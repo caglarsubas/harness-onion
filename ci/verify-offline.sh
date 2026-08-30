@@ -16,6 +16,22 @@ runner="${ci_dir}/run_packet_argv.py"
 session_id="offline-$PPID-$$"
 packet_dir="$(CDPATH='' cd -- "$(dirname -- "$HARNESS_TASK_PACKET")" && pwd -P)"
 packet_path="${packet_dir}/$(basename -- "$HARNESS_TASK_PACKET")"
+
+if [[ "${HARNESS_OFFLINE_ENFORCED:-0}" == "1" ]]; then
+  if [[ -z "${HARNESS_OFFLINE_BACKEND:-}" || -z "${HARNESS_OFFLINE_SESSION_ID:-}" ]]; then
+    echo "trusted outer isolation must name its backend and session" >&2
+    exit 2
+  fi
+  for offline_setting in UV_OFFLINE UV_FROZEN UV_NO_SYNC; do
+    if [[ "${!offline_setting:-}" != "1" ]]; then
+      echo "trusted outer isolation requires ${offline_setting}=1" >&2
+      exit 2
+    fi
+  done
+  cd "$repo_root"
+  exec python3 "$runner"
+fi
+
 # shellcheck disable=SC2034 # Consumed by the sourced isolation contract.
 harness_isolation_repository_root="$repo_root"
 # shellcheck source=warm-source-isolation.sh

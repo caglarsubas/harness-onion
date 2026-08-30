@@ -1,0 +1,23 @@
+[project]
+name = "harness-engineering-meta"
+version = "0.1.0"
+description = "Offline architecture validation for the Planeon MAS harness platform"
+readme = "README.md"
+requires-python = "==3.12.*"
+license = { text = "Apache-2.0" }
+dependencies = [
+  "jsonschema==4.24.0",
+  "PyYAML==6.0.2",
+]
+
+[dependency-groups]
+dev = [
+  "pytest==8.4.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers -q -p no:cacheprovider"
+testpaths = ["tests"]
