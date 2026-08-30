@@ -13,6 +13,7 @@ RUNNER_PATH = Path(__file__).with_name("run_packet_argv.py")
 SPEC = importlib.util.spec_from_file_location("packet_argv_runner", RUNNER_PATH)
 assert SPEC and SPEC.loader
 RUNNER = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = RUNNER
 SPEC.loader.exec_module(RUNNER)
 
 
@@ -242,6 +243,10 @@ else:
         self.assertEqual(0, completed.returncode, completed.stdout + completed.stderr)
 
     def test_wrapper_requires_detected_locked_warm_root_declaration(self) -> None:
+        if os.environ.get("HARNESS_OFFLINE_ENFORCED") == "1":
+            self.skipTest(
+                "trusted outer gate owns isolation; nested wrapper validation is prohibited"
+            )
         with tempfile.TemporaryDirectory(
             prefix="codex-harness-warmstarts.", dir="/tmp"
         ) as directory, tempfile.TemporaryDirectory() as packet_directory:
@@ -269,6 +274,10 @@ else:
         self.assertIn("absent from HARNESS_WARM_SOURCE_ROOTS", completed.stderr)
 
     def test_wrapper_requires_explicit_trusted_warm_root_contract(self) -> None:
+        if os.environ.get("HARNESS_OFFLINE_ENFORCED") == "1":
+            self.skipTest(
+                "trusted outer gate owns isolation; nested wrapper validation is prohibited"
+            )
         with tempfile.TemporaryDirectory() as directory:
             packet = Path(directory) / "packet.yaml"
             packet.write_text("fixture: declaration-only\n", encoding="utf-8")
@@ -334,15 +343,23 @@ else:
             "HARNESS_TASK_PACKET": "/tmp/packet.yaml",
             "OPENAI_API_KEY": "forbidden",
             "AWS_ACCESS_KEY_ID": "forbidden",
+            "AWS_SESSION_TOKEN": "forbidden",
+            "KUBECONFIG": "/tmp/forbidden-kubeconfig",
+            "DOCKER_CONFIG": "/tmp/forbidden-docker-config",
             "WARM_SOURCE_ROOT": "/tmp/forbidden-source",
-            "SAFE_LOCAL_SETTING": "kept",
+            "SAFE_LOCAL_SETTING": "must-not-pass",
+            "HARNESS_OFFLINE_ENFORCED": "1",
         }
         scrubbed = RUNNER.scrub_environment(environment)
-        self.assertEqual("kept", scrubbed["SAFE_LOCAL_SETTING"])
+        self.assertEqual("1", scrubbed["HARNESS_OFFLINE_ENFORCED"])
         self.assertNotIn("HARNESS_TASK_PACKET", scrubbed)
         self.assertNotIn("OPENAI_API_KEY", scrubbed)
         self.assertNotIn("AWS_ACCESS_KEY_ID", scrubbed)
+        self.assertNotIn("AWS_SESSION_TOKEN", scrubbed)
+        self.assertNotIn("KUBECONFIG", scrubbed)
+        self.assertNotIn("DOCKER_CONFIG", scrubbed)
         self.assertNotIn("WARM_SOURCE_ROOT", scrubbed)
+        self.assertNotIn("SAFE_LOCAL_SETTING", scrubbed)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,189 @@
+schemaVersion: harness.planeon.ai/zero-bill-negative-fixtures/v1alpha1
+cases:
+  - id: github-runner-ubuntu-latest
+    vector: github.runnerLabel:ubuntu-latest
+    expectedRule: github-hosted-runner
+    targetPath: .github/workflows/bad.yml
+    content: |
+      jobs:
+        verify:
+          runs-on: ubuntu-latest
+  - id: github-runner-ubuntu-24
+    vector: github.runnerLabel:ubuntu-24.04
+    expectedRule: github-hosted-runner
+    targetPath: .github/workflows/bad.yml
+    content: |
+      jobs:
+        verify:
+          runs-on: ubuntu-24.04
+  - id: github-runner-windows
+    vector: github.runnerLabel:windows-latest
+    expectedRule: github-hosted-runner
+    targetPath: .github/workflows/bad.yml
+    content: |
+      jobs:
+        verify:
+          runs-on: windows-latest
+  - id: github-runner-macos
+    vector: github.runnerLabel:macos-latest
+    expectedRule: github-hosted-runner
+    targetPath: .github/workflows/bad.yml
+    content: |
+      jobs:
+        verify:
+          runs-on: macos-latest
+  - id: github-upload-artifact
+    vector: github.action:actions/upload-artifact
+    expectedRule: github-upload-artifact
+    targetPath: .github/workflows/bad.yml
+    content: |
+      steps:
+        - uses: actions/upload-artifact@0000000000000000000000000000000000000000
+  - id: github-actions-cache
+    vector: github.action:actions/cache
+    expectedRule: github-cache
+    targetPath: .github/workflows/bad.yml
+    content: |
+      steps:
+        - uses: actions/cache@0000000000000000000000000000000000000000
+  - id: github-packages
+    vector: github.service:packages
+    expectedRule: github-packages
+    targetPath: .github/workflows/bad.yml
+    content: |
+      permissions:
+        packages: write
+  - id: github-ghcr
+    vector: github.service:ghcr
+    expectedRule: github-ghcr
+    targetPath: deploy/workload.yaml
+    content: |
+      image: ghcr.io/example/service@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  - id: github-lfs
+    vector: github.service:lfs
+    expectedRule: github-lfs
+    targetPath: .gitattributes
+    content: |
+      *.bin filter=lfs diff=lfs merge=lfs -text
+  - id: github-codespaces
+    vector: github.service:codespaces
+    expectedRule: github-codespaces
+    targetPath: .github/workflows/bad.yml
+    content: |
+      permissions:
+        codespaces: write
+  - id: github-hosted-runner-service
+    vector: github.service:hosted-runners
+    expectedRule: github-hosted-runners-service
+    targetPath: .github/workflows/bad.yml
+    content: |
+      jobs:
+        verify:
+          runs-on: github-hosted-4-core
+  - id: github-advanced-security
+    vector: github.service:advanced-security
+    expectedRule: github-advanced-security
+    targetPath: .github/workflows/bad.yml
+    content: |
+      steps:
+        - uses: github/codeql-action/init@0000000000000000000000000000000000000000
+  - id: github-schedule
+    vector: github.trigger:schedule
+    expectedRule: github-schedule
+    targetPath: .github/workflows/bad.yml
+    content: |
+      on:
+        schedule:
+          - cron: "0 0 * * *"
+  - id: cloud-resource-provisioning
+    vector: implementation:cloud-resource-provisioning
+    expectedRule: cloud-resource-provisioning
+    targetPath: deploy/public-service.yaml
+    content: |
+      apiVersion: v1
+      kind: Service
+      spec:
+        type: LoadBalancer
+  - id: terraform-cloud-provider
+    vector: implementation:terraform-cloud-providers
+    expectedRule: terraform-cloud-provider
+    targetPath: infra/main.tf
+    content: |
+      provider "aws" {
+        region = "us-east-1"
+      }
+  - id: mutable-image-tag
+    vector: implementation:mutable-image-tags
+    expectedRule: mutable-image-reference
+    targetPath: deploy/workload.yaml
+    content: |
+      image: quay.io/example/service:latest
+  - id: mutable-chart-version
+    vector: implementation:mutable-chart-tags
+    expectedRule: mutable-chart-reference
+    targetPath: charts/service/Chart.yaml
+    content: |
+      dependencies:
+        - name: dependency
+          version: "*"
+  - id: paid-metered-provider
+    vector: implementation:paid-or-metered-providers
+    expectedRule: paid-metered-provider
+    targetPath: config/provider.yaml
+    content: |
+      costDisposition: PAID_METERED
+  - id: third-party-api-key
+    vector: implementation:third-party-api-key-providers
+    expectedRule: third-party-api-key
+    targetPath: config/provider.yaml
+    content: |
+      environment:
+        OPENAI_API_KEY: required
+  - id: unknown-cost-disposition
+    vector: implementation:unknown-provider-cost-disposition
+    expectedRule: unknown-cost-disposition
+    targetPath: config/provider.yaml
+    content: |
+      costDisposition: UNKNOWN
+  - id: hosted-model-provider
+    vector: implementation:hosted-model-providers
+    expectedRule: hosted-model-provider
+    targetPath: config/provider.yaml
+    content: |
+      provider: openai
+  - id: cloud-billing-api
+    vector: implementation:cloud-billing-apis
+    expectedRule: cloud-billing-api
+    targetPath: services/billing/config.yaml
+    content: |
+      endpoint: https://cloudbilling.googleapis.com/v1
+  - id: runtime-model-download
+    vector: implementation:runtime-model-downloads
+    expectedRule: runtime-model-download
+    targetPath: services/model/entrypoint.sh
+    content: |
+      ollama pull llama3
+  - id: runtime-package-download
+    vector: implementation:runtime-package-downloads
+    expectedRule: runtime-package-download
+    targetPath: services/api/entrypoint.sh
+    content: |
+      pip install fastapi
+  - id: runtime-image-download
+    vector: implementation:runtime-image-downloads-outside-locked-bundle
+    expectedRule: runtime-image-download
+    targetPath: deploy/pull.sh
+    content: |
+      docker pull quay.io/example/service@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  - id: external-telemetry-exporter
+    vector: implementation:external-telemetry-exporters
+    expectedRule: external-telemetry-exporter
+    targetPath: deploy/telemetry.yaml
+    content: |
+      OTEL_EXPORTER_OTLP_ENDPOINT: https://telemetry.example.com
+  - id: implicit-network-package-execution
+    vector: implementation:implicit-network-package-execution
+    expectedRule: implicit-network-package-execution
+    targetPath: services/web/start.sh
+    content: |
+      npx vite

@@ -42,35 +42,29 @@ FORBIDDEN_OFFLINE_TOKENS = {
     "pull",
 }
 FORBIDDEN_EXECUTABLE_BASENAMES = {"sh", "bash", "zsh", "dash", "env"}
-CREDENTIAL_ENVIRONMENT_MARKERS = {
-    "API_KEY",
-    "ACCESS_KEY",
-    "ACCESS_TOKEN",
-    "AUTH_TOKEN",
-    "CLIENT_SECRET",
-    "CREDENTIAL",
-    "GH_TOKEN",
-    "GITHUB_TOKEN",
-    "PASSWORD",
-    "PRIVATE_KEY",
-    "SECRET_KEY",
+CHILD_ENVIRONMENT_ALLOWLIST = {
+    "CI",
+    "GITHUB_ACTIONS",
+    "GITHUB_WORKSPACE",
+    "HARNESS_OFFLINE_BACKEND",
+    "HARNESS_OFFLINE_ENFORCED",
+    "HARNESS_OFFLINE_SESSION_ID",
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "LOGNAME",
+    "PATH",
+    "PYTHONDONTWRITEBYTECODE",
+    "TMPDIR",
+    "USER",
+    "UV_CACHE_DIR",
+    "UV_FROZEN",
+    "UV_NO_SYNC",
+    "UV_OFFLINE",
+    "UV_PROJECT_ENVIRONMENT",
+    "UV_PYTHON_DOWNLOADS",
+    "VIRTUAL_ENV",
 }
-CLEAN_ROOM_PATH_ENVIRONMENT_MARKERS = {
-    "HARNESS_WARM_SOURCE_ROOTS",
-    "REUSE_SOURCE",
-    "SOURCE_SNAPSHOT",
-    "WARM_SOURCE",
-    "WARMSTART",
-}
-CLOUD_ENVIRONMENT_PREFIXES = (
-    "ANTHROPIC_",
-    "AWS_",
-    "AZURE_",
-    "GCP_",
-    "GOOGLE_",
-    "OPENAI_",
-    "OPENROUTER_",
-)
 
 
 class PacketTransportError(ValueError):
@@ -154,16 +148,11 @@ def validate_execution_contract(packet_text: str) -> None:
 
 
 def scrub_environment(environment: dict[str, str]) -> dict[str, str]:
-    scrubbed = dict(environment)
-    for name in list(scrubbed):
-        upper_name = name.upper()
-        if upper_name == PACKET_ENVIRONMENT or any(
-            marker in upper_name for marker in CREDENTIAL_ENVIRONMENT_MARKERS
-        ) or any(
-            marker in upper_name for marker in CLEAN_ROOM_PATH_ENVIRONMENT_MARKERS
-        ) or upper_name.startswith(CLOUD_ENVIRONMENT_PREFIXES):
-            scrubbed.pop(name, None)
-    return scrubbed
+    return {
+        name: value
+        for name, value in environment.items()
+        if name in CHILD_ENVIRONMENT_ALLOWLIST
+    }
 
 
 def run_commands(
@@ -227,6 +216,7 @@ def main() -> int:
     )
     if result.returncode != 0:
         return result.returncode
+    verify_packet_digest(packet_path, packet_digest)
 
     print(
         f"packet={packet_digest} phases=prefetch,offline "

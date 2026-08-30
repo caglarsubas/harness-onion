@@ -54,3 +54,16 @@ The repository launcher retains an independently usable macOS/Linux fail-closed
 boundary for local verification. It is an inner defense and packet-contract
 implementation; it is not the GitHub workflow trust boundary. A pull request may
 not change the workflow to call it directly or add any earlier repository command.
+
+The repository packet executor passes children a closed environment allowlist,
+not a filtered copy of the caller environment. Only local process identity,
+workspace, temporary-directory, locked-toolchain, and non-secret isolation proof
+variables survive. The task-packet path, warm-source paths, cloud/provider
+variables, credentials, agent sockets, kubeconfig, container configuration, and
+all unknown variables are absent from packet commands.
+
+The outbound canary is evidence only when the named backend returns an error
+code produced by its OS isolation mechanism. A timeout, DNS error, unreachable
+route, or coincidentally disconnected host does not prove isolation and fails
+closed. The packet digest is rechecked after the canary and after every declared
+prefetch or acceptance argv.
