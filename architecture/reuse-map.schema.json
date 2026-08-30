@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/reuse-map.v1alpha1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sources",
+    "nonPublicPlanningInputs",
+    "pathAuthority",
+    "authorizationAuthority"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/reuse-map/v1alpha1"},
+    "sources": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "nonPublicPlanningInputs": {"$ref": "#/$defs/nonPublicPlanningInputs"},
+    "pathAuthority": {"const": "architecture/reuse-path-index.yaml"},
+    "authorizationAuthority": {"const": "legal/source-reuse-authorization.yaml"}
+  },
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "repository": {
+      "enum": [
+        "git@github.com:caglarsubas/llm_inference_engine.git",
+        "git@github.com:caglarsubas/data-source-harness.git"
+      ]
+    },
+    "destination": {
+      "enum": [
+        "contracts",
+        "sdks",
+        "industry-packs",
+        "control-plane",
+        "runtime-plane",
+        "model-plane",
+        "knowledge-plane",
+        "execution-plane",
+        "trust-plane",
+        "operator",
+        "distribution",
+        "conformance-labs"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "licenseDisposition",
+        "destinations",
+        "excluded",
+        "excludedPathPatterns"
+      ],
+      "properties": {
+        "repository": {"$ref": "#/$defs/repository"},
+        "commit": {"$ref": "#/$defs/sha1"},
+        "licenseDisposition": {"const": "path-review-required-before-copy"},
+        "destinations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/destination"}
+        },
+        "excluded": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "excludedPathPatterns": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "nonPublicPlanningInputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "disposition",
+        "implementationAccess",
+        "requirementDisposition",
+        "copyAuthorization"
+      ],
+      "properties": {
+        "count": {"const": 3},
+        "disposition": {"const": "METADATA_OMITTED_FROM_PUBLIC_REPOSITORY"},
+        "implementationAccess": {"const": "PROHIBITED"},
+        "requirementDisposition": {
+          "const": "DISTILLED_INTO_INDEPENDENT_PUBLIC_CONTRACTS_AND_ACCEPTANCE_CRITERIA"
+        },
+        "copyAuthorization": {"const": "NONE"}
+      }
+    }
+  }
+}

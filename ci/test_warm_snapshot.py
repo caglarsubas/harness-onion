@@ -4,6 +4,7 @@ import importlib.util
 import os
 import stat
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +16,7 @@ LOCKER_PATH = Path(__file__).with_name("lock_warm_snapshot.py")
 SPEC = importlib.util.spec_from_file_location("warm_snapshot_locker", LOCKER_PATH)
 assert SPEC and SPEC.loader
 LOCKER = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = LOCKER
 SPEC.loader.exec_module(LOCKER)
 
 
@@ -30,6 +32,27 @@ def git(repository: Path, *arguments: str) -> str:
 
 
 class WarmSnapshotTest(unittest.TestCase):
+    def test_git_environment_scrubs_credentials_and_alternates(self) -> None:
+        with mock.patch.dict(
+            os.environ,
+            {
+                "EXAMPLE_API_KEY": "must-not-pass",
+                "GITHUB_TOKEN": "must-not-pass",
+                "SSH_AUTH_SOCK": "/private/tmp/agent.sock",
+                "GIT_ALTERNATE_OBJECT_DIRECTORIES": "/private/tmp/objects",
+                "SAFE_SETTING": "preserved",
+            },
+            clear=True,
+        ):
+            environment = LOCKER.git_environment()
+        self.assertNotIn("SAFE_SETTING", environment)
+        self.assertEqual("1", environment["GIT_NO_LAZY_FETCH"])
+        self.assertEqual("0", environment["GIT_TERMINAL_PROMPT"])
+        self.assertNotIn("EXAMPLE_API_KEY", environment)
+        self.assertNotIn("GITHUB_TOKEN", environment)
+        self.assertNotIn("SSH_AUTH_SOCK", environment)
+        self.assertNotIn("GIT_ALTERNATE_OBJECT_DIRECTORIES", environment)
+
     def test_rejects_actual_missing_promised_blob(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             snapshot = Path(directory) / "snapshot"
@@ -85,7 +108,10 @@ class WarmSnapshotTest(unittest.TestCase):
             LOCKER.verify_local_objects(Path("/unused"), entries)
 
     def test_locks_exact_detached_inventory_and_disables_remotes(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
+        with tempfile.TemporaryDirectory(
+            prefix="met-002-observer.",
+            dir="/private/tmp",
+        ) as directory:
             root = Path(directory)
             snapshot = root / "snapshot"
             snapshot.mkdir()
@@ -148,6 +174,8 @@ class WarmSnapshotTest(unittest.TestCase):
                     require_locked=True,
                 )
                 self.assertTrue(evidence["objectsLocal"])
+                self.assertTrue(evidence["objectAlternatesDisabled"])
+                self.assertTrue(evidence["ambientCredentialsScrubbed"])
                 self.assertTrue(evidence["writeBitsRemoved"])
                 self.assertEqual(2, evidence["indexedPathCount"])
             finally:
