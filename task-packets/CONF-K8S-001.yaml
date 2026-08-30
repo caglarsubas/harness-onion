@@ -1,0 +1,17 @@
+id: CONF-K8S-001
+repository: mas-harness-conformance-labs
+branch: codex/conf-k8s-001-live-matrix
+objective: Certify each maintained Kubernetes minor independently on self-managed or pre-existing tenant public-cloud Kubernetes with live installation, runtime, upgrade, and security evidence.
+predecessors: [CONF-A3-001, OP-007, DIST-005, RUN-002, KN-002, EXEC-002, TRUST-003]
+allowedPaths: ["campaigns/platform/kubernetes/", "tests/platform/kubernetes/", "fixtures/platform/kubernetes/", "docs/reports/kubernetes-template.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes complete platform release behavior v1", "Produces Kubernetes 1.35, 1.36, and 1.37 certification evidence"]
+deliverables: ["Separate per-minor and custody-mode environment intake, install, health, runtime, network/RBAC, restart, upgrade/rollback, uninstall-retention, and evidence results."]
+excluded: ["Cluster or cloud-resource provisioning, cloud-provider management or billing APIs, combining minors into one status, or rendering-only pass."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","campaign","CAMPAIGN=kubernetes-live-matrix"],["make","evidence-verify","CAMPAIGN=kubernetes-live-matrix"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+liveCampaignExecution: {"launcherArgv":["/opt/planeon/bin/harness-live-campaign-launch"],"commandTransport":"ARGV_ARRAY_V1","executionPlacement":"PREINSTALLED_TARGET_LOCAL_EPHEMERAL_RUNNER","executionEnvelopeEnvironment":"HARNESS_LIVE_EXECUTION_ENVELOPE","executionEnvelopeMode":"DUAL_SIGNED_PACKET_COMMAND_CAMPAIGN_ENDPOINT_BINDING_V1","releaseTrustStoreMount":"/etc/planeon/trust/release-trust-bundle.json","tenantTrustStoreMount":"/etc/planeon/trust/tenant-trust-bundle.json","trustStoreMode":"HASH_PINNED_LOCAL_PUBLIC_KEYS_VALIDITY_PURPOSE_AND_REVOCATION_V1","revocationRequired":true,"networkIsolation":"OS_ENFORCED_DENY_ALL_EXCEPT_SIGNED_ENDPOINTS","endpointAuthority":"TENANT_CONTROLLED_PREEXISTING_CAPACITY_ONLY","dynamicEndpointTransport":"PREAUTHORIZED_API_OR_CAMPAIGN_PROXY_ONLY","mutationAdmission":"SERVER_SIDE_SIGNED_ZERO_INCREMENTAL_COST_POLICY_AND_RBAC_REQUIRED","capacityAuthorization":"INDEPENDENT_OPERATOR_SIGNED_FIXED_PREEXISTING_CAPACITY","publicInternetDiscovery":"DENIED","cloudManagementApis":"DENIED","billingApis":"DENIED","thirdPartyApiKeys":"DENIED","credentialMode":"TENANT_LOCAL_SHORT_LIVED_FILE_REFERENCE","unavailableResult":"NOT_RUN_ENV_UNAVAILABLE","ciEvidenceUse":"FORBIDDEN","allowedEvidenceAxes":["DEPLOYMENT","RUNTIME","ASSURANCE"],"commands":[["make","campaign","CAMPAIGN=kubernetes-live-matrix"],["make","evidence-verify","CAMPAIGN=kubernetes-live-matrix"]]}
+expectedEvidence: ["Independent PASS/FAIL/NOT_RUN_ENV_UNAVAILABLE results with live=true, Kubernetes minor, platform, and architecture recorded as dimensions.", "Exact cluster/version/runtime and artifact digests."]
+rollback: Remove only campaign namespaces/resources and retain evidence plus PVCs according to the test retention policy.

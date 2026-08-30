@@ -1,0 +1,16 @@
+id: MET-003
+repository: Harness-Engineering
+branch: codex/met-003-zero-bill-policy
+objective: Make zero cloud, GitHub storage, hosted-runner, paid-provider, and runtime-download cost constraints executable and fail closed.
+predecessors: [MET-002]
+allowedPaths: ["policies/zero-bill-policy.yaml", "schemas/trusted-runner-manifest.schema.json", "BILLING_POLICY.md", "docs/TRUSTED_RUNNER_CONTRACT.md", "ci/prefetch.sh", "ci/verify-offline.sh", "ci/warm-source-isolation.sh", "ci/run_packet_argv.py", "ci/network_canary.py", "ci/test_offline_runner.py", "scripts/verify_offline.sh", "scripts/verify_toolchain.py", "scripts/zero_bill_scan.py", "tests/fixtures/zero-bill/", "tests/test_zero_bill.py", ".github/workflows/verify.yml", "Makefile"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes repository ownership graph v1", "Produces zero-bill policy v1", "Produces offline CI contract v1"]
+deliverables: ["Scanner rules for every prohibited billing vector.", "One deny-all-outbound process tree for local-cache-only prefetch and offline verification with canonical warm-root denial.", "Pinned self-hosted read-only PR workflow selecting only the closed ephemeral credential-free labels and preinstalled signed host launcher."]
+excluded: ["Scheduled workflows, remote caches, Actions artifacts, GitHub Packages, GHCR, Git LFS, cloud provisioning, and untrusted-fork execution."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/zero_bill_scan.py","."],["uv","run","--offline","--frozen","--no-sync","pytest","tests/test_zero_bill.py"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Positive zero-bill report.", "Negative fixture for each prohibited billing vector."]
+rollback: Revert policy and workflow only; downstream repositories may not weaken an already adopted billing gate.

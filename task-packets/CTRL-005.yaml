@@ -1,0 +1,16 @@
+id: CTRL-005
+repository: mas-harness-control-plane
+branch: codex/ctrl-005-profile-lock-bundle
+objective: Implement profile review, explanation, offline approval, immutable lock digest, bundle request, and signed-bundle status tracking.
+predecessors: [CTRL-004, CON-005]
+allowedPaths: ["apps/control-web/src/app/profiles/", "apps/control-web/src/app/api/v1alpha1/profiles/", "apps/control-web/src/app/api/v1alpha1/bundles/", "apps/control-web/src/lib/profiles/", "packages/db/migrations/profile-lock/", "tests/profiles/", "e2e/profile-lock.spec.ts", "ci/targets/ctrl-005.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes HarnessProfile, BundleRelease, ApprovalRequest, and Operation v1alpha1", "Produces profile lock and bundle-request REST behavior v1alpha1"]
+deliverables: ["Diff/explanation review, offline approval evidence, canonical digest lock, immutable profile transitions, bundle request outbox, and signed-status projection."]
+excluded: ["Bundle composition/signing, profile mutation after lock, or control-plane runtime dependency."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","profile-contract"],["make","profile-lock-e2e"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Digest matches compiler artifact.", "Mutation-after-lock, stale approval, tampered explanation, and duplicate bundle-request denial."]
+rollback: Disable new locks and revert UI/API changes; preserve already locked profiles and audit evidence.

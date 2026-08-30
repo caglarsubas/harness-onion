@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/repositories.schema.json",
+  "title": "Repository Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "dependencySemantics", "operatorBootstrap", "dependencyGraphs", "repositories"],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/repository-registry/v1alpha1"},
+    "dependencySemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction", "legacyDependsOn", "graphTypes", "everyUnconditionalRepositoryGraphAcyclic", "acyclicityExclusions"],
+      "properties": {
+        "direction": {"const": "consumer-to-provider"},
+        "legacyDependsOn": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["projectionOf", "status", "rule"],
+          "properties": {
+            "projectionOf": {"const": "contractSource"},
+            "status": {"const": "compatibility-only"},
+            "rule": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        "graphTypes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["contractSource", "buildArtifact", "releaseSet", "runtimeIntegration"],
+          "properties": {
+            "contractSource": {"$ref": "#/$defs/nonEmptyString"},
+            "buildArtifact": {"$ref": "#/$defs/nonEmptyString"},
+            "releaseSet": {"$ref": "#/$defs/nonEmptyString"},
+            "runtimeIntegration": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        "everyUnconditionalRepositoryGraphAcyclic": {"const": true},
+        "acyclicityExclusions": {"const": ["subjectUnderEvaluation"]}
+      }
+    },
+    "operatorBootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phases", "crossPhaseReciprocalEdges"],
+      "properties": {
+        "phases": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {"$ref": "#/$defs/buildOperatorPhase"},
+            {"$ref": "#/$defs/assembleReleasePhase"},
+            {"$ref": "#/$defs/installWorkloadsPhase"}
+          ],
+          "items": false
+        },
+        "crossPhaseReciprocalEdges": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/crossPhaseEdge"}
+        }
+      }
+    },
+    "dependencyGraphs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractSource", "buildArtifact", "releaseSet", "runtimeIntegration"],
+      "properties": {
+        "contractSource": {"$ref": "#/$defs/contractGraph"},
+        "buildArtifact": {"$ref": "#/$defs/artifactGraph"},
+        "releaseSet": {"$ref": "#/$defs/artifactGraph"},
+        "runtimeIntegration": {"$ref": "#/$defs/runtimeGraph"}
+      }
+    },
+    "repositories": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/repository"}
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "repositoryId": {
+      "enum": [
+        "harness-engineering", "contracts", "sdks", "industry-packs", "control-plane",
+        "runtime-plane", "model-plane", "knowledge-plane", "execution-plane", "trust-plane",
+        "operator", "distribution", "conformance-labs"
+      ]
+    },
+    "repositoryPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer", "provider"],
+      "properties": {
+        "consumer": {"$ref": "#/$defs/repositoryId"},
+        "provider": {"$ref": "#/$defs/repositoryId"}
+      }
+    },
+    "phaseBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "rule"],
+      "properties": {
+        "id": {"type": "string"},
+        "rule": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "buildOperatorPhase": {
+      "allOf": [
+        {"$ref": "#/$defs/phaseBase"},
+        {"type": "object", "properties": {"id": {"const": "build-operator"}}}
+      ]
+    },
+    "assembleReleasePhase": {
+      "allOf": [
+        {"$ref": "#/$defs/phaseBase"},
+        {"type": "object", "properties": {"id": {"const": "assemble-release-set"}}}
+      ]
+    },
+    "installWorkloadsPhase": {
+      "allOf": [
+        {"$ref": "#/$defs/phaseBase"},
+        {"type": "object", "properties": {"id": {"const": "install-workloads"}}}
+      ]
+    },
+    "crossPhaseEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["releaseSet", "runtimeIntegration", "rationale"],
+      "properties": {
+        "releaseSet": {"$ref": "#/$defs/repositoryPair"},
+        "runtimeIntegration": {"$ref": "#/$defs/repositoryPair"},
+        "rationale": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "contractEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer", "provider"],
+      "properties": {
+        "consumer": {"$ref": "#/$defs/repositoryId"},
+        "provider": {"$ref": "#/$defs/repositoryId"}
+      }
+    },
+    "artifactEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer", "provider", "artifact"],
+      "properties": {
+        "consumer": {"$ref": "#/$defs/repositoryId"},
+        "provider": {"$ref": "#/$defs/repositoryId"},
+        "artifact": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}
+      }
+    },
+    "runtimeEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer", "provider", "interface"],
+      "properties": {
+        "consumer": {"$ref": "#/$defs/repositoryId"},
+        "provider": {"$ref": "#/$defs/repositoryId"},
+        "interface": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "selectionType": {"enum": ["whenCapability", "subjectUnderEvaluation"]},
+        "selectedWhen": {"$ref": "#/$defs/selectionPredicate"}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["selectionType"]},
+          "then": {"required": ["selectedWhen"]}
+        },
+        {
+          "if": {"required": ["selectedWhen"]},
+          "then": {"required": ["selectionType"]}
+        },
+        {
+          "if": {"required": ["selectionType"], "properties": {"selectionType": {"const": "whenCapability"}}},
+          "then": {"properties": {"selectedWhen": {"$ref": "#/$defs/capabilityPredicate"}}}
+        },
+        {
+          "if": {"required": ["selectionType"], "properties": {"selectionType": {"const": "subjectUnderEvaluation"}}},
+          "then": {"properties": {"selectedWhen": {"$ref": "#/$defs/selectionPredicate"}}}
+        }
+      ]
+    },
+    "contractGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edges"],
+      "properties": {
+        "edges": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/contractEdge"}}
+      }
+    },
+    "artifactGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edges"],
+      "properties": {
+        "edges": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/artifactEdge"}}
+      }
+    },
+    "runtimeGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edges"],
+      "properties": {
+        "edges": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/runtimeEdge"}}
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind", "dependsOn"],
+      "properties": {
+        "id": {"$ref": "#/$defs/repositoryId"},
+        "name": {"type": "string", "pattern": "^(Harness-Engineering|mas-harness-[a-z0-9-]+)$"},
+        "kind": {"enum": ["meta", "product"]},
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/repositoryId"}
+        }
+      }
+    },
+    "selectionPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "anyOfSubjectHarnesses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        },
+        "anyOfCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9.-]*$"}
+        }
+      }
+    },
+    "capabilityPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anyOfCapabilities"],
+      "properties": {
+        "anyOfCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        }
+      }
+    }
+  }
+}

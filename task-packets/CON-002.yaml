@@ -1,0 +1,16 @@
+id: CON-002
+repository: mas-harness-contracts
+branch: codex/con-002-taxonomy-catalog
+objective: Define the sixteen harness classes, closed capability-admission roles, providers, module releases, compatibility envelopes, and independent install units.
+predecessors: [CON-001, MET-001]
+allowedPaths: ["schemas/v1alpha1/taxonomy/", "catalog/harnesses/", "catalog/providers/", "src/planeon_harness_contracts/registry.py", "src/planeon_harness_contracts/validation.py", "src/planeon_harness_contracts/commands/validate.json", "src/planeon_harness_contracts/commands/catalog.json", "tests/contract/test_taxonomy.py", "tests/fixtures/taxonomy/", "contracts/catalog.lock.json", "docs/taxonomy.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes harness taxonomy v1", "Produces HarnessClassDefinition v1alpha1", "Produces HarnessModuleDefinition v1alpha1", "Produces FrameworkProviderDefinition v1alpha1", "Produces ModuleRelease v1alpha1", "Owns harnessctl validate and catalog command registrations"]
+deliverables: ["Schemas for capability admission, dependencies, conflicts, install units, OCI digests, intents, evidence, resources, licenses, upgrades, and rollbacks.", "Disjoint public-demand, signed-environment-fact, and explicit-selector registries with INTERNAL_ONLY default.", "Catalog entries for all sixteen harness IDs and canonical catalog lock."]
+excluded: ["Provider implementation code or tenant profile selection."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","harnessctl","validate","--kind","catalog","catalog/"],["uv","run","--offline","--frozen","--no-sync","harnessctl","catalog","lock","--check"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Exactly sixteen valid harness entries.", "Stable catalog digest and negative capability-role, inactive-selector, dependency, and conflict vectors."]
+rollback: Revert unconsumed v1alpha1 taxonomy additions before any profile is locked.

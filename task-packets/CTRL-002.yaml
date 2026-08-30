@@ -1,0 +1,16 @@
+id: CTRL-002
+repository: mas-harness-control-plane
+branch: codex/ctrl-002-questionnaire-journey
+objective: Implement signed industry-pack intake, revisioned questionnaire sessions, eight-stage portal flow, readiness findings, ETags, idempotency, and audit.
+predecessors: [CTRL-001, IND-WG-005]
+allowedPaths: ["apps/control-web/src/app/questionnaires/", "apps/control-web/src/app/api/v1alpha1/questionnaires/", "apps/control-web/src/app/api/v1alpha1/sessions/", "apps/control-web/src/lib/questionnaire/", "packages/db/migrations/questionnaire/", "tests/questionnaire/", "e2e/questionnaire.spec.ts", "ci/targets/ctrl-002.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes Questionnaire and IndustryPack contracts v1alpha1", "Produces questionnaire session REST behavior v1alpha1"]
+deliverables: ["Verified local pack intake, revisioned answers, eight-stage setup UI, readiness states, optimistic concurrency, idempotency, and audit events."]
+excluded: ["LLM-generated answers, network pack fetches, tenant-supplied identity headers, or profile compilation."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","questionnaire-contract"],["make","questionnaire-e2e"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Complete white-goods journey and refresh/resume behavior.", "Tampered pack, stale ETag, duplicate idempotency key, and cross-tenant denial evidence."]
+rollback: Revert questionnaire routes, UI, and additive migration; preserve existing tenant/auth bootstrap.

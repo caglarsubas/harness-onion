@@ -1,0 +1,17 @@
+id: CONF-SEC-001
+repository: mas-harness-conformance-labs
+branch: codex/conf-sec-001-adversarial
+objective: Run adversarial operator-hosted SaaS and self-managed cross-tenant, forged-artifact/evidence, sandbox, prompt/tool, secret, policy, revocation, and isolation certification.
+predecessors: [CONF-A3-001, RUN-002, KN-002, EXEC-002, TRUST-003, OP-007, DIST-005]
+allowedPaths: ["campaigns/security/", "tests/security/", "fixtures/security/", "docs/reports/security-template.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes complete platform security behavior v1", "Produces enterprise security certification evidence"]
+deliverables: ["Shared-control-plane RLS and runtime namespace/dedicated-cluster isolation, API/DB/index/cache/memory/network isolation, identity forgery, evidence/artifact forgery, revocation, prompt/tool injection, secret exposure, sandbox escape, policy/guardrail outage, and audit tamper campaigns."]
+excluded: ["External penetration-testing SaaS, destructive tests outside fixture namespaces, or representing namespace isolation as silo equivalence."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","campaign","CAMPAIGN=enterprise-security"],["make","evidence-verify","CAMPAIGN=enterprise-security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+liveCampaignExecution: {"launcherArgv":["/opt/planeon/bin/harness-live-campaign-launch"],"commandTransport":"ARGV_ARRAY_V1","executionPlacement":"PREINSTALLED_TARGET_LOCAL_EPHEMERAL_RUNNER","executionEnvelopeEnvironment":"HARNESS_LIVE_EXECUTION_ENVELOPE","executionEnvelopeMode":"DUAL_SIGNED_PACKET_COMMAND_CAMPAIGN_ENDPOINT_BINDING_V1","releaseTrustStoreMount":"/etc/planeon/trust/release-trust-bundle.json","tenantTrustStoreMount":"/etc/planeon/trust/tenant-trust-bundle.json","trustStoreMode":"HASH_PINNED_LOCAL_PUBLIC_KEYS_VALIDITY_PURPOSE_AND_REVOCATION_V1","revocationRequired":true,"networkIsolation":"OS_ENFORCED_DENY_ALL_EXCEPT_SIGNED_ENDPOINTS","endpointAuthority":"TENANT_CONTROLLED_PREEXISTING_CAPACITY_ONLY","dynamicEndpointTransport":"PREAUTHORIZED_API_OR_CAMPAIGN_PROXY_ONLY","mutationAdmission":"SERVER_SIDE_SIGNED_ZERO_INCREMENTAL_COST_POLICY_AND_RBAC_REQUIRED","capacityAuthorization":"INDEPENDENT_OPERATOR_SIGNED_FIXED_PREEXISTING_CAPACITY","publicInternetDiscovery":"DENIED","cloudManagementApis":"DENIED","billingApis":"DENIED","thirdPartyApiKeys":"DENIED","credentialMode":"TENANT_LOCAL_SHORT_LIVED_FILE_REFERENCE","unavailableResult":"NOT_RUN_ENV_UNAVAILABLE","ciEvidenceUse":"FORBIDDEN","allowedEvidenceAxes":["SECURITY","ASSURANCE"],"commands":[["make","campaign","CAMPAIGN=enterprise-security"],["make","evidence-verify","CAMPAIGN=enterprise-security"]]}
+expectedEvidence: ["Per-control PASS/FAIL/NOT_RUN_ENV_UNAVAILABLE results and raw local evidence references.", "No cross-tenant read/write/execute and no secret/raw-content disclosure."]
+rollback: Remove only fixture attack resources; retain security evidence and all revocation/audit records.

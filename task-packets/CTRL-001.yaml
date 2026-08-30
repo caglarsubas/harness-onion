@@ -1,0 +1,16 @@
+id: CTRL-001
+repository: mas-harness-control-plane
+branch: codex/ctrl-001-bootstrap-auth
+objective: Bootstrap separate control-web and compiler-worker processes with OIDC tenant derivation, PostgreSQL RLS, health endpoints, and non-root images.
+predecessors: [SDK-002, IND-001, MET-003]
+allowedPaths: [".github/workflows/verify.yml", "apps/control-web/", "workers/profile-compiler/", "prisma/", "packages/db/", "tests/bootstrap/", "deploy/helm/control-plane/", "package.json", "package-lock.json", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes generated TypeScript/Python clients v1alpha1", "Produces control service health and tenant-context contract v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["Locked Node 24.20.0/Next.js 16.3.3 Active LTS/React 19.2/TypeScript 5/Prisma 6.19.3 and Python 3.12 toolchains.", "Next.js App Router standalone self-hosted build with only locally bundled assets and no Vercel service, hosted analytics, remote font, CDN, provider adapter, or runtime npm dependency.", "Separate images, OIDC session, server-derived tenant identity, RLS roles, health/readiness, and offline CI.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Questionnaire behavior, cloud deployment, paid identity providers, or wholesale legacy Prisma history."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["RLS denies cross-tenant rows.", "Both non-root images start offline with mocked OIDC and PostgreSQL.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Revert the unconsumed service scaffold and initial database migration together.

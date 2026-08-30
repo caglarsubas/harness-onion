@@ -1,0 +1,18 @@
+id: KN-001
+repository: mas-harness-knowledge-plane
+branch: codex/kn-001-foundation
+objective: Bootstrap the knowledge service kernel with separate store roles, RLS, inbox/outbox, source-reference privacy, images, charts, and contract mocks.
+predecessors: [SDK-004, TRUST-001, MET-003]
+allowedPaths: [".github/workflows/verify.yml", "src/planeon_knowledge/common/", "services/", "migrations/", "tests/common/", "contract-mocks/", "deploy/helm/", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse:
+  - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["deployment/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
+  - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/telemetry.py","src/data_source_harness/policy.py","src/data_source_harness/routing.py","deployment/profiles/air-gapped.json","deployment/profiles/local-laptop.json","deployment/profiles/self-hosted.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
+contracts: ["Consumes knowledge, identity, policy, telemetry, and event contracts v1alpha1", "Produces knowledge service kernel v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["Separate domain, ingestion, retrieval, and memory schemas/roles; tenant RLS; inbox/outbox; redacted source refs; health; images; charts; offline mocks.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Domain, connector, retrieval, memory behavior, shared tables, or external storage requirements."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","common-contract"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Role and RLS cross-store/cross-tenant denial.", "All non-root service shells start offline against mocks.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Revert the unconsumed foundation and initial additive migrations before domain packets merge.

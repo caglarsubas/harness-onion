@@ -1,0 +1,985 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/provider-module.schema.json",
+  "title": "Planeon harness provider and module catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "catalogVersion",
+    "status",
+    "policy",
+    "closureRules",
+    "capabilityRegistry",
+    "capabilityAdmission",
+    "capabilityImplications",
+    "capabilityProviders",
+    "providerExclusivityGroups",
+    "networkTargetRegistry",
+    "moduleCompatibility",
+    "serviceModuleBindings",
+    "dependencySatisfaction",
+    "implementationOwnership",
+    "modules",
+    "profileExamples"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "harness.planeon.ai/provider-module-catalog/v1alpha1"
+    },
+    "catalogVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "const": "PLANNED"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validCostDispositions",
+        "forbiddenProviderTraits",
+        "forbiddenDemandCapabilities",
+        "releaseAdmission",
+        "runtimeDownloadAllowed"
+      ],
+      "properties": {
+        "validCostDispositions": {
+          "const": [
+            "SELF_HOSTED_OPEN_SOURCE_NON_METERED",
+            "TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED"
+          ]
+        },
+        "forbiddenProviderTraits": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "forbiddenDemandCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "releaseAdmission": {"type": "string", "minLength": 1},
+        "runtimeDownloadAllowed": {"const": false}
+      }
+    },
+    "closureRules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "rule", "failure"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+          "rule": {"type": "string", "minLength": 1},
+          "failure": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "capabilityRegistry": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/stableId"}
+    },
+    "capabilityAdmission": {"$ref": "#/$defs/capabilityAdmission"},
+    "capabilityImplications": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/capabilityImplication"}
+    },
+    "capabilityProviders": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/capabilityProvider"}
+    },
+    "providerExclusivityGroups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/providerExclusivityGroup"}
+    },
+    "networkTargetRegistry": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/networkTarget"}
+    },
+    "moduleCompatibility": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/moduleCompatibility"}
+    },
+    "serviceModuleBindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/serviceModuleBinding"}
+    },
+    "dependencySatisfaction": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/dependencySatisfaction"}
+    },
+    "implementationOwnership": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"$ref": "#/$defs/stableId"},
+      "additionalProperties": {"$ref": "#/$defs/implementationOwnership"}
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/module"}
+    },
+    "profileExamples": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"$ref": "#/$defs/profileExample"}
+    }
+  },
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9.-]+$"
+    },
+    "networkTargetId": {
+      "type": "string",
+      "pattern": "^(?:(?:module|external)\\.[a-z0-9][a-z0-9.-]+|[a-z0-9]+(?:-[a-z0-9]+)+)$"
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "name"],
+      "properties": {
+        "type": {
+          "enum": ["REPOSITORY", "TENANT_SUPPLIED_EXTERNAL"]
+        },
+        "name": {"type": "string", "minLength": 1}
+      }
+    },
+    "installUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "artifact",
+        "digest",
+        "digestStatus"
+      ],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "type": {
+          "enum": [
+            "OCI_IMAGE",
+            "HELM_CHART",
+            "OCI_ARTIFACT",
+            "PYTHON_WHEEL",
+            "NPM_TARBALL",
+            "LOCAL_BINARY",
+            "KUBERNETES_RUNTIME_CLASS",
+            "EXTERNAL_ENDPOINT",
+            "MOUNTED_VOLUME",
+            "CLUSTER_API",
+            "DATABASE_SERVICE",
+            "DATABASE_EXTENSION"
+          ]
+        },
+        "artifact": {"type": "string", "minLength": 1},
+        "digest": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+          ]
+        },
+        "digestStatus": {
+          "enum": ["MISSING_PLANNED", "LOCKED"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"digestStatus": {"const": "MISSING_PLANNED"}}},
+          "then": {"properties": {"digest": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"digestStatus": {"const": "LOCKED"}}},
+          "then": {"properties": {"digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}}}
+        }
+      ]
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allOf", "anyOf", "not", "description"],
+      "properties": {
+        "allOf": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "anyOf": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "not": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "description": {"type": "string", "minLength": 1}
+      }
+    },
+    "conditionalDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["moduleId", "selectionType", "selectedWhen"],
+      "properties": {
+        "moduleId": {"$ref": "#/$defs/stableId"},
+        "selectionType": {"const": "subjectUnderEvaluation"},
+        "selectedWhen": {"$ref": "#/$defs/subjectSelectionPredicate"}
+      }
+    },
+    "subjectSelectionPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "anyOfSubjectHarnesses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "anyOfSubjectCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        }
+      }
+    },
+    "capabilityAdmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultClassification",
+        "publicDemandCapabilities",
+        "environmentFactCapabilities",
+        "providerSelectorCapabilities",
+        "requestAdmission",
+        "environmentAdmission",
+        "recommendationPolicy",
+        "assuranceSubjectAdmission",
+        "conditionalRequirements"
+      ],
+      "properties": {
+        "defaultClassification": {"const": "INTERNAL_ONLY"},
+        "publicDemandCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "environmentFactCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "providerSelectorCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "requestAdmission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowedClassifications", "inactiveSelectorDisposition", "missingSelectorDisposition", "multipleSelectorDisposition", "internalCapabilityDisposition"],
+          "properties": {
+            "allowedClassifications": {"const": ["PUBLIC_DEMAND", "PROVIDER_SELECTOR"]},
+            "inactiveSelectorDisposition": {"const": "INVALID_COMBINATION"},
+            "missingSelectorDisposition": {"const": "NEEDS_INPUT"},
+            "multipleSelectorDisposition": {"const": "AMBIGUOUS_PROVIDER"},
+            "internalCapabilityDisposition": {"const": "INVALID_CAPABILITY_ROLE"}
+          }
+        },
+        "environmentAdmission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowedClassification", "releaseRequiresSignedAttestation"],
+          "properties": {
+            "allowedClassification": {"const": "ENVIRONMENT_FACT"},
+            "releaseRequiresSignedAttestation": {"const": true}
+          }
+        },
+        "recommendationPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rankingOutput", "tenantAcceptanceRequired", "acceptedSelectorField", "implicitSelectionAllowed", "compatibleFallbackAllowed"],
+          "properties": {
+            "rankingOutput": {"const": "PROPOSED_SELECTOR_ONLY"},
+            "tenantAcceptanceRequired": {"const": true},
+            "acceptedSelectorField": {"const": "requestedCapabilities"},
+            "implicitSelectionAllowed": {"const": false},
+            "compatibleFallbackAllowed": {"const": false}
+          }
+        },
+        "assuranceSubjectAdmission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowedClassification", "capabilitiesMustBeSubsetOfAcceptedResolvedDemand", "inferenceSource"],
+          "properties": {
+            "allowedClassification": {"const": "PUBLIC_DEMAND"},
+            "capabilitiesMustBeSubsetOfAcceptedResolvedDemand": {"const": true},
+            "inferenceSource": {"const": "EXPLICIT_SUBJECT_SET_ONLY"}
+          }
+        },
+        "conditionalRequirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/conditionalCapabilityRequirement"}
+        }
+      }
+    },
+    "conditionalCapabilityRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["whenCapability", "requiresAnyCapabilities", "requiresSelectorGroup", "missingDisposition"],
+      "properties": {
+        "whenCapability": {"$ref": "#/$defs/stableId"},
+        "requiresAnyCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "requiresSelectorGroup": {"$ref": "#/$defs/stableId"},
+        "missingDisposition": {"const": "NEEDS_INPUT"}
+      }
+    },
+    "capabilityImplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "whenAll", "addCapabilities"],
+      "properties": {
+        "id": {"$ref": "#/$defs/stableId"},
+        "whenAll": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "addCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        }
+      }
+    },
+    "capabilityProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability", "resolution", "modules"],
+      "properties": {
+        "capability": {"$ref": "#/$defs/stableId"},
+        "resolution": {"const": "ALL"},
+        "modules": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        }
+      }
+    },
+    "providerExclusivityGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "activatedByCapabilities", "cardinality", "members", "selectors"],
+      "properties": {
+        "id": {"$ref": "#/$defs/stableId"},
+        "activatedByCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "cardinality": {"const": "EXACTLY_ONE_EXPLICIT_SELECTOR"},
+        "members": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "selectors": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"$ref": "#/$defs/providerSelector"}
+        }
+      }
+    },
+    "providerSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selectorCapability", "memberId"],
+      "properties": {
+        "selectorCapability": {"$ref": "#/$defs/stableId"},
+        "memberId": {"$ref": "#/$defs/stableId"}
+      }
+    },
+    "networkTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "targetClass", "locality", "allowedDirections", "resolutionAuthority", "addressPolicy", "urlLiteralAllowed", "publicHostAllowed"],
+      "properties": {
+        "id": {"$ref": "#/$defs/networkTargetId"},
+        "targetClass": {
+          "enum": ["MODULE_SERVICE", "EXTERNAL_PREREQUISITE", "TENANT_INGRESS", "TENANT_PRIVATE_ENDPOINT", "LOCAL_SELECTOR", "CLUSTER_API", "LOCAL_ARTIFACT_SOURCE", "OFFLINE_PREFETCH_SOURCE"]
+        },
+        "locality": {"enum": ["IN_PROCESS", "CLUSTER_LOCAL", "TENANT_PRIVATE", "LOCAL_FILESYSTEM"]},
+        "allowedDirections": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["INGRESS", "EGRESS"]}
+        },
+        "resolutionAuthority": {"enum": ["MODULE_ID", "CATALOG_EXTERNAL_ID", "PROFILE_ALLOWLIST", "OPERATOR_ALLOWLIST", "STATIC_LOCAL_SELECTOR"]},
+        "addressPolicy": {"const": "LOCAL_OR_SIGNED_TENANT_PRIVATE_ONLY"},
+        "urlLiteralAllowed": {"const": false},
+        "publicHostAllowed": {"const": false}
+      }
+    },
+    "moduleCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["moduleId", "operatingSystems", "isolationModes", "kubernetesApiGrant", "storageMode", "resourceRequirement", "networkLocalities", "requiredRuntimeClasses"],
+      "properties": {
+        "moduleId": {"$ref": "#/$defs/stableId"},
+        "operatingSystems": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["linux", "macos", "platform-supplied"]}
+        },
+        "isolationModes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["namespace", "dedicated-cluster", "local-process", "platform-supplied"]}
+        },
+        "kubernetesApiGrant": {
+          "enum": ["NONE", "READ_ONLY", "NAMESPACED_WRITE", "CLUSTER_CONTROLLER", "EPHEMERAL_JOB_CREATE", "TENANT_SUPPLIED"]
+        },
+        "storageMode": {"enum": ["NONE", "EPHEMERAL", "PERSISTENT", "EXTERNAL_READ_ONLY", "EXTERNAL_SERVICE", "MIXED"]},
+        "resourceRequirement": {"$ref": "#/$defs/resourceCapacity"},
+        "networkLocalities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["IN_PROCESS", "CLUSTER_LOCAL", "TENANT_PRIVATE", "LOCAL_FILESYSTEM"]}
+        },
+        "requiredRuntimeClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["kubernetes-default", "gvisor", "kata", "local-process", "none", "platform-supplied"]}
+        }
+      }
+    },
+    "serviceModuleBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["serviceId", "moduleId"],
+      "properties": {
+        "serviceId": {"$ref": "#/$defs/stableId"},
+        "moduleId": {"$ref": "#/$defs/stableId"}
+      }
+    },
+    "dependencySatisfaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["serviceDependencyId", "mode", "targetId"],
+      "properties": {
+        "serviceDependencyId": {"$ref": "#/$defs/stableId"},
+        "mode": {"enum": ["MODULE_ALIAS", "EXCLUSIVE_GROUP"]},
+        "targetId": {"$ref": "#/$defs/stableId"}
+      }
+    },
+    "environmentFacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capabilities", "kubernetes", "architecture", "operatingSystem", "isolation", "connectivity", "accelerators", "kubernetesApi", "storageModes", "resourceCapacity", "networkLocalities", "runtimeClasses", "attestation"],
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "kubernetes": {"enum": ["upstream", "k3s", "openshift"]},
+        "architecture": {"enum": ["amd64", "arm64"]},
+        "operatingSystem": {"enum": ["linux", "macos"]},
+        "isolation": {"enum": ["namespace", "dedicated-cluster"]},
+        "connectivity": {"enum": ["airgap", "silo", "connected"]},
+        "accelerators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["nvidia"]}
+        },
+        "kubernetesApi": {"$ref": "#/$defs/kubernetesApiFacts"},
+        "storageModes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["NONE", "EPHEMERAL", "PERSISTENT", "EXTERNAL_READ_ONLY", "EXTERNAL_SERVICE", "MIXED"]}
+        },
+        "resourceCapacity": {"$ref": "#/$defs/resourceCapacity"},
+        "networkLocalities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["IN_PROCESS", "CLUSTER_LOCAL", "TENANT_PRIVATE", "LOCAL_FILESYSTEM"]}
+        },
+        "runtimeClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["kubernetes-default", "gvisor", "kata", "local-process", "none", "platform-supplied"]}
+        },
+        "attestation": {"$ref": "#/$defs/factAttestation"}
+      }
+    },
+    "kubernetesApiFacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "versionStatus", "grants"],
+      "properties": {
+        "version": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "pattern": "^[0-9]+\\.[0-9]+$"}
+          ]
+        },
+        "versionStatus": {"enum": ["MISSING_PLANNED", "DECLARED"]},
+        "grants": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["NONE", "READ_ONLY", "NAMESPACED_WRITE", "CLUSTER_CONTROLLER", "EPHEMERAL_JOB_CREATE", "TENANT_SUPPLIED"]}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"versionStatus": {"const": "MISSING_PLANNED"}}},
+          "then": {"properties": {"version": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"versionStatus": {"const": "DECLARED"}}},
+          "then": {"properties": {"version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+$"}}}
+        }
+      ]
+    },
+    "resourceCapacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availableClasses", "cpuMillicores", "memoryMiB", "ephemeralStorageMiB", "capacityStatus"],
+      "properties": {
+        "availableClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["TINY", "SMALL", "MEDIUM", "LARGE", "PROFILE_DEFINED", "EXTERNAL"]}
+        },
+        "cpuMillicores": {"oneOf": [{"type": "null"}, {"type": "integer", "minimum": 1}]},
+        "memoryMiB": {"oneOf": [{"type": "null"}, {"type": "integer", "minimum": 1}]},
+        "ephemeralStorageMiB": {"oneOf": [{"type": "null"}, {"type": "integer", "minimum": 1}]},
+        "capacityStatus": {"enum": ["MISSING_PLANNED", "DECLARED"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"capacityStatus": {"const": "MISSING_PLANNED"}}},
+          "then": {
+            "properties": {
+              "cpuMillicores": {"type": "null"},
+              "memoryMiB": {"type": "null"},
+              "ephemeralStorageMiB": {"type": "null"}
+            }
+          }
+        }
+      ]
+    },
+    "factAttestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "digest", "digestStatus", "signatureStatus"],
+      "properties": {
+        "source": {"type": "string", "minLength": 1},
+        "digest": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+          ]
+        },
+        "digestStatus": {"enum": ["MISSING_PLANNED", "LOCKED"]},
+        "signatureStatus": {"enum": ["MISSING_PLANNED", "VERIFIED"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"digestStatus": {"const": "MISSING_PLANNED"}}},
+          "then": {
+            "properties": {
+              "digest": {"type": "null"},
+              "signatureStatus": {"const": "MISSING_PLANNED"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"digestStatus": {"const": "LOCKED"}}},
+          "then": {
+            "properties": {
+              "digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+              "signatureStatus": {"const": "VERIFIED"}
+            }
+          }
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaIntent", "requiredFields", "forbiddenFields"],
+      "properties": {
+        "schemaIntent": {"type": "string", "minLength": 1},
+        "requiredFields": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "forbiddenFields": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "secrets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "references", "inlineValuesAllowed"],
+      "properties": {
+        "mode": {"enum": ["NONE", "REFERENCE_ONLY", "PUBLIC_MATERIAL_ONLY"]},
+        "references": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "inlineValuesAllowed": {"const": false}
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["defaultDeny", "ingressFrom", "egressTo", "undeclaredExternalEgressAllowed"],
+      "properties": {
+        "defaultDeny": {"type": "boolean"},
+        "ingressFrom": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/networkTargetId"}},
+        "egressTo": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/networkTargetId"}},
+        "undeclaredExternalEgressAllowed": {"const": false}
+      }
+    },
+    "rbac": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["serviceAccount", "kubernetesApiAccess", "permissions"],
+      "properties": {
+        "serviceAccount": {"type": "string", "minLength": 1},
+        "kubernetesApiAccess": {
+          "enum": ["NONE", "READ_ONLY", "NAMESPACED_WRITE", "CLUSTER_CONTROLLER", "EPHEMERAL_JOB_CREATE", "TENANT_SUPPLIED"]
+        },
+        "permissions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "claims", "retentionOwner"],
+      "properties": {
+        "mode": {"enum": ["NONE", "EPHEMERAL", "PERSISTENT", "EXTERNAL_READ_ONLY", "EXTERNAL_SERVICE", "MIXED"]},
+        "claims": {"type": "array", "items": {"type": "string"}},
+        "retentionOwner": {"type": "string", "minLength": 1}
+      }
+    },
+    "platforms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kubernetes", "os"],
+      "properties": {
+        "kubernetes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["upstream", "k3s", "openshift", "none"]}
+        },
+        "os": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["linux", "macos", "platform-supplied"]}
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "minimum", "limitsRequired", "accelerator"],
+      "properties": {
+        "class": {"enum": ["TINY", "SMALL", "MEDIUM", "LARGE", "PROFILE_DEFINED", "EXTERNAL"]},
+        "minimum": {"type": "string", "minLength": 1},
+        "limitsRequired": {"type": "boolean"},
+        "accelerator": {"enum": ["NONE", "OPTIONAL", "REQUIRED", "TENANT_DEFINED"]}
+      }
+    },
+    "health": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["liveness", "readiness", "startup"],
+      "properties": {
+        "liveness": {"type": "string", "minLength": 1},
+        "readiness": {"type": "string", "minLength": 1},
+        "startup": {"type": "string", "minLength": 1}
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx", "custody", "source"],
+      "properties": {
+        "spdx": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "custody": {"enum": ["REPOSITORY_BUILT", "UPSTREAM_PINNED", "TENANT_ATTESTED_PINNED", "COMPOSITE_REVIEW_REQUIRED"]},
+        "source": {"type": "string", "minLength": 1}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "safety"],
+      "properties": {
+        "strategy": {"type": "string", "minLength": 1},
+        "safety": {"type": "string", "minLength": 1}
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "defaultAction", "destructiveDeletionRequiresAuthorization"],
+      "properties": {
+        "classification": {"type": "string", "minLength": 1},
+        "defaultAction": {"type": "string", "minLength": 1},
+        "destructiveDeletionRequiresAuthorization": {"type": "boolean"}
+      }
+    },
+    "implementationOwnership": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["disposition", "packetId", "path", "deliverableIndex"],
+          "properties": {
+            "disposition": {"const": "REPOSITORY_PACKET"},
+            "packetId": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)[A-Za-z0-9._/-]+$"
+            },
+            "deliverableIndex": {"type": "integer", "minimum": 0}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["disposition", "verification", "reason"],
+          "properties": {
+            "disposition": {"const": "EXTERNAL_PREREQUISITE"},
+            "verification": {"const": "TENANT_ATTESTED_PINNED"},
+            "reason": {"type": "string", "minLength": 20}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["disposition", "installable", "reason"],
+          "properties": {
+            "disposition": {"const": "CONTRACT_ONLY"},
+            "installable": {"const": false},
+            "reason": {"type": "string", "minLength": 20}
+          }
+        }
+      ]
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "harness",
+        "scope",
+        "owner",
+        "kind",
+        "selection",
+        "providers",
+        "installUnits",
+        "dependencies",
+        "capabilityCondition",
+        "configuration",
+        "secrets",
+        "network",
+        "rbac",
+        "storage",
+        "platforms",
+        "architectures",
+        "resources",
+        "health",
+        "immutableDigestRequired",
+        "status",
+        "license",
+        "costDisposition",
+        "upgrade",
+        "rollback",
+        "uninstall",
+        "dataRetention"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/stableId"},
+        "harness": {"$ref": "#/$defs/stableId"},
+        "scope": {"enum": ["BUILD_TIME", "MANAGEMENT_PLANE", "RUNTIME", "EXTERNAL"]},
+        "owner": {"$ref": "#/$defs/owner"},
+        "kind": {
+          "enum": ["API", "WORKER", "CONTROLLER", "JOB", "ADAPTER", "UI", "CHART", "LIBRARY", "CLI", "INFRASTRUCTURE", "ARTIFACT", "COLLECTOR", "DATABASE", "RUNTIME", "CAPABILITY_AGGREGATE"]
+        },
+        "selection": {"enum": ["DEFAULT", "OPTIONAL", "CONDITIONAL"]},
+        "providers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "installUnits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/installUnit"}
+        },
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "conditionalDependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/conditionalDependency"}
+        },
+        "requiredProviderGroups": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "capabilityCondition": {"$ref": "#/$defs/condition"},
+        "configuration": {"$ref": "#/$defs/configuration"},
+        "secrets": {"$ref": "#/$defs/secrets"},
+        "network": {"$ref": "#/$defs/network"},
+        "rbac": {"$ref": "#/$defs/rbac"},
+        "storage": {"$ref": "#/$defs/storage"},
+        "platforms": {"$ref": "#/$defs/platforms"},
+        "architectures": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["amd64", "arm64", "platform-supplied"]}
+        },
+        "resources": {"$ref": "#/$defs/resources"},
+        "health": {"$ref": "#/$defs/health"},
+        "immutableDigestRequired": {"const": true},
+        "status": {"const": "PLANNED"},
+        "license": {"$ref": "#/$defs/license"},
+        "costDisposition": {
+          "enum": ["SELF_HOSTED_OPEN_SOURCE_NON_METERED", "TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED"]
+        },
+        "upgrade": {"$ref": "#/$defs/lifecycle"},
+        "rollback": {"$ref": "#/$defs/lifecycle"},
+        "uninstall": {"$ref": "#/$defs/lifecycle"},
+        "dataRetention": {"$ref": "#/$defs/retention"}
+      }
+    },
+    "profileExample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "intent",
+        "requestedCapabilities",
+        "environmentFacts",
+        "assuranceSubjects",
+        "selectedModules",
+        "externalPrerequisites",
+        "excludedModules",
+        "expectedClosure",
+        "digestDisposition"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/stableId"},
+        "intent": {"type": "string", "minLength": 1},
+        "requestedCapabilities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "environmentFacts": {"$ref": "#/$defs/environmentFacts"},
+        "assuranceSubjects": {"$ref": "#/$defs/assuranceSubjects"},
+        "selectedModules": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "externalPrerequisites": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "excludedModules": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/stableId"}},
+        "expectedClosure": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "digestDisposition": {"const": "UNRESOLVED_UNTIL_RELEASE"}
+      }
+    },
+    "assuranceSubjects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selectionMode", "harnesses", "capabilities", "subjectSetDigest", "digestStatus", "signatureStatus"],
+      "properties": {
+        "selectionMode": {"const": "EXPLICIT_IMMUTABLE_SUBJECT_SET"},
+        "harnesses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/stableId"}
+        },
+        "subjectSetDigest": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+          ]
+        },
+        "digestStatus": {"enum": ["MISSING_PLANNED", "LOCKED"]},
+        "signatureStatus": {"enum": ["MISSING_PLANNED", "VERIFIED"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"digestStatus": {"const": "MISSING_PLANNED"}}},
+          "then": {
+            "properties": {
+              "subjectSetDigest": {"type": "null"},
+              "signatureStatus": {"const": "MISSING_PLANNED"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"digestStatus": {"const": "LOCKED"}}},
+          "then": {
+            "properties": {
+              "subjectSetDigest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+              "signatureStatus": {"const": "VERIFIED"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

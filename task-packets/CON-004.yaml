@@ -1,0 +1,16 @@
+id: CON-004
+repository: mas-harness-contracts
+branch: codex/con-004-profile-compiler
+objective: Implement deterministic prerequisite closure, closed capability admission, recommendation-only provider filtering, explicit tenant selector acceptance, ambiguity handling, installation waves, and explanations.
+predecessors: [CON-003]
+allowedPaths: ["schemas/v1alpha1/composition/", "src/planeon_harness_contracts/canonical.py", "src/planeon_harness_contracts/compiler.py", "src/planeon_harness_contracts/errors.py", "src/planeon_harness_contracts/graph.py", "src/planeon_harness_contracts/cli.py", "src/planeon_harness_contracts/commands/verify-determinism.json", "tests/unit/test_compiler.py", "tests/property/test_compiler.py", "tests/determinism/", "tests/fixtures/compiler/", "docs/compiler.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes QuestionnaireAnswerSet v1alpha1", "Consumes DataReadinessAssessment v1alpha1", "Consumes HarnessModuleDefinition v1alpha1", "Produces TenantDemand v1alpha1", "Produces HarnessProfile v1alpha1", "Produces BillOfMaterials v1alpha1", "Produces InstallPlan v1alpha1", "Produces EvidencePlan v1alpha1", "Produces ExecutionBudget v1alpha1", "Owns harnessctl verify-determinism command registration"]
+deliverables: ["Accepted-prerequisite closure, capability-role admission, compatibility filtering, proposed-selector recommendations, explicit selector-to-member resolution, subject-aware conditional closure, and topological waves.", "Canonical JSON, SHA-256, explanations, and stable NEEDS_INPUT, INVALID_CAPABILITY_ROLE, INVALID_COMBINATION, and AMBIGUOUS_PROVIDER errors."]
+excluded: ["LLM selection, ranking that mutates a profile, implicit or fallback provider selection, silent prerequisites, artifact fetching, or installation."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","pytest","tests/unit/test_compiler.py","tests/property/test_compiler.py","tests/determinism"],["uv","run","--offline","--frozen","--no-sync","harnessctl","verify-determinism","tests/fixtures/compiler/valid"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Byte-identical clean-directory outputs.", "Golden digests and property tests for capability-role violations, inactive/missing/multiple selectors, recommendation acceptance, subject-capability closure, local-judge NEEDS_INPUT, cycles, conflicts, and incomplete prerequisites."]
+rollback: Revert compiler and composition contracts before any profile is locked against this version.

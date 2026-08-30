@@ -1,0 +1,16 @@
+id: SDK-007
+repository: mas-harness-sdks
+branch: codex/sdk-007-prometa-compat
+objective: Publish a separate planeon-prometa-compat distribution that preserves approved legacy imports through the v1 line.
+predecessors: [SDK-005, SDK-006]
+allowedPaths: ["python/compat/prometa/", "python/tests/compat/", "python/compat-pyproject.toml", "docs/migrations/prometa.md", "docs/compatibility-matrix.md", "ci/targets/sdk-007.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes planeon_harness SDK API v1", "Produces optional legacy `prometa` import surface v1"]
+deliverables: ["Separate compatibility wheel, explicit re-exports, warnings, support matrix, and v2 removal notice."]
+excluded: ["New platform services depending on the compatibility package or preserving paid-provider modules."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","compat-vectors"],["make","build-reproducible"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Approved legacy import suite passes.", "Dependency graph proves planeon_harness does not import prometa compatibility."]
+rollback: Withdraw only the optional compatibility wheel while retaining the canonical SDK.

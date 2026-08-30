@@ -1,0 +1,16 @@
+id: CTRL-003
+repository: mas-harness-control-plane
+branch: codex/ctrl-003-demand-approval
+objective: Implement demand validation, prerequisite accept/reject, approvals, N-of-M policy hooks, and lifecycle guards.
+predecessors: [CTRL-002, CON-004]
+allowedPaths: ["apps/control-web/src/app/demands/", "apps/control-web/src/app/api/v1alpha1/demands/", "apps/control-web/src/app/api/v1alpha1/approvals/", "apps/control-web/src/lib/demands/", "packages/db/migrations/demand/", "tests/demands/", "e2e/demand-approval.spec.ts", "ci/targets/ctrl-003.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes TenantDemand, ApprovalRequest, and lifecycle contracts v1alpha1", "Produces demand and approval REST behavior v1alpha1"]
+deliverables: ["Validated demand transitions, explicit prerequisite decisions, approval quorum hook, rejection reasons, and append-only audit."]
+excluded: ["Silent prerequisite acceptance, embedded policy engine, profile compilation, or bundle creation."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","demand-contract"],["make","demand-approval-e2e"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Legal-state transition table coverage.", "Missing owner/readiness, rejected prerequisite, stale approval, duplicate request, and tenant-denial vectors."]
+rollback: Revert demand and approval features plus their additive migration without deleting questionnaire data.

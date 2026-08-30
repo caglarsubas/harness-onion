@@ -1,0 +1,22 @@
+schemaVersion: harness.planeon.ai/reuse-map/v1alpha1
+sources:
+  - repository: git@github.com:caglarsubas/llm_inference_engine.git
+    commit: 6815c21cb10a4d7dc0b4804f6bb223afb4321e97
+    licenseDisposition: path-review-required-before-copy
+    destinations: [contracts, model-plane, runtime-plane, trust-plane, distribution, conformance-labs]
+    excluded: [openrouter, tunnels, hosted-endpoints, ghcr, runtime-model-downloads]
+    excludedPathPatterns: ['(?i)(^|[/_\\.-])(openrouter|tunnel|hosted[_-]?provider|hosted[_-]?endpoint)([/_\\.-]|$)']
+  - repository: git@github.com:caglarsubas/data-source-harness.git
+    commit: 858281f4b845ffacfe05cdb2c40a402c237d4c54
+    licenseDisposition: path-review-required-before-copy
+    destinations: [contracts, knowledge-plane, execution-plane, trust-plane, industry-packs, distribution, conformance-labs]
+    excluded: [hmac-production-signing, fused-retrieval-memory-runtime-state]
+    excludedPathPatterns: ['(?i)(^|[/_\\.-])hmac([^/_\\.-]*)([/_\\.-]|$)']
+nonPublicPlanningInputs:
+  count: 3
+  disposition: METADATA_OMITTED_FROM_PUBLIC_REPOSITORY
+  implementationAccess: PROHIBITED
+  requirementDisposition: DISTILLED_INTO_INDEPENDENT_PUBLIC_CONTRACTS_AND_ACCEPTANCE_CRITERIA
+  copyAuthorization: NONE
+pathAuthority: architecture/reuse-path-index.yaml
+authorizationAuthority: legal/source-reuse-authorization.yaml

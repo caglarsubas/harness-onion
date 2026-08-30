@@ -1,0 +1,17 @@
+id: RUN-GW-002
+repository: mas-harness-runtime-plane
+branch: codex/run-gw-002-streaming
+objective: Add resumable SSE proxying, cancellation, bounded buffering, timeout, backpressure, and explicit fallback semantics to the AI gateway.
+predecessors: [RUN-GW-001]
+allowedPaths: ["services/ai-gateway/src/streaming/", "services/ai-gateway/src/cancellation/", "services/ai-gateway/tests/streaming/", "fixtures/streaming/", "docs/streaming.md", "ci/targets/run-gw-002.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse:
+  - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: REFERENCE_ONLY, paths: ["src/inference_engine/cancellation.py","src/inference_engine/api/_batcher.py","src/inference_engine/api/_fallback.py","src/inference_engine/api/chat.py","src/inference_engine/api/responses.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
+contracts: ["Consumes model streaming and SSE-resume contracts v1", "Produces AI gateway streaming behavior v1"]
+deliverables: ["Bounded SSE buffers, resume tokens, cancellation propagation, timeout/backpressure, safe fallback boundary, and redacted telemetry."]
+excluded: ["Unbounded replay, fallback after visible incompatible output, or raw content in metrics/logs."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","streaming-contract"],["make","streaming-failure-matrix"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Slow-client, disconnect/resume, cancellation, buffer exhaustion, and partial-output fallback reports."]
+rollback: Disable new streaming route and revert its isolated module without changing non-streaming routing.

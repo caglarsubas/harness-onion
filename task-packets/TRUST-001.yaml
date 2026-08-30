@@ -1,0 +1,16 @@
+id: TRUST-001
+repository: mas-harness-trust-plane
+branch: codex/trust-001-foundation
+objective: Bootstrap tenant OIDC admission, trust-plane database isolation, signed OPA policy activation, policy decisions, audit/outbox, and fail-closed clients.
+predecessors: [SDK-003, CON-006, MET-003]
+allowedPaths: [".github/workflows/verify.yml", "src/planeon_trust/common/", "services/policy-decision/", "migrations/policy/", "tests/foundation/", "fixtures/policy/", "deploy/helm/policy-decision/", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes identity, policy bundle, decision, audit, and event contracts v1alpha1", "Produces policy-decision API and fail-closed client v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["JWT/OIDC tenant derivation, separate RLS roles, offline signed policy activation, decision API, bounded decision metadata cache, append-only audit/outbox, and fail-closed client.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Caller-supplied tenant identity, external authorization SaaS, policy authoring UI, guardrails, or fail-open mutations."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","policy-vectors"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Cross-tenant/forged-token denial.", "Signed activation, last-known-good, revoked/expired policy, OPA outage, and atomic audit/outbox reports.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Reactivate the previous verified policy bundle and revert additive code without deleting audit records.

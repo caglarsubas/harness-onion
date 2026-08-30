@@ -1,0 +1,16 @@
+id: EXEC-001
+repository: mas-harness-execution-plane
+branch: codex/exec-001-foundation
+objective: Bootstrap execution services with separate RLS roles, inbox/outbox, task/event contracts, images, mocks, and state-model tests.
+predecessors: [SDK-004, TRUST-001, KN-001, MET-003]
+allowedPaths: [".github/workflows/verify.yml", "src/planeon_execution/common/", "services/", "migrations/", "tests/common/", "contract-mocks/", "deploy/helm/", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes task, tool, protocol, decision, event, identity, and policy contracts v1alpha1", "Produces execution service kernel v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["Separate protocol/orchestration/tools/decision schemas and roles, tenant RLS, inbox/outbox, task model, health, non-root images, charts, and mocks.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Protocol adapters, orchestration behavior, tool execution, sandboxes, or decision algorithms."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","state-model"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Legal/illegal task transition coverage.", "Cross-role and cross-tenant denial plus offline service-shell startup.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Revert the unconsumed execution foundation and initial additive migrations.

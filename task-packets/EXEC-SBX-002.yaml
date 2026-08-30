@@ -1,0 +1,16 @@
+id: EXEC-SBX-002
+repository: mas-harness-execution-plane
+branch: codex/exec-sbx-002-native-providers
+objective: Add independently selectable gVisor and Kata native sandbox manifests, capability probes, and explicit non-certification behavior.
+predecessors: [EXEC-SBX-001]
+allowedPaths: ["providers/gvisor/", "providers/kata/", "src/planeon_execution/sandbox/capabilities.py", "tests/sandbox-native/", "fixtures/sandbox-native/", "docs/native-sandbox.md", "ci/targets/exec-sbx-002.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes sandbox capability and platform contracts v1alpha1", "Produces gVisor and Kata provider modules v1"]
+deliverables: ["RuntimeClass manifests, platform/architecture probes, admission checks, resource/network profiles, cleanup, and provider-specific conformance hooks."]
+excluded: ["Installing host runtimes, claiming hard isolation when unavailable, or falling back to ordinary containers for UNTRUSTED_NATIVE."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","sandbox-native-render"],["make","sandbox-native-probe-fixtures"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Compatible/incompatible probe vectors.", "Unavailable live runtime yields NOT_RUN_ENV_UNAVAILABLE and compilation denial, never a pass."]
+rollback: Remove optional provider manifests and catalog entries without changing Job/Wasmtime behavior.

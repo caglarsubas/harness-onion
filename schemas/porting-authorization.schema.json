@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/porting-authorization-index.v1alpha1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "admissionEnabled", "authorizations"],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/porting-authorization-index/v1alpha1"},
+    "status": {"const": "DISABLED_FAIL_CLOSED"},
+    "admissionEnabled": {"const": false},
+    "authorizations": {
+      "type": "array",
+      "maxItems": 0,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/authorization"}
+    }
+  },
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "safeFile": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/safeFile"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "offlineSignature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "canonicalRecordSha256", "signaturePath", "approverKeyFingerprintSha256"],
+      "properties": {
+        "algorithm": {"const": "ED25519"},
+        "canonicalRecordSha256": {"$ref": "#/$defs/sha256"},
+        "signaturePath": {"$ref": "#/$defs/safeFile"},
+        "approverKeyFingerprintSha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorizationId", "state", "sourceRepository", "sourceCommit",
+        "sourcePath", "sourceGitObject", "destinationRepository",
+        "destinationPath", "transformationIntent", "parityIntent",
+        "ownershipEvidence", "licenseEvidence",
+        "thirdPartyReviewEvidence", "exclusionReviewEvidence",
+        "approvedBy", "approvedAt", "offlineSignature",
+        "destinationPortingRecord"
+      ],
+      "properties": {
+        "authorizationId": {"type": "string", "pattern": "^PA-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3}$"},
+        "state": {"const": "APPROVED"},
+        "sourceRepository": {
+          "enum": [
+            "git@github.com:caglarsubas/llm_inference_engine.git",
+            "git@github.com:caglarsubas/data-source-harness.git"
+          ]
+        },
+        "sourceCommit": {"$ref": "#/$defs/sha1"},
+        "sourcePath": {"$ref": "#/$defs/safeFile"},
+        "sourceGitObject": {"$ref": "#/$defs/sha1"},
+        "destinationRepository": {
+          "enum": [
+            "Harness-Engineering", "mas-harness-contracts", "mas-harness-sdks",
+            "mas-harness-industry-packs", "mas-harness-control-plane",
+            "mas-harness-runtime-plane", "mas-harness-model-plane",
+            "mas-harness-knowledge-plane", "mas-harness-execution-plane",
+            "mas-harness-trust-plane", "mas-harness-operator",
+            "mas-harness-distribution", "mas-harness-conformance-labs"
+          ]
+        },
+        "destinationPath": {"$ref": "#/$defs/safeFile"},
+        "transformationIntent": {"enum": ["EXACT_COPY", "ATTRIBUTED_ADAPTATION"]},
+        "parityIntent": {"enum": ["BEHAVIORAL_PARITY", "CONTRACT_PARITY", "APPROVED_DIVERGENCE"]},
+        "ownershipEvidence": {"$ref": "#/$defs/evidence"},
+        "licenseEvidence": {"$ref": "#/$defs/evidence"},
+        "thirdPartyReviewEvidence": {"$ref": "#/$defs/evidence"},
+        "exclusionReviewEvidence": {"$ref": "#/$defs/evidence"},
+        "approvedBy": {"const": "LEGAL_AND_REPOSITORY_OWNER"},
+        "approvedAt": {"type": "string", "format": "date-time"},
+        "offlineSignature": {"$ref": "#/$defs/offlineSignature"},
+        "destinationPortingRecord": {"const": "PORTING.yaml"}
+      }
+    }
+  }
+}

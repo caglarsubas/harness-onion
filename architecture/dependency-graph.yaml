@@ -1,0 +1,109 @@
+schemaVersion: harness.planeon.ai/dependency-graph/v1alpha1
+rules:
+  everyUnconditionalRepositoryGraphAcyclic: true
+  repositoryGraphAcyclicityExclusions: [subjectUnderEvaluation]
+  harnessCyclesAllowed: false
+  mainBranchDependenciesAllowed: false
+  submodulesAllowed: false
+  handwrittenContractCopiesAllowed: false
+  artifactReference: version-and-sha256-digest
+
+runtimeSurface:
+  authority: architecture/dependency-graph.yaml#/runtimeSurface
+  mirroredBy:
+    - docs/harnesses/runtime.ai-gateway.md
+    - docs/harnesses/runtime.experience.md
+  services:
+    ai-gateway:
+      basePath: /gateway/v1
+      endpoints:
+        - {method: POST, path: /gateway/v1/invoke}
+        - {method: POST, path: /gateway/v1/embeddings}
+        - {method: POST, path: /gateway/v1/rerank}
+        - {method: GET, path: /gateway/v1/routes}
+        - {method: GET, path: "/gateway/v1/routes/{id}"}
+      emittedEvents:
+        - gateway.route.activated.v1
+        - gateway.request.denied.v1
+        - gateway.request.completed.v1
+        - gateway.budget.exhausted.v1
+        - gateway.fallback.selected.v1
+      state:
+        behavior: STATEFUL
+        durableContent: metadata-only
+        forbiddenPersistentContent: [raw-prompts, raw-responses, conversation-memory, retrieved-context]
+    experience-gateway:
+      basePath: /experience/v1
+      endpoints:
+        - {method: POST, path: /experience/v1/sessions}
+        - {method: GET, path: "/experience/v1/sessions/{id}"}
+        - {method: GET, path: "/experience/v1/sessions/{id}/events"}
+        - {method: POST, path: "/experience/v1/sessions/{id}/tasks"}
+        - {method: POST, path: "/experience/v1/tasks/{id}/input"}
+        - {method: POST, path: "/experience/v1/tasks/{id}/cancel"}
+        - {method: GET, path: /experience/v1/approvals}
+        - {method: POST, path: "/experience/v1/approvals/{id}:decide"}
+        - {method: GET, path: "/experience/v1/evidence/{id}"}
+      emittedEvents:
+        - experience.session.created.v1
+        - experience.input.submitted.v1
+        - experience.task.cancel.requested.v1
+        - experience.approval.decided.v1
+      state:
+        behavior: STATEFUL
+        durableContent: session-metadata-redacted-projections-and-cursors
+        forbiddenPersistentContent: [unclassified-raw-prompts, unclassified-raw-responses, long-term-memory]
+
+runtimeRequestGraph:
+  direction: caller-to-provider
+  commonAdmissionEdges:
+    - {from: ai-gateway, to: policy-decision, purpose: tenant-and-route-admission}
+    - {from: ai-gateway, to: guardrail-service, purpose: signed-input-output-runtime-checks}
+    - {from: ai-gateway, to: usage-ledger, purpose: atomic-budget-reservation-and-usage}
+  branches:
+    - id: direct-model
+      selectedWhen: {type: routeKind, routeKind: DIRECT_MODEL}
+      entrypoints: [ai-gateway, experience-gateway]
+      edges:
+        - {from: experience-gateway, to: ai-gateway, purpose: optional-human-channel-projection}
+        - {from: ai-gateway, to: inference-api, purpose: normalized-model-invocation}
+      forbiddenNodes: [retrieval-service, orchestration-api, orchestration-worker, tool-broker]
+    - id: task
+      selectedWhen: {type: routeKind, routeKind: TASK}
+      entrypoints: [ai-gateway, experience-gateway]
+      edges:
+        - {from: experience-gateway, to: ai-gateway, purpose: submit-signed-task-route}
+        - {from: ai-gateway, to: orchestration-api, purpose: durable-task-admission}
+        - {from: orchestration-api, to: orchestration-worker, purpose: durable-outbox-and-lease}
+        - from: orchestration-worker
+          to: retrieval-service
+          purpose: optional-retrieval-and-context-assembly
+          selectedWhen: {anyOfCapabilities: [knowledge.retrieval]}
+        - from: orchestration-worker
+          to: inference-api
+          purpose: optional-model-step
+          selectedWhen: {anyOfCapabilities: [model.inference]}
+        - from: orchestration-worker
+          to: tool-broker
+          purpose: optional-governed-tool-step
+          selectedWhen: {anyOfCapabilities: [tool.governed-execution]}
+      ownership:
+        retrievalAndContextAssembly: orchestration-worker
+        toolFlow: orchestration-worker
+        durableTaskState: orchestration-api-and-worker
+    - id: experience-task-control
+      selectedWhen:
+        type: taskEvent
+        taskMustExist: true
+        anyOfEvents: [INPUT_SUBMITTED, CANCELLATION_REQUESTED, APPROVAL_DECIDED, EVENT_REPLAY_REQUESTED]
+      entrypoints: [experience-gateway]
+      edges:
+        - {from: experience-gateway, to: orchestration-api, purpose: task-input-cancel-and-snapshot}
+        - {from: experience-gateway, to: governance-service, purpose: approval-view-and-decision}
+      forbiddenNodes: [inference-api, retrieval-service, tool-broker]
+  invariants:
+    - ai-gateway never retrieves or assembles context.
+    - direct-model routes call inference-api and never create orchestration tasks.
+    - task routes call orchestration-api; only orchestration-worker owns retrieval, context assembly, and tool flow.
+    - non-task experience remains usable without execution.orchestration.
+controlPlaneOnRuntimePath: false

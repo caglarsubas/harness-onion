@@ -1,0 +1,16 @@
+id: OP-002
+repository: mas-harness-operator
+branch: codex/op-002-preflight-verification
+objective: Implement platform, architecture, storage, network, and sandbox preflight plus locked-profile, closure, checksum, signature, revocation, and license verification.
+predecessors: [OP-001, DIST-003]
+allowedPaths: ["internal/preflight/", "internal/verify/", "cmd/bundle-verifier/", "tests/preflight/", "tests/verify/", "fixtures/preflight/", "deploy/helm/bundle-verifier/", "docs/preflight.md", "ci/targets/op-002.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes locked profile, bundle lock, trust, license, platform, architecture, storage, network, and sandbox contracts v1", "Produces preflight and verification conditions v1"]
+deliverables: ["Read-only preflight observations, complete bundle closure, checksum/signature/trust rotation/revocation/license checks, and fail-before-apply reasons."]
+excluded: ["Kubernetes apply, cloud checks, Red Hat entitlement assumptions, network artifact fetching, or private signing keys."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","preflight-fixtures"],["make","bundle-verifier-test"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Supported/unsupported platform vectors.", "Tampered, incomplete, revoked, unlicensed, wrong-architecture, and unavailable-sandbox denial before apply."]
+rollback: Revert verifier version and restore the prior public trust/config bundle; no workload resources have been applied.

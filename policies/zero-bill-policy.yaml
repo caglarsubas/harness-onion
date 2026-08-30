@@ -1,0 +1,54 @@
+schemaVersion: harness.planeon.ai/zero-bill-policy/v1alpha1
+defaults:
+  deploymentMode: offline
+  allowedHosts: []
+  runtimeDownloads: false
+  externalTelemetry: false
+  paidOrMeteredProviders: false
+  thirdPartyApiKeys: false
+forbiddenGithub:
+  runnerLabels: [ubuntu-latest, ubuntu-24.04, windows-latest, macos-latest]
+  actions: [actions/upload-artifact, actions/cache]
+  services: [packages, ghcr, lfs, codespaces, hosted-runners, advanced-security]
+  workflowTriggers: [schedule]
+forbiddenImplementation:
+  - cloud-resource-provisioning
+  - terraform-cloud-providers
+  - mutable-image-tags
+  - mutable-chart-tags
+  - paid-or-metered-providers
+  - third-party-api-key-providers
+  - unknown-provider-cost-disposition
+  - hosted-model-providers
+  - cloud-billing-apis
+  - runtime-model-downloads
+  - runtime-package-downloads
+  - runtime-image-downloads-outside-locked-bundle
+  - external-telemetry-exporters
+  - implicit-network-package-execution
+providerAdmission:
+  allowedCostDispositions:
+    - SELF_HOSTED_OPEN_SOURCE_NON_METERED
+    - TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED
+  unknownCostDisposition: reject
+  paidOrMetered: reject
+  thirdPartyApiKey: reject
+  externalTelemetry: reject
+ci:
+  selfHostedOnly: true
+  requiredRunnerLabels: [self-hosted, harness-engineering, ephemeral, credential-free]
+  ephemeralRunnerRequired: true
+  credentialAndBrokerFreeRequired: true
+  trustedHostLauncher: /opt/planeon/bin/harness-offline-launch
+  trustedRunnerManifest: /etc/planeon/harness-runner-manifest.json
+  trustedHostLauncherState: EXTERNAL_PREREQUISITE_NOT_PROVEN
+  repositoryCodeBeforeHostIsolation: false
+  uploadArtifacts: false
+  remoteCache: false
+  externalForkExecution: false
+  permissions: contents-read
+  monitoring: bounded-until-terminal
+offlineVerification:
+  osNetworkIsolationRequired: true
+  outboundCanaryRequired: true
+  unsupportedIsolationBackend: fail

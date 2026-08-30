@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/dependency-graph.schema.json",
+  "title": "Canonical Runtime Dependency Graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "rules", "runtimeSurface", "runtimeRequestGraph", "controlPlaneOnRuntimePath"],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/dependency-graph/v1alpha1"},
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "everyUnconditionalRepositoryGraphAcyclic", "repositoryGraphAcyclicityExclusions", "harnessCyclesAllowed", "mainBranchDependenciesAllowed",
+        "submodulesAllowed", "handwrittenContractCopiesAllowed", "artifactReference"
+      ],
+      "properties": {
+        "everyUnconditionalRepositoryGraphAcyclic": {"const": true},
+        "repositoryGraphAcyclicityExclusions": {"const": ["subjectUnderEvaluation"]},
+        "harnessCyclesAllowed": {"const": false},
+        "mainBranchDependenciesAllowed": {"const": false},
+        "submodulesAllowed": {"const": false},
+        "handwrittenContractCopiesAllowed": {"const": false},
+        "artifactReference": {"const": "version-and-sha256-digest"}
+      }
+    },
+    "runtimeSurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority", "mirroredBy", "services"],
+      "properties": {
+        "authority": {"const": "architecture/dependency-graph.yaml#/runtimeSurface"},
+        "mirroredBy": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^docs/harnesses/[a-z0-9.-]+\\.md$"}
+        },
+        "services": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ai-gateway", "experience-gateway"],
+          "properties": {
+            "ai-gateway": {
+              "allOf": [
+                {"$ref": "#/$defs/runtimeService"},
+                {"type": "object", "properties": {"basePath": {"const": "/gateway/v1"}}}
+              ]
+            },
+            "experience-gateway": {
+              "allOf": [
+                {"$ref": "#/$defs/runtimeService"},
+                {"type": "object", "properties": {"basePath": {"const": "/experience/v1"}}}
+              ]
+            }
+          }
+        }
+      }
+    },
+    "runtimeRequestGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction", "commonAdmissionEdges", "branches", "invariants"],
+      "properties": {
+        "direction": {"const": "caller-to-provider"},
+        "commonAdmissionEdges": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/requestEdge"}
+        },
+        "branches": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {"$ref": "#/$defs/directModelBranch"},
+              {"$ref": "#/$defs/taskBranch"},
+              {"$ref": "#/$defs/experienceTaskControlBranch"}
+            ]
+          },
+          "allOf": [
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "direct-model"}}}},
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "task"}}}},
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "experience-task-control"}}}}
+          ]
+        },
+        "invariants": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nonEmptyString"}
+        }
+      }
+    },
+    "controlPlaneOnRuntimePath": {"const": false}
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "serviceId": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path"],
+      "properties": {
+        "method": {"enum": ["GET", "POST", "PUT", "PATCH", "DELETE"]},
+        "path": {"type": "string", "pattern": "^/[A-Za-z0-9{}:._/-]+$"}
+      }
+    },
+    "runtimeState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["behavior", "durableContent", "forbiddenPersistentContent"],
+      "properties": {
+        "behavior": {"enum": ["STATEFUL", "STATELESS", "EPHEMERAL"]},
+        "durableContent": {"$ref": "#/$defs/nonEmptyString"},
+        "forbiddenPersistentContent": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}
+        }
+      }
+    },
+    "runtimeService": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basePath", "endpoints", "emittedEvents", "state"],
+      "properties": {
+        "basePath": {"type": "string", "pattern": "^/[a-z0-9/-]+$"},
+        "endpoints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/endpoint"}
+        },
+        "emittedEvents": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*\\.v[0-9]+$"}
+        },
+        "state": {"$ref": "#/$defs/runtimeState"}
+      }
+    },
+    "requestEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "purpose"],
+      "properties": {
+        "from": {"$ref": "#/$defs/serviceId"},
+        "to": {"$ref": "#/$defs/serviceId"},
+        "purpose": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "selectedWhen": {"$ref": "#/$defs/capabilityPredicate"}
+      }
+    },
+    "branchBase": {
+      "type": "object",
+      "required": ["id", "selectedWhen", "entrypoints", "edges"],
+      "properties": {
+        "id": {"enum": ["direct-model", "task", "experience-task-control"]},
+        "selectedWhen": {"$ref": "#/$defs/branchPredicate"},
+        "entrypoints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/serviceId"}
+        },
+        "edges": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/requestEdge"}
+        }
+      }
+    },
+    "directModelBranch": {
+      "allOf": [
+        {"$ref": "#/$defs/branchBase"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "selectedWhen", "entrypoints", "edges", "forbiddenNodes"],
+          "properties": {
+            "id": {"const": "direct-model"},
+            "selectedWhen": {"$ref": "#/$defs/directRoutePredicate"},
+            "entrypoints": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/serviceId"}},
+            "edges": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/requestEdge"}},
+            "forbiddenNodes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/serviceId"}}
+          }
+        }
+      ]
+    },
+    "taskBranch": {
+      "allOf": [
+        {"$ref": "#/$defs/branchBase"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "selectedWhen", "entrypoints", "edges", "ownership"],
+          "properties": {
+            "id": {"const": "task"},
+            "selectedWhen": {"$ref": "#/$defs/taskRoutePredicate"},
+            "entrypoints": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/serviceId"}},
+            "edges": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/requestEdge"}},
+            "ownership": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["retrievalAndContextAssembly", "toolFlow", "durableTaskState"],
+              "properties": {
+                "retrievalAndContextAssembly": {"$ref": "#/$defs/serviceId"},
+                "toolFlow": {"$ref": "#/$defs/serviceId"},
+                "durableTaskState": {"type": "string", "pattern": "^[a-z0-9-]+$"}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "experienceTaskControlBranch": {
+      "allOf": [
+        {"$ref": "#/$defs/branchBase"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "selectedWhen", "entrypoints", "edges", "forbiddenNodes"],
+          "properties": {
+            "id": {"const": "experience-task-control"},
+            "selectedWhen": {"$ref": "#/$defs/taskEventPredicate"},
+            "entrypoints": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/serviceId"}},
+            "edges": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/requestEdge"}},
+            "forbiddenNodes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/serviceId"}}
+          }
+        }
+      ]
+    },
+    "capabilityPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anyOfCapabilities"],
+      "properties": {
+        "anyOfCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        }
+      }
+    },
+    "branchPredicate": {
+      "oneOf": [
+        {"$ref": "#/$defs/directRoutePredicate"},
+        {"$ref": "#/$defs/taskRoutePredicate"},
+        {"$ref": "#/$defs/taskEventPredicate"}
+      ]
+    },
+    "directRoutePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "routeKind"],
+      "properties": {
+        "type": {"const": "routeKind"},
+        "routeKind": {"const": "DIRECT_MODEL"}
+      }
+    },
+    "taskRoutePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "routeKind"],
+      "properties": {
+        "type": {"const": "routeKind"},
+        "routeKind": {"const": "TASK"}
+      }
+    },
+    "taskEventPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "taskMustExist", "anyOfEvents"],
+      "properties": {
+        "type": {"const": "taskEvent"},
+        "taskMustExist": {"const": true},
+        "anyOfEvents": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["INPUT_SUBMITTED", "CANCELLATION_REQUESTED", "APPROVAL_DECIDED", "EVENT_REPLAY_REQUESTED"]}
+        }
+      }
+    }
+  }
+}

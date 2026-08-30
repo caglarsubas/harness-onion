@@ -1,0 +1,16 @@
+id: DIST-005
+repository: mas-harness-distribution
+branch: codex/dist-005-repro-security
+objective: Certify reproducible builds, blob closure, archive safety, staging integrity, key revocation, and no-network operation.
+predecessors: [DIST-004]
+allowedPaths: ["tests/reproducibility/", "tests/security/", "tests/airgap/", "fixtures/attacks/", "scripts/rebuild_compare.sh", "scripts/run_supply_chain_campaign.py", "docs/runbooks/", "src/planeon_distribution/", "ci/targets/dist-005.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes complete distribution behavior v1", "Produces distribution reproducibility/security evidence set v1"]
+deliverables: ["Two-clean-build comparison, corrupt/missing/extra blob denial, traversal/bomb defense, staging tamper, revocation, race, and no-egress campaign."]
+excluded: ["Feature additions, online scanners, or treating cached/mutable inputs as reproducible."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","build-reproducible"],["make","supply-chain-security"],["make","airgap-runtime"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Identical clean-build root digests.", "Complete adversarial supply-chain and offline network reports."]
+rollback: Revoke faulty candidate/release artifacts and restore the prior signed bundle/trust set.

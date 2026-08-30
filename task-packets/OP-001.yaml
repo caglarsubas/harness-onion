@@ -1,0 +1,16 @@
+id: OP-001
+repository: mas-harness-operator
+branch: codex/op-001-bootstrap-crd
+objective: Bootstrap the Go operator with generated CRDs, state validation, minimal RBAC, leader election, health, non-root image/chart, and offline envtest.
+predecessors: [CON-005, MET-003]
+allowedPaths: [".github/workflows/verify.yml", "cmd/operator/", "internal/controller/", "api/v1alpha1/", "config/crd/", "config/rbac/", "config/manager/", "deploy/helm/operator/", "tests/envtest/", "go.mod", "go.sum", "tools.lock", "Makefile", "Containerfile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes HarnessInstallation CRD and lifecycle contracts v1alpha1", "Produces operator manager and reconciliation shell v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["Pinned Go/controller-runtime toolchain, generated-code check, CRD/status validation, leader election, health/readiness, least RBAC, envtest, arbitrary-UID image, and chart.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Preflight, bundle verification, resource apply, cloud provisioning, or cluster creation."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","generated-check"],["make","envtest-offline"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Clean generation diff and CRD schema tests.", "RBAC audit and arbitrary-UID offline manager startup.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Revert the operator scaffold before any HarnessInstallation resource is reconciled.

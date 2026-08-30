@@ -1,0 +1,18 @@
+id: MODEL-002
+repository: mas-harness-model-plane
+branch: codex/model-002-custody-routing
+objective: Implement model license/custody admission and signed desired, observed, last-known-good, and revoked routing state.
+predecessors: [MODEL-001, TRUST-001]
+allowedPaths: ["src/planeon_model/custody/", "src/planeon_model/routing/", "src/planeon_model/control.py", "tests/custody/", "tests/routing/", "fixtures/routing/", "docs/model-custody.md", "ci/targets/model-002.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse:
+  - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: DISCOVERY_ONLY, paths: ["contracts/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
+  - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: REFERENCE_ONLY, paths: ["src/inference_engine/model_plane_control.py","src/inference_engine/model_plane_observer.py","src/inference_engine/model_routing.py","src/inference_engine/model_routing_runtime.py","src/inference_engine/model_routing_status.py","src/inference_engine/api/_model_routing.py","contracts/prometa-model-usage-v2.schema.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
+contracts: ["Consumes signed route, trust, model custody, and license contracts v1alpha1", "Produces model route activation and custody behavior v1"]
+deliverables: ["Digest/license/custody checks, offline signature verification, desired/observed/last-good states, revocation, atomic activation, and policy hook."]
+excluded: ["Downloading models, accepting unreviewed weights, or fail-open route changes."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","routing-parity"],["make","custody-contract"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Valid activation and last-known-good proof.", "Forged, revoked, expired, digest-mismatched, and unlicensed model denial vectors."]
+rollback: Reactivate the previous verified route; never destructively alter model custody records.

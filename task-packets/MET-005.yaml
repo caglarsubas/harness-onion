@@ -1,0 +1,16 @@
+id: MET-005
+repository: Harness-Engineering
+branch: codex/met-005-release-lock
+objective: Define cross-repository release locking and independent source, CI, merge, artifact, signature, deployment, runtime, assurance, and acceptance evidence axes.
+predecessors: [MET-004]
+allowedPaths: ["schemas/release-set.schema.json", "release/repos.lock.json", "release/fixture-release-set.yaml", "release/evidence-policy.yaml", "scripts/build_release_lock.py", "scripts/check_release_lock.py", "tests/test_release_lock.py", "docs/adr/0005-release-evidence.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes repository ownership graph v1", "Produces release-set schema v1alpha1", "Produces release evidence policy v1"]
+deliverables: ["Digest-pinned repository and artifact release-lock generator/checker.", "Evidence policy that never conflates merge, deployment, runtime, or tenant acceptance."]
+excluded: ["Publishing, signing, deploying, or certifying a real platform release."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/check_release_lock.py","release/fixture-release-set.yaml"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/test_release_lock.py"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Valid fixture release lock with immutable SHAs and digests.", "Negative vectors for mutable refs and missing evidence axes."]
+rollback: Revert the unconsumed release-lock schema and fixture without changing product repositories.

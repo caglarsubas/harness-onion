@@ -1,0 +1,18 @@
+id: IND-WG-004
+repository: mas-harness-industry-packs
+branch: codex/ind-wg-004-provider-profiles
+objective: Publish deterministic white-goods provider recommendations and explicit-selector questionnaire choices for local, regulated, silo, and air-gap environments.
+predecessors: [IND-WG-003, CON-004]
+allowedPaths: ["packs/white-goods/provider-preferences/", "packs/white-goods/fixtures/demands/", "packs/white-goods/fixtures/expected/", "packs/white-goods/tests/test_profiles.py", "docs/white-goods/profiles.md", "ci/targets/ind-wg-004.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse:
+  - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["deployment/profiles/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
+  - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/local_only.py","src/data_source_harness/deployment.py","deployment/profiles/air-gapped.json","deployment/profiles/local-laptop.json","deployment/profiles/self-hosted.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
+contracts: ["Consumes compiler contracts v1alpha1", "Produces white-goods minimal ARM64, minimal AMD64, regulated OpenShift, silo, and air-gap profiles v1alpha1"]
+deliverables: ["Versioned recommendation-only provider overlays, explicit accepted-selector fixtures, resource envelopes, isolation requirements, expected compiler outputs, and explanations."]
+excluded: ["Ranking that mutates a profile, implicit provider fallback, cloud provisioning, mutable artifacts, paid providers, and silent installation of unused harnesses."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","compile-pack","PACK=white-goods"],["make","profile-golden-check","PACK=white-goods"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Byte-identical profile/BOM/install/evidence outputs for five environments.", "Recommendations remain proposals until their selectors are explicitly accepted.", "Only selected module artifacts appear in each BOM."]
+rollback: Revert provider overlays while retaining the sector questions and readiness rules.

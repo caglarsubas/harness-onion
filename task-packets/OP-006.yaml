@@ -1,0 +1,16 @@
+id: OP-006
+repository: mas-harness-operator
+branch: codex/op-006-uninstall-fleet
+objective: Implement retention-safe uninstall, explicit destructive authorization, optional signed fleet synchronization, and a manual air-gap path.
+predecessors: [OP-005]
+allowedPaths: ["internal/controller/uninstall/", "cmd/fleet-sync-agent/", "internal/fleet/", "tests/uninstall/", "tests/fleet/", "fixtures/fleet/", "deploy/helm/fleet-sync-agent/", "docs/uninstall.md", "docs/fleet-sync.md", "ci/targets/op-006.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes retention, destructive authorization, desired-state, trust, and installation contracts v1", "Produces uninstall and optional fleet-sync behavior v1"]
+deliverables: ["Reverse dependency uninstall, PVC/evidence retain-by-default, explicit scoped destruction token, local-endpoint signed fleet desired state, and manual import reconciliation."]
+excluded: ["Automatic PVC/evidence deletion, cloud fleet services, control-plane requirement in air-gap, or network fallback."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","envtest-uninstall"],["make","fleet-contract"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Default-retain and explicit-destroy vectors.", "Forged/stale desired state, endpoint outage, duplicate sync, and manual air-gap operation reports."]
+rollback: Stop fleet sync, restore previous local desired digest, and never restore data by destructive reverse migration.

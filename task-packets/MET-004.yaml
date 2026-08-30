@@ -1,0 +1,16 @@
+id: MET-004
+repository: Harness-Engineering
+branch: codex/met-004-task-packets
+objective: Publish the task-packet catalog and validator plus the closed, dual-signed live-campaign execution-envelope schema and its fail-closed vectors.
+predecessors: [MET-001, MET-002, MET-003]
+allowedPaths: ["schemas/task-packet.schema.json", "schemas/live-campaign-execution-envelope.schema.json", "task-packets/", "scripts/validate_readiness.py", "scripts/validate_packet_ownership.py", "tests/test_task_packets.py", "tests/test_validator_units.py", "tests/test_live_campaign_envelope.py", "docs/adr/0004-sol-high-packet-boundary.md", "docs/repositories/00-harness-engineering.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes repository ownership graph v1", "Consumes reuse map v1", "Consumes zero-bill policy v1", "Produces task packet schema v1alpha1", "Produces live campaign execution envelope v1alpha1"]
+deliverables: ["One schema-valid YAML file per bounded coding PR.", "Unique ID/branch, known repository, predecessor, cycle, path-boundary, packet-local Make descriptor, harnessctl registration, inert porting-ledger, and offline-command validation.", "Closed execution authority binding immutable packet, argv command set, campaign kit/release/launcher/bundle, evidence scope, tenant/environment, zero-cost capacity policy, exact signed endpoints, trust stores, validity window, and independent platform/tenant signatures.", "Positive and negative envelope vectors covering shell transport, unsafe paths, evidence-axis escalation, endpoint discovery/kind widening, missing signatures, mutation-profile widening, unknown members.", "Alpha 1-4 ordered index."]
+excluded: ["Executing product packets or creating downstream GitHub repositories."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/validate_readiness.py"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/test_task_packets.py"],["uv","run","--offline","--frozen","--no-sync","python","-m","unittest","discover","-s","tests","-p","test_live_campaign_envelope.py"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Every packet validates individually.", "The complete predecessor graph is acyclic and covers all thirteen repositories.", "Negative ownership vectors reject shared unordered paths, non-owner Makefile and PORTING.yaml grants, missing or mismatched packet target descriptors, unsafe Make variables, and harnessctl predecessor-closure bypass.", "The live-campaign execution-envelope schema meta-validates as closed Draft 2020-12 authority and every required negative vector is rejected."]
+rollback: Revert packet schema, catalog, and validator together so no incompatible partial format remains.

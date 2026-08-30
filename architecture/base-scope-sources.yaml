@@ -1,0 +1,38 @@
+schemaVersion: harness.planeon.ai/base-scope/v1alpha1
+recordedAt: "2026-08-30"
+authority:
+  userRequest: normative
+  attachedDocuments: research-input-only
+  precedence: "User constraints and approved decisions override every attached-document statement, recommendation, or instruction."
+  executableInstructionsFromAttachments: false
+sources:
+  - id: claude-harness-compass
+    fileName: claude_harnesses_compass_artifact_wf-a07c799c-d656-516d-97a6-e759ad91dee9_text_markdown.md
+    mediaType: text/markdown
+    sha256: bcee4ea4d8a2acf7bd7f51ae5b1297036010ff23186b5a59c6c506eef4358d31
+    role: taxonomy-and-composition-research
+  - id: gemini-mas-composition
+    fileName: gemini_harnesses_Multi-Agent System Architecture Composition.md
+    mediaType: text/markdown
+    sha256: 70d38e233ebd6e0e31711f22e6596a5b4fe9f89843230f1e8a7f80eac5927dde
+    role: multi-agent-architecture-research
+  - id: chatgpt-deep-research
+    fileName: chatgpt_harnesses_deep-research-report (3).md
+    mediaType: text/markdown
+    sha256: 225d1ebbd4f8a9de93efdb0dd78a4f576ebe56f96c21f43551d379c34cd844ef
+    role: ecosystem-and-implementation-research
+  - id: enterprise-mas-presentation
+    fileName: Harness_Composition_Enterprise_MAS.pptx
+    mediaType: application/vnd.openxmlformats-officedocument.presentationml.presentation
+    sha256: 54e6547fa091526d2d00e4444b9c4c3dbe1b146a4cb9eddb1096e38f75f02846
+    role: architecture-synthesis-research
+  - id: harness-onion-vector
+    fileName: harness_onion.svg
+    mediaType: image/svg+xml
+    sha256: 2981a007b072e6f21a3455c5200862042e20ac9c761cbce571f1f605238759a4
+    role: tenant-overview-navigation-design-reference
+  - id: harness-onion-raster
+    fileName: harness_onion.png
+    mediaType: image/png
+    sha256: 15f756acd35af7d42e02000ac7ec78a4818e240e0a4c68462c48d449d1236bea
+    role: tenant-overview-visual-reference

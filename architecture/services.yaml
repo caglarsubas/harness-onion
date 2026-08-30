@@ -1,0 +1,1692 @@
+schemaVersion: harness.planeon.ai/services/v1alpha1
+catalogVersion: 1.1.0
+sourceTaxonomy: architecture/taxonomy.yaml
+counts:
+  canonicalDeployables: 26
+  managementDeployables: 2
+  total: 28
+
+implementationOwnership:
+  bundle-verifier: {packetId: OP-002, path: cmd/bundle-verifier/}
+  otel-collector: {packetId: TRUST-OBS-001, path: modules/otel-collector/}
+  operator: {packetId: OP-001, path: cmd/operator/}
+  policy-decision: {packetId: TRUST-001, path: services/policy-decision/}
+  sandbox-runner: {packetId: EXEC-SBX-001, path: src/planeon_execution/sandbox/}
+  fleet-sync-agent: {packetId: OP-006, path: cmd/fleet-sync-agent/}
+  guardrail-service: {packetId: TRUST-002, path: services/guardrail-service/}
+  usage-ledger: {packetId: TRUST-OBS-001, path: services/usage-ledger/}
+  governance-service: {packetId: TRUST-GOV-001, path: services/governance-service/}
+  domain-service: {packetId: KN-DOM-001, path: services/domain-service/}
+  registry-service: {packetId: TRUST-REG-001, path: services/registry-service/}
+  inference-api: {packetId: MODEL-001, path: deploy/helm/inference-api/}
+  connector-controller: {packetId: KN-DATA-001, path: services/connector-controller/}
+  memory-service: {packetId: KN-MEM-001, path: services/memory-service/}
+  control-web: {packetId: CTRL-001, path: apps/control-web/}
+  ingest-worker: {packetId: KN-DATA-001, path: services/ingest-worker/}
+  retrieval-service: {packetId: KN-RET-001, path: services/retrieval-service/}
+  protocol-gateway: {packetId: EXEC-PROT-001, path: services/protocol-gateway/}
+  evidence-service: {packetId: TRUST-EVAL-001, path: services/evidence-service/}
+  profile-compiler-worker: {packetId: CTRL-004, path: workers/profile-compiler/}
+  index-worker: {packetId: KN-RET-001, path: services/index-worker/}
+  orchestration-api: {packetId: EXEC-ORCH-001, path: services/orchestration-api/}
+  decision-service: {packetId: EXEC-ML-001, path: services/decision-service/}
+  assurance-worker: {packetId: TRUST-EVAL-001, path: services/assurance-worker/}
+  tool-broker: {packetId: EXEC-TOOL-001, path: services/tool-broker/}
+  orchestration-worker: {packetId: EXEC-ORCH-001, path: services/orchestration-worker/}
+  ai-gateway: {packetId: RUN-001, path: services/ai-gateway/}
+  experience-gateway: {packetId: RUN-EXP-001, path: services/experience-gateway/src/}
+
+enums:
+  dependencyModes: [SYNC, ASYNC, CONTROL, ARTIFACT]
+  failureModes: [FAIL_CLOSED, FAIL_OPEN]
+  degradationPolicyTypes: [disableImmediately, bounded]
+  degradationBudgetDimensions: [timeSeconds, bytes, workItems]
+  degradationBudgetExhaustionModes: [ANY, ALL]
+  degradationExhaustionActions: [MARK_DEGRADED_AND_FAIL_READINESS, STOP_CLAIMING_WORK_AND_FAIL_READINESS]
+  behaviorModes: [STATEFUL, STATELESS, EPHEMERAL]
+  implementationStatuses: [PLANNED, IN_PROGRESS, IMPLEMENTED, DEPRECATED]
+  evidenceStatuses: [NOT_STARTED, COLLECTING, PASS, WARN, FAIL, STALE, WAIVED]
+
+dependencyStateAggregation:
+  evaluationModel: FULL_SNAPSHOT_RECOMPUTE
+  edgeKey: consumerServiceId+dependencyId
+  snapshotRevisionRule: LATEST_MONOTONIC_SNAPSHOT_ONLY
+  conditionNormalization: ONE_CANONICAL_CONDITION_PER_EDGE_REVISION
+  ruleApplication: AT_MOST_ONE_EXPLICIT_RULE_ELSE_DEFAULT_CONTRIBUTION
+  triggerMatrix: EXACT_DECLARED_TRIGGERS_ONLY
+  unmatchedSelectedFailureDisposition: FAIL_CLOSED_INVALID_TRIGGER
+  unmatchedSelectedFailureContribution:
+    severity: FAILED
+    observedStateEffect: FAILED
+    readinessEffect: NOT_READY
+    desiredStateAction: NO_CHANGE
+  unmatchedSelectedFailureWorkAction: REJECT_NEW_AND_COMPENSATE
+  unmatchedSelectedFailureReason: DependencyTriggerInvalid
+  defaultContributionEligibility: HEALTHY_CONDITION_ONLY
+  modeAggregates:
+    RUNTIME_DATA_PATH: [SYNC, ASYNC]
+  defaultContribution:
+    severity: READY
+    observedStateEffect: NO_CHANGE
+    readinessEffect: NO_CHANGE
+    desiredStateAction: NO_CHANGE
+  contributionUpdate: REPLACE_BY_EDGE_KEY
+  recomputeOnAnyEdgeRevision: true
+  orderIndependent: true
+  severityPrecedence: [FAILED, BLOCKED, DEGRADED, READY]
+  readinessPrecedence: [NOT_READY, POLICY_CONTROLLED, NO_CHANGE]
+  desiredStateActionPrecedence: [SET_SUSPENDED, NO_CHANGE]
+  workActionAggregation: ORDERED_UNIQUE_SET
+  noChangeActionHandling: OMIT_WHEN_ANY_NON_NEUTRAL_ACTION_EXISTS
+  workActionPrecedence:
+    - FAIL_WAVE_RETAIN_EVIDENCE
+    - REJECT_NEW_AND_COMPENSATE
+    - DO_NOT_APPLY
+    - BLOCK_START
+    - BLOCK_MUTATIONS
+    - PAUSE_ACK_RETAIN_CURSOR
+    - RETURN_RETRYABLE_503
+    - EXECUTE_ON_EXHAUSTION
+    - APPLY_DEGRADATION_POLICY
+    - RESET_DEGRADATION_BUDGET_AND_RECOMPUTE
+    - RESTORE_OPTIONAL_CAPABILITY_AND_RECOMPUTE
+    - RECOMPUTE_AND_UNBLOCK_IF_PERMITTED
+    - RECOMPUTE_AND_RESUME_IF_PERMITTED
+    - RECOMPUTE_FROM_DEPENDENCY_SNAPSHOT
+    - NO_CHANGE
+  reasonTieBreak: HIGHEST_SEVERITY_THEN_LEXICOGRAPHIC_EDGE_KEY
+  neutralReasonHandling: EXCLUDE_FROM_PRIMARY_REASON
+  projection:
+    observedState: FAILED_ELSE_BLOCKED_ELSE_DEGRADED_ELSE_LOCAL_STATE
+    readiness: NOT_READY_ELSE_POLICY_CONTROLLED_ELSE_LOCAL_READINESS
+    desiredState: SET_SUSPENDED_ELSE_NO_CHANGE
+  selectionHandling: UNSELECTED_EDGE_REPLACES_PRIOR_CONTRIBUTION_WITH_NO_CHANGE
+  recoveryActionGate: EXECUTE_ONLY_IF_AGGREGATED_RESULT_PERMITS
+  revokedReleaseRecovery: FORBIDDEN_TERMINAL
+
+stateMachines:
+  desired:
+    initial: ABSENT
+    states: [ABSENT, PRESENT, ACTIVE, SUSPENDED, RETIRED]
+    transitions:
+      ABSENT: [PRESENT]
+      PRESENT: [ACTIVE, ABSENT]
+      ACTIVE: [SUSPENDED, PRESENT]
+      SUSPENDED: [ACTIVE, PRESENT, RETIRED]
+      RETIRED: []
+  observed:
+    initial: UNKNOWN
+    states: [UNKNOWN, ABSENT, PENDING, STARTING, READY, DEGRADED, BLOCKED, STOPPING, FAILED]
+    transitions:
+      UNKNOWN: [ABSENT, PENDING, BLOCKED, FAILED]
+      ABSENT: [PENDING]
+      PENDING: [STARTING, BLOCKED, STOPPING, FAILED]
+      STARTING: [READY, DEGRADED, BLOCKED, STOPPING, FAILED]
+      READY: [DEGRADED, BLOCKED, STOPPING, FAILED]
+      DEGRADED: [READY, BLOCKED, STOPPING, FAILED]
+      BLOCKED: [STARTING, DEGRADED, STOPPING, FAILED]
+      STOPPING: [ABSENT, FAILED]
+      FAILED: [PENDING, STOPPING]
+  release:
+    initial: DRAFT
+    states: [DRAFT, BUILT, VERIFIED, AWAITING_SIGNATURE, SIGNED, RELEASED, DEPRECATED, RETIRED, FAILED, REVOKED]
+    transitions:
+      DRAFT: [BUILT, FAILED]
+      BUILT: [VERIFIED, FAILED]
+      VERIFIED: [AWAITING_SIGNATURE, FAILED]
+      AWAITING_SIGNATURE: [SIGNED, FAILED]
+      SIGNED: [RELEASED, REVOKED]
+      RELEASED: [DEPRECATED, REVOKED]
+      DEPRECATED: [RETIRED, REVOKED]
+      RETIRED: []
+      FAILED: [DRAFT]
+      REVOKED: []
+
+dependencyStatePropagation:
+  - id: required-artifact-unverified
+    trigger: {mode: ARTIFACT, requirement: REQUIRED, event: UNVERIFIED, phase: BEFORE_START, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: BLOCKED, observedStateEffect: BLOCKED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: DO_NOT_APPLY
+      reason: DependencyArtifactUnverified
+  - id: required-control-not-ready-before-start
+    trigger: {mode: CONTROL, requirement: REQUIRED, event: NOT_READY, phase: BEFORE_START, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: BLOCKED, observedStateEffect: BLOCKED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: BLOCK_START
+      reason: DependencyControlNotReady
+  - id: required-control-lost-after-ready
+    trigger: {mode: CONTROL, requirement: REQUIRED, event: LOST, phase: AFTER_READY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: BLOCK_MUTATIONS
+      reason: DependencyControlLost
+  - id: required-sync-lost
+    trigger: {mode: SYNC, requirement: REQUIRED, event: LOST, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: RETURN_RETRYABLE_503
+      reason: DependencySyncLost
+  - id: required-async-lost
+    trigger: {mode: ASYNC, requirement: REQUIRED, event: LOST, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: PAUSE_ACK_RETAIN_CURSOR
+      reason: DependencyAsyncLost
+  - id: fail-open-lost
+    trigger: {mode: ANY, requirement: OPTIONAL, event: LOST, phase: ANY, degradationBudget: AVAILABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: POLICY_CONTROLLED, desiredStateAction: NO_CHANGE}
+      workAction: APPLY_DEGRADATION_POLICY
+      reason: DependencyDegraded
+  - id: fail-open-budget-exhausted
+    trigger: {mode: ANY, requirement: OPTIONAL, event: LOST, phase: ANY, degradationBudget: EXHAUSTED}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: EXECUTE_ON_EXHAUSTION
+      reason: DependencyBudgetExhausted
+  - id: optional-disable-immediately-lost
+    trigger: {mode: ANY, requirement: OPTIONAL, event: LOST, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: POLICY_CONTROLLED, desiredStateAction: NO_CHANGE}
+      workAction: APPLY_DEGRADATION_POLICY
+      reason: DependencyCapabilityDisabled
+  - id: optional-or-unselected
+    trigger: {mode: ANY, requirement: UNSELECTED, event: UNSELECTED, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: READY, observedStateEffect: NO_CHANGE, readinessEffect: NO_CHANGE, desiredStateAction: NO_CHANGE}
+      workAction: NO_CHANGE
+      reason: DependencyNotSelected
+  - id: dependency-release-revoked
+    trigger: {mode: ANY, requirement: ANY, event: RELEASE_REVOKED, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: NOT_READY, desiredStateAction: SET_SUSPENDED}
+      workAction: REJECT_NEW_AND_COMPENSATE
+      reason: DependencyReleaseRevoked
+  - id: ephemeral-dependency-failed
+    trigger: {mode: ARTIFACT, requirement: REQUIRED, event: EXECUTION_FAILED, phase: BEFORE_START, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: FAILED, observedStateEffect: FAILED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: FAIL_WAVE_RETAIN_EVIDENCE
+      reason: DependencyExecutionFailed
+  - id: required-artifact-invalidated-after-ready
+    trigger: {mode: ARTIFACT, requirement: REQUIRED, event: UNVERIFIED, phase: AFTER_READY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: DEGRADED, observedStateEffect: DEGRADED, readinessEffect: NOT_READY, desiredStateAction: NO_CHANGE}
+      workAction: REJECT_NEW_AND_COMPENSATE
+      reason: DependencyArtifactInvalidated
+  - id: required-artifact-restored
+    trigger: {mode: ARTIFACT, requirement: REQUIRED, event: VERIFIED_OR_RESTORED, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: READY, observedStateEffect: NO_CHANGE, readinessEffect: NO_CHANGE, desiredStateAction: NO_CHANGE}
+      workAction: RECOMPUTE_FROM_DEPENDENCY_SNAPSHOT
+      reason: DependencyArtifactRestored
+  - id: required-control-restored
+    trigger: {mode: CONTROL, requirement: REQUIRED, event: RESTORED, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: READY, observedStateEffect: NO_CHANGE, readinessEffect: NO_CHANGE, desiredStateAction: NO_CHANGE}
+      workAction: RECOMPUTE_AND_UNBLOCK_IF_PERMITTED
+      reason: DependencyControlRestored
+  - id: required-runtime-dependency-restored
+    trigger: {mode: RUNTIME_DATA_PATH, requirement: REQUIRED, event: RESTORED, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: READY, observedStateEffect: NO_CHANGE, readinessEffect: NO_CHANGE, desiredStateAction: NO_CHANGE}
+      workAction: RECOMPUTE_AND_RESUME_IF_PERMITTED
+      reason: DependencyRuntimeRestored
+  - id: optional-dependency-recovered
+    trigger: {mode: ANY, requirement: OPTIONAL, event: RESTORED, phase: ANY, degradationBudget: RECOVERED}
+    outcome:
+      edgeContribution: {severity: READY, observedStateEffect: NO_CHANGE, readinessEffect: NO_CHANGE, desiredStateAction: NO_CHANGE}
+      workAction: RESET_DEGRADATION_BUDGET_AND_RECOMPUTE
+      reason: OptionalDependencyRecovered
+  - id: optional-disable-immediately-restored
+    trigger: {mode: ANY, requirement: OPTIONAL, event: RESTORED, phase: ANY, degradationBudget: NOT_APPLICABLE}
+    outcome:
+      edgeContribution: {severity: READY, observedStateEffect: NO_CHANGE, readinessEffect: NO_CHANGE, desiredStateAction: NO_CHANGE}
+      workAction: RESTORE_OPTIONAL_CAPABILITY_AND_RECOMPUTE
+      reason: OptionalCapabilityRestored
+
+externalDependencies:
+  external.kubernetes-api: Operator-supplied Kubernetes, K3s, or OpenShift API.
+  external.local-oci-source: Mounted OCI layout or operator-supplied local OCI registry.
+  external.release-trust-store: Mounted public keys and revocation manifest; never a private key.
+  external.oidc-provider: Tenant/operator-supplied OIDC issuer such as local Keycloak.
+  external.postgresql: Tenant/operator-supplied PostgreSQL with service-scoped roles and RLS.
+  external.pgvector: pgvector extension in the tenant PostgreSQL service.
+  external.opa-engine: Local OPA engine loaded with signed policy bundles.
+  external.otel-backend: Local Prometheus and Jaeger-compatible storage.
+  external.tenant-source-endpoints: Explicitly allowlisted tenant data endpoints.
+  external.tenant-object-store: Tenant PVC or tenant-supplied S3-compatible endpoint.
+  external.tenant-model-volume: Pre-staged, license-approved local model artifacts.
+  external.local-model-backend: Selected Ollama, llama.cpp, or vLLM backend.
+  external.signed-catalog: Digest-pinned contract/module catalog artifact.
+  external.signed-industry-packs: Digest-pinned industry-pack artifact.
+
+startupWaves:
+  - wave: 0
+    objective: Verify immutable inputs and start the telemetry intake boundary.
+    services: [bundle-verifier, otel-collector]
+  - wave: 1
+    objective: Establish cluster reconciliation, authorization, and isolated execution primitives.
+    services: [operator, policy-decision, sandbox-runner]
+  - wave: 2
+    objective: Establish safety, usage, governance, domain, and optional desired-state synchronization.
+    services: [fleet-sync-agent, guardrail-service, usage-ledger, governance-service, domain-service]
+  - wave: 3
+    objective: Establish registry, model, data-source control, and governed memory.
+    services: [registry-service, inference-api, connector-controller, memory-service]
+  - wave: 4
+    objective: Establish management UI, ingestion, retrieval, protocol, and evidence intake.
+    services: [control-web, ingest-worker, retrieval-service, protocol-gateway, evidence-service]
+  - wave: 5
+    objective: Establish compilation, indexing, orchestration API, decisions, and assurance.
+    services: [profile-compiler-worker, index-worker, orchestration-api, decision-service, assurance-worker]
+  - wave: 6
+    objective: Establish governed tools and tenant AI routing.
+    services: [tool-broker, ai-gateway]
+  - wave: 7
+    objective: Start durable workers and expose resumable tenant interactions.
+    services: [orchestration-worker, experience-gateway]
+
+services:
+  - id: bundle-verifier
+    ownerRepository: mas-harness-operator
+    harness: runtime.infrastructure
+    kind: job
+    stateBehavior:
+      mode: EPHEMERAL
+      durableState: false
+      restartSemantics: A new immutable verification run is created for each install or upgrade generation.
+    stores:
+      - name: external.local-oci-source
+        ownership: read-only
+        purpose: Bundle blobs and lock.
+      - name: external.release-trust-store
+        ownership: read-only
+        purpose: Offline public-key and revocation verification.
+    dependencies:
+      - id: external.local-oci-source
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Missing or digest-mismatched blobs fail the generation before apply.
+      - id: external.release-trust-store
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Missing, invalid, or revoked trust material fails verification.
+    readinessCriteria:
+      - All bundle-lock entries, signatures, licenses, and revocations validate offline.
+      - Successful completion emits a generation-scoped verification evidence record.
+    startupWave: 0
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: otel-collector
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.observability-finops
+    kind: collector
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Local bounded WAL/queue replays without cross-tenant mixing.
+    stores:
+      - name: collector-wal
+        ownership: owned
+        purpose: Bounded local telemetry buffer.
+      - name: external.otel-backend
+        ownership: write
+        purpose: Local metrics and trace storage.
+    dependencies:
+      - id: external.otel-backend
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Buffer locally within the configured byte/time budget; readiness fails when the budget is exhausted.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 3600, bytes: 536870912}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - OTLP receivers listen only on configured cluster interfaces.
+      - Tenant routing and content-redaction processors are loaded.
+      - WAL is writable and below its fail-open capacity threshold.
+    startupWave: 0
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: operator
+    ownerRepository: mas-harness-operator
+    harness: runtime.infrastructure
+    kind: controller
+    stateBehavior:
+      mode: STATELESS
+      durableState: true
+      restartSemantics: Reconstructs desired/observed state from CRDs, status, and generation inventory.
+    stores:
+      - name: external.kubernetes-api
+        ownership: control
+        purpose: HarnessInstallation spec/status and managed resources.
+      - name: installation-inventory-configmap
+        ownership: owned
+        purpose: Generation-scoped resource UID and digest inventory.
+    dependencies:
+      - id: external.kubernetes-api
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Reconciliation and readiness stop when the API is unavailable.
+      - id: bundle-verifier
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: No install or upgrade wave starts without successful verification evidence.
+    readinessCriteria:
+      - Kubernetes API discovery, leader lease, CRD storage version, and RBAC self-check pass.
+      - Reconciler queue accepts work and observedGeneration can be persisted.
+    startupWave: 1
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: policy-decision
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.security-safety
+    kind: api
+    stateBehavior:
+      mode: STATELESS
+      durableState: false
+      restartSemantics: Reloads the last verified signed policy bundle before becoming ready.
+    stores:
+      - name: external.opa-engine
+        ownership: control
+        purpose: Local policy evaluation.
+      - name: external.release-trust-store
+        ownership: read-only
+        purpose: Policy-bundle signature and revocation verification.
+    dependencies:
+      - id: external.opa-engine
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: All protected decisions return unavailable/deny when OPA is not ready.
+      - id: external.release-trust-store
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Unsigned or revoked policy bundles never activate.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Decision service continues inside bounded local telemetry buffering; audit decisions remain durably recorded by callers.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Signed baseline policy bundle is active and its digest is exposed.
+      - Tenant/actor identity and deny-path self-tests pass.
+      - OPA health and decision timeout budget pass.
+    startupWave: 1
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: sandbox-runner
+    ownerRepository: mas-harness-execution-plane
+    harness: execution.tool-skill-sandbox
+    kind: job
+    stateBehavior:
+      mode: EPHEMERAL
+      durableState: false
+      restartSemantics: Every authorized execution receives a new bounded Job or WASM instance; failed native executions are never silently retried.
+    stores:
+      - name: ephemeral-workspace
+        ownership: owned
+        purpose: Per-execution scratch data destroyed after receipt capture.
+    dependencies:
+      - id: external.kubernetes-api
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Job creation or observation failure blocks execution.
+      - id: external.release-trust-store
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Runner image/profile and authorization digest must verify.
+    readinessCriteria:
+      - Selected isolation class is available and matches the signed sandbox profile.
+      - Default-deny network, resource/time limits, non-root, seccomp, and cleanup controls pass.
+    startupWave: 1
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: fleet-sync-agent
+    ownerRepository: mas-harness-operator
+    harness: runtime.infrastructure
+    kind: agent
+    stateBehavior:
+      mode: STATELESS
+      durableState: true
+      restartSemantics: Resumes from the last verified desired-state digest stored in Kubernetes status.
+    stores:
+      - name: external.kubernetes-api
+        ownership: control
+        purpose: Desired HarnessInstallation references and observed sync cursor.
+    dependencies:
+      - id: operator
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: New desired state is not submitted while operator readiness is false.
+      - id: bundle-verifier
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Synced references must be verifiable before status changes.
+      - id: external.kubernetes-api
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Desired-state submission and verified cursor/status persistence stop when the Kubernetes API is unavailable.
+      - id: external.local-oci-source
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Existing workloads continue on last verified state; new sync remains pending.
+        degradationPolicy:
+          type: disableImmediately
+          capability: management.fleet-pull
+    readinessCriteria:
+      - Disabled profiles report NOT_APPLICABLE; enabled profiles can read the local desired-state endpoint.
+      - Last verified cursor and digest are observable without secret material.
+    startupWave: 2
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: guardrail-service
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.security-safety
+    kind: api
+    stateBehavior:
+      mode: STATELESS
+      durableState: false
+      restartSemantics: Reloads signed detector/profile artifacts before accepting requests.
+    stores:
+      - name: guardrail-profile-artifact
+        ownership: read-only
+        purpose: Signed input/output/runtime detector configuration.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Evaluation is denied when policy/profile authorization cannot be established.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Continues with bounded local metrics; guardrail result itself is returned synchronously.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Signed detector profiles load and deterministic conformance vectors pass.
+      - Streaming evaluator meets configured buffer and latency limits.
+    startupWave: 2
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: usage-ledger
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.observability-finops
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Replays idempotent usage observations and preserves reservations/budgets.
+    stores:
+      - name: external.postgresql
+        ownership: schema:usage
+        purpose: Immutable observations, reservations, budgets, and aggregates.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Budget reads/reservations require authenticated policy admission.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Ledger remains authoritative while metric export buffers locally.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Reservations and usage writes fail without durable storage.
+    readinessCriteria:
+      - PostgreSQL migrations, tenant RLS, uniqueness/idempotency, and reservation reconciliation pass.
+      - Replay-safe usage golden vectors pass.
+    startupWave: 2
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: governance-service
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.governance-agentops
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores approvals, waivers, autonomy levels, and tamper-evident audit head from PostgreSQL.
+    stores:
+      - name: external.postgresql
+        ownership: schema:governance
+        purpose: Approvals, waivers, exceptions, autonomy, and audit chain.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: New approvals, waivers, and autonomy mutations stop without policy admission.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Bounded telemetry degradation does not discard the database audit chain.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: All state-changing governance requests fail without durable audit storage.
+    readinessCriteria:
+      - Migrations/RLS pass and audit-chain head verifies.
+      - Approval, N-of-M, waiver-expiry, and deny-path self-tests pass.
+    startupWave: 2
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: domain-service
+    ownerRepository: mas-harness-knowledge-plane
+    harness: knowledge.domain-semantic
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Reloads immutable ontology/mapping versions and validation results from PostgreSQL.
+    stores:
+      - name: external.postgresql
+        ownership: schema:domain
+        purpose: Ontology versions, mappings, and SHACL validation results.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Domain reads and version mutations require tenant-scoped authorization.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: No version activation without durable storage.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Bounded metrics degradation; validation evidence remains stored.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, active ontology digest, RDF/SHACL engines, and white-goods semantic vectors pass.
+    startupWave: 2
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: registry-service
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.governance-agentops
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores immutable module/agent/release records and revocation state.
+    stores:
+      - name: external.postgresql
+        ownership: schema:registry
+        purpose: Module, agent, release, certification, promotion, and revocation records.
+    dependencies:
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Promotion/revocation requires governance authority.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Registry reads/mutations require policy admission.
+      - id: external.signed-catalog
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Catalog digest and schema must verify before registry readiness.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Registry mutations require durable storage.
+    readinessCriteria:
+      - Catalog digest, migrations/RLS, release-state guards, and revocation self-tests pass.
+    startupWave: 3
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: inference-api
+    ownerRepository: mas-harness-model-plane
+    harness: runtime.model-inference
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Reloads signed model/route manifests and preserves last-known-good activation; queues are reconstructible.
+    stores:
+      - name: external.tenant-model-volume
+        ownership: read-only
+        purpose: Pre-staged model/tokenizer artifacts.
+      - name: route-activation-volume
+        ownership: owned
+        purpose: Verified desired/observed and last-known-good route digests.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: New inference requests fail when policy admission is unavailable.
+      - id: guardrail-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Profile-required model input/output checks cannot be bypassed.
+      - id: external.local-model-backend
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Readiness follows the selected backend/model capability probe.
+      - id: external.tenant-model-volume
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Missing/unlicensed/digest-mismatched model content blocks readiness.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Bounded telemetry degradation; usage observations remain locally buffered.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Signed route/model manifests, custody/license, backend probe, tokenizer, streaming cancellation, and minimal inference self-test pass.
+    startupWave: 3
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: connector-controller
+    ownerRepository: mas-harness-knowledge-plane
+    harness: knowledge.data-integration
+    kind: controller
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores source declarations, connector leases, and assessment state from PostgreSQL.
+    stores:
+      - name: external.postgresql
+        ownership: schema:ingestion
+        purpose: Sources, profiles, leases, readiness, and outbox.
+    dependencies:
+      - id: domain-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Source activation requires an accepted domain/mapping version.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Connector configuration and credential references require admission.
+      - id: external.tenant-source-endpoints
+        mode: CONTROL
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Controller remains ready; unavailable individual sources become DEGRADED and are not scheduled.
+        degradationPolicy:
+          type: disableImmediately
+          capability: tenant.source-endpoints
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Lease/config mutations require durable state.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Bounded telemetry degradation; readiness evidence remains durable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, domain contract, lease recovery, endpoint allowlist/SSRF, and source-profile validation pass.
+    startupWave: 3
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: memory-service
+    ownerRepository: mas-harness-knowledge-plane
+    harness: knowledge.memory-state
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores governed memories, TTL queue, deletion tombstones, and redaction receipts.
+    stores:
+      - name: external.postgresql
+        ownership: schema:memory
+        purpose: Purpose-bound memories, consent, TTL, tombstones, and receipts.
+      - name: external.pgvector
+        ownership: schema:memory
+        purpose: Tenant-isolated memory vectors only.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Reads/writes/deletes require purpose and tenant authorization.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Retention, consent, and exceptional access require active governance policy.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Memory mutations fail without durable state.
+      - id: external.pgvector
+        mode: SYNC
+        required: false
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [memory.semantic]}
+        failureMode: FAIL_OPEN
+        behavior: Exact and relational memory remain available; semantic search and vector writes are disabled immediately.
+        degradationPolicy:
+          type: disableImmediately
+          capability: memory.semantic
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Content-free metrics buffer locally; deletion receipts remain durable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, purpose/consent policy, TTL scheduler, deletion/tombstone, and cross-tenant denial tests pass.
+    startupWave: 3
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: control-web
+    ownerRepository: mas-harness-control-plane
+    harness: management-plane
+    kind: web-api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Reconstructs sessions, profiles, approvals, operations, idempotency, ordered status projections/cursors, and outbox from PostgreSQL.
+    stores:
+      - name: external.postgresql
+        ownership: schema:control
+        purpose: Tenants, sessions, answers, findings, demands, profiles, approvals, operations, tenant/plane/harness status projections, source cursors, audit, outbox/inbox.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Authenticated reads/mutations require tenant policy admission.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Approval/profile-lock mutations fail when governance is unavailable.
+      - id: registry-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: New demands/profiles require a verified catalog snapshot.
+      - id: external.signed-industry-packs
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Questionnaire sessions cannot start from an unverified pack.
+      - id: external.oidc-provider
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: No anonymous or caller-supplied tenant identity.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: State-changing requests fail without durable audit state.
+      - id: operator
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: The last verified installation projection remains readable with explicit stale/source-unavailable status while new operator summaries are unavailable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, workItems: 1000}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - OIDC discovery/signature, DB migrations/RLS, pack/catalog digests, idempotency/ETag, audit-chain, status aggregation/freshness, and authenticated projection-cursor checks pass.
+      - Tenant overview, plane/harness drill-down, operator-portfolio scope, onion/list equivalence, and zero-public-browser-request checks pass.
+    startupWave: 4
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: ingest-worker
+    ownerRepository: mas-harness-knowledge-plane
+    harness: knowledge.data-integration
+    kind: worker
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Reclaims expired leases and resumes from source checkpoint without acknowledging uncommitted batches.
+    stores:
+      - name: external.postgresql
+        ownership: schema:ingestion
+        purpose: Jobs, leases, checkpoints, batches, provenance, freshness, and coverage.
+      - name: external.tenant-object-store
+        ownership: write
+        purpose: Tenant source objects/evidence by digest reference.
+    dependencies:
+      - id: connector-controller
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: No new leases are accepted from an unready controller.
+      - id: domain-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Decoded records require the accepted semantic mapping.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Source reads and classification actions require policy admission.
+      - id: external.tenant-source-endpoints
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Affected source job pauses without acknowledging its checkpoint.
+      - id: external.postgresql
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Worker pauses when batch/provenance/checkpoint cannot commit atomically.
+      - id: external.tenant-object-store
+        mode: ASYNC
+        required: false
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [storage.object-required]}
+        failureMode: FAIL_OPEN
+        behavior: Object-backed source jobs stop before acknowledging their checkpoint; database-only source jobs continue.
+        degradationPolicy:
+          type: disableImmediately
+          capability: storage.object-required
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Bounded telemetry buffer; ingestion evidence remains in PostgreSQL.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Lease recovery, source allowlist, decoder, atomic batch/provenance/checkpoint commit, and dead-letter tests pass.
+    startupWave: 4
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: retrieval-service
+    ownerRepository: mas-harness-knowledge-plane
+    harness: knowledge.retrieval-context
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores ready index-version pointers; in-flight query state is disposable.
+    stores:
+      - name: external.postgresql
+        ownership: schema:retrieval
+        purpose: Chunks, citations, source/index versions, and ready pointers.
+      - name: external.pgvector
+        ownership: schema:retrieval
+        purpose: Tenant/source-version-scoped embeddings.
+    dependencies:
+      - id: domain-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Context assembly uses only accepted domain/mapping versions.
+      - id: connector-controller
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Source/version readiness must be observable.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Every retrieval/source citation is tenant-policy filtered.
+      - id: inference-api
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Disable optional semantic reranking and use approved PostgreSQL FTS/vector path.
+        degradationPolicy:
+          type: disableImmediately
+          capability: retrieval.rerank.local
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Queries fail without tenant-isolated index/citation state.
+      - id: external.pgvector
+        mode: SYNC
+        required: false
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [retrieval.vector]}
+        failureMode: FAIL_OPEN
+        behavior: Vector retrieval is disabled immediately; approved PostgreSQL FTS routes remain available and vector-required routes fail explicitly.
+        degradationPolicy:
+          type: disableImmediately
+          capability: retrieval.vector
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Content-free metrics buffer locally.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, at least one configured retrieval mode, citation/source-version validation, and stale-index denial pass.
+    startupWave: 4
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: protocol-gateway
+    ownerRepository: mas-harness-execution-plane
+    harness: execution.protocol-interoperability
+    kind: gateway
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores capability registry cache and replay-safe inbox/outbox; request sessions are stateless.
+    stores:
+      - name: external.postgresql
+        ownership: schema:protocol
+        purpose: Capabilities, negotiated versions, inbox/outbox, and revocations.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Capability discovery/invocation requires authenticated policy admission.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Delegation/autonomy limits must be current.
+      - id: registry-service
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: New negotiations require a current signed capability registration.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Mutating protocol/task handoffs require replay-safe inbox/outbox.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Bounded content-free telemetry degradation.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - MCP 2026-07-28, 2025-11-25 compatibility, A2A v1, auth propagation, revocation, and duplicate message vectors pass.
+    startupWave: 4
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: evidence-service
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.evaluation-assurance
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores immutable evidence records, status axes, staleness schedule, and waiver links.
+    stores:
+      - name: external.postgresql
+        ownership: schema:evidence
+        purpose: Evidence metadata, controls, status, provenance, and staleness.
+      - name: external.tenant-object-store
+        ownership: write
+        purpose: Large evidence objects by digest reference.
+    dependencies:
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Evidence reads/writes require tenant and producer authorization.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Waivers/status exceptions require governance authority.
+      - id: registry-service
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Evidence must bind to a known immutable release/control version.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Evidence is never acknowledged without durable metadata/provenance.
+      - id: external.tenant-object-store
+        mode: ASYNC
+        required: false
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [storage.object-required]}
+        failureMode: FAIL_OPEN
+        behavior: Large-object submissions stop before metadata acknowledgment; inline metadata-only evidence remains available.
+        degradationPolicy:
+          type: disableImmediately
+          capability: storage.object-required
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Evidence remains durable while metrics buffer locally.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, producer signatures, evidence-axis separation, staleness, waiver linkage, and forged-evidence denial pass.
+    startupWave: 4
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: profile-compiler-worker
+    ownerRepository: mas-harness-control-plane
+    harness: management-plane
+    kind: worker
+    stateBehavior:
+      mode: STATELESS
+      durableState: true
+      restartSemantics: Reclaims expired compilation leases and atomically republishes deterministic outputs from durable jobs.
+    stores:
+      - name: external.postgresql
+        ownership: schema:control
+        purpose: Compilation jobs, leases, operations, profile revisions, and outbox.
+    dependencies:
+      - id: control-web
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Existing validated jobs continue from PostgreSQL; no new jobs are created while the web producer is unavailable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 1800, workItems: 100}
+          exhaustWhen: ANY
+          onExhaustion: STOP_CLAIMING_WORK_AND_FAIL_READINESS
+      - id: registry-service
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Every job pins a verified catalog digest.
+      - id: external.signed-industry-packs
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Every job pins a verified pack digest.
+      - id: external.postgresql
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: No job acknowledgment before atomic profile/operation/outbox commit.
+    readinessCriteria:
+      - Contracts/catalog/pack digests load, determinism self-test passes, DB lease can be claimed/renewed, and atomic output directory is writable.
+    startupWave: 5
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: index-worker
+    ownerRepository: mas-harness-knowledge-plane
+    harness: knowledge.retrieval-context
+    kind: worker
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Resumes create-then-swap index jobs from committed source/chunk checkpoints.
+    stores:
+      - name: external.postgresql
+        ownership: schema:retrieval
+        purpose: Index jobs, chunks, vectors, citations, and ready pointers.
+      - name: external.pgvector
+        ownership: schema:retrieval
+        purpose: Versioned embeddings.
+    dependencies:
+      - id: ingest-worker
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Index only committed, provenance-bound batches; pause when input cursor cannot advance.
+      - id: inference-api
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Use configured non-model FTS path; vector-required profiles instead fail readiness through the conditional module requirement.
+        degradationPolicy:
+          type: disableImmediately
+          capability: embedding.local-and-approved
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Chunking/embedding access requires source/tenant policy admission.
+      - id: external.postgresql
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Failed commit never swaps the ready index pointer.
+      - id: external.pgvector
+        mode: ASYNC
+        required: false
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [retrieval.vector]}
+        failureMode: FAIL_OPEN
+        behavior: Vector index jobs pause before pointer swap; FTS-only jobs continue.
+        degradationPolicy:
+          type: disableImmediately
+          capability: retrieval.vector
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Metrics buffer; index evidence remains durable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Checkpoint/restart, create-then-swap, source-version/citation, embedding-dimension, and stale-index tests pass.
+    startupWave: 5
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: orchestration-api
+    ownerRepository: mas-harness-execution-plane
+    harness: execution.orchestration
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores task/event/input/idempotency state; no in-memory state is authoritative.
+    stores:
+      - name: external.postgresql
+        ownership: schema:orchestration
+        purpose: Tasks, events, checkpoints, input, budgets, idempotency, and outbox.
+    dependencies:
+      - id: protocol-gateway
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: External task submission/delegation requires negotiated protocol authority.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Autonomy, approval, and workflow rules must be current.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Task create/read/input/cancel requires authorization.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Mutations fail without durable task/outbox commit.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Content-free telemetry buffers while task/audit state remains durable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, A2A lifecycle guards, idempotency/input/cancel, budget, and state/outbox atomicity tests pass.
+    startupWave: 5
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: decision-service
+    ownerRepository: mas-harness-execution-plane
+    harness: execution.ml-decision
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores signed artifact references, requests/results, and provenance; execution processes are replaceable.
+    stores:
+      - name: external.postgresql
+        ownership: schema:decision
+        purpose: Requests, results, feature/provenance references, and artifact versions.
+    dependencies:
+      - id: connector-controller
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Decision inputs must reference accepted data source/batch versions.
+      - id: inference-api
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Deterministic scikit-learn/ONNX/OR-Tools decisions continue; model-assisted capability is disabled.
+        degradationPolicy:
+          type: disableImmediately
+          capability: model.inference
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Model/optimization autonomy and promotion policy must be current.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Input/artifact/output access requires policy admission.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Results are not returned as durable decisions before provenance commit.
+    readinessCriteria:
+      - Signed decision artifact, deterministic replay, feature provenance, RLS, and configured engine self-tests pass.
+    startupWave: 5
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: assurance-worker
+    ownerRepository: mas-harness-trust-plane
+    harness: trust.evaluation-assurance
+    kind: worker
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Reclaims campaign leases and resumes from immutable input/evaluator digests.
+    stores:
+      - name: external.postgresql
+        ownership: schema:evidence
+        purpose: Campaigns, leases, observations, evaluator/calibration references, and outbox.
+    dependencies:
+      - id: evidence-service
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Campaign results are not acknowledged until evidence accepts durable records.
+      - id: ingest-worker
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        selectionType: subjectUnderEvaluation
+        selectedWhen: {anyOfSubjectHarnesses: [knowledge.data-integration]}
+        behavior: When selected by the immutable campaign subject, evaluation data requires accepted provenance/readiness evidence and the edge fails closed.
+      - id: inference-api
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        selectionType: subjectUnderEvaluation
+        selectedWhen:
+          anyOfSubjectHarnesses: [runtime.model-inference]
+          anyOfSubjectCapabilities: [assurance.local-model-judge]
+        behavior: Deterministic evaluators continue; local-model judge cases become NOT_RUN_ENV_UNAVAILABLE when the optional judge is unavailable.
+        degradationPolicy:
+          type: disableImmediately
+          capability: assurance.local-model-judge
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Campaign authority, thresholds, waivers, and budgets must be current.
+      - id: external.postgresql
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Campaign leases, observations, and outbox records must commit before work is acknowledged.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Campaign evidence remains durable while metrics buffer.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Evaluator/campaign digests, lease recovery, deterministic vectors, calibration bounds, and evidence submission pass.
+    startupWave: 5
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: tool-broker
+    ownerRepository: mas-harness-execution-plane
+    harness: execution.tool-skill-sandbox
+    kind: api
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores plans, authorizations, executions, receipts, compensation, and unknown-outcome reviews.
+    stores:
+      - name: external.postgresql
+        ownership: schema:tools
+        purpose: Catalog, plans, approvals, executions, receipts, compensation, idempotency, and review.
+    dependencies:
+      - id: orchestration-api
+        mode: CONTROL
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Tool plans/executions must bind to an admitted durable task.
+      - id: sandbox-runner
+        mode: ARTIFACT
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Required isolation profile/image must verify before authorization.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Every plan and execution requires current policy decision.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Approval and side-effect/autonomy policy must be current.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: No execution starts before durable authorization/idempotency commit.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Execution receipts remain durable while metrics buffer.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, action classification, approval, sandbox profile, receipt signing, idempotency, compensation, and outcome-unknown tests pass.
+    startupWave: 6
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: orchestration-worker
+    ownerRepository: mas-harness-execution-plane
+    harness: execution.orchestration
+    kind: worker
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Reclaims expired task leases and resumes from last committed checkpoint; never replays unreceipted non-idempotent actions.
+    stores:
+      - name: external.postgresql
+        ownership: schema:orchestration
+        purpose: Task leases, checkpoints, attempts, pending input, budgets, and outbox.
+    dependencies:
+      - id: orchestration-api
+        mode: CONTROL
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Existing admitted tasks continue from PostgreSQL; no new tasks arrive while the API producer is unavailable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 3600, workItems: 1000}
+          exhaustWhen: ANY
+          onExhaustion: STOP_CLAIMING_WORK_AND_FAIL_READINESS
+      - id: protocol-gateway
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Delegated calls require negotiated/authenticated protocol capability.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Autonomy, approval, retry, and loop limits must be current.
+      - id: inference-api
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Deterministic workflows remain available; agent/model steps pause without consuming retry budget.
+        degradationPolicy:
+          type: disableImmediately
+          capability: model.inference
+      - id: retrieval-service
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: No-context workflows continue only when the signed workflow permits it.
+        degradationPolicy:
+          type: disableImmediately
+          capability: knowledge.retrieval
+      - id: tool-broker
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Read-only/no-tool tasks continue; tool steps pause.
+        degradationPolicy:
+          type: disableImmediately
+          capability: tool.governed-execution
+      - id: external.postgresql
+        mode: ASYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Worker pauses without checkpoint/state/outbox atomic commit.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Durable task evidence remains while content-free telemetry buffers.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Lease/checkpoint recovery, lifecycle, budget/loop/time limits, duplicate/out-of-order events, and crash-at-commit vectors pass.
+    startupWave: 7
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: ai-gateway
+    ownerRepository: mas-harness-runtime-plane
+    harness: runtime.ai-gateway
+    kind: gateway
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores signed route activation, idempotency metadata, budget reservations, and last-known-good route; no raw business payload is durable.
+    contractAuthority: architecture/dependency-graph.yaml#/runtimeSurface/services/ai-gateway
+    stores:
+      - name: external.postgresql
+        ownership: schema:gateway
+        purpose: Route activation, request deduplication, budget reservations, and outbox.
+    dependencies:
+      - id: inference-api
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Model routes fail without a ready selected local inference endpoint.
+      - id: policy-decision
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Every route/request requires current policy admission.
+      - id: guardrail-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Signed profile input/output/runtime checks cannot be bypassed.
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Autonomy, data use, and route policy must be current.
+      - id: usage-ledger
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Requests requiring a budget reserve before dispatch.
+      - id: orchestration-api
+        mode: SYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Direct model routes remain available; agent/task routes are disabled.
+        degradationPolicy:
+          type: disableImmediately
+          capability: task.orchestration
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Mutating/idempotent dispatch fails without durable reservation/dedup state.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Usage/audit records remain durable while telemetry buffers.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Signed route/last-good, policy/guardrail/budget, idempotency, upstream capability probes, streaming/cancellation, and no-content telemetry tests pass.
+    startupWave: 6
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED
+
+  - id: experience-gateway
+    ownerRepository: mas-harness-runtime-plane
+    harness: runtime.experience
+    kind: gateway
+    stateBehavior:
+      mode: STATEFUL
+      durableState: true
+      restartSemantics: Restores interaction/event/input/cancel state and resumable SSE cursor from PostgreSQL.
+    contractAuthority: architecture/dependency-graph.yaml#/runtimeSurface/services/experience-gateway
+    stores:
+      - name: external.postgresql
+        ownership: schema:experience
+        purpose: Interactions, ordered events, pending input, cancellation, retention, and outbox.
+    dependencies:
+      - id: ai-gateway
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: New model/agent interaction dispatch requires the tenant gateway.
+      - id: orchestration-api
+        mode: SYNC
+        required: false
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [task.orchestration]}
+        failureMode: FAIL_OPEN
+        behavior: Non-task sessions and direct-model interactions remain available; task submission, state, input, resume, and cancel are disabled.
+        degradationPolicy:
+          type: disableImmediately
+          capability: task.orchestration
+      - id: governance-service
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Approval/input visibility and actor permissions must be current.
+      - id: external.postgresql
+        mode: SYNC
+        required: true
+        failureMode: FAIL_CLOSED
+        behavior: Interaction mutation and ordered event publication require durable commit.
+      - id: otel-collector
+        mode: ASYNC
+        required: false
+        failureMode: FAIL_OPEN
+        behavior: Content-free telemetry buffers; interaction events remain durable.
+        degradationPolicy:
+          type: bounded
+          budget: {timeSeconds: 300, bytes: 16777216}
+          exhaustWhen: ANY
+          onExhaustion: MARK_DEGRADED_AND_FAIL_READINESS
+    readinessCriteria:
+      - Migrations/RLS, monotonic event IDs, Last-Event-ID replay, input/resume/cancel, retention, and cross-tenant denial pass.
+    startupWave: 7
+    implementationStatus: PLANNED
+    evidenceStatus: NOT_STARTED

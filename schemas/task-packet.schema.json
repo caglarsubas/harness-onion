@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/task-packet.v1alpha1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "repository", "branch", "objective", "predecessors", "allowedPaths",
+    "warmSourceAccess", "sourceReuse", "contracts", "deliverables", "excluded", "prefetchCommands",
+    "offlineAcceptanceCommands", "offlineExecution",
+    "expectedEvidence", "rollback"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+$"},
+    "repository": {"type": "string", "minLength": 1},
+    "branch": {"type": "string", "pattern": "^codex/[a-z0-9][a-z0-9-]*$"},
+    "objective": {"type": "string", "minLength": 20},
+    "predecessors": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true,
+      "description": "Implementation-order predecessors require merged source and passing offline implementation evidence. NOT_RUN_ENV_UNAVAILABLE can unblock later coding but never satisfies a release or production gate."
+    },
+    "allowedPaths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"},
+      "uniqueItems": true,
+      "description": "A bootstrap packet owns Makefile; a later Make-using packet owns its exact ci/targets/<lowercase-packet-id>.json descriptor. PORTING.yaml is limited to product bootstraps or a future authorized PORT_CANDIDATE."
+    },
+    "warmSourceAccess": {
+      "const": "PROHIBITED_DURING_IMPLEMENTATION",
+      "description": "The trusted launcher must deny read, metadata, and write access to every canonical warm-source root supplied through HARNESS_WARM_SOURCE_ROOTS, scrub that value before child execution, and fail when a detected locked root is undeclared."
+    },
+    "sourceReuse": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/sourceReuseEntry"},
+      "uniqueItems": true
+    },
+    "contracts": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "deliverables": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "excluded": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "prefetchCommands": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/argvCommand"},
+      "uniqueItems": true
+    },
+    "offlineAcceptanceCommands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/offlineArgvCommand"},
+      "uniqueItems": true
+    },
+    "offlineExecution": {"$ref": "#/$defs/offlineExecution"},
+    "liveCampaignExecution": {"$ref": "#/$defs/liveCampaignExecution"},
+    "expectedEvidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "rollback": {"type": "string", "minLength": 10}
+  },
+  "$defs": {
+    "sourceRepository": {
+      "enum": [
+        "git@github.com:caglarsubas/llm_inference_engine.git",
+        "git@github.com:caglarsubas/data-source-harness.git"
+      ]
+    },
+    "argvCommand": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1, "pattern": "^[^\\u0000]+$"},
+      "not": {
+        "prefixItems": [
+          {"type": "string", "pattern": "(?:^|/)(?:sh|bash|zsh|dash|env)$"}
+        ]
+      }
+    },
+    "offlineArgvCommand": {
+      "allOf": [
+        {"$ref": "#/$defs/argvCommand"},
+        {
+          "not": {
+            "contains": {
+              "enum": ["curl", "wget", "npx", "prefetch", "fetch", "download", "install", "sync", "add", "pull"]
+            }
+          }
+        },
+        {
+          "not": {
+            "allOf": [
+              {"minItems": 2},
+              {"prefixItems": [{"const": "make"}, {"const": "verify-offline"}]}
+            ]
+          }
+        },
+        {
+          "not": {
+            "prefixItems": [
+              {"type": "string", "pattern": "(?:^|/)(?:sh|bash|zsh|dash|env)$"}
+            ]
+          }
+        },
+        {
+          "if": {"prefixItems": [{"const": "uv"}]},
+          "then": {
+            "allOf": [
+              {"contains": {"const": "--offline"}},
+              {"contains": {"const": "--frozen"}},
+              {"contains": {"const": "--no-sync"}}
+            ]
+          }
+        }
+      ]
+    },
+    "offlineExecution": {
+      "type": "object",
+      "description": "The wrapper owns both network denial and fail-closed warm-source filesystem isolation; packet commands never receive warm-source paths.",
+      "additionalProperties": false,
+      "required": [
+        "wrapperArgv", "packetPathEnvironment", "packetPathMode",
+        "commandTransport", "isolation", "sessionScope",
+        "prefetchOutsideSession", "offlineEnvironment"
+      ],
+      "properties": {
+        "wrapperArgv": {"const": ["./ci/verify-offline.sh"]},
+        "packetPathEnvironment": {"const": "HARNESS_TASK_PACKET"},
+        "packetPathMode": {"const": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH"},
+        "commandTransport": {"const": "ARGV_ARRAY_V1"},
+        "isolation": {"const": "OS_ENFORCED_DENY_ALL_OUTBOUND"},
+        "sessionScope": {"const": "SINGLE_PROCESS_TREE"},
+        "prefetchOutsideSession": {"const": false},
+        "offlineEnvironment": {
+          "const": {"UV_OFFLINE": "1", "UV_FROZEN": "1", "UV_NO_SYNC": "1"}
+        }
+      }
+    },
+    "liveCampaignExecution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "launcherArgv", "commandTransport", "executionPlacement",
+        "executionEnvelopeEnvironment", "executionEnvelopeMode",
+        "releaseTrustStoreMount", "tenantTrustStoreMount", "trustStoreMode",
+        "revocationRequired", "networkIsolation", "endpointAuthority",
+        "dynamicEndpointTransport", "mutationAdmission", "capacityAuthorization",
+        "publicInternetDiscovery", "cloudManagementApis", "billingApis",
+        "thirdPartyApiKeys", "credentialMode", "unavailableResult",
+        "ciEvidenceUse", "allowedEvidenceAxes", "commands"
+      ],
+      "properties": {
+        "launcherArgv": {"const": ["/opt/planeon/bin/harness-live-campaign-launch"]},
+        "commandTransport": {"const": "ARGV_ARRAY_V1"},
+        "executionPlacement": {"const": "PREINSTALLED_TARGET_LOCAL_EPHEMERAL_RUNNER"},
+        "executionEnvelopeEnvironment": {"const": "HARNESS_LIVE_EXECUTION_ENVELOPE"},
+        "executionEnvelopeMode": {"const": "DUAL_SIGNED_PACKET_COMMAND_CAMPAIGN_ENDPOINT_BINDING_V1"},
+        "releaseTrustStoreMount": {"const": "/etc/planeon/trust/release-trust-bundle.json"},
+        "tenantTrustStoreMount": {"const": "/etc/planeon/trust/tenant-trust-bundle.json"},
+        "trustStoreMode": {"const": "HASH_PINNED_LOCAL_PUBLIC_KEYS_VALIDITY_PURPOSE_AND_REVOCATION_V1"},
+        "revocationRequired": {"const": true},
+        "networkIsolation": {"const": "OS_ENFORCED_DENY_ALL_EXCEPT_SIGNED_ENDPOINTS"},
+        "endpointAuthority": {"const": "TENANT_CONTROLLED_PREEXISTING_CAPACITY_ONLY"},
+        "dynamicEndpointTransport": {"const": "PREAUTHORIZED_API_OR_CAMPAIGN_PROXY_ONLY"},
+        "mutationAdmission": {"const": "SERVER_SIDE_SIGNED_ZERO_INCREMENTAL_COST_POLICY_AND_RBAC_REQUIRED"},
+        "capacityAuthorization": {"const": "INDEPENDENT_OPERATOR_SIGNED_FIXED_PREEXISTING_CAPACITY"},
+        "publicInternetDiscovery": {"const": "DENIED"},
+        "cloudManagementApis": {"const": "DENIED"},
+        "billingApis": {"const": "DENIED"},
+        "thirdPartyApiKeys": {"const": "DENIED"},
+        "credentialMode": {"const": "TENANT_LOCAL_SHORT_LIVED_FILE_REFERENCE"},
+        "unavailableResult": {"const": "NOT_RUN_ENV_UNAVAILABLE"},
+        "ciEvidenceUse": {"const": "FORBIDDEN"},
+        "allowedEvidenceAxes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "DEPLOYMENT", "RUNTIME", "SECURITY", "ASSURANCE",
+              "TENANT_ACCEPTANCE_CANDIDATE"
+            ]
+          },
+          "uniqueItems": true,
+          "not": {"contains": {"const": "TENANT_ACCEPTANCE"}}
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/argvCommand"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "sourceReuseEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "reuseMode", "paths", "strategy"],
+      "properties": {
+        "repository": {"$ref": "#/$defs/sourceRepository"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "reuseMode": {
+          "enum": ["DISCOVERY_ONLY", "REFERENCE_ONLY", "PORT_CANDIDATE"]
+        },
+        "authorizationId": {"type": "string", "pattern": "^PA-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3}$"},
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "strategy": {"type": "string", "minLength": 10},
+        "mappings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/portMapping"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"reuseMode": {"const": "DISCOVERY_ONLY"}}},
+          "then": {
+            "properties": {
+              "paths": {
+                "items": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+/$"}
+              },
+              "strategy": {"const": "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
+            },
+            "not": {"anyOf": [{"required": ["authorizationId"]}, {"required": ["mappings"]}]}
+          }
+        },
+        {
+          "if": {"properties": {"reuseMode": {"const": "REFERENCE_ONLY"}}},
+          "then": {
+            "properties": {
+              "paths": {
+                "items": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"}
+              },
+              "strategy": {
+                "allOf": [
+                  {"pattern": "(?i)reference"},
+                  {"pattern": "exact-blob"},
+                  {"pattern": "(?i)implementation access"},
+                  {"pattern": "(?i)copy"},
+                  {"pattern": "(?i)forbidden"},
+                  {"pattern": "future packet revision"},
+                  {"pattern": "porting admission"}
+                ]
+              }
+            },
+            "not": {"anyOf": [{"required": ["authorizationId"]}, {"required": ["mappings"]}]}
+          }
+        },
+        {
+          "if": {"properties": {"reuseMode": {"const": "PORT_CANDIDATE"}}},
+          "then": {
+            "required": ["authorizationId", "mappings"],
+            "properties": {
+              "paths": {
+                "maxItems": 1,
+                "items": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"}
+              },
+              "mappings": {"maxItems": 1},
+              "strategy": {"pattern": "COPY_AUTHORIZED"}
+            }
+          }
+        }
+      ]
+    },
+    "portMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourcePath", "destinationPath", "transformationIntent", "parityIntent"],
+      "properties": {
+        "sourcePath": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+        "destinationPath": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+        "transformationIntent": {"enum": ["EXACT_COPY", "ATTRIBUTED_ADAPTATION"]},
+        "parityIntent": {"enum": ["BEHAVIORAL_PARITY", "CONTRACT_PARITY", "APPROVED_DIVERGENCE"]}
+      }
+    }
+  }
+}

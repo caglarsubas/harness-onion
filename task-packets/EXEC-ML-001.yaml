@@ -1,0 +1,16 @@
+id: EXEC-ML-001
+repository: mas-harness-execution-plane
+branch: codex/exec-ml-001-decision-service
+objective: Implement signed local scikit-learn, ONNX Runtime, and OR-Tools decision adapters with provenance and deterministic evidence.
+predecessors: [EXEC-001, MODEL-002, KN-DATA-002, TRUST-001]
+allowedPaths: ["services/decision-service/", "src/planeon_execution/decision/", "migrations/decision/", "providers/scikit-learn/", "providers/onnxruntime/", "providers/ortools/", "tests/decision/", "fixtures/decision/", "deploy/helm/decision-service/", "ci/targets/exec-ml-001.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes signed artifact, feature/provenance, policy, and decision contracts v1", "Produces local decision service API v1"]
+deliverables: ["Artifact/custody verification, feature provenance, deterministic inference/optimization adapters, bounded resources, reason metadata, and evidence events."]
+excluded: ["Training pipelines, cloud AutoML, external feature stores, unversioned artifacts, or opaque decisions without provenance."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","decision-contract"],["make","decision-repro"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Two-run deterministic outputs for all three adapters.", "Forged artifact, missing feature provenance, resource exhaustion, and tenant-denial vectors."]
+rollback: Disable the affected decision provider and retain immutable requests/results/evidence.

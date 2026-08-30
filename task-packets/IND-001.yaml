@@ -1,0 +1,16 @@
+id: IND-001
+repository: mas-harness-industry-packs
+branch: codex/ind-001-pack-framework
+objective: Build the industry-pack loader, safe validation, overlay semantics, eight-stage journey, pack index, and authoring guide.
+predecessors: [CON-006, MET-003]
+allowedPaths: [".github/workflows/verify.yml", "src/planeon_industry_packs/", "schemas/", "common/", "tests/framework/", "tests/fixtures/framework/", "docs/authoring.md", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes guidance and readiness contracts v1alpha1", "Produces IndustryPack artifact contract v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["Pack loader, common journey, non-executable rule validation, overlay rules, immutable pack index, authoring CLI, and offline packaging.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Industry-specific assumptions, executable plugins, LLM-required guidance, or network fetches."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","pack-framework-test"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Valid/invalid pack vectors.", "Deterministic pack index digest and sandbox rejection report.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Revert the pack framework before any sector pack is released.

@@ -1,0 +1,17 @@
+id: TRUST-GOV-001
+repository: mas-harness-trust-plane
+branch: codex/trust-gov-001-approvals-waivers
+objective: Implement N-of-M approvals, autonomy policies, exceptions, expiring waivers, compensating controls, and tamper-evident audit linkage.
+predecessors: [TRUST-001]
+allowedPaths: ["services/governance-service/", "src/planeon_trust/governance/", "migrations/governance/", "tests/governance/", "fixtures/governance/", "deploy/helm/governance-service/", "ci/targets/trust-gov-001.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse:
+  - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/governance.py","src/data_source_harness/policy.py","src/data_source_harness/promotion.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
+contracts: ["Consumes ApprovalRequest, policy, waiver, autonomy, audit, and event contracts v1alpha1", "Produces governance API v1"]
+deliverables: ["Reviewer eligibility, quorum, segregation, expiry, autonomy ladder, exceptions, waiver control/justification/compensation/expiry, and hash-linked audit chain.", "Production waivers are signed scope-exact documentation records only; they never satisfy a required control or convert evidence to PASS."]
+excluded: ["Self-approval, permanent waivers, policy bypass, waiver-as-PASS promotion, or deleting rejected/expired decisions."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","governance-contract"],["make","audit-integrity"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Quorum/segregation/expiry vectors.", "Tamper, replay, self-approval, missing compensating control, and expired waiver denial evidence.", "Fresh PASS is the only production-control satisfaction state; valid waivers over MISSING, COLLECTING, WARN, FAIL, STALE, or WAIVED evidence remain promotion-blocking."]
+rollback: Disable new approvals and retain all historical approval, waiver, and audit records.

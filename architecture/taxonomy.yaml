@@ -1,0 +1,298 @@
+schemaVersion: harness.planeon.ai/taxonomy/v1alpha1
+
+dependencyTypes:
+  always: The provider harness is included in install selection whenever the consumer harness is selected. This is not a readiness assertion; service dependency mode, required flag, failure mode, and degradation policy determine runtime readiness.
+  whenCapability: The dependency is selected only when the named consumer capability is enabled.
+  productionGate: The dependency is not an install-time prerequisite, but its current PASS evidence blocks production promotion.
+  subjectUnderEvaluation: The dependency is required only for an assurance campaign whose immutable subject declares that harness.
+
+deploymentModes:
+  billingBoundary: The platform never provisions, purchases, or scales billable infrastructure. Any pre-existing operator or tenant capacity and its approval remain outside the product transaction boundary.
+  modes:
+    - id: operator-hosted-saas
+      infrastructureCustody: operator-preauthorized
+      tenancy: shared-control-plane-with-policy-selected-dedicated-or-isolated-runtime
+      connectivity: connected-or-silo
+      billableProvisioning: FORBIDDEN
+      certificationPackets: [CTRL-007, CONF-SEC-001, CONF-UPG-001]
+    - id: tenant-public-cloud
+      infrastructureCustody: tenant-preexisting-managed-kubernetes
+      tenancy: tenant-selected-namespace-or-dedicated-cluster
+      connectivity: connected-or-silo
+      billableProvisioning: FORBIDDEN
+      certificationPackets: [CONF-K8S-001, CONF-OCP-001, CONF-SEC-001]
+    - id: self-managed
+      infrastructureCustody: tenant-owned-kubernetes-k3s-openshift-or-plain-vm
+      tenancy: tenant-selected-namespace-or-dedicated-cluster
+      connectivity: connected-silo-or-disconnected
+      billableProvisioning: FORBIDDEN
+      certificationPackets: [CONF-K8S-001, CONF-K3S-001, CONF-OCP-001, CONF-SEC-001]
+    - id: air-gapped
+      infrastructureCustody: tenant-disconnected-environment
+      tenancy: tenant-selected-namespace-or-dedicated-cluster
+      connectivity: physically-disconnected
+      billableProvisioning: FORBIDDEN
+      certificationPackets: [CONF-AIR-001, CONF-SEC-001, CONF-UPG-001]
+
+productionGates:
+  - id: runtimeGatewayProductionAssurance
+    requiredEvidenceStatus: PASS
+    maximumEvidenceAgeSeconds: 86400
+    immutableSubjectDigest: {required: true, algorithm: sha256}
+    evidencePlanBinding:
+      planIdRequired: true
+      planDigest: {required: true, algorithm: sha256}
+      controlSetDigest: {required: true, algorithm: sha256}
+      requiredControls:
+        - gateway.contract-conformance
+        - gateway.route-integrity
+        - gateway.tenant-isolation
+        - gateway.security-safety
+        - gateway.zero-bill-offline
+        - gateway.supply-chain
+        - gateway.runtime-resilience
+        - gateway.tenant-acceptance
+      aggregation: ALL_REQUIRED_CONTROLS
+    campaignBinding:
+      purpose: PRODUCTION_PROMOTION
+      campaignIdRequired: true
+      campaignDigest: {required: true, algorithm: sha256}
+    controlSatisfaction:
+      rule: FRESH_PASS_FOR_EVERY_REQUIRED_CONTROL
+      nonPassDisposition: PROMOTION_BLOCKED
+      waiverEffect: DOCUMENT_EXCEPTION_ONLY_PROMOTION_REMAINS_BLOCKED
+      waiverSatisfiesPromotion: false
+    trustedProducer:
+      policyId: production-assurance-trusted-producer-v1
+      policyDigest: {required: true, algorithm: sha256}
+      signatureRequired: true
+      signerIdentityRequired: true
+      producerReleaseDigest: {required: true, algorithm: sha256}
+    scopeBinding:
+      matchPolicy: EXACT_ALL
+      requiredFields: [tenantId, profileDigest, bundleDigest, routeId, routeDigest, subjectType, subjectId, subjectVersion, subjectDigest]
+    waiver:
+      allowed: true
+      signatureRequired: true
+      expiresAtRequired: true
+      maximumDurationSeconds: 14400
+      subjectDigestBindingRequired: true
+      evidencePlanDigestBindingRequired: true
+      controlSetDigestBindingRequired: true
+      campaignDigestBindingRequired: true
+      controlIdBinding: SAME_REQUIRED_CONTROL_ID
+      scopeBinding: EXACT_GATE_SCOPE
+      forbiddenEvidenceStatuses: [FAIL, STALE]
+  - id: decisionRouteProductionAssurance
+    requiredEvidenceStatus: PASS
+    maximumEvidenceAgeSeconds: 86400
+    immutableSubjectDigest: {required: true, algorithm: sha256}
+    evidencePlanBinding:
+      planIdRequired: true
+      planDigest: {required: true, algorithm: sha256}
+      controlSetDigest: {required: true, algorithm: sha256}
+      requiredControls:
+        - decision.contract-conformance
+        - decision.route-integrity
+        - decision.data-provenance
+        - decision.tenant-isolation
+        - decision.security-safety
+        - decision.zero-bill-offline
+        - decision.supply-chain
+        - decision.runtime-resilience
+        - decision.tenant-acceptance
+      aggregation: ALL_REQUIRED_CONTROLS
+    campaignBinding:
+      purpose: PRODUCTION_PROMOTION
+      campaignIdRequired: true
+      campaignDigest: {required: true, algorithm: sha256}
+    controlSatisfaction:
+      rule: FRESH_PASS_FOR_EVERY_REQUIRED_CONTROL
+      nonPassDisposition: PROMOTION_BLOCKED
+      waiverEffect: DOCUMENT_EXCEPTION_ONLY_PROMOTION_REMAINS_BLOCKED
+      waiverSatisfiesPromotion: false
+    trustedProducer:
+      policyId: production-assurance-trusted-producer-v1
+      policyDigest: {required: true, algorithm: sha256}
+      signatureRequired: true
+      signerIdentityRequired: true
+      producerReleaseDigest: {required: true, algorithm: sha256}
+    scopeBinding:
+      matchPolicy: EXACT_ALL
+      requiredFields: [tenantId, profileDigest, bundleDigest, routeId, routeDigest, subjectType, subjectId, subjectVersion, subjectDigest]
+    waiver:
+      allowed: true
+      signatureRequired: true
+      expiresAtRequired: true
+      maximumDurationSeconds: 14400
+      subjectDigestBindingRequired: true
+      evidencePlanDigestBindingRequired: true
+      controlSetDigestBindingRequired: true
+      campaignDigestBindingRequired: true
+      controlIdBinding: SAME_REQUIRED_CONTROL_ID
+      scopeBinding: EXACT_GATE_SCOPE
+      forbiddenEvidenceStatuses: [FAIL, STALE]
+
+harnesses:
+  - id: runtime.infrastructure
+    plane: runtime
+    ownerRepository: operator
+    deployables: [operator, fleet-sync-agent, bundle-verifier]
+    requires: []
+  - id: runtime.model-inference
+    plane: runtime
+    ownerRepository: model-plane
+    deployables: [inference-api]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.observability-finops, type: always}
+  - id: runtime.ai-gateway
+    plane: runtime
+    ownerRepository: runtime-plane
+    deployables: [ai-gateway]
+    requires:
+      - {id: runtime.model-inference, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+      - {id: trust.observability-finops, type: always}
+      - id: execution.orchestration
+        type: whenCapability
+        selectedWhen: {anyOfCapabilities: [task.orchestration]}
+      - id: trust.evaluation-assurance
+        type: productionGate
+        gate: runtimeGatewayProductionAssurance
+  - id: runtime.experience
+    plane: runtime
+    ownerRepository: runtime-plane
+    deployables: [experience-gateway]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+      - {id: runtime.ai-gateway, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+      - {id: trust.observability-finops, type: always}
+      - id: execution.orchestration
+        type: whenCapability
+        selectedWhen: {anyOfCapabilities: [task.orchestration]}
+  - id: knowledge.domain-semantic
+    plane: knowledge
+    ownerRepository: knowledge-plane
+    deployables: [domain-service]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+      - {id: trust.security-safety, type: always}
+  - id: knowledge.data-integration
+    plane: knowledge
+    ownerRepository: knowledge-plane
+    deployables: [connector-controller, ingest-worker]
+    requires:
+      - {id: knowledge.domain-semantic, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.observability-finops, type: always}
+  - id: knowledge.retrieval-context
+    plane: knowledge
+    ownerRepository: knowledge-plane
+    deployables: [retrieval-service, index-worker]
+    requires:
+      - {id: knowledge.domain-semantic, type: always}
+      - {id: knowledge.data-integration, type: always}
+      - {id: trust.security-safety, type: always}
+      - id: runtime.model-inference
+        type: whenCapability
+        selectedWhen:
+          anyOfCapabilities: [embedding.local-and-approved, retrieval.rerank.local]
+  - id: knowledge.memory-state
+    plane: knowledge
+    ownerRepository: knowledge-plane
+    deployables: [memory-service]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+      - id: runtime.model-inference
+        type: whenCapability
+        selectedWhen: {anyOfCapabilities: [memory.semantic]}
+  - id: execution.protocol-interoperability
+    plane: execution
+    ownerRepository: execution-plane
+    deployables: [protocol-gateway]
+    requires:
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+  - id: execution.orchestration
+    plane: execution
+    ownerRepository: execution-plane
+    deployables: [orchestration-api, orchestration-worker]
+    requires:
+      - {id: execution.protocol-interoperability, type: always}
+      - {id: trust.governance-agentops, type: always}
+      - {id: trust.observability-finops, type: always}
+      - id: knowledge.retrieval-context
+        type: whenCapability
+        selectedWhen: {anyOfCapabilities: [knowledge.retrieval]}
+      - id: runtime.model-inference
+        type: whenCapability
+        selectedWhen: {anyOfCapabilities: [model.inference]}
+  - id: execution.tool-skill-sandbox
+    plane: execution
+    ownerRepository: execution-plane
+    deployables: [tool-broker, sandbox-runner]
+    requires:
+      - {id: execution.orchestration, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+  - id: execution.ml-decision
+    plane: execution
+    ownerRepository: execution-plane
+    deployables: [decision-service]
+    requires:
+      - {id: knowledge.data-integration, type: always}
+      - id: runtime.model-inference
+        type: whenCapability
+        selectedWhen: {anyOfCapabilities: [model.inference]}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+      - {id: trust.observability-finops, type: always}
+      - id: trust.evaluation-assurance
+        type: productionGate
+        gate: decisionRouteProductionAssurance
+  - id: trust.security-safety
+    plane: trust
+    ownerRepository: trust-plane
+    deployables: [policy-decision, guardrail-service]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+    subcapabilities: [security.identity, security.authorization, security.supply-chain, guardrails.input, guardrails.output, guardrails.runtime]
+  - id: trust.governance-agentops
+    plane: trust
+    ownerRepository: trust-plane
+    deployables: [governance-service, registry-service]
+    requires:
+      - {id: trust.security-safety, type: always}
+      - {id: trust.observability-finops, type: always}
+    subcapabilities: [governance.policy, governance.oversight, governance.exceptions, agentops.registry, agentops.promotion, agentops.feedback]
+  - id: trust.observability-finops
+    plane: trust
+    ownerRepository: trust-plane
+    deployables: [otel-collector, usage-ledger]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+  - id: trust.evaluation-assurance
+    plane: trust
+    ownerRepository: trust-plane
+    deployables: [evidence-service, assurance-worker]
+    requires:
+      - {id: runtime.infrastructure, type: always}
+      - {id: trust.security-safety, type: always}
+      - {id: trust.governance-agentops, type: always}
+      - {id: trust.observability-finops, type: always}
+      - id: knowledge.data-integration
+        type: subjectUnderEvaluation
+        selectedWhen:
+          anyOfSubjectHarnesses: [knowledge.data-integration]
+      - id: runtime.model-inference
+        type: subjectUnderEvaluation
+        selectedWhen:
+          anyOfSubjectHarnesses: [runtime.model-inference]
+          anyOfCapabilities: [assurance.local-model-judge]

@@ -1,0 +1,663 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/services.schema.json",
+  "title": "Microservice Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "catalogVersion", "sourceTaxonomy", "counts", "implementationOwnership", "enums",
+    "stateMachines", "dependencyStateAggregation", "dependencyStatePropagation",
+    "externalDependencies", "startupWaves", "services"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/services/v1alpha1"},
+    "catalogVersion": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "sourceTaxonomy": {"const": "architecture/taxonomy.yaml"},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonicalDeployables", "managementDeployables", "total"],
+      "properties": {
+        "canonicalDeployables": {"const": 26},
+        "managementDeployables": {"const": 2},
+        "total": {"const": 28}
+      }
+    },
+    "implementationOwnership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle-verifier", "otel-collector", "operator", "policy-decision",
+        "sandbox-runner", "fleet-sync-agent", "guardrail-service", "usage-ledger",
+        "governance-service", "domain-service", "registry-service", "inference-api",
+        "connector-controller", "memory-service", "control-web", "ingest-worker",
+        "retrieval-service", "protocol-gateway", "evidence-service",
+        "profile-compiler-worker", "index-worker", "orchestration-api",
+        "decision-service", "assurance-worker", "tool-broker",
+        "orchestration-worker", "ai-gateway", "experience-gateway"
+      ],
+      "properties": {
+        "bundle-verifier": {"$ref": "#/$defs/implementationOwnership"},
+        "otel-collector": {"$ref": "#/$defs/implementationOwnership"},
+        "operator": {"$ref": "#/$defs/implementationOwnership"},
+        "policy-decision": {"$ref": "#/$defs/implementationOwnership"},
+        "sandbox-runner": {"$ref": "#/$defs/implementationOwnership"},
+        "fleet-sync-agent": {"$ref": "#/$defs/implementationOwnership"},
+        "guardrail-service": {"$ref": "#/$defs/implementationOwnership"},
+        "usage-ledger": {"$ref": "#/$defs/implementationOwnership"},
+        "governance-service": {"$ref": "#/$defs/implementationOwnership"},
+        "domain-service": {"$ref": "#/$defs/implementationOwnership"},
+        "registry-service": {"$ref": "#/$defs/implementationOwnership"},
+        "inference-api": {"$ref": "#/$defs/implementationOwnership"},
+        "connector-controller": {"$ref": "#/$defs/implementationOwnership"},
+        "memory-service": {"$ref": "#/$defs/implementationOwnership"},
+        "control-web": {"$ref": "#/$defs/implementationOwnership"},
+        "ingest-worker": {"$ref": "#/$defs/implementationOwnership"},
+        "retrieval-service": {"$ref": "#/$defs/implementationOwnership"},
+        "protocol-gateway": {"$ref": "#/$defs/implementationOwnership"},
+        "evidence-service": {"$ref": "#/$defs/implementationOwnership"},
+        "profile-compiler-worker": {"$ref": "#/$defs/implementationOwnership"},
+        "index-worker": {"$ref": "#/$defs/implementationOwnership"},
+        "orchestration-api": {"$ref": "#/$defs/implementationOwnership"},
+        "decision-service": {"$ref": "#/$defs/implementationOwnership"},
+        "assurance-worker": {"$ref": "#/$defs/implementationOwnership"},
+        "tool-broker": {"$ref": "#/$defs/implementationOwnership"},
+        "orchestration-worker": {"$ref": "#/$defs/implementationOwnership"},
+        "ai-gateway": {"$ref": "#/$defs/implementationOwnership"},
+        "experience-gateway": {"$ref": "#/$defs/implementationOwnership"}
+      }
+    },
+    "enums": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependencyModes", "failureModes", "degradationPolicyTypes", "degradationBudgetDimensions",
+        "degradationBudgetExhaustionModes", "degradationExhaustionActions", "behaviorModes",
+        "implementationStatuses", "evidenceStatuses"
+      ],
+      "properties": {
+        "dependencyModes": {"const": ["SYNC", "ASYNC", "CONTROL", "ARTIFACT"]},
+        "failureModes": {"const": ["FAIL_CLOSED", "FAIL_OPEN"]},
+        "degradationPolicyTypes": {"const": ["disableImmediately", "bounded"]},
+        "degradationBudgetDimensions": {"const": ["timeSeconds", "bytes", "workItems"]},
+        "degradationBudgetExhaustionModes": {"const": ["ANY", "ALL"]},
+        "degradationExhaustionActions": {
+          "const": ["MARK_DEGRADED_AND_FAIL_READINESS", "STOP_CLAIMING_WORK_AND_FAIL_READINESS"]
+        },
+        "behaviorModes": {"const": ["STATEFUL", "STATELESS", "EPHEMERAL"]},
+        "implementationStatuses": {"const": ["PLANNED", "IN_PROGRESS", "IMPLEMENTED", "DEPRECATED"]},
+        "evidenceStatuses": {"const": ["NOT_STARTED", "COLLECTING", "PASS", "WARN", "FAIL", "STALE", "WAIVED"]}
+      }
+    },
+    "stateMachines": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["desired", "observed", "release"],
+      "properties": {
+        "desired": {"$ref": "#/$defs/desiredStateMachine"},
+        "observed": {"$ref": "#/$defs/observedStateMachine"},
+        "release": {"$ref": "#/$defs/releaseStateMachine"}
+      }
+    },
+    "dependencyStateAggregation": {"$ref": "#/$defs/dependencyStateAggregation"},
+    "dependencyStatePropagation": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 17,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/propagationRule"}
+    },
+    "externalDependencies": {"$ref": "#/$defs/externalDependencies"},
+    "startupWaves": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/startupWave"}
+    },
+    "services": {
+      "type": "array",
+      "minItems": 28,
+      "maxItems": 28,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/service"}
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "implementationOwnership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packetId", "path"],
+      "properties": {
+        "packetId": {"type": "string", "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+$"},
+        "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+/$"}
+      }
+    },
+    "stringList": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmptyString"}},
+    "desiredStateMachine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initial", "states", "transitions"],
+      "properties": {
+        "initial": {"const": "ABSENT"},
+        "states": {"const": ["ABSENT", "PRESENT", "ACTIVE", "SUSPENDED", "RETIRED"]},
+        "transitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ABSENT", "PRESENT", "ACTIVE", "SUSPENDED", "RETIRED"],
+          "properties": {
+            "ABSENT": {"$ref": "#/$defs/stringList"},
+            "PRESENT": {"$ref": "#/$defs/stringList"},
+            "ACTIVE": {"$ref": "#/$defs/stringList"},
+            "SUSPENDED": {"$ref": "#/$defs/stringList"},
+            "RETIRED": {"$ref": "#/$defs/stringList"}
+          }
+        }
+      }
+    },
+    "observedStateMachine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initial", "states", "transitions"],
+      "properties": {
+        "initial": {"const": "UNKNOWN"},
+        "states": {"const": ["UNKNOWN", "ABSENT", "PENDING", "STARTING", "READY", "DEGRADED", "BLOCKED", "STOPPING", "FAILED"]},
+        "transitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["UNKNOWN", "ABSENT", "PENDING", "STARTING", "READY", "DEGRADED", "BLOCKED", "STOPPING", "FAILED"],
+          "properties": {
+            "UNKNOWN": {"$ref": "#/$defs/stringList"},
+            "ABSENT": {"$ref": "#/$defs/stringList"},
+            "PENDING": {"$ref": "#/$defs/stringList"},
+            "STARTING": {"$ref": "#/$defs/stringList"},
+            "READY": {"$ref": "#/$defs/stringList"},
+            "DEGRADED": {"$ref": "#/$defs/stringList"},
+            "BLOCKED": {"$ref": "#/$defs/stringList"},
+            "STOPPING": {"$ref": "#/$defs/stringList"},
+            "FAILED": {"$ref": "#/$defs/stringList"}
+          }
+        }
+      }
+    },
+    "releaseStateMachine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initial", "states", "transitions"],
+      "properties": {
+        "initial": {"const": "DRAFT"},
+        "states": {"const": ["DRAFT", "BUILT", "VERIFIED", "AWAITING_SIGNATURE", "SIGNED", "RELEASED", "DEPRECATED", "RETIRED", "FAILED", "REVOKED"]},
+        "transitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["DRAFT", "BUILT", "VERIFIED", "AWAITING_SIGNATURE", "SIGNED", "RELEASED", "DEPRECATED", "RETIRED", "FAILED", "REVOKED"],
+          "properties": {
+            "DRAFT": {"$ref": "#/$defs/stringList"},
+            "BUILT": {"$ref": "#/$defs/stringList"},
+            "VERIFIED": {"$ref": "#/$defs/stringList"},
+            "AWAITING_SIGNATURE": {"$ref": "#/$defs/stringList"},
+            "SIGNED": {"$ref": "#/$defs/stringList"},
+            "RELEASED": {"$ref": "#/$defs/stringList"},
+            "DEPRECATED": {"$ref": "#/$defs/stringList"},
+            "RETIRED": {"$ref": "#/$defs/stringList"},
+            "FAILED": {"$ref": "#/$defs/stringList"},
+            "REVOKED": {"$ref": "#/$defs/stringList"}
+          }
+        }
+      }
+    },
+    "edgeContribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "observedStateEffect", "readinessEffect", "desiredStateAction"],
+      "properties": {
+        "severity": {"enum": ["READY", "DEGRADED", "BLOCKED", "FAILED"]},
+        "observedStateEffect": {"enum": ["NO_CHANGE", "DEGRADED", "BLOCKED", "FAILED"]},
+        "readinessEffect": {"enum": ["NO_CHANGE", "POLICY_CONTROLLED", "NOT_READY"]},
+        "desiredStateAction": {"enum": ["NO_CHANGE", "SET_SUSPENDED"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"severity": {"const": "READY"}}},
+          "then": {
+            "properties": {
+              "observedStateEffect": {"const": "NO_CHANGE"},
+              "readinessEffect": {"const": "NO_CHANGE"},
+              "desiredStateAction": {"const": "NO_CHANGE"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"severity": {"const": "BLOCKED"}}},
+          "then": {
+            "properties": {
+              "observedStateEffect": {"const": "BLOCKED"},
+              "readinessEffect": {"const": "NOT_READY"},
+              "desiredStateAction": {"const": "NO_CHANGE"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"severity": {"const": "FAILED"}}},
+          "then": {
+            "properties": {
+              "observedStateEffect": {"const": "FAILED"},
+              "readinessEffect": {"const": "NOT_READY"},
+              "desiredStateAction": {"const": "NO_CHANGE"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"severity": {"const": "DEGRADED"}}},
+          "then": {
+            "properties": {
+              "observedStateEffect": {"const": "DEGRADED"},
+              "readinessEffect": {"enum": ["POLICY_CONTROLLED", "NOT_READY"]}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"desiredStateAction": {"const": "SET_SUSPENDED"}}},
+          "then": {
+            "properties": {
+              "severity": {"const": "DEGRADED"},
+              "observedStateEffect": {"const": "DEGRADED"},
+              "readinessEffect": {"const": "NOT_READY"}
+            }
+          }
+        }
+      ]
+    },
+    "dependencyStateAggregation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluationModel", "edgeKey", "snapshotRevisionRule", "conditionNormalization", "ruleApplication",
+        "triggerMatrix", "unmatchedSelectedFailureDisposition",
+        "unmatchedSelectedFailureContribution", "unmatchedSelectedFailureWorkAction",
+        "unmatchedSelectedFailureReason", "defaultContributionEligibility",
+        "modeAggregates", "defaultContribution", "contributionUpdate",
+        "recomputeOnAnyEdgeRevision", "orderIndependent", "severityPrecedence",
+        "readinessPrecedence", "desiredStateActionPrecedence", "workActionAggregation",
+        "noChangeActionHandling",
+        "workActionPrecedence", "reasonTieBreak", "neutralReasonHandling", "projection", "selectionHandling",
+        "recoveryActionGate", "revokedReleaseRecovery"
+      ],
+      "properties": {
+        "evaluationModel": {"const": "FULL_SNAPSHOT_RECOMPUTE"},
+        "edgeKey": {"const": "consumerServiceId+dependencyId"},
+        "snapshotRevisionRule": {"const": "LATEST_MONOTONIC_SNAPSHOT_ONLY"},
+        "conditionNormalization": {"const": "ONE_CANONICAL_CONDITION_PER_EDGE_REVISION"},
+        "ruleApplication": {"const": "AT_MOST_ONE_EXPLICIT_RULE_ELSE_DEFAULT_CONTRIBUTION"},
+        "triggerMatrix": {"const": "EXACT_DECLARED_TRIGGERS_ONLY"},
+        "unmatchedSelectedFailureDisposition": {"const": "FAIL_CLOSED_INVALID_TRIGGER"},
+        "unmatchedSelectedFailureContribution": {
+          "allOf": [
+            {"$ref": "#/$defs/edgeContribution"},
+            {
+              "const": {
+                "severity": "FAILED",
+                "observedStateEffect": "FAILED",
+                "readinessEffect": "NOT_READY",
+                "desiredStateAction": "NO_CHANGE"
+              }
+            }
+          ]
+        },
+        "unmatchedSelectedFailureWorkAction": {"const": "REJECT_NEW_AND_COMPENSATE"},
+        "unmatchedSelectedFailureReason": {"const": "DependencyTriggerInvalid"},
+        "defaultContributionEligibility": {"const": "HEALTHY_CONDITION_ONLY"},
+        "modeAggregates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["RUNTIME_DATA_PATH"],
+          "properties": {
+            "RUNTIME_DATA_PATH": {"const": ["SYNC", "ASYNC"]}
+          }
+        },
+        "defaultContribution": {
+          "allOf": [
+            {"$ref": "#/$defs/edgeContribution"},
+            {
+              "const": {
+                "severity": "READY",
+                "observedStateEffect": "NO_CHANGE",
+                "readinessEffect": "NO_CHANGE",
+                "desiredStateAction": "NO_CHANGE"
+              }
+            }
+          ]
+        },
+        "contributionUpdate": {"const": "REPLACE_BY_EDGE_KEY"},
+        "recomputeOnAnyEdgeRevision": {"const": true},
+        "orderIndependent": {"const": true},
+        "severityPrecedence": {"const": ["FAILED", "BLOCKED", "DEGRADED", "READY"]},
+        "readinessPrecedence": {"const": ["NOT_READY", "POLICY_CONTROLLED", "NO_CHANGE"]},
+        "desiredStateActionPrecedence": {"const": ["SET_SUSPENDED", "NO_CHANGE"]},
+        "workActionAggregation": {"const": "ORDERED_UNIQUE_SET"},
+        "noChangeActionHandling": {"const": "OMIT_WHEN_ANY_NON_NEUTRAL_ACTION_EXISTS"},
+        "workActionPrecedence": {
+          "const": [
+            "FAIL_WAVE_RETAIN_EVIDENCE", "REJECT_NEW_AND_COMPENSATE", "DO_NOT_APPLY",
+            "BLOCK_START", "BLOCK_MUTATIONS", "PAUSE_ACK_RETAIN_CURSOR",
+            "RETURN_RETRYABLE_503", "EXECUTE_ON_EXHAUSTION", "APPLY_DEGRADATION_POLICY",
+            "RESET_DEGRADATION_BUDGET_AND_RECOMPUTE", "RESTORE_OPTIONAL_CAPABILITY_AND_RECOMPUTE",
+            "RECOMPUTE_AND_UNBLOCK_IF_PERMITTED",
+            "RECOMPUTE_AND_RESUME_IF_PERMITTED", "RECOMPUTE_FROM_DEPENDENCY_SNAPSHOT",
+            "NO_CHANGE"
+          ]
+        },
+        "reasonTieBreak": {"const": "HIGHEST_SEVERITY_THEN_LEXICOGRAPHIC_EDGE_KEY"},
+        "neutralReasonHandling": {"const": "EXCLUDE_FROM_PRIMARY_REASON"},
+        "projection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["observedState", "readiness", "desiredState"],
+          "properties": {
+            "observedState": {"const": "FAILED_ELSE_BLOCKED_ELSE_DEGRADED_ELSE_LOCAL_STATE"},
+            "readiness": {"const": "NOT_READY_ELSE_POLICY_CONTROLLED_ELSE_LOCAL_READINESS"},
+            "desiredState": {"const": "SET_SUSPENDED_ELSE_NO_CHANGE"}
+          }
+        },
+        "selectionHandling": {"const": "UNSELECTED_EDGE_REPLACES_PRIOR_CONTRIBUTION_WITH_NO_CHANGE"},
+        "recoveryActionGate": {"const": "EXECUTE_ONLY_IF_AGGREGATED_RESULT_PERMITS"},
+        "revokedReleaseRecovery": {"const": "FORBIDDEN_TERMINAL"}
+      }
+    },
+    "propagationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger", "outcome"],
+      "properties": {
+        "id": {
+          "enum": [
+            "required-artifact-unverified", "required-control-not-ready-before-start",
+            "required-control-lost-after-ready", "required-sync-lost", "required-async-lost",
+            "fail-open-lost", "fail-open-budget-exhausted", "optional-or-unselected",
+            "dependency-release-revoked", "ephemeral-dependency-failed",
+            "optional-disable-immediately-lost", "required-artifact-invalidated-after-ready",
+            "required-artifact-restored", "required-control-restored",
+            "required-runtime-dependency-restored", "optional-dependency-recovered",
+            "optional-disable-immediately-restored"
+          ]
+        },
+        "trigger": {"$ref": "#/$defs/propagationTrigger"},
+        "outcome": {"$ref": "#/$defs/propagationOutcome"}
+      }
+    },
+    "propagationTrigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "requirement", "event", "phase", "degradationBudget"],
+      "properties": {
+        "mode": {"enum": ["ARTIFACT", "CONTROL", "SYNC", "ASYNC", "RUNTIME_DATA_PATH", "ANY"]},
+        "requirement": {"enum": ["REQUIRED", "OPTIONAL", "UNSELECTED", "ANY"]},
+        "event": {
+          "enum": [
+            "UNVERIFIED", "NOT_READY", "LOST", "UNSELECTED", "RELEASE_REVOKED",
+            "EXECUTION_FAILED", "VERIFIED_OR_RESTORED", "RESTORED"
+          ]
+        },
+        "phase": {"enum": ["BEFORE_START", "AFTER_READY", "ANY"]},
+        "degradationBudget": {"enum": ["NOT_APPLICABLE", "AVAILABLE", "EXHAUSTED", "RECOVERED"]}
+      },
+      "oneOf": [
+        {"const": {"mode": "ARTIFACT", "requirement": "REQUIRED", "event": "UNVERIFIED", "phase": "BEFORE_START", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "CONTROL", "requirement": "REQUIRED", "event": "NOT_READY", "phase": "BEFORE_START", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "CONTROL", "requirement": "REQUIRED", "event": "LOST", "phase": "AFTER_READY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "SYNC", "requirement": "REQUIRED", "event": "LOST", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ASYNC", "requirement": "REQUIRED", "event": "LOST", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ANY", "requirement": "OPTIONAL", "event": "LOST", "phase": "ANY", "degradationBudget": "AVAILABLE"}},
+        {"const": {"mode": "ANY", "requirement": "OPTIONAL", "event": "LOST", "phase": "ANY", "degradationBudget": "EXHAUSTED"}},
+        {"const": {"mode": "ANY", "requirement": "OPTIONAL", "event": "LOST", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ANY", "requirement": "UNSELECTED", "event": "UNSELECTED", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ANY", "requirement": "ANY", "event": "RELEASE_REVOKED", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ARTIFACT", "requirement": "REQUIRED", "event": "EXECUTION_FAILED", "phase": "BEFORE_START", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ARTIFACT", "requirement": "REQUIRED", "event": "UNVERIFIED", "phase": "AFTER_READY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ARTIFACT", "requirement": "REQUIRED", "event": "VERIFIED_OR_RESTORED", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "CONTROL", "requirement": "REQUIRED", "event": "RESTORED", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "RUNTIME_DATA_PATH", "requirement": "REQUIRED", "event": "RESTORED", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}},
+        {"const": {"mode": "ANY", "requirement": "OPTIONAL", "event": "RESTORED", "phase": "ANY", "degradationBudget": "RECOVERED"}},
+        {"const": {"mode": "ANY", "requirement": "OPTIONAL", "event": "RESTORED", "phase": "ANY", "degradationBudget": "NOT_APPLICABLE"}}
+      ]
+    },
+    "propagationOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edgeContribution", "workAction", "reason"],
+      "properties": {
+        "edgeContribution": {"$ref": "#/$defs/edgeContribution"},
+        "workAction": {
+          "enum": [
+            "DO_NOT_APPLY", "BLOCK_START", "BLOCK_MUTATIONS", "RETURN_RETRYABLE_503",
+            "PAUSE_ACK_RETAIN_CURSOR", "APPLY_DEGRADATION_POLICY", "EXECUTE_ON_EXHAUSTION",
+            "REJECT_NEW_AND_COMPENSATE", "FAIL_WAVE_RETAIN_EVIDENCE",
+            "RESET_DEGRADATION_BUDGET_AND_RECOMPUTE", "RESTORE_OPTIONAL_CAPABILITY_AND_RECOMPUTE",
+            "RECOMPUTE_AND_UNBLOCK_IF_PERMITTED",
+            "RECOMPUTE_AND_RESUME_IF_PERMITTED", "RECOMPUTE_FROM_DEPENDENCY_SNAPSHOT",
+            "NO_CHANGE"
+          ]
+        },
+        "reason": {"type": "string", "pattern": "^[A-Z][A-Za-z0-9]+$"}
+      }
+    },
+    "externalDependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external.kubernetes-api", "external.local-oci-source", "external.release-trust-store",
+        "external.oidc-provider", "external.postgresql", "external.pgvector", "external.opa-engine",
+        "external.otel-backend", "external.tenant-source-endpoints", "external.tenant-object-store",
+        "external.tenant-model-volume", "external.local-model-backend", "external.signed-catalog",
+        "external.signed-industry-packs"
+      ],
+      "properties": {
+        "external.kubernetes-api": {"$ref": "#/$defs/nonEmptyString"},
+        "external.local-oci-source": {"$ref": "#/$defs/nonEmptyString"},
+        "external.release-trust-store": {"$ref": "#/$defs/nonEmptyString"},
+        "external.oidc-provider": {"$ref": "#/$defs/nonEmptyString"},
+        "external.postgresql": {"$ref": "#/$defs/nonEmptyString"},
+        "external.pgvector": {"$ref": "#/$defs/nonEmptyString"},
+        "external.opa-engine": {"$ref": "#/$defs/nonEmptyString"},
+        "external.otel-backend": {"$ref": "#/$defs/nonEmptyString"},
+        "external.tenant-source-endpoints": {"$ref": "#/$defs/nonEmptyString"},
+        "external.tenant-object-store": {"$ref": "#/$defs/nonEmptyString"},
+        "external.tenant-model-volume": {"$ref": "#/$defs/nonEmptyString"},
+        "external.local-model-backend": {"$ref": "#/$defs/nonEmptyString"},
+        "external.signed-catalog": {"$ref": "#/$defs/nonEmptyString"},
+        "external.signed-industry-packs": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "startupWave": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wave", "objective", "services"],
+      "properties": {
+        "wave": {"type": "integer", "minimum": 0, "maximum": 7},
+        "objective": {"$ref": "#/$defs/nonEmptyString"},
+        "services": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}
+        }
+      }
+    },
+    "stateBehavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "durableState", "restartSemantics"],
+      "properties": {
+        "mode": {"enum": ["STATEFUL", "STATELESS", "EPHEMERAL"]},
+        "durableState": {"type": "boolean"},
+        "restartSemantics": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "store": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "ownership", "purpose"],
+      "properties": {
+        "name": {"$ref": "#/$defs/nonEmptyString"},
+        "ownership": {"type": "string", "pattern": "^(owned|read-only|write|control|schema:[a-z0-9-]+)$"},
+        "purpose": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "timeSeconds": {"type": "integer", "minimum": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "workItems": {"type": "integer", "minimum": 1}
+      }
+    },
+    "disableImmediatelyPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "capability"],
+      "properties": {
+        "type": {"const": "disableImmediately"},
+        "capability": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+      }
+    },
+    "boundedPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "budget", "exhaustWhen", "onExhaustion"],
+      "properties": {
+        "type": {"const": "bounded"},
+        "budget": {"$ref": "#/$defs/budget"},
+        "exhaustWhen": {"enum": ["ANY", "ALL"]},
+        "onExhaustion": {
+          "enum": ["MARK_DEGRADED_AND_FAIL_READINESS", "STOP_CLAIMING_WORK_AND_FAIL_READINESS"]
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mode", "required", "failureMode", "behavior"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"},
+        "mode": {"enum": ["SYNC", "ASYNC", "CONTROL", "ARTIFACT"]},
+        "required": {"type": "boolean"},
+        "selectionType": {"enum": ["whenCapability", "subjectUnderEvaluation"]},
+        "selectedWhen": {"type": "object"},
+        "failureMode": {"enum": ["FAIL_CLOSED", "FAIL_OPEN"]},
+        "behavior": {"$ref": "#/$defs/nonEmptyString"},
+        "degradationPolicy": {
+          "oneOf": [
+            {"$ref": "#/$defs/disableImmediatelyPolicy"},
+            {"$ref": "#/$defs/boundedPolicy"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"required": ["failureMode"], "properties": {"failureMode": {"const": "FAIL_OPEN"}}},
+          "then": {"required": ["degradationPolicy"]}
+        },
+        {
+          "if": {"required": ["failureMode"], "properties": {"failureMode": {"const": "FAIL_CLOSED"}}},
+          "then": {"not": {"required": ["degradationPolicy"]}}
+        },
+        {
+          "if": {"required": ["mode"], "properties": {"mode": {"const": "ARTIFACT"}}},
+          "then": {"properties": {"failureMode": {"const": "FAIL_CLOSED"}}}
+        },
+        {
+          "if": {"required": ["selectionType"]},
+          "then": {"required": ["selectedWhen"]}
+        },
+        {
+          "if": {"required": ["selectedWhen"]},
+          "then": {"required": ["selectionType"]}
+        },
+        {
+          "if": {"required": ["selectionType"], "properties": {"selectionType": {"const": "whenCapability"}}},
+          "then": {"properties": {"selectedWhen": {"$ref": "#/$defs/capabilityPredicate"}}}
+        },
+        {
+          "if": {"required": ["selectionType"], "properties": {"selectionType": {"const": "subjectUnderEvaluation"}}},
+          "then": {"properties": {"selectedWhen": {"$ref": "#/$defs/selectionPredicate"}}}
+        }
+      ]
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "ownerRepository", "harness", "kind", "stateBehavior", "stores", "dependencies",
+        "readinessCriteria", "startupWave", "implementationStatus", "evidenceStatus"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "ownerRepository": {
+          "enum": [
+            "mas-harness-control-plane", "mas-harness-execution-plane", "mas-harness-knowledge-plane",
+            "mas-harness-model-plane", "mas-harness-operator", "mas-harness-runtime-plane", "mas-harness-trust-plane"
+          ]
+        },
+        "harness": {
+          "enum": [
+            "management-plane", "runtime.infrastructure", "runtime.model-inference", "runtime.ai-gateway",
+            "runtime.experience", "knowledge.domain-semantic", "knowledge.data-integration",
+            "knowledge.retrieval-context", "knowledge.memory-state", "execution.protocol-interoperability",
+            "execution.orchestration", "execution.tool-skill-sandbox", "execution.ml-decision",
+            "trust.security-safety", "trust.governance-agentops", "trust.observability-finops",
+            "trust.evaluation-assurance"
+          ]
+        },
+        "kind": {"enum": ["agent", "api", "collector", "controller", "gateway", "job", "web-api", "worker"]},
+        "contractAuthority": {"type": "string", "pattern": "^architecture/dependency-graph\\.yaml#/runtimeSurface/services/[a-z0-9-]+$"},
+        "stateBehavior": {"$ref": "#/$defs/stateBehavior"},
+        "stores": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/store"}},
+        "dependencies": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/dependency"}},
+        "readinessCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nonEmptyString"}
+        },
+        "startupWave": {"type": "integer", "minimum": 0, "maximum": 7},
+        "implementationStatus": {"enum": ["PLANNED", "IN_PROGRESS", "IMPLEMENTED", "DEPRECATED"]},
+        "evidenceStatus": {"enum": ["NOT_STARTED", "COLLECTING", "PASS", "WARN", "FAIL", "STALE", "WAIVED"]}
+      }
+    },
+    "selectionPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "anyOfSubjectHarnesses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        },
+        "anyOfSubjectCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        }
+      }
+    },
+    "capabilityPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anyOfCapabilities"],
+      "properties": {
+        "anyOfCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+id: SDK-006
+repository: mas-harness-sdks
+branch: codex/sdk-006-guardrail-client
+objective: Implement guardrail profiles, streaming evaluation, detector contracts, client behavior, fail modes, and conformance vectors clean-room.
+predecessors: [SDK-003]
+allowedPaths: ["python/src/planeon_harness/guardrail/", "python/tests/guardrail/", "typescript/src/guardrail/", "typescript/tests/guardrail/", "fixtures/guardrail/", "ci/targets/sdk-006.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes trust guardrail contracts v1alpha1", "Produces guardrail SDK API and conformance vectors v1"]
+deliverables: ["Input, output, runtime, and streaming profiles; local detector interface; redaction-safe result; explicit fail mode; cross-language clients."]
+excluded: ["Deployable guardrail service and external moderation APIs."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","guardrail-vectors"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Streaming boundary and detector-failure vectors.", "No raw protected content in telemetry or errors."]
+rollback: Revert guardrail SDK modules without changing admission or telemetry APIs.

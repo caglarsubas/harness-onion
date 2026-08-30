@@ -1,0 +1,188 @@
+schemaVersion: harness.planeon.ai/repository-registry/v1alpha1
+
+dependencySemantics:
+  direction: consumer-to-provider
+  legacyDependsOn:
+    projectionOf: contractSource
+    status: compatibility-only
+    rule: New tooling must read dependencyGraphs; dependsOn is retained only for the current readiness validator.
+  graphTypes:
+    contractSource: Compile-time source or generated-contract coupling. Product implementation source must not cross repository boundaries.
+    buildArtifact: Immutable package/schema/tool artifacts required to build or test a repository.
+    releaseSet: Released images, charts, packs, and manifests pinned together by digest for distribution or conformance.
+    runtimeIntegration: Deployed service/API or installer-to-bundle relationships; conditional assurance-subject edges are selected only by an immutable campaign. These edges never grant permission to import provider source.
+  everyUnconditionalRepositoryGraphAcyclic: true
+  acyclicityExclusions: [subjectUnderEvaluation]
+
+operatorBootstrap:
+  phases:
+    - id: build-operator
+      rule: mas-harness-operator builds and verifies independently from mas-harness-distribution.
+    - id: assemble-release-set
+      rule: mas-harness-distribution pins the already released operator image, chart, and CRD with selected workload artifacts.
+    - id: install-workloads
+      rule: An already installed and verified operator consumes a workload bundle from the distribution OCI layout.
+  crossPhaseReciprocalEdges:
+    - releaseSet: {consumer: distribution, provider: operator}
+      runtimeIntegration: {consumer: operator, provider: distribution}
+      rationale: These edges occur in different phases and never create source or build cycles.
+
+dependencyGraphs:
+  contractSource:
+    edges:
+      - {consumer: sdks, provider: contracts}
+      - {consumer: industry-packs, provider: contracts}
+      - {consumer: control-plane, provider: contracts}
+      - {consumer: control-plane, provider: sdks}
+      - {consumer: control-plane, provider: industry-packs}
+      - {consumer: runtime-plane, provider: contracts}
+      - {consumer: runtime-plane, provider: sdks}
+      - {consumer: model-plane, provider: contracts}
+      - {consumer: model-plane, provider: sdks}
+      - {consumer: knowledge-plane, provider: contracts}
+      - {consumer: knowledge-plane, provider: sdks}
+      - {consumer: execution-plane, provider: contracts}
+      - {consumer: execution-plane, provider: sdks}
+      - {consumer: trust-plane, provider: contracts}
+      - {consumer: trust-plane, provider: sdks}
+      - {consumer: operator, provider: contracts}
+      - {consumer: distribution, provider: contracts}
+      - {consumer: conformance-labs, provider: contracts}
+      - {consumer: conformance-labs, provider: sdks}
+      - {consumer: conformance-labs, provider: industry-packs}
+  buildArtifact:
+    edges:
+      - {consumer: sdks, provider: contracts, artifact: generated-contract-packages}
+      - {consumer: industry-packs, provider: contracts, artifact: questionnaire-and-profile-schemas}
+      - {consumer: control-plane, provider: contracts, artifact: generated-api-and-profile-packages}
+      - {consumer: control-plane, provider: sdks, artifact: client-and-context-packages}
+      - {consumer: control-plane, provider: industry-packs, artifact: signed-pack-fixtures}
+      - {consumer: runtime-plane, provider: contracts, artifact: generated-runtime-contracts}
+      - {consumer: runtime-plane, provider: sdks, artifact: client-context-and-receipt-packages}
+      - {consumer: model-plane, provider: contracts, artifact: generated-model-contracts}
+      - {consumer: model-plane, provider: sdks, artifact: client-context-and-receipt-packages}
+      - {consumer: knowledge-plane, provider: contracts, artifact: generated-knowledge-contracts}
+      - {consumer: knowledge-plane, provider: sdks, artifact: client-context-and-receipt-packages}
+      - {consumer: execution-plane, provider: contracts, artifact: generated-execution-contracts}
+      - {consumer: execution-plane, provider: sdks, artifact: client-context-and-receipt-packages}
+      - {consumer: trust-plane, provider: contracts, artifact: generated-trust-contracts}
+      - {consumer: trust-plane, provider: sdks, artifact: client-context-and-evidence-packages}
+      - {consumer: operator, provider: contracts, artifact: crd-bundle-and-module-manifest-schemas}
+      - {consumer: distribution, provider: contracts, artifact: bundle-lock-and-module-manifest-schemas}
+      - {consumer: conformance-labs, provider: contracts, artifact: conformance-and-evidence-schemas}
+      - {consumer: conformance-labs, provider: sdks, artifact: portable-test-clients}
+      - {consumer: conformance-labs, provider: industry-packs, artifact: signed-industry-acceptance-fixtures}
+  releaseSet:
+    edges:
+      - {consumer: distribution, provider: contracts, artifact: contract-catalog}
+      - {consumer: distribution, provider: industry-packs, artifact: signed-industry-packs}
+      - {consumer: distribution, provider: control-plane, artifact: control-plane-images-and-charts}
+      - {consumer: distribution, provider: runtime-plane, artifact: runtime-images-and-charts}
+      - {consumer: distribution, provider: model-plane, artifact: model-images-and-charts}
+      - {consumer: distribution, provider: knowledge-plane, artifact: knowledge-images-and-charts}
+      - {consumer: distribution, provider: execution-plane, artifact: execution-images-and-charts}
+      - {consumer: distribution, provider: trust-plane, artifact: trust-images-and-charts}
+      - {consumer: distribution, provider: operator, artifact: operator-image-chart-and-crd}
+      - {consumer: conformance-labs, provider: distribution, artifact: subject-bundle-by-digest}
+  runtimeIntegration:
+    edges:
+      - {consumer: control-plane, provider: trust-plane, interface: policy-governance-registry-apis}
+      - {consumer: runtime-plane, provider: model-plane, interface: normalized-inference-api}
+      - consumer: runtime-plane
+        provider: execution-plane
+        interface: task-admission-and-control-api
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [task.orchestration]}
+      - {consumer: runtime-plane, provider: trust-plane, interface: policy-guardrail-governance-usage-apis}
+      - consumer: knowledge-plane
+        provider: model-plane
+        interface: embeddings-and-reranking-api
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [knowledge.retrieval, memory.semantic]}
+      - consumer: execution-plane
+        provider: knowledge-plane
+        interface: retrieval-and-data-readiness-apis
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [knowledge.retrieval, decision.deterministic, decision.onnx]}
+      - consumer: execution-plane
+        provider: model-plane
+        interface: inference-api
+        selectionType: whenCapability
+        selectedWhen: {anyOfCapabilities: [model.inference]}
+      - {consumer: execution-plane, provider: trust-plane, interface: policy-governance-usage-evidence-apis}
+      - {consumer: knowledge-plane, provider: trust-plane, interface: policy-and-governance-apis}
+      - {consumer: model-plane, provider: trust-plane, interface: policy-guardrail-and-usage-apis}
+      - consumer: trust-plane
+        provider: knowledge-plane
+        interface: data-readiness-and-provenance-subject-api
+        selectionType: subjectUnderEvaluation
+        selectedWhen: {anyOfSubjectHarnesses: [knowledge.data-integration]}
+      - consumer: trust-plane
+        provider: model-plane
+        interface: model-subject-and-local-judge-api
+        selectionType: subjectUnderEvaluation
+        selectedWhen:
+          anyOfSubjectHarnesses: [runtime.model-inference]
+          anyOfCapabilities: [assurance.local-model-judge]
+      - {consumer: operator, provider: distribution, interface: verified-workload-bundle}
+      - {consumer: conformance-labs, provider: operator, interface: installation-status-and-evidence}
+      - {consumer: conformance-labs, provider: control-plane, interface: questionnaire-and-profile-apis}
+      - {consumer: conformance-labs, provider: runtime-plane, interface: runtime-contract-surface}
+      - {consumer: conformance-labs, provider: model-plane, interface: model-contract-surface}
+      - {consumer: conformance-labs, provider: knowledge-plane, interface: knowledge-contract-surface}
+      - {consumer: conformance-labs, provider: execution-plane, interface: execution-contract-surface}
+      - {consumer: conformance-labs, provider: trust-plane, interface: trust-and-evidence-contract-surface}
+
+repositories:
+  - id: harness-engineering
+    name: Harness-Engineering
+    kind: meta
+    dependsOn: []
+  - id: contracts
+    name: mas-harness-contracts
+    kind: product
+    dependsOn: []
+  - id: sdks
+    name: mas-harness-sdks
+    kind: product
+    dependsOn: [contracts]
+  - id: industry-packs
+    name: mas-harness-industry-packs
+    kind: product
+    dependsOn: [contracts]
+  - id: control-plane
+    name: mas-harness-control-plane
+    kind: product
+    dependsOn: [contracts, sdks, industry-packs]
+  - id: runtime-plane
+    name: mas-harness-runtime-plane
+    kind: product
+    dependsOn: [contracts, sdks]
+  - id: model-plane
+    name: mas-harness-model-plane
+    kind: product
+    dependsOn: [contracts, sdks]
+  - id: knowledge-plane
+    name: mas-harness-knowledge-plane
+    kind: product
+    dependsOn: [contracts, sdks]
+  - id: execution-plane
+    name: mas-harness-execution-plane
+    kind: product
+    dependsOn: [contracts, sdks]
+  - id: trust-plane
+    name: mas-harness-trust-plane
+    kind: product
+    dependsOn: [contracts, sdks]
+  - id: operator
+    name: mas-harness-operator
+    kind: product
+    dependsOn: [contracts]
+  - id: distribution
+    name: mas-harness-distribution
+    kind: product
+    dependsOn: [contracts]
+  - id: conformance-labs
+    name: mas-harness-conformance-labs
+    kind: product
+    dependsOn: [contracts, sdks, industry-packs]

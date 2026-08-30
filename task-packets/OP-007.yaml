@@ -1,0 +1,16 @@
+id: OP-007
+repository: mas-harness-operator
+branch: codex/op-007-platform-security
+objective: Certify operator rendering and live behavior across Kubernetes, OpenShift, and K3s security constraints and outage drills.
+predecessors: [OP-006]
+allowedPaths: ["tests/platform/", "tests/security/", "tests/resilience/", "fixtures/platform/", "scripts/render_matrix.sh", "scripts/run_operator_campaign.py", "docs/runbooks/", "config/", "deploy/helm/", "ci/targets/op-007.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes complete operator behavior and platform compatibility matrix v1", "Produces operator platform/security evidence set v1"]
+deliverables: ["Render/live matrix, arbitrary UID/SCC, RBAC/default-deny, controller compromise boundaries, API/registry/policy outages, and evidence semantics."]
+excluded: ["Cluster provisioning, Terraform, Red Hat subscriptions, treating render as live certification, or passing unavailable environments."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","platform-render-matrix"],["make","operator-security"],["make","operator-resilience"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Separate PASS/FAIL/NOT_RUN_ENV_UNAVAILABLE results with render-only versus live recorded as an executionMode dimension.", "RBAC/network/arbitrary-UID and outage reports."]
+rollback: Revert only compatible platform manifest changes and retain prior certified manifests and evidence.

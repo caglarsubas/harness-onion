@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/trusted-runner-manifest.v1alpha1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "launcher", "runner", "isolation", "preflight", "signature"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/trusted-runner-manifest/v1alpha1"},
+    "launcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "version", "sha256", "ownerUid", "ownerGid", "mode"],
+      "properties": {
+        "path": {"const": "/opt/planeon/bin/harness-offline-launch"},
+        "version": {"type": "string", "pattern": "^[1-9][0-9]*\\.[0-9]+\\.[0-9]+$"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "ownerUid": {"const": 0},
+        "ownerGid": {"const": 0},
+        "mode": {"const": "0555"}
+      }
+    },
+    "runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredLabels", "ephemeral", "ambientCloudCredentials",
+        "sshAgent", "kubeconfig", "containerControlSockets", "billableBrokers"
+      ],
+      "properties": {
+        "requiredLabels": {
+          "const": ["self-hosted", "harness-engineering", "ephemeral", "credential-free"]
+        },
+        "ephemeral": {"const": true},
+        "ambientCloudCredentials": {"const": false},
+        "sshAgent": {"const": false},
+        "kubeconfig": {"const": false},
+        "containerControlSockets": {"const": []},
+        "billableBrokers": {"const": []}
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network", "warmSourceRootEnvironment", "warmSourceRootMode",
+        "warmSourceRoots", "credentialHomeMode", "localSocketMode", "childPathMode",
+        "runnerManifestChildMode"
+      ],
+      "properties": {
+        "network": {"const": "OS_ENFORCED_DENY_ALL_OUTBOUND"},
+        "warmSourceRootEnvironment": {"const": "HARNESS_WARM_SOURCE_ROOTS"},
+        "warmSourceRootMode": {"const": "CANONICAL_EXHAUSTIVE_DENY_READ_METADATA_WRITE"},
+        "warmSourceRoots": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^/(?!$)(?!private/?$)(?!private/tmp/?$)(?!tmp/?$)(?!Users/?$)(?!home/?$).+[^/]$"
+          }
+        },
+        "credentialHomeMode": {"const": "HIDDEN_OR_EMPTY"},
+        "localSocketMode": {"const": "CONTROL_AND_AGENT_SOCKETS_HIDDEN"},
+        "childPathMode": {"const": "WARM_ROOT_PATHS_SCRUBBED"},
+        "runnerManifestChildMode": {"const": "MANIFEST_KEY_SIGNATURE_AND_PREFLIGHT_HIDDEN"}
+      }
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suiteVersion", "status", "evidenceSha256", "networkDenied",
+        "warmReadDenied", "warmMetadataDenied", "warmWriteDenied",
+        "packetWriteDenied", "credentialEnvironmentScrubbed", "brokerSocketsAbsent"
+      ],
+      "properties": {
+        "suiteVersion": {"type": "string", "pattern": "^[1-9][0-9]*\\.[0-9]+\\.[0-9]+$"},
+        "status": {"const": "PASS"},
+        "evidenceSha256": {"$ref": "#/$defs/sha256"},
+        "networkDenied": {"const": true},
+        "warmReadDenied": {"const": true},
+        "warmMetadataDenied": {"const": true},
+        "warmWriteDenied": {"const": true},
+        "packetWriteDenied": {"const": true},
+        "credentialEnvironmentScrubbed": {"const": true},
+        "brokerSocketsAbsent": {"const": true}
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "signaturePath", "publicKeyPath", "publicKeySha256"],
+      "properties": {
+        "algorithm": {"const": "ED25519"},
+        "signaturePath": {"const": "/etc/planeon/harness-runner-manifest.json.sig"},
+        "publicKeyPath": {"const": "/etc/planeon/harness-runner-manifest.pub"},
+        "publicKeySha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

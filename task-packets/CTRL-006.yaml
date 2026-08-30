@@ -1,0 +1,16 @@
+id: CTRL-006
+repository: mas-harness-control-plane
+branch: codex/ctrl-006-security-e2e
+objective: Close control-plane security, accessibility, dependency, tamper-evidence, and full white-goods journey gaps before Alpha 1 certification.
+predecessors: [CTRL-005, TRUST-002]
+allowedPaths: ["apps/control-web/src/", "workers/profile-compiler/", "packages/db/", "tests/security/", "e2e/security/", "e2e/white-goods.spec.ts", "scripts/audit_dependencies.py", "docs/security/", "package.json", "package-lock.json", "pyproject.toml", "uv.lock", "ci/targets/ctrl-006.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes all control APIs v1alpha1", "Consumes guardrail and policy clients v1", "Produces Alpha 1 control-plane acceptance evidence"]
+deliverables: ["RLS, CSRF/session, tenant isolation, tamper chain, dependency remediation, accessibility, and Playwright white-goods journey coverage."]
+excluded: ["Suppressing release-blocking vulnerabilities, external test services, or claiming runtime deployment success."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","security"],["make","accessibility"],["make","e2e-white-goods"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Cross-tenant and tamper denial campaign.", "Accessibility report, dependency disposition, and complete questionnaire-to-locked-profile browser evidence."]
+rollback: Revert only remediations that preserve locked-profile compatibility and never roll back security database changes destructively.

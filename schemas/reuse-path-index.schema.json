@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/reuse-path-index.v1alpha1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "generatedFrom", "defaultReuseDisposition",
+    "copyAuthorizationDisposition", "sources"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/reuse-path-index/v1alpha1"},
+    "generatedFrom": {"type": "string", "minLength": 1},
+    "defaultReuseDisposition": {"const": "REFERENCE_ONLY_PENDING_PATH_REVIEW"},
+    "copyAuthorizationDisposition": {"const": "COPY_AUTHORIZED"},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/source"}
+    }
+  },
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "repository": {
+      "enum": [
+        "git@github.com:caglarsubas/llm_inference_engine.git",
+        "git@github.com:caglarsubas/data-source-harness.git"
+      ]
+    },
+    "destinationRepository": {
+      "enum": [
+        "Harness-Engineering", "mas-harness-contracts", "mas-harness-sdks",
+        "mas-harness-industry-packs", "mas-harness-control-plane",
+        "mas-harness-runtime-plane", "mas-harness-model-plane",
+        "mas-harness-knowledge-plane", "mas-harness-execution-plane",
+        "mas-harness-trust-plane", "mas-harness-operator",
+        "mas-harness-distribution", "mas-harness-conformance-labs"
+      ]
+    },
+    "safePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "licenseDisposition", "authorization", "paths"],
+      "properties": {
+        "repository": {"$ref": "#/$defs/repository"},
+        "commit": {"$ref": "#/$defs/sha1"},
+        "licenseDisposition": {"const": "path-review-required-before-copy"},
+        "authorization": {"const": "recorded-repository-scope-authorization"},
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {"$ref": "#/$defs/treeDiscovery"},
+              {"$ref": "#/$defs/blobPending"},
+              {"$ref": "#/$defs/blobCopyAuthorized"}
+            ]
+          }
+        }
+      }
+    },
+    "pendingOwnershipEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "authority", "authorshipClaim"],
+      "properties": {
+        "status": {"const": "REPOSITORY_SCOPE_CONSENT_ONLY"},
+        "authority": {"const": "legal/source-reuse-authorization.yaml"},
+        "authorshipClaim": {"const": "NONE"}
+      }
+    },
+    "pendingLicenseEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "authority", "inferredFromRepositoryOwnership"],
+      "properties": {
+        "status": {"const": "NOT_YET_VERIFIED"},
+        "authority": {"const": "legal/third-party-license-policy.yaml"},
+        "inferredFromRepositoryOwnership": {"const": false}
+      }
+    },
+    "treeDiscovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "path", "gitObject", "kind", "useModes",
+        "ownershipEvidence", "licenseEvidence", "reuseDisposition",
+        "eligibleForCopyAuthorization", "requiredBeforeCopy"
+      ],
+      "properties": {
+        "recordType": {"const": "TREE_DISCOVERY"},
+        "path": {"type": "string", "minLength": 2, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+/$"},
+        "gitObject": {"$ref": "#/$defs/sha1"},
+        "kind": {"const": "tree"},
+        "useModes": {"const": ["DISCOVERY_ONLY"]},
+        "ownershipEvidence": {"$ref": "#/$defs/pendingOwnershipEvidence"},
+        "licenseEvidence": {"$ref": "#/$defs/pendingLicenseEvidence"},
+        "reuseDisposition": {"const": "DISCOVERY_ONLY"},
+        "eligibleForCopyAuthorization": {"const": false},
+        "requiredBeforeCopy": {"const": ["replaceWithExactIndexedBlobs"]}
+      }
+    },
+    "blobPending": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "path", "gitObject", "kind", "useModes",
+        "ownershipEvidence", "licenseEvidence", "reuseDisposition",
+        "eligibleForCopyAuthorization", "requiredBeforeCopy"
+      ],
+      "properties": {
+        "recordType": {"const": "BLOB_PENDING"},
+        "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+        "gitObject": {"$ref": "#/$defs/sha1"},
+        "kind": {"const": "blob"},
+        "useModes": {"const": ["REFERENCE_ONLY"]},
+        "ownershipEvidence": {"$ref": "#/$defs/pendingOwnershipEvidence"},
+        "licenseEvidence": {"$ref": "#/$defs/pendingLicenseEvidence"},
+        "reuseDisposition": {"const": "REFERENCE_ONLY_PENDING_PATH_REVIEW"},
+        "eligibleForCopyAuthorization": {"const": true},
+        "requiredBeforeCopy": {
+          "const": [
+            "ownerOrLicenseGrantEvidenceRecorded", "spdxDispositionRecorded",
+            "thirdPartyAndGeneratedContentReviewed", "excludedFeatureScanPassed",
+            "portingRecordPrepared"
+          ]
+        }
+      }
+    },
+    "blobCopyAuthorized": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordType", "path", "gitObject", "kind", "useModes",
+        "ownershipEvidence", "licenseEvidence", "thirdPartyReview",
+        "exclusionReview", "authorizationIds", "approvedDestinations",
+        "reuseDisposition", "eligibleForCopyAuthorization", "requiredBeforeCopy"
+      ],
+      "properties": {
+        "recordType": {"const": "BLOB_COPY_AUTHORIZED"},
+        "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+        "gitObject": {"$ref": "#/$defs/sha1"},
+        "kind": {"const": "blob"},
+        "useModes": {"const": ["PORT_CANDIDATE"]},
+        "ownershipEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "authority", "rightsBasis", "authorshipClaim", "evidenceSha256"],
+          "properties": {
+            "status": {"const": "PATH_LEVEL_RIGHTS_VERIFIED"},
+            "authority": {"const": "architecture/porting-authorization-index.yaml"},
+            "rightsBasis": {"enum": ["AUTHORSHIP_ATTESTATION", "LICENSE_GRANT", "CONTRIBUTOR_ASSIGNMENT"]},
+            "authorshipClaim": {"enum": ["VERIFIED", "NOT_REQUIRED_BY_LICENSE_GRANT"]},
+            "evidenceSha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "licenseEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "authority", "spdxId", "evidenceSha256", "inferredFromRepositoryOwnership"],
+          "properties": {
+            "status": {"const": "PATH_LEVEL_LICENSE_APPROVED"},
+            "authority": {"const": "architecture/porting-authorization-index.yaml"},
+            "spdxId": {"enum": ["Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC", "MPL-2.0", "PostgreSQL", "Unicode-3.0"]},
+            "evidenceSha256": {"$ref": "#/$defs/sha256"},
+            "inferredFromRepositoryOwnership": {"const": false}
+          }
+        },
+        "thirdPartyReview": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "evidenceSha256"],
+          "properties": {
+            "status": {"const": "COMPLETED_NO_UNRESOLVED_MATERIAL"},
+            "evidenceSha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "exclusionReview": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "evidenceSha256"],
+          "properties": {
+            "status": {"const": "PASSED"},
+            "evidenceSha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "authorizationIds": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^PA-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3}$"}
+        },
+        "approvedDestinations": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["repository", "pathPrefix"],
+            "properties": {
+              "repository": {"$ref": "#/$defs/destinationRepository"},
+              "pathPrefix": {"$ref": "#/$defs/safePath"}
+            }
+          }
+        },
+        "reuseDisposition": {"const": "COPY_AUTHORIZED"},
+        "eligibleForCopyAuthorization": {"const": true},
+        "requiredBeforeCopy": {"const": []}
+      }
+    }
+  }
+}

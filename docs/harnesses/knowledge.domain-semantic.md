@@ -1,0 +1,138 @@
+# Harness Specification: `knowledge.domain-semantic`
+
+## Contract
+
+| Field | Value |
+|---|---|
+| Plane | Knowledge |
+| Owning repository | `mas-harness-knowledge-plane` |
+| API version | `harness.planeon.ai/v1alpha1` |
+
+## Capabilities and non-goals
+
+This harness captures a tenant's business vocabulary, canonical entities, relationships, constraints, process concepts, ownership, and versioned semantic mappings. It validates RDF/SHACL artifacts, exposes resolved domain terms, and provides the semantic baseline required before data ingestion and retrieval are certified.
+
+It does not ingest source data, build retrieval indexes, store conversational memory, execute business rules as code, or use an LLM to declare an ontology complete. Industry packs may propose terms and shapes, but tenant owners approve them.
+
+## Owner and deployables
+
+- `domain-service`: versioned domain-package API, validation, publication, resolution, and compatibility checks.
+
+The baseline implementation embeds RDFLib and pySHACL in `domain-service`; no external triplestore is required for minimal profiles.
+Apache Jena is contract-only, non-installable comparative guidance in this
+release; there is no selectable Jena service or repository packet.
+
+## Dependencies, conflicts, and ordering
+
+- Required: `runtime.infrastructure`, `trust.security-safety`, `trust.observability-finops`.
+- Required for production publication: `trust.governance-agentops`.
+- Optional consumers: `knowledge.data-integration`, `knowledge.retrieval-context`, `execution.ml-decision`, `trust.evaluation-assurance`.
+- Conflicts:
+  - Two active definitions for the same canonical URI without an explicit replacement mapping.
+  - Breaking removal or range change while a locked profile depends on the prior version.
+  - Executable code, remote context fetches, or network imports inside a domain package.
+  - Publication without named business/data owners.
+
+Domain publication precedes data mapping, readiness approval, retrieval indexing, and model grounding.
+
+## Provider implementations
+
+| Provider | Use |
+|---|---|
+| `planeon.rdflib` | Baseline local RDF graph, JSON-LD/Turtle parsing, and term resolution |
+| `planeon.pyshacl` | Mandatory SHACL validation provider |
+| `planeon.jena` | Contract-only, non-installable high-scale SPARQL guidance; active selection is rejected as `PROVIDER_UNAVAILABLE` |
+
+All remote RDF imports are resolved into the signed domain package at build time. Runtime network dereferencing is prohibited.
+
+## Configuration and runtime boundaries
+
+```yaml
+domain:
+  id: string
+  version: semver
+  packageRef: oci@sha256:...
+  defaultLanguage: string
+  supportedLanguages: [string]
+  owners: [subject-id]
+  compatibility: backward | strict
+validation:
+  shapes: [relative-path]
+  severityBlocking: [Violation]
+  maxTriples: integer
+imports:
+  mode: vendored-only
+```
+
+- Secrets: none for the baseline. Comparative Jena guidance does not activate a credential path.
+- RBAC: no Kubernetes API access. Publication requires `domain:publish`; drafts require `domain:write`; resolution requires `domain:read`.
+- Network: ingress from control, data, retrieval, decision, and assurance services. Egress to PostgreSQL, policy, and OTel only.
+- Storage: immutable domain packages are OCI artifacts. Metadata, version graph, validation reports, and active pointers live in domain-owned tables within the knowledge schema. No source records are stored here.
+
+## APIs, events, and state
+
+```text
+POST /knowledge/v1/domains
+GET  /knowledge/v1/domains/{id}/versions
+POST /knowledge/v1/domains/{id}/versions
+POST /knowledge/v1/domains/{id}/versions/{version}:validate
+POST /knowledge/v1/domains/{id}/versions/{version}:publish
+POST /knowledge/v1/domains/{id}/versions/{version}:resolve
+GET  /knowledge/v1/domains/{id}/versions/{version}/report
+```
+
+Version states: `DRAFT → VALIDATING → VALID`; then `AWAITING_APPROVAL → ACTIVE`. Alternatives are `INVALID`, `REJECTED`, `SUPERSEDED`, and `RETIRED`.
+
+Emitted:
+
+- `domain.version.validated.v1`
+- `domain.version.published.v1`
+- `domain.version.rejected.v1`
+- `domain.version.superseded.v1`
+
+Consumed: `approval.decided.v1`, `module.release.revoked.v1`, and industry-pack activation notifications.
+
+## Failures, retry, and rollback
+
+- Parsing, SHACL, ownership, signature, or import-closure errors mark the version `INVALID` with bounded findings.
+- Validation is deterministic and safe to retry. Publication requires an idempotency key and optimistic version check.
+- The active pointer changes atomically only after validation and approval.
+- A failed publication retains the prior active version.
+- Rollback activates a previously approved compatible version; it never mutates an immutable package.
+- Consumers pin a domain digest. Superseding a version does not silently change existing locked profiles.
+- Excessive graph size or cyclic import manifests fail before loading the active graph.
+
+## Evidence and readiness gates
+
+- Named business and data owners.
+- Package signature, digest, SPDX/license record, and closed import graph.
+- SHACL validation report with zero blocking violations.
+- Term coverage for every industry-pack mandatory concept.
+- Compatibility report against the previous active version.
+- Representative mapping fixtures approved by domain owners.
+- Multilingual label coverage when required by the selected industry pack.
+
+Data and retrieval harnesses cannot become production ready until they reference an `ACTIVE` domain digest and their mappings validate against it.
+
+## Profile behavior
+
+- `minimal-local`: RDFLib/pySHACL, one domain package, PostgreSQL metadata.
+- `enterprise`: multiple bounded contexts, approval workflow, and compatibility gates. Jena remains non-installable comparative guidance.
+- `airgap-enclave`: vendored contexts and imports only; no remote URI resolution.
+
+## Tests
+
+- Unit: parsing, URI normalization, import closure, term resolution, compatibility classification.
+- Contract: JSON-LD/Turtle/SHACL golden vectors and API/event schemas.
+- Security: entity expansion, malicious context URLs, archive traversal, oversized graphs, authorization.
+- Lifecycle: draft, validate, approve, publish, pin, supersede, rollback.
+- Industry: white-goods asset, product, process, defect, CTQ, CAPA, and provenance fixtures.
+- Air gap: resolution and validation with network disabled.
+
+## Sol-high implementation packets
+
+1. `KN-001-foundation`: common knowledge service kernel, tenant database roles/RLS, inbox/outbox, source-reference privacy, images/charts, and contract mocks used by the domain service.
+2. `KN-DOM-001`: ontology/package lifecycle, RDFLib/pySHACL validation, semantic mappings, compatibility/owner evidence, white-goods coverage, and publication/rollback. Jena remains non-installable comparative guidance outside this packet.
+3. `KN-002-security-resilience`: malicious document/context defense, tenant/store isolation, domain-store outage recovery, stale/superseded consumers, and air-gap validation.
+
+No packet may introduce remote ontology fetching or treat generative output as owner approval.

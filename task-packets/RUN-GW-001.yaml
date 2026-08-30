@@ -1,0 +1,18 @@
+id: RUN-GW-001
+repository: mas-harness-runtime-plane
+branch: codex/run-gw-001-routing
+objective: Implement signed route intake, deterministic selection, policy and guardrail decisions, budget reservation, and model/execution adapters.
+predecessors: [RUN-001, MODEL-002, EXEC-ORCH-001, TRUST-002, TRUST-OBS-001]
+allowedPaths: ["services/ai-gateway/src/routing/", "services/ai-gateway/src/policy/", "services/ai-gateway/src/adapters/", "services/ai-gateway/src/usage/", "services/ai-gateway/tests/routing/", "fixtures/routing/", "ci/targets/run-gw-001.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse:
+  - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: DISCOVERY_ONLY, paths: ["contracts/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
+  - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: REFERENCE_ONLY, paths: ["src/inference_engine/model_routing.py","src/inference_engine/model_routing_runtime.py","src/inference_engine/model_routing_status.py","src/inference_engine/api/_model_routing.py","contracts/prometa-model-usage-v2.schema.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
+contracts: ["Consumes signed routing, policy, guardrail, budget, model, and task APIs v1", "Produces AI gateway route and usage behavior v1"]
+deliverables: ["Verified last-known-good route activation, deterministic routing, fail-closed policy/guardrails, atomic budget reservation, adapters, and usage events."]
+excluded: ["Paid-provider routes, unsigned policy activation, control-plane calls, or streaming behavior."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","routing-parity"],["make","gateway-contract"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Golden route parity and signed-policy activation report.", "Denied, expired, revoked, over-budget, and dependency-outage vectors."]
+rollback: Revert routing module and retain the previous active signed route contract.

@@ -1,0 +1,16 @@
+id: OP-005
+repository: mas-harness-operator
+branch: codex/op-005-upgrade-rollback
+objective: Implement compatibility preflight, generation-scoped one-wave upgrades, current-generation rollback, previous-ready retention, and migration coordination.
+predecessors: [OP-004, DIST-005]
+allowedPaths: ["internal/controller/upgrade/", "internal/migrations/", "internal/rollback/", "tests/upgrade/", "fixtures/upgrade/", "docs/upgrade-rollback.md", "ci/targets/op-005.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes release compatibility, migration, install wave, and rollback contracts v1", "Produces upgrade/rollback status and evidence v1"]
+deliverables: ["Preflight compatibility, previous-ready retention, one-wave upgrade, expand/contract coordination, automatic current-generation rollback, and bounded failure summary."]
+excluded: ["Destructive database rollback, cross-generation resource deletion, or upgrading from unsigned/unverified bundles."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","envtest-upgrade"],["make","upgrade-crash-matrix"],["make","rollback-contract"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Crash/failure at every wave returns to previous ready digest.", "Migration compatibility and no-destructive-rollback reports."]
+rollback: Restore previousReadyBundleDigest and reverse only current-generation inventory; retain migrations compatible with the previous release.

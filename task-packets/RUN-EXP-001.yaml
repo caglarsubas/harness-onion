@@ -1,0 +1,16 @@
+id: RUN-EXP-001
+repository: mas-harness-runtime-plane
+branch: codex/run-exp-001-interactions
+objective: Implement interaction lifecycle, tenant-scoped event replay, input-required resume, cancel, retention, and a self-hosted Next.js/TypeScript reference web client.
+predecessors: [RUN-GW-002, EXEC-ORCH-001]
+allowedPaths: ["services/experience-gateway/src/", "services/experience-gateway/tests/", "reference-client/", "migrations/interaction/", "fixtures/interactions/", "docs/experience.md", "ci/targets/run-exp-001.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes A2A task and SSE-resume contracts v1", "Produces experience interaction API and AG-UI-compatible event projection v1"]
+deliverables: ["Create/read/cancel/input APIs, persisted bounded replay, resume cursors, retention/deletion, and an accessible Next.js 16.3.3 App Router/React 19.2/TypeScript 5 reference client with locally bundled assets and no hosted frontend service dependency."]
+excluded: ["Business workflow state duplication, arbitrary channel integrations, or raw prompt telemetry."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","interaction-contract"],["make","experience-e2e"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Input-required, refresh/resume, cancel, expiry, deletion, and cross-tenant replay-denial evidence."]
+rollback: Stop experience gateway and revert additive interaction tables only after retention-safe export or deletion.

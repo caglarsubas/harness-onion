@@ -1,0 +1,16 @@
+id: SDK-001
+repository: mas-harness-sdks
+branch: codex/sdk-001-generated-clients
+objective: Bootstrap locked Python and TypeScript SDK toolchains and generate deterministic clients from the pinned contract release.
+predecessors: [CON-005, MET-003]
+allowedPaths: ["python/", "typescript/", "generators/", "contracts.lock.json", "tests/generated/", "ci/", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", ".github/workflows/verify.yml"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes OpenAPI and AsyncAPI v1alpha1", "Produces generated Python client v1alpha1", "Produces generated TypeScript client v1alpha1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
+deliverables: ["Frozen toolchains, deterministic generators, generated clients, drift checker, reproducible packages, and offline CI.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
+excluded: ["Handwritten service behavior, framework integrations, or runtime compatibility shims."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","generated-check"],["make","build-reproducible"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Clean regeneration diff.", "Two-build package digest match and contract-release lock.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
+rollback: Revert the unconsumed SDK scaffold and generated outputs together.

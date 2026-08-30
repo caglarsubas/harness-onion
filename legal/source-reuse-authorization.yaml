@@ -1,0 +1,91 @@
+schemaVersion: harness.planeon.ai/source-authorization/v1alpha1
+status: recorded-repository-scope-authorization
+recordedAt: 2026-08-30
+basis: >-
+  The user identified warm-start repositories as owned reference material while
+  requiring their code and GitHub state to remain untouched. This public record
+  covers only the two publicly disclosed repositories. Three non-public planning
+  inputs were distilled into independent contracts and acceptance criteria; all
+  of their repository metadata is deliberately omitted and they are unavailable
+  to implementation identities. This records repository-scope consent for
+  inspection only; it does not assert path-level authorship, exclusive ownership,
+  a license grant, or permission to copy any current blob.
+targetLicense: Apache-2.0
+scopeSource: architecture/reuse-map.yaml
+conditions:
+  - Discovery trees are reference-only and never authorize recursive copying.
+  - Every currently indexed blob is reference-only and supports clean-room behavioral or contract parity work only.
+  - No current task packet is a PORT_CANDIDATE and no current path is COPY_AUTHORIZED.
+  - A future PORT_CANDIDATE requires an approved authorizationId and exact sourcePath-to-destinationPath mapping.
+  - COPY_AUTHORIZED requires path-level rights, SPDX, third-party/generated-content, and exclusion-review evidence digests.
+  - Every authorized destination records the same authorizationId and mapping in schema-valid PORTING.yaml.
+  - Third-party code and dependencies retain their original licenses.
+  - Source commit and path hashes are preserved.
+  - Existing repositories are never modified.
+  - A path without verified ownership or license provenance remains reference-only.
+acquisition:
+  checkout: detached-read-only-snapshot
+  lockTool: ci/lock_warm_snapshot.py
+  directArgvOnly: true
+  sourceCommitVerification: required-before-and-after-reference-session
+  objectInventoryVerification: required-before-and-after-reference-session-with-lazy-fetch-disabled
+  workingTreeCleanVerification: required-before-and-after-reference-session
+  filesystemEnforcement: REMOVE_ALL_WRITE_BITS_AND_REQUIRE_OS_READ_ONLY_MOUNT_OR_SEPARATE_UNPRIVILEGED_OBSERVER
+  implementationIdentityAccess: forbidden
+  observationIdentity: separate-unprivileged-source-observer
+  fetchRemoteAfterMaterialization: disabled
+  pushRemote: forbidden
+  pushCredentials: forbidden
+  sourceFilesystemWrites: forbidden
+  importMethod: forbidden-until-approved-two-repository-transaction
+  pathAuthority: architecture/reuse-path-index.yaml
+  authorizationAuthority: architecture/porting-authorization-index.yaml
+  authorizationSchema: schemas/porting-authorization.schema.json
+  destinationRecordSchema: schemas/porting-record.schema.json
+authorizationStateMachine:
+  initial: REFERENCE_ONLY_PENDING_PATH_REVIEW
+  promotableTo: COPY_AUTHORIZED
+  admissionEnabled: false
+  admissionDisabledReason: NO_OFFLINE_SIGNATURE_AND_EVIDENCE_VERIFIER_IMPLEMENTED
+  currentCopyAuthorizedCount: 0
+  futurePromotionRequiresPacketRevision: true
+  futureAdmissionEnablementRequires:
+    - canonicalAuthorizationSignatureVerifier
+    - pinnedOfflineApproverKeyFingerprint
+    - trackedEvidencePathDigestVerification
+    - exactPathIndexAuthorizationPacketDestinationJoin
+    - destinationPreparedAndAppliedRecordVerification
+  promotionRequirements:
+    - exactGitBlobVerified
+    - pathLevelOwnerOrLicenseGrantEvidenceDigestRecorded
+    - pathLevelSpdxEvidenceDigestRecorded
+    - thirdPartyAndGeneratedContentReviewDigestRecorded
+    - excludedFeatureReviewDigestRecorded
+    - approvedDestinationRecorded
+    - sourcePathDestinationPathMappingRecorded
+    - destinationPortingRecordPrepared
+  deniedStates: [REJECTED_LICENSE, REJECTED_PROVENANCE, REJECTED_EXCLUSION]
+twoRepositoryTransaction:
+  sourceAuthority:
+    repository: Harness-Engineering
+    record: architecture/porting-authorization-index.yaml
+  destinationAuthority:
+    record: PORTING.yaml
+    schema: schemas/porting-record.schema.json
+  joinKey: authorizationId
+  exactMappingKeys: [sourceRepository, sourceCommit, sourcePath, sourceGitObject, destinationRepository, destinationPath, transformationIntent, parityIntent]
+  phases:
+    - SOURCE_APPROVED
+    - DESTINATION_PREPARED
+    - APPLIED
+  sourceApprovedRule: canonical signed authorization and every tracked evidence digest validate before destination preparation
+  destinationPreparedRule: destination PORTING.yaml records the exact mapping without source bytes or a destination object
+  applyRule: source material may enter only after both prior phases validate; APPLIED then binds the resulting destination object and the separate source-material commit
+  mergeRule: no destination merge is permitted until the APPLIED record and source-material commit validate; merge evidence is recorded afterward and is never self-referential
+  sourceRepositoryMutation: forbidden
+  missingOrMismatchedRecord: DENY_COPY
+currentInventory:
+  treeDiscoveryRecords: 20
+  blobPendingRecords: 515
+  blobCopyAuthorizedRecords: 0
+  portingAuthorizationRecords: 0

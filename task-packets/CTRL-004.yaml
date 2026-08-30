@@ -1,0 +1,16 @@
+id: CTRL-004
+repository: mas-harness-control-plane
+branch: codex/ctrl-004-compiler-worker
+objective: Implement PostgreSQL compilation jobs, leases, atomic compiler invocation, outbox/inbox, bounded retries, dead-letter, and Operation API.
+predecessors: [CTRL-003, CON-005]
+allowedPaths: ["workers/profile-compiler/", "apps/control-web/src/app/api/v1alpha1/operations/", "apps/control-web/src/lib/operations/", "packages/db/migrations/compiler-jobs/", "tests/compiler-worker/", "e2e/compiler-operation.spec.ts", "ci/targets/ctrl-004.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes compiler package and Operation/CloudEvent v1alpha1", "Produces asynchronous profile compilation operation v1"]
+deliverables: ["Atomic state/outbox transaction, worker lease/claim, exact compiler wheel invocation, atomic profile artifacts, retry/backoff, dead-letter, and resume."]
+excluded: ["HTTP listener on the worker, NATS baseline dependency, unbounded retries, or bundle building."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","compiler-worker-contract"],["make","compiler-crash-matrix"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Crash-before/after-commit and duplicate delivery reports.", "Exactly-once visible profile result under at-least-once job execution."]
+rollback: Stop the worker and revert additive job tables only after queued jobs are drained or marked cancelled.

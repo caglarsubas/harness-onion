@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/porting-record.v1alpha1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "destinationRepository", "records"],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/porting-record/v1alpha1"},
+    "destinationRepository": {"$ref": "#/$defs/destinationRepository"},
+    "records": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/record"}
+    }
+  },
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "safeFile": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+    "sourceRepository": {
+      "enum": [
+        "git@github.com:caglarsubas/llm_inference_engine.git",
+        "git@github.com:caglarsubas/data-source-harness.git"
+      ]
+    },
+    "destinationRepository": {
+      "enum": [
+        "Harness-Engineering", "mas-harness-contracts", "mas-harness-sdks",
+        "mas-harness-industry-packs", "mas-harness-control-plane",
+        "mas-harness-runtime-plane", "mas-harness-model-plane",
+        "mas-harness-knowledge-plane", "mas-harness-execution-plane",
+        "mas-harness-trust-plane", "mas-harness-operator",
+        "mas-harness-distribution", "mas-harness-conformance-labs"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/safeFile"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorizationId", "state", "sourceRepository", "sourceCommit",
+        "sourcePath", "sourceGitObject", "destinationPath",
+        "transformationIntent", "parityIntent", "authorizationRecord"
+      ],
+      "properties": {
+        "authorizationId": {"type": "string", "pattern": "^PA-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3}$"},
+        "state": {"enum": ["DESTINATION_PREPARED", "APPLIED"]},
+        "sourceRepository": {"$ref": "#/$defs/sourceRepository"},
+        "sourceCommit": {"$ref": "#/$defs/sha1"},
+        "sourcePath": {"$ref": "#/$defs/safeFile"},
+        "sourceGitObject": {"$ref": "#/$defs/sha1"},
+        "destinationPath": {"$ref": "#/$defs/safeFile"},
+        "destinationGitObject": {"$ref": "#/$defs/sha1"},
+        "transformationIntent": {"enum": ["EXACT_COPY", "ATTRIBUTED_ADAPTATION"]},
+        "parityIntent": {"enum": ["BEHAVIORAL_PARITY", "CONTRACT_PARITY", "APPROVED_DIVERGENCE"]},
+        "authorizationRecord": {"$ref": "#/$defs/evidence"},
+        "parityEvidence": {"$ref": "#/$defs/evidence"},
+        "sourceMaterialCommit": {"$ref": "#/$defs/sha1"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "DESTINATION_PREPARED"}}},
+          "then": {
+            "not": {
+              "anyOf": [
+                {"required": ["destinationGitObject"]},
+                {"required": ["parityEvidence"]},
+                {"required": ["sourceMaterialCommit"]}
+              ]
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"const": "APPLIED"}}},
+          "then": {
+            "required": ["destinationGitObject", "parityEvidence", "sourceMaterialCommit"]
+          }
+        }
+      ]
+    }
+  }
+}

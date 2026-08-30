@@ -1,0 +1,16 @@
+id: SDK-003
+repository: mas-harness-sdks
+branch: codex/sdk-003-admission-trust
+objective: Implement signed runtime admission, trust roots, receipts, idempotency, budgets, and runtime-control vectors clean-room in the neutral SDK.
+predecessors: [SDK-002, CON-006]
+allowedPaths: ["python/src/planeon_harness/runtime/", "python/src/planeon_harness/budget.py", "python/src/planeon_harness/authz.py", "python/tests/runtime/", "typescript/src/runtime/", "typescript/tests/runtime/", "fixtures/runtime/", "ci/targets/sdk-003.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes runtime, receipt, budget, and trust contracts v1alpha1", "Produces Python and TypeScript admission/trust API v1"]
+deliverables: ["Offline signature admission, trust rotation, idempotency helpers, budget envelope, receipt verification, and shared runtime-control vectors."]
+excluded: ["Secret storage, service persistence, or silent fail-open admission."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","runtime-vectors"],["make","security"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Cross-language admission and receipt parity.", "Revoked, expired, forged, replayed, and over-budget denial vectors."]
+rollback: Revert admission and trust helpers while retaining neutral telemetry and generated clients.

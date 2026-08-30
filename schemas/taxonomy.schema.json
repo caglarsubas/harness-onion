@@ -1,0 +1,366 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/taxonomy.schema.json",
+  "title": "Harness Taxonomy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "dependencyTypes", "deploymentModes", "productionGates", "harnesses"],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/taxonomy/v1alpha1"},
+    "dependencyTypes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["always", "whenCapability", "productionGate", "subjectUnderEvaluation"],
+      "properties": {
+        "always": {"type": "string", "minLength": 1},
+        "whenCapability": {"type": "string", "minLength": 1},
+        "productionGate": {"type": "string", "minLength": 1},
+        "subjectUnderEvaluation": {"type": "string", "minLength": 1}
+      }
+    },
+    "deploymentModes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["billingBoundary", "modes"],
+      "properties": {
+        "billingBoundary": {"type": "string", "minLength": 1},
+        "modes": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/deploymentMode"},
+          "allOf": [
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "operator-hosted-saas"}}}},
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "tenant-public-cloud"}}}},
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "self-managed"}}}},
+            {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "air-gapped"}}}}
+          ]
+        }
+      }
+    },
+    "productionGates": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/productionGate"},
+      "allOf": [
+        {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "runtimeGatewayProductionAssurance"}}}},
+        {"contains": {"type": "object", "required": ["id"], "properties": {"id": {"const": "decisionRouteProductionAssurance"}}}}
+      ]
+    },
+    "harnesses": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/harness"}
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "identifier": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"},
+    "deploymentMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "infrastructureCustody", "tenancy", "connectivity", "billableProvisioning", "certificationPackets"],
+      "properties": {
+        "id": {"enum": ["operator-hosted-saas", "tenant-public-cloud", "self-managed", "air-gapped"]},
+        "infrastructureCustody": {"$ref": "#/$defs/nonEmptyString"},
+        "tenancy": {"$ref": "#/$defs/nonEmptyString"},
+        "connectivity": {"$ref": "#/$defs/nonEmptyString"},
+        "billableProvisioning": {"const": "FORBIDDEN"},
+        "certificationPackets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z0-9-]+$"}
+        }
+      }
+    },
+    "dependency": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type"],
+          "properties": {
+            "id": {"$ref": "#/$defs/identifier"},
+            "type": {"const": "always"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "selectedWhen"],
+          "properties": {
+            "id": {"$ref": "#/$defs/identifier"},
+            "type": {"const": "whenCapability"},
+            "selectedWhen": {"$ref": "#/$defs/capabilityPredicate"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "gate"],
+          "properties": {
+            "id": {"$ref": "#/$defs/identifier"},
+            "type": {"const": "productionGate"},
+            "gate": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "selectedWhen"],
+          "properties": {
+            "id": {"$ref": "#/$defs/identifier"},
+            "type": {"const": "subjectUnderEvaluation"},
+            "selectedWhen": {"$ref": "#/$defs/selectionPredicate"}
+          }
+        }
+      ]
+    },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "plane", "ownerRepository", "deployables", "requires"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "plane": {"enum": ["runtime", "knowledge", "execution", "trust"]},
+        "ownerRepository": {
+          "enum": ["operator", "runtime-plane", "model-plane", "knowledge-plane", "execution-plane", "trust-plane"]
+        },
+        "deployables": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}
+        },
+        "requires": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/dependency"}
+        },
+        "subcapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        }
+      }
+    },
+    "selectionPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "anyOfSubjectHarnesses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        },
+        "anyOfCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9.-]*$"}
+        }
+      }
+    },
+    "capabilityPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anyOfCapabilities"],
+      "properties": {
+        "anyOfCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        }
+      }
+    },
+    "productionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "requiredEvidenceStatus", "maximumEvidenceAgeSeconds",
+        "immutableSubjectDigest", "evidencePlanBinding", "campaignBinding",
+        "controlSatisfaction", "trustedProducer", "scopeBinding", "waiver"
+      ],
+      "properties": {
+        "id": {"enum": ["runtimeGatewayProductionAssurance", "decisionRouteProductionAssurance"]},
+        "requiredEvidenceStatus": {"const": "PASS"},
+        "maximumEvidenceAgeSeconds": {"type": "integer", "minimum": 1},
+        "immutableSubjectDigest": {"$ref": "#/$defs/requiredSha256Digest"},
+        "evidencePlanBinding": {"$ref": "#/$defs/evidencePlanBinding"},
+        "campaignBinding": {"$ref": "#/$defs/campaignBinding"},
+        "controlSatisfaction": {"$ref": "#/$defs/controlSatisfaction"},
+        "trustedProducer": {"$ref": "#/$defs/trustedProducer"},
+        "scopeBinding": {"$ref": "#/$defs/gateScopeBinding"},
+        "waiver": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowed", "signatureRequired", "expiresAtRequired",
+            "maximumDurationSeconds", "subjectDigestBindingRequired",
+            "evidencePlanDigestBindingRequired",
+            "controlSetDigestBindingRequired", "campaignDigestBindingRequired",
+            "controlIdBinding", "scopeBinding", "forbiddenEvidenceStatuses"
+          ],
+          "properties": {
+            "allowed": {"const": true},
+            "signatureRequired": {"const": true},
+            "expiresAtRequired": {"const": true},
+            "maximumDurationSeconds": {"type": "integer", "minimum": 1},
+            "subjectDigestBindingRequired": {"const": true},
+            "evidencePlanDigestBindingRequired": {"const": true},
+            "controlSetDigestBindingRequired": {"const": true},
+            "campaignDigestBindingRequired": {"const": true},
+            "controlIdBinding": {"const": "SAME_REQUIRED_CONTROL_ID"},
+            "scopeBinding": {"const": "EXACT_GATE_SCOPE"},
+            "forbiddenEvidenceStatuses": {"const": ["FAIL", "STALE"]}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["id"],
+            "properties": {"id": {"const": "runtimeGatewayProductionAssurance"}}
+          },
+          "then": {
+            "properties": {
+              "evidencePlanBinding": {
+                "properties": {
+                  "requiredControls": {
+                    "const": [
+                      "gateway.contract-conformance",
+                      "gateway.route-integrity",
+                      "gateway.tenant-isolation",
+                      "gateway.security-safety",
+                      "gateway.zero-bill-offline",
+                      "gateway.supply-chain",
+                      "gateway.runtime-resilience",
+                      "gateway.tenant-acceptance"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["id"],
+            "properties": {"id": {"const": "decisionRouteProductionAssurance"}}
+          },
+          "then": {
+            "properties": {
+              "evidencePlanBinding": {
+                "properties": {
+                  "requiredControls": {
+                    "const": [
+                      "decision.contract-conformance",
+                      "decision.route-integrity",
+                      "decision.data-provenance",
+                      "decision.tenant-isolation",
+                      "decision.security-safety",
+                      "decision.zero-bill-offline",
+                      "decision.supply-chain",
+                      "decision.runtime-resilience",
+                      "decision.tenant-acceptance"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "requiredSha256Digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "algorithm"],
+      "properties": {
+        "required": {"const": true},
+        "algorithm": {"const": "sha256"}
+      }
+    },
+    "evidencePlanBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planIdRequired", "planDigest", "controlSetDigest",
+        "requiredControls", "aggregation"
+      ],
+      "properties": {
+        "planIdRequired": {"const": true},
+        "planDigest": {"$ref": "#/$defs/requiredSha256Digest"},
+        "controlSetDigest": {"$ref": "#/$defs/requiredSha256Digest"},
+        "requiredControls": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}
+        },
+        "aggregation": {"const": "ALL_REQUIRED_CONTROLS"}
+      }
+    },
+    "campaignBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "campaignIdRequired", "campaignDigest"],
+      "properties": {
+        "purpose": {"const": "PRODUCTION_PROMOTION"},
+        "campaignIdRequired": {"const": true},
+        "campaignDigest": {"$ref": "#/$defs/requiredSha256Digest"}
+      }
+    },
+    "controlSatisfaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule", "nonPassDisposition", "waiverEffect", "waiverSatisfiesPromotion"],
+      "properties": {
+        "rule": {"const": "FRESH_PASS_FOR_EVERY_REQUIRED_CONTROL"},
+        "nonPassDisposition": {"const": "PROMOTION_BLOCKED"},
+        "waiverEffect": {"const": "DOCUMENT_EXCEPTION_ONLY_PROMOTION_REMAINS_BLOCKED"},
+        "waiverSatisfiesPromotion": {"const": false}
+      }
+    },
+    "trustedProducer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyId", "policyDigest", "signatureRequired",
+        "signerIdentityRequired", "producerReleaseDigest"
+      ],
+      "properties": {
+        "policyId": {"const": "production-assurance-trusted-producer-v1"},
+        "policyDigest": {"$ref": "#/$defs/requiredSha256Digest"},
+        "signatureRequired": {"const": true},
+        "signerIdentityRequired": {"const": true},
+        "producerReleaseDigest": {"$ref": "#/$defs/requiredSha256Digest"}
+      }
+    },
+    "gateScopeBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["matchPolicy", "requiredFields"],
+      "properties": {
+        "matchPolicy": {"const": "EXACT_ALL"},
+        "requiredFields": {
+          "const": [
+            "tenantId", "profileDigest", "bundleDigest", "routeId",
+            "routeDigest", "subjectType", "subjectId", "subjectVersion",
+            "subjectDigest"
+          ]
+        }
+      }
+    }
+  }
+}

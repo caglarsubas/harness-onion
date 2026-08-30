@@ -1,0 +1,156 @@
+schemaVersion: harness.planeon.ai/license-policy/v1alpha1
+policyVersion: 0.2.0
+coreLicense: Apache-2.0
+
+evaluation:
+  failClosed: true
+  catalogSource: architecture/providers.yaml
+  licenseField: modules[].license.spdx[]
+  expressionMatching: EXACT_SPDX_EXPRESSION
+  allExpressionsMustBeClassified: true
+  unknownExpressionOutcome: DENY_UNKNOWN_LICENSE
+  emptyLicenseSetOutcome: DENY_MISSING_LICENSE
+  precedence:
+    - DENIED
+    - UNKNOWN
+    - PLANNED_UNRESOLVED
+    - OPTIONAL_EXPLICIT_REVIEW
+    - OPEN_CONTENT
+    - ALLOWED_EXCEPTION_EXPRESSION
+    - DEFAULT_ALLOWED
+  mixedLicenseSetRule: Apply the highest-precedence outcome present; a lower-risk expression never weakens a denial, unresolved placeholder, or review requirement.
+  obligationAggregationRule: Satisfy the evidence and distribution obligations of every expression in the set even when another expression determines the aggregate outcome.
+
+defaultAllowedSpdx:
+  - Apache-2.0
+  - MIT
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - ISC
+  - MPL-2.0
+  - PostgreSQL
+  - Unicode-3.0
+
+allowedExceptionExpressions:
+  - expression: Apache-2.0 WITH LLVM-exception
+    baseLicense: Apache-2.0
+    exception: LLVM-exception
+    allowedCustody:
+      - UPSTREAM_PINNED
+      - COMPOSITE_REVIEW_REQUIRED
+    catalogOutcome: ACCEPT_CLASSIFIED
+    releaseOutcome: ALLOW_ONLY_WITH_PINNED_SOURCE_EXCEPTION_TEXT_SBOM_AND_NOTICE
+
+openContentSpdx:
+  - expression: CC0-1.0
+    allowedKinds:
+      - ARTIFACT
+    allowedScopes:
+      - BUILD_TIME
+      - MANAGEMENT_PLANE
+      - EXTERNAL
+    allowedUse: Public verification material metadata fixtures datasets and other non-runtime-code content only.
+    catalogOutcome: ACCEPT_CLASSIFIED
+    releaseOutcome: ALLOW_ONLY_WITH_PROVENANCE_SCOPE_AND_CONTENT_INVENTORY
+
+optionalExplicitReview:
+  - GPL-2.0-only
+  - GPL-3.0-only
+  - AGPL-3.0-only
+
+optionalExplicitReviewRule:
+  catalogOutcome: REVIEW_REQUIRED
+  releaseOutcomeWithoutApprovedDecision: DENY_RELEASE
+  requiredDecisionFields:
+    - expression
+    - approvedUseAndDistributionMode
+    - sourceOfferOrCorrespondingSourceDisposition
+    - networkCopyleftDisposition
+    - noticeAndAttributionDisposition
+    - approvingAuthority
+    - decisionDigest
+
+plannedUnresolvedSpdx:
+  - NOASSERTION
+
+plannedUnresolvedRule:
+  allowedModuleStatus:
+    - PLANNED
+  allowedCustody:
+    - COMPOSITE_REVIEW_REQUIRED
+    - TENANT_ATTESTED_PINNED
+  catalogOutcome: ACCEPT_PLANNED_PLACEHOLDER_ONLY
+  releaseOutcome: DENY_RELEASE
+  promotionRequirement: Replace every NOASSERTION item with exact classified SPDX expression or separately approved model data hardware or entitlement disposition before BUILT VERIFIED SIGNED or RELEASED evidence.
+  mayNotSatisfy:
+    - modelLicenseApprovalRequired
+    - datasetLicenseApprovalRequired
+    - sbomLicenseCompleteness
+    - distributionLicenseApproval
+
+deniedForDefaultDistribution:
+  - SSPL-1.0
+  - BUSL-1.1
+  - Elastic-2.0
+
+deniedRule:
+  catalogOutcome: DENY
+  releaseOutcome: DENY_RELEASE
+  overrideAllowed: false
+  appliesRegardlessOf:
+    - moduleStatus
+    - custody
+    - otherExpressionsInLicenseSet
+    - tenantAttestation
+
+custodyRules:
+  REPOSITORY_BUILT:
+    requiredEvidence: [sourceCommit, sbom, notice]
+    unresolvedAllowedWhilePlanned: false
+  UPSTREAM_PINNED:
+    requiredEvidence: [upstreamCommitOrArtifactDigest, licenseText, sbom, notice]
+    unresolvedAllowedWhilePlanned: false
+  COMPOSITE_REVIEW_REQUIRED:
+    requiredEvidence: [componentInventory, perComponentSpdx, custodyDecision, sbom, notice]
+    unresolvedAllowedWhilePlanned: true
+  TENANT_ATTESTED_PINNED:
+    requiredEvidence: [tenantAttestationDigest, exactArtifactOrFactDigest, perComponentDisposition]
+    unresolvedAllowedWhilePlanned: true
+
+statusRules:
+  PLANNED:
+    unresolvedPlaceholderAllowedByRule: plannedUnresolvedRule
+    provesDistributionApproval: false
+  releaseAdmission:
+    allowedFinalClassifications:
+      - DEFAULT_ALLOWED
+      - ALLOWED_EXCEPTION_EXPRESSION
+      - OPEN_CONTENT
+      - OPTIONAL_EXPLICIT_REVIEW_APPROVED
+    forbiddenFinalClassifications:
+      - DENIED
+      - UNKNOWN
+      - PLANNED_UNRESOLVED
+      - OPTIONAL_EXPLICIT_REVIEW
+
+requirements:
+  osiApprovedOnly: true
+  osiApprovedScope: SOFTWARE_CODE_AND_RUNTIME
+  openContentRequiresExplicitClassification: true
+  sbomRequired: true
+  noticeRequired: true
+  modelLicenseApprovalRequired: true
+  datasetLicenseApprovalRequired: true
+pathDecisionPolicy:
+  default: REFERENCE_ONLY_PENDING_PATH_REVIEW
+  missingEvidence: DENY_COPY
+  repositoryOwnershipInferenceAllowed: false
+  rootLicenseInheritanceAllowed: false
+  copyAuthorization: COPY_AUTHORIZED
+  requiredEvidence:
+    - exactRepositoryCommitAndBlob
+    - ownershipOrLicenseGrantBasis
+    - detectedSpdxOrDocumentedLicenseDecision
+    - thirdPartyAndGeneratedContentReview
+    - excludedFeatureScan
+  portingRecordRequiredPerBlob: true

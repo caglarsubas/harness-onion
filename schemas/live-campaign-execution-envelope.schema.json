@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/live-campaign-execution-envelope.v1alpha1.json",
+  "title": "Live campaign execution envelope",
+  "description": "Closed, dual-signed authority for one exact live campaign execution on pre-existing zero-incremental-cost Kubernetes capacity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packetId",
+    "packetFileReference",
+    "packetDigest",
+    "commands",
+    "commandSetDigest",
+    "conformanceKitRoot",
+    "conformanceKitDigest",
+    "campaignId",
+    "campaignDefinitionFileReference",
+    "campaignDefinitionDigest",
+    "campaignReleaseFileReference",
+    "campaignReleaseDigest",
+    "launcherDigest",
+    "bundleFileReference",
+    "bundleDigest",
+    "allowedEvidenceAxes",
+    "tenantId",
+    "environmentId",
+    "capacityAuthorizationId",
+    "capacityAuthorizationFileReference",
+    "capacityAuthorizationDigest",
+    "mutationProfile",
+    "admissionPolicyDigest",
+    "resourceQuotaDigest",
+    "endpoints",
+    "issuedAt",
+    "expiresAt",
+    "nonce",
+    "releaseTrustStoreDigest",
+    "tenantTrustStoreDigest",
+    "platformSignerKeyId",
+    "platformSignature",
+    "tenantSignerKeyId",
+    "tenantSignature"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "harness.planeon.ai/live-campaign-execution-envelope/v1alpha1"
+    },
+    "packetId": {"$ref": "#/$defs/identifier"},
+    "packetFileReference": {"$ref": "#/$defs/absoluteLocalPath"},
+    "packetDigest": {"$ref": "#/$defs/sha256"},
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/directArgv"}
+    },
+    "commandSetDigest": {"$ref": "#/$defs/sha256"},
+    "conformanceKitRoot": {"$ref": "#/$defs/absoluteLocalPath"},
+    "conformanceKitDigest": {"$ref": "#/$defs/sha256"},
+    "campaignId": {"$ref": "#/$defs/identifier"},
+    "campaignDefinitionFileReference": {"$ref": "#/$defs/absoluteLocalPath"},
+    "campaignDefinitionDigest": {"$ref": "#/$defs/sha256"},
+    "campaignReleaseFileReference": {"$ref": "#/$defs/absoluteLocalPath"},
+    "campaignReleaseDigest": {"$ref": "#/$defs/sha256"},
+    "launcherDigest": {"$ref": "#/$defs/sha256"},
+    "bundleFileReference": {"$ref": "#/$defs/absoluteLocalPath"},
+    "bundleDigest": {"$ref": "#/$defs/sha256"},
+    "allowedEvidenceAxes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "DEPLOYMENT",
+          "RUNTIME",
+          "SECURITY",
+          "ASSURANCE",
+          "TENANT_ACCEPTANCE_CANDIDATE"
+        ]
+      },
+      "not": {"contains": {"const": "TENANT_ACCEPTANCE"}}
+    },
+    "tenantId": {"$ref": "#/$defs/identifier"},
+    "environmentId": {"$ref": "#/$defs/identifier"},
+    "capacityAuthorizationId": {"$ref": "#/$defs/identifier"},
+    "capacityAuthorizationFileReference": {"$ref": "#/$defs/absoluteLocalPath"},
+    "capacityAuthorizationDigest": {"$ref": "#/$defs/sha256"},
+    "mutationProfile": {
+      "const": "ZERO_INCREMENTAL_COST_KUBERNETES_V1"
+    },
+    "admissionPolicyDigest": {"$ref": "#/$defs/sha256"},
+    "resourceQuotaDigest": {"$ref": "#/$defs/sha256"},
+    "endpoints": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/endpoint"}
+    },
+    "issuedAt": {"type": "string", "format": "date-time"},
+    "expiresAt": {"type": "string", "format": "date-time"},
+    "nonce": {
+      "type": "string",
+      "minLength": 22,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "releaseTrustStoreDigest": {"$ref": "#/$defs/sha256"},
+    "tenantTrustStoreDigest": {"$ref": "#/$defs/sha256"},
+    "platformSignerKeyId": {"$ref": "#/$defs/keyId"},
+    "platformSignature": {"$ref": "#/$defs/base64urlSignature"},
+    "tenantSignerKeyId": {"$ref": "#/$defs/keyId"},
+    "tenantSignature": {"$ref": "#/$defs/base64urlSignature"}
+  },
+  "$defs": {
+    "absoluteLocalPath": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 4096,
+      "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)/(?:[^/\\u0000\\r\\n\\\\]+/)*[^/\\u0000\\r\\n\\\\]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "keyId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+    },
+    "base64urlSignature": {
+      "type": "string",
+      "minLength": 86,
+      "maxLength": 86,
+      "pattern": "^[A-Za-z0-9_-]{86}$"
+    },
+    "argvItem": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^\\u0000\\r\\n]+$"
+    },
+    "shellExecutable": {
+      "type": "string",
+      "pattern": "^(?:.*/)?(?:sh|bash|zsh|dash|ksh|fish|env|cmd(?:\\.exe)?|powershell(?:\\.exe)?|pwsh(?:\\.exe)?)$"
+    },
+    "directArgv": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/argvItem"},
+      "not": {
+        "contains": {"$ref": "#/$defs/shellExecutable"}
+      }
+    },
+    "tlsBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "serverName",
+        "serverSpkiDigest",
+        "caCertificateFileReference"
+      ],
+      "properties": {
+        "serverName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^(?=.{1,253}$)(?!.*\\.\\.)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$"
+        },
+        "serverSpkiDigest": {"$ref": "#/$defs/sha256"},
+        "caCertificateFileReference": {"$ref": "#/$defs/absoluteLocalPath"}
+      }
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "endpointId",
+        "kind",
+        "ipAddress",
+        "port",
+        "tls",
+        "credentialFileReference",
+        "authorizationPolicyDigest",
+        "costDisposition",
+        "accessMode",
+        "discovery"
+      ],
+      "properties": {
+        "endpointId": {"$ref": "#/$defs/identifier"},
+        "kind": {
+          "enum": [
+            "KUBERNETES_API_PROXY",
+            "CAMPAIGN_PROXY",
+            "LOCAL_REGISTRY",
+            "LOCAL_EVIDENCE_SINK"
+          ]
+        },
+        "ipAddress": {
+          "type": "string",
+          "allOf": [
+            {
+              "oneOf": [
+                {"format": "ipv4"},
+                {"format": "ipv6"}
+              ]
+            },
+            {
+              "not": {
+                "enum": ["0.0.0.0", "255.255.255.255", "::", "169.254.169.254"]
+              }
+            }
+          ]
+        },
+        "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+        "tls": {"$ref": "#/$defs/tlsBinding"},
+        "credentialFileReference": {"$ref": "#/$defs/absoluteLocalPath"},
+        "authorizationPolicyDigest": {"$ref": "#/$defs/sha256"},
+        "costDisposition": {
+          "enum": [
+            "SELF_HOSTED_OPEN_SOURCE_NON_METERED",
+            "TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED"
+          ]
+        },
+        "accessMode": {
+          "enum": ["PREAUTHORIZED_PROXY", "LOCAL_PREEXISTING"]
+        },
+        "discovery": {"const": false}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": ["KUBERNETES_API_PROXY", "CAMPAIGN_PROXY"]
+              }
+            }
+          },
+          "then": {"properties": {"accessMode": {"const": "PREAUTHORIZED_PROXY"}}},
+          "else": {"properties": {"accessMode": {"const": "LOCAL_PREEXISTING"}}}
+        }
+      ]
+    }
+  }
+}

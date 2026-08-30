@@ -1,0 +1,16 @@
+id: DIST-003
+repository: mas-harness-distribution
+branch: codex/dist-003-sign-promote
+objective: Implement offline Ed25519 Cosign ceremony, component/root signatures, trust rotation/revocation, and atomic candidate promotion.
+predecessors: [DIST-002, MET-005]
+allowedPaths: ["src/planeon_distribution/signing.py", "src/planeon_distribution/promotion.py", "cmd/harness-bundlectl/sign.py", "cmd/harness-bundlectl/verify.py", "trust/", "tests/signing/", "fixtures/signing/", "docs/release-ceremony.md", "docs/key-rotation.md", "ci/targets/dist-003.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes staged bundle lock, trust, revocation, approval, and release contracts v1", "Produces signed released bundle and trust manifest v1"]
+deliverables: ["Offline private-key ceremony, component/root signatures, public trust bundle, overlapping key rotation, revocation, signed approval binding, and atomic released state."]
+excluded: ["Private keys in repositories/CI, keyless-only trust, signing mutable tags, or promoting a partially scanned candidate."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","signing-fixtures"],["make","rotation-test"],["make","promotion-contract"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Offline sign/verify and atomic promotion proof.", "Forged, wrong-key, revoked, expired-overlap, mutated-candidate, and missing-approval denial vectors."]
+rollback: Revoke the faulty release and restore the prior trusted public-key set; private-key material remains offline.

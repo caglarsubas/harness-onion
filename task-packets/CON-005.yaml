@@ -1,0 +1,16 @@
+id: CON-005
+repository: mas-harness-contracts
+branch: codex/con-005-lifecycle-events
+objective: Publish lifecycle and tenant harness-status projection schemas, OpenAPI and AsyncAPI, CloudEvents envelopes, audit semantics, and imported golden vectors.
+predecessors: [CON-004]
+allowedPaths: ["schemas/v1alpha1/lifecycle/", "schemas/v1alpha1/status/", "schemas/v1alpha1/events/", "openapi/", "asyncapi/", "generated/", "src/planeon_harness_contracts/state_machine.py", "src/planeon_harness_contracts/events.py", "tests/model/", "tests/golden/", "tests/fixtures/lifecycle/", "tests/fixtures/status/", "scripts/generate_contracts.py", "scripts/check_generated.py", "contracts/release-manifest.json", "docs/lifecycle.md", "docs/status-projections.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes composition contracts v1alpha1", "Produces lifecycle transition tables v1", "Produces Operation, ApprovalRequest, EvidenceRecord, and HarnessCloudEvent v1alpha1", "Produces OrganizationHarnessPortfolioPage, TenantHarnessOverview, PlaneStatusProjection, HarnessStatusProjection, StatusAxisProjection, StatusFindingSummary, and ProjectionFreshness v1alpha1", "Produces OpenAPI and AsyncAPI v1alpha1"]
+deliverables: ["Machine-enforced transitions for canonical entities.", "Tenant-safe event/audit schemas and deterministic generated interfaces.", "Closed selection, installation, evidence, freshness, aggregation-precedence, immutable-binding, and pagination contracts for organization, plane, and harness status projections."]
+excluded: ["Message brokers, service databases, generated service implementations, or Kubernetes controllers."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/generate_contracts.py","--check"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/model","tests/golden"],["uv","run","--offline","--frozen","--no-sync","harnessctl","validate","--kind","event","tests/fixtures/lifecycle/events"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Clean regeneration diff.", "Legal and illegal transition coverage plus golden events without secrets or business payloads.", "Golden status fixtures cover every closed state, freshness loss, missing immutable binding, precedence rule, waiver-without-pass, and unselected-harness exclusion."]
+rollback: Revert the unconsumed lifecycle and generated interface release while retaining earlier compiler contracts.

@@ -1,0 +1,84 @@
+# Zero-Bill Policy
+
+The project must not create or consume anything that can produce a cloud,
+GitHub, paid-provider, metered-provider, or third-party API-key bill. This is an
+absolute admission rule, not merely a default.
+
+Public-cloud and SaaS support means deployment onto infrastructure explicitly
+supplied and operated by the adopter. The software never creates cloud accounts,
+clusters, load balancers, DNS zones, object stores, GPUs, hosted databases, or
+paid model/provider subscriptions.
+
+Every provider and endpoint must be classified as
+`SELF_HOSTED_OPEN_SOURCE_NON_METERED` or
+`TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED`. Unknown cost disposition, paid or
+metered endpoints, external hosted-model providers, commercial API keys, cloud
+billing APIs, and external telemetry exporters are rejected by the compiler and
+runtime admission controls.
+
+GitHub workflows use only self-hosted runners and store no Actions artifacts,
+caches, packages, container images, LFS objects, or scheduled monitoring jobs.
+Release artifacts are written to a tenant-owned OCI registry or an offline OCI
+layout. Runtime defaults are offline, have an empty host allowlist, and contain
+no required third-party API keys.
+
+The public default branch is seeded before PR work so the pinned verification
+workflow exists when GitHub evaluates a pull request. A no-cost self-hosted
+runner with the complete locked wheelhouse/tool cache is a hard prerequisite.
+Missing runner/tool custody blocks CI; no GitHub-hosted runner, cache, artifact,
+package, or online dependency-fetch fallback is permitted.
+
+The runner is ephemeral and credential/socket-free: it has no cloud/provider
+credentials, SSH agent, kubeconfig, Docker or containerd control socket, or
+other ambient broker that checked-out code could use to create a bill. Workflow
+execution after the pinned credential-free checkout is restricted to the
+preinstalled, root-owned `/opt/planeon/bin/harness-offline-launch`. Checked-out
+shell, Python, Make, tests, and all other repository-controlled code begin only
+after that host launcher establishes OS isolation. The workflow and host-launcher
+installation require protected-owner review.
+
+Manual post-merge live certification has a separate external boundary. The only
+entry point is the preinstalled, root-owned
+`/opt/planeon/bin/harness-live-campaign-launch`; checked-out
+`ci/verify-live-campaign.sh` is an inner runner and cannot run directly. Before
+opening credentials or executing repository code, the external launcher reads
+only `HARNESS_LIVE_EXECUTION_ENVELOPE`; verifies independent `PLATFORM_RELEASE`
+and `TENANT_LIVE_EXECUTION` signatures over the same RFC 8785 payload; checks
+every immutable file, command, trust-store, and embedded endpoint digest; and
+verifies the separate digest-bound `CAPACITY_OPERATOR` authorization. Release
+and tenant trust are read only from
+`/etc/planeon/trust/release-trust-bundle.json` and
+`/etc/planeon/trust/tenant-trust-bundle.json`. The launcher establishes host OS
+deny-all-except-envelope isolation and proves that the capacity-operator-owned
+server-side zero-cost mutation policy is active and cannot be bypassed by the
+campaign service account.
+
+The mutation policy limits the campaign to named namespaces, identities, verbs,
+GVKs, quotas, and preallocated resources. It rejects cloud/provider resources,
+load balancers, dynamic storage, autoscaling, external DNS or artifacts,
+external telemetry, runtime downloads, privilege/RBAC/admission/network-policy
+escalation, and unknown cost disposition. Dynamic workloads are probed only
+through embedded signed `KUBERNETES_API_PROXY` or `CAMPAIGN_PROXY` endpoints,
+never discovered addresses. Tenant execution approval does not imply capacity
+approval; the independent capacity signature remains required. Missing capacity is
+`NOT_RUN_ENV_UNAVAILABLE`, while invalid authority or an attempted boundary
+bypass is `FAIL`. No cloud or billing API is queried to infer safety. See
+[`docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md`](docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md).
+
+With `HARNESS_TASK_PACKET` set to a hash-pinned packet YAML path,
+`["./ci/verify-offline.sh"]` establishes an OS-level network-denied sandbox or
+namespace and passes an outbound-connect canary before executing the packet's
+direct argv arrays. Local-cache-only prefetch and acceptance run in that same
+isolated process tree. The runner removes credential/cloud variables and the
+packet path from child environments and rechecks the packet digest after every
+command. The single process tree enforces `UV_OFFLINE=1`,
+`UV_FROZEN=1`, and `UV_NO_SYNC=1`; it fails when the host cannot prove that
+boundary.
+
+The protected runner also supplies every canonical warm-snapshot root through
+newline-delimited `HARNESS_WARM_SOURCE_ROOTS` (`NONE` is permitted only when no
+snapshot is mounted). The trusted launcher rejects malformed, overlapping, or
+undeclared detected roots; macOS denies read/metadata/write access and Linux
+Firejail blacklists and marks each root read-only. The value is removed before
+any repository or packet child starts. A runner that cannot provide the complete
+root set or the required filesystem backend is blocked.
