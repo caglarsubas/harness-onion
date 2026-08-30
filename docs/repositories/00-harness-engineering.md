@@ -79,7 +79,7 @@ Harness-Engineering/
 │   ├── network_canary.py
 │   ├── validate_architecture.py
 │   ├── validate_reuse.py
-│   ├── validate_packets.py
+│   ├── validate_packet_ownership.py
 │   ├── validate_release_set.py
 │   └── zero_bill_scan.py
 └── tests/
@@ -87,7 +87,7 @@ Harness-Engineering/
     ├── test_validator_units.py
     ├── test_architecture.py
     ├── test_reuse.py
-    ├── test_packets.py
+    ├── test_task_packets.py
     ├── test_live_campaign_envelope.py
     ├── test_release_set.py
     └── test_zero_bill.py
@@ -148,6 +148,11 @@ The executor passes the selected hash-pinned packet through `HARNESS_TASK_PACKET
 and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
+
+`MET-004` runs the complete readiness validator, the dedicated 91-packet
+catalog suite together with the ownership negative vectors, and the live
+campaign envelope positive/negative vectors. This proves the semantic packet
+boundary in addition to JSON Schema conformance.
 
 Acceptance requires exactly 13 repository records, exactly 16 public harness
 IDs, an acyclic dependency graph, complete reference-only provenance with no
