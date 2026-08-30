@@ -82,3 +82,26 @@ undeclared detected roots; macOS denies read/metadata/write access and Linux
 Firejail blacklists and marks each root read-only. The value is removed before
 any repository or packet child starts. A runner that cannot provide the complete
 root set or the required filesystem backend is blocked.
+
+## Executable admission and evidence
+
+`python scripts/zero_bill_scan.py .` is the packet-owned static admission gate.
+It validates the policy itself, the exact self-hosted workflow, the trusted-runner
+manifest schema, and every provider-module cost disposition before scanning
+deployable source and configuration surfaces. It rejects cloud provisioning,
+hosted runners, GitHub storage services, paid or unknown providers, provider API
+keys, mutable artifacts, runtime downloads, external telemetry, billing APIs,
+and implicit network package execution. Documentation, task packets, and the
+negative-fixture corpus are evidence inputs rather than deployable surfaces and
+are not treated as implementations.
+
+The manifest at `tests/fixtures/zero-bill/cases.yaml` has one independently
+executed negative case for every entry in `forbiddenGithub` and
+`forbiddenImplementation`. Tests require exact vector closure: adding a policy
+prohibition without a matching negative case fails, as does a fixture that no
+longer triggers its expected scanner rule.
+
+A positive scan proves only static source admission for the scanned tree. CI,
+merge, artifact, deployment, runtime, assurance, and tenant acceptance remain
+separate evidence states. The scanner never queries a cloud provider, billing
+API, hosted model, telemetry service, or package registry to infer safety.

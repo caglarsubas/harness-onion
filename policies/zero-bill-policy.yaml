@@ -1,4 +1,9 @@
 schemaVersion: harness.planeon.ai/zero-bill-policy/v1alpha1
+enforcement:
+  failClosed: true
+  scanner: scripts/zero_bill_scan.py
+  negativeFixtureManifest: tests/fixtures/zero-bill/cases.yaml
+  unknownStructuredInput: reject
 defaults:
   deploymentMode: offline
   allowedHosts: []

@@ -64,6 +64,7 @@ case "$(uname -s)" in
       env \
         HARNESS_TASK_PACKET="$packet_path" \
         HARNESS_OFFLINE_ENFORCED=1 \
+        HARNESS_OFFLINE_BACKEND=darwin-sandbox \
         HARNESS_OFFLINE_SESSION_ID="$session_id" \
         UV_OFFLINE=1 \
         UV_FROZEN=1 \
@@ -83,6 +84,7 @@ case "$(uname -s)" in
         env \
           HARNESS_TASK_PACKET="$packet_path" \
           HARNESS_OFFLINE_ENFORCED=1 \
+          HARNESS_OFFLINE_BACKEND=linux-firejail \
           HARNESS_OFFLINE_SESSION_ID="$session_id" \
           UV_OFFLINE=1 \
           UV_FROZEN=1 \
