@@ -1,0 +1,84 @@
+schemaVersion: harness.planeon.ai/release-evidence-policy/v1
+
+states:
+  passing: [PASS]
+  nonPassing:
+    - MISSING
+    - COLLECTING
+    - WARN
+    - FAIL
+    - NOT_APPLICABLE
+    - NOT_RUN_ENV_UNAVAILABLE
+    - STALE
+    - WAIVED
+    - PENDING
+    - REJECTED
+
+scopes:
+  component:
+    - SOURCE
+    - CI
+    - MERGE
+    - ARTIFACT
+    - SIGNATURE
+  release:
+    - DEPLOYMENT
+    - RUNTIME
+    - SECURITY
+    - ASSURANCE
+    - TENANT_ACCEPTANCE_CANDIDATE
+    - TENANT_ACCEPTANCE
+
+promotionGates:
+  NONE:
+    componentAxes: []
+    releaseAxes: []
+  ARTIFACT_RELEASE:
+    componentAxes: [SOURCE, CI, MERGE, ARTIFACT, SIGNATURE]
+    releaseAxes: []
+  PLATFORM_DEPLOYABLE:
+    componentAxes: [SOURCE, CI, MERGE, ARTIFACT, SIGNATURE]
+    releaseAxes: [DEPLOYMENT, RUNTIME]
+  PLATFORM_CERTIFIED:
+    componentAxes: [SOURCE, CI, MERGE, ARTIFACT, SIGNATURE]
+    releaseAxes: [DEPLOYMENT, RUNTIME, SECURITY, ASSURANCE]
+  TENANT_ACCEPTED:
+    componentAxes: [SOURCE, CI, MERGE, ARTIFACT, SIGNATURE]
+    releaseAxes:
+      - DEPLOYMENT
+      - RUNTIME
+      - SECURITY
+      - ASSURANCE
+      - TENANT_ACCEPTANCE_CANDIDATE
+      - TENANT_ACCEPTANCE
+
+rules:
+  failClosed: true
+  exactAxisCoverageRequired: true
+  evidenceDigestMaySatisfyOnlyOneAxis: true
+  subjectDigestBindingRequired: true
+  passingState: PASS
+  unavailableState: NOT_RUN_ENV_UNAVAILABLE
+  unavailableNeverPasses: true
+  notApplicableNeverPassesByDefault: true
+  warningNeverPasses: true
+  waiverNeverPasses: true
+  staleNeverPasses: true
+  candidateNeverEqualsTenantAcceptance: true
+  tenantAcceptanceRequiresCandidatePass: true
+  tenantAcceptanceRequiresIndependentProducer: true
+  futureDatedEvidenceRejected: true
+  expiredEvidenceRejectedForPromotion: true
+  sourceDoesNotImplyCI: true
+  ciDoesNotImplyMerge: true
+  mergeDoesNotImplyArtifact: true
+  artifactDoesNotImplySignature: true
+  signatureDoesNotImplyDeployment: true
+  deploymentDoesNotImplyRuntime: true
+  runtimeDoesNotImplySecurity: true
+  securityDoesNotImplyAssurance: true
+  assuranceDoesNotImplyTenantAcceptanceCandidate: true
+  tenantAcceptanceCandidateDoesNotImplyTenantAcceptance: true
+  sourceCiMergeArtifactSignatureAreComponentScoped: true
+  deploymentRuntimeSecurityAssuranceAreEnvironmentScoped: true
+  tenantAcceptanceIsTenantEnvironmentReleaseScoped: true

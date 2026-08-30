@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://harness.planeon.ai/schemas/release-set.v1alpha1.json",
+  "title": "Planeon MAS immutable release lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "documentKind",
+    "fixtureOnly",
+    "releaseId",
+    "generatedAt",
+    "repositoryRegistry",
+    "evidencePolicy",
+    "bundle",
+    "repositories",
+    "releaseEvidence",
+    "promotion",
+    "notices"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "harness.planeon.ai/release-set/v1alpha1"
+    },
+    "documentKind": {
+      "enum": ["INERT_LOCK", "SYNTHETIC_FIXTURE", "RELEASE_LOCK"]
+    },
+    "fixtureOnly": {"type": "boolean"},
+    "releaseId": {"$ref": "#/$defs/identifier"},
+    "generatedAt": {"type": "string", "format": "date-time"},
+    "repositoryRegistry": {
+      "allOf": [
+        {"$ref": "#/$defs/authorityReference"},
+        {"properties": {"path": {"const": "architecture/repositories.yaml"}}}
+      ]
+    },
+    "evidencePolicy": {
+      "allOf": [
+        {"$ref": "#/$defs/authorityReference"},
+        {"properties": {"path": {"const": "release/evidence-policy.yaml"}}}
+      ]
+    },
+    "bundle": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/bundle"}
+      ]
+    },
+    "repositories": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/repositoryRelease"},
+      "uniqueItems": true
+    },
+    "releaseEvidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence"},
+      "uniqueItems": true
+    },
+    "promotion": {"$ref": "#/$defs/promotion"},
+    "notices": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {"type": "string", "minLength": 10, "maxLength": 500},
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"documentKind": {"const": "INERT_LOCK"}}},
+      "then": {
+        "properties": {
+          "fixtureOnly": {"const": false},
+          "releaseId": {"const": "unassembled"},
+          "bundle": {"type": "null"},
+          "repositories": {"maxItems": 0},
+          "releaseEvidence": {"maxItems": 0},
+          "promotion": {
+            "allOf": [
+              {"$ref": "#/$defs/promotion"},
+              {
+                "properties": {
+                  "target": {"const": "NONE"},
+                  "decision": {"const": "BLOCKED"},
+                  "requiredAxes": {"maxItems": 0}
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"documentKind": {"const": "SYNTHETIC_FIXTURE"}}},
+      "then": {
+        "properties": {
+          "fixtureOnly": {"const": true},
+          "bundle": {"$ref": "#/$defs/bundle"},
+          "repositories": {"minItems": 13, "maxItems": 13},
+          "releaseEvidence": {"$ref": "#/$defs/releaseEvidence"},
+          "promotion": {
+            "allOf": [
+              {"$ref": "#/$defs/promotion"},
+              {"properties": {"target": {"not": {"const": "NONE"}}}}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"documentKind": {"const": "RELEASE_LOCK"}}},
+      "then": {
+        "properties": {
+          "fixtureOnly": {"const": false},
+          "bundle": {"$ref": "#/$defs/bundle"},
+          "repositories": {"minItems": 13, "maxItems": 13},
+          "releaseEvidence": {"$ref": "#/$defs/releaseEvidence"},
+          "promotion": {
+            "allOf": [
+              {"$ref": "#/$defs/promotion"},
+              {"properties": {"target": {"not": {"const": "NONE"}}}}
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "authorityReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000\\r\\n\\\\]+$"
+        },
+        "digest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundleId",
+        "version",
+        "digest",
+        "sbomDigest",
+        "licenseDigest",
+        "signatureDigest"
+      ],
+      "properties": {
+        "bundleId": {"$ref": "#/$defs/identifier"},
+        "version": {"$ref": "#/$defs/version"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "sbomDigest": {"$ref": "#/$defs/sha256"},
+        "licenseDigest": {"$ref": "#/$defs/sha256"},
+        "signatureDigest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[0-9A-Za-z][0-9A-Za-z._+-]*$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactId",
+        "kind",
+        "version",
+        "digest",
+        "sbomDigest",
+        "licenseDigest",
+        "signatureDigest"
+      ],
+      "properties": {
+        "artifactId": {"$ref": "#/$defs/identifier"},
+        "kind": {
+          "enum": [
+            "META_POLICY_BUNDLE",
+            "CONTRACT_BUNDLE",
+            "SDK_PACKAGE",
+            "INDUSTRY_PACK",
+            "OCI_IMAGE",
+            "OCI_INDEX",
+            "HELM_CHART",
+            "OPERATOR_BUNDLE",
+            "DISTRIBUTION_BUNDLE",
+            "CONFORMANCE_KIT"
+          ]
+        },
+        "version": {"$ref": "#/$defs/version"},
+        "digest": {"$ref": "#/$defs/sha256"},
+        "sbomDigest": {"$ref": "#/$defs/sha256"},
+        "licenseDigest": {"$ref": "#/$defs/sha256"},
+        "signatureDigest": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "axis": {
+      "enum": [
+        "SOURCE",
+        "CI",
+        "MERGE",
+        "ARTIFACT",
+        "SIGNATURE",
+        "DEPLOYMENT",
+        "RUNTIME",
+        "SECURITY",
+        "ASSURANCE",
+        "TENANT_ACCEPTANCE_CANDIDATE",
+        "TENANT_ACCEPTANCE"
+      ]
+    },
+    "evidenceState": {
+      "enum": [
+        "MISSING",
+        "COLLECTING",
+        "PASS",
+        "WARN",
+        "FAIL",
+        "NOT_APPLICABLE",
+        "NOT_RUN_ENV_UNAVAILABLE",
+        "STALE",
+        "WAIVED",
+        "PENDING",
+        "REJECTED"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "axis",
+        "status",
+        "subjectDigests",
+        "evidenceDigest",
+        "producer",
+        "observedAt",
+        "validUntil"
+      ],
+      "properties": {
+        "axis": {"$ref": "#/$defs/axis"},
+        "status": {"$ref": "#/$defs/evidenceState"},
+        "subjectDigests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/sha256"},
+          "uniqueItems": true
+        },
+        "evidenceDigest": {"$ref": "#/$defs/sha256"},
+        "producer": {"$ref": "#/$defs/identifier"},
+        "observedAt": {"type": "string", "format": "date-time"},
+        "validUntil": {"type": "string", "format": "date-time"}
+      }
+    },
+    "componentEvidence": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/evidence"},
+      "allOf": [
+        {"contains": {"properties": {"axis": {"const": "SOURCE"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "CI"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "MERGE"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "ARTIFACT"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "SIGNATURE"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1}
+      ]
+    },
+    "releaseEvidence": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/evidence"},
+      "allOf": [
+        {"contains": {"properties": {"axis": {"const": "DEPLOYMENT"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "RUNTIME"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "SECURITY"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "ASSURANCE"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "TENANT_ACCEPTANCE_CANDIDATE"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"axis": {"const": "TENANT_ACCEPTANCE"}}, "required": ["axis"]}, "minContains": 1, "maxContains": 1}
+      ]
+    },
+    "repositoryRelease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositoryId",
+        "repositoryName",
+        "releaseTag",
+        "gitCommit",
+        "sourceTreeDigest",
+        "artifacts",
+        "componentEvidence"
+      ],
+      "properties": {
+        "repositoryId": {"$ref": "#/$defs/identifier"},
+        "repositoryName": {"$ref": "#/$defs/identifier"},
+        "releaseTag": {"$ref": "#/$defs/version"},
+        "gitCommit": {"$ref": "#/$defs/gitCommit"},
+        "sourceTreeDigest": {"$ref": "#/$defs/sha256"},
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/artifact"},
+          "uniqueItems": true
+        },
+        "componentEvidence": {"$ref": "#/$defs/componentEvidence"}
+      }
+    },
+    "promotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "decision", "requiredAxes", "blockers"],
+      "properties": {
+        "target": {
+          "enum": [
+            "NONE",
+            "ARTIFACT_RELEASE",
+            "PLATFORM_DEPLOYABLE",
+            "PLATFORM_CERTIFIED",
+            "TENANT_ACCEPTED"
+          ]
+        },
+        "decision": {"enum": ["PASS", "BLOCKED"]},
+        "requiredAxes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/axis"},
+          "uniqueItems": true
+        },
+        "blockers": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 3, "maxLength": 500},
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"decision": {"const": "PASS"}}},
+          "then": {"properties": {"blockers": {"maxItems": 0}}},
+          "else": {"properties": {"blockers": {"minItems": 1}}}
+        }
+      ]
+    }
+  }
+}
