@@ -24,15 +24,56 @@ class SnapshotError(RuntimeError):
     """The source snapshot cannot satisfy the immutable-reference contract."""
 
 
+class UniqueKeySafeLoader(yaml.SafeLoader):
+    """Safe YAML loader that refuses an ambiguous duplicate authority key."""
+
+
+def _construct_unique_mapping(
+    loader: UniqueKeySafeLoader,
+    node: yaml.MappingNode,
+    deep: bool = False,
+) -> dict[Any, Any]:
+    loader.flatten_mapping(node)
+    result: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        if key in result:
+            raise SnapshotError(
+                f"duplicate reuse-index key {key!r} at line {key_node.start_mark.line + 1}"
+            )
+        result[key] = loader.construct_object(value_node, deep=deep)
+    return result
+
+
+UniqueKeySafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    _construct_unique_mapping,
+)
+
+
+def git_environment() -> dict[str, str]:
+    """Return a non-interactive Git environment without ambient credentials."""
+
+    return {
+        "PATH": os.environ.get("PATH", os.defpath),
+        "TMPDIR": os.environ.get("TMPDIR", "/tmp"),
+        "GIT_CONFIG_GLOBAL": "/dev/null",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_NO_LAZY_FETCH": "1",
+        "GIT_TERMINAL_PROMPT": "0",
+        "GCM_INTERACTIVE": "never",
+        "LANG": "C",
+        "LC_ALL": "C",
+    }
+
+
 def run_git(snapshot: Path, arguments: list[str], *, input_text: str | None = None) -> str:
-    environment = os.environ.copy()
-    environment["GIT_NO_LAZY_FETCH"] = "1"
     completed = subprocess.run(
         ["git", "-C", str(snapshot), *arguments],
         input=input_text,
         text=True,
         capture_output=True,
-        env=environment,
+        env=git_environment(),
         shell=False,
         check=False,
     )
@@ -43,8 +84,9 @@ def run_git(snapshot: Path, arguments: list[str], *, input_text: str | None = No
 
 
 def load_index(repository: str) -> tuple[str, list[dict[str, Any]]]:
-    authority = yaml.safe_load(
-        (ROOT / "architecture/reuse-path-index.yaml").read_text(encoding="utf-8")
+    authority = yaml.load(
+        (ROOT / "architecture/reuse-path-index.yaml").read_text(encoding="utf-8"),
+        Loader=UniqueKeySafeLoader,
     )
     matches = [
         source
@@ -76,7 +118,12 @@ def verify_local_objects(snapshot: Path, entries: list[dict[str, Any]]) -> None:
     """Require each indexed object to be present locally with its indexed Git kind."""
 
     expected_by_object: dict[str, str] = {}
+    indexed_paths: set[str] = set()
     for entry in entries:
+        indexed_path = str(entry["path"])
+        if indexed_path in indexed_paths:
+            raise SnapshotError(f"indexed path is duplicated: {indexed_path}")
+        indexed_paths.add(indexed_path)
         object_id = str(entry["gitObject"])
         kind = str(entry["kind"])
         prior_kind = expected_by_object.setdefault(object_id, kind)
@@ -110,17 +157,33 @@ def verify_snapshot(
     *,
     require_locked: bool,
 ) -> dict[str, Any]:
+    if snapshot.is_symlink():
+        raise SnapshotError("snapshot root must not be a symbolic link")
     resolved = snapshot.resolve(strict=True)
-    forbidden_roots = {Path("/"), Path.home().resolve(), ROOT.resolve()}
-    if resolved in forbidden_roots or not (resolved / ".git").is_dir():
+    forbidden_roots = {Path.home().resolve(), ROOT.resolve()}
+    if (
+        resolved == Path("/")
+        or any(
+            resolved == forbidden
+            or forbidden in resolved.parents
+            or resolved in forbidden.parents
+            for forbidden in forbidden_roots
+        )
+        or not (resolved / ".git").is_dir()
+        or (resolved / ".git").is_symlink()
+    ):
         raise SnapshotError("snapshot must be a dedicated Git working tree")
+    alternates = resolved / ".git/objects/info/alternates"
+    if alternates.exists():
+        raise SnapshotError("snapshot object store must not use alternates")
+    run_git(resolved, ["cat-file", "-e", f"{commit}^{{commit}}"])
     if run_git(resolved, ["rev-parse", "HEAD"]).strip() != commit:
         raise SnapshotError("snapshot HEAD differs from the indexed commit")
     symbolic = subprocess.run(
         ["git", "-C", str(resolved), "symbolic-ref", "-q", "HEAD"],
         text=True,
         capture_output=True,
-        env={**os.environ, "GIT_NO_LAZY_FETCH": "1"},
+        env=git_environment(),
         shell=False,
         check=False,
     )
@@ -128,7 +191,15 @@ def verify_snapshot(
         raise SnapshotError("snapshot HEAD must be detached")
     if symbolic.returncode not in {1}:
         raise SnapshotError("unable to prove detached HEAD")
-    if run_git(resolved, ["status", "--porcelain=v1", "--untracked-files=all"]):
+    if run_git(
+        resolved,
+        [
+            "status",
+            "--porcelain=v1",
+            "--untracked-files=all",
+            "--ignored=matching",
+        ],
+    ):
         raise SnapshotError("snapshot working tree is not clean")
 
     tree = parse_tree(resolved, commit)
@@ -147,6 +218,9 @@ def verify_snapshot(
     verify_local_objects(resolved, entries)
 
     if require_locked:
+        remotes = run_git(resolved, ["remote"]).splitlines()
+        if remotes != ["origin"]:
+            raise SnapshotError("snapshot must contain only the disabled origin remote")
         if run_git(resolved, ["remote", "get-url", "origin"]).strip() != NO_FETCH_REMOTE:
             raise SnapshotError("fetch remote is not disabled")
         if (
@@ -175,9 +249,11 @@ def verify_snapshot(
         "detached": True,
         "clean": True,
         "objectsLocal": True,
+        "objectAlternatesDisabled": True,
         "writeBitsRemoved": require_locked,
         "fetchDisabled": require_locked,
         "pushDisabled": require_locked,
+        "ambientCredentialsScrubbed": True,
     }
 
 
