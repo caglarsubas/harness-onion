@@ -3,7 +3,7 @@ repository: mas-harness-contracts
 branch: codex/con-005-lifecycle-events
 objective: Publish lifecycle and tenant harness-status projection schemas, OpenAPI and AsyncAPI, CloudEvents envelopes, audit semantics, and imported golden vectors.
 predecessors: [CON-004]
-allowedPaths: ["schemas/v1alpha1/lifecycle/", "schemas/v1alpha1/status/", "schemas/v1alpha1/events/", "openapi/", "asyncapi/", "generated/", "src/planeon_harness_contracts/state_machine.py", "src/planeon_harness_contracts/events.py", "tests/model/", "tests/golden/", "tests/fixtures/lifecycle/", "tests/fixtures/status/", "scripts/generate_contracts.py", "scripts/check_generated.py", "contracts/release-manifest.json", "docs/lifecycle.md", "docs/status-projections.md"]
+allowedPaths: ["schemas/v1alpha1/lifecycle/", "schemas/v1alpha1/status/", "schemas/v1alpha1/events/", "openapi/", "asyncapi/", "generated/", "src/planeon_harness_contracts/state_machine.py", "src/planeon_harness_contracts/events.py", "src/planeon_harness_contracts/validation.py", "tests/model/", "tests/golden/", "tests/fixtures/lifecycle/", "tests/fixtures/status/", "scripts/generate_contracts.py", "scripts/check_generated.py", "contracts/release-manifest.json", "docs/lifecycle.md", "docs/status-projections.md"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
 contracts: ["Consumes composition contracts v1alpha1", "Produces lifecycle transition tables v1", "Produces Operation, ApprovalRequest, EvidenceRecord, and HarnessCloudEvent v1alpha1", "Produces OrganizationHarnessPortfolioPage, TenantHarnessOverview, PlaneStatusProjection, HarnessStatusProjection, StatusAxisProjection, StatusFindingSummary, and ProjectionFreshness v1alpha1", "Produces OpenAPI and AsyncAPI v1alpha1"]
