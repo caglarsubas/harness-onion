@@ -3,15 +3,15 @@ repository: mas-harness-sdks
 branch: codex/sdk-002-telemetry-core
 objective: Implement tenant-neutral context, semantic attributes, decorators, and OpenTelemetry vectors clean-room without provider-specific telemetry contracts.
 predecessors: [SDK-001, MET-002]
-allowedPaths: ["python/src/planeon_harness/context.py", "python/src/planeon_harness/attributes.py", "python/src/planeon_harness/decorators.py", "python/tests/telemetry/", "typescript/src/telemetry/", "typescript/tests/telemetry/", "examples/telemetry/", "ci/targets/sdk-002.json"]
+allowedPaths: ["python/src/planeon_harness/context.py", "python/src/planeon_harness/attributes.py", "python/src/planeon_harness/decorators.py", "python/tests/telemetry/", "typescript/src/telemetry/", "typescript/tests/telemetry/", "examples/telemetry/", "generators/generate.py", "ci/targets/sdk-002.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: REFERENCE_ONLY, paths: ["src/inference_engine/request_identity.py","src/inference_engine/otel.py","src/inference_engine/genai_metrics.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
 contracts: ["Consumes HarnessCloudEvent v1alpha1", "Produces tenant-neutral telemetry API v1"]
-deliverables: ["Context propagation, stable neutral attributes, sync/async decorators, redaction defaults, and framework-neutral examples."]
+deliverables: ["Context propagation, stable neutral attributes, sync/async decorators, redaction defaults, and framework-neutral examples.", "Narrow SDK-001 generated-tree ownership to exact generated TypeScript files while preserving packet-owned non-linked TypeScript source subdirectories; generation write mode must not delete those extensions."]
 excluded: ["DeclarAI-only telemetry names, raw prompt export, or external telemetry endpoints."]
 prefetchCommands: []
 offlineAcceptanceCommands: [["make","telemetry-vectors"],["make","build-reproducible"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Cross-language golden span vectors.", "Pinned reuse-index source hashes, independent clean-room parity, and a behavioral-change record without PORTING.yaml mutation."]
+expectedEvidence: ["Cross-language golden span vectors.", "Pinned reuse-index source hashes, independent clean-room parity, and a behavioral-change record without PORTING.yaml mutation.", "Generated-tree vectors admit the telemetry source directory, preserve it in write mode, and reject undeclared top-level generated files or linked extension paths."]
 rollback: Revert the telemetry layer while retaining generated clients.
