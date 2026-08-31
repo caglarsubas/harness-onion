@@ -106,6 +106,45 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `SDK-006-guardrails`: profiles, streaming evaluation, detector contract, client, and conformance vectors.
 7. `SDK-007-compat`: `planeon-prometa-compat`, legacy import tests, warnings, support matrix, and v1 removal notice.
 
+### SDK-005 integration contract
+
+SDK-005 is Python-only and instruments explicit caller invocations; it does not
+patch frameworks, discover plugins, auto-register hooks, create clients, or own
+network configuration. The base package and `planeon_harness.integrations`
+import without any optional framework. A framework-specific factory performs
+the first framework import and fails with the closed
+`OPTIONAL_INTEGRATION_UNAVAILABLE` code and exact install-extra name when that
+dependency is absent.
+
+The packaging and compatibility surfaces are one atomic packet. The five PEP
+508 extras are `langchain` (`langchain-core>=1.6,<2`), `langgraph`
+(`langgraph>=1.2,<2`), `crewai` (`crewai>=1.15,<2`), `semantic-kernel`
+(`semantic-kernel>=1.44,<2`), and `mcp` (`mcp>=2.1,<3`). The
+`python/optional-dependencies.lock` baseline snapshot is 1.6.1, 1.2.11,
+1.15.18, 1.44.1, and 2.1.1 respectively, as observed from the upstream project
+pages on 2026-09-01. These baselines are documentation and fake-surface
+compatibility authority, not a claim that live upstream packages ran in the
+offline gate. The lock records `OFFLINE_FAKE_SURFACE_ONLY` until a separately
+authorized dependency-prefetch packet can execute real package matrices.
+
+The bounded adapters expose only LangChain runnable `invoke`/`ainvoke`,
+LangGraph graph `invoke`/`ainvoke`, CrewAI crew `kickoff`/`kickoff_async`,
+Semantic Kernel `invoke`/`invoke_prompt`, and MCP client `call_tool`. MCP defaults
+to the SDK-004 `2026-07-28` revision and admits only its explicit
+`2025-11-25` compatibility mode. A sixth, dependency-free vector adapter wraps
+a caller-supplied synchronous or asynchronous search callable and deliberately
+does not select or install a vector vendor.
+
+Every wrapper uses fixed `harness.integration.*` operation names, delegates only
+when the caller invokes it, preserves return values and exceptions, and sends
+records only to an explicit SDK-002 sink. Arguments, prompts, messages, results,
+exception text, credentials, framework state, and tenant identity from
+framework metadata are never captured. The upstream baselines and extension
+shapes are grounded in the official LangChain/LangGraph documentation,
+CrewAI event documentation, Microsoft Semantic Kernel filter documentation,
+and the official MCP Python SDK release line; their URLs are recorded in the
+lock rather than fetched during build or runtime.
+
 ## Testing, verification, and acceptance
 
 The `SDK-001` bootstrap packet declares
