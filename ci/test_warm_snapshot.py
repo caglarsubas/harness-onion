@@ -47,6 +47,7 @@ class WarmSnapshotTest(unittest.TestCase):
             environment = LOCKER.git_environment()
         self.assertNotIn("SAFE_SETTING", environment)
         self.assertEqual("1", environment["GIT_NO_LAZY_FETCH"])
+        self.assertEqual("0", environment["GIT_OPTIONAL_LOCKS"])
         self.assertEqual("0", environment["GIT_TERMINAL_PROMPT"])
         self.assertNotIn("EXAMPLE_API_KEY", environment)
         self.assertNotIn("GITHUB_TOKEN", environment)

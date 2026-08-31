@@ -60,6 +60,7 @@ def git_environment() -> dict[str, str]:
         "GIT_CONFIG_GLOBAL": "/dev/null",
         "GIT_CONFIG_NOSYSTEM": "1",
         "GIT_NO_LAZY_FETCH": "1",
+        "GIT_OPTIONAL_LOCKS": "0",
         "GIT_TERMINAL_PROMPT": "0",
         "GCM_INTERACTIVE": "never",
         "LANG": "C",
