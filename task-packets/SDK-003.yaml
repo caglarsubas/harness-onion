@@ -2,13 +2,13 @@ id: SDK-003
 repository: mas-harness-sdks
 branch: codex/sdk-003-admission-trust
 objective: Implement signed runtime admission, trust roots, receipts, idempotency, budgets, and runtime-control vectors clean-room in the neutral SDK.
-predecessors: [SDK-002, CON-006]
-allowedPaths: ["python/src/planeon_harness/runtime/", "python/src/planeon_harness/budget.py", "python/src/planeon_harness/authz.py", "python/tests/runtime/", "typescript/src/runtime/", "typescript/tests/runtime/", "fixtures/runtime/", "ci/targets/sdk-003.json"]
+predecessors: [SDK-002, CON-007]
+allowedPaths: ["contracts.lock.json", "generators/contract-snapshot/contracts/release-manifest.json", "generators/contract-snapshot/schemas/v1alpha1/runtime/", "python/pyproject.toml", "python/toolchain.lock.json", "python/runtime-dependencies.lock.json", "python/src/planeon_harness/runtime/", "python/src/planeon_harness/budget.py", "python/src/planeon_harness/authz.py", "python/src/planeon_harness/__init__.py", "python/src/planeon_harness/generated/models.py", "python/tests/runtime/", "typescript/package.json", "typescript/src/index.ts", "typescript/src/models.ts", "typescript/src/runtime/", "typescript/dist/index.js", "typescript/dist/index.d.ts", "typescript/dist/models.js", "typescript/dist/models.d.ts", "typescript/dist/runtime/", "typescript/tests/runtime/", "tests/generated/golden-manifest.json", "fixtures/runtime/", "ci/targets/sdk-003.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes runtime, receipt, budget, and trust contracts v1alpha1", "Produces Python and TypeScript admission/trust API v1"]
-deliverables: ["Offline signature admission, trust rotation, idempotency helpers, budget envelope, receipt verification, and shared runtime-control vectors."]
-excluded: ["Secret storage, service persistence, or silent fail-open admission."]
+contracts: ["Consumes the exact CON-007 runtime-admission release digest", "Produces Python and TypeScript admission/trust API v1", "Uses RFC 8785 JCS and Ed25519 through audited open-source platform implementations"]
+deliverables: ["Offline signature admission, trust rotation, idempotency helpers, budget envelope, receipt verification, and shared runtime-control vectors.", "Python uses a hash-pinned cryptography dependency from the preprovisioned offline wheelhouse; TypeScript uses the platform Web Crypto Ed25519 implementation with no network or postinstall action.", "Contract lock, contract snapshot, generated models, package exports, and source/dist surfaces move together as one release-lock update."]
+excluded: ["Custom cryptographic primitives, private-key custody, secret storage, service persistence, network fetches, live admission, or silent fail-open admission."]
 prefetchCommands: []
 offlineAcceptanceCommands: [["make","runtime-vectors"],["make","security"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}

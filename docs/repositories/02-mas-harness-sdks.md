@@ -32,6 +32,7 @@ mas-harness-sdks/
 ├── python/
 │   ├── compat-pyproject.toml
 │   ├── optional-dependencies.lock
+│   ├── runtime-dependencies.lock.json
 │   ├── compat/prometa/
 │   ├── src/planeon_harness/
 │   │   ├── attributes.py
@@ -58,9 +59,11 @@ mas-harness-sdks/
 
 - Python core: distribution `planeon-harness-sdk`, import `planeon_harness`, Python 3.10-3.13 with development baseline 3.12.14, built by Hatchling and locked with `uv` 0.12.7.
 - Python compatibility: distribution `planeon-prometa-compat`, import `prometa`, versioned with core through `v1.x`; it contains re-exports and deprecation warnings only.
-- TypeScript: package `@planeon/harness-sdk`, Node 24.20.0 LTS, TypeScript 5.x, ESM, `package-lock.json`, and no postinstall network action.
+- TypeScript: package `@planeon/harness-sdk`, Node 24.20.0 LTS, TypeScript 5.x, ESM, a committed toolchain lock, and no postinstall network action.
 - Generated types and clients cover all OpenAPI schemas, CloudEvents, error envelopes, idempotency keys, ETags, and operations.
 - Handwritten APIs cover tenant context, OTel attributes/decorators, trace/baggage propagation, signed-bundle admission, policy/guardrail clients, task polling/SSE, MCP/A2A adapters, idempotent receipts, budgets, resilience, and framework instrumentation.
+- `SDK-003` consumes the exact `CON-007` release digest. Python Ed25519 uses a hash-pinned `cryptography` wheel from the preprovisioned offline wheelhouse; TypeScript uses the runtime Web Crypto implementation. Neither language may ship custom cryptographic primitives, fetch packages at runtime, or hold private keys.
+- The Python dependency lock, TypeScript export map, contract snapshot, generated models, and committed source/dist runtime surfaces are part of the same packet boundary so consumers cannot observe a partial admission API.
 - Stores: SDK runtime helpers may target a caller-supplied PostgreSQL connection through the `runtime-postgres` extra, but the SDK owns no migrations or database service.
 - Events: typed constructors/parsers for all `HarnessCloudEvent` variants; SDKs never publish automatically without a caller-supplied transport.
 
@@ -97,7 +100,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 
 1. `SDK-001-bootstrap-generated`: toolchains, contract lock, deterministic generators, generated clients, and drift check.
 2. `SDK-002-telemetry`: context, neutral semantic attributes, decorators, OTel vectors, and framework-neutral examples.
-3. `SDK-003-admission-trust`: signed admission, trust roots, receipts, idempotency, budgets, and runtime-control vectors.
+3. `SDK-003-admission-trust`: consume the pinned runtime-admission contract release; implement signed admission, trust roots, receipts, idempotency, budgets, and runtime-control vectors with audited platform cryptography.
 4. `SDK-004-protocols`: MCP 2026-07-28 plus 2025-11-25 compatibility, A2A v1 task helpers, SSE resume, and CloudEvents.
 5. `SDK-005-integrations`: LangChain, LangGraph, CrewAI, Semantic Kernel, MCP, and vector integrations as optional extras.
 6. `SDK-006-guardrails`: profiles, streaming evaluation, detector contract, client, and conformance vectors.

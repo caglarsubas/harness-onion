@@ -1,0 +1,16 @@
+id: CON-007
+repository: mas-harness-contracts
+branch: codex/con-007-runtime-admission-contracts
+objective: Publish closed runtime admission, trust-bundle, receipt, replay, idempotency, and budget-consumption contracts with deterministic RFC 8785 and Ed25519 interoperability vectors.
+predecessors: [CON-006]
+allowedPaths: ["schemas/v1alpha1/runtime/", "generated/", "scripts/generate_contracts.py", "scripts/check_generated.py", "tests/runtime/", "tests/fixtures/runtime/", "contracts/release-manifest.json", "docs/runtime-admission.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes ExecutionBudget v1alpha1", "Produces RuntimeTrustBundle, SignedAdmissionEnvelope, RuntimeAdmissionReceipt, ReplayRecord, and BudgetConsumption v1alpha1", "Produces RFC 8785 JCS plus Ed25519 signature profile and closed denial reason codes"]
+deliverables: ["Tenant-bound, digest-bound, time-bounded signed admission envelope and trust rotation schemas.", "Fail-closed receipt, replay/idempotency, and budget-consumption schemas with no secret material.", "Deterministic canonical payload, valid signature, forged signature, revoked, expired, wrong-tenant, replayed, idempotency-conflict, and over-budget vectors for downstream SDK verification."]
+excluded: ["Private keys, secret storage, cryptographic implementation, service persistence, network clients, live admission, or tenant acceptance."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/generate_contracts.py","--check"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/runtime"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Every runtime contract validates positive fixtures and rejects unknown members, malformed digests, mutable algorithms, raw idempotency material, and invalid state combinations.", "Golden canonical bytes and SHA-256 digests are stable; Ed25519 public keys and signatures are fixed interoperability data only, with no private-key material.", "Closed denial vectors distinguish malformed, forged, unknown/revoked/wrong-purpose signer, validity-window, tenant, replay, idempotency, digest, and budget failures without claiming runtime execution."]
+rollback: Revert the unconsumed runtime-admission contract release while retaining lifecycle, compatibility, and composition contracts.
