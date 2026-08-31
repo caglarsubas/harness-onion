@@ -42,8 +42,23 @@ transition.
    proves indexed objects are local with lazy fetch disabled, removes all write
    bits, disables fetch and push, rejects alternates and linked worktrees, and
    scrubs ambient credential settings. Its packet tests use synthetic local Git
-   fixtures only. `MET-002` does not open, mount, fetch, or inspect a warm-source
-   checkout.
+   fixtures only. The initial `MET-002` catalog publication did not open, mount,
+   fetch, or inspect a warm-source checkout; the later user-authorized exception
+   is bounded by the following decision.
+6. The user-authorized `data.harness/v1` observation is the sole current
+   reference-observation execution. The external root-owned launcher verifies
+   the merged `MET-002` packet digest, signed source authority, exact pinned
+   commit, and 29 indexed JSON Schema blobs; temporarily grants traversal only
+   to the unprivileged observer identity; applies deny-all networking, all-write
+   denial, whole-snapshot read denial, and exact-blob read exceptions; and
+   restores the private parent traversal mode after the child exits. It emits
+   [`architecture/observations/data-harness-v1.json`](../../architecture/observations/data-harness-v1.json)
+   with 2,030 canonical structural facts and SHA-256
+   `5c559a6ef3d59fa40e74ab2fb36603752751f523249da884f8e0d8daa06cfe10`.
+   The report excludes source-root paths, host UID/GID and timestamps,
+   descriptions, examples, source text, and executable code. A second run
+   reproduced the same digest. This is observation evidence, not copy,
+   adaptation, porting, CI, release, or tenant-acceptance authority.
 
 ## Future authorization transaction
 
