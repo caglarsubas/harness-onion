@@ -11,10 +11,12 @@ import jsonschema
 
 from scripts.validate_packet_ownership import validate_packet_ownership
 from scripts.validate_readiness import (
+    DATA_HARNESS_V1_OBSERVATION_PATHS,
     EXPECTED_PACKET_COUNT,
     LIVE_CAMPAIGN_EVIDENCE_AXES,
     LIVE_CAMPAIGN_EXECUTION_BASE,
     LIVE_CAMPAIGN_PACKET_IDS,
+    REFERENCE_OBSERVATION_EXECUTION_BASE,
     load_yaml,
 )
 
@@ -166,6 +168,26 @@ def test_live_campaign_authority_is_exact_and_offline_commands_remain_primary() 
             assert "TENANT_ACCEPTANCE" not in live_execution["allowedEvidenceAxes"]
         else:
             assert live_execution is None
+
+
+def test_reference_observation_authority_is_exact_and_separate_from_implementation() -> None:
+    packets = packets_by_id()
+    expected = {
+        **REFERENCE_OBSERVATION_EXECUTION_BASE,
+        "repository": "git@github.com:caglarsubas/data-source-harness.git",
+        "commit": "858281f4b845ffacfe05cdb2c40a402c237d4c54",
+        "sourcePaths": DATA_HARNESS_V1_OBSERVATION_PATHS,
+        "outputPath": "architecture/observations/data-harness-v1.json",
+    }
+
+    for packet_id, packet in packets.items():
+        observation = packet.get("referenceObservationExecution")
+        if packet_id == "MET-002":
+            assert packet["warmSourceAccess"] == "AUTHORIZED_READ_ONLY_OBSERVATION"
+            assert observation == expected
+        else:
+            assert packet["warmSourceAccess"] == "PROHIBITED_DURING_IMPLEMENTATION"
+            assert observation is None
 
 
 def test_task_packet_schema_rejects_legacy_shell_and_unknown_authority() -> None:

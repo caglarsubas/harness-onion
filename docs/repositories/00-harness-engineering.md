@@ -38,6 +38,7 @@ Harness-Engineering/
 │   ├── reuse-map.yaml
 │   ├── reuse-path-index.yaml
 │   ├── porting-authorization-index.yaml
+│   ├── observations/data-harness-v1.json
 │   └── reuse-map.schema.json
 ├── legal/
 │   ├── source-reuse-authorization.yaml
@@ -114,7 +115,7 @@ Each current authority is writable by exactly one `Harness-Engineering` packet. 
 | Owning packet | Canonical authorities |
 |---|---|
 | `MET-001` | `architecture/base-scope-sources.yaml`, `architecture/taxonomy.yaml`, `architecture/repositories.yaml`, `architecture/services.yaml`, `architecture/dependency-graph.yaml`, `architecture/providers.yaml`, and their five current schemas: taxonomy, repositories, services, dependency graph, and provider module. |
-| `MET-002` | `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, the empty `architecture/porting-authorization-index.yaml`, `schemas/reuse-path-index.schema.json`, `schemas/porting-authorization.schema.json`, `schemas/porting-record.schema.json`, `legal/source-reuse-authorization.yaml`, and `legal/third-party-license-policy.yaml`. It later produces the planned `architecture/reuse-map.schema.json`. |
+| `MET-002` | `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, the empty `architecture/porting-authorization-index.yaml`, the separately observed structural-facts report `architecture/observations/data-harness-v1.json`, `schemas/reuse-path-index.schema.json`, `schemas/porting-authorization.schema.json`, `schemas/porting-record.schema.json`, `legal/source-reuse-authorization.yaml`, and `legal/third-party-license-policy.yaml`. It later produces the planned `architecture/reuse-map.schema.json`. |
 | `MET-003` | `policies/zero-bill-policy.yaml`. |
 | `MET-004` | `schemas/task-packet.schema.json`, `schemas/live-campaign-execution-envelope.schema.json`, and the one-file-per-packet `task-packets/` authority catalog. |
 | `MET-005` (planned predecessor-gated authority) | `schemas/release-set.schema.json`, `release/repos.lock.json`, `release/fixture-release-set.yaml`, and `release/evidence-policy.yaml`; these paths do not become current authorities before this packet executes and produces evidence. |
@@ -129,10 +130,20 @@ Each current authority is writable by exactly one `Harness-Engineering` packet. 
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
 
+The one user-authorized `data.harness/v1` observation is a manual `MET-002`
+activity under the exact `referenceObservationExecution` binding. A separately
+installed root-owned launcher and `planeon-reference-observer` identity may read
+only the 29 declared JSON Schema blobs at the pinned commit under deny-all
+egress and source-write denial. Its output contains normalized schema identities,
+fields, required sets, constraints, state enums, references, and blob digests;
+it excludes descriptions, examples, source text, and executable code. The later
+offline acceptance run has no warm-source access. This observation grants no
+copy or porting authority.
+
 ## PR packets
 
 1. `MET-001-foundation`: repository scaffold, Apache-2.0 files, toolchain, taxonomy, repository catalog, and validator tests.
-2. `MET-002-reuse`: truthful reference catalog, disabled fail-closed future authorization index, non-circular destination record schema, executable snapshot locker/verifier, license policy, exact source hashes, and source-object checks.
+2. `MET-002-reuse`: truthful reference catalog, disabled fail-closed future authorization index, non-circular destination record schema, executable snapshot locker/verifier, license policy, exact source hashes, source-object checks, and the separately launched distilled `data.harness/v1` structural observation.
 3. `MET-003-zero-bill`: billing policy, static scanner, forbidden-pattern fixtures, and self-hosted workflow policy.
 4. `MET-004-packets`: task-packet schema, packet validator, Alpha 1-4 index, predecessor/allowed-path validation, and the closed dual-signed live-campaign execution-envelope schema with negative vectors.
 5. `MET-005-release-lock`: release-set schema, lock generator/checker, evidence policy, and fixture release set.

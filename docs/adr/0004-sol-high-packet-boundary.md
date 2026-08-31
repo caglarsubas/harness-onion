@@ -43,6 +43,26 @@ deny-all-outbound process tree. Shell transport, recursive offline wrappers,
 runtime downloads, cloud provisioning, paid providers, mutable authority, and
 warm-source filesystem access remain denied.
 
+`MET-002` is the sole closed exception and is an observation packet, not a
+product implementation packet. Its `referenceObservationExecution` may be run
+manually only after the packet authority has merged. The preinstalled,
+root-owned `/opt/planeon/bin/harness-reference-observe` must verify a signed
+source-authority manifest that binds the merged packet digest, exact repository,
+commit, 29 indexed blob paths, canonical locked snapshot root, output path, and
+the separate `planeon-reference-observer` identity. It establishes deny-all
+outbound isolation before opening any source blob, denies every source write,
+never executes source code, and emits only the seven closed structural fact
+kinds declared by the packet. Descriptions, examples, source text, executable
+logic, undeclared paths, recursive directory reads, and copy authority are
+forbidden.
+
+The observer invocation is not CI or acceptance evidence. After it emits the
+distilled report, the source root is removed from the environment and remains
+unavailable to the coding identity. The ordinary signed offline launcher then
+validates the committed report with all warm roots hidden. Every packet other
+than `MET-002`, including `CON-006`, retains
+`PROHIBITED_DURING_IMPLEMENTATION` and cannot declare observation authority.
+
 Ten conformance packets may declare `liveCampaignExecution`, but this is a
 separate manual post-merge path. The external root-owned launcher accepts only
 `HARNESS_LIVE_EXECUTION_ENVELOPE`. The closed envelope binds the exact packet,
@@ -68,6 +88,10 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 - Live-envelope vectors reject shell transport, unsafe paths, final acceptance
   escalation, endpoint discovery or kind widening, missing signatures, mutation
   widening, and unknown members.
+- Reference-observation vectors reject every packet except `MET-002`, any source
+  path outside the exact indexed list, source-code execution, source text,
+  recursive reads, write access, public egress, implementation-identity access,
+  CI use, and output outside the packet-owned distilled report.
 - Acceptance runs through the packet-declared signed offline launcher; direct
   test execution is not packet evidence.
 
