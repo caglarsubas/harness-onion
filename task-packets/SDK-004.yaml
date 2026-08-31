@@ -3,7 +3,7 @@ repository: mas-harness-sdks
 branch: codex/sdk-004-protocol-helpers
 objective: Implement MCP, A2A, resumable SSE, task, and CloudEvents helpers against the pinned protocol contracts.
 predecessors: [SDK-003]
-allowedPaths: ["python/src/planeon_harness/protocols/", "python/tests/protocols/", "typescript/package.json", "typescript/src/protocols/", "typescript/dist/protocols/", "typescript/tests/protocols/", "fixtures/protocols/", "docs/protocol-support.md", "ci/targets/sdk-004.json"]
+allowedPaths: ["python/src/planeon_harness/protocols/", "python/tests/protocols/", "typescript/package.json", "typescript/src/protocols/", "typescript/dist/protocols/", "typescript/tests/protocols/", "fixtures/protocols/", "docs/protocol-support.md", "ci/targets/sdk-004.json", "tests/generated/test_make_dispatch.py"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/protocol.py","src/data_source_harness/protocol_profiles.py","src/data_source_harness/delegation.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
