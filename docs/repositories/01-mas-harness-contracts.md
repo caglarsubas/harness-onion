@@ -52,7 +52,8 @@ mas-harness-contracts/
 │   ├── composition/
 │   ├── lifecycle/
 │   ├── status/
-│   └── events/
+│   ├── events/
+│   └── runtime/
 ├── openapi/
 ├── asyncapi/
 ├── catalog/
@@ -65,6 +66,7 @@ mas-harness-contracts/
 │   ├── compiler.md
 │   ├── guidance-dsl.md
 │   ├── lifecycle.md
+│   ├── runtime-admission.md
 │   ├── status-projections.md
 │   ├── taxonomy.md
 │   └── migrations/data-harness-v1.md
@@ -76,16 +78,18 @@ mas-harness-contracts/
     ├── compatibility/
     ├── determinism/
     ├── golden/
-    └── fixtures/{compiler,guidance,taxonomy,lifecycle,status,compatibility}/
+    ├── runtime/
+    └── fixtures/{compiler,guidance,taxonomy,lifecycle,status,compatibility,runtime}/
 ```
 
 ## Package, toolchain, and public interfaces
 
 - Distribution/import: `planeon-harness-contracts` / `planeon_harness_contracts`.
-- Toolchain: Python 3.12.14, `uv` 0.12.7, Hatchling, jsonschema 4.x, PyYAML 6.x, cryptography, Hypothesis, pytest, Ruff, and mypy; exact versions are frozen in `uv.lock`.
+- Toolchain: Python 3.12.14, `uv` 0.12.7, Hatchling, jsonschema 4.x, PyYAML 6.x, Hypothesis, pytest, Ruff, and mypy; exact versions are frozen in `uv.lock`.
 - CLI: `harnessctl validate|compile|explain|catalog lock|verify-determinism|evidence validate|zero-bill scan`.
-- Canonical resource groups: catalog, guidance, readiness, composition, lifecycle, and events.
-- Public kinds: `HarnessClassDefinition`, `HarnessModuleDefinition`, `FrameworkProviderDefinition`, `ModuleRelease`, `ReleaseSet`, `QuestionnaireDefinition`, `QuestionnaireSession`, `QuestionnaireAnswerSet`, `GuidanceRule`, `BusinessContext`, `DataSourceDeclaration`, `DataReadinessAssessment`, `IntegrationDeclaration`, `ControlRequirement`, `ReadinessFinding`, `TenantDemand`, `HarnessProfile`, `BillOfMaterials`, `InstallPlan`, `EvidencePlan`, `ExecutionBudget`, `Operation`, `BundleRelease`, `HarnessInstallation`, `ApprovalRequest`, `PolicyBundle`, `EvidenceRecord`, and `HarnessCloudEvent`.
+- Canonical resource groups: catalog, guidance, readiness, composition, lifecycle, events, and runtime admission.
+- Public kinds: `HarnessClassDefinition`, `HarnessModuleDefinition`, `FrameworkProviderDefinition`, `ModuleRelease`, `ReleaseSet`, `QuestionnaireDefinition`, `QuestionnaireSession`, `QuestionnaireAnswerSet`, `GuidanceRule`, `BusinessContext`, `DataSourceDeclaration`, `DataReadinessAssessment`, `IntegrationDeclaration`, `ControlRequirement`, `ReadinessFinding`, `TenantDemand`, `HarnessProfile`, `BillOfMaterials`, `InstallPlan`, `EvidencePlan`, `ExecutionBudget`, `Operation`, `BundleRelease`, `HarnessInstallation`, `ApprovalRequest`, `PolicyBundle`, `EvidenceRecord`, `HarnessCloudEvent`, `RuntimeTrustBundle`, `SignedAdmissionEnvelope`, `RuntimeAdmissionReceipt`, `ReplayRecord`, and `BudgetConsumption`.
+- Runtime admission signatures use RFC 8785 JCS over a closed I-JSON/ASCII-key subset and Ed25519. Contracts contain public keys and deterministic interoperability signatures only; private-key custody and cryptographic implementation remain outside this repository.
 - Rule operators are exactly `all`, `any`, `not`, `eq`, `in`, `exists`, `gte`, and `lte`; schemas reject executable expressions and unknown operators.
 - APIs are described, not hosted, by the five OpenAPI documents. CloudEvents 1.0 event schemas are the event interface.
 - Stores: none.
@@ -135,6 +139,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 4. `CON-004-compiler`: deterministic closure, prerequisite acceptance, capability-role admission, recommendation-only provider filtering, explicit tenant selector acceptance, subject-aware conditional closure, ambiguity handling, installation waves, and explanations.
 5. `CON-005-lifecycle-events`: lifecycle state and tenant harness-status projection schemas, closed aggregation/freshness semantics, OpenAPI/AsyncAPI, CloudEvents envelope, compatibility policy, and imported golden vectors.
 6. `CON-006-compat`: `data.harness/v1` conversion, round-trip fixtures, deprecation metadata, and migration guide.
+7. `CON-007-runtime-admission-contracts`: tenant-bound signed admission envelopes, trust rotation, receipts, replay/idempotency state, budget consumption, closed denial reasons, and canonical interoperability vectors.
 
 ## Testing, verification, and acceptance
 
@@ -148,7 +153,7 @@ packet through `HARNESS_TASK_PACKET` and invokes only
 `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the complete
 ordered list.
 
-Determinism compiles every fixture twice in clean temporary directories and byte-compares all six outputs. Property tests cover arbitrary DAGs, cycles, capability-role violations, inactive/missing/multiple selectors, recommendation acceptance, subject-capability closure, local-judge backend input, ordering, integer resource bounds, and rule evaluation. Every lifecycle fixture proves allowed and forbidden transitions. Status golden/property tests cover every closed selection, installation, evidence and freshness state; deterministic worst-child precedence; waiver-without-pass; required immutable bindings; and exclusion of unselected harnesses from health.
+Determinism compiles every fixture twice in clean temporary directories and byte-compares all six outputs. Property tests cover arbitrary DAGs, cycles, capability-role violations, inactive/missing/multiple selectors, recommendation acceptance, subject-capability closure, local-judge backend input, ordering, integer resource bounds, and rule evaluation. Every lifecycle fixture proves allowed and forbidden transitions. Status golden/property tests cover every closed selection, installation, evidence and freshness state; deterministic worst-child precedence; waiver-without-pass; required immutable bindings; and exclusion of unselected harnesses from health. Runtime-contract tests additionally cover valid canonical payloads plus malformed, forged, revoked, expired, wrong-tenant, replayed, idempotency-conflict, digest-mismatch, and over-budget outcomes. They prove source-contract interoperability only and never claim a live runtime decision.
 
 ## Release and rollback
 

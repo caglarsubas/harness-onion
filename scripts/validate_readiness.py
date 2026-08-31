@@ -94,7 +94,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 91
+EXPECTED_PACKET_COUNT = 92
 EXPECTED_REUSE_PATH_COUNT = 535
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -4121,7 +4121,7 @@ def validate_packets(
         validation.error(ownership_error)
     validation.require(
         set(packets) == set(declared_packet_owners),
-        "task packet files must exactly match the 91 packets declared by repository plans",
+        "task packet files must exactly match the 92 packets declared by repository plans",
     )
 
     authority_owner: dict[str, str] = {
@@ -4242,7 +4242,7 @@ def validate_packets(
         len(ordered_packet_ids) == EXPECTED_PACKET_COUNT
         and len(ordered_packet_ids) == len(set(ordered_packet_ids))
         and set(ordered_packet_ids) == set(declared_packet_owners),
-        "task-packets README must index each of the 91 individual packet files exactly once",
+        "task-packets README must index each of the 92 individual packet files exactly once",
     )
     order_by_id = {packet_id: index for index, packet_id in enumerate(ordered_packet_ids)}
     for packet_id, packet in packets.items():
