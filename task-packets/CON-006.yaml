@@ -2,8 +2,8 @@ id: CON-006
 repository: mas-harness-contracts
 branch: codex/con-006-data-harness-compat
 objective: Implement data.harness/v1 conversion, round-trip vectors, deprecation metadata, and a complete migration guide.
-predecessors: [CON-005]
-allowedPaths: ["compatibility/data-harness-v1/", "src/planeon_harness_contracts/commands/compatibility.json", "tests/compatibility/", "tests/fixtures/compatibility/", "docs/migrations/data-harness-v1.md", "contracts/release-manifest.json"]
+predecessors: [MET-002, CON-005]
+allowedPaths: ["compatibility/data-harness-v1/", "src/planeon_harness_contracts/compatibility_data_harness_v1.py", "src/planeon_harness_contracts/commands/compatibility.json", "scripts/generate_contracts.py", "tests/compatibility/", "tests/fixtures/compatibility/", "docs/migrations/data-harness-v1.md", "contracts/release-manifest.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["compatibility/","schemas/v1/","tests/fixtures/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}

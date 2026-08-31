@@ -402,6 +402,41 @@ class ValidatorUnitTest(unittest.TestCase):
         with self.assertRaises(jsonschema.ValidationError):
             jsonschema.validate(packet, schema)
 
+    def test_task_schema_closes_reference_observation_authority(self) -> None:
+        schema = json.loads(
+            (ROOT / "schemas/task-packet.schema.json").read_text(encoding="utf-8")
+        )
+        packet = valid_packet_fixture()
+        packet["warmSourceAccess"] = "AUTHORIZED_READ_ONLY_OBSERVATION"
+        packet["referenceObservationExecution"] = {
+            **VALIDATOR.REFERENCE_OBSERVATION_EXECUTION_BASE,
+            "repository": "git@github.com:caglarsubas/data-source-harness.git",
+            "commit": "858281f4b845ffacfe05cdb2c40a402c237d4c54",
+            "sourcePaths": VALIDATOR.DATA_HARNESS_V1_OBSERVATION_PATHS,
+            "outputPath": "architecture/observations/data-harness-v1.json",
+        }
+        jsonschema.validate(packet, schema)
+
+        packet["referenceObservationExecution"]["sourceCodeExecution"] = "ALLOWED"
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.validate(packet, schema)
+
+    def test_task_schema_rejects_observation_authority_on_implementation_packet(self) -> None:
+        schema = json.loads(
+            (ROOT / "schemas/task-packet.schema.json").read_text(encoding="utf-8")
+        )
+        packet = valid_packet_fixture()
+        packet["referenceObservationExecution"] = {
+            **VALIDATOR.REFERENCE_OBSERVATION_EXECUTION_BASE,
+            "repository": "git@github.com:caglarsubas/data-source-harness.git",
+            "commit": "858281f4b845ffacfe05cdb2c40a402c237d4c54",
+            "sourcePaths": VALIDATOR.DATA_HARNESS_V1_OBSERVATION_PATHS,
+            "outputPath": "architecture/observations/data-harness-v1.json",
+        }
+
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.validate(packet, schema)
+
     def test_task_schema_rejects_repository_live_launcher(self) -> None:
         schema = json.loads(
             (ROOT / "schemas/task-packet.schema.json").read_text(encoding="utf-8")

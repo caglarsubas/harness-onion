@@ -131,6 +131,64 @@ LIVE_CAMPAIGN_EXECUTION_BASE = {
     "unavailableResult": "NOT_RUN_ENV_UNAVAILABLE",
     "ciEvidenceUse": "FORBIDDEN",
 }
+
+DATA_HARNESS_V1_OBSERVATION_PATHS = [
+    "schemas/v1/action-preview.schema.json",
+    "schemas/v1/bounded-query-plan.schema.json",
+    "schemas/v1/checkpoint-token.schema.json",
+    "schemas/v1/connector-worker-profile.schema.json",
+    "schemas/v1/coverage-statement.schema.json",
+    "schemas/v1/cross-plane-evidence-set.schema.json",
+    "schemas/v1/data-batch.schema.json",
+    "schemas/v1/data-source-connector-profile.schema.json",
+    "schemas/v1/deployment-profile.schema.json",
+    "schemas/v1/disconnected-runtime-readiness.schema.json",
+    "schemas/v1/durable-action-record.schema.json",
+    "schemas/v1/entity-redirect.schema.json",
+    "schemas/v1/freshness-observation.schema.json",
+    "schemas/v1/industry-domain-pack-manifest.schema.json",
+    "schemas/v1/live-acceptance-campaign.schema.json",
+    "schemas/v1/local-cross-plane-evidence.schema.json",
+    "schemas/v1/local-harness-runtime-evidence.schema.json",
+    "schemas/v1/local-image-lock.schema.json",
+    "schemas/v1/local-source-evidence.schema.json",
+    "schemas/v1/northbound-tool-catalog.schema.json",
+    "schemas/v1/promotion-readiness.schema.json",
+    "schemas/v1/protocol-profile-conformance.schema.json",
+    "schemas/v1/reference-lab-manifest.schema.json",
+    "schemas/v1/route-decision.schema.json",
+    "schemas/v1/semantic-assertion.schema.json",
+    "schemas/v1/semantic-mapping-candidate.schema.json",
+    "schemas/v1/source-action-capability-profile.schema.json",
+    "schemas/v1/source-action-plan.schema.json",
+    "schemas/v1/source-mutation-receipt.schema.json",
+]
+
+REFERENCE_OBSERVATION_EXECUTION_BASE = {
+    "launcherArgv": ["/opt/planeon/bin/harness-reference-observe"],
+    "executionPlacement": "PREINSTALLED_LOCAL_SEPARATE_OBSERVER_IDENTITY",
+    "packetPathEnvironment": "HARNESS_TASK_PACKET",
+    "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+    "sourceAuthorityEnvironment": "HARNESS_REFERENCE_SOURCE_AUTHORITY",
+    "sourceAuthorityMode": "ROOT_OWNED_SIGNED_EXACT_COMMIT_AND_PATHS",
+    "observerIdentity": "planeon-reference-observer",
+    "networkIsolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+    "sourceFilesystem": "DECLARED_BLOBS_READ_METADATA_ONLY_ALL_WRITE_DENIED",
+    "sourceCodeExecution": "DENIED",
+    "outputMode": "DISTILLED_CONTRACT_FACTS_ONLY_NO_SOURCE_TEXT",
+    "allowedFactKinds": [
+        "SCHEMA_IDENTITY",
+        "OBJECT_FIELD",
+        "REQUIRED_FIELD",
+        "VALUE_CONSTRAINT",
+        "STATE_ENUM",
+        "REFERENCE_EDGE",
+        "SCHEMA_DIGEST",
+    ],
+    "copyAuthority": "NONE",
+    "implementationIdentityAccess": "DENIED",
+    "ciEvidenceUse": "FORBIDDEN",
+}
 LIVE_CAMPAIGN_EVIDENCE_AXES = {
     "CONF-A1-001": ["RUNTIME", "ASSURANCE"],
     "CONF-A2-001": ["RUNTIME", "ASSURANCE"],
@@ -3710,11 +3768,52 @@ def validate_packets(
             f"packet {packet_id} branch must start with codex/{packet_id.casefold()}",
         )
         covered_repositories.add(packet["repository"])
-        validation.require(
-            packet.get("warmSourceAccess")
-            == "PROHIBITED_DURING_IMPLEMENTATION",
-            f"packet {packet_id} must deny warm-source filesystem access to the implementation run",
-        )
+        reference_observation = packet.get("referenceObservationExecution")
+        if packet_id == "MET-002":
+            expected_reference_observation = {
+                **REFERENCE_OBSERVATION_EXECUTION_BASE,
+                "repository": "git@github.com:caglarsubas/data-source-harness.git",
+                "commit": "858281f4b845ffacfe05cdb2c40a402c237d4c54",
+                "sourcePaths": DATA_HARNESS_V1_OBSERVATION_PATHS,
+                "outputPath": "architecture/observations/data-harness-v1.json",
+            }
+            validation.require(
+                packet.get("warmSourceAccess")
+                == "AUTHORIZED_READ_ONLY_OBSERVATION",
+                "packet MET-002 must declare the separately launched read-only observation boundary",
+            )
+            validation.require(
+                reference_observation == expected_reference_observation,
+                "packet MET-002 reference observation must exactly bind the pinned data.harness/v1 blobs and distilled output",
+            )
+            reference_only_paths = {
+                source_path
+                for source in packet.get("sourceReuse", [])
+                if source.get("repository")
+                == expected_reference_observation["repository"]
+                and source.get("commit") == expected_reference_observation["commit"]
+                and source.get("reuseMode") == "REFERENCE_ONLY"
+                for source_path in source.get("paths", [])
+            }
+            validation.require(
+                set(DATA_HARNESS_V1_OBSERVATION_PATHS) <= reference_only_paths,
+                "packet MET-002 observation paths must all be exact REFERENCE_ONLY indexed blobs",
+            )
+            validation.require(
+                expected_reference_observation["outputPath"]
+                in packet.get("allowedPaths", []),
+                "packet MET-002 must own its exact distilled observation output",
+            )
+        else:
+            validation.require(
+                packet.get("warmSourceAccess")
+                == "PROHIBITED_DURING_IMPLEMENTATION",
+                f"packet {packet_id} must deny warm-source filesystem access to the implementation run",
+            )
+            validation.require(
+                reference_observation is None,
+                f"packet {packet_id} may not declare reference-observation authority",
+            )
         prefetch_commands = packet["prefetchCommands"]
         offline_commands = packet["offlineAcceptanceCommands"]
         offline_execution = packet["offlineExecution"]
@@ -4068,6 +4167,9 @@ def validate_packets(
             for packet_path in packet_files
         },
     }
+    observation_authority_path = "architecture/observations/data-harness-v1.json"
+    if (ROOT / observation_authority_path).is_file():
+        authority_owner[observation_authority_path] = "MET-002"
 
     def packet_owns_path(packet: dict[str, Any], authority_path: str) -> bool:
         if packet.get("repository") != "Harness-Engineering":

@@ -28,8 +28,11 @@
       "description": "A bootstrap packet owns Makefile; a later Make-using packet owns its exact ci/targets/<lowercase-packet-id>.json descriptor. PORTING.yaml is limited to product bootstraps or a future authorized PORT_CANDIDATE."
     },
     "warmSourceAccess": {
-      "const": "PROHIBITED_DURING_IMPLEMENTATION",
-      "description": "The trusted launcher must deny read, metadata, and write access to every canonical warm-source root supplied through HARNESS_WARM_SOURCE_ROOTS, scrub that value before child execution, and fail when a detected locked root is undeclared."
+      "enum": [
+        "PROHIBITED_DURING_IMPLEMENTATION",
+        "AUTHORIZED_READ_ONLY_OBSERVATION"
+      ],
+      "description": "Product implementation always uses PROHIBITED_DURING_IMPLEMENTATION. AUTHORIZED_READ_ONLY_OBSERVATION is reserved to MET-002 and requires the separate root-owned observation launcher; its later acceptance run still denies every warm root."
     },
     "sourceReuse": {
       "type": "array",
@@ -51,10 +54,22 @@
       "uniqueItems": true
     },
     "offlineExecution": {"$ref": "#/$defs/offlineExecution"},
+    "referenceObservationExecution": {"$ref": "#/$defs/referenceObservationExecution"},
     "liveCampaignExecution": {"$ref": "#/$defs/liveCampaignExecution"},
     "expectedEvidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
     "rollback": {"type": "string", "minLength": 10}
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "warmSourceAccess": {"const": "AUTHORIZED_READ_ONLY_OBSERVATION"}
+        }
+      },
+      "then": {"required": ["referenceObservationExecution"]},
+      "else": {"not": {"required": ["referenceObservationExecution"]}}
+    }
+  ],
   "$defs": {
     "allowedPath": {
       "type": "string",
@@ -135,6 +150,55 @@
         "offlineEnvironment": {
           "const": {"UV_OFFLINE": "1", "UV_FROZEN": "1", "UV_NO_SYNC": "1"}
         }
+      }
+    },
+    "referenceObservationExecution": {
+      "type": "object",
+      "description": "Manual, post-authority source observation performed before implementation by an external observer identity. It cannot copy source material, execute source code, or serve as offline acceptance.",
+      "additionalProperties": false,
+      "required": [
+        "launcherArgv", "executionPlacement", "packetPathEnvironment",
+        "packetPathMode", "sourceAuthorityEnvironment", "sourceAuthorityMode",
+        "observerIdentity", "repository", "commit", "sourcePaths",
+        "networkIsolation", "sourceFilesystem", "sourceCodeExecution",
+        "outputPath", "outputMode", "allowedFactKinds", "copyAuthority",
+        "implementationIdentityAccess", "ciEvidenceUse"
+      ],
+      "properties": {
+        "launcherArgv": {"const": ["/opt/planeon/bin/harness-reference-observe"]},
+        "executionPlacement": {"const": "PREINSTALLED_LOCAL_SEPARATE_OBSERVER_IDENTITY"},
+        "packetPathEnvironment": {"const": "HARNESS_TASK_PACKET"},
+        "packetPathMode": {"const": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH"},
+        "sourceAuthorityEnvironment": {"const": "HARNESS_REFERENCE_SOURCE_AUTHORITY"},
+        "sourceAuthorityMode": {"const": "ROOT_OWNED_SIGNED_EXACT_COMMIT_AND_PATHS"},
+        "observerIdentity": {"const": "planeon-reference-observer"},
+        "repository": {"$ref": "#/$defs/sourceRepository"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "sourcePaths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\/$).+$"},
+          "uniqueItems": true
+        },
+        "networkIsolation": {"const": "OS_ENFORCED_DENY_ALL_OUTBOUND"},
+        "sourceFilesystem": {"const": "DECLARED_BLOBS_READ_METADATA_ONLY_ALL_WRITE_DENIED"},
+        "sourceCodeExecution": {"const": "DENIED"},
+        "outputPath": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.json$"},
+        "outputMode": {"const": "DISTILLED_CONTRACT_FACTS_ONLY_NO_SOURCE_TEXT"},
+        "allowedFactKinds": {
+          "const": [
+            "SCHEMA_IDENTITY",
+            "OBJECT_FIELD",
+            "REQUIRED_FIELD",
+            "VALUE_CONSTRAINT",
+            "STATE_ENUM",
+            "REFERENCE_EDGE",
+            "SCHEMA_DIGEST"
+          ]
+        },
+        "copyAuthority": {"const": "NONE"},
+        "implementationIdentityAccess": {"const": "DENIED"},
+        "ciEvidenceUse": {"const": "FORBIDDEN"}
       }
     },
     "liveCampaignExecution": {
