@@ -42,13 +42,15 @@ mas-harness-industry-packs/
 │   ├── data/
 │   ├── provider-preferences/
 │   ├── fixtures/{answers,demands,e2e,expected,governance,readiness,sources}/
-│   └── tests/{test_business_domain.py,test_data_readiness.py,test_e2e_fixtures.py,test_governance.py,test_profiles.py}
 ├── schemas/
 ├── scripts/build_pack_manifest.py
 ├── docs/
 │   ├── authoring.md
 │   └── white-goods/{business-domain.md,certification.md,data-readiness.md,governance.md,profiles.md}
-└── tests/{framework,fixtures/framework}/
+└── tests/
+    ├── framework/
+    ├── fixtures/framework/
+    └── white_goods/{test_business_domain.py,test_data_readiness.py,test_e2e_fixtures.py,test_governance.py,test_profiles.py}
 ```
 
 ## Package, toolchain, and owned interfaces
@@ -345,6 +347,55 @@ validation. Predecessor handlers/tests may change only their version,
 inventory/archive expectation, packet output version, and cumulative successor
 dispatch; predecessor resources, decisions, and digests stay frozen.
 
+## IND-WG-005 certification-fixture contract
+
+IND-WG-005 starts only from exact merged product commit
+`3814e642c8c8eb9f9bf77f230930eeff209de565`, white-goods 0.4.0 computed pack
+digest `38a056e7f3008aa9980fc12f1677f6f160dddb18aa156e63258921b911ab1773`,
+raw `pack.yaml` SHA-256
+`29e8732b5e6730ecc42e54bed8f00487ece81cde4c50fc1521f711b65240defb`,
+its 64-file/61-resource inventory, reproducible archive SHA-256
+`3f0a3b22e1152526324fd7f7940a8d45331b2d182da309f249ef94956476856c`,
+canonical-index SHA-256
+`022a9d685c52cb73dad7b51d53c4d02a0168680ad138af99503076af9bd6783b`,
+and the unchanged framework 0.1.1 wheel. It advances only the sector pack to
+0.5.0 and adds exactly eight data resources, producing a 72-file/69-resource
+inventory.
+
+Five synthetic scenario records close the source-level white-goods journey for
+`minimal-arm64`, `minimal-amd64`, `regulated-openshift`, `silo`, and `air-gap`.
+Each binds exact raw bytes for an accepted business fixture, PASS data-readiness
+fixture, governance decision, provider demand, and golden output. The regulated
+scenario uses the reversible-write governance vector; all others use the
+read-only vector. `SOURCE_CONTRACT_READY` means only that those pack-local
+records form the declared deterministic closure. It is not a campaign,
+deployment, runtime observation, assurance result, compliance conclusion, or
+tenant acceptance.
+
+`pack.lock.json` binds exactly the seventy final pack members other than itself
+and `manifest.json`, using lexical path records with media type, byte size, raw
+SHA-256, and Apache-2.0 disposition. Its payload digest covers canonical bytes
+of the algorithm, exclusions, and entry list. It deliberately omits final pack,
+index, archive, lock-file, and manifest-file digests, so the committed subject
+is non-recursive.
+
+`manifest.json` binds the raw lock-file digest, its payload digest and entry
+count, clean-room packet lineage, and pack license. Its artifact state is
+`NOT_RETAINED`; its release-signing state is `MISSING_PLANNED`, with null
+signature and signer. This makes it an unsigned deterministic source document
+that a later offline release process may sign after merge. IND-WG-005 neither
+creates nor verifies a signature and cannot claim an artifact, publication,
+release, deployment, runtime, assurance, conformance, or tenant state.
+
+The sixth scenario resource is a five-vector mutation catalog. Acceptance
+changes only in-memory copies to prove stable denial for changed content,
+missing members, undeclared members, altered payload digests, and altered
+manifest-to-lock bindings. The unique `certification-fixtures` Make target
+runs the packet-owned handler. Cumulative acceptance reruns all four predecessor
+targets, all five white-goods test slices, dispatcher regressions, two-build
+index/archive identity, and zero-bill validation. No pack artifact or signature
+is retained.
+
 ## Warm-source mapping
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
@@ -356,7 +407,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 3. `IND-WG-002-data-readiness`: source inventory, mock API/DB/file/event data, completeness/freshness/provenance/classification thresholds, and failure fixtures.
 4. `IND-WG-003-governance-integrations`: regulatory/control mapping, autonomy/action categories, integration declarations, credential/side-effect questions, and waiver rules.
 5. `IND-WG-004-provider-profiles`: minimal ARM64, minimal AMD64, regulated OpenShift, silo, and air-gap provider recommendations plus explicit accepted-selector fixtures and expected compiler outputs.
-6. `IND-WG-005-certification-fixtures`: deterministic end-to-end fixtures and signed pack artifact manifest.
+6. `IND-WG-005-certification-fixtures`: deterministic source-contract scenarios, a non-recursive payload lock, and an unsigned offline-signing-ready manifest.
 
 ## Testing, verification, and acceptance
 

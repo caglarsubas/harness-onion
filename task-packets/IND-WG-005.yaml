@@ -1,18 +1,131 @@
 id: IND-WG-005
 repository: mas-harness-industry-packs
 branch: codex/ind-wg-005-certification-fixtures
-objective: Freeze deterministic white-goods end-to-end fixtures and a signed-ready pack artifact manifest for conformance campaigns.
+objective: Freeze deterministic white-goods source-contract scenarios, a non-recursive payload lock, and an unsigned offline-signing-ready manifest for later conformance campaigns.
 predecessors: [IND-WG-004]
-allowedPaths: ["packs/white-goods/fixtures/e2e/", "packs/white-goods/tests/test_e2e_fixtures.py", "packs/white-goods/pack.lock.json", "packs/white-goods/manifest.json", "scripts/build_pack_manifest.py", "docs/white-goods/certification.md", "ci/targets/ind-wg-005.json"]
+allowedPaths:
+  - packs/white-goods/pack.yaml
+  - packs/white-goods/fixtures/e2e/
+  - packs/white-goods/pack.lock.json
+  - packs/white-goods/manifest.json
+  - scripts/build_pack_manifest.py
+  - tests/white_goods/test_business_domain.py
+  - tests/white_goods/test_data_readiness.py
+  - tests/white_goods/test_governance.py
+  - tests/white_goods/test_profiles.py
+  - tests/white_goods/test_e2e_fixtures.py
+  - tests/framework/test_dispatch.py
+  - docs/white-goods/certification.md
+  - ci/handlers/ind_wg_001.py
+  - ci/handlers/ind_wg_002.py
+  - ci/handlers/ind_wg_003.py
+  - ci/handlers/ind_wg_004.py
+  - ci/handlers/ind_wg_005.py
+  - ci/targets/ind-wg-005.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["tests/reference_labs/","tests/fixtures/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/acceptance.py","src/data_source_harness/conformance.py","tests/reference_labs/__init__.py","tests/reference_labs/test_cold_chain_phase3.py","tests/reference_labs/test_local_cross_plane_lab.py","tests/reference_labs/test_local_harness_runtime_lab.py","tests/reference_labs/test_local_source_lab.py","tests/reference_labs/test_phase4_actions.py","tests/reference_labs/test_phase5_runtime.py","tests/reference_labs/test_phase6_5_integration_spine.py","tests/reference_labs/test_phase6_runtime.py","tests/reference_labs/test_phase7_readiness.py","tests/reference_labs/test_runtime_bundle.py","tests/reference_labs/test_white_goods_lab.py","tests/reference_labs/test_white_goods_phase2.py","tests/fixtures/contracts/negative/action-preview.no-effects.json","tests/fixtures/contracts/negative/bounded-query-plan.unbounded.json","tests/fixtures/contracts/negative/checkpoint-token.no-position.json","tests/fixtures/contracts/negative/connector-worker-profile.mutable-image.json","tests/fixtures/contracts/negative/coverage-statement.empty.json","tests/fixtures/contracts/negative/cross-plane-evidence-set.collapsed.json","tests/fixtures/contracts/negative/data-batch.no-lineage.json","tests/fixtures/contracts/negative/data-source-connector-profile.missing-discovery.json","tests/fixtures/contracts/negative/deployment-profile.air-gap-external-telemetry.json","tests/fixtures/contracts/negative/deployment-profile.local-laptop-mirror.json","tests/fixtures/contracts/negative/disconnected-runtime-readiness.false-acceptance.json","tests/fixtures/contracts/negative/durable-action-record.raw-parameters.json","tests/fixtures/contracts/negative/entity-redirect.no-lineage.json","tests/fixtures/contracts/negative/freshness-observation.no-watermark.json","tests/fixtures/contracts/negative/industry-domain-pack-manifest.no-tech.json","tests/fixtures/contracts/negative/live-acceptance-campaign.false-acceptance.json","tests/fixtures/contracts/negative/local-cross-plane-evidence.false-pass.json","tests/fixtures/contracts/negative/local-harness-runtime-evidence.false-pass.json","tests/fixtures/contracts/negative/local-image-lock.mutable.json","tests/fixtures/contracts/negative/local-source-evidence.false-pass.json","tests/fixtures/contracts/negative/northbound-tool-catalog.no-scope.json","tests/fixtures/contracts/negative/promotion-readiness.no-runtime.json","tests/fixtures/contracts/negative/protocol-profile-conformance.no-checks.json","tests/fixtures/contracts/negative/reference-lab-manifest.no-scenarios.json","tests/fixtures/contracts/negative/route-decision.selected-without-route.json","tests/fixtures/contracts/negative/semantic-assertion.no-lineage.json","tests/fixtures/contracts/negative/semantic-mapping-candidate.no-lineage.json","tests/fixtures/contracts/negative/source-action-capability-profile.no-idempotency.json","tests/fixtures/contracts/negative/source-action-plan.no-precondition.json","tests/fixtures/contracts/negative/source-mutation-receipt.raw-result.json","tests/fixtures/contracts/positive/action-preview.minimal.json","tests/fixtures/contracts/positive/bounded-query-plan.minimal.json","tests/fixtures/contracts/positive/checkpoint-token.minimal.json","tests/fixtures/contracts/positive/connector-worker-profile.process.json","tests/fixtures/contracts/positive/coverage-statement.partial.json","tests/fixtures/contracts/positive/cross-plane-evidence-set.partial.json","tests/fixtures/contracts/positive/data-batch.minimal.json","tests/fixtures/contracts/positive/data-source-connector-profile.minimal.json","tests/fixtures/contracts/positive/deployment-profile.air-gapped.json","tests/fixtures/contracts/positive/deployment-profile.local-laptop.json","tests/fixtures/contracts/positive/disconnected-runtime-readiness.blocked.json","tests/fixtures/contracts/positive/durable-action-record.executing.json","tests/fixtures/contracts/positive/entity-redirect.minimal.json","tests/fixtures/contracts/positive/freshness-observation.minimal.json","tests/fixtures/contracts/positive/industry-domain-pack-manifest.minimal.json","tests/fixtures/contracts/positive/live-acceptance-campaign.partial.json","tests/fixtures/contracts/positive/local-cross-plane-evidence.passed.json","tests/fixtures/contracts/positive/local-harness-runtime-evidence.passed.json","tests/fixtures/contracts/positive/local-image-lock.arm64.json","tests/fixtures/contracts/positive/local-source-evidence.passed.json","tests/fixtures/contracts/positive/northbound-tool-catalog.minimal.json","tests/fixtures/contracts/positive/promotion-readiness.minimal.json","tests/fixtures/contracts/positive/protocol-profile-conformance.local.json","tests/fixtures/contracts/positive/reference-lab-manifest.minimal.json","tests/fixtures/contracts/positive/route-decision.selected.json","tests/fixtures/contracts/positive/semantic-assertion.minimal.json","tests/fixtures/contracts/positive/semantic-mapping-candidate.minimal.json","tests/fixtures/contracts/positive/source-action-capability-profile.minimal.json","tests/fixtures/contracts/positive/source-action-plan.minimal.json","tests/fixtures/contracts/positive/source-mutation-receipt.minimal.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes white-goods pack slices v1alpha1", "Produces white-goods certification fixture set v1alpha1"]
-deliverables: ["Frozen inputs/expected outcomes, manifest with file digests/licenses/provenance, deterministic pack archive, and tamper fixtures."]
-excluded: ["Release signing, real tenant acceptance, or live platform deployment."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","pack-manifest","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","packs/white-goods/tests/test_e2e_fixtures.py"]]
+contracts:
+  - >-
+    Starts only from exact merged mas-harness-industry-packs commit
+    3814e642c8c8eb9f9bf77f230930eeff209de565, white-goods 0.4.0 computed
+    pack digest 38a056e7f3008aa9980fc12f1677f6f160dddb18aa156e63258921b911ab1773,
+    raw pack.yaml SHA-256 29e8732b5e6730ecc42e54bed8f00487ece81cde4c50fc1521f711b65240defb,
+    exact 64-file/61-resource inventory, reproducible archive SHA-256
+    3f0a3b22e1152526324fd7f7940a8d45331b2d182da309f249ef94956476856c,
+    canonical-index SHA-256
+    022a9d685c52cb73dad7b51d53c4d02a0168680ad138af99503076af9bd6783b,
+    and framework 0.1.1 wheel SHA-256
+    d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4.
+  - >-
+    Advances only the white-goods sector pack from 0.4.0 to 0.5.0 and adds
+    exactly eight declared data resources for a resulting exact
+    72-file/69-resource inventory: five source-contract scenario records, one
+    tamper-vector catalog, one non-recursive payload lock, and one unsigned
+    artifact manifest. Common content, contracts lock, journey, ontology,
+    every predecessor pack resource, pack format 0.1.0, and framework
+    distribution 0.1.1 remain byte-identical.
+  - >-
+    The payload lock covers exactly the seventy final pack members other than
+    pack.lock.json and manifest.json. Its lexically sorted records bind path,
+    media type, byte size, raw SHA-256, and Apache-2.0 disposition. The lock's
+    payload digest is SHA-256 over canonical SORTED_UTF8_JSON_V1 bytes of its
+    algorithm, excluded-path set, and exact entry list. It never embeds the
+    final pack, index, archive, lock-file, or manifest-file digest, avoiding a
+    recursive subject.
+  - >-
+    The manifest binds the exact raw pack.lock.json SHA-256, its payload digest
+    and entry count, the clean-room packet lineage IND-001 through IND-WG-005,
+    and the pack-level Apache-2.0 disposition. Its artifact state is
+    NOT_RETAINED and its release-signing state is MISSING_PLANNED with no
+    signature or signer id. It is a deterministic source document eligible to
+    become an offline signing subject after merge; it is not a signed release,
+    retained artifact, publication, deployment, runtime observation,
+    assurance result, cross-repository conformance result, or tenant
+    acceptance.
+deliverables:
+  - >-
+    Add exactly five synthetic end-to-end source-contract scenarios named
+    minimal-arm64, minimal-amd64, regulated-openshift, silo, and air-gap. Each
+    binds by exact relative path and raw SHA-256 one accepted business answer
+    fixture, the PASS data-readiness fixture, one governance decision fixture,
+    its provider-demand fixture, and its golden-output envelope. The regulated
+    OpenShift scenario uses ready-reversible-write; the other four use
+    ready-read-only. Each expected outcome is SOURCE_CONTRACT_READY and carries
+    an exact evidence boundary with source true and candidate, CI, merge,
+    artifact, publication, deployment, runtime, assurance,
+    crossRepositoryConformance, and tenantAcceptance false.
+  - >-
+    Add one closed tamper-vector catalog with exactly five in-memory mutations:
+    CONTENT_BYTES_CHANGED, MEMBER_MISSING, UNDECLARED_MEMBER,
+    LOCK_PAYLOAD_DIGEST_CHANGED, and MANIFEST_LOCK_BINDING_CHANGED. Each vector
+    names one exact target and one stable denial reason. Tests and the packet
+    handler must prove all five deny deterministically without modifying the
+    repository pack.
+  - >-
+    Add scripts/build_pack_manifest.py as a deterministic, network-free library
+    for constructing and validating the lock and manifest in memory. It reads
+    regular pack files without links, uses the framework's media-type and
+    canonical-JSON rules, compares generated bytes with the committed lock and
+    manifest, and exposes fail-closed in-memory mutation validation. It does not
+    write, sign, retain, publish, deploy, fetch, resolve, or execute pack data.
+  - >-
+    Register only the unique certification-fixtures Make target with exact
+    PACK=white-goods and direct argv to ci/handlers/ind_wg_005.py. Update the
+    descriptor-inventory regression without changing Makefile or the
+    dispatcher. Update predecessor handlers/tests only for sector version,
+    exact file/resource inventory, archive name, packet output version, and
+    cumulative successor dispatch; preserve every predecessor content byte,
+    decision, digest, and validation contract.
+  - >-
+    The packet handler validates the exact predecessor binding, scenario
+    closure, raw referenced digests, source-only evidence boundaries, exact
+    70-entry payload lock, exact manifest binding, five stable tamper denials,
+    two-build canonical-index and fixed-epoch archive identity, and false
+    retained-artifact/publication/runtime/assurance/tenant states. It emits the
+    computed 0.5.0 pack, index, archive, payload-lock, and manifest digests only
+    as ephemeral command evidence.
+excluded:
+  - >-
+    Warm checkout access; copied reference bytes; executable pack content;
+    archive or signature retention; private keys; key generation; signing;
+    signature verification; release admission; publication; upload; registry
+    push; deployment; live campaign execution; cloud provisioning; hosted
+    runners; paid or metered services; API keys; credentials; secrets; remote
+    reads; external telemetry; runtime downloads; mutable references; legal or
+    regulatory conclusions; cross-repository conformance; runtime evidence;
+    assurance evidence; or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["make","data-readiness","PACK=white-goods"],["make","governance-integrations","PACK=white-goods"],["make","provider-profiles","PACK=white-goods"],["make","certification-fixtures","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py","tests/white_goods/test_data_readiness.py","tests/white_goods/test_governance.py","tests/white_goods/test_profiles.py","tests/white_goods/test_e2e_fixtures.py","tests/framework/test_dispatch.py"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Stable pack lock and archive digest.", "Tampered, missing, and extra fixture denial report."]
-rollback: Revert the unreleased certification fixture set without changing earlier pack semantics.
+expectedEvidence:
+  - The exact merged 0.4.0 predecessor commit, raw pack file, computed pack/index/archive digests, 64-file/61-resource inventory, and framework wheel match immutable packet bindings before any successor validation.
+  - Exactly five named source-contract scenarios and one five-case tamper catalog are present; every referenced path is declared by the pack, every raw digest matches, scenario/profile identities are one-to-one, and governance posture selection is exact.
+  - The lock has exactly seventy lexical records and excludes only pack.lock.json and manifest.json. Every record's path, media type, byte size, raw SHA-256, and Apache-2.0 disposition match current bytes, while the canonical payload digest reconstructs twice identically.
+  - The unsigned manifest reconstructs twice identically and binds the exact committed lock bytes, payload digest, entry count, source lineage, license disposition, and missing-planned signing state. It contains no signature, signer, retained artifact, archive digest, release, publication, deployment, runtime, assurance, conformance, or tenant claim.
+  - Content-byte, missing-member, undeclared-member, payload-digest, and manifest-lock-binding mutations each produce their exact stable denial reason and never rewrite the pack.
+  - Two canonical indexes and fixed-epoch archives of white-goods 0.5.0 are byte-identical and temporary outputs are removed; common.foundation 1.0.0, framework 0.1.1, and every predecessor pack resource remain unchanged.
+  - Dispatcher inventory includes pack, data-readiness, governance-integrations, provider-profiles, and certification-fixtures with no duplicate target, undeclared variable, shell transport, ambiguous handler, or predecessor regression.
+  - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, cross-repository conformance, and tenant acceptance remain separate evidence states; all post-source and post-merge states remain false or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased white-goods 0.5.0 certification slice and restore exact IND-WG-004 commit 3814e642c8c8eb9f9bf77f230930eeff209de565 and pack 0.4.0; retain common.foundation 1.0.0, framework 0.1.1, predecessor evidence, and every downstream release, runtime, assurance, conformance, or tenant record unchanged.
