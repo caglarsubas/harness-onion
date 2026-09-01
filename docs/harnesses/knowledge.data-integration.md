@@ -54,20 +54,48 @@ implementation cannot access, copy, adapt, translate, or derive code from a
 warm checkout. HMAC production signing, fused state models, and the old
 canonical namespace are not retained.
 
+### KN-DATA-001 implementation boundary
+
+The first data-integration packet implements only declaration/validation,
+fenced leases, bounded read-plan execution through injected ports, strict local
+decoding, and immutable staged-batch metadata. Public source definitions contain
+digest references for endpoints, credentials, network policy, active domain,
+mapping, schema, and owners; raw locators, paths, URLs, SQL, topics, connection
+strings, Secret names/keys/values, and payloads are forbidden. Endpoint and
+secret grants are already verified trust inputs and are never discovered,
+signed, or verified by the knowledge plane.
+
+FILE, HTTP, PostgreSQL, and EVENT are contract adapters, not bundled drivers.
+The core opens no path/socket/database/broker and performs no DNS or credential
+operation. Tests inject bounded provider observations. FILE rejects traversal,
+symlinks, devices, and archives; HTTP rejects redirects, userinfo, metadata
+targets, cross-authority pagination, and unsafe request features; PostgreSQL
+accepts only a grant-pinned statement id/digest and read-only prepared execution;
+EVENT accepts only a grant-pinned topic/partition and never auto-commits.
+
+KN-DATA-001 source history stops at `VALID` or `SAMPLED`, and its batch history
+stops at `STAGED`. `KN-DATA-002` exclusively owns readiness thresholds and
+PASS/WARN/FAIL, owner approval, activation, committed batches, checkpoint
+advancement, retry/dead-letter, provenance, and quality evidence. A staged batch
+therefore cannot be treated as accepted input, deployment/runtime evidence, or
+tenant acceptance.
+
 ## Configuration and runtime boundaries
 
 ```yaml
 source:
   id: string
   connectorProvider: string
-  endpointRef: string
-  credentialSecretRef: {name: string, keyMapping: {}}
+  endpointRefDigest: sha256:...
+  credentialRefDigest: sha256:... | null
+  networkPolicyDigest: sha256:...
   classification: public | internal | confidential | restricted
   residency: [string]
-  owner: subject-id
+  ownerDigest: sha256:...
   accessMode: read-only
 schema:
   expectedSchemaDigest: sha256:...
+  activeDomainVersionDigest: sha256:...
   domainMappingDigest: sha256:...
 ingestion:
   mode: snapshot | incremental | stream
