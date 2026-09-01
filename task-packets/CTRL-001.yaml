@@ -255,21 +255,8 @@ excluded:
     service; API key; remote telemetry; image/chart execution; deployment;
     production/runtime/security/assurance evidence; or tenant acceptance.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands:
-  - ["make","bootstrap-e2e"]
-  - ["make","zero-bill"]
-offlineExecution:
-  wrapperArgv: ["./ci/verify-offline.sh"]
-  packetPathEnvironment: HARNESS_TASK_PACKET
-  packetPathMode: HASH_PINNED_READ_ONCE_NO_CHILD_PATH
-  commandTransport: ARGV_ARRAY_V1
-  isolation: OS_ENFORCED_DENY_ALL_OUTBOUND
-  sessionScope: SINGLE_PROCESS_TREE
-  prefetchOutsideSession: false
-  offlineEnvironment:
-    UV_OFFLINE: "1"
-    UV_FROZEN: "1"
-    UV_NO_SYNC: "1"
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - Exact empty base, SDK-002 telemetry sources, IND-001 common guidance, MET-003 zero-bill artifacts, Node/npm/Next/React/TypeScript/Prisma/AJV/Vitest closure, CPython/uv closure, and packet-local lock match before behavior tests run.
   - Offline OIDC vectors cover valid asymmetric admission plus malformed, duplicate, oversized, ambiguous-audience, wrong issuer/audience/tenant/nonce/key/algorithm, early, expired, excessive-lifetime, replayed, and forged tokens with stable bounded denials and no sensitive material in logs/errors/state/telemetry.
