@@ -248,20 +248,27 @@ and ancestor assertions, and checks every foundation-tree path against KN-001's
 original allowed set; all other foundation security checks remain closed.
 
 The packet owns one additional cumulative-CI correction in
-`ci/handlers/prefetch.py`. The zero-bill workflow deliberately keeps the pinned
-checkout at `fetch-depth: 2`; once a dependent packet exists, that checkout
-contains the KN-001 foundation parent but need not contain the older empty
-bootstrap object. The handler therefore retains the empty commit only in its
-immutable predecessor-provenance lock and uses exact merged KN-001 commit
-`672e73e...` for its two Git object/ancestor checks. No lock, dependency,
-source-presence, Python, offline, runner, checkout-depth, or billing rule changes.
+`ci/handlers/prefetch.py`. At KN-DOM-001 time, the pinned checkout used
+`fetch-depth: 2`; that checkout contained the KN-001 foundation parent but not
+the older empty bootstrap object. The handler therefore retains the empty commit
+only in its immutable predecessor-provenance lock and uses exact merged KN-001
+commit `672e73e...` for its two Git object/ancestor checks. No lock, dependency,
+source-presence, Python, offline, runner, or billing rule changes.
 
-`KN-DATA-001` adds only `ci/targets/kn-data-001.json`. Its packet declares the
+`KN-DATA-001` adds `ci/targets/kn-data-001.json`. Its packet declares the
 already-owned `make prefetch` entry so the KN-001 and KN-DOM handlers execute
 cumulatively before `connector-parity`, `connector-contract`, and `security`.
 The new connector targets dispatch only direct Python argv into
 `tests/connectors`; the packet does not edit Makefile, either generic transport,
 or any predecessor descriptor/handler.
+
+Because KN-DATA-001 is the third cumulative product commit, it also changes only
+the pinned credential-free checkout's `fetch-depth` from `2` to `0`. Otherwise
+the exact KN-001 foundation object required by unchanged prefetch and security
+assertions is absent. Full public history is durable for later packets and adds
+no credential persistence, hosted runner, artifact/cache, external action,
+billable broker, cloud resource, or runtime download; every other workflow byte
+and the launcher-only execution boundary remain unchanged.
 
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
