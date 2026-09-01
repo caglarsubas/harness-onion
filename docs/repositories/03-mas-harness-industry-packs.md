@@ -195,7 +195,9 @@ path beneath a distributable pack root is closed data inventory and executable
 suffixes fail closed. The
 packet-owned handler verifies dependency versions, closed local SHACL settings,
 pack/index/archive determinism, answer-vector decisions, and false downstream
-evidence flags without retaining an artifact.
+evidence flags without retaining an artifact. Registering the packet-owned Make
+descriptor also updates the existing closed descriptor-inventory regression
+test; the dispatcher and bootstrap-owned Makefile remain unchanged.
 
 Acceptance proves: the journey works without an LLM; invalid/executable rules fail closed; missing business owner or data evidence blocks approval; identical answers produce identical pack requirements; all fixtures are synthetic and license-clean; and white-goods minimal/regulated/air-gap demands compile to expected digests.
 
