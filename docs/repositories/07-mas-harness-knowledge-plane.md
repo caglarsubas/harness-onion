@@ -186,11 +186,13 @@ future transport behavior beyond the declared closed validation contract.
 
 The packet also corrects one KN-001 test-range defect in
 `tests/common/test_security_sql_delivery.py`: the foundation ownership assertion
-must compare the empty base to exact merged KN-001 commit `672e73e...`, not to
-the current HEAD. Otherwise every valid later-packet file is falsely treated as
-a KN-001 file. The amendment changes only the comparison endpoint and adds an
-ancestor assertion; KN-001's original allowed set and all other foundation
-security checks remain closed.
+must enumerate the complete tree of exact merged KN-001 commit `672e73e...`, not
+diff the empty base against the current HEAD. Otherwise every valid later-packet
+file is falsely treated as a KN-001 file, while the pinned two-commit cumulative
+checkout does not carry the older empty object needed by such a diff. The
+amendment changes only the Git enumeration, retains the exact foundation object
+and ancestor assertions, and checks every foundation-tree path against KN-001's
+original allowed set; all other foundation security checks remain closed.
 
 The packet owns one additional cumulative-CI correction in
 `ci/handlers/prefetch.py`. The zero-bill workflow deliberately keeps the pinned
@@ -251,7 +253,7 @@ while denying empty phases, malformed argv, shell/environment launchers,
 recursive verification, forbidden offline tokens, execution-contract drift,
 packet mutation, missing isolation identity, and leaked authority paths.
 The cumulative security target additionally proves the exact KN-001 commit is
-an ancestor and its own base-to-foundation paths remain within the original
+an ancestor and every path in its exact tree remains within the original
 bootstrap boundary, independently of KN-DOM's packet-local path validation.
 The cumulative prefetch target likewise proves that exact foundation object is
 available and ancestral in the pinned two-commit checkout while preserving the

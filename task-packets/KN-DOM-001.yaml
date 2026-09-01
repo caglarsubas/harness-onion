@@ -32,8 +32,9 @@ contracts:
     KN-001 acceptance-command equality check with closed generic ARGV_ARRAY_V1
     validation while preserving every digest, isolation, environment, canary,
     shell-denial, prefetch, and offline-token control. It may also bind the
-    inherited KN-001 changed-path test to the exact KN-001 merge commit instead
-    of HEAD so cumulative security checks do not misclassify later packet paths.
+    inherited KN-001 changed-path test to enumerate the exact KN-001 merge
+    commit tree instead of diffing against HEAD so cumulative security checks
+    do not misclassify later packet paths or require an absent bootstrap object.
     Finally, because the pinned fetch-depth-two workflow no longer transports
     the empty bootstrap object after a dependent commit exists, it may replace
     only prefetch.py's empty-base object and ancestry checks with checks for the
@@ -264,14 +265,18 @@ deliverables:
     handler owned by KN-001.
   - >-
     The inherited tests/common/test_security_sql_delivery.py changed-path check
-    currently diffs the empty repository base against HEAD, so every legitimate
-    later-packet path is falsely evaluated as KN-001-owned. KN-DOM-001 may change
-    only that test's comparison endpoint to exact merged KN-001 commit
-    672e73e512113fbf2bb96c222b2ffea7f58e79ed and assert that commit remains an
-    ancestor of HEAD. The original KN-001 allowed-path set and every other
-    foundation security assertion remain unchanged. This correction grants no
-    KN-DOM implementation ownership under tests/common and does not weaken
-    current-packet allowedPaths, cumulative dispatch, or zero-bill scanning.
+    originally diffed the empty repository base against HEAD, so every legitimate
+    later-packet path was falsely evaluated as KN-001-owned. The pinned
+    fetch-depth-two cumulative checkout also does not transport that empty
+    object. KN-DOM-001 may replace only this Git enumeration with
+    `git ls-tree -r --name-only` over exact merged KN-001 commit
+    672e73e512113fbf2bb96c222b2ffea7f58e79ed, after proving that commit exists
+    and remains an ancestor of HEAD. The exact foundation tree must remain
+    within the original KN-001 allowed-path set. The original allowed set and
+    every other foundation security assertion remain unchanged. This correction
+    grants no KN-DOM implementation ownership under tests/common and does not
+    weaken current-packet allowedPaths, cumulative dispatch, or zero-bill
+    scanning.
   - >-
     The inherited ci/handlers/prefetch.py requires the empty bootstrap commit to
     exist in the checkout and be an ancestor of HEAD. The credential-free
