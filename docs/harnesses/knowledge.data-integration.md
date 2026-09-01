@@ -85,6 +85,9 @@ credential-free checkout with full public Git history so exact KN-001 and
 KN-DOM ancestor objects remain available to unchanged predecessor checks. This
 does not authorize hosted runners, credential persistence, artifacts/caches,
 external actions, runtime downloads, or any billable service.
+The inherited common workflow assertion and zero-bill scanner synchronize only
+their required checkout-depth literal to this full-history contract; every
+other zero-bill and two-step-workflow denial remains unchanged.
 
 ## Configuration and runtime boundaries
 
