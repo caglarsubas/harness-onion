@@ -1,16 +1,40 @@
 id: SDK-007
 repository: mas-harness-sdks
 branch: codex/sdk-007-prometa-compat
-objective: Publish a separate planeon-prometa-compat distribution that preserves approved legacy imports through the v1 line.
+objective: Implement a clean-room, separately installable planeon-prometa-compat migration distribution with a closed five-module alias surface, exact canonical-SDK dependency, deterministic offline wheel, and explicit v2 removal boundary.
 predecessors: [SDK-005, SDK-006]
-allowedPaths: ["python/compat/prometa/", "python/tests/compat/", "python/compat-pyproject.toml", "docs/migrations/prometa.md", "docs/compatibility-matrix.md", "ci/targets/sdk-007.json"]
+allowedPaths:
+  - python/compat/prometa/
+  - python/tests/compat/
+  - python/compat-pyproject.toml
+  - docs/migrations/prometa.md
+  - docs/compatibility-matrix.md
+  - ci/targets/sdk-007.json
+  - tests/generated/test_make_dispatch.py
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes planeon_harness SDK API v1", "Produces optional legacy `prometa` import surface v1"]
-deliverables: ["Separate compatibility wheel, explicit re-exports, warnings, support matrix, and v2 removal notice."]
-excluded: ["New platform services depending on the compatibility package or preserving paid-provider modules."]
+contracts:
+  - Consumes only the installed planeon-harness-sdk 0.1.0 public Python surfaces; the compatibility distribution declares the exact dependency planeon-harness-sdk==0.1.0 and never vendors, copies, patches, or imports canonical private modules.
+  - Produces distribution planeon-prometa-compat 0.1.0 with exactly the import mappings prometa -> planeon_harness, prometa.guardrail -> planeon_harness.guardrail, prometa.integrations -> planeon_harness.integrations, prometa.protocols -> planeon_harness.protocols, and prometa.runtime -> planeon_harness.runtime.
+  - These mappings are the complete newly approved migration surface. They do not claim observed compatibility with, or require access to, a warm-start repository or any historical private implementation.
+deliverables:
+  - >-
+    python/compat-pyproject.toml is the closed build manifest: empty build requirements, distribution/version planeon-prometa-compat 0.1.0, Python >=3.10, Apache-2.0, and sole dependency planeon-harness-sdk==0.1.0. It records canonical import planeon_harness, compatibility import prometa, removal version 2.0.0, and network default disabled; the deterministic backend rejects semantic drift from these constants.
+  - The compatibility source contains exactly prometa/__init__.py, guardrail.py, integrations.py, protocols.py, and runtime.py as importable package modules. Each module re-exports every and only the target module's public __all__ names with object identity preserved; the root also exposes canonical __version__. No compatibility symbol implements behavior, owns state, wraps calls, catches errors, performs discovery, or changes optional-integration loading.
+  - First import of the prometa package emits one DeprecationWarning with the exact content-free message "The prometa import is deprecated; use planeon_harness. It is supported only through planeon-harness-sdk v1 and will be removed in v2." Submodule imports add no warnings. Unknown compatibility modules and attributes remain absent.
+  - A dependency-free backend under python/compat/prometa builds only planeon_prometa_compat-0.1.0-py3-none-any.whl with fixed timestamps, modes, ordering, metadata, license, and RECORD hashes. Its default verification builds twice in isolated temporary directories, requires byte identity, emits only the wheel SHA-256 plus published/runtimeEvidence/tenantAcceptance false, and leaves no repository artifact. An explicit caller-owned output directory may receive one verified wheel for later release assembly.
+  - Compatibility tests import the built wheel in a fresh subprocess alongside the canonical source, assert the five mappings, exact __all__ and object identity, one warning, absent unknown modules, no optional-framework import on prometa.integrations, closed wheel members/METADATA/RECORD, and the exact dependency direction. A separate subprocess blocks every prometa import while importing canonical planeon_harness surfaces to prove the canonical SDK does not depend on compatibility.
+  - SDK-007 owns compat-vectors and a cumulative build-reproducible handler in ci/targets/sdk-007.json. compat-vectors runs the contract lock, compatibility tests, closed dispatch inventory, PORTING NO_AUTHORIZATION, and zero-bill scan; build-reproducible runs the compatibility two-build verifier after the predecessor package builders. The dispatch inventory adds compat-vectors without changing Makefile or ci/run_make_target.py.
+  - docs/migrations/prometa.md lists only the five mappings, exact replacement imports, warning, exact-version installation rule, rollback, and v2 removal. docs/compatibility-matrix.md records current 0.1.0-to-0.1.0 support, Python >=3.10, offline status, and NOT_CLAIMED cells for unobserved historical APIs, deployment, runtime, assurance, and tenant acceptance. Future pre-v2 releases must update core, compatibility version, exact dependency, tests, and matrix atomically.
+excluded:
+  - Warm-source observation or copying, inferred historical modules, aliases beyond the five approved paths, private canonical imports, paid-provider modules, provider clients, API keys, hosted telemetry, network calls, runtime downloads, plugin discovery, monkey-patching, automatic installation, a compatibility sdist, package publication, or any platform service depending on prometa.
 prefetchCommands: []
 offlineAcceptanceCommands: [["make","compat-vectors"],["make","build-reproducible"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Approved legacy import suite passes.", "Dependency graph proves planeon_harness does not import prometa compatibility."]
-rollback: Withdraw only the optional compatibility wheel while retaining the canonical SDK.
+expectedEvidence:
+  - A wheel-isolated subprocess proves every approved import resolves to the canonical public objects by identity, emits only the fixed package warning, rejects unapproved modules/attributes, and does not import optional frameworks.
+  - Two fixed-epoch compatibility builds are byte-identical; wheel membership, metadata, exact canonical dependency, RECORD hashes, and source/build-manifest constants are closed and synchronized, while no artifact is published or retained by the default verifier.
+  - A compatibility-blocked subprocess imports planeon_harness, guardrail, integrations, protocols, and runtime successfully, proving dependency direction remains compatibility-to-canonical only.
+  - Generated target inventory includes compat-vectors, cumulative direct-argv build dispatch remains closed, generated canonical surfaces remain byte-exact, PORTING remains NO_AUTHORIZATION, and the deny-all-outbound canary passes.
+  - Documentation labels the surface as a newly approved migration alias rather than historical parity and keeps deployment, runtime, assurance, and tenant acceptance unclaimed.
+rollback: Withdraw the optional planeon-prometa-compat wheel and remove its five aliases, tests, descriptor handlers, and two migration documents together without changing or withdrawing the canonical planeon-harness-sdk packages.
