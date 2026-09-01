@@ -70,7 +70,11 @@ telemetry:
   exporters: [local-prometheus, local-jaeger]
 budgets:
   - scope: tenant | profile | route | workflow
+    concurrentTasks: integer
+    taskSeconds: integer
+    retries: integer
     modelCalls: integer
+    modelTokens: integer
     inputTokens: integer
     outputTokens: integer
     toolCalls: integer
@@ -78,6 +82,8 @@ budgets:
     gpuSeconds: integer
     storageBytes: integer
     windowSeconds: integer
+    enforcement: HARD | ADVISORY
+    warningThresholdBasisPoints: integer
 ```
 
 - Secrets: the baseline requires none; local backend credentials, when needed, are tenant-local secret references. External exporter credentials and third-party API keys are schema-rejected.
@@ -102,6 +108,19 @@ Budget states: `AVAILABLE`, `WARNING`, `EXHAUSTED`, `SUSPENDED`, `RESET_PENDING`
 
 Reservation states: `RESERVED → COMMITTED | RELEASED | EXPIRED`.
 
+TRUST-OBS-001 uses fixed UTC windows and atomic committed-plus-reserved
+counters. Reserve idempotency binds tenant, budget digest, scope, operation,
+requested dimensions, and the idempotency-key digest; commit and release have
+separate transition keys. Exact retries return the original result and
+conflicting reuse fails closed. A commit cannot exceed its reservation.
+
+The public ExecutionBudget and BudgetConsumption names and limits remain
+authoritative for `concurrentTasks`, `taskSeconds`, `retries`, `toolCalls`, and
+`modelTokens`. The other dimensions above are packet-local attribution fields,
+not a revision of those public schemas. `ADVISORY` can record overage but cannot
+override a public budget whose enforcement is `REQUIRED` and disposition is
+`BLOCK`.
+
 Emitted:
 
 - `usage.reserved.v1`
@@ -123,6 +142,10 @@ Consumed: task/model/tool/decision completion/failure, installation health, poli
 - Configuration activation is atomic; invalid redaction/exporter policy retains last-known-good config.
 - Service rollback preserves newer usage and budget reservations through compatible migrations.
 - Counter reconciliation reports discrepancies; it never silently resets usage.
+- Retention in TRUST-OBS-001 is non-destructive: it produces cutoff/history
+  digests and `RETENTION_DUE` findings but preserves authoritative usage and
+  audit history. Physical purge requires a later tenant-authorized governance
+  contract and packet.
 
 ## Evidence and readiness gates
 
@@ -138,8 +161,8 @@ Production readiness requires bounded storage/cardinality, redaction, budget cor
 
 ## Profile behavior
 
-- `minimal-local`: one collector, Prometheus/Jaeger, PostgreSQL ledger, short retention.
-- `enterprise`: HA collectors/ledger, explicitly attested tenant-scoped backends, SLOs, and longer policy-bounded retention.
+- `minimal-local`: one source-configured collector, tenant-attested local Prometheus/Jaeger prerequisite, PostgreSQL ledger, and short query-retention policy.
+- `enterprise`: HA collectors/ledger, explicitly attested tenant-scoped backends, SLOs, and longer policy-bounded retention evidence.
 - `airgap-enclave`: all backends local; exporters allowlist contains no external destination; bounded local storage alarms.
 
 ## Tests

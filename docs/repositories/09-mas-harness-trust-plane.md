@@ -132,7 +132,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 2. `TRUST-002-guardrails`: input/output/runtime profiles, streaming evaluation, detector interface, redaction, evidence, and SDK conformance.
 3. `TRUST-GOV-001`: approvals, N-of-M, autonomy, waivers/expiry, exceptions, tamper-evident audit chain, and policy linkage.
 4. `TRUST-REG-001`: module/agent/release registry, certification axes, promotion, deprecation, revocation, and signed release admission.
-5. `TRUST-OBS-001`: OTel Collector/Prometheus/Jaeger offline modules, usage ledger, reservations/budgets, tenant isolation, and retention.
+5. `TRUST-OBS-001`: source-only OTel collector and external Prometheus/Jaeger backend contracts, usage ledger, atomic reservations/budgets, content-free telemetry, tenant isolation, and non-destructive retention evidence.
 6. `TRUST-EVAL-001`: deterministic evaluators, campaigns, trace/evidence ingestion, local-model judge opt-in, calibration, staleness, and reproducibility.
 7. `TRUST-003-resilience-security`: OPA/DB/collector outages, audit buffer exhaustion, forged evidence, waiver expiry, cross-tenant denial, and air-gap startup.
 
@@ -274,6 +274,79 @@ fixtures must not copy SDK-006 vectors and must cover signature/profile
 lifecycle, every SDK outcome, Unicode redaction, UTF-8 bounds, streaming state,
 tenant isolation, atomic failure, evidence closure, content leakage, SQL/Helm
 security, closed dispatch, and zero-bill behavior.
+
+### Coding-ready `TRUST-OBS-001` slice
+
+TRUST-OBS-001 explicitly follows TRUST-002 so its one authorized cumulative
+dispatch-inventory edit is ordered and so the existing SDK wheel/toolchain
+binding is part of its predecessor closure. It retains the dependency-minimal
+repository closure and pins the
+public contracts release at commit
+`2146278a95344cd2a8e22596b2f315b46edffc88`, including the exact
+ExecutionBudget, BudgetConsumption, runtime-common, CloudEvent, and valid-budget
+vector digests named by the task packet. It also pins SDK-002 merge commit
+`92a8ebf8e705eb2bf7a4e5be89edc5e8aa062c08`, its three Python telemetry
+module digests, and the golden span-vector digest. Those three modules are
+byte-identical in the already admitted SDK wheel at SHA-256
+`9b85d01b7079fe27c189d70b7fba46614c3df647d6f44e9270fe4683d7337fa4`.
+No contracts, SDK, or warm-source checkout is mounted during implementation;
+`pyproject.toml` and `uv.lock` are outside the packet boundary and unchanged.
+
+The ledger accepts eleven closed integer dimensions. It preserves the exact
+five public ExecutionBudget dimensions and maxima while adding packet-local
+model-call, input/output-token, CPU/GPU-second, and storage-byte attribution.
+Budgets have one of four scopes, fixed UTC windows, exact HARD or ADVISORY
+enforcement, bounded warning thresholds, and reservation TTLs clipped to their
+window. HARD oversubscription, suspended budgets, state/storage/reconciliation
+failure, clock regression, tenant mismatch, and idempotency conflict deny.
+ADVISORY exhaustion records the discrepancy but cannot override a separately
+required public `REQUIRED`/`BLOCK` ExecutionBudget.
+
+Every reservation has exactly one terminal transition. Reserve idempotency
+binds the complete tenant/budget/scope/operation/request digest; commit and
+release use independent transition idempotency. Successful mutations atomically
+append reservation, transition, usage, aggregate, audit, and outbox state.
+Commit cannot exceed reserved dimensions. Expiry releases capacity through an
+immutable transition. Reconciliation recomputes derived counters and emits a
+finding on mismatch; it never silently repairs authoritative history.
+
+Retention is deliberately non-destructive in this packet. The service computes
+stable cutoffs and `RETENTION_DUE` findings bound to aggregate/history digests,
+but it does not delete, compact, truncate, mutate, or hide usage/audit history.
+A future purge requires a tenant-authorized governance contract and separate
+packet. This resolves the destructive-data boundary without pretending that a
+source-only check proves a production retention job.
+
+Usage routes derive organization and subject through the TRUST-001 OIDC
+boundary. Mutation bodies cannot contain identity, content, credentials,
+pricing, currency, or endpoints; queries are always tenant-filtered. The ASGI
+surface is bounded to 65,536-byte closed JSON and non-echoing stable errors.
+Offline tests cover concurrency, all states/scopes/dimensions, retry conflicts,
+window edges, expiry, atomic failure, aggregate reconciliation, retention,
+dependency readiness, cross-tenant denial, and content leakage.
+
+The OTel path contains only a closed source configuration contract and
+install-inert example. Prometheus and Jaeger paths are tenant-attestation and
+content-free query contracts for catalog entry `external.otel-backend`; they
+do not package or install those external prerequisites. URL literals, public
+hosts, remote write, external exporters, payload capture, arbitrary labels,
+inline secrets, API keys, mutable images, and runtime downloads fail source
+validation. Buffer count/byte/age and cardinality bounds are mandatory;
+audit-required saturation degrades readiness instead of dropping evidence.
+
+The PostgreSQL migration is append-only, tenant-RLS enforced, role-separated,
+and idempotency constrained. The usage-ledger chart is disabled and digest-only
+until existing PostgreSQL/OIDC/policy/collector references are supplied; it
+provisions no database, backend, PVC, Secret, key, credential, namespace, or
+cloud resource. PostgreSQL, actual collector/backends, images, Kubernetes,
+OpenShift, deployment, runtime, live security, assurance, and tenant acceptance
+remain `NOT_RUN_ENV_UNAVAILABLE` or pending after offline acceptance.
+
+Acceptance is exactly `make usage-vectors`, `make observability-smoke`, `make
+security`, and `make zero-bill` through the signed hash-pinned deny-all-outbound
+launcher. The packet adds only its descriptor and packet-owned tests/code. Its
+single predecessor-owned test edit extends the generated target/owner inventory
+while retaining every negative dispatch and no-porting assertion.
 
 ## Release and rollback
 
