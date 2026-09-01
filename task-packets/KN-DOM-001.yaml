@@ -1,18 +1,276 @@
 id: KN-DOM-001
 repository: mas-harness-knowledge-plane
 branch: codex/kn-dom-001-semantic-service
-objective: Implement versioned ontology, SHACL validation, semantic mappings, domain evidence, and white-goods ontology parity.
+objective: Implement a clean-room, tenant-isolated domain service with immutable ontology versions, bounded local RDF/SHACL validation, digest-only semantic mappings, approval-gated atomic activation and rollback, metadata-only evidence/events, and independently authored white-goods parity vectors.
 predecessors: [KN-001, IND-WG-001]
 allowedPaths: ["services/domain-service/", "src/planeon_knowledge/domain/", "migrations/domain/", "tests/domain/", "fixtures/domain/", "deploy/helm/domain-service/", "ci/targets/kn-dom-001.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/reference_labs/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/semantic.py","reference_labs/white_goods/README.md","reference_labs/white_goods/__init__.py","reference_labs/white_goods/action-capabilities.json","reference_labs/white_goods/airgap-images.lock.json","reference_labs/white_goods/bundle.py","reference_labs/white_goods/certify.py","reference_labs/white_goods/certify_phase2.py","reference_labs/white_goods/data/api/service-api-fixtures.json","reference_labs/white_goods/data/documents/refrigerator-e05-manual.md","reference_labs/white_goods/data/documents/untrusted-field-note.md","reference_labs/white_goods/data/documents/washing-machine-e21-manual.md","reference_labs/white_goods/data/documents/washing-machine-pump-bulletin.md","reference_labs/white_goods/data/events/telemetry.jsonl","reference_labs/white_goods/data/master/customers.csv","reference_labs/white_goods/data/master/installed_products.csv","reference_labs/white_goods/data/master/products.csv","reference_labs/white_goods/data/quality/quality_inspections.csv","reference_labs/white_goods/data/service/service_orders.csv","reference_labs/white_goods/dataset.lock.json","reference_labs/white_goods/docker-compose.yml","reference_labs/white_goods/freshness-slos.json","reference_labs/white_goods/gqm-plan.json","reference_labs/white_goods/lab.py","reference_labs/white_goods/live/HarnessAcceptance.Containerfile","reference_labs/white_goods/live/README.md","reference_labs/white_goods/live/ServiceApi.Containerfile","reference_labs/white_goods/live/__init__.py","reference_labs/white_goods/live/compose.template.yaml","reference_labs/white_goods/live/connectors.py","reference_labs/white_goods/live/cross_plane_lab.py","reference_labs/white_goods/live/harness-requirements.txt","reference_labs/white_goods/live/harness_probe.py","reference_labs/white_goods/live/harness_runtime_lab.py","reference_labs/white_goods/live/local_lab.py","reference_labs/white_goods/live/model_plane_probe.py","reference_labs/white_goods/live/postgresql-seed.sql","reference_labs/white_goods/live/service_api.py","reference_labs/white_goods/pack-manifest.json","reference_labs/white_goods/phase2-gqm-plan.json","reference_labs/white_goods/phase2.py","reference_labs/white_goods/phase4.py","reference_labs/white_goods/phase5.py","reference_labs/white_goods/phase6_worker.py","reference_labs/white_goods/promotion-readiness.example.json","reference_labs/white_goods/reference-lab-manifest.json","reference_labs/white_goods/runtime/Containerfile","reference_labs/white_goods/runtime/README.md","reference_labs/white_goods/runtime/mirroring/imageset-config.template.yaml","reference_labs/white_goods/runtime/openshift/config-map.yaml","reference_labs/white_goods/runtime/openshift/deployment.template.yaml","reference_labs/white_goods/runtime/openshift/network-policy-allow-internal.yaml","reference_labs/white_goods/runtime/openshift/network-policy.yaml","reference_labs/white_goods/runtime/openshift/service-account.yaml","reference_labs/white_goods/runtime/openshift/service.yaml","reference_labs/white_goods/runtime/protocol-profiles.json","reference_labs/white_goods/runtime/wheelhouse-requirements.txt","reference_labs/white_goods/runtime_bundle.py","reference_labs/white_goods/semantic-mappings.json","reference_labs/white_goods/technology/opensearch/index-mapping.json","reference_labs/white_goods/technology/postgresql/schema.sql","reference_labs/white_goods/technology/redpanda/topic-contract.json","reference_labs/white_goods/technology/service-api/openapi.yaml","tests/reference_labs/__init__.py","tests/reference_labs/test_cold_chain_phase3.py","tests/reference_labs/test_local_cross_plane_lab.py","tests/reference_labs/test_local_harness_runtime_lab.py","tests/reference_labs/test_local_source_lab.py","tests/reference_labs/test_phase4_actions.py","tests/reference_labs/test_phase5_runtime.py","tests/reference_labs/test_phase6_5_integration_spine.py","tests/reference_labs/test_phase6_runtime.py","tests/reference_labs/test_phase7_readiness.py","tests/reference_labs/test_runtime_bundle.py","tests/reference_labs/test_white_goods_lab.py","tests/reference_labs/test_white_goods_phase2.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes domain-semantic and white-goods pack contracts v1alpha1", "Produces domain service API and evidence v1"]
-deliverables: ["Immutable ontology versions, RDFLib storage, pySHACL validation, mapping lifecycle, provenance links, domain evidence, and tenant isolation."]
-excluded: ["Retrieval indexes, memory entries, runtime state, or automatic ontology invention."]
-prefetchCommands: []
+contracts:
+  - >-
+    Starts only from merged mas-harness-knowledge-plane KN-001 commit
+    672e73e512113fbf2bb96c222b2ffea7f58e79ed. The exact raw SHA-256 locks are
+    canonical.py 90f000f5a09a12c3cc2f55b659cd1c563751f268fc4173756563b2d6cf46eb7f,
+    models.py c52af1605f0e7c5ee0a0b6734cebe4cf1c46e32db6318fadef733a8e722792f6,
+    health.py ffa409fb9acfb85021abb4d9874ad983206e3433cd817106ab13c2103f611e95,
+    asgi.py a7eef860c0a2e7afe7a8a960f2989c5c68b7fd0c5a2a94e6d2d07534701d703b,
+    services.py 24cc9d433600d48758ff0810d20d661a24b0f771e0b0533583b17d82d775e319,
+    domain foundation SQL
+    9a5af7f8b78370ff8a59f7bb1b4303bd7bcf58b603bb198fca3cf80a390311f2,
+    root Make dispatcher
+    29e8cb70e71a3d03f9f50108e28f99d890da6090a680c8de32d6bdcd947be7ea,
+    packet argv transport
+    43d39673f9ba46d3fb450579fa5d40a78c9e7345728bfc41bb3f06e22ec01cab,
+    and zero-bill scanner
+    00d5048b69373809d4106a1d5883d8d26c3e5fa8448f7d52e7f216202b4bbc20.
+    KN-DOM-001 does not edit the root Makefile, root dispatcher, KN-001 handler,
+    common kernel, root pyproject/uv.lock, or inert PORTING ledger.
+  - >-
+    Consumes only the public IND-WG-001 product boundary at exact
+    mas-harness-industry-packs commit
+    714e311b550798c230d440c869d36f7ad5a857b4. Raw SHA-256 locks are ontology
+    ff512027f26c2a61522086d7c0ea854194d1631325dcd1007ed3803bb4262310,
+    SHACL aaca9fb6b50e205aee3d93ab0ec520fa4ef6482652b27a1b15f5b765b65410b0,
+    accepted answers
+    b76421c1f0cfa258c97f159a48f0f8f53782ec6415384b9fed3acc57119da052,
+    valid graph e8b5d7244788360432f119361db7f07ad40bd8ac8a7848e7f70f7bd7d94b3b67,
+    invalid graph f659112808bf9ccd9dd5a4efc7425a30dfeb61cde27c7f8644760918611431e2,
+    pack e20d3b6723698a298b93a8dc45743b6644d7e443e1c4fd0450a2c344a9238bf1,
+    contracts lock
+    81d7470e28b452cbf8de2e4903b47b5335709b09cf6375f78481057973d75c91,
+    pyproject 331f31f6fbe122a860325e23256b95f2cdbfcffd82e3f95e3a0d99fde332b1ba,
+    and uv.lock
+    12ab191dedad208ea14f88a388006c395b63fbc4e9f23ea6583d802a30653e8f.
+    Acceptance receives no predecessor path. fixtures/domain contains new
+    synthetic compatibility vectors authored in this repository and a lock of
+    these public artifacts, never copied pack files or warm-source material.
+  - >-
+    The domain-service dependency unit requires exact CPython 3.12.14 and the
+    open-source runtime closure html5rdf==1.2.1 SHA-256
+    1f519121bc366af3e485310dc8041d2e86e5173c1a320fac3dc9d2604069b83e,
+    owlrl==7.6.2
+    83347bf7f133979e87b2b18695d51d25510b99cec3f6919b5df05d4fbf058ae0,
+    packaging==26.3
+    d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c,
+    prettytable==3.18.0
+    b3346e0e6f79180833aebaac088ae926340586cf6d7d991b9eb125b65f72313a,
+    pyparsing==3.3.2
+    850ba148bd908d7e2411587e247a1e4f0327839c40e2e5e6d05a007ecc69911d,
+    pyshacl==0.40.1
+    27dd58c8ddfa103303b4a8c40b2c666332ffc912dbcd3137f7adc7b7bc5e6bda,
+    rdflib==7.6.0
+    30c0a3ebf4c0e09215f066be7246794b6492e054e782d7ac2a34c9f70a15e0dd,
+    and wcwidth==0.8.3
+    d5b73dba6158a595ec9370350e7f2637bcac8d6c5e4fde34f30fcffb6103a5e4.
+    The external root-owned runner verifies exact toolchain inventory SHA-256
+    b1db59b19689e240d1224f0a116f19072a10f0cc8baa5ba34a30cdd37feb896a,
+    wheelhouse inventory
+    79f00f38eca25736612634e31b0a3909c1f34af7ffd18bafbc9292a3c6691957,
+    and license inventory
+    d4875eb83cfca4774fd0c84f91647bda759cc32cd0beb75191600c68894f7951
+    before checked-out code runs. No package resolution or install occurs in
+    prefetch or acceptance.
+  - >-
+    Produces planeon.knowledge.domain/v1 DomainDefinition, DomainVersion,
+    DomainVersionRevision, ValidationReport, SemanticMapping,
+    MappingRevision, ApprovalAttestation, CompatibilityReport,
+    DomainEvidence, and DomainEvent metadata contracts plus the closed
+    /knowledge/v1/domains API. Organization and subject are always injected as
+    KN-001 TenantIdentity; product bodies, headers, queries, graphs, shapes,
+    mappings, fixtures, and package metadata never supply tenant identity.
+deliverables:
+  - >-
+    Keep the KN-001 root project and root uv.lock dependency-free. Add a
+    separately installable services/domain-service dependency manifest and
+    dependencies.lock.json containing exactly the eight-package semantic
+    runtime closure and wheel/license hashes above. The service performs a
+    startup version check and reports NOT_READY on a missing or mismatched
+    engine. The externally supplied immutable base image must already contain
+    that closure; the Containerfile performs no install, fetch, or build in this
+    packet. Jena is a literal PROVIDER_UNAVAILABLE guidance value and introduces
+    no image, endpoint, credential, code path, or fallback.
+  - >-
+    DomainDefinition contains organizationId, domainId, displayName,
+    defaultLanguage, supportedLanguages, businessOwnerIds, dataOwnerIds,
+    compatibilityMode BACKWARD or STRICT, createdAt, and createdBySubjectId.
+    DomainVersion immutable metadata contains domainId, semantic version,
+    packageDigest, ontologyDigest, shapesDigest, importManifestDigest,
+    licenseExpression Apache-2.0, ownersDigest, createdAt, and creator. Graph
+    bytes, shapes, mappings, labels, business facts, approval bodies, tokens,
+    and source payloads are never written to events, errors, logs, SQL evidence,
+    or mocks; validation material is supplied by an injected exact-digest local
+    provider and is not retained by the service core.
+  - >-
+    Domain version states are DRAFT, VALIDATING, VALID, INVALID,
+    AWAITING_APPROVAL, ACTIVE, REJECTED, SUPERSEDED, and RETIRED. The only normal
+    transitions are DRAFT->VALIDATING, VALIDATING->VALID|INVALID,
+    VALID->AWAITING_APPROVAL, AWAITING_APPROVAL->REJECTED, and an approved
+    AWAITING_APPROVAL->ACTIVE. Atomic activation appends the new ACTIVE revision,
+    changes the one active pointer, and appends SUPERSEDED for the prior active
+    version in one transaction. A previously approved compatible SUPERSEDED
+    version may be reactivated as rollback, atomically superseding the current
+    active; no version/package/report/evidence is mutated or deleted. RETIRED is
+    terminal and cannot be activated. Duplicate commands with the same
+    organization/idempotency key and request digest return the prior result;
+    reuse with a different digest returns IDEMPOTENCY_CONFLICT.
+  - >-
+    ApprovalAttestation is an already-verified transport input containing
+    approvalId, organizationId, domainId, version, packageDigest, decision
+    APPROVED or REJECTED, decidedAt, approverSubjectId, and evidenceDigest. Its
+    organization/domain/version/package must match immutable metadata and its
+    evidence digest is persisted. This repository never signs, verifies a
+    tenant key, implements an approval workflow, accepts self-approval, or
+    treats a policy allow, fixture, test, or generated output as owner approval.
+    Every read and mutation first requires an injected fail-closed policy permit
+    bound to organization, subject, exact action, resource digest, expiry, and
+    allowed=true; transport/mismatch/expiry/deny prevents state access.
+  - >-
+    Local semantic validation accepts only bounded Turtle or JSON-LD bytes from
+    the injected digest provider: maximum 2 MiB per document, 4 MiB total,
+    50000 data triples, 20000 shape triples, 128 findings, and 30 seconds by an
+    injected monotonic deadline. JSON-LD @context is inline object/array only;
+    string contexts and @import are rejected before RDFLib. Turtle/JSON-LD
+    graphs may use only urn:planeon:<closed-domain>: identifiers and the exact
+    non-dereferenced RDF, RDFS, XSD, OWL, and SHACL W3C namespace prefixes.
+    file, ftp, data, arbitrary http/https, relative traversal, owl:imports,
+    external contexts, RDF/XML/entity expansion, archives, scripts, executable
+    literals, and unknown media types fail before validation.
+  - >-
+    pySHACL is invoked only with advanced=false, js=false, inference=none,
+    do_owl_imports=false, abort_on_first=false, meta_shacl=false, and explicit
+    in-memory data/shapes graphs. Shapes containing sh:sparql, SHACL-SPARQL
+    constraint components, sh:js, JavaScript functions, rules, or remote graph
+    references are rejected. ValidationReport contains only organizationId,
+    domainId, version, package/graph/shapes digests, exact engine versions and
+    modes, conforms, bounded triple/finding counts, sorted findings of stable
+    reasonCode/severity/focusDigest/pathDigest/constraintComponent, startedAt,
+    completedAt, and reportDigest; messages and offending literal values are
+    never retained or echoed. Parser/limit/deadline/engine errors append an
+    INVALID revision with bounded stable reasons and never alter active state.
+  - >-
+    SemanticMapping immutable metadata contains mappingId, semantic version,
+    exact active domainVersionDigest, sourceSchemaDigest, assertionsDigest,
+    ownersDigest, provenanceDigests, createdAt, and creator. Packet-local JSON
+    assertions contain only sourceFieldDigest, targetTerm IRI,
+    transformationKind DIRECT|ENUM|UNIT|DERIVED, and non-empty provenance
+    digests; raw field names, schemas, queries, source values, code, formulas,
+    credentials, or transformation scripts are forbidden. Validation requires
+    every target term to exist in the exact validated graph and produces sorted
+    missing/invalid reason codes. Mapping states DRAFT, VALIDATING, VALID,
+    INVALID, AWAITING_APPROVAL, ACTIVE, REJECTED, and SUPERSEDED follow the same
+    append-only approval/idempotency model and cannot outlive or silently switch
+    their pinned domain digest.
+  - >-
+    Compatibility compares canonical term inventories and per-term RDF
+    statement digests against the currently active version. Equal inventories
+    and statements are IDENTICAL; additive terms with unchanged prior term
+    statements are BACKWARD_COMPATIBLE; removed terms or changed prior term
+    statements are BREAKING. STRICT accepts only IDENTICAL; BACKWARD accepts
+    IDENTICAL or BACKWARD_COMPATIBLE. Breaking publication and rollback deny
+    with COMPATIBILITY_BLOCKED and preserve the prior pointer. Replacement
+    mappings are evidence metadata only in this packet and cannot override this
+    closed classifier.
+  - >-
+    The standard-library ASGI adapter exposes exactly POST
+    /knowledge/v1/domains, GET /knowledge/v1/domains/{domainId}/versions, POST
+    /knowledge/v1/domains/{domainId}/versions, POST
+    /knowledge/v1/domains/{domainId}/versions/{version}:validate, POST
+    /knowledge/v1/domains/{domainId}/versions/{version}:request-approval, POST
+    /knowledge/v1/domains/{domainId}/versions/{version}:record-decision, POST
+    /knowledge/v1/domains/{domainId}/versions/{version}:publish, POST
+    /knowledge/v1/domains/{domainId}/versions/{version}:rollback, POST
+    /knowledge/v1/domains/{domainId}/versions/{version}:resolve, GET
+    /knowledge/v1/domains/{domainId}/versions/{version}/report, and POST
+    /knowledge/v1/mappings:validate. Mutation requests require an idempotency key
+    and If-Match revision where state already exists. Bodies are closed and
+    bounded; caller identity, unknown fields/routes/methods, stale revision,
+    missing policy/material/approval/provenance, and any dependency error return
+    stable non-echoing failures. Lists are bounded and deterministically sorted;
+    no endpoint discovers a package, source, graph, key, or network service.
+  - >-
+    DomainEvidence and DomainEvent contain only organization/domain/version/
+    mapping ids, state/revision, package/report/approval/compatibility/resource
+    digests, stable reason codes, correlation/causation ids, occurredAt, and a
+    canonical record digest. They contain no RDF, SHACL report text, source
+    schema, mapping assertion, business label/fact, token, prompt, model output,
+    or tenant acceptance flag. Evidence append and outbox append occur in the
+    same atomic store transaction as each successful state transition; injected
+    failure leaves no partial state, pointer, evidence, idempotency, or event.
+  - >-
+    migrations/domain/002_semantic_service.sql adds tenant-RLS domain_definition,
+    domain_version, domain_version_revision, semantic_mapping,
+    semantic_mapping_revision, validation_report, domain_evidence,
+    domain_event_outbox, domain_idempotency, and active_domain_pointer tables.
+    Immutable metadata/revision/report/evidence/outbox/idempotency rows reject
+    UPDATE and DELETE. The runtime role receives own-schema SELECT/INSERT and
+    exact function execution only, never BYPASSRLS, DDL, TRUNCATE, DELETE,
+    arbitrary UPDATE, cross-schema, or public privileges. One controlled atomic
+    activation function validates transaction-local organization context,
+    expected revision, approval/package/report/compatibility digests, and changes
+    only active_domain_pointer while appending revisions/evidence/outbox. No down
+    migration, destructive command, extension, database, role, object store, or
+    package bytes are created. PostgreSQL execution remains
+    NOT_RUN_ENV_UNAVAILABLE.
+  - >-
+    Independently authored fixtures/domain/white-goods vectors declare the
+    eleven required business concepts, refrigeration/laundry/dish-care/cooking
+    product families, named synthetic owners, CTQ/KPI/outcome relationships,
+    valid and invalid SHACL data, digest-only semantic mappings, and exact
+    IND-WG-001 provenance locks. The positive graph validates and reaches term
+    coverage 100%; missing owner, missing provenance, unknown target term,
+    invalid SHACL, stale digest, tenant mismatch, and breaking compatibility
+    vectors deny with sorted stable reason codes. Fixtures are synthetic,
+    contain no copied predecessor or warm-source bytes, and keep publication,
+    deployment, runtime, assurance, and tenant acceptance false.
+  - >-
+    KN-DOM-001 owns only ci/targets/kn-dom-001.json and its exact handlers under
+    already allowed service/domain/test/fixture paths. It cumulatively registers
+    prefetch, domain-contract, white-goods-domain-parity, and security without
+    editing Makefile, ci/run_make_target.py, KN-001 descriptors, or KN-001
+    handlers. Prefetch first runs KN-001 locks and then verifies the service
+    dependency lock and exact installed semantic versions without installing or
+    downloading. All commands are direct argv; negative tests retain unknown,
+    overlapping, shell, and undeclared-variable rejection.
+  - >-
+    Update only the existing domain-service Containerfile/chart source. The
+    image remains externally supplied by immutable digest, non-root, read-only,
+    and package-install-free. The chart stays disabled by default and additionally
+    requires an existing semantic-provider bundle digest/config reference; it
+    creates no image, package mirror, namespace, Secret, database, object store,
+    PVC, public route, IdP, policy service, key, credential, or cloud resource.
+    Network policy remains default-deny; deployment, chart rendering, container
+    build/start, PostgreSQL, and Kubernetes/OpenShift proof remain
+    NOT_RUN_ENV_UNAVAILABLE.
+excluded:
+  - >-
+    Warm-source observation/access/mount/path transport/copying/adaptation/
+    translation/execution; copied industry-pack bytes; automatic ontology or
+    mapping invention; LLM completion; owner/approval inference; private keys or
+    signing; approval workflow implementation; policy-authority fallback; RDF
+    remote fetch/import/dereference; RDF/XML; archives; SPARQL/JavaScript SHACL;
+    Jena runtime; triplestore; OCI registry/publish/pull; package installation;
+    source ingestion; raw source schemas/values; retrieval/index/embedding;
+    memory/runtime checkpoints; destructive data behavior; cross-tenant access;
+    public endpoints; hosted runners; Actions artifacts/cache/Packages; cloud
+    provisioning; paid or metered APIs; API keys; runtime downloads; mutable
+    images; external telemetry defaults; production DB/image/chart execution;
+    release/artifact/SBOM/signature; deployment; runtime proof; live security;
+    assurance; or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","domain-contract"],["make","white-goods-domain-parity"],["make","security"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["White-goods ontology/mapping parity.", "Invalid SHACL, stale version, cross-tenant, and missing provenance denial vectors."]
-rollback: Revert the domain service version while retaining prior immutable ontology records.
+expectedEvidence:
+  - Exact KN-001 commit/source locks, IND-WG-001 commit/artifact locks, CPython 3.12.14, eight-package service dependency lock, root-owned toolchain/wheelhouse/license inventories, and installed semantic versions agree before domain tests run; no root project dependency or predecessor/warm path is introduced.
+  - Turtle and closed inline-context JSON-LD positive vectors parse locally and produce deterministic graph/shapes/term digests. Remote/string contexts, @import, owl:imports, arbitrary HTTP/HTTPS/FTP/file/data IRIs, RDF/XML, traversal, oversize/triple-limit/deadline, SHACL-SPARQL, JS, rules, unknown media, and engine mismatch deny without network access or input echo.
+  - pySHACL positive/negative vectors prove the exact safe invocation modes, deterministic conformance, bounded sorted digest-only findings, stable error reasons, and zero retained graph/literal/report-message content.
+  - Domain lifecycle vectors cover every allowed transition, illegal/repeated/stale transitions, idempotent replay/conflict, approval match/deny/self-approval, publish, prior-version supersede, compatible rollback, terminal retirement, atomic failure injection, and preservation of one exact active pointer.
+  - Mapping vectors prove closed digest-only assertions, target-term existence, non-empty provenance, owner/approval gates, active-domain pinning, state transitions, stale/superseded denial, tenant separation, and absence of raw field/schema/value/transformation content.
+  - Compatibility vectors prove IDENTICAL, BACKWARD_COMPATIBLE, and BREAKING classifications; STRICT and BACKWARD admission preserve the old active version on a disallowed publish or rollback.
+  - API/policy vectors reject caller tenant/subject fields in body/header/query, unknown/oversized input, stale If-Match, missing/conflicting idempotency, policy deny/expiry/mismatch/outage, material mismatch, cross-tenant not-found distinction leaks, and dependency failure; response/error/event/evidence inspection proves no sensitive echo.
+  - Static SQL tests prove tenant RLS, transaction-local organization context, append-only metadata/revision/report/evidence/outbox/idempotency, one controlled pointer mutation boundary, exact own-schema grants, atomic evidence/outbox/state semantics, and absence of destructive/down/cross-schema/BYPASSRLS/provisioning. PostgreSQL execution is explicitly NOT_RUN_ENV_UNAVAILABLE.
+  - Independently authored white-goods vectors achieve exact concept/product-family/owner/CTQ/KPI/outcome coverage and valid SHACL/mapping parity; missing owner/provenance/term, invalid shape, stale pack lock, and cross-tenant vectors deny. File inspection and git object comparison prove no predecessor or warm-source byte was copied.
+  - Cumulative Make dispatch runs KN-001 then KN-DOM-001 handlers lexically and retains all negative dispatch/PORTING/zero-bill gates. Container/chart source remains digest-only, non-root, inert, default-deny, existing-reference-only, and package-install/cloud/credential/public-route free.
+  - Source, offline contract/unit, PR, merge, artifact/SBOM, release signature, deployment, runtime, live security, assurance, and tenant acceptance remain distinct. This packet can prove only source, offline contract/unit, PR, and merge evidence; every later axis stays false, missing, pending, or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased KN-DOM-001 source and additive migration before a dependent packet consumes it. At runtime, only an explicit policy- and approval-authorized compatible rollback may reactivate a previously approved immutable SUPERSEDED version while atomically superseding the current pointer; preserve every version, mapping, report, evidence, outbox, idempotency, prior KN-001 record, external package, artifact, deployment, runtime observation, assurance result, and tenant decision. Never delete data, run a down migration, or claim that this source-only packet performed runtime rollback.
