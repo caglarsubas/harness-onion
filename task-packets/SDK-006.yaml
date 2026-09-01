@@ -1,16 +1,54 @@
 id: SDK-006
 repository: mas-harness-sdks
 branch: codex/sdk-006-guardrail-client
-objective: Implement guardrail profiles, streaming evaluation, detector contracts, client behavior, fail modes, and conformance vectors clean-room.
-predecessors: [SDK-003]
-allowedPaths: ["python/src/planeon_harness/guardrail/", "python/tests/guardrail/", "typescript/src/guardrail/", "typescript/tests/guardrail/", "fixtures/guardrail/", "ci/targets/sdk-006.json"]
+objective: Implement deterministic, transport-neutral Python and TypeScript guardrail profiles, local detector contracts, bounded streaming evaluation, explicit fail modes, redaction-safe results, and shared conformance vectors clean-room.
+predecessors: [SDK-003, SDK-005]
+allowedPaths:
+  - python/src/planeon_harness/guardrail/
+  - python/tests/guardrail/
+  - typescript/package.json
+  - typescript/src/index.ts
+  - typescript/src/guardrail/
+  - typescript/dist/index.js
+  - typescript/dist/index.d.ts
+  - typescript/dist/guardrail/
+  - typescript/tests/guardrail/
+  - fixtures/guardrail/
+  - ci/targets/sdk-006.json
+  - tests/generated/test_make_dispatch.py
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes trust guardrail contracts v1alpha1", "Produces guardrail SDK API and conformance vectors v1"]
-deliverables: ["Input, output, runtime, and streaming profiles; local detector interface; redaction-safe result; explicit fail mode; cross-language clients."]
-excluded: ["Deployable guardrail service and external moderation APIs."]
+contracts:
+  - Consumes the SDK-003 fail-closed runtime and closed-error conventions without changing contracts.lock.json or claiming a guardrail schema absent from the pinned contract snapshot.
+  - Produces the in-process harness.planeon.ai guardrail SDK API v1 and byte-equivalent Python/TypeScript conformance vectors consumed later by TRUST-002.
+  - Exposes the TypeScript root and ./guardrail package surfaces and the Python planeon_harness.guardrail package without a network transport, service endpoint, or optional dependency.
+deliverables:
+  - A closed GuardrailProfile has exactly apiVersion harness.planeon.ai/v1alpha1, kind GuardrailProfile, profileId, semantic version, stage INPUT|OUTPUT|RUNTIME|STREAMING, failMode FAIL_CLOSED|FAIL_OPEN, maximumContentBytes from 1 through 1048576, and one through 64 unique ordered stable detectorIds. Unknown fields, invalid identifiers, and invalid limits fail before content is evaluated.
+  - Python and TypeScript expose GuardrailClient, GuardrailStream, GuardrailDetector, GuardrailProfile, GuardrailRequest, DetectorFinding, RedactionRange, GuardrailResult, GuardrailContractError, and the same closed enums. Detectors are caller-supplied synchronous local implementations; client construction rejects duplicate or unknown profile detector identifiers and never invokes a detector.
+  - A detector receives only the current stage and content and returns its own matching detectorId, action ALLOW|DENY|REDACT|QUARANTINE, a stable content-free reasonCode, and redactionRanges. REDACT requires sorted non-overlapping in-bounds Unicode-scalar ranges; other actions forbid ranges. Invalid findings are treated as detector failures and never expose the invalid value.
+  - Evaluation measures UTF-8 bytes and returns PAYLOAD_TOO_LARGE with outcome DENY before detector invocation when the profile limit is exceeded. Otherwise detectors run in profile order. FAIL_CLOSED stops at the first failure with ERROR_FAIL_CLOSED. FAIL_OPEN records only failed detector IDs, continues, sets degraded true, and uses deterministic precedence DENY then QUARANTINE then REDACT then ERROR_FAIL_OPEN then ALLOW; the reason is the first profile-ordered finding at the winning precedence.
+  - GuardrailResult has exactly profileId, profileVersion, stage, outcome, reasonCode, detectorFindings, failedDetectorIds, degraded, and redactedContent. Raw input is never returned. redactedContent is non-null only for REDACT and replaces the union of overlapping or adjacent Unicode-scalar ranges with the fixed token [REDACTED]; every other outcome returns null.
+  - GuardrailStream accepts only STREAMING profiles, buffers cumulative non-empty string chunks up to maximumContentBytes, and evaluates the complete bounded buffer after every push so cross-chunk matches are detected. DENY, QUARANTINE, and ERROR_FAIL_CLOSED clear the buffer and terminally reject later calls. finish returns the last result, evaluates one empty buffer only when no chunk was pushed, clears content, and rejects every later push or finish.
+  - All errors use stable codes INVALID_GUARDRAIL_PROFILE, INVALID_GUARDRAIL_REQUEST, UNKNOWN_DETECTOR, INVALID_DETECTOR_RESULT, STREAM_TERMINATED, or STREAM_FINISHED with fixed content-free messages. Detector exception types, messages, arguments, content, results, and framework state never enter results, exceptions, telemetry, console output, or fixtures expected output.
+  - Deterministic fixtures cover all four stages, every outcome and fail mode, precedence, UTF-8 size limits, Unicode-scalar redaction, adjacent and overlapping ranges, missing and throwing detectors, malformed findings, cross-boundary streaming matches, terminal streams, and empty finish. Python and TypeScript must serialize every expected result byte-identically as sorted compact UTF-8 JSON.
+  - The SDK-006 descriptor owns guardrail-vectors and its cumulative security handler. The closed dispatch inventory admits guardrail-vectors; source, committed JavaScript, declarations, root export, subpath export, fixtures, and package metadata remain synchronized.
+excluded:
+  - Deployable guardrail service, HTTP client, remote detector, moderation API, classifier/model download, asynchronous detector, payload persistence, evidence emission, automatic telemetry, external exporter, framework hook, provider SDK, API key, vendor endpoint, streaming transport, or governance decision.
 prefetchCommands: []
-offlineAcceptanceCommands: [["make","guardrail-vectors"],["make","security"]]
-offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Streaming boundary and detector-failure vectors.", "No raw protected content in telemetry or errors."]
-rollback: Revert guardrail SDK modules without changing admission or telemetry APIs.
+offlineAcceptanceCommands: [[make, guardrail-vectors], [make, security]]
+offlineExecution:
+  wrapperArgv: [./ci/verify-offline.sh]
+  packetPathEnvironment: HARNESS_TASK_PACKET
+  packetPathMode: HASH_PINNED_READ_ONCE_NO_CHILD_PATH
+  commandTransport: ARGV_ARRAY_V1
+  isolation: OS_ENFORCED_DENY_ALL_OUTBOUND
+  sessionScope: SINGLE_PROCESS_TREE
+  prefetchOutsideSession: false
+  offlineEnvironment: {UV_OFFLINE: "1", UV_FROZEN: "1", UV_NO_SYNC: "1"}
+expectedEvidence:
+  - Shared fixtures produce byte-identical Python and TypeScript results for every stage, outcome, fail mode, precedence case, UTF-8 limit, Unicode redaction range, and streaming boundary.
+  - Construction invokes no detector; missing, throwing, and malformed detectors prove the exact fail-closed and explicit degraded fail-open behavior with no exception detail leakage.
+  - Protected sentinel content is absent from every result, error, expected fixture result, telemetry record, and captured stdout/stderr; REDACT output contains only the fixed replacement at protected ranges.
+  - TypeScript source, committed JavaScript, declarations, root export, ./guardrail export, and package metadata are synchronized and contain no fetch, socket, credential, exporter, provider, or runtime-download path.
+  - Generated target inventory includes guardrail-vectors, direct-argv dispatch remains closed, PORTING stays NO_AUTHORIZATION, and the deny-all-outbound canary passes.
+rollback: Revert the guardrail SDK modules, fixtures, exports, and SDK-006 descriptor together without changing admission, telemetry, protocol, integration, or generated-client APIs.
