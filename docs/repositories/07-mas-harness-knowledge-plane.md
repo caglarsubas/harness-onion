@@ -118,6 +118,57 @@ failure leaves the prior pointer unchanged. A policy allow, fixture, test, or
 generated output is never owner approval. Runtime PostgreSQL, image, and chart
 execution remain `NOT_RUN_ENV_UNAVAILABLE` for this packet.
 
+### `KN-DATA-001` connector staging boundary
+
+`KN-DATA-001` starts only from exact merged KN-DOM-001 commit `187a3d6...`
+and exact public IND-WG-002 commit `a4d3df9...`. It keeps the root package
+dependency-free and adds no source driver or network client. The existing
+cumulative `make prefetch` first verifies KN-001 and the KN-DOM semantic
+toolchain; connector acceptance then uses injected in-memory ports only. Public
+contract and industry inputs are digest locked, while destination fixtures are
+independently authored and contain no copied predecessor or warm-source bytes.
+
+The packet owns source declaration, fail-closed validation, fenced worker
+leases, four bounded read-plan adapters, strict local decoding, and immutable
+staged-batch metadata. Public source bodies contain only digest references and
+closed limits. Verified endpoint and secret grants are injected by the trusted
+adapter boundary and bind exact organization, source, connector kind, operation,
+resource digest, network policy, and expiry. The repository never discovers a
+host, DNS record, filesystem root, SQL statement, topic, or Secret and never
+signs or verifies these grants.
+
+Validation also consumes an injected metadata-only domain-binding observation
+that proves the source's exact domain-version and semantic-mapping digests are
+ACTIVE for the same tenant. Missing, stale, superseded, inactive, or mismatched
+bindings deny before connector I/O; ingestion never reads the domain schema or
+discovers a domain endpoint.
+
+FILE accepts only a grant-bound relative POSIX path and an injected regular-file
+receipt. HTTP accepts only GET plans under the grant's exact authority/path and
+opaque same-grant pagination tokens; redirects and absolute next links deny.
+PostgreSQL accepts only a pre-authorized statement id/digest with separately
+bound scalar parameters and requires a read-only, prepared, row/deadline-limited
+observation. EVENT accepts only grant-bound topic/partition metadata and never
+auto-commits. The core performs no socket, DNS, filesystem, database, broker, or
+credential operation in this source packet.
+
+Decoding is closed to bounded strict UTF-8 JSON, NDJSON, CSV, text, and Markdown.
+It rejects duplicate JSON keys, non-finite/deep/oversized values, malformed CSV,
+archives, compression, XML, YAML, executable formats, and media sniffing. Lease
+history is append-only with monotonically increasing fencing tokens; stale,
+expired, released, wrong-owner, or wrong-tenant workers cannot stage metadata.
+Staging persists only content/schema/material/checkpoint-candidate and per-record
+digests after an injected sink returns an exact tenant/source/batch-bound receipt.
+No payload, field value/name, URL/path, SQL/parameter, topic, credential, or
+provider message is persisted or emitted.
+
+The packet stops at source `VALID` or `SAMPLED` and batch `STAGED`. Readiness,
+owner approval, ACTIVE/DEGRADED/REVOKED sources, committed batches, checkpoint
+advancement, retry/dead-letter, provenance/quality findings, and white-goods
+PASS/WARN/FAIL remain KN-DATA-002 work. PostgreSQL, real source connectivity,
+image/chart execution, deployment, runtime, assurance, and tenant acceptance are
+separate evidence axes and remain unavailable or pending.
+
 ## Owned APIs, events, and stores
 
 The following are repository-level API ownership assignments, not `KN-001`
@@ -130,7 +181,9 @@ implementation.
 /knowledge/v1/domains/{id}/versions
 /knowledge/v1/mappings:validate
 /knowledge/v1/sources
-/knowledge/v1/sources/{id}:assess
+/knowledge/v1/sources/{id}:validate
+/knowledge/v1/sources/{id}:sample
+/knowledge/v1/staged-batches/{id}
 /knowledge/v1/retrieve
 /knowledge/v1/context:assemble
 /knowledge/v1/indexes
@@ -203,6 +256,13 @@ immutable predecessor-provenance lock and uses exact merged KN-001 commit
 `672e73e...` for its two Git object/ancestor checks. No lock, dependency,
 source-presence, Python, offline, runner, checkout-depth, or billing rule changes.
 
+`KN-DATA-001` adds only `ci/targets/kn-data-001.json`. Its packet declares the
+already-owned `make prefetch` entry so the KN-001 and KN-DOM handlers execute
+cumulatively before `connector-parity`, `connector-contract`, and `security`.
+The new connector targets dispatch only direct Python argv into
+`tests/connectors`; the packet does not edit Makefile, either generic transport,
+or any predecessor descriptor/handler.
+
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
@@ -258,6 +318,13 @@ bootstrap boundary, independently of KN-DOM's packet-local path validation.
 The cumulative prefetch target likewise proves that exact foundation object is
 available and ancestral in the pinned two-commit checkout while preserving the
 empty bootstrap SHA solely as immutable provenance.
+
+KN-DATA-001 acceptance then proves four independently authored connector-class
+vectors, closed source/API/state/grant contracts, bounded decoding and staging,
+tenant-scoped lease fencing and idempotency, atomic sink-failure rollback, and
+path/SSRF/SQL/event/secret/payload negative cases. Its cumulative `security`
+target retains every KN-001 and KN-DOM handler plus packet-local SQL, chart,
+Containerfile, zero-bill, and evidence-axis checks.
 
 `common-contract` validates the immutable upstream lock, exact Python/lock
 closure, canonical JSON/digests, closed records, privacy, idempotency, health
