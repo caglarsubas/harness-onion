@@ -198,6 +198,81 @@ packet enumerates the positive and negative identity, policy, OPA, storage,
 cache, API/client, SQL, Helm, dispatcher, porting, billing, and evidence-axis
 vectors that must pass before merge.
 
+### Coding-ready `TRUST-002` slice
+
+TRUST-002 is bound to the same contracts commit and release manifest as
+TRUST-001 and specifically pins EvidenceRecord SHA-256
+`05ea50ee0ad9fb74414871c8c3fa572e9f1a22bbc667194f911834f26b829674`.
+It consumes the reproducible SDK-006 wheel from commit
+`a181302f81bf6a83760cfae3890551ace89f51e4` at SHA-256
+`9b85d01b7079fe27c189d70b7fba46614c3df647d6f44e9270fe4683d7337fa4`.
+The packet evolves the frozen local wheelhouse from `trust-001` to
+`trust-002`; the SDK distribution version remains `0.1.0`, so the new prefetch
+handler must verify the guardrail symbols and exact wheel digest rather than
+accept the version string alone. SDK/contracts source and upstream fixtures are
+not mounted in implementation or acceptance.
+
+The service owns authenticated unary evaluation plus explicit stream create,
+push, and finish routes. OIDC verification derives the organization; request
+bodies cannot supply it. Unary callers submit exactly `profileId` and
+`content`. Stream creation submits only `profileId`; each push submits a
+monotonic `sequence` and non-empty chunk; finish submits only the next
+`sequence`. The active signed profile supplies the stage and limit. The
+response extends the SDK result only with content-free decision, profile,
+content-digest, byte-count, time, release, and RECEIVED EvidenceRecord fields.
+
+Profiles are tenant-bound Ed25519 artifacts signed for
+`GUARDRAIL_PROFILE`. Activation validates their exact embedded SDK profile,
+detector configuration, digest, validity, version, and predecessor before one
+atomic switch. The prior verified, unexpired, non-revoked profile is the sole
+rollback candidate; revocation always wins. INPUT and RUNTIME require
+`FAIL_CLOSED`. OUTPUT and STREAMING may explicitly use `FAIL_OPEN`, but
+`ERROR_FAIL_OPEN` remains degraded and non-releasing. Only `ALLOW` and
+`REDACT` results set `released=true`.
+
+The deployable admits only closed, synchronous, deterministic local detector
+implementations. They perform no I/O, network, subprocess, model, dynamic
+plugin, runtime download, or telemetry operation. The SDK handles duplicate,
+missing, throwing, and malformed detector results with its stable fail-mode
+contract. Arbitrary regular expressions, remote moderation, Presidio packaging,
+and untrusted in-process extensions are outside this packet.
+
+Streaming keeps complete bounded content only in tenant-keyed volatile memory
+so matches split across chunks remain detectable. Each tenant is limited to
+128 open sessions with a 60-second idle TTL and a 1,048,576-byte profile ceiling.
+States are `OPEN`, `TERMINATED`, `FINISHED`, and `EXPIRED`. Denial, quarantine,
+fail-closed error, finish, expiry, and eviction clear content; replay,
+out-of-order access, and cross-tenant access return stable content-free errors.
+
+Each successful evaluation atomically appends content-free decision/audit
+metadata and an EvidenceRecord intake candidate. The record is always
+`RECEIVED` on axis `SECURITY`, is never campaign-generated, maps `ALLOW` to
+`PASS`, `REDACT` to `WARN`, and every other outcome to `FAIL`, and binds its
+evidence/provenance digests to a content-free envelope and the signed profile.
+TRUST-002 cannot advance that record to `VERIFIED`, certify a control, emit a
+new lifecycle CloudEvent type absent from the pinned contracts, make a
+governance decision, or establish tenant acceptance. Raw and redacted content
+are never persisted or logged; redacted content exists only in the immediate
+REDACT response.
+
+The guardrail migration is metadata-only, forces tenant RLS, separates owner,
+migrator, runtime, and evidence-writer roles, and makes decision/evidence rows
+append-only. The chart is install-inert, digest-only, deny-egress by default,
+uses existing Secret references, and retains OpenShift-compatible non-root
+defaults. Offline SQL/chart checks leave PostgreSQL, image build, Kubernetes,
+OpenShift, deployment, runtime, and tenant acceptance explicitly
+`NOT_RUN_ENV_UNAVAILABLE`.
+
+Acceptance is exactly `make prefetch`, `make guardrail-vectors`, `make
+streaming-failure-matrix`, `make security`, and `make zero-bill` through the
+signed hash-pinned deny-all-outbound launcher. TRUST-002 owns only its
+packet-local cumulative Make descriptor, prefetch handler, and toolchain lock;
+it does not edit the bootstrap Makefile or dispatcher. Independent product
+fixtures must not copy SDK-006 vectors and must cover signature/profile
+lifecycle, every SDK outcome, Unicode redaction, UTF-8 bounds, streaming state,
+tenant isolation, atomic failure, evidence closure, content leakage, SQL/Helm
+security, closed dispatch, and zero-bill behavior.
+
 ## Release and rollback
 
 - Each sub-capability/deployable has independent image/module digest and compatibility range. Policy/evaluator bundles are separately versioned and signed.
