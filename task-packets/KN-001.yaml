@@ -1,18 +1,241 @@
 id: KN-001
 repository: mas-harness-knowledge-plane
 branch: codex/kn-001-foundation
-objective: Bootstrap the knowledge service kernel with separate store roles, RLS, inbox/outbox, source-reference privacy, images, charts, and contract mocks.
+objective: Bootstrap a clean-room, dependency-minimal Knowledge Plane foundation with six inert service shells, four isolated PostgreSQL ownership domains, tenant RLS, append-only inbox/outbox/source references, privacy-safe contract mocks, immutable image/chart source, and closed offline dispatch.
 predecessors: [SDK-004, TRUST-001, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "src/planeon_knowledge/common/", "services/", "migrations/", "tests/common/", "contract-mocks/", "deploy/helm/", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - src/planeon_knowledge/common/
+  - services/
+  - migrations/
+  - tests/common/
+  - contract-mocks/
+  - deploy/helm/
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["deployment/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/telemetry.py","src/data_source_harness/policy.py","src/data_source_harness/routing.py","deployment/profiles/air-gapped.json","deployment/profiles/local-laptop.json","deployment/profiles/self-hosted.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes knowledge, identity, policy, telemetry, and event contracts v1alpha1", "Produces knowledge service kernel v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["Separate domain, ingestion, retrieval, and memory schemas/roles; tenant RLS; inbox/outbox; redacted source refs; health; images; charts; offline mocks.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Domain, connector, retrieval, memory behavior, shared tables, or external storage requirements."]
+contracts:
+  - >-
+    Starts only from public mas-harness-knowledge-plane commit
+    f3a3463d2fe04d4b17dc3abbebc6b3375bd6d890, whose tree is empty. KN-001 is
+    the sole bootstrap owner of every file it creates; the implementation must
+    fail its source-lock check if HEAD is not a descendant of that exact base.
+  - >-
+    Consumes mas-harness-contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 and source-contract-only release
+    manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79.
+    The exact canonical manifest entry digests are lifecycle CloudEvent
+    f0be09712101b61980e7752ae4a394bd09fa21640df4cbeeec4764f1e6004d0f,
+    lifecycle common types
+    08326b0089973097698776011a2d5c386cd6e0e6490642f1b9bfd942d6f7e409,
+    EvidenceRecord
+    05ea50ee0ad9fb74414871c8c3fa572e9f1a22bbc667194f911834f26b829674,
+    TrustApi b16d5bd0a16186c4a6c98c5fce938f1b9e2c8fda562586f1466715de0b531271,
+    and PolicyBundle
+    c0444183121d156d001d0b004975b14dd25df3a6065bd4ecfecd4c965a0fd13d.
+    The separately recorded raw source SHA-256 values are CloudEvent
+    4e1282bda0b3f947265a84545ed5b2fdea0a1bb4e69af3642fc14c265811c56c,
+    common dce5d8030eea3a19694511eb26513614dcc720ef4e0d650772131b14ed58f075,
+    and EvidenceRecord
+    a80935c2dc5ac4624d972edc3876d301059c74e507ca2be28ea353b1070bdd8c;
+    manifest entry and raw source digests must not be conflated.
+  - >-
+    Consumes SDK-004 only as an immutable public compatibility boundary from
+    mas-harness-sdks commit 67b879ba596be7239abb26c1492a22ac546cc61e. The
+    protocol golden vector raw SHA-256 is
+    0a8ddc461b62c025d15fae36aa0001e97c653f9f20be17bd53a76a192eef461c;
+    raw protocol module SHA-256 values are __init__.py
+    732b23800d5f8f2a8e449f8b71c18990281958380ff61c90306fd133606bd347,
+    _json.py 26accb104905617cb6f266634fd5cd8e122c8022636d5b0261f3b472e748b240,
+    cloudevents.py
+    110f1a5559093a4cbfd2377eb5f38bae37eafa3af677fce74f69132eb9c67451,
+    and errors.py
+    9be30cf4135bd56c6785f96ee1d57207b541921dcbd9ae5b091283734d5760ab.
+    KN-001 reimplements no SDK and installs no SDK package; packet-local vectors
+    prove the produced envelope remains compatible without opening or mounting
+    the predecessor repository during implementation or acceptance.
+  - >-
+    Consumes the TRUST-001 fail-closed policy boundary from exact commit
+    73802adbfa1adf97f20d03026e0b2232691d5392. The raw SHA-256 values are
+    PolicyDecisionRequest
+    dc2cac458329174a1ac4feda9182f0f4c355dd054278f343b9784702aaff4c75,
+    PolicyDecisionResponse
+    2811621092f603b8fc6f73ddba7e6921481c66ed385eaec33287b385947013b4,
+    and fail-closed client source
+    128c6b3fafd03aabcec139bf43be73df8cad0a781d0075b88d3d218a377b5175.
+    Organization and subject are admitted at the transport boundary and never
+    accepted from product request bodies, headers, query strings, or mocks.
+  - >-
+    Consumes MET-003 zero-bill admission from exact Harness-Engineering commit
+    97da35afff79e1582b964b613472609a613ea81b. Raw SHA-256 values are policy
+    77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e,
+    scanner 57fa7e94bf5657f0daf959d5229dfc2a53a0ab94793d1d5fa03a7513b1272fd7,
+    and pinned workflow
+    b6b8c87fc5f9615c193594c7a861a59e55022acfdb1dc9970c903af9fca22dee.
+  - >-
+    Produces planeon.knowledge.foundation/v1 records TenantIdentity,
+    DependencyHealth, ServiceDescriptor, SourceReference, InboxRecord, and
+    OutboxRecord; produces six health-only ASGI service shells; produces the
+    initial additive PostgreSQL contract; produces closed packet-local Make
+    target descriptor dispatch v1; and produces an inert destination PORTING
+    ledger v1 with zero current copy authorizations.
+deliverables:
+  - >-
+    Implement for exact CPython 3.12.14 using only the standard library. The
+    pyproject declares no runtime or development dependency, uv.lock contains
+    only the root package lock, prefetch performs local verification only, and
+    no package manager, wheelhouse, network, SDK install, FastAPI, Pydantic,
+    psycopg, PostgreSQL server, pgvector, OTel collector, container engine, or
+    Kubernetes cluster is required for packet acceptance. Later packets may add
+    digest-locked dependencies without changing this foundation contract.
+  - >-
+    TenantIdentity is an immutable admitted context containing only
+    organization_id, subject_id, and admission_digest. Constructors validate
+    closed UUID/digest/string bounds, and no API or mock parses identity from a
+    product body, header, query, environment default, or source reference.
+    Stable KnowledgeError responses contain only schemaVersion, code,
+    correlationId, and a bounded generic message; they never echo rejected
+    input, credentials, source locators, payloads, prompts, or model content.
+  - >-
+    Canonical JSON rejects duplicate keys, non-object roots where an object is
+    required, unknown fields, non-finite numbers, invalid UTF-8, and payloads
+    over 65536 bytes. It emits sorted-key compact UTF-8 and lowercase
+    sha256:<64-hex> digests. All timestamps are explicit UTC RFC 3339 seconds
+    ending Z; all identifiers and media types use closed length and character
+    bounds.
+  - >-
+    SourceReference contains exactly schemaVersion, organizationId, sourceId,
+    sourceVersionDigest, locatorDigest, contentDigest, mediaType, contentBytes,
+    and observedAt. Digests bind externally stored content and locator values;
+    the record never contains a URI, filesystem path, bucket/key, SQL/query,
+    authorization value, token, credential, raw locator, raw source content,
+    excerpt, prompt, embedding, or business payload. Binary source/evidence
+    content is outside this repository and later may be referenced only by
+    digest on a tenant PVC or tenant-supplied S3-compatible store.
+  - >-
+    InboxRecord and OutboxRecord contain closed metadata only. Inbox identity is
+    unique by organizationId plus eventId and records eventType, aggregateId,
+    eventDigest, receivedAt, and processedAt. Outbox identity is unique by
+    organizationId plus eventId and records eventType, aggregateId,
+    payloadDigest, occurredAt, and publishedAt. The foundation exposes pure
+    idempotency classification and append-only state transitions only; events
+    carry ids/digests and never source, evidence, prompt, model, or business
+    payloads. Runtime checkpoints are forbidden.
+  - >-
+    Provide health-only, dependency-injected standard-library ASGI shells for
+    domain-service, connector-controller, ingest-worker, retrieval-service,
+    index-worker, and memory-service. Each fixes its service name, one owned
+    schema, harness id, and policy-action prefix. GET /health/live reports
+    process liveness; GET /health/ready reports READY only when local policy,
+    owned-store, identity-admission, and contract-mock probes are READY.
+    Telemetry is optional and can be DEGRADED without authorizing work. Any
+    unknown path, method, body, query, caller identity, missing dependency,
+    malformed probe, timeout, or probe exception fails closed with bounded
+    metadata and no network retry or discovery. No knowledge business endpoint
+    is implemented by this packet.
+  - >-
+    Provide closed local JSON contract mocks for an admitted identity, policy
+    allow, policy deny, policy transport failure, dependency states, SourceReference,
+    InboxRecord, OutboxRecord, and a lifecycle CloudEvent compatibility vector.
+    Mocks contain synthetic UUIDs/digests only, no URL, route to a real system,
+    source payload, credential, public endpoint, API key, secret, or warm-source
+    material. Mock loaders reject links, non-regular files, duplicate members,
+    unknown fields, oversized data, identity mismatch, and content-bearing keys.
+  - >-
+    migrations/{domain,ingestion,retrieval,memory}/001_foundation.sql create one
+    NOLOGIN owner role and one NOLOGIN runtime role per schema. Each schema owns
+    its own source_reference, inbox_event, and outbox_event tables; there is no
+    shared application table. Every row has organization_id, ENABLE and FORCE
+    ROW LEVEL SECURITY, and policies based only on
+    NULLIF(current_setting('planeon.organization_id', true), ''). Runtime roles
+    receive SELECT and INSERT only on their own schema tables and no BYPASSRLS,
+    DDL, CREATE, TRUNCATE, UPDATE, DELETE, cross-schema, public-schema, or role
+    inheritance privilege. Transaction setup uses set_config(..., true) after
+    validated identity. Append-only triggers reject UPDATE and DELETE;
+    organizationId plus eventId uniqueness provides inbox/outbox idempotency.
+    No down/destructive migration, business table, extension, database, user,
+    storage, or network endpoint is created. Actual PostgreSQL execution is
+    NOT_RUN_ENV_UNAVAILABLE in this source-only packet.
+  - >-
+    Each of the six services owns a source-only Containerfile with a required
+    externally supplied immutable BASE_IMAGE@sha256 digest, fixed non-root UID
+    65532, no package installation, network fetch, shell entrypoint, mutable tag,
+    embedded secret, health call to a remote endpoint, or build invocation in
+    acceptance. Each deploy/helm/<service> chart is disabled by default and has
+    empty image repository/digest, no tag, and required existing references for
+    identity, policy, and owned-store configuration before enablement. Charts
+    create no namespace, Secret, database, object store, PVC, IdP, registry,
+    cloud resource, key, credential, or public route. Templates declare
+    non-root/read-only/dropped-capability/seccomp security, bounded resources,
+    probes, service accounts, digest-only images, and default-deny NetworkPolicy;
+    optional telemetry remains disabled and OpenShift arbitrary UID is allowed.
+    These are source contracts, not built artifacts or deployment proof.
+  - >-
+    The bootstrap Makefile delegates only to ci/run_make_target.py. KN-001 owns
+    ci/targets/kn-001.json handlers for help, prefetch, common-contract, and
+    security. The dispatcher validates closed descriptors and direct argv,
+    executes at most one matching handler per packet and all matching packets
+    in lexical packet order, and rejects zero matches, duplicate or overlapping
+    rules within one packet, undeclared variables, bad owner or filename,
+    command strings, shells, or ambiguous handlers. The prefetch handler checks
+    exact interpreter, source locks, lock closure, and required local files
+    without downloads. Later packets never edit Makefile.
+  - >-
+    ci/verify-offline.sh is only an adapter for the trusted external launcher:
+    it validates the hidden packet transport and executes received direct argv
+    without a shell command string, subprocess-created network allowance, or
+    fallback path. CI uses only pinned actions/checkout commit
+    11bd71901bbe5b1630ceea73d27597364c9af683 on labels self-hosted,
+    harness-engineering, ephemeral, and credential-free, then invokes only
+    /opt/planeon/bin/harness-offline-launch. It uses no hosted runner, cache,
+    artifact, Packages, service container, secret, permission escalation, or
+    network/package setup step.
+  - >-
+    PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel,
+    with authorizationId null and empty mappings, copiedFiles, and appliedPorts.
+    It cannot name or imply a source path, destination mapping, copied file, or
+    applied port. Any future port requires a revised legally approved
+    PORT_CANDIDATE packet and exact destination record.
+excluded:
+  - >-
+    Warm-checkout observation, access, mount, path transport, copying,
+    adaptation, translation, derivative reuse, or source execution; domain
+    ontology/SHACL/mapping behavior; connectors, discovery, ingestion,
+    classification, coverage, freshness, provenance, leases, retry, or dead
+    letter behavior; chunking, embeddings, vector/FTS indexes, retrieval,
+    reranking, context assembly, memory read/write/delete, checkpointing, or
+    business APIs; database/container/chart execution; source/evidence object
+    storage; public endpoints; identity-provider or policy implementation;
+    caller-supplied identity; secrets or private keys; hosted runners; cloud
+    provisioning; Actions cache/artifacts/Packages; paid or metered APIs;
+    runtime downloads; mutable artifact references; external telemetry default;
+    publishing; deployment; runtime proof; live security proof; assurance; or
+    tenant acceptance.
 prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","common-contract"],["make","security"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Role and RLS cross-store/cross-tenant denial.", "All non-root service shells start offline against mocks.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Revert the unconsumed foundation and initial additive migrations before domain packets merge.
+expectedEvidence:
+  - Exact empty base, contracts release/entry/raw, SDK-004 protocol, TRUST-001 policy, MET-003 zero-bill, and CPython 3.12.14 locks match the packet-local immutable lock before tests execute; the standard-library-only lock contains no third-party package.
+  - Canonical JSON/digest, bounded validation, stable error, TenantIdentity, SourceReference, InboxRecord, and OutboxRecord vectors pass; negative vectors reject duplicate/unknown/content-bearing/caller-identity/oversized/invalid inputs without echoing them.
+  - Privacy inspection proves source references, mocks, logs, errors, service responses, inbox/outbox records, events, SQL, images, and charts contain no raw source locator/content, authorization material, credential, prompt, embedding, model output, or business payload.
+  - All six service descriptors have exact harness/schema/policy ownership; health-only ASGI vectors prove liveness, readiness, optional telemetry degradation, dependency denial, exception/timeout denial, unknown route/method/body/query denial, and absence of business endpoints or network discovery.
+  - Static SQL contract tests prove four disjoint owner/runtime role pairs, four schemas, per-schema tables, FORCE RLS, transaction-local organization context, exact own-schema grants, append-only enforcement, inbox/outbox uniqueness, and absence of cross-schema/public/BYPASSRLS/DDL/update/delete/truncate/destructive migration/extension/provisioning. PostgreSQL execution is explicitly NOT_RUN_ENV_UNAVAILABLE.
+  - Containerfile and Helm source tests prove six non-root source-only images/charts, required digest-only images, inert defaults, existing-reference configuration, security/resource/probe/network-policy bounds, arbitrary-UID compatibility, and absence of build, deploy, cloud, public route, namespace, Secret, database, storage, credential, package-fetch, or mutable-image behavior.
+  - Negative Make-dispatch vectors reject missing, unknown, duplicate, owner/filename mismatch, undeclared variables, command strings, shell transport, zero handlers, and multiple applicable handlers from one packet while preserving lexical cumulative dispatch across different packets. PORTING bootstrap validation proves zero authorized source mappings and rejects every copy claim without a future approved PORT_CANDIDATE packet.
+  - Zero-bill scanning finds no hosted runner, Actions artifact/cache/Packages, service container, paid/provider API, API-key field, remote telemetry, cloud provisioning, runtime download, mutable image/tag, publication, external network default, retained artifact, credential, or warm-source path transport.
+  - Source, offline contract/unit, PR check, merge, artifact/SBOM, release signature, deployment, runtime, live security, assurance, and tenant acceptance remain distinct states. KN-001 can prove only source, offline contract/unit, PR, and merge evidence; every later axis stays false, missing, pending, or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unconsumed KN-001 source bootstrap before any dependent packet merges. Preserve the empty base, all predecessor repositories, external identity/policy/PostgreSQL/container/Kubernetes systems, any append-only record, future artifact, deployment, runtime observation, assurance result, and tenant decision; never run a destructive database rollback or claim that this source-only packet created runtime state.

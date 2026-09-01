@@ -72,10 +72,33 @@ mas-harness-knowledge-plane/
 ## Deployables and toolchain
 
 - Services: `domain-service`, `connector-controller`, `ingest-worker`, `retrieval-service`, `index-worker`, and `memory-service`; each has a separate non-root image/chart/service account.
-- Python 3.12.14, FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, and OpenTelemetry; exact versions frozen in `uv.lock`.
+- `KN-001` starts from the empty public repository commit `f3a3463d2fe04d4b17dc3abbebc6b3375bd6d890` and bootstraps source-only, health-only shells for exact Python 3.12.14 with no third-party dependency. It does not build an image, connect to PostgreSQL, or deploy a chart.
+- The target stack for later packets remains FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, and OpenTelemetry. A later packet must admit and freeze each exact dependency before use; their mention here is not installation or execution authority for `KN-001`.
 - Baseline connectors are local file, allowlisted HTTP, PostgreSQL read-only, and deterministic event fixture. New connectors use the documented SDK and separate module manifest.
 
+### `KN-001` foundation boundary
+
+The bootstrap produces only common canonical JSON/digest/error primitives,
+server-admitted `TenantIdentity`, metadata-only `SourceReference`, `InboxRecord`
+and `OutboxRecord`, dependency health, six immutable service descriptors, six
+health-only ASGI adapters, four additive SQL source contracts, local synthetic
+contract mocks, six source-only Containerfiles, and six disabled-by-default Helm
+charts. It does not implement any endpoint listed below under “Owned APIs”; those
+are allocated to later behavior packets.
+
+Readiness is fail-closed. Each service requires its local identity-admission,
+policy, contract-mock, and owned-store probes to be `READY`. Optional telemetry
+may be `DEGRADED`, but that state never authorizes work. Unknown routes, methods,
+bodies, query strings, caller identity, missing or malformed probes, timeouts,
+and probe exceptions return bounded metadata-only failures and never trigger
+network discovery or retry.
+
 ## Owned APIs, events, and stores
+
+The following are repository-level API ownership assignments, not `KN-001`
+deliverables. Their respective later packets must define request/response,
+identity, policy, idempotency, state-transition, and failure contracts before
+implementation.
 
 ```text
 /knowledge/v1/domains
@@ -99,6 +122,16 @@ Store ownership uses one tenant database with separate owners/RLS schemas:
 - `memory`: memory entries, consent/purpose, TTL, deletion tombstones, and redaction receipts.
 
 No service writes another schema. Runtime checkpoints are explicitly forbidden. Binary source/evidence objects use tenant PVC or tenant-supplied S3-compatible storage through references.
+
+`KN-001` creates no binary store and no business table. It provides identical
+`source_reference`, `inbox_event`, and `outbox_event` foundation tables inside
+each of the four schemas, with separate NOLOGIN owner/runtime role pairs, FORCE
+RLS, transaction-local organization context, append-only enforcement, and only
+own-schema `SELECT`/`INSERT` runtime grants. No shared table, cross-schema grant,
+`BYPASSRLS`, DDL runtime privilege, destructive down migration, database,
+extension, user, PVC, bucket, or endpoint is created. PostgreSQL execution for
+this packet is `NOT_RUN_ENV_UNAVAILABLE`; static contract validation cannot be
+reported as runtime database proof.
 
 Emits source/batch/provenance/freshness/index/memory/evidence events. Consumes accepted domain/data declarations, policy decisions, deletion requests, and local embedding/rerank responses. Events carry IDs/digests, not source payloads.
 
@@ -124,6 +157,14 @@ edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
 - Upstream: contracts, SDK, trust policy/guardrail/evidence APIs, PostgreSQL/pgvector, OTel, tenant source endpoints, and model plane only for selected local embeddings/reranking.
 - Downstream: runtime context assembly, execution workflows/tools, industry/conformance evidence.
 - Trust/OPA loss fails closed for source access and memory writes/deletes. Model loss pauses indexing requiring embeddings but does not corrupt existing indexes.
+
+`KN-001` pins the exact public contracts commit and release-manifest digests,
+SDK-004 protocol commit/vector/module digests, TRUST-001 policy request/response
+and client digests, and MET-003 policy/scanner/workflow digests in a local lock.
+These are compatibility authorities, not mounted source dependencies. The
+bootstrap uses only the standard library, local mocks, and dependency injection;
+it never opens a predecessor or warm-start checkout during implementation or
+acceptance.
 
 ## Warm-source mapping
 
@@ -151,6 +192,22 @@ executor supplies the hash-pinned packet through `HARNESS_TASK_PACKET` and
 invokes only `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the
 complete ordered list.
 
+`common-contract` validates the immutable upstream lock, exact Python/lock
+closure, canonical JSON/digests, closed records, privacy, idempotency, health
+adapters, service ownership, and synthetic mocks. `security` validates the four
+SQL ownership/RLS contracts, six Containerfile/chart sources, fail-closed
+readiness, negative dispatch and `PORTING.yaml` vectors, path ownership, warm
+source exclusion, and zero-bill policy. The two targets are cumulative direct
+argv handlers owned only by `ci/targets/kn-001.json`; neither target downloads,
+builds, deploys, opens a network route, or invokes a shell command string.
+
+The source-only acceptance records PostgreSQL, image build, Kubernetes/OpenShift
+render/deployment, runtime, live security, assurance, and tenant acceptance as
+`NOT_RUN_ENV_UNAVAILABLE` or pending. It may prove only source and offline
+contract/unit behavior; PR, merge, artifact/SBOM, release signature, deployment,
+runtime, live security, assurance, and tenant acceptance remain independent
+evidence axes.
+
 Acceptance: white-goods mock sources ingest read-only, produce complete provenance/freshness/coverage, validate domain mappings, build a versioned index, return cited tenant-isolated context, and store/delete governed memory independently. Cross-schema/tenant access, SSRF, prompt injection metadata, stale-citation use, and secret leakage are denied. All services operate with egress restricted to declared tenant sources/local dependencies.
 
 ## Release and rollback
@@ -158,9 +215,11 @@ Acceptance: white-goods mock sources ingest read-only, produce complete provenan
 - Each harness/deployable is an independent module release with compatible contracts and migration range.
 - Index builds are create-then-swap; failed builds retain previous ready index. Ontology/mapping versions are immutable.
 - DB migrations use expand/contract. Rollback selects prior images and index/version pointers; source data, memory, tombstones, and provenance are retained. Destructive deletion requires an explicit signed request and receipt.
+- For `KN-001`, rollback is source-only: revert the unconsumed bootstrap before a dependent packet merges. Never run a destructive database rollback or infer that source validation created an artifact, deployment, runtime state, assurance result, or tenant decision.
 
 ## Zero-bill rules
 
 - No hosted embeddings/vector DB/object store, crawling SaaS, remote telemetry, automatic connector discovery, or runtime downloads.
 - HTTP connectors are allowlisted tenant endpoints; cloud metadata/link-local/private-network SSRF rules are enforced unless an exact tenant destination is approved.
 - Self-hosted offline CI only; no GitHub storage/cache/Packages, cloud databases, scheduled ingestion, or paid evaluation APIs.
+- `KN-001` CI uses only pinned credential-free checkout on ephemeral self-hosted labels and invokes the external root-owned offline launcher. It has no hosted runner, service container, Actions cache/artifact/Packages, secret, network/package setup, or retained output.
