@@ -270,6 +270,15 @@ no credential persistence, hosted runner, artifact/cache, external action,
 billable broker, cloud resource, or runtime download; every other workflow byte
 and the launcher-only execution boundary remain unchanged.
 
+The inherited `tests/common/test_security_sql_delivery.py` assertion and
+`ci/zero_bill_scan.py` required-workflow marker are updated from the same literal
+depth `2` to `0`; neither can remain green while pinning the superseded contract.
+Those are exact guard synchronization changes, not relaxed controls. The scanner
+is re-pinned at SHA-256
+`cd859d5f3c8aaf1b0a5eee1b3f5f445a471c8749e0507a2749ecbb490371e509`;
+its forbidden hosted-runner, credential, artifact/cache, package/container,
+cloud, runtime-download, and external-telemetry checks remain byte-identical.
+
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.

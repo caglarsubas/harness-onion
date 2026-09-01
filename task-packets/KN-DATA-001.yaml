@@ -3,7 +3,7 @@ repository: mas-harness-knowledge-plane
 branch: codex/kn-data-001-connectors
 objective: Implement a clean-room, tenant-isolated connector controller and ingest-worker core for source declaration and validation, fenced leases, bounded read-only file, HTTP, PostgreSQL, and event reads, strict local decoding, and immutable staged-batch metadata without claiming readiness, activation, committed ingestion, or runtime connectivity.
 predecessors: [KN-DOM-001, IND-WG-002]
-allowedPaths: [".github/workflows/verify.yml", "services/connector-controller/", "services/ingest-worker/", "src/planeon_knowledge/ingestion/__init__.py", "src/planeon_knowledge/ingestion/contracts.py", "src/planeon_knowledge/ingestion/decoder.py", "src/planeon_knowledge/ingestion/leases.py", "src/planeon_knowledge/ingestion/batch.py", "src/planeon_knowledge/ingestion/connectors/", "src/planeon_knowledge/ingestion/store.py", "src/planeon_knowledge/ingestion/service.py", "src/planeon_knowledge/ingestion/asgi.py", "migrations/ingestion/002_connector_service.sql", "tests/connectors/", "fixtures/connectors/", "deploy/helm/connector-controller/", "deploy/helm/ingest-worker/", "ci/targets/kn-data-001.json"]
+allowedPaths: [".github/workflows/verify.yml", "ci/zero_bill_scan.py", "tests/common/test_security_sql_delivery.py", "services/connector-controller/", "services/ingest-worker/", "src/planeon_knowledge/ingestion/__init__.py", "src/planeon_knowledge/ingestion/contracts.py", "src/planeon_knowledge/ingestion/decoder.py", "src/planeon_knowledge/ingestion/leases.py", "src/planeon_knowledge/ingestion/batch.py", "src/planeon_knowledge/ingestion/connectors/", "src/planeon_knowledge/ingestion/store.py", "src/planeon_knowledge/ingestion/service.py", "src/planeon_knowledge/ingestion/asgi.py", "migrations/ingestion/002_connector_service.sql", "tests/connectors/", "fixtures/connectors/", "deploy/helm/connector-controller/", "deploy/helm/ingest-worker/", "ci/targets/kn-data-001.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["tests/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
@@ -21,11 +21,13 @@ contracts:
     root Makefile af17da2687c3f0684dc4044981c5ea0ead3a9c51d6240a539bf7353402db5f09,
     Make dispatcher 29e8cb70e71a3d03f9f50108e28f99d890da6090a680c8de32d6bdcd947be7ea,
     packet transport 7499ccf15021145c0d6698aa8e1e7d333ab6ccc4d6f1fb397a277b895de6e1f8,
-    and zero-bill scanner 00d5048b69373809d4106a1d5883d8d26c3e5fa8448f7d52e7f216202b4bbc20.
+    and post-correction zero-bill scanner
+    cd859d5f3c8aaf1b0a5eee1b3f5f445a471c8749e0507a2749ecbb490371e509.
     This packet does not edit the root project/lock, Makefile, dispatcher,
     packet transport, foundation or domain source, prior descriptors/handlers,
-    common tests, or inert PORTING ledger. Its sole workflow edit is the
-    cumulative-history correction specified below.
+    common implementation tests other than the exact workflow guard specified
+    below, or inert PORTING ledger. Its sole workflow family edits are the
+    cumulative-history correction and its two exact guards specified below.
   - >-
     Consumes only the public compatibility boundary at exact
     mas-harness-contracts commit 2146278a95344cd2a8e22596b2f315b46edffc88.
@@ -252,6 +254,10 @@ deliverables:
     permissions, timeout, fork denial, and all zero-bill constraints remain
     byte-for-byte unchanged. No tag, LFS, submodule, artifact, cache, hosted
     runner, credential, paid API, cloud resource, or runtime download is added.
+    The inherited common workflow assertion and zero-bill scanner change only
+    their exact required marker from fetch-depth 2 to fetch-depth 0. The scanner
+    remains otherwise byte-identical and is re-pinned above; all other common
+    assertions and scanner forbidden-token/resource checks remain unchanged.
   - >-
     Update only existing connector-controller and ingest-worker Containerfile/
     chart source. Images remain externally supplied by immutable digest,
