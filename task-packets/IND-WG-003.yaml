@@ -3,16 +3,138 @@ repository: mas-harness-industry-packs
 branch: codex/ind-wg-003-governance-integrations
 objective: Define white-goods control mappings, autonomy categories, integrations, credentials, side effects, compensation, and waiver requirements.
 predecessors: [IND-WG-002]
-allowedPaths: ["packs/white-goods/questions/governance/", "packs/white-goods/questions/integrations/", "packs/white-goods/controls/", "packs/white-goods/rules/governance.json", "packs/white-goods/fixtures/governance/", "packs/white-goods/tests/test_governance.py", "docs/white-goods/governance.md", "ci/targets/ind-wg-003.json"]
+allowedPaths:
+  - packs/white-goods/pack.yaml
+  - packs/white-goods/questions/governance/
+  - packs/white-goods/questions/integrations/
+  - packs/white-goods/controls/
+  - packs/white-goods/rules/governance.json
+  - packs/white-goods/fixtures/governance/
+  - tests/white_goods/test_business_domain.py
+  - tests/white_goods/test_data_readiness.py
+  - tests/white_goods/test_governance.py
+  - tests/framework/test_dispatch.py
+  - docs/white-goods/governance.md
+  - ci/handlers/ind_wg_002.py
+  - ci/handlers/ind_wg_003.py
+  - ci/targets/ind-wg-003.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/actions.py","src/data_source_harness/governance.py","src/data_source_harness/policy.py","reference_labs/white_goods/README.md","reference_labs/white_goods/__init__.py","reference_labs/white_goods/action-capabilities.json","reference_labs/white_goods/airgap-images.lock.json","reference_labs/white_goods/bundle.py","reference_labs/white_goods/certify.py","reference_labs/white_goods/certify_phase2.py","reference_labs/white_goods/data/api/service-api-fixtures.json","reference_labs/white_goods/data/documents/refrigerator-e05-manual.md","reference_labs/white_goods/data/documents/untrusted-field-note.md","reference_labs/white_goods/data/documents/washing-machine-e21-manual.md","reference_labs/white_goods/data/documents/washing-machine-pump-bulletin.md","reference_labs/white_goods/data/events/telemetry.jsonl","reference_labs/white_goods/data/master/customers.csv","reference_labs/white_goods/data/master/installed_products.csv","reference_labs/white_goods/data/master/products.csv","reference_labs/white_goods/data/quality/quality_inspections.csv","reference_labs/white_goods/data/service/service_orders.csv","reference_labs/white_goods/dataset.lock.json","reference_labs/white_goods/docker-compose.yml","reference_labs/white_goods/freshness-slos.json","reference_labs/white_goods/gqm-plan.json","reference_labs/white_goods/lab.py","reference_labs/white_goods/live/HarnessAcceptance.Containerfile","reference_labs/white_goods/live/README.md","reference_labs/white_goods/live/ServiceApi.Containerfile","reference_labs/white_goods/live/__init__.py","reference_labs/white_goods/live/compose.template.yaml","reference_labs/white_goods/live/connectors.py","reference_labs/white_goods/live/cross_plane_lab.py","reference_labs/white_goods/live/harness-requirements.txt","reference_labs/white_goods/live/harness_probe.py","reference_labs/white_goods/live/harness_runtime_lab.py","reference_labs/white_goods/live/local_lab.py","reference_labs/white_goods/live/model_plane_probe.py","reference_labs/white_goods/live/postgresql-seed.sql","reference_labs/white_goods/live/service_api.py","reference_labs/white_goods/pack-manifest.json","reference_labs/white_goods/phase2-gqm-plan.json","reference_labs/white_goods/phase2.py","reference_labs/white_goods/phase4.py","reference_labs/white_goods/phase5.py","reference_labs/white_goods/phase6_worker.py","reference_labs/white_goods/promotion-readiness.example.json","reference_labs/white_goods/reference-lab-manifest.json","reference_labs/white_goods/runtime/Containerfile","reference_labs/white_goods/runtime/README.md","reference_labs/white_goods/runtime/mirroring/imageset-config.template.yaml","reference_labs/white_goods/runtime/openshift/config-map.yaml","reference_labs/white_goods/runtime/openshift/deployment.template.yaml","reference_labs/white_goods/runtime/openshift/network-policy-allow-internal.yaml","reference_labs/white_goods/runtime/openshift/network-policy.yaml","reference_labs/white_goods/runtime/openshift/service-account.yaml","reference_labs/white_goods/runtime/openshift/service.yaml","reference_labs/white_goods/runtime/protocol-profiles.json","reference_labs/white_goods/runtime/wheelhouse-requirements.txt","reference_labs/white_goods/runtime_bundle.py","reference_labs/white_goods/semantic-mappings.json","reference_labs/white_goods/technology/opensearch/index-mapping.json","reference_labs/white_goods/technology/postgresql/schema.sql","reference_labs/white_goods/technology/redpanda/topic-contract.json","reference_labs/white_goods/technology/service-api/openapi.yaml"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes ControlRequirement and IntegrationDeclaration v1alpha1", "Produces white-goods governance/integration slice v1alpha1"]
-deliverables: ["Read/write action categories, approval and compensation requirements, credential references, regulatory questions, control owners, and expiring waivers."]
-excluded: ["Legal advice, hard-coded tenant credentials, or automatic waiver approval."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","packs/white-goods/tests/test_governance.py"]]
+contracts:
+  - >-
+    Starts only from exact merged mas-harness-industry-packs commit
+    a4d3df9b169e95c285e22a2fdb2b4c9d711230e2, white-goods 0.2.0 computed
+    pack digest e0ad15c9da5f126c4aa20c88f75d4e9b15808ee841347ba4663dd99664248177,
+    raw pack.yaml SHA-256 3bc885342cd43870624a1a188851af2aa314ec333ba87cb8170597f7b3d8f674,
+    and framework 0.1.1 wheel SHA-256
+    d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4.
+  - >-
+    Consumes public contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 and its ApprovalRequest
+    v1alpha1 schema at schemas/v1alpha1/lifecycle/approval-request.schema.json
+    SHA-256 4fe8d214a920690008a4390919acebf797b0ab4e6c649a7a88e0882f3b2a1b27,
+    lifecycle common schema SHA-256
+    dce5d8030eea3a19694511eb26513614dcc720ef4e0d650772131b14ed58f075,
+    and composition common schema SHA-256
+    11b55d3eafa8d87a90956345da0919f67478a7738d5ca118025904f8ff58b5f0;
+    no schema bytes or upstream source paths enter product execution.
+  - >-
+    ControlRequirement and IntegrationDeclaration are named in the architecture
+    plan but are NOT_AVAILABLE_IN_BOUND_RELEASE. The packet must record that
+    status and must not claim public-schema conformance, invent a public kind,
+    or alter mas-harness-contracts. It produces only versioned pack-local,
+    data-only IndustryControlRequirementRecordSet and
+    IndustryIntegrationDeclarationRecordSet resources for the white-goods
+    guidance surface.
+  - >-
+    Advances only the white-goods sector pack from 0.2.0 to 0.3.0. The common
+    pack, contracts lock, journey, ontology, business/data resources, pack
+    format 0.1.0, and framework distribution 0.1.1 remain byte-identical.
+deliverables:
+  - >-
+    Add exactly four questionnaires: governance applicability, autonomy/action
+    boundary, waiver declaration, and integration declaration. Closed action
+    categories are READ_ONLY, REVERSIBLE_WRITE, IRREVERSIBLE_WRITE, and
+    UNKNOWN_SIDE_EFFECT; closed autonomy levels are OBSERVE, RECOMMEND,
+    APPROVAL_REQUIRED, and BOUNDED_AUTONOMOUS. Questions collect accountable
+    roles, tenant-determined applicability and evidence references, policy and
+    approval reference ids, separation/quorum, durable-receipt, idempotency,
+    compensation or outcome-review, credential-reference and access-scope
+    declarations, waiver scope/control/approval/compensating-control/expiry,
+    and no executable values.
+  - >-
+    Regulatory content is a tenant-answerable applicability-candidate map for
+    product safety, data protection, cybersecurity, quality management, and
+    environmental/energy governance. It contains no legal conclusion,
+    jurisdictional assertion, production threshold, or automatic control
+    satisfaction; tenant legal/regulatory authority and local evidence remain
+    required.
+  - >-
+    Add exactly four control resources: the immutable public-contract binding,
+    pack-local control requirements, pack-local integration declarations, and
+    a waiver policy. Control requirements name stable ids, accountable owners,
+    applicability inputs, evidence requirements, action categories, waiver
+    eligibility, freshness expectations, and promotion disposition.
+    Integration declarations cover synthetic API, PostgreSQL, file, and event
+    classes, declare read/write and side-effect categories, accept only scoped
+    credential reference ids, and contain no endpoint, connection, credential
+    value, or executable connector configuration.
+  - >-
+    The governance rule blocks any write-capable or unknown-side-effect demand
+    unless the closed governance-evidence-complete answer is true. The packet
+    handler independently fails write compilation without an exact policy
+    reference, valid unexpired MUTATION ApprovalRequest, required distinct
+    approver quorum, durable-receipt declaration, idempotency reference, scoped
+    credential reference and access approval, and compensation or explicit
+    outcome-review strategy. UNKNOWN_SIDE_EFFECT always blocks.
+  - >-
+    Add exactly eleven synthetic governance fixtures: ready read-only, ready
+    reversible-write, missing policy, missing approval, missing receipt,
+    missing compensation, unknown side effect, self approval, active
+    scope-exact waiver, expired waiver, and waiver without compensating control.
+    Decisions are READY or BLOCKED with sorted unique stable reason codes.
+    An otherwise valid waiver still produces
+    WAIVER_DOES_NOT_SATISFY_PROMOTION and remains BLOCKED; expiry or malformed
+    scope adds its own reason and never converts evidence to PASS.
+  - >-
+    Declare nine new questionnaire/control/rule resources plus eleven governance
+    fixtures in white-goods 0.3.0 for an exact closed inventory of 52 pack files and 49
+    resource ids. Tests remain under tests/white_goods/ and are not pack
+    content. Update predecessor business/data tests only for the sector version,
+    file/resource inventory, archive name, and packet output version; preserve
+    their frozen resource bytes, decisions, digests, and data assessment contract.
+  - >-
+    Register only the unique governance-integrations Make target with exact
+    PACK=white-goods and direct argv to ci/handlers/ind_wg_003.py. Update the
+    descriptor-inventory regression without changing Makefile or the dispatcher.
+    The handler validates exact predecessor/public bindings, closed questions,
+    controls, declarations, rule, fixtures, ApprovalRequest shape, governance
+    decisions, two-build index/archive identity, no retained artifact, and false
+    publication/deployment/runtime/assurance/tenant-acceptance flags.
+excluded:
+  - >-
+    Legal advice or conclusions, automatic regulatory applicability, public
+    ControlRequirement or IntegrationDeclaration schema claims, edits to the
+    contracts repository, copied schema or warm-source bytes, warm checkout
+    access, real tenant identities or records, credential values, secrets,
+    tokens, endpoints, connection strings, remote reads, runtime downloads,
+    paid services, executable pack content, connector execution, side effects,
+    hard-coded production policy, self approval, implicit approval, automatic
+    waiver approval or renewal, waiver-based PASS/promotion, signatures,
+    publication, deployment, runtime evidence, assurance evidence, or tenant
+    acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["make","data-readiness","PACK=white-goods"],["make","governance-integrations","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py","tests/white_goods/test_data_readiness.py","tests/white_goods/test_governance.py","tests/framework/test_dispatch.py"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Write-capable paths cannot compile without policy, approval, receipt, and compensation answers.", "Waiver expiry vectors."]
-rollback: Revert governance/integration content before the pack is signed or published.
+expectedEvidence:
+  - The exact predecessor commit, 0.2.0 raw pack file and computed digest, framework wheel, public contracts commit, and three public schema digests match immutable packet bindings without mounting or reading a warm-source checkout.
+  - The contract-binding record proves ApprovalRequest v1alpha1 is available and records ControlRequirement and IntegrationDeclaration as NOT_AVAILABLE_IN_BOUND_RELEASE; no copied schema bytes or false public-conformance claim exists.
+  - Four questionnaires, four controls, one rule, and eleven governance fixtures form the exact declared inventory; all control, declaration, question, fixture, and reason-code ids are unique and closed.
+  - READ_ONLY and valid REVERSIBLE_WRITE vectors are READY. Missing policy, approval, quorum/separation, receipt, idempotency, scoped credential reference/access approval, compensation/outcome review, or a known side-effect category is BLOCKED with exact sorted reason codes.
+  - Active, expired, malformed-scope, and missing-compensating-control waiver behavior is fail closed; a waiver documents an exception only and production promotion remains blocked until every required control has fresh PASS evidence.
+  - Two canonical indexes and fixed-epoch archives of white-goods 0.3.0 are byte-identical and temporary outputs are removed; common.foundation 1.0.0, framework 0.1.1, and every predecessor content byte and decision remain unchanged.
+  - Dispatcher inventory includes pack, data-readiness, and governance-integrations with no duplicate target, undeclared variable, shell transport, ambiguous handler, or predecessor regression.
+  - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate evidence states; all post-merge operational and tenant states remain false or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased white-goods 0.3.0 governance/integration slice and restore exact IND-WG-002 commit a4d3df9b169e95c285e22a2fdb2b4c9d711230e2 and pack 0.2.0; retain common.foundation 1.0.0, framework 0.1.1, predecessor evidence, and every downstream release, runtime, assurance, or tenant record unchanged.

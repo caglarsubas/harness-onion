@@ -217,6 +217,66 @@ source and policy closure, dataset digests/counts, every result vector, and two-
 build index/archive identity without retaining an artifact. It also preserves
 false publication, deployment, runtime, assurance, and tenant-acceptance flags.
 
+## IND-WG-003 governance and integrations contract
+
+IND-WG-003 starts only from exact merged product commit
+`a4d3df9b169e95c285e22a2fdb2b4c9d711230e2`, white-goods 0.2.0 computed pack
+digest `e0ad15c9da5f126c4aa20c88f75d4e9b15808ee841347ba4663dd99664248177`,
+raw `pack.yaml` SHA-256
+`3bc885342cd43870624a1a188851af2aa314ec333ba87cb8170597f7b3d8f674`, and
+framework 0.1.1 wheel SHA-256
+`d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4`.
+It advances only the sector pack to 0.3.0. Common content, contracts lock,
+journey, ontology, business/data resources, pack format 0.1.0, and framework
+0.1.1 stay byte-identical.
+
+The public lifecycle binding is contracts commit
+`2146278a95344cd2a8e22596b2f315b46edffc88`. It binds `ApprovalRequest`
+v1alpha1 at `schemas/v1alpha1/lifecycle/approval-request.schema.json`, SHA-256
+`4fe8d214a920690008a4390919acebf797b0ab4e6c649a7a88e0882f3b2a1b27`,
+lifecycle common SHA-256
+`dce5d8030eea3a19694511eb26513614dcc720ef4e0d650772131b14ed58f075`, and
+composition common SHA-256
+`11b55d3eafa8d87a90956345da0919f67478a7738d5ca118025904f8ff58b5f0`.
+Although the architecture plan names `ControlRequirement` and
+`IntegrationDeclaration`, their schemas are absent from this exact released
+contract tree. The pack records them as `NOT_AVAILABLE_IN_BOUND_RELEASE` and
+defines only pack-local, data-only requirement/declaration record sets. It
+neither copies public schema bytes nor claims that these records implement an
+unreleased public kind.
+
+Four questionnaires cover regulatory applicability, action/autonomy boundary,
+waiver declaration, and integration declaration. Regulatory themes are
+tenant-answerable candidates for product safety, data protection,
+cybersecurity, quality management, and environmental/energy governance. They
+are not legal conclusions. Closed action categories are `READ_ONLY`,
+`REVERSIBLE_WRITE`, `IRREVERSIBLE_WRITE`, and `UNKNOWN_SIDE_EFFECT`; closed
+autonomy levels are `OBSERVE`, `RECOMMEND`, `APPROVAL_REQUIRED`, and
+`BOUNDED_AUTONOMOUS`.
+
+Write-capable compilation requires exact policy and approval references, an
+unexpired `MUTATION` approval, distinct required approver quorum, durable
+receipt and idempotency declarations, a scoped credential reference with access
+approval, and compensation or explicit outcome review. Unknown side effects
+always block. Pack content carries no credential value, endpoint, connection,
+or executable connector configuration.
+
+Waivers must bind the same control and complete scope, an unexpired `WAIVER`
+approval, justification, compensating control, and non-renewable expiry. They
+document an exception only: even a valid active waiver remains `BLOCKED` with
+`WAIVER_DOES_NOT_SATISFY_PROMOTION` until every required control has fresh
+`PASS` evidence. Expired, cross-scope, self-approved, or incomplete waivers add
+their stable failure reason and never imply approval or promotion.
+
+The pack adds four control resources, one closed governance rule, and eleven
+synthetic decision fixtures. Its exact resulting inventory is 52 files and 49
+resource ids. Tests remain outside the pack. The unique
+`governance-integrations` Make target runs direct argv through the packet-owned
+handler; cumulative acceptance also reruns pack, data-readiness, business/data
+tests, dispatcher regression, deterministic index/archive checks, and zero-bill
+validation. No artifact is retained or published, and deployment, runtime,
+assurance, and tenant-acceptance evidence remain false.
+
 ## Warm-source mapping
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
