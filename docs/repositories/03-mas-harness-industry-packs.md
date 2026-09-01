@@ -277,6 +277,74 @@ tests, dispatcher regression, deterministic index/archive checks, and zero-bill
 validation. No artifact is retained or published, and deployment, runtime,
 assurance, and tenant-acceptance evidence remain false.
 
+## IND-WG-004 provider-profile contract
+
+IND-WG-004 starts only from exact merged product commit
+`219cafc97d89513e89b9f0eaa0349756a2a3954c`, white-goods 0.3.0 computed pack
+digest `798665b769140b621feb0346ab37f32a6804a950b9028f71d921a5b7fc650447`,
+raw `pack.yaml` SHA-256
+`b21aae64acda0eb21eeb63c57aed7458d18926867e1d33e1558f1f492f7ccc67`,
+its 52-file/49-resource inventory, and the unchanged framework 0.1.1 wheel. It
+advances only the sector pack to 0.4.0 and adds exactly twelve data resources:
+one public-contract/catalog binding, one five-profile recommendation catalog,
+five full `CompileRequest` demand fixtures, and five golden-output envelopes.
+The resulting closed inventory is 64 pack files and 61 resource ids.
+
+The public authority is contracts commit
+`2146278a95344cd2a8e22596b2f315b46edffc88`, release-manifest SHA-256
+`c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79`,
+catalog digest
+`sha256:26d442c4e90a19d767d32e80ef9df3d154b3146d3238dc0eecf29ee773913a26`,
+and deterministic compiler source SHA-256
+`0b0960c87bc1214e795144968db3976bd548c80e6002b03bc3f6e292303a764b`.
+The pack binds raw composition, questionnaire, and readiness schema hashes plus
+the canonical harness/provider/module catalog hashes. It copies none of those
+bytes and its isolated acceptance receives no upstream repository path.
+
+The exact profile matrix is:
+
+| Profile | Platform | Accepted providers | Direct demand | Accepted prerequisites |
+| --- | --- | --- | --- | --- |
+| `minimal-arm64` | self-managed ARM64 Linux/K3s | K3s + llama.cpp | local CPU model and K3s | Security, Observability |
+| `minimal-amd64` | self-managed AMD64 Linux/upstream Kubernetes | upstream Kubernetes + llama.cpp | local CPU model and Kubernetes | Security, Observability |
+| `regulated-openshift` | self-managed AMD64 Linux/OpenShift | OpenShift + llama.cpp | governed action, assurance, local CPU model, OpenShift | Governance, Security, Observability |
+| `silo` | self-managed AMD64 Linux/upstream Kubernetes | upstream Kubernetes + llama.cpp | read-only agent, cited retrieval, local CPU model, Kubernetes | Domain, Data Integration, Governance, Security, Observability |
+| `air-gap` | air-gapped AMD64 Linux/K3s | K3s + llama.cpp | air-gap deployment, local CPU model, K3s | Security, Observability |
+
+Each profile separates recommendation from acceptance. Compatible choices are
+`PROPOSED_SELECTOR_ONLY`; a fixture becomes compilable only after its submitted
+tenant demand contains exactly one selector for every active provider group.
+No ranking, default, fallback, or provider availability claim can mutate a
+profile. Every selected provider is public-catalog `PLANNED`, credential-free,
+external-telemetry-free, runtime-download-disabled, and self-hosted
+open-source/non-metered or tenant-supplied.
+
+The profiles carry exact planning envelopes for CPU, memory, ephemeral and
+model storage plus the five bounded execution-budget dimensions. Capacity still
+requires tenant attestation. Isolation is deny-by-default; OpenShift requires
+the signed arbitrary-UID fact, silo requires both the released compiler's
+non-air-gap `connectivity.connected` fact and narrower `connectivity.silo`
+fact, and air-gap requires deny-all outbound plus a tenant-supplied,
+digest-pinned local OCI source. “Regulated” is a policy posture, not a legal or
+compliance conclusion.
+
+Each golden envelope captures the exact six compiler outputs—`profile.json`,
+`bom.json`, `install-plan.json`, `evidence-plan.json`, `explanation.md`, and
+`profile.sha256`—and their SHA-256 values. Packet acceptance reconstructs those
+bytes twice in memory using `SORTED_UTF8_JSON_V1`, checks every digest and
+profile reference, and proves the BOM/install plan contains only selected
+modules and providers. This is a pack-local immutable golden lock, not a rerun
+of upstream source and not cross-repository conformance, artifact, deployment,
+runtime, assurance, or tenant-acceptance evidence.
+
+The unique `provider-profiles` Make target dispatches directly to
+`ci/handlers/ind_wg_004.py`. Cumulative acceptance reruns pack,
+data-readiness, governance-integrations, all four white-goods test slices,
+dispatcher regressions, two-build index/archive identity, and zero-bill
+validation. Predecessor handlers/tests may change only their version,
+inventory/archive expectation, packet output version, and cumulative successor
+dispatch; predecessor resources, decisions, and digests stay frozen.
+
 ## Warm-source mapping
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
