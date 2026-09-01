@@ -10,6 +10,7 @@ allowedPaths:
   - src/planeon_trust/guardrails/
   - migrations/guardrails/
   - tests/guardrails/
+  - tests/foundation/test_dispatch_porting.py
   - fixtures/guardrails/
   - deploy/helm/guardrail-service/
   - ci/handlers/trust_002_prefetch.py
@@ -37,6 +38,7 @@ deliverables:
   - The guardrail-service Helm chart is install-inert until an operator supplies an immutable image digest and existing OIDC registry, public profile-keyset, active-profile, and database Secret references. It creates no namespace, database, identity provider, secret value, registry, storage class, cloud resource, or billable service; uses non-root OpenShift-compatible security defaults; and denies egress by default.
   - TRUST-002 evolves pyproject.toml and uv.lock only to replace the SDK-003 wheel source with the exact SDK-006 wheel in /opt/planeon/wheelhouse/trust-002 while retaining the exact Python 3.12.14, cryptography 49.0.0, cffi 2.1.0, and pycparser 3.0 closure. The new packet-local prefetch handler and toolchain lock verify installed guardrail symbols, wheel digests, lock bindings, regular non-symlink files, and zero network requirement; TRUST-001 lock and handler remain unchanged.
   - ci/targets/trust-002.json adds cumulative direct-argv handlers for prefetch, guardrail-vectors, streaming-failure-matrix, security, and zero-bill without editing bootstrap-owned Makefile or ci/run_make_target.py. Duplicate, ambiguous, unknown, shell-based, or undeclared-variable dispatch remains fail-closed.
+  - tests/foundation/test_dispatch_porting.py may evolve only its generated descriptor-inventory expectation to include TRUST-002 targets and to prove cumulative same-name prefetch, security, and zero-bill ownership; its negative unknown, duplicate, ambiguity, variable, shell, and PORTING assertions remain unchanged.
 excluded:
   - Paid or remote moderation, provider APIs, API keys, hosted models, classifier/model downloads, Presidio packaging, asynchronous or network detectors, dynamic plugins, arbitrary regular expressions, shell execution, runtime dependency resolution, cloud provisioning, or external telemetry.
   - Raw protected content, redacted content, token/claims, subject identity, detector exception text, signing private keys, or secret values in persistence, evidence, outbox, telemetry, logs, console output, fixtures expected output, or CI artifacts.
@@ -53,4 +55,5 @@ expectedEvidence:
   - Evidence vectors prove exact EvidenceRecord schema closure in RECEIVED state, SECURITY-axis result mapping, campaignGenerated false, content-free evidence digest, profile provenance digest, and inability of guardrail evaluation to emit VERIFIED evidence, certify a control, or create tenant acceptance.
   - SQL and Helm static/security vectors prove forced tenant RLS, least privilege, append-only metadata, no payload columns, digest-only images, existing-Secret references, non-root OpenShift compatibility, deny-default egress, and install-inert defaults. PostgreSQL, Kubernetes, OpenShift, image build, deployment, runtime, and tenant acceptance remain NOT_RUN_ENV_UNAVAILABLE.
   - The signed hash-pinned deny-all-outbound run passes cumulative prefetch, guardrail-vectors, streaming-failure-matrix, security, and zero-bill targets; Make dispatch stays direct-argv and closed, PORTING remains NO_AUTHORIZATION, no GitHub cache/artifact/package or hosted runner is used, and no warm-source path is mounted or observed.
+  - The predecessor dispatch test recognizes the exact post-TRUST-002 target union while continuing to reject every unknown, duplicate, ambiguous, undeclared-variable, and shell-based route; no bootstrap dispatcher or Makefile edit is present.
 rollback: Atomically reactivate only the immediately previous verified, unexpired, non-revoked signed guardrail profile, clear every volatile stream buffer, and preserve append-only decision/evidence metadata. Revert TRUST-002 code, descriptor, SDK-006 lock/source binding, migration, and chart together; never delete evidence, reactivate revoked profiles, downgrade to SDK-003 while guardrail code remains, or claim rollback as deployment/runtime proof.

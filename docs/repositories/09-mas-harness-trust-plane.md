@@ -267,7 +267,9 @@ Acceptance is exactly `make prefetch`, `make guardrail-vectors`, `make
 streaming-failure-matrix`, `make security`, and `make zero-bill` through the
 signed hash-pinned deny-all-outbound launcher. TRUST-002 owns only its
 packet-local cumulative Make descriptor, prefetch handler, and toolchain lock;
-it does not edit the bootstrap Makefile or dispatcher. Independent product
+it also owns the exact bootstrap dispatcher inventory test solely to extend its
+expected generated target union while retaining every negative assertion. It
+does not edit the bootstrap Makefile or dispatcher. Independent product
 fixtures must not copy SDK-006 vectors and must cover signature/profile
 lifecycle, every SDK outcome, Unicode redaction, UTF-8 bounds, streaming state,
 tenant isolation, atomic failure, evidence closure, content leakage, SQL/Helm
