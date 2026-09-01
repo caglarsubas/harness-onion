@@ -163,3 +163,12 @@ Data and retrieval harnesses cannot become production ready until they reference
 3. `KN-002-security-resilience`: malicious document/context defense, tenant/store isolation, domain-store outage recovery, stale/superseded consumers, and air-gap validation.
 
 No packet may introduce remote ontology fetching or treat generative output as owner approval.
+
+KN-DOM-001 additionally closes the bootstrap transport defect that otherwise
+admits only KN-001's literal command list. Its bounded edit to
+`ci/run_packet_argv.py` generalizes the command-list check without changing the
+signed wrapper, deny-all-outbound session, packet digest rechecks, offline
+environment, local-only prefetch, direct-argv rules, or Make dispatcher. Both
+the unchanged bootstrap sequence and this packet's declared sequence must pass;
+empty, shell-based, network/install-bearing, recursive, mutated, or
+contract-drifted sequences must fail closed.

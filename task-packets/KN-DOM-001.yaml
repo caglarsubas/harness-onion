@@ -3,7 +3,7 @@ repository: mas-harness-knowledge-plane
 branch: codex/kn-dom-001-semantic-service
 objective: Implement a clean-room, tenant-isolated domain service with immutable ontology versions, bounded local RDF/SHACL validation, digest-only semantic mappings, approval-gated atomic activation and rollback, metadata-only evidence/events, and independently authored white-goods parity vectors.
 predecessors: [KN-001, IND-WG-001]
-allowedPaths: ["services/domain-service/", "src/planeon_knowledge/domain/", "migrations/domain/", "tests/domain/", "fixtures/domain/", "deploy/helm/domain-service/", "ci/targets/kn-dom-001.json"]
+allowedPaths: ["services/domain-service/", "src/planeon_knowledge/domain/", "migrations/domain/", "tests/domain/", "fixtures/domain/", "deploy/helm/domain-service/", "ci/targets/kn-dom-001.json", "ci/run_packet_argv.py"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/reference_labs/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
@@ -25,8 +25,12 @@ contracts:
     43d39673f9ba46d3fb450579fa5d40a78c9e7345728bfc41bb3f06e22ec01cab,
     and zero-bill scanner
     00d5048b69373809d4106a1d5883d8d26c3e5fa8448f7d52e7f216202b4bbc20.
-    KN-DOM-001 does not edit the root Makefile, root dispatcher, KN-001 handler,
-    common kernel, root pyproject/uv.lock, or inert PORTING ledger.
+    KN-DOM-001 does not edit the root Makefile, root Make dispatcher, KN-001
+    handler/descriptor, common kernel, root pyproject/uv.lock, or inert PORTING
+    ledger. It may replace only the inherited packet argv transport's literal
+    KN-001 acceptance-command equality check with closed generic ARGV_ARRAY_V1
+    validation while preserving every digest, isolation, environment, canary,
+    shell-denial, prefetch, and offline-token control.
   - >-
     Consumes only the public IND-WG-001 product boundary at exact
     mas-harness-industry-packs commit
@@ -233,6 +237,21 @@ deliverables:
     dependency lock and exact installed semantic versions without installing or
     downloading. All commands are direct argv; negative tests retain unknown,
     overlapping, shell, and undeclared-variable rejection.
+  - >-
+    The inherited ci/run_packet_argv.py currently rejects every command sequence
+    except KN-001's two bootstrap targets. KN-DOM-001 is the one bounded
+    transport-generalization exception: it removes only that packet-specific
+    equality gate and accepts one non-empty prefetch phase equal to
+    [["make","prefetch"]] plus one non-empty offlineAcceptanceCommands array.
+    Each command remains a non-empty direct argv array; shells/environment
+    launchers, control characters, recursive verify-offline, forbidden offline
+    network/install/prefetch tokens, unexpected execution metadata, packet
+    mutation, missing OS isolation identity, leaked packet/warm-root variables,
+    or offline-environment drift fail before or between commands. Tests prove
+    KN-001 remains accepted, KN-DOM-001 becomes accepted, and malformed or
+    broadened transport remains denied. This exception does not change Makefile,
+    ci/run_make_target.py, any descriptor other than kn-dom-001.json, or any
+    handler owned by KN-001.
   - >-
     Update only the existing domain-service Containerfile/chart source. The
     image remains externally supplied by immutable digest, non-root, read-only,
