@@ -3,7 +3,7 @@ repository: mas-harness-knowledge-plane
 branch: codex/kn-dom-001-semantic-service
 objective: Implement a clean-room, tenant-isolated domain service with immutable ontology versions, bounded local RDF/SHACL validation, digest-only semantic mappings, approval-gated atomic activation and rollback, metadata-only evidence/events, and independently authored white-goods parity vectors.
 predecessors: [KN-001, IND-WG-001]
-allowedPaths: ["services/domain-service/", "src/planeon_knowledge/domain/", "migrations/domain/", "tests/domain/", "fixtures/domain/", "deploy/helm/domain-service/", "ci/targets/kn-dom-001.json", "ci/run_packet_argv.py", "tests/common/test_security_sql_delivery.py"]
+allowedPaths: ["services/domain-service/", "src/planeon_knowledge/domain/", "migrations/domain/", "tests/domain/", "fixtures/domain/", "deploy/helm/domain-service/", "ci/targets/kn-dom-001.json", "ci/run_packet_argv.py", "ci/handlers/prefetch.py", "tests/common/test_security_sql_delivery.py"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/reference_labs/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
@@ -26,13 +26,20 @@ contracts:
     and zero-bill scanner
     00d5048b69373809d4106a1d5883d8d26c3e5fa8448f7d52e7f216202b4bbc20.
     KN-DOM-001 does not edit the root Makefile, root Make dispatcher, KN-001
-    handler/descriptor, common kernel, root pyproject/uv.lock, or inert PORTING
+    descriptor or handlers except the exact ci/handlers/prefetch.py ancestry
+    correction below, common kernel, root pyproject/uv.lock, or inert PORTING
     ledger. It may replace only the inherited packet argv transport's literal
     KN-001 acceptance-command equality check with closed generic ARGV_ARRAY_V1
     validation while preserving every digest, isolation, environment, canary,
     shell-denial, prefetch, and offline-token control. It may also bind the
     inherited KN-001 changed-path test to the exact KN-001 merge commit instead
     of HEAD so cumulative security checks do not misclassify later packet paths.
+    Finally, because the pinned fetch-depth-two workflow no longer transports
+    the empty bootstrap object after a dependent commit exists, it may replace
+    only prefetch.py's empty-base object and ancestry checks with checks for the
+    exact merged KN-001 commit above. The immutable upstream lock continues to
+    retain the empty-base provenance value, and every remaining prefetch check
+    and message contract stays closed.
   - >-
     Consumes only the public IND-WG-001 product boundary at exact
     mas-harness-industry-packs commit
@@ -234,8 +241,9 @@ deliverables:
     KN-DOM-001 owns only ci/targets/kn-dom-001.json and its exact handlers under
     already allowed service/domain/test/fixture paths. It cumulatively registers
     prefetch, domain-contract, white-goods-domain-parity, and security without
-    editing Makefile, ci/run_make_target.py, KN-001 descriptors, or KN-001
-    handlers. Prefetch first runs KN-001 locks and then verifies the service
+    editing Makefile, ci/run_make_target.py, KN-001 descriptors, or any KN-001
+    handler except the exact prefetch ancestry correction declared below.
+    Prefetch first runs KN-001 locks and then verifies the service
     dependency lock and exact installed semantic versions without installing or
     downloading. All commands are direct argv; negative tests retain unknown,
     overlapping, shell, and undeclared-variable rejection.
@@ -264,6 +272,18 @@ deliverables:
     foundation security assertion remain unchanged. This correction grants no
     KN-DOM implementation ownership under tests/common and does not weaken
     current-packet allowedPaths, cumulative dispatch, or zero-bill scanning.
+  - >-
+    The inherited ci/handlers/prefetch.py requires the empty bootstrap commit to
+    exist in the checkout and be an ancestor of HEAD. The credential-free
+    workflow is intentionally pinned to fetch-depth 2, so a cumulative packet's
+    PR merge ref and later exact-main commit do not transport that older object.
+    KN-DOM-001 may replace only those two Git object/ancestry checks with the
+    exact merged KN-001 foundation commit
+    672e73e512113fbf2bb96c222b2ffea7f58e79ed. The base field in the immutable
+    predecessor lock remains the exact empty commit; CPython, lock equality,
+    dependency-free root, source-presence, direct-argv, offline, and error
+    checks remain unchanged. Tests must prove the foundation constant is used
+    by both Git checks and the empty-base constant remains only provenance.
   - >-
     Update only the existing domain-service Containerfile/chart source. The
     image remains externally supplied by immutable digest, non-root, read-only,
