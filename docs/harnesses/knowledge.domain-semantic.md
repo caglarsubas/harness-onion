@@ -174,10 +174,11 @@ empty, shell-based, network/install-bearing, recursive, mutated, or
 contract-drifted sequences must fail closed.
 
 The same packet makes the inherited KN-001 changed-path assertion cumulative:
-it compares the empty base only through the exact merged KN-001 commit and
-requires that commit to remain an ancestor of HEAD. This prevents later domain
-files from being mislabeled as bootstrap changes without broadening either
-packet's implementation ownership.
+it enumerates the complete tree of the exact merged KN-001 commit and requires
+that commit to remain an ancestor of HEAD. This avoids both later domain files
+being mislabeled as bootstrap changes and dependence on the absent empty object
+in the pinned two-commit checkout, without broadening either packet's
+implementation ownership.
 
 It also makes the inherited KN-001 prefetch ancestry proof compatible with the
 pinned zero-bill `fetch-depth: 2` checkout. The immutable predecessor lock keeps
