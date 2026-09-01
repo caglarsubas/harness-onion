@@ -3,16 +3,97 @@ repository: mas-harness-industry-packs
 branch: codex/ind-wg-001-business-domain
 objective: Define the white-goods business objectives, roles, ontology, CTQs, KPIs, and representative answer sets.
 predecessors: [IND-001]
-allowedPaths: ["packs/white-goods/pack.yaml", "packs/white-goods/questions/business/", "packs/white-goods/ontology/", "packs/white-goods/fixtures/answers/", "packs/white-goods/tests/test_business_domain.py", "docs/white-goods/business-domain.md", "ci/targets/ind-wg-001.json"]
+allowedPaths:
+  - packs/white-goods/pack.yaml
+  - packs/white-goods/contracts.lock.json
+  - packs/white-goods/journey.yaml
+  - packs/white-goods/questions/business/
+  - packs/white-goods/ontology/
+  - packs/white-goods/fixtures/answers/
+  - packs/white-goods/tests/test_business_domain.py
+  - docs/white-goods/business-domain.md
+  - docs/authoring.md
+  - src/planeon_industry_packs/rules.py
+  - src/planeon_industry_packs/__init__.py
+  - src/planeon_industry_packs/build_backend.py
+  - tests/framework/test_framework.py
+  - pyproject.toml
+  - uv.lock
+  - ci/handlers/ind_wg_001.py
+  - ci/zero_bill_scan.py
+  - ci/targets/ind-wg-001.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/reference_labs/","docs/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["reference_labs/white_goods/README.md","reference_labs/white_goods/__init__.py","reference_labs/white_goods/action-capabilities.json","reference_labs/white_goods/airgap-images.lock.json","reference_labs/white_goods/bundle.py","reference_labs/white_goods/certify.py","reference_labs/white_goods/certify_phase2.py","reference_labs/white_goods/data/api/service-api-fixtures.json","reference_labs/white_goods/data/documents/refrigerator-e05-manual.md","reference_labs/white_goods/data/documents/untrusted-field-note.md","reference_labs/white_goods/data/documents/washing-machine-e21-manual.md","reference_labs/white_goods/data/documents/washing-machine-pump-bulletin.md","reference_labs/white_goods/data/events/telemetry.jsonl","reference_labs/white_goods/data/master/customers.csv","reference_labs/white_goods/data/master/installed_products.csv","reference_labs/white_goods/data/master/products.csv","reference_labs/white_goods/data/quality/quality_inspections.csv","reference_labs/white_goods/data/service/service_orders.csv","reference_labs/white_goods/dataset.lock.json","reference_labs/white_goods/docker-compose.yml","reference_labs/white_goods/freshness-slos.json","reference_labs/white_goods/gqm-plan.json","reference_labs/white_goods/lab.py","reference_labs/white_goods/live/HarnessAcceptance.Containerfile","reference_labs/white_goods/live/README.md","reference_labs/white_goods/live/ServiceApi.Containerfile","reference_labs/white_goods/live/__init__.py","reference_labs/white_goods/live/compose.template.yaml","reference_labs/white_goods/live/connectors.py","reference_labs/white_goods/live/cross_plane_lab.py","reference_labs/white_goods/live/harness-requirements.txt","reference_labs/white_goods/live/harness_probe.py","reference_labs/white_goods/live/harness_runtime_lab.py","reference_labs/white_goods/live/local_lab.py","reference_labs/white_goods/live/model_plane_probe.py","reference_labs/white_goods/live/postgresql-seed.sql","reference_labs/white_goods/live/service_api.py","reference_labs/white_goods/pack-manifest.json","reference_labs/white_goods/phase2-gqm-plan.json","reference_labs/white_goods/phase2.py","reference_labs/white_goods/phase4.py","reference_labs/white_goods/phase5.py","reference_labs/white_goods/phase6_worker.py","reference_labs/white_goods/promotion-readiness.example.json","reference_labs/white_goods/reference-lab-manifest.json","reference_labs/white_goods/runtime/Containerfile","reference_labs/white_goods/runtime/README.md","reference_labs/white_goods/runtime/mirroring/imageset-config.template.yaml","reference_labs/white_goods/runtime/openshift/config-map.yaml","reference_labs/white_goods/runtime/openshift/deployment.template.yaml","reference_labs/white_goods/runtime/openshift/network-policy-allow-internal.yaml","reference_labs/white_goods/runtime/openshift/network-policy.yaml","reference_labs/white_goods/runtime/openshift/service-account.yaml","reference_labs/white_goods/runtime/openshift/service.yaml","reference_labs/white_goods/runtime/protocol-profiles.json","reference_labs/white_goods/runtime/wheelhouse-requirements.txt","reference_labs/white_goods/runtime_bundle.py","reference_labs/white_goods/semantic-mappings.json","reference_labs/white_goods/technology/opensearch/index-mapping.json","reference_labs/white_goods/technology/postgresql/schema.sql","reference_labs/white_goods/technology/redpanda/topic-contract.json","reference_labs/white_goods/technology/service-api/openapi.yaml","tests/reference_labs/__init__.py","tests/reference_labs/test_cold_chain_phase3.py","tests/reference_labs/test_local_cross_plane_lab.py","tests/reference_labs/test_local_harness_runtime_lab.py","tests/reference_labs/test_local_source_lab.py","tests/reference_labs/test_phase4_actions.py","tests/reference_labs/test_phase5_runtime.py","tests/reference_labs/test_phase6_5_integration_spine.py","tests/reference_labs/test_phase6_runtime.py","tests/reference_labs/test_phase7_readiness.py","tests/reference_labs/test_runtime_bundle.py","tests/reference_labs/test_white_goods_lab.py","tests/reference_labs/test_white_goods_phase2.py","docs/architecture/phase-0.md","docs/architecture/phase-1-white-goods-lab.md","docs/architecture/phase-2-trustworthy-context.md","docs/architecture/phase-3-pack-factory.md","docs/architecture/phase-3-pilot-selection.md","docs/architecture/phase-4-governed-actions.md","docs/architecture/phase-5-durable-runtime.md","docs/architecture/phase-6-runtime-scaffold.md","docs/architecture/phase-6.5-integration-spine.md","docs/architecture/phase-7-live-acceptance.md","docs/contracts/compatibility.md","docs/development-roadmap.md","docs/initial_research_docs/MAS Data Harness Roadmap.md","docs/initial_research_docs/compass_artifact_wf-dc9dea36-f55a-59ed-8a68-65a9ad6b7e2d_text_markdown.md","docs/initial_research_docs/deep-research-report (2).md","docs/security/threat-model.md","docs/testing/phase-0-gates.md","docs/testing/phase-1-gates.md","docs/testing/phase-2-gates.md","docs/testing/phase-3-gates.md","docs/testing/phase-4-gates.md","docs/testing/phase-5-gates.md","docs/testing/phase-6-gates.md","docs/testing/phase-6.5-gates.md","docs/testing/phase-7-readiness-gates.md"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes IndustryPack artifact contract v1", "Produces white-goods business/domain pack slice v1alpha1"]
-deliverables: ["Asset, product, process, quality, CTQ, KPI, accountable-role, and acceptance-outcome definitions with representative answers."]
-excluded: ["Plant-specific claims, write-capable actions, source credentials, or inferred regulatory obligations."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","packs/white-goods/tests/test_business_domain.py"]]
+contracts:
+  - Consumes exact public IND-001 main commit a626437a18cd27d75cb96e0d846f56a235313c98, common.foundation 1.0.0 pack digest 3cfea19e6e0a4a653d63622e250f40001b4f8221ebab18fa5bfc1601b8eddea3, raw common/pack.yaml SHA-256 534246425cdf38fd4f311da1e4a587eadbffdb589d747435a081ed969ae978e9, and reproducible framework 0.1.0 wheel SHA-256 89b790008f594d32398d7e592706f1fe412a94e42cf2fbadb194ccf555126b17 without copying or mounting an upstream checkout during acceptance.
+  - Produces white-goods business/domain pack slice harness.planeon.ai/industry-pack/v1alpha1 and framework distribution 0.1.1, retaining format compatibility 0.1.0 while admitting only the five exact W3C RDF/RDFS/XSD/OWL/SHACL namespace IRIs as non-dereferenced semantic identifiers in RDF-family files.
+  - Adds development-only rdflib==7.6.0 and pyshacl==0.40.1 plus their exact locked transitive open-source closure; they are preloaded into a root-owned offline toolchain and are never downloaded by packet execution.
+deliverables:
+  - >-
+    packs/white-goods is a closed SECTOR pack version 0.1.0 extending exactly
+    common.foundation 1.0.0 at its computed digest. It carries byte-identical
+    contracts.lock.json and journey.yaml bindings, overlayMode APPEND_ONLY,
+    Apache-2.0 licensing, and only declared regular data members. No common
+    resource id is shadowed and no sector pack is used as a parent.
+  - >-
+    Business questionnaires define uniquely identified, typed, required or
+    optional questions for objectives, accountable roles, product families,
+    processes, CTQs, KPIs, acceptance outcomes, evidence references, and
+    deferred plant-specific choices. Closed response types are string,
+    boolean, number, and choice; choice values are explicit and no question
+    requests a secret, credential, personal record, remote endpoint, model
+    prompt, write-capable action, or unsupported regulatory conclusion.
+  - >-
+    The white-goods ontology uses only local files, the five admitted W3C
+    namespace identifiers, and urn:planeon:white-goods:* domain IRIs. It
+    defines BusinessObjective, AccountableRole, ProductFamily, ProductModel,
+    ManufacturingProcess, ProcessStep, QualityCharacteristic,
+    CriticalToQuality, KeyPerformanceIndicator, AcceptanceOutcome, and their
+    closed relationships. Product families are refrigeration, laundry,
+    dish-care, and cooking. Every objective, CTQ, KPI, and acceptance outcome
+    has exactly one accountable role or owner relation as specified by SHACL.
+  - >-
+    SHACL shapes require stable ids, labels, ownership, formula text,
+    numerator/denominator or observation definitions, target direction,
+    dimensions, evidence class, and acceptance semantics without embedding
+    plant thresholds. Validation uses pySHACL with advanced=false, js=false,
+    inference=none, do_owl_imports=false, and only explicit local graphs.
+    Imports, external IRIs beyond the semantic allowlist, SPARQL constraints,
+    JavaScript, remote graphs, and implicit network resolution fail closed.
+  - >-
+    Representative synthetic answer sets include one accepted pilot, missing
+    accountable-owner, incomplete outcome evidence, and unverified
+    plant-specific-choice cases. Canonical sorted UTF-8 JSON digests bind each
+    vector and deterministic evaluation yields READY only for the complete
+    pilot; incomplete or unverifiable cases are BLOCKED with sorted stable
+    reason codes. Fixtures cannot assert that publication, deployment,
+    runtime, assurance, or tenant acceptance occurred.
+  - >-
+    The packet-owned Make descriptor registers only pack with exact
+    PACK=white-goods and direct argv to ci/handlers/ind_wg_001.py. The handler
+    proves pack validity, two-build index/archive identity, SHACL conformance
+    and negative detection, deterministic answer evaluation, exact dependency
+    versions, no RDF imports or network use, and false evidence flags. It
+    creates only temporary outputs and retains or publishes no artifact.
+  - >-
+    planeon-harness-industry-packs 0.1.1 keeps the framework runtime dependency
+    surface unchanged. RDFLib and pySHACL are development-only. The semantic
+    IRI exception is closed to RDF-family paths and exact W3C namespace
+    prefixes; arbitrary HTTP, FTP, endpoint, template, credential, executable,
+    and model/tool fields remain rejected. Framework regression tests cover
+    both the five admitted identifiers and a non-allowlisted remote IRI.
+excluded:
+  - Plant names, production values, thresholds presented as real, customer or employee data, plant-specific facts, certification or regulatory claims, write-capable actions, credentials, secrets, source-schema bytes, warm-source observation, copied source material, network resolution, hosted services, paid APIs, JavaScript/SPARQL SHACL, ontology imports, signing, publication, deployment, runtime evidence, assurance evidence, or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","packs/white-goods/tests/test_business_domain.py"],["make","build-reproducible"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["SHACL-valid ontology and deterministic answer vectors.", "Source provenance and deferred plant-specific choices."]
-rollback: Revert the unreleased white-goods business/domain slice without changing the pack framework.
+expectedEvidence:
+  - The exact sector pack validates against the merged IND-001 framework; two canonical indexes and fixed-epoch archives are byte-identical and retain all publication/runtime/assurance/tenant flags false.
+  - pySHACL proves the local positive graph conforms and the negative graph fails with the expected closed constraint components while imports, JavaScript, advanced mode, inference, SPARQL, and network resolution stay disabled.
+  - Questionnaire ids, answer keys, ontology terms, roles, objectives, CTQs, KPIs, formulas, dimensions, evidence classes, and acceptance outcomes are mutually closed and deterministic; negative answer vectors yield sorted stable blockers.
+  - Dependency metadata, uv.lock, wheel METADATA, zero-bill rules, license-compatible package inventory, and the root-owned offline toolchain agree on framework 0.1.1, rdflib 7.6.0, and pyshacl 0.40.1.
+  - Historical sourceReuse remains provenance only. Acceptance receives no warm-source path and the authored pack states that every fixture is synthetic and every plant-specific choice remains deferred until tenant evidence exists.
+  - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate evidence states.
+rollback: Revert the unreleased white-goods business/domain slice and framework 0.1.1 semantic-IRI patch together; retain common.foundation 1.0.0, IND-001 framework 0.1.0 evidence, and every downstream tenant or release record unchanged.
