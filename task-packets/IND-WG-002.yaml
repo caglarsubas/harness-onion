@@ -113,11 +113,7 @@ excluded:
     publication, deployment, runtime evidence, assurance evidence, or tenant
     acceptance. Missing or WARN evidence cannot be marked ready.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands:
-  - ["make","pack","PACK=white-goods"]
-  - ["make","data-readiness","PACK=white-goods"]
-  - ["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py","tests/white_goods/test_data_readiness.py"]
-  - ["make","zero-bill"]
+offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["make","data-readiness","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py","tests/white_goods/test_data_readiness.py"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - The exact predecessor commit, raw pack file, pack digest, framework wheel, public contracts commit, two schema paths, and two schema digests match the packet's immutable bindings without mounting or reading a warm-source checkout.
