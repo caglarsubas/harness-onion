@@ -41,7 +41,7 @@ mas-harness-sdks/
 │   │   ├── context.py
 │   │   ├── decorators.py
 │   │   ├── protocols/
-│   │   ├── guardrails/
+│   │   ├── guardrail/
 │   │   ├── runtime/
 │   │   └── integrations/
 │   └── tests/{compat,guardrail,integrations,protocols,runtime,telemetry}/
@@ -59,7 +59,7 @@ mas-harness-sdks/
 
 - Python core: distribution `planeon-harness-sdk`, import `planeon_harness`, Python 3.10-3.13 with development baseline 3.12.14, built by Hatchling and locked with `uv` 0.12.7.
 - Python compatibility: distribution `planeon-prometa-compat`, import `prometa`, versioned with core through `v1.x`; it contains re-exports and deprecation warnings only.
-- TypeScript: package `@planeon/harness-sdk`, Node 24.20.0 LTS, TypeScript 5.x, ESM, a committed toolchain lock, and no postinstall network action.
+- TypeScript: package `@planeon/harness-sdk`, pinned Node 24.19.0, TypeScript 5.x, ESM, a committed toolchain lock, and no postinstall network action.
 - Generated types and clients cover all OpenAPI schemas, CloudEvents, error envelopes, idempotency keys, ETags, and operations.
 - Handwritten APIs cover tenant context, OTel attributes/decorators, trace/baggage propagation, signed-bundle admission, policy/guardrail clients, task polling/SSE, MCP/A2A adapters, idempotent receipts, budgets, resilience, and framework instrumentation.
 - `SDK-003` consumes the exact `CON-007` release digest. Python Ed25519 uses a hash-pinned `cryptography` wheel from the preprovisioned offline wheelhouse; TypeScript uses the runtime Web Crypto implementation. Neither language may ship custom cryptographic primitives, fetch packages at runtime, or hold private keys.
@@ -144,6 +144,53 @@ shapes are grounded in the official LangChain/LangGraph documentation,
 CrewAI event documentation, Microsoft Semantic Kernel filter documentation,
 and the official MCP Python SDK release line; their URLs are recorded in the
 lock rather than fetched during build or runtime.
+
+### SDK-006 guardrail contract
+
+SDK-006 owns a deterministic in-process SDK contract and the conformance
+vectors later consumed by the downstream trust guardrail packet; it does not claim a guardrail schema in
+the current `contracts.lock.json`, create a deployable service, or add a network
+transport. Python exposes `planeon_harness.guardrail`. TypeScript exposes the
+same contract from both the package root and `@planeon/harness-sdk/guardrail`;
+source, committed JavaScript, declarations, export map, and fixtures move
+together.
+
+A closed `GuardrailProfile` identifies one of `INPUT`, `OUTPUT`, `RUNTIME`,
+or `STREAMING`, an explicit `FAIL_CLOSED` or `FAIL_OPEN` mode, a 1 through
+1,048,576 UTF-8-byte content limit, and an ordered set of local detector IDs.
+The client is transport-neutral and synchronous in this packet. It accepts
+caller-supplied detectors only, performs no detector call during construction,
+and rejects missing or duplicate registrations before content is evaluated.
+External moderation APIs, remote detectors, model downloads, provider SDKs,
+API keys, evidence persistence, and automatic telemetry are excluded.
+
+Each detector returns a stable content-free reason, one of `ALLOW`, `DENY`,
+`REDACT`, or `QUARANTINE`, and Unicode-scalar redaction ranges only for
+`REDACT`. Ranges must be ordered, non-overlapping, and in bounds. The client
+combines ranges across detectors by sorted union, merges overlaps and adjacency,
+and substitutes the exact token `[REDACTED]`. Raw input is never a result field;
+sanitized content exists only for a `REDACT` outcome.
+
+Oversized input is denied before a detector runs. Detector exceptions and
+malformed findings never escape with their type, message, or value.
+`FAIL_CLOSED` stops on the first such failure with `ERROR_FAIL_CLOSED`.
+`FAIL_OPEN` remains explicit: it records only failed detector IDs, marks the
+result degraded, continues evaluation, and applies the closed precedence
+`DENY > QUARANTINE > REDACT > ERROR_FAIL_OPEN > ALLOW`. A concrete winning
+finding supplies the first profile-ordered reason at that precedence.
+
+Streaming uses the same evaluator over the complete bounded cumulative buffer
+after every non-empty chunk, making split matches observable without unbounded
+retention. `DENY`, `QUARANTINE`, and `ERROR_FAIL_CLOSED` clear and terminate
+the stream. `finish` returns the latest evaluation, evaluates one empty buffer
+only when no chunk was pushed, clears content, and closes the stream. Terminal
+and finished calls fail with distinct content-free codes.
+
+Shared fixtures cover every stage, outcome, failure mode, precedence branch,
+UTF-8 limit, Unicode redaction case, detector outage/malformed result, and
+streaming boundary. Python and TypeScript serialize the closed result shape as
+byte-identical sorted compact UTF-8 JSON. Protected fixture sentinels must be
+absent from expected results, errors, telemetry, and captured output.
 
 ## Testing, verification, and acceptance
 
