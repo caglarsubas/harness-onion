@@ -178,3 +178,10 @@ it compares the empty base only through the exact merged KN-001 commit and
 requires that commit to remain an ancestor of HEAD. This prevents later domain
 files from being mislabeled as bootstrap changes without broadening either
 packet's implementation ownership.
+
+It also makes the inherited KN-001 prefetch ancestry proof compatible with the
+pinned zero-bill `fetch-depth: 2` checkout. The immutable predecessor lock keeps
+the empty bootstrap SHA as provenance, while the handler's two Git availability
+and ancestry checks use exact merged KN-001 commit `672e73e...`, which is the
+foundation parent available to both the dependent PR merge ref and later
+exact-main commit. Every other prefetch and offline control remains unchanged.

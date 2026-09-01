@@ -192,6 +192,15 @@ a KN-001 file. The amendment changes only the comparison endpoint and adds an
 ancestor assertion; KN-001's original allowed set and all other foundation
 security checks remain closed.
 
+The packet owns one additional cumulative-CI correction in
+`ci/handlers/prefetch.py`. The zero-bill workflow deliberately keeps the pinned
+checkout at `fetch-depth: 2`; once a dependent packet exists, that checkout
+contains the KN-001 foundation parent but need not contain the older empty
+bootstrap object. The handler therefore retains the empty commit only in its
+immutable predecessor-provenance lock and uses exact merged KN-001 commit
+`672e73e...` for its two Git object/ancestor checks. No lock, dependency,
+source-presence, Python, offline, runner, checkout-depth, or billing rule changes.
+
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
@@ -244,6 +253,9 @@ packet mutation, missing isolation identity, and leaked authority paths.
 The cumulative security target additionally proves the exact KN-001 commit is
 an ancestor and its own base-to-foundation paths remain within the original
 bootstrap boundary, independently of KN-DOM's packet-local path validation.
+The cumulative prefetch target likewise proves that exact foundation object is
+available and ancestral in the pinned two-commit checkout while preserving the
+empty bootstrap SHA solely as immutable provenance.
 
 `common-contract` validates the immutable upstream lock, exact Python/lock
 closure, canonical JSON/digests, closed records, privacy, idempotency, health
