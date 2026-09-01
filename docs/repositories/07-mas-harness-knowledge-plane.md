@@ -93,6 +93,31 @@ bodies, query strings, caller identity, missing or malformed probes, timeouts,
 and probe exceptions return bounded metadata-only failures and never trigger
 network discovery or retry.
 
+### `KN-DOM-001` domain-service boundary
+
+`KN-DOM-001` preserves the dependency-free KN-001 root package and root lock.
+RDFLib 7.6.0, pySHACL 0.40.1, and their exact eight-package runtime closure are
+declared and digest/license locked only in `services/domain-service/`; acceptance
+uses the preinstalled root-owned IND-WG-001 semantic toolchain without package
+resolution. This prevents a later harness dependency from silently changing the
+foundation closure or another service image.
+
+Domain packages and semantic mappings are immutable digest-bound metadata.
+Graph/shapes bytes are supplied transiently by an injected local exact-digest
+provider and are never placed in SQL, events, evidence, errors, or logs. Only
+bounded Turtle and inline-context JSON-LD are admitted. The implementation
+rejects remote contexts/imports, arbitrary network/file IRIs, RDF/XML, archives,
+SPARQL/JavaScript/rule-based SHACL, over-limit graphs, and any engine mode other
+than the closed local RDFLib/pySHACL profile.
+
+Version and mapping state histories are append-only. Publication requires an
+already verified, digest-bound approval attestation plus an exact unexpired
+policy permit. Activation and compatible rollback atomically append revisions,
+evidence, and an outbox event while switching one tenant-scoped active pointer;
+failure leaves the prior pointer unchanged. A policy allow, fixture, test, or
+generated output is never owner approval. Runtime PostgreSQL, image, and chart
+execution remain `NOT_RUN_ENV_UNAVAILABLE` for this packet.
+
 ## Owned APIs, events, and stores
 
 The following are repository-level API ownership assignments, not `KN-001`

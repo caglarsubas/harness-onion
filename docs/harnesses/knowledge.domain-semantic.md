@@ -18,7 +18,10 @@ It does not ingest source data, build retrieval indexes, store conversational me
 
 - `domain-service`: versioned domain-package API, validation, publication, resolution, and compatibility checks.
 
-The baseline implementation embeds RDFLib and pySHACL in `domain-service`; no external triplestore is required for minimal profiles.
+The baseline implementation embeds a digest-locked RDFLib 7.6.0 and pySHACL
+0.40.1 service-specific dependency unit in `domain-service`; the KN-001 root
+package remains standard-library-only. No external triplestore is required for
+minimal profiles.
 Apache Jena is contract-only, non-installable comparative guidance in this
 release; there is no selectable Jena service or repository packet.
 
@@ -43,7 +46,11 @@ Domain publication precedes data mapping, readiness approval, retrieval indexing
 | `planeon.pyshacl` | Mandatory SHACL validation provider |
 | `planeon.jena` | Contract-only, non-installable high-scale SPARQL guidance; active selection is rejected as `PROVIDER_UNAVAILABLE` |
 
-All remote RDF imports are resolved into the signed domain package at build time. Runtime network dereferencing is prohibited.
+All import content must already be vendored and digest-bound outside this
+packet. `KN-DOM-001` accepts no import statement at all: remote contexts,
+`owl:imports`, and runtime network dereferencing are prohibited. A future signed
+package-admission packet may define a closed vendored-import manifest without
+broadening runtime egress.
 
 ## Configuration and runtime boundaries
 
@@ -81,7 +88,19 @@ POST /knowledge/v1/domains/{id}/versions/{version}:resolve
 GET  /knowledge/v1/domains/{id}/versions/{version}/report
 ```
 
-Version states: `DRAFT → VALIDATING → VALID`; then `AWAITING_APPROVAL → ACTIVE`. Alternatives are `INVALID`, `REJECTED`, `SUPERSEDED`, and `RETIRED`.
+Version states are append-only revisions: `DRAFT → VALIDATING → VALID →
+AWAITING_APPROVAL → ACTIVE`. Alternatives are `INVALID`, `REJECTED`,
+`SUPERSEDED`, and terminal `RETIRED`. Atomic activation appends `ACTIVE`, appends
+`SUPERSEDED` for the prior active version, writes evidence/outbox/idempotency,
+and changes exactly one tenant-scoped active pointer. A compatible, previously
+approved `SUPERSEDED` version can be reactivated by the same atomic boundary;
+metadata and prior history are never mutated or deleted.
+
+Mapping states are `DRAFT`, `VALIDATING`, `VALID`, `INVALID`,
+`AWAITING_APPROVAL`, `ACTIVE`, `REJECTED`, and `SUPERSEDED`. Every mapping binds
+an exact active domain digest and contains only source-field digests, target term
+IRIs, a closed transformation kind, owners, and provenance digests—never raw
+schemas, fields, values, queries, formulas, or executable transformations.
 
 Emitted:
 
@@ -95,10 +114,18 @@ Consumed: `approval.decided.v1`, `module.release.revoked.v1`, and industry-pack 
 ## Failures, retry, and rollback
 
 - Parsing, SHACL, ownership, signature, or import-closure errors mark the version `INVALID` with bounded findings.
+- Validation is bounded to 2 MiB per document, 4 MiB total, 50,000 data triples,
+  20,000 shape triples, 128 digest-only findings, and an injected 30-second
+  monotonic deadline. Report messages and offending literals are not retained.
 - Validation is deterministic and safe to retry. Publication requires an idempotency key and optimistic version check.
 - The active pointer changes atomically only after validation and approval.
 - A failed publication retains the prior active version.
 - Rollback activates a previously approved compatible version; it never mutates an immutable package.
+- Compatibility is deterministic: unchanged term inventories/statements are
+  `IDENTICAL`; additive terms with unchanged prior statements are
+  `BACKWARD_COMPATIBLE`; removed terms or changed prior statements are
+  `BREAKING`. `STRICT` accepts only identical and `BACKWARD` accepts identical
+  or backward-compatible changes.
 - Consumers pin a domain digest. Superseding a version does not silently change existing locked profiles.
 - Excessive graph size or cyclic import manifests fail before loading the active graph.
 
