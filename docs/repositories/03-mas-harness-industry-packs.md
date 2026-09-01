@@ -54,11 +54,12 @@ mas-harness-industry-packs/
 ## Package, toolchain, and owned interfaces
 
 - Distribution/import: `planeon-harness-industry-packs` / `planeon_industry_packs`.
-- IND-001 toolchain: Python 3.12.14, `uv` 0.12.7,
+- Base toolchain: Python 3.12.14, `uv` 0.12.7,
   `jsonschema==4.24.0`, `PyYAML==6.0.2`, and `pytest==8.4.2` in the
-  development group; exact direct and transitive versions are locked. RDFLib
-  and pySHACL are intentionally deferred until the white-goods ontology packet
-  explicitly admits their dependency paths and offline wheel closure.
+  development group. IND-WG-001 advances the framework distribution to 0.1.1
+  and adds development-only `rdflib==7.6.0` and `pyshacl==0.40.1` with an exact
+  transitive offline wheel closure. The framework runtime dependencies remain
+  unchanged; packet execution never resolves or downloads a package.
 - CLI: `harness-pack validate`, `harness-pack test`, `harness-pack compile-index`, and `harness-pack package`.
 - Artifact: an OCI pack artifact containing only data, schemas, fixtures, documentation, and digests; no executable hook.
 - Rules use only `all|any|not|eq|in|exists|gte|lte` and may emit questions, requirements, blockers, or recommendations.
@@ -134,6 +135,33 @@ byte identity.
 - Downstream: control plane consumes signed pack artifacts; conformance labs consume fixtures; knowledge/trust planes consume accepted domain/control artifacts, never pack source files directly.
 - Packs cannot import one another. They extend the versioned `common` pack through declared overlay/precedence rules.
 
+## IND-WG-001 business-domain contract
+
+IND-WG-001 binds exact industry-pack main commit
+`a626437a18cd27d75cb96e0d846f56a235313c98`, common pack digest
+`3cfea19e6e0a4a653d63622e250f40001b4f8221ebab18fa5bfc1601b8eddea3`,
+and the reproducible framework 0.1.0 wheel. `white-goods` is a clean-room,
+Apache-2.0 sector overlay; historical `sourceReuse` entries are provenance only
+and no warm checkout is observed or mounted.
+
+The first sector slice defines business objectives, accountable roles, four
+product families, manufacturing processes, quality characteristics, CTQs,
+KPIs, acceptance outcomes, and synthetic answer vectors. Plant identities,
+measured values, production thresholds, customer/employee data, regulatory
+conclusions, and credentials remain tenant-evidence-dependent and absent.
+
+The ontology uses `urn:planeon:white-goods:*` for domain terms. RDF-family
+content may identify only the exact W3C RDF, RDFS, XSD, OWL, and SHACL
+namespaces without dereferencing them. Every other remote IRI remains invalid.
+SHACL validation is local-only with imports, JavaScript, SPARQL, advanced mode,
+and inference disabled. A positive graph must conform and a negative graph must
+produce the expected constraint components.
+
+Framework 0.1.1 owns the narrow semantic-identifier exception. It does not
+relax the general network-target prohibition and does not alter the 0.1.0 pack
+format. The packet updates deterministic wheel/sdist evidence because framework
+source changed; the immutable common pack and its digest do not change.
+
 ## Warm-source mapping
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
@@ -158,6 +186,13 @@ reproducibility checks as direct argv arrays. The executor supplies the
 hash-pinned packet through `HARNESS_TASK_PACKET` and invokes only
 `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the complete
 ordered list.
+
+IND-WG-001 declares `prefetchCommands: [["make","prefetch"]]` and ordered
+acceptance commands for `make pack PACK=white-goods`, the exact business-domain
+pytest file, framework reproducibility, and zero-bill validation. The
+packet-owned handler verifies dependency versions, closed local SHACL settings,
+pack/index/archive determinism, answer-vector decisions, and false downstream
+evidence flags without retaining an artifact.
 
 Acceptance proves: the journey works without an LLM; invalid/executable rules fail closed; missing business owner or data evidence blocks approval; identical answers produce identical pack requirements; all fixtures are synthetic and license-clean; and white-goods minimal/regulated/air-gap demands compile to expected digests.
 
