@@ -1,16 +1,284 @@
 id: CTRL-001
 repository: mas-harness-control-plane
 branch: codex/ctrl-001-bootstrap-auth
-objective: Bootstrap separate control-web and compiler-worker processes with OIDC tenant derivation, PostgreSQL RLS, health endpoints, and non-root images.
+objective: Bootstrap a clean-room control-plane foundation with separate web and compiler-worker processes, offline OIDC session admission, server-derived tenant identity, tenant-isolated PostgreSQL source contracts, closed health/readiness state, non-root image and Helm sources, and deterministic offline dispatch without implementing questionnaire or compilation behavior.
 predecessors: [SDK-002, IND-001, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "apps/control-web/", "workers/profile-compiler/", "prisma/", "packages/db/", "tests/bootstrap/", "deploy/helm/control-plane/", "package.json", "package-lock.json", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - apps/control-web/
+  - workers/profile-compiler/
+  - prisma/
+  - packages/db/
+  - tests/bootstrap/
+  - deploy/helm/control-plane/
+  - package.json
+  - package-lock.json
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes generated TypeScript/Python clients v1alpha1", "Produces control service health and tenant-context contract v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["Locked Node 24.20.0/Next.js 16.3.3 Active LTS/React 19.2/TypeScript 5/Prisma 6.19.3 and Python 3.12 toolchains.", "Next.js App Router standalone self-hosted build with only locally bundled assets and no Vercel service, hosted analytics, remote font, CDN, provider adapter, or runtime npm dependency.", "Separate images, OIDC session, server-derived tenant identity, RLS roles, health/readiness, and offline CI.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Questionnaire behavior, cloud deployment, paid identity providers, or wholesale legacy Prisma history."]
+contracts:
+  - >-
+    Starts only from public mas-harness-control-plane commit
+    fbd3d21da70167b0819caa1dfc017e7c673a1cbe, whose tree is empty. CTRL-001
+    is the sole bootstrap owner of every product file it creates; prefetch must
+    fail when HEAD is not that exact commit or a direct implementation
+    descendant whose first parent is that commit. The product run receives no
+    warm-source path, checkout, mount, object, or copied byte.
+  - >-
+    Consumes SDK-002 only as an immutable public compatibility boundary at exact
+    mas-harness-sdks merge commit
+    92a8ebf8e705eb2bf7a4e5be89edc5e8aa062c08. Raw SHA-256 locks are TypeScript
+    telemetry context
+    526c851a8a598d1d49b47da4b0fc588c24dcdef974b76b7b21ec4d747ead7ae1,
+    attributes 922ed63c42c742cfc01ad61f880862b8a9312a1a3a647698995a6d426cc15a5c,
+    decorators 5f8d92fa84b8ad8c48f3319578ebb0f3f8b5abe9a33c86d86acd48a649f8f06d,
+    and package manifest
+    c74a05bb7e25f02b47ab24be5c215d1431947dbf882741ec4797141da9e494c0.
+    The bootstrap neither installs nor copies the SDK and exports no telemetry by
+    default. Its local compatibility fixture admits only the SDK-002 neutral
+    organization, harness, plane, component, operation, outcome, and correlation
+    attributes and rejects prompts, answers, tokens, claims, cookies, raw
+    identity, arbitrary attributes, and provider-specific names.
+  - >-
+    Consumes IND-001 only as an immutable public guidance boundary at exact
+    mas-harness-industry-packs merge commit
+    a626437a18cd27d75cb96e0d846f56a235313c98. Raw SHA-256 locks are common
+    journey 950a6d21c68a35117a3cd36d67491cde85274ef911d78ff8585e1be8671db2fb,
+    common pack manifest
+    534246425cdf38fd4f311da1e4a587eadbffdb589d747435a081ed969ae978e9,
+    and contracts lock
+    81d7470e28b452cbf8de2e4903b47b5335709b09cf6375f78481057973d75c91.
+    CTRL-001 records these digests in a local immutable lock but implements no
+    pack loader, questionnaire, sector rule, remote resolver, or copied pack
+    content. CTRL-002 owns verified pack intake and the eight-stage journey.
+  - >-
+    Consumes MET-003 zero-bill admission from exact Harness-Engineering commit
+    97da35afff79e1582b964b613472609a613ea81b. Raw SHA-256 values are policy
+    77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e,
+    scanner 57fa7e94bf5657f0daf959d5229dfc2a53a0ab94793d1d5fa03a7513b1272fd7,
+    and pinned workflow
+    b6b8c87fc5f9615c193594c7a861a59e55022acfdb1dc9970c903af9fca22dee.
+  - >-
+    Produces planeon.control.foundation/v1 records OidcIssuerBinding,
+    AuthorizationAttempt, AdmittedPrincipal, SessionRevision, TenantContext,
+    DependencyStatus, ServiceHealth, AuditRecord, InboxRecord, and OutboxRecord;
+    produces health-only control-web and inert profile-compiler-worker process
+    surfaces; produces the initial additive control-schema PostgreSQL contract;
+    produces closed packet-local Make target descriptor dispatch v1; and
+    produces an inert destination PORTING ledger v1 with zero current copy
+    authorizations.
+deliverables:
+  - >-
+    Pin the web toolchain to Node.js 24.20.0, npm 11.11.0, Next.js 16.3.3,
+    React and react-dom 19.2.0, TypeScript 5.9.3, Prisma and @prisma/client
+    6.19.3, AJV 8.20.0, and Vitest 4.1.11. package-lock.json is canonical and
+    package.json fixes packageManager plus exact engines. npm installation is
+    allowed only as packet prefetch with --offline, --ignore-scripts,
+    --no-audit, and --no-fund against the preprovisioned local cache inside the
+    same deny-all-outbound process tree as acceptance; acceptance performs no
+    registry lookup, lifecycle script, telemetry, update-notifier, cache upload,
+    package publication, Next/Vercel remote service, or retained build artifact.
+    The Next App Router build is standalone and all fonts, icons, styles,
+    scripts, and assets are repository-local.
+  - >-
+    Pin the worker toolchain to exact CPython 3.12.14 and uv 0.12.7. The
+    CTRL-001 worker is standard-library-only, has no psycopg or contract-package
+    dependency, opens no listener, consumes no job, compiles no profile, and
+    performs no polling, sleep, network, filesystem discovery, or subprocess
+    execution. It accepts only explicit --health-check and --run-once argv;
+    run-once validates injected dependency state and returns the closed
+    IDLE_BOOTSTRAP outcome. CTRL-004 owns the digest-locked database adapter,
+    job lease, compiler invocation, retry, and atomic publication behavior.
+  - >-
+    Implement an offline OIDC admission core around a caller-supplied compact
+    ID token and a regular local closed issuer registry. Each binding fixes one
+    HTTPS issuer, one or more audiences, organizationId, tenant claim name and
+    exact value, allowed asymmetric algorithms, maximum token lifetime, clock
+    skew, and inline public JWKS. No discovery URL, token endpoint, userinfo
+    endpoint, client secret, symmetric key, private key, password grant, remote
+    JWKS, DNS lookup, HTTP client, or environment-derived tenant is permitted.
+    Test fixtures use only reserved example.invalid issuers and synthetic public
+    keys; production identity material is operator supplied outside source.
+  - >-
+    Token admission requires a closed protected header with typ JWT, supported
+    alg, and kid plus exact iss, aud, sub, iat, nbf, exp, nonce, jti, and the
+    registry-selected tenant claim. It rejects duplicate JSON members, malformed
+    base64url or UTF-8, unknown members, missing or ambiguous audience, algorithm
+    confusion, unknown/inactive key, issuer/audience/tenant/nonce mismatch,
+    excessive lifetime, clock failure, early/expired/replayed token, bad
+    signature, oversized input, and any caller organization override. Raw ID or
+    access tokens, claims, authorization headers, cookies, nonce/state/verifier,
+    key material, and subject values are never logged, persisted, cached,
+    returned in errors, placed in telemetry, or sent to the browser after
+    admission.
+  - >-
+    AuthorizationAttempt is a bounded one-use server-side record whose random
+    state, nonce, and PKCE verifier are stored only as SHA-256 digests, expire in
+    at most ten minutes, and are consumed atomically. Successful admission maps
+    the issuer binding—not a free-form token claim—to an immutable TenantContext
+    containing organizationId, a subject digest, sessionId, admissionDigest,
+    issuedAt, and expiresAt. Caller-supplied X-Tenant-Id, X-Organization-Id,
+    organizationId, tenantId, subjectId, or session identity in a header, query,
+    body, cookie payload, or environment default is rejected before business
+    dispatch.
+  - >-
+    Sessions use an opaque random value in an HttpOnly, Secure, SameSite=Lax,
+    Path=/, __Host-planeon_session cookie. Only its SHA-256 digest is stored.
+    The absolute lifetime is at most eight hours and the idle lifetime at most
+    thirty minutes. Session revisions are append-only ACTIVE, REVOKED, or
+    EXPIRED records with monotonic version and one current pointer; reuse after
+    revocation/expiry, pointer mismatch, missing CSRF proof for a mutation, or
+    storage/audit failure denies. The bootstrap implements no login page,
+    provider exchange, logout UI, business mutation, or tenant-selection UI;
+    injected local fixtures exercise the transport-neutral start/admit/session
+    core only.
+  - >-
+    Provide a dependency-injected control-web core plus Next route handlers for
+    GET /health/live and GET /health/ready only. Liveness reports only process
+    identity and RUNNING. Readiness is READY only when the exact local issuer
+    registry, session entropy source, owned-store probe, audit append probe,
+    tenant-context transaction probe, and static contract lock are READY.
+    Optional local telemetry may report DEGRADED but cannot authorize a request.
+    Missing, malformed, stale, timed-out, or throwing required probes produce
+    NOT_READY with bounded dependency reason codes and no retry/discovery.
+    Unknown routes and methods return bounded 404/405 responses without echoing
+    request values. No questionnaire, demand, profile, bundle, organization,
+    overview, plane, or harness endpoint is implemented by this packet.
+  - >-
+    Provide a separate profile-compiler-worker entrypoint and health model. It
+    is READY only when its immutable contracts lock and owned-store probe are
+    READY, and its only work outcome is IDLE_BOOTSTRAP. It never imports the
+    Next application, accepts an HTTP request, shares process memory with the
+    web process, consumes an outbox/job, or treats the web process as a
+    synchronous dependency. Web unavailability cannot change an already
+    injected worker dependency snapshot.
+  - >-
+    prisma/schema.prisma and packages/db/migrations/001_foundation.sql define
+    the control schema and only tenant, authorization_attempt, auth_session,
+    auth_session_revision, audit_event, idempotency_record, event_inbox, and
+    event_outbox foundation tables. Every tenant-owned row has immutable
+    organization_id, bounded identifiers/digests, version, UTC timestamps, and
+    audit linkage. Inbox uniqueness is organization_id plus event_id; outbox
+    uniqueness is organization_id plus event_id; audit and outbox rows are
+    append-only. No questionnaire, answer, readiness, demand, profile, approval,
+    operation, compilation job, bundle request, overview, projection, secret,
+    token, prompt, model output, business payload, or binary object table is
+    created by CTRL-001.
+  - >-
+    The SQL contract creates separate NOLOGIN owner, migrator, runtime, and
+    audit-writer roles. Every tenant table enables and forces RLS using only
+    NULLIF(current_setting('planeon.organization_id', true), ''); tenant context
+    is set transaction-locally with set_config after admitted UUID validation and
+    reset by transaction end. Runtime receives only required SELECT/INSERT and
+    narrowly enumerated session-current-pointer UPDATE privileges, with no
+    BYPASSRLS, role inheritance, DDL, CREATE, TRUNCATE, DELETE, cross-schema,
+    public-schema, or audit/outbox update privilege. Append-only triggers reject
+    UPDATE/DELETE where required. No database, extension, user/login, password,
+    network endpoint, cloud store, down migration, cascade, or destructive
+    rollback is created.
+  - >-
+    Acceptance proves SQL structure and tenant-isolation parity with an
+    independent in-memory transaction model. Actual PostgreSQL execution is
+    reported only PASS when a separately supplied credential-free disposable
+    local cluster is available inside isolation; otherwise it is explicitly
+    NOT_RUN_ENV_UNAVAILABLE and source/parity evidence must not be promoted to
+    deployment or runtime proof. A shared host database or ambient credential
+    is never required or mutated by packet acceptance.
+  - >-
+    apps/control-web/Containerfile and workers/profile-compiler/Containerfile
+    are source-only and require caller-supplied BASE_IMAGE@sha256 values. They
+    use fixed non-root UID 65532, read-only-compatible paths, direct non-shell
+    entrypoints, and perform no package installation, fetch, image build, or
+    remote health call during acceptance. No image is built, pushed, signed,
+    scanned, or reported runnable by this packet; those evidence axes remain
+    separate.
+  - >-
+    deploy/helm/control-plane contains one inert chart with independently
+    scalable web and worker deployments, both disabled by default. Enabling a
+    component requires a non-empty operator-supplied repository plus sha256
+    digest, explicit replica count and bounded resources, and existing Secret
+    references for only that component's configuration. Templates create no
+    namespace, Secret, database, IdP, registry, storage, PVC, ingress, Route,
+    LoadBalancer, public endpoint, certificate, key, credential, cloud resource,
+    or paid service. They declare non-root/read-only/dropped-capability/seccomp
+    security, dedicated service accounts, probes, digest-only images, and
+    default-deny ingress/egress NetworkPolicies while remaining compatible with
+    OpenShift arbitrary UID policy.
+  - >-
+    The bootstrap Makefile delegates only to ci/run_make_target.py. CTRL-001
+    owns ci/targets/ctrl-001.json handlers for help, prefetch, bootstrap-e2e,
+    and zero-bill. The dispatcher validates closed descriptors, exact target and
+    variable bindings, cumulative lexical handler order, and direct argv without
+    a shell. It rejects missing, unknown, duplicate, owner/filename mismatch,
+    undeclared-variable, command-string, shell, zero-handler, and ambiguous
+    handler vectors. Later packets never edit Makefile, dispatcher, packet
+    transport, workflow, or CTRL-001 handler files.
+  - >-
+    ci/verify-offline.sh is only an adapter for the trusted external launcher:
+    it validates the hidden hash-pinned packet transport and executes received
+    direct argv without a shell command string, subprocess-created network
+    allowance, or fallback path. CI uses only pinned actions/checkout commit
+    11bd71901bbe5b1630ceea73d27597364c9af683 on labels self-hosted,
+    harness-engineering, ephemeral, and credential-free, then invokes only
+    /opt/planeon/bin/harness-offline-launch. It uses no hosted runner, service
+    container, cache, artifact, Packages, secret, permission escalation, remote
+    setup action, or network/package setup step.
+  - >-
+    PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel,
+    with authorizationId null and empty mappings, copiedFiles, and appliedPorts.
+    It cannot name or imply a source path, destination mapping, copied file, or
+    applied port. Any future port requires a revised legally approved
+    PORT_CANDIDATE packet and exact destination record.
+excluded:
+  - >-
+    Warm-source observation, access, mount, path transport, copying, adaptation,
+    translation, derivative reuse, or execution; hosted identity or auth SaaS;
+    remote OIDC discovery/JWKS/token/userinfo calls; caller-selected tenant;
+    password authentication; private keys, secrets, credentials, or raw token
+    storage; questionnaire/industry-pack loading; answers/readiness/demands;
+    approvals/profiles/compilation/jobs/outbox delivery/bundles; organization
+    portfolio or tenant harness overview; model, agent, retrieval, tool, policy,
+    governance, registry, operator, or Kubernetes calls; ingress/public routes;
+    database/IdP/cloud provisioning; package or runtime download; package/image
+    publication; hosted runner; Actions cache/artifact/Packages; paid or metered
+    service; API key; remote telemetry; image/chart execution; deployment;
+    production/runtime/security/assurance evidence; or tenant acceptance.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","zero-bill"]]
-offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["RLS denies cross-tenant rows.", "Both non-root images start offline with mocked OIDC and PostgreSQL.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Revert the unconsumed service scaffold and initial database migration together.
+offlineAcceptanceCommands:
+  - ["make","bootstrap-e2e"]
+  - ["make","zero-bill"]
+offlineExecution:
+  wrapperArgv: ["./ci/verify-offline.sh"]
+  packetPathEnvironment: HARNESS_TASK_PACKET
+  packetPathMode: HASH_PINNED_READ_ONCE_NO_CHILD_PATH
+  commandTransport: ARGV_ARRAY_V1
+  isolation: OS_ENFORCED_DENY_ALL_OUTBOUND
+  sessionScope: SINGLE_PROCESS_TREE
+  prefetchOutsideSession: false
+  offlineEnvironment:
+    UV_OFFLINE: "1"
+    UV_FROZEN: "1"
+    UV_NO_SYNC: "1"
+expectedEvidence:
+  - Exact empty base, SDK-002 telemetry sources, IND-001 common guidance, MET-003 zero-bill artifacts, Node/npm/Next/React/TypeScript/Prisma/AJV/Vitest closure, CPython/uv closure, and packet-local lock match before behavior tests run.
+  - Offline OIDC vectors cover valid asymmetric admission plus malformed, duplicate, oversized, ambiguous-audience, wrong issuer/audience/tenant/nonce/key/algorithm, early, expired, excessive-lifetime, replayed, and forged tokens with stable bounded denials and no sensitive material in logs/errors/state/telemetry.
+  - Authorization-attempt and session vectors prove one-use state/nonce/PKCE digests, server-derived tenant context, secure opaque-cookie attributes, absolute/idle expiry, atomic revocation, CSRF denial, cross-tenant denial, and audit-failure rollback without accepting caller tenant or subject fields.
+  - Web liveness/readiness and worker health vectors cover READY, each required dependency missing/malformed/stale/timeout/exception, optional telemetry degradation, unknown method/path, process separation, and worker IDLE_BOOTSTRAP without implementing any business route or compilation behavior.
+  - Prisma/SQL/static and in-memory parity vectors prove exact foundation tables, four roles, FORCE RLS, transaction-local tenant context, cross-tenant denial, append-only audit/outbox, tenant idempotency/inbox uniqueness, least privilege, no destructive migration, and truthful PostgreSQL NOT_RUN_ENV_UNAVAILABLE handling when no disposable isolated cluster is supplied.
+  - Next standalone/type checks and deterministic local tests run from the locked offline dependency tree; browser/build scans prove all assets local and no Vercel service, hosted analytics, remote font, CDN, provider adapter, discovery client, external fetch, or public request surface exists.
+  - Containerfile and Helm source checks prove two separately scalable non-root digest-only components, disabled defaults, external existing Secret references, bounded resources, default-deny networks, and absence of cloud, IdP, database, registry, storage, credential, public-route, image-build, or deployment behavior.
+  - Negative Make-dispatch vectors reject missing, unknown, duplicate, owner/filename mismatch, undeclared variables, shell transport, zero handlers, and multiple applicable handlers from one packet; porting bootstrap validation proves zero authorized source mappings and rejects every copy claim without a future approved PORT_CANDIDATE packet.
+  - Zero-bill scanning finds no hosted runner, Actions artifact/cache/Packages, paid/provider API, API-key requirement, remote telemetry, cloud provisioning, runtime download, mutable image/tag, publication, external network default, or retained artifact. Registered ephemeral runner count returns to zero after PR and exact-main checks.
+  - Source, PR CI, merge, artifact/SBOM, signature/release, deployment, runtime, security, assurance, and tenant acceptance remain separate. CTRL-001 can prove only source and offline contract/unit/build properties; all later axes remain false, missing, pending, or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased CTRL-001 product scaffold and additive migration together to the exact empty base. Preserve all predecessor repositories, external IdP/PostgreSQL installations, audit records, released artifacts, deployments, runtime observations, assurance records, and tenant decisions; never perform destructive data rollback.

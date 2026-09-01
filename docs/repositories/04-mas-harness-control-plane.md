@@ -58,7 +58,7 @@ mas-harness-control-plane/
 ## Deployables and toolchain
 
 - `control-web`: Node 24.20.0 LTS, Next.js 16.3.3 Active LTS with the App Router, React 19.2, TypeScript 5, Prisma 6.19.3, PostgreSQL, AJV 8.20.0, Vitest, and Playwright. `package-lock.json` is canonical; runtime dependencies with release-blocking vulnerabilities are upgraded in a dedicated packet before Alpha 1 release.
-- `profile-compiler-worker`: Python 3.12.14, `uv` 0.12.7, exact `planeon-harness-contracts` wheel, psycopg 3.x, and no HTTP listener.
+- `profile-compiler-worker`: Python 3.12.14, `uv` 0.12.7, and no HTTP listener. `CTRL-001` is a standard-library-only inert worker with no job or database adapter; `CTRL-004` owns the exact `planeon-harness-contracts` wheel, psycopg closure, leases, compilation, and publication.
 - Two separate non-root images and one chart; either deployable can scale independently.
 - Every first-party browser route is TypeScript. Assets, fonts, icons, maps, and
   visualization code are bundled locally; Vercel services, hosted analytics,
@@ -147,6 +147,51 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 5. `CTRL-005-profile-lock-bundle`: profile review/explanation, offline approval, lock digest, bundle request, and signed-bundle status.
 6. `CTRL-006-security-e2e`: RLS denial, CSRF/session, tenant isolation, tamper evidence, accessibility, Playwright journey, and dependency remediation.
 7. `CTRL-007-tenant-harness-overview`: ordered status projections, RLS APIs, platform-operator portfolio, tenant overview, plane/harness drill-down, interactive onion plus accessible list, stale-source behavior, WCAG 2.2 AA, and zero-public-browser-request evidence. The coding brief is [`TENANT_HARNESS_OVERVIEW.md`](../TENANT_HARNESS_OVERVIEW.md).
+
+## `CTRL-001` bootstrap authority
+
+`CTRL-001` starts only from the exact empty public control-plane commit
+`fbd3d21da70167b0819caa1dfc017e7c673a1cbe`. It binds SDK-002 neutral
+telemetry, the IND-001 common journey, and MET-003 zero-bill policy by exact
+public commits and raw digests, without installing or copying predecessor source.
+The packet creates only the control foundation: offline OIDC admission/session
+primitives, server-derived tenant context, health/readiness, an inert compiler
+worker, the first additive PostgreSQL/RLS source contract, two source-only
+Containerfiles, an inert Helm chart, and closed offline dispatch.
+
+OIDC uses a regular local issuer registry with inline asymmetric public JWKS.
+Remote discovery, token/userinfo calls, client secrets, symmetric keys, passwords,
+and caller-selected tenants are forbidden. Authorization state, nonce, PKCE
+verifier, session cookie, subject, and token identifiers are retained only as
+bounded SHA-256 digests. The opaque `__Host-planeon_session` cookie is secure,
+HttpOnly, SameSite=Lax, and server-side; tenant context comes from the selected
+issuer binding and cannot be supplied by a body, query, header, cookie payload,
+or environment default. Session revisions are append-only `ACTIVE`, `REVOKED`,
+or `EXPIRED` records with atomic audit behavior.
+
+The web surface contains only `GET /health/live` and `GET /health/ready` in this
+packet. Required issuer-registry, entropy, store, audit, tenant-transaction, and
+contract-lock probes must all be ready; optional telemetry can degrade without
+authorizing work. The separate worker exposes only command-line health and one-
+shot `IDLE_BOOTSTRAP` behavior. Questionnaire, demand, profile, compilation,
+bundle, overview, plane, harness, and operator endpoints remain owned by later
+packets.
+
+The initial `control` schema contains only tenant, authorization-attempt,
+session, session-revision, audit, idempotency, inbox, and outbox tables. Four
+NOLOGIN roles, forced RLS, transaction-local organization context, append-only
+audit/outbox triggers, and least privilege are mandatory. Static SQL and an
+independent in-memory isolation model are source/contract evidence only. Actual
+PostgreSQL is `NOT_RUN_ENV_UNAVAILABLE` unless acceptance receives a disposable,
+credential-free local cluster; a shared host database is never mutated.
+
+The exact Node, npm, Next.js, React, TypeScript, Prisma, AJV, Vitest, Python, and
+uv versions are packet-locked. npm may populate `node_modules` only from a
+preprovisioned local cache under the same deny-all-outbound launcher; no install
+script, registry lookup, remote font/asset, Vercel service, hosted analytics,
+image build, deployment, or retained generated artifact is permitted. Both
+source-only images require external digest references, and both Helm components
+are independently scalable but disabled by default.
 
 ## Testing, verification, and acceptance
 
