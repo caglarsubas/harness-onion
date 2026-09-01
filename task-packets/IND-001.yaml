@@ -1,16 +1,108 @@
 id: IND-001
 repository: mas-harness-industry-packs
 branch: codex/ind-001-pack-framework
-objective: Build the industry-pack loader, safe validation, overlay semantics, eight-stage journey, pack index, and authoring guide.
-predecessors: [CON-006, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "src/planeon_industry_packs/", "schemas/", "common/", "tests/framework/", "tests/fixtures/framework/", "docs/authoring.md", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+objective: Bootstrap the offline industry-pack repository and implement a closed IndustryPack v1alpha1 envelope, immutable common eight-stage journey, append-only sector overlay validation, deterministic index/archive tooling, and authoring CLI.
+predecessors: [CON-007, MET-003]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - src/planeon_industry_packs/
+  - schemas/
+  - common/
+  - tests/framework/
+  - tests/fixtures/framework/
+  - docs/authoring.md
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes guidance and readiness contracts v1alpha1", "Produces IndustryPack artifact contract v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["Pack loader, common journey, non-executable rule validation, overlay rules, immutable pack index, authoring CLI, and offline packaging.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Industry-specific assumptions, executable plugins, LLM-required guidance, or network fetches."]
+contracts:
+  - Consumes the public CON-007 main authority at Git commit 2146278a95344cd2a8e22596b2f315b46edffc88 through common/contracts.lock.json. The lock pins release-manifest SHA-256 c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79, catalog digest sha256:26d442c4e90a19d767d32e80ef9df3d154b3146d3238dc0eecf29ee773913a26, and the exact common-guidance, questionnaire-definition, guidance-rule, and data-readiness schema paths and digests. No upstream source or schema bytes are copied or mounted.
+  - Produces IndustryPack artifact contract harness.planeon.ai/industry-pack/v1alpha1, IndustryJourney v1alpha1, PackIndex v1alpha1, PackContractsLock v1alpha1, and the closed non-executable pack-rule grammar.
+  - Produces closed packet-local Make target descriptor dispatch v1 and the inert destination PORTING ledger v1 with zero current copy authorizations.
+deliverables:
+  - >-
+    schemas/ contains closed Draft 2020-12 schemas for the pack manifest,
+    journey, rule, contracts lock, and pack index. A pack manifest contains only
+    apiVersion, kind, metadata, compatibility, journey, overlayMode, extends,
+    and content. Metadata fixes stable id, semantic version, title, industry,
+    Apache-2.0-compatible SPDX license expression, and COMMON or SECTOR kind.
+    Compatibility binds framework 0.1.0 and the exact contracts-lock digest.
+    Journey and content paths are normalized relative POSIX paths beneath the
+    pack root. Content is partitioned into questionnaires, rules, readiness,
+    ontologies, controls, providerPreferences, and fixtures.
+  - >-
+    common/journey.yaml defines exactly these contiguous stages in order:
+    business-context, domain-and-outcomes, data-readiness,
+    governance-and-regulation, integration-readiness, harness-demand,
+    environment-and-provider-fit, and evidence-and-acceptance. The common pack
+    is industry-neutral, uses overlayMode APPEND_ONLY, has no parent, and binds
+    its journey and contracts lock by SHA-256. A SECTOR pack must extend exactly
+    common.foundation 1.0.0 at its computed pack digest. It may add uniquely
+    identified content assigned to an existing stage but cannot replace,
+    delete, shadow, reorder, or weaken common or sibling content. Packs never
+    extend another sector pack.
+  - >-
+    The loader accepts only regular YAML, JSON, Markdown, text, CSV, JSONL, RDF,
+    Turtle, and OWL data files beneath an explicit regular directory. It rejects
+    links, devices, hidden files, absolute or traversal paths, duplicate YAML or
+    JSON keys, custom YAML tags, executable suffixes or modes, unknown members,
+    oversized files, unlisted files, duplicate resource ids, content-id or
+    stage collisions, and fields or rule operators that could execute code,
+    access files or networks, interpolate templates, hold secrets, or invoke an
+    LLM. Rules admit only all, any, not, eq, in, exists, gte, and lte and emit
+    only ASK_QUESTION, REQUIRE_EVIDENCE, RECOMMEND_HARNESS, or BLOCK_READINESS.
+  - >-
+    PackIndex uses canonical sorted UTF-8 JSON. Each file record fixes relative
+    path, media type, byte size, and sha256 digest; packDigest hashes the
+    canonical file-record array and excludes a generated index from its own
+    subject. IndexDigest hashes the closed index payload without indexDigest.
+    harness-pack validate PACK_ROOT emits a sorted accepted/rejected report;
+    compile-index PACK_ROOT --output FILE and package PACK_ROOT --output DIR
+    exclusively create their outputs and never overwrite. Package creates one
+    fixed-epoch, sorted, mode-0644 tar.gz containing data plus pack.index.json.
+    Two builds must be byte-identical and all reports keep published,
+    runtimeEvidence, assuranceEvidence, and tenantAcceptance false.
+  - >-
+    planeon-harness-industry-packs 0.1.0 is a Python 3.12 package with a
+    dependency-free deterministic build backend, exact runtime dependencies
+    jsonschema==4.24.0 and PyYAML==6.0.2, and pytest==8.4.2 only in the locked
+    development group. RDFLib and pySHACL are not installed by this packet;
+    the white-goods ontology packet must separately admit and lock them before
+    claiming SHACL validation. Default execution performs no network access,
+    package publication, remote resolution, model call, or runtime download.
+  - >-
+    The bootstrap Makefile delegates only to ci/run_make_target.py. IND-001 owns
+    ci/targets/ind-001.json handlers for help, prefetch, pack-framework-test,
+    build-reproducible, and zero-bill. The dispatcher validates closed
+    descriptors, exact target and variable bindings, cumulative lexical handler
+    order, and direct argv without a shell. Tests cover positive common/sector
+    packs, byte identity, manifest and index closure, and negative link,
+    traversal, duplicate-key, extra-file, executable-content, unsafe-mode,
+    invalid-rule, stale-parent-digest, collision, overwrite, dispatch, and
+    porting vectors.
+  - >-
+    PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel
+    and cannot name a source path, mapping, copied file, or applied port.
+excluded:
+  - Industry-specific facts, tenant answers, executable plugins, Python or shell content in packs, LLM-required guidance, source-schema copying, warm-source access, network fetches, API keys, paid providers, signing, publication, deployment, runtime evidence, assurance evidence, or tenant acceptance.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands: [["make","pack-framework-test"],["make","zero-bill"]]
+offlineAcceptanceCommands: [["make","pack-framework-test"],["make","build-reproducible"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Valid/invalid pack vectors.", "Deterministic pack index digest and sandbox rejection report.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Revert the pack framework before any sector pack is released.
+expectedEvidence:
+  - Valid common and append-only sector fixtures load without an LLM; invalid fixtures fail with stable reason codes and cannot escape their roots, execute content, weaken the common journey, or conceal unindexed files.
+  - Two framework wheel/sdist builds, two common pack indexes, and two common pack archives are byte-identical; every digest and RECORD member is recomputed while no default artifact is retained or published.
+  - The contract lock, common journey, manifest, index, CLI output, package metadata, direct-argv dispatch inventory, PORTING NO_AUTHORIZATION state, and zero-bill report are mutually consistent and closed.
+  - Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.
+  - PORTING bootstrap validation proves zero authorized source mappings and rejects every copy claim without a future approved PORT_CANDIDATE packet.
+  - Source, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate; package and fixture checks may prove only their named offline source/artifact properties.
+rollback: Revert the unconsumed framework, common pack, schemas, toolchain, and bootstrap authorities together before any sector pack is released; do not mutate a product release or tenant record.

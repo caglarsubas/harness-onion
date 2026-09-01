@@ -54,7 +54,11 @@ mas-harness-industry-packs/
 ## Package, toolchain, and owned interfaces
 
 - Distribution/import: `planeon-harness-industry-packs` / `planeon_industry_packs`.
-- Toolchain: Python 3.12.14, `uv` 0.12.7, RDFLib, pySHACL, jsonschema, PyYAML, pytest, Ruff, and mypy; exact versions are locked.
+- IND-001 toolchain: Python 3.12.14, `uv` 0.12.7,
+  `jsonschema==4.24.0`, `PyYAML==6.0.2`, and `pytest==8.4.2` in the
+  development group; exact direct and transitive versions are locked. RDFLib
+  and pySHACL are intentionally deferred until the white-goods ontology packet
+  explicitly admits their dependency paths and offline wheel closure.
 - CLI: `harness-pack validate`, `harness-pack test`, `harness-pack compile-index`, and `harness-pack package`.
 - Artifact: an OCI pack artifact containing only data, schemas, fixtures, documentation, and digests; no executable hook.
 - Rules use only `all|any|not|eq|in|exists|gte|lte` and may emit questions, requirements, blockers, or recommendations.
@@ -78,6 +82,51 @@ campaign packets.
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
+
+## IND-001 framework contract
+
+IND-001 binds but does not copy the public contract release. The
+`common/contracts.lock.json` authority fixes contracts commit
+`2146278a95344cd2a8e22596b2f315b46edffc88`, release-manifest SHA-256
+`c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79`,
+catalog digest
+`sha256:26d442c4e90a19d767d32e80ef9df3d154b3146d3238dc0eecf29ee773913a26`,
+and the exact public guidance/readiness schema paths and digests. Product
+acceptance receives no upstream source path and performs no network lookup.
+
+The common journey has exactly eight stages, in this order:
+
+1. `business-context`
+2. `domain-and-outcomes`
+3. `data-readiness`
+4. `governance-and-regulation`
+5. `integration-readiness`
+6. `harness-demand`
+7. `environment-and-provider-fit`
+8. `evidence-and-acceptance`
+
+`common.foundation` 1.0.0 is immutable and industry-neutral. A sector pack
+binds the common pack's computed digest and uses only `APPEND_ONLY` overlay
+semantics. It may add uniquely identified content to an existing stage. It may
+not replace, delete, shadow, reorder, or weaken common content, and it may not
+extend another sector pack. This keeps sector guidance adjustable without
+letting an industry overlay bypass foundational business, data, governance, or
+acceptance gates.
+
+The loader admits only closed data/document formats and regular files under an
+explicit pack root. Links, traversal, hidden or unlisted files, executable
+suffixes or modes, duplicate YAML/JSON keys, custom YAML tags, unknown fields,
+unsafe rule operators, templates, code, filesystem/network targets, secrets,
+and LLM prompts fail closed. Rules use the eight public guidance operators and
+the four public guidance actions only.
+
+`harness-pack validate` emits deterministic validation evidence.
+`compile-index` exclusively creates canonical JSON whose file records bind
+path, media type, size, and SHA-256. `package` exclusively creates a fixed-
+epoch, sorted, mode-0644 tar.gz containing the computed index. Neither command
+overwrites, signs, publishes, deploys, or reports runtime, assurance, or tenant
+acceptance. Framework wheel/sdist, index, and pack archive all require two-build
+byte identity.
 
 ## Dependencies
 
@@ -103,7 +152,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 The `IND-001` bootstrap packet declares
 `prefetchCommands: [["make","prefetch"]]` and ordered
 `offlineAcceptanceCommands:
-[["make","pack-framework-test"],["make","zero-bill"]]`.
+[["make","pack-framework-test"],["make","build-reproducible"],["make","zero-bill"]]`.
 Later packets add lint, type, coverage, pack validation, white-goods, index, and
 reproducibility checks as direct argv arrays. The executor supplies the
 hash-pinned packet through `HARNESS_TASK_PACKET` and invokes only
