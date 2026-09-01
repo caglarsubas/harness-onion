@@ -151,9 +151,9 @@ SDK-006 owns a deterministic in-process SDK contract and the conformance
 vectors later consumed by the downstream trust guardrail packet; it does not claim a guardrail schema in
 the current `contracts.lock.json`, create a deployable service, or add a network
 transport. Python exposes `planeon_harness.guardrail`. TypeScript exposes the
-same contract from both the package root and `@planeon/harness-sdk/guardrail`;
-source, committed JavaScript, declarations, export map, and fixtures move
-together.
+same contract from `@planeon/harness-sdk/guardrail`; source, committed
+JavaScript, declarations, export map, and fixtures move together while the
+generator-owned package root remains unchanged.
 
 A closed `GuardrailProfile` identifies one of `INPUT`, `OUTPUT`, `RUNTIME`,
 or `STREAMING`, an explicit `FAIL_CLOSED` or `FAIL_OPEN` mode, a 1 through

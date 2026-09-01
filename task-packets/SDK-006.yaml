@@ -7,10 +7,7 @@ allowedPaths:
   - python/src/planeon_harness/guardrail/
   - python/tests/guardrail/
   - typescript/package.json
-  - typescript/src/index.ts
   - typescript/src/guardrail/
-  - typescript/dist/index.js
-  - typescript/dist/index.d.ts
   - typescript/dist/guardrail/
   - typescript/tests/guardrail/
   - fixtures/guardrail/
@@ -21,7 +18,7 @@ sourceReuse: []
 contracts:
   - Consumes the SDK-003 fail-closed runtime and closed-error conventions without changing contracts.lock.json or claiming a guardrail schema absent from the pinned contract snapshot.
   - Produces the in-process harness.planeon.ai guardrail SDK API v1 and byte-equivalent Python/TypeScript conformance vectors consumed later by TRUST-002.
-  - Exposes the TypeScript root and ./guardrail package surfaces and the Python planeon_harness.guardrail package without a network transport, service endpoint, or optional dependency.
+  - Exposes the TypeScript ./guardrail package surface and the Python planeon_harness.guardrail package without a network transport, service endpoint, optional dependency, or change to generator-owned root exports.
 deliverables:
   - A closed GuardrailProfile has exactly apiVersion harness.planeon.ai/v1alpha1, kind GuardrailProfile, profileId, semantic version, stage INPUT|OUTPUT|RUNTIME|STREAMING, failMode FAIL_CLOSED|FAIL_OPEN, maximumContentBytes from 1 through 1048576, and one through 64 unique ordered stable detectorIds. Unknown fields, invalid identifiers, and invalid limits fail before content is evaluated.
   - Python and TypeScript expose GuardrailClient, GuardrailStream, GuardrailDetector, GuardrailProfile, GuardrailRequest, DetectorFinding, RedactionRange, GuardrailResult, GuardrailContractError, and the same closed enums. Detectors are caller-supplied synchronous local implementations; client construction rejects duplicate or unknown profile detector identifiers and never invokes a detector.
@@ -31,7 +28,7 @@ deliverables:
   - GuardrailStream accepts only STREAMING profiles, buffers cumulative non-empty string chunks up to maximumContentBytes, and evaluates the complete bounded buffer after every push so cross-chunk matches are detected. DENY, QUARANTINE, and ERROR_FAIL_CLOSED clear the buffer and terminally reject later calls. finish returns the last result, evaluates one empty buffer only when no chunk was pushed, clears content, and rejects every later push or finish.
   - All errors use stable codes INVALID_GUARDRAIL_PROFILE, INVALID_GUARDRAIL_REQUEST, UNKNOWN_DETECTOR, INVALID_DETECTOR_RESULT, STREAM_TERMINATED, or STREAM_FINISHED with fixed content-free messages. Detector exception types, messages, arguments, content, results, and framework state never enter results, exceptions, telemetry, console output, or fixtures expected output.
   - Deterministic fixtures cover all four stages, every outcome and fail mode, precedence, UTF-8 size limits, Unicode-scalar redaction, adjacent and overlapping ranges, missing and throwing detectors, malformed findings, cross-boundary streaming matches, terminal streams, and empty finish. Python and TypeScript must serialize every expected result byte-identically as sorted compact UTF-8 JSON.
-  - The SDK-006 descriptor owns guardrail-vectors and its cumulative security handler. The closed dispatch inventory admits guardrail-vectors; source, committed JavaScript, declarations, root export, subpath export, fixtures, and package metadata remain synchronized.
+  - The SDK-006 descriptor owns guardrail-vectors and its cumulative security handler. The closed dispatch inventory admits guardrail-vectors; source, committed JavaScript, declarations, subpath export, fixtures, and package metadata remain synchronized while generator-owned root exports stay unchanged.
 excluded:
   - Deployable guardrail service, HTTP client, remote detector, moderation API, classifier/model download, asynchronous detector, payload persistence, evidence emission, automatic telemetry, external exporter, framework hook, provider SDK, API key, vendor endpoint, streaming transport, or governance decision.
 prefetchCommands: []
@@ -49,6 +46,6 @@ expectedEvidence:
   - Shared fixtures produce byte-identical Python and TypeScript results for every stage, outcome, fail mode, precedence case, UTF-8 limit, Unicode redaction range, and streaming boundary.
   - Construction invokes no detector; missing, throwing, and malformed detectors prove the exact fail-closed and explicit degraded fail-open behavior with no exception detail leakage.
   - Protected sentinel content is absent from every result, error, expected fixture result, telemetry record, and captured stdout/stderr; REDACT output contains only the fixed replacement at protected ranges.
-  - TypeScript source, committed JavaScript, declarations, root export, ./guardrail export, and package metadata are synchronized and contain no fetch, socket, credential, exporter, provider, or runtime-download path.
+  - TypeScript source, committed JavaScript, declarations, ./guardrail export, and package metadata are synchronized and contain no fetch, socket, credential, exporter, provider, or runtime-download path; generated root surfaces remain byte-exact.
   - Generated target inventory includes guardrail-vectors, direct-argv dispatch remains closed, PORTING stays NO_AUTHORIZATION, and the deny-all-outbound canary passes.
 rollback: Revert the guardrail SDK modules, fixtures, exports, and SDK-006 descriptor together without changing admission, telemetry, protocol, integration, or generated-client APIs.
