@@ -3,7 +3,7 @@ repository: mas-harness-knowledge-plane
 branch: codex/kn-data-001-connectors
 objective: Implement a clean-room, tenant-isolated connector controller and ingest-worker core for source declaration and validation, fenced leases, bounded read-only file, HTTP, PostgreSQL, and event reads, strict local decoding, and immutable staged-batch metadata without claiming readiness, activation, committed ingestion, or runtime connectivity.
 predecessors: [KN-DOM-001, IND-WG-002]
-allowedPaths: ["services/connector-controller/", "services/ingest-worker/", "src/planeon_knowledge/ingestion/__init__.py", "src/planeon_knowledge/ingestion/contracts.py", "src/planeon_knowledge/ingestion/decoder.py", "src/planeon_knowledge/ingestion/leases.py", "src/planeon_knowledge/ingestion/batch.py", "src/planeon_knowledge/ingestion/connectors/", "src/planeon_knowledge/ingestion/store.py", "src/planeon_knowledge/ingestion/service.py", "src/planeon_knowledge/ingestion/asgi.py", "migrations/ingestion/002_connector_service.sql", "tests/connectors/", "fixtures/connectors/", "deploy/helm/connector-controller/", "deploy/helm/ingest-worker/", "ci/targets/kn-data-001.json"]
+allowedPaths: [".github/workflows/verify.yml", "services/connector-controller/", "services/ingest-worker/", "src/planeon_knowledge/ingestion/__init__.py", "src/planeon_knowledge/ingestion/contracts.py", "src/planeon_knowledge/ingestion/decoder.py", "src/planeon_knowledge/ingestion/leases.py", "src/planeon_knowledge/ingestion/batch.py", "src/planeon_knowledge/ingestion/connectors/", "src/planeon_knowledge/ingestion/store.py", "src/planeon_knowledge/ingestion/service.py", "src/planeon_knowledge/ingestion/asgi.py", "migrations/ingestion/002_connector_service.sql", "tests/connectors/", "fixtures/connectors/", "deploy/helm/connector-controller/", "deploy/helm/ingest-worker/", "ci/targets/kn-data-001.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["tests/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
@@ -24,7 +24,8 @@ contracts:
     and zero-bill scanner 00d5048b69373809d4106a1d5883d8d26c3e5fa8448f7d52e7f216202b4bbc20.
     This packet does not edit the root project/lock, Makefile, dispatcher,
     packet transport, foundation or domain source, prior descriptors/handlers,
-    common tests, workflow, or inert PORTING ledger.
+    common tests, or inert PORTING ledger. Its sole workflow edit is the
+    cumulative-history correction specified below.
   - >-
     Consumes only the public compatibility boundary at exact
     mas-harness-contracts commit 2146278a95344cd2a8e22596b2f315b46edffc88.
@@ -231,13 +232,26 @@ deliverables:
     input, duplicate batch, sink failure, and checkpoint promotion. Fixtures use
     new synthetic bytes and never copy predecessor or warm-source material.
   - >-
-    KN-DATA-001 owns only ci/targets/kn-data-001.json for Make integration. It
+    KN-DATA-001 owns ci/targets/kn-data-001.json for Make integration. It
     registers connector-parity, connector-contract, and security handlers under
     tests/connectors and cumulatively reuses the existing prefetch target so
     KN-001 and KN-DOM locks/toolchain checks run first. It does not edit Makefile,
     ci/run_make_target.py, ci/run_packet_argv.py, or prior descriptors/handlers.
     Negative tests retain unknown, duplicate, ambiguous, shell, undeclared
     variable, transport, PORTING, warm-source, and zero-bill denial.
+  - >-
+    The packet owns one evidence-preserving correction to
+    .github/workflows/verify.yml: the already pinned, credential-free public
+    checkout changes only fetch-depth from 2 to 0. KN-DATA-001 is the third
+    cumulative product commit, so depth 2 contains KN-DATA-001 and KN-DOM-001
+    but omits exact KN-001 foundation object 672e73e... required by the unchanged
+    cumulative prefetch and foundation-tree security assertions. Full public
+    history is the durable minimum that preserves exact ancestor evidence for
+    later packets without packet-by-packet depth growth. The pinned checkout
+    action, persist-credentials=false, self-hosted labels, launcher-only step,
+    permissions, timeout, fork denial, and all zero-bill constraints remain
+    byte-for-byte unchanged. No tag, LFS, submodule, artifact, cache, hosted
+    runner, credential, paid API, cloud resource, or runtime download is added.
   - >-
     Update only existing connector-controller and ingest-worker Containerfile/
     chart source. Images remain externally supplied by immutable digest,
@@ -264,6 +278,7 @@ offlineAcceptanceCommands: [["make","connector-parity"],["make","connector-contr
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - Exact predecessor/contract/industry locks, dependency-free root, cumulative prefetch, and no warm path or external package.
+  - Pinned credential-free full-history checkout makes exact KN-001 and KN-DOM ancestors available without changing runner, launcher, permission, or billing boundaries.
   - Closed contract/API/state/idempotency/policy/grant tests plus four independently authored connector and decoder parity vectors.
   - Tenant isolation, lease crash/expiry/fencing replay, duplicate staging, atomic sink failure, credential-scope, path traversal, SSRF/redirect, SQL write/injection, event-admin, oversized/malformed input, and secret/payload non-disclosure evidence.
   - Static tenant-RLS/least-privilege/append-only SQL and inert digest-only Containerfile/chart/NetworkPolicy evidence; PostgreSQL, source connectivity, build, deployment, runtime, assurance, and tenant acceptance explicitly not passed.

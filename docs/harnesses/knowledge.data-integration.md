@@ -80,6 +80,12 @@ advancement, retry/dead-letter, provenance, and quality evidence. A staged batch
 therefore cannot be treated as accepted input, deployment/runtime evidence, or
 tenant acceptance.
 
+Its cumulative self-hosted verification uses the existing pinned,
+credential-free checkout with full public Git history so exact KN-001 and
+KN-DOM ancestor objects remain available to unchanged predecessor checks. This
+does not authorize hosted runners, credential persistence, artifacts/caches,
+external actions, runtime downloads, or any billable service.
+
 ## Configuration and runtime boundaries
 
 ```yaml
