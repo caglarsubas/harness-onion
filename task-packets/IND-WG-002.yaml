@@ -3,16 +3,124 @@ repository: mas-harness-industry-packs
 branch: codex/ind-wg-002-data-readiness
 objective: Add white-goods source inventory, representative mock data, and explicit completeness, freshness, provenance, and classification thresholds.
 predecessors: [IND-WG-001]
-allowedPaths: ["packs/white-goods/questions/data/", "packs/white-goods/data/", "packs/white-goods/rules/data-readiness.json", "packs/white-goods/fixtures/sources/", "packs/white-goods/fixtures/readiness/", "packs/white-goods/tests/test_data_readiness.py", "docs/white-goods/data-readiness.md", "ci/targets/ind-wg-002.json"]
+allowedPaths:
+  - packs/white-goods/pack.yaml
+  - packs/white-goods/questions/data/
+  - packs/white-goods/data/
+  - packs/white-goods/rules/data-readiness.json
+  - packs/white-goods/fixtures/sources/
+  - packs/white-goods/fixtures/readiness/
+  - tests/white_goods/test_business_domain.py
+  - tests/white_goods/test_data_readiness.py
+  - tests/framework/test_dispatch.py
+  - docs/white-goods/data-readiness.md
+  - ci/handlers/ind_wg_002.py
+  - ci/targets/ind-wg-002.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/fixtures/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/freshness.py","src/data_source_harness/coverage.py","reference_labs/white_goods/README.md","reference_labs/white_goods/__init__.py","reference_labs/white_goods/action-capabilities.json","reference_labs/white_goods/airgap-images.lock.json","reference_labs/white_goods/bundle.py","reference_labs/white_goods/certify.py","reference_labs/white_goods/certify_phase2.py","reference_labs/white_goods/data/api/service-api-fixtures.json","reference_labs/white_goods/data/documents/refrigerator-e05-manual.md","reference_labs/white_goods/data/documents/untrusted-field-note.md","reference_labs/white_goods/data/documents/washing-machine-e21-manual.md","reference_labs/white_goods/data/documents/washing-machine-pump-bulletin.md","reference_labs/white_goods/data/events/telemetry.jsonl","reference_labs/white_goods/data/master/customers.csv","reference_labs/white_goods/data/master/installed_products.csv","reference_labs/white_goods/data/master/products.csv","reference_labs/white_goods/data/quality/quality_inspections.csv","reference_labs/white_goods/data/service/service_orders.csv","reference_labs/white_goods/dataset.lock.json","reference_labs/white_goods/docker-compose.yml","reference_labs/white_goods/freshness-slos.json","reference_labs/white_goods/gqm-plan.json","reference_labs/white_goods/lab.py","reference_labs/white_goods/live/HarnessAcceptance.Containerfile","reference_labs/white_goods/live/README.md","reference_labs/white_goods/live/ServiceApi.Containerfile","reference_labs/white_goods/live/__init__.py","reference_labs/white_goods/live/compose.template.yaml","reference_labs/white_goods/live/connectors.py","reference_labs/white_goods/live/cross_plane_lab.py","reference_labs/white_goods/live/harness-requirements.txt","reference_labs/white_goods/live/harness_probe.py","reference_labs/white_goods/live/harness_runtime_lab.py","reference_labs/white_goods/live/local_lab.py","reference_labs/white_goods/live/model_plane_probe.py","reference_labs/white_goods/live/postgresql-seed.sql","reference_labs/white_goods/live/service_api.py","reference_labs/white_goods/pack-manifest.json","reference_labs/white_goods/phase2-gqm-plan.json","reference_labs/white_goods/phase2.py","reference_labs/white_goods/phase4.py","reference_labs/white_goods/phase5.py","reference_labs/white_goods/phase6_worker.py","reference_labs/white_goods/promotion-readiness.example.json","reference_labs/white_goods/reference-lab-manifest.json","reference_labs/white_goods/runtime/Containerfile","reference_labs/white_goods/runtime/README.md","reference_labs/white_goods/runtime/mirroring/imageset-config.template.yaml","reference_labs/white_goods/runtime/openshift/config-map.yaml","reference_labs/white_goods/runtime/openshift/deployment.template.yaml","reference_labs/white_goods/runtime/openshift/network-policy-allow-internal.yaml","reference_labs/white_goods/runtime/openshift/network-policy.yaml","reference_labs/white_goods/runtime/openshift/service-account.yaml","reference_labs/white_goods/runtime/openshift/service.yaml","reference_labs/white_goods/runtime/protocol-profiles.json","reference_labs/white_goods/runtime/wheelhouse-requirements.txt","reference_labs/white_goods/runtime_bundle.py","reference_labs/white_goods/semantic-mappings.json","reference_labs/white_goods/technology/opensearch/index-mapping.json","reference_labs/white_goods/technology/postgresql/schema.sql","reference_labs/white_goods/technology/redpanda/topic-contract.json","reference_labs/white_goods/technology/service-api/openapi.yaml","tests/fixtures/contracts/negative/action-preview.no-effects.json","tests/fixtures/contracts/negative/bounded-query-plan.unbounded.json","tests/fixtures/contracts/negative/checkpoint-token.no-position.json","tests/fixtures/contracts/negative/connector-worker-profile.mutable-image.json","tests/fixtures/contracts/negative/coverage-statement.empty.json","tests/fixtures/contracts/negative/cross-plane-evidence-set.collapsed.json","tests/fixtures/contracts/negative/data-batch.no-lineage.json","tests/fixtures/contracts/negative/data-source-connector-profile.missing-discovery.json","tests/fixtures/contracts/negative/deployment-profile.air-gap-external-telemetry.json","tests/fixtures/contracts/negative/deployment-profile.local-laptop-mirror.json","tests/fixtures/contracts/negative/disconnected-runtime-readiness.false-acceptance.json","tests/fixtures/contracts/negative/durable-action-record.raw-parameters.json","tests/fixtures/contracts/negative/entity-redirect.no-lineage.json","tests/fixtures/contracts/negative/freshness-observation.no-watermark.json","tests/fixtures/contracts/negative/industry-domain-pack-manifest.no-tech.json","tests/fixtures/contracts/negative/live-acceptance-campaign.false-acceptance.json","tests/fixtures/contracts/negative/local-cross-plane-evidence.false-pass.json","tests/fixtures/contracts/negative/local-harness-runtime-evidence.false-pass.json","tests/fixtures/contracts/negative/local-image-lock.mutable.json","tests/fixtures/contracts/negative/local-source-evidence.false-pass.json","tests/fixtures/contracts/negative/northbound-tool-catalog.no-scope.json","tests/fixtures/contracts/negative/promotion-readiness.no-runtime.json","tests/fixtures/contracts/negative/protocol-profile-conformance.no-checks.json","tests/fixtures/contracts/negative/reference-lab-manifest.no-scenarios.json","tests/fixtures/contracts/negative/route-decision.selected-without-route.json","tests/fixtures/contracts/negative/semantic-assertion.no-lineage.json","tests/fixtures/contracts/negative/semantic-mapping-candidate.no-lineage.json","tests/fixtures/contracts/negative/source-action-capability-profile.no-idempotency.json","tests/fixtures/contracts/negative/source-action-plan.no-precondition.json","tests/fixtures/contracts/negative/source-mutation-receipt.raw-result.json","tests/fixtures/contracts/positive/action-preview.minimal.json","tests/fixtures/contracts/positive/bounded-query-plan.minimal.json","tests/fixtures/contracts/positive/checkpoint-token.minimal.json","tests/fixtures/contracts/positive/connector-worker-profile.process.json","tests/fixtures/contracts/positive/coverage-statement.partial.json","tests/fixtures/contracts/positive/cross-plane-evidence-set.partial.json","tests/fixtures/contracts/positive/data-batch.minimal.json","tests/fixtures/contracts/positive/data-source-connector-profile.minimal.json","tests/fixtures/contracts/positive/deployment-profile.air-gapped.json","tests/fixtures/contracts/positive/deployment-profile.local-laptop.json","tests/fixtures/contracts/positive/disconnected-runtime-readiness.blocked.json","tests/fixtures/contracts/positive/durable-action-record.executing.json","tests/fixtures/contracts/positive/entity-redirect.minimal.json","tests/fixtures/contracts/positive/freshness-observation.minimal.json","tests/fixtures/contracts/positive/industry-domain-pack-manifest.minimal.json","tests/fixtures/contracts/positive/live-acceptance-campaign.partial.json","tests/fixtures/contracts/positive/local-cross-plane-evidence.passed.json","tests/fixtures/contracts/positive/local-harness-runtime-evidence.passed.json","tests/fixtures/contracts/positive/local-image-lock.arm64.json","tests/fixtures/contracts/positive/local-source-evidence.passed.json","tests/fixtures/contracts/positive/northbound-tool-catalog.minimal.json","tests/fixtures/contracts/positive/promotion-readiness.minimal.json","tests/fixtures/contracts/positive/protocol-profile-conformance.local.json","tests/fixtures/contracts/positive/reference-lab-manifest.minimal.json","tests/fixtures/contracts/positive/route-decision.selected.json","tests/fixtures/contracts/positive/semantic-assertion.minimal.json","tests/fixtures/contracts/positive/semantic-mapping-candidate.minimal.json","tests/fixtures/contracts/positive/source-action-capability-profile.minimal.json","tests/fixtures/contracts/positive/source-action-plan.minimal.json","tests/fixtures/contracts/positive/source-mutation-receipt.minimal.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes DataReadinessAssessment v1alpha1", "Produces white-goods data-readiness slice v1alpha1"]
-deliverables: ["Mock API, PostgreSQL, files, and events; source ownership; data lock; readiness thresholds; and PASS/WARN/FAIL fixtures."]
-excluded: ["Real tenant data, credentials, unsupported freshness claims, or marking missing evidence as passed."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","packs/white-goods/tests/test_data_readiness.py"]]
+contracts:
+  - >-
+    Consumes exact merged IND-WG-001 product commit
+    714e311b550798c230d440c869d36f7ad5a857b4, white-goods 0.1.0 pack
+    digest cb413874a002a481a7163e6198cac277894e72a7c918085d635b1fadcf523913,
+    raw pack.yaml SHA-256
+    e20d3b6723698a298b93a8dc45743b6644d7e443e1c4fd0450a2c344a9238bf1,
+    and reproducible framework 0.1.1 wheel SHA-256
+    d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4.
+  - >-
+    Consumes DataReadinessAssessment v1alpha1 from public contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 at the authoritative path
+    schemas/v1alpha1/readiness/data-readiness-assessment.schema.json with
+    SHA-256 ffe003a1a7ec0773f49d8f394ac3dd6281114bd4335ff05c87d223412faf92a5
+    and guidance common.schema.json with SHA-256
+    4d77297073d4c2e559f1131fbada566b499197f87113f7e28b136f0b4ae5f429.
+    A data-only binding record documents that the predecessor lock's guidance
+    path for DataReadinessAssessment is historical and non-authoritative while
+    its content digest is correct; no schema bytes or upstream checkout enter
+    this repository or packet execution.
+  - >-
+    Produces white-goods pack 0.2.0, retaining pack-format compatibility 0.1.0
+    and framework distribution 0.1.1, with a deterministic data-readiness
+    slice whose nested assessment objects conform to the exact public
+    DataReadinessAssessment surface: apiVersion, kind, metadata, and spec;
+    READY or BLOCKED overall status; exactly ten ordered gate results; sorted
+    unique evidence ids and missing-gate ids; and stable reason codes.
+deliverables:
+  - >-
+    Advance only the white-goods sector pack from 0.1.0 to 0.2.0. Retain the
+    byte-identical common pack, contracts.lock.json, journey.yaml, ontology,
+    business questions, business answer vectors, pack-format compatibility
+    0.1.0, and framework distribution 0.1.1. Update predecessor business tests
+    only for the new sector version, declared resource/file inventory, and
+    deterministic archive name; all predecessor decisions and answer digests
+    remain unchanged.
+  - >-
+    Data questionnaires collect source kind and ownership, required-field
+    coverage, observation timing, duplicate measurement, classification and
+    provenance coverage, evidence references, and confirmation that examples
+    are synthetic. Closed options cover API, PostgreSQL, files, and events.
+    Questions cannot request tenant records, credentials, secrets, connection
+    strings, endpoints, or unsupported production facts.
+  - >-
+    The source inventory declares exactly four synthetic local source classes
+    with accountable owners, custodians, data classifications, and stable
+    evidence ids. Representative API JSON, PostgreSQL-shaped CSV, document
+    inspection evidence, and event JSONL are independently authored, minimal,
+    non-personal, non-production fixtures. dataset.lock.json binds every data
+    member by relative path, media type, record count, byte size, and SHA-256.
+  - >-
+    A versioned illustrative readiness policy records tenant-replaceable PASS
+    and WARN thresholds: completeness at least 0.98/0.95, freshness no more
+    than 15/60 minutes, duplicate rate no more than 0.01/0.02, classification
+    coverage 1.00/0.98, and provenance coverage 1.00/0.98. Zero observations
+    always fail as MISSING_DATA. Thresholds are examples, never production
+    claims, and every tenant must bind its own approved evidence and policy.
+  - >-
+    PASS, WARN, and FAIL fixtures use fixed evaluation times and measurement
+    counts. Negative vectors cover missing, stale, duplicate, unclassified,
+    and unprovenanced data. Evaluation uses decimal-safe arithmetic and sorted
+    stable reason codes; FAIL dominates WARN, WARN never advances readiness,
+    and a missing-data result suppresses misleading derived metric findings.
+  - >-
+    Each readiness fixture wraps one nested DataReadinessAssessment with
+    exactly these gate ids in order: business.owner, business.outcome,
+    data.owner, data.quality, data.completeness, data.freshness,
+    data.provenance, data.classification, integration.readiness, and
+    autonomy.boundary. PASS yields READY; WARN yields BLOCKED with NEEDS_INPUT;
+    FAIL yields BLOCKED with BLOCKED. Only relevant non-pass gates appear in
+    sorted missingGateIds. Integration and autonomy may be NOT_APPLICABLE.
+  - >-
+    The packet-owned Make descriptor registers only the unique data-readiness
+    target with exact PACK=white-goods and direct argv to
+    ci/handlers/ind_wg_002.py. The handler validates the contract binding,
+    questionnaire/source/policy closure, dataset digests and counts, all
+    decisions and assessments, two-build pack index/archive identity, no
+    retained artifact, and false publication/deployment/runtime/assurance/
+    tenant-acceptance flags. The closed descriptor-inventory regression is
+    updated without changing Makefile or the dispatcher.
+excluded:
+  - >-
+    Real tenant or warm-source data, copied schema or source bytes, credentials,
+    secrets, connection strings, source endpoints, remote reads, runtime
+    downloads, paid services, production thresholds, plant/customer/employee
+    identities, unsupported freshness or regulatory claims, mutable digests,
+    executable pack content, write-capable actions, waivers, signatures,
+    publication, deployment, runtime evidence, assurance evidence, or tenant
+    acceptance. Missing or WARN evidence cannot be marked ready.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands:
+  - ["make","pack","PACK=white-goods"]
+  - ["make","data-readiness","PACK=white-goods"]
+  - ["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py","tests/white_goods/test_data_readiness.py"]
+  - ["make","zero-bill"]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Deterministic source/data digests.", "Failure vectors for missing, stale, duplicate, unclassified, and unprovenanced data."]
-rollback: Revert white-goods data fixtures and rules while retaining the business/domain slice.
+expectedEvidence:
+  - The exact predecessor commit, raw pack file, pack digest, framework wheel, public contracts commit, two schema paths, and two schema digests match the packet's immutable bindings without mounting or reading a warm-source checkout.
+  - The four synthetic source classes, source owners/custodians, data member paths, record counts, byte sizes, media types, and SHA-256 values are closed and mutually consistent; a tampered byte, count, path, or classification fails.
+  - PASS, WARN, missing, stale, duplicate, unclassified, and unprovenanced vectors produce exact sorted reason codes, ten ordered contract gates, correct gate states, correct missingGateIds, and READY only for PASS.
+  - Two canonical indexes and fixed-epoch archives of white-goods 0.2.0 are byte-identical and temporary outputs are removed; the immutable common pack and framework 0.1.1 distribution remain byte-identical to predecessor evidence.
+  - Dispatcher inventory includes IND-WG-001 pack and IND-WG-002 data-readiness with no duplicate target, undeclared variable, shell transport, ambiguous handler, or predecessor regression.
+  - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate evidence states; all post-merge operational and tenant states remain false or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased white-goods 0.2.0 data-readiness slice and restore the exact IND-WG-001 0.1.0 pack; retain common.foundation 1.0.0, framework 0.1.1, predecessor evidence, and every downstream release, runtime, assurance, or tenant record unchanged.

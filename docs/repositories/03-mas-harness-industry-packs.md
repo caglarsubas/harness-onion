@@ -162,6 +162,58 @@ relax the general network-target prohibition and does not alter the 0.1.0 pack
 format. The packet updates deterministic wheel/sdist evidence because framework
 source changed; the immutable common pack and its digest do not change.
 
+## IND-WG-002 data-readiness contract
+
+IND-WG-002 starts only from exact merged product commit
+`714e311b550798c230d440c869d36f7ad5a857b4`. It binds white-goods 0.1.0 pack
+digest `cb413874a002a481a7163e6198cac277894e72a7c918085d635b1fadcf523913`,
+raw `pack.yaml` SHA-256
+`e20d3b6723698a298b93a8dc45743b6644d7e443e1c4fd0450a2c344a9238bf1`,
+and framework 0.1.1 wheel SHA-256
+`d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4`.
+It advances only the sector pack to 0.2.0. The common pack, contracts lock,
+journey, ontology, business content, pack format 0.1.0, and framework 0.1.1
+remain byte-identical.
+
+The readiness assessment binds public contracts commit
+`2146278a95344cd2a8e22596b2f315b46edffc88`. The authoritative schema is
+`schemas/v1alpha1/readiness/data-readiness-assessment.schema.json`, SHA-256
+`ffe003a1a7ec0773f49d8f394ac3dd6281114bd4335ff05c87d223412faf92a5`;
+its common guidance schema is SHA-256
+`4d77297073d4c2e559f1131fbada566b499197f87113f7e28b136f0b4ae5f429`.
+The existing sector lock records the readiness schema under a historical
+`guidance/` path but binds the correct content digest. IND-WG-002 documents the
+authoritative path in a new data-only binding record. It neither edits the
+predecessor lock nor copies schema bytes.
+
+The pack carries four independently authored synthetic source classes: API,
+PostgreSQL, files, and events. Each declares an owner, custodian,
+classification, and local evidence id. A closed dataset lock binds every data
+member's path, media type, record count, byte size, and SHA-256. Fixtures contain
+no tenant, plant, customer, employee, credential, connection, endpoint, or warm-
+source material.
+
+The illustrative policy is tenant-replaceable and deterministic. PASS/WARN
+bands are completeness 0.98/0.95 minimum, freshness 15/60 minutes maximum,
+duplicate rate 0.01/0.02 maximum, classification coverage 1.00/0.98 minimum,
+and provenance coverage 1.00/0.98 minimum. Zero observations always produce
+`MISSING_DATA`. These values are test policy, not production claims.
+
+PASS alone yields `READY`. WARN yields `BLOCKED` plus `NEEDS_INPUT`; FAIL yields
+`BLOCKED` plus `BLOCKED`. Every nested `DataReadinessAssessment` contains
+exactly ten ordered gates for business ownership/outcomes, data ownership,
+quality, completeness, freshness, provenance, classification, integration, and
+autonomy. Evidence ids, missing-gate ids, and reason codes are sorted and
+unique. Missing data suppresses derived metric findings so absent observations
+cannot produce misleading coverage or freshness conclusions.
+
+Tests remain under `tests/white_goods/`, outside the distributable pack. The new
+Make target is uniquely named `data-readiness`; `pack` remains owned by
+IND-WG-001. The IND-WG-002 handler validates contract bindings, questionnaire,
+source and policy closure, dataset digests/counts, every result vector, and two-
+build index/archive identity without retaining an artifact. It also preserves
+false publication, deployment, runtime, assurance, and tenant-acceptance flags.
+
 ## Warm-source mapping
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
