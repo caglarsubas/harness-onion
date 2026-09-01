@@ -184,6 +184,14 @@ argv, shell denial, and offline network/install-token denial remain mandatory.
 This is not ownership of `Makefile`, `ci/run_make_target.py`, KN-001 handlers, or
 future transport behavior beyond the declared closed validation contract.
 
+The packet also corrects one KN-001 test-range defect in
+`tests/common/test_security_sql_delivery.py`: the foundation ownership assertion
+must compare the empty base to exact merged KN-001 commit `672e73e...`, not to
+the current HEAD. Otherwise every valid later-packet file is falsely treated as
+a KN-001 file. The amendment changes only the comparison endpoint and adds an
+ancestor assertion; KN-001's original allowed set and all other foundation
+security checks remain closed.
+
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
@@ -233,6 +241,9 @@ accepts both the unchanged KN-001 sequence and KN-DOM-001's declared sequence,
 while denying empty phases, malformed argv, shell/environment launchers,
 recursive verification, forbidden offline tokens, execution-contract drift,
 packet mutation, missing isolation identity, and leaked authority paths.
+The cumulative security target additionally proves the exact KN-001 commit is
+an ancestor and its own base-to-foundation paths remain within the original
+bootstrap boundary, independently of KN-DOM's packet-local path validation.
 
 `common-contract` validates the immutable upstream lock, exact Python/lock
 closure, canonical JSON/digests, closed records, privacy, idempotency, health
