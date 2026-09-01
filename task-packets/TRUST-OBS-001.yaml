@@ -1,18 +1,205 @@
 id: TRUST-OBS-001
 repository: mas-harness-trust-plane
 branch: codex/trust-obs-001-usage-telemetry
-objective: Implement offline OTel/Prometheus/Jaeger modules and a tenant-scoped immutable usage, reservation, budget, aggregate, and retention ledger.
-predecessors: [TRUST-001, SDK-002]
-allowedPaths: ["services/usage-ledger/", "src/planeon_trust/usage/", "migrations/usage/", "modules/otel-collector/", "modules/prometheus/", "modules/jaeger/", "tests/observability/", "fixtures/usage/", "deploy/helm/usage-ledger/", "ci/targets/trust-obs-001.json"]
+objective: Implement a dependency-minimal tenant-scoped usage ledger plus source-only local OTel and external Prometheus/Jaeger backend contracts, with atomic reservations, content-free telemetry, bounded buffering, reconciliation, and non-destructive retention evidence.
+predecessors: [TRUST-001, TRUST-002, SDK-002]
+allowedPaths: ["services/usage-ledger/", "src/planeon_trust/usage/", "migrations/usage/", "modules/otel-collector/", "modules/prometheus/", "modules/jaeger/", "tests/observability/", "tests/foundation/test_dispatch_porting.py", "fixtures/usage/", "deploy/helm/usage-ledger/", "ci/targets/trust-obs-001.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: DISCOVERY_ONLY, paths: ["docker/observability/","tests/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: REFERENCE_ONLY, paths: ["src/inference_engine/usage_ledger.py","src/inference_engine/observability.py","src/inference_engine/otel.py","docker/observability/grafana/dashboards/inference-engine-overview.json","docker/observability/grafana/provisioning/dashboards/provider.yaml","docker/observability/grafana/provisioning/datasources/datasources.yaml","docker/observability/otel-collector.yaml","docker/observability/prometheus.native.yml","docker/observability/prometheus.yml","tests/__init__.py","tests/conftest.py","tests/fixtures/lease-vectors/README.md","tests/fixtures/lease-vectors/acks/ack-advisory-nothing-enforced.json","tests/fixtures/lease-vectors/acks/ack-enforcement-off-refused.json","tests/fixtures/lease-vectors/acks/ack-enforcing-quarantine.json","tests/fixtures/lease-vectors/acks/ack-enforcing-without-lease-refused.json","tests/fixtures/lease-vectors/acks/ack-lease-parse-failed.json","tests/fixtures/lease-vectors/acks/ack-missing-field-refused.json","tests/fixtures/lease-vectors/acks/ack-missing-object.json","tests/fixtures/lease-vectors/acks/ack-no-lease.json","tests/fixtures/lease-vectors/acks/ack-stale-lease-still-enforcing.json","tests/fixtures/lease-vectors/acks/ack-unknown-keys-ignored.json","tests/fixtures/lease-vectors/manifest.json","tests/fixtures/lease-vectors/vectors/lease-advisory-expired.json","tests/fixtures/lease-vectors/vectors/lease-agent-scope.json","tests/fixtures/lease-vectors/vectors/lease-lower-revision.json","tests/fixtures/lease-vectors/vectors/lease-quarantine-expired.json","tests/fixtures/lease-vectors/vectors/lease-serving-not-enforcement.json","tests/fixtures/lease-vectors/vectors/lease-serving-replay-across-streams.json","tests/fixtures/lease-vectors/vectors/lease-tampered-signature.json","tests/fixtures/lease-vectors/vectors/lease-valid-v1.json","tests/fixtures/lease-vectors/vectors/lease-wrong-key-purpose.json","tests/fixtures/model-routing-policy-v1.json","tests/fixtures/model-routing-policy-v2.json","tests/test_adapter_usage_paths.py","tests/test_admin_auth_keys.py","tests/test_admin_model_routing_policy.py","tests/test_admin_policies.py","tests/test_auth.py","tests/test_auto_eval.py","tests/test_auto_eval_policy.py","tests/test_cancellation.py","tests/test_chat_multimodal.py","tests/test_chat_streaming.py","tests/test_completions.py","tests/test_composite_registry.py","tests/test_concurrency.py","tests/test_dynamic_batching.py","tests/test_embeddings.py","tests/test_evals.py","tests/test_genai_metrics.py","tests/test_generation_deadline.py","tests/test_generation_timeout.py","tests/test_guardrail.py","tests/test_http_contract.py","tests/test_intent_tracing.py","tests/test_llama_cpp_context_window.py","tests/test_llama_cpp_tool_arguments.py","tests/test_manager.py","tests/test_metrics.py","tests/test_mlx_prefix_cache.py","tests/test_mlx_probe.py","tests/test_mlx_registry.py","tests/test_mlx_vlm_openai_worker.py","tests/test_model_plane_observer.py","tests/test_model_plane_runtime_control.py","tests/test_model_routing_api.py","tests/test_model_routing_policy.py","tests/test_model_routing_rate_limit.py","tests/test_model_routing_runtime.py","tests/test_models_snapshot.py","tests/test_molmo_mlx_openai_worker.py","tests/test_observability.py","tests/test_ollama_http_adapter.py","tests/test_ollama_http_registry.py","tests/test_openai_compat.py","tests/test_otel_exporter.py","tests/test_pairwise.py","tests/test_per_rubric_judges.py","tests/test_prefix_cache.py","tests/test_promote_vllm_model.py","tests/test_registry.py","tests/test_registry_source_order.py","tests/test_request_identity.py","tests/test_rerank.py","tests/test_response_normalize.py","tests/test_responses_api.py","tests/test_scheduler.py","tests/test_server.py","tests/test_sida_openai_worker.py","tests/test_startup_readiness.py","tests/test_state_dispatch.py","tests/test_streaming_tool_audit.py","tests/test_structured_output_capability.py","tests/test_structured_output_enforcement.py","tests/test_structured_outputs.py","tests/test_tool_audit.py","tests/test_tool_timing.py","tests/test_upstream_resilience.py","tests/test_upstream_retry_routing.py","tests/test_usage_ledger.py","tests/test_vllm_adapter.py","tests/test_vllm_probe.py","tests/test_vlm_request_matrix.py","tests/test_vlm_smoke_script.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes telemetry and ExecutionBudget contracts v1", "Produces usage ledger API and observability modules v1"]
-deliverables: ["Immutable entries, reservations, commit/release, budgets, aggregates, retention, tenant isolation, local dashboards, and no external exporters."]
-excluded: ["Cloud telemetry, pricing claims, raw prompt storage, or mandatory ClickHouse/Redis."]
+contracts:
+  - >-
+    Starts from public mas-harness-contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 and source-contract-only release
+    manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79.
+    It consumes ExecutionBudget raw SHA-256
+    3d605bcdf1180c9a2c9ab0c56dd3da2fe821c66c7cf33ba3fb576dfb98c5c7d7,
+    runtime common raw SHA-256
+    f5cbcee26f9dbd5250499358f26db403ce409d87e4fd625deccbca3f717d6ead,
+    BudgetConsumption raw SHA-256
+    98b72f3283388c8533069b05ca272c9d0e17f8709167837fa643a07b74b2d2c2,
+    its valid vector raw SHA-256
+    fea48682bee15b6a42e672234975bf6285a3b8c929237236b80b8f535c9d3a7b,
+    and HarnessCloudEvent raw SHA-256
+    f0be09712101b61980e7752ae4a394bd09fa21640df4cbeeec4764f1e6004d0f.
+    Packet-local usage APIs may extend resource dimensions but must preserve the
+    five public ExecutionBudget and BudgetConsumption dimension names and
+    limits exactly; they do not revise or claim a new public contract release.
+  - >-
+    Consumes the SDK-002 telemetry authority at merged commit
+    92a8ebf8e705eb2bf7a4e5be89edc5e8aa062c08. The exact unchanged Python
+    context, attributes, and decorators source digests are respectively
+    24cf52e5f9250674eb0348c5f95cc10e8c59d7b346727874003dc45982116a54,
+    9ca5a49aa79e599ff3da222566dc04ece67fdfd33c534732343d082c9fa87e4f,
+    and 0d18bea2878b2f1e3153f7d084e6a870bf1a35197709a5cb7f9164acc2c20dc4.
+    The golden span vector digest is
+    e6b6a5546566eb55739f2fbbba0c1c239312f26f6c0a62f44c79b850fe57714c.
+    The already admitted SDK-006 wheel at SHA-256
+    9b85d01b7079fe27c189d70b7fba46614c3df647d6f44e9270fe4683d7337fa4
+    contains byte-identical copies of those three SDK-002 Python modules; this
+    packet adds no dependency, changes neither pyproject.toml nor uv.lock, and
+    does not receive the SDK source checkout during product implementation.
+  - >-
+    Produces packet-local usage-ledger API
+    harness.planeon.ai/usage-ledger/v1alpha1. POST reserve, commit, release, and
+    evaluate bodies never accept organizationId, tenantId, subjectId, pricing,
+    currency, endpoint, credential, prompt, output, message, source, memory, or
+    tool payload fields. OIDC admission and organization/subject derivation use
+    the existing TRUST-001 boundary. GET query scope is always restricted to
+    the derived organization. Requests and responses are closed JSON objects,
+    bounded to 65536 bytes, and use stable reason codes.
+  - >-
+    The closed dimensions are concurrentTasks, taskSeconds, retries, toolCalls,
+    modelTokens, modelCalls, inputTokens, outputTokens, cpuSeconds, gpuSeconds,
+    and storageBytes. Values are non-negative integers no greater than
+    9000000000000000. Budget scope is exactly TENANT, PROFILE, ROUTE, or
+    WORKFLOW; enforcement is HARD or ADVISORY; windows are fixed UTC epochs with
+    windowSeconds 60..31536000; warningThresholdBasisPoints is 1..9999;
+    reservation TTL is 1..3600 seconds and is clipped to the current window.
+    The five public ExecutionBudget dimensions retain their public maxima.
+  - >-
+    Reservation state is RESERVED then exactly one of COMMITTED, RELEASED, or
+    EXPIRED. Reserve idempotency binds organization, budget digest, scope,
+    operation, requested dimensions, and idempotency-key digest. Commit and
+    release have independent transition idempotency; exact retries return the
+    original result and conflicting reuse is denied. Commit observations may
+    not exceed the reservation. A single organization-scoped transaction
+    appends the reservation/decision/usage/outbox records and updates derived
+    counters atomically. HARD exhaustion and every storage or reconciliation
+    failure deny; ADVISORY exhaustion records the exceeded dimensions but does
+    not authorize any operation that separately requires a public REQUIRED/BLOCK
+    ExecutionBudget.
+  - >-
+    Produces source-only module contracts for planeon.otel and the cataloged
+    external.otel-backend. Prometheus and Jaeger paths contain only install-inert
+    tenant-attestation/query contracts for that external prerequisite; they do
+    not package, install, provision, or claim ownership of either backend. The
+    collector contract accepts only OTLP receivers, required content-redaction,
+    memory/cardinality/batch controls, a bounded local WAL, and catalog-resolved
+    tenant-private exporters. URL literals, remote write, public hosts, external
+    exporters, payload capture, inline secrets, API keys, mutable images, and
+    runtime downloads are rejected.
+  - >-
+    Produces closed packet-local Make target descriptor dispatch v1. The packet
+    owns usage-vectors and observability-smoke plus cumulative security and
+    zero-bill handlers. It owns the exact predecessor dispatch inventory test
+    only to extend the generated target union and cumulative owner assertions;
+    all predecessor negative-dispatch and PORTING assertions remain unchanged.
+deliverables:
+  - >-
+    Implement a dependency-minimal Python service core using only the repository
+    baseline closure. Define immutable BudgetDefinition, Reservation,
+    ReservationTransition, UsageEntry, Aggregate, ReconciliationFinding,
+    RetentionFinding, DependencyHealth, and content-free telemetry records.
+    Store only digests, opaque identifiers, integer counts, states, reason codes,
+    and timestamps; never retain request bodies, token/JWT material, business
+    payloads, prompts, model outputs, source content, memory content, credentials,
+    or arbitrary labels.
+  - >-
+    Implement locked in-memory reference storage with copy-on-commit semantics.
+    Every mutation first expires due reservations, resolves the current window,
+    validates tenant/scope/budget digests, and commits reservation, decision,
+    usage, aggregate, audit, and outbox changes as one atomic state replacement.
+    Injected failure leaves byte-equivalent prior state. Cross-organization IDs,
+    duplicate/conflicting idempotency, terminal-state transitions, negative or
+    oversized counters, clock regression, and unconfigured budgets fail closed.
+  - >-
+    Budget state is SUSPENDED when disabled, RESET_PENDING only while a prior
+    window has unreconciled terminal accounting, EXHAUSTED when any current
+    committed-plus-reserved dimension reaches or exceeds its limit, WARNING at
+    the configured basis-point threshold, otherwise AVAILABLE. Expiry releases
+    reserved capacity through an immutable EXPIRED transition. Reconciliation
+    recomputes counters from immutable records and emits a finding on any
+    discrepancy; it never silently resets or repairs authoritative history.
+  - >-
+    Retention is non-destructive in this packet. It computes query cutoffs and
+    immutable RETENTION_DUE findings bound to aggregate/history digests. It does
+    not delete, truncate, compact, mutate, or hide authoritative usage/audit
+    history because no tenant-signed destructive-retention authority exists yet.
+    Any future purge requires a separate governance contract and task packet.
+  - >-
+    Provide transport-neutral service methods and a dependency-minimal ASGI
+    adapter for reserve, commit, release, usage query, budgets query/evaluate,
+    SLO projection, dependency health, liveness, and readiness. Readiness fails
+    without durable-store readiness, current reconciliation, and a valid local
+    collector contract; collector/backend outage is reported as degraded and
+    never changes authoritative budget decisions. Error responses contain no
+    submitted value or identity material.
+  - >-
+    Provide an independent fixture catalog covering public budget compatibility,
+    exact HARD and ADVISORY boundaries, all scopes/dimensions, warning/exhausted/
+    suspended/reset states, races, idempotency conflicts, expiry, commit/release,
+    aggregate reconciliation, clock/window edges, retention findings, collector
+    outage, content rejection, and cross-tenant denial. Fixtures are clean-room
+    and do not copy any warm-source vector.
+  - >-
+    Provide bounded content-free telemetry admission and local buffering.
+    Required semantic attributes are derived from admitted SDK context; unknown,
+    sensitive, nested, overlong, non-finite, or high-cardinality attributes are
+    dropped without value echo. Buffer limits are exact record count, byte count,
+    and age; overflow drops only non-audit telemetry in LOW then NORMAL priority
+    order, while audit-required saturation fails readiness and reports a stable
+    finding rather than discarding evidence.
+  - >-
+    modules/otel-collector contains a closed source configuration contract and
+    install-inert example. modules/prometheus and modules/jaeger contain only
+    external-backend attestation and content-free query catalogs. Offline smoke
+    tests reject endpoint literals, public/remote exporters, remote write,
+    payload capture, secrets, mutable artifacts, unbounded buffers/cardinality,
+    missing tenant isolation/retention, and any claim that external backends are
+    repository-built or currently released.
+  - >-
+    migrations/usage/001_usage.sql creates distinct NOLOGIN owner, migrator,
+    runtime, and audit-reader roles plus tenant budget, reservation,
+    reservation-transition, usage-entry, aggregate, reconciliation, retention,
+    audit, and outbox tables. Tenant tables use ENABLE and FORCE RLS with only
+    transaction-local planeon.organization_id. Runtime has no BYPASSRLS, DDL,
+    TRUNCATE, or DELETE; authoritative tables reject UPDATE/DELETE; uniqueness
+    closes reserve/commit/release idempotency; no down or destructive migration
+    exists. PostgreSQL execution remains NOT_RUN_ENV_UNAVAILABLE.
+  - >-
+    The usage-ledger Helm chart is disabled until an operator supplies an
+    immutable service image digest plus existing PostgreSQL, OIDC, policy, and
+    optional local-collector references. It provisions no database, backend,
+    PVC, Secret, key, namespace, cloud resource, or credential. It is non-root,
+    read-only, capability-dropped, seccomp RuntimeDefault, resource-bounded,
+    OpenShift arbitrary-UID compatible, and default-deny with only explicit
+    cluster-local dependencies.
+  - >-
+    ci/targets/trust-obs-001.json registers usage-vectors,
+    observability-smoke, security, and zero-bill as direct argv. Cumulative
+    security retains TRUST-001 and TRUST-002 handlers and adds only packet-owned
+    observability tests. The exact foundation dispatch test recognizes
+    TRUST-OBS-001 owners while preserving all malformed/ambiguous/shell/variable/
+    zero-handler/PORTING denial vectors.
+excluded:
+  - >-
+    Warm checkout access or copied source; public contract revision; dependency
+    or lockfile change; OpenTelemetry, Prometheus, Jaeger, Loki, PostgreSQL, or
+    Kubernetes binary execution; backend/image download, packaging,
+    provisioning, deployment, or release; Grafana; ClickHouse; Redis; cloud or
+    hosted telemetry; public endpoint or remote-write defaults; external billing
+    or pricing APIs; currency or invoice claims; provider/API keys; raw payload,
+    prompt, output, source, memory, secret, credential, token, or arbitrary-label
+    capture; automatic/destructive retention; scheduled work; hosted runners;
+    Actions cache/artifacts/Packages; publishing; mutable artifacts; runtime
+    downloads; deployment/runtime/security/assurance certification; or tenant
+    acceptance.
 prefetchCommands: []
-offlineAcceptanceCommands: [["make","usage-vectors"],["make","observability-smoke"],["make","security"]]
+offlineAcceptanceCommands: [["make","usage-vectors"],["make","observability-smoke"],["make","security"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Reservation race/idempotency and aggregate reconciliation.", "Tenant isolation, retention, collector outage, and zero-egress evidence."]
-rollback: Disable new reservations only with fail-closed callers and preserve immutable usage/audit records.
+expectedEvidence:
+  - Exact public contract/release digests, SDK-002 commit/module/vector digests, byte-equivalent admitted SDK wheel modules, CPython baseline, and unchanged dependency/lock files pass before behavior tests.
+  - Public ExecutionBudget and BudgetConsumption compatibility plus all eleven dimensions, four scopes, HARD/ADVISORY modes, UTC windows, warning and exhaustion boundaries, suspension, reset-pending, and maximum integer bounds produce deterministic closed vectors.
+  - Concurrent reservations never oversubscribe a HARD budget. Exact reserve/commit/release retries are stable; conflicting reuse, commit above reservation, duplicate terminal transition, expiry races, clock regression, storage failure, and tenant/budget/scope mismatch fail closed without partial state.
+  - Every successful mutation has one atomic immutable reservation/transition/usage/aggregate/audit/outbox result. Aggregate recomputation matches authoritative records; injected discrepancies emit findings and never silently repair history.
+  - Retention computes stable cutoff/history digests and RETENTION_DUE findings without deleting, updating, compacting, truncating, or hiding authoritative usage/audit records. Rollback and outage vectors preserve all history.
+  - API/ASGI vectors prove server-derived tenant/subject scope, 65536-byte and closed-field limits, cross-tenant/query denial, stable non-echoing errors, readiness dependency semantics, and no content/token/credential storage or response leakage.
+  - Telemetry tests match the pinned SDK-002 semantic contract, reject sensitive/arbitrary/high-cardinality content, enforce count/byte/age bounds, preserve audit-required evidence, and report collector/backend outage without altering budget decisions.
+  - OTel, Prometheus, and Jaeger module source checks prove install-inert catalog alignment, external-backend ownership, local-only closed routes, bounded retention/cardinality/WAL, no Loki or Grafana implication, and rejection of external exporters, remote write, public hosts, inline secrets, API keys, mutable artifacts, or runtime fetches.
+  - SQL source tests prove separate roles, FORCE RLS, transaction-local tenant context, append-only authority, idempotency uniqueness, runtime privilege denial, and no destructive migration. Helm source tests prove digest-only operator inputs, disabled defaults, bounded security/resources/network, external dependency references, and zero state/credential/cloud provisioning.
+  - Cumulative dispatch tests preserve every predecessor target/owner and negative vector while adding TRUST-OBS-001. Zero-bill scanning finds no hosted runner, cache/artifact upload, cloud provisioning, paid/provider API, API-key field, remote telemetry, mutable artifact, scheduled work, runtime download, or retained CI artifact.
+  - Source, contract/unit, PR check, merge, artifact/SBOM, signature/release, deployment, runtime, security, assurance, and tenant acceptance remain separate. This packet can prove only clean-room source and offline contract/unit behavior; PostgreSQL, collector/backend, Kubernetes, artifact, release, live security, assurance, and tenant acceptance remain pending or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert only the unreleased TRUST-OBS-001 source and disable new reservation routes with callers remaining fail closed. Preserve every immutable usage, reservation, transition, aggregate, audit, outbox, reconciliation, and retention record; do not delete PostgreSQL state, weaken a HARD budget, reset counters, remove tenant backend data, or claim rollback of any external deployment, release, runtime observation, assurance result, or tenant decision.
