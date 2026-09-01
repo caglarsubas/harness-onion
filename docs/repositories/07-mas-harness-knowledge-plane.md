@@ -173,6 +173,17 @@ exception is the generic `campaign`, `evidence-verify`, and
 `acceptance-package` dispatch owned and tested by `CONF-001` for conformance
 campaign packets.
 
+`KN-DOM-001` also owns one bounded correction to the separate
+`ci/run_packet_argv.py` transport. The KN-001 bootstrap accidentally closed that
+transport over KN-001's literal acceptance target list, which would reject every
+later packet before the cumulative dispatcher could run. KN-DOM-001 replaces
+only that literal equality test with closed generic `ARGV_ARRAY_V1` validation.
+The hash-pinned packet, single deny-all-outbound process tree, exact offline
+environment, local-only prefetch entry point, canary, digest rechecks, direct
+argv, shell denial, and offline network/install-token denial remain mandatory.
+This is not ownership of `Makefile`, `ci/run_make_target.py`, KN-001 handlers, or
+future transport behavior beyond the declared closed validation contract.
+
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
@@ -216,6 +227,12 @@ white-goods, zero-bill, and reproducibility checks as direct argv arrays. The
 executor supplies the hash-pinned packet through `HARNESS_TASK_PACKET` and
 invokes only `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the
 complete ordered list.
+
+The KN-DOM-001 acceptance also proves that the generalized packet transport
+accepts both the unchanged KN-001 sequence and KN-DOM-001's declared sequence,
+while denying empty phases, malformed argv, shell/environment launchers,
+recursive verification, forbidden offline tokens, execution-contract drift,
+packet mutation, missing isolation identity, and leaked authority paths.
 
 `common-contract` validates the immutable upstream lock, exact Python/lock
 closure, canonical JSON/digests, closed records, privacy, idempotency, health
