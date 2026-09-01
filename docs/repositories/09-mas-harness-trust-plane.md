@@ -342,11 +342,12 @@ cloud resource. PostgreSQL, actual collector/backends, images, Kubernetes,
 OpenShift, deployment, runtime, live security, assurance, and tenant acceptance
 remain `NOT_RUN_ENV_UNAVAILABLE` or pending after offline acceptance.
 
-Acceptance is exactly `make usage-vectors`, `make observability-smoke`, `make
-security`, and `make zero-bill` through the signed hash-pinned deny-all-outbound
-launcher. The packet adds only its descriptor and packet-owned tests/code. Its
-single predecessor-owned test edit extends the generated target/owner inventory
-while retaining every negative dispatch and no-porting assertion.
+Acceptance runs fixed local-cache-only `make prefetch` first, then exactly
+`make usage-vectors`, `make observability-smoke`, `make security`, and `make
+zero-bill` through the same signed hash-pinned deny-all-outbound launcher
+process tree. The packet adds only its descriptor and packet-owned tests/code.
+Its single predecessor-owned test edit extends the generated target/owner
+inventory while retaining every negative dispatch and no-porting assertion.
 
 ## Release and rollback
 
