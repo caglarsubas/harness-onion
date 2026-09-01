@@ -99,7 +99,7 @@ POST /observability/v1/usage:commit
 POST /observability/v1/usage:release
 GET  /observability/v1/usage
 GET  /observability/v1/budgets
-POST /observability/v1/budgets/{id}:evaluate
+POST /observability/v1/budgets:evaluate
 GET  /observability/v1/slos
 GET  /observability/v1/health/dependencies
 ```

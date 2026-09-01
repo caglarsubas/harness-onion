@@ -187,7 +187,7 @@ excluded:
     Actions cache/artifacts/Packages; publishing; mutable artifacts; runtime
     downloads; deployment/runtime/security/assurance certification; or tenant
     acceptance.
-prefetchCommands: []
+prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","usage-vectors"],["make","observability-smoke"],["make","security"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
