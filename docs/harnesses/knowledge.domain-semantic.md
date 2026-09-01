@@ -172,3 +172,9 @@ environment, local-only prefetch, direct-argv rules, or Make dispatcher. Both
 the unchanged bootstrap sequence and this packet's declared sequence must pass;
 empty, shell-based, network/install-bearing, recursive, mutated, or
 contract-drifted sequences must fail closed.
+
+The same packet makes the inherited KN-001 changed-path assertion cumulative:
+it compares the empty base only through the exact merged KN-001 commit and
+requires that commit to remain an ancestor of HEAD. This prevents later domain
+files from being mislabeled as bootstrap changes without broadening either
+packet's implementation ownership.
