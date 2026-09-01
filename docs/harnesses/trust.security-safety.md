@@ -103,7 +103,9 @@ Emitted:
 
 - `policy.bundle.activated.v1`
 - `policy.denied.v1`
-- `guardrail.triggered.v1`
+- packet-local `planeon.trust.guardrail-evaluation.recorded.v1alpha1` outbox
+  classification; this is internal metadata and is not represented as a public
+  HarnessCloudEvent until that type exists in the contracts repository
 - `artifact.verification.failed.v1`
 - `trust.manifest.rotated.v1`
 - `security.dependency.unavailable.v1`
@@ -156,3 +158,50 @@ Consumed: signed bundle/profile release, module revocation, approval/waiver expi
 5. `TRUST-003-resilience-security`: OPA/identity/DB/audit outages, forged evidence/artifacts, cross-tenant denial, stale/revoked policy, and air-gap startup.
 
 Every packet must leave private signing keys and secret values outside source, CI artifacts, events, and logs.
+
+### Closed TRUST-002 service contract
+
+TRUST-002 implements the SDK-006 contract as a tenant-facing service without
+expanding its detector semantics. It pins the SDK-006 commit and reproducible
+wheel digest, the contracts release manifest, and the EvidenceRecord schema.
+The product owns independent fixtures; it does not copy the SDK fixture corpus
+or mount any SDK, contracts, or warm-source checkout during implementation or
+acceptance.
+
+| Operation | Exact body | Result/state |
+|---|---|---|
+| `POST /trust/v1/guardrails:evaluate` | `profileId`, `content` | SDK result plus content-free decision/evidence metadata |
+| `POST /trust/v1/guardrails/streams` | `profileId` | opaque tenant-bound stream, `OPEN`, next sequence `1` |
+| `POST /trust/v1/guardrails/streams/{streamId}:push` | `sequence`, non-empty `content` | cumulative bounded evaluation and next sequence |
+| `POST /trust/v1/guardrails/streams/{streamId}:finish` | `sequence` | final evaluation and `FINISHED` |
+
+Bearer identity is verified by the TRUST-001 OIDC boundary, and organization is
+never read from a body, path, header override, profile selector, or stream ID.
+The active signed profile fixes stage and limits. Profiles use tenant-bound
+Ed25519 signatures with purpose `GUARDRAIL_PROFILE`, monotonic versions,
+predecessor digests, validity, revocation, atomic activation, and one eligible
+last-known-good rollback. INPUT and RUNTIME are always `FAIL_CLOSED`.
+OUTPUT/STREAMING `FAIL_OPEN` is explicit, but a detector error stays degraded
+and non-releasing. Only `ALLOW` and `REDACT` release a result.
+
+Only closed deterministic local detectors are registered. They are synchronous,
+bounded by the profile content limit, and have no I/O, network, subprocess,
+model, plugin, provider, download, secret, or telemetry capability. The service
+does not pretend a non-cancellable in-process Python callback has a safe timeout;
+instead it excludes arbitrary/untrusted callbacks and tests throwing, missing,
+duplicate, and malformed detectors through the SDK fail-mode contract.
+
+Streaming retains a cumulative buffer only in process: maximum 1,048,576 UTF-8
+bytes, 128 open sessions per tenant, and a 60-second idle TTL. `OPEN` transitions
+to `TERMINATED` on DENY, QUARANTINE, or ERROR_FAIL_CLOSED; to `FINISHED` on
+finish; or to `EXPIRED` on TTL/capacity eviction. Every terminal transition
+clears raw content. Cross-tenant access, non-monotonic sequence, replay, and
+post-terminal calls fail with stable content-free codes.
+
+Persistence is one atomic metadata-only decision, audit, and EvidenceRecord
+candidate write. Evidence stays `RECEIVED` on axis `SECURITY`; it is not
+`VERIFIED` evidence, governance approval, certification, promotion, deployment
+proof, runtime proof, or tenant acceptance. Raw and redacted content, token
+claims, subject identity, exception detail, private keys, and secret values are
+forbidden from storage, events, evidence, telemetry, logs, and captured output.
+The immediate REDACT response is the only place sanitized content may appear.
