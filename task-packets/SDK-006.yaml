@@ -33,15 +33,7 @@ excluded:
   - Deployable guardrail service, HTTP client, remote detector, moderation API, classifier/model download, asynchronous detector, payload persistence, evidence emission, automatic telemetry, external exporter, framework hook, provider SDK, API key, vendor endpoint, streaming transport, or governance decision.
 prefetchCommands: []
 offlineAcceptanceCommands: [[make, guardrail-vectors], [make, security]]
-offlineExecution:
-  wrapperArgv: [./ci/verify-offline.sh]
-  packetPathEnvironment: HARNESS_TASK_PACKET
-  packetPathMode: HASH_PINNED_READ_ONCE_NO_CHILD_PATH
-  commandTransport: ARGV_ARRAY_V1
-  isolation: OS_ENFORCED_DENY_ALL_OUTBOUND
-  sessionScope: SINGLE_PROCESS_TREE
-  prefetchOutsideSession: false
-  offlineEnvironment: {UV_OFFLINE: "1", UV_FROZEN: "1", UV_NO_SYNC: "1"}
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - Shared fixtures produce byte-identical Python and TypeScript results for every stage, outcome, fail mode, precedence case, UTF-8 limit, Unicode redaction range, and streaming boundary.
   - Construction invokes no detector; missing, throwing, and malformed detectors prove the exact fail-closed and explicit degraded fail-open behavior with no exception detail leakage.
