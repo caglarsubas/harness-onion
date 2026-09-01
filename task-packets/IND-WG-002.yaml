@@ -14,6 +14,7 @@ allowedPaths:
   - tests/white_goods/test_data_readiness.py
   - tests/framework/test_dispatch.py
   - docs/white-goods/data-readiness.md
+  - ci/handlers/ind_wg_001.py
   - ci/handlers/ind_wg_002.py
   - ci/targets/ind-wg-002.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
@@ -54,8 +55,10 @@ deliverables:
     business questions, business answer vectors, pack-format compatibility
     0.1.0, and framework distribution 0.1.1. Update predecessor business tests
     only for the new sector version, declared resource/file inventory, and
-    deterministic archive name; all predecessor decisions and answer digests
-    remain unchanged.
+    deterministic archive name. Narrow the predecessor handler's questionnaire
+    discovery to its owned questions/business/ path so additive data questions
+    cannot enter frozen business answer vectors; all predecessor decisions and
+    answer digests remain unchanged.
   - >-
     Data questionnaires collect source kind and ownership, required-field
     coverage, observation timing, duplicate measurement, classification and

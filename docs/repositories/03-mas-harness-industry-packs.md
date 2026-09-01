@@ -209,7 +209,10 @@ cannot produce misleading coverage or freshness conclusions.
 
 Tests remain under `tests/white_goods/`, outside the distributable pack. The new
 Make target is uniquely named `data-readiness`; `pack` remains owned by
-IND-WG-001. The IND-WG-002 handler validates contract bindings, questionnaire,
+IND-WG-001. Its predecessor handler is narrowed to discover only its owned
+`questions/business/` paths, preventing additive data questionnaires from
+changing frozen business answer-vector keys or decisions. The IND-WG-002
+handler validates contract bindings, questionnaire,
 source and policy closure, dataset digests/counts, every result vector, and two-
 build index/archive identity without retaining an artifact. It also preserves
 false publication, deployment, runtime, assurance, and tenant-acceptance flags.
