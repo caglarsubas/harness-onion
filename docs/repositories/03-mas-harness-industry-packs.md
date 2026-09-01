@@ -189,7 +189,10 @@ ordered list.
 
 IND-WG-001 declares `prefetchCommands: [["make","prefetch"]]` and ordered
 acceptance commands for `make pack PACK=white-goods`, the exact business-domain
-pytest file, framework reproducibility, and zero-bill validation. The
+pytest file under the repository test tree, framework reproducibility, and
+zero-bill validation. Tests remain outside `packs/white-goods` because every
+path beneath a distributable pack root is closed data inventory and executable
+suffixes fail closed. The
 packet-owned handler verifies dependency versions, closed local SHACL settings,
 pack/index/archive determinism, answer-vector decisions, and false downstream
 evidence flags without retaining an artifact.

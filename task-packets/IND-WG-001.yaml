@@ -10,7 +10,7 @@ allowedPaths:
   - packs/white-goods/questions/business/
   - packs/white-goods/ontology/
   - packs/white-goods/fixtures/answers/
-  - packs/white-goods/tests/test_business_domain.py
+  - tests/white_goods/test_business_domain.py
   - docs/white-goods/business-domain.md
   - docs/authoring.md
   - src/planeon_industry_packs/rules.py
@@ -87,7 +87,7 @@ deliverables:
 excluded:
   - Plant names, production values, thresholds presented as real, customer or employee data, plant-specific facts, certification or regulatory claims, write-capable actions, credentials, secrets, source-schema bytes, warm-source observation, copied source material, network resolution, hosted services, paid APIs, JavaScript/SPARQL SHACL, ontology imports, signing, publication, deployment, runtime evidence, assurance evidence, or tenant acceptance.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","packs/white-goods/tests/test_business_domain.py"],["make","build-reproducible"],["make","zero-bill"]]
+offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py"],["make","build-reproducible"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - The exact sector pack validates against the merged IND-001 framework; two canonical indexes and fixed-epoch archives are byte-identical and retain all publication/runtime/assurance/tenant flags false.
