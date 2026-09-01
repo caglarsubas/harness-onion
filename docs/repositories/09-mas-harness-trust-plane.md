@@ -55,7 +55,16 @@ mas-harness-trust-plane/
 
 ## Deployables and toolchain
 
-- Python 3.12.14, FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, and pytest; exact versions frozen in `uv.lock`.
+- The repository target stack is Python 3.12.14, FastAPI, Pydantic v2,
+  psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, and pytest; every
+  admitted dependency must be exact and frozen in `uv.lock`.
+- `TRUST-001` deliberately starts with a dependency-minimal ASGI service core
+  and the exact offline closure `planeon-harness-sdk==0.1.0`,
+  `cryptography==49.0.0`, `cffi==2.1.0`, and `pycparser==3.0`. FastAPI,
+  Pydantic, HTTPX, psycopg, OpenTelemetry, an OPA binary, and a PostgreSQL
+  server are not silently pulled into the bootstrap packet. Later packets must
+  admit their exact local wheel/image closure and add live integration evidence
+  without weakening the same core contracts.
 - Deployables: `policy-decision` with OPA, `guardrail-service`, `governance-service`, `registry-service`, `evidence-service`, `assurance-worker`, and `usage-ledger`. OTel Collector/Prometheus/Jaeger are upstream pinned images/config modules, not reimplemented.
 - Baseline identity uses tenant-supplied OIDC/Keycloak. OpenBao and SPIRE are optional modules.
 
@@ -140,6 +149,54 @@ arrays. The executor supplies the hash-pinned packet through
 ["./ci/verify-offline.sh"]` for the complete ordered list.
 
 Acceptance: unauthorized/malformed tenant contexts and mutations are denied; OPA outage fails closed; guardrails handle streaming; approvals/waivers enforce reviewer/expiry policy; forged/stale evidence cannot promote; usage/budget is replay-safe; each evidence axis remains independent; local deterministic campaign works with egress denied; content/secrets never enter default telemetry.
+
+### Coding-ready `TRUST-001` slice
+
+The bootstrap is bound to contracts commit
+`2146278a95344cd2a8e22596b2f315b46edffc88`, release-manifest SHA-256
+`c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79`,
+CON-006 mapping SHA-256
+`81cc6d9ed39099534b61e45830f95af6bb215854f43dc21c37dd8080055445a3`,
+and the reproducible SDK-003 wheel from commit
+`a083d04fb2c0f32a1ce8373a6251e703226380c8` at SHA-256
+`5a4fa30c64432622083d8a0eeb32cf3ae67fa9975795eb2f0b5a209bd76d56a5`.
+No contract or SDK checkout is mounted during implementation or acceptance.
+
+The service route is `POST /trust/v1/policy:decide`. Authentication derives
+the organization and subject from a locally configured, signature-verified
+OIDC token; the request body cannot carry tenant identity. RS256, ES256, and
+EdDSA are supported from a closed public JWKS. Discovery and symmetric JWT
+algorithms are excluded. The OPA adapter accepts only the same-pod loopback
+endpoint `http://127.0.0.1:8181/v1/data/planeon/authz/decision` (or an exact
+loopback equivalent) and fails closed on every transport or result error.
+
+Signed policy artifacts are verified and staged before one atomic active-policy
+switch. The immediately previous verified non-revoked policy is the only
+last-known-good candidate; revocation and expiry always override rollback.
+The decision cache is tenant-keyed, metadata-only, bounded to 1,024 entries and
+30 seconds, excludes denials and mutations, and is cleared on every trust-state
+change. An allow is returned only after decision metadata plus redacted audit
+and outbox classification commit atomically.
+
+`migrations/policy/001_foundation.sql` is the PostgreSQL authority for distinct
+owner/migrator/runtime/audit-writer roles, `ENABLE` plus `FORCE ROW LEVEL
+SECURITY`, transaction-local tenant context, least privilege, and append-only
+audit/outbox. Offline tests validate the migration contract; they do not claim
+that PostgreSQL, OPA, OIDC, Helm, Kubernetes, or OpenShift ran. Those axes remain
+`NOT_RUN_ENV_UNAVAILABLE` until their separately authorized environment tests.
+
+The Helm chart is install-inert until an operator supplies immutable image
+digests and existing Secret references. It provisions no IdP, database,
+registry, storage, key, credential, namespace, or cloud resource. OPA is an
+optional same-pod sidecar; all images are digest-only, mutable tags are absent,
+and OpenShift-compatible non-root restrictions remain mandatory.
+
+Bootstrap acceptance is exactly `make prefetch`, `make policy-vectors`, `make
+security`, the full `unittest` discovery for `tests/foundation`, and `make
+zero-bill`, all through the signed hash-pinned deny-all-outbound launcher. The
+packet enumerates the positive and negative identity, policy, OPA, storage,
+cache, API/client, SQL, Helm, dispatcher, porting, billing, and evidence-axis
+vectors that must pass before merge.
 
 ## Release and rollback
 
