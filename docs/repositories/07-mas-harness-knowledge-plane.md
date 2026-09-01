@@ -41,7 +41,9 @@ mas-harness-knowledge-plane/
 │   │   ├── evidence.py
 │   │   ├── freshness.py
 │   │   ├── leases.py
-│   │   └── provenance.py
+│   │   ├── provenance.py
+│   │   ├── readiness.py
+│   │   └── retries.py
 │   ├── retrieval/
 │   └── memory/
 ├── services/
@@ -169,6 +171,58 @@ PASS/WARN/FAIL remain KN-DATA-002 work. PostgreSQL, real source connectivity,
 image/chart execution, deployment, runtime, assurance, and tenant acceptance are
 separate evidence axes and remain unavailable or pending.
 
+### `KN-DATA-002` readiness and activation boundary
+
+`KN-DATA-002` starts only from exact merged KN-DATA-001 commit `dfa67f0...`,
+exact public IND-WG-002 commit `a4d3df9...`, exact public contracts commit
+`2146278...`, and the already locked TRUST-001 boundary `73802ad...`. It keeps
+the root dependency-free and uses no warm checkout, network client, source,
+database, queue, scheduler, package install, image build, or cluster. Public
+schemas and industry fixtures are digest-pinned inputs; destination validators
+and parity fixtures are independently authored.
+
+Before activation, the packet binds the lease partition into every new staged
+batch and checkpoint-candidate digest. Predecessor batches without that binding
+remain readable but are permanently ineligible for assessment or commit. New
+sampling may repeat from a connector source revision in `VALID` or `SAMPLED`,
+retaining every existing grant, domain-binding, lease, decoder, size, staging,
+and idempotency rule. Staging alone never changes the active readiness pointer.
+
+Readiness policies are versioned, tenant-approved, digest-bound observations.
+Measurement observations carry bounded counts, a latest source-observation time,
+validity, and exact source/batch/material/record-set/checkpoint digests—never
+payload values. Decimal-safe evaluation produces completeness, freshness,
+duplicate, classification-coverage, and provenance-coverage findings. Zero
+observations yields only `MISSING_DATA`; FAIL dominates WARN, WARN blocks READY,
+and stale/missing input cannot pass. Source freshness is kept distinct from
+future retrieval-index freshness.
+
+Worker processing is append-only and fenced. Work moves through `PENDING`,
+`CLAIMED`, `RETRY_SCHEDULED`, `SUCCEEDED`, or `DEAD_LETTERED`, with no more than
+three attempts and exact retry-delay metadata of 1 then 4 seconds. The core does
+not sleep or schedule external work. Exhausted and non-retryable failures create
+metadata-only dead letters. Review can append `ACKNOWLEDGED`; it cannot delete,
+requeue, activate, or manufacture passing evidence.
+
+A successful assessment transaction writes the findings, exact public ten-gate
+`DataReadinessAssessment`, bounded digest-only provenance DAG, verified public
+`EvidenceRecord` on the `SOURCE` axis, readiness revision, work success, and
+outbox event together. Operational readiness is separate from connector source
+history: absent is derived `UNASSESSED`, PASS is `READY_FOR_APPROVAL`, WARN/FAIL
+is `DEGRADED`, commit is `ACTIVE`, and explicit `REVOKED` dominates. Expired
+policy, measurements, evidence, or approval derives effective `DEGRADED` without
+rewriting history.
+
+Commit requires an exact current PASS, an unexpired fail-closed permit, and a
+separate already verified owner `APPROVE` attestation bound to the source,
+partitioned batch, assessment, evidence, policy, provenance, owner digest, and
+expiry. A policy allow is never owner approval, and owner approval is not tenant
+acceptance. One transaction appends immutable committed-batch/checkpoint/source-
+activation/provenance/evidence/idempotency/outbox records and advances only the
+digest checkpoint for that partition. Stale revisions, older/equal fences,
+superseded or expired evidence, approval mismatch, or commit failure leaves the
+prior pointers unchanged; checkpoints never rewind.
+
 ## Owned APIs, events, and stores
 
 The following are repository-level API ownership assignments, not `KN-001`
@@ -183,7 +237,14 @@ implementation.
 /knowledge/v1/sources
 /knowledge/v1/sources/{id}:validate
 /knowledge/v1/sources/{id}:sample
+/knowledge/v1/sources/{id}/readiness
+/knowledge/v1/sources/{id}:revoke
 /knowledge/v1/staged-batches/{id}
+/knowledge/v1/staged-batches/{id}:assess
+/knowledge/v1/staged-batches/{id}:commit
+/knowledge/v1/readiness-assessments/{id}
+/knowledge/v1/dead-letters/{id}
+/knowledge/v1/dead-letters/{id}:review
 /knowledge/v1/retrieve
 /knowledge/v1/context:assemble
 /knowledge/v1/indexes
@@ -199,7 +260,10 @@ Store ownership uses one tenant database with separate owners/RLS schemas:
 - `retrieval`: chunks, citations, index versions, pgvector embeddings; every index is tenant and source-version scoped.
 - `memory`: memory entries, consent/purpose, TTL, deletion tombstones, and redaction receipts.
 
-No service writes another schema. Runtime checkpoints are explicitly forbidden. Binary source/evidence objects use tenant PVC or tenant-supplied S3-compatible storage through references.
+No service writes another schema. Execution-runtime checkpoints are explicitly
+forbidden here; ingestion may advance only its own digest-only, partition-bound
+source checkpoint after atomic batch commit. Binary source/evidence objects use
+tenant PVC or tenant-supplied S3-compatible storage through references.
 
 `KN-001` creates no binary store and no business table. It provides identical
 `source_reference`, `inbox_event`, and `outbox_event` foundation tables inside
@@ -279,6 +343,13 @@ is re-pinned at SHA-256
 its forbidden hosted-runner, credential, artifact/cache, package/container,
 cloud, runtime-download, and external-telemetry checks remain byte-identical.
 
+`KN-DATA-002` adds only `ci/targets/kn-data-002.json`. It declares the existing
+`prefetch` target and registers direct Python handlers for `readiness-parity`,
+`readiness-contract`, `failure-matrix`, and `security`. The security target is
+cumulative, so KN-001, KN-DOM-001, KN-DATA-001, and KN-DATA-002 handlers all run
+in lexical packet order. No Makefile, dispatcher, transport, prior descriptor,
+workflow, scanner, or PORTING edit is authorized.
+
 The same bootstrap packet is the only current owner of `PORTING.yaml` and
 seeds a closed `NO_AUTHORIZATION` ledger. Reference/discovery-only packets cannot
 edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
@@ -341,6 +412,15 @@ tenant-scoped lease fencing and idempotency, atomic sink-failure rollback, and
 path/SSRF/SQL/event/secret/payload negative cases. Its cumulative `security`
 target retains every KN-001 and KN-DOM handler plus packet-local SQL, chart,
 Containerfile, zero-bill, and evidence-axis checks.
+
+KN-DATA-002 acceptance proves partition-bound staging, repeat sampling, exact
+white-goods PASS/WARN/missing/incomplete/stale/duplicate/unclassified/
+unprovenanced parity, decimal findings, ten ordered public gates, bounded
+provenance, public SOURCE-axis evidence, fenced three-attempt retry/dead-letter,
+owner/policy separation, atomic activation, monotonic digest checkpoints,
+expiry degradation, revocation dominance, tenant isolation, and static RLS/
+least-privilege SQL. PostgreSQL, actual sources, images, deployment, runtime,
+assurance, owner approval, and tenant acceptance remain separate and unclaimed.
 
 `common-contract` validates the immutable upstream lock, exact Python/lock
 closure, canonical JSON/digests, closed records, privacy, idempotency, health

@@ -1,18 +1,330 @@
 id: KN-DATA-002
 repository: mas-harness-knowledge-plane
 branch: codex/kn-data-002-readiness-evidence
-objective: Implement provenance, freshness, coverage, classification, readiness evidence, retry/dead-letter, and white-goods source parity.
-predecessors: [KN-DATA-001, TRUST-001]
-allowedPaths: ["src/planeon_knowledge/ingestion/provenance.py", "src/planeon_knowledge/ingestion/freshness.py", "src/planeon_knowledge/ingestion/coverage.py", "src/planeon_knowledge/ingestion/classification.py", "src/planeon_knowledge/ingestion/evidence.py", "migrations/ingestion/readiness/", "tests/readiness/", "fixtures/readiness/", "ci/targets/kn-data-002.json"]
+objective: Implement a clean-room, tenant-isolated readiness processor for staged ingestion batches with versioned tenant-approved thresholds, deterministic PASS/WARN/FAIL findings, immutable provenance and public evidence records, bounded retry/dead-letter review, owner-approved atomic batch/checkpoint activation, explicit degradation/revocation, and independently authored white-goods parity without claiming runtime or tenant acceptance.
+predecessors: [KN-DATA-001, IND-WG-002, TRUST-001]
+allowedPaths: ["services/connector-controller/app.py", "services/ingest-worker/app.py", "src/planeon_knowledge/ingestion/__init__.py", "src/planeon_knowledge/ingestion/contracts.py", "src/planeon_knowledge/ingestion/batch.py", "src/planeon_knowledge/ingestion/store.py", "src/planeon_knowledge/ingestion/service.py", "src/planeon_knowledge/ingestion/asgi.py", "src/planeon_knowledge/ingestion/provenance.py", "src/planeon_knowledge/ingestion/freshness.py", "src/planeon_knowledge/ingestion/coverage.py", "src/planeon_knowledge/ingestion/classification.py", "src/planeon_knowledge/ingestion/evidence.py", "src/planeon_knowledge/ingestion/readiness.py", "src/planeon_knowledge/ingestion/retries.py", "migrations/ingestion/readiness/003_readiness.sql", "tests/connectors/", "tests/readiness/", "fixtures/connectors/", "fixtures/readiness/", "ci/targets/kn-data-002.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/evidence.py","src/data_source_harness/freshness.py","src/data_source_harness/coverage.py","src/data_source_harness/cross_plane.py","reference_labs/white_goods/README.md","reference_labs/white_goods/__init__.py","reference_labs/white_goods/action-capabilities.json","reference_labs/white_goods/airgap-images.lock.json","reference_labs/white_goods/bundle.py","reference_labs/white_goods/certify.py","reference_labs/white_goods/certify_phase2.py","reference_labs/white_goods/data/api/service-api-fixtures.json","reference_labs/white_goods/data/documents/refrigerator-e05-manual.md","reference_labs/white_goods/data/documents/untrusted-field-note.md","reference_labs/white_goods/data/documents/washing-machine-e21-manual.md","reference_labs/white_goods/data/documents/washing-machine-pump-bulletin.md","reference_labs/white_goods/data/events/telemetry.jsonl","reference_labs/white_goods/data/master/customers.csv","reference_labs/white_goods/data/master/installed_products.csv","reference_labs/white_goods/data/master/products.csv","reference_labs/white_goods/data/quality/quality_inspections.csv","reference_labs/white_goods/data/service/service_orders.csv","reference_labs/white_goods/dataset.lock.json","reference_labs/white_goods/docker-compose.yml","reference_labs/white_goods/freshness-slos.json","reference_labs/white_goods/gqm-plan.json","reference_labs/white_goods/lab.py","reference_labs/white_goods/live/HarnessAcceptance.Containerfile","reference_labs/white_goods/live/README.md","reference_labs/white_goods/live/ServiceApi.Containerfile","reference_labs/white_goods/live/__init__.py","reference_labs/white_goods/live/compose.template.yaml","reference_labs/white_goods/live/connectors.py","reference_labs/white_goods/live/cross_plane_lab.py","reference_labs/white_goods/live/harness-requirements.txt","reference_labs/white_goods/live/harness_probe.py","reference_labs/white_goods/live/harness_runtime_lab.py","reference_labs/white_goods/live/local_lab.py","reference_labs/white_goods/live/model_plane_probe.py","reference_labs/white_goods/live/postgresql-seed.sql","reference_labs/white_goods/live/service_api.py","reference_labs/white_goods/pack-manifest.json","reference_labs/white_goods/phase2-gqm-plan.json","reference_labs/white_goods/phase2.py","reference_labs/white_goods/phase4.py","reference_labs/white_goods/phase5.py","reference_labs/white_goods/phase6_worker.py","reference_labs/white_goods/promotion-readiness.example.json","reference_labs/white_goods/reference-lab-manifest.json","reference_labs/white_goods/runtime/Containerfile","reference_labs/white_goods/runtime/README.md","reference_labs/white_goods/runtime/mirroring/imageset-config.template.yaml","reference_labs/white_goods/runtime/openshift/config-map.yaml","reference_labs/white_goods/runtime/openshift/deployment.template.yaml","reference_labs/white_goods/runtime/openshift/network-policy-allow-internal.yaml","reference_labs/white_goods/runtime/openshift/network-policy.yaml","reference_labs/white_goods/runtime/openshift/service-account.yaml","reference_labs/white_goods/runtime/openshift/service.yaml","reference_labs/white_goods/runtime/protocol-profiles.json","reference_labs/white_goods/runtime/wheelhouse-requirements.txt","reference_labs/white_goods/runtime_bundle.py","reference_labs/white_goods/semantic-mappings.json","reference_labs/white_goods/technology/opensearch/index-mapping.json","reference_labs/white_goods/technology/postgresql/schema.sql","reference_labs/white_goods/technology/redpanda/topic-contract.json","reference_labs/white_goods/technology/service-api/openapi.yaml","tests/__init__.py","tests/fixtures/contracts/negative/action-preview.no-effects.json","tests/fixtures/contracts/negative/bounded-query-plan.unbounded.json","tests/fixtures/contracts/negative/checkpoint-token.no-position.json","tests/fixtures/contracts/negative/connector-worker-profile.mutable-image.json","tests/fixtures/contracts/negative/coverage-statement.empty.json","tests/fixtures/contracts/negative/cross-plane-evidence-set.collapsed.json","tests/fixtures/contracts/negative/data-batch.no-lineage.json","tests/fixtures/contracts/negative/data-source-connector-profile.missing-discovery.json","tests/fixtures/contracts/negative/deployment-profile.air-gap-external-telemetry.json","tests/fixtures/contracts/negative/deployment-profile.local-laptop-mirror.json","tests/fixtures/contracts/negative/disconnected-runtime-readiness.false-acceptance.json","tests/fixtures/contracts/negative/durable-action-record.raw-parameters.json","tests/fixtures/contracts/negative/entity-redirect.no-lineage.json","tests/fixtures/contracts/negative/freshness-observation.no-watermark.json","tests/fixtures/contracts/negative/industry-domain-pack-manifest.no-tech.json","tests/fixtures/contracts/negative/live-acceptance-campaign.false-acceptance.json","tests/fixtures/contracts/negative/local-cross-plane-evidence.false-pass.json","tests/fixtures/contracts/negative/local-harness-runtime-evidence.false-pass.json","tests/fixtures/contracts/negative/local-image-lock.mutable.json","tests/fixtures/contracts/negative/local-source-evidence.false-pass.json","tests/fixtures/contracts/negative/northbound-tool-catalog.no-scope.json","tests/fixtures/contracts/negative/promotion-readiness.no-runtime.json","tests/fixtures/contracts/negative/protocol-profile-conformance.no-checks.json","tests/fixtures/contracts/negative/reference-lab-manifest.no-scenarios.json","tests/fixtures/contracts/negative/route-decision.selected-without-route.json","tests/fixtures/contracts/negative/semantic-assertion.no-lineage.json","tests/fixtures/contracts/negative/semantic-mapping-candidate.no-lineage.json","tests/fixtures/contracts/negative/source-action-capability-profile.no-idempotency.json","tests/fixtures/contracts/negative/source-action-plan.no-precondition.json","tests/fixtures/contracts/negative/source-mutation-receipt.raw-result.json","tests/fixtures/contracts/positive/action-preview.minimal.json","tests/fixtures/contracts/positive/bounded-query-plan.minimal.json","tests/fixtures/contracts/positive/checkpoint-token.minimal.json","tests/fixtures/contracts/positive/connector-worker-profile.process.json","tests/fixtures/contracts/positive/coverage-statement.partial.json","tests/fixtures/contracts/positive/cross-plane-evidence-set.partial.json","tests/fixtures/contracts/positive/data-batch.minimal.json","tests/fixtures/contracts/positive/data-source-connector-profile.minimal.json","tests/fixtures/contracts/positive/deployment-profile.air-gapped.json","tests/fixtures/contracts/positive/deployment-profile.local-laptop.json","tests/fixtures/contracts/positive/disconnected-runtime-readiness.blocked.json","tests/fixtures/contracts/positive/durable-action-record.executing.json","tests/fixtures/contracts/positive/entity-redirect.minimal.json","tests/fixtures/contracts/positive/freshness-observation.minimal.json","tests/fixtures/contracts/positive/industry-domain-pack-manifest.minimal.json","tests/fixtures/contracts/positive/live-acceptance-campaign.partial.json","tests/fixtures/contracts/positive/local-cross-plane-evidence.passed.json","tests/fixtures/contracts/positive/local-harness-runtime-evidence.passed.json","tests/fixtures/contracts/positive/local-image-lock.arm64.json","tests/fixtures/contracts/positive/local-source-evidence.passed.json","tests/fixtures/contracts/positive/northbound-tool-catalog.minimal.json","tests/fixtures/contracts/positive/promotion-readiness.minimal.json","tests/fixtures/contracts/positive/protocol-profile-conformance.local.json","tests/fixtures/contracts/positive/reference-lab-manifest.minimal.json","tests/fixtures/contracts/positive/route-decision.selected.json","tests/fixtures/contracts/positive/semantic-assertion.minimal.json","tests/fixtures/contracts/positive/semantic-mapping-candidate.minimal.json","tests/fixtures/contracts/positive/source-action-capability-profile.minimal.json","tests/fixtures/contracts/positive/source-action-plan.minimal.json","tests/fixtures/contracts/positive/source-mutation-receipt.minimal.json","tests/helpers.py","tests/reference_labs/__init__.py","tests/reference_labs/test_cold_chain_phase3.py","tests/reference_labs/test_local_cross_plane_lab.py","tests/reference_labs/test_local_harness_runtime_lab.py","tests/reference_labs/test_local_source_lab.py","tests/reference_labs/test_phase4_actions.py","tests/reference_labs/test_phase5_runtime.py","tests/reference_labs/test_phase6_5_integration_spine.py","tests/reference_labs/test_phase6_runtime.py","tests/reference_labs/test_phase7_readiness.py","tests/reference_labs/test_runtime_bundle.py","tests/reference_labs/test_white_goods_lab.py","tests/reference_labs/test_white_goods_phase2.py","tests/test_acceptance.py","tests/test_actions.py","tests/test_cli.py","tests/test_conformance.py","tests/test_connector.py","tests/test_context.py","tests/test_contracts.py","tests/test_coordination.py","tests/test_coverage.py","tests/test_cross_plane.py","tests/test_decoder.py","tests/test_delegation.py","tests/test_deployment.py","tests/test_durability.py","tests/test_evidence.py","tests/test_freshness.py","tests/test_governance.py","tests/test_local_only.py","tests/test_models.py","tests/test_pack_factory.py","tests/test_packaging.py","tests/test_planning.py","tests/test_promotion.py","tests/test_protocol.py","tests/test_protocol_profiles.py","tests/test_routing.py","tests/test_runtime.py","tests/test_runtime_server.py","tests/test_scaffolding.py","tests/test_semantic.py","tests/test_semantic_memory.py","tests/test_telemetry.py","tests/test_worker.py","tests/test_worker_connector.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes DataReadinessAssessment and EvidenceRecord v1alpha1", "Produces data readiness evidence and events v1"]
-deliverables: ["Immutable provenance graph, versioned thresholds, freshness/coverage/classification findings, evidence publication, bounded retries, and dead-letter review."]
-excluded: ["Marking missing/stale evidence as pass, conflating source with index freshness, or silent dead-letter loss."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","readiness-parity"],["make","readiness-contract"],["make","failure-matrix"]]
+contracts:
+  - >-
+    Starts only from exact merged mas-harness-knowledge-plane KN-DATA-001 commit
+    dfa67f06b307e7b47a790cfdb0bc5e63fb13eec9. Exact raw SHA-256 locks are
+    common canonical 90f000f5a09a12c3cc2f55b659cd1c563751f268fc4173756563b2d6cf46eb7f,
+    common models c52af1605f0e7c5ee0a0b6734cebe4cf1c46e32db6318fadef733a8e722792f6,
+    common errors 1de5c6a674bc341afe473fcb430a634ffadf1cc4d4b6bbf4e0164968616d0215,
+    ingestion contracts d6f28dcddebd339541396c09d5242a538e8e1fdfe9702a8bd5d0692b88383d57,
+    staged-batch builder 17a82e95fef2552c2f9b8b417ff512cb83a5bf08f803d28ef6b463fe68453368,
+    ingestion store 07bb0ebcada2f0c2346da5d61a5243d91be0ea66a6d552496a5fc83564bbeb8a,
+    ingestion service d8476c3ed6834f632d029f010571f4401d706e40432713415d033734082a3210,
+    ingestion ASGI c80fe850c4cd2811741431a480eae9248b1462305f664b6515a9225a5d546e13,
+    connector SQL f1d62adc876d761f7cb5f9707a8b1cf18c27d139b1acaf2a36efc6c2c39b944e,
+    connector upstream lock e401b0ce9193d1489a592f4d60621e000c200e236bf10ea8ee03304371c2d730,
+    connector white-goods manifest
+    df4759002b7ae1d399b19f53621a9a5880aac438faf529053676b7f3b8bbb4b2,
+    root Makefile af17da2687c3f0684dc4044981c5ea0ead3a9c51d6240a539bf7353402db5f09,
+    Make dispatcher 29e8cb70e71a3d03f9f50108e28f99d890da6090a680c8de32d6bdcd947be7ea,
+    packet transport 7499ccf15021145c0d6698aa8e1e7d333ab6ccc4d6f1fb397a277b895de6e1f8,
+    full-history workflow 91090dc69c12837e8b73eb41a868b3afca7dcb34b304c7b409ac716310ddd3a6,
+    and zero-bill scanner
+    cd859d5f3c8aaf1b0a5eee1b3f5f445a471c8749e0507a2749ecbb490371e509.
+    This packet may make only the explicit partition/readiness integration edits
+    to predecessor ingestion files and connector regression fixtures/tests in
+    allowedPaths. It may not edit the root project/lock, Makefile, workflow,
+    scanner, dispatcher, packet transport, prior descriptors/handlers, common or
+    domain source, deployment charts, Containerfiles, or inert PORTING ledger.
+  - >-
+    Consumes only the public contract boundary at exact mas-harness-contracts
+    commit 2146278a95344cd2a8e22596b2f315b46edffc88 and source-contract release
+    manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79.
+    DataReadinessAssessment is read from authoritative path
+    schemas/v1alpha1/readiness/data-readiness-assessment.schema.json, raw SHA-256
+    ffe003a1a7ec0773f49d8f394ac3dd6281114bd4335ff05c87d223412faf92a5,
+    with guidance common schema raw SHA-256
+    4d77297073d4c2e559f1131fbada566b499197f87113f7e28b136f0b4ae5f429.
+    EvidenceRecord is read from
+    schemas/v1alpha1/lifecycle/evidence-record.schema.json, raw SHA-256
+    a80935c2dc5ac4624d972edc3876d301059c74e507ca2be28ea353b1070bdd8c,
+    with lifecycle common schema raw SHA-256
+    dce5d8030eea3a19694511eb26513614dcc720ef4e0d650772131b14ed58f075
+    and release entry digest
+    05ea50ee0ad9fb74414871c8c3fa572e9f1a22bbc667194f911834f26b829674.
+    No upstream schema bytes or checkout enter the product repository or packet
+    execution; destination validators are independently implemented from this
+    closed surface.
+  - >-
+    Consumes the public IND-WG-002 boundary at exact
+    mas-harness-industry-packs commit
+    a4d3df9b169e95c285e22a2fdb2b4c9d711230e2. Raw SHA-256 locks are contract
+    binding d0f9a1ce1635a2ec35fe44b2e16061bc43ec5615ed4d16e481a456918af7783c,
+    dataset lock 80e43a1167dcabe9ba60af5871ace462a777fb0c72d0026220a792dea3ec2a11,
+    illustrative policy 7b496afdd8cd9749bf261ba4752e474a8062d54368b735a6c2553090db107c59,
+    source inventory 863a362490b64b91fa725e8de8a268d2b4863c37d1f25dda8e853980861b6e72,
+    PASS 9f91f09cdd33d37d94cf4d92f340fa9445bbd0bc376a4abc5e13ddccbdad329f,
+    WARN freshness 0d57ce6f10cd4040d08861ea9293ee98d25c4e740daed868ad579019b7b24fff,
+    missing a1fa4538cddd12112693bcad9fce3de2c7714f338ab8cbd79489aa69cdecea4d,
+    stale 596d2cddc2fdad71a773acdd77f24743e66289e05ed6aa93067d8eb38a7358ff,
+    duplicate 384fe15132b77dbb38c70fefd9c7c777fe5554d6435c5918baef2a8bd8773ecc,
+    unclassified 6d7d50052b5db98b0f4cd47c24490d5129718fe6152c870e79cac0578e23b32d,
+    and unprovenanced
+    0524c87aa1da35e4fb9ecc2881bff4a4b6d8822930d201275ad6b58879c01711.
+    The illustrative policy is parity input only and can never activate a tenant
+    source. Activation requires a separate exact tenant-approved policy
+    observation and owner approval. Product fixtures are independently authored
+    and contain no copied pack, contract, predecessor, or warm-source bytes.
+  - >-
+    Consumes TRUST-001 only through exact merged mas-harness-trust-plane commit
+    73802adbfa1adf97f20d03026e0b2232691d5392 and the already locked fail-closed
+    client SHA-256 128c6b3fafd03aabcec139bf43be73df8cad0a781d0075b88d3d218a377b5175,
+    request SHA-256 dc2cac458329174a1ac4feda9182f0f4c355dd054278f343b9784702aaff4c75,
+    and response SHA-256
+    2811621092f603b8fc6f73ddba7e6921481c66ed385eaec33287b385947013b4.
+    Policy decisions and owner approvals are separately injected, already
+    verified metadata. The knowledge plane never calls OPA, discovers a policy
+    endpoint, accepts caller tenant identity, verifies signatures, or treats an
+    allow decision as owner approval.
+  - >-
+    The root remains the exact dependency-free CPython 3.12 source closure.
+    Cumulative prefetch uses exact CPython 3.12.14 plus the already admitted
+    KN-DOM semantic toolchain; KN-DATA-002 adds no package, driver, executable,
+    image, network client, runtime download, build, or fallback. All assessment,
+    queue, provenance, evidence, and activation acceptance uses the standard
+    library, injected metadata-only ports, and copy-on-commit in-memory storage.
+  - >-
+    Produces planeon.knowledge.ingestion.readiness/v1 ReadinessPolicyObservation,
+    MeasurementObservation, PrerequisiteGateObservation, ReadinessFinding,
+    ReadinessAssessment, ProvenanceGraph, ReadinessWorkRevision,
+    SourceReadinessRevision, BatchCommit, CheckpointRevision, DeadLetterRecord,
+    DeadLetterReview, OwnerApprovalAttestation, ReadinessEvidenceRecord, and
+    ReadinessEvent metadata. The public assessment and evidence projections match
+    DataReadinessAssessment and EvidenceRecord v1alpha1 exactly; packet-local
+    metadata adds only digest-bound operational state and never alters the public
+    schema surfaces.
+deliverables:
+  - >-
+    Correct the KN-DATA-001 checkpoint ambiguity before any activation. Every new
+    CheckpointCandidate and StagedBatch binds the exact normalized lease partition
+    in its canonical digest. Existing predecessor batches without a partition are
+    readable but permanently ineligible for readiness or commit with stable
+    BATCH_PARTITION_UNBOUND. Connector regression tests and independently authored
+    fixture digests are updated only for this new closed field; all prior lease,
+    staging, decoder, grant, and source-boundary behavior remains unchanged.
+  - >-
+    ReadinessPolicyObservation is immutable and binds organization, stable policy
+    id and semantic version, canonical policy digest, independent tenant-approval
+    digest, effectiveAt, expiresAt, and decimal-string PASS/WARN thresholds for
+    completeness, freshness minutes, duplicate rate, classification coverage,
+    and provenance coverage. Bounds are closed to 0 through 1 for ratios and 0
+    through 10080 minutes for freshness; PASS is always stricter than or equal to
+    WARN. illustrative=true, missing approval, cross-tenant, future, expired,
+    malformed, non-finite, over-precision, or digest-mismatched policies may be
+    evaluated for named parity only but can never authorize activation.
+  - >-
+    MeasurementObservation is injected metadata, not request content. It binds
+    organization, source-version, batch, material, record-set and checkpoint-
+    candidate digests; observed/expected/non-null-required/duplicate/classified/
+    provenanced counts; latest source-observation time; collectedAt; validUntil;
+    sorted prerequisite evidence ids; and a canonical observation digest. Counts
+    are non-negative, internally consistent, capped at 10000, and cannot exceed
+    the relevant observed or expected total. No field name/value, row, document,
+    event, owner identity, endpoint, credential, or source payload is retained.
+  - >-
+    Deterministic evaluation uses decimal-safe arithmetic and fixed timestamps.
+    Zero observed records yields only FAIL/MISSING_DATA and suppresses misleading
+    derived findings. Otherwise completeness is non-null-required divided by
+    expected count; duplicate rate is duplicate divided by observed; coverage
+    ratios are classified or provenanced divided by observed; freshness is the
+    non-negative difference between evaluation time and latest source observation.
+    A future observation, invalid denominator, inconsistent count, expired input,
+    or batch/digest mismatch fails closed. Source freshness is never labeled or
+    used as index freshness.
+  - >-
+    Each metric emits one immutable PASS, WARN, or FAIL ReadinessFinding with a
+    stable reason code and exact policy/observation/batch digests. FAIL dominates
+    WARN and WARN dominates PASS. Expected reason codes are MISSING_DATA,
+    INCOMPLETE_DATA, COMPLETENESS_NEEDS_INPUT, STALE_DATA,
+    FRESHNESS_NEEDS_INPUT, DUPLICATE_DATA, DUPLICATES_NEED_INPUT,
+    UNCLASSIFIED_DATA, CLASSIFICATION_NEEDS_INPUT, UNPROVENANCED_DATA, and
+    PROVENANCE_NEEDS_INPUT. Findings are sorted by metric id and reason code and
+    never disappear when a later assessment supersedes them.
+  - >-
+    Every completed evaluation projects exactly one DataReadinessAssessment with
+    apiVersion harness.planeon.ai/v1alpha1, kind DataReadinessAssessment, stable
+    metadata id/version, an injected stable questionnaireSessionId, exactly ten
+    ordered gates business.owner, business.outcome, data.owner, data.quality,
+    data.completeness, data.freshness, data.provenance, data.classification,
+    integration.readiness, and autonomy.boundary, sorted unique evidence ids and
+    missingGateIds, and only PASS, NEEDS_INPUT, BLOCKED, or NOT_APPLICABLE gate
+    states. The three prerequisite gates require current injected tenant evidence;
+    integration and autonomy are explicitly NOT_APPLICABLE in this packet. Only
+    all-PASS data/prerequisite findings yield READY. WARN yields BLOCKED with
+    NEEDS_INPUT; FAIL yields BLOCKED with BLOCKED. Missing or stale evidence can
+    never yield READY.
+  - >-
+    ProvenanceGraph is an immutable bounded DAG of at most 32 digest-only nodes
+    and 64 typed edges. Assessment graphs bind source version, staged batch,
+    material, record set, checkpoint candidate, lease partition/fence, domain
+    version, semantic mapping, policy, measurements, findings, assessment, and
+    evidence. Commit graphs additionally bind the prior assessment graph, exact
+    owner approval, committed batch, and checkpoint revision. Node/edge ids are
+    sorted and unique; dangling edges, cycles, duplicate semantic nodes, unknown
+    kinds, cross-tenant refs, or digest drift fail before persistence. Individual
+    payload records are represented only by the already committed record-set
+    digest, never by values or an unbounded graph.
+  - >-
+    Assessment is worker-driven. POST assess atomically creates one idempotent
+    readiness work item containing only exact dependency digests and returns 202;
+    it does not run connector I/O or claim readiness. Worker claims are
+    organization/work/source/batch scoped, have monotonically increasing fencing
+    tokens and 1 through 300 second TTLs, and append revisions PENDING, CLAIMED,
+    RETRY_SCHEDULED, SUCCEEDED, or DEAD_LETTERED. Stale, expired, wrong-worker,
+    wrong-tenant, or superseded claims cannot publish an assessment.
+  - >-
+    Retry is closed to stable allowlisted transient reason codes and at most three
+    attempts. Retry delays are deterministic metadata 1 second then 4 seconds;
+    the core never sleeps, schedules a cloud job, or performs automatic I/O.
+    Non-retryable failure dead-letters on its first attempt; the third transient
+    failure or third expired claim dead-letters. A DeadLetterRecord contains only
+    tenant/source/batch/work/attempt/fence/reason/digest/timestamp metadata. Review
+    is append-only and limited to ACKNOWLEDGED with a stable review reason; it
+    never deletes, silently drops, requeues, activates, or marks the work passed.
+  - >-
+    Successful worker completion appends findings, assessment, provenance graph,
+    a public EvidenceRecord projection, source-readiness revision, metadata-only
+    outbox event, and SUCCEEDED work revision in one copy-on-commit transaction.
+    The EvidenceRecord is VERIFIED on axis SOURCE with result PASS, WARN, or FAIL,
+    PLATFORM producer authority, campaignGenerated=false, exact subject/evidence/
+    provenance digests, bounded control ids, collectedAt, and validUntil. It never
+    claims PR, merge, artifact, signature, deployment, runtime, security,
+    assurance, or TENANT_ACCEPTANCE evidence. Store/outbox failure leaves no
+    partial assessment, evidence, state pointer, event, or successful work claim.
+  - >-
+    Source readiness is a separate append-only operational history and does not
+    rewrite KN-DATA-001 source-revision history. Absence derives UNASSESSED. A
+    current PASS assessment appends READY_FOR_APPROVAL; WARN/FAIL appends DEGRADED.
+    If a source was ACTIVE, assessing a replacement batch fail-closes it to
+    READY_FOR_APPROVAL or DEGRADED until that batch is explicitly approved and
+    committed. An expired policy, measurement, assessment, evidence record, or
+    owner approval makes the effective read state DEGRADED without rewriting
+    history. Explicit REVOKED overrides every prior pointer and cannot be
+    re-enabled by this packet.
+  - >-
+    Activation requires both an unexpired allow=true AccessPermit for exact action
+    knowledge.ingestion.batch.commit and a separate already verified APPROVE
+    OwnerApprovalAttestation. The attestation binds organization, owner digest,
+    source version, batch, PASS assessment, VERIFIED PASS evidence, policy,
+    provenance, issuedAt, expiresAt, approval id, and canonical approval digest.
+    It must match SourceDefinition.ownerDigest and the latest readiness pointer.
+    A policy allow, platform finding, fixture, worker identity, or generated output
+    is never owner approval; owner approval is not TENANT_ACCEPTANCE.
+  - >-
+    Commit accepts only the latest current READY_FOR_APPROVAL PASS assessment for
+    one partition-bound STAGED batch. One atomic transaction appends immutable
+    BatchCommit, monotonically increasing CheckpointRevision/current pointer,
+    ACTIVE SourceReadinessRevision, commit ProvenanceGraph, VERIFIED SOURCE/PASS
+    EvidenceRecord, idempotency result, and metadata-only batch/source outbox
+    events. The checkpoint stores only the exact candidate digest, partition,
+    source version, batch digest, revision, fencing token, and activation time;
+    it never stores or rewinds an opaque provider offset. An older/equal fence,
+    older batch, stale revision, duplicate different request, superseded or
+    expired assessment/approval, or atomic failure advances nothing.
+  - >-
+    Sampling may repeat from KN-DATA-001 VALID or SAMPLED source revision state;
+    every run still appends SAMPLING then SAMPLED and requires the same current
+    connector lease, policy/grant/domain checks, limits, decoder, staging receipt,
+    and idempotency contract. A new staged batch does not itself change an ACTIVE
+    pointer. Assessment or explicit revocation is required. No connector action,
+    source write, automatic resampling, checkpoint rewind, or unbounded stream is
+    introduced.
+  - >-
+    The standard-library controller extends its closed API only with POST
+    /knowledge/v1/staged-batches/{batchId}:assess, POST
+    /knowledge/v1/staged-batches/{batchId}:commit, GET
+    /knowledge/v1/readiness-assessments/{assessmentId}, GET
+    /knowledge/v1/sources/{sourceId}/readiness, POST
+    /knowledge/v1/sources/{sourceId}:revoke, GET
+    /knowledge/v1/dead-letters/{deadLetterId}, and POST
+    /knowledge/v1/dead-letters/{deadLetterId}:review. Mutations require an
+    idempotency key and If-Match where a readiness revision exists. Public bodies
+    are empty except review's closed ACKNOWLEDGED decision and stable reason code;
+    policy, measurements, prerequisites, approval, identity, permits, and worker
+    claims are injected after scope authorization. Unknown routes/methods/fields,
+    query strings, duplicate headers, body identity, existence probes, and all
+    exceptions return bounded stable non-echoing errors.
+  - >-
+    connector-controller composes only the public controller with injected local
+    readiness dependency ports. ingest-worker composes only claim/process/failure
+    methods and exposes no new public HTTP business route. Neither service opens a
+    source, filesystem path, socket, database, broker, evidence endpoint, policy
+    endpoint, or credential. Existing Containerfiles/charts remain unchanged,
+    disabled by default, digest-only, default-deny, and package-install-free.
+  - >-
+    migrations/ingestion/readiness/003_readiness.sql is additive and has no down
+    migration. It leaves predecessor rows readable, adds a nullable partition
+    column plus future-insert/commit guards so unbound legacy staged batches cannot
+    activate, and creates tenant-RLS append-only policy/measurement/work/history/
+    finding/assessment/provenance/evidence/readiness/batch-commit/checkpoint/dead-
+    letter/review/outbox tables. Only readiness/work/checkpoint pointers are
+    mutable, and only narrow SECURITY DEFINER compare-and-append functions may
+    change them after transaction-local tenant, expected revision, fence,
+    current-state, expiry, and digest checks. Runtime gets exact own-schema
+    SELECT/INSERT/function grants, never BYPASSRLS, DDL, TRUNCATE, DELETE,
+    arbitrary UPDATE, cross-schema access, payload/material access, or public
+    function execution. PostgreSQL execution remains NOT_RUN_ENV_UNAVAILABLE.
+  - >-
+    Independently authored fixtures/readiness vectors cover all four FILE, HTTP,
+    POSTGRESQL, and EVENT source classes; PASS, WARN, missing, incomplete, stale,
+    duplicate, unclassified, unprovenanced, owner-denied, stale-approval,
+    superseded-assessment, repeated sampling, checkpoint ordering, retry, claim
+    expiry, terminal dead-letter, and acknowledged-review cases. Parity checks
+    compare exact decisions/reason codes/gate order to the locked public
+    white-goods boundary without copying its fixture bytes or treating its
+    illustrative policy as tenant approval.
+  - >-
+    KN-DATA-002 owns only ci/targets/kn-data-002.json for Make integration. It
+    registers readiness-parity, readiness-contract, failure-matrix, and security
+    handlers using direct python3 -m unittest argv under tests/readiness and
+    declares the existing prefetch target so KN-001 and KN-DOM handlers execute
+    cumulatively. make security executes predecessor and packet-local handlers in
+    lexical packet order. It does not edit Makefile, dispatcher, packet transport,
+    prior descriptors/handlers, workflow, scanner, or PORTING ledger; unknown,
+    duplicate, ambiguous, shell, undeclared-variable, warm-source, and zero-bill
+    denial remain closed.
+  - >-
+    No acceptance step provisions PostgreSQL, a source, object store, queue,
+    container, cluster, registry, cloud resource, hosted runner, telemetry sink,
+    API key, credential, or mutable artifact. Source, contract/unit, PR check,
+    merge, artifact/SBOM, signature/release, deployment, runtime, security,
+    assurance, owner approval, and tenant acceptance remain distinct evidence
+    states. This packet can prove only source and offline contract/unit behavior;
+    PostgreSQL, source connectivity, images/charts, deployment, runtime, assurance,
+    and tenant acceptance remain NOT_RUN_ENV_UNAVAILABLE or
+    PENDING_TENANT_AUTHORITY.
+excluded:
+  - >-
+    Warm-source access or reuse; copied public fixture/schema bytes; caller-supplied
+    tenant identity, policy, measurements, approval, permit, worker claim, or
+    evidence result; illustrative-policy activation; policy/approval signing or
+    verification; OPA or control-plane calls; source mutation; arbitrary SQL;
+    endpoint/DNS/credential discovery; raw payload/field/row/document/event/offset
+    persistence; index-freshness claims; checkpoint rewind; automatic requeue
+    after dead-letter; dead-letter deletion; fail-open readiness; re-enable after
+    revocation; indexing/retrieval/memory; cloud scheduling; external telemetry;
+    hosted runners; paid/metered APIs; API keys; runtime downloads; publishing;
+    deployment; production/runtime evidence; assurance; or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","readiness-parity"],["make","readiness-contract"],["make","failure-matrix"],["make","security"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["White-goods PASS/WARN/FAIL parity.", "Stale, incomplete, duplicate, unclassified, retry, and dead-letter reports."]
-rollback: Revert assessment logic while preserving immutable batches and provenance; mark derived evidence stale.
+expectedEvidence:
+  - Exact product, contract/release/schema, industry/vector, TRUST-001, CPython/toolchain, workflow/scanner, and predecessor-file locks match without opening a warm checkout or adding a dependency.
+  - All four connector kinds bind partition into new staged-batch/checkpoint digests; legacy unbound batches deny activation while every KN-DATA-001 staging/grant/lease/decoder/idempotency/security regression remains green.
+  - PASS, WARN, missing, incomplete, stale, duplicate, unclassified, and unprovenanced vectors yield exact decimal metrics, stable sorted findings, ten ordered public gates, missingGateIds, READY/BLOCKED status, public EvidenceRecord fields, and bounded acyclic provenance.
+  - Tenant/policy/measurement/prerequisite/batch/source/partition/fence/expiry/digest mismatches, illustrative policy, future observation, stale assessment, owner denial, owner/policy conflation, duplicate command, and store/outbox failure all fail closed without partial state or sensitive material.
+  - Retry claims prove tenant isolation, monotonic fencing, claim expiry recovery, exact 1/4-second metadata delays, three-attempt ceiling, immediate non-retryable dead-letter, terminal third failure, append-only acknowledgement, and no silent deletion/requeue/pass.
+  - Commit proves exact current PASS plus independent owner approval, atomic batch/checkpoint/source/provenance/evidence/idempotency/outbox append, monotonic checkpoint order, repeat-sample behavior, expiry degradation, and revocation dominance; every failure preserves the prior active/checkpoint pointers.
+  - Static SQL proves FORCE RLS, transaction-local tenant scope, append-only histories, narrow SECURITY DEFINER pointer functions, legacy partition denial, least privilege, no destructive down migration, and no payload/credential/cloud schema. Actual PostgreSQL remains NOT_RUN_ENV_UNAVAILABLE.
+  - Cumulative direct-argv Make dispatch, full predecessor security, no warm path, no copy authorization, and zero-bill scanning pass. PR, merge, artifact, release, deployment, runtime, security certification, assurance, owner approval, and tenant acceptance remain separate and unclaimed.
+rollback: Revert the unreleased KN-DATA-002 readiness processor and additive migration before a dependent packet consumes it. Preserve all KN-001/KN-DOM/KN-DATA-001 source definitions, revisions, leases, staged batches, record digests, checkpoint candidates, material receipts, evidence/events/idempotency, every KN-DATA-002 policy/measurement/work/finding/assessment/provenance/evidence/readiness/batch-commit/checkpoint/dead-letter/review/outbox history, and all external artifact/deployment/runtime/assurance/tenant records. Never run a down migration, delete or rewrite evidence, decrement a fence/revision, rewind a checkpoint, uncommit material, contact a source, reactivate a revoked source, or infer that source rollback changed deployed/runtime/tenant state; instead mark derived readiness stale or revoke its operational pointer through a separately authorized future packet.

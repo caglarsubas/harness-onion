@@ -89,6 +89,41 @@ The inherited common workflow assertion and zero-bill scanner synchronize only
 their required checkout-depth literal to this full-history contract; every
 other zero-bill and two-step-workflow denial remains unchanged.
 
+### KN-DATA-002 implementation boundary
+
+The second packet starts only from exact merged KN-DATA-001 and adds no package,
+driver, runtime download, source connection, or deployment behavior. It first
+closes one activation-critical predecessor gap: every new staged batch and
+checkpoint candidate carries the exact lease partition in its canonical digest.
+Legacy unbound batches remain readable but cannot be assessed or committed.
+
+Readiness input is injected, digest-bound metadata. A versioned tenant-approved
+policy supplies decimal PASS/WARN thresholds; a measurement observation supplies
+only bounded counts, source-observation time, validity, and predecessor digests.
+The public request cannot supply tenant identity, policy, measurements,
+prerequisite evidence, approval, or a result. The industry-pack policy is used
+only for deterministic parity and is explicitly ineligible for activation.
+
+Assessment is an append-only worker workflow with fenced claims, at most three
+attempts, and deterministic 1- then 4-second retry metadata. No in-process sleep
+or cloud scheduler is used. Non-retryable or exhausted work creates a durable
+dead letter; review can acknowledge it but cannot delete, silently requeue, or
+turn it into a pass. Successful processing atomically appends decimal findings,
+an exact ten-gate `DataReadinessAssessment`, a bounded acyclic provenance graph,
+a `SOURCE`-axis `EvidenceRecord`, a source-readiness revision, and an outbox
+event. Missing or stale evidence never yields READY, and source freshness is not
+misrepresented as retrieval-index freshness.
+
+Operational readiness is separate from the KN-DATA-001 source revision history:
+absence derives `UNASSESSED`; PASS becomes `READY_FOR_APPROVAL`; WARN/FAIL becomes
+`DEGRADED`; an expired input is effectively `DEGRADED`; and explicit `REVOKED`
+dominates. Commit additionally requires an exact current PASS, an unexpired
+policy allow, and an independently verified owner approval bound to the source,
+batch, assessment, evidence, policy, and provenance. One transaction then
+appends the committed-batch record, advances only the digest checkpoint for that
+partition, activates the source, and records provenance/evidence/events. Owner
+approval is neither a policy allow nor tenant acceptance.
+
 ## Configuration and runtime boundaries
 
 ```yaml
@@ -113,10 +148,12 @@ ingestion:
   maxRecordsPerBatch: integer
   maxBytesPerBatch: integer
 readiness:
-  completenessMin: decimal-string
-  freshnessMaxSeconds: integer
-  provenanceCoverageMin: decimal-string
-  duplicateRateMax: decimal-string
+  policyVersion: semver
+  completeness: {passMinimum: decimal-string, warnMinimum: decimal-string}
+  freshnessMinutes: {passMaximum: decimal-string, warnMaximum: decimal-string}
+  duplicateRate: {passMaximum: decimal-string, warnMaximum: decimal-string}
+  classificationCoverage: {passMinimum: decimal-string, warnMinimum: decimal-string}
+  provenanceCoverage: {passMinimum: decimal-string, warnMinimum: decimal-string}
 ```
 
 - Secrets: referenced Kubernetes Secret paths; mounted only into the selected worker and never returned by APIs.
@@ -131,16 +168,25 @@ POST /knowledge/v1/sources
 GET  /knowledge/v1/sources/{id}
 POST /knowledge/v1/sources/{id}:validate
 POST /knowledge/v1/sources/{id}:sample
-POST /knowledge/v1/sources/{id}:activate
-POST /knowledge/v1/sources/{id}:ingest
 GET  /knowledge/v1/sources/{id}/readiness
-GET  /knowledge/v1/batches/{id}
-GET  /knowledge/v1/batches/{id}/provenance
+POST /knowledge/v1/sources/{id}:revoke
+GET  /knowledge/v1/staged-batches/{id}
+POST /knowledge/v1/staged-batches/{id}:assess
+POST /knowledge/v1/staged-batches/{id}:commit
+GET  /knowledge/v1/readiness-assessments/{id}
+GET  /knowledge/v1/dead-letters/{id}
+POST /knowledge/v1/dead-letters/{id}:review
 ```
 
-Source states: `DECLARED → VALIDATING → SAMPLED → READY_FOR_APPROVAL → ACTIVE`; alternatives `INVALID`, `DEGRADED`, `DISABLED`, `REVOKED`.
+Connector source revisions remain `DECLARED → VALIDATING → VALID → SAMPLING →
+SAMPLED`, with `INVALID` and `DISABLED` alternatives. Repeated sampling may start
+from `VALID` or `SAMPLED`.
 
-Batch states: `PLANNED → READING → DECODING → MAPPING → VALIDATING → COMMITTED`; alternatives `RETRYABLE_FAILED`, `FAILED`, `QUARANTINED`.
+Separate operational readiness states are derived `UNASSESSED`, then
+`READY_FOR_APPROVAL`, `ACTIVE`, `DEGRADED`, or terminal `REVOKED`. Batch metadata
+remains immutable `STAGED`; an accepted batch gains a separate immutable
+`COMMITTED` record. Work states are `PENDING`, `CLAIMED`, `RETRY_SCHEDULED`,
+`SUCCEEDED`, or `DEAD_LETTERED`.
 
 Emitted:
 
@@ -157,10 +203,10 @@ Consumed: `domain.version.published.v1`, `approval.decided.v1`, `policy.bundle.a
 - Connectivity and sampling failures do not activate a source.
 - Snapshot/incremental batches commit atomically after validation. Partial output remains staging and is never advertised.
 - Checkpoints advance only after batch commit. Duplicate source records are handled through declared stable record IDs and batch digests.
-- Reads retry three times with jitter when the connector class declares the error transient. Authentication, schema, policy, and mapping failures do not retry automatically.
+- Readiness work has at most three fenced attempts and deterministic 1- then 4-second retry metadata for an allowlisted transient failure. The core never sleeps or schedules external work. Authentication, schema, policy, mapping, and contract failures dead-letter without automatic retry.
 - Stream consumers use inbox/checkpoint semantics and tolerate duplicate delivery.
 - Schema drift creates a new readiness finding and pauses ingestion when classified breaking.
-- Rollback repoints consumers to the last accepted batch/index input; source systems are never modified.
+- KN-DATA-002 never rewinds a checkpoint or reactivates a revoked source. Rollback preserves immutable histories and marks derived readiness stale through future authority; source systems are never modified.
 
 ## Evidence and readiness gates
 
