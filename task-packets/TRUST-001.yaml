@@ -1,16 +1,203 @@
 id: TRUST-001
 repository: mas-harness-trust-plane
 branch: codex/trust-001-foundation
-objective: Bootstrap tenant OIDC admission, trust-plane database isolation, signed OPA policy activation, policy decisions, audit/outbox, and fail-closed clients.
+objective: Bootstrap a dependency-minimal trust-plane foundation with offline OIDC tenant admission, signed policy activation, loopback-only OPA decisions, PostgreSQL tenant-isolation migrations, atomic decision/audit/outbox recording, bounded metadata-only caching, and fail-closed clients.
 predecessors: [SDK-003, CON-006, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "src/planeon_trust/common/", "services/policy-decision/", "migrations/policy/", "tests/foundation/", "fixtures/policy/", "deploy/helm/policy-decision/", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - src/planeon_trust/common/
+  - services/policy-decision/
+  - migrations/policy/
+  - tests/foundation/
+  - fixtures/policy/
+  - deploy/helm/policy-decision/
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes identity, policy bundle, decision, audit, and event contracts v1alpha1", "Produces policy-decision API and fail-closed client v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["JWT/OIDC tenant derivation, separate RLS roles, offline signed policy activation, decision API, bounded decision metadata cache, append-only audit/outbox, and fail-closed client.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Caller-supplied tenant identity, external authorization SaaS, policy authoring UI, guardrails, or fail-open mutations."]
+contracts:
+  - >-
+    Starts only from public mas-harness-contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 and its source-contract-only
+    release manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79.
+    The implementation binds the manifest entries for PolicyBundle, the
+    lifecycle CloudEvent envelope, lifecycle common types, and the trust API;
+    it does not copy the contract repository or claim that the existing
+    evidence-only trust OpenAPI already defines the new decision endpoint.
+  - >-
+    CON-006 compatibility is consumed only through the public mapping authority
+    compatibility/data-harness-v1/mappings.json at raw SHA-256
+    81cc6d9ed39099534b61e45830f95af6bb215854f43dc21c37dd8080055445a3.
+    Decision ids and policy digests produced here are stable values that legacy
+    data.harness/v1 action-preview, durable-action-record, and
+    source-mutation-receipt documents may reference; this packet neither copies
+    legacy schemas nor invents a legacy policy-decision schema.
+  - >-
+    Consumes exactly the SDK-003 Python distribution built reproducibly from
+    mas-harness-sdks commit a083d04fb2c0f32a1ce8373a6251e703226380c8:
+    planeon_harness_sdk-0.1.0-py3-none-any.whl SHA-256
+    5a4fa30c64432622083d8a0eeb32cf3ae67fa9975795eb2f0b5a209bd76d56a5.
+    The service uses its canonical JSON and digest primitives; cryptographic
+    verification remains explicit in this repository because OIDC and policy
+    signing are different purposes from runtime admission.
+  - >-
+    Produces PolicyDecisionRequest and PolicyDecisionResponse
+    harness.planeon.ai/policy-decision/v1alpha1. POST
+    /trust/v1/policy:decide accepts only action, resource, attributes, and
+    mutation; organization identity is never accepted from the body. The
+    response contains exactly schemaVersion, decisionId, organizationId,
+    subjectId, requestDigest, policyDigest, allowed, reasonCode, obligations,
+    evaluatedAt, and expiresAt. Health endpoints cannot report ready without an
+    active policy and reachable decision backend.
+  - >-
+    Produces SignedPolicyArtifact
+    harness.planeon.ai/signed-policy-artifact/v1alpha1 for local activation.
+    Its canonical signed payload binds organizationId, policyId, policyDigest,
+    bundleVersion, entrypoint, module digests, dataDigest, effectiveAt,
+    expiresAt, and supersedesPolicyDigest. The detached signature fixes
+    algorithm ED25519, keyId, purpose POLICY_BUNDLE, signedMessageDigest, and
+    value; an exact tenant-local public-key set supplies state, purpose, and
+    validity. No private key enters source, CI, a container, or default runtime.
+  - >-
+    Produces closed packet-local Make target descriptor dispatch v1 and the
+    inert destination PORTING ledger v1 with zero current copy authorizations.
+deliverables:
+  - >-
+    Implement a transport-neutral Python 3.12.14 service core and a minimal
+    dependency-free ASGI adapter. The exact installed closure is
+    planeon-harness-sdk==0.1.0, cryptography==49.0.0, cffi==2.1.0, and
+    pycparser==3.0 from the preprovisioned local wheelhouse; no FastAPI,
+    Pydantic, HTTPX, psycopg, OPA binary, database server, or network package
+    resolution is required by this packet. pyproject.toml, uv.lock, prefetch
+    checks, and tests must agree on this closure. Later adapters may add the
+    repository target stack only through separately digest-locked packets.
+  - >-
+    OIDC admission uses a closed tenant issuer registry loaded from local JSON.
+    Each issuer record binds issuer, one or more audiences, organizationId,
+    allowed algorithms, tenant-claim name and exact value, clock-skew limit,
+    maximum token lifetime, and an inline public JWKS containing only RSA,
+    P-256 EC, or Ed25519 public keys. Tokens require typ JWT, alg and kid,
+    issuer, audience, subject, iat, nbf, exp, jti, and the configured tenant
+    claim. Algorithm confusion, duplicate JSON members, malformed base64url,
+    unknown issuer/key, missing or excessive lifetime, time failure, signature
+    failure, caller organization fields, and cross-tenant claims deny with
+    stable reason codes. Tokens, claims, and authorization headers are never
+    logged, cached, persisted, or returned.
+  - >-
+    Policy activation accepts only a regular local JSON artifact and a regular
+    local public-key-set file supplied by the operator. It rejects links,
+    duplicate members, unknown fields, traversal or absolute module paths,
+    digest mismatch, tenant mismatch, unknown/not-active/revoked/wrong-purpose
+    keys, invalid signature, non-contiguous bundle version, wrong predecessor,
+    not-yet-effective or expired policy, and unsupported entrypoint. Activation
+    performs verify, stage, then one locked atomic current-pointer switch; only
+    the immediately previous verified non-revoked policy is retained as
+    last-known-good. Revocation always overrides current or rollback, and a
+    failed candidate never changes the active policy.
+  - >-
+    Policy evaluation constructs OPA input only after OIDC admission and inserts
+    the derived organization and subject server-side. The backend URI is fixed
+    to http://127.0.0.1:8181/v1/data/planeon/authz/decision by default and any
+    configured URI must remain loopback HTTP with that exact path, no userinfo,
+    query, or fragment. The closed OPA result is exactly allowed boolean,
+    reasonCode, obligations, and ttlSeconds. Timeout, connection failure,
+    non-2xx, malformed or oversized JSON, missing result, stale/revoked/expired
+    policy, audit failure, or backend denial fails closed; no remote endpoint or
+    discovery is permitted.
+  - >-
+    The metadata-only cache is an in-process, per-organization bounded LRU with
+    maximum 1024 entries and maximum 30-second TTL. Its key binds organization,
+    subject digest, canonical request digest, and active policy digest; its
+    value contains only the closed response fields. Denials, mutation requests,
+    token/JWT material, request attributes, and OPA input are never cached.
+    Activation, revocation, expiry, or last-known-good change clears all cache
+    entries. Cache failure denies instead of bypassing policy evaluation.
+  - >-
+    A single decision transaction appends the immutable decision metadata,
+    audit record, and lifecycle outbox record before an allow response is
+    returned. In-memory test storage uses one lock and copy-on-commit semantics;
+    the PostgreSQL contract uses one transaction and rejects partial writes.
+    Audit and outbox payloads contain digests and reason/obligation identifiers,
+    never tokens, policy source, attributes, prompts, model content, or business
+    payloads. An outbox event uses the public lifecycle CloudEvent envelope with
+    aggregateKind PolicyBundle only for activation/revocation; decision audit is
+    not mislabeled as a public lifecycle transition.
+  - >-
+    migrations/policy/001_foundation.sql creates distinct NOLOGIN owner,
+    migrator, runtime, and audit-writer roles plus policy_bundle,
+    policy_decision, audit_record, and outbox_event tables. Every tenant table
+    has organization_id, ENABLE and FORCE ROW LEVEL SECURITY, and policies based
+    only on NULLIF(current_setting('planeon.organization_id', true), ''). The
+    runtime role receives no BYPASSRLS, DDL, TRUNCATE, DELETE, cross-tenant, or
+    audit-update privilege. Transaction setup uses set_config(..., true) after
+    validated identity. Append-only triggers reject update/delete on audit and
+    outbox tables. Down migrations and destructive rollback are absent.
+  - >-
+    Provide a fail-closed local client that requires an injected transport,
+    bounded timeout, admitted OIDC token, and exact response validation.
+    Transport exceptions, timeouts, non-2xx, identity/request/policy mismatch,
+    malformed response, expired decision, or any non-literal allowed=true
+    produce PolicyDenied and never authorize a mutation. The client performs no
+    DNS discovery, retries, telemetry export, token persistence, or fail-open
+    fallback.
+  - >-
+    The Helm chart is inert until the operator supplies immutable digest
+    references for the service image and optional OPA sidecar, an existing
+    Secret reference for OIDC/policy public material, and an existing
+    PostgreSQL Secret reference. It creates no database, IdP, registry, cloud
+    resource, persistent volume, key, or credential. OPA is a same-pod
+    loopback-only sidecar when explicitly enabled; mutable tags and default
+    images are absent. The chart declares non-root/read-only security contexts,
+    dropped capabilities, seccomp RuntimeDefault, bounded resources, probes,
+    NetworkPolicy with deny-all ingress/egress plus only explicit DNS-disabled
+    pod-local/service rules, and OpenShift-compatible arbitrary UID behavior.
+  - >-
+    The bootstrap Makefile delegates only to ci/run_make_target.py. TRUST-001
+    owns ci/targets/trust-001.json handlers for help, prefetch, policy-vectors,
+    security, and zero-bill. The dispatcher validates closed descriptors and
+    direct argv, executes at most one matching handler per packet and all
+    matching packets in lexical packet order, and rejects zero matches,
+    duplicate/overlapping rules within one packet, undeclared variables, bad
+    owner/filename, or shell transport. Later packets never edit Makefile.
+  - >-
+    PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel
+    and cannot name a source path, mapping, copied file, or applied port.
+excluded:
+  - >-
+    Warm checkout access or copied source; identity-provider implementation;
+    remote JWKS discovery; symmetric JWT algorithms; caller-supplied tenant
+    identity; private keys or signing; policy authoring UI; Rego compilation;
+    downloading or embedding OPA; an in-process allow fallback; production
+    database execution; database provisioning; FastAPI/Pydantic/psycopg
+    adapters; guardrails; approvals/waivers; hosted authorization or telemetry;
+    cloud provisioning; hosted runners; Actions cache/artifacts/Packages; paid
+    or metered services; API keys; credentials in CI; runtime downloads;
+    mutable artifact references; publishing; deployment; runtime/production
+    proof; security certification; assurance; or tenant acceptance.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands: [["make","policy-vectors"],["make","security"]]
+offlineAcceptanceCommands: [["make","policy-vectors"],["make","security"],["python3","-m","unittest","discover","-s","tests/foundation","-p","test_*.py"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Cross-tenant/forged-token denial.", "Signed activation, last-known-good, revoked/expired policy, OPA outage, and atomic audit/outbox reports.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Reactivate the previous verified policy bundle and revert additive code without deleting audit records.
+expectedEvidence:
+  - Exact contract commit/release-manifest, CON-006 mapping, SDK-003 commit/wheel, CPython 3.12.14, and the four-package offline dependency closure match their immutable bindings before tests run.
+  - Positive RS256, ES256, and EdDSA tenant-token vectors admit only the registry-bound organization and subject; malformed, ambiguous, forged, wrong-audience/issuer/tenant/key/algorithm, replay-identity, early, expired, and overlong tokens produce stable denials without exposing token or claim content.
+  - Signed activation, atomic switch, last-known-good, non-contiguous version, predecessor mismatch, tampered module/data/digest/signature, unknown/wrong-purpose/not-active/revoked key, not-yet-effective, expiry, revocation override, and failed-candidate vectors preserve one exact active-policy state and clear cache on every trust change.
+  - Allow, explicit deny, mutation non-cache, tenant-separated cache, eviction, TTL, OPA timeout/outage/non-2xx/oversize/malformed/missing-result, policy expiry/revocation, cache failure, and atomic-store failure vectors all fail closed with deterministic reason codes.
+  - Every successful allow has one same-transaction decision, audit, and outbox-or-audit classification result; injected failures leave no partial record. Stored/cache/event inspection proves absence of tokens, claims, authorization headers, request attributes, OPA input, policy source, prompts, model output, and business payload.
+  - Migration contract tests prove four separate roles, FORCE RLS on every tenant table, transaction-local tenant context, no runtime BYPASSRLS/DDL/delete/truncate, append-only audit/outbox, and no destructive down migration. Actual PostgreSQL and Kubernetes execution remain NOT_RUN_ENV_UNAVAILABLE and are not reported as passing.
+  - ASGI/API and client vectors reject body organization identity, oversized or unknown input, malformed response, mismatched tenant/request/policy, expired decision, timeout, and transport failure; only an exact unexpired allowed=true response can satisfy the client.
+  - Helm source checks prove all images are digest-only and operator-supplied, OPA is optional and loopback, Secret references are external, resources/security/probes/network policy are bounded, and the chart contains no cloud, IdP, database, storage, key, namespace, or credential provisioning.
+  - Negative Make-dispatch vectors reject missing, unknown, duplicate, owner/filename mismatch, undeclared variables, shell transport, zero handlers, and multiple applicable handlers from one packet while preserving lexical cumulative dispatch across different packets. PORTING bootstrap validation proves zero authorized source mappings and rejects every copy claim without a future approved PORT_CANDIDATE packet.
+  - Zero-bill scanning finds no hosted runner, Actions artifact/cache, paid/provider API, API-key field, remote telemetry, cloud provisioning, runtime download, mutable image/tag, package publication, external network default, or retained artifact.
+  - Source, contract/unit, PR check, merge, artifact/SBOM, signature/release, deployment, runtime, security, assurance, and tenant acceptance remain separate. This packet can prove only source and offline contract/unit behavior; all later axes remain false, missing, pending, or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased TRUST-001 repository bootstrap and deactivate its unconsumed local test policy. Preserve every append-only audit/outbox record, predecessor repository, external IdP/OPA/PostgreSQL installation, released artifact, deployment, runtime observation, assurance result, and tenant decision; never run a destructive database rollback.
