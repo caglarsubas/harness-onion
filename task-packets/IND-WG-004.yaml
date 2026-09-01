@@ -1,18 +1,217 @@
 id: IND-WG-004
 repository: mas-harness-industry-packs
 branch: codex/ind-wg-004-provider-profiles
-objective: Publish deterministic white-goods provider recommendations and explicit-selector questionnaire choices for local, regulated, silo, and air-gap environments.
+objective: Publish deterministic white-goods provider recommendations and explicit-selector questionnaire choices for minimal ARM64, minimal AMD64, regulated OpenShift, silo, and air-gap environments.
 predecessors: [IND-WG-003, CON-004]
-allowedPaths: ["packs/white-goods/provider-preferences/", "packs/white-goods/fixtures/demands/", "packs/white-goods/fixtures/expected/", "packs/white-goods/tests/test_profiles.py", "docs/white-goods/profiles.md", "ci/targets/ind-wg-004.json"]
+allowedPaths:
+  - packs/white-goods/pack.yaml
+  - packs/white-goods/provider-preferences/
+  - packs/white-goods/fixtures/demands/
+  - packs/white-goods/fixtures/expected/
+  - tests/white_goods/test_business_domain.py
+  - tests/white_goods/test_data_readiness.py
+  - tests/white_goods/test_governance.py
+  - tests/white_goods/test_profiles.py
+  - tests/framework/test_dispatch.py
+  - docs/white-goods/profiles.md
+  - ci/handlers/ind_wg_002.py
+  - ci/handlers/ind_wg_003.py
+  - ci/handlers/ind_wg_004.py
+  - ci/targets/ind-wg-004.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["deployment/profiles/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/local_only.py","src/data_source_harness/deployment.py","deployment/profiles/air-gapped.json","deployment/profiles/local-laptop.json","deployment/profiles/self-hosted.json"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes compiler contracts v1alpha1", "Produces white-goods minimal ARM64, minimal AMD64, regulated OpenShift, silo, and air-gap profiles v1alpha1"]
-deliverables: ["Versioned recommendation-only provider overlays, explicit accepted-selector fixtures, resource envelopes, isolation requirements, expected compiler outputs, and explanations."]
-excluded: ["Ranking that mutates a profile, implicit provider fallback, cloud provisioning, mutable artifacts, paid providers, and silent installation of unused harnesses."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","compile-pack","PACK=white-goods"],["make","profile-golden-check","PACK=white-goods"]]
+contracts:
+  - >-
+    Starts only from exact merged mas-harness-industry-packs commit
+    219cafc97d89513e89b9f0eaa0349756a2a3954c, white-goods 0.3.0 computed
+    pack digest 798665b769140b621feb0346ab37f32a6804a950b9028f71d921a5b7fc650447,
+    raw pack.yaml SHA-256 b21aae64acda0eb21eeb63c57aed7458d18926867e1d33e1558f1f492f7ccc67,
+    exact 52-file/49-resource inventory, and framework 0.1.1 wheel SHA-256
+    d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4.
+  - >-
+    Consumes public contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88, release-manifest raw SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79,
+    catalog.lock raw SHA-256
+    25461717732b423a4923bc0faf7ae034033801ce4cc1398cf56b601715ab9877,
+    and catalog digest
+    sha256:26d442c4e90a19d767d32e80ef9df3d154b3146d3238dc0eecf29ee773913a26.
+    The canonical catalog entry digests are harnesses
+    sha256:27db4d3aa8b28b54ab9c6be26db9a29eb5a22edcfc26340184b5f6bb015dd45e,
+    framework providers
+    sha256:c48ecc5d98f1eb5393052f4ad51851be3039dcbcd0ca656278a0afca816cb6cf,
+    and modules
+    sha256:3d1ebbcded6e8d68ca624819c12424a6e6c2552d09aec366e1fdad72df7d2793.
+  - >-
+    Binds the released deterministic compiler source SHA-256
+    0b0960c87bc1214e795144968db3976bd548c80e6002b03bc3f6e292303a764b
+    and the raw v1alpha1 schema SHA-256 values: compile request
+    559951b883d9762a8f47db0d3e4bc7fbb4ec22dca0b2a2de9a677ff2d668bfcb,
+    composition common
+    11b55d3eafa8d87a90956345da0919f67478a7738d5ca118025904f8ff58b5f0,
+    compiled profile document
+    2b3b3d70a7fe00ca5667634622b0fafa22562f0a33f363663e27757aaa57bfcb,
+    tenant demand
+    c43620c47e3afee6b2be09b1cc80c6b9ef9d851d1930f57531aa1e56a98373f2,
+    harness profile
+    08936914f52b8c3b611e47ffa35f668dd177718f613907687a67b448877c39a6,
+    bill of materials
+    03b2f6b27851f45133aa68b0cd8536e677eeb84ef07303582d6cdcc93b27d744,
+    install plan
+    fb67904b7853fd209b156c045197ae88f940ec5f9f0df5b000ad3aa1158a0547,
+    evidence plan
+    7f9985fb5293d417e41dbe59d53f6cf407351ff85c6c6893b0efd90b8f2106eb,
+    execution budget
+    3d605bcdf1180c9a2c9ab0c56dd3da2fe821c66c7cf33ba3fb576dfb98c5c7d7,
+    QuestionnaireAnswerSet
+    cceebb735554d91f82395032f3ddcf475fc05ea897dfdff36165bcd71edaf828,
+    guidance common
+    4d77297073d4c2e559f1131fbada566b499197f87113f7e28b136f0b4ae5f429,
+    and DataReadinessAssessment
+    ffe003a1a7ec0773f49d8f394ac3dd6281114bd4335ff05c87d223412faf92a5.
+    No public schema/compiler/catalog bytes or upstream source path enter the
+    product repository or its acceptance process.
+  - >-
+    Advances only the white-goods sector pack from 0.3.0 to 0.4.0 and adds
+    exactly twelve pack resources for a resulting exact 64-file/61-resource
+    inventory: one contract binding, one five-profile recommendation catalog,
+    five CompileRequest demand fixtures, and five closed golden-output
+    envelopes. Common content, contracts lock, journey, ontology,
+    business/data/governance/integration resources, pack format 0.1.0, and
+    framework distribution 0.1.1 remain byte-identical.
+deliverables:
+  - >-
+    Add a closed contract-binding resource and one recommendation-only provider
+    catalog containing exactly five profiles. Every profile has a stable id,
+    environment class, one demand fixture path, one expected-output envelope
+    path, explicit infrastructure and model selector recommendations, accepted
+    selector set, selected provider ids, prerequisite harness ids, quantitative
+    resource envelope, isolation requirements, exclusions, and explanation.
+    Recommendations use disposition PROPOSED_SELECTOR_ONLY and cannot enter a
+    HarnessProfile unless the tenant demand explicitly contains exactly one
+    accepted selector for every active provider group.
+  - >-
+    minimal-arm64 is self-managed ARM64 Linux on K3s. It requests
+    model.local-cpu, platform.k3s, platform.provider.k3s, and
+    provider.planeon.llamacpp; accepts trust.observability-finops and
+    trust.security-safety prerequisites; attests architecture.arm64-available,
+    connectivity.connected, and tenant.namespace-isolation; and accepts only
+    provider.runtime.infrastructure.k3s plus provider.planeon.llamacpp. Its
+    planning envelope is 2000 CPU millicores, 4096 MiB memory, 8192 MiB
+    ephemeral storage, 8192 MiB model storage, and execution limits 1
+    concurrent task, 300 seconds, 1 retry, 12 tool calls, and 32768 model
+    tokens.
+  - >-
+    minimal-amd64 is self-managed AMD64 Linux on upstream Kubernetes. It
+    requests deployment.kubernetes, model.local-cpu,
+    platform.provider.kubernetes-upstream, and provider.planeon.llamacpp;
+    accepts trust.observability-finops and trust.security-safety prerequisites;
+    attests architecture.amd64-available, connectivity.connected, and
+    tenant.namespace-isolation; and accepts only
+    provider.runtime.infrastructure.kubernetes-upstream plus
+    provider.planeon.llamacpp. Its planning envelope is 4000 CPU millicores,
+    8192 MiB memory, 16384 MiB ephemeral storage, 16384 MiB model storage, and
+    execution limits 2 concurrent tasks, 300 seconds, 1 retry, 16 tool calls,
+    and 65536 model tokens.
+  - >-
+    regulated-openshift is self-managed AMD64 Linux on OpenShift. It requests
+    agent.governed-action, assurance.required, model.local-cpu,
+    platform.openshift, platform.provider.openshift, and
+    provider.planeon.llamacpp; accepts trust.governance-agentops,
+    trust.observability-finops, and trust.security-safety prerequisites;
+    attests architecture.amd64-available, connectivity.connected,
+    platform.openshift.arbitrary-uid, and tenant.namespace-isolation; and
+    accepts only provider.runtime.infrastructure.openshift plus
+    provider.planeon.llamacpp. Its planning envelope is 8000 CPU millicores,
+    16384 MiB memory, 32768 MiB ephemeral storage, 32768 MiB model storage, and
+    execution limits 4 concurrent tasks, 600 seconds, 1 retry, 24 tool calls,
+    and 131072 model tokens. Regulated is a tenant-policy posture, not a legal
+    compliance assertion.
+  - >-
+    silo is self-managed AMD64 Linux on upstream Kubernetes. It requests
+    agent.read-only, deployment.kubernetes, model.local-cpu,
+    platform.provider.kubernetes-upstream, provider.planeon.llamacpp, and
+    retrieval.cited; accepts knowledge.data-integration,
+    knowledge.domain-semantic, trust.governance-agentops,
+    trust.observability-finops, and trust.security-safety prerequisites;
+    attests architecture.amd64-available, connectivity.connected,
+    connectivity.silo, and tenant.namespace-isolation; and accepts only
+    provider.runtime.infrastructure.kubernetes-upstream plus
+    provider.planeon.llamacpp. connectivity.connected satisfies the released
+    compiler's binary non-air-gap admission while connectivity.silo is the
+    narrower signed locality fact. Its planning envelope is 8000 CPU
+    millicores, 16384 MiB memory, 32768 MiB ephemeral storage, 32768 MiB model
+    storage, and execution limits 4 concurrent tasks, 600 seconds, 2 retries,
+    24 tool calls, and 131072 model tokens.
+  - >-
+    air-gap is air-gapped AMD64 Linux on K3s. It requests deployment.airgap,
+    model.local-cpu, platform.k3s, platform.provider.k3s, and
+    provider.planeon.llamacpp; accepts trust.observability-finops and
+    trust.security-safety prerequisites; attests architecture.amd64-available,
+    connectivity.airgap, and tenant.namespace-isolation; and accepts only
+    provider.runtime.infrastructure.k3s plus provider.planeon.llamacpp. Its
+    planning envelope is 4000 CPU millicores, 8192 MiB memory, 32768 MiB
+    ephemeral storage, 32768 MiB model storage, and execution limits 2
+    concurrent tasks, 600 seconds, 1 retry, 16 tool calls, and 65536 model
+    tokens. Isolation requires deny-all outbound, no runtime downloads, and a
+    tenant-supplied digest-pinned local OCI layout or registry.
+  - >-
+    Every demand is a full synthetic CompileRequest with a submitted
+    QuestionnaireAnswerSet, the ten exact READY/PASS readiness gates, explicit
+    tenant-bound environment facts and deterministic synthetic attestation
+    digest, empty immutable assurance subjects, exact accepted prerequisites,
+    and exact resource-envelope execution budget. Fixture VERIFIED status is
+    schema test input only and is not cryptographic, deployment, runtime,
+    assurance, or tenant evidence.
+  - >-
+    Every golden envelope captures exactly profile.json, bom.json,
+    install-plan.json, evidence-plan.json, explanation.md, and profile.sha256
+    bytes produced against the bound public compiler/catalog, plus each file's
+    SHA-256. JSON reconstruction uses SORTED_UTF8_JSON_V1 and text is exact
+    UTF-8. Acceptance independently reconstructs the six files twice in memory,
+    compares all bytes and digests, and proves every BOM entry belongs to the
+    selected module/provider closure. This pack-local lock does not rerun the
+    upstream compiler and does not claim cross-repository conformance,
+    deployment, runtime behavior, assurance, or tenant acceptance.
+  - >-
+    All provider catalog records are PLANNED, credential-free,
+    external-telemetry-free, runtime-download-disabled, and open-source
+    non-metered/self-hosted or tenant-supplied. Every resource, BOM, install
+    unit, and evidence state remains PLANNED or MISSING_PLANNED; no artifact
+    digest, provider availability, capacity sufficiency, legal conclusion, or
+    production readiness is fabricated.
+  - >-
+    Register only the unique provider-profiles Make target with exact
+    PACK=white-goods and direct argv to ci/handlers/ind_wg_004.py. Update the
+    descriptor-inventory regression without changing Makefile or the
+    dispatcher. Update predecessor handlers/tests only for sector version,
+    exact file/resource inventory, archive name, packet output version, and
+    cumulative successor dispatch; preserve every predecessor content byte,
+    decision, digest, and validation contract.
+excluded:
+  - >-
+    Provider ranking that mutates a profile, automatic selector acceptance,
+    implicit or fallback provider selection, more than one selector per active
+    group, unselected module or provider BOM entries, copied public
+    schema/compiler/catalog bytes, upstream paths during product acceptance,
+    warm checkout access, cloud provisioning, cluster creation, GPU
+    requirements, mutable artifact references, fabricated artifact digests,
+    paid/metered providers, API keys, credentials, secrets, remote reads,
+    external telemetry, runtime downloads, executable pack content, legal or
+    regulatory compliance conclusions, release signing, publication,
+    deployment, runtime evidence, assurance evidence, or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","pack","PACK=white-goods"],["make","data-readiness","PACK=white-goods"],["make","governance-integrations","PACK=white-goods"],["make","provider-profiles","PACK=white-goods"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/white_goods/test_business_domain.py","tests/white_goods/test_data_readiness.py","tests/white_goods/test_governance.py","tests/white_goods/test_profiles.py","tests/framework/test_dispatch.py"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Byte-identical profile/BOM/install/evidence outputs for five environments.", "Recommendations remain proposals until their selectors are explicitly accepted.", "Only selected module artifacts appear in each BOM."]
-rollback: Revert provider overlays while retaining the sector questions and readiness rules.
+expectedEvidence:
+  - The exact predecessor commit, 0.3.0 raw pack file and computed digest, 52-file/49-resource inventory, framework wheel, public contracts commit, compiler source, release manifest, catalog lock/digest/entries, and twelve schema digests match immutable packet bindings without mounting or reading a warm-source checkout.
+  - Exactly five recommendation-only profiles, five full demand fixtures, and five closed golden envelopes form the exact declared 0.4.0 inventory of 64 pack files and 61 resource ids; ids, paths, selectors, prerequisites, environment facts, envelopes, and explanations are unique and closed.
+  - Each active infrastructure and model group contains exactly one explicitly accepted selector. Proposed selectors remain PROPOSED_SELECTOR_ONLY; omitted, incompatible, surplus, or ambiguous selector fixtures fail closed and no fallback is substituted.
+  - Two in-memory reconstructions per profile are byte-identical for all six outputs and match every locked SHA-256. Each profile SHA references exact profile.json bytes; every BOM entry and install wave is a subset of the selected module/provider closure and carries only PLANNED or MISSING_PLANNED state.
+  - Minimal ARM64, minimal AMD64, regulated OpenShift, silo, and air-gap environment facts, prerequisite closures, selected providers, resource envelopes, isolation constraints, and no-bill restrictions match their exact packet definitions. The silo dual-fact and air-gap deny-all/no-runtime-download boundaries are explicit.
+  - Two canonical indexes and fixed-epoch archives of white-goods 0.4.0 are byte-identical and temporary outputs are removed; common.foundation 1.0.0, framework 0.1.1, and every predecessor content byte and decision remain unchanged.
+  - Dispatcher inventory includes pack, data-readiness, governance-integrations, and provider-profiles with no duplicate target, undeclared variable, shell transport, ambiguous handler, or predecessor regression.
+  - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate evidence states; all post-merge operational and tenant states remain false or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert the unreleased white-goods 0.4.0 provider-profile slice and restore exact IND-WG-003 commit 219cafc97d89513e89b9f0eaa0349756a2a3954c and pack 0.3.0; retain common.foundation 1.0.0, framework 0.1.1, predecessor evidence, and every downstream release, runtime, assurance, or tenant record unchanged.
