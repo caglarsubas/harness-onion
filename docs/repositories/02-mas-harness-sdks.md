@@ -58,7 +58,7 @@ mas-harness-sdks/
 ## Packages, toolchain, and interfaces
 
 - Python core: distribution `planeon-harness-sdk`, import `planeon_harness`, Python 3.10-3.13 with development baseline 3.12.14, built by Hatchling and locked with `uv` 0.12.7.
-- Python compatibility: distribution `planeon-prometa-compat`, import `prometa`, versioned with core through `v1.x`; it contains re-exports and deprecation warnings only.
+- Python compatibility: distribution `planeon-prometa-compat`, import `prometa`, exact-versioned with core before v2; SDK-007 approves only five clean-room alias modules, re-exports, and one deprecation warning. It does not claim parity with an unobserved historical implementation.
 - TypeScript: package `@planeon/harness-sdk`, pinned Node 24.19.0, TypeScript 5.x, ESM, a committed toolchain lock, and no postinstall network action.
 - Generated types and clients cover all OpenAPI schemas, CloudEvents, error envelopes, idempotency keys, ETags, and operations.
 - Handwritten APIs cover tenant context, OTel attributes/decorators, trace/baggage propagation, signed-bundle admission, policy/guardrail clients, task polling/SSE, MCP/A2A adapters, idempotent receipts, budgets, resilience, and framework instrumentation.
@@ -104,7 +104,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 4. `SDK-004-protocols`: MCP 2026-07-28 plus 2025-11-25 compatibility, A2A v1 task helpers, SSE resume, and CloudEvents.
 5. `SDK-005-integrations`: LangChain, LangGraph, CrewAI, Semantic Kernel, MCP, and vector integrations as optional extras.
 6. `SDK-006-guardrails`: profiles, streaming evaluation, detector contract, client, and conformance vectors.
-7. `SDK-007-compat`: `planeon-prometa-compat`, legacy import tests, warnings, support matrix, and v1 removal notice.
+7. `SDK-007-compat`: `planeon-prometa-compat`, five newly approved migration aliases, wheel-isolated identity tests, a fixed warning, support matrix, and v2 removal notice.
 
 ### SDK-005 integration contract
 
@@ -191,6 +191,58 @@ UTF-8 limit, Unicode redaction case, detector outage/malformed result, and
 streaming boundary. Python and TypeScript serialize the closed result shape as
 byte-identical sorted compact UTF-8 JSON. Protected fixture sentinels must be
 absent from expected results, errors, telemetry, and captured output.
+
+### SDK-007 compatibility contract
+
+SDK-007 creates a separate `planeon-prometa-compat` 0.1.0 wheel that depends
+exactly on `planeon-harness-sdk==0.1.0`. It never modifies or vendors the
+canonical distribution. Its approved surface is deliberately closed to five
+module mappings:
+
+| Compatibility import | Canonical import |
+|---|---|
+| `prometa` | `planeon_harness` |
+| `prometa.guardrail` | `planeon_harness.guardrail` |
+| `prometa.integrations` | `planeon_harness.integrations` |
+| `prometa.protocols` | `planeon_harness.protocols` |
+| `prometa.runtime` | `planeon_harness.runtime` |
+
+Each compatibility module exports every and only its canonical target's
+`__all__` names, and each value is the same object rather than a wrapper or
+copy. The root exposes the canonical `__version__`. Importing `prometa` emits
+one `DeprecationWarning`: `The prometa import is deprecated; use
+planeon_harness. It is supported only through planeon-harness-sdk v1 and will
+be removed in v2.` Submodules add no warnings. An unknown module or attribute
+is not synthesized.
+
+This is a newly approved migration alias, not evidence about an unobserved
+legacy repository. Implementation cannot mount or inspect a warm source, infer
+additional legacy modules, or claim compatibility for any historical private
+API. `NOT_CLAIMED` remains the explicit matrix state for every such surface.
+New platform code imports `planeon_harness` directly; only migrating external
+callers may install the compatibility wheel.
+
+`python/compat-pyproject.toml` is a closed, dependency-free build manifest. A
+packet-owned backend builds only the pure-Python compatibility wheel, fixes
+timestamps, modes, ordering, metadata, license, and `RECORD`, and compares two
+isolated builds byte for byte. Default verification prints the wheel digest and
+negative evidence states but retains and publishes nothing. An explicit
+caller-owned output directory may receive one already-verified wheel for a
+later offline release assembly; SDK-007 itself does not publish it.
+
+Wheel-isolated subprocess tests cover the five imports, exact `__all__`, object
+identity, warning count/message, absent unknown modules, optional-framework
+non-loading, closed wheel membership, metadata, and record hashes. A separate
+subprocess rejects every `prometa` import while importing all five canonical
+surfaces, proving the dependency remains compatibility-to-canonical only.
+The packet adds `compat-vectors` and a cumulative `build-reproducible` handler
+through `ci/targets/sdk-007.json`; it does not edit the bootstrap Makefile,
+dispatcher, canonical build backend, generated roots, or `PORTING.yaml`.
+
+For every later release before v2, the canonical and compatibility versions,
+exact dependency, vectors, and compatibility matrix move atomically. Version
+2 removes the alias package only after the migration report. Rollback withdraws
+the optional wheel without changing canonical SDK artifacts.
 
 ## Testing, verification, and acceptance
 
