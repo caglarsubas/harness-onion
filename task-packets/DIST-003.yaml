@@ -1,16 +1,96 @@
 id: DIST-003
 repository: mas-harness-distribution
 branch: codex/dist-003-sign-promote
-objective: Implement offline Ed25519 Cosign ceremony, component/root signatures, trust rotation/revocation, and atomic candidate promotion.
+objective: Implement offline Ed25519 Cosign component/root signing, independently signed release approval, public trust rotation/revocation, and atomic immutable promotion.
 predecessors: [DIST-002, MET-005]
 allowedPaths: ["src/planeon_distribution/signing.py", "src/planeon_distribution/promotion.py", "cmd/harness-bundlectl/sign.py", "cmd/harness-bundlectl/verify.py", "trust/", "tests/signing/", "fixtures/signing/", "docs/release-ceremony.md", "docs/key-rotation.md", "ci/targets/dist-003.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes staged bundle lock, trust, revocation, approval, and release contracts v1", "Produces signed released bundle and trust manifest v1"]
-deliverables: ["Offline private-key ceremony, component/root signatures, public trust bundle, overlapping key rotation, revocation, signed approval binding, and atomic released state."]
-excluded: ["Private keys in repositories/CI, keyless-only trust, signing mutable tags, or promoting a partially scanned candidate."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","signing-fixtures"],["make","rotation-test"],["make","promotion-contract"]]
+contracts:
+  - Consumes canonical BUILT_UNSIGNED bundle lock, SCANNED supply-chain evidence, release approval, public trust/revocation, and BundleRelease state contracts v1alpha1.
+  - Produces digest-bound component attestations, Cosign bundles, signed release manifest, immutable RELEASED record, and public trust manifest v1alpha1.
+  - >-
+    Implementation starts from exact merged mas-harness-distribution DIST-002
+    commit f11fc4ad070545bd762970f22fb1177484a4b90f. Its pull-request and
+    exact-main runs are 33636462675 and 33636613237. All earlier validation,
+    exact OCI closure, atomic staging, supply-chain admission, inert PORTING,
+    closed dispatch, and zero-bill behavior remain active and unmodified.
+  - >-
+    The lifecycle authority remains mas-harness-contracts CON-005 commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 with bundle-release schema
+    SHA-256 c983a8d97c70d7957e74f06413ca0158e3b7be626468bf8d217dfc5829aa5918.
+    The release-evidence authority is Harness-Engineering MET-005 packet
+    SHA-256 aee54bd4c5219eb9ab7a751fb4d42008a5e05abc3188b9484a1eee8a1f628cba.
+    Those repositories are not mounted during implementation or acceptance.
+  - >-
+    Signing invokes only the root-installed /opt/planeon/bin/cosign v3.1.1
+    binary with SHA-256
+    e1775d26440ce3f57a95599d34d2b976c6400e06d1b31b6bea927f4857e3fe18.
+    The external trusted launcher verifies that exact file before repository
+    code runs. Cosign receives direct argv, a local key path, local payload and
+    bundle paths, no transparency-log upload, no signing-config discovery, and
+    no network. Verification requires the local public key and bundle and uses
+    explicit private-key offline mode without claiming public-log inclusion.
+  - >-
+    No private key, password, seed, key fixture, key-generation transcript, KMS
+    locator, OIDC identity, certificate, or secret may exist in Git, CI output,
+    the candidate, trust bundle, release store, or command output. Tests create
+    two independent ephemeral Cosign keypairs in a private temporary directory:
+    RELEASE_APPROVAL and BUNDLE_RELEASE. Production key generation and custody
+    are manual external ceremonies and outside this packet.
+  - >-
+    trust/trust-bundle.schema.json closes sequence, bundle digest, keys, roles,
+    validity, state ACTIVE or RETIRING, public-key digest, and revocations.
+    Verification takes an explicit RFC3339 verification instant, never the wall
+    clock; requires exactly one supplied public-key file per referenced key;
+    recomputes its digest; and rejects unknown role, key, state, time window,
+    duplicate, gap, rollback sequence, or revocation effective at that instant.
+    Rotation fixtures prove an old RETIRING and new ACTIVE key overlap without
+    either silently widening the other's role.
+  - >-
+    A release approval is closed canonical JSON, self-digested, separately
+    Cosign-signed by one currently trusted RELEASE_APPROVAL key, and binds exact
+    bundle-lock and supply-chain-evidence digests, allowed BUNDLE_RELEASE key
+    ids, authority, validity window, organization, and profile. A missing,
+    forged, expired, wrong-role, wrong-key, or digest-mismatched approval blocks
+    signing. Approval never establishes tenant acceptance.
+  - >-
+    signing.py validates BUILT_UNSIGNED and SCANNED state and their mutual
+    bundle-lock binding, then creates canonical per-component attestation
+    payloads and one canonical AWAITING_SIGNATURE release manifest. It signs
+    every component payload and the root manifest with the authorized release
+    key, immediately verifies every Cosign bundle with the matching trusted
+    public key, and emits a self-digested SIGNED release record. The manifest
+    binds all artifact, SPDX, vulnerability, model-custody, approval, payload,
+    and signature-bundle digests. Output is private sibling staging followed by
+    no-overwrite atomic rename; failure removes only the private candidate.
+  - >-
+    promotion.py revalidates approval, trust/revocation, every payload/signature,
+    bundle lock, supply-chain evidence, OCI bytes transitively bound by the lock,
+    and signed-release self digest after copying to a private sibling. It emits
+    a self-digested RELEASED record referencing the SIGNED record and promotes
+    with one no-overwrite atomic rename under the release digest. Existing,
+    symlinked, special, hard-linked, mutated, partial, cross-device, revoked, or
+    superseded input fails closed and never changes a prior release.
+  - >-
+    ci/targets/dist-003.json owns only signing-fixtures, rotation-test, and
+    promotion-contract direct-argv handlers. make prefetch remains first and
+    zero-bill remains last. Signed launcher acceptance receives neither a warm
+    source root nor a private signing key; fixture keys exist only inside the
+    isolated process tree and are deleted with its temporary directories.
+deliverables:
+  - Offline Cosign component/root signing and immediate verification, independently signed release approval, public role-scoped trust rotation/revocation, and immutable atomic release promotion.
+  - Positive and negative fixtures for wrong key/role/digest/state/time, forged signature/approval, revoked or expired overlap, mutation, partial output, and destination overwrite.
+excluded:
+  - Repository or CI private keys, public-transparency claims, keyless-only or network trust, KMS/cloud secrets, mutable tags, partially scanned candidates, overwriting releases, deployment, runtime, assurance, or tenant acceptance.
+  - Warm-source access, hosted runners, GitHub artifact/cache/package storage, external telemetry, API keys, runtime downloads, or billable services.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","signing-fixtures"],["make","rotation-test"],["make","promotion-contract"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Offline sign/verify and atomic promotion proof.", "Forged, wrong-key, revoked, expired-overlap, mutated-candidate, and missing-approval denial vectors."]
-rollback: Revoke the faulty release and restore the prior trusted public-key set; private-key material remains offline.
+expectedEvidence:
+  - Ephemeral approval and release keys sign and verify entirely offline; the repository and committed fixtures contain no private material, password, seed, token, OIDC, KMS, or transparency-log dependency.
+  - Every selected component has an exact signed attestation; one signed root manifest binds all component, SBOM, vulnerability, model, approval, and signature-bundle digests; forged, missing, swapped, or wrong-key material is denied.
+  - Rotation accepts both role-correct keys only during their explicit overlap, then rejects the expired old key; an effective revocation rejects either key regardless of overlap.
+  - Promotion revalidates the full chain after copy, yields one immutable digest-addressed RELEASED directory, and leaves no destination or private candidate after injected failure; existing releases are never overwritten.
+  - Signed hash-pinned acceptance runs prefetch, all three packet targets, and zero-bill with OS-denied outbound traffic; CI/merge/exact-main remain separate from release/deployment/runtime/assurance/tenant acceptance.
+rollback: Append a revocation for a faulty signing key or release and select a prior immutable trusted release digest. Never delete or overwrite a release, reduce trust sequence, or restore private material from repository state.
