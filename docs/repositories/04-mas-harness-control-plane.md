@@ -141,12 +141,13 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 ## PR packets
 
 1. `CTRL-001-bootstrap-auth`: web/worker scaffold, OIDC session, tenant derivation, PostgreSQL/RLS, health/readiness, and non-root images.
-2. `CTRL-002-questionnaire`: signed pack intake, session/answer revisions, eight-stage UI, readiness findings, ETag/idempotency, and audit.
-3. `CTRL-003-demand-approval`: demand validation, prerequisite accept/reject, approval workflow, N-of-M policy hook, and lifecycle guards.
-4. `CTRL-004-compiler-worker`: job/outbox schema, lease/claim, compiler invocation, atomic profile outputs, retries/dead-letter, and operation API.
-5. `CTRL-005-profile-lock-bundle`: profile review/explanation, offline approval, lock digest, bundle request, and signed-bundle status.
-6. `CTRL-006-security-e2e`: RLS denial, CSRF/session, tenant isolation, tamper evidence, accessibility, Playwright journey, and dependency remediation.
-7. `CTRL-007-tenant-harness-overview`: ordered status projections, RLS APIs, platform-operator portfolio, tenant overview, plane/harness drill-down, interactive onion plus accessible list, stale-source behavior, WCAG 2.2 AA, and zero-public-browser-request evidence. The coding brief is [`TENANT_HARNESS_OVERVIEW.md`](../TENANT_HARNESS_OVERVIEW.md).
+2. `CTRL-FIX-001-bootstrap-lineage`: one-time correction that admits later descendant PR merge refs and additive packet-pinned dependencies while preserving every bootstrap pin.
+3. `CTRL-002-questionnaire`: signed pack intake, session/answer revisions, eight-stage UI, readiness findings, ETag/idempotency, and audit.
+4. `CTRL-003-demand-approval`: demand validation, prerequisite accept/reject, approval workflow, N-of-M policy hook, and lifecycle guards.
+5. `CTRL-004-compiler-worker`: job/outbox schema, lease/claim, compiler invocation, atomic profile outputs, retries/dead-letter, and operation API.
+6. `CTRL-005-profile-lock-bundle`: profile review/explanation, offline approval, lock digest, bundle request, and signed-bundle status.
+7. `CTRL-006-security-e2e`: RLS denial, CSRF/session, tenant isolation, tamper evidence, accessibility, Playwright journey, and dependency remediation.
+8. `CTRL-007-tenant-harness-overview`: ordered status projections, RLS APIs, platform-operator portfolio, tenant overview, plane/harness drill-down, interactive onion plus accessible list, stale-source behavior, WCAG 2.2 AA, and zero-public-browser-request evidence. The coding brief is [`TENANT_HARNESS_OVERVIEW.md`](../TENANT_HARNESS_OVERVIEW.md).
 
 ## `CTRL-001` bootstrap authority
 
@@ -192,6 +193,61 @@ script, registry lookup, remote font/asset, Vercel service, hosted analytics,
 image build, deployment, or retained generated artifact is permitted. Both
 source-only images require external digest references, and both Helm components
 are independently scalable but disabled by default.
+
+## `CTRL-FIX-001` bootstrap-lineage correction authority
+
+The merged CTRL-001 scaffold exposed two bootstrap-only assumptions that would
+otherwise block every later packet: its prefetch gate required `HEAD^1` to be the
+empty repository commit, and it required the root dependency maps to equal the
+bootstrap maps byte-for-byte. A pull-request merge ref after CTRL-001 necessarily
+has current `main` as first parent, and later packets may need dependencies that
+their own authority and offline cache pin.
+
+`CTRL-FIX-001` is the sole predecessor-handler correction. It keeps
+`fbd3d21da70167b0819caa1dfc017e7c673a1cbe` as the one exact empty history root,
+requires full non-shallow ancestry from that root, rejects Git replace/graft
+authority, and retains every exact CTRL-001 runtime/dev dependency as a mandatory
+subset. Additive dependencies are admitted only when a later packet pins them in
+its package lock, packet-local tests, signed root-owned cache inventory, and
+offline acceptance. The correction cannot edit the Makefile, dispatcher,
+transport, workflow, PORTING ledger, public API, tenant state, or deployment.
+
+## `CTRL-002` questionnaire authority
+
+CTRL-002 consumes the exact merged CTRL-001/CTRL-FIX-001 line, the contracts
+release at `2146278a95344cd2a8e22596b2f315b46edffc88`, and the white-goods
+certification source at `c6513d71535d56c71869bf889169d798c7b80c9c`. The task
+packet pins the questionnaire schema, contract release, pack, journey,
+certification lock, artifact manifest, and accepted-pilot bytes independently.
+The upstream artifact is currently unsigned and `NOT_RETAINED`; it is provenance
+and cannot be presented as an admitted release.
+
+Production intake is local-only and fail closed. A bounded gzip/tar archive,
+certification lock/manifest, and Ed25519 release signature are admitted against a
+local purpose/validity/revocation trust registry. Identity, archive, index, lock,
+contract, journey, and resource digests must agree before YAML or questionnaire
+data becomes visible. Tar paths, file kinds/modes/sizes/counts, UTF-8, duplicate
+keys, aliases, custom tags, and executable content are closed. The only added
+runtime package is exact `yaml` 2.9.0 (ISC, zero dependencies); Node implements
+gzip, tar, digest, signature, and canonicalization from its standard library.
+
+The eight stage IDs and order are immutable. Session creation is DRAFT revision
+1, the first save starts IN_PROGRESS, review produces deterministic append-only
+findings and either BLOCKED or READY_FOR_COMPILATION, and SUPERSEDED remains a
+terminal state without a CTRL-002 mutation. Every mutation requires server-
+derived OIDC tenant context, CSRF, and idempotency; updates also require a strong
+ETag. Exact replay returns the stored response, divergent replay is 409, missing
+precondition is 428, stale precondition is 412, and unknown/cross-tenant IDs share
+one 404 representation. PostgreSQL source creates only questionnaire_session,
+answer_revision, and readiness_finding with forced RLS and append-only history;
+without a disposable credential-free local cluster its runtime axis is
+`NOT_RUN_ENV_UNAVAILABLE`.
+
+The App Router exposes a responsive `/questionnaires` entry and stable
+`/questionnaires/{sessionId}/{stageId}` steps with all eight named stages,
+save/resume/review, findings, and accessible loading/empty/error semantics. Full
+browser/WCAG certification remains owned by CTRL-006, and the tenant onion/
+portfolio overview remains owned by CTRL-007.
 
 ## Testing, verification, and acceptance
 
