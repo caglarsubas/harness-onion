@@ -33,6 +33,13 @@ CONFORMANCE_GENERIC_MAKE_TARGETS = {
     "acceptance-package",
 }
 
+CONTROL_BOOTSTRAP_CORRECTION_PATHS = {
+    "AGENTS.md",
+    "ci/handlers/prefetch.py",
+    "ci/targets/ctrl-fix-001.json",
+    "tests/bootstrap/test_static_contract.py",
+}
+
 ALLOWED_MAKE_VARIABLES = {
     "BACKEND",
     "CAMPAIGN",
@@ -205,6 +212,28 @@ def validate_packet_ownership(packets: dict[str, dict[str, Any]]) -> list[str]:
             and bool(targets)
             and targets <= CONFORMANCE_GENERIC_MAKE_TARGETS
         )
+
+        if packet_id == "CTRL-FIX-001":
+            if repository != "mas-harness-control-plane":
+                errors.append("CTRL-FIX-001 must target mas-harness-control-plane")
+            if packet.get("predecessors") != ["CTRL-001"]:
+                errors.append("CTRL-FIX-001 must depend only on CTRL-001")
+            if set(allowed_paths) != CONTROL_BOOTSTRAP_CORRECTION_PATHS:
+                errors.append("CTRL-FIX-001 path authority is not the closed bootstrap correction")
+            if targets != {"prefetch", "prefetch-lineage-regression", "bootstrap-e2e", "zero-bill"}:
+                errors.append("CTRL-FIX-001 Make targets are not the closed bootstrap correction set")
+        elif repository == "mas-harness-control-plane" and packet_id != "CTRL-001":
+            forbidden_correction_paths = CONTROL_BOOTSTRAP_CORRECTION_PATHS - {
+                "ci/targets/ctrl-fix-001.json"
+            }
+            if any(
+                paths_overlap(path, forbidden)
+                for path in allowed_paths
+                for forbidden in forbidden_correction_paths
+            ):
+                errors.append(
+                    f"product packet {packet_id} overlaps the CTRL-FIX-001 bootstrap correction"
+                )
 
         if is_product_bootstrap:
             if not owns_makefile:

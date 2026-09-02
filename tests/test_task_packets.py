@@ -70,7 +70,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 92
+    assert len(files) == EXPECTED_PACKET_COUNT == 93
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -147,9 +147,30 @@ def test_alpha_index_partitions_every_packet_once() -> None:
     assert all(count == 1 for count in counts.values())
 
 
-def test_packet_ownership_is_closed_for_all_91_packets() -> None:
+def test_packet_ownership_is_closed_for_all_93_packets() -> None:
     errors = validate_packet_ownership(packets_by_id())
     assert errors == []
+
+
+def test_control_bootstrap_correction_is_one_closed_exception() -> None:
+    packets = packets_by_id()
+    correction = packets["CTRL-FIX-001"]
+
+    assert correction["repository"] == "mas-harness-control-plane"
+    assert correction["predecessors"] == ["CTRL-001"]
+    assert correction["allowedPaths"] == [
+        "AGENTS.md",
+        "ci/handlers/prefetch.py",
+        "ci/targets/ctrl-fix-001.json",
+        "tests/bootstrap/test_static_contract.py",
+    ]
+    assert correction["prefetchCommands"] == [["make", "prefetch"]]
+    assert correction["offlineAcceptanceCommands"] == [
+        ["make", "prefetch-lineage-regression"],
+        ["make", "bootstrap-e2e"],
+        ["make", "zero-bill"],
+    ]
+    assert packets["CTRL-002"]["predecessors"] == ["CTRL-FIX-001", "IND-WG-005"]
 
 
 def test_live_campaign_authority_is_exact_and_offline_commands_remain_primary() -> None:

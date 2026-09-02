@@ -1,16 +1,115 @@
 id: CTRL-002
 repository: mas-harness-control-plane
 branch: codex/ctrl-002-questionnaire-journey
-objective: Implement signed industry-pack intake, revisioned questionnaire sessions, eight-stage portal flow, readiness findings, ETags, idempotency, and audit.
-predecessors: [CTRL-001, IND-WG-005]
-allowedPaths: ["apps/control-web/src/app/questionnaires/", "apps/control-web/src/app/api/v1alpha1/questionnaires/", "apps/control-web/src/app/api/v1alpha1/sessions/", "apps/control-web/src/lib/questionnaire/", "packages/db/migrations/questionnaire/", "tests/questionnaire/", "e2e/questionnaire.spec.ts", "ci/targets/ctrl-002.json"]
+objective: Implement signed industry-pack intake, revisioned questionnaire sessions, the eight-stage portal journey, deterministic readiness findings, optimistic concurrency, idempotency, and audit.
+predecessors: [CTRL-FIX-001, IND-WG-005]
+allowedPaths: ["package.json", "package-lock.json", "apps/control-web/src/app/questionnaires/", "apps/control-web/src/app/api/v1alpha1/questionnaires/", "apps/control-web/src/app/api/v1alpha1/sessions/", "apps/control-web/src/lib/questionnaire/", "packages/db/migrations/questionnaire/", "tests/questionnaire/", "e2e/questionnaire.spec.ts", "ci/targets/ctrl-002.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes Questionnaire and IndustryPack contracts v1alpha1", "Produces questionnaire session REST behavior v1alpha1"]
-deliverables: ["Verified local pack intake, revisioned answers, eight-stage setup UI, readiness states, optimistic concurrency, idempotency, and audit events."]
-excluded: ["LLM-generated answers, network pack fetches, tenant-supplied identity headers, or profile compilation."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","questionnaire-contract"],["make","questionnaire-e2e"]]
+contracts:
+  - >-
+    Implementation starts from exact merged control-plane commit
+    09ebf03c3f7a3cf6414b2e3c4f6352c94d221fa8 and the merged CTRL-FIX-001
+    descendant. It consumes mas-harness-contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 with release-manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79
+    and QuestionnaireDefinition, QuestionnaireSession, and
+    QuestionnaireAnswerSet schema SHA-256 values respectively
+    c8857968da611838f4bd623c7727cd3c90619f12fc7cfed0db96effacac47223,
+    c7bcc030bd5cc19f03433f5fe7e08e41c2d91be40e4e94d312a64bac1794f17a,
+    and cceebb735554d91f82395032f3ddcf475fc05ea897dfdff36165bcd71edaf828.
+  - >-
+    The white-goods acceptance baseline is mas-harness-industry-packs commit
+    c6513d71535d56c71869bf889169d798c7b80c9c. It binds pack id
+    white-goods.manufacturing version 0.5.0, pack.yaml SHA-256
+    c78f6f284513a605d10e67413291b209fa4d5b03e8510ef37f20cc95d38688ee,
+    journey SHA-256 950a6d21c68a35117a3cd36d67491cde85274ef911d78ff8585e1be8671db2fb,
+    contracts-lock SHA-256 81d7470e28b452cbf8de2e4903b47b5335709b09cf6375f78481057973d75c91,
+    certification pack-lock SHA-256
+    c9d559c972b8b6f7515853e6545eb276567b4aeb860cb99a46c477cd840b80d2
+    with payload digest 3c3659a732e5c7ad2cdba6ca45e87f18790791097dce6b5cabe93d74f32e65fe,
+    artifact-manifest SHA-256
+    00f89e371031b007ef4565dc1bc9cfccccf848714d30d967845aea0e3e62a949,
+    and accepted-pilot answer SHA-256
+    b76421c1f0cfa258c97f159a48f0f8f53782ec6415384b9fed3acc57119da052.
+    The current upstream manifest is explicitly unsigned and NOT_RETAINED, so it
+    is provenance only and cannot be admitted as a release.
+  - >-
+    Runtime intake accepts only a bounded local IndustryPackReleaseEnvelope with
+    one gzip/tar data-only archive, its certification manifest and pack lock, and
+    one Ed25519 signature over RFC-8785-style canonical JSON binding purpose
+    INDUSTRY_PACK_RELEASE, key id, pack id/version, archive SHA-256/size,
+    pack-lock SHA-256, artifact-manifest SHA-256, issuedAt, and expiresAt. Public
+    keys come only from a validated local regular-file trust registry with
+    purpose, validity, and revocation; unknown, revoked, expired, wrong-purpose,
+    malformed, or invalid signatures fail closed. No signing key is stored or
+    used by the product.
+  - >-
+    Archive admission permits at most 256 regular non-executable UTF-8 data
+    files, 5 MiB compressed, 20 MiB expanded, and 2 MiB per file. Absolute,
+    parent, dot, hidden, duplicate, linked, device, executable-mode, unsupported,
+    unlisted, missing, digest-mismatched, and trailing archive content is
+    rejected. pack.index.json, pack.lock.json, manifest.json, pack.yaml,
+    contracts.lock.json, and journey.yaml must agree on identity and digests.
+    YAML uses the exact zero-dependency ISC package yaml 2.9.0 in YAML 1.2 core
+    mode with unique keys, aliases disabled, and no custom tags.
+  - >-
+    The immutable journey order is business-context, domain-and-outcomes,
+    data-readiness, governance-and-regulation, integration-readiness,
+    harness-demand, environment-and-provider-fit, evidence-and-acceptance.
+    A stage may be informational but cannot be absent or reordered. Question ids
+    are globally unique; supported response types are string, number, boolean,
+    and single/multiple choice with closed options. Every answer source is
+    TENANT_DECLARATION; credential values, secrets, raw tenant records, executable
+    content, and LLM-generated answers are rejected.
+  - >-
+    POST /api/v1alpha1/sessions creates DRAFT revision 1 at the first stage; GET
+    /api/v1alpha1/questionnaires lists only admitted pack projections; GET
+    /api/v1alpha1/sessions/{id} returns the current projection and strong ETag;
+    PUT /api/v1alpha1/sessions/{id}/answers appends exactly one AnswerRevision;
+    POST /api/v1alpha1/sessions/{id}/review appends deterministic findings and
+    transitions to BLOCKED or READY_FOR_COMPILATION. Saving starts IN_PROGRESS.
+    SUPERSEDED is append-only terminal and not exposed as a CTRL-002 mutation.
+  - >-
+    Authenticated OIDC session context is the sole organization and actor source;
+    tenant headers, body/query organization ids, and session-id discovery are
+    rejected. Cross-tenant reads and writes return the same 404 envelope as an
+    unknown id. Every mutation requires CSRF proof and Idempotency-Key; every
+    update also requires If-Match. Missing If-Match is 428, stale ETag is 412,
+    key reuse with a different canonical request fingerprint is 409, and exact
+    replay returns the stored status/body/ETag without a second revision or audit
+    event.
+  - >-
+    QuestionnaireSession rows are mutable only through versioned transitions;
+    AnswerRevision, ReadinessFinding, and audit records are append-only. The
+    additive migration creates only control.questionnaire_session,
+    control.answer_revision, and control.readiness_finding, forces organization
+    RLS, uses transaction-local planeon.organization_id, grants least privilege,
+    and does not mutate the CTRL-001 tables destructively. Actual PostgreSQL is
+    NOT_RUN_ENV_UNAVAILABLE unless a disposable credential-free local cluster is
+    supplied; the independently exercised in-memory store must preserve the same
+    isolation, concurrency, idempotency, and append-only semantics.
+  - >-
+    The responsive Next.js App Router UI exposes /questionnaires and
+    /questionnaires/{sessionId}/{stageId}, named progress for all eight stages,
+    save/resume, review, missing/readiness findings, loading/empty/error states,
+    semantic form controls, visible focus, keyboard operation, and reduced-motion
+    behavior using local assets only. CTRL-002 does not claim the later full
+    Playwright/WCAG or tenant harness overview acceptance owned by CTRL-006 and
+    CTRL-007.
+deliverables:
+  - Bounded signed-pack verifier, immutable admitted-pack projection, exact predecessor lock checks, and negative tamper/revocation/archive vectors.
+  - Revisioned tenant-isolated session service and REST adapters with strong ETags, idempotency replay/conflict, CSRF, deterministic review findings, and append-only audit parity.
+  - Additive PostgreSQL/RLS source migration plus explicit NOT_RUN_ENV_UNAVAILABLE runtime evidence when no disposable local database exists.
+  - Professional responsive eight-stage Next.js questionnaire screens with refresh/resume and no public-network asset or telemetry dependency.
+  - Packet-local direct-argv descriptor running predecessor regression, questionnaire contract, questionnaire E2E, and zero-bill checks in one signed offline process tree.
+excluded:
+  - LLM-generated answers, network pack fetch or discovery, unsigned/current NOT_RETAINED white-goods artifact admission, tenant-supplied identity, raw secrets or tenant data, demand approval, profile compilation, bundle creation, infrastructure provisioning, or claims of artifact/deployment/runtime/assurance/tenant-acceptance evidence.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","questionnaire-contract"],["make","questionnaire-e2e"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Complete white-goods journey and refresh/resume behavior.", "Tampered pack, stale ETag, duplicate idempotency key, and cross-tenant denial evidence."]
-rollback: Revert questionnaire routes, UI, and additive migration; preserve existing tenant/auth bootstrap.
+expectedEvidence:
+  - Signed synthetic white-goods release intake, eight-stage save/refresh/resume/review, deterministic blocked and ready outcomes, exact replay, and append-only revision/audit evidence.
+  - Invalid signature, unknown/revoked/expired/wrong-purpose key, tampered archive/lock/index, unsafe tar/YAML, missing answer, type/choice error, stale ETag, missing CSRF/idempotency, idempotency conflict, credential-shaped value, and cross-tenant indistinguishable-not-found denial evidence.
+  - Strict TypeScript, Next standalone build, responsive semantic route source, migration/RLS source parity, zero-public-network and zero-bill scans pass; live PostgreSQL remains NOT_RUN_ENV_UNAVAILABLE unless the declared disposable environment exists.
+rollback: Revert questionnaire routes, UI, service, dependency, descriptor, and additive migration while preserving CTRL-001 authentication/tenant/audit/idempotency data and every append-only questionnaire record already created; never run a destructive down migration or alter an external pack, IdP, database, artifact, deployment, runtime, or tenant decision.

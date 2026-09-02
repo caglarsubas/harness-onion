@@ -59,7 +59,11 @@
     `ci/targets/<lowercase-packet-id>.json` descriptor and may not edit
     `Makefile`; the conformance campaign/evidence/acceptance rules are the closed
     `CONF-001` exception. Preserve every predecessor handler and reject unknown,
-    duplicate, ambiguous, undeclared-variable, or shell-based dispatch.
+    duplicate, ambiguous, undeclared-variable, or shell-based dispatch. The sole
+    bootstrap-handler correction is `CTRL-FIX-001`: it may edit only the control
+    plane's `AGENTS.md`, `ci/handlers/prefetch.py`, its exact descriptor, and its
+    bootstrap regression test so later packet PR merge commits remain admissible
+    without weakening the exact empty-root or bootstrap dependency pins.
 14. Only a product bootstrap packet may seed the inert `PORTING.yaml` ledger.
     No current reference/discovery-only packet may edit it. A later revision may
     add that path only with a legally approved `PORT_CANDIDATE` and exact mapping.

@@ -1,0 +1,40 @@
+id: CTRL-FIX-001
+repository: mas-harness-control-plane
+branch: codex/ctrl-fix-001-bootstrap-lineage
+objective: Correct the bootstrap prefetch lineage and dependency-extension gates so every later control-plane packet can execute without weakening CTRL-001 custody.
+predecessors: [CTRL-001]
+allowedPaths: ["AGENTS.md", "ci/handlers/prefetch.py", "ci/targets/ctrl-fix-001.json", "tests/bootstrap/test_static_contract.py"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - >-
+    The only accepted repository history has the exact empty root
+    fbd3d21da70167b0819caa1dfc017e7c673a1cbe, is non-shallow, has no replace or
+    graft authority, and has that root as an ancestor of HEAD. The CTRL-001
+    one-direct-child restriction is retired after the merged bootstrap because
+    GitHub pull-request merge refs necessarily have the current main commit as
+    first parent.
+  - >-
+    Every CTRL-001 Node, npm, Python, uv, runtime dependency, development
+    dependency, predecessor lock, required source, and offline-install pin
+    remains mandatory. A later packet may add a direct dependency only when its
+    own packet, descriptor, package lock, signed runner inventory, and acceptance
+    pin that dependency; it may not remove, replace, range-widen, or mutate a
+    bootstrap pin.
+  - >-
+    This is the sole closed exception to predecessor-handler immutability. It
+    does not change Makefile, ci/run_make_target.py, packet transport, workflow,
+    PORTING.yaml, product APIs, tenant state, deployment, or any evidence axis.
+deliverables:
+  - Descendant-history verification anchored to the exact empty root with shallow, replace-ref, and graft rejection.
+  - Bootstrap dependency subset enforcement that preserves every CTRL-001 exact version while permitting separately authorized additive dependencies.
+  - Static regression evidence proving the retired HEAD-parent equality and exact-map equality cannot return.
+excluded:
+  - Any product feature, public contract, database change, dependency addition, warm-source access, hosted runner, network relaxation, or evidence promotion.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","prefetch-lineage-regression"],["make","bootstrap-e2e"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - Signed offline acceptance passes on a branch descended from merged CTRL-001 and rejects a missing root, shallow history, replace/graft authority, and any bootstrap dependency drift.
+  - PR CI, squash merge, and exact-main CI remain separate; artifact, deployment, runtime, assurance, and tenant acceptance remain false, missing, pending, or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Revert this pre-release correction to CTRL-001 main; later control-plane packets remain blocked and no tenant data, artifact, deployment, or external system is changed.
