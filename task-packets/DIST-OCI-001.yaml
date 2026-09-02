@@ -83,11 +83,11 @@ excluded:
   - Mutable tags, unrelated modules, signing, promotion, SBOM, vulnerability scanning, network fetch, registry mutation, Helm execution/rendering, installation, or tenant mega-images.
   - Warm-source access, external packages, cloud services, hosted runners, GitHub artifact/cache/package storage, API keys, remote telemetry, or runtime downloads.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands: [["make","resolve-fixtures"],["make","build-fixture"],["make","minimal-selectivity-proof"]]
+offlineAcceptanceCommands: [["make","resolve-fixtures"],["make","build-fixture"],["make","minimal-selectivity-proof"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - Stable canonical bundle-lock and bundle-id digests match across two independent temporary build roots and the complete staged OCI blob closure verifies.
   - Minimal profile includes only the selected infrastructure module's image/chart closure for linux/arm64; an explicitly unselected AI-gateway module contributes nothing.
   - Negative vectors reject mutable/remote references, duplicate/unknown fields, missing platform coverage, digest/size/media mismatch, missing/extra blobs, symlinks, output/source overlap, existing destination, and injected pre-publish failure without partial output.
-  - Signed hash-pinned acceptance runs prefetch then resolve-fixtures, build-fixture, and minimal-selectivity-proof with OS-denied outbound traffic; CI/merge/exact-main remain distinct from artifact/release/deployment/runtime/assurance/tenant acceptance.
+  - Signed hash-pinned acceptance runs prefetch then resolve-fixtures, build-fixture, minimal-selectivity-proof, and zero-bill with OS-denied outbound traffic; CI/merge/exact-main remain distinct from artifact/release/deployment/runtime/assurance/tenant acceptance.
 rollback: Delete only the unsigned staged OCI layout; no released bundle exists.
