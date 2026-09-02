@@ -1,16 +1,242 @@
 id: CONF-001
 repository: mas-harness-conformance-labs
 branch: codex/conf-001-conformance-kit
-objective: Bootstrap the offline conformance CLI, campaign/evidence schemas, environment intake, contract/lifecycle/event kit, signing, and meta-tests.
+objective: Bootstrap a dependency-free, deterministic offline conformance CLI, closed campaign and evidence contracts, honest environment intake, lifecycle and event assertions, technical-evidence signing, reproducible live-launcher candidate, generic campaign dispatch, and adversarial meta-tests.
 predecessors: [CON-005, SDK-001, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "src/harness_conformance/", "schemas/", "campaigns/meta/", "tests/meta/", "fixtures/environments/", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - src/harness_conformance/
+  - schemas/
+  - campaigns/meta/
+  - tests/meta/
+  - fixtures/environments/
+  - toolchain.lock
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes canonical contracts, states, events, and evidence v1alpha1", "Produces conformance campaign/result/evidence schemas v1", "Produces the dual-signed execution-envelope and preinstalled trusted live-launcher protocol v1", "Owns the generic make acceptance-package CAMPAIGN=<id> dispatch contract; it produces only an unsigned tenant-acceptance candidate", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["CLI, environment capabilities, PASS/FAIL/WARN/NOT_APPLICABLE/NOT_RUN_ENV_UNAVAILABLE semantics, deterministic campaign execution, signed technical-evidence bundle, contract/state/event assertions, and meta-tests.", "Repository-side adapters for the external root-owned /opt/planeon/bin/harness-live-campaign-launch protocol; repository code never establishes or widens its own network boundary.", "Positive and negative Makefile meta-tests proving acceptance-package dispatch is generic, campaign-bound, deterministic, and cannot emit or imply a tenant-authorized signature.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Product feature code, cloud provisioning, hosted test services, or mapping static render to live pass."]
+contracts:
+  - Consumes canonical contracts, states, events, and evidence v1alpha1.
+  - Produces conformance campaign, result, report, technical-evidence, environment-intake, campaign-release, execution-envelope, capacity-authorization, trust-bundle, and unsigned tenant-acceptance-candidate schemas v1alpha1.
+  - Produces the dual-signed execution-envelope and preinstalled trusted live-launcher protocol v1.
+  - Produces closed packet-local Make target descriptor dispatch v1 and generic campaign dispatch v1.
+  - Produces inert destination PORTING ledger v1 with zero current copy authorizations.
+  - >-
+    Implementation starts from exact public non-product seed commit
+    592291decb1d77f3cbacd02251e169eb8886c8c2 with tree
+    aff629e4afeb07cab7294343789bdc7d2f4b27b5. The seed contains only README,
+    AGENTS.md, and the pinned self-hosted workflow. CONF-001 is the sole owner
+    of the repository bootstrap, Makefile, dispatcher, generic campaign rules,
+    and PORTING.yaml. No warm-source repository may be mounted, opened, copied,
+    adapted, translated, or supplied to a packet process.
+  - >-
+    Canonical lifecycle, event, and status authority is exact merged
+    mas-harness-contracts CON-005 commit
+    63a1af44ce0abe31075c37c3529848ebe8fe2fcb, whose accepted pull-request run
+    is 33363060818. The exact release-manifest, harness CloudEvent, lifecycle
+    common/operation/approval/evidence/installation/bundle/policy, and status
+    common/harness/organization/plane/freshness/axis/finding/overview byte
+    SHA-256 values are respectively
+    beb70f35185ce631f23f60b1e0b4c2d7d800cccc5b713a819cac62d596b5f509,
+    4e1282bda0b3f947265a84545ed5b2fdea0a1bb4e69af3642fc14c265811c56c,
+    dce5d8030eea3a19694511eb26513614dcc720ef4e0d650772131b14ed58f075,
+    876bd985adf2267e5f4594e19e3e37296eab8cad7344c2d23cb68ca2c97a4982,
+    4fe8d214a920690008a4390919acebf797b0ab4e6c649a7a88e0882f3b2a1b27,
+    a80935c2dc5ac4624d972edc3876d301059c74e507ca2be28ea353b1070bdd8c,
+    f84afa6189b9c59ee5c4ad06d94e0f9eec7f3277955c450f8710c02ad832d07d,
+    c983a8d97c70d7957e74f06413ca0158e3b7be626468bf8d217dfc5829aa5918,
+    141673ed53ffaa9777617841d2abeab025cfa351c78c39fcc8520538ac20fcf6,
+    51ec37f73bcf5ddc8f29388e53da3f4175eaee342a26138349ebcd9ff5a5113d,
+    b6f07b2064785be00da35785f955861bb1e3f60d0b0f2443e4bab079a4add878,
+    347f998b75ef680f54fa40e4edbf5e9acc9f3a3cc9e6722381b5b1c1ab1fc75d,
+    98a6d65f01f6e1b1a903cd0b3fd7e87ffcdb2aae555c09d4c1063a92e01f3376,
+    0c48197b587a0bd7a11e087ba7864745a117efe5a17fb1c2f0a17b3591197816,
+    771d58a6b668b1325c493dedff50459cf944793ad335768a856c85264c52b378,
+    0f545de0a4bccaf581bd52a988149faebd40edc19c6150652ffb6dd5ab63c622,
+    and b422b7e1da89aa478bb22416c8b60e508e4b1e3ba578f263a87598f58dd95c32.
+    toolchain.lock records these documentary authorities; packet execution does
+    not mount or read the contracts checkout.
+  - >-
+    Generated-client predecessor authority is exact merged mas-harness-sdks
+    SDK-001 commit 702239f542a563158595a7fa05e63612facc0eeb, whose accepted
+    pull-request run is 33372138592. Its contracts.lock.json and Python package
+    metadata byte SHA-256 values are
+    bb1c088fbafcf07b4edba43f92015c935fcd2cfed224874c6569320da146199d and
+    2b427ab602415d87fdc18f603d12bc30d9f133ba7a1f669209c622b30ead4807.
+    CONF-001 records compatibility only; it neither mounts the SDK checkout nor
+    imports a mutable SDK artifact.
+  - >-
+    Zero-bill authority is exact Harness-Engineering MET-003 merge commit
+    97da35afff79e1582b964b613472609a613ea81b and accepted pull-request run
+    33313396516. The MET-003 packet, zero-bill policy, and scanner byte SHA-256
+    values are d0bf1bc8cb15c536433528bf7b30aa3713e5ae44cb809d749fe8f344bccf3eea,
+    77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e,
+    and 57fa7e94bf5657f0daf959d5229dfc2a53a0ab94793d1d5fa03a7513b1272fd7.
+    The packet-local scanner independently rejects hosted runners, Actions
+    artifact/cache/package storage, cloud provisioning, paid or API-key
+    dependencies, public fallbacks, external telemetry defaults, runtime
+    downloads, mutable references, live campaigns in CI, and billable services.
+  - >-
+    Trusted-live planning authority is exact public Harness-Engineering commit
+    fcbf070e272571eacbe7f04de92aac5484a9902e. Its live execution-envelope
+    schema, task-packet schema, trusted live-runner contract, porting-record
+    schema, and porting-authorization schema byte SHA-256 values are
+    ee5ce21417760c941b70b03fc7d48c6462104268f374a424f4cd01f7ed5ca6ee,
+    85cc0a29b37cba2fc52dae253eb49d2fc6c282ab4580363b8c86e967bae25dfd,
+    18509ade585005def652c848f1a456f31c7e55f7871dd60a6919095bae422242,
+    492c510f1ddf1080eb8a59c4a7478518f035f6c5b0a466de5f95e5ae3fd8107b,
+    and 1c5675728c9c13fde47d644b654bdff9eebe19d9210a5987832c8ef6224c9d56.
+    Product schemas preserve the exact closed envelope members, RFC 8785
+    signature coverage, two independent envelope roles, separate capacity
+    signature, endpoint and mutation constraints, evidence-axis rules, and
+    unavailable semantics defined there.
+  - >-
+    Runtime is CPython 3.12.14 from root-owned inventory
+    /etc/planeon/python-3.12.14.inventory.json with inventory SHA-256
+    36167810c1ec56f5d5dc55410d9e528c58700ff138608e3b116f868a4d650799,
+    interpreter /opt/planeon/python/3.12.14/bin/python3.12 with SHA-256
+    ac60cfe0268614638d0ffa35f3b0284fc7b3a11482723793455e17eeb278509e,
+    and root-owned uv 0.12.7 at /opt/planeon/bin/uv with SHA-256
+    55936a60bff5de7ac04facb72f9e6fd0ffd9661063480224c3ab321c3f10caff.
+    The package and lock contain no third-party dependencies. Cryptographic
+    primitives, canonical JSON, schema checks, CLI, tests, and deterministic
+    build use only audited packet-owned code and the Python standard library.
+    Prefetch validates immutable local inventory only and never installs,
+    synchronizes, resolves, or downloads.
+  - >-
+    toolchain.lock is closed canonical JSON and binds the exact seed,
+    predecessors, authority-file hashes, Python and uv inventories, dependency-
+    free lock, checkout workflow pin, live contract, and packet ID. Prefetch
+    verifies all locally available authority records by documentary digest,
+    exact repository ancestry, tool versions and hashes, no warm-root visibility,
+    and no undeclared dependency or executable. A missing or mismatched lock
+    fails before any acceptance handler.
+  - >-
+    schemas/ publishes additionalProperties:false JSON schemas for campaign,
+    control result, environment intake, campaign report, technical evidence
+    bundle, campaign release, trust bundle, live execution envelope, capacity
+    authorization, and tenant-acceptance candidate. Duplicate JSON members,
+    non-UTF-8, floats or non-finite numbers, unknown fields, invalid identifiers,
+    non-lowercase sha256, unbounded text or collections, invalid time windows,
+    aliases, and secret-shaped fields are rejected. Canonical JSON is the
+    UTF-8 RFC-8785-compatible subset containing only null, booleans, signed
+    53-bit integers, strings, arrays, and lexicographically sorted object keys.
+  - >-
+    The only result states are PASS, FAIL, WARN, NOT_APPLICABLE, and
+    NOT_RUN_ENV_UNAVAILABLE. A required result other than PASS blocks the
+    campaign. Offline execution may originate only UNIT evidence. Live
+    execution may originate only the exact ordered packet-declared live axes.
+    SOURCE, CI, MERGE, ARTIFACT, SIGNATURE, DEPLOYMENT, RUNTIME, SECURITY,
+    ASSURANCE, TENANT_ACCEPTANCE_CANDIDATE, and TENANT_ACCEPTANCE remain
+    independently visible. Neither a report nor a static fixture may upgrade
+    unavailable work, a candidate, or another axis to PASS.
+  - >-
+    A declarative campaign contains a closed ordered control list and no shell,
+    URL, embedded credential, arbitrary module, executable, or command string.
+    CONF-001 handlers are exactly STATIC_ASSERTION, SCHEMA_ASSERTION,
+    LIFECYCLE_ASSERTION, EVENT_ASSERTION, and ENVIRONMENT_CAPABILITY. Execution
+    order, reason codes, observations, sanitized-output hashes, report bytes,
+    evidence bytes, and digests are deterministic for caller-fixed time and run
+    ID. Missing required environment facts return NOT_RUN_ENV_UNAVAILABLE;
+    invalid authority or an assertion mismatch returns FAIL.
+  - >-
+    Technical evidence uses Ed25519 with closed key purposes and signs the exact
+    domain-separated canonical payload. Signing keys are caller-supplied local
+    files opened no-follow, never logged or embedded in an output, and cannot
+    have TENANT_ACCEPTANCE purpose. Verification rejects malleable encodings,
+    wrong roles, scope, digests, duplicate keys, invalid windows, revocation,
+    altered bytes, replayed subject bindings, and signatures over a different
+    canonical payload. Meta fixtures use an explicitly test-only RFC vector;
+    the repository contains no production private key.
+  - >-
+    The live-launcher candidate is built reproducibly from packet-owned Python
+    sources into a deterministic executable zip application. Two clean builds
+    have identical bytes and sha256. The candidate verifies the signed root-
+    owned manifest, pinned root public-key digest, UID/GID/mode and fixed trust
+    mounts before an envelope; opens every local reference absolute, canonical,
+    no-follow, regular, read-once; verifies all envelope, tree, release, bundle,
+    trust, endpoint, capacity, command, axis, time, nonce, signature, admission,
+    quota, and launcher bindings; and refuses CI context, public, discovered,
+    wildcard, metadata, provider, or CRI endpoints, shell transport, unsupported
+    isolation, or credential exposure. Missing installation, isolation, target,
+    proxy, or capacity is NOT_RUN_ENV_UNAVAILABLE; invalid authority is FAIL.
+    Building the candidate neither installs it nor grants it live authority.
+  - >-
+    Repository-side ci/verify-live-campaign.py is an inner adapter only. It
+    requires a non-inheritable proof descriptor created after the external
+    root-owned launcher establishes the signed boundary; rejects direct, CI,
+    PR, or scheduled execution; receives no envelope, trust, or capacity path;
+    and direct-executes only already verified argv. It cannot establish, widen,
+    or substitute the network boundary and is never called by offline CI.
+  - >-
+    Makefile delegates every target only to ci/run_make_target.py. The closed
+    ci/targets/conf-001.json descriptor registers exact direct-argv handlers for
+    prefetch, meta-conformance, build-reproducible, zero-bill, and
+    acceptance-package-contract. The dispatcher validates lexical descriptor
+    order, packet and filename ownership, target and variable grammar, direct
+    argv, cumulative applicability, and rejects missing, unknown, duplicate,
+    ambiguous, undeclared-variable, malformed, zero-handler, or shell-based
+    dispatch. Later packets never edit Makefile or dispatcher.
+  - >-
+    CONF-001 also owns generic campaign, evidence-verify, and acceptance-package
+    dispatch. It discovers only canonical campaigns/**/campaign.json records
+    beneath the checkout, validates each closed campaignId is globally unique
+    and equals CAMPAIGN, and direct-executes fixed packet-owned CLI argv with the
+    resolved file. Unknown, duplicated, symlinked, traversal, malformed, or
+    undeclared campaign values fail closed. acceptance-package emits only an
+    unsigned TENANT_ACCEPTANCE_CANDIDATE with immutable evidence references;
+    any signature field, acceptance claim, or tenant transition is rejected.
+  - >-
+    PORTING.yaml contains only schemaVersion, destination repository, and one
+    NO_AUTHORIZATION sentinel without source repository, commit, path, mapping,
+    destination, authorizationId, or copied content. Tests reject every copy or
+    port claim. Any future edit requires a revised PORT_CANDIDATE packet and
+    approved path-level authorization.
+  - >-
+    CI remains public-repository, self-hosted, ephemeral, and credential-free.
+    The workflow uses only actions/checkout pinned at
+    11bd71901bbe5b1630ceea73d27597364c9af683 with persisted credentials
+    disabled, then invokes /opt/planeon/bin/harness-offline-launch. The signed
+    launcher verifies this exact packet digest, immutable tool inventory,
+    canonical warm-source deny roots, absent credentials and privileged sockets,
+    and runs prefetch plus all acceptance argv in one OS deny-all-outbound
+    process tree. Repository code receives neither packet nor warm paths.
+deliverables:
+  - Dependency-free Python 3.12 package and strict harness-conformance CLI with validate, run, evidence-verify, technical-sign, and acceptance-candidate subcommands.
+  - Closed schemas and deterministic meta campaign and environment fixtures covering every result, handler, evidence axis, lifecycle and event assertion, and unavailable path.
+  - Canonical JSON, bounded schema validator, deterministic campaign engine, report and evidence builder, Ed25519 technical signer and verifier, and no-secret output handling.
+  - Reproducible trusted live-launcher candidate, external-launch protocol verifier, tree and reference custody, endpoint and capacity admission validation, and direct-invocation denial adapter.
+  - Closed Make dispatcher plus generic campaign, evidence, and acceptance-package registry with positive and adversarial tests.
+  - Exact toolchain and source-authority lock, offline packet transport, network canary, zero-bill scan, pinned self-hosted workflow, and inert PORTING ledger.
+  - Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.
+  - Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.
+  - PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port.
+  - PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet.
+excluded:
+  - Product feature code, hosted API, production database or event stream, cluster or cloud provisioning, live endpoint discovery, hosted test service, paid evaluation, API key, external telemetry, runtime download, or mutable artifact reference.
+  - Installing or invoking the live launcher, running a live campaign in CI, opening target credentials, creating capacity, contacting a target, or mapping static or offline evidence to a live pass.
+  - Copying or observing a warm repository, importing predecessor checkouts at runtime, automatic tenant acceptance, campaign-held tenant signing material, or collapsing evidence axes.
 prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","meta-conformance"],["make","build-reproducible"],["make","zero-bill"],["make","acceptance-package-contract"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Self-test proves each canonical result state and evidence axis.", "Two-run deterministic campaign/evidence digest and no-network report.", "Negative live-protocol vectors reject a non-absolute or repository launcher, missing/stale/ambiguous/revoked trust bindings, either missing signature, any packet/command/campaign/kit/launcher/bundle/axis/endpoint/capacity/admission digest mismatch, DNS rebinding, wildcard or discovered endpoints, undeclared ports, public discovery, cloud/billing APIs, shell transport, unavailable targets falsely marked PASS, and use from a GitHub PR check.", "Positive and negative acceptance-package-contract tests prove a declared campaign emits an unsigned acceptance candidate and prove unknown campaigns, signature claims, and tenant-acceptance transitions fail closed.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Revert the unconsumed conformance kit; no product or tenant state exists.
+expectedEvidence:
+  - Exact seed ancestry, predecessor commits, runs and file locks, Python and uv inventories, dependency-free lock, workflow pin, packet digest, and absent warm-root visibility pass before tests.
+  - Meta-tests exercise every canonical result and handler, deterministic two-run report and evidence equality, required-control blocking, honest unavailable behavior, lifecycle and event acceptance and denial, schema bounds, duplicate-key rejection, and sanitized outputs.
+  - Technical signing vectors pass for the test-only Ed25519 key and reject wrong purpose, scope, time, revocation, key, signature, payload, digest, duplicate trust entries, replayed binding, secret-shaped output, and every tenant-acceptance signing attempt.
+  - Two clean live-launcher candidate builds have identical bytes and digest; positive fixture preflight validates all signed bindings without executing a target, while negative vectors reject missing, stale, ambiguous or revoked trust, either missing signature, same-role keys, every packet, command, campaign, kit, launcher, bundle, axis, endpoint, capacity, admission, quota or trust digest mismatch, path, symlink or reopen substitution, DNS rebinding, wildcard or discovered endpoints, undeclared ports, metadata, public, provider or CRI targets, shell transport, CI use, and unavailable targets falsely marked PASS.
+  - Generic dispatch tests prove campaign and evidence-verify are campaign-bound and deterministic, and acceptance-package creates only an unsigned candidate; unknown, duplicate, symlink or traversal campaigns, undeclared variables, signature claims, tenant-acceptance transitions, and direct live-adapter calls fail closed.
+  - Descriptor tests reject missing, unknown, duplicate, owner or filename mismatch, malformed or ambiguous rules, undeclared variables, shell executable or command strings, non-lexical execution, and zero or multiple unintended handlers.
+  - PORTING validation proves exactly one NO_AUTHORIZATION sentinel and rejects any source mapping or copy claim.
+  - Zero-bill scans and negative fixtures cover hosted runners, Actions artifacts, cache and packages, cloud or billing APIs, provisioning, paid or API-key providers, public fallbacks, external telemetry, downloads, mutable references, scheduled or live CI, credential variables, and container or cloud sockets.
+  - Signed hash-pinned PR and exact-main runs pass all ordered commands inside one deny-all-outbound process tree. Source, PR CI, merge, exact-main, artifact candidate, external installation, deployment, runtime, assurance, and tenant acceptance remain separately reported.
+rollback: Revert the unconsumed conformance scaffold to seed commit 592291decb1d77f3cbacd02251e169eb8886c8c2. Remove no external installation, artifact, target state, or tenant evidence because CONF-001 creates none; preserve the public authority and inert PORTING ledger.
