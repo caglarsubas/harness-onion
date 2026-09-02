@@ -1,0 +1,49 @@
+id: TRUST-FIX-001
+repository: mas-harness-trust-plane
+branch: codex/trust-fix-001-package-markers
+objective: Close the post-certification path-authority gap for the trust-plane root package and test package markers without changing any trust behavior, public API, dependency, or evidence claim.
+predecessors: [TRUST-OBS-001, CONF-A1-001]
+allowedPaths:
+  - src/planeon_trust/__init__.py
+  - tests/__init__.py
+  - tests/foundation/test_authority_markers.py
+  - tests/foundation/test_dispatch_porting.py
+  - ci/targets/trust-fix-001.json
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - >-
+    Starts from exact public mas-harness-trust-plane main commit
+    919deda20b5c2a126129de7d484dd7c9667ad11e. TRUST-001 pull request 1
+    introduced src/planeon_trust/__init__.py and tests/__init__.py while its
+    packet omitted those two parent-package paths. This packet does not
+    retroactively authorize that change; it establishes reviewed ownership of
+    the current marker files through a new packet, branch, pull request, signed
+    offline check, merge, and exact-main check.
+  - >-
+    The public root package marker contains only a fixed module docstring,
+    __version__ = "0.1.0", and __all__ = ("__version__",). The test root marker
+    contains only a fixed module docstring. Neither marker may import, call,
+    discover, register, mutate, perform I/O, read environment state, open a
+    network path, or add implementation behavior.
+  - >-
+    TRUST-FIX-001 adds only a packet-owned direct-argv descriptor for the unique
+    authority-boundary target and an additive security handler. It does not edit
+    the bootstrap Makefile, dispatcher, packet transport, workflow, dependency
+    locks, PORTING ledger, service code, migrations, charts, fixtures, or
+    existing packet descriptors.
+deliverables:
+  - Explicit current ownership and closed AST-level regression coverage for both package-marker files.
+  - Cumulative descriptor-inventory evidence that TRUST-FIX-001 participates in security checks without changing existing handler order or ownership.
+  - Signed zero-bill pull-request and exact-main acceptance with all live evidence axes still unavailable or unclaimed.
+excluded:
+  - Retroactive authorization, trust behavior, service routes, tenant state, policy or guardrail semantics, telemetry, dependencies, public imports beyond __version__, warm-source access, artifacts, deployment, runtime, assurance, or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","authority-boundary"],["make","security"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - AST inspection proves the two markers have exactly the permitted inert statements and no executable imports, calls, discovery, registration, I/O, environment access, or network behavior.
+  - Descriptor inventory proves authority-boundary has exactly one TRUST-FIX-001 owner and security remains cumulative in lexical packet order with the new handler included.
+  - The complete existing trust foundation, guardrail, observability, dispatch, porting, and zero-bill checks remain green under the hash-pinned packet and deny-all-outbound launcher.
+  - Source, contract/unit, pull-request check, merge, artifact/SBOM, signature/release, deployment, runtime, security certification, assurance, and tenant acceptance remain separate; this correction proves no live axis.
+rollback: Revert the two marker clarifications, authority regression, and packet descriptor together; the historical path-authority gap then becomes open again and later development must stop until another explicit correction is approved.

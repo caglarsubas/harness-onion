@@ -2,7 +2,7 @@ id: TRUST-003
 repository: mas-harness-trust-plane
 branch: codex/trust-003-resilience-security
 objective: Certify trust-plane fail-closed behavior for OPA, database, collector, audit, evidence, waiver, tenant, and air-gap failures.
-predecessors: [TRUST-002, TRUST-GOV-001, TRUST-REG-001, TRUST-OBS-001, TRUST-EVAL-001]
+predecessors: [TRUST-002, TRUST-GOV-001, TRUST-REG-001, TRUST-OBS-001, TRUST-FIX-001, TRUST-EVAL-001]
 allowedPaths: ["tests/security/", "tests/resilience/", "tests/airgap/", "fixtures/attacks/", "scripts/run_failure_campaign.py", "docs/runbooks/", "src/planeon_trust/", "services/", "ci/targets/trust-003.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []

@@ -133,8 +133,9 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 3. `TRUST-GOV-001`: approvals, N-of-M, autonomy, waivers/expiry, exceptions, tamper-evident audit chain, and policy linkage.
 4. `TRUST-REG-001`: module/agent/release registry, certification axes, promotion, deprecation, revocation, and signed release admission.
 5. `TRUST-OBS-001`: source-only OTel collector and external Prometheus/Jaeger backend contracts, usage ledger, atomic reservations/budgets, content-free telemetry, tenant isolation, and non-destructive retention evidence.
-6. `TRUST-EVAL-001`: deterministic evaluators, campaigns, trace/evidence ingestion, local-model judge opt-in, calibration, staleness, and reproducibility.
-7. `TRUST-003-resilience-security`: OPA/DB/collector outages, audit buffer exhaustion, forged evidence, waiver expiry, cross-tenant denial, and air-gap startup.
+6. `TRUST-FIX-001-package-markers`: post-certification ownership correction and inert-marker regression for the root source and test packages.
+7. `TRUST-EVAL-001`: deterministic evaluators, campaigns, trace/evidence ingestion, local-model judge opt-in, calibration, staleness, and reproducibility.
+8. `TRUST-003-resilience-security`: OPA/DB/collector outages, audit buffer exhaustion, forged evidence, waiver expiry, cross-tenant denial, and air-gap startup.
 
 ## Testing, verification, and acceptance
 
@@ -348,6 +349,30 @@ zero-bill` through the same signed hash-pinned deny-all-outbound launcher
 process tree. The packet adds only its descriptor and packet-owned tests/code.
 Its single predecessor-owned test edit extends the generated target/owner
 inventory while retaining every negative dispatch and no-porting assertion.
+
+### Coding-ready `TRUST-FIX-001` slice
+
+The Phase-0 completion audit found that TRUST-001 pull request 1 introduced the
+root source and test package markers even though the packet authorized only the
+`src/planeon_trust/common/` and `tests/foundation/` subtrees. The correction does
+not rewrite history or retroactively broaden TRUST-001. It starts from exact
+TRUST-OBS-001 main, follows the completed Alpha-1 campaign, and takes current
+ownership of only those two marker files plus a packet-local regression test,
+descriptor, and the additive dispatch-inventory assertion.
+
+The source marker remains limited to a fixed docstring, version constant, and
+explicit export of that version. The test marker remains docstring-only. An AST
+test rejects imports, calls, discovery, registration, I/O, environment access,
+and any additional statement. The packet adds one unique
+`authority-boundary` target and one cumulative `security` handler without
+editing the bootstrap Makefile, dispatcher, workflow, locks, services,
+migrations, charts, fixtures, public routes, or tenant state.
+
+Acceptance runs `make prefetch`, then exactly `make authority-boundary`, `make
+security`, and `make zero-bill` through the hash-pinned signed deny-all-outbound
+launcher. It creates source, unit, PR-check, merge, and exact-main evidence only;
+artifact, release, deployment, runtime, certification, assurance, and tenant
+acceptance remain absent or `NOT_RUN_ENV_UNAVAILABLE`.
 
 ## Release and rollback
 
