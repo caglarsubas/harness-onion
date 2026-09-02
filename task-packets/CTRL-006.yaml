@@ -1,16 +1,188 @@
 id: CTRL-006
 repository: mas-harness-control-plane
 branch: codex/ctrl-006-security-e2e
-objective: Close control-plane security, accessibility, dependency, tamper-evidence, and full white-goods journey gaps before Alpha 1 certification.
+objective: Close the Alpha 1 control-plane security, tenant-isolation, tamper-evidence, dependency, accessibility, and offline browser-journey acceptance gaps without widening any product API or evidence claim.
 predecessors: [CTRL-005, TRUST-002]
-allowedPaths: ["apps/control-web/src/", "workers/profile-compiler/", "packages/db/", "tests/security/", "e2e/security/", "e2e/white-goods.spec.ts", "scripts/audit_dependencies.py", "docs/security/", "package.json", "package-lock.json", "pyproject.toml", "uv.lock", "ci/targets/ctrl-006.json"]
+allowedPaths:
+  - apps/control-web/src/
+  - packages/db/
+  - tests/security/
+  - e2e/security/
+  - e2e/white-goods.spec.ts
+  - scripts/audit_dependencies.py
+  - docs/security/
+  - package.json
+  - package-lock.json
+  - ci/targets/ctrl-006.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes all control APIs v1alpha1", "Consumes guardrail and policy clients v1", "Produces Alpha 1 control-plane acceptance evidence"]
-deliverables: ["RLS, CSRF/session, tenant isolation, tamper chain, dependency remediation, accessibility, and Playwright white-goods journey coverage."]
-excluded: ["Suppressing release-blocking vulnerabilities, external test services, or claiming runtime deployment success."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","security"],["make","accessibility"],["make","e2e-white-goods"]]
+contracts:
+  - >-
+    Implementation starts from exact merged control-plane commit
+    8e89226acfdcd1f5034d4ee71bb1a161553350b0, containing the accepted
+    CTRL-001 through CTRL-005 APIs, state machines, migrations, and frontend.
+    The packet is a security and acceptance closure over that exact product
+    surface. It does not add a tenant-facing resource, route, lifecycle state,
+    harness status, deployment assertion, or public contract version.
+  - >-
+    The trust predecessor is exact mas-harness-trust-plane commit
+    c9b4b66c9343e6824348be694df28f30e771f571, whose accepted exact-main run is
+    33528837543. The pinned TRUST-002 request, response, signed-profile, and
+    upstream-lock byte SHA-256 values are respectively
+    f420c30c592f98b1b064e95265c1dd5743c09bf7b1a7db537fb1c83d48b296e8,
+    9c9e455ce5675c5e0ce0a0d02b227df21f67e7b73a7841b87200b872b4734709,
+    453d831272dc712e1c5294267df936ad1c5e8d65795e475c2fe0008234a613f6,
+    and 422d2c93bdeaf858057a7962edd0ad61f16bfe5cd66cb4d3c25742d8958784c1.
+    CTRL-006 records and tests this boundary only: it neither mounts the trust
+    repository nor invents a trust client, remote call, policy decision, or
+    guardrail result when the control plane has no such predecessor surface.
+  - >-
+    Every /api/v1alpha1 response uses one closed security-header policy:
+    no-store, nosniff, DENY framing, no-referrer, a restrictive Permissions
+    Policy, and a default-deny Content Security Policy appropriate to JSON.
+    Browser mutations additionally require application/json, an accepted
+    same-origin Origin when Origin is present, and same-origin Fetch Metadata
+    when Sec-Fetch-Site is present. Missing browser metadata remains admissible
+    only for authenticated non-browser clients that present the existing
+    session and CSRF proofs. Malformed or conflicting Host, Origin, content
+    type, caller identity, duplicate query, body, ETag, CSRF, or idempotency
+    authority fails with the existing bounded error envelope and no mutation.
+  - >-
+    Session and CSRF comparisons use fixed-length digests and constant-time
+    equality. The opaque __Host-planeon_session cookie remains Secure,
+    HttpOnly, Path=/, SameSite=Lax, server-side, absolute-bounded, idle-bounded,
+    and tenant-bound. Cross-organization identifiers always use the existing
+    indistinguishable not-found behavior. No tenant, subject, role, session,
+    profile, policy, or organization authority is accepted from body, query,
+    caller-selected header, cookie payload, environment default, or browser
+    storage.
+  - >-
+    A packet-owned append-only audit-chain primitive seals canonical
+    content-free audit facts with organization id, sequence, previous record
+    digest, event id/type, aggregate digest, subject digest, and occurredAt.
+    The genesis predecessor is sha256 of an empty byte string; sequence is
+    strictly increasing per organization. Batch append validates every entry
+    before one atomic replacement. Verification recomputes every link and
+    digest and returns only a bounded reason code plus verified length and head
+    digest. Duplicate event id, wrong organization, invalid digest/timestamp,
+    sequence gap, reordered/deleted/inserted entry, changed fact, changed
+    predecessor, or changed record digest fails closed. Raw answers, profile
+    bytes, credentials, tokens, secret values, paths, and exception text are
+    inadmissible.
+  - >-
+    The questionnaire, demand, operation, and profile in-memory acceptance
+    stores seal their existing audit facts through the common audit-chain
+    primitive at the same logical commit boundary. A chain append failure
+    leaves domain state, audit arrays, inbox/outbox, idempotency responses, and
+    lifecycle state unchanged. Existing public audit fields remain compatible;
+    the chain is an internal evidence sidecar and cannot mark an EvidenceRecord
+    VERIFIED, certify a control, or establish tenant acceptance.
+  - >-
+    Database security acceptance parses every control migration cumulatively
+    and proves that each tenant-scoped table has ENABLE plus FORCE ROW LEVEL
+    SECURITY, a policy bound to transaction-local planeon.organization_id, and
+    no runtime DELETE, TRUNCATE, DDL, or BYPASSRLS grant. It also proves the
+    exact transaction-local tenant-context statement remains parameterized and
+    that audit/outbox and immutable receipt guards are present. Static parsing
+    and the independent in-memory denial model are source evidence only. A live
+    disposable credential-free PostgreSQL run is explicitly
+    NOT_RUN_ENV_UNAVAILABLE when no such local endpoint is supplied.
+  - >-
+    Security vectors span every accepted control API and lifecycle from signed
+    questionnaire pack listing through session answers/review, demand creation
+    and approval, compilation operation, exact-output profile review, profile
+    approval/lock, and bundle request/source status. They prove same-tenant
+    success; wrong-tenant indistinguishable denial; hostile Origin and Fetch
+    Metadata denial; absent/changed CSRF, If-Match, and idempotency denial;
+    replay/conflict behavior; bounded errors; audit-chain verification; and
+    injected atomic-append failure. They do not call an external identity,
+    trust, model, registry, distribution, database, or browser service.
+  - >-
+    package.json adds only exact @playwright/test 1.61.0 as a development
+    dependency. npm scripts remain non-shell and do not download browsers.
+    package-lock.json remains lockfile v3 and has no git, URL, mutable, lifecycle
+    install-script, or unpinned direct dependency. Acceptance uses only a
+    preprovisioned root-owned npm cache and Chromium Headless Shell 149.0.7827.55
+    revision 1228 at /opt/planeon/browser/ctrl-006, whose inventory file is
+    /etc/planeon/browser-ctrl-006.inventory.json with SHA-256
+    26b02e485ac5af595cdf7a6f3005cae1b5630b48991ffa12215be4a5f0fb1371.
+    PLAYWRIGHT_BROWSERS_PATH and executablePath are closed to that tree; no
+    Google Chrome, browser channel, fallback discovery, runtime installation,
+    remote asset, CDN, hosted analytics, or public request is permitted.
+  - >-
+    scripts/audit_dependencies.py is a deterministic standard-library review
+    of the committed manifest, lock, installed package metadata, and a closed
+    docs/security/dependency-review.json disposition. The disposition binds the
+    exact package-lock digest, review timestamp, source URLs as documentary
+    provenance only, license decisions, and all known reviewed advisories by
+    identifier, affected range, installed version, severity, and disposition.
+    Missing, stale-lock, unknown-license, unresolved HIGH or CRITICAL, mutable
+    source, install script, git dependency, remote tarball outside the npm
+    registry, omitted transitive package, or suppressed finding fails. The
+    signed offline run never queries npm, OSV, GitHub, or another service and
+    therefore proves only the frozen review snapshot, not perpetual absence of
+    future advisories.
+  - >-
+    Playwright runs Chromium by pipe in the same deny-all-outbound process tree
+    and fails on any request whose scheme is not data or about. Because the OS
+    isolation also denies loopback, browser evidence uses production-derived
+    semantic journey documents rendered into data URLs; it does not start or
+    connect to a local HTTP server. Browser vectors cover questionnaire,
+    readiness, demand approval, compilation, profile review, distinct approval,
+    lock, and bundle-request states; keyboard-only movement; visible focus;
+    names/roles/values; error and status announcements; 320 CSS-pixel reflow;
+    200 percent zoom; reduced motion; non-color status labels; and absence of
+    public requests. The same lifecycle is separately executed against the real
+    service classes and HTTP handlers, so the two rails are complementary and
+    are never misreported as socket-level browser/backend integration.
+  - >-
+    Accessibility acceptance is scoped to the CTRL-001 through CTRL-005 pages
+    and shared layout. It checks semantic landmarks and heading order, labelled
+    controls, keyboard reachability, programmatic error/status associations,
+    target size, focus visibility, reflow, zoom, reduced motion, and textual
+    equivalents for state. docs/security/accessibility-review.md records the
+    required manual screen-reader, contrast, focus-order, and comprehension
+    review as NOT_RUN_ENV_UNAVAILABLE until performed by a human. Automated
+    checks are not labelled complete WCAG certification.
+  - >-
+    ci/targets/ctrl-006.json adds direct-argv security, accessibility, and
+    e2e-white-goods handlers without editing Makefile or ci/run_make_target.py.
+    security runs strict typecheck, cumulative service/security/RLS/tamper
+    vectors, and dependency audit. accessibility runs the bounded semantic and
+    browser accessibility vectors. e2e-white-goods runs the real service
+    journey then the pipe-only Playwright journey. Every predecessor handler
+    remains active, and unknown, duplicate, ambiguous, shell-based, or
+    undeclared-variable dispatch remains fail-closed.
+  - >-
+    The signed runner extends the exact CTRL-005 Node 24.20.0, npm 11.11.0,
+    Python 3.12.14, uv 0.12.7, npm/compiler toolchains, source locks, and
+    deny-all-outbound boundary only with the root-owned Playwright npm closure
+    and Chromium inventory above. No cloud credential, API key, SSH agent,
+    kubeconfig, container socket, hosted runner, GitHub artifact/cache/package,
+    billable broker, external telemetry, runtime package download, warm-source
+    path, or paid service is present.
+deliverables:
+  - Closed shared HTTP/session hardening with same-origin browser mutation policy and bounded security headers.
+  - Tenant-scoped canonical append-only audit chains integrated atomically across questionnaire, demand, operation, and profile stores.
+  - Cumulative RLS/least-privilege and cross-tenant/API security denial campaign with explicit live-PostgreSQL status.
+  - Frozen exact-lock dependency review and fail-closed offline audit command.
+  - Real pipe-only Playwright keyboard, reflow, reduced-motion, no-public-request, and white-goods journey evidence plus separate real-service lifecycle evidence.
+  - Accessibility review record separating automated evidence from required manual acceptance.
+  - Packet-local direct-argv target descriptor preserving every predecessor dispatcher and zero-bill rule.
+excluded:
+  - New public APIs, resources, lifecycle states, overview/plane/harness status projections, CTRL-007 tenant overview UI, product observability, remote guardrail invocation, policy invention, browser/backend loopback claims, or public-contract changes.
+  - Hosted browsers, SaaS scanners, external test services, npm audit during signed acceptance, runtime downloads, Google Chrome, remote fonts/assets, analytics, telemetry, API keys, cloud provisioning, hosted runners, paid services, or GitHub artifacts/caches/packages.
+  - Raw content in audit evidence, destructive migrations, RLS bypass, security finding suppression, complete WCAG certification, PostgreSQL/Kubernetes/OpenShift execution claims, deployment/runtime proof, assurance certification, or tenant acceptance.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","security"],["make","accessibility"],["make","e2e-white-goods"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Cross-tenant and tamper denial campaign.", "Accessibility report, dependency disposition, and complete questionnaire-to-locked-profile browser evidence."]
-rollback: Revert only remediations that preserve locked-profile compatibility and never roll back security database changes destructively.
+expectedEvidence:
+  - Exact product base, TRUST-002 commit/contract hashes, Playwright version, Chromium revision/inventory, npm lock, and every predecessor source lock are verified before acceptance; no warm-source checkout is mounted or observed.
+  - Cross-tenant, caller-identity, hostile-origin/fetch-metadata, CSRF, ETag, idempotency, replay, bounded-error, and atomic-failure vectors pass for the cumulative API/lifecycle surface without exposing tenant existence or partially committing state.
+  - Audit vectors verify canonical genesis/head/sequence linkage and detect changed, reordered, deleted, inserted, duplicated, cross-tenant, or predecessor-tampered entries without retaining protected content.
+  - SQL/static and in-memory vectors prove FORCE RLS, transaction-local parameterized tenant context, least privilege, append-only guards, and tenant denial. Live PostgreSQL is recorded as NOT_RUN_ENV_UNAVAILABLE when the disposable local environment is absent.
+  - Dependency review binds every installed direct/transitive package and committed lock digest, fails on every undisposed HIGH/CRITICAL or unknown license/source, and records the frozen-snapshot limitation. No online audit runs inside acceptance.
+  - Playwright launches only the pinned open-source Chromium executable by pipe, observes zero non-data/about requests, and passes keyboard, focus, name/role/value, announcement, non-color, 320-pixel reflow, 200-percent zoom, and reduced-motion vectors across the production-derived white-goods states.
+  - The separate real-service white-goods vector reaches questionnaire review, approved demand, successful compile projection, approved and locked profile, and one bundle request while preserving all evidence-axis limits; this is not claimed as deployment, runtime, assurance, or tenant acceptance.
+  - The signed hash-pinned run passes cumulative bootstrap-e2e, security, accessibility, e2e-white-goods, and zero-bill targets in one deny-all-outbound process tree; source, CI, merge, exact-main, artifact, deployment, runtime, assurance, manual accessibility, and tenant-acceptance evidence remain separate.
+rollback: Stop new control-plane mutations, preserve all committed tenant audit, session, questionnaire, demand, operation, profile, lock, bundle, inbox, and outbox history, then revert CTRL-006 HTTP/session hardening, audit-chain sidecars, dependency review, browser tests, documentation, package lock, and descriptor together. Never disable RLS or CSRF, delete history, suppress an unresolved vulnerability, replace Chromium with a mutable browser, run a destructive down migration, or reinterpret a prior product state as deployment, runtime, assurance, accessibility certification, or tenant acceptance.
