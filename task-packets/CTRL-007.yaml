@@ -3,14 +3,220 @@ repository: mas-harness-control-plane
 branch: codex/ctrl-007-tenant-harness-overview
 objective: Implement tenant-scoped organization, plane, and harness status projections plus an accessible Next.js overview and separately authorized platform-operator portfolio.
 predecessors: [CTRL-006, CON-005, KN-DATA-002, TRUST-OBS-001, OP-003, DIST-004]
-allowedPaths: ["apps/control-web/src/app/overview/", "apps/control-web/src/app/planes/", "apps/control-web/src/app/harnesses/", "apps/control-web/src/app/organizations/", "apps/control-web/src/app/api/v1alpha1/overview/", "apps/control-web/src/app/api/v1alpha1/planes/", "apps/control-web/src/app/api/v1alpha1/harnesses/", "apps/control-web/src/app/api/v1alpha1/organizations/", "apps/control-web/src/components/harness-overview/", "apps/control-web/src/lib/harness-status/", "packages/db/migrations/harness-status/", "tests/harness-status/", "e2e/harness-overview.spec.ts", "docs/harness-overview.md", "ci/targets/ctrl-007.json"]
+allowedPaths:
+  - apps/control-web/src/app/overview/
+  - apps/control-web/src/app/planes/
+  - apps/control-web/src/app/harnesses/
+  - apps/control-web/src/app/organizations/
+  - apps/control-web/src/app/api/v1alpha1/overview/
+  - apps/control-web/src/app/api/v1alpha1/planes/
+  - apps/control-web/src/app/api/v1alpha1/harnesses/
+  - apps/control-web/src/app/api/v1alpha1/organizations/
+  - apps/control-web/src/components/harness-overview/
+  - apps/control-web/src/lib/harness-status/
+  - packages/db/migrations/harness-status/
+  - tests/harness-status/
+  - e2e/harness-overview.spec.ts
+  - docs/harness-overview.md
+  - ci/targets/ctrl-007.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes status-projection, lifecycle, evidence, taxonomy, profile, release, installation, and tenant-policy contracts v1alpha1", "Produces tenant-derived overview, plane, and harness read APIs v1alpha1", "Produces separately policy-authorized organization portfolio and organization-overview read APIs v1alpha1", "Persists tenant-scoped append/update-only status projections and authenticated source cursors"]
-deliverables: ["Idempotent ordered projection ingestors for profile, distribution, operator, trust, runtime, security, assurance, and tenant-acceptance summaries.", "RLS-enforced tenant APIs and audited platform-operator portfolio APIs with cursor pagination and indistinguishable not-found behavior.", "Self-hosted Next.js App Router routes for organization portfolio, tenant overview, plane detail, and harness detail with stable URLs and breadcrumbs.", "Data-driven interactive four-plane/sixteen-harness onion with an accessible semantic-list equivalent and list-first compact layout.", "Closed aggregation, freshness, immutable-binding, stable-reason-code, and last-verified-projection behavior with no status coercion."]
-excluded: ["Infrastructure provisioning, installation mutation, artifact signing, direct browser fan-out to product planes, opaque health scores, remote assets, hosted analytics, Vercel services, public browser requests, or cross-tenant access without explicit audited platform-operator policy."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","status-contract"],["make","overview-e2e"],["make","overview-accessibility"],["make","zero-public-browser-requests"]]
+contracts:
+  - >-
+    Implementation starts from exact merged mas-harness-control-plane CTRL-006
+    commit 73077c5775cf680aaf9d761251e2e95b85596048. Its accepted pull-request and
+    exact-main runs are 33627584527 and 33627736905. The existing server-side
+    session authority, caller-identity rejection, bounded errors, same-origin
+    browser policy, append-only audit chain, RLS baseline, Next.js App Router,
+    exact npm lock, local Chromium, closed Make dispatcher, and zero-bill rules
+    remain active. CTRL-007 changes no existing route, root layout, shared CSS,
+    package manifest/lock, Makefile, dispatcher, workflow, session primitive, or
+    predecessor migration.
+  - >-
+    Status authority is exact merged mas-harness-contracts CON-005 commit
+    63a1af44ce0abe31075c37c3529848ebe8fe2fcb and accepted pull-request run
+    33363060818. The SHA-256 values for generated/lifecycle-transitions.json,
+    generated/status-semantics.json, and openapi/status.openapi.json are
+    17122d47f3d3cce568f117b9113f83821db3aaddba3c910afb40e068f193dffc,
+    ab0dca30d0411c6f5897652e044ef3ad732f5feba7c4852bdca111b2112f844f,
+    and 2046769e26ce55012ecbacb979de70cd004790b549995b83afcdb327f98dde13.
+    The common, harness, portfolio, plane, freshness, axis, finding, and tenant
+    overview schema hashes are respectively
+    51ec37f73bcf5ddc8f29388e53da3f4175eaee342a26138349ebcd9ff5a5113d,
+    b6f07b2064785be00da35785f955861bb1e3f60d0b0f2443e4bab079a4add878,
+    347f998b75ef680f54fa40e4edbf5e9acc9f3a3cc9e6722381b5b1c1ab1fc75d,
+    98a6d65f01f6e1b1a903cd0b3fd7e87ffcdb2aae555c09d4c1063a92e01f3376,
+    0c48197b587a0bd7a11e087ba7864745a117efe5a17fb1c2f0a17b3591197816,
+    771d58a6b668b1325c493dedff50459cf944793ad335768a856c85264c52b378,
+    0f545de0a4bccaf581bd52a988149faebd40edc19c6150652ffb6dd5ab63c622,
+    and b422b7e1da89aa478bb22416c8b60e508e4b1e3ba578f263a87598f58dd95c32.
+    These locks are documentary public-contract provenance; no contracts checkout
+    is mounted, read, copied, or fetched by product implementation or acceptance.
+  - >-
+    Source summaries are bounded to exact predecessor public facts: KN-DATA-002
+    commit 2056405d747f10bcea36f089fcd6f2de474b3ee5 with accepted PR/exact-main
+    runs 33569253853 and 33569419518; TRUST-OBS-001 commit
+    919deda20b5c2a126129de7d484dd7c9667ad11e with accepted PR/exact-main runs
+    33535303809 and 33535602147; OP-003 commit
+    0fa716fae4009f4fc63861f808f9e794f8925999 with accepted PR/exact-main runs
+    33657138276 and 33657346833; and DIST-004 commit
+    6ef7273f0674c3d39f2bd5becf084a4fd16c590c with accepted PR/exact-main runs
+    33643041456 and 33643205684. CTRL-007 defines only an authenticated summary
+    ingestion port and committed synthetic fixtures. It performs no repository,
+    Kubernetes, registry, trust, telemetry, or tenant-source access.
+  - >-
+    apps/control-web/src/lib/harness-status owns authority.ts, contracts.ts,
+    taxonomy.ts, aggregation.ts, projection-store.ts, runtime.ts, http.ts, and
+    fixtures.ts. Contracts use the exact CON-005 closed enums and projection
+    bindings. Taxonomy exposes exactly four ordered planes and sixteen canonical
+    harness ids from the planning authority: runtime.infrastructure,
+    runtime.model-inference, runtime.ai-gateway, runtime.experience;
+    knowledge.domain-semantic, knowledge.data-integration,
+    knowledge.retrieval-context, knowledge.memory-state;
+    execution.protocol-interoperability, execution.orchestration,
+    execution.tool-skill-sandbox, execution.ml-decision;
+    trust.security-safety, trust.governance-agentops,
+    trust.observability-finops, and trust.evaluation-assurance.
+  - >-
+    Aggregation is pure and deterministic with precedence REVOKED, FAILED,
+    BLOCKED, DEGRADED, READY, EMPTY. Only SELECTED or BLOCKED harnesses
+    contribute. Required FAIL yields FAILED; required MISSING, STALE,
+    NOT_RUN_ENV_UNAVAILABLE, SOURCE_UNAVAILABLE, or expired freshness yields
+    BLOCKED; WARN or WAIVED yields DEGRADED; WAIVED always retains its underlying
+    non-pass state and never becomes PASS. A non-empty current projection requires
+    organization/profile/bundle/release/generation/schema bindings plus all four
+    planes, all sixteen harnesses, all eleven axes per harness, unique ordered
+    cursors, and exact taxonomy membership. Invalid or missing bindings never
+    render as current.
+  - >-
+    ProjectionStore receives direct typed authenticated SourceSummary values for
+    PROFILE_LOCK, DISTRIBUTION_RELEASE, OPERATOR_RECONCILIATION, TRUST_EVIDENCE,
+    RUNTIME_HEALTH, SECURITY_ASSURANCE, ASSURANCE_CAMPAIGN, and
+    TENANT_ACCEPTANCE. Each event binds organization, source, event id, monotonic
+    sequence, cursor, observedAt, profile/bundle/release digests, generation, and
+    content digest. Same event replay is a zero-write replay; changed duplicate,
+    gap, regression, cross-binding input, unknown source, future timestamp, or
+    invalid projection blocks atomically. The store publishes one last-verified
+    snapshot only after validation; source loss changes freshness to
+    SOURCE_UNAVAILABLE without fabricating source facts, readiness, assurance,
+    or tenant acceptance.
+  - >-
+    Tenant GET handlers derive organization and subject only from the existing
+    authenticated server session and reject caller-supplied organization,
+    tenant, subject, role, session, or policy authority in headers, query, or
+    body. Tenant capabilities are harness:overview:view and harness:detail:view.
+    GET /api/v1alpha1/overview, /planes/{planeId}, and /harnesses/{harnessId}
+    return only that session organization. Unknown and cross-organization
+    objects return the same bounded 404 envelope. Responses retain the CTRL-006
+    no-store/default-deny security headers and expose no exception or source
+    payload.
+  - >-
+    Operator GET handlers require a separately injected, deny-by-default
+    organization:portfolio:view decision bound to the authenticated subject,
+    action, target organization or LIST scope, and observed policy digest.
+    Authorization is never inferred from a role string, header, environment, or
+    tenant session field. Every allow or deny attempt appends a content-minimal
+    audit fact before response; audit failure refuses access. Portfolio cursors
+    are opaque digest-bound stable sort keys, limit is 1..200, state is a closed
+    aggregate filter, and unauthorized/unknown organization ids are
+    indistinguishable 404 responses. Tenant routes cannot call the operator port.
+  - >-
+    packages/db/migrations/harness-status/001_status_projection.sql adds only
+    tenant_harness_status_projection, tenant_plane_status_projection,
+    tenant_overview_projection, status_projection_cursor,
+    status_projection_finding, and status_projection_operator_audit. Projection
+    and cursor keys include organization id; all tenant tables ENABLE and FORCE
+    RLS against transaction-local planeon.organization_id. Runtime grants are
+    SELECT/INSERT and explicit bounded UPDATE columns only; DELETE, TRUNCATE,
+    DDL, wildcard, owner, superuser, and BYPASSRLS authority are absent.
+    Append-only audit and monotonic source cursor triggers reject update/delete
+    or cursor regression. Cross-tenant operator reads are available only through
+    one SECURITY DEFINER function owned by a non-login owner, with fixed empty
+    search_path, explicit policy-decision arguments, bounded pagination, no
+    dynamic SQL, and append-only audit in the same transaction. Static SQL and
+    an independent in-memory denial model are source evidence; live PostgreSQL
+    remains NOT_RUN_ENV_UNAVAILABLE when no credential-free local endpoint exists.
+  - >-
+    Server pages at /overview, /planes/[planeId], /harnesses/[harnessId],
+    /organizations, and /organizations/[organizationId] use packet-local
+    components and a server fixture runtime for bounded offline demonstration.
+    The overview renders organization bindings, freshness, priority findings,
+    four plane summaries, sixteen named harness links, eleven evidence axes, and
+    lifecycle facts. The data-driven concentric onion is a progressive-enhancement
+    navigation companion, never the sole representation. Its plane/harness links
+    use native anchors; an optional client roving-focus controller gives clockwise
+    arrow movement while Tab exits the composite. At compact widths the onion is
+    hidden and the complete semantic list remains. Query filters state, axis, and
+    selection update both representations through stable same-origin URLs.
+  - >-
+    UI status is never color-only and no opaque score is emitted. Pages include
+    breadcrumbs, one main landmark, ordered headings, visible focus, textual
+    state/freshness/blocker labels, 44 CSS-pixel targets, reduced-motion rules,
+    320 CSS-pixel reflow, 200-percent zoom, deterministic empty/stale/source-loss/
+    unauthorized states, loading and not-found boundaries, and immutable digest
+    abbreviations with full accessible values. Loading preserves structure and
+    never displays cached fabricated health. No page performs a mutation or
+    receives raw credentials, business content, source data, or evidence payloads.
+  - >-
+    All UI assets, CSS, icons, and fonts are local. There is no CDN, remote font,
+    analytics, telemetry, Vercel primitive, public API, WebSocket, service worker,
+    runtime download, or browser fan-out. Playwright uses only the preinstalled
+    root-owned Chromium Headless Shell 149.0.7827.55 at
+    /opt/planeon/browser/ctrl-006/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    and verifies the browser version. Pipe-only tests render production-derived
+    HTML/data URLs under OS deny-all networking and fail on every request not
+    using data or about. They do not claim socket-level frontend/backend,
+    deployment, runtime, assurance, or tenant acceptance evidence.
+  - >-
+    tests/harness-status owns authority/taxonomy, closed parsing, aggregation
+    table/property vectors, ingestion/replay/gap/atomicity/freshness, tenant and
+    operator HTTP isolation/audit, SQL/RLS least privilege, server/component
+    source semantics, and production-derived render fixtures. e2e/harness-overview.spec.ts
+    covers portfolio-to-organization, overview-to-plane-to-harness, direct URL,
+    browser history, filter reflection, keyboard order, focus, accessible names,
+    non-color state, stale/source-loss/empty/unauthorized views, 320-pixel reflow,
+    200-percent zoom, reduced motion, and zero public requests. Manual screen-reader,
+    contrast, comprehension, and real PostgreSQL/browser-server checks remain
+    NOT_RUN_ENV_UNAVAILABLE, not certified.
+  - >-
+    ci/targets/ctrl-007.json alone adds status-contract, overview-e2e,
+    overview-accessibility, and zero-public-browser-requests direct-argv handlers.
+    It changes neither Makefile nor dispatcher and preserves every predecessor
+    handler. status-contract runs strict typecheck and all harness-status Vitest
+    tests; overview-e2e runs the bounded Playwright navigation suite;
+    overview-accessibility runs source/accessibility vectors plus that suite;
+    zero-public-browser-requests runs the exact no-network vector. make prefetch
+    is first, bootstrap-e2e preserves cumulative acceptance, and make zero-bill
+    is last in the same signed hash-pinned deny-all process tree.
+  - >-
+    The exact CTRL-006 Node 24.20.0, npm 11.11.0, TypeScript 5.9.3, Next.js
+    16.3.3, React 19.2, Vitest 4.1.11, Playwright 1.61.0, npm closure, browser
+    inventory, Python 3.12.14, uv 0.12.7, and launcher custody are reused without
+    dependency changes or downloads. No warm source, cloud credential, API key,
+    SSH agent, kubeconfig, container socket, hosted runner, Actions artifact/cache/
+    package, billable broker, external telemetry, mutable reference, or paid
+    service is present.
+deliverables:
+  - Exact CON-005 projection models, sixteen-harness taxonomy, deterministic aggregation, and source-lock authority module.
+  - Atomic ordered projection store with replay, cursor, binding, last-verified, source-loss, and content-minimal audit semantics.
+  - Tenant-derived read handlers and separately policy-authorized audited operator portfolio handlers.
+  - Additive FORCE-RLS projection schema, monotonic cursors, append-only operator audit, bounded grants, and closed operator procedure.
+  - Responsive accessible overview, plane, harness, and operator organization routes with interactive onion plus complete semantic list.
+  - Golden/unit/property/API/RLS/source/accessibility/Playwright/no-public-network tests, runbook, and packet-local descriptor.
+excluded:
+  - Infrastructure provisioning, installation/profile/release mutation, live event-bus/source access, browser fan-out, mutable operations, or direct Kubernetes/database/registry/trust/model calls.
+  - New dependency or lockfile changes, root layout/shared CSS changes, hosted browsers/services, remote assets/fonts/analytics, public requests, Vercel, cloud resources, API keys, billable services, GitHub artifacts/caches/packages, or warm-source access.
+  - RLS bypass by the runtime role, role/header/environment-derived operator authority, dynamic SQL, secret/raw evidence/business payload storage, destructive migration, opaque score, status coercion, or unselected health contribution.
+  - Claims of live PostgreSQL, socket-level browser/backend integration, deployment/runtime health, artifact/signature, assurance, WCAG certification, or tenant acceptance beyond exact supplied source facts.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","status-contract"],["make","overview-e2e"],["make","overview-accessibility"],["make","zero-public-browser-requests"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Golden, unit, and property tests prove closed-state parsing, aggregation precedence, freshness degradation, missing-binding rejection, waiver-without-pass, and exclusion of unselected harnesses from health.", "API and PostgreSQL RLS tests prove tenant derivation, cross-tenant denial, audited operator scoping, cursor stability, idempotent event replay, and ordered cursor advancement.", "Playwright proves portfolio-to-organization and overview-to-plane-to-harness direct navigation, browser history, URL filters, empty/loading/stale/partial-outage/unauthorized/air-gap states, and last-verified projection behavior.", "WCAG 2.2 AA evidence proves onion/list semantic equivalence, keyboard order, focus, non-color status, screen-reader names/roles/values, 200 percent reflow, and reduced motion.", "Captured browser traffic proves no CDN, remote font, hosted analytics, public API, Vercel, runtime download, or other public-network request."]
-rollback: Disable the overview and operator-portfolio routes, deploy the previous compatible web image, retain append-only projection/audit rows and source cursors, and remove only additive readers after their retention window; never delete tenant evidence or coerce states during rollback.
+expectedEvidence:
+  - Exact product and predecessor commits/runs, CON-005 file hashes, taxonomy, npm lock, browser inventory, and launcher custody are verified; no predecessor or warm-source checkout is mounted or observed during product work.
+  - Golden and property vectors prove closed enum/binding rejection, exact four-by-four taxonomy, precedence, expired/source-unavailable blocking, waiver without pass, and zero contribution from NOT_SELECTED or PROPOSED harnesses.
+  - Ingestion vectors prove eight-source validation, idempotent identical replay, changed-duplicate/gap/regression/cross-binding/future-time denial, atomic failure, cursor advancement, last-verified publication, and no fabricated evidence.
+  - HTTP and independent RLS models prove session-derived tenant isolation, caller-identity rejection, operator policy/action/target/digest binding, audited allow and deny, stable pagination/filtering, and indistinguishable not-found responses.
+  - SQL review proves exact additive tables, composite tenant keys, FORCE RLS, transaction-local context, bounded grants, append-only audit, monotonic cursor guard, and closed non-login fixed-search-path operator procedure; live PostgreSQL is honestly NOT_RUN_ENV_UNAVAILABLE.
+  - Source and Playwright evidence proves semantic onion/list equivalence, named harnesses, stable route/filter navigation, keyboard/focus/history, loading/empty/stale/source-loss/unauthorized states, reflow/zoom/reduced motion, non-color status, and zero non-data/about requests.
+  - Signed hash-pinned acceptance passes prefetch, cumulative bootstrap-e2e, all four CTRL-007 handlers, and terminal zero-bill in one OS-denied-outbound process tree. Source, PR CI, merge, exact-main, artifact, deployment, runtime, security, assurance, manual accessibility, and tenant acceptance remain separate evidence states.
+rollback: Disable the additive overview and operator portfolio entry points, deploy the exact CTRL-006 compatible image, and revert CTRL-007 code, migration, tests, documentation, and descriptor together. Preserve every projection, source cursor, finding, and operator audit record for its retention period; never delete tenant evidence, weaken RLS, broaden operator authority, coerce status, or claim rollback as runtime or tenant-acceptance evidence.
