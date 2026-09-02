@@ -1,16 +1,178 @@
 id: OP-001
 repository: mas-harness-operator
 branch: codex/op-001-bootstrap-crd
-objective: Bootstrap the Go operator with generated CRDs, state validation, minimal RBAC, leader election, health, non-root image/chart, and offline envtest.
+objective: Bootstrap the clean-room Go operator, namespaced HarnessInstallation CRD, contract projection, generated artifacts, closed dispatcher, minimal RBAC, manager assembly, image, and chart under a fully offline toolchain.
 predecessors: [CON-005, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "cmd/operator/", "internal/controller/", "api/v1alpha1/", "config/crd/", "config/rbac/", "config/manager/", "deploy/helm/operator/", "tests/envtest/", "go.mod", "go.sum", "tools.lock", "Makefile", "Containerfile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - cmd/operator/
+  - internal/controller/
+  - api/v1alpha1/
+  - config/crd/
+  - config/rbac/
+  - config/manager/
+  - deploy/helm/operator/
+  - tests/envtest/
+  - go.mod
+  - go.sum
+  - tools.lock
+  - Makefile
+  - Containerfile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes HarnessInstallation CRD and lifecycle contracts v1alpha1", "Produces operator manager and reconciliation shell v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["Pinned Go/controller-runtime toolchain, generated-code check, CRD/status validation, leader election, health/readiness, least RBAC, envtest, arbitrary-UID image, and chart.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Preflight, bundle verification, resource apply, cloud provisioning, or cluster creation."]
+contracts:
+  - >-
+    Implementation starts from the exact public, non-product operator seed
+    commit 226bad09b724e0e7f560fc5e6aa51382ef2d1e58. The packet may replace the
+    seed AGENTS.md and workflow only to adopt the product bootstrap controls,
+    and it is the sole owner of Makefile, ci/run_make_target.py, the OP-001
+    handler/descriptor, and the inert PORTING.yaml ledger. No other product
+    code, source history, generated output, or warm-source checkout exists or
+    is an input.
+  - >-
+    The lifecycle authority is exact merged mas-harness-contracts CON-005
+    commit 63a1af44ce0abe31075c37c3529848ebe8fe2fcb and PR check 33363060818.
+    The common schema, HarnessInstallation schema, and generated transition
+    table byte SHA-256 values are respectively
+    dce5d8030eea3a19694511eb26513614dcc720ef4e0d650772131b14ed58f075,
+    f84afa6189b9c59ee5c4ad06d94e0f9eec7f3277955c450f8710c02ad832d07d,
+    and 17122d47f3d3cce568f117b9113f83821db3aaddba3c910afb40e068f193dffc.
+    Product implementation does not mount or open that repository. A small
+    independently encoded fixture locks only these declared public facts.
+  - >-
+    The Kubernetes HarnessInstallation is namespaced and separates desired
+    input from observed state. spec contains immutable organizationId,
+    harnessId, profileDigest, bundleDigest, releaseDigest, targetNamespace,
+    desiredGeneration, and trustRef. status contains phase,
+    observedGeneration, currentReleaseDigest, lastGoodReleaseDigest,
+    reasonCode, lastTransitionAt, evidenceRefs, and conditions. Digests use the
+    exact sha256:<64 lowercase hex> form; ids and reason codes use the CON-005
+    closed lexical forms; targetNamespace is a DNS label and cannot be default.
+    CEL validation makes identity/binding fields and desiredGeneration
+    monotonic/immutable as applicable and prevents status state from being
+    accepted through spec.
+  - >-
+    api/v1alpha1 exposes one deterministic ToLifecycleProjection adapter. It
+    emits the exact CON-005 wire shape apiVersion, kind, metadata{id,version},
+    and spec{binding,harnessId,state,desiredGeneration,observedGeneration,
+    currentReleaseDigest,lastGoodReleaseDigest,reasonCode,lastTransitionAt,
+    evidenceRefs}. No Kubernetes-only field leaks into that projection and no
+    lifecycle field is silently defaulted. All sixteen CON-005 installation
+    states are admitted; only the published transition table is accepted by
+    the transition validator. Conditions use metav1.Condition with exact
+    types DependenciesResolved, ArtifactsVerified, Configured, Ready, Healthy,
+    PolicyCompliant, and EvidenceCurrent.
+  - >-
+    The OP-001 controller is a shell only. It registers the namespaced type,
+    field index, health/readiness checks, leader election, and a reconciler that
+    performs validation and returns without applying, deleting, downloading,
+    verifying, or mutating tenant workload resources. OP-002 owns preflight and
+    verification; OP-003 owns foundation apply and lifecycle status mutation.
+    The manager watches exactly one required namespace from direct argv, has
+    metrics disabled by default, binds probes only to a caller-supplied local
+    address, and has no cloud, control-plane, registry, telemetry, or secret
+    dependency.
+  - >-
+    RBAC is namespace-scoped and grants only get/list/watch/create/update/patch
+    on HarnessInstallations and status/finalizers plus Leases and Events needed
+    for leader election and bounded event publication. It grants no Secrets,
+    nodes, namespaces, cluster roles, admission webhooks, token creation,
+    impersonation, exec, wildcard verbs/resources/apiGroups, delete, or
+    bind/escalate. The chart emits one ServiceAccount with token automount
+    disabled, Role/RoleBinding, Deployment, Service, and namespaced
+    HarnessInstallation CRD reference/install note; it never creates a
+    namespace or cluster-scoped privilege other than the CRD manifest owned in
+    config/crd.
+  - >-
+    Every manager container uses a digest-only image value, non-root and
+    read-only filesystem, RuntimeDefault seccomp, no privilege escalation,
+    drop ALL capabilities, bounded CPU/memory requests and limits, and
+    writable emptyDir only at /tmp. The Containerfile is a two-input
+    reproducible packaging recipe over a prebuilt static binary and scratch;
+    it performs no package install or network operation and sets a numeric
+    non-root default that an OpenShift arbitrary UID may override.
+  - >-
+    Generated artifacts are reproducible. /opt/planeon/bin/controller-gen
+    v0.21.0 with SHA-256
+    4f2b8ca0430239f41afc5a5e5c09325f9c2abb88d8b940ca9351d8242bdb216d
+    regenerates CRD, deepcopy, and RBAC output into a temporary directory;
+    generated-check compares sorted exact bytes with committed files and fails
+    on drift. Hand-written schema duplication or a network-fetched generator
+    is forbidden.
+  - >-
+    The trusted launcher uses Go 1.26.7 from the official darwin-arm64 archive
+    SHA-256 020a1e8224811be75163e920bc77e0926a1390a6aeea19bdcf23f74b9d749f6d.
+    The installed go binary SHA-256 is
+    9da68c657a8344623d37fc9dc048d845011736409249bc924dd9af47a61594e6;
+    /etc/planeon/go-1.26.7.inventory.json and
+    /etc/planeon/gomodcache-op001.inventory.json have SHA-256 values
+    198db2b91046d9b5dd473a78eaad7326c1f378da65bac5bab8a4a0d3038862d1
+    and 398cd7cea3b0f0a71e726fd479197256fe1939e99d4981865392f6693122b25b.
+    The immutable module closure pins controller-runtime v0.24.1,
+    Kubernetes/apimachinery/apiextensions v0.36.0, and their exact go.sum
+    graph. Acceptance sets GOPROXY=off, GOSUMDB=off, GOTOOLCHAIN=local,
+    GOWORK=off, and a temporary GOCACHE; no module, toolchain, envtest asset,
+    image, or chart is downloaded at runtime.
+  - >-
+    The target name envtest-offline is retained from the published packet but
+    means the socket-free OP-001 controller-runtime acceptance rail: scheme
+    registration, fake-client reconciliation shell, health handlers through
+    httptest recorders, manager option construction, lifecycle projection,
+    CRD structural/CEL validation, RBAC denial vectors, chart security, and an
+    arbitrary-UID filesystem/process test. A real kube-apiserver/etcd envtest
+    uses loopback sockets, which the mandatory deny network* sandbox forbids;
+    it is explicitly NOT_RUN_ENV_UNAVAILABLE in OP-001 and cannot be claimed as
+    Kubernetes deployment/runtime evidence. A later live campaign may run only
+    under its separately authorized external launcher.
+  - >-
+    The bootstrap Makefile delegates only to ci/run_make_target.py. That
+    dispatcher validates exact packet id, descriptor filename/owner, target,
+    variables, cumulative lexical handler order, and direct argv arrays, and
+    rejects missing, unknown, duplicate, ambiguous, shell-based, or undeclared
+    dispatch. make prefetch runs first and proves the exact seed ancestry,
+    packet/toolchain authorities, no-network module closure, workflow pins,
+    and inert PORTING ledger. zero-bill runs last.
+  - Produces closed packet-local Make target descriptor dispatch v1.
+  - Produces inert destination PORTING ledger v1 with zero current copy authorizations.
+  - >-
+    MET-003 remains pinned at merge commit
+    97da35afff79e1582b964b613472609a613ea81b. CI uses only the pinned
+    credential-free checkout and the root-owned launcher on one fresh
+    ephemeral self-hosted runner. There are no hosted runners, Actions
+    artifacts/caches/packages, schedules, cloud resources, API keys, external
+    telemetry, runtime downloads, container/cluster sockets, SSH agent, or
+    billable broker.
+deliverables:
+  - Clean-room Go module, namespaced HarnessInstallation API, exact lifecycle projection and transition validation, generated CRD/deepcopy/RBAC, and non-mutating controller shell.
+  - Minimal manager command with closed direct argv, leader election, health/readiness, single-namespace watch, and no implicit endpoint or credential.
+  - Namespace-scoped least-privilege manifests, secure digest-only Helm deployment, and offline Containerfile.
+  - Closed bootstrap dispatcher, exact OP-001 descriptor, signed offline wrapper, immutable tools lock, inert PORTING ledger, and zero-bill scanner.
+  - PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port.
+  - Deterministic generated drift, API/state/CRD, controller shell, RBAC/security, chart/image, arbitrary-UID, dispatcher-negative, and source-boundary evidence.
+excluded:
+  - Preflight, bundle verification, resource apply, workload status mutation, cloud or cluster provisioning, namespace creation, webhooks, conversion, fleet sync, upgrade, rollback, uninstall, or destructive behavior.
+  - Real kube-apiserver/etcd envtest, Kubernetes/OpenShift deployment/runtime certification, assurance, tenant acceptance, or claims based on render/static/fake-client evidence.
+  - Warm-source access or reuse, hosted runners, GitHub artifact/cache/package storage, API keys, credentials, billable services, registry mutation, runtime downloads, mutable references, external telemetry, or outbound/loopback network use.
 prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","generated-check"],["make","envtest-offline"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Clean generation diff and CRD schema tests.", "RBAC audit and arbitrary-UID offline manager startup.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Revert the operator scaffold before any HarnessInstallation resource is reconciled.
+expectedEvidence:
+  - Exact seed ancestry, CON-005 commit/schema hashes, MET-003 authority, Go/controller-gen/module-cache inventories, and packet digest are verified before any product command; no warm checkout is mounted or opened.
+  - generated-check produces byte-identical deepcopy, CRD, and RBAC artifacts in two temporary roots and rejects a seeded generated-file drift.
+  - API tests cover every digest/id/namespace constraint, all sixteen states, every allowed and forbidden transition, exact CON-005 lifecycle projection, observedGeneration behavior, and condition vocabulary.
+  - Controller-runtime fake-client and socket-free manager tests prove scheme/index/reconciler registration, no tenant workload mutation, bounded health/readiness behavior, leader-election configuration, single-namespace scope, and deterministic restart-safe no-op results.
+  - RBAC/chart/Containerfile tests prove the exact allowlist, every denied privilege, dedicated non-automounted identity, digest-only image, non-root/arbitrary-UID-compatible security context, read-only root, default resources, and absence of cluster/cloud/download/telemetry behavior.
+  - Dispatcher negative vectors and inert PORTING checks pass; signed acceptance runs prefetch, generated-check, envtest-offline, and zero-bill in one deny-all-network process tree.
+  - Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.
+  - PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet.
+  - Real envtest, artifact publication, image build, installation, deployment, runtime, assurance, and tenant acceptance remain separate and are recorded as NOT_RUN_ENV_UNAVAILABLE or NOT_RUN_NOT_IN_PACKET rather than inferred.
+rollback: Revert the unreleased OP-001 scaffold to exact seed commit 226bad09b724e0e7f560fc5e6aa51382ef2d1e58. No HarnessInstallation resource or tenant workload has been reconciled, no artifact has been published, and the inert PORTING ledger remains NO_AUTHORIZATION.
