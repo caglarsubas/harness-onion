@@ -100,8 +100,9 @@ contracts:
   - >-
     package.json adds only exact @playwright/test 1.61.0 as a development
     dependency. npm scripts remain non-shell and do not download browsers.
-    package-lock.json remains lockfile v3 and has no git, URL, mutable, lifecycle
-    install-script, or unpinned direct dependency. Acceptance uses only a
+    package-lock.json remains lockfile v3 and has no git, non-registry URL,
+    mutable source, undeclared lifecycle install-script, or unpinned direct
+    dependency. Acceptance uses only a
     preprovisioned root-owned npm cache and Chromium Headless Shell 149.0.7827.55
     revision 1228 at /opt/planeon/browser/ctrl-006, whose inventory file is
     /etc/planeon/browser-ctrl-006.inventory.json with SHA-256
@@ -117,8 +118,8 @@ contracts:
     provenance only, license decisions, and all known reviewed advisories by
     identifier, affected range, installed version, severity, and disposition.
     Missing, stale-lock, unknown-license, unresolved HIGH or CRITICAL, mutable
-    source, install script, git dependency, remote tarball outside the npm
-    registry, omitted transitive package, or suppressed finding fails. The
+    source, undeclared install script, git dependency, remote tarball outside
+    the npm registry, omitted transitive package, or suppressed finding fails. The
     signed offline run never queries npm, OSV, GitHub, or another service and
     therefore proves only the frozen review snapshot, not perpetual absence of
     future advisories.
