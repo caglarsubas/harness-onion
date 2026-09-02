@@ -107,8 +107,11 @@ contracts:
     revision 1228 at /opt/planeon/browser/ctrl-006, whose inventory file is
     /etc/planeon/browser-ctrl-006.inventory.json with SHA-256
     26b02e485ac5af595cdf7a6f3005cae1b5630b48991ffa12215be4a5f0fb1371.
-    PLAYWRIGHT_BROWSERS_PATH and executablePath are closed to that tree; no
-    Google Chrome, browser channel, fallback discovery, runtime installation,
+    The tests use an exact absolute executablePath under that tree and verify
+    the browser-reported version; no path is accepted from packet-child
+    environment because the closed transport strips undeclared settings.
+    PLAYWRIGHT_BROWSERS_PATH is not required when executablePath is absolute.
+    No Google Chrome, browser channel, fallback discovery, runtime installation,
     remote asset, CDN, hosted analytics, or public request is permitted.
   - >-
     scripts/audit_dependencies.py is a deterministic standard-library review
