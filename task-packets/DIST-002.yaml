@@ -1,16 +1,105 @@
 id: DIST-002
 repository: mas-harness-distribution
 branch: codex/dist-002-supply-chain
-objective: Add SPDX SBOM, license policy, offline vulnerability scanning, model custody, disposition, and evidence references to bundle staging.
+objective: Add deterministic SPDX SBOM, closed license admission, pinned offline vulnerability evaluation, model custody, disposition, and digest-bound evidence to unsigned bundle staging.
 predecessors: [DIST-OCI-001, MET-002]
 allowedPaths: ["src/planeon_distribution/sbom.py", "src/planeon_distribution/licenses.py", "src/planeon_distribution/vulnerabilities.py", "src/planeon_distribution/model_custody.py", "policies/", "tests/supply-chain/", "fixtures/supply-chain/", "docs/supply-chain.md", "ci/targets/dist-002.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes license policy, artifact custody, vulnerability, SBOM, and evidence contracts v1", "Produces supply-chain evidence for staged bundles v1"]
-deliverables: ["Per-component SPDX JSON SBOM, allow/deny license check, pinned offline vulnerability DB/scan, model license/custody manifest, disposition, and lock references."]
-excluded: ["Online scanners, downloading vulnerability DB during verification, unapproved model weights, or ignoring release-blocking findings."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","supply-chain-fixtures"],["make","sbom-check"],["make","vulnerability-offline"]]
+contracts:
+  - Consumes third-party license policy v1alpha1, canonical bundle.lock.json v1alpha1, local component inventory v1alpha1, pinned vulnerability snapshot v1alpha1, vulnerability disposition v1alpha1, and model custody manifest v1alpha1.
+  - Produces deterministic SPDX 2.3 JSON component documents, closed license verdicts, offline vulnerability scan results, model custody verdicts, and canonical supply-chain.evidence.json v1alpha1.
+  - >-
+    Implementation starts from exact merged mas-harness-distribution DIST-OCI-001
+    commit 67ce20e3a1d6436839537cfd04774029cded6f8c. Its pull-request and
+    exact-main runs are 33633831521 and 33634015822. DIST-001 validation,
+    DIST-FIX-001 closed cumulative dispatch, DIST-OCI-001 exact selection and
+    atomic staging, the inert PORTING ledger, dependency-free Python toolchain,
+    and every zero-bill restriction remain active and unmodified.
+  - >-
+    The license authority is the exact Harness-Engineering
+    legal/third-party-license-policy.yaml content with SHA-256
+    b1b9a9d6f1e7e053072818b7fdaa384ecd8a2f41410a85b024f1c212a7631311.
+    policies/license-policy.json is a closed, execution-oriented projection of
+    only the release classifications needed by this packet: default-allowed,
+    allowed exception, open content, explicit-review, planned-unresolved, and
+    denied. It binds that source digest and may narrow but never broaden it.
+    Unknown, empty, malformed, ambiguous, review-without-an-exact-approved
+    decision, planned placeholder, or denied SPDX expression blocks evidence.
+  - >-
+    fixtures/supply-chain/component-inventory.json is closed canonical JSON and
+    binds one exact bundle-lock digest. Every selected bundle component appears
+    exactly once with an immutable digest, kind, module id, platform, name,
+    version, supplier, Package URL, source locator, SPDX expression, custody
+    class, and deterministic source epoch. Extra, missing, duplicate, mutable,
+    credential-bearing, absolute-path, unselected, or digest-mismatched entries
+    fail closed. Source locators are evidence strings only and are never opened.
+  - >-
+    sbom.py emits one byte-reproducible SPDX 2.3 JSON document per component.
+    Document namespace, SPDX identifiers, creation time, package checksums,
+    concluded/declared license, supplier, Package URL external reference, and
+    DESCRIBES relationship are derived only from the validated inventory. SPDX
+    documents contain no host, username, secret, network result, absolute path,
+    release, runtime, assurance, or tenant-acceptance claim. Repeated generation
+    is byte-identical and every emitted digest is recomputed before admission.
+  - >-
+    vulnerabilities.py evaluates a closed, canonical, content-self-digested
+    local advisory snapshot. The snapshot declares its schema, database id,
+    source name, generated and valid-through dates, and exact package/version
+    matches with bounded severity. Evaluation uses the policy's explicit
+    assessment date rather than wall-clock time, performs no discovery or
+    network access, and rejects a digest mismatch, wrong database id, expired
+    validity, duplicate/unknown record, unsupported severity, or ambiguous
+    match. HIGH or CRITICAL findings block unless an exact finding/package/
+    component-bound approved FALSE_POSITIVE or ACCEPTED_RISK disposition with
+    authority, decision digest, and expiry covers them; lower findings remain
+    reported and no disposition can hide a finding.
+  - >-
+    model_custody.py validates zero or more model manifests separately from OCI
+    software components. Each selected model binds model id, artifact digest,
+    exact SPDX expression, redistribution boolean, upstream source, architecture,
+    quantization, tokenizer digest, approving authority, and approval digest.
+    Missing custody, mutable source, unapproved license, redistribution denial,
+    duplicate model/artifact, placeholder digest, or unreferenced manifest blocks
+    evidence. A bundle with no model component must declare an empty model set;
+    this is not a claim that models are bundled.
+  - >-
+    The admitted supply-chain.evidence.json is closed canonical JSON with state
+    SCANNED, the exact BUILT_UNSIGNED bundle-lock digest, policy and database
+    digests, lexically ordered per-component SPDX/license/vulnerability records,
+    lexically ordered model-custody records, and an evidence digest over the
+    remaining fields. It is staged beside but never mutates bundle.lock.json,
+    cannot claim AWAITING_SIGNATURE, SIGNED, RELEASED, deployment, runtime,
+    assurance, or tenant acceptance, and is published with create-exclusive
+    writes so prior evidence cannot be overwritten.
+  - >-
+    No Syft, Grype, registry, package index, or external advisory service is
+    available in the pinned Phase-0 toolchain. This packet therefore implements
+    the deterministic standard-library reference generator and normalized
+    offline advisory evaluator required to prove the contract and fixtures. It
+    does not claim equivalence to a production scanner. A future packet may add
+    a separately digest-pinned preinstalled OSS scanner/database adapter without
+    changing these verdict semantics; runtime downloads remain forbidden.
+  - >-
+    ci/targets/dist-002.json adds only supply-chain-fixtures, sbom-check,
+    vulnerability-offline, and model-custody-check direct-argv handlers. make
+    prefetch remains first, and make zero-bill remains the last cumulative gate.
+    Acceptance executes only through the signed, hash-pinned, root-owned
+    deny-all-outbound launcher; repository code receives no packet path, warm
+    source root, credential, cloud configuration, or signing key.
+deliverables:
+  - Deterministic per-component SPDX 2.3 JSON, exact license verdicts, pinned offline vulnerability results/dispositions, strict model custody verdicts, and one digest-bound SCANNED evidence record.
+  - Positive and negative fixtures proving completeness, reproducibility, license denial/review, stale or corrupt database refusal, undisposed severe finding refusal, disposition binding, model custody, and no-overwrite publication.
+excluded:
+  - Online scanners, vulnerability/model/package downloads, registry access, wall-clock-dependent verdicts, mutable artifact references, unapproved model weights, license overrides, finding suppression, signing, promotion, air-gap export/import, Helm rendering, installation, deployment, runtime, assurance, or tenant acceptance.
+  - Warm-source access, external packages, cloud services, hosted runners, GitHub artifact/cache/package storage, API keys, remote telemetry, or billable endpoints.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","supply-chain-fixtures"],["make","sbom-check"],["make","vulnerability-offline"],["make","model-custody-check"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["SBOM/license/scan/model-custody digests.", "Denied license, stale DB, severe undisposed finding, and uncustodied model vectors."]
-rollback: Delete only staged supply-chain evidence and candidate bundle; never alter source artifacts.
+expectedEvidence:
+  - Two clean generations produce byte-identical SPDX and supply-chain evidence digests, and every selected bundle component has exactly one admitted SPDX, license, and vulnerability record.
+  - Denied, unknown, missing, unresolved, and unapproved-review licenses fail with stable reason codes; permitted expressions retain every policy obligation and source-policy digest.
+  - Corrupt, wrong-id, stale, duplicate, ambiguous, or incomplete vulnerability snapshots fail; every finding remains visible and undisposed HIGH/CRITICAL findings block while an exact unexpired approved disposition admits only its bound finding.
+  - Missing, mutable, unapproved, redistribution-forbidden, duplicate, or unreferenced model custody fails; an explicit empty model set succeeds only when the component inventory selects no model.
+  - Signed hash-pinned acceptance runs prefetch then all four packet targets and zero-bill with OS-denied outbound traffic; PR, merge, and exact-main evidence remain separate from artifact/release/deployment/runtime/assurance/tenant acceptance.
+rollback: Delete only generated supply-chain evidence next to the unsigned candidate bundle. Never mutate the bundle lock, source OCI layout, advisory snapshot, prior evidence, or a released artifact.
