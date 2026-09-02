@@ -1,16 +1,185 @@
 id: CTRL-005
 repository: mas-harness-control-plane
 branch: codex/ctrl-005-profile-lock-bundle
-objective: Implement profile review, explanation, offline approval, immutable lock digest, bundle request, and signed-bundle status tracking.
+objective: Implement tenant-scoped profile review, exact-output explanation, offline profile approval, an immutable canonical profile lock, one durable bundle request, and authenticated source-reported signed-bundle status without composing, signing, fetching, or releasing an artifact.
 predecessors: [CTRL-004, CON-005]
-allowedPaths: ["apps/control-web/src/app/profiles/", "apps/control-web/src/app/api/v1alpha1/profiles/", "apps/control-web/src/app/api/v1alpha1/bundles/", "apps/control-web/src/lib/profiles/", "packages/db/migrations/profile-lock/", "tests/profiles/", "e2e/profile-lock.spec.ts", "ci/targets/ctrl-005.json"]
+allowedPaths: ["apps/control-web/src/app/profiles/", "apps/control-web/src/app/api/v1alpha1/profiles/", "apps/control-web/src/app/api/v1alpha1/bundles/", "apps/control-web/src/lib/profiles/", "apps/control-web/src/lib/operations/", "packages/db/migrations/profile-lock/", "tests/profiles/", "e2e/profile-lock.spec.ts", "ci/targets/ctrl-005.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes HarnessProfile, BundleRelease, ApprovalRequest, and Operation v1alpha1", "Produces profile lock and bundle-request REST behavior v1alpha1"]
-deliverables: ["Diff/explanation review, offline approval evidence, canonical digest lock, immutable profile transitions, bundle request outbox, and signed-status projection."]
-excluded: ["Bundle composition/signing, profile mutation after lock, or control-plane runtime dependency."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","profile-contract"],["make","profile-lock-e2e"]]
+contracts:
+  - >-
+    Implementation starts from exact merged control-plane commit
+    f551858a9825c826c1fff2b674176842da777e10, containing CTRL-004's accepted
+    immutable six-output profile revision, compiler binding, Operation store,
+    inbox/outbox, and database migration. It consumes mas-harness-contracts
+    commit 2146278a95344cd2a8e22596b2f315b46edffc88 and release-manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79.
+    Exact schema byte SHA-256 values are HarnessProfile
+    08936914f52b8c3b611e47ffa35f668dd177718f613907687a67b448877c39a6,
+    CompiledProfileDocument
+    2b3b3d70a7fe00ca5667634622b0fafa22562f0a33f363663e27757aaa57bfcb,
+    ApprovalRequest
+    4fe8d214a920690008a4390919acebf797b0ab4e6c649a7a88e0882f3b2a1b27,
+    BundleRelease
+    c983a8d97c70d7957e74f06413ca0158e3b7be626468bf8d217dfc5829aa5918,
+    Operation
+    876bd985adf2267e5f4594e19e3e37296eab8cad7344c2d23cb68ca2c97a4982,
+    HarnessCloudEvent
+    4e1282bda0b3f947265a84545ed5b2fdea0a1bb4e69af3642fc14c265811c56c,
+    and lifecycle-transition table
+    17122d47f3d3cce568f117b9113f83821db3aaddba3c910afb40e068f193dffc.
+  - >-
+    No package, toolchain, image, database, broker, API key, hosted service, or
+    runtime-download dependency is added. Acceptance reuses only the exact
+    CTRL-004 root-owned Node/npm/Python/uv/npm-cache/compiler environment and
+    signed runner inventory. Browser code uses Next.js App Router, React, and
+    TypeScript already locked by CTRL-001. All assets remain local; there is no
+    Vercel service, analytics, remote font, email SaaS, model/provider call,
+    registry lookup, cloud provisioning, public telemetry, or outbound request.
+  - >-
+    GET /api/v1alpha1/profiles/{id} returns one authenticated-organization
+    review projection and strong ETag. The projection binds the immutable
+    CTRL-004 profile row/revision/result key, approved demand revision/digest,
+    compiler-wheel and catalog digests, exact six output digests, current
+    profile state, current profile-approval reference/status, profile-lock
+    reference/digest, and bundle-request reference/source status. It exposes the
+    parsed HarnessProfile and digest-only BOM/install/evidence summaries, never
+    raw questionnaire answers, credentials, filesystem paths, internal lease
+    data, tenant existence, or artifact/runtime assertions. Unknown and
+    cross-tenant identifiers share one 404 representation.
+  - >-
+    GET /api/v1alpha1/profiles/{id}/explanation returns only the exact stored
+    CTRL-004 explanation.md bytes as UTF-8 text/markdown with no-store and
+    nosniff headers. The server selects the stored bytes; the caller supplies no
+    path, filename, renderer, URL, template, or content. Before every profile,
+    explanation, approval, lock, or bundle action, the service recomputes all
+    six output digests, verifies profile.sha256 against the exact profile.json
+    bytes, parses the closed compiled profile document, and recomputes the
+    review digest. Any byte, digest, identifier, binding, or explanation change
+    fails closed as PROFILE_REVISION_TAMPERED and performs no mutation.
+  - >-
+    Internal profile states are PROPOSED, APPROVAL_PENDING, LOCKED, REJECTED,
+    and SUPERSEDED. CTRL-005 implements PROPOSED to APPROVAL_PENDING;
+    APPROVAL_PENDING to LOCKED or REJECTED; and PROPOSED or REJECTED to
+    SUPERSEDED only as a server-owned replacement consequence. LOCKED and
+    SUPERSEDED are terminal in this packet. HarnessProfile bytes remain the
+    compiler's immutable public PLANNED resource; internal control state never
+    rewrites those bytes or presents PLANNED as deployment/runtime status.
+    A profile containing any unresolved proposedSelectors cannot request
+    approval or lock and must be replaced by a newly approved demand and newly
+    compiled profile with explicit selector choices.
+  - >-
+    POST /api/v1alpha1/profiles/{id}/approve accepts exactly an empty JSON
+    object. Authenticated OIDC context is the sole tenant/requester source. It
+    requires CSRF proof, Idempotency-Key, the current profile strong ETag, a
+    tamper-free PROPOSED profile, and an available server-owned local profile
+    approval policy. It atomically moves the profile to APPROVAL_PENDING,
+    creates one PENDING ApprovalRequest with approvalType PROFILE bound to the
+    exact profile revision/result key/review digest and finite expiry, appends
+    audit and digest-only approval.requested.v1 outbox records, and returns the
+    canonical ApprovalRequest plus ETag. The requester is ineligible to review;
+    policy admission closes distinct eligible reviewer digests, N-of-M count,
+    expiry, and policy digest.
+  - >-
+    GET /api/v1alpha1/profiles/{id}/approval and POST
+    /api/v1alpha1/profiles/{id}/approval/decision are the packet-owned offline
+    profile-approval surface; CTRL-003 demand approval routes and records remain
+    unchanged. A decision body has exactly decision APPROVE or REJECT and one
+    stable reasonCode. Decision requires authenticated eligible reviewer,
+    distinct subject from requester and prior reviewers, CSRF, Idempotency-Key,
+    current approval If-Match, and unexpired PENDING state. Decisions append in
+    order. N distinct approvals transition to APPROVED; one rejection
+    transitions to REJECTED and atomically moves the profile to REJECTED.
+    Exact replay returns the original status/body/ETag without a second row or
+    event; divergent replay is 409. Missing If-Match is 428, stale is 412, and
+    stale/expired/rejected/cancelled approval can never authorize a lock.
+  - >-
+    POST /api/v1alpha1/profiles/{id}/lock accepts exactly an empty JSON object
+    and no caller-supplied approval, digest, selector, tenant, actor, output,
+    path, or artifact authority. It requires CSRF, Idempotency-Key, current
+    profile If-Match, current tamper-free APPROVAL_PENDING state, and the exact
+    current APPROVED unexpired profile approval whose subject revision/result
+    key/review digest still match. In one transaction it recomputes a canonical
+    SHA-256 lock digest over organization, profile id/revision/result key,
+    approved demand revision/digest, compiler/catalog digests, every exact
+    output digest, approval id/revision/digest, and approval policy digest;
+    inserts one immutable lock receipt; moves the profile to LOCKED; and appends
+    audit plus digest-only profile.locked.v1 outbox records. Lock replay is
+    exact and mutation after lock, approval substitution, output substitution,
+    stale ETag, and a second lock are refused without mutation.
+  - >-
+    POST /api/v1alpha1/bundles accepts a closed body containing only profileId.
+    It requires authenticated tenant context, CSRF, Idempotency-Key, If-Match of
+    the current LOCKED profile, a valid immutable lock receipt, and zero prior
+    bundle request for that lock. Atomically it creates one immutable
+    bundle_request in REQUESTED, one BUILD_BUNDLE Operation in PENDING bound to
+    the profile-lock digest, one idempotency response, one audit record, and one
+    digest-only bundle.requested.v1 internal management outbox record; it
+    returns 202 with the Operation and bundle-request location. Exact replay is
+    stable and a duplicate key or second request for the same lock cannot create
+    another request. The request is a local durable handoff record only: it does
+    not compose, fetch, scan, sign, publish, or release an artifact and is not a
+    CON-005 lifecycle CloudEvent until a future distribution contract consumes
+    it.
+  - >-
+    GET /api/v1alpha1/bundles/{id} exposes only the authenticated tenant's
+    request projection with REQUESTED or SOURCE_REPORTED_SIGNED status, profile
+    lock digest, Operation reference, source freshness, and digest-only
+    BundleRelease reference. Signed status is consumed only through a
+    repository-internal method exercised by acceptance: an authenticated,
+    allow-listed distribution source submits a closed envelope containing
+    source id, organization/partition, event id, bundle-request id, strictly
+    increasing sequence, observedAt, and one canonical BundleRelease in SIGNED
+    state. The release must bind the exact locked profile digest and contain
+    non-null bundle, release, manifest, and signature digests. The original
+    envelope enters the append-only inbox and is deduplicated by event id;
+    source, partition, request, profile, sequence, state, or digest mismatch is
+    refused. Admission atomically changes only the local projection to
+    SOURCE_REPORTED_SIGNED, transitions its BUILD_BUNDLE Operation from PENDING
+    through RUNNING to SUCCEEDED as needed, and appends audit/canonical Operation
+    lifecycle outbox rows. It proves source-reported status only, not local
+    signature verification, artifact existence, release, deployment, runtime,
+    assurance, or tenant acceptance.
+  - >-
+    The additive profile-lock migration creates only control.profile_approval,
+    control.profile_lock, and control.bundle_request. It may replace by exact
+    name the CTRL-004 profile-state and operation-type checks and guard
+    functions solely to admit the new legal profile states and BUILD_BUNDLE
+    operation while retaining every immutable binding and revision rule. Each
+    new table has immutable organization_id, version/timestamps, audit linkage,
+    FORCE RLS through transaction-local planeon.organization_id, append-only or
+    legal-transition triggers, unique profile revision/lock/request bindings,
+    least-privilege runtime grants, and no DELETE/TRUNCATE/DDL/BYPASSRLS grant.
+    No destructive down migration exists. Actual PostgreSQL execution remains
+    NOT_RUN_ENV_UNAVAILABLE unless a disposable credential-free local cluster
+    is provided; the in-memory contract store preserves the same tenant,
+    idempotency, transition, atomicity, uniqueness, and append-only semantics.
+  - >-
+    UI routes under /profiles are server-derived and progressively enhanced.
+    The review page names all selected harnesses/modules/providers and every
+    evidence boundary, shows the exact explanation, approval state/expiry and
+    distinct-reviewer progress, lock digest/state, bundle-request/source status,
+    and explicit labels that compilation, lock, and source-reported signature
+    are not deployment, runtime, assurance, or tenant acceptance. Keyboard
+    controls, semantic headings, table/list equivalents, focus behavior, and
+    bounded no-JavaScript-readable state are required; CTRL-006 retains full
+    security/accessibility/browser certification ownership.
+deliverables:
+  - Exact contract/base locks plus tenant-scoped profile review and byte-verified explanation APIs and UI.
+  - Distinct-reviewer offline PROFILE ApprovalRequest lifecycle with expiry, ETag, idempotency, audit, and atomic profile transitions.
+  - Immutable canonical profile-lock receipt binding all six outputs, demand/compiler/catalog authority, and approved review policy.
+  - Exactly-once durable bundle request with BUILD_BUNDLE Operation and digest-only internal management outbox handoff.
+  - Authenticated idempotent source-reported SIGNED BundleRelease projection with canonical Operation lifecycle events and explicit evidence-axis limits.
+  - Additive FORCE-RLS migration, in-memory parity, tamper/duplicate/crash/tenant vectors, and packet-local direct-argv CI descriptor.
+excluded:
+  - Bundle composition, dependency resolution, OCI/image/tar creation, scanning, signing, key custody, publication, release promotion, Kubernetes/cloud access, provider/model calls, public event-contract changes, generic demand-approval mutation, remote approval or email, artifact signature verification, runtime installation, destructive migration, or any artifact/deployment/runtime/security/assurance/tenant-acceptance claim.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","profile-contract"],["make","profile-lock-e2e"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Digest matches compiler artifact.", "Mutation-after-lock, stale approval, tampered explanation, and duplicate bundle-request denial."]
-rollback: Disable new locks and revert UI/API changes; preserve already locked profiles and audit evidence.
+expectedEvidence:
+  - Exact base/schema hashes, compiler-output digest/review/lock determinism, strict TypeScript, predecessor regression, standalone build, and zero-bill scan pass in one signed deny-all-outbound process tree.
+  - Profile read/explanation, unresolved-selector block, request approval, N-of-M distinct approval, reject/expire/stale paths, canonical lock, exact replay/conflict, second-lock refusal, mutation-after-lock, tampered explanation/profile/digest, audit failure, and cross-tenant denial vectors pass.
+  - Bundle request returns one BUILD_BUNDLE Operation and one request/outbox row; duplicate delivery/request, wrong source/tenant/partition/profile/digest/sequence, non-SIGNED release, stale status, and crash-before-commit vectors expose no duplicate or partial state.
+  - Migration tests prove exactly three new tables, named compatible constraint replacement, legal profile/operation transitions, immutable locks, unique request binding, FORCE RLS, transaction-local tenant context, append-only evidence, least privilege, and absence of destructive down behavior. Live PostgreSQL remains NOT_RUN_ENV_UNAVAILABLE when its environment is absent.
+  - All later evidence axes remain false, missing, pending, SOURCE_REPORTED_ONLY, or NOT_RUN_ENV_UNAVAILABLE; no profile or bundle response claims an artifact, release signature verification, deployment, runtime, assurance, or tenant acceptance.
+rollback: Stop new approval, lock, and bundle-request admissions; revert the unreleased profile UI/API, packet descriptor, and additive migration while preserving every already committed profile revision, decision, lock receipt, bundle request, Operation, audit, inbox, and outbox record. Never unlock or rewrite a locked profile, delete tenant history, mutate a compiler output, retract a downstream record, run a destructive down migration, or alter an artifact, release, deployment, runtime, assurance, or tenant decision.
