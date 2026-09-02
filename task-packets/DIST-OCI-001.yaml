@@ -2,7 +2,7 @@ id: DIST-OCI-001
 repository: mas-harness-distribution
 branch: codex/dist-oci-001-resolve-build
 objective: Resolve exact module/platform closure, vendor Helm dependencies, fetch by digest, stage OCI layout, and prove minimal-profile selectivity.
-predecessors: [DIST-001, CON-005]
+predecessors: [DIST-FIX-001, CON-005]
 allowedPaths: ["src/planeon_distribution/resolver.py", "src/planeon_distribution/builder.py", "src/planeon_distribution/oci.py", "src/planeon_distribution/helm.py", "tests/resolve/", "tests/build/", "fixtures/profiles/", "schemas/bundle-lock.schema.json", "docs/oci-bundle.md", "ci/targets/dist-oci-001.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:

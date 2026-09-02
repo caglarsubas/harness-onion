@@ -302,7 +302,7 @@ def _validate_path_index(
     )
     _require(
         index.get("generatedFrom")
-        == "93 task packets; all current source paths are reference-only and validation status is reported separately",
+        == "94 task packets; all current source paths are reference-only and validation status is reported separately",
         "reuse path index generation statement changed",
     )
     _require(
@@ -446,7 +446,7 @@ def _validate_task_packet_closure(
     indexed_paths: dict[tuple[str, str], dict[str, Any]],
 ) -> int:
     packet_paths = sorted((root / "task-packets").glob("*.yaml"))
-    _require(len(packet_paths) == 93, f"expected 93 task packets, found {len(packet_paths)}")
+    _require(len(packet_paths) == 94, f"expected 94 task packets, found {len(packet_paths)}")
     referenced: set[tuple[str, str]] = set()
     for packet_path in packet_paths:
         packet = load_yaml(packet_path)
