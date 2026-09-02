@@ -3,7 +3,7 @@ repository: mas-harness-conformance-labs
 branch: codex/conf-a1-001-foundations
 objective: Certify the white-goods journey from questionnaire through business, domain, data readiness, signed bundle, and installed foundation harnesses.
 predecessors: [CONF-002, CTRL-007, KN-DATA-002, TRUST-OBS-001, OP-003, DIST-004]
-allowedPaths: ["campaigns/alpha1/", "tests/alpha1/", "fixtures/alpha1/", "docs/reports/alpha1-template.md"]
+allowedPaths: ["campaigns/alpha1/", "tests/alpha1/", "fixtures/alpha1/", "docs/reports/alpha1-template.md", "tests/meta/test_registry_dispatch.py"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/reference_labs/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
@@ -24,8 +24,11 @@ contracts:
     0a0f5c2d6305a1772848ba2e58b8c3d17321de3fe5fdc99377515e09c1138389,
     544ac42fc892f376b1f5b9ddafbb28e94230cfa61834a5fce89acef8d8d8b098,
     and 3800262cd8a9386d94edc0a0350faa3796f0407298c33079badd2f90943e8ef4.
-    This packet preserves all of them and uses only CONF-001 generic campaign
-    dispatch; it creates no descriptor and changes no shared engine.
+    This packet preserves all engine and dispatch files, uses only CONF-001
+    generic campaign dispatch, creates no descriptor, and changes no shared
+    engine. It may correct only tests/meta/test_registry_dispatch.py so the
+    bootstrap registry assertion accepts additive packet-owned campaigns while
+    still requiring meta-core and validating every discovered campaign.
   - >-
     Predecessor release locks are CTRL-007 main
     39eb8f8fc42382bbfdd8ac1e0723531282648656 with PR/main runs
@@ -145,6 +148,7 @@ deliverables:
   - Complete four-plane/sixteen-harness tenant overview fixture with exact selected/unselected aggregation, independent evidence axes, freshness, organization isolation, and local drill-down routes.
   - LIVE_CAMPAIGN definition that fails honestly to NOT_RUN_ENV_UNAVAILABLE offline plus deterministic technical-evidence verification and report template.
   - Standard-library positive, mutation, stage-order, selectivity, evidence-axis, freshness, isolation, navigation, accessibility-model, no-secret/no-endpoint, and reproducibility tests.
+  - Additive campaign-registry regression that preserves meta-core and resolves every unique discovered campaign without hard-coding a one-campaign repository.
 excluded:
   - Opening, mounting, fetching, executing, importing, copying, adapting, translating, or hashing content from the warm source or any predecessor checkout during product implementation or acceptance.
   - Retrieval, context assembly, memory, model inference, AI gateway, experience, protocols, orchestration, tools, sandbox, ML/decision execution, business-data ingestion, source mutation, live bundle creation/signing, cluster discovery/apply, health probing, assurance certification, or tenant acceptance.
@@ -155,6 +159,7 @@ offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironme
 liveCampaignExecution: {"launcherArgv":["/opt/planeon/bin/harness-live-campaign-launch"],"commandTransport":"ARGV_ARRAY_V1","executionPlacement":"PREINSTALLED_TARGET_LOCAL_EPHEMERAL_RUNNER","executionEnvelopeEnvironment":"HARNESS_LIVE_EXECUTION_ENVELOPE","executionEnvelopeMode":"DUAL_SIGNED_PACKET_COMMAND_CAMPAIGN_ENDPOINT_BINDING_V1","releaseTrustStoreMount":"/etc/planeon/trust/release-trust-bundle.json","tenantTrustStoreMount":"/etc/planeon/trust/tenant-trust-bundle.json","trustStoreMode":"HASH_PINNED_LOCAL_PUBLIC_KEYS_VALIDITY_PURPOSE_AND_REVOCATION_V1","revocationRequired":true,"networkIsolation":"OS_ENFORCED_DENY_ALL_EXCEPT_SIGNED_ENDPOINTS","endpointAuthority":"TENANT_CONTROLLED_PREEXISTING_CAPACITY_ONLY","dynamicEndpointTransport":"PREAUTHORIZED_API_OR_CAMPAIGN_PROXY_ONLY","mutationAdmission":"SERVER_SIDE_SIGNED_ZERO_INCREMENTAL_COST_POLICY_AND_RBAC_REQUIRED","capacityAuthorization":"INDEPENDENT_OPERATOR_SIGNED_FIXED_PREEXISTING_CAPACITY","publicInternetDiscovery":"DENIED","cloudManagementApis":"DENIED","billingApis":"DENIED","thirdPartyApiKeys":"DENIED","credentialMode":"TENANT_LOCAL_SHORT_LIVED_FILE_REFERENCE","unavailableResult":"NOT_RUN_ENV_UNAVAILABLE","ciEvidenceUse":"FORBIDDEN","allowedEvidenceAxes":["RUNTIME","ASSURANCE"],"commands":[["python3","-m","unittest","discover","-s","tests/alpha1","-p","test_*.py"],["make","campaign","CAMPAIGN=alpha1-white-goods"],["make","evidence-verify","CAMPAIGN=alpha1-white-goods"]]}
 expectedEvidence:
   - Journey and overview fixtures are canonical and byte-identical over two reads; schemas are closed; authority, stage, plane, harness, route, gate, module, status, reason, and evidence-axis sets and orders are exact with no duplicate or unknown member.
+  - The inherited meta registry test requires meta-core, discovers alpha1-white-goods and parity-metadata additively, resolves every campaign exactly once, and still rejects duplicate campaign IDs.
   - All predecessor commit/run/hash locks match packet-declared literals without product access to another checkout, and mutation of any lock, digest binding, organization binding, source reference, or fixture reference fails.
   - Questionnaire, business owners/outcomes/KPIs, domain digest set, source inventory, every readiness gate and evidence reference, profile digest, demand/dependency selection reason, and exact five-module set form one organization-bound chain; missing or reordered prerequisites block every dependent stage.
   - Negative vectors reject a sixth selected artifact, absent dependency, image tag or host, public URL, credential/secret key, tenant or business payload, false signature/preflight/apply/health/freshness PASS, stage skip, duplicated harness, collapsed evidence axis, and tenant acceptance claim.
@@ -162,4 +167,4 @@ expectedEvidence:
   - Offline campaign emits required RUNTIME and ASSURANCE results as NOT_RUN_ENV_UNAVAILABLE, overall NOT_RUN_ENV_UNAVAILABLE, and deterministic evidence with only those originated axes. Evidence verification may PASS structurally but cannot upgrade campaign, deployment, runtime, assurance, or tenant acceptance.
   - Signed PR and exact-main acceptance pass Alpha-1 unit tests and generic evidence verification in one deny-all-outbound process tree. Source, CI, merge, artifact, signature/release, deployment, runtime, assurance, tenant-acceptance candidate, and tenant acceptance remain distinct evidence states.
   - Environment-facing execution remains NOT_RUN_ENV_UNAVAILABLE until a manual post-merge external launcher validates dual signatures, fixed tenant endpoints, independent capacity authorization, server-side zero-cost admission, and target-local authority. Campaign output can never sign or assert TENANT_ACCEPTANCE.
-rollback: Revert only campaigns/alpha1, tests/alpha1, fixtures/alpha1, and the Alpha-1 report template to exact CONF-002 main. Offline work creates no bundle, release, deployment, runtime, tenant data, or external state to uninstall; any future live rollback requires its own authorized environment procedure and retains evidence by policy.
+rollback: Revert campaigns/alpha1, tests/alpha1, fixtures/alpha1, the Alpha-1 report template, and the additive registry assertion to exact CONF-002 main. Offline work creates no bundle, release, deployment, runtime, tenant data, or external state to uninstall; any future live rollback requires its own authorized environment procedure and retains evidence by policy.
