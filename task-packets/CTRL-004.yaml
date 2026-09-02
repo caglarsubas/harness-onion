@@ -1,16 +1,161 @@
 id: CTRL-004
 repository: mas-harness-control-plane
 branch: codex/ctrl-004-compiler-worker
-objective: Implement PostgreSQL compilation jobs, leases, atomic compiler invocation, outbox/inbox, bounded retries, dead-letter, and Operation API.
+objective: Implement a digest-bound asynchronous profile-compilation operation, PostgreSQL job leases and fencing, the exact released compiler wheel, atomic six-file profile publication, transactional audit/outbox, idempotent inbox delivery, bounded retry/dead-letter behavior, and tenant-scoped Operation API.
 predecessors: [CTRL-003, CON-005]
-allowedPaths: ["workers/profile-compiler/", "apps/control-web/src/app/api/v1alpha1/operations/", "apps/control-web/src/lib/operations/", "packages/db/migrations/compiler-jobs/", "tests/compiler-worker/", "e2e/compiler-operation.spec.ts", "ci/targets/ctrl-004.json"]
+allowedPaths: ["workers/profile-compiler/", "apps/control-web/src/app/api/v1alpha1/demands/[id]/compile/", "apps/control-web/src/app/api/v1alpha1/operations/", "apps/control-web/src/lib/operations/", "packages/db/migrations/compiler-jobs/", "tests/compiler-worker/", "e2e/compiler-operation.spec.ts", "ci/targets/ctrl-004.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes compiler package and Operation/CloudEvent v1alpha1", "Produces asynchronous profile compilation operation v1"]
-deliverables: ["Atomic state/outbox transaction, worker lease/claim, exact compiler wheel invocation, atomic profile artifacts, retry/backoff, dead-letter, and resume."]
-excluded: ["HTTP listener on the worker, NATS baseline dependency, unbounded retries, or bundle building."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","compiler-worker-contract"],["make","compiler-crash-matrix"]]
+contracts:
+  - >-
+    Implementation starts from exact merged control-plane commit
+    557bcec8b91912dcfc73c56eb40825b113d27b3c, containing the accepted CTRL-003
+    demand/approval lifecycle. It consumes mas-harness-contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 with release-manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79,
+    deterministic compiler wheel planeon_harness_contracts-0.1.0-py3-none-any.whl
+    SHA-256 53500a690c8b7614e0cb6ea1e4d78e0831b94a458523e558fedfeb13428bb97b,
+    compiler source SHA-256
+    0b0960c87bc1214e795144968db3976bd548c80e6002b03bc3f6e292303a764b,
+    canonicalization source SHA-256
+    ef551e4c996762770c2547302f4cd4dc61b6695b3f6619de0428e8527612dbdc,
+    CompileRequest schema byte SHA-256
+    559951b883d9762a8f47db0d3e4bc7fbb4ec22dca0b2a2de9a677ff2d668bfcb,
+    Operation schema byte SHA-256
+    876bd985adf2267e5f4594e19e3e37296eab8cad7344c2d23cb68ca2c97a4982,
+    HarnessCloudEvent schema byte SHA-256
+    4e1282bda0b3f947265a84545ed5b2fdea0a1bb4e69af3642fc14c265811c56c,
+    and lifecycle-transition-table SHA-256
+    17122d47f3d3cce568f117b9113f83821db3aaddba3c910afb40e068f193dffc.
+    The contract wheel is built twice with SOURCE_DATE_EPOCH=946684800 from the
+    exact public commit and both bytes must match the pinned digest before it is
+    admitted to the signed root-owned offline dependency inventory.
+  - >-
+    The only new third-party runtime closure is pure-Python psycopg 3.3.4 wheel
+    SHA-256 b6bbc25ccf05c8fad3b061d9db2ef0909a555171b84b07f29458a447253d679a
+    under LGPL-3.0-only plus typing-extensions 4.16.0 wheel SHA-256
+    481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8.
+    workers/profile-compiler/dependencies.lock.json is the closed repository
+    source lock for those three wheels, CPython 3.12.14, uv 0.12.7, and the
+    required system libpq boundary. Acceptance uses only an independently
+    inventoried, root-owned local environment populated before the deny-all
+    session. There is no runtime package install, registry request, binary
+    download, vendored database, hosted queue, or paid/API-key dependency.
+  - >-
+    POST /api/v1alpha1/demands/{id}/compile accepts no tenant, actor, compiler,
+    catalog, path, callback, provider, or credential authority from the body.
+    Authenticated OIDC context is the sole organization/actor source. The route
+    requires one CTRL-003 APPROVED demand, its current strong ETag through
+    If-Match, CSRF proof, and Idempotency-Key. A server-owned CompileInputResolver
+    re-resolves the exact approved demand revision/digest, submitted
+    QuestionnaireAnswerSet, READY DataReadinessAssessment, verified environment
+    attestation, and immutable local catalog digest/resources. Missing,
+    unavailable, stale, changed, cross-tenant, non-current, non-APPROVED, or
+    digest-mismatched input fails closed without creating an operation or job.
+  - >-
+    A successful compile request commits exactly one Operation in PENDING, one
+    QUEUED compilation job, one idempotency response, and one append-only audit
+    record atomically, then returns 202 with the canonical Operation and its
+    strong ETag. Exact replay returns the original status/body/ETag and creates
+    no row or event; reuse of the key with a different canonical request
+    fingerprint returns 409. Missing If-Match is 428, stale ETag is 412, and
+    unknown/cross-tenant identifiers share one 404 representation.
+  - >-
+    Operation uses only the CON-005 lifecycle: PENDING to RUNNING or CANCELLED;
+    RUNNING to SUCCEEDED, FAILED, or CANCELLING; and CANCELLING to CANCELLED or
+    FAILED. CTRL-004 creates COMPILE_PROFILE operations and implements only
+    PENDING to RUNNING to SUCCEEDED/FAILED; it exposes no cancellation mutation
+    and sets cancellable false. SUCCEEDED, FAILED, and CANCELLED are terminal;
+    retry never edits a terminal operation. GET /api/v1alpha1/operations/{id}
+    returns only the authenticated organization projection and ETag. Operation
+    success never constitutes demand approval, profile lock, bundle release,
+    artifact, deployment, runtime, assurance, or tenant acceptance.
+  - >-
+    Internal compilation-job states are QUEUED, LEASED, RETRY_WAIT, SUCCEEDED,
+    and DEAD_LETTERED. Legal transitions are QUEUED to LEASED; RETRY_WAIT to
+    LEASED; LEASED to RETRY_WAIT, SUCCEEDED, or DEAD_LETTERED; and an expired
+    LEASED row may be reclaimed as a new fenced LEASED attempt. SUCCEEDED and
+    DEAD_LETTERED are terminal. Claim uses one PostgreSQL transaction with
+    SELECT FOR UPDATE SKIP LOCKED, deterministic eligibility ordering, a unique
+    unguessable lease token, worker id, attempt number, claimedAt, and
+    leaseExpiresAt. Every extend, retry, fail, and success write must match the
+    current tenant/job/attempt/token and an unexpired lease; a stale owner can
+    never publish or mutate state.
+  - >-
+    The retry schedule is closed at three total attempts with deterministic
+    delays of 5 seconds after attempt one and 30 seconds after attempt two.
+    Database unavailability leaves durable state unchanged. A declared
+    retryable infrastructure failure moves LEASED to RETRY_WAIT, clears the
+    lease, preserves the stable reason code, and leaves the same RUNNING
+    operation. A compiler validation/admission error, malformed output,
+    digest/contract mismatch, fencing failure after re-read, or retry exhaustion
+    moves the job to DEAD_LETTERED and the Operation from RUNNING to FAILED in
+    one transaction. Failures persist reasonCode and retryable only, never raw
+    exception text, request/answer values, credentials, paths, or business data.
+  - >-
+    The worker has no HTTP listener and never invokes a shell. It imports
+    planeon_harness_contracts.compiler.compile_profile and
+    write_compilation_outputs from the exact installed wheel after validating
+    workers/profile-compiler/dependencies.lock.json and the trusted environment
+    binding. It accepts only a server-resolved immutable CompileRequest mapping,
+    catalog resource tuple, and sha256 catalog digest; calls no model, provider,
+    registry, artifact store, Kubernetes API, broker, or network endpoint; and
+    rejects output names other than profile.json, bom.json, install-plan.json,
+    evidence-plan.json, explanation.md, and profile.sha256.
+  - >-
+    Publication is one fenced PostgreSQL transaction. It byte-validates all six
+    compiler outputs, recomputes every output digest, verifies profile.sha256
+    against the exact profile.json bytes, inserts one immutable profile revision
+    and its six exact byte payloads/digests, advances one tenant-scoped proposed
+    profile pointer, marks the job SUCCEEDED, transitions the Operation to
+    SUCCEEDED with digest-only resultRefs, and appends audit and canonical
+    HarnessCloudEvent outbox rows. Unique keys bind organization, approved
+    demand id/revision/digest, compiler-wheel digest, catalog digest, and profile
+    revision so duplicate/reordered execution exposes exactly one result. A
+    crash or injected error before commit exposes none; a crash after commit
+    replays the existing terminal result without recompilation or duplication.
+  - >-
+    RUNNING and terminal Operation transitions append
+    harness.operation.state.changed.v1 outbox events conforming to CON-005.
+    Events contain only organization/partition key, aggregate/sequence,
+    correlation/causation, actor/reason, transition, and digest-only resource
+    references. Outbox delivery is at least once: delivery and published
+    acknowledgement are separate, lease-fenced actions. A crash after sink
+    delivery may redeliver the identical event id. The inbox admits an
+    authenticated allowed source, verifies organization partition and strictly
+    increasing subject sequence, stores the original envelope, and deduplicates
+    by event id; duplicate delivery cannot mutate an operation/profile or append
+    a second audit record. No message broker is a baseline dependency.
+  - >-
+    The additive migration creates only control.operation,
+    control.compilation_job, control.profile, and control.profile_revision plus
+    required indexes/constraints, and extends the existing control.event_outbox
+    and control.event_inbox only with backward-compatible compiler-owned
+    constraints/indexes when necessary. Every tenant row has immutable
+    organization_id, version/timestamps, FORCE RLS using transaction-local
+    planeon.organization_id, least-privilege API/worker/publisher grants, and no
+    runtime BYPASSRLS, DDL, DELETE, or TRUNCATE. Audit, profile revisions,
+    accepted inbox envelopes, and emitted outbox payloads are append-only;
+    destructive down migration is absent. Actual PostgreSQL execution is
+    NOT_RUN_ENV_UNAVAILABLE unless a disposable credential-free local cluster
+    is provided; in-memory contract stores must preserve the same tenant,
+    transition, lease, idempotency, atomicity, and uniqueness semantics.
+deliverables:
+  - Exact public compiler/Operation/CloudEvent and Python dependency lock with a reproducible contract wheel and signed offline environment inventory.
+  - Tenant-scoped compile-request route and Operation read API with APPROVED-demand source re-resolution, CSRF, strong ETag, idempotency, and indistinguishable cross-tenant denial.
+  - No-listener Python worker with deterministic claim ordering, SKIP LOCKED lease semantics, unguessable fencing tokens, bounded retries, dead-letter behavior, and stable privacy-safe failure codes.
+  - Fenced atomic six-output profile publication with exact-byte digests, exactly-once visible tenant profile revision, audit, lifecycle outbox, and idempotent authenticated inbox behavior.
+  - Additive PostgreSQL/RLS source migration and in-memory parity tests, with live database evidence retained as NOT_RUN_ENV_UNAVAILABLE when the disposable environment is absent.
+  - Packet-local direct-argv descriptor running predecessor regression, compiler/Operation contracts, full crash/duplicate/lease matrix, and zero-bill checks inside one signed deny-all process tree.
+excluded:
+  - Worker HTTP listener, NATS or any broker baseline, embedded scheduler service, profile approval/lock, bundle building/signing, installation, Kubernetes or cloud provisioning, caller-selected tenant/compiler/catalog/path, raw payload events, unbounded retry/sleep, destructive migration, paid API, runtime download, or promotion of artifact/deployment/runtime/security/assurance/tenant-acceptance evidence.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","compiler-worker-contract"],["make","compiler-crash-matrix"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Crash-before/after-commit and duplicate delivery reports.", "Exactly-once visible profile result under at-least-once job execution."]
-rollback: Stop the worker and revert additive job tables only after queued jobs are drained or marked cancelled.
+expectedEvidence:
+  - Exact base/contract/wheel/dependency locks, reproducible contract-wheel bytes, dependency import, strict TypeScript, and canonical Operation/CloudEvent validation pass under CPython 3.12.14 and uv 0.12.7 without network.
+  - PENDING/RUNNING/terminal lifecycle, legal and illegal job transitions, deterministic claim order, concurrent claim exclusion, expired lease reclaim, stale-token fencing, lease extension, three-attempt retry schedule, non-retryable failure, exhaustion, and dead-letter vectors pass.
+  - Crash before claim commit, after claim commit, before result commit, after result commit, after outbox delivery/before acknowledgement, duplicate/out-of-order event, duplicate job delivery, idempotency replay/conflict, stale ETag/input, malformed output, compiler error, atomic audit failure, and cross-tenant denial prove no lost or duplicate visible profile/event mutation.
+  - Source migration tests prove FORCE RLS, transaction-local tenant context, immutable tenant bindings, unique result keys, append-only audit/inbox/outbox/profile revisions, least privilege, and absence of destructive down behavior. Live PostgreSQL remains NOT_RUN_ENV_UNAVAILABLE unless the declared disposable environment exists.
+  - Zero-bill scan proves no hosted runner, package/runtime download, public telemetry, paid/provider API, secret, cloud provisioning, broker dependency, or undeclared network path; later evidence axes remain false, missing, pending, or NOT_RUN_ENV_UNAVAILABLE.
+rollback: Stop new compiler claims, allow an operator to drain or mark already queued jobs cancelled only through a future authorized operation, and revert the unreleased route, worker, descriptor, and additive schema while preserving every operation, job attempt, immutable profile revision/output, audit, inbox, and outbox record already committed; never delete tenant history, run a destructive down migration, unlock a profile, alter a demand approval, or mutate an external compiler contract, database, artifact, deployment, runtime, or tenant decision.
