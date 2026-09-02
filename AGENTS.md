@@ -60,10 +60,15 @@
     `Makefile`; the conformance campaign/evidence/acceptance rules are the closed
     `CONF-001` exception. Preserve every predecessor handler and reject unknown,
     duplicate, ambiguous, undeclared-variable, or shell-based dispatch. The sole
-    bootstrap-handler correction is `CTRL-FIX-001`: it may edit only the control
-    plane's `AGENTS.md`, `ci/handlers/prefetch.py`, its exact descriptor, and its
-    bootstrap regression test so later packet PR merge commits remain admissible
-    without weakening the exact empty-root or bootstrap dependency pins.
+    bootstrap-handler corrections are `CTRL-FIX-001` and `DIST-FIX-001`.
+    `CTRL-FIX-001` may edit only the control plane's `AGENTS.md`,
+    `ci/handlers/prefetch.py`, its exact descriptor, and its bootstrap regression
+    test so later packet PR merge commits remain admissible without weakening the
+    exact empty-root or bootstrap dependency pins. `DIST-FIX-001` may edit only
+    the distribution repository's `AGENTS.md`, `Makefile`, and bootstrap dispatch
+    regression test so future packet descriptors are reachable through the
+    already-closed dispatcher; it may not change the dispatcher, existing target
+    argv, source locks, PORTING ledger, toolchain, or zero-bill boundary.
 14. Only a product bootstrap packet may seed the inert `PORTING.yaml` ledger.
     No current reference/discovery-only packet may edit it. A later revision may
     add that path only with a legally approved `PORT_CANDIDATE` and exact mapping.

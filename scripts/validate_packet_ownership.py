@@ -40,6 +40,13 @@ CONTROL_BOOTSTRAP_CORRECTION_PATHS = {
     "tests/bootstrap/test_static_contract.py",
 }
 
+DISTRIBUTION_BOOTSTRAP_CORRECTION_PATHS = {
+    "AGENTS.md",
+    "Makefile",
+    "ci/targets/dist-fix-001.json",
+    "tests/bootstrap/test_dispatch.py",
+}
+
 ALLOWED_MAKE_VARIABLES = {
     "BACKEND",
     "CAMPAIGN",
@@ -235,6 +242,28 @@ def validate_packet_ownership(packets: dict[str, dict[str, Any]]) -> list[str]:
                     f"product packet {packet_id} overlaps the CTRL-FIX-001 bootstrap correction"
                 )
 
+        if packet_id == "DIST-FIX-001":
+            if repository != "mas-harness-distribution":
+                errors.append("DIST-FIX-001 must target mas-harness-distribution")
+            if packet.get("predecessors") != ["DIST-001"]:
+                errors.append("DIST-FIX-001 must depend only on DIST-001")
+            if set(allowed_paths) != DISTRIBUTION_BOOTSTRAP_CORRECTION_PATHS:
+                errors.append("DIST-FIX-001 path authority is not the closed bootstrap correction")
+            if targets != {"prefetch", "dist-fix-regression", "zero-bill"}:
+                errors.append("DIST-FIX-001 Make targets are not the closed bootstrap correction set")
+        elif repository == "mas-harness-distribution" and packet_id != "DIST-001":
+            forbidden_correction_paths = DISTRIBUTION_BOOTSTRAP_CORRECTION_PATHS - {
+                "ci/targets/dist-fix-001.json"
+            }
+            if any(
+                paths_overlap(path, forbidden)
+                for path in allowed_paths
+                for forbidden in forbidden_correction_paths
+            ):
+                errors.append(
+                    f"product packet {packet_id} overlaps the DIST-FIX-001 bootstrap correction"
+                )
+
         if is_product_bootstrap:
             if not owns_makefile:
                 errors.append(
@@ -265,7 +294,7 @@ def validate_packet_ownership(packets: dict[str, dict[str, Any]]) -> list[str]:
                     errors.append(
                         f"product bootstrap packet {packet_id} omits authority phrase {required_phrase!r}"
                     )
-        elif repository in PRODUCT_BOOTSTRAP_PACKETS and owns_makefile:
+        elif repository in PRODUCT_BOOTSTRAP_PACKETS and owns_makefile and packet_id != "DIST-FIX-001":
             errors.append(
                 f"product packet {packet_id} may not share bootstrap-owned Makefile"
             )

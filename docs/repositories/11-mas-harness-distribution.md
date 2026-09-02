@@ -133,12 +133,13 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 ## PR packets
 
 1. `DIST-001-bootstrap-tools`: CLI, toolchain lock/prefetch, schema validation, local OCI-layout fixture, and no-network test harness.
-2. `DIST-OCI-001-resolve-build`: exact module/platform closure, Helm vendoring, digest fetch, canonical lock, staging state, and minimal-profile proof.
-3. `DIST-002-supply-chain`: SPDX SBOM, license allow/deny, offline Grype DB/scan, model custody, vulnerability disposition, and evidence references.
-4. `DIST-003-sign-promote`: offline Ed25519 Cosign ceremony, component/root signatures, public-key rotation/overlap, revocation, atomic promotion, and candidate/released separation.
-5. `DIST-AIR-001-export-import`: OCI layout archive, checksums, signatures/trust/SBOM/licenses/vulnerability DB/model manifest, physical offline verification/import, and relocation digest proof.
-6. `DIST-004-helm-profiles`: minimal ARM64/AMD64, regulated OCP, bridge/silo, and air-gap profile charts with exact selected subcharts only.
-7. `DIST-005-repro-security`: two-clean-build digest match, corrupt/missing/extra blob denial, path traversal/archive bombs, compromised staging, and key-revocation drills.
+2. `DIST-FIX-001-cumulative-make`: bounded bootstrap correction making future descriptor-owned targets reachable without changing the closed dispatcher or existing argv.
+3. `DIST-OCI-001-resolve-build`: exact module/platform closure, Helm vendoring, digest fetch, canonical lock, staging state, and minimal-profile proof.
+4. `DIST-002-supply-chain`: SPDX SBOM, license allow/deny, offline Grype DB/scan, model custody, vulnerability disposition, and evidence references.
+5. `DIST-003-sign-promote`: offline Ed25519 Cosign ceremony, component/root signatures, public-key rotation/overlap, revocation, atomic promotion, and candidate/released separation.
+6. `DIST-AIR-001-export-import`: OCI layout archive, checksums, signatures/trust/SBOM/licenses/vulnerability DB/model manifest, physical offline verification/import, and relocation digest proof.
+7. `DIST-004-helm-profiles`: minimal ARM64/AMD64, regulated OCP, bridge/silo, and air-gap profile charts with exact selected subcharts only.
+8. `DIST-005-repro-security`: two-clean-build digest match, corrupt/missing/extra blob denial, path traversal/archive bombs, compromised staging, and key-revocation drills.
 
 ## Testing, verification, and acceptance
 

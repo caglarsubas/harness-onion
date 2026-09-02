@@ -1,0 +1,58 @@
+id: DIST-FIX-001
+repository: mas-harness-distribution
+branch: codex/dist-fix-001-cumulative-make
+objective: Correct the DIST-001 bootstrap Make boundary so later packet-owned direct-argv descriptors are reachable without changing the closed dispatcher, existing handlers, toolchains, or public product contracts.
+predecessors: [DIST-001]
+allowedPaths: ["Makefile", "AGENTS.md", "ci/targets/dist-fix-001.json", "tests/bootstrap/test_dispatch.py"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - >-
+    Implementation starts from exact merged DIST-001 commit
+    03eac03a93560e54299c0f2e3eceef7339ecacc3. Its accepted pull-request and
+    exact-main runs are 33630243399 and 33630388800. This correction changes no
+    Python package, OCI fixture/validator, CLI, source/contract/toolchain lock,
+    packet transport, root launcher, target descriptor, PORTING ledger,
+    workflow, billing rule, or evidence claim.
+  - >-
+    Makefile retains fixture-verify as its default and retains the exact
+    prefetch, fixture-verify, and zero-bill dispatch recipe. It adds one .DEFAULT
+    recipe that forwards the requested target name as one argv item to
+    ci/run_make_target.py. The recipe invokes no shell command string, variable
+    expansion from caller-controlled input, network tool, or alternate
+    dispatcher. Existing explicit targets remain behaviorally identical.
+  - >-
+    ci/run_make_target.py remains byte-identical and is still the sole authority
+    for descriptor ownership, filename, schema, direct argv, target syntax,
+    allowed variable enums, cumulative lexical ordering, and unique
+    applicability. A later target succeeds only when a packet-owned descriptor
+    declares it; otherwise the dispatcher returns its existing bounded
+    zero-applicable-handler refusal. The Make fallback cannot manufacture or
+    bypass a handler.
+  - >-
+    The bootstrap regression test invokes a syntactically valid undeclared
+    future target through Make and proves control reaches the closed dispatcher
+    and fails with zero applicable handlers, rather than Make's no-rule error.
+    It also proves the three DIST-001 explicit targets retain one direct recipe
+    and the Makefile contains no eval, include, shell function, recursive Make,
+    command substitution, wildcard target generation, or second dispatcher.
+  - >-
+    Acceptance uses the unchanged DIST-001 signed launcher and exact hash-pinned
+    DIST-FIX-001 packet under OS-enforced deny-all outbound isolation. Prefetch
+    remains first and verifies the original planning ancestry, locks, tools,
+    inert porting sentinel, and fixture. No warm-source path is opened or passed
+    to repository code.
+deliverables:
+  - One bounded Make .DEFAULT forwarding rule and regression coverage for future descriptor reachability and unknown-target fail closure.
+  - Product AGENTS.md authority note naming the exact exception and preserving all later packet ownership rules.
+excluded:
+  - Dispatcher, handler, descriptor, source, schema, CLI, fixture, lock, PORTING, workflow, dependency, toolchain, network, billing, API, artifact, deployment, runtime, assurance, or tenant-acceptance changes.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","dist-fix-regression"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - Makefile diff is limited to one generic forwarding rule; the dispatcher and all existing descriptor argv remain byte-identical.
+  - Existing prefetch, fixture-verify, and zero-bill targets pass; an undeclared valid target reaches the dispatcher and fails with its stable zero-applicable-handler reason.
+  - Static regression rejects dynamic Make evaluation, includes, shell functions, recursive Make, command substitution, wildcard generation, or an alternate dispatcher.
+  - Signed pull-request and exact-main runs remain separate; no artifact, deployment, runtime, assurance, or tenant-acceptance evidence is created.
+rollback: Revert only the generic Make forwarding rule, authority note, and regression test together. Existing DIST-001 targets remain usable; later packet work must stop because its descriptor targets would again be unreachable.
