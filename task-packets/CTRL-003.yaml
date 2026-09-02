@@ -1,16 +1,137 @@
 id: CTRL-003
 repository: mas-harness-control-plane
 branch: codex/ctrl-003-demand-approval
-objective: Implement demand validation, prerequisite accept/reject, approvals, N-of-M policy hooks, and lifecycle guards.
-predecessors: [CTRL-002, CON-004]
+objective: Implement digest-bound demand validation, explicit prerequisite accept/reject, policy-admitted N-of-M approvals, rejection reasons, lifecycle guards, optimistic concurrency, idempotency, and append-only audit.
+predecessors: [CTRL-002, CON-005]
 allowedPaths: ["apps/control-web/src/app/demands/", "apps/control-web/src/app/api/v1alpha1/demands/", "apps/control-web/src/app/api/v1alpha1/approvals/", "apps/control-web/src/lib/demands/", "packages/db/migrations/demand/", "tests/demands/", "e2e/demand-approval.spec.ts", "ci/targets/ctrl-003.json"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes TenantDemand, ApprovalRequest, and lifecycle contracts v1alpha1", "Produces demand and approval REST behavior v1alpha1"]
-deliverables: ["Validated demand transitions, explicit prerequisite decisions, approval quorum hook, rejection reasons, and append-only audit."]
-excluded: ["Silent prerequisite acceptance, embedded policy engine, profile compilation, or bundle creation."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","demand-contract"],["make","demand-approval-e2e"]]
+contracts:
+  - >-
+    Implementation starts from exact merged control-plane commit
+    90b29a71df82bb747f0465dfed16714b2e8a3fd9, which contains the merged
+    CTRL-002 questionnaire journey. It consumes mas-harness-contracts commit
+    2146278a95344cd2a8e22596b2f315b46edffc88 with release-manifest SHA-256
+    c5dd4c39d1c69d07f8d8de3d1a09584bb906172fee2d5ac20ad25ff344b0db79,
+    TenantDemand schema SHA-256
+    c43620c47e3afee6b2be09b1cc80c6b9ef9d851d1930f57531aa1e56a98373f2,
+    ApprovalRequest schema SHA-256
+    4fe8d214a920690008a4390919acebf797b0ab4e6c649a7a88e0882f3b2a1b27,
+    and generated lifecycle-transition-table SHA-256
+    17122d47f3d3cce568f117b9113f83821db3aaddba3c910afb40e068f193dffc.
+    CON-005 is mandatory because ApprovalRequest and its canonical terminal
+    transitions do not exist in the CON-004 release.
+  - >-
+    A demand is created only for the authenticated organization from one
+    tenant-scoped CTRL-002 questionnaire session at READY_FOR_COMPILATION and
+    one read-only, locally resolved source snapshot. The snapshot binds the
+    questionnaire session id/revision, QuestionnaireAnswerSet id/digest,
+    DataReadinessAssessment id/digest/status/expiry, and independent current
+    owner-approval id/digest/expiry. It contains no answer values, tenant
+    records, credentials, policy text, or evidence bytes. Missing, unavailable,
+    cross-tenant, stale, non-PASS readiness, non-current owner approval, digest
+    mismatch, or a questionnaire state other than READY_FOR_COMPILATION blocks
+    validation; a caller assertion cannot replace the resolver.
+  - >-
+    POST /api/v1alpha1/demands creates DRAFT revision 1 and accepts only source
+    references, requested public capabilities, proposed prerequisite harness
+    ids, explicit prerequisite decisions, the verified environment declaration,
+    assurance subjects, and a bounded execution budget. The server derives
+    tenantId from OIDC context and derives acceptedPrerequisiteHarnessIds only
+    from exact ACCEPT decisions. Every proposed prerequisite requires exactly
+    one ACCEPT or REJECT decision with a bounded reason code. Unknown, duplicate,
+    missing, surplus, or self-contradictory decisions are refused; REJECT never
+    becomes acceptance and keeps validation BLOCKED.
+  - >-
+    Demand states are DRAFT, BLOCKED, VALIDATED, APPROVAL_PENDING, APPROVED,
+    REJECTED, and SUPERSEDED. Legal transitions are DRAFT to BLOCKED or
+    VALIDATED; BLOCKED to VALIDATED or SUPERSEDED; VALIDATED to
+    APPROVAL_PENDING or SUPERSEDED; and APPROVAL_PENDING to APPROVED, REJECTED,
+    BLOCKED, or SUPERSEDED. APPROVED, REJECTED, and SUPERSEDED are terminal.
+    A same-state revalidation may append a new revision but cannot erase prior
+    findings or decisions. Unknown states, skipped transitions, mutation after
+    a terminal state, validation after approval starts, and approval before
+    VALIDATED fail closed.
+  - >-
+    POST /api/v1alpha1/demands/{id}/validate re-resolves every source and appends
+    deterministic sorted findings plus one demand revision and audit event. A
+    VALIDATED projection is the exact TenantDemand v1alpha1 resource whose
+    accepted prerequisite list is derived from decisions; it is source and
+    contract evidence only, not a profile, artifact, deployment, runtime,
+    assurance, or tenant-acceptance result. GET /api/v1alpha1/demands/{id}
+    returns the tenant projection and a strong revision/digest ETag.
+  - >-
+    POST /api/v1alpha1/demands/{id}/approve requests approval only from a
+    VALIDATED demand. It calls an injected local ApprovalPolicyHook; the control
+    plane does not embed a policy engine, accept policy decisions from request
+    bodies, call a hosted service, or fail open. The hook must return ADMITTED
+    with one immutable policy reference, 1..32 required distinct decisions, a
+    closed 1..32-member eligible-reviewer set, an expiry, and separation of the
+    requester from reviewers. DENIED, UNAVAILABLE, malformed, expired, or
+    self-approval-permitting policy results refuse the request without partial
+    state. Exact idempotent replay returns the original approval.
+  - >-
+    The created ApprovalRequest has approvalType DEMAND and PENDING state and
+    binds the organization, demand id, demand canonical digest, demand revision,
+    policy reference, requester, quorum, request time, and expiry. GET
+    /api/v1alpha1/approvals/{id} returns the tenant-scoped canonical projection
+    and strong ETag. POST /api/v1alpha1/approvals/{id}/decision accepts only
+    APPROVE or REJECT plus a bounded reason code from the authenticated actor;
+    authorization comes only from the stored policy-hook result. Reviewers are
+    distinct, the requester cannot decide, and one actor cannot decide twice.
+  - >-
+    ApprovalRequest follows the CON-005 lifecycle exactly: PENDING becomes
+    APPROVED after the admitted N distinct approvals, REJECTED on the first
+    admitted rejection, EXPIRED when now is at or after expiresAt, or CANCELLED
+    only through a future owning packet. All four target states are terminal.
+    Every decision rechecks the immutable demand digest/revision and current
+    policy binding. Stale demand, stale ETag, expired request, duplicate reviewer,
+    unauthorized reviewer, quorum overflow, conflicting replay, and terminal
+    mutation fail closed. APPROVED moves the demand to APPROVED; REJECTED moves
+    it to REJECTED; EXPIRED moves it to BLOCKED with APPROVAL_EXPIRED. Neither a
+    DEMAND approval nor its test fixture is TENANT_ACCEPTANCE.
+  - >-
+    Authenticated OIDC session context is the sole organization and actor source;
+    tenant headers and organization/actor ids in body or query are rejected.
+    Cross-tenant and unknown resources use the same 404 envelope. Every mutation
+    requires CSRF proof and Idempotency-Key; every update also requires If-Match.
+    Missing If-Match is 428, stale ETag is 412, key reuse with a different
+    canonical request fingerprint is 409, and exact replay returns the stored
+    status/body/ETag without a second revision, decision, or audit event.
+  - >-
+    PrerequisiteDecision and audit records are append-only; demand and approval
+    rows mutate only through versioned legal transitions, and the approval
+    decision array may only retain its exact immutable prefix and append one new
+    decision. The additive migration creates only control.demand,
+    control.prerequisite_decision, and control.approval; forces organization RLS;
+    uses transaction-local planeon.organization_id; grants least privilege; and
+    does not destructively alter CTRL-001 or CTRL-002 tables. Application
+    mutations commit demand, approval, decisions, idempotency, and audit atomically. Actual PostgreSQL is
+    NOT_RUN_ENV_UNAVAILABLE unless a disposable credential-free local cluster is
+    supplied; the in-memory store must preserve matching isolation, lifecycle,
+    concurrency, idempotency, append-only, and atomic-failure semantics.
+  - >-
+    The responsive Next.js App Router demand UI exposes /demands and uses named
+    states, explicit prerequisite ACCEPT/REJECT controls, rejection explanations,
+    source-readiness findings, approval quorum/reviewer progress, terminal-state
+    guards, loading/empty/error states, semantic controls, visible focus,
+    keyboard operation, and reduced-motion behavior using local assets only.
+    It does not compile a profile, create a bundle, execute a policy engine, or
+    claim the full Playwright/WCAG acceptance owned by CTRL-006.
+deliverables:
+  - Exact predecessor locks plus validated TenantDemand and ApprovalRequest projections with closed state transitions.
+  - Tenant-isolated demand service with source re-resolution, explicit prerequisite accept/reject, deterministic findings, strong ETags, idempotency, and append-only audit.
+  - Fail-closed injected N-of-M policy hook, authenticated distinct reviewer decisions, rejection reasons, expiry/staleness guards, and canonical approval lifecycle.
+  - Additive PostgreSQL/RLS source migration plus explicit NOT_RUN_ENV_UNAVAILABLE runtime evidence when no disposable local database exists.
+  - Professional responsive demand and approval UI with explicit states and no public-network asset or telemetry dependency.
+  - Packet-local direct-argv descriptor running predecessor regression, demand contract, demand approval E2E, and zero-bill checks in one signed offline process tree.
+excluded:
+  - Silent prerequisite acceptance, caller-supplied tenant/actor/policy authority, embedded or hosted policy engine, self-approval, mutable or deleted audit/decision history, profile compilation, bundle creation, infrastructure provisioning, paid API, runtime download, or claims of artifact/deployment/runtime/assurance/tenant-acceptance evidence.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","bootstrap-e2e"],["make","demand-contract"],["make","demand-approval-e2e"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Legal-state transition table coverage.", "Missing owner/readiness, rejected prerequisite, stale approval, duplicate request, and tenant-denial vectors."]
-rollback: Revert demand and approval features plus their additive migration without deleting questionnaire data.
+expectedEvidence:
+  - Legal demand and ApprovalRequest transition-table coverage, exact N-of-M completion, first-rejection termination, expiry handling, and append-only revision/decision/audit proof.
+  - Missing/unavailable/stale/wrong-tenant owner or readiness source, rejected/missing/duplicate/surplus prerequisite, policy deny/unavailable/malformed, self/unauthorized/duplicate reviewer, stale demand/approval/ETag, idempotency conflict, terminal mutation, atomic failure, and cross-tenant indistinguishable-not-found denial vectors.
+  - Strict TypeScript, Next standalone build, responsive semantic route source, migration/RLS source parity, zero-public-network and zero-bill scans pass; live PostgreSQL remains NOT_RUN_ENV_UNAVAILABLE unless the declared disposable environment exists.
+rollback: Revert demand and approval routes, UI, service, descriptor, and additive migration while preserving CTRL-001 authentication/tenant/audit/idempotency data, all CTRL-002 questionnaire data, and every append-only demand, prerequisite, approval, decision, finding, and audit record already created; never run a destructive down migration or alter an external policy service, database, artifact, deployment, runtime, or tenant decision.
