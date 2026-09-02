@@ -1,16 +1,139 @@
 id: OP-003
 repository: mas-harness-operator
 branch: codex/op-003-foundation-reconcile
-objective: Reconcile namespaces, isolation baselines, ordered foundation waves, server-side inventory, conditions, idempotency, restart recovery, and evidence.
+objective: Add a deterministic namespaced foundation reconciliation engine with ordered server-side apply, durable generation inventory, crash recovery, status conditions, and content-minimal evidence.
 predecessors: [OP-002, DIST-004]
-allowedPaths: ["internal/controller/foundation/", "internal/apply/", "internal/inventory/", "internal/evidence/", "config/foundation/", "tests/foundation/", "fixtures/foundation/", "docs/reconciliation.md", "ci/targets/op-003.json"]
+allowedPaths:
+  - internal/controller/foundation/
+  - internal/apply/
+  - internal/inventory/
+  - internal/evidence/
+  - config/foundation/
+  - tests/foundation/
+  - fixtures/foundation/
+  - docs/reconciliation.md
+  - ci/targets/op-003.json
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
-contracts: ["Consumes verified InstallPlan waves and foundation module intents v1", "Produces installation conditions, inventory, apply receipts, and evidence v1"]
-deliverables: ["Namespace/RBAC/default-deny/quota/security baseline, one-wave-at-a-time server-side apply, generation inventory, status conditions, idempotent restart, and evidence refs."]
-excluded: ["Optional module health, upgrades, destructive cleanup, or controller access to signing secrets."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","envtest-foundation"],["make","foundation-crash-matrix"],["make","security"]]
+contracts:
+  - >-
+    Implementation starts from exact merged mas-harness-operator OP-002 commit
+    eb4eebc2205a9d9fdfe81f0b57af44f5b11588da. Its accepted pull-request and
+    exact-main runs are 33654167405 and 33654309373. The namespaced CRD,
+    sixteen-state lifecycle, non-mutating default controller, closed dispatcher,
+    signed-bundle verifier, immutable receipt, root-owned Cosign, Go closure,
+    inert PORTING ledger, and zero-bill boundary remain active and byte-compatible.
+    OP-003 changes no CRD, manager wiring, Makefile, dispatcher, workflow,
+    dependency, image, chart, RBAC, or PORTING record.
+  - >-
+    The profile authority is exact merged mas-harness-distribution DIST-004
+    commit 6ef7273f0674c3d39f2bd5becf084a4fd16c590c. Its accepted pull-request
+    and exact-main runs are 33643041456 and 33643205684. OP-003 does not mount,
+    open, import, or depend on that checkout. The committed foundation fixture
+    independently encodes only the closed public facts pinned here: one target
+    namespace, digest-only artifacts, ordered selected modules, default-deny
+    ingress and egress, bounded quota and limits, dedicated service account,
+    and namespaced least-privilege Role/RoleBinding.
+  - >-
+    Namespace creation and mutation are not authorized. The target namespace
+    must already exist and must equal the caller's configured watch namespace;
+    absent or mismatched scope blocks before Apply. Every planned resource is
+    namespaced to that exact non-default namespace. Cluster-scoped objects,
+    Namespace objects, wildcard API groups/resources/verbs, Secrets, token
+    requests, SCC mutation, admission webhooks, CRDs, Nodes, persistent volume
+    deletion, and cross-namespace subjects or references are rejected.
+  - >-
+    A FoundationPlan v1alpha1 is canonical JSON with exactly schemaVersion,
+    organizationId, installationId, generation, targetNamespace, profileDigest,
+    bundleDigest, releaseDigest, verificationReceiptDigest, and waves. All ids,
+    digests, generation, names, API versions, kinds, namespaces, wave ordering,
+    and resource ordering are closed and validated. Each resource contains one
+    canonical JSON manifest and its SHA-256; its apiVersion/kind/namespace/name
+    identity must exactly equal the manifest metadata and its digest. Unknown,
+    duplicate, unsorted, mutable-image, non-canonical, or missing content blocks.
+  - >-
+    The first wave is exactly foundation-baseline and contains exactly one
+    dedicated ServiceAccount, default-deny NetworkPolicy covering both Ingress
+    and Egress, ResourceQuota, LimitRange, namespaced Role, and RoleBinding to
+    that ServiceAccount. The closed resource-kind allowlist is ServiceAccount,
+    NetworkPolicy, ResourceQuota, LimitRange, Role, RoleBinding, and ConfigMap.
+    ConfigMaps may contain only non-secret inventory/configuration metadata.
+    Pod/workload, Secret, Service, Ingress, PVC, storage, image pull, and optional
+    harness-module resources are outside OP-003.
+  - >-
+    The apply Port receives direct typed arguments only and models Kubernetes
+    server-side apply with field manager planeon-foundation-v1, force=false,
+    dryRun=false, and the canonical manifest. It returns exact UID,
+    resourceVersion, observed manifest digest, and appliedAt. Any scope drift,
+    missing identity, changed observed digest, conflict, warning, unavailable
+    backend, or ambiguous response is a bounded failure; the engine never
+    retries with force, delete/recreate, client-side apply, kubectl, Helm, shell,
+    or an unverified resource.
+  - >-
+    InventoryStore is the sole durable state port. It loads and compare-and-swaps
+    one canonical GenerationInventory v1alpha1 keyed by organization,
+    installation, generation, profile, bundle, release, target namespace, and
+    plan/verification receipt digests. It records ordered waves and each
+    resource's immutable identity, desired/observed digest, UID, resourceVersion,
+    appliedAt, and APPLIED state. Revision mismatch blocks as INVENTORY_CONFLICT;
+    prior-generation or binding drift blocks. No database, Secret, raw business
+    payload, credential, or cross-tenant key is introduced.
+  - >-
+    Reconciliation is one wave at a time and one resource at a time. Before
+    Apply it persists WAVE_APPLYING plus the exact next resource; after Apply it
+    persists that receipt before advancing. A restart reloads inventory, proves
+    every completed binding, and resumes the first incomplete resource. Repeated
+    calls after COMPLETE return the same outcome and make zero Apply/store writes.
+    The closed crash hooks BEFORE_APPLY, AFTER_APPLY_BEFORE_RECEIPT,
+    AFTER_RECEIPT, BEFORE_STATUS, and AFTER_STATUS prove convergence. The
+    after-apply crash may repeat server-side apply for the same identity/digest,
+    but it may never create a second logical resource or advance without receipt.
+  - >-
+    A successful Outcome v1alpha1 contains observedGeneration, APPLYING or
+    HEALTH_CHECKING phase, current release digest, exact inventory/evidence
+    digests, and all seven CON-005 condition types in lexical order with
+    observedGeneration. DependenciesResolved, ArtifactsVerified,
+    PolicyCompliant, Configured, and EvidenceCurrent are True; Ready and Healthy
+    remain Unknown with FOUNDATION_APPLIED_AWAITING_HEALTH. OP-003 never emits
+    READY, deployment, runtime, assurance, or tenant-acceptance evidence.
+  - >-
+    EvidenceBuilder emits one canonical FoundationApplyEvidence v1alpha1 with
+    only ids/digests/generation, wave/resource counts, bounded result/reason,
+    startedAt/completedAt whole-second UTC, and inventory digest. It excludes
+    manifests, annotations, Secret data, environment variables, business data,
+    tool output, credentials, and free-form errors. Time is caller supplied;
+    no wall-clock or random source affects deterministic tests.
+  - >-
+    The package remains dependency-injected and socket-free in OP-003. It does
+    not alter the default OP-001 controller wiring because no signed plan source,
+    receipt admission store, live API-server authorization, or tenant target is
+    part of this packet. A real cluster run is NOT_RUN_ENV_UNAVAILABLE under
+    deny-all CI; source tests use in-memory fakes that model API-server identity,
+    CAS, crash, restart, conflict, and idempotency precisely.
+  - >-
+    make prefetch remains first through the OP-001 handler. The immutable
+    bootstrap Makefile has no generic later target, so packet acceptance invokes
+    foundation-reconcile, foundation-crash-matrix, and foundation-security
+    directly through ci/run_make_target.py. ci/targets/op-003.json owns only
+    those three direct-argv handlers; zero-bill remains last through OP-001.
+    Tests use committed fixtures and the immutable OP-001 Go cache only, with no
+    package, image, cluster, registry, trust, or runtime download.
+deliverables:
+  - Closed canonical FoundationPlan/resource validation and complete secure baseline fixture.
+  - Server-side apply port, CAS inventory, ordered wave engine, deterministic conditions/evidence, and restart-idempotency semantics.
+  - Crash-at-every-boundary, drift/conflict/scope/allowlist/security, replay, and zero-write-after-complete test matrices.
+  - Packet-local closed dispatcher descriptor and reconciliation/runbook documentation with explicit non-evidence states.
+excluded:
+  - Namespace creation/mutation, cluster-scoped RBAC, CRD/schema/manager wiring changes, live Kubernetes discovery/apply, kubectl/Helm execution, optional modules, health probes, upgrades, rollback, deletion, uninstall, or destructive cleanup.
+  - Artifact publication, image build/pull, registry mutation, installation/deployment/runtime claims, assurance, tenant acceptance, or any PASS inferred from unavailable environment input.
+  - Warm-source access, hosted runners, Actions artifacts/caches/packages, API keys, credentials, external telemetry, runtime downloads, mutable references, cloud provisioning, or billable services.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["python3","ci/run_make_target.py","foundation-reconcile"],["python3","ci/run_make_target.py","foundation-crash-matrix"],["python3","ci/run_make_target.py","foundation-security"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Crash at each apply/status boundary converges without duplicate resources.", "Only verified selected foundation resources exist and conditions report observedGeneration."]
-rollback: Delete only current-generation foundation inventory in reverse wave order while retaining evidence and previous-ready inventory.
+expectedEvidence:
+  - Canonical valid plan produces exact baseline identity and deterministic plan digest twice; unknown, non-canonical, duplicated, unsorted, mutable, forbidden-kind, cross-namespace, default-namespace, secret-bearing, missing-baseline, and digest-drift vectors block before Apply/store writes.
+  - Every ordered wave/resource is applied with planeon-foundation-v1, force=false and one durable receipt; inventory and evidence bytes are deterministic for caller-fixed time and all condition types/order/observedGeneration match CON-005.
+  - Crash injection before/after every Apply, receipt, and status boundary followed by a new engine instance converges to one logical resource per identity, the same complete inventory/evidence/outcome, and zero writes after completion.
+  - Apply conflict, API response drift, inventory CAS conflict, prior-generation/binding drift, missing namespace scope, and unavailable backend emit bounded reasons and never force, delete, broaden scope, or claim readiness.
+  - Signed hash-pinned acceptance passes prefetch, all three OP-003 handlers, and zero-bill in one OS-denied-outbound process tree. Source, PR CI, merge, exact-main, artifact, deployment, runtime, assurance, and tenant acceptance remain separate evidence states.
+rollback: Revert the unreleased OP-003 packages, fixture, descriptor, and documentation together to exact OP-002 commit eb4eebc2205a9d9fdfe81f0b57af44f5b11588da. No live API server, namespace, resource, inventory, status, or tenant workload has been mutated.
