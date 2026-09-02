@@ -8,12 +8,158 @@ warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["reference_labs/white_goods/","tests/reference_labs/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/acceptance.py","src/data_source_harness/conformance.py","reference_labs/white_goods/README.md","reference_labs/white_goods/__init__.py","reference_labs/white_goods/action-capabilities.json","reference_labs/white_goods/airgap-images.lock.json","reference_labs/white_goods/bundle.py","reference_labs/white_goods/certify.py","reference_labs/white_goods/certify_phase2.py","reference_labs/white_goods/data/api/service-api-fixtures.json","reference_labs/white_goods/data/documents/refrigerator-e05-manual.md","reference_labs/white_goods/data/documents/untrusted-field-note.md","reference_labs/white_goods/data/documents/washing-machine-e21-manual.md","reference_labs/white_goods/data/documents/washing-machine-pump-bulletin.md","reference_labs/white_goods/data/events/telemetry.jsonl","reference_labs/white_goods/data/master/customers.csv","reference_labs/white_goods/data/master/installed_products.csv","reference_labs/white_goods/data/master/products.csv","reference_labs/white_goods/data/quality/quality_inspections.csv","reference_labs/white_goods/data/service/service_orders.csv","reference_labs/white_goods/dataset.lock.json","reference_labs/white_goods/docker-compose.yml","reference_labs/white_goods/freshness-slos.json","reference_labs/white_goods/gqm-plan.json","reference_labs/white_goods/lab.py","reference_labs/white_goods/live/HarnessAcceptance.Containerfile","reference_labs/white_goods/live/README.md","reference_labs/white_goods/live/ServiceApi.Containerfile","reference_labs/white_goods/live/__init__.py","reference_labs/white_goods/live/compose.template.yaml","reference_labs/white_goods/live/connectors.py","reference_labs/white_goods/live/cross_plane_lab.py","reference_labs/white_goods/live/harness-requirements.txt","reference_labs/white_goods/live/harness_probe.py","reference_labs/white_goods/live/harness_runtime_lab.py","reference_labs/white_goods/live/local_lab.py","reference_labs/white_goods/live/model_plane_probe.py","reference_labs/white_goods/live/postgresql-seed.sql","reference_labs/white_goods/live/service_api.py","reference_labs/white_goods/pack-manifest.json","reference_labs/white_goods/phase2-gqm-plan.json","reference_labs/white_goods/phase2.py","reference_labs/white_goods/phase4.py","reference_labs/white_goods/phase5.py","reference_labs/white_goods/phase6_worker.py","reference_labs/white_goods/promotion-readiness.example.json","reference_labs/white_goods/reference-lab-manifest.json","reference_labs/white_goods/runtime/Containerfile","reference_labs/white_goods/runtime/README.md","reference_labs/white_goods/runtime/mirroring/imageset-config.template.yaml","reference_labs/white_goods/runtime/openshift/config-map.yaml","reference_labs/white_goods/runtime/openshift/deployment.template.yaml","reference_labs/white_goods/runtime/openshift/network-policy-allow-internal.yaml","reference_labs/white_goods/runtime/openshift/network-policy.yaml","reference_labs/white_goods/runtime/openshift/service-account.yaml","reference_labs/white_goods/runtime/openshift/service.yaml","reference_labs/white_goods/runtime/protocol-profiles.json","reference_labs/white_goods/runtime/wheelhouse-requirements.txt","reference_labs/white_goods/runtime_bundle.py","reference_labs/white_goods/semantic-mappings.json","reference_labs/white_goods/technology/opensearch/index-mapping.json","reference_labs/white_goods/technology/postgresql/schema.sql","reference_labs/white_goods/technology/redpanda/topic-contract.json","reference_labs/white_goods/technology/service-api/openapi.yaml","tests/reference_labs/__init__.py","tests/reference_labs/test_cold_chain_phase3.py","tests/reference_labs/test_local_cross_plane_lab.py","tests/reference_labs/test_local_harness_runtime_lab.py","tests/reference_labs/test_local_source_lab.py","tests/reference_labs/test_phase4_actions.py","tests/reference_labs/test_phase5_runtime.py","tests/reference_labs/test_phase6_5_integration_spine.py","tests/reference_labs/test_phase6_runtime.py","tests/reference_labs/test_phase7_readiness.py","tests/reference_labs/test_runtime_bundle.py","tests/reference_labs/test_white_goods_lab.py","tests/reference_labs/test_white_goods_phase2.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes white-goods pack, control, domain/data, trust, bundle, and installation behavior v1", "Produces Alpha 1 foundation certification evidence v1"]
-deliverables: ["Campaign for owners/KPIs, ontology, source inventory, readiness gates, profile lock, minimal selected bundle, signature, preflight, apply, health, evidence freshness, and an accurate tenant organization overview with plane/harness drill-down."]
-excluded: ["Retrieval, inference, agents, tools, mutation, or claiming tenant acceptance beyond foundation scope."]
+contracts:
+  - >-
+    Implementation base is exact merged CONF-002 main commit
+    32e21f3f7cba8b3d0d35f76dd795cbd053be2f1f. Its accepted pull-request run is
+    33669602419 and exact-main run is 33669727003. The exact campaigns, schemas,
+    source-package, tests, and fixtures Git trees are
+    7b196065ef411f9f0026386a209d2913f25de7e1,
+    4a60d56bd1943b0badf5044f403766044c404a21,
+    5c85797113fbe55280cfa5d2d988fea18899bf8d,
+    51ae934c7033096404c91369f3b3ce0fd2c1ea6a, and
+    97befeb8d8d8912c445aaa4b1a7b6976efc74479. Makefile,
+    ci/run_make_target.py, ci/run_packet.py, and ci/verify-offline.sh byte
+    SHA-256 values are bb652db371113bab5d9d8924f0b10b1f85793c0cc84178d447ab1095f4e7b981,
+    0a0f5c2d6305a1772848ba2e58b8c3d17321de3fe5fdc99377515e09c1138389,
+    544ac42fc892f376b1f5b9ddafbb28e94230cfa61834a5fce89acef8d8d8b098,
+    and 3800262cd8a9386d94edc0a0350faa3796f0407298c33079badd2f90943e8ef4.
+    This packet preserves all of them and uses only CONF-001 generic campaign
+    dispatch; it creates no descriptor and changes no shared engine.
+  - >-
+    Predecessor release locks are CTRL-007 main
+    39eb8f8fc42382bbfdd8ac1e0723531282648656 with PR/main runs
+    33662200783/33662472964, KN-DATA-002 main
+    2056405d747f10bcea36f089fcd6f2de474b3ee5 with runs
+    33569253853/33569419518, TRUST-OBS-001 main
+    919deda20b5c2a126129de7d484dd7c9667ad11e with runs
+    33535303809/33535602147, OP-003 main
+    0fa716fae4009f4fc63861f808f9e794f8925999 with runs
+    33657138276/33657346833, and DIST-004 main
+    6ef7273f0674c3d39f2bd5becf084a4fd16c590c with runs
+    33643041456/33643205684. They are provenance locks, not permission to mount
+    another checkout or evidence that an Alpha-1 environment exists.
+  - >-
+    The independent fixture also binds public predecessor interface hashes:
+    CTRL-007 taxonomy 0341903fa6de38bc36a27fa6c938196daf65403cb885c7408e56c6429ba3275e,
+    status contract e22d7599cbb92453632ea6dfc0e4d8af0e7f17b18134b9a78687f40f94799a4b,
+    and overview guide 2f331a334aa72d4a8208dcca81b1cba81f347bd5a66fbf426a71135dd0ce5ac8;
+    KN domain coverage 6c8ebd93daae1bcc0a056909a64f0202621b4e9e2a404f00abfdcbd18957e705
+    and readiness-status a39a88015e401ec137e07ea66d994ac3d5844a2bdbe5418502ad2f7289ec026d;
+    trust usage config 79978c6006e9e2d27b31cb15a212e668026a3ac7eb2867b55206da78a0999ec0;
+    distribution OCI guide 68ca0d58cf657a90d514b870c0214f157bf69a4549c20a1f4bb294535d510c2b;
+    and operator foundation status/plan
+    134a515b26b50c54a627735db2738fc9da179f788e53e704fd0be20cd0469254/
+    9db56d5edd265506d589fc2b802d41d6aab2a9ba0ca31bebf4784348ab87e391.
+    Product acceptance compares only packet-owned literal locks; it never reads
+    those predecessor repositories.
+  - >-
+    fixtures/alpha1/journey.json is canonical JSON with the exact closed fields
+    schemaVersion, authority, organization, questionnaire, businessContext,
+    domainContext, dataReadiness, profile, bundle, stages, and overviewRef.
+    Authority has exactly six records, one for each predecessor, each closed to
+    packetId, repository, commit, pullRequestRunId, and exactMainRunId.
+    Organization is the synthetic org.marmara-thermal tenant, air-gapped
+    OpenShift on linux/arm64 with PHYSICAL_AIR_GAP isolation, local-only
+    dependencies, no external endpoint, and no credential, business payload,
+    personal data, or secret.
+  - >-
+    Questionnaire answers declare the white-goods industry, owners, desired
+    outcomes and KPI identifiers, deployment and regulatory inputs, source-kind
+    inventory, and only the tenant-demanded knowledge.domain-semantic and
+    knowledge.data-integration harnesses. Business context has named accountable
+    roles and measurable KPI definitions without observed values. Domain context
+    binds a synthetic ontology/mapping/coverage digest set. Data readiness has
+    the ordered business.owner, business.outcome, data.owner, data.quality,
+    data.completeness, data.freshness, data.provenance, data.classification,
+    integration.readiness, and autonomy.boundary gates; every PASS requires a
+    nonempty evidence reference and readiness remains fixture evidence, never a
+    live source claim.
+  - >-
+    The locked profile separates two DEMAND_SELECTED knowledge harnesses from
+    three REQUIRED_FOUNDATION_DEPENDENCY harnesses: runtime.infrastructure,
+    trust.security-safety, and trust.observability-finops. Exactly five harnesses
+    are selected and exactly eleven are NOT_SELECTED. The expected module list is
+    exact, sorted, unique, digest addressed, local-only, and carries no image tag,
+    registry host, public URL, or unselected artifact. Bundle state is
+    NOT_BUILT_IN_OFFLINE_CAMPAIGN and signature, preflight, apply, health, and
+    freshness remain NOT_RUN_ENV_UNAVAILABLE until the separately authorized live
+    runner receives a real tenant environment and dual-signed envelope.
+  - >-
+    Journey stages are exact and ordered: QUESTIONNAIRE, BUSINESS_CONTEXT,
+    DOMAIN_CONTEXT, DATA_READINESS, PROFILE_LOCK, BUNDLE_BUILD,
+    SIGNATURE_RELEASE, PREFLIGHT, APPLY, RUNTIME_HEALTH, and EVIDENCE_FRESHNESS.
+    The first five may be FIXTURE_VALIDATED with UNIT-only claims. The remaining
+    six are NOT_RUN_ENV_UNAVAILABLE and must carry no fabricated digest, endpoint,
+    receipt, timestamp, or PASS. Every downstream stage is blocked when any
+    predecessor is non-pass; offline tests mutate every boundary and prove no
+    status skipping or false readiness.
+  - >-
+    fixtures/alpha1/overview.json contains exactly the four canonical planes and
+    sixteen numbered, named harnesses in CTRL-007 order. The five selected
+    harnesses are BLOCKED with installation BLOCKED and reason
+    LIVE_FOUNDATION_ENVIRONMENT_UNAVAILABLE. The eleven unselected harnesses are
+    NOT_SELECTED, ABSENT, EMPTY, have only NOT_APPLICABLE evidence, and never
+    improve or degrade organization health. Runtime, knowledge, and trust planes
+    are BLOCKED, execution is EMPTY, and organization aggregate is BLOCKED with
+    counts BLOCKED=5 and EMPTY=11.
+  - >-
+    Each selected harness overview carries all eleven independent axes in exact
+    order: SOURCE, CONTRACT_UNIT, PR_CHECK, MERGE, ARTIFACT_SBOM,
+    SIGNATURE_RELEASE, DEPLOYMENT, RUNTIME, SECURITY, ASSURANCE, and
+    TENANT_ACCEPTANCE. Source and contract/unit may be PASS only with digest
+    references. PR, merge, artifact/SBOM, signature/release, and security are
+    MISSING in the packet-local pre-run projection. Deployment, runtime, and
+    assurance are NOT_RUN_ENV_UNAVAILABLE. Tenant acceptance is NOT_APPLICABLE
+    with an explicit foundation-scope applicability reason. No axis is collapsed,
+    waived, scored, or inferred from another.
+  - >-
+    Overview freshness is SOURCE_UNAVAILABLE and retains its last packet-local
+    binding without manufacturing current state. It includes exact local routes
+    /overview, /planes/{planeId}, and /harnesses/{harnessId}; all four plane and
+    sixteen harness destinations are unique and resolvable. Tests provide the
+    same complete semantic navigation model at 320 CSS pixels and at 200 percent
+    zoom, assert 44-pixel minimum controls and one labelled main landmark, and
+    model cross-tenant/unknown detail as the same bounded NOT_FOUND result. No
+    browser, frontend server, network, database, or tenant session is started by
+    this repository.
+  - >-
+    campaigns/alpha1/campaign.json is LIVE_CAMPAIGN and contains exactly two
+    required ENVIRONMENT_CAPABILITY controls: foundation-runtime on RUNTIME and
+    foundation-assurance on ASSURANCE. Its packet-owned environment fixture sets
+    both capabilities to null. Offline run status is therefore exactly
+    NOT_RUN_ENV_UNAVAILABLE; the unsigned technical evidence remains structurally
+    valid, has resultStatus NOT_RUN_ENV_UNAVAILABLE and originatedAxes exactly
+    RUNTIME then ASSURANCE. evidence-verify PASS means only canonical bundle
+    validation, never live readiness or assurance.
+  - >-
+    Signed offline acceptance first runs all Alpha-1 standard-library unit and
+    negative tests, then generic campaign and evidence verification under the
+    root-owned CONF-A1-001 packet on a public-repository ephemeral credential-free
+    runner. No hosted runner, artifact/cache/package upload, cloud or billing API,
+    third-party key, runtime download, mutable reference, public request, external
+    telemetry, privileged socket, warm-source path, live target, or mutation is
+    allowed.
+deliverables:
+  - Closed synthetic Alpha-1 journey, predecessor ledger, questionnaire/business/domain/data-readiness chain, locked minimal five-harness foundation profile, and explicit unavailable bundle-to-runtime stages.
+  - Complete four-plane/sixteen-harness tenant overview fixture with exact selected/unselected aggregation, independent evidence axes, freshness, organization isolation, and local drill-down routes.
+  - LIVE_CAMPAIGN definition that fails honestly to NOT_RUN_ENV_UNAVAILABLE offline plus deterministic technical-evidence verification and report template.
+  - Standard-library positive, mutation, stage-order, selectivity, evidence-axis, freshness, isolation, navigation, accessibility-model, no-secret/no-endpoint, and reproducibility tests.
+excluded:
+  - Opening, mounting, fetching, executing, importing, copying, adapting, translating, or hashing content from the warm source or any predecessor checkout during product implementation or acceptance.
+  - Retrieval, context assembly, memory, model inference, AI gateway, experience, protocols, orchestration, tools, sandbox, ML/decision execution, business-data ingestion, source mutation, live bundle creation/signing, cluster discovery/apply, health probing, assurance certification, or tenant acceptance.
+  - Browser/server/database/registry/Kubernetes execution, live campaign argv in CI, public network, cloud or billing API, hosted runner, paid service, third-party key, credential, runtime download, artifact upload, telemetry export, or any PASS inferred from unavailable input.
 prefetchCommands: []
-offlineAcceptanceCommands: [["make","campaign","CAMPAIGN=alpha1-white-goods"],["make","evidence-verify","CAMPAIGN=alpha1-white-goods"]]
+offlineAcceptanceCommands: [["python3","-m","unittest","discover","-s","tests/alpha1","-p","test_*.py"],["make","campaign","CAMPAIGN=alpha1-white-goods"],["make","evidence-verify","CAMPAIGN=alpha1-white-goods"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-liveCampaignExecution: {"launcherArgv":["/opt/planeon/bin/harness-live-campaign-launch"],"commandTransport":"ARGV_ARRAY_V1","executionPlacement":"PREINSTALLED_TARGET_LOCAL_EPHEMERAL_RUNNER","executionEnvelopeEnvironment":"HARNESS_LIVE_EXECUTION_ENVELOPE","executionEnvelopeMode":"DUAL_SIGNED_PACKET_COMMAND_CAMPAIGN_ENDPOINT_BINDING_V1","releaseTrustStoreMount":"/etc/planeon/trust/release-trust-bundle.json","tenantTrustStoreMount":"/etc/planeon/trust/tenant-trust-bundle.json","trustStoreMode":"HASH_PINNED_LOCAL_PUBLIC_KEYS_VALIDITY_PURPOSE_AND_REVOCATION_V1","revocationRequired":true,"networkIsolation":"OS_ENFORCED_DENY_ALL_EXCEPT_SIGNED_ENDPOINTS","endpointAuthority":"TENANT_CONTROLLED_PREEXISTING_CAPACITY_ONLY","dynamicEndpointTransport":"PREAUTHORIZED_API_OR_CAMPAIGN_PROXY_ONLY","mutationAdmission":"SERVER_SIDE_SIGNED_ZERO_INCREMENTAL_COST_POLICY_AND_RBAC_REQUIRED","capacityAuthorization":"INDEPENDENT_OPERATOR_SIGNED_FIXED_PREEXISTING_CAPACITY","publicInternetDiscovery":"DENIED","cloudManagementApis":"DENIED","billingApis":"DENIED","thirdPartyApiKeys":"DENIED","credentialMode":"TENANT_LOCAL_SHORT_LIVED_FILE_REFERENCE","unavailableResult":"NOT_RUN_ENV_UNAVAILABLE","ciEvidenceUse":"FORBIDDEN","allowedEvidenceAxes":["RUNTIME","ASSURANCE"],"commands":[["make","campaign","CAMPAIGN=alpha1-white-goods"],["make","evidence-verify","CAMPAIGN=alpha1-white-goods"]]}
-expectedEvidence: ["Independent source/CI/artifact/signature/deployment/runtime/evidence axes remain independently visible in the tenant overview.", "Missing readiness blocks installation, unused harness images are absent, and unselected harnesses render as NOT_SELECTED without degrading organization health.", "Overview-to-plane-to-harness navigation, stale projection behavior, tenant isolation, accessibility equivalence, and zero-public-browser-request checks pass."]
-rollback: Uninstall the Alpha 1 test generation while retaining PVCs, evidence, and fixture source records by default.
+liveCampaignExecution: {"launcherArgv":["/opt/planeon/bin/harness-live-campaign-launch"],"commandTransport":"ARGV_ARRAY_V1","executionPlacement":"PREINSTALLED_TARGET_LOCAL_EPHEMERAL_RUNNER","executionEnvelopeEnvironment":"HARNESS_LIVE_EXECUTION_ENVELOPE","executionEnvelopeMode":"DUAL_SIGNED_PACKET_COMMAND_CAMPAIGN_ENDPOINT_BINDING_V1","releaseTrustStoreMount":"/etc/planeon/trust/release-trust-bundle.json","tenantTrustStoreMount":"/etc/planeon/trust/tenant-trust-bundle.json","trustStoreMode":"HASH_PINNED_LOCAL_PUBLIC_KEYS_VALIDITY_PURPOSE_AND_REVOCATION_V1","revocationRequired":true,"networkIsolation":"OS_ENFORCED_DENY_ALL_EXCEPT_SIGNED_ENDPOINTS","endpointAuthority":"TENANT_CONTROLLED_PREEXISTING_CAPACITY_ONLY","dynamicEndpointTransport":"PREAUTHORIZED_API_OR_CAMPAIGN_PROXY_ONLY","mutationAdmission":"SERVER_SIDE_SIGNED_ZERO_INCREMENTAL_COST_POLICY_AND_RBAC_REQUIRED","capacityAuthorization":"INDEPENDENT_OPERATOR_SIGNED_FIXED_PREEXISTING_CAPACITY","publicInternetDiscovery":"DENIED","cloudManagementApis":"DENIED","billingApis":"DENIED","thirdPartyApiKeys":"DENIED","credentialMode":"TENANT_LOCAL_SHORT_LIVED_FILE_REFERENCE","unavailableResult":"NOT_RUN_ENV_UNAVAILABLE","ciEvidenceUse":"FORBIDDEN","allowedEvidenceAxes":["RUNTIME","ASSURANCE"],"commands":[["python3","-m","unittest","discover","-s","tests/alpha1","-p","test_*.py"],["make","campaign","CAMPAIGN=alpha1-white-goods"],["make","evidence-verify","CAMPAIGN=alpha1-white-goods"]]}
+expectedEvidence:
+  - Journey and overview fixtures are canonical and byte-identical over two reads; schemas are closed; authority, stage, plane, harness, route, gate, module, status, reason, and evidence-axis sets and orders are exact with no duplicate or unknown member.
+  - All predecessor commit/run/hash locks match packet-declared literals without product access to another checkout, and mutation of any lock, digest binding, organization binding, source reference, or fixture reference fails.
+  - Questionnaire, business owners/outcomes/KPIs, domain digest set, source inventory, every readiness gate and evidence reference, profile digest, demand/dependency selection reason, and exact five-module set form one organization-bound chain; missing or reordered prerequisites block every dependent stage.
+  - Negative vectors reject a sixth selected artifact, absent dependency, image tag or host, public URL, credential/secret key, tenant or business payload, false signature/preflight/apply/health/freshness PASS, stage skip, duplicated harness, collapsed evidence axis, and tenant acceptance claim.
+  - Overview contains four ordered planes and sixteen named harnesses, selects exactly five, excludes eleven from health, derives BLOCKED=5/EMPTY=11 and organization BLOCKED, exposes all local drill-down routes and semantic equivalents, retains last binding as SOURCE_UNAVAILABLE, and returns indistinguishable bounded not-found for cross-tenant and unknown IDs.
+  - Offline campaign emits required RUNTIME and ASSURANCE results as NOT_RUN_ENV_UNAVAILABLE, overall NOT_RUN_ENV_UNAVAILABLE, and deterministic evidence with only those originated axes. Evidence verification may PASS structurally but cannot upgrade campaign, deployment, runtime, assurance, or tenant acceptance.
+  - Signed PR and exact-main acceptance pass Alpha-1 unit tests and generic evidence verification in one deny-all-outbound process tree. Source, CI, merge, artifact, signature/release, deployment, runtime, assurance, tenant-acceptance candidate, and tenant acceptance remain distinct evidence states.
+  - Environment-facing execution remains NOT_RUN_ENV_UNAVAILABLE until a manual post-merge external launcher validates dual signatures, fixed tenant endpoints, independent capacity authorization, server-side zero-cost admission, and target-local authority. Campaign output can never sign or assert TENANT_ACCEPTANCE.
+rollback: Revert only campaigns/alpha1, tests/alpha1, fixtures/alpha1, and the Alpha-1 report template to exact CONF-002 main. Offline work creates no bundle, release, deployment, runtime, tenant data, or external state to uninstall; any future live rollback requires its own authorized environment procedure and retains evidence by policy.
