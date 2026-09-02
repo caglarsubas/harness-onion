@@ -8,11 +8,78 @@ warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["deployment/profiles/","tests/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/local_only.py","src/data_source_harness/packaging.py","deployment/profiles/air-gapped.json","deployment/profiles/local-laptop.json","deployment/profiles/self-hosted.json","tests/__init__.py","tests/fixtures/contracts/negative/action-preview.no-effects.json","tests/fixtures/contracts/negative/bounded-query-plan.unbounded.json","tests/fixtures/contracts/negative/checkpoint-token.no-position.json","tests/fixtures/contracts/negative/connector-worker-profile.mutable-image.json","tests/fixtures/contracts/negative/coverage-statement.empty.json","tests/fixtures/contracts/negative/cross-plane-evidence-set.collapsed.json","tests/fixtures/contracts/negative/data-batch.no-lineage.json","tests/fixtures/contracts/negative/data-source-connector-profile.missing-discovery.json","tests/fixtures/contracts/negative/deployment-profile.air-gap-external-telemetry.json","tests/fixtures/contracts/negative/deployment-profile.local-laptop-mirror.json","tests/fixtures/contracts/negative/disconnected-runtime-readiness.false-acceptance.json","tests/fixtures/contracts/negative/durable-action-record.raw-parameters.json","tests/fixtures/contracts/negative/entity-redirect.no-lineage.json","tests/fixtures/contracts/negative/freshness-observation.no-watermark.json","tests/fixtures/contracts/negative/industry-domain-pack-manifest.no-tech.json","tests/fixtures/contracts/negative/live-acceptance-campaign.false-acceptance.json","tests/fixtures/contracts/negative/local-cross-plane-evidence.false-pass.json","tests/fixtures/contracts/negative/local-harness-runtime-evidence.false-pass.json","tests/fixtures/contracts/negative/local-image-lock.mutable.json","tests/fixtures/contracts/negative/local-source-evidence.false-pass.json","tests/fixtures/contracts/negative/northbound-tool-catalog.no-scope.json","tests/fixtures/contracts/negative/promotion-readiness.no-runtime.json","tests/fixtures/contracts/negative/protocol-profile-conformance.no-checks.json","tests/fixtures/contracts/negative/reference-lab-manifest.no-scenarios.json","tests/fixtures/contracts/negative/route-decision.selected-without-route.json","tests/fixtures/contracts/negative/semantic-assertion.no-lineage.json","tests/fixtures/contracts/negative/semantic-mapping-candidate.no-lineage.json","tests/fixtures/contracts/negative/source-action-capability-profile.no-idempotency.json","tests/fixtures/contracts/negative/source-action-plan.no-precondition.json","tests/fixtures/contracts/negative/source-mutation-receipt.raw-result.json","tests/fixtures/contracts/positive/action-preview.minimal.json","tests/fixtures/contracts/positive/bounded-query-plan.minimal.json","tests/fixtures/contracts/positive/checkpoint-token.minimal.json","tests/fixtures/contracts/positive/connector-worker-profile.process.json","tests/fixtures/contracts/positive/coverage-statement.partial.json","tests/fixtures/contracts/positive/cross-plane-evidence-set.partial.json","tests/fixtures/contracts/positive/data-batch.minimal.json","tests/fixtures/contracts/positive/data-source-connector-profile.minimal.json","tests/fixtures/contracts/positive/deployment-profile.air-gapped.json","tests/fixtures/contracts/positive/deployment-profile.local-laptop.json","tests/fixtures/contracts/positive/disconnected-runtime-readiness.blocked.json","tests/fixtures/contracts/positive/durable-action-record.executing.json","tests/fixtures/contracts/positive/entity-redirect.minimal.json","tests/fixtures/contracts/positive/freshness-observation.minimal.json","tests/fixtures/contracts/positive/industry-domain-pack-manifest.minimal.json","tests/fixtures/contracts/positive/live-acceptance-campaign.partial.json","tests/fixtures/contracts/positive/local-cross-plane-evidence.passed.json","tests/fixtures/contracts/positive/local-harness-runtime-evidence.passed.json","tests/fixtures/contracts/positive/local-image-lock.arm64.json","tests/fixtures/contracts/positive/local-source-evidence.passed.json","tests/fixtures/contracts/positive/northbound-tool-catalog.minimal.json","tests/fixtures/contracts/positive/promotion-readiness.minimal.json","tests/fixtures/contracts/positive/protocol-profile-conformance.local.json","tests/fixtures/contracts/positive/reference-lab-manifest.minimal.json","tests/fixtures/contracts/positive/route-decision.selected.json","tests/fixtures/contracts/positive/semantic-assertion.minimal.json","tests/fixtures/contracts/positive/semantic-mapping-candidate.minimal.json","tests/fixtures/contracts/positive/source-action-capability-profile.minimal.json","tests/fixtures/contracts/positive/source-action-plan.minimal.json","tests/fixtures/contracts/positive/source-mutation-receipt.minimal.json","tests/helpers.py","tests/reference_labs/__init__.py","tests/reference_labs/test_cold_chain_phase3.py","tests/reference_labs/test_local_cross_plane_lab.py","tests/reference_labs/test_local_harness_runtime_lab.py","tests/reference_labs/test_local_source_lab.py","tests/reference_labs/test_phase4_actions.py","tests/reference_labs/test_phase5_runtime.py","tests/reference_labs/test_phase6_5_integration_spine.py","tests/reference_labs/test_phase6_runtime.py","tests/reference_labs/test_phase7_readiness.py","tests/reference_labs/test_runtime_bundle.py","tests/reference_labs/test_white_goods_lab.py","tests/reference_labs/test_white_goods_phase2.py","tests/test_acceptance.py","tests/test_actions.py","tests/test_cli.py","tests/test_conformance.py","tests/test_connector.py","tests/test_context.py","tests/test_contracts.py","tests/test_coordination.py","tests/test_coverage.py","tests/test_cross_plane.py","tests/test_decoder.py","tests/test_delegation.py","tests/test_deployment.py","tests/test_durability.py","tests/test_evidence.py","tests/test_freshness.py","tests/test_governance.py","tests/test_local_only.py","tests/test_models.py","tests/test_pack_factory.py","tests/test_packaging.py","tests/test_planning.py","tests/test_promotion.py","tests/test_protocol.py","tests/test_protocol_profiles.py","tests/test_routing.py","tests/test_runtime.py","tests/test_runtime_server.py","tests/test_scaffolding.py","tests/test_semantic.py","tests/test_semantic_memory.py","tests/test_telemetry.py","tests/test_worker.py","tests/test_worker_connector.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes signed released bundle and air-gap archive contract v1", "Produces verified imported OCI layout and relocation receipt v1"]
-deliverables: ["Archive with OCI blobs, lock, checksums, signatures, trust, SBOMs, licenses, vulnerability DB, model manifest; safe extract; verify-before-import; relocation proof."]
-excluded: ["Network fallback, runtime downloads, unverified import, secret export, path traversal, or archive bombs."]
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","airgap-export-import"],["make","relocation-proof"],["make","archive-security"]]
+contracts:
+  - Consumes immutable RELEASED directory, signed-release chain, OCI layout, and explicit supply-chain evidence-source set v1alpha1.
+  - Produces deterministic physical-transfer archive, transfer manifest/checksum, VERIFIED_IMPORT directory, and digest-preserving local OCI relocation receipt v1alpha1.
+  - >-
+    Implementation starts from exact merged mas-harness-distribution DIST-003
+    commit c44136bbfa6c87d93c68c70c92fd97a6da8d9124. Its pull-request and
+    exact-main runs are 33638910112 and 33639066541. All earlier selection,
+    staging, supply-chain, approval, Cosign, trust/revocation, promotion,
+    closed-dispatch, inert-PORTING, and zero-bill constraints remain active.
+  - >-
+    Export accepts exactly one immutable RELEASED directory plus an explicit
+    closed evidence map. Required evidence names are license-policy.json,
+    vulnerability-policy.json, vulnerability-db.json, dispositions.json,
+    model-custody.json, and exactly one deterministic SPDX JSON document for
+    every selected component. It rejects a private key/password/seed/token,
+    symlink, hard link, special file, mutable path, duplicate logical name,
+    extra unclassified evidence, missing component SBOM, changed signed chain,
+    or source exceeding the fixed entry/byte/path bounds.
+  - >-
+    airgap.py writes an uncompressed POSIX ustar archive in lexical path order
+    with uid/gid/mtime zero, empty owner names, normalized 0644 files and 0755
+    directories, and no PAX/global/sparse/device/FIFO/link entries. A canonical
+    transfer-manifest.json binds schema, RELEASED record and release digests,
+    every payload/evidence path, size, SHA-256, media role, and archive limits.
+    The archive is staged privately, fsynced, published by no-overwrite atomic
+    rename, and returned with its SHA-256 for separate physical custody.
+  - >-
+    Import requires the expected archive SHA-256 out of band, verifies it before
+    parsing, applies the same fixed maximum archive bytes, entries, per-file
+    bytes, total expanded bytes, path depth/length, and compression-ratio rules,
+    and rejects duplicate, absolute, empty, dot, traversal, backslash, Unicode-
+    ambiguous, linked, sparse, special, PAX, extra, missing, wrong-mode, or
+    checksum-mismatched members. It extracts each regular file create-exclusively
+    without tarfile.extract and never follows a destination path.
+  - >-
+    Import recomputes transfer-manifest closure, validates the full DIST-003
+    signed release with the imported public trust and explicit verification
+    instant, verifies bundle/evidence equality and the OCI layout, checks every
+    required evidence-source digest, SPDX component coverage, vulnerability DB
+    self digest, and model manifest binding, then writes a self-digested
+    VERIFIED_IMPORT receipt. Only the verified private sibling is atomically
+    renamed; failure leaves no destination or partial extraction.
+  - >-
+    relocation.py copies only the verified imported OCI layout into a private
+    sibling under a caller-supplied local destination. It validates every source
+    and destination blob and exact tree digest, changes no OCI bytes or digest,
+    creates a canonical receipt binding import receipt, source/destination OCI
+    digest, release digest, and stable local target id, then atomically publishes
+    without overwrite. It performs no registry login, push, pull, tag rewrite,
+    endpoint discovery, cluster apply, or network fallback.
+  - >-
+    SourceReuse entries remain historical provenance only. Product implementation
+    and acceptance neither mount nor open any warm-start checkout. The root
+    launcher retains exact Cosign 3.1.1 custody because import re-verifies the
+    signed chain, and all commands run in one deny-all-outbound process tree.
+  - >-
+    ci/targets/dist-air-001.json owns only airgap-export-import,
+    relocation-proof, and archive-security direct-argv handlers. make prefetch
+    remains first and make zero-bill remains the final cumulative gate.
+deliverables:
+  - Deterministic bounded archive containing released OCI bytes, lock, signed chain, trust, SBOMs, license policy, vulnerability policy/database/dispositions, and model custody evidence.
+  - Digest-before-parse safe import, full offline re-verification, atomic VERIFIED_IMPORT publication, and byte-identical OCI relocation receipt.
+excluded:
+  - Network fallback, runtime downloads, registry mutation, secret/private-key export, generic tar extraction, unchecked compression, unverified import, digest rewrite, deployment, runtime, assurance, or tenant acceptance.
+  - Warm-source access, cloud storage/KMS, hosted runners, GitHub artifact/cache/package storage, API keys, external telemetry, or billable services.
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","airgap-export-import"],["make","relocation-proof"],["make","archive-security"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Two-zone no-network export/import transcript.", "Corrupt checksum/signature, traversal, bomb, missing/extra blob, and digest-change denial."]
-rollback: Delete the failed imported candidate layout and retain the previous verified local registry content.
+expectedEvidence:
+  - Two independent temporary zones export and import the same archive with OS-denied network, matching archive/manifest/release/OCI digests, complete required evidence, and no secret material.
+  - Repeated export of identical input is byte-identical; wrong out-of-band digest, corrupt signature/checksum/blob, missing or extra evidence, and signed-subject mutation fail before publication.
+  - Traversal, absolute/backslash/dot/Unicode-ambiguous/duplicate paths, link/device/FIFO/PAX/sparse members, oversized archive/file/expanded set, excessive depth/count, and decompression-bomb vectors leave no extracted destination.
+  - Relocation yields byte-identical source/destination OCI tree digests and rejects mutation, symlink, hard link, existing destination, invalid target id, or injected pre-publish failure.
+  - Signed hash-pinned acceptance runs prefetch, all three packet targets, and zero-bill with OS-denied outbound traffic; import/relocation evidence does not assert deployment/runtime/assurance/tenant acceptance.
+rollback: Delete only a failed private import/relocation candidate or select a prior immutable imported release digest. Never overwrite a verified import, alter the source archive, or delete prior local registry content.
