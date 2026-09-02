@@ -8,11 +8,86 @@ warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: DISCOVERY_ONLY, paths: ["scripts/","deploy/helm/","tests/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/llm_inference_engine.git", commit: "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", reuseMode: REFERENCE_ONLY, paths: ["scripts/container_smoke.sh","scripts/download_mlx_model.py","scripts/download_vlm_models.py","scripts/launchd/com.prometa.inference-engine.plist","scripts/launchd/com.prometa.log-rotate.plist","scripts/launchd/com.prometa.ollama.plist","scripts/list_models.py","scripts/native-service.sh","scripts/promote_vllm_model.py","scripts/relocate_images.sh","scripts/rotate_logs.py","scripts/serve_mlx_vlm_openai.py","scripts/serve_molmo_mlx_openai.py","scripts/serve_sida_openai.py","scripts/share-service.sh","scripts/share_endpoint.sh","scripts/smoke_test.py","scripts/stress_test.py","scripts/test_relocate_images.sh","scripts/verify_release_contract.sh","scripts/vlm_request_matrix.py","scripts/vlm_strict_json_smoke.py","deploy/helm/inference-engine/.helmignore","deploy/helm/inference-engine/Chart.yaml","deploy/helm/inference-engine/README.md","deploy/helm/inference-engine/ci/render-production-profile.sh","deploy/helm/inference-engine/ci/render-sno-trial-profile.sh","deploy/helm/inference-engine/templates/NOTES.txt","deploy/helm/inference-engine/templates/_helpers.tpl","deploy/helm/inference-engine/templates/networkpolicy.yaml","deploy/helm/inference-engine/templates/pdb.yaml","deploy/helm/inference-engine/templates/service.yaml","deploy/helm/inference-engine/templates/serviceaccount.yaml","deploy/helm/inference-engine/templates/servicemonitor.yaml","deploy/helm/inference-engine/templates/statefulset.yaml","deploy/helm/inference-engine/templates/validate-production-profile.yaml","deploy/helm/inference-engine/values.openshift-production.yaml","deploy/helm/inference-engine/values.openshift-sno-trial.yaml","deploy/helm/inference-engine/values.yaml","tests/__init__.py","tests/conftest.py","tests/fixtures/lease-vectors/README.md","tests/fixtures/lease-vectors/acks/ack-advisory-nothing-enforced.json","tests/fixtures/lease-vectors/acks/ack-enforcement-off-refused.json","tests/fixtures/lease-vectors/acks/ack-enforcing-quarantine.json","tests/fixtures/lease-vectors/acks/ack-enforcing-without-lease-refused.json","tests/fixtures/lease-vectors/acks/ack-lease-parse-failed.json","tests/fixtures/lease-vectors/acks/ack-missing-field-refused.json","tests/fixtures/lease-vectors/acks/ack-missing-object.json","tests/fixtures/lease-vectors/acks/ack-no-lease.json","tests/fixtures/lease-vectors/acks/ack-stale-lease-still-enforcing.json","tests/fixtures/lease-vectors/acks/ack-unknown-keys-ignored.json","tests/fixtures/lease-vectors/manifest.json","tests/fixtures/lease-vectors/vectors/lease-advisory-expired.json","tests/fixtures/lease-vectors/vectors/lease-agent-scope.json","tests/fixtures/lease-vectors/vectors/lease-lower-revision.json","tests/fixtures/lease-vectors/vectors/lease-quarantine-expired.json","tests/fixtures/lease-vectors/vectors/lease-serving-not-enforcement.json","tests/fixtures/lease-vectors/vectors/lease-serving-replay-across-streams.json","tests/fixtures/lease-vectors/vectors/lease-tampered-signature.json","tests/fixtures/lease-vectors/vectors/lease-valid-v1.json","tests/fixtures/lease-vectors/vectors/lease-wrong-key-purpose.json","tests/fixtures/model-routing-policy-v1.json","tests/fixtures/model-routing-policy-v2.json","tests/test_adapter_usage_paths.py","tests/test_admin_auth_keys.py","tests/test_admin_model_routing_policy.py","tests/test_admin_policies.py","tests/test_auth.py","tests/test_auto_eval.py","tests/test_auto_eval_policy.py","tests/test_cancellation.py","tests/test_chat_multimodal.py","tests/test_chat_streaming.py","tests/test_completions.py","tests/test_composite_registry.py","tests/test_concurrency.py","tests/test_dynamic_batching.py","tests/test_embeddings.py","tests/test_evals.py","tests/test_genai_metrics.py","tests/test_generation_deadline.py","tests/test_generation_timeout.py","tests/test_guardrail.py","tests/test_http_contract.py","tests/test_intent_tracing.py","tests/test_llama_cpp_context_window.py","tests/test_llama_cpp_tool_arguments.py","tests/test_manager.py","tests/test_metrics.py","tests/test_mlx_prefix_cache.py","tests/test_mlx_probe.py","tests/test_mlx_registry.py","tests/test_mlx_vlm_openai_worker.py","tests/test_model_plane_observer.py","tests/test_model_plane_runtime_control.py","tests/test_model_routing_api.py","tests/test_model_routing_policy.py","tests/test_model_routing_rate_limit.py","tests/test_model_routing_runtime.py","tests/test_models_snapshot.py","tests/test_molmo_mlx_openai_worker.py","tests/test_observability.py","tests/test_ollama_http_adapter.py","tests/test_ollama_http_registry.py","tests/test_openai_compat.py","tests/test_otel_exporter.py","tests/test_pairwise.py","tests/test_per_rubric_judges.py","tests/test_prefix_cache.py","tests/test_promote_vllm_model.py","tests/test_registry.py","tests/test_registry_source_order.py","tests/test_request_identity.py","tests/test_rerank.py","tests/test_response_normalize.py","tests/test_responses_api.py","tests/test_scheduler.py","tests/test_server.py","tests/test_sida_openai_worker.py","tests/test_startup_readiness.py","tests/test_state_dispatch.py","tests/test_streaming_tool_audit.py","tests/test_structured_output_capability.py","tests/test_structured_output_enforcement.py","tests/test_structured_outputs.py","tests/test_tool_audit.py","tests/test_tool_timing.py","tests/test_upstream_resilience.py","tests/test_upstream_retry_routing.py","tests/test_usage_ledger.py","tests/test_vllm_adapter.py","tests/test_vllm_probe.py","tests/test_vlm_request_matrix.py","tests/test_vlm_smoke_script.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes locked profile, BOM, module releases, and OCI media types v1alpha1", "Produces canonical bundle.lock.json and staged OCI layout v1"]
-deliverables: ["Exact architecture/module closure, digest-only fetch, vendored charts, canonical lock, staging state, atomic local publish, and minimal-profile proof."]
-excluded: ["Mutable tags, unrelated modules, signing, promotion, network fetch during verify-offline, or tenant mega-images."]
-prefetchCommands: []
+contracts:
+  - Consumes locked profile, BOM, module releases, and OCI media types v1alpha1.
+  - Produces canonical bundle.lock.json and staged OCI layout v1.
+  - >-
+    Implementation starts from exact merged DIST-001 commit
+    03eac03a93560e54299c0f2e3eceef7339ecacc3, whose pull-request and exact-main
+    runs are 33630243399 and 33630388800. All DIST-001 OCI validation, closed
+    dispatcher, inert PORTING ledger, source locks, dependency-free Python
+    toolchain, and zero-bill restrictions remain active and unmodified.
+  - >-
+    The contract predecessor remains exact merged mas-harness-contracts CON-005
+    commit 63a1af44ce0abe31075c37c3529848ebe8fe2fcb. The locked profile and BOM
+    schema SHA-256 values are
+    08936914f52b8c3b611e47ffa35f668dd177718f613907687a67b448877c39a6 and
+    03b2f6b27851f45133aa68b0cd8536e677eeb84ef07303582d6cdcc93b27d744.
+    No contract repository, warm-start checkout, registry, or network endpoint
+    is mounted or opened during implementation or acceptance.
+  - >-
+    fixtures/profiles/minimal-arm64.json is canonical closed JSON. It binds a
+    profile id and digest, exactly linux/arm64, a bounded ordered module list,
+    explicit selected booleans, and digest/size/media-type descriptors whose
+    content is already present in the immutable DIST-001 local OCI fixture.
+    Every selected artifact is sha256-addressed; URL, tag, latest, credential,
+    local absolute path, implicit platform, duplicate module/artifact, unknown
+    field, unsupported media type, or missing source blob fails closed.
+  - >-
+    resolver.py validates the complete declaration before selecting anything,
+    includes only artifacts from selected modules matching every requested
+    platform, orders modules/artifacts lexically, and returns an immutable
+    resolution. An unselected module cannot contribute a blob, chart, image,
+    provider, platform, or lock entry. Empty selection, missing platform
+    coverage, digest/size mismatch, or conflicting reuse of a digest fails with
+    a stable reason code and creates no staging path.
+  - >-
+    helm.py treats chart content only as a pre-vendored digest-addressed local
+    component. It rejects dependency URLs, repositories, aliases, mutable
+    versions, undeclared subcharts, or bytes not present under the source OCI
+    digest. DIST-OCI-001 does not run Helm, render Kubernetes resources, or
+    claim chart semantic conformance; DIST-004 owns render evidence.
+  - >-
+    builder.py creates a private sibling temporary directory, copies only the
+    selected image roots plus their recursively verified config/layer closure,
+    emits canonical bundle.lock.json, verifies every staged digest and the
+    resulting OCI layout, fsyncs files/directories, and publishes with one
+    no-overwrite atomic rename. Failure removes only the private candidate and
+    never alters a prior destination. Symlink, special-file, traversal,
+    hard-link ambiguity, extra source blob, output-inside-source, existing
+    destination, or cross-device/non-atomic publish is rejected.
+  - >-
+    bundle.lock.json is closed canonical JSON with schemaVersion, state
+    BUILT_UNSIGNED, profile id/digest, exact sorted platforms, exact sorted
+    selected modules, component descriptors, complete staged blob descriptors,
+    source index digest, and OCI layout digest. It contains no timestamp,
+    hostname, username, absolute path, credential, signature, release,
+    deployment, runtime, assurance, or tenant-acceptance assertion. Bundle id
+    is sha256 of these canonical lock bytes and repeated clean builds match.
+  - >-
+    schemas/bundle-lock.schema.json closes every field, enum, length, digest,
+    media type, platform, uniqueness, and bound consumed by the implementation.
+    Validation is standard-library and code-enforced in this packet; no new
+    Python dependency or runtime download is introduced. The lock state is
+    staging evidence only and cannot advance beyond BUILT_UNSIGNED.
+  - >-
+    ci/targets/dist-oci-001.json adds only resolve-fixtures, build-fixture, and
+    minimal-selectivity-proof direct-argv handlers. make prefetch remains the
+    DIST-001 validation-only handler and is always the first packet phase. All
+    acceptance runs in the existing signed deny-all-outbound process tree and
+    zero-bill remains cumulative.
+deliverables:
+  - Exact architecture/module resolution, digest-only local closure, pre-vendored chart validation, canonical lock, staging state, atomic local publish, and minimal-profile proof.
+  - Deterministic build and negative fixtures covering selection, platform, digest, closure, path, and atomicity failures.
+excluded:
+  - Mutable tags, unrelated modules, signing, promotion, SBOM, vulnerability scanning, network fetch, registry mutation, Helm execution/rendering, installation, or tenant mega-images.
+  - Warm-source access, external packages, cloud services, hosted runners, GitHub artifact/cache/package storage, API keys, remote telemetry, or runtime downloads.
+prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","resolve-fixtures"],["make","build-fixture"],["make","minimal-selectivity-proof"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Stable bundle-lock digest and complete blob closure.", "Minimal profile includes only selected module images/charts and architecture."]
+expectedEvidence:
+  - Stable canonical bundle-lock and bundle-id digests match across two independent temporary build roots and the complete staged OCI blob closure verifies.
+  - Minimal profile includes only the selected infrastructure module's image/chart closure for linux/arm64; an explicitly unselected AI-gateway module contributes nothing.
+  - Negative vectors reject mutable/remote references, duplicate/unknown fields, missing platform coverage, digest/size/media mismatch, missing/extra blobs, symlinks, output/source overlap, existing destination, and injected pre-publish failure without partial output.
+  - Signed hash-pinned acceptance runs prefetch then resolve-fixtures, build-fixture, and minimal-selectivity-proof with OS-denied outbound traffic; CI/merge/exact-main remain distinct from artifact/release/deployment/runtime/assurance/tenant acceptance.
 rollback: Delete only the unsigned staged OCI layout; no released bundle exists.
