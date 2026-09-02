@@ -100,7 +100,10 @@ contracts:
     ci/targets/conf-002.json registers only parity-registry-check and parity-meta,
     using direct Python argv into packet-owned adapters/tests. The inherited
     dispatcher executes descriptors in lexical packet order and preserves every
-    CONF-001 handler. No generic campaign target is re-registered.
+    CONF-001 handler. Packet prefetch first invokes the inherited no-download
+    prefetch target. Because later packets cannot edit the bootstrap-owned
+    Makefile, offline acceptance invokes ci/run_make_target.py directly for the
+    descriptor-owned targets. No generic campaign target is re-registered.
   - >-
     Signed acceptance runs under the exact CONF-002 packet through the root-owned
     offline launcher on a public-repository ephemeral credential-free runner.
@@ -116,8 +119,8 @@ excluded:
   - Opening, mounting, fetching, executing, importing, copying, adapting, translating, or hashing content from either warm-source repository.
   - Running an original warm test command, cloud, billing, provider, network, load, mutation, live, or paid evaluation; inferring behavior from a filename beyond published planning; or treating an intentional change or untestable target as exact parity.
   - Editing CONF-001 Makefile, dispatcher, toolchain lock, PORTING ledger, schemas, core package, meta campaign, or evidence and signing authority.
-prefetchCommands: []
-offlineAcceptanceCommands: [["make","parity-registry-check"],["make","parity-meta"]]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["python3","ci/run_make_target.py","parity-registry-check"],["python3","ci/run_make_target.py","parity-meta"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - Exact CONF-001 base commit, runs, trees and file locks plus public provenance authority and its index/map hashes are verified without mounting either authority checkout in packet acceptance.
@@ -125,7 +128,7 @@ expectedEvidence:
   - Every vector is independently authored, schema closed, record-bound, deterministic over two runs, excludes all cost and source execution cases, and either has a passing destination adapter, an approved public divergence reason, or the exact untestable reason; WARN or untestable never satisfies exact parity.
   - Negative adapter tests reject unknown families, arbitrary modules, shell or subprocess fields, URLs, credentials, copied payload markers, mutation, unexpected results, altered expectations, unbound provenance, and nondeterministic output.
   - Packet-runner tests reject duplicate or missing inline command authority, aliases, string or shell commands, recursive wrappers, download verbs, malformed offlineExecution, packet replacement, path inheritance, wrong phase order, zero commands, and execution outside the existing isolated session.
-  - Make dispatch preserves CONF-001 handlers, reaches both CONF-002 targets through only ci/targets/conf-002.json, and rejects descriptor ownership, filename, variable, argv, ambiguity, and duplicate faults.
+  - Direct dispatcher acceptance preserves CONF-001 handlers, reaches both CONF-002 targets through only ci/targets/conf-002.json without editing the bootstrap Makefile, and rejects descriptor ownership, filename, variable, argv, ambiguity, and duplicate faults.
   - Signed PR and exact-main acceptance pass parity-registry-check and parity-meta under deny-all outbound isolation, while source, CI, merge, parity metadata, product behavior, deployment, runtime, assurance, and tenant acceptance remain separate states.
   - Source Git objects remain reference-only. Future byte reuse requires a separately revised PORT_CANDIDATE packet, path-level legal approval, COPY_AUTHORIZED mapping, and PORTING.yaml update.
 rollback: Revert the CONF-002 registry, vectors, adapters, campaign, tests, descriptor, and packet-runner correction to exact CONF-001 main without changing warm sources, destination implementations, PORTING authority, or external state.
