@@ -1,18 +1,149 @@
 id: DIST-001
 repository: mas-harness-distribution
 branch: codex/dist-001-bootstrap-tools
-objective: Bootstrap the offline bundle CLI, locked toolchain/prefetch, schema validation, local OCI fixture, and no-network harness.
+objective: Bootstrap the distribution repository's deterministic offline bundle-verification shell, locked standard-library toolchain, local OCI fixture, closed Make dispatcher, and zero-bill acceptance boundary.
 predecessors: [CON-005, MET-003]
-allowedPaths: [".github/workflows/verify.yml", "cmd/harness-bundlectl/", "src/planeon_distribution/", "schemas/", "tests/bootstrap/", "fixtures/oci-layout/", "toolchain.lock", "pyproject.toml", "uv.lock", "Makefile", "README.md", "AGENTS.md", "CONTRIBUTING.md", ".gitignore", "LICENSE", "NOTICE", "SECURITY.md", "PORTING.yaml", "ci/"]
+allowedPaths:
+  - .github/workflows/verify.yml
+  - cmd/harness-bundlectl/
+  - src/planeon_distribution/
+  - schemas/
+  - tests/bootstrap/
+  - fixtures/oci-layout/
+  - toolchain.lock
+  - pyproject.toml
+  - uv.lock
+  - Makefile
+  - README.md
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - .gitignore
+  - LICENSE
+  - NOTICE
+  - SECURITY.md
+  - PORTING.yaml
+  - ci/
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse:
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: DISCOVERY_ONLY, paths: ["deployment/profiles/","scripts/"], strategy: "historical reference-only discovery provenance; implementation access and recursive copying forbidden"}
   - {repository: "git@github.com:caglarsubas/data-source-harness.git", commit: "858281f4b845ffacfe05cdb2c40a402c237d4c54", reuseMode: REFERENCE_ONLY, paths: ["src/data_source_harness/packaging.py","deployment/profiles/air-gapped.json","deployment/profiles/local-laptop.json","deployment/profiles/self-hosted.json","scripts/build-airgap-wheelhouse.sh","scripts/check-local-only.py"], strategy: "historical reference-only exact-blob provenance for independent clean-room parity; implementation access, copying, adaptation, translation, and derivative reuse are forbidden; direct reuse requires a future packet revision after porting admission is enabled"}
-contracts: ["Consumes profile, BOM, bundle, and release schemas v1alpha1", "Produces harness-bundlectl shell and OCI fixture contract v1", "Produces closed packet-local Make target descriptor dispatch v1", "Produces inert destination PORTING ledger v1 with zero current copy authorizations"]
-deliverables: ["Frozen offline tools, validation CLI, local OCI-layout fixture, deterministic filesystem helpers, no-network test harness, and common Make targets.", "Bootstrap Makefile delegates only to ci/run_make_target.py, which validates closed ci/targets/<packet-id>.json descriptors, exact target and variable bindings, cumulative lexical handler order, and direct argv without shell strings; later packets never edit Makefile.", "PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel and cannot name a source path, mapping, copied file, or applied port."]
-excluded: ["Remote registry, real bundle closure, SBOM/scan, signing, or Helm profiles."]
+contracts:
+  - Produces closed packet-local Make target descriptor dispatch v1.
+  - Bootstrap Makefile delegates only to ci/run_make_target.py.
+  - Produces inert destination PORTING ledger v1 with zero current copy authorizations.
+  - PORTING.yaml contains only the closed NO_AUTHORIZATION bootstrap sentinel.
+  - PORTING bootstrap validation proves zero authorized source mappings.
+  - >-
+    Implementation starts from exact public planning seed
+    46505de17b025ade5b065d0e1021cf7c69b6f4c7. That seed contains only README,
+    AGENTS.md, and the pinned self-hosted workflow; it contains no product code.
+    DIST-001 is the sole bootstrap owner of Makefile, ci/run_make_target.py, and
+    PORTING.yaml. Every product file in this packet is implemented clean-room;
+    neither recorded warm-source checkout may be mounted, opened, copied,
+    adapted, translated, or supplied to a child process.
+  - >-
+    The contract predecessor is exact merged mas-harness-contracts commit
+    63a1af44ce0abe31075c37c3529848ebe8fe2fcb; its accepted CON-005 pull-request
+    run is 33363060818. The exact harness-profile, bill-of-materials,
+    bundle-release, and release-manifest byte SHA-256 values at that commit are
+    08936914f52b8c3b611e47ffa35f668dd177718f613907687a67b448877c39a6,
+    03b2f6b27851f45133aa68b0cd8536e677eeb84ef07303582d6cdcc93b27d744,
+    c983a8d97c70d7957e74f06413ca0158e3b7be626468bf8d217dfc5829aa5918,
+    and beb70f35185ce631f23f60b1e0b4c2d7d800cccc5b713a819cac62d596b5f509.
+    toolchain.lock records these immutable source locks as documentary contract
+    authority; signed acceptance does not mount the contracts repository and
+    does not claim a released bundle, install, runtime, assurance, or tenant
+    acceptance state.
+  - >-
+    The zero-bill predecessor is exact Harness-Engineering commit
+    97da35afff79e1582b964b613472609a613ea81b. Its MET-003 packet,
+    zero-bill-policy, and scanner byte SHA-256 values are respectively
+    d0bf1bc8cb15c536433528bf7b30aa3713e5ae44cb809d749fe8f344bccf3eea,
+    77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e,
+    and 57fa7e94bf5657f0daf959d5229dfc2a53a0ab94793d1d5fa03a7513b1272fd7.
+    The packet-local scanner independently enforces no hosted runner,
+    GitHub artifact/cache/package use, cloud provisioning, paid/API-key
+    dependency, external telemetry default, runtime download, mutable OCI
+    reference, or public-network requirement.
+  - >-
+    The runtime is CPython 3.12.14 from root-owned inventory
+    /etc/planeon/python-3.12.14.inventory.json with inventory SHA-256
+    36167810c1ec56f5d5dc55410d9e528c58700ff138608e3b116f868a4d650799,
+    plus root-owned uv 0.12.7 at /opt/planeon/bin/uv with executable SHA-256
+    55936a60bff5de7ac04facb72f9e6fd0ffd9661063480224c3ab321c3f10caff.
+    pyproject.toml and uv.lock contain the local package only and no external
+    dependency. DIST-001 may not invoke Helm, ORAS, Cosign, Syft, Grype, a
+    container engine, registry, package index, or vulnerability service;
+    later packets must pin and preprovision each newly authorized tool.
+  - >-
+    toolchain.lock is a canonical closed JSON object that binds the planning
+    base, contract and MET-003 authorities, exact Python and uv versions,
+    paths, and hashes. Prefetch performs validation only: it verifies the empty
+    product ancestry, authority digests, root-owned tool inventories, exact
+    interpreter versions, dependency-free uv lock, and local fixture closure.
+    It performs no install, sync, download, registry access, or source checkout.
+  - >-
+    The packet owns a strict Python package and harness-bundlectl verify command.
+    The command accepts exactly one local OCI-layout path, never follows a
+    symlink, never interprets a URL, emits one canonical JSON report on stdout,
+    emits bounded reason codes on stderr, and returns 0 for VALID, 2 for invalid
+    input/content, or 3 for an unavailable local path. It never mutates the
+    layout or reports candidate content as signed, released, deployed, running,
+    assured, or tenant accepted.
+  - >-
+    schemas/oci-layout-shell.schema.json defines a closed validation-report
+    contract. The standard-library validator rejects duplicate JSON members,
+    non-UTF-8/non-canonical JSON, symlinks, special files, traversal names,
+    unbounded files/count/depth, unsupported algorithms/media types/versions,
+    mutable references, missing/extra blobs, digest or size mismatch, duplicate
+    descriptors, non-lowercase sha256, and unreachable content. Only relative
+    OCI blobs/sha256/<64 lowercase hex> paths are admissible. The valid fixture
+    is byte-stable and contains an OCI 1.0 layout, canonical index, one image
+    manifest, one config, and one deterministic layer; negative vectors are
+    generated only in temporary directories during tests.
+  - >-
+    The bootstrap Makefile delegates every target to ci/run_make_target.py.
+    The closed dispatcher loads ci/targets/*.json in lexical packet order,
+    validates exact packet owner and filename, target names, variable enums,
+    direct argv arrays, and unique applicability, and rejects unknown,
+    duplicate, ambiguous, undeclared-variable, empty, malformed, or shell-based
+    dispatch. DIST-001 registers prefetch, fixture-verify, and zero-bill only.
+    Later packets may add only their exact descriptor and owned handlers and
+    may never edit Makefile or the dispatcher.
+  - >-
+    PORTING.yaml contains only schemaVersion, destination repository, and one
+    NO_AUTHORIZATION sentinel with no source repository, commit, path, mapping,
+    destination, authorizationId, or copied content. Validation rejects any
+    copy/port claim. A future edit requires a revised packet with an approved
+    PORT_CANDIDATE and exact legal mapping; current discovery/reference entries
+    are never sufficient authority.
+  - >-
+    CI remains public-repository, self-hosted, ephemeral, and credential-free.
+    The workflow uses only actions/checkout pinned at
+    11bd71901bbe5b1630ceea73d27597364c9af683 with persisted credentials disabled,
+    then invokes /opt/planeon/bin/harness-offline-launch. The launcher verifies
+    its Ed25519-signed root-owned manifest, this exact packet digest, toolchain
+    inventories, canonical warm-source deny roots, absent credentials and
+    control sockets, and runs prefetch plus acceptance in one OS deny-all-
+    outbound process tree. Repository code never receives packet or warm paths.
+deliverables:
+  - Dependency-free Python 3.12 package and bounded harness-bundlectl local OCI verification command.
+  - Canonical closed toolchain/source lock and validation-report schema.
+  - Deterministic valid OCI-layout fixture plus generated invalid security/closure vectors.
+  - Closed direct-argv Make dispatcher, packet transport, network canary, prefetch validation, zero-bill scan, and negative dispatch tests.
+  - Inert zero-authorization PORTING ledger and validation.
+excluded:
+  - Remote registry or URL input, real bundle resolution/build, Helm rendering, image pulling, SBOM, scan, vulnerability DB, model custody, signing, promotion, air-gap archive, relocation, or installation.
+  - External Python packages, package-index access, runtime downloads, hosted runners, GitHub artifacts/caches/packages, cloud services, API keys, external telemetry, mutable references, Docker/containerd/podman sockets, or warm-source access.
+  - Release, artifact, deployment, runtime, assurance, tenant-acceptance, or full OCI conformance claims.
 prefetchCommands: [["make","prefetch"]]
 offlineAcceptanceCommands: [["make","fixture-verify"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Toolchain digests and offline CLI report.", "Valid/invalid OCI fixture vectors and no network trace.", "Negative Make-dispatch vectors reject missing, unknown, or duplicate targets; owner or filename mismatch; undeclared variables; shell transport; and zero or ambiguous applicable handlers.", "PORTING bootstrap validation proves zero authorized source mappings and rejects any copy claim without a future approved PORT_CANDIDATE packet."]
-rollback: Revert the unconsumed distribution scaffold and fixture.
+expectedEvidence:
+  - Exact planning base, CON-005/MET-003 file locks, Python/uv inventories, dependency-free lock, and absent warm-source visibility pass before fixture acceptance.
+  - Valid fixture produces a byte-stable canonical VALID report with the exact reachable descriptor/blob count and root index digest; repeated runs are identical and leave the fixture unchanged.
+  - Generated invalid vectors deny duplicate members, malformed/noncanonical JSON, symlink/special/traversal path, missing/extra/unreachable blob, wrong digest/size/media type/version, mutable reference, duplicate descriptor, and resource-bound violations using stable reason codes.
+  - Negative Make-dispatch vectors reject missing, unknown, duplicate, ambiguous, owner/filename mismatch, undeclared variable, malformed descriptor, forbidden shell executable, and zero/multiple applicable handler cases.
+  - PORTING validation proves the sole NO_AUTHORIZATION sentinel and rejects every source mapping/copy claim.
+  - The signed hash-pinned run passes prefetch, fixture-verify, and zero-bill in one deny-all-outbound process tree; CI/merge/exact-main remain separate from artifact/deployment/runtime/assurance/tenant acceptance.
+rollback: Revert the unconsumed DIST-001 product scaffold and fixture to the planning-only seed. Remove no external artifact because none is produced; preserve the public authority and never replace the inert PORTING ledger with an unapproved copy claim.
