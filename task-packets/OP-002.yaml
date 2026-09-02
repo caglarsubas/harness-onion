@@ -119,10 +119,14 @@ contracts:
   - >-
     make prefetch remains first through the unchanged OP-001 handler.
     ci/targets/op-002.json owns only preflight-fixtures,
-    bundle-verifier-test, and security direct-argv handlers. zero-bill remains
-    last through the OP-001 handler. Every test uses committed local fixtures,
-    temporary directories, the immutable Go module cache, and root Cosign; it
-    performs no package, image, cluster, registry, or trust download.
+    bundle-verifier-test, and security direct-argv handlers. Because the
+    bootstrap Makefile exposes no generic later-packet target and is immutable,
+    acceptance invokes those handlers directly through the existing closed
+    ci/run_make_target.py dispatcher; no Makefile edit or bypass is authorized.
+    zero-bill remains last through the OP-001 Make handler. Every test uses
+    committed local fixtures, temporary directories, the immutable Go module
+    cache, and root Cosign; it performs no package, image, cluster, registry,
+    or trust download.
 deliverables:
   - Closed preflight request/observation/result types, quantity/version comparison, deterministic condition ordering, and complete supported/blocked fixture matrix.
   - Canonical local bundle/trust/supply-chain/OCI/signature verifier, immutable receipt, bounded reason codes, fail-before-apply sink gate, and direct-argv CLI.
@@ -133,7 +137,7 @@ excluded:
   - OP-003 foundation resources, optional modules, installation/deployment/runtime evidence, assurance, tenant acceptance, or any PASS inferred from unavailable input.
   - Warm-source access, hosted runners, Actions artifacts/caches/packages, API keys, credentials, external telemetry, runtime downloads, mutable references, or billable services.
 prefetchCommands: [["make","prefetch"]]
-offlineAcceptanceCommands: [["make","preflight-fixtures"],["make","bundle-verifier-test"],["make","security"],["make","zero-bill"]]
+offlineAcceptanceCommands: [["python3","ci/run_make_target.py","preflight-fixtures"],["python3","ci/run_make_target.py","bundle-verifier-test"],["python3","ci/run_make_target.py","security"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - Supported Kubernetes, OpenShift, and K3s plus amd64/arm64, version boundary, capacity, storage, connectivity, sandbox, and exact-lock vectors produce byte-identical ordered results twice; every missing/malformed/mismatched input blocks.
