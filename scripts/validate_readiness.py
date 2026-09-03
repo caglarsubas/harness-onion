@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import re
 import sys
@@ -95,7 +96,7 @@ EXPECTED_BASE_SOURCES = {
 }
 
 EXPECTED_PACKET_COUNT = 107
-EXPECTED_REUSE_PATH_COUNT = 535
+EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
     "CONF-A2-001",
@@ -249,6 +250,33 @@ EXPECTED_MANAGEMENT_SERVICES = {
 EXPECTED_WARM_SOURCES = {
     "git@github.com:caglarsubas/llm_inference_engine.git": "6815c21cb10a4d7dc0b4804f6bb223afb4321e97",
     "git@github.com:caglarsubas/data-source-harness.git": "858281f4b845ffacfe05cdb2c40a402c237d4c54",
+    "git@github.com:caglarsubas/agent-hook-v2.git": "2b521dc03a43b994bc52c76652306b1a77bf9572",
+    "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git": "ba615515af84760a0accb31c37b815f9820f06d2",
+    "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git": "3a4012d809e6ed00a3f05be940c5278eac20a166",
+}
+
+EXPECTED_TREE_OBSERVATION_DIGESTS = {
+    "MET-OBS-AH-001": "0c94377f0ae6bf7ec7d70d521c411ff6883614cb2cebca2a1243cea1ce775339",
+    "MET-OBS-OCP-001": "c0cab3b3c294ab0db09f19215ad51f3ca5b09c71bb007fef2b894f7588d3f41b",
+    "MET-OBS-SDK-001": "aa41c2d2b781e6776724367b3cf931d23b6812cc14ecb4a27c4f6c0b69ef61d7",
+}
+
+EXPECTED_DEPENDENCY_EXPRESSIONS = {
+    "0BSD",
+    "Apache-2.0",
+    "Apache-2.0 AND LGPL-3.0-or-later",
+    "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
+    "Apache-2.0 OR BSD-2-Clause",
+    "Apache-2.0 OR BSD-3-Clause",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "CC-BY-4.0",
+    "ISC",
+    "LGPL-3.0-or-later",
+    "MIT",
+    "MPL-2.0",
+    "PSF-2.0",
+    "W3C-20150513",
 }
 
 REQUIRED_REPOSITORY_TOPICS = {
@@ -1722,6 +1750,93 @@ def validate_module_license_policy(
                     f"provider module {module_id} uses open-content expression {expression!r} "
                     "outside the allowed kind/scope",
                 )
+
+    inventory = load_json(ROOT / "docs/phase-0/dependency-license-inventory.json")
+    validation.require(
+        inventory.get("schemaVersion")
+        == "harness.planeon.ai/phase-zero-dependency-license-inventory/v1alpha1"
+        and inventory.get("policy") == "legal/third-party-license-policy.yaml",
+        "Phase-0 dependency license inventory identity is not exact",
+    )
+    repository_records = inventory.get("repositories", [])
+    repository_names = [
+        record.get("repository")
+        for record in repository_records
+        if isinstance(record, dict)
+    ]
+    validation.require(
+        set(repository_names) == EXPECTED_REPOSITORIES
+        and len(repository_names) == len(repository_records) == 13,
+        "Phase-0 dependency inventory must account for all thirteen planned repositories exactly once",
+    )
+    planned_repositories = {
+        record.get("repository")
+        for record in repository_records
+        if isinstance(record, dict)
+        and record.get("sourceState") == "PLANNED_NOT_CREATED"
+    }
+    validation.require(
+        planned_repositories
+        == {
+            "mas-harness-runtime-plane",
+            "mas-harness-model-plane",
+            "mas-harness-execution-plane",
+        },
+        "only the three not-yet-created plane repositories may be marked planned",
+    )
+    evidence_sources = inventory.get("evidenceSources", [])
+    validation.require(
+        isinstance(evidence_sources, list)
+        and len(evidence_sources) == 4
+        and len({source.get("id") for source in evidence_sources}) == 4,
+        "Phase-0 dependency inventory must retain four exact lock/inventory evidence sources",
+    )
+    evidence_expressions = {
+        expression
+        for source in evidence_sources
+        if isinstance(source, dict)
+        for expression in source.get("expressions", [])
+    }
+    discovered_records = inventory.get("discoveredExpressions", [])
+    discovered_by_expression = {
+        record.get("expression"): record
+        for record in discovered_records
+        if isinstance(record, dict)
+    }
+    validation.require(
+        set(discovered_by_expression) == EXPECTED_DEPENDENCY_EXPRESSIONS
+        == evidence_expressions
+        and len(discovered_by_expression) == len(discovered_records),
+        "Phase-0 dependency expressions must exactly match the lock and wheelhouse evidence",
+    )
+    for expression, record in discovered_by_expression.items():
+        assigned = expression_classes.get(expression, set())
+        validation.require(
+            len(assigned) == 1 and record.get("classification") in assigned,
+            f"Phase-0 dependency {expression!r} is unknown, ambiguous, or misclassified",
+        )
+        if expression == "CC-BY-4.0":
+            validation.require(
+                record.get("useKind") == "CONTENT_DATASET"
+                and record.get("components") == ["caniuse-lite@1.0.30001810"],
+                "CC-BY-4.0 must remain attributed non-runtime content only",
+            )
+        if "OPTIONAL_EXPLICIT_REVIEW" in assigned:
+            validation.require(
+                record.get("releaseOutcome")
+                == "DENY_RELEASE_WITHOUT_APPROVED_DECISION",
+                f"review-gated dependency {expression!r} must deny release without approval",
+            )
+    validation.require(
+        inventory.get("approvedButNotObservedExpressions")
+        == [
+            {
+                "expression": "LGPL-3.0-only",
+                "classification": "OPTIONAL_EXPLICIT_REVIEW",
+            }
+        ],
+        "approved but unobserved LGPL classification changed",
+    )
 
 
 def validate_provider_catalog_data(
@@ -3269,6 +3384,16 @@ def validate_reuse(
         and len(source_by_repository) == len(sources),
         "reuse map must contain each publicly disclosed warm-start repository exactly once",
     )
+    validation.require(
+        reuse.get("sourceInventory")
+        == {
+            "approvedRepositoryCount": 5,
+            "publiclyRecordedCount": 5,
+            "metadataOmittedCount": 0,
+            "copyAuthorization": "NONE",
+        },
+        "reuse map source inventory must account for five public repositories and authorize no copying",
+    )
     for source in sources:
         commit = str(source.get("commit", ""))
         validation.require(bool(re.fullmatch(r"[0-9a-f]{40}", commit)), f"invalid source commit: {commit}")
@@ -3536,9 +3661,66 @@ def validate_reuse(
         packet = load_yaml(packet_path)
         for source in packet.get("sourceReuse", []):
             referenced_paths.update((source["repository"], path) for path in source.get("paths", []))
+    observed_paths: set[tuple[str, str]] = set()
+    for packet_id, observation in TREE_OBSERVATION_PACKETS.items():
+        report_path = ROOT / observation["outputPath"]
+        try:
+            report = load_json(report_path)
+        except (OSError, json.JSONDecodeError, DuplicateJsonKeyError) as exc:
+            validation.error(f"tree observation {packet_id} cannot be read: {exc}")
+            continue
+        validation.require(
+            hashlib.sha256(report_path.read_bytes()).hexdigest()
+            == EXPECTED_TREE_OBSERVATION_DIGESTS[packet_id],
+            f"tree observation {packet_id} digest changed",
+        )
+        authority_record = report.get("authority", {})
+        validation.require(
+            authority_record.get("packetId") == packet_id
+            and authority_record.get("repository") == observation["repository"]
+            and authority_record.get("commit") == observation["commit"]
+            and authority_record.get("packetObservation", {}).get("copyAuthority")
+            == "NONE"
+            and report.get("isolationEvidence", {}).get("copyAuthority") == "NONE",
+            f"tree observation {packet_id} authority is not exact or overstates copying",
+        )
+        sources = report.get("sources", [])
+        source_paths = [
+            source.get("path") for source in sources if isinstance(source, dict)
+        ]
+        validation.require(
+            len(source_paths) == len(sources) == len(set(source_paths))
+            and source_paths == sorted(source_paths),
+            f"tree observation {packet_id} paths are malformed, duplicated, or unordered",
+        )
+        for source in sources:
+            object_type = source.get("objectType")
+            validation.require(
+                object_type in {"blob", "tree"},
+                f"tree observation {packet_id} contains an unknown object type",
+            )
+            observed_path = (
+                f"{source.get('path')}/" if object_type == "tree" else source.get("path")
+            )
+            key = (observation["repository"], observed_path)
+            validation.require(key not in observed_paths, f"duplicate observed path {key}")
+            validation.require(key in indexed_paths, f"tree observation path is unindexed: {key}")
+            indexed_entry = indexed_paths.get(key, {})
+            validation.require(
+                indexed_entry.get("kind") == object_type
+                and indexed_entry.get("gitObject") == source.get("gitObject")
+                and indexed_entry.get("recordType")
+                == ("TREE_DISCOVERY" if object_type == "tree" else "BLOB_PENDING"),
+                f"tree observation metadata conflicts with indexed path {key}",
+            )
+            observed_paths.add(key)
     validation.require(
-        set(indexed_paths) == referenced_paths,
-        "reuse path index must exactly match every source path cited by task packets",
+        not referenced_paths & observed_paths,
+        "task packet source references and full-tree observations must not overlap",
+    )
+    validation.require(
+        set(indexed_paths) == referenced_paths | observed_paths,
+        "reuse path index must exactly match packet references plus signed tree observations",
     )
     authorized_index_ids: set[str] = set()
     for (repository, source_path), entry in indexed_paths.items():

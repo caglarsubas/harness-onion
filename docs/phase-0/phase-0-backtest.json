@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "harness.planeon.ai/phase-zero-backtest/v1alpha1",
+  "reportId": "PHASE-0-BACKTEST-2026-09-04",
+  "recordedAt": "2026-09-04",
+  "authorityCommitBeforePacket": "2bf8819737149b847ee1ecd534ba472338afd1aa",
+  "packet": "MET-P0-002",
+  "scope": "Planning authority, five-source provenance, delivered foundational slices, tenant overview correction, zero-bill CI boundary, and coding readiness.",
+  "disposition": "READY_TO_COMPLETE_ON_GREEN_PR_AND_EXACT_MAIN_REPLAY",
+  "completionRule": "MET-P0-002 is complete only after signed deny-all offline acceptance, green self-hosted PR CI, merge, and green exact-main self-hosted replay. This record does not infer later evidence axes.",
+  "cardinality": {"repositoriesPlanned": 13, "repositoriesPubliclyCreated": 10, "repositoriesPlannedNotCreated": 3, "planes": 4, "harnesses": 16, "services": 28, "providerModules": 87, "taskPackets": 107},
+  "backlog": [
+    {"id": "P0-AUTHORITY", "status": "DONE", "evidence": ["https://github.com/caglarsubas/harness-onion/pull/81", "https://github.com/caglarsubas/harness-onion/pull/82", "https://github.com/caglarsubas/harness-onion/pull/86", "https://github.com/caglarsubas/harness-onion/pull/87", "https://github.com/caglarsubas/harness-onion/pull/88"]},
+    {"id": "P0-WARM-OBSERVATIONS", "status": "DONE", "evidence": ["https://github.com/caglarsubas/harness-onion/pull/83", "https://github.com/caglarsubas/harness-onion/pull/84", "https://github.com/caglarsubas/harness-onion/pull/85"]},
+    {"id": "P0-TRUST-BOUNDARY", "status": "DONE", "evidence": ["https://github.com/caglarsubas/mas-harness-trust-plane/pull/5"]},
+    {"id": "P0-PUBLIC-FORK-ZERO-BILL", "status": "DONE", "evidence": ["https://github.com/caglarsubas/mas-harness-trust-plane/pull/5", "https://github.com/caglarsubas/mas-harness-industry-packs/pull/7"]},
+    {"id": "P0-TENANT-OVERVIEW", "status": "DONE", "evidence": ["https://github.com/caglarsubas/mas-harness-control-plane/pull/9"]},
+    {"id": "P0-FIVE-SOURCE-INDEX", "status": "DONE", "completionPacket": "MET-P0-002", "actual": {"sources": 5, "treeDiscoveryRecords": 905, "blobPendingRecords": 4202, "copyAuthorizedRecords": 0}},
+    {"id": "P0-DEPENDENCY-LICENSE-CLOSURE", "status": "DONE", "completionPacket": "MET-P0-002", "actual": {"discoveredExpressions": 15, "lgplReleaseRule": "DENY_WITHOUT_APPROVED_DECISION", "ccByUse": "CONTENT_ONLY"}},
+    {"id": "P0-FINAL-REPLAY", "status": "WAITING", "waitsFor": ["MET-P0-002 green PR CI", "MET-P0-002 merge", "exact-main workflow dispatch"]},
+    {"id": "ALPHA2-REMAINING-PLANE-BOOTSTRAPS", "status": "WAITING", "phaseZeroBlocker": false, "repositories": ["mas-harness-runtime-plane", "mas-harness-model-plane", "mas-harness-execution-plane"]}
+  ],
+  "localAcceptance": {"status": "PASS", "packetSha256": "6ffd3057b377f1d6c7fc47cae26472f010e83090b5c31d90cbb46c4e0a7d9611", "network": "OS_ENFORCED_DENY_ALL_OUTBOUND", "readiness": "PASS", "testsPassed": 179, "testsSkippedEnvironment": 5, "warmSourceAccess": "OS_DENIED"},
+  "warmSources": [
+    {"repository": "git@github.com:caglarsubas/llm_inference_engine.git", "commit": "6815c21cb10a4d7dc0b4804f6bb223afb4321e97", "authorityMode": "PACKET_REFERENCE_CLOSURE", "copyAuthorization": "NONE"},
+    {"repository": "git@github.com:caglarsubas/data-source-harness.git", "commit": "858281f4b845ffacfe05cdb2c40a402c237d4c54", "authorityMode": "PACKET_REFERENCE_CLOSURE_AND_BOUNDED_SCHEMA_OBSERVATION", "copyAuthorization": "NONE"},
+    {"repository": "git@github.com:caglarsubas/agent-hook-v2.git", "commit": "2b521dc03a43b994bc52c76652306b1a77bf9572", "authorityMode": "SIGNED_METADATA_ONLY_FULL_TREE_OBSERVATION", "reportSha256": "0c94377f0ae6bf7ec7d70d521c411ff6883614cb2cebca2a1243cea1ce775339", "copyAuthorization": "NONE"},
+    {"repository": "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git", "commit": "ba615515af84760a0accb31c37b815f9820f06d2", "authorityMode": "SIGNED_METADATA_ONLY_FULL_TREE_OBSERVATION", "reportSha256": "c0cab3b3c294ab0db09f19215ad51f3ca5b09c71bb007fef2b894f7588d3f41b", "copyAuthorization": "NONE"},
+    {"repository": "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git", "commit": "3a4012d809e6ed00a3f05be940c5278eac20a166", "authorityMode": "SIGNED_METADATA_ONLY_FULL_TREE_OBSERVATION", "reportSha256": "aa41c2d2b781e6776724367b3cf931d23b6812cc14ecb4a27c4f6c0b69ef61d7", "copyAuthorization": "NONE"}
+  ],
+  "latestExactMainEvidence": [
+    {"repository": "harness-onion", "commit": "2bf8819737149b847ee1ecd534ba472338afd1aa", "ci": "PASS", "run": "https://github.com/caglarsubas/harness-onion/actions/runs/33778199144"},
+    {"repository": "mas-harness-contracts", "commit": "2146278a95344cd2a8e22596b2f315b46edffc88", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-contracts/actions/runs/33672468013"},
+    {"repository": "mas-harness-sdks", "commit": "bd26ede4fea094de7fe53b784d50c1c51e001938", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-sdks/actions/runs/33672568634"},
+    {"repository": "mas-harness-industry-packs", "commit": "118296af0bcf85ef1a4983c23725c215ba6c91ed", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-industry-packs/actions/runs/33770625951"},
+    {"repository": "mas-harness-control-plane", "commit": "97e461aa22e34002c7407555750a93b69f1b750c", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-control-plane/actions/runs/33776622656"},
+    {"repository": "mas-harness-knowledge-plane", "commit": "2056405d747f10bcea36f089fcd6f2de474b3ee5", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-knowledge-plane/actions/runs/33569419518"},
+    {"repository": "mas-harness-trust-plane", "commit": "ac5184fe3e993043d97620e3e3e9a03e3d816b78", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-trust-plane/actions/runs/33770311081"},
+    {"repository": "mas-harness-operator", "commit": "0fa716fae4009f4fc63861f808f9e794f8925999", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-operator/actions/runs/33657346833"},
+    {"repository": "mas-harness-distribution", "commit": "6ef7273f0674c3d39f2bd5becf084a4fd16c590c", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-distribution/actions/runs/33643205684"},
+    {"repository": "mas-harness-conformance-labs", "commit": "30877d289d389b29d3da9eb9a3c083c9ebc33382", "ci": "PASS", "run": "https://github.com/caglarsubas/mas-harness-conformance-labs/actions/runs/33672006536"}
+  ],
+  "evidenceAxes": [
+    {"axis": "SOURCE", "status": "PASS_WITH_MET_P0_002_CANDIDATE_PENDING_MERGE", "notes": "Ten public repositories exist; three later plane repositories remain explicitly planned and uncreated."},
+    {"axis": "CONTRACT_AND_UNIT", "status": "PASS_SIGNED_LOCAL_CANDIDATE", "notes": "Signed deny-all execution passed readiness and 179 tests; five environment-only cases were explicitly skipped."},
+    {"axis": "PR_CHECK", "status": "NOT_RUN_PENDING_PR", "notes": "Requires the self-hosted credential-free workflow."},
+    {"axis": "MERGE", "status": "NOT_RUN_PENDING_PR", "notes": "Requires a green PR and exact merged commit."},
+    {"axis": "ARTIFACT_AND_SBOM", "status": "NOT_RUN_NOT_IN_PACKET", "notes": "Dependency classification is not an SBOM or release artifact."},
+    {"axis": "SIGNATURE_AND_RELEASE", "status": "NOT_RUN_NOT_IN_PACKET", "notes": "No product release is asserted."},
+    {"axis": "DEPLOYMENT", "status": "NOT_RUN_ENV_UNAVAILABLE", "notes": "No pre-authorized target is in this packet."},
+    {"axis": "RUNTIME", "status": "NOT_RUN_ENV_UNAVAILABLE", "notes": "No runtime target is in this packet."},
+    {"axis": "SECURITY_AND_ASSURANCE", "status": "NOT_RUN_ENV_UNAVAILABLE", "notes": "Offline security tests do not become live assurance."},
+    {"axis": "TENANT_ACCEPTANCE", "status": "NOT_RUN_ENV_UNAVAILABLE", "notes": "No tenant decision is inferred from technical evidence."}
+  ],
+  "historicalDebt": [
+    {"id": "HIST-MET-004-BRANCH-REUSE", "status": "RECORDED_NON_BLOCKING", "disposition": "Predates the one-packet-one-branch enforcement; history is not rewritten and current validation prevents recurrence."},
+    {"id": "HIST-PRE-OBSERVATION-WORDING", "status": "SUPERSEDED_NON_NORMATIVE", "disposition": "Older repository-plan paragraphs that called three warm sources non-public are superseded by the five-source machine authorities and this audit; packet-local history is retained."}
+  ],
+  "negativeConclusions": [
+    "A green source or CI check is not artifact, deployment, runtime, assurance, or tenant acceptance.",
+    "A license classification is not release approval.",
+    "A planned repository is not an implemented repository.",
+    "A metadata-only observation is not source access or copy authorization.",
+    "GitHub public-repository Actions are used only with self-hosted credential-free runners; no hosted-runner billing is authorized."
+  ]
+}

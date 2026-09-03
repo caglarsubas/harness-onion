@@ -16,14 +16,15 @@ This is the complete PR-sized execution queue for the Planeon Enterprise MAS Har
 4. Warm-start repositories are immutable. Packet reuse entries record historical
    source-observation provenance and parity expectations; they do not expose a
    warm checkout to an implementation run. `DISCOVERY_ONLY` trees and
-   `REFERENCE_ONLY` blobs remain non-copyable. All 515 publicly indexed blobs are
+   `REFERENCE_ONLY` blobs remain non-copyable. All 4,202 publicly indexed blobs are
    `BLOB_PENDING`; there are zero
    current `PORT_CANDIDATE`, `BLOB_COPY_AUTHORIZED`, or porting-authorization
    records. Future direct reuse requires legal input, a revised packet carrying
    an `authorizationId` and exact source-to-destination mapping, a promoted path
-   record, and a matching destination `PORTING.yaml` record. Non-public planning
-   inputs are deliberately absent from packets and cannot be mounted, discovered,
-   or used by an implementation run.
+   record, and a matching destination `PORTING.yaml` record. All five approved
+   warm repositories are exact-commit pinned; three have only signed
+   metadata-only tree observations. Warm-source paths cannot be mounted,
+   discovered, or used by an implementation run.
 5. Run only the declared `prefetchCommands` as the first phase inside the same
    deny-all-outbound OS-isolated process tree as acceptance. This phase may
    prepare dependencies only from the preprovisioned, digest-locked local

@@ -25,7 +25,10 @@
     "repository": {
       "enum": [
         "git@github.com:caglarsubas/llm_inference_engine.git",
-        "git@github.com:caglarsubas/data-source-harness.git"
+        "git@github.com:caglarsubas/data-source-harness.git",
+        "git@github.com:caglarsubas/agent-hook-v2.git",
+        "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git",
+        "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git"
       ]
     },
     "destinationRepository": {
@@ -168,7 +171,7 @@
           "properties": {
             "status": {"const": "PATH_LEVEL_LICENSE_APPROVED"},
             "authority": {"const": "architecture/porting-authorization-index.yaml"},
-            "spdxId": {"enum": ["Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC", "MPL-2.0", "PostgreSQL", "Unicode-3.0"]},
+            "spdxId": {"enum": ["Apache-2.0", "0BSD", "MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC", "MPL-2.0", "PostgreSQL", "PSF-2.0", "Unicode-3.0", "W3C-20150513"]},
             "evidenceSha256": {"$ref": "#/$defs/sha256"},
             "inferredFromRepositoryOwnership": {"const": false}
           }

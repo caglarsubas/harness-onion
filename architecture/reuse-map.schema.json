@@ -6,7 +6,7 @@
   "required": [
     "schemaVersion",
     "sources",
-    "nonPublicPlanningInputs",
+    "sourceInventory",
     "pathAuthority",
     "authorizationAuthority"
   ],
@@ -14,12 +14,12 @@
     "schemaVersion": {"const": "harness.planeon.ai/reuse-map/v1alpha1"},
     "sources": {
       "type": "array",
-      "minItems": 2,
-      "maxItems": 2,
+      "minItems": 5,
+      "maxItems": 5,
       "uniqueItems": true,
       "items": {"$ref": "#/$defs/source"}
     },
-    "nonPublicPlanningInputs": {"$ref": "#/$defs/nonPublicPlanningInputs"},
+    "sourceInventory": {"$ref": "#/$defs/sourceInventory"},
     "pathAuthority": {"const": "architecture/reuse-path-index.yaml"},
     "authorizationAuthority": {"const": "legal/source-reuse-authorization.yaml"}
   },
@@ -28,7 +28,10 @@
     "repository": {
       "enum": [
         "git@github.com:caglarsubas/llm_inference_engine.git",
-        "git@github.com:caglarsubas/data-source-harness.git"
+        "git@github.com:caglarsubas/data-source-harness.git",
+        "git@github.com:caglarsubas/agent-hook-v2.git",
+        "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git",
+        "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git"
       ]
     },
     "destination": {
@@ -82,23 +85,19 @@
         }
       }
     },
-    "nonPublicPlanningInputs": {
+    "sourceInventory": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "count",
-        "disposition",
-        "implementationAccess",
-        "requirementDisposition",
+        "approvedRepositoryCount",
+        "publiclyRecordedCount",
+        "metadataOmittedCount",
         "copyAuthorization"
       ],
       "properties": {
-        "count": {"const": 3},
-        "disposition": {"const": "METADATA_OMITTED_FROM_PUBLIC_REPOSITORY"},
-        "implementationAccess": {"const": "PROHIBITED"},
-        "requirementDisposition": {
-          "const": "DISTILLED_INTO_INDEPENDENT_PUBLIC_CONTRACTS_AND_ACCEPTANCE_CRITERIA"
-        },
+        "approvedRepositoryCount": {"const": 5},
+        "publiclyRecordedCount": {"const": 5},
+        "metadataOmittedCount": {"const": 0},
         "copyAuthorization": {"const": "NONE"}
       }
     }

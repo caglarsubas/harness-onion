@@ -37,6 +37,8 @@ def authority_root(tmp_path: Path) -> Path:
     destination.mkdir()
     for directory in ("architecture", "schemas", "legal", "task-packets"):
         shutil.copytree(ROOT / directory, destination / directory)
+    (destination / "docs").mkdir()
+    shutil.copytree(ROOT / "docs/phase-0", destination / "docs/phase-0")
     return destination
 
 
@@ -61,16 +63,16 @@ def test_canonical_authorities_are_closed_and_deterministic() -> None:
     report = VALIDATOR.validate_reuse(ROOT, check_toolchain=False)
 
     assert report.accounted_source_inputs == 5
-    assert report.public_sha_pins == 2
-    assert report.metadata_omitted_inputs == 3
-    assert report.task_packets == 104
-    assert report.tree_discovery_records == 20
-    assert report.blob_pending_records == 515
+    assert report.public_sha_pins == 5
+    assert report.metadata_omitted_inputs == 0
+    assert report.task_packets == 107
+    assert report.tree_discovery_records == 905
+    assert report.blob_pending_records == 4202
     assert report.blob_copy_authorized_records == 0
     assert report.porting_authorization_records == 0
     assert report.classified_spdx_expressions > 0
     assert set(report.authority_digests) == set(VALIDATOR.AUTHORITY_PATHS)
-    assert len(report.authority_digests) == 9
+    assert len(report.authority_digests) == 15
     assert all(len(digest) == 64 for digest in report.authority_digests.values())
     assert report.render().endswith("reuse validation passed")
 
@@ -105,13 +107,31 @@ def test_public_source_identity_and_license_claim_are_exact(
         _validate(authority_root)
 
 
-def test_non_public_inputs_cannot_be_exposed_or_authorized(authority_root: Path) -> None:
+def test_source_inventory_cannot_authorize_copying(authority_root: Path) -> None:
     path = authority_root / "architecture/reuse-map.yaml"
     authority = _read_yaml(path)
-    authority["nonPublicPlanningInputs"]["copyAuthorization"] = "COPY_AUTHORIZED"
+    authority["sourceInventory"]["copyAuthorization"] = "COPY_AUTHORIZED"
     _write_yaml(path, authority)
 
     with pytest.raises(VALIDATOR.ReuseValidationError):
+        _validate(authority_root)
+
+
+def test_observation_and_path_index_must_match_exactly(authority_root: Path) -> None:
+    path = authority_root / "architecture/reuse-path-index.yaml"
+    authority = _read_yaml(path)
+    source = next(
+        item
+        for item in authority["sources"]
+        if item["repository"].endswith("agent-hook-v2.git")
+    )
+    source["paths"][0]["gitObject"] = "0" * 40
+    _write_yaml(path, authority)
+
+    with pytest.raises(
+        VALIDATOR.ReuseValidationError,
+        match="observed source metadata conflicts",
+    ):
         _validate(authority_root)
 
 
@@ -185,6 +205,36 @@ def test_license_policy_cannot_be_made_fail_open(authority_root: Path) -> None:
         VALIDATOR.ReuseValidationError,
         match="classification must fail closed",
     ):
+        _validate(authority_root)
+
+
+def test_content_license_cannot_be_reclassified_as_code(authority_root: Path) -> None:
+    path = authority_root / "docs/phase-0/dependency-license-inventory.json"
+    inventory = json.loads(path.read_text(encoding="utf-8"))
+    record = next(
+        item
+        for item in inventory["discoveredExpressions"]
+        if item["expression"] == "CC-BY-4.0"
+    )
+    record["useKind"] = "CODE_DEPENDENCY"
+    path.write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(VALIDATOR.ReuseValidationError, match="not constrained"):
+        _validate(authority_root)
+
+
+def test_lgpl_dependency_requires_explicit_release_review(authority_root: Path) -> None:
+    path = authority_root / "docs/phase-0/dependency-license-inventory.json"
+    inventory = json.loads(path.read_text(encoding="utf-8"))
+    record = next(
+        item
+        for item in inventory["discoveredExpressions"]
+        if item["expression"] == "LGPL-3.0-or-later"
+    )
+    record["releaseOutcome"] = "ALLOW"
+    path.write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8")
+
+    with pytest.raises(VALIDATOR.ReuseValidationError, match="does not fail closed"):
         _validate(authority_root)
 
 

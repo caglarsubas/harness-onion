@@ -1,11 +1,16 @@
 schemaVersion: harness.planeon.ai/license-policy/v1alpha1
-policyVersion: 0.2.0
+policyVersion: 0.3.0
 coreLicense: Apache-2.0
 
 evaluation:
   failClosed: true
-  catalogSource: architecture/providers.yaml
-  licenseField: modules[].license.spdx[]
+  catalogSources:
+    - path: architecture/providers.yaml
+      licenseField: modules[].license.spdx[]
+      useAuthority: PROVIDER_MODULE
+    - path: docs/phase-0/dependency-license-inventory.json
+      licenseField: discoveredExpressions[].expression
+      useAuthority: PHASE_ZERO_DEPENDENCY
   expressionMatching: EXACT_SPDX_EXPRESSION
   allExpressionsMustBeClassified: true
   unknownExpressionOutcome: DENY_UNKNOWN_LICENSE
@@ -23,13 +28,16 @@ evaluation:
 
 defaultAllowedSpdx:
   - Apache-2.0
+  - 0BSD
   - MIT
   - BSD-2-Clause
   - BSD-3-Clause
   - ISC
   - MPL-2.0
   - PostgreSQL
+  - PSF-2.0
   - Unicode-3.0
+  - W3C-20150513
 
 allowedExceptionExpressions:
   - expression: Apache-2.0 WITH LLVM-exception
@@ -40,6 +48,22 @@ allowedExceptionExpressions:
       - COMPOSITE_REVIEW_REQUIRED
     catalogOutcome: ACCEPT_CLASSIFIED
     releaseOutcome: ALLOW_ONLY_WITH_PINNED_SOURCE_EXCEPTION_TEXT_SBOM_AND_NOTICE
+  - expression: Apache-2.0 OR BSD-2-Clause
+    baseLicense: Apache-2.0
+    exception: PERMISSIVE_DUAL_LICENSE_CHOICE
+    allowedCustody:
+      - UPSTREAM_PINNED
+      - COMPOSITE_REVIEW_REQUIRED
+    catalogOutcome: ACCEPT_CLASSIFIED
+    releaseOutcome: ALLOW_ONLY_WITH_PINNED_SOURCE_LICENSE_TEXT_SBOM_AND_NOTICE
+  - expression: Apache-2.0 OR BSD-3-Clause
+    baseLicense: Apache-2.0
+    exception: PERMISSIVE_DUAL_LICENSE_CHOICE
+    allowedCustody:
+      - UPSTREAM_PINNED
+      - COMPOSITE_REVIEW_REQUIRED
+    catalogOutcome: ACCEPT_CLASSIFIED
+    releaseOutcome: ALLOW_ONLY_WITH_PINNED_SOURCE_LICENSE_TEXT_SBOM_AND_NOTICE
 
 openContentSpdx:
   - expression: CC0-1.0
@@ -52,11 +76,25 @@ openContentSpdx:
     allowedUse: Public verification material metadata fixtures datasets and other non-runtime-code content only.
     catalogOutcome: ACCEPT_CLASSIFIED
     releaseOutcome: ALLOW_ONLY_WITH_PROVENANCE_SCOPE_AND_CONTENT_INVENTORY
+  - expression: CC-BY-4.0
+    allowedKinds:
+      - ARTIFACT
+    allowedScopes:
+      - BUILD_TIME
+      - MANAGEMENT_PLANE
+      - EXTERNAL
+    allowedUse: Attributed metadata datasets and other non-runtime-code content only; never classify executable code under this rule.
+    catalogOutcome: ACCEPT_CLASSIFIED
+    releaseOutcome: ALLOW_ONLY_WITH_ATTRIBUTION_PROVENANCE_SCOPE_AND_CONTENT_INVENTORY
 
 optionalExplicitReview:
   - GPL-2.0-only
   - GPL-3.0-only
   - AGPL-3.0-only
+  - LGPL-3.0-only
+  - LGPL-3.0-or-later
+  - Apache-2.0 AND LGPL-3.0-or-later
+  - Apache-2.0 AND LGPL-3.0-or-later AND MIT
 
 optionalExplicitReviewRule:
   catalogOutcome: REVIEW_REQUIRED

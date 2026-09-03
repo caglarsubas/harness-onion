@@ -87,7 +87,8 @@ only; a separate authorized tenant signature is required for actual acceptance.
 | Destination `PORTING.yaml` record shape | [`schemas/porting-record.schema.json`](../schemas/porting-record.schema.json) |
 | Source authorization | [`legal/source-reuse-authorization.yaml`](../legal/source-reuse-authorization.yaml) |
 | Executable warm-snapshot integrity lock | [`ci/lock_warm_snapshot.py`](../ci/lock_warm_snapshot.py) |
-| Third-party licensing | [`legal/third-party-license-policy.yaml`](../legal/third-party-license-policy.yaml) |
+| Third-party licensing | [`legal/third-party-license-policy.yaml`](../legal/third-party-license-policy.yaml), [`docs/phase-0/dependency-license-inventory.json`](phase-0/dependency-license-inventory.json) |
+| Phase-0 cross-check and evidence boundaries | [`docs/phase-0/phase-0-backtest.json`](phase-0/phase-0-backtest.json), [`docs/phase-0/PHASE_0_BACKTEST.md`](phase-0/PHASE_0_BACKTEST.md) |
 | Zero-bill defaults and prohibitions | [`policies/zero-bill-policy.yaml`](../policies/zero-bill-policy.yaml) |
 | Provider/module and deterministic-profile-example shape | [`schemas/provider-module.schema.json`](../schemas/provider-module.schema.json) |
 | Executable packet shape | [`schemas/task-packet.schema.json`](../schemas/task-packet.schema.json) |
@@ -95,13 +96,24 @@ only; a separate authorized tenant signature is required for actual acceptance.
 | Closed live execution-envelope shape | [`schemas/live-campaign-execution-envelope.schema.json`](../schemas/live-campaign-execution-envelope.schema.json) |
 | External trusted live-campaign boundary, dual signatures, endpoints/proxies, zero-cost admission, statuses, and evidence axes | [`TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md`](TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md) |
 
-The public reuse authority currently contains 20 `TREE_DISCOVERY` records and 515
-`BLOB_PENDING` records. It contains zero `BLOB_COPY_AUTHORIZED` paths, and the
+The public reuse authority currently contains 905 `TREE_DISCOVERY` records and
+4,202 `BLOB_PENDING` records across all five exact-commit warm-start
+repositories. It contains zero `BLOB_COPY_AUTHORIZED` paths, and the
 porting-authorization index contains zero records. Direct reuse is therefore not
 an executable option in any current packet; legal input and a future packet
-revision are required first. Three non-public planning inputs have no public
-repository, commit, path, or object metadata and are unavailable to product
+revision are required first. The first two repositories are indexed from the
+closed packet-reference closure; the other three are indexed from signed,
+metadata-only full-tree observations that exposed no source text to the
+implementation identity. Every warm-source path remains unavailable to product
 implementation runs.
+
+The Phase-0 dependency inventory is
+[`docs/phase-0/dependency-license-inventory.json`](phase-0/dependency-license-inventory.json).
+It records all thirteen planned repositories, distinguishes the three
+repositories that are not yet created, and classifies every SPDX expression
+discovered in the exact control-plane lock and root-owned offline wheel
+inventories. Classification does not imply release: SBOM, notices, and approved
+LGPL disposition remain mandatory release gates.
 
 The provider authority is `PLANNED`: it defines 59 packet-owned implementation
 plans, 23 tenant-supplied external prerequisites (twenty `external.*` records
