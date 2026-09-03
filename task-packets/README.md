@@ -193,62 +193,63 @@ be hidden behind another make target or script.
 | 62 | `MET-P0-FIX-002` | `Harness-Engineering` | Phase-0 packet authority and provenance correction |
 | 63 | `MET-P0-FIX-003` | `Harness-Engineering` | Offline browser-document ownership correction |
 | 64 | `CTRL-FIX-002` | `mas-harness-control-plane` | Tenant overview semantics, theme, and security regression correction |
-| 65 | `MET-P0-002` | `Harness-Engineering` | Five-source, license, provenance, and Phase-0 audit closure |
+| 65 | `MET-P0-FIX-004` | `Harness-Engineering` | Five-source reuse-validator ownership correction |
+| 66 | `MET-P0-002` | `Harness-Engineering` | Five-source, license, provenance, and Phase-0 audit closure |
 
 ## Alpha 2 — Read-only intelligence
 
 | Order | Packet | Repository | Acceptance slice |
 |---:|---|---|---|
-| 66 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |
-| 67 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |
-| 68 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |
-| 69 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |
-| 70 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |
-| 71 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |
-| 72 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |
-| 73 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |
-| 74 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |
-| 75 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |
-| 76 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |
-| 77 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |
-| 78 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |
-| 79 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |
+| 67 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |
+| 68 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |
+| 69 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |
+| 70 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |
+| 71 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |
+| 72 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |
+| 73 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |
+| 74 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |
+| 75 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |
+| 76 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |
+| 77 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |
+| 78 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |
+| 79 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |
+| 80 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |
 
 ## Alpha 3 — Governed action and interaction
 
 | Order | Packet | Repository | Acceptance slice |
 |---:|---|---|---|
-| 80 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |
-| 81 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |
-| 82 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |
-| 83 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |
-| 84 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |
-| 85 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |
-| 86 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |
-| 87 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |
-| 88 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |
-| 89 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |
+| 81 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |
+| 82 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |
+| 83 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |
+| 84 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |
+| 85 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |
+| 86 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |
+| 87 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |
+| 88 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |
+| 89 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |
+| 90 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |
 
 ## Alpha 4 — Enterprise release
 
 | Order | Packet | Repository | Acceptance slice |
 |---:|---|---|---|
-| 90 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |
-| 91 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |
-| 92 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |
-| 93 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |
-| 94 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |
-| 95 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |
-| 96 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |
-| 97 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |
-| 98 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |
-| 99 | `OP-007` | `mas-harness-operator` | Platform security |
-| 100 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |
-| 101 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |
-| 102 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |
-| 103 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |
-| 104 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |
-| 105 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
-| 106 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
+| 91 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |
+| 92 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |
+| 93 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |
+| 94 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |
+| 95 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |
+| 96 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |
+| 97 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |
+| 98 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |
+| 99 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |
+| 100 | `OP-007` | `mas-harness-operator` | Platform security |
+| 101 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |
+| 102 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |
+| 103 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |
+| 104 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |
+| 105 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |
+| 106 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
+| 107 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
