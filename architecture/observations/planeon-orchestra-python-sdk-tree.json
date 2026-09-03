@@ -1,0 +1,3457 @@
+{
+  "authority": {
+    "authorityId": "met-obs-sdk-001-20260903",
+    "commit": "3a4012d809e6ed00a3f05be940c5278eac20a166",
+    "extractorSha256": "e382eaa6ad5446caa0a4abb8be61b2e41ab4cc16159c3d1e5c86fba49ed455a0",
+    "launcherSha256": "971b534767afd900f00b588cf626b79c029f784f5820608b3803dd27ae967cee",
+    "observerIdentity": "planeon-reference-observer",
+    "packetDigest": "fe44c76c6160847435869accd0ec895ec0ff700bca3f7ec09843b535a0a21e95",
+    "packetId": "MET-OBS-SDK-001",
+    "packetObservation": {
+      "allowedFactKinds": [
+        "REPOSITORY_SUMMARY",
+        "TREE_ENTRY"
+      ],
+      "ciEvidenceUse": "FORBIDDEN",
+      "commit": "3a4012d809e6ed00a3f05be940c5278eac20a166",
+      "copyAuthority": "NONE",
+      "executionPlacement": "PREINSTALLED_LOCAL_SEPARATE_OBSERVER_IDENTITY",
+      "implementationIdentityAccess": "DENIED",
+      "launcherArgv": [
+        "/opt/planeon/bin/harness-reference-observe"
+      ],
+      "networkIsolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+      "observationMode": "FULL_TRACKED_TREE_METADATA",
+      "observerIdentity": "planeon-reference-observer",
+      "outputMode": "DISTILLED_REPOSITORY_TREE_METADATA_ONLY_NO_SOURCE_TEXT",
+      "outputPath": "architecture/observations/planeon-orchestra-python-sdk-tree.json",
+      "packetPathEnvironment": "HARNESS_TASK_PACKET",
+      "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+      "repository": "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git",
+      "sourceAuthorityEnvironment": "HARNESS_REFERENCE_SOURCE_AUTHORITY",
+      "sourceAuthorityMode": "ROOT_OWNED_SIGNED_EXACT_COMMIT_FULL_TRACKED_TREE",
+      "sourceCodeExecution": "DENIED",
+      "sourceFilesystem": "FULL_TRACKED_TREE_METADATA_ONLY_ALL_CONTENT_READ_AND_WRITE_DENIED",
+      "sourceSelection": "FULL_TRACKED_TREE_AT_PINNED_COMMIT"
+    },
+    "repository": "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git",
+    "schemaVersion": "harness.planeon.ai/reference-source-authority/v1"
+  },
+  "facts": [
+    {
+      "gitObject": "048edfc48091a81ada147e8a01e97849ca558a10",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/reviewer.py"
+    },
+    {
+      "gitObject": "04be7983ef3a1781d84844bc62bcb19f85c4c799",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/pdb.yaml"
+    },
+    {
+      "gitObject": "0ad0b668a50dd18f0b65ff31b8708feed0d0b613",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/Dockerfile.security-proof"
+    },
+    {
+      "gitObject": "0c7e1c0ec6cc1c1cb64d78a87c3033811806af25",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/runtime_control.py"
+    },
+    {
+      "gitObject": "0c9520af64cddd83583b091cca4ffbdc7c0937dc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/security_assurance.py"
+    },
+    {
+      "gitObject": "0d76815fae9d3695d8435fc84430b7d2c208d62c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_kernel.py"
+    },
+    {
+      "gitObject": "0f08a858795e9fc9d2dfa7243653e1dfdfc21607",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/workflow_ontology.py"
+    },
+    {
+      "gitObject": "0f3b7bc31a9108c10448f1f92ece2cf57417dfc6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "CONTRIBUTING.md"
+    },
+    {
+      "gitObject": "0f9aba2820f7b434d2bbe9678962ea1a7b3b5973",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/session.py"
+    },
+    {
+      "gitObject": "0fad792c8463a8c2120acbc81449696c7dfb9da1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-tampered-signature.json"
+    },
+    {
+      "gitObject": "1053a49f811d666dbf9794f207969477c4542f2b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/routing.py"
+    },
+    {
+      "gitObject": "1088bb436af081e965d5eacd8965a37c42ff22f9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_openai_embeddings.py"
+    },
+    {
+      "gitObject": "1175494a3fb430c840c2adc8eb2c034b6c1cd3bb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_guardrail_deploy_assets.py"
+    },
+    {
+      "gitObject": "12526dfa5ca9cdc4f28a395c0e8216bdb38e41e5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/budget.py"
+    },
+    {
+      "gitObject": "14cb34b56c355f76605696a0b5c6cfe7678b18ab",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "examples"
+    },
+    {
+      "gitObject": "16001e1d49ada5a806172346b6f61fb49347d031",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_promotion_attestation.py"
+    },
+    {
+      "gitObject": "165d107e1eea05a87ba23f6761a1042ab20e035d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/crewai.py"
+    },
+    {
+      "gitObject": "16b9b2bcb09ba3e7b146d7f62cc26b4ac9f5ed74",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/security_proof.py"
+    },
+    {
+      "gitObject": "174569938636c4d4feb6ba91415580d3798ee3c2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/resilience.py"
+    },
+    {
+      "gitObject": "17d163c08ede4ce14d19882432b4ffa626271fa1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_agent_name_resolution.py"
+    },
+    {
+      "gitObject": "17e96d1b24287aa0aa67f4666454471d8c4f72d6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/release.yml"
+    },
+    {
+      "gitObject": "18301365b494ba0a13e78dc26f0d8a32002e9cfe",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_trust.py"
+    },
+    {
+      "gitObject": "18ad6fe5964b866ded29a78a46bac24a0eae5244",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/attributes.py"
+    },
+    {
+      "gitObject": "19474cf3c1c3ffb78fe48e684bc53e1172343071",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/values.mcp.example.yaml"
+    },
+    {
+      "gitObject": "1a3b34267e4207413b60b211d677e809dcb54640",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-advisory-nothing-enforced.json"
+    },
+    {
+      "gitObject": "1a9594ebfcbec6856fe2b5367e1b16eb771efabe",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/published-upgrade-rollback.sh"
+    },
+    {
+      "gitObject": "1dce56bb13e4f0b839a89c186dddade1f9c8606f",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests/fixtures/lease-vectors"
+    },
+    {
+      "gitObject": "1dee1c29a72506af647df98bfb7896b56bdbe5fe",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/service.yaml"
+    },
+    {
+      "gitObject": "1f4ce1ed6351f73098e868f8e6c8983a33802815",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/_llm_common.py"
+    },
+    {
+      "gitObject": "1f8627feade8467f8f9f222639302fa6dde42229",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_model_gateway.py"
+    },
+    {
+      "gitObject": "200ced55855b95b7e8ffc2c1dcd265071bf69a7e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": ".github"
+    },
+    {
+      "gitObject": "20254dc0ac9d557b6bab013dc14510957e4445a9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/promotion-attestation-review-v1.json"
+    },
+    {
+      "gitObject": "206d437347232db27b23c4d864b8cbf45807804e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/cloudbuild.workflow-proof.yaml"
+    },
+    {
+      "gitObject": "215f481e6aca235a4fda153fce0319083cec73bc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_published_upgrade.py"
+    },
+    {
+      "gitObject": "2279abde28bd8e12dd07f6d959de2a547e474360",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/host.py"
+    },
+    {
+      "gitObject": "2515f528a743eee9a286a65bd9b1147006338848",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/prompt.py"
+    },
+    {
+      "gitObject": "2527bd0235531b708cc9f525219d6b4beb71dc60",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/Dockerfile.ubi"
+    },
+    {
+      "gitObject": "26a3f7152a97f4377a9fedd046d0e8e620a766fc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/control_plane.py"
+    },
+    {
+      "gitObject": "2707a445ecaa4ab46d80ebfd17dc629782fb30c0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/anthropic.py"
+    },
+    {
+      "gitObject": "28b5fda39d37bbfcb8d348bb3500be4ddd5e8f6d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/values.production.example.yaml"
+    },
+    {
+      "gitObject": "2a2f8403d0e4fbf9af15077711e7b27c083cb753",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/memory.py"
+    },
+    {
+      "gitObject": "2b7f261451ff16744433e02de0daade07e6c4327",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/host_conformance.py"
+    },
+    {
+      "gitObject": "2b9613113bcf349670c455e3bd07ec1ae263f502",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/operations/backup-postgres.sh"
+    },
+    {
+      "gitObject": "2c0c758753f4b304cebe7b2b3f78fd9e727350cc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/.helmignore"
+    },
+    {
+      "gitObject": "2c23e11422411c0d3c65a513c01a364597aaee76",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "prometa/runtime/fixtures"
+    },
+    {
+      "gitObject": "2c55e835658ce627aaa0f7a2fc71542a112a937d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/langchain.py"
+    },
+    {
+      "gitObject": "2f598705328af00ba187359bf96536e580bad874",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_host.py"
+    },
+    {
+      "gitObject": "30395eb3dda7a5eb587f51a714eff619599d5379",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/bundle-envelope-v1.json"
+    },
+    {
+      "gitObject": "30d1d81538e17ebdff63c9281addc9a2cd18c097",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_topology_assets.py"
+    },
+    {
+      "gitObject": "3222ffa0bc6704a14a53bcbe698b85c1e9de310f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-enforcement-off-refused.json"
+    },
+    {
+      "gitObject": "322a1aebae96284ad244ef2d3801813a4bbd1dd4",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/backup-cronjob.yaml"
+    },
+    {
+      "gitObject": "32de8c3f0ed88dec731def6297c754445ae7658e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/_helpers.tpl"
+    },
+    {
+      "gitObject": "35e0a407a5a886194cdde54870523c2fcbf6f080",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "prometa/integrations"
+    },
+    {
+      "gitObject": "36d145df286c17541fc940165b1d14ffc7a92564",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/vector.py"
+    },
+    {
+      "gitObject": "3843a637e71de72f4647501f586d58f2283a69dd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/profiles.py"
+    },
+    {
+      "gitObject": "39580b7ce58cc5f8263fb50ad81b620b1594612a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_deploy_assets.py"
+    },
+    {
+      "gitObject": "3a4015aec13f790c7c2451e52eb6d9de81fd3676",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/runtime-published-upgrade-rollback.yml"
+    },
+    {
+      "gitObject": "3c2d3a5afe6cabe71bd0f4ce8fa9c911b8285015",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_security_proof.py"
+    },
+    {
+      "gitObject": "3e862e0ad923a39da4bbbf8e0f85707c29d11c5b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_postgres.py"
+    },
+    {
+      "gitObject": "3fef97d3982fb81609fd47911073a5e36afda43e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/Dockerfile"
+    },
+    {
+      "gitObject": "41be1b6f9ebda87fe98a561fccfe018978c360c7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_workflow_proof.py"
+    },
+    {
+      "gitObject": "43770924895fb0d01b974271b174369a4d53ebd0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/_raw_channel.py"
+    },
+    {
+      "gitObject": "45b68130f89bfe3270918d72e9b48ca25b57db95",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/config.example.json"
+    },
+    {
+      "gitObject": "46fa0ca1dcf7fd6a2b09ec5d932f30d455692f5d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_workflow_decisions.py"
+    },
+    {
+      "gitObject": "4722c2925f27d40ab770c5a0f2695b27c0df11c9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/chain.py"
+    },
+    {
+      "gitObject": "4771fa27c9353d5dc15e0769d73b8d1ee02f79e0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-missing-object.json"
+    },
+    {
+      "gitObject": "48d90f4746d62d2a6f344d739b79f3d45c1cea5d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_control_lease.py"
+    },
+    {
+      "gitObject": "4bb1c691e808f957d13a9071debcf7fa4e3a076e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/serviceaccount.yaml"
+    },
+    {
+      "gitObject": "4c36983db75c0ffaac74b8b6ac2e6c3f38a39af3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/README.md"
+    },
+    {
+      "gitObject": "4c4524cf0ad1c1668c836f23da4b64129affb250",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/cloudbuild.security-proof.yaml"
+    },
+    {
+      "gitObject": "4e785e17a78e17d965b85352f7b1350ef7b42b1b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/runtime_upgrade_host_process.py"
+    },
+    {
+      "gitObject": "4f20913bb28ac8582b58eb456a31c182db509fd5",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/reference-runtime/operations"
+    },
+    {
+      "gitObject": "509df37bfe27178604a93be3cdf951e990cfb09b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_security_assurance.py"
+    },
+    {
+      "gitObject": "5233aa18d374eccc341f02d6c52ab4f8d45edeff",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/openai.py"
+    },
+    {
+      "gitObject": "5307989c79a4b8f94f6aa2fe82295abf80bc2233",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrails.py"
+    },
+    {
+      "gitObject": "536965ec52e698529ecc59d41abec42ae47d59b7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_conformance.py"
+    },
+    {
+      "gitObject": "54dbfbf41a82380b426effd68194cf303bbc3c4b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_mcp_integration.py"
+    },
+    {
+      "gitObject": "550460752b31e55d4152ecb615a86a80f31f1dcd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/aml_instrumentation.py"
+    },
+    {
+      "gitObject": "55f7db387358b9e71cb53898f388d3798241bb8f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-advisory-expired.json"
+    },
+    {
+      "gitObject": "57ad158cbf570f7004736038a786bb41510f6da3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/fixtures/runtime-kernel-v2.json"
+    },
+    {
+      "gitObject": "57ad158cbf570f7004736038a786bb41510f6da3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/runtime-kernel-v2.json"
+    },
+    {
+      "gitObject": "5807ef83ad6029d07033d4fa1ce4dbd7197ae91f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/_helpers.tpl"
+    },
+    {
+      "gitObject": "590d44990bf7c9f0e82b07a60775f099076d9beb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/Dockerfile"
+    },
+    {
+      "gitObject": "59a3fa4089570d6a3eee4082cffda6d4ded891ab",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "CHANGELOG.md"
+    },
+    {
+      "gitObject": "5a5b14b8739baea2020c4a932ba1442c7cef2da5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/client.py"
+    },
+    {
+      "gitObject": "5b07ac1f1f5dd49cfac555627ccf40dfe241b5f7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/admission.py"
+    },
+    {
+      "gitObject": "5daf57499c3a36dba0dd97a8592e185e9f51d1d5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/reasoning.py"
+    },
+    {
+      "gitObject": "5e031c3b9be5b270143bd5ae25e68b43a09fe562",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/reference-runtime/chart/templates"
+    },
+    {
+      "gitObject": "5e9a63cae9c0e44c8fe51910b88b2c6aaa546ef1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/openai_agents.py"
+    },
+    {
+      "gitObject": "5ea7d0ec1605804d43a4198277d294171d70633e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/publish-runtime-artifacts.yml"
+    },
+    {
+      "gitObject": "61f99c9758cf8ac452f447dbeba235adc889f72e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/guardrail-service"
+    },
+    {
+      "gitObject": "63682dd878793702f860bcbe139664746aedd4fb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-lease-parse-failed.json"
+    },
+    {
+      "gitObject": "640ccc4c3fee1e4d50fe3cb2ea645131f49b1fac",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_guardrail_host.py"
+    },
+    {
+      "gitObject": "644bd3475b2f8a57d50f34b78fe948a24a39b9a8",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/guardrail-service/chart"
+    },
+    {
+      "gitObject": "6530253ff8c192e98bdb109a109fb6240af1e32e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-stale-lease-still-enforcing.json"
+    },
+    {
+      "gitObject": "6598d495638de36466c504fe0ccf29658be8492b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_recovery.py"
+    },
+    {
+      "gitObject": "66bd498cae398ef2524b3ae154654de53c3e2899",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/client.py"
+    },
+    {
+      "gitObject": "67eec41fec69f6d870d2ada502157af748ab3930",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/__init__.py"
+    },
+    {
+      "gitObject": "6978396f155952445bb35d59a61c2394b44c8c3e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests/fixtures"
+    },
+    {
+      "gitObject": "6a65490825b53d13db7a7b5b399da7dab9df6e49",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/published_upgrade_fixture.py"
+    },
+    {
+      "gitObject": "6a8cb466d1e28fe6b1996f265dbce642dddbd624",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/intent.py"
+    },
+    {
+      "gitObject": "6ba60dab32969907f729cdafdd9387577a3bd79e",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/install-k3d.sh"
+    },
+    {
+      "gitObject": "6baf95f99387d3110535273c54cb0bc414fb78e9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/config.pull.example.json"
+    },
+    {
+      "gitObject": "6c954702d915522e807074a211134cde3f8db855",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_mcp_transport.py"
+    },
+    {
+      "gitObject": "6cbe0af7593da72c4361257a1c341b44f2d58b45",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/resolve-published-release.sh"
+    },
+    {
+      "gitObject": "6dc510ccdb79799bc54fc1d8f3e0581342dded8c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/_context.py"
+    },
+    {
+      "gitObject": "6df6f58b02d3d8701a593425527f0913e689ba89",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/runtime-release-handoff-v1.json"
+    },
+    {
+      "gitObject": "6ed69f8b33c71a0dc1419399481509f29b0c0fe4",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests"
+    },
+    {
+      "gitObject": "6ffe965c16e6c714154002b44f5d5849c30dfccd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_receipts.py"
+    },
+    {
+      "gitObject": "706d43816aba19c285c1a1265092431a76a5f533",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/langgraph.py"
+    },
+    {
+      "gitObject": "716daf89d7e3a2e69521e242a3b9650d1a7184ed",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/__init__.py"
+    },
+    {
+      "gitObject": "71d02e2475911e3832287665435af6ad08066930",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/kernel.py"
+    },
+    {
+      "gitObject": "723435f617658e3b0fb634e396ddce7615aec475",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/mirror-to-planeon.yml"
+    },
+    {
+      "gitObject": "72d211c5166612f0148eabdddd80616e2ec385a8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".gitignore"
+    },
+    {
+      "gitObject": "738b5c5fb2617bceea95ceceda3bc7e91a5a5c23",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_guardrail_kernel.py"
+    },
+    {
+      "gitObject": "75394c91f6a5895d59c8ed6ca7a21f76817fd1e1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_guardrail_tool_result.py"
+    },
+    {
+      "gitObject": "7544b272982f7a9128d75de6958a4ff87cc665af",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "prometa"
+    },
+    {
+      "gitObject": "7621693f7c0a13323a75b93bae1b3344b8ec729d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_guardrail_evaluator.py"
+    },
+    {
+      "gitObject": "76e28a000a63f58c69a743062dee21a4bd67f6f4",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/compose.yaml"
+    },
+    {
+      "gitObject": "774ed40f9afba8f07264a3558c0d709bcd005c6a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_workflow_admission_v3.py"
+    },
+    {
+      "gitObject": "78c8601255c2f16666981d274354d5046253d21b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-serving-not-enforcement.json"
+    },
+    {
+      "gitObject": "7a6270684a58c2a9ee5094ef4b04dcb307daee12",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/operations/restore-postgres.sh"
+    },
+    {
+      "gitObject": "7b0c5713cf0bd81a138ebf0e33febb8bbb867c97",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-enforcing-without-lease-refused.json"
+    },
+    {
+      "gitObject": "7b6d655f91ef009e497284c0e5e53009f2476d15",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/deployment.yaml"
+    },
+    {
+      "gitObject": "7bd01dca655f4c979cc8db0c86a4fdd2f203c277",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_chain_attrs.py"
+    },
+    {
+      "gitObject": "7dbf6a33025aea5ccc19977c3728d7a0b8284c5b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_upgrade_rollback.py"
+    },
+    {
+      "gitObject": "7f902a84591fad15fc9a013e02c1d53ca81132c7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/detectors.py"
+    },
+    {
+      "gitObject": "7ff66f08c5c2e6f5b4b3836d2736a9329184c374",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/topology_mcp_server.py"
+    },
+    {
+      "gitObject": "7ff9b8dc811fb70128b9b3854e74dff69c1ff909",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/guardrail-service/chart/templates"
+    },
+    {
+      "gitObject": "80796f660ad91def0e23c3b45e6a1004430c725b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/tasks.py"
+    },
+    {
+      "gitObject": "818027587639dcc140cee1b7a4f4e7747f1cb837",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/service.yaml"
+    },
+    {
+      "gitObject": "81c1c7d5b782f433d2caec08698b68df5941325e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_release_assets.py"
+    },
+    {
+      "gitObject": "81f4d8264de05ced2fadcb5caa9e7e6f9de7b34a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/__init__.py"
+    },
+    {
+      "gitObject": "82969c86e759f8bd61684501dba56bcfe3845a3d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/authz.py"
+    },
+    {
+      "gitObject": "843bb5ee2988e85530c626dbd6bf055632c04ac6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/decorators.py"
+    },
+    {
+      "gitObject": "864060410547c66e8cf0198958a441c642bd9f15",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/mcp_vector_quickstart.py"
+    },
+    {
+      "gitObject": "8640e04494744084006a97d4ffec7d3815fc638b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/README.md"
+    },
+    {
+      "gitObject": "866ec59539f52adbbb6187d888892b00765bb712",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/NOTES.txt"
+    },
+    {
+      "gitObject": "87c9c4d71dd4c217041c9c234ded1772705a3202",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-wrong-key-purpose.json"
+    },
+    {
+      "gitObject": "898b126def0da9154711870c74a0532c5b3e614e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/reference-runtime"
+    },
+    {
+      "gitObject": "8b3464813145214b25edb912dd0b1273cd8adfe1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/host.py"
+    },
+    {
+      "gitObject": "8c6c867043760e4f2231eca8834edf46c500fe28",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/sync_runtime_release_version.py"
+    },
+    {
+      "gitObject": "8cce2e5053d34f50f2bae6ec4bc5d206e828d557",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/Dockerfile.workflow-proof"
+    },
+    {
+      "gitObject": "8ccf580f9c879868c97a89925a7dd4063eef6858",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/topology_probe.py"
+    },
+    {
+      "gitObject": "8d7f14b85e2c869820bc683a272afab3706a754e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/serviceaccount.yaml"
+    },
+    {
+      "gitObject": "8da0077e2957e75f3a866d263a8eba407886bd03",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/Chart.yaml"
+    },
+    {
+      "gitObject": "8f2254a11c9d8bb64feb667b23232309d016b41c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_guardrail_conformance.py"
+    },
+    {
+      "gitObject": "8f3169e5e3cca536c786192d4e21556fe2a2ccdf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/semantic_kernel.py"
+    },
+    {
+      "gitObject": "8feb4a2c8796818b0f74a0ff2192f5c922673708",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/runtime-published-install.yml"
+    },
+    {
+      "gitObject": "904899fe4098299a4459d91099b70480d072d0a2",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors"
+    },
+    {
+      "gitObject": "914c7caa4631e8a9cbe84dc3672ee1c5386bbfcf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/config.mcp.example.json"
+    },
+    {
+      "gitObject": "91a9bd87c4da12073456fdf32cb189dca3b710a8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_feedback_attrs.py"
+    },
+    {
+      "gitObject": "927613dc0b27ce7f1efe522ace6e68aceecb889a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/escalation.py"
+    },
+    {
+      "gitObject": "94108cf27297bfc12197b48e921847a9e3c124dd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/mcp.py"
+    },
+    {
+      "gitObject": "96093c7c1dc6c5c82bcc073e469880ef04369dc0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/events.py"
+    },
+    {
+      "gitObject": "9626cf722edfffd0706d8d80e1fc1654aad01f66",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-quarantine-expired.json"
+    },
+    {
+      "gitObject": "96564bc102734481fb125570e1b5d81b6306e5f1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/data_flow_refs.py"
+    },
+    {
+      "gitObject": "99114fb312e2c096582247d663790e5197662844",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/Chart.yaml"
+    },
+    {
+      "gitObject": "9919c018b1c18e9d5dfde699ad290ce3687bfe1d",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": ".github/ci"
+    },
+    {
+      "gitObject": "9a3d09e1921658570433a1739becfa4a67a5a87d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/google.py"
+    },
+    {
+      "gitObject": "9b3d81d29c6d767d888ffaa1be033b7bb75e2661",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_workflow_golden.py"
+    },
+    {
+      "gitObject": "9b529589be622664f015fa4f390f1f18b150db50",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/publish.yml"
+    },
+    {
+      "gitObject": "9c3fc704376d49b711cb16e7806682bb46a66b5f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/values.openshift-production.yaml"
+    },
+    {
+      "gitObject": "9cef7484c8724a216a0fa1949ceddcb5a5c10ff7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/compatibility-baselines.json"
+    },
+    {
+      "gitObject": "9f22744157316db18d98a6257cc6ad51330dc469",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/workflow-decision-batch-v1.json"
+    },
+    {
+      "gitObject": "a08aaceae0906a3d428083494c58eb83810d9135",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/compatibility-job.yaml"
+    },
+    {
+      "gitObject": "a16fa70c69a30b4147caebf14969d6be1cd58e39",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/runtime_conformance_command_driver.py"
+    },
+    {
+      "gitObject": "a1b1ed65dac584648e0d021f6af540c47775495e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/conformance.py"
+    },
+    {
+      "gitObject": "a1f3bd43b3ccb799b21700cb0c006eec89759919",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/runtime_recovery_host_process.py"
+    },
+    {
+      "gitObject": "a32dacf1659b5f1c7a3a348683426bb401f4a6e9",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/reference-runtime/chart"
+    },
+    {
+      "gitObject": "a467890ec30fd46f9a4596671482235277217f22",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-valid-v1.json"
+    },
+    {
+      "gitObject": "a5557bb9476efa657d415434476ea5703bdc5e87",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-no-lease.json"
+    },
+    {
+      "gitObject": "a5673b5882e9ee7f99962ebb39fa1e0b701c5d05",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_tasks.py"
+    },
+    {
+      "gitObject": "a5a3459f8c60eaef2d2b44f1d8a59d662bfee7c5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-serving-replay-across-streams.json"
+    },
+    {
+      "gitObject": "a76bac2e38593f20b12d32dd9a60f8d25b10c3de",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/Dockerfile.ubi"
+    },
+    {
+      "gitObject": "a820a07b263e27e708759735fd16ed628897c0e3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/manifest.json"
+    },
+    {
+      "gitObject": "aa05c9602764f51a0c035060f5bf86d0d24035aa",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/hpa.yaml"
+    },
+    {
+      "gitObject": "ab52c1ad4fa5c9b335fea4e2468931a92ba2e5a6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/runtime_mcp_stdio_server.py"
+    },
+    {
+      "gitObject": "ab930cc0fee8656502ca1689b6ce437132cd703e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/values.openshift-sno-trial.yaml"
+    },
+    {
+      "gitObject": "ac222ac8836ca5162df0388cf7eac183502398b6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_workflow_ontology.py"
+    },
+    {
+      "gitObject": "ad0d189d0b07990023df4fdccf7e59dc7888c946",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/failmode.py"
+    },
+    {
+      "gitObject": "adcd48abac705098e6e1bd94cf3f5977b23e2268",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_runtime_release_contract.sh"
+    },
+    {
+      "gitObject": "ae19c67af7f7ff281252f57c67d9f6045e8e613b",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/verified-k3d-image-import.sh"
+    },
+    {
+      "gitObject": "af9ddba766225d4043ebd73ec6bea1e52ff643c0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/__init__.py"
+    },
+    {
+      "gitObject": "afae0cc27e535ddaceb42cb56d6c4e7ed142ccbb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/config.example.json"
+    },
+    {
+      "gitObject": "b0ab7f197f54c92264d5e9d3658f9f5dc9b49da7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/sentiment.py"
+    },
+    {
+      "gitObject": "b0ae910e02b3f36cb9b52c10b9dfac5894b45039",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-unknown-keys-ignored.json"
+    },
+    {
+      "gitObject": "b10c251f3f164498a8ea5bc3b05d786c5530d886",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/security-decision-batch-v1.json"
+    },
+    {
+      "gitObject": "b1f0b9b85fc3677702290039ccc1dab0c7b0ed59",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/feedback.py"
+    },
+    {
+      "gitObject": "b58d225c93aacdba6865e87f01dadabfeb9a25aa",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": ".github/workflows"
+    },
+    {
+      "gitObject": "b65fde239dffadb942f8cbfd1e3e792aacae7655",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/upgrade-rollback-drill.sh"
+    },
+    {
+      "gitObject": "b699863e880eb7400169849370d50d71445a15ae",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy"
+    },
+    {
+      "gitObject": "b7966eb5b44d2fbd02d0e0a7d0ac52910931e8b6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_workflow_kernel.py"
+    },
+    {
+      "gitObject": "b8b787e09f30f45ab02e865239515237f79f6d5b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/trust.py"
+    },
+    {
+      "gitObject": "ba406e871d058471c74f3271f578df69f1424e49",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/runtime_kernel_quickstart.py"
+    },
+    {
+      "gitObject": "bbab1a4aeea6bb664ddb623b42da2fdd526b5b30",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_model_invocation_identity_contract.py"
+    },
+    {
+      "gitObject": "bbfa11cd1e2f4a155be512c9153196b1fd092837",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_control_plane.py"
+    },
+    {
+      "gitObject": "bf05c4f2ae8d7e0cc666e0b8a088190325cb5a2e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "pyproject.toml"
+    },
+    {
+      "gitObject": "bf941cd1212666d22f562b5214a5a1a9242e3813",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/topology-profiles.json"
+    },
+    {
+      "gitObject": "c17d082b0ba437fa101a9ae2ee7946100ed152ea",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/workflow_proof.py"
+    },
+    {
+      "gitObject": "c187695fefc3832503bf58431d66df1c1d4dc479",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/render-sno-trial-profile.sh"
+    },
+    {
+      "gitObject": "c1a8ff352a496e5c64aef73189d2caab99534520",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_host_tls.py"
+    },
+    {
+      "gitObject": "c21cf272a05fad7de65b526d5d77b0f14604fd2b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/fixtures/runtime-kernel-v1.json"
+    },
+    {
+      "gitObject": "c21cf272a05fad7de65b526d5d77b0f14604fd2b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/runtime-kernel-v1.json"
+    },
+    {
+      "gitObject": "c269cd382967d07dcb4ceb0621b7247b7778ce93",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "prometa/runtime"
+    },
+    {
+      "gitObject": "c31e165cf8e236974598ad6a7a6b5ea5d69ed8f6",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests/fixtures/lease-vectors/acks"
+    },
+    {
+      "gitObject": "c3ac327e2989ffbbc2452209e2a32f76be911534",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/prometa-model-usage-v2.schema.json"
+    },
+    {
+      "gitObject": "c51522642761b01ad30da1c4fda53fef0818911a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_human_escalation.py"
+    },
+    {
+      "gitObject": "c595b857b68b3854af929ad1e20ba6b4e913cfea",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/ci/verify_core_package_boundary.py"
+    },
+    {
+      "gitObject": "c68d364b086176c46fa16f7ff6039188acf2ff36",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-lower-revision.json"
+    },
+    {
+      "gitObject": "c6c104dd1b39ac0c739fe13be29bd4fe5a11c4ac",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_intent_attrs.py"
+    },
+    {
+      "gitObject": "c724447b3885542da35afab55dea715f486c9a53",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/values.yaml"
+    },
+    {
+      "gitObject": "c7bf036d683dd66a3d23d4eec4795653c9935fa6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/openai_agents_quickstart.py"
+    },
+    {
+      "gitObject": "c8d0654be16142846cc1abfad6fd88f02b1bc970",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_retrieval_query.py"
+    },
+    {
+      "gitObject": "ca339f96e533c4686862611e1934c3790ec0c2f8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/streaming.py"
+    },
+    {
+      "gitObject": "ca4b8ea1950232614fc43db9e080f81e7d2c4f26",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-enforcing-quarantine.json"
+    },
+    {
+      "gitObject": "ca8c6c1be6e512ea90e5932c3273faaab326eb99",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_openllmetry_bridge.py"
+    },
+    {
+      "gitObject": "ce174d8c41513b106f0b4cf37b7c4faf9c4cf148",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/values.yaml"
+    },
+    {
+      "gitObject": "ce928a1a82ba347c75aad5051bd678963d6bf22f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_admission.py"
+    },
+    {
+      "gitObject": "d09b4766e40636b279311f6cb2ed3adda555c829",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/retrieval.py"
+    },
+    {
+      "gitObject": "d0ab9d7c6c5bddd92167ca3b182937ffb11744b8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/ci.yml"
+    },
+    {
+      "gitObject": "d1c832e8707cc8b13b45e63e5936cb8cb506e750",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/workflow-policy-golden-v1.json"
+    },
+    {
+      "gitObject": "d3317c11aaa21d0aaa449fac544c61f14a9d09d8",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "prometa/guardrail"
+    },
+    {
+      "gitObject": "d4f84421cc1c22a9527e61c799f9279550141c4d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/acks/ack-missing-field-refused.json"
+    },
+    {
+      "gitObject": "d56e4d3edb63cf37bc39b3b88437ee4fba7e0692",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/compose.yaml"
+    },
+    {
+      "gitObject": "d5778b8b4a22426938aa2a2106ba8909eddbd3dc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/networkpolicy.yaml"
+    },
+    {
+      "gitObject": "d5a3e82d17e1b05a1cba090807ce2275560926d6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/networkpolicy.yaml"
+    },
+    {
+      "gitObject": "d6f3fe6fb5919c99a5a1753a91eb270586c1e48c",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/topology-certification.sh"
+    },
+    {
+      "gitObject": "d7723b9f87aa8c58f157046e1f14c5aa6ff5afea",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_agent_id_resolution.py"
+    },
+    {
+      "gitObject": "d8f251d039d8458add06019e6ed78239301ecfb1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_control_lease_vectors.py"
+    },
+    {
+      "gitObject": "d9f92da653ed857b854e92888e53667d0c585ab5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/README.md"
+    },
+    {
+      "gitObject": "da404e29dade3cb9fc5ae6e473b32ee5d0507ec9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/topology-profiles.mcp.json"
+    },
+    {
+      "gitObject": "da8ad25e5dd6138fd1eb90433999c808c1961886",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/refs.py"
+    },
+    {
+      "gitObject": "dc0b8f56042db9476687561aeefae3411a974296",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/postgres.py"
+    },
+    {
+      "gitObject": "e06d11d1c30b6ff95c15db9cc35ecb14210c035f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/ci/topology_fixture.py"
+    },
+    {
+      "gitObject": "e18726ee4571a8fc5d3d3cda40ce85e89f1438a6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_runtime_mcp.py"
+    },
+    {
+      "gitObject": "e2345147bdd1e1e2f209e22ce90268fc200ac384",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/mcp.py"
+    },
+    {
+      "gitObject": "e431d7a6cc173ad57f258983bea44c81c2d04d44",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".dockerignore"
+    },
+    {
+      "gitObject": "e58dc33d903f223942fcfb5aec80440a3a5278ae",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/promotion-attestation-v1.json"
+    },
+    {
+      "gitObject": "e5bddf5deed3d9ccd2a46b6b0fe1ed874f8efaee",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/integrations/openllmetry.py"
+    },
+    {
+      "gitObject": "e5e38ebf176c386dc431b84f60059566ff9a4377",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/deployment.yaml"
+    },
+    {
+      "gitObject": "e64df969bb485065edf0eb7370f10a26af836e81",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/quickstart.py"
+    },
+    {
+      "gitObject": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/__init__.py"
+    },
+    {
+      "gitObject": "eaa5a9aab5c646a2877d074bbb2f27736cbc09ae",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/api-keys.example.json"
+    },
+    {
+      "gitObject": "ed92fba9fd932b9098cd39c02a96739652ff904d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_langchain_integration.py"
+    },
+    {
+      "gitObject": "f0b561bee9c92b22ff768b33e73a5737339783da",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/pdb.yaml"
+    },
+    {
+      "gitObject": "f1f726f8e1e54ea89fec79a22f45568cd075f968",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/reference-runtime/chart/templates/migration-job.yaml"
+    },
+    {
+      "gitObject": "f23da7cf4543cec9c2b5f844d2a0f8c0f0fc0764",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/crewai_quickstart.py"
+    },
+    {
+      "gitObject": "f42980c7684c569eac625f116f8ec3f6aa7bf493",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/conformance.py"
+    },
+    {
+      "gitObject": "f6c6f65bf413deb0b7522b4cd2c84d94867ffc72",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/lease-vectors/vectors/lease-agent-scope.json"
+    },
+    {
+      "gitObject": "f782517b906beb9abfc409873027701e87f02ef0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "deploy/guardrail-service/chart/templates/NOTES.txt"
+    },
+    {
+      "gitObject": "f83a028aab40547787c479f61c2fcb511651852c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/model_gateway.py"
+    },
+    {
+      "gitObject": "f83b17e51a78835e76eada2c3b2d2d4a31937661",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/fixtures/__init__.py"
+    },
+    {
+      "gitObject": "f888aad543542a359d013dfddf48e5f805084a6d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "README.md"
+    },
+    {
+      "gitObject": "f8c535a8af1979e74daf6cc7bf954cdea8c8c15f",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "scripts"
+    },
+    {
+      "gitObject": "fb7370ec09b3d37eb7a10ea860f9327a4b63fab1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/receipts.py"
+    },
+    {
+      "gitObject": "fb793031561a3ac8320f0b980d168190b6204a8f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/runtime/workflow_decisions.py"
+    },
+    {
+      "gitObject": "fbaeb4a71bc6ac22ef81d3c462969ab90b986664",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/contract.py"
+    },
+    {
+      "gitObject": "fcc821e2146f60cded049745f59a4c792f57234e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "deploy/reference-runtime/ci"
+    },
+    {
+      "gitObject": "ff7e878e39645f0c8e0bb855f3e8a62430f49450",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "examples/langchain_quickstart.py"
+    },
+    {
+      "gitObject": "ffb19185f1d3cdb1d7eff5dd8d83b6cd70547b8f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "prometa/guardrail/service.py"
+    },
+    {
+      "kind": "REPOSITORY_SUMMARY",
+      "objectTypeCounts": {
+        "blob": 237,
+        "tree": 24
+      },
+      "sourcePath": ".",
+      "trackedEntryCount": 261
+    }
+  ],
+  "isolationEvidence": {
+    "copyAuthority": "NONE",
+    "errno": 1,
+    "networkBackend": "darwin-sandbox",
+    "outboundDenied": true,
+    "sourceCodeExecution": "DENIED",
+    "sourceContentReadAccess": "DENIED",
+    "sourceWriteAccess": "DENIED"
+  },
+  "observationId": "met-obs-sdk-001-full-tracked-tree",
+  "schemaVersion": "harness.planeon.ai/reference-observation/v1",
+  "sources": [
+    {
+      "gitObject": "e431d7a6cc173ad57f258983bea44c81c2d04d44",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".dockerignore"
+    },
+    {
+      "gitObject": "200ced55855b95b7e8ffc2c1dcd265071bf69a7e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": ".github"
+    },
+    {
+      "gitObject": "9919c018b1c18e9d5dfde699ad290ce3687bfe1d",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": ".github/ci"
+    },
+    {
+      "gitObject": "c595b857b68b3854af929ad1e20ba6b4e913cfea",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/ci/verify_core_package_boundary.py"
+    },
+    {
+      "gitObject": "b58d225c93aacdba6865e87f01dadabfeb9a25aa",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": ".github/workflows"
+    },
+    {
+      "gitObject": "d0ab9d7c6c5bddd92167ca3b182937ffb11744b8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "gitObject": "723435f617658e3b0fb634e396ddce7615aec475",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/mirror-to-planeon.yml"
+    },
+    {
+      "gitObject": "5ea7d0ec1605804d43a4198277d294171d70633e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/publish-runtime-artifacts.yml"
+    },
+    {
+      "gitObject": "9b529589be622664f015fa4f390f1f18b150db50",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/publish.yml"
+    },
+    {
+      "gitObject": "17e96d1b24287aa0aa67f4666454471d8c4f72d6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/release.yml"
+    },
+    {
+      "gitObject": "8feb4a2c8796818b0f74a0ff2192f5c922673708",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/runtime-published-install.yml"
+    },
+    {
+      "gitObject": "3a4015aec13f790c7c2451e52eb6d9de81fd3676",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/runtime-published-upgrade-rollback.yml"
+    },
+    {
+      "gitObject": "72d211c5166612f0148eabdddd80616e2ec385a8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".gitignore"
+    },
+    {
+      "gitObject": "59a3fa4089570d6a3eee4082cffda6d4ded891ab",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "CHANGELOG.md"
+    },
+    {
+      "gitObject": "0f3b7bc31a9108c10448f1f92ece2cf57417dfc6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "CONTRIBUTING.md"
+    },
+    {
+      "gitObject": "f888aad543542a359d013dfddf48e5f805084a6d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "README.md"
+    },
+    {
+      "gitObject": "b699863e880eb7400169849370d50d71445a15ae",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy"
+    },
+    {
+      "gitObject": "61f99c9758cf8ac452f447dbeba235adc889f72e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/guardrail-service"
+    },
+    {
+      "gitObject": "590d44990bf7c9f0e82b07a60775f099076d9beb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/Dockerfile"
+    },
+    {
+      "gitObject": "2527bd0235531b708cc9f525219d6b4beb71dc60",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/Dockerfile.ubi"
+    },
+    {
+      "gitObject": "d9f92da653ed857b854e92888e53667d0c585ab5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/README.md"
+    },
+    {
+      "gitObject": "eaa5a9aab5c646a2877d074bbb2f27736cbc09ae",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/api-keys.example.json"
+    },
+    {
+      "gitObject": "644bd3475b2f8a57d50f34b78fe948a24a39b9a8",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/guardrail-service/chart"
+    },
+    {
+      "gitObject": "8da0077e2957e75f3a866d263a8eba407886bd03",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/Chart.yaml"
+    },
+    {
+      "gitObject": "7ff9b8dc811fb70128b9b3854e74dff69c1ff909",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/guardrail-service/chart/templates"
+    },
+    {
+      "gitObject": "f782517b906beb9abfc409873027701e87f02ef0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/NOTES.txt"
+    },
+    {
+      "gitObject": "5807ef83ad6029d07033d4fa1ce4dbd7197ae91f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/_helpers.tpl"
+    },
+    {
+      "gitObject": "e5e38ebf176c386dc431b84f60059566ff9a4377",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/deployment.yaml"
+    },
+    {
+      "gitObject": "d5778b8b4a22426938aa2a2106ba8909eddbd3dc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/networkpolicy.yaml"
+    },
+    {
+      "gitObject": "04be7983ef3a1781d84844bc62bcb19f85c4c799",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/pdb.yaml"
+    },
+    {
+      "gitObject": "1dee1c29a72506af647df98bfb7896b56bdbe5fe",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/service.yaml"
+    },
+    {
+      "gitObject": "8d7f14b85e2c869820bc683a272afab3706a754e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/templates/serviceaccount.yaml"
+    },
+    {
+      "gitObject": "ce174d8c41513b106f0b4cf37b7c4faf9c4cf148",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/chart/values.yaml"
+    },
+    {
+      "gitObject": "d56e4d3edb63cf37bc39b3b88437ee4fba7e0692",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/compose.yaml"
+    },
+    {
+      "gitObject": "afae0cc27e535ddaceb42cb56d6c4e7ed142ccbb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/guardrail-service/config.example.json"
+    },
+    {
+      "gitObject": "898b126def0da9154711870c74a0532c5b3e614e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/reference-runtime"
+    },
+    {
+      "gitObject": "3fef97d3982fb81609fd47911073a5e36afda43e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/Dockerfile"
+    },
+    {
+      "gitObject": "0ad0b668a50dd18f0b65ff31b8708feed0d0b613",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/Dockerfile.security-proof"
+    },
+    {
+      "gitObject": "a76bac2e38593f20b12d32dd9a60f8d25b10c3de",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/Dockerfile.ubi"
+    },
+    {
+      "gitObject": "8cce2e5053d34f50f2bae6ec4bc5d206e828d557",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/Dockerfile.workflow-proof"
+    },
+    {
+      "gitObject": "4c36983db75c0ffaac74b8b6ac2e6c3f38a39af3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/README.md"
+    },
+    {
+      "gitObject": "a32dacf1659b5f1c7a3a348683426bb401f4a6e9",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/reference-runtime/chart"
+    },
+    {
+      "gitObject": "2c0c758753f4b304cebe7b2b3f78fd9e727350cc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/.helmignore"
+    },
+    {
+      "gitObject": "99114fb312e2c096582247d663790e5197662844",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/Chart.yaml"
+    },
+    {
+      "gitObject": "5e031c3b9be5b270143bd5ae25e68b43a09fe562",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/reference-runtime/chart/templates"
+    },
+    {
+      "gitObject": "866ec59539f52adbbb6187d888892b00765bb712",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/NOTES.txt"
+    },
+    {
+      "gitObject": "32de8c3f0ed88dec731def6297c754445ae7658e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/_helpers.tpl"
+    },
+    {
+      "gitObject": "322a1aebae96284ad244ef2d3801813a4bbd1dd4",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/backup-cronjob.yaml"
+    },
+    {
+      "gitObject": "a08aaceae0906a3d428083494c58eb83810d9135",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/compatibility-job.yaml"
+    },
+    {
+      "gitObject": "7b6d655f91ef009e497284c0e5e53009f2476d15",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/deployment.yaml"
+    },
+    {
+      "gitObject": "aa05c9602764f51a0c035060f5bf86d0d24035aa",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/hpa.yaml"
+    },
+    {
+      "gitObject": "f1f726f8e1e54ea89fec79a22f45568cd075f968",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/migration-job.yaml"
+    },
+    {
+      "gitObject": "d5a3e82d17e1b05a1cba090807ce2275560926d6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/networkpolicy.yaml"
+    },
+    {
+      "gitObject": "f0b561bee9c92b22ff768b33e73a5737339783da",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/pdb.yaml"
+    },
+    {
+      "gitObject": "818027587639dcc140cee1b7a4f4e7747f1cb837",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/service.yaml"
+    },
+    {
+      "gitObject": "4bb1c691e808f957d13a9071debcf7fa4e3a076e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/templates/serviceaccount.yaml"
+    },
+    {
+      "gitObject": "19474cf3c1c3ffb78fe48e684bc53e1172343071",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/values.mcp.example.yaml"
+    },
+    {
+      "gitObject": "9c3fc704376d49b711cb16e7806682bb46a66b5f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/values.openshift-production.yaml"
+    },
+    {
+      "gitObject": "ab930cc0fee8656502ca1689b6ce437132cd703e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/values.openshift-sno-trial.yaml"
+    },
+    {
+      "gitObject": "28b5fda39d37bbfcb8d348bb3500be4ddd5e8f6d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/values.production.example.yaml"
+    },
+    {
+      "gitObject": "c724447b3885542da35afab55dea715f486c9a53",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/chart/values.yaml"
+    },
+    {
+      "gitObject": "fcc821e2146f60cded049745f59a4c792f57234e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/reference-runtime/ci"
+    },
+    {
+      "gitObject": "6ba60dab32969907f729cdafdd9387577a3bd79e",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/install-k3d.sh"
+    },
+    {
+      "gitObject": "1a9594ebfcbec6856fe2b5367e1b16eb771efabe",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/published-upgrade-rollback.sh"
+    },
+    {
+      "gitObject": "6a65490825b53d13db7a7b5b399da7dab9df6e49",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/published_upgrade_fixture.py"
+    },
+    {
+      "gitObject": "c187695fefc3832503bf58431d66df1c1d4dc479",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/render-sno-trial-profile.sh"
+    },
+    {
+      "gitObject": "6cbe0af7593da72c4361257a1c341b44f2d58b45",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/resolve-published-release.sh"
+    },
+    {
+      "gitObject": "d6f3fe6fb5919c99a5a1753a91eb270586c1e48c",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/topology-certification.sh"
+    },
+    {
+      "gitObject": "e06d11d1c30b6ff95c15db9cc35ecb14210c035f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/topology_fixture.py"
+    },
+    {
+      "gitObject": "7ff66f08c5c2e6f5b4b3836d2736a9329184c374",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/topology_mcp_server.py"
+    },
+    {
+      "gitObject": "8ccf580f9c879868c97a89925a7dd4063eef6858",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/topology_probe.py"
+    },
+    {
+      "gitObject": "b65fde239dffadb942f8cbfd1e3e792aacae7655",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/upgrade-rollback-drill.sh"
+    },
+    {
+      "gitObject": "ae19c67af7f7ff281252f57c67d9f6045e8e613b",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/ci/verified-k3d-image-import.sh"
+    },
+    {
+      "gitObject": "4c4524cf0ad1c1668c836f23da4b64129affb250",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/cloudbuild.security-proof.yaml"
+    },
+    {
+      "gitObject": "206d437347232db27b23c4d864b8cbf45807804e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/cloudbuild.workflow-proof.yaml"
+    },
+    {
+      "gitObject": "9cef7484c8724a216a0fa1949ceddcb5a5c10ff7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/compatibility-baselines.json"
+    },
+    {
+      "gitObject": "76e28a000a63f58c69a743062dee21a4bd67f6f4",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/compose.yaml"
+    },
+    {
+      "gitObject": "45b68130f89bfe3270918d72e9b48ca25b57db95",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/config.example.json"
+    },
+    {
+      "gitObject": "914c7caa4631e8a9cbe84dc3672ee1c5386bbfcf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/config.mcp.example.json"
+    },
+    {
+      "gitObject": "6baf95f99387d3110535273c54cb0bc414fb78e9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/config.pull.example.json"
+    },
+    {
+      "gitObject": "4f20913bb28ac8582b58eb456a31c182db509fd5",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "deploy/reference-runtime/operations"
+    },
+    {
+      "gitObject": "2b9613113bcf349670c455e3bd07ec1ae263f502",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/operations/backup-postgres.sh"
+    },
+    {
+      "gitObject": "7a6270684a58c2a9ee5094ef4b04dcb307daee12",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/operations/restore-postgres.sh"
+    },
+    {
+      "gitObject": "bf941cd1212666d22f562b5214a5a1a9242e3813",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/topology-profiles.json"
+    },
+    {
+      "gitObject": "da404e29dade3cb9fc5ae6e473b32ee5d0507ec9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "deploy/reference-runtime/topology-profiles.mcp.json"
+    },
+    {
+      "gitObject": "14cb34b56c355f76605696a0b5c6cfe7678b18ab",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "examples"
+    },
+    {
+      "gitObject": "550460752b31e55d4152ecb615a86a80f31f1dcd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/aml_instrumentation.py"
+    },
+    {
+      "gitObject": "f23da7cf4543cec9c2b5f844d2a0f8c0f0fc0764",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/crewai_quickstart.py"
+    },
+    {
+      "gitObject": "96564bc102734481fb125570e1b5d81b6306e5f1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/data_flow_refs.py"
+    },
+    {
+      "gitObject": "ff7e878e39645f0c8e0bb855f3e8a62430f49450",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/langchain_quickstart.py"
+    },
+    {
+      "gitObject": "864060410547c66e8cf0198958a441c642bd9f15",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/mcp_vector_quickstart.py"
+    },
+    {
+      "gitObject": "c7bf036d683dd66a3d23d4eec4795653c9935fa6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/openai_agents_quickstart.py"
+    },
+    {
+      "gitObject": "e64df969bb485065edf0eb7370f10a26af836e81",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/quickstart.py"
+    },
+    {
+      "gitObject": "a16fa70c69a30b4147caebf14969d6be1cd58e39",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/runtime_conformance_command_driver.py"
+    },
+    {
+      "gitObject": "ba406e871d058471c74f3271f578df69f1424e49",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "examples/runtime_kernel_quickstart.py"
+    },
+    {
+      "gitObject": "7544b272982f7a9128d75de6958a4ff87cc665af",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "prometa"
+    },
+    {
+      "gitObject": "67eec41fec69f6d870d2ada502157af748ab3930",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/__init__.py"
+    },
+    {
+      "gitObject": "6dc510ccdb79799bc54fc1d8f3e0581342dded8c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/_context.py"
+    },
+    {
+      "gitObject": "43770924895fb0d01b974271b174369a4d53ebd0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/_raw_channel.py"
+    },
+    {
+      "gitObject": "18ad6fe5964b866ded29a78a46bac24a0eae5244",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/attributes.py"
+    },
+    {
+      "gitObject": "82969c86e759f8bd61684501dba56bcfe3845a3d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/authz.py"
+    },
+    {
+      "gitObject": "12526dfa5ca9cdc4f28a395c0e8216bdb38e41e5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/budget.py"
+    },
+    {
+      "gitObject": "4722c2925f27d40ab770c5a0f2695b27c0df11c9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/chain.py"
+    },
+    {
+      "gitObject": "5a5b14b8739baea2020c4a932ba1442c7cef2da5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/client.py"
+    },
+    {
+      "gitObject": "843bb5ee2988e85530c626dbd6bf055632c04ac6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/decorators.py"
+    },
+    {
+      "gitObject": "96093c7c1dc6c5c82bcc073e469880ef04369dc0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/events.py"
+    },
+    {
+      "gitObject": "b1f0b9b85fc3677702290039ccc1dab0c7b0ed59",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/feedback.py"
+    },
+    {
+      "gitObject": "d3317c11aaa21d0aaa449fac544c61f14a9d09d8",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "prometa/guardrail"
+    },
+    {
+      "gitObject": "81f4d8264de05ced2fadcb5caa9e7e6f9de7b34a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/__init__.py"
+    },
+    {
+      "gitObject": "66bd498cae398ef2524b3ae154654de53c3e2899",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/client.py"
+    },
+    {
+      "gitObject": "a1b1ed65dac584648e0d021f6af540c47775495e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/conformance.py"
+    },
+    {
+      "gitObject": "fbaeb4a71bc6ac22ef81d3c462969ab90b986664",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/contract.py"
+    },
+    {
+      "gitObject": "7f902a84591fad15fc9a013e02c1d53ca81132c7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/detectors.py"
+    },
+    {
+      "gitObject": "ad0d189d0b07990023df4fdccf7e59dc7888c946",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/failmode.py"
+    },
+    {
+      "gitObject": "2279abde28bd8e12dd07f6d959de2a547e474360",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/host.py"
+    },
+    {
+      "gitObject": "3843a637e71de72f4647501f586d58f2283a69dd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/profiles.py"
+    },
+    {
+      "gitObject": "ffb19185f1d3cdb1d7eff5dd8d83b6cd70547b8f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/service.py"
+    },
+    {
+      "gitObject": "ca339f96e533c4686862611e1934c3790ec0c2f8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrail/streaming.py"
+    },
+    {
+      "gitObject": "5307989c79a4b8f94f6aa2fe82295abf80bc2233",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/guardrails.py"
+    },
+    {
+      "gitObject": "35e0a407a5a886194cdde54870523c2fcbf6f080",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "prometa/integrations"
+    },
+    {
+      "gitObject": "716daf89d7e3a2e69521e242a3b9650d1a7184ed",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/__init__.py"
+    },
+    {
+      "gitObject": "1f4ce1ed6351f73098e868f8e6c8983a33802815",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/_llm_common.py"
+    },
+    {
+      "gitObject": "2707a445ecaa4ab46d80ebfd17dc629782fb30c0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/anthropic.py"
+    },
+    {
+      "gitObject": "165d107e1eea05a87ba23f6761a1042ab20e035d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/crewai.py"
+    },
+    {
+      "gitObject": "9a3d09e1921658570433a1739becfa4a67a5a87d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/google.py"
+    },
+    {
+      "gitObject": "2c55e835658ce627aaa0f7a2fc71542a112a937d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/langchain.py"
+    },
+    {
+      "gitObject": "706d43816aba19c285c1a1265092431a76a5f533",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/langgraph.py"
+    },
+    {
+      "gitObject": "94108cf27297bfc12197b48e921847a9e3c124dd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/mcp.py"
+    },
+    {
+      "gitObject": "5233aa18d374eccc341f02d6c52ab4f8d45edeff",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/openai.py"
+    },
+    {
+      "gitObject": "5e9a63cae9c0e44c8fe51910b88b2c6aaa546ef1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/openai_agents.py"
+    },
+    {
+      "gitObject": "e5bddf5deed3d9ccd2a46b6b0fe1ed874f8efaee",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/openllmetry.py"
+    },
+    {
+      "gitObject": "8f3169e5e3cca536c786192d4e21556fe2a2ccdf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/semantic_kernel.py"
+    },
+    {
+      "gitObject": "36d145df286c17541fc940165b1d14ffc7a92564",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/integrations/vector.py"
+    },
+    {
+      "gitObject": "6a8cb466d1e28fe6b1996f265dbce642dddbd624",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/intent.py"
+    },
+    {
+      "gitObject": "2a2f8403d0e4fbf9af15077711e7b27c083cb753",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/memory.py"
+    },
+    {
+      "gitObject": "2515f528a743eee9a286a65bd9b1147006338848",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/prompt.py"
+    },
+    {
+      "gitObject": "5daf57499c3a36dba0dd97a8592e185e9f51d1d5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/reasoning.py"
+    },
+    {
+      "gitObject": "da8ad25e5dd6138fd1eb90433999c808c1961886",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/refs.py"
+    },
+    {
+      "gitObject": "174569938636c4d4feb6ba91415580d3798ee3c2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/resilience.py"
+    },
+    {
+      "gitObject": "d09b4766e40636b279311f6cb2ed3adda555c829",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/retrieval.py"
+    },
+    {
+      "gitObject": "048edfc48091a81ada147e8a01e97849ca558a10",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/reviewer.py"
+    },
+    {
+      "gitObject": "1053a49f811d666dbf9794f207969477c4542f2b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/routing.py"
+    },
+    {
+      "gitObject": "c269cd382967d07dcb4ceb0621b7247b7778ce93",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "prometa/runtime"
+    },
+    {
+      "gitObject": "af9ddba766225d4043ebd73ec6bea1e52ff643c0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/__init__.py"
+    },
+    {
+      "gitObject": "5b07ac1f1f5dd49cfac555627ccf40dfe241b5f7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/admission.py"
+    },
+    {
+      "gitObject": "f42980c7684c569eac625f116f8ec3f6aa7bf493",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/conformance.py"
+    },
+    {
+      "gitObject": "26a3f7152a97f4377a9fedd046d0e8e620a766fc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/control_plane.py"
+    },
+    {
+      "gitObject": "927613dc0b27ce7f1efe522ace6e68aceecb889a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/escalation.py"
+    },
+    {
+      "gitObject": "2c23e11422411c0d3c65a513c01a364597aaee76",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "prometa/runtime/fixtures"
+    },
+    {
+      "gitObject": "f83b17e51a78835e76eada2c3b2d2d4a31937661",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/fixtures/__init__.py"
+    },
+    {
+      "gitObject": "c21cf272a05fad7de65b526d5d77b0f14604fd2b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/fixtures/runtime-kernel-v1.json"
+    },
+    {
+      "gitObject": "57ad158cbf570f7004736038a786bb41510f6da3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/fixtures/runtime-kernel-v2.json"
+    },
+    {
+      "gitObject": "8b3464813145214b25edb912dd0b1273cd8adfe1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/host.py"
+    },
+    {
+      "gitObject": "2b7f261451ff16744433e02de0daade07e6c4327",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/host_conformance.py"
+    },
+    {
+      "gitObject": "71d02e2475911e3832287665435af6ad08066930",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/kernel.py"
+    },
+    {
+      "gitObject": "e2345147bdd1e1e2f209e22ce90268fc200ac384",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/mcp.py"
+    },
+    {
+      "gitObject": "f83a028aab40547787c479f61c2fcb511651852c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/model_gateway.py"
+    },
+    {
+      "gitObject": "dc0b8f56042db9476687561aeefae3411a974296",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/postgres.py"
+    },
+    {
+      "gitObject": "fb7370ec09b3d37eb7a10ea860f9327a4b63fab1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/receipts.py"
+    },
+    {
+      "gitObject": "0c7e1c0ec6cc1c1cb64d78a87c3033811806af25",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/runtime_control.py"
+    },
+    {
+      "gitObject": "0c9520af64cddd83583b091cca4ffbdc7c0937dc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/security_assurance.py"
+    },
+    {
+      "gitObject": "16b9b2bcb09ba3e7b146d7f62cc26b4ac9f5ed74",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/security_proof.py"
+    },
+    {
+      "gitObject": "80796f660ad91def0e23c3b45e6a1004430c725b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/tasks.py"
+    },
+    {
+      "gitObject": "b8b787e09f30f45ab02e865239515237f79f6d5b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/trust.py"
+    },
+    {
+      "gitObject": "fb793031561a3ac8320f0b980d168190b6204a8f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/workflow_decisions.py"
+    },
+    {
+      "gitObject": "0f08a858795e9fc9d2dfa7243653e1dfdfc21607",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/workflow_ontology.py"
+    },
+    {
+      "gitObject": "c17d082b0ba437fa101a9ae2ee7946100ed152ea",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/runtime/workflow_proof.py"
+    },
+    {
+      "gitObject": "b0ab7f197f54c92264d5e9d3658f9f5dc9b49da7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/sentiment.py"
+    },
+    {
+      "gitObject": "0f9aba2820f7b434d2bbe9678962ea1a7b3b5973",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "prometa/session.py"
+    },
+    {
+      "gitObject": "bf05c4f2ae8d7e0cc666e0b8a088190325cb5a2e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "pyproject.toml"
+    },
+    {
+      "gitObject": "f8c535a8af1979e74daf6cc7bf954cdea8c8c15f",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "scripts"
+    },
+    {
+      "gitObject": "8c6c867043760e4f2231eca8834edf46c500fe28",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/sync_runtime_release_version.py"
+    },
+    {
+      "gitObject": "adcd48abac705098e6e1bd94cf3f5977b23e2268",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/verify_runtime_release_contract.sh"
+    },
+    {
+      "gitObject": "6ed69f8b33c71a0dc1419399481509f29b0c0fe4",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests"
+    },
+    {
+      "gitObject": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/__init__.py"
+    },
+    {
+      "gitObject": "6978396f155952445bb35d59a61c2394b44c8c3e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests/fixtures"
+    },
+    {
+      "gitObject": "30395eb3dda7a5eb587f51a714eff619599d5379",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/bundle-envelope-v1.json"
+    },
+    {
+      "gitObject": "1dce56bb13e4f0b839a89c186dddade1f9c8606f",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests/fixtures/lease-vectors"
+    },
+    {
+      "gitObject": "8640e04494744084006a97d4ffec7d3815fc638b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/README.md"
+    },
+    {
+      "gitObject": "c31e165cf8e236974598ad6a7a6b5ea5d69ed8f6",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests/fixtures/lease-vectors/acks"
+    },
+    {
+      "gitObject": "1a3b34267e4207413b60b211d677e809dcb54640",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-advisory-nothing-enforced.json"
+    },
+    {
+      "gitObject": "3222ffa0bc6704a14a53bcbe698b85c1e9de310f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-enforcement-off-refused.json"
+    },
+    {
+      "gitObject": "ca4b8ea1950232614fc43db9e080f81e7d2c4f26",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-enforcing-quarantine.json"
+    },
+    {
+      "gitObject": "7b0c5713cf0bd81a138ebf0e33febb8bbb867c97",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-enforcing-without-lease-refused.json"
+    },
+    {
+      "gitObject": "63682dd878793702f860bcbe139664746aedd4fb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-lease-parse-failed.json"
+    },
+    {
+      "gitObject": "d4f84421cc1c22a9527e61c799f9279550141c4d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-missing-field-refused.json"
+    },
+    {
+      "gitObject": "4771fa27c9353d5dc15e0769d73b8d1ee02f79e0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-missing-object.json"
+    },
+    {
+      "gitObject": "a5557bb9476efa657d415434476ea5703bdc5e87",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-no-lease.json"
+    },
+    {
+      "gitObject": "6530253ff8c192e98bdb109a109fb6240af1e32e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-stale-lease-still-enforcing.json"
+    },
+    {
+      "gitObject": "b0ae910e02b3f36cb9b52c10b9dfac5894b45039",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/acks/ack-unknown-keys-ignored.json"
+    },
+    {
+      "gitObject": "a820a07b263e27e708759735fd16ed628897c0e3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/manifest.json"
+    },
+    {
+      "gitObject": "904899fe4098299a4459d91099b70480d072d0a2",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests/fixtures/lease-vectors/vectors"
+    },
+    {
+      "gitObject": "55f7db387358b9e71cb53898f388d3798241bb8f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-advisory-expired.json"
+    },
+    {
+      "gitObject": "f6c6f65bf413deb0b7522b4cd2c84d94867ffc72",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-agent-scope.json"
+    },
+    {
+      "gitObject": "c68d364b086176c46fa16f7ff6039188acf2ff36",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-lower-revision.json"
+    },
+    {
+      "gitObject": "9626cf722edfffd0706d8d80e1fc1654aad01f66",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-quarantine-expired.json"
+    },
+    {
+      "gitObject": "78c8601255c2f16666981d274354d5046253d21b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-serving-not-enforcement.json"
+    },
+    {
+      "gitObject": "a5a3459f8c60eaef2d2b44f1d8a59d662bfee7c5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-serving-replay-across-streams.json"
+    },
+    {
+      "gitObject": "0fad792c8463a8c2120acbc81449696c7dfb9da1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-tampered-signature.json"
+    },
+    {
+      "gitObject": "a467890ec30fd46f9a4596671482235277217f22",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-valid-v1.json"
+    },
+    {
+      "gitObject": "87c9c4d71dd4c217041c9c234ded1772705a3202",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/lease-vectors/vectors/lease-wrong-key-purpose.json"
+    },
+    {
+      "gitObject": "c3ac327e2989ffbbc2452209e2a32f76be911534",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/prometa-model-usage-v2.schema.json"
+    },
+    {
+      "gitObject": "20254dc0ac9d557b6bab013dc14510957e4445a9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/promotion-attestation-review-v1.json"
+    },
+    {
+      "gitObject": "e58dc33d903f223942fcfb5aec80440a3a5278ae",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/promotion-attestation-v1.json"
+    },
+    {
+      "gitObject": "c21cf272a05fad7de65b526d5d77b0f14604fd2b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/runtime-kernel-v1.json"
+    },
+    {
+      "gitObject": "57ad158cbf570f7004736038a786bb41510f6da3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/runtime-kernel-v2.json"
+    },
+    {
+      "gitObject": "6df6f58b02d3d8701a593425527f0913e689ba89",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/runtime-release-handoff-v1.json"
+    },
+    {
+      "gitObject": "b10c251f3f164498a8ea5bc3b05d786c5530d886",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/security-decision-batch-v1.json"
+    },
+    {
+      "gitObject": "9f22744157316db18d98a6257cc6ad51330dc469",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/workflow-decision-batch-v1.json"
+    },
+    {
+      "gitObject": "d1c832e8707cc8b13b45e63e5936cb8cb506e750",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/workflow-policy-golden-v1.json"
+    },
+    {
+      "gitObject": "ab52c1ad4fa5c9b335fea4e2468931a92ba2e5a6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/runtime_mcp_stdio_server.py"
+    },
+    {
+      "gitObject": "a1f3bd43b3ccb799b21700cb0c006eec89759919",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/runtime_recovery_host_process.py"
+    },
+    {
+      "gitObject": "4e785e17a78e17d965b85352f7b1350ef7b42b1b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/runtime_upgrade_host_process.py"
+    },
+    {
+      "gitObject": "d7723b9f87aa8c58f157046e1f14c5aa6ff5afea",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_agent_id_resolution.py"
+    },
+    {
+      "gitObject": "17d163c08ede4ce14d19882432b4ffa626271fa1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_agent_name_resolution.py"
+    },
+    {
+      "gitObject": "7bd01dca655f4c979cc8db0c86a4fdd2f203c277",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_chain_attrs.py"
+    },
+    {
+      "gitObject": "91a9bd87c4da12073456fdf32cb189dca3b710a8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_feedback_attrs.py"
+    },
+    {
+      "gitObject": "8f2254a11c9d8bb64feb667b23232309d016b41c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_guardrail_conformance.py"
+    },
+    {
+      "gitObject": "1175494a3fb430c840c2adc8eb2c034b6c1cd3bb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_guardrail_deploy_assets.py"
+    },
+    {
+      "gitObject": "7621693f7c0a13323a75b93bae1b3344b8ec729d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_guardrail_evaluator.py"
+    },
+    {
+      "gitObject": "640ccc4c3fee1e4d50fe3cb2ea645131f49b1fac",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_guardrail_host.py"
+    },
+    {
+      "gitObject": "75394c91f6a5895d59c8ed6ca7a21f76817fd1e1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_guardrail_tool_result.py"
+    },
+    {
+      "gitObject": "c6c104dd1b39ac0c739fe13be29bd4fe5a11c4ac",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_intent_attrs.py"
+    },
+    {
+      "gitObject": "ed92fba9fd932b9098cd39c02a96739652ff904d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_langchain_integration.py"
+    },
+    {
+      "gitObject": "54dbfbf41a82380b426effd68194cf303bbc3c4b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_mcp_integration.py"
+    },
+    {
+      "gitObject": "bbab1a4aeea6bb664ddb623b42da2fdd526b5b30",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_model_invocation_identity_contract.py"
+    },
+    {
+      "gitObject": "1088bb436af081e965d5eacd8965a37c42ff22f9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_openai_embeddings.py"
+    },
+    {
+      "gitObject": "ca8c6c1be6e512ea90e5932c3273faaab326eb99",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_openllmetry_bridge.py"
+    },
+    {
+      "gitObject": "16001e1d49ada5a806172346b6f61fb49347d031",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_promotion_attestation.py"
+    },
+    {
+      "gitObject": "c8d0654be16142846cc1abfad6fd88f02b1bc970",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_retrieval_query.py"
+    },
+    {
+      "gitObject": "ce928a1a82ba347c75aad5051bd678963d6bf22f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_admission.py"
+    },
+    {
+      "gitObject": "536965ec52e698529ecc59d41abec42ae47d59b7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_conformance.py"
+    },
+    {
+      "gitObject": "48d90f4746d62d2a6f344d739b79f3d45c1cea5d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_control_lease.py"
+    },
+    {
+      "gitObject": "d8f251d039d8458add06019e6ed78239301ecfb1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_control_lease_vectors.py"
+    },
+    {
+      "gitObject": "bbfa11cd1e2f4a155be512c9153196b1fd092837",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_control_plane.py"
+    },
+    {
+      "gitObject": "39580b7ce58cc5f8263fb50ad81b620b1594612a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_deploy_assets.py"
+    },
+    {
+      "gitObject": "738b5c5fb2617bceea95ceceda3bc7e91a5a5c23",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_guardrail_kernel.py"
+    },
+    {
+      "gitObject": "2f598705328af00ba187359bf96536e580bad874",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_host.py"
+    },
+    {
+      "gitObject": "c1a8ff352a496e5c64aef73189d2caab99534520",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_host_tls.py"
+    },
+    {
+      "gitObject": "c51522642761b01ad30da1c4fda53fef0818911a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_human_escalation.py"
+    },
+    {
+      "gitObject": "0d76815fae9d3695d8435fc84430b7d2c208d62c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_kernel.py"
+    },
+    {
+      "gitObject": "e18726ee4571a8fc5d3d3cda40ce85e89f1438a6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_mcp.py"
+    },
+    {
+      "gitObject": "6c954702d915522e807074a211134cde3f8db855",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_mcp_transport.py"
+    },
+    {
+      "gitObject": "1f8627feade8467f8f9f222639302fa6dde42229",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_model_gateway.py"
+    },
+    {
+      "gitObject": "3e862e0ad923a39da4bbbf8e0f85707c29d11c5b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_postgres.py"
+    },
+    {
+      "gitObject": "215f481e6aca235a4fda153fce0319083cec73bc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_published_upgrade.py"
+    },
+    {
+      "gitObject": "6ffe965c16e6c714154002b44f5d5849c30dfccd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_receipts.py"
+    },
+    {
+      "gitObject": "6598d495638de36466c504fe0ccf29658be8492b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_recovery.py"
+    },
+    {
+      "gitObject": "81c1c7d5b782f433d2caec08698b68df5941325e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_release_assets.py"
+    },
+    {
+      "gitObject": "509df37bfe27178604a93be3cdf951e990cfb09b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_security_assurance.py"
+    },
+    {
+      "gitObject": "3c2d3a5afe6cabe71bd0f4ce8fa9c911b8285015",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_security_proof.py"
+    },
+    {
+      "gitObject": "a5673b5882e9ee7f99962ebb39fa1e0b701c5d05",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_tasks.py"
+    },
+    {
+      "gitObject": "30d1d81538e17ebdff63c9281addc9a2cd18c097",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_topology_assets.py"
+    },
+    {
+      "gitObject": "18301365b494ba0a13e78dc26f0d8a32002e9cfe",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_trust.py"
+    },
+    {
+      "gitObject": "7dbf6a33025aea5ccc19977c3728d7a0b8284c5b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_upgrade_rollback.py"
+    },
+    {
+      "gitObject": "774ed40f9afba8f07264a3558c0d709bcd005c6a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_workflow_admission_v3.py"
+    },
+    {
+      "gitObject": "46fa0ca1dcf7fd6a2b09ec5d932f30d455692f5d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_workflow_decisions.py"
+    },
+    {
+      "gitObject": "9b3d81d29c6d767d888ffaa1be033b7bb75e2661",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_workflow_golden.py"
+    },
+    {
+      "gitObject": "b7966eb5b44d2fbd02d0e0a7d0ac52910931e8b6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_workflow_kernel.py"
+    },
+    {
+      "gitObject": "ac222ac8836ca5162df0388cf7eac183502398b6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_workflow_ontology.py"
+    },
+    {
+      "gitObject": "41be1b6f9ebda87fe98a561fccfe018978c360c7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_runtime_workflow_proof.py"
+    }
+  ]
+}
