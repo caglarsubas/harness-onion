@@ -2,7 +2,7 @@ id: MET-OBS-OCP-001
 repository: Harness-Engineering
 branch: codex/met-obs-ocp-001-reference-lab
 objective: Observe the approved orchestra-openshift-reference-lab commit as full tracked-tree metadata under a separate read-only identity without exposing source contents to implementation.
-predecessors: [MET-OBS-AH-001]
+predecessors: [MET-OBS-AH-001, MET-P0-FIX-001]
 allowedPaths: ["architecture/observations/orchestra-openshift-reference-lab-tree.json"]
 warmSourceAccess: AUTHORIZED_READ_ONLY_OBSERVATION
 sourceReuse: []

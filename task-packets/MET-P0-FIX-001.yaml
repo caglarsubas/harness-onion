@@ -1,0 +1,16 @@
+id: MET-P0-FIX-001
+repository: Harness-Engineering
+branch: codex/met-p0-fix-001-tree-order
+objective: Canonicalize recursive Git tree metadata before comparison so separately authorized full-tree observations remain deterministic across Git traversal order.
+predecessors: [MET-P0-001]
+allowedPaths: ["reference-observer/harness-reference-observe.py", "task-packets/MET-P0-FIX-001.yaml", "task-packets/MET-OBS-AH-001.yaml", "task-packets/MET-OBS-OCP-001.yaml", "task-packets/MET-OBS-SDK-001.yaml", "task-packets/README.md", "scripts/validate_readiness.py", "scripts/validate_reuse.py", "tests/test_task_packets.py", "tests/test_reuse.py", "tests/test_reference_observer.py", "docs/adr/0004-sol-high-packet-boundary.md", "docs/READINESS_INDEX.md", "docs/repositories/00-harness-engineering.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes full tracked-tree metadata observation contract v1", "Preserves exact signed binding equality after canonical path ordering"]
+deliverables: ["Pure deterministic parser sorts Git traversal records by repository-relative path before validating uniqueness and binding equality.", "Observation packets depend on this correction.", "Regression proves unsorted Git tree traversal becomes canonical without reading source contents."]
+excluded: ["Warm-source access, observation execution, source-content reads, source changes, copy authority, and product repository changes."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/validate_readiness.py"],["uv","run","--offline","--frozen","--no-sync","python","-m","pytest","tests/test_task_packets.py","tests/test_reuse.py","tests/test_reference_observer.py"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["The 104-packet catalog validates.", "Unsorted recursive tree records produce a stable path-sorted binding list.", "Malformed, duplicate, and unsafe tree records fail closed.", "No warm-start path is available to the correction run."]
+rollback: Revert the parser and packet predecessor changes together; do not retry observations with the known non-canonical launcher.

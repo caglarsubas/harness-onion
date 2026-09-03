@@ -112,15 +112,11 @@ def _drop_to_observer(uid: int, gid: int) -> None:
     os.setuid(uid)
 
 
-def _tracked_tree(source_root: Path) -> list[dict[str, str]]:
-    result = _run(
-        ["/usr/bin/git", "-C", str(source_root), "ls-tree", "-r", "-t", "--full-tree", "-z", "HEAD"],
-        text=False,
-    )
-    if result.returncode != 0:
-        raise LauncherError("cannot enumerate the pinned tracked tree")
+def _parse_tracked_tree(raw: bytes) -> list[dict[str, str]]:
+    """Parse and canonicalize Git's traversal-ordered recursive tree output."""
+
     bindings: list[dict[str, str]] = []
-    for record in result.stdout.split(b"\0"):
+    for record in raw.split(b"\0"):
         if not record:
             continue
         metadata, separator, raw_path = record.partition(b"\t")
@@ -134,9 +130,20 @@ def _tracked_tree(source_root: Path) -> list[dict[str, str]]:
         if object_type not in {"blob", "tree", "commit"} or not path or path.startswith("/") or ".." in Path(path).parts:
             raise LauncherError("git tree record contains an unsafe entry")
         bindings.append({"path": path, "mode": mode, "objectType": object_type, "gitObject": git_object})
-    if not bindings or bindings != sorted(bindings, key=lambda item: item["path"]):
-        raise LauncherError("git tree inventory is empty or non-canonical")
+    bindings.sort(key=lambda item: item["path"])
+    if not bindings or len({item["path"] for item in bindings}) != len(bindings):
+        raise LauncherError("git tree inventory is empty or contains duplicate paths")
     return bindings
+
+
+def _tracked_tree(source_root: Path) -> list[dict[str, str]]:
+    result = _run(
+        ["/usr/bin/git", "-C", str(source_root), "ls-tree", "-r", "-t", "--full-tree", "-z", "HEAD"],
+        text=False,
+    )
+    if result.returncode != 0:
+        raise LauncherError("cannot enumerate the pinned tracked tree")
+    return _parse_tracked_tree(result.stdout)
 
 
 def _check_report(report: dict[str, Any], authority: dict[str, Any], raw: bytes) -> None:
