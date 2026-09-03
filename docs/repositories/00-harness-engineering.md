@@ -167,7 +167,8 @@ authorities; they cannot authorize a port.
 10. `MET-OBS-SDK-001-orchestra-sdk`: exact-commit read-only tracked-tree metadata observation for the Orchestra Python SDK.
 11. `MET-P0-FIX-002-authority`: correct control-plane paths, SDK provenance, catalog count, and final-closure ordering before product execution.
 12. `MET-P0-FIX-003-browser-authority`: include the production-derived offline browser document in the control correction boundary.
-13. `MET-P0-002-phase0-evidence`: five-source reference-only integration, dependency-license closure, corrected provenance, and final Phase-0 audit record.
+13. `MET-P0-FIX-004-reuse-authority`: include the existing reuse schema, independent validator/tests, and readiness index in final closure ownership.
+14. `MET-P0-002-phase0-evidence`: five-source reference-only integration, dependency-license closure, corrected provenance, and final Phase-0 audit record.
 
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
@@ -181,7 +182,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Phase-0 corrections extend the dedicated 106-packet
+`MET-004` runs the complete readiness validator, while the Phase-0 corrections extend the dedicated 107-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
