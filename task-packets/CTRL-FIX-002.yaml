@@ -2,8 +2,8 @@ id: CTRL-FIX-002
 repository: mas-harness-control-plane
 branch: codex/ctrl-fix-002-phase0-ui-security
 objective: Correct Phase-0 control-plane security regression coverage and make the tenant harness overview semantically accessible, theme-complete, and digest-transparent.
-predecessors: [MET-P0-001, CTRL-007]
-allowedPaths: ["apps/portal/src/app/", "apps/portal/src/components/HarnessOnion.tsx", "apps/portal/src/styles/", "apps/portal/src/test/", "apps/portal/e2e/", "ci/targets/ctrl-fix-002.json", "tests/security/rls.test.ts"]
+predecessors: [MET-P0-FIX-002, CTRL-007]
+allowedPaths: ["apps/control-web/src/components/harness-overview/HarnessOnion.tsx", "apps/control-web/src/components/harness-overview/OverviewPage.tsx", "apps/control-web/src/components/harness-overview/DetailPages.tsx", "apps/control-web/src/components/harness-overview/overview.module.css", "tests/harness-status/ui-source.test.ts", "e2e/harness-overview.spec.ts", "ci/targets/ctrl-fix-002.json", "tests/security/rls.test.ts"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
 contracts: ["Consumes tenant harness overview contract", "Preserves native link semantics and accessible responsive equivalence", "Preserves tenant-scoped RLS and platform-owned audit-table isolation"]

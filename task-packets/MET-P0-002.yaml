@@ -2,7 +2,7 @@ id: MET-P0-002
 repository: Harness-Engineering
 branch: codex/met-p0-002-phase0-evidence
 objective: Integrate all five approved warm-start repositories, close dependency-license classifications, correct meta provenance, and publish reproducible Phase-0 audit evidence.
-predecessors: [MET-OBS-SDK-001, TRUST-FIX-002, IND-FIX-001, CTRL-FIX-002]
+predecessors: [MET-P0-FIX-002, CTRL-FIX-002]
 allowedPaths: ["architecture/reuse-map.yaml", "architecture/reuse-path-index.yaml", "architecture/base-scope-sources.yaml", "legal/source-reuse-authorization.yaml", "legal/third-party-license-policy.yaml", "schemas/reuse-path-index.schema.json", "schemas/porting-authorization.schema.json", "schemas/task-packet.schema.json", "scripts/validate_readiness.py", "scripts/validate_repository_tree_observation.py", "tests/test_task_packets.py", "tests/test_validator_units.py", "tests/test_repository_tree_observation.py", "docs/repositories/00-harness-engineering.md", "docs/repositories/09-mas-harness-trust-plane.md", "docs/phase-0/", "task-packets/README.md"]
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
@@ -12,5 +12,5 @@ excluded: ["Warm-source access, source copying, release approval for review-gate
 prefetchCommands: []
 offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/validate_readiness.py"],["uv","run","--offline","--frozen","--no-sync","python","-m","pytest"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
-expectedEvidence: ["Complete meta validation and tests pass offline.", "All 103 packet snapshots remain reproducible or are explicitly snapshot-bound.", "The three new observation reports exactly match indexed repositories and commits.", "All discovered dependency SPDX expressions are classified with release-gated LGPL and content-only CC-BY rules.", "Deployment, runtime, assurance, and tenant acceptance remain separately NOT_RUN_ENV_UNAVAILABLE where no target exists."]
+expectedEvidence: ["Complete meta validation and tests pass offline.", "All 105 packet snapshots remain reproducible or are explicitly snapshot-bound.", "The three new observation reports exactly match indexed repositories and commits.", "All discovered dependency SPDX expressions are classified with release-gated LGPL and content-only CC-BY rules.", "Deployment, runtime, assurance, and tenant acceptance remain separately NOT_RUN_ENV_UNAVAILABLE where no target exists."]
 rollback: Revert the integrated evidence authorities together; do not remove immutable observation history or rewrite merged commits.
