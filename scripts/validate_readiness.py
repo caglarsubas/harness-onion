@@ -94,7 +94,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 104
+EXPECTED_PACKET_COUNT = 105
 EXPECTED_REUSE_PATH_COUNT = 535
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -4179,7 +4179,7 @@ def validate_packets(
         validation.error(ownership_error)
     validation.require(
         set(packets) == set(declared_packet_owners),
-        "task packet files must exactly match the 104 packets declared by repository plans",
+        "task packet files must exactly match the 105 packets declared by repository plans",
     )
 
     authority_owner: dict[str, str] = {
@@ -4222,7 +4222,13 @@ def validate_packets(
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-P0-FIX-001"
+                "MET-P0-FIX-002"
+                if packet_path.stem
+                in {
+                    "MET-P0-FIX-002", "CTRL-FIX-002",
+                    "MET-P0-002", "TRUST-001",
+                }
+                else "MET-P0-FIX-001"
                 if packet_path.stem
                 in {
                     "MET-P0-FIX-001", "MET-OBS-AH-001",
@@ -4230,8 +4236,8 @@ def validate_packets(
                 }
                 else "MET-P0-001"
                 if packet_path.stem in {
-                    "MET-P0-001", "MET-P0-002", "TRUST-FIX-002",
-                    "IND-FIX-001", "CTRL-FIX-002", "TRUST-003",
+                    "MET-P0-001", "TRUST-FIX-002",
+                    "IND-FIX-001", "TRUST-003",
                 }
                 else "MET-004"
             )
