@@ -1,0 +1,17 @@
+id: MET-OBS-SDK-001
+repository: Harness-Engineering
+branch: codex/met-obs-sdk-001-orchestra-sdk
+objective: Observe the approved planeon-orchestra-python-sdk commit as full tracked-tree metadata under a separate read-only identity without exposing source contents to implementation.
+predecessors: [MET-OBS-OCP-001]
+allowedPaths: ["architecture/observations/planeon-orchestra-python-sdk-tree.json"]
+warmSourceAccess: AUTHORIZED_READ_ONLY_OBSERVATION
+sourceReuse: []
+contracts: ["Consumes full tracked-tree metadata observation contract v1", "Produces Orchestra Python SDK immutable tree observation"]
+deliverables: ["Canonical exact-commit tracked-tree metadata report with Git object identities and isolation evidence."]
+excluded: ["Source-text capture, source execution, copying, porting authorization, and source repository mutation."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/validate_repository_tree_observation.py","architecture/observations/planeon-orchestra-python-sdk-tree.json","MET-OBS-SDK-001"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+referenceObservationExecution: {"launcherArgv":["/opt/planeon/bin/harness-reference-observe"],"executionPlacement":"PREINSTALLED_LOCAL_SEPARATE_OBSERVER_IDENTITY","packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","sourceAuthorityEnvironment":"HARNESS_REFERENCE_SOURCE_AUTHORITY","sourceAuthorityMode":"ROOT_OWNED_SIGNED_EXACT_COMMIT_FULL_TRACKED_TREE","observerIdentity":"planeon-reference-observer","repository":"git@github.com:caglarsubas/planeon-orchestra-python-sdk.git","commit":"3a4012d809e6ed00a3f05be940c5278eac20a166","observationMode":"FULL_TRACKED_TREE_METADATA","sourceSelection":"FULL_TRACKED_TREE_AT_PINNED_COMMIT","networkIsolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sourceFilesystem":"FULL_TRACKED_TREE_METADATA_ONLY_ALL_CONTENT_READ_AND_WRITE_DENIED","sourceCodeExecution":"DENIED","outputPath":"architecture/observations/planeon-orchestra-python-sdk-tree.json","outputMode":"DISTILLED_REPOSITORY_TREE_METADATA_ONLY_NO_SOURCE_TEXT","allowedFactKinds":["REPOSITORY_SUMMARY","TREE_ENTRY"],"copyAuthority":"NONE","implementationIdentityAccess":"DENIED","ciEvidenceUse":"FORBIDDEN"}
+expectedEvidence: ["The observer report binds the exact repository and commit, enumerates the complete tracked tree, proves deny-all egress and content-read/write denial, and contains no source text."]
+rollback: Revert only the observation report; the approved source repository remains untouched.

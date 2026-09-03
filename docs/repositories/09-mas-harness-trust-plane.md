@@ -134,8 +134,9 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 4. `TRUST-REG-001`: module/agent/release registry, certification axes, promotion, deprecation, revocation, and signed release admission.
 5. `TRUST-OBS-001`: source-only OTel collector and external Prometheus/Jaeger backend contracts, usage ledger, atomic reservations/budgets, content-free telemetry, tenant isolation, and non-destructive retention evidence.
 6. `TRUST-FIX-001-package-markers`: post-certification ownership correction and inert-marker regression for the root source and test packages.
-7. `TRUST-EVAL-001`: deterministic evaluators, campaigns, trace/evidence ingestion, local-model judge opt-in, calibration, staleness, and reproducibility.
-8. `TRUST-003-resilience-security`: OPA/DB/collector outages, audit buffer exhaustion, forged evidence, waiver expiry, cross-tenant denial, and air-gap startup.
+7. `TRUST-FIX-002-provenance-guard`: exact SDK-003 commit correction and public-fork pre-scheduling guard for the self-hosted verifier.
+8. `TRUST-EVAL-001`: deterministic evaluators, campaigns, trace/evidence ingestion, local-model judge opt-in, calibration, staleness, and reproducibility.
+9. `TRUST-003-resilience-security`: OPA/DB/collector outages, audit buffer exhaustion, forged evidence, waiver expiry, cross-tenant denial, and air-gap startup.
 
 ## Testing, verification, and acceptance
 

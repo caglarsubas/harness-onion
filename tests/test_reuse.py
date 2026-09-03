@@ -63,7 +63,7 @@ def test_canonical_authorities_are_closed_and_deterministic() -> None:
     assert report.accounted_source_inputs == 5
     assert report.public_sha_pins == 2
     assert report.metadata_omitted_inputs == 3
-    assert report.task_packets == 95
+    assert report.task_packets == 103
     assert report.tree_discovery_records == 20
     assert report.blob_pending_records == 515
     assert report.blob_copy_authorized_records == 0

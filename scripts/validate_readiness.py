@@ -94,7 +94,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 95
+EXPECTED_PACKET_COUNT = 103
 EXPECTED_REUSE_PATH_COUNT = 535
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -188,6 +188,42 @@ REFERENCE_OBSERVATION_EXECUTION_BASE = {
     "copyAuthority": "NONE",
     "implementationIdentityAccess": "DENIED",
     "ciEvidenceUse": "FORBIDDEN",
+}
+TREE_OBSERVATION_EXECUTION_BASE = {
+    "launcherArgv": ["/opt/planeon/bin/harness-reference-observe"],
+    "executionPlacement": "PREINSTALLED_LOCAL_SEPARATE_OBSERVER_IDENTITY",
+    "packetPathEnvironment": "HARNESS_TASK_PACKET",
+    "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+    "sourceAuthorityEnvironment": "HARNESS_REFERENCE_SOURCE_AUTHORITY",
+    "sourceAuthorityMode": "ROOT_OWNED_SIGNED_EXACT_COMMIT_FULL_TRACKED_TREE",
+    "observerIdentity": "planeon-reference-observer",
+    "observationMode": "FULL_TRACKED_TREE_METADATA",
+    "sourceSelection": "FULL_TRACKED_TREE_AT_PINNED_COMMIT",
+    "networkIsolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+    "sourceFilesystem": "FULL_TRACKED_TREE_METADATA_ONLY_ALL_CONTENT_READ_AND_WRITE_DENIED",
+    "sourceCodeExecution": "DENIED",
+    "outputMode": "DISTILLED_REPOSITORY_TREE_METADATA_ONLY_NO_SOURCE_TEXT",
+    "allowedFactKinds": ["REPOSITORY_SUMMARY", "TREE_ENTRY"],
+    "copyAuthority": "NONE",
+    "implementationIdentityAccess": "DENIED",
+    "ciEvidenceUse": "FORBIDDEN",
+}
+TREE_OBSERVATION_PACKETS = {
+    "MET-OBS-AH-001": {
+        "repository": "git@github.com:caglarsubas/agent-hook-v2.git",
+        "commit": "2b521dc03a43b994bc52c76652306b1a77bf9572",
+        "outputPath": "architecture/observations/agent-hook-v2-tree.json",
+    },
+    "MET-OBS-OCP-001": {
+        "repository": "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git",
+        "commit": "ba615515af84760a0accb31c37b815f9820f06d2",
+        "outputPath": "architecture/observations/orchestra-openshift-reference-lab-tree.json",
+    },
+    "MET-OBS-SDK-001": {
+        "repository": "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git",
+        "commit": "3a4012d809e6ed00a3f05be940c5278eac20a166",
+        "outputPath": "architecture/observations/planeon-orchestra-python-sdk-tree.json",
+    },
 }
 LIVE_CAMPAIGN_EVIDENCE_AXES = {
     "CONF-A1-001": ["RUNTIME", "ASSURANCE"],
@@ -3804,6 +3840,28 @@ def validate_packets(
                 in packet.get("allowedPaths", []),
                 "packet MET-002 must own its exact distilled observation output",
             )
+        elif packet_id in TREE_OBSERVATION_PACKETS:
+            expected_reference_observation = {
+                **TREE_OBSERVATION_EXECUTION_BASE,
+                **TREE_OBSERVATION_PACKETS[packet_id],
+            }
+            validation.require(
+                packet.get("warmSourceAccess") == "AUTHORIZED_READ_ONLY_OBSERVATION",
+                f"packet {packet_id} must declare the separate full-tree observer boundary",
+            )
+            validation.require(
+                reference_observation == expected_reference_observation,
+                f"packet {packet_id} full-tree observation binding is not exact",
+            )
+            validation.require(
+                expected_reference_observation["outputPath"]
+                in packet.get("allowedPaths", []),
+                f"packet {packet_id} must own only its distilled observation output",
+            )
+            validation.require(
+                packet.get("sourceReuse") == [],
+                f"packet {packet_id} metadata observation cannot grant source reuse",
+            )
         else:
             validation.require(
                 packet.get("warmSourceAccess")
@@ -4121,7 +4179,7 @@ def validate_packets(
         validation.error(ownership_error)
     validation.require(
         set(packets) == set(declared_packet_owners),
-        "task packet files must exactly match the 95 packets declared by repository plans",
+        "task packet files must exactly match the 103 packets declared by repository plans",
     )
 
     authority_owner: dict[str, str] = {
@@ -4158,15 +4216,35 @@ def validate_packets(
         },
         "policies/zero-bill-policy.yaml": "MET-003",
         "schemas/trusted-runner-manifest.schema.json": "MET-003",
-        "schemas/task-packet.schema.json": "MET-004",
+        "schemas/task-packet.schema.json": "MET-P0-002",
         "schemas/live-campaign-execution-envelope.schema.json": "MET-004",
         "scripts/validate_packet_ownership.py": "MET-004",
-        "tests/test_validator_units.py": "MET-004",
+        "tests/test_validator_units.py": "MET-P0-002",
         **{
-            f"task-packets/{packet_path.name}": "MET-004"
+            f"task-packets/{packet_path.name}": (
+                "MET-P0-001"
+                if packet_path.stem
+                in {
+                    "MET-P0-001", "MET-OBS-AH-001", "MET-OBS-OCP-001",
+                    "MET-OBS-SDK-001", "MET-P0-002", "TRUST-FIX-002",
+                    "IND-FIX-001", "CTRL-FIX-002", "TRUST-003",
+                }
+                else "MET-004"
+            )
             for packet_path in packet_files
         },
     }
+    authority_owner.update(
+        {
+            "architecture/base-scope-sources.yaml": "MET-P0-002",
+            "architecture/reuse-map.yaml": "MET-P0-002",
+            "architecture/reuse-path-index.yaml": "MET-P0-002",
+            "legal/source-reuse-authorization.yaml": "MET-P0-002",
+            "legal/third-party-license-policy.yaml": "MET-P0-002",
+            "schemas/reuse-path-index.schema.json": "MET-P0-002",
+            "schemas/porting-authorization.schema.json": "MET-P0-002",
+        }
+    )
     observation_authority_path = "architecture/observations/data-harness-v1.json"
     if (ROOT / observation_authority_path).is_file():
         authority_owner[observation_authority_path] = "MET-002"
@@ -4193,10 +4271,12 @@ def validate_packets(
             for packet_id, packet in packets.items()
             if packet_owns_path(packet, authority_path)
         }
+        superseded_owners = owners - {expected_owner}
         validation.require(
-            owners == {expected_owner},
-            f"machine authority {authority_path} must be owned only by {expected_owner}; "
-            f"found={sorted(owners)}",
+            expected_owner in owners
+            and superseded_owners <= ancestors(expected_owner),
+            f"machine authority {authority_path} must be currently owned by {expected_owner} "
+            f"with only ordered predecessor owners; found={sorted(owners)}",
         )
 
     authorized_roots_by_repository: dict[str, set[str]] = defaultdict(set)
@@ -4242,7 +4322,7 @@ def validate_packets(
         len(ordered_packet_ids) == EXPECTED_PACKET_COUNT
         and len(ordered_packet_ids) == len(set(ordered_packet_ids))
         and set(ordered_packet_ids) == set(declared_packet_owners),
-        "task-packets README must index each of the 95 individual packet files exactly once",
+        "task-packets README must index each of the 103 individual packet files exactly once",
     )
     order_by_id = {packet_id: index for index, packet_id in enumerate(ordered_packet_ids)}
     for packet_id, packet in packets.items():

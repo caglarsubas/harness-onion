@@ -1,0 +1,16 @@
+id: TRUST-FIX-002
+repository: mas-harness-trust-plane
+branch: codex/trust-fix-002-provenance-guard
+objective: Correct the nonexistent SDK provenance commit and prevent untrusted public-fork pull requests from reaching the self-hosted trust-plane runner.
+predecessors: [MET-P0-001, TRUST-FIX-001, SDK-003]
+allowedPaths: [".github/workflows/verify.yml", "ci/handlers/prefetch.py", "ci/targets/trust-fix-002.json", "services/policy-decision/contracts/upstream.lock.json", "tests/bootstrap/test_static_contract.py"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes SDK admission contract at exact SDK-003 merge commit", "Preserves credential-free self-hosted CI boundary"]
+deliverables: ["Every trust-plane SDK lock points to a commit that exists on the provider default branch.", "Public-fork pull requests are rejected before the self-hosted job is scheduled.", "Regression tests bind both invariants."]
+excluded: ["Policy behavior changes, tenant isolation changes, warm-source access, hosted runners, secrets, and release promotion."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","trust-fix-002-regression"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Correct SDK commit is bound consistently in lock and prefetch handler.", "Workflow job has an exact same-repository pull-request guard.", "Offline regression and zero-bill checks pass."]
+rollback: Revert the correction only if the previous nonexistent provenance is explicitly restored as known-invalid evidence; never weaken the runner guard.

@@ -80,7 +80,10 @@
     "sourceRepository": {
       "enum": [
         "git@github.com:caglarsubas/llm_inference_engine.git",
-        "git@github.com:caglarsubas/data-source-harness.git"
+        "git@github.com:caglarsubas/data-source-harness.git",
+        "git@github.com:caglarsubas/agent-hook-v2.git",
+        "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git",
+        "git@github.com:caglarsubas/planeon-orchestra-python-sdk.git"
       ]
     },
     "argvCommand": {
@@ -159,7 +162,7 @@
       "required": [
         "launcherArgv", "executionPlacement", "packetPathEnvironment",
         "packetPathMode", "sourceAuthorityEnvironment", "sourceAuthorityMode",
-        "observerIdentity", "repository", "commit", "sourcePaths",
+        "observerIdentity", "repository", "commit",
         "networkIsolation", "sourceFilesystem", "sourceCodeExecution",
         "outputPath", "outputMode", "allowedFactKinds", "copyAuthority",
         "implementationIdentityAccess", "ciEvidenceUse"
@@ -170,10 +173,17 @@
         "packetPathEnvironment": {"const": "HARNESS_TASK_PACKET"},
         "packetPathMode": {"const": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH"},
         "sourceAuthorityEnvironment": {"const": "HARNESS_REFERENCE_SOURCE_AUTHORITY"},
-        "sourceAuthorityMode": {"const": "ROOT_OWNED_SIGNED_EXACT_COMMIT_AND_PATHS"},
+        "sourceAuthorityMode": {
+          "enum": [
+            "ROOT_OWNED_SIGNED_EXACT_COMMIT_AND_PATHS",
+            "ROOT_OWNED_SIGNED_EXACT_COMMIT_FULL_TRACKED_TREE"
+          ]
+        },
         "observerIdentity": {"const": "planeon-reference-observer"},
         "repository": {"$ref": "#/$defs/sourceRepository"},
         "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "observationMode": {"enum": ["FULL_TRACKED_TREE_METADATA"]},
+        "sourceSelection": {"enum": ["FULL_TRACKED_TREE_AT_PINNED_COMMIT"]},
         "sourcePaths": {
           "type": "array",
           "minItems": 1,
@@ -181,25 +191,78 @@
           "uniqueItems": true
         },
         "networkIsolation": {"const": "OS_ENFORCED_DENY_ALL_OUTBOUND"},
-        "sourceFilesystem": {"const": "DECLARED_BLOBS_READ_METADATA_ONLY_ALL_WRITE_DENIED"},
+        "sourceFilesystem": {
+          "enum": [
+            "DECLARED_BLOBS_READ_METADATA_ONLY_ALL_WRITE_DENIED",
+            "FULL_TRACKED_TREE_METADATA_ONLY_ALL_CONTENT_READ_AND_WRITE_DENIED"
+          ]
+        },
         "sourceCodeExecution": {"const": "DENIED"},
         "outputPath": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.json$"},
-        "outputMode": {"const": "DISTILLED_CONTRACT_FACTS_ONLY_NO_SOURCE_TEXT"},
+        "outputMode": {
+          "enum": [
+            "DISTILLED_CONTRACT_FACTS_ONLY_NO_SOURCE_TEXT",
+            "DISTILLED_REPOSITORY_TREE_METADATA_ONLY_NO_SOURCE_TEXT"
+          ]
+        },
         "allowedFactKinds": {
-          "const": [
-            "SCHEMA_IDENTITY",
-            "OBJECT_FIELD",
-            "REQUIRED_FIELD",
-            "VALUE_CONSTRAINT",
-            "STATE_ENUM",
-            "REFERENCE_EDGE",
-            "SCHEMA_DIGEST"
+          "oneOf": [
+            {
+              "const": [
+                "SCHEMA_IDENTITY",
+                "OBJECT_FIELD",
+                "REQUIRED_FIELD",
+                "VALUE_CONSTRAINT",
+                "STATE_ENUM",
+                "REFERENCE_EDGE",
+                "SCHEMA_DIGEST"
+              ]
+            },
+            {"const": ["REPOSITORY_SUMMARY", "TREE_ENTRY"]}
           ]
         },
         "copyAuthority": {"const": "NONE"},
         "implementationIdentityAccess": {"const": "DENIED"},
         "ciEvidenceUse": {"const": "FORBIDDEN"}
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["observationMode"],
+            "properties": {"observationMode": {"const": "FULL_TRACKED_TREE_METADATA"}}
+          },
+          "then": {
+            "required": ["sourceSelection"],
+            "not": {"required": ["sourcePaths"]},
+            "properties": {
+              "sourceAuthorityMode": {"const": "ROOT_OWNED_SIGNED_EXACT_COMMIT_FULL_TRACKED_TREE"},
+              "sourceFilesystem": {"const": "FULL_TRACKED_TREE_METADATA_ONLY_ALL_CONTENT_READ_AND_WRITE_DENIED"},
+              "outputMode": {"const": "DISTILLED_REPOSITORY_TREE_METADATA_ONLY_NO_SOURCE_TEXT"},
+              "allowedFactKinds": {"const": ["REPOSITORY_SUMMARY", "TREE_ENTRY"]}
+            }
+          },
+          "else": {
+            "required": ["sourcePaths"],
+            "not": {"anyOf": [{"required": ["sourceSelection"]}, {"required": ["observationMode"]}]},
+            "properties": {
+              "sourceAuthorityMode": {"const": "ROOT_OWNED_SIGNED_EXACT_COMMIT_AND_PATHS"},
+              "sourceFilesystem": {"const": "DECLARED_BLOBS_READ_METADATA_ONLY_ALL_WRITE_DENIED"},
+              "outputMode": {"const": "DISTILLED_CONTRACT_FACTS_ONLY_NO_SOURCE_TEXT"},
+              "allowedFactKinds": {
+                "const": [
+                  "SCHEMA_IDENTITY",
+                  "OBJECT_FIELD",
+                  "REQUIRED_FIELD",
+                  "VALUE_CONSTRAINT",
+                  "STATE_ENUM",
+                  "REFERENCE_EDGE",
+                  "SCHEMA_DIGEST"
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "liveCampaignExecution": {
       "type": "object",

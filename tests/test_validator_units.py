@@ -421,6 +421,30 @@ class ValidatorUnitTest(unittest.TestCase):
         with self.assertRaises(jsonschema.ValidationError):
             jsonschema.validate(packet, schema)
 
+    def test_task_schema_closes_full_tree_metadata_observation(self) -> None:
+        schema = json.loads(
+            (ROOT / "schemas/task-packet.schema.json").read_text(encoding="utf-8")
+        )
+        packet = valid_packet_fixture()
+        packet["warmSourceAccess"] = "AUTHORIZED_READ_ONLY_OBSERVATION"
+        packet["referenceObservationExecution"] = {
+            **VALIDATOR.TREE_OBSERVATION_EXECUTION_BASE,
+            **VALIDATOR.TREE_OBSERVATION_PACKETS["MET-OBS-AH-001"],
+        }
+        jsonschema.validate(packet, schema)
+
+        widened = json.loads(json.dumps(packet))
+        widened["referenceObservationExecution"]["sourcePaths"] = ["README.md"]
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.validate(widened, schema)
+
+        content_read = json.loads(json.dumps(packet))
+        content_read["referenceObservationExecution"]["sourceFilesystem"] = (
+            "DECLARED_BLOBS_READ_METADATA_ONLY_ALL_WRITE_DENIED"
+        )
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.validate(content_read, schema)
+
     def test_task_schema_rejects_observation_authority_on_implementation_packet(self) -> None:
         schema = json.loads(
             (ROOT / "schemas/task-packet.schema.json").read_text(encoding="utf-8")

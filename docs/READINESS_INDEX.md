@@ -182,5 +182,5 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 95-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 103-packet execution
   catalog and topological delivery guidance.
