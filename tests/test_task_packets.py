@@ -72,7 +72,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 105
+    assert len(files) == EXPECTED_PACKET_COUNT == 106
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -149,7 +149,7 @@ def test_alpha_index_partitions_every_packet_once() -> None:
     assert all(count == 1 for count in counts.values())
 
 
-def test_packet_ownership_is_closed_for_all_105_packets() -> None:
+def test_packet_ownership_is_closed_for_all_106_packets() -> None:
     errors = validate_packet_ownership(packets_by_id())
     assert errors == []
 
