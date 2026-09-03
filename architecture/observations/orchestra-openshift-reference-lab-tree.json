@@ -1,0 +1,5823 @@
+{
+  "authority": {
+    "authorityId": "met-obs-ocp-001-20260903",
+    "commit": "ba615515af84760a0accb31c37b815f9820f06d2",
+    "extractorSha256": "e382eaa6ad5446caa0a4abb8be61b2e41ab4cc16159c3d1e5c86fba49ed455a0",
+    "launcherSha256": "971b534767afd900f00b588cf626b79c029f784f5820608b3803dd27ae967cee",
+    "observerIdentity": "planeon-reference-observer",
+    "packetDigest": "9028852eaa2ddc2f7dc3559e38ab4d83bc3c6598dab97d10fb80846ed17fe711",
+    "packetId": "MET-OBS-OCP-001",
+    "packetObservation": {
+      "allowedFactKinds": [
+        "REPOSITORY_SUMMARY",
+        "TREE_ENTRY"
+      ],
+      "ciEvidenceUse": "FORBIDDEN",
+      "commit": "ba615515af84760a0accb31c37b815f9820f06d2",
+      "copyAuthority": "NONE",
+      "executionPlacement": "PREINSTALLED_LOCAL_SEPARATE_OBSERVER_IDENTITY",
+      "implementationIdentityAccess": "DENIED",
+      "launcherArgv": [
+        "/opt/planeon/bin/harness-reference-observe"
+      ],
+      "networkIsolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+      "observationMode": "FULL_TRACKED_TREE_METADATA",
+      "observerIdentity": "planeon-reference-observer",
+      "outputMode": "DISTILLED_REPOSITORY_TREE_METADATA_ONLY_NO_SOURCE_TEXT",
+      "outputPath": "architecture/observations/orchestra-openshift-reference-lab-tree.json",
+      "packetPathEnvironment": "HARNESS_TASK_PACKET",
+      "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+      "repository": "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git",
+      "sourceAuthorityEnvironment": "HARNESS_REFERENCE_SOURCE_AUTHORITY",
+      "sourceAuthorityMode": "ROOT_OWNED_SIGNED_EXACT_COMMIT_FULL_TRACKED_TREE",
+      "sourceCodeExecution": "DENIED",
+      "sourceFilesystem": "FULL_TRACKED_TREE_METADATA_ONLY_ALL_CONTENT_READ_AND_WRITE_DENIED",
+      "sourceSelection": "FULL_TRACKED_TREE_AT_PINNED_COMMIT"
+    },
+    "repository": "git@github.com:caglarsubas/orchestra-openshift-reference-lab.git",
+    "schemaVersion": "harness.planeon.ai/reference-source-authority/v1"
+  },
+  "facts": [
+    {
+      "gitObject": "01427cb4e686b7077d9f654ee1a75ca49e27ae7e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_admission.py"
+    },
+    {
+      "gitObject": "018aa743ce942b3403281a0799bb8a2b5fc0f5c0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/dependency-risk-custody-verification.yml"
+    },
+    {
+      "gitObject": "019fd157302ca3a665b5c6db5ba24decf0e8ead5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/foundation-apply.yml"
+    },
+    {
+      "gitObject": "02555682674d4fa86a0f1455c7b873b8a828cd9e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-product-artifact-admission-policy.lock.json"
+    },
+    {
+      "gitObject": "02a534a8170050de214687c1c6b3ba4af1008be9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/server.py"
+    },
+    {
+      "gitObject": "0351db4cd10d6fccec4788f247110157f939a216",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/config.py"
+    },
+    {
+      "gitObject": "040304805a327bd2989f3cd502aeddc752dd2e2b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/migrate.py"
+    },
+    {
+      "gitObject": "047dd53a3a1b0a3cb2c8a709829c6ee3408384c3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/lab_service_publication.py"
+    },
+    {
+      "gitObject": "04acd4a7428d6f1eb59645c98f48f8e672e56d5c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/reference-lab/README.md"
+    },
+    {
+      "gitObject": "05328d53c896dc3a460e0c847afa280a9bbb4134",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_reference_lab_contract_intake.py"
+    },
+    {
+      "gitObject": "06c5078813cdd3772e647a503d465362b77a4ca8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/migrations/001_receiver.sql"
+    },
+    {
+      "gitObject": "077ba1846ced8b897c7e251eb0bec5f177adc708",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-risk-custody-verification-v1.schema.json"
+    },
+    {
+      "gitObject": "07a4dac221b7cf057d321bbcd3f152f489f55122",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/.dockerignore"
+    },
+    {
+      "gitObject": "07a4dac221b7cf057d321bbcd3f152f489f55122",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/.dockerignore"
+    },
+    {
+      "gitObject": "089da4593c0c5eb14c2b241df67c732cc8072f0e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_dependency_risk_raw_custody.py"
+    },
+    {
+      "gitObject": "08f0e22ba9a65b493d43938456882ca07263206c",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra/terraform/sno-trial"
+    },
+    {
+      "gitObject": "090b2ae2dbd9078cdb19b234ea976767f64314f9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/operator-control-plane-readiness.lock.json"
+    },
+    {
+      "gitObject": "092a1c88e64ada6b30fb7f9b4d3f9bae0a89a2fb",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra/openshift"
+    },
+    {
+      "gitObject": "092e09de51397dfff686c9b4f86e301f8f812c53",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/prerequisites.example.json"
+    },
+    {
+      "gitObject": "0a51b96b3150569d76faedb6865099921e15a97c",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "config"
+    },
+    {
+      "gitObject": "0ac60cfe8bd18c338fde305e3af0d274aeeb51a1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_integrity.py"
+    },
+    {
+      "gitObject": "0c64a6602ec25ea0d30f795fe04705ad3e0bb70f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/test_contracts.py"
+    },
+    {
+      "gitObject": "0c96f44c5bec73971166ef6349e32ac6cba5f764",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/valkey-service.json"
+    },
+    {
+      "gitObject": "0dfd258013b7845a82fe7db3af98827dbac2d55f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/lab-service-publication-replay.yml"
+    },
+    {
+      "gitObject": "0eeff7483287f3ab4804b6175589d7dc0b001958",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/dependencies"
+    },
+    {
+      "gitObject": "0f6bb2a3377670bf71f77d26adc2702f3d78c4a7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-operator-inputs-v1.schema.json"
+    },
+    {
+      "gitObject": "0fbc5b2f147d9be81c9ca98d690909088feedf02",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/materialize_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "0fc847f9a97907a9594bbca84534688a6086868d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "Makefile"
+    },
+    {
+      "gitObject": "10f714dbee272b70ceab401a6bad05355e249181",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/architecture.md"
+    },
+    {
+      "gitObject": "12a81ef3e5ddee6f251426f9cb31018b20fed70f",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/foundation_observation.py"
+    },
+    {
+      "gitObject": "12ef700708bc52ed119655fd2b85044975cb0a31",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-product-artifact-set-v1.schema.json"
+    },
+    {
+      "gitObject": "12fbf53823196fdb2bf970916ff192b054aabb71",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/.terraform.lock.hcl"
+    },
+    {
+      "gitObject": "12fbf53823196fdb2bf970916ff192b054aabb71",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/.terraform.lock.hcl"
+    },
+    {
+      "gitObject": "12fbf53823196fdb2bf970916ff192b054aabb71",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/sno-trial/.terraform.lock.hcl"
+    },
+    {
+      "gitObject": "13b40e1f4ae487c6fe933f009cbaae87636e9ca2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_production_model_artifact_intake.py"
+    },
+    {
+      "gitObject": "1498a5350233f95715dfa779dbf4e23bc42715ca",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/helpers.py"
+    },
+    {
+      "gitObject": "14b3946b43e420bb2c9242472888761c50a000b8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/production-model-artifacts.md"
+    },
+    {
+      "gitObject": "14fa50fc382c3312aaf26ab2f93220110b46d712",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "docs/runbooks"
+    },
+    {
+      "gitObject": "1721b54dde99d738d2d2abfcb8be751f7e976ab5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/production-model-artifact-intake-simulated.json"
+    },
+    {
+      "gitObject": "176c73b9800a1404cb4be0746a34a9e8e390170b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_product_artifact_admission.py"
+    },
+    {
+      "gitObject": "1810a0aaaeb88846599097c6b5e6ccc2718a2b7e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/dependency-image-admission.md"
+    },
+    {
+      "gitObject": "190d8d71e958fd975ce3499254e826431b927cbb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/contracts.py"
+    },
+    {
+      "gitObject": "195994b48ca9e486202816baab65c93f049d01c7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/certificates.yaml"
+    },
+    {
+      "gitObject": "19c48aceef7e390eb061177f339456cfe11da513",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/model-backend-service.json"
+    },
+    {
+      "gitObject": "19f7e574b6fff22d04983c2252ef93e03515d964",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests/fixtures"
+    },
+    {
+      "gitObject": "1aae8fbf214a9e63976ba3e0d1c61580e9dd7e92",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-workload-candidate-v1.schema.json"
+    },
+    {
+      "gitObject": "1c6a9358999e48b0c6c5b39099be5e012543fc31",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/tests/test_gateway.py"
+    },
+    {
+      "gitObject": "1cfa726861d314394213503c38b551b2441a75e7",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab"
+    },
+    {
+      "gitObject": "1dcc68d5c58df630d18d884136dc23b27dd04f4f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-manifest-materialization-v1.schema.json"
+    },
+    {
+      "gitObject": "1e0307a10b32fc3097a103eb5e6de32119e8af5e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-gitops-candidate.lock.json"
+    },
+    {
+      "gitObject": "1e7188bf96fa341066ca2c06cdf5432495f8b5d9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/README.md"
+    },
+    {
+      "gitObject": "202dab11069f4b28ac60b384a0c6419bf44ab8f8",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "contracts"
+    },
+    {
+      "gitObject": "20bb57c768d6478ffb49400a2afae8a684377cb5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/cloudnative-pg.values.json"
+    },
+    {
+      "gitObject": "21243cf31987e0950ec845b6a72367ad467bb642",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/dependencies/reference-lab"
+    },
+    {
+      "gitObject": "218540419809bc7286dac23a81a72e7717e70ed0",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "policies"
+    },
+    {
+      "gitObject": "21e794dce711f1e2dba04c1939b54b98ca9b0239",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/collect_prerequisite_observation.py"
+    },
+    {
+      "gitObject": "2217b9ef0ff6596d6de560f5bf9422cf8ef2ceff",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_risk_custody_verification.py"
+    },
+    {
+      "gitObject": "22abb198959229b1043bcb66e937ba8cb8fb7ecd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/render_sno_trial_install_config.py"
+    },
+    {
+      "gitObject": "23829f366f3356a1716bee92703e3d7226bfad03",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/clusters/reference-lab/storage-class.yaml"
+    },
+    {
+      "gitObject": "23d360979905dfe03c2553eab3dce7923be93f36",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/dependency_risk_execution.py"
+    },
+    {
+      "gitObject": "242b8523e6b7f059542a56922f116d271f4d6bbf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/reference-lab/kustomization.yaml"
+    },
+    {
+      "gitObject": "24782070e581a14a8e62a0fef56ebda59988ed0a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_risk_intake.py"
+    },
+    {
+      "gitObject": "2575b889026c220f4acf7407895aef3df3244ca7",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "tests"
+    },
+    {
+      "gitObject": "26470ca980a01e6284d0c7f0c3a923be632fe2a4",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-network-hygiene-v1.schema.json"
+    },
+    {
+      "gitObject": "271b5ecc234f7fdc39e7d520555a4559aa74508c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_production_model_artifact_custody.py"
+    },
+    {
+      "gitObject": "289270fcdc8f0cd2d9c40b711eca7141408601aa",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_sno_trial_dependency_risk_custody_report.py"
+    },
+    {
+      "gitObject": "29485453ba9f3c2f826852e8cdff344b27303a17",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_and_publish_dependency_risk_custody.sh"
+    },
+    {
+      "gitObject": "29605e3fd678c6ce5b83d3d4e40ff26831a7fa61",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_contracts.py"
+    },
+    {
+      "gitObject": "2bc4e9d4bea4cc3bba232aea220dce8313373834",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-risk-custody-policy.lock.json"
+    },
+    {
+      "gitObject": "2daa3749344bbe213d2da071595bff47aa2bc725",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_bom.py"
+    },
+    {
+      "gitObject": "2f084a3d2dafd42c3dea20436fd2b731b4da250a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/locals.tf"
+    },
+    {
+      "gitObject": "2f0d06c9ce5ea6685c9daca75b14d4827f1c1ff7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/clusters/reference-lab/default-deny.yaml"
+    },
+    {
+      "gitObject": "2f4969fb3695282bd9c9dd904de115c42dbaf32c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-render-admission-v1.schema.json"
+    },
+    {
+      "gitObject": "2f58ddfe7d6649f2aa771283365ad0f43155adc7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/production-model-artifact-intake-policy.lock.json"
+    },
+    {
+      "gitObject": "2fb730a5f02f1d7a4abbcd6e2f733e46cd23c6e1",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "contracts/platform"
+    },
+    {
+      "gitObject": "2ff58718888d404c6029d80a2c2752f40d7b0e57",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-dns-delegation-missing.json"
+    },
+    {
+      "gitObject": "30014fe5a51ecafd305959ff16276d37b3cf0e2c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-runtime-contract-set-v1.schema.json"
+    },
+    {
+      "gitObject": "30284fbc85dc856a686e435138007948984a52fd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/platform-rc10-certification-runner-toolchain-lock.json"
+    },
+    {
+      "gitObject": "3051d8d6043628d7f4d3678b0f5a969409363817",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-artifact-set-v1.schema.json"
+    },
+    {
+      "gitObject": "32952d050583c88e88cf64f50f67b40ec6f3ba5d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-operator-path-v1.schema.json"
+    },
+    {
+      "gitObject": "32b7c147de795ce4961ef9979296487b98444372",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/build_dependency_risk_evidence.py"
+    },
+    {
+      "gitObject": "33dd468b8803d517907b3d8052268c63e30f85e0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/production-model-artifact-upload-receipt-v1.schema.json"
+    },
+    {
+      "gitObject": "349d1f8b8b7c3bbe65f92a8316c4c211e0befa1f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/threat-model.md"
+    },
+    {
+      "gitObject": "350811a5569366d6c65b9a9c3ed8cd6656521d80",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/README.md"
+    },
+    {
+      "gitObject": "350fe2a9a60eac9ba94ee38c09675a6d58753e24",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_and_publish_production_model_artifact_custody.sh"
+    },
+    {
+      "gitObject": "3546b65597e2d9f5bc051a93accea08c69eff5de",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/test_github.py"
+    },
+    {
+      "gitObject": "35e1ea8bcfcf8ac70b1715c306aa52eb54adb696",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/foundation-plan.md"
+    },
+    {
+      "gitObject": "36465999cd9db2511bc8bfc6244e1a22070f5d9e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_dependency_signatures.py"
+    },
+    {
+      "gitObject": "36babc6f50697277939c12b30e651459b8a6b203",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_rendered_gitops.py"
+    },
+    {
+      "gitObject": "3776cac077d14490128435e8caf905ed8f4c0697",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/products/reference-lab"
+    },
+    {
+      "gitObject": "37a330cc7859c3999b93019c72c897d576d1c8b7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/lab-service-publication.md"
+    },
+    {
+      "gitObject": "37f6540ce5c0048d4c66fd28ee1f45422b95c77a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-integrity-policy.lock.json"
+    },
+    {
+      "gitObject": "386da93f0ff8b4cb387d04c05836d8c402e3712e",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_foundation_plan_package.py"
+    },
+    {
+      "gitObject": "3876a5ac7af2d469ee20418942c9bf3dfa8eb5c7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/production-model-artifact-candidate-v1.schema.json"
+    },
+    {
+      "gitObject": "38821cf2032fa1fb0e7081a3531fd834d338d0ce",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": ".github/workflows"
+    },
+    {
+      "gitObject": "38c42c3ef33341a6adff2428992b5d9bef5be565",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_operator_path.py"
+    },
+    {
+      "gitObject": "3972239e8ddb228f8898e1ff018c4afb0ccd1d14",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/signing.py"
+    },
+    {
+      "gitObject": "398183fe8af0a9d1f3dbf95d77f00121615361f8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-resource-exposure-active.json"
+    },
+    {
+      "gitObject": "39fa7d0a52f9fbd78d3c472b88b01958e95ec447",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/clusters/reference-lab"
+    },
+    {
+      "gitObject": "3a7d1076c600399bd6761818eb69ea3782a43884",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_product_dry_run.py"
+    },
+    {
+      "gitObject": "3ab27e154f2abe38a29f90d3a8dbd7a74784671a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".gitignore"
+    },
+    {
+      "gitObject": "3b3e7bf435e90139b9e5ea657a0c7859a0c3814c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/config.py"
+    },
+    {
+      "gitObject": "3b76b89118ced345c26412e15b5f5e9bcc662963",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_gitops.py"
+    },
+    {
+      "gitObject": "3bd3a0c37deb7a85f8c86fad30534c5d220e9118",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_foundation_apply_execution.py"
+    },
+    {
+      "gitObject": "3c28ad74ff1c002382b25948d842ebadfee19734",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/model-backend-service-account.json"
+    },
+    {
+      "gitObject": "3c73294e38ef53977a5e24574df2f94b220019b9",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver"
+    },
+    {
+      "gitObject": "3cb386b5b7f01a26353b043cd5fce0aac68a5c36",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/production-model-custody-runner.lock.json"
+    },
+    {
+      "gitObject": "3cdc4165a2f1c044eb293b1b3c78150e74899206",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_operator_inputs.py"
+    },
+    {
+      "gitObject": "3d6d04c0573b21b0f465de913e1784ad5fd5b173",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra"
+    },
+    {
+      "gitObject": "3e68f0b8479510110ea340435331f3a8b1819a6d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_repository.py"
+    },
+    {
+      "gitObject": "3ec96ac3eab3066cae17f71f65b9580fd4b2bb45",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/dependency-risk-custody-verification-v1.schema.json"
+    },
+    {
+      "gitObject": "3ed28108ddcec731719d6da81b6b638b9b91918f",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_dependency_risk_custody.py"
+    },
+    {
+      "gitObject": "3fdc967e8399f7a24f8d7bd374ded35e8bcbee85",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "schemas"
+    },
+    {
+      "gitObject": "4020f060530cf256f1340ed0e78378f3b9bf9d0d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/production-model-artifact-candidate.lock.json"
+    },
+    {
+      "gitObject": "4052eec233d4094a0acd2db35a82feb8012709bb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/release-validation-receiver.md"
+    },
+    {
+      "gitObject": "40d282c4e081a651421113fdeda12e7c690f41ae",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/dependency-risk-collection-statement-v1.schema.json"
+    },
+    {
+      "gitObject": "40d7ea347e9f9385a52dbfe47d33023dbeda4beb",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_sno_trial_dependency_risk_raw_custody.py"
+    },
+    {
+      "gitObject": "41c09a3172bb58d1d0fe99d33a2a662a07f33c1b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_resource_exposure.py"
+    },
+    {
+      "gitObject": "42212d6c1e55188317cc29516f982641a3298361",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/implementation-status.md"
+    },
+    {
+      "gitObject": "42bc5390851c364d16c249480437151d468be1fb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-risk-evidence-v1.schema.json"
+    },
+    {
+      "gitObject": "42c6982bfc99e18a93cc7d35215850a4ca58035e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-product-artifact-set-v2.schema.json"
+    },
+    {
+      "gitObject": "44ec0ed887c592a468fe27a94f6139384a7c81ca",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_production_model_artifact_candidate.py"
+    },
+    {
+      "gitObject": "45d111ed50779b5c6e6e8772b811266ea5ea5113",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/dependency-supply-chain-intake.md"
+    },
+    {
+      "gitObject": "46c2be926464d78234aa9a495a67f44ef615bd60",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_risk_collection_custody.py"
+    },
+    {
+      "gitObject": "47ac447a17a97f82814c1205dde9d814be646d44",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/lab-service-publication.lock.json"
+    },
+    {
+      "gitObject": "47c3dddbb8422a1d47fd293fc037454bd167110b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/dependency-signature-exceptions-v1.schema.json"
+    },
+    {
+      "gitObject": "483783017c8aa0657abbacc5937ba2a8e0240bdb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_lab_service_publication.py"
+    },
+    {
+      "gitObject": "488df9a47aead051e0000f8b0d44cb92c91342e4",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/reference-lab/default-deny.yaml"
+    },
+    {
+      "gitObject": "48a04b90f596dcfba43c2ed996b09b2dcbceadd1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/clusters/reference-lab/quotas.yaml"
+    },
+    {
+      "gitObject": "48a96191f0fafbfda875c9149195c20606d80e58",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-network-dirty.json"
+    },
+    {
+      "gitObject": "48f06f15b539d42c2e2bdc14203a6cfb1c0a2bbc",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/collect_dependency_risk_evidence.sh"
+    },
+    {
+      "gitObject": "498a43fe3b2b86525075fef77c607ed3d4e9424e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_lab_service_publication_replay.py"
+    },
+    {
+      "gitObject": "4ad6d0c07754f968e59cfa81bfda16165d045114",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "contracts/platform/reference-lab-contract-schemas.v2.json"
+    },
+    {
+      "gitObject": "4aeaf39b280f4c24e0257ce3a18c4b2c6b5600e3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/lab-service-publication-replay.lock.json"
+    },
+    {
+      "gitObject": "4b0099822cd3a66852de9a95a3b161754562cd85",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_sno_trial_profile.py"
+    },
+    {
+      "gitObject": "4c46b4b8eb7e6effcac91e3af5f091ceee12cbe6",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": ".github"
+    },
+    {
+      "gitObject": "4c4e4e7328475e62ecd993cc2e1abcd72c181210",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/test_config.py"
+    },
+    {
+      "gitObject": "4d10c0e514c333ce518c1ed08dfee8678bbc0241",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/dependency-risk-preflight.yml"
+    },
+    {
+      "gitObject": "4d738737c6cc5a164581cc9a02668116c44928a4",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/release-validation-receiver/tests"
+    },
+    {
+      "gitObject": "4df19b56a358975844689fa1e82d61e8fa250104",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/test_store_integration.py"
+    },
+    {
+      "gitObject": "4e919407c777050a701e91d01655a64c339b611e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_supply_chain.py"
+    },
+    {
+      "gitObject": "4f10222f6c3c12208593842707361155d15df658",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "contracts/platform/reference-lab-certification-policy.v2.json"
+    },
+    {
+      "gitObject": "4f63c56b403a3c99a2c6bc7fcd6e3878e328d485",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/dependency_risk_custody_verification.py"
+    },
+    {
+      "gitObject": "503269010d0ef14cd3a8a6e211676a345ac6e6eb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/teardown.md"
+    },
+    {
+      "gitObject": "504067f736a0ea8c2ed8e2850f006b5cd2014968",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/lab.lock.json"
+    },
+    {
+      "gitObject": "50a2541f0745a1da9e08df1086cdbf5e3ed39484",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/README.md"
+    },
+    {
+      "gitObject": "511fa731cca40b8ce8320318d1874f7b4fb968ae",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/products"
+    },
+    {
+      "gitObject": "5163d003ca7b69138db9b08b49acd75741485dc8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_prerequisite_observation.py"
+    },
+    {
+      "gitObject": "51c4746b3ba665cda5896d23c3587db39c885272",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/requirements-linux-amd64.in"
+    },
+    {
+      "gitObject": "522833501d59559118dfbe2b2940b7f13f0dac13",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/dns-delegation.md"
+    },
+    {
+      "gitObject": "5323fe480043761028ff028967bd90f245dde57f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_risk_custody.py"
+    },
+    {
+      "gitObject": "53750b3bef89e26b876c817a2d3c8498c93a5495",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/cross-plane-release-set.lock.json"
+    },
+    {
+      "gitObject": "53d20656344533c9ab64d59cd37cfdd4064f8aef",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "541589ebaecaa0244d4626e8d3c759475b36d8cf",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/publish_foundation_plan_package.sh"
+    },
+    {
+      "gitObject": "54f3f66c8f1897bbdd3da10084fd5195f1eed8ee",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/foundation-apply.md"
+    },
+    {
+      "gitObject": "571811a54b6afddf4e283ef478abd364acbfed7e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/prerequisites.md"
+    },
+    {
+      "gitObject": "57c1dd969e7bc9ad2579dbd2ce4ad1bb55210d9e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/foundation-apply-execution.lock.json"
+    },
+    {
+      "gitObject": "580a5187e9f1d1c8e34dc323c81601b0cf16961f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/foundation-observation.lock.json"
+    },
+    {
+      "gitObject": "583a027a85c844758c24088d1dc145c993c328e3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-cloud-pending.json"
+    },
+    {
+      "gitObject": "58f9f1f8293e3682632abab78e4bbbde07ca60cf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/production-model-artifact-custody-record-v1.schema.json"
+    },
+    {
+      "gitObject": "5a875befff9f18d491029c876dc31f2726d92584",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-risk-execution.lock.json"
+    },
+    {
+      "gitObject": "5ac10761c135a7765ceb2f87ae659cab0337645e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/model-application.json"
+    },
+    {
+      "gitObject": "5bd7877d879d94a2242b8cbc7f00a150ac2f2182",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/variables.tf"
+    },
+    {
+      "gitObject": "5d48062e5b4fc48bc71582d4f04672bacf964c22",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/__init__.py"
+    },
+    {
+      "gitObject": "5dc035f0079230605f9188b61a5c29695c7ca90c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/vault.values.json"
+    },
+    {
+      "gitObject": "5fb86adf1ebe71e3bd3c56320492ae82976bb07a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/test_app.py"
+    },
+    {
+      "gitObject": "60d99471598b3edd79eebbeaae2c00c08f53c493",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/store.py"
+    },
+    {
+      "gitObject": "6157c623824e23f99a5f59542e0c2bca26194587",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/certification-contract-intake.md"
+    },
+    {
+      "gitObject": "6269400133c01024838dc585fa7a082835d12f1f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/app.py"
+    },
+    {
+      "gitObject": "631a31cef973dd84e5a121333ff9d67cdd4d49bb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/bootstrap.md"
+    },
+    {
+      "gitObject": "6357388267b781f44519801a572e848235f77a39",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_admission.py"
+    },
+    {
+      "gitObject": "63f3d26f40608b599cabdbb93b882453263e5176",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_sno_trial_dependency_runtime_contracts.py"
+    },
+    {
+      "gitObject": "6413b74b619d42f6542815966327d48ccd84d66e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/dependency-risk-scan-manifest-v1.schema.json"
+    },
+    {
+      "gitObject": "64d3bf0964cdc1dca7cda433d00cb3da3701d5fd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".editorconfig"
+    },
+    {
+      "gitObject": "678e7a9ef3fb04cfd2c9f4dee5db34647b6ebf11",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-admission.lock.json"
+    },
+    {
+      "gitObject": "682aa86545b763a369acecfd3f7e0b3cd04f29fe",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_dry_run.py"
+    },
+    {
+      "gitObject": "692362ef53b440fe48ec3928a91d2a29f77f626b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "policies/repository-policy.json"
+    },
+    {
+      "gitObject": "692e6ebd628056030420aeb5f4025d0099cc30a3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-operator-inputs.lock.json"
+    },
+    {
+      "gitObject": "698bd801662f0104f0de623025d0eb23cc4166b5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/dns.tf"
+    },
+    {
+      "gitObject": "69deb0d6ff8dbe77986e9eb1580db6af64740580",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/operator-control-plane-readiness.md"
+    },
+    {
+      "gitObject": "6ad9e38aacd3dd63ec3abbef7d41e77089bbf0c0",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_release_set.py"
+    },
+    {
+      "gitObject": "6adbd63a612f600bf200052bc3cfb4bbf0d1d04f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_risk_collection_execution.py"
+    },
+    {
+      "gitObject": "6c88fb8066541e5a5942bdbb362696ad52da8df1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-manifest-candidate-v1.schema.json"
+    },
+    {
+      "gitObject": "6d3c8016e5fd7ee6f0c2132f8f212c85e90d9f9c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/production_model_custody_outputs.tf"
+    },
+    {
+      "gitObject": "6da3b09ed7dc05d7bd05a7c06d4336e8bb88261d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/external-secrets.values.json"
+    },
+    {
+      "gitObject": "6dec231ca6d760b3375acbf786ad6416fe5bfbf0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_profile.py"
+    },
+    {
+      "gitObject": "6e5fdb6ac70bea8d6d118f45b91326af99d8f8f4",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/collect_sno_trial_dependency_risk_evidence.sh"
+    },
+    {
+      "gitObject": "6ec0f51651db108b36ca08fde8a4bfa5f8f90857",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/gateway.py"
+    },
+    {
+      "gitObject": "6ef567ae883665c12acb75751dd3a3a043f20e90",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-risk-collection-execution.lock.json"
+    },
+    {
+      "gitObject": "6f9bc06eaf91fa29d3cc54e149edfa5e894d4cab",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_prerequisite_observation.py"
+    },
+    {
+      "gitObject": "7192c2bc19bb9d402542ae4947f6f77af051a70b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "contracts/platform/reference-lab-campaign.fixture.json"
+    },
+    {
+      "gitObject": "72df4f1642bff86078b77a8075bebc606363f7bb",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_and_publish_sno_trial_dependency_risk_custody.sh"
+    },
+    {
+      "gitObject": "72df5ead46e1e413235f9a33e1356929e39cd6d2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/clusters/reference-lab/namespaces.yaml"
+    },
+    {
+      "gitObject": "738657272f00e093a6f1c7da5541984efaeccd83",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/foundation-plan-summary-v1.schema.json"
+    },
+    {
+      "gitObject": "747d6ba5d63a568b4c65142628c770e6d609e29f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_prerequisite_policy.py"
+    },
+    {
+      "gitObject": "748fc1a5df3e699aea6e7efc5355a10c6d50086d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/sno-trial-product-artifact-admission.yml"
+    },
+    {
+      "gitObject": "75162815708d38ef236eaf08b14705a9bec01dc2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/outputs.tf"
+    },
+    {
+      "gitObject": "758d7bcfbc88010ce002d174432c786146094bf9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-bom.lock.json"
+    },
+    {
+      "gitObject": "75ceb469a3ddcb9521526ee66c162074772cd806",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_signature_verification.py"
+    },
+    {
+      "gitObject": "76fec942921792378cd832531980b4b78240ddcc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/__init__.py"
+    },
+    {
+      "gitObject": "783b7862cb719feee0b925bd0f83838fe73768b8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/model-backend-default-deny.json"
+    },
+    {
+      "gitObject": "7858555b65f7466d8d6b1e01f8d5546075493aea",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/README.md"
+    },
+    {
+      "gitObject": "78af6a7e01f19332648e18308476bfffac1f6d8d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/kustomization.yaml"
+    },
+    {
+      "gitObject": "78c38754b8e61adb94604ffe1336ec7981ce282d",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/release-validation-receiver/src"
+    },
+    {
+      "gitObject": "796c2e7af38f086144b79c70811446a0cf3af392",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "docs"
+    },
+    {
+      "gitObject": "7974742b3ce76880a12e524dd963dd18e98c7d0f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/foundation-apply-receipt-v1.schema.json"
+    },
+    {
+      "gitObject": "7a126cd197efc12e94b59e020bbf8adffec9e319",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_dns_delegation.py"
+    },
+    {
+      "gitObject": "7b8d54d1b6903f994b3b456b3f0e138ff57b9b85",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/sno-trial/variables.tf"
+    },
+    {
+      "gitObject": "7d95bcf84569062620f7b6a34e1e3e3593c38d21",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-risk-policy.lock.json"
+    },
+    {
+      "gitObject": "7de823fe3adf4616ac680e57663e959cdaf763c4",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/actionlint.yaml"
+    },
+    {
+      "gitObject": "7eb1057796f79d240ab3be3911fd585cf549ab29",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/tests/helpers.py"
+    },
+    {
+      "gitObject": "800748f2d586c143f6c323b77f6c82529232b893",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/clickhouse-operator.values.json"
+    },
+    {
+      "gitObject": "801ebad5bdacd3149bff8bed57f74a5666e400a3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/gunicorn_config.py"
+    },
+    {
+      "gitObject": "81915115bb77d0f55231e98911d39d52bd16efe0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/production-model-artifact-custody-policy.lock.json"
+    },
+    {
+      "gitObject": "81bb7e67ba223a4ed89d77779a996c58cb4f64dc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/test_worker.py"
+    },
+    {
+      "gitObject": "828c711239c1694f492d394201b1427c2b203fde",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/production-model-artifact-custody-execution.lock.json"
+    },
+    {
+      "gitObject": "82aa909b7f64738f7bc57cb25c63ca0fc3e1bb0c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-billing-execution.lock.json"
+    },
+    {
+      "gitObject": "837b86baadd83fdf2da129c615f9e57aef26603a",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/collect_foundation_observer_authority.py"
+    },
+    {
+      "gitObject": "843a1c2eb36856aa340bb55ba292e0d8dffc85e5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/reference-lab/project.json"
+    },
+    {
+      "gitObject": "84b63a24b9921a3ca83bb287f40788c21c1d9ebd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/service-overlays.json"
+    },
+    {
+      "gitObject": "84dccbeac6b9b11511c2858264a91084b44234c2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/render_install_config.py"
+    },
+    {
+      "gitObject": "86217d6aa282e8234c4e909b90e774937d26c0ae",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-product-artifact-replay-v2.schema.json"
+    },
+    {
+      "gitObject": "864b052db967d9a833e7be8063016e5aaf33a43a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/foundation-observation.yml"
+    },
+    {
+      "gitObject": "866e8e0f7f2fc509e3e5002796954bde9eb59aae",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/project.json"
+    },
+    {
+      "gitObject": "8733374c8226d004e4f7b64b53cd6db04f6ee2bf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/README.md"
+    },
+    {
+      "gitObject": "877d40c8b9b58f606930bb40f55ae19d1c30b9f9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/production_model_custody_variables.tf"
+    },
+    {
+      "gitObject": "880c69d724d54cd83ed57c9995cb68cf80bfbd52",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/Containerfile"
+    },
+    {
+      "gitObject": "896f13dff3d2985c4d950bd12d1685b686c36fb6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_foundation_apply_execution.py"
+    },
+    {
+      "gitObject": "89b7ef2acdfdcc06668b4277efc39391a99bfaf2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/sno-trial/tests/profile.tftest.hcl"
+    },
+    {
+      "gitObject": "8b8e4b61c70a627e39d0092ded8a255b3d86c6bc",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/publish_dependency_risk_collection.sh"
+    },
+    {
+      "gitObject": "8cc411496d7eea8f8395e62fd3a4a3a3813acb52",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_dependency_dry_run.py"
+    },
+    {
+      "gitObject": "8e0004bcc9a888ee3b8fceccd300cafb00746eb2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/operator-control-plane-readiness-v1.schema.json"
+    },
+    {
+      "gitObject": "8f726b4c566c379548da42b913b2ddc6c7c0c635",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_inputs.py"
+    },
+    {
+      "gitObject": "9042f141804ecc987aa7ce8b5113d5dd9d48b6c5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-artifacts.lock.json"
+    },
+    {
+      "gitObject": "9076b9a59c5f7b6604be6f8e0a129509e91fb2cc",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/sno-trial.md"
+    },
+    {
+      "gitObject": "907768fbd44f0aa9c561d93253377d7ca9d93e64",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-source-verification.lock.json"
+    },
+    {
+      "gitObject": "908a8ddd702d60ac48a3647a03cf9f3e2e17beb5",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "90eb4f0c5f4d888a92d0754a4942a1eb5c74a328",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/publish_sno_trial_dependency_risk_collection.sh"
+    },
+    {
+      "gitObject": "91e98d5447c62937d7b09f8cc88e222473c2991d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_product_gitops.py"
+    },
+    {
+      "gitObject": "9284647e0637e93b82aa539682d3e786f4fac15b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-mirror-intake.example.json"
+    },
+    {
+      "gitObject": "929ab0763fc3ceb65b5b5b26c49a1ef2c782de2c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/oidc.py"
+    },
+    {
+      "gitObject": "92a8d197f5f67f64420bdaedb771835c9776a730",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/valkey-service-account.json"
+    },
+    {
+      "gitObject": "94f42027b98a94ac5b21832d8357bec41915a5b2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/foundation-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "9570414c3c9354086cc565530746b9ff7405bf27",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/operator_control_plane_readiness.py"
+    },
+    {
+      "gitObject": "9590a438a0154db31b7dbcb395324670b9f4dee6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_github_environment_contract.py"
+    },
+    {
+      "gitObject": "96b0e717ad2abe8791ec3871080da1b01ba97dc8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_operator_inputs.py"
+    },
+    {
+      "gitObject": "998c43f2cc8008430fa5d2a5b878c3747cf4dad7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/trial_lease.py"
+    },
+    {
+      "gitObject": "99c7d73d03d5080674b37a8a9f9a3efa46740d57",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops"
+    },
+    {
+      "gitObject": "99f0652a024eab267aecbcd34e386c57752a59eb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/build_red_hat_entitlement_statement.py"
+    },
+    {
+      "gitObject": "9a37ce463cbc542ce5932ff226e2df9c785bc419",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/sno-trial/versions.tf"
+    },
+    {
+      "gitObject": "9a9622b633101b4617be9a8b816c5e9726f25627",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/sno-trial-product-artifact-replay.yml"
+    },
+    {
+      "gitObject": "9aa132a2ba6c6202299f92df42a536e1ab5a7fe6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-risk-raw-custody-statement-v1.schema.json"
+    },
+    {
+      "gitObject": "9aba6e29278051bae96f59355be96ecea2b78cea",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "AGENTS.md"
+    },
+    {
+      "gitObject": "9aef36441efc8e0928e5ddfe3803338dba49ec50",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/worker.py"
+    },
+    {
+      "gitObject": "9b98d3275ec6efa98c69d17bc724b003ef4f89de",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/production_model_custody.tf"
+    },
+    {
+      "gitObject": "9c0837a44a31a2ac0d3b108b4e3b251bf8dbd882",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/prerequisite-observation-policy.lock.json"
+    },
+    {
+      "gitObject": "9cbb15dc5e68f1a343514d3bba9a60b18065de0f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/production_model_artifact_custody.py"
+    },
+    {
+      "gitObject": "9d27f68792e154bc804aa30b26d488a3156a0214",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_materialize_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "9d8050386ce9a81daea487e80e8b395c8d390fbf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_risk_collection.py"
+    },
+    {
+      "gitObject": "9dbc761593204598f7f1d14a759d081f482750bc",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/synthetic-tenant-kit"
+    },
+    {
+      "gitObject": "9e3cc9a8c716cde0b75eb97c3c529f422519d0a8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_artifacts.py"
+    },
+    {
+      "gitObject": "9e4ef1c346c7e8871d2b942226b3dbd1746729d6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/tests/test_mcp_surface.py"
+    },
+    {
+      "gitObject": "9e51f24168cd893310ad2f2c5f5ecf4cdd46fc1a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-product-artifact-replay-v1.schema.json"
+    },
+    {
+      "gitObject": "9ebfc4cb243a1bd05e230c20ae81eab3b69b9631",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/requirements-linux-amd64.lock"
+    },
+    {
+      "gitObject": "a0618ad8f52a15501ad13949f399118b1ffdd2e6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/external-secrets.yaml"
+    },
+    {
+      "gitObject": "a07325f9f627002a049e2b3da004fdd4e90426f8",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/build_sno_trial_dependency_risk_evidence.py"
+    },
+    {
+      "gitObject": "a0911da0137f262e266ef98e22afe2a336626c41",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial.lock.json"
+    },
+    {
+      "gitObject": "a0a820b91741e27dd94e8844ec0286cbb034bd2c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/tests/test_config.py"
+    },
+    {
+      "gitObject": "a13d0f0edfa5a2567c389ff922ff9e0d2a12151a",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra/terraform"
+    },
+    {
+      "gitObject": "a15e26c4d9cfad04a9e981ff3ce3dd0ee5883f02",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-operator-path-ready.json"
+    },
+    {
+      "gitObject": "a172cef4a6855614112bf73039fbbfbd6522631e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/dependencies/candidates"
+    },
+    {
+      "gitObject": "a1d42f0ab9c7b03357684d4d5eebb6d5473a88ba",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-risk-policy.lock.json"
+    },
+    {
+      "gitObject": "a21dd6184d3be3cd3fd65825f22750ce07bb5ca3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-readiness-v1.schema.json"
+    },
+    {
+      "gitObject": "a24b940fcc070eba751c10d453057ee611ab3452",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-product-dry-run-observed.json"
+    },
+    {
+      "gitObject": "a25398aa315a77b57201699b60c999be795b7179",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/foundation_apply_execution.py"
+    },
+    {
+      "gitObject": "a27cd00fae56ef0b51de84d07f41fcdad0c0c85a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-workload-candidate.lock.json"
+    },
+    {
+      "gitObject": "a2caf3a91583c4c4b6aaea42c7b05688c260405e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/foundation-observation.md"
+    },
+    {
+      "gitObject": "a342635f277842646756db6eb56fcdf9228ff7f1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/namespace-model-backend.json"
+    },
+    {
+      "gitObject": "a3c9e7facf14241bb54046646c15e1c159fbb891",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/versions.tf"
+    },
+    {
+      "gitObject": "a43e15380adb022cb7e465484a8191a5e77dca49",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-openshift-toolchain-intake-v1.schema.json"
+    },
+    {
+      "gitObject": "a56271991e289eeccc23943f863ca1d8c4f80bc0",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic"
+    },
+    {
+      "gitObject": "a58712e5452471043d305a855b3ab74a18347aef",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_risk.py"
+    },
+    {
+      "gitObject": "a5f6d863e4113eeec7398b39bc372980f585cd57",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/README.md"
+    },
+    {
+      "gitObject": "a6526ba2a5dba498833c95f4117580bbf7abd5b2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_source_verification.py"
+    },
+    {
+      "gitObject": "a746be9bb9a06de89536eabfa5726057b9c79eb2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-risk-custody-verification.lock.json"
+    },
+    {
+      "gitObject": "a817c11694bc8e1ea9b232ef08caf5a515ca89d1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_release_set.py"
+    },
+    {
+      "gitObject": "a861a40edf06c2d9ba9aea145863f2dfc5652c1f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/lab-service-publication.yml"
+    },
+    {
+      "gitObject": "aa1f181414c80342a625cd4ba3ec893e8ee876b9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-product-artifact-admission-v1.schema.json"
+    },
+    {
+      "gitObject": "aa204c61e76ae401239c4089a10ce56f0fa7604d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/kustomization.yaml"
+    },
+    {
+      "gitObject": "aa97f5f5ced7cc495ca89d2ff171e8bf1375c343",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_gitops.py"
+    },
+    {
+      "gitObject": "aaf85ee0a07089616b14eae48ca2379dcb72698d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/pyproject.toml"
+    },
+    {
+      "gitObject": "ac76099fecef4c40567a2f87cdb989261d40dd3c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "README.md"
+    },
+    {
+      "gitObject": "ac9ff229bfbbe43f7e073164f91c5ea7ce89a592",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_foundation_observation.py"
+    },
+    {
+      "gitObject": "acee4e3f010ac736a89dc3ca9323c34e8003d078",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/review_foundation_plan_package.sh"
+    },
+    {
+      "gitObject": "ad25ef2d1fbd831eb7527ff18a6aa78baf96bdda",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "scripts"
+    },
+    {
+      "gitObject": "ad64cc9dbc0bcb45f2163ce3e96b180f49c36aa2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/github.py"
+    },
+    {
+      "gitObject": "ad6ab8697c16d8dc1a7b9d8caed3540ea8d05ba9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dns-delegation-v1.schema.json"
+    },
+    {
+      "gitObject": "ad968288fd46243f24a3f8bdad5ebfd4e7c1b668",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_product_gitops.py"
+    },
+    {
+      "gitObject": "ad9cba491d4c27ceaeaa2415b5d6193f251af68b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_production_model_artifact_custody_execution.py"
+    },
+    {
+      "gitObject": "adcb6dfcc6beeef8d3e001834f774b917cf19f99",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/configure_reference_lab_environment.py"
+    },
+    {
+      "gitObject": "ae1b0c52fcb55c89b61a7aa5879c05c020b06774",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_operator_path.py"
+    },
+    {
+      "gitObject": "ae468d21413f03e04b373eb62f42d3d1bf578d13",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/platform-application.json"
+    },
+    {
+      "gitObject": "ae8fb313d9ee89588fd5556498bf57b1cd71e041",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-cost-rate-card.lock.json"
+    },
+    {
+      "gitObject": "aecaa13afa7146dc1d7872803c09bd6d7f588bfb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-product-dry-run-v1.schema.json"
+    },
+    {
+      "gitObject": "afb2996523dcb245f312faa867c0fd7c10fe043e",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/upload_production_model_artifact_custody.sh"
+    },
+    {
+      "gitObject": "b08419fab14d05fce7577e3d083c845625fa30e8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_production_model_artifact_custody_execution.py"
+    },
+    {
+      "gitObject": "b0b0d9fd54476da34a182d6e39d78a584133052b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/reference-lab-certification-contract.lock.json"
+    },
+    {
+      "gitObject": "b0fc2db825f5ae4a13f77f6cb4b7638e168f5e7b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/dependency-signature-exceptions.example.json"
+    },
+    {
+      "gitObject": "b150c2ac3fba98a95dc962014b9752924ca56394",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_risk_custody_verification.py"
+    },
+    {
+      "gitObject": "b173a06a680595710aceb910c9aa10158d08cf4c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_dependency_inputs.py"
+    },
+    {
+      "gitObject": "b1a3dd1eabd9c224701da1ececcdd41f72e73c56",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-product-artifacts.lock.json"
+    },
+    {
+      "gitObject": "b1b7246f7a3fda548037d659ae84a1162dfc1b88",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/production-model-artifact-custody.yml"
+    },
+    {
+      "gitObject": "b1e73fce54f48132a1afeef9c3222cbd94f524a3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_risk_execution.py"
+    },
+    {
+      "gitObject": "b2823ea4bed544cbb03c9f04a97c0503eb66f7bf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/foundation_plan_summary.py"
+    },
+    {
+      "gitObject": "b5050ec084a08dcb17223af9e96e7f101ba839ff",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/trusted-ca.yaml"
+    },
+    {
+      "gitObject": "b5a07e467970e8b9721f1c1e3aa58cc80fbd2247",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/errors.py"
+    },
+    {
+      "gitObject": "b692b3491fdc55599f5a55d115b542d10dac9393",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/reference-lab/namespaces.yaml"
+    },
+    {
+      "gitObject": "b80e65c1b2ad05709fe3f496a59753197a26acca",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/synthetic-tenant-kit/tests"
+    },
+    {
+      "gitObject": "b8665f1fedad50ac90a9d9d34e06d10c8ed2473d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/openshift_toolchain_intake.py"
+    },
+    {
+      "gitObject": "b8871be5c096524a7524d04ca79523166616f0b2",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra/terraform/foundation"
+    },
+    {
+      "gitObject": "b92cd4b47dbe513712c21be2c17e1eaebeac326a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/__init__.py"
+    },
+    {
+      "gitObject": "b9a21a226b07c7b77e83dfdbbb6a998825f78391",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-cluster-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "ba09c37dbea81d3dd7b76285de3e0ac7e9730193",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services"
+    },
+    {
+      "gitObject": "ba3800158506f4552e9ced81d1af8e303ff2c6cf",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/lab-services.lock.json"
+    },
+    {
+      "gitObject": "bade6385dcc56058c644c1523f9e085de3c75781",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/production_model_artifact_custody_live.py"
+    },
+    {
+      "gitObject": "bb78b4110c3208e94bd989806f8c5cc58ae708d6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_dependency_risk_collection.py"
+    },
+    {
+      "gitObject": "bc150c1e1fb848cd14101b291814289108897a93",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_product_artifact_admission.py"
+    },
+    {
+      "gitObject": "bc27f1c941c1b90ea2bf1ed58d97422547cd8711",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/run_ephemeral_production_model_custody_runner.sh"
+    },
+    {
+      "gitObject": "bc6ab7a2fe1dff60315fe41b0a842e8167da6544",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/dependency_risk_collection_execution.py"
+    },
+    {
+      "gitObject": "bcc37017564afcd21c98da96177f245cc95123e9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/dependency-risk-raw-custody-statement-v1.schema.json"
+    },
+    {
+      "gitObject": "bce881f4ed25d72f17493a2b99f1f8e64cd215c7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_sno_trial_workload_candidate.py"
+    },
+    {
+      "gitObject": "bcf6524786c8e2102d011e96666a427a26659663",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/valkey-stateful-set.json"
+    },
+    {
+      "gitObject": "bd0dc6fba4a81abd9236ae89e49768048191df5d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/ci.yml"
+    },
+    {
+      "gitObject": "bd2065c3f9801b8f6dac9d5681981b12cc061368",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_network_hygiene.py"
+    },
+    {
+      "gitObject": "bd94617cd305a7cf4c5abaac018a1776c95d04e2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_production_model_artifact_candidate.py"
+    },
+    {
+      "gitObject": "bdaad98d56e257843a0469dc88ae22bcf5648952",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/prerequisite-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "bdd449edf1f870cda2be3fc59aff419991d06305",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_foundation_plan_summary.py"
+    },
+    {
+      "gitObject": "beb7cfe081dc7066e4751777628708bddb970f5f",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/release-validation-receiver"
+    },
+    {
+      "gitObject": "bf0ca84f8dc4bea7d332e1f8dc86041c9c8b0080",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/namespace-valkey.json"
+    },
+    {
+      "gitObject": "bf7bc029c8f6abcd70e803cf6149dd8c21f80041",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_gitops_candidate.py"
+    },
+    {
+      "gitObject": "c1163e42e5b89b43f2297ce16b8c3aca9658299a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_dependency_risk_collection_execution.py"
+    },
+    {
+      "gitObject": "c1b1ffeed744f743db9901bd9f2d58fd1f9e6ecd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/dependency-risk-evidence-v1.schema.json"
+    },
+    {
+      "gitObject": "c1fe84e8fe0549874bc124791d789fbb45345d90",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/__init__.py"
+    },
+    {
+      "gitObject": "c28859d4c5b8799f82c6d26115e7489d1d470398",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_configure_sno_trial_product_admission_environment.py"
+    },
+    {
+      "gitObject": "c28ea3cfdfe2fdfea5d00b9d329994ef5840a9d2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/tests/test_oidc.py"
+    },
+    {
+      "gitObject": "c29e4fd5e8561e1d5fd5a39cbda6440e188fe936",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_risk_intake.py"
+    },
+    {
+      "gitObject": "c2b74f31fd90fbbfde67b8c04685cb31497e9a8f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/README.md"
+    },
+    {
+      "gitObject": "c3d9b15a20375554c9f66076519740ecccffeb68",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/migration-network-policy.yaml"
+    },
+    {
+      "gitObject": "c436759bffb6a35a545d21656c75872707a0cd18",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/main.tf"
+    },
+    {
+      "gitObject": "c4da9b38ca9e4c8b35ba5c35380209bb848124fb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/configure_sno_trial_product_admission_environment.py"
+    },
+    {
+      "gitObject": "c50b82b3a1fefb63fa55583adc61ac938af2359b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_readiness.py"
+    },
+    {
+      "gitObject": "c54816c78bd7f421510a8cea1411b74036bebfa7",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_foundation_observation.py"
+    },
+    {
+      "gitObject": "c5748026e58db924d18a6c0bca13ee26e48f93d0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-manifest-candidate.lock.json"
+    },
+    {
+      "gitObject": "c57cabc7b61d5f8f07bf1c085e9e993f7b4e232e",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra/terraform/sno-trial/tests"
+    },
+    {
+      "gitObject": "c64307890dc21c1c54a6e636a5627ab9389adc6a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/valkey-allow-clients.json"
+    },
+    {
+      "gitObject": "c6575d8130d48f8582e038697d76998c4b122971",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_product_artifacts.py"
+    },
+    {
+      "gitObject": "c7dc7d3f12fa14fd70b4117152ebefbe8d8e873e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/pyproject.toml"
+    },
+    {
+      "gitObject": "c9eb9bb7aa6a6a886656c3f353609099fe165cd9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/github_environment_contract.py"
+    },
+    {
+      "gitObject": "ca5d78813722960d742017ecc5a91e5956b7bca0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_readiness.py"
+    },
+    {
+      "gitObject": "cb2d31e1ffb1cda5bfd3d535fb7f9020a978f17e",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/foundation_apply_receipt.py"
+    },
+    {
+      "gitObject": "cbd70f7fe6f8f5046247157bd8b88f8ef5d55434",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/foundation-plan.yml"
+    },
+    {
+      "gitObject": "cd1421829e32492ecff859443e95492be2c907bb",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/openshift/install-config.template.yaml"
+    },
+    {
+      "gitObject": "cdd851fbe6ed03b6a98dce77e81b20078f756fd0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-signature-exceptions.example.json"
+    },
+    {
+      "gitObject": "ce2dacea159b6ecf48e6079897878bbedebba69d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/variables.tf"
+    },
+    {
+      "gitObject": "cf3dcf55dfaac7946c80e25a7d1ae17a2fcc02f0",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/dependabot.yml"
+    },
+    {
+      "gitObject": "d0b5a98bb8423f1f82d865896392a755ad0cebc2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/sno-trial/outputs.tf"
+    },
+    {
+      "gitObject": "d161f7fae64a7d875bb10b20345affedc37add95",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_bom.py"
+    },
+    {
+      "gitObject": "d1b18ed33d86b6517cfa537e6ecd004d591d5e13",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/clusters"
+    },
+    {
+      "gitObject": "d1be987eb3049309d0519a5b1fd7313318011889",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/outputs.tf"
+    },
+    {
+      "gitObject": "d4825577ceccbee1dbf2cd69f48c9f09a6564097",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/lab-service-publication-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "d56ab29d145a29f186ff61ea953bf03e051f4108",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_supply_chain.py"
+    },
+    {
+      "gitObject": "d5d8df2db5adb72e2cb0bc1fb35bef479d3ba1ca",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "infra/terraform/bootstrap"
+    },
+    {
+      "gitObject": "d672f30b463384b4b947eb9f1bf6f4e10bfed965",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/requirements-linux-amd64.lock"
+    },
+    {
+      "gitObject": "d6b897ab717824ef80fa113b9a2fa21b4024ae9e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_production_model_artifact_custody_live.py"
+    },
+    {
+      "gitObject": "d6d40301c98a5f9e88b3ea83480901744a87fa3e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-signature-exceptions-v1.schema.json"
+    },
+    {
+      "gitObject": "d80cc292c34d2b5e741f539900ba30078e0083db",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/mcp_surface.py"
+    },
+    {
+      "gitObject": "d86ec5eabb63690c8d15fd95e1865dd7662f8e0c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_risk_custody_report.py"
+    },
+    {
+      "gitObject": "d890fbf4ee8fb5c74271fc41bde65506846ddc6d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_resource_exposure.py"
+    },
+    {
+      "gitObject": "d8d53e3a1c4a3e0bf67bc29671ce373f44f915d1",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/synthetic-tenant-kit/src"
+    },
+    {
+      "gitObject": "d94e390b6469e2906d6d865f7b77714735e5800b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_dependency_integrity.py"
+    },
+    {
+      "gitObject": "dadf3ea775822fff16181144cf47332be15b2c6e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_cluster_observation.py"
+    },
+    {
+      "gitObject": "dcd30b7e8a908b0660569713fabbb3579d9f2c63",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-dependency-runtime-contracts.lock.json"
+    },
+    {
+      "gitObject": "de0dc30f03d5d1584ca660e93c016754bb3cccd7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": ".github/workflows/dependency-risk-collection.yml"
+    },
+    {
+      "gitObject": "de3e1da94267d5767eefe8956e82de228df2fcb9",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "config/sno-trial-openshift-toolchain.lock.json"
+    },
+    {
+      "gitObject": "def464ce28d2d58b7fcbeb29ac6e4f860007084a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/foundation-plan-package-v1.schema.json"
+    },
+    {
+      "gitObject": "df724f3b959176209d55dbab742671d0bd494b40",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/production_model_custody.tf"
+    },
+    {
+      "gitObject": "df801bcd5d84a1d254f8441d00910540f8b14d1e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_gitops_candidate.py"
+    },
+    {
+      "gitObject": "e0cdf39449f138226b92edbbeca57e81c3b276ce",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_and_apply_foundation_plan.sh"
+    },
+    {
+      "gitObject": "e1369aeafaa3b81d6861528cc3e3f34cfc72e304",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/dependency-risk-review.md"
+    },
+    {
+      "gitObject": "e1aeaa9b4831e861cd82ae14e6151aa7f8e1ef60",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_cluster_observation.py"
+    },
+    {
+      "gitObject": "e2969c5d602178a5637141dd3af0e0bc8466116b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-risk-policy-v1.schema.json"
+    },
+    {
+      "gitObject": "e3a240b9d556092e468fab8c539b1d0e73636e74",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/openshift/install-config.sno-trial.template.yaml"
+    },
+    {
+      "gitObject": "e4f17df470a47ac6530e89c91833ece365cc130b",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/foundation_plan_package.py"
+    },
+    {
+      "gitObject": "e52270cdb71ba3d38a08460a9b812f3c89afa576",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dependency_runtime_contracts.py"
+    },
+    {
+      "gitObject": "e5433528307ce60d4e79f52a4f9812f7c71c824f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_network_hygiene.py"
+    },
+    {
+      "gitObject": "e56c527cfb392f01adb0eed2dced035a4fa8aa7a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/src/orchestra_synthetic/contracts.py"
+    },
+    {
+      "gitObject": "e572bdb705825db124c846ddba51499ae39d3a21",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/sno-trial/main.tf"
+    },
+    {
+      "gitObject": "e575cc1b0a08acab8ef9b1645372c3f2f117f491",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/valkey-default-deny.json"
+    },
+    {
+      "gitObject": "e61668c638285ef31212ca04913b9ebc83a2a31d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/versions.tf"
+    },
+    {
+      "gitObject": "e6297360311ea04e3696469960c8c8d442fd0646",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-integrity-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "e643516d2ba2d45d5e369906d688ae7fbcf13cc2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-resource-exposure-v1.schema.json"
+    },
+    {
+      "gitObject": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/tests/__init__.py"
+    },
+    {
+      "gitObject": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/synthetic-tenant-kit/tests/__init__.py"
+    },
+    {
+      "gitObject": "e6c875bc65fd75cefc31a08f9d8eecb34482c79a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/dependency_risk_contract.py"
+    },
+    {
+      "gitObject": "e6f999f6bffd43067fa96308030801ee1efe0ce6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_operator_control_plane_readiness.py"
+    },
+    {
+      "gitObject": "e75895a86e589c5d5601c492fbf17743bf9b246e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "services/release-validation-receiver/Containerfile"
+    },
+    {
+      "gitObject": "e80647b22cc5a4e0fd7ec2a1001f65284438a3d8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/verify_dependency_sources.py"
+    },
+    {
+      "gitObject": "e8b6dcd1c614552d11a5f25bbc33f845efaccfed",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_sno_trial_dependency_artifacts.py"
+    },
+    {
+      "gitObject": "e8b9fae7eee1653f596e51cfcb1cf1a7f5119993",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/validate_dependency_risk_execution.py"
+    },
+    {
+      "gitObject": "e8cc4ca26ecf83e103825193036f66d27e499a93",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_reference_lab_contract_intake.py"
+    },
+    {
+      "gitObject": "e9715870f3e8b50e4da0fc4e806cffb360c9977c",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/foundation_observation_report.py"
+    },
+    {
+      "gitObject": "ea2066c390d030fc7e9c425441f2ab7cf02fc24d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_product_artifacts.py"
+    },
+    {
+      "gitObject": "eaac65e26538b08d57273d10caf9b1639c6c0a94",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/products/reference-lab/runtime-application.json"
+    },
+    {
+      "gitObject": "eb66ff4efb63d1b690677e6a9b96c7c9a3d7b17e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-server-dry-run-v1.schema.json"
+    },
+    {
+      "gitObject": "eb9f8a18093955ccf6de525b130e4919ae5d3eb2",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/production_model_artifact_intake.py"
+    },
+    {
+      "gitObject": "ecb9c650aa56dc4810786b290d37aefc0fedd431",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_product_dry_run.py"
+    },
+    {
+      "gitObject": "eccaf4962438051fa8d877339f567b24e5244d8b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/fixtures/sno-trial-cluster-healthy.json"
+    },
+    {
+      "gitObject": "ed4d1a97212bb51e6d0d616b56bcf228a3c8ad7b",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/lab-service-publication-replay-v1.schema.json"
+    },
+    {
+      "gitObject": "edd64d9a231b75cd6bf5ac73a754f781143975b7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/foundation/production_model_custody_outputs.tf"
+    },
+    {
+      "gitObject": "ee48acb65de6ae6a0d26d29bb376d5d159922c93",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_openshift_toolchain_intake.py"
+    },
+    {
+      "gitObject": "eea92aee055c494b7e4d09360cd9a9fef4d4cca0",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "services/release-validation-receiver/src/orchestra_receiver/migrations"
+    },
+    {
+      "gitObject": "ef87015aa04fd2604cd5b60d4fb749938ccd5443",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/reference-lab/jetstream.values.json"
+    },
+    {
+      "gitObject": "f0e5b871f43218cc46fc244121daa38734015e23",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_dependency_risk.py"
+    },
+    {
+      "gitObject": "f0e8f2578abe4009d673df9978a2d050fd83bae8",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_service_dependencies.py"
+    },
+    {
+      "gitObject": "f39e3fc6909b297e93eef4e7c93579193a17cd53",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/production_model_artifact_custody_execution.py"
+    },
+    {
+      "gitObject": "f3b992abf1da62cb3031cdf9991f5f13460c000c",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_install_admission.py"
+    },
+    {
+      "gitObject": "f57148eb1fd894fa4ff60c9608e8051b07dee213",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/production-model-artifact-intake-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "f6caea12b3d632c84364bffce4cbd4784fe3ef3f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/sno-trial-dependency-input-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "f705231be1bdaa00c936bae3692895d5e94af777",
+      "kind": "TREE_ENTRY",
+      "mode": "040000",
+      "objectType": "tree",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial"
+    },
+    {
+      "gitObject": "f70f4afd4cef454da7abfeb356636337dc2645ad",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/lab_service_publication_replay.py"
+    },
+    {
+      "gitObject": "f7531658778f4e4f4f77906d9653f747c0a70d2a",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/model-backend-allow-model-plane.json"
+    },
+    {
+      "gitObject": "f81753ec940855dbf7c76b44daa895e6f2dbfbfd",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/dependencies/candidates/sno-trial/model-backend-stateful-set.json"
+    },
+    {
+      "gitObject": "f8d10a9c6f9dee7651d367010b9df3c22fda88c3",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_foundation_cost_controls.py"
+    },
+    {
+      "gitObject": "fb1a309ff1b61d5ff2d519f5f3c7755c1b828c6f",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_workload_candidate.py"
+    },
+    {
+      "gitObject": "fb2ff98db86904d494382dfc6def69325af8f42b",
+      "kind": "TREE_ENTRY",
+      "mode": "100755",
+      "objectType": "blob",
+      "sourcePath": "scripts/observe_foundation_apply.sh"
+    },
+    {
+      "gitObject": "fba66b9acd276d25d4b23216657137d34e8eb3b6",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/sno_trial_install_admission.py"
+    },
+    {
+      "gitObject": "fbb3f36bbba669e2527ff5a743b9dcb3fb4fb2f1",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/materialize_sno_trial_install_config.py"
+    },
+    {
+      "gitObject": "fbceb04caf8aab56d8087b7ede1d20c2ef522470",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "docs/runbooks/synthetic-tenant-kit.md"
+    },
+    {
+      "gitObject": "fccacdedd7222b73176561d4dbb53b5d08b2cc85",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "gitops/clusters/reference-lab/kustomization.yaml"
+    },
+    {
+      "gitObject": "fcf84ae604262ec2d6238aaa1f1fcb1e90ea40c7",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "scripts/prerequisite_observation.py"
+    },
+    {
+      "gitObject": "fdb25a2bd261782f0d0fc55a55664ca662165e16",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "tests/test_sno_trial_dns_delegation.py"
+    },
+    {
+      "gitObject": "ff618a058ad490465da780cbd4f1be18336a787e",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "schemas/production-model-license-review-decision-v1.schema.json"
+    },
+    {
+      "gitObject": "ff67f6c3a6fdfacf7fe48bbc720910da953d4c3d",
+      "kind": "TREE_ENTRY",
+      "mode": "100644",
+      "objectType": "blob",
+      "sourcePath": "infra/terraform/bootstrap/main.tf"
+    },
+    {
+      "kind": "REPOSITORY_SUMMARY",
+      "objectTypeCounts": {
+        "blob": 404,
+        "tree": 39
+      },
+      "sourcePath": ".",
+      "trackedEntryCount": 443
+    }
+  ],
+  "isolationEvidence": {
+    "copyAuthority": "NONE",
+    "errno": 1,
+    "networkBackend": "darwin-sandbox",
+    "outboundDenied": true,
+    "sourceCodeExecution": "DENIED",
+    "sourceContentReadAccess": "DENIED",
+    "sourceWriteAccess": "DENIED"
+  },
+  "observationId": "met-obs-ocp-001-full-tracked-tree",
+  "schemaVersion": "harness.planeon.ai/reference-observation/v1",
+  "sources": [
+    {
+      "gitObject": "64d3bf0964cdc1dca7cda433d00cb3da3701d5fd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".editorconfig"
+    },
+    {
+      "gitObject": "4c46b4b8eb7e6effcac91e3af5f091ceee12cbe6",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": ".github"
+    },
+    {
+      "gitObject": "7de823fe3adf4616ac680e57663e959cdaf763c4",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/actionlint.yaml"
+    },
+    {
+      "gitObject": "cf3dcf55dfaac7946c80e25a7d1ae17a2fcc02f0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/dependabot.yml"
+    },
+    {
+      "gitObject": "38821cf2032fa1fb0e7081a3531fd834d338d0ce",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": ".github/workflows"
+    },
+    {
+      "gitObject": "bd0dc6fba4a81abd9236ae89e49768048191df5d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "gitObject": "de0dc30f03d5d1584ca660e93c016754bb3cccd7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/dependency-risk-collection.yml"
+    },
+    {
+      "gitObject": "018aa743ce942b3403281a0799bb8a2b5fc0f5c0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/dependency-risk-custody-verification.yml"
+    },
+    {
+      "gitObject": "4d10c0e514c333ce518c1ed08dfee8678bbc0241",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/dependency-risk-preflight.yml"
+    },
+    {
+      "gitObject": "019fd157302ca3a665b5c6db5ba24decf0e8ead5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/foundation-apply.yml"
+    },
+    {
+      "gitObject": "864b052db967d9a833e7be8063016e5aaf33a43a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/foundation-observation.yml"
+    },
+    {
+      "gitObject": "cbd70f7fe6f8f5046247157bd8b88f8ef5d55434",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/foundation-plan.yml"
+    },
+    {
+      "gitObject": "0dfd258013b7845a82fe7db3af98827dbac2d55f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/lab-service-publication-replay.yml"
+    },
+    {
+      "gitObject": "a861a40edf06c2d9ba9aea145863f2dfc5652c1f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/lab-service-publication.yml"
+    },
+    {
+      "gitObject": "b1b7246f7a3fda548037d659ae84a1162dfc1b88",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/production-model-artifact-custody.yml"
+    },
+    {
+      "gitObject": "748fc1a5df3e699aea6e7efc5355a10c6d50086d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/sno-trial-product-artifact-admission.yml"
+    },
+    {
+      "gitObject": "9a9622b633101b4617be9a8b816c5e9726f25627",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".github/workflows/sno-trial-product-artifact-replay.yml"
+    },
+    {
+      "gitObject": "3ab27e154f2abe38a29f90d3a8dbd7a74784671a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": ".gitignore"
+    },
+    {
+      "gitObject": "9aba6e29278051bae96f59355be96ecea2b78cea",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "AGENTS.md"
+    },
+    {
+      "gitObject": "0fc847f9a97907a9594bbca84534688a6086868d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "Makefile"
+    },
+    {
+      "gitObject": "ac76099fecef4c40567a2f87cdb989261d40dd3c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "README.md"
+    },
+    {
+      "gitObject": "0a51b96b3150569d76faedb6865099921e15a97c",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "config"
+    },
+    {
+      "gitObject": "53750b3bef89e26b876c817a2d3c8498c93a5495",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/cross-plane-release-set.lock.json"
+    },
+    {
+      "gitObject": "678e7a9ef3fb04cfd2c9f4dee5db34647b6ebf11",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-admission.lock.json"
+    },
+    {
+      "gitObject": "758d7bcfbc88010ce002d174432c786146094bf9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-bom.lock.json"
+    },
+    {
+      "gitObject": "1e0307a10b32fc3097a103eb5e6de32119e8af5e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-gitops-candidate.lock.json"
+    },
+    {
+      "gitObject": "9284647e0637e93b82aa539682d3e786f4fac15b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-mirror-intake.example.json"
+    },
+    {
+      "gitObject": "6ef567ae883665c12acb75751dd3a3a043f20e90",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-risk-collection-execution.lock.json"
+    },
+    {
+      "gitObject": "a746be9bb9a06de89536eabfa5726057b9c79eb2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-risk-custody-verification.lock.json"
+    },
+    {
+      "gitObject": "5a875befff9f18d491029c876dc31f2726d92584",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-risk-execution.lock.json"
+    },
+    {
+      "gitObject": "7d95bcf84569062620f7b6a34e1e3e3593c38d21",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-risk-policy.lock.json"
+    },
+    {
+      "gitObject": "b0fc2db825f5ae4a13f77f6cb4b7638e168f5e7b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-signature-exceptions.example.json"
+    },
+    {
+      "gitObject": "907768fbd44f0aa9c561d93253377d7ca9d93e64",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/dependency-source-verification.lock.json"
+    },
+    {
+      "gitObject": "57c1dd969e7bc9ad2579dbd2ce4ad1bb55210d9e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/foundation-apply-execution.lock.json"
+    },
+    {
+      "gitObject": "580a5187e9f1d1c8e34dc323c81601b0cf16961f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/foundation-observation.lock.json"
+    },
+    {
+      "gitObject": "4aeaf39b280f4c24e0257ce3a18c4b2c6b5600e3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/lab-service-publication-replay.lock.json"
+    },
+    {
+      "gitObject": "47ac447a17a97f82814c1205dde9d814be646d44",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/lab-service-publication.lock.json"
+    },
+    {
+      "gitObject": "ba3800158506f4552e9ced81d1af8e303ff2c6cf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/lab-services.lock.json"
+    },
+    {
+      "gitObject": "504067f736a0ea8c2ed8e2850f006b5cd2014968",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/lab.lock.json"
+    },
+    {
+      "gitObject": "090b2ae2dbd9078cdb19b234ea976767f64314f9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/operator-control-plane-readiness.lock.json"
+    },
+    {
+      "gitObject": "9c0837a44a31a2ac0d3b108b4e3b251bf8dbd882",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/prerequisite-observation-policy.lock.json"
+    },
+    {
+      "gitObject": "092e09de51397dfff686c9b4f86e301f8f812c53",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/prerequisites.example.json"
+    },
+    {
+      "gitObject": "4020f060530cf256f1340ed0e78378f3b9bf9d0d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/production-model-artifact-candidate.lock.json"
+    },
+    {
+      "gitObject": "828c711239c1694f492d394201b1427c2b203fde",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/production-model-artifact-custody-execution.lock.json"
+    },
+    {
+      "gitObject": "81915115bb77d0f55231e98911d39d52bd16efe0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/production-model-artifact-custody-policy.lock.json"
+    },
+    {
+      "gitObject": "2f58ddfe7d6649f2aa771283365ad0f43155adc7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/production-model-artifact-intake-policy.lock.json"
+    },
+    {
+      "gitObject": "3cb386b5b7f01a26353b043cd5fce0aac68a5c36",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/production-model-custody-runner.lock.json"
+    },
+    {
+      "gitObject": "b0b0d9fd54476da34a182d6e39d78a584133052b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/reference-lab-certification-contract.lock.json"
+    },
+    {
+      "gitObject": "82aa909b7f64738f7bc57cb25c63ca0fc3e1bb0c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-billing-execution.lock.json"
+    },
+    {
+      "gitObject": "ae8fb313d9ee89588fd5556498bf57b1cd71e041",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-cost-rate-card.lock.json"
+    },
+    {
+      "gitObject": "9042f141804ecc987aa7ce8b5113d5dd9d48b6c5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-artifacts.lock.json"
+    },
+    {
+      "gitObject": "37f6540ce5c0048d4c66fd28ee1f45422b95c77a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-integrity-policy.lock.json"
+    },
+    {
+      "gitObject": "c5748026e58db924d18a6c0bca13ee26e48f93d0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-manifest-candidate.lock.json"
+    },
+    {
+      "gitObject": "2bc4e9d4bea4cc3bba232aea220dce8313373834",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-risk-custody-policy.lock.json"
+    },
+    {
+      "gitObject": "a1d42f0ab9c7b03357684d4d5eebb6d5473a88ba",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-risk-policy.lock.json"
+    },
+    {
+      "gitObject": "dcd30b7e8a908b0660569713fabbb3579d9f2c63",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-runtime-contracts.lock.json"
+    },
+    {
+      "gitObject": "cdd851fbe6ed03b6a98dce77e81b20078f756fd0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-dependency-signature-exceptions.example.json"
+    },
+    {
+      "gitObject": "de3e1da94267d5767eefe8956e82de228df2fcb9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-openshift-toolchain.lock.json"
+    },
+    {
+      "gitObject": "692e6ebd628056030420aeb5f4025d0099cc30a3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-operator-inputs.lock.json"
+    },
+    {
+      "gitObject": "02555682674d4fa86a0f1455c7b873b8a828cd9e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-product-artifact-admission-policy.lock.json"
+    },
+    {
+      "gitObject": "b1a3dd1eabd9c224701da1ececcdd41f72e73c56",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-product-artifacts.lock.json"
+    },
+    {
+      "gitObject": "a27cd00fae56ef0b51de84d07f41fcdad0c0c85a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial-workload-candidate.lock.json"
+    },
+    {
+      "gitObject": "a0911da0137f262e266ef98e22afe2a336626c41",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "config/sno-trial.lock.json"
+    },
+    {
+      "gitObject": "202dab11069f4b28ac60b384a0c6419bf44ab8f8",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "contracts"
+    },
+    {
+      "gitObject": "2fb730a5f02f1d7a4abbcd6e2f733e46cd23c6e1",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "contracts/platform"
+    },
+    {
+      "gitObject": "7192c2bc19bb9d402542ae4947f6f77af051a70b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "contracts/platform/reference-lab-campaign.fixture.json"
+    },
+    {
+      "gitObject": "4f10222f6c3c12208593842707361155d15df658",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "contracts/platform/reference-lab-certification-policy.v2.json"
+    },
+    {
+      "gitObject": "4ad6d0c07754f968e59cfa81bfda16165d045114",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "contracts/platform/reference-lab-contract-schemas.v2.json"
+    },
+    {
+      "gitObject": "796c2e7af38f086144b79c70811446a0cf3af392",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "docs"
+    },
+    {
+      "gitObject": "10f714dbee272b70ceab401a6bad05355e249181",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/architecture.md"
+    },
+    {
+      "gitObject": "42212d6c1e55188317cc29516f982641a3298361",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/implementation-status.md"
+    },
+    {
+      "gitObject": "571811a54b6afddf4e283ef478abd364acbfed7e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/prerequisites.md"
+    },
+    {
+      "gitObject": "14fa50fc382c3312aaf26ab2f93220110b46d712",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "docs/runbooks"
+    },
+    {
+      "gitObject": "350811a5569366d6c65b9a9c3ed8cd6656521d80",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/README.md"
+    },
+    {
+      "gitObject": "631a31cef973dd84e5a121333ff9d67cdd4d49bb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/bootstrap.md"
+    },
+    {
+      "gitObject": "6157c623824e23f99a5f59542e0c2bca26194587",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/certification-contract-intake.md"
+    },
+    {
+      "gitObject": "1810a0aaaeb88846599097c6b5e6ccc2718a2b7e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/dependency-image-admission.md"
+    },
+    {
+      "gitObject": "e1369aeafaa3b81d6861528cc3e3f34cfc72e304",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/dependency-risk-review.md"
+    },
+    {
+      "gitObject": "45d111ed50779b5c6e6e8772b811266ea5ea5113",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/dependency-supply-chain-intake.md"
+    },
+    {
+      "gitObject": "522833501d59559118dfbe2b2940b7f13f0dac13",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/dns-delegation.md"
+    },
+    {
+      "gitObject": "54f3f66c8f1897bbdd3da10084fd5195f1eed8ee",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/foundation-apply.md"
+    },
+    {
+      "gitObject": "a2caf3a91583c4c4b6aaea42c7b05688c260405e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/foundation-observation.md"
+    },
+    {
+      "gitObject": "35e1ea8bcfcf8ac70b1715c306aa52eb54adb696",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/foundation-plan.md"
+    },
+    {
+      "gitObject": "37a330cc7859c3999b93019c72c897d576d1c8b7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/lab-service-publication.md"
+    },
+    {
+      "gitObject": "69deb0d6ff8dbe77986e9eb1580db6af64740580",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/operator-control-plane-readiness.md"
+    },
+    {
+      "gitObject": "14b3946b43e420bb2c9242472888761c50a000b8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/production-model-artifacts.md"
+    },
+    {
+      "gitObject": "4052eec233d4094a0acd2db35a82feb8012709bb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/release-validation-receiver.md"
+    },
+    {
+      "gitObject": "9076b9a59c5f7b6604be6f8e0a129509e91fb2cc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/sno-trial.md"
+    },
+    {
+      "gitObject": "fbceb04caf8aab56d8087b7ede1d20c2ef522470",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/synthetic-tenant-kit.md"
+    },
+    {
+      "gitObject": "503269010d0ef14cd3a8a6e211676a345ac6e6eb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/runbooks/teardown.md"
+    },
+    {
+      "gitObject": "349d1f8b8b7c3bbe65f92a8316c4c211e0befa1f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "docs/threat-model.md"
+    },
+    {
+      "gitObject": "99c7d73d03d5080674b37a8a9f9a3efa46740d57",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops"
+    },
+    {
+      "gitObject": "1e7188bf96fa341066ca2c06cdf5432495f8b5d9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/README.md"
+    },
+    {
+      "gitObject": "d1b18ed33d86b6517cfa537e6ecd004d591d5e13",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/clusters"
+    },
+    {
+      "gitObject": "39fa7d0a52f9fbd78d3c472b88b01958e95ec447",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/clusters/reference-lab"
+    },
+    {
+      "gitObject": "2f0d06c9ce5ea6685c9daca75b14d4827f1c1ff7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/clusters/reference-lab/default-deny.yaml"
+    },
+    {
+      "gitObject": "fccacdedd7222b73176561d4dbb53b5d08b2cc85",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/clusters/reference-lab/kustomization.yaml"
+    },
+    {
+      "gitObject": "72df5ead46e1e413235f9a33e1356929e39cd6d2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/clusters/reference-lab/namespaces.yaml"
+    },
+    {
+      "gitObject": "48a04b90f596dcfba43c2ed996b09b2dcbceadd1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/clusters/reference-lab/quotas.yaml"
+    },
+    {
+      "gitObject": "23829f366f3356a1716bee92703e3d7226bfad03",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/clusters/reference-lab/storage-class.yaml"
+    },
+    {
+      "gitObject": "0eeff7483287f3ab4804b6175589d7dc0b001958",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/dependencies"
+    },
+    {
+      "gitObject": "a172cef4a6855614112bf73039fbbfbd6522631e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/dependencies/candidates"
+    },
+    {
+      "gitObject": "1cfa726861d314394213503c38b551b2441a75e7",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/dependencies/candidates/reference-lab"
+    },
+    {
+      "gitObject": "a5f6d863e4113eeec7398b39bc372980f585cd57",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/README.md"
+    },
+    {
+      "gitObject": "800748f2d586c143f6c323b77f6c82529232b893",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/clickhouse-operator.values.json"
+    },
+    {
+      "gitObject": "20bb57c768d6478ffb49400a2afae8a684377cb5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/cloudnative-pg.values.json"
+    },
+    {
+      "gitObject": "6da3b09ed7dc05d7bd05a7c06d4336e8bb88261d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/external-secrets.values.json"
+    },
+    {
+      "gitObject": "ef87015aa04fd2604cd5b60d4fb749938ccd5443",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/jetstream.values.json"
+    },
+    {
+      "gitObject": "84b63a24b9921a3ca83bb287f40788c21c1d9ebd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/service-overlays.json"
+    },
+    {
+      "gitObject": "5dc035f0079230605f9188b61a5c29695c7ca90c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/reference-lab/vault.values.json"
+    },
+    {
+      "gitObject": "f705231be1bdaa00c936bae3692895d5e94af777",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/dependencies/candidates/sno-trial"
+    },
+    {
+      "gitObject": "8733374c8226d004e4f7b64b53cd6db04f6ee2bf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/README.md"
+    },
+    {
+      "gitObject": "78af6a7e01f19332648e18308476bfffac1f6d8d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/kustomization.yaml"
+    },
+    {
+      "gitObject": "f7531658778f4e4f4f77906d9653f747c0a70d2a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/model-backend-allow-model-plane.json"
+    },
+    {
+      "gitObject": "783b7862cb719feee0b925bd0f83838fe73768b8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/model-backend-default-deny.json"
+    },
+    {
+      "gitObject": "3c28ad74ff1c002382b25948d842ebadfee19734",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/model-backend-service-account.json"
+    },
+    {
+      "gitObject": "19c48aceef7e390eb061177f339456cfe11da513",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/model-backend-service.json"
+    },
+    {
+      "gitObject": "f81753ec940855dbf7c76b44daa895e6f2dbfbfd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/model-backend-stateful-set.json"
+    },
+    {
+      "gitObject": "a342635f277842646756db6eb56fcdf9228ff7f1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/namespace-model-backend.json"
+    },
+    {
+      "gitObject": "bf0ca84f8dc4bea7d332e1f8dc86041c9c8b0080",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/namespace-valkey.json"
+    },
+    {
+      "gitObject": "c64307890dc21c1c54a6e636a5627ab9389adc6a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/valkey-allow-clients.json"
+    },
+    {
+      "gitObject": "e575cc1b0a08acab8ef9b1645372c3f2f117f491",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/valkey-default-deny.json"
+    },
+    {
+      "gitObject": "92a8d197f5f67f64420bdaedb771835c9776a730",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/valkey-service-account.json"
+    },
+    {
+      "gitObject": "0c96f44c5bec73971166ef6349e32ac6cba5f764",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/valkey-service.json"
+    },
+    {
+      "gitObject": "bcf6524786c8e2102d011e96666a427a26659663",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/candidates/sno-trial/valkey-stateful-set.json"
+    },
+    {
+      "gitObject": "21243cf31987e0950ec845b6a72367ad467bb642",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/dependencies/reference-lab"
+    },
+    {
+      "gitObject": "04acd4a7428d6f1eb59645c98f48f8e672e56d5c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/reference-lab/README.md"
+    },
+    {
+      "gitObject": "488df9a47aead051e0000f8b0d44cb92c91342e4",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/reference-lab/default-deny.yaml"
+    },
+    {
+      "gitObject": "242b8523e6b7f059542a56922f116d271f4d6bbf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/reference-lab/kustomization.yaml"
+    },
+    {
+      "gitObject": "b692b3491fdc55599f5a55d115b542d10dac9393",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/reference-lab/namespaces.yaml"
+    },
+    {
+      "gitObject": "843a1c2eb36856aa340bb55ba292e0d8dffc85e5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/dependencies/reference-lab/project.json"
+    },
+    {
+      "gitObject": "511fa731cca40b8ce8320318d1874f7b4fb968ae",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/products"
+    },
+    {
+      "gitObject": "3776cac077d14490128435e8caf905ed8f4c0697",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "gitops/products/reference-lab"
+    },
+    {
+      "gitObject": "50a2541f0745a1da9e08df1086cdbf5e3ed39484",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/README.md"
+    },
+    {
+      "gitObject": "195994b48ca9e486202816baab65c93f049d01c7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/certificates.yaml"
+    },
+    {
+      "gitObject": "a0618ad8f52a15501ad13949f399118b1ffdd2e6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/external-secrets.yaml"
+    },
+    {
+      "gitObject": "aa204c61e76ae401239c4089a10ce56f0fa7604d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/kustomization.yaml"
+    },
+    {
+      "gitObject": "c3d9b15a20375554c9f66076519740ecccffeb68",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/migration-network-policy.yaml"
+    },
+    {
+      "gitObject": "5ac10761c135a7765ceb2f87ae659cab0337645e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/model-application.json"
+    },
+    {
+      "gitObject": "ae468d21413f03e04b373eb62f42d3d1bf578d13",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/platform-application.json"
+    },
+    {
+      "gitObject": "866e8e0f7f2fc509e3e5002796954bde9eb59aae",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/project.json"
+    },
+    {
+      "gitObject": "eaac65e26538b08d57273d10caf9b1639c6c0a94",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/runtime-application.json"
+    },
+    {
+      "gitObject": "b5050ec084a08dcb17223af9e96e7f101ba839ff",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "gitops/products/reference-lab/trusted-ca.yaml"
+    },
+    {
+      "gitObject": "3d6d04c0573b21b0f465de913e1784ad5fd5b173",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra"
+    },
+    {
+      "gitObject": "092a1c88e64ada6b30fb7f9b4d3f9bae0a89a2fb",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra/openshift"
+    },
+    {
+      "gitObject": "e3a240b9d556092e468fab8c539b1d0e73636e74",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/openshift/install-config.sno-trial.template.yaml"
+    },
+    {
+      "gitObject": "cd1421829e32492ecff859443e95492be2c907bb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/openshift/install-config.template.yaml"
+    },
+    {
+      "gitObject": "a13d0f0edfa5a2567c389ff922ff9e0d2a12151a",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra/terraform"
+    },
+    {
+      "gitObject": "d5d8df2db5adb72e2cb0bc1fb35bef479d3ba1ca",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra/terraform/bootstrap"
+    },
+    {
+      "gitObject": "12fbf53823196fdb2bf970916ff192b054aabb71",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/.terraform.lock.hcl"
+    },
+    {
+      "gitObject": "ff67f6c3a6fdfacf7fe48bbc720910da953d4c3d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/main.tf"
+    },
+    {
+      "gitObject": "75162815708d38ef236eaf08b14705a9bec01dc2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/outputs.tf"
+    },
+    {
+      "gitObject": "df724f3b959176209d55dbab742671d0bd494b40",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/production_model_custody.tf"
+    },
+    {
+      "gitObject": "6d3c8016e5fd7ee6f0c2132f8f212c85e90d9f9c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/production_model_custody_outputs.tf"
+    },
+    {
+      "gitObject": "5bd7877d879d94a2242b8cbc7f00a150ac2f2182",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/variables.tf"
+    },
+    {
+      "gitObject": "e61668c638285ef31212ca04913b9ebc83a2a31d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/bootstrap/versions.tf"
+    },
+    {
+      "gitObject": "b8871be5c096524a7524d04ca79523166616f0b2",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra/terraform/foundation"
+    },
+    {
+      "gitObject": "12fbf53823196fdb2bf970916ff192b054aabb71",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/.terraform.lock.hcl"
+    },
+    {
+      "gitObject": "698bd801662f0104f0de623025d0eb23cc4166b5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/dns.tf"
+    },
+    {
+      "gitObject": "2f084a3d2dafd42c3dea20436fd2b731b4da250a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/locals.tf"
+    },
+    {
+      "gitObject": "c436759bffb6a35a545d21656c75872707a0cd18",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/main.tf"
+    },
+    {
+      "gitObject": "d1be987eb3049309d0519a5b1fd7313318011889",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/outputs.tf"
+    },
+    {
+      "gitObject": "9b98d3275ec6efa98c69d17bc724b003ef4f89de",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/production_model_custody.tf"
+    },
+    {
+      "gitObject": "edd64d9a231b75cd6bf5ac73a754f781143975b7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/production_model_custody_outputs.tf"
+    },
+    {
+      "gitObject": "877d40c8b9b58f606930bb40f55ae19d1c30b9f9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/production_model_custody_variables.tf"
+    },
+    {
+      "gitObject": "ce2dacea159b6ecf48e6079897878bbedebba69d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/variables.tf"
+    },
+    {
+      "gitObject": "a3c9e7facf14241bb54046646c15e1c159fbb891",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/foundation/versions.tf"
+    },
+    {
+      "gitObject": "08f0e22ba9a65b493d43938456882ca07263206c",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra/terraform/sno-trial"
+    },
+    {
+      "gitObject": "12fbf53823196fdb2bf970916ff192b054aabb71",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/sno-trial/.terraform.lock.hcl"
+    },
+    {
+      "gitObject": "e572bdb705825db124c846ddba51499ae39d3a21",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/sno-trial/main.tf"
+    },
+    {
+      "gitObject": "d0b5a98bb8423f1f82d865896392a755ad0cebc2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/sno-trial/outputs.tf"
+    },
+    {
+      "gitObject": "c57cabc7b61d5f8f07bf1c085e9e993f7b4e232e",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "infra/terraform/sno-trial/tests"
+    },
+    {
+      "gitObject": "89b7ef2acdfdcc06668b4277efc39391a99bfaf2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/sno-trial/tests/profile.tftest.hcl"
+    },
+    {
+      "gitObject": "7b8d54d1b6903f994b3b456b3f0e138ff57b9b85",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/sno-trial/variables.tf"
+    },
+    {
+      "gitObject": "9a37ce463cbc542ce5932ff226e2df9c785bc419",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "infra/terraform/sno-trial/versions.tf"
+    },
+    {
+      "gitObject": "218540419809bc7286dac23a81a72e7717e70ed0",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "policies"
+    },
+    {
+      "gitObject": "692362ef53b440fe48ec3928a91d2a29f77f626b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "policies/repository-policy.json"
+    },
+    {
+      "gitObject": "3fdc967e8399f7a24f8d7bd374ded35e8bcbee85",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "schemas"
+    },
+    {
+      "gitObject": "40d282c4e081a651421113fdeda12e7c690f41ae",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/dependency-risk-collection-statement-v1.schema.json"
+    },
+    {
+      "gitObject": "3ec96ac3eab3066cae17f71f65b9580fd4b2bb45",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/dependency-risk-custody-verification-v1.schema.json"
+    },
+    {
+      "gitObject": "c1b1ffeed744f743db9901bd9f2d58fd1f9e6ecd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/dependency-risk-evidence-v1.schema.json"
+    },
+    {
+      "gitObject": "bcc37017564afcd21c98da96177f245cc95123e9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/dependency-risk-raw-custody-statement-v1.schema.json"
+    },
+    {
+      "gitObject": "6413b74b619d42f6542815966327d48ccd84d66e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/dependency-risk-scan-manifest-v1.schema.json"
+    },
+    {
+      "gitObject": "47c3dddbb8422a1d47fd293fc037454bd167110b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/dependency-signature-exceptions-v1.schema.json"
+    },
+    {
+      "gitObject": "7974742b3ce76880a12e524dd963dd18e98c7d0f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/foundation-apply-receipt-v1.schema.json"
+    },
+    {
+      "gitObject": "94f42027b98a94ac5b21832d8357bec41915a5b2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/foundation-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "def464ce28d2d58b7fcbeb29ac6e4f860007084a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/foundation-plan-package-v1.schema.json"
+    },
+    {
+      "gitObject": "738657272f00e093a6f1c7da5541984efaeccd83",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/foundation-plan-summary-v1.schema.json"
+    },
+    {
+      "gitObject": "d4825577ceccbee1dbf2cd69f48c9f09a6564097",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/lab-service-publication-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "ed4d1a97212bb51e6d0d616b56bcf228a3c8ad7b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/lab-service-publication-replay-v1.schema.json"
+    },
+    {
+      "gitObject": "8e0004bcc9a888ee3b8fceccd300cafb00746eb2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/operator-control-plane-readiness-v1.schema.json"
+    },
+    {
+      "gitObject": "bdaad98d56e257843a0469dc88ae22bcf5648952",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/prerequisite-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "3876a5ac7af2d469ee20418942c9bf3dfa8eb5c7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/production-model-artifact-candidate-v1.schema.json"
+    },
+    {
+      "gitObject": "58f9f1f8293e3682632abab78e4bbbde07ca60cf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/production-model-artifact-custody-record-v1.schema.json"
+    },
+    {
+      "gitObject": "f57148eb1fd894fa4ff60c9608e8051b07dee213",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/production-model-artifact-intake-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "33dd468b8803d517907b3d8052268c63e30f85e0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/production-model-artifact-upload-receipt-v1.schema.json"
+    },
+    {
+      "gitObject": "ff618a058ad490465da780cbd4f1be18336a787e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/production-model-license-review-decision-v1.schema.json"
+    },
+    {
+      "gitObject": "b9a21a226b07c7b77e83dfdbbb6a998825f78391",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-cluster-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "3051d8d6043628d7f4d3678b0f5a969409363817",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-artifact-set-v1.schema.json"
+    },
+    {
+      "gitObject": "f6caea12b3d632c84364bffce4cbd4784fe3ef3f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-input-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "e6297360311ea04e3696469960c8c8d442fd0646",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-integrity-observation-v1.schema.json"
+    },
+    {
+      "gitObject": "6c88fb8066541e5a5942bdbb362696ad52da8df1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-manifest-candidate-v1.schema.json"
+    },
+    {
+      "gitObject": "1dcc68d5c58df630d18d884136dc23b27dd04f4f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-manifest-materialization-v1.schema.json"
+    },
+    {
+      "gitObject": "077ba1846ced8b897c7e251eb0bec5f177adc708",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-risk-custody-verification-v1.schema.json"
+    },
+    {
+      "gitObject": "42bc5390851c364d16c249480437151d468be1fb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-risk-evidence-v1.schema.json"
+    },
+    {
+      "gitObject": "e2969c5d602178a5637141dd3af0e0bc8466116b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-risk-policy-v1.schema.json"
+    },
+    {
+      "gitObject": "9aa132a2ba6c6202299f92df42a536e1ab5a7fe6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-risk-raw-custody-statement-v1.schema.json"
+    },
+    {
+      "gitObject": "30014fe5a51ecafd305959ff16276d37b3cf0e2c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-runtime-contract-set-v1.schema.json"
+    },
+    {
+      "gitObject": "eb66ff4efb63d1b690677e6a9b96c7c9a3d7b17e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-server-dry-run-v1.schema.json"
+    },
+    {
+      "gitObject": "d6d40301c98a5f9e88b3ea83480901744a87fa3e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dependency-signature-exceptions-v1.schema.json"
+    },
+    {
+      "gitObject": "ad6ab8697c16d8dc1a7b9d8caed3540ea8d05ba9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-dns-delegation-v1.schema.json"
+    },
+    {
+      "gitObject": "26470ca980a01e6284d0c7f0c3a923be632fe2a4",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-network-hygiene-v1.schema.json"
+    },
+    {
+      "gitObject": "a43e15380adb022cb7e465484a8191a5e77dca49",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-openshift-toolchain-intake-v1.schema.json"
+    },
+    {
+      "gitObject": "0f6bb2a3377670bf71f77d26adc2702f3d78c4a7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-operator-inputs-v1.schema.json"
+    },
+    {
+      "gitObject": "32952d050583c88e88cf64f50f67b40ec6f3ba5d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-operator-path-v1.schema.json"
+    },
+    {
+      "gitObject": "aa1f181414c80342a625cd4ba3ec893e8ee876b9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-product-artifact-admission-v1.schema.json"
+    },
+    {
+      "gitObject": "9e51f24168cd893310ad2f2c5f5ecf4cdd46fc1a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-product-artifact-replay-v1.schema.json"
+    },
+    {
+      "gitObject": "86217d6aa282e8234c4e909b90e774937d26c0ae",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-product-artifact-replay-v2.schema.json"
+    },
+    {
+      "gitObject": "12ef700708bc52ed119655fd2b85044975cb0a31",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-product-artifact-set-v1.schema.json"
+    },
+    {
+      "gitObject": "42c6982bfc99e18a93cc7d35215850a4ca58035e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-product-artifact-set-v2.schema.json"
+    },
+    {
+      "gitObject": "aecaa13afa7146dc1d7872803c09bd6d7f588bfb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-product-dry-run-v1.schema.json"
+    },
+    {
+      "gitObject": "a21dd6184d3be3cd3fd65825f22750ce07bb5ca3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-readiness-v1.schema.json"
+    },
+    {
+      "gitObject": "2f4969fb3695282bd9c9dd904de115c42dbaf32c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-render-admission-v1.schema.json"
+    },
+    {
+      "gitObject": "e643516d2ba2d45d5e369906d688ae7fbcf13cc2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-resource-exposure-v1.schema.json"
+    },
+    {
+      "gitObject": "1aae8fbf214a9e63976ba3e0d1c61580e9dd7e92",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "schemas/sno-trial-workload-candidate-v1.schema.json"
+    },
+    {
+      "gitObject": "ad25ef2d1fbd831eb7527ff18a6aa78baf96bdda",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "scripts"
+    },
+    {
+      "gitObject": "b92cd4b47dbe513712c21be2c17e1eaebeac326a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/__init__.py"
+    },
+    {
+      "gitObject": "32b7c147de795ce4961ef9979296487b98444372",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/build_dependency_risk_evidence.py"
+    },
+    {
+      "gitObject": "99f0652a024eab267aecbcd34e386c57752a59eb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/build_red_hat_entitlement_statement.py"
+    },
+    {
+      "gitObject": "a07325f9f627002a049e2b3da004fdd4e90426f8",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/build_sno_trial_dependency_risk_evidence.py"
+    },
+    {
+      "gitObject": "48f06f15b539d42c2e2bdc14203a6cfb1c0a2bbc",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/collect_dependency_risk_evidence.sh"
+    },
+    {
+      "gitObject": "837b86baadd83fdf2da129c615f9e57aef26603a",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/collect_foundation_observer_authority.py"
+    },
+    {
+      "gitObject": "21e794dce711f1e2dba04c1939b54b98ca9b0239",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/collect_prerequisite_observation.py"
+    },
+    {
+      "gitObject": "6e5fdb6ac70bea8d6d118f45b91326af99d8f8f4",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/collect_sno_trial_dependency_risk_evidence.sh"
+    },
+    {
+      "gitObject": "adcb6dfcc6beeef8d3e001834f774b917cf19f99",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/configure_reference_lab_environment.py"
+    },
+    {
+      "gitObject": "c4da9b38ca9e4c8b35ba5c35380209bb848124fb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/configure_sno_trial_product_admission_environment.py"
+    },
+    {
+      "gitObject": "bc6ab7a2fe1dff60315fe41b0a842e8167da6544",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/dependency_risk_collection_execution.py"
+    },
+    {
+      "gitObject": "e6c875bc65fd75cefc31a08f9d8eecb34482c79a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/dependency_risk_contract.py"
+    },
+    {
+      "gitObject": "4f63c56b403a3c99a2c6bc7fcd6e3878e328d485",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/dependency_risk_custody_verification.py"
+    },
+    {
+      "gitObject": "23d360979905dfe03c2553eab3dce7923be93f36",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/dependency_risk_execution.py"
+    },
+    {
+      "gitObject": "a25398aa315a77b57201699b60c999be795b7179",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/foundation_apply_execution.py"
+    },
+    {
+      "gitObject": "cb2d31e1ffb1cda5bfd3d535fb7f9020a978f17e",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/foundation_apply_receipt.py"
+    },
+    {
+      "gitObject": "12a81ef3e5ddee6f251426f9cb31018b20fed70f",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/foundation_observation.py"
+    },
+    {
+      "gitObject": "e9715870f3e8b50e4da0fc4e806cffb360c9977c",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/foundation_observation_report.py"
+    },
+    {
+      "gitObject": "e4f17df470a47ac6530e89c91833ece365cc130b",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/foundation_plan_package.py"
+    },
+    {
+      "gitObject": "b2823ea4bed544cbb03c9f04a97c0503eb66f7bf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/foundation_plan_summary.py"
+    },
+    {
+      "gitObject": "c9eb9bb7aa6a6a886656c3f353609099fe165cd9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/github_environment_contract.py"
+    },
+    {
+      "gitObject": "047dd53a3a1b0a3cb2c8a709829c6ee3408384c3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/lab_service_publication.py"
+    },
+    {
+      "gitObject": "f70f4afd4cef454da7abfeb356636337dc2645ad",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/lab_service_publication_replay.py"
+    },
+    {
+      "gitObject": "0fbc5b2f147d9be81c9ca98d690909088feedf02",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/materialize_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "fbb3f36bbba669e2527ff5a743b9dcb3fb4fb2f1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/materialize_sno_trial_install_config.py"
+    },
+    {
+      "gitObject": "fb2ff98db86904d494382dfc6def69325af8f42b",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/observe_foundation_apply.sh"
+    },
+    {
+      "gitObject": "b8665f1fedad50ac90a9d9d34e06d10c8ed2473d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/openshift_toolchain_intake.py"
+    },
+    {
+      "gitObject": "9570414c3c9354086cc565530746b9ff7405bf27",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/operator_control_plane_readiness.py"
+    },
+    {
+      "gitObject": "fcf84ae604262ec2d6238aaa1f1fcb1e90ea40c7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/prerequisite_observation.py"
+    },
+    {
+      "gitObject": "9cbb15dc5e68f1a343514d3bba9a60b18065de0f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/production_model_artifact_custody.py"
+    },
+    {
+      "gitObject": "f39e3fc6909b297e93eef4e7c93579193a17cd53",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/production_model_artifact_custody_execution.py"
+    },
+    {
+      "gitObject": "bade6385dcc56058c644c1523f9e085de3c75781",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/production_model_artifact_custody_live.py"
+    },
+    {
+      "gitObject": "eb9f8a18093955ccf6de525b130e4919ae5d3eb2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/production_model_artifact_intake.py"
+    },
+    {
+      "gitObject": "8b8e4b61c70a627e39d0092ded8a255b3d86c6bc",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/publish_dependency_risk_collection.sh"
+    },
+    {
+      "gitObject": "541589ebaecaa0244d4626e8d3c759475b36d8cf",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/publish_foundation_plan_package.sh"
+    },
+    {
+      "gitObject": "90eb4f0c5f4d888a92d0754a4942a1eb5c74a328",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/publish_sno_trial_dependency_risk_collection.sh"
+    },
+    {
+      "gitObject": "84dccbeac6b9b11511c2858264a91084b44234c2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/render_install_config.py"
+    },
+    {
+      "gitObject": "22abb198959229b1043bcb66e937ba8cb8fb7ecd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/render_sno_trial_install_config.py"
+    },
+    {
+      "gitObject": "acee4e3f010ac736a89dc3ca9323c34e8003d078",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/review_foundation_plan_package.sh"
+    },
+    {
+      "gitObject": "bc27f1c941c1b90ea2bf1ed58d97422547cd8711",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/run_ephemeral_production_model_custody_runner.sh"
+    },
+    {
+      "gitObject": "dadf3ea775822fff16181144cf47332be15b2c6e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_cluster_observation.py"
+    },
+    {
+      "gitObject": "8cc411496d7eea8f8395e62fd3a4a3a3813acb52",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_dependency_dry_run.py"
+    },
+    {
+      "gitObject": "b173a06a680595710aceb910c9aa10158d08cf4c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_dependency_inputs.py"
+    },
+    {
+      "gitObject": "d94e390b6469e2906d6d865f7b77714735e5800b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_dependency_integrity.py"
+    },
+    {
+      "gitObject": "f0e5b871f43218cc46fc244121daa38734015e23",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_dependency_risk.py"
+    },
+    {
+      "gitObject": "3ed28108ddcec731719d6da81b6b638b9b91918f",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_dependency_risk_custody.py"
+    },
+    {
+      "gitObject": "7a126cd197efc12e94b59e020bbf8adffec9e319",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_dns_delegation.py"
+    },
+    {
+      "gitObject": "fba66b9acd276d25d4b23216657137d34e8eb3b6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_install_admission.py"
+    },
+    {
+      "gitObject": "e5433528307ce60d4e79f52a4f9812f7c71c824f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_network_hygiene.py"
+    },
+    {
+      "gitObject": "3cdc4165a2f1c044eb293b1b3c78150e74899206",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_operator_inputs.py"
+    },
+    {
+      "gitObject": "38c42c3ef33341a6adff2428992b5d9bef5be565",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_operator_path.py"
+    },
+    {
+      "gitObject": "bc150c1e1fb848cd14101b291814289108897a93",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_product_artifact_admission.py"
+    },
+    {
+      "gitObject": "c6575d8130d48f8582e038697d76998c4b122971",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_product_artifacts.py"
+    },
+    {
+      "gitObject": "ecb9c650aa56dc4810786b290d37aefc0fedd431",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_product_dry_run.py"
+    },
+    {
+      "gitObject": "ca5d78813722960d742017ecc5a91e5956b7bca0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_readiness.py"
+    },
+    {
+      "gitObject": "41c09a3172bb58d1d0fe99d33a2a662a07f33c1b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/sno_trial_resource_exposure.py"
+    },
+    {
+      "gitObject": "998c43f2cc8008430fa5d2a5b878c3747cf4dad7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/trial_lease.py"
+    },
+    {
+      "gitObject": "afb2996523dcb245f312faa867c0fd7c10fe043e",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/upload_production_model_artifact_custody.sh"
+    },
+    {
+      "gitObject": "01427cb4e686b7077d9f654ee1a75ca49e27ae7e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_admission.py"
+    },
+    {
+      "gitObject": "d161f7fae64a7d875bb10b20345affedc37add95",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_bom.py"
+    },
+    {
+      "gitObject": "3b76b89118ced345c26412e15b5f5e9bcc662963",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_gitops.py"
+    },
+    {
+      "gitObject": "df801bcd5d84a1d254f8441d00910540f8b14d1e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_gitops_candidate.py"
+    },
+    {
+      "gitObject": "46c2be926464d78234aa9a495a67f44ef615bd60",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_risk_collection_custody.py"
+    },
+    {
+      "gitObject": "6adbd63a612f600bf200052bc3cfb4bbf0d1d04f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_risk_collection_execution.py"
+    },
+    {
+      "gitObject": "d86ec5eabb63690c8d15fd95e1865dd7662f8e0c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_risk_custody_report.py"
+    },
+    {
+      "gitObject": "2217b9ef0ff6596d6de560f5bf9422cf8ef2ceff",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_risk_custody_verification.py"
+    },
+    {
+      "gitObject": "e8b9fae7eee1653f596e51cfcb1cf1a7f5119993",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_risk_execution.py"
+    },
+    {
+      "gitObject": "c29e4fd5e8561e1d5fd5a39cbda6440e188fe936",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_risk_intake.py"
+    },
+    {
+      "gitObject": "d56ab29d145a29f186ff61ea953bf03e051f4108",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_dependency_supply_chain.py"
+    },
+    {
+      "gitObject": "3bd3a0c37deb7a85f8c86fad30534c5d220e9118",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/validate_foundation_apply_execution.py"
+    },
+    {
+      "gitObject": "c54816c78bd7f421510a8cea1411b74036bebfa7",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/validate_foundation_observation.py"
+    },
+    {
+      "gitObject": "5163d003ca7b69138db9b08b49acd75741485dc8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_prerequisite_observation.py"
+    },
+    {
+      "gitObject": "747d6ba5d63a568b4c65142628c770e6d609e29f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_prerequisite_policy.py"
+    },
+    {
+      "gitObject": "ad968288fd46243f24a3f8bdad5ebfd4e7c1b668",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/validate_product_gitops.py"
+    },
+    {
+      "gitObject": "bd94617cd305a7cf4c5abaac018a1776c95d04e2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_production_model_artifact_candidate.py"
+    },
+    {
+      "gitObject": "ad9cba491d4c27ceaeaa2415b5d6193f251af68b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_production_model_artifact_custody_execution.py"
+    },
+    {
+      "gitObject": "05328d53c896dc3a460e0c847afa280a9bbb4134",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_reference_lab_contract_intake.py"
+    },
+    {
+      "gitObject": "6ad9e38aacd3dd63ec3abbef7d41e77089bbf0c0",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/validate_release_set.py"
+    },
+    {
+      "gitObject": "36babc6f50697277939c12b30e651459b8a6b203",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_rendered_gitops.py"
+    },
+    {
+      "gitObject": "3e68f0b8479510110ea340435331f3a8b1819a6d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_repository.py"
+    },
+    {
+      "gitObject": "e8b6dcd1c614552d11a5f25bbc33f845efaccfed",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_sno_trial_dependency_artifacts.py"
+    },
+    {
+      "gitObject": "908a8ddd702d60ac48a3647a03cf9f3e2e17beb5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "289270fcdc8f0cd2d9c40b711eca7141408601aa",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/validate_sno_trial_dependency_risk_custody_report.py"
+    },
+    {
+      "gitObject": "63f3d26f40608b599cabdbb93b882453263e5176",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_sno_trial_dependency_runtime_contracts.py"
+    },
+    {
+      "gitObject": "4b0099822cd3a66852de9a95a3b161754562cd85",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_sno_trial_profile.py"
+    },
+    {
+      "gitObject": "bce881f4ed25d72f17493a2b99f1f8e64cd215c7",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/validate_sno_trial_workload_candidate.py"
+    },
+    {
+      "gitObject": "e0cdf39449f138226b92edbbeca57e81c3b276ce",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/verify_and_apply_foundation_plan.sh"
+    },
+    {
+      "gitObject": "29485453ba9f3c2f826852e8cdff344b27303a17",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/verify_and_publish_dependency_risk_custody.sh"
+    },
+    {
+      "gitObject": "350fe2a9a60eac9ba94ee38c09675a6d58753e24",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/verify_and_publish_production_model_artifact_custody.sh"
+    },
+    {
+      "gitObject": "72df4f1642bff86078b77a8075bebc606363f7bb",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/verify_and_publish_sno_trial_dependency_risk_custody.sh"
+    },
+    {
+      "gitObject": "bb78b4110c3208e94bd989806f8c5cc58ae708d6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/verify_dependency_risk_collection.py"
+    },
+    {
+      "gitObject": "089da4593c0c5eb14c2b241df67c732cc8072f0e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/verify_dependency_risk_raw_custody.py"
+    },
+    {
+      "gitObject": "36465999cd9db2511bc8bfc6244e1a22070f5d9e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/verify_dependency_signatures.py"
+    },
+    {
+      "gitObject": "e80647b22cc5a4e0fd7ec2a1001f65284438a3d8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "scripts/verify_dependency_sources.py"
+    },
+    {
+      "gitObject": "386da93f0ff8b4cb387d04c05836d8c402e3712e",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/verify_foundation_plan_package.py"
+    },
+    {
+      "gitObject": "40d7ea347e9f9385a52dbfe47d33023dbeda4beb",
+      "mode": "100755",
+      "objectType": "blob",
+      "path": "scripts/verify_sno_trial_dependency_risk_raw_custody.py"
+    },
+    {
+      "gitObject": "ba09c37dbea81d3dd7b76285de3e0ac7e9730193",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services"
+    },
+    {
+      "gitObject": "beb7cfe081dc7066e4751777628708bddb970f5f",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/release-validation-receiver"
+    },
+    {
+      "gitObject": "07a4dac221b7cf057d321bbcd3f152f489f55122",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/.dockerignore"
+    },
+    {
+      "gitObject": "e75895a86e589c5d5601c492fbf17743bf9b246e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/Containerfile"
+    },
+    {
+      "gitObject": "c2b74f31fd90fbbfde67b8c04685cb31497e9a8f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/README.md"
+    },
+    {
+      "gitObject": "aaf85ee0a07089616b14eae48ca2379dcb72698d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/pyproject.toml"
+    },
+    {
+      "gitObject": "9ebfc4cb243a1bd05e230c20ae81eab3b69b9631",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/requirements-linux-amd64.lock"
+    },
+    {
+      "gitObject": "78c38754b8e61adb94604ffe1336ec7981ce282d",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/release-validation-receiver/src"
+    },
+    {
+      "gitObject": "3c73294e38ef53977a5e24574df2f94b220019b9",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/release-validation-receiver/src/orchestra_receiver"
+    },
+    {
+      "gitObject": "76fec942921792378cd832531980b4b78240ddcc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/__init__.py"
+    },
+    {
+      "gitObject": "6269400133c01024838dc585fa7a082835d12f1f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/app.py"
+    },
+    {
+      "gitObject": "0351db4cd10d6fccec4788f247110157f939a216",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/config.py"
+    },
+    {
+      "gitObject": "190d8d71e958fd975ce3499254e826431b927cbb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/contracts.py"
+    },
+    {
+      "gitObject": "b5a07e467970e8b9721f1c1e3aa58cc80fbd2247",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/errors.py"
+    },
+    {
+      "gitObject": "ad64cc9dbc0bcb45f2163ce3e96b180f49c36aa2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/github.py"
+    },
+    {
+      "gitObject": "801ebad5bdacd3149bff8bed57f74a5666e400a3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/gunicorn_config.py"
+    },
+    {
+      "gitObject": "040304805a327bd2989f3cd502aeddc752dd2e2b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/migrate.py"
+    },
+    {
+      "gitObject": "eea92aee055c494b7e4d09360cd9a9fef4d4cca0",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/migrations"
+    },
+    {
+      "gitObject": "06c5078813cdd3772e647a503d465362b77a4ca8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/migrations/001_receiver.sql"
+    },
+    {
+      "gitObject": "3972239e8ddb228f8898e1ff018c4afb0ccd1d14",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/signing.py"
+    },
+    {
+      "gitObject": "60d99471598b3edd79eebbeaae2c00c08f53c493",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/store.py"
+    },
+    {
+      "gitObject": "9aef36441efc8e0928e5ddfe3803338dba49ec50",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/src/orchestra_receiver/worker.py"
+    },
+    {
+      "gitObject": "4d738737c6cc5a164581cc9a02668116c44928a4",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/release-validation-receiver/tests"
+    },
+    {
+      "gitObject": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/__init__.py"
+    },
+    {
+      "gitObject": "1498a5350233f95715dfa779dbf4e23bc42715ca",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/helpers.py"
+    },
+    {
+      "gitObject": "5fb86adf1ebe71e3bd3c56320492ae82976bb07a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/test_app.py"
+    },
+    {
+      "gitObject": "4c4e4e7328475e62ecd993cc2e1abcd72c181210",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/test_config.py"
+    },
+    {
+      "gitObject": "0c64a6602ec25ea0d30f795fe04705ad3e0bb70f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/test_contracts.py"
+    },
+    {
+      "gitObject": "3546b65597e2d9f5bc051a93accea08c69eff5de",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/test_github.py"
+    },
+    {
+      "gitObject": "4df19b56a358975844689fa1e82d61e8fa250104",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/test_store_integration.py"
+    },
+    {
+      "gitObject": "81bb7e67ba223a4ed89d77779a996c58cb4f64dc",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/release-validation-receiver/tests/test_worker.py"
+    },
+    {
+      "gitObject": "9dbc761593204598f7f1d14a759d081f482750bc",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/synthetic-tenant-kit"
+    },
+    {
+      "gitObject": "07a4dac221b7cf057d321bbcd3f152f489f55122",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/.dockerignore"
+    },
+    {
+      "gitObject": "880c69d724d54cd83ed57c9995cb68cf80bfbd52",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/Containerfile"
+    },
+    {
+      "gitObject": "7858555b65f7466d8d6b1e01f8d5546075493aea",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/README.md"
+    },
+    {
+      "gitObject": "c7dc7d3f12fa14fd70b4117152ebefbe8d8e873e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/pyproject.toml"
+    },
+    {
+      "gitObject": "51c4746b3ba665cda5896d23c3587db39c885272",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/requirements-linux-amd64.in"
+    },
+    {
+      "gitObject": "d672f30b463384b4b947eb9f1bf6f4e10bfed965",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/requirements-linux-amd64.lock"
+    },
+    {
+      "gitObject": "d8d53e3a1c4a3e0bf67bc29671ce373f44f915d1",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/synthetic-tenant-kit/src"
+    },
+    {
+      "gitObject": "a56271991e289eeccc23943f863ca1d8c4f80bc0",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic"
+    },
+    {
+      "gitObject": "5d48062e5b4fc48bc71582d4f04672bacf964c22",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/__init__.py"
+    },
+    {
+      "gitObject": "3b3e7bf435e90139b9e5ea657a0c7859a0c3814c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/config.py"
+    },
+    {
+      "gitObject": "e56c527cfb392f01adb0eed2dced035a4fa8aa7a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/contracts.py"
+    },
+    {
+      "gitObject": "6ec0f51651db108b36ca08fde8a4bfa5f8f90857",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/gateway.py"
+    },
+    {
+      "gitObject": "d80cc292c34d2b5e741f539900ba30078e0083db",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/mcp_surface.py"
+    },
+    {
+      "gitObject": "929ab0763fc3ceb65b5b5b26c49a1ef2c782de2c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/oidc.py"
+    },
+    {
+      "gitObject": "02a534a8170050de214687c1c6b3ba4af1008be9",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/src/orchestra_synthetic/server.py"
+    },
+    {
+      "gitObject": "b80e65c1b2ad05709fe3f496a59753197a26acca",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "services/synthetic-tenant-kit/tests"
+    },
+    {
+      "gitObject": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/tests/__init__.py"
+    },
+    {
+      "gitObject": "7eb1057796f79d240ab3be3911fd585cf549ab29",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/tests/helpers.py"
+    },
+    {
+      "gitObject": "a0a820b91741e27dd94e8844ec0286cbb034bd2c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/tests/test_config.py"
+    },
+    {
+      "gitObject": "1c6a9358999e48b0c6c5b39099be5e012543fc31",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/tests/test_gateway.py"
+    },
+    {
+      "gitObject": "9e4ef1c346c7e8871d2b942226b3dbd1746729d6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/tests/test_mcp_surface.py"
+    },
+    {
+      "gitObject": "c28ea3cfdfe2fdfea5d00b9d329994ef5840a9d2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "services/synthetic-tenant-kit/tests/test_oidc.py"
+    },
+    {
+      "gitObject": "2575b889026c220f4acf7407895aef3df3244ca7",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests"
+    },
+    {
+      "gitObject": "c1fe84e8fe0549874bc124791d789fbb45345d90",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/__init__.py"
+    },
+    {
+      "gitObject": "19f7e574b6fff22d04983c2252ef93e03515d964",
+      "mode": "040000",
+      "objectType": "tree",
+      "path": "tests/fixtures"
+    },
+    {
+      "gitObject": "30284fbc85dc856a686e435138007948984a52fd",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/platform-rc10-certification-runner-toolchain-lock.json"
+    },
+    {
+      "gitObject": "1721b54dde99d738d2d2abfcb8be751f7e976ab5",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/production-model-artifact-intake-simulated.json"
+    },
+    {
+      "gitObject": "583a027a85c844758c24088d1dc145c993c328e3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-cloud-pending.json"
+    },
+    {
+      "gitObject": "eccaf4962438051fa8d877339f567b24e5244d8b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-cluster-healthy.json"
+    },
+    {
+      "gitObject": "2ff58718888d404c6029d80a2c2752f40d7b0e57",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-dns-delegation-missing.json"
+    },
+    {
+      "gitObject": "48a96191f0fafbfda875c9149195c20606d80e58",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-network-dirty.json"
+    },
+    {
+      "gitObject": "a15e26c4d9cfad04a9e981ff3ce3dd0ee5883f02",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-operator-path-ready.json"
+    },
+    {
+      "gitObject": "a24b940fcc070eba751c10d453057ee611ab3452",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-product-dry-run-observed.json"
+    },
+    {
+      "gitObject": "398183fe8af0a9d1f3dbf95d77f00121615361f8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/fixtures/sno-trial-resource-exposure-active.json"
+    },
+    {
+      "gitObject": "c28859d4c5b8799f82c6d26115e7489d1d470398",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_configure_sno_trial_product_admission_environment.py"
+    },
+    {
+      "gitObject": "29605e3fd678c6ce5b83d3d4e40ff26831a7fa61",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_contracts.py"
+    },
+    {
+      "gitObject": "6357388267b781f44519801a572e848235f77a39",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_admission.py"
+    },
+    {
+      "gitObject": "2daa3749344bbe213d2da071595bff47aa2bc725",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_bom.py"
+    },
+    {
+      "gitObject": "aa97f5f5ced7cc495ca89d2ff171e8bf1375c343",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_gitops.py"
+    },
+    {
+      "gitObject": "bf7bc029c8f6abcd70e803cf6149dd8c21f80041",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_gitops_candidate.py"
+    },
+    {
+      "gitObject": "9d8050386ce9a81daea487e80e8b395c8d390fbf",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_risk_collection.py"
+    },
+    {
+      "gitObject": "c1163e42e5b89b43f2297ce16b8c3aca9658299a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_risk_collection_execution.py"
+    },
+    {
+      "gitObject": "b150c2ac3fba98a95dc962014b9752924ca56394",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_risk_custody_verification.py"
+    },
+    {
+      "gitObject": "b1e73fce54f48132a1afeef9c3222cbd94f524a3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_risk_execution.py"
+    },
+    {
+      "gitObject": "24782070e581a14a8e62a0fef56ebda59988ed0a",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_risk_intake.py"
+    },
+    {
+      "gitObject": "75ceb469a3ddcb9521526ee66c162074772cd806",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_signature_verification.py"
+    },
+    {
+      "gitObject": "a6526ba2a5dba498833c95f4117580bbf7abd5b2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_source_verification.py"
+    },
+    {
+      "gitObject": "4e919407c777050a701e91d01655a64c339b611e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_dependency_supply_chain.py"
+    },
+    {
+      "gitObject": "896f13dff3d2985c4d950bd12d1685b686c36fb6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_foundation_apply_execution.py"
+    },
+    {
+      "gitObject": "f8d10a9c6f9dee7651d367010b9df3c22fda88c3",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_foundation_cost_controls.py"
+    },
+    {
+      "gitObject": "ac9ff229bfbbe43f7e073164f91c5ea7ce89a592",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_foundation_observation.py"
+    },
+    {
+      "gitObject": "bdd449edf1f870cda2be3fc59aff419991d06305",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_foundation_plan_summary.py"
+    },
+    {
+      "gitObject": "9590a438a0154db31b7dbcb395324670b9f4dee6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_github_environment_contract.py"
+    },
+    {
+      "gitObject": "483783017c8aa0657abbacc5937ba2a8e0240bdb",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_lab_service_publication.py"
+    },
+    {
+      "gitObject": "498a43fe3b2b86525075fef77c607ed3d4e9424e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_lab_service_publication_replay.py"
+    },
+    {
+      "gitObject": "9d27f68792e154bc804aa30b26d488a3156a0214",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_materialize_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "ee48acb65de6ae6a0d26d29bb376d5d159922c93",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_openshift_toolchain_intake.py"
+    },
+    {
+      "gitObject": "e6f999f6bffd43067fa96308030801ee1efe0ce6",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_operator_control_plane_readiness.py"
+    },
+    {
+      "gitObject": "6f9bc06eaf91fa29d3cc54e149edfa5e894d4cab",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_prerequisite_observation.py"
+    },
+    {
+      "gitObject": "91e98d5447c62937d7b09f8cc88e222473c2991d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_product_gitops.py"
+    },
+    {
+      "gitObject": "44ec0ed887c592a468fe27a94f6139384a7c81ca",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_production_model_artifact_candidate.py"
+    },
+    {
+      "gitObject": "271b5ecc234f7fdc39e7d520555a4559aa74508c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_production_model_artifact_custody.py"
+    },
+    {
+      "gitObject": "b08419fab14d05fce7577e3d083c845625fa30e8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_production_model_artifact_custody_execution.py"
+    },
+    {
+      "gitObject": "d6b897ab717824ef80fa113b9a2fa21b4024ae9e",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_production_model_artifact_custody_live.py"
+    },
+    {
+      "gitObject": "13b40e1f4ae487c6fe933f009cbaae87636e9ca2",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_production_model_artifact_intake.py"
+    },
+    {
+      "gitObject": "e8cc4ca26ecf83e103825193036f66d27e499a93",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_reference_lab_contract_intake.py"
+    },
+    {
+      "gitObject": "a817c11694bc8e1ea9b232ef08caf5a515ca89d1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_release_set.py"
+    },
+    {
+      "gitObject": "f0e8f2578abe4009d673df9978a2d050fd83bae8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_service_dependencies.py"
+    },
+    {
+      "gitObject": "e1aeaa9b4831e861cd82ae14e6151aa7f8e1ef60",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_cluster_observation.py"
+    },
+    {
+      "gitObject": "9e3cc9a8c716cde0b75eb97c3c529f422519d0a8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_artifacts.py"
+    },
+    {
+      "gitObject": "682aa86545b763a369acecfd3f7e0b3cd04f29fe",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_dry_run.py"
+    },
+    {
+      "gitObject": "8f726b4c566c379548da42b913b2ddc6c7c0c635",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_inputs.py"
+    },
+    {
+      "gitObject": "0ac60cfe8bd18c338fde305e3af0d274aeeb51a1",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_integrity.py"
+    },
+    {
+      "gitObject": "53d20656344533c9ab64d59cd37cfdd4064f8aef",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_manifests.py"
+    },
+    {
+      "gitObject": "a58712e5452471043d305a855b3ab74a18347aef",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_risk.py"
+    },
+    {
+      "gitObject": "5323fe480043761028ff028967bd90f245dde57f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_risk_custody.py"
+    },
+    {
+      "gitObject": "e52270cdb71ba3d38a08460a9b812f3c89afa576",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dependency_runtime_contracts.py"
+    },
+    {
+      "gitObject": "fdb25a2bd261782f0d0fc55a55664ca662165e16",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_dns_delegation.py"
+    },
+    {
+      "gitObject": "f3b992abf1da62cb3031cdf9991f5f13460c000c",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_install_admission.py"
+    },
+    {
+      "gitObject": "bd2065c3f9801b8f6dac9d5681981b12cc061368",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_network_hygiene.py"
+    },
+    {
+      "gitObject": "96b0e717ad2abe8791ec3871080da1b01ba97dc8",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_operator_inputs.py"
+    },
+    {
+      "gitObject": "ae1b0c52fcb55c89b61a7aa5879c05c020b06774",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_operator_path.py"
+    },
+    {
+      "gitObject": "176c73b9800a1404cb4be0746a34a9e8e390170b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_product_artifact_admission.py"
+    },
+    {
+      "gitObject": "ea2066c390d030fc7e9c425441f2ab7cf02fc24d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_product_artifacts.py"
+    },
+    {
+      "gitObject": "3a7d1076c600399bd6761818eb69ea3782a43884",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_product_dry_run.py"
+    },
+    {
+      "gitObject": "6dec231ca6d760b3375acbf786ad6416fe5bfbf0",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_profile.py"
+    },
+    {
+      "gitObject": "c50b82b3a1fefb63fa55583adc61ac938af2359b",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_readiness.py"
+    },
+    {
+      "gitObject": "d890fbf4ee8fb5c74271fc41bde65506846ddc6d",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_resource_exposure.py"
+    },
+    {
+      "gitObject": "fb1a309ff1b61d5ff2d519f5f3c7755c1b828c6f",
+      "mode": "100644",
+      "objectType": "blob",
+      "path": "tests/test_sno_trial_workload_candidate.py"
+    }
+  ]
+}
