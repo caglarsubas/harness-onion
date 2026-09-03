@@ -124,7 +124,11 @@ edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
 
 ## Warm-source mapping
 
-Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
+Public source provenance is recorded in the meta repository through the exact
+five-source reuse map and path index. The last three repositories entered that
+authority only through signed metadata-only tree observations; product
+implementation identities cannot mount or read a warm checkout. No source path
+is copy-authorized.
 
 ## PR packets
 

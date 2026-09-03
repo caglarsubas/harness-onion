@@ -133,7 +133,11 @@ Each current authority is writable by exactly one `Harness-Engineering` packet. 
 
 ## Warm-source mapping
 
-Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
+Public source provenance is recorded only in `architecture/reuse-map.yaml`,
+`architecture/reuse-path-index.yaml`, packet `sourceReuse` entries, and the three
+signed metadata-only tree observations. All five approved warm repositories are
+publicly named and exact-commit pinned. Their paths are unavailable to product
+implementation identities, and no source is copy-authorized.
 
 The user-authorized `data.harness/v1` observation is a manual `MET-002`
 activity under the exact `referenceObservationExecution` binding. A separately
@@ -152,6 +156,16 @@ network connection, implementation-identity access, and copy authority. Each
 repository uses its own packet, branch, PR, signed authority, and canonical
 metadata-only report. The three reports may later populate reference-only path
 authorities; they cannot authorize a port.
+
+`MET-P0-002` consumes those reports without opening a warm checkout. It freezes
+all five source trees into 905 discovery-tree and 4,202 pending-blob records,
+retains zero copy authorizations, and records exact dependency-license evidence
+without promoting classification into release approval.
+
+Repository-plan paragraphs created before the observation packets that call
+three inputs non-public are retained only as packet-era history. They are
+non-normative and superseded by the current machine-readable five-source
+authorities and the Phase-0 audit record.
 
 ## PR packets
 

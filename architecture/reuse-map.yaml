@@ -12,11 +12,28 @@ sources:
     destinations: [contracts, knowledge-plane, execution-plane, trust-plane, industry-packs, distribution, conformance-labs]
     excluded: [hmac-production-signing, fused-retrieval-memory-runtime-state]
     excludedPathPatterns: ['(?i)(^|[/_\\.-])hmac([^/_\\.-]*)([/_\\.-]|$)']
-nonPublicPlanningInputs:
-  count: 3
-  disposition: METADATA_OMITTED_FROM_PUBLIC_REPOSITORY
-  implementationAccess: PROHIBITED
-  requirementDisposition: DISTILLED_INTO_INDEPENDENT_PUBLIC_CONTRACTS_AND_ACCEPTANCE_CRITERIA
+  - repository: git@github.com:caglarsubas/agent-hook-v2.git
+    commit: 2b521dc03a43b994bc52c76652306b1a77bf9572
+    licenseDisposition: path-review-required-before-copy
+    destinations: [contracts, control-plane, execution-plane, trust-plane, operator, conformance-labs]
+    excluded: [live-cloud-actions, hosted-provider-keys, direct-production-mutation, embedded-credentials, billable-observability]
+    excludedPathPatterns: ['(?i)(^|/)(?:\.env|id_rsa|id_ed25519|credentials\.json|service-account\.json)$']
+  - repository: git@github.com:caglarsubas/orchestra-openshift-reference-lab.git
+    commit: ba615515af84760a0accb31c37b815f9820f06d2
+    licenseDisposition: path-review-required-before-copy
+    destinations: [runtime-plane, trust-plane, operator, distribution, conformance-labs]
+    excluded: [cloud-provisioning, billable-capacity-creation, cluster-credential-material, mutable-images]
+    excludedPathPatterns: ['(?i)(^|/)(?:\.env|id_rsa|id_ed25519|credentials\.json|service-account\.json)$']
+  - repository: git@github.com:caglarsubas/planeon-orchestra-python-sdk.git
+    commit: 3a4012d809e6ed00a3f05be940c5278eac20a166
+    licenseDisposition: path-review-required-before-copy
+    destinations: [contracts, sdks, control-plane, execution-plane, conformance-labs]
+    excluded: [provider-keys, hosted-endpoints, remote-telemetry-defaults, proprietary-compatibility-shortcuts]
+    excludedPathPatterns: ['(?i)(^|/)(?:\.env|id_rsa|id_ed25519|credentials\.json|service-account\.json)$']
+sourceInventory:
+  approvedRepositoryCount: 5
+  publiclyRecordedCount: 5
+  metadataOmittedCount: 0
   copyAuthorization: NONE
 pathAuthority: architecture/reuse-path-index.yaml
 authorizationAuthority: legal/source-reuse-authorization.yaml

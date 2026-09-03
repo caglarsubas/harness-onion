@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "harness.planeon.ai/phase-zero-dependency-license-inventory/v1alpha1",
+  "recordedAt": "2026-09-04",
+  "scope": "PHASE_ZERO_SOURCE_AND_LOCK_METADATA",
+  "policy": "legal/third-party-license-policy.yaml",
+  "releaseBoundary": "Classification is not release approval. Every release still requires an immutable SBOM, notices, and any explicit-review decision.",
+  "repositories": [
+    {"repository": "Harness-Engineering", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "2bf8819737149b847ee1ecd534ba472338afd1aa", "sourceLicense": "Apache-2.0", "licenseSha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4", "dependencyEvidence": "LOCK_METADATA_NO_SPDX", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-contracts", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "2146278a95344cd2a8e22596b2f315b46edffc88", "sourceLicense": "Apache-2.0", "licenseSha256": "9adadb0535c71af2dc313e30e9a1ee4028dc359595ba9912c77c571a8db507fe", "dependencyEvidence": "LOCK_METADATA_NO_SPDX", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-sdks", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "bd26ede4fea094de7fe53b784d50c1c51e001938", "sourceLicense": "Apache-2.0", "licenseSha256": "42eabded550b5567b86507685df9e4de6a453b9c1d8bf98af00af499876def53", "dependencyEvidence": "NO_EMBEDDED_LICENSE_INVENTORY", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-industry-packs", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "118296af0bcf85ef1a4983c23725c215ba6c91ed", "sourceLicense": "Apache-2.0", "licenseSha256": "c09e359e19201c825fa8a72a1781867bb5f7b19c745e5220b38b4be201585bde", "dependencyEvidence": "ind-wg-001-wheelhouse", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-control-plane", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "97e461aa22e34002c7407555750a93b69f1b750c", "sourceLicense": "Apache-2.0", "licenseSha256": "2d3b806e6fd270f11819d0f797f721747adb0d497760e1b9053b6cd1fae4cf54", "dependencyEvidence": "control-plane-package-lock", "releaseDisposition": "BLOCKED_UNTIL_SBOM_AND_LGPL_REVIEW"},
+    {"repository": "mas-harness-runtime-plane", "sourceState": "PLANNED_NOT_CREATED", "mainCommit": null, "sourceLicense": "Apache-2.0-PLANNED", "licenseSha256": null, "dependencyEvidence": "NOT_APPLICABLE_NO_SOURCE", "releaseDisposition": "NOT_RELEASE_CANDIDATE"},
+    {"repository": "mas-harness-model-plane", "sourceState": "PLANNED_NOT_CREATED", "mainCommit": null, "sourceLicense": "Apache-2.0-PLANNED", "licenseSha256": null, "dependencyEvidence": "NOT_APPLICABLE_NO_SOURCE", "releaseDisposition": "NOT_RELEASE_CANDIDATE"},
+    {"repository": "mas-harness-knowledge-plane", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "2056405d747f10bcea36f089fcd6f2de474b3ee5", "sourceLicense": "Apache-2.0", "licenseSha256": "f48462feaecba4e1572b554046d7a50fab0bf437e4d7b7ced4c312a41e81085d", "dependencyEvidence": "LOCK_METADATA_NO_SPDX", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-execution-plane", "sourceState": "PLANNED_NOT_CREATED", "mainCommit": null, "sourceLicense": "Apache-2.0-PLANNED", "licenseSha256": null, "dependencyEvidence": "NOT_APPLICABLE_NO_SOURCE", "releaseDisposition": "NOT_RELEASE_CANDIDATE"},
+    {"repository": "mas-harness-trust-plane", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "ac5184fe3e993043d97620e3e3e9a03e3d816b78", "sourceLicense": "Apache-2.0", "licenseSha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4", "dependencyEvidence": "trust-001-wheelhouse,trust-002-wheelhouse", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-operator", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "0fa716fae4009f4fc63861f808f9e794f8925999", "sourceLicense": "Apache-2.0", "licenseSha256": "a8495ede7427ad1b2f5c0f402989c986ab58f8ef3b732e921161793fbdd1f64e", "dependencyEvidence": "LOCK_METADATA_NO_SPDX", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-distribution", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "6ef7273f0674c3d39f2bd5becf084a4fd16c590c", "sourceLicense": "Apache-2.0", "licenseSha256": "2d3b806e6fd270f11819d0f797f721747adb0d497760e1b9053b6cd1fae4cf54", "dependencyEvidence": "LOCK_METADATA_NO_SPDX", "releaseDisposition": "BLOCKED_UNTIL_SBOM"},
+    {"repository": "mas-harness-conformance-labs", "sourceState": "PUBLIC_MAIN_PRESENT", "mainCommit": "30877d289d389b29d3da9eb9a3c083c9ebc33382", "sourceLicense": "Apache-2.0", "licenseSha256": "2d3b806e6fd270f11819d0f797f721747adb0d497760e1b9053b6cd1fae4cf54", "dependencyEvidence": "LOCK_METADATA_NO_SPDX", "releaseDisposition": "BLOCKED_UNTIL_SBOM"}
+  ],
+  "evidenceSources": [
+    {"id": "control-plane-package-lock", "repository": "mas-harness-control-plane", "sourcePath": "package-lock.json", "sourceSha256": "362ccf86489852256e36585ad1241c76a9c094d04cf8a35c9c2554e2f5e15cf7", "componentCount": 167, "licensedComponentCount": 167, "missingLicenseCount": 0, "expressions": ["0BSD", "Apache-2.0", "Apache-2.0 AND LGPL-3.0-or-later", "Apache-2.0 AND LGPL-3.0-or-later AND MIT", "BSD-2-Clause", "BSD-3-Clause", "CC-BY-4.0", "ISC", "LGPL-3.0-or-later", "MIT", "MPL-2.0"]},
+    {"id": "ind-wg-001-wheelhouse", "repository": "mas-harness-industry-packs", "sourcePath": "root-owned offline inventory wheelhouse-ind-wg-001.licenses.json", "sourceSha256": "d4875eb83cfca4774fd0c84f91647bda759cc32cd0beb75191600c68894f7951", "componentCount": 19, "licensedComponentCount": 19, "missingLicenseCount": 0, "expressions": ["Apache-2.0", "Apache-2.0 OR BSD-2-Clause", "BSD-2-Clause", "BSD-3-Clause", "MIT", "PSF-2.0", "W3C-20150513"]},
+    {"id": "trust-001-wheelhouse", "repository": "mas-harness-trust-plane", "sourcePath": "root-owned offline inventory wheelhouse-trust-001.licenses.json", "sourceSha256": "9ebb156068bd98fdf89bd428df8358b75af92d9ddff509a3bc445f07a3451652", "componentCount": 4, "licensedComponentCount": 4, "missingLicenseCount": 0, "expressions": ["Apache-2.0", "Apache-2.0 OR BSD-3-Clause", "BSD-3-Clause", "MIT"]},
+    {"id": "trust-002-wheelhouse", "repository": "mas-harness-trust-plane", "sourcePath": "root-owned offline inventory wheelhouse-trust-002.licenses.json", "sourceSha256": "93872c0cd488177149b81d26eb65610f34dd12ba3acc7189fc6e8e2f159cabac", "componentCount": 4, "licensedComponentCount": 4, "missingLicenseCount": 0, "expressions": ["Apache-2.0", "Apache-2.0 OR BSD-3-Clause", "BSD-3-Clause", "MIT"]}
+  ],
+  "discoveredExpressions": [
+    {"expression": "0BSD", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "Apache-2.0", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "Apache-2.0 AND LGPL-3.0-or-later", "classification": "OPTIONAL_EXPLICIT_REVIEW", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "DENY_RELEASE_WITHOUT_APPROVED_DECISION"},
+    {"expression": "Apache-2.0 AND LGPL-3.0-or-later AND MIT", "classification": "OPTIONAL_EXPLICIT_REVIEW", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "DENY_RELEASE_WITHOUT_APPROVED_DECISION"},
+    {"expression": "Apache-2.0 OR BSD-2-Clause", "classification": "ALLOWED_EXCEPTION_EXPRESSION", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_PINNED_SOURCE_LICENSE_TEXT_SBOM_AND_NOTICE"},
+    {"expression": "Apache-2.0 OR BSD-3-Clause", "classification": "ALLOWED_EXCEPTION_EXPRESSION", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_PINNED_SOURCE_LICENSE_TEXT_SBOM_AND_NOTICE"},
+    {"expression": "BSD-2-Clause", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "BSD-3-Clause", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "CC-BY-4.0", "classification": "OPEN_CONTENT", "useKind": "CONTENT_DATASET", "components": ["caniuse-lite@1.0.30001810"], "releaseOutcome": "ALLOW_ONLY_AS_ATTRIBUTED_NON_RUNTIME_CONTENT"},
+    {"expression": "ISC", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "LGPL-3.0-or-later", "classification": "OPTIONAL_EXPLICIT_REVIEW", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "DENY_RELEASE_WITHOUT_APPROVED_DECISION"},
+    {"expression": "MIT", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "MPL-2.0", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "PSF-2.0", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"},
+    {"expression": "W3C-20150513", "classification": "DEFAULT_ALLOWED", "useKind": "CODE_DEPENDENCY", "releaseOutcome": "ALLOW_ONLY_WITH_SBOM_AND_NOTICE"}
+  ],
+  "approvedButNotObservedExpressions": [
+    {"expression": "LGPL-3.0-only", "classification": "OPTIONAL_EXPLICIT_REVIEW"}
+  ]
+}

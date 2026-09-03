@@ -1,15 +1,15 @@
 schemaVersion: harness.planeon.ai/source-authorization/v1alpha1
 status: recorded-repository-scope-authorization
-recordedAt: 2026-08-30
+recordedAt: 2026-09-04
 basis: >-
   The user identified warm-start repositories as owned reference material while
   requiring their code and GitHub state to remain untouched. This public record
-  covers only the two publicly disclosed repositories. Three non-public planning
-  inputs were distilled into independent contracts and acceptance criteria; all
-  of their repository metadata is deliberately omitted and they are unavailable
-  to implementation identities. This records repository-scope consent for
-  inspection only; it does not assert path-level authorship, exclusive ownership,
-  a license grant, or permission to copy any current blob.
+  covers all five user-approved repositories at immutable commits. The final
+  three were observed only through separately authorized metadata-only full-tree
+  sessions; no source text entered the implementation identity. This records
+  repository-scope consent for inspection only; it does not assert path-level
+  authorship, exclusive ownership, a license grant, or permission to copy any
+  current blob.
 targetLicense: Apache-2.0
 scopeSource: architecture/reuse-map.yaml
 conditions:
@@ -84,8 +84,33 @@ twoRepositoryTransaction:
   mergeRule: no destination merge is permitted until the APPLIED record and source-material commit validate; merge evidence is recorded afterward and is never self-referential
   sourceRepositoryMutation: forbidden
   missingOrMismatchedRecord: DENY_COPY
+observationEvidence:
+  - packetId: MET-OBS-AH-001
+    repository: git@github.com:caglarsubas/agent-hook-v2.git
+    commit: 2b521dc03a43b994bc52c76652306b1a77bf9572
+    report: architecture/observations/agent-hook-v2-tree.json
+    reportSha256: 0c94377f0ae6bf7ec7d70d521c411ff6883614cb2cebca2a1243cea1ce775339
+    treeRecords: 822
+    blobRecords: 3046
+    copyAuthority: NONE
+  - packetId: MET-OBS-OCP-001
+    repository: git@github.com:caglarsubas/orchestra-openshift-reference-lab.git
+    commit: ba615515af84760a0accb31c37b815f9820f06d2
+    report: architecture/observations/orchestra-openshift-reference-lab-tree.json
+    reportSha256: c0cab3b3c294ab0db09f19215ad51f3ca5b09c71bb007fef2b894f7588d3f41b
+    treeRecords: 39
+    blobRecords: 404
+    copyAuthority: NONE
+  - packetId: MET-OBS-SDK-001
+    repository: git@github.com:caglarsubas/planeon-orchestra-python-sdk.git
+    commit: 3a4012d809e6ed00a3f05be940c5278eac20a166
+    report: architecture/observations/planeon-orchestra-python-sdk-tree.json
+    reportSha256: aa41c2d2b781e6776724367b3cf931d23b6812cc14ecb4a27c4f6c0b69ef61d7
+    treeRecords: 24
+    blobRecords: 237
+    copyAuthority: NONE
 currentInventory:
-  treeDiscoveryRecords: 20
-  blobPendingRecords: 515
+  treeDiscoveryRecords: 905
+  blobPendingRecords: 4202
   blobCopyAuthorizedRecords: 0
   portingAuthorizationRecords: 0
