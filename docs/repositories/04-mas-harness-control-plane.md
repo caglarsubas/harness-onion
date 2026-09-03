@@ -148,6 +148,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `CTRL-005-profile-lock-bundle`: profile review/explanation, offline approval, lock digest, bundle request, and signed-bundle status.
 7. `CTRL-006-security-e2e`: RLS denial, CSRF/session, tenant isolation, tamper evidence, accessibility, Playwright journey, and dependency remediation.
 8. `CTRL-007-tenant-harness-overview`: ordered status projections, RLS APIs, platform-operator portfolio, tenant overview, plane/harness drill-down, interactive onion plus accessible list, stale-source behavior, WCAG 2.2 AA, and zero-public-browser-request evidence. The coding brief is [`TENANT_HARNESS_OVERVIEW.md`](../TENANT_HARNESS_OVERVIEW.md).
+9. `CTRL-FIX-002-phase0-ui-security`: native-link onion semantics, explicit full-digest access, light/dark theme closure, stripe-free status treatment, and tenant-versus-platform audit-table regression coverage.
 
 ## `CTRL-001` bootstrap authority
 

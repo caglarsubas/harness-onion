@@ -1,0 +1,16 @@
+id: IND-FIX-001
+repository: mas-harness-industry-packs
+branch: codex/ind-fix-001-fork-guard
+objective: Prevent untrusted public-fork pull requests from scheduling code on the self-hosted industry-pack runner while preserving local and same-repository verification.
+predecessors: [MET-P0-001, IND-WG-005]
+allowedPaths: [".github/workflows/verify.yml", "ci/targets/ind-fix-001.json", "tests/bootstrap/test_static_contract.py"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Preserves credential-free self-hosted CI boundary", "Preserves industry-pack verification semantics"]
+deliverables: ["Exact same-repository pull-request guard on the self-hosted job.", "Regression test that rejects absent or weakened fork guards."]
+excluded: ["Industry content changes, hosted runners, secrets, cloud access, and warm-source access."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","ind-fix-001-regression"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Fork PRs cannot schedule the self-hosted job.", "Same-repository PR and push verification remain enabled.", "Offline regression and zero-bill checks pass."]
+rollback: Revert the guard and its regression together only if an equally strict pre-scheduling trust boundary replaces them.

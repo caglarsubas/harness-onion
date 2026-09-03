@@ -1,0 +1,16 @@
+id: CTRL-FIX-002
+repository: mas-harness-control-plane
+branch: codex/ctrl-fix-002-phase0-ui-security
+objective: Correct Phase-0 control-plane security regression coverage and make the tenant harness overview semantically accessible, theme-complete, and digest-transparent.
+predecessors: [MET-P0-001, CTRL-007]
+allowedPaths: ["apps/portal/src/app/", "apps/portal/src/components/HarnessOnion.tsx", "apps/portal/src/styles/", "apps/portal/src/test/", "apps/portal/e2e/", "ci/targets/ctrl-fix-002.json", "tests/security/rls.test.ts"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes tenant harness overview contract", "Preserves native link semantics and accessible responsive equivalence", "Preserves tenant-scoped RLS and platform-owned audit-table isolation"]
+deliverables: ["Onion objects remain native links without listbox/option role overrides or false selection state.", "Full evidence digests are available in visible or explicitly labelled accessible text.", "Light and dark themes, local font assets or a documented local-first stack, and stripe-free status treatments pass UI tests.", "RLS regression distinguishes tenant-owned tables from the globally owned append-only operator audit table and asserts exact privilege revocation."]
+excluded: ["API contract changes, tenant data model changes, audit-table RLS, external fonts, analytics, paid services, and warm-source access."]
+prefetchCommands: [["make","prefetch"]]
+offlineAcceptanceCommands: [["make","ctrl-fix-002-regression"],["make","security"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Component, browser, type, build, security, and zero-bill checks pass offline.", "Native-link semantics and non-color status labels are asserted.", "Full digests are programmatically exposed without title-only dependence.", "Dark theme and reduced-motion/forced-colors behavior remain valid.", "The platform audit table stays globally isolated by revocation while tenant tables retain org_id RLS."]
+rollback: Revert the UI and regression corrections together without changing stored tenant or audit data.

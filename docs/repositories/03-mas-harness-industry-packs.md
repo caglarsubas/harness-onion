@@ -408,6 +408,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 4. `IND-WG-003-governance-integrations`: regulatory/control mapping, autonomy/action categories, integration declarations, credential/side-effect questions, and waiver rules.
 5. `IND-WG-004-provider-profiles`: minimal ARM64, minimal AMD64, regulated OpenShift, silo, and air-gap provider recommendations plus explicit accepted-selector fixtures and expected compiler outputs.
 6. `IND-WG-005-certification-fixtures`: deterministic source-contract scenarios, a non-recursive payload lock, and an unsigned offline-signing-ready manifest.
+7. `IND-FIX-001-fork-guard`: public-fork pre-scheduling guard for the self-hosted verifier.
 
 ## Testing, verification, and acceptance
 

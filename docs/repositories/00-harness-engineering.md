@@ -60,6 +60,9 @@ Harness-Engineering/
 ├── task-packets/
 │   ├── README.md
 │   └── <one-file-per-packet>.yaml
+├── reference-observer/
+│   ├── harness-reference-observe.py
+│   └── harness-reference-extract.py
 ├── release/
 │   ├── repos.lock.json
 │   ├── fixture-release-set.yaml
@@ -81,6 +84,7 @@ Harness-Engineering/
 │   ├── validate_architecture.py
 │   ├── validate_reuse.py
 │   ├── validate_packet_ownership.py
+│   ├── validate_repository_tree_observation.py
 │   ├── validate_release_set.py
 │   └── zero_bill_scan.py
 └── tests/
@@ -89,6 +93,7 @@ Harness-Engineering/
     ├── test_architecture.py
     ├── test_reuse.py
     ├── test_task_packets.py
+    ├── test_repository_tree_observation.py
     ├── test_live_campaign_envelope.py
     ├── test_release_set.py
     └── test_zero_bill.py
@@ -130,7 +135,7 @@ Each current authority is writable by exactly one `Harness-Engineering` packet. 
 
 Public source provenance is recorded only in `architecture/reuse-map.yaml`, `architecture/reuse-path-index.yaml`, and packet `sourceReuse` entries. Non-public planning inputs have already been distilled into independent public contracts and acceptance criteria; their repository names, commits, paths, and object IDs are deliberately omitted. They are not mounted or required during implementation. No source is copy-authorized.
 
-The one user-authorized `data.harness/v1` observation is a manual `MET-002`
+The user-authorized `data.harness/v1` observation is a manual `MET-002`
 activity under the exact `referenceObservationExecution` binding. A separately
 installed root-owned launcher and `planeon-reference-observer` identity may read
 only the 29 declared JSON Schema blobs at the pinned commit under deny-all
@@ -140,6 +145,14 @@ it excludes descriptions, examples, source text, and executable code. The later
 offline acceptance run has no warm-source access. This observation grants no
 copy or porting authority.
 
+`MET-P0-001` adds a second, narrower observation mode for the other three
+approved warm starts. It enumerates the full tracked Git tree at one pinned
+commit but denies every source-content read, source write, source execution,
+network connection, implementation-identity access, and copy authority. Each
+repository uses its own packet, branch, PR, signed authority, and canonical
+metadata-only report. The three reports may later populate reference-only path
+authorities; they cannot authorize a port.
+
 ## PR packets
 
 1. `MET-001-foundation`: repository scaffold, Apache-2.0 files, toolchain, taxonomy, repository catalog, and validator tests.
@@ -147,6 +160,11 @@ copy or porting authority.
 3. `MET-003-zero-bill`: billing policy, static scanner, forbidden-pattern fixtures, and self-hosted workflow policy.
 4. `MET-004-packets`: task-packet schema, packet validator, Alpha 1-4 index, predecessor/allowed-path validation, and the closed dual-signed live-campaign execution-envelope schema with negative vectors.
 5. `MET-005-release-lock`: release-set schema, lock generator/checker, evidence policy, and fixture release set.
+6. `MET-P0-001-gap-authorities`: unique correction packets, full-tree metadata observer source, closed schema, and negative vectors.
+7. `MET-OBS-AH-001-agent-hook`: exact-commit read-only tracked-tree metadata observation for `agent-hook-v2`.
+8. `MET-OBS-OCP-001-reference-lab`: exact-commit read-only tracked-tree metadata observation for the OpenShift reference lab.
+9. `MET-OBS-SDK-001-orchestra-sdk`: exact-commit read-only tracked-tree metadata observation for the Orchestra Python SDK.
+10. `MET-P0-002-phase0-evidence`: five-source reference-only integration, dependency-license closure, corrected provenance, and final Phase-0 audit record.
 
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
@@ -160,7 +178,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, the dedicated 95-packet
+`MET-004` runs the complete readiness validator, while `MET-P0-001` extends the dedicated 103-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.

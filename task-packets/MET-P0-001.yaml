@@ -1,0 +1,16 @@
+id: MET-P0-001
+repository: Harness-Engineering
+branch: codex/met-p0-001-gap-authorities
+objective: Publish bounded Phase-0 correction packets and a reproducible full-tree metadata observation contract for the three approved warm-start repositories.
+predecessors: [MET-005, TRUST-FIX-001, CTRL-007]
+allowedPaths: ["schemas/task-packet.schema.json", "task-packets/MET-P0-001.yaml", "task-packets/MET-OBS-AH-001.yaml", "task-packets/MET-OBS-OCP-001.yaml", "task-packets/MET-OBS-SDK-001.yaml", "task-packets/MET-P0-002.yaml", "task-packets/TRUST-FIX-002.yaml", "task-packets/IND-FIX-001.yaml", "task-packets/CTRL-FIX-002.yaml", "task-packets/TRUST-003.yaml", "task-packets/README.md", "scripts/validate_readiness.py", "scripts/validate_reuse.py", "scripts/validate_repository_tree_observation.py", "reference-observer/", "tests/test_task_packets.py", "tests/test_validator_units.py", "tests/test_reuse.py", "tests/test_repository_tree_observation.py", "docs/adr/0004-sol-high-packet-boundary.md", "docs/READINESS_INDEX.md", "docs/repositories/00-harness-engineering.md", "docs/repositories/03-mas-harness-industry-packs.md", "docs/repositories/04-mas-harness-control-plane.md", "docs/repositories/09-mas-harness-trust-plane.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes task packet schema v1alpha1", "Produces Phase-0 correction packet authority", "Produces full tracked-tree metadata observation contract v1"]
+deliverables: ["Eight unique packet files and branches appended to the Alpha-1 queue.", "Closed packet-schema support for exact-commit full tracked-tree metadata observations without source-content reads.", "Root-installable observer launcher and extractor source with deterministic validation and negative tests.", "Repository plans and readiness checks that bind the enlarged packet catalog and ordered authority revisions."]
+excluded: ["Reading or changing a warm-start checkout.", "Executing any observation or product correction packet.", "Changing product repositories or enabling copy authority."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/validate_readiness.py"],["uv","run","--offline","--frozen","--no-sync","python","-m","pytest","tests/test_task_packets.py","tests/test_validator_units.py","tests/test_repository_tree_observation.py"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["All 103 packet authorities validate and remain topologically ordered.", "Each new packet has a unique branch and closed allowed-path boundary.", "Full-tree observation accepts only a signed exact commit and emits canonical metadata without source text or execution.", "Existing data.harness/v1 schema observation remains valid."]
+rollback: Revert the publication as one unit; no downstream correction packet may run without this merged authority.
