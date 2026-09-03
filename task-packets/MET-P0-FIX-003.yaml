@@ -1,0 +1,16 @@
+id: MET-P0-FIX-003
+repository: Harness-Engineering
+branch: codex/met-p0-fix-003-browser-authority
+objective: Complete the control-plane correction boundary by owning the production-derived offline browser document that exercises overview semantics without a network server.
+predecessors: [MET-P0-FIX-002]
+allowedPaths: ["task-packets/MET-P0-FIX-003.yaml", "task-packets/CTRL-FIX-002.yaml", "task-packets/MET-P0-002.yaml", "task-packets/README.md", "scripts/validate_readiness.py", "tests/test_task_packets.py", "docs/adr/0004-sol-high-packet-boundary.md", "docs/READINESS_INDEX.md", "docs/repositories/00-harness-engineering.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Preserves one-packet one-branch one-PR execution", "Requires production-derived offline browser evidence", "Preserves the corrected control source boundary"]
+deliverables: ["CTRL-FIX-002 owns render-document.ts together with the component and Playwright assertion that consume it.", "MET-P0-002 consumes this final packet-boundary correction.", "Catalog counts and topological ordering remain deterministic."]
+excluded: ["Control-plane product changes, warm-source access, source copying, cloud activity, and historical Git rewrite."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["uv","run","--offline","--frozen","--no-sync","python","scripts/validate_readiness.py"],["uv","run","--offline","--frozen","--no-sync","python","-m","pytest","tests/test_task_packets.py"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["All 106 packet authorities validate and remain topologically ordered.", "The browser document and its Playwright test share one exact product packet owner.", "No warm-start path is available to the correction run."]
+rollback: Revert this authority correction only together with any dependent unstarted packet; never claim browser evidence from an unowned or stale render document.
