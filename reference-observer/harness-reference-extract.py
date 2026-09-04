@@ -195,7 +195,26 @@ def _tree_report(authority: dict[str, Any], denial_errno: int) -> dict[str, Any]
     }
 
 
+def _schema_observation_id(authority: dict[str, Any]) -> str:
+    """Keep the historical data report stable; admit only the exact new model binding."""
+    if authority.get("packetId") == "MET-002":
+        return "data-harness-v1-structural-facts"
+    observation = authority.get("packetObservation", {})
+    if (
+        authority.get("packetId") == "MET-OBS-MODEL-001"
+        and authority.get("repository") == observation.get("repository")
+        == "git@github.com:caglarsubas/llm_inference_engine.git"
+        and authority.get("commit") == observation.get("commit")
+        == "6815c21cb10a4d7dc0b4804f6bb223afb4321e97"
+        and observation.get("sourcePaths") == ["contracts/prometa-model-usage-v2.schema.json"]
+        and observation.get("outputPath") == "architecture/observations/model-usage-v2.json"
+    ):
+        return "model-usage-v2-structural-facts"
+    raise ObservationError("unrecognized schema observation authority")
+
+
 def _schema_report(authority: dict[str, Any], source_root: Path, denial_errno: int) -> dict[str, Any]:
+    observation_id = _schema_observation_id(authority)
     facts: list[dict[str, Any]] = []
     sources: list[dict[str, str]] = []
     for binding in authority.pop("sourceBindings"):
@@ -221,7 +240,7 @@ def _schema_report(authority: dict[str, Any], source_root: Path, denial_errno: i
     facts.sort(key=_canonical_key)
     return {
         "schemaVersion": "harness.planeon.ai/reference-observation/v1",
-        "observationId": "data-harness-v1-structural-facts",
+        "observationId": observation_id,
         "authority": authority,
         "isolationEvidence": {
             "networkBackend": "darwin-sandbox", "outboundDenied": True,

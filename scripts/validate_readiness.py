@@ -18,8 +18,10 @@ import yaml
 
 try:
     from validate_packet_ownership import validate_packet_ownership
+    from validate_alpha2_readiness import validate_model_authority
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
+    from scripts.validate_alpha2_readiness import validate_model_authority
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -95,7 +97,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 107
+EXPECTED_PACKET_COUNT = 110
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -3987,7 +3989,7 @@ def validate_packets(
         )
         covered_repositories.add(packet["repository"])
         reference_observation = packet.get("referenceObservationExecution")
-        if packet_id == "MET-002":
+        if packet_id in {"MET-002", "MET-OBS-MODEL-001"}:
             expected_reference_observation = {
                 **REFERENCE_OBSERVATION_EXECUTION_BASE,
                 "repository": "git@github.com:caglarsubas/data-source-harness.git",
@@ -3995,14 +3997,21 @@ def validate_packets(
                 "sourcePaths": DATA_HARNESS_V1_OBSERVATION_PATHS,
                 "outputPath": "architecture/observations/data-harness-v1.json",
             }
+            if packet_id == "MET-OBS-MODEL-001":
+                expected_reference_observation.update({
+                    "repository": "git@github.com:caglarsubas/llm_inference_engine.git",
+                    "commit": "6815c21cb10a4d7dc0b4804f6bb223afb4321e97",
+                    "sourcePaths": ["contracts/prometa-model-usage-v2.schema.json"],
+                    "outputPath": "architecture/observations/model-usage-v2.json",
+                })
             validation.require(
                 packet.get("warmSourceAccess")
                 == "AUTHORIZED_READ_ONLY_OBSERVATION",
-                "packet MET-002 must declare the separately launched read-only observation boundary",
+                f"packet {packet_id} must declare the separately launched read-only observation boundary",
             )
             validation.require(
                 reference_observation == expected_reference_observation,
-                "packet MET-002 reference observation must exactly bind the pinned data.harness/v1 blobs and distilled output",
+                f"packet {packet_id} reference observation must exactly bind the pinned schema blobs and distilled output",
             )
             reference_only_paths = {
                 source_path
@@ -4014,13 +4023,13 @@ def validate_packets(
                 for source_path in source.get("paths", [])
             }
             validation.require(
-                set(DATA_HARNESS_V1_OBSERVATION_PATHS) <= reference_only_paths,
-                "packet MET-002 observation paths must all be exact REFERENCE_ONLY indexed blobs",
+                set(expected_reference_observation["sourcePaths"]) <= reference_only_paths,
+                f"packet {packet_id} observation paths must all be exact REFERENCE_ONLY indexed blobs",
             )
             validation.require(
                 expected_reference_observation["outputPath"]
                 in packet.get("allowedPaths", []),
-                "packet MET-002 must own its exact distilled observation output",
+                f"packet {packet_id} must own its exact distilled observation output",
             )
         elif packet_id in TREE_OBSERVATION_PACKETS:
             expected_reference_observation = {
@@ -4357,11 +4366,15 @@ def validate_packets(
                 "MET-002" in ancestors(packet_id),
                 f"packet {packet_id} may inspect or port warm source before the MET-002 authorization gate",
             )
+    for authority_error in validate_model_authority(
+        packets, load_json(ROOT / "architecture/model-evidence-boundary.json")
+    ):
+        validation.error(authority_error)
     for ownership_error in validate_packet_ownership(packets):
         validation.error(ownership_error)
     validation.require(
         set(packets) == set(declared_packet_owners),
-        "task packet files must exactly match the 107 packets declared by repository plans",
+        f"task packet files must exactly match the {EXPECTED_PACKET_COUNT} packets declared by repository plans",
     )
 
     authority_owner: dict[str, str] = {
@@ -4398,13 +4411,17 @@ def validate_packets(
         },
         "policies/zero-bill-policy.yaml": "MET-003",
         "schemas/trusted-runner-manifest.schema.json": "MET-003",
-        "schemas/task-packet.schema.json": "MET-P0-002",
+        "schemas/task-packet.schema.json": "MET-A2-001",
+        "architecture/model-evidence-boundary.json": "MET-A2-001",
+        "scripts/validate_alpha2_readiness.py": "MET-A2-001",
         "schemas/live-campaign-execution-envelope.schema.json": "MET-004",
         "scripts/validate_packet_ownership.py": "MET-004",
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-P0-FIX-004"
+                "MET-A2-001"
+                if packet_path.stem in {"MET-A2-001", "MET-OBS-MODEL-001", "CON-MODEL-001", "MODEL-001"}
+                else "MET-P0-FIX-004"
                 if packet_path.stem
                 in {"MET-P0-FIX-004", "MET-P0-002"}
                 else "MET-P0-FIX-003"

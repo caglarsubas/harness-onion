@@ -143,7 +143,12 @@ A route cannot be production `READY` without artifact custody, license approval,
 
 ## Tests
 
-- Independent clean-room parity against pre-recorded, digest-pinned vectors: OpenAI schemas, scheduling, cancellation, streaming, usage, signed routing, and structured output; no warm checkout access.
+- Independent clean-room conformance against the digest-pinned CON-MODEL-001
+  schemas/vectors: API shapes, scheduling, cancellation, streaming, usage and
+  structured output; later packets add signed routing and backend checks.
+  The model-usage observation supplies structural facts only. Original source
+  tests remain `NOT_RUN_ENV_UNAVAILABLE` and source behavioral parity
+  `NOT_ESTABLISHED`; see [the approved evidence boundary](../alpha-2/MODEL_PREREQUISITES.md).
 - Unit: route resolution, capability negotiation, queue admission, token/resource limits.
 - Contract: OpenAI-compatible request/response golden vectors and CloudEvents.
 - Security: unsigned routes, path traversal, prompt logging, secret redaction, unauthorized route activation.
@@ -153,7 +158,7 @@ A route cannot be production `READY` without artifact custody, license approval,
 
 ## Sol-high implementation packets
 
-1. `MODEL-001-clean-room-core`: implement the shared API, scheduler, cancellation, namespace, local fixtures, and independent parity tests without warm-checkout access; prohibited hosted behavior is absent by construction.
+1. `MODEL-001-clean-room-core`: consume CON-MODEL-001 and implement the shared API, scheduler, cancellation, namespace, local fixtures, and independent contract tests without warm-checkout access; record unavailable original-source evidence separately.
 2. `MODEL-002-custody-routing`: model manifest/license custody, signed desired/observed route activation, revocation, and last-known-good behavior.
 3. `MODEL-OLLAMA-001`: independent Ollama adapter/probe/module, AMD64/ARM64 manifests, streaming, embeddings, and offline test.
 4. `MODEL-LLAMACPP-001`: independent llama.cpp adapter/module, CPU envelopes, structured output, cancellation, and offline test.

@@ -53,6 +53,7 @@ mas-harness-contracts/
 │   ├── lifecycle/
 │   ├── status/
 │   ├── events/
+│   ├── model/
 │   └── runtime/
 ├── openapi/
 ├── asyncapi/
@@ -67,6 +68,8 @@ mas-harness-contracts/
 │   ├── guidance-dsl.md
 │   ├── lifecycle.md
 │   ├── runtime-admission.md
+│   ├── model-api.md
+│   ├── model-usage-compatibility.md
 │   ├── status-projections.md
 │   ├── taxonomy.md
 │   └── migrations/data-harness-v1.md
@@ -74,6 +77,7 @@ mas-harness-contracts/
     ├── unit/
     ├── contract/{test_guidance.py,test_taxonomy.py}
     ├── model/
+    ├── model_api/
     ├── property/test_compiler.py
     ├── compatibility/
     ├── determinism/
@@ -91,7 +95,7 @@ mas-harness-contracts/
 - Public kinds: `HarnessClassDefinition`, `HarnessModuleDefinition`, `FrameworkProviderDefinition`, `ModuleRelease`, `ReleaseSet`, `QuestionnaireDefinition`, `QuestionnaireSession`, `QuestionnaireAnswerSet`, `GuidanceRule`, `BusinessContext`, `DataSourceDeclaration`, `DataReadinessAssessment`, `IntegrationDeclaration`, `ControlRequirement`, `ReadinessFinding`, `TenantDemand`, `HarnessProfile`, `BillOfMaterials`, `InstallPlan`, `EvidencePlan`, `ExecutionBudget`, `Operation`, `BundleRelease`, `HarnessInstallation`, `ApprovalRequest`, `PolicyBundle`, `EvidenceRecord`, `HarnessCloudEvent`, `RuntimeTrustBundle`, `SignedAdmissionEnvelope`, `RuntimeAdmissionReceipt`, `ReplayRecord`, and `BudgetConsumption`.
 - Runtime admission signatures use RFC 8785 JCS over a closed I-JSON/ASCII-key subset and Ed25519. Contracts contain public keys and deterministic interoperability signatures only; private-key custody and cryptographic implementation remain outside this repository.
 - Rule operators are exactly `all`, `any`, `not`, `eq`, `in`, `exists`, `gte`, and `lte`; schemas reject executable expressions and unknown operators.
-- APIs are described, not hosted, by the five OpenAPI documents. CloudEvents 1.0 event schemas are the event interface.
+- APIs are described, not hosted, by five existing OpenAPI documents and the planned additive model API document. CloudEvents 1.0 event schemas are the event interface.
 - Stores: none.
 
 Compiler output is exactly `profile.json`, `bom.json`, `install-plan.json`, `evidence-plan.json`, `explanation.md`, and `profile.sha256`. It validates, normalizes, enforces closed capability roles, evaluates rules, reports readiness, proposes prerequisites and compatible provider selectors, computes closure only after tenant acceptance, resolves exactly one accepted selector per active exclusive group, rejects inactive selectors/cycles/conflicts, creates installation waves, canonicalizes JSON, hashes outputs, and explains every decision. Ranking produces recommendations only and cannot mutate a profile. A missing selector returns `NEEDS_INPUT`; multiple accepted selectors return `AMBIGUOUS_PROVIDER`.
@@ -140,6 +144,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 5. `CON-005-lifecycle-events`: lifecycle state and tenant harness-status projection schemas, closed aggregation/freshness semantics, OpenAPI/AsyncAPI, CloudEvents envelope, compatibility policy, and imported golden vectors.
 6. `CON-006-compat`: `data.harness/v1` conversion, round-trip fixtures, deprecation metadata, and migration guide.
 7. `CON-007-runtime-admission-contracts`: tenant-bound signed admission envelopes, trust rotation, receipts, replay/idempotency state, budget consumption, closed denial reasons, and canonical interoperability vectors.
+8. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation.
 
 ## Testing, verification, and acceptance
 
