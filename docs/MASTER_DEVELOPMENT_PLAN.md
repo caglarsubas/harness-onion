@@ -28,6 +28,12 @@ signed OCI profile referencing only selected immutable modules.
 
 ### Alpha 2: read-only intelligence
 
+- Entry repair: publish `MET-A2-001`, then execute the separately authorized
+  `MET-OBS-MODEL-001` usage-schema observation and `CON-MODEL-001` API/usage
+  contract release before `MODEL-001`. Structural facts and independent
+  conformance never imply an original-source test pass. See
+  [prerequisite details](alpha-2/MODEL_PREREQUISITES.md) and the
+  [phase-labelled checkpoint](DEVELOPMENT_STATUS.md).
 - Add retrieval/context, local inference, AI gateway, MCP/A2A mediation, and a
   read-only durable task.
 - Certify a cited white-goods task with no write authority.

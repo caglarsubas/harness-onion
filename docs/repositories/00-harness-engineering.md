@@ -37,6 +37,7 @@ Harness-Engineering/
 │   ├── providers.yaml
 │   ├── reuse-map.yaml
 │   ├── reuse-path-index.yaml
+│   ├── model-evidence-boundary.json
 │   ├── porting-authorization-index.yaml
 │   ├── observations/data-harness-v1.json
 │   └── reuse-map.schema.json
@@ -73,12 +74,16 @@ Harness-Engineering/
 │   ├── harnesses/
 │   ├── repositories/
 │   ├── MASTER_DEVELOPMENT_PLAN.md
+│   ├── DEVELOPMENT_STATUS.md
+│   ├── alpha-2/
 │   ├── MICROSERVICE_CATALOG.md
 │   ├── PROVIDER_MODULE_CATALOG.md
 │   ├── READINESS_INDEX.md
 │   └── SCOPE_PROVENANCE.md
 ├── scripts/
 │   ├── validate_readiness.py
+│   ├── validate_alpha2_readiness.py
+│   ├── validate_model_usage_observation.py
 │   ├── verify_offline.sh
 │   ├── network_canary.py
 │   ├── validate_architecture.py
@@ -89,6 +94,8 @@ Harness-Engineering/
 │   └── zero_bill_scan.py
 └── tests/
     ├── test_readiness.py
+    ├── test_alpha2_readiness.py
+    ├── test_model_usage_observation.py
     ├── test_validator_units.py
     ├── test_architecture.py
     ├── test_reuse.py
@@ -183,6 +190,8 @@ authorities and the Phase-0 audit record.
 12. `MET-P0-FIX-003-browser-authority`: include the production-derived offline browser document in the control correction boundary.
 13. `MET-P0-FIX-004-reuse-authority`: include the existing reuse schema, independent validator/tests, and readiness index in final closure ownership.
 14. `MET-P0-002-phase0-evidence`: five-source reference-only integration, dependency-license closure, corrected provenance, and final Phase-0 audit record.
+15. `MET-A2-001-model-prerequisites`: approved Alpha-2 authority repair, narrow observation/contract packet publication, explicit original-baseline boundary and regression checks.
+16. `MET-OBS-MODEL-001-usage-facts`: separately signed one-blob model-usage schema observation and source-free report validation; original source tests are not executed.
 
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
@@ -196,7 +205,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Phase-0 corrections extend the dedicated 107-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 110-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.

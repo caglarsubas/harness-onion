@@ -108,6 +108,10 @@ edit it; a future copy transaction requires a revised `PORT_CANDIDATE` packet.
 
 ## Dependencies
 
+- Alpha-2 implementation prerequisites: the approved model structural observation
+  and `CON-MODEL-001` shared API/usage/vector release. MODEL-001 pins their merged
+  commits and actual digests in `contracts.lock.json` and `ci/contract-snapshot/`.
+  See [model prerequisite plan](../alpha-2/MODEL_PREREQUISITES.md).
 - Upstream: contracts, SDK, trust policy/guardrail endpoint, selected backend, OTel Collector, and tenant model PVC.
 - Downstream: runtime AI gateway, execution agents/decision services, knowledge embedding/reranking jobs, assurance worker.
 - Trust loss fails closed for new requests requiring decisions; already admitted bounded streams may finish. Registry/control-plane loss does not interrupt an active signed last-known-good route.
@@ -118,7 +122,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 
 ## PR packets
 
-1. `MODEL-001-clean-room-core`: independent parity tests, clean-room API/core scheduler/cancellation, local fixtures, and explicit prohibited-feature exclusion.
+1. `MODEL-001-clean-room-core`: independent shared-contract conformance, clean-room API/core scheduler/cancellation, local fixtures, explicit unavailable original-source baseline and prohibited-feature exclusion.
 2. `MODEL-002-custody-routing`: model manifest/license checks, signed route activation, desired/observed/last-good behavior, revocation, and trust hook.
 3. `MODEL-OLLAMA-001`: Ollama adapter/probe/backend module, AMD64/ARM64 manifests, streaming and embeddings conformance.
 4. `MODEL-LLAMACPP-001`: llama.cpp adapter/backend, CPU resource envelopes, structured output, and cancellation.
@@ -138,7 +142,7 @@ supplies the hash-pinned packet through `HARNESS_TASK_PACKET` and invokes only
 `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the complete
 ordered list.
 
-Acceptance requires signed local route activation, invalid-signature/revocation denial, streaming/cancellation, structured outputs, embeddings, usage accuracy, queue overload behavior, arbitrary-UID startup, exact warm-source parity or documented change, and successful startup/request with egress physically denied. Unavailable accelerator tests report `NOT_RUN_ENV_UNAVAILABLE`.
+Whole-harness acceptance requires signed local route activation, invalid-signature/revocation denial, streaming/cancellation, structured outputs, embeddings, usage accuracy, queue overload behavior, arbitrary-UID startup, and successful startup/request with egress physically denied. Those checks are distributed across the owning packets, not all claimed by MODEL-001. Its retained `make source-parity` target proves independent destination contract conformance only; original source tests remain `NOT_RUN_ENV_UNAVAILABLE` and behavioral parity `NOT_ESTABLISHED`. Structural observations cannot substitute for behavioral evidence. Unavailable accelerator tests report `NOT_RUN_ENV_UNAVAILABLE`.
 
 ## Release and rollback
 

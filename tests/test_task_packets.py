@@ -72,7 +72,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 107
+    assert len(files) == EXPECTED_PACKET_COUNT == 110
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -149,7 +149,7 @@ def test_alpha_index_partitions_every_packet_once() -> None:
     assert all(count == 1 for count in counts.values())
 
 
-def test_packet_ownership_is_closed_for_all_107_packets() -> None:
+def test_packet_ownership_is_closed_for_all_110_packets() -> None:
     errors = validate_packet_ownership(packets_by_id())
     assert errors == []
 
@@ -228,6 +228,15 @@ def test_reference_observation_authority_is_exact_and_separate_from_implementati
         if packet_id == "MET-002":
             assert packet["warmSourceAccess"] == "AUTHORIZED_READ_ONLY_OBSERVATION"
             assert observation == expected
+        elif packet_id == "MET-OBS-MODEL-001":
+            assert packet["warmSourceAccess"] == "AUTHORIZED_READ_ONLY_OBSERVATION"
+            assert observation == {
+                **REFERENCE_OBSERVATION_EXECUTION_BASE,
+                "repository": "git@github.com:caglarsubas/llm_inference_engine.git",
+                "commit": "6815c21cb10a4d7dc0b4804f6bb223afb4321e97",
+                "sourcePaths": ["contracts/prometa-model-usage-v2.schema.json"],
+                "outputPath": "architecture/observations/model-usage-v2.json",
+            }
         elif packet_id in TREE_OBSERVATION_PACKETS:
             assert packet["warmSourceAccess"] == "AUTHORIZED_READ_ONLY_OBSERVATION"
             assert observation == {

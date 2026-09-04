@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 104 YAML task packets,
+The authoritative implementation queue contains exactly 110 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 107 packets validate against the closed schema with unique IDs and branches.
+- All 110 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -97,6 +97,10 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Consequences
 
+- The approved Alpha-2 entry repair adds one authority publication, one exact
+  model-usage schema observation and one shared model-contract packet. The
+  historical Phase-0 audit retains its 107-packet snapshot. No original-source
+  tests or behavioral parity are claimed from independent conformance vectors.
 - A Sol-High coding run has a deterministic scope, predecessor contract,
   verification command set, evidence expectation, and rollback boundary.
 - Harness modularity remains independent of repository count: packets can evolve

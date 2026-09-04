@@ -32,7 +32,7 @@
         "PROHIBITED_DURING_IMPLEMENTATION",
         "AUTHORIZED_READ_ONLY_OBSERVATION"
       ],
-      "description": "Product implementation always uses PROHIBITED_DURING_IMPLEMENTATION. AUTHORIZED_READ_ONLY_OBSERVATION is reserved to MET-002 and requires the separate root-owned observation launcher; its later acceptance run still denies every warm root."
+      "description": "Product implementation always uses PROHIBITED_DURING_IMPLEMENTATION. AUTHORIZED_READ_ONLY_OBSERVATION is restricted by the readiness validator to MET-002, MET-OBS-MODEL-001 and the three exact tree-observation packets. Each requires the separate root-owned observation launcher; offline acceptance still denies every warm root."
     },
     "sourceReuse": {
       "type": "array",
