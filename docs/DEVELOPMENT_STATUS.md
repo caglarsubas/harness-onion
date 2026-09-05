@@ -12,7 +12,7 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 1 | `CONF-A1-001` live gates | WAITING | Installed-foundation evidence; offline completion does not certify live behavior |
 | Alpha 2 | `MET-A2-001` | DONE — source/PR/merge | Model prerequisites; PR 90 and required verify check independently refreshed on 2026-09-05 |
 | Alpha 2 | `MET-OBS-MODEL-001` | DONE — source/PR/merge | Structural observation; PR 91 and required verify check independently refreshed on 2026-09-05; not source behavior or live evidence |
-| Alpha 2 entry | `MET-REPAIR-001` | ONGOING — source | R01–R06 corrective authority, cumulative regression gates and 114-packet catalog; offline/CI/merge not yet established |
+| Alpha 2 entry | `MET-REPAIR-001` | ONGOING — local offline PASS | R01–R06 authority and 114-packet catalog; initial exact-head replay passed 449 tests with 10 nested-isolation skips; final-head CI/merge/exact-main remain required |
 | Foundation correction | `CON-FIX-001` | WAITING | R01/R02 inventory, additive release assertions and independent status vectors |
 | Alpha 1 correction | `CTRL-FIX-003` | WAITING | R03/R04/R05 read-time freshness, portfolio and aggregation parity |
 | Alpha 1 integration | `CTRL-INTEGRATE-001` | WAITING | R06 authenticated production overview and durable projection adapters; separate live acceptance required |
@@ -41,10 +41,26 @@ merge `2aa85c1d4ea175dc6fba935bffa5aae2fa64e3c2`.
 These are PR checks, not new exact-main or live runs. Older Phase-0/control
 references above remain historical snapshots, not re-executed acceptance.
 
-Current acceptance blocker: the installed localhost launcher is still pinned
-to MET-OBS-MODEL-001, and no GitHub runner was registered at this checkpoint.
-An operator-installed signed MET-REPAIR-001 bundle and fresh isolation preflight
-are required. Never run acceptance directly or substitute a hosted runner.
+Operator reauthorization is complete: the existing key signed the exact
+MET-REPAIR-001 packet, fresh isolation preflight passed, and launcher version
+1.4.1 passed its installed self-check. Its packet SHA-256 is
+`45ea3a94514ae1b7b06608fa4629603fbe3c908c726da66fa733ccaffcb03986`.
+The first administrator attempt restored the previous bundle after a macOS
+working-directory denial; the identical bundle passed when launched from a
+readable temporary directory. No source, isolation, dependency or key change
+was required, and the prior root-owned authority is retained for rollback.
+
+Initial exact-head local replay of
+`0ee855e2852b0fde17b17119a67da8d651aa4059` passed the complete declared argv:
+readiness, five-source reuse, Alpha-2 and repair authority, 449 pytest cases
+with 10 skips, and the zero-bill scan. Skips are the existing nested-isolation
+tests under the enforced outer boundary, not product conformance passes.
+The execution log SHA-256 is
+`3c2b81e5f10300c6de8e221906b39053a87bb8a752a76e41da806b6722942986`.
+This is local evidence, not GitHub CI, merge or exact-main acceptance. The
+checkpoint update itself still requires fresh final-head replay and the
+required self-hosted check on [PR 92](https://github.com/caglarsubas/harness-onion/pull/92).
+Never run acceptance directly or substitute a hosted runner.
 Next product packet after authority merge and exact-main acceptance: CON-FIX-001.
 The [repair plan](alpha-2/READINESS_REPAIRS.md) keeps review findings, ownership,
 product fixes and live acceptance distinct. No phase completion is claimed here.
