@@ -155,7 +155,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
    gains authority only after independent reviewed root-owned installation.
 2. `CONF-002-parity`: warm-source vector registry, source hashes, parity runners, behavior-change records, and destination adapters.
 3. `CONF-A1-001`: questionnaire-to-installed white-goods business/domain/data foundation campaign.
-4. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection.
+4. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
 5. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
 6. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
 7. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.

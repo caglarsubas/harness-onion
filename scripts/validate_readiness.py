@@ -19,9 +19,11 @@ import yaml
 try:
     from validate_packet_ownership import validate_packet_ownership
     from validate_alpha2_readiness import validate_model_authority
+    from validate_readiness_repairs import validate_repair_authority
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
     from scripts.validate_alpha2_readiness import validate_model_authority
+    from scripts.validate_readiness_repairs import validate_repair_authority
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,7 +99,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 110
+EXPECTED_PACKET_COUNT = 114
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -4372,6 +4374,10 @@ def validate_packets(
         validation.error(authority_error)
     for ownership_error in validate_packet_ownership(packets):
         validation.error(ownership_error)
+    for repair_error in validate_repair_authority(
+        packets, load_json(ROOT / "architecture/readiness-repairs.json")
+    ):
+        validation.error(repair_error)
     validation.require(
         set(packets) == set(declared_packet_owners),
         f"task packet files must exactly match the {EXPECTED_PACKET_COUNT} packets declared by repository plans",
@@ -4413,13 +4419,17 @@ def validate_packets(
         "schemas/trusted-runner-manifest.schema.json": "MET-003",
         "schemas/task-packet.schema.json": "MET-A2-001",
         "architecture/model-evidence-boundary.json": "MET-A2-001",
-        "scripts/validate_alpha2_readiness.py": "MET-A2-001",
+        "scripts/validate_alpha2_readiness.py": "MET-REPAIR-001",
+        "scripts/validate_readiness_repairs.py": "MET-REPAIR-001",
+        "architecture/readiness-repairs.json": "MET-REPAIR-001",
         "schemas/live-campaign-execution-envelope.schema.json": "MET-004",
         "scripts/validate_packet_ownership.py": "MET-004",
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-A2-001"
+                "MET-REPAIR-001"
+                if packet_path.stem in {"MET-REPAIR-001", "CON-FIX-001", "CTRL-FIX-003", "CTRL-INTEGRATE-001", "CON-MODEL-001", "CONF-A2-001"}
+                else "MET-A2-001"
                 if packet_path.stem in {"MET-A2-001", "MET-OBS-MODEL-001", "CON-MODEL-001", "MODEL-001"}
                 else "MET-P0-FIX-004"
                 if packet_path.stem
@@ -4538,7 +4548,7 @@ def validate_packets(
         len(ordered_packet_ids) == EXPECTED_PACKET_COUNT
         and len(ordered_packet_ids) == len(set(ordered_packet_ids))
         and set(ordered_packet_ids) == set(declared_packet_owners),
-        "task-packets README must index each of the 104 individual packet files exactly once",
+        f"task-packets README must index each of the {EXPECTED_PACKET_COUNT} individual packet files exactly once",
     )
     order_by_id = {packet_id: index for index, packet_id in enumerate(ordered_packet_ids)}
     for packet_id, packet in packets.items():

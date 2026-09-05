@@ -37,6 +37,7 @@ mas-harness-control-plane/
 │       ├── app/{demands,harnesses,organizations,overview,planes,profiles,questionnaires}/
 │       ├── components/harness-overview/
 │       └── lib/{demands,harness-status,operations,profiles,questionnaire}/
+├── contracts/{status-regression,status-integration}/
 ├── workers/profile-compiler/
 ├── packages/db/
 │   └── migrations/{compiler-jobs,demand,harness-status,profile-lock,questionnaire}/
@@ -149,6 +150,9 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 7. `CTRL-006-security-e2e`: RLS denial, CSRF/session, tenant isolation, tamper evidence, accessibility, Playwright journey, and dependency remediation.
 8. `CTRL-007-tenant-harness-overview`: ordered status projections, RLS APIs, platform-operator portfolio, tenant overview, plane/harness drill-down, interactive onion plus accessible list, stale-source behavior, WCAG 2.2 AA, and zero-public-browser-request evidence. The coding brief is [`TENANT_HARNESS_OVERVIEW.md`](../TENANT_HARNESS_OVERVIEW.md).
 9. `CTRL-FIX-002-phase0-ui-security`: native-link onion semantics, explicit full-digest access, light/dark theme closure, stripe-free status treatment, and tenant-versus-platform audit-table regression coverage.
+
+10. `CTRL-FIX-003-status-consistency`: clock-aware materialization for detail and portfolio, canonical aggregation parity using pinned CON-FIX-001 vectors, and cumulative control regressions; production policies remain denied.
+11. `CTRL-INTEGRATE-001-production-overview`: explicit authenticated production composition and durable tenant projection/policy adapters, additive database migration, real route/browser tests and isolated PostgreSQL acceptance. Missing local capacity remains NOT_RUN_ENV_UNAVAILABLE; CONF-A2-001 separately certifies installed behavior.
 
 ## `CTRL-001` bootstrap authority
 

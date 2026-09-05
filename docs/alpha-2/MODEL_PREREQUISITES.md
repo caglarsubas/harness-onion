@@ -11,11 +11,16 @@ license disposition, or live campaign is authorized by this publication alone.
 |---|---|---|---|
 | Alpha 2 | `MET-A2-001` | Meta | Publish this correction; green offline PR and merge |
 | Alpha 2 | `MET-OBS-MODEL-001` | Meta / separate observer identity | One signed structural report, validated offline |
-| Alpha 2 | `CON-MODEL-001` | Contracts | Additive model API/usage release and independent vectors |
+| Alpha 2 entry | `MET-REPAIR-001` | Meta | Publish R01–R06 repair authority |
+| Foundation correction | `CON-FIX-001` | Contracts | Full-suite baseline, additive tests and independent status vectors |
+| Alpha 1 correction | `CTRL-FIX-003` | Control | Freshness, portfolio and canonical status parity |
+| Alpha 2 | `CON-MODEL-001` | Contracts | Additive model API/usage release and independent vectors after both corrections |
 | Alpha 2 | `MODEL-001` | Model plane | Clean-room inference core against the pinned contract release |
 | Alpha 2 | `MODEL-002` | Model plane | Model custody and signed route activation |
 
-The three new packets bring the current catalog to 110. The Phase-0 back-test
+The original three-packet publication brought its catalog to 110. The approved
+R01–R06 correction brings the current catalog to 114; see
+[READINESS_REPAIRS.md](READINESS_REPAIRS.md). The Phase-0 back-test
 and reuse index remain historical 107-packet snapshots; their source inventory
 is unchanged. None of these steps satisfies a live release or tenant gate.
 
@@ -98,7 +103,10 @@ the product invent a divergent format. Use the frozen existing dependencies.
    CON-007 and predecessor entries and golden/compatibility behavior. Pin the
    release manifest, actual source commit and every consumed vector digest;
    never insert invented artifact digests. Run the packet's full offline argv
-   list, PR checks, merge and exact-main replay separately.
+   list, including the entire contracts test suite, PR checks, merge and
+   exact-main replay separately. Pin CON-FIX-001 in addition to the original
+   CON-007 provenance; preserve its status vectors. The model packet cannot edit
+   predecessor test files or weaken their checks to accommodate the sixth API.
 
 ## Original baseline versus destination conformance
 
@@ -126,8 +134,8 @@ observation expansion or copy authorization is silently added here.
 
 ## Runner and execution handoff
 
-No root-owned host files are part of any repository PR. The current host's
-TRUST-FIX-001 pin is not authority for another packet. Before each CI run, the
+No root-owned host files are part of any repository PR. A previously installed
+packet pin is not authority for another packet. Before each CI run, the
 operator must supply the reviewed exact packet YAML/digest, signed launcher
 manifest/version/hash, passing isolation preflight and complete offline cache
 on the existing localhost runner. Maintain all canonical warm-root denials and

@@ -38,6 +38,7 @@ Harness-Engineering/
 │   ├── reuse-map.yaml
 │   ├── reuse-path-index.yaml
 │   ├── model-evidence-boundary.json
+│   ├── readiness-repairs.json
 │   ├── porting-authorization-index.yaml
 │   ├── observations/data-harness-v1.json
 │   └── reuse-map.schema.json
@@ -83,6 +84,7 @@ Harness-Engineering/
 ├── scripts/
 │   ├── validate_readiness.py
 │   ├── validate_alpha2_readiness.py
+│   ├── validate_readiness_repairs.py
 │   ├── validate_model_usage_observation.py
 │   ├── verify_offline.sh
 │   ├── network_canary.py
@@ -95,6 +97,7 @@ Harness-Engineering/
 └── tests/
     ├── test_readiness.py
     ├── test_alpha2_readiness.py
+    ├── test_readiness_repairs.py
     ├── test_model_usage_observation.py
     ├── test_validator_units.py
     ├── test_architecture.py
@@ -193,6 +196,8 @@ authorities and the Phase-0 audit record.
 15. `MET-A2-001-model-prerequisites`: approved Alpha-2 authority repair, narrow observation/contract packet publication, explicit original-baseline boundary and regression checks.
 16. `MET-OBS-MODEL-001-usage-facts`: separately signed one-blob model-usage schema observation and source-free report validation; original source tests are not executed.
 
+17. `MET-REPAIR-001-readiness-regressions`: publish R01–R06 corrective authority, cumulative regression gates, production integration ownership and phase-labelled evidence without claiming product fixes.
+
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
 ## Testing, verification, and acceptance
@@ -205,7 +210,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 110-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 114-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
