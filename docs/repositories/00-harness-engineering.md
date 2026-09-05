@@ -197,6 +197,7 @@ authorities and the Phase-0 audit record.
 16. `MET-OBS-MODEL-001-usage-facts`: separately signed one-blob model-usage schema observation and source-free report validation; original source tests are not executed.
 
 17. `MET-REPAIR-001-readiness-regressions`: publish R01–R06 corrective authority, cumulative regression gates, production integration ownership and phase-labelled evidence without claiming product fixes.
+18. `MET-REPAIR-002-contract-regression-scope`: publish two exact cumulative registry-test paths and a function-bounded blocked-selection correction; preserve failed baseline and historical review evidence.
 
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
@@ -210,7 +211,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 114-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 115-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.

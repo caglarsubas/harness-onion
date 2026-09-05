@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "harness.planeon.ai/readiness-repair-amendment/v1",
+  "authorityPacket": "MET-REPAIR-002",
+  "amendsPacket": "CON-FIX-001",
+  "approvalDate": "2026-09-05",
+  "historicalRepairAuthority": "MET-REPAIR-001",
+  "historicalRepairRecordSha256": "30db784918bb651cc81f26d23cb4b1d7f790ef260ef5e48a2d7ae2ae94c12a0d",
+  "historicalRepairPacketCount": 114,
+  "currentPacketCount": 115,
+  "baseline": {
+    "repository": "mas-harness-contracts",
+    "commit": "2146278a95344cd2a8e22596b2f315b46edffc88",
+    "execution": "LOCAL_SIGNED_HOST_OFFLINE_REPLAY",
+    "packetSha256": "fc10e7d4f40c3eacab69dc7d7ef3a23fffeca6e9080392ca26fd0c9c9f2ef9c5",
+    "commandsCompleted": 3,
+    "generationChecks": "PASS",
+    "passed": 181,
+    "failed": 3,
+    "skipped": 0,
+    "outputSha256": "8a918152e335c0d2c48fac7072b70bc3a69acea9caaf4c4a03e9a33d939f74ec",
+    "failures": [
+      "tests/contract/test_taxonomy.py::TaxonomyContractTests::test_registry_and_commands_have_closed_con002_authority",
+      "tests/golden/test_generated_contracts.py::test_generated_outputs_are_exact_and_check_mode_passes",
+      "tests/test_command_registry.py::CommandRegistryTests::test_bootstrap_cli_has_no_registered_commands"
+    ]
+  },
+  "addedPaths": [
+    "tests/test_command_registry.py",
+    "tests/contract/test_taxonomy.py",
+    "src/planeon_harness_contracts/state_machine.py"
+  ],
+  "retainedGuards": [
+    "REGISTRY_FAIL_CLOSED_UNCHANGED",
+    "EMPTY_AND_CURRENT_REGISTRY_TESTS_SEPARATE",
+    "RESTRICTED_OWNER_REJECTION_REQUIRED",
+    "FULL_SUITE_NO_SUPPRESSION",
+    "PUBLIC_WIRE_AND_COMPATIBILITY_BYTES_UNCHANGED"
+  ],
+  "implementationException": {
+    "path": "src/planeon_harness_contracts/state_machine.py",
+    "function": "aggregate_status",
+    "beforeSha256": "c18d938bbd5f9c62f25bdb01df983f3b55a16acdd2b4e610ea7b34ffbf22353b",
+    "change": "BLOCKED_SELECTION_PRECEDES_DEGRADED_INSTALLATION",
+    "expectedState": "BLOCKED",
+    "higherPrecedence": [
+      "REVOKED",
+      "FAILED"
+    ],
+    "retainedDefinitionBytes": "ALL_OUTSIDE_AGGREGATE_STATUS",
+    "freshnessClassifierChange": "FORBIDDEN",
+    "publishedSemanticsChange": "FORBIDDEN",
+    "findingEvidence": "SOURCE_REVIEW_ONLY_NEW_VECTOR_NOT_RUN",
+    "productStatus": "WAITING_IMPLEMENTATION"
+  },
+  "evidenceBoundary": "AUTHORITY_AMENDMENT_ONLY_NOT_PRODUCT_FIX_OR_LIVE_ACCEPTANCE"
+}

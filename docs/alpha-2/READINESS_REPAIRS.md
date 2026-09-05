@@ -1,12 +1,21 @@
 # Readiness repair execution plan
 
-Authority: `MET-REPAIR-001`, approved by the user on 2026-09-05 after a
+Original authority: `MET-REPAIR-001`, approved by the user on 2026-09-05 after a
 read-only source review. This publication assigns work; it does not implement
 product fixes or invalidate the packet-specific historical evidence. The
 machine-readable review snapshot is
 [`readiness-repairs.json`](../../architecture/readiness-repairs.json).
+The separately approved `MET-REPAIR-002` amendment below supersedes only the
+CON-FIX-001 scope restrictions it names; the original JSON remains byte-identical.
+Its current packet index and predecessor gates supersede the 114-packet count
+and earlier execution table in the original model-prerequisite planning page.
 
 ## Checkpoint and order
+
+The following table is the original publication-time snapshot, not the current
+execution ledger. See [development status](../DEVELOPMENT_STATUS.md) for the
+amendment checkpoint and [the packet index](../../task-packets/README.md) for
+the current 115-packet queue.
 
 | Phase | Packet | Status at publication | Description |
 |---|---|---|---|
@@ -59,6 +68,57 @@ Reviewed destination: `mas-harness-contracts`, CON-007 main
 The implementation must also add negative regression cases that would fail
 against the old inventory/lineage assumptions. No public state semantics,
 schemas, release signing rules or dependency versions change in CON-FIX-001.
+
+## Approved amendment — cumulative registry tests and blocked selection
+
+Authority: `MET-REPAIR-002`, explicitly approved on 2026-09-05 after the complete
+signed CON-FIX-001 baseline replay. The exact untouched CON-007 commit above
+produced **181 passed, three failed and zero skipped tests**; both generation
+checks passed. Log SHA-256:
+`8a918152e335c0d2c48fac7072b70bc3a69acea9caaf4c4a03e9a33d939f74ec`.
+This is local failure evidence, not a product pass. The
+[amendment record](../../architecture/readiness-repair-amendment.json) binds
+the original packet, commit, result and three failing test identities.
+
+CON-FIX-001 gains exactly three additional paths:
+
+- `tests/test_command_registry.py`: test an explicitly empty temporary registry
+  for the historical bootstrap scenario, and separately test the real current
+  registry. A fixture cannot replace current-registry integration coverage.
+- `tests/contract/test_taxonomy.py`: pass exact CON-002 descriptor paths under
+  CON-002 authority, retain cumulative coverage for CON-002/004/006, and prove
+  later-owner descriptors are rejected under restricted CON-002 authority.
+  The production loader's rejection is correct and must not be weakened.
+- `src/planeon_harness_contracts/state_machine.py`: after establishing an
+  independent failing vector, correct only blocked-selection precedence inside
+  `aggregate_status`. With BLOCKED selection, DEGRADED installation, CURRENT
+  freshness and passing evidence, the published contract requires BLOCKED.
+  REVOKED and FAILED still outrank BLOCKED. The finding is source-reviewed;
+  its new vector has not yet executed.
+
+The baseline module digest is
+`c18d938bbd5f9c62f25bdb01df983f3b55a16acdd2b4e610ea7b34ffbf22353b`.
+Pin it and preserve bytes outside `aggregate_status`, including
+`classify_freshness`, lifecycle definitions, enums and transitions. Record the
+real before/after module digest and this exact MODEL_IMPLEMENTATION entry as
+the sole predecessor implementation-byte exception. Existing wire, runtime and
+compatibility contracts remain byte-identical; derived manifest/index changes
+remain explicitly accounted for. No command registry, CLI, descriptor, schema,
+dependency or licensing changes are authorized.
+
+The independent vector set must cover the selection-by-installation matrix,
+required/optional evidence, higher-priority failure/revocation, freshness loss,
+waivers and neutral non-contributing selections. Expected values come from
+published semantics, never the function under test. No skips, xfails,
+deselection or runtime monkeypatch may hide regressions. If reproducing the
+finding contradicts the documented premise, stop and report the discrepancy.
+
+Publish this meta amendment on its own branch/PR and verify exact main before
+the revised product packet runs. Old CON-FIX-001 signatures do not authorize
+the revised bytes; standing localhost reauthorization permission allows the
+existing operator process to repin them, with fresh preflight, the existing key
+and cache, and rollback retained. It grants no broader code, source or live
+execution authority. Product fixes and downstream live acceptance remain open.
 
 ## R03/R04/R05 — Consistent tenant status
 

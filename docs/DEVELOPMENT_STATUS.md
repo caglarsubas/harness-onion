@@ -1,6 +1,6 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
-Snapshot: 2026-09-05, during `MET-REPAIR-001` publication. This is a checkpoint,
+Snapshot: 2026-09-05, during `MET-REPAIR-002` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run
 must refresh GitHub evidence rather than infer completion from this document.
@@ -12,8 +12,9 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 1 | `CONF-A1-001` live gates | WAITING | Installed-foundation evidence; offline completion does not certify live behavior |
 | Alpha 2 | `MET-A2-001` | DONE — source/PR/merge | Model prerequisites; PR 90 and required verify check independently refreshed on 2026-09-05 |
 | Alpha 2 | `MET-OBS-MODEL-001` | DONE — source/PR/merge | Structural observation; PR 91 and required verify check independently refreshed on 2026-09-05; not source behavior or live evidence |
-| Alpha 2 entry | `MET-REPAIR-001` | ONGOING — local offline PASS | R01–R06 authority and 114-packet catalog; initial exact-head replay passed 449 tests with 10 nested-isolation skips; final-head CI/merge/exact-main remain required |
-| Foundation correction | `CON-FIX-001` | WAITING | R01/R02 inventory, additive release assertions and independent status vectors |
+| Alpha 2 entry | `MET-REPAIR-001` | DONE — source/PR/merge/local exact-main | PR 92 at 6e6b911; required CI green and 449 passed/10 nested-isolation skips in separate local exact-main replay |
+| Foundation authority | `MET-REPAIR-002` | ONGOING — scope publication | Approve exact cumulative-registry test paths and documented blocked-selection implementation correction; product fixes not yet executed |
+| Foundation correction | `CON-FIX-001` | WAITING — amended authority | Baseline 181 passed/3 failed; repair inventory/lineage, legacy registry tests and documented blocked-selection precedence, then publish independent vectors |
 | Alpha 1 correction | `CTRL-FIX-003` | WAITING | R03/R04/R05 read-time freshness, portfolio and aggregation parity |
 | Alpha 1 integration | `CTRL-INTEGRATE-001` | WAITING | R06 authenticated production overview and durable projection adapters; separate live acceptance required |
 | Alpha 2 | `CON-MODEL-001` | WAITING — corrective prerequisites | Model API/usage contracts after CON-FIX-001 and CTRL-FIX-003; full contracts suite required |
@@ -41,29 +42,43 @@ merge `2aa85c1d4ea175dc6fba935bffa5aae2fa64e3c2`.
 These are PR checks, not new exact-main or live runs. Older Phase-0/control
 references above remain historical snapshots, not re-executed acceptance.
 
-Operator reauthorization is complete: the existing key signed the exact
-MET-REPAIR-001 packet, fresh isolation preflight passed, and launcher version
-1.4.1 passed its installed self-check. Its packet SHA-256 is
-`45ea3a94514ae1b7b06608fa4629603fbe3c908c726da66fa733ccaffcb03986`.
-The first administrator attempt restored the previous bundle after a macOS
-working-directory denial; the identical bundle passed when launched from a
-readable temporary directory. No source, isolation, dependency or key change
-was required, and the prior root-owned authority is retained for rollback.
+MET-REPAIR-001 publication is complete:
+[PR 92](https://github.com/caglarsubas/harness-onion/pull/92),
+required [CI run](https://github.com/caglarsubas/harness-onion/actions/runs/33951017359),
+squash commit `6e6b91115d59f4fa9be556462d4958dcfad805b6`.
+The separate signed local exact-main replay passed all six commands and
+449 tests with 10 expected nested-isolation skips; log SHA-256
+`84b116ed8a687a4ade1f4c38f390fa37bb14e2681d580dfa4ce612768c04becd`.
+This was not a new GitHub Actions exact-main run. The ephemeral runner and
+temporary credentials were removed; operator diagnostics and rollback retained.
 
-Initial exact-head local replay of
-`0ee855e2852b0fde17b17119a67da8d651aa4059` passed the complete declared argv:
-readiness, five-source reuse, Alpha-2 and repair authority, 449 pytest cases
-with 10 skips, and the zero-bill scan. Skips are the existing nested-isolation
-tests under the enforced outer boundary, not product conformance passes.
-The execution log SHA-256 is
-`3c2b81e5f10300c6de8e221906b39053a87bb8a752a76e41da806b6722942986`.
-This is local evidence, not GitHub CI, merge or exact-main acceptance. The
-checkpoint update itself still requires fresh final-head replay and the
-required self-hosted check on [PR 92](https://github.com/caglarsubas/harness-onion/pull/92).
-Never run acceptance directly or substitute a hosted runner.
-Next product packet after authority merge and exact-main acceptance: CON-FIX-001.
-The [repair plan](alpha-2/READINESS_REPAIRS.md) keeps review findings, ownership,
-product fixes and live acceptance distinct. No phase completion is claimed here.
+The first CON-FIX-001 baseline used the exact root-owned packet SHA-256
+`fc10e7d4f40c3eacab69dc7d7ef3a23fffeca6e9080392ca26fd0c9c9f2ef9c5`
+on untouched contracts main
+`2146278a95344cd2a8e22596b2f315b46edffc88`.
+Both generation checks passed; the entire test suite returned **181 passed,
+three failed, zero skipped**. In addition to the known generated-inventory
+failure, two historical registry tests assume earlier repository states.
+The immutable log SHA-256 is
+`8a918152e335c0d2c48fac7072b70bc3a69acea9caaf4c4a03e9a33d939f74ec`.
+The status-precedence discrepancy is source-reviewed but its new regression
+has not run. No product file was changed by that baseline run.
+
+The user approved the [narrow amendment](alpha-2/READINESS_REPAIRS.md) on
+2026-09-05. MET-REPAIR-002 publishes it separately; source publication, local
+offline, required CI, merge and exact-main checks remain required for this
+checkpoint itself. The current catalog contains 115 packets; the original
+six-finding, 114-packet JSON is retained byte-identically.
+Next product packet after amendment merge and exact-main verification:
+CON-FIX-001 with a fresh pin for its revised YAML, never the older signature.
+
+Standing operator permission covers packet-specific localhost runner
+reauthorization without repeated permission requests, using the existing key,
+local preinstalled caches, fresh isolation preflight, root-owned installation,
+ephemeral credential-free execution and rollback. Administrator authentication
+may still require the macOS prompt. No downloads, hosted runners, cloud
+resources, broader product paths, warm-source observation/copying or live
+tenant execution are granted by that permission. No phase completion is claimed.
 
 Every progress report should show **phase, packet ID, status, description,
 completed evidence, current blocker and next packet**. At a phase completion,

@@ -34,10 +34,13 @@ signed OCI profile referencing only selected immutable modules.
   conformance never imply an original-source test pass. See
   [prerequisite details](alpha-2/MODEL_PREREQUISITES.md) and the
   [phase-labelled checkpoint](DEVELOPMENT_STATUS.md).
-- Before continuing model API coding, complete `MET-REPAIR-001`, `CON-FIX-001`
+- Before continuing model API coding, complete `MET-REPAIR-001`, `MET-REPAIR-002`, `CON-FIX-001`
   and `CTRL-FIX-003`. `CTRL-INTEGRATE-001` owns the production overview carryover
   and is a prerequisite of `CONF-A2-001`; fresh Alpha-1 installed evidence remains
   required independently. See [corrective scope](alpha-2/READINESS_REPAIRS.md).
+  The second amendment admits two legacy registry-test corrections and only
+  the implementation fix for documented blocked-selection precedence, without
+  changing public semantics or weakening command-owner admission.
 - Add retrieval/context, local inference, AI gateway, MCP/A2A mediation, and a
   read-only durable task.
 - Certify a cited white-goods task with no write authority.

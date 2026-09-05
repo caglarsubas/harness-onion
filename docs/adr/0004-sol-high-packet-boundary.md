@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 114 YAML task packets,
+The authoritative implementation queue contains exactly 115 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 114 packets validate against the closed schema with unique IDs and branches.
+- All 115 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -97,9 +97,14 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Consequences
 
+- The approved `MET-REPAIR-002` adds one authority packet, taking the current
+  count to 115. It admits two legacy registry-test paths and a function-bounded
+  blocked-selection correction in `CON-FIX-001`. The 181-pass/three-failure
+  baseline remains failure evidence; the original six-finding JSON is immutable.
+
 - The 2026-09-05 approved `MET-REPAIR-001` publication adds four packets for
   corrective authority, contracts regression, status consistency and production
-  overview integration. The current count is 114; earlier 107/110-packet audit
+  overview integration. Its publication count is 114; earlier 107/110-packet audit
   and publication records remain historical. Shared generator changes require
   the complete contracts suite, and integration is an explicit live gate.
 

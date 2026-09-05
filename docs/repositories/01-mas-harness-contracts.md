@@ -145,7 +145,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 5. `CON-005-lifecycle-events`: lifecycle state and tenant harness-status projection schemas, closed aggregation/freshness semantics, OpenAPI/AsyncAPI, CloudEvents envelope, compatibility policy, and imported golden vectors.
 6. `CON-006-compat`: `data.harness/v1` conversion, round-trip fixtures, deprecation metadata, and migration guide.
 7. `CON-007-runtime-admission-contracts`: tenant-bound signed admission envelopes, trust rotation, receipts, replay/idempotency state, budget consumption, closed denial reasons, and canonical interoperability vectors.
-8. `CON-FIX-001-cumulative-regression`: repair generated-output inventory and additive API/extension assertions, pin the predecessor manifest, publish independent canonical status vectors and run the complete contracts suite.
+8. `CON-FIX-001-cumulative-regression`: after `MET-REPAIR-002`, repair generated-output inventory, cumulative registry tests and additive release assertions; restore documented blocked-selection precedence only in `aggregate_status`; pin the predecessor manifest, publish independent status vectors and run the complete contracts suite.
 9. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation.
 
 ## Testing, verification, and acceptance
@@ -163,6 +163,14 @@ ordered list.
 Determinism compiles every fixture twice in clean temporary directories and byte-compares all six outputs. Property tests cover arbitrary DAGs, cycles, capability-role violations, inactive/missing/multiple selectors, recommendation acceptance, subject-capability closure, local-judge backend input, ordering, integer resource bounds, and rule evaluation. Every lifecycle fixture proves allowed and forbidden transitions. Status golden/property tests cover every closed selection, installation, evidence and freshness state; deterministic worst-child precedence; waiver-without-pass; required immutable bindings; and exclusion of unselected harnesses from health. Runtime-contract tests additionally cover valid canonical payloads plus malformed, forged, revoked, expired, wrong-tenant, replayed, idempotency-conflict, digest-mismatch, and over-budget outcomes. They prove source-contract interoperability only and never claim a live runtime decision.
 
 ## Release and rollback
+
+The approved correction changes only blocked-selection precedence inside
+`aggregate_status`. Pin the original module digest and require byte identity
+outside that function; retain freshness classification, lifecycle rules, enums,
+command registry, CLI and descriptors unchanged. Record real before/after module
+digests as the sole implementation-entry exception. Every predecessor wire and
+compatibility byte remains immutable. Explicit empty-registry fixtures do not
+replace the mandatory current-registry and restricted-owner rejection tests.
 
 - SemVer tags and offline-signed wheel/schema/catalog digests; generated artifacts must be reproducible.
 - A release publishes one immutable compatibility matrix and catalog digest. Consumers never read unreleased schemas from Git.

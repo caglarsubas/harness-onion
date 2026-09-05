@@ -11,7 +11,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 114. This index is a plan,
+report records 107 packets; the current catalog has 115; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -101,6 +101,7 @@ only; a separate authorized tenant signature is required for actual acceptance.
 | Provider/module and deterministic-profile-example shape | [`schemas/provider-module.schema.json`](../schemas/provider-module.schema.json) |
 | Executable packet shape | [`schemas/task-packet.schema.json`](../schemas/task-packet.schema.json) |
 | Readiness repair ownership and implementation gates | [`architecture/readiness-repairs.json`](../architecture/readiness-repairs.json), [`READINESS_REPAIRS.md`](alpha-2/READINESS_REPAIRS.md) |
+| Approved cumulative-test and status-precedence amendment | [`architecture/readiness-repair-amendment.json`](../architecture/readiness-repair-amendment.json), [`MET-REPAIR-002`](../task-packets/MET-REPAIR-002.yaml) |
 | Alpha-2 model source/destination evidence separation | [`architecture/model-evidence-boundary.json`](../architecture/model-evidence-boundary.json), [`MODEL_PREREQUISITES.md`](alpha-2/MODEL_PREREQUISITES.md) |
 | External trusted-runner manifest shape | [`schemas/trusted-runner-manifest.schema.json`](../schemas/trusted-runner-manifest.schema.json), [`TRUSTED_RUNNER_CONTRACT.md`](TRUSTED_RUNNER_CONTRACT.md) |
 | Closed live execution-envelope shape | [`schemas/live-campaign-execution-envelope.schema.json`](../schemas/live-campaign-execution-envelope.schema.json) |
@@ -204,5 +205,5 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 114-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 115-packet execution
   catalog and topological delivery guidance.
