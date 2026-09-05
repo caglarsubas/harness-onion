@@ -606,8 +606,8 @@ def _validate_task_packet_closure(
 ) -> int:
     packet_paths = sorted((root / "task-packets").glob("*.yaml"))
     # The Phase-0 report/index are immutable 107-packet historical snapshots.
-    # Current closure includes the three additive Alpha-2 authority packets.
-    _require(len(packet_paths) == 110, f"expected 110 task packets, found {len(packet_paths)}")
+    # Current closure includes three Alpha-2 entry and four corrective packets.
+    _require(len(packet_paths) == 114, f"expected 114 task packets, found {len(packet_paths)}")
     referenced: set[tuple[str, str]] = set()
     for packet_path in packet_paths:
         packet = load_yaml(packet_path)

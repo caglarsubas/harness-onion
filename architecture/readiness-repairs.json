@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "harness.planeon.ai/readiness-repairs/v1",
+  "authorityPacket": "MET-REPAIR-001",
+  "reviewDate": "2026-09-05",
+  "reviewMethod": "READ_ONLY_SOURCE_ANALYSIS",
+  "historicalPhaseZeroPacketCount": 107,
+  "historicalAlphaTwoPublicationPacketCount": 110,
+  "currentPacketCount": 114,
+  "findings": [
+    {"id": "R01", "phase": "FOUNDATION_CORRECTION", "owner": "CON-FIX-001", "description": "Generated-output golden inventory omits compatibility files", "status": "WAITING_IMPLEMENTATION"},
+    {"id": "R02", "phase": "ALPHA_2_ENTRY", "owner": "CON-FIX-001", "description": "Additive API and release tests conflict with the next packet boundary", "status": "WAITING_IMPLEMENTATION"},
+    {"id": "R03", "phase": "ALPHA_1_CORRECTION", "owner": "CTRL-FIX-003", "description": "Read-time freshness does not age without ingestion", "status": "WAITING_IMPLEMENTATION"},
+    {"id": "R04", "phase": "ALPHA_1_CORRECTION", "owner": "CTRL-FIX-003", "description": "Portfolio filtering bypasses outage-aware materialization", "status": "WAITING_IMPLEMENTATION"},
+    {"id": "R05", "phase": "ALPHA_1_CORRECTION", "owner": "CTRL-FIX-003", "description": "TypeScript aggregation differs from canonical optional-evidence semantics", "status": "WAITING_IMPLEMENTATION"},
+    {"id": "R06", "phase": "ALPHA_1_INTEGRATION", "owner": "CTRL-INTEGRATE-001", "description": "Production policy, durable projections and authenticated pages need explicit integration ownership", "status": "WAITING_IMPLEMENTATION"}
+  ],
+  "modelCodingPrerequisites": ["CON-FIX-001", "CTRL-FIX-003"],
+  "productionIntegrationOwner": "CTRL-INTEGRATE-001",
+  "liveCertificationOwner": "CONF-A2-001",
+  "evidenceBoundary": "AUTHORITY_ONLY_NOT_PRODUCT_FIX_OR_LIVE_ACCEPTANCE",
+  "productionGate": "FRESH_INSTALLED_FOUNDATION_AND_AUTHENTICATED_DURABLE_OVERVIEW_EVIDENCE_REQUIRED"
+}
