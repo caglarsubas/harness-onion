@@ -145,7 +145,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 5. `CON-005-lifecycle-events`: lifecycle state and tenant harness-status projection schemas, closed aggregation/freshness semantics, OpenAPI/AsyncAPI, CloudEvents envelope, compatibility policy, and imported golden vectors.
 6. `CON-006-compat`: `data.harness/v1` conversion, round-trip fixtures, deprecation metadata, and migration guide.
 7. `CON-007-runtime-admission-contracts`: tenant-bound signed admission envelopes, trust rotation, receipts, replay/idempotency state, budget consumption, closed denial reasons, and canonical interoperability vectors.
-8. `CON-FIX-001-cumulative-regression`: after `MET-REPAIR-002`, repair generated-output inventory, cumulative registry tests and additive release assertions; restore documented blocked-selection precedence only in `aggregate_status`; pin the predecessor manifest, publish independent status vectors and run the complete contracts suite.
+8. `CON-FIX-001-cumulative-regression`: after the MET-REPAIR-002 authority amendment, repair generated-output inventory, cumulative registry tests and additive release assertions; restore documented blocked-selection precedence only in `aggregate_status`; pin the predecessor manifest, publish independent status vectors and run the complete contracts suite.
 9. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation.
 
 ## Testing, verification, and acceptance
