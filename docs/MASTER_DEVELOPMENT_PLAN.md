@@ -239,6 +239,20 @@ offline.
 
 `predecessors` orders implementation contracts, not certification claims.
 Merged code and passing offline evidence—including an honest live-environment
-`NOT_RUN_ENV_UNAVAILABLE`—may unblock later source work. Release and production
+`NOT_RUN_ENV_UNAVAILABLE`—may unblock later source work except the stricter
+early Linux runtime-coding gates below. Release and production
 promotion remain separately blocked until every required live campaign has its
 fresh, scope-exact `PASS` evidence.
+
+## Alpha-2 early Linux prerequisite amendment
+
+MET-LINUX-001 publishes the [early Linux plan](alpha-2/LINUX_READINESS.md).
+After the completed CON-FIX-001 correction, continue CTRL-FIX-003, then
+MET-LINUX-002 and CONF-LINUX-001. Their source completion is separate from
+the fresh native Linux AMD64 PASS required before CTRL-INTEGRATE-001,
+MODEL-001, EXEC-001 or RUN-001 runtime coding. CON-MODEL-001 remains a pure
+contract exception. Use macOS for development; build release dependencies and
+images in pinned Linux targets, never reuse macOS native output. ARM64 needs
+separate native qualification before release. No new billable capacity or
+download is authorized. This early baseline does not replace the full Alpha-4
+Kubernetes/OpenShift/K3s/air-gap and tenant acceptance matrix.

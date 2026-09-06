@@ -67,3 +67,13 @@ code produced by its OS isolation mechanism. A timeout, DNS error, unreachable
 route, or coincidentally disconnected host does not prove isolation and fails
 closed. The packet digest is rechecked after the canary and after every declared
 prefetch or acceptance argv.
+
+## Early Linux runner candidate ownership
+
+MET-LINUX-002 owns ci/linux-runner/ and tests/linux_runner/ as a source-tested
+candidate/operator kit. It preserves this manifest/signature, command, secret,
+warm-source denial and zero-bill contract. A Darwin sandbox-exec installation
+is not Linux Firejail evidence. Independent root-owned installation and fresh
+Linux negative probes are mandatory; unavailable OS isolation is never a
+fallback to unisolated execution. Neither CI nor a repository script may
+install itself as privileged authority. See alpha-2/LINUX_READINESS.md.

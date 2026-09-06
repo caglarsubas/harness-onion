@@ -20,10 +20,12 @@ try:
     from validate_packet_ownership import validate_packet_ownership
     from validate_alpha2_readiness import validate_model_authority
     from validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
+    from validate_linux_readiness import validate_linux_readiness
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
     from scripts.validate_alpha2_readiness import validate_model_authority
     from scripts.validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
+    from scripts.validate_linux_readiness import validate_linux_readiness
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -99,7 +101,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 115
+EXPECTED_PACKET_COUNT = 118
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -108,6 +110,7 @@ LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-AIR-001",
     "CONF-K3S-001",
     "CONF-K8S-001",
+    "CONF-LINUX-001",
     "CONF-OCP-001",
     "CONF-SEC-001",
     "CONF-UPG-001",
@@ -237,6 +240,7 @@ LIVE_CAMPAIGN_EVIDENCE_AXES = {
     "CONF-AIR-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
     "CONF-K3S-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
     "CONF-K8S-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
+    "CONF-LINUX-001": ["DEPLOYMENT", "RUNTIME", "SECURITY", "ASSURANCE"],
     "CONF-OCP-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
     "CONF-SEC-001": ["SECURITY", "ASSURANCE"],
     "CONF-UPG-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
@@ -4374,6 +4378,10 @@ def validate_packets(
         validation.error(authority_error)
     for ownership_error in validate_packet_ownership(packets):
         validation.error(ownership_error)
+    for linux_error in validate_linux_readiness(
+        packets, load_json(ROOT / "architecture/linux-readiness.json")
+    ):
+        validation.error(linux_error)
     for repair_error in validate_repair_authority(
         packets, load_json(ROOT / "architecture/readiness-repairs.json")
     ):
@@ -4424,8 +4432,10 @@ def validate_packets(
         "schemas/trusted-runner-manifest.schema.json": "MET-003",
         "schemas/task-packet.schema.json": "MET-A2-001",
         "architecture/model-evidence-boundary.json": "MET-A2-001",
-        "scripts/validate_alpha2_readiness.py": "MET-REPAIR-001",
-        "scripts/validate_readiness_repairs.py": "MET-REPAIR-002",
+        "scripts/validate_alpha2_readiness.py": "MET-LINUX-001",
+        "scripts/validate_readiness_repairs.py": "MET-LINUX-001",
+        "scripts/validate_linux_readiness.py": "MET-LINUX-001",
+        "architecture/linux-readiness.json": "MET-LINUX-001",
         "architecture/readiness-repairs.json": "MET-REPAIR-001",
         "architecture/readiness-repair-amendment.json": "MET-REPAIR-002",
         "schemas/live-campaign-execution-envelope.schema.json": "MET-004",
@@ -4433,7 +4443,9 @@ def validate_packets(
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-REPAIR-002"
+                "MET-LINUX-001"
+                if packet_path.stem in {"MET-LINUX-001", "MET-LINUX-002", "CONF-LINUX-001", "MODEL-001", "RUN-001", "EXEC-001", "CTRL-INTEGRATE-001"}
+                else "MET-REPAIR-002"
                 if packet_path.stem in {"MET-REPAIR-002", "CON-FIX-001"}
                 else "MET-REPAIR-001"
                 if packet_path.stem in {"MET-REPAIR-001", "CON-FIX-001", "CTRL-FIX-003", "CTRL-INTEGRATE-001", "CON-MODEL-001", "CONF-A2-001"}

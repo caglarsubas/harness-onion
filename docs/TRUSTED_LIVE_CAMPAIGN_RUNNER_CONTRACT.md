@@ -428,3 +428,13 @@ metadata/cloud/billing/provider/CRI endpoints; missing isolation or proxy;
 unapproved Kubernetes mutations; admission/RBAC bypass; noncanonical result or
 axis; `TENANT_ACCEPTANCE`; and a campaign-generated acceptance signature.
 Reports bind all verified authority and result digests without storing secrets.
+
+## Early Linux evidence subset
+
+CONF-LINUX-001 admits exactly DEPLOYMENT, RUNTIME, SECURITY and ASSURANCE under
+the same dual-signed envelope and independent capacity authorization. It does
+not admit TENANT_ACCEPTANCE or substitute fixtures/capability flags for real
+Linux probe records. Only pre-existing signed proxy endpoints may execute
+fixed probes; no raw container socket or new resource capacity is authorized.
+Source merge with NOT_RUN_ENV_UNAVAILABLE leaves the early runtime coding gate
+closed. See alpha-2/LINUX_READINESS.md; full Alpha-4 certification is unchanged.

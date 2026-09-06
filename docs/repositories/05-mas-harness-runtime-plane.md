@@ -156,3 +156,16 @@ Acceptance: local OIDC, OPA, PostgreSQL, and a local model complete a direct-mod
 - Route catalog accepts only local/self-hosted endpoints explicitly supplied by the tenant; hosted-provider adapters and API-key settings are rejected by default schemas.
 - No runtime downloads, remote telemetry, analytics, cloud provisioning, or external channel SaaS in core.
 - Self-hosted offline CI only; no GitHub storage/cache/Packages, hosted load testing, scheduled workflows, or public tunnels.
+
+## Early Linux implementation gate
+
+RUN-001 retains all original prerequisites and adds CONF-LINUX-001. Require
+fresh native Linux AMD64 baseline PASS before runtime coding. Build target-native
+Linux artifacts from pinned source/caches; verify non-root startup, deny-all
+egress, health and shutdown behavior. ARM64 is independently qualified before
+support claims. Local macOS tests do not establish runtime or infrastructure
+harness deployment acceptance.
+
+Detailed steps, cases, evidence bindings and rollback:
+[Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
+certification and tenant acceptance remain independent.

@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "harness.planeon.ai/linux-readiness/v1",
+  "authorityPacket": "MET-LINUX-001",
+  "currentPacketCount": 118,
+  "publicationEvidence": "ROADMAP_AUTHORITY_ONLY",
+  "developmentHosts": [
+    "macOS",
+    "Linux"
+  ],
+  "productionKernel": "Linux",
+  "runnerKitOwner": "MET-LINUX-002",
+  "earlyCampaignOwner": "CONF-LINUX-001",
+  "gate": {
+    "status": "WAITING",
+    "runtimeCodingRequires": "FRESH_NATIVE_LINUX_AMD64_PASS",
+    "blockedPackets": [
+      "CTRL-INTEGRATE-001",
+      "MODEL-001",
+      "EXEC-001",
+      "RUN-001"
+    ],
+    "sourceOnlyExceptions": [
+      "CTRL-FIX-003",
+      "CON-MODEL-001"
+    ],
+    "unavailableResult": "NOT_RUN_ENV_UNAVAILABLE",
+    "unavailableUnblocksRuntimeCoding": false,
+    "maximumEvidenceAgeHours": 168,
+    "invalidateOn": [
+      "SOURCE_OR_IMAGE_CHANGE",
+      "TOOLCHAIN_OR_CACHE_CHANGE",
+      "HOST_OR_ISOLATION_CHANGE",
+      "TRUST_REVOCATION_OR_EXPIRY",
+      "FAILED_REQUIRED_CASE"
+    ]
+  },
+  "targets": [
+    {
+      "os": "linux",
+      "architecture": "amd64",
+      "execution": "NATIVE",
+      "requiredFor": "EARLY_RUNTIME_CODING_GATE",
+      "status": "NOT_RUN_ENV_UNAVAILABLE"
+    },
+    {
+      "os": "linux",
+      "architecture": "arm64",
+      "execution": "NATIVE",
+      "requiredFor": "ARM64_RELEASE_OR_SUPPORT_CLAIM",
+      "status": "NOT_RUN_ENV_UNAVAILABLE"
+    }
+  ],
+  "build": {
+    "targetNativeDependencies": true,
+    "hostOutputReuse": "DENIED",
+    "mutableInputs": "DENIED",
+    "downloads": "DENIED",
+    "sourceScope": "PINNED_OWN_PRODUCT_TREES_ONLY",
+    "cacheScope": "PINNED_OS_ARCH_LIBC_TOOLCHAIN",
+    "requiredBindings": [
+      "SOURCE_COMMIT",
+      "IMAGE_DIGEST",
+      "BUILD_RECIPE_DIGEST",
+      "OS_ARCH_LIBC",
+      "TOOLCHAIN_INVENTORY",
+      "CACHE_INVENTORY",
+      "SBOM_DIGEST",
+      "BUILD_LOG_DIGEST"
+    ]
+  },
+  "requiredCases": [
+    "HOST_ISOLATION_NEGATIVES",
+    "LINUX_TARGET_BUILD",
+    "FULL_PREDECESSOR_REGRESSION",
+    "CONTROL_CONTAINER_STARTUP",
+    "POSTGRES_MIGRATION_AND_RLS",
+    "DURABLE_RESTART",
+    "ARBITRARY_NON_ROOT_UID",
+    "READ_ONLY_ROOT_FILESYSTEM",
+    "KUBERNETES_SMOKE",
+    "DEFAULT_DENY_NETWORK"
+  ],
+  "evidence": {
+    "axes": [
+      "DEPLOYMENT",
+      "RUNTIME",
+      "SECURITY",
+      "ASSURANCE"
+    ],
+    "sourceOrFixtureCanPass": false,
+    "emulationCanQualifyNative": false,
+    "missingMandatoryCaseCanPass": false,
+    "acceptCallerVerificationBoolean": false,
+    "requiredBindings": [
+      "PACKET_DIGEST",
+      "ENVELOPE_DIGEST",
+      "CAPACITY_AUTHORIZATION_DIGEST",
+      "TENANT_AND_ENVIRONMENT",
+      "HOST_KERNEL_ARCH_LIBC",
+      "SOURCE_AND_IMAGE_DIGESTS",
+      "RUN_NONCE",
+      "OBSERVED_AT",
+      "VALID_UNTIL",
+      "PROBE_DIGESTS",
+      "OUTPUT_DIGESTS",
+      "INDEPENDENT_SIGNATURES"
+    ],
+    "signingAuthority": "EXISTING_PLATFORM_RELEASE_TENANT_LIVE_EXECUTION_AND_CAPACITY_OPERATOR",
+    "runtimeTransport": "SIGNED_PREEXISTING_PROXY_ONLY"
+  },
+  "billing": {
+    "newProvisioning": false,
+    "hostedRunners": false,
+    "paidApis": false,
+    "thirdPartyKeys": false,
+    "rawContainerSockets": false,
+    "capacity": "LOCAL_OR_PREEXISTING_TENANT_AUTHORIZED_ZERO_INCREMENTAL_COST"
+  },
+  "laterCertificationOwners": [
+    "CONF-K8S-001",
+    "CONF-OCP-001",
+    "CONF-K3S-001",
+    "CONF-AIR-001",
+    "CONF-SEC-001",
+    "CONF-UPG-001",
+    "CONF-WG-001"
+  ],
+  "completedCorrection": {
+    "packet": "CON-FIX-001",
+    "repository": "mas-harness-contracts",
+    "mergeCommit": "fb365aabfd8c5560e064be5d97ff9f2bcc69c57c",
+    "pr": 8,
+    "requiredCiRun": 33982852363,
+    "exactMain": {
+      "kind": "LOCAL_SIGNED_OFFLINE",
+      "passed": 758,
+      "failed": 0,
+      "skipped": 0,
+      "logSha256": "c4fc420019527382d41ec72d06e4de91e00ebb401e9c38c78d1b40056f95429a"
+    },
+    "linuxProof": false
+  }
+}

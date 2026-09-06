@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 115 YAML task packets,
+The authoritative implementation queue contains exactly 118 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 115 packets validate against the closed schema with unique IDs and branches.
+- All 118 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -143,3 +143,11 @@ reinterpret previously recorded evidence under a different schema.
   environments.
 - Let one signer authorize a live run: rejected because platform release and
   tenant execution consent are separate authorities.
+
+## Approved early Linux amendment
+
+MET-LINUX-001 adds three independently owned packets, producing 118 total.
+It preserves the historical 107/110/114/115 snapshots, thirteen repositories,
+sixteen harnesses and every existing billing/trust/source boundary. Linux
+runtime coding gates require separate fresh native evidence; a merged kit or
+macOS source test cannot qualify Linux. See ../alpha-2/LINUX_READINESS.md.

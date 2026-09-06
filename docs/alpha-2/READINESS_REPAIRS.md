@@ -215,3 +215,14 @@ After consumption, supersede through another packet rather than rewriting
 source history. Product rollback preserves public predecessor contracts,
 immutable vectors, admitted tenant projections and audit history; database
 rollback must never delete tenant data or undo additive schema destructively.
+
+## Superseding execution checkpoint and Linux gate
+
+CON-FIX-001 is now merged in contracts PR 8 at
+fb365aabfd8c5560e064be5d97ff9f2bcc69c57c. Its separate local exact-main replay
+passed all 758 tests with no skips; see ../DEVELOPMENT_STATUS.md for CI and
+log digests. The original failed baseline and immutable review/amendment JSON
+remain historical evidence. CTRL-FIX-003 is the next product correction.
+The [Linux amendment](LINUX_READINESS.md) introduces a fresh native Linux
+prerequisite for production integration and new runtime implementations, not
+for the status correction or pure model contracts. No Linux PASS is recorded.
