@@ -256,3 +256,15 @@ images in pinned Linux targets, never reuse macOS native output. ARM64 needs
 separate native qualification before release. No new billable capacity or
 download is authorized. This early baseline does not replace the full Alpha-4
 Kubernetes/OpenShift/K3s/air-gap and tenant acceptance matrix.
+
+## Approved pre-campaign correction — MET-REPAIR-003
+
+The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes the
+unamended conformance dispatch order above: MET-LINUX-002 (source complete),
+MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
+CONF-LINUX-001 (campaign source and separately authorized native evidence).
+The queue has 120 packets across the same thirteen repositories/sixteen harnesses.
+Explicit full-suite discovery and closed result-handler additions are mandatory.
+Retiring the untrusted live-adapter path does not build or install a trusted live
+backend. Neither amendment nor corrected source opens the fresh native AMD64
+gate. No cloud/VM provisioning, new keys or automatic OS authentication is added.

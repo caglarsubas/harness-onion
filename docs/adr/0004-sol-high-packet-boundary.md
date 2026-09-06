@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 118 YAML task packets,
+The authoritative implementation queue contains exactly 120 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 118 packets validate against the closed schema with unique IDs and branches.
+- All 120 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -151,3 +151,18 @@ It preserves the historical 107/110/114/115 snapshots, thirteen repositories,
 sixteen harnesses and every existing billing/trust/source boundary. Linux
 runtime coding gates require separate fresh native evidence; a merged kit or
 macOS source test cannot qualify Linux. See ../alpha-2/LINUX_READINESS.md.
+
+## MET-REPAIR-003: bounded conformance repair
+
+The approved amendment adds MET-REPAIR-003 and CONF-FIX-001 (120 packets total).
+The historical Linux policy remains its exact 118-packet publication. Only the
+amended campaign can add LINUX_READINESS to the shared HANDLERS tuple and the
+control-result handler enum; every unrelated definition/member is preserved.
+CONF-FIX-001 owns eight explicit paths, not ci/ or tests/ generally. It may only
+adjust the named old phase-order test's OS/backend mock, never its assertions.
+Explicit suite discovery avoids namespace-package omissions and breaking the
+Alpha-1 directory-local import. The fixed run_packet_argv bridge satisfies the
+unchanged Linux candidate transport pins. Permissive network errno results and
+caller-created live proof descriptors cannot become acceptance evidence.
+Makefile, generic dispatch, root installation, workflow, PORTING, dependencies,
+source locks, and live endpoint/provisioning authority are unchanged.

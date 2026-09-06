@@ -203,6 +203,8 @@ authorities and the Phase-0 audit record.
 
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
+21. `MET-REPAIR-003-linux-conformance-authority`: closed R1-R4 scope amendment, exact suite discovery and CONF-FIX-001 prerequisite; no product implementation or native Linux claim.
+
 ## Testing, verification, and acceptance
 
 The `MET-001` bootstrap packet declares `prefetchCommands: []` and ordered
@@ -213,7 +215,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 118-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 120-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
@@ -280,3 +282,12 @@ external operator custody remain mandatory.
 Detailed steps, cases, evidence bindings and rollback:
 [Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
 certification and tenant acceptance remain independent.
+
+## Conformance correction authority
+
+MET-REPAIR-003 owns the [new amendment](../../architecture/linux-readiness-amendment.json),
+its validator/negative tests, current catalog and checkpoint. It preserves
+architecture/linux-readiness.json byte-for-byte. The whole predecessor suite,
+Linux candidate suite and new scope/discovery regressions run offline in one
+signed process tree. Source publication cannot claim product repair, external
+installation, native qualification or a model-effort transition.

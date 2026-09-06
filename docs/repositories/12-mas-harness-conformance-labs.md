@@ -155,16 +155,17 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
    gains authority only after independent reviewed root-owned installation.
 2. `CONF-002-parity`: warm-source vector registry, source hashes, parity runners, behavior-change records, and destination adapters.
 3. `CONF-A1-001`: questionnaire-to-installed white-goods business/domain/data foundation campaign.
-4. `CONF-LINUX-001`: early native Linux baseline campaign, closed build/probe evidence verifier and independent operator execution; no source/fixture substitution or Alpha-4 certification claim.
-5. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
-6. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
-7. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
-8. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.
-9. `CONF-K3S-001`: single-VM K3s minimal AMD64/ARM64 campaign.
-10. `CONF-AIR-001`: two-zone physical no-network export/import/install/runtime/upgrade evidence.
-11. `CONF-SEC-001`: cross-tenant/API/DB/index/cache/network denial, forged artifacts/evidence, sandbox escape, prompt/tool attacks, secrets, and revocation.
-12. `CONF-UPG-001`: operator/service/DB upgrade, crashes at every wave, last-known-good rollback, retention, and uninstall.
-13. `CONF-WG-001`: complete enterprise journey and an unsigned tenant-acceptance
+4. `CONF-FIX-001`: offline OS/backend and strict canary correction, fixed transport bridge, complete predecessor discovery and fail-closed retirement of the unauthenticated live adapter; no live authority.
+5. `CONF-LINUX-001`: early native Linux baseline campaign, closed build/probe evidence verifier and independent operator execution; no source/fixture substitution or Alpha-4 certification claim.
+6. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
+7. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
+8. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
+9. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.
+10. `CONF-K3S-001`: single-VM K3s minimal AMD64/ARM64 campaign.
+11. `CONF-AIR-001`: two-zone physical no-network export/import/install/runtime/upgrade evidence.
+12. `CONF-SEC-001`: cross-tenant/API/DB/index/cache/network denial, forged artifacts/evidence, sandbox escape, prompt/tool attacks, secrets, and revocation.
+13. `CONF-UPG-001`: operator/service/DB upgrade, crashes at every wave, last-known-good rollback, retention, and uninstall.
+14. `CONF-WG-001`: complete enterprise journey and an unsigned tenant-acceptance
     candidate; a separate tenant signer owns the acceptance decision.
 
 ## Testing, verification, and acceptance
@@ -228,3 +229,19 @@ but runtime coding gates remain closed until fresh verified Linux PASS.
 Detailed steps, cases, evidence bindings and rollback:
 [Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
 certification and tenant acceptance remain independent.
+
+## R1-R4 implementation boundary
+
+[The approved amendment](../alpha-2/LINUX_READINESS_REPAIRS.md) must merge first.
+CONF-FIX-001 then runs each predecessor suite explicitly, repairs both backend
+checks and the creation-denial canary, adds the exact pinned transport bridge,
+and removes unauthenticated live-adapter execution. Missing external endpoint
+isolation remains unavailable. It never changes Makefile/dispatch or root code.
+
+CONF-LINUX-001 may additionally append only LINUX_READINESS to models.HANDLERS
+and the published control-result handler enum; all old definitions, enums,
+outputs and fixtures stay intact. Its seven declared commands cover meta,
+parity, alpha1, runner-boundary and linux-baseline suites, campaign and evidence
+verification. Empty or omitted suites fail. No broad package initializer change
+or legacy Alpha-1 import rewrite is needed. Native AMD64 PASS and separately
+qualified ARM64 remain independent post-merge gates, never source-test claims.
