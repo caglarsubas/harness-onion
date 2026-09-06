@@ -15,7 +15,7 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 entry | `MET-REPAIR-001` | DONE — source/PR/merge/local exact-main | PR 92 at 6e6b911; required CI green and 449 passed/10 nested-isolation skips in separate local exact-main replay |
 | Foundation authority | `MET-REPAIR-002` | DONE — source/CI/merge/local exact-main | PR 93 at f753b99; amended cumulative regression authority |
 | Foundation correction | `CON-FIX-001` | DONE — source/CI/merge/local exact-main | PR 8 at fb365aa; 758 passed, zero skips; independent status vectors and cumulative registry correction |
-| Alpha 2 authority | `MET-LINUX-001` | ONGOING — publication | Early Linux gates, three owned packets, exact 118-packet catalog and checkpoint |
+| Alpha 2 authority | `MET-LINUX-001` | ONGOING — local acceptance passed; publication pending | Early Linux gates, three owned packets, exact 118-packet catalog and checkpoint; fresh-head CI/merge/exact-main remain separate |
 | Alpha 1 correction | `CTRL-FIX-003` | WAITING | R03/R04/R05 read-time freshness, portfolio and aggregation parity |
 | Alpha 2 foundation | `MET-LINUX-002` | WAITING | Linux trusted-runner candidate, pinned build inputs and operator isolation kit |
 | Alpha 2 early gate | `CONF-LINUX-001` | WAITING — Linux execution unavailable | Real Linux AMD64 build/isolation/minimal runtime baseline; ARM64 independently qualified |
@@ -94,21 +94,35 @@ Linux deployment/runtime acceptance.
 
 The approved [early Linux amendment](alpha-2/LINUX_READINESS.md) brings the
 current catalog to 118 packets. Historical 107/110/114/115 snapshots and source
-locks remain unchanged. MET-LINUX-001 is the current publication; its local,
-required CI, merge and exact-main gates are not yet recorded as passing.
+locks remain unchanged. MET-LINUX-001 is the current publication. Signed local
+acceptance of source `0a6fb00de344af01d27c3a66899e4a758bf8593e` passed all seven
+declared commands: 577 tests passed with ten expected nested-isolation skips,
+and all five authority validators plus the zero-bill scan passed. Local log
+SHA-256: `0cb31f69a7ea08157c6765f1820f6b3d80302e747d9164bc7b8380dd8955f164`.
+The installed host's real OS isolation probes passed separately. This is exact
+committed-source evidence, not evidence for a later head, PR merge or Linux.
+Required CI, merge and exact-main are still pending at this checkpoint.
 Next product packet after publication closure: CTRL-FIX-003. Then implement
 MET-LINUX-002 and CONF-LINUX-001; do not dispatch new runtime code until the
 separate fresh native Linux AMD64 gate passes. Contract-only exceptions and
 the full Alpha-4 matrix are described in the Linux plan.
 
-Current publication blocker: the MET-LINUX-001 host bundle is prepared and
-signed using the existing operator key, with a fresh macOS isolation preflight.
-Noninteractive root installation returned "sudo: a password is required".
-The previously installed CON-FIX-001 authority remains unchanged. No packet
-acceptance command has run under the new authority, no runner is registered,
-and the publication must remain an unmerged draft until local and required
-self-hosted checks pass. This is an OS-custody blocker, not a new permission
-request or a Linux test failure.
+The previous OS-custody blocker is resolved. The external permanent localhost
+launcher is installed and verified after a directory-mode repair and a narrow
+no-bytecode repair. Six generated Python cache files were quarantined with
+rollback; no pinned tool inventory was relaxed or regenerated. The existing key
+now authorizes exact packet/commit/profile data through a fixed, no-argument,
+digest-bound maintenance helper without an administrator prompt. Successful
+activation, idempotent retry, invalid-input/extra-argument refusal, inventory
+self-check and installed OS isolation were independently verified. No operator
+code, key or installation script is shipped in this publication.
+
+No runner is registered at this checkpoint. The older required run
+34009931651 remains CANCELLED, not PASS. Before publication, replay the updated
+exact head, run required CI on its independently signed PR merge ref using an
+ephemeral localhost runner, merge only green checks, and replay exact main.
+Routine packet re-signing needs no renewed permission or OS authentication;
+policy/toolchain/backend changes remain separate privileged maintenance.
 
 Standing operator permission covers packet-specific localhost runner
 reauthorization without repeated permission requests, using the existing key,
