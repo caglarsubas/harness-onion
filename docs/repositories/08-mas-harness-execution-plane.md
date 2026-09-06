@@ -161,3 +161,16 @@ Acceptance: a read-only task retrieves cited context and uses a local model; a w
 - No managed workflow/queue/sandbox/optimization service, hosted agent, or remote code executor.
 - Baseline PostgreSQL, local Kubernetes Jobs, Wasmtime, scikit-learn, ONNX Runtime, and OR-Tools are open-source/local. Optional providers are bundled only when license/platform checks pass.
 - Self-hosted offline CI only; no cloud runners, scheduled agents, GitHub storage/Packages, API keys, public callbacks, or external telemetry.
+
+## Early Linux implementation gate
+
+EXEC-001 retains all original prerequisites and adds CONF-LINUX-001. Require
+fresh native Linux AMD64 baseline PASS before runtime coding. Build Linux-native
+workers and dependencies from pinned local inputs; prove process lifecycle,
+restart/replay, tenant isolation and denied undeclared egress for each deployed
+artifact. Later sandbox/agent tooling must not inherit workstation or raw
+container-control privileges.
+
+Detailed steps, cases, evidence bindings and rollback:
+[Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
+certification and tenant acceptance remain independent.

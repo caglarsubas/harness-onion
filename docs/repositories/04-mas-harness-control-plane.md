@@ -282,3 +282,17 @@ Acceptance: a local OIDC fixture user completes a white-goods session, sees miss
   There is no Actions storage/cache/Packages, scheduled workflow, or remote
   browser service.
 - Bundle request cannot include cloud provisioning or paid-provider requirements; static and runtime egress tests enforce the rule.
+
+## Early Linux implementation gate
+
+CTRL-FIX-003 remains the next source-only status correction. CTRL-INTEGRATE-001
+requires fresh CONF-LINUX-001 native Linux AMD64 baseline PASS before runtime
+coding. Build Next.js standalone output and native Node dependencies in the
+pinned Linux target; never copy workstation .next/node_modules. Verify container
+startup, arbitrary non-root UID, read-only filesystem, PostgreSQL migration/RLS
+and restart with real evidence. The overview's status model must keep Linux
+qualification distinct from source, installation and tenant acceptance.
+
+Detailed steps, cases, evidence bindings and rollback:
+[Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
+certification and tenant acceptance remain independent.

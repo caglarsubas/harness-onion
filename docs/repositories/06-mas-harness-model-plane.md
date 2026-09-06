@@ -155,3 +155,15 @@ Whole-harness acceptance requires signed local route activation, invalid-signatu
 - Reject hosted-provider endpoints/API-key variables; no OpenRouter; no automatic model or tokenizer download; no usage-based service.
 - Model weights, vulnerability DB, wheels, images, and tokenizers must be present in the signed bundle/PVC before startup.
 - Self-hosted offline CI only, with no GitHub storage/Packages, cloud accelerators, tunnels, scheduled benchmarks, or external telemetry.
+
+## Early Linux implementation gate
+
+MODEL-001 retains all original prerequisites and adds CONF-LINUX-001. Require
+fresh native Linux AMD64 baseline PASS before runtime coding, then test each
+actual model backend/image on its declared Linux target. CPU architectures,
+GPU drivers and accelerators are separate evidence axes. MLX remains macOS
+development-only; no implicit model/package downloads or paid provider fallback.
+
+Detailed steps, cases, evidence bindings and rollback:
+[Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
+certification and tenant acceptance remain independent.

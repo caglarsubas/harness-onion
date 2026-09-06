@@ -154,3 +154,12 @@ Before consumers run, revert the authority publication as one unit. After a
 consumer exists, supersede contracts/evidence through a new bounded packet;
 never rewrite historical source reports or lower signature, billing or copying
 gates. Rolling back model implementation must not delete tenant model volumes.
+
+## Linux release prerequisite
+
+The [early Linux amendment](LINUX_READINESS.md) adds CONF-LINUX-001 to MODEL-001
+without removing any existing prerequisite. Model API contract-only work retains
+its correction gates. Model runtime coding requires fresh native Linux AMD64
+baseline PASS; every new model artifact then needs its own target-specific
+Linux evidence. ARM64 and GPU/driver claims require independent qualification.
+macOS/MLX development evidence does not qualify the Linux Kubernetes runtime.

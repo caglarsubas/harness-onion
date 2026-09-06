@@ -11,7 +11,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 115; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 118; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -205,5 +205,15 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 115-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 118-packet execution
   catalog and topological delivery guidance.
+
+## Early Linux readiness publication
+
+[LINUX_READINESS.md](alpha-2/LINUX_READINESS.md) defines MET-LINUX-001,
+MET-LINUX-002 and CONF-LINUX-001; the closed policy is
+[linux-readiness.json](../architecture/linux-readiness.json). The dedicated
+validator runs in MET-LINUX-001's signed seven-command offline session.
+The source-only predecessor rule does not bypass the explicitly stricter
+fresh native Linux gate for runtime coding. The 115-packet amendment remains
+historical; the current catalog contains 118 packets.

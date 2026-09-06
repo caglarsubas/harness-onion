@@ -155,15 +155,16 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
    gains authority only after independent reviewed root-owned installation.
 2. `CONF-002-parity`: warm-source vector registry, source hashes, parity runners, behavior-change records, and destination adapters.
 3. `CONF-A1-001`: questionnaire-to-installed white-goods business/domain/data foundation campaign.
-4. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
-5. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
-6. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
-7. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.
-8. `CONF-K3S-001`: single-VM K3s minimal AMD64/ARM64 campaign.
-9. `CONF-AIR-001`: two-zone physical no-network export/import/install/runtime/upgrade evidence.
-10. `CONF-SEC-001`: cross-tenant/API/DB/index/cache/network denial, forged artifacts/evidence, sandbox escape, prompt/tool attacks, secrets, and revocation.
-11. `CONF-UPG-001`: operator/service/DB upgrade, crashes at every wave, last-known-good rollback, retention, and uninstall.
-12. `CONF-WG-001`: complete enterprise journey and an unsigned tenant-acceptance
+4. `CONF-LINUX-001`: early native Linux baseline campaign, closed build/probe evidence verifier and independent operator execution; no source/fixture substitution or Alpha-4 certification claim.
+5. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
+6. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
+7. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
+8. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.
+9. `CONF-K3S-001`: single-VM K3s minimal AMD64/ARM64 campaign.
+10. `CONF-AIR-001`: two-zone physical no-network export/import/install/runtime/upgrade evidence.
+11. `CONF-SEC-001`: cross-tenant/API/DB/index/cache/network denial, forged artifacts/evidence, sandbox escape, prompt/tool attacks, secrets, and revocation.
+12. `CONF-UPG-001`: operator/service/DB upgrade, crashes at every wave, last-known-good rollback, retention, and uninstall.
+13. `CONF-WG-001`: complete enterprise journey and an unsigned tenant-acceptance
     candidate; a separate tenant signer owns the acceptance decision.
 
 ## Testing, verification, and acceptance
@@ -181,7 +182,7 @@ supplies the hash-pinned packet through `HARNESS_TASK_PACKET` and invokes only
 `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the complete
 ordered list.
 
-The ten environment-facing campaign packets repeat those argv arrays under a
+The eleven environment-facing campaign packets repeat those argv arrays under a
 closed `liveCampaignExecution` record. Offline PR acceptance runs with no live
 authority and verifies honest `NOT_RUN_ENV_UNAVAILABLE` behavior. A manual
 post-merge run uses the external trusted launcher with a dual-signed execution
@@ -213,3 +214,17 @@ Acceptance requires meta-tests that deliberately fail each evidence/status rule,
   Kubernetes write. Unavailable capacity is `NOT_RUN_ENV_UNAVAILABLE`, not an
   online fallback; invalid authority or an attempted boundary bypass is `FAIL`.
 - Large logs/reports remain on the runner or signed local OCI evidence layout and are removed per retention policy after ingestion.
+
+## Early Linux implementation gate
+
+CONF-LINUX-001 owns the early campaign, evidence schema, fixed verifier and
+additive common campaign/CLI/schema/live-context paths declared in its packet.
+It follows CONF-A1-001 so common tests are ordered. Preserve all older handlers
+and run the complete conformance suite, not only new Linux fixtures. Missing
+signed Linux context is unavailable; generic capability flags and emulation
+cannot close native qualification. The source kit may merge independently,
+but runtime coding gates remain closed until fresh verified Linux PASS.
+
+Detailed steps, cases, evidence bindings and rollback:
+[Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
+certification and tenant acceptance remain independent.

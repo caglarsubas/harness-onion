@@ -198,6 +198,8 @@ authorities and the Phase-0 audit record.
 
 17. `MET-REPAIR-001-readiness-regressions`: publish R01–R06 corrective authority, cumulative regression gates, production integration ownership and phase-labelled evidence without claiming product fixes.
 18. `MET-REPAIR-002-contract-regression-scope`: publish two exact cumulative registry-test paths and a function-bounded blocked-selection correction; preserve failed baseline and historical review evidence.
+19. `MET-LINUX-001`: early Linux authority, exact 118-packet catalog, native-target evidence gates and verified contracts correction checkpoint.
+20. `MET-LINUX-002`: Linux trusted-runner candidate, reproducible operator kit and isolation/build provenance probes; root installation and live evidence remain external.
 
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
@@ -211,7 +213,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 115-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 118-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
@@ -265,3 +267,16 @@ not claims made by JSON Schema validation.
   `offlineExecution` process tree with no online fallback.
 - No cloud CLIs, Terraform providers, paid-provider URLs, external telemetry, API-key variables, or secret values.
 - PRs from forks are never executed on trusted self-hosted runners until reviewed and imported into a trusted branch.
+
+## Early Linux implementation gate
+
+MET-LINUX-001 owns the closed Linux policy, its validator/tests, catalog and
+phase-labelled checkpoint. MET-LINUX-002 owns ci/linux-runner/,
+tests/linux_runner/ and docs/linux-runner/ only. Its launcher.py, build.py and
+preflight.py produce a reviewable portable candidate and operator kit; source
+PASS does not grant root installation or certify Linux. Exact packet argv and
+external operator custody remain mandatory.
+
+Detailed steps, cases, evidence bindings and rollback:
+[Linux readiness](../alpha-2/LINUX_READINESS.md). Full Alpha-4 enterprise
+certification and tenant acceptance remain independent.
