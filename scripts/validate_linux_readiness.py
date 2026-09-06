@@ -8,6 +8,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from validate_linux_repair import amend_linux_packet
+except ModuleNotFoundError:
+    from scripts.validate_linux_repair import amend_linux_packet
+
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_POLICY = json.loads(r'''{
   "schemaVersion": "harness.planeon.ai/linux-readiness/v1",
@@ -537,9 +542,11 @@ def validate_linux_readiness(packets: Any, policy: Any) -> list[str]:
         errors.append("Linux publication policy changed or claims unverified readiness")
     if not isinstance(packets, dict):
         return [*errors, "Linux packet catalog must be an object"]
-    if len(packets) != 118:
-        errors.append("Linux publication requires the complete 118-packet catalog")
+    if len(packets) != 120:
+        errors.append("Current catalog requires 120 packets; original Linux policy remains 118")
     for packet_id, expected in EXPECTED_PACKETS.items():
+        if packet_id == "CONF-LINUX-001":
+            expected = amend_linux_packet(expected)
         if not _same(packets.get(packet_id), expected):
             errors.append(f"{packet_id} closed Linux authority changed")
     for packet_id, predecessors in RUNTIME_PREDECESSORS.items():
@@ -567,7 +574,7 @@ def main() -> int:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("Linux roadmap authority valid: 118 packets; live Linux acceptance remains unproven.")
+    print("Linux roadmap authority valid: 120 packets; historical 118-packet policy preserved; live Linux acceptance remains unproven.")
     return 0
 
 

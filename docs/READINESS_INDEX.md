@@ -11,7 +11,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 118; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 120; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -205,7 +205,7 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 118-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 120-packet execution
   catalog and topological delivery guidance.
 
 ## Early Linux readiness publication
@@ -216,4 +216,16 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; the current catalog contains 118 packets.
+historical; that publication contained 118 packets; the current approved repair contains 120.
+
+## Conformance readiness amendment
+
+[MET-REPAIR-003](../task-packets/MET-REPAIR-003.yaml),
+[closed amendment](../architecture/linux-readiness-amendment.json),
+[repair guide](alpha-2/LINUX_READINESS_REPAIRS.md) and
+[negative validator](../scripts/validate_linux_repair.py) bind R1-R4 to exact
+source-reviewed paths. CONF-FIX-001 owns the offline-wrapper/transport/canary
+correction and retires insecure live-adapter execution. CONF-LINUX-001 owns the
+additive handler-contract extension and named suite/campaign integration.
+No missing test suite, fixture PASS or caller-provided boundary marker can
+satisfy Linux qualification. Prior Linux policy bytes remain immutable.

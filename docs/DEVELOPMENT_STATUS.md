@@ -1,6 +1,6 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
-Snapshot: 2026-09-06, during `MET-LINUX-001` publication. This is a checkpoint,
+Snapshot: 2026-09-06, during `MET-REPAIR-003` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run
 must refresh GitHub evidence rather than infer completion from this document.
@@ -15,10 +15,12 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 entry | `MET-REPAIR-001` | DONE — source/PR/merge/local exact-main | PR 92 at 6e6b911; required CI green and 449 passed/10 nested-isolation skips in separate local exact-main replay |
 | Foundation authority | `MET-REPAIR-002` | DONE — source/CI/merge/local exact-main | PR 93 at f753b99; amended cumulative regression authority |
 | Foundation correction | `CON-FIX-001` | DONE — source/CI/merge/local exact-main | PR 8 at fb365aa; 758 passed, zero skips; independent status vectors and cumulative registry correction |
-| Alpha 2 authority | `MET-LINUX-001` | ONGOING — local acceptance passed; publication pending | Early Linux gates, three owned packets, exact 118-packet catalog and checkpoint; fresh-head CI/merge/exact-main remain separate |
-| Alpha 1 correction | `CTRL-FIX-003` | WAITING | R03/R04/R05 read-time freshness, portfolio and aggregation parity |
-| Alpha 2 foundation | `MET-LINUX-002` | WAITING | Linux trusted-runner candidate, pinned build inputs and operator isolation kit |
-| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — Linux execution unavailable | Real Linux AMD64 build/isolation/minimal runtime baseline; ARM64 independently qualified |
+| Alpha 2 authority | `MET-LINUX-001` | DONE — source/CI/merge/local exact-main | PR 94 at b1d7478; original 118-packet Linux gate authority, no native acceptance |
+| Alpha 1 correction | `CTRL-FIX-003` | DONE — source/CI/merge/local exact-main | Control PR 10 at 1de7c40; 698 unit and 6 browser checks recorded, no Linux claim |
+| Alpha 2 foundation | `MET-LINUX-002` | DONE — source/CI/merge/local exact-main | PR 95 at c37f2b7; candidate and operator kit, SOURCE_PACKAGE_ONLY |
+| Alpha 2 authority | `MET-REPAIR-003` | ONGOING — publication | Approved R1-R4 packet scope and discovery amendment; CI/merge/main remain separate |
+| Alpha 2 correction | `CONF-FIX-001` | WAITING — next after publication | OS-bound offline transport/canary, discovery guards and retired unauthenticated live adapter |
+| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — CONF-FIX-001 and independent Linux execution | Real Linux AMD64 build/isolation/minimal runtime baseline; ARM64 independently qualified |
 | Alpha 1 integration | `CTRL-INTEGRATE-001` | WAITING — fresh Linux gate | R06 authenticated production overview and durable projection adapters; separate live acceptance required |
 | Alpha 2 | `CON-MODEL-001` | WAITING — corrective prerequisites | Model API/usage contracts after CON-FIX-001 and CTRL-FIX-003; full contracts suite required |
 | Alpha 2 | `MODEL-001` | WAITING — prerequisites and fresh Linux gate | Model repository bootstrap and local inference core |
@@ -30,6 +32,37 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 3 | `TRUST-GOV-001` through `CONF-A3-001` | WAITING | Governed actions, memory, tools, sandboxes and interaction |
 | Alpha 4 | `MODEL-004` through `CONF-WG-001` | WAITING | Performance, resilience, platform and enterprise acceptance |
 | Cross-phase | Artifact/SBOM, release, deployment, runtime, assurance, tenant acceptance | WAITING — independent gates | Never inferred from source/offline completion |
+
+## Current amendment boundary
+
+[R1-R4 repair](alpha-2/LINUX_READINESS_REPAIRS.md) is approved. MET-REPAIR-003
+publishes exactly two new packets, bringing the current catalog to 120; the
+original 118-packet Linux policy remains byte-identical. This is authority
+work, not implementation of CONF-FIX-001 or the Linux campaign.
+
+Latest independently checked source prerequisites:
+[meta PR 95](https://github.com/caglarsubas/harness-onion/pull/95) at
+c37f2b72e7449f787140553beea39ebe871f35da,
+[required localhost CI](https://github.com/caglarsubas/harness-onion/actions/runs/34028811315),
+and local signed exact-main replay: 249 candidate tests, 577 predecessor tests,
+10 explicitly retained nested-isolation skips. Candidate digest and replay log
+are recorded in architecture/linux-readiness-amendment.json. No GitHub Actions
+exact-main run, Linux installation or native runtime acceptance is implied.
+Control PR 10 at 1de7c405329f4458970be0187838145b4da222d8 and conformance PR 3 at
+30877d289d389b29d3da9eb9a3c083c9ebc33382 are merged. The product inspection was
+read-only; R1-R4 are SOURCE_INSPECTION_ONLY, not reproduced runtime failures.
+
+Next: close this publication, implement CONF-FIX-001 as a separate PR, then
+CONF-LINUX-001 source and independent native qualification. Unknown/absent
+Linux capacity and the external live isolation/proxy backend remain
+NOT_RUN_ENV_UNAVAILABLE. Runtime coding remains gated; no phase completion or
+model-effort transition is due. Routine localhost signed activation uses
+standing operator authority without another administrator prompt.
+
+## Historical evidence retained from preceding checkpoints
+
+The older publication-time pending states below describe their dated snapshots,
+not the current table above. They are retained to avoid erasing failure/history.
 
 Verified Phase-0 references: [PR 89](https://github.com/caglarsubas/harness-onion/pull/89)
 and [exact-main run](https://github.com/caglarsubas/harness-onion/actions/runs/33784371270)
