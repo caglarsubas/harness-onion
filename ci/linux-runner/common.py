@@ -217,8 +217,13 @@ def inventory(root, *, trusted=False, source=False):
     return sorted(entries, key=lambda entry: entry["path"].encode())
 
 
+def input_roots(value):
+    return sorted({t["root"] for t in value["tools"].values()} |
+                  {c["root"] for c in value["caches"]} | {s["root"] for s in value["systemTrees"]})
+
+
 def validate_inputs(value):
-    closed(value, ("schemaVersion", "target", "tools", "caches", "source", "recipes"))
+    closed(value, ("schemaVersion", "target", "tools", "caches", "systemTrees", "systemFiles", "source", "recipes"))
     require(value["schemaVersion"] == "planeon.linux-build-inputs/v1", "build input version")
     target = value["target"]
     closed(target, ("os", "architecture", "libc", "libcVersion", "execution", "imageDigest"))
@@ -241,6 +246,16 @@ def validate_inputs(value):
         absolute(cache["root"])
         sha(cache["inventorySha256"])
         require(cache["tool"] in value["tools"] and all(cache[k] == target[k] for k in ("os", "architecture", "libc")), "cache target mismatch")
+    require(type(value["systemTrees"]) is list, "system closure missing")
+    system_roots = []
+    for item in value["systemTrees"]:
+        closed(item, ("root", "inventorySha256"))
+        require(item["root"] in ("/usr/lib", "/usr/lib64", "/usr/libexec", "/etc/firejail"), "unapproved system root")
+        sha(item["inventorySha256"])
+        system_roots.append(item["root"])
+    require({"/usr/lib", "/etc/firejail"} <= set(system_roots) and len(set(system_roots)) == len(system_roots), "incomplete/duplicate system closure")
+    closed(value["systemFiles"], ("/etc/ld.so.cache",))
+    sha(value["systemFiles"]["/etc/ld.so.cache"])
     closed(value["source"], ("repository", "commit", "treeSha256"))
     require(re.fullmatch(r"caglarsubas/(?:harness-onion|mas-harness-[a-z-]+)", value["source"]["repository"]) is not None,
             "source is not an owned product")
@@ -248,7 +263,7 @@ def validate_inputs(value):
     sha(value["source"]["treeSha256"])
     require(value["recipes"] == {"packet": "SIGNED_PACKET_WRAPPER", "nextStandalone": "LINUX_TARGET_BUILD_ONLY",
                                  "downloads": "DENIED", "hostOutputReuse": "DENIED"}, "unapproved build recipe")
-    roots = [t["root"] for t in value["tools"].values()] + [c["root"] for c in value["caches"]]
+    roots = input_roots(value)
     # Multiple tools may live in one exhaustive inventory; distinct roots may not overlap.
     disjoint(sorted(set(roots)))
     return value

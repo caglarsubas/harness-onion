@@ -14,7 +14,7 @@ import time
 
 from common import (ANCHOR, FIREJAIL, LAUNCHER, MANIFEST, OFFLINE, PACKET, POLICY,
                     PREFLIGHT, PROFILE, PUBLIC, PYTHON, Refused, Unavailable, absolute,
-                    canonical, closed, digest, disjoint, inventory, packet_commands, parse,
+                    canonical, closed, digest, disjoint, input_roots, inventory, packet_commands, parse,
                     require, root_read, sha, validate_inputs, validate_manifest)
 from ed25519 import pem_public, verify
 import preflight
@@ -57,7 +57,7 @@ def validate_policy(policy, now):
     disjoint([str(workspace), str(runner_home), policy["warmContainer"]])
     disjoint(policy["warmRoots"])
     inputs = validate_inputs(policy["inputs"])
-    roots = sorted(set(t["root"] for t in inputs["tools"].values()) | {c["root"] for c in inputs["caches"]})
+    roots = input_roots(inputs)
     disjoint([str(workspace), str(runner_home), policy["warmContainer"], *roots])
     require(all(not (Path(root) == Path("/etc/planeon") or Path("/etc/planeon") in Path(root).parents
                     or Path(root) in Path("/etc/planeon").parents) for root in roots), "inventory overlaps trust")
@@ -77,8 +77,7 @@ def validate_policy(policy, now):
 
 def profile_bytes(policy):
     """The full profile is signed indirectly; no warm root appears in argv."""
-    roots = sorted(set(t["root"] for t in policy["inputs"]["tools"].values()) |
-                   {c["root"] for c in policy["inputs"]["caches"]})
+    roots = input_roots(policy["inputs"])
     lines = ["# MET-LINUX-002 candidate v1; native preflight required", "quiet", "net none",
              "private", "private-tmp", "private-dev", "caps.drop all", "nonewprivs",
              "nogroups", "restrict-namespaces", "seccomp-error-action EPERM", "seccomp.block-secondary",
@@ -89,6 +88,7 @@ def profile_bytes(policy):
     for root in policy["warmRoots"]:
         lines += ["read-only " + root, "blacklist " + root]
     lines += ["read-only " + root for root in roots]
+    lines += ["read-only /etc/ld.so.cache"]
     # Do not expose adjacent checkouts or runner credentials through the work parent.
     lines += ["whitelist " + value for value in [policy["workspace"], LAUNCHER, PACKET,
                                                  *[root for root in roots if root.startswith("/opt/")]]]
@@ -128,7 +128,10 @@ def verify_tools(inputs):
     libc, version = platform.libc_ver()
     require((libc, version) == (target["libc"], target["libcVersion"]), "libc mismatch or unobservable libc")
     seen = {}
-    for spec in [*inputs["tools"].values(), *inputs["caches"]]:
+    require(not os.path.lexists("/etc/ld.so.preload"), "global dynamic loader injection")
+    for path, expected in inputs["systemFiles"].items():
+        require(digest(root_read(path)) == expected, "system loader cache mismatch")
+    for spec in [*inputs["tools"].values(), *inputs["caches"], *inputs["systemTrees"]]:
         root = spec["root"]
         if root not in seen:
             # Validate root and every ancestor before inventory traversal.
@@ -139,10 +142,14 @@ def verify_tools(inputs):
                         "inventory root custody")
             seen[root] = digest(canonical(inventory(root, trusted=True)))
         require(seen[root] == spec["inventorySha256"], "tool/cache inventory mismatch")
-    for name in ("python", "firejail", "git"):
+    for name in sorted(set(inputs["tools"]) - {"npm"}):
         raw = root_read(inputs["tools"][name]["path"], maximum=256 * 1024 * 1024)
-        require(raw[:6] == b"\x7fELF\x02\x01" and len(raw) >= 20, "non-Linux native tool")
-        require(int.from_bytes(raw[18:20], "little") == {"amd64": 62, "arm64": 183}[target["architecture"]], "ELF architecture mismatch")
+        validate_elf(raw, target["architecture"])
+
+
+def validate_elf(raw, architecture):
+    require(raw[:6] == b"\x7fELF\x02\x01" and len(raw) >= 20, "non-Linux native tool")
+    require(int.from_bytes(raw[18:20], "little") == {"amd64": 62, "arm64": 183}[architecture], "ELF architecture mismatch")
 
 
 def load_authority(*, bootstrap_preflight=False):
@@ -277,6 +284,7 @@ def inside(context):
     require(platform.system() == "Linux", "internal mode requires Linux")
     protect_process()
     policy = internal_authority(context)
+    require(os.getuid() == os.geteuid() == policy["operatorUid"], "internal identity mismatch")
     result = preflight.run(context)
     result.update({"policySha256": context["policySha256"], "launcherSha256": context["launcherSha256"],
                    "kernel": platform.release(), "architecture": platform.machine(), "observedAt": int(time.time()),
@@ -285,6 +293,8 @@ def inside(context):
     if context["preflightOnly"]:
         print(canonical(result).decode(), flush=True)
         return 0
+    verify_tools(policy["inputs"])
+    packet_commands(Path(PACKET).read_bytes())
     workspace = Path(policy["workspace"])
     source = policy["inputs"]["source"]
     require(digest(canonical(inventory(workspace, source=True))) == source["treeSha256"], "source tree mismatch")

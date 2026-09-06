@@ -23,6 +23,8 @@ def inputs():
                        "execution": "NATIVE", "imageDigest": "sha256:" + "3" * 64},
             "tools": tools, "caches": [{"root": "/opt/planeon/cache/python", "inventorySha256": "4" * 64,
                                        "os": "linux", "architecture": "amd64", "libc": "glibc", "tool": "python"}],
+            "systemTrees": [{"root": root, "inventorySha256": "a" * 64} for root in ("/usr/lib", "/etc/firejail")],
+            "systemFiles": {"/etc/ld.so.cache": "b" * 64},
             "source": {"repository": "caglarsubas/harness-onion", "commit": "5" * 40, "treeSha256": "6" * 64},
             "recipes": {"packet": "SIGNED_PACKET_WRAPPER", "nextStandalone": "LINUX_TARGET_BUILD_ONLY",
                         "downloads": "DENIED", "hostOutputReuse": "DENIED"}}

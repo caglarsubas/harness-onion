@@ -9,7 +9,8 @@ explicitly stated. No sample digest in a unit test is operational authority.
 
 ## Build-input object
 
-Exactly `schemaVersion`, `target`, `tools`, `caches`, `source`, `recipes`:
+Exactly `schemaVersion`, `target`, `tools`, `caches`, `systemTrees`,
+`systemFiles`, `source`, `recipes`:
 
 - `schemaVersion`: `planeon.linux-build-inputs/v1`.
 - `target`: exactly `os=linux`, `architecture=amd64|arm64`,
@@ -26,6 +27,14 @@ Exactly `schemaVersion`, `target`, `tools`, `caches`, `source`, `recipes`:
 - `caches`: nonempty records with exactly `root`, `inventorySha256`, `os`,
   `architecture`, `libc`, `tool`; target fields must match `target`, and `tool`
   must name a supplied pinned tool. No mutable or absent cache is admitted.
+- `systemTrees`: unique `root`/`inventorySha256` records covering at least
+  `/usr/lib` and `/etc/firejail`, optionally `/usr/lib64` and `/usr/libexec`.
+  Pin all helper/native-library/configuration closures for the selected immutable
+  host image. The same exhaustive ownership/inventory rules apply.
+- `systemFiles`: exactly `/etc/ld.so.cache` and its byte digest. Global
+  `/etc/ld.so.preload` is forbidden. This initial closure requires an observable
+  glibc-compatible loader cache; unsupported musl layouts cannot qualify by
+  borrowing glibc evidence.
 - `source`: exactly `repository`, `commit`, `treeSha256`. Repository is the
   owned harness-onion or mas-harness-* family; a warm repository is forbidden.
   Commit is 40 lowercase hex characters, not a branch or tag. Tree digest covers
@@ -46,12 +55,15 @@ hardlinks, FIFOs, sockets, devices and unknown entries fail. Changes during a
 read fail; atime alone is not an integrity field. All tool/cache files and
 directories must be root-owned and not group/world writable. The operator must
 stage regular-file Linux closures, not point at symlinked workstation caches.
+A stock distribution library tree containing SONAME symlinks is not silently
+accepted: the external immutable runner image must supply a reviewed regular-file
+closure. This is a strict candidate prerequisite, not a claim of out-of-box
+compatibility with every distribution.
 
 Distinct tool/cache roots may not overlap each other, the workspace, runner
 home, trust or warm container. Tools sharing one root must have the same
-exhaustive inventory digest. Include the Firejail helper/configuration and
-runtime library closures in independently reviewed immutable host custody;
-the ELF checks do not establish dynamic-library closure by themselves.
+exhaustive inventory digest. System helper/configuration/library trees and
+loader-cache bytes are verified too; ELF headers alone do not establish closure.
 
 ## Signed execution policy
 

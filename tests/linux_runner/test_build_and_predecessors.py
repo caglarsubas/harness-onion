@@ -98,7 +98,7 @@ def test_full_predecessor_suites_and_validators_remain_green(capsys):
     # A nested test process stays in this packet's OS-denied tree. Excluding
     # only this new directory prevents recursion, not legacy-test deselection.
     env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
-    commands = [[sys.executable, "-m", "pytest", "tests", "--ignore=tests/linux_runner", "ci/test_offline_runner.py", "ci/test_warm_snapshot.py"]]
+    commands = [[sys.executable, "-m", "pytest", "-rs", "tests", "--ignore=tests/linux_runner", "ci/test_offline_runner.py", "ci/test_warm_snapshot.py"]]
     commands += [[sys.executable, "scripts/" + name] for name in
                  ("validate_readiness.py", "validate_reuse.py", "validate_alpha2_readiness.py",
                   "validate_readiness_repairs.py", "validate_linux_readiness.py")]
