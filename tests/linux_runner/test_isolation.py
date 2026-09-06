@@ -150,11 +150,13 @@ def test_descendant_uses_fresh_interpreter_and_closed_fds(monkeypatch):
         preflight.run(context)
 
 
-def test_real_integration_is_not_faked_on_development_host():
+def test_real_integration_is_not_faked_on_development_host(capsys):
     disposition = preflight.installed_availability()
     if disposition is not None:
         assert disposition["status"] == "NOT_RUN_ENV_UNAVAILABLE"
         assert disposition["nativeLinuxAcceptance"] is False
+        with capsys.disabled():
+            print("LINUX_NATIVE_INTEGRATION=" + canonical(disposition).decode(), flush=True)
     else:
         # No nested Firejail or trusted-authority lookup from repository CI.
         # Actual negatives are the external --operator-preflight operation, not

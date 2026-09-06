@@ -22,6 +22,8 @@ import preflight
 POLICY_DOMAIN = b"planeon.linux-runner-policy/v1\x00"
 INTERNAL = ("--inside", "--probe-child")
 AUTHORITY_FILES = {"anchor": ANCHOR, "public": PUBLIC, "policy": POLICY, "signature": POLICY + ".sig"}
+NORMAL_AUTHORITY_FILES = {**AUTHORITY_FILES, "manifest": MANIFEST,
+                          "manifestSignature": MANIFEST + ".sig", "preflight": PREFLIGHT}
 
 
 def protect_process():
@@ -81,7 +83,7 @@ def profile_bytes(policy):
              "private", "private-tmp", "private-dev", "caps.drop all", "nonewprivs",
              "nogroups", "restrict-namespaces", "seccomp-error-action EPERM", "seccomp.block-secondary",
              "seccomp socket,connect,sendto,sendmsg,sendmmsg,ptrace,process_vm_readv,process_vm_writev,pidfd_getfd,bpf,io_uring_setup,setns,unshare",
-             "read-only " + PACKET, "blacklist /etc/planeon", "blacklist /run",
+             "read-only " + PACKET, "blacklist /etc/planeon", "blacklist /run", "disable-mnt", "blacklist /srv",
              "blacklist /var/run", "blacklist /root", "blacklist /home",
              "blacklist " + policy["runnerHome"], "blacklist " + policy["warmContainer"]]
     for root in policy["warmRoots"]:
@@ -95,6 +97,29 @@ def profile_bytes(policy):
 
 def verify_signed(raw, signature, public, domain=b""):
     require(verify(public, domain + raw, signature), "Ed25519 signature refused")
+
+
+def verify_host_manifest(raw, signature, evidence_raw, *, public, key, launcher_bytes, policy_raw, policy):
+    verify_signed(raw, signature, public)
+    manifest = parse(raw)
+    roots = validate_manifest(manifest)
+    require(roots == policy["warmRoots"] and manifest["launcher"]["sha256"] == digest(launcher_bytes)
+            and manifest["signature"]["publicKeySha256"] == digest(key), "manifest custody differs")
+    require(digest(evidence_raw) == manifest["preflight"]["evidenceSha256"], "installed preflight digest")
+    evidence = parse(evidence_raw)
+    closed(evidence, ("status", "scope", "networkCases", "hiddenPathCount", "descendantsChecked",
+                      *preflight.PROOFS, "policySha256", "launcherSha256", "kernel", "architecture",
+                      "observedAt", "nativeLinuxAcceptance"))
+    closed(evidence["networkCases"], preflight.NETWORK_CASES)
+    require(all(evidence["networkCases"][name] is True for name in preflight.NETWORK_CASES)
+            and evidence["descendantsChecked"] is True and evidence["nativeLinuxAcceptance"] is False
+            and type(evidence["hiddenPathCount"]) is int
+            and evidence["hiddenPathCount"] == len(policy["warmRoots"]) + len(hidden_paths(policy)), "preflight case closure")
+    require(evidence["status"] == "PASS" and evidence["scope"] == "HOST_ISOLATION_ONLY"
+            and evidence["policySha256"] == digest(policy_raw) and evidence["launcherSha256"] == digest(launcher_bytes)
+            and evidence["kernel"] == platform.release() and evidence["architecture"] == platform.machine()
+            and type(evidence["observedAt"]) is int and 0 <= int(time.time()) - evidence["observedAt"] <= 3600
+            and all(evidence[k] is True for k in preflight.PROOFS), "stale or mismatched installed preflight")
 
 
 def verify_tools(inputs):
@@ -145,20 +170,8 @@ def load_authority(*, bootstrap_preflight=False):
     require(digest(packet) == policy["packetSha256"], "packet tamper")
     packet_commands(packet)
     if not bootstrap_preflight:
-        manifest_raw = root_read(MANIFEST)
-        verify_signed(manifest_raw, root_read(MANIFEST + ".sig"), public)
-        manifest = parse(manifest_raw)
-        roots = validate_manifest(manifest)
-        require(roots == policy["warmRoots"] and manifest["launcher"]["sha256"] == digest(launcher)
-                and manifest["signature"]["publicKeySha256"] == digest(key), "manifest custody differs")
-        evidence_raw = root_read(PREFLIGHT)
-        require(digest(evidence_raw) == manifest["preflight"]["evidenceSha256"], "installed preflight digest")
-        evidence = parse(evidence_raw)
-        require(evidence["status"] == "PASS" and evidence["scope"] == "HOST_ISOLATION_ONLY"
-                and evidence["policySha256"] == digest(policy_raw) and evidence["launcherSha256"] == digest(launcher)
-                and evidence["kernel"] == platform.release() and evidence["architecture"] == platform.machine()
-                and type(evidence["observedAt"]) is int and 0 <= int(time.time()) - evidence["observedAt"] <= 3600
-                and all(evidence[k] is True for k in preflight.PROOFS), "stale or mismatched installed preflight")
+        verify_host_manifest(root_read(MANIFEST), root_read(MANIFEST + ".sig"), root_read(PREFLIGHT),
+                             public=public, key=key, launcher_bytes=launcher, policy_raw=policy_raw, policy=policy)
     expected_roots = "\n".join(policy["warmRoots"]) or "NONE"
     require(os.environ.get("HARNESS_WARM_SOURCE_ROOTS") == expected_roots, "warm setting differs")
     container = Path(policy["warmContainer"])
@@ -218,10 +231,12 @@ def supervise(argv, *, env, cwd, payload, timeout, pass_fds=()):
 
 def internal_authority(context):
     """A pipe payload is not authority: reverify retained root-custodied FDs."""
-    closed(context["authorityDescriptors"], AUTHORITY_FILES)
+    require(type(context["preflightOnly"]) is bool, "ambiguous internal operation")
+    files = AUTHORITY_FILES if context["preflightOnly"] else NORMAL_AUTHORITY_FILES
+    closed(context["authorityDescriptors"], files)
     raw = {}
     try:
-        for name, path in AUTHORITY_FILES.items():
+        for name, path in files.items():
             fd = context["authorityDescriptors"][name]
             require(type(fd) is int and fd > 2 and os.readlink(f"/proc/self/fd/{fd}") == path, "wrong authority descriptor")
             m = os.fstat(fd)
@@ -241,6 +256,10 @@ def internal_authority(context):
             and digest(root_read(LAUNCHER, mode=0o555)) == anchor["launcherSha256"], "internal custody mismatch")
     verify_signed(raw["policy"], raw["signature"], pem_public(raw["public"]), POLICY_DOMAIN)
     policy = validate_policy(parse(raw["policy"]), int(time.time()))
+    if not context["preflightOnly"]:
+        verify_host_manifest(raw["manifest"], raw["manifestSignature"], raw["preflight"],
+                             public=pem_public(raw["public"]), key=raw["public"],
+                             launcher_bytes=root_read(LAUNCHER, mode=0o555), policy_raw=raw["policy"], policy=policy)
     require(canonical(policy) == canonical(context["policy"]) and context["policySha256"] == digest(raw["policy"])
             and context["launcherSha256"] == anchor["launcherSha256"] and context["roots"] == policy["warmRoots"]
             and context["hiddenPaths"] == hidden_paths(policy) and context["launcher"] == LAUNCHER,
@@ -249,7 +268,8 @@ def internal_authority(context):
 
 
 def hidden_paths(policy):
-    return ["/etc/planeon/linux-runner", "/home/runner", "/root/.ssh",
+    return [MANIFEST, MANIFEST + ".sig", PUBLIC, PREFLIGHT, POLICY, PROFILE, ANCHOR,
+            "/home/runner", "/root/.ssh",
             policy["runnerHome"] + "/.credentials", "/run/docker.sock", "/run/containerd/containerd.sock"]
 
 
@@ -310,7 +330,7 @@ def main():
                    "launcher": LAUNCHER, "preflightOnly": only}
         descriptors = {}
         try:
-            for name, path in AUTHORITY_FILES.items():
+            for name, path in (AUTHORITY_FILES if only else NORMAL_AUTHORITY_FILES).items():
                 descriptors[name] = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
             context["authorityDescriptors"] = descriptors
             code = supervise([FIREJAIL, "--keep-fd=" + ",".join(str(fd) for fd in descriptors.values()),

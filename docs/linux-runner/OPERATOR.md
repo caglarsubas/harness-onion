@@ -113,9 +113,10 @@ Tests require EPERM/EACCES for socket denial, never a timeout, route failure,
 unsupported address family or DNS failure. IPv4, IPv6, UDP/DNS, loopback, Unix
 pathname and abstract socket creation are tested without sending packets.
 
-Only four explicitly retained root-owned authority descriptors cross the
-Firejail boundary. The trusted supervisor revalidates their identity, custody,
-pins and signature, then closes all four before running any repository code.
+Only explicitly retained root-owned authority descriptors cross the Firejail
+boundary: four for bootstrap probes, seven for normal execution (also manifest,
+manifest signature and preflight). The trusted supervisor revalidates identity,
+custody, pins and signatures, then closes all of them before repository code.
 Ambient FDs are closed; stdin is replaced for packet commands. Supervisor
 dumpability is disabled, namespace/proc argv leakage is probed, and a fresh
 Python descendant must reproduce the negative controls. A pipe payload or
