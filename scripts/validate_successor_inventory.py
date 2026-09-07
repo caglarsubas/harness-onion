@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from functools import lru_cache
 from pathlib import Path
 import re
 import stat
@@ -116,7 +117,9 @@ def parse_hook_proof(document):
     tail = document.split(marker, 1)[1]
     if b"\n```" not in tail:
         raise ValueError("unterminated source proof")
-    raw = tail.split(b"\n```", 1)[0]
+    raw, closing = tail.split(b"\n```", 1)
+    if closing and not closing.startswith(b"\n"):
+        raise ValueError("source proof closing fence must end its line")
     if len(raw) > 16384:
         raise ValueError("source proof too large")
     result = parse(raw)
@@ -214,6 +217,12 @@ def regular_baseline_bytes(record, baseline):
     return raw
 
 
+@lru_cache(maxsize=256)
+def packet_semantics(raw):
+    # Key by exact bytes: mutations cannot reuse a predecessor's parsed value.
+    return canonical(yaml.safe_load(raw))
+
+
 def validate_successor_inventory(packets, record, inputs):
     try:
         pinned(record)
@@ -230,7 +239,7 @@ def validate_successor_inventory(packets, record, inputs):
             raw = inputs.get(path)
             if type(raw) is not bytes or digest(raw) != expected:
                 errors.append("immutable authority input changed: " + path)
-            elif path.startswith("task-packets/") and canonical(packets.get(Path(path).stem)) != canonical(yaml.safe_load(raw)):
+            elif path.startswith("task-packets/") and canonical(packets.get(Path(path).stem)) != packet_semantics(raw):
                 errors.append("packet semantic/byte mismatch: " + path)
         baseline = parse(inputs[BASELINE_PATH])
         if len(baseline["files"]) != 106 or sum(map(len, baseline["tests"].values())) != 150:

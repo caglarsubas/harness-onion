@@ -208,6 +208,9 @@ def test_fenced_source_proof_is_closed_and_data_only(inputs):
     proof = vector(inputs, 6)[6]
     document = b"# Source checkpoint\n\n```harness-launcher-source-proof\n" + canonical(proof) + b"\n```\n"
     assert parse_hook_proof(document) == proof
+    for closing in (b"```not-a-fence\n", b"```\r\n", b"```extra"):
+        with pytest.raises(ValueError):
+            parse_hook_proof(document[:-4] + closing)
     for changed in (b"", document + document, document[:-5], b"x" * 262145,
                     b'```harness-launcher-source-proof\n{"x":1,"x":2}\n```',
                     b'```harness-launcher-source-proof\n{"x":NaN}\n```',
