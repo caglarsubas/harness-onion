@@ -57,6 +57,7 @@ CONTRACT_PATHS = [
     "scripts/generate_contracts.py", "scripts/check_generated.py",
     "docs/model-api.md", "docs/model-usage-compatibility.md",
     "tests/golden/test_generated_contracts.py",
+    "tests/model/test_lifecycle_contracts.py",
 ]
 
 

@@ -283,13 +283,14 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-The current catalog contains 123 packets. The preceding 121-packet Linux test
-publication is historical; its consumed bytes are unchanged. Before CON-MODEL-001,
-publish the [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md),
-verify localhost PR CI and exact-main offline replay, then implement model
-contracts in their own product PR. Preserve every predecessor test assertion.
-The untouched baseline passed 758 tests; the new integration gap is source
-inspection, not an executed failure. Linux runtime gates remain closed.
+That publication contained 122 packets; the current catalog has 123. The preceding
+121-packet Linux test publication is historical; its consumed bytes are unchanged.
+The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
+localhost PR CI and exact-main replay before the model draft started.
+It changes no predecessor assertion. The untouched baseline passed 758 tests;
+that fixture integration finding remains source inspection, not an executed
+failure. The later inventory exception is separately bounded below.
+Linux runtime gates remain closed.
 
 ## Model API inventory authority — MET-REPAIR-006
 
