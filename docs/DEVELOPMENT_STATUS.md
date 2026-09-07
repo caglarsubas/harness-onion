@@ -19,7 +19,7 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 1 correction | `CTRL-FIX-003` | DONE — source/CI/merge/local exact-main | Control PR 10 at 1de7c40; 698 unit and 6 browser checks recorded, no Linux claim |
 | Alpha 2 foundation | `MET-LINUX-002` | DONE — source/CI/merge/local exact-main | PR 95 at c37f2b7; candidate and operator kit, SOURCE_PACKAGE_ONLY |
 | Alpha 2 authority | `MET-REPAIR-003` | DONE — source/CI/merge/local exact-main | Meta PR 96 at 7047ec9; consumed R1-R4 authority retained |
-| Operator prerequisite | `OPERATOR-RUNNER-002` | DONE — external installation/verification | Conformance-only profile admitted; fresh signed activation and OS-denial checks passed |
+| Operator prerequisite | OPERATOR-RUNNER-002 (external maintenance, not a product packet) | DONE — external installation/verification | Conformance-only profile admitted; fresh signed activation and OS-denial checks passed |
 | Alpha 2 correction | `CONF-FIX-001` | DONE — source/CI/merge/local exact-main | Conformance PR 4 at 07453d3; 83 tests, zero skips, full inventory closure |
 | Alpha 2 authority | `MET-REPAIR-004` | ONGOING — publication | One assertion-only legacy Linux test grant; CI/merge/main remain separate |
 | Alpha 2 early gate | `CONF-LINUX-001` | WAITING — MET-REPAIR-004 and independent Linux execution | Real Linux AMD64 build/isolation/minimal runtime baseline; ARM64 independently qualified |
