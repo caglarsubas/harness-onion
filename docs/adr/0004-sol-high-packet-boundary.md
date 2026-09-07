@@ -63,7 +63,7 @@ validates the committed report with all warm roots hidden. Every packet other
 than `MET-002`, including `CON-006`, retains
 `PROHIBITED_DURING_IMPLEMENTATION` and cannot declare observation authority.
 
-Eleven conformance packets may declare `liveCampaignExecution`, but this is a
+Twelve conformance packets may declare `liveCampaignExecution`, but this is a
 separate manual post-merge path. The external root-owned launcher accepts only
 `HARNESS_LIVE_EXECUTION_ENVELOPE`. The closed envelope binds the exact packet,
 command set, conformance kit, campaign definition and release, launcher, bundle,

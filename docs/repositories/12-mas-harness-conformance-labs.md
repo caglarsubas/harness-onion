@@ -190,7 +190,7 @@ supplies the hash-pinned packet through `HARNESS_TASK_PACKET` and invokes only
 `offlineExecution.wrapperArgv: ["./ci/verify-offline.sh"]` for the complete
 ordered list.
 
-The eleven environment-facing campaign packets repeat those argv arrays under a
+The twelve environment-facing campaign packets repeat those argv arrays under a
 closed `liveCampaignExecution` record. Offline PR acceptance runs with no live
 authority and verifies honest `NOT_RUN_ENV_UNAVAILABLE` behavior. A manual
 post-merge run uses the external trusted launcher with a dual-signed execution
