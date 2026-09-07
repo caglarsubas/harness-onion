@@ -263,7 +263,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 130 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 132 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -283,7 +283,7 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-That publication contained 122 packets; the current catalog has 130. The preceding
+That publication contained 122 packets; the current catalog has 132. The preceding
 121-packet Linux test publication is historical; its consumed bytes are unchanged.
 The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
 localhost PR CI and exact-main replay before the model draft started.
@@ -307,7 +307,7 @@ review. Source, offline, CI, merge, native Linux and tenant gates stay separate.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-Current catalog: 130 packets. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 132. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -322,3 +322,22 @@ pure authority/evidence adapter. Source fixtures never become native evidence.
 
 Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
 One packet, branch, PR and exact local/CI/main gate per run remains mandatory.
+
+## Approved packet scalar compatibility repair — MET-REPAIR-007
+
+The [exact correction guide](alpha-2/PACKET_SCALAR_REPAIR.md) adds MET-REPAIR-007 and
+CONF-FIX-002: **132 packets**, thirteen repositories, sixteen harnesses and
+**twelve** unchanged possible live declarations. The preceding 130 packet YAML
+and all existing architecture/legal/policy/release bytes remain immutable.
+This is the current supplement to the historical live-backend publication.
+
+CONF-LIVE-001 is blocked after its quoted scalar identity failed before any
+acceptance command or test ran. Complete CONF-FIX-002 in a separate product PR
+first: change only the exact parser branch and one full-file hash assertion,
+then add independent regression evidence in its three new owned files.
+No packet reserialization, dependency, root policy, installation or isolation
+change is authorized. Resume CONF-LIVE-001 only after corrective source,
+local offline, required PR CI, merge and separate local exact-main closure.
+Retain its original 103-file/120-test baseline and add corrective provenance
+only within its existing paths; the six-root/eight-command inventory is fixed.
+Native Linux, live backend, runtime and tenant acceptance remain separate gates.

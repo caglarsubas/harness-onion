@@ -53,8 +53,8 @@ def validate_linux_test_ownership(packets: Any, record: Any, historical_bytes: b
         errors.append("consumed 120-packet amendment must remain byte-identical")
     if not isinstance(packets, dict):
         return [*errors, "Linux assertion ownership requires a packet mapping"]
-    if len(packets) != 130:
-        errors.append("Current catalog requires exactly 130 packets; Linux ownership record remains 121")
+    if len(packets) != 132:
+        errors.append("Current catalog requires exactly 132 packets; Linux ownership record remains 121")
     for packet_id, expected in PACKET_DIGESTS.items():
         if packet_digest(packets.get(packet_id)) != expected:
             errors.append(packet_id + " exact assertion-only authority changed")
@@ -73,7 +73,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Linux test ownership valid: 130 packets; historical one-assertion grant preserved; native/live acceptance unproven.")
+        print("Linux test ownership valid: 132 packets; historical one-assertion grant preserved; native/live acceptance unproven.")
     return int(bool(errors))
 
 

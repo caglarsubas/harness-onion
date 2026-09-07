@@ -1,6 +1,6 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
-Snapshot: 2026-09-07, during `MET-LIVE-001` publication. This is a checkpoint,
+Snapshot: 2026-09-07, during `MET-REPAIR-007` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run
 must refresh GitHub evidence rather than infer completion from this document.
@@ -27,8 +27,10 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 authority | `MET-REPAIR-005` | DONE — source/CI/merge/local exact-main | Meta PR 98 at f8137ea; 1168 passed, ten existing nested-isolation skips |
 | Alpha 2 authority | `MET-REPAIR-006` | DONE — source/CI/merge/local exact-main | Meta PR 99 at f0ccd9f; 1295 passed, ten existing nested-isolation skips |
 | Alpha 2 | `CON-MODEL-001` | DONE — source/CI/merge/local exact-main | Contracts PR 9 at e9de8e5; 1175 passed, zero skips; original-source parity and runtime unproven |
-| Alpha 2 authority | `MET-LIVE-001` | ONGOING — publication | Six bounded source-only backend packets; no installation or native qualification |
-| Alpha 2 backend | `CONF-LIVE-001` | WAITING | Session contracts and cumulative inventory |
+| Alpha 2 authority | `MET-LIVE-001` | DONE — source/CI/merge/local exact-main | Meta PR 100 at 50cfd3f; 1453 passed, ten existing nested-isolation skips; no installation or native qualification |
+| Alpha 2 authority | `MET-REPAIR-007` | ONGOING — publication | Exact quote-safe packet parser and one-hash-assertion correction authority; no product edits |
+| Alpha 2 correction | `CONF-FIX-002` | WAITING — authority closure | Quote-safe parser, fixed legacy hash assertion and independent regression vectors |
+| Alpha 2 backend | `CONF-LIVE-001` | BLOCKED — parser prerequisite | Draft conformance PR 6 at 57ee966; scalar identity rejected before commands/tests; cancelled CI is not PASS |
 | Alpha 2 backend | `CONF-LIVE-002` | WAITING | Protected Linux supervisor and isolation candidate |
 | Alpha 2 backend | `CONF-LIVE-003` | WAITING | Fixed proxy transport and zero-cost admission |
 | Alpha 2 backend | `CONF-LIVE-004` | WAITING | Native Linux build and ten fixed probes |
@@ -44,7 +46,44 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 4 | `MODEL-004` through `CONF-WG-001` | WAITING | Performance, resilience, platform and enterprise acceptance |
 | Cross-phase | Artifact/SBOM, release, deployment, runtime, assurance, tenant acceptance | WAITING — independent gates | Never inferred from source/offline completion |
 
-## Current amendment boundary — trusted Linux live backend
+## Current amendment boundary — packet scalar compatibility
+
+The [exact correction guide](alpha-2/PACKET_SCALAR_REPAIR.md) and closed
+`architecture/packet-scalar-amendment.json` publish two new packets, for
+**132 packets**, thirteen repositories, sixteen harnesses and twelve unchanged
+possible live declarations. All 130 predecessor packet YAML and the existing
+architecture/legal/policy/release records (164 files total) remain byte-identical.
+The product parser and installed runner are not changed in this publication.
+
+MET-LIVE-001 completed as [meta PR 100](https://github.com/caglarsubas/harness-onion/pull/100),
+merge 50cfd3f13c6942bc7a6995d463482a390db0a98e, required CI 34108692075.
+Separate local exact-main: 1453 passed, ten existing nested-isolation skips,
+all twelve commands; log SHA-256
+d32a52c94ed08bad40dd47e001b3cee3e79c245968062eb279da588fff397956.
+
+CONF-LIVE-001 draft [PR 6](https://github.com/caglarsubas/mas-harness-conformance-labs/pull/6)
+remains unaccepted at 57ee9668e029b08310c57f502990e419b4a1c797.
+Signed activation sequence 53 established OS isolation, but the repository
+reader rejected its JSON-quoted scalar identity. **Zero acceptance commands and
+zero tests executed**; exit 2 is a pre-test refusal, not a failed test count.
+Retained log: 604f1ae0a94ed058d0243fd43e0268c5e524ad6a7259e9aa5f0b0b788aa02d39.
+CI 34115040866 / job 101719758135 was cancelled while queued, without a runner:
+CANCELLED_NOT_PASS. No source, CI or native acceptance may be inferred.
+
+Next: close MET-REPAIR-007 source/head, required localhost PR CI, merge and
+separate local exact-main evidence. Then implement CONF-FIX-002 on the accepted
+conformance main, not on the unaccepted session draft, in its own coding run/PR.
+Only its two exact existing-file transformations and three new owned files are
+authorized. Resume CONF-LIVE-001 after those corrective gates close; preserve
+the original 103-file/120-ID history and reconcile the corrective predecessor
+additively within its existing paths. Do not rewrite any signed packet YAML.
+Native AMD64/ARM64 remain NOT_RUN_ENV_UNAVAILABLE. No phase-end model-effort
+transition, root policy change or new administrator prompt is due.
+
+## Historical MET-LIVE-001 publication checkpoint
+
+The following authority-publication statements describe the earlier checkpoint;
+the verified current rows and corrective dispatch gate above supersede its next step.
 
 [Backend readiness guide](alpha-2/LIVE_BACKEND_READINESS.md) adds one meta packet
 and six conformance source packets: **130 packets**, thirteen repositories,

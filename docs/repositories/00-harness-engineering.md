@@ -208,6 +208,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 23. `MET-REPAIR-005-model-fixture-scope`: exact model fixture-copy helper exception, immutable baseline, strict input-byte and whole-packet mutation checks; no product implementation.
 24. `MET-REPAIR-006-model-api-inventory`: exact additive required-five API predicate, pinned failed-draft evidence, historical fixture routing and independent scope/safety mutations; no product implementation.
 25. `MET-LIVE-001`: publish six bounded conformance backend packets, immutable predecessors and the strict source/native dispatch gate; no product or installation work.
+26. `MET-REPAIR-007`: publish the exact quote-safe parser and one-hash-assertion repair authority, 164 immutable predecessor files and the additive CONF-FIX-002 dispatch prerequisite.
 
 ## Testing, verification, and acceptance
 
@@ -325,7 +326,7 @@ current successor. No consumed authority, root installation or product edit.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-Current catalog: 130 packets. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 132. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -340,3 +341,22 @@ pure authority/evidence adapter. Source fixtures never become native evidence.
 
 Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
 One packet, branch, PR and exact local/CI/main gate per run remains mandatory.
+
+## Approved packet scalar compatibility repair — MET-REPAIR-007
+
+The [exact correction guide](../alpha-2/PACKET_SCALAR_REPAIR.md) adds MET-REPAIR-007 and
+CONF-FIX-002: **132 packets**, thirteen repositories, sixteen harnesses and
+**twelve** unchanged possible live declarations. The preceding 130 packet YAML
+and all existing architecture/legal/policy/release bytes remain immutable.
+This is the current supplement to the historical live-backend publication.
+
+CONF-LIVE-001 is blocked after its quoted scalar identity failed before any
+acceptance command or test ran. Complete CONF-FIX-002 in a separate product PR
+first: change only the exact parser branch and one full-file hash assertion,
+then add independent regression evidence in its three new owned files.
+No packet reserialization, dependency, root policy, installation or isolation
+change is authorized. Resume CONF-LIVE-001 only after corrective source,
+local offline, required PR CI, merge and separate local exact-main closure.
+Retain its original 103-file/120-test baseline and add corrective provenance
+only within its existing paths; the six-root/eight-command inventory is fixed.
+Native Linux, live backend, runtime and tenant acceptance remain separate gates.
