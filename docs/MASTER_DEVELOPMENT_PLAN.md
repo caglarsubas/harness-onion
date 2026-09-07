@@ -263,7 +263,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 123 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 130 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -294,7 +294,7 @@ Linux runtime gates remain closed.
 
 ## Model API inventory authority — MET-REPAIR-006
 
-The current queue has 123 packets. [The exact inventory amendment](alpha-2/MODEL_API_INVENTORY_REPAIR.md)
+That publication had 123 packets. [The exact inventory amendment](alpha-2/MODEL_API_INVENTORY_REPAIR.md)
 preserves the 122-packet fixture publication and its exact helper grant.
 The model draft reproduced a second fixed inventory: 1048 passed, one failed,
 zero skipped. Permit only required-five API membership instead of exact equality,

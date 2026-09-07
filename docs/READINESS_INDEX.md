@@ -250,7 +250,7 @@ Current catalog: 130 packets; the prior 121-packet record remains historical. Hi
 
 - [MET-REPAIR-006](../task-packets/MET-REPAIR-006.yaml): exact predicate-only grant.
 - [Closed record](../architecture/model-api-inventory-amendment.json): immutable passing baseline, failed draft and predicate/outside-byte bindings.
-- [Development instructions](alpha-2/MODEL_API_INVENTORY_REPAIR.md): current 123-packet checkpoint, negative tests and remaining product/native gates.
+- [Development instructions](alpha-2/MODEL_API_INVENTORY_REPAIR.md): historical 123-packet checkpoint, negative tests and then-pending product/native gates.
 
 The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 

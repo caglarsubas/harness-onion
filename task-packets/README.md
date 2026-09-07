@@ -334,7 +334,7 @@ draft CON-MODEL-001 PR 9. It permits only required-five subset membership in the
 pinned lifecycle test. Preserve its test ID and every other byte, including every
 API's OpenAPI-version, no-server, nonempty-path and local-reference checks.
 See [the exact inventory repair](../docs/alpha-2/MODEL_API_INVENTORY_REPAIR.md).
-The 123-packet queue retains the 122-packet consumed publication unchanged.
+That 123-packet publication retains the 122-packet consumed publication unchanged.
 The draft has 1048 passed, one failed, zero skipped; cancelled CI is not PASS.
 Normal model-contract completeness review and full source/CI/main gates remain.
 
