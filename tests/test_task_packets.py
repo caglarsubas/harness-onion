@@ -72,7 +72,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 123
+    assert len(files) == EXPECTED_PACKET_COUNT == 130
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -199,7 +199,7 @@ def test_live_campaign_authority_is_exact_and_offline_commands_remain_primary() 
     packets = packets_by_id()
 
     assert set(LIVE_CAMPAIGN_EVIDENCE_AXES) == LIVE_CAMPAIGN_PACKET_IDS
-    assert len(LIVE_CAMPAIGN_PACKET_IDS) == 11
+    assert len(LIVE_CAMPAIGN_PACKET_IDS) == 12
     for packet_id, packet in packets.items():
         live_execution = packet.get("liveCampaignExecution")
         if packet_id in LIVE_CAMPAIGN_PACKET_IDS:

@@ -24,6 +24,7 @@ try:
     from validate_linux_repair import validate_linux_repair
     from validate_linux_test_ownership import validate_linux_test_ownership
     from validate_model_fixture_scope import load_scope_inputs, validate_model_fixture_scope
+    from validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
     from validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
@@ -33,6 +34,7 @@ except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit te
     from scripts.validate_linux_repair import validate_linux_repair
     from scripts.validate_linux_test_ownership import validate_linux_test_ownership
     from scripts.validate_model_fixture_scope import load_scope_inputs, validate_model_fixture_scope
+    from scripts.validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
     from scripts.validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 
 
@@ -109,7 +111,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 123
+EXPECTED_PACKET_COUNT = 130
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -119,6 +121,7 @@ LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-K3S-001",
     "CONF-K8S-001",
     "CONF-LINUX-001",
+    "CONF-LIVE-006",
     "CONF-OCP-001",
     "CONF-SEC-001",
     "CONF-UPG-001",
@@ -249,6 +252,7 @@ LIVE_CAMPAIGN_EVIDENCE_AXES = {
     "CONF-K3S-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
     "CONF-K8S-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
     "CONF-LINUX-001": ["DEPLOYMENT", "RUNTIME", "SECURITY", "ASSURANCE"],
+    "CONF-LIVE-006": ["DEPLOYMENT", "RUNTIME", "SECURITY", "ASSURANCE"],
     "CONF-OCP-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
     "CONF-SEC-001": ["SECURITY", "ASSURANCE"],
     "CONF-UPG-001": ["DEPLOYMENT", "RUNTIME", "ASSURANCE"],
@@ -4414,6 +4418,8 @@ def validate_packets(
         load_inventory_inputs(ROOT),
     ):
         validation.error(inventory_error)
+    for live_error in validate_live_backend_readiness(packets, *load_live_inputs(ROOT)):
+        validation.error(live_error)
     for amendment_error in validate_repair_amendment(
         packets, load_json(ROOT / "architecture/readiness-repair-amendment.json"),
         (ROOT / "architecture/readiness-repairs.json").read_bytes(),
@@ -4461,12 +4467,14 @@ def validate_packets(
         "schemas/task-packet.schema.json": "MET-A2-001",
         "architecture/model-evidence-boundary.json": "MET-A2-001",
         "scripts/validate_alpha2_readiness.py": "MET-REPAIR-006",
-        "scripts/validate_readiness_repairs.py": "MET-REPAIR-006",
-        "scripts/validate_linux_readiness.py": "MET-REPAIR-006",
-        "scripts/validate_linux_repair.py": "MET-REPAIR-006",
-        "scripts/validate_linux_test_ownership.py": "MET-REPAIR-006",
-        "scripts/validate_model_fixture_scope.py": "MET-REPAIR-006",
-        "scripts/validate_model_api_inventory.py": "MET-REPAIR-006",
+        "scripts/validate_readiness_repairs.py": "MET-LIVE-001",
+        "scripts/validate_linux_readiness.py": "MET-LIVE-001",
+        "scripts/validate_linux_repair.py": "MET-LIVE-001",
+        "scripts/validate_linux_test_ownership.py": "MET-LIVE-001",
+        "scripts/validate_model_fixture_scope.py": "MET-LIVE-001",
+        "scripts/validate_model_api_inventory.py": "MET-LIVE-001",
+        "architecture/live-backend-roadmap.json": "MET-LIVE-001",
+        "scripts/validate_live_backend_readiness.py": "MET-LIVE-001",
         "architecture/model-api-inventory-amendment.json": "MET-REPAIR-006",
         "architecture/model-fixture-scope-amendment.json": "MET-REPAIR-005",
         "architecture/linux-test-ownership-amendment.json": "MET-REPAIR-004",
@@ -4479,7 +4487,9 @@ def validate_packets(
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-REPAIR-006"
+                "MET-LIVE-001"
+                if packet_path.stem in {"MET-LIVE-001", "CONF-LIVE-001", "CONF-LIVE-002", "CONF-LIVE-003", "CONF-LIVE-004", "CONF-LIVE-005", "CONF-LIVE-006"}
+                else "MET-REPAIR-006"
                 if packet_path.stem in {"MET-REPAIR-006", "CON-MODEL-001"}
                 else "MET-REPAIR-005"
                 if packet_path.stem == "MET-REPAIR-005"

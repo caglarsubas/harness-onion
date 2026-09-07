@@ -27,7 +27,7 @@ def inputs():
 def test_current_authority_and_historical_bytes_agree(inputs):
     packets, record, snapshots = inputs
     assert validate_model_fixture_scope(*inputs) == []
-    assert len(packets) == 123
+    assert len(packets) == 130
     assert record["historicalPacketCount"] == 121
     assert record["baseline"]["passed"] == 758
     assert record["baseline"]["failed"] == record["baseline"]["skipped"] == 0
@@ -200,9 +200,9 @@ def test_commands_execution_identity_and_count_cannot_change(inputs):
 
 def test_current_checkpoint_separates_source_from_native_acceptance():
     status = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "| Alpha 2 authority | `MET-REPAIR-006` | ONGOING" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-006` | DONE" in status
     assert "| Alpha 2 authority | `MET-REPAIR-005` | DONE" in status
     assert "| Alpha 2 authority | `MET-REPAIR-004` | DONE" in status
     assert "| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — native qualification" in status
-    assert "| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-006" in status
+    assert "| Alpha 2 | `CON-MODEL-001` | DONE" in status
     assert "not a live dashboard or certification ledger" in status
