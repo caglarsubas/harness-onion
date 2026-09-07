@@ -119,7 +119,7 @@ def validate_repair_authority(packets: dict[str, Any], record: Any) -> list[str]
             require(packet.get("offlineAcceptanceCommands") == PRODUCT_COMMANDS[packet_id], f"{packet_id} regression commands changed")
             require(packet.get("prefetchCommands") == ([] if packet_id == "CON-FIX-001" else [["make", "prefetch"]]), f"{packet_id} prefetch boundary changed")
     model = packets.get("CON-MODEL-001", {})
-    require(model.get("predecessors") == ["CON-007", "MET-OBS-MODEL-001", "CON-FIX-001", "CTRL-FIX-003"], "model coding must wait for both product corrections")
+    require(model.get("predecessors") == ["CON-007", "MET-OBS-MODEL-001", "CON-FIX-001", "CTRL-FIX-003", "MET-REPAIR-005"], "model coding must wait for both product corrections and the fixture amendment")
     require(model.get("offlineAcceptanceCommands") == CONTRACT_COMMANDS, "model contract acceptance must run the entire contracts suite")
     live = packets.get("CONF-A2-001", {})
     require(live.get("predecessors") == ["CONF-A1-001", "KN-RET-001", "MODEL-003", "RUN-GW-002", "EXEC-PROT-001", "EXEC-ORCH-001", "CTRL-INTEGRATE-001"], "Alpha-2 certification must retain foundation and production integration gates")
@@ -297,7 +297,7 @@ def validate_repair_amendment(
         == EXPECTED_AMENDMENT["historicalRepairRecordSha256"],
         "original repair publication was rewritten",
     )
-    require(len(packets) == 121, "current Linux test repair requires exactly 121 packets; historical amendment remains 115")
+    require(len(packets) == 122, "current model fixture amendment requires exactly 122 packets; historical amendment remains 115")
     meta = packets.get("MET-REPAIR-002", {})
     require(isinstance(meta, dict), "repair amendment packet must be an object")
     if not isinstance(meta, dict):

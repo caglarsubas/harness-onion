@@ -263,7 +263,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 121 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 122 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -280,3 +280,13 @@ preserves the consumed 118/120-packet records and advances the current catalog
 to 121. Order: MET-REPAIR-004 publication, CONF-LINUX-001 source, then separately
 authorized native Linux qualification; runtime coding and later tenant acceptance
 remain gated. No product or host installation occurs in the meta publication.
+
+## Model fixture-copy authority — MET-REPAIR-005
+
+The current catalog contains 122 packets. The preceding 121-packet Linux test
+publication is historical; its consumed bytes are unchanged. Before CON-MODEL-001,
+publish the [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md),
+verify localhost PR CI and exact-main offline replay, then implement model
+contracts in their own product PR. Preserve every predecessor test assertion.
+The untouched baseline passed 758 tests; the new integration gap is source
+inspection, not an executed failure. Linux runtime gates remain closed.

@@ -14,7 +14,7 @@ license disposition, or live campaign is authorized by this publication alone.
 | Alpha 2 entry | `MET-REPAIR-001` | Meta | Publish R01–R06 repair authority |
 | Foundation correction | `CON-FIX-001` | Contracts | Full-suite baseline, additive tests and independent status vectors |
 | Alpha 1 correction | `CTRL-FIX-003` | Control | Freshness, portfolio and canonical status parity |
-| Alpha 2 | `CON-MODEL-001` | Contracts | Additive model API/usage release and independent vectors after both corrections |
+| Alpha 2 | `CON-MODEL-001` | Contracts | Additive model API/usage release and independent vectors after both corrections and MET-REPAIR-005 |
 | Alpha 2 | `MODEL-001` | Model plane | Clean-room inference core against the pinned contract release |
 | Alpha 2 | `MODEL-002` | Model plane | Model custody and signed route activation |
 
@@ -105,8 +105,9 @@ the product invent a divergent format. Use the frozen existing dependencies.
    never insert invented artifact digests. Run the packet's full offline argv
    list, including the entire contracts test suite, PR checks, merge and
    exact-main replay separately. Pin CON-FIX-001 in addition to the original
-   CON-007 provenance; preserve its status vectors. The model packet cannot edit
-   predecessor test files or weaken their checks to accommodate the sixth API.
+   CON-007 provenance; preserve its status vectors. The model packet cannot weaken
+   predecessor checks. MET-REPAIR-005 supplies the sole helper-copy exception
+   below; all other predecessor test edits remain forbidden.
 
 ## Original baseline versus destination conformance
 
@@ -163,3 +164,14 @@ its correction gates. Model runtime coding requires fresh native Linux AMD64
 baseline PASS; every new model artifact then needs its own target-specific
 Linux evidence. ARM64 and GPU/driver claims require independent qualification.
 macOS/MLX development evidence does not qualify the Linux Kubernetes runtime.
+
+## Superseding exact fixture-copy exception — MET-REPAIR-005
+
+The [approved fixture amendment](MODEL_FIXTURE_SCOPE_REPAIR.md) adds one merged
+predecessor and one exact legacy-test path to CON-MODEL-001. Only the pinned
+_copy_generation_inputs helper may add the required model vector/snapshot
+copies and input-lock file copy. Every other byte and assertion stays unchanged.
+This supersedes only the earlier blanket test-edit exclusion, not the full-suite
+or strict release-input requirements. The original 758-test baseline passed;
+the missing temporary-input inventory is SOURCE_INSPECTION_ONLY. Native runtime
+qualification remains independent and unproven.
