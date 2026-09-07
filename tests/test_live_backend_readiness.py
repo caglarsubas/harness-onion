@@ -204,6 +204,7 @@ def test_malformed_or_unpinned_record_cannot_control_input_reads(tmp_path, raw):
 
 def test_current_status_preserves_history_and_labels_next_work():
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
+    assert "during `MET-LIVE-001` publication" in text
     assert "| Alpha 2 authority | `MET-LIVE-001` | ONGOING" in text
     assert "| Alpha 2 | `CON-MODEL-001` | DONE" in text
     assert "Historical MET-REPAIR-006 publication checkpoint" in text
