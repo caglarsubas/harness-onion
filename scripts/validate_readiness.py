@@ -22,12 +22,14 @@ try:
     from validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
     from validate_linux_readiness import validate_linux_readiness
     from validate_linux_repair import validate_linux_repair
+    from validate_linux_test_ownership import validate_linux_test_ownership
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
     from scripts.validate_alpha2_readiness import validate_model_authority
     from scripts.validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
     from scripts.validate_linux_readiness import validate_linux_readiness
     from scripts.validate_linux_repair import validate_linux_repair
+    from scripts.validate_linux_test_ownership import validate_linux_test_ownership
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +105,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 120
+EXPECTED_PACKET_COUNT = 121
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -4393,6 +4395,11 @@ def validate_packets(
         (ROOT / "architecture/linux-readiness.json").read_bytes(),
     ):
         validation.error(linux_repair_error)
+    for test_ownership_error in validate_linux_test_ownership(
+        packets, load_json(ROOT / "architecture/linux-test-ownership-amendment.json"),
+        (ROOT / "architecture/linux-readiness-amendment.json").read_bytes(),
+    ):
+        validation.error(test_ownership_error)
     for amendment_error in validate_repair_amendment(
         packets, load_json(ROOT / "architecture/readiness-repair-amendment.json"),
         (ROOT / "architecture/readiness-repairs.json").read_bytes(),
@@ -4440,9 +4447,11 @@ def validate_packets(
         "schemas/task-packet.schema.json": "MET-A2-001",
         "architecture/model-evidence-boundary.json": "MET-A2-001",
         "scripts/validate_alpha2_readiness.py": "MET-LINUX-001",
-        "scripts/validate_readiness_repairs.py": "MET-REPAIR-003",
-        "scripts/validate_linux_readiness.py": "MET-REPAIR-003",
-        "scripts/validate_linux_repair.py": "MET-REPAIR-003",
+        "scripts/validate_readiness_repairs.py": "MET-REPAIR-004",
+        "scripts/validate_linux_readiness.py": "MET-REPAIR-004",
+        "scripts/validate_linux_repair.py": "MET-REPAIR-004",
+        "scripts/validate_linux_test_ownership.py": "MET-REPAIR-004",
+        "architecture/linux-test-ownership-amendment.json": "MET-REPAIR-004",
         "architecture/linux-readiness-amendment.json": "MET-REPAIR-003",
         "architecture/linux-readiness.json": "MET-LINUX-001",
         "architecture/readiness-repairs.json": "MET-REPAIR-001",
@@ -4452,6 +4461,9 @@ def validate_packets(
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
+                "MET-REPAIR-004"
+                if packet_path.stem in {"MET-REPAIR-004", "CONF-LINUX-001"}
+                else
                 "MET-REPAIR-003"
                 if packet_path.stem in {"MET-REPAIR-003", "CONF-FIX-001", "CONF-LINUX-001"}
                 else "MET-LINUX-001"

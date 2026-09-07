@@ -263,8 +263,20 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-The queue has 120 packets across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 121 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
 gate. No cloud/VM provisioning, new keys or automatic OS authentication is added.
+
+## Assertion-only pre-Linux test repair — MET-REPAIR-004
+
+The completed CONF-FIX-001 source correction exposed one remaining ownership
+gap: the existing canonical vocabulary regression requires five handlers but
+CONF-LINUX-001 must add one. MET-REPAIR-004 permits only replacing that assertion
+with the exact ordered six-handler tuple, not weakening it or editing other
+legacy vectors. Its [closed publication](alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md)
+preserves the consumed 118/120-packet records and advances the current catalog
+to 121. Order: MET-REPAIR-004 publication, CONF-LINUX-001 source, then separately
+authorized native Linux qualification; runtime coding and later tenant acceptance
+remain gated. No product or host installation occurs in the meta publication.

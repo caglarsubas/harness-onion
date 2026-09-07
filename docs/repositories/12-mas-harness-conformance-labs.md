@@ -245,3 +245,15 @@ parity, alpha1, runner-boundary and linux-baseline suites, campaign and evidence
 verification. Empty or omitted suites fail. No broad package initializer change
 or legacy Alpha-1 import rewrite is needed. Native AMD64 PASS and separately
 qualified ARM64 remain independent post-merge gates, never source-test claims.
+
+## MET-REPAIR-004 test-ownership boundary
+
+CONF-FIX-001 is merged at 07453d3e6313c836426545c454380176bc2a2ee1; all 83
+source tests passed locally, in required PR CI and in local exact-main replay.
+CONF-LINUX-001 additionally depends on MET-REPAIR-004 and may replace only
+self.assertEqual(len(HANDLERS), 5) in the named canonical-schema test with the
+exact ordered six-handler tuple. Every other byte/assertion stays unchanged.
+New negative tests live in its Linux-owned directory and reuse the unchanged
+inventory helper to cover all five suites and all 83 predecessor test IDs.
+No runner-boundary path, new live authority, native PASS or tenant acceptance
+is granted by this amendment. See [the exact scope](../alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md).

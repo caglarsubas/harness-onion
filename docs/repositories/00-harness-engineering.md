@@ -204,6 +204,7 @@ authorities and the Phase-0 audit record.
 Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a PR, runs self-hosted CI, and merges only after all required checks pass.
 
 21. `MET-REPAIR-003-linux-conformance-authority`: closed R1-R4 scope amendment, exact suite discovery and CONF-FIX-001 prerequisite; no product implementation or native Linux claim.
+22. `MET-REPAIR-004-linux-test-ownership`: one assertion-only legacy test grant, immutable 118/120-packet history, completed runner source evidence and unchanged native/live gates.
 
 ## Testing, verification, and acceptance
 
@@ -215,7 +216,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 120-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 121-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
@@ -291,3 +292,11 @@ architecture/linux-readiness.json byte-for-byte. The whole predecessor suite,
 Linux candidate suite and new scope/discovery regressions run offline in one
 signed process tree. Source publication cannot claim product repair, external
 installation, native qualification or a model-effort transition.
+
+## Assertion-only Linux test amendment
+
+MET-REPAIR-004 owns architecture/linux-test-ownership-amendment.json and its
+validator/tests. It extends the current catalog to 121, preserves the consumed
+MET-REPAIR-003 record and grants CONF-LINUX-001 exactly one additional test path.
+The exact six-handler assertion keeps all other test bytes unchanged; no product
+or operator code is part of this publication.
