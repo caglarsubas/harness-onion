@@ -29,7 +29,7 @@ def inputs():
 def test_closed_catalog_preserves_164_files_and_all_130_packet_bytes(inputs):
     packets, record, raw = inputs
     assert validate_scalar_repair(*inputs) == []
-    assert len(packets) == 132 and len(record["protectedFiles"]) == 164 and len(raw) == 169
+    assert len(packets) == 134 and len(record["protectedFiles"]) == 164 and len(raw) == 169
     assert len([p for p in record["protectedFiles"] if p.startswith("task-packets/")]) == 130
     assert record["repositoryCount"] == 13 and record["harnessCount"] == 16
     assert record["liveDeclarationCount"] == 12
@@ -219,7 +219,7 @@ def test_status_and_consumer_reconciliation_remain_separate_from_product_accepta
     assert gate["additionalAllowedPaths"] == [] and gate["nativeAcceptance"] is False
     assert record["failedDraft"]["testsExecuted"] == record["failedDraft"]["commandsExecuted"] == 0
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "during `MET-REPAIR-007` publication" in text
+    assert "during `MET-REPAIR-008` publication" in text
     assert "| Alpha 2 authority | `MET-LIVE-001` | DONE" in text
     assert "| Alpha 2 backend | `CONF-LIVE-001` | BLOCKED" in text
     assert "CANCELLED_NOT_PASS" in text

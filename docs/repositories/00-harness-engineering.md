@@ -210,6 +210,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 25. `MET-LIVE-001`: publish six bounded conformance backend packets, immutable predecessors and the strict source/native dispatch gate; no product or installation work.
 26. `MET-REPAIR-007`: publish the exact quote-safe parser and one-hash-assertion repair authority, 164 immutable predecessor files and the additive CONF-FIX-002 dispatch prerequisite.
 
+27. `MET-REPAIR-008`: publish the exact cumulative inventory repair, 170 immutable predecessor files, six-stage source proof and CONF-FIX-003 prerequisite.
+
 ## Testing, verification, and acceptance
 
 The `MET-001` bootstrap packet declares `prefetchCommands: []` and ordered
@@ -326,7 +328,7 @@ current successor. No consumed authority, root installation or product edit.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 132. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 134. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -342,13 +344,13 @@ pure authority/evidence adapter. Source fixtures never become native evidence.
 Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
 One packet, branch, PR and exact local/CI/main gate per run remains mandatory.
 
-## Approved packet scalar compatibility repair — MET-REPAIR-007
+## Historical packet scalar compatibility publication — MET-REPAIR-007
 
 The [exact correction guide](../alpha-2/PACKET_SCALAR_REPAIR.md) adds MET-REPAIR-007 and
 CONF-FIX-002: **132 packets**, thirteen repositories, sixteen harnesses and
 **twelve** unchanged possible live declarations. The preceding 130 packet YAML
 and all existing architecture/legal/policy/release bytes remain immutable.
-This is the current supplement to the historical live-backend publication.
+This is the retained 132-packet publication. The successor-inventory supplement below supersedes its dispatch status.
 
 CONF-LIVE-001 is blocked after its quoted scalar identity failed before any
 acceptance command or test ran. Complete CONF-FIX-002 in a separate product PR
@@ -360,3 +362,33 @@ local offline, required PR CI, merge and separate local exact-main closure.
 Retain its original 103-file/120-test baseline and add corrective provenance
 only within its existing paths; the six-root/eight-command inventory is fixed.
 Native Linux, live backend, runtime and tenant acceptance remain separate gates.
+
+## Approved cumulative inventory repair — MET-REPAIR-008
+
+The [cumulative inventory guide](../alpha-2/SUCCESSOR_INVENTORY_REPAIR.md) adds
+MET-REPAIR-008 and CONF-FIX-003: **134 packets**, thirteen repositories, sixteen
+harnesses and twelve unchanged possible live declarations. All 132 previous
+packet YAML and existing architecture/legal/policy/release bytes are immutable
+(170 files). Neither old correction record is rewritten.
+
+MET-REPAIR-007 and CONF-FIX-002 are complete as separate source/CI/merge/local
+exact-main checkpoints. Source inspection subsequently found the scalar suite's
+frozen 106-file inventory rejects the next ten legitimate files; the earlier
+successor-readiness inference is withdrawn, not its actual 150-test PASS.
+Complete the new authority and then CONF-FIX-003 in its separate product PR:
+one exact three-hunk test change and four new files, all 150 previous test IDs
+plus twenty new tests. The parser and every other predecessor stay fixed.
+
+Require complete ordered stage path sets (110, 120, 127, 135, 141, 146, 151 files),
+predecessor hashes/modes, real collection and strict malformed/link/partial-stage
+negatives. CONF-LIVE-006 alone may later replace the single terminal unavailable
+statement after unchanged launcher manifest/preflight checks, with a bounded
+SOURCE_DELTA_ONLY proof in its already-owned qualification document. That proof
+is source accounting, not execution authority or a code-safety certification.
+
+CONF-LIVE-001 remains blocked until corrective source, local offline, required
+localhost PR CI, merge and local exact-main close. Then reconcile cumulative
+history within its existing ten paths and unchanged six-root/eight-command
+acceptance. No signed consumer packet, root policy, dependency, installation or
+billing boundary changes. Native Linux and tenant acceptance remain separate;
+no phase-end model-effort transition is due.

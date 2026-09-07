@@ -11,7 +11,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 132; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 134; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -205,7 +205,7 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 132-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 134-packet execution
   catalog and topological delivery guidance.
 
 ## Early Linux readiness publication
@@ -216,7 +216,7 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; that publication contained 118 packets; the current approved catalog contains 132.
+historical; that publication contained 118 packets; the current approved catalog contains 134.
 
 ## Conformance readiness amendment
 
@@ -236,7 +236,7 @@ satisfy Linux qualification. Prior Linux policy bytes remain immutable.
 - [Closed amendment](../architecture/linux-test-ownership-amendment.json): immutable predecessor source/CI/main pins, exact statement replacement and preserved native/live gates.
 - [Guide and phase checkpoint](alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md): publication only; CONF-LINUX-001 implementation and native qualification remain independent.
 
-Current catalog: 132 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
+Current catalog: 134 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
 
 ## Model fixture scope — preserved authority
 
@@ -259,7 +259,7 @@ The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 132. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 134. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -275,13 +275,13 @@ pure authority/evidence adapter. Source fixtures never become native evidence.
 Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
 One packet, branch, PR and exact local/CI/main gate per run remains mandatory.
 
-## Approved packet scalar compatibility repair — MET-REPAIR-007
+## Historical packet scalar compatibility publication — MET-REPAIR-007
 
 The [exact correction guide](alpha-2/PACKET_SCALAR_REPAIR.md) adds MET-REPAIR-007 and
 CONF-FIX-002: **132 packets**, thirteen repositories, sixteen harnesses and
 **twelve** unchanged possible live declarations. The preceding 130 packet YAML
 and all existing architecture/legal/policy/release bytes remain immutable.
-This is the current supplement to the historical live-backend publication.
+This is the retained 132-packet publication. The successor-inventory supplement below supersedes its dispatch status.
 
 CONF-LIVE-001 is blocked after its quoted scalar identity failed before any
 acceptance command or test ran. Complete CONF-FIX-002 in a separate product PR
@@ -293,3 +293,33 @@ local offline, required PR CI, merge and separate local exact-main closure.
 Retain its original 103-file/120-test baseline and add corrective provenance
 only within its existing paths; the six-root/eight-command inventory is fixed.
 Native Linux, live backend, runtime and tenant acceptance remain separate gates.
+
+## Approved cumulative inventory repair — MET-REPAIR-008
+
+The [cumulative inventory guide](alpha-2/SUCCESSOR_INVENTORY_REPAIR.md) adds
+MET-REPAIR-008 and CONF-FIX-003: **134 packets**, thirteen repositories, sixteen
+harnesses and twelve unchanged possible live declarations. All 132 previous
+packet YAML and existing architecture/legal/policy/release bytes are immutable
+(170 files). Neither old correction record is rewritten.
+
+MET-REPAIR-007 and CONF-FIX-002 are complete as separate source/CI/merge/local
+exact-main checkpoints. Source inspection subsequently found the scalar suite's
+frozen 106-file inventory rejects the next ten legitimate files; the earlier
+successor-readiness inference is withdrawn, not its actual 150-test PASS.
+Complete the new authority and then CONF-FIX-003 in its separate product PR:
+one exact three-hunk test change and four new files, all 150 previous test IDs
+plus twenty new tests. The parser and every other predecessor stay fixed.
+
+Require complete ordered stage path sets (110, 120, 127, 135, 141, 146, 151 files),
+predecessor hashes/modes, real collection and strict malformed/link/partial-stage
+negatives. CONF-LIVE-006 alone may later replace the single terminal unavailable
+statement after unchanged launcher manifest/preflight checks, with a bounded
+SOURCE_DELTA_ONLY proof in its already-owned qualification document. That proof
+is source accounting, not execution authority or a code-safety certification.
+
+CONF-LIVE-001 remains blocked until corrective source, local offline, required
+localhost PR CI, merge and local exact-main close. Then reconcile cumulative
+history within its existing ten paths and unchanged six-root/eight-command
+acceptance. No signed consumer packet, root policy, dependency, installation or
+billing boundary changes. Native Linux and tenant acceptance remain separate;
+no phase-end model-effort transition is due.

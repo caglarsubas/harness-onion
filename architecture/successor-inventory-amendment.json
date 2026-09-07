@@ -1,0 +1,828 @@
+{
+  "authorityPacket": "MET-REPAIR-008",
+  "change": {
+    "afterSha256": "e1491e4407ff6d221871b45bbd775beb28afba11d418ae001847a512bb4b6fe6",
+    "beforeSha256": "c340e47f5eb8286e2e76ae5b38dc0bed6073701de44859b3356aed4c708f42e8",
+    "hunks": [
+      {
+        "afterBlock": "        helper = load_local(\"scalar_successor_inventory\", \"tests/platform/linux_baseline/_successor_inventory.py\")\n        result = helper.verify_repository(ROOT)\n        self.assertEqual(result[\"baselineFiles\"], 106)\n        self.assertEqual(result[\"evidenceClass\"], \"SOURCE_INVENTORY_ONLY\")\n        self.assertIs(result[\"nativeAcceptance\"], False)\n",
+        "beforeBlock": "        observed = {}\n        for path in BASELINE[\"files\"]:\n            file = regular(path)\n            observed[path] = {\"mode\": \"100755\" if file.stat().st_mode & 0o111 else \"100644\", \"sha256\": \"sha256:\" + sha(file.read_bytes())}\n        check_original_files(observed)\n        files = subprocess.run([\"git\", \"ls-files\", \"-z\"], cwd=ROOT, check=True, capture_output=True).stdout.decode().rstrip(\"\\0\").split(\"\\0\")\n        self.assertEqual(set(files), set(BASELINE[\"files\"]) | ADDED_PATHS)\n        for path in ADDED_PATHS:\n            self.assertTrue(stat.S_ISREG(regular(path).stat().st_mode))\n",
+        "prefixSha256": "e0db2a1261abd5a0789888a372105850ce0ea6ad7f32158123dca98279fd662f",
+        "suffixSha256": "364e9c71a8fbfced8d6f3d19067eaf167f4c94ca09b93c8f5b16182eef945d67"
+      },
+      {
+        "afterBlock": "        expected[TEST_PATH] = sorted(NEW_TEST_IDS)\n        expected[\"tests/platform/linux_baseline/test_successor_inventory.py\"] = [\n            \"SuccessorInventoryTests.test_all_seven_complete_stage_vectors\",\n            \"SuccessorInventoryTests.test_current_repository\",\n            \"SuccessorInventoryTests.test_current_test_guard_not_exempt\",\n            \"SuccessorInventoryTests.test_every_missing_stage_path_refuses\",\n            \"SuccessorInventoryTests.test_exact_scalar_test_patch\",\n            \"SuccessorInventoryTests.test_fixture_tamper_and_duplicate_json_refuse\",\n            \"SuccessorInventoryTests.test_hook_prefix_suffix_and_replacement_tamper_refuse\",\n            \"SuccessorInventoryTests.test_hook_proof_identity_digest_type_and_scope_refuse\",\n            \"SuccessorInventoryTests.test_old_guard_rejects_legitimate_stage_one\",\n            \"SuccessorInventoryTests.test_original_106_file_and_150_test_history\",\n            \"SuccessorInventoryTests.test_original_test_ids_and_new_tests_collected\",\n            \"SuccessorInventoryTests.test_out_of_order_and_partial_stages_refuse\",\n            \"SuccessorInventoryTests.test_predecessor_hash_size_and_mode_tampering_refuses\",\n            \"SuccessorInventoryTests.test_premature_hook_or_proof_refuses\",\n            \"SuccessorInventoryTests.test_presence_or_environment_does_not_authorize\",\n            \"SuccessorInventoryTests.test_source_evidence_is_never_native_acceptance\",\n            \"SuccessorInventoryTests.test_stage_six_requires_exact_hook_proof\",\n            \"SuccessorInventoryTests.test_symlinks_hardlinks_and_nonregular_files_refuse\",\n            \"SuccessorInventoryTests.test_test_omissions_skips_and_xfails_refuse\",\n            \"SuccessorInventoryTests.test_unknown_duplicate_and_traversal_paths_refuse\",\n        ]\n",
+        "beforeBlock": "        expected[TEST_PATH] = sorted(NEW_TEST_IDS)\n",
+        "prefixSha256": "4c68c93bdf0ea9fde8dbabdc50995f564623c1328370a4bbbe1a27b5de47baf0",
+        "suffixSha256": "59bf9c5f959b1bf4481cc200e68b202b052f4ece15d7a8276ca5ca70a904d98d"
+      },
+      {
+        "afterBlock": "        print(\"scalar-test-inventory roots=5 predecessor=150 added=20 skipped=0 status=PASS\", flush=True)\n",
+        "beforeBlock": "        print(\"scalar-test-inventory roots=5 predecessor=120 added=30 skipped=0 status=PASS\", flush=True)\n",
+        "prefixSha256": "80655a02e0b1c108987c2846f9e1d66439743f94475c21f0d481bdf0423c2d12",
+        "suffixSha256": "d2e55bd66066f47724ae0d05de628e93e7c30437c2384281cd5e2f17a8515f44"
+      }
+    ],
+    "originalTestIds": "PRESERVE_ALL_150",
+    "otherBytes": "UNCHANGED",
+    "path": "tests/platform/linux_baseline/test_packet_scalars.py"
+  },
+  "checkpoint": {
+    "base": "88de1d9b7272a25678b01129e51d5756dbe608ed",
+    "campaignResult": "NOT_RUN_ENV_UNAVAILABLE",
+    "ci": {
+      "activation": 60,
+      "attempt": 1,
+      "commands": 7,
+      "decodedLogSha256": "9710fd687fb34c25486c7b44887bda83ba5313dbbd13403f554d4446a75b97db",
+      "jobId": 101790810481,
+      "mergeRef": "94089157b70ac2e4ef033a45d15feeb6d3ffcbe1",
+      "remainingRunners": 0,
+      "runId": 34137197794,
+      "runnerId": 30,
+      "runnerRetired": true,
+      "skipped": 0,
+      "status": "SUCCESS",
+      "tests": 150,
+      "uploadedArtifacts": 0
+    },
+    "evidenceVerification": "STRUCTURAL_ONLY",
+    "head": "09b713b690bd2a6861aab386baf8af1a9529fc73",
+    "headReplay": {
+      "activation": 59,
+      "commands": 7,
+      "exitCode": 0,
+      "logSha256": "08f9bb7f0c2ae2de552c02c41cb205b062baee1e0c5b54c843bf4022526274c3",
+      "skipped": 0,
+      "tests": 150
+    },
+    "inventory": {
+      "addedFiles": 3,
+      "addedTests": 30,
+      "currentTrackedFiles": 106,
+      "exactEdits": {
+        "ci/run_packet.py": "397219b875c040d496edaecaca28bf68725c5338313f047a799235b451ca6de1",
+        "tests/platform/linux_baseline/test_linux_inventory.py": "9111de6b6e167c2eca41801bffc5430b1af8c85f7da696c11a20cce577a1bb29"
+      },
+      "originalFiles": 103,
+      "originalTests": 120
+    },
+    "liveAcceptance": false,
+    "main": "8519225b1564834fab5bcd001c263688e6fba7fe",
+    "mainReplay": {
+      "activation": 61,
+      "commands": 7,
+      "execution": "LOCAL_SIGNED_HOST_OFFLINE_REPLAY",
+      "exitCode": 0,
+      "githubActionsExactMainRun": false,
+      "logSha256": "c6d01559a6704cc9ffa0c817c49f081517cf8ddddafab0dbb68673c43d02e7b5",
+      "skipped": 0,
+      "tests": 150,
+      "trackedFilesUnchanged": true,
+      "workingTreeOverlay": false
+    },
+    "metaCommit": "c526ccaa293b2113032c5a5b4a037e35baacb196",
+    "nativeAcceptance": false,
+    "next": {
+      "codingRun": "SEPARATE",
+      "draftHead": "57ee9668e029b08310c57f502990e419b4a1c797",
+      "draftPr": 6,
+      "packetId": "CONF-LIVE-001",
+      "packetSha256": "5c7ceb5094b1c5a29192b7bdea913b23f777698bd31224ca5d1958a793dba3b3",
+      "requirements": [
+        "Read original ten allowed paths and all predecessor locks",
+        "Incorporate accepted CONF-FIX-002 predecessor without rewriting either packet YAML",
+        "Keep original 103-file/120-test history; independently prove exact two corrections, three added files and 30 added test IDs",
+        "Preserve all predecessor tests and the original six-suite/eight-command acceptance",
+        "Do not modify root policy, helpers, keys, sudoers, installation, warm sources, toolchain or billing boundary"
+      ]
+    },
+    "packetId": "CONF-FIX-002",
+    "packetSha256": "c8639e527496660b8211f5bdcdb8f7470129b7d00f938c061d34630c797d8af4",
+    "phase": "Alpha 2",
+    "policySha256": "6fcc0b0bcaf1eae8c0d967a04bc20dd255edb360873372aa737c4415d865aa50",
+    "pr": 7,
+    "prUrl": "https://github.com/caglarsubas/mas-harness-conformance-labs/pull/7",
+    "red": {
+      "activation": 58,
+      "commandsExecuted": 5,
+      "commit": "a4f8c83131d8552f648cb14831acbe887b07f65d",
+      "errorRecords": 4,
+      "exitCode": 1,
+      "failingSubcases": 237,
+      "logSha256": "d1f8b7c6891051a7b91d0b50189d3448255f2a02074cd75713d5e42e92eaf6ef",
+      "predecessorTestsPassed": 120,
+      "status": "REPRODUCED_NOT_ACCEPTANCE",
+      "testsExecuted": 150
+    },
+    "repository": "caglarsubas/mas-harness-conformance-labs",
+    "sourcePath": "/Users/caglarsubasi/Documents/ChatGPT/mas-harness-conformance-labs",
+    "status": "DONE_SOURCE_GATES_ONLY",
+    "tree": "da6d32f7bb603f0283d36b8acc8244ba18f4a1ed"
+  },
+  "currentPacketCount": 134,
+  "diagnosis": {
+    "class": "SOURCE_INSPECTION_ONLY",
+    "combinedFiles": 116,
+    "currentFiles": 106,
+    "draftAdditions": 10,
+    "draftCommit": "57ee9668e029b08310c57f502990e419b4a1c797",
+    "draftPr": 6,
+    "sourceEdits": 0,
+    "testsExecuted": 0
+  },
+  "dispatchGate": {
+    "before": "CONF-LIVE-001",
+    "consumerAllowedPathsUnchanged": true,
+    "consumerCommands": 8,
+    "consumerRoots": 6,
+    "nativeAcceptance": false,
+    "requiredEvidence": [
+      "SOURCE",
+      "LOCAL_OFFLINE",
+      "REQUIRED_PR_CI",
+      "MERGE",
+      "LOCAL_EXACT_MAIN"
+    ],
+    "requiresCompletedPacket": "CONF-FIX-003",
+    "rewritePacketYaml": false
+  },
+  "harnessCount": 16,
+  "historicalPacketCount": 132,
+  "hook": {
+    "beforeBlock": "        raise ConformanceError(\"ISOLATION_BACKEND_UNAVAILABLE\", \"preinstalled signed endpoint isolation has not entered a child session\")\n",
+    "beforeSha256": "0635ca7494e29c495fcf8188c167d82bb27f109102fc46f91052e1d509817d27",
+    "fence": "harness-launcher-source-proof",
+    "maxProofBytes": 16384,
+    "maxReplacementBytes": 8192,
+    "packetId": "CONF-LIVE-006",
+    "packetSha256": "f95c277cffdfb622f45a1b4b91a5292d9d9a5bfabc8f9388b3899cbb20c5213d",
+    "path": "src/harness_conformance/live_launcher.py",
+    "prefixSha256": "bb045414f14081b46b095347542f1b546ebff8f958edba34712baaabddd85e74",
+    "proofClass": "SOURCE_DELTA_ONLY",
+    "proofPath": "docs/live-backend/qualification.md",
+    "proofSchemaVersion": "harness.planeon.ai/launcher-source-delta/v1alpha1",
+    "runtimeAuthority": false,
+    "suffixSha256": "272f53cefb8133ad05102d6994f395a1ceba858c46147ce637a5cc43ef4821cd"
+  },
+  "inputFiles": {
+    "architecture/successor-inventory-inputs/baseline.json": "f84ab0aeac644670b6a36ca52af1493af29bfacc8f04c4602a9e650dfca0c645",
+    "architecture/successor-inventory-inputs/live_launcher.before.txt": "0635ca7494e29c495fcf8188c167d82bb27f109102fc46f91052e1d509817d27",
+    "architecture/successor-inventory-inputs/test_packet_scalars.before.txt": "c340e47f5eb8286e2e76ae5b38dc0bed6073701de44859b3356aed4c708f42e8"
+  },
+  "installationAuthority": "NONE",
+  "liveDeclarationCount": 12,
+  "metaBaseline": "c526ccaa293b2113032c5a5b4a037e35baacb196",
+  "nativeAcceptance": false,
+  "packetDigests": {
+    "task-packets/CONF-FIX-003.yaml": "19089018ab6b1e2dada65d1dc3715940037b0881c1db02217622455a8a91d5a1",
+    "task-packets/MET-REPAIR-008.yaml": "3a25b0653760488a41575696cf722bccce76d51bd2653ca8f1ccdef162cfc476"
+  },
+  "packetSpecifications": {
+    "CONF-FIX-003": {
+      "allowedPaths": [
+        "tests/platform/linux_baseline/test_packet_scalars.py",
+        "tests/platform/linux_baseline/_successor_inventory.py",
+        "tests/platform/linux_baseline/test_successor_inventory.py",
+        "fixtures/platform/linux-baseline/successor-inventory.json",
+        "docs/reports/successor-inventory-repair.md"
+      ],
+      "branch": "codex/conf-fix-003-cumulative-inventory",
+      "contracts": [
+        "Start only from accepted conformance main 8519225b1564834fab5bcd001c263688e6fba7fe. Consume the exact merged MET-REPAIR-008 successor-inventory amendment and inert inputs; do not merge the unaccepted session draft or edit any packet YAML.",
+        "The sole old-file edit is the exact pinned three-hunk test_packet_scalars.py transformation. Preserve every other predecessor byte, all 150 test IDs and the corrected parser plus original Linux hash guard. Four new files supply a test-only helper, 20 independently enumerated regression tests, data fixture and report.",
+        "Source-only correction can precede native qualification; no source PASS grants installation, execution, credentials, capacity, runtime or tenant acceptance. Source/local/required CI/merge/local exact-main must close before CONF-LIVE-001 resumes."
+      ],
+      "deliverables": [
+        "Apply the exact three-hunk scalar-test transformation. Delegate whole-repository cumulative inventory checking to the new test-only helper, retain all original 150 IDs, and add only the twenty explicit successor-test IDs to five-root inventory equality. No skipped/xfail/deselected tests, broad hash exemptions or imported stored source.",
+        "Build the fixture from the exact 106-file/150-ID accepted inventory, preserving its historical bytes and original 103/120 data separately. Pin the correction's test after hash and four new paths. Publish the six original packet IDs/digests/exact path groups and the launcher proof boundary without changing their YAML.",
+        "Implement verify_repository(root) using actual tracked regular no-symlink/no-hardlink files, exact closed metadata and independently inferred complete stage prefixes. Stage zero has 110 files; stages one through six have 120,127,135,141,146,151. These counts only supplement exact sets, original bytes and modes; no count-only acceptance.",
+        "Implement pure validate_composition metadata/byte checks with bounded closed hook proof, no environment-based selection or file-existence-only exemption. Stages zero through five preserve the original launcher exactly and forbid hook proof; stage six requires the exact before/prefix/suffix/after binding and only the approved one-block replacement. Proof is SOURCE_DELTA_ONLY, never authorization to run the replacement.",
+        "Implement all twenty pinned regression methods using independent vectors for all seven complete stages and every missing/extra/duplicate/partial/order/hash/mode/link/type/proof mutation. Preserve all 150 old IDs and collect all twenty new IDs: 170 actual tests at this checkpoint, zero skips. Future backend methods must remain in the separately declared sixth suite.",
+        "Use fresh-child AST/actual collection within the same offline process tree when checking roots with colliding module names. Independently require every original and repair method; refuse empty roots, namespace omissions, load_tests filtering, skip, xfail and substituted modules. No compile/import/execute of inert predecessor snapshots.",
+        "Run the five existing suites and unchanged campaign/evidence commands via the signed installed launcher. Demonstrate the frozen old predicate rejects stage-one paths as a labelled unit/static regression, while the corrected real helper accepts every complete allowed stage and refuses negatives; synthetic stage-six source is inert unit data, not a live implementation.",
+        "Record source/head/CI/merge/local exact-main separately, preserve failed parser and static inventory history, then hand off CONF-LIVE-001 cumulative reconciliation only inside its existing ten paths. Keep original signed packet bytes, six-root/eight-command successor acceptance and independent native gate."
+      ],
+      "excluded": [
+        "Production code including ci/run_packet.py and live_launcher.py; every other predecessor test/helper/fixture/schema; Makefile, dispatcher, workflow, dependencies/toolchain, PORTING, root runner/helper/policy/key/sudoers, installation, warm sources, paid APIs, hosted resources, runtime downloads, live or native execution, acceptance promotion."
+      ],
+      "expectedEvidence": [
+        "Exact one-test transformation plus four new files; 106 historical files preserved except that pinned test change; original150 plus20 independent actual collected tests, all seven declared commands and zero skipped/xfail/deselected.",
+        "Closed, complete stage0\u20136 composition vectors and negative evidence through the actual product helper; unknown paths, altered old bytes, partial stages, unproven launcher change, spoofed flags or fixture tampering refuse. Product runtime and native behavior are not tested by these synthetic data cases.",
+        "No renewed administrator installation or root change. Fresh signed local/head, required localhost PR CI, merge and separate local exact-main required; no native or tenant acceptance."
+      ],
+      "id": "CONF-FIX-003",
+      "objective": "Repair cumulative source inventory compatibility for all six published backend packets while preserving all 150 predecessor tests and exact parser correction.",
+      "offlineAcceptanceCommands": [
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/meta",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/parity",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/alpha1",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/fixes/runner_boundary",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/platform/linux_baseline",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "make",
+          "campaign",
+          "CAMPAIGN=linux-baseline"
+        ],
+        [
+          "make",
+          "evidence-verify",
+          "CAMPAIGN=linux-baseline"
+        ]
+      ],
+      "offlineExecution": {
+        "commandTransport": "ARGV_ARRAY_V1",
+        "isolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+        "offlineEnvironment": {
+          "UV_FROZEN": "1",
+          "UV_NO_SYNC": "1",
+          "UV_OFFLINE": "1"
+        },
+        "packetPathEnvironment": "HARNESS_TASK_PACKET",
+        "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+        "prefetchOutsideSession": false,
+        "sessionScope": "SINGLE_PROCESS_TREE",
+        "wrapperArgv": [
+          "./ci/verify-offline.sh"
+        ]
+      },
+      "predecessors": [
+        "MET-REPAIR-008",
+        "CONF-FIX-002"
+      ],
+      "prefetchCommands": [],
+      "repository": "mas-harness-conformance-labs",
+      "rollback": "Revert this unconsumed correction only through a reviewed packet. After successor consumption use a reviewed correction, preserving immutable history and all source/CI/failure evidence; never erase trust, replay or tenant data.",
+      "sourceReuse": [],
+      "warmSourceAccess": "PROHIBITED_DURING_IMPLEMENTATION"
+    },
+    "MET-REPAIR-008": {
+      "allowedPaths": [
+        "task-packets/MET-REPAIR-008.yaml",
+        "task-packets/CONF-FIX-003.yaml",
+        "architecture/successor-inventory-amendment.json",
+        "architecture/successor-inventory-inputs/baseline.json",
+        "architecture/successor-inventory-inputs/test_packet_scalars.before.txt",
+        "architecture/successor-inventory-inputs/live_launcher.before.txt",
+        "scripts/validate_successor_inventory.py",
+        "tests/test_successor_inventory.py",
+        "docs/alpha-2/SUCCESSOR_INVENTORY_REPAIR.md",
+        "scripts/validate_packet_scalar_repair.py",
+        "tests/test_packet_scalar_repair.py",
+        "scripts/validate_live_backend_readiness.py",
+        "tests/test_live_backend_readiness.py",
+        "scripts/validate_readiness.py",
+        "scripts/validate_reuse.py",
+        "scripts/validate_readiness_repairs.py",
+        "scripts/validate_linux_readiness.py",
+        "scripts/validate_linux_repair.py",
+        "scripts/validate_linux_test_ownership.py",
+        "scripts/validate_model_fixture_scope.py",
+        "scripts/validate_model_api_inventory.py",
+        "tests/test_alpha2_readiness.py",
+        "tests/test_model_fixture_scope.py",
+        "tests/test_linux_repair.py",
+        "tests/test_linux_test_ownership.py",
+        "tests/test_model_api_inventory.py",
+        "tests/test_linux_readiness.py",
+        "tests/test_task_packets.py",
+        "tests/test_reuse.py",
+        "docs/MASTER_DEVELOPMENT_PLAN.md",
+        "docs/READINESS_INDEX.md",
+        "docs/adr/0004-sol-high-packet-boundary.md",
+        "docs/DEVELOPMENT_STATUS.md",
+        "docs/repositories/00-harness-engineering.md",
+        "docs/repositories/12-mas-harness-conformance-labs.md",
+        "task-packets/README.md"
+      ],
+      "branch": "codex/met-repair-008-cumulative-inventory",
+      "contracts": [
+        "Consumes meta main c526ccaa293b2113032c5a5b4a037e35baacb196 and accepted conformance main 8519225b1564834fab5bcd001c263688e6fba7fe. The latter passed 150 tests and seven commands in local/head, CI34137197794 and separate local exact-main; those source results do not prove successor composition or native acceptance.",
+        "Add exactly MET-REPAIR-008 and CONF-FIX-003: 134 packets, thirteen repositories, sixteen harnesses and twelve unchanged possible live declarations. All 132 existing packet YAML and existing architecture/legal/policy/release bytes stay immutable."
+      ],
+      "deliverables": [
+        "Publish inert accepted 106-file/150-ID conformance inventory and exact before-source snapshots. Pin only the precise cumulative-inventory and additive test-ID substitutions in test_packet_scalars.py; all other bytes, original methods and parser vectors remain unchanged. Product correction owns that one test and four new helper/test/fixture/report files.",
+        "Publish a data-only closed composition oracle and independent mutations for stage zero plus all six ordered successor stages. Require complete prefix path sets, exact predecessor bytes/modes, regular no-link files and no arbitrary extra, partial, skipped or out-of-order stage. Snapshot code is never imported, compiled or executed in meta acceptance.",
+        "Preserve the launcher before source. Constrain the later CONF-LIVE-006 hook to the one terminal unavailable statement after unchanged manifest verification and preflight. Require a bounded source-only proof in its already-owned qualification document binding original/prefix/suffix/replacement/result hashes and exact packet ID/digest. All other launcher bytes remain fixed; proof is neither runtime authority nor code-safety certification.",
+        "Add the corrective dispatch prerequisite before CONF-LIVE-001 resumes; require source/local/CI/merge/exact-main closure. Its ten existing paths reconcile original 103-file/120-ID history plus both correction checkpoints, all 150 predecessor IDs and all new correction IDs; no packet YAML or command inventory rewrite.",
+        "Update current catalog counts, validator integration, ownership and evidence checkpoints only. Preserve existing substantive predicates and all historical authorities. Add strict new-packet hashes and independently pinned successor validation rather than dropping old catalog checks.",
+        "Run all fourteen declared meta commands through the signed offline launcher, then required localhost PR CI and separate exact-main. Product CONF-FIX-003 remains NOT_RUN in this publication."
+      ],
+      "excluded": [
+        "Product edits or execution, any consumed packet/architecture/legal/policy/release rewrite, signature/public-API/tenant-isolation changes, new runtime authority, warm sources, dependencies/runtime downloads, hosted runners, artifact uploads, cloud/VM provisioning, paid APIs, root helper/policy/key/sudoers/workflow/toolchain changes, installation, native qualification or tenant acceptance."
+      ],
+      "expectedEvidence": [
+        "134 exact schema-valid owned packets; all 132 predecessor YAML and existing architecture/legal/policy/release bytes unchanged. Independently verified data-only stage compositions, strict malformed/byte/hash/identity/ownership/hook-proof negatives and original inventory preservation.",
+        "Retain original pre-test parser failure and cancelled CI as history; current inventory blocker is SOURCE_INSPECTION_ONLY, not a new product test failure. CONF-FIX-002's actual green source evidence remains valid but its earlier successor-readiness inference is withdrawn.",
+        "No product/helper installation or native/live execution; signed nonroot activation only. Alpha 2 remains ongoing and no phase-end effort transition is due."
+      ],
+      "id": "MET-REPAIR-008",
+      "objective": "Publish the approved cumulative source-inventory correction and six-stage compatibility proofs; no product implementation or live execution.",
+      "offlineAcceptanceCommands": [
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_readiness.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_reuse.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_alpha2_readiness.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_readiness_repairs.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_linux_readiness.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_linux_repair.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_linux_test_ownership.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_model_fixture_scope.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_model_api_inventory.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_live_backend_readiness.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_packet_scalar_repair.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/validate_successor_inventory.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "-m",
+          "pytest",
+          "tests",
+          "ci/test_offline_runner.py",
+          "ci/test_warm_snapshot.py"
+        ],
+        [
+          "uv",
+          "run",
+          "--offline",
+          "--frozen",
+          "--no-sync",
+          "python",
+          "scripts/zero_bill_scan.py",
+          "."
+        ]
+      ],
+      "offlineExecution": {
+        "commandTransport": "ARGV_ARRAY_V1",
+        "isolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+        "offlineEnvironment": {
+          "UV_FROZEN": "1",
+          "UV_NO_SYNC": "1",
+          "UV_OFFLINE": "1"
+        },
+        "packetPathEnvironment": "HARNESS_TASK_PACKET",
+        "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+        "prefetchOutsideSession": false,
+        "sessionScope": "SINGLE_PROCESS_TREE",
+        "wrapperArgv": [
+          "./ci/verify-offline.sh"
+        ]
+      },
+      "predecessors": [
+        "MET-REPAIR-007",
+        "CONF-FIX-002",
+        "MET-LIVE-001"
+      ],
+      "prefetchCommands": [],
+      "repository": "Harness-Engineering",
+      "rollback": "Before consumption revert this additive authority as one reviewed unit; after consumption publish a reviewed successor. Preserve signed packet bytes, historical source/test inventories, failed logs, trust/replay history and tenant data.",
+      "sourceReuse": [],
+      "warmSourceAccess": "PROHIBITED_DURING_IMPLEMENTATION"
+    }
+  },
+  "phase": "Alpha 2",
+  "productImplementation": "NOT_RUN",
+  "protectedFiles": {
+    "architecture/base-scope-sources.yaml": "38b19648432f8394f28a0115ffd11995f0d9843891f864af0c2dd6ac677dd2eb",
+    "architecture/dependency-graph.yaml": "47986eff1832f2ed990bb9ceb2cd9aab574475df0bc20f2a39ac91c985cfd50f",
+    "architecture/linux-readiness-amendment.json": "3a59552dbadd6a9e7579038523787926b921c35a3c71d036d2705b1c95b804a6",
+    "architecture/linux-readiness.json": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+    "architecture/linux-test-ownership-amendment.json": "5aa1e79de247ebed7550b56db48266182941232d9036840beade99fbcf11172f",
+    "architecture/live-backend-roadmap.json": "06d55fab0d0e56cbbdedab975fd4e2371f06896a6298e96c8c4e23c5e50916e7",
+    "architecture/model-api-inventory-amendment.json": "7f298fdb1db878105d9925b5b07500f9cb6298f8b887d87d91edbc6210b48c7b",
+    "architecture/model-api-inventory-inputs/CON-MODEL-001.before.yaml": "fff08209e76c2287c257a8d37a29aba159f82019e70f51d36bcaebf9d6805f33",
+    "architecture/model-api-inventory-inputs/test_lifecycle_contracts.before.txt": "53f528db6e9d3ce00a8c16e8cf24345a992b2b6130cdfb7d5a6dee02dbaed81e",
+    "architecture/model-evidence-boundary.json": "5be8de011a0cc4769b919ce0a416cb73d791c92181920abca7e8793abb788b48",
+    "architecture/model-fixture-inputs/CON-MODEL-001.before.yaml": "807efc83ddd77e27e19d0e7d53811321c9b00c95972b53e78b263f385fd41d48",
+    "architecture/model-fixture-inputs/test_generated_contracts.before.txt": "856b1d14e0f4d4ee84f6c4f973db412f9905559124091355bec7de85cc818080",
+    "architecture/model-fixture-scope-amendment.json": "e46ea246e0ab64d7d6882822739b3029659138711f2bb426ea26fea064e08bd3",
+    "architecture/observations/agent-hook-v2-tree.json": "0c94377f0ae6bf7ec7d70d521c411ff6883614cb2cebca2a1243cea1ce775339",
+    "architecture/observations/data-harness-v1.json": "5c559a6ef3d59fa40e74ab2fb36603752751f523249da884f8e0d8daa06cfe10",
+    "architecture/observations/model-usage-v2.json": "aa5488bad4528bd4119dfe9134f517403986b6fd45408f34c508929924e764f9",
+    "architecture/observations/orchestra-openshift-reference-lab-tree.json": "c0cab3b3c294ab0db09f19215ad51f3ca5b09c71bb007fef2b894f7588d3f41b",
+    "architecture/observations/planeon-orchestra-python-sdk-tree.json": "aa41c2d2b781e6776724367b3cf931d23b6812cc14ecb4a27c4f6c0b69ef61d7",
+    "architecture/packet-scalar-amendment.json": "56b270f8d211f598cbf0183088430bd5ccc16e64eb089b865e117748c762b4e1",
+    "architecture/packet-scalar-inputs/baseline.json": "d88c8f22877cf7269135ef53c08ff3a4921edb0946db0d9c9c1d38209256bfb6",
+    "architecture/packet-scalar-inputs/run_packet.before.txt": "3128dd48c486d74c3a109eb0d6655c57033011d508afadce35756e485d94e83a",
+    "architecture/packet-scalar-inputs/test_linux_inventory.before.txt": "1f5587f857927ca645e1c79edd4b4cd560f0eb70a881fb670b5047739421b7ef",
+    "architecture/porting-authorization-index.yaml": "a9768c8a75c2a9d3469271c60861c4ceb0b45cd3304d9c6be2dc1783ff1e7ec3",
+    "architecture/providers.yaml": "9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02",
+    "architecture/readiness-repair-amendment.json": "c3caa938557f1b9bb195188e35edc946fbdea36f0f1b235ab23f2689ffc54912",
+    "architecture/readiness-repairs.json": "30db784918bb651cc81f26d23cb4b1d7f790ef260ef5e48a2d7ae2ae94c12a0d",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/reuse-map.schema.json": "a9f2980e12679a7292fc394f1e53c437a4e60dc16ba22129c0cb66dce1b759a3",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/services.yaml": "857376b5e2b10a2a2542124a7d36b770eca531d15e463d68415416b887dd90a6",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "legal/source-reuse-authorization.yaml": "15db98cbaef76c942f7bd230c245f506653311b9cfec4596255b5770eb6e45fa",
+    "legal/third-party-license-policy.yaml": "fa3a4398acafc3960eaaae9f5396d4e96d91e6ff252b83f6c53e1f5f0d8a40d0",
+    "policies/zero-bill-policy.yaml": "77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e",
+    "release/evidence-policy.yaml": "ead30b57628a7479152c94f6a9496d90ec9d60701d7214cfcf3e36765dbda069",
+    "release/fixture-release-set.yaml": "7597ebe4754a501de67dc2ee620dba4a8413e8b87761437d562194bac595b2f9",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "task-packets/CON-001.yaml": "88383a2c8bc66c959df0abc8bc1c8d86a852cac654cd1833327f8b06e2cf41b4",
+    "task-packets/CON-002.yaml": "1e266163e2990ca7412338e878cb6b41e8a769abc27802083c352d1fc7e6da20",
+    "task-packets/CON-003.yaml": "f54c40fba3c9ef2889851981e93f282ff069c4c40de222a18005d57241b7bb1a",
+    "task-packets/CON-004.yaml": "1613ae0d5f5f113d0208f811f36c998168094109b96d68f8e7c31798e62733a3",
+    "task-packets/CON-005.yaml": "1e5c7ac03625c08a7ff46b133e2b7689e5ef43de4782a5948f5f63823bcca4d6",
+    "task-packets/CON-006.yaml": "e05a3f0c7c9c51857ae8afa774cad5fcb75483bcca49f44da54375327fdafec0",
+    "task-packets/CON-007.yaml": "b5ab9498ff950345c0198a7a54fd3d62052f13a978f5113c69900f199dfb38ea",
+    "task-packets/CON-FIX-001.yaml": "15040a4811277880118d58121a7d23721d8a91b4ab6d3211f960189d6a351a14",
+    "task-packets/CON-MODEL-001.yaml": "d5f7ccf98a8dfa8862c204bd9be99cbfbc2307b98be00f0112f6e9dcb59abd9e",
+    "task-packets/CONF-001.yaml": "2ad6741244eb83c152b0880ffb3518b10a02d5cc65bf2e1012b879866069de48",
+    "task-packets/CONF-002.yaml": "7130dfaa116bcadd99cb29506be8cda8864643bb26b9216f7466c5e9085ebaab",
+    "task-packets/CONF-A1-001.yaml": "c076b578b6655c70b7ca7309d3a5b43e9e5cad79138b44c89025ab6e6b20b1b4",
+    "task-packets/CONF-A2-001.yaml": "574e85c20d97db27fa23ede3f5d7ebf043ff7980e237d21623aa05b331852bd8",
+    "task-packets/CONF-A3-001.yaml": "70c53e57e6d140bf088993e0db0a7e6da1a2cdda5f0810eb89dbe3215c2ea624",
+    "task-packets/CONF-AIR-001.yaml": "f6c08f690d1588db15b939beb0b86c5ecce40b19b33cea1db04413c2ecb8a666",
+    "task-packets/CONF-FIX-001.yaml": "b02d7c6f2872c61fbde5be10451ac8de08e8336ee032e85b468e40dfaf8790ac",
+    "task-packets/CONF-FIX-002.yaml": "c8639e527496660b8211f5bdcdb8f7470129b7d00f938c061d34630c797d8af4",
+    "task-packets/CONF-K3S-001.yaml": "6178307a2845df6a369d666fec60653b167bfbb9b5086e8dbd58217d33229dc5",
+    "task-packets/CONF-K8S-001.yaml": "6626cd491cf266209e77b9f90c66cabc8c1fc36195ef87ea6278fa5c07db5056",
+    "task-packets/CONF-LINUX-001.yaml": "22f00544680f90a90b03420632bebf192a8c687549b519770fca5f98dd5fd6c9",
+    "task-packets/CONF-LIVE-001.yaml": "5c7ceb5094b1c5a29192b7bdea913b23f777698bd31224ca5d1958a793dba3b3",
+    "task-packets/CONF-LIVE-002.yaml": "05a6f03d19a1e12fafe278e5ec72c8adc6304766697b8682bc8d63092d47427f",
+    "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+    "task-packets/CONF-LIVE-004.yaml": "3cb0e1f7d163d7a420fbf2134b7ca5a7c70174acfca8646c341be83e6c23ff23",
+    "task-packets/CONF-LIVE-005.yaml": "b25b9a828907a25d46fea9ccce74d3f05f30cfb9623acd0b21e8dd359e1d9623",
+    "task-packets/CONF-LIVE-006.yaml": "f95c277cffdfb622f45a1b4b91a5292d9d9a5bfabc8f9388b3899cbb20c5213d",
+    "task-packets/CONF-OCP-001.yaml": "04e8bc10f8b9bf5e84b6d55fecd96985f991054d4ba0346cd7316667ecd93ee3",
+    "task-packets/CONF-SEC-001.yaml": "39eeaa83876002f57e29fffac39847f5d058aea128f447558213baa70687abdd",
+    "task-packets/CONF-UPG-001.yaml": "4c2cc8bdaae80a30f3a8492be724a8920b1ea6fb66dbce7383713ecdd24c2a42",
+    "task-packets/CONF-WG-001.yaml": "cd0685d9cdf8a018f4465d5223d950a557e4d523320891cc5d907496111442cd",
+    "task-packets/CTRL-001.yaml": "5e8d3d18a8245ccd985c77d8269b73333b510a2689a341edffd17dcfde77a8c3",
+    "task-packets/CTRL-002.yaml": "d0045acba54f420d6543581eebca1ae88e78c516576e2e8c1399762761bdcf25",
+    "task-packets/CTRL-003.yaml": "0bd59f60ae73a7e19c97f5d797cb8955f28a5f3a181326c5c4af8d57ed5d2bbe",
+    "task-packets/CTRL-004.yaml": "425faffab20090282bd60b17ac7cfc7942eeaaef0c2ff046b77d9736d77968d4",
+    "task-packets/CTRL-005.yaml": "da414f08217a1b60351a3c7da42784a4cb749c12520f2250f6526f17df72976f",
+    "task-packets/CTRL-006.yaml": "5b9f6ba920cb6d6eb5c192dfc104851d395772c57347ca69bc68aec6328709d1",
+    "task-packets/CTRL-007.yaml": "4a70eac5a350e7b48d2b8b180c02455a5953837050c57f46cd7dbafb86291822",
+    "task-packets/CTRL-FIX-001.yaml": "f1084924fe765b8d905a3156448bea636aec111b71a93e4a842dfbcab563b401",
+    "task-packets/CTRL-FIX-002.yaml": "621e7ba7ad0b8852cc7bc63e666c5ac25e92fe5a769481b491bb850f1eecdd97",
+    "task-packets/CTRL-FIX-003.yaml": "42876f9ab5ab8c227920fe6eee3a913b72f6940a989a8d128d627fbfea43c48f",
+    "task-packets/CTRL-INTEGRATE-001.yaml": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95",
+    "task-packets/DIST-001.yaml": "8de07c6a51176005765ef44aa4613b4443f610350d452daadbeae271b46bf48d",
+    "task-packets/DIST-002.yaml": "785b079851cbb207cbeb012adab16f9dbcbcd555eb49ec835147d77899d359a0",
+    "task-packets/DIST-003.yaml": "47a2951fd7957b780352cd0300d5b98af101509f43293c4daeaeae7626b9b5eb",
+    "task-packets/DIST-004.yaml": "f1ea5c7b9df565a3c28d3b7fd24cb4878fccfaa0e75cc9ef1f57171d56e60633",
+    "task-packets/DIST-005.yaml": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f",
+    "task-packets/DIST-AIR-001.yaml": "7a16e99750dd6044d56194a815ab2182d09759e27dea1cf6669d6366276ccb20",
+    "task-packets/DIST-FIX-001.yaml": "d65fd678adb17be1c6875eb0e8ca7e955d59e4df32bc263b20213f1de845c983",
+    "task-packets/DIST-OCI-001.yaml": "7211a4874c3236df8b257e2d8889180493ab8a0ece0812ef01fcf38ae257158e",
+    "task-packets/EXEC-001.yaml": "7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108",
+    "task-packets/EXEC-002.yaml": "a8eeb8d1a1c56c87329818c827d398a329356420fdc2dd0b9df8e8d23f4c76c5",
+    "task-packets/EXEC-ML-001.yaml": "ce65bd9b74e405b4dbc153430d9a05b245ba904c2372adc3a406a5de88e9c969",
+    "task-packets/EXEC-ORCH-001.yaml": "bab8ff0d2a85f22484c29011836c2458449755634bf27b3462199ef445354d75",
+    "task-packets/EXEC-PROT-001.yaml": "8dda3de5062124d3c2080ab5eaf68dd3d9b73f5e0f9c4fe646ec9284263201c2",
+    "task-packets/EXEC-SBX-001.yaml": "8fb5e9035117761d9cb0e66600e246103f08392f342ddff69143018c60bdb517",
+    "task-packets/EXEC-SBX-002.yaml": "fdec3da0f03a4e3cff03c642317616554454fc4767afee8180c141128b04cf49",
+    "task-packets/EXEC-TOOL-001.yaml": "c0d160591f0f5eed5f28ce0db0ff2c5f3a609beb3e253ed21a7caa354e83816d",
+    "task-packets/IND-001.yaml": "3d5778712ed09558c4df4c881745785311ca4f3be5ba7df4556930dd131cf86f",
+    "task-packets/IND-FIX-001.yaml": "0d3b1bf1a1b167275c5c7916a845c658f14e7fa69dc0383963ba4648c202145c",
+    "task-packets/IND-WG-001.yaml": "2766279b611409c8c0bc376b1161d3508e2485fa72c109222e90ceb60b13611c",
+    "task-packets/IND-WG-002.yaml": "78bd0d87b54b9987621c1c42d8363fcd73d67c46677fe354d9f39229778a10d9",
+    "task-packets/IND-WG-003.yaml": "897dc36776c08f73c93019cbcbe841a0f1ad2710385b28141b05602b53e3882e",
+    "task-packets/IND-WG-004.yaml": "20ed881b6010aa5b5bca07d85b92d49b053641e88b05884c61e6a1661902fb7f",
+    "task-packets/IND-WG-005.yaml": "033db2dd187457a94a8a346baf6aa11bd07ad6ac25cfc3d4d315a60b2e78ae38",
+    "task-packets/KN-001.yaml": "5e1790e09f99c70f41288fde9767447f8b655ec821f029d266aa9973301d81e2",
+    "task-packets/KN-002.yaml": "96a61677ee41b973a9282f858c4f355d54afe4b2c5f47d6cc18aea2114226fb6",
+    "task-packets/KN-DATA-001.yaml": "73422c32a67d78cbcb6e74447482022f3552b24fd8ca356da5da91c9c538e0d2",
+    "task-packets/KN-DATA-002.yaml": "ddd3b5f0f21705eb1ea07103dc91b194703dea50935e0e37c9796101e3239e40",
+    "task-packets/KN-DOM-001.yaml": "452fd1e14baa779023ca27511af9b9a8b4281ddc8dea51327b93e594700e9f56",
+    "task-packets/KN-MEM-001.yaml": "4ab3568fdfd01d500f205a2c5976526639a775c21ec09b8cf99cfdcfaaff3483",
+    "task-packets/KN-RET-001.yaml": "d417da2b27707a0b69590019e556f35cf6d6f737c37858c9099481323415a5b1",
+    "task-packets/MET-001.yaml": "43af6889dcf50d3ee8370cd5e761acc1a9fd989a44538b4db84a62df21f67880",
+    "task-packets/MET-002.yaml": "e93658d831f7dc2f1b228f03986117ca59af276fefe901e3802df117a2eb34c7",
+    "task-packets/MET-003.yaml": "d0bf1bc8cb15c536433528bf7b30aa3713e5ae44cb809d749fe8f344bccf3eea",
+    "task-packets/MET-004.yaml": "942bae46d9b7e8561f7a4474f465eb2397df7bbc48a34b90e8c91403f126012f",
+    "task-packets/MET-005.yaml": "aee54bd4c5219eb9ab7a751fb4d42008a5e05abc3188b9484a1eee8a1f628cba",
+    "task-packets/MET-A2-001.yaml": "fcee128a05f6e53e60461a53108bb652187ae7e67c1056a4f2dcb6fd6477b413",
+    "task-packets/MET-LINUX-001.yaml": "b54b47708b13bf9c184345308466e6a23af159040aacdc62744d43135c8f5f04",
+    "task-packets/MET-LINUX-002.yaml": "7e2efb3daad8e5152028cfd35ced7449cd145a51fd3573b4e71981d29a8ee787",
+    "task-packets/MET-LIVE-001.yaml": "c37fa6eabc16e7a424b894c8b3863931a4fa6bb56baa20b75d447923bc38007c",
+    "task-packets/MET-OBS-AH-001.yaml": "9a527e5343d99e679c850a1dd416de9c4ed19f100caec0d1872f1dfc1424001a",
+    "task-packets/MET-OBS-MODEL-001.yaml": "7493f8f788f982df4cd6b32f3647c82f41b8989feee54fea8740fff5e61f1a9b",
+    "task-packets/MET-OBS-OCP-001.yaml": "9028852eaa2ddc2f7dc3559e38ab4d83bc3c6598dab97d10fb80846ed17fe711",
+    "task-packets/MET-OBS-SDK-001.yaml": "fe44c76c6160847435869accd0ec895ec0ff700bca3f7ec09843b535a0a21e95",
+    "task-packets/MET-P0-001.yaml": "41d838c56aa88e5c60e4b6768d28d3b24073fc63955309c89a49315c641192dc",
+    "task-packets/MET-P0-002.yaml": "6ffd3057b377f1d6c7fc47cae26472f010e83090b5c31d90cbb46c4e0a7d9611",
+    "task-packets/MET-P0-FIX-001.yaml": "1845f579a807d30e2880d4aee46b52e849092b0374fbf59f4ca31f8e66d45194",
+    "task-packets/MET-P0-FIX-002.yaml": "b12012d45b0b9f968816a21be7cc714491ba94fcb7ee1af348da9bcd520a6ef2",
+    "task-packets/MET-P0-FIX-003.yaml": "bf18a928240f0e0991287564d193a45a2699efa9aeb949b31dc112815a83cef2",
+    "task-packets/MET-P0-FIX-004.yaml": "c3614e7cace9d83299e70add53c6650c8668d156850f941904f64f871ad29807",
+    "task-packets/MET-REPAIR-001.yaml": "45ea3a94514ae1b7b06608fa4629603fbe3c908c726da66fa733ccaffcb03986",
+    "task-packets/MET-REPAIR-002.yaml": "75cd79e37a9a3a2adc645e322d8b8b6f27abf546d52b6fb821c275dedf4078e4",
+    "task-packets/MET-REPAIR-003.yaml": "6f07a6fe38f305ffc226999b19fedb5ec4082069c8d14dede36bd001e550abf1",
+    "task-packets/MET-REPAIR-004.yaml": "3217293d977e25f0c6e7f6e6bb0134c27d840fd8769dc285494ecc7f351f6d94",
+    "task-packets/MET-REPAIR-005.yaml": "680335751aab8ac403f73db751d67c0ba98fce09017d51eebd7fa36d7b9fb5d0",
+    "task-packets/MET-REPAIR-006.yaml": "365207085a6bc661164660008d9248f1414a821898497851da9f17cba9366e92",
+    "task-packets/MET-REPAIR-007.yaml": "e4bbc961a86663fd4e8f52a74524e335b579b75031c2fdc97ff3ed0b9714d756",
+    "task-packets/MODEL-001.yaml": "753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0",
+    "task-packets/MODEL-002.yaml": "25ac59868a1805845ab244ee7ab08590dd72c928c6821bd22bc47eb1c5c819c5",
+    "task-packets/MODEL-003.yaml": "25403133eb4bd1272f6719903832e4182d899c6c6d2613b9240ce417bd6af09f",
+    "task-packets/MODEL-004.yaml": "2b7260bd8bc5bf06880be4d2a06adab877ec6b956d1fe7b4ed40a619dad34ab3",
+    "task-packets/MODEL-LLAMACPP-001.yaml": "f151b3393cb61b9133f21488fb53f01117e0960078077b6439bdc612adda793d",
+    "task-packets/MODEL-OLLAMA-001.yaml": "31fd06d3fab1227e42661af30e025c33deb51e49fcdf291ab443b6f80780d768",
+    "task-packets/MODEL-VLLM-001.yaml": "681a93edcbead7333b8439e6ddc849bc7a4ee0b9008b8bbab60cd494cac00f4e",
+    "task-packets/OP-001.yaml": "9a64698615c1c1fa8ef899b50495d5249bec0a877f0e7f7a92e9058ef196b07b",
+    "task-packets/OP-002.yaml": "caeea13c1efffc147fd0ca2d4c270916ca12e61c2a7122962eff4b024d2bf2f4",
+    "task-packets/OP-003.yaml": "86fd96fc4cf016331ebe1c8c95a5c0faba9b8155439f324c381991ea7b1eba1b",
+    "task-packets/OP-004.yaml": "6b585f709a0f69283534e0fadbe90502bd335fc9754bb5c30b0624d26e3eb241",
+    "task-packets/OP-005.yaml": "9529029015e992d5cfffc4d0c2bcfe88e579834b8e27aff31607fb550799f09d",
+    "task-packets/OP-006.yaml": "fa376aee945c301717e12b79aa5c4ebd7869e6b924b6afabd3f184db32d1595e",
+    "task-packets/OP-007.yaml": "f4508ad47659315581d551939576d2307aa0043de4b71eabf99878de126b2548",
+    "task-packets/RUN-001.yaml": "4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457",
+    "task-packets/RUN-002.yaml": "cbda98c7e8f70f404c2316fa50e09eb66d18778a82ae2d64a16d20451a03c67e",
+    "task-packets/RUN-EXP-001.yaml": "2a134a3b0e344b18a35ef3b82f1d34aa74f79ef83ab0730cda2eb740bce4a541",
+    "task-packets/RUN-GW-001.yaml": "3695dc7de22d757f70528d9f23d0c4b46865b70a22c5c15f4bd423590544069a",
+    "task-packets/RUN-GW-002.yaml": "3745467874e1293eb93e8a32c36c50493568389d718b1e66650952352a733996",
+    "task-packets/SDK-001.yaml": "737990fc853fd50c22d211f0ada320585b304fe116cab881581575a9a6dca941",
+    "task-packets/SDK-002.yaml": "b791f5f514dec76ebfd37ea17c7b0ca024057fbe4ebc2443bcdf15e7ca18c151",
+    "task-packets/SDK-003.yaml": "49b413cbd44e8fefdb20b7c817c676b0b95d671a25f07a11c47fb9276ab1a7b5",
+    "task-packets/SDK-004.yaml": "8c24a6bc4429e29e97a64746d12de95d9b47bd7b3d48ca312d8c9a3aea8ec23a",
+    "task-packets/SDK-005.yaml": "b6db3bd5595dcae7aeaea71a3a5ca49b4044abfbe13d687d8cb49c1013c45a7a",
+    "task-packets/SDK-006.yaml": "dc7771e61400288b5b7e6c6b69b802430ededa03947bed2adaa5f6542a063edc",
+    "task-packets/SDK-007.yaml": "054feee9dfc45e76959a7182e47672dc95fb68558d2f1f7d97445eada3566054",
+    "task-packets/TRUST-001.yaml": "d4fec1372836a3c85458b1e489fabda0869cc38a8bc480a709dc94e0e5fb8b19",
+    "task-packets/TRUST-002.yaml": "cf80bc33b5517177e00f2d9e8bddb92c41f1c59b18a0cc2f54688a693a4ac151",
+    "task-packets/TRUST-003.yaml": "b0d1ccdb6a7545fbc58d8c32fa5e9835383608ba945ad948da06c8c6996af350",
+    "task-packets/TRUST-EVAL-001.yaml": "c0f5eaa5e35ea34fff04eb49ae4b500b4dbcc01221e11ece6b95b845c376828c",
+    "task-packets/TRUST-FIX-001.yaml": "68d753be5f9eb9edaaf696bb48ea7c40448c4205d2778a3172a62a5f5707cc6c",
+    "task-packets/TRUST-FIX-002.yaml": "f74a5004b51b8b16aa7a9c01036ac76bb1b396ddc692cc5736233639ee314893",
+    "task-packets/TRUST-GOV-001.yaml": "af7591bd4b20237ad54e942c65d4149540f4dca3d72b6478db6bb9e0afff3221",
+    "task-packets/TRUST-OBS-001.yaml": "760c4a519ec39f1a4a9523eca563d4e22597b06c8b8929913a7953d0f30f0290",
+    "task-packets/TRUST-REG-001.yaml": "83fc22106c0eeb31b032bd3f5820eb359855d5c928f9bf3be9cd7edf1563427e"
+  },
+  "repairPaths": [
+    "tests/platform/linux_baseline/test_packet_scalars.py",
+    "tests/platform/linux_baseline/_successor_inventory.py",
+    "tests/platform/linux_baseline/test_successor_inventory.py",
+    "fixtures/platform/linux-baseline/successor-inventory.json",
+    "docs/reports/successor-inventory-repair.md"
+  ],
+  "repairTestIds": [
+    "SuccessorInventoryTests.test_all_seven_complete_stage_vectors",
+    "SuccessorInventoryTests.test_current_repository",
+    "SuccessorInventoryTests.test_current_test_guard_not_exempt",
+    "SuccessorInventoryTests.test_every_missing_stage_path_refuses",
+    "SuccessorInventoryTests.test_exact_scalar_test_patch",
+    "SuccessorInventoryTests.test_fixture_tamper_and_duplicate_json_refuse",
+    "SuccessorInventoryTests.test_hook_prefix_suffix_and_replacement_tamper_refuse",
+    "SuccessorInventoryTests.test_hook_proof_identity_digest_type_and_scope_refuse",
+    "SuccessorInventoryTests.test_old_guard_rejects_legitimate_stage_one",
+    "SuccessorInventoryTests.test_original_106_file_and_150_test_history",
+    "SuccessorInventoryTests.test_original_test_ids_and_new_tests_collected",
+    "SuccessorInventoryTests.test_out_of_order_and_partial_stages_refuse",
+    "SuccessorInventoryTests.test_predecessor_hash_size_and_mode_tampering_refuses",
+    "SuccessorInventoryTests.test_premature_hook_or_proof_refuses",
+    "SuccessorInventoryTests.test_presence_or_environment_does_not_authorize",
+    "SuccessorInventoryTests.test_source_evidence_is_never_native_acceptance",
+    "SuccessorInventoryTests.test_stage_six_requires_exact_hook_proof",
+    "SuccessorInventoryTests.test_symlinks_hardlinks_and_nonregular_files_refuse",
+    "SuccessorInventoryTests.test_test_omissions_skips_and_xfails_refuse",
+    "SuccessorInventoryTests.test_unknown_duplicate_and_traversal_paths_refuse"
+  ],
+  "repositoryCount": 13,
+  "schemaVersion": "harness.planeon.ai/successor-inventory-amendment/v1alpha1",
+  "sourceBaseline": {
+    "commit": "8519225b1564834fab5bcd001c263688e6fba7fe",
+    "files": 106,
+    "originalFiles": 103,
+    "originalTests": 120,
+    "tests": 150
+  },
+  "stageCounts": [
+    110,
+    120,
+    127,
+    135,
+    141,
+    146,
+    151
+  ],
+  "stages": [
+    {
+      "id": "CONF-LIVE-001",
+      "packetSha256": "5c7ceb5094b1c5a29192b7bdea913b23f777698bd31224ca5d1958a793dba3b3",
+      "paths": [
+        "src/harness_conformance/live_session.py",
+        "src/harness_conformance/live_backend_authority.py",
+        "schemas/v1alpha1/live-backend-session.schema.json",
+        "fixtures/live-backend/session-vectors.json",
+        "fixtures/live-backend/baseline.json",
+        "tests/live_backend/_fixtures.py",
+        "tests/live_backend/_inventory.py",
+        "tests/live_backend/test_session.py",
+        "tests/live_backend/test_inventory.py",
+        "docs/live-backend/session.md"
+      ]
+    },
+    {
+      "id": "CONF-LIVE-002",
+      "packetSha256": "05a6f03d19a1e12fafe278e5ec72c8adc6304766697b8682bc8d63092d47427f",
+      "paths": [
+        "src/harness_conformance/live_supervisor.py",
+        "src/harness_conformance/live_linux_boundary.py",
+        "src/harness_conformance/live_replay_store.py",
+        "tests/live_backend/test_supervisor.py",
+        "tests/live_backend/test_linux_boundary.py",
+        "tests/live_backend/test_replay_store.py",
+        "docs/live-backend/linux-boundary.md"
+      ]
+    },
+    {
+      "id": "CONF-LIVE-003",
+      "packetSha256": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+      "paths": [
+        "src/harness_conformance/live_proxy_client.py",
+        "src/harness_conformance/live_proxy_server.py",
+        "src/harness_conformance/live_mutation_admission.py",
+        "tests/live_backend/test_proxy_client.py",
+        "tests/live_backend/test_proxy_server.py",
+        "tests/live_backend/test_mutation_admission.py",
+        "fixtures/live-backend/proxy-vectors.json",
+        "docs/live-backend/proxy.md"
+      ]
+    },
+    {
+      "id": "CONF-LIVE-004",
+      "packetSha256": "3cb0e1f7d163d7a420fbf2134b7ca5a7c70174acfca8646c341be83e6c23ff23",
+      "paths": [
+        "src/harness_conformance/live_fixed_probes.py",
+        "src/harness_conformance/live_probe_receipts.py",
+        "fixtures/live-backend/probe-vectors.json",
+        "tests/live_backend/test_fixed_probes.py",
+        "tests/live_backend/test_probe_receipts.py",
+        "docs/live-backend/probes.md"
+      ]
+    },
+    {
+      "id": "CONF-LIVE-005",
+      "packetSha256": "b25b9a828907a25d46fea9ccce74d3f05f30cfb9623acd0b21e8dd359e1d9623",
+      "paths": [
+        "ci/build_live_backend.py",
+        "src/harness_conformance/live_backend_package.py",
+        "tests/live_backend/test_package.py",
+        "fixtures/live-backend/package-vectors.json",
+        "docs/live-backend/operator-handoff.md"
+      ]
+    },
+    {
+      "id": "CONF-LIVE-006",
+      "packetSha256": "f95c277cffdfb622f45a1b4b91a5292d9d9a5bfabc8f9388b3899cbb20c5213d",
+      "paths": [
+        "src/harness_conformance/live_launcher.py",
+        "src/harness_conformance/live_backend_campaign.py",
+        "src/harness_conformance/live_backend_evidence.py",
+        "tests/live_backend/test_campaign_integration.py",
+        "tests/live_backend/test_cumulative_release.py",
+        "docs/live-backend/qualification.md"
+      ]
+    }
+  ]
+}
