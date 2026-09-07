@@ -41,7 +41,7 @@ def candidate_pair(inputs):
 def test_current_authority_and_preserved_failure_evidence(inputs):
     packets, record, snapshots = inputs
     assert validate_model_api_inventory(*inputs) == []
-    assert len(packets) == 123
+    assert len(packets) == 130
     assert record["historicalPacketCount"] == 122
     assert record["baseline"]["passed"] == 758
     assert record["baseline"]["failed"] == record["baseline"]["skipped"] == 0
@@ -132,7 +132,7 @@ def test_every_other_byte_is_immutable(inputs, where):
     assert validate_inventory_edit(before, changed)
 
 
-@pytest.mark.parametrize("value", [None, [], {}, True, 123, float("nan"), "bytes"])
+@pytest.mark.parametrize("value", [None, [], {}, True, 130, float("nan"), "bytes"])
 def test_malformed_shapes_fail_closed(inputs, value):
     packets, record, snapshots = inputs
     assert validate_model_api_inventory(value, record, snapshots)
@@ -241,9 +241,9 @@ def test_missing_or_linked_input_is_not_followed(tmp_path):
 
 def test_checkpoint_keeps_product_and_native_gates_open():
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "| Alpha 2 authority | `MET-REPAIR-006` | ONGOING" in text
+    assert "| Alpha 2 authority | `MET-REPAIR-006` | DONE" in text
     assert "| Alpha 2 authority | `MET-REPAIR-005` | DONE" in text
-    assert "| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-006" in text
+    assert "| Alpha 2 | `CON-MODEL-001` | DONE" in text
     assert "| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — native qualification" in text
     assert "not a live dashboard or certification ledger" in text
     assert "1048 passed, one failed, zero skipped" in text

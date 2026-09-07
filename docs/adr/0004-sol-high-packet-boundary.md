@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 123 YAML task packets,
+The authoritative implementation queue contains exactly 130 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 123 packets validate against the closed schema with unique IDs and branches.
+- All 130 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -169,7 +169,7 @@ source locks, and live endpoint/provisioning authority are unchanged.
 
 ## MET-REPAIR-004: assertion-only test ownership
 
-That publication contains 121 packets; the current catalog contains 123. The prior 120-packet amendment and
+That publication contains 121 packets; the current catalog contains 130. The prior 120-packet amendment and
 118-packet policy remain unchanged historical records. One new predecessor and
 one exact test-file path are added to CONF-LINUX-001 with an assertion-only grant:
 replace the old five-handler count with equality to the exact ordered six-handler
@@ -189,10 +189,31 @@ is added; source, PR, exact-main and native acceptance remain separate.
 
 ## MET-REPAIR-006: exact additive API inventory ownership
 
-The current catalog has 123 packets. The consumed MET-REPAIR-005 packet and
+The current catalog has 130 packets. The consumed MET-REPAIR-005 packet and
 record remain unchanged; its whole model-packet pin is read from the immutable
 pre-amendment snapshot, while the exact successor is separately validated.
 Only the required-five subset predicate is authorized in the named lifecycle
 test. Keep all other bytes and checks for every discovered API. This supersedes
 the earlier blanket assertion exclusion only at that predicate. No fixed-six
 substitute, tests suppression, file hiding or product edits in the meta run.
+
+## Approved trusted live backend enablement — MET-LIVE-001
+
+The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
+`architecture/live-backend-roadmap.json` add six sequential conformance packets
+(CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
+Current catalog: 130 packets. The 123 consumed packet YAML and all existing
+architecture/legal/policy/release records remain byte-identical.
+
+Only the six source-enablement packets may proceed before native qualification.
+After their source closure, external operator installation and a fresh
+independently signed native AMD64 qualification are required before
+CTRL-INTEGRATE-001, MODEL-001, EXEC-001 or RUN-001. ARM64 qualification is separate.
+CONF-LIVE-006 adds the twelfth possible manual campaign declaration with the
+complete eight-command inventory; it grants no installation, target access,
+provisioning or paid capability. The old seven-command CONF-LINUX-001 verifier
+and all predecessor tests remain unchanged; the new packet has its own exact
+pure authority/evidence adapter. Source fixtures never become native evidence.
+
+Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
+One packet, branch, PR and exact local/CI/main gate per run remains mandatory.

@@ -207,6 +207,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 22. `MET-REPAIR-004-linux-test-ownership`: one assertion-only legacy test grant, immutable 118/120-packet history, completed runner source evidence and unchanged native/live gates.
 23. `MET-REPAIR-005-model-fixture-scope`: exact model fixture-copy helper exception, immutable baseline, strict input-byte and whole-packet mutation checks; no product implementation.
 24. `MET-REPAIR-006-model-api-inventory`: exact additive required-five API predicate, pinned failed-draft evidence, historical fixture routing and independent scope/safety mutations; no product implementation.
+25. `MET-LIVE-001`: publish six bounded conformance backend packets, immutable predecessors and the strict source/native dispatch gate; no product or installation work.
 
 ## Testing, verification, and acceptance
 
@@ -318,3 +319,24 @@ source-free destination/authority snapshots, dedicated validator/negative tests
 and current 123-packet reconciliation. Its scoped predecessor-validator change
 routes historical bytes to the pinned old packet and validates only the exact
 current successor. No consumed authority, root installation or product edit.
+
+## Approved trusted live backend enablement — MET-LIVE-001
+
+The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
+`architecture/live-backend-roadmap.json` add six sequential conformance packets
+(CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
+Current catalog: 130 packets. The 123 consumed packet YAML and all existing
+architecture/legal/policy/release records remain byte-identical.
+
+Only the six source-enablement packets may proceed before native qualification.
+After their source closure, external operator installation and a fresh
+independently signed native AMD64 qualification are required before
+CTRL-INTEGRATE-001, MODEL-001, EXEC-001 or RUN-001. ARM64 qualification is separate.
+CONF-LIVE-006 adds the twelfth possible manual campaign declaration with the
+complete eight-command inventory; it grants no installation, target access,
+provisioning or paid capability. The old seven-command CONF-LINUX-001 verifier
+and all predecessor tests remain unchanged; the new packet has its own exact
+pure authority/evidence adapter. Source fixtures never become native evidence.
+
+Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
+One packet, branch, PR and exact local/CI/main gate per run remains mandatory.

@@ -283,7 +283,7 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-That publication contained 122 packets; the current catalog has 123. The preceding
+That publication contained 122 packets; the current catalog has 130. The preceding
 121-packet Linux test publication is historical; its consumed bytes are unchanged.
 The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
 localhost PR CI and exact-main replay before the model draft started.
@@ -301,3 +301,24 @@ zero skipped. Permit only required-five API membership instead of exact equality
 without changing the test identity or any following safety check. Publish and
 accept this meta packet before resuming product PR 9 and its normal completeness
 review. Source, offline, CI, merge, native Linux and tenant gates stay separate.
+
+## Approved trusted live backend enablement — MET-LIVE-001
+
+The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
+`architecture/live-backend-roadmap.json` add six sequential conformance packets
+(CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
+Current catalog: 130 packets. The 123 consumed packet YAML and all existing
+architecture/legal/policy/release records remain byte-identical.
+
+Only the six source-enablement packets may proceed before native qualification.
+After their source closure, external operator installation and a fresh
+independently signed native AMD64 qualification are required before
+CTRL-INTEGRATE-001, MODEL-001, EXEC-001 or RUN-001. ARM64 qualification is separate.
+CONF-LIVE-006 adds the twelfth possible manual campaign declaration with the
+complete eight-command inventory; it grants no installation, target access,
+provisioning or paid capability. The old seven-command CONF-LINUX-001 verifier
+and all predecessor tests remain unchanged; the new packet has its own exact
+pure authority/evidence adapter. Source fixtures never become native evidence.
+
+Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
+One packet, branch, PR and exact local/CI/main gate per run remains mandatory.

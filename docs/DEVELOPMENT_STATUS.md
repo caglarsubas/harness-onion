@@ -25,8 +25,15 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 early gate | `CONF-LINUX-001` | WAITING — native qualification | Source kit DONE: conformance PR 5 at 88de1d9; 120 tests passed, zero skips; actual AMD64/ARM64 qualification absent |
 | Alpha 1 integration | `CTRL-INTEGRATE-001` | WAITING — fresh Linux gate | R06 authenticated production overview and durable projection adapters; separate live acceptance required |
 | Alpha 2 authority | `MET-REPAIR-005` | DONE — source/CI/merge/local exact-main | Meta PR 98 at f8137ea; 1168 passed, ten existing nested-isolation skips |
-| Alpha 2 authority | `MET-REPAIR-006` | ONGOING — publication | Exact additive API-inventory predicate grant; no product implementation |
-| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-006 | Draft PR 9 at 47c4166; 1048 passed, one failed, zero skipped; cancelled CI is not PASS |
+| Alpha 2 authority | `MET-REPAIR-006` | DONE — source/CI/merge/local exact-main | Meta PR 99 at f0ccd9f; 1295 passed, ten existing nested-isolation skips |
+| Alpha 2 | `CON-MODEL-001` | DONE — source/CI/merge/local exact-main | Contracts PR 9 at e9de8e5; 1175 passed, zero skips; original-source parity and runtime unproven |
+| Alpha 2 authority | `MET-LIVE-001` | ONGOING — publication | Six bounded source-only backend packets; no installation or native qualification |
+| Alpha 2 backend | `CONF-LIVE-001` | WAITING | Session contracts and cumulative inventory |
+| Alpha 2 backend | `CONF-LIVE-002` | WAITING | Protected Linux supervisor and isolation candidate |
+| Alpha 2 backend | `CONF-LIVE-003` | WAITING | Fixed proxy transport and zero-cost admission |
+| Alpha 2 backend | `CONF-LIVE-004` | WAITING | Native Linux build and ten fixed probes |
+| Alpha 2 backend | `CONF-LIVE-005` | WAITING | Reproducible packaging and operator handoff |
+| Alpha 2 backend | `CONF-LIVE-006` | WAITING | Trusted campaign integration and manual qualification declaration |
 | Alpha 2 | `MODEL-001` | WAITING — prerequisites and fresh Linux gate | Model repository bootstrap and local inference core |
 | Alpha 2 | `MODEL-002` | WAITING | Custody and signed routes |
 | Alpha 2 | `MODEL-OLLAMA-001`, `MODEL-LLAMACPP-001`, `MODEL-VLLM-001`, `MODEL-003` | WAITING | Selectable local backends, security and telemetry |
@@ -37,7 +44,40 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 4 | `MODEL-004` through `CONF-WG-001` | WAITING | Performance, resilience, platform and enterprise acceptance |
 | Cross-phase | Artifact/SBOM, release, deployment, runtime, assurance, tenant acceptance | WAITING — independent gates | Never inferred from source/offline completion |
 
-## Current amendment boundary — model API inventory
+## Current amendment boundary — trusted Linux live backend
+
+[Backend readiness guide](alpha-2/LIVE_BACKEND_READINESS.md) adds one meta packet
+and six conformance source packets: **130 packets**, thirteen repositories,
+sixteen harnesses. All 123 previous packet YAML and existing architecture,
+legal, policy and release records remain byte-identical. Existing source locks
+and the native AMD64 runtime gate are not relaxed.
+
+MET-REPAIR-006 completed as [meta PR 99](https://github.com/caglarsubas/harness-onion/pull/99),
+merge f0ccd9f292f332a05e8eebd17a831e19989fb739, CI 34092480912.
+Separate exact-main: 1295 passed, ten existing nested-isolation skips;
+log e855f6dd347dc010a51442a8f84a54c9e7c64ed5dac8502d80dd09a74c6cdbac.
+
+CON-MODEL-001 completed as [contracts PR 9](https://github.com/caglarsubas/mas-harness-contracts/pull/9),
+merge e9de8e53cf036a90a03b1e114eba08fc0ba89ae3, CI 34101363187.
+Separate exact-main: 1175 passed, zero failed/skipped, all 758 predecessor IDs;
+log e7dbb4a26b6edf1a84edda528defef90c8cd3258b8a594fc0df156db9e5f4b5f.
+
+CONF-LINUX-001 source kit completed as [conformance PR 5](https://github.com/caglarsubas/mas-harness-conformance-labs/pull/5),
+merge 88de1d9b7272a25678b01129e51d5756dbe608ed, CI 34076298942.
+Separate exact-main: 120 passed, zero skips;
+log 866b0eb26f2c1a97bc106de4f4bb2366251ae09de143233a6c973ae5647b3ac8.
+Native AMD64/ARM64 still NOT_RUN_ENV_UNAVAILABLE.
+
+Next: close this authority publication, then CONF-LIVE-001 in its own source
+run. The ordered six-packet implementation prepares an uninstalled candidate.
+Independent native capacity, reviewed installation, release inputs and signed
+manual qualification remain required before CTRL-INTEGRATE-001, MODEL-001,
+EXEC-001 or RUN-001. No phase-end model-effort transition is due.
+
+## Historical MET-REPAIR-006 publication checkpoint
+
+The following failed-draft and pending-publication statements are preserved as
+the earlier checkpoint, superseded only by the verified current source rows above.
 
 [Exact API-inventory repair](alpha-2/MODEL_API_INVENTORY_REPAIR.md) is the current
 publication: 123 packets across thirteen repositories and sixteen harnesses.
