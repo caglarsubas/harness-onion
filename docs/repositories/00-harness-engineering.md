@@ -206,6 +206,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 21. `MET-REPAIR-003-linux-conformance-authority`: closed R1-R4 scope amendment, exact suite discovery and CONF-FIX-001 prerequisite; no product implementation or native Linux claim.
 22. `MET-REPAIR-004-linux-test-ownership`: one assertion-only legacy test grant, immutable 118/120-packet history, completed runner source evidence and unchanged native/live gates.
 23. `MET-REPAIR-005-model-fixture-scope`: exact model fixture-copy helper exception, immutable baseline, strict input-byte and whole-packet mutation checks; no product implementation.
+24. `MET-REPAIR-006-model-api-inventory`: exact additive required-five API predicate, pinned failed-draft evidence, historical fixture routing and independent scope/safety mutations; no product implementation.
 
 ## Testing, verification, and acceptance
 
@@ -217,7 +218,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 122-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 123-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
@@ -305,6 +306,15 @@ or operator code is part of this publication.
 ## Model fixture-copy authority
 
 MET-REPAIR-005 owns architecture/model-fixture-scope-amendment.json, the exact
-source-free baseline inputs, its validator/tests and current 122-packet catalog.
+source-free baseline inputs and its historical 122-packet publication. MET-REPAIR-006
+owns the current successor-aware validator/test routing; those historical bytes are immutable.
 It grants no runtime, source observation or root installation authority. See
 [the implementation boundary](../alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md).
+
+## Model API inventory authority
+
+MET-REPAIR-006 owns architecture/model-api-inventory-amendment.json, the two
+source-free destination/authority snapshots, dedicated validator/negative tests
+and current 123-packet reconciliation. Its scoped predecessor-validator change
+routes historical bytes to the pinned old packet and validates only the exact
+current successor. No consumed authority, root installation or product edit.

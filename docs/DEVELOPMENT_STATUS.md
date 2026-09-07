@@ -1,6 +1,6 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
-Snapshot: 2026-09-07, during `MET-REPAIR-005` publication. This is a checkpoint,
+Snapshot: 2026-09-07, during `MET-REPAIR-006` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run
 must refresh GitHub evidence rather than infer completion from this document.
@@ -24,8 +24,9 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 authority | `MET-REPAIR-004` | DONE — source/CI/merge/local exact-main | Meta PR 97 at a50f878; 1066 tests passed, ten existing nested-isolation skips |
 | Alpha 2 early gate | `CONF-LINUX-001` | WAITING — native qualification | Source kit DONE: conformance PR 5 at 88de1d9; 120 tests passed, zero skips; actual AMD64/ARM64 qualification absent |
 | Alpha 1 integration | `CTRL-INTEGRATE-001` | WAITING — fresh Linux gate | R06 authenticated production overview and durable projection adapters; separate live acceptance required |
-| Alpha 2 authority | `MET-REPAIR-005` | ONGOING — publication | Exact model fixture-copy helper grant; no product implementation |
-| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-005 | Corrections merged; unchanged 758-test baseline passed; model contracts and full cumulative suite next |
+| Alpha 2 authority | `MET-REPAIR-005` | DONE — source/CI/merge/local exact-main | Meta PR 98 at f8137ea; 1168 passed, ten existing nested-isolation skips |
+| Alpha 2 authority | `MET-REPAIR-006` | ONGOING — publication | Exact additive API-inventory predicate grant; no product implementation |
+| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-006 | Draft PR 9 at 47c4166; 1048 passed, one failed, zero skipped; cancelled CI is not PASS |
 | Alpha 2 | `MODEL-001` | WAITING — prerequisites and fresh Linux gate | Model repository bootstrap and local inference core |
 | Alpha 2 | `MODEL-002` | WAITING | Custody and signed routes |
 | Alpha 2 | `MODEL-OLLAMA-001`, `MODEL-LLAMACPP-001`, `MODEL-VLLM-001`, `MODEL-003` | WAITING | Selectable local backends, security and telemetry |
@@ -36,38 +37,34 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 4 | `MODEL-004` through `CONF-WG-001` | WAITING | Performance, resilience, platform and enterprise acceptance |
 | Cross-phase | Artifact/SBOM, release, deployment, runtime, assurance, tenant acceptance | WAITING — independent gates | Never inferred from source/offline completion |
 
-## Current amendment boundary — model fixture scope
+## Current amendment boundary — model API inventory
 
-[Model fixture-copy repair](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) is the current
-publication, with 122 packets across thirteen repositories and sixteen harnesses.
-It authorizes only the exact _copy_generation_inputs additions in the pinned
-legacy contracts test. Every assertion and all other bytes remain unchanged.
-All prior publication records remain immutable.
+[Exact API-inventory repair](alpha-2/MODEL_API_INVENTORY_REPAIR.md) is the current
+publication: 123 packets across thirteen repositories and sixteen harnesses.
+It permits only the required-five membership predicate; preserve the named test
+ID and every other byte, including all safety checks on every discovered API.
+The prior fixture-copy record and all consumed authorities remain immutable.
 
-The untouched contracts baseline at fb365aabfd8c5560e064be5d97ff9f2bcc69c57c
-passed all three signed offline commands and 758 tests, zero failures/skips.
-Log SHA-256: 563390fc76763cc347c6327b7e219ae2077ad94592a061f92ee97a705fae9af7.
-The missing temporary model input inventory is SOURCE_INSPECTION_ONLY, not a
-reproduced extension failure.
+Meta PR 98 merged at f8137eab6acfa8b13051f1c4e548854fc7dc934f; required CI
+34082964856 passed. Separate local exact-main: 1168 passed, ten existing
+nested-isolation skips; log ada39810a672dc49dad92e353508e18e34746e3dbb243514d2188321662e02ab.
 
-[Meta PR 97](https://github.com/caglarsubas/harness-onion/pull/97) merged at
-a50f878296295abf42dc48093904d99f046f0d2b; required CI 34071682963 passed.
-Independent local exact-main log:
-0798ba7a6dd2c42ae07c00939efca9b2dfa258a55e5a2e7c6aea5526cf672f18.
+Contracts draft PR 9 remains unmerged at 47c416676b3fba105d7631c1957b9d729daa592e.
+Its exact signed replay had 1048 passed, one failed, zero skipped; both generator
+checks passed. All 758 predecessor IDs were retained. Log SHA-256:
+9176867b7f6137870d6b33dd4c31443f3d98af9794ced6b58831aa4d96d873db.
+The queued CI run 34089294582 was cancelled before a runner was assigned:
+CANCELLED_NOT_PASS. The no-server issue was source-inspected and removed from
+the new API, not a second executed failure. No legacy predicate edit has run.
 
-[Conformance PR 5](https://github.com/caglarsubas/mas-harness-conformance-labs/pull/5)
-merged at 88de1d9b7272a25678b01129e51d5756dbe608ed; required CI 34076298942
-passed. Source kit tests: 120 passed, zero skips. Independent local exact-main
-log: 866b0eb26f2c1a97bc106de4f4bb2366251ae09de143233a6c973ae5647b3ac8.
-All native qualification cases remain NOT_RUN_ENV_UNAVAILABLE. Source, PR checks
-and local replay do not establish a native Linux build, installed backend,
-deployment/runtime, assurance or tenant acceptance.
-
-Next: close MET-REPAIR-005 source/head, PR CI, merge and local exact-main gates;
-then run CON-MODEL-001 in its own product branch/PR. Contract-only work may
-proceed without native runtime claims. MODEL-001, CTRL-INTEGRATE-001, RUN-001
-and EXEC-001 remain gated by fresh native AMD64 PASS. Standing signed localhost
-activation needs no new administrator prompt. No model-effort transition is due.
+Next: close MET-REPAIR-006 source/head, PR CI, merge and local exact-main gates;
+then resume CON-MODEL-001 in its separate product run. Apply the sole predicate
+change, add independent negative vectors, complete normal model-contract completeness review
+and rerun the full suite. Contract-only work makes no runtime claim.
+CONF-LINUX-001 source kit remains merged (PR 5, 120 passed, zero skips), but
+native AMD64/ARM64 qualification remains NOT_RUN_ENV_UNAVAILABLE.
+MODEL-001, CTRL-INTEGRATE-001, RUN-001 and EXEC-001 still require fresh native
+AMD64 PASS. No new administrator prompt or model-effort transition is due.
 
 ## Historical MET-REPAIR-004 publication checkpoint
 

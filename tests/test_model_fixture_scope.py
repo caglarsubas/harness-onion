@@ -10,7 +10,9 @@ import yaml
 from scripts.validate_model_fixture_scope import (
     EXPECTED_BEFORE, EXPECTED_META, EXPECTED_RECORD, amend_model_packet,
     validate_fixture_edit, validate_model_fixture_scope,
+    load_scope_inputs,
 )
+from scripts.validate_model_api_inventory import amend_model_packet as amend_inventory_packet
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,14 +21,13 @@ ROOT = Path(__file__).resolve().parents[1]
 def inputs():
     packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     record = json.loads((ROOT / "architecture/model-fixture-scope-amendment.json").read_text())
-    paths = [*record["protectedFiles"], *(f"task-packets/{p}.yaml" for p in record["packetDigests"])]
-    return packets, record, {path: (ROOT / path).read_bytes() for path in paths}
+    return packets, record, load_scope_inputs(ROOT)
 
 
 def test_current_authority_and_historical_bytes_agree(inputs):
     packets, record, snapshots = inputs
     assert validate_model_fixture_scope(*inputs) == []
-    assert len(packets) == 122
+    assert len(packets) == 123
     assert record["historicalPacketCount"] == 121
     assert record["baseline"]["passed"] == 758
     assert record["baseline"]["failed"] == record["baseline"]["skipped"] == 0
@@ -37,7 +38,8 @@ def test_current_authority_and_historical_bytes_agree(inputs):
     unchanged = deepcopy(before)
     after = amend_model_packet(before)
     assert before == unchanged
-    assert after == packets["CON-MODEL-001"]
+    assert after == yaml.safe_load(snapshots["task-packets/CON-MODEL-001.yaml"])
+    assert amend_inventory_packet(after) == packets["CON-MODEL-001"]
     assert after["predecessors"] == before["predecessors"] + ["MET-REPAIR-005"]
     assert after["allowedPaths"] == before["allowedPaths"] + ["tests/golden/test_generated_contracts.py"]
     for field in before:
@@ -198,8 +200,9 @@ def test_commands_execution_identity_and_count_cannot_change(inputs):
 
 def test_current_checkpoint_separates_source_from_native_acceptance():
     status = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "| Alpha 2 authority | `MET-REPAIR-005` | ONGOING" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-006` | ONGOING" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-005` | DONE" in status
     assert "| Alpha 2 authority | `MET-REPAIR-004` | DONE" in status
     assert "| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — native qualification" in status
-    assert "| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-005" in status
+    assert "| Alpha 2 | `CON-MODEL-001` | WAITING — MET-REPAIR-006" in status
     assert "not a live dashboard or certification ledger" in status
