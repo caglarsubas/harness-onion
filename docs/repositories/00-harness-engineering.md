@@ -205,6 +205,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 21. `MET-REPAIR-003-linux-conformance-authority`: closed R1-R4 scope amendment, exact suite discovery and CONF-FIX-001 prerequisite; no product implementation or native Linux claim.
 22. `MET-REPAIR-004-linux-test-ownership`: one assertion-only legacy test grant, immutable 118/120-packet history, completed runner source evidence and unchanged native/live gates.
+23. `MET-REPAIR-005-model-fixture-scope`: exact model fixture-copy helper exception, immutable baseline, strict input-byte and whole-packet mutation checks; no product implementation.
 
 ## Testing, verification, and acceptance
 
@@ -216,7 +217,7 @@ and invokes only `offlineExecution.wrapperArgv:
 ["./ci/verify-offline.sh"]`; individual acceptance commands are never run
 separately.
 
-`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 121-packet
+`MET-004` runs the complete readiness validator, while the Alpha-2 authority repair extends the dedicated 122-packet
 catalog suite together with the ownership negative vectors, and the live
 campaign envelope positive/negative vectors. This proves the semantic packet
 boundary in addition to JSON Schema conformance.
@@ -300,3 +301,10 @@ validator/tests. It extends the current catalog to 121, preserves the consumed
 MET-REPAIR-003 record and grants CONF-LINUX-001 exactly one additional test path.
 The exact six-handler assertion keeps all other test bytes unchanged; no product
 or operator code is part of this publication.
+
+## Model fixture-copy authority
+
+MET-REPAIR-005 owns architecture/model-fixture-scope-amendment.json, the exact
+source-free baseline inputs, its validator/tests and current 122-packet catalog.
+It grants no runtime, source observation or root installation authority. See
+[the implementation boundary](../alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md).

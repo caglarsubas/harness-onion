@@ -30,7 +30,7 @@ def test_current_amendment_is_complete_and_historical_policy_unchanged(inputs):
     assert validate_linux_repair(packets, record, raw) == []
     assert validate_linux_readiness(packets, json.loads(raw)) == []
     assert validate_packet_ownership(packets) == []
-    assert len(packets) == 121
+    assert len(packets) == 122
     assert record["currentPacketCount"] == 120  # Consumed record is immutable.
     assert json.loads(raw)["currentPacketCount"] == 118
     assert record["baseline"]["reviewEvidence"] == "SOURCE_INSPECTION_ONLY"
@@ -203,7 +203,7 @@ def test_catalog_checkpoint_and_source_only_phase_labels_exist(inputs):
     status = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
     assert "| Alpha 2 authority | `MET-REPAIR-003` | DONE" in status
     assert "| Alpha 2 correction | `CONF-FIX-001` | DONE" in status
-    assert "| Alpha 2 authority | `MET-REPAIR-004` | ONGOING" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-004` | DONE" in status
     assert "not a live dashboard or certification ledger" in status
     guide = (ROOT / "docs/alpha-2/LINUX_READINESS_REPAIRS.md").read_text()
     for finding in ("R1", "R2", "R3", "R4"):

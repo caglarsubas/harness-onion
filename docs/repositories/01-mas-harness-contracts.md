@@ -146,7 +146,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `CON-006-compat`: `data.harness/v1` conversion, round-trip fixtures, deprecation metadata, and migration guide.
 7. `CON-007-runtime-admission-contracts`: tenant-bound signed admission envelopes, trust rotation, receipts, replay/idempotency state, budget consumption, closed denial reasons, and canonical interoperability vectors.
 8. `CON-FIX-001-cumulative-regression`: after the MET-REPAIR-002 authority amendment, repair generated-output inventory, cumulative registry tests and additive release assertions; restore documented blocked-selection precedence only in `aggregate_status`; pin the predecessor manifest, publish independent status vectors and run the complete contracts suite.
-9. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation.
+9. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation and MET-REPAIR-005 fixture-scope publication.
 
 ## Testing, verification, and acceptance
 
@@ -181,3 +181,12 @@ replace the mandatory current-registry and restricted-owner rejection tests.
 - Compiler and validation perform no network calls and accept no provider credentials.
 - Catalog rejects mutable OCI tags, external paid-provider requirements, runtime downloads, and modules without redistributable license disposition.
 - Self-hosted CI only; no GitHub storage features, Packages, cloud CLIs, hosted runners, scheduled workflows, external telemetry, or remote caches.
+
+## Exact model fixture-copy exception
+
+The [MET-REPAIR-005 amendment](../alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) permits
+CON-MODEL-001 to edit only _copy_generation_inputs inside the pinned legacy
+generator test, adding the two model directories and one lock-file copy.
+All assertions and other file bytes remain unchanged. New model tests verify
+the exact transformation and all 758 predecessor test IDs; no reduced suite,
+optional-input generator fallback or source/native acceptance promotion.

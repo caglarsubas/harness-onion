@@ -31,7 +31,7 @@ def test_current_publication_is_authority_only(inputs):
     assert all(target["status"] == "NOT_RUN_ENV_UNAVAILABLE" for target in policy["targets"])
     assert policy["completedCorrection"]["linuxProof"] is False
     assert policy["currentPacketCount"] == 118  # Immutable historical policy.
-    assert len(packets) == 121
+    assert len(packets) == 122
 
 
 @pytest.mark.parametrize(("path", "replacement"), [
@@ -144,5 +144,6 @@ def test_correction_and_contract_source_exceptions_preserved(inputs):
     assert packets["CTRL-FIX-003"]["predecessors"] == ["CTRL-FIX-002", "CON-FIX-001"]
     assert packets["CON-MODEL-001"]["predecessors"] == [
         "CON-007", "MET-OBS-MODEL-001", "CON-FIX-001", "CTRL-FIX-003",
+        "MET-REPAIR-005",
     ]
     assert policy["gate"]["sourceOnlyExceptions"] == ["CTRL-FIX-003", "CON-MODEL-001"]

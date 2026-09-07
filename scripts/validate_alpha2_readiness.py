@@ -56,6 +56,7 @@ CONTRACT_PATHS = [
     "contracts/model-inputs/", "contracts/release-manifest.json", "generated/",
     "scripts/generate_contracts.py", "scripts/check_generated.py",
     "docs/model-api.md", "docs/model-usage-compatibility.md",
+    "tests/golden/test_generated_contracts.py",
 ]
 
 
@@ -70,7 +71,7 @@ def validate_model_authority(packets: dict[str, Any], boundary: Any) -> list[str
     expected_predecessors = {
         "MET-A2-001": ["MET-P0-002", "CONF-A1-001"],
         "MET-OBS-MODEL-001": ["MET-A2-001"],
-        "CON-MODEL-001": ["CON-007", "MET-OBS-MODEL-001", "CON-FIX-001", "CTRL-FIX-003"],
+        "CON-MODEL-001": ["CON-007", "MET-OBS-MODEL-001", "CON-FIX-001", "CTRL-FIX-003", "MET-REPAIR-005"],
         "MODEL-001": ["SDK-003", "CON-006", "MET-002", "MET-003", "CON-MODEL-001", "CONF-LINUX-001"],
     }
     for packet_id, expected in expected_predecessors.items():

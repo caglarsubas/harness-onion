@@ -226,3 +226,13 @@ remain historical evidence. CTRL-FIX-003 is the next product correction.
 The [Linux amendment](LINUX_READINESS.md) introduces a fresh native Linux
 prerequisite for production integration and new runtime implementations, not
 for the status correction or pure model contracts. No Linux PASS is recorded.
+
+## Superseding model fixture-copy exception — MET-REPAIR-005
+
+The original MET-REPAIR-001 record and packet remain byte-identical. Its blanket
+restriction on later predecessor-test edits is superseded only for the exact
+_copy_generation_inputs copy additions approved in
+[MODEL_FIXTURE_SCOPE_REPAIR.md](MODEL_FIXTURE_SCOPE_REPAIR.md). All test assertions,
+other test bytes, cumulative regression commands and strict release-input checks
+remain unchanged. Baseline: 758 passed, zero failures/skips. This source-only
+amendment is not a product fix, reproduced failure, model release or Linux PASS.

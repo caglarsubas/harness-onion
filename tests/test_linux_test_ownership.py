@@ -34,7 +34,7 @@ def test_current_and_historical_authorities_agree_without_rewriting_history(inpu
     original = (ROOT / "architecture/linux-readiness.json").read_bytes()
     assert validate_linux_readiness(packets, json.loads(original)) == []
     assert validate_linux_repair(packets, json.loads(previous), original) == []
-    assert len(packets) == 121
+    assert len(packets) == 122
     assert json.loads(previous)["currentPacketCount"] == 120
     assert json.loads(original)["currentPacketCount"] == 118
     assert record["testChange"]["productImplementation"] == "NOT_RUN"
@@ -201,7 +201,7 @@ def test_historical_bytes_unknown_fields_and_count_changes_fail(inputs):
 
 def test_phase_checkpoint_owns_current_status_not_native_claims(inputs):
     status = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "| Alpha 2 authority | `MET-REPAIR-004` | ONGOING" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-004` | DONE" in status
     assert "| Alpha 2 correction | `CONF-FIX-001` | DONE" in status
     guide = (ROOT / "docs/alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md").read_text()
     for required in ("SOURCE_INSPECTION_ONLY", "NOT_RUN_ENV_UNAVAILABLE", "No model-effort transition", "121"):

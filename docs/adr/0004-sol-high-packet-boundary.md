@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 121 YAML task packets,
+The authoritative implementation queue contains exactly 122 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 121 packets validate against the closed schema with unique IDs and branches.
+- All 122 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -169,10 +169,20 @@ source locks, and live endpoint/provisioning authority are unchanged.
 
 ## MET-REPAIR-004: assertion-only test ownership
 
-The current catalog contains 121 packets. The prior 120-packet amendment and
+That publication contains 121 packets; the current catalog contains 122. The prior 120-packet amendment and
 118-packet policy remain unchanged historical records. One new predecessor and
 one exact test-file path are added to CONF-LINUX-001 with an assertion-only grant:
 replace the old five-handler count with equality to the exact ordered six-handler
 tuple. All other legacy test bytes and the completed CONF-FIX-001 boundaries are
 preserved. This publication does not implement a product test, install a runner,
 add live authority or qualify native Linux. A consumed amendment is never reopened.
+
+## MET-REPAIR-005: exact model fixture-copy ownership
+
+The new authority publication adds one packet (122 total), not a repository or
+harness. Its sole product grant is the pinned _copy_generation_inputs edit in
+tests/golden/test_generated_contracts.py; copy the two required model directories
+and one input-lock file only. Existing assertions and all other bytes remain
+immutable. See MODEL_FIXTURE_SCOPE_REPAIR.md for the strict byte/negative tests.
+No test bypass, generator weakening, source access, billing or runtime authority
+is added; source, PR, exact-main and native acceptance remain separate.
