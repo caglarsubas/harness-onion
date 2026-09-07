@@ -24,7 +24,7 @@ def inputs():
 def test_exact_catalog_and_real_source_checkpoint(inputs):
     packets, record, raw = inputs
     assert validate_live_backend_readiness(*inputs) == []
-    assert len(packets) == 132 and len(raw) == 156
+    assert len(packets) == 134 and len(raw) == 156
     assert record["historicalPacketCount"] == 123
     assert (record["repositoryCount"], record["harnessCount"]) == (13, 16)
     assert [c["passed"] for c in record["checkpoints"]] == [1295, 1175, 120]
@@ -204,7 +204,7 @@ def test_malformed_or_unpinned_record_cannot_control_input_reads(tmp_path, raw):
 
 def test_current_status_preserves_history_and_labels_next_work():
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "during `MET-REPAIR-007` publication" in text
+    assert "during `MET-REPAIR-008` publication" in text
     assert "| Alpha 2 authority | `MET-LIVE-001` | DONE" in text
     assert "| Alpha 2 | `CON-MODEL-001` | DONE" in text
     assert "Historical MET-REPAIR-006 publication checkpoint" in text

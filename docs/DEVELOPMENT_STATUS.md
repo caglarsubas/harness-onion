@@ -1,6 +1,6 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
-Snapshot: 2026-09-07, during `MET-REPAIR-007` publication. This is a checkpoint,
+Snapshot: 2026-09-08, during `MET-REPAIR-008` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run
 must refresh GitHub evidence rather than infer completion from this document.
@@ -28,9 +28,11 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 authority | `MET-REPAIR-006` | DONE — source/CI/merge/local exact-main | Meta PR 99 at f0ccd9f; 1295 passed, ten existing nested-isolation skips |
 | Alpha 2 | `CON-MODEL-001` | DONE — source/CI/merge/local exact-main | Contracts PR 9 at e9de8e5; 1175 passed, zero skips; original-source parity and runtime unproven |
 | Alpha 2 authority | `MET-LIVE-001` | DONE — source/CI/merge/local exact-main | Meta PR 100 at 50cfd3f; 1453 passed, ten existing nested-isolation skips; no installation or native qualification |
-| Alpha 2 authority | `MET-REPAIR-007` | ONGOING — publication | Exact quote-safe packet parser and one-hash-assertion correction authority; no product edits |
-| Alpha 2 correction | `CONF-FIX-002` | WAITING — authority closure | Quote-safe parser, fixed legacy hash assertion and independent regression vectors |
-| Alpha 2 backend | `CONF-LIVE-001` | BLOCKED — parser prerequisite | Draft conformance PR 6 at 57ee966; scalar identity rejected before commands/tests; cancelled CI is not PASS |
+| Alpha 2 authority | `MET-REPAIR-007` | DONE — source/CI/merge/local exact-main | Meta PR 101 at c526cca; CI 34122702351; 1549 passed and ten existing nested-isolation skips |
+| Alpha 2 correction | `CONF-FIX-002` | DONE — source/CI/merge/local exact-main | Conformance PR 7 at 8519225; CI 34137197794; 150 tests, zero skips, seven commands |
+| Alpha 2 authority | `MET-REPAIR-008` | ONGOING — publication | Exact cumulative inventory repair and six-stage source checks; no product edits |
+| Alpha 2 correction | `CONF-FIX-003` | WAITING — authority closure | Exact three-hunk scalar-suite inventory change, four new files and twenty regression methods |
+| Alpha 2 backend | `CONF-LIVE-001` | BLOCKED — cumulative inventory prerequisite | Draft PR 6 preserved at 57ee966; new issue is SOURCE_INSPECTION_ONLY; historical pre-test refusal/cancelled CI is not PASS |
 | Alpha 2 backend | `CONF-LIVE-002` | WAITING | Protected Linux supervisor and isolation candidate |
 | Alpha 2 backend | `CONF-LIVE-003` | WAITING | Fixed proxy transport and zero-cost admission |
 | Alpha 2 backend | `CONF-LIVE-004` | WAITING | Native Linux build and ten fixed probes |
@@ -46,7 +48,47 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 4 | `MODEL-004` through `CONF-WG-001` | WAITING | Performance, resilience, platform and enterprise acceptance |
 | Cross-phase | Artifact/SBOM, release, deployment, runtime, assurance, tenant acceptance | WAITING — independent gates | Never inferred from source/offline completion |
 
-## Current amendment boundary — packet scalar compatibility
+## Current amendment boundary — cumulative source inventory
+
+The [cumulative correction guide](alpha-2/SUCCESSOR_INVENTORY_REPAIR.md) publishes
+MET-REPAIR-008 and CONF-FIX-003: **134 packets**, thirteen repositories, sixteen
+harnesses, twelve unchanged possible live declarations. All 132 earlier packet
+YAML and existing architecture/legal/policy/release records remain byte-identical
+(170 files). Product CONF-FIX-003 is NOT_RUN in this publication.
+
+Verified predecessor checkpoints:
+
+- MET-REPAIR-007: [meta PR 101](https://github.com/caglarsubas/harness-onion/pull/101),
+  main c526ccaa293b2113032c5a5b4a037e35baacb196, CI 34122702351;
+  separate local exact-main 1549 passed, ten existing nested-isolation skips,
+  thirteen commands; log 1b4c47a23406390b60e7375a4d6a0dcedbf9a6a880c963a2c87e1aa2dd8c9ce2.
+- CONF-FIX-002: [conformance PR 7](https://github.com/caglarsubas/mas-harness-conformance-labs/pull/7),
+  main 8519225b1564834fab5bcd001c263688e6fba7fe, CI 34137197794,
+  job 101790810481; local/head, required CI and separate local exact-main each
+  passed 150 tests with zero skips and seven commands. Exact-main log
+  c6d01559a6704cc9ffa0c817c49f081517cf8ddddafab0dbb68673c43d02e7b5.
+
+SOURCE_INSPECTION_ONLY: the accepted scalar suite freezes 106 paths; adding
+CONF-LIVE-001's ten disjoint paths creates 116 and violates its equality guard.
+Its predecessor hash check also needs exact final-stage launcher reconciliation.
+No new product test was executed for this diagnosis. The previous conclusion
+that CONF-LIVE-001 was ready to resume is withdrawn; the actual checkpoint PASS
+remains valid for its accepted source. The earlier draft parser failure and
+CANCELLED_NOT_PASS CI are retained below, not recast as inventory failures.
+
+Next: close MET-REPAIR-008 local/head, required localhost PR CI, merge and local
+exact-main; then implement CONF-FIX-003 in a separate coding run/PR. Preserve
+all 150 test identities and parser vectors; add twenty tests and a strict helper
+for complete ordered stages 0–6. Then reconcile CONF-LIVE-001 solely in its
+existing ten paths, preserving the original 103/120 history and both correction
+checkpoints. The final launcher source proof grants no runtime authority.
+Native AMD64/ARM64 remain NOT_RUN_ENV_UNAVAILABLE. Alpha 2 is ongoing; no phase-end
+model-effort transition, root policy change or administrator prompt is due.
+
+## Historical MET-REPAIR-007 publication checkpoint
+
+The following records the earlier publication. The current rows and cumulative
+dispatch gate above supersede its next-step instructions.
 
 The [exact correction guide](alpha-2/PACKET_SCALAR_REPAIR.md) and closed
 `architecture/packet-scalar-amendment.json` publish two new packets, for

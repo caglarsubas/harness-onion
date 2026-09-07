@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 132 YAML task packets,
+The authoritative implementation queue contains exactly 134 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 132 packets validate against the closed schema with unique IDs and branches.
+- All 134 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -169,7 +169,7 @@ source locks, and live endpoint/provisioning authority are unchanged.
 
 ## MET-REPAIR-004: assertion-only test ownership
 
-That publication contains 121 packets; the current catalog contains 132. The prior 120-packet amendment and
+That publication contains 121 packets; the current catalog contains 134. The prior 120-packet amendment and
 118-packet policy remain unchanged historical records. One new predecessor and
 one exact test-file path are added to CONF-LINUX-001 with an assertion-only grant:
 replace the old five-handler count with equality to the exact ordered six-handler
@@ -189,7 +189,7 @@ is added; source, PR, exact-main and native acceptance remain separate.
 
 ## MET-REPAIR-006: exact additive API inventory ownership
 
-The current catalog has 132 packets. The consumed MET-REPAIR-005 packet and
+The current catalog has 134 packets. The consumed MET-REPAIR-005 packet and
 record remain unchanged; its whole model-packet pin is read from the immutable
 pre-amendment snapshot, while the exact successor is separately validated.
 Only the required-five subset predicate is authorized in the named lifecycle
@@ -202,7 +202,7 @@ substitute, tests suppression, file hiding or product edits in the meta run.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 132. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 134. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -218,13 +218,13 @@ pure authority/evidence adapter. Source fixtures never become native evidence.
 Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
 One packet, branch, PR and exact local/CI/main gate per run remains mandatory.
 
-## Approved packet scalar compatibility repair — MET-REPAIR-007
+## Historical packet scalar compatibility publication — MET-REPAIR-007
 
 The [exact correction guide](../alpha-2/PACKET_SCALAR_REPAIR.md) adds MET-REPAIR-007 and
 CONF-FIX-002: **132 packets**, thirteen repositories, sixteen harnesses and
 **twelve** unchanged possible live declarations. The preceding 130 packet YAML
 and all existing architecture/legal/policy/release bytes remain immutable.
-This is the current supplement to the historical live-backend publication.
+This is the retained 132-packet publication. The successor-inventory supplement below supersedes its dispatch status.
 
 CONF-LIVE-001 is blocked after its quoted scalar identity failed before any
 acceptance command or test ran. Complete CONF-FIX-002 in a separate product PR
@@ -236,3 +236,33 @@ local offline, required PR CI, merge and separate local exact-main closure.
 Retain its original 103-file/120-test baseline and add corrective provenance
 only within its existing paths; the six-root/eight-command inventory is fixed.
 Native Linux, live backend, runtime and tenant acceptance remain separate gates.
+
+## Approved cumulative inventory repair — MET-REPAIR-008
+
+The [cumulative inventory guide](../alpha-2/SUCCESSOR_INVENTORY_REPAIR.md) adds
+MET-REPAIR-008 and CONF-FIX-003: **134 packets**, thirteen repositories, sixteen
+harnesses and twelve unchanged possible live declarations. All 132 previous
+packet YAML and existing architecture/legal/policy/release bytes are immutable
+(170 files). Neither old correction record is rewritten.
+
+MET-REPAIR-007 and CONF-FIX-002 are complete as separate source/CI/merge/local
+exact-main checkpoints. Source inspection subsequently found the scalar suite's
+frozen 106-file inventory rejects the next ten legitimate files; the earlier
+successor-readiness inference is withdrawn, not its actual 150-test PASS.
+Complete the new authority and then CONF-FIX-003 in its separate product PR:
+one exact three-hunk test change and four new files, all 150 previous test IDs
+plus twenty new tests. The parser and every other predecessor stay fixed.
+
+Require complete ordered stage path sets (110, 120, 127, 135, 141, 146, 151 files),
+predecessor hashes/modes, real collection and strict malformed/link/partial-stage
+negatives. CONF-LIVE-006 alone may later replace the single terminal unavailable
+statement after unchanged launcher manifest/preflight checks, with a bounded
+SOURCE_DELTA_ONLY proof in its already-owned qualification document. That proof
+is source accounting, not execution authority or a code-safety certification.
+
+CONF-LIVE-001 remains blocked until corrective source, local offline, required
+localhost PR CI, merge and local exact-main close. Then reconcile cumulative
+history within its existing ten paths and unchanged six-root/eight-command
+acceptance. No signed consumer packet, root policy, dependency, installation or
+billing boundary changes. Native Linux and tenant acceptance remain separate;
+no phase-end model-effort transition is due.

@@ -87,11 +87,14 @@ def validate_live_backend_readiness(
             errors.append("original 123-packet / 156-file preservation inventory changed")
         try:
             from validate_packet_scalar_repair import ADDITIONS, validate_additions
+            from validate_successor_inventory import ADDITIONS as SUCCESSORS, validate_additions as validate_successors
         except ImportError:
             from scripts.validate_packet_scalar_repair import ADDITIONS, validate_additions
-        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) or len(packets) != 132:
-            errors.append("current roadmap requires exactly 132 named packets; historical authority remains 130")
+            from scripts.validate_successor_inventory import ADDITIONS as SUCCESSORS, validate_additions as validate_successors
+        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) or len(packets) != 134:
+            errors.append("current roadmap requires exactly 134 named packets; historical authority remains 130")
         errors.extend(validate_additions(packets))
+        errors.extend(validate_successors(packets))
         if set(inputs) != set(protected):
             errors.append("missing or extra protected predecessor input")
         for path, expected in protected.items():
@@ -140,7 +143,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Live backend roadmap valid: 132 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
+        print("Live backend roadmap valid: 134 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
     return bool(errors)
 
 
