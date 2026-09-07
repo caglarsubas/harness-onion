@@ -1,6 +1,6 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
-Snapshot: 2026-09-06, during `MET-REPAIR-003` publication. This is a checkpoint,
+Snapshot: 2026-09-07, during `MET-REPAIR-004` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run
 must refresh GitHub evidence rather than infer completion from this document.
@@ -18,9 +18,11 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Alpha 2 authority | `MET-LINUX-001` | DONE — source/CI/merge/local exact-main | PR 94 at b1d7478; original 118-packet Linux gate authority, no native acceptance |
 | Alpha 1 correction | `CTRL-FIX-003` | DONE — source/CI/merge/local exact-main | Control PR 10 at 1de7c40; 698 unit and 6 browser checks recorded, no Linux claim |
 | Alpha 2 foundation | `MET-LINUX-002` | DONE — source/CI/merge/local exact-main | PR 95 at c37f2b7; candidate and operator kit, SOURCE_PACKAGE_ONLY |
-| Alpha 2 authority | `MET-REPAIR-003` | ONGOING — publication | Approved R1-R4 packet scope and discovery amendment; CI/merge/main remain separate |
-| Alpha 2 correction | `CONF-FIX-001` | WAITING — next after publication | OS-bound offline transport/canary, discovery guards and retired unauthenticated live adapter |
-| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — CONF-FIX-001 and independent Linux execution | Real Linux AMD64 build/isolation/minimal runtime baseline; ARM64 independently qualified |
+| Alpha 2 authority | `MET-REPAIR-003` | DONE — source/CI/merge/local exact-main | Meta PR 96 at 7047ec9; consumed R1-R4 authority retained |
+| Operator prerequisite | `OPERATOR-RUNNER-002` | DONE — external installation/verification | Conformance-only profile admitted; fresh signed activation and OS-denial checks passed |
+| Alpha 2 correction | `CONF-FIX-001` | DONE — source/CI/merge/local exact-main | Conformance PR 4 at 07453d3; 83 tests, zero skips, full inventory closure |
+| Alpha 2 authority | `MET-REPAIR-004` | ONGOING — publication | One assertion-only legacy Linux test grant; CI/merge/main remain separate |
+| Alpha 2 early gate | `CONF-LINUX-001` | WAITING — MET-REPAIR-004 and independent Linux execution | Real Linux AMD64 build/isolation/minimal runtime baseline; ARM64 independently qualified |
 | Alpha 1 integration | `CTRL-INTEGRATE-001` | WAITING — fresh Linux gate | R06 authenticated production overview and durable projection adapters; separate live acceptance required |
 | Alpha 2 | `CON-MODEL-001` | WAITING — corrective prerequisites | Model API/usage contracts after CON-FIX-001 and CTRL-FIX-003; full contracts suite required |
 | Alpha 2 | `MODEL-001` | WAITING — prerequisites and fresh Linux gate | Model repository bootstrap and local inference core |
@@ -34,6 +36,33 @@ must refresh GitHub evidence rather than infer completion from this document.
 | Cross-phase | Artifact/SBOM, release, deployment, runtime, assurance, tenant acceptance | WAITING — independent gates | Never inferred from source/offline completion |
 
 ## Current amendment boundary
+
+[Assertion-only Linux test repair](alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md) is the
+current publication. It adds one packet (121 total) and grants exactly one
+additional conformance test path. The original 118-packet policy and consumed
+120-packet amendment remain byte-identical. No product or privileged host change
+is part of this meta PR.
+
+CONF-FIX-001 completed as [conformance PR 4](https://github.com/caglarsubas/mas-harness-conformance-labs/pull/4),
+main 07453d3e6313c836426545c454380176bc2a2ee1. Required
+[CI 34052209212](https://github.com/caglarsubas/mas-harness-conformance-labs/actions/runs/34052209212)
+and the separate signed local exact-main replay each passed 83 tests with no
+skips. Main replay log SHA-256:
+c793655198e8e0c3dfa9f5a596618b25a579e5dffc74549bd72473847c7ec889.
+Meta PR 96 at 7047ec93170d5db8a148d1f6cfd34ad7877fb423 passed required
+CI 34032961187 and independent local exact-main replay (955 passed, ten existing
+nested-isolation skips). Its source-only closure is distinct from conformance
+product repair; neither establishes Linux/runtime or tenant acceptance.
+
+Next: close MET-REPAIR-004 publication, implement CONF-LINUX-001 in its own PR,
+then independently qualify native Linux. The new test may only replace its
+handler assertion with the exact six-handler tuple; all other legacy test bytes
+remain unchanged. Unknown/absent Linux capacity and live isolation/proxy authority
+remain NOT_RUN_ENV_UNAVAILABLE. No model-effort transition is due.
+
+## Historical MET-REPAIR-003 publication checkpoint
+
+The following snapshot predates the completed source correction above.
 
 [R1-R4 repair](alpha-2/LINUX_READINESS_REPAIRS.md) is approved. MET-REPAIR-003
 publishes exactly two new packets, bringing the current catalog to 120; the

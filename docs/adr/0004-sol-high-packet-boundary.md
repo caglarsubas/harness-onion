@@ -22,7 +22,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 120 YAML task packets,
+The authoritative implementation queue contains exactly 121 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -63,7 +63,7 @@ validates the committed report with all warm roots hidden. Every packet other
 than `MET-002`, including `CON-006`, retains
 `PROHIBITED_DURING_IMPLEMENTATION` and cannot declare observation authority.
 
-Ten conformance packets may declare `liveCampaignExecution`, but this is a
+Eleven conformance packets may declare `liveCampaignExecution`, but this is a
 separate manual post-merge path. The external root-owned launcher accepts only
 `HARNESS_LIVE_EXECUTION_ENVELOPE`. The closed envelope binds the exact packet,
 command set, conformance kit, campaign definition and release, launcher, bundle,
@@ -79,7 +79,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 120 packets validate against the closed schema with unique IDs and branches.
+- All 121 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -166,3 +166,13 @@ unchanged Linux candidate transport pins. Permissive network errno results and
 caller-created live proof descriptors cannot become acceptance evidence.
 Makefile, generic dispatch, root installation, workflow, PORTING, dependencies,
 source locks, and live endpoint/provisioning authority are unchanged.
+
+## MET-REPAIR-004: assertion-only test ownership
+
+The current catalog contains 121 packets. The prior 120-packet amendment and
+118-packet policy remain unchanged historical records. One new predecessor and
+one exact test-file path are added to CONF-LINUX-001 with an assertion-only grant:
+replace the old five-handler count with equality to the exact ordered six-handler
+tuple. All other legacy test bytes and the completed CONF-FIX-001 boundaries are
+preserved. This publication does not implement a product test, install a runner,
+add live authority or qualify native Linux. A consumed amendment is never reopened.

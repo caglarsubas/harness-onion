@@ -9,10 +9,11 @@ import yaml
 
 from scripts.validate_linux_readiness import EXPECTED_PACKETS, validate_linux_readiness
 from scripts.validate_linux_repair import (
-    CAMPAIGN_COMMANDS, EXPECTED_AMENDMENT, PACKET_DIGESTS,
+    CAMPAIGN_COMMANDS, EXPECTED_AMENDMENT, PACKET_DIGESTS, CURRENT_PACKET_DIGESTS,
     amend_linux_packet, packet_bytes, validate_linux_repair,
 )
 from scripts.validate_packet_ownership import validate_packet_ownership
+from scripts.validate_linux_test_ownership import amend_linux_test_packet
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,7 +30,8 @@ def test_current_amendment_is_complete_and_historical_policy_unchanged(inputs):
     assert validate_linux_repair(packets, record, raw) == []
     assert validate_linux_readiness(packets, json.loads(raw)) == []
     assert validate_packet_ownership(packets) == []
-    assert len(packets) == 120
+    assert len(packets) == 121
+    assert record["currentPacketCount"] == 120  # Consumed record is immutable.
     assert json.loads(raw)["currentPacketCount"] == 118
     assert record["baseline"]["reviewEvidence"] == "SOURCE_INSPECTION_ONLY"
     assert record["baseline"]["runtimeReproduction"] == "NOT_RUN"
@@ -43,7 +45,10 @@ def test_packet_projection_matches_actual_bytes(inputs, packet_id):
     packets, _, _ = inputs
     raw = (ROOT / "task-packets" / (packet_id + ".yaml")).read_bytes()
     assert packet_bytes(packets[packet_id]) == raw
-    assert hashlib.sha256(raw).hexdigest() == PACKET_DIGESTS[packet_id]
+    assert hashlib.sha256(raw).hexdigest() == CURRENT_PACKET_DIGESTS[packet_id]
+    if packet_id == "CONF-LINUX-001":
+        historical = amend_linux_packet(EXPECTED_PACKETS[packet_id])
+        assert hashlib.sha256(packet_bytes(historical)).hexdigest() == PACKET_DIGESTS[packet_id]
 
 
 @pytest.mark.parametrize("packet_id", tuple(PACKET_DIGESTS))
@@ -131,7 +136,7 @@ def test_campaign_delta_is_exact_not_replacement_authority(inputs):
     snapshot = deepcopy(old)
     expected = amend_linux_packet(old)
     assert old == snapshot
-    assert packets["CONF-LINUX-001"] == expected
+    assert packets["CONF-LINUX-001"] == amend_linux_test_packet(expected)
     assert expected["allowedPaths"] == old["allowedPaths"] + [
         "src/harness_conformance/models.py", "schemas/v1alpha1/control-result.schema.json"]
     for key in ("contracts", "excluded", "rollback", "sourceReuse", "offlineExecution"):
@@ -196,8 +201,9 @@ def test_corrective_boundary_retains_no_executable_live_authority(inputs):
 def test_catalog_checkpoint_and_source_only_phase_labels_exist(inputs):
     _, _, _ = inputs
     status = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    assert "| Alpha 2 authority | `MET-REPAIR-003` | ONGOING" in status
-    assert "| Alpha 2 correction | `CONF-FIX-001` | WAITING" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-003` | DONE" in status
+    assert "| Alpha 2 correction | `CONF-FIX-001` | DONE" in status
+    assert "| Alpha 2 authority | `MET-REPAIR-004` | ONGOING" in status
     assert "not a live dashboard or certification ledger" in status
     guide = (ROOT / "docs/alpha-2/LINUX_READINESS_REPAIRS.md").read_text()
     for finding in ("R1", "R2", "R3", "R4"):
