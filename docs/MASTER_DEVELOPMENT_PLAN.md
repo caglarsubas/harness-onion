@@ -263,7 +263,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 122 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 123 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -283,10 +283,20 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-The current catalog contains 122 packets. The preceding 121-packet Linux test
+The current catalog contains 123 packets. The preceding 121-packet Linux test
 publication is historical; its consumed bytes are unchanged. Before CON-MODEL-001,
 publish the [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md),
 verify localhost PR CI and exact-main offline replay, then implement model
 contracts in their own product PR. Preserve every predecessor test assertion.
 The untouched baseline passed 758 tests; the new integration gap is source
 inspection, not an executed failure. Linux runtime gates remain closed.
+
+## Model API inventory authority — MET-REPAIR-006
+
+The current queue has 123 packets. [The exact inventory amendment](alpha-2/MODEL_API_INVENTORY_REPAIR.md)
+preserves the 122-packet fixture publication and its exact helper grant.
+The model draft reproduced a second fixed inventory: 1048 passed, one failed,
+zero skipped. Permit only required-five API membership instead of exact equality,
+without changing the test identity or any following safety check. Publish and
+accept this meta packet before resuming product PR 9 and its normal completeness
+review. Source, offline, CI, merge, native Linux and tenant gates stay separate.

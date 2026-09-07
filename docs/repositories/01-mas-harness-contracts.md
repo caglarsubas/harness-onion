@@ -146,7 +146,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `CON-006-compat`: `data.harness/v1` conversion, round-trip fixtures, deprecation metadata, and migration guide.
 7. `CON-007-runtime-admission-contracts`: tenant-bound signed admission envelopes, trust rotation, receipts, replay/idempotency state, budget consumption, closed denial reasons, and canonical interoperability vectors.
 8. `CON-FIX-001-cumulative-regression`: after the MET-REPAIR-002 authority amendment, repair generated-output inventory, cumulative registry tests and additive release assertions; restore documented blocked-selection precedence only in `aggregate_status`; pin the predecessor manifest, publish independent status vectors and run the complete contracts suite.
-9. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation and MET-REPAIR-005 fixture-scope publication.
+9. `CON-MODEL-001-api-usage`: model API/usage schemas, additive release manifest, source-free input locks, explicit usage-field compatibility dispositions and independently authored conformance vectors after the approved structural observation and MET-REPAIR-005 fixture-scope and MET-REPAIR-006 inventory-scope publications.
 
 ## Testing, verification, and acceptance
 
@@ -190,3 +190,13 @@ generator test, adding the two model directories and one lock-file copy.
 All assertions and other file bytes remain unchanged. New model tests verify
 the exact transformation and all 758 predecessor test IDs; no reduced suite,
 optional-input generator fallback or source/native acceptance promotion.
+
+## Exact additive API inventory exception
+
+The [MET-REPAIR-006 amendment](../alpha-2/MODEL_API_INVENTORY_REPAIR.md) adds only
+tests/model/test_lifecycle_contracts.py and its named required-five inventory
+predicate. Preserve the original test ID, every other byte and every discovered
+API's existing safety checks. The fixture-copy exception is unchanged.
+Resume draft PR 9 only after authority closure, retain all 758 predecessor test
+identities, add independent missing-API/added-API safety vectors, finish normal
+model-contract completeness review, and rerun every acceptance command.

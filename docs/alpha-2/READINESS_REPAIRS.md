@@ -236,3 +236,13 @@ _copy_generation_inputs copy additions approved in
 other test bytes, cumulative regression commands and strict release-input checks
 remain unchanged. Baseline: 758 passed, zero failures/skips. This source-only
 amendment is not a product fix, reproduced failure, model release or Linux PASS.
+
+## Superseding model API inventory exception — MET-REPAIR-006
+
+[MODEL_API_INVENTORY_REPAIR.md](MODEL_API_INVENTORY_REPAIR.md) permits only the exact
+required-five subset predicate in the pinned lifecycle test. This is the sole
+additional assertion exception; all other legacy bytes, cumulative commands,
+release-input validation and fixture-copy boundaries remain unchanged.
+The earlier fixture diagnosis stays source-inspection-only. The later model
+inventory failure is independently reproduced, not retroactively inserted into
+earlier records. Product PR 9 remains draft, with no accepted CI or merge.

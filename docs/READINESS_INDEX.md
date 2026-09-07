@@ -11,7 +11,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 122; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 123; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -205,7 +205,7 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 122-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 123-packet execution
   catalog and topological delivery guidance.
 
 ## Early Linux readiness publication
@@ -216,7 +216,7 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; that publication contained 118 packets; the current approved repair contains 122.
+historical; that publication contained 118 packets; the current approved repair contains 123.
 
 ## Conformance readiness amendment
 
@@ -236,12 +236,20 @@ satisfy Linux qualification. Prior Linux policy bytes remain immutable.
 - [Closed amendment](../architecture/linux-test-ownership-amendment.json): immutable predecessor source/CI/main pins, exact statement replacement and preserved native/live gates.
 - [Guide and phase checkpoint](alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md): publication only; CONF-LINUX-001 implementation and native qualification remain independent.
 
-Current catalog: 122 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
+Current catalog: 123 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
 
-## Model fixture scope — current authority
+## Model fixture scope — preserved authority
 
 - [MET-REPAIR-005](../task-packets/MET-REPAIR-005.yaml): exact helper-only grant.
 - [Closed record](../architecture/model-fixture-scope-amendment.json): pinned
   baseline, helper transformation and independent evidence boundaries.
 - [Development instructions](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md): source-only
   checklist, strict verification, rollback and unchanged native runtime gate.
+
+## Model API inventory scope — current authority
+
+- [MET-REPAIR-006](../task-packets/MET-REPAIR-006.yaml): exact predicate-only grant.
+- [Closed record](../architecture/model-api-inventory-amendment.json): immutable passing baseline, failed draft and predicate/outside-byte bindings.
+- [Development instructions](alpha-2/MODEL_API_INVENTORY_REPAIR.md): current 123-packet checkpoint, negative tests and remaining product/native gates.
+
+The cancelled draft CI is not PASS; no model-product acceptance is recorded.
