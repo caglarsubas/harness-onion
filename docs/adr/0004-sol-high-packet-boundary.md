@@ -1,7 +1,7 @@
 # ADR 0004: Sol-High task packets are the executable change boundary
 
-Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](../alpha-2/PROXY_CONTRACT_READINESS.md).
-Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](../alpha-2/POLICY_OBSERVATION_READINESS.md).
+Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
 CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
 Older publication sections below retain their historical states, not current instructions.
 
@@ -27,7 +27,7 @@ catalog into the implementation queue.
 
 ## Decision
 
-The authoritative implementation queue contains exactly 135 YAML task packets,
+The authoritative implementation queue contains exactly 136 YAML task packets,
 ordered in the Alpha 1-4 index. Each coding run implements exactly one packet on
 its unique `codex/<packet-id>-<slug>` branch and changes only that packet's
 repository-local `allowedPaths`. Every predecessor must exist, the complete
@@ -84,7 +84,7 @@ authority, capacity, or target produces `NOT_RUN_ENV_UNAVAILABLE`, never a pass.
 
 ## Verification
 
-- All 135 packets validate against the closed schema with unique IDs and branches.
+- All 136 packets validate against the closed schema with unique IDs and branches.
 - The catalog covers all thirteen repositories and its predecessor graph is
   closed, acyclic, and topologically indexed across Alpha 1-4.
 - Negative ownership vectors reject unordered overlaps, non-owner Makefile and
@@ -174,7 +174,7 @@ source locks, and live endpoint/provisioning authority are unchanged.
 
 ## MET-REPAIR-004: assertion-only test ownership
 
-That publication contains 121 packets; the current catalog contains 135. The prior 120-packet amendment and
+That publication contains 121 packets; the current catalog contains 136. The prior 120-packet amendment and
 118-packet policy remain unchanged historical records. One new predecessor and
 one exact test-file path are added to CONF-LINUX-001 with an assertion-only grant:
 replace the old five-handler count with equality to the exact ordered six-handler
@@ -194,7 +194,7 @@ is added; source, PR, exact-main and native acceptance remain separate.
 
 ## MET-REPAIR-006: exact additive API inventory ownership
 
-The current catalog has 135 packets. The consumed MET-REPAIR-005 packet and
+The current catalog has 136 packets. The consumed MET-REPAIR-005 packet and
 record remain unchanged; its whole model-packet pin is read from the immutable
 pre-amendment snapshot, while the exact successor is separately validated.
 Only the required-five subset predicate is authorized in the named lifecycle
@@ -207,7 +207,7 @@ substitute, tests suppression, file hiding or product edits in the meta run.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 135. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 136. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -290,3 +290,14 @@ cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
 Native qualification, runtime and tenant acceptance remain separate and unavailable.
 No installation, key issuance, root-policy change, hosted runner or paid API is
 part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.
+
+## Approved protected policy observation — MET-REPAIR-010
+
+Source-only prerequisite before CONF-LIVE-003: fixed local server-only observation,
+independent operator custody and current enforcement evidence. Campaign API rules,
+credentials, mutations and egress remain unchanged. The observer is a separately
+installed open-source operator prerequisite, not an available or deployed product.
+Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
+Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
+See the current dispatch link above for the closed schemas, native obligations,
+recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.

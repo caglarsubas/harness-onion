@@ -1,7 +1,7 @@
 # Implementation Readiness Index
 
-Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](alpha-2/PROXY_CONTRACT_READINESS.md).
-Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](alpha-2/POLICY_OBSERVATION_READINESS.md).
+Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
 CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
 Older publication sections below retain their historical states, not current instructions.
 
@@ -16,7 +16,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 135; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 136; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -210,7 +210,7 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 135-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 136-packet execution
   catalog and topological delivery guidance.
 
 ## Early Linux readiness publication
@@ -221,7 +221,7 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; that publication contained 118 packets; the current approved catalog contains 135.
+historical; that publication contained 118 packets; the current approved catalog contains 136.
 
 ## Conformance readiness amendment
 
@@ -241,7 +241,7 @@ satisfy Linux qualification. Prior Linux policy bytes remain immutable.
 - [Closed amendment](../architecture/linux-test-ownership-amendment.json): immutable predecessor source/CI/main pins, exact statement replacement and preserved native/live gates.
 - [Guide and phase checkpoint](alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md): publication only; CONF-LINUX-001 implementation and native qualification remain independent.
 
-Current catalog: 135 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
+Current catalog: 136 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
 
 ## Model fixture scope — preserved authority
 
@@ -264,7 +264,7 @@ The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 135. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 136. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -347,3 +347,14 @@ cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
 Native qualification, runtime and tenant acceptance remain separate and unavailable.
 No installation, key issuance, root-policy change, hosted runner or paid API is
 part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.
+
+## Approved protected policy observation — MET-REPAIR-010
+
+Source-only prerequisite before CONF-LIVE-003: fixed local server-only observation,
+independent operator custody and current enforcement evidence. Campaign API rules,
+credentials, mutations and egress remain unchanged. The observer is a separately
+installed open-source operator prerequisite, not an available or deployed product.
+Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
+Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
+See the current dispatch link above for the closed schemas, native obligations,
+recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.

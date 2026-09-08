@@ -16,7 +16,7 @@ RECORD_PATH = "architecture/proxy-contract-amendment.json"
 RECORD_SHA256 = "bf9b679d00e7ecd98b9d8c576ecd17201145a281c0019c2ca718607483048733"
 PACKET_SHA256 = "91d5beb52180cb106b286cc298d4665ceb1ff186f9bb0d7770df5c01b8712426"
 SCHEMA_SHA256 = "e3f3c175b51b0f93b6865e37d7d27624403891cc372542d719bc34a8381884a6"
-ADDITIONS = ("MET-REPAIR-009",)
+ADDITIONS = ("MET-REPAIR-009", "MET-REPAIR-010")
 CASES = ["HOST_ISOLATION_NEGATIVES","LINUX_TARGET_BUILD","FULL_PREDECESSOR_REGRESSION","CONTROL_CONTAINER_STARTUP","POSTGRES_MIGRATION_AND_RLS","DURABLE_RESTART","ARBITRARY_NON_ROOT_UID","READ_ONLY_ROOT_FILESYSTEM","KUBERNETES_SMOKE","DEFAULT_DENY_NETWORK"]
 PATHS = ["/v1/linux-baseline/" + item.lower().replace("_", "-") for item in CASES]
 
@@ -76,7 +76,11 @@ def validate_additions(packets):
     try:
         if type(packets) is not dict or digest(canonical(packets.get(ADDITIONS[0]))) != PACKET_SHA256:
             return ["exact proxy prerequisite packet required"]
-        return []
+        try:
+            from validate_policy_observation import validate_additions as observation_additions
+        except ImportError:
+            from scripts.validate_policy_observation import validate_additions as observation_additions
+        return observation_additions(packets)
     except (TypeError, ValueError, RecursionError):
         return ["malformed proxy prerequisite packet"]
 
@@ -212,7 +216,7 @@ def validate_proxy_contract(packets, record, inputs):
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         old_ids = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
         if len(old_ids) != 134 or len(record["protectedFiles"]) != 176 or set(packets) != old_ids | set(ADDITIONS):
-            errors.append("exact historical 134 plus one proxy prerequisite required")
+            errors.append("exact historical 134 plus proxy and observation prerequisites required")
         if set(inputs) != set(pins):
             errors.append("exact proxy authority input inventory required")
         for path, checksum in pins.items():
@@ -248,7 +252,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Proxy prerequisite valid: 135 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.")
+        print("Proxy prerequisite valid: 136 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

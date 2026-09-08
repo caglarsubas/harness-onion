@@ -1,7 +1,7 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
-Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](PROXY_CONTRACT_READINESS.md).
-Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](POLICY_OBSERVATION_READINESS.md).
+Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
 CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
 Older publication sections below retain their historical states, not current instructions.
 
@@ -476,3 +476,14 @@ cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
 Native qualification, runtime and tenant acceptance remain separate and unavailable.
 No installation, key issuance, root-policy change, hosted runner or paid API is
 part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.
+
+## Approved protected policy observation — MET-REPAIR-010
+
+Source-only prerequisite before CONF-LIVE-003: fixed local server-only observation,
+independent operator custody and current enforcement evidence. Campaign API rules,
+credentials, mutations and egress remain unchanged. The observer is a separately
+installed open-source operator prerequisite, not an available or deployed product.
+Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
+Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
+See the current dispatch link above for the closed schemas, native obligations,
+recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.
