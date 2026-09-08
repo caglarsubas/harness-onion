@@ -1,5 +1,68 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-08, during `MET-REPAIR-009` publication. Authority-only;
+this is not a live runtime dashboard. Historical snapshots below remain preserved.
+Current catalog: 135 packets, thirteen repositories, four planes, sixteen harnesses.
+The complete backlog is in [task-packets/README.md](../task-packets/README.md).
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 | Closure | DONE — historical source/offline | Earlier acceptance remains separate from live installation |
+| Alpha 1 | Foundation and tenant overview source | DONE — recorded source/offline | Independent live integration and tenant acceptance remain waiting |
+| Alpha 2 authority | `MET-LIVE-001` | DONE — source gates | Six-packet source-only Linux backend authority |
+| Alpha 2 | `CON-MODEL-001` | DONE — source gates | Model contracts; not model runtime acceptance |
+| Alpha 2 authority | `MET-REPAIR-008` | DONE — source/CI/merge/local exact-main | Meta PR 102, main 3b1ea6b; 1720 passed, ten existing nested-isolation skips |
+| Alpha 2 correction | `CONF-FIX-002` | DONE — source gates | Parser correction; historical CI retained |
+| Alpha 2 correction | `CONF-FIX-003` | DONE — source/CI/merge/local exact-main | PR 8, main 01ef8b1; 110 files / 170 tests |
+| Alpha 2 backend | `CONF-LIVE-001` | DONE — source/CI/merge/local exact-main | PR 6, main d734b80; 120 files / 216 tests |
+| Alpha 2 backend | `CONF-LIVE-002` | DONE — source/CI/merge/local exact-main | PR 9, main 7205075; 127 files / 279 tests |
+| Alpha 2 authority | `MET-REPAIR-009` | ONGOING — publication | Strict proxy contract prerequisite; no product or native execution |
+| Alpha 2 backend | `CONF-LIVE-003` | WAITING — authority closure | Fixed transport, independent server authentication and zero-cost admission |
+| Alpha 2 backend | `CONF-LIVE-004` | WAITING | Fixed build/probe implementations and native observations |
+| Alpha 2 backend | `CONF-LIVE-005` | WAITING | Reproducible client/server candidate packaging and operator handoff |
+| Alpha 2 backend | `CONF-LIVE-006` | WAITING | Final integration and manual qualification declaration |
+| Alpha 2 | Native AMD64 / ARM64 qualification | WAITING — NOT_RUN_ENV_UNAVAILABLE | Separate installation, capacity and signed native evidence |
+| Alpha 1 integration / Alpha 2 | `CTRL-INTEGRATE-001`, `MODEL-001`, `EXEC-001`, `RUN-001` | WAITING — fresh native AMD64 gate | Runtime product code remains gated |
+| Alpha 3 | Governed action and interaction | WAITING | Existing DAG unchanged |
+| Alpha 4 | Enterprise release/platform matrix | WAITING | Independent deployment, runtime, assurance and tenant acceptance |
+
+## Current contract boundary
+
+The [proxy prerequisite](alpha-2/PROXY_CONTRACT_READINESS.md) and
+[closed amendment](../architecture/proxy-contract-amendment.json) define the
+strict private CAMPAIGN_PROXY_MTLS_ZERO_COST_V1 profile. All 134 existing packet
+YAML and 176 predecessor authority files remain byte-identical. Product schemas,
+public signature roles, exact stage counts and the eight CONF-LIVE-003 paths
+are unchanged. No product test or native operation is run by this publication.
+
+SOURCE_INSPECTION_ONLY found open nested capacity entries and a root-only
+schema closure test. The existing campaignProxyRules builder already checks
+its fixed rule; preserve that protection. This is not a demonstrated runtime
+escape, new failed product test or invalidation of earlier actual source PASS.
+
+Verified checkpoint evidence (not re-executed product tests):
+CONF-LIVE-002 PR 9 / main 7205075d2f234b622dd61072803b754f1dffeb79,
+tree c48d71a7c8d5ddf245e1aab8063ecd9ae2b59834, required CI 34182386653
+(job 101923905610), 279 tests/zero skips/eight commands.
+Independent LOCAL exact-main log SHA256:
+b73f3bc778ab0849c1fee260612539115a497a443a3fe5f598ff1a09d295c2e5.
+The immediate 127-file/279-ID source inventory and separate evidence states
+are pinned in the new inert baseline. Native Linux/runtime/tenant acceptance
+remain NOT_RUN_ENV_UNAVAILABLE. No model-effort transition is due: Alpha 2 is
+ONGOING, not complete.
+
+Next: complete MET-REPAIR-009 local/head, required localhost PR CI, merge and
+independent LOCAL exact-main; then implement CONF-LIVE-003 in its own coding
+run/PR under this supplement and unchanged packet. It must reject ambiguity,
+cross-tenant credentials, policy substitution, quota races and unsafe cleanup
+without widening egress, deployment or billing permissions.
+Earlier failed drafts and CANCELLED_NOT_PASS runs below remain historical.
+
+## Historical MET-REPAIR-008 publication checkpoint
+
+The following is the preserved earlier snapshot; its then-pending states and
+next-step instructions are superseded by the current table above.
+
 Snapshot: 2026-09-08, during `MET-REPAIR-008` publication. This is a checkpoint,
 not a live dashboard or certification ledger. The complete packet list and
 descriptions remain in [the roadmap](../task-packets/README.md). A later run

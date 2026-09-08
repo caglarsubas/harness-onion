@@ -27,6 +27,7 @@ try:
     from validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
     from validate_packet_scalar_repair import load_scalar_inputs, validate_scalar_repair
     from validate_successor_inventory import load_successor_inputs, validate_successor_inventory
+    from validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
     from validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
@@ -39,6 +40,7 @@ except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit te
     from scripts.validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
     from scripts.validate_packet_scalar_repair import load_scalar_inputs, validate_scalar_repair
     from scripts.validate_successor_inventory import load_successor_inputs, validate_successor_inventory
+    from scripts.validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
     from scripts.validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 
 
@@ -115,7 +117,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 134
+EXPECTED_PACKET_COUNT = 135
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -4428,6 +4430,8 @@ def validate_packets(
         validation.error(scalar_error)
     for successor_error in validate_successor_inventory(packets, *load_successor_inputs(ROOT)):
         validation.error(successor_error)
+    for proxy_error in validate_proxy_contract(packets, *load_proxy_inputs(ROOT)):
+        validation.error(proxy_error)
     for amendment_error in validate_repair_amendment(
         packets, load_json(ROOT / "architecture/readiness-repair-amendment.json"),
         (ROOT / "architecture/readiness-repairs.json").read_bytes(),
@@ -4475,25 +4479,30 @@ def validate_packets(
         "schemas/task-packet.schema.json": "MET-A2-001",
         "architecture/model-evidence-boundary.json": "MET-A2-001",
         "scripts/validate_alpha2_readiness.py": "MET-REPAIR-006",
-        "scripts/validate_readiness_repairs.py": "MET-REPAIR-008",
-        "scripts/validate_linux_readiness.py": "MET-REPAIR-008",
-        "scripts/validate_linux_repair.py": "MET-REPAIR-008",
-        "scripts/validate_linux_test_ownership.py": "MET-REPAIR-008",
-        "scripts/validate_model_fixture_scope.py": "MET-REPAIR-008",
-        "scripts/validate_model_api_inventory.py": "MET-REPAIR-008",
+        "scripts/validate_readiness_repairs.py": "MET-REPAIR-009",
+        "scripts/validate_linux_readiness.py": "MET-REPAIR-009",
+        "scripts/validate_linux_repair.py": "MET-REPAIR-009",
+        "scripts/validate_linux_test_ownership.py": "MET-REPAIR-009",
+        "scripts/validate_model_fixture_scope.py": "MET-REPAIR-009",
+        "scripts/validate_model_api_inventory.py": "MET-REPAIR-009",
         "architecture/live-backend-roadmap.json": "MET-LIVE-001",
-        "scripts/validate_live_backend_readiness.py": "MET-REPAIR-008",
+        "scripts/validate_live_backend_readiness.py": "MET-REPAIR-009",
         "architecture/packet-scalar-amendment.json": "MET-REPAIR-007",
         "architecture/packet-scalar-inputs/baseline.json": "MET-REPAIR-007",
         "architecture/packet-scalar-inputs/run_packet.before.txt": "MET-REPAIR-007",
         "architecture/packet-scalar-inputs/test_linux_inventory.before.txt": "MET-REPAIR-007",
-        "scripts/validate_packet_scalar_repair.py": "MET-REPAIR-008",
+        "scripts/validate_packet_scalar_repair.py": "MET-REPAIR-009",
         "architecture/model-api-inventory-amendment.json": "MET-REPAIR-006",
         "architecture/successor-inventory-amendment.json": "MET-REPAIR-008",
         "architecture/successor-inventory-inputs/baseline.json": "MET-REPAIR-008",
         "architecture/successor-inventory-inputs/test_packet_scalars.before.txt": "MET-REPAIR-008",
         "architecture/successor-inventory-inputs/live_launcher.before.txt": "MET-REPAIR-008",
-        "scripts/validate_successor_inventory.py": "MET-REPAIR-008",
+        "scripts/validate_successor_inventory.py": "MET-REPAIR-009",
+        "architecture/proxy-contract-amendment.json": "MET-REPAIR-009",
+        "architecture/proxy-contract-inputs/baseline.json": "MET-REPAIR-009",
+        "architecture/proxy-contract-inputs/profile.schema.json": "MET-REPAIR-009",
+        "architecture/proxy-contract-inputs/vectors.json": "MET-REPAIR-009",
+        "scripts/validate_proxy_contract.py": "MET-REPAIR-009",
         "architecture/model-fixture-scope-amendment.json": "MET-REPAIR-005",
         "architecture/linux-test-ownership-amendment.json": "MET-REPAIR-004",
         "architecture/linux-readiness-amendment.json": "MET-REPAIR-003",
@@ -4505,7 +4514,9 @@ def validate_packets(
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-REPAIR-008"
+                "MET-REPAIR-009"
+                if packet_path.stem == "MET-REPAIR-009"
+                else "MET-REPAIR-008"
                 if packet_path.stem in {"MET-REPAIR-008", "CONF-FIX-003"}
                 else "MET-REPAIR-007"
                 if packet_path.stem in {"MET-REPAIR-007", "CONF-FIX-002"}

@@ -229,10 +229,15 @@ def validate_successor_inventory(packets, record, inputs):
         if type(packets) is not dict or type(inputs) is not dict:
             return ["packet and input maps required"]
         errors = validate_additions(packets)
+        try:
+            from validate_proxy_contract import ADDITIONS as PROXY_ADDITIONS, validate_additions as validate_proxy_additions
+        except ImportError:
+            from scripts.validate_proxy_contract import ADDITIONS as PROXY_ADDITIONS, validate_additions as validate_proxy_additions
+        errors.extend(validate_proxy_additions(packets))
         pins = {**record["protectedFiles"], **record["inputFiles"], **record["packetDigests"]}
         old_ids = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        if len(old_ids) != 132 or len(record["protectedFiles"]) != 170 or set(packets) != old_ids | set(ADDITIONS):
-            errors.append("exact historical 132 plus two new packets required")
+        if len(old_ids) != 132 or len(record["protectedFiles"]) != 170 or set(packets) != old_ids | set(ADDITIONS) | set(PROXY_ADDITIONS):
+            errors.append("exact historical 132 plus two inventory and one proxy prerequisite packets required")
         if set(inputs) != set(pins):
             errors.append("exact 175 authority inputs required")
         for path, expected in pins.items():
@@ -266,7 +271,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Successor inventory authority valid: 134 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.")
+        print("Successor inventory authority valid: 135 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.")
     return int(bool(errors))
 
 

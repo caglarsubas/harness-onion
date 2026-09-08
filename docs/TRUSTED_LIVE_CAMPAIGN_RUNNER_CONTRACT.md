@@ -1,5 +1,10 @@
 # Trusted Live-Campaign Runner Contract
 
+Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](alpha-2/PROXY_CONTRACT_READINESS.md).
+Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Older publication sections below retain their historical states, not current instructions.
+
 This contract defines the runtime verification semantics for
 [`live-campaign-execution-envelope.schema.json`](../schemas/live-campaign-execution-envelope.schema.json)
 and the closed `liveCampaignExecution` task-packet record. The schema is the
@@ -459,3 +464,22 @@ pure authority/evidence adapter. Source fixtures never become native evidence.
 
 Current phase/status and completed source checkpoints are in DEVELOPMENT_STATUS.md.
 One packet, branch, PR and exact local/CI/main gate per run remains mandatory.
+
+## Approved proxy contract prerequisite — MET-REPAIR-009
+
+The [strict proxy profile](alpha-2/PROXY_CONTRACT_READINESS.md) closes credential and resource-rule
+semantics for the new proxy without changing any accepted public wire schema,
+134 existing packet YAML, product path grant, command inventory or signature role.
+This one additive meta packet produces a 135-packet catalog and preserves all
+176 predecessor authority files. It records SOURCE_INSPECTION_ONLY findings,
+not a reproduced exploit or new product test failure.
+
+Complete this authority before CONF-LIVE-003. Product implementation remains
+in that packet's eight existing paths; preserve all 127 predecessor files and
+279 test IDs. CONF-LIVE-004 owns actual probes, CONF-LIVE-005 the fixed client/server
+candidate packaging, and CONF-LIVE-006 the already-bounded final hook. Mutual TLS,
+independent server custody, actual policy/RBAC, durable reservations and exact-UID
+cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
+Native qualification, runtime and tenant acceptance remain separate and unavailable.
+No installation, key issuance, root-policy change, hosted runner or paid API is
+part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.

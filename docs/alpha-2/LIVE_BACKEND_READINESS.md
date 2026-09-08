@@ -1,5 +1,10 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
+Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](PROXY_CONTRACT_READINESS.md).
+Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Older publication sections below retain their historical states, not current instructions.
+
 ## Decision and evidence boundary
 
 Approved source-only roadmap amendment. The platform remains thirteen repositories,
@@ -452,3 +457,22 @@ unit if necessary. After consumption, use reviewed successor authority, retainin
 historical hashes and all failed evidence. Runtime rollback belongs to the
 independent operator, preserves trust/replay history and tenant data, and
 invalidates mismatched native evidence. Alpha 2 remains ongoing.
+
+## Approved proxy contract prerequisite — MET-REPAIR-009
+
+The [strict proxy profile](PROXY_CONTRACT_READINESS.md) closes credential and resource-rule
+semantics for the new proxy without changing any accepted public wire schema,
+134 existing packet YAML, product path grant, command inventory or signature role.
+This one additive meta packet produces a 135-packet catalog and preserves all
+176 predecessor authority files. It records SOURCE_INSPECTION_ONLY findings,
+not a reproduced exploit or new product test failure.
+
+Complete this authority before CONF-LIVE-003. Product implementation remains
+in that packet's eight existing paths; preserve all 127 predecessor files and
+279 test IDs. CONF-LIVE-004 owns actual probes, CONF-LIVE-005 the fixed client/server
+candidate packaging, and CONF-LIVE-006 the already-bounded final hook. Mutual TLS,
+independent server custody, actual policy/RBAC, durable reservations and exact-UID
+cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
+Native qualification, runtime and tenant acceptance remain separate and unavailable.
+No installation, key issuance, root-policy change, hosted runner or paid API is
+part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.

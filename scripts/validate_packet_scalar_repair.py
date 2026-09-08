@@ -113,11 +113,14 @@ def validate_scalar_repair(packets: Any, record: Any, inputs: Any) -> list[str]:
         old_ids = {Path(path).stem for path in record["protectedFiles"] if path.startswith("task-packets/")}
         try:
             from validate_successor_inventory import ADDITIONS as SUCCESSORS, validate_additions as validate_successors
+            from validate_proxy_contract import ADDITIONS as PROXY_ADDITIONS, validate_additions as validate_proxy_additions
         except ImportError:
             from scripts.validate_successor_inventory import ADDITIONS as SUCCESSORS, validate_additions as validate_successors
-        if len(old_ids) != 130 or set(packets) != old_ids | set(ADDITIONS) | set(SUCCESSORS):
-            errors.append("exact historical 132 plus two cumulative correction packets required")
+            from scripts.validate_proxy_contract import ADDITIONS as PROXY_ADDITIONS, validate_additions as validate_proxy_additions
+        if len(old_ids) != 130 or set(packets) != old_ids | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS):
+            errors.append("exact historical 132 plus three cumulative correction packets required")
         errors.extend(validate_successors(packets))
+        errors.extend(validate_proxy_additions(packets))
         for path, expected in pins.items():
             raw = inputs.get(path)
             if type(raw) is not bytes or digest(raw) != expected:
@@ -158,7 +161,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Scalar repair authority valid: 134 packets; historical 132-packet record and 164 predecessor files unchanged.")
+        print("Scalar repair authority valid: 135 packets; historical 132-packet record and 164 predecessor files unchanged.")
     return int(bool(errors))
 
 
