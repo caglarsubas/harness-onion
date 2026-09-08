@@ -1,5 +1,10 @@
 # Master Development Plan
 
+Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](alpha-2/PROXY_CONTRACT_READINESS.md).
+Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Older publication sections below retain their historical states, not current instructions.
+
 ## Purpose
 
 This is the program-level contract for building the Planeon Enterprise MAS
@@ -263,7 +268,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 134 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 135 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -283,7 +288,7 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-That publication contained 122 packets; the current catalog has 134. The preceding
+That publication contained 122 packets; the current catalog has 135. The preceding
 121-packet Linux test publication is historical; its consumed bytes are unchanged.
 The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
 localhost PR CI and exact-main replay before the model draft started.
@@ -307,7 +312,7 @@ review. Source, offline, CI, merge, native Linux and tenant gates stay separate.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 134. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 135. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -371,3 +376,22 @@ history within its existing ten paths and unchanged six-root/eight-command
 acceptance. No signed consumer packet, root policy, dependency, installation or
 billing boundary changes. Native Linux and tenant acceptance remain separate;
 no phase-end model-effort transition is due.
+
+## Approved proxy contract prerequisite — MET-REPAIR-009
+
+The [strict proxy profile](alpha-2/PROXY_CONTRACT_READINESS.md) closes credential and resource-rule
+semantics for the new proxy without changing any accepted public wire schema,
+134 existing packet YAML, product path grant, command inventory or signature role.
+This one additive meta packet produces a 135-packet catalog and preserves all
+176 predecessor authority files. It records SOURCE_INSPECTION_ONLY findings,
+not a reproduced exploit or new product test failure.
+
+Complete this authority before CONF-LIVE-003. Product implementation remains
+in that packet's eight existing paths; preserve all 127 predecessor files and
+279 test IDs. CONF-LIVE-004 owns actual probes, CONF-LIVE-005 the fixed client/server
+candidate packaging, and CONF-LIVE-006 the already-bounded final hook. Mutual TLS,
+independent server custody, actual policy/RBAC, durable reservations and exact-UID
+cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
+Native qualification, runtime and tenant acceptance remain separate and unavailable.
+No installation, key issuance, root-policy change, hosted runner or paid API is
+part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.

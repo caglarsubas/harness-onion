@@ -1,5 +1,10 @@
 # Implementation Readiness Index
 
+Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](alpha-2/PROXY_CONTRACT_READINESS.md).
+Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Older publication sections below retain their historical states, not current instructions.
+
 This index is the entry point for a coding agent. The architecture is planning-
 ready; product implementation, release, deployment, runtime, assurance, and
 tenant-acceptance evidence remain `NOT_STARTED` until their task packets run.
@@ -11,7 +16,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 134; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 135; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -205,7 +210,7 @@ Trust:
 - [`TENANT_HARNESS_OVERVIEW.md`](TENANT_HARNESS_OVERVIEW.md): the approved
   organization/plane/harness status projection, authorization, navigation,
   responsive interaction, accessibility, and frontend delivery contract.
-- [`task-packets/README.md`](../task-packets/README.md): the 134-packet execution
+- [`task-packets/README.md`](../task-packets/README.md): the 135-packet execution
   catalog and topological delivery guidance.
 
 ## Early Linux readiness publication
@@ -216,7 +221,7 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; that publication contained 118 packets; the current approved catalog contains 134.
+historical; that publication contained 118 packets; the current approved catalog contains 135.
 
 ## Conformance readiness amendment
 
@@ -236,7 +241,7 @@ satisfy Linux qualification. Prior Linux policy bytes remain immutable.
 - [Closed amendment](../architecture/linux-test-ownership-amendment.json): immutable predecessor source/CI/main pins, exact statement replacement and preserved native/live gates.
 - [Guide and phase checkpoint](alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md): publication only; CONF-LINUX-001 implementation and native qualification remain independent.
 
-Current catalog: 134 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
+Current catalog: 135 packets; the prior 121-packet record remains historical. Historical 118/120-packet publications remain byte-identical.
 
 ## Model fixture scope — preserved authority
 
@@ -259,7 +264,7 @@ The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 134. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 135. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -323,3 +328,22 @@ history within its existing ten paths and unchanged six-root/eight-command
 acceptance. No signed consumer packet, root policy, dependency, installation or
 billing boundary changes. Native Linux and tenant acceptance remain separate;
 no phase-end model-effort transition is due.
+
+## Approved proxy contract prerequisite — MET-REPAIR-009
+
+The [strict proxy profile](alpha-2/PROXY_CONTRACT_READINESS.md) closes credential and resource-rule
+semantics for the new proxy without changing any accepted public wire schema,
+134 existing packet YAML, product path grant, command inventory or signature role.
+This one additive meta packet produces a 135-packet catalog and preserves all
+176 predecessor authority files. It records SOURCE_INSPECTION_ONLY findings,
+not a reproduced exploit or new product test failure.
+
+Complete this authority before CONF-LIVE-003. Product implementation remains
+in that packet's eight existing paths; preserve all 127 predecessor files and
+279 test IDs. CONF-LIVE-004 owns actual probes, CONF-LIVE-005 the fixed client/server
+candidate packaging, and CONF-LIVE-006 the already-bounded final hook. Mutual TLS,
+independent server custody, actual policy/RBAC, durable reservations and exact-UID
+cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
+Native qualification, runtime and tenant acceptance remain separate and unavailable.
+No installation, key issuance, root-policy change, hosted runner or paid API is
+part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.
