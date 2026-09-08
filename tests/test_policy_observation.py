@@ -112,6 +112,13 @@ def test_complete_closed_schema_with_local_refs():
             assert value["$ref"].startswith("#/$defs/")
 
 
+@pytest.mark.parametrize("bad", ["100\n", "100\r", "100\u0000", "\u00e9", "100\t", "\u202e100"])
+def test_control_unicode_and_final_newline_fields_are_not_canonical_ids(bad):
+    value = deepcopy(VECTORS["positive"])
+    value["observation"]["namespace"]["resourceVersion"] = bad
+    assert validate(value)
+
+
 @pytest.mark.parametrize("resource", ["namespaces", "resourcequotas", "limitranges",
     "serviceaccounts", "roles", "rolebindings", "clusterrolebindings",
     "validatingadmissionpolicies", "networkpolicies"])

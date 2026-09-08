@@ -42,8 +42,23 @@ def load_observation_inputs(root):
                     {*record["protectedFiles"], *record["inputFiles"]}}
 
 
+def _ascii_fields(value):
+    # Every field in this private protocol has an ASCII grammar. JSON Schema's
+    # end anchor may match before a final newline; reject that ambiguity here.
+    if type(value) is str:
+        _require(all(32 <= ord(char) <= 126 for char in value), "non-ASCII or control field")
+    elif type(value) is dict:
+        for key, child in value.items():
+            _ascii_fields(key)
+            _ascii_fields(child)
+    elif type(value) is list:
+        for child in value:
+            _ascii_fields(child)
+
+
 def _shape(value, variant, schema, maximum):
     _bounded(value)
+    _ascii_fields(value)
     _require(len(canonical(value)) <= maximum, "observation bytes exceeded")
     spec = {"$ref": "#/$defs/" + variant, "$defs": schema["$defs"]}
     jsonschema.Draft202012Validator(spec).validate(value)
