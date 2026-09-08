@@ -1,8 +1,8 @@
 # Implementation Readiness Index
 
-Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](alpha-2/POLICY_OBSERVATION_READINESS.md).
-Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
-CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md).
+Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
+CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
 This index is the entry point for a coding agent. The architecture is planning-
@@ -16,7 +16,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 136; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 138; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -221,7 +221,7 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; that publication contained 118 packets; the current approved catalog contains 136.
+historical; that publication contained 118 packets; the current approved catalog contains 138.
 
 ## Conformance readiness amendment
 
@@ -264,7 +264,7 @@ The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 136. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -358,3 +358,17 @@ Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
 Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
 See the current dispatch link above for the closed schemas, native obligations,
 recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.
+
+## Approved retained custody correction — MET-REPAIR-011
+
+The [bounded handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md) adds MET-REPAIR-011 and CONF-FIX-004:
+138 packets, unchanged thirteen repositories/four planes/sixteen harnesses.
+The original 136 packet YAML and all prior authority records remain immutable.
+CONF-FIX-004 may change only its five existing custody/supervisor/test/document
+paths; old test bodies remain byte prefixes and all 279 methods remain required.
+The 127-file stage and later 135/141/146/151 path counts stay unchanged.
+Separate source/local/CI/merge/local exact-main closure is required before
+CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
+path reopening, installation, new credential, dependency, native/live execution
+or acceptance promotion. Prior nested-timeout failures remain unresolved history;
+no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.

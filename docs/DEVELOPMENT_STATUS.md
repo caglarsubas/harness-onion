@@ -1,5 +1,53 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-08, during `MET-REPAIR-011` publication. Source authority only.
+Current catalog: 138 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 | Closure | DONE — historical source/offline | Live installation separate |
+| Alpha 1 | Foundation and tenant overview source | DONE — recorded source/offline | Live integration and tenant acceptance remain waiting |
+| Alpha 2 authority | `MET-LIVE-001` | DONE — source gates | Bounded Linux backend authority |
+| Alpha 2 | `CON-MODEL-001` | DONE — source gates | Model contracts, not runtime acceptance |
+| Alpha 2 | `CONF-LIVE-001/002` | DONE — source gates | Session/supervisor candidates; main7205075, 127 files / 279 tests |
+| Alpha 2 | `MET-REPAIR-009/010` | DONE — source/CI/merge/local exact-main | Proxy and observation contracts; no installed observer |
+| Alpha 2 authority | `MET-REPAIR-011` | ONGOING — publication | Approved retained-custody handoff authority |
+| Alpha 2 correction | `CONF-FIX-004` | WAITING | Two custody/supervisor modules and append-only tests/report |
+| Alpha 2 backend | `CONF-LIVE-003` | WAITING — custody correction | Fixed transport, independent authentication and zero-cost admission |
+| Alpha 2 backend | `CONF-LIVE-004/005/006` | WAITING | Fixed probes, reproducible packaging and integration |
+| Alpha 2 | Native AMD64 / ARM64 qualification | WAITING — NOT_RUN_ENV_UNAVAILABLE | Independent installation, existing capacity and signed native evidence |
+| Alpha 1 integration / Alpha 2 | `CTRL-INTEGRATE-001`, `MODEL-001`, `EXEC-001`, `RUN-001` | WAITING — native AMD64 gate | Runtime product code remains gated |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise matrix | WAITING | Independent deployment, runtime, assurance and tenant acceptance |
+
+## Current correction
+
+The [retained-custody handoff guide](alpha-2/CUSTODY_HANDOFF_REPAIR.md) records a
+SOURCE_INSPECTION_ONLY integration gap: verified release, trust and kit material
+is lost before the fixed proxy hook; reopening those paths is forbidden.
+No failed product test or demonstrated runtime escape is claimed.
+
+This publication authorizes the later five-existing-path CONF-FIX-004 correction.
+The original 127-file/279-ID checkpoint stays historical; the corrected commit
+must carry explicit source-delta and additional regression evidence. All original
+assertion bodies and 122 unaffected files stay byte-identical. Source stage
+counts remain 110/120/127/135/141/146/151; no product or native execution here.
+
+MET-REPAIR-010 closure was verified against PR104: main108e61953d522106db7c8de65ee19120a952853b,
+required CI34196959000 and separate local exact-main. Attempt one failed the
+unchanged 420-second nested-test timeout; attempt two passed unchanged, 2284 tests
+and ten existing nested-isolation skips. Both logs remain retained. Timing
+stability is UNRESOLVED; this correction cannot adjust limits, coverage or isolation.
+
+Alpha 2 is ONGOING. Model-effort transition NOT_DUE. No root policy, administrator
+installation, new key, hosted runner, dependency download, artifact upload or bill.
+
+## Historical MET-REPAIR-010 publication checkpoint
+
+The following snapshot predates the verified closure above. It is retained as
+history, not the current dispatch instruction.
+
+# Development checkpoint — Phase 0 to Alpha 2
+
 Snapshot: 2026-09-08, during `MET-REPAIR-010` publication. Source authority only.
 Current catalog: 136 packets, thirteen repositories, four planes, sixteen harnesses.
 

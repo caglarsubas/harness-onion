@@ -1,8 +1,8 @@
 # Trusted Live-Campaign Runner Contract
 
-Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](alpha-2/POLICY_OBSERVATION_READINESS.md).
-Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
-CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md).
+Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
+CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
 This contract defines the runtime verification semantics for
@@ -494,3 +494,17 @@ Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
 Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
 See the current dispatch link above for the closed schemas, native obligations,
 recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.
+
+## Approved retained custody correction — MET-REPAIR-011
+
+The [bounded handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md) adds MET-REPAIR-011 and CONF-FIX-004:
+138 packets, unchanged thirteen repositories/four planes/sixteen harnesses.
+The original 136 packet YAML and all prior authority records remain immutable.
+CONF-FIX-004 may change only its five existing custody/supervisor/test/document
+paths; old test bodies remain byte prefixes and all 279 methods remain required.
+The 127-file stage and later 135/141/146/151 path counts stay unchanged.
+Separate source/local/CI/merge/local exact-main closure is required before
+CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
+path reopening, installation, new credential, dependency, native/live execution
+or acceptance promotion. Prior nested-timeout failures remain unresolved history;
+no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.

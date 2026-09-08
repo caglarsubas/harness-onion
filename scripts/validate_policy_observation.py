@@ -20,7 +20,7 @@ RECORD_PATH = "architecture/policy-observation-amendment.json"
 RECORD_SHA256 = "a579f7464ddd1b8de2e888734b9c249f13e9fccc02ad3001e6114f1d74332734"
 PACKET_SHA256 = "fe936ede385abb790dbba18d05fa007184296eb81bd23fcf5ae5d14e0b8be112"
 SCHEMA_SHA256 = "d4ac4deef49bea39ff7d010e3fe75d75ac446b3d87db4b2e59ee49ef12d02e72"
-ADDITIONS = ("MET-REPAIR-010",)
+ADDITIONS = ("MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004")
 ZERO = "sha256:" + "0" * 64
 POLICIES = ("admissionPolicy", "resourceQuota", "limitRange", "serviceAccount",
             "rbac", "networkPolicy", "mutationBroker")
@@ -28,8 +28,13 @@ POLICIES = ("admissionPolicy", "resourceQuota", "limitRange", "serviceAccount",
 
 def validate_additions(packets):
     try:
-        return [] if type(packets) is dict and digest(canonical(packets.get(ADDITIONS[0]))) == PACKET_SHA256 else [
-            "exact policy-observation prerequisite packet required"]
+        if type(packets) is not dict or digest(canonical(packets.get(ADDITIONS[0]))) != PACKET_SHA256:
+            return ["exact policy-observation prerequisite packet required"]
+        try:
+            from validate_custody_handoff import validate_additions as custody_additions
+        except ImportError:
+            from scripts.validate_custody_handoff import validate_additions as custody_additions
+        return custody_additions(packets)
     except (TypeError, ValueError, RecursionError):
         return ["malformed observation packet"]
 
@@ -130,7 +135,7 @@ def validate_observation_contract(packets, record, inputs):
         errors = validate_additions(packets)
         old_ids = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
         if len(old_ids) != 135 or set(packets) != old_ids | set(ADDITIONS):
-            errors.append("135 immutable predecessors plus one observation packet required")
+            errors.append("135 immutable predecessors plus exact observation and custody packets required")
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         if set(inputs) != set(pins):
             errors.append("exact observation input inventory required")
@@ -169,7 +174,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Policy observation authority valid: 136 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Policy observation authority valid: 138 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 
