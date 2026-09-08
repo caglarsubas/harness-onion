@@ -1,8 +1,8 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
-Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](../alpha-2/POLICY_OBSERVATION_READINESS.md).
-Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
-CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](../alpha-2/CUSTODY_HANDOFF_REPAIR.md).
+Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
+CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
 ## Purpose and boundaries
@@ -166,19 +166,20 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 7. `CONF-FIX-003`: exact scalar-suite inventory amendment, test-only cumulative helper and twenty new methods; preserve 150 predecessor IDs and all production bytes.
 8. `CONF-LIVE-001`: Session contracts and cumulative inventory; exact paths and cumulative commands in the approved backend guide.
 9. `CONF-LIVE-002`: Protected Linux supervisor and isolation candidate; exact paths and cumulative commands in the approved backend guide.
-10. `CONF-LIVE-003`: Fixed proxy transport and zero-cost admission; exact paths and cumulative commands in the approved backend guide.
-11. `CONF-LIVE-004`: Native Linux build and ten fixed probes; exact paths and cumulative commands in the approved backend guide.
-12. `CONF-LIVE-005`: Reproducible packaging and operator handoff; exact paths and cumulative commands in the approved backend guide.
-13. `CONF-LIVE-006`: Trusted campaign integration and manual qualification declaration; exact paths and cumulative commands in the approved backend guide.
-14. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
-15. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
-16. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
-17. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.
-18. `CONF-K3S-001`: single-VM K3s minimal AMD64/ARM64 campaign.
-19. `CONF-AIR-001`: two-zone physical no-network export/import/install/runtime/upgrade evidence.
-20. `CONF-SEC-001`: cross-tenant/API/DB/index/cache/network denial, forged artifacts/evidence, sandbox escape, prompt/tool attacks, secrets, and revocation.
-21. `CONF-UPG-001`: operator/service/DB upgrade, crashes at every wave, last-known-good rollback, retention, and uninstall.
-22. `CONF-WG-001`: complete enterprise journey and an unsigned tenant-acceptance
+10. `CONF-FIX-004`: retained authority/kit custody and supervisor handoff; five existing paths, append-only regressions/report, 279 original methods preserved.
+11. `CONF-LIVE-003`: Fixed proxy transport and zero-cost admission; exact paths and cumulative commands in the approved backend guide.
+12. `CONF-LIVE-004`: Native Linux build and ten fixed probes; exact paths and cumulative commands in the approved backend guide.
+13. `CONF-LIVE-005`: Reproducible packaging and operator handoff; exact paths and cumulative commands in the approved backend guide.
+14. `CONF-LIVE-006`: Trusted campaign integration and manual qualification declaration; exact paths and cumulative commands in the approved backend guide.
+15. `CONF-A2-001`: cited read-only white-goods agent with local model/retrieval and failure injection. Also consumes CTRL-INTEGRATE-001 and separately requires fresh installed Alpha-1 foundation plus authenticated production overview, durable restart/replay and tenant/RLS evidence; fixtures or source-only completion cannot satisfy these live gates.
+16. `CONF-A3-001`: approval/resume/tool receipt/compensation, sandbox, memory lifecycle, and tenant-isolation campaign.
+17. `CONF-K8S-001`: live Kubernetes 1.35-1.37 matrix; each minor/platform/architecture result separate.
+18. `CONF-OCP-001`: OpenShift 4.20 arbitrary UID/SCC/Route/NetworkPolicy/operator campaign.
+19. `CONF-K3S-001`: single-VM K3s minimal AMD64/ARM64 campaign.
+20. `CONF-AIR-001`: two-zone physical no-network export/import/install/runtime/upgrade evidence.
+21. `CONF-SEC-001`: cross-tenant/API/DB/index/cache/network denial, forged artifacts/evidence, sandbox escape, prompt/tool attacks, secrets, and revocation.
+22. `CONF-UPG-001`: operator/service/DB upgrade, crashes at every wave, last-known-good rollback, retention, and uninstall.
+23. `CONF-WG-001`: complete enterprise journey and an unsigned tenant-acceptance
     candidate; a separate tenant signer owns the acceptance decision.
 
 ## Testing, verification, and acceptance
@@ -276,7 +277,7 @@ is granted by this amendment. See [the exact scope](../alpha-2/LINUX_TEST_OWNERS
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 136. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -370,3 +371,17 @@ Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
 Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
 See the current dispatch link above for the closed schemas, native obligations,
 recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.
+
+## Approved retained custody correction — MET-REPAIR-011
+
+The [bounded handoff correction](../alpha-2/CUSTODY_HANDOFF_REPAIR.md) adds MET-REPAIR-011 and CONF-FIX-004:
+138 packets, unchanged thirteen repositories/four planes/sixteen harnesses.
+The original 136 packet YAML and all prior authority records remain immutable.
+CONF-FIX-004 may change only its five existing custody/supervisor/test/document
+paths; old test bodies remain byte prefixes and all 279 methods remain required.
+The 127-file stage and later 135/141/146/151 path counts stay unchanged.
+Separate source/local/CI/merge/local exact-main closure is required before
+CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
+path reopening, installation, new credential, dependency, native/live execution
+or acceptance promotion. Prior nested-timeout failures remain unresolved history;
+no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.

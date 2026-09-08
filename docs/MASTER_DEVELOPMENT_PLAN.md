@@ -1,8 +1,8 @@
 # Master Development Plan
 
-Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](alpha-2/POLICY_OBSERVATION_READINESS.md).
-Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
-CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
+Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md).
+Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
+CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
 ## Purpose
@@ -268,7 +268,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 136 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 138 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -288,7 +288,7 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-That publication contained 122 packets; the current catalog has 136. The preceding
+That publication contained 122 packets; the current catalog has 138. The preceding
 121-packet Linux test publication is historical; its consumed bytes are unchanged.
 The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
 localhost PR CI and exact-main replay before the model draft started.
@@ -312,7 +312,7 @@ review. Source, offline, CI, merge, native Linux and tenant gates stay separate.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 136. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -406,3 +406,17 @@ Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
 Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
 See the current dispatch link above for the closed schemas, native obligations,
 recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.
+
+## Approved retained custody correction — MET-REPAIR-011
+
+The [bounded handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md) adds MET-REPAIR-011 and CONF-FIX-004:
+138 packets, unchanged thirteen repositories/four planes/sixteen harnesses.
+The original 136 packet YAML and all prior authority records remain immutable.
+CONF-FIX-004 may change only its five existing custody/supervisor/test/document
+paths; old test bodies remain byte prefixes and all 279 methods remain required.
+The 127-file stage and later 135/141/146/151 path counts stay unchanged.
+Separate source/local/CI/merge/local exact-main closure is required before
+CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
+path reopening, installation, new credential, dependency, native/live execution
+or acceptance promotion. Prior nested-timeout failures remain unresolved history;
+no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.
