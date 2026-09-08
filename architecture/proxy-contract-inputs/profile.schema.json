@@ -649,6 +649,7 @@
                     "required": [
                       "name",
                       "image",
+                      "imagePullPolicy",
                       "resources",
                       "securityContext"
                     ],
@@ -661,6 +662,9 @@
                         "minLength": 1,
                         "maxLength": 1024,
                         "pattern": "^[a-z0-9][a-z0-9.:/-]*@sha256:[0-9a-f]{64}$"
+                      },
+                      "imagePullPolicy": {
+                        "const": "Never"
                       },
                       "resources": {
                         "type": "object",
@@ -738,6 +742,7 @@
                           "readOnlyRootFilesystem",
                           "runAsNonRoot",
                           "runAsUser",
+                          "seccompProfile",
                           "capabilities"
                         ],
                         "properties": {
@@ -754,6 +759,12 @@
                             "type": "integer",
                             "minimum": 10000,
                             "maximum": 2147483647
+                          },
+                          "seccompProfile": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": ["type"],
+                            "properties": {"type": {"const": "RuntimeDefault"}}
                           },
                           "capabilities": {
                             "type": "object",

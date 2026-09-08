@@ -134,9 +134,11 @@ def sample_kind(kind):
         manifest = {"apiVersion": "v1", "kind": kind, "metadata": meta, "spec": {
             "restartPolicy": "Never", "serviceAccountName": "campaign", "automountServiceAccountToken": False,
             "enableServiceLinks": False, "hostNetwork": False, "hostPID": False, "hostIPC": False,
-            "containers": [{"name": "probe", "image": image, "resources": {"requests": amount, "limits": dict(amount)},
+            "containers": [{"name": "probe", "image": image, "imagePullPolicy": "Never",
+                "resources": {"requests": amount, "limits": dict(amount)},
                 "securityContext": {"allowPrivilegeEscalation": False, "readOnlyRootFilesystem": True,
-                    "runAsNonRoot": True, "runAsUser": 10001, "capabilities": {"drop": ["ALL"]}}}]}}
+                    "runAsNonRoot": True, "runAsUser": 10001, "seccompProfile": {"type": "RuntimeDefault"},
+                    "capabilities": {"drop": ["ALL"]}}}]}}
         profile["quota"] = dict(pods=1, configMaps=0, services=0, cpuMillis=100,
                                 memoryBytes=1048576, ephemeralStorageBytes=1048576)
         profile["localImages"] = [image]
@@ -163,6 +165,9 @@ def test_other_allowed_templates_and_exact_quota(kind):
     ("Pod", ("hostNetwork",), True), ("Pod", ("hostPID",), True),
     ("Pod", ("automountServiceAccountToken",), True), ("Pod", ("initContainers",), []),
     ("Pod", ("containers", 0, "image"), "registry.local/probe:latest"),
+    ("Pod", ("containers", 0, "imagePullPolicy"), "IfNotPresent"),
+    ("Pod", ("containers", 0, "imagePullPolicy"), "Always"),
+    ("Pod", ("containers", 0, "securityContext", "seccompProfile", "type"), "Unconfined"),
     ("Pod", ("containers", 0, "command"), ["/bin/sh"]),
     ("Pod", ("containers", 0, "securityContext", "runAsUser"), 0),
     ("Pod", ("containers", 0, "securityContext", "readOnlyRootFilesystem"), False),
@@ -176,6 +181,15 @@ def test_signed_but_unsafe_manifest_still_refuses(kind, path, value):
     profile = sample_kind(kind)
     manifest = profile["resources"][0]["manifest"]
     at(manifest["spec"], path[:-1])[path[-1]] = value
+    profile["resources"][0]["manifestDigest"] = "sha256:" + digest(canonical(manifest))
+    assert validate_profile(profile, SCHEMA)
+
+
+@pytest.mark.parametrize("path", [("imagePullPolicy",), ("securityContext", "seccompProfile")])
+def test_missing_runtime_safety_defaults_are_not_inferred(path):
+    profile = sample_kind("Pod")
+    manifest = profile["resources"][0]["manifest"]
+    del at(manifest["spec"]["containers"][0], path[:-1])[path[-1]]
     profile["resources"][0]["manifestDigest"] = "sha256:" + digest(canonical(manifest))
     assert validate_profile(profile, SCHEMA)
 

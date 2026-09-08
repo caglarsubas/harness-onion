@@ -243,6 +243,9 @@ service-account automount, extra capabilities or privilege escalation. Root
 filesystem is read-only. The signed UID is 10000..2147483647, not fixed to one
 UID; this retains arbitrary-nonroot qualification. Only immutable local images
 already present and digest-bound to the signed release/plan are admissible.
+imagePullPolicy is explicitly Never: cache loss must fail, never trigger a pull.
+Container seccompProfile is explicitly RuntimeDefault; omitted or Unconfined
+profiles are rejected rather than relying on cluster defaults.
 No command/args/env/hostPath/network override is accepted from a request.
 Workloads requiring unrepresented writable volumes are unavailable; adding
 templates later requires separate reviewed profile authority, not a fallback.
