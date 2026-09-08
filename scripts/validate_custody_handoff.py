@@ -148,7 +148,8 @@ def reconstruct_source(before, row, allowed, limits):
         changed = parsed.body[0]
         if isinstance(original, ast.FunctionDef):
             require(changed.name == original.name and ast.dump(changed.args) == ast.dump(original.args)
-                    and ast.dump(changed.returns or ast.Constant(None)) == ast.dump(original.returns or ast.Constant(None))
+                    and (ast.dump(changed.returns) if changed.returns is not None else None)
+                    == (ast.dump(original.returns) if original.returns is not None else None)
                     and changed.type_comment == original.type_comment
                     and [ast.dump(p) for p in changed.type_params] == [ast.dump(p) for p in original.type_params]
                     and not changed.decorator_list, "function interface or decorator changed")

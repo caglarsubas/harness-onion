@@ -152,6 +152,7 @@ def test_named_region_changes_preserve_other_source_bytes_and_function_interface
 
 @pytest.mark.parametrize("region,edit", [
     ("_Lifecycle._now", lambda text: text.replace("def _now(self, active):", "def _now(self, active) -> bool:")),
+    ("_Lifecycle._now", lambda text: text.replace("def _now(self, active):", "def _now(self, active) -> None:")),
     ("InstalledContext.__slots__", lambda text: text.replace("__slots__ =", "__slots__ = injected =")),
 ])
 def test_region_cannot_change_return_contract_or_bind_another_slot_target(authority, region, edit):
