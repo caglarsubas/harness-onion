@@ -18,7 +18,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/custody-handoff-amendment.json"
-RECORD_SHA256 = "d5ac412b5f2c2aa6642546fa66d2927470bcfb8af18fe5c3699f390956eed7c6"
+RECORD_SHA256 = "26d0301045c60908850ec225fa497d73da4c4125c377e74a931d41c83d57c491"
 PACKET_DIGESTS = {"MET-REPAIR-011":"aaa070d5ea2e7a4f6cfea9578d87bf82b7e12d5ef6c75d8456ed366701c7d7c1","CONF-FIX-004":"79c00496cab7cf4531b5d65d7aa292c662ed2d27c840b6e4d8ce8aa015ebb289"}
 ADDITIONS = ("MET-REPAIR-011", "CONF-FIX-004")
 BEFORE_PATH = "architecture/custody-handoff-inputs/baseline.json"

@@ -53,7 +53,10 @@ def seal(after, proof, before_doc):
 def test_exact_publication_correction_and_historical_scope(authority):
     packets, record, inputs = authority
     assert validate_custody_handoff(*authority) == []
-    assert len(packets) == 138 and len(record["protectedFiles"]) == 190
+    assert len(packets) == 138 and len(record["protectedFiles"]) == 203
+    assert "task-packets/MET-REPAIR-010.yaml" in record["protectedFiles"]
+    assert {p.name for p in (ROOT / "schemas").glob("*.json")} == {
+        Path(p).name for p in record["protectedFiles"] if p.startswith("schemas/")}
     assert len(packets["MET-REPAIR-011"]["offlineAcceptanceCommands"]) == 17
     fix = packets["CONF-FIX-004"]
     baseline = json.loads(inputs[record["sourceBaseline"]["path"]])
