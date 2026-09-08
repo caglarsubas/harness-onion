@@ -150,6 +150,24 @@ def test_named_region_changes_preserve_other_source_bytes_and_function_interface
         reconstruct_source(raw, row, record["change"]["sourceRegions"][path], record["change"])
 
 
+@pytest.mark.parametrize("region,edit", [
+    ("_Lifecycle._now", lambda text: text.replace("def _now(self, active):", "def _now(self, active) -> bool:")),
+    ("InstalledContext.__slots__", lambda text: text.replace("__slots__ =", "__slots__ = injected =")),
+])
+def test_region_cannot_change_return_contract_or_bind_another_slot_target(authority, region, edit):
+    record, inputs = authority[1:]
+    path = "src/harness_conformance/live_supervisor.py"
+    raw = json.loads(inputs[BEFORE_PATH])["files"][path].encode()
+    _, methods = definitions(raw)
+    start, end, _ = methods[region]
+    replacement = edit(raw[start:end].decode())
+    assert replacement.encode() != raw[start:end]
+    expected = raw[:start] + replacement.encode() + raw[end:]
+    row = dict(beforeSha256=digest(raw), afterSha256=digest(expected), regions={region: replacement}, append="")
+    with pytest.raises(ValueError):
+        reconstruct_source(raw, row, record["change"]["sourceRegions"][path], record["change"])
+
+
 @pytest.mark.parametrize("append", ["\nimport os\n", "\nx = True\n", "\nraise RuntimeError()\n",
     "\ndef read_owned():\n    return None\n", "\ndef os():\n    return None\n",
     "\ndef load_tests(loader, tests, pattern):\n    return []\n", "\n@runner\ndef helper():\n    return None\n",

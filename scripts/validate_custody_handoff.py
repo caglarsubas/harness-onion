@@ -148,9 +148,13 @@ def reconstruct_source(before, row, allowed, limits):
         changed = parsed.body[0]
         if isinstance(original, ast.FunctionDef):
             require(changed.name == original.name and ast.dump(changed.args) == ast.dump(original.args)
+                    and ast.dump(changed.returns or ast.Constant(None)) == ast.dump(original.returns or ast.Constant(None))
+                    and changed.type_comment == original.type_comment
+                    and [ast.dump(p) for p in changed.type_params] == [ast.dump(p) for p in original.type_params]
                     and not changed.decorator_list, "function interface or decorator changed")
         else:
-            require(name == "InstalledContext.__slots__" and ast.dump(changed.targets[0]) == ast.dump(original.targets[0])
+            require(name == "InstalledContext.__slots__" and len(changed.targets) == 1
+                    and ast.dump(changed.targets[0]) == ast.dump(original.targets[0])
                     and isinstance(changed.value, ast.Tuple) and all(isinstance(v, ast.Constant)
                     and type(v.value) is str for v in changed.value.elts), "literal context slots required")
             old_slots = [v.value for v in original.value.elts]
