@@ -54,7 +54,7 @@ def vector(inputs, stage):
 def test_exact_catalog_checkpoint_and_historical_inventory(inputs):
     packets, record, raw = inputs
     assert validate_successor_inventory(*inputs) == []
-    assert len(packets) == 135 and len(record["protectedFiles"]) == 170 and len(raw) == 175
+    assert len(packets) == 136 and len(record["protectedFiles"]) == 170 and len(raw) == 175
     baseline = json.loads(raw[BASELINE_PATH])
     historical = json.loads(baseline["historical103Raw"])
     assert len(baseline["files"]) == 106 and sum(map(len, baseline["tests"].values())) == 150
@@ -297,7 +297,7 @@ def test_current_status_and_scope_do_not_claim_product_or_native_acceptance(inpu
     assert all("liveCampaignExecution" not in packets[p] for p in ADDITIONS)
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
     current = text.split("## Historical MET-REPAIR-008 publication checkpoint")[0]
-    assert "during `MET-REPAIR-009` publication" in current
+    assert "during `MET-REPAIR-010` publication" in current
     assert "| Alpha 2 correction | `CONF-FIX-002` | DONE" in current
     assert "| Alpha 2 correction | `CONF-FIX-003` | DONE" in current
     assert "| Alpha 2 backend | `CONF-LIVE-003` | WAITING" in current

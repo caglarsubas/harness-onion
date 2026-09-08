@@ -1,5 +1,55 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-08, during `MET-REPAIR-010` publication. Source authority only.
+Current catalog: 136 packets, thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 | Closure | DONE — historical source/offline | Earlier acceptance remains separate from live installation |
+| Alpha 1 | Foundation and tenant overview source | DONE — recorded source/offline | Independent live integration and tenant acceptance remain waiting |
+| Alpha 2 authority | `MET-LIVE-001` | DONE — source gates | Six-packet source-only Linux backend authority |
+| Alpha 2 | `CON-MODEL-001` | DONE — source gates | Model contracts; not model runtime acceptance |
+| Alpha 2 authority | `MET-REPAIR-008` | DONE — source/CI/merge/local exact-main | Meta PR 102, main 3b1ea6b; 1720 passed, ten existing nested-isolation skips |
+| Alpha 2 correction | `CONF-FIX-002` | DONE — source gates | Parser correction; historical CI retained |
+| Alpha 2 correction | `CONF-FIX-003` | DONE — source/CI/merge/local exact-main | PR 8, main 01ef8b1; 110 files / 170 tests |
+| Alpha 2 backend | `CONF-LIVE-001` | DONE — source/CI/merge/local exact-main | PR 6, main d734b80; 120 files / 216 tests |
+| Alpha 2 backend | `CONF-LIVE-002` | DONE — source/CI/merge/local exact-main | PR 9, main 7205075; 127 files / 279 tests |
+| Alpha 2 authority | `MET-REPAIR-009` | DONE — source/CI/merge/local exact-main | PR 103, main 33de300; 1973 passed / ten existing skips; first timeout and unchanged retry retained |
+| Alpha 2 authority | `MET-REPAIR-010` | ONGOING — publication | Protected read-only policy-observation prerequisite |
+| Alpha 2 backend | `CONF-LIVE-003` | WAITING — observation authority closure | Fixed transport, independent server authentication and zero-cost admission |
+| Alpha 2 backend | `CONF-LIVE-004` | WAITING | Fixed build/probe implementations and native observations |
+| Alpha 2 backend | `CONF-LIVE-005` | WAITING | Reproducible client/server candidate packaging and operator handoff |
+| Alpha 2 backend | `CONF-LIVE-006` | WAITING | Final integration and manual qualification declaration |
+| Alpha 2 | Native AMD64 / ARM64 qualification | WAITING — NOT_RUN_ENV_UNAVAILABLE | Separate installation, capacity and signed native evidence |
+| Alpha 1 integration / Alpha 2 | `CTRL-INTEGRATE-001`, `MODEL-001`, `EXEC-001`, `RUN-001` | WAITING — fresh native AMD64 gate | Runtime product code remains gated |
+| Alpha 3 | Governed action and interaction | WAITING | Existing DAG unchanged |
+| Alpha 4 | Enterprise release/platform matrix | WAITING | Independent deployment, runtime, assurance and tenant acceptance |
+
+
+## Current observation prerequisite
+
+SOURCE_INSPECTION_ONLY found that required fresh policy observations have no
+permitted transport in the existing exact run-resource API rules. The new
+[protected read-only channel](alpha-2/POLICY_OBSERVATION_READINESS.md) supplies
+an explicit independent operator interface without altering campaign/mutation
+permissions. No observer is installed or product/native test executed here.
+CONF-LIVE-003 remains WAITING until this source/local/CI/merge/exact-main closure.
+All 135 predecessor packets and the strict proxy profile remain byte-identical.
+The source checkpoint remains 127 files / 279 tests; native/runtime/tenant
+acceptance is NOT_RUN_ENV_UNAVAILABLE. Alpha 2 is ONGOING; effort change NOT_DUE.
+
+PR 103 closure: main 33de300cabb497044c679d51df13d36d14a4b906; CI 34188564620.
+Its first local exact-main replay hit the unchanged 420-second nested-test timeout.
+The same code/coverage/timeout passed a fresh retry (1973 tests, ten existing
+nested-isolation skips). Both results remain recorded; timing stability is not
+claimed. This packet cannot relax that timeout or remove predecessor tests.
+
+## Historical MET-REPAIR-009 publication checkpoint
+
+The following was the prior publication state, not the current dispatch instruction.
+
+### Prior development checkpoint — Phase 0 to Alpha 2
+
 Snapshot: 2026-09-08, during `MET-REPAIR-009` publication. Authority-only;
 this is not a live runtime dashboard. Historical snapshots below remain preserved.
 Current catalog: 135 packets, thirteen repositories, four planes, sixteen harnesses.

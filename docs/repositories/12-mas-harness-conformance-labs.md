@@ -1,7 +1,7 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
-Current Alpha-2 dispatch: [MET-REPAIR-009 proxy contract prerequisite](../alpha-2/PROXY_CONTRACT_READINESS.md).
-Catalog 135; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
+Current Alpha-2 dispatch: [MET-REPAIR-010 protected policy-observation prerequisite](../alpha-2/POLICY_OBSERVATION_READINESS.md).
+Catalog 136; accepted backend source through CONF-LIVE-002 (127 files / 279 tests).
 CONF-LIVE-003 waits for this authority's source/CI/merge/local exact-main closure.
 Older publication sections below retain their historical states, not current instructions.
 
@@ -276,7 +276,7 @@ is granted by this amendment. See [the exact scope](../alpha-2/LINUX_TEST_OWNERS
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 135. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 136. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -359,3 +359,14 @@ cleanup must be tested independently; meta vectors are UNIT_VERIFICATION_ONLY.
 Native qualification, runtime and tenant acceptance remain separate and unavailable.
 No installation, key issuance, root-policy change, hosted runner or paid API is
 part of this publication. Alpha 2 remains ongoing; no phase-end effort change is due.
+
+## Approved protected policy observation — MET-REPAIR-010
+
+Source-only prerequisite before CONF-LIVE-003: fixed local server-only observation,
+independent operator custody and current enforcement evidence. Campaign API rules,
+credentials, mutations and egress remain unchanged. The observer is a separately
+installed open-source operator prerequisite, not an available or deployed product.
+Current catalog 136; 135 predecessor YAML and strict proxy profile preserved.
+Product stages 110/120/127/135/141/146/151 and eight paths/eight commands unchanged.
+See the current dispatch link above for the closed schemas, native obligations,
+recorded predecessor timing risk and separate acceptance gates. Alpha 2 ONGOING.
