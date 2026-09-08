@@ -18,8 +18,8 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/custody-handoff-amendment.json"
-RECORD_SHA256 = "0ea3c3b5e9e33e543629dae92fccba2ae06d3abb91c9df5a32862d0c3d62916a"
-PACKET_DIGESTS = {"MET-REPAIR-011":"a37f1adf121943ce599b7c1781640d43c4d167b48f1632294d1a958232ca36e0","CONF-FIX-004":"79c00496cab7cf4531b5d65d7aa292c662ed2d27c840b6e4d8ce8aa015ebb289"}
+RECORD_SHA256 = "d5ac412b5f2c2aa6642546fa66d2927470bcfb8af18fe5c3699f390956eed7c6"
+PACKET_DIGESTS = {"MET-REPAIR-011":"aaa070d5ea2e7a4f6cfea9578d87bf82b7e12d5ef6c75d8456ed366701c7d7c1","CONF-FIX-004":"79c00496cab7cf4531b5d65d7aa292c662ed2d27c840b6e4d8ce8aa015ebb289"}
 ADDITIONS = ("MET-REPAIR-011", "CONF-FIX-004")
 BEFORE_PATH = "architecture/custody-handoff-inputs/baseline.json"
 DOC_PATH = "docs/live-backend/linux-boundary.md"
@@ -254,8 +254,9 @@ def validate_custody_handoff(packets, record, inputs):
             _, actual = definitions(before["files"][path].encode())
             require(len(regions) == len(set(regions)) and set(regions) <= set(actual), "unknown or duplicate custody region")
         return errors
-    except (TypeError, ValueError, KeyError, AttributeError, SyntaxError, UnicodeError, RecursionError, yaml.YAMLError):
-        return ["malformed custody-handoff authority"]
+    except (TypeError, ValueError, KeyError, AttributeError, SyntaxError, UnicodeError, RecursionError, yaml.YAMLError) as exc:
+        detail = str(exc) if type(exc) is ValueError else type(exc).__name__
+        return ["malformed custody-handoff authority: " + detail]
 
 
 def main():

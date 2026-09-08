@@ -198,7 +198,7 @@
     "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
   },
   "inputFiles": {
-    "task-packets/MET-REPAIR-011.yaml": "4dc901d610c2e59083b05125caf107db983776d735a1f8e92cb522bbb734456c",
+    "task-packets/MET-REPAIR-011.yaml": "68308a56b7d60b4083330f479868bf10b378a84c9d1cf25fcc1b055bf1444964",
     "task-packets/CONF-FIX-004.yaml": "6a41b419c4e5b02311e148b846d339216f1b512cf8025ae75de77e72ea3d8db0",
     "architecture/custody-handoff-inputs/baseline.json": "9053162f5249e75584c334fc6898444e6c7220b1cf116f8efb348a6658165ca6",
     "docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md": "0a095725bf71fb26ab8500391c1c214fef63f124b7a29ec171a552d0a211b025"
@@ -455,7 +455,7 @@
       },
       "expectedEvidence": [
         "138 exact schema-valid owned packets; all 136 predecessor packet and immutable authority bytes preserved. Independent data-only region/append/checkpoint mutation tests; original 127-file/279-ID history remains pinned.",
-        "Product source correction, installed backend, native Linux, runtime and tenant acceptance remain NOT_RUN or NOT_RUN_ENV_UNAVAILABLE. No product test is performed by a source-delta oracle.",
+        "Product source correction is unexecuted; installed backend, native Linux, runtime and tenant acceptance remain NOT_RUN_ENV_UNAVAILABLE. No product test is performed by a source-delta oracle.",
         "Separate local/head/CI/merge/local exact-main evidence; preserve all failures. Alpha 2 ONGOING; effort transition NOT_DUE. Existing nonroot signed activation only, no new administrator authentication or billing surface."
       ],
       "rollback": "Before consumption revert this additive publication as one reviewed unit; after consumption issue a bounded successor. Preserve accepted source hashes, historical test/CI evidence, immutable packet bytes, trust/replay history and tenant data."
