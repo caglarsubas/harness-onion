@@ -291,7 +291,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 132 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |
 | 133 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |
 | 134 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
-| 136 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
+| 135 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 
