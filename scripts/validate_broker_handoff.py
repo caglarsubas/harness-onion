@@ -22,7 +22,7 @@ BEFORE_PATH = "architecture/broker-handoff-inputs/meta-before.json"
 SCHEMA_PATH = "architecture/broker-handoff-inputs/channel.schema.json"
 VECTORS_PATH = "architecture/broker-handoff-inputs/vectors.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
-RECORD_SHA256 = "45ba6bb3687bee5d7592828ad35f4d979060e6fc30e2b024e1480f057ec3a49d"
+RECORD_SHA256 = "2012532803f16e846b537cc377e9125d90a15a6190ccce4a181b10f4192380a7"
 PACKET_SHA256 = "37063b4b23be808442a48002c917afbb1d2ac15f75bf8fbb0e5ce739a9f3cfba"
 ZERO = "sha256:" + "0" * 64
 BRIDGED_PATHS = frozenset(["docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md","docs/adr/0004-sol-high-packet-boundary.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_ci_performance.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_proxy_contract.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_ci_performance.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_proxy_contract.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
@@ -93,8 +93,12 @@ def historical_bytes(path, raw):
 
 def current_test_bytes(before):
     require(type(before) is bytes, "test source bytes required")
-    matches = [r for p, r in _record()["metaRecipes"].items()
+    record = _record()
+    matches = [r for p, r in record["metaRecipes"].items()
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+    if not matches:
+        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test source")
+        return before
     require(len(matches) == 1, "exact predecessor test source required")
     return apply_recipe(before, matches[0])
 
@@ -301,6 +305,8 @@ def validate_handoff(packets, record, inputs):
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input set")
         for p, checksum in pins.items():
             require(type(inputs[p]) is bytes and digest(inputs[p]) == checksum, "current input changed: " + p)
+        require(all(p in record["protectedFiles"] and digest(inputs[p]) == checksum
+                    for p, checksum in record["unchangedTests"].items()), "unchanged test pins differ")
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
         require(len(old) == 142 and len(packets) == 143 and set(packets) == old | {"MET-REPAIR-014"}, "exact catalog")
         for name in packets:

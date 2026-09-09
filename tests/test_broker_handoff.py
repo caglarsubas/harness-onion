@@ -332,6 +332,17 @@ def test_data_oracle_cannot_execute_snapshots_or_native_primitives():
             assert name not in forbidden
 
 
+def test_unchanged_legacy_test_bridge_accepts_only_six_exact_pinned_sources(authority):
+    _, record, inputs = authority
+    assert len(record["unchangedTests"]) == 6
+    for path, checksum in record["unchangedTests"].items():
+        raw = inputs[path]
+        assert digest(raw) == checksum
+        assert current_test_bytes(raw) == raw
+        with pytest.raises(ValueError): current_test_bytes(raw + b"\n# altered\n")
+    with pytest.raises(ValueError): current_test_bytes(b"def test_unknown(): pass\n")
+
+
 def test_roadmap_distinguishes_source_publication_from_product_and_native_acceptance():
     current = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-013")[0]
     assert "during `MET-REPAIR-014` publication" in current
