@@ -130,7 +130,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 141
+EXPECTED_PACKET_COUNT = 142
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -4453,6 +4453,12 @@ def validate_packets(
         validation.error(performance_error)
     for credential_error in validate_credential_lifecycle(packets, *load_credential_inputs(ROOT)):
         validation.error(credential_error)
+    try:
+        from validate_credential_ordering import load_ordering_inputs, validate_credential_ordering
+    except ImportError:
+        from scripts.validate_credential_ordering import load_ordering_inputs, validate_credential_ordering
+    for ordering_error in validate_credential_ordering(packets, *load_ordering_inputs(ROOT)):
+        validation.error(ordering_error)
     for amendment_error in validate_repair_amendment(
         packets, load_json(ROOT / "architecture/readiness-repair-amendment.json"),
         (ROOT / "architecture/readiness-repairs.json").read_bytes(),
@@ -4625,6 +4631,10 @@ def validate_packets(
                             for path in packets["MET-REPAIR-012"]["allowedPaths"]
                             if path in authority_owner})
     authority_owner["architecture/credential-lifecycle-inputs/meta-tests.before.json"] = "MET-REPAIR-012"
+    authority_owner.update({path: "MET-REPAIR-013"
+                            for path in packets["MET-REPAIR-013"]["allowedPaths"]
+                            if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
+    authority_owner["task-packets/MET-REPAIR-013.yaml"] = "MET-REPAIR-013"
     observation_authority_path = "architecture/observations/data-harness-v1.json"
     if (ROOT / observation_authority_path).is_file():
         authority_owner[observation_authority_path] = "MET-002"

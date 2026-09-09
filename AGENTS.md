@@ -51,7 +51,13 @@
     `PLATFORM_RELEASE` and `TENANT_LIVE_EXECUTION` signatures over the same RFC
     8785 payload, every referenced digest and embedded endpoint, the separate
     digest-bound `CAPACITY_OPERATOR` authorization, proxy scope, and server-side
-    zero-cost mutation admission before checked-out code or credentials run. A missing authority/backend/target is
+    zero-cost mutation admission before checked-out code, probes or mutations run.
+    MET-REPAIR-013 is the sole credential-ordering exception: after independent
+    signatures, isolation, durable nonce reservation and retained custody checks,
+    the campaign-client mTLS credential may authenticate only to its pinned
+    proxy. This grants no execution; fresh server observation and transactional
+    admission remain mandatory before effects or upstream credential access.
+    See docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md. A missing authority/backend/target is
     `NOT_RUN_ENV_UNAVAILABLE`; never bypass it, invoke the inner repository
     launcher directly, broaden egress, or let a campaign sign tenant acceptance.
 13. A product bootstrap packet is the sole owner of `Makefile` and

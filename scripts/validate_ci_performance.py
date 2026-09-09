@@ -14,15 +14,20 @@ except ModuleNotFoundError:
     from scripts.safe_yaml import safe_load
     from scripts.validate_proxy_contract import canonical, digest, parse, regular_bytes
 
+try:
+    from validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+except ImportError:
+    from scripts.validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/ci-performance-amendment.json"
 BEFORE_PATH = "architecture/ci-performance-inputs/tests.before.json"
 RECORD_SHA256 = "c533d6afdb7c8afc72a80a249d05e9812e18cd1aa6d54f9df7e3b1f4a158c5c3"
 PACKET_SHA256 = "e5d8e021c7e779040118b8ba71fb45ec14d7a5a4e39386a2580ff4f1eb821284"
 ADDITIONS = ("MET-PERF-001",)
-CURRENT_PACKET_COUNT = 141
+CURRENT_PACKET_COUNT = 142
 HISTORICAL_PACKET_COUNT = 139
-SUCCESSOR_ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005")
+SUCCESSOR_ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013")
 
 
 def require(condition, message):
@@ -124,7 +129,7 @@ def validate_ci_performance(packets, record, inputs, current_tests):
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "complete independent input inventory")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum,
+            require(type(inputs[path]) is bytes and digest(historical_bytes(path, inputs[path])) == checksum,
                     "protected input changed: " + path)
             if path.startswith("task-packets/"):
                 require(canonical(packets[Path(path).stem]) == canonical(safe_load(inputs[path])),
@@ -138,6 +143,7 @@ def validate_ci_performance(packets, record, inputs, current_tests):
         except ImportError:
             from scripts.validate_credential_lifecycle import validate_additions as credential_additions
         errors.extend(credential_additions(packets))
+        errors.extend(ordering_additions(packets))
         packet = packets["MET-PERF-001"]
         prefix = ["uv", "run", "--offline", "--frozen", "--no-sync", "python"]
         previous_commands = packets["MET-REPAIR-011"]["offlineAcceptanceCommands"]
@@ -161,7 +167,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("CI performance authority valid: 141 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.")
+        print("CI performance authority valid: 142 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.")
     return int(bool(errors))
 
 

@@ -21,11 +21,16 @@ except ImportError:
     from scripts.validate_proxy_contract import canonical, digest, parse, regular_bytes
     from scripts.validate_successor_inventory import packet_semantics
 
+try:
+    from validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+except ImportError:
+    from scripts.validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/custody-handoff-amendment.json"
 RECORD_SHA256 = "26d0301045c60908850ec225fa497d73da4c4125c377e74a931d41c83d57c491"
 PACKET_DIGESTS = {"MET-REPAIR-011":"aaa070d5ea2e7a4f6cfea9578d87bf82b7e12d5ef6c75d8456ed366701c7d7c1","CONF-FIX-004":"79c00496cab7cf4531b5d65d7aa292c662ed2d27c840b6e4d8ce8aa015ebb289"}
-ADDITIONS = ("MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005")
+ADDITIONS = ("MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013")
 BEFORE_PATH = "architecture/custody-handoff-inputs/baseline.json"
 DOC_PATH = "docs/live-backend/linux-boundary.md"
 PROOF_FIELDS = {"schemaVersion", "evidenceClass", "packetId", "packetSha256", "authorityDigest",
@@ -256,7 +261,7 @@ def validate_custody_handoff(packets, record, inputs):
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact custody input inventory required")
         for path, checksum in pins.items():
-            raw = inputs[path]
+            raw = historical_bytes(path, inputs[path])
             require(type(raw) is bytes and digest(raw) == checksum, "immutable input changed: " + path)
             if path.startswith("task-packets/"):
                 require(canonical(packets[Path(path).stem]) == packet_semantics(raw), "packet bytes/semantics mismatch")
@@ -287,7 +292,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Custody handoff authority valid: 141 packets; 127-file/279-ID history preserved; product/native NOT_RUN.")
+        print("Custody handoff authority valid: 142 packets; 127-file/279-ID history preserved; product/native NOT_RUN.")
     return int(bool(errors))
 
 

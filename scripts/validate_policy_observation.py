@@ -20,12 +20,17 @@ except ImportError:
     from scripts.validate_proxy_contract import (canonical, digest, parse, regular_bytes,
                                                 _bounded, _time, _require, validate_profile)
 
+try:
+    from validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+except ImportError:
+    from scripts.validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/policy-observation-amendment.json"
 RECORD_SHA256 = "a579f7464ddd1b8de2e888734b9c249f13e9fccc02ad3001e6114f1d74332734"
 PACKET_SHA256 = "fe936ede385abb790dbba18d05fa007184296eb81bd23fcf5ae5d14e0b8be112"
 SCHEMA_SHA256 = "d4ac4deef49bea39ff7d010e3fe75d75ac446b3d87db4b2e59ee49ef12d02e72"
-ADDITIONS = ("MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005")
+ADDITIONS = ("MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013")
 ZERO = "sha256:" + "0" * 64
 POLICIES = ("admissionPolicy", "resourceQuota", "limitRange", "serviceAccount",
             "rbac", "networkPolicy", "mutationBroker")
@@ -145,7 +150,7 @@ def validate_observation_contract(packets, record, inputs):
         if set(inputs) != set(pins):
             errors.append("exact observation input inventory required")
         for path, checksum in pins.items():
-            raw = inputs.get(path)
+            raw = historical_bytes(path, inputs.get(path))
             if type(raw) is not bytes or digest(raw) != checksum:
                 errors.append("immutable observation input changed: " + path)
             elif path.startswith("task-packets/") and canonical(packets.get(Path(path).stem)) != canonical(safe_yaml_load(raw)):
@@ -179,7 +184,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Policy observation authority valid: 141 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Policy observation authority valid: 142 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 

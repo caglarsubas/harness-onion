@@ -18,10 +18,15 @@ except ImportError:
     from scripts.validate_custody_handoff import definitions, reconstruct_source, appended_definitions, require
     from scripts.validate_successor_inventory import packet_semantics
 
+try:
+    from validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+except ImportError:
+    from scripts.validate_credential_ordering import historical_bytes, current_test_bytes, validate_additions as ordering_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/credential-lifecycle-amendment.json"
 RECORD_SHA256 = "851fd80ddeec7367405a3e8445e330290341e2b4d68bccf372c24a4b965c341c"
-ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005")
+ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013")
 PACKET_DIGESTS = {"MET-REPAIR-012": "bb53b3538a50a6c4e26b7f40c6697376c3cb1cc5e3947dad573c9d45d9253a1e",
                   "CONF-FIX-005": "abb7c2a19d54f84789c2656164e1e9ac66f822620173401fe93c50d61cc5cf2a"}
 BEFORE_PATH = "architecture/credential-lifecycle-inputs/before.json"
@@ -44,7 +49,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet map required")
         for name, checksum in PACKET_DIGESTS.items():
             require(digest(canonical(packets.get(name))) == checksum, "credential packet changed")
-        return []
+        return ordering_additions(packets)
     except (TypeError, ValueError, RecursionError):
         return ["exact credential publication and correction packets required"]
 
@@ -82,7 +87,7 @@ def reconcile_meta_test_bytes(before):
     recipes = [rule for rule in record["metaReconciliation"]["testRecipes"].values()
                if rule["beforeSha256"] == digest(before)]
     require(len(recipes) == 1, "exact accepted meta test required")
-    return apply_meta_test_recipe(before, recipes[0])
+    return current_test_bytes(apply_meta_test_recipe(before, recipes[0]))
 
 
 def validate_meta_test_preservation(record, before_raw, current):
@@ -102,7 +107,7 @@ def validate_meta_test_preservation(record, before_raw, current):
             from scripts.validate_ci_performance import test_definitions
         for path, recipe in recipes.items():
             old = before["files"][path].encode()
-            require(type(current[path]) is bytes and current[path] == apply_meta_test_recipe(old, recipe),
+            require(type(current[path]) is bytes and current[path] == current_test_bytes(apply_meta_test_recipe(old, recipe)),
                     "unreviewed meta assertion or body change")
             require(test_definitions(old) == test_definitions(current[path]), "meta test identity changed")
         return []
@@ -244,12 +249,12 @@ def validate_credential_lifecycle(packets, record, inputs):
         pinned(record)
         errors = validate_additions(packets)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 139 and len(packets) == 141 and set(packets) == old | set(ADDITIONS),
-                "139 predecessors plus two exact packets required")
+        require(len(old) == 139 and len(packets) == 142 and set(packets) == old | set(ADDITIONS),
+                "139 predecessors plus two credential packets and exact ordering authority required")
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input map required")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "immutable input changed: " + path)
+            require(type(inputs[path]) is bytes and digest(historical_bytes(path, inputs[path])) == checksum, "immutable input changed: " + path)
             if path.startswith("task-packets/"):
                 require(canonical(packets[Path(path).stem]) == packet_semantics(inputs[path]), "packet semantics differ")
         require(not validate_meta_test_preservation(record, inputs[META_BEFORE_PATH],
@@ -313,7 +318,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential lifecycle authority valid: 141 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Credential lifecycle authority valid: 142 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 

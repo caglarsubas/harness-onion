@@ -1,8 +1,8 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](../alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
-Catalog 141; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
-CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
+Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](../alpha-2/CREDENTIAL_ORDERING_REPAIR.md).
+Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
+MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.
 Older publication sections below retain their historical states, not current instructions.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
@@ -223,6 +223,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 30. `MET-REPAIR-011`: publish the bounded retained-custody handoff correction, five-path CONF-FIX-004 packet, immutable original inventory and region/prefix source-delta checks.
 31. `MET-PERF-001`: measure and repair safe YAML parsing cost while preserving every assertion, both complete replays, timeouts and isolation; close independently before reconciling PR106.
 32. `MET-REPAIR-012`: publish the bounded credential lifecycle, five-path CONF-FIX-005 authority and cumulative source-accounting oracle.
+33. `MET-REPAIR-013`: publish the authentication-only client credential ordering exception, mandatory independent server admission and exact meta/source preservation checks.
 
 ## Testing, verification, and acceptance
 
@@ -340,7 +341,7 @@ current successor. No consumed authority, root installation or product edit.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 141. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 142. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -464,3 +465,21 @@ Publish and close each packet separately before CONF-LIVE-003. No product/native
 execution, new installation, key, dependency, cloud action or bill in this meta
 publication. Prior timing failures remain UNRESOLVED; no timeout or coverage
 relaxation. Alpha 2 ONGOING; model-effort transition NOT_DUE.
+
+
+## Approved credential-ordering correction — MET-REPAIR-013
+
+The current dispatch link above is normative for the authentication-only client
+credential exception. After independent signatures, kernel isolation, durable
+reservation and retained custody checks, the client may authenticate only to its
+pinned proxy. The server still requires fresh local policy observation and
+transactional zero-cost admission before any probe, mutation or upstream
+credential use. No TLS success or client receipt grants native acceptance.
+
+Preserve all 141 predecessor packet bytes, historical authority and source locks.
+Current catalog142; conformance checkpoint9df7dd7 has 127 files / 327 tests.
+CONF-LIVE-003 retains eight paths/eight commands; no additional product repair
+packet, signature role, endpoint, installed capability or billing permission.
+This meta publication requires twenty-one offline commands and separate local,
+required localhost CI, merge and local exact-main gates. Native AMD64/ARM64 and
+Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.
