@@ -1,8 +1,8 @@
 # Master Development Plan
 
-Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md).
-Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
-CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
+Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
+Catalog 140; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
+CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
 ## Purpose
@@ -268,7 +268,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 138 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 140 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -288,7 +288,7 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-That publication contained 122 packets; the current catalog has 138. The preceding
+That publication contained 122 packets; the current catalog has 140. The preceding
 121-packet Linux test publication is historical; its consumed bytes are unchanged.
 The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
 localhost PR CI and exact-main replay before the model draft started.
@@ -312,7 +312,7 @@ review. Source, offline, CI, merge, native Linux and tenant gates stay separate.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 140. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -420,3 +420,19 @@ CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
 path reopening, installation, new credential, dependency, native/live execution
 or acceptance promotion. Prior nested-timeout failures remain unresolved history;
 no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.
+
+
+## Approved bounded credential lifecycle — MET-REPAIR-012
+
+The [credential-lifecycle correction](alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md) publishes
+MET-REPAIR-012 and CONF-FIX-005: 140 packets, unchanged thirteen repositories,
+four planes and sixteen harnesses. Preserve all 138 predecessor packet bytes.
+CONF-FIX-004 closed at 0aa3ef3027f4a156d7ebed1b56af244e021d080a, 127 files / 305 tests;
+its historical proof remains unchanged. CONF-FIX-005 supplies narrowly owned
+late-credential/temporary-handle custody plus three cumulative source-accounting
+adaptations, with every behavioral assertion and all 305 prior IDs retained.
+Source stage counts and later eight-path proxy grant remain unchanged.
+Publish and close each packet separately before CONF-LIVE-003. No product/native
+execution, new installation, key, dependency, cloud action or bill in this meta
+publication. Prior timing failures remain UNRESOLVED; no timeout or coverage
+relaxation. Alpha 2 ONGOING; model-effort transition NOT_DUE.

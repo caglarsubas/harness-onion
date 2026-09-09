@@ -1,5 +1,52 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-09, during `MET-REPAIR-012` publication. Source authority only.
+Current catalog: 140 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 | Closure | DONE — historical source/offline | Live installation separate |
+| Alpha 1 | Foundation and tenant overview | DONE — recorded source/offline | Live integration and tenant acceptance waiting |
+| Alpha 2 | MET-LIVE-001 / CON-MODEL-001 / CONF-LIVE-001/002 | DONE — recorded source gates | Contracts and supervisor candidate, not native qualification |
+| Alpha 2 | MET-REPAIR-009/010/011 | DONE — source gates | Proxy, observation and retained-custody authority |
+| Alpha 2 | CONF-FIX-004 | DONE — source/local/CI/merge/local exact-main | Main0aa3ef3, 127 files / 305 tests, zero skips |
+| Alpha 2 authority | MET-REPAIR-012 | ONGOING — publication | Bounded late-credential lifecycle and source-accounting authority |
+| Alpha 2 correction | CONF-FIX-005 | WAITING | Five-path correction; product code not changed here |
+| Alpha 2 backend | CONF-LIVE-003 | WAITING — correction closure | Fixed transport, independent authentication and zero-cost admission |
+| Alpha 2 backend | CONF-LIVE-004/005/006 | WAITING | Fixed probes, reproducible packaging and integration |
+| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installation, existing capacity and actual signed qualification |
+| Alpha 1 integration / Alpha 2 | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING — native AMD64 gate | Runtime product coding remains gated |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise matrix | WAITING | Independent runtime, assurance and tenant acceptance |
+
+## Current correction
+
+The [bounded credential lifecycle](alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md)
+separates immutable initial authority custody from post-isolation credential
+ownership. Source inspection found that sealing the registry and denying all
+later handles leaves no retained credential path through successive operations.
+Three source-accounting regions also need exact cumulative-stage support.
+No reproduced exploit, product failure or live operation is claimed here.
+
+CONF-FIX-004 closed in PR10 and required CI34251687066; independent local
+exact-main passed all eight commands, 305 tests / zero skips. Log SHA256:
+37af0b10ea88389bffd6fa15027678866a3b195ffb5acd6eec63d90ceedd2e4b.
+Its actual 127/305 checkpoint and old 127/279 history remain separate.
+CONF-FIX-005 must preserve all 305 IDs and every behavioral assertion, with
+only the explicitly named source-accounting region changes. No product run
+or edit occurs in this meta publication; acceptance requires eighteen commands.
+
+Prior nested-test timeout failures at unchanged 420 seconds remain recorded;
+timing stability UNRESOLVED. Only one bounded unchanged retry, no relaxed
+timeout, skipped coverage or weaker isolation. Alpha 2 ONGOING; effort transition
+NOT_DUE. No administrator authentication, root policy, key, dependency download,
+hosted runner, artifact upload, cloud action or bill.
+
+## Historical MET-REPAIR-011 publication checkpoint
+
+The following is historical, not current dispatch authority.
+
+# Development checkpoint — Phase 0 to Alpha 2
+
 Snapshot: 2026-09-08, during `MET-REPAIR-011` publication. Source authority only.
 Current catalog: 138 packets; thirteen repositories, four planes, sixteen harnesses.
 

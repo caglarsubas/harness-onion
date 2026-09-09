@@ -1,8 +1,8 @@
 # Sol-High Task Packet Catalog
 
-Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](../docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md).
-Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
-CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
+Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](../docs/alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
+Catalog 140; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
+CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
 This is the complete PR-sized execution queue for the Planeon Enterprise MAS Harness Platform. The rule is **one YAML file per packet, one GPT-Sol high-effort run per packet, and one pull request per packet**.
@@ -205,7 +205,7 @@ be hidden behind another make target or script.
 ## Alpha 2 — Read-only intelligence
 
 The readiness repair retains the historical 107-packet Phase-0 and 110-packet
-Alpha-2 publication snapshots. The current catalog has 138 packets; the first repair publication retains its 114-packet snapshot. Alpha-1
+Alpha-2 publication snapshots. The current catalog has 140 packets; the first repair publication retains its 114-packet snapshot. Alpha-1
 status corrections and production integration appear here because their new
 authority follows the merged model observation; no historical packet is
 rewritten as completed live acceptance. CON-MODEL-001 requires both product
@@ -239,62 +239,64 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 90 | `MET-REPAIR-010` | `Harness-Engineering` | Protected read-only policy-observation contract prerequisite |
 | 91 | `MET-REPAIR-011` | `Harness-Engineering` | Retained-custody handoff correction authority |
 | 92 | `CONF-FIX-004` | `mas-harness-conformance-labs` | Retained authority handles and supervisor handoff |
-| 93 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |
-| 94 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |
-| 95 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |
-| 96 | `CONF-LIVE-006` | `mas-harness-conformance-labs` | Trusted campaign integration and manual qualification declaration |
-| 97 | `CTRL-INTEGRATE-001` | `mas-harness-control-plane` | Alpha-1 production overview integration carryover |
-| 98 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |
-| 99 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |
-| 100 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |
-| 101 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |
-| 102 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |
-| 103 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |
-| 104 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |
-| 105 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |
-| 106 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |
-| 107 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |
-| 108 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |
-| 109 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |
-| 110 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |
-| 111 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |
+| 93 | `MET-REPAIR-012` | `Harness-Engineering` | Bounded credential lifecycle authority |
+| 94 | `CONF-FIX-005` | `mas-harness-conformance-labs` | Post-isolation credential custody and cumulative accounting |
+| 95 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |
+| 96 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |
+| 97 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |
+| 98 | `CONF-LIVE-006` | `mas-harness-conformance-labs` | Trusted campaign integration and manual qualification declaration |
+| 99 | `CTRL-INTEGRATE-001` | `mas-harness-control-plane` | Alpha-1 production overview integration carryover |
+| 100 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |
+| 101 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |
+| 102 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |
+| 103 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |
+| 104 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |
+| 105 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |
+| 106 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |
+| 107 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |
+| 108 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |
+| 109 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |
+| 110 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |
+| 111 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |
+| 112 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |
+| 113 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |
 
 ## Alpha 3 — Governed action and interaction
 
 | Order | Packet | Repository | Acceptance slice |
 |---:|---|---|---|
-| 112 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |
-| 113 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |
-| 114 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |
-| 115 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |
-| 116 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |
-| 117 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |
-| 118 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |
-| 119 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |
-| 120 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |
-| 121 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |
+| 114 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |
+| 115 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |
+| 116 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |
+| 117 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |
+| 118 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |
+| 119 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |
+| 120 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |
+| 121 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |
+| 122 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |
+| 123 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |
 
 ## Alpha 4 — Enterprise release
 
 | Order | Packet | Repository | Acceptance slice |
 |---:|---|---|---|
-| 122 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |
-| 123 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |
-| 124 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |
-| 125 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |
-| 126 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |
-| 127 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |
-| 128 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |
-| 129 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |
-| 130 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |
-| 131 | `OP-007` | `mas-harness-operator` | Platform security |
-| 132 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |
-| 133 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |
-| 134 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |
-| 135 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |
-| 136 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |
-| 137 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
-| 138 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
+| 124 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |
+| 125 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |
+| 126 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |
+| 127 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |
+| 128 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |
+| 129 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |
+| 130 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |
+| 131 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |
+| 132 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |
+| 133 | `OP-007` | `mas-harness-operator` | Platform security |
+| 134 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |
+| 135 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |
+| 136 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |
+| 137 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |
+| 138 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |
+| 139 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
+| 140 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 
@@ -315,7 +317,7 @@ claim. Full Alpha-4 certification remains separate. The earlier amendment's
 MET-REPAIR-003 publishes the [R1-R4 amendment](../docs/alpha-2/LINUX_READINESS_REPAIRS.md)
 without implementing product code. CONF-FIX-001 is the next source correction;
 CONF-LINUX-001 waits for its merged source and exact-main offline evidence.
-The MET-REPAIR-003 publication contained 120 packets; the current catalog contains 138. The original 118-packet Linux policy and prior
+The MET-REPAIR-003 publication contained 120 packets; the current catalog contains 140. The original 118-packet Linux policy and prior
 107/110/114/115 snapshots remain unchanged historical records.
 
 Both conformance packets enumerate each test-suite root explicitly. The campaign
@@ -336,7 +338,7 @@ Native Linux, independent live authority and full Alpha-4 acceptance remain sepa
 
 MET-REPAIR-005 grants CON-MODEL-001 only the exact helper copy additions in
 [the bounded fixture repair](../docs/alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md).
-The current catalog has 138 packets; the earlier 121-packet publication and all
+The current catalog has 140 packets; the earlier 121-packet publication and all
 source/native gates remain unchanged. That fixture-copy grant changes no assertions;
 the sole later inventory-predicate exception is MET-REPAIR-006 below.
 
@@ -356,7 +358,7 @@ Normal model-contract completeness review and full source/CI/main gates remain.
 The [coding guide](../docs/alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 140. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -464,3 +466,19 @@ CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
 path reopening, installation, new credential, dependency, native/live execution
 or acceptance promotion. Prior nested-timeout failures remain unresolved history;
 no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.
+
+
+## Approved bounded credential lifecycle — MET-REPAIR-012
+
+The [credential-lifecycle correction](../docs/alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md) publishes
+MET-REPAIR-012 and CONF-FIX-005: 140 packets, unchanged thirteen repositories,
+four planes and sixteen harnesses. Preserve all 138 predecessor packet bytes.
+CONF-FIX-004 closed at 0aa3ef3027f4a156d7ebed1b56af244e021d080a, 127 files / 305 tests;
+its historical proof remains unchanged. CONF-FIX-005 supplies narrowly owned
+late-credential/temporary-handle custody plus three cumulative source-accounting
+adaptations, with every behavioral assertion and all 305 prior IDs retained.
+Source stage counts and later eight-path proxy grant remain unchanged.
+Publish and close each packet separately before CONF-LIVE-003. No product/native
+execution, new installation, key, dependency, cloud action or bill in this meta
+publication. Prior timing failures remain UNRESOLVED; no timeout or coverage
+relaxation. Alpha 2 ONGOING; model-effort transition NOT_DUE.
