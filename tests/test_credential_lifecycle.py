@@ -85,7 +85,7 @@ def inventory(authority, stage=2):
 def test_exact_authority_and_all_historical_bytes(authority):
     packets, record, inputs = authority
     assert validate_credential_lifecycle(*authority) == []
-    assert len(packets) == 141 and len(record["protectedFiles"]) == 245
+    assert len(packets) == 142 and len(record["protectedFiles"]) == 245
     assert len(packets["MET-REPAIR-012"]["offlineAcceptanceCommands"]) == 20
     assert len(packets["CONF-FIX-005"]["allowedPaths"]) == 5
     assert len(packets["CONF-FIX-005"]["offlineAcceptanceCommands"]) == 8
@@ -244,7 +244,7 @@ def test_lifecycle_bounds_dispatch_and_evidence_are_not_flags(authority):
     assert record["previousClosure"]["timingStability"] == "UNRESOLVED"
     assert record["previousClosure"]["timeoutChangeAuthorized"] is False
     current = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-011 publication checkpoint")[0]
-    assert "during `MET-REPAIR-012` publication" in current and "305" in current
+    assert "during `MET-REPAIR-013` publication" in current and "305" in current
     assert "CONF-FIX-005" in current and "NOT_DUE" in current
 
 
@@ -271,7 +271,7 @@ def test_performance_predecessor_and_exact_twenty_commands(authority):
 
 def test_all_accepted_meta_test_bytes_and_ids_remain_accounted(authority):
     from scripts.validate_credential_lifecycle import (
-        META_BEFORE_PATH, apply_meta_test_recipe, validate_meta_test_preservation,
+        META_BEFORE_PATH, apply_meta_test_recipe, validate_meta_test_preservation, current_test_bytes,
     )
     from scripts.validate_ci_performance import test_definitions, expected_test_source
     _, record, inputs = authority
@@ -282,7 +282,7 @@ def test_all_accepted_meta_test_bytes_and_ids_remain_accounted(authority):
     assert validate_meta_test_preservation(record, inputs[META_BEFORE_PATH], current) == []
     for path, recipe in recipes.items():
         raw = before[path].encode()
-        assert apply_meta_test_recipe(raw, recipe) == current[path]
+        assert current_test_bytes(apply_meta_test_recipe(raw, recipe)) == current[path]
         assert test_definitions(raw) == test_definitions(current[path])
         changed = dict(current)
         changed[path] += b"\n# unreviewed mutation\n"
@@ -305,7 +305,7 @@ def test_meta_reconciliation_has_no_broad_test_exemption(authority, kind):
     if kind == "extra": current["tests/unowned.py"] = b"pass\n"
     if kind == "before": before += b" "
     if kind == "record": record["metaReconciliation"]["currentPacketCount"] = 142
-    if kind == "assertion": current[path] = current[path].replace(b"assert len(paths) == 157", b"assert True", 1)
+    if kind == "assertion": current[path] = current[path].replace(b"assert len(paths) == 158", b"assert True", 1)
     if kind == "skip": current[path] = b"import pytest\npytest.skip('fast', allow_module_level=True)\n" + current[path]
     if kind == "unknown-recipe": record["metaReconciliation"]["testRecipes"]["unowned"] = {}
     assert validate_meta_test_preservation(record, before, current)

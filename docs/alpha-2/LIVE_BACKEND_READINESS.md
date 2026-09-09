@@ -1,8 +1,8 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
-Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](CREDENTIAL_LIFECYCLE_REPAIR.md).
-Catalog 141; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
-CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
+Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](CREDENTIAL_ORDERING_REPAIR.md).
+Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
+MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.
 Older publication sections below retain their historical states, not current instructions.
 
 ## Decision and evidence boundary
@@ -517,3 +517,21 @@ Publish and close each packet separately before CONF-LIVE-003. No product/native
 execution, new installation, key, dependency, cloud action or bill in this meta
 publication. Prior timing failures remain UNRESOLVED; no timeout or coverage
 relaxation. Alpha 2 ONGOING; model-effort transition NOT_DUE.
+
+
+## Approved credential-ordering correction — MET-REPAIR-013
+
+The current dispatch link above is normative for the authentication-only client
+credential exception. After independent signatures, kernel isolation, durable
+reservation and retained custody checks, the client may authenticate only to its
+pinned proxy. The server still requires fresh local policy observation and
+transactional zero-cost admission before any probe, mutation or upstream
+credential use. No TLS success or client receipt grants native acceptance.
+
+Preserve all 141 predecessor packet bytes, historical authority and source locks.
+Current catalog142; conformance checkpoint9df7dd7 has 127 files / 327 tests.
+CONF-LIVE-003 retains eight paths/eight commands; no additional product repair
+packet, signature role, endpoint, installed capability or billing permission.
+This meta publication requires twenty-one offline commands and separate local,
+required localhost CI, merge and local exact-main gates. Native AMD64/ARM64 and
+Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.

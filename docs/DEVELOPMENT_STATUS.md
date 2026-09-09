@@ -1,5 +1,51 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-09, during `MET-REPAIR-013` publication. Source authority only.
+Current catalog: 142 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Source/offline; independent runtime acceptance remains separate |
+| Alpha 2 | MET-REPAIR-012 / PR106 | DONE_SOURCE_GATES | Meta main 047bae8; localhost CI34315715428 and local exact-main |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7; 127 files / 327 tests; all 305 previous tests retained |
+| Alpha 2 authority | MET-REPAIR-013 | ONGOING — publication | Client authentication versus server execution ordering |
+| Alpha 2 backend | CONF-LIVE-003 | WAITING — this publication closure | Eight-path fixed proxy and zero-cost admission |
+| Alpha 2 backend | CONF-LIVE-004 | WAITING | Ten native Linux probes |
+| Alpha 2 backend | CONF-LIVE-005 | WAITING | Reproducible packaging and operator handoff |
+| Alpha 2 backend | CONF-LIVE-006 | WAITING | Trusted campaign integration |
+| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installation and qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Runtime, assurance and independent tenant decision |
+
+## Current correction
+
+The [credential-ordering authority](alpha-2/CREDENTIAL_ORDERING_REPAIR.md)
+resolves the circular client credential/policy dependency. After existing local
+authority, isolation, reservation and custody gates, the client credential may
+only authenticate to its signed proxy. The server alone performs fresh policy
+observation and transactional admission before probes, mutations or upstream
+credential use. This explicitly changes client ordering, not server authorization.
+No public wire, credential purpose, endpoint, product path or command is added.
+
+CONF-FIX-005 source gates closed: required CI34322944641, 327 tests with zero
+skips, merge9df7dd7 and independent local exact-main. Exact-main log SHA256:
+11b34f5ef6d52064d6381a2d80cdf2359325c676555ac6c40bc5e5269ee49a08.
+Current 127/327, CONF-FIX-004 127/305 and original 127/279 checkpoints remain
+separate. Recorded passes are not fresh acceptance for this new publication.
+
+This meta packet requires twenty-one commands, including both complete replays.
+Prior timing failures remain retained; no change to nested420/trusted900-second
+or workflow15-minute limits. Source/CI/merge/local exact-main do not establish
+installation, native qualification, runtime or tenant acceptance.
+Alpha 2 ONGOING; effort transition NOT_DUE. No new root policy, installation,
+key, administrator prompt, paid API, hosted runner, download or cloud action.
+
+## Historical MET-REPAIR-012 publication checkpoint
+
+The following snapshot is historical, not current dispatch authority.
+
+# Development checkpoint — Phase 0 to Alpha 2
+
 Snapshot: 2026-09-09, during `MET-REPAIR-012` publication. Source authority only.
 Current catalog: 141 packets; thirteen repositories, four planes, sixteen harnesses.
 

@@ -54,7 +54,7 @@ def seal(after, proof, before_doc):
 def test_exact_publication_correction_and_historical_scope(authority):
     packets, record, inputs = authority
     assert validate_custody_handoff(*authority) == []
-    assert len(packets) == 141 and len(record["protectedFiles"]) == 203
+    assert len(packets) == 142 and len(record["protectedFiles"]) == 203
     assert "task-packets/MET-REPAIR-010.yaml" in record["protectedFiles"]
     assert {p.name for p in (ROOT / "schemas").glob("*.json")} == {
         Path(p).name for p in record["protectedFiles"] if p.startswith("schemas/")}
@@ -223,5 +223,5 @@ def test_dispatch_preserves_timing_failures_and_separate_evidence(authority):
     assert record["evidence"]["modelEffortTransition"] == "NOT_DUE"
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
     current = text.split("## Historical MET-PERF-001 publication checkpoint")[0]
-    assert "during `MET-REPAIR-012` publication" in current
+    assert "during `MET-REPAIR-013` publication" in current
     assert "CONF-FIX-004" in current and "CONF-LIVE-003" in current

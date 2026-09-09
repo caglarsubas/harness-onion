@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "planeon.internal.credential-ordering-vectors/v1",
+  "evidenceClass": "DATA_CHECK_ONLY",
+  "nativeAcceptance": false,
+  "tenantAcceptance": false,
+  "client": [
+    "AUTHORITY",
+    "ISOLATION",
+    "RESERVATION",
+    "CLIENT_ELIGIBILITY",
+    "CLIENT_CREDENTIAL",
+    "TLS_AUTHENTICATED",
+    "FIXED_REQUEST",
+    "RECEIPT_CHECKED",
+    "CLOSED"
+  ],
+  "server": [
+    "AUTHORITY",
+    "ISOLATION",
+    "POLICY_OBSERVED",
+    "RESERVATION",
+    "SERVER_TLS_CREDENTIAL",
+    "PEER_AUTHENTICATED",
+    "FIXED_REQUEST_CHECKED",
+    "POLICY_RECHECKED",
+    "UPSTREAM_CREDENTIAL",
+    "GENERATION_FENCED",
+    "FIXED_PROBE",
+    "POLICY_RECHECKED",
+    "RECEIPT_CANDIDATE",
+    "CLOSED"
+  ],
+  "serverWithoutResources": [
+    "AUTHORITY",
+    "ISOLATION",
+    "POLICY_OBSERVED",
+    "RESERVATION",
+    "SERVER_TLS_CREDENTIAL",
+    "PEER_AUTHENTICATED",
+    "FIXED_REQUEST_CHECKED",
+    "POLICY_RECHECKED",
+    "GENERATION_FENCED",
+    "FIXED_PROBE",
+    "POLICY_RECHECKED",
+    "RECEIPT_CANDIDATE",
+    "CLOSED"
+  ]
+}
