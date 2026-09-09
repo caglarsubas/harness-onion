@@ -223,6 +223,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 30. `MET-REPAIR-011`: publish the bounded retained-custody handoff correction, five-path CONF-FIX-004 packet, immutable original inventory and region/prefix source-delta checks.
 31. `MET-PERF-001`: measure and repair safe YAML parsing cost while preserving every assertion, both complete replays, timeouts and isolation; close independently before reconciling PR106.
 32. `MET-REPAIR-012`: publish the bounded credential lifecycle, five-path CONF-FIX-005 authority and cumulative source-accounting oracle.
+33. `MET-REPAIR-013`: publish the authentication-only client credential ordering exception, mandatory independent server admission and exact meta/source preservation checks.
 
 ## Testing, verification, and acceptance
 
