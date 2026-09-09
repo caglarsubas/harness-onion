@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_successor_inventory import (
     ADDITIONS, BASELINE_PATH, LAUNCHER_BEFORE_PATH, RECORD_PATH, TEST_BEFORE_PATH,
@@ -17,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_bytes()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_bytes()) for p in (ROOT / "task-packets").glob("*.yaml")}
     return packets, *load_successor_inputs(ROOT)
 
 
@@ -54,7 +55,7 @@ def vector(inputs, stage):
 def test_exact_catalog_checkpoint_and_historical_inventory(inputs):
     packets, record, raw = inputs
     assert validate_successor_inventory(*inputs) == []
-    assert len(packets) == 140 and len(record["protectedFiles"]) == 170 and len(raw) == 175
+    assert len(packets) == 141 and len(record["protectedFiles"]) == 170 and len(raw) == 175
     baseline = json.loads(raw[BASELINE_PATH])
     historical = json.loads(baseline["historical103Raw"])
     assert len(baseline["files"]) == 106 and sum(map(len, baseline["tests"].values())) == 150

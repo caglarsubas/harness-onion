@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_model_api_inventory import (
     EXPECTED_BEFORE, EXPECTED_META, EXPECTED_RECORD, amend_model_packet,
@@ -22,7 +23,7 @@ REQUIRED = (
 
 @pytest.fixture
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     record = json.loads((ROOT / "architecture/model-api-inventory-amendment.json").read_text())
     return packets, record, load_inventory_inputs(ROOT)
 
@@ -41,7 +42,7 @@ def candidate_pair(inputs):
 def test_current_authority_and_preserved_failure_evidence(inputs):
     packets, record, snapshots = inputs
     assert validate_model_api_inventory(*inputs) == []
-    assert len(packets) == 140
+    assert len(packets) == 141
     assert record["historicalPacketCount"] == 122
     assert record["baseline"]["passed"] == 758
     assert record["baseline"]["failed"] == record["baseline"]["skipped"] == 0
@@ -55,7 +56,7 @@ def test_current_authority_and_preserved_failure_evidence(inputs):
     assert record["testChange"]["diagnosis"] == "REPRODUCED_FIXED_INVENTORY_FAILURE"
     assert record["testChange"]["noServerFinding"] == "SOURCE_INSPECTION_ONLY_REMOVED_FROM_NEW_API"
     assert record["testChange"]["productPredicateEdit"] == "NOT_RUN"
-    before = yaml.safe_load(snapshots["architecture/model-api-inventory-inputs/CON-MODEL-001.before.yaml"])
+    before = safe_yaml_load(snapshots["architecture/model-api-inventory-inputs/CON-MODEL-001.before.yaml"])
     assert before == EXPECTED_BEFORE
     unchanged = deepcopy(before)
     after = amend_model_packet(before)

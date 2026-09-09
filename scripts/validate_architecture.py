@@ -17,6 +17,11 @@ from typing import Any, Iterable
 import jsonschema
 import yaml
 
+try:
+    from safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -141,7 +146,7 @@ class DuplicateJsonKeyError(ArchitectureValidationError):
     """Raised when a JSON mapping repeats a key."""
 
 
-class UniqueKeySafeLoader(yaml.SafeLoader):
+class UniqueKeySafeLoader(MetaSafeLoader):
     """PyYAML safe loader that refuses duplicate mapping keys."""
 
 

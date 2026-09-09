@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_linux_readiness import EXPECTED_PACKETS, validate_linux_readiness
 from scripts.validate_linux_repair import (
@@ -20,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     record = json.loads((ROOT / "architecture/linux-readiness-amendment.json").read_text())
     return packets, record, (ROOT / "architecture/linux-readiness.json").read_bytes()
 
@@ -30,7 +31,7 @@ def test_current_amendment_is_complete_and_historical_policy_unchanged(inputs):
     assert validate_linux_repair(packets, record, raw) == []
     assert validate_linux_readiness(packets, json.loads(raw)) == []
     assert validate_packet_ownership(packets) == []
-    assert len(packets) == 140
+    assert len(packets) == 141
     assert record["currentPacketCount"] == 120  # Consumed record is immutable.
     assert json.loads(raw)["currentPacketCount"] == 118
     assert record["baseline"]["reviewEvidence"] == "SOURCE_INSPECTION_ONLY"

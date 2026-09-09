@@ -8,6 +8,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +30,7 @@ BUILDER = _load_module("build_release_lock", ROOT / "scripts/build_release_lock.
 
 
 def fixture_document() -> dict:
-    document = yaml.safe_load(FIXTURE_PATH.read_text(encoding="utf-8"))
+    document = safe_yaml_load(FIXTURE_PATH.read_text(encoding="utf-8"))
     assert isinstance(document, dict)
     return document
 

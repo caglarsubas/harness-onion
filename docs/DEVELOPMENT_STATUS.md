@@ -1,7 +1,7 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
 Snapshot: 2026-09-09, during `MET-REPAIR-012` publication. Source authority only.
-Current catalog: 140 packets; thirteen repositories, four planes, sixteen harnesses.
+Current catalog: 141 packets; thirteen repositories, four planes, sixteen harnesses.
 
 | Phase | Packet / gate | Status | Description |
 |---|---|---|---|
@@ -10,7 +10,8 @@ Current catalog: 140 packets; thirteen repositories, four planes, sixteen harnes
 | Alpha 2 | MET-LIVE-001 / CON-MODEL-001 / CONF-LIVE-001/002 | DONE — recorded source gates | Contracts and supervisor candidate, not native qualification |
 | Alpha 2 | MET-REPAIR-009/010/011 | DONE — source gates | Proxy, observation and retained-custody authority |
 | Alpha 2 | CONF-FIX-004 | DONE — source/local/CI/merge/local exact-main | Main0aa3ef3, 127 files / 305 tests, zero skips |
-| Alpha 2 authority | MET-REPAIR-012 | ONGOING — publication | Bounded late-credential lifecycle and source-accounting authority |
+| Alpha 2 | MET-PERF-001 | DONE — source/local/CI/merge/local exact-main | PR107, main e367e89; both complete replays preserved |
+| Alpha 2 authority | MET-REPAIR-012 / PR106 | ONGOING — publication | Bounded late-credential lifecycle and source-accounting authority |
 | Alpha 2 correction | CONF-FIX-005 | WAITING | Five-path correction; product code not changed here |
 | Alpha 2 backend | CONF-LIVE-003 | WAITING — correction closure | Fixed transport, independent authentication and zero-cost admission |
 | Alpha 2 backend | CONF-LIVE-004/005/006 | WAITING | Fixed probes, reproducible packaging and integration |
@@ -33,13 +34,35 @@ exact-main passed all eight commands, 305 tests / zero skips. Log SHA256:
 Its actual 127/305 checkpoint and old 127/279 history remain separate.
 CONF-FIX-005 must preserve all 305 IDs and every behavioral assertion, with
 only the explicitly named source-accounting region changes. No product run
-or edit occurs in this meta publication; acceptance requires eighteen commands.
+or edit occurs in this meta publication; acceptance requires twenty commands.
 
 Prior nested-test timeout failures at unchanged 420 seconds remain recorded;
 timing stability UNRESOLVED. Only one bounded unchanged retry, no relaxed
 timeout, skipped coverage or weaker isolation. Alpha 2 ONGOING; effort transition
 NOT_DUE. No administrator authentication, root policy, key, dependency download,
 hosted runner, artifact upload, cloud action or bill.
+
+PR106 is being reconciled against accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060. Its earlier timeout logs are retained; old results do not validate the combined head. The new command set includes measurement and performance validation, with unchanged 420/900-second limits.
+
+## Historical MET-PERF-001 publication checkpoint
+
+The following complete publication snapshot is historical, not current dispatch authority.
+
+# Development checkpoint — Alpha 2 CI-performance repair
+
+Snapshot: 2026-09-09, during `MET-PERF-001` publication. Catalog 139.
+
+| Phase | ID / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations | DONE — recorded source/offline | Live acceptance separate |
+| Alpha 2 | MET-PERF-001 | ONGOING | Safe-parser cost repair; both complete replays and limits unchanged |
+| Alpha 2 | MET-REPAIR-012 / PR106 | WAITING | Separate unmerged draft; 420-second and 900-second failed CI evidence retained |
+| Alpha 2 | CONF-FIX-005 | WAITING | Product correction after accepted authority |
+| Alpha 2 | CONF-LIVE-003/004/005/006 | WAITING | Proxy, probes, packaging and integration |
+| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise matrix | WAITING | Existing roadmap unchanged |
+
+[Current repair](alpha-2/CI_PERFORMANCE_REPAIR.md): diagnostic corpus parsing was 2.94 times faster with the already installed LibYAML safe parser; full source/local/CI/merge/local exact-main remain separately required. No product or runtime acceptance. Alpha 2 ONGOING; effort transition NOT_DUE.
 
 ## Historical MET-REPAIR-011 publication checkpoint
 

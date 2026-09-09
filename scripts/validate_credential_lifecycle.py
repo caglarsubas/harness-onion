@@ -8,22 +8,25 @@ from pathlib import Path
 import yaml
 
 try:
+    from safe_yaml import safe_load as safe_yaml_load
     from validate_proxy_contract import canonical, digest, parse, regular_bytes
     from validate_custody_handoff import definitions, reconstruct_source, appended_definitions, require
     from validate_successor_inventory import packet_semantics
 except ImportError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
     from scripts.validate_proxy_contract import canonical, digest, parse, regular_bytes
     from scripts.validate_custody_handoff import definitions, reconstruct_source, appended_definitions, require
     from scripts.validate_successor_inventory import packet_semantics
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/credential-lifecycle-amendment.json"
-RECORD_SHA256 = "5d05d3d9685fcead82141aca9a0298bb22f97e9a4f9fd5ee19187402e2861317"
+RECORD_SHA256 = "851fd80ddeec7367405a3e8445e330290341e2b4d68bccf372c24a4b965c341c"
 ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005")
-PACKET_DIGESTS = {"MET-REPAIR-012": "ce2b7b4e25ee27e6afa9ec80d3be03e58709122772445db9208514aa2e16644f",
+PACKET_DIGESTS = {"MET-REPAIR-012": "bb53b3538a50a6c4e26b7f40c6697376c3cb1cc5e3947dad573c9d45d9253a1e",
                   "CONF-FIX-005": "abb7c2a19d54f84789c2656164e1e9ac66f822620173401fe93c50d61cc5cf2a"}
 BEFORE_PATH = "architecture/credential-lifecycle-inputs/before.json"
 CHECKPOINT_PATH = "architecture/credential-lifecycle-inputs/checkpoint.json"
+META_BEFORE_PATH = "architecture/credential-lifecycle-inputs/meta-tests.before.json"
 DOC_PATH = "docs/live-backend/linux-boundary.md"
 PROOF_FIELDS = {"schemaVersion", "evidenceClass", "packetId", "packetSha256", "authorityDigest",
                 "baseCommit", "baseTree", "before", "checkpoint", "sources", "tests"}
@@ -50,6 +53,61 @@ def load_credential_inputs(root):
     record = parse(regular_bytes(root, RECORD_PATH))
     pinned(record)
     return record, {p: regular_bytes(root, p) for p in {*record["protectedFiles"], *record["inputFiles"]}}
+
+
+def apply_meta_test_recipe(before, recipe):
+    """Closed byte substitutions only; the record is pinned by every caller."""
+    require(type(before) is bytes and type(recipe) is dict
+            and set(recipe) == {"beforeSha256", "afterSha256", "replacements"}
+            and digest(before) == recipe["beforeSha256"], "exact meta test before required")
+    require(type(recipe["replacements"]) is list, "ordered meta substitutions required")
+    after = before
+    for item in recipe["replacements"]:
+        require(type(item) is dict and set(item) == {"before", "after", "count"}
+                and type(item["before"]) is str and type(item["after"]) is str
+                and type(item["count"]) is int and item["count"] > 0
+                and item["before"] and item["before"] != item["after"], "effective closed substitution required")
+        old, new = item["before"].encode(), item["after"].encode()
+        require(after.count(old) == item["count"], "exact substitution cardinality required")
+        after = after.replace(old, new)
+    require(digest(after) == recipe["afterSha256"], "meta test after differs")
+    return after
+
+
+def reconcile_meta_test_bytes(before):
+    """Data-only bridge from accepted MET-PERF-001 tests, never a cached result."""
+    record = parse(regular_bytes(ROOT, RECORD_PATH))
+    pinned(record)
+    require(type(before) is bytes, "meta test bytes required")
+    recipes = [rule for rule in record["metaReconciliation"]["testRecipes"].values()
+               if rule["beforeSha256"] == digest(before)]
+    require(len(recipes) == 1, "exact accepted meta test required")
+    return apply_meta_test_recipe(before, recipes[0])
+
+
+def validate_meta_test_preservation(record, before_raw, current):
+    try:
+        pinned(record)
+        require(type(before_raw) is bytes and digest(before_raw) == record["inputFiles"][META_BEFORE_PATH],
+                "exact accepted meta test snapshot required")
+        before = parse(before_raw)
+        metadata = record["metaReconciliation"]
+        require(before["baseCommit"] == record["metaBaseline"] == metadata["baseCommit"], "meta baseline identity")
+        recipes = metadata["testRecipes"]
+        require(type(current) is dict and set(current) == set(before["files"]) == set(recipes),
+                "exact meta test inventory required")
+        try:
+            from validate_ci_performance import test_definitions
+        except ImportError:
+            from scripts.validate_ci_performance import test_definitions
+        for path, recipe in recipes.items():
+            old = before["files"][path].encode()
+            require(type(current[path]) is bytes and current[path] == apply_meta_test_recipe(old, recipe),
+                    "unreviewed meta assertion or body change")
+            require(test_definitions(old) == test_definitions(current[path]), "meta test identity changed")
+        return []
+    except (ValueError, TypeError, KeyError, AttributeError, SyntaxError, UnicodeError, RecursionError):
+        return ["invalid exact meta-test reconciliation"]
 
 
 def test_ids(raw):
@@ -186,13 +244,22 @@ def validate_credential_lifecycle(packets, record, inputs):
         pinned(record)
         errors = validate_additions(packets)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 138 and set(packets) == old | set(ADDITIONS), "138 predecessors plus two exact packets required")
+        require(len(old) == 139 and len(packets) == 141 and set(packets) == old | set(ADDITIONS),
+                "139 predecessors plus two exact packets required")
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input map required")
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "immutable input changed: " + path)
             if path.startswith("task-packets/"):
                 require(canonical(packets[Path(path).stem]) == packet_semantics(inputs[path]), "packet semantics differ")
+        require(not validate_meta_test_preservation(record, inputs[META_BEFORE_PATH],
+                    {p: inputs[p] for p in record["metaReconciliation"]["testRecipes"]}),
+                "all accepted meta test bytes required")
+        prefix = ["uv", "run", "--offline", "--frozen", "--no-sync", "python"]
+        prior_commands = packets["MET-PERF-001"]["offlineAcceptanceCommands"]
+        require(packets["MET-REPAIR-012"]["offlineAcceptanceCommands"] == [*prior_commands[:-2],
+                prefix + ["scripts/validate_credential_lifecycle.py"], *prior_commands[-2:]],
+                "all twenty cumulative commands required")
         checkpoint = parse(inputs[CHECKPOINT_PATH])
         before = parse(inputs[BEFORE_PATH])
         require(len(checkpoint["files"]) == 127 and checkpoint["testCount"] == 305
@@ -238,7 +305,7 @@ def validate_credential_lifecycle(packets, record, inputs):
 
 def main():
     try:
-        packets = {p.stem: yaml.safe_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
+        packets = {p.stem: safe_yaml_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
                    for p in (ROOT / "task-packets").glob("*.yaml")}
         errors = validate_credential_lifecycle(packets, *load_credential_inputs(ROOT))
     except (OSError, ValueError, TypeError, RecursionError, yaml.YAMLError):
@@ -246,7 +313,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential lifecycle authority valid: 140 packets; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Credential lifecycle authority valid: 141 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 

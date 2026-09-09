@@ -10,6 +10,11 @@ import textwrap
 import yaml
 
 try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
+try:
     from validate_proxy_contract import canonical, digest, parse, regular_bytes
     from validate_successor_inventory import packet_semantics
 except ImportError:
@@ -20,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/custody-handoff-amendment.json"
 RECORD_SHA256 = "26d0301045c60908850ec225fa497d73da4c4125c377e74a931d41c83d57c491"
 PACKET_DIGESTS = {"MET-REPAIR-011":"aaa070d5ea2e7a4f6cfea9578d87bf82b7e12d5ef6c75d8456ed366701c7d7c1","CONF-FIX-004":"79c00496cab7cf4531b5d65d7aa292c662ed2d27c840b6e4d8ce8aa015ebb289"}
-ADDITIONS = ("MET-REPAIR-011", "CONF-FIX-004", "MET-REPAIR-012", "CONF-FIX-005")
+ADDITIONS = ("MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005")
 BEFORE_PATH = "architecture/custody-handoff-inputs/baseline.json"
 DOC_PATH = "docs/live-backend/linux-boundary.md"
 PROOF_FIELDS = {"schemaVersion", "evidenceClass", "packetId", "packetSha256", "authorityDigest",
@@ -43,10 +48,14 @@ def validate_additions(packets):
         for name, checksum in PACKET_DIGESTS.items():
             require(digest(canonical(packets.get(name))) == checksum, "custody packet changed: " + name)
         try:
+            from validate_ci_performance import validate_additions as performance_additions
+        except ImportError:
+            from scripts.validate_ci_performance import validate_additions as performance_additions
+        try:
             from validate_credential_lifecycle import validate_additions as credential_additions
         except ImportError:
             from scripts.validate_credential_lifecycle import validate_additions as credential_additions
-        return credential_additions(packets)
+        return performance_additions(packets) + credential_additions(packets)
     except (TypeError, ValueError, RecursionError):
         return ["exact custody publication and correction packets required"]
 
@@ -270,7 +279,7 @@ def validate_custody_handoff(packets, record, inputs):
 
 def main():
     try:
-        packets = {p.stem: yaml.safe_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
+        packets = {p.stem: safe_yaml_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
                    for p in (ROOT / "task-packets").glob("*.yaml")}
         errors = validate_custody_handoff(packets, *load_custody_inputs(ROOT))
     except (OSError, ValueError, TypeError, RecursionError, yaml.YAMLError):
@@ -278,7 +287,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Custody handoff authority valid: 140 packets; 127-file/279-ID history preserved; product/native NOT_RUN.")
+        print("Custody handoff authority valid: 141 packets; 127-file/279-ID history preserved; product/native NOT_RUN.")
     return int(bool(errors))
 
 

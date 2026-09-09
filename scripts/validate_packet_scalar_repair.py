@@ -11,6 +11,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/packet-scalar-amendment.json"
 RECORD_SHA256 = "cc083e1bc1b1551ba88a85316074a09434e73d8271355b6011e8f11dbce6a8e0"
@@ -79,7 +84,7 @@ def validate_additions(packets: Any) -> list[str]:
 
 @lru_cache(maxsize=256)
 def _packet_digest(raw: bytes) -> str:
-    return digest(canonical(yaml.safe_load(raw)))
+    return digest(canonical(safe_yaml_load(raw)))
 
 
 def validate_edit(path: str, before: bytes, after: bytes, record: Any) -> list[str]:
@@ -153,7 +158,7 @@ def validate_scalar_repair(packets: Any, record: Any, inputs: Any) -> list[str]:
 
 def main() -> int:
     try:
-        packets = {p.stem: yaml.safe_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
+        packets = {p.stem: safe_yaml_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
                    for p in (ROOT / "task-packets").glob("*.yaml")}
         errors = validate_scalar_repair(packets, *load_scalar_inputs(ROOT))
     except (OSError, TypeError, ValueError, RecursionError, yaml.YAMLError) as exc:
@@ -161,7 +166,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Scalar repair authority valid: 140 packets; historical 132-packet record and 164 predecessor files unchanged.")
+        print("Scalar repair authority valid: 141 packets; historical 132-packet record and 164 predecessor files unchanged.")
     return int(bool(errors))
 
 

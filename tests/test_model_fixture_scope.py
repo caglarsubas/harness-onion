@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_model_fixture_scope import (
     EXPECTED_BEFORE, EXPECTED_META, EXPECTED_RECORD, amend_model_packet,
@@ -19,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     record = json.loads((ROOT / "architecture/model-fixture-scope-amendment.json").read_text())
     return packets, record, load_scope_inputs(ROOT)
 
@@ -27,18 +28,18 @@ def inputs():
 def test_current_authority_and_historical_bytes_agree(inputs):
     packets, record, snapshots = inputs
     assert validate_model_fixture_scope(*inputs) == []
-    assert len(packets) == 140
+    assert len(packets) == 141
     assert record["historicalPacketCount"] == 121
     assert record["baseline"]["passed"] == 758
     assert record["baseline"]["failed"] == record["baseline"]["skipped"] == 0
     assert record["testChange"]["diagnosis"] == "SOURCE_INSPECTION_ONLY"
     assert record["testChange"]["productImplementation"] == "NOT_RUN"
-    before = yaml.safe_load(snapshots["architecture/model-fixture-inputs/CON-MODEL-001.before.yaml"])
+    before = safe_yaml_load(snapshots["architecture/model-fixture-inputs/CON-MODEL-001.before.yaml"])
     assert before == EXPECTED_BEFORE
     unchanged = deepcopy(before)
     after = amend_model_packet(before)
     assert before == unchanged
-    assert after == yaml.safe_load(snapshots["task-packets/CON-MODEL-001.yaml"])
+    assert after == safe_yaml_load(snapshots["task-packets/CON-MODEL-001.yaml"])
     assert amend_inventory_packet(after) == packets["CON-MODEL-001"]
     assert after["predecessors"] == before["predecessors"] + ["MET-REPAIR-005"]
     assert after["allowedPaths"] == before["allowedPaths"] + ["tests/golden/test_generated_contracts.py"]

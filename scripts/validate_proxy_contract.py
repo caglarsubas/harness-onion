@@ -11,12 +11,17 @@ import stat
 import jsonschema
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/proxy-contract-amendment.json"
 RECORD_SHA256 = "bf9b679d00e7ecd98b9d8c576ecd17201145a281c0019c2ca718607483048733"
 PACKET_SHA256 = "91d5beb52180cb106b286cc298d4665ceb1ff186f9bb0d7770df5c01b8712426"
 SCHEMA_SHA256 = "e3f3c175b51b0f93b6865e37d7d27624403891cc372542d719bc34a8381884a6"
-ADDITIONS = ("MET-REPAIR-009", "MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004", "MET-REPAIR-012", "CONF-FIX-005")
+ADDITIONS = ("MET-REPAIR-009", "MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005")
 CASES = ["HOST_ISOLATION_NEGATIVES","LINUX_TARGET_BUILD","FULL_PREDECESSOR_REGRESSION","CONTROL_CONTAINER_STARTUP","POSTGRES_MIGRATION_AND_RLS","DURABLE_RESTART","ARBITRARY_NON_ROOT_UID","READ_ONLY_ROOT_FILESYSTEM","KUBERNETES_SMOKE","DEFAULT_DENY_NETWORK"]
 PATHS = ["/v1/linux-baseline/" + item.lower().replace("_", "-") for item in CASES]
 
@@ -223,7 +228,7 @@ def validate_proxy_contract(packets, record, inputs):
             raw = inputs.get(path)
             if type(raw) is not bytes or digest(raw) != checksum:
                 errors.append("immutable proxy input changed: " + path)
-            elif path.startswith("task-packets/") and canonical(packets.get(Path(path).stem)) != canonical(yaml.safe_load(raw)):
+            elif path.startswith("task-packets/") and canonical(packets.get(Path(path).stem)) != canonical(safe_yaml_load(raw)):
                 errors.append("packet semantics/bytes differ: " + path)
         baseline = parse(inputs["architecture/proxy-contract-inputs/baseline.json"])
         if (baseline["commit"] != record["sourceBaseline"]["commit"] or len(baseline["files"]) != 127
@@ -244,7 +249,7 @@ def validate_proxy_contract(packets, record, inputs):
 
 def main():
     try:
-        packets = {p.stem: yaml.safe_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
+        packets = {p.stem: safe_yaml_load(regular_bytes(ROOT, str(p.relative_to(ROOT))))
                    for p in (ROOT / "task-packets").glob("*.yaml")}
         errors = validate_proxy_contract(packets, *load_proxy_inputs(ROOT))
     except (OSError, ValueError, TypeError, RecursionError, yaml.YAMLError) as exc:
@@ -252,7 +257,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Proxy prerequisite valid: 140 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.")
+        print("Proxy prerequisite valid: 141 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

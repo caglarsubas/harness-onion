@@ -1,9 +1,10 @@
 # Master Development Plan
 
 Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
-Catalog 140; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
+Catalog 141; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
 CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
+Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
 ## Purpose
 
@@ -268,7 +269,7 @@ The [R1-R4 readiness amendment](alpha-2/LINUX_READINESS_REPAIRS.md) supersedes t
 unamended conformance dispatch order above: MET-LINUX-002 (source complete),
 MET-REPAIR-003 (authority), CONF-FIX-001 (source boundary repair), then
 CONF-LINUX-001 (campaign source and separately authorized native evidence).
-That publication contained 120 packets; the current queue contains 140 across the same thirteen repositories/sixteen harnesses.
+That publication contained 120 packets; the current queue contains 141 across the same thirteen repositories/sixteen harnesses.
 Explicit full-suite discovery and closed result-handler additions are mandatory.
 Retiring the untrusted live-adapter path does not build or install a trusted live
 backend. Neither amendment nor corrected source opens the fresh native AMD64
@@ -288,7 +289,7 @@ remain gated. No product or host installation occurs in the meta publication.
 
 ## Model fixture-copy authority — MET-REPAIR-005
 
-That publication contained 122 packets; the current catalog has 140. The preceding
+That publication contained 122 packets; the current catalog has 141. The preceding
 121-packet Linux test publication is historical; its consumed bytes are unchanged.
 The [exact helper-copy grant](alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md) completed
 localhost PR CI and exact-main replay before the model draft started.
@@ -312,7 +313,7 @@ review. Source, offline, CI, merge, native Linux and tenant gates stay separate.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 140. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 141. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.

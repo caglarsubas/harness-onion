@@ -1,7 +1,43 @@
 # Bounded credential lifecycle — MET-REPAIR-012 / CONF-FIX-005
 
 Alpha 2 · approved 2026-09-09 · source-only authority.
-140 packets, thirteen repositories, four planes, sixteen harnesses.
+141 packets, thirteen repositories, four planes, sixteen harnesses.
+
+## Reconciliation with accepted performance main
+
+This unmerged authority is reconciled with MET-PERF-001 main
+e367e89463b86ebc1b1e20563d677bdfe6694060 (PR107). All 139 predecessor
+packet YAML, performance authority/snapshot/parser/measurement bytes and existing
+source locks remain unchanged. The new two packets bring the catalog to 141.
+This is still one MET-REPAIR-012 branch/PR/run, not a product implementation.
+
+The accepted performance checkpoint passed all nineteen commands on its head,
+required localhost CI34310950326 and independent local exact-main. Its final
+outer suite had 2390 passed / ten existing skips in 240.47 seconds; nested 2141
+passed / ten existing skips in 114.16 seconds. Those results do not validate
+this combined head. Both earlier PR106 timeout logs remain retained:
+a9fe028fb7c4c1c56b9d44324e4b0cea12156d7d9375d49ab3537be839eece5b
+and 7a039daf67e188fe529113f1988ae857d8cd77e7962744a8c0879f49fcfdbe79.
+
+Current acceptance runs twenty exact commands: the full unchanged performance
+command sequence plus credential-lifecycle validation immediately before pytest.
+Both complete fresh replays remain; nested 420 seconds, trusted 900 seconds and
+workflow fifteen minutes remain unchanged. Use the already installed safe YAML
+helper in the newly published credential validator/test fixtures; no cache,
+monkeypatch, dependency or parser change is introduced.
+
+The exact meta-test bridge preserves the historical 139-packet reconstruction
+and checks current bytes independently. It pins 21 accepted test files, permitting
+only the explicit current catalog 139-to-141 and corpus 155-to-157 literals,
+named current-status bindings, and the performance test import binding to that
+closed bridge. Every other byte, assertion, ID, parameter and marker is unchanged.
+Unknown paths, ineffective/ambiguous substitutions, changed snapshots, forged
+packets and arbitrary test edits fail closed. No future-file/hash exemption.
+The original MET-PERF-001 record and before-test snapshot are not rewritten.
+
+Source/local/required CI/merge/local exact-main must close afresh before
+CONF-FIX-005. No product credential behavior, public contract, native boundary,
+root policy or billable surface changes during this reconciliation.
 
 ## Verified checkpoint and diagnosis
 
@@ -161,7 +197,8 @@ No actual credential, socket, certificate issuance, native isolation or probe ru
 |---|---|---|---|
 | Phase 0 / Alpha 1 | Recorded foundations | DONE source/offline | Live acceptance separate |
 | Alpha 2 | MET-REPAIR-011 / CONF-FIX-004 | DONE source gates | Retained 127/305 checkpoint |
-| Alpha 2 | MET-REPAIR-012 | ONGOING | This authority, eighteen commands |
+| Alpha 2 | MET-PERF-001 | DONE source gates | Accepted main e367e89; historical proof retained |
+| Alpha 2 | MET-REPAIR-012 | ONGOING | Reconciled authority, twenty commands |
 | Alpha 2 | CONF-FIX-005 | WAITING | Five-path correction, eight commands |
 | Alpha 2 | CONF-LIVE-003 | WAITING | Consume corrected source closure |
 | Alpha 2 | CONF-LIVE-004/005/006 | WAITING | Probes, packaging, integration |

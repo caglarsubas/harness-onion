@@ -11,6 +11,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PROHIBITED_KEYS = {"$comment", "description", "example", "examples", "raw", "sourceRoot", "sourceText", "title"}
@@ -24,7 +29,7 @@ def validate(path: Path, packet_id: str) -> list[str]:
     errors: list[str] = []
     try:
         report = json.loads(path.read_text(encoding="utf-8"))
-        packet = yaml.safe_load((ROOT / f"task-packets/{packet_id}.yaml").read_text(encoding="utf-8"))
+        packet = safe_yaml_load((ROOT / f"task-packets/{packet_id}.yaml").read_text(encoding="utf-8"))
     except (OSError, ValueError, yaml.YAMLError) as exc:
         return [f"cannot load observation authority: {exc}"]
 

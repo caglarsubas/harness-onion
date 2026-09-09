@@ -1,7 +1,7 @@
 # ADR 0004: Sol-High task packets are the executable change boundary
 
 Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](../alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
-Catalog 140; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
+Catalog 141; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
 CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
 
@@ -194,7 +194,7 @@ is added; source, PR, exact-main and native acceptance remain separate.
 
 ## MET-REPAIR-006: exact additive API inventory ownership
 
-The current catalog has 140 packets. The consumed MET-REPAIR-005 packet and
+The current catalog has 141 packets. The consumed MET-REPAIR-005 packet and
 record remain unchanged; its whole model-packet pin is read from the immutable
 pre-amendment snapshot, while the exact successor is separately validated.
 Only the required-five subset predicate is authorized in the named lifecycle
@@ -320,7 +320,7 @@ no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_
 ## Approved bounded credential lifecycle — MET-REPAIR-012
 
 The [credential-lifecycle correction](../alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md) publishes
-MET-REPAIR-012 and CONF-FIX-005: 140 packets, unchanged thirteen repositories,
+MET-REPAIR-012 and CONF-FIX-005: 141 packets, unchanged thirteen repositories,
 four planes and sixteen harnesses. Preserve all 138 predecessor packet bytes.
 CONF-FIX-004 closed at 0aa3ef3027f4a156d7ebed1b56af244e021d080a, 127 files / 305 tests;
 its historical proof remains unchanged. CONF-FIX-005 supplies narrowly owned

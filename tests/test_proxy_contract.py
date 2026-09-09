@@ -8,6 +8,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_proxy_contract import (CASES, RECORD_SHA256, canonical, digest,
     load_proxy_inputs, parse, regular_bytes, validate_additions, validate_profile, validate_proxy_contract)
@@ -19,7 +20,7 @@ VECTORS = json.loads((ROOT / "architecture/proxy-contract-inputs/vectors.json").
 
 @pytest.fixture
 def authority():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     return packets, *load_proxy_inputs(ROOT)
 
 
@@ -46,7 +47,7 @@ REQUIRED_FIELDS = [(path, key) for path, obj in nested_objects(VECTORS["positive
 def test_exact_catalog_profile_and_recorded_source_checkpoint(authority):
     packets, record, inputs = authority
     assert validate_proxy_contract(*authority) == []
-    assert len(packets) == 140 and len(record["protectedFiles"]) == 176
+    assert len(packets) == 141 and len(record["protectedFiles"]) == 176
     assert digest(canonical(record)) == RECORD_SHA256
     baseline = parse(inputs["architecture/proxy-contract-inputs/baseline.json"])
     assert len(baseline["files"]) == 127 and baseline["testCount"] == 279

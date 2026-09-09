@@ -10,6 +10,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_RECORD = json.loads(r'''{"schemaVersion":"harness.planeon.ai/linux-test-ownership-amendment/v1","authorityPacket":"MET-REPAIR-004","approvalDate":"2026-09-07","historicalPacketCount":120,"currentPacketCount":121,"historicalAmendmentSha256":"3a59552dbadd6a9e7579038523787926b921c35a3c71d036d2705b1c95b804a6","historicalLinuxPacketSha256":"818c9bbe5c900f53201a4e34c65b5806edfe908f41e820af9d73575c68d5b704","packetDigests":{"MET-REPAIR-004":"3217293d977e25f0c6e7f6e6bb0134c27d840fd8769dc285494ecc7f351f6d94","CONF-LINUX-001":"22f00544680f90a90b03420632bebf192a8c687549b519770fca5f98dd5fd6c9"},"sourceBaseline":{"repository":"mas-harness-conformance-labs","commit":"07453d3e6313c836426545c454380176bc2a2ee1","tree":"03524ab71fe8832b40648bd29222cd9c438d5861","pullRequest":4,"requiredCiRun":34052209212,"requiredCiJob":101537713213,"exactMainExecution":"LOCAL_SIGNED_HOST_OFFLINE_REPLAY","exactMainLogSha256":"c793655198e8e0c3dfa9f5a596618b25a579e5dffc74549bd72473847c7ec889","sourceTestsPassed":83,"sourceTestsSkipped":0,"linuxAcceptance":false,"liveAcceptance":false},"testChange":{"path":"tests/meta/test_canonical_schema.py","beforeSha256":"4ff004974fc75c6ea15010eedb9d1596c002330b33596c64a888622f0bd02c8f","method":"CanonicalSchemaTests.test_closed_vocabularies","beforeStatement":"self.assertEqual(len(HANDLERS), 5)","afterStatement":"self.assertEqual(HANDLERS, (\"STATIC_ASSERTION\", \"SCHEMA_ASSERTION\", \"LIFECYCLE_ASSERTION\", \"EVENT_ASSERTION\", \"ENVIRONMENT_CAPABILITY\", \"LINUX_READINESS\"))","otherBytes":"UNCHANGED","otherAssertions":"UNCHANGED","additionalPaths":["tests/meta/test_canonical_schema.py"],"negativeCasesOwner":"tests/platform/linux_baseline/","diagnosis":"SOURCE_INSPECTION_ONLY","productImplementation":"NOT_RUN"},"preserved":{"handlerAddition":"LINUX_READINESS_ONLY","offlineAndLiveCommands":7,"predecessorTests":83,"inventoryHelper":"UNCHANGED","runtimeCodingRequires":"FRESH_NATIVE_LINUX_AMD64_PASS","nativeLinuxStatus":"NOT_RUN_ENV_UNAVAILABLE","liveBackendStatus":"NOT_RUN_ENV_UNAVAILABLE","billingBoundary":"UNCHANGED","modelEffortTransition":"NOT_DUE"},"evidenceBoundary":"AUTHORITY_ONLY_NOT_PRODUCT_TEST_CHANGE_NATIVE_LINUX_OR_TENANT_ACCEPTANCE"}''')
 PACKET_DIGESTS = EXPECTED_RECORD["packetDigests"]
@@ -53,8 +58,8 @@ def validate_linux_test_ownership(packets: Any, record: Any, historical_bytes: b
         errors.append("consumed 120-packet amendment must remain byte-identical")
     if not isinstance(packets, dict):
         return [*errors, "Linux assertion ownership requires a packet mapping"]
-    if len(packets) != 140:
-        errors.append("Current catalog requires exactly 140 packets; Linux ownership record remains 121")
+    if len(packets) != 141:
+        errors.append("Current catalog requires exactly 141 packets; Linux ownership record remains 121")
     for packet_id, expected in PACKET_DIGESTS.items():
         if packet_digest(packets.get(packet_id)) != expected:
             errors.append(packet_id + " exact assertion-only authority changed")
@@ -63,7 +68,7 @@ def validate_linux_test_ownership(packets: Any, record: Any, historical_bytes: b
 
 def main() -> int:
     try:
-        packets = {p.stem: yaml.safe_load(p.read_text()) for p in sorted((ROOT / "task-packets").glob("*.yaml"))}
+        packets = {p.stem: safe_yaml_load(p.read_text()) for p in sorted((ROOT / "task-packets").glob("*.yaml"))}
         record = json.loads((ROOT / "architecture/linux-test-ownership-amendment.json").read_text())
         old = (ROOT / "architecture/linux-readiness-amendment.json").read_bytes()
         errors = validate_linux_test_ownership(packets, record, old)
@@ -73,7 +78,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Linux test ownership valid: 140 packets; historical one-assertion grant preserved; native/live acceptance unproven.")
+        print("Linux test ownership valid: 141 packets; historical one-assertion grant preserved; native/live acceptance unproven.")
     return int(bool(errors))
 
 

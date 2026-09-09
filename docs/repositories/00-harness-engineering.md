@@ -1,9 +1,10 @@
 # Repository Plan: `Harness-Engineering`
 
 Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](../alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
-Catalog 140; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
+Catalog 141; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
 CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
 Older publication sections below retain their historical states, not current instructions.
+Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
 ## Purpose and boundaries
 
@@ -220,7 +221,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 28. `MET-REPAIR-009`: publish strict proxy authentication/admission profile, immutable 127-file/279-ID source checkpoint and additional dispatch prerequisite.
 29. `MET-REPAIR-010`: publish protected read-only policy observation, exact custody/freshness/generation contracts and unchanged campaign-permission regressions.
 30. `MET-REPAIR-011`: publish the bounded retained-custody handoff correction, five-path CONF-FIX-004 packet, immutable original inventory and region/prefix source-delta checks.
-31. `MET-REPAIR-012`: publish the bounded credential lifecycle, five-path CONF-FIX-005 authority and cumulative source-accounting oracle.
+31. `MET-PERF-001`: measure and repair safe YAML parsing cost while preserving every assertion, both complete replays, timeouts and isolation; close independently before reconciling PR106.
+32. `MET-REPAIR-012`: publish the bounded credential lifecycle, five-path CONF-FIX-005 authority and cumulative source-accounting oracle.
 
 ## Testing, verification, and acceptance
 
@@ -338,7 +340,7 @@ current successor. No consumed authority, root installation or product edit.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 140. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 141. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.

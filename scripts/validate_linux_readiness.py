@@ -9,6 +9,11 @@ from typing import Any
 import yaml
 
 try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
+try:
     from validate_linux_repair import amend_linux_packet
     from validate_linux_test_ownership import amend_linux_test_packet
 except ModuleNotFoundError:
@@ -544,8 +549,8 @@ def validate_linux_readiness(packets: Any, policy: Any) -> list[str]:
         errors.append("Linux publication policy changed or claims unverified readiness")
     if not isinstance(packets, dict):
         return [*errors, "Linux packet catalog must be an object"]
-    if len(packets) != 140:
-        errors.append("Current catalog requires 140 packets; original Linux policy remains 118")
+    if len(packets) != 141:
+        errors.append("Current catalog requires 141 packets; original Linux policy remains 118")
     for packet_id, expected in EXPECTED_PACKETS.items():
         if packet_id == "CONF-LINUX-001":
             expected = amend_linux_test_packet(amend_linux_packet(expected))
@@ -566,7 +571,7 @@ def validate_linux_readiness(packets: Any, policy: Any) -> list[str]:
 
 def main() -> int:
     packets = {
-        path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
+        path.stem: safe_yaml_load(path.read_text(encoding="utf-8"))
         for path in sorted((ROOT / "task-packets").glob("*.yaml"))
     }
     errors = validate_linux_readiness(
@@ -576,7 +581,7 @@ def main() -> int:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("Linux roadmap authority valid: 140 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.")
+    print("Linux roadmap authority valid: 141 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.")
     return 0
 
 

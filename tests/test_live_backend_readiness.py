@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_live_backend_readiness import (
     NEW_IDS, RUNTIME_GATED, load_live_inputs, regular_bytes,
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     record, raw = load_live_inputs(ROOT)
     return packets, record, raw
 
@@ -24,7 +25,7 @@ def inputs():
 def test_exact_catalog_and_real_source_checkpoint(inputs):
     packets, record, raw = inputs
     assert validate_live_backend_readiness(*inputs) == []
-    assert len(packets) == 140 and len(raw) == 156
+    assert len(packets) == 141 and len(raw) == 156
     assert record["historicalPacketCount"] == 123
     assert (record["repositoryCount"], record["harnessCount"]) == (13, 16)
     assert [c["passed"] for c in record["checkpoints"]] == [1295, 1175, 120]
