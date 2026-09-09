@@ -30,7 +30,7 @@ RECORD_PATH = "architecture/policy-observation-amendment.json"
 RECORD_SHA256 = "a579f7464ddd1b8de2e888734b9c249f13e9fccc02ad3001e6114f1d74332734"
 PACKET_SHA256 = "fe936ede385abb790dbba18d05fa007184296eb81bd23fcf5ae5d14e0b8be112"
 SCHEMA_SHA256 = "d4ac4deef49bea39ff7d010e3fe75d75ac446b3d87db4b2e59ee49ef12d02e72"
-ADDITIONS = ("MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013")
+ADDITIONS = ("MET-REPAIR-010", "MET-REPAIR-011", "CONF-FIX-004", "MET-PERF-001", "MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014")
 ZERO = "sha256:" + "0" * 64
 POLICIES = ("admissionPolicy", "resourceQuota", "limitRange", "serviceAccount",
             "rbac", "networkPolicy", "mutationBroker")
@@ -184,7 +184,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Policy observation authority valid: 142 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Policy observation authority valid: 143 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 

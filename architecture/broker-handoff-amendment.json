@@ -1,0 +1,1829 @@
+{
+  "schemaVersion": "planeon.internal.broker-handoff-amendment/v1",
+  "packetId": "MET-REPAIR-014",
+  "evidenceClass": "SOURCE_AUTHORITY_ONLY",
+  "nativeAcceptance": false,
+  "tenantAcceptance": false,
+  "metaBaseline": "d603672e7d2729e6547721e831fd6f6e8bce49a7",
+  "sourceBaseline": {
+    "commit": "9df7dd7f2df8ac64096ef37d8df259761947d552",
+    "tree": "1310cc74cc0ed39cfeb1068e998a0f78502a4be4",
+    "fileCount": 127,
+    "testCount": 327
+  },
+  "ownedPaths": [
+    "architecture/broker-handoff-amendment.json",
+    "architecture/broker-handoff-inputs/channel.schema.json",
+    "architecture/broker-handoff-inputs/meta-before.json",
+    "architecture/broker-handoff-inputs/vectors.json",
+    "docs/DEVELOPMENT_STATUS.md",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/READINESS_INDEX.md",
+    "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+    "docs/adr/0004-sol-high-packet-boundary.md",
+    "docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+    "docs/alpha-2/LIVE_BACKEND_READINESS.md",
+    "docs/repositories/00-harness-engineering.md",
+    "docs/repositories/12-mas-harness-conformance-labs.md",
+    "scripts/validate_broker_handoff.py",
+    "scripts/validate_ci_performance.py",
+    "scripts/validate_credential_lifecycle.py",
+    "scripts/validate_credential_ordering.py",
+    "scripts/validate_custody_handoff.py",
+    "scripts/validate_linux_readiness.py",
+    "scripts/validate_linux_repair.py",
+    "scripts/validate_linux_test_ownership.py",
+    "scripts/validate_live_backend_readiness.py",
+    "scripts/validate_model_api_inventory.py",
+    "scripts/validate_model_fixture_scope.py",
+    "scripts/validate_packet_scalar_repair.py",
+    "scripts/validate_policy_observation.py",
+    "scripts/validate_proxy_contract.py",
+    "scripts/validate_readiness.py",
+    "scripts/validate_readiness_repairs.py",
+    "scripts/validate_reuse.py",
+    "scripts/validate_successor_inventory.py",
+    "task-packets/MET-REPAIR-014.yaml",
+    "task-packets/README.md",
+    "tests/test_alpha2_readiness.py",
+    "tests/test_broker_handoff.py",
+    "tests/test_ci_performance.py",
+    "tests/test_credential_lifecycle.py",
+    "tests/test_credential_ordering.py",
+    "tests/test_custody_handoff.py",
+    "tests/test_linux_readiness.py",
+    "tests/test_linux_repair.py",
+    "tests/test_linux_test_ownership.py",
+    "tests/test_live_backend_readiness.py",
+    "tests/test_model_api_inventory.py",
+    "tests/test_model_fixture_scope.py",
+    "tests/test_packet_scalar_repair.py",
+    "tests/test_policy_observation.py",
+    "tests/test_proxy_contract.py",
+    "tests/test_reuse.py",
+    "tests/test_successor_inventory.py",
+    "tests/test_task_packets.py"
+  ],
+  "stages": [
+    110,
+    120,
+    127,
+    135,
+    141,
+    146,
+    151
+  ],
+  "protocol": {
+    "id": "BROKER_CONTROLLED_EXECUTION_V1",
+    "socket": "/run/planeon/live-proxy/capacity-broker.sock",
+    "family": "AF_UNIX",
+    "type": "SOCK_SEQPACKET",
+    "brokerExecutable": "/opt/planeon/bin/harness-capacity-broker",
+    "brokerManifest": "/etc/planeon/harness-capacity-broker-manifest.json",
+    "workerExecutable": "/opt/planeon/bin/harness-live-probe-exec",
+    "workerManifest": "/etc/planeon/harness-live-probe-manifest.json",
+    "bindingPath": "campaigns/platform/linux-baseline/broker-execution-binding.json",
+    "workerEntry": "live_fixed_probes.broker_worker_main",
+    "workerArgv": [
+      "/opt/planeon/bin/harness-live-probe-exec"
+    ],
+    "workerInheritedControlFd": 3,
+    "serverOwnsApiCredential": true,
+    "brokerOwnsWorker": true,
+    "returnedExecutionGrant": false,
+    "observerOperation": "OBSERVE_POLICY",
+    "publicWireChange": false,
+    "networkEndpointChange": false,
+    "kubernetesGrantChange": false,
+    "qualifiedOperatorBackendRequired": true,
+    "backendAvailability": "NOT_RUN_ENV_UNAVAILABLE"
+  },
+  "protectedFiles": {
+    ".github/workflows/verify.yml": "b6b8c87fc5f9615c193594c7a861a59e55022acfdb1dc9970c903af9fca22dee",
+    ".gitignore": "95f51bf2adc1adf30cc0f74ef7e4449a910b66c0d2656ef41f91dea09de409bd",
+    ".impeccable.md": "a003261408f0911dae19de8405fa1fa75be4472f7db647ceda001df324c30106",
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "BILLING_POLICY.md": "a6cc00dd61373ba9b062174862f4232f19df7bf6790115c2fc9d189719ce87fd",
+    "CONTRIBUTING.md": "2a59bc842e08552348bfca5c9bcb3977c24e7c9827e03ebff5575d27602195dc",
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "Makefile": "c12c2ec279c033f91fd0ccee94df05090e012eb592485b3398ebc58e8c062afa",
+    "NOTICE": "acc8acc6c5c1a11e425276d169b34509d5374a4b958e76cd866facde0a268624",
+    "README.md": "39009aaa14673b74a60f30e9aee8b621a06dc727520c9da4a1938f57badd53b9",
+    "SECURITY.md": "43212de85ed67d7e1f4bcb4d49c40d1acc01fbdc5fde807f0d24c35447dd0b92",
+    "architecture/base-scope-sources.yaml": "38b19648432f8394f28a0115ffd11995f0d9843891f864af0c2dd6ac677dd2eb",
+    "architecture/ci-performance-amendment.json": "2716be38eee78aefa1b3269a3a30659ae101794da25b9ee6ab30afefbbd19b38",
+    "architecture/ci-performance-inputs/tests.before.json": "11fe1351bd83f0ccb36487897bbc8b8171c26c4074156e512288348a16c836c3",
+    "architecture/credential-lifecycle-amendment.json": "e4f036bce09ebdea17b2b2d25d6a65678b88ec6e5dd7c18f550c3b45b6061da8",
+    "architecture/credential-lifecycle-inputs/before.json": "9176a8d22bab88e48111d53540815ea8be9b2987c43ddfe824de6664971b640e",
+    "architecture/credential-lifecycle-inputs/checkpoint.json": "88b02e2cea777d57723f3d5f6f1309213c93389343084c714ddd92393e5fae95",
+    "architecture/credential-lifecycle-inputs/meta-tests.before.json": "432d5dd6b85df90eba864cf73aa9d5e2cbebf999f7ccde85f72be4e4982f8a53",
+    "architecture/credential-ordering-amendment.json": "b4d367b1ff29c92f75304504e30920da25fd682b691f14aabf5f8705d0544c21",
+    "architecture/credential-ordering-inputs/checkpoint.json": "25f86c5ac11bb65b8ae25c51dd5d5df9c7860ddc824ef9a10de118440a3bf696",
+    "architecture/credential-ordering-inputs/meta-before.json": "5aed1292ff416c92a363ff34e0d570a152fb8029048701bd8b3fe77c69a486ff",
+    "architecture/credential-ordering-inputs/source-before.json": "37a44c19ef3e71b24de4332fe02211f94bdf7a1ac099a7f685b8d491932c7dce",
+    "architecture/credential-ordering-inputs/vectors.json": "94de69be63e466212d158627eccb9d4a014dd709ecb71fbe4ff886145b8f9c49",
+    "architecture/custody-handoff-amendment.json": "81a95c9d1b84aae1ae71d7fa293931fc1118eacd2083051d353875e7b55e2180",
+    "architecture/custody-handoff-inputs/baseline.json": "9053162f5249e75584c334fc6898444e6c7220b1cf116f8efb348a6658165ca6",
+    "architecture/dependency-graph.yaml": "47986eff1832f2ed990bb9ceb2cd9aab574475df0bc20f2a39ac91c985cfd50f",
+    "architecture/linux-readiness-amendment.json": "3a59552dbadd6a9e7579038523787926b921c35a3c71d036d2705b1c95b804a6",
+    "architecture/linux-readiness.json": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+    "architecture/linux-test-ownership-amendment.json": "5aa1e79de247ebed7550b56db48266182941232d9036840beade99fbcf11172f",
+    "architecture/live-backend-roadmap.json": "06d55fab0d0e56cbbdedab975fd4e2371f06896a6298e96c8c4e23c5e50916e7",
+    "architecture/model-api-inventory-amendment.json": "7f298fdb1db878105d9925b5b07500f9cb6298f8b887d87d91edbc6210b48c7b",
+    "architecture/model-api-inventory-inputs/CON-MODEL-001.before.yaml": "fff08209e76c2287c257a8d37a29aba159f82019e70f51d36bcaebf9d6805f33",
+    "architecture/model-api-inventory-inputs/test_lifecycle_contracts.before.txt": "53f528db6e9d3ce00a8c16e8cf24345a992b2b6130cdfb7d5a6dee02dbaed81e",
+    "architecture/model-evidence-boundary.json": "5be8de011a0cc4769b919ce0a416cb73d791c92181920abca7e8793abb788b48",
+    "architecture/model-fixture-inputs/CON-MODEL-001.before.yaml": "807efc83ddd77e27e19d0e7d53811321c9b00c95972b53e78b263f385fd41d48",
+    "architecture/model-fixture-inputs/test_generated_contracts.before.txt": "856b1d14e0f4d4ee84f6c4f973db412f9905559124091355bec7de85cc818080",
+    "architecture/model-fixture-scope-amendment.json": "e46ea246e0ab64d7d6882822739b3029659138711f2bb426ea26fea064e08bd3",
+    "architecture/observations/agent-hook-v2-tree.json": "0c94377f0ae6bf7ec7d70d521c411ff6883614cb2cebca2a1243cea1ce775339",
+    "architecture/observations/data-harness-v1.json": "5c559a6ef3d59fa40e74ab2fb36603752751f523249da884f8e0d8daa06cfe10",
+    "architecture/observations/model-usage-v2.json": "aa5488bad4528bd4119dfe9134f517403986b6fd45408f34c508929924e764f9",
+    "architecture/observations/orchestra-openshift-reference-lab-tree.json": "c0cab3b3c294ab0db09f19215ad51f3ca5b09c71bb007fef2b894f7588d3f41b",
+    "architecture/observations/planeon-orchestra-python-sdk-tree.json": "aa41c2d2b781e6776724367b3cf931d23b6812cc14ecb4a27c4f6c0b69ef61d7",
+    "architecture/packet-scalar-amendment.json": "56b270f8d211f598cbf0183088430bd5ccc16e64eb089b865e117748c762b4e1",
+    "architecture/packet-scalar-inputs/baseline.json": "d88c8f22877cf7269135ef53c08ff3a4921edb0946db0d9c9c1d38209256bfb6",
+    "architecture/packet-scalar-inputs/run_packet.before.txt": "3128dd48c486d74c3a109eb0d6655c57033011d508afadce35756e485d94e83a",
+    "architecture/packet-scalar-inputs/test_linux_inventory.before.txt": "1f5587f857927ca645e1c79edd4b4cd560f0eb70a881fb670b5047739421b7ef",
+    "architecture/policy-observation-amendment.json": "0df7e72a65fc5eb1c20d59b8c62ebff377f160214192d681ea7f3d29b57e38c7",
+    "architecture/policy-observation-inputs/channel.schema.json": "fb69b77201d9b6275a19667a5f5770537f382ddb11309095733628c8430bdc0e",
+    "architecture/policy-observation-inputs/vectors.json": "1bfb46776636f800e38ab6a8f94a0989aa38513fb4a28ef18e61e732a115c124",
+    "architecture/porting-authorization-index.yaml": "a9768c8a75c2a9d3469271c60861c4ceb0b45cd3304d9c6be2dc1783ff1e7ec3",
+    "architecture/providers.yaml": "9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02",
+    "architecture/proxy-contract-amendment.json": "6c93e7db962cffa0281331c5220cdd8d5e453ab38ae39b4baa2e62be21a60600",
+    "architecture/proxy-contract-inputs/baseline.json": "980ff63a57a6a167020f6d64297f946c92d7ce56b8c274b3fec56fb18bd837c1",
+    "architecture/proxy-contract-inputs/profile.schema.json": "209349ccf44989566ffb39e2654fc91323b5eb2d9cbe895a4b18f33a349a226d",
+    "architecture/proxy-contract-inputs/vectors.json": "edf32ddf992e06e8786fd331affdb4d2ecd5538ca874d52c37439386793a8eb7",
+    "architecture/readiness-repair-amendment.json": "c3caa938557f1b9bb195188e35edc946fbdea36f0f1b235ab23f2689ffc54912",
+    "architecture/readiness-repairs.json": "30db784918bb651cc81f26d23cb4b1d7f790ef260ef5e48a2d7ae2ae94c12a0d",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/reuse-map.schema.json": "a9f2980e12679a7292fc394f1e53c437a4e60dc16ba22129c0cb66dce1b759a3",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/services.yaml": "857376b5e2b10a2a2542124a7d36b770eca531d15e463d68415416b887dd90a6",
+    "architecture/successor-inventory-amendment.json": "d6bd95af8bc7dd3d497907df58cc843a1732dc12e74a401692e47449444c349d",
+    "architecture/successor-inventory-inputs/baseline.json": "f84ab0aeac644670b6a36ca52af1493af29bfacc8f04c4602a9e650dfca0c645",
+    "architecture/successor-inventory-inputs/live_launcher.before.txt": "0635ca7494e29c495fcf8188c167d82bb27f109102fc46f91052e1d509817d27",
+    "architecture/successor-inventory-inputs/test_packet_scalars.before.txt": "c340e47f5eb8286e2e76ae5b38dc0bed6073701de44859b3356aed4c708f42e8",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "ci/linux-runner/build.py": "bfef77f1bdfae16e596a12fe9d3136ec6ba325468ffb0662a6e1a7bdafe51331",
+    "ci/linux-runner/common.py": "cd1e468d4ce3f6e9760f2169d873b42ecc409c9ea3dac4945c9615cd8b4a3946",
+    "ci/linux-runner/ed25519.py": "6ca5eb106c6567feb28ec1dbd5d988cec1d15b838c192306c2fc74357ea851c9",
+    "ci/linux-runner/launcher.py": "e1f2e0166c82e01c6eedeec542584d8d0d4bb27c3f2eaf5e5e2298b7d53d1861",
+    "ci/linux-runner/preflight.py": "636a1df537125b72d0396963dc848281d359c2fd6806712aaf4848599a9184cc",
+    "ci/linux-runner/prepare.py": "5dc2158b69e9f7623f613e7015c97deb5c7184c7ba48554b0f5230ab2582bb04",
+    "ci/lock_warm_snapshot.py": "d7e3d7507300ed21b011021f4323cefb85563add57fb40d3a7b16337e6bbd67f",
+    "ci/measure_yaml_parsing.py": "2adf3490b7f54bf8bca5ae20e1f0ea1819830c635cdf5d0ca06f42e07061f0b3",
+    "ci/network_canary.py": "1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099",
+    "ci/prefetch.sh": "069a5eddb73a9b12f0620323b0638fa2b616fafe1210daa90484788815bd6785",
+    "ci/run_packet_argv.py": "5a635f1694892354722afa14be103cf1c2efed70d6198fe163889eca3e211826",
+    "ci/test_offline_runner.py": "46444c4218502f889f9d3e923c60604f6eff5434ab248a9cfc96976f38f06fcb",
+    "ci/test_warm_snapshot.py": "929be52a3835a0b0d28d355fd4b4f85fc0e5e210502c3b6c62c2b24348fafa24",
+    "ci/verify-offline.sh": "881a6f8c8bf7f5c01896578e960685545b8b7ec02e672808571836e73d132ae2",
+    "ci/warm-source-isolation.sh": "f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b",
+    "docs/MICROSERVICE_CATALOG.md": "699f2c0fe3ae9d95d3e6d4261d51a95199e13f17d28ffef4a2d71a8c307e8eff",
+    "docs/PROVIDER_MODULE_CATALOG.md": "12abaa45bf87258c9da5c2d03001d814a5251939510b54bf7606f9169a8105d1",
+    "docs/SCOPE_PROVENANCE.md": "0c6b97368440bb0da4b0532a9231e17d45cf511e0268e10753461000f6db39e3",
+    "docs/TENANT_HARNESS_OVERVIEW.md": "3855671e04267e774c515b35e8ddc07c3b8a252198f9843da82d2d1aa7996a6d",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "docs/adr/0001-repository-boundaries.md": "a5db14c280aaafcdfa403ca9a68762eacf012dd887ea67c1ec8bd35ced3f42f7",
+    "docs/adr/0002-contract-authority.md": "654c6ef2e1333945bafd466688779d73d07fbe6027199cdef8d24b57870fc0c5",
+    "docs/adr/0003-source-reuse-and-provenance.md": "4b5fa5de4a77ea1175527d676195f8c1fdb6938ec2b2aa5407bc690f09308a6a",
+    "docs/adr/0005-release-evidence.md": "e0d9134551f137da84cbb5709b0a6383447995490ac5a01647b211831fc67971",
+    "docs/alpha-2/CI_PERFORMANCE_REPAIR.md": "9ba4b315b96d45b070165529ab476b500ff2aa56e4ee2f9f5b678e9fe3d290cc",
+    "docs/alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md": "b736e1f808ef31ffa28df7702e3ac4a3325cdcaaaef544bdec1f79c55fd4bd41",
+    "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md": "b2ed7fe5be1a8b23ec31483c94f77a79094972acde5b726b33a660d729a3bb2d",
+    "docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md": "0a095725bf71fb26ab8500391c1c214fef63f124b7a29ec171a552d0a211b025",
+    "docs/alpha-2/LINUX_READINESS.md": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+    "docs/alpha-2/LINUX_READINESS_REPAIRS.md": "ae1c9284eba881730bf4959587616e701c4c3d09f5d8209d156a3798e6cb4f24",
+    "docs/alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md": "cc6558725f5942fad8feff788199525b165ecb0d567fcace9b3a57760143c4af",
+    "docs/alpha-2/MODEL_API_INVENTORY_REPAIR.md": "e0aef4b956ad1d5f6578c303fb8d14c6999800be9d27fbe3851ad1ae051ea578",
+    "docs/alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md": "1e254fac661abbd84737cbf07bbe8c16a39b47e2a102f82e1c768a2254265e92",
+    "docs/alpha-2/MODEL_PREREQUISITES.md": "7861cc7c441c35ad3cfb723659399b06ba2018ef53162c26ec080c2de3ae30aa",
+    "docs/alpha-2/PACKET_SCALAR_REPAIR.md": "a16dc058d838bb431b6f6a79210ec4464a1870a1a4df2014ff67a4f263745b5b",
+    "docs/alpha-2/POLICY_OBSERVATION_READINESS.md": "65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c",
+    "docs/alpha-2/PROXY_CONTRACT_READINESS.md": "3e3bf310ebd8a7b1aed696ed9b8d4d26cb67160aab3f862877e2b2a2e0c9f3d0",
+    "docs/alpha-2/READINESS_REPAIRS.md": "60ccec243e8256a6978b5697cf5349ee70726f6cad997d0621cae029dc3ad346",
+    "docs/alpha-2/SUCCESSOR_INVENTORY_REPAIR.md": "b783e35408fbe7af82f84094aeb51c06ca89a89e06ef3da9212e89bbe92a73ea",
+    "docs/alpha-2/model-usage-observation.md": "5f7bb84bd83a50187fbc67eadbe74ba90112802ddc9e7fd438476ca44a7424b9",
+    "docs/harnesses/execution.ml-decision.md": "2ce11ffbe176c2cf76467a4919370cad9d150ed3d3a8b3a696f8fc88abdfb284",
+    "docs/harnesses/execution.orchestration.md": "c39ca59fb10943bec28b6ff03deb693579a05b35d9f899b023c6beae0224f400",
+    "docs/harnesses/execution.protocol-interoperability.md": "a4db6d89924f001a4963f94e3e8a7a496849417fefc53e366649ec7ad68cc1a0",
+    "docs/harnesses/execution.tool-skill-sandbox.md": "a59932c08e029002427388454205a355b9296638edb68ec83cf4756687f99691",
+    "docs/harnesses/knowledge.data-integration.md": "e6e434eb4127bec96ad348a22184d89d25bd7fbf27a8873d1ba7432de7974d53",
+    "docs/harnesses/knowledge.domain-semantic.md": "3e214989be3a292c260605836aca0fbc5d50d6d2700f6adea34c34525b7d933c",
+    "docs/harnesses/knowledge.memory-state.md": "e2cb23707dae9b7168a8ccb5e4b043b2160ba6cf8e30f4309e241cd9c6687ebc",
+    "docs/harnesses/knowledge.retrieval-context.md": "97ebb79dbfbebc3b8df24cda8a0038610fd7252468547dbfe3e6be736f44b301",
+    "docs/harnesses/runtime.ai-gateway.md": "e27867568b90608b0a61c42009601b11c435369d3e966dfb45e7cc4aa841fa05",
+    "docs/harnesses/runtime.experience.md": "c652f4e3cc085650f9945acbf8668e182ef9d72733d7f19a1f0b486d4c965203",
+    "docs/harnesses/runtime.infrastructure.md": "b60f41a675e21cb5e68e84111901d89f5314d9d6b23e391c2997cc1fc67aea9f",
+    "docs/harnesses/runtime.model-inference.md": "ae2f12789094eef17794d6d322d720c39adb2b7d13ee5cf10645020e05ba41c2",
+    "docs/harnesses/trust.evaluation-assurance.md": "3e74af78e0bc07329a0744efc51f33efbd90deb817c6b65e7f6ed87810575b19",
+    "docs/harnesses/trust.governance-agentops.md": "c3880cce734bd9397300a189feeeedf793ef93c9cef8729d7cffa7c59eed2ce9",
+    "docs/harnesses/trust.observability-finops.md": "02e29a7f659a6399a96a52a166bb8edce962bba796c246843f81bc33c45ae29e",
+    "docs/harnesses/trust.security-safety.md": "90b46367c7258891931eb1af05f99eaf5948d9e8f28c9651c491f256d3074b91",
+    "docs/linux-runner/BUILD_INPUTS.md": "1c6541be0e0cf9e6620941f745bf92ce51097c2bad4714b665b39655093364a6",
+    "docs/linux-runner/OPERATOR.md": "5477648b9c857361d0287afda277d2ba2da76b24b56bdc6449905077815913fd",
+    "docs/phase-0/PHASE_0_BACKTEST.md": "2961ed650c065587f948ad0fbbd7c41732b83dcd6c30f1b35fffc88c1c5ada8f",
+    "docs/phase-0/dependency-license-inventory.json": "1ccafd9b5f5aacebe407b252426f5f388bed64ce5510d4cca9c80509587f890e",
+    "docs/phase-0/phase-0-backtest.json": "9c173ecf7631b85e533788cd734d30e4ce485fb74ccf21a06430ed7ca8cdda67",
+    "docs/repositories/01-mas-harness-contracts.md": "1968495de998cdba1896bfa00ec701de92c2e001898d283d0fb44869951ff0ce",
+    "docs/repositories/02-mas-harness-sdks.md": "0437c0675c13a2353e4ba19f1c092e3a6503aacb268bf48b947fbc4a479018d4",
+    "docs/repositories/03-mas-harness-industry-packs.md": "32cabf6333549bc9442f0fa41618d8732341f6793626b4110f10f3e1ab36e122",
+    "docs/repositories/04-mas-harness-control-plane.md": "d17971f2446d99e89d42639765e9ec1f29a045a5b81c55eb15aa9b82e8373b23",
+    "docs/repositories/05-mas-harness-runtime-plane.md": "e153598ebe10e2e95ac3443ad62dd24123ece8c0666d1cfe91ec06849d22f697",
+    "docs/repositories/06-mas-harness-model-plane.md": "ab232896a5b5b353d4d45e73dcf6af80fa48e3b5eb5cf0eafcec8e81e9ff17d6",
+    "docs/repositories/07-mas-harness-knowledge-plane.md": "2bc58a694413764eaf9494b34ff8655978bbd5c1dd73a7a14cb0f7bfb0fe3f99",
+    "docs/repositories/08-mas-harness-execution-plane.md": "03902f33355868930bcd340d1c3a40aead70aac84669d57753d4dae10fb56773",
+    "docs/repositories/09-mas-harness-trust-plane.md": "a25fdedd90b54afbd93d501d3fce6b27bd944baf67633530f3ad53bad5af881f",
+    "docs/repositories/10-mas-harness-operator.md": "6ec8fbcaebdab32888d8d30741d6d3cbb59cea200af84ebd1ae5b84521e04785",
+    "docs/repositories/11-mas-harness-distribution.md": "421913e72a46af053a3fbe5964cb05ac794bdc731cb06e4485462cfbf921697f",
+    "legal/source-reuse-authorization.yaml": "15db98cbaef76c942f7bd230c245f506653311b9cfec4596255b5770eb6e45fa",
+    "legal/third-party-license-policy.yaml": "fa3a4398acafc3960eaaae9f5396d4e96d91e6ff252b83f6c53e1f5f0d8a40d0",
+    "policies/zero-bill-policy.yaml": "77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e",
+    "pyproject.toml": "3876fa86bb79bb1951b017527a83278491c21ce9f1e017e38a0558f00b89ed2b",
+    "reference-observer/harness-reference-extract.py": "c3ee70583ed0ba85693dcc3da62c40d8039919c1213facdcca3b13e172bc6a04",
+    "reference-observer/harness-reference-observe.py": "971b534767afd900f00b588cf626b79c029f784f5820608b3803dd27ae967cee",
+    "release/evidence-policy.yaml": "ead30b57628a7479152c94f6a9496d90ec9d60701d7214cfcf3e36765dbda069",
+    "release/fixture-release-set.yaml": "7597ebe4754a501de67dc2ee620dba4a8413e8b87761437d562194bac595b2f9",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "schemas/dependency-graph.schema.json": "9c6f18bcc26e2b574297ba3e50d2e440f67f9bb78b3b5b7cfffa179c7141c870",
+    "schemas/live-campaign-execution-envelope.schema.json": "ee5ce21417760c941b70b03fc7d48c6462104268f374a424f4cd01f7ed5ca6ee",
+    "schemas/porting-authorization.schema.json": "1c5675728c9c13fde47d644b654bdff9eebe19d9210a5987832c8ef6224c9d56",
+    "schemas/porting-record.schema.json": "492c510f1ddf1080eb8a59c4a7478518f035f6c5b0a466de5f95e5ae3fd8107b",
+    "schemas/provider-module.schema.json": "f177ca68e4c3e62b5b4c8a8bd909589e755b722478ce341d4781169cf8730b9d",
+    "schemas/release-set.schema.json": "f8efb2cf71f272eaf51ee962401fdc2c608342beb6f266f3cc8d14a031ee777b",
+    "schemas/repositories.schema.json": "8b1841a75925c2b059909424656cf85d20691c50d5585da5b9ae7e5971271f27",
+    "schemas/reuse-path-index.schema.json": "237169f0e8e65f557133e1c484e6bee602c7b1119935b0be8dbbdd575446d0d3",
+    "schemas/services.schema.json": "7aa4eedb210650120496ea5858cbde3067dfa7d9c3b5b54bf39e3655f4010f0a",
+    "schemas/task-packet.schema.json": "1e6d75398fb6571a1fd752b1ed597d0465c4031f9271bdda27a3075c88fb39f0",
+    "schemas/taxonomy.schema.json": "b952d10ef9eb52012c3aabb58648b86f28600e006089b6685a2be2474964022d",
+    "schemas/trusted-runner-manifest.schema.json": "157ad117269e9244b143c8bc6a80e1faf34678c1b538adb92b2e55444189d480",
+    "scripts/build_release_lock.py": "ee8c7448503fc63cbb06f7c004bfa1e682a7f4f4703ab75fec5aa64bea051d4c",
+    "scripts/check_release_lock.py": "50fd3de0bd75e088a8ef5e1b6af68577e64380409818b147da13c28db85bfc03",
+    "scripts/network_canary.py": "6c430b5998b9388bf19a88e459bc46afbf8a8e0895e7ca6cde6e11673a8f9108",
+    "scripts/safe_yaml.py": "99c673560e65e58cdc1abe86e53472feaf93e546dd76cb9f3ba051beef5c49d7",
+    "scripts/validate_alpha2_readiness.py": "a3f260e32785c91616f139d20cc0793604db941c108dbefddcbf721102729ff5",
+    "scripts/validate_architecture.py": "2cea2785fc84131362595d45d5e5fef1b67b873a08753d94dac6e3bab377c3b9",
+    "scripts/validate_data_harness_v1_observation.py": "87c3f94da2709359d62e01bc683f1bdcebc3515225b22fa61ab221b76e57e5a4",
+    "scripts/validate_model_usage_observation.py": "b338fd13b4a03519f5da5fb1901921ed7cd3651774f8d72bc3a2696186014185",
+    "scripts/validate_packet_ownership.py": "1f1a44601ce3f88713ae15d3af013d03f8f0eb30885a81645a0500bee64bf8ba",
+    "scripts/validate_repository_tree_observation.py": "90aec471e9814e4e66b870252c385da2830bc53a0e97e285426a05a9f65a657e",
+    "scripts/verify_offline.sh": "e01ce471ccd25bfc4af0c0d3e1eb9c2b8d60840eaaa213f7aff55c05d029891b",
+    "scripts/verify_toolchain.py": "9cf639874721037ec7875b0f2938bee57fa75b2cdebc6501912ef253dcda2190",
+    "scripts/zero_bill_scan.py": "57fa7e94bf5657f0daf959d5229dfc2a53a0ab94793d1d5fa03a7513b1272fd7",
+    "task-packets/CON-001.yaml": "88383a2c8bc66c959df0abc8bc1c8d86a852cac654cd1833327f8b06e2cf41b4",
+    "task-packets/CON-002.yaml": "1e266163e2990ca7412338e878cb6b41e8a769abc27802083c352d1fc7e6da20",
+    "task-packets/CON-003.yaml": "f54c40fba3c9ef2889851981e93f282ff069c4c40de222a18005d57241b7bb1a",
+    "task-packets/CON-004.yaml": "1613ae0d5f5f113d0208f811f36c998168094109b96d68f8e7c31798e62733a3",
+    "task-packets/CON-005.yaml": "1e5c7ac03625c08a7ff46b133e2b7689e5ef43de4782a5948f5f63823bcca4d6",
+    "task-packets/CON-006.yaml": "e05a3f0c7c9c51857ae8afa774cad5fcb75483bcca49f44da54375327fdafec0",
+    "task-packets/CON-007.yaml": "b5ab9498ff950345c0198a7a54fd3d62052f13a978f5113c69900f199dfb38ea",
+    "task-packets/CON-FIX-001.yaml": "15040a4811277880118d58121a7d23721d8a91b4ab6d3211f960189d6a351a14",
+    "task-packets/CON-MODEL-001.yaml": "d5f7ccf98a8dfa8862c204bd9be99cbfbc2307b98be00f0112f6e9dcb59abd9e",
+    "task-packets/CONF-001.yaml": "2ad6741244eb83c152b0880ffb3518b10a02d5cc65bf2e1012b879866069de48",
+    "task-packets/CONF-002.yaml": "7130dfaa116bcadd99cb29506be8cda8864643bb26b9216f7466c5e9085ebaab",
+    "task-packets/CONF-A1-001.yaml": "c076b578b6655c70b7ca7309d3a5b43e9e5cad79138b44c89025ab6e6b20b1b4",
+    "task-packets/CONF-A2-001.yaml": "574e85c20d97db27fa23ede3f5d7ebf043ff7980e237d21623aa05b331852bd8",
+    "task-packets/CONF-A3-001.yaml": "70c53e57e6d140bf088993e0db0a7e6da1a2cdda5f0810eb89dbe3215c2ea624",
+    "task-packets/CONF-AIR-001.yaml": "f6c08f690d1588db15b939beb0b86c5ecce40b19b33cea1db04413c2ecb8a666",
+    "task-packets/CONF-FIX-001.yaml": "b02d7c6f2872c61fbde5be10451ac8de08e8336ee032e85b468e40dfaf8790ac",
+    "task-packets/CONF-FIX-002.yaml": "c8639e527496660b8211f5bdcdb8f7470129b7d00f938c061d34630c797d8af4",
+    "task-packets/CONF-FIX-003.yaml": "19089018ab6b1e2dada65d1dc3715940037b0881c1db02217622455a8a91d5a1",
+    "task-packets/CONF-FIX-004.yaml": "6a41b419c4e5b02311e148b846d339216f1b512cf8025ae75de77e72ea3d8db0",
+    "task-packets/CONF-FIX-005.yaml": "6e3d31d5facfa69b9e38299317e4d6b9c7356566c5ded0594cbdeb965acdde0e",
+    "task-packets/CONF-K3S-001.yaml": "6178307a2845df6a369d666fec60653b167bfbb9b5086e8dbd58217d33229dc5",
+    "task-packets/CONF-K8S-001.yaml": "6626cd491cf266209e77b9f90c66cabc8c1fc36195ef87ea6278fa5c07db5056",
+    "task-packets/CONF-LINUX-001.yaml": "22f00544680f90a90b03420632bebf192a8c687549b519770fca5f98dd5fd6c9",
+    "task-packets/CONF-LIVE-001.yaml": "5c7ceb5094b1c5a29192b7bdea913b23f777698bd31224ca5d1958a793dba3b3",
+    "task-packets/CONF-LIVE-002.yaml": "05a6f03d19a1e12fafe278e5ec72c8adc6304766697b8682bc8d63092d47427f",
+    "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+    "task-packets/CONF-LIVE-004.yaml": "3cb0e1f7d163d7a420fbf2134b7ca5a7c70174acfca8646c341be83e6c23ff23",
+    "task-packets/CONF-LIVE-005.yaml": "b25b9a828907a25d46fea9ccce74d3f05f30cfb9623acd0b21e8dd359e1d9623",
+    "task-packets/CONF-LIVE-006.yaml": "f95c277cffdfb622f45a1b4b91a5292d9d9a5bfabc8f9388b3899cbb20c5213d",
+    "task-packets/CONF-OCP-001.yaml": "04e8bc10f8b9bf5e84b6d55fecd96985f991054d4ba0346cd7316667ecd93ee3",
+    "task-packets/CONF-SEC-001.yaml": "39eeaa83876002f57e29fffac39847f5d058aea128f447558213baa70687abdd",
+    "task-packets/CONF-UPG-001.yaml": "4c2cc8bdaae80a30f3a8492be724a8920b1ea6fb66dbce7383713ecdd24c2a42",
+    "task-packets/CONF-WG-001.yaml": "cd0685d9cdf8a018f4465d5223d950a557e4d523320891cc5d907496111442cd",
+    "task-packets/CTRL-001.yaml": "5e8d3d18a8245ccd985c77d8269b73333b510a2689a341edffd17dcfde77a8c3",
+    "task-packets/CTRL-002.yaml": "d0045acba54f420d6543581eebca1ae88e78c516576e2e8c1399762761bdcf25",
+    "task-packets/CTRL-003.yaml": "0bd59f60ae73a7e19c97f5d797cb8955f28a5f3a181326c5c4af8d57ed5d2bbe",
+    "task-packets/CTRL-004.yaml": "425faffab20090282bd60b17ac7cfc7942eeaaef0c2ff046b77d9736d77968d4",
+    "task-packets/CTRL-005.yaml": "da414f08217a1b60351a3c7da42784a4cb749c12520f2250f6526f17df72976f",
+    "task-packets/CTRL-006.yaml": "5b9f6ba920cb6d6eb5c192dfc104851d395772c57347ca69bc68aec6328709d1",
+    "task-packets/CTRL-007.yaml": "4a70eac5a350e7b48d2b8b180c02455a5953837050c57f46cd7dbafb86291822",
+    "task-packets/CTRL-FIX-001.yaml": "f1084924fe765b8d905a3156448bea636aec111b71a93e4a842dfbcab563b401",
+    "task-packets/CTRL-FIX-002.yaml": "621e7ba7ad0b8852cc7bc63e666c5ac25e92fe5a769481b491bb850f1eecdd97",
+    "task-packets/CTRL-FIX-003.yaml": "42876f9ab5ab8c227920fe6eee3a913b72f6940a989a8d128d627fbfea43c48f",
+    "task-packets/CTRL-INTEGRATE-001.yaml": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95",
+    "task-packets/DIST-001.yaml": "8de07c6a51176005765ef44aa4613b4443f610350d452daadbeae271b46bf48d",
+    "task-packets/DIST-002.yaml": "785b079851cbb207cbeb012adab16f9dbcbcd555eb49ec835147d77899d359a0",
+    "task-packets/DIST-003.yaml": "47a2951fd7957b780352cd0300d5b98af101509f43293c4daeaeae7626b9b5eb",
+    "task-packets/DIST-004.yaml": "f1ea5c7b9df565a3c28d3b7fd24cb4878fccfaa0e75cc9ef1f57171d56e60633",
+    "task-packets/DIST-005.yaml": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f",
+    "task-packets/DIST-AIR-001.yaml": "7a16e99750dd6044d56194a815ab2182d09759e27dea1cf6669d6366276ccb20",
+    "task-packets/DIST-FIX-001.yaml": "d65fd678adb17be1c6875eb0e8ca7e955d59e4df32bc263b20213f1de845c983",
+    "task-packets/DIST-OCI-001.yaml": "7211a4874c3236df8b257e2d8889180493ab8a0ece0812ef01fcf38ae257158e",
+    "task-packets/EXEC-001.yaml": "7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108",
+    "task-packets/EXEC-002.yaml": "a8eeb8d1a1c56c87329818c827d398a329356420fdc2dd0b9df8e8d23f4c76c5",
+    "task-packets/EXEC-ML-001.yaml": "ce65bd9b74e405b4dbc153430d9a05b245ba904c2372adc3a406a5de88e9c969",
+    "task-packets/EXEC-ORCH-001.yaml": "bab8ff0d2a85f22484c29011836c2458449755634bf27b3462199ef445354d75",
+    "task-packets/EXEC-PROT-001.yaml": "8dda3de5062124d3c2080ab5eaf68dd3d9b73f5e0f9c4fe646ec9284263201c2",
+    "task-packets/EXEC-SBX-001.yaml": "8fb5e9035117761d9cb0e66600e246103f08392f342ddff69143018c60bdb517",
+    "task-packets/EXEC-SBX-002.yaml": "fdec3da0f03a4e3cff03c642317616554454fc4767afee8180c141128b04cf49",
+    "task-packets/EXEC-TOOL-001.yaml": "c0d160591f0f5eed5f28ce0db0ff2c5f3a609beb3e253ed21a7caa354e83816d",
+    "task-packets/IND-001.yaml": "3d5778712ed09558c4df4c881745785311ca4f3be5ba7df4556930dd131cf86f",
+    "task-packets/IND-FIX-001.yaml": "0d3b1bf1a1b167275c5c7916a845c658f14e7fa69dc0383963ba4648c202145c",
+    "task-packets/IND-WG-001.yaml": "2766279b611409c8c0bc376b1161d3508e2485fa72c109222e90ceb60b13611c",
+    "task-packets/IND-WG-002.yaml": "78bd0d87b54b9987621c1c42d8363fcd73d67c46677fe354d9f39229778a10d9",
+    "task-packets/IND-WG-003.yaml": "897dc36776c08f73c93019cbcbe841a0f1ad2710385b28141b05602b53e3882e",
+    "task-packets/IND-WG-004.yaml": "20ed881b6010aa5b5bca07d85b92d49b053641e88b05884c61e6a1661902fb7f",
+    "task-packets/IND-WG-005.yaml": "033db2dd187457a94a8a346baf6aa11bd07ad6ac25cfc3d4d315a60b2e78ae38",
+    "task-packets/KN-001.yaml": "5e1790e09f99c70f41288fde9767447f8b655ec821f029d266aa9973301d81e2",
+    "task-packets/KN-002.yaml": "96a61677ee41b973a9282f858c4f355d54afe4b2c5f47d6cc18aea2114226fb6",
+    "task-packets/KN-DATA-001.yaml": "73422c32a67d78cbcb6e74447482022f3552b24fd8ca356da5da91c9c538e0d2",
+    "task-packets/KN-DATA-002.yaml": "ddd3b5f0f21705eb1ea07103dc91b194703dea50935e0e37c9796101e3239e40",
+    "task-packets/KN-DOM-001.yaml": "452fd1e14baa779023ca27511af9b9a8b4281ddc8dea51327b93e594700e9f56",
+    "task-packets/KN-MEM-001.yaml": "4ab3568fdfd01d500f205a2c5976526639a775c21ec09b8cf99cfdcfaaff3483",
+    "task-packets/KN-RET-001.yaml": "d417da2b27707a0b69590019e556f35cf6d6f737c37858c9099481323415a5b1",
+    "task-packets/MET-001.yaml": "43af6889dcf50d3ee8370cd5e761acc1a9fd989a44538b4db84a62df21f67880",
+    "task-packets/MET-002.yaml": "e93658d831f7dc2f1b228f03986117ca59af276fefe901e3802df117a2eb34c7",
+    "task-packets/MET-003.yaml": "d0bf1bc8cb15c536433528bf7b30aa3713e5ae44cb809d749fe8f344bccf3eea",
+    "task-packets/MET-004.yaml": "942bae46d9b7e8561f7a4474f465eb2397df7bbc48a34b90e8c91403f126012f",
+    "task-packets/MET-005.yaml": "aee54bd4c5219eb9ab7a751fb4d42008a5e05abc3188b9484a1eee8a1f628cba",
+    "task-packets/MET-A2-001.yaml": "fcee128a05f6e53e60461a53108bb652187ae7e67c1056a4f2dcb6fd6477b413",
+    "task-packets/MET-LINUX-001.yaml": "b54b47708b13bf9c184345308466e6a23af159040aacdc62744d43135c8f5f04",
+    "task-packets/MET-LINUX-002.yaml": "7e2efb3daad8e5152028cfd35ced7449cd145a51fd3573b4e71981d29a8ee787",
+    "task-packets/MET-LIVE-001.yaml": "c37fa6eabc16e7a424b894c8b3863931a4fa6bb56baa20b75d447923bc38007c",
+    "task-packets/MET-OBS-AH-001.yaml": "9a527e5343d99e679c850a1dd416de9c4ed19f100caec0d1872f1dfc1424001a",
+    "task-packets/MET-OBS-MODEL-001.yaml": "7493f8f788f982df4cd6b32f3647c82f41b8989feee54fea8740fff5e61f1a9b",
+    "task-packets/MET-OBS-OCP-001.yaml": "9028852eaa2ddc2f7dc3559e38ab4d83bc3c6598dab97d10fb80846ed17fe711",
+    "task-packets/MET-OBS-SDK-001.yaml": "fe44c76c6160847435869accd0ec895ec0ff700bca3f7ec09843b535a0a21e95",
+    "task-packets/MET-P0-001.yaml": "41d838c56aa88e5c60e4b6768d28d3b24073fc63955309c89a49315c641192dc",
+    "task-packets/MET-P0-002.yaml": "6ffd3057b377f1d6c7fc47cae26472f010e83090b5c31d90cbb46c4e0a7d9611",
+    "task-packets/MET-P0-FIX-001.yaml": "1845f579a807d30e2880d4aee46b52e849092b0374fbf59f4ca31f8e66d45194",
+    "task-packets/MET-P0-FIX-002.yaml": "b12012d45b0b9f968816a21be7cc714491ba94fcb7ee1af348da9bcd520a6ef2",
+    "task-packets/MET-P0-FIX-003.yaml": "bf18a928240f0e0991287564d193a45a2699efa9aeb949b31dc112815a83cef2",
+    "task-packets/MET-P0-FIX-004.yaml": "c3614e7cace9d83299e70add53c6650c8668d156850f941904f64f871ad29807",
+    "task-packets/MET-PERF-001.yaml": "761c004a56df4e626c6e984e8fe0e0e7d4cec2a87bdb57a5f4ae40430930256a",
+    "task-packets/MET-REPAIR-001.yaml": "45ea3a94514ae1b7b06608fa4629603fbe3c908c726da66fa733ccaffcb03986",
+    "task-packets/MET-REPAIR-002.yaml": "75cd79e37a9a3a2adc645e322d8b8b6f27abf546d52b6fb821c275dedf4078e4",
+    "task-packets/MET-REPAIR-003.yaml": "6f07a6fe38f305ffc226999b19fedb5ec4082069c8d14dede36bd001e550abf1",
+    "task-packets/MET-REPAIR-004.yaml": "3217293d977e25f0c6e7f6e6bb0134c27d840fd8769dc285494ecc7f351f6d94",
+    "task-packets/MET-REPAIR-005.yaml": "680335751aab8ac403f73db751d67c0ba98fce09017d51eebd7fa36d7b9fb5d0",
+    "task-packets/MET-REPAIR-006.yaml": "365207085a6bc661164660008d9248f1414a821898497851da9f17cba9366e92",
+    "task-packets/MET-REPAIR-007.yaml": "e4bbc961a86663fd4e8f52a74524e335b579b75031c2fdc97ff3ed0b9714d756",
+    "task-packets/MET-REPAIR-008.yaml": "3a25b0653760488a41575696cf722bccce76d51bd2653ca8f1ccdef162cfc476",
+    "task-packets/MET-REPAIR-009.yaml": "15dc67a95231ca39755bd91ff5056e5cf5c1769340e09104ca0878715ce9bf97",
+    "task-packets/MET-REPAIR-010.yaml": "735b5bd31ddb8ce72d7a08f50658e3d34e4953c780be5ea0e704aded2f86b488",
+    "task-packets/MET-REPAIR-011.yaml": "68308a56b7d60b4083330f479868bf10b378a84c9d1cf25fcc1b055bf1444964",
+    "task-packets/MET-REPAIR-012.yaml": "98df418a71f5e42a50c92b7b118698ea9278f2f8c239dc80288fdbedb3739845",
+    "task-packets/MET-REPAIR-013.yaml": "dfbe04555e5ab402e6fe14946ff399b04d57a1f7007ab2f88cbb8123b2701738",
+    "task-packets/MODEL-001.yaml": "753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0",
+    "task-packets/MODEL-002.yaml": "25ac59868a1805845ab244ee7ab08590dd72c928c6821bd22bc47eb1c5c819c5",
+    "task-packets/MODEL-003.yaml": "25403133eb4bd1272f6719903832e4182d899c6c6d2613b9240ce417bd6af09f",
+    "task-packets/MODEL-004.yaml": "2b7260bd8bc5bf06880be4d2a06adab877ec6b956d1fe7b4ed40a619dad34ab3",
+    "task-packets/MODEL-LLAMACPP-001.yaml": "f151b3393cb61b9133f21488fb53f01117e0960078077b6439bdc612adda793d",
+    "task-packets/MODEL-OLLAMA-001.yaml": "31fd06d3fab1227e42661af30e025c33deb51e49fcdf291ab443b6f80780d768",
+    "task-packets/MODEL-VLLM-001.yaml": "681a93edcbead7333b8439e6ddc849bc7a4ee0b9008b8bbab60cd494cac00f4e",
+    "task-packets/OP-001.yaml": "9a64698615c1c1fa8ef899b50495d5249bec0a877f0e7f7a92e9058ef196b07b",
+    "task-packets/OP-002.yaml": "caeea13c1efffc147fd0ca2d4c270916ca12e61c2a7122962eff4b024d2bf2f4",
+    "task-packets/OP-003.yaml": "86fd96fc4cf016331ebe1c8c95a5c0faba9b8155439f324c381991ea7b1eba1b",
+    "task-packets/OP-004.yaml": "6b585f709a0f69283534e0fadbe90502bd335fc9754bb5c30b0624d26e3eb241",
+    "task-packets/OP-005.yaml": "9529029015e992d5cfffc4d0c2bcfe88e579834b8e27aff31607fb550799f09d",
+    "task-packets/OP-006.yaml": "fa376aee945c301717e12b79aa5c4ebd7869e6b924b6afabd3f184db32d1595e",
+    "task-packets/OP-007.yaml": "f4508ad47659315581d551939576d2307aa0043de4b71eabf99878de126b2548",
+    "task-packets/RUN-001.yaml": "4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457",
+    "task-packets/RUN-002.yaml": "cbda98c7e8f70f404c2316fa50e09eb66d18778a82ae2d64a16d20451a03c67e",
+    "task-packets/RUN-EXP-001.yaml": "2a134a3b0e344b18a35ef3b82f1d34aa74f79ef83ab0730cda2eb740bce4a541",
+    "task-packets/RUN-GW-001.yaml": "3695dc7de22d757f70528d9f23d0c4b46865b70a22c5c15f4bd423590544069a",
+    "task-packets/RUN-GW-002.yaml": "3745467874e1293eb93e8a32c36c50493568389d718b1e66650952352a733996",
+    "task-packets/SDK-001.yaml": "737990fc853fd50c22d211f0ada320585b304fe116cab881581575a9a6dca941",
+    "task-packets/SDK-002.yaml": "b791f5f514dec76ebfd37ea17c7b0ca024057fbe4ebc2443bcdf15e7ca18c151",
+    "task-packets/SDK-003.yaml": "49b413cbd44e8fefdb20b7c817c676b0b95d671a25f07a11c47fb9276ab1a7b5",
+    "task-packets/SDK-004.yaml": "8c24a6bc4429e29e97a64746d12de95d9b47bd7b3d48ca312d8c9a3aea8ec23a",
+    "task-packets/SDK-005.yaml": "b6db3bd5595dcae7aeaea71a3a5ca49b4044abfbe13d687d8cb49c1013c45a7a",
+    "task-packets/SDK-006.yaml": "dc7771e61400288b5b7e6c6b69b802430ededa03947bed2adaa5f6542a063edc",
+    "task-packets/SDK-007.yaml": "054feee9dfc45e76959a7182e47672dc95fb68558d2f1f7d97445eada3566054",
+    "task-packets/TRUST-001.yaml": "d4fec1372836a3c85458b1e489fabda0869cc38a8bc480a709dc94e0e5fb8b19",
+    "task-packets/TRUST-002.yaml": "cf80bc33b5517177e00f2d9e8bddb92c41f1c59b18a0cc2f54688a693a4ac151",
+    "task-packets/TRUST-003.yaml": "b0d1ccdb6a7545fbc58d8c32fa5e9835383608ba945ad948da06c8c6996af350",
+    "task-packets/TRUST-EVAL-001.yaml": "c0f5eaa5e35ea34fff04eb49ae4b500b4dbcc01221e11ece6b95b845c376828c",
+    "task-packets/TRUST-FIX-001.yaml": "68d753be5f9eb9edaaf696bb48ea7c40448c4205d2778a3172a62a5f5707cc6c",
+    "task-packets/TRUST-FIX-002.yaml": "f74a5004b51b8b16aa7a9c01036ac76bb1b396ddc692cc5736233639ee314893",
+    "task-packets/TRUST-GOV-001.yaml": "af7591bd4b20237ad54e942c65d4149540f4dca3d72b6478db6bb9e0afff3221",
+    "task-packets/TRUST-OBS-001.yaml": "760c4a519ec39f1a4a9523eca563d4e22597b06c8b8929913a7953d0f30f0290",
+    "task-packets/TRUST-REG-001.yaml": "83fc22106c0eeb31b032bd3f5820eb359855d5c928f9bf3be9cd7edf1563427e",
+    "tests/fixtures/zero-bill/cases.yaml": "d0399b8c7f0baacdbc57f904caaefdc258a20e5977bc767076fcdf31f4c129f5",
+    "tests/linux_runner/conftest.py": "414b64d997172139aa984294dbb9b9d136ac9197f8245580f6d8c05e84b3a0d4",
+    "tests/linux_runner/test_authority.py": "1a29bb42ca3a6fda8281c6e9e9fa79266107b1e244510563950e69ff3aa7cf90",
+    "tests/linux_runner/test_build_and_predecessors.py": "6990993b16abdd8b548e6edfba37e7c40ab6bdd10478a45ab029a3a06765c0c6",
+    "tests/linux_runner/test_isolation.py": "e5f6b98874ace99fb27667264b44deb797f18e5fafbda392b70476184e91c9f9",
+    "tests/linux_runner/test_manifest_gate.py": "3dcaa594833c855e2f5df621ae2786cb21e2d9aeeaae6833ca534f680a92098f",
+    "tests/linux_runner/test_toolchain.py": "19333875ae259280b4d64ee3dfb1c37618362fd94e3086381e92b636680941bf",
+    "tests/test_architecture.py": "4950bc15a766718f7841fdb3a549507c99e2eb67805eda952f536190d87301fa",
+    "tests/test_data_harness_v1_observation.py": "5404c7e707f159c4dbe5a279ca67bc47f9cc0da6839e49b8d9fdb6c254c9180f",
+    "tests/test_live_campaign_envelope.py": "c86fba5f72c8285ced6ab6039d65f6cc0ab78d8f79aa571e11879b14fc5424fd",
+    "tests/test_model_usage_observation.py": "3b6edd26186344584d7257eac61cc1e8b57b7de6fb34f16e865571a581b78e07",
+    "tests/test_readiness.py": "9694b99697768d759542b5d0cacb44ae8f04a75591254bda94555f1dc70ba280",
+    "tests/test_readiness_repairs.py": "2647e5b195cfeb891429d17e28a3b34714f74cacab83c08b11af5f0b29a20147",
+    "tests/test_reference_observer.py": "1ee810ee459404ff6d74cf7ce4ed1d62c139db6264a848acb57dd257474781d1",
+    "tests/test_release_lock.py": "41f1e77372f5536d2812041fb32e79f2bc7b8ccd3f776e59bc5f0bc5a0b10521",
+    "tests/test_repository_tree_observation.py": "555987fc9bc8d43400f9f7dcd5bc0a1e5a6bcc7c171097a8b1922c5487c37f8e",
+    "tests/test_validator_units.py": "fc301539333e3f9a833577fd1c879b9d23b969a9056a4c9ab5b721d80f363db6",
+    "tests/test_zero_bill.py": "0a3f0a4480afa0382737d52da976b7d72b7a2d79c9c5c22b2f8812caa33a2821",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "inputFiles": {
+    "architecture/broker-handoff-inputs/meta-before.json": "701c23be9e1e57a4fb7288abc33d84aef992b7257342b28595c27120d80948bd",
+    "architecture/broker-handoff-inputs/channel.schema.json": "e7e9558fb50b7ba804222065734d1d4fb4694327bb2427a34ef8dffc945d56f9",
+    "architecture/broker-handoff-inputs/vectors.json": "80d8da953c41ef544ecf0cd4a0f62b98316b018bfbdc39c550c320f68ab603c4",
+    "docs/alpha-2/BROKER_HANDOFF_READINESS.md": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+    "task-packets/MET-REPAIR-014.yaml": "19ad702ccc750b57f4105d90796eb19f1314e31c9b4f7c4580da9eb7e5b27601"
+  },
+  "metaRecipes": {
+    "docs/DEVELOPMENT_STATUS.md": {
+      "beforeSha256": "ca5e6d20b62f9b1799c9da1412319307c60244ef42a65c6948a6248ae212a000",
+      "afterSha256": "49d0c7a6791dcdb7cdc11ef759b4b64fd1cb69851dc9f0f9ad5272f0bce72555",
+      "replacements": [
+        {
+          "before": "# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-09, during `MET-REPAIR-013` publication. Source authority only.\nCurrent catalog: 142 packets; thirteen repositories, four planes, sixteen harnesses.\n",
+          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-09, during `MET-REPAIR-014` publication. Source authority only.\nCurrent catalog: 143 packets; thirteen repositories, four planes, sixteen harnesses.\n\n| Phase | Packet / gate | Status | Description |\n|---|---|---|---|\n| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime acceptance remains separate |\n| Alpha 2 | MET-REPAIR-012 / PR106 | DONE_SOURCE_GATES | Accepted source authority |\n| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7; 127 files / 327 tests; corrected CONF-FIX-004 127/305 checkpoint preserved |\n| Alpha 2 | MET-REPAIR-013 / PR108 | DONE_SOURCE_GATES | Main d603672; required localhost CI34334594189 and independent local exact-main |\n| Alpha 2 authority | MET-REPAIR-014 | ONGOING — publication | Fixed server-local broker execution and cleanup handoff |\n| Alpha 2 backend | CONF-LIVE-003 | WAITING — this publication closure | Local unvalidated drafts preserved; finish eight-path proxy/admission after authority closes |\n| Alpha 2 backend | CONF-LIVE-004 | WAITING | Fixed broker-owned worker and ten native probes |\n| Alpha 2 backend | CONF-LIVE-005 | WAITING | Three inert candidate entries and operator handoff |\n| Alpha 2 backend | CONF-LIVE-006 | WAITING | Trusted integration and independent native evidence |\n| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |\n| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |\n| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |\n\n## Current correction\n\nThe [broker handoff authority](alpha-2/BROKER_HANDOFF_READINESS.md) closes\nCONF-LIVE-003/B1: a current observation is not an atomic execution grant. The\nexternal broker owns the contained fixed worker and enforcement transaction,\nincluding zero-resource probes. The proxy retains its server-only API credential,\nexact signed-resource/UID custody and independent cleanup. No callback/token can\nreplace installed enforcement. No public API, endpoint set, signature role,\nKubernetes permission, product path or command change is authorized.\n\nThe new local channel and fixed worker ABI are source contracts, not installed\nservices. MET-REPAIR-013 exact-main log SHA256:\n66620c90c3b55077a72a7ca5bc6f291c491d3481c48d08edaacdacc43a23ce94.\nRecorded prior passes are not new packet acceptance. All327 predecessor product\ntests and all127 files remain pinned and unexecuted by this meta publication.\n\nThis packet requires twenty-two commands and both complete replays. Keep all\nfailed logs and nested420/trusted900-second/workflow15-minute limits. No root\ninstallation/policy change, administrator prompt, new key, hosted runner,\ndownload, paid API, artifact upload, cloud action or native campaign.\nSource/CI/merge/local exact-main, packaging, installation, native qualification,\nruntime, assurance and tenant acceptance remain independent evidence states.\nAlpha 2 ONGOING; effort transition NOT_DUE.\n\n## Historical MET-REPAIR-013 publication checkpoint\n\nThe following snapshot is historical, not current dispatch authority.\n\n# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-09, during `MET-REPAIR-013` publication. Source authority only.\nCurrent catalog: 142 packets; thirteen repositories, four planes, sixteen harnesses.\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/MASTER_DEVELOPMENT_PLAN.md": {
+      "beforeSha256": "bf35641a5d54320107ce179d5a612cdd7df30ff3944e3b24354338ab46954080",
+      "afterSha256": "552a16499f82420e42ac1a9e0445d0595779641727ba2d9f77c95964096de681",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/READINESS_INDEX.md": {
+      "beforeSha256": "c7bf3e56f6a678d76ba300b5e2ed4ebeb5d8081d70ab8b8430c26f39a8bcca05",
+      "afterSha256": "ced4f5cacc6cc7b8ff1d3f3750d03f1cd80bca77be86992df4c2d06f2356a996",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md": {
+      "beforeSha256": "45db024e4d6dd49751989c3a77a4c1744e227215db31a1f79f9561d4ee53f111",
+      "afterSha256": "32dbd6238da3764e9ef846659d594ab3220772167aac522122aba8d4128e06a2",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/adr/0004-sol-high-packet-boundary.md": {
+      "beforeSha256": "26ef0d9355f6d8d317eaa674e4f2ced0ec4664e458cd0a8e48a263de0a63f973",
+      "afterSha256": "43176cef38b17bf471d85be4f0eebd0570cc84e569cf83350e000e95079551fc",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](../alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](../alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/LIVE_BACKEND_READINESS.md": {
+      "beforeSha256": "4ab60b930b0e4bd332657088f4c1e6a16835972c3f876246008722c2dbf0898f",
+      "afterSha256": "6c7ac00f7bd9617c03c16fb555e83721bd0248e8fbeec62e435775fa59dee234",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/00-harness-engineering.md": {
+      "beforeSha256": "9f9d59efd7eba85a10ddc7fece3067c16c796d14576312fc608c5c554539878d",
+      "afterSha256": "c3dad6f1a25997bf6704e053d3a2f81d49467087727ab423061e30379395751b",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](../alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](../alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        },
+        {
+          "before": "33. `MET-REPAIR-013`: publish the authentication-only client credential ordering exception, mandatory independent server admission and exact meta/source preservation checks.",
+          "after": "33. `MET-REPAIR-013`: publish the authentication-only client credential ordering exception, mandatory independent server admission and exact meta/source preservation checks.\n34. `MET-REPAIR-014`: publish fixed server-local broker execution, contained worker ABI, exact cleanup and closed data-model acceptance; preserve all consumer paths and historical evidence.",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/12-mas-harness-conformance-labs.md": {
+      "beforeSha256": "06933971ed2b0537310c9ee07195484413a98ced2b56558380683df438fe18c9",
+      "afterSha256": "2491d2b30c4ff235ecbbf58b24f0d2299369f5dbbc6dfbb8ec51c708d68d5276",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](../alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](../alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_ci_performance.py": {
+      "beforeSha256": "fec1225b3ab73f0c88092048c814bca1eeaac6049d054db065e6867fbc9163bf",
+      "afterSha256": "a31ec44ba8e665a3bfdbf5896554a71a382e997e341289572cbfc3ffa526e6ce",
+      "replacements": [
+        {
+          "before": "CURRENT_PACKET_COUNT = 142",
+          "after": "CURRENT_PACKET_COUNT = 143",
+          "count": 1
+        },
+        {
+          "before": "SUCCESSOR_ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\")",
+          "after": "SUCCESSOR_ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"CI performance authority valid: 142 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.\")",
+          "after": "        print(\"CI performance authority valid: 143 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_credential_lifecycle.py": {
+      "beforeSha256": "be14a0b2eaaa1e1d33edaaf8f82daf3cf4e233344a981bf66149b53de327c250",
+      "afterSha256": "624305b6f3433998d73aede4f320af4f625ec8e530ab93fd3a40c8937908d2ac",
+      "replacements": [
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\")",
+          "after": "ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\")",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 139 and len(packets) == 142 and set(packets) == old | set(ADDITIONS),",
+          "after": "        require(len(old) == 139 and len(packets) == 143 and set(packets) == old | set(ADDITIONS),",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Credential lifecycle authority valid: 142 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.\")",
+          "after": "        print(\"Credential lifecycle authority valid: 143 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_credential_ordering.py": {
+      "beforeSha256": "ad651ad2ad46b8eed8517fc990e212ba9b5af93edeeb5b1ce9874e2950c4aa36",
+      "afterSha256": "54e878f9c1ec34a61c1d51c656a291f2a73801c509e153fa836afad8befa1ec1",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 141 and len(packets) == 142 and set(packets) == old | {\"MET-REPAIR-013\"},",
+          "after": "        require(len(old) == 141 and len(packets) == 143 and set(packets) == old | {\"MET-REPAIR-013\"},",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Credential ordering valid: 142 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")",
+          "after": "        print(\"Credential ordering valid: 143 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")",
+          "count": 1
+        },
+        {
+          "before": "ROOT = Path(__file__).resolve().parents[1]",
+          "after": "try:\n    from validate_broker_handoff import historical_bytes as broker_history, current_test_bytes as broker_current, validate_additions as broker_additions\nexcept ImportError:\n    from scripts.validate_broker_handoff import historical_bytes as broker_history, current_test_bytes as broker_current, validate_additions as broker_additions\n\nROOT = Path(__file__).resolve().parents[1]",
+          "count": 1
+        },
+        {
+          "before": "        return []\n    except (ValueError, TypeError, RecursionError):",
+          "after": "        return broker_additions(packets)\n    except (ValueError, TypeError, RecursionError):",
+          "count": 1
+        },
+        {
+          "before": "    if path != \"AGENTS.md\" and not path.startswith(\"tests/\"):",
+          "after": "    raw = broker_history(path, raw)\n    if path != \"AGENTS.md\" and not path.startswith(\"tests/\"):",
+          "count": 1
+        },
+        {
+          "before": "    return apply_recipe(before, matches[0][1])",
+          "after": "    return broker_current(apply_recipe(before, matches[0][1]))",
+          "count": 1
+        },
+        {
+          "before": "current[path] == apply_recipe(raw, recipe)",
+          "after": "broker_history(path, current[path]) == apply_recipe(raw, recipe)",
+          "count": 1
+        },
+        {
+          "before": "digest(inputs[path]) == checksum",
+          "after": "digest(broker_history(path, inputs[path])) == checksum",
+          "count": 1
+        },
+        {
+          "before": "set(packets) == old | {\"MET-REPAIR-013\"}",
+          "after": "set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\"}",
+          "count": 1
+        },
+        {
+          "before": "        for name in packets:\n",
+          "after": "        for name in old | {\"MET-REPAIR-013\"}:\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_custody_handoff.py": {
+      "beforeSha256": "bd9e53d8c4002fd398b46c0feb9776f36623ef576f1d3c8bfeba880f380a6c7d",
+      "afterSha256": "4c1486e78e1084d132c8fa29d62d5d33695f0c03218903b413ed7e4e3f15e53e",
+      "replacements": [
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\")",
+          "after": "ADDITIONS = (\"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Custody handoff authority valid: 142 packets; 127-file/279-ID history preserved; product/native NOT_RUN.\")",
+          "after": "        print(\"Custody handoff authority valid: 143 packets; 127-file/279-ID history preserved; product/native NOT_RUN.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_readiness.py": {
+      "beforeSha256": "810f8bf69455957ce912752a9782be0ef4383df790fc67671fd7a30af31fd439",
+      "afterSha256": "0077286f344e2184bbb3efa1a45b2e6d8770eb356d4361c640207a4fc87ac54e",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 142:",
+          "after": "    if len(packets) != 143:",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"Current catalog requires 142 packets; original Linux policy remains 118\")",
+          "after": "        errors.append(\"Current catalog requires 143 packets; original Linux policy remains 118\")",
+          "count": 1
+        },
+        {
+          "before": "    print(\"Linux roadmap authority valid: 142 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.\")",
+          "after": "    print(\"Linux roadmap authority valid: 143 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_repair.py": {
+      "beforeSha256": "7d557e9b33d82d016c8d6370a650642b3044fdf97390e3944fcc282e080ff7dc",
+      "afterSha256": "f93ab487cd65e4bf9ad96c65586f880f01ae5787d6e20917c11d307474aafc83",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 142:",
+          "after": "    if len(packets) != 143:",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"Current catalog requires exactly 142 packets; consumed amendment remains 120\")",
+          "after": "        errors.append(\"Current catalog requires exactly 143 packets; consumed amendment remains 120\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Linux repair authority valid: 142 packets; 120-packet record preserved; native Linux remains unproven.\")",
+          "after": "        print(\"Linux repair authority valid: 143 packets; 120-packet record preserved; native Linux remains unproven.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_test_ownership.py": {
+      "beforeSha256": "3dadff5a99f07c738f09fb5877b1952b7b3b8d02efe56775784c7fde2facade6",
+      "afterSha256": "e36a33b7484a8c2c193355c8165f9b6b07d806216c95bcb26a328e52832949bb",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 142:",
+          "after": "    if len(packets) != 143:",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"Current catalog requires exactly 142 packets; Linux ownership record remains 121\")",
+          "after": "        errors.append(\"Current catalog requires exactly 143 packets; Linux ownership record remains 121\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Linux test ownership valid: 142 packets; historical one-assertion grant preserved; native/live acceptance unproven.\")",
+          "after": "        print(\"Linux test ownership valid: 143 packets; historical one-assertion grant preserved; native/live acceptance unproven.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_live_backend_readiness.py": {
+      "beforeSha256": "10db2d541a02cef3eb542502deb349d40fd0e309e76d9d7b39a7e207c00c3b1e",
+      "afterSha256": "7a95968243a99b3f1c8ffd40e0a617f4b0b6263e69f784d731860653bd09cbc5",
+      "replacements": [
+        {
+          "before": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 142:",
+          "after": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 143:",
+          "count": 1
+        },
+        {
+          "before": "            errors.append(\"current roadmap requires exactly 142 named packets; historical authority remains 130\")",
+          "after": "            errors.append(\"current roadmap requires exactly 143 named packets; historical authority remains 130\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Live backend roadmap valid: 142 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")",
+          "after": "        print(\"Live backend roadmap valid: 143 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_model_api_inventory.py": {
+      "beforeSha256": "dbca41b4cc25e20460d37e75801b7477848b3860f60d028359b84f1406d8e896",
+      "afterSha256": "b94c538bfc615a0ebacb095d4bd48699c6eb5ef8da8cecdff25b8478778e609f",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 142:",
+          "after": "    if len(packets) != 143:",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"current catalog requires exactly 142 packets\")",
+          "after": "        errors.append(\"current catalog requires exactly 143 packets\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Model inventory authority valid: 142 packets; exact predicate grant; product/native acceptance unproven.\")",
+          "after": "        print(\"Model inventory authority valid: 143 packets; exact predicate grant; product/native acceptance unproven.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_model_fixture_scope.py": {
+      "beforeSha256": "e22c7402ef32c4917451361697e6477406cd0ef046daaae87d19f7c878caa696",
+      "afterSha256": "4cae35ae5c16d368f7ef143fa0d2b18d8b41d2436140fbbb8464203e91076c6e",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 142:",
+          "after": "    if len(packets) != 143:",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"current catalog requires exactly 142 packets; fixture publication remains 122\")",
+          "after": "        errors.append(\"current catalog requires exactly 143 packets; fixture publication remains 122\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Model fixture authority valid: 142 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.\")",
+          "after": "        print(\"Model fixture authority valid: 143 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_packet_scalar_repair.py": {
+      "beforeSha256": "c82edd930f66242ba3e4443c0a493a84d381ccee868725f019d838c4e5e295db",
+      "afterSha256": "3678b8a4fae4cf4f6ae3dffae4bc6c3c2452be49ca9d30c74184e36d65dd3114",
+      "replacements": [
+        {
+          "before": "        print(\"Scalar repair authority valid: 142 packets; historical 132-packet record and 164 predecessor files unchanged.\")",
+          "after": "        print(\"Scalar repair authority valid: 143 packets; historical 132-packet record and 164 predecessor files unchanged.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_policy_observation.py": {
+      "beforeSha256": "aa1978e16f5ad663bd9ed855ae83924f4600e4c5b8d1f48f64f531f8afc7da21",
+      "afterSha256": "4a8b26f80f5e32d83e9e1c5db1f4aed158fd95585516969045f556de6a3ac304",
+      "replacements": [
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\")",
+          "after": "ADDITIONS = (\"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Policy observation authority valid: 142 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.\")",
+          "after": "        print(\"Policy observation authority valid: 143 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_proxy_contract.py": {
+      "beforeSha256": "fa713f2eb37b4aa45f2da42704c2bff0741a9324d41ee14bc480df8a2a88069f",
+      "afterSha256": "dd0e19ea0a4a2254426a36f2c295a3ea1d599742586e957833cbbcd211d7fda9",
+      "replacements": [
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-009\", \"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\")",
+          "after": "ADDITIONS = (\"MET-REPAIR-009\", \"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Proxy prerequisite valid: 142 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")",
+          "after": "        print(\"Proxy prerequisite valid: 143 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_readiness.py": {
+      "beforeSha256": "9494182232fa11635656b99f3d11efe0dce5ea69154ba1e54fd886ba876d2491",
+      "afterSha256": "da68f8115b9c95eddf51ba3d56437829026469c713a90692334c7bc6516bd14c",
+      "replacements": [
+        {
+          "before": "EXPECTED_PACKET_COUNT = 142",
+          "after": "EXPECTED_PACKET_COUNT = 143",
+          "count": 1
+        },
+        {
+          "before": "    for amendment_error in validate_repair_amendment(",
+          "after": "    try:\n        from validate_broker_handoff import load_handoff_inputs, validate_handoff\n    except ImportError:\n        from scripts.validate_broker_handoff import load_handoff_inputs, validate_handoff\n    for handoff_error in validate_handoff(packets, *load_handoff_inputs(ROOT)):\n        validation.error(handoff_error)\n    for amendment_error in validate_repair_amendment(",
+          "count": 1
+        },
+        {
+          "before": "    authority_owner[\"task-packets/MET-REPAIR-013.yaml\"] = \"MET-REPAIR-013\"",
+          "after": "    authority_owner[\"task-packets/MET-REPAIR-013.yaml\"] = \"MET-REPAIR-013\"\n    authority_owner.update({path: \"MET-REPAIR-014\"\n                            for path in packets[\"MET-REPAIR-014\"][\"allowedPaths\"]\n                            if path in authority_owner or path.startswith((\"architecture/\", \"scripts/\"))})\n    authority_owner[\"task-packets/MET-REPAIR-014.yaml\"] = \"MET-REPAIR-014\"",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_readiness_repairs.py": {
+      "beforeSha256": "98cff659ad04594f515bf17bfe9d0cbdc3034c63010a57889197e9c17c8ceed4",
+      "afterSha256": "a40463e9ce9230f31175b105bc2100dd773df95f38f6b4d79c9d143a9ee0ee08",
+      "replacements": [
+        {
+          "before": "    require(len(packets) == 142, \"current catalog requires exactly 142 packets; historical amendment remains 115\")",
+          "after": "    require(len(packets) == 143, \"current catalog requires exactly 143 packets; historical amendment remains 115\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_reuse.py": {
+      "beforeSha256": "aa208639355f175dd2e0edb4a0c01322df4d45f11fd4a207ec0e1285525a626b",
+      "afterSha256": "d52ecedc8763d1064a3672bd6e8d69500496b75edd25e98c0dc721f5e2b8b58c",
+      "replacements": [
+        {
+          "before": "    _require(len(packet_paths) == 142, f\"expected 142 task packets, found {len(packet_paths)}\")",
+          "after": "    _require(len(packet_paths) == 143, f\"expected 143 task packets, found {len(packet_paths)}\")",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_successor_inventory.py": {
+      "beforeSha256": "c2dcdfd8a5544dca6d4c72c7c48bf0c43ddfe2c56c6a765272b419eda6e958c9",
+      "afterSha256": "bfc83e7af245f3b7bdaca1b3906db56ed2f57b2b9475992fc36034999f7bc038",
+      "replacements": [
+        {
+          "before": "        print(\"Successor inventory authority valid: 142 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")",
+          "after": "        print(\"Successor inventory authority valid: 143 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")",
+          "count": 1
+        }
+      ]
+    },
+    "task-packets/README.md": {
+      "beforeSha256": "dc6a65841619c3b61aaf0b06f53305fc7be967c504b4ced10cc9b11cd1e275f8",
+      "afterSha256": "191f82c4c46f53d347c78cf678752488afd4352b0d2d54248ef8a69652970f04",
+      "replacements": [
+        {
+          "before": "Current Alpha-2 dispatch: [MET-REPAIR-013 credential ordering](../docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md).",
+          "after": "Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](../docs/alpha-2/BROKER_HANDOFF_READINESS.md).",
+          "count": 1
+        },
+        {
+          "before": "Catalog 142; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "after": "Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.",
+          "count": 1
+        },
+        {
+          "before": "MET-REPAIR-012 and CONF-FIX-005 source gates are closed. Close this ordering authority before CONF-LIVE-003.",
+          "after": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n",
+          "after": "Alpha3/4 remain waiting; Alpha 2 ONGOING, effort transition NOT_DUE.\n\n\n## Approved broker handoff — MET-REPAIR-014\n\nThe current dispatch link is normative for the fixed server-local broker execution\nhandoff, including zero-resource probes. Broker-controlled execution, not an\nobservation, callback or token, enforces the policy generation. The proxy retains\nexact resource/UID ownership and cleanup; the worker has no credentials or generic\nexecution API. New local custody and the fixed worker ABI do not change public\ncampaign/signature schemas, network endpoint sets or Kubernetes permissions.\n\nCatalog143; all142 predecessor packet bytes and the accepted127-file/327-test\nproduct checkpoint remain unchanged. Product packets003–006 keep their exact\npaths/eight commands and source stages. This source-only publication requires22\ncommands, both complete replays, required localhost PR CI, merge and independent\nlocal exact-main. No installation, new broker availability, paid service or live\nacceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.\n",
+          "count": 1
+        },
+        {
+          "before": "| 96 | `MET-REPAIR-013` | `Harness-Engineering` | Client authentication / server execution ordering authority |",
+          "after": "| 96 | `MET-REPAIR-013` | `Harness-Engineering` | Client authentication / server execution ordering authority |\n| 97 | `MET-REPAIR-014` | `Harness-Engineering` | Fixed broker-controlled execution and cleanup handoff |",
+          "count": 1
+        },
+        {
+          "before": "| 97 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |",
+          "after": "| 98 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |",
+          "count": 1
+        },
+        {
+          "before": "| 98 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |",
+          "after": "| 99 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |",
+          "count": 1
+        },
+        {
+          "before": "| 99 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |",
+          "after": "| 100 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |",
+          "count": 1
+        },
+        {
+          "before": "| 100 | `CONF-LIVE-006` | `mas-harness-conformance-labs` | Trusted campaign integration and manual qualification declaration |",
+          "after": "| 101 | `CONF-LIVE-006` | `mas-harness-conformance-labs` | Trusted campaign integration and manual qualification declaration |",
+          "count": 1
+        },
+        {
+          "before": "| 101 | `CTRL-INTEGRATE-001` | `mas-harness-control-plane` | Alpha-1 production overview integration carryover |",
+          "after": "| 102 | `CTRL-INTEGRATE-001` | `mas-harness-control-plane` | Alpha-1 production overview integration carryover |",
+          "count": 1
+        },
+        {
+          "before": "| 102 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |",
+          "after": "| 103 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |",
+          "count": 1
+        },
+        {
+          "before": "| 103 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |",
+          "after": "| 104 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |",
+          "count": 1
+        },
+        {
+          "before": "| 104 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |",
+          "after": "| 105 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |",
+          "count": 1
+        },
+        {
+          "before": "| 105 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |",
+          "after": "| 106 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |",
+          "count": 1
+        },
+        {
+          "before": "| 106 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |",
+          "after": "| 107 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |",
+          "count": 1
+        },
+        {
+          "before": "| 107 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |",
+          "after": "| 108 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |",
+          "count": 1
+        },
+        {
+          "before": "| 108 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |",
+          "after": "| 109 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |",
+          "count": 1
+        },
+        {
+          "before": "| 109 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |",
+          "after": "| 110 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |",
+          "count": 1
+        },
+        {
+          "before": "| 110 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |",
+          "after": "| 111 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |",
+          "count": 1
+        },
+        {
+          "before": "| 111 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |",
+          "after": "| 112 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |",
+          "count": 1
+        },
+        {
+          "before": "| 112 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |",
+          "after": "| 113 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |",
+          "count": 1
+        },
+        {
+          "before": "| 113 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |",
+          "after": "| 114 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |",
+          "count": 1
+        },
+        {
+          "before": "| 114 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |",
+          "after": "| 115 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |",
+          "count": 1
+        },
+        {
+          "before": "| 115 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |",
+          "after": "| 116 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |",
+          "count": 1
+        },
+        {
+          "before": "| 116 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |",
+          "after": "| 117 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |",
+          "count": 1
+        },
+        {
+          "before": "| 117 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |",
+          "after": "| 118 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |",
+          "count": 1
+        },
+        {
+          "before": "| 118 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |",
+          "after": "| 119 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |",
+          "count": 1
+        },
+        {
+          "before": "| 119 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |",
+          "after": "| 120 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |",
+          "count": 1
+        },
+        {
+          "before": "| 120 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |",
+          "after": "| 121 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |",
+          "count": 1
+        },
+        {
+          "before": "| 121 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |",
+          "after": "| 122 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |",
+          "count": 1
+        },
+        {
+          "before": "| 122 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |",
+          "after": "| 123 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |",
+          "count": 1
+        },
+        {
+          "before": "| 123 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |",
+          "after": "| 124 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |",
+          "count": 1
+        },
+        {
+          "before": "| 124 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |",
+          "after": "| 125 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |",
+          "count": 1
+        },
+        {
+          "before": "| 125 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |",
+          "after": "| 126 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |",
+          "count": 1
+        },
+        {
+          "before": "| 126 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |",
+          "after": "| 127 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |",
+          "count": 1
+        },
+        {
+          "before": "| 127 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |",
+          "after": "| 128 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |",
+          "count": 1
+        },
+        {
+          "before": "| 128 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |",
+          "after": "| 129 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 129 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |",
+          "after": "| 130 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 130 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |",
+          "after": "| 131 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 131 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |",
+          "after": "| 132 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 132 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |",
+          "after": "| 133 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |",
+          "count": 1
+        },
+        {
+          "before": "| 133 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |",
+          "after": "| 134 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |",
+          "count": 1
+        },
+        {
+          "before": "| 134 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |",
+          "after": "| 135 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |",
+          "count": 1
+        },
+        {
+          "before": "| 135 | `OP-007` | `mas-harness-operator` | Platform security |",
+          "after": "| 136 | `OP-007` | `mas-harness-operator` | Platform security |",
+          "count": 1
+        },
+        {
+          "before": "| 136 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |",
+          "after": "| 137 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |",
+          "count": 1
+        },
+        {
+          "before": "| 137 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |",
+          "after": "| 138 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |",
+          "count": 1
+        },
+        {
+          "before": "| 138 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |",
+          "after": "| 139 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |",
+          "count": 1
+        },
+        {
+          "before": "| 139 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |",
+          "after": "| 140 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |",
+          "count": 1
+        },
+        {
+          "before": "| 140 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |",
+          "after": "| 141 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |",
+          "count": 1
+        },
+        {
+          "before": "| 141 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |",
+          "after": "| 142 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |",
+          "count": 1
+        },
+        {
+          "before": "| 142 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |",
+          "after": "| 143 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_alpha2_readiness.py": {
+      "beforeSha256": "ccc4f98f7b16776020ce494cadf9daff2f3b55580080f0ebf1f615dce4a5443c",
+      "afterSha256": "7644a279e048f2dc70b1f9c94267a055b656e3e6cca6923050d97c84cb38e0a1",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_ci_performance.py": {
+      "beforeSha256": "567a3ff719ced63b5808ecc6a14c54bd5e724fe3528a025c87367b4d3bfab643",
+      "afterSha256": "52d06b7c1fc95c541b24fd7e7b40836809cd98b0682a9bce64fef9a18faa9f6f",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == CURRENT_PACKET_COUNT == 142",
+          "after": "    assert len(packets) == CURRENT_PACKET_COUNT == 143",
+          "count": 1
+        },
+        {
+          "before": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 142\"",
+          "after": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 143\"",
+          "count": 1
+        },
+        {
+          "before": "    assert len(paths) == 158",
+          "after": "    assert len(paths) == 159",
+          "count": 1
+        },
+        {
+          "before": "    assert \"during `MET-REPAIR-013` publication\" in current",
+          "after": "    assert \"during `MET-REPAIR-014` publication\" in current",
+          "count": 1
+        },
+        {
+          "before": "    assert \"MET-REPAIR-013 | ONGOING\" in current",
+          "after": "    assert \"MET-REPAIR-014 | ONGOING\" in current",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_credential_lifecycle.py": {
+      "beforeSha256": "0ffbe47af674e340f9f3aa553f9d03f9823c3cd0e48e02a7365578b8d58cce4e",
+      "afterSha256": "8ce3f15d0eb932f87f12d2ed2f048358d7c7cde0605309467602687d06ed8f66",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(record[\"protectedFiles\"]) == 245",
+          "after": "    assert len(packets) == 143 and len(record[\"protectedFiles\"]) == 245",
+          "count": 1
+        },
+        {
+          "before": "    assert \"during `MET-REPAIR-013` publication\" in current and \"305\" in current",
+          "after": "    assert \"during `MET-REPAIR-014` publication\" in current and \"305\" in current",
+          "count": 1
+        },
+        {
+          "before": "    if kind == \"assertion\": current[path] = current[path].replace(b\"assert len(paths) == 158\", b\"assert True\", 1)",
+          "after": "    if kind == \"assertion\": current[path] = current[path].replace(b\"assert len(paths) == 159\", b\"assert True\", 1)",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_credential_ordering.py": {
+      "beforeSha256": "8dbac2fd6f7ada967f58817e886b4d9fdda521cffc5543d0fcae3e66c6e3bcff",
+      "afterSha256": "c9a69374f87299810b121d1121614f338aa567bcaf2b6447c77dbe6b740582d9",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        },
+        {
+          "before": "    assert \"during `MET-REPAIR-013` publication\" in current",
+          "after": "    assert \"during `MET-REPAIR-014` publication\" in current",
+          "count": 1
+        },
+        {
+          "before": "    assert \"MET-REPAIR-013 | ONGOING\" in current",
+          "after": "    assert \"MET-REPAIR-014 | ONGOING\" in current",
+          "count": 1
+        },
+        {
+          "before": "import pytest\n",
+          "after": "import pytest\nfrom scripts.validate_broker_handoff import historical_bytes as broker_history\n",
+          "count": 1
+        },
+        {
+          "before": "assert digest(inputs[path]) == checksum",
+          "after": "assert digest(broker_history(path, inputs[path])) == checksum",
+          "count": 1
+        },
+        {
+          "before": "assert apply_recipe(old, recipe) == current[path]",
+          "after": "assert apply_recipe(old, recipe) == broker_history(path, current[path])",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_custody_handoff.py": {
+      "beforeSha256": "5431a97415f6be294b1553635dc0c03ffc1ad1f01f11ba51b96f02663a881ace",
+      "afterSha256": "c71e94c1c48643126effc614948b94c6e8bc15ba0a7989f2f3e86262efdd14e4",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(record[\"protectedFiles\"]) == 203",
+          "after": "    assert len(packets) == 143 and len(record[\"protectedFiles\"]) == 203",
+          "count": 1
+        },
+        {
+          "before": "    assert \"during `MET-REPAIR-013` publication\" in current",
+          "after": "    assert \"during `MET-REPAIR-014` publication\" in current",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_readiness.py": {
+      "beforeSha256": "144046e4a2fecddc9e57f8f6c32c1ee77236a7a60b7eb439b3e4a2260f95af70",
+      "afterSha256": "31b9d80152681cae7a30c870dab61a85f235128ca9ab2e958d2e33d5c23ca354",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_repair.py": {
+      "beforeSha256": "ab4514f111e7b42855f6a6f8817e876ef30b91795d625d7052c503568dd7b872",
+      "afterSha256": "fe29f898543d699060850d1c3fa1532457a8a17a96d4cd52e3f36a33109fc8f3",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_test_ownership.py": {
+      "beforeSha256": "9a54ddecaec8bcad9d58ff4ddd051c64d096013ffb87c6fc0fb8b4b587258bc1",
+      "afterSha256": "63ff683c492d44f40a54eb8816655e64d06efd4394ff365ab2cfada8aadf90e6",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_live_backend_readiness.py": {
+      "beforeSha256": "89e1d8b6d3b63e447723b2f0db83cc3ea826701629ee52a4240ed1927617dd83",
+      "afterSha256": "82a87f67c829a61fd6bf1e2b95c16f24e94ca7186b95dc566902908da7b71080",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(raw) == 156",
+          "after": "    assert len(packets) == 143 and len(raw) == 156",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_model_api_inventory.py": {
+      "beforeSha256": "87b0c98ca1695e7c072671c277db25475e93b4e1f535e2a42dc2f01d24c1cba2",
+      "afterSha256": "5d2c97b5f65793437dbf90781539380cd31d438b7e7975dcec5846e1a9f44533",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_model_fixture_scope.py": {
+      "beforeSha256": "e0aebc707d8b3d8aa8ac8bf27e7ab2b4cceddacc08d6ea549047dd8852098c32",
+      "afterSha256": "adef966d199231840137bfd482c228fd475a7f929bc5b48699c66eaee96ed28a",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142",
+          "after": "    assert len(packets) == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_packet_scalar_repair.py": {
+      "beforeSha256": "299585745dc2d6edaa4803162eb04597830e747200436d0c1b3aa75b72d4d461",
+      "afterSha256": "27983fbf4cf8c14afc6d85dba1119a8e854b4908228917fab7e927d5caffb3f4",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(record[\"protectedFiles\"]) == 164 and len(raw) == 169",
+          "after": "    assert len(packets) == 143 and len(record[\"protectedFiles\"]) == 164 and len(raw) == 169",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_policy_observation.py": {
+      "beforeSha256": "ecd7906079a5836ea8abe354a0c1c65b8e8c7987ece57ab7a24cdbb52c06beff",
+      "afterSha256": "f367af7214e02bb740d6a97f2f6464bc043d6fb115f35b452936b2cf69d3e713",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(record[\"protectedFiles\"]) == 186",
+          "after": "    assert len(packets) == 143 and len(record[\"protectedFiles\"]) == 186",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_proxy_contract.py": {
+      "beforeSha256": "0a43d97474cc98dd03adc43c7af8dbfca151a1e46bf33c42ccd269e6b94c9ee1",
+      "afterSha256": "fb8fd92010bcf453343c697d16e6fafaf60d0ab47fbba3ab5b2bcb742d85e7a1",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(record[\"protectedFiles\"]) == 176",
+          "after": "    assert len(packets) == 143 and len(record[\"protectedFiles\"]) == 176",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_reuse.py": {
+      "beforeSha256": "d6f9df031df0a04c42433a4eca6c0fe6772af0be64a96809586e72a4abb6abd7",
+      "afterSha256": "ab36fadac5d5c6889318741c58aa597aa45a1952865c21035555dd6acced2446",
+      "replacements": [
+        {
+          "before": "    assert report.task_packets == 142",
+          "after": "    assert report.task_packets == 143",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_successor_inventory.py": {
+      "beforeSha256": "1a44c0ae4d7326e3d45c7829bc81cb2e1cbce3b486b2680d66cbd1e178b67f44",
+      "afterSha256": "0dfd1a677ab3b6e8c08bb3d4f38d125488b51ae3868b8f96794744c55683008c",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 142 and len(record[\"protectedFiles\"]) == 170 and len(raw) == 175",
+          "after": "    assert len(packets) == 143 and len(record[\"protectedFiles\"]) == 170 and len(raw) == 175",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_task_packets.py": {
+      "beforeSha256": "f55ac066ad132b5d7649da115223de489ed316c106a0d5cd6fb5ab6f85c9cbb3",
+      "afterSha256": "eef71c04be403a6ec299f0715dff6f05942067314ea3d8353bf2350094c21c88",
+      "replacements": [
+        {
+          "before": "    assert len(files) == EXPECTED_PACKET_COUNT == 142",
+          "after": "    assert len(files) == EXPECTED_PACKET_COUNT == 143",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "dispatch": {
+    "CONF-LIVE-003": {
+      "paths": [
+        "src/harness_conformance/live_proxy_client.py",
+        "src/harness_conformance/live_proxy_server.py",
+        "src/harness_conformance/live_mutation_admission.py",
+        "tests/live_backend/test_proxy_client.py",
+        "tests/live_backend/test_proxy_server.py",
+        "tests/live_backend/test_mutation_admission.py",
+        "fixtures/live-backend/proxy-vectors.json",
+        "docs/live-backend/proxy.md"
+      ],
+      "commands": [
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/meta",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/parity",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/alpha1",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/fixes/runner_boundary",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/platform/linux_baseline",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/live_backend",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "make",
+          "campaign",
+          "CAMPAIGN=linux-baseline"
+        ],
+        [
+          "make",
+          "evidence-verify",
+          "CAMPAIGN=linux-baseline"
+        ]
+      ]
+    },
+    "CONF-LIVE-004": {
+      "paths": [
+        "src/harness_conformance/live_fixed_probes.py",
+        "src/harness_conformance/live_probe_receipts.py",
+        "fixtures/live-backend/probe-vectors.json",
+        "tests/live_backend/test_fixed_probes.py",
+        "tests/live_backend/test_probe_receipts.py",
+        "docs/live-backend/probes.md"
+      ],
+      "commands": [
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/meta",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/parity",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/alpha1",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/fixes/runner_boundary",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/platform/linux_baseline",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/live_backend",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "make",
+          "campaign",
+          "CAMPAIGN=linux-baseline"
+        ],
+        [
+          "make",
+          "evidence-verify",
+          "CAMPAIGN=linux-baseline"
+        ]
+      ]
+    },
+    "CONF-LIVE-005": {
+      "paths": [
+        "ci/build_live_backend.py",
+        "src/harness_conformance/live_backend_package.py",
+        "tests/live_backend/test_package.py",
+        "fixtures/live-backend/package-vectors.json",
+        "docs/live-backend/operator-handoff.md"
+      ],
+      "commands": [
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/meta",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/parity",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/alpha1",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/fixes/runner_boundary",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/platform/linux_baseline",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/live_backend",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "make",
+          "campaign",
+          "CAMPAIGN=linux-baseline"
+        ],
+        [
+          "make",
+          "evidence-verify",
+          "CAMPAIGN=linux-baseline"
+        ]
+      ]
+    },
+    "CONF-LIVE-006": {
+      "paths": [
+        "src/harness_conformance/live_launcher.py",
+        "src/harness_conformance/live_backend_campaign.py",
+        "src/harness_conformance/live_backend_evidence.py",
+        "tests/live_backend/test_campaign_integration.py",
+        "tests/live_backend/test_cumulative_release.py",
+        "docs/live-backend/qualification.md"
+      ],
+      "commands": [
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/meta",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/parity",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/alpha1",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/fixes/runner_boundary",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/platform/linux_baseline",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/live_backend",
+          "-p",
+          "test_*.py"
+        ],
+        [
+          "make",
+          "campaign",
+          "CAMPAIGN=linux-baseline"
+        ],
+        [
+          "make",
+          "evidence-verify",
+          "CAMPAIGN=linux-baseline"
+        ]
+      ]
+    }
+  },
+  "unchangedTests": {
+    "tests/test_architecture.py": "4950bc15a766718f7841fdb3a549507c99e2eb67805eda952f536190d87301fa",
+    "tests/test_model_usage_observation.py": "3b6edd26186344584d7257eac61cc1e8b57b7de6fb34f16e865571a581b78e07",
+    "tests/test_readiness.py": "9694b99697768d759542b5d0cacb44ae8f04a75591254bda94555f1dc70ba280",
+    "tests/test_readiness_repairs.py": "2647e5b195cfeb891429d17e28a3b34714f74cacab83c08b11af5f0b29a20147",
+    "tests/test_release_lock.py": "41f1e77372f5536d2812041fb32e79f2bc7b8ccd3f776e59bc5f0bc5a0b10521",
+    "tests/test_validator_units.py": "fc301539333e3f9a833577fd1c879b9d23b969a9056a4c9ab5b721d80f363db6"
+  }
+}

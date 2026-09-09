@@ -1,5 +1,53 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-09, during `MET-REPAIR-014` publication. Source authority only.
+Current catalog: 143 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime acceptance remains separate |
+| Alpha 2 | MET-REPAIR-012 / PR106 | DONE_SOURCE_GATES | Accepted source authority |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7; 127 files / 327 tests; corrected CONF-FIX-004 127/305 checkpoint preserved |
+| Alpha 2 | MET-REPAIR-013 / PR108 | DONE_SOURCE_GATES | Main d603672; required localhost CI34334594189 and independent local exact-main |
+| Alpha 2 authority | MET-REPAIR-014 | ONGOING — publication | Fixed server-local broker execution and cleanup handoff |
+| Alpha 2 backend | CONF-LIVE-003 | WAITING — this publication closure | Local unvalidated drafts preserved; finish eight-path proxy/admission after authority closes |
+| Alpha 2 backend | CONF-LIVE-004 | WAITING | Fixed broker-owned worker and ten native probes |
+| Alpha 2 backend | CONF-LIVE-005 | WAITING | Three inert candidate entries and operator handoff |
+| Alpha 2 backend | CONF-LIVE-006 | WAITING | Trusted integration and independent native evidence |
+| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+## Current correction
+
+The [broker handoff authority](alpha-2/BROKER_HANDOFF_READINESS.md) closes
+CONF-LIVE-003/B1: a current observation is not an atomic execution grant. The
+external broker owns the contained fixed worker and enforcement transaction,
+including zero-resource probes. The proxy retains its server-only API credential,
+exact signed-resource/UID custody and independent cleanup. No callback/token can
+replace installed enforcement. No public API, endpoint set, signature role,
+Kubernetes permission, product path or command change is authorized.
+
+The new local channel and fixed worker ABI are source contracts, not installed
+services. MET-REPAIR-013 exact-main log SHA256:
+66620c90c3b55077a72a7ca5bc6f291c491d3481c48d08edaacdacc43a23ce94.
+Recorded prior passes are not new packet acceptance. All327 predecessor product
+tests and all127 files remain pinned and unexecuted by this meta publication.
+
+This packet requires twenty-two commands and both complete replays. Keep all
+failed logs and nested420/trusted900-second/workflow15-minute limits. No root
+installation/policy change, administrator prompt, new key, hosted runner,
+download, paid API, artifact upload, cloud action or native campaign.
+Source/CI/merge/local exact-main, packaging, installation, native qualification,
+runtime, assurance and tenant acceptance remain independent evidence states.
+Alpha 2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-013 publication checkpoint
+
+The following snapshot is historical, not current dispatch authority.
+
+# Development checkpoint — Phase 0 to Alpha 2
+
 Snapshot: 2026-09-09, during `MET-REPAIR-013` publication. Source authority only.
 Current catalog: 142 packets; thirteen repositories, four planes, sixteen harnesses.
 
