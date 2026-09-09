@@ -40,7 +40,8 @@ def test_exact_packet_and_preservation_authority(authority):
 @pytest.mark.parametrize("field", ["allowedPaths", "offlineAcceptanceCommands", "predecessors", "sourceReuse", "excluded"])
 def test_packet_cannot_relax_scope_or_acceptance(authority, field):
     packets = deepcopy(authority[0])
-    packets["MET-PERF-001"][field] = []
+    packets["MET-PERF-001"][field] = [{"unreviewed": True}] if field == "sourceReuse" else []
+    assert packets["MET-PERF-001"][field] != authority[0]["MET-PERF-001"][field]
     assert validate_additions(packets)
     assert validate_ci_performance(packets, *authority[1:])
 
