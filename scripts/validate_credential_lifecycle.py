@@ -203,6 +203,26 @@ def validate_credential_lifecycle(packets, record, inputs):
         require(set(before["files"]) == set(fix["allowedPaths"]), "exact before files required")
         for path, raw in before["files"].items():
             require("sha256:" + digest(raw.encode()) == checkpoint["files"][path]["sha256"], "before bytes mismatch")
+        # Verify the actual accepted correction as inert source, not merely a
+        # history label attached to the current checkpoint.
+        try:
+            from validate_custody_handoff import validate_delta as historical_delta
+        except ImportError:
+            from scripts.validate_custody_handoff import validate_delta as historical_delta
+        historical = parse(inputs["architecture/custody-handoff-amendment.json"])
+        document = before["files"][DOC_PATH].encode()
+        marker = b"```harness-custody-source-proof\n"
+        require(document.count(marker) == 1, "unique historical proof required")
+        proof_raw = document.split(marker, 1)[1].split(b"\n```", 1)[0]
+        proof = parse(proof_raw)
+        require(proof_raw == canonical(proof), "canonical historical proof required")
+        require(not historical_delta({p: raw.encode() for p, raw in before["files"].items()}, proof,
+            historical, inputs["architecture/custody-handoff-inputs/baseline.json"]), "historical source proof failed")
+        original = parse(inputs[record["sourceBaseline"]["originalPath"]])
+        require(original["testCount"] == 279 and set(original["files"]) == set(checkpoint["files"]),
+                "historical checkpoint changed")
+        for path, ids in original["tests"].items():
+            require(set(ids) <= set(checkpoint["tests"][path]), "historical test lost")
         for rules in ("sourceRegions", "testRegions"):
             for path, names in record["change"][rules].items():
                 _, locations = definitions(before["files"][path].encode())

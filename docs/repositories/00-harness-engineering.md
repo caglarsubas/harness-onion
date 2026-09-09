@@ -219,8 +219,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 28. `MET-REPAIR-009`: publish strict proxy authentication/admission profile, immutable 127-file/279-ID source checkpoint and additional dispatch prerequisite.
 29. `MET-REPAIR-010`: publish protected read-only policy observation, exact custody/freshness/generation contracts and unchanged campaign-permission regressions.
-31. `MET-REPAIR-012`: publish the bounded credential lifecycle, five-path CONF-FIX-005 authority and cumulative source-accounting oracle.
 30. `MET-REPAIR-011`: publish the bounded retained-custody handoff correction, five-path CONF-FIX-004 packet, immutable original inventory and region/prefix source-delta checks.
+31. `MET-REPAIR-012`: publish the bounded credential lifecycle, five-path CONF-FIX-005 authority and cumulative source-accounting oracle.
 
 ## Testing, verification, and acceptance
 
