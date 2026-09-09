@@ -8,6 +8,7 @@ import os
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts import validate_model_usage_observation as validator
 
@@ -16,7 +17,7 @@ from scripts import validate_model_usage_observation as validator
 def observed():
     raw = validator.read_report(validator.REPORT_PATH)
     packet = validator.PACKET_PATH.read_bytes()
-    index = yaml.safe_load(validator.INDEX_PATH.read_text())
+    index = safe_yaml_load(validator.INDEX_PATH.read_text())
     return json.loads(raw), raw, packet, index
 
 

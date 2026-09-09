@@ -10,6 +10,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 ROOT = Path(__file__).resolve().parents[1]
 UV_PYTHON = ["uv", "run", "--offline", "--frozen", "--no-sync", "python"]
 CONTRACT_COMMANDS = [
@@ -297,7 +302,7 @@ def validate_repair_amendment(
         == EXPECTED_AMENDMENT["historicalRepairRecordSha256"],
         "original repair publication was rewritten",
     )
-    require(len(packets) == 138, "current catalog requires exactly 138 packets; historical amendment remains 115")
+    require(len(packets) == 139, "current catalog requires exactly 139 packets; historical amendment remains 115")
     meta = packets.get("MET-REPAIR-002", {})
     require(isinstance(meta, dict), "repair amendment packet must be an object")
     if not isinstance(meta, dict):
@@ -338,7 +343,7 @@ def validate_repair_amendment(
 
 def main() -> int:
     try:
-        packets = {path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
+        packets = {path.stem: safe_yaml_load(path.read_text(encoding="utf-8"))
                    for path in (ROOT / "task-packets").glob("*.yaml")}
         record = json.loads((ROOT / "architecture/readiness-repairs.json").read_text(encoding="utf-8"))
         errors = validate_repair_authority(packets, record)

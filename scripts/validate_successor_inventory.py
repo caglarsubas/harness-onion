@@ -11,6 +11,11 @@ import stat
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/successor-inventory-amendment.json"
 RECORD_SHA256 = "491c3ee536b0be231be7f29e3580f357659c7012ec54077268e23aa1f08f48e0"
@@ -220,7 +225,7 @@ def regular_baseline_bytes(record, baseline):
 @lru_cache(maxsize=256)
 def packet_semantics(raw):
     # Key by exact bytes: mutations cannot reuse a predecessor's parsed value.
-    return canonical(yaml.safe_load(raw))
+    return canonical(safe_yaml_load(raw))
 
 
 def validate_successor_inventory(packets, record, inputs):
@@ -264,14 +269,14 @@ def validate_successor_inventory(packets, record, inputs):
 
 def main():
     try:
-        packets = {p.stem: yaml.safe_load(regular_bytes(ROOT, str(p.relative_to(ROOT)))) for p in (ROOT / "task-packets").glob("*.yaml")}
+        packets = {p.stem: safe_yaml_load(regular_bytes(ROOT, str(p.relative_to(ROOT)))) for p in (ROOT / "task-packets").glob("*.yaml")}
         errors = validate_successor_inventory(packets, *load_successor_inputs(ROOT))
     except (OSError, TypeError, ValueError, RecursionError, yaml.YAMLError) as exc:
         errors = ["successor authority unavailable: " + type(exc).__name__]
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Successor inventory authority valid: 138 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.")
+        print("Successor inventory authority valid: 139 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.")
     return int(bool(errors))
 
 

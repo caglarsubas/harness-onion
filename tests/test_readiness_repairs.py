@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
 
@@ -12,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def inputs():
-    packets = {path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
+    packets = {path.stem: safe_yaml_load(path.read_text(encoding="utf-8"))
                for path in (ROOT / "task-packets").glob("*.yaml")}
     record = json.loads((ROOT / "architecture/readiness-repairs.json").read_text(encoding="utf-8"))
     return packets, record

@@ -1,3 +1,23 @@
+# Development checkpoint — Alpha 2 CI-performance repair
+
+Snapshot: 2026-09-09, during `MET-PERF-001` publication. Catalog 139.
+
+| Phase | ID / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations | DONE — recorded source/offline | Live acceptance separate |
+| Alpha 2 | MET-PERF-001 | ONGOING | Safe-parser cost repair; both complete replays and limits unchanged |
+| Alpha 2 | MET-REPAIR-012 / PR106 | WAITING | Separate unmerged draft; 420-second and 900-second failed CI evidence retained |
+| Alpha 2 | CONF-FIX-005 | WAITING | Product correction after accepted authority |
+| Alpha 2 | CONF-LIVE-003/004/005/006 | WAITING | Proxy, probes, packaging and integration |
+| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise matrix | WAITING | Existing roadmap unchanged |
+
+[Current repair](alpha-2/CI_PERFORMANCE_REPAIR.md): diagnostic corpus parsing was 2.94 times faster with the already installed LibYAML safe parser; full source/local/CI/merge/local exact-main remain separately required. No product or runtime acceptance. Alpha 2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-011 publication checkpoint
+
+The following is historical, not current dispatch authority.
+
 # Development checkpoint — Phase 0 to Alpha 2
 
 Snapshot: 2026-09-08, during `MET-REPAIR-011` publication. Source authority only.

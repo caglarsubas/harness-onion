@@ -9,6 +9,7 @@ from pathlib import Path
 
 import jsonschema
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
@@ -87,10 +88,10 @@ def provider_catalog_validation_errors(catalog: dict[str, object]) -> list[str]:
     schema = json.loads(
         (ROOT / "schemas/provider-module.schema.json").read_text(encoding="utf-8")
     )
-    repositories = yaml.safe_load(
+    repositories = safe_yaml_load(
         (ROOT / "architecture/repositories.yaml").read_text(encoding="utf-8")
     )["repositories"]
-    services = yaml.safe_load(
+    services = safe_yaml_load(
         (ROOT / "architecture/services.yaml").read_text(encoding="utf-8")
     )["services"]
     validation = VALIDATOR.Validation()
@@ -544,7 +545,7 @@ class ValidatorUnitTest(unittest.TestCase):
         schema = json.loads(
             (ROOT / "schemas/services.schema.json").read_text(encoding="utf-8")
         )
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/services.yaml").read_text(encoding="utf-8")
         )
         catalog["services"][0]["stateBehavior"]["unknownStateClaim"] = True
@@ -556,7 +557,7 @@ class ValidatorUnitTest(unittest.TestCase):
         schema = json.loads(
             (ROOT / "schemas/services.schema.json").read_text(encoding="utf-8")
         )
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/services.yaml").read_text(encoding="utf-8")
         )
         catalog["dependencyStatePropagation"][0] = {
@@ -571,7 +572,7 @@ class ValidatorUnitTest(unittest.TestCase):
         schema = json.loads(
             (ROOT / "schemas/services.schema.json").read_text(encoding="utf-8")
         )
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/services.yaml").read_text(encoding="utf-8")
         )
         catalog["dependencyStatePropagation"][0]["trigger"] = {
@@ -589,7 +590,7 @@ class ValidatorUnitTest(unittest.TestCase):
         schema = json.loads(
             (ROOT / "schemas/taxonomy.schema.json").read_text(encoding="utf-8")
         )
-        taxonomy = yaml.safe_load(
+        taxonomy = safe_yaml_load(
             (ROOT / "architecture/taxonomy.yaml").read_text(encoding="utf-8")
         )
         taxonomy["productionGates"][0]["trustedProducer"][
@@ -603,7 +604,7 @@ class ValidatorUnitTest(unittest.TestCase):
         schema = json.loads(
             (ROOT / "schemas/taxonomy.schema.json").read_text(encoding="utf-8")
         )
-        taxonomy = yaml.safe_load(
+        taxonomy = safe_yaml_load(
             (ROOT / "architecture/taxonomy.yaml").read_text(encoding="utf-8")
         )
         satisfaction = taxonomy["productionGates"][0]["controlSatisfaction"]
@@ -619,7 +620,7 @@ class ValidatorUnitTest(unittest.TestCase):
                 encoding="utf-8"
             )
         )
-        index = yaml.safe_load(
+        index = safe_yaml_load(
             (ROOT / "architecture/porting-authorization-index.yaml").read_text(
                 encoding="utf-8"
             )
@@ -660,7 +661,7 @@ class ValidatorUnitTest(unittest.TestCase):
                 encoding="utf-8"
             )
         )
-        graph = yaml.safe_load(
+        graph = safe_yaml_load(
             (ROOT / "architecture/dependency-graph.yaml").read_text(
                 encoding="utf-8"
             )
@@ -690,7 +691,7 @@ class ValidatorUnitTest(unittest.TestCase):
         schema = json.loads(
             (ROOT / "schemas/provider-module.schema.json").read_text(encoding="utf-8")
         )
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         catalog["implementationOwnership"]["module.platform.contracts"][
@@ -703,7 +704,7 @@ class ValidatorUnitTest(unittest.TestCase):
     def test_provider_implementation_ownership_requires_complete_packet_coverage(
         self,
     ) -> None:
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         del catalog["implementationOwnership"]["module.platform.contracts"]
@@ -713,7 +714,7 @@ class ValidatorUnitTest(unittest.TestCase):
             errors,
         )
 
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         ownership = catalog["implementationOwnership"]["module.platform.contracts"]
@@ -724,7 +725,7 @@ class ValidatorUnitTest(unittest.TestCase):
             errors,
         )
 
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         ownership = catalog["implementationOwnership"]["module.platform.contracts"]
@@ -738,7 +739,7 @@ class ValidatorUnitTest(unittest.TestCase):
     def test_provider_implementation_ownership_rejects_false_deliverables_and_contract_selection(
         self,
     ) -> None:
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         ownership = catalog["implementationOwnership"]["module.platform.contracts"]
@@ -749,7 +750,7 @@ class ValidatorUnitTest(unittest.TestCase):
             errors,
         )
 
-        catalog = yaml.safe_load(
+        catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         catalog["profileExamples"][0]["selectedModules"].append(

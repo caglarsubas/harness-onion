@@ -10,6 +10,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_SOURCE = {
@@ -133,7 +138,7 @@ def validate_checkpoint(root: Path, packets: dict[str, Any]) -> list[str]:
 
 def main() -> int:
     try:
-        packets = {path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
+        packets = {path.stem: safe_yaml_load(path.read_text(encoding="utf-8"))
                    for path in (ROOT / "task-packets").glob("*.yaml")}
         boundary = json.loads((ROOT / "architecture/model-evidence-boundary.json").read_text(encoding="utf-8"))
         errors = validate_model_authority(packets, boundary) + validate_checkpoint(ROOT, packets)

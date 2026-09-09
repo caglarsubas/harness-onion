@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_readiness import (
     EXPECTED_REPOSITORIES,
@@ -43,7 +44,7 @@ class ReadinessValidationTest(unittest.TestCase):
 class ProviderCatalogNegativeTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.catalog = yaml.safe_load(
+        cls.catalog = safe_yaml_load(
             (ROOT / "architecture/providers.yaml").read_text(encoding="utf-8")
         )
         cls.schema = json.loads(
@@ -51,7 +52,7 @@ class ProviderCatalogNegativeTest(unittest.TestCase):
         )
         cls.service_ids = {
             service["id"]
-            for service in yaml.safe_load(
+            for service in safe_yaml_load(
                 (ROOT / "architecture/services.yaml").read_text(encoding="utf-8")
             )["services"]
         }
