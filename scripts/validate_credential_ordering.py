@@ -20,7 +20,7 @@ BEFORE_PATH = "architecture/credential-ordering-inputs/meta-before.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
 SOURCE_PATH = "architecture/credential-ordering-inputs/source-before.json"
 VECTORS_PATH = "architecture/credential-ordering-inputs/vectors.json"
-RECORD_SHA256 = "300c3de298b2c6fa4067799f9b5ea798a4829b95d3f8c5e8b55728d055983a40"
+RECORD_SHA256 = "7fa6920687a29f55adc088b5239951fa506f1e71ed826839bf7de8b970483f77"
 PACKET_SHA256 = "0a0bb47c5636ae12b62e540eae100a146ab2db6982b4946b0642e02079040afe"
 CLIENT_TRACE = ("AUTHORITY", "ISOLATION", "RESERVATION", "CLIENT_ELIGIBILITY",
                 "CLIENT_CREDENTIAL", "TLS_AUTHENTICATED", "FIXED_REQUEST", "RECEIPT_CHECKED", "CLOSED")

@@ -126,7 +126,7 @@ def test_closed_data_types_refuse_truthy_or_selected_authority(role, trace, reso
     "offlineAcceptanceCommands", "excluded", "offlineExecution"])
 def test_packet_scope_and_full_acceptance_cannot_be_relaxed(authority, field):
     packets = deepcopy(authority[0])
-    packets["MET-REPAIR-013"][field] = {} if field == "offlineExecution" else []
+    packets["MET-REPAIR-013"][field] = {} if field == "offlineExecution" else [{"unexpected": True}]
     assert validate_additions(packets)
     assert validate_credential_ordering(packets, *authority[1:])
 

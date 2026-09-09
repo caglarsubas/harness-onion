@@ -48,6 +48,8 @@ def synthetic(authority):
 
 def inventory(authority, stage=2):
     _, record, inputs = authority
+    from scripts.validate_credential_ordering import historical_bytes
+    inputs = {path: historical_bytes(path, raw) for path, raw in inputs.items()}
     checkpoint = json.loads(inputs[CHECKPOINT_PATH])
     after, proof = synthetic(authority)
     rows = {p: dict(path=p, mode=r["mode"], size=r["size"], sha256=r["sha256"].removeprefix("sha256:"),
