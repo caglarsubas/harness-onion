@@ -20,7 +20,9 @@ BEFORE_PATH = "architecture/ci-performance-inputs/tests.before.json"
 RECORD_SHA256 = "c533d6afdb7c8afc72a80a249d05e9812e18cd1aa6d54f9df7e3b1f4a158c5c3"
 PACKET_SHA256 = "e5d8e021c7e779040118b8ba71fb45ec14d7a5a4e39386a2580ff4f1eb821284"
 ADDITIONS = ("MET-PERF-001",)
-CURRENT_PACKET_COUNT = 139
+CURRENT_PACKET_COUNT = 141
+HISTORICAL_PACKET_COUNT = 139
+SUCCESSOR_ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005")
 
 
 def require(condition, message):
@@ -64,8 +66,17 @@ def expected_test_source(before, rule):
         result = result.replace(b"yaml.safe_load(", b"safe_yaml_load(")
     if rule["catalogScalar"]:
         require(b"== 138" in result, "original current-catalog assertion required")
-        result = result.replace(b"== 138", ("== " + str(CURRENT_PACKET_COUNT)).encode())
+        result = result.replace(b"== 138", ("== " + str(HISTORICAL_PACKET_COUNT)).encode())
     return result
+
+
+def expected_current_test_source(before, rule):
+    """Keep historical reconstruction; apply only the pinned successor recipe."""
+    try:
+        from validate_credential_lifecycle import reconcile_meta_test_bytes
+    except ImportError:
+        from scripts.validate_credential_lifecycle import reconcile_meta_test_bytes
+    return reconcile_meta_test_bytes(expected_test_source(before, rule))
 
 
 def test_definitions(raw):
@@ -97,7 +108,7 @@ def validate_test_preservation(record, before_raw, current_tests):
         for path, rule in rules.items():
             original = before["files"][path].encode()
             require(type(current_tests[path]) is bytes
-                    and current_tests[path] == expected_test_source(original, rule),
+                    and current_tests[path] == expected_current_test_source(original, rule),
                     "previous test bytes changed: " + path)
             require(test_definitions(original) == test_definitions(current_tests[path]),
                     "previous test identity changed")
@@ -120,7 +131,13 @@ def validate_ci_performance(packets, record, inputs, current_tests):
                         "packet semantics differ from current bytes")
         previous = {Path(path).stem for path in record["protectedFiles"] if path.startswith("task-packets/")}
         require(len(previous) == 138 and len(packets) == CURRENT_PACKET_COUNT
-                and set(packets) == previous | set(ADDITIONS), "138 exact predecessors plus approved performance packet")
+                and set(packets) == previous | set(ADDITIONS) | set(SUCCESSOR_ADDITIONS),
+                "138 exact predecessors, performance packet and two exact credential packets")
+        try:
+            from validate_credential_lifecycle import validate_additions as credential_additions
+        except ImportError:
+            from scripts.validate_credential_lifecycle import validate_additions as credential_additions
+        errors.extend(credential_additions(packets))
         packet = packets["MET-PERF-001"]
         prefix = ["uv", "run", "--offline", "--frozen", "--no-sync", "python"]
         previous_commands = packets["MET-REPAIR-011"]["offlineAcceptanceCommands"]
@@ -144,7 +161,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("CI performance authority valid: 139 packets; all prior tests and both complete replays preserved; no native acceptance.")
+        print("CI performance authority valid: 141 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.")
     return int(bool(errors))
 
 

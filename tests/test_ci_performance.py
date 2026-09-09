@@ -11,7 +11,7 @@ from ci.measure_yaml_parsing import shape
 from scripts import safe_yaml
 from scripts.validate_ci_performance import (
     BEFORE_PATH, CURRENT_PACKET_COUNT, RECORD_SHA256, canonical, digest,
-    expected_test_source, load_performance_inputs, test_definitions as source_test_names,
+    expected_current_test_source as expected_test_source, load_performance_inputs, test_definitions as source_test_names,
     validate_additions, validate_ci_performance, validate_test_preservation,
 )
 
@@ -27,7 +27,7 @@ def authority():
 
 def test_exact_packet_and_preservation_authority(authority):
     packets, record, inputs, current = authority
-    assert len(packets) == CURRENT_PACKET_COUNT == 139
+    assert len(packets) == CURRENT_PACKET_COUNT == 141
     assert len(record["protectedFiles"]) == 236
     assert len(record["mechanicalTestUpdates"]) == 20
     assert digest(canonical(record)) == RECORD_SHA256
@@ -81,7 +81,7 @@ def test_assertion_or_skip_substitution_refuses(authority, change):
     _, record, inputs, current = authority
     path = "tests/test_task_packets.py"
     changed = dict(current)
-    target = b"assert len(files) == EXPECTED_PACKET_COUNT == 139"
+    target = b"assert len(files) == EXPECTED_PACKET_COUNT == 141"
     assert target in changed[path]
     changed[path] = changed[path].replace(target, change, 1)
     assert validate_test_preservation(record, inputs[BEFORE_PATH], changed)
@@ -141,7 +141,7 @@ def test_malformed_and_executable_tags_refuse_without_side_effects(raw):
 def test_full_current_corpus_matches_the_python_safe_constructor():
     paths = sorted({p for folder in ("architecture", "legal", "policies", "release", "task-packets")
                     for p in (ROOT / folder).rglob("*.yaml")})
-    assert len(paths) == 155
+    assert len(paths) == 157
     for path in paths:
         raw = path.read_bytes()
         assert shape(safe_yaml.safe_load(raw)) == shape(yaml.load(raw, Loader=yaml.SafeLoader)), path
@@ -159,7 +159,7 @@ def test_stricter_duplicate_key_constructors_still_refuse(module_name):
 
 def test_current_status_does_not_claim_pending_publication_or_native_pass():
     text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
-    current = text.split("## Historical MET-REPAIR-011 publication checkpoint")[0]
-    assert "during `MET-PERF-001` publication" in current
-    assert "MET-REPAIR-012 / PR106 | WAITING" in current
+    current = text.split("## Historical MET-PERF-001 publication checkpoint")[0]
+    assert "during `MET-REPAIR-012` publication" in current
+    assert "MET-REPAIR-012 / PR106 | ONGOING" in current
     assert "NOT_RUN_ENV_UNAVAILABLE" in current and "effort transition NOT_DUE" in current

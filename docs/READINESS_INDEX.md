@@ -1,9 +1,10 @@
 # Implementation Readiness Index
 
-Current Alpha-2 dispatch: [MET-PERF-001 bounded CI parsing repair](alpha-2/CI_PERFORMANCE_REPAIR.md).
-Catalog 139; preserve all 138 predecessor packets and both complete regression replays.
-MET-REPAIR-012 / PR106 remains a separate unmerged draft; reconcile and reverify it only after this packet closes.
-CONF-FIX-005 and CONF-LIVE-003 remain waiting. Older publication sections are historical, not current instructions.
+Current Alpha-2 dispatch: [MET-REPAIR-012 bounded credential lifecycle](alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md).
+Catalog 141; original 127/279 and corrected CONF-FIX-004 127/305 checkpoints remain distinct.
+CONF-FIX-005 must close after this authority, then CONF-LIVE-003 may consume its corrected checkpoint.
+Older publication sections below retain their historical states, not current instructions.
+Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
 This index is the entry point for a coding agent. The architecture is planning-
 ready; product implementation, release, deployment, runtime, assurance, and
@@ -16,7 +17,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 139; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 141; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -264,7 +265,7 @@ The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 139. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 141. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -372,3 +373,19 @@ CONF-LIVE-003 consumes the corrected checkpoint. No file-presence exemption,
 path reopening, installation, new credential, dependency, native/live execution
 or acceptance promotion. Prior nested-timeout failures remain unresolved history;
 no timing, isolation or coverage relaxation. Alpha 2 ONGOING; effort change NOT_DUE.
+
+
+## Approved bounded credential lifecycle — MET-REPAIR-012
+
+The [credential-lifecycle correction](alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md) publishes
+MET-REPAIR-012 and CONF-FIX-005: 140 packets, unchanged thirteen repositories,
+four planes and sixteen harnesses. Preserve all 138 predecessor packet bytes.
+CONF-FIX-004 closed at 0aa3ef3027f4a156d7ebed1b56af244e021d080a, 127 files / 305 tests;
+its historical proof remains unchanged. CONF-FIX-005 supplies narrowly owned
+late-credential/temporary-handle custody plus three cumulative source-accounting
+adaptations, with every behavioral assertion and all 305 prior IDs retained.
+Source stage counts and later eight-path proxy grant remain unchanged.
+Publish and close each packet separately before CONF-LIVE-003. No product/native
+execution, new installation, key, dependency, cloud action or bill in this meta
+publication. Prior timing failures remain UNRESOLVED; no timeout or coverage
+relaxation. Alpha 2 ONGOING; model-effort transition NOT_DUE.

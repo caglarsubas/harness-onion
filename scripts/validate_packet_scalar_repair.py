@@ -166,7 +166,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Scalar repair authority valid: 139 packets; historical 132-packet record and 164 predecessor files unchanged.")
+        print("Scalar repair authority valid: 141 packets; historical 132-packet record and 164 predecessor files unchanged.")
     return int(bool(errors))
 
 
