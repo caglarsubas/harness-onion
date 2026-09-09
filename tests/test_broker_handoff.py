@@ -74,11 +74,15 @@ def test_complete_resource_and_zero_resource_transcripts_are_only_data(data, ind
         assert not any(f["kind"].startswith("RESOURCE_") for f in sample["frames"])
 
 
-@pytest.mark.parametrize("variant", ["binding", "dispatch", "frame"])
+@pytest.mark.parametrize("variant", ["binding", "dispatch", "frame", "workerStart"])
 def test_every_closed_nested_object_rejects_extra_missing_and_wrong_type(data, variant):
     schema, vectors = data
     sample = vectors["positive"][1]
     values = [sample["binding"]] if variant == "binding" else [sample["request"]] if variant == "dispatch" else sample["frames"]
+    if variant == "workerStart":
+        values = [dict(schemaVersion="planeon.internal.broker-worker/v1", operation="START",
+            executionId="c" * 64, bindingDigest=sample["request"]["bindingDigest"],
+            caseId=CASES[0], requestDigest=sample["request"]["requestDigest"], generation="a" * 64)]
     def objects(value, path=()):
         if type(value) is dict:
             yield path, value
@@ -341,6 +345,40 @@ def test_unchanged_legacy_test_bridge_accepts_only_six_exact_pinned_sources(auth
         assert current_test_bytes(raw) == raw
         with pytest.raises(ValueError): current_test_bytes(raw + b"\n# altered\n")
     with pytest.raises(ValueError): current_test_bytes(b"def test_unknown(): pass\n")
+
+
+@pytest.mark.parametrize("outcome", ["DENIED", "AMBIGUOUS", "DELETED"])
+def test_denied_ambiguous_or_wrong_verb_result_cannot_produce_completed(data, outcome):
+    schema, vectors = data
+    sample = vectors["positive"][1]
+    frames = deepcopy(sample["frames"])
+    frames[2]["payload"].update(outcome=outcome, objectBase64=None)
+    assert validate_transcript(sample["binding"], sample["request"], reseal(frames), schema)
+
+
+def test_absolute_deadline_revokes_execution_without_releasing_consumed_case():
+    state = model()
+    state.admit("run", CASES[0], "generation-a")
+    state.advance(899)
+    state.effect("run", CASES[0], "generation-a")
+    state.advance(1)
+    with pytest.raises(ValueError): state.effect("run", CASES[0], "generation-a")
+    state.reap()
+    with pytest.raises(ValueError): state.finish()
+    assert ("run", CASES[0]) in state.consumed
+    for invalid in (-1, True, 1.5):
+        with pytest.raises(ValueError): state.advance(invalid)
+
+
+def test_delete_ambiguity_cannot_be_retried_with_the_same_uid():
+    state = model()
+    state.admit("run", CASES[0], "generation-a")
+    state.effect("run", CASES[0], "generation-a", "resource-one", "CREATE")
+    state.created_response("resource-one", "created-uid")
+    state.effect("run", CASES[0], "generation-a", "resource-one", "DELETE", "created-uid")
+    with pytest.raises(ValueError):
+        state.effect("run", CASES[0], "generation-a", "resource-one", "DELETE", "created-uid")
+    assert state.created["resource-one"] == "created-uid"
 
 
 def test_roadmap_distinguishes_source_publication_from_product_and_native_acceptance():

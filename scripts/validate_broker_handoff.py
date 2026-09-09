@@ -130,7 +130,7 @@ def validate_transcript(binding, request, frames, schema):
         require(request["bindingDigest"] == "sha256:" + digest(canonical(binding)), "binding mismatch")
         require(type(frames) is list and 2 <= len(frames) <= 2048, "bounded transcript required")
         previous, execution, pending, chunk_index = ZERO, None, None, 0
-        actions, payload, cleanup, ended = set(), bytearray(), None, False
+        actions, payload, cleanup, ended, action_failed = set(), bytearray(), None, False, False
         for sequence, frame in enumerate(frames, 1):
             _shape(frame, "frame", schema)
             require(not ended and all(frame[k] == request[k] for k in COMMON), "scope/generation changed")
@@ -146,10 +146,13 @@ def validate_transcript(binding, request, frames, schema):
                         and data["actionId"] not in actions
                         and data["manifestDigest"] in binding["caseResourceDigests"][request["caseId"]],
                         "unowned/overlapping resource action")
-                pending = data["actionId"]
-                actions.add(pending)
+                pending = data
+                actions.add(data["actionId"])
             elif kind == "RESOURCE_RESULT":
-                require(pending == data["actionId"], "result has no matching action")
+                require(pending is not None and pending["actionId"] == data["actionId"], "result has no matching action")
+                outcomes = {"CREATE": {"CREATED"}, "GET": {"ABSENT", "PRESENT"}, "DELETE": {"DELETED"}}
+                require(data["outcome"] in outcomes[pending["verb"]] | {"DENIED", "AMBIGUOUS"}, "verb/outcome mismatch")
+                action_failed |= data["outcome"] in ("DENIED", "AMBIGUOUS")
                 if data["objectBase64"] is not None:
                     raw = base64.b64decode(data["objectBase64"], validate=True)
                     require(len(raw) <= 16384 and base64.b64encode(raw).decode() == data["objectBase64"]
@@ -178,7 +181,8 @@ def validate_transcript(binding, request, frames, schema):
                 require(pending is None and cleanup is not None and len(payload) == data["receiptSize"]
                         and "sha256:" + digest(bytes(payload)) == data["receiptDigest"]
                         and data["cleanupDigest"] == cleanup["cleanupDigest"], "terminal receipt mismatch")
-                require(data["status"] != "COMPLETED" or cleanup["state"] == "CLEAN", "pending cleanup is not completed")
+                require(data["status"] != "COMPLETED" or cleanup["state"] == "CLEAN" and not action_failed,
+                        "failed action or pending cleanup is not completed")
                 ended = True
             elif kind != "STARTED":
                 raise ValueError("aborted/refused transcript cannot complete")
@@ -203,11 +207,12 @@ class FenceModel:
         self.generation, self.resources = generation, {k: frozenset(v) for k,v in case_resources.items()}
         self.consumed, self.active, self.poisoned, self.pending_generation = set(), None, False, None
         self.created, self.used_names, self.effects, self.deletions = {}, set(), [], set()
+        self.now, self.deadline = 0, 900
 
     def admit(self, run, case, generation, persistence="SYNCED"):
         require(type(run) is str and type(case) is str and case in CASES and type(generation) is str,
                 "closed model identity")
-        require(not self.poisoned and self.active is None and generation == self.generation
+        require(not self.poisoned and self.now < self.deadline and self.active is None and generation == self.generation
                 and (run, case) not in self.consumed, "shared admission denied")
         self.consumed.add((run, case))
         self.active = dict(run=run, case=case, generation=generation, gate=False, reaped=False, invalid=False)
@@ -219,7 +224,7 @@ class FenceModel:
 
     def effect(self, run, case, generation, manifest=None, verb=None, uid=None):
         active = self.active
-        require(not self.poisoned and active is not None and active["gate"] and not active["reaped"]
+        require(not self.poisoned and self.now < self.deadline and active is not None and active["gate"] and not active["reaped"]
                 and not active["invalid"] and (run, case, generation) ==
                 (active["run"], active["case"], self.generation), "no active broker execution")
         if manifest is not None:
@@ -230,7 +235,8 @@ class FenceModel:
                 self.used_names.add(manifest)
                 self.created[manifest] = None  # intent is held before a response
             elif verb == "DELETE":
-                require(type(uid) is str and self.created.get(manifest) == uid, "exact recorded UID required")
+                require(type(uid) is str and self.created.get(manifest) == uid
+                        and (manifest, uid) not in self.deletions, "exact recorded UID and no blind retry required")
                 self.deletions.add((manifest, uid))
         else:
             require(verb is None and uid is None, "no generic operation")
@@ -273,6 +279,12 @@ class FenceModel:
     def crash(self):
         self.poisoned = True
         if self.active is not None:
+            self.active.update(gate=False, invalid=True)
+
+    def advance(self, seconds):
+        require(type(seconds) is int and 0 <= seconds <= 900, "monotonic bounded model time")
+        self.now += seconds
+        if self.now >= self.deadline and self.active is not None:
             self.active.update(gate=False, invalid=True)
 
 
