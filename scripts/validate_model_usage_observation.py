@@ -14,6 +14,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_PATH = ROOT / "architecture/observations/model-usage-v2.json"
@@ -136,7 +141,7 @@ def validate_report(raw: bytes, packet_bytes: bytes, index: Any) -> list[str]:
 
     if not isinstance(packet_bytes, bytes) or hashlib.sha256(packet_bytes).hexdigest() != EXPECTED_PACKET_SHA256:
         return ["packet digest differs from merged authority"]
-    packet = yaml.safe_load(packet_bytes)
+    packet = safe_yaml_load(packet_bytes)
     observation = packet["referenceObservationExecution"]
     try:
         report = decode_report(raw)
@@ -291,7 +296,7 @@ def read_report(path: Path) -> bytes:
 def main() -> int:
     try:
         errors = validate_report(read_report(REPORT_PATH), PACKET_PATH.read_bytes(),
-                                 yaml.safe_load(INDEX_PATH.read_text(encoding="utf-8")))
+                                 safe_yaml_load(INDEX_PATH.read_text(encoding="utf-8")))
     except (OSError, ValueError, TypeError, RecursionError, yaml.YAMLError):
         print("model observation validation FAILED: required local inputs unavailable or malformed")
         return 1

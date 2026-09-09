@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_linux_readiness import validate_linux_readiness
 
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 @pytest.fixture
 def inputs():
     packets = {
-        path.stem: yaml.safe_load(path.read_text())
+        path.stem: safe_yaml_load(path.read_text())
         for path in (ROOT / "task-packets").glob("*.yaml")
     }
     policy = json.loads((ROOT / "architecture/linux-readiness.json").read_text())
@@ -31,7 +32,7 @@ def test_current_publication_is_authority_only(inputs):
     assert all(target["status"] == "NOT_RUN_ENV_UNAVAILABLE" for target in policy["targets"])
     assert policy["completedCorrection"]["linuxProof"] is False
     assert policy["currentPacketCount"] == 118  # Immutable historical policy.
-    assert len(packets) == 138
+    assert len(packets) == 139
 
 
 @pytest.mark.parametrize(("path", "replacement"), [

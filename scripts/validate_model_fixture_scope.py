@@ -11,6 +11,11 @@ from typing import Any
 import yaml
 
 try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
+try:
     from validate_model_api_inventory import amend_model_packet as amend_inventory_packet
 except ModuleNotFoundError:
     from scripts.validate_model_api_inventory import amend_model_packet as amend_inventory_packet
@@ -67,8 +72,8 @@ def validate_model_fixture_scope(packets: Any, record: Any, snapshots: Any) -> l
         errors.append("model fixture amendment evidence or scope changed")
     if not isinstance(packets, dict):
         return [*errors, "model fixture authority requires a packet mapping"]
-    if len(packets) != 138:
-        errors.append("current catalog requires exactly 138 packets; fixture publication remains 122")
+    if len(packets) != 139:
+        errors.append("current catalog requires exactly 139 packets; fixture publication remains 122")
     if not same(packets.get("MET-REPAIR-005"), EXPECTED_META):
         errors.append("MET-REPAIR-005 whole-packet scope changed")
     if not same(packets.get("CON-MODEL-001"), amend_inventory_packet(amend_model_packet(EXPECTED_BEFORE))):
@@ -109,7 +114,7 @@ def load_scope_inputs(root: Path) -> dict[str, bytes]:
 
 def main() -> int:
     try:
-        packets = {p.stem: yaml.safe_load(p.read_text(encoding="utf-8"))
+        packets = {p.stem: safe_yaml_load(p.read_text(encoding="utf-8"))
                    for p in sorted((ROOT / "task-packets").glob("*.yaml"))}
         record = json.loads((ROOT / "architecture/model-fixture-scope-amendment.json").read_text())
         snapshots = load_scope_inputs(ROOT)
@@ -120,7 +125,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Model fixture authority valid: 138 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.")
+        print("Model fixture authority valid: 139 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.")
     return int(bool(errors))
 
 

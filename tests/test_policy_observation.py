@@ -8,6 +8,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_policy_observation import (ZERO, RECORD_SHA256, SCHEMA_SHA256,
     canonical, digest, load_observation_inputs, validate_additions,
@@ -23,7 +24,7 @@ PROFILE_SCHEMA = json.loads((ROOT / "architecture/proxy-contract-inputs/profile.
 
 @pytest.fixture
 def authority():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     return packets, *load_observation_inputs(ROOT)
 
 
@@ -56,7 +57,7 @@ FIELDS = [(kind, path, field) for kind, path in OBJECTS
 def test_exact_catalog_and_independent_source_evidence(authority):
     packets, record, inputs = authority
     assert validate_observation_contract(*authority) == []
-    assert len(packets) == 138 and len(record["protectedFiles"]) == 186
+    assert len(packets) == 139 and len(record["protectedFiles"]) == 186
     assert digest(canonical(record)) == RECORD_SHA256
     assert digest(canonical(SCHEMA)) == SCHEMA_SHA256
     baseline = json.loads(inputs["architecture/proxy-contract-inputs/baseline.json"])

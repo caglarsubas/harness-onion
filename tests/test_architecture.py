@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,7 +27,7 @@ def authority_root(tmp_path: Path) -> Path:
 
 
 def _load(path: Path) -> dict:
-    value = yaml.safe_load(path.read_text(encoding="utf-8"))
+    value = safe_yaml_load(path.read_text(encoding="utf-8"))
     assert isinstance(value, dict)
     return value
 

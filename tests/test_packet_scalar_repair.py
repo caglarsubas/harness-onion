@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_packet_scalar_repair import (
     ADDITIONS, RECORD_PATH, load_scalar_inputs, regular_bytes, validate_edit,
@@ -22,14 +23,14 @@ SNAPSHOTS = {
 
 @pytest.fixture(scope="module")
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_bytes()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_bytes()) for p in (ROOT / "task-packets").glob("*.yaml")}
     return packets, *load_scalar_inputs(ROOT)
 
 
 def test_closed_catalog_preserves_164_files_and_all_130_packet_bytes(inputs):
     packets, record, raw = inputs
     assert validate_scalar_repair(*inputs) == []
-    assert len(packets) == 138 and len(record["protectedFiles"]) == 164 and len(raw) == 169
+    assert len(packets) == 139 and len(record["protectedFiles"]) == 164 and len(raw) == 169
     assert len([p for p in record["protectedFiles"] if p.startswith("task-packets/")]) == 130
     assert record["repositoryCount"] == 13 and record["harnessCount"] == 16
     assert record["liveDeclarationCount"] == 12
@@ -122,7 +123,7 @@ def test_all_six_real_packet_scalar_views_are_pinned_without_executing_parser(in
     for packet_id, text in record["publishedBackendPackets"].items():
         assert text.encode() == raw["task-packets/" + packet_id + ".yaml"]
         # Independently parse declarative authority only; not the stored product code.
-        document = yaml.safe_load(text)
+        document = safe_yaml_load(text)
         assert document == packets[packet_id]
         for field in ("id", "repository", "warmSourceAccess"):
             line = next(line for line in text.splitlines() if line.startswith(field + ":"))

@@ -1,9 +1,9 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](../alpha-2/CUSTODY_HANDOFF_REPAIR.md).
-Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
-CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
-Older publication sections below retain their historical states, not current instructions.
+Current Alpha-2 dispatch: [MET-PERF-001 bounded CI parsing repair](../alpha-2/CI_PERFORMANCE_REPAIR.md).
+Catalog 139; preserve all 138 predecessor packets and both complete regression replays.
+MET-REPAIR-012 / PR106 remains a separate unmerged draft; reconcile and reverify it only after this packet closes.
+CONF-FIX-005 and CONF-LIVE-003 remain waiting. Older publication sections are historical, not current instructions.
 
 ## Purpose and boundaries
 
@@ -220,6 +220,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 28. `MET-REPAIR-009`: publish strict proxy authentication/admission profile, immutable 127-file/279-ID source checkpoint and additional dispatch prerequisite.
 29. `MET-REPAIR-010`: publish protected read-only policy observation, exact custody/freshness/generation contracts and unchanged campaign-permission regressions.
 30. `MET-REPAIR-011`: publish the bounded retained-custody handoff correction, five-path CONF-FIX-004 packet, immutable original inventory and region/prefix source-delta checks.
+31. `MET-PERF-001`: measure and repair safe YAML parsing cost while preserving every assertion, both complete replays, timeouts and isolation; close independently before reconciling PR106.
 
 ## Testing, verification, and acceptance
 
@@ -337,7 +338,7 @@ current successor. No consumed authority, root installation or product edit.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 139. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.

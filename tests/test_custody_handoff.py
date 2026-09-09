@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_custody_handoff import (ADDITIONS, BEFORE_PATH, DOC_PATH,
     RECORD_SHA256, appended_definitions, canonical, definitions, digest,
@@ -17,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def authority():
-    packets = {p.stem: yaml.safe_load(p.read_bytes()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_bytes()) for p in (ROOT / "task-packets").glob("*.yaml")}
     return packets, *load_custody_inputs(ROOT)
 
 
@@ -53,7 +54,7 @@ def seal(after, proof, before_doc):
 def test_exact_publication_correction_and_historical_scope(authority):
     packets, record, inputs = authority
     assert validate_custody_handoff(*authority) == []
-    assert len(packets) == 138 and len(record["protectedFiles"]) == 203
+    assert len(packets) == 139 and len(record["protectedFiles"]) == 203
     assert "task-packets/MET-REPAIR-010.yaml" in record["protectedFiles"]
     assert {p.name for p in (ROOT / "schemas").glob("*.json")} == {
         Path(p).name for p in record["protectedFiles"] if p.startswith("schemas/")}

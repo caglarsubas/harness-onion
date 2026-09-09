@@ -16,6 +16,11 @@ from typing import Any
 import jsonschema
 import yaml
 
+try:
+    from safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -269,7 +274,7 @@ class DuplicateJsonKeyError(ReuseValidationError):
     """A JSON authority repeats an object key."""
 
 
-class UniqueKeySafeLoader(yaml.SafeLoader):
+class UniqueKeySafeLoader(MetaSafeLoader):
     """PyYAML safe loader that refuses duplicate mapping keys."""
 
 
@@ -607,7 +612,7 @@ def _validate_task_packet_closure(
     packet_paths = sorted((root / "task-packets").glob("*.yaml"))
     # The Phase-0 report/index are immutable 107-packet historical snapshots.
     # Current closure includes three Alpha-2 entry and four corrective packets.
-    _require(len(packet_paths) == 138, f"expected 138 task packets, found {len(packet_paths)}")
+    _require(len(packet_paths) == 139, f"expected 139 task packets, found {len(packet_paths)}")
     referenced: set[tuple[str, str]] = set()
     for packet_path in packet_paths:
         packet = load_yaml(packet_path)

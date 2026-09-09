@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_linux_readiness import EXPECTED_PACKETS, validate_linux_readiness
 from scripts.validate_linux_repair import (
@@ -21,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
 def inputs():
-    packets = {p.stem: yaml.safe_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
+    packets = {p.stem: safe_yaml_load(p.read_text()) for p in (ROOT / "task-packets").glob("*.yaml")}
     record = json.loads((ROOT / "architecture/linux-test-ownership-amendment.json").read_text())
     previous = (ROOT / "architecture/linux-readiness-amendment.json").read_bytes()
     return packets, record, previous
@@ -34,7 +35,7 @@ def test_current_and_historical_authorities_agree_without_rewriting_history(inpu
     original = (ROOT / "architecture/linux-readiness.json").read_bytes()
     assert validate_linux_readiness(packets, json.loads(original)) == []
     assert validate_linux_repair(packets, json.loads(previous), original) == []
-    assert len(packets) == 138
+    assert len(packets) == 139
     assert json.loads(previous)["currentPacketCount"] == 120
     assert json.loads(original)["currentPacketCount"] == 118
     assert record["testChange"]["productImplementation"] == "NOT_RUN"

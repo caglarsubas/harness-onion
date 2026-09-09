@@ -9,6 +9,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,7 +44,7 @@ def authority_root(tmp_path: Path) -> Path:
 
 
 def _read_yaml(path: Path) -> dict:
-    value = yaml.safe_load(path.read_text(encoding="utf-8"))
+    value = safe_yaml_load(path.read_text(encoding="utf-8"))
     assert isinstance(value, dict)
     return value
 
@@ -65,7 +66,7 @@ def test_canonical_authorities_are_closed_and_deterministic() -> None:
     assert report.accounted_source_inputs == 5
     assert report.public_sha_pins == 5
     assert report.metadata_omitted_inputs == 0
-    assert report.task_packets == 138
+    assert report.task_packets == 139
     assert report.tree_discovery_records == 905
     assert report.blob_pending_records == 4202
     assert report.blob_copy_authorized_records == 0

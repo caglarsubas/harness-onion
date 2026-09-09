@@ -1,9 +1,9 @@
 # Implementation Readiness Index
 
-Current Alpha-2 dispatch: [MET-REPAIR-011 retained-custody handoff correction](alpha-2/CUSTODY_HANDOFF_REPAIR.md).
-Catalog 138; historical backend checkpoint CONF-LIVE-002 remains 127 files / 279 original tests.
-CONF-FIX-004 must close after this authority, then CONF-LIVE-003 may consume the corrected checkpoint.
-Older publication sections below retain their historical states, not current instructions.
+Current Alpha-2 dispatch: [MET-PERF-001 bounded CI parsing repair](alpha-2/CI_PERFORMANCE_REPAIR.md).
+Catalog 139; preserve all 138 predecessor packets and both complete regression replays.
+MET-REPAIR-012 / PR106 remains a separate unmerged draft; reconcile and reverify it only after this packet closes.
+CONF-FIX-005 and CONF-LIVE-003 remain waiting. Older publication sections are historical, not current instructions.
 
 This index is the entry point for a coding agent. The architecture is planning-
 ready; product implementation, release, deployment, runtime, assurance, and
@@ -16,7 +16,7 @@ requires the observation, contracts/status corrections and shared-model-contract
 prerequisites. Production overview integration has its own later live gate. See
 [Development status](DEVELOPMENT_STATUS.md) and
 [Model prerequisites](alpha-2/MODEL_PREREQUISITES.md). The historical Phase-0
-report records 107 packets; the current catalog has 138; the first repair retains its 114-packet snapshot. This index is a plan,
+report records 107 packets; the current catalog has 139; the first repair retains its 114-packet snapshot. This index is a plan,
 not proof that every packet or live evidence gate has passed.
 
 Prerequisite: publish this planning corpus and pinned workflow once to the public
@@ -221,7 +221,7 @@ MET-LINUX-002 and CONF-LINUX-001; the closed policy is
 validator runs in MET-LINUX-001's signed seven-command offline session.
 The source-only predecessor rule does not bypass the explicitly stricter
 fresh native Linux gate for runtime coding. The 115-packet amendment remains
-historical; that publication contained 118 packets; the current approved catalog contains 138.
+historical; that publication contained 118 packets; the current approved catalog contains 139.
 
 ## Conformance readiness amendment
 
@@ -264,7 +264,7 @@ The cancelled draft CI is not PASS; no model-product acceptance is recorded.
 The [coding guide](alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 138. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; the current catalog contains 139. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.

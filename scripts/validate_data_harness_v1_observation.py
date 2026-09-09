@@ -12,6 +12,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_PATH = ROOT / "architecture/observations/data-harness-v1.json"
@@ -66,14 +71,14 @@ def canonical_key(value: dict[str, Any]) -> str:
 
 def load_packet() -> tuple[dict[str, Any], bytes]:
     packet_bytes = PACKET_PATH.read_bytes()
-    packet = yaml.safe_load(packet_bytes)
+    packet = safe_yaml_load(packet_bytes)
     if not isinstance(packet, dict):
         raise ValueError("MET-002 packet is not a mapping")
     return packet, packet_bytes
 
 
 def indexed_blobs(repository: str, commit: str) -> dict[str, dict[str, Any]]:
-    index = yaml.safe_load(INDEX_PATH.read_text(encoding="utf-8"))
+    index = safe_yaml_load(INDEX_PATH.read_text(encoding="utf-8"))
     records = index.get("sources") if isinstance(index, dict) else index
     if not isinstance(records, list):
         raise ValueError("reuse path index has no repository list")

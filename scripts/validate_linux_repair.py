@@ -11,6 +11,11 @@ from typing import Any
 import yaml
 
 try:
+    from safe_yaml import safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import safe_load as safe_yaml_load
+
+try:
     from validate_linux_test_ownership import PACKET_DIGESTS as TEST_OWNERSHIP_DIGESTS
 except ModuleNotFoundError:
     from scripts.validate_linux_test_ownership import PACKET_DIGESTS as TEST_OWNERSHIP_DIGESTS
@@ -76,8 +81,8 @@ def validate_linux_repair(packets: Any, amendment: Any, historical_policy_bytes:
         errors.append("original 118-packet Linux policy must remain byte-identical")
     if not isinstance(packets, dict):
         return [*errors, "Linux repair requires a packet mapping"]
-    if len(packets) != 138:
-        errors.append("Current catalog requires exactly 138 packets; consumed amendment remains 120")
+    if len(packets) != 139:
+        errors.append("Current catalog requires exactly 139 packets; consumed amendment remains 120")
     for packet_id, expected_digest in CURRENT_PACKET_DIGESTS.items():
         try:
             actual = hashlib.sha256(packet_bytes(packets.get(packet_id))).hexdigest()
@@ -90,7 +95,7 @@ def validate_linux_repair(packets: Any, amendment: Any, historical_policy_bytes:
 
 def main() -> int:
     try:
-        packets = {p.stem: yaml.safe_load(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "task-packets").glob("*.yaml"))}
+        packets = {p.stem: safe_yaml_load(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "task-packets").glob("*.yaml"))}
         amendment = json.loads((ROOT / "architecture/linux-readiness-amendment.json").read_text())
         errors = validate_linux_repair(packets, amendment, (ROOT / "architecture/linux-readiness.json").read_bytes())
     except (OSError, ValueError, TypeError, yaml.YAMLError) as exc:
@@ -99,7 +104,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Linux repair authority valid: 138 packets; 120-packet record preserved; native Linux remains unproven.")
+        print("Linux repair authority valid: 139 packets; 120-packet record preserved; native Linux remains unproven.")
     return int(bool(errors))
 
 

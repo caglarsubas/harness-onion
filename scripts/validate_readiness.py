@@ -17,6 +17,11 @@ import jsonschema
 import yaml
 
 try:
+    from safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+except ModuleNotFoundError:
+    from scripts.safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+
+try:
     from validate_packet_ownership import validate_packet_ownership
     from validate_alpha2_readiness import validate_model_authority
     from validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
@@ -30,6 +35,7 @@ try:
     from validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
     from validate_policy_observation import load_observation_inputs, validate_observation_contract
     from validate_custody_handoff import load_custody_inputs, validate_custody_handoff
+    from validate_ci_performance import load_performance_inputs, validate_ci_performance
     from validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
@@ -45,6 +51,7 @@ except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit te
     from scripts.validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
     from scripts.validate_policy_observation import load_observation_inputs, validate_observation_contract
     from scripts.validate_custody_handoff import load_custody_inputs, validate_custody_handoff
+    from scripts.validate_ci_performance import load_performance_inputs, validate_ci_performance
     from scripts.validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 
 
@@ -121,7 +128,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 138
+EXPECTED_PACKET_COUNT = 139
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -387,7 +394,7 @@ class DuplicateYamlKeyError(yaml.YAMLError):
     """A YAML authority repeated a mapping key and is therefore ambiguous."""
 
 
-class UniqueKeySafeLoader(yaml.SafeLoader):
+class UniqueKeySafeLoader(MetaSafeLoader):
     """Safe YAML loader whose mappings reject duplicate keys."""
 
 
@@ -4440,6 +4447,8 @@ def validate_packets(
         validation.error(observation_error)
     for custody_error in validate_custody_handoff(packets, *load_custody_inputs(ROOT)):
         validation.error(custody_error)
+    for performance_error in validate_ci_performance(packets, *load_performance_inputs(ROOT)):
+        validation.error(performance_error)
     for amendment_error in validate_repair_amendment(
         packets, load_json(ROOT / "architecture/readiness-repair-amendment.json"),
         (ROOT / "architecture/readiness-repairs.json").read_bytes(),
@@ -4529,7 +4538,9 @@ def validate_packets(
         "tests/test_validator_units.py": "MET-P0-002",
         **{
             f"task-packets/{packet_path.name}": (
-                "MET-REPAIR-011"
+                "MET-PERF-001"
+                if packet_path.stem == "MET-PERF-001"
+                else "MET-REPAIR-011"
                 if packet_path.stem in {"MET-REPAIR-011", "CONF-FIX-004"}
                 else "MET-REPAIR-010"
                 if packet_path.stem == "MET-REPAIR-010"
@@ -4599,6 +4610,7 @@ def validate_packets(
             "schemas/porting-authorization.schema.json": "MET-P0-002",
         }
     )
+    authority_owner.update({path: "MET-PERF-001" for path in ["architecture/ci-performance-amendment.json","architecture/ci-performance-inputs/tests.before.json","scripts/safe_yaml.py","scripts/validate_alpha2_readiness.py","scripts/validate_architecture.py","scripts/validate_ci_performance.py","scripts/validate_custody_handoff.py","scripts/validate_data_harness_v1_observation.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_model_usage_observation.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_proxy_contract.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_repository_tree_observation.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","tests/test_validator_units.py"]})
     observation_authority_path = "architecture/observations/data-harness-v1.json"
     if (ROOT / observation_authority_path).is_file():
         authority_owner[observation_authority_path] = "MET-002"

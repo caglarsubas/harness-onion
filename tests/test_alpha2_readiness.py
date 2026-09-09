@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from scripts.safe_yaml import safe_load as safe_yaml_load
 
 from scripts.validate_alpha2_readiness import validate_checkpoint, validate_model_authority
 
@@ -13,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def inputs():
-    packets = {path.stem: yaml.safe_load(path.read_text())
+    packets = {path.stem: safe_yaml_load(path.read_text())
                for path in (ROOT / "task-packets").glob("*.yaml")}
     boundary = json.loads((ROOT / "architecture/model-evidence-boundary.json").read_text())
     return packets, boundary
@@ -82,4 +83,4 @@ def test_historical_phase_zero_cardinality_is_not_rewritten():
     audit = json.loads((ROOT / "docs/phase-0/phase-0-backtest.json").read_text())
     assert audit["cardinality"]["taskPackets"] == 107
     packets, _ = inputs()
-    assert len(packets) == 138
+    assert len(packets) == 139
