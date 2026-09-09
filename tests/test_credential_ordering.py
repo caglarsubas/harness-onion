@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+from scripts.validate_broker_handoff import historical_bytes as broker_history
 
 from scripts.safe_yaml import safe_load
 from scripts.validate_credential_ordering import (
@@ -26,7 +27,7 @@ def authority():
 def test_exact_142_catalog_and_corrected_127_327_checkpoint(authority):
     packets, record, inputs = authority
     assert validate_credential_ordering(*authority) == []
-    assert len(packets) == 142
+    assert len(packets) == 143
     assert len([p for p in record["protectedFiles"] if p.startswith("task-packets/")]) == 141
     checkpoint = json.loads(inputs[CHECKPOINT_PATH])
     assert len(checkpoint["files"]) == 127
@@ -147,7 +148,7 @@ def test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse(author
             **{p:r["afterSha256"] for p,r in record["metaChanges"].items()}}
     assert set(pins) == set(inputs)
     for path, checksum in pins.items():
-        assert digest(inputs[path]) == checksum
+        assert digest(broker_history(path, inputs[path])) == checksum
         assert digest(inputs[path] + b" ") != checksum
     for path in ("AGENTS.md", BEFORE_PATH, CHECKPOINT_PATH, SOURCE_PATH, VECTORS_PATH,
                  "task-packets/CONF-LIVE-003.yaml", "scripts/validate_readiness.py"):
@@ -168,7 +169,7 @@ def test_current_and_historical_test_and_agents_bytes_are_distinct_and_checked(a
     assert validate_recipes(record, inputs[BEFORE_PATH], current) == []
     for path, recipe in record["metaRecipes"].items():
         old = before[path].encode()
-        assert apply_recipe(old, recipe) == current[path]
+        assert apply_recipe(old, recipe) == broker_history(path, current[path])
         assert historical_bytes(path, current[path]) == old
         if path.startswith("tests/"):
             assert current_test_bytes(old) == current[path]
@@ -206,9 +207,9 @@ def test_no_snapshot_execution_network_or_credential_primitive_in_data_oracle():
 
 def test_current_roadmap_keeps_completed_source_and_waiting_native_separate():
     current = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-012")[0]
-    assert "during `MET-REPAIR-013` publication" in current
+    assert "during `MET-REPAIR-014` publication" in current
     assert "MET-REPAIR-012 / PR106 | DONE_SOURCE_GATES" in current
     assert "CONF-FIX-005 / PR11 | DONE_SOURCE_GATES" in current
-    assert "MET-REPAIR-013 | ONGOING" in current
+    assert "MET-REPAIR-014 | ONGOING" in current
     assert "127 files / 327 tests" in current
     assert "NOT_RUN_ENV_UNAVAILABLE" in current and "effort transition NOT_DUE" in current

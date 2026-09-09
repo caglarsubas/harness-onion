@@ -14,6 +14,11 @@ except ImportError:
     from scripts.safe_yaml import safe_load
     from scripts.validate_proxy_contract import canonical, digest, parse, regular_bytes
 
+try:
+    from validate_broker_handoff import historical_bytes as broker_history, current_test_bytes as broker_current, validate_additions as broker_additions
+except ImportError:
+    from scripts.validate_broker_handoff import historical_bytes as broker_history, current_test_bytes as broker_current, validate_additions as broker_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/credential-ordering-amendment.json"
 BEFORE_PATH = "architecture/credential-ordering-inputs/meta-before.json"
@@ -51,7 +56,7 @@ def validate_additions(packets):
         require(type(packets) is dict and
                 digest(canonical(packets.get("MET-REPAIR-013"))) == PACKET_SHA256,
                 "exact credential-ordering packet required")
-        return []
+        return broker_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed credential-ordering authority packet"]
 
@@ -89,6 +94,7 @@ def historical_bytes(path, raw):
     This is source accounting only. It neither hides current files from acceptance
     nor executes or imports the historical view. Unchanged inputs remain untouched.
     """
+    raw = broker_history(path, raw)
     if path != "AGENTS.md" and not path.startswith("tests/"):
         return raw
     record = _record()
@@ -108,7 +114,7 @@ def current_test_bytes(before):
     matches = [(p, r) for p, r in record["metaRecipes"].items()
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     require(len(matches) == 1, "exact predecessor test bytes required")
-    return apply_recipe(before, matches[0][1])
+    return broker_current(apply_recipe(before, matches[0][1]))
 
 
 def validate_trace(role, trace, *, resources=False):
@@ -150,7 +156,7 @@ def validate_recipes(record, before_raw, current):
                 "exact current recipe inventory")
         for path, recipe in recipes.items():
             raw = before["files"][path].encode()
-            require(type(current[path]) is bytes and current[path] == apply_recipe(raw, recipe),
+            require(type(current[path]) is bytes and broker_history(path, current[path]) == apply_recipe(raw, recipe),
                     "actual current bytes differ")
             if path.startswith("tests/"):
                 require(_test_ids(raw) == _test_ids(current[path]), "old test identities changed")
@@ -174,11 +180,11 @@ def validate_credential_ordering(packets, record, inputs):
                 **{p: r["afterSha256"] for p, r in record["metaChanges"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact current input set")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "changed input: " + path)
+            require(type(inputs[path]) is bytes and digest(broker_history(path, inputs[path])) == checksum, "changed input: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 141 and len(packets) == 142 and set(packets) == old | {"MET-REPAIR-013"},
+        require(len(old) == 141 and len(packets) == 143 and set(packets) == old | {"MET-REPAIR-013", "MET-REPAIR-014"},
                 "141 immutable predecessors and one exact addition required")
-        for name in packets:
+        for name in old | {"MET-REPAIR-013"}:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/" + name + ".yaml"])),
                     "packet semantics differ from bytes")
         packet = packets["MET-REPAIR-013"]
@@ -222,7 +228,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential ordering valid: 142 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
+        print("Credential ordering valid: 143 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
     return int(bool(errors))
 
 
