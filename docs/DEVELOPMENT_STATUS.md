@@ -38,8 +38,8 @@ or edit occurs in this meta publication; acceptance requires twenty commands.
 
 Prior nested-test timeout failures at unchanged 420 seconds remain recorded;
 timing stability UNRESOLVED. Only one bounded unchanged retry, no relaxed
-timeout, skipped coverage or weaker isolation. Alpha 2 ONGOING; effort transition
-NOT_DUE. No administrator authentication, root policy, key, dependency download,
+timeout, skipped coverage or weaker isolation. Alpha 2 ONGOING; effort transition NOT_DUE.
+No administrator authentication, root policy, key, dependency download,
 hosted runner, artifact upload, cloud action or bill.
 
 PR106 is being reconciled against accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060. Its earlier timeout logs are retained; old results do not validate the combined head. The new command set includes measurement and performance validation, with unchanged 420/900-second limits.
