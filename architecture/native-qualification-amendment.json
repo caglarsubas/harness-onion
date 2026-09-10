@@ -590,7 +590,7 @@
     },
     "docs/repositories/00-harness-engineering.md": {
       "beforeSha256": "c3dad6f1a25997bf6704e053d3a2f81d49467087727ab423061e30379395751b",
-      "afterSha256": "7ffad94e642368683b560c7c034c27c382e818b5753a8dabda4fd1953647b8aa",
+      "afterSha256": "0db9250e0d79f9978f9dd367fd08d6e22b7281d41b1a9e82b6fcdb60da972ed3",
       "replacements": [
         {
           "before": "[MET-REPAIR-014 broker handoff]",
@@ -610,6 +610,11 @@
         {
           "before": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
           "after": "MET-REPAIR-014 source gates are closed. Close this qualification authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "34. `MET-REPAIR-014`: publish fixed server-local broker execution, contained worker ABI, exact cleanup and closed data-model acceptance; preserve all consumer paths and historical evidence.",
+          "after": "34. `MET-REPAIR-014`: publish fixed server-local broker execution, contained worker ABI, exact cleanup and closed data-model acceptance; preserve all consumer paths and historical evidence.\n35. `MET-REPAIR-015`: publish the fixed Linux qualification binding and kernel inspection contract; preserve product paths, existing privileges and separate native acceptance.",
           "count": 1
         }
       ]
@@ -804,9 +809,19 @@
       "afterSha256": "edd668622863706797f8ed309dd002524ce9df1093d868177a91d92884c40452",
       "replacements": [
         {
-          "before": "143",
-          "after": "144",
-          "count": 3
+          "before": "    if len(packets) != 143:",
+          "after": "    if len(packets) != 144:",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"current catalog requires exactly 143 packets\")",
+          "after": "        errors.append(\"current catalog requires exactly 144 packets\")",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Model inventory authority valid: 143 packets; exact predicate grant; product/native acceptance unproven.\")",
+          "after": "        print(\"Model inventory authority valid: 144 packets; exact predicate grant; product/native acceptance unproven.\")",
+          "count": 1
         }
       ]
     },
@@ -853,8 +868,8 @@
       "afterSha256": "7c0f8cbd2b9837d0c098ee3ba21f0df0506765a947a54c301b46444abbecb359",
       "replacements": [
         {
-          "before": "143",
-          "after": "144",
+          "before": "        print(\"Proxy prerequisite valid: 143 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")",
+          "after": "        print(\"Proxy prerequisite valid: 144 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")",
           "count": 1
         },
         {
@@ -869,8 +884,8 @@
       "afterSha256": "89615b35fe7f49272625bffd4cef4ba8043f8eea5c17f8fa39f76c28b690fc11",
       "replacements": [
         {
-          "before": "143",
-          "after": "144",
+          "before": "EXPECTED_PACKET_COUNT = 143",
+          "after": "EXPECTED_PACKET_COUNT = 144",
           "count": 1
         },
         {
@@ -907,15 +922,15 @@
       "afterSha256": "571bd872005e7d877df1ad16f5698f8aa16ee6ae7301e3850366eaa51049c996",
       "replacements": [
         {
-          "before": "143",
-          "after": "144",
+          "before": "        print(\"Successor inventory authority valid: 143 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")",
+          "after": "        print(\"Successor inventory authority valid: 144 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")",
           "count": 1
         }
       ]
     },
     "task-packets/README.md": {
       "beforeSha256": "191f82c4c46f53d347c78cf678752488afd4352b0d2d54248ef8a69652970f04",
-      "afterSha256": "581426e43533846e2818c30bfdb641dcfc33f1264dbeddb040c26176875d90b8",
+      "afterSha256": "b18c7345cb2c924e3874f2afe8e4fd13d2c9b351d00b4aea4034ea8409f60146",
       "replacements": [
         {
           "before": "[MET-REPAIR-014 broker handoff]",
@@ -935,6 +950,11 @@
         {
           "before": "MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.",
           "after": "MET-REPAIR-014 source gates are closed. Close this qualification authority before CONF-LIVE-003.",
+          "count": 1
+        },
+        {
+          "before": "| 97 | `MET-REPAIR-014` | `Harness-Engineering` | Fixed broker-controlled execution and cleanup handoff |",
+          "after": "| 97 | `MET-REPAIR-014` | `Harness-Engineering` | Fixed broker-controlled execution and cleanup handoff |\n| 98 | `MET-REPAIR-015` | `Harness-Engineering` | Fixed Linux qualification binding and kernel inspection contract |",
           "count": 1
         }
       ]

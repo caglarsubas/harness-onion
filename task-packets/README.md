@@ -245,6 +245,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 95 | `CONF-FIX-005` | `mas-harness-conformance-labs` | Post-isolation credential custody and cumulative accounting |
 | 96 | `MET-REPAIR-013` | `Harness-Engineering` | Client authentication / server execution ordering authority |
 | 97 | `MET-REPAIR-014` | `Harness-Engineering` | Fixed broker-controlled execution and cleanup handoff |
+| 98 | `MET-REPAIR-015` | `Harness-Engineering` | Fixed Linux qualification binding and kernel inspection contract |
 | 98 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |
 | 99 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |
 | 100 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |
