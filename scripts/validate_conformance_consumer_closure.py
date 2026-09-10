@@ -14,18 +14,13 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
-try:
-    from validate_conformance_performance_followup import historical_bytes as followup_history, current_test_bytes as followup_current, validate_additions as followup_additions
-except ImportError:
-    from scripts.validate_conformance_performance_followup import historical_bytes as followup_history, current_test_bytes as followup_current, validate_additions as followup_additions
-
 ROOT = Path(__file__).resolve().parents[1]
-RECORD_PATH = "architecture/conformance-performance-amendment.json"
-BEFORE_PATH = "architecture/conformance-performance-inputs/meta-before.json"
-PRODUCT_PATH = "architecture/conformance-performance-inputs/product-before.json"
+RECORD_PATH = "architecture/conformance-consumer-closure.json"
+BEFORE_PATH = "architecture/conformance-consumer-closure-inputs/meta-before.json"
+PRODUCT_PATH = "architecture/conformance-consumer-closure-inputs/product-before.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
-RECORD_SHA256 = "2c2e855548fe9dfcc79838d6036472ba86f30cbf972dfebba5fc8d45bed9d699"
-NEW_IDS = ("MET-PERF-002", "CONF-PERF-001")
+RECORD_SHA256 = "337d46d0dd1609ff875b88a558ac0ae7244858ff1c1b45e91829e362ea0fd85d"
+NEW_IDS = ("MET-PERF-004", "CONF-PERF-003")
 
 
 def require(ok, message):
@@ -99,7 +94,6 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
-    raw = followup_history(path, raw)
     record = _record()
     rule = record["metaRecipes"].get(path)
     if rule is None:
@@ -121,9 +115,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return followup_current(before)
+        return before
     require(len(matches) == 1, "unique predecessor")
-    return followup_current(apply_recipe(before, matches[0]))
+    return apply_recipe(before, matches[0])
 
 
 def validate_additions(packets):
@@ -132,7 +126,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return followup_additions(packets)
+        return []
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -170,6 +164,8 @@ def reconstruct_product(path, before, row, spec):
             and set(row) == {"regions", "append", "afterSha256", "constant"}, "closed source proof")
     require(type(row["regions"]) is dict and set(row["regions"]) == set(spec["regions"])
             and type(row["append"]) is str and len(row["append"].encode()) <= spec["append"], "bounded exact regions")
+    if "fixedRegions" in spec:
+        require(row["regions"] == spec["fixedRegions"], "exact historical-consumer bridge")
     replacements = []
     for name in spec["regions"]:
         start, end, old = region(before, name)
@@ -191,7 +187,7 @@ def reconstruct_product(path, before, row, spec):
             require(not any(isinstance(n, forbidden) for n in ast.walk(parsed[0])), "arithmetic-only region")
             require(all(isinstance(n.func, ast.Name) and n.func.id == "pow"
                         for n in ast.walk(parsed[0]) if isinstance(n, ast.Call)), "no runtime service/cache")
-        if old.name.startswith("test_"):
+        if old.name.startswith("test_") and "fixedRegions" not in spec:
             assertions = lambda node: [ast.dump(n) for n in ast.walk(node)
                 if isinstance(n, ast.Assert) or isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
                 and n.func.attr.startswith("assert")]
@@ -239,14 +235,14 @@ def validate_product_delta(after, proof, record, before_raw):
         before = parse(before_raw)
         require(type(proof) is dict and set(proof) == {"schemaVersion", "evidenceClass", "packetId",
                 "authorityDigest", "baseCommit", "sources", "newTestIds", "beforeSources", "documentSuffix"}, "closed proof")
-        require(proof["schemaVersion"] == "planeon.conformance-performance-delta/v1"
-                and proof["evidenceClass"] == "SOURCE_DELTA_ONLY" and proof["packetId"] == "CONF-PERF-001"
+        require(proof["schemaVersion"] == "planeon.conformance-performance-delta/v3"
+                and proof["evidenceClass"] == "SOURCE_DELTA_ONLY" and proof["packetId"] == "CONF-PERF-003"
                 and proof["authorityDigest"] == RECORD_SHA256
                 and proof["baseCommit"] == before["baseCommit"] == record["sourceBaseline"]["commit"], "proof identity")
         doc = "docs/live-backend/linux-boundary.md"
         require(type(after) is dict and type(proof["sources"]) is dict
                 and set(after) == set(before["files"]) == set(record["productPaths"])
-                and set(proof["sources"]) == set(after) - {doc}, "exact six-path proof")
+                and set(proof["sources"]) == set(after) - {doc}, "exact eight-path proof")
         require(proof["beforeSources"] == {p:r for p,r in before["files"].items() if p != doc}, "inert source history")
         suffix = proof["documentSuffix"]
         require(type(suffix) is str and len(suffix.encode()) <= 65536
@@ -286,39 +282,147 @@ def validate_authority(packets, record, inputs):
                 **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact current input inventory")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(followup_history(path, inputs[path])) == checksum, "current source changed: " + path)
+            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 144 and len(packets) == 150 and set(packets) == old | set(NEW_IDS) | {"MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003"}, "exact148 catalog")
-        for name in old | set(NEW_IDS):
+        require(len(old) == 148 and len(packets) == 150 and set(packets) == old | set(NEW_IDS), "exact150 catalog")
+        for name in packets:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
         packet, product = (packets[name] for name in NEW_IDS)
         require(packet["allowedPaths"] == record["ownedPaths"] and product["allowedPaths"] == record["productPaths"], "path grant")
         require(packet["offlineAcceptanceCommands"] == record["preserved"]["metaCommands"]
-                and len(packet["offlineAcceptanceCommands"]) == 24, "complete meta commands")
+                and len(packet["offlineAcceptanceCommands"]) == 26, "complete meta commands")
         require(product["offlineAcceptanceCommands"] == packets["CONF-FIX-005"]["offlineAcceptanceCommands"]
                 == record["preserved"]["productCommands"], "unchanged eight product commands")
         before = parse(inputs[BEFORE_PATH])
         require(before["baseCommit"] == record["metaBaseline"] and set(before["files"]) == set(record["metaRecipes"]), "meta before inventory")
         for path, rule in record["metaRecipes"].items():
             raw = before["files"][path].encode()
-            require(apply_recipe(raw, rule) == followup_history(path, inputs[path]), "meta recipe differs")
+            require(apply_recipe(raw, rule) == inputs[path], "meta recipe differs")
             if path.startswith("tests/"):
                 require(test_ids(raw) == test_ids(inputs[path]), "old test identity changed")
         checkpoint, sources = parse(inputs[CHECKPOINT_PATH]), parse(inputs[PRODUCT_PATH])
         require(checkpoint["commit"] == sources["baseCommit"] == record["sourceBaseline"]["commit"]
                 and checkpoint["tree"] == record["sourceBaseline"]["tree"]
                 and len(checkpoint["files"]) == 127 and sum(map(len, checkpoint["tests"].values())) == 327, "127/327 checkpoint")
-        require(set(sources["files"]) == set(record["productPaths"]), "six pinned product paths")
+        require(set(sources["files"]) == set(record["productPaths"]), "eight pinned product paths")
         for path, raw in sources["files"].items():
             require("sha256:"+digest(raw.encode()) == checkpoint["files"][path]["sha256"], "product source changed")
             for name in record["productRegions"][path]["regions"]:
                 region(raw.encode(), name)
+        require(len(record["productPaths"]) == 8 and len(record["accountingBridges"]) == 4, "exact eight-path closure")
+        for bridge in record["accountingBridges"]:
+            path = bridge["path"]
+            raw = sources["files"][path].encode()
+            start, end, _ = region(raw, bridge["region"])
+            require(digest(raw[start:end]) == bridge["beforeSha256"]
+                    and digest(bridge["after"].encode()) == bridge["afterSha256"]
+                    and record["productRegions"][path]["fixedRegions"][bridge["region"]] == bridge["after"], "exact consumer before/after")
+        validate_consumer_census(parse(inputs["architecture/conformance-consumer-closure-inputs/consumer-sources.json"]), checkpoint, sources, record)
+        require(record["profiling"]["subcalls"] is False and record["profiling"]["builtins"] is True
+                and record["profiling"]["fullBaselineRequired"] is True
+                and record["profiling"]["partialMayAuthorizeOptimization"] is False
+                and record["profiling"]["crossCallCacheAllowed"] is False, "full uncached measurement gate")
         require(record["stages"] == [110,120,127,135,141,146,151]
                 and record["measurement"]["functionAttribution"] == "NOT_YET_MEASURED"
                 and record["preserved"]["nativeAcceptance"] is record["preserved"]["tenantAcceptance"] is False, "evidence promotion")
         return []
     except (ValueError, TypeError, KeyError, AttributeError, UnicodeError, SyntaxError, RecursionError) as exc:
         return ["invalid performance authority: "+str(exc)]
+
+
+def source_read_census(files):
+    """Enumerate syntax from all pinned Python sources; never execute snapshots."""
+    sites = []
+    observed = {"read_bytes", "read_text", "regular_bytes", "tracked_inventory",
+                "validate_checkpoint", "validate_composition", "verify_repository",
+                "isolated_inventory", "check_edit", "corrected_test", "performance_current"}
+    for path, raw in sorted(files.items()):
+        tree = ast.parse(raw)
+        def visit(node, scope):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                scope = scope + (node.name,)
+            if isinstance(node, ast.Call):
+                name = node.func.id if isinstance(node.func, ast.Name) else getattr(node.func, "attr", "")
+                if name in observed:
+                    sites.append(dict(path=path, scope=".".join(scope), line=node.lineno,
+                                      kind=name, expression=ast.dump(node, include_attributes=False)))
+            for child in ast.iter_child_nodes(node):
+                visit(child, scope)
+        visit(tree, ())
+    return sorted(sites, key=lambda row: (row["path"], row["line"], row["kind"], row["expression"]))
+
+
+def validate_consumer_census(census, checkpoint, sources, record):
+    require(type(census) is dict and set(census) == {"baseCommit", "evidenceClass", "files"}
+            and census["baseCommit"] == checkpoint["commit"]
+            and census["evidenceClass"] == "STATIC_SOURCE_CENSUS_ONLY", "closed inert census")
+    expected = {p for p in checkpoint["files"] if p.endswith(".py")}
+    require(type(census["files"]) is dict and set(census["files"]) == expected
+            and len(expected) == record["consumerCensus"]["pythonFiles"], "complete Python census")
+    for path, raw in census["files"].items():
+        require(type(raw) is str, "inert source string")
+        encoded, pin = raw.encode(), checkpoint["files"][path]
+        require(len(encoded) == pin["size"] and "sha256:" + digest(encoded) == pin["sha256"]
+                and hashlib.sha1(b"blob " + str(len(encoded)).encode() + b"\0" + encoded).hexdigest() == pin["blob"],
+                "accepted census source pin")
+        if path in sources["files"]:
+            require(raw == sources["files"][path], "census and region sources disagree")
+    tests = {p: sorted(test_ids(census["files"][p].encode())) for p in checkpoint["tests"]}
+    require(tests == {p: sorted(v) for p, v in checkpoint["tests"].items()}
+            and sum(map(len, tests.values())) == 327, "all 327 static predecessor IDs")
+    sites = source_read_census(census["files"])
+    require(len(record["accountingBridges"]) == 4, "four reviewed consumer bridges")
+    grouped = {}
+    for bridge in record["accountingBridges"]:
+        path, name = bridge["path"], bridge["region"]
+        require(any(row["path"] == path and row["scope"] == name and row["kind"] == "read_bytes"
+                    for row in sites), "historical direct-read edge missing")
+        after = ast.parse("\n".join(line[4:] if line else line for line in bridge["after"].splitlines()))
+        require(not any(isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                        and n.func.attr in ("read_bytes", "read_text") for n in ast.walk(after)),
+                "bridge still reads current bytes as history")
+        require(sum(isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                    and n.func.attr == "performance_current" for n in ast.walk(after)) == 1,
+                "fresh current custody before historical comparison")
+        grouped.setdefault(path, {})[name] = bridge["after"]
+    require(grouped == {p: s["fixedRegions"] for p, s in record["productRegions"].items()
+                        if "fixedRegions" in s}, "complete exact bridge region map")
+    require(record["consumerCensus"]["executionAllowed"] is False
+            and record["consumerCensus"]["classification"] == "STATIC_SOURCE_CENSUS_ONLY",
+            "static census cannot grant execution")
+    return sites
+
+
+def validate_dispatch_ownership(packets):
+    """Keep the generic checker; retire only three exact digest-bound pairs."""
+    try:
+        from validate_packet_ownership import validate_packet_ownership
+    except ImportError:
+        from scripts.validate_packet_ownership import validate_packet_ownership
+    errors = validate_packet_ownership(packets)
+    try:
+        record = _record()
+        require(validate_additions(packets) == [], "exact replacement packets")
+        for name in ("CONF-PERF-001", "CONF-PERF-002"):
+            path = "task-packets/" + name + ".yaml"
+            raw = regular_bytes(ROOT, path)
+            require(digest(raw) == record["protectedFiles"][path]
+                    and canonical(packets.get(name)) == canonical(safe_load(raw))
+                    and record["dispatch"][name] == "SUPERSEDED_UNACCEPTED_HISTORY",
+                    "immutable retired packet")
+        retired = set()
+        for left, right, count in (("CONF-PERF-001", "CONF-PERF-002", 6),
+                                   ("CONF-PERF-001", "CONF-PERF-003", 6),
+                                   ("CONF-PERF-002", "CONF-PERF-003", 8)):
+            paths = set(packets[left]["allowedPaths"]) & set(packets[right]["allowedPaths"])
+            require(len(paths) == count, "exact pairwise path overlap")
+            retired.update("unordered same-repository packets " + left + " and " + right + " overlap at "
+                           + repr(path) + " and " + repr(path) for path in paths)
+        require(len(retired) == 20 and all(errors.count(message) == 1 for message in retired),
+                "exact20 retired diagnostics")
+        return [error for error in errors if error not in retired]
+    except (ValueError, TypeError, KeyError, OSError, RecursionError):
+        return errors + ["missing or changed closed consumer dispatch replacement"]
 
 
 def main():
@@ -330,7 +434,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 150 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 150 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 
