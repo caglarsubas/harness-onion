@@ -1212,7 +1212,7 @@
     },
     "tests/test_ci_performance.py": {
       "beforeSha256": "03f5dfa8cc70a7387c7c921803f1ff6709af053791a024dbdd14b9942cf2ed3e",
-      "afterSha256": "0c61a57dfa36a613e55715ba0c51251e6e85705b9d41e3a6ab790178d1b889b4",
+      "afterSha256": "4af7c3bd211ec120a944c4cd0566cc358d17228d841528ab56620cce50c01b24",
       "replacements": [
         {
           "before": "    assert len(packets) == CURRENT_PACKET_COUNT == 144\n",
@@ -1225,6 +1225,11 @@
           "count": 1
         },
         {
+          "before": "    assert len(paths) == 160\n",
+          "after": "    assert len(paths) == 162\n",
+          "count": 1
+        },
+        {
           "before": "    text = (ROOT / \"docs/DEVELOPMENT_STATUS.md\").read_text()\n",
           "after": "    text = (ROOT / \"docs/DEVELOPMENT_STATUS.md\").read_text().split(\"## Historical MET-REPAIR-015 publication checkpoint\\n\",1)[1]\n",
           "count": 1
@@ -1233,11 +1238,16 @@
     },
     "tests/test_credential_lifecycle.py": {
       "beforeSha256": "811a7d36e9fdaf7f8ca7dd6f8e1f54ee1ed9c715a55617ba5d67e2d751a6de5c",
-      "afterSha256": "0ae680c97934dae1f1177393209e4019a4d66a4ab755427d7c93c312ef7efdf0",
+      "afterSha256": "3ae029864ef7d1e93f8b796549aebfbbfe66550425638330b8d92e3908ca4b9a",
       "replacements": [
         {
           "before": "    assert len(packets) == 144 and len(record[\"protectedFiles\"]) == 245\n",
           "after": "    assert len(packets) == 146 and len(record[\"protectedFiles\"]) == 245\n",
+          "count": 1
+        },
+        {
+          "before": "    if kind == \"assertion\": current[path] = current[path].replace(b\"assert len(paths) == 160\", b\"assert True\", 1)\n",
+          "after": "    if kind == \"assertion\": current[path] = current[path].replace(b\"assert len(paths) == 162\", b\"assert True\", 1)\n",
           "count": 1
         },
         {
@@ -1449,6 +1459,8 @@
     }
   },
   "unchangedTests": {
+    "ci/test_offline_runner.py": "46444c4218502f889f9d3e923c60604f6eff5434ab248a9cfc96976f38f06fcb",
+    "ci/test_warm_snapshot.py": "929be52a3835a0b0d28d355fd4b4f85fc0e5e210502c3b6c62c2b24348fafa24",
     "tests/linux_runner/conftest.py": "414b64d997172139aa984294dbb9b9d136ac9197f8245580f6d8c05e84b3a0d4",
     "tests/linux_runner/test_authority.py": "1a29bb42ca3a6fda8281c6e9e9fa79266107b1e244510563950e69ff3aa7cf90",
     "tests/linux_runner/test_build_and_predecessors.py": "6990993b16abdd8b548e6edfba37e7c40ab6bdd10478a45ab029a3a06765c0c6",

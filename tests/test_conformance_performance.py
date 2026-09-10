@@ -3,6 +3,7 @@ import ast
 from copy import deepcopy
 import json
 from pathlib import Path
+import re
 
 import pytest
 
@@ -131,6 +132,22 @@ def test_product_scope_rejects_tampering_before_history(authority,fault):
     if fault == "oversize": proof["sources"][supervisor]["append"] = "x"*131073
     if fault == "skip": proof["sources"][supervisor]["append"] += "\n@unittest.skip('hidden')\ndef test_hidden():\n    pass\n"
     if fault == "collection": proof["sources"][supervisor]["append"] += "\ndef load_tests(loader, tests, pattern):\n    return tests\n"
+    # Recompute actual candidate bytes and checksums for malformed but scoped
+    # edits. These cases must fail the relevant guard, not a stale checksum.
+    if fault in {"region-name", "runtime-import", "runtime-call", "helper-pin", "oversize", "skip", "collection"}:
+        before = json.loads(inputs[PRODUCT_PATH])["files"]
+        path = crypto if fault in {"region-name", "runtime-import", "runtime-call"} else (
+            "tests/live_backend/_inventory.py" if fault == "helper-pin" else supervisor)
+        row = proof["sources"][path]
+        current = before[path].encode()
+        spans = [(region(current, name)[:2], value.encode()) for name, value in row["regions"].items()]
+        for (start, end), value in sorted(spans, reverse=True):
+            current = current[:start] + value + current[end:]
+        if row["constant"] is not None:
+            current = re.sub(rb'^HELPER_SHA256 = "[0-9a-f]{64}"$',
+                ('HELPER_SHA256 = "'+row["constant"]+'"').encode(), current, flags=re.M)
+        after[path] = current + row["append"].encode()
+        row["afterSha256"] = digest(after[path])
     # Keep document assembly consistent so source-oracle negatives do not pass
     # merely because an earlier proof-document equality catches changed JSON.
     if fault != "doc-prefix" and doc in after:
