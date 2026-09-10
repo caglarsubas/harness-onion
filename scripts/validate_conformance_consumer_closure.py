@@ -19,7 +19,7 @@ RECORD_PATH = "architecture/conformance-consumer-closure.json"
 BEFORE_PATH = "architecture/conformance-consumer-closure-inputs/meta-before.json"
 PRODUCT_PATH = "architecture/conformance-consumer-closure-inputs/product-before.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
-RECORD_SHA256 = "af4f2f5a8e75215c225ff0e6d9a6e9b439421bcdfa0a65ba3d3932e21fb83063"
+RECORD_SHA256 = "337d46d0dd1609ff875b88a558ac0ae7244858ff1c1b45e91829e362ea0fd85d"
 NEW_IDS = ("MET-PERF-004", "CONF-PERF-003")
 
 
