@@ -8,14 +8,12 @@ import re
 
 import pytest
 
-from scripts.validate_conformance_consumer_closure import historical_bytes as closure_history
-
 from scripts.safe_yaml import safe_load
-from scripts.validate_conformance_performance_followup import (
+from scripts.validate_conformance_consumer_closure import (
     ROOT, BEFORE_PATH, PRODUCT_PATH, RECORD_SHA256, apply_recipe, canonical,
     current_test_bytes, digest, historical_bytes, load_inputs, reconstruct_product,
     region, regular_bytes, test_ids as ids, validate_additions, validate_authority, validate_product_delta,
-    validate_dispatch_ownership,
+    validate_dispatch_ownership, source_read_census, validate_consumer_census,
 )
 
 DOC = "docs/live-backend/linux-boundary.md"
@@ -38,13 +36,13 @@ def test_exact_catalog_preserves_every_old_yaml_and_authority(authority):
     assert validate_authority(*authority) == []
     assert len(packets) == 150
     old = [p for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")]
-    assert len(old) == 146
+    assert len(old) == 148
     for path in old:
         assert digest(inputs[path]) == record["protectedFiles"][path]
-    assert len(packets["MET-PERF-003"]["offlineAcceptanceCommands"]) == 25
-    assert packets["CONF-PERF-002"]["offlineAcceptanceCommands"] == packets["CONF-PERF-001"]["offlineAcceptanceCommands"]
-    assert len(packets["CONF-PERF-002"]["offlineAcceptanceCommands"]) == 8
-    assert "CONF-PERF-001" not in packets["CONF-PERF-002"]["predecessors"]
+    assert len(packets["MET-PERF-004"]["offlineAcceptanceCommands"]) == 26
+    assert packets["CONF-PERF-003"]["offlineAcceptanceCommands"] == packets["CONF-PERF-001"]["offlineAcceptanceCommands"]
+    assert len(packets["CONF-PERF-003"]["offlineAcceptanceCommands"]) == 8
+    assert "CONF-PERF-001" not in packets["CONF-PERF-003"]["predecessors"]
     assert record["dispatch"]["CONF-PERF-001"] == "SUPERSEDED_UNACCEPTED_HISTORY"
     assert record["sourceBaseline"]["files"] == 127 and record["sourceBaseline"]["tests"] == 327
     assert record["stages"] == [110,120,127,135,141,146,151]
@@ -59,7 +57,7 @@ def test_every_current_meta_byte_is_validated_before_history(authority):
     before = json.loads(inputs[BEFORE_PATH])["files"]
     for path, rule in record["metaRecipes"].items():
         raw = before[path].encode()
-        assert apply_recipe(raw, rule) == closure_history(path, inputs[path])
+        assert apply_recipe(raw, rule) == inputs[path]
         assert historical_bytes(path, inputs[path]) == raw
         if path.startswith("tests/"):
             assert ids(raw) == ids(inputs[path])
@@ -67,19 +65,21 @@ def test_every_current_meta_byte_is_validated_before_history(authority):
         with pytest.raises(ValueError):
             historical_bytes(path, inputs[path]+b"\n")
     for path in record["unchangedTests"]:
-        assert current_test_bytes(closure_history(path, inputs[path])) == inputs[path]
+        assert current_test_bytes(inputs[path]) == inputs[path]
 
 
 def test_exact_bridges_preserve_old_oracles_and_only_change_historical_operands(authority):
     _, record, inputs = authority
     before = json.loads(inputs[PRODUCT_PATH])["files"]
-    assert set(record["accountingBridges"]) == {SCALAR, SUCCESSOR}
+    assert len(record["accountingBridges"]) == 4
     assert len(before) == len(record["productPaths"]) == 8
     assert set(before) == {DOC,SUPERVISOR,CRYPTO,HELPER,IMPORTER,SCALAR,SUCCESSOR,
                            "tests/platform/linux_baseline/test_linux_inventory.py"}
-    for path, bridge in record["accountingBridges"].items():
+    grouped = {}
+    for bridge in record["accountingBridges"]:
+        path, name = bridge["path"], bridge["region"]
         raw = before[path].encode()
-        start,end,_ = region(raw,bridge["region"])
+        start,end,_ = region(raw,name)
         old = raw[start:end].decode()
         assert digest(old.encode()) == bridge["beforeSha256"]
         if path == SCALAR:
@@ -89,17 +89,21 @@ def test_exact_bridges_preserve_old_oracles_and_only_change_historical_operands(
                 '        for path, change in FIXTURE["changes"].items():').replace(
                 'check_edit(path, before, regular(path).read_bytes())','check_edit(path, before, historical_sources[path])')
         else:
-            expected = old.replace('        historical = json.loads',
-                '        _, historical_sources, _ = HELPER.performance_current(ROOT)\n        historical = json.loads').replace(
-                'self.assertEqual(sha((ROOT / path).read_bytes()), checksum)',
-                'self.assertEqual(sha(historical_sources[path]), checksum)')
+            first, rest = old.split("\n", 1)
+            expected = first + "\n        _, historical_sources, _ = HELPER.performance_current(ROOT)\n" + rest
+            expected = expected.replace('sha((ROOT / path).read_bytes())', 'sha(historical_sources[path])')
+            expected = expected.replace('(ROOT / RECORD["change"]["path"]).read_bytes()', 'historical_sources[RECORD["change"]["path"]]')
         assert bridge["after"] == expected
         assert digest(expected.encode()) == bridge["afterSha256"]
-        assert record["productRegions"][path]["fixedRegions"] == {bridge["region"]:expected}
+        grouped.setdefault(path, {})[name] = expected
         assert record["productRegions"][path]["append"] == 0
-    assert record["consumerGraph"] == ["original-linux-91","scalar-exact-edit","successor-exact-history",
-        "cumulative-106-stages","backend-110","supervisor-120","custody-279","credential-305",
-        "accepted-127-327","actual-six-root-discovery"]
+    assert grouped == {p:s["fixedRegions"] for p,s in record["productRegions"].items() if "fixedRegions" in s}
+    prior = json.loads((ROOT/"architecture/conformance-performance-followup.json").read_bytes())
+    for path, bridge in prior["accountingBridges"].items():
+        assert grouped[path][bridge["region"]] == bridge["after"]
+    assert record["consumerGraph"] == ["original-linux-91","scalar-exact-edit","successor-current-scalar-hash",
+        "successor-exact-scalar-patch","successor-exact-history","cumulative-106-stages","backend-110",
+        "supervisor-120","custody-279","credential-305","accepted-127-327","actual-six-root-discovery"]
 
 
 def test_partial_measurement_never_becomes_baseline_or_algorithm_authority(authority):
@@ -107,9 +111,12 @@ def test_partial_measurement_never_becomes_baseline_or_algorithm_authority(autho
     measurement, profiling = record["measurement"], record["profiling"]
     assert measurement["functionAttribution"] == "NOT_YET_MEASURED"
     assert measurement["baselineAccepted"] is measurement["algorithmSelected"] is False
-    assert [a["status"] for a in measurement["attempts"]] == ["FAIL_ACCOUNTING","TIMEOUT_NOT_PASS"]
+    assert [a["status"] for a in measurement["attempts"]] == ["FAIL_ACCOUNTING","TIMEOUT_NOT_PASS","FAIL_ACCOUNTING"]
     assert measurement["ci"]["status"] == "CANCELLED_QUEUED_NO_RUNNER_NOT_PASS"
-    assert measurement["ci"]["runnerId"] == 0
+    assert measurement["ci"]["runnerId"] == measurement["latestCi"]["runnerId"] == 0
+    last = measurement["attempts"][-1]
+    assert (last["executedTests"], last["passedTests"], last["failures"], last["skips"]) == (170,168,2,0)
+    assert last["backend"] == last["profile"] == "NOT_RUN"
     assert profiling == dict(subcalls=False,builtins=True,defaultTimer=True,scope="FULL_SUPERVISOR_MODULE",
         requiredFunctions=["_add","_scalar_mult","sign","verify","builtins.pow"],fullBaselineRequired=True,
         partialMayAuthorizeOptimization=False,crossCallCacheAllowed=False,fullProductCommandsRequired=8,
@@ -123,7 +130,7 @@ def test_supersession_retains_generic_checks_and_only_closes_exact_pair(authorit
     assert len(generic) == 20
     assert all(any(pair in error for pair in ("CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-003")) for error in generic)
     assert validate_dispatch_ownership(packets) == []
-    assert "CONF-PERF-001" not in packets["CONF-PERF-002"]["predecessors"]
+    assert "CONF-PERF-001" not in packets["CONF-PERF-003"]["predecessors"]
 
 
 @pytest.mark.parametrize("fault", ["old-path", "new-path", "old-command", "new-command", "old-repo",
@@ -132,13 +139,13 @@ def test_supersession_never_suppresses_changed_packets_or_other_ownership_errors
     from scripts.validate_packet_ownership import validate_packet_ownership
     packets = deepcopy(authority[0])
     if fault == "old-path": packets["CONF-PERF-001"]["allowedPaths"].append("outside.py")
-    if fault == "new-path": packets["CONF-PERF-002"]["allowedPaths"].append("outside.py")
+    if fault == "new-path": packets["CONF-PERF-003"]["allowedPaths"].append("outside.py")
     if fault == "old-command": packets["CONF-PERF-001"]["offlineAcceptanceCommands"].pop()
-    if fault == "new-command": packets["CONF-PERF-002"]["offlineAcceptanceCommands"].pop()
+    if fault == "new-command": packets["CONF-PERF-003"]["offlineAcceptanceCommands"].pop()
     if fault == "old-repo": packets["CONF-PERF-001"]["repository"] = "Harness-Engineering"
-    if fault == "new-predecessor": packets["CONF-PERF-002"]["predecessors"].append("CONF-PERF-001")
+    if fault == "new-predecessor": packets["CONF-PERF-003"]["predecessors"].append("CONF-PERF-001")
     if fault == "missing-old": packets.pop("CONF-PERF-001")
-    if fault == "missing-new": packets.pop("CONF-PERF-002")
+    if fault == "missing-new": packets.pop("CONF-PERF-003")
     if fault == "unrelated-overlap":
         packets["UNRELATED-001"] = dict(repository="mas-harness-conformance-labs",
             predecessors=[], allowedPaths=["src/harness_conformance/crypto.py"])
@@ -154,7 +161,7 @@ def test_supersession_never_suppresses_changed_packets_or_other_ownership_errors
     "command","timeout","native","partial","cache","profile","bridge","dispatch"])
 def test_authority_and_measurement_boundaries_fail_closed(authority,fault):
     packets,record,inputs = deepcopy(authority)
-    if fault == "packet": packets["CONF-PERF-002"]["allowedPaths"].append("src/other.py")
+    if fault == "packet": packets["CONF-PERF-003"]["allowedPaths"].append("src/other.py")
     if fault == "old-yaml": inputs["task-packets/CONF-PERF-001.yaml"] += b" "
     if fault == "source": inputs["scripts/validate_readiness.py"] += b"\n"
     if fault == "missing": inputs.pop(PRODUCT_PATH)
@@ -162,14 +169,14 @@ def test_authority_and_measurement_boundaries_fail_closed(authority,fault):
     if fault == "before": inputs[BEFORE_PATH] += b" "
     if fault == "product-before": inputs[PRODUCT_PATH] += b" "
     if fault == "record": record["productPaths"].append("Makefile")
-    if fault == "command": packets["CONF-PERF-002"]["offlineAcceptanceCommands"].pop()
+    if fault == "command": packets["CONF-PERF-003"]["offlineAcceptanceCommands"].pop()
     if fault == "timeout": record["preserved"]["trustedSeconds"] += 1
     if fault == "native": record["preserved"]["nativeAcceptance"] = True
     if fault == "partial": record["profiling"]["partialMayAuthorizeOptimization"] = True
     if fault == "cache": record["profiling"]["crossCallCacheAllowed"] = True
     if fault == "profile": record["profiling"]["builtins"] = False
     if fault == "bridge": record["productRegions"][SUCCESSOR].pop("fixedRegions")
-    if fault == "dispatch": packets["CONF-PERF-002"]["predecessors"].append("CONF-PERF-001")
+    if fault == "dispatch": packets["CONF-PERF-003"]["predecessors"].append("CONF-PERF-001")
     assert validate_authority(packets,record,inputs)
 
 
@@ -205,8 +212,8 @@ def sample(authority):
         addition = "\nclass FollowupScopeOnlyTests(unittest.TestCase):\n    def test_independent_scope_example(self):\n        self.assertEqual(1, 1)\n" if path == SUPERVISOR else ""
         rows[path] = dict(regions=regions,append=addition,afterSha256="",constant=None)
     rows[IMPORTER]["constant"] = digest(before[HELPER].encode())
-    proof = dict(schemaVersion="planeon.conformance-performance-delta/v2",evidenceClass="SOURCE_DELTA_ONLY",
-        packetId="CONF-PERF-002",authorityDigest=RECORD_SHA256,baseCommit=record["sourceBaseline"]["commit"],sources=rows,
+    proof = dict(schemaVersion="planeon.conformance-performance-delta/v3",evidenceClass="SOURCE_DELTA_ONLY",
+        packetId="CONF-PERF-003",authorityDigest=RECORD_SHA256,baseCommit=record["sourceBaseline"]["commit"],sources=rows,
         newTestIds=["FollowupScopeOnlyTests.test_independent_scope_example"],
         beforeSources={p:r for p,r in before.items() if p != DOC},documentSuffix="\nSynthetic scope data, not acceptance.\n")
     after = {}
@@ -229,8 +236,8 @@ def test_resealed_source_mutations_fail_intended_scope_guards(authority,fault):
     _,record,inputs = authority
     after,proof,before = sample(authority)
     rows = proof["sources"]
-    scalar_name = record["accountingBridges"][SCALAR]["region"]
-    successor_name = record["accountingBridges"][SUCCESSOR]["region"]
+    scalar_name = next(b["region"] for b in record["accountingBridges"] if b["path"] == SCALAR)
+    successor_name = "SuccessorInventoryTests.test_original_106_file_and_150_test_history"
     if fault in ("scalar-original","successor-original"):
         path,name = (SCALAR,scalar_name) if fault == "scalar-original" else (SUCCESSOR,successor_name)
         raw = before[path].encode()
@@ -298,7 +305,7 @@ def test_regular_inputs_refuse_links_and_nonregular_sources(tmp_path):
 
 
 def test_validator_is_data_only_and_product_cannot_execute_in_meta():
-    tree = ast.parse((ROOT/'scripts/validate_conformance_performance_followup.py').read_bytes())
+    tree = ast.parse((ROOT/'scripts/validate_conformance_consumer_closure.py').read_bytes())
     forbidden = {'exec','eval','compile','__import__','Popen','system','CDLL','socket','syscall'}
     for node in ast.walk(tree):
         if isinstance(node,ast.Call):
@@ -310,11 +317,89 @@ def test_validator_is_data_only_and_product_cannot_execute_in_meta():
 
 
 def test_roadmap_and_measurement_keep_all_acceptance_boundaries():
-    guide = (ROOT/'docs/alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md').read_text()
+    guide = (ROOT/'docs/alpha-2/CONFORMANCE_CONSUMER_CLOSURE.md').read_text()
     for value in ('NOT_YET_MEASURED','PARTIAL_DIAGNOSTIC_ONLY','SOURCE_DELTA_ONLY','327','750 seconds',
                   '0.85','CONF-LIVE-003','NOT_RUN_ENV_UNAVAILABLE','effort transition NOT_DUE',
                   'subcalls=False, builtins=True','119','119','170','900','create_stats mid-run'):
         assert value in guide
-    current = (ROOT/'docs/DEVELOPMENT_STATUS.md').read_text().split('## Historical MET-PERF-003 publication checkpoint\n',1)[1].split('## Historical MET-PERF-002')[0]
-    for value in ('MET-PERF-003 | ONGOING','CONF-PERF-002 | WAITING','draft13 | BLOCKED_UNACCEPTED','draft12 | WAITING'):
+    current = (ROOT/'docs/DEVELOPMENT_STATUS.md').read_text().split('## Historical MET-PERF-003')[0]
+    for value in ('MET-PERF-004 | ONGOING','CONF-PERF-003 | WAITING','draft13 | BLOCKED_UNACCEPTED','draft12 | WAITING'):
         assert value in current
+
+
+def test_complete_inert_census_matches_all_accepted_python_and_test_sources(authority):
+    _,record,inputs = authority
+    census = json.loads(inputs[record["consumerCensus"]["path"]])
+    checkpoint = json.loads(inputs["architecture/credential-ordering-inputs/checkpoint.json"])
+    sources = json.loads(inputs[PRODUCT_PATH])
+    sites = validate_consumer_census(census,checkpoint,sources,record)
+    assert sites == source_read_census(census["files"])
+    assert set(census["files"]) == {p for p in checkpoint["files"] if p.endswith(".py")}
+    assert sum(len(ids(raw.encode())) for p,raw in census["files"].items() if p in checkpoint["tests"]) == 327
+    assert {b["region"] for b in record["accountingBridges"] if b["path"] == SUCCESSOR} == {
+        "SuccessorInventoryTests.test_current_test_guard_not_exempt",
+        "SuccessorInventoryTests.test_exact_scalar_test_patch",
+        "SuccessorInventoryTests.test_original_106_file_and_150_test_history"}
+    # The two missed consumers are visible in the whole-corpus read inventory.
+    for method in ("test_current_test_guard_not_exempt", "test_exact_scalar_test_patch"):
+        found = [s for s in sites if s["path"] == SUCCESSOR and s["scope"] == "SuccessorInventoryTests."+method and s["kind"] == "read_bytes"]
+        assert len(found) == 1
+    assert any(s["path"] == IMPORTER and s["kind"] == "read_bytes" for s in sites)
+    assert any(s["path"] == HELPER and s["kind"] == "regular_bytes" for s in sites)
+    assert any(s["path"] == SUPERVISOR and s["kind"] == "tracked_inventory" for s in sites)
+
+
+@pytest.mark.parametrize("fault", ["missing","extra","changed","other-commit","claims-execution","string-kind","scope-mismatch","lost-id"])
+def test_whole_consumer_census_refuses_omissions_and_source_substitution(authority,fault):
+    _,record,inputs = authority
+    record = deepcopy(record)
+    census = json.loads(inputs[record["consumerCensus"]["path"]])
+    checkpoint = json.loads(inputs["architecture/credential-ordering-inputs/checkpoint.json"])
+    sources = json.loads(inputs[PRODUCT_PATH])
+    if fault == "missing": census["files"].pop(SUCCESSOR)
+    if fault == "extra": census["files"]["extra.py"] = ""
+    if fault == "changed": census["files"][SUCCESSOR] += "\n"
+    if fault == "other-commit": census["baseCommit"] = "0"*40
+    if fault == "claims-execution": census["evidenceClass"] = "PASS"
+    if fault == "string-kind": census["files"][SUCCESSOR] = {}
+    if fault == "scope-mismatch": sources["files"][SCALAR] += "\n"
+    if fault == "lost-id": checkpoint["tests"][SUCCESSOR].pop()
+    with pytest.raises(ValueError):
+        validate_consumer_census(census,checkpoint,sources,record)
+
+
+@pytest.mark.parametrize("method", ["test_current_test_guard_not_exempt","test_exact_scalar_test_patch"])
+@pytest.mark.parametrize("fault", ["current-disk","missing-custody","weakened-invariant","extra-statement","original","wrong-method"])
+def test_both_new_bridges_refuse_resealed_targeted_mutations(authority,method,fault):
+    _,record,inputs = authority
+    after,proof,before = sample(authority)
+    name = "SuccessorInventoryTests."+method
+    row = proof["sources"][SUCCESSOR]
+    source = row["regions"][name]
+    if fault == "current-disk":
+        source = source.replace("historical_sources[path]", "(ROOT / path).read_bytes()").replace('historical_sources[RECORD["change"]["path"]]', '(ROOT / RECORD["change"]["path"]).read_bytes()')
+    if fault == "missing-custody": source = source.replace("        _, historical_sources, _ = HELPER.performance_current(ROOT)\n", "")
+    if fault == "weakened-invariant":
+        source = source.replace("e1491e4407ff6d221871b45bbd775beb28afba11d418ae001847a512bb4b6fe6", "0"*64).replace("len(methods(after)), 30", "len(methods(after)), 29")
+    if fault == "extra-statement": source += "        pass\n"
+    if fault == "original": source = before[SUCCESSOR].encode()[slice(*region(before[SUCCESSOR].encode(),name)[:2])].decode()
+    if fault == "wrong-method": source = source.replace("def "+method, "def renamed")
+    assert source != row["regions"][name]
+    row["regions"][name] = source
+    reseal(after,proof,before)
+    assert row["afterSha256"] == digest(after[SUCCESSOR])
+    with pytest.raises(ValueError,match="exact historical-consumer bridge"):
+        reconstruct_product(SUCCESSOR,before[SUCCESSOR].encode(),row,record["productRegions"][SUCCESSOR])
+    assert validate_product_delta(after,proof,record,inputs[PRODUCT_PATH])
+
+
+def test_no_newly_changed_bridge_can_hide_a_current_historical_read(authority):
+    _,record,inputs = authority
+    after,proof,before = sample(authority)
+    sites = source_read_census({p:r.decode() for p,r in after.items() if p.endswith(".py")})
+    for bridge in record["accountingBridges"]:
+        relevant = [s for s in sites if s["path"] == bridge["path"] and s["scope"] == bridge["region"]]
+        assert sum(s["kind"] == "performance_current" for s in relevant) == 1
+        assert not any(s["kind"] in ("read_bytes","read_text") for s in relevant)
+    # Sample is inert: it is never imported merely because its source proof passes.
+    assert validate_product_delta(after,proof,record,inputs[PRODUCT_PATH]) == []

@@ -1,5 +1,31 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-10, during `MET-PERF-004` publication. Source authority only.
+Current catalog:150 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | ID / gate | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source/offline gates, runtime separate |
+| Alpha2 | MET-PERF-003 / PR112 | DONE_SOURCE_GATES | Meta a0384bd; independent LOCAL exact-main passed |
+| Alpha2 | CONF-PERF-001 / draft13 | BLOCKED_UNACCEPTED | Prior accounting failure and incomplete timed-out profile retained |
+| Alpha2 | CONF-PERF-002 / draft14 | BLOCKED_UNACCEPTED | Activation150:168 passed,2 failed; no baseline/profile |
+| Alpha2 authority | MET-PERF-004 | ONGOING | Two further exact methods, full static consumer census |
+| Alpha2 repair | CONF-PERF-003 | WAITING | Separate branch from accepted9df/127 files/327 tests; full original-crypto baseline |
+| Alpha2 backend | CONF-LIVE-003 / draft12 | WAITING | Separate accepted-checkpoint reconciliation after repair |
+| Alpha2 backend | CONF-LIVE-004/005/006 | WAITING | Subsequent live-source packets |
+| Alpha2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Installed Linux qualification is independent |
+| Alpha3 / Alpha4 | Governed actions / enterprise release | WAITING | Not advanced by source-only work |
+
+See [consumer-closure authority](alpha-2/CONFORMANCE_CONSUMER_CLOSURE.md).
+All26 meta commands and both full replays remain. Preserve148 older YAML and
+existing test behaviors; no product imports/execution here. Eight-path product
+scope gains only two exact methods, not broader filesystem or test permissions.
+Local / required localhost CI / merge / LOCAL exact-main remain separate.
+No cloud, hosted runner, paid API, runtime download or uploaded artifact.
+Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-PERF-003 publication checkpoint
+
 Snapshot: 2026-09-10, during `MET-PERF-003` publication. Authority only; no product optimization.
 Current catalog:148 packets; thirteen repositories, four planes, sixteen harnesses.
 
