@@ -64,8 +64,8 @@ def validate_model_api_inventory(packets: Any, record: Any, snapshots: Any) -> l
         errors.append("model inventory amendment evidence or scope changed")
     if not isinstance(packets, dict):
         return [*errors, "model inventory authority requires a packet mapping"]
-    if len(packets) != 146:
-        errors.append("current catalog requires exactly 146 packets")
+    if len(packets) != 148:
+        errors.append("current catalog requires exactly 148 packets")
     if not same(packets.get("MET-REPAIR-006"), EXPECTED_META):
         errors.append("MET-REPAIR-006 whole-packet scope changed")
     if not same(packets.get("CON-MODEL-001"), amend_model_packet(EXPECTED_BEFORE)):
@@ -110,7 +110,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Model inventory authority valid: 146 packets; exact predicate grant; product/native acceptance unproven.")
+        print("Model inventory authority valid: 148 packets; exact predicate grant; product/native acceptance unproven.")
     return int(bool(errors))
 
 

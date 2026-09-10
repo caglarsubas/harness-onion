@@ -1,9 +1,9 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-PERF-002 conformance performance authority](../alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
-Catalog 146; accepted conformance main9df7dd7 preserves 127 files / 327 tests.
-MET-REPAIR-015 source gates closed at main3f52d53. Close MET-PERF-002 then CONF-PERF-001 before reconciling draft CONF-LIVE-003.
-Older publication sections below retain their historical states, not current instructions.
+Current Alpha-2 dispatch: [MET-PERF-003 accounting/profiling follow-up](../alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md).
+Catalog 148; product main9df7dd7 remains 127 files / 327 tests; both drafts unaccepted.
+MET-PERF-002 source gates closed at2814402. Publish MET-PERF-003, then separate CONF-PERF-002; no timeout or workload relaxation.
+CONF-PERF-001 draft13 is retained blocked history; older publication sections below are historical, not current instructions.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
 ## Purpose and boundaries
@@ -228,6 +228,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 35. `MET-REPAIR-015`: publish the fixed Linux qualification binding and kernel inspection contract; preserve product paths, existing privileges and separate native acceptance.
 
 36. `MET-PERF-002`: publish the fixed performance investigation, six-path product repair and exact preservation proof; retain failures and all source/native boundaries.
+
+37. `MET-PERF-003`: reconcile two direct historical consumers with exact eight-path source authority and measured lower-overhead profiling; retain146 old YAML and failure evidence.
 
 ## Testing, verification, and acceptance
 

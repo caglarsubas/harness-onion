@@ -25,9 +25,9 @@ BEFORE_PATH = "architecture/ci-performance-inputs/tests.before.json"
 RECORD_SHA256 = "c533d6afdb7c8afc72a80a249d05e9812e18cd1aa6d54f9df7e3b1f4a158c5c3"
 PACKET_SHA256 = "e5d8e021c7e779040118b8ba71fb45ec14d7a5a4e39386a2580ff4f1eb821284"
 ADDITIONS = ("MET-PERF-001",)
-CURRENT_PACKET_COUNT = 146
+CURRENT_PACKET_COUNT = 148
 HISTORICAL_PACKET_COUNT = 139
-SUCCESSOR_ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001")
+SUCCESSOR_ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002")
 
 
 def require(condition, message):
@@ -167,7 +167,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("CI performance authority valid: 146 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.")
+        print("CI performance authority valid: 148 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.")
     return int(bool(errors))
 
 
