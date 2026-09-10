@@ -14,6 +14,7 @@ from scripts.validate_linux_repair import (
     amend_linux_packet, packet_bytes, validate_linux_repair,
 )
 from scripts.validate_packet_ownership import validate_packet_ownership
+from scripts.validate_conformance_performance_followup import validate_dispatch_ownership
 from scripts.validate_linux_test_ownership import amend_linux_test_packet
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,8 +31,8 @@ def test_current_amendment_is_complete_and_historical_policy_unchanged(inputs):
     packets, record, raw = inputs
     assert validate_linux_repair(packets, record, raw) == []
     assert validate_linux_readiness(packets, json.loads(raw)) == []
-    assert validate_packet_ownership(packets) == []
-    assert len(packets) == 146
+    assert validate_dispatch_ownership(packets) == []
+    assert len(packets) == 148
     assert record["currentPacketCount"] == 120  # Consumed record is immutable.
     assert json.loads(raw)["currentPacketCount"] == 118
     assert record["baseline"]["reviewEvidence"] == "SOURCE_INSPECTION_ONLY"

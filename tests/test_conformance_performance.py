@@ -7,6 +7,8 @@ import re
 
 import pytest
 
+from scripts.validate_conformance_performance_followup import historical_bytes as followup_history
+
 from scripts.safe_yaml import safe_load
 from scripts.validate_conformance_performance import (
     ROOT, BEFORE_PATH, PRODUCT_PATH, RECORD_SHA256, apply_recipe, canonical,
@@ -24,7 +26,7 @@ def authority():
 def test_current_catalog_preserves_all_old_packets_and_full_commands(authority):
     packets, record, inputs = authority
     assert validate_authority(*authority) == []
-    assert len(packets) == 146
+    assert len(packets) == 148
     assert len([p for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")]) == 144
     assert len(packets["MET-PERF-002"]["offlineAcceptanceCommands"]) == 24
     assert len(packets["CONF-PERF-001"]["offlineAcceptanceCommands"]) == 8
@@ -40,7 +42,7 @@ def test_every_current_meta_byte_precedes_historical_reconstruction(authority):
     before = json.loads(inputs[BEFORE_PATH])["files"]
     for path, rule in record["metaRecipes"].items():
         raw = before[path].encode()
-        assert apply_recipe(raw, rule) == inputs[path]
+        assert apply_recipe(raw, rule) == followup_history(path, inputs[path])
         assert historical_bytes(path, inputs[path]) == raw
         if path.startswith("tests/"):
             assert ids(raw) == ids(inputs[path])
@@ -48,7 +50,7 @@ def test_every_current_meta_byte_precedes_historical_reconstruction(authority):
         with pytest.raises(ValueError):
             historical_bytes(path, inputs[path]+b"\n")
     for path in record["unchangedTests"]:
-        assert current_test_bytes(inputs[path]) == inputs[path]
+        assert current_test_bytes(followup_history(path, inputs[path])) == inputs[path]
 
 
 @pytest.mark.parametrize("fault",["packet","old-packet","source","missing","extra","before","product-before","record","command","timeout","native"])
@@ -173,7 +175,7 @@ def test_roadmap_keeps_draft_and_source_native_gates_separate():
     for text in ("NOT_YET_MEASURED","CANCELLED_NOT_PASS","SOURCE_DELTA_ONLY","327",
                  "750 seconds","0.85","CONF-LIVE-003","NOT_RUN_ENV_UNAVAILABLE","effort transition NOT_DUE"):
         assert text in guide
-    status = (ROOT/"docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-015")[0]
+    status = (ROOT/"docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-PERF-002 publication checkpoint\n",1)[1].split("## Historical MET-REPAIR-015")[0]
     assert "MET-PERF-002 | ONGOING" in status
     assert "CONF-PERF-001 | WAITING" in status
     assert "PR12 | WAITING" in status

@@ -1,5 +1,28 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-10, during `MET-PERF-003` publication. Authority only; no product optimization.
+Current catalog:148 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations / tenant overview | DONE_RECORDED | Source/offline; runtime separate |
+| Alpha2 | MET-PERF-002 / PR111 | DONE_SOURCE_GATES | Meta2814402; product remains9df7dd7/127/327 |
+| Alpha2 | CONF-PERF-001 / draft13 | BLOCKED_UNACCEPTED | Two missing historical consumers; then900-second timeout, incomplete profile |
+| Alpha2 authority | MET-PERF-003 | ONGOING | Eight-path source scope and lower-overhead full profiling contract |
+| Alpha2 repair | CONF-PERF-002 | WAITING | Separate new product branch from accepted9df; full baseline first |
+| Alpha2 backend | CONF-LIVE-003 / draft12 | WAITING | Unaccepted; reconcile exact checkpoint separately after repair |
+| Alpha2 backend | CONF-LIVE-004 /005 /006 | WAITING | Probes, packaging, integration |
+| Alpha2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha2 runtime / Alpha3 / Alpha4 | Runtime / governed actions / enterprise release | WAITING | Existing gates and independent tenant decision |
+
+See [follow-up authority](alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md).
+All25 cumulative meta commands and both full replays remain; no product edit or
+execution here. Preserve all146 prior YAML, all existing tests, nested420 /
+trusted900 / workflow15 minutes and zero-bill isolation. Local / required CI /
+merge / independent LOCAL exact-main separate. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-PERF-002 publication checkpoint
+
 Snapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.
 Current catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.
 

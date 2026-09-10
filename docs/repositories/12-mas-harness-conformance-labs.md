@@ -1,9 +1,9 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
-Current Alpha-2 dispatch: [MET-PERF-002 conformance performance authority](../alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
-Catalog 146; accepted conformance main9df7dd7 preserves 127 files / 327 tests.
-MET-REPAIR-015 source gates closed at main3f52d53. Close MET-PERF-002 then CONF-PERF-001 before reconciling draft CONF-LIVE-003.
-Older publication sections below retain their historical states, not current instructions.
+Current Alpha-2 dispatch: [MET-PERF-003 accounting/profiling follow-up](../alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md).
+Catalog 148; product main9df7dd7 remains 127 files / 327 tests; both drafts unaccepted.
+MET-PERF-002 source gates closed at2814402. Publish MET-PERF-003, then separate CONF-PERF-002; no timeout or workload relaxation.
+CONF-PERF-001 draft13 is retained blocked history; older publication sections below are historical, not current instructions.
 
 ## Purpose and boundaries
 
@@ -185,6 +185,8 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 24. `CONF-FIX-005`: bounded post-isolation credential/transport ownership; preserve behavioral tests and cumulative exact source stages.
 
 Performance prerequisite: `CONF-PERF-001` measures inherited arithmetic before optimizing only the private addition region; preserves all327 predecessor tests and runs the complete eight-command recipe. Reconcile draft003 only after this separate source gate closes.
+
+Current performance prerequisite: `CONF-PERF-002` replaces unaccepted001 dispatch, not its history; close all327-test byte/identity consumers before measuring a full lower-overhead baseline. Partial profiles never authorize optimization.
 
 ## Testing, verification, and acceptance
 
