@@ -23,6 +23,7 @@ except ModuleNotFoundError:
 
 try:
     from validate_packet_ownership import validate_packet_ownership
+    from validate_conformance_performance_followup import validate_dispatch_ownership
     from validate_alpha2_readiness import validate_model_authority
     from validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
     from validate_linux_readiness import validate_linux_readiness
@@ -40,6 +41,7 @@ try:
     from validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
 except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
     from scripts.validate_packet_ownership import validate_packet_ownership
+    from scripts.validate_conformance_performance_followup import validate_dispatch_ownership
     from scripts.validate_alpha2_readiness import validate_model_authority
     from scripts.validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
     from scripts.validate_linux_readiness import validate_linux_readiness
@@ -4407,7 +4409,7 @@ def validate_packets(
         packets, load_json(ROOT / "architecture/model-evidence-boundary.json")
     ):
         validation.error(authority_error)
-    for ownership_error in validate_packet_ownership(packets):
+    for ownership_error in validate_dispatch_ownership(packets):
         validation.error(ownership_error)
     for linux_error in validate_linux_readiness(
         packets, load_json(ROOT / "architecture/linux-readiness.json")

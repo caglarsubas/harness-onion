@@ -13,6 +13,7 @@ from scripts.validate_conformance_performance_followup import (
     ROOT, BEFORE_PATH, PRODUCT_PATH, RECORD_SHA256, apply_recipe, canonical,
     current_test_bytes, digest, historical_bytes, load_inputs, reconstruct_product,
     region, regular_bytes, test_ids as ids, validate_additions, validate_authority, validate_product_delta,
+    validate_dispatch_ownership,
 )
 
 DOC = "docs/live-backend/linux-boundary.md"
@@ -111,6 +112,40 @@ def test_partial_measurement_never_becomes_baseline_or_algorithm_authority(autho
         requiredFunctions=["_add","_scalar_mult","sign","verify","builtins.pow"],fullBaselineRequired=True,
         partialMayAuthorizeOptimization=False,crossCallCacheAllowed=False,fullProductCommandsRequired=8,
         workloadMedianRatio=0.85,candidateTrustedSeconds=750)
+
+
+def test_supersession_retains_generic_checks_and_only_closes_exact_pair(authority):
+    from scripts.validate_packet_ownership import validate_packet_ownership
+    packets, _, _ = authority
+    generic = validate_packet_ownership(packets)
+    assert len(generic) == 6
+    assert all("CONF-PERF-001 and CONF-PERF-002" in error for error in generic)
+    assert validate_dispatch_ownership(packets) == []
+    assert "CONF-PERF-001" not in packets["CONF-PERF-002"]["predecessors"]
+
+
+@pytest.mark.parametrize("fault", ["old-path", "new-path", "old-command", "new-command", "old-repo",
+    "new-predecessor", "missing-old", "missing-new", "unrelated-overlap", "unrelated-make"])
+def test_supersession_never_suppresses_changed_packets_or_other_ownership_errors(authority, fault):
+    from scripts.validate_packet_ownership import validate_packet_ownership
+    packets = deepcopy(authority[0])
+    if fault == "old-path": packets["CONF-PERF-001"]["allowedPaths"].append("outside.py")
+    if fault == "new-path": packets["CONF-PERF-002"]["allowedPaths"].append("outside.py")
+    if fault == "old-command": packets["CONF-PERF-001"]["offlineAcceptanceCommands"].pop()
+    if fault == "new-command": packets["CONF-PERF-002"]["offlineAcceptanceCommands"].pop()
+    if fault == "old-repo": packets["CONF-PERF-001"]["repository"] = "Harness-Engineering"
+    if fault == "new-predecessor": packets["CONF-PERF-002"]["predecessors"].append("CONF-PERF-001")
+    if fault == "missing-old": packets.pop("CONF-PERF-001")
+    if fault == "missing-new": packets.pop("CONF-PERF-002")
+    if fault == "unrelated-overlap":
+        packets["UNRELATED-001"] = dict(repository="mas-harness-conformance-labs",
+            predecessors=[], allowedPaths=["src/harness_conformance/crypto.py"])
+    if fault == "unrelated-make": packets["CONF-FIX-005"]["offlineAcceptanceCommands"].append(["make", "bad;target"])
+    result = validate_dispatch_ownership(packets)
+    assert result
+    unrelated = [error for error in validate_packet_ownership(packets)
+                 if "CONF-PERF-001 and CONF-PERF-002" not in error]
+    assert set(unrelated) <= set(result)
 
 
 @pytest.mark.parametrize("fault",["packet","old-yaml","source","missing","extra","before","product-before","record",

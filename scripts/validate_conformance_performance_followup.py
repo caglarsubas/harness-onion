@@ -19,7 +19,7 @@ RECORD_PATH = "architecture/conformance-performance-followup.json"
 BEFORE_PATH = "architecture/conformance-performance-followup-inputs/meta-before.json"
 PRODUCT_PATH = "architecture/conformance-performance-followup-inputs/product-before.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
-RECORD_SHA256 = "869326ab4e9a5e8f36409c127ce58dc7f9c03701d34c7d725efa40924378c169"
+RECORD_SHA256 = "4f28a4de9f62c992c1dcc7b0ad616768c9ef370ef0b67fa512090f933d0d4952"
 NEW_IDS = ("MET-PERF-003", "CONF-PERF-002")
 
 
@@ -326,6 +326,34 @@ def validate_authority(packets, record, inputs):
         return []
     except (ValueError, TypeError, KeyError, AttributeError, UnicodeError, SyntaxError, RecursionError) as exc:
         return ["invalid performance authority: "+str(exc)]
+
+
+def validate_dispatch_ownership(packets):
+    """Retain generic ownership checks; recognize only the pinned retired pair."""
+    try:
+        from validate_packet_ownership import validate_packet_ownership
+    except ImportError:
+        from scripts.validate_packet_ownership import validate_packet_ownership
+    errors = validate_packet_ownership(packets)
+    try:
+        record = _record()
+        require(validate_additions(packets) == [], "exact replacement packets")
+        path = "task-packets/CONF-PERF-001.yaml"
+        raw = regular_bytes(ROOT, path)
+        require(digest(raw) == record["protectedFiles"][path]
+                and canonical(packets.get("CONF-PERF-001")) == canonical(safe_load(raw)),
+                "immutable superseded packet")
+        require(record["dispatch"]["CONF-PERF-001"] == "SUPERSEDED_UNACCEPTED_HISTORY",
+                "explicit superseded dispatch")
+        paths = packets["CONF-PERF-001"]["allowedPaths"]
+        require(len(paths) == 6 and set(paths) < set(packets["CONF-PERF-002"]["allowedPaths"]),
+                "exact original six overlaps")
+        retired = {"unordered same-repository packets CONF-PERF-001 and CONF-PERF-002 overlap at "
+                   + repr(path) + " and " + repr(path) for path in paths}
+        require(all(errors.count(message) == 1 for message in retired), "exact retired overlap diagnostics")
+        return [error for error in errors if error not in retired]
+    except (ValueError, TypeError, KeyError, OSError, RecursionError):
+        return errors + ["missing or changed closed performance dispatch replacement"]
 
 
 def main():

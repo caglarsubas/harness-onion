@@ -37,6 +37,12 @@ own unaccepted implementation, not an accepted source checkpoint. Preserve all
 327 inherited identities and behavioral bodies; append new tests only to the
 existing supervisor module. No new product file. The other119 files stay exact.
 
+The generic ownership checker remains unchanged and checks the full catalog.
+The follow-up adapter may remove only its six exact overlapping-path diagnostics
+for the digest-pinned001/002 replacement pair. Every other diagnostic survives;
+missing or changed packet data fails closed. This is retired dispatch, not an
+accepted predecessor dependency, a general overlap exemption or an old YAML edit.
+
 The original six paths retain their region/interface/byte/append bounds:
 private crypto _add only; successor validate_composition/verify_repository plus
 bounded pure proof helper; the one Linux-inventory accounting method; backend

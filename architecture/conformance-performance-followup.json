@@ -950,7 +950,7 @@
     },
     "scripts/validate_readiness.py": {
       "beforeSha256": "23da7947e11e85bf3bb1639344a8f20adef531add634fc62f0b2251e7539f613",
-      "afterSha256": "45675b8e9f25a5f8838106b0314201c125a6e3913fe5700da4f2825a91f59766",
+      "afterSha256": "f11617e3a1508c40a9e091f358eb3d740f12ce476591e6051c3d51cbed38baf5",
       "replacements": [
         {
           "before": "EXPECTED_PACKET_COUNT = 146\n",
@@ -960,6 +960,21 @@
         {
           "before": "    authority_owner[\"task-packets/CONF-PERF-001.yaml\"] = \"MET-PERF-002\"\n",
           "after": "    authority_owner[\"task-packets/CONF-PERF-001.yaml\"] = \"MET-PERF-002\"\n    authority_owner.update({path: \"MET-PERF-003\"\n                            for path in packets[\"MET-PERF-003\"][\"allowedPaths\"]\n                            if path in authority_owner or path.startswith((\"architecture/\", \"scripts/\"))})\n    authority_owner[\"task-packets/MET-PERF-003.yaml\"] = \"MET-PERF-003\"\n    authority_owner[\"task-packets/CONF-PERF-002.yaml\"] = \"MET-PERF-003\"\n",
+          "count": 1
+        },
+        {
+          "before": "    from validate_packet_ownership import validate_packet_ownership\n",
+          "after": "    from validate_packet_ownership import validate_packet_ownership\n    from validate_conformance_performance_followup import validate_dispatch_ownership\n",
+          "count": 1
+        },
+        {
+          "before": "    from scripts.validate_packet_ownership import validate_packet_ownership\n",
+          "after": "    from scripts.validate_packet_ownership import validate_packet_ownership\n    from scripts.validate_conformance_performance_followup import validate_dispatch_ownership\n",
+          "count": 1
+        },
+        {
+          "before": "    for ownership_error in validate_packet_ownership(packets):\n",
+          "after": "    for ownership_error in validate_dispatch_ownership(packets):\n",
           "count": 1
         }
       ]
@@ -1523,12 +1538,12 @@
   "inputFiles": {
     "architecture/conformance-performance-followup-inputs/meta-before.json": "e3e65b7b16652e13f07ce0136360f6458ceab514e03a86e195a02aee548db127",
     "architecture/conformance-performance-followup-inputs/product-before.json": "b94d14121eb37b7eeb2bff2a5570cf4a41e593c4d2f03de626cfbd745969d0dc",
-    "docs/alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md": "c681a19da5fbfbb7f6c25802fb473dbc736a562e3dad5da4e1fedebcd37faa58",
-    "task-packets/MET-PERF-003.yaml": "6bb362b20ac434349e769486b5c6209f0b22677a633b73fe535cdd4003946f29",
+    "docs/alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md": "20839cec24b1e1b0128d0e7ed62d1c4d2cf8f52eff2fe52eaa362b1b8feaffce",
+    "task-packets/MET-PERF-003.yaml": "7acb73ac5dcee82d261cddc13ef5eb0c012c32dead3a150d328aa806bd7fe5b8",
     "task-packets/CONF-PERF-002.yaml": "c0bae3ab228a431c6220768e3720ef723ded4efc3ccd3514df7f38a635f05a01"
   },
   "packetDigests": {
-    "MET-PERF-003": "2b89df4af7cae614a5810fe41da4360d6b78dca7b71f3234ed004a5c233a246f",
+    "MET-PERF-003": "9cc9e27e577e54f7f856a0ff72d454f0115c9cda8df5feb64c486314ebd9bbb3",
     "CONF-PERF-002": "200ba8ba6db3e57cbe61f60b1c53499a8cb60586acf3db3b1c9b1f5cdd98317b"
   },
   "measurement": {
