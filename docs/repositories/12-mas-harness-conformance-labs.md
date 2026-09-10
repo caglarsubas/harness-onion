@@ -1,8 +1,8 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
-Current Alpha-2 dispatch: [MET-REPAIR-015 Linux qualification](../alpha-2/NATIVE_QUALIFICATION_READINESS.md).
-Catalog 144; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
-MET-REPAIR-014 source gates are closed. Close this qualification authority before CONF-LIVE-003.
+Current Alpha-2 dispatch: [MET-PERF-002 conformance performance authority](../alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+Catalog 146; accepted conformance main9df7dd7 preserves 127 files / 327 tests.
+MET-REPAIR-015 source gates closed at main3f52d53. Close MET-PERF-002 then CONF-PERF-001 before reconciling draft CONF-LIVE-003.
 Older publication sections below retain their historical states, not current instructions.
 
 ## Purpose and boundaries
@@ -183,6 +183,8 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
     candidate; a separate tenant signer owns the acceptance decision.
 
 24. `CONF-FIX-005`: bounded post-isolation credential/transport ownership; preserve behavioral tests and cumulative exact source stages.
+
+Performance prerequisite: `CONF-PERF-001` measures inherited arithmetic before optimizing only the private addition region; preserves all327 predecessor tests and runs the complete eight-command recipe. Reconcile draft003 only after this separate source gate closes.
 
 ## Testing, verification, and acceptance
 

@@ -7,6 +7,8 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from scripts.validate_conformance_performance import historical_bytes as performance_history
+
 from scripts.safe_yaml import safe_load
 from scripts.validate_native_qualification import (
     BEFORE_PATH,SCHEMA_PATH,VECTORS_PATH,CHECKPOINT_PATH,ROLES,HOOKS,
@@ -32,7 +34,7 @@ def data(authority):
 def test_exact_catalog_recipe_and_unchanged_product_checkpoint(authority):
     packets,record,inputs = authority
     assert validate_qualification_authority(*authority) == []
-    assert len(packets) == 144
+    assert len(packets) == 146
     assert sum(p.startswith("task-packets/") for p in record["protectedFiles"]) == 143
     assert len(packets["MET-REPAIR-015"]["offlineAcceptanceCommands"]) == 23
     checkpoint = json.loads(inputs[CHECKPOINT_PATH])
@@ -184,15 +186,15 @@ def test_all_exact_current_bytes_are_checked_before_historical_reconstruction(au
     before = json.loads(inputs[BEFORE_PATH])["files"]
     for path,rule in record["metaRecipes"].items():
         raw = before[path].encode()
-        assert apply_recipe(raw,rule) == inputs[path]
+        assert apply_recipe(raw,rule) == performance_history(path, inputs[path])
         assert historical_bytes(path,inputs[path]) == raw
         if path.startswith("tests/"):
             assert _tests(raw) == _tests(inputs[path])
             assert current_test_bytes(raw) == inputs[path]
         with pytest.raises(ValueError): historical_bytes(path,inputs[path]+b"\n# changed\n")
     for path,checksum in record["unchangedTests"].items():
-        assert digest(inputs[path]) == checksum
-        assert current_test_bytes(inputs[path]) == inputs[path]
+        assert digest(performance_history(path, inputs[path])) == checksum
+        assert current_test_bytes(performance_history(path, inputs[path])) == inputs[path]
 
 
 @pytest.mark.parametrize("fault",["packet","protected","before","schema","vectors","record","extra","missing"])
@@ -229,7 +231,7 @@ def test_qualification_guide_closes_bootstrap_and_native_boundaries():
                  "no self/circular digest","NOT_RUN_ENV_UNAVAILABLE","check_self()",
                  "check_peer(role, retained_peer)","before opening the observer"):
         assert text in guide
-    status = (ROOT/"docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-014")[0]
+    status = (ROOT/"docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-015 publication checkpoint\n",1)[1].split("## Historical MET-REPAIR-014")[0]
     assert "during `MET-REPAIR-015` publication" in status
     assert "MET-REPAIR-014 / PR109 | DONE_SOURCE_GATES" in status
     assert "MET-REPAIR-015 | ONGOING" in status

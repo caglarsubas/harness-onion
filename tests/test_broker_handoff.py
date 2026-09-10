@@ -48,7 +48,7 @@ def model():
 def test_exact_authority_catalog_and_immutable_consumer_checkpoint(authority):
     packets, record, inputs = authority
     assert validate_handoff(*authority) == []
-    assert len(packets) == 144
+    assert len(packets) == 146
     assert sum(p.startswith("task-packets/") for p in record["protectedFiles"]) == 142
     assert len(packets["MET-REPAIR-014"]["offlineAcceptanceCommands"]) == 22
     checkpoint = json.loads(inputs[CHECKPOINT_PATH])
@@ -383,7 +383,7 @@ def test_delete_ambiguity_cannot_be_retried_with_the_same_uid():
 
 
 def test_roadmap_distinguishes_source_publication_from_product_and_native_acceptance():
-    current = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-013")[0]
+    current = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-015 publication checkpoint\n",1)[1].split("## Historical MET-REPAIR-013")[0]
     assert "during `MET-REPAIR-015` publication" in current
     assert "MET-REPAIR-013 / PR108 | DONE_SOURCE_GATES" in current
     assert "MET-REPAIR-015 | ONGOING" in current

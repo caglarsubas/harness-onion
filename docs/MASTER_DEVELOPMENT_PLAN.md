@@ -1,8 +1,8 @@
 # Master Development Plan
 
-Current Alpha-2 dispatch: [MET-REPAIR-015 Linux qualification](alpha-2/NATIVE_QUALIFICATION_READINESS.md).
-Catalog 144; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
-MET-REPAIR-014 source gates are closed. Close this qualification authority before CONF-LIVE-003.
+Current Alpha-2 dispatch: [MET-PERF-002 conformance performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+Catalog 146; accepted conformance main9df7dd7 preserves 127 files / 327 tests.
+MET-REPAIR-015 source gates closed at main3f52d53. Close MET-PERF-002 then CONF-PERF-001 before reconciling draft CONF-LIVE-003.
 Older publication sections below retain their historical states, not current instructions.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
