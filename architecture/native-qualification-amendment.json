@@ -930,7 +930,7 @@
     },
     "task-packets/README.md": {
       "beforeSha256": "191f82c4c46f53d347c78cf678752488afd4352b0d2d54248ef8a69652970f04",
-      "afterSha256": "b18c7345cb2c924e3874f2afe8e4fd13d2c9b351d00b4aea4034ea8409f60146",
+      "afterSha256": "9033850983e1ab5f9b6c5780be65f9177ba0d68a0ebcd4fdf6bc6be1d0fc2935",
       "replacements": [
         {
           "before": "[MET-REPAIR-014 broker handoff]",
@@ -955,6 +955,236 @@
         {
           "before": "| 97 | `MET-REPAIR-014` | `Harness-Engineering` | Fixed broker-controlled execution and cleanup handoff |",
           "after": "| 97 | `MET-REPAIR-014` | `Harness-Engineering` | Fixed broker-controlled execution and cleanup handoff |\n| 98 | `MET-REPAIR-015` | `Harness-Engineering` | Fixed Linux qualification binding and kernel inspection contract |",
+          "count": 1
+        },
+        {
+          "before": "| 98 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |",
+          "after": "| 99 | `CONF-LIVE-003` | `mas-harness-conformance-labs` | Fixed proxy transport and zero-cost admission |",
+          "count": 1
+        },
+        {
+          "before": "| 99 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |",
+          "after": "| 100 | `CONF-LIVE-004` | `mas-harness-conformance-labs` | Native Linux build and ten fixed probes |",
+          "count": 1
+        },
+        {
+          "before": "| 100 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |",
+          "after": "| 101 | `CONF-LIVE-005` | `mas-harness-conformance-labs` | Reproducible packaging and operator handoff |",
+          "count": 1
+        },
+        {
+          "before": "| 101 | `CONF-LIVE-006` | `mas-harness-conformance-labs` | Trusted campaign integration and manual qualification declaration |",
+          "after": "| 102 | `CONF-LIVE-006` | `mas-harness-conformance-labs` | Trusted campaign integration and manual qualification declaration |",
+          "count": 1
+        },
+        {
+          "before": "| 102 | `CTRL-INTEGRATE-001` | `mas-harness-control-plane` | Alpha-1 production overview integration carryover |",
+          "after": "| 103 | `CTRL-INTEGRATE-001` | `mas-harness-control-plane` | Alpha-1 production overview integration carryover |",
+          "count": 1
+        },
+        {
+          "before": "| 103 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |",
+          "after": "| 104 | `MODEL-001` | `mas-harness-model-plane` | Local inference core |",
+          "count": 1
+        },
+        {
+          "before": "| 104 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |",
+          "after": "| 105 | `MODEL-002` | `mas-harness-model-plane` | Custody and signed routes |",
+          "count": 1
+        },
+        {
+          "before": "| 105 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |",
+          "after": "| 106 | `MODEL-OLLAMA-001` | `mas-harness-model-plane` | Ollama provider |",
+          "count": 1
+        },
+        {
+          "before": "| 106 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |",
+          "after": "| 107 | `MODEL-LLAMACPP-001` | `mas-harness-model-plane` | llama.cpp provider |",
+          "count": 1
+        },
+        {
+          "before": "| 107 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |",
+          "after": "| 108 | `MODEL-VLLM-001` | `mas-harness-model-plane` | vLLM provider |",
+          "count": 1
+        },
+        {
+          "before": "| 108 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |",
+          "after": "| 109 | `MODEL-003` | `mas-harness-model-plane` | Model security and telemetry |",
+          "count": 1
+        },
+        {
+          "before": "| 109 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |",
+          "after": "| 110 | `KN-RET-001` | `mas-harness-knowledge-plane` | Retrieval and cited context |",
+          "count": 1
+        },
+        {
+          "before": "| 110 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |",
+          "after": "| 111 | `EXEC-001` | `mas-harness-execution-plane` | Execution foundation |",
+          "count": 1
+        },
+        {
+          "before": "| 111 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |",
+          "after": "| 112 | `EXEC-PROT-001` | `mas-harness-execution-plane` | Protocol gateway |",
+          "count": 1
+        },
+        {
+          "before": "| 112 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |",
+          "after": "| 113 | `EXEC-ORCH-001` | `mas-harness-execution-plane` | Durable orchestration |",
+          "count": 1
+        },
+        {
+          "before": "| 113 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |",
+          "after": "| 114 | `RUN-001` | `mas-harness-runtime-plane` | Runtime edge foundation |",
+          "count": 1
+        },
+        {
+          "before": "| 114 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |",
+          "after": "| 115 | `RUN-GW-001` | `mas-harness-runtime-plane` | Signed routing and budgets |",
+          "count": 1
+        },
+        {
+          "before": "| 115 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |",
+          "after": "| 116 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |",
+          "count": 1
+        },
+        {
+          "before": "| 116 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |",
+          "after": "| 117 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |",
+          "count": 1
+        },
+        {
+          "before": "| 117 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |",
+          "after": "| 118 | `TRUST-GOV-001` | `mas-harness-trust-plane` | Approvals, autonomy, and waivers |",
+          "count": 1
+        },
+        {
+          "before": "| 118 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |",
+          "after": "| 119 | `TRUST-REG-001` | `mas-harness-trust-plane` | AgentOps registry and promotion |",
+          "count": 1
+        },
+        {
+          "before": "| 119 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |",
+          "after": "| 120 | `EXEC-TOOL-001` | `mas-harness-execution-plane` | Governed tools and compensation |",
+          "count": 1
+        },
+        {
+          "before": "| 120 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |",
+          "after": "| 121 | `EXEC-SBX-001` | `mas-harness-execution-plane` | Job and Wasmtime sandboxes |",
+          "count": 1
+        },
+        {
+          "before": "| 121 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |",
+          "after": "| 122 | `EXEC-SBX-002` | `mas-harness-execution-plane` | gVisor and Kata sandboxes |",
+          "count": 1
+        },
+        {
+          "before": "| 122 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |",
+          "after": "| 123 | `EXEC-ML-001` | `mas-harness-execution-plane` | Local decision service |",
+          "count": 1
+        },
+        {
+          "before": "| 123 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |",
+          "after": "| 124 | `KN-MEM-001` | `mas-harness-knowledge-plane` | Governed memory |",
+          "count": 1
+        },
+        {
+          "before": "| 124 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |",
+          "after": "| 125 | `RUN-EXP-001` | `mas-harness-runtime-plane` | Interaction and resumable UI |",
+          "count": 1
+        },
+        {
+          "before": "| 125 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |",
+          "after": "| 126 | `OP-004` | `mas-harness-operator` | Per-module reconciliation |",
+          "count": 1
+        },
+        {
+          "before": "| 126 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |",
+          "after": "| 127 | `CONF-A3-001` | `mas-harness-conformance-labs` | Governed-action certification |",
+          "count": 1
+        },
+        {
+          "before": "| 127 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |",
+          "after": "| 128 | `MODEL-004` | `mas-harness-model-plane` | Performance evidence |",
+          "count": 1
+        },
+        {
+          "before": "| 128 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |",
+          "after": "| 129 | `TRUST-EVAL-001` | `mas-harness-trust-plane` | Assurance and evaluation |",
+          "count": 1
+        },
+        {
+          "before": "| 129 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |",
+          "after": "| 130 | `TRUST-003` | `mas-harness-trust-plane` | Trust resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 130 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |",
+          "after": "| 131 | `KN-002` | `mas-harness-knowledge-plane` | Knowledge resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 131 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |",
+          "after": "| 132 | `EXEC-002` | `mas-harness-execution-plane` | Execution resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 132 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |",
+          "after": "| 133 | `RUN-002` | `mas-harness-runtime-plane` | Runtime resilience |",
+          "count": 1
+        },
+        {
+          "before": "| 133 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |",
+          "after": "| 134 | `DIST-005` | `mas-harness-distribution` | Distribution reproducibility/security |",
+          "count": 1
+        },
+        {
+          "before": "| 134 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |",
+          "after": "| 135 | `OP-005` | `mas-harness-operator` | Upgrade and rollback |",
+          "count": 1
+        },
+        {
+          "before": "| 135 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |",
+          "after": "| 136 | `OP-006` | `mas-harness-operator` | Uninstall and fleet sync |",
+          "count": 1
+        },
+        {
+          "before": "| 136 | `OP-007` | `mas-harness-operator` | Platform security |",
+          "after": "| 137 | `OP-007` | `mas-harness-operator` | Platform security |",
+          "count": 1
+        },
+        {
+          "before": "| 137 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |",
+          "after": "| 138 | `CONF-K8S-001` | `mas-harness-conformance-labs` | Kubernetes live certification |",
+          "count": 1
+        },
+        {
+          "before": "| 138 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |",
+          "after": "| 139 | `CONF-OCP-001` | `mas-harness-conformance-labs` | OpenShift live certification |",
+          "count": 1
+        },
+        {
+          "before": "| 139 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |",
+          "after": "| 140 | `CONF-K3S-001` | `mas-harness-conformance-labs` | K3s certification |",
+          "count": 1
+        },
+        {
+          "before": "| 140 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |",
+          "after": "| 141 | `CONF-AIR-001` | `mas-harness-conformance-labs` | Physical air-gap certification |",
+          "count": 1
+        },
+        {
+          "before": "| 141 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |",
+          "after": "| 142 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |",
+          "count": 1
+        },
+        {
+          "before": "| 142 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |",
+          "after": "| 143 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |",
+          "count": 1
+        },
+        {
+          "before": "| 143 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |",
+          "after": "| 144 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |",
           "count": 1
         }
       ]
