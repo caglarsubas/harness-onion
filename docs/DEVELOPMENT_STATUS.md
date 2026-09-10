@@ -1,5 +1,30 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.
+Current catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |
+| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |
+| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |
+| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |
+| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |
+| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |
+| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+See [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+All24 meta commands, both full predecessor replays, signed deny-all execution,
+required localhost CI, green-only merge and independent LOCAL exact-main remain
+mandatory. No product edit or execution in this meta publication. No timeout
+increase, new dependency, administrator prompt, root policy, hosted runner,
+cloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-015 publication checkpoint
+
 Snapshot: 2026-09-10, during `MET-REPAIR-015` publication. Source authority only.
 Current catalog: 144 packets; thirteen repositories, four planes, sixteen harnesses.
 
@@ -94,6 +119,31 @@ The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.
+Current catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |
+| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |
+| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |
+| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |
+| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |
+| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |
+| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+See [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+All24 meta commands, both full predecessor replays, signed deny-all execution,
+required localhost CI, green-only merge and independent LOCAL exact-main remain
+mandatory. No product edit or execution in this meta publication. No timeout
+increase, new dependency, administrator prompt, root policy, hosted runner,
+cloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-015 publication checkpoint
+
 Snapshot: 2026-09-09, during `MET-REPAIR-013` publication. Source authority only.
 Current catalog: 142 packets; thirteen repositories, four planes, sixteen harnesses.
 
@@ -139,6 +189,31 @@ key, administrator prompt, paid API, hosted runner, download or cloud action.
 The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+Snapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.
+Current catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |
+| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |
+| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |
+| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |
+| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |
+| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |
+| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+See [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+All24 meta commands, both full predecessor replays, signed deny-all execution,
+required localhost CI, green-only merge and independent LOCAL exact-main remain
+mandatory. No product edit or execution in this meta publication. No timeout
+increase, new dependency, administrator prompt, root policy, hosted runner,
+cloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-015 publication checkpoint
 
 Snapshot: 2026-09-09, during `MET-REPAIR-012` publication. Source authority only.
 Current catalog: 141 packets; thirteen repositories, four planes, sixteen harnesses.
@@ -210,6 +285,31 @@ The following is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.
+Current catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |
+| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |
+| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |
+| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |
+| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |
+| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |
+| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+See [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+All24 meta commands, both full predecessor replays, signed deny-all execution,
+required localhost CI, green-only merge and independent LOCAL exact-main remain
+mandatory. No product edit or execution in this meta publication. No timeout
+increase, new dependency, administrator prompt, root policy, hosted runner,
+cloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-015 publication checkpoint
+
 Snapshot: 2026-09-08, during `MET-REPAIR-011` publication. Source authority only.
 Current catalog: 138 packets; thirteen repositories, four planes, sixteen harnesses.
 
@@ -257,6 +357,31 @@ The following snapshot predates the verified closure above. It is retained as
 history, not the current dispatch instruction.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+Snapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.
+Current catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |
+| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |
+| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |
+| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |
+| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |
+| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |
+| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+See [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+All24 meta commands, both full predecessor replays, signed deny-all execution,
+required localhost CI, green-only merge and independent LOCAL exact-main remain
+mandatory. No product edit or execution in this meta publication. No timeout
+increase, new dependency, administrator prompt, root policy, hosted runner,
+cloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-015 publication checkpoint
 
 Snapshot: 2026-09-08, during `MET-REPAIR-010` publication. Source authority only.
 Current catalog: 136 packets, thirteen repositories, four planes, sixteen harnesses.

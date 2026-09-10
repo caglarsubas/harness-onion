@@ -1,8 +1,8 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-REPAIR-015 Linux qualification](../alpha-2/NATIVE_QUALIFICATION_READINESS.md).
-Catalog 144; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
-MET-REPAIR-014 source gates are closed. Close this qualification authority before CONF-LIVE-003.
+Current Alpha-2 dispatch: [MET-PERF-002 conformance performance authority](../alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).
+Catalog 146; accepted conformance main9df7dd7 preserves 127 files / 327 tests.
+MET-REPAIR-015 source gates closed at main3f52d53. Close MET-PERF-002 then CONF-PERF-001 before reconciling draft CONF-LIVE-003.
 Older publication sections below retain their historical states, not current instructions.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
@@ -226,6 +226,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 33. `MET-REPAIR-013`: publish the authentication-only client credential ordering exception, mandatory independent server admission and exact meta/source preservation checks.
 34. `MET-REPAIR-014`: publish fixed server-local broker execution, contained worker ABI, exact cleanup and closed data-model acceptance; preserve all consumer paths and historical evidence.
 35. `MET-REPAIR-015`: publish the fixed Linux qualification binding and kernel inspection contract; preserve product paths, existing privileges and separate native acceptance.
+
+36. `MET-PERF-002`: publish the fixed performance investigation, six-path product repair and exact preservation proof; retain failures and all source/native boundaries.
 
 ## Testing, verification, and acceptance
 

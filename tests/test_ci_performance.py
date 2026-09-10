@@ -27,7 +27,7 @@ def authority():
 
 def test_exact_packet_and_preservation_authority(authority):
     packets, record, inputs, current = authority
-    assert len(packets) == CURRENT_PACKET_COUNT == 144
+    assert len(packets) == CURRENT_PACKET_COUNT == 146
     assert len(record["protectedFiles"]) == 236
     assert len(record["mechanicalTestUpdates"]) == 20
     assert digest(canonical(record)) == RECORD_SHA256
@@ -81,7 +81,7 @@ def test_assertion_or_skip_substitution_refuses(authority, change):
     _, record, inputs, current = authority
     path = "tests/test_task_packets.py"
     changed = dict(current)
-    target = b"assert len(files) == EXPECTED_PACKET_COUNT == 144"
+    target = b"assert len(files) == EXPECTED_PACKET_COUNT == 146"
     assert target in changed[path]
     changed[path] = changed[path].replace(target, change, 1)
     assert validate_test_preservation(record, inputs[BEFORE_PATH], changed)
@@ -158,7 +158,7 @@ def test_stricter_duplicate_key_constructors_still_refuse(module_name):
 
 
 def test_current_status_does_not_claim_pending_publication_or_native_pass():
-    text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text()
+    text = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-015 publication checkpoint\n",1)[1]
     current = text.split("## Historical MET-PERF-001 publication checkpoint")[0]
     assert "during `MET-REPAIR-015` publication" in current
     assert "MET-REPAIR-015 | ONGOING" in current

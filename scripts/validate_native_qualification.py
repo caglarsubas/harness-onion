@@ -16,6 +16,11 @@ except ImportError:
     from scripts.safe_yaml import safe_load
     from scripts.validate_proxy_contract import canonical, digest, parse, regular_bytes, CASES, _bounded
 
+try:
+    from validate_conformance_performance import historical_bytes as performance_history, current_test_bytes as performance_current, validate_additions as performance_additions
+except ImportError:
+    from scripts.validate_conformance_performance import historical_bytes as performance_history, current_test_bytes as performance_current, validate_additions as performance_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/native-qualification-amendment.json"
 BEFORE_PATH = "architecture/native-qualification-inputs/meta-before.json"
@@ -51,7 +56,7 @@ def validate_additions(packets):
     try:
         require(type(packets) is dict and digest(canonical(packets.get("MET-REPAIR-015"))) == PACKET_SHA256,
                 "exact qualification packet required")
-        return []
+        return performance_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed native qualification packet"]
 
@@ -76,6 +81,7 @@ def apply_recipe(before, recipe):
 
 def historical_bytes(path, raw):
     """Check exact current replacements before exposing old bytes to old pins."""
+    raw = performance_history(path, raw)
     if path not in BRIDGED_PATHS:
         return raw
     record = _record()
@@ -99,9 +105,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test source")
-        return before
+        return performance_current(before)
     require(len(matches) == 1, "exact predecessor test source required")
-    return apply_recipe(before, matches[0])
+    return performance_current(apply_recipe(before, matches[0]))
 
 
 def _shape(value, variant, schema):
@@ -288,10 +294,10 @@ def validate_qualification_authority(packets, record, inputs):
                 **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact current inputs")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "current input changed: "+path)
+            require(type(inputs[path]) is bytes and digest(performance_history(path, inputs[path])) == checksum, "current input changed: "+path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 143 and len(packets) == 144 and set(packets) == old | {"MET-REPAIR-015"}, "exact catalog")
-        for name in packets:
+        require(len(old) == 143 and len(packets) == 146 and set(packets) == old | {"MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001"}, "exact catalog")
+        for name in old | {"MET-REPAIR-015"}:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet bytes")
         packet = packets["MET-REPAIR-015"]
         previous = packets["MET-REPAIR-014"]["offlineAcceptanceCommands"]
@@ -303,10 +309,10 @@ def validate_qualification_authority(packets, record, inputs):
         require(before["baseCommit"] == record["metaBaseline"] and set(before["files"]) == set(record["metaRecipes"]), "before inventory")
         for path, rule in record["metaRecipes"].items():
             raw = before["files"][path].encode()
-            require(apply_recipe(raw,rule) == inputs[path], "unreviewed replacement")
+            require(apply_recipe(raw,rule) == performance_history(path, inputs[path]), "unreviewed replacement")
             if path.startswith("tests/"):
                 require(_tests(raw) == _tests(inputs[path]), "predecessor test lost")
-        require(all(p in record["protectedFiles"] and digest(inputs[p]) == checksum
+        require(all(p in record["protectedFiles"] and digest(performance_history(p, inputs[p])) == checksum
                     for p,checksum in record["unchangedTests"].items()), "unchanged test pins")
         checkpoint = parse(inputs[CHECKPOINT_PATH])
         require(checkpoint["commit"] == record["sourceBaseline"]["commit"]
@@ -338,7 +344,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Native qualification authority valid: 144 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
+        print("Native qualification authority valid: 146 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
     return int(bool(errors))
 
 
