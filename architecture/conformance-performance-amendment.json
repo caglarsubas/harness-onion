@@ -484,12 +484,12 @@
   "metaRecipes": {
     "docs/DEVELOPMENT_STATUS.md": {
       "beforeSha256": "8bdc20b2b65b7aeb0c2181d727ba288eedabf3ed6e43da5724e77fb3199aaa08",
-      "afterSha256": "f193261309612ff3f764eb6b15a7cc55745f67cc65d48dabfaa8c25f96b02bab",
+      "afterSha256": "d94e37ae0deafd6cac4915a2cb6ff5ab664bcb2d045cf0791da7ced500f4269a",
       "replacements": [
         {
-          "before": "# Development checkpoint — Phase 0 to Alpha 2\n\n",
-          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.\nCurrent catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.\n\n| Phase | Packet / gate | Status | Description |\n|---|---|---|---|\n| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |\n| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |\n| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |\n| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |\n| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |\n| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |\n| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |\n| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |\n| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |\n| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |\n\nSee [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).\nAll24 meta commands, both full predecessor replays, signed deny-all execution,\nrequired localhost CI, green-only merge and independent LOCAL exact-main remain\nmandatory. No product edit or execution in this meta publication. No timeout\nincrease, new dependency, administrator prompt, root policy, hosted runner,\ncloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.\n\n## Historical MET-REPAIR-015 publication checkpoint\n\n",
-          "count": 5
+          "before": "# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-10, during `MET-REPAIR-015` publication.",
+          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-10, during `MET-PERF-002` publication. Authority only, not a performance fix.\nCurrent catalog: 146 packets; thirteen repositories, four planes, sixteen harnesses.\n\n| Phase | Packet / gate | Status | Description |\n|---|---|---|---|\n| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime separate |\n| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7;127 files/327 tests |\n| Alpha 2 | MET-REPAIR-015 / PR110 | DONE_SOURCE_GATES | Main3f52d53; local, required CI and independent local exact-main |\n| Alpha 2 authority | MET-PERF-002 | ONGOING | Publish measured narrow performance-repair scope |\n| Alpha 2 repair | CONF-PERF-001 | WAITING | Profile first; private arithmetic parity; full unchanged workload |\n| Alpha 2 backend | CONF-LIVE-003 / PR12 | WAITING — draft incomplete | Local385/0 skips; required CI cancelled twice; no merge |\n| Alpha 2 backend | CONF-LIVE-004 /005 /006 | WAITING | Worker/probes, packaging, integration |\n| Alpha 2 | Native Linux AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed qualification |\n| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |\n| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |\n\nSee [performance authority](alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md).\nAll24 meta commands, both full predecessor replays, signed deny-all execution,\nrequired localhost CI, green-only merge and independent LOCAL exact-main remain\nmandatory. No product edit or execution in this meta publication. No timeout\nincrease, new dependency, administrator prompt, root policy, hosted runner,\ncloud action or artifact upload. Alpha2 ONGOING; effort transition NOT_DUE.\n\n## Historical MET-REPAIR-015 publication checkpoint\n\nSnapshot: 2026-09-10, during `MET-REPAIR-015` publication.",
+          "count": 1
         }
       ]
     },
@@ -1471,12 +1471,12 @@
     "architecture/conformance-performance-inputs/meta-before.json": "4554b6c7038e44de8d30a01b34bb31eddf4c0cce430a0fcc2a8451adbd0af96c",
     "architecture/conformance-performance-inputs/product-before.json": "8aae2dd20507805c1cfd91ed7836a979c5c8e0345decdbc7ac64eb87e0b5bf9e",
     "docs/alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md": "0fb79410bf745992371c07b62f1c00d7ffae06e150c068b753ad9cd986e32745",
-    "task-packets/MET-PERF-002.yaml": "346d4de4dbe48bb8a196037f1337e34600cb0fcd75d6320f732cb4b6392155d7",
-    "task-packets/CONF-PERF-001.yaml": "11b2d410841781eba8ccfc44b09f5cab08606d9aced52ed5f7e30ff0405610f6"
+    "task-packets/MET-PERF-002.yaml": "cfc550f705db0005bd9244fa61491d791730f39174062fdc6c23e98d53852b14",
+    "task-packets/CONF-PERF-001.yaml": "4a45a79639fe745ddec1460df08b7990979da921952bb5daf0cc2bf5d93b8e93"
   },
   "packetDigests": {
-    "MET-PERF-002": "cbfedb624a130c863d947ddad0689c314e10619a9363ad07c1b153e47a74b364",
-    "CONF-PERF-001": "08f525f637562293c98fa38d718b2fe4e264de688ea0ae4d1be819591e41d813"
+    "MET-PERF-002": "d7d1abf8e4a9afb6af594f8869b020eb26b19e9acc2f6415f8aef936eda0c12f",
+    "CONF-PERF-001": "36bc01c369dccf19be519852ceac32246cbb407175819f1e79867c014170062c"
   },
   "measurement": {
     "source": "7b36fd6ac272d9b41d5f65ab8e4e153ab5eb621c",
@@ -1498,6 +1498,7 @@
   "dispatch": {
     "CONF-PERF-001": [
       "MET-PERF-002",
+      "CONF-FIX-003",
       "CONF-FIX-005"
     ],
     "CONF-LIVE-003": [

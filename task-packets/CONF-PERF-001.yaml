@@ -2,7 +2,7 @@ id: "CONF-PERF-001"
 repository: "mas-harness-conformance-labs"
 branch: "codex/conf-perf-001-private-arithmetic"
 objective: "Measure inherited verification cost and, only if confirmed, optimize the private addition region without changing signature semantics or workload."
-predecessors: ["MET-PERF-002","CONF-FIX-005"]
+predecessors: ["MET-PERF-002","CONF-FIX-003","CONF-FIX-005"]
 allowedPaths: ["docs/live-backend/linux-boundary.md","src/harness_conformance/crypto.py","tests/live_backend/_inventory.py","tests/live_backend/test_supervisor.py","tests/platform/linux_baseline/_successor_inventory.py","tests/platform/linux_baseline/test_linux_inventory.py"]
 warmSourceAccess: "PROHIBITED_DURING_IMPLEMENTATION"
 sourceReuse: []
