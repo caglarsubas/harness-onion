@@ -1,8 +1,8 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
-Current Alpha-2 dispatch: [MET-REPAIR-014 broker handoff](BROKER_HANDOFF_READINESS.md).
-Catalog 143; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
-MET-REPAIR-013 source gates are closed. Close this broker handoff authority before CONF-LIVE-003.
+Current Alpha-2 dispatch: [MET-REPAIR-015 Linux qualification](NATIVE_QUALIFICATION_READINESS.md).
+Catalog 144; corrected conformance main9df7dd7 preserves 127 files / 327 tests.
+MET-REPAIR-014 source gates are closed. Close this qualification authority before CONF-LIVE-003.
 Older publication sections below retain their historical states, not current instructions.
 
 ## Decision and evidence boundary
