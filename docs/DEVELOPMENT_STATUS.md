@@ -1,5 +1,51 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-10, during `MET-REPAIR-015` publication. Source authority only.
+Current catalog: 144 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | Packet / gate | Status | Description |
+|---|---|---|---|
+| Phase 0 / Alpha 1 | Foundations and tenant overview | DONE_RECORDED | Historical source/offline; runtime acceptance remains separate |
+| Alpha 2 | CONF-FIX-005 / PR11 | DONE_SOURCE_GATES | Main9df7dd7; 127 files / 327 tests; prior 127/305 checkpoint preserved |
+| Alpha 2 | MET-REPAIR-013 / PR108 | DONE_SOURCE_GATES | Accepted credential ordering |
+| Alpha 2 | MET-REPAIR-014 / PR109 | DONE_SOURCE_GATES | Main8f3cc3a; broker-controlled execution handoff |
+| Alpha 2 authority | MET-REPAIR-015 | ONGOING — publication | Closed native qualification record and fixed kernel inspection ABI |
+| Alpha 2 backend | CONF-LIVE-003 | WAITING — this publication closure | Preserve unvalidated drafts; implement eight-path proxy/admission after source gates close |
+| Alpha 2 backend | CONF-LIVE-004 | WAITING | Fixed broker-owned worker and ten native probes |
+| Alpha 2 backend | CONF-LIVE-005 | WAITING | Three inert candidates and independent operator handoff |
+| Alpha 2 backend | CONF-LIVE-006 | WAITING | Integration and independent native evidence |
+| Alpha 2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Actual installed qualification; not macOS source CI |
+| Alpha 2 runtime | CTRL-INTEGRATE-001 / MODEL-001 / EXEC-001 / RUN-001 | WAITING | Fresh native AMD64 gate |
+| Alpha 3 / Alpha 4 | Governed actions / enterprise release | WAITING | Existing roadmap and independent tenant decision |
+
+## Current correction
+
+The [native qualification contract](alpha-2/NATIVE_QUALIFICATION_READINESS.md)
+closes CONF-LIVE-003/B2: expected installation records are not observations of
+active kernel enforcement. One release-listed, independently root-bound private
+record binds the exact host, code inventory and kernel configuration. Fixed
+in-process inspection checks actual SELinux, fs-verity, cgroup/BPF and retained
+process state. It never uses the unqualified observer to prove its own identity.
+
+This is an explicit first qualification profile, not a new platform-wide
+SELinux deployment mandate or an assertion that a compatible operator backend
+exists. Missing OS facilities or existing inspection access remain unavailable;
+no grant, privilege addition, installation or configuration change is authorized.
+
+MET-REPAIR-014 exact-main log SHA256:
+3861fe151676f2cf07a065b3769c905405a7691786ea0f0b6f8c0ce845460a9a.
+All127 predecessor files and all327 product test identities remain pinned and
+unexecuted in this meta packet. Product003 drafts are not touched.
+
+Run all twenty-three commands including both full replays in the existing
+signed deny-all tree. Preserve nested420/trusted900-second/workflow15-minute
+bounds and failure logs. Local head, required localhost CI, merge and independent
+local exact-main remain separate from installed, native, runtime and tenant gates.
+No new key, admin prompt, hosted runner, download, paid API, cloud operation,
+artifact upload or native campaign. Alpha2 ONGOING; effort transition NOT_DUE.
+
+## Historical MET-REPAIR-014 publication checkpoint
+
 Snapshot: 2026-09-09, during `MET-REPAIR-014` publication. Source authority only.
 Current catalog: 143 packets; thirteen repositories, four planes, sixteen harnesses.
 

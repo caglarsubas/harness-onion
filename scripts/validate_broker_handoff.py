@@ -16,6 +16,11 @@ except ImportError:
     from scripts.safe_yaml import safe_load
     from scripts.validate_proxy_contract import canonical, digest, parse, regular_bytes, CASES, _bounded
 
+try:
+    from validate_native_qualification import historical_bytes as qualification_history, current_test_bytes as qualification_current, validate_additions as qualification_additions
+except ImportError:
+    from scripts.validate_native_qualification import historical_bytes as qualification_history, current_test_bytes as qualification_current, validate_additions as qualification_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/broker-handoff-amendment.json"
 BEFORE_PATH = "architecture/broker-handoff-inputs/meta-before.json"
@@ -50,7 +55,7 @@ def validate_additions(packets):
     try:
         require(type(packets) is dict and digest(canonical(packets.get("MET-REPAIR-014"))) == PACKET_SHA256,
                 "exact broker packet required")
-        return []
+        return qualification_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed broker handoff packet"]
 
@@ -75,6 +80,7 @@ def apply_recipe(before, recipe):
 
 def historical_bytes(path, raw):
     """Check exact current replacements before exposing old bytes to old pins."""
+    raw = qualification_history(path, raw)
     if path not in BRIDGED_PATHS:
         return raw
     record = _record()
@@ -98,9 +104,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test source")
-        return before
+        return qualification_current(before)
     require(len(matches) == 1, "exact predecessor test source required")
-    return apply_recipe(before, matches[0])
+    return qualification_current(apply_recipe(before, matches[0]))
 
 
 def _shape(value, variant, schema):
@@ -316,12 +322,12 @@ def validate_handoff(packets, record, inputs):
                 **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input set")
         for p, checksum in pins.items():
-            require(type(inputs[p]) is bytes and digest(inputs[p]) == checksum, "current input changed: " + p)
-        require(all(p in record["protectedFiles"] and digest(inputs[p]) == checksum
+            require(type(inputs[p]) is bytes and digest(qualification_history(p, inputs[p])) == checksum, "current input changed: " + p)
+        require(all(p in record["protectedFiles"] and digest(qualification_history(p, inputs[p])) == checksum
                     for p, checksum in record["unchangedTests"].items()), "unchanged test pins differ")
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 142 and len(packets) == 143 and set(packets) == old | {"MET-REPAIR-014"}, "exact catalog")
-        for name in packets:
+        require(len(old) == 142 and len(packets) == 144 and set(packets) == old | {"MET-REPAIR-014", "MET-REPAIR-015"}, "exact catalog")
+        for name in old | {"MET-REPAIR-014"}:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/" + name + ".yaml"])), "packet bytes")
         packet = packets["MET-REPAIR-014"]
         previous = packets["MET-REPAIR-013"]["offlineAcceptanceCommands"]
@@ -333,7 +339,7 @@ def validate_handoff(packets, record, inputs):
         require(before["baseCommit"] == record["metaBaseline"] and set(before["files"]) == set(record["metaRecipes"]), "before inventory")
         for p, rule in record["metaRecipes"].items():
             raw = before["files"][p].encode()
-            require(apply_recipe(raw, rule) == inputs[p], "unreviewed replacement")
+            require(apply_recipe(raw, rule) == qualification_history(p, inputs[p]), "unreviewed replacement")
             if p.startswith("tests/"):
                 require(_tests(raw) == _tests(inputs[p]), "predecessor test identity changed")
         checkpoint = parse(inputs[CHECKPOINT_PATH])
@@ -366,7 +372,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Broker handoff valid: 143 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
+        print("Broker handoff valid: 144 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
     return int(bool(errors))
 
 

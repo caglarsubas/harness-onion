@@ -27,7 +27,7 @@ def authority():
 def test_exact_142_catalog_and_corrected_127_327_checkpoint(authority):
     packets, record, inputs = authority
     assert validate_credential_ordering(*authority) == []
-    assert len(packets) == 143
+    assert len(packets) == 144
     assert len([p for p in record["protectedFiles"] if p.startswith("task-packets/")]) == 141
     checkpoint = json.loads(inputs[CHECKPOINT_PATH])
     assert len(checkpoint["files"]) == 127
@@ -207,9 +207,9 @@ def test_no_snapshot_execution_network_or_credential_primitive_in_data_oracle():
 
 def test_current_roadmap_keeps_completed_source_and_waiting_native_separate():
     current = (ROOT / "docs/DEVELOPMENT_STATUS.md").read_text().split("## Historical MET-REPAIR-012")[0]
-    assert "during `MET-REPAIR-014` publication" in current
+    assert "during `MET-REPAIR-015` publication" in current
     assert "MET-REPAIR-012 / PR106 | DONE_SOURCE_GATES" in current
     assert "CONF-FIX-005 / PR11 | DONE_SOURCE_GATES" in current
-    assert "MET-REPAIR-014 | ONGOING" in current
+    assert "MET-REPAIR-015 | ONGOING" in current
     assert "127 files / 327 tests" in current
     assert "NOT_RUN_ENV_UNAVAILABLE" in current and "effort transition NOT_DUE" in current
