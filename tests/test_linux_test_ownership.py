@@ -16,6 +16,7 @@ from scripts.validate_linux_test_ownership import (
     EXPECTED_RECORD, PACKET_DIGESTS, amend_linux_test_packet, validate_linux_test_ownership,
 )
 from scripts.validate_packet_ownership import validate_packet_ownership
+from scripts.validate_conformance_performance_followup import validate_dispatch_ownership
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -31,7 +32,7 @@ def inputs():
 def test_current_and_historical_authorities_agree_without_rewriting_history(inputs):
     packets, record, previous = inputs
     assert validate_linux_test_ownership(packets, record, previous) == []
-    assert validate_packet_ownership(packets) == []
+    assert validate_dispatch_ownership(packets) == []
     original = (ROOT / "architecture/linux-readiness.json").read_bytes()
     assert validate_linux_readiness(packets, json.loads(original)) == []
     assert validate_linux_repair(packets, json.loads(previous), original) == []

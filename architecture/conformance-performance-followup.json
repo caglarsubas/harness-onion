@@ -1383,22 +1383,42 @@
     },
     "tests/test_linux_repair.py": {
       "beforeSha256": "794967d8f70633102c9ce7cf7fb3215f7ac70d5eb90ed23107bf0600aacb89b3",
-      "afterSha256": "139e0971c66c353c6275f461e43d556587850f1afaeda97d29f5b9719eea7ac0",
+      "afterSha256": "d4209e8f14adbe77f199f1e45fb5e059df409799cc5575dbbad885696fe3d2fc",
       "replacements": [
         {
           "before": "    assert len(packets) == 146\n",
           "after": "    assert len(packets) == 148\n",
+          "count": 1
+        },
+        {
+          "before": "from scripts.validate_packet_ownership import validate_packet_ownership\n",
+          "after": "from scripts.validate_packet_ownership import validate_packet_ownership\nfrom scripts.validate_conformance_performance_followup import validate_dispatch_ownership\n",
+          "count": 1
+        },
+        {
+          "before": "validate_packet_ownership(packets)",
+          "after": "validate_dispatch_ownership(packets)",
           "count": 1
         }
       ]
     },
     "tests/test_linux_test_ownership.py": {
       "beforeSha256": "533e4c8a06b017b5f87e83b141cc017262eee59e656cdc499975383c66c2c333",
-      "afterSha256": "c74eafeddf50f2f8f819d16015fe424d902bf48f2f278cc4be5135ef2645a3c5",
+      "afterSha256": "cf8117e4c5b290879737840d50c30bd1a00ca4e5f1fb87cdf675b2cb8a38d127",
       "replacements": [
         {
           "before": "    assert len(packets) == 146\n",
           "after": "    assert len(packets) == 148\n",
+          "count": 1
+        },
+        {
+          "before": "from scripts.validate_packet_ownership import validate_packet_ownership\n",
+          "after": "from scripts.validate_packet_ownership import validate_packet_ownership\nfrom scripts.validate_conformance_performance_followup import validate_dispatch_ownership\n",
+          "count": 1
+        },
+        {
+          "before": "validate_packet_ownership(packets)",
+          "after": "validate_dispatch_ownership(packets)",
           "count": 1
         }
       ]
@@ -1504,11 +1524,21 @@
     },
     "tests/test_task_packets.py": {
       "beforeSha256": "95f0e12a5d586a8432dc0944aa2ade70efefeea5b509b999133c19cce78b309a",
-      "afterSha256": "5aee97fc7a0a8fbad9c924cdf004d2529ea3e516c93e3b2f1bb0050d6ee90918",
+      "afterSha256": "07dc2297372d23468aa82e704fc5844c6a0ab7caccc63c2b7d5ea3c2199638bd",
       "replacements": [
         {
           "before": "    assert len(files) == EXPECTED_PACKET_COUNT == 146\n",
           "after": "    assert len(files) == EXPECTED_PACKET_COUNT == 148\n",
+          "count": 1
+        },
+        {
+          "before": "from scripts.validate_packet_ownership import validate_packet_ownership\n",
+          "after": "from scripts.validate_packet_ownership import validate_packet_ownership\nfrom scripts.validate_conformance_performance_followup import validate_dispatch_ownership\n",
+          "count": 1
+        },
+        {
+          "before": "validate_packet_ownership(packets_by_id())",
+          "after": "validate_dispatch_ownership(packets_by_id())",
           "count": 1
         }
       ]

@@ -19,7 +19,7 @@ RECORD_PATH = "architecture/conformance-performance-followup.json"
 BEFORE_PATH = "architecture/conformance-performance-followup-inputs/meta-before.json"
 PRODUCT_PATH = "architecture/conformance-performance-followup-inputs/product-before.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
-RECORD_SHA256 = "4f28a4de9f62c992c1dcc7b0ad616768c9ef370ef0b67fa512090f933d0d4952"
+RECORD_SHA256 = "7f9ab986281fe6de0d5875e97121bdbe96d41b66567cd5f1e2727204355eb686"
 NEW_IDS = ("MET-PERF-003", "CONF-PERF-002")
 
 
