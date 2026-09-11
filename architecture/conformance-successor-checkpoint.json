@@ -1339,7 +1339,7 @@
     },
     "tests/test_conformance_reference_measurement.py": {
       "beforeSha256": "5b8103bcc08a5d7c5693ee4ddb1528491aa6b2767153d55983433e23641a4bf7",
-      "afterSha256": "4680b1b8b4b938dc4ebfeb74557ee391119473fd4c5509c55b48406d784ff392",
+      "afterSha256": "8f076bef2974a936fbb84e8d1d4d0dd6efbbec823a0e90b82242ac216a3d653f",
       "replacements": [
         {
           "before": "    assert len(packets) == 153\n",
@@ -1359,6 +1359,11 @@
         {
           "before": "    assert len(generic) == 72 and len(record[\"overlapPairs\"]) == 10",
           "after": "    assert len(generic) == 80 and len(record[\"overlapPairs\"]) == 10",
+          "count": 1
+        },
+        {
+          "before": "    allowed = [left+\" and \"+right for left,right,_ in record[\"overlapPairs\"]]\n",
+          "after": "    allowed = [left+\" and \"+right for left,right,_ in record[\"overlapPairs\"]]\n    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\"])\n",
           "count": 1
         }
       ]

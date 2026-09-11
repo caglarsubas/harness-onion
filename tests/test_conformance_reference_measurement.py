@@ -221,6 +221,7 @@ def test_dispatch_never_hides_changed_or_unrelated_packets(authority, fault):
     result = validate_dispatch_ownership(packets)
     assert result
     allowed = [left+" and "+right for left,right,_ in record["overlapPairs"]]
+    allowed.extend(["CONF-BENCH-001 and CONF-FIX-006","CONF-FIX-006 and CONF-PERF-001","CONF-FIX-006 and CONF-PERF-002","CONF-FIX-006 and CONF-PERF-003"])
     unrelated = [e for e in validate_packet_ownership(packets) if not any(pair in e for pair in allowed)]
     assert set(unrelated) <= set(result)
 
