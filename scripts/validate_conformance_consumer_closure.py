@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_conformance_reference_measurement import historical_bytes as reference_history, current_test_bytes as reference_current, validate_additions as reference_additions, validate_dispatch_ownership as reference_dispatch
+except ImportError:
+    from scripts.validate_conformance_reference_measurement import historical_bytes as reference_history, current_test_bytes as reference_current, validate_additions as reference_additions, validate_dispatch_ownership as reference_dispatch
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/conformance-consumer-closure.json"
 BEFORE_PATH = "architecture/conformance-consumer-closure-inputs/meta-before.json"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = reference_history(path, raw)
     record = _record()
     rule = record["metaRecipes"].get(path)
     if rule is None:
@@ -115,9 +121,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return reference_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return reference_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -126,7 +132,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return reference_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -282,10 +288,10 @@ def validate_authority(packets, record, inputs):
                 **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact current input inventory")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "current source changed: " + path)
+            require(type(inputs[path]) is bytes and digest(reference_history(path, inputs[path])) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 148 and len(packets) == 150 and set(packets) == old | set(NEW_IDS), "exact150 catalog")
-        for name in packets:
+        require(len(old) == 148 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {"MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001"}, "exact153 catalog")
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
         packet, product = (packets[name] for name in NEW_IDS)
         require(packet["allowedPaths"] == record["ownedPaths"] and product["allowedPaths"] == record["productPaths"], "path grant")
@@ -297,7 +303,7 @@ def validate_authority(packets, record, inputs):
         require(before["baseCommit"] == record["metaBaseline"] and set(before["files"]) == set(record["metaRecipes"]), "meta before inventory")
         for path, rule in record["metaRecipes"].items():
             raw = before["files"][path].encode()
-            require(apply_recipe(raw, rule) == inputs[path], "meta recipe differs")
+            require(apply_recipe(raw, rule) == reference_history(path, inputs[path]), "meta recipe differs")
             if path.startswith("tests/"):
                 require(test_ids(raw) == test_ids(inputs[path]), "old test identity changed")
         checkpoint, sources = parse(inputs[CHECKPOINT_PATH]), parse(inputs[PRODUCT_PATH])
@@ -394,35 +400,8 @@ def validate_consumer_census(census, checkpoint, sources, record):
 
 
 def validate_dispatch_ownership(packets):
-    """Keep the generic checker; retire only three exact digest-bound pairs."""
-    try:
-        from validate_packet_ownership import validate_packet_ownership
-    except ImportError:
-        from scripts.validate_packet_ownership import validate_packet_ownership
-    errors = validate_packet_ownership(packets)
-    try:
-        record = _record()
-        require(validate_additions(packets) == [], "exact replacement packets")
-        for name in ("CONF-PERF-001", "CONF-PERF-002"):
-            path = "task-packets/" + name + ".yaml"
-            raw = regular_bytes(ROOT, path)
-            require(digest(raw) == record["protectedFiles"][path]
-                    and canonical(packets.get(name)) == canonical(safe_load(raw))
-                    and record["dispatch"][name] == "SUPERSEDED_UNACCEPTED_HISTORY",
-                    "immutable retired packet")
-        retired = set()
-        for left, right, count in (("CONF-PERF-001", "CONF-PERF-002", 6),
-                                   ("CONF-PERF-001", "CONF-PERF-003", 6),
-                                   ("CONF-PERF-002", "CONF-PERF-003", 8)):
-            paths = set(packets[left]["allowedPaths"]) & set(packets[right]["allowedPaths"])
-            require(len(paths) == count, "exact pairwise path overlap")
-            retired.update("unordered same-repository packets " + left + " and " + right + " overlap at "
-                           + repr(path) + " and " + repr(path) for path in paths)
-        require(len(retired) == 20 and all(errors.count(message) == 1 for message in retired),
-                "exact20 retired diagnostics")
-        return [error for error in errors if error not in retired]
-    except (ValueError, TypeError, KeyError, OSError, RecursionError):
-        return errors + ["missing or changed closed consumer dispatch replacement"]
+    """Delegate to the newest pinned closed adapter; old packets stay immutable."""
+    return reference_dispatch(packets)
 
 
 def main():
@@ -434,7 +413,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 150 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 153 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

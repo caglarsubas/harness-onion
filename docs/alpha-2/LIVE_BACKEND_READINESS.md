@@ -1,9 +1,9 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
-Current Alpha-2 dispatch: [MET-PERF-004 transitive consumer closure](CONFORMANCE_CONSUMER_CLOSURE.md).
-Catalog150; accepted product main9df7dd7 remains127 files /327 tests; drafts12/13/14 unaccepted.
-MET-PERF-003 source gates closed at a0384bd. Publish MET-PERF-004, then separate CONF-PERF-003; same eight paths, two additional exact methods.
-Earlier publication sections and superseded dispatches remain historical; no performance or native acceptance.
+Current Alpha-2 dispatch: [MET-PERF-005 reference-measurement amendment](CONFORMANCE_REFERENCE_MEASUREMENT.md).
+Catalog153; accepted product9df7dd7 remains127 files /327 tests; drafts12/13/14/15 unaccepted.
+MET-PERF-004 source gates closed at0bc353e. Publish005, then separate CONF-PERF-004 coding with CONF-BENCH-001 read-only pre-optimization replay.
+Complete reference benchmark replaces only the unavailable full unoptimized baseline; all eight candidate commands and all acceptance boundaries remain.
 
 ## Decision and evidence boundary
 

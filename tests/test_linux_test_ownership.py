@@ -16,7 +16,7 @@ from scripts.validate_linux_test_ownership import (
     EXPECTED_RECORD, PACKET_DIGESTS, amend_linux_test_packet, validate_linux_test_ownership,
 )
 from scripts.validate_packet_ownership import validate_packet_ownership
-from scripts.validate_conformance_consumer_closure import validate_dispatch_ownership
+from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,7 +36,7 @@ def test_current_and_historical_authorities_agree_without_rewriting_history(inpu
     original = (ROOT / "architecture/linux-readiness.json").read_bytes()
     assert validate_linux_readiness(packets, json.loads(original)) == []
     assert validate_linux_repair(packets, json.loads(previous), original) == []
-    assert len(packets) == 150
+    assert len(packets) == 153
     assert json.loads(previous)["currentPacketCount"] == 120
     assert json.loads(original)["currentPacketCount"] == 118
     assert record["testChange"]["productImplementation"] == "NOT_RUN"

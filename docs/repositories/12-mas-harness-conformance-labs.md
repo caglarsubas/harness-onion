@@ -1,9 +1,9 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
-Current Alpha-2 dispatch: [MET-PERF-004 transitive consumer closure](../alpha-2/CONFORMANCE_CONSUMER_CLOSURE.md).
-Catalog150; accepted product main9df7dd7 remains127 files /327 tests; drafts12/13/14 unaccepted.
-MET-PERF-003 source gates closed at a0384bd. Publish MET-PERF-004, then separate CONF-PERF-003; same eight paths, two additional exact methods.
-Earlier publication sections and superseded dispatches remain historical; no performance or native acceptance.
+Current Alpha-2 dispatch: [MET-PERF-005 reference-measurement amendment](../alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md).
+Catalog153; accepted product9df7dd7 remains127 files /327 tests; drafts12/13/14/15 unaccepted.
+MET-PERF-004 source gates closed at0bc353e. Publish005, then separate CONF-PERF-004 coding with CONF-BENCH-001 read-only pre-optimization replay.
+Complete reference benchmark replaces only the unavailable full unoptimized baseline; all eight candidate commands and all acceptance boundaries remain.
 
 ## Purpose and boundaries
 
@@ -189,6 +189,8 @@ Performance prerequisite: `CONF-PERF-001` measures inherited arithmetic before o
 Current performance prerequisite: `CONF-PERF-002` replaces unaccepted001 dispatch, not its history; close all327-test byte/identity consumers before measuring a full lower-overhead baseline. Partial profiles never authorize optimization.
 
 Current dispatch: `CONF-PERF-003` from accepted9df; supersede unaccepted001/002 dispatch without merging either. All four fixed historical consumers validate current custody first. Complete eight-command baseline remains mandatory.
+
+Current dispatch: `CONF-PERF-004` sole coding owner from accepted9df; `CONF-BENCH-001` is read-only measurement of its committed unchanged-crypto scaffold, not an accepted predecessor or PR. See new reference-measurement guide; previous full-baseline dispatch is historical and unaccepted.
 
 ## Testing, verification, and acceptance
 

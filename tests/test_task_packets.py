@@ -10,7 +10,7 @@ from typing import Any
 import jsonschema
 
 from scripts.validate_packet_ownership import validate_packet_ownership
-from scripts.validate_conformance_consumer_closure import validate_dispatch_ownership
+from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
 from scripts.validate_readiness import (
     DATA_HARNESS_V1_OBSERVATION_PATHS,
     EXPECTED_PACKET_COUNT,
@@ -73,7 +73,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 150
+    assert len(files) == EXPECTED_PACKET_COUNT == 153
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 

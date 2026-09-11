@@ -276,7 +276,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Successor inventory authority valid: 150 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.")
+        print("Successor inventory authority valid: 153 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.")
     return int(bool(errors))
 
 
