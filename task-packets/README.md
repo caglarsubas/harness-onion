@@ -348,7 +348,7 @@ claim. Full Alpha-4 certification remains separate. The earlier amendment's
 MET-REPAIR-003 publishes the [R1-R4 amendment](../docs/alpha-2/LINUX_READINESS_REPAIRS.md)
 without implementing product code. CONF-FIX-001 is the next source correction;
 CONF-LINUX-001 waits for its merged source and exact-main offline evidence.
-The MET-REPAIR-003 publication contained 120 packets; that historical publication recorded 142. The original 118-packet Linux policy and prior
+The MET-REPAIR-003 publication contained 120 packets; that historical snapshot contained 142. The original 118-packet Linux policy and prior
 107/110/114/115 snapshots remain unchanged historical records.
 
 Both conformance packets enumerate each test-suite root explicitly. The campaign
@@ -389,7 +389,7 @@ Normal model-contract completeness review and full source/CI/main gates remain.
 The [coding guide](../docs/alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; that historical publication recorded 142. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; that historical snapshot contained 142. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
