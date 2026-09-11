@@ -302,7 +302,7 @@ def validate_repair_amendment(
         == EXPECTED_AMENDMENT["historicalRepairRecordSha256"],
         "original repair publication was rewritten",
     )
-    require(len(packets) == 155, "current catalog requires exactly 155 packets; historical amendment remains 115")
+    require(len(packets) == 156, "current catalog requires exactly 156 packets; historical amendment remains 115")
     meta = packets.get("MET-REPAIR-002", {})
     require(isinstance(meta, dict), "repair amendment packet must be an object")
     if not isinstance(meta, dict):

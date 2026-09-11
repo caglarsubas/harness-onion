@@ -1,5 +1,19 @@
 # Provider and Module Catalog
 
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
 ## Authority and evidence boundary
 
 [architecture/providers.yaml](../architecture/providers.yaml) is the machine-readable authority for module identity, demand admission, capability selection, provider exclusivity, network targets, module compatibility, assurance subjects, dependency closure, and example profile outcomes. [schemas/provider-module.schema.json](../schemas/provider-module.schema.json) closes its record shape. [architecture/services.yaml](../architecture/services.yaml) remains authoritative for runtime service dependency modes and state propagation; the catalog binds those service identities to module identities without redefining service behavior.

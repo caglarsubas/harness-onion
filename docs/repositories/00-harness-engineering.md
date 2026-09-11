@@ -1,7 +1,21 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
-Catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
+Historical Alpha-2 dispatch at publication: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+Historical catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
 Publish016, then separate CONF-FIX-006 two-path source correction; preserve354 IDs, runtime/benchmark and original proofs.
 Draft12 failed one inherited127-file assertion at its approved135-file stage; no full acceptance or native promotion.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
@@ -237,6 +251,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 40. `MET-REPAIR-016`: preserve153 packets and accepted performance history; authorize only the two-path successor checkpoint correction.
 
+41. `MET-ADOPT-001`: approved air-gap/provider adoption policy, exact multi-repository ownership, phased coverage and source-only authority reconciliation.
+
 ## Testing, verification, and acceptance
 
 The `MET-001` bootstrap packet declares `prefetchCommands: []` and ordered
@@ -353,7 +369,7 @@ current successor. No consumed authority, root installation or product edit.
 The [coding guide](../alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 142. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; that historical publication recorded 142. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -489,7 +505,7 @@ transactional zero-cost admission before any probe, mutation or upstream
 credential use. No TLS success or client receipt grants native acceptance.
 
 Preserve all 141 predecessor packet bytes, historical authority and source locks.
-Current catalog142; conformance checkpoint9df7dd7 has 127 files / 327 tests.
+Historical catalog142; conformance checkpoint9df7dd7 has 127 files / 327 tests.
 CONF-LIVE-003 retains eight paths/eight commands; no additional product repair
 packet, signature role, endpoint, installed capability or billing permission.
 This meta publication requires twenty-one offline commands and separate local,

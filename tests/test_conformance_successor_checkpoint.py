@@ -4,6 +4,8 @@ import json
 
 import pytest
 
+from scripts.validate_provider_adoption import historical_bytes as adoption_history
+
 from scripts.safe_yaml import safe_load
 from scripts import validate_conformance_successor_checkpoint as module
 
@@ -42,7 +44,7 @@ def candidate(authority):
 def test_current155_catalog_preserves153_yaml_and_exact_two_path_scope(authority):
     packets, record, inputs = authority
     assert module.validate_authority(*authority) == []
-    assert len(packets) == 155
+    assert len(packets) == 156
     assert packets["CONF-FIX-006"]["allowedPaths"] == [module.DOC, module.SUP]
     assert packets["CONF-FIX-006"]["predecessors"] == ["MET-REPAIR-016", "CONF-PERF-004"]
     assert packets["MET-REPAIR-016"]["offlineAcceptanceCommands"][:-3] == packets["MET-PERF-005"]["offlineAcceptanceCommands"][:-2]
@@ -50,7 +52,7 @@ def test_current155_catalog_preserves153_yaml_and_exact_two_path_scope(authority
     assert len(packets["CONF-FIX-006"]["offlineAcceptanceCommands"]) == 8
     assert sum(p.startswith("task-packets/") and p.endswith(".yaml") for p in record["protectedFiles"]) == 153
     for path, pin in record["protectedFiles"].items():
-        assert module.digest(inputs[path]) == pin
+        assert module.digest(adoption_history(path, inputs[path])) == pin
 
 
 def test_original_v4_proof_and_b758_checkpoint_remain_immutable(authority):
@@ -70,7 +72,7 @@ def test_exact_meta_replacements_keep_all_old_test_identities(authority):
     before = json.loads(inputs[module.BEFORE_PATH])["files"]
     for path, rule in record["metaRecipes"].items():
         raw = before[path].encode()
-        assert module.apply_recipe(raw, rule) == inputs[path]
+        assert module.apply_recipe(raw, rule) == adoption_history(path, inputs[path])
         assert module.historical_bytes(path, inputs[path]) == raw
         if path.startswith("tests/"):
             assert module.test_ids(raw) == module.test_ids(inputs[path])

@@ -1,0 +1,1813 @@
+{
+  "schemaVersion": "planeon.internal.provider-adoption/v1",
+  "evidenceClass": "PLANNING_ONLY",
+  "releaseRequirement": "Require **at least one qualified baseline for every released harness capability** at the first enterprise release.",
+  "minimumQualifiedBaselines": 1,
+  "selectionRule": "EXACTLY_ONE_EXPLICIT_ACCEPTED_SELECTOR_PER_ACTIVE_EXCLUSIVE_GROUP",
+  "policies": {
+    "productionFoundation": "LINUX_KUBERNETES_OPENSHIFT",
+    "macOS": "DEVELOPMENT_NOT_QUALIFICATION",
+    "billableProvisioning": false,
+    "paidApis": false,
+    "runtimeDownloads": false,
+    "externalTelemetryDefault": false,
+    "hostedRunners": false,
+    "onlineLicenseCheck": false,
+    "customAdapterIsolation": "SEPARATE_WORKER_OR_SERVICE",
+    "customAdapterMaySelfAuthorize": false,
+    "registryOwner": "trust-plane",
+    "selectionUiOwner": "control-plane",
+    "existingExternalServiceLifecycleOwner": "TENANT",
+    "proprietaryTargetAllowed": "AUTHORIZED_ALREADY_LICENSED_ON_PREM_ZERO_INCREMENTAL_CHARGES_ONLY",
+    "proprietaryTargetMayBeDistributed": false,
+    "unknownIncrementalCharges": "BLOCK",
+    "distributedSoftware": "OPEN_SOURCE_EXISTING_LICENSE_POLICY",
+    "warmSourceAccess": "PROHIBITED_DURING_IMPLEMENTATION",
+    "coreCatalogMutation": false
+  },
+  "repositoryMap": [
+    {
+      "label": "R00",
+      "repositoryId": "harness-engineering",
+      "name": "Harness-Engineering",
+      "harnessIds": []
+    },
+    {
+      "label": "R01",
+      "repositoryId": "contracts",
+      "name": "mas-harness-contracts",
+      "harnessIds": []
+    },
+    {
+      "label": "R02",
+      "repositoryId": "sdks",
+      "name": "mas-harness-sdks",
+      "harnessIds": []
+    },
+    {
+      "label": "R03",
+      "repositoryId": "industry-packs",
+      "name": "mas-harness-industry-packs",
+      "harnessIds": []
+    },
+    {
+      "label": "R04",
+      "repositoryId": "control-plane",
+      "name": "mas-harness-control-plane",
+      "harnessIds": []
+    },
+    {
+      "label": "R05",
+      "repositoryId": "runtime-plane",
+      "name": "mas-harness-runtime-plane",
+      "harnessIds": [
+        "runtime.ai-gateway",
+        "runtime.experience"
+      ]
+    },
+    {
+      "label": "R06",
+      "repositoryId": "model-plane",
+      "name": "mas-harness-model-plane",
+      "harnessIds": [
+        "runtime.model-inference"
+      ]
+    },
+    {
+      "label": "R07",
+      "repositoryId": "knowledge-plane",
+      "name": "mas-harness-knowledge-plane",
+      "harnessIds": [
+        "knowledge.domain-semantic",
+        "knowledge.data-integration",
+        "knowledge.retrieval-context",
+        "knowledge.memory-state"
+      ]
+    },
+    {
+      "label": "R08",
+      "repositoryId": "execution-plane",
+      "name": "mas-harness-execution-plane",
+      "harnessIds": [
+        "execution.protocol-interoperability",
+        "execution.orchestration",
+        "execution.tool-skill-sandbox",
+        "execution.ml-decision"
+      ]
+    },
+    {
+      "label": "R09",
+      "repositoryId": "trust-plane",
+      "name": "mas-harness-trust-plane",
+      "harnessIds": [
+        "trust.security-safety",
+        "trust.governance-agentops",
+        "trust.observability-finops",
+        "trust.evaluation-assurance"
+      ]
+    },
+    {
+      "label": "R10",
+      "repositoryId": "operator",
+      "name": "mas-harness-operator",
+      "harnessIds": [
+        "runtime.infrastructure"
+      ]
+    },
+    {
+      "label": "R11",
+      "repositoryId": "distribution",
+      "name": "mas-harness-distribution",
+      "harnessIds": []
+    },
+    {
+      "label": "R12",
+      "repositoryId": "conformance-labs",
+      "name": "mas-harness-conformance-labs",
+      "harnessIds": []
+    }
+  ],
+  "harnessCoverage": [
+    {
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.runtime.infrastructure.bundle-verifier",
+        "module.runtime.infrastructure.fleet-sync-agent",
+        "module.runtime.infrastructure.namespace-baseline",
+        "module.runtime.infrastructure.operator",
+        "provider.runtime.infrastructure.k3s",
+        "provider.runtime.infrastructure.kubernetes-upstream",
+        "provider.runtime.infrastructure.openshift"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "runtime.model-inference",
+      "ownerRepository": "model-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.runtime.model-inference.inference-api",
+        "provider.planeon.llamacpp",
+        "provider.planeon.mlx",
+        "provider.planeon.ollama",
+        "provider.planeon.vllm"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "runtime.ai-gateway",
+      "ownerRepository": "runtime-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.runtime.ai-gateway.ai-gateway",
+        "provider.planeon.litellm-local"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "runtime.experience",
+      "ownerRepository": "runtime-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.runtime.experience.experience-gateway",
+        "provider.planeon.experience-agui",
+        "provider.planeon.experience-web"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "knowledge.domain-semantic",
+      "ownerRepository": "knowledge-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.knowledge.domain-semantic.domain-service",
+        "provider.planeon.jena"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.knowledge.data-integration.connector-controller",
+        "module.knowledge.data-integration.ingest-worker",
+        "provider.planeon.connector-events",
+        "provider.planeon.connector-file",
+        "provider.planeon.connector-http",
+        "provider.planeon.connector-jdbc",
+        "provider.planeon.connector-sftp"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "knowledge.retrieval-context",
+      "ownerRepository": "knowledge-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.knowledge.retrieval-context.index-worker",
+        "module.knowledge.retrieval-context.retrieval-service",
+        "provider.planeon.local-cross-encoder",
+        "provider.planeon.qdrant"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "knowledge.memory-state",
+      "ownerRepository": "knowledge-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.knowledge.memory-state.expiry-worker",
+        "module.knowledge.memory-state.memory-service",
+        "provider.planeon.memory-pgvector"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "execution.protocol-interoperability",
+      "ownerRepository": "execution-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.execution.protocol-interoperability.protocol-gateway",
+        "provider.execution.protocol-a2a",
+        "provider.execution.protocol-asyncapi",
+        "provider.execution.protocol-mcp",
+        "provider.execution.protocol-openapi"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "execution.orchestration",
+      "ownerRepository": "execution-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.execution.orchestration.orchestration-api",
+        "module.execution.orchestration.orchestration-worker"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "execution.tool-skill-sandbox",
+      "ownerRepository": "execution-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.execution.tool-skill-sandbox.sandbox-runner",
+        "module.execution.tool-skill-sandbox.tool-broker",
+        "provider.execution.sandbox-gvisor",
+        "provider.execution.sandbox-kata",
+        "provider.execution.sandbox-wasmtime"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "execution.ml-decision",
+      "ownerRepository": "execution-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.execution.ml-decision.decision-service",
+        "provider.execution.decision-onnx",
+        "provider.execution.decision-ortools",
+        "provider.execution.decision-sklearn"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "trust.security-safety",
+      "ownerRepository": "trust-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "external.oidc-provider",
+        "external.opa-engine",
+        "module.trust.security.guardrail-service",
+        "module.trust.security.policy-decision"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "trust.governance-agentops",
+      "ownerRepository": "trust-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.trust.governance.governance-service",
+        "module.trust.governance.registry-service"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "trust.observability-finops",
+      "ownerRepository": "trust-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "external.otel-backend",
+        "module.trust.observability.otel-collector",
+        "module.trust.observability.usage-ledger"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    },
+    {
+      "harnessId": "trust.evaluation-assurance",
+      "ownerRepository": "trust-plane",
+      "phase": "ALPHA_4_RELEASE_GATE",
+      "minimumQualifiedBaselines": 1,
+      "expansionTarget": [
+        3,
+        4
+      ],
+      "catalogCandidateIds": [
+        "module.trust.assurance.assurance-worker",
+        "module.trust.assurance.evidence-service"
+      ],
+      "qualificationStatus": "NOT_CLAIMED",
+      "evidenceRefs": []
+    }
+  ],
+  "relationships": [
+    {
+      "catalogId": "module.runtime.infrastructure.operator",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": "OP-001",
+      "technologyOptions": [
+        "planeon.operator"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.runtime.infrastructure.bundle-verifier",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": "OP-002",
+      "technologyOptions": [
+        "planeon.bundle-verifier",
+        "planeon.cosign"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.runtime.infrastructure.fleet-sync-agent",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": "OP-006",
+      "technologyOptions": [
+        "planeon.fleet-sync"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.runtime.infrastructure.namespace-baseline",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": "OP-003",
+      "technologyOptions": [
+        "planeon.namespace-baseline"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.runtime.infrastructure.kubernetes-upstream",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "kubernetes.upstream"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_EXTERNAL"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.runtime.infrastructure.k3s",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "kubernetes.k3s"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_EXTERNAL"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.runtime.infrastructure.openshift",
+      "harnessId": "runtime.infrastructure",
+      "ownerRepository": "operator",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "openshift.ocp"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_EXTERNAL"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "operator",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.runtime.model-inference.inference-api",
+      "harnessId": "runtime.model-inference",
+      "ownerRepository": "model-plane",
+      "originatingPacket": "MODEL-001",
+      "technologyOptions": [
+        "planeon.inference-api"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "model-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.ollama",
+      "harnessId": "runtime.model-inference",
+      "ownerRepository": "model-plane",
+      "originatingPacket": "MODEL-OLLAMA-001",
+      "technologyOptions": [
+        "planeon.ollama"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "model-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.llamacpp",
+      "harnessId": "runtime.model-inference",
+      "ownerRepository": "model-plane",
+      "originatingPacket": "MODEL-LLAMACPP-001",
+      "technologyOptions": [
+        "planeon.llamacpp"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "model-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.vllm",
+      "harnessId": "runtime.model-inference",
+      "ownerRepository": "model-plane",
+      "originatingPacket": "MODEL-VLLM-001",
+      "technologyOptions": [
+        "planeon.vllm"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "model-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.mlx",
+      "harnessId": "runtime.model-inference",
+      "ownerRepository": "model-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "planeon.mlx"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "model-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.runtime.ai-gateway.ai-gateway",
+      "harnessId": "runtime.ai-gateway",
+      "ownerRepository": "runtime-plane",
+      "originatingPacket": "RUN-001",
+      "technologyOptions": [
+        "planeon.gateway"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "runtime-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.litellm-local",
+      "harnessId": "runtime.ai-gateway",
+      "ownerRepository": "runtime-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "planeon.litellm-local"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "runtime-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.runtime.experience.experience-gateway",
+      "harnessId": "runtime.experience",
+      "ownerRepository": "runtime-plane",
+      "originatingPacket": "RUN-EXP-001",
+      "technologyOptions": [
+        "planeon.experience.sse"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "runtime-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.experience-web",
+      "harnessId": "runtime.experience",
+      "ownerRepository": "runtime-plane",
+      "originatingPacket": "RUN-EXP-001",
+      "technologyOptions": [
+        "planeon.experience.web"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "runtime-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.experience-agui",
+      "harnessId": "runtime.experience",
+      "ownerRepository": "runtime-plane",
+      "originatingPacket": "RUN-EXP-001",
+      "technologyOptions": [
+        "planeon.experience.agui"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "runtime-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.domain-semantic.domain-service",
+      "harnessId": "knowledge.domain-semantic",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DOM-001",
+      "technologyOptions": [
+        "planeon.rdflib",
+        "planeon.pyshacl"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.jena",
+      "harnessId": "knowledge.domain-semantic",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "planeon.jena"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.data-integration.connector-controller",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DATA-001",
+      "technologyOptions": [
+        "planeon.connector-controller"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.data-integration.ingest-worker",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DATA-001",
+      "technologyOptions": [
+        "planeon.ingest-worker"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.connector-http",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DATA-001",
+      "technologyOptions": [
+        "planeon.connector.http"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.connector-jdbc",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DATA-001",
+      "technologyOptions": [
+        "planeon.connector.jdbc"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.connector-file",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DATA-001",
+      "technologyOptions": [
+        "planeon.connector.file"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.connector-sftp",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "planeon.connector.sftp"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.connector-events",
+      "harnessId": "knowledge.data-integration",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-DATA-001",
+      "technologyOptions": [
+        "planeon.connector.events"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.retrieval-context.retrieval-service",
+      "harnessId": "knowledge.retrieval-context",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-RET-001",
+      "technologyOptions": [
+        "planeon.postgres-hybrid"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.retrieval-context.index-worker",
+      "harnessId": "knowledge.retrieval-context",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-RET-001",
+      "technologyOptions": [
+        "planeon.index-worker"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.local-cross-encoder",
+      "harnessId": "knowledge.retrieval-context",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-RET-001",
+      "technologyOptions": [
+        "planeon.local-cross-encoder"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.qdrant",
+      "harnessId": "knowledge.retrieval-context",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "planeon.qdrant"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.memory-state.memory-service",
+      "harnessId": "knowledge.memory-state",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-MEM-001",
+      "technologyOptions": [
+        "planeon.memory.postgres"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.knowledge.memory-state.expiry-worker",
+      "harnessId": "knowledge.memory-state",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-MEM-001",
+      "technologyOptions": [
+        "planeon.memory.expiry-worker"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.planeon.memory-pgvector",
+      "harnessId": "knowledge.memory-state",
+      "ownerRepository": "knowledge-plane",
+      "originatingPacket": "KN-MEM-001",
+      "technologyOptions": [
+        "planeon.memory.pgvector"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "knowledge-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.execution.protocol-interoperability.protocol-gateway",
+      "harnessId": "execution.protocol-interoperability",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-PROT-001",
+      "technologyOptions": [
+        "planeon.protocol-gateway"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.protocol-mcp",
+      "harnessId": "execution.protocol-interoperability",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-PROT-001",
+      "technologyOptions": [
+        "planeon.mcp"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.protocol-a2a",
+      "harnessId": "execution.protocol-interoperability",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-PROT-001",
+      "technologyOptions": [
+        "planeon.a2a"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.protocol-openapi",
+      "harnessId": "execution.protocol-interoperability",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-PROT-001",
+      "technologyOptions": [
+        "planeon.openapi"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.protocol-asyncapi",
+      "harnessId": "execution.protocol-interoperability",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-PROT-001",
+      "technologyOptions": [
+        "planeon.asyncapi"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.execution.orchestration.orchestration-api",
+      "harnessId": "execution.orchestration",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-ORCH-001",
+      "technologyOptions": [
+        "planeon.orchestration-api"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.execution.orchestration.orchestration-worker",
+      "harnessId": "execution.orchestration",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-ORCH-001",
+      "technologyOptions": [
+        "planeon.orchestrator.postgres"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.execution.tool-skill-sandbox.tool-broker",
+      "harnessId": "execution.tool-skill-sandbox",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-TOOL-001",
+      "technologyOptions": [
+        "planeon.tool-broker"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.execution.tool-skill-sandbox.sandbox-runner",
+      "harnessId": "execution.tool-skill-sandbox",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-SBX-001",
+      "technologyOptions": [
+        "planeon.sandbox.kubernetes-job"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.sandbox-wasmtime",
+      "harnessId": "execution.tool-skill-sandbox",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-SBX-001",
+      "technologyOptions": [
+        "planeon.sandbox.wasmtime"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.sandbox-gvisor",
+      "harnessId": "execution.tool-skill-sandbox",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-SBX-002",
+      "technologyOptions": [
+        "planeon.sandbox.gvisor"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.sandbox-kata",
+      "harnessId": "execution.tool-skill-sandbox",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-SBX-002",
+      "technologyOptions": [
+        "planeon.sandbox.kata"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.execution.ml-decision.decision-service",
+      "harnessId": "execution.ml-decision",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-ML-001",
+      "technologyOptions": [
+        "planeon.decision-service"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.decision-sklearn",
+      "harnessId": "execution.ml-decision",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-ML-001",
+      "technologyOptions": [
+        "planeon.sklearn"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.decision-onnx",
+      "harnessId": "execution.ml-decision",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-ML-001",
+      "technologyOptions": [
+        "planeon.onnx"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "provider.execution.decision-ortools",
+      "harnessId": "execution.ml-decision",
+      "ownerRepository": "execution-plane",
+      "originatingPacket": "EXEC-ML-001",
+      "technologyOptions": [
+        "planeon.ortools"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "execution-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "external.opa-engine",
+      "harnessId": "trust.security-safety",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "opa"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_EXTERNAL"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "external.oidc-provider",
+      "harnessId": "trust.security-safety",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "keycloak"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_EXTERNAL"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "external.otel-backend",
+      "harnessId": "trust.observability-finops",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": null,
+      "technologyOptions": [
+        "prometheus",
+        "jaeger"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_EXTERNAL"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.observability.otel-collector",
+      "harnessId": "trust.observability-finops",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-OBS-001",
+      "technologyOptions": [
+        "planeon.otel"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.security.policy-decision",
+      "harnessId": "trust.security-safety",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-001",
+      "technologyOptions": [
+        "planeon.policy-decision"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.security.guardrail-service",
+      "harnessId": "trust.security-safety",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-002",
+      "technologyOptions": [
+        "planeon.guardrails.rules"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.observability.usage-ledger",
+      "harnessId": "trust.observability-finops",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-OBS-001",
+      "technologyOptions": [
+        "planeon.usage-postgres"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.governance.governance-service",
+      "harnessId": "trust.governance-agentops",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-GOV-001",
+      "technologyOptions": [
+        "planeon.governance"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.governance.registry-service",
+      "harnessId": "trust.governance-agentops",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-REG-001",
+      "technologyOptions": [
+        "planeon.registry"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.assurance.evidence-service",
+      "harnessId": "trust.evaluation-assurance",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-EVAL-001",
+      "technologyOptions": [
+        "planeon.evidence"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    },
+    {
+      "catalogId": "module.trust.assurance.assurance-worker",
+      "harnessId": "trust.evaluation-assurance",
+      "ownerRepository": "trust-plane",
+      "originatingPacket": "TRUST-EVAL-001",
+      "technologyOptions": [
+        "planeon.assurance.pytest"
+      ],
+      "capabilityScope": "CATALOG_RECORD_ONLY_NOT_PER_CAPABILITY_QUALIFICATION",
+      "integrationModes": [
+        "BUILT_IN_MANAGED"
+      ],
+      "version": null,
+      "environment": null,
+      "qualificationStatus": "NOT_CLAIMED",
+      "supportOwner": "trust-plane",
+      "countsTowardQualifiedOptions": false,
+      "remainingWork": "PIN_VERSION_ENVIRONMENT_AND_PER_CAPABILITY_EVIDENCE_BEFORE_RELEASE"
+    }
+  ],
+  "extensionBacklog": [
+    {
+      "id": "CON-EXT-001",
+      "repositoryId": "contracts",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "MET-ADOPT-001"
+      ],
+      "requiredInterfaces": [
+        "Versioned provider manifest, adapter artifact, external binding and qualification record",
+        "Explicit external-target policy separate from distributed-software licenses",
+        "Compiler admission and compatibility with closed existing schemas"
+      ],
+      "acceptance": [
+        "Unknown/unsigned/privilege-escalating provider rejection",
+        "UI/file deterministic compilation vectors",
+        "External lifecycle and zero-cost entitlement admission vectors"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    },
+    {
+      "id": "SDK-EXT-001",
+      "repositoryId": "sdks",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "CON-EXT-001"
+      ],
+      "requiredInterfaces": [
+        "Versioned Python/TypeScript adapter SDK",
+        "Independent read-only isolated adapter example"
+      ],
+      "acceptance": [
+        "No optional provider auto-import/download",
+        "Custom implementation without core edits",
+        "Typed cancellation/errors and secret-reference redaction"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    },
+    {
+      "id": "CONF-EXT-001",
+      "repositoryId": "conformance-labs",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "CON-EXT-001",
+        "SDK-EXT-001"
+      ],
+      "requiredInterfaces": [
+        "Independent extension contract kit and evidence format",
+        "Real target qualification distinguished from fake surface tests"
+      ],
+      "acceptance": [
+        "Reject counterfeit qualification and tenant-acceptance claims",
+        "Positive/negative protocol vectors",
+        "Offline package and independently scoped target evidence"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    },
+    {
+      "id": "TRUST-EXT-001",
+      "repositoryId": "trust-plane",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "CON-EXT-001",
+        "CONF-EXT-001"
+      ],
+      "requiredInterfaces": [
+        "Authoritative provider registry admission/promotion/deprecation/revocation",
+        "External-target entitlement and incremental-charge policy"
+      ],
+      "acceptance": [
+        "Unsigned/unqualified/revoked/overprivileged denial",
+        "Tenant registry isolation and no built-in shadowing",
+        "Unknown/metered charges block; support ownership persists"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    },
+    {
+      "id": "CTRL-EXT-001",
+      "repositoryId": "control-plane",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "SDK-EXT-001",
+        "TRUST-EXT-001"
+      ],
+      "requiredInterfaces": [
+        "Registration and accepted selection UI",
+        "Per-organization provider qualification/support/status projections"
+      ],
+      "acceptance": [
+        "No duplicate registry or browser fan-out",
+        "Cross-tenant requests fail; stale evidence explicit",
+        "Distinct install health, capability readiness and support responsibility"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    },
+    {
+      "id": "DIST-EXT-001",
+      "repositoryId": "distribution",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "CON-EXT-001",
+        "TRUST-EXT-001"
+      ],
+      "requiredInterfaces": [
+        "Mode-aware minimal bundle and immutable dependency closure",
+        "Approved adapter artifacts and local binding references"
+      ],
+      "acceptance": [
+        "No unwanted service/image in closure",
+        "SBOM/license/signature/offline verification",
+        "No bundled proprietary runtime or model download"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    },
+    {
+      "id": "OP-EXT-001",
+      "repositoryId": "operator",
+      "phase": "ALPHA_2",
+      "status": "WAITING_PACKET_PUBLICATION",
+      "dispatchable": false,
+      "predecessors": [
+        "CON-EXT-001",
+        "DIST-EXT-001"
+      ],
+      "requiredInterfaces": [
+        "Verified mode-aware installation/reconciliation",
+        "Explicit immutable-profile upgrade and migration contract"
+      ],
+      "acceptance": [
+        "External service never provisioned/upgraded/deleted",
+        "Restart/idempotency/recovery and denied egress",
+        "Stateful migration/export/reindex and honest rollback limits"
+      ],
+      "publicationGate": [
+        "EXACT_ALLOWED_PATHS",
+        "ACCEPTED_PREDECESSOR_RELEASE_DIGESTS",
+        "DECLARED_OFFLINE_ARGV",
+        "REQUIRED_SELF_HOSTED_CI",
+        "ONE_PACKET_BRANCH_PR"
+      ]
+    }
+  ],
+  "expansionBacklog": [
+    {
+      "id": "ollama-existing-and-managed",
+      "owner": "model-plane",
+      "phase": "ALPHA_2",
+      "packet": "MODEL-OLLAMA-001",
+      "status": "WAITING_QUALIFICATION",
+      "order": [
+        "QUALIFY_EXTERNAL_ENDPOINT",
+        "QUALIFY_MANAGED_DEPLOYMENT"
+      ]
+    },
+    {
+      "id": "llamacpp-vllm-alternatives",
+      "owner": "model-plane",
+      "phase": "ALPHA_2",
+      "packets": [
+        "MODEL-LLAMACPP-001",
+        "MODEL-VLLM-001"
+      ],
+      "status": "WAITING_QUALIFICATION"
+    },
+    {
+      "id": "retrieval-pgvector",
+      "owner": "knowledge-plane",
+      "phase": "ALPHA_2",
+      "packet": "KN-RET-001",
+      "status": "WAITING_QUALIFICATION"
+    },
+    {
+      "id": "milvus",
+      "owner": "knowledge-plane",
+      "phase": "POST_RELEASE_WAVE_1",
+      "packet": null,
+      "status": "WAITING_PACKET_PUBLICATION",
+      "order": [
+        "EXTERNAL_ATTACHMENT",
+        "MANAGED_DEPLOYMENT"
+      ]
+    },
+    {
+      "id": "durable-execution-adoption",
+      "owner": "execution-plane",
+      "phase": "BEFORE_FURTHER_BESPOKE_EXECUTION",
+      "packet": "EXEC-ORCH-001",
+      "candidate": "Temporal",
+      "status": "ADOPTION_DECISION_REQUIRED",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "framework-real-package-qualification",
+      "owner": "sdks",
+      "phase": "ALPHA_2_AND_EXPANSION",
+      "packet": null,
+      "status": "WAITING_PACKET_PUBLICATION",
+      "fakeSurfaceIsQualification": false
+    }
+  ],
+  "currentCheckpoint": {
+    "phase": "ALPHA_2",
+    "metaBase": "9010ef0280d301eb18071266bda17e4c1ad5ebcc",
+    "conformanceMain": "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+    "conformanceDraft": "6dcd8e72859037839915c2f928e0fb55641e458a",
+    "packet": "CONF-LIVE-003",
+    "status": "IMPLEMENTATION_INCOMPLETE",
+    "recordedTests": 509,
+    "recordedSkips": 0,
+    "evidenceClass": "RECORDED_LOCAL_AND_CI_NOT_PACKET_COMPLETION",
+    "nativeQualification": "NOT_RUN_ENV_UNAVAILABLE",
+    "tenantAcceptance": false,
+    "modelEffortTransition": "NOT_DUE"
+  }
+}
