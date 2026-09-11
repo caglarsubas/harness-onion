@@ -118,6 +118,12 @@ Nested420 /trusted900 /workflow15 minutes stay unchanged. No OS/root-policy,
 new key, administrator prompt, dependency, toolchain, Makefile, dispatcher,
 fixture, PORTING, download, hosted compute, cloud, paid API or artifact upload.
 META runs all27 cumulative commands and both full replays; no new META skips.
+The three already-owned predecessor history helpers and the new helper use
+fresh exact raw-byte authority pins and record-matched routing tables. Successor
+unwinding always happens first; identity routes grant no acceptance. Relevant
+records and changed source bytes are reread on every invocation, with no parsed
+authority or acceptance-result cache. All predecessor records remain immutable;
+new regression tests cover fresh reads and missing/extra routes in each helper.
 Product/reference never opens a warm-start source or gains telemetry/egress.
 
 Local source, required CI, merge, LOCAL exact-main, reference measurement,

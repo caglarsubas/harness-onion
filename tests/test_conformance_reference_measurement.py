@@ -99,6 +99,48 @@ def test_unmodified_paths_are_identity_not_an_acceptance_decision(authority,monk
     assert calls == [1]
 
 
+@pytest.mark.parametrize("layer", ["performance","followup","closure"])
+def test_each_predecessor_record_is_reread_and_never_cached(monkeypatch,layer):
+    from scripts import validate_conformance_performance as performance
+    from scripts import validate_conformance_performance_followup as followup
+    from scripts import validate_conformance_consumer_closure as closure
+    module = {"performance":performance,"followup":followup,"closure":closure}[layer]
+    raw = module.regular_bytes(ROOT,module.RECORD_PATH)
+    reads = []
+    def read_again(root,path):
+        reads.append(path)
+        return raw if len(reads) == 1 else raw+b" "
+    monkeypatch.setattr(module,"regular_bytes",read_again)
+    assert module._record() == json.loads(raw)
+    with pytest.raises(ValueError,match="exact fresh authority bytes"):
+        module._record()
+    assert reads == [module.RECORD_PATH,module.RECORD_PATH]
+
+
+@pytest.mark.parametrize("layer", ["performance","followup","closure"])
+@pytest.mark.parametrize("fault", ["missing-route","extra-route"])
+def test_each_predecessor_routing_table_is_exact(authority,monkeypatch,layer,fault):
+    from scripts import validate_conformance_performance as performance
+    from scripts import validate_conformance_performance_followup as followup
+    from scripts import validate_conformance_consumer_closure as closure
+    module = {"performance":performance,"followup":followup,"closure":closure}[layer]
+    record,inputs = module.load_inputs(ROOT)
+    paths = set(module.HISTORY_PATHS)
+    if fault == "missing-route": paths.remove("scripts/validate_readiness.py")
+    else: paths.add("unreviewed.py")
+    monkeypatch.setattr(module,"HISTORY_PATHS",frozenset(paths))
+    assert module.validate_authority(authority[0],record,inputs)
+
+
+def test_predecessor_successor_unwinding_still_precedes_identity_routes():
+    for name,successor in (("performance","followup_history"),("performance_followup","closure_history"),("consumer_closure","reference_history")):
+        source = (ROOT/('scripts/validate_conformance_'+name+'.py')).read_text()
+        start = source.index('def historical_bytes(path, raw):')
+        end = source.index('\ndef current_test_bytes',start)
+        body = source[start:end]
+        assert body.index('raw = '+successor+'(path, raw)') < body.index('if path not in HISTORY_PATHS:')
+
+
 def test_replay_is_read_only_not_source_predecessor_or_candidate_acceptance(authority):
     packets, record, _ = authority
     spec = record["referenceBenchmark"]

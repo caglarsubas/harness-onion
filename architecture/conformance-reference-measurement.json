@@ -684,7 +684,7 @@
     },
     "scripts/validate_conformance_consumer_closure.py": {
       "beforeSha256": "2c1ba44046fcd8e76821b1a701f40ddd45ded0ed91cbc35c59877e79f529e8fd",
-      "afterSha256": "1d12e04ad40fc269b24f5acc3bc26f0873832c4f9dd0a9da55e66c4c5b45de96",
+      "afterSha256": "33b7e21d642ad072361c164afc793626ab6567c5c5be0d0d0b491dedfebedf55",
       "replacements": [
         {
           "before": "        require(len(old) == 148 and len(packets) == 150 and set(packets) == old | set(NEW_IDS), \"exact150 catalog\")\n",
@@ -740,12 +740,32 @@
           "before": "def validate_dispatch_ownership(packets):\n    \"\"\"Keep the generic checker; retire only three exact digest-bound pairs.\"\"\"\n    try:\n        from validate_packet_ownership import validate_packet_ownership\n    except ImportError:\n        from scripts.validate_packet_ownership import validate_packet_ownership\n    errors = validate_packet_ownership(packets)\n    try:\n        record = _record()\n        require(validate_additions(packets) == [], \"exact replacement packets\")\n        for name in (\"CONF-PERF-001\", \"CONF-PERF-002\"):\n            path = \"task-packets/\" + name + \".yaml\"\n            raw = regular_bytes(ROOT, path)\n            require(digest(raw) == record[\"protectedFiles\"][path]\n                    and canonical(packets.get(name)) == canonical(safe_load(raw))\n                    and record[\"dispatch\"][name] == \"SUPERSEDED_UNACCEPTED_HISTORY\",\n                    \"immutable retired packet\")\n        retired = set()\n        for left, right, count in ((\"CONF-PERF-001\", \"CONF-PERF-002\", 6),\n                                   (\"CONF-PERF-001\", \"CONF-PERF-003\", 6),\n                                   (\"CONF-PERF-002\", \"CONF-PERF-003\", 8)):\n            paths = set(packets[left][\"allowedPaths\"]) & set(packets[right][\"allowedPaths\"])\n            require(len(paths) == count, \"exact pairwise path overlap\")\n            retired.update(\"unordered same-repository packets \" + left + \" and \" + right + \" overlap at \"\n                           + repr(path) + \" and \" + repr(path) for path in paths)\n        require(len(retired) == 20 and all(errors.count(message) == 1 for message in retired),\n                \"exact20 retired diagnostics\")\n        return [error for error in errors if error not in retired]\n    except (ValueError, TypeError, KeyError, OSError, RecursionError):\n        return errors + [\"missing or changed closed consumer dispatch replacement\"]\n\n",
           "after": "def validate_dispatch_ownership(packets):\n    \"\"\"Delegate to the newest pinned closed adapter; old packets stay immutable.\"\"\"\n    return reference_dispatch(packets)\n\n",
           "count": 1
+        },
+        {
+          "before": "RECORD_PATH = \"architecture/conformance-consumer-closure.json\"\n",
+          "after": "RECORD_PATH = \"architecture/conformance-consumer-closure.json\"\nRECORD_FILE_SHA256 = \"0f42919cdd9d92685a4cd0ecd0ee471cdbdb05cd62b8cdaef334e340f14614ac\"\nHISTORY_PATHS = frozenset([\"docs/DEVELOPMENT_STATUS.md\",\"docs/MASTER_DEVELOPMENT_PLAN.md\",\"docs/READINESS_INDEX.md\",\"docs/alpha-2/LIVE_BACKEND_READINESS.md\",\"docs/repositories/00-harness-engineering.md\",\"docs/repositories/12-mas-harness-conformance-labs.md\",\"scripts/validate_broker_handoff.py\",\"scripts/validate_ci_performance.py\",\"scripts/validate_conformance_performance.py\",\"scripts/validate_conformance_performance_followup.py\",\"scripts/validate_credential_lifecycle.py\",\"scripts/validate_credential_ordering.py\",\"scripts/validate_custody_handoff.py\",\"scripts/validate_linux_readiness.py\",\"scripts/validate_linux_repair.py\",\"scripts/validate_linux_test_ownership.py\",\"scripts/validate_live_backend_readiness.py\",\"scripts/validate_model_api_inventory.py\",\"scripts/validate_model_fixture_scope.py\",\"scripts/validate_native_qualification.py\",\"scripts/validate_packet_scalar_repair.py\",\"scripts/validate_policy_observation.py\",\"scripts/validate_proxy_contract.py\",\"scripts/validate_readiness.py\",\"scripts/validate_readiness_repairs.py\",\"scripts/validate_reuse.py\",\"scripts/validate_successor_inventory.py\",\"task-packets/README.md\",\"tests/test_alpha2_readiness.py\",\"tests/test_broker_handoff.py\",\"tests/test_ci_performance.py\",\"tests/test_conformance_performance.py\",\"tests/test_conformance_performance_followup.py\",\"tests/test_credential_lifecycle.py\",\"tests/test_credential_ordering.py\",\"tests/test_custody_handoff.py\",\"tests/test_linux_readiness.py\",\"tests/test_linux_repair.py\",\"tests/test_linux_test_ownership.py\",\"tests/test_live_backend_readiness.py\",\"tests/test_model_api_inventory.py\",\"tests/test_model_fixture_scope.py\",\"tests/test_native_qualification.py\",\"tests/test_packet_scalar_repair.py\",\"tests/test_policy_observation.py\",\"tests/test_proxy_contract.py\",\"tests/test_reuse.py\",\"tests/test_successor_inventory.py\",\"tests/test_task_packets.py\"])\n",
+          "count": 1
+        },
+        {
+          "before": "    value = parse(regular_bytes(ROOT, RECORD_PATH))\n    pinned(value)\n    return value",
+          "after": "    # Fresh read/hash/parse on every invocation, without a result cache.\n    raw = regular_bytes(ROOT, RECORD_PATH)\n    require(digest(raw) == RECORD_FILE_SHA256, \"exact fresh authority bytes\")\n    return parse(raw)",
+          "count": 1
+        },
+        {
+          "before": "    record = _record()\n    rule = record[\"metaRecipes\"].get(path)",
+          "after": "    # Successor history above is always validated before this identity route.\n    if path not in HISTORY_PATHS:\n        return raw\n    record = _record()\n    rule = record[\"metaRecipes\"].get(path)",
+          "count": 1
+        },
+        {
+          "before": "def validate_authority(packets, record, inputs):\n    try:\n        pinned(record)",
+          "after": "def validate_authority(packets, record, inputs):\n    try:\n        pinned(record)\n        require(HISTORY_PATHS == set(record[\"metaRecipes\"]), \"exact historical routing table\")",
+          "count": 1
         }
       ]
     },
     "scripts/validate_conformance_performance.py": {
       "beforeSha256": "36d74e6a13295b6fa862a5037a49660456354a6dbfb0eeb826b090a3903001ca",
-      "afterSha256": "ca63b2b6eccfc8097b36a0a53dd0e1fc059bdd07d8d7153716ea371bbc1847e0",
+      "afterSha256": "341510dd6bce3ca8879755399c9f5fe85542eb8164a678b10382bfef99f7d780",
       "replacements": [
         {
           "before": "        require(len(old) == 144 and len(packets) == 150 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\"}, \"exact148 catalog\")\n",
@@ -761,12 +781,32 @@
           "before": "        require(len(old) == 144 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\"}, \"exact148 catalog\")\n",
           "after": "        require(len(old) == 144 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\"}, \"exact148 catalog\")\n",
           "count": 1
+        },
+        {
+          "before": "RECORD_PATH = \"architecture/conformance-performance-amendment.json\"\n",
+          "after": "RECORD_PATH = \"architecture/conformance-performance-amendment.json\"\nRECORD_FILE_SHA256 = \"dc6019ef0c8ddb721a3f72ee10f98bb7925cc8313b09b74793865d01602d0243\"\nHISTORY_PATHS = frozenset([\"docs/DEVELOPMENT_STATUS.md\",\"docs/MASTER_DEVELOPMENT_PLAN.md\",\"docs/READINESS_INDEX.md\",\"docs/alpha-2/LIVE_BACKEND_READINESS.md\",\"docs/repositories/00-harness-engineering.md\",\"docs/repositories/12-mas-harness-conformance-labs.md\",\"scripts/validate_broker_handoff.py\",\"scripts/validate_ci_performance.py\",\"scripts/validate_credential_lifecycle.py\",\"scripts/validate_credential_ordering.py\",\"scripts/validate_custody_handoff.py\",\"scripts/validate_linux_readiness.py\",\"scripts/validate_linux_repair.py\",\"scripts/validate_linux_test_ownership.py\",\"scripts/validate_live_backend_readiness.py\",\"scripts/validate_model_api_inventory.py\",\"scripts/validate_model_fixture_scope.py\",\"scripts/validate_native_qualification.py\",\"scripts/validate_packet_scalar_repair.py\",\"scripts/validate_policy_observation.py\",\"scripts/validate_proxy_contract.py\",\"scripts/validate_readiness.py\",\"scripts/validate_readiness_repairs.py\",\"scripts/validate_reuse.py\",\"scripts/validate_successor_inventory.py\",\"task-packets/README.md\",\"tests/test_alpha2_readiness.py\",\"tests/test_broker_handoff.py\",\"tests/test_ci_performance.py\",\"tests/test_credential_lifecycle.py\",\"tests/test_credential_ordering.py\",\"tests/test_custody_handoff.py\",\"tests/test_linux_readiness.py\",\"tests/test_linux_repair.py\",\"tests/test_linux_test_ownership.py\",\"tests/test_live_backend_readiness.py\",\"tests/test_model_api_inventory.py\",\"tests/test_model_fixture_scope.py\",\"tests/test_native_qualification.py\",\"tests/test_packet_scalar_repair.py\",\"tests/test_policy_observation.py\",\"tests/test_proxy_contract.py\",\"tests/test_reuse.py\",\"tests/test_successor_inventory.py\",\"tests/test_task_packets.py\"])\n",
+          "count": 1
+        },
+        {
+          "before": "    value = parse(regular_bytes(ROOT, RECORD_PATH))\n    pinned(value)\n    return value",
+          "after": "    # Fresh read/hash/parse on every invocation, without a result cache.\n    raw = regular_bytes(ROOT, RECORD_PATH)\n    require(digest(raw) == RECORD_FILE_SHA256, \"exact fresh authority bytes\")\n    return parse(raw)",
+          "count": 1
+        },
+        {
+          "before": "    record = _record()\n    rule = record[\"metaRecipes\"].get(path)",
+          "after": "    # Successor history above is always validated before this identity route.\n    if path not in HISTORY_PATHS:\n        return raw\n    record = _record()\n    rule = record[\"metaRecipes\"].get(path)",
+          "count": 1
+        },
+        {
+          "before": "def validate_authority(packets, record, inputs):\n    try:\n        pinned(record)",
+          "after": "def validate_authority(packets, record, inputs):\n    try:\n        pinned(record)\n        require(HISTORY_PATHS == set(record[\"metaRecipes\"]), \"exact historical routing table\")",
+          "count": 1
         }
       ]
     },
     "scripts/validate_conformance_performance_followup.py": {
       "beforeSha256": "d255affe9a3c05a07b42d4fc27b73a241c9b469037ccd2e85d5f5c6acce597df",
-      "afterSha256": "4877f3406dc559c8418e6bd79704729a0672368f36fd151e354e2bcc156ea10b",
+      "afterSha256": "39c4038230411eaec4412d32613ecfb281c8917e04fb7f1d72ca8df12661cd43",
       "replacements": [
         {
           "before": "        require(len(old) == 146 and len(packets) == 150 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\"}, \"exact150 catalog\")\n",
@@ -781,6 +821,26 @@
         {
           "before": "        require(len(old) == 146 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\"}, \"exact150 catalog\")\n",
           "after": "        require(len(old) == 146 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\"}, \"exact150 catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "RECORD_PATH = \"architecture/conformance-performance-followup.json\"\n",
+          "after": "RECORD_PATH = \"architecture/conformance-performance-followup.json\"\nRECORD_FILE_SHA256 = \"3e2ba8d1db0ca4ba7ea60a814cbc0f35554c3781f7b940d5c7d11c58a5932ff2\"\nHISTORY_PATHS = frozenset([\"docs/DEVELOPMENT_STATUS.md\",\"docs/MASTER_DEVELOPMENT_PLAN.md\",\"docs/READINESS_INDEX.md\",\"docs/alpha-2/LIVE_BACKEND_READINESS.md\",\"docs/repositories/00-harness-engineering.md\",\"docs/repositories/12-mas-harness-conformance-labs.md\",\"scripts/validate_broker_handoff.py\",\"scripts/validate_ci_performance.py\",\"scripts/validate_conformance_performance.py\",\"scripts/validate_credential_lifecycle.py\",\"scripts/validate_credential_ordering.py\",\"scripts/validate_custody_handoff.py\",\"scripts/validate_linux_readiness.py\",\"scripts/validate_linux_repair.py\",\"scripts/validate_linux_test_ownership.py\",\"scripts/validate_live_backend_readiness.py\",\"scripts/validate_model_api_inventory.py\",\"scripts/validate_model_fixture_scope.py\",\"scripts/validate_native_qualification.py\",\"scripts/validate_packet_scalar_repair.py\",\"scripts/validate_policy_observation.py\",\"scripts/validate_proxy_contract.py\",\"scripts/validate_readiness.py\",\"scripts/validate_readiness_repairs.py\",\"scripts/validate_reuse.py\",\"scripts/validate_successor_inventory.py\",\"task-packets/README.md\",\"tests/test_alpha2_readiness.py\",\"tests/test_broker_handoff.py\",\"tests/test_ci_performance.py\",\"tests/test_conformance_performance.py\",\"tests/test_credential_lifecycle.py\",\"tests/test_credential_ordering.py\",\"tests/test_custody_handoff.py\",\"tests/test_linux_readiness.py\",\"tests/test_linux_repair.py\",\"tests/test_linux_test_ownership.py\",\"tests/test_live_backend_readiness.py\",\"tests/test_model_api_inventory.py\",\"tests/test_model_fixture_scope.py\",\"tests/test_native_qualification.py\",\"tests/test_packet_scalar_repair.py\",\"tests/test_policy_observation.py\",\"tests/test_proxy_contract.py\",\"tests/test_reuse.py\",\"tests/test_successor_inventory.py\",\"tests/test_task_packets.py\"])\n",
+          "count": 1
+        },
+        {
+          "before": "    value = parse(regular_bytes(ROOT, RECORD_PATH))\n    pinned(value)\n    return value",
+          "after": "    # Fresh read/hash/parse on every invocation, without a result cache.\n    raw = regular_bytes(ROOT, RECORD_PATH)\n    require(digest(raw) == RECORD_FILE_SHA256, \"exact fresh authority bytes\")\n    return parse(raw)",
+          "count": 1
+        },
+        {
+          "before": "    record = _record()\n    rule = record[\"metaRecipes\"].get(path)",
+          "after": "    # Successor history above is always validated before this identity route.\n    if path not in HISTORY_PATHS:\n        return raw\n    record = _record()\n    rule = record[\"metaRecipes\"].get(path)",
+          "count": 1
+        },
+        {
+          "before": "def validate_authority(packets, record, inputs):\n    try:\n        pinned(record)",
+          "after": "def validate_authority(packets, record, inputs):\n    try:\n        pinned(record)\n        require(HISTORY_PATHS == set(record[\"metaRecipes\"]), \"exact historical routing table\")",
           "count": 1
         }
       ]
@@ -1670,7 +1730,7 @@
   "inputFiles": {
     "architecture/conformance-reference-measurement-inputs/meta-before.json": "12e918a03c0a240e49670655e8448b5e25a49a8cf01c1662b0578ac5075f260c",
     "architecture/conformance-reference-measurement-inputs/benchmark-method.json": "4345c612f41edd8d10e09eda4dfd083f4db89cb56e519f9f40f0b5566f1f9ec0",
-    "docs/alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md": "352a80893c4d229ea0cf3f311bf32eb4fe597d93418ea752f805791dd62bc031",
+    "docs/alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md": "72e4ca4b4dd56bcc6637c9d0c5f4c9927096bd8dae4966703a086cad21a1fc90",
     "task-packets/MET-PERF-005.yaml": "7ed4fd331c9f5b232fc2f513d09e6c3316d117037c46666fa27c3846d50db5e8",
     "task-packets/CONF-PERF-004.yaml": "9580efb06ed18abb8782ef24e7729469b64fc67e963eff9d599a77662a10debf",
     "task-packets/CONF-BENCH-001.yaml": "43589db82dd51ecdadb94f5165f2b4fe7d8ff9b137db356e6000a2f9788b9e16",
