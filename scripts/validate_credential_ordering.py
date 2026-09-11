@@ -182,7 +182,7 @@ def validate_credential_ordering(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(broker_history(path, inputs[path])) == checksum, "changed input: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 141 and len(packets) == 155 and set(packets) == old | {"MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006"},
+        require(len(old) == 141 and len(packets) == 156 and set(packets) == old | {"MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001"},
                 "141 immutable predecessors and one exact addition required")
         for name in old | {"MET-REPAIR-013"}:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/" + name + ".yaml"])),
@@ -228,7 +228,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential ordering valid: 155 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
+        print("Credential ordering valid: 156 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
     return int(bool(errors))
 
 

@@ -1,5 +1,19 @@
 # Repository Plan: `mas-harness-knowledge-plane`
 
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
 ## Purpose and boundaries
 
 This repository owns four separately installable harnesses: `knowledge.domain-semantic`, `knowledge.data-integration`, `knowledge.retrieval-context`, and `knowledge.memory-state`. It provides domain validation, connectors/ingestion/provenance, retrieval/context assembly, and governed memory while maintaining strict store and API boundaries.

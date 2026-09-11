@@ -1,7 +1,21 @@
 # Sol-High Task Packet Catalog
 
-Current Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../docs/alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
-Catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](../docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
+Historical Alpha-2 dispatch at publication: [MET-REPAIR-016 successor checkpoint correction](../docs/alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+Historical catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
 Publish016, then separate CONF-FIX-006 two-path source correction; preserve354 IDs, runtime/benchmark and original proofs.
 Draft12 failed one inherited127-file assertion at its approved135-file stage; no full acceptance or native promotion.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
@@ -206,7 +220,7 @@ be hidden behind another make target or script.
 ## Alpha 2 — Read-only intelligence
 
 The readiness repair retains the historical 107-packet Phase-0 and 110-packet
-Alpha-2 publication snapshots. The current catalog has 142 packets; the first repair publication retains its 114-packet snapshot. Alpha-1
+Alpha-2 publication snapshots. That historical publication recorded 142 packets; the first repair publication retains its 114-packet snapshot. Alpha-1
 status corrections and production integration appear here because their new
 authority follows the merged model observation; no historical packet is
 rewritten as completed live acceptance. CON-MODEL-001 requires both product
@@ -313,6 +327,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 153 | `CONF-SEC-001` | `mas-harness-conformance-labs` | Adversarial security certification |
 | 154 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
 | 155 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
+| 156 | `MET-ADOPT-001` | `Harness-Engineering` | Provider adoption,13-repository policy and phased extension backlog |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 
@@ -333,7 +348,7 @@ claim. Full Alpha-4 certification remains separate. The earlier amendment's
 MET-REPAIR-003 publishes the [R1-R4 amendment](../docs/alpha-2/LINUX_READINESS_REPAIRS.md)
 without implementing product code. CONF-FIX-001 is the next source correction;
 CONF-LINUX-001 waits for its merged source and exact-main offline evidence.
-The MET-REPAIR-003 publication contained 120 packets; the current catalog contains 142. The original 118-packet Linux policy and prior
+The MET-REPAIR-003 publication contained 120 packets; that historical snapshot contained 142. The original 118-packet Linux policy and prior
 107/110/114/115 snapshots remain unchanged historical records.
 
 Both conformance packets enumerate each test-suite root explicitly. The campaign
@@ -354,7 +369,7 @@ Native Linux, independent live authority and full Alpha-4 acceptance remain sepa
 
 MET-REPAIR-005 grants CON-MODEL-001 only the exact helper copy additions in
 [the bounded fixture repair](../docs/alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md).
-The current catalog has 142 packets; the earlier 121-packet publication and all
+That historical publication recorded 142 packets; the earlier 121-packet publication and all
 source/native gates remain unchanged. That fixture-copy grant changes no assertions;
 the sole later inventory-predicate exception is MET-REPAIR-006 below.
 
@@ -374,7 +389,7 @@ Normal model-contract completeness review and full source/CI/main gates remain.
 The [coding guide](../docs/alpha-2/LIVE_BACKEND_READINESS.md) and closed
 `architecture/live-backend-roadmap.json` add six sequential conformance packets
 (CONF-LIVE-001 through CONF-LIVE-006), not new repositories or harnesses.
-This publication recorded 130 packets; the current catalog contains 142. The 123 consumed packet YAML and all existing
+This publication recorded 130 packets; that historical snapshot contained 142. The 123 consumed packet YAML and all existing
 architecture/legal/policy/release records remain byte-identical.
 
 Only the six source-enablement packets may proceed before native qualification.
@@ -510,7 +525,7 @@ transactional zero-cost admission before any probe, mutation or upstream
 credential use. No TLS success or client receipt grants native acceptance.
 
 Preserve all 141 predecessor packet bytes, historical authority and source locks.
-Current catalog142; conformance checkpoint9df7dd7 has 127 files / 327 tests.
+Historical catalog142; conformance checkpoint9df7dd7 has 127 files / 327 tests.
 CONF-LIVE-003 retains eight paths/eight commands; no additional product repair
 packet, signature role, endpoint, installed capability or billing permission.
 This meta publication requires twenty-one offline commands and separate local,

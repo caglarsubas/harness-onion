@@ -1,0 +1,1805 @@
+{
+  "schemaVersion": "planeon.internal.provider-adoption-authority/v1",
+  "authorityPacket": "MET-ADOPT-001",
+  "metaBaseline": "9010ef0280d301eb18071266bda17e4c1ad5ebcc",
+  "evidenceClass": "PLANNING_ONLY",
+  "ownedPaths": [
+    "README.md",
+    "architecture/provider-adoption-authority.json",
+    "architecture/provider-adoption.json",
+    "docs/DEVELOPMENT_STATUS.md",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/PROVIDER_MODULE_CATALOG.md",
+    "docs/READINESS_INDEX.md",
+    "docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md",
+    "docs/harnesses/execution.ml-decision.md",
+    "docs/harnesses/execution.orchestration.md",
+    "docs/harnesses/execution.protocol-interoperability.md",
+    "docs/harnesses/execution.tool-skill-sandbox.md",
+    "docs/harnesses/knowledge.data-integration.md",
+    "docs/harnesses/knowledge.domain-semantic.md",
+    "docs/harnesses/knowledge.memory-state.md",
+    "docs/harnesses/knowledge.retrieval-context.md",
+    "docs/harnesses/runtime.ai-gateway.md",
+    "docs/harnesses/runtime.experience.md",
+    "docs/harnesses/runtime.infrastructure.md",
+    "docs/harnesses/runtime.model-inference.md",
+    "docs/harnesses/trust.evaluation-assurance.md",
+    "docs/harnesses/trust.governance-agentops.md",
+    "docs/harnesses/trust.observability-finops.md",
+    "docs/harnesses/trust.security-safety.md",
+    "docs/repositories/00-harness-engineering.md",
+    "docs/repositories/01-mas-harness-contracts.md",
+    "docs/repositories/02-mas-harness-sdks.md",
+    "docs/repositories/03-mas-harness-industry-packs.md",
+    "docs/repositories/04-mas-harness-control-plane.md",
+    "docs/repositories/05-mas-harness-runtime-plane.md",
+    "docs/repositories/06-mas-harness-model-plane.md",
+    "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "docs/repositories/08-mas-harness-execution-plane.md",
+    "docs/repositories/09-mas-harness-trust-plane.md",
+    "docs/repositories/10-mas-harness-operator.md",
+    "docs/repositories/11-mas-harness-distribution.md",
+    "docs/repositories/12-mas-harness-conformance-labs.md",
+    "scripts/validate_broker_handoff.py",
+    "scripts/validate_ci_performance.py",
+    "scripts/validate_conformance_consumer_closure.py",
+    "scripts/validate_conformance_performance.py",
+    "scripts/validate_conformance_performance_followup.py",
+    "scripts/validate_conformance_reference_measurement.py",
+    "scripts/validate_conformance_successor_checkpoint.py",
+    "scripts/validate_credential_lifecycle.py",
+    "scripts/validate_credential_ordering.py",
+    "scripts/validate_custody_handoff.py",
+    "scripts/validate_linux_readiness.py",
+    "scripts/validate_linux_repair.py",
+    "scripts/validate_linux_test_ownership.py",
+    "scripts/validate_live_backend_readiness.py",
+    "scripts/validate_model_api_inventory.py",
+    "scripts/validate_model_fixture_scope.py",
+    "scripts/validate_native_qualification.py",
+    "scripts/validate_packet_scalar_repair.py",
+    "scripts/validate_policy_observation.py",
+    "scripts/validate_provider_adoption.py",
+    "scripts/validate_proxy_contract.py",
+    "scripts/validate_readiness.py",
+    "scripts/validate_readiness_repairs.py",
+    "scripts/validate_reuse.py",
+    "scripts/validate_successor_inventory.py",
+    "task-packets/MET-ADOPT-001.yaml",
+    "task-packets/README.md",
+    "tests/test_alpha2_readiness.py",
+    "tests/test_broker_handoff.py",
+    "tests/test_ci_performance.py",
+    "tests/test_conformance_consumer_closure.py",
+    "tests/test_conformance_performance.py",
+    "tests/test_conformance_performance_followup.py",
+    "tests/test_conformance_reference_measurement.py",
+    "tests/test_conformance_successor_checkpoint.py",
+    "tests/test_credential_lifecycle.py",
+    "tests/test_credential_ordering.py",
+    "tests/test_custody_handoff.py",
+    "tests/test_linux_readiness.py",
+    "tests/test_linux_repair.py",
+    "tests/test_linux_test_ownership.py",
+    "tests/test_live_backend_readiness.py",
+    "tests/test_model_api_inventory.py",
+    "tests/test_model_fixture_scope.py",
+    "tests/test_native_qualification.py",
+    "tests/test_packet_scalar_repair.py",
+    "tests/test_policy_observation.py",
+    "tests/test_provider_adoption.py",
+    "tests/test_proxy_contract.py",
+    "tests/test_reuse.py",
+    "tests/test_successor_inventory.py",
+    "tests/test_task_packets.py"
+  ],
+  "protectedFiles": {
+    ".github/workflows/verify.yml": "b6b8c87fc5f9615c193594c7a861a59e55022acfdb1dc9970c903af9fca22dee",
+    ".gitignore": "95f51bf2adc1adf30cc0f74ef7e4449a910b66c0d2656ef41f91dea09de409bd",
+    ".impeccable.md": "a003261408f0911dae19de8405fa1fa75be4472f7db647ceda001df324c30106",
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "BILLING_POLICY.md": "a6cc00dd61373ba9b062174862f4232f19df7bf6790115c2fc9d189719ce87fd",
+    "CONTRIBUTING.md": "2a59bc842e08552348bfca5c9bcb3977c24e7c9827e03ebff5575d27602195dc",
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "Makefile": "c12c2ec279c033f91fd0ccee94df05090e012eb592485b3398ebc58e8c062afa",
+    "NOTICE": "acc8acc6c5c1a11e425276d169b34509d5374a4b958e76cd866facde0a268624",
+    "SECURITY.md": "43212de85ed67d7e1f4bcb4d49c40d1acc01fbdc5fde807f0d24c35447dd0b92",
+    "architecture/base-scope-sources.yaml": "38b19648432f8394f28a0115ffd11995f0d9843891f864af0c2dd6ac677dd2eb",
+    "architecture/broker-handoff-amendment.json": "1b5843241dc2574b26c8f24dae6fd6a341860cf2a6db9b0b560801e8ad629529",
+    "architecture/broker-handoff-inputs/channel.schema.json": "e7e9558fb50b7ba804222065734d1d4fb4694327bb2427a34ef8dffc945d56f9",
+    "architecture/broker-handoff-inputs/meta-before.json": "701c23be9e1e57a4fb7288abc33d84aef992b7257342b28595c27120d80948bd",
+    "architecture/broker-handoff-inputs/vectors.json": "80d8da953c41ef544ecf0cd4a0f62b98316b018bfbdc39c550c320f68ab603c4",
+    "architecture/ci-performance-amendment.json": "2716be38eee78aefa1b3269a3a30659ae101794da25b9ee6ab30afefbbd19b38",
+    "architecture/ci-performance-inputs/tests.before.json": "11fe1351bd83f0ccb36487897bbc8b8171c26c4074156e512288348a16c836c3",
+    "architecture/conformance-consumer-closure-inputs/consumer-sources.json": "7ed2c605abe41e7e1122b58841455489a1b6f9bee93f95a10ad56976a4485e3d",
+    "architecture/conformance-consumer-closure-inputs/meta-before.json": "b680d897ab09bd6455866dda0e13d102a156db1143db9fd707dbbc08dcbe17b8",
+    "architecture/conformance-consumer-closure-inputs/product-before.json": "b94d14121eb37b7eeb2bff2a5570cf4a41e593c4d2f03de626cfbd745969d0dc",
+    "architecture/conformance-consumer-closure.json": "0f42919cdd9d92685a4cd0ecd0ee471cdbdb05cd62b8cdaef334e340f14614ac",
+    "architecture/conformance-performance-amendment.json": "dc6019ef0c8ddb721a3f72ee10f98bb7925cc8313b09b74793865d01602d0243",
+    "architecture/conformance-performance-followup-inputs/meta-before.json": "e3e65b7b16652e13f07ce0136360f6458ceab514e03a86e195a02aee548db127",
+    "architecture/conformance-performance-followup-inputs/product-before.json": "b94d14121eb37b7eeb2bff2a5570cf4a41e593c4d2f03de626cfbd745969d0dc",
+    "architecture/conformance-performance-followup.json": "3e2ba8d1db0ca4ba7ea60a814cbc0f35554c3781f7b940d5c7d11c58a5932ff2",
+    "architecture/conformance-performance-inputs/meta-before.json": "4554b6c7038e44de8d30a01b34bb31eddf4c0cce430a0fcc2a8451adbd0af96c",
+    "architecture/conformance-performance-inputs/product-before.json": "8aae2dd20507805c1cfd91ed7836a979c5c8e0345decdbc7ac64eb87e0b5bf9e",
+    "architecture/conformance-reference-measurement-inputs/benchmark-method.json": "4345c612f41edd8d10e09eda4dfd083f4db89cb56e519f9f40f0b5566f1f9ec0",
+    "architecture/conformance-reference-measurement-inputs/meta-before.json": "12e918a03c0a240e49670655e8448b5e25a49a8cf01c1662b0578ac5075f260c",
+    "architecture/conformance-reference-measurement.json": "01b97634ff6d8d6251c68413838cadf6dd6b2079cde3794c31ec97cac46fd589",
+    "architecture/conformance-successor-checkpoint-inputs/checkpoint.json": "f434acd1028d24f057d9a17686894d00e691bc4a3c76daba5ded33c199c809db",
+    "architecture/conformance-successor-checkpoint-inputs/meta-before.json": "0a6183a74ace02dc696f23d62020790be4ac2985794bc4e6635fa8489e66c528",
+    "architecture/conformance-successor-checkpoint-inputs/product-before.json": "ef184022036ccdfd94015fb92058e54968d66242a3848ae80b805ab50288a34b",
+    "architecture/conformance-successor-checkpoint.json": "73488d6a0066b23a95954048ccaf4bcf78ddc0f66d88c7818db2c25ff33f128b",
+    "architecture/credential-lifecycle-amendment.json": "e4f036bce09ebdea17b2b2d25d6a65678b88ec6e5dd7c18f550c3b45b6061da8",
+    "architecture/credential-lifecycle-inputs/before.json": "9176a8d22bab88e48111d53540815ea8be9b2987c43ddfe824de6664971b640e",
+    "architecture/credential-lifecycle-inputs/checkpoint.json": "88b02e2cea777d57723f3d5f6f1309213c93389343084c714ddd92393e5fae95",
+    "architecture/credential-lifecycle-inputs/meta-tests.before.json": "432d5dd6b85df90eba864cf73aa9d5e2cbebf999f7ccde85f72be4e4982f8a53",
+    "architecture/credential-ordering-amendment.json": "b4d367b1ff29c92f75304504e30920da25fd682b691f14aabf5f8705d0544c21",
+    "architecture/credential-ordering-inputs/checkpoint.json": "25f86c5ac11bb65b8ae25c51dd5d5df9c7860ddc824ef9a10de118440a3bf696",
+    "architecture/credential-ordering-inputs/meta-before.json": "5aed1292ff416c92a363ff34e0d570a152fb8029048701bd8b3fe77c69a486ff",
+    "architecture/credential-ordering-inputs/source-before.json": "37a44c19ef3e71b24de4332fe02211f94bdf7a1ac099a7f685b8d491932c7dce",
+    "architecture/credential-ordering-inputs/vectors.json": "94de69be63e466212d158627eccb9d4a014dd709ecb71fbe4ff886145b8f9c49",
+    "architecture/custody-handoff-amendment.json": "81a95c9d1b84aae1ae71d7fa293931fc1118eacd2083051d353875e7b55e2180",
+    "architecture/custody-handoff-inputs/baseline.json": "9053162f5249e75584c334fc6898444e6c7220b1cf116f8efb348a6658165ca6",
+    "architecture/dependency-graph.yaml": "47986eff1832f2ed990bb9ceb2cd9aab574475df0bc20f2a39ac91c985cfd50f",
+    "architecture/linux-readiness-amendment.json": "3a59552dbadd6a9e7579038523787926b921c35a3c71d036d2705b1c95b804a6",
+    "architecture/linux-readiness.json": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+    "architecture/linux-test-ownership-amendment.json": "5aa1e79de247ebed7550b56db48266182941232d9036840beade99fbcf11172f",
+    "architecture/live-backend-roadmap.json": "06d55fab0d0e56cbbdedab975fd4e2371f06896a6298e96c8c4e23c5e50916e7",
+    "architecture/model-api-inventory-amendment.json": "7f298fdb1db878105d9925b5b07500f9cb6298f8b887d87d91edbc6210b48c7b",
+    "architecture/model-api-inventory-inputs/CON-MODEL-001.before.yaml": "fff08209e76c2287c257a8d37a29aba159f82019e70f51d36bcaebf9d6805f33",
+    "architecture/model-api-inventory-inputs/test_lifecycle_contracts.before.txt": "53f528db6e9d3ce00a8c16e8cf24345a992b2b6130cdfb7d5a6dee02dbaed81e",
+    "architecture/model-evidence-boundary.json": "5be8de011a0cc4769b919ce0a416cb73d791c92181920abca7e8793abb788b48",
+    "architecture/model-fixture-inputs/CON-MODEL-001.before.yaml": "807efc83ddd77e27e19d0e7d53811321c9b00c95972b53e78b263f385fd41d48",
+    "architecture/model-fixture-inputs/test_generated_contracts.before.txt": "856b1d14e0f4d4ee84f6c4f973db412f9905559124091355bec7de85cc818080",
+    "architecture/model-fixture-scope-amendment.json": "e46ea246e0ab64d7d6882822739b3029659138711f2bb426ea26fea064e08bd3",
+    "architecture/native-qualification-amendment.json": "e935cbd3045522cf3c5ad47161140e2444d55ebddfb74c09a641e4a0b66ca84a",
+    "architecture/native-qualification-inputs/meta-before.json": "3b7929df563a6eabe5e0c9f624ef886d55e898b6ccf1d269e8cb90ae63e92905",
+    "architecture/native-qualification-inputs/qualification.schema.json": "bef248bfa82b234124c014f98e40c5791bced3171bb118b7ed1bb7b8daaf95c3",
+    "architecture/native-qualification-inputs/vectors.json": "cd1be009b721bb596887335184a33ab8e1f24aed8215477b63e28f058110748f",
+    "architecture/observations/agent-hook-v2-tree.json": "0c94377f0ae6bf7ec7d70d521c411ff6883614cb2cebca2a1243cea1ce775339",
+    "architecture/observations/data-harness-v1.json": "5c559a6ef3d59fa40e74ab2fb36603752751f523249da884f8e0d8daa06cfe10",
+    "architecture/observations/model-usage-v2.json": "aa5488bad4528bd4119dfe9134f517403986b6fd45408f34c508929924e764f9",
+    "architecture/observations/orchestra-openshift-reference-lab-tree.json": "c0cab3b3c294ab0db09f19215ad51f3ca5b09c71bb007fef2b894f7588d3f41b",
+    "architecture/observations/planeon-orchestra-python-sdk-tree.json": "aa41c2d2b781e6776724367b3cf931d23b6812cc14ecb4a27c4f6c0b69ef61d7",
+    "architecture/packet-scalar-amendment.json": "56b270f8d211f598cbf0183088430bd5ccc16e64eb089b865e117748c762b4e1",
+    "architecture/packet-scalar-inputs/baseline.json": "d88c8f22877cf7269135ef53c08ff3a4921edb0946db0d9c9c1d38209256bfb6",
+    "architecture/packet-scalar-inputs/run_packet.before.txt": "3128dd48c486d74c3a109eb0d6655c57033011d508afadce35756e485d94e83a",
+    "architecture/packet-scalar-inputs/test_linux_inventory.before.txt": "1f5587f857927ca645e1c79edd4b4cd560f0eb70a881fb670b5047739421b7ef",
+    "architecture/policy-observation-amendment.json": "0df7e72a65fc5eb1c20d59b8c62ebff377f160214192d681ea7f3d29b57e38c7",
+    "architecture/policy-observation-inputs/channel.schema.json": "fb69b77201d9b6275a19667a5f5770537f382ddb11309095733628c8430bdc0e",
+    "architecture/policy-observation-inputs/vectors.json": "1bfb46776636f800e38ab6a8f94a0989aa38513fb4a28ef18e61e732a115c124",
+    "architecture/porting-authorization-index.yaml": "a9768c8a75c2a9d3469271c60861c4ceb0b45cd3304d9c6be2dc1783ff1e7ec3",
+    "architecture/providers.yaml": "9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02",
+    "architecture/proxy-contract-amendment.json": "6c93e7db962cffa0281331c5220cdd8d5e453ab38ae39b4baa2e62be21a60600",
+    "architecture/proxy-contract-inputs/baseline.json": "980ff63a57a6a167020f6d64297f946c92d7ce56b8c274b3fec56fb18bd837c1",
+    "architecture/proxy-contract-inputs/profile.schema.json": "209349ccf44989566ffb39e2654fc91323b5eb2d9cbe895a4b18f33a349a226d",
+    "architecture/proxy-contract-inputs/vectors.json": "edf32ddf992e06e8786fd331affdb4d2ecd5538ca874d52c37439386793a8eb7",
+    "architecture/readiness-repair-amendment.json": "c3caa938557f1b9bb195188e35edc946fbdea36f0f1b235ab23f2689ffc54912",
+    "architecture/readiness-repairs.json": "30db784918bb651cc81f26d23cb4b1d7f790ef260ef5e48a2d7ae2ae94c12a0d",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/reuse-map.schema.json": "a9f2980e12679a7292fc394f1e53c437a4e60dc16ba22129c0cb66dce1b759a3",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/services.yaml": "857376b5e2b10a2a2542124a7d36b770eca531d15e463d68415416b887dd90a6",
+    "architecture/successor-inventory-amendment.json": "d6bd95af8bc7dd3d497907df58cc843a1732dc12e74a401692e47449444c349d",
+    "architecture/successor-inventory-inputs/baseline.json": "f84ab0aeac644670b6a36ca52af1493af29bfacc8f04c4602a9e650dfca0c645",
+    "architecture/successor-inventory-inputs/live_launcher.before.txt": "0635ca7494e29c495fcf8188c167d82bb27f109102fc46f91052e1d509817d27",
+    "architecture/successor-inventory-inputs/test_packet_scalars.before.txt": "c340e47f5eb8286e2e76ae5b38dc0bed6073701de44859b3356aed4c708f42e8",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "ci/linux-runner/build.py": "bfef77f1bdfae16e596a12fe9d3136ec6ba325468ffb0662a6e1a7bdafe51331",
+    "ci/linux-runner/common.py": "cd1e468d4ce3f6e9760f2169d873b42ecc409c9ea3dac4945c9615cd8b4a3946",
+    "ci/linux-runner/ed25519.py": "6ca5eb106c6567feb28ec1dbd5d988cec1d15b838c192306c2fc74357ea851c9",
+    "ci/linux-runner/launcher.py": "e1f2e0166c82e01c6eedeec542584d8d0d4bb27c3f2eaf5e5e2298b7d53d1861",
+    "ci/linux-runner/preflight.py": "636a1df537125b72d0396963dc848281d359c2fd6806712aaf4848599a9184cc",
+    "ci/linux-runner/prepare.py": "5dc2158b69e9f7623f613e7015c97deb5c7184c7ba48554b0f5230ab2582bb04",
+    "ci/lock_warm_snapshot.py": "d7e3d7507300ed21b011021f4323cefb85563add57fb40d3a7b16337e6bbd67f",
+    "ci/measure_yaml_parsing.py": "2adf3490b7f54bf8bca5ae20e1f0ea1819830c635cdf5d0ca06f42e07061f0b3",
+    "ci/network_canary.py": "1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099",
+    "ci/prefetch.sh": "069a5eddb73a9b12f0620323b0638fa2b616fafe1210daa90484788815bd6785",
+    "ci/run_packet_argv.py": "5a635f1694892354722afa14be103cf1c2efed70d6198fe163889eca3e211826",
+    "ci/test_offline_runner.py": "46444c4218502f889f9d3e923c60604f6eff5434ab248a9cfc96976f38f06fcb",
+    "ci/test_warm_snapshot.py": "929be52a3835a0b0d28d355fd4b4f85fc0e5e210502c3b6c62c2b24348fafa24",
+    "ci/verify-offline.sh": "881a6f8c8bf7f5c01896578e960685545b8b7ec02e672808571836e73d132ae2",
+    "ci/warm-source-isolation.sh": "f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b",
+    "docs/MICROSERVICE_CATALOG.md": "699f2c0fe3ae9d95d3e6d4261d51a95199e13f17d28ffef4a2d71a8c307e8eff",
+    "docs/SCOPE_PROVENANCE.md": "0c6b97368440bb0da4b0532a9231e17d45cf511e0268e10753461000f6db39e3",
+    "docs/TENANT_HARNESS_OVERVIEW.md": "3855671e04267e774c515b35e8ddc07c3b8a252198f9843da82d2d1aa7996a6d",
+    "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "docs/adr/0001-repository-boundaries.md": "a5db14c280aaafcdfa403ca9a68762eacf012dd887ea67c1ec8bd35ced3f42f7",
+    "docs/adr/0002-contract-authority.md": "654c6ef2e1333945bafd466688779d73d07fbe6027199cdef8d24b57870fc0c5",
+    "docs/adr/0003-source-reuse-and-provenance.md": "4b5fa5de4a77ea1175527d676195f8c1fdb6938ec2b2aa5407bc690f09308a6a",
+    "docs/adr/0004-sol-high-packet-boundary.md": "17aabdaddcba80d95df0591fe126a7962f7d289929dfa426640814f37d1c5090",
+    "docs/adr/0005-release-evidence.md": "e0d9134551f137da84cbb5709b0a6383447995490ac5a01647b211831fc67971",
+    "docs/alpha-2/BROKER_HANDOFF_READINESS.md": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+    "docs/alpha-2/CI_PERFORMANCE_REPAIR.md": "9ba4b315b96d45b070165529ab476b500ff2aa56e4ee2f9f5b678e9fe3d290cc",
+    "docs/alpha-2/CONFORMANCE_CONSUMER_CLOSURE.md": "9b26333af40892e59d49efc3cb9297ae8237bea80c1cd742215e42599377f282",
+    "docs/alpha-2/CONFORMANCE_PERFORMANCE_FOLLOWUP.md": "20839cec24b1e1b0128d0e7ed62d1c4d2cf8f52eff2fe52eaa362b1b8feaffce",
+    "docs/alpha-2/CONFORMANCE_PERFORMANCE_REPAIR.md": "0fb79410bf745992371c07b62f1c00d7ffae06e150c068b753ad9cd986e32745",
+    "docs/alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md": "72e4ca4b4dd56bcc6637c9d0c5f4c9927096bd8dae4966703a086cad21a1fc90",
+    "docs/alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md": "b736e1f808ef31ffa28df7702e3ac4a3325cdcaaaef544bdec1f79c55fd4bd41",
+    "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md": "b2ed7fe5be1a8b23ec31483c94f77a79094972acde5b726b33a660d729a3bb2d",
+    "docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md": "0a095725bf71fb26ab8500391c1c214fef63f124b7a29ec171a552d0a211b025",
+    "docs/alpha-2/LINUX_READINESS.md": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+    "docs/alpha-2/LINUX_READINESS_REPAIRS.md": "ae1c9284eba881730bf4959587616e701c4c3d09f5d8209d156a3798e6cb4f24",
+    "docs/alpha-2/LINUX_TEST_OWNERSHIP_REPAIR.md": "cc6558725f5942fad8feff788199525b165ecb0d567fcace9b3a57760143c4af",
+    "docs/alpha-2/LIVE_BACKEND_READINESS.md": "bda41fb1cc8e4f49214f874b209b493538e1342d6b50310bf5d83a16dc7057b6",
+    "docs/alpha-2/MODEL_API_INVENTORY_REPAIR.md": "e0aef4b956ad1d5f6578c303fb8d14c6999800be9d27fbe3851ad1ae051ea578",
+    "docs/alpha-2/MODEL_FIXTURE_SCOPE_REPAIR.md": "1e254fac661abbd84737cbf07bbe8c16a39b47e2a102f82e1c768a2254265e92",
+    "docs/alpha-2/MODEL_PREREQUISITES.md": "7861cc7c441c35ad3cfb723659399b06ba2018ef53162c26ec080c2de3ae30aa",
+    "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+    "docs/alpha-2/PACKET_SCALAR_REPAIR.md": "a16dc058d838bb431b6f6a79210ec4464a1870a1a4df2014ff67a4f263745b5b",
+    "docs/alpha-2/POLICY_OBSERVATION_READINESS.md": "65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c",
+    "docs/alpha-2/PROXY_CONTRACT_READINESS.md": "3e3bf310ebd8a7b1aed696ed9b8d4d26cb67160aab3f862877e2b2a2e0c9f3d0",
+    "docs/alpha-2/READINESS_REPAIRS.md": "60ccec243e8256a6978b5697cf5349ee70726f6cad997d0621cae029dc3ad346",
+    "docs/alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md": "34c8a35df0b6e7063c1b1ec5f8cb233df35d80ce46e6c9104ad5cd61ea415a0c",
+    "docs/alpha-2/SUCCESSOR_INVENTORY_REPAIR.md": "b783e35408fbe7af82f84094aeb51c06ca89a89e06ef3da9212e89bbe92a73ea",
+    "docs/alpha-2/model-usage-observation.md": "5f7bb84bd83a50187fbc67eadbe74ba90112802ddc9e7fd438476ca44a7424b9",
+    "docs/linux-runner/BUILD_INPUTS.md": "1c6541be0e0cf9e6620941f745bf92ce51097c2bad4714b665b39655093364a6",
+    "docs/linux-runner/OPERATOR.md": "5477648b9c857361d0287afda277d2ba2da76b24b56bdc6449905077815913fd",
+    "docs/phase-0/PHASE_0_BACKTEST.md": "2961ed650c065587f948ad0fbbd7c41732b83dcd6c30f1b35fffc88c1c5ada8f",
+    "docs/phase-0/dependency-license-inventory.json": "1ccafd9b5f5aacebe407b252426f5f388bed64ce5510d4cca9c80509587f890e",
+    "docs/phase-0/phase-0-backtest.json": "9c173ecf7631b85e533788cd734d30e4ce485fb74ccf21a06430ed7ca8cdda67",
+    "legal/source-reuse-authorization.yaml": "15db98cbaef76c942f7bd230c245f506653311b9cfec4596255b5770eb6e45fa",
+    "legal/third-party-license-policy.yaml": "fa3a4398acafc3960eaaae9f5396d4e96d91e6ff252b83f6c53e1f5f0d8a40d0",
+    "policies/zero-bill-policy.yaml": "77c1385d014db8562be215f03a806deafb66e38c6e7faed9167f53299dadd43e",
+    "pyproject.toml": "3876fa86bb79bb1951b017527a83278491c21ce9f1e017e38a0558f00b89ed2b",
+    "reference-observer/harness-reference-extract.py": "c3ee70583ed0ba85693dcc3da62c40d8039919c1213facdcca3b13e172bc6a04",
+    "reference-observer/harness-reference-observe.py": "971b534767afd900f00b588cf626b79c029f784f5820608b3803dd27ae967cee",
+    "release/evidence-policy.yaml": "ead30b57628a7479152c94f6a9496d90ec9d60701d7214cfcf3e36765dbda069",
+    "release/fixture-release-set.yaml": "7597ebe4754a501de67dc2ee620dba4a8413e8b87761437d562194bac595b2f9",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "schemas/dependency-graph.schema.json": "9c6f18bcc26e2b574297ba3e50d2e440f67f9bb78b3b5b7cfffa179c7141c870",
+    "schemas/live-campaign-execution-envelope.schema.json": "ee5ce21417760c941b70b03fc7d48c6462104268f374a424f4cd01f7ed5ca6ee",
+    "schemas/porting-authorization.schema.json": "1c5675728c9c13fde47d644b654bdff9eebe19d9210a5987832c8ef6224c9d56",
+    "schemas/porting-record.schema.json": "492c510f1ddf1080eb8a59c4a7478518f035f6c5b0a466de5f95e5ae3fd8107b",
+    "schemas/provider-module.schema.json": "f177ca68e4c3e62b5b4c8a8bd909589e755b722478ce341d4781169cf8730b9d",
+    "schemas/release-set.schema.json": "f8efb2cf71f272eaf51ee962401fdc2c608342beb6f266f3cc8d14a031ee777b",
+    "schemas/repositories.schema.json": "8b1841a75925c2b059909424656cf85d20691c50d5585da5b9ae7e5971271f27",
+    "schemas/reuse-path-index.schema.json": "237169f0e8e65f557133e1c484e6bee602c7b1119935b0be8dbbdd575446d0d3",
+    "schemas/services.schema.json": "7aa4eedb210650120496ea5858cbde3067dfa7d9c3b5b54bf39e3655f4010f0a",
+    "schemas/task-packet.schema.json": "1e6d75398fb6571a1fd752b1ed597d0465c4031f9271bdda27a3075c88fb39f0",
+    "schemas/taxonomy.schema.json": "b952d10ef9eb52012c3aabb58648b86f28600e006089b6685a2be2474964022d",
+    "schemas/trusted-runner-manifest.schema.json": "157ad117269e9244b143c8bc6a80e1faf34678c1b538adb92b2e55444189d480",
+    "scripts/build_release_lock.py": "ee8c7448503fc63cbb06f7c004bfa1e682a7f4f4703ab75fec5aa64bea051d4c",
+    "scripts/check_release_lock.py": "50fd3de0bd75e088a8ef5e1b6af68577e64380409818b147da13c28db85bfc03",
+    "scripts/network_canary.py": "6c430b5998b9388bf19a88e459bc46afbf8a8e0895e7ca6cde6e11673a8f9108",
+    "scripts/safe_yaml.py": "99c673560e65e58cdc1abe86e53472feaf93e546dd76cb9f3ba051beef5c49d7",
+    "scripts/validate_alpha2_readiness.py": "a3f260e32785c91616f139d20cc0793604db941c108dbefddcbf721102729ff5",
+    "scripts/validate_architecture.py": "2cea2785fc84131362595d45d5e5fef1b67b873a08753d94dac6e3bab377c3b9",
+    "scripts/validate_data_harness_v1_observation.py": "87c3f94da2709359d62e01bc683f1bdcebc3515225b22fa61ab221b76e57e5a4",
+    "scripts/validate_model_usage_observation.py": "b338fd13b4a03519f5da5fb1901921ed7cd3651774f8d72bc3a2696186014185",
+    "scripts/validate_packet_ownership.py": "1f1a44601ce3f88713ae15d3af013d03f8f0eb30885a81645a0500bee64bf8ba",
+    "scripts/validate_repository_tree_observation.py": "90aec471e9814e4e66b870252c385da2830bc53a0e97e285426a05a9f65a657e",
+    "scripts/verify_offline.sh": "e01ce471ccd25bfc4af0c0d3e1eb9c2b8d60840eaaa213f7aff55c05d029891b",
+    "scripts/verify_toolchain.py": "9cf639874721037ec7875b0f2938bee57fa75b2cdebc6501912ef253dcda2190",
+    "scripts/zero_bill_scan.py": "57fa7e94bf5657f0daf959d5229dfc2a53a0ab94793d1d5fa03a7513b1272fd7",
+    "task-packets/CON-001.yaml": "88383a2c8bc66c959df0abc8bc1c8d86a852cac654cd1833327f8b06e2cf41b4",
+    "task-packets/CON-002.yaml": "1e266163e2990ca7412338e878cb6b41e8a769abc27802083c352d1fc7e6da20",
+    "task-packets/CON-003.yaml": "f54c40fba3c9ef2889851981e93f282ff069c4c40de222a18005d57241b7bb1a",
+    "task-packets/CON-004.yaml": "1613ae0d5f5f113d0208f811f36c998168094109b96d68f8e7c31798e62733a3",
+    "task-packets/CON-005.yaml": "1e5c7ac03625c08a7ff46b133e2b7689e5ef43de4782a5948f5f63823bcca4d6",
+    "task-packets/CON-006.yaml": "e05a3f0c7c9c51857ae8afa774cad5fcb75483bcca49f44da54375327fdafec0",
+    "task-packets/CON-007.yaml": "b5ab9498ff950345c0198a7a54fd3d62052f13a978f5113c69900f199dfb38ea",
+    "task-packets/CON-FIX-001.yaml": "15040a4811277880118d58121a7d23721d8a91b4ab6d3211f960189d6a351a14",
+    "task-packets/CON-MODEL-001.yaml": "d5f7ccf98a8dfa8862c204bd9be99cbfbc2307b98be00f0112f6e9dcb59abd9e",
+    "task-packets/CONF-001.yaml": "2ad6741244eb83c152b0880ffb3518b10a02d5cc65bf2e1012b879866069de48",
+    "task-packets/CONF-002.yaml": "7130dfaa116bcadd99cb29506be8cda8864643bb26b9216f7466c5e9085ebaab",
+    "task-packets/CONF-A1-001.yaml": "c076b578b6655c70b7ca7309d3a5b43e9e5cad79138b44c89025ab6e6b20b1b4",
+    "task-packets/CONF-A2-001.yaml": "574e85c20d97db27fa23ede3f5d7ebf043ff7980e237d21623aa05b331852bd8",
+    "task-packets/CONF-A3-001.yaml": "70c53e57e6d140bf088993e0db0a7e6da1a2cdda5f0810eb89dbe3215c2ea624",
+    "task-packets/CONF-AIR-001.yaml": "f6c08f690d1588db15b939beb0b86c5ecce40b19b33cea1db04413c2ecb8a666",
+    "task-packets/CONF-BENCH-001.yaml": "43589db82dd51ecdadb94f5165f2b4fe7d8ff9b137db356e6000a2f9788b9e16",
+    "task-packets/CONF-FIX-001.yaml": "b02d7c6f2872c61fbde5be10451ac8de08e8336ee032e85b468e40dfaf8790ac",
+    "task-packets/CONF-FIX-002.yaml": "c8639e527496660b8211f5bdcdb8f7470129b7d00f938c061d34630c797d8af4",
+    "task-packets/CONF-FIX-003.yaml": "19089018ab6b1e2dada65d1dc3715940037b0881c1db02217622455a8a91d5a1",
+    "task-packets/CONF-FIX-004.yaml": "6a41b419c4e5b02311e148b846d339216f1b512cf8025ae75de77e72ea3d8db0",
+    "task-packets/CONF-FIX-005.yaml": "6e3d31d5facfa69b9e38299317e4d6b9c7356566c5ded0594cbdeb965acdde0e",
+    "task-packets/CONF-FIX-006.yaml": "4ef0c643deaf202a3ab4ce42180ddb35196960e21553ae26ec231a735fee1c32",
+    "task-packets/CONF-K3S-001.yaml": "6178307a2845df6a369d666fec60653b167bfbb9b5086e8dbd58217d33229dc5",
+    "task-packets/CONF-K8S-001.yaml": "6626cd491cf266209e77b9f90c66cabc8c1fc36195ef87ea6278fa5c07db5056",
+    "task-packets/CONF-LINUX-001.yaml": "22f00544680f90a90b03420632bebf192a8c687549b519770fca5f98dd5fd6c9",
+    "task-packets/CONF-LIVE-001.yaml": "5c7ceb5094b1c5a29192b7bdea913b23f777698bd31224ca5d1958a793dba3b3",
+    "task-packets/CONF-LIVE-002.yaml": "05a6f03d19a1e12fafe278e5ec72c8adc6304766697b8682bc8d63092d47427f",
+    "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+    "task-packets/CONF-LIVE-004.yaml": "3cb0e1f7d163d7a420fbf2134b7ca5a7c70174acfca8646c341be83e6c23ff23",
+    "task-packets/CONF-LIVE-005.yaml": "b25b9a828907a25d46fea9ccce74d3f05f30cfb9623acd0b21e8dd359e1d9623",
+    "task-packets/CONF-LIVE-006.yaml": "f95c277cffdfb622f45a1b4b91a5292d9d9a5bfabc8f9388b3899cbb20c5213d",
+    "task-packets/CONF-OCP-001.yaml": "04e8bc10f8b9bf5e84b6d55fecd96985f991054d4ba0346cd7316667ecd93ee3",
+    "task-packets/CONF-PERF-001.yaml": "4a45a79639fe745ddec1460df08b7990979da921952bb5daf0cc2bf5d93b8e93",
+    "task-packets/CONF-PERF-002.yaml": "c0bae3ab228a431c6220768e3720ef723ded4efc3ccd3514df7f38a635f05a01",
+    "task-packets/CONF-PERF-003.yaml": "99a915ec683d04755f5423bcf5ade9214c4dc3a6971a611c7b5f7ab71adf48d1",
+    "task-packets/CONF-PERF-004.yaml": "9580efb06ed18abb8782ef24e7729469b64fc67e963eff9d599a77662a10debf",
+    "task-packets/CONF-SEC-001.yaml": "39eeaa83876002f57e29fffac39847f5d058aea128f447558213baa70687abdd",
+    "task-packets/CONF-UPG-001.yaml": "4c2cc8bdaae80a30f3a8492be724a8920b1ea6fb66dbce7383713ecdd24c2a42",
+    "task-packets/CONF-WG-001.yaml": "cd0685d9cdf8a018f4465d5223d950a557e4d523320891cc5d907496111442cd",
+    "task-packets/CTRL-001.yaml": "5e8d3d18a8245ccd985c77d8269b73333b510a2689a341edffd17dcfde77a8c3",
+    "task-packets/CTRL-002.yaml": "d0045acba54f420d6543581eebca1ae88e78c516576e2e8c1399762761bdcf25",
+    "task-packets/CTRL-003.yaml": "0bd59f60ae73a7e19c97f5d797cb8955f28a5f3a181326c5c4af8d57ed5d2bbe",
+    "task-packets/CTRL-004.yaml": "425faffab20090282bd60b17ac7cfc7942eeaaef0c2ff046b77d9736d77968d4",
+    "task-packets/CTRL-005.yaml": "da414f08217a1b60351a3c7da42784a4cb749c12520f2250f6526f17df72976f",
+    "task-packets/CTRL-006.yaml": "5b9f6ba920cb6d6eb5c192dfc104851d395772c57347ca69bc68aec6328709d1",
+    "task-packets/CTRL-007.yaml": "4a70eac5a350e7b48d2b8b180c02455a5953837050c57f46cd7dbafb86291822",
+    "task-packets/CTRL-FIX-001.yaml": "f1084924fe765b8d905a3156448bea636aec111b71a93e4a842dfbcab563b401",
+    "task-packets/CTRL-FIX-002.yaml": "621e7ba7ad0b8852cc7bc63e666c5ac25e92fe5a769481b491bb850f1eecdd97",
+    "task-packets/CTRL-FIX-003.yaml": "42876f9ab5ab8c227920fe6eee3a913b72f6940a989a8d128d627fbfea43c48f",
+    "task-packets/CTRL-INTEGRATE-001.yaml": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95",
+    "task-packets/DIST-001.yaml": "8de07c6a51176005765ef44aa4613b4443f610350d452daadbeae271b46bf48d",
+    "task-packets/DIST-002.yaml": "785b079851cbb207cbeb012adab16f9dbcbcd555eb49ec835147d77899d359a0",
+    "task-packets/DIST-003.yaml": "47a2951fd7957b780352cd0300d5b98af101509f43293c4daeaeae7626b9b5eb",
+    "task-packets/DIST-004.yaml": "f1ea5c7b9df565a3c28d3b7fd24cb4878fccfaa0e75cc9ef1f57171d56e60633",
+    "task-packets/DIST-005.yaml": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f",
+    "task-packets/DIST-AIR-001.yaml": "7a16e99750dd6044d56194a815ab2182d09759e27dea1cf6669d6366276ccb20",
+    "task-packets/DIST-FIX-001.yaml": "d65fd678adb17be1c6875eb0e8ca7e955d59e4df32bc263b20213f1de845c983",
+    "task-packets/DIST-OCI-001.yaml": "7211a4874c3236df8b257e2d8889180493ab8a0ece0812ef01fcf38ae257158e",
+    "task-packets/EXEC-001.yaml": "7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108",
+    "task-packets/EXEC-002.yaml": "a8eeb8d1a1c56c87329818c827d398a329356420fdc2dd0b9df8e8d23f4c76c5",
+    "task-packets/EXEC-ML-001.yaml": "ce65bd9b74e405b4dbc153430d9a05b245ba904c2372adc3a406a5de88e9c969",
+    "task-packets/EXEC-ORCH-001.yaml": "bab8ff0d2a85f22484c29011836c2458449755634bf27b3462199ef445354d75",
+    "task-packets/EXEC-PROT-001.yaml": "8dda3de5062124d3c2080ab5eaf68dd3d9b73f5e0f9c4fe646ec9284263201c2",
+    "task-packets/EXEC-SBX-001.yaml": "8fb5e9035117761d9cb0e66600e246103f08392f342ddff69143018c60bdb517",
+    "task-packets/EXEC-SBX-002.yaml": "fdec3da0f03a4e3cff03c642317616554454fc4767afee8180c141128b04cf49",
+    "task-packets/EXEC-TOOL-001.yaml": "c0d160591f0f5eed5f28ce0db0ff2c5f3a609beb3e253ed21a7caa354e83816d",
+    "task-packets/IND-001.yaml": "3d5778712ed09558c4df4c881745785311ca4f3be5ba7df4556930dd131cf86f",
+    "task-packets/IND-FIX-001.yaml": "0d3b1bf1a1b167275c5c7916a845c658f14e7fa69dc0383963ba4648c202145c",
+    "task-packets/IND-WG-001.yaml": "2766279b611409c8c0bc376b1161d3508e2485fa72c109222e90ceb60b13611c",
+    "task-packets/IND-WG-002.yaml": "78bd0d87b54b9987621c1c42d8363fcd73d67c46677fe354d9f39229778a10d9",
+    "task-packets/IND-WG-003.yaml": "897dc36776c08f73c93019cbcbe841a0f1ad2710385b28141b05602b53e3882e",
+    "task-packets/IND-WG-004.yaml": "20ed881b6010aa5b5bca07d85b92d49b053641e88b05884c61e6a1661902fb7f",
+    "task-packets/IND-WG-005.yaml": "033db2dd187457a94a8a346baf6aa11bd07ad6ac25cfc3d4d315a60b2e78ae38",
+    "task-packets/KN-001.yaml": "5e1790e09f99c70f41288fde9767447f8b655ec821f029d266aa9973301d81e2",
+    "task-packets/KN-002.yaml": "96a61677ee41b973a9282f858c4f355d54afe4b2c5f47d6cc18aea2114226fb6",
+    "task-packets/KN-DATA-001.yaml": "73422c32a67d78cbcb6e74447482022f3552b24fd8ca356da5da91c9c538e0d2",
+    "task-packets/KN-DATA-002.yaml": "ddd3b5f0f21705eb1ea07103dc91b194703dea50935e0e37c9796101e3239e40",
+    "task-packets/KN-DOM-001.yaml": "452fd1e14baa779023ca27511af9b9a8b4281ddc8dea51327b93e594700e9f56",
+    "task-packets/KN-MEM-001.yaml": "4ab3568fdfd01d500f205a2c5976526639a775c21ec09b8cf99cfdcfaaff3483",
+    "task-packets/KN-RET-001.yaml": "d417da2b27707a0b69590019e556f35cf6d6f737c37858c9099481323415a5b1",
+    "task-packets/MET-001.yaml": "43af6889dcf50d3ee8370cd5e761acc1a9fd989a44538b4db84a62df21f67880",
+    "task-packets/MET-002.yaml": "e93658d831f7dc2f1b228f03986117ca59af276fefe901e3802df117a2eb34c7",
+    "task-packets/MET-003.yaml": "d0bf1bc8cb15c536433528bf7b30aa3713e5ae44cb809d749fe8f344bccf3eea",
+    "task-packets/MET-004.yaml": "942bae46d9b7e8561f7a4474f465eb2397df7bbc48a34b90e8c91403f126012f",
+    "task-packets/MET-005.yaml": "aee54bd4c5219eb9ab7a751fb4d42008a5e05abc3188b9484a1eee8a1f628cba",
+    "task-packets/MET-A2-001.yaml": "fcee128a05f6e53e60461a53108bb652187ae7e67c1056a4f2dcb6fd6477b413",
+    "task-packets/MET-LINUX-001.yaml": "b54b47708b13bf9c184345308466e6a23af159040aacdc62744d43135c8f5f04",
+    "task-packets/MET-LINUX-002.yaml": "7e2efb3daad8e5152028cfd35ced7449cd145a51fd3573b4e71981d29a8ee787",
+    "task-packets/MET-LIVE-001.yaml": "c37fa6eabc16e7a424b894c8b3863931a4fa6bb56baa20b75d447923bc38007c",
+    "task-packets/MET-OBS-AH-001.yaml": "9a527e5343d99e679c850a1dd416de9c4ed19f100caec0d1872f1dfc1424001a",
+    "task-packets/MET-OBS-MODEL-001.yaml": "7493f8f788f982df4cd6b32f3647c82f41b8989feee54fea8740fff5e61f1a9b",
+    "task-packets/MET-OBS-OCP-001.yaml": "9028852eaa2ddc2f7dc3559e38ab4d83bc3c6598dab97d10fb80846ed17fe711",
+    "task-packets/MET-OBS-SDK-001.yaml": "fe44c76c6160847435869accd0ec895ec0ff700bca3f7ec09843b535a0a21e95",
+    "task-packets/MET-P0-001.yaml": "41d838c56aa88e5c60e4b6768d28d3b24073fc63955309c89a49315c641192dc",
+    "task-packets/MET-P0-002.yaml": "6ffd3057b377f1d6c7fc47cae26472f010e83090b5c31d90cbb46c4e0a7d9611",
+    "task-packets/MET-P0-FIX-001.yaml": "1845f579a807d30e2880d4aee46b52e849092b0374fbf59f4ca31f8e66d45194",
+    "task-packets/MET-P0-FIX-002.yaml": "b12012d45b0b9f968816a21be7cc714491ba94fcb7ee1af348da9bcd520a6ef2",
+    "task-packets/MET-P0-FIX-003.yaml": "bf18a928240f0e0991287564d193a45a2699efa9aeb949b31dc112815a83cef2",
+    "task-packets/MET-P0-FIX-004.yaml": "c3614e7cace9d83299e70add53c6650c8668d156850f941904f64f871ad29807",
+    "task-packets/MET-PERF-001.yaml": "761c004a56df4e626c6e984e8fe0e0e7d4cec2a87bdb57a5f4ae40430930256a",
+    "task-packets/MET-PERF-002.yaml": "cfc550f705db0005bd9244fa61491d791730f39174062fdc6c23e98d53852b14",
+    "task-packets/MET-PERF-003.yaml": "7acb73ac5dcee82d261cddc13ef5eb0c012c32dead3a150d328aa806bd7fe5b8",
+    "task-packets/MET-PERF-004.yaml": "a50aeeeafcc1f81d08caa54a90ea64aa66b46bc7dae543e603b21406132fc002",
+    "task-packets/MET-PERF-005.yaml": "7ed4fd331c9f5b232fc2f513d09e6c3316d117037c46666fa27c3846d50db5e8",
+    "task-packets/MET-REPAIR-001.yaml": "45ea3a94514ae1b7b06608fa4629603fbe3c908c726da66fa733ccaffcb03986",
+    "task-packets/MET-REPAIR-002.yaml": "75cd79e37a9a3a2adc645e322d8b8b6f27abf546d52b6fb821c275dedf4078e4",
+    "task-packets/MET-REPAIR-003.yaml": "6f07a6fe38f305ffc226999b19fedb5ec4082069c8d14dede36bd001e550abf1",
+    "task-packets/MET-REPAIR-004.yaml": "3217293d977e25f0c6e7f6e6bb0134c27d840fd8769dc285494ecc7f351f6d94",
+    "task-packets/MET-REPAIR-005.yaml": "680335751aab8ac403f73db751d67c0ba98fce09017d51eebd7fa36d7b9fb5d0",
+    "task-packets/MET-REPAIR-006.yaml": "365207085a6bc661164660008d9248f1414a821898497851da9f17cba9366e92",
+    "task-packets/MET-REPAIR-007.yaml": "e4bbc961a86663fd4e8f52a74524e335b579b75031c2fdc97ff3ed0b9714d756",
+    "task-packets/MET-REPAIR-008.yaml": "3a25b0653760488a41575696cf722bccce76d51bd2653ca8f1ccdef162cfc476",
+    "task-packets/MET-REPAIR-009.yaml": "15dc67a95231ca39755bd91ff5056e5cf5c1769340e09104ca0878715ce9bf97",
+    "task-packets/MET-REPAIR-010.yaml": "735b5bd31ddb8ce72d7a08f50658e3d34e4953c780be5ea0e704aded2f86b488",
+    "task-packets/MET-REPAIR-011.yaml": "68308a56b7d60b4083330f479868bf10b378a84c9d1cf25fcc1b055bf1444964",
+    "task-packets/MET-REPAIR-012.yaml": "98df418a71f5e42a50c92b7b118698ea9278f2f8c239dc80288fdbedb3739845",
+    "task-packets/MET-REPAIR-013.yaml": "dfbe04555e5ab402e6fe14946ff399b04d57a1f7007ab2f88cbb8123b2701738",
+    "task-packets/MET-REPAIR-014.yaml": "19ad702ccc750b57f4105d90796eb19f1314e31c9b4f7c4580da9eb7e5b27601",
+    "task-packets/MET-REPAIR-015.yaml": "a9a2ddc49852c4642b385acaba77061463a47d71025db72c302e8c1a6dfb2b76",
+    "task-packets/MET-REPAIR-016.yaml": "519ac3b1b8cdb6de648fd91b82029c9139b93d939e452eeac666cbbf92916ec2",
+    "task-packets/MODEL-001.yaml": "753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0",
+    "task-packets/MODEL-002.yaml": "25ac59868a1805845ab244ee7ab08590dd72c928c6821bd22bc47eb1c5c819c5",
+    "task-packets/MODEL-003.yaml": "25403133eb4bd1272f6719903832e4182d899c6c6d2613b9240ce417bd6af09f",
+    "task-packets/MODEL-004.yaml": "2b7260bd8bc5bf06880be4d2a06adab877ec6b956d1fe7b4ed40a619dad34ab3",
+    "task-packets/MODEL-LLAMACPP-001.yaml": "f151b3393cb61b9133f21488fb53f01117e0960078077b6439bdc612adda793d",
+    "task-packets/MODEL-OLLAMA-001.yaml": "31fd06d3fab1227e42661af30e025c33deb51e49fcdf291ab443b6f80780d768",
+    "task-packets/MODEL-VLLM-001.yaml": "681a93edcbead7333b8439e6ddc849bc7a4ee0b9008b8bbab60cd494cac00f4e",
+    "task-packets/OP-001.yaml": "9a64698615c1c1fa8ef899b50495d5249bec0a877f0e7f7a92e9058ef196b07b",
+    "task-packets/OP-002.yaml": "caeea13c1efffc147fd0ca2d4c270916ca12e61c2a7122962eff4b024d2bf2f4",
+    "task-packets/OP-003.yaml": "86fd96fc4cf016331ebe1c8c95a5c0faba9b8155439f324c381991ea7b1eba1b",
+    "task-packets/OP-004.yaml": "6b585f709a0f69283534e0fadbe90502bd335fc9754bb5c30b0624d26e3eb241",
+    "task-packets/OP-005.yaml": "9529029015e992d5cfffc4d0c2bcfe88e579834b8e27aff31607fb550799f09d",
+    "task-packets/OP-006.yaml": "fa376aee945c301717e12b79aa5c4ebd7869e6b924b6afabd3f184db32d1595e",
+    "task-packets/OP-007.yaml": "f4508ad47659315581d551939576d2307aa0043de4b71eabf99878de126b2548",
+    "task-packets/RUN-001.yaml": "4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457",
+    "task-packets/RUN-002.yaml": "cbda98c7e8f70f404c2316fa50e09eb66d18778a82ae2d64a16d20451a03c67e",
+    "task-packets/RUN-EXP-001.yaml": "2a134a3b0e344b18a35ef3b82f1d34aa74f79ef83ab0730cda2eb740bce4a541",
+    "task-packets/RUN-GW-001.yaml": "3695dc7de22d757f70528d9f23d0c4b46865b70a22c5c15f4bd423590544069a",
+    "task-packets/RUN-GW-002.yaml": "3745467874e1293eb93e8a32c36c50493568389d718b1e66650952352a733996",
+    "task-packets/SDK-001.yaml": "737990fc853fd50c22d211f0ada320585b304fe116cab881581575a9a6dca941",
+    "task-packets/SDK-002.yaml": "b791f5f514dec76ebfd37ea17c7b0ca024057fbe4ebc2443bcdf15e7ca18c151",
+    "task-packets/SDK-003.yaml": "49b413cbd44e8fefdb20b7c817c676b0b95d671a25f07a11c47fb9276ab1a7b5",
+    "task-packets/SDK-004.yaml": "8c24a6bc4429e29e97a64746d12de95d9b47bd7b3d48ca312d8c9a3aea8ec23a",
+    "task-packets/SDK-005.yaml": "b6db3bd5595dcae7aeaea71a3a5ca49b4044abfbe13d687d8cb49c1013c45a7a",
+    "task-packets/SDK-006.yaml": "dc7771e61400288b5b7e6c6b69b802430ededa03947bed2adaa5f6542a063edc",
+    "task-packets/SDK-007.yaml": "054feee9dfc45e76959a7182e47672dc95fb68558d2f1f7d97445eada3566054",
+    "task-packets/TRUST-001.yaml": "d4fec1372836a3c85458b1e489fabda0869cc38a8bc480a709dc94e0e5fb8b19",
+    "task-packets/TRUST-002.yaml": "cf80bc33b5517177e00f2d9e8bddb92c41f1c59b18a0cc2f54688a693a4ac151",
+    "task-packets/TRUST-003.yaml": "b0d1ccdb6a7545fbc58d8c32fa5e9835383608ba945ad948da06c8c6996af350",
+    "task-packets/TRUST-EVAL-001.yaml": "c0f5eaa5e35ea34fff04eb49ae4b500b4dbcc01221e11ece6b95b845c376828c",
+    "task-packets/TRUST-FIX-001.yaml": "68d753be5f9eb9edaaf696bb48ea7c40448c4205d2778a3172a62a5f5707cc6c",
+    "task-packets/TRUST-FIX-002.yaml": "f74a5004b51b8b16aa7a9c01036ac76bb1b396ddc692cc5736233639ee314893",
+    "task-packets/TRUST-GOV-001.yaml": "af7591bd4b20237ad54e942c65d4149540f4dca3d72b6478db6bb9e0afff3221",
+    "task-packets/TRUST-OBS-001.yaml": "760c4a519ec39f1a4a9523eca563d4e22597b06c8b8929913a7953d0f30f0290",
+    "task-packets/TRUST-REG-001.yaml": "83fc22106c0eeb31b032bd3f5820eb359855d5c928f9bf3be9cd7edf1563427e",
+    "tests/fixtures/zero-bill/cases.yaml": "d0399b8c7f0baacdbc57f904caaefdc258a20e5977bc767076fcdf31f4c129f5",
+    "tests/linux_runner/conftest.py": "414b64d997172139aa984294dbb9b9d136ac9197f8245580f6d8c05e84b3a0d4",
+    "tests/linux_runner/test_authority.py": "1a29bb42ca3a6fda8281c6e9e9fa79266107b1e244510563950e69ff3aa7cf90",
+    "tests/linux_runner/test_build_and_predecessors.py": "6990993b16abdd8b548e6edfba37e7c40ab6bdd10478a45ab029a3a06765c0c6",
+    "tests/linux_runner/test_isolation.py": "e5f6b98874ace99fb27667264b44deb797f18e5fafbda392b70476184e91c9f9",
+    "tests/linux_runner/test_manifest_gate.py": "3dcaa594833c855e2f5df621ae2786cb21e2d9aeeaae6833ca534f680a92098f",
+    "tests/linux_runner/test_toolchain.py": "19333875ae259280b4d64ee3dfb1c37618362fd94e3086381e92b636680941bf",
+    "tests/test_architecture.py": "4950bc15a766718f7841fdb3a549507c99e2eb67805eda952f536190d87301fa",
+    "tests/test_data_harness_v1_observation.py": "5404c7e707f159c4dbe5a279ca67bc47f9cc0da6839e49b8d9fdb6c254c9180f",
+    "tests/test_live_campaign_envelope.py": "c86fba5f72c8285ced6ab6039d65f6cc0ab78d8f79aa571e11879b14fc5424fd",
+    "tests/test_model_usage_observation.py": "3b6edd26186344584d7257eac61cc1e8b57b7de6fb34f16e865571a581b78e07",
+    "tests/test_readiness.py": "9694b99697768d759542b5d0cacb44ae8f04a75591254bda94555f1dc70ba280",
+    "tests/test_readiness_repairs.py": "2647e5b195cfeb891429d17e28a3b34714f74cacab83c08b11af5f0b29a20147",
+    "tests/test_reference_observer.py": "1ee810ee459404ff6d74cf7ce4ed1d62c139db6264a848acb57dd257474781d1",
+    "tests/test_release_lock.py": "41f1e77372f5536d2812041fb32e79f2bc7b8ccd3f776e59bc5f0bc5a0b10521",
+    "tests/test_repository_tree_observation.py": "555987fc9bc8d43400f9f7dcd5bc0a1e5a6bcc7c171097a8b1922c5487c37f8e",
+    "tests/test_validator_units.py": "fc301539333e3f9a833577fd1c879b9d23b969a9056a4c9ab5b721d80f363db6",
+    "tests/test_zero_bill.py": "0a3f0a4480afa0382737d52da976b7d72b7a2d79c9c5c22b2f8812caa33a2821",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "metaRecipes": {
+    "README.md": {
+      "beforeSha256": "39009aaa14673b74a60f30e9aee8b621a06dc727520c9da4a1938f57badd53b9",
+      "afterSha256": "af84f36cc7e1df375e030027e6de9914cbc3ce0ffc73d73799aea0d1cba5b594",
+      "replacements": [
+        {
+          "before": "# Harness Engineering\n\nThis repository is the architecture and execution-readiness source of truth for",
+          "after": "# Harness Engineering\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nThis repository is the architecture and execution-readiness source of truth for",
+          "count": 1
+        }
+      ]
+    },
+    "docs/DEVELOPMENT_STATUS.md": {
+      "beforeSha256": "e9c608a21946463cdb3e52680c949dc80122cdddf5c55e8cc2d6e982ae58a4fe",
+      "afterSha256": "f11a2f2e48396563a4df10136acdd0257f26276b7de546b3a8d5ed760e47f40c",
+      "replacements": [
+        {
+          "before": "# Development checkpoint — Phase 0 to Alpha 2\n\nSnapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.",
+          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nSnapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.",
+          "count": 5
+        }
+      ]
+    },
+    "docs/MASTER_DEVELOPMENT_PLAN.md": {
+      "beforeSha256": "cc9107f6ab47055175e940c792d5109faed66fa94856068bbb0f2927dbebbd7a",
+      "afterSha256": "e2ffd6fa674cf85e43bd48898cdb6bbfbb359f4ac67f5f3f1db57812a6c28208",
+      "replacements": [
+        {
+          "before": "# Master Development Plan\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "after": "# Master Development Plan\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "count": 1
+        },
+        {
+          "before": "Current Alpha-2 dispatch:",
+          "after": "Historical Alpha-2 dispatch at publication:",
+          "count": 1
+        },
+        {
+          "before": "the current catalog contains 142",
+          "after": "that historical snapshot contained 142",
+          "count": 1
+        },
+        {
+          "before": "the current catalog has 142",
+          "after": "that historical publication recorded 142",
+          "count": 1
+        },
+        {
+          "before": "Current catalog142;",
+          "after": "Historical catalog142;",
+          "count": 1
+        },
+        {
+          "before": "Catalog155;",
+          "after": "Historical catalog155;",
+          "count": 1
+        }
+      ]
+    },
+    "docs/PROVIDER_MODULE_CATALOG.md": {
+      "beforeSha256": "12abaa45bf87258c9da5c2d03001d814a5251939510b54bf7606f9169a8105d1",
+      "afterSha256": "1723f1ea35ecc87529c2d680f7e51fda61923a368f1e241b7a82982b10935b1d",
+      "replacements": [
+        {
+          "before": "# Provider and Module Catalog\n\n## Authority and evidence boundary",
+          "after": "# Provider and Module Catalog\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Authority and evidence boundary",
+          "count": 1
+        }
+      ]
+    },
+    "docs/READINESS_INDEX.md": {
+      "beforeSha256": "6bf7ce598a796e2a3964405e9ba7035a1975bb42f0cbcde5ee43a76f09e1cdeb",
+      "afterSha256": "a0618882d700b7ae7c0d016d090410ddb011fb9c84ca58eb6fee4f2c3ba7ab99",
+      "replacements": [
+        {
+          "before": "# Implementation Readiness Index\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "after": "# Implementation Readiness Index\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "count": 1
+        },
+        {
+          "before": "Current Alpha-2 dispatch:",
+          "after": "Historical Alpha-2 dispatch at publication:",
+          "count": 1
+        },
+        {
+          "before": "the current catalog contains 142",
+          "after": "that historical snapshot contained 142",
+          "count": 1
+        },
+        {
+          "before": "the current catalog has 142",
+          "after": "that historical publication recorded 142",
+          "count": 1
+        },
+        {
+          "before": "Current catalog142;",
+          "after": "Historical catalog142;",
+          "count": 1
+        },
+        {
+          "before": "Catalog155;",
+          "after": "Historical catalog155;",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/execution.ml-decision.md": {
+      "beforeSha256": "2ce11ffbe176c2cf76467a4919370cad9d150ed3d3a8b3a696f8fc88abdfb284",
+      "afterSha256": "4971c807e86059a4798597d69c07c9cf4925c76c3c03ae393d7e2b71bcbd0644",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `execution.ml-decision`\n\n## Contract",
+          "after": "# Harness Specification: `execution.ml-decision`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/execution.orchestration.md": {
+      "beforeSha256": "c39ca59fb10943bec28b6ff03deb693579a05b35d9f899b023c6beae0224f400",
+      "afterSha256": "d75aa225d2feae7bf460e383f1bbff693947748fd8240b77573be30a1c330a3a",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `execution.orchestration`\n\n## Contract",
+          "after": "# Harness Specification: `execution.orchestration`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/execution.protocol-interoperability.md": {
+      "beforeSha256": "a4db6d89924f001a4963f94e3e8a7a496849417fefc53e366649ec7ad68cc1a0",
+      "afterSha256": "064456d7f14b24d065990880908b92fea1f6a48ca25eb76c472618e3388a634f",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `execution.protocol-interoperability`\n\n## Contract",
+          "after": "# Harness Specification: `execution.protocol-interoperability`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/execution.tool-skill-sandbox.md": {
+      "beforeSha256": "a59932c08e029002427388454205a355b9296638edb68ec83cf4756687f99691",
+      "afterSha256": "ee3ff1416f53de66020d9f822bb0c1c6c3412edea27a3147736703d1481804b3",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `execution.tool-skill-sandbox`\n\n## Contract",
+          "after": "# Harness Specification: `execution.tool-skill-sandbox`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/knowledge.data-integration.md": {
+      "beforeSha256": "e6e434eb4127bec96ad348a22184d89d25bd7fbf27a8873d1ba7432de7974d53",
+      "afterSha256": "d21049f8be41d6dbbbf06e5a77c8078ec218ec83b5d1a46ddc52c1625a0097be",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `knowledge.data-integration`\n\n## Contract",
+          "after": "# Harness Specification: `knowledge.data-integration`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/knowledge.domain-semantic.md": {
+      "beforeSha256": "3e214989be3a292c260605836aca0fbc5d50d6d2700f6adea34c34525b7d933c",
+      "afterSha256": "3ce4a8f5581b6d6dc64849b4ecb13deeaf40d07894fcd463be51ab965dfeca9b",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `knowledge.domain-semantic`\n\n## Contract",
+          "after": "# Harness Specification: `knowledge.domain-semantic`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/knowledge.memory-state.md": {
+      "beforeSha256": "e2cb23707dae9b7168a8ccb5e4b043b2160ba6cf8e30f4309e241cd9c6687ebc",
+      "afterSha256": "34c647c129cac2bbf3a6b4260b1d2c939b2e1601d08b3bfef4878a4d5dc2c5e6",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `knowledge.memory-state`\n\n## Contract",
+          "after": "# Harness Specification: `knowledge.memory-state`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/knowledge.retrieval-context.md": {
+      "beforeSha256": "97ebb79dbfbebc3b8df24cda8a0038610fd7252468547dbfe3e6be736f44b301",
+      "afterSha256": "474548440e84d72ffbfc533e1099feb55939e4641404cfe52e5e21a0b24c9773",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `knowledge.retrieval-context`\n\n## Contract",
+          "after": "# Harness Specification: `knowledge.retrieval-context`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/runtime.ai-gateway.md": {
+      "beforeSha256": "e27867568b90608b0a61c42009601b11c435369d3e966dfb45e7cc4aa841fa05",
+      "afterSha256": "49979cdb9664d64d0d04400dbf834c5012082499dfa12ef3f36d256ac790f512",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `runtime.ai-gateway`\n\n## Contract",
+          "after": "# Harness Specification: `runtime.ai-gateway`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/runtime.experience.md": {
+      "beforeSha256": "c652f4e3cc085650f9945acbf8668e182ef9d72733d7f19a1f0b486d4c965203",
+      "afterSha256": "f57b309a614b98d8ca596c904454c6baf6877b8d0336eba8371bc470926179c0",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `runtime.experience`\n\n## Contract",
+          "after": "# Harness Specification: `runtime.experience`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/runtime.infrastructure.md": {
+      "beforeSha256": "b60f41a675e21cb5e68e84111901d89f5314d9d6b23e391c2997cc1fc67aea9f",
+      "afterSha256": "bc7482939eea4ac22a1628338835f2e41ff535d15f1c89f5b215ad90be5f7f01",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `runtime.infrastructure`\n\n## Contract",
+          "after": "# Harness Specification: `runtime.infrastructure`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/runtime.model-inference.md": {
+      "beforeSha256": "ae2f12789094eef17794d6d322d720c39adb2b7d13ee5cf10645020e05ba41c2",
+      "afterSha256": "67da632869c459abd16a2b5c3adcdad09f2667e00b128d5caaace12c6bd1dfa3",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `runtime.model-inference`\n\n## Contract",
+          "after": "# Harness Specification: `runtime.model-inference`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/trust.evaluation-assurance.md": {
+      "beforeSha256": "3e74af78e0bc07329a0744efc51f33efbd90deb817c6b65e7f6ed87810575b19",
+      "afterSha256": "ec27f21fd0263deb135af8b3f34ad90b2a81b092726a0da5c296e1e14f056667",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `trust.evaluation-assurance`\n\n## Contract",
+          "after": "# Harness Specification: `trust.evaluation-assurance`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/trust.governance-agentops.md": {
+      "beforeSha256": "c3880cce734bd9397300a189feeeedf793ef93c9cef8729d7cffa7c59eed2ce9",
+      "afterSha256": "e670954b3c9ce23f40471e2442c61add883fc16c434cdb334e387e49f96ea061",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `trust.governance-agentops`\n\n## Contract",
+          "after": "# Harness Specification: `trust.governance-agentops`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/trust.observability-finops.md": {
+      "beforeSha256": "02e29a7f659a6399a96a52a166bb8edce962bba796c246843f81bc33c45ae29e",
+      "afterSha256": "37ea207e55f9b64f6649b2e85cc3dca37c0434e3f169530efca26048774b21d8",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `trust.observability-finops`\n\n## Contract",
+          "after": "# Harness Specification: `trust.observability-finops`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/harnesses/trust.security-safety.md": {
+      "beforeSha256": "90b46367c7258891931eb1af05f99eaf5948d9e8f28c9651c491f256d3074b91",
+      "afterSha256": "82bcd5249b59b9aee46832eee7afc7a5eb627b3c09d7c509f82f74a5fa70b51b",
+      "replacements": [
+        {
+          "before": "# Harness Specification: `trust.security-safety`\n\n## Contract",
+          "after": "# Harness Specification: `trust.security-safety`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Contract",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/00-harness-engineering.md": {
+      "beforeSha256": "d3bebbbcab68ddfa7fd8f2452f76d46e4c70ddfc0839ba073437ec233a790344",
+      "afterSha256": "03bc425bb1dcd9c3ecfea5e0b661cf4ce20af354fa1208c819bf944631bfcede",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `Harness-Engineering`\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "after": "# Repository Plan: `Harness-Engineering`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "count": 1
+        },
+        {
+          "before": "Current Alpha-2 dispatch:",
+          "after": "Historical Alpha-2 dispatch at publication:",
+          "count": 1
+        },
+        {
+          "before": "the current catalog contains 142",
+          "after": "that historical snapshot contained 142",
+          "count": 1
+        },
+        {
+          "before": "Current catalog142;",
+          "after": "Historical catalog142;",
+          "count": 1
+        },
+        {
+          "before": "Catalog155;",
+          "after": "Historical catalog155;",
+          "count": 1
+        },
+        {
+          "before": "## Testing, verification, and acceptance\n",
+          "after": "41. `MET-ADOPT-001`: approved air-gap/provider adoption policy, exact multi-repository ownership, phased coverage and source-only authority reconciliation.\n\n## Testing, verification, and acceptance\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/01-mas-harness-contracts.md": {
+      "beforeSha256": "1968495de998cdba1896bfa00ec701de92c2e001898d283d0fb44869951ff0ce",
+      "afterSha256": "6570101930bfaec8a48167b05826cc144fbc3a81a43fa98a779c17dba1706dd9",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-contracts`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-contracts`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/02-mas-harness-sdks.md": {
+      "beforeSha256": "0437c0675c13a2353e4ba19f1c092e3a6503aacb268bf48b947fbc4a479018d4",
+      "afterSha256": "d79ee9fc5d39e0f35a6397f43be27431e1c868660bed2c0084946009c5b6de99",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-sdks`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-sdks`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/03-mas-harness-industry-packs.md": {
+      "beforeSha256": "32cabf6333549bc9442f0fa41618d8732341f6793626b4110f10f3e1ab36e122",
+      "afterSha256": "b4f50354c607568d76fa5591e871b2ed132dd627766ba8e0a2dcd7d5b0f115c6",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-industry-packs`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-industry-packs`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/04-mas-harness-control-plane.md": {
+      "beforeSha256": "d17971f2446d99e89d42639765e9ec1f29a045a5b81c55eb15aa9b82e8373b23",
+      "afterSha256": "a1a94fc3428df0f447f5922eb2891388aec530334942ba6f2c9c2098af87f7e8",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-control-plane`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-control-plane`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/05-mas-harness-runtime-plane.md": {
+      "beforeSha256": "e153598ebe10e2e95ac3443ad62dd24123ece8c0666d1cfe91ec06849d22f697",
+      "afterSha256": "6b298006f414bcf75cd9fbf56e2b7ee662da98f1b11da459da21d54d3ea804d5",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-runtime-plane`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-runtime-plane`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/06-mas-harness-model-plane.md": {
+      "beforeSha256": "ab232896a5b5b353d4d45e73dcf6af80fa48e3b5eb5cf0eafcec8e81e9ff17d6",
+      "afterSha256": "d766813e1996954bf1ded598139c33617e85bc41dea6be6713eb632fb73e1947",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-model-plane`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-model-plane`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/07-mas-harness-knowledge-plane.md": {
+      "beforeSha256": "2bc58a694413764eaf9494b34ff8655978bbd5c1dd73a7a14cb0f7bfb0fe3f99",
+      "afterSha256": "676fd9c2dbe1b9efa22160615927d1cdb244e5764c13a4b832c1184ed94032e2",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-knowledge-plane`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-knowledge-plane`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/08-mas-harness-execution-plane.md": {
+      "beforeSha256": "03902f33355868930bcd340d1c3a40aead70aac84669d57753d4dae10fb56773",
+      "afterSha256": "77f96362993121be6b66fef5f13d71802f36cd7ff049b857b2b9b714d0584be5",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-execution-plane`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-execution-plane`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/09-mas-harness-trust-plane.md": {
+      "beforeSha256": "a25fdedd90b54afbd93d501d3fce6b27bd944baf67633530f3ad53bad5af881f",
+      "afterSha256": "d61e67133b6281248d573c6b07f0d4ac4454826f0a84fcd2f0216e45c2507a51",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-trust-plane`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-trust-plane`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/10-mas-harness-operator.md": {
+      "beforeSha256": "6ec8fbcaebdab32888d8d30741d6d3cbb59cea200af84ebd1ae5b84521e04785",
+      "afterSha256": "f0c949442c3ddd6cfb90887348aa91716280603521c10ba889cce26e1ae26e5b",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-operator`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-operator`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/11-mas-harness-distribution.md": {
+      "beforeSha256": "421913e72a46af053a3fbe5964cb05ac794bdc731cb06e4485462cfbf921697f",
+      "afterSha256": "03aab36b6edc2519795d456296b599d89dfc1d1fb02bc2e4feaba1903bb83a65",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-distribution`\n\n## Purpose and boundaries",
+          "after": "# Repository Plan: `mas-harness-distribution`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\n## Purpose and boundaries",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/12-mas-harness-conformance-labs.md": {
+      "beforeSha256": "d85a32f4c6da421fddf5c11a2846b8dda9b9c04b36152c87dff7a123d0ebd9ad",
+      "afterSha256": "1fa14a9f551d38a975e908a4bd111ab60b56dc7096fd3079538a0ff99e988f72",
+      "replacements": [
+        {
+          "before": "# Repository Plan: `mas-harness-conformance-labs`\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "after": "# Repository Plan: `mas-harness-conformance-labs`\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "count": 1
+        },
+        {
+          "before": "Current Alpha-2 dispatch:",
+          "after": "Historical Alpha-2 dispatch at publication:",
+          "count": 1
+        },
+        {
+          "before": "Current catalog142;",
+          "after": "Historical catalog142;",
+          "count": 1
+        },
+        {
+          "before": "Catalog155;",
+          "after": "Historical catalog155;",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_broker_handoff.py": {
+      "beforeSha256": "2d0181a6dc625c53a46dfabc3c04157c1cf18c1c934ef58d936fafa9c91b37fb",
+      "afterSha256": "bfac2ce5b7a42d23814d1b5832719d4eb4ef22fc9f0d60a9c0faef43afae54d0",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 142 and len(packets) == 155 and set(packets) == old | {\"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact catalog\")\n",
+          "after": "        require(len(old) == 142 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Broker handoff valid: 155 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Broker handoff valid: 156 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 142 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact catalog\")\n",
+          "after": "        require(len(old) == 142 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"}, \"exact catalog\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_ci_performance.py": {
+      "beforeSha256": "b95f49dfb65dc2f538d5541fcb625713a32ab867adb2816db710f21bde81f8c7",
+      "afterSha256": "01a83293878191224f6a160fb8ba24ed7962bcebc14c8beb7406e10ab725e773",
+      "replacements": [
+        {
+          "before": "CURRENT_PACKET_COUNT = 155\n",
+          "after": "CURRENT_PACKET_COUNT = 156\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"CI performance authority valid: 155 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.\")\n",
+          "after": "        print(\"CI performance authority valid: 156 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.\")\n",
+          "count": 1
+        },
+        {
+          "before": "SUCCESSOR_ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\")\n",
+          "after": "SUCCESSOR_ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_consumer_closure.py": {
+      "beforeSha256": "e59b3ab49d6d63825a5cdd3f4d8d701a1a929a342d3dc46b8ea1c9eb88dd1d3d",
+      "afterSha256": "a80ab79f4d62f1ac49d158b43ee6bd47a3eecdd944ae9a2cd626d29537df13c6",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 148 and len(packets) == 155 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact153 catalog\")\n",
+          "after": "        require(len(old) == 148 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact153 catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Conformance performance authority valid: 155 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Conformance performance authority valid: 156 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 148 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact153 catalog\")\n",
+          "after": "        require(len(old) == 148 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"}, \"exact153 catalog\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_performance.py": {
+      "beforeSha256": "70230193d467c2579a123ce2917cea057f8ba3041ff074311b9ad4fb090d05fd",
+      "afterSha256": "28edc17c75b23ef1ae60a8fb44af3e7275c91885ca2a553c15b6904df03e2b79",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 144 and len(packets) == 155 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact148 catalog\")\n",
+          "after": "        require(len(old) == 144 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact148 catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Conformance performance authority valid: 155 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Conformance performance authority valid: 156 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 144 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact148 catalog\")\n",
+          "after": "        require(len(old) == 144 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"}, \"exact148 catalog\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_performance_followup.py": {
+      "beforeSha256": "ffdbb07727071c703bd62d35cdf7ecd42b725fb0bcc81f44edb28d901ae63eab",
+      "afterSha256": "1f836904479570bcd65b0f612ae06d390599ff6e4f56ca8df638c1bf325d2124",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 146 and len(packets) == 155 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact150 catalog\")\n",
+          "after": "        require(len(old) == 146 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact150 catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Conformance performance authority valid: 155 packets; 146 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Conformance performance authority valid: 156 packets; 146 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 146 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact150 catalog\")\n",
+          "after": "        require(len(old) == 146 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"}, \"exact150 catalog\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_reference_measurement.py": {
+      "beforeSha256": "c2b841068fabc080e15230fcc8242a4e206fe4e79297cfe05c335a8155499898",
+      "afterSha256": "f939782e6c6a9f6b254ffac630de3f60335498302210156ba530e48ab09b92fb",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 150 and len(packets) == 155 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact155 catalog\")\n",
+          "after": "        require(len(old) == 150 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact155 catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Conformance performance authority valid: 155 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Conformance performance authority valid: 156 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 150 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact155 catalog\")\n",
+          "after": "        require(len(old) == 150 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"}, \"exact155 catalog\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_successor_checkpoint.py": {
+      "beforeSha256": "a5a664bf8338cbaca761cc892bacd8af955911603885a36bf6156b4093ffbede",
+      "afterSha256": "3ae9d80fe9382a106cff397debafef677adf2f93ba1ec2df7183f57cb16ed1c0",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 153 and len(packets) == 155 and set(packets) == old | set(NEW_IDS), \"exact155 catalog\")\n",
+          "after": "        require(len(old) == 153 and len(packets) == 156 and set(packets) == old | set(NEW_IDS), \"exact155 catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Successor checkpoint authority valid:155 packets;153 immutable YAML; two product paths; source data only.\")\n",
+          "after": "        print(\"Successor checkpoint authority valid:156 packets;153 immutable YAML; two product paths; source data only.\")\n",
+          "count": 1
+        },
+        {
+          "before": "ROOT = Path(__file__).resolve().parents[1]\n",
+          "after": "try:\n    from validate_provider_adoption import historical_bytes as adoption_history, current_test_bytes as adoption_current, validate_additions as adoption_additions\nexcept ImportError:\n    from scripts.validate_provider_adoption import historical_bytes as adoption_history, current_test_bytes as adoption_current, validate_additions as adoption_additions\n\nROOT = Path(__file__).resolve().parents[1]\n",
+          "count": 1
+        },
+        {
+          "before": "def historical_bytes(path, raw):\n",
+          "after": "def historical_bytes(path, raw):\n    raw = adoption_history(path, raw)\n",
+          "count": 1
+        },
+        {
+          "before": "        return before\n    require(len(matches) == 1, \"unique predecessor\")\n    return apply_recipe(before, matches[0])",
+          "after": "        return adoption_current(before)\n    require(len(matches) == 1, \"unique predecessor\")\n    return adoption_current(apply_recipe(before, matches[0]))",
+          "count": 1
+        },
+        {
+          "before": "        return []\n    except (ValueError, TypeError, RecursionError):\n        return [\"missing or changed performance packets\"]",
+          "after": "        return adoption_additions(packets)\n    except (ValueError, TypeError, RecursionError):\n        return [\"missing or changed performance packets\"]",
+          "count": 1
+        },
+        {
+          "before": "digest(inputs[path]) == checksum, \"exact current source: \" + path",
+          "after": "digest(adoption_history(path, inputs[path])) == checksum, \"exact current source: \" + path",
+          "count": 1
+        },
+        {
+          "before": "set(packets) == old | set(NEW_IDS), \"exact155 catalog\"",
+          "after": "set(packets) == old | set(NEW_IDS) | {\"MET-ADOPT-001\"}, \"exact156 catalog\"",
+          "count": 1
+        },
+        {
+          "before": "        for name in packets:\n",
+          "after": "        for name in old | set(NEW_IDS):\n",
+          "count": 1
+        },
+        {
+          "before": "apply_recipe(raw, rule) == inputs[path], \"reversible recipe\"",
+          "after": "apply_recipe(raw, rule) == adoption_history(path, inputs[path]), \"reversible recipe\"",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_credential_lifecycle.py": {
+      "beforeSha256": "e8a85eb5e702f12214a2f7f8db0f53cd36ad8c99dde6d70a60ecee5a6eb8143b",
+      "afterSha256": "7f1a53be59b7f7de5f988c75594fc92956bdcd51022f9d22d2be6b464562182b",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 139 and len(packets) == 155 and set(packets) == old | set(ADDITIONS),\n",
+          "after": "        require(len(old) == 139 and len(packets) == 156 and set(packets) == old | set(ADDITIONS),\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Credential lifecycle authority valid: 155 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "after": "        print(\"Credential lifecycle authority valid: 156 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\")\n",
+          "after": "ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_credential_ordering.py": {
+      "beforeSha256": "6d79117c816fec43061354240acd382d4ae49e3e298b1fdffffd02532c2db469",
+      "afterSha256": "d8e0ee7036e9702098465147faf0d7437d8ba1771ecd0057dbdcbf53ea691644",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 141 and len(packets) == 155 and set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"},\n",
+          "after": "        require(len(old) == 141 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"},\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Credential ordering valid: 155 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Credential ordering valid: 156 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 141 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"},\n",
+          "after": "        require(len(old) == 141 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"},\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_custody_handoff.py": {
+      "beforeSha256": "bbb90e8668802f7a55d0e7ab6d1cdcf68c82e320670a28590d5d8c8592398398",
+      "afterSha256": "4d332d8982451fbd17071992be9edc3280752a0ec4f52bccb22f501a9383bb59",
+      "replacements": [
+        {
+          "before": "        print(\"Custody handoff authority valid: 155 packets; 127-file/279-ID history preserved; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Custody handoff authority valid: 156 packets; 127-file/279-ID history preserved; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\")\n",
+          "after": "ADDITIONS = (\"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_readiness.py": {
+      "beforeSha256": "b8f5a0a468137f64c19ff63fa7a1fff72581d4c328dd894bfd9d79426e26a0a4",
+      "afterSha256": "8ad7fa4f9f1e99b0b35ba9da7d1c3bc2f3cf9ba4527d47f0909d0609ac209ffe",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 155:\n",
+          "after": "    if len(packets) != 156:\n",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"Current catalog requires 155 packets; original Linux policy remains 118\")\n",
+          "after": "        errors.append(\"Current catalog requires 156 packets; original Linux policy remains 118\")\n",
+          "count": 1
+        },
+        {
+          "before": "    print(\"Linux roadmap authority valid: 155 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.\")\n",
+          "after": "    print(\"Linux roadmap authority valid: 156 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_repair.py": {
+      "beforeSha256": "eb9aec5f3da249b7c5b9abd11960f09189ae3a1102aae1f861bd90aa635f7816",
+      "afterSha256": "009efbbb9456def75a2e6b5ac008dfcd080da0f6970a76b10a7ab30af9a7f351",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 155:\n",
+          "after": "    if len(packets) != 156:\n",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"Current catalog requires exactly 155 packets; consumed amendment remains 120\")\n",
+          "after": "        errors.append(\"Current catalog requires exactly 156 packets; consumed amendment remains 120\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Linux repair authority valid: 155 packets; 120-packet record preserved; native Linux remains unproven.\")\n",
+          "after": "        print(\"Linux repair authority valid: 156 packets; 120-packet record preserved; native Linux remains unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_test_ownership.py": {
+      "beforeSha256": "b2a3348c1dbc3c9dad9b72150fe471db1ce8321ed70d9250946502e2104dc43a",
+      "afterSha256": "c2271afded84872c8d691a7ba30a3353463b170b3f1c68cb67133f2d812aec47",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 155:\n",
+          "after": "    if len(packets) != 156:\n",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"Current catalog requires exactly 155 packets; Linux ownership record remains 121\")\n",
+          "after": "        errors.append(\"Current catalog requires exactly 156 packets; Linux ownership record remains 121\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Linux test ownership valid: 155 packets; historical one-assertion grant preserved; native/live acceptance unproven.\")\n",
+          "after": "        print(\"Linux test ownership valid: 156 packets; historical one-assertion grant preserved; native/live acceptance unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_live_backend_readiness.py": {
+      "beforeSha256": "690638df7551a9a8cf5c1d153d895e0c10ceec2f13101e7d4aaf146a0a2a1d53",
+      "afterSha256": "240cf6a3b662d023016cb8665c693882991a6b5517060b52d2083bf4162e508b",
+      "replacements": [
+        {
+          "before": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 155:\n",
+          "after": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 156:\n",
+          "count": 1
+        },
+        {
+          "before": "            errors.append(\"current roadmap requires exactly 155 named packets; historical authority remains 130\")\n",
+          "after": "            errors.append(\"current roadmap requires exactly 156 named packets; historical authority remains 130\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Live backend roadmap valid: 155 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")\n",
+          "after": "        print(\"Live backend roadmap valid: 156 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_model_api_inventory.py": {
+      "beforeSha256": "95b06a70b5293c82216a2cbe2d4e071dd299eee4ce56e6ee7f4539c0829fd57d",
+      "afterSha256": "33963e18685f0aab295ae618a21671664b815cbcff51d42ec901778b35da5b11",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 155:\n",
+          "after": "    if len(packets) != 156:\n",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"current catalog requires exactly 155 packets\")\n",
+          "after": "        errors.append(\"current catalog requires exactly 156 packets\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Model inventory authority valid: 155 packets; exact predicate grant; product/native acceptance unproven.\")\n",
+          "after": "        print(\"Model inventory authority valid: 156 packets; exact predicate grant; product/native acceptance unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_model_fixture_scope.py": {
+      "beforeSha256": "dc12ae4e884c89f57ee8365f27b44aa49f48d7f49f1126b34ffac6c79307fdc5",
+      "afterSha256": "aafc088fd9046e87664b01c7953563fc35a147b504a4e59750bf876c717884ee",
+      "replacements": [
+        {
+          "before": "    if len(packets) != 155:\n",
+          "after": "    if len(packets) != 156:\n",
+          "count": 1
+        },
+        {
+          "before": "        errors.append(\"current catalog requires exactly 155 packets; fixture publication remains 122\")\n",
+          "after": "        errors.append(\"current catalog requires exactly 156 packets; fixture publication remains 122\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Model fixture authority valid: 155 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.\")\n",
+          "after": "        print(\"Model fixture authority valid: 156 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_native_qualification.py": {
+      "beforeSha256": "682c59187c2c54cdaf6340335abea2072ab06744284e3d3afd17ef0cb2bef0f4",
+      "afterSha256": "1bc85577aa65bc445f7ed03b711c480d21bd7757c424fd8a3bb7ec3bbe1fb7c0",
+      "replacements": [
+        {
+          "before": "        require(len(old) == 143 and len(packets) == 155 and set(packets) == old | {\"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact catalog\")\n",
+          "after": "        require(len(old) == 143 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact catalog\")\n",
+          "count": 1
+        },
+        {
+          "before": "        print(\"Native qualification authority valid: 155 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Native qualification authority valid: 156 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "        require(len(old) == 143 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\"}, \"exact catalog\")\n",
+          "after": "        require(len(old) == 143 and len(packets) == 156 and set(packets) == old | {\"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\"}, \"exact catalog\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_packet_scalar_repair.py": {
+      "beforeSha256": "a0e4d645b7ca6420779dd902058424b16495e628008edb3d3b87863bd43ec700",
+      "afterSha256": "fa53435725e5223b2b51ff7a0c1de70ec4256605900da920b6919c29f18dd0c4",
+      "replacements": [
+        {
+          "before": "        print(\"Scalar repair authority valid: 155 packets; historical 132-packet record and 164 predecessor files unchanged.\")\n",
+          "after": "        print(\"Scalar repair authority valid: 156 packets; historical 132-packet record and 164 predecessor files unchanged.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_policy_observation.py": {
+      "beforeSha256": "f5110aa856b1735ab00d44412f74b143bcf0cc4488c880651e4793443930fd2a",
+      "afterSha256": "610e4d36ebd327098e8bfd61c5dbbfe70b74ef984d24d8b33627ccf2ac78d987",
+      "replacements": [
+        {
+          "before": "        print(\"Policy observation authority valid: 155 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "after": "        print(\"Policy observation authority valid: 156 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\")\n",
+          "after": "ADDITIONS = (\"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_proxy_contract.py": {
+      "beforeSha256": "f4f83b64409241470d009d91120222bf85d940523f45d2758a1b7e5ee94d5954",
+      "afterSha256": "3fa7ab5032f139ffb0be36a48bee2299934e936ba2509a308360059311aba995",
+      "replacements": [
+        {
+          "before": "        print(\"Proxy prerequisite valid: 155 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")\n",
+          "after": "        print(\"Proxy prerequisite valid: 156 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        },
+        {
+          "before": "ADDITIONS = (\"MET-REPAIR-009\", \"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\")\n",
+          "after": "ADDITIONS = (\"MET-REPAIR-009\", \"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_readiness.py": {
+      "beforeSha256": "af1e339c99f22fd3a3e6d62ff7da3a19f699f8bf952a794c9aa2b89bb5ac3ae5",
+      "afterSha256": "9381566f6006f1ed999190421f6c6a4e922e0fcc2006a76378924a44f30f0763",
+      "replacements": [
+        {
+          "before": "EXPECTED_PACKET_COUNT = 155\n",
+          "after": "EXPECTED_PACKET_COUNT = 156\n",
+          "count": 1
+        },
+        {
+          "before": "    authority_owner[\"task-packets/CONF-FIX-006.yaml\"] = \"MET-REPAIR-016\"\n",
+          "after": "    authority_owner[\"task-packets/CONF-FIX-006.yaml\"] = \"MET-REPAIR-016\"\n    authority_owner.update({path: \"MET-ADOPT-001\"\n                            for path in packets[\"MET-ADOPT-001\"][\"allowedPaths\"]\n                            if path in authority_owner or path.startswith((\"architecture/\", \"scripts/\"))})\n    authority_owner[\"task-packets/MET-ADOPT-001.yaml\"] = \"MET-ADOPT-001\"\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_readiness_repairs.py": {
+      "beforeSha256": "bc91505351381880a09ebcc51db90852506812b7f0fc33986a75b5a792d9e327",
+      "afterSha256": "482ca31e329eff9c9c27cc752ea19260c60afec1be7ded12a611d7b93095c239",
+      "replacements": [
+        {
+          "before": "    require(len(packets) == 155, \"current catalog requires exactly 155 packets; historical amendment remains 115\")\n",
+          "after": "    require(len(packets) == 156, \"current catalog requires exactly 156 packets; historical amendment remains 115\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_reuse.py": {
+      "beforeSha256": "edfd2500f6108e1d01d741a803718fbd6b3d9205b70421117a72a4f8094f5bbb",
+      "afterSha256": "590254703e1c9898794371f8b195b0e71fdbcf4b8eee805038020f96a34506f8",
+      "replacements": [
+        {
+          "before": "    _require(len(packet_paths) == 155, f\"expected 155 task packets, found {len(packet_paths)}\")\n",
+          "after": "    _require(len(packet_paths) == 156, f\"expected 156 task packets, found {len(packet_paths)}\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_successor_inventory.py": {
+      "beforeSha256": "2aea6487780042dc90a686f0d006f81b9209e59d28c1c5cfa819cf2892419902",
+      "afterSha256": "d2a0da29bac708b65f142cd4656bfb6de93071dd5582f8603ee9750119f9a837",
+      "replacements": [
+        {
+          "before": "        print(\"Successor inventory authority valid: 155 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")\n",
+          "after": "        print(\"Successor inventory authority valid: 156 packets; 170 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "task-packets/README.md": {
+      "beforeSha256": "2419bc86f8904eef566608c2cc22a4702f80027ad7f63c8632b933302f157dff",
+      "afterSha256": "7bc96e6092a54a2e0e364559e0af127a6dcd9810df70a4ab091c4049f8b96032",
+      "replacements": [
+        {
+          "before": "# Sol-High Task Packet Catalog\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../docs/alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "after": "# Sol-High Task Packet Catalog\n\n## Current adoption roadmap — MET-ADOPT-001\n\n[Product/provider and multi-repository policy](../docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.\nCatalog:156 executable packet specifications (155 retained plus this meta packet);\nseven extension backlog specifications remain non-dispatchable pending exact\npacket/path/argv and accepted predecessor release-lock publication.\nRequire **at least one qualified baseline for every released harness capability** at the first enterprise release.\nAlpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is\nNOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.\nThe linked ownership table and machine ledger are normative for provider work;\nexisting public schemas, service ownership and prerequisite gates remain intact.\n\n## Retained plan and historical publication checkpoints\n\nCurrent Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../docs/alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).",
+          "count": 1
+        },
+        {
+          "before": "Current Alpha-2 dispatch:",
+          "after": "Historical Alpha-2 dispatch at publication:",
+          "count": 1
+        },
+        {
+          "before": "The current catalog has 142",
+          "after": "That historical publication recorded 142",
+          "count": 2
+        },
+        {
+          "before": "the current catalog contains 142",
+          "after": "that historical snapshot contained 142",
+          "count": 2
+        },
+        {
+          "before": "Current catalog142;",
+          "after": "Historical catalog142;",
+          "count": 1
+        },
+        {
+          "before": "Catalog155;",
+          "after": "Historical catalog155;",
+          "count": 1
+        },
+        {
+          "before": "| 155 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |\n",
+          "after": "| 155 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |\n| 156 | `MET-ADOPT-001` | `Harness-Engineering` | Provider adoption,13-repository policy and phased extension backlog |\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_alpha2_readiness.py": {
+      "beforeSha256": "7538eb4e6ee72d778edfe337cd7745e496b62347846bfdb7a8fb8ae9d8d2ec13",
+      "afterSha256": "69f1f7059cbee81833a70654bc4b8b308dfe8dff55984392e6f3c1abb72274a5",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_broker_handoff.py": {
+      "beforeSha256": "16c263904a6c378a5b3790682b96cbbb93641188fa0076735798da092ad085e4",
+      "afterSha256": "ee81c402a19caacfe12aa9f027288f93e03a39f1634f1a3c525251e78bcaa0d1",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_ci_performance.py": {
+      "beforeSha256": "8e91013086a47d81bcb072df91b978365d6235a61a70df1c4fc295af7dbbc514",
+      "afterSha256": "d85436e153e21f819f5bb76a0d0298bcbc383e4716f2ad792b7bad9fd1227bc4",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == CURRENT_PACKET_COUNT == 155\n",
+          "after": "    assert len(packets) == CURRENT_PACKET_COUNT == 156\n",
+          "count": 1
+        },
+        {
+          "before": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 155\"\n",
+          "after": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 156\"\n",
+          "count": 1
+        },
+        {
+          "before": "    assert len(paths) == 171\n",
+          "after": "    assert len(paths) == 172\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_consumer_closure.py": {
+      "beforeSha256": "963f3b1d63175061ab7a2d310fd606af09c164a17a68a1022883cc6e8e5a0d75",
+      "afterSha256": "098413971984962e03c7ebc003c24c713298bd4dd6d746f8954db3605529b783",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_performance.py": {
+      "beforeSha256": "7e3226ad8eb3b71126cd31a45fa1ea5c650c1b1714b889e61d6fe4c34a5b1a6b",
+      "afterSha256": "c4d7bd10b477eeb89a105451119887f296522e860890907166f15b23258ce8fb",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_performance_followup.py": {
+      "beforeSha256": "5d0db619cb8649395dd265e929f42502a97b34bdc10c4c6ee3f3596a6f116b66",
+      "afterSha256": "9a117c709605e6e38318d00f06b462d143de8b14692071c4b8a9e39d9ae8711f",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_reference_measurement.py": {
+      "beforeSha256": "8f076bef2974a936fbb84e8d1d4d0dd6efbbec823a0e90b82242ac216a3d653f",
+      "afterSha256": "a4a19e5d80a514edc89a6dfb32d155b79f9ea02f69fe105634699d6687f2fec4",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        },
+        {
+          "before": "assert digest(inputs[path]) == checksum",
+          "after": "assert digest(checkpoint_history(path, inputs[path])) == checksum",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_successor_checkpoint.py": {
+      "beforeSha256": "7425e59c6f776ce97a37aff3fc4d60de7c06c7738e53b44beb2b58a3d8b32407",
+      "afterSha256": "09b65401009c8f639bac4ebff2b7c4ae9867c79e5ebb7162013eb19eeb29d9c7",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        },
+        {
+          "before": "import pytest\n",
+          "after": "import pytest\n\nfrom scripts.validate_provider_adoption import historical_bytes as adoption_history\n",
+          "count": 1
+        },
+        {
+          "before": "assert module.digest(inputs[path]) == pin",
+          "after": "assert module.digest(adoption_history(path, inputs[path])) == pin",
+          "count": 1
+        },
+        {
+          "before": "assert module.apply_recipe(raw, rule) == inputs[path]",
+          "after": "assert module.apply_recipe(raw, rule) == adoption_history(path, inputs[path])",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_credential_lifecycle.py": {
+      "beforeSha256": "4fdca2bfd6e8112b9ea12bd870d4fe89f4365ca4e2205d3fea2505a6c1c78b1b",
+      "afterSha256": "f3a9b66141283eea68e4b6a1ec111aba2c4b25408dc0a5835c8ed8f47a59eefa",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(record[\"protectedFiles\"]) == 245\n",
+          "after": "    assert len(packets) == 156 and len(record[\"protectedFiles\"]) == 245\n",
+          "count": 1
+        },
+        {
+          "before": "current[path].replace(b\"assert len(paths) == 171\",",
+          "after": "current[path].replace(b\"assert len(paths) == 172\",",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_credential_ordering.py": {
+      "beforeSha256": "299bb15155bfb813e94b4a019448b2bf9a7c594b4ed86442153cc7fcf7c70b9d",
+      "afterSha256": "cf996b521880cdac05c140dbfe283fe7250e1c48ff9ec1a96264d8896cb38d6f",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_custody_handoff.py": {
+      "beforeSha256": "0eb6c23314a2be557a30a7df29cfd44004273bd526ff116c3bc9ad6484efca9b",
+      "afterSha256": "35fe156bb67def9c5a16c0bdfc23eb75b73309daabab514f63ea336c4ca7ad52",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(record[\"protectedFiles\"]) == 203\n",
+          "after": "    assert len(packets) == 156 and len(record[\"protectedFiles\"]) == 203\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_readiness.py": {
+      "beforeSha256": "7ad8d9790317df9d73a45b1b746f98452890371b53606e3966013de36a68ad26",
+      "afterSha256": "bfd78733b6274f88893284376786422562439c664df3e45a4e4728683497519f",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_repair.py": {
+      "beforeSha256": "4f146904e5f0dd9fa1e29f5d24375e9bd00525f272a488f66187a7301d5412f2",
+      "afterSha256": "2b66181f7ddf6996bf1289a663bc55c2299191564863621e9fc87d5315cb23a9",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_test_ownership.py": {
+      "beforeSha256": "63fd8f593b7afc8bb996a84c464448fd2d573b44a4b877b05933bf847c7317e1",
+      "afterSha256": "db48604451feaa20d710c4ede25e022f0f8e8bb12e7f4fdf3ce2a7dff6ff0383",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_live_backend_readiness.py": {
+      "beforeSha256": "135ec19eb0c2c603a74f6f04c8f7fc97df18bc7a77b71085267001b4ae5a8b78",
+      "afterSha256": "19d95407348812e2c73a45526f7da00a47306c6c16aa47dd5421e47557c5f4ea",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(raw) == 156\n",
+          "after": "    assert len(packets) == 156 and len(raw) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_model_api_inventory.py": {
+      "beforeSha256": "b520cc4d65b6a60a6e7bfefad4dff8bc590225e8b53d897ea40c9a514117544f",
+      "afterSha256": "6ad26ab7afd303134ab4a5ef460150d7e2139187d567e924c359c8a6fc8fb5b6",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_model_fixture_scope.py": {
+      "beforeSha256": "f1712fb39a03c9ab0f3f8f10fd182748ee8feaf188697f2c3ac96a2c5026443b",
+      "afterSha256": "8d36849f68840f56240bbc495ace601c425bbad29ff43146a64b12a051d7c8b8",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_native_qualification.py": {
+      "beforeSha256": "1cf6bc7910ff64fe95e1ba2fc25a2a674efb73ecb2a7d597e1937a597746e3d5",
+      "afterSha256": "f4fe02136f1ed5eb504e1ed8646d7d550ccd3f1447822d84d0ae0d83b9ee177f",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155\n",
+          "after": "    assert len(packets) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_packet_scalar_repair.py": {
+      "beforeSha256": "4bf75be7146d2c84f90c5e770be2fdc99db712fd49b3b5c2064eb0e5430616c4",
+      "afterSha256": "385c2fc32d0761428dc527573410ad1ab2611f10bc725b2dc3ad0da73ed7adc1",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(record[\"protectedFiles\"]) == 164 and len(raw) == 169\n",
+          "after": "    assert len(packets) == 156 and len(record[\"protectedFiles\"]) == 164 and len(raw) == 169\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_policy_observation.py": {
+      "beforeSha256": "8b9e0ed87b794b8b9333f5d10490fa91d049c5aaa23382b347aa094fe2fa8f89",
+      "afterSha256": "46b13d8fa4ceee6b49389b7b98d9babf1656fd7b61f0f64056384e4428f2a8a7",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(record[\"protectedFiles\"]) == 186\n",
+          "after": "    assert len(packets) == 156 and len(record[\"protectedFiles\"]) == 186\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_proxy_contract.py": {
+      "beforeSha256": "a36817424cd3e8986cf0e08b75db5e22209544bee04d50d2d06b1ddf3cee9886",
+      "afterSha256": "2b794d9fa569e7e37df8532ae49c2e68dec74072b5a96bb29ce87b33bb0baee1",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(record[\"protectedFiles\"]) == 176\n",
+          "after": "    assert len(packets) == 156 and len(record[\"protectedFiles\"]) == 176\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_reuse.py": {
+      "beforeSha256": "41177fdce18a8c46f425e2ee420eb6d97b3f299e28717eeabeeff13f7f69859a",
+      "afterSha256": "d142ce49912f95d16c2f575ade8378e0026282e96aee6fc781faac60c9f66976",
+      "replacements": [
+        {
+          "before": "    assert report.task_packets == 155\n",
+          "after": "    assert report.task_packets == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_successor_inventory.py": {
+      "beforeSha256": "1fb82a04cb3fd9d7b9fa6664509ac62a31b3b2b0df640d14e10d9f6dc299109f",
+      "afterSha256": "6671d2b02d169fa556c70b74a6f6be1df59dd299f86318b2c25bef1d1e57ed5a",
+      "replacements": [
+        {
+          "before": "    assert len(packets) == 155 and len(record[\"protectedFiles\"]) == 170 and len(raw) == 175\n",
+          "after": "    assert len(packets) == 156 and len(record[\"protectedFiles\"]) == 170 and len(raw) == 175\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_task_packets.py": {
+      "beforeSha256": "f8204f8019f91c6ee9388ed0123aac2778ea10effed888a1381e7a7f999fc9c2",
+      "afterSha256": "ddffa32e430e45ca93959b50889af27f8d1bafed06532596e53d7470367d8289",
+      "replacements": [
+        {
+          "before": "    assert len(files) == EXPECTED_PACKET_COUNT == 155\n",
+          "after": "    assert len(files) == EXPECTED_PACKET_COUNT == 156\n",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "unchangedTests": {
+    "ci/test_offline_runner.py": "46444c4218502f889f9d3e923c60604f6eff5434ab248a9cfc96976f38f06fcb",
+    "ci/test_warm_snapshot.py": "929be52a3835a0b0d28d355fd4b4f85fc0e5e210502c3b6c62c2b24348fafa24",
+    "tests/linux_runner/conftest.py": "414b64d997172139aa984294dbb9b9d136ac9197f8245580f6d8c05e84b3a0d4",
+    "tests/linux_runner/test_authority.py": "1a29bb42ca3a6fda8281c6e9e9fa79266107b1e244510563950e69ff3aa7cf90",
+    "tests/linux_runner/test_build_and_predecessors.py": "6990993b16abdd8b548e6edfba37e7c40ab6bdd10478a45ab029a3a06765c0c6",
+    "tests/linux_runner/test_isolation.py": "e5f6b98874ace99fb27667264b44deb797f18e5fafbda392b70476184e91c9f9",
+    "tests/linux_runner/test_manifest_gate.py": "3dcaa594833c855e2f5df621ae2786cb21e2d9aeeaae6833ca534f680a92098f",
+    "tests/linux_runner/test_toolchain.py": "19333875ae259280b4d64ee3dfb1c37618362fd94e3086381e92b636680941bf",
+    "tests/test_architecture.py": "4950bc15a766718f7841fdb3a549507c99e2eb67805eda952f536190d87301fa",
+    "tests/test_data_harness_v1_observation.py": "5404c7e707f159c4dbe5a279ca67bc47f9cc0da6839e49b8d9fdb6c254c9180f",
+    "tests/test_live_campaign_envelope.py": "c86fba5f72c8285ced6ab6039d65f6cc0ab78d8f79aa571e11879b14fc5424fd",
+    "tests/test_model_usage_observation.py": "3b6edd26186344584d7257eac61cc1e8b57b7de6fb34f16e865571a581b78e07",
+    "tests/test_readiness.py": "9694b99697768d759542b5d0cacb44ae8f04a75591254bda94555f1dc70ba280",
+    "tests/test_readiness_repairs.py": "2647e5b195cfeb891429d17e28a3b34714f74cacab83c08b11af5f0b29a20147",
+    "tests/test_reference_observer.py": "1ee810ee459404ff6d74cf7ce4ed1d62c139db6264a848acb57dd257474781d1",
+    "tests/test_release_lock.py": "41f1e77372f5536d2812041fb32e79f2bc7b8ccd3f776e59bc5f0bc5a0b10521",
+    "tests/test_repository_tree_observation.py": "555987fc9bc8d43400f9f7dcd5bc0a1e5a6bcc7c171097a8b1922c5487c37f8e",
+    "tests/test_validator_units.py": "fc301539333e3f9a833577fd1c879b9d23b969a9056a4c9ab5b721d80f363db6",
+    "tests/test_zero_bill.py": "0a3f0a4480afa0382737d52da976b7d72b7a2d79c9c5c22b2f8812caa33a2821"
+  },
+  "inputFiles": {
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md": "9b94cb0b765dc0e0573358d619b44c0527116062ee86b5a8326c2a1a67a946f2",
+    "tests/test_provider_adoption.py": "957ac2c7829310c73a5853ed5cba08410fca5c6d59464db45744e5c12fbc8f2c",
+    "task-packets/MET-ADOPT-001.yaml": "bb7c8bc5ef7cb67b808817280f5b6803a12bd182c5c944084ea5de4714cd7837"
+  },
+  "packetDigests": {
+    "MET-ADOPT-001": "3eac9e98f8cd7a2ba2437964b636a9d8d04d361e4b0397dde40faaf1a50da912"
+  },
+  "navigationPaths": [
+    "README.md",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/READINESS_INDEX.md",
+    "docs/DEVELOPMENT_STATUS.md",
+    "docs/PROVIDER_MODULE_CATALOG.md",
+    "task-packets/README.md",
+    "docs/harnesses/execution.ml-decision.md",
+    "docs/harnesses/execution.orchestration.md",
+    "docs/harnesses/execution.protocol-interoperability.md",
+    "docs/harnesses/execution.tool-skill-sandbox.md",
+    "docs/harnesses/knowledge.data-integration.md",
+    "docs/harnesses/knowledge.domain-semantic.md",
+    "docs/harnesses/knowledge.memory-state.md",
+    "docs/harnesses/knowledge.retrieval-context.md",
+    "docs/harnesses/runtime.ai-gateway.md",
+    "docs/harnesses/runtime.experience.md",
+    "docs/harnesses/runtime.infrastructure.md",
+    "docs/harnesses/runtime.model-inference.md",
+    "docs/harnesses/trust.evaluation-assurance.md",
+    "docs/harnesses/trust.governance-agentops.md",
+    "docs/harnesses/trust.observability-finops.md",
+    "docs/harnesses/trust.security-safety.md",
+    "docs/repositories/00-harness-engineering.md",
+    "docs/repositories/01-mas-harness-contracts.md",
+    "docs/repositories/02-mas-harness-sdks.md",
+    "docs/repositories/03-mas-harness-industry-packs.md",
+    "docs/repositories/04-mas-harness-control-plane.md",
+    "docs/repositories/05-mas-harness-runtime-plane.md",
+    "docs/repositories/06-mas-harness-model-plane.md",
+    "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "docs/repositories/08-mas-harness-execution-plane.md",
+    "docs/repositories/09-mas-harness-trust-plane.md",
+    "docs/repositories/10-mas-harness-operator.md",
+    "docs/repositories/11-mas-harness-distribution.md",
+    "docs/repositories/12-mas-harness-conformance-labs.md"
+  ]
+}

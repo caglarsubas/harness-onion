@@ -1,5 +1,19 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
 Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
 
 | Phase | ID | Status | Description |
@@ -216,6 +230,20 @@ The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
 Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
 
 | Phase | ID | Status | Description |
@@ -281,6 +309,20 @@ key, administrator prompt, paid API, hosted runner, download or cloud action.
 The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
 
 Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
 
@@ -372,6 +414,20 @@ The following is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
 Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
 
 | Phase | ID | Status | Description |
@@ -439,6 +495,20 @@ The following snapshot predates the verified closure above. It is retained as
 history, not the current dispatch instruction.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
 
 Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
 

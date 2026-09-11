@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_provider_adoption import historical_bytes as adoption_history, current_test_bytes as adoption_current, validate_additions as adoption_additions
+except ImportError:
+    from scripts.validate_provider_adoption import historical_bytes as adoption_history, current_test_bytes as adoption_current, validate_additions as adoption_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/conformance-successor-checkpoint.json"
 BEFORE_PATH = "architecture/conformance-successor-checkpoint-inputs/meta-before.json"
@@ -97,6 +102,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = adoption_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -122,9 +128,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return adoption_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return adoption_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -133,7 +139,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return adoption_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -289,10 +295,10 @@ def validate_authority(packets, record, inputs):
         pins = {**record["protectedFiles"], **record["inputFiles"], **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input inventory")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "exact current source: " + path)
+            require(type(inputs[path]) is bytes and digest(adoption_history(path, inputs[path])) == checksum, "exact current source: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 153 and len(packets) == 155 and set(packets) == old | set(NEW_IDS), "exact155 catalog")
-        for name in packets:
+        require(len(old) == 153 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {"MET-ADOPT-001"}, "exact156 catalog")
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "raw semantic packet binding")
         meta, product = (packets[x] for x in NEW_IDS)
         require(meta["allowedPaths"] == record["ownedPaths"] and product["allowedPaths"] == [DOC, SUP], "exact ownership")
@@ -302,7 +308,7 @@ def validate_authority(packets, record, inputs):
         require(before["baseCommit"] == record["metaBaseline"] and set(before["files"]) == set(record["metaRecipes"]), "exact before corpus")
         for path, rule in record["metaRecipes"].items():
             raw = before["files"][path].encode()
-            require(apply_recipe(raw, rule) == inputs[path], "reversible recipe")
+            require(apply_recipe(raw, rule) == adoption_history(path, inputs[path]), "reversible recipe")
             if path.startswith("tests/"):
                 require(test_ids(raw) == test_ids(inputs[path]), "all previous test identities")
         checkpoint, product_before = parse(inputs[CHECKPOINT_PATH]), parse(inputs[PRODUCT_PATH])
@@ -360,7 +366,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Successor checkpoint authority valid:155 packets;153 immutable YAML; two product paths; source data only.")
+        print("Successor checkpoint authority valid:156 packets;153 immutable YAML; two product paths; source data only.")
     return int(bool(errors))
 
 

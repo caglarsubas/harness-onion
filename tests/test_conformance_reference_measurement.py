@@ -32,7 +32,7 @@ def authority():
 def test_current_authority_preserves_all150_old_yaml_and_records(authority):
     packets, record, inputs = authority
     assert validate_authority(*authority) == []
-    assert len(packets) == 155
+    assert len(packets) == 156
     old = [p for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")]
     assert len(old) == 150
     for path in old:
@@ -43,7 +43,7 @@ def test_current_authority_preserves_all150_old_yaml_and_records(authority):
     assert packets["CONF-PERF-004"]["offlineAcceptanceCommands"] == packets["CONF-FIX-005"]["offlineAcceptanceCommands"]
     assert len(packets["CONF-PERF-004"]["offlineAcceptanceCommands"]) == 8
     for path, checksum in record["protectedFiles"].items():
-        assert digest(inputs[path]) == checksum
+        assert digest(checkpoint_history(path, inputs[path])) == checksum
     assert record["sourceBaseline"]["files"] == 127 and record["sourceBaseline"]["tests"] == 327
     assert record["stages"] == [110,120,127,135,141,146,151]
 

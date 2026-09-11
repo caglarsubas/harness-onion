@@ -303,7 +303,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(checkpoint_history(path, inputs[path])) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 150 and len(packets) == 155 and set(packets) == old | set(NEW_IDS) | {"MET-REPAIR-016", "CONF-FIX-006"}, "exact155 catalog")
+        require(len(old) == 150 and len(packets) == 156 and set(packets) == old | set(NEW_IDS) | {"MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001"}, "exact155 catalog")
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
         packet, product, reference = (packets[name] for name in NEW_IDS)
@@ -559,7 +559,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 155 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 156 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

@@ -1,5 +1,19 @@
 # Repository Plan: `mas-harness-control-plane`
 
+## Current adoption roadmap — MET-ADOPT-001
+
+[Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
+Catalog:156 executable packet specifications (155 retained plus this meta packet);
+seven extension backlog specifications remain non-dispatchable pending exact
+packet/path/argv and accepted predecessor release-lock publication.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+Alpha2 remains ONGOING. CONF-LIVE-003 draft is incomplete; native Linux is
+NOT_RUN_ENV_UNAVAILABLE. Source, CI, merge, artifact and tenant acceptance differ.
+The linked ownership table and machine ledger are normative for provider work;
+existing public schemas, service ownership and prerequisite gates remain intact.
+
+## Retained plan and historical publication checkpoints
+
 ## Purpose and boundaries
 
 This repository implements the guided setup portal, authenticated control API, questionnaire sessions, readiness review, tenant demand/profile lifecycle, compilation job worker, approvals, operations, immutable bundle requests, tenant organization harness overview, and separately authorized platform-operator portfolio. It is an asynchronous management plane and is never on a synchronous agent/model/tool request path.
