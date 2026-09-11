@@ -26,7 +26,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/credential-lifecycle-amendment.json"
 RECORD_SHA256 = "851fd80ddeec7367405a3e8445e330290341e2b4d68bccf372c24a4b965c341c"
-ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001")
+ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006")
 PACKET_DIGESTS = {"MET-REPAIR-012": "bb53b3538a50a6c4e26b7f40c6697376c3cb1cc5e3947dad573c9d45d9253a1e",
                   "CONF-FIX-005": "abb7c2a19d54f84789c2656164e1e9ac66f822620173401fe93c50d61cc5cf2a"}
 BEFORE_PATH = "architecture/credential-lifecycle-inputs/before.json"
@@ -249,7 +249,7 @@ def validate_credential_lifecycle(packets, record, inputs):
         pinned(record)
         errors = validate_additions(packets)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 139 and len(packets) == 153 and set(packets) == old | set(ADDITIONS),
+        require(len(old) == 139 and len(packets) == 155 and set(packets) == old | set(ADDITIONS),
                 "139 predecessors plus two credential packets and exact ordering authority required")
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input map required")
@@ -318,7 +318,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential lifecycle authority valid: 153 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Credential lifecycle authority valid: 155 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 

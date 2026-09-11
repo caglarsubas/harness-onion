@@ -1,5 +1,25 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
+
+| Phase | ID | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source gates; runtime separate |
+| Alpha2 | MET-PERF-005 / CONF-PERF-004 | DONE_SOURCE_GATES_RECORDED | META2e882d0 and productb7586c4/127 files/354 tests |
+| Alpha2 | MET-REPAIR-016 | ONGOING | Narrow two-path successor correction authority |
+| Alpha2 | CONF-FIX-006 | WAITING | Preserve benchmark/runtime and exact approved future stages |
+| Alpha2 | CONF-LIVE-003 / draft12 | BLOCKED_PREDECESSOR |425 tests:424 pass,one inherited failure; commands7/8 not run |
+| Alpha2 | CONF-LIVE-004/005/006 | WAITING | Probes, packaging, integration |
+| Alpha2 | Native AMD64/ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha3 / Alpha4 | Governed actions / enterprise matrix | WAITING | No phase promotion |
+
+See [successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+All28 META commands, both full replays, nested420/trusted900/workflow15 unchanged.
+Current correction is source-only; no root policy/admin/key/download/cloud/billable changes.
+All153 prior YAML and accepted histories remain. Model-effort transition NOT_DUE.
+
+## Historical MET-PERF-005 publication checkpoint
+
 Snapshot: 2026-09-11, during `MET-PERF-005` publication. Source authority only.
 Current catalog:153 packets; thirteen repositories, four planes, sixteen harnesses.
 
@@ -196,6 +216,26 @@ The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
+
+| Phase | ID | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source gates; runtime separate |
+| Alpha2 | MET-PERF-005 / CONF-PERF-004 | DONE_SOURCE_GATES_RECORDED | META2e882d0 and productb7586c4/127 files/354 tests |
+| Alpha2 | MET-REPAIR-016 | ONGOING | Narrow two-path successor correction authority |
+| Alpha2 | CONF-FIX-006 | WAITING | Preserve benchmark/runtime and exact approved future stages |
+| Alpha2 | CONF-LIVE-003 / draft12 | BLOCKED_PREDECESSOR |425 tests:424 pass,one inherited failure; commands7/8 not run |
+| Alpha2 | CONF-LIVE-004/005/006 | WAITING | Probes, packaging, integration |
+| Alpha2 | Native AMD64/ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha3 / Alpha4 | Governed actions / enterprise matrix | WAITING | No phase promotion |
+
+See [successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+All28 META commands, both full replays, nested420/trusted900/workflow15 unchanged.
+Current correction is source-only; no root policy/admin/key/download/cloud/billable changes.
+All153 prior YAML and accepted histories remain. Model-effort transition NOT_DUE.
+
+## Historical MET-PERF-005 publication checkpoint
+
 Snapshot: 2026-09-09, during `MET-REPAIR-013` publication. Source authority only.
 Current catalog: 142 packets; thirteen repositories, four planes, sixteen harnesses.
 
@@ -241,6 +281,26 @@ key, administrator prompt, paid API, hosted runner, download or cloud action.
 The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
+
+| Phase | ID | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source gates; runtime separate |
+| Alpha2 | MET-PERF-005 / CONF-PERF-004 | DONE_SOURCE_GATES_RECORDED | META2e882d0 and productb7586c4/127 files/354 tests |
+| Alpha2 | MET-REPAIR-016 | ONGOING | Narrow two-path successor correction authority |
+| Alpha2 | CONF-FIX-006 | WAITING | Preserve benchmark/runtime and exact approved future stages |
+| Alpha2 | CONF-LIVE-003 / draft12 | BLOCKED_PREDECESSOR |425 tests:424 pass,one inherited failure; commands7/8 not run |
+| Alpha2 | CONF-LIVE-004/005/006 | WAITING | Probes, packaging, integration |
+| Alpha2 | Native AMD64/ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha3 / Alpha4 | Governed actions / enterprise matrix | WAITING | No phase promotion |
+
+See [successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+All28 META commands, both full replays, nested420/trusted900/workflow15 unchanged.
+Current correction is source-only; no root policy/admin/key/download/cloud/billable changes.
+All153 prior YAML and accepted histories remain. Model-effort transition NOT_DUE.
+
+## Historical MET-PERF-005 publication checkpoint
 
 Snapshot: 2026-09-09, during `MET-REPAIR-012` publication. Source authority only.
 Current catalog: 141 packets; thirteen repositories, four planes, sixteen harnesses.
@@ -312,6 +372,26 @@ The following is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
+
+| Phase | ID | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source gates; runtime separate |
+| Alpha2 | MET-PERF-005 / CONF-PERF-004 | DONE_SOURCE_GATES_RECORDED | META2e882d0 and productb7586c4/127 files/354 tests |
+| Alpha2 | MET-REPAIR-016 | ONGOING | Narrow two-path successor correction authority |
+| Alpha2 | CONF-FIX-006 | WAITING | Preserve benchmark/runtime and exact approved future stages |
+| Alpha2 | CONF-LIVE-003 / draft12 | BLOCKED_PREDECESSOR |425 tests:424 pass,one inherited failure; commands7/8 not run |
+| Alpha2 | CONF-LIVE-004/005/006 | WAITING | Probes, packaging, integration |
+| Alpha2 | Native AMD64/ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha3 / Alpha4 | Governed actions / enterprise matrix | WAITING | No phase promotion |
+
+See [successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+All28 META commands, both full replays, nested420/trusted900/workflow15 unchanged.
+Current correction is source-only; no root policy/admin/key/download/cloud/billable changes.
+All153 prior YAML and accepted histories remain. Model-effort transition NOT_DUE.
+
+## Historical MET-PERF-005 publication checkpoint
+
 Snapshot: 2026-09-08, during `MET-REPAIR-011` publication. Source authority only.
 Current catalog: 138 packets; thirteen repositories, four planes, sixteen harnesses.
 
@@ -359,6 +439,26 @@ The following snapshot predates the verified closure above. It is retained as
 history, not the current dispatch instruction.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+Snapshot: 2026-09-11, during `MET-REPAIR-016` publication. Catalog155 /171 YAML.
+
+| Phase | ID | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source gates; runtime separate |
+| Alpha2 | MET-PERF-005 / CONF-PERF-004 | DONE_SOURCE_GATES_RECORDED | META2e882d0 and productb7586c4/127 files/354 tests |
+| Alpha2 | MET-REPAIR-016 | ONGOING | Narrow two-path successor correction authority |
+| Alpha2 | CONF-FIX-006 | WAITING | Preserve benchmark/runtime and exact approved future stages |
+| Alpha2 | CONF-LIVE-003 / draft12 | BLOCKED_PREDECESSOR |425 tests:424 pass,one inherited failure; commands7/8 not run |
+| Alpha2 | CONF-LIVE-004/005/006 | WAITING | Probes, packaging, integration |
+| Alpha2 | Native AMD64/ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent qualification |
+| Alpha3 / Alpha4 | Governed actions / enterprise matrix | WAITING | No phase promotion |
+
+See [successor checkpoint correction](alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+All28 META commands, both full replays, nested420/trusted900/workflow15 unchanged.
+Current correction is source-only; no root policy/admin/key/download/cloud/billable changes.
+All153 prior YAML and accepted histories remain. Model-effort transition NOT_DUE.
+
+## Historical MET-PERF-005 publication checkpoint
 
 Snapshot: 2026-09-08, during `MET-REPAIR-010` publication. Source authority only.
 Current catalog: 136 packets, thirteen repositories, four planes, sixteen harnesses.

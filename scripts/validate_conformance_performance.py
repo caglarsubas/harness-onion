@@ -295,7 +295,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(followup_history(path, inputs[path])) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 144 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {"MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001"}, "exact148 catalog")
+        require(len(old) == 144 and len(packets) == 155 and set(packets) == old | set(NEW_IDS) | {"MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006"}, "exact148 catalog")
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
         packet, product = (packets[name] for name in NEW_IDS)
@@ -337,7 +337,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 153 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 155 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

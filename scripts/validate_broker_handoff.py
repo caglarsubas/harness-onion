@@ -326,7 +326,7 @@ def validate_handoff(packets, record, inputs):
         require(all(p in record["protectedFiles"] and digest(qualification_history(p, inputs[p])) == checksum
                     for p, checksum in record["unchangedTests"].items()), "unchanged test pins differ")
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 142 and len(packets) == 153 and set(packets) == old | {"MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001"}, "exact catalog")
+        require(len(old) == 142 and len(packets) == 155 and set(packets) == old | {"MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006"}, "exact catalog")
         for name in old | {"MET-REPAIR-014"}:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/" + name + ".yaml"])), "packet bytes")
         packet = packets["MET-REPAIR-014"]
@@ -372,7 +372,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Broker handoff valid: 153 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
+        print("Broker handoff valid: 155 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
     return int(bool(errors))
 
 

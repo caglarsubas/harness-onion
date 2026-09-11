@@ -1,9 +1,9 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-PERF-005 reference-measurement amendment](../alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md).
-Catalog153; accepted product9df7dd7 remains127 files /327 tests; drafts12/13/14/15 unaccepted.
-MET-PERF-004 source gates closed at0bc353e. Publish005, then separate CONF-PERF-004 coding with CONF-BENCH-001 read-only pre-optimization replay.
-Complete reference benchmark replaces only the unavailable full unoptimized baseline; all eight candidate commands and all acceptance boundaries remain.
+Current Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+Catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
+Publish016, then separate CONF-FIX-006 two-path source correction; preserve354 IDs, runtime/benchmark and original proofs.
+Draft12 failed one inherited127-file assertion at its approved135-file stage; no full acceptance or native promotion.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
 ## Purpose and boundaries
@@ -234,6 +234,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 38. `MET-PERF-004`: publish four exact consumer bridges, complete pinned Python source-read inventory and two observed-failure regressions; preserve148 older YAML and all source/runtime boundaries.
 
 39. `MET-PERF-005`: define fresh reference-only measurement before bounded candidate selection, preserving failed evidence, all150 old YAML and full candidate acceptance.
+
+40. `MET-REPAIR-016`: preserve153 packets and accepted performance history; authorize only the two-path successor checkpoint correction.
 
 ## Testing, verification, and acceptance
 
