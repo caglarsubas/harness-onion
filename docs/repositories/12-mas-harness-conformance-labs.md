@@ -1,9 +1,9 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
-Current Alpha-2 dispatch: [MET-PERF-005 reference-measurement amendment](../alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md).
-Catalog153; accepted product9df7dd7 remains127 files /327 tests; drafts12/13/14/15 unaccepted.
-MET-PERF-004 source gates closed at0bc353e. Publish005, then separate CONF-PERF-004 coding with CONF-BENCH-001 read-only pre-optimization replay.
-Complete reference benchmark replaces only the unavailable full unoptimized baseline; all eight candidate commands and all acceptance boundaries remain.
+Current Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](../alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md).
+Catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
+Publish016, then separate CONF-FIX-006 two-path source correction; preserve354 IDs, runtime/benchmark and original proofs.
+Draft12 failed one inherited127-file assertion at its approved135-file stage; no full acceptance or native promotion.
 
 ## Purpose and boundaries
 
@@ -191,6 +191,8 @@ Current performance prerequisite: `CONF-PERF-002` replaces unaccepted001 dispatc
 Current dispatch: `CONF-PERF-003` from accepted9df; supersede unaccepted001/002 dispatch without merging either. All four fixed historical consumers validate current custody first. Complete eight-command baseline remains mandatory.
 
 Current dispatch: `CONF-PERF-004` sole coding owner from accepted9df; `CONF-BENCH-001` is read-only measurement of its committed unchanged-crypto scaffold, not an accepted predecessor or PR. See new reference-measurement guide; previous full-baseline dispatch is historical and unaccepted.
+
+Next: `CONF-FIX-006`, two existing paths from acceptedb7586c4; no runtime/benchmark change. Then separately reconcile draft12.
 
 ## Testing, verification, and acceptance
 

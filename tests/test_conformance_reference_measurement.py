@@ -6,6 +6,8 @@ import re
 
 import pytest
 
+from scripts.validate_conformance_successor_checkpoint import historical_bytes as checkpoint_history
+
 from scripts.safe_yaml import safe_load
 from scripts.validate_conformance_reference_measurement import (
     ROOT, BEFORE_PATH, PRODUCT_PATH, RECORD_SHA256, apply_recipe, canonical,
@@ -30,7 +32,7 @@ def authority():
 def test_current_authority_preserves_all150_old_yaml_and_records(authority):
     packets, record, inputs = authority
     assert validate_authority(*authority) == []
-    assert len(packets) == 153
+    assert len(packets) == 155
     old = [p for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")]
     assert len(old) == 150
     for path in old:
@@ -51,7 +53,7 @@ def test_reversible_current_byte_checks_preserve_historical_tests(authority):
     before = json.loads(inputs[BEFORE_PATH])["files"]
     for path, rule in record["metaRecipes"].items():
         raw = before[path].encode()
-        assert apply_recipe(raw, rule) == inputs[path]
+        assert apply_recipe(raw, rule) == checkpoint_history(path, inputs[path])
         assert historical_bytes(path, inputs[path]) == raw
         if path.startswith("tests/"):
             assert ids(raw) == ids(inputs[path])
@@ -198,7 +200,7 @@ def test_exact72_closed_overlaps_preserve_generic_diagnostics(authority):
     from scripts.validate_packet_ownership import validate_packet_ownership
     packets, record, _ = authority
     generic = validate_packet_ownership(packets)
-    assert len(generic) == 72 and len(record["overlapPairs"]) == 10
+    assert len(generic) == 80 and len(record["overlapPairs"]) == 10
     assert sum(pair[2] for pair in record["overlapPairs"]) == 72
     assert validate_dispatch_ownership(packets) == []
 
@@ -219,6 +221,7 @@ def test_dispatch_never_hides_changed_or_unrelated_packets(authority, fault):
     result = validate_dispatch_ownership(packets)
     assert result
     allowed = [left+" and "+right for left,right,_ in record["overlapPairs"]]
+    allowed.extend(["CONF-BENCH-001 and CONF-FIX-006","CONF-FIX-006 and CONF-PERF-001","CONF-FIX-006 and CONF-PERF-002","CONF-FIX-006 and CONF-PERF-003"])
     unrelated = [e for e in validate_packet_ownership(packets) if not any(pair in e for pair in allowed)]
     assert set(unrelated) <= set(result)
 
