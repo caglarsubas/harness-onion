@@ -1513,11 +1513,16 @@
     },
     "tests/test_conformance_reference_measurement.py": {
       "beforeSha256": "8f076bef2974a936fbb84e8d1d4d0dd6efbbec823a0e90b82242ac216a3d653f",
-      "afterSha256": "2aa64afa30c7bd25bd0de39ee86950864613eff134d372fdf5c4469a51b4a1a1",
+      "afterSha256": "a4a19e5d80a514edc89a6dfb32d155b79f9ea02f69fe105634699d6687f2fec4",
       "replacements": [
         {
           "before": "    assert len(packets) == 155\n",
           "after": "    assert len(packets) == 156\n",
+          "count": 1
+        },
+        {
+          "before": "assert digest(inputs[path]) == checksum",
+          "after": "assert digest(checkpoint_history(path, inputs[path])) == checksum",
           "count": 1
         }
       ]
