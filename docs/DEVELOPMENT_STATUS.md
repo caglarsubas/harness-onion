@@ -1,5 +1,33 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+Snapshot: 2026-09-11, during `MET-PERF-005` publication. Source authority only.
+Current catalog:153 packets; thirteen repositories, four planes, sixteen harnesses.
+
+| Phase | ID / gate | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Source/offline evidence; runtime separate |
+| Alpha2 | MET-PERF-004 / PR113 | DONE_SOURCE_GATES | Meta0bc353e; required CI and independent LOCAL exact-main |
+| Alpha2 | CONF-PERF-001/002 / drafts13/14 | BLOCKED_UNACCEPTED | Historical accounting/timeout failures retained |
+| Alpha2 | CONF-PERF-003 / draft15 | BLOCKED_TIMEOUT | Activation155:170 passed, backend incomplete at900 seconds |
+| Alpha2 authority | MET-PERF-005 | ONGOING | Separate completed reference measurement from full candidate acceptance |
+| Alpha2 repair | CONF-PERF-004 | WAITING | Future single coding packet: scaffold then conditional private-_add candidate |
+| Alpha2 measurement | CONF-BENCH-001 | WAITING | Read-only replay of committed unchanged-crypto scaffold; no merge authority |
+| Alpha2 backend | CONF-LIVE-003 / draft12 | WAITING | Separate accepted-checkpoint reconciliation after repair |
+| Alpha2 backend | CONF-LIVE-004/005/006 | WAITING | Subsequent live-source packets |
+| Alpha2 | Native AMD64 / ARM64 | NOT_RUN_ENV_UNAVAILABLE | Independent installed Linux qualification |
+| Alpha3 / Alpha4 | Governed actions / enterprise release | WAITING | No advancement from source-only work |
+
+See [reference-measurement amendment](alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md).
+All27 META commands and both full replays remain; preserve150 prior YAML.
+Only a freshly complete signed reference benchmark can precede arithmetic choice.
+Full candidate eight-command acceptance, zero product skips, ratio<=0.85 and
+LOCAL/LOCAL exact-main<=750 seconds remain, with trusted900/nested420/workflow15.
+No root policy, new key, administrator prompt, hosted runner, cloud, paid API,
+download or artifact upload. Source / CI / merge / LOCAL exact-main / native /
+runtime / assurance / tenant acceptance remain separate. Effort transition NOT_DUE.
+
+## Historical MET-PERF-004 publication checkpoint
+
 Snapshot: 2026-09-10, during `MET-PERF-004` publication. Source authority only.
 Current catalog:150 packets; thirteen repositories, four planes, sixteen harnesses.
 

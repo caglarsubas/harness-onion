@@ -1,9 +1,9 @@
 # Repository Plan: `Harness-Engineering`
 
-Current Alpha-2 dispatch: [MET-PERF-004 transitive consumer closure](../alpha-2/CONFORMANCE_CONSUMER_CLOSURE.md).
-Catalog150; accepted product main9df7dd7 remains127 files /327 tests; drafts12/13/14 unaccepted.
-MET-PERF-003 source gates closed at a0384bd. Publish MET-PERF-004, then separate CONF-PERF-003; same eight paths, two additional exact methods.
-Earlier publication sections and superseded dispatches remain historical; no performance or native acceptance.
+Current Alpha-2 dispatch: [MET-PERF-005 reference-measurement amendment](../alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md).
+Catalog153; accepted product9df7dd7 remains127 files /327 tests; drafts12/13/14/15 unaccepted.
+MET-PERF-004 source gates closed at0bc353e. Publish005, then separate CONF-PERF-004 coding with CONF-BENCH-001 read-only pre-optimization replay.
+Complete reference benchmark replaces only the unavailable full unoptimized baseline; all eight candidate commands and all acceptance boundaries remain.
 Accepted MET-PERF-001 main e367e89463b86ebc1b1e20563d677bdfe6694060 is preserved; this reconciliation runs both complete replays and all twenty commands.
 
 ## Purpose and boundaries
@@ -232,6 +232,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 37. `MET-PERF-003`: reconcile two direct historical consumers with exact eight-path source authority and measured lower-overhead profiling; retain146 old YAML and failure evidence.
 
 38. `MET-PERF-004`: publish four exact consumer bridges, complete pinned Python source-read inventory and two observed-failure regressions; preserve148 older YAML and all source/runtime boundaries.
+
+39. `MET-PERF-005`: define fresh reference-only measurement before bounded candidate selection, preserving failed evidence, all150 old YAML and full candidate acceptance.
 
 ## Testing, verification, and acceptance
 

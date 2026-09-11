@@ -14,20 +14,15 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
-try:
-    from validate_conformance_reference_measurement import historical_bytes as reference_history, current_test_bytes as reference_current, validate_additions as reference_additions, validate_dispatch_ownership as reference_dispatch
-except ImportError:
-    from scripts.validate_conformance_reference_measurement import historical_bytes as reference_history, current_test_bytes as reference_current, validate_additions as reference_additions, validate_dispatch_ownership as reference_dispatch
-
 ROOT = Path(__file__).resolve().parents[1]
-RECORD_PATH = "architecture/conformance-consumer-closure.json"
-RECORD_FILE_SHA256 = "0f42919cdd9d92685a4cd0ecd0ee471cdbdb05cd62b8cdaef334e340f14614ac"
-HISTORY_PATHS = frozenset(["docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_broker_handoff.py","scripts/validate_ci_performance.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_proxy_contract.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_broker_handoff.py","tests/test_ci_performance.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_proxy_contract.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
-BEFORE_PATH = "architecture/conformance-consumer-closure-inputs/meta-before.json"
+RECORD_PATH = "architecture/conformance-reference-measurement.json"
+BEFORE_PATH = "architecture/conformance-reference-measurement-inputs/meta-before.json"
 PRODUCT_PATH = "architecture/conformance-consumer-closure-inputs/product-before.json"
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
-RECORD_SHA256 = "337d46d0dd1609ff875b88a558ac0ae7244858ff1c1b45e91829e362ea0fd85d"
-NEW_IDS = ("MET-PERF-004", "CONF-PERF-003")
+RECORD_SHA256 = "b3a81dd4e771580d13ba31dcac8405e91336a2229f7845a637de29f927e6672e"
+NEW_IDS = ("MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001")
+RECORD_FILE_SHA256 = "01b97634ff6d8d6251c68413838cadf6dd6b2079cde3794c31ec97cac46fd589"
+HISTORY_PATHS = frozenset(["docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_broker_handoff.py","scripts/validate_ci_performance.py","scripts/validate_conformance_consumer_closure.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_proxy_contract.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_broker_handoff.py","tests/test_ci_performance.py","tests/test_conformance_consumer_closure.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_proxy_contract.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
 
 
 def require(ok, message):
@@ -78,7 +73,7 @@ def pinned(record):
 
 
 def _record():
-    # Fresh read/hash/parse on every invocation, without a result cache.
+    # Fresh read and byte digest every invocation; never cache parsed authority.
     raw = regular_bytes(ROOT, RECORD_PATH)
     require(digest(raw) == RECORD_FILE_SHA256, "exact fresh authority bytes")
     return parse(raw)
@@ -102,8 +97,8 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
-    raw = reference_history(path, raw)
-    # Successor history above is always validated before this identity route.
+    # A closed code-pinned routing table, not an acceptance/result cache.
+    # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
         return raw
     record = _record()
@@ -127,9 +122,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return reference_current(before)
+        return before
     require(len(matches) == 1, "unique predecessor")
-    return reference_current(apply_recipe(before, matches[0]))
+    return apply_recipe(before, matches[0])
 
 
 def validate_additions(packets):
@@ -138,7 +133,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return reference_additions(packets)
+        return []
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -247,8 +242,8 @@ def validate_product_delta(after, proof, record, before_raw):
         before = parse(before_raw)
         require(type(proof) is dict and set(proof) == {"schemaVersion", "evidenceClass", "packetId",
                 "authorityDigest", "baseCommit", "sources", "newTestIds", "beforeSources", "documentSuffix"}, "closed proof")
-        require(proof["schemaVersion"] == "planeon.conformance-performance-delta/v3"
-                and proof["evidenceClass"] == "SOURCE_DELTA_ONLY" and proof["packetId"] == "CONF-PERF-003"
+        require(proof["schemaVersion"] == "planeon.conformance-performance-delta/v4"
+                and proof["evidenceClass"] == "SOURCE_DELTA_ONLY" and proof["packetId"] == "CONF-PERF-004"
                 and proof["authorityDigest"] == RECORD_SHA256
                 and proof["baseCommit"] == before["baseCommit"] == record["sourceBaseline"]["commit"], "proof identity")
         doc = "docs/live-backend/linux-boundary.md"
@@ -272,6 +267,11 @@ def validate_product_delta(after, proof, record, before_raw):
         path = "tests/live_backend/test_supervisor.py"
         added = sorted(set(test_ids(after[path])) - set(test_ids(before["files"][path].encode())))
         require(added and proof["newTestIds"] == added, "exact new test inventory")
+        require(set(record["referenceBenchmark"]["requiredNewTestIds"]) <= set(added), "all21 required regression IDs")
+        begin, end, _ = region(after[path], "PerformanceArithmeticTests.test_fixed_three_sample_workload")
+        require(digest(after[path][begin:end]) == record["referenceBenchmark"]["templateSha256"], "exact matched benchmark method")
+        forbidden_observers = {"setUpModule", "tearDownModule", "_performance_finish_profile"}
+        require(not any(isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name in forbidden_observers for n in ast.parse(proof["sources"][path]["append"]).body), "no full-module profiling overlay")
         # The proof-bearing document has no self-digest. Exact assembly above
         # binds its original prefix, suffix and canonical five-source proof.
         return []
@@ -295,22 +295,32 @@ def validate_authority(packets, record, inputs):
                 **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact current input inventory")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(reference_history(path, inputs[path])) == checksum, "current source changed: " + path)
+            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 148 and len(packets) == 153 and set(packets) == old | set(NEW_IDS) | {"MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001"}, "exact153 catalog")
-        for name in old | set(NEW_IDS):
+        require(len(old) == 150 and len(packets) == 153 and set(packets) == old | set(NEW_IDS), "exact153 catalog")
+        for name in packets:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
-        packet, product = (packets[name] for name in NEW_IDS)
+        packet, product, reference = (packets[name] for name in NEW_IDS)
         require(packet["allowedPaths"] == record["ownedPaths"] and product["allowedPaths"] == record["productPaths"], "path grant")
         require(packet["offlineAcceptanceCommands"] == record["preserved"]["metaCommands"]
-                and len(packet["offlineAcceptanceCommands"]) == 26, "complete meta commands")
+                and len(packet["offlineAcceptanceCommands"]) == 27, "complete meta commands")
         require(product["offlineAcceptanceCommands"] == packets["CONF-FIX-005"]["offlineAcceptanceCommands"]
                 == record["preserved"]["productCommands"], "unchanged eight product commands")
+        require(reference["allowedPaths"] == record["productPaths"] and reference["prefetchCommands"] == []
+                and reference["offlineAcceptanceCommands"] == record["preserved"]["referenceCommands"]
+                == [record["referenceBenchmark"]["command"]], "exact read-only benchmark recipe")
+        template = parse(inputs[record["referenceBenchmark"]["templatePath"]])
+        require(template["evidenceClass"] == "INERT_SOURCE_SPECIFICATION_ONLY"
+                and digest(template["method"].encode()) == template["sha256"]
+                == record["referenceBenchmark"]["templateSha256"], "exact inert benchmark method")
+        ast.parse("\n".join(line[4:] if line else line for line in template["method"].splitlines()))
+        require(len(record["referenceBenchmark"]["requiredProductTestIds"]) == 348
+                and len(record["referenceBenchmark"]["requiredNewTestIds"]) == 21, "327 plus21 regression identity floor")
         before = parse(inputs[BEFORE_PATH])
         require(before["baseCommit"] == record["metaBaseline"] and set(before["files"]) == set(record["metaRecipes"]), "meta before inventory")
         for path, rule in record["metaRecipes"].items():
             raw = before["files"][path].encode()
-            require(apply_recipe(raw, rule) == reference_history(path, inputs[path]), "meta recipe differs")
+            require(apply_recipe(raw, rule) == inputs[path], "meta recipe differs")
             if path.startswith("tests/"):
                 require(test_ids(raw) == test_ids(inputs[path]), "old test identity changed")
         checkpoint, sources = parse(inputs[CHECKPOINT_PATH]), parse(inputs[PRODUCT_PATH])
@@ -332,7 +342,9 @@ def validate_authority(packets, record, inputs):
                     and record["productRegions"][path]["fixedRegions"][bridge["region"]] == bridge["after"], "exact consumer before/after")
         validate_consumer_census(parse(inputs["architecture/conformance-consumer-closure-inputs/consumer-sources.json"]), checkpoint, sources, record)
         require(record["profiling"]["subcalls"] is False and record["profiling"]["builtins"] is True
-                and record["profiling"]["fullBaselineRequired"] is True
+                and record["profiling"]["fullBaselineRequired"] is False
+                and record["profiling"]["completeReferenceBenchmarkRequired"] is True
+                and record["profiling"]["fullCandidateRequired"] is True
                 and record["profiling"]["partialMayAuthorizeOptimization"] is False
                 and record["profiling"]["crossCallCacheAllowed"] is False, "full uncached measurement gate")
         require(record["stages"] == [110,120,127,135,141,146,151]
@@ -406,9 +418,130 @@ def validate_consumer_census(census, checkpoint, sources, record):
     return sites
 
 
+def validate_measurement_data(report, custody, record, *, reference=None):
+    """DATA_CHECK_ONLY. The operator must independently verify signed custody.
+
+    Consistent caller-supplied JSON is not proof of a real run or authorization.
+    No signature verification, program execution, promotion or mutation occurs.
+    """
+    try:
+        import math
+        import statistics
+        pinned(record)
+        spec = record["referenceBenchmark"]
+        require(type(report) is dict and set(report) == set(spec["reportFields"]), "closed benchmark report")
+        require(type(custody) is dict and set(custody) == set(spec["custodyFields"]), "closed retained custody data")
+        for key, value in spec["fixedReport"].items():
+            require(type(report[key]) is type(value) and report[key] == value, "fixed report identity: " + key)
+        is_candidate = reference is not None
+        packet = "CONF-PERF-004" if is_candidate else "CONF-BENCH-001"
+        require(custody["packetId"] == packet and custody["status"] == "COMPLETE"
+                and type(custody["exitCode"]) is int and custody["exitCode"] == 0
+                and type(custody["commandsCompleted"]) is int
+                and custody["commandsCompleted"] == (8 if is_candidate else 1)
+                and type(custody["skipped"]) is int and custody["skipped"] == 0
+                and custody["workingTreeOverlay"] is False and custody["trackedFilesUnchanged"] is True,
+                "complete unchanged zero-skip run data")
+        require(custody["execution"] == "SIGNED_DENY_ALL_OFFLINE"
+                and custody["evidenceClass"] == "RETAINED_CUSTODY_DATA_ONLY", "data cannot self-grant authority")
+        require(type(custody["activationSequence"]) is int and custody["activationSequence"] > 155,
+                "fresh post-timeout activation")
+        for key in ("checkoutCommit", "checkoutTree"):
+            require(type(custody[key]) is str and re.fullmatch("[0-9a-f]{40}", custody[key]), "commit/tree identity")
+        for key in ("packetSha256", "logSha256", "sourceInventorySha256", "referenceReportSha256"):
+            require(type(custody[key]) is str and re.fullmatch("[0-9a-f]{64}", custody[key]), "custody digest")
+        require(custody["packetSha256"] == record["inputFiles"]["task-packets/" + packet + ".yaml"], "exact replay packet")
+        require(type(custody["testIds"]) is list and all(type(x) is str for x in custody["testIds"])
+                and custody["testIds"] == sorted(set(custody["testIds"])), "exact nonduplicate executed IDs")
+        expected_ids = spec["requiredProductTestIds"] if is_candidate else [spec["testId"]]
+        require((set(expected_ids) <= set(custody["testIds"])) if is_candidate
+                else custody["testIds"] == expected_ids, "full product or exact one-method benchmark inventory")
+        number = lambda x: type(x) in (float, int) and math.isfinite(x) and x > 0
+        require(number(custody["trustedElapsedSeconds"])
+                and custody["trustedElapsedSeconds"] <= (750 if is_candidate else 900), "unchanged deadline")
+        for key in ("interpreter", "platform"):
+            require(type(report[key]) is str and 0 < len(report[key]) <= 1024, "bounded host metadata")
+        require(type(report["sourceSha256"]) is str and re.fullmatch("[0-9a-f]{64}", report["sourceSha256"]), "source digest")
+        if not is_candidate:
+            require(report["sourceSha256"] == spec["unchangedCryptoSha256"], "exact original crypto")
+        require(type(report["samplesSeconds"]) is list and len(report["samplesSeconds"]) == 3
+                and all(number(x) for x in report["samplesSeconds"]), "three complete positive finite samples")
+        require(report["resultDigests"] == [spec["resultDigest"]] * 3, "deterministic vector equality")
+        wall = report["benchmarkWallSeconds"]
+        require(number(wall) and sum(report["samplesSeconds"]) <= wall <= custody["trustedElapsedSeconds"], "consistent benchmark wall")
+        require(type(report["functions"]) is list, "function attribution rows")
+        names, rows = [], {}
+        for row in report["functions"]:
+            require(type(row) is dict and set(row) == {"function", "calls", "primitiveCalls", "selfSeconds", "cumulativeSeconds"}, "closed function row")
+            name = row["function"]
+            require(type(name) is str and name in spec["requiredFunctions"] and name not in names, "exact function attribution")
+            require(type(row["calls"]) is int and type(row["primitiveCalls"]) is int
+                    and 0 < row["primitiveCalls"] <= row["calls"], "nonzero integer call counts")
+            require(number(row["selfSeconds"]) and number(row["cumulativeSeconds"])
+                    and row["selfSeconds"] <= row["cumulativeSeconds"] <= wall, "finite function times")
+            names.append(name)
+            rows[name] = row
+        require(names == sorted(spec["requiredFunctions"]), "all required complete function rows")
+        if not is_candidate:
+            require(custody["referenceReportSha256"] == digest(canonical(report)), "reference report identity")
+            require(rows["_add"]["cumulativeSeconds"] / wall >= 0.50
+                    and rows["builtins.pow"]["selfSeconds"] / wall >= 0.40, "material reference arithmetic attribution")
+        else:
+            require(type(reference) is dict and set(reference) == {"report", "custody"}, "closed reference binding")
+            require(not validate_measurement_data(reference["report"], reference["custody"], record), "complete reference data required")
+            prior = reference["report"]
+            require(custody["referenceReportSha256"] == digest(canonical(prior)), "exact retained reference report")
+            require(custody["activationSequence"] > reference["custody"]["activationSequence"]
+                    and custody["checkoutCommit"] != reference["custody"]["checkoutCommit"], "ordered distinct candidate commit")
+            for key in ("interpreter", "platform", "observerIdentity", "sampleIdentity", "benchmarkSha256", "recipeSha256", "warmColdDefinition"):
+                require(report[key] == prior[key], "matched reference/candidate metadata: " + key)
+            require(statistics.median(report["samplesSeconds"]) <= 0.85 * statistics.median(prior["samplesSeconds"]), "matched median performance gate")
+        return []
+    except (ValueError, TypeError, KeyError, AttributeError, UnicodeError, RecursionError, OverflowError):
+        return ["invalid benchmark DATA_CHECK_ONLY; signatures and real-run custody remain external"]
+
+
+def validate_reference_scaffold_data(after, proof, record, before_raw):
+    """The exact unchanged-crypto source scope, not a completed reference run."""
+    errors = validate_product_delta(after, proof, record, before_raw)
+    if errors:
+        return errors
+    if digest(after["src/harness_conformance/crypto.py"]) != record["referenceBenchmark"]["unchangedCryptoSha256"]:
+        return ["reference scaffold crypto is not the accepted unchanged source"]
+    return []
+
+
 def validate_dispatch_ownership(packets):
-    """Delegate to the newest pinned closed adapter; old packets stay immutable."""
-    return reference_dispatch(packets)
+    """No generic weakening; close only the ten immutable, exact scoped pairs."""
+    try:
+        from validate_packet_ownership import validate_packet_ownership
+    except ImportError:
+        from scripts.validate_packet_ownership import validate_packet_ownership
+    errors = validate_packet_ownership(packets)
+    try:
+        record = _record()
+        require(validate_additions(packets) == [], "exact new packets")
+        for name in ("CONF-PERF-001", "CONF-PERF-002", "CONF-PERF-003"):
+            path = "task-packets/" + name + ".yaml"
+            raw = regular_bytes(ROOT, path)
+            require(digest(raw) == record["protectedFiles"][path]
+                    and canonical(packets.get(name)) == canonical(safe_load(raw))
+                    and record["dispatch"][name] == "SUPERSEDED_UNACCEPTED_HISTORY", "immutable retired packet")
+        role = record["referenceBenchmark"]["executionRole"]
+        require(role == {"packetId": "CONF-BENCH-001", "sourceOwner": "CONF-PERF-004",
+                "sourceEdits": False, "requiresBranchOrPr": False, "acceptedSourcePredecessor": False,
+                "class": "READ_ONLY_REFERENCE_REPLAY"}, "read-only replay role")
+        retired = set()
+        for pair in record["overlapPairs"]:
+            left, right, count = pair
+            paths = set(packets[left]["allowedPaths"]) & set(packets[right]["allowedPaths"])
+            require(len(paths) == count, "exact pairwise path overlap")
+            retired.update("unordered same-repository packets " + left + " and " + right + " overlap at "
+                           + repr(path) + " and " + repr(path) for path in paths)
+        require(len(retired) == 72 and all(errors.count(message) == 1 for message in retired), "exact72 diagnostics")
+        return [error for error in errors if error not in retired]
+    except (ValueError, TypeError, KeyError, OSError, RecursionError):
+        return errors + ["missing or changed closed reference/candidate dispatch"]
 
 
 def main():
@@ -420,7 +553,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 153 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 153 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

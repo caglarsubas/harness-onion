@@ -36,7 +36,7 @@ def authority():
 def test_exact_catalog_preserves_every_old_yaml_and_authority(authority):
     packets, record, inputs = authority
     assert validate_authority(*authority) == []
-    assert len(packets) == 150
+    assert len(packets) == 153
     old = [p for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")]
     assert len(old) == 146
     for path in old:
@@ -120,8 +120,8 @@ def test_supersession_retains_generic_checks_and_only_closes_exact_pair(authorit
     from scripts.validate_packet_ownership import validate_packet_ownership
     packets, _, _ = authority
     generic = validate_packet_ownership(packets)
-    assert len(generic) == 20
-    assert all(any(pair in error for pair in ("CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-003")) for error in generic)
+    assert len(generic) == 72
+    assert all(any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004")) for error in generic)
     assert validate_dispatch_ownership(packets) == []
     assert "CONF-PERF-001" not in packets["CONF-PERF-002"]["predecessors"]
 
@@ -146,7 +146,7 @@ def test_supersession_never_suppresses_changed_packets_or_other_ownership_errors
     result = validate_dispatch_ownership(packets)
     assert result
     unrelated = [error for error in validate_packet_ownership(packets)
-                 if not any(pair in error for pair in ("CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-003"))]
+                 if not any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004"))]
     assert set(unrelated) <= set(result)
 
 

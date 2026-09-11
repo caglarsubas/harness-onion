@@ -98,8 +98,8 @@ def validate_live_backend_readiness(
             from scripts.validate_packet_scalar_repair import ADDITIONS, validate_additions
             from scripts.validate_successor_inventory import ADDITIONS as SUCCESSORS, validate_additions as validate_successors
             from scripts.validate_proxy_contract import ADDITIONS as PROXY_ADDITIONS, validate_additions as validate_proxy_additions
-        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 150:
-            errors.append("current roadmap requires exactly 150 named packets; historical authority remains 130")
+        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 153:
+            errors.append("current roadmap requires exactly 153 named packets; historical authority remains 130")
         errors.extend(validate_additions(packets))
         errors.extend(validate_successors(packets))
         errors.extend(validate_proxy_additions(packets))
@@ -151,7 +151,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Live backend roadmap valid: 150 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
+        print("Live backend roadmap valid: 153 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
     return bool(errors)
 
 

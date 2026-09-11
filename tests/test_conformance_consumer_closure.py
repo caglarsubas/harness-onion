@@ -8,6 +8,8 @@ import re
 
 import pytest
 
+from scripts.validate_conformance_reference_measurement import historical_bytes as reference_history
+
 from scripts.safe_yaml import safe_load
 from scripts.validate_conformance_consumer_closure import (
     ROOT, BEFORE_PATH, PRODUCT_PATH, RECORD_SHA256, apply_recipe, canonical,
@@ -34,7 +36,7 @@ def authority():
 def test_exact_catalog_preserves_every_old_yaml_and_authority(authority):
     packets, record, inputs = authority
     assert validate_authority(*authority) == []
-    assert len(packets) == 150
+    assert len(packets) == 153
     old = [p for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")]
     assert len(old) == 148
     for path in old:
@@ -57,7 +59,7 @@ def test_every_current_meta_byte_is_validated_before_history(authority):
     before = json.loads(inputs[BEFORE_PATH])["files"]
     for path, rule in record["metaRecipes"].items():
         raw = before[path].encode()
-        assert apply_recipe(raw, rule) == inputs[path]
+        assert apply_recipe(raw, rule) == reference_history(path, inputs[path])
         assert historical_bytes(path, inputs[path]) == raw
         if path.startswith("tests/"):
             assert ids(raw) == ids(inputs[path])
@@ -65,7 +67,7 @@ def test_every_current_meta_byte_is_validated_before_history(authority):
         with pytest.raises(ValueError):
             historical_bytes(path, inputs[path]+b"\n")
     for path in record["unchangedTests"]:
-        assert current_test_bytes(inputs[path]) == inputs[path]
+        assert current_test_bytes(reference_history(path, inputs[path])) == inputs[path]
 
 
 def test_exact_bridges_preserve_old_oracles_and_only_change_historical_operands(authority):
@@ -127,8 +129,8 @@ def test_supersession_retains_generic_checks_and_only_closes_exact_pair(authorit
     from scripts.validate_packet_ownership import validate_packet_ownership
     packets, _, _ = authority
     generic = validate_packet_ownership(packets)
-    assert len(generic) == 20
-    assert all(any(pair in error for pair in ("CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-003")) for error in generic)
+    assert len(generic) == 72
+    assert all(any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004")) for error in generic)
     assert validate_dispatch_ownership(packets) == []
     assert "CONF-PERF-001" not in packets["CONF-PERF-003"]["predecessors"]
 
@@ -153,7 +155,7 @@ def test_supersession_never_suppresses_changed_packets_or_other_ownership_errors
     result = validate_dispatch_ownership(packets)
     assert result
     unrelated = [error for error in validate_packet_ownership(packets)
-                 if not any(pair in error for pair in ("CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-003"))]
+                 if not any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004"))]
     assert set(unrelated) <= set(result)
 
 
@@ -322,7 +324,7 @@ def test_roadmap_and_measurement_keep_all_acceptance_boundaries():
                   '0.85','CONF-LIVE-003','NOT_RUN_ENV_UNAVAILABLE','effort transition NOT_DUE',
                   'subcalls=False, builtins=True','119','119','170','900','create_stats mid-run'):
         assert value in guide
-    current = (ROOT/'docs/DEVELOPMENT_STATUS.md').read_text().split('## Historical MET-PERF-003')[0]
+    current = (ROOT/'docs/DEVELOPMENT_STATUS.md').read_text().split('## Historical MET-PERF-004 publication checkpoint\n',1)[1].split('## Historical MET-PERF-003')[0]
     for value in ('MET-PERF-004 | ONGOING','CONF-PERF-003 | WAITING','draft13 | BLOCKED_UNACCEPTED','draft12 | WAITING'):
         assert value in current
 
