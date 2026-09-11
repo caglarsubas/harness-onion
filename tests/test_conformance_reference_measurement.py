@@ -60,6 +60,45 @@ def test_reversible_current_byte_checks_preserve_historical_tests(authority):
             historical_bytes(path, inputs[path] + b"\n")
 
 
+def test_every_record_read_rechecks_bytes_without_cross_call_cache(monkeypatch):
+    from scripts import validate_conformance_reference_measurement as module
+    raw = module.regular_bytes(ROOT, module.RECORD_PATH)
+    reads = []
+    def read_again(root,path):
+        reads.append(path)
+        return raw if len(reads) == 1 else raw + b" "
+    monkeypatch.setattr(module,"regular_bytes",read_again)
+    assert module._record()["authorityPacket"] == "MET-PERF-005"
+    with pytest.raises(ValueError, match="exact fresh authority bytes"):
+        module._record()
+    assert reads == [module.RECORD_PATH, module.RECORD_PATH]
+
+
+@pytest.mark.parametrize("fault", ["missing-route","extra-route"])
+def test_routing_table_is_exact_and_cannot_suppress_reviewed_changes(authority,monkeypatch,fault):
+    from scripts import validate_conformance_reference_measurement as module
+    paths = set(module.HISTORY_PATHS)
+    if fault == "missing-route": paths.remove("scripts/validate_readiness.py")
+    else: paths.add("unreviewed.py")
+    monkeypatch.setattr(module,"HISTORY_PATHS",frozenset(paths))
+    assert validate_authority(*authority)
+
+
+def test_unmodified_paths_are_identity_not_an_acceptance_decision(authority,monkeypatch):
+    from scripts import validate_conformance_reference_measurement as module
+    calls = []
+    original = module._record
+    def counted():
+        calls.append(1)
+        return original()
+    monkeypatch.setattr(module,"_record",counted)
+    assert historical_bytes("unchanged.txt",b"untrusted") == b"untrusted"
+    assert calls == []
+    raw = authority[2]["scripts/validate_readiness.py"]
+    assert historical_bytes("scripts/validate_readiness.py",raw) != raw
+    assert calls == [1]
+
+
 def test_replay_is_read_only_not_source_predecessor_or_candidate_acceptance(authority):
     packets, record, _ = authority
     spec = record["referenceBenchmark"]

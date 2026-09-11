@@ -21,6 +21,8 @@ PRODUCT_PATH = "architecture/conformance-consumer-closure-inputs/product-before.
 CHECKPOINT_PATH = "architecture/credential-ordering-inputs/checkpoint.json"
 RECORD_SHA256 = "b073d7c32b9c7b06407c8b5a5772be35ba1e62928f2d5e2283544cd3dc3bbbd9"
 NEW_IDS = ("MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001")
+RECORD_FILE_SHA256 = "0454a7e69bc1fd922617c957045fa5bf88f0a6eb21c68d679fe72c8954a5f518"
+HISTORY_PATHS = frozenset(["docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_broker_handoff.py","scripts/validate_ci_performance.py","scripts/validate_conformance_consumer_closure.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_proxy_contract.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_broker_handoff.py","tests/test_ci_performance.py","tests/test_conformance_consumer_closure.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_proxy_contract.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
 
 
 def require(ok, message):
@@ -71,9 +73,10 @@ def pinned(record):
 
 
 def _record():
-    value = parse(regular_bytes(ROOT, RECORD_PATH))
-    pinned(value)
-    return value
+    # Fresh read and byte digest every invocation; never cache parsed authority.
+    raw = regular_bytes(ROOT, RECORD_PATH)
+    require(digest(raw) == RECORD_FILE_SHA256, "exact fresh authority bytes")
+    return parse(raw)
 
 
 def apply_recipe(before, rule):
@@ -94,6 +97,10 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    # A closed code-pinned routing table, not an acceptance/result cache.
+    # Unchanged inputs still receive the predecessor caller's exact hash check.
+    if path not in HISTORY_PATHS:
+        return raw
     record = _record()
     rule = record["metaRecipes"].get(path)
     if rule is None:
@@ -282,6 +289,7 @@ def load_inputs(root):
 def validate_authority(packets, record, inputs):
     try:
         pinned(record)
+        require(HISTORY_PATHS == set(record["metaRecipes"]), "exact historical routing table")
         require(not validate_additions(packets), "new packet mismatch")
         pins = {**record["protectedFiles"], **record["inputFiles"],
                 **{p:r["afterSha256"] for p,r in record["metaRecipes"].items()}}
