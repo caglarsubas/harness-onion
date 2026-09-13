@@ -1,5 +1,16 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 Current Alpha-2 dispatch: [MET-REPAIR-016 successor checkpoint correction](SUCCESSOR_CHECKPOINT_REPAIR.md).
 Catalog155; accepted productb7586c4 has127 files /354 tests. META005 and product PERF004 source gates are closed.
 Publish016, then separate CONF-FIX-006 two-path source correction; preserve354 IDs, runtime/benchmark and original proofs.

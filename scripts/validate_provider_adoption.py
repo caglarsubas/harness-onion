@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_proxy_diagnostics import historical_bytes as diagnostic_history, current_test_bytes as diagnostic_current, validate_additions as diagnostic_additions
+except ImportError:
+    from scripts.validate_proxy_diagnostics import historical_bytes as diagnostic_history, current_test_bytes as diagnostic_current, validate_additions as diagnostic_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/provider-adoption-authority.json"
 RECORD_SHA256 = "040f02f7ce6aeb54a2d5469804a0b293149d97a66ac7ccdf43d7f41c6fa48284"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = diagnostic_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -119,9 +125,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return diagnostic_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return diagnostic_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -130,7 +136,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return diagnostic_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -230,10 +236,10 @@ def validate_authority(packets, record, inputs):
         pins = {**record['protectedFiles'], **record['inputFiles'], **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(set(inputs) == set(pins), 'exact fresh input inventory')
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'changed current source: ' + path)
+            require(type(inputs[path]) is bytes and digest(diagnostic_history(path, inputs[path])) == checksum, 'changed current source: ' + path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 155 and len(packets) == 156 and set(packets) == old | set(NEW_IDS), 'exact156 catalog with155 immutable predecessors')
-        for name in packets:
+        require(len(old) == 155 and len(packets) == 158 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-006', 'CONF-DIAG-001'}, 'exact158 catalog with155 immutable predecessors')
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'raw semantic packet binding')
         packet = packets['MET-ADOPT-001']
         require(packet['allowedPaths'] == record['ownedPaths'] and packet['sourceReuse'] == [] and packet['predecessors'] == ['MET-REPAIR-016'], 'meta-only scope')
@@ -241,7 +247,7 @@ def validate_authority(packets, record, inputs):
         require(len(commands) == 29 and commands[:-3] == packets['MET-REPAIR-016']['offlineAcceptanceCommands'][:-2] and commands[-2:] == packets['MET-REPAIR-016']['offlineAcceptanceCommands'][-2:] and commands[-3] == ['uv','run','--offline','--frozen','--no-sync','python','scripts/validate_provider_adoption.py'], 'all28 prior commands plus new validator')
         for path, rule in record['metaRecipes'].items():
             before = historical_bytes(path, inputs[path])
-            require(apply_recipe(before, rule) == inputs[path], 'exact reversible amendment')
+            require(apply_recipe(before, rule) == diagnostic_history(path, inputs[path]), 'exact reversible amendment')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'all historical test identities preserved')
         plan = parse(inputs[PLAN_PATH])
@@ -261,4 +267,4 @@ if __name__ == '__main__':
     if errors:
         print('\n'.join(errors))
         raise SystemExit(1)
-    print('Provider adoption authority valid:156 packets;155 immutable predecessors;16 harnesses/13 repositories; planning only, no product qualification.')
+    print('Provider adoption authority valid:158 packets;155 immutable predecessors;16 harnesses/13 repositories; planning only, no product qualification.')

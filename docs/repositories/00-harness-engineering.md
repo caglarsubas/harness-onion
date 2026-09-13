@@ -1,5 +1,16 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](../alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
@@ -252,6 +263,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 40. `MET-REPAIR-016`: preserve153 packets and accepted performance history; authorize only the two-path successor checkpoint correction.
 
 41. `MET-ADOPT-001`: approved air-gap/provider adoption policy, exact multi-repository ownership, phased coverage and source-only authority reconciliation.
+
+42. `MET-PERF-006`: exact local proxy diagnostic scope, preserved timeout evidence, closed read-only dispatch and no repair authority.
 
 ## Testing, verification, and acceptance
 

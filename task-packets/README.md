@@ -1,5 +1,16 @@
 # Sol-High Task Packet Catalog
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](../docs/alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](../docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
@@ -328,6 +339,8 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 154 | `CONF-UPG-001` | `mas-harness-conformance-labs` | Lifecycle certification |
 | 155 | `CONF-WG-001` | `mas-harness-conformance-labs` | White-goods enterprise acceptance |
 | 156 | `MET-ADOPT-001` | `Harness-Engineering` | Provider adoption,13-repository policy and phased extension backlog |
+| 157 | `MET-PERF-006` | `Harness-Engineering` | Exact proxy diagnostic authority; no optimization |
+| 158 | `CONF-DIAG-001` | `mas-harness-conformance-labs` | Read-only normal/profiled retirement workload; no coding PR |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 

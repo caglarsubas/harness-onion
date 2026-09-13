@@ -1,5 +1,16 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
@@ -230,6 +241,17 @@ The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
@@ -309,6 +331,17 @@ key, administrator prompt, paid API, hosted runner, download or cloud action.
 The following snapshot is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
 
 ## Current adoption roadmap — MET-ADOPT-001
 
@@ -414,6 +447,17 @@ The following is historical, not current dispatch authority.
 
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
@@ -495,6 +539,17 @@ The following snapshot predates the verified closure above. It is retained as
 history, not the current dispatch instruction.
 
 # Development checkpoint — Phase 0 to Alpha 2
+
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
 
 ## Current adoption roadmap — MET-ADOPT-001
 

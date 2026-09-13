@@ -1,0 +1,991 @@
+{
+  "schemaVersion": "planeon.internal.proxy-diagnostics/v1",
+  "evidenceClass": "DIAGNOSTIC_PLAN_ONLY",
+  "packetId": "CONF-DIAG-001",
+  "sourceOwner": "CONF-LIVE-003",
+  "sourceEdits": false,
+  "requiresBranchOrPr": false,
+  "acceptedSourcePredecessor": false,
+  "diagnosticIsAcceptance": false,
+  "optimizationAuthorized": false,
+  "subject": {
+    "repository": "mas-harness-conformance-labs",
+    "commit": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+    "tree": "f5a25661c2df6c87e5d3429b0b5f62511c2e5988",
+    "sourceStatus": "LOCAL_UNACCEPTED_NOT_PUSHED",
+    "fullAcceptance": false,
+    "fullTestInventory": 1277,
+    "backendTestInventory": 1107,
+    "inventory": [
+      {
+        "mode": "100644",
+        "path": ".github/workflows/verify.yml",
+        "sha256": "91090dc69c12837e8b73eb41a868b3afca7dcb34b304c7b409ac716310ddd3a6",
+        "size": 615
+      },
+      {
+        "mode": "100644",
+        "path": ".gitignore",
+        "sha256": "0672c3d34147eb3a4b4aa4298d4d88f647d6d28aa22cffdb705508df11bda33a",
+        "size": 158
+      },
+      {
+        "mode": "100644",
+        "path": "AGENTS.md",
+        "sha256": "0b8faaf320feae214a47000b924c9a9c717e73e6d220edf1d16f0ff14381e843",
+        "size": 3064
+      },
+      {
+        "mode": "100644",
+        "path": "CONTRIBUTING.md",
+        "sha256": "d947eeaf23f47ad60e26bb2e0f236f08a8bd74ca7f8e80d378248ef4477d5964",
+        "size": 460
+      },
+      {
+        "mode": "100644",
+        "path": "LICENSE",
+        "sha256": "2d3b806e6fd270f11819d0f797f721747adb0d497760e1b9053b6cd1fae4cf54",
+        "size": 774
+      },
+      {
+        "mode": "100644",
+        "path": "Makefile",
+        "sha256": "bb652db371113bab5d9d8924f0b10b1f85793c0cc84178d447ab1095f4e7b981",
+        "size": 661
+      },
+      {
+        "mode": "100644",
+        "path": "NOTICE",
+        "sha256": "a70fc36aa7b6f295c4a662b6443a0599c4c89e9b6e62feb29763967d79ce382f",
+        "size": 169
+      },
+      {
+        "mode": "100644",
+        "path": "PORTING.yaml",
+        "sha256": "69af26b731e28920bb4cc5dd25f6d1d1c18aa75308d75517d6a61f214fa238c4",
+        "size": 253
+      },
+      {
+        "mode": "100644",
+        "path": "README.md",
+        "sha256": "652e3abc12e4cd6d405eb80018a7c29c68d7d3094c2858196d9b83ea7dd566ea",
+        "size": 1228
+      },
+      {
+        "mode": "100644",
+        "path": "SECURITY.md",
+        "sha256": "1b5594cb9074fb98aa77768df57aeab45c469b60337ba9662e71367b92aa9cc7",
+        "size": 555
+      },
+      {
+        "mode": "100644",
+        "path": "campaigns/alpha1/campaign.json",
+        "sha256": "17ad9b40b5518e3432c926b5604073fb922df08be38055310dbc851d1a18cef6",
+        "size": 702
+      },
+      {
+        "mode": "100644",
+        "path": "campaigns/meta/campaign.json",
+        "sha256": "22091f996b03eae43f8d00da3ec08c85ad12aef2cbb7d0d4ca8b79df8b705386",
+        "size": 2341
+      },
+      {
+        "mode": "100644",
+        "path": "campaigns/parity/campaign.json",
+        "sha256": "cd2ce011470ffef7dc7a08a4fc994a81f3d2f58899276991e02efb1c431956f4",
+        "size": 627
+      },
+      {
+        "mode": "100644",
+        "path": "campaigns/platform/linux-baseline/campaign.json",
+        "sha256": "3f4da90f48f61e3ee99b002b969eecbffbe60ac65d650abc82cdc6052df9e50e",
+        "size": 5429
+      },
+      {
+        "mode": "100644",
+        "path": "ci/acceptance_package_contract.py",
+        "sha256": "e5872ce6a4af9ead7c1cf130e47ca028fb7dc85b63ef5801abae82151938df6d",
+        "size": 1753
+      },
+      {
+        "mode": "100644",
+        "path": "ci/build_live_launcher.py",
+        "sha256": "873dba7a314405a6ff7c446ee4c0333e34c7cc3400c01141f2c8929dc58c35ad",
+        "size": 2425
+      },
+      {
+        "mode": "100644",
+        "path": "ci/network_canary.py",
+        "sha256": "8eb07e2c974fd4a5040869ef0eee43963826dc8b32f7dd93fa18a91931e56500",
+        "size": 1499
+      },
+      {
+        "mode": "100644",
+        "path": "ci/prefetch.py",
+        "sha256": "341e6e102b93e74a0e7b3688ad88faacf4fd23dad2d6100884039d1a207947a1",
+        "size": 3824
+      },
+      {
+        "mode": "100644",
+        "path": "ci/run_make_target.py",
+        "sha256": "0a0f5c2d6305a1772848ba2e58b8c3d17321de3fe5fdc99377515e09c1138389",
+        "size": 5807
+      },
+      {
+        "mode": "100644",
+        "path": "ci/run_packet.py",
+        "sha256": "397219b875c040d496edaecaca28bf68725c5338313f047a799235b451ca6de1",
+        "size": 8302
+      },
+      {
+        "mode": "100644",
+        "path": "ci/run_packet_argv.py",
+        "sha256": "523bda5db30faba4c027332a40f36c36e1efdb7e5bd39b68045bcdf817f94fdd",
+        "size": 226
+      },
+      {
+        "mode": "100644",
+        "path": "ci/targets/conf-001.json",
+        "sha256": "dc2d49619485436c5cf4540b60c5432e847f96433bc60aa3da88577ffa9887b7",
+        "size": 692
+      },
+      {
+        "mode": "100644",
+        "path": "ci/targets/conf-002.json",
+        "sha256": "0e2d0b28b83567cd5cf8fd46f30a377d255995af4450f4675ae08bf27fd757c1",
+        "size": 339
+      },
+      {
+        "mode": "100644",
+        "path": "ci/trust/live-runner-root.pub",
+        "sha256": "6b22a99cab70c60b7cc345962ae220e32b2dbc89c72b419c79a9c92ec5f6c012",
+        "size": 82
+      },
+      {
+        "mode": "100644",
+        "path": "ci/verify-live-campaign.py",
+        "sha256": "ed7fa0f9a5d933c257a93f9be9ac5a3321c0b2451aa31e0f698a6053e8f46004",
+        "size": 630
+      },
+      {
+        "mode": "100755",
+        "path": "ci/verify-offline.sh",
+        "sha256": "b058780b727d2e4c7b5f77d3c7f623a7dafdac621c5b505238297e2ea2524c47",
+        "size": 912
+      },
+      {
+        "mode": "100644",
+        "path": "ci/zero_bill.py",
+        "sha256": "6e9c7f5aa2ea527a1b1d9472bbab164be4ba051f27dae90005695ff3f04cda14",
+        "size": 2177
+      },
+      {
+        "mode": "100644",
+        "path": "docs/live-backend/linux-boundary.md",
+        "sha256": "157a7733b5df9dddc656d086f54e585b1508ef161e6849cdcc54cebc0b1ed7b3",
+        "size": 1697376
+      },
+      {
+        "mode": "100644",
+        "path": "docs/live-backend/proxy.md",
+        "sha256": "f21d8b04b1c1c00b4ac6c7de5e5afab532baca4c19ed1b79db9c3d77c59b349b",
+        "size": 91412
+      },
+      {
+        "mode": "100644",
+        "path": "docs/live-backend/session.md",
+        "sha256": "41319d8f1a7fa9441fded7efe23c8254929cc5ea15d7d1f59c125e33b29fc767",
+        "size": 10811
+      },
+      {
+        "mode": "100644",
+        "path": "docs/parity.md",
+        "sha256": "70fb8b95ee95eb7219c3b9ed0eea4c00c280ecf93dba6765418fa559d92b8dc4",
+        "size": 1083
+      },
+      {
+        "mode": "100644",
+        "path": "docs/reports/alpha1-template.md",
+        "sha256": "70f572dc3d3fef6d45e14c93c09352aea9b7bbdad189cc5167e3d57628c933a9",
+        "size": 2179
+      },
+      {
+        "mode": "100644",
+        "path": "docs/reports/linux-baseline.md",
+        "sha256": "99096cc71b49d662cb3c1a71137724eb1748aa633a7a24c8b56fa4b467605919",
+        "size": 10913
+      },
+      {
+        "mode": "100644",
+        "path": "docs/reports/packet-scalar-repair.md",
+        "sha256": "d824ddb953d31f1a20e19951ef743611e1943f5b6b8d6fe4679721d3146e355a",
+        "size": 6081
+      },
+      {
+        "mode": "100644",
+        "path": "docs/reports/runner-boundary-repair.md",
+        "sha256": "e5700f158b640364f15565cbbea8dee7e86e88c045c8cde07cfaa8fe77a525bf",
+        "size": 6595
+      },
+      {
+        "mode": "100644",
+        "path": "docs/reports/successor-inventory-repair.md",
+        "sha256": "c930632d1e8674d9516976a5d07d385ac6211ade937fd16b6b875607f8498ab2",
+        "size": 7131
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/alpha1/environment-unavailable.json",
+        "sha256": "71ae29d6bafffc062dcaa358929cdc5224d29f415b6a3a327714f9013dca345d",
+        "size": 244
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/alpha1/journey.json",
+        "sha256": "0399a95811cafc48c8deae07b45fadb8082b3be99db838da8b09fbddc1614bd8",
+        "size": 7677
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/alpha1/overview.json",
+        "sha256": "c840c2f0c8e3094cdaaa08a10ea57d859d969c24546c3a23107189e63d7b626b",
+        "size": 12726
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/environments/meta-complete.json",
+        "sha256": "6ea4589266ff02ea3c42bf86d72ac5bca9c593203bf35177ecb7da4ab2df1cbe",
+        "size": 225
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/environments/meta-unavailable.json",
+        "sha256": "3bec392601ed731f34f00dd55c835986b758a501d54a1ac0213d1e85eb8e2838",
+        "size": 207
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/live-backend/baseline.json",
+        "sha256": "c3dd610a748e018c9e015668567fbea9820a050022dc33375912f8f4aaa51a00",
+        "size": 174441
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/live-backend/proxy-vectors.json",
+        "sha256": "ba3cff195f1f615fddb98e2db6713c359d8dbd05699cb1710157fe374b27760f",
+        "size": 500997
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/live-backend/session-vectors.json",
+        "sha256": "4999510bbaba2ae4faed7b9afa6d17ba3bbecb733f40f7bf92c69a6d9313a3fd",
+        "size": 2822
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/platform/linux-baseline/environment-unavailable.json",
+        "sha256": "c79b375f07694835f616b51243b92305b96f29088424673457582103078307aa",
+        "size": 219
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/platform/linux-baseline/predecessor-inventory.json",
+        "sha256": "f47c088f150ce7c61a14707aad71c634001037fd423eb43ace3acb055be86a58",
+        "size": 18630
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/platform/linux-baseline/predecessor-sources.json",
+        "sha256": "3fb88e3358c25fb65369e73a3decf9fe111797b1f44b2cc1deeabea8c5d8defc",
+        "size": 23010
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/platform/linux-baseline/scalar-repair.json",
+        "sha256": "0e04f3878efd8196fc33aa47a80ecbf5a48e7df262f08b98030acfd4c565fd06",
+        "size": 114585
+      },
+      {
+        "mode": "100644",
+        "path": "fixtures/platform/linux-baseline/successor-inventory.json",
+        "sha256": "44f5dc37ad2ef258302e2454a163dde80ad9350a64f43b290d2049af33b77b86",
+        "size": 171701
+      },
+      {
+        "mode": "100644",
+        "path": "parity/adapters/run_parity.py",
+        "sha256": "650c17312390ec0f4382dad3c9279be0bb50522374c7ec01a079d9a7db8eefac",
+        "size": 4849
+      },
+      {
+        "mode": "100644",
+        "path": "parity/adapters/validate_registry.py",
+        "sha256": "14d00741194d4de4bd3e14adb2829b3612217b9185905220ff8d6c0be39c12d9",
+        "size": 6185
+      },
+      {
+        "mode": "100644",
+        "path": "parity/registry.yaml",
+        "sha256": "0fac00ae1575b5c86996d32f3a9f01a69f6d77743170df1ecf6aff7243569af5",
+        "size": 5544
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/data-batch-lineage.json",
+        "sha256": "67c46555d13dd0b48f2e7fe8cbad9f09da7708baf816527f32ea9e96eb264d2d",
+        "size": 239
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/data-connector-closed-discovery.json",
+        "sha256": "86279c3564392e353ba8537c2cba9d11f4449fc140a02398a146fd6f73e47de0",
+        "size": 240
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/data-local-only-no-fallback.json",
+        "sha256": "fe3698e550940e90f71d497d0e0024ad99dbc8026684e77ebecb666b1577904f",
+        "size": 207
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/model-route-fail-closed.json",
+        "sha256": "6eb0342fea804721e30ed38657d44c1578d20b4f829b76a3215df635f504a5de",
+        "size": 198
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/model-upstream-bounded-retry.json",
+        "sha256": "f0a3cdf305e1f63f0edd05e074373cf6f98f09063bed101a100a74b3b920e854",
+        "size": 192
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/model-usage-tenant-neutral.json",
+        "sha256": "410f55e3e3453a19754c52cecb689349aba41a95b015aceca7d35ff2e4f9f1ce",
+        "size": 299
+      },
+      {
+        "mode": "100644",
+        "path": "parity/vectors/white-goods-foundation-boundary.json",
+        "sha256": "49f3a5a70f32c00cebc69594832300939942dc6b80f8a57d60f2c577e728ac2d",
+        "size": 277
+      },
+      {
+        "mode": "100644",
+        "path": "pyproject.toml",
+        "sha256": "4180e069f0bfb7b38f99b367f9a6f29e914a61717bd0797343f3d2b99720409c",
+        "size": 500
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/campaign-release.schema.json",
+        "sha256": "50053c212b0e9a40dcf4e7dd4c155c8c3da6a81a77a82ae7f59aadc2d6d0cfa9",
+        "size": 1189
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/campaign-report.schema.json",
+        "sha256": "3e775c55dbc5dff84fb5aab90525814ef03595a69583e8239640583cac7036a9",
+        "size": 1073
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/conformance-campaign.schema.json",
+        "sha256": "dd4fb4f5fda756613d5f69056460abdbd05b675dbddb4c9606bc9324321bb89f",
+        "size": 10324
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/conformance-trust-bundle.schema.json",
+        "sha256": "587e9e4fcc48fa98cf316b73a3cccabd9713fa0cbae48067f5f43f181404c245",
+        "size": 1151
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/control-result.schema.json",
+        "sha256": "2113a19ec9e077dcb7ab6f2c299c4756d09b0d1e3d3a32195d2103ff8d54e182",
+        "size": 1056
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/environment-intake.schema.json",
+        "sha256": "b69ef4bda6fe209b0416ef1c250747a38179d4cef0cf9bc8c72b1f0de1e3d621",
+        "size": 776
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/linux-readiness-evidence.schema.json",
+        "sha256": "8f4cf17273b097e39420b2394be43259c9bea30b684a58bcdc739c60b5059c0e",
+        "size": 61742
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/live-backend-session.schema.json",
+        "sha256": "7c4ad7c69feb4e9e9f8509f2cdd6c1bcccbf8acb60711810c2e0df8ef7cb737d",
+        "size": 2504
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/live-campaign-execution-envelope.schema.json",
+        "sha256": "d4720d28fd0cfb8f4979f8d1bb808c5244c6e8121c4a97b0303cfed033c4d1fd",
+        "size": 4272
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/live-capacity-authorization.schema.json",
+        "sha256": "196cafdba0cc168b8dbab7cb02aeda003b1b0cb2f0ae8e9b233b883629949235",
+        "size": 2177
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/technical-evidence-bundle.schema.json",
+        "sha256": "0d1e7ad8413733c63b18bb0b658a93f541800c604b2f56c8842fe4ac7760d513",
+        "size": 1524
+      },
+      {
+        "mode": "100644",
+        "path": "schemas/v1alpha1/tenant-acceptance-candidate.schema.json",
+        "sha256": "37c57329bb835d7aa091be9de41bcfaed9305b1e0359ec1289d114f31bbf426a",
+        "size": 995
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/__init__.py",
+        "sha256": "748cd4a32689b1856ef53f51793e3f85303a25658846bb9a6965440ceeed769f",
+        "size": 236
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/__main__.py",
+        "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+        "size": 48
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/acceptance.py",
+        "sha256": "81a562a983f1d662e78d95d7e3e29f070471b3e304c13bac5162e0b05108c933",
+        "size": 2613
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/build_backend.py",
+        "sha256": "d7ed81b4e0ffd865093679ef51a033a7bc74024b20300b098520306a05243e99",
+        "size": 2399
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/campaign.py",
+        "sha256": "da0a25fba8336f658948ab1018a9db5c518bcc52849bdfcf295058906a26272a",
+        "size": 7026
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/canonical.py",
+        "sha256": "eb16aee5dda8f512b78b637361f0a057c7e944cd1b9eb888c88182c867e7794d",
+        "size": 5645
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/cli.py",
+        "sha256": "c6fe0356d835db4bb0ae43d2484ca107f32bbf9046ff04c1a5a5ab47703ce8c1",
+        "size": 4482
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/crypto.py",
+        "sha256": "bf4cd892d5a7b0dd38bf38b88f72657821d7f21575fce450e60a5a13950c0ca9",
+        "size": 5148
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/errors.py",
+        "sha256": "c30216c02cfa449063b77ca922a3c7cd32e0c6a8010365e093d730e7bc37807a",
+        "size": 308
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/events.py",
+        "sha256": "2cc8855e5fe02c9874e3653b5f094b4095eed483e2446ba32735ddc57c6b422a",
+        "size": 2197
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/evidence.py",
+        "sha256": "670a8c4f6b06caf8af7749b0fe5bf6210d746cd6a823430a387890add135b3e6",
+        "size": 7683
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/lifecycle.py",
+        "sha256": "86c7f62bea77d963e087d2b244f8479a5a81bd1dac8ab5ec5579ad9b0a35f69c",
+        "size": 1582
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/linux_readiness.py",
+        "sha256": "1d40b52a05a85cf0d2179d5545bc8325b8035a24340c5a52b8b66f28e0476fc8",
+        "size": 22629
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live.py",
+        "sha256": "8f6d033292801930cd280f3611aed3c6012cf4d39ec63d4324eb92590e44a022",
+        "size": 23002
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_backend_authority.py",
+        "sha256": "b57f241e1c0c76be3d86682e9a1a1d62f40115aaa917d2e124d589c84880e42d",
+        "size": 9916
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_launcher.py",
+        "sha256": "0635ca7494e29c495fcf8188c167d82bb27f109102fc46f91052e1d509817d27",
+        "size": 5281
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_linux_boundary.py",
+        "sha256": "7c590b4078e4bd024c0798749f5d1e1197f9a30c15cc6d1a2b0d7b9131ae54fe",
+        "size": 52544
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_mutation_admission.py",
+        "sha256": "b3a92d485716fb5df6b01273a0d0e4277813b052ce6720e7a90c27db29faea23",
+        "size": 137925
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_proxy_client.py",
+        "sha256": "f82bf0fe70c3782db1cec798b3d4a3fe2b36be68e4ae9ffe56b6e600895b24ff",
+        "size": 18956
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_proxy_server.py",
+        "sha256": "ee5435b63d9dc515992cde29c7dd3cd0aeddd81de7b9c865643a8b8d3ffd5ae9",
+        "size": 269008
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_replay_store.py",
+        "sha256": "ff512b35ce7761b5dccc2c57989a6888b0daa9c99fba404f7be0be6878dae3f7",
+        "size": 10076
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_session.py",
+        "sha256": "dc15ebe6d919093cb1842c77c19c9e7846d7ef62e3b04946114824befa9e4454",
+        "size": 12361
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/live_supervisor.py",
+        "sha256": "4dfeb1780c5fc6b2e116f027fbbde6b8a0fec401911f11c4f45900e7ad84b03e",
+        "size": 38977
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/models.py",
+        "sha256": "3d095046632c640bd679b730cc76c90276a73c18263de227ad8a5692c34730dc",
+        "size": 1430
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/registry.py",
+        "sha256": "fa32c26a773a93d60c3f1cd512a99d1213258f944846e028bf7c92aca7049139",
+        "size": 1595
+      },
+      {
+        "mode": "100644",
+        "path": "src/harness_conformance/schema.py",
+        "sha256": "cd3fefc33833cf5fbccb97a0ac75524ecd967cfa10064a79f64a837f75397ee5",
+        "size": 9908
+      },
+      {
+        "mode": "100644",
+        "path": "tests/alpha1/__init__.py",
+        "sha256": "1c4b4913127e929661e104454b7900591e39681401eb19594436b1a860c49a6a",
+        "size": 48
+      },
+      {
+        "mode": "100644",
+        "path": "tests/alpha1/contract.py",
+        "sha256": "20034c14d493cac5f730440b27833c5fa87722fda0a1574ce0f81836764749a7",
+        "size": 16927
+      },
+      {
+        "mode": "100644",
+        "path": "tests/alpha1/test_alpha1.py",
+        "sha256": "b528290f311a5e41e2b163028bb5212a022d15319a7a9fb218fd7e272480e9c7",
+        "size": 7371
+      },
+      {
+        "mode": "100644",
+        "path": "tests/fixes/runner_boundary/_inventory.py",
+        "sha256": "fb50aba04fe963a89b74ad1aca57b1242fa54481e01989ac18a189a080ade94c",
+        "size": 2443
+      },
+      {
+        "mode": "100644",
+        "path": "tests/fixes/runner_boundary/legacy-tests.json",
+        "sha256": "9fff3fb6bd66789b18bc8f38885d2bfd287124f9a32b4f7a0d645c27ee500dbd",
+        "size": 4603
+      },
+      {
+        "mode": "100644",
+        "path": "tests/fixes/runner_boundary/test_boundaries.py",
+        "sha256": "2e33efe165cf46912a426285dabd0bbe98b17acdf18f3d7a8bf3cb56a71247e4",
+        "size": 15192
+      },
+      {
+        "mode": "100644",
+        "path": "tests/fixes/runner_boundary/test_inventory.py",
+        "sha256": "1fbacb25aea922a37fb552e91f6b95dded7c1774d1ba2a80f5989cd926cad5e6",
+        "size": 3569
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/_fixtures.py",
+        "sha256": "edec764c067e538fa9709dc7dce59a357ae996ba36c6121482cc3b24d86b8a28",
+        "size": 3383
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/_inventory.py",
+        "sha256": "d341edcdf49dadf182c3fcc9926d373d13c83aa004d3cc74363312861a7f1e46",
+        "size": 4839
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_inventory.py",
+        "sha256": "f128f05fc395c26de0c13c34953bfff297fa64f857f3f70aab56dbc9e3bcc8a1",
+        "size": 10197
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_linux_boundary.py",
+        "sha256": "06d16e4c833dc818a084b655b4f767dbe601212adc9525c47dc94241c32ee238",
+        "size": 62720
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_mutation_admission.py",
+        "sha256": "b3bce862631f82dedb67928b7c81ca4cc2cf03fc78111d77b814cc549a7e4be1",
+        "size": 36648
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_proxy_client.py",
+        "sha256": "90399c359d8e97fa526597b8097b5d73bf052e02f48b3fa6fad6db5453729227",
+        "size": 21302
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_proxy_server.py",
+        "sha256": "05e715db5e27b4560dc397ad15f4522490a9122e8efd0daa52563db1cd8f4a3c",
+        "size": 498101
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_replay_store.py",
+        "sha256": "492d6569edb1d271199a3d52b93e82f7295ae478d90b01376125313ee1af8213",
+        "size": 9971
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_session.py",
+        "sha256": "4348b898c1d8cab9fbc94b7bfceff5442a21c0e49fc2645277ae706506c25e90",
+        "size": 32978
+      },
+      {
+        "mode": "100644",
+        "path": "tests/live_backend/test_supervisor.py",
+        "sha256": "2c6fc822b453e57f0354e2a6876b016ea9d536216e77b2390f1026befaef7db1",
+        "size": 295260
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_build_cli.py",
+        "sha256": "989c58c63a8cc5234e0396c4bee1c667da133c6893ca24dd96bd95822f43a4e6",
+        "size": 2781
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_campaign.py",
+        "sha256": "85fc9c47556fa0db78ed1948cba696cea0da9d895848169785d227a6e66efc8d",
+        "size": 3007
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_canonical_schema.py",
+        "sha256": "f3c233226c5dc400f225eeb16bde754fd73b3e332a2cc85c7795571537845a35",
+        "size": 3187
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_evidence_crypto.py",
+        "sha256": "b0b87f6e4f726ebc7af82be7ab9b6b83a73ec130e1559cb5d9800396b91436c4",
+        "size": 4501
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_live.py",
+        "sha256": "9ac39858b40468a10b2a20ae43e0aaa92f64fde6ab63d275143d654774ec10a3",
+        "size": 11715
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_porting_zero_bill.py",
+        "sha256": "f8ed0fdffc245541d332d78c66d6e9045c3bfc85e0683c3cb7e87b263c1bd448",
+        "size": 4182
+      },
+      {
+        "mode": "100644",
+        "path": "tests/meta/test_registry_dispatch.py",
+        "sha256": "b021ddeb2a7a534427edf7db594b0d9532711bec4fcfac76405dcded73adbc1d",
+        "size": 3756
+      },
+      {
+        "mode": "100644",
+        "path": "tests/parity/test_adapters.py",
+        "sha256": "9e4217daee3c0e6f5f7dc0a292c4ff55cb1a3b7259b477ee65dfc13315e49c4a",
+        "size": 2337
+      },
+      {
+        "mode": "100644",
+        "path": "tests/parity/test_packet_runner.py",
+        "sha256": "0054ccd9312c59a77194a17152191a80bc82d98a5b27ee6e83183b2e62bf7d97",
+        "size": 6066
+      },
+      {
+        "mode": "100644",
+        "path": "tests/parity/test_registry.py",
+        "sha256": "88d007d59c2da7dc45fdb4da0d7787725ff6a4d6d120a7f38d843a94baf2b5ff",
+        "size": 2638
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/_fixtures.py",
+        "sha256": "579ff77d11e66776884ccf4a3343c417393767215b09abc5aacc1a19c10bcb7d",
+        "size": 11573
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/_successor_inventory.py",
+        "sha256": "0ab36ab0055b72d25dced1d0339a1dbacfafe29ea450b2935c171912405ea733",
+        "size": 63700
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/test_linux_campaign.py",
+        "sha256": "e4501ef5df6a3a1e9f3755aee40592f81ccdcab069d187215f612b97f9773094",
+        "size": 8618
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/test_linux_evidence.py",
+        "sha256": "b6e162808c471d3d2ed7caa2ed2c056af33819d91ae46a66ff5298da982912b3",
+        "size": 14548
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/test_linux_inventory.py",
+        "sha256": "3fdd36f47cfb3deb7edaab8685dbead5c90519a92844b5bc2266441d5160c338",
+        "size": 5683
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/test_linux_protocol.py",
+        "sha256": "2057b427ba366717c506d561978695e27b53208b4e3fbf318b00671fe672254d",
+        "size": 8232
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/test_packet_scalars.py",
+        "sha256": "c2ce177f7a462abcae70ae5c51cc2c50d1a3041dc7b9afa527a2e0c582932fe9",
+        "size": 27287
+      },
+      {
+        "mode": "100644",
+        "path": "tests/platform/linux_baseline/test_successor_inventory.py",
+        "sha256": "46417d8566acedf4c60e396dfe27dcd94743e288eda9f1aeea2db5c27efd0b9e",
+        "size": 21048
+      },
+      {
+        "mode": "100644",
+        "path": "toolchain.lock",
+        "sha256": "40a0cbb9fc244a8484b22494b6bfa070fbc76aec0edd86ab690026f6a8027bfc",
+        "size": 2153
+      },
+      {
+        "mode": "100644",
+        "path": "uv.lock",
+        "sha256": "bd9cb528f2c6ad6a74e3dc1998978e029144fcee2535387cc5ef3db7907dcfbc",
+        "size": 150
+      }
+    ],
+    "inventoryDataSha256": "da56a96ea2f955382e95e6107dbeb7238c1f814692839d45eb02c1a973d4d85f"
+  },
+  "remoteCheckpoint": {
+    "main": "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+    "head": "699a00c2d26e36c9c710aa85d0338f0d926073f2",
+    "pr": 12,
+    "draft": true,
+    "merged": false
+  },
+  "recipe": {
+    "commands": [
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/live_backend",
+        "-p",
+        "test_proxy_server.py",
+        "-k",
+        "BrokerCreateRetirementTests",
+        "-v"
+      ],
+      [
+        "python3",
+        "-m",
+        "cProfile",
+        "-s",
+        "cumulative",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/live_backend",
+        "-p",
+        "test_proxy_server.py",
+        "-k",
+        "BrokerCreateRetirementTests",
+        "-v"
+      ]
+    ],
+    "selectedTestIds": [
+      "test_proxy_server.BrokerCreateRetirementTests.test_ambiguous_send_cannot_be_retired_as_success",
+      "test_proxy_server.BrokerCreateRetirementTests.test_api_peer_replacement_before_close_is_rejected",
+      "test_proxy_server.BrokerCreateRetirementTests.test_changed_created_identity_refuses_before_advancement",
+      "test_proxy_server.BrokerCreateRetirementTests.test_changed_result_frame_refuses_before_advancement",
+      "test_proxy_server.BrokerCreateRetirementTests.test_close_deadline_cannot_be_renewed",
+      "test_proxy_server.BrokerCreateRetirementTests.test_close_does_not_touch_recycled_descriptor",
+      "test_proxy_server.BrokerCreateRetirementTests.test_close_failure_preserves_first_error_and_holds_capacity",
+      "test_proxy_server.BrokerCreateRetirementTests.test_close_noop_cannot_advance_transcript",
+      "test_proxy_server.BrokerCreateRetirementTests.test_closed_api_cannot_be_reused_for_another_action",
+      "test_proxy_server.BrokerCreateRetirementTests.test_closed_descriptor_metadata_is_pinned_without_reopening_it",
+      "test_proxy_server.BrokerCreateRetirementTests.test_closed_owner_check_rejects_later_history_rollback",
+      "test_proxy_server.BrokerCreateRetirementTests.test_closed_owner_check_rejects_transcript_rewind",
+      "test_proxy_server.BrokerCreateRetirementTests.test_codec_failure_leaves_closed_api_and_held_accounting",
+      "test_proxy_server.BrokerCreateRetirementTests.test_descriptor_pin_substitution_after_live_check_refuses_before_close",
+      "test_proxy_server.BrokerCreateRetirementTests.test_foreign_api_reference_is_not_checked_or_closed",
+      "test_proxy_server.BrokerCreateRetirementTests.test_foreign_broker_reference_is_not_closed",
+      "test_proxy_server.BrokerCreateRetirementTests.test_foreign_events_reference_is_not_checked",
+      "test_proxy_server.BrokerCreateRetirementTests.test_foreign_retirement_is_not_published_or_called",
+      "test_proxy_server.BrokerCreateRetirementTests.test_generation_loss_during_close_prevents_advancement",
+      "test_proxy_server.BrokerCreateRetirementTests.test_history_append_during_close_prevents_advancement",
+      "test_proxy_server.BrokerCreateRetirementTests.test_history_rollback_before_close_is_rejected",
+      "test_proxy_server.BrokerCreateRetirementTests.test_instance_shadow_close_is_not_invoked",
+      "test_proxy_server.BrokerCreateRetirementTests.test_next_event_waits_for_separate_action_owner_handoff",
+      "test_proxy_server.BrokerCreateRetirementTests.test_no_caller_result_frame_or_cleanup_selector",
+      "test_proxy_server.BrokerCreateRetirementTests.test_no_created_result_cannot_retire",
+      "test_proxy_server.BrokerCreateRetirementTests.test_non_none_close_result_is_rejected",
+      "test_proxy_server.BrokerCreateRetirementTests.test_peer_loss_during_close_prevents_advancement",
+      "test_proxy_server.BrokerCreateRetirementTests.test_post_advance_guard_failure_does_not_undo_transcript_or_publish",
+      "test_proxy_server.BrokerCreateRetirementTests.test_recorded_but_unsent_result_cannot_retire",
+      "test_proxy_server.BrokerCreateRetirementTests.test_reentrant_retirement_never_advances_or_closes_twice",
+      "test_proxy_server.BrokerCreateRetirementTests.test_repeated_retirement_never_replays_or_recloses",
+      "test_proxy_server.BrokerCreateRetirementTests.test_result_data_substitution_during_close_is_rejected",
+      "test_proxy_server.BrokerCreateRetirementTests.test_retained_checks_reobserve_without_reclosing_or_replaying",
+      "test_proxy_server.BrokerCreateRetirementTests.test_retirement_does_not_release_resources_write_history_or_claim_cleanup",
+      "test_proxy_server.BrokerCreateRetirementTests.test_retirement_reads_no_new_credential_and_performs_no_transport_io",
+      "test_proxy_server.BrokerCreateRetirementTests.test_socket_substitution_after_live_check_cannot_retire_or_close_foreign",
+      "test_proxy_server.BrokerCreateRetirementTests.test_success_closes_original_api_then_advances_original_parser_once",
+      "test_proxy_server.BrokerCreateRetirementTests.test_tls_substitution_after_live_check_cannot_retire",
+      "test_proxy_server.BrokerCreateRetirementTests.test_unowned_constructor_never_retires_or_advances",
+      "test_proxy_server.BrokerCreateRetirementTests.test_unpublished_send_is_not_a_retirement_grant"
+    ],
+    "counts": [
+      40,
+      40
+    ],
+    "skips": 0,
+    "prefetchCommands": [],
+    "profile": "python-conformance-stdlib",
+    "profiler": "STDLIB_CPROFILE_CLI_DEFAULTS_SUBCALLS_AND_BUILTINS",
+    "output": "STDOUT_COMPLETE_STATS_NO_PICKLE_FILE",
+    "scope": "DISCOVERY_IMPORT_FIXTURE_TEST_CLEANUP_FOR_SELECTED_CLASS_ONLY",
+    "successfulPairsMaximum": 3,
+    "unchangedRetriesMaximum": 1,
+    "timeoutSeconds": 900,
+    "nestedTimeoutSeconds": 420,
+    "workflowTimeoutMinutes": 15
+  },
+  "failures": [
+    {
+      "label": "candidate01",
+      "activation": 252,
+      "commit": "e3ea986caa8c14cc194119273660bf87f72d7029",
+      "exitCode": 1,
+      "elapsedSeconds": 493.3598032910377,
+      "logSha256": "e407477b463a39132100c5141990615f671193ae85770adb008bd3d8edc1c8ee",
+      "requestSha256": "ec923750300c94a2970b8e422e7e168a8fbf35b3036c5d678508cb89f9ad30f8",
+      "sourceInventorySha256": "7d2cd22bb2cf2c56d690a21c57fa698927dd4e17b70b3540b90ded2bfe083a05",
+      "status": "FAILED_NEW_TEST",
+      "commandsSevenEight": "NOT_RUN",
+      "fullAcceptance": false
+    },
+    {
+      "label": "candidate02",
+      "activation": 253,
+      "commit": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+      "exitCode": 1,
+      "elapsedSeconds": 904.5144169169944,
+      "logSha256": "0884ab5df11f07cf39e3ae147eedc02920dd3db5215439eb55a8adc0b2b69e49",
+      "requestSha256": "f4cfda7b46ae7d14c6e59c0d172081f1ca745218e72be2b2e189be01af4b5378",
+      "sourceInventorySha256": "da56a96ea2f955382e95e6107dbeb7238c1f814692839d45eb02c1a973d4d85f",
+      "status": "TIMEOUT_NOT_PASS",
+      "commandsSevenEight": "NOT_RUN",
+      "fullAcceptance": false
+    },
+    {
+      "label": "candidate03",
+      "activation": 254,
+      "commit": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+      "exitCode": 1,
+      "elapsedSeconds": 902.0007965409895,
+      "logSha256": "b5880bca36181bcfbdf167ad4de2afceaa19c2267eba6dd710222b9c6cbe47ce",
+      "requestSha256": "85997909a789036dc536a31340bad6448bed6c87ff36173d5b70506c3023a78e",
+      "sourceInventorySha256": "da56a96ea2f955382e95e6107dbeb7238c1f814692839d45eb02c1a973d4d85f",
+      "status": "TIMEOUT_NOT_PASS",
+      "commandsSevenEight": "NOT_RUN",
+      "fullAcceptance": false
+    }
+  ],
+  "diagnosticSample": {
+    "sha256": "0d0074a385636e59694414e4b52aef04b5a11213fd9f81e8c120f431397a162f",
+    "status": "ONE_SECOND_OS_SAMPLE_NOT_ROOT_CAUSE"
+  },
+  "gates": {
+    "metaSourceGatesRequired": true,
+    "independentSignedCustodyRequired": true,
+    "actualSourceInventoryBeforeAfterRequired": true,
+    "completePairRequired": true,
+    "partialPooling": false,
+    "hostChanges": false,
+    "sourceOverlays": false,
+    "timeoutIncrease": false,
+    "productAcceptanceCommandsUnchanged": true,
+    "newRepairPacketRequired": true,
+    "nativeQualification": "NOT_RUN_ENV_UNAVAILABLE",
+    "tenantAcceptance": false,
+    "modelEffortTransition": "NOT_DUE"
+  }
+}
