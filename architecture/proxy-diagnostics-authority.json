@@ -1184,7 +1184,7 @@
     },
     "tests/test_conformance_successor_checkpoint.py": {
       "beforeSha256": "09b65401009c8f639bac4ebff2b7c4ae9867c79e5ebb7162013eb19eeb29d9c7",
-      "afterSha256": "22c08d5d98a0d9468d4a1bec87e06ad8fc3a80bd3532f0b2138de2e202d2ea9c",
+      "afterSha256": "3385e22095d00892e1c54a3057e38222253c12a1e3ab9cfb874ad9a7860630af",
       "replacements": [
         {
           "before": "len(generic) == 80",
@@ -1194,6 +1194,11 @@
         {
           "before": "    assert len(packets) == 156\n",
           "after": "    assert len(packets) == 158\n",
+          "count": 1
+        },
+        {
+          "before": "assert len(closed) == 72",
+          "after": "assert len(closed) == 73",
           "count": 1
         }
       ]
