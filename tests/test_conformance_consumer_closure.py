@@ -129,8 +129,8 @@ def test_supersession_retains_generic_checks_and_only_closes_exact_pair(authorit
     from scripts.validate_packet_ownership import validate_packet_ownership
     packets, _, _ = authority
     generic = validate_packet_ownership(packets)
-    assert len(generic) == 80
-    assert all(any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004", "CONF-BENCH-001 and CONF-FIX-006", "CONF-FIX-006 and CONF-PERF-001", "CONF-FIX-006 and CONF-PERF-002", "CONF-FIX-006 and CONF-PERF-003")) for error in generic)
+    assert len(generic) == 81
+    assert all(any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004", "CONF-BENCH-001 and CONF-FIX-006", "CONF-FIX-006 and CONF-PERF-001", "CONF-FIX-006 and CONF-PERF-002", "CONF-FIX-006 and CONF-PERF-003", "CONF-DIAG-001 and CONF-LIVE-003")) for error in generic)
     assert validate_dispatch_ownership(packets) == []
     assert "CONF-PERF-001" not in packets["CONF-PERF-003"]["predecessors"]
 
@@ -155,7 +155,7 @@ def test_supersession_never_suppresses_changed_packets_or_other_ownership_errors
     result = validate_dispatch_ownership(packets)
     assert result
     unrelated = [error for error in validate_packet_ownership(packets)
-                 if not any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004", "CONF-BENCH-001 and CONF-FIX-006", "CONF-FIX-006 and CONF-PERF-001", "CONF-FIX-006 and CONF-PERF-002", "CONF-FIX-006 and CONF-PERF-003"))]
+                 if not any(pair in error for pair in ("CONF-BENCH-001 and CONF-PERF-001", "CONF-BENCH-001 and CONF-PERF-002", "CONF-BENCH-001 and CONF-PERF-003", "CONF-BENCH-001 and CONF-PERF-004", "CONF-PERF-001 and CONF-PERF-002", "CONF-PERF-001 and CONF-PERF-003", "CONF-PERF-001 and CONF-PERF-004", "CONF-PERF-002 and CONF-PERF-003", "CONF-PERF-002 and CONF-PERF-004", "CONF-PERF-003 and CONF-PERF-004", "CONF-BENCH-001 and CONF-FIX-006", "CONF-FIX-006 and CONF-PERF-001", "CONF-FIX-006 and CONF-PERF-002", "CONF-FIX-006 and CONF-PERF-003", "CONF-DIAG-001 and CONF-LIVE-003"))]
     assert set(unrelated) <= set(result)
 
 

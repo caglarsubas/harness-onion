@@ -151,7 +151,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Live backend roadmap valid: 158 packets; historical 130-packet authority and 158 predecessor files unchanged; source-only, native gate closed.")
+        print("Live backend roadmap valid: 158 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
     return bool(errors)
 
 

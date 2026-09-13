@@ -50,7 +50,7 @@ def test_tampered_source_authority_refuses(authority,fault):
     assert module.validate_authority(packets,record,inputs)
 
 
-@pytest.mark.parametrize('fault',['source-write','branch','predecessor','acceptance','optimize','subject','tree','source-pass','bool-count','inventory-count','inventory-link','inventory-duplicate','inventory-hash','selector','profile','skips','timeout','nested-timeout','workflow-timeout','retry','pair-count','test-id','test-count','failure-pass','missing-failure','sample-cause','pooling','overlay','repair-gate','signed-custody','native','tenant','extra'])
+@pytest.mark.parametrize('fault',['source-write','branch','predecessor','acceptance','optimize','subject','tree','source-pass','bool-count','inventory-count','inventory-link','inventory-duplicate','inventory-hash','selector','profile','skips','timeout','nested-timeout','workflow-timeout','retry','pair-count','test-id','test-count','failure-pass','missing-failure','sample-cause','pooling','overlay','repair-gate','signed-custody','native','tenant','sleep','thermal','extra'])
 def test_semantic_faults_refuse_even_with_outer_hash_binding_disabled(authority,fault):
     spec = module.parse(authority[2][module.SPEC_PATH])
     flags = {'source-write':'sourceEdits','branch':'requiresBranchOrPr','predecessor':'acceptedSourcePredecessor','acceptance':'diagnosticIsAcceptance','optimize':'optimizationAuthorized'}
@@ -82,6 +82,8 @@ def test_semantic_faults_refuse_even_with_outer_hash_binding_disabled(authority,
     if fault == 'signed-custody': spec['gates']['independentSignedCustodyRequired'] = False
     if fault == 'native': spec['gates']['nativeQualification'] = 'PASS'
     if fault == 'tenant': spec['gates']['tenantAcceptance'] = True
+    if fault == 'sleep': spec['gates']['uninterruptedAwakeIntervalRequired'] = False
+    if fault == 'thermal': spec['gates']['thermalEmergencyIntervalRejected'] = False
     if fault == 'extra': spec['extra'] = True
     with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
 

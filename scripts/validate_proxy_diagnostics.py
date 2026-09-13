@@ -16,9 +16,9 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/proxy-diagnostics-authority.json"
-RECORD_SHA256 = "e3c3e7ecab8619da02f31151c6c4f879dac8a0cc926074688efebfa6a468f253"
+RECORD_SHA256 = "d410fda68b5b803abc2b58892b3b0a0b902b88bbf88288806bd85681f1a22c19"
 NEW_IDS = ("MET-PERF-006", "CONF-DIAG-001")
-RECORD_FILE_SHA256 = "5e9e7f3e7e6104768690e64a3b6e7abd5fcabf66269eecc89d0650922c0050f8"
+RECORD_FILE_SHA256 = "f1d3af5c8cc283e70e84852f8289dd6ccf8fb3800ff174832f2d67ea447555c2"
 HISTORY_PATHS = frozenset(["docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_broker_handoff.py","scripts/validate_ci_performance.py","scripts/validate_conformance_consumer_closure.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_conformance_reference_measurement.py","scripts/validate_conformance_successor_checkpoint.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_provider_adoption.py","scripts/validate_proxy_contract.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_broker_handoff.py","tests/test_ci_performance.py","tests/test_conformance_consumer_closure.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_conformance_reference_measurement.py","tests/test_conformance_successor_checkpoint.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_provider_adoption.py","tests/test_proxy_contract.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
 
 
@@ -150,7 +150,7 @@ def test_ids(raw):
 
 SPEC_PATH = "architecture/proxy-diagnostics.json"
 GUIDE_PATH = "docs/alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md"
-EXPECTED_SPEC_SHA256 = "589c205039ea4b94cc400414a0d73f2e33690e5521062f0f859a799a08dddbaa"
+EXPECTED_SPEC_SHA256 = "3e058dae996027d72faf3e818a8ef12dd2f6d375202b9620068999bc654a2cc6"
 EXPECTED_TEST_IDS_SHA256 = "e33f0745fbce712f32d5f9469b0805f9cdcf21e24f5e8df354208e31702adb07"
 COMMANDS = parse("[[\"python3\",\"-m\",\"unittest\",\"discover\",\"-s\",\"tests/live_backend\",\"-p\",\"test_proxy_server.py\",\"-k\",\"BrokerCreateRetirementTests\",\"-v\"],[\"python3\",\"-m\",\"cProfile\",\"-s\",\"cumulative\",\"-m\",\"unittest\",\"discover\",\"-s\",\"tests/live_backend\",\"-p\",\"test_proxy_server.py\",\"-k\",\"BrokerCreateRetirementTests\",\"-v\"]]")
 
@@ -241,7 +241,8 @@ def validate_spec(spec, *, bind=True):
     require(canonical(spec['gates']) == canonical({
         'metaSourceGatesRequired':True,'independentSignedCustodyRequired':True,
         'actualSourceInventoryBeforeAfterRequired':True,'completePairRequired':True,
-        'partialPooling':False,'hostChanges':False,'sourceOverlays':False,
+        'partialPooling':False,'hostChanges':False,'uninterruptedAwakeIntervalRequired':True,
+        'thermalEmergencyIntervalRejected':True,'sourceOverlays':False,
         'timeoutIncrease':False,'productAcceptanceCommandsUnchanged':True,
         'newRepairPacketRequired':True,'nativeQualification':'NOT_RUN_ENV_UNAVAILABLE',
         'tenantAcceptance':False,'modelEffortTransition':'NOT_DUE'}), 'unchanged acceptance and repair gates')

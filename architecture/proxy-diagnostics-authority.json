@@ -814,7 +814,7 @@
     },
     "scripts/validate_live_backend_readiness.py": {
       "beforeSha256": "240cf6a3b662d023016cb8665c693882991a6b5517060b52d2083bf4162e508b",
-      "afterSha256": "f873e09d8124b12d3f1f2885c302068b44d7b3f8ee3724b0d9ded3a5bde519f4",
+      "afterSha256": "7c189def0b2282c82a126f22229a644be1ad122db760822d9939553303d60a2a",
       "replacements": [
         {
           "before": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 156:\n",
@@ -829,6 +829,11 @@
         {
           "before": "        print(\"Live backend roadmap valid: 156 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")\n",
           "after": "        print(\"Live backend roadmap valid: 158 packets; historical 130-packet authority and 158 predecessor files unchanged; source-only, native gate closed.\")\n",
+          "count": 1
+        },
+        {
+          "before": "and 158 predecessor files unchanged",
+          "after": "and 156 predecessor files unchanged",
           "count": 1
         }
       ]
@@ -1105,8 +1110,18 @@
     },
     "tests/test_conformance_consumer_closure.py": {
       "beforeSha256": "098413971984962e03c7ebc003c24c713298bd4dd6d746f8954db3605529b783",
-      "afterSha256": "5628dbd1ca9b3a192263f1eb37849d6cb3f59c9133db256ec08ad5d6333e4e21",
+      "afterSha256": "caa676e5da705dc798eed24c83e18f53f1b7fcb4a6f6c4cb23551a1852710e64",
       "replacements": [
+        {
+          "before": "len(generic) == 80",
+          "after": "len(generic) == 81",
+          "count": 1
+        },
+        {
+          "before": "\"CONF-FIX-006 and CONF-PERF-003\"",
+          "after": "\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\"",
+          "count": 2
+        },
         {
           "before": "    assert len(packets) == 156\n",
           "after": "    assert len(packets) == 158\n",
@@ -1127,8 +1142,18 @@
     },
     "tests/test_conformance_performance_followup.py": {
       "beforeSha256": "9a117c709605e6e38318d00f06b462d143de8b14692071c4b8a9e39d9ae8711f",
-      "afterSha256": "70815b92fd0481ab745f5e206a678306ec987635e6c1fd4577364d8de5f04d78",
+      "afterSha256": "ed5000cacc4090db27b908dba71d28966bf9fd309c23a86c297f3e37f6083178",
       "replacements": [
+        {
+          "before": "len(generic) == 80",
+          "after": "len(generic) == 81",
+          "count": 1
+        },
+        {
+          "before": "\"CONF-FIX-006 and CONF-PERF-003\"",
+          "after": "\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\"",
+          "count": 2
+        },
         {
           "before": "    assert len(packets) == 156\n",
           "after": "    assert len(packets) == 158\n",
@@ -1138,8 +1163,18 @@
     },
     "tests/test_conformance_reference_measurement.py": {
       "beforeSha256": "a4a19e5d80a514edc89a6dfb32d155b79f9ea02f69fe105634699d6687f2fec4",
-      "afterSha256": "38f100f59368cda2de2021fd2da4266e74db0fe4d6d7102fa94e113d16c9b7c1",
+      "afterSha256": "827826b49a678dcbbd3fa79d4766158b3a2ce26a69388760e179375f0ddabbfe",
       "replacements": [
+        {
+          "before": "len(generic) == 80",
+          "after": "len(generic) == 81",
+          "count": 1
+        },
+        {
+          "before": "\"CONF-FIX-006 and CONF-PERF-003\"",
+          "after": "\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\"",
+          "count": 1
+        },
         {
           "before": "    assert len(packets) == 156\n",
           "after": "    assert len(packets) == 158\n",
@@ -1149,8 +1184,13 @@
     },
     "tests/test_conformance_successor_checkpoint.py": {
       "beforeSha256": "09b65401009c8f639bac4ebff2b7c4ae9867c79e5ebb7162013eb19eeb29d9c7",
-      "afterSha256": "da633a969dea5040c909fceb2d7b85bcd15970f087f0a8226737fd2e5553bd63",
+      "afterSha256": "22c08d5d98a0d9468d4a1bec87e06ad8fc3a80bd3532f0b2138de2e202d2ea9c",
       "replacements": [
+        {
+          "before": "len(generic) == 80",
+          "after": "len(generic) == 81",
+          "count": 1
+        },
         {
           "before": "    assert len(packets) == 156\n",
           "after": "    assert len(packets) == 158\n",
@@ -1231,11 +1271,16 @@
     },
     "tests/test_live_backend_readiness.py": {
       "beforeSha256": "19d95407348812e2c73a45526f7da00a47306c6c16aa47dd5421e47557c5f4ea",
-      "afterSha256": "edf3fa7010d380e71dd4fb07786744f373404f4bc3574acb26bdc4813b0c7873",
+      "afterSha256": "b5bc2dec33740b7fd008b3d9a3021d90fed5935412981f8f93e148ac306cb354",
       "replacements": [
         {
           "before": "    assert len(packets) == 156 and len(raw) == 156\n",
           "after": "    assert len(packets) == 158 and len(raw) == 158\n",
+          "count": 1
+        },
+        {
+          "before": "assert len(packets) == 158 and len(raw) == 158",
+          "after": "assert len(packets) == 158 and len(raw) == 156",
           "count": 1
         }
       ]
@@ -1383,9 +1428,9 @@
     "tests/test_zero_bill.py": "0a3f0a4480afa0382737d52da976b7d72b7a2d79c9c5c22b2f8812caa33a2821"
   },
   "inputFiles": {
-    "architecture/proxy-diagnostics.json": "62a397b4bbb7449775ea978df2c1c8396dbf9915089586bf069c74e6e51395c6",
-    "docs/alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md": "f38fe06dbf4f854edd6a84cff4fa0db5a050ed130c78efac09a8ca910c256766",
-    "tests/test_proxy_diagnostics.py": "126e939167c0a640809fbfe8261cf52cf4c28966dc9e303d2515280f5214c920",
+    "architecture/proxy-diagnostics.json": "3a02a48f186fd64f4bfb02e92738f435ee869abfd2fe8ca5526586ac00f7e3c7",
+    "docs/alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md": "a704e57dfdeea58b1dde5619b92fec9ecde2a1ac47bf79905dba2059f50c9679",
+    "tests/test_proxy_diagnostics.py": "661d08adca173ac7f5e1a3e71b739c444b5249f4783463e8348db55b852d0ace",
     "task-packets/MET-PERF-006.yaml": "e27a001db64c1c706adc4449551d15a4ba3baa5a34f773ad4feadf599d2aadff",
     "task-packets/CONF-DIAG-001.yaml": "f38420268211065a2bd0ef34b2d0d5e4bc4ee835bcd7d775b82b6a1e3c202950"
   },

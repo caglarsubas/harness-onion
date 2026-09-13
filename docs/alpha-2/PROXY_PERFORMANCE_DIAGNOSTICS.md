@@ -92,7 +92,19 @@ campaign. Retain all attempts and stop after retry exhaustion. Never pool partia
 logs or combine one successful command from each failed pair into a complete pair.
 Do not disturb other local workloads to improve the numbers. Report observed host
 load and paired timings; no hardware-cause claim without independent evidence.
+Require an uninterrupted awake interval for each diagnostic pair, and reject
+intervals with host sleep or thermal-emergency events as timing baselines. Keep
+awake-time/monotonic duration separate from wall-clock elapsed time. Do not
+override thermal protection, power policy or another workload. If a suitable
+interval is unavailable, retain the result as environment-affected and stop.
 Existing nested 420 / trusted 900 seconds / workflow 15 minutes remain unchanged.
+
+During the first META publication test run, macOS reported a 929-second sleep
+starting 2026-09-14 03:35:50 +0800, with reason Dark Wake Thermal Emergency.
+This observation is separate from the earlier product failures. It invalidates
+that META run as a wall-clock performance baseline, not the executed assertions;
+it does not prove why the previous CONF-LIVE-003 runs timed out. No OS settings
+were changed and this publication grants no power-management override.
 
 ## Decision and resumption gates
 
