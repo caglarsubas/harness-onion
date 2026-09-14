@@ -1,5 +1,16 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
+## Current repair-planning gate — MET-PERF-007
+
+[Canonicalization repair proposal](CANONICAL_REPAIR_PLAN.md) is current.
+Catalog:159 specifications; all158 previous packet YAML remain immutable.
+MET-PERF-006 source gates and CONF-DIAG-001 measured scope are recorded complete.
+All3 diagnostic pairs passed; individual command wall times remain NOT_MEASURED.
+MET-PERF-007 publication ONGOING; PLAN-CANON-001 consumer design WAITING. Proposed
+CONF-PERF-005 is NOT_AUTHORIZED: no product YAML or write grant. CONF-LIVE-003
+remains BLOCKED_FULL_ACCEPTANCE; no timeout retry reset or native promotion.
+Alpha2 ONGOING; effort NOT_DUE. Earlier dispatch headings are historical.
+
 ## Current diagnostic gate — MET-PERF-006
 
 [Bounded proxy performance investigation](PROXY_PERFORMANCE_DIAGNOSTICS.md)

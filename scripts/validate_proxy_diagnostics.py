@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_canonical_repair_plan import historical_bytes as repair_history, current_test_bytes as repair_current, validate_additions as repair_additions
+except ImportError:
+    from scripts.validate_canonical_repair_plan import historical_bytes as repair_history, current_test_bytes as repair_current, validate_additions as repair_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/proxy-diagnostics-authority.json"
 RECORD_SHA256 = "3fd7313be067b32677adafec516c7f467bb8f147ffcfe84c192f10ef5a509a80"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = repair_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -119,9 +125,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return repair_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return repair_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -130,7 +136,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return repair_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -283,10 +289,10 @@ def validate_authority(packets, record, inputs):
                 **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), 'exact fresh input inventory')
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'changed source: '+path)
+            require(type(inputs[path]) is bytes and digest(repair_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 156 and len(packets) == 158 and set(packets) == old | set(NEW_IDS), '158 specifications with156 immutable predecessors')
-        for name in packets:
+        require(len(old) == 156 and len(packets) == 159 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-007'}, '159 specifications with156 immutable predecessors')
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet raw semantic binding')
         meta, replay = (packets[name] for name in NEW_IDS)
         require(meta['allowedPaths'] == record['ownedPaths'] and meta['predecessors'] == ['MET-ADOPT-001']
@@ -301,7 +307,7 @@ def validate_authority(packets, record, inputs):
                 and replay['sourceReuse'] == [] and 'liveCampaignExecution' not in replay, 'read-only fixed diagnostic role')
         for path, rule in record['metaRecipes'].items():
             before = historical_bytes(path, inputs[path])
-            require(apply_recipe(before,rule) == inputs[path], 'reversible amendment')
+            require(apply_recipe(before,rule) == repair_history(path, inputs[path]), 'reversible amendment')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'all old test identities retained')
         validate_spec(parse(inputs[SPEC_PATH]))

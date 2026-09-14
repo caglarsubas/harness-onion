@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "planeon.internal.canonical-repair-plan/v1",
+  "packetId": "MET-PERF-007",
+  "evidenceClass": "RETAINED_DIAGNOSTIC_DATA_AND_PROPOSAL_ONLY",
+  "productGrant": false,
+  "proposedPacketId": "CONF-PERF-005",
+  "readinessItem": "PLAN-CANON-001",
+  "readiness": "WAITING_EXACT_CONSUMER_DESIGN",
+  "metaBase": "f973598a66946d5f1d06c8db71291d144c83d363",
+  "productBase": "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+  "subject": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+  "sourceInventorySha256": "da56a96ea2f955382e95e6107dbeb7238c1f814692839d45eb02c1a973d4d85f",
+  "diagnosticPacketSha256": "f38420268211065a2bd0ef34b2d0d5e4bc4ee835bcd7d775b82b6a1e3c202950",
+  "pairs": [
+    {
+      "label": "pair01",
+      "activation": 260,
+      "requestSha256": "d3b8b4accfb2dfbeafe54dd1a44cfa8afa3683e1b4e03c6fb7ff8360b2c26269",
+      "logSha256": "c2bcfa6d2a1ad51e0b3c7408d177078c9cf5a5c744b542258e8b0b8b4e523c02",
+      "testCounts": [
+        40,
+        40
+      ],
+      "skipped": 0,
+      "unittestSeconds": [
+        12.36,
+        29.368
+      ],
+      "profileTotalSeconds": 29.57,
+      "pairWallSeconds": 43.97431206703186,
+      "pairMonotonicSeconds": 43.973726666
+    },
+    {
+      "label": "pair02",
+      "activation": 261,
+      "requestSha256": "5180f847a22cb4c2215176670fded0b8c65df7e353a3e170c737599e9450045e",
+      "logSha256": "0e3d6098c54eb713c3aaba0de1db50d9e73ddd18d30c5642e8d4a2d2b3cff942",
+      "testCounts": [
+        40,
+        40
+      ],
+      "skipped": 0,
+      "unittestSeconds": [
+        12.781,
+        32.564
+      ],
+      "profileTotalSeconds": 32.772,
+      "pairWallSeconds": 47.444435834884644,
+      "pairMonotonicSeconds": 47.443803625
+    },
+    {
+      "label": "pair03",
+      "activation": 262,
+      "requestSha256": "0456692f26592fb10ac1369aa595c3bb41b150d4db01146146deaa9cce33961a",
+      "logSha256": "2810e700fb5e7289090c397a58a54a85e6fb04a25a33e55a0bb1765e326e5ed7",
+      "testCounts": [
+        40,
+        40
+      ],
+      "skipped": 0,
+      "unittestSeconds": [
+        12.558,
+        30.059
+      ],
+      "profileTotalSeconds": 30.277,
+      "pairWallSeconds": 44.91385102272034,
+      "pairMonotonicSeconds": 44.913253041
+    }
+  ],
+  "uniqueTests": 40,
+  "executions": 240,
+  "successfulPairs": 3,
+  "remainingDiagnosticPairs": 0,
+  "retriesUsed": 0,
+  "individualCommandWall": "NOT_MEASURED_NO_COMMAND_BOUNDARY_TIMESTAMPS",
+  "fullTimeoutRootCause": "NOT_ESTABLISHED",
+  "profileOverhead": "SUBSTANTIAL_NOT_PRODUCTION_RANKING",
+  "candidate": {
+    "path": "src/harness_conformance/canonical.py",
+    "function": "require_canonical_document",
+    "proposal": "PER_INVOCATION_ENCODED_BYTES_REUSE_ONLY",
+    "implemented": false,
+    "speedup": "NOT_MEASURED",
+    "publicSemantics": "PRESERVE_OR_STOP",
+    "crossCallCache": false,
+    "guardRemoval": false,
+    "cryptoChange": false
+  },
+  "consumerPaths": [
+    "src/harness_conformance/canonical.py",
+    "tests/platform/linux_baseline/_successor_inventory.py",
+    "tests/live_backend/_inventory.py",
+    "tests/live_backend/test_supervisor.py",
+    "docs/live-backend/linux-boundary.md",
+    "tests/platform/linux_baseline/test_linux_inventory.py",
+    "tests/platform/linux_baseline/test_packet_scalars.py",
+    "tests/platform/linux_baseline/test_successor_inventory.py"
+  ],
+  "gates": {
+    "exactConsumerBridgeRequired": true,
+    "independentSemanticOraclesRequired": true,
+    "fixedMatchedUnprofiledBenchmarkRequired": true,
+    "fullEightCommandsRequired": true,
+    "timeoutSeconds": 900,
+    "nestedTimeoutSeconds": 420,
+    "workflowTimeoutMinutes": 15,
+    "productSkips": 0,
+    "diagnosticBudgetReset": false,
+    "proxyRetryReset": false,
+    "currentSourceBeforeHistory": true,
+    "storedSourceExecution": false,
+    "sourceCiMergeExactMainSeparate": true,
+    "native": "NOT_RUN_ENV_UNAVAILABLE",
+    "tenantAcceptance": false,
+    "billingChange": false,
+    "rootPolicyChange": false,
+    "modelEffortTransition": "NOT_DUE"
+  }
+}
