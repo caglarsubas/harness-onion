@@ -305,7 +305,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 44. `MET-PERF-008`: publish canonicalization no-go and one-attempt full-backend timing diagnostics with no product edits.
 
-45. MET-ACCEPT-001: publish one additional local-only full-acceptance allowance for unchanged CONF-LIVE-003; no product edits or execution this META run.
+45. `MET-ACCEPT-001`: publish one additional local-only full-acceptance allowance for unchanged CONF-LIVE-003; no product edits or execution this META run.
 
 ## Testing, verification, and acceptance
 
