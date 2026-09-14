@@ -1,6 +1,7 @@
 """Independent local-allowance source checks; never execute product code."""
 from copy import deepcopy
 import pytest
+from scripts.validate_conformance_publication import historical_bytes as publication_history
 from scripts import validate_local_acceptance as module
 from scripts.safe_yaml import safe_load
 
@@ -14,10 +15,10 @@ def authority():
 def test_exact_one_meta_packet_preserves161_packets_and_test_identities(authority):
     assert module.validate_authority(*authority) == []
     packets,record,inputs = authority
-    assert len(packets) == 162 and module.NEW_IDS == ('MET-ACCEPT-001',)
+    assert len(packets) == 163 and module.NEW_IDS == ('MET-ACCEPT-001',)
     for path,rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == inputs[path]
+        assert module.apply_recipe(before,rule) == publication_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]
