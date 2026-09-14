@@ -185,9 +185,9 @@ def test_exact_dispatch_preserves_prior72_and_only_closes_eight_additional_pairs
     from scripts.validate_packet_ownership import validate_packet_ownership
     from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
     generic = validate_packet_ownership(authority[0])
-    assert len(generic) == 81
+    assert len(generic) == 82
     closed = module.close_dispatch_errors(authority[0], generic)
-    assert len(closed) == 73
+    assert len(closed) == 74
     assert validate_dispatch_ownership(authority[0]) == []
     assert module.close_dispatch_errors(authority[0], generic + ["unrelated error"])[-1] == "unrelated error"
 

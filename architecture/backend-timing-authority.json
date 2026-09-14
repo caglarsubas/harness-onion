@@ -1171,12 +1171,22 @@
     },
     "tests/test_conformance_consumer_closure.py": {
       "beforeSha256": "42c2921c3f1b7230f2dfabbb01ca74fb9c93d4ebb3a1fd0a8396b93e431290cd",
-      "afterSha256": "69bb41d35a183825e71f7062aece1ef5cc8b3883f12de9b9a38bf09e5b22cf29",
+      "afterSha256": "b57241908a93f54fd60c71f7349d40d5573d82e9e8c137fba77aa47a8b7a38f3",
       "replacements": [
         {
           "before": "    assert len(packets) == 159\n",
           "after": "    assert len(packets) == 161\n",
           "count": 1
+        },
+        {
+          "before": "assert len(generic) == 81",
+          "after": "assert len(generic) == 82",
+          "count": 1
+        },
+        {
+          "before": "\"CONF-DIAG-001 and CONF-LIVE-003\"",
+          "after": "\"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\"",
+          "count": 2
         }
       ]
     },
@@ -1193,33 +1203,63 @@
     },
     "tests/test_conformance_performance_followup.py": {
       "beforeSha256": "16701b1a16dfe7e741263892ea3839af35fbf158b88d11bd1c4e42ccb13341f8",
-      "afterSha256": "a428d86afef8fe0d32cf0c3425e3204d48f13b0fce345d2a6f628bf623d35424",
+      "afterSha256": "7114c6d67f886d2b252548ad939c3d08d39482bb7959ef689d5299a9a92ddece",
       "replacements": [
         {
           "before": "    assert len(packets) == 159\n",
           "after": "    assert len(packets) == 161\n",
           "count": 1
+        },
+        {
+          "before": "assert len(generic) == 81",
+          "after": "assert len(generic) == 82",
+          "count": 1
+        },
+        {
+          "before": "\"CONF-DIAG-001 and CONF-LIVE-003\"",
+          "after": "\"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\"",
+          "count": 2
         }
       ]
     },
     "tests/test_conformance_reference_measurement.py": {
       "beforeSha256": "8bad8e0ba9472a95f1d1de27693532de5e482fb070fb024a49c9ed701af3cbf5",
-      "afterSha256": "96ca43425b20b1edf2023ad24eaf87ce2ce59a18febc7b3065b7321352c9ffa1",
+      "afterSha256": "07cde18594a56d0aefd69c43b2a38834f0c9141a90424603892781524ff49258",
       "replacements": [
         {
           "before": "    assert len(packets) == 159\n",
           "after": "    assert len(packets) == 161\n",
+          "count": 1
+        },
+        {
+          "before": "assert len(generic) == 81",
+          "after": "assert len(generic) == 82",
+          "count": 1
+        },
+        {
+          "before": "\"CONF-DIAG-001 and CONF-LIVE-003\"",
+          "after": "\"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\"",
           "count": 1
         }
       ]
     },
     "tests/test_conformance_successor_checkpoint.py": {
       "beforeSha256": "5d8c7f4a9e246b54753571f1ea85bd37b100990c45514f70d310c407aa0b7c4c",
-      "afterSha256": "ba9eb5f26c556d32d3f0066b2e9ba65c39be5298a420d231f35e155e638a7133",
+      "afterSha256": "8a9fb93f128494e4a3511f658afd0c71054b7740025b3f8b1b8a05f2ec501ce5",
       "replacements": [
         {
           "before": "    assert len(packets) == 159\n",
           "after": "    assert len(packets) == 161\n",
+          "count": 1
+        },
+        {
+          "before": "assert len(generic) == 81",
+          "after": "assert len(generic) == 82",
+          "count": 1
+        },
+        {
+          "before": "assert len(closed) == 73",
+          "after": "assert len(closed) == 74",
           "count": 1
         }
       ]
