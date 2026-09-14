@@ -16,9 +16,9 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/conformance-completion-authority.json"
-RECORD_SHA256 = "6fcdb739da52be427684ab898366ce63aa0c34fcfb8865a16c9958fe6b5db7d7"
+RECORD_SHA256 = "55a816fbeb8763450e8c27797444b275adbbbfc201c887661bb9e1183974af93"
 NEW_IDS = ("MET-REPAIR-017","CONF-FIX-007")
-RECORD_FILE_SHA256 = "532290207e82b873a6355bc68850c0badffbc86e52fb46419cdf350496f12f90"
+RECORD_FILE_SHA256 = "17447fa1df241ea8287adf1220c3804e431c0794c51d02ecc588b8269ad15b94"
 HISTORY_PATHS = frozenset(["docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_backend_timing.py","scripts/validate_broker_handoff.py","scripts/validate_canonical_repair_plan.py","scripts/validate_ci_performance.py","scripts/validate_conformance_consumer_closure.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_conformance_publication.py","scripts/validate_conformance_reference_measurement.py","scripts/validate_conformance_successor_checkpoint.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_local_acceptance.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_provider_adoption.py","scripts/validate_proxy_contract.py","scripts/validate_proxy_diagnostics.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_backend_timing.py","tests/test_broker_handoff.py","tests/test_canonical_repair_plan.py","tests/test_ci_performance.py","tests/test_conformance_consumer_closure.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_conformance_publication.py","tests/test_conformance_reference_measurement.py","tests/test_conformance_successor_checkpoint.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_local_acceptance.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_provider_adoption.py","tests/test_proxy_contract.py","tests/test_proxy_diagnostics.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
 
 
@@ -231,7 +231,7 @@ def validate_authority(packets, record, inputs):
                 and meta['offlineExecution'] == packets['MET-PUBLISH-001']['offlineExecution'], 'all34 prior commands retained')
         spec = parse(inputs[SPEC_PATH]); validate_spec(spec)
         require(product['repository'] == 'mas-harness-conformance-labs'
-                and product['predecessors'] == ['CONF-LIVE-003','MET-REPAIR-017']
+                and product['predecessors'] == ['CONF-LIVE-003','CONF-DIAG-002','MET-REPAIR-017']
                 and product['allowedPaths'] == spec['product']['allowedPaths']
                 and product['offlineAcceptanceCommands'] == COMMANDS
                 and product['offlineExecution'] == packets['CONF-LIVE-003']['offlineExecution'], 'closed product packet')

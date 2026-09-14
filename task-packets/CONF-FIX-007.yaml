@@ -2,7 +2,7 @@ id: "CONF-FIX-007"
 repository: "mas-harness-conformance-labs"
 branch: "codex/conf-fix-007-conformance-completion"
 objective: "Complete the remaining CONF-LIVE-003 fixed qualifier, broker driver, exact-UID cleanup and server integration under unchanged security contracts; source only."
-predecessors: ["CONF-LIVE-003","MET-REPAIR-017"]
+predecessors: ["CONF-LIVE-003","CONF-DIAG-002","MET-REPAIR-017"]
 allowedPaths: ["src/harness_conformance/live_proxy_server.py","src/harness_conformance/live_mutation_admission.py","tests/live_backend/test_proxy_server.py","tests/live_backend/test_mutation_admission.py","docs/live-backend/proxy.md"]
 warmSourceAccess: "PROHIBITED_DURING_IMPLEMENTATION"
 sourceReuse: []

@@ -36,7 +36,10 @@ CONF-FIX-007 owns only these five existing conformance paths:
 - tests/live_backend/test_mutation_admission.py
 - docs/live-backend/proxy.md
 
-Its predecessors are CONF-LIVE-003 and this amendment. Start a fresh
+Its predecessors are CONF-LIVE-003, CONF-DIAG-002 and this amendment. The
+diagnostic ordering transitively includes CONF-DIAG-001; it preserves consumed
+observation history and does not treat diagnostics as accepted source ancestry.
+Start a fresh
 codex/conf-fix-007-conformance-completion branch and one product PR from the exact
 accepted product main after all META source gates pass. Do not reopen PR12,
 reuse its branch or republish its consumed allowances. The 135-path product stage
