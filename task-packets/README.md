@@ -1,5 +1,19 @@
 # Sol-High Task Packet Catalog
 
+## Current implementation-completion gate — MET-REPAIR-017
+
+[Conformance completion amendment](../docs/alpha-2/CONFORMANCE_COMPLETION.md) is current.
+Catalog:165 specifications; all163 predecessor packet YAML remain immutable.
+CONF-LIVE-003 publication DONE_RECORDED: PR12/main092fcf4, CI34828356129 and
+LOCAL exact-main passed1277 tests/eight commands. Implementation remains INCOMPLETE:
+qualifier composition, broker handoff, exact-UID cleanup and terminal/server integration.
+MET-REPAIR-017 ONGOING; CONF-FIX-007 WAITING_META_SOURCE_GATES, five existing product paths.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; its effective predecessors include CONF-FIX-007.
+Complete C1-C7 review, full local/required localhost CI, protected merge and independent
+LOCAL exact-main must precede004 coding. No native/tenant promotion or old budget reset.
+CONF-LIVE-005/006 and CONF-A2-001 WAITING. Alpha2 ONGOING; effort NOT_DUE.
+Earlier publication headings and evidence remain historical, not implementation closure.
+
 ## Current publication gate — MET-PUBLISH-001
 
 [Conformance publication decision](../docs/alpha-2/CONFORMANCE_PUBLICATION.md) is current.
@@ -395,6 +409,8 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 161 | `CONF-DIAG-002` | `mas-harness-conformance-labs` | Read-only full-backend duration observation; no product acceptance |
 | 162 | `MET-ACCEPT-001` | `Harness-Engineering` | Publish one additional LOCAL full-acceptance allowance for unchanged CONF-LIVE-003 |
 | 163 | `MET-PUBLISH-001` | `Harness-Engineering` | Publish bounded CONF-LIVE-003 source publication and verification gates |
+| 164 | `MET-REPAIR-017` | `Harness-Engineering` | Publish conformance completion correction and mandatory successor gate |
+| 165 | `CONF-FIX-007` | `mas-harness-conformance-labs` | Complete fixed qualifier, broker handoff, exact-UID cleanup and server integration |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 

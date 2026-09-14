@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_conformance_completion import historical_bytes as completion_history, current_test_bytes as completion_current, validate_additions as completion_additions
+except ImportError:
+    from scripts.validate_conformance_completion import historical_bytes as completion_history, current_test_bytes as completion_current, validate_additions as completion_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/conformance-publication-authority.json"
 RECORD_SHA256 = "a4d41df9c922307dc204f2e618e1ad7723e0c921b20742732349d429be1bd4a7"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = completion_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -119,9 +125,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return completion_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return completion_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -130,7 +136,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return completion_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -197,11 +203,11 @@ def validate_authority(packets, record, inputs):
         pins = {**record['protectedFiles'], **record['inputFiles'], **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), 'exact fresh inputs')
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'changed source: '+path)
+            require(type(inputs[path]) is bytes and digest(completion_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 162 and len(packets) == 163 and set(packets) == old | set(NEW_IDS), '162 immutable plus one META')
+        require(len(old) == 162 and len(packets) == 165 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007'}, '162 immutable plus one META')
         require('CONF-PERF-005' not in packets, 'no speculative repair')
-        for name in packets:
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet source parity')
         meta = packets['MET-PUBLISH-001']
         require(meta['allowedPaths'] == record['ownedPaths'] and meta['predecessors'] == ['MET-ACCEPT-001']
@@ -225,7 +231,7 @@ def validate_authority(packets, record, inputs):
                 and product['offlineExecution'] == spec['recipe']['offlineExecution'], 'original product packet')
         for path, rule in record['metaRecipes'].items():
             before = historical_bytes(path,inputs[path])
-            require(apply_recipe(before,rule) == inputs[path], 'exact reversible amendment')
+            require(apply_recipe(before,rule) == completion_history(path, inputs[path]), 'exact reversible amendment')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'inherited test identity preservation')
         for path in record['navigationPaths']:
@@ -242,4 +248,4 @@ if __name__ == '__main__':
     if errors:
         print('\n'.join(errors))
         raise SystemExit(1)
-    print('Conformance publication authority valid:163 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')
+    print('Conformance publication authority valid:165 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')

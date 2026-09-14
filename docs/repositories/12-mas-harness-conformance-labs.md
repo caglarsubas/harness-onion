@@ -1,5 +1,19 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current implementation-completion gate — MET-REPAIR-017
+
+[Conformance completion amendment](../alpha-2/CONFORMANCE_COMPLETION.md) is current.
+Catalog:165 specifications; all163 predecessor packet YAML remain immutable.
+CONF-LIVE-003 publication DONE_RECORDED: PR12/main092fcf4, CI34828356129 and
+LOCAL exact-main passed1277 tests/eight commands. Implementation remains INCOMPLETE:
+qualifier composition, broker handoff, exact-UID cleanup and terminal/server integration.
+MET-REPAIR-017 ONGOING; CONF-FIX-007 WAITING_META_SOURCE_GATES, five existing product paths.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; its effective predecessors include CONF-FIX-007.
+Complete C1-C7 review, full local/required localhost CI, protected merge and independent
+LOCAL exact-main must precede004 coding. No native/tenant promotion or old budget reset.
+CONF-LIVE-005/006 and CONF-A2-001 WAITING. Alpha2 ONGOING; effort NOT_DUE.
+Earlier publication headings and evidence remain historical, not implementation closure.
+
 ## Current publication gate — MET-PUBLISH-001
 
 [Conformance publication decision](../alpha-2/CONFORMANCE_PUBLICATION.md) is current.
@@ -275,6 +289,8 @@ Read-only diagnostic role: `CONF-DIAG-001` measures the pinned retirement tests;
 CONF-LIVE-003 remains the sole owner. MET-ACCEPT-001 grants one additional LOCAL attempt only after META source gates; no new product packet or dispatch exemption.
 
 CONF-LIVE-003 local gate passed. MET-PUBLISH-001 separately scopes publication/CI/exact-main; it grants no product edits and creates no second product owner.
+
+`CONF-FIX-007` corrects remaining003 implementation in five existing paths, with no new source stage or native authority. Its reviewed completion and independent exact-main are mandatory before004.
 
 ## Testing, verification, and acceptance
 
