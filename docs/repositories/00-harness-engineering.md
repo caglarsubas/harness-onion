@@ -277,6 +277,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 42. `MET-PERF-006`: exact local proxy diagnostic scope, preserved timeout evidence, closed read-only dispatch and no repair authority.
 
+43. `MET-PERF-007`: record diagnostic evidence and bounded canonicalization proposal; no product grant before exact consumer design.
+
 ## Testing, verification, and acceptance
 
 The `MET-001` bootstrap packet declares `prefetchCommands: []` and ordered

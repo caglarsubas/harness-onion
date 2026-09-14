@@ -510,11 +510,16 @@
     },
     "docs/repositories/00-harness-engineering.md": {
       "beforeSha256": "5999ebbd6983a1aa7a1c3fc812cf1840ea9b62ce129bcafa5f37478098bdd00c",
-      "afterSha256": "37151cb926011fd98ae16834e32198b78bf861210df5ea9afd54ca4955796d79",
+      "afterSha256": "3bb734056d05f8b9a2da4a6fde8ff2224d490e132b1d8d0e119848e8cbbad6c8",
       "replacements": [
         {
           "before": "# Repository Plan: `Harness-Engineering`\n\n## Current diagnostic gate — MET-PERF-006",
           "after": "# Repository Plan: `Harness-Engineering`\n\n## Current repair-planning gate — MET-PERF-007\n\n[Canonicalization repair proposal](../alpha-2/CANONICAL_REPAIR_PLAN.md) is current.\nCatalog:159 specifications; all158 previous packet YAML remain immutable.\nMET-PERF-006 source gates and CONF-DIAG-001 measured scope are recorded complete.\nAll3 diagnostic pairs passed; individual command wall times remain NOT_MEASURED.\nMET-PERF-007 publication ONGOING; PLAN-CANON-001 consumer design WAITING. Proposed\nCONF-PERF-005 is NOT_AUTHORIZED: no product YAML or write grant. CONF-LIVE-003\nremains BLOCKED_FULL_ACCEPTANCE; no timeout retry reset or native promotion.\nAlpha2 ONGOING; effort NOT_DUE. Earlier dispatch headings are historical.\n\n## Current diagnostic gate — MET-PERF-006",
+          "count": 1
+        },
+        {
+          "before": "## Testing, verification, and acceptance\n",
+          "after": "43. `MET-PERF-007`: record diagnostic evidence and bounded canonicalization proposal; no product grant before exact consumer design.\n\n## Testing, verification, and acceptance\n",
           "count": 1
         }
       ]
