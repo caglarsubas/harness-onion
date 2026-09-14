@@ -1,5 +1,16 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current diagnostic gate — MET-PERF-008
+
+[Backend timing diagnostic](../alpha-2/BACKEND_TIMING_DIAGNOSTICS.md) is current.
+Catalog:161 specifications; all159 predecessor packet YAML remain immutable.
+MET-PERF-007 source gates DONE_RECORDED. PLAN-CANON-001 DONE_NO_GO_AS_TIMEOUT_REPAIR;
+CONF-PERF-005 stays NOT_AUTHORIZED. MET-PERF-008 publication ONGOING.
+CONF-DIAG-002 waits for this publication's source/local/CI/merge/LOCAL exact-main gates: one
+full1107-method backend timing observation, maximum1 attempt, no retry or source write.
+CONF-DIAG-001 remains exhausted; CONF-LIVE-003 BLOCKED_FULL_ACCEPTANCE.
+Alpha2 ONGOING; effort NOT_DUE. Earlier headings retain historical publication status.
+
 ## Current repair-planning gate — MET-PERF-007
 
 [Canonicalization repair proposal](../alpha-2/CANONICAL_REPAIR_PLAN.md) is current.
@@ -231,6 +242,8 @@ Current dispatch: `CONF-PERF-004` sole coding owner from accepted9df; `CONF-BENC
 Next: `CONF-FIX-006`, two existing paths from acceptedb7586c4; no runtime/benchmark change. Then separately reconcile draft12.
 
 Read-only diagnostic role: `CONF-DIAG-001` measures the pinned retirement tests; no product writes, branch/PR or acceptance promotion.
+
+`CONF-DIAG-002` is read-only full-backend timing, not a coding packet or source predecessor; one attempt only after MET-PERF-008 source gates.
 
 ## Testing, verification, and acceptance
 

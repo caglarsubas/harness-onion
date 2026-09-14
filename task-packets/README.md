@@ -1,5 +1,16 @@
 # Sol-High Task Packet Catalog
 
+## Current diagnostic gate — MET-PERF-008
+
+[Backend timing diagnostic](../docs/alpha-2/BACKEND_TIMING_DIAGNOSTICS.md) is current.
+Catalog:161 specifications; all159 predecessor packet YAML remain immutable.
+MET-PERF-007 source gates DONE_RECORDED. PLAN-CANON-001 DONE_NO_GO_AS_TIMEOUT_REPAIR;
+CONF-PERF-005 stays NOT_AUTHORIZED. MET-PERF-008 publication ONGOING.
+CONF-DIAG-002 waits for this publication's source/local/CI/merge/LOCAL exact-main gates: one
+full1107-method backend timing observation, maximum1 attempt, no retry or source write.
+CONF-DIAG-001 remains exhausted; CONF-LIVE-003 BLOCKED_FULL_ACCEPTANCE.
+Alpha2 ONGOING; effort NOT_DUE. Earlier headings retain historical publication status.
+
 ## Current repair-planning gate — MET-PERF-007
 
 [Canonicalization repair proposal](../docs/alpha-2/CANONICAL_REPAIR_PLAN.md) is current.
@@ -353,6 +364,8 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 157 | `MET-PERF-006` | `Harness-Engineering` | Exact proxy diagnostic authority; no optimization |
 | 158 | `CONF-DIAG-001` | `mas-harness-conformance-labs` | Read-only normal/profiled retirement workload; no coding PR |
 | 159 | `MET-PERF-007` | `Harness-Engineering` | Recorded diagnosis and bounded canonicalization proposal; no product grant |
+| 160 | `MET-PERF-008` | `Harness-Engineering` | Publish canonical no-go and single-attempt full-backend timing authority |
+| 161 | `CONF-DIAG-002` | `mas-harness-conformance-labs` | Read-only full-backend duration observation; no product acceptance |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 
