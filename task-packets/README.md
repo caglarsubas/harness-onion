@@ -1,5 +1,16 @@
 # Sol-High Task Packet Catalog
 
+## Current repair-planning gate — MET-PERF-007
+
+[Canonicalization repair proposal](../docs/alpha-2/CANONICAL_REPAIR_PLAN.md) is current.
+Catalog:159 specifications; all158 previous packet YAML remain immutable.
+MET-PERF-006 source gates and CONF-DIAG-001 measured scope are recorded complete.
+All3 diagnostic pairs passed; individual command wall times remain NOT_MEASURED.
+MET-PERF-007 publication ONGOING; PLAN-CANON-001 consumer design WAITING. Proposed
+CONF-PERF-005 is NOT_AUTHORIZED: no product YAML or write grant. CONF-LIVE-003
+remains BLOCKED_FULL_ACCEPTANCE; no timeout retry reset or native promotion.
+Alpha2 ONGOING; effort NOT_DUE. Earlier dispatch headings are historical.
+
 ## Current diagnostic gate — MET-PERF-006
 
 [Bounded proxy performance investigation](../docs/alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
@@ -341,6 +352,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 156 | `MET-ADOPT-001` | `Harness-Engineering` | Provider adoption,13-repository policy and phased extension backlog |
 | 157 | `MET-PERF-006` | `Harness-Engineering` | Exact proxy diagnostic authority; no optimization |
 | 158 | `CONF-DIAG-001` | `mas-harness-conformance-labs` | Read-only normal/profiled retirement workload; no coding PR |
+| 159 | `MET-PERF-007` | `Harness-Engineering` | Recorded diagnosis and bounded canonicalization proposal; no product grant |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 
