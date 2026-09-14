@@ -4,6 +4,8 @@ import json
 
 import pytest
 
+from scripts.validate_proxy_diagnostics import historical_bytes as diagnostic_history
+
 from scripts import validate_provider_adoption as module
 from scripts.safe_yaml import safe_load
 
@@ -17,7 +19,7 @@ def authority():
 def test_exact_new_catalog_and_all_historical_packet_bytes(authority):
     assert module.validate_authority(*authority) == []
     packets, record, inputs = authority
-    assert len(packets) == 156
+    assert len(packets) == 158
     assert len([p for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')]) == 155
     assert set(module.EXTENSIONS).isdisjoint(packets)
     assert packets['CONF-LIVE-003']['id'] == 'CONF-LIVE-003'
@@ -27,7 +29,7 @@ def test_exact_reversible_changes_preserve_every_old_test_identity(authority):
     _, record, inputs = authority
     for path, rule in record['metaRecipes'].items():
         before = module.historical_bytes(path, inputs[path])
-        assert module.apply_recipe(before, rule) == inputs[path]
+        assert module.apply_recipe(before, rule) == diagnostic_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]

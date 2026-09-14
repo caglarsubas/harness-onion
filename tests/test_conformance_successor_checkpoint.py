@@ -44,7 +44,7 @@ def candidate(authority):
 def test_current155_catalog_preserves153_yaml_and_exact_two_path_scope(authority):
     packets, record, inputs = authority
     assert module.validate_authority(*authority) == []
-    assert len(packets) == 156
+    assert len(packets) == 158
     assert packets["CONF-FIX-006"]["allowedPaths"] == [module.DOC, module.SUP]
     assert packets["CONF-FIX-006"]["predecessors"] == ["MET-REPAIR-016", "CONF-PERF-004"]
     assert packets["MET-REPAIR-016"]["offlineAcceptanceCommands"][:-3] == packets["MET-PERF-005"]["offlineAcceptanceCommands"][:-2]
@@ -185,9 +185,9 @@ def test_exact_dispatch_preserves_prior72_and_only_closes_eight_additional_pairs
     from scripts.validate_packet_ownership import validate_packet_ownership
     from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
     generic = validate_packet_ownership(authority[0])
-    assert len(generic) == 80
+    assert len(generic) == 81
     closed = module.close_dispatch_errors(authority[0], generic)
-    assert len(closed) == 72
+    assert len(closed) == 73
     assert validate_dispatch_ownership(authority[0]) == []
     assert module.close_dispatch_errors(authority[0], generic + ["unrelated error"])[-1] == "unrelated error"
 

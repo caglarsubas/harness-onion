@@ -1,5 +1,16 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current diagnostic gate — MET-PERF-006
+
+[Bounded proxy performance investigation](../alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md)
+is the current Alpha 2 diagnostic dispatch. Catalog:158 specifications,156
+immutable predecessors. MET-PERF-006 publication ONGOING; CONF-DIAG-001 WAITING
+for its source gates. Product7939626 is local-only and full acceptance is BLOCKED
+by two900-second timeouts; draft12 remains incomplete/unmerged. No repair, native
+qualification or tenant acceptance is granted. Alpha2 ONGOING; effort NOT_DUE.
+The MET-ADOPT-001 provider/multi-repository policy below remains normative; its
+156-packet counts and checkpoint are retained publication history.
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
@@ -207,6 +218,8 @@ Current dispatch: `CONF-PERF-003` from accepted9df; supersede unaccepted001/002 
 Current dispatch: `CONF-PERF-004` sole coding owner from accepted9df; `CONF-BENCH-001` is read-only measurement of its committed unchanged-crypto scaffold, not an accepted predecessor or PR. See new reference-measurement guide; previous full-baseline dispatch is historical and unaccepted.
 
 Next: `CONF-FIX-006`, two existing paths from acceptedb7586c4; no runtime/benchmark change. Then separately reconcile draft12.
+
+Read-only diagnostic role: `CONF-DIAG-001` measures the pinned retirement tests; no product writes, branch/PR or acceptance promotion.
 
 ## Testing, verification, and acceptance
 
