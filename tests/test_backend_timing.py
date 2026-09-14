@@ -1,6 +1,7 @@
 """Independent timing-authority refusals; never execute or import product code."""
 from copy import deepcopy
 import pytest
+from scripts.validate_local_acceptance import historical_bytes as acceptance_history
 from scripts import validate_backend_timing as module
 from scripts.safe_yaml import safe_load
 
@@ -14,10 +15,10 @@ def authority():
 def test_exact_publication_preserves159_packets_and_inherited_test_ids(authority):
     assert module.validate_authority(*authority) == []
     packets,record,inputs = authority
-    assert len(packets) == 161 and 'CONF-PERF-005' not in packets
+    assert len(packets) == 162 and 'CONF-PERF-005' not in packets
     for path,rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == inputs[path]
+        assert module.apply_recipe(before,rule) == acceptance_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]

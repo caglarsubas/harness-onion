@@ -1,5 +1,18 @@
 # Sol-High Task Packet Catalog
 
+## Current local-acceptance gate — MET-ACCEPT-001
+
+[One additional local acceptance attempt](../docs/alpha-2/LOCAL_ACCEPTANCE_REVALIDATION.md) is current.
+Catalog:162 specifications; all161 predecessor packet YAML remain immutable.
+MET-PERF-008 source gates DONE_RECORDED. CONF-DIAG-002 DONE_DIAGNOSTIC_ONLY:
+1107 tests passed, zero attempts remain; no full acceptance or optimization claim.
+MET-ACCEPT-001 publication ONGOING; CONF-LIVE-003 WAITING_META_SOURCE_GATES.
+After source/local/required localhost CI/merge/LOCAL exact-main, one additional
+LOCAL full8-command attempt on unchanged7939626; no retry, code edit, product CI,
+push or merge grant. Old failed/exhausted budgets remain; CONF-PERF-005 NOT_AUTHORIZED.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING. Alpha2 ONGOING; effort NOT_DUE.
+Earlier headings retain historical publication status.
+
 ## Current diagnostic gate — MET-PERF-008
 
 [Backend timing diagnostic](../docs/alpha-2/BACKEND_TIMING_DIAGNOSTICS.md) is current.
@@ -366,6 +379,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 159 | `MET-PERF-007` | `Harness-Engineering` | Recorded diagnosis and bounded canonicalization proposal; no product grant |
 | 160 | `MET-PERF-008` | `Harness-Engineering` | Publish canonical no-go and single-attempt full-backend timing authority |
 | 161 | `CONF-DIAG-002` | `mas-harness-conformance-labs` | Read-only full-backend duration observation; no product acceptance |
+| 162 | `MET-ACCEPT-001` | `Harness-Engineering` | Publish one additional LOCAL full-acceptance allowance for unchanged CONF-LIVE-003 |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 

@@ -291,7 +291,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(repair_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 156 and len(packets) == 161 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002'}, '161 specifications with156 immutable predecessors')
+        require(len(old) == 156 and len(packets) == 162 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001'}, '162 specifications with156 immutable predecessors')
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet raw semantic binding')
         meta, replay = (packets[name] for name in NEW_IDS)

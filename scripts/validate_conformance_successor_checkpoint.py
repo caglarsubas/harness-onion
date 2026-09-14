@@ -297,7 +297,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(adoption_history(path, inputs[path])) == checksum, "exact current source: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 153 and len(packets) == 161 and set(packets) == old | set(NEW_IDS) | {"MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002"}, "exact156 catalog")
+        require(len(old) == 153 and len(packets) == 162 and set(packets) == old | set(NEW_IDS) | {"MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001"}, "exact156 catalog")
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "raw semantic packet binding")
         meta, product = (packets[x] for x in NEW_IDS)
@@ -366,7 +366,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Successor checkpoint authority valid:161 packets;153 immutable YAML; two product paths; source data only.")
+        print("Successor checkpoint authority valid:162 packets;153 immutable YAML; two product paths; source data only.")
     return int(bool(errors))
 
 
