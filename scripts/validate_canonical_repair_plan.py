@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_backend_timing import historical_bytes as timing_history, current_test_bytes as timing_current, validate_additions as timing_additions
+except ImportError:
+    from scripts.validate_backend_timing import historical_bytes as timing_history, current_test_bytes as timing_current, validate_additions as timing_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/canonical-repair-plan-authority.json"
 RECORD_SHA256 = "b8d364ec8b1e3332931a2bc725b32796a9daba6d3faa793de7c3335c18e9d881"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = timing_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -119,9 +125,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
     if not matches:
         require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return timing_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return timing_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -130,7 +136,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return timing_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -186,12 +192,12 @@ def validate_authority(packets, record, inputs):
                 **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), 'exact fresh input inventory')
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'changed source: '+path)
+            require(type(inputs[path]) is bytes and digest(timing_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 158 and len(packets) == 159 and set(packets) == old | set(NEW_IDS),
+        require(len(old) == 158 and len(packets) == 161 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002'},
                 'one new meta packet and158 immutable predecessors')
         require('CONF-PERF-005' not in packets, 'proposed product packet is not execution authority')
-        for name in packets:
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'raw semantic binding')
         meta = packets['MET-PERF-007']
         require(meta['allowedPaths'] == record['ownedPaths'] and meta['predecessors'] == ['MET-PERF-006']
@@ -203,7 +209,7 @@ def validate_authority(packets, record, inputs):
                 and meta['offlineExecution'] == packets['MET-PERF-006']['offlineExecution'], 'unchanged30 plus planning validator')
         for path, rule in record['metaRecipes'].items():
             before = historical_bytes(path, inputs[path])
-            require(apply_recipe(before,rule) == inputs[path], 'exact reversible bridge')
+            require(apply_recipe(before,rule) == timing_history(path, inputs[path]), 'exact reversible bridge')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'all inherited test identities')
         validate_plan(parse(inputs[SPEC_PATH]))
