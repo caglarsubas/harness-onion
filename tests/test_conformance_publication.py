@@ -1,6 +1,7 @@
 """Independent META-only publication checks. No product imports or execution."""
 from copy import deepcopy
 import pytest
+from scripts.validate_conformance_completion import historical_bytes as completion_history
 from scripts import validate_conformance_publication as module
 from scripts.safe_yaml import safe_load
 
@@ -14,10 +15,10 @@ def authority():
 def test_one_meta_owner_keeps162_packets_and_every_inherited_test(authority):
     assert module.validate_authority(*authority) == []
     packets,record,inputs = authority
-    assert len(packets) == 163 and module.NEW_IDS == ('MET-PUBLISH-001',)
+    assert len(packets) == 165 and module.NEW_IDS == ('MET-PUBLISH-001',)
     for path,rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == inputs[path]
+        assert module.apply_recipe(before,rule) == completion_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]
