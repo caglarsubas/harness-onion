@@ -1,0 +1,327 @@
+{
+  "schemaVersion": "planeon.internal.conformance-publication/v1",
+  "metaPacketId": "MET-PUBLISH-001",
+  "sourceOwner": "CONF-LIVE-003",
+  "metaBase": "0eb07ad1cd95de89d6e484aeb393fe1dc469ed2b",
+  "evidenceClass": "META_SOURCE_AUTHORITY_ONLY",
+  "prerequisite": {
+    "packetId": "MET-ACCEPT-001",
+    "commit": "0eb07ad1cd95de89d6e484aeb393fe1dc469ed2b",
+    "packetSha256": "100fa8cd2e55323d6b99d75d9da079ba06a1414f2c85019b3246ba833d606f8d",
+    "specificationPath": "architecture/local-acceptance.json",
+    "specificationSha256": "14dbd4c8e53ac711ec9bfb7e4cb6db03f873d313503e74c7f183ef16c950997f",
+    "localGate": "DONE_LOCAL_ONLY",
+    "localAllowanceRemaining": 0,
+    "diagnosticBudgetsRemaining": 0,
+    "oldBudgetsReset": false
+  },
+  "subject": {
+    "repository": "mas-harness-conformance-labs",
+    "commit": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+    "tree": "f5a25661c2df6c87e5d3429b0b5f62511c2e5988",
+    "branch": "codex/conf-live-003-proxy-admission",
+    "sourceFiles": 135,
+    "sourceInventorySha256": "da56a96ea2f955382e95e6107dbeb7238c1f814692839d45eb02c1a973d4d85f",
+    "inventoryAuthority": "architecture/local-acceptance.json#/subject/inventory",
+    "staticTestIdentityAuthority": "architecture/local-acceptance.json#/recipe/testSuites",
+    "staticTestIds": 1277,
+    "status": "LOCAL_ACCEPTED_NOT_PUBLISHED",
+    "productPacketSha256": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5"
+  },
+  "localEvidence": {
+    "evidenceClass": "LOCAL_OFFLINE_ACCEPTANCE_ONLY",
+    "requestSha256": "9d96c912a1aab43f92fa643481dca4c5b26ec9ff907f22c04e076bd6af9256b3",
+    "activationSequence": 276,
+    "reservation": "operator-attempts/MET-ACCEPT-001-CONF-LIVE-003-LOCAL.json",
+    "reservationSha256": "37ea5d5b70b34b0b097235e92aae19c5894bba5045121b67c95b94629070e87a",
+    "logSha256": "2eef9221d8c7f1a301634a9f1830cbf630486b054ebe0c64053daf866b2e9049",
+    "auditSha256": "be7fb727321cb0dfb949fb45fb43e28aaff75d2181ccaba6c822251fb3561069",
+    "resultSha256": "363738e260cc610bc3e26ef639936607893521983ce8a3a45d37d400ee1983dd",
+    "testsPassed": 1277,
+    "suiteCounts": [
+      37,
+      14,
+      9,
+      23,
+      87,
+      1107
+    ],
+    "commandCount": 8,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "monotonicSeconds": 427.110394334,
+    "wallSeconds": 427.1115560531616,
+    "awakeIntervalValid": true,
+    "sourceUnchanged": true,
+    "independentAuditRequired": true,
+    "retainedHashesAreAuthentication": false,
+    "attemptConsumed": true,
+    "remainingAttempts": 0
+  },
+  "remoteCheckpoint": {
+    "repository": "caglarsubas/mas-harness-conformance-labs",
+    "pr": 12,
+    "head": "699a00c2d26e36c9c710aa85d0338f0d926073f2",
+    "main": "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+    "draft": true,
+    "merged": false,
+    "refreshBeforeAnyWrite": true
+  },
+  "signedHistory": {
+    "basePath": "architecture/local-acceptance.json#/signedHistory/records",
+    "baseCount": 80,
+    "newLocalRequest": {
+      "sequence": 276,
+      "checkoutCommit": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+      "packetSha256": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+      "profile": "python-conformance-stdlib",
+      "issuedAt": 1789368487,
+      "expiresAt": 1789454887,
+      "requestSha256": "9d96c912a1aab43f92fa643481dca4c5b26ec9ff907f22c04e076bd6af9256b3"
+    },
+    "recordCount": 81,
+    "meaning": "SIGNED_REQUESTS_NOT_EXECUTION_COUNT",
+    "futureComparison": "EXACT_BASELINE_PLUS_ONLY_RESERVATION_BOUND_CI_AND_MAIN_REQUESTS",
+    "unexplainedRequests": "BLOCK",
+    "resignRenewsAllowance": false
+  },
+  "recipe": {
+    "commands": [
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/meta",
+        "-p",
+        "test_*.py"
+      ],
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/parity",
+        "-p",
+        "test_*.py"
+      ],
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/alpha1",
+        "-p",
+        "test_*.py"
+      ],
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/fixes/runner_boundary",
+        "-p",
+        "test_*.py"
+      ],
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/platform/linux_baseline",
+        "-p",
+        "test_*.py"
+      ],
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/live_backend",
+        "-p",
+        "test_*.py"
+      ],
+      [
+        "make",
+        "campaign",
+        "CAMPAIGN=linux-baseline"
+      ],
+      [
+        "make",
+        "evidence-verify",
+        "CAMPAIGN=linux-baseline"
+      ]
+    ],
+    "prefetchCommands": [],
+    "offlineExecution": {
+      "wrapperArgv": [
+        "./ci/verify-offline.sh"
+      ],
+      "packetPathEnvironment": "HARNESS_TASK_PACKET",
+      "packetPathMode": "HASH_PINNED_READ_ONCE_NO_CHILD_PATH",
+      "commandTransport": "ARGV_ARRAY_V1",
+      "isolation": "OS_ENFORCED_DENY_ALL_OUTBOUND",
+      "sessionScope": "SINGLE_PROCESS_TREE",
+      "prefetchOutsideSession": false,
+      "offlineEnvironment": {
+        "UV_OFFLINE": "1",
+        "UV_FROZEN": "1",
+        "UV_NO_SYNC": "1"
+      }
+    },
+    "profile": "python-conformance-stdlib",
+    "timeoutSeconds": 900,
+    "nestedTimeoutSeconds": 420,
+    "workflowTimeoutMinutes": 15,
+    "expectedSuiteCounts": [
+      37,
+      14,
+      9,
+      23,
+      87,
+      1107
+    ],
+    "expectedTests": 1277,
+    "expectedSkips": 0,
+    "sourceOverlay": false,
+    "filters": false,
+    "newProfiler": false,
+    "output": "FULL_UNFILTERED_STDOUT_STDERR",
+    "caseEvidence": "STATIC_PINNED_IDS_PLUS_OBSERVED_SUITE_TOTALS_NOT_VERBOSE_IDENTITIES",
+    "campaignOutput": "STRUCTURAL_ONLY_NATIVE_NOT_RUN_ENV_UNAVAILABLE"
+  },
+  "publication": {
+    "mode": "EXISTING_BRANCH_FAST_FORWARD_ONLY",
+    "reservation": "operator-attempts/MET-PUBLISH-001-CONF-LIVE-003-PUBLICATION.json",
+    "preserveExistingPR": true,
+    "newBranch": false,
+    "newPR": false,
+    "forcePush": false,
+    "rebase": false,
+    "sourceEdits": false,
+    "expectedOldHead": "699a00c2d26e36c9c710aa85d0338f0d926073f2",
+    "newHead": "7939626dc6aec99b58816e3a709fd0babf3a985f",
+    "expectedBase": "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+    "requiredCheck": "verify",
+    "merge": "GREEN_ONLY_PROTECTED_MERGE_PINNED_HEAD_BASE_AND_TREE",
+    "bypassProtection": false,
+    "mergeMode": "REPOSITORY_ALLOWED_ONLY",
+    "reviewState": "READY_ONLY_AFTER_PUBLICATION",
+    "uncertainMutation": "READ_STATE_DO_NOT_BLINDLY_REPEAT",
+    "baseOrHeadDrift": "STOP_NO_REBASE_OR_REPAIR",
+    "newSource": "SEPARATE_REVIEWED_AMENDMENT_REQUIRED"
+  },
+  "executions": [
+    {
+      "stage": "CI",
+      "maximumAttempts": 1,
+      "retries": 0,
+      "reservation": "operator-attempts/MET-PUBLISH-001-CONF-LIVE-003-CI.json",
+      "subject": "EXACT_GITHUB_PR_MERGE_REF",
+      "parents": [
+        "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+        "7939626dc6aec99b58816e3a709fd0babf3a985f"
+      ],
+      "expectedTree": "f5a25661c2df6c87e5d3429b0b5f62511c2e5988",
+      "requires": "PUBLISHED_EXACT_HEAD_AND_FRESH_ROOT_SIGNED_ISOLATION",
+      "requiredCheck": "verify",
+      "workflowSha256": "91090dc69c12837e8b73eb41a868b3afca7dcb34b304c7b409ac716310ddd3a6",
+      "execution": "EXISTING_EPHEMERAL_LOCALHOST_RUNNER",
+      "hostedRunner": false,
+      "workflowDispatch": false,
+      "reRunJobs": false,
+      "reserveBefore": "RUNNER_ACTIVATION_OR_JOB_EXECUTION",
+      "retireRunnerAndCredentials": true
+    },
+    {
+      "stage": "LOCAL_EXACT_MAIN",
+      "maximumAttempts": 1,
+      "retries": 0,
+      "reservation": "operator-attempts/MET-PUBLISH-001-CONF-LIVE-003-MAIN.json",
+      "subject": "EXACT_PROTECTED_MERGE_COMMIT",
+      "expectedTree": "f5a25661c2df6c87e5d3429b0b5f62511c2e5988",
+      "expectedParent": "f988c78e93b28257810ed99e7f0c072e9b76bae5",
+      "requires": "INDEPENDENT_GREEN_CI_AUDIT_AND_VERIFIED_MERGE",
+      "execution": "INSTALLED_OFFLINE_LAUNCHER",
+      "reserveBefore": "LAUNCH",
+      "githubActionsDispatch": false,
+      "mergeDoesNotImplyAcceptance": true
+    }
+  ],
+  "custody": {
+    "durable": true,
+    "exclusiveCreate": true,
+    "consumeOnReservation": true,
+    "retryOnCrash": false,
+    "retryOnTimeout": false,
+    "retryOnSleep": false,
+    "noCrossStagePooling": true,
+    "doNotReuseLocalAcceptance": true,
+    "oneActiveExecution": true,
+    "requiredBindings": [
+      "acceptedMetaCommit",
+      "metaPacketSha256",
+      "productPacketSha256",
+      "stage",
+      "sourceCommit",
+      "sourceTree",
+      "sourceInventorySha256",
+      "signedRequestSha256",
+      "attempt",
+      "maximumAttempts",
+      "retries"
+    ],
+    "ciAdditionalBindings": [
+      "repository",
+      "pullRequest",
+      "runId",
+      "runAttempt",
+      "jobId",
+      "head",
+      "base",
+      "workflowSha256"
+    ],
+    "mainAdditionalBindings": [
+      "verifiedMergeCommit",
+      "verifiedMergeTree",
+      "requiredCIAuditSha256"
+    ],
+    "storeOutsideDisposableCheckout": true,
+    "terminalResultSeparate": true,
+    "missingPrerequisite": "NOT_RUN_ENV_UNAVAILABLE"
+  },
+  "gates": {
+    "metaLocalHead": true,
+    "metaRequiredLocalhostCI": true,
+    "metaGreenMerge": true,
+    "metaLocalExactMain": true,
+    "reverifyIndependentLocalAcceptance": true,
+    "sourceToolchainAndSignedCustody": true,
+    "preflightDenyAllOutbound": true,
+    "productExecutionInThisMetaRun": false,
+    "productEdits": false,
+    "oldPacketEdits": false,
+    "warmSourceAccess": false,
+    "rootPolicyChange": false,
+    "hostPowerChange": false,
+    "dependenciesOrDownloads": false,
+    "billingChange": false,
+    "technicalEvidencePromotion": false,
+    "nativeQualification": "NOT_RUN_ENV_UNAVAILABLE",
+    "tenantAcceptance": false,
+    "artifactAcceptance": false,
+    "deploymentAcceptance": false,
+    "runtimeAssurance": false,
+    "phaseCompletion": false,
+    "noNewProductOwner": true,
+    "noGenericDispatchException": true,
+    "modelEffortTransition": "NOT_DUE"
+  }
+}

@@ -1,5 +1,19 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current publication gate — MET-PUBLISH-001
+
+[Conformance publication decision](../alpha-2/CONFORMANCE_PUBLICATION.md) is current.
+Catalog:163 specifications; all162 predecessor packet YAML remain immutable.
+MET-ACCEPT-001 source gates DONE_RECORDED; CONF-LIVE-003 local gate DONE_LOCAL_ONLY:
+1277 tests, eight commands, independent audit PASS on unchanged7939626; local allowance exhausted.
+MET-PUBLISH-001 publication ONGOING; product publication WAITING_META_SOURCE_GATES.
+After this META source/local/required localhost CI/merge/LOCAL exact-main, authorize
+one existing-branch publication, one required localhost CI attempt and one separate
+LOCAL exact-main attempt. No product edit, force push, hosted runner or native promotion.
+All old failures, signed custody and consumed budgets remain. CONF-PERF-005 NOT_AUTHORIZED.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING. Alpha2 ONGOING; effort NOT_DUE.
+Earlier headings retain historical publication status.
+
 ## Current local-acceptance gate — MET-ACCEPT-001
 
 [One additional local acceptance attempt](../alpha-2/LOCAL_ACCEPTANCE_REVALIDATION.md) is current.
@@ -259,6 +273,8 @@ Read-only diagnostic role: `CONF-DIAG-001` measures the pinned retirement tests;
 `CONF-DIAG-002` is read-only full-backend timing, not a coding packet or source predecessor; one attempt only after MET-PERF-008 source gates.
 
 CONF-LIVE-003 remains the sole owner. MET-ACCEPT-001 grants one additional LOCAL attempt only after META source gates; no new product packet or dispatch exemption.
+
+CONF-LIVE-003 local gate passed. MET-PUBLISH-001 separately scopes publication/CI/exact-main; it grants no product edits and creates no second product owner.
 
 ## Testing, verification, and acceptance
 
