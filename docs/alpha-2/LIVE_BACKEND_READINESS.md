@@ -1,5 +1,18 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
+## Current local-acceptance gate — MET-ACCEPT-001
+
+[One additional local acceptance attempt](LOCAL_ACCEPTANCE_REVALIDATION.md) is current.
+Catalog:162 specifications; all161 predecessor packet YAML remain immutable.
+MET-PERF-008 source gates DONE_RECORDED. CONF-DIAG-002 DONE_DIAGNOSTIC_ONLY:
+1107 tests passed, zero attempts remain; no full acceptance or optimization claim.
+MET-ACCEPT-001 publication ONGOING; CONF-LIVE-003 WAITING_META_SOURCE_GATES.
+After source/local/required localhost CI/merge/LOCAL exact-main, one additional
+LOCAL full8-command attempt on unchanged7939626; no retry, code edit, product CI,
+push or merge grant. Old failed/exhausted budgets remain; CONF-PERF-005 NOT_AUTHORIZED.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING. Alpha2 ONGOING; effort NOT_DUE.
+Earlier headings retain historical publication status.
+
 ## Current diagnostic gate — MET-PERF-008
 
 [Backend timing diagnostic](BACKEND_TIMING_DIAGNOSTICS.md) is current.

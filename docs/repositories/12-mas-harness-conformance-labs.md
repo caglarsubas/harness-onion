@@ -1,5 +1,18 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current local-acceptance gate — MET-ACCEPT-001
+
+[One additional local acceptance attempt](../alpha-2/LOCAL_ACCEPTANCE_REVALIDATION.md) is current.
+Catalog:162 specifications; all161 predecessor packet YAML remain immutable.
+MET-PERF-008 source gates DONE_RECORDED. CONF-DIAG-002 DONE_DIAGNOSTIC_ONLY:
+1107 tests passed, zero attempts remain; no full acceptance or optimization claim.
+MET-ACCEPT-001 publication ONGOING; CONF-LIVE-003 WAITING_META_SOURCE_GATES.
+After source/local/required localhost CI/merge/LOCAL exact-main, one additional
+LOCAL full8-command attempt on unchanged7939626; no retry, code edit, product CI,
+push or merge grant. Old failed/exhausted budgets remain; CONF-PERF-005 NOT_AUTHORIZED.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING. Alpha2 ONGOING; effort NOT_DUE.
+Earlier headings retain historical publication status.
+
 ## Current diagnostic gate — MET-PERF-008
 
 [Backend timing diagnostic](../alpha-2/BACKEND_TIMING_DIAGNOSTICS.md) is current.
@@ -244,6 +257,8 @@ Next: `CONF-FIX-006`, two existing paths from acceptedb7586c4; no runtime/benchm
 Read-only diagnostic role: `CONF-DIAG-001` measures the pinned retirement tests; no product writes, branch/PR or acceptance promotion.
 
 `CONF-DIAG-002` is read-only full-backend timing, not a coding packet or source predecessor; one attempt only after MET-PERF-008 source gates.
+
+CONF-LIVE-003 remains the sole owner. MET-ACCEPT-001 grants one additional LOCAL attempt only after META source gates; no new product packet or dispatch exemption.
 
 ## Testing, verification, and acceptance
 
