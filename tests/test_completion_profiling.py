@@ -116,7 +116,8 @@ def observer():
 
 
 @pytest.mark.parametrize('outcome',['pass','failure','error','skip'])
-def test_synthetic_observer_preserves_results_and_test_body(observer,capsys,outcome):
+def test_synthetic_observer_preserves_results_and_test_body(observer,capfd,outcome):
+    # The real stack watchdog needs descriptor-backed stderr, not StringIO.
     calls = []
     def body(self):
         calls.append('body')
@@ -130,7 +131,7 @@ def test_synthetic_observer_preserves_results_and_test_body(observer,capsys,outc
     assert len(result.failures) == (outcome == 'failure')
     assert len(result.errors) == (outcome == 'error')
     assert len(result.skipped) == (outcome == 'skip')
-    rows = [json.loads(l) for l in capsys.readouterr().out.splitlines()]
+    rows = [json.loads(l) for l in capfd.readouterr().out.splitlines()]
     assert [r['event'] for r in rows] == ['case-start','case-finish']
     assert all(r['evidenceClass'] == 'WORKLOAD_DIAGNOSTIC_ONLY' for r in rows)
     assert rows[-1]['threadCpuSeconds'] >= 0 and rows[-1]['wallSeconds'] >= 0
@@ -139,13 +140,13 @@ def test_synthetic_observer_preserves_results_and_test_body(observer,capsys,outc
 
 
 @pytest.mark.parametrize('index',[0,1,2])
-def test_each_timing_only_case_runs_without_ambient_profiler(observer,capsys,index):
+def test_each_timing_only_case_runs_without_ambient_profiler(observer,capfd,index):
     identity = sorted(observer['TIMING_ONLY'])[index]; seen = []
     def body(self): seen.append(sys.getprofile())
     case = type('Synthetic', (unittest.TestCase,), {'runTest':body,'id':lambda _:identity})()
     result = unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(case)
     assert seen == [None] and result.wasSuccessful() and result.testsRun == 1
-    end = json.loads(capsys.readouterr().out.splitlines()[-1])
+    end = json.loads(capfd.readouterr().out.splitlines()[-1])
     assert end['functionCount'] == 0 and end['profilerActiveAtFinish'] is None
     assert end['topSelf'] == end['topCumulative'] == []
 
