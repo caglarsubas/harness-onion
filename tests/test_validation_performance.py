@@ -5,6 +5,7 @@ import datetime
 import importlib
 import json
 from pathlib import Path
+import re
 import shutil
 
 import pytest
@@ -203,6 +204,14 @@ def test_complete167_authority_and_old_sources(authority):
     assert module.NEW_IDS == ("MET-PERF-010",)
     assert len([p for p in record["protectedFiles"]
                 if p.startswith("task-packets/") and p.endswith(".yaml")]) == 166
+    plan = inputs["docs/repositories/00-harness-engineering.md"].decode()
+    section = re.search(r"^## PR packets\s*$([\s\S]*?)(?=^## |\Z)", plan, re.M)
+    assert section is not None
+    assert re.findall(r"`(MET-PERF-010)`", section.group(1)) == ["MET-PERF-010"]
+    indexed = re.findall(r"^\|\s*\d+\s*\|\s*`([A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+)`\s*\|",
+                         inputs["task-packets/README.md"].decode(), re.M)
+    assert len(indexed) == len(set(indexed)) == 167
+    assert set(indexed) == set(packets)
     for path, rule in record["metaRecipes"].items():
         before = module.historical_bytes(path, inputs[path])
         assert module.apply_recipe(before, rule) == inputs[path]
@@ -261,4 +270,3 @@ def test_fresh_new_authority_cannot_cache_success(monkeypatch):
     with pytest.raises(ValueError):
         module._record()
     assert len(calls) == 2
-

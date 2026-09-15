@@ -372,7 +372,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 48. `MET-ADOPT-002`: publish the research-led OSS adoption map, per-harness build-versus-integrate responsibilities and coordinated delivery gates without product changes.
 
-49. MET-PERF-010: independent bounded validation-performance repair; old draft/attempt evidence remains immutable.
+49. `MET-PERF-010`: independent bounded validation-performance repair; old draft/attempt evidence remains immutable.
 
 ## Testing, verification, and acceptance
 
