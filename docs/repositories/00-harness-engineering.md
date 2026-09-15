@@ -357,6 +357,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 
 47. `MET-REPAIR-017`: publish the bounded five-path completion correction, preserve historical publication evidence and block004 pending reviewed implementation closure.
 
+48. `MET-ADOPT-002`: publish the research-led OSS adoption map, per-harness build-versus-integrate responsibilities and coordinated delivery gates without product changes.
+
 ## Testing, verification, and acceptance
 
 The `MET-001` bootstrap packet declares `prefetchCommands: []` and ordered
