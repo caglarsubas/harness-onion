@@ -189,6 +189,8 @@ Harness-Engineering/
 ├── task-packets/
 │   ├── README.md
 │   └── <one-file-per-packet>.yaml
+├── diagnostics/
+│   └── conf_diag_003.py
 ├── reference-observer/
 │   ├── harness-reference-observe.py
 │   └── harness-reference-extract.py
