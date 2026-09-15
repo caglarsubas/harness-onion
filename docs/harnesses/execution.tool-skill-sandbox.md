@@ -1,5 +1,30 @@
 # Harness Specification: `execution.tool-skill-sandbox`
 
+## Current research-led implementation direction — MET-ADOPT-002
+
+[Harness / paper / upstream repository map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
+is the current reuse-first planning amendment. It covers all16 canonical harnesses
+and preserves the four planes and13 repository owners. Catalog:166 packet specifications;
+all165 predecessor YAML remain byte-immutable. Proposed provider-adoption work is
+non-dispatchable until exact successor packets, contracts and offline locks are published.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+META source publication is not OSS provider implementation or qualification.
+Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
+source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
+
+Planning target: `google/gvisor` + `bytecodealliance/wasmtime`.
+Use gVisor for approved Linux container isolation or Wasmtime for eligible Wasm tools; use upstream protocol tool interfaces. Do not build a sandbox kernel.
+Platform scope: Own tool admission, least privilege, approval/receipt binding, exact resource cleanup and versioned skill promotion. H1 manages runtime installation, not execution authority.
+Delivery: `EXEC-SANDBOX-ADOPT-001` (ALPHA_3, WAITING_PACKET_PUBLICATION).
+Acceptance: Test escape attempts, denied egress/mounts, resource exhaustion, cancellation and exact-UID cleanup on qualified Linux. Learned/new skill proposals never self-install or self-promote; curated tool artifacts remain digest-pinned.
+This takes precedence over older build-from-scratch directions for future work,
+not over current public contracts or active provider selectors. Retained provider
+paragraphs below describe the prior/current implementation boundary, not permission
+to expand a competing general-purpose engine.
+
+## Retained implementation specifications and historical checkpoints
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.

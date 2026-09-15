@@ -1,5 +1,20 @@
 # Sol-High Task Packet Catalog
 
+## Current research-led implementation direction — MET-ADOPT-002
+
+[Harness / paper / upstream repository map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
+is the current reuse-first planning amendment. It covers all16 canonical harnesses
+and preserves the four planes and13 repository owners. Catalog:166 packet specifications;
+all165 predecessor YAML remain byte-immutable. Proposed provider-adoption work is
+non-dispatchable until exact successor packets, contracts and offline locks are published.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+META source publication is not OSS provider implementation or qualification.
+Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
+source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
+
+## Retained implementation specifications and historical checkpoints
+
 ## Current implementation-completion gate — MET-REPAIR-017
 
 [Conformance completion amendment](../docs/alpha-2/CONFORMANCE_COMPLETION.md) is current.
@@ -411,6 +426,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 163 | `MET-PUBLISH-001` | `Harness-Engineering` | Publish bounded CONF-LIVE-003 source publication and verification gates |
 | 164 | `MET-REPAIR-017` | `Harness-Engineering` | Publish conformance completion correction and mandatory successor gate |
 | 165 | `CONF-FIX-007` | `mas-harness-conformance-labs` | Complete fixed qualifier, broker handoff, exact-UID cleanup and server integration |
+| 166 | `MET-ADOPT-002` | `Harness-Engineering` | Publish all16 harness research/OSS adoption map and reuse-first delivery gates |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 

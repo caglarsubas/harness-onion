@@ -1,5 +1,30 @@
 # Harness Specification: `execution.ml-decision`
 
+## Current research-led implementation direction — MET-ADOPT-002
+
+[Harness / paper / upstream repository map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
+is the current reuse-first planning amendment. It covers all16 canonical harnesses
+and preserves the four planes and13 repository owners. Catalog:166 packet specifications;
+all165 predecessor YAML remain byte-immutable. Proposed provider-adoption work is
+non-dispatchable until exact successor packets, contracts and offline locks are published.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+META source publication is not OSS provider implementation or qualification.
+Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
+source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
+
+Planning target: `scikit-learn/scikit-learn` + `microsoft/onnxruntime`.
+Use scikit-learn for declared classical ML workflows and ONNX Runtime for pinned inference; OR-Tools remains an independently scoped optimization option.
+Platform scope: Own decision contracts, lineage, model promotion, confidence/abstention and industry validation. Autonomous training or production self-modification is not enabled.
+Delivery: `EXEC-ML-ADOPT-001` (ALPHA_3, WAITING_PACKET_PUBLICATION).
+Acceptance: Test offline deterministic fixtures, schema mismatch, data leakage, drift, rejected unsigned models and local resource caps; unknown executable deserialization denies. Paper results do not qualify our models.
+This takes precedence over older build-from-scratch directions for future work,
+not over current public contracts or active provider selectors. Retained provider
+paragraphs below describe the prior/current implementation boundary, not permission
+to expand a competing general-purpose engine.
+
+## Retained implementation specifications and historical checkpoints
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.

@@ -1,5 +1,23 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current research-led implementation direction — MET-ADOPT-002
+
+[Harness / paper / upstream repository map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
+is the current reuse-first planning amendment. It covers all16 canonical harnesses
+and preserves the four planes and13 repository owners. Catalog:166 packet specifications;
+all165 predecessor YAML remain byte-immutable. Proposed provider-adoption work is
+non-dispatchable until exact successor packets, contracts and offline locks are published.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+META source publication is not OSS provider implementation or qualification.
+Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
+source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
+
+Repository R00 retains its existing accountable ownership. Shared responsibility: coordinate research decisions, typed graphs and one-owner packets.
+No new repository, source import or cross-repository implementation is authorized here.
+
+## Retained implementation specifications and historical checkpoints
+
 ## Current implementation-completion gate — MET-REPAIR-017
 
 [Conformance completion amendment](../alpha-2/CONFORMANCE_COMPLETION.md) is current.
@@ -338,6 +356,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 46. `MET-PUBLISH-001`: publish bounded source publication, localhost CI and exact-main verification authority for unchanged CONF-LIVE-003; META only.
 
 47. `MET-REPAIR-017`: publish the bounded five-path completion correction, preserve historical publication evidence and block004 pending reviewed implementation closure.
+
+48. `MET-ADOPT-002`: publish the research-led OSS adoption map, per-harness build-versus-integrate responsibilities and coordinated delivery gates without product changes.
 
 ## Testing, verification, and acceptance
 

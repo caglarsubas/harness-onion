@@ -1,6 +1,7 @@
 """META-only completion policy tests. No product import, credential or probe."""
 from copy import deepcopy
 import pytest
+from scripts.validate_research_adoption import historical_bytes as research_history
 from scripts import validate_conformance_completion as module
 from scripts.safe_yaml import safe_load
 
@@ -14,10 +15,10 @@ def authority():
 def test_exact_amendment_preserves163_packets_and_inherited_tests(authority):
     assert module.validate_authority(*authority) == []
     packets,record,inputs = authority
-    assert len(packets) == 165 and module.NEW_IDS == ('MET-REPAIR-017','CONF-FIX-007')
+    assert len(packets) == 166 and module.NEW_IDS == ('MET-REPAIR-017','CONF-FIX-007')
     for path,rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == inputs[path]
+        assert module.apply_recipe(before,rule) == research_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]
