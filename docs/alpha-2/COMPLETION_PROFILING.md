@@ -62,7 +62,7 @@ command-string splitting, environment override, base64 loader or source overlay.
 
 The readable observer is [diagnostics/conf_diag_003.py](../../diagnostics/conf_diag_003.py).
 The packet transports an exact Python source literal in `python3 -c`; only
-blank-line/indentation formatting is compacted to meet the installed single
+whitespace formatting is compacted with token and AST parity to meet the installed single
 argument limit. A validator pins both source and argv bytes and requires AST
 parity and exactly one literal exec expression, rejecting dynamic loaders and
 extra arguments. The existing no-newline/4096-byte argument boundary is retained;
@@ -78,12 +78,37 @@ The exact discovered identity count and digest must match before the runner star
 
 TextTestResult start/stop observers emit flushed JSON records containing the
 case ID and available wall/thread-CPU/process-CPU time. For1,394 cases, stdlib
-cProfile's default timer supplies top20 self-elapsed and top20 cumulative-elapsed
+cProfile's default-timer counters supply top20 self-elapsed and top20 cumulative-elapsed
 function records, call counts and recursive-call counts. It writes no profiler
 file. Known repo/stdlib paths are relative; other profile paths are redacted.
 Stack-only faulthandler diagnostics are armed at30 seconds, without locals,
 argument values, secret contents or forced success. Existing factory diagnostics
 remain untouched. Normal unittest failures/errors/skips and exit status remain.
+
+### Pinned-interpreter compatibility correction
+
+Native CPython3.12.14 cProfile uses interpreter-wide sys.monitoring, not the
+legacy sys.getprofile hook. This observer therefore does not call its native
+enable/disable methods. Instead an explicitly identity-owned current-thread
+sys.setprofile adapter forwards call/return and C-call events to the installed
+cProfile counter callbacks. Those private callbacks are supported here only
+for pinned CPython3.12.14; other interpreter versions fail before attachment.
+No CPython source is copied, no monitoring callback is replaced and no profiler
+implementation is reimplemented. This diagnostic-specific adapter is not a
+portable product/runtime integration.
+
+Before any case the observer refuses ambient legacy profiling and occupied
+monitoring tool IDs0-5 or their global events. Its cleanup removes only its
+identical hook; a replacement hook and any newly occupied monitoring slot are
+left untouched. Detected interference emits observationValid=false, suppresses
+function rows and aborts the diagnostic, never fabricating a clean run.
+hookOwnedAtFinish describes hook identity only, not continuous ownership.
+Open observer-boundary frames are not force-flushed or claimed as complete
+function calls. Synthetic tests verify actual counter records, recursion,
+built-ins, thread exclusion, foreign-state preservation and setup failure.
+
+Implementation basis: [pinned CPython counter/monitoring source](https://github.com/python/cpython/blob/v3.12.14/Modules/_lsprof.c)
+and [per-interpreter monitoring specification](https://peps.python.org/pep-0669/#specification).
 
 Three exact cases receive timing only because their inherited contract requires
 no ambient observer:
@@ -104,12 +129,13 @@ Interpretation limits are mandatory:
 - Per-case timers cover setup/body/teardown/cleanup and profiler overhead, not
   imports/discovery or class/module fixtures. Discovery has a separate timing;
   unassigned intervals are not attributed to the last test.
-- Function times are elapsed, not CPU. Only the current test thread is profiled.
+- Function times are elapsed, not CPU. The explicit legacy hook observes only
+  its current test thread; native cProfile global enable is not used.
   Thread CPU differs from process CPU; process CPU includes other threads, not
   child processes. CPU/wall ratios are observations, not proof of scheduler cause.
 - Cumulative times overlap and must not be summed. Top-N output is censored;
   absent functions are not zero-cost. Report total function count separately.
-- A profiler active at finish is not proof of uninterrupted profiling. Any
+- An identical hook at finish is not proof of uninterrupted profiling. Any
   competing profiler/diagnostic interference invalidates that attribution;
   original errors remain visible. Never fight an inherited profiler or retry.
 - Timeout can leave a start without a finish/profile. Mark its cost NOT_MEASURED;
@@ -129,7 +155,7 @@ Authenticate signatures/installed custody independently; this JSON ledger grants
 no execution by itself. Keep exactly one active run and retire its exact slot.
 
 Keep nested420/trusted900/workflow15-minute limits. No timeout extension, fourth
-LOCAL retry, repeat diagnostic, old reservation rewrite or new-directory reset.
+product LOCAL retry, repeat diagnostic, old reservation rewrite or new-directory reset.
 Crash, timeout, sleep or invalid performance observation after activation consumes
 the attempt. Missing prerequisites before activation are unavailable, never a
 reason to bypass policy, install tooling or execute outside isolation.
@@ -145,6 +171,14 @@ META tests exercise only synthetic local observer cases and authority mutations;
 they never import/discover the product suite. This packet preserves all36 prior
 META commands, adds its validator (37 total), retains both full test replays and
 all inherited isolation skips, and uses the normal exact signed localhost gates.
+
+The initial META LOCAL attempts1-3 failed: a repository-tree declaration,
+descriptorless synthetic stderr, then a CPython3.12 profiler-state mismatch.
+All three failures and reservations remain retained in the machine record.
+The user separately approved at most two additional META LOCAL attempts4/5
+for this observer correction, each reserved before activation. This does not
+renew CONF-FIX-007, add diagnostic retries, weaken any test or permit CI to
+substitute for LOCAL acceptance. Source, CI, merge and exact-main remain separate.
 
 ## Decision after measurement and preserved product roadmap
 

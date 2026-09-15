@@ -1,17 +1,16 @@
-"""CONF-DIAG-003 observer. No acceptance, source edits or test substitutions."""
-import cProfile
-import faulthandler
+import cProfile as c
+import faulthandler as f
 import hashlib
 import json
 from pathlib import Path
 import sys
-import sysconfig
-import time
-import unittest
+import sysconfig as sc
+import time as t
+import unittest as u
 
-EXPECTED_IDS = '03ab92921cd44154d4658e7e0205ac6134a66cf905ab0baf360f52dc01369a94'
+IDS_SHA = '03ab92921cd44154d4658e7e0205ac6134a66cf905ab0baf360f52dc01369a94'
 ROOT = Path.cwd()
-STDLIB = Path(sysconfig.get_path('stdlib'))
+STDLIB = Path(sc.get_path('stdlib'))
 TIMING_ONLY = {
     'test_supervisor.PerformanceArithmeticTests.test_fixed_three_sample_workload',
     'test_supervisor.PerformanceSourceProofTests.test_benchmark_restores_observer_after_workload_exception',
@@ -19,86 +18,114 @@ TIMING_ONLY = {
 }
 
 
-def emit(event, **fields):
+def emit(event, **kw):
     print(json.dumps(dict(event=event, evidenceClass='WORKLOAD_DIAGNOSTIC_ONLY',
-                          **fields), sort_keys=True, allow_nan=False), flush=True)
+                          **kw), sort_keys=True, allow_nan=False), flush=True)
 
 
-def label(code):
-    if isinstance(code, str):
-        return ['BUILTIN', 0, code[:160]]
-    path = Path(code.co_filename)
+def busy():
+    m = sys.monitoring
+    return any(m.get_tool(i) is not None or m.get_events(i) for i in range(6))
+
+
+def profile():
+    if sys.implementation.name != 'cpython' or sys.version_info[:3] != (3, 12, 14):
+        raise RuntimeError('CPython 3.12.14')
+    p = c.Profile()
+    d = {'call':p._pystart_callback, 'return':p._pyreturn_callback,
+         'c_call':p._ccall_callback, 'c_return':p._creturn_callback,
+         'c_exception':p._creturn_callback}
+    def hook(frame, event, arg):
+        d[event](frame.f_code, frame.f_lasti, arg, sys.monitoring.MISSING)
+    return p, hook
+
+
+def clocks():
+    return t.perf_counter(), t.thread_time(), t.process_time()
+
+
+def label(c):
+    if isinstance(c, str):
+        return ['BUILTIN', 0, c[:160]]
+    p = Path(c.co_filename)
     for root, tag in ((ROOT, 'SUBJECT'), (STDLIB, 'STDLIB')):
         try:
-            return [tag + '/' + str(path.relative_to(root)), code.co_firstlineno, code.co_name]
+            return [tag + '/' + str(p.relative_to(root)), c.co_firstlineno, c.co_name]
         except ValueError:
             pass
-    return ['OTHER', code.co_firstlineno, code.co_name]
+    return ['OTHER', c.co_firstlineno, c.co_name]
 
 
-class Result(unittest.TextTestResult):
+class Result(u.TextTestResult):
+    def close(self):
+        if self.h is not None and sys.getprofile() is self.h:
+            sys.setprofile(None)
+        f.cancel_dump_traceback_later()
+
     def startTest(self, test):
+        self.p = self.h = None
+        if sys.getprofile() is not None or busy():
+            raise RuntimeError('ambient profiler')
         super().startTest(test)
-        self.case_id = test.id()
-        emit('case-start', testId=self.case_id)
-        faulthandler.dump_traceback_later(30, repeat=True, exit=False)
-        self.wall = time.perf_counter()
-        self.cpu = time.thread_time()
-        self.process_cpu = time.process_time()
-        self.profiler = None
-        if self.case_id not in TIMING_ONLY:
-            if sys.getprofile() is not None:
-                raise RuntimeError('unexpected ambient profiler')
-            self.profiler = cProfile.Profile()
-            self.profiler.enable()
+        emit('case-start', testId=test.id())
+        self.begin = clocks()
+        try:
+            f.dump_traceback_later(30, repeat=True, exit=False)
+            if test.id() not in TIMING_ONLY:
+                self.p, self.h = profile()
+                sys.setprofile(self.h)
+        except BaseException:
+            self.close()
+            raise
 
     def stopTest(self, test):
-        cpu = time.thread_time() - self.cpu
-        wall = time.perf_counter() - self.wall
-        process_cpu = time.process_time() - self.process_cpu
-        intact = sys.getprofile() is self.profiler if self.profiler else None
-        if self.profiler:
-            self.profiler.disable()
-        rows = self.profiler.getstats() if self.profiler else []
-        def top(key):
-            return [dict(function=label(e.code), calls=e.callcount,
-                         recursiveCalls=e.reccallcount, selfElapsed=e.inlinetime,
-                         cumulativeElapsed=e.totaltime)
-                    for e in sorted(rows, key=key, reverse=True)[:20]]
-        emit('case-finish', testId=self.case_id, wallSeconds=wall,
-             threadCpuSeconds=cpu, processCpuSeconds=process_cpu,
-             profilerActiveAtFinish=intact, functionCount=len(rows),
-             topSelf=top(lambda e: e.inlinetime),
-             topCumulative=top(lambda e: e.totaltime))
-        faulthandler.cancel_dump_traceback_later()
+        try:
+            wall, cpu, proc = (a-b for a, b in zip(clocks(), self.begin))
+            owned = sys.getprofile() is self.h if self.h else None
+            self.close()
+            valid = owned is not False and sys.getprofile() is None and not busy()
+            rows = self.p.getstats() if self.p and valid else []
+            def top(key):
+                return [dict(function=label(e.code), calls=e.callcount,
+                             recursiveCalls=e.reccallcount, selfElapsed=e.inlinetime,
+                             cumulativeElapsed=e.totaltime)
+                        for e in sorted(rows, key=key, reverse=True)[:20]]
+            emit('case-finish', testId=test.id(), wallSeconds=wall,
+                 threadCpuSeconds=cpu, processCpuSeconds=proc,
+                 hookOwnedAtFinish=owned, observationValid=valid, functionCount=len(rows),
+                 topSelf=top(lambda e: e.inlinetime), topCumulative=top(lambda e: e.totaltime))
+            if not valid:
+                raise RuntimeError('interference')
+        finally:
+            self.close()
         super().stopTest(test)
 
 
-def identities(suite):
-    for item in suite:
-        if isinstance(item, unittest.TestSuite):
-            yield from identities(item)
+def identities(s):
+    for x in s:
+        if isinstance(x, u.TestSuite):
+            yield from identities(x)
         else:
-            yield item.id()
+            yield x.id()
 
 
 def main():
-    faulthandler.dump_traceback_later(30, repeat=True, exit=False)
+    f.dump_traceback_later(30, repeat=True, exit=False)
     try:
-        wall, cpu = time.perf_counter(), time.process_time()
-        suite = unittest.defaultTestLoader.discover('tests/live_backend', 'test_*.py')
-        ids = sorted(identities(suite))
+        wall, _, cpu = clocks()
+        s = u.defaultTestLoader.discover('tests/live_backend', 'test_*.py')
+        ids = sorted(identities(s))
         digest = hashlib.sha256(json.dumps(ids, separators=(',', ':')).encode()).hexdigest()
-        if len(ids) != 1397 or len(set(ids)) != 1397 or digest != EXPECTED_IDS:
-            raise ValueError('exact whole-backend inventory required')
+        if len(ids) != 1397 or digest != IDS_SHA:
+            raise ValueError('exact inventory required')
         emit('discovered', cases=len(ids), idsSha256=digest,
-             wallSeconds=time.perf_counter()-wall, processCpuSeconds=time.process_time()-cpu)
-        result = unittest.TextTestRunner(verbosity=2, resultclass=Result).run(suite)
-        emit('finished', cases=result.testsRun, failures=len(result.failures),
-             errors=len(result.errors), skips=len(result.skipped))
-        return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 1397 else 1
+             wallSeconds=t.perf_counter()-wall, processCpuSeconds=t.process_time()-cpu)
+        r = u.TextTestRunner(verbosity=2, resultclass=Result).run(s)
+        emit('finished', cases=r.testsRun, failures=len(r.failures),
+             errors=len(r.errors), skips=len(r.skipped))
+        return 0 if r.wasSuccessful() and not r.skipped and r.testsRun == 1397 else 1
     finally:
-        faulthandler.cancel_dump_traceback_later()
+        f.cancel_dump_traceback_later()
 
 
 if __name__ == '__main__':

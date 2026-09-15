@@ -10,6 +10,44 @@
   "optimizationAuthorized": false,
   "requiresBranchOrPr": false,
   "acceptedSourcePredecessor": false,
+  "metaValidationExtension": {
+    "reason": "USER_APPROVED_OBSERVER_COMPATIBILITY_CORRECTION",
+    "retainedLocalOrdinals": [
+      1,
+      2,
+      3
+    ],
+    "additionalLocalMaximum": 2,
+    "newLocalOrdinals": [
+      4,
+      5
+    ],
+    "oldReservationsImmutable": true,
+    "failures": [
+      {
+        "ordinal": 1,
+        "commit": "1109b43a254cc33f8b0453ac101878f519aea1fa",
+        "resultSha256": "44d97b869fa3a899fa8121f487f3e6512064255b99d8b34c9bc23096c109e261",
+        "logSha256": "9d1b3afdea33290de3512567b02f9f606a115cf94ccee40d1dab511c0bb1b547",
+        "reservationSha256": "ddc3fd9f339d0c24e481a63db31b1e05db530b8bbfe5dd856e5ca41a2da835b3"
+      },
+      {
+        "ordinal": 2,
+        "commit": "e475d3ae64ac5dcae79cfcf9112908b1b7ce1f2f",
+        "resultSha256": "c504eff646a958df298d21d74779fe7200350abcfa138375a5c6bbf4df2cd6b2",
+        "logSha256": "756b05da2bbbd503f1442b0e55b0cda5bf66b8f942aad7fbd0fe1a1ca867ac11",
+        "reservationSha256": "dfbb4ae9ceb27b0f0d891758099a8763c0edea686c01258897cbcfc4fdd1febb"
+      },
+      {
+        "ordinal": 3,
+        "commit": "e1a3584d7ff9bbcc17c3111472b1896827811ad0",
+        "resultSha256": "c2a943288f1de5f145de78adb97956dfe51bf9d6ca3ef7edb65ae78c8f382b4e",
+        "logSha256": "a30e58b779885162ecd7ee6729079933f2176e4822e9aa3639a50b28c22c3949",
+        "reservationSha256": "7930287769a9b148f8d49c36b405f4e0d335fd947cb77ac2f1b610dac1c62c74"
+      }
+    ],
+    "productBudgetChange": false
+  },
   "subject": {
     "repository": "mas-harness-conformance-labs",
     "commit": "25fab12c168ff686e863291098fce0f3dba629bd",
@@ -894,7 +932,7 @@
       [
         "python3",
         "-c",
-        "exec(\"\\\"\\\"\\\"CONF-DIAG-003 observer. No acceptance, source edits or test substitutions.\\\"\\\"\\\"\\nimport cProfile\\nimport faulthandler\\nimport hashlib\\nimport json\\nfrom pathlib import Path\\nimport sys\\nimport sysconfig\\nimport time\\nimport unittest\\nEXPECTED_IDS = '03ab92921cd44154d4658e7e0205ac6134a66cf905ab0baf360f52dc01369a94'\\nROOT = Path.cwd()\\nSTDLIB = Path(sysconfig.get_path('stdlib'))\\nTIMING_ONLY = {\\n 'test_supervisor.PerformanceArithmeticTests.test_fixed_three_sample_workload',\\n 'test_supervisor.PerformanceSourceProofTests.test_benchmark_restores_observer_after_workload_exception',\\n 'test_supervisor.PerformanceSourceProofTests.test_benchmark_refuses_ambient_observer_without_replacing_it',\\n}\\ndef emit(event, **fields):\\n print(json.dumps(dict(event=event, evidenceClass='WORKLOAD_DIAGNOSTIC_ONLY',\\n      **fields), sort_keys=True, allow_nan=False), flush=True)\\ndef label(code):\\n if isinstance(code, str):\\n  return ['BUILTIN', 0, code[:160]]\\n path = Path(code.co_filename)\\n for root, tag in ((ROOT, 'SUBJECT'), (STDLIB, 'STDLIB')):\\n  try:\\n   return [tag + '/' + str(path.relative_to(root)), code.co_firstlineno, code.co_name]\\n  except ValueError:\\n   pass\\n return ['OTHER', code.co_firstlineno, code.co_name]\\nclass Result(unittest.TextTestResult):\\n def startTest(self, test):\\n  super().startTest(test)\\n  self.case_id = test.id()\\n  emit('case-start', testId=self.case_id)\\n  faulthandler.dump_traceback_later(30, repeat=True, exit=False)\\n  self.wall = time.perf_counter()\\n  self.cpu = time.thread_time()\\n  self.process_cpu = time.process_time()\\n  self.profiler = None\\n  if self.case_id not in TIMING_ONLY:\\n   if sys.getprofile() is not None:\\n    raise RuntimeError('unexpected ambient profiler')\\n   self.profiler = cProfile.Profile()\\n   self.profiler.enable()\\n def stopTest(self, test):\\n  cpu = time.thread_time() - self.cpu\\n  wall = time.perf_counter() - self.wall\\n  process_cpu = time.process_time() - self.process_cpu\\n  intact = sys.getprofile() is self.profiler if self.profiler else None\\n  if self.profiler:\\n   self.profiler.disable()\\n  rows = self.profiler.getstats() if self.profiler else []\\n  def top(key):\\n   return [dict(function=label(e.code), calls=e.callcount,\\n      recursiveCalls=e.reccallcount, selfElapsed=e.inlinetime,\\n      cumulativeElapsed=e.totaltime)\\n     for e in sorted(rows, key=key, reverse=True)[:20]]\\n  emit('case-finish', testId=self.case_id, wallSeconds=wall,\\n   threadCpuSeconds=cpu, processCpuSeconds=process_cpu,\\n   profilerActiveAtFinish=intact, functionCount=len(rows),\\n   topSelf=top(lambda e: e.inlinetime),\\n   topCumulative=top(lambda e: e.totaltime))\\n  faulthandler.cancel_dump_traceback_later()\\n  super().stopTest(test)\\ndef identities(suite):\\n for item in suite:\\n  if isinstance(item, unittest.TestSuite):\\n   yield from identities(item)\\n  else:\\n   yield item.id()\\ndef main():\\n faulthandler.dump_traceback_later(30, repeat=True, exit=False)\\n try:\\n  wall, cpu = time.perf_counter(), time.process_time()\\n  suite = unittest.defaultTestLoader.discover('tests/live_backend', 'test_*.py')\\n  ids = sorted(identities(suite))\\n  digest = hashlib.sha256(json.dumps(ids, separators=(',', ':')).encode()).hexdigest()\\n  if len(ids) != 1397 or len(set(ids)) != 1397 or digest != EXPECTED_IDS:\\n   raise ValueError('exact whole-backend inventory required')\\n  emit('discovered', cases=len(ids), idsSha256=digest,\\n   wallSeconds=time.perf_counter()-wall, processCpuSeconds=time.process_time()-cpu)\\n  result = unittest.TextTestRunner(verbosity=2, resultclass=Result).run(suite)\\n  emit('finished', cases=result.testsRun, failures=len(result.failures),\\n   errors=len(result.errors), skips=len(result.skipped))\\n  return 0 if result.wasSuccessful() and not result.skipped and result.testsRun == 1397 else 1\\n finally:\\n  faulthandler.cancel_dump_traceback_later()\\nif __name__ == '__main__':\\n raise SystemExit(main())\\n\")"
+        "exec(\"import cProfile as c\\nimport faulthandler as f\\nimport hashlib\\nimport json\\nfrom pathlib import Path\\nimport sys\\nimport sysconfig as sc\\nimport time as t\\nimport unittest as u\\nIDS_SHA='03ab92921cd44154d4658e7e0205ac6134a66cf905ab0baf360f52dc01369a94'\\nROOT=Path.cwd()\\nSTDLIB=Path(sc.get_path('stdlib'))\\nTIMING_ONLY={'test_supervisor.PerformanceArithmeticTests.test_fixed_three_sample_workload','test_supervisor.PerformanceSourceProofTests.test_benchmark_restores_observer_after_workload_exception','test_supervisor.PerformanceSourceProofTests.test_benchmark_refuses_ambient_observer_without_replacing_it',}\\ndef emit(event,**kw):\\n print(json.dumps(dict(event=event,evidenceClass='WORKLOAD_DIAGNOSTIC_ONLY',**kw),sort_keys=True,allow_nan=False),flush=True)\\ndef busy():\\n m=sys.monitoring\\n return any(m.get_tool(i)is not None or m.get_events(i)for i in range(6))\\ndef profile():\\n if sys.implementation.name!='cpython'or sys.version_info[:3]!=(3,12,14):\\n  raise RuntimeError('CPython 3.12.14')\\n p=c.Profile()\\n d={'call':p._pystart_callback,'return':p._pyreturn_callback,'c_call':p._ccall_callback,'c_return':p._creturn_callback,'c_exception':p._creturn_callback}\\n def hook(frame,event,arg):\\n  d[event](frame.f_code,frame.f_lasti,arg,sys.monitoring.MISSING)\\n return p,hook\\ndef clocks():\\n return t.perf_counter(),t.thread_time(),t.process_time()\\ndef label(c):\\n if isinstance(c,str):\\n  return['BUILTIN',0,c[:160]]\\n p=Path(c.co_filename)\\n for root,tag in((ROOT,'SUBJECT'),(STDLIB,'STDLIB')):\\n  try:\\n   return[tag+'/'+str(p.relative_to(root)),c.co_firstlineno,c.co_name]\\n  except ValueError:\\n   pass\\n return['OTHER',c.co_firstlineno,c.co_name]\\nclass Result(u.TextTestResult):\\n def close(self):\\n  if self.h is not None and sys.getprofile()is self.h:\\n   sys.setprofile(None)\\n  f.cancel_dump_traceback_later()\\n def startTest(self,test):\\n  self.p=self.h=None\\n  if sys.getprofile()is not None or busy():\\n   raise RuntimeError('ambient profiler')\\n  super().startTest(test)\\n  emit('case-start',testId=test.id())\\n  self.begin=clocks()\\n  try:\\n   f.dump_traceback_later(30,repeat=True,exit=False)\\n   if test.id()not in TIMING_ONLY:\\n    self.p,self.h=profile()\\n    sys.setprofile(self.h)\\n  except BaseException:\\n   self.close()\\n   raise\\n def stopTest(self,test):\\n  try:\\n   wall,cpu,proc=(a-b for a,b in zip(clocks(),self.begin))\\n   owned=sys.getprofile()is self.h if self.h else None\\n   self.close()\\n   valid=owned is not False and sys.getprofile()is None and not busy()\\n   rows=self.p.getstats()if self.p and valid else[]\\n   def top(key):\\n    return[dict(function=label(e.code),calls=e.callcount,recursiveCalls=e.reccallcount,selfElapsed=e.inlinetime,cumulativeElapsed=e.totaltime)for e in sorted(rows,key=key,reverse=True)[:20]]\\n   emit('case-finish',testId=test.id(),wallSeconds=wall,threadCpuSeconds=cpu,processCpuSeconds=proc,hookOwnedAtFinish=owned,observationValid=valid,functionCount=len(rows),topSelf=top(lambda e:e.inlinetime),topCumulative=top(lambda e:e.totaltime))\\n   if not valid:\\n    raise RuntimeError('interference')\\n  finally:\\n   self.close()\\n  super().stopTest(test)\\ndef identities(s):\\n for x in s:\\n  if isinstance(x,u.TestSuite):\\n   yield from identities(x)\\n  else:\\n   yield x.id()\\ndef main():\\n f.dump_traceback_later(30,repeat=True,exit=False)\\n try:\\n  wall,_,cpu=clocks()\\n  s=u.defaultTestLoader.discover('tests/live_backend','test_*.py')\\n  ids=sorted(identities(s))\\n  digest=hashlib.sha256(json.dumps(ids,separators=(',',':')).encode()).hexdigest()\\n  if len(ids)!=1397 or digest!=IDS_SHA:\\n   raise ValueError('exact inventory required')\\n  emit('discovered',cases=len(ids),idsSha256=digest,wallSeconds=t.perf_counter()-wall,processCpuSeconds=t.process_time()-cpu)\\n  r=u.TextTestRunner(verbosity=2,resultclass=Result).run(s)\\n  emit('finished',cases=r.testsRun,failures=len(r.failures),errors=len(r.errors),skips=len(r.skipped))\\n  return 0 if r.wasSuccessful()and not r.skipped and r.testsRun==1397 else 1\\n finally:\\n  f.cancel_dump_traceback_later()\\nif __name__=='__main__':\\n raise SystemExit(main())\\n\")"
       ]
     ],
     "prefetchCommands": [],
@@ -2316,12 +2354,12 @@
   },
   "program": {
     "path": "diagnostics/conf_diag_003.py",
-    "sha256": "0e67502e4e49f50693ce854177eb59e70a4848e8449fd614a299a01ff546f8bf",
-    "argvCodeSha256": "d02d2b3e4eaa32f8f031b91e05d6ed4067787b0c53131960efe7c456d1d709cd",
+    "sha256": "cea27b7a29a7d0aa2d944f7e2389c53f015e627922c6e4a0348ce7c78d9373b9",
+    "argvCodeSha256": "69df672658b215bf97591a37382552cbdddf785317e02b48b0dc06bbfd6bbac9",
     "transport": "EXACT_LITERAL_PYTHON_SOURCE_ARGV_NO_SHELL_NO_DYNAMIC_INPUT",
-    "argumentBytes": 3921,
+    "argumentBytes": 4095,
     "formattingOnlyAstParityRequired": true,
-    "profiler": "STDLIB_CPROFILE_DEFAULT_TIMER",
+    "profiler": "PINNED_CPYTHON31214_CPROFILE_COUNTERS_OWNED_LEGACY_HOOK",
     "perTestClocks": [
       "perf_counter",
       "thread_time",
@@ -2369,13 +2407,16 @@
     "functionTime": "ELAPSED_NOT_CPU",
     "testTimeScope": "SETUP_BODY_TEARDOWN_CLEANUP_WITH_OBSERVER_OVERHEAD",
     "outsideCaseTime": "NOT_ATTRIBUTED_TO_CASE_FUNCTIONS",
-    "profileScope": "CURRENT_THREAD_ONLY",
+    "profileScope": "OWNED_CURRENT_THREAD_HOOK_NOT_NATIVE_GLOBAL_ENABLE",
     "processCpuScope": "PROCESS_THREADS_NOT_CHILD_PROCESSES",
     "cumulativeTimes": "OVERLAPPING_NOT_ADDITIVE",
     "topFunctions": "TRUNCATED_20_PER_METRIC_NOT_TOTAL_COVERAGE",
     "unfinishedCase": "NO_FINISH_MEANS_NOT_MEASURED",
     "lineReceiptTime": "NOT_EXECUTION_BOUNDARY",
-    "activeAtFinish": "NOT_PROOF_OF_UNINTERRUPTED_PROFILING",
+    "activeAtFinish": "HOOK_IDENTITY_ONLY_NOT_PROOF_OF_UNINTERRUPTED_PROFILING",
+    "counterBoundary": "OPEN_OBSERVER_FRAMES_NOT_FLUSHED_OR_REPORTED_AS_COMPLETE",
+    "interference": "SUPPRESS_FUNCTION_ROWS_ABORT_WITHOUT_CLOBBERING_FOREIGN_HOOK_OR_MONITORING",
+    "privateApi": "CPYTHON31214_COUNTER_CALLBACKS_ONLY_FAIL_OTHER_INTERPRETERS",
     "timingOnlyReason": "PRESERVE_THREE_EXISTING_AMBIENT_PROFILER_REFUSALS_ALL_TESTS_STILL_RUN",
     "speedup": "NOT_MEASURED",
     "timeout": "RETAINED_PARTIAL_DIAGNOSTIC_NOT_ACCEPTANCE"

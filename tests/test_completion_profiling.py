@@ -6,6 +6,8 @@ import json
 import runpy
 import sys
 import unittest
+import gc
+import threading
 import pytest
 from scripts import validate_completion_profiling as module
 from scripts.safe_yaml import safe_load
@@ -135,7 +137,9 @@ def test_synthetic_observer_preserves_results_and_test_body(observer,capfd,outco
     assert [r['event'] for r in rows] == ['case-start','case-finish']
     assert all(r['evidenceClass'] == 'WORKLOAD_DIAGNOSTIC_ONLY' for r in rows)
     assert rows[-1]['threadCpuSeconds'] >= 0 and rows[-1]['wallSeconds'] >= 0
-    assert rows[-1]['profilerActiveAtFinish'] is True
+    assert rows[-1]['hookOwnedAtFinish'] is True and rows[-1]['observationValid'] is True
+    assert any(e.code is body.__code__ and e.callcount == 1 for e in result.p.getstats())
+    assert not observer['busy']()
     assert 0 < len(rows[-1]['topSelf']) <= 20 and 0 < len(rows[-1]['topCumulative']) <= 20
 
 
@@ -147,7 +151,8 @@ def test_each_timing_only_case_runs_without_ambient_profiler(observer,capfd,inde
     result = unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(case)
     assert seen == [None] and result.wasSuccessful() and result.testsRun == 1
     end = json.loads(capfd.readouterr().out.splitlines()[-1])
-    assert end['functionCount'] == 0 and end['profilerActiveAtFinish'] is None
+    assert end['functionCount'] == 0 and end['hookOwnedAtFinish'] is None
+    assert end['observationValid'] is True and not observer['busy']()
     assert end['topSelf'] == end['topCumulative'] == []
 
 
@@ -173,3 +178,127 @@ def test_discovery_mismatch_refuses_before_runner(observer,monkeypatch):
 def test_synthetic_external_path_label_omits_absolute_path(observer):
     namespace = {}; exec(compile('def f(): pass','/private/example-secret/fake.py','exec'),namespace)
     assert observer['label'](namespace['f'].__code__) == ['OTHER',1,'f']
+
+
+@pytest.mark.parametrize('kind',['legacy','reserved','events','native-cprofile'])
+def test_ambient_profiler_refuses_without_touching_it(observer,capfd,kind):
+    import cProfile
+    m = sys.monitoring
+    assert sys.getprofile() is None and not observer['busy']()
+    def foreign(*args): pass
+    native = None
+    try:
+        if kind == 'legacy': sys.setprofile(foreign)
+        elif kind == 'native-cprofile':
+            native = cProfile.Profile(); native.enable()
+        else:
+            m.use_tool_id(0,'synthetic-occupied')
+            if kind == 'events': m.set_events(0,m.events.PY_START)
+        hook = sys.getprofile()
+        state = [(m.get_tool(i),m.get_events(i)) for i in range(6)]
+        calls = []
+        case = unittest.FunctionTestCase(lambda:calls.append('executed'))
+        with pytest.raises(RuntimeError,match='ambient'):
+            unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(case)
+        assert calls == [] and sys.getprofile() is hook
+        assert state == [(m.get_tool(i),m.get_events(i)) for i in range(6)]
+    finally:
+        if kind == 'legacy': sys.setprofile(None)
+        elif native: native.disable()
+        else: m.set_events(0,0); m.free_tool_id(0)
+
+
+@pytest.mark.parametrize('kind',['disabled','replacement','monitoring'])
+def test_interference_invalidates_and_preserves_foreign_state(observer,capfd,kind):
+    m = sys.monitoring
+    assert sys.getprofile() is None and not observer['busy']()
+    def foreign(*args): pass
+    def body():
+        if kind == 'monitoring':
+            m.use_tool_id(0,'synthetic-new'); m.set_events(0,m.events.PY_START)
+        else: sys.setprofile(foreign if kind == 'replacement' else None)
+    case = unittest.FunctionTestCase(body)
+    try:
+        with pytest.raises(RuntimeError,match='interference'):
+            unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(case)
+        gc.collect()  # A discarded counter must not clear a foreign hook.
+        assert sys.getprofile() is (foreign if kind == 'replacement' else None)
+        if kind == 'monitoring':
+            assert m.get_tool(0) == 'synthetic-new' and m.get_events(0) == m.events.PY_START
+        else: assert not observer['busy']()
+        end = json.loads(capfd.readouterr().out.splitlines()[-1])
+        assert end['observationValid'] is False and end['functionCount'] == 0
+        assert end['topSelf'] == end['topCumulative'] == []
+        assert end['hookOwnedAtFinish'] is (kind == 'monitoring')
+    finally:
+        if kind == 'replacement': sys.setprofile(None)
+        if kind == 'monitoring': m.set_events(0,0); m.free_tool_id(0)
+
+
+def test_real_counter_recursion_builtins_and_thread_scope(observer,capfd):
+    seen = []
+    def other_thread(): seen.append(sys.getprofile())
+    def recursive(n): return recursive(n-1) if n else sorted((3,1,2))
+    def body():
+        thread = threading.Thread(target=other_thread)
+        thread.start(); thread.join(timeout=10)
+        assert not thread.is_alive()
+        assert recursive(2) == [1,2,3]
+        try: [1].index(2)
+        except ValueError: pass
+    result = unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(unittest.FunctionTestCase(body))
+    assert result.wasSuccessful() and seen == [None]
+    entries = result.p.getstats()
+    entry = next(e for e in entries if e.code is recursive.__code__)
+    assert entry.callcount == 3 and entry.reccallcount == 2
+    assert entry.totaltime >= entry.inlinetime >= 0
+    assert not any(e.code is other_thread.__code__ for e in entries)
+    assert any(isinstance(e.code,str) and 'sorted' in e.code and e.callcount == 1 for e in entries)
+    assert any(isinstance(e.code,str) and 'index' in e.code and e.callcount == 1 for e in entries)
+    assert sys.getprofile() is None and not observer['busy']()
+
+
+@pytest.mark.parametrize('failure',['callback','setup'])
+def test_observer_setup_failure_leaves_no_owned_hook(observer,monkeypatch,capfd,failure):
+    def broken(): raise RuntimeError('synthetic setup failure')
+    result_class = observer['Result']
+    globals_ = result_class.startTest.__globals__
+    if failure == 'setup': monkeypatch.setitem(globals_,'profile',broken)
+    else:
+        original = globals_['profile']
+        def bad_profile():
+            p,_ = original()
+            def broken_hook(*args): raise RuntimeError('synthetic callback failure')
+            return p,broken_hook
+        monkeypatch.setitem(globals_,'profile',bad_profile)
+    with pytest.raises(RuntimeError,match='synthetic'):
+        unittest.TextTestRunner(stream=io.StringIO(),resultclass=result_class).run(unittest.FunctionTestCase(lambda:None))
+    assert sys.getprofile() is None and not observer['busy']()
+
+
+@pytest.mark.parametrize('version',[(3,12,13),(3,13,0)])
+def test_counter_refuses_unqualified_interpreter(observer,monkeypatch,version):
+    monkeypatch.setattr(sys,'version_info',version)
+    with pytest.raises(RuntimeError,match='CPython'): observer['profile']()
+
+
+def test_counter_has_no_global_monitoring_writes_or_private_runtime_patch(authority):
+    import ast
+    tree = ast.parse(authority[2][module.PROGRAM_PATH])
+    calls = [n.func for n in ast.walk(tree) if isinstance(n,ast.Call)]
+    assert not any(isinstance(f,ast.Attribute) and f.attr in
+                   {'enable','disable','register_callback','set_events','use_tool_id','free_tool_id',
+                    'setprofile_all_threads','settrace','settrace_all_threads'} for f in calls)
+    spec = module.parse(authority[2][module.SPEC_PATH])
+    assert spec['program']['profiler'] == 'PINNED_CPYTHON31214_CPROFILE_COUNTERS_OWNED_LEGACY_HOOK'
+    assert spec['limitations']['profileScope'] == 'OWNED_CURRENT_THREAD_HOOK_NOT_NATIVE_GLOBAL_ENABLE'
+
+
+def test_only_two_additional_meta_attempts_and_no_product_budget_change(authority):
+    spec = module.parse(authority[2][module.SPEC_PATH])
+    grant = spec['metaValidationExtension']
+    assert grant['retainedLocalOrdinals'] == [1,2,3] and grant['additionalLocalMaximum'] == 2
+    assert grant['newLocalOrdinals'] == [4,5] and grant['oldReservationsImmutable'] is True
+    assert spec['priorBudget']['remainingLocal'] == 0 and spec['recipe']['attemptsMaximum'] == 1
+    grant['additionalLocalMaximum'] = 3
+    with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
