@@ -1,5 +1,20 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current execution gate - MET-PERF-009
+
+[Completion profiling amendment](../alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING;
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED (3/3). Draft PR18 stays unmerged.
+MET-PERF-009 ONGOING_PUBLICATION; CONF-DIAG-003 WAITING_META_SOURCE_GATES.
+One read-only whole-backend diagnostic, zero retries; not a fourth acceptance run.
+C1-C7, full8-command acceptance, CI/merge/exact-main and CONF-LIVE-004
+WAITING_PREDECESSOR_CORRECTION remain unchanged. Catalog168 specifications;
+all166 old YAML stay byte-immutable. No product execution in this META packet.
+The [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md) remains adopted;
+no replacement of the reuse-first roadmap or qualification claim.
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current research-led implementation direction — MET-ADOPT-002
 
 [Harness / paper / upstream repository map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
@@ -358,6 +373,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 47. `MET-REPAIR-017`: publish the bounded five-path completion correction, preserve historical publication evidence and block004 pending reviewed implementation closure.
 
 48. `MET-ADOPT-002`: publish the research-led OSS adoption map, per-harness build-versus-integrate responsibilities and coordinated delivery gates without product changes.
+
+49. `MET-PERF-009`: publish one read-only completion profiling diagnostic after the exhausted007 LOCAL allowance, without product edits or acceptance reset.
 
 ## Testing, verification, and acceptance
 

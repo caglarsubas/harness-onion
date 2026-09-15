@@ -1,0 +1,174 @@
+"""META-only authority and synthetic observer tests. Never import product code."""
+from copy import deepcopy
+import hashlib
+import io
+import json
+import runpy
+import sys
+import unittest
+import pytest
+from scripts import validate_completion_profiling as module
+from scripts.safe_yaml import safe_load
+
+
+@pytest.fixture(scope='module')
+def authority():
+    packets = {p.stem:safe_load(p.read_bytes()) for p in (module.ROOT/'task-packets').glob('*.yaml')}
+    return packets,*module.load_inputs(module.ROOT)
+
+
+def test_all166_packets_and_inherited_test_ids_preserved(authority):
+    assert module.validate_authority(*authority) == []
+    packets, record, inputs = authority
+    assert len(packets) == 168
+    for path, rule in record['metaRecipes'].items():
+        before = module.historical_bytes(path,inputs[path])
+        assert module.apply_recipe(before,rule) == inputs[path]
+        if path.startswith('tests/'):
+            assert module.test_ids(before) == module.test_ids(inputs[path])
+            assert module.current_test_bytes(before) == inputs[path]
+
+
+@pytest.mark.parametrize('fault',['old-packet','new-meta','diagnostic','recipe','missing','extra','record','source','program','guide'])
+def test_source_or_packet_substitution_refuses(authority,fault):
+    packets, record, inputs = deepcopy(authority)
+    if fault == 'old-packet': inputs['task-packets/CONF-FIX-007.yaml'] += b' '
+    if fault == 'new-meta': packets['MET-PERF-009']['objective'] = 'changed'
+    if fault == 'diagnostic': packets['CONF-DIAG-003']['allowedPaths'].append('src/')
+    if fault == 'recipe': packets['MET-PERF-009']['offlineAcceptanceCommands'].pop()
+    if fault == 'missing': inputs.pop(module.SPEC_PATH)
+    if fault == 'extra': inputs['undeclared'] = b'x'
+    if fault == 'record': record['metaBaseline'] = '0'*40
+    if fault == 'source': inputs['scripts/validate_packet_ownership.py'] += b'\n'
+    if fault == 'program': inputs[module.PROGRAM_PATH] += b'\n'
+    if fault == 'guide': inputs['docs/alpha-2/COMPLETION_PROFILING.md'] += b'\n'
+    assert module.validate_authority(packets,record,inputs)
+
+
+@pytest.mark.parametrize('fault',['sourceEdits','diagnosticIsAcceptance','optimizationAuthorized','requiresBranchOrPr','acceptedSourcePredecessor'])
+def test_diagnostic_cannot_grant_product_or_acceptance(authority,fault):
+    spec = module.parse(authority[2][module.SPEC_PATH]); spec[fault] = True
+    with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
+
+
+@pytest.mark.parametrize('fault',['argv','retry','attempt','timeout','nested','workflow','skip','order','ids','duplicate','timing-only','profiles','source','tree','inventory','failure','reset','remaining','program','toolchain','limits'])
+def test_resealed_diagnostic_scope_or_budget_change_refuses(authority,fault):
+    spec = module.parse(authority[2][module.SPEC_PATH]); recipe = spec['recipe']
+    if fault == 'argv': recipe['commands'][0].append('-k')
+    if fault == 'retry': recipe['retriesMaximum'] = 1
+    if fault == 'attempt': recipe['attemptsMaximum'] = True
+    if fault == 'timeout': recipe['timeoutSeconds'] = 901
+    if fault == 'nested': recipe['nestedTimeoutSeconds'] = 421
+    if fault == 'workflow': recipe['workflowTimeoutMinutes'] = 16
+    if fault == 'skip': recipe['skips'] = 1
+    if fault == 'order': recipe['selection'] = 'FAST_FIRST'
+    if fault == 'ids': recipe['expectedTestIds'].pop()
+    if fault == 'duplicate': recipe['expectedTestIds'][0] = recipe['expectedTestIds'][1]
+    if fault == 'timing-only': recipe['timingOnlyTestIds'].pop()
+    if fault == 'profiles': recipe['profiledTestCount'] = 1397
+    if fault == 'source': spec['subject']['commit'] = spec['subject']['acceptedMain']
+    if fault == 'tree': spec['subject']['tree'] = '0'*40
+    if fault == 'inventory': spec['subject']['inventory'][0]['mode'] = '120000'
+    if fault == 'failure': spec['priorFailures'][0]['fullAcceptance'] = True
+    if fault == 'reset': spec['priorBudget']['resetAllowed'] = True
+    if fault == 'remaining': spec['priorBudget']['remainingLocal'] = 1
+    if fault == 'program': spec['program']['transport'] = 'ARBITRARY_SCRIPT'
+    if fault == 'toolchain': spec['toolchain']['interpreterSha256'] = '0'*64
+    if fault == 'limits': spec['limitations']['functionTime'] = 'CPU_WITHOUT_OVERHEAD'
+    with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
+
+
+@pytest.mark.parametrize('key',['metaLocalRequired','metaRequiredCIRequired','protectedMetaMergeRequired','metaExactMainRequired','independentSignedCustodyRequired','reserveBeforeActivation','oneActiveExecution','timeoutConsumesAttempt','partialPooling','productAcceptanceRecipeUnchanged','c1ThroughC7Required','successor004StillBlocked','newRepairPacketRequired','oldBudgetsReset','productPushOrMerge','rootPolicyChange','hostPowerChange','testFiltering','testSubstitution','guardBypass','dependenciesOrDownloads','billingChange','warmSourceAccess','nativeQualification','tenantAcceptance','modelEffortTransition'])
+def test_each_execution_boundary_is_fixed(authority,key):
+    spec = module.parse(authority[2][module.SPEC_PATH]); old = spec['gates'][key]
+    spec['gates'][key] = not old if type(old) is bool else 'PASS'
+    with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
+
+
+def test_literal_transport_is_source_identical_and_not_dynamic(authority):
+    spec = module.parse(authority[2][module.SPEC_PATH])
+    module.validate_program(authority[2][module.PROGRAM_PATH],spec)
+    spec['recipe']['commands'][0][2] = 'exec(input())'
+    spec['program']['argvCodeSha256'] = hashlib.sha256(b'exec(input())').hexdigest()
+    with pytest.raises(ValueError): module.validate_program(authority[2][module.PROGRAM_PATH],spec)
+
+
+def test_fresh_authority_read_rejects_later_drift(monkeypatch):
+    raw = module.regular_bytes(module.ROOT,module.RECORD_PATH); calls = []
+    def read(root,path):
+        calls.append(path)
+        return raw if len(calls) == 1 else raw+b' '
+    monkeypatch.setattr(module,'regular_bytes',read)
+    assert module._record()['authorityPacket'] == 'MET-PERF-009'
+    with pytest.raises(ValueError): module._record()
+    assert len(calls) == 2
+
+
+@pytest.mark.parametrize('raw',[b'{"a":1,"a":2}',b'{"x":NaN}',b'{"x":Infinity}'])
+def test_duplicate_and_nonfinite_data_refuses(raw):
+    with pytest.raises(ValueError): module.parse(raw)
+
+
+@pytest.fixture
+def observer():
+    # This module load defines only stdlib observer helpers; main/discovery is not run.
+    return runpy.run_path(str(module.ROOT/module.PROGRAM_PATH))
+
+
+@pytest.mark.parametrize('outcome',['pass','failure','error','skip'])
+def test_synthetic_observer_preserves_results_and_test_body(observer,capsys,outcome):
+    calls = []
+    def body(self):
+        calls.append('body')
+        if outcome == 'failure': self.fail('synthetic failure')
+        if outcome == 'error': raise RuntimeError('synthetic error')
+        if outcome == 'skip': self.skipTest('synthetic skip')
+    case = type('Synthetic', (unittest.TestCase,), {'runTest':body})()
+    assert sys.getprofile() is None
+    result = unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(case)
+    assert calls == ['body'] and result.testsRun == 1 and sys.getprofile() is None
+    assert len(result.failures) == (outcome == 'failure')
+    assert len(result.errors) == (outcome == 'error')
+    assert len(result.skipped) == (outcome == 'skip')
+    rows = [json.loads(l) for l in capsys.readouterr().out.splitlines()]
+    assert [r['event'] for r in rows] == ['case-start','case-finish']
+    assert all(r['evidenceClass'] == 'WORKLOAD_DIAGNOSTIC_ONLY' for r in rows)
+    assert rows[-1]['threadCpuSeconds'] >= 0 and rows[-1]['wallSeconds'] >= 0
+    assert rows[-1]['profilerActiveAtFinish'] is True
+    assert 0 < len(rows[-1]['topSelf']) <= 20 and 0 < len(rows[-1]['topCumulative']) <= 20
+
+
+@pytest.mark.parametrize('index',[0,1,2])
+def test_each_timing_only_case_runs_without_ambient_profiler(observer,capsys,index):
+    identity = sorted(observer['TIMING_ONLY'])[index]; seen = []
+    def body(self): seen.append(sys.getprofile())
+    case = type('Synthetic', (unittest.TestCase,), {'runTest':body,'id':lambda _:identity})()
+    result = unittest.TextTestRunner(stream=io.StringIO(),resultclass=observer['Result']).run(case)
+    assert seen == [None] and result.wasSuccessful() and result.testsRun == 1
+    end = json.loads(capsys.readouterr().out.splitlines()[-1])
+    assert end['functionCount'] == 0 and end['profilerActiveAtFinish'] is None
+    assert end['topSelf'] == end['topCumulative'] == []
+
+
+def test_identity_walk_keeps_every_case_in_order(observer):
+    first, second = unittest.FunctionTestCase(lambda:None), unittest.FunctionTestCase(lambda:None)
+    first.id = lambda:'first'; second.id = lambda:'second'
+    suite = unittest.TestSuite([unittest.TestSuite([first]),second])
+    assert list(observer['identities'](suite)) == ['first','second']
+    assert suite.countTestCases() == 2
+
+
+def test_discovery_mismatch_refuses_before_runner(observer,monkeypatch):
+    class Loader:
+        def discover(self,*args):
+            assert args == ('tests/live_backend','test_*.py')
+            return unittest.TestSuite()
+    monkeypatch.setattr(unittest,'defaultTestLoader',Loader())
+    def forbidden(*args,**kwargs): raise AssertionError('runner must not start')
+    monkeypatch.setattr(unittest,'TextTestRunner',forbidden)
+    with pytest.raises(ValueError,match='inventory'): observer['main']()
+
+
+def test_synthetic_external_path_label_omits_absolute_path(observer):
+    namespace = {}; exec(compile('def f(): pass','/private/example-secret/fake.py','exec'),namespace)
+    assert observer['label'](namespace['f'].__code__) == ['OTHER',1,'f']
