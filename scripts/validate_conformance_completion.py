@@ -121,10 +121,11 @@ def historical_bytes(path, raw):
 def current_test_bytes(before):
     require(type(before) is bytes, "test bytes")
     record = _record()
+    input_digest = digest(before)
     matches = [r for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
-        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
+        require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
         return research_current(before)
     require(len(matches) == 1, "unique predecessor")
     return research_current(apply_recipe(before, matches[0]))
@@ -225,7 +226,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(research_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 163 and len(packets) == 166 and set(packets) == old | set(NEW_IDS) | {'MET-ADOPT-002'}, '163 immutable plus two successors')
+        require(len(old) == 163 and len(packets) == 167 and set(packets) == old | set(NEW_IDS) | {'MET-ADOPT-002', 'MET-PERF-010'}, '163 immutable plus two successors')
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet source parity')
         meta, product = packets['MET-REPAIR-017'], packets['CONF-FIX-007']
@@ -270,4 +271,4 @@ if __name__ == '__main__':
     errors = validate_authority(packets,*load_inputs(ROOT))
     if errors:
         print('\n'.join(errors)); raise SystemExit(1)
-    print('Conformance completion authority valid:166 specifications;163 unchanged packets; correction required before004; no product/native acceptance.')
+    print('Conformance completion authority valid:167 specifications;163 unchanged packets; correction required before004; no product/native acceptance.')

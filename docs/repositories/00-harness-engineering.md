@@ -1,5 +1,18 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current execution gate - MET-PERF-010
+
+[Bounded validation repair](../alpha-2/VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
+Independent accepted-base repair, not acceptance or amendment of draft PR124.
+LOCAL3 total (1/2 consumed;3 supplemental), CI2/exact-main1 maximum. All old budgets remain closed.
+Full37-command recipe, fresh integrity checks and inherited tests/skips retained.
+Catalog167; all166 old packet YAML immutable. No product or provider execution.
+CONF-FIX-007 and CONF-DIAG-003 remain waiting; CONF-LIVE-004
+WAITING_PREDECESSOR_CORRECTION. Preserve the [all16 research/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current research-led implementation direction — MET-ADOPT-002
 
 [Harness / paper / upstream repository map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
@@ -358,6 +371,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 47. `MET-REPAIR-017`: publish the bounded five-path completion correction, preserve historical publication evidence and block004 pending reviewed implementation closure.
 
 48. `MET-ADOPT-002`: publish the research-led OSS adoption map, per-harness build-versus-integrate responsibilities and coordinated delivery gates without product changes.
+
+49. `MET-PERF-010`: independent bounded validation-performance repair; old draft/attempt evidence remains immutable.
 
 ## Testing, verification, and acceptance
 

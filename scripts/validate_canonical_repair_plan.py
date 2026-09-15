@@ -121,10 +121,11 @@ def historical_bytes(path, raw):
 def current_test_bytes(before):
     require(type(before) is bytes, "test bytes")
     record = _record()
+    input_digest = digest(before)
     matches = [r for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
-        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
+        require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
         return timing_current(before)
     require(len(matches) == 1, "unique predecessor")
     return timing_current(apply_recipe(before, matches[0]))
@@ -194,7 +195,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(timing_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 158 and len(packets) == 166 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002'},
+        require(len(old) == 158 and len(packets) == 167 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010'},
                 'one new meta packet and158 immutable predecessors')
         require('CONF-PERF-005' not in packets, 'proposed product packet is not execution authority')
         for name in old | set(NEW_IDS):

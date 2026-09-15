@@ -1,5 +1,18 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
+## Current execution gate - MET-PERF-010
+
+[Bounded validation repair](VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
+Independent accepted-base repair, not acceptance or amendment of draft PR124.
+LOCAL3 total (1/2 consumed;3 supplemental), CI2/exact-main1 maximum. All old budgets remain closed.
+Full37-command recipe, fresh integrity checks and inherited tests/skips retained.
+Catalog167; all166 old packet YAML immutable. No product or provider execution.
+CONF-FIX-007 and CONF-DIAG-003 remain waiting; CONF-LIVE-004
+WAITING_PREDECESSOR_CORRECTION. Preserve the [all16 research/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current research-led implementation direction — MET-ADOPT-002
 
 [Harness / paper / upstream repository map](HARNESS_PAPER_REPOSITORY_MAP.md)
