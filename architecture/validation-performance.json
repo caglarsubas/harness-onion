@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "planeon.internal.validation-performance/v1",
+  "metaPacketId": "MET-PERF-010",
+  "evidenceClass": "META_VALIDATION_REPAIR_NOT_RUNTIME_ACCEPTANCE",
+  "baseline": {
+    "commit": "b2705835139ece8954cf36f66ab0b5e8d8b3c10b",
+    "tree": "196cdf455893786a98c6c4ebc9f8c2fdce216010",
+    "packet": "MET-ADOPT-002",
+    "packetCount": 166,
+    "trackedFiles": 489
+  },
+  "draft": {
+    "packet": "MET-PERF-009",
+    "pr": 124,
+    "commit": "1886aa2272f8d8bc73da60ebd7a6738f288de5fb",
+    "modified": false,
+    "accepted": false,
+    "reconciliationAuthorized": false
+  },
+  "budgets": {
+    "LOCAL": 2,
+    "CI": 2,
+    "LOCAL_EXACT_MAIN": 1,
+    "diagnostic": 0,
+    "transfer": false,
+    "resetOnCommit": false
+  },
+  "limits": {
+    "nestedSeconds": 420,
+    "hostSeconds": 900,
+    "workflowMinutes": 15,
+    "localGateSeconds": 750,
+    "exactMainGateSeconds": 750
+  },
+  "oldBudgets": {
+    "metaLocalConsumed": 5,
+    "remainingMetaLocal": 0,
+    "diagnosticReserved": [
+      1,
+      2
+    ],
+    "remainingDiagnostic": 0,
+    "productLocalConsumed": 3,
+    "reset": false
+  },
+  "policies": {
+    "freshReadEveryBoundary": true,
+    "allInheritedTests": true,
+    "strictParsers": true,
+    "completeRecipe": true,
+    "soleApprovedLocalDigestReuse": true,
+    "globalCache": false,
+    "sourceExecution": false,
+    "productChanges": false,
+    "draftChanges": false,
+    "rootChange": false,
+    "downloads": false,
+    "billingChange": false,
+    "warmSourceAccess": false
+  },
+  "logicRegions": {
+    "scripts/validate_backend_timing.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_broker_handoff.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_canonical_repair_plan.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_completion.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_consumer_closure.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_performance.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_performance_followup.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_publication.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_reference_measurement.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_conformance_successor_checkpoint.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_credential_lifecycle.py": [
+      "reconcile_meta_test_bytes"
+    ],
+    "scripts/validate_credential_ordering.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_local_acceptance.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_native_qualification.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_provider_adoption.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_proxy_diagnostics.py": [
+      "current_test_bytes"
+    ],
+    "scripts/validate_research_adoption.py": [
+      "current_test_bytes"
+    ]
+  },
+  "serializer": {
+    "path": "tests/fixture_yaml.py",
+    "consumer": "tests/test_reuse.py::_write_yaml",
+    "native": "CSafeDumper",
+    "fallback": "SafeDumper",
+    "sortKeys": false,
+    "width": 1000,
+    "encoding": "utf-8",
+    "temporaryOnly": true,
+    "globalMonkeypatch": false
+  },
+  "testVectors": {
+    "ids": [
+      "VP-01",
+      "VP-02",
+      "VP-03",
+      "VP-04",
+      "VP-05",
+      "VP-06",
+      "VP-07",
+      "VP-08",
+      "VP-09",
+      "VP-10"
+    ],
+    "source": "tests/test_validation_performance.py",
+    "expectedAddedCases": 130,
+    "baselineExpectedPasses": {
+      "inner": 3726,
+      "outer": 3975
+    },
+    "expectedPasses": {
+      "inner": 3856,
+      "outer": 4105
+    },
+    "inheritedSkips": 10,
+    "countsAreNotAcceptance": true
+  },
+  "evidence": {
+    "proposalSha256": "224b50c27e58ba0aca75bb0206ab45cd0a4b5b99c6d949bcc95addc34590c838",
+    "diagnosticOutputSha256": "22b089b031a7aead4f1ccb702c1b97e266c160dc50a83382ac1fe526fa6c0cda",
+    "diagnosticIndexSha256": "fb531a903f7876c179dbc2147b60bf37bfe136427b64e76e3b3c4d885bb31f10",
+    "diagnosticClass": "DIAGNOSTIC_INCOMPLETE_NOT_ACCEPTANCE",
+    "leafCostsMeasured": false,
+    "speedupMeasured": false,
+    "local": "NOT_RUN",
+    "ci": "NOT_RUN",
+    "merge": "NOT_RUN",
+    "exactMain": "NOT_RUN",
+    "runtime": "NOT_RUN",
+    "tenant": "NOT_RUN"
+  },
+  "contractPins": {
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    ".github/workflows/verify.yml": "b6b8c87fc5f9615c193594c7a861a59e55022acfdb1dc9970c903af9fca22dee",
+    "ci/verify-offline.sh": "881a6f8c8bf7f5c01896578e960685545b8b7ec02e672808571836e73d132ae2",
+    "ci/run_packet_argv.py": "5a635f1694892354722afa14be103cf1c2efed70d6198fe163889eca3e211826",
+    "scripts/verify_offline.sh": "e01ce471ccd25bfc4af0c0d3e1eb9c2b8d60840eaaa213f7aff55c05d029891b",
+    "scripts/verify_toolchain.py": "9cf639874721037ec7875b0f2938bee57fa75b2cdebc6501912ef253dcda2190",
+    "scripts/safe_yaml.py": "99c673560e65e58cdc1abe86e53472feaf93e546dd76cb9f3ba051beef5c49d7",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9",
+    "pyproject.toml": "3876fa86bb79bb1951b017527a83278491c21ce9f1e017e38a0558f00b89ed2b",
+    "architecture/research-adoption.json": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+    "architecture/research-adoption-authority.json": "37fd33e216e5ec7513f3af751bf5590399f918d4cfde4eea8c7bbbc4587d752b",
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/conformance-completion.json": "431a550dcc57a9a16597df6ae9772f64ac8e622997e643ac4ed43652d91e6376",
+    "task-packets/MET-ADOPT-002.yaml": "9d4cd3a954a94daf3a624398e65d169c62d8b042ee8ab0588a375e8a7f832df2",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "legal/source-reuse-authorization.yaml": "15db98cbaef76c942f7bd230c245f506653311b9cfec4596255b5770eb6e45fa"
+  }
+}

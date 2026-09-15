@@ -121,10 +121,11 @@ def historical_bytes(path, raw):
 def current_test_bytes(before):
     require(type(before) is bytes, "test bytes")
     record = _record()
+    input_digest = digest(before)
     matches = [r for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
-        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
+        require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
         return completion_current(before)
     require(len(matches) == 1, "unique predecessor")
     return completion_current(apply_recipe(before, matches[0]))
@@ -205,7 +206,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(completion_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 162 and len(packets) == 166 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007', 'MET-ADOPT-002'}, '162 immutable plus one META')
+        require(len(old) == 162 and len(packets) == 167 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010'}, '162 immutable plus one META')
         require('CONF-PERF-005' not in packets, 'no speculative repair')
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet source parity')
@@ -248,4 +249,4 @@ if __name__ == '__main__':
     if errors:
         print('\n'.join(errors))
         raise SystemExit(1)
-    print('Conformance publication authority valid:166 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')
+    print('Conformance publication authority valid:167 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')

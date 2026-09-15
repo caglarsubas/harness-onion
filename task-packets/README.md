@@ -1,5 +1,18 @@
 # Sol-High Task Packet Catalog
 
+## Current execution gate - MET-PERF-010
+
+[Bounded validation repair](../docs/alpha-2/VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
+Independent accepted-base repair, not acceptance or amendment of draft PR124.
+LOCAL2/CI2/exact-main1 maximum; all old exhausted budgets remain closed.
+Full37-command recipe, fresh integrity checks and inherited tests/skips retained.
+Catalog167; all166 old packet YAML immutable. No product or provider execution.
+CONF-FIX-007 and CONF-DIAG-003 remain waiting; CONF-LIVE-004
+WAITING_PREDECESSOR_CORRECTION. Preserve the [all16 research/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current research-led implementation direction — MET-ADOPT-002
 
 [Harness / paper / upstream repository map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
@@ -427,6 +440,7 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 164 | `MET-REPAIR-017` | `Harness-Engineering` | Publish conformance completion correction and mandatory successor gate |
 | 165 | `CONF-FIX-007` | `mas-harness-conformance-labs` | Complete fixed qualifier, broker handoff, exact-UID cleanup and server integration |
 | 166 | `MET-ADOPT-002` | `Harness-Engineering` | Publish all16 harness research/OSS adoption map and reuse-first delivery gates |
+| 167 | `MET-PERF-010` | `Harness-Engineering` | Bounded validator digest and safe fixture serialization repair |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 

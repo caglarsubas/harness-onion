@@ -121,10 +121,11 @@ def historical_bytes(path, raw):
 def current_test_bytes(before):
     require(type(before) is bytes, "test bytes")
     record = _record()
+    input_digest = digest(before)
     matches = [r for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
-        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
+        require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
         return diagnostic_current(before)
     require(len(matches) == 1, "unique predecessor")
     return diagnostic_current(apply_recipe(before, matches[0]))
@@ -238,7 +239,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(diagnostic_history(path, inputs[path])) == checksum, 'changed current source: ' + path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 155 and len(packets) == 166 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-006', 'CONF-DIAG-001', 'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002'}, 'exact158 catalog with155 immutable predecessors')
+        require(len(old) == 155 and len(packets) == 167 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-006', 'CONF-DIAG-001', 'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010'}, 'exact158 catalog with155 immutable predecessors')
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'raw semantic packet binding')
         packet = packets['MET-ADOPT-001']
@@ -267,4 +268,4 @@ if __name__ == '__main__':
     if errors:
         print('\n'.join(errors))
         raise SystemExit(1)
-    print('Provider adoption authority valid:166 packets;155 immutable predecessors;16 harnesses/13 repositories; planning only, no product qualification.')
+    print('Provider adoption authority valid:167 packets;155 immutable predecessors;16 harnesses/13 repositories; planning only, no product qualification.')
