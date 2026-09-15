@@ -1,5 +1,20 @@
 # Alpha 2 — canonicalization repair decision and remaining readiness gate
 
+## Current research-led implementation direction — MET-ADOPT-002
+
+[Harness / paper / upstream repository map](HARNESS_PAPER_REPOSITORY_MAP.md)
+is the current reuse-first planning amendment. It covers all16 canonical harnesses
+and preserves the four planes and13 repository owners. Catalog:166 packet specifications;
+all165 predecessor YAML remain byte-immutable. Proposed provider-adoption work is
+non-dispatchable until exact successor packets, contracts and offline locks are published.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+META source publication is not OSS provider implementation or qualification.
+Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
+source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
+
+## Retained implementation specifications and historical checkpoints
+
 `MET-PERF-007` publishes diagnostic findings and a bounded repair proposal. It
 does not grant product edits, execute product code or declare the repair ready
 to code. `CONF-PERF-005` is a proposed identifier only: there is deliberately no

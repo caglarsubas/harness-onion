@@ -1,5 +1,30 @@
 # Harness Specification: `trust.evaluation-assurance`
 
+## Current research-led implementation direction — MET-ADOPT-002
+
+[Harness / paper / upstream repository map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md)
+is the current reuse-first planning amendment. It covers all16 canonical harnesses
+and preserves the four planes and13 repository owners. Catalog:166 packet specifications;
+all165 predecessor YAML remain byte-immutable. Proposed provider-adoption work is
+non-dispatchable until exact successor packets, contracts and offline locks are published.
+Require **at least one qualified baseline for every released harness capability** at the first enterprise release.
+META source publication is not OSS provider implementation or qualification.
+Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
+source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
+
+Planning target: `UKGovernmentBEIS/inspect_ai`.
+Use Inspect AI for agent/task evaluation with local models; add Ragas for RAG metrics and promptfoo for local red-team suites only after pinned-package and dependency review.
+Platform scope: Own evidence schemas, immutable subjects, release gates and independence. Keep pytest for deterministic source/contract checks; it is not the agent-quality engine.
+Delivery: `TRUST-EVAL-ADOPT-001` (ALPHA_2, WAITING_PACKET_PUBLICATION).
+Acceptance: Test real pinned evaluation package, local dataset/model assets, reproducibility, known-failing task scores, denied network/API defaults and signed evidence separation. Research about subsampling never permits filtering mandatory acceptance/CI recipes.
+This takes precedence over older build-from-scratch directions for future work,
+not over current public contracts or active provider selectors. Retained provider
+paragraphs below describe the prior/current implementation boundary, not permission
+to expand a competing general-purpose engine.
+
+## Retained implementation specifications and historical checkpoints
+
 ## Current adoption roadmap — MET-ADOPT-001
 
 [Product/provider and multi-repository policy](../alpha-2/PROVIDER_ADOPTION_ROADMAP.md) is the current planning amendment.
