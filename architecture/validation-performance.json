@@ -18,12 +18,26 @@
     "reconciliationAuthorized": false
   },
   "budgets": {
-    "LOCAL": 2,
+    "LOCAL": 3,
     "CI": 2,
     "LOCAL_EXACT_MAIN": 1,
     "diagnostic": 0,
     "transfer": false,
     "resetOnCommit": false
+  },
+  "countCorrection": {
+    "proposalSha256": "34a076e4284af1fa767b818511484a103fa86a8a0d88d22eeecf17a92bf346d4",
+    "priorLocalOrdinals": [
+      1,
+      2
+    ],
+    "supplementalLocalOrdinal": 3,
+    "previousExpectedPasses": {
+      "inner": 3856,
+      "outer": 4105
+    },
+    "retainedLocal2LogSha256": "6c795508669fe777057e6d10783b0887927495c29246958fd3d5f128d1bf93c9",
+    "previousAuditNotRewritten": true
   },
   "limits": {
     "nestedSeconds": 420,
@@ -137,13 +151,41 @@
     ],
     "source": "tests/test_validation_performance.py",
     "expectedAddedCases": 130,
+    "inheritedExpandedCases": 10,
+    "totalAddedCases": 140,
+    "inheritedParameterExpansion": [
+      {
+        "module": "custody_handoff",
+        "test": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "fields": [
+          "allowedPaths",
+          "prefetchCommands",
+          "offlineAcceptanceCommands",
+          "sourceReuse",
+          "predecessors"
+        ],
+        "cases": 5
+      },
+      {
+        "module": "credential_lifecycle",
+        "test": "test_exact_packet_fields_cannot_expand",
+        "fields": [
+          "allowedPaths",
+          "predecessors",
+          "prefetchCommands",
+          "offlineAcceptanceCommands",
+          "sourceReuse"
+        ],
+        "cases": 5
+      }
+    ],
     "baselineExpectedPasses": {
       "inner": 3726,
       "outer": 3975
     },
     "expectedPasses": {
-      "inner": 3856,
-      "outer": 4105
+      "inner": 3866,
+      "outer": 4115
     },
     "inheritedSkips": 10,
     "countsAreNotAcceptance": true

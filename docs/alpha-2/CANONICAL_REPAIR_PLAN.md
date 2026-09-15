@@ -4,7 +4,7 @@
 
 [Bounded validation repair](VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
 Independent accepted-base repair, not acceptance or amendment of draft PR124.
-LOCAL2/CI2/exact-main1 maximum; all old exhausted budgets remain closed.
+LOCAL3 total (1/2 consumed;3 supplemental), CI2/exact-main1 maximum. All old budgets remain closed.
 Full37-command recipe, fresh integrity checks and inherited tests/skips retained.
 Catalog167; all166 old packet YAML immutable. No product or provider execution.
 CONF-FIX-007 and CONF-DIAG-003 remain waiting; CONF-LIVE-004

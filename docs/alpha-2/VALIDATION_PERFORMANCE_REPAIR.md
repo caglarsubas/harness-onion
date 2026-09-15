@@ -43,7 +43,9 @@ and final zero-bill scan must complete through the existing signed localhost
 launcher. No direct subset, collect-only, diagnostic, hidden warm-up or extra
 baseline is authorized.
 
-Budgets: LOCAL2, CI2, independent LOCAL exact-main1. Reserve before signing/
+Budgets: LOCAL3 total, CI2, independent LOCAL exact-main1. LOCAL1/2 remain
+consumed; the approved count-accounting amendment grants only LOCAL3 as one
+supplemental attempt. No old reservation or audit is reset. Reserve before signing/
 activation, failures after reservation consume an ordinal, one active run,
 no reset or transfer. A source fix needs remaining LOCAL allowance and fresh
 exact-source LOCAL success before CI. CI retry uses its own remaining ordinal.
@@ -52,9 +54,15 @@ must be <=750s. Functional pass and performance failure are separate; never
 merge from a partial or over-budget repair claim.
 
 Source inventory and the new130 parametrized regression cases are accounted
-separately from the base's recorded3726 nested/3975 outer passing cases and ten
-inherited isolation skips. Expected candidate:3856 nested/4105 outer passes,
+separately from ten expanded inherited cases: five custody-handoff and five
+credential-lifecycle field mutations now include MET-PERF-010. Their original
+test definitions remain unchanged. Thus140 total additional cases supplement
+the base's recorded3726 nested/3975 outer passes. Expected candidate:3866 nested/4115 outer passes,
 each with the same ten inherited skips; these are expectations, not results.
+The earlier3856/4105 forecast omitted the ten inherited expansions. LOCAL2
+completed all37 commands,3866/4115 passes and ten skips each in475.10s, but its
+original count-gate audit remains unaccepted and retained. Corrected source must
+pass fresh full LOCAL3 before CI; no retrospective acceptance or speedup claim.
 Retain old test identities, parameters and assertions through exact data-only
 recipes. Compare serializer shape rather than equality alone. Fresh-read,
 duplicate-match, unsupported-object, tampered-input, source and budget-negative
@@ -88,4 +96,3 @@ Alpha2 remains open; model-effort transition NOT_DUE.
 Before merge, failed work remains draft. After merge, any revert/successor has
 its own gates; no history reset, force push, old evidence rewrite or automatic
 runtime rollback. Stop on scope/contract/billing/isolation drift or exhaustion.
-

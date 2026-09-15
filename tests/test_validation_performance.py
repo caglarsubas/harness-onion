@@ -212,6 +212,37 @@ def test_complete167_authority_and_old_sources(authority):
                          inputs["task-packets/README.md"].decode(), re.M)
     assert len(indexed) == len(set(indexed)) == 167
     assert set(indexed) == set(packets)
+    vectors = module.parse(inputs[module.SPEC_PATH])["testVectors"]
+    assert vectors["expectedAddedCases"] == 130
+    assert vectors["inheritedExpandedCases"] == 10
+    assert vectors["totalAddedCases"] == 140
+    expanded = 0
+    for row in vectors["inheritedParameterExpansion"]:
+        source_path = "scripts/validate_" + row["module"] + ".py"
+        test_path = "tests/test_" + row["module"] + ".py"
+        def additions(raw):
+            node = next(n for n in ast.parse(raw).body if isinstance(n, ast.Assign)
+                        and any(isinstance(t, ast.Name) and t.id == "ADDITIONS" for t in n.targets))
+            return ast.literal_eval(node.value)
+        current = inputs[source_path]
+        before = module.historical_bytes(source_path, current)
+        assert additions(current) == additions(before) + ("MET-PERF-010",)
+        functions = [next(n for n in ast.parse(raw).body
+                          if isinstance(n, ast.FunctionDef) and n.name == row["test"])
+                     for raw in (module.historical_bytes(test_path, inputs[test_path]), inputs[test_path])]
+        assert ast.dump(functions[0]) == ast.dump(functions[1])
+        decorators = functions[1].decorator_list
+        assert len(decorators) == 2 and decorators[0].args[1].id == "ADDITIONS"
+        fields = ast.literal_eval(decorators[1].args[1])
+        assert [v[0] for v in fields] == row["fields"]
+        assert len(fields) == row["cases"] == 5
+        expanded += len(fields)
+    assert expanded == vectors["inheritedExpandedCases"]
+    assert vectors["expectedAddedCases"] + expanded == vectors["totalAddedCases"]
+    assert vectors["expectedPasses"] == {
+        name: count + vectors["totalAddedCases"]
+        for name, count in vectors["baselineExpectedPasses"].items()}
+    assert vectors["expectedPasses"] == {"inner": 3866, "outer": 4115}
     for path, rule in record["metaRecipes"].items():
         before = module.historical_bytes(path, inputs[path])
         assert module.apply_recipe(before, rule) == inputs[path]
