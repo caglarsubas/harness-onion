@@ -1,0 +1,75 @@
+{
+  "acceptedBaseline": "3a81c8ffb17be9e288c4368d443c57361d5a4fc8",
+  "acceptedDocumentFunctionSha256": "fe3b468872cb14db63f1b2bc1b5c4579703d1e8909c037f8e657ed2d2c26d97c",
+  "additionalConsumerMigrationAuthorized": false,
+  "currentBeforeHistorical": true,
+  "draftSource": "25fab12c168ff686e863291098fce0f3dba629bd",
+  "effectiveFixtureAndHelperReviewRequired": true,
+  "finalCounts": "MUST_BE_FROZEN_FROM_EXACT_CANDIDATE_BEFORE_FIRST_RESERVATION",
+  "globalDiscoveryPatch": false,
+  "helperException": {
+    "line": 788,
+    "sha256": "a2945ff118a1d89322fa8268a1bbd2a1771fee3106738bd2033fe9841937327f"
+  },
+  "historicalBytesExecuted": false,
+  "immutableVerifier": {
+    "line": 730,
+    "sha256": "bcec7020663bdd1f18285714a87da2c016b98f945451042119246a326bbb90b5"
+  },
+  "inheritedBackend": 1429,
+  "inheritedDraftMethodReview": [
+    {
+      "after": "f3f7f9240220dbd018b83bd7f1b2045959e115f473086b84d407bb52f9d8af01",
+      "assertionAstUnchanged": false,
+      "before": "0f59729441b3522f467ef9819639250d4f3c65343b3f3b293c2f235fd42dbf27",
+      "id": "KernelSelfInspectionTests.test_startup_keeps_containment_refusal_before_storage_observer_and_credentials",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "status": "STATIC_REVIEW_CANDIDATE_REQUIRES_C7"
+    },
+    {
+      "after": "c0267017f5659e1efab4f7a83005633766d24d0841f8ee07368bcfd5fb61fb9b",
+      "assertionAstUnchanged": true,
+      "before": "f319a3713295ab5bc46bc5548f90eea2dc5682fc7443ec6b52b1bc7380d40ce0",
+      "id": "BrokerStartupSourceOrderTests.test_server_constructor_order_keeps_broker_before_credentials",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "status": "STATIC_REVIEW_CANDIDATE_REQUIRES_C7"
+    },
+    {
+      "after": "5021cb3672268538ded6dbbfe26c4bbc8b6b3492488ebade4a7f6f4a873b4a36",
+      "assertionAstUnchanged": true,
+      "before": "2d6b939743b16f40c7a64e2c974a9cc798b8570aabdaceba60dce7745c7d9c9b",
+      "id": "ObserverInspectionWiringTests.test_observer_no_longer_requests_legacy_probe_containment",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "status": "STATIC_REVIEW_CANDIDATE_REQUIRES_C7"
+    }
+  ],
+  "inheritedTotal": 1599,
+  "methodException": {
+    "id": "DocumentRepairTests.test_consumer_history_preserved",
+    "line": 1114,
+    "path": "tests/live_backend/test_mutation_admission.py",
+    "sha256": "935ec902571c43adbedf3dd844fa44f40c0a35633f3dde95de0b28fafc48fc66"
+  },
+  "originalBaseline": "092fcf475c6f3ebd455e3c354cddb7664ea1f900",
+  "originalProofRetained": true,
+  "otherAcceptedRepairMethodBodiesImmutable": 31,
+  "requiredAdditionalRegressionCases": [
+    "closed_paths_and_duplicate_members",
+    "unsafe_mode_link_and_ancestry",
+    "unowned_source_and_resealed_rows",
+    "stale_current_bytes",
+    "wrong_before_image",
+    "missing_or_reordered_reverse_transform",
+    "unrecognized_authority_or_transformation",
+    "changed_document_body_or_fallback",
+    "changed_original_source_proof",
+    "changed_preserved_method_or_assertion",
+    "missing_renamed_or_duplicate_test_identity",
+    "collection_skip_or_filter_override",
+    "fresh_reads_after_mutation",
+    "actual_discovery_matches_current_full_inventory",
+    "historical_1309_inventory_separate_from_current",
+    "no_stored_source_execution_or_acceptance_cache"
+  ],
+  "status": "PROPOSED_NOT_IMPLEMENTED"
+}

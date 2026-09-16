@@ -1,5 +1,21 @@
 # Alpha 2 — conformance implementation completion
 
+## Current integration gate - MET-REPAIR-018
+
+[Completion integration](COMPLETION_INTEGRATION.md): Alpha2 ONGOING.
+MET-PERF-013 DONE_SOURCE_GATES at7b2efc5 / PR128.
+CONF-BENCH-003 DONE_MEASUREMENT_PASS; shared four-run allowance exhausted, no retry.
+CONF-PERF-006 DONE_SOURCE_GATES at3a81c8f / PR19: LOCAL, required localhost CI and independent exact-main passed1309 tests without skips.
+MET-REPAIR-018 ONGOING_META_PUBLICATION;177 specifications and175 immutable prior packets.
+CONF-FIX-008 WAITING_META_SOURCE_GATES; new five-path completion successor preserving1599 inherited identities plus new regressions.
+CONF-FIX-007/PR18 NON_DISPATCHABLE_RETAINED_HISTORY; BLOCKED_LOCAL_BUDGET_EXHAUSTED, unchanged head25fab12.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; independent C1-C7 and all successor source gates mandatory.
+CONF-A2-001 and Alpha3/4 WAITING. No native/runtime/tenant acceptance; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+Older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 MET-REPAIR-017 is a META-only amendment. It publishes one subsequent corrective
 product packet, CONF-FIX-007. No product source, native reader, probe, installation
 or campaign executes in this META run. Sixteen harnesses, four planes and thirteen

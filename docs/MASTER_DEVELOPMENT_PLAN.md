@@ -1,5 +1,21 @@
 # Master Development Plan
 
+## Current integration gate - MET-REPAIR-018
+
+[Completion integration](alpha-2/COMPLETION_INTEGRATION.md): Alpha2 ONGOING.
+MET-PERF-013 DONE_SOURCE_GATES at7b2efc5 / PR128.
+CONF-BENCH-003 DONE_MEASUREMENT_PASS; shared four-run allowance exhausted, no retry.
+CONF-PERF-006 DONE_SOURCE_GATES at3a81c8f / PR19: LOCAL, required localhost CI and independent exact-main passed1309 tests without skips.
+MET-REPAIR-018 ONGOING_META_PUBLICATION;177 specifications and175 immutable prior packets.
+CONF-FIX-008 WAITING_META_SOURCE_GATES; new five-path completion successor preserving1599 inherited identities plus new regressions.
+CONF-FIX-007/PR18 NON_DISPATCHABLE_RETAINED_HISTORY; BLOCKED_LOCAL_BUDGET_EXHAUSTED, unchanged head25fab12.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; independent C1-C7 and all successor source gates mandatory.
+CONF-A2-001 and Alpha3/4 WAITING. No native/runtime/tenant acceptance; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current publication gate - MET-PERF-013
 
 [Benchmark transport correction](alpha-2/BENCHMARK_TRANSPORT.md): Alpha2 ONGOING.

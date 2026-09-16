@@ -3,6 +3,7 @@ import ast
 from copy import deepcopy
 import pytest
 from scripts import validate_benchmark_transport as module
+from scripts.validate_completion_integration import historical_bytes as integration_history
 from scripts.safe_yaml import safe_load
 
 
@@ -15,11 +16,11 @@ def authority():
 def test_closed_transport_authority_and_historical_projection(authority):
     assert module.validate_authority(*authority) == []
     packets,record,inputs = authority
-    assert len(packets) == 175 and len(module.historical_catalog(packets)) == 173
+    assert len(packets) == 177 and len(module.historical_catalog(packets)) == 173
     assert module.NEW_IDS == ('MET-PERF-013','CONF-BENCH-003')
     for path,rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == inputs[path]
+        assert module.apply_recipe(before,rule) == integration_history(path,inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]
