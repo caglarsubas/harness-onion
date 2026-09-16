@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_factory_diagnostics import historical_bytes as factory_history, current_test_bytes as factory_current, validate_additions as factory_additions, historical_catalog as factory_catalog
+except ImportError:
+    from scripts.validate_factory_diagnostics import historical_bytes as factory_history, current_test_bytes as factory_current, validate_additions as factory_additions, historical_catalog as factory_catalog
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = 'architecture/completion-integration-authority.json'
 RECORD_SHA256 = '61419d001ed05ab04f23f6e7d1dbc402c655023c71cccb1df6f6e936eafaf747'
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = factory_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -120,9 +126,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
         require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return factory_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return factory_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -131,7 +137,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return factory_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -160,6 +166,7 @@ ACCOUNTING = 'architecture/completion-integration-inputs/source-accounting.json'
 def historical_catalog(packets):
     record = _record(); pinned(record)
     require(validate_additions(packets) == [], 'exact integration packets')
+    packets = factory_catalog(packets)
     old = {Path(p).stem for p in record['protectedFiles']
            if p.startswith('task-packets/') and p.endswith('.yaml')}
     require(len(old) == 175 and set(packets) == old | set(NEW_IDS), 'closed 177-packet catalog')
@@ -241,8 +248,8 @@ def validate_authority(packets, record, inputs):
         pins = {**record['protectedFiles'], **record['inputFiles'], **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), 'complete fresh inputs')
         for path,checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'source drift: '+path)
-        for name in packets:
+            require(type(inputs[path]) is bytes and digest(factory_history(path,inputs[path])) == checksum, 'source drift: '+path)
+        for name in factory_catalog(packets):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet byte parity')
         value = parse(inputs[SPEC_PATH]); validate_spec(value)
         meta, product, prior = packets['MET-REPAIR-018'], packets['CONF-FIX-008'], old['MET-PERF-013']
@@ -284,7 +291,7 @@ def validate_authority(packets, record, inputs):
             require(digest(inputs[path]) == checksum, 'immutable contract/lock')
         for path,rule in record['metaRecipes'].items():
             before = historical_bytes(path, inputs[path])
-            require(apply_recipe(before,rule) == inputs[path], 'exact reversible metadata')
+            require(apply_recipe(before,rule) == factory_history(path,inputs[path]), 'exact reversible metadata')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'all inherited test identities')
         for path in record['navigationPaths']:

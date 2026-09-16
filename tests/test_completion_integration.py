@@ -3,6 +3,7 @@ import ast
 from copy import deepcopy
 import pytest
 from scripts import validate_completion_integration as module
+from scripts.validate_factory_diagnostics import historical_bytes as factory_history
 from scripts.safe_yaml import safe_load
 
 
@@ -15,10 +16,10 @@ def authority():
 def test_complete_authority_and_reversible_current_history(authority):
     assert module.validate_authority(*authority) == []
     packets, record, inputs = authority
-    assert len(packets) == 177 and len(module.historical_catalog(packets)) == 175
+    assert len(packets) == 179 and len(module.historical_catalog(packets)) == 175
     for path,rule in record['metaRecipes'].items():
         old = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(old,rule) == inputs[path]
+        assert module.apply_recipe(old,rule) == factory_history(path,inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(old) == module.test_ids(inputs[path])
             assert module.current_test_bytes(old) == inputs[path]

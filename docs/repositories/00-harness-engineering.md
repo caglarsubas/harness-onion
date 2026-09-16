@@ -1,5 +1,20 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current diagnostic gate - MET-PERF-014
+
+[Bounded factory diagnostics](../alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.
+MET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.
+CONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.
+MET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.
+CONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.
+Subsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current integration gate - MET-REPAIR-018
 
 [Completion integration](../alpha-2/COMPLETION_INTEGRATION.md): Alpha2 ONGOING.
@@ -456,6 +471,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 52. `MET-PERF-012`: publish exact conditional document repair and read-only measurement authority.
 53. `MET-PERF-013`: publish exact argument transport correction and non-resettable comparison successor.
 54. `MET-REPAIR-018`: reconcile accepted helper gates and publish separate completion-integration authority.
+55. `MET-PERF-014`: publish bounded factory diagnostics without product execution.
 
 ## Testing, verification, and acceptance
 
