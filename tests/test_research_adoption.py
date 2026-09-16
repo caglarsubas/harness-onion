@@ -1,7 +1,7 @@
 """Research adoption planning integrity; never imports or runs provider code."""
 from copy import deepcopy
 import pytest
-from scripts.validate_completion_profiling import historical_bytes as profiling_history
+from scripts.validate_validation_performance import historical_bytes as repair_history
 from scripts import validate_research_adoption as module
 from scripts.safe_yaml import safe_load
 
@@ -21,10 +21,10 @@ def plan_inputs(authority):
 def test_complete166_catalog_and_all_inherited_tests_remain(authority):
     assert module.validate_authority(*authority) == []
     packets,record,inputs = authority
-    assert len(packets) == 168 and module.NEW_IDS == ('MET-ADOPT-002',)
+    assert len(packets) == 169 and module.NEW_IDS == ('MET-ADOPT-002',)
     for path,rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == profiling_history(path, inputs[path])
+        assert module.apply_recipe(before,rule) == repair_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]

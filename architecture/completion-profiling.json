@@ -2,7 +2,7 @@
   "schemaVersion": "planeon.internal.completion-profiling/v1",
   "metaPacketId": "MET-PERF-009",
   "packetId": "CONF-DIAG-003",
-  "metaBase": "b2705835139ece8954cf36f66ab0b5e8d8b3c10b",
+  "metaBase": "91b320b9f8525e986260fc4792b01f125b5feae9",
   "evidenceClass": "META_PLANNING_ONLY",
   "sourceOwner": "CONF-FIX-007",
   "sourceEdits": false,
@@ -2448,5 +2448,282 @@
     "nativeQualification": false,
     "tenantAcceptance": false,
     "modelEffortTransition": "NOT_DUE"
+  },
+  "reconciliation": {
+    "base": "91b320b9f8525e986260fc4792b01f125b5feae9",
+    "draft": "1886aa2272f8d8bc73da60ebd7a6738f288de5fb",
+    "proposalSha256": "3ba6442b8d21152cf0e0341edbe04cf483e52ba555a242d4b24c11d56b0daf6f",
+    "proposalMarkdownSha256": "43661da0b7b1fcb937b3146c054f84128b4402f90d70fe474187a6235abcf4ba",
+    "budgets": {
+      "LOCAL": 7,
+      "newLocalOrdinals": [
+        6,
+        7
+      ],
+      "retainedLocalOrdinals": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "CI": 2,
+      "LOCAL_EXACT_MAIN": 1,
+      "diagnostics": 0,
+      "productExecutions": 0,
+      "reset": false,
+      "transfer": false
+    },
+    "limits": {
+      "nestedSeconds": 420,
+      "hostSeconds": 900,
+      "workflowMinutes": 15,
+      "localGateSeconds": 750,
+      "exactMainGateSeconds": 750
+    },
+    "retainedMetaFailures": [
+      {
+        "ordinal": 1,
+        "commit": "1109b43a254cc33f8b0453ac101878f519aea1fa",
+        "exitCode": 1,
+        "resultSha256": "44d97b869fa3a899fa8121f487f3e6512064255b99d8b34c9bc23096c109e261",
+        "logSha256": "9d1b3afdea33290de3512567b02f9f606a115cf94ccee40d1dab511c0bb1b547",
+        "reservationSha256": "ddc3fd9f339d0c24e481a63db31b1e05db530b8bbfe5dd856e5ca41a2da835b3"
+      },
+      {
+        "ordinal": 2,
+        "commit": "e475d3ae64ac5dcae79cfcf9112908b1b7ce1f2f",
+        "exitCode": 1,
+        "resultSha256": "c504eff646a958df298d21d74779fe7200350abcfa138375a5c6bbf4df2cd6b2",
+        "logSha256": "756b05da2bbbd503f1442b0e55b0cda5bf66b8f942aad7fbd0fe1a1ca867ac11",
+        "reservationSha256": "dfbb4ae9ceb27b0f0d891758099a8763c0edea686c01258897cbcfc4fdd1febb"
+      },
+      {
+        "ordinal": 3,
+        "commit": "e1a3584d7ff9bbcc17c3111472b1896827811ad0",
+        "exitCode": 1,
+        "resultSha256": "c2a943288f1de5f145de78adb97956dfe51bf9d6ca3ef7edb65ae78c8f382b4e",
+        "logSha256": "a30e58b779885162ecd7ee6729079933f2176e4822e9aa3639a50b28c22c3949",
+        "reservationSha256": "7930287769a9b148f8d49c36b405f4e0d335fd947cb77ac2f1b610dac1c62c74"
+      },
+      {
+        "ordinal": 4,
+        "commit": "1886aa2272f8d8bc73da60ebd7a6738f288de5fb",
+        "exitCode": 1,
+        "resultSha256": "ac430ae356fb190cec8f5cf2491ecfa5d5f6f33cae550d32af30bdf474a2166f",
+        "logSha256": "6d7cc264e690579ce1a21970595462be0ae53a2d18e40c8abf4a037a3c54d18d",
+        "reservationSha256": "ec1516666368957404674251bdba3fc118c8866a5ee117f3298412f9ac236ceb"
+      },
+      {
+        "ordinal": 5,
+        "commit": "1886aa2272f8d8bc73da60ebd7a6738f288de5fb",
+        "exitCode": 1,
+        "resultSha256": "1758899cbdca491aad5fc5c88ec6e1fa5f90036a3010625b8b3cd8f4ce1be2c1",
+        "logSha256": "d0574177f5672b7f9c4bbc815e910837359ae8f85d2dce3dadfea0abbbcbf049",
+        "reservationSha256": "439a3697e98b564efe1ec1950119c922de39c3369582f305a4211ad28c965f2c"
+      }
+    ],
+    "retainedDiagnosticFailures": [
+      {
+        "ordinal": 1,
+        "reservationSha256": "5aa036c2c073b04895fcf21c41fda7c85dc66f1fee74bf7de0c6d7a05a4b25d2"
+      },
+      {
+        "ordinal": 2,
+        "reservationSha256": "5637780c4900b6b946f5fd3c24dac9a298398880ca34e4f517643b9fcf63fd79"
+      }
+    ],
+    "predecessorAcceptance": {
+      "status": "FULL_LOCAL_ACCEPTANCE_VERIFIED",
+      "commit": "91b320b9f8525e986260fc4792b01f125b5feae9",
+      "auditSha256": "e48ace151d93a4a3ea020165fa11be708e80b693b566d9d2f1053c1e0a2e5755",
+      "resultSha256": "79f88c69c867f4240547b3797f2a83366521cac1795c45e18f140e06390a6124",
+      "logSha256": "5b170d7df28e8329eef35fe99d9ad50b9d393aaef9ea17d82dcf3fdabf1755eb",
+      "elapsedSeconds": 464.511755042,
+      "nativeAcceptance": false,
+      "tenantAcceptance": false
+    },
+    "protectedAcceptedInputs": {
+      "task-packets/MET-PERF-010.yaml": "f568f10599b02758c22d67e053c8eff207f409d0584b7866832c4e95659e31b2",
+      "architecture/validation-performance-authority.json": "88e3a3e95b32aa5eee7d34f9124bf60c724c538ba4ebad5a6ed906a0d3e62507",
+      "architecture/validation-performance.json": "0c985b6ea1ba2e9aa2e9a5ab47d933b893b90599ee5e3b832d6f6f3ddc4168b8",
+      "docs/alpha-2/VALIDATION_PERFORMANCE_REPAIR.md": "0578d13af79d0b863d97495e38f324ffb8d7dec8a1324acfd1d962213ec9b4de",
+      "tests/fixture_yaml.py": "cdcc55e5bdbf1272cb625cb23bb48b7f0051b415032749c09c4240f01697f986"
+    },
+    "currentFirstOrder": [
+      "MET-PERF-009",
+      "MET-PERF-010",
+      "MET-ADOPT-002",
+      "OLDER_IMMUTABLE_AUTHORITIES"
+    ],
+    "testAccounting": {
+      "addedTestsSha256": "89a7fedc309498afc4406b3d3a3b5fc8729d61b4136e16552f8ebb461affb67e",
+      "baselineCommit": "91b320b9f8525e986260fc4792b01f125b5feae9",
+      "baselineExpectedPasses": {
+        "inner": 3866,
+        "outer": 4115
+      },
+      "draftCaseIds": [
+        "test_all166_packets_and_inherited_test_ids_preserved",
+        "test_source_or_packet_substitution_refuses[('old-packet',)]",
+        "test_source_or_packet_substitution_refuses[('new-meta',)]",
+        "test_source_or_packet_substitution_refuses[('diagnostic',)]",
+        "test_source_or_packet_substitution_refuses[('recipe',)]",
+        "test_source_or_packet_substitution_refuses[('missing',)]",
+        "test_source_or_packet_substitution_refuses[('extra',)]",
+        "test_source_or_packet_substitution_refuses[('record',)]",
+        "test_source_or_packet_substitution_refuses[('source',)]",
+        "test_source_or_packet_substitution_refuses[('program',)]",
+        "test_source_or_packet_substitution_refuses[('guide',)]",
+        "test_diagnostic_cannot_grant_product_or_acceptance[('sourceEdits',)]",
+        "test_diagnostic_cannot_grant_product_or_acceptance[('diagnosticIsAcceptance',)]",
+        "test_diagnostic_cannot_grant_product_or_acceptance[('optimizationAuthorized',)]",
+        "test_diagnostic_cannot_grant_product_or_acceptance[('requiresBranchOrPr',)]",
+        "test_diagnostic_cannot_grant_product_or_acceptance[('acceptedSourcePredecessor',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('argv',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('retry',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('attempt',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('timeout',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('nested',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('workflow',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('skip',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('order',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('ids',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('duplicate',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('timing-only',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('profiles',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('source',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('tree',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('inventory',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('failure',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('reset',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('remaining',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('program',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('toolchain',)]",
+        "test_resealed_diagnostic_scope_or_budget_change_refuses[('limits',)]",
+        "test_each_execution_boundary_is_fixed[('metaLocalRequired',)]",
+        "test_each_execution_boundary_is_fixed[('metaRequiredCIRequired',)]",
+        "test_each_execution_boundary_is_fixed[('protectedMetaMergeRequired',)]",
+        "test_each_execution_boundary_is_fixed[('metaExactMainRequired',)]",
+        "test_each_execution_boundary_is_fixed[('independentSignedCustodyRequired',)]",
+        "test_each_execution_boundary_is_fixed[('reserveBeforeActivation',)]",
+        "test_each_execution_boundary_is_fixed[('oneActiveExecution',)]",
+        "test_each_execution_boundary_is_fixed[('timeoutConsumesAttempt',)]",
+        "test_each_execution_boundary_is_fixed[('partialPooling',)]",
+        "test_each_execution_boundary_is_fixed[('productAcceptanceRecipeUnchanged',)]",
+        "test_each_execution_boundary_is_fixed[('c1ThroughC7Required',)]",
+        "test_each_execution_boundary_is_fixed[('successor004StillBlocked',)]",
+        "test_each_execution_boundary_is_fixed[('newRepairPacketRequired',)]",
+        "test_each_execution_boundary_is_fixed[('oldBudgetsReset',)]",
+        "test_each_execution_boundary_is_fixed[('productPushOrMerge',)]",
+        "test_each_execution_boundary_is_fixed[('rootPolicyChange',)]",
+        "test_each_execution_boundary_is_fixed[('hostPowerChange',)]",
+        "test_each_execution_boundary_is_fixed[('testFiltering',)]",
+        "test_each_execution_boundary_is_fixed[('testSubstitution',)]",
+        "test_each_execution_boundary_is_fixed[('guardBypass',)]",
+        "test_each_execution_boundary_is_fixed[('dependenciesOrDownloads',)]",
+        "test_each_execution_boundary_is_fixed[('billingChange',)]",
+        "test_each_execution_boundary_is_fixed[('warmSourceAccess',)]",
+        "test_each_execution_boundary_is_fixed[('nativeQualification',)]",
+        "test_each_execution_boundary_is_fixed[('tenantAcceptance',)]",
+        "test_each_execution_boundary_is_fixed[('modelEffortTransition',)]",
+        "test_literal_transport_is_source_identical_and_not_dynamic",
+        "test_fresh_authority_read_rejects_later_drift",
+        "test_duplicate_and_nonfinite_data_refuses[(b'{\"a\":1,\"a\":2}',)]",
+        "test_duplicate_and_nonfinite_data_refuses[(b'{\"x\":NaN}',)]",
+        "test_duplicate_and_nonfinite_data_refuses[(b'{\"x\":Infinity}',)]",
+        "test_synthetic_observer_preserves_results_and_test_body[('pass',)]",
+        "test_synthetic_observer_preserves_results_and_test_body[('failure',)]",
+        "test_synthetic_observer_preserves_results_and_test_body[('error',)]",
+        "test_synthetic_observer_preserves_results_and_test_body[('skip',)]",
+        "test_each_timing_only_case_runs_without_ambient_profiler[(0,)]",
+        "test_each_timing_only_case_runs_without_ambient_profiler[(1,)]",
+        "test_each_timing_only_case_runs_without_ambient_profiler[(2,)]",
+        "test_identity_walk_keeps_every_case_in_order",
+        "test_discovery_mismatch_refuses_before_runner",
+        "test_synthetic_external_path_label_omits_absolute_path",
+        "test_ambient_profiler_refuses_without_touching_it[('legacy',)]",
+        "test_ambient_profiler_refuses_without_touching_it[('reserved',)]",
+        "test_ambient_profiler_refuses_without_touching_it[('events',)]",
+        "test_ambient_profiler_refuses_without_touching_it[('native-cprofile',)]",
+        "test_interference_invalidates_and_preserves_foreign_state[('disabled',)]",
+        "test_interference_invalidates_and_preserves_foreign_state[('replacement',)]",
+        "test_interference_invalidates_and_preserves_foreign_state[('monitoring',)]",
+        "test_real_counter_recursion_builtins_and_thread_scope",
+        "test_observer_setup_failure_leaves_no_owned_hook[('callback',)]",
+        "test_observer_setup_failure_leaves_no_owned_hook[('setup',)]",
+        "test_counter_refuses_unqualified_interpreter[((3, 12, 13),)]",
+        "test_counter_refuses_unqualified_interpreter[((3, 13, 0),)]",
+        "test_counter_has_no_global_monitoring_writes_or_private_runtime_patch",
+        "test_only_two_additional_meta_attempts_and_no_product_budget_change"
+      ],
+      "draftObserverCases": 92,
+      "draftTestsSha256": "f705914f5712cc444a6b0e68c3177597e7d87ec434f9d63d9f97f01990d99918",
+      "evidence": "STATIC_SOURCE_ACCOUNTING_NOT_ACCEPTANCE",
+      "expectedPasses": {
+        "inner": 3997,
+        "outer": 4246
+      },
+      "inheritedExpandedCases": 20,
+      "inheritedParameterExpansion": [
+        {
+          "additionalPacketIds": [
+            "MET-PERF-009",
+            "CONF-DIAG-003"
+          ],
+          "cases": 10,
+          "fields": [
+            "allowedPaths",
+            "prefetchCommands",
+            "offlineAcceptanceCommands",
+            "sourceReuse",
+            "predecessors"
+          ],
+          "module": "custody_handoff",
+          "test": "test_each_new_packet_is_exact_and_cannot_expand_scope"
+        },
+        {
+          "additionalPacketIds": [
+            "MET-PERF-009",
+            "CONF-DIAG-003"
+          ],
+          "cases": 10,
+          "fields": [
+            "allowedPaths",
+            "predecessors",
+            "prefetchCommands",
+            "offlineAcceptanceCommands",
+            "sourceReuse"
+          ],
+          "module": "credential_lifecycle",
+          "test": "test_exact_packet_fields_cannot_expand"
+        }
+      ],
+      "inheritedSkips": 10,
+      "newCaseIds": [
+        "test_reconciliation_keeps_accepted_performance_and_observer",
+        "test_reconciliation_boundary_cannot_be_resealed[('base',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('draft',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('budgets',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('limits',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('retainedMetaFailures',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('retainedDiagnosticFailures',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('predecessorAcceptance',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('proposalSha256',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('proposalMarkdownSha256',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('protectedAcceptedInputs',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('currentFirstOrder',)]",
+        "test_reconciliation_boundary_cannot_be_resealed[('testAccounting',)]",
+        "test_current_first_routing_rejects_old_or_mutated_source[('scripts/validate_custody_handoff.py',)]",
+        "test_current_first_routing_rejects_old_or_mutated_source[('scripts/validate_validation_performance.py',)]",
+        "test_current_first_routing_rejects_old_or_mutated_source[('tests/test_task_packets.py',)]",
+        "test_current_first_routing_rejects_old_or_mutated_source[('tests/test_validation_performance.py',)]",
+        "test_profiling_lookup_retains_unique_match_and_fresh_hashes",
+        "test_reconciliation_budget_keeps_all_prior_attempts_consumed"
+      ],
+      "reconciliationCases": 19,
+      "testsCollectedOrRun": false,
+      "totalAddedCases": 131
+    }
   }
 }

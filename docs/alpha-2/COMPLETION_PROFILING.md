@@ -1,3 +1,83 @@
+# Alpha 2 — existing PR124 reconciliation after accepted validation repair
+
+Owner: MET-PERF-009. Status: ONGOING_PUBLICATION, not accepted. The original draft
+specification below is retained history; this section is the current scope.
+
+Accepted predecessor MET-PERF-010 is main91b320b9f8525e986260fc4792b01f125b5feae9,
+with complete LOCAL, required localhost CI, protected merge and independent LOCAL
+exact-main acceptance. Its source gates do not qualify any provider or product.
+The original PR124 draft1886aa2272f8d8bc73da60ebd7a6738f288de5fb remains in branch
+history; its five failed LOCAL attempts and two old META diagnostics are retained.
+
+The separately approved reconciliation preserves all167 accepted packet YAML,
+all accepted authority JSON, the safe fixture helper and all17 local digest
+optimizations. Only84 named paths are owned; the two additional validation-owner
+paths permit closed successor accounting and regressions. The diagnostic observer
+stays byte-identical. No product, warm source or runtime behavior is changed.
+The combined catalog contains169 specifications:167 accepted plus009/CONF-DIAG-003.
+
+Current-first source checks normalize only through reconciled009 -> accepted010
+-> older authorities, validating exact live bytes before each historical step.
+All existing fresh-read, digest, duplicate-match and mutation checks remain.
+Historical source is data, never imported/executed. Reject unknown/stale source,
+skipped010 normalization, substituted records and added permissions.
+
+## Execution budget and complete verification
+
+META LOCAL maximum7 total:1–5 remain consumed; only6/7 are newly authorized.
+Existing CI maximum2 and independent LOCAL exact-main maximum1 remain unchanged.
+No extra META diagnostics, subsets, collection-only, benchmark or product run.
+Each ordinal must be durably reserved before signing/activation; no reset or
+transfer. Exactly one active verification. A bounded source correction may use
+the remaining LOCAL ordinal, and CI requires fresh full exact-source LOCAL pass.
+
+All37 accepted predecessor direct argv remain; the profiling validator is inserted
+before full pytest, giving38 commands. Both complete nested and outer suites,
+original tests/assertions and inherited isolation skips remain. Exact expected
+case counts, including new packet-driven parameter expansions, are source/data
+accounted and pinned in architecture/completion-profiling.json before execution.
+Counts are expectations, not retrospective acceptance or a unique-test sum.
+
+Use only the existing signed deny-all-outbound localhost launcher/toolchain.
+Full LOCAL/exact-main <=750 seconds; nested420/trusted900/workflow15min unchanged.
+No root/key/admin/power/isolation/timeout changes, new dependencies, downloads,
+hosted runner, cloud provisioning, paid APIs, telemetry or artifact uploads.
+
+Keep the existing branch and PR124; no rebase or force-push. After full LOCAL,
+publish the reconciled head, verify required localhost CI and runner cleanup,
+then protected squash merge the exact green head. Independently verify the
+actual main commit and exact tested tree. Retain every source/signature/command/
+timing/reservation/failure/cleanup record. Failure or exhaustion leaves the draft
+unaccepted; any broader repair needs a separate decision.
+
+## Product and roadmap boundaries
+
+CONF-DIAG-003 remains WAITING_META_SOURCE_GATES: its one read-only diagnostic is
+a separate subsequent turn, not execution here. Its exact25fab12/135-file subject,
+1397 backend cases,1394 function profiles and3 timing-only cases are unchanged.
+The previous CONF-FIX-007 LOCAL3/3 remains exhausted. Observation cannot complete
+that packet. Any measured correction needs a new bounded owner decision, C1–C7,
+all1277 predecessor test identities, full8-command acceptance, CI/merge/exact-main.
+CONF-LIVE-004 remains WAITING_PREDECESSOR_CORRECTION;005/006 andCONF-A2-001 wait.
+
+The adopted16-harness/four-plane/13-repository research-led OSS map is retained.
+At least one qualified baseline per released capability remains the enterprise
+minimum. No provider/runtime, native Linux, artifact release or tenant acceptance
+is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
+
+| Phase | ID | Status | Description |
+|---|---|---|---|
+| Phase0 / Alpha1 | Foundations | DONE_RECORDED | Historical source/offline evidence |
+| Alpha2 | MET-ADOPT-002 | DONE_RECORDED | Research/OSS direction retained |
+| Alpha2 | MET-PERF-010 | DONE_SOURCE_GATES | Accepted validation repair |
+| Alpha2 | MET-PERF-009 / PR124 | ONGOING_PUBLICATION | This reconciliation; full gates required |
+| Alpha2 | CONF-DIAG-003 | WAITING_META_SOURCE_GATES | Separate read-only diagnostic |
+| Alpha2 | CONF-FIX-007 | BLOCKED_LOCAL_BUDGET_EXHAUSTED | No product acceptance renewal |
+| Alpha2 | CONF-LIVE-004/005/006; CONF-A2-001 | WAITING_PREDECESSOR_CORRECTION | Native/integrated qualification |
+| Alpha3 / Alpha4 | Later roadmap | WAITING | Governed actions and enterprise release |
+
+## Retained original draft specification — historical, not current allowance
+
 # Alpha 2 - completion profiling after exhausted LOCAL acceptance
 
 Owner: MET-PERF-009. Companion: CONF-DIAG-003. META_PLANNING_ONLY.

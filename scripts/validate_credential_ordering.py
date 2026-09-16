@@ -111,8 +111,9 @@ def current_test_bytes(before):
     """Compose the previous accepted recipe with this exact successor, not a cache."""
     require(type(before) is bytes, "test bytes required")
     record = _record()
+    input_digest = digest(before)
     matches = [(p, r) for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     require(len(matches) == 1, "exact predecessor test bytes required")
     return broker_current(apply_recipe(before, matches[0][1]))
 
@@ -182,7 +183,7 @@ def validate_credential_ordering(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(broker_history(path, inputs[path])) == checksum, "changed input: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 141 and len(packets) == 168 and set(packets) == old | {"MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-009", "CONF-DIAG-003"},
+        require(len(old) == 141 and len(packets) == 169 and set(packets) == old | {"MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003"},
                 "141 immutable predecessors and one exact addition required")
         for name in old | {"MET-REPAIR-013"}:
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/" + name + ".yaml"])),
@@ -228,7 +229,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential ordering valid: 168 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
+        print("Credential ordering valid: 169 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.")
     return int(bool(errors))
 
 

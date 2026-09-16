@@ -10,6 +10,7 @@ import jsonschema
 import pytest
 import yaml
 from scripts.safe_yaml import safe_load as safe_yaml_load
+from fixture_yaml import dump_fixture
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,7 +52,7 @@ def _read_yaml(path: Path) -> dict:
 
 def _write_yaml(path: Path, value: dict) -> None:
     path.write_text(
-        yaml.safe_dump(value, sort_keys=False, width=1000),
+        dump_fixture(value),
         encoding="utf-8",
     )
 
@@ -66,7 +67,7 @@ def test_canonical_authorities_are_closed_and_deterministic() -> None:
     assert report.accounted_source_inputs == 5
     assert report.public_sha_pins == 5
     assert report.metadata_omitted_inputs == 0
-    assert report.task_packets == 168
+    assert report.task_packets == 169
     assert report.tree_discovery_records == 905
     assert report.blob_pending_records == 4202
     assert report.blob_copy_authorized_records == 0

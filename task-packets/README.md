@@ -1,16 +1,29 @@
 # Sol-High Task Packet Catalog
 
-## Current execution gate - MET-PERF-009
+## Current execution gate - MET-PERF-009 reconciliation
 
-[Completion profiling amendment](../docs/alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING;
-CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED (3/3). Draft PR18 stays unmerged.
-MET-PERF-009 ONGOING_PUBLICATION; CONF-DIAG-003 WAITING_META_SOURCE_GATES.
-One read-only whole-backend diagnostic, zero retries; not a fourth acceptance run.
-C1-C7, full8-command acceptance, CI/merge/exact-main and CONF-LIVE-004
-WAITING_PREDECESSOR_CORRECTION remain unchanged. Catalog168 specifications;
-all166 old YAML stay byte-immutable. No product execution in this META packet.
-The [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md) remains adopted;
-no replacement of the reuse-first roadmap or qualification claim.
+[Completion profiling reconciliation](../docs/alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING.
+MET-PERF-010 DONE_SOURCE_GATES at91b320b; accepted performance repair preserved.
+PR124 reconciliation ONGOING_PUBLICATION; LOCAL6/7 only (five old attempts consumed),
+CI2/exact-main1 maximum; full38 commands and both complete META suites.
+Catalog169 specifications; all167 accepted packet YAML and authority JSON immutable.
+CONF-DIAG-003 WAITING_META_SOURCE_GATES; no product execution in this coding turn.
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED; C1-C7 and full8-command acceptance remain.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; no native/runtime/tenant promotion.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
+## Current execution gate - MET-PERF-010
+
+[Bounded validation repair](../docs/alpha-2/VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
+Independent accepted-base repair, not acceptance or amendment of draft PR124.
+LOCAL3 total (1/2 consumed;3 supplemental), CI2/exact-main1 maximum. All old budgets remain closed.
+Full37-command recipe, fresh integrity checks and inherited tests/skips retained.
+Catalog167; all166 old packet YAML immutable. No product or provider execution.
+CONF-FIX-007 and CONF-DIAG-003 remain waiting; CONF-LIVE-004
+WAITING_PREDECESSOR_CORRECTION. Preserve the [all16 research/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
 Model-effort transition NOT_DUE.
 
 ## Retained planning and historical checkpoints
@@ -442,8 +455,9 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 164 | `MET-REPAIR-017` | `Harness-Engineering` | Publish conformance completion correction and mandatory successor gate |
 | 165 | `CONF-FIX-007` | `mas-harness-conformance-labs` | Complete fixed qualifier, broker handoff, exact-UID cleanup and server integration |
 | 166 | `MET-ADOPT-002` | `Harness-Engineering` | Publish all16 harness research/OSS adoption map and reuse-first delivery gates |
-| 167 | `MET-PERF-009` | `Harness-Engineering` | Publish bounded completion profiling after exhausted LOCAL acceptance |
-| 168 | `CONF-DIAG-003` | `mas-harness-conformance-labs` | One read-only full-backend diagnostic; never product acceptance |
+| 167 | `MET-PERF-010` | `Harness-Engineering` | Bounded validator digest and safe fixture serialization repair |
+| 168 | `MET-PERF-009` | `Harness-Engineering` | Reconciled bounded completion profiling; existing PR124 |
+| 169 | `CONF-DIAG-003` | `mas-harness-conformance-labs` | One separate read-only full-backend diagnostic; no acceptance |
 
 This table is a valid topological order. Parallel execution is permitted only when all predecessors are complete and the packet boundaries do not conflict.
 

@@ -121,10 +121,11 @@ def historical_bytes(path, raw):
 def current_test_bytes(before):
     require(type(before) is bytes, "test bytes")
     record = _record()
+    input_digest = digest(before)
     matches = [r for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
-        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
+        require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
         return publication_current(before)
     require(len(matches) == 1, "unique predecessor")
     return publication_current(apply_recipe(before, matches[0]))
@@ -208,7 +209,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(publication_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 161 and len(packets) == 168 and set(packets) == old | set(NEW_IDS) | {'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-009', 'CONF-DIAG-003'}, '161 unchanged plus one META')
+        require(len(old) == 161 and len(packets) == 169 and set(packets) == old | set(NEW_IDS) | {'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003'}, '161 unchanged plus one META')
         require('CONF-PERF-005' not in packets, 'no speculative repair')
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet source parity')
@@ -245,4 +246,4 @@ if __name__ == '__main__':
     if errors:
         print('\n'.join(errors))
         raise SystemExit(1)
-    print('Local acceptance authority valid:168 specifications;161 unchanged packets; one additional local-only attempt.')
+    print('Local acceptance authority valid:169 specifications;161 unchanged packets; one additional local-only attempt.')

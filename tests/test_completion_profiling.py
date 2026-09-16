@@ -22,7 +22,7 @@ def authority():
 def test_all166_packets_and_inherited_test_ids_preserved(authority):
     assert module.validate_authority(*authority) == []
     packets, record, inputs = authority
-    assert len(packets) == 168
+    assert len(packets) == 169
     for path, rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
         assert module.apply_recipe(before,rule) == inputs[path]
@@ -302,3 +302,83 @@ def test_only_two_additional_meta_attempts_and_no_product_budget_change(authorit
     assert spec['priorBudget']['remainingLocal'] == 0 and spec['recipe']['attemptsMaximum'] == 1
     grant['additionalLocalMaximum'] = 3
     with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
+
+
+def test_reconciliation_keeps_accepted_performance_and_observer(authority):
+    from scripts import validate_validation_performance as repair
+    packets, record, inputs = authority
+    spec = module.parse(inputs[module.SPEC_PATH])
+    grant = spec['reconciliation']
+    assert grant['base'] == '91b320b9f8525e986260fc4792b01f125b5feae9'
+    assert grant['draft'] == '1886aa2272f8d8bc73da60ebd7a6738f288de5fb'
+    assert len(packets) == 169
+    assert len([p for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')]) == 167
+    assert packets['MET-PERF-009']['predecessors'] == ['MET-PERF-010']
+    commands = packets['MET-PERF-009']['offlineAcceptanceCommands']
+    assert len(commands) == 38
+    assert commands[:-3] + commands[-2:] == packets['MET-PERF-010']['offlineAcceptanceCommands']
+    assert module.digest(inputs[module.PROGRAM_PATH]) == 'cea27b7a29a7d0aa2d944f7e2389c53f015e627922c6e4a0348ce7c78d9373b9'
+    path = 'tests/test_task_packets.py'
+    current = inputs[path]
+    accepted = module.historical_bytes(path,current)
+    assert module.digest(accepted) == record['metaRecipes'][path]['beforeSha256']
+    old = repair.historical_bytes(path,current)
+    assert module.digest(accepted) == repair._record()['metaRecipes'][path]['afterSha256']
+    assert module.digest(old) == repair._record()['metaRecipes'][path]['beforeSha256']
+    assert current != accepted != old
+    assert repair.current_test_bytes(old) == current
+
+
+@pytest.mark.parametrize('field',[
+    'base','draft','budgets','limits','retainedMetaFailures','retainedDiagnosticFailures',
+    'predecessorAcceptance','proposalSha256','proposalMarkdownSha256','protectedAcceptedInputs',
+    'currentFirstOrder','testAccounting',
+])
+def test_reconciliation_boundary_cannot_be_resealed(authority,field):
+    spec = module.parse(authority[2][module.SPEC_PATH])
+    spec['reconciliation'][field] = None
+    with pytest.raises(ValueError): module.validate_spec(spec,bind=False)
+
+
+@pytest.mark.parametrize('path',[
+    'scripts/validate_custody_handoff.py','scripts/validate_validation_performance.py',
+    'tests/test_task_packets.py','tests/test_validation_performance.py',
+])
+def test_current_first_routing_rejects_old_or_mutated_source(authority,path):
+    from scripts import validate_validation_performance as repair
+    inputs = authority[2]
+    current = inputs[path]
+    accepted = module.historical_bytes(path,current)
+    assert module.apply_recipe(accepted,authority[1]['metaRecipes'][path]) == current
+    with pytest.raises(ValueError): module.historical_bytes(path,accepted)
+    with pytest.raises(ValueError): module.historical_bytes(path,current+b'\n# altered\n')
+    with pytest.raises(ValueError): repair.historical_bytes(path,accepted)
+
+
+def test_profiling_lookup_retains_unique_match_and_fresh_hashes(authority,monkeypatch):
+    path = 'tests/test_task_packets.py'
+    current = authority[2][path]
+    before = module.historical_bytes(path,current)
+    original = module.digest
+    calls = []
+    def digest(raw):
+        calls.append(raw)
+        return original(raw)
+    monkeypatch.setattr(module,'digest',digest)
+    assert module.current_test_bytes(before) == current
+    assert sum(raw == before for raw in calls) == 2
+    record = deepcopy(module._record())
+    record['metaRecipes']['tests/duplicate.py'] = deepcopy(record['metaRecipes'][path])
+    monkeypatch.setattr(module,'_record',lambda:record)
+    with pytest.raises(ValueError): module.current_test_bytes(before)
+
+
+def test_reconciliation_budget_keeps_all_prior_attempts_consumed(authority):
+    grant = module.parse(authority[2][module.SPEC_PATH])['reconciliation']
+    assert grant['budgets'] == {'LOCAL':7,'newLocalOrdinals':[6,7],
+        'retainedLocalOrdinals':[1,2,3,4,5],'CI':2,'LOCAL_EXACT_MAIN':1,
+        'diagnostics':0,'productExecutions':0,'reset':False,'transfer':False}
+    assert [row['ordinal'] for row in grant['retainedMetaFailures']] == [1,2,3,4,5]
+    assert all(row['exitCode'] != 0 for row in grant['retainedMetaFailures'])
+    assert len(grant['retainedDiagnosticFailures']) == 2
+    assert grant['predecessorAcceptance']['status'] == 'FULL_LOCAL_ACCEPTANCE_VERIFIED'

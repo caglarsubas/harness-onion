@@ -16,10 +16,10 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/completion-profiling-authority.json"
-RECORD_SHA256 = "7d555ca915f61c476131343736a9d02a08cf44120f4a0a3827f465d443a6b02c"
+RECORD_SHA256 = "abcd5ee23eaf9eb6da9ff8e40bff867fbae4c2cec75d53f9c23273e3b8e3c76a"
 NEW_IDS = ("MET-PERF-009", "CONF-DIAG-003")
-RECORD_FILE_SHA256 = "bcecaaa50b0fc028783e34f61076254974dff0be62cf5dc5580b8b18e497e7f0"
-HISTORY_PATHS = frozenset(["README.md","docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/CANONICAL_REPAIR_PLAN.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_backend_timing.py","scripts/validate_broker_handoff.py","scripts/validate_canonical_repair_plan.py","scripts/validate_ci_performance.py","scripts/validate_conformance_completion.py","scripts/validate_conformance_consumer_closure.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_conformance_publication.py","scripts/validate_conformance_reference_measurement.py","scripts/validate_conformance_successor_checkpoint.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_local_acceptance.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_provider_adoption.py","scripts/validate_proxy_contract.py","scripts/validate_proxy_diagnostics.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_research_adoption.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_backend_timing.py","tests/test_broker_handoff.py","tests/test_canonical_repair_plan.py","tests/test_ci_performance.py","tests/test_conformance_completion.py","tests/test_conformance_consumer_closure.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_conformance_publication.py","tests/test_conformance_reference_measurement.py","tests/test_conformance_successor_checkpoint.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_local_acceptance.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_provider_adoption.py","tests/test_proxy_contract.py","tests/test_proxy_diagnostics.py","tests/test_research_adoption.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py"])
+RECORD_FILE_SHA256 = "19b97e955a280cee0e2e9f4afa8bc38eb344f59924ef6a37dd277334cf2474d9"
+HISTORY_PATHS = frozenset(["README.md","docs/DEVELOPMENT_STATUS.md","docs/MASTER_DEVELOPMENT_PLAN.md","docs/READINESS_INDEX.md","docs/alpha-2/CANONICAL_REPAIR_PLAN.md","docs/alpha-2/LIVE_BACKEND_READINESS.md","docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md","docs/repositories/00-harness-engineering.md","docs/repositories/12-mas-harness-conformance-labs.md","scripts/validate_backend_timing.py","scripts/validate_broker_handoff.py","scripts/validate_canonical_repair_plan.py","scripts/validate_ci_performance.py","scripts/validate_conformance_completion.py","scripts/validate_conformance_consumer_closure.py","scripts/validate_conformance_performance.py","scripts/validate_conformance_performance_followup.py","scripts/validate_conformance_publication.py","scripts/validate_conformance_reference_measurement.py","scripts/validate_conformance_successor_checkpoint.py","scripts/validate_credential_lifecycle.py","scripts/validate_credential_ordering.py","scripts/validate_custody_handoff.py","scripts/validate_linux_readiness.py","scripts/validate_linux_repair.py","scripts/validate_linux_test_ownership.py","scripts/validate_live_backend_readiness.py","scripts/validate_local_acceptance.py","scripts/validate_model_api_inventory.py","scripts/validate_model_fixture_scope.py","scripts/validate_native_qualification.py","scripts/validate_packet_scalar_repair.py","scripts/validate_policy_observation.py","scripts/validate_provider_adoption.py","scripts/validate_proxy_contract.py","scripts/validate_proxy_diagnostics.py","scripts/validate_readiness.py","scripts/validate_readiness_repairs.py","scripts/validate_research_adoption.py","scripts/validate_reuse.py","scripts/validate_successor_inventory.py","scripts/validate_validation_performance.py","task-packets/README.md","tests/test_alpha2_readiness.py","tests/test_backend_timing.py","tests/test_broker_handoff.py","tests/test_canonical_repair_plan.py","tests/test_ci_performance.py","tests/test_conformance_completion.py","tests/test_conformance_consumer_closure.py","tests/test_conformance_performance.py","tests/test_conformance_performance_followup.py","tests/test_conformance_publication.py","tests/test_conformance_reference_measurement.py","tests/test_conformance_successor_checkpoint.py","tests/test_credential_lifecycle.py","tests/test_credential_ordering.py","tests/test_custody_handoff.py","tests/test_linux_readiness.py","tests/test_linux_repair.py","tests/test_linux_test_ownership.py","tests/test_live_backend_readiness.py","tests/test_local_acceptance.py","tests/test_model_api_inventory.py","tests/test_model_fixture_scope.py","tests/test_native_qualification.py","tests/test_packet_scalar_repair.py","tests/test_policy_observation.py","tests/test_provider_adoption.py","tests/test_proxy_contract.py","tests/test_proxy_diagnostics.py","tests/test_research_adoption.py","tests/test_reuse.py","tests/test_successor_inventory.py","tests/test_task_packets.py","tests/test_validation_performance.py"])
 
 
 def require(ok, message):
@@ -115,10 +115,11 @@ def historical_bytes(path, raw):
 def current_test_bytes(before):
     require(type(before) is bytes, "test bytes")
     record = _record()
+    input_digest = digest(before)
     matches = [r for p, r in record["metaRecipes"].items()
-               if p.startswith("tests/") and r["beforeSha256"] == digest(before)]
+               if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
-        require(digest(before) in record["unchangedTests"].values(), "unreviewed unchanged test")
+        require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
         return before
     require(len(matches) == 1, "unique predecessor")
     return apply_recipe(before, matches[0])
@@ -149,8 +150,8 @@ def test_ids(raw):
 
 
 SPEC_PATH = "architecture/completion-profiling.json"
-EXPECTED_SPEC_SHA256 = "618395238c7e3bd02924ac17fd0b0393c04cd557477e276afce4d58902ebed1e"
-EXPECTED_MEMBER_DIGESTS = {"schemaVersion":"f48feb29e86fe7696d5fe7a78c9b916c45d6551cd2db6e7f14e9f5d03d20cf4c","metaPacketId":"46be3e785b995a9dbbd723cfe74174fea3b39b8033aa5aeb19acaaa5b3a5d8d8","packetId":"891dc8854df736144642cd036db678b70eed392898ce624c70fb94e3efb9dad1","metaBase":"3de6e576663e65780420417e1079c6d3b8c2a557bbe8e447079c5d30a57730b8","evidenceClass":"f07fb1e0dee93df27db723be730e0723c84c2e49b5fe6a0d0cc94a4794a45002","sourceOwner":"5feb221f567fb6537008aaacde4aae9158a8363674655382aa93fcdb01a07e68","sourceEdits":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","diagnosticIsAcceptance":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","optimizationAuthorized":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","requiresBranchOrPr":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","acceptedSourcePredecessor":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","metaValidationExtension":"37f1d741451f928dba0507eca469eb6363afeacde80c8f46b6f3c9bf20f3cfa2","subject":"4b61d4546670821f199d00ccd7ed2e83e5567fcbfac2bdfa2d97a9e66a1422c0","priorFailures":"91c70a9df9b2b1a8a450e699593c304da3cb6ff9a45f786f22c500b10b9de9bb","priorBudget":"e1c4afa7dca74e8c94a01bb1cee66bfeb89e0472c45376391f61f79ef9560cfb","recipe":"ac12431f10af93d88d47f0ba946394fba24a6fcae4f9b4d554d1764879b72c5a","program":"a9476f361d50efb7efdeeb4e394f656d5a92eb98f5027f52438f8f5e2c9c0161","toolchain":"961c3bc7912245087f7c3e6a973de2e47c213318160d213567574c38eda25baf","contractPins":"47f5bf36e356e8792b6622f8d1eb7315b394d72e6653a160348c11d093bf32f3","limitations":"07346f4f1c54a9402210e89f3c433f70246c8d973004e2e1f879e046fcdd1ded","gates":"91b5c648408dd9556570750fc1fbd42f31c3e8d19b8fa09de731c04cfcec541a"}
+EXPECTED_SPEC_SHA256 = "c3340b25567bbb388c144b7546a3f141cc84ccd03ff1545d592230ab49776b7e"
+EXPECTED_MEMBER_DIGESTS = {"schemaVersion":"f48feb29e86fe7696d5fe7a78c9b916c45d6551cd2db6e7f14e9f5d03d20cf4c","metaPacketId":"46be3e785b995a9dbbd723cfe74174fea3b39b8033aa5aeb19acaaa5b3a5d8d8","packetId":"891dc8854df736144642cd036db678b70eed392898ce624c70fb94e3efb9dad1","metaBase":"8d6b1ab1683ef609351b74b281e96c2d8f1b822e1d82804a22978b651f9bb5dd","evidenceClass":"f07fb1e0dee93df27db723be730e0723c84c2e49b5fe6a0d0cc94a4794a45002","sourceOwner":"5feb221f567fb6537008aaacde4aae9158a8363674655382aa93fcdb01a07e68","sourceEdits":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","diagnosticIsAcceptance":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","optimizationAuthorized":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","requiresBranchOrPr":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","acceptedSourcePredecessor":"fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa","metaValidationExtension":"37f1d741451f928dba0507eca469eb6363afeacde80c8f46b6f3c9bf20f3cfa2","subject":"4b61d4546670821f199d00ccd7ed2e83e5567fcbfac2bdfa2d97a9e66a1422c0","priorFailures":"91c70a9df9b2b1a8a450e699593c304da3cb6ff9a45f786f22c500b10b9de9bb","priorBudget":"e1c4afa7dca74e8c94a01bb1cee66bfeb89e0472c45376391f61f79ef9560cfb","recipe":"ac12431f10af93d88d47f0ba946394fba24a6fcae4f9b4d554d1764879b72c5a","program":"a9476f361d50efb7efdeeb4e394f656d5a92eb98f5027f52438f8f5e2c9c0161","toolchain":"961c3bc7912245087f7c3e6a973de2e47c213318160d213567574c38eda25baf","contractPins":"47f5bf36e356e8792b6622f8d1eb7315b394d72e6653a160348c11d093bf32f3","limitations":"07346f4f1c54a9402210e89f3c433f70246c8d973004e2e1f879e046fcdd1ded","gates":"91b5c648408dd9556570750fc1fbd42f31c3e8d19b8fa09de731c04cfcec541a","reconciliation":"c2a7c8be246208275f8ac37a2cf165219ab9b545ce7eedb5dcbdb3edab0badfe"}
 PROGRAM_PATH = "diagnostics/conf_diag_003.py"
 PROGRAM_SHA256 = "cea27b7a29a7d0aa2d944f7e2389c53f015e627922c6e4a0348ce7c78d9373b9"
 
@@ -184,6 +185,15 @@ def validate_spec(spec, *, bind=True):
             and spec['sourceOwner'] == 'CONF-FIX-007', 'exact owners')
     for key in ('sourceEdits','diagnosticIsAcceptance','optimizationAuthorized','requiresBranchOrPr','acceptedSourcePredecessor'):
         require(spec[key] is False, 'no product or acceptance grant')
+    grant = spec['reconciliation']
+    require(spec['metaBase'] == grant['base'] == '91b320b9f8525e986260fc4792b01f125b5feae9'
+            and grant['draft'] == '1886aa2272f8d8bc73da60ebd7a6738f288de5fb', 'exact reconciled sources')
+    require(grant['budgets'] == {'LOCAL':7,'newLocalOrdinals':[6,7],
+        'retainedLocalOrdinals':[1,2,3,4,5],'CI':2,'LOCAL_EXACT_MAIN':1,
+        'diagnostics':0,'productExecutions':0,'reset':False,'transfer':False}, 'finite reconciliation allowance')
+    require([r['ordinal'] for r in grant['retainedMetaFailures']] == [1,2,3,4,5]
+            and all(r['exitCode'] != 0 for r in grant['retainedMetaFailures']), 'all original failures retained')
+    require(grant['currentFirstOrder'] == ['MET-PERF-009','MET-PERF-010','MET-ADOPT-002','OLDER_IMMUTABLE_AUTHORITIES'], 'one-way historical normalization')
     recipe, subject = spec['recipe'], spec['subject']
     ids = recipe['expectedTestIds']
     require(type(ids) is list and ids == sorted(set(ids)) and len(ids) == recipe['testCount'] == 1397, 'all backend identities')
@@ -220,16 +230,16 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 166 and len(packets) == 168 and set(packets) == old | set(NEW_IDS), '166 immutable plus two new packets')
+        require(len(old) == 167 and len(packets) == 169 and set(packets) == old | set(NEW_IDS), '167 immutable plus two new packets')
         for name in packets:
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'raw packet parity')
         meta, replay = (packets[name] for name in NEW_IDS)
-        require(meta['allowedPaths'] == record['ownedPaths'] and meta['predecessors'] == ['MET-ADOPT-002']
+        require(meta['allowedPaths'] == record['ownedPaths'] and meta['predecessors'] == ['MET-PERF-010']
                 and meta['repository'] == 'Harness-Engineering', 'META-only publication owner')
-        commands, prior = meta['offlineAcceptanceCommands'], packets['MET-ADOPT-002']['offlineAcceptanceCommands']
-        require(len(commands) == 37 and commands[:-3] == prior[:-2] and commands[-2:] == prior[-2:]
+        commands, prior = meta['offlineAcceptanceCommands'], packets['MET-PERF-010']['offlineAcceptanceCommands']
+        require(len(commands) == 38 and commands[:-3] == prior[:-2] and commands[-2:] == prior[-2:]
                 and commands[-3] == ['uv','run','--offline','--frozen','--no-sync','python','scripts/validate_completion_profiling.py']
-                and meta['offlineExecution'] == packets['MET-ADOPT-002']['offlineExecution'], 'whole36-command predecessor recipe')
+                and meta['offlineExecution'] == packets['MET-PERF-010']['offlineExecution'], 'whole37-command predecessor recipe')
         spec = parse(inputs[SPEC_PATH]); validate_spec(spec); validate_program(inputs[PROGRAM_PATH],spec)
         require(replay['repository'] == 'mas-harness-conformance-labs'
                 and replay['allowedPaths'] == ['tests/live_backend/test_proxy_server.py']
@@ -242,6 +252,8 @@ def validate_authority(packets, record, inputs):
                     and 'liveCampaignExecution' not in packet, 'no source reuse or live authority')
         for path, checksum in spec['contractPins'].items():
             require(digest(inputs[path]) == checksum, 'unchanged completion/reuse contract')
+        for path, checksum in spec['reconciliation']['protectedAcceptedInputs'].items():
+            require(digest(inputs[path]) == checksum, 'accepted performance input changed')
         for path, rule in record['metaRecipes'].items():
             before = historical_bytes(path,inputs[path])
             require(apply_recipe(before,rule) == inputs[path], 'exact reversible metadata')
@@ -261,4 +273,4 @@ if __name__ == '__main__':
     errors = validate_authority(packets,*load_inputs(ROOT))
     if errors:
         print('\n'.join(errors)); raise SystemExit(1)
-    print('Completion profiling authority valid:168 specifications;166 immutable packets; one diagnostic, no acceptance reset.')
+    print('Completion profiling authority valid:169 specifications;167 immutable packets; one diagnostic, no acceptance reset.')
