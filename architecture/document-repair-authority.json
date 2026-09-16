@@ -1,10 +1,10 @@
 {
   "authorityPacket": "MET-PERF-011",
   "inputFiles": {
-    "architecture/document-repair-plan.json": "5caf3c347fb5b0544e44cfe625f58d422b35d86ca78745d84bab27fa315dc925",
-    "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md": "204deec7865ad127db4b27b3fcf99851460e0c6d44904df79f70831d42e5c470",
-    "task-packets/MET-PERF-011.yaml": "5d2ffd2571c89d5072da00fbdeb370b20ebff1c92c32f03e5b940ab8515c594d",
-    "tests/test_document_repair_plan.py": "6030c3bd63cd53a5ef02e3e0fea411c92fe6149a77bc96449fc69382eafbd781"
+    "architecture/document-repair-plan.json": "c1de038cc085efca67acb5712672c22967f6b80fd27c068ba3295df42cd4ac31",
+    "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md": "4b9a0cd2a105c963f94ded7304ee047245265901bed06baaba4af6e0f0cb630d",
+    "task-packets/MET-PERF-011.yaml": "a34726125505361a7498353f0211a1673a570032221ef40e2b0487f8b0255f62",
+    "tests/test_document_repair_plan.py": "7a06988c76f4be7cb17ffa576326277e28401265ec5ac9838e78040b2bca7f9a"
   },
   "metaBaseline": "5c5695e8bcd0ba95ff655b06ac397ef11f6cf0e0",
   "metaRecipes": {
@@ -861,12 +861,17 @@
       ]
     },
     "tests/test_credential_lifecycle.py": {
-      "afterSha256": "9066427bcaef5ed541cadc80eee66373054ae8c5953cfdf4daf7d72c5a5720c0",
+      "afterSha256": "fd428dee1ccdcc70f9dfc93878bb8fa1dcc64da9cc4df8aca644c8c6722e841f",
       "beforeSha256": "666ff5ebc985a0eca691eeb8d09320805d211a9f98f2e6634cc442dea769bcf0",
       "replacements": [
         {
           "after": "    assert len(packets) == 170 and len(record[\"protectedFiles\"]) == 245\n",
           "before": "    assert len(packets) == 169 and len(record[\"protectedFiles\"]) == 245\n",
+          "count": 1
+        },
+        {
+          "after": "    if kind == \"assertion\":\n        target = b\"assert len(paths) == 186\"\n        assert current[path].count(target) == 1\n        current[path] = current[path].replace(target, b\"assert True\", 1)\n",
+          "before": "    if kind == \"assertion\": current[path] = current[path].replace(b\"assert len(paths) == 185\", b\"assert True\", 1)\n",
           "count": 1
         }
       ]
@@ -1196,7 +1201,7 @@
     "tests/test_validation_performance.py"
   ],
   "packetDigests": {
-    "MET-PERF-011": "ad4313dfe9f4af103dd6869bc134bdf34f56bacea646c71699b538dbb77ac747"
+    "MET-PERF-011": "a989f32f691171a631a2fbb9739da4308383eb7d38d764ac7e9f0982500dc799"
   },
   "protectedFiles": {
     "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",

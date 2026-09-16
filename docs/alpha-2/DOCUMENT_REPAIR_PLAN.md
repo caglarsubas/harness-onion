@@ -58,7 +58,13 @@ Then require full eight-command product acceptance, every inherited identity/ass
 
 Preserve all169 old packet YAML, every accepted authority JSON, immutable observer, release/reuse/toolchain locks and tests. Add only MET-PERF-011, its plan/closed source-accounting validator/tests, and exact catalog/current-first navigation bridges.170 specifications. All38 predecessor commands remain; add this plan validator before full pytest for39 commands. Both full nested/outer selections, isolation skips and fresh-read/digest checks remain. No subsets, standalone repository test execution or timeout changes.
 
-Finite META-only caps: LOCAL2, required localhost CI2, independent LOCAL exact-main1. Reserve each ordinal before signing/activation; every failure/timeout/interruption consumes it. Source fixes require remaining LOCAL and fresh exact-source full success before CI. Product runs0, diagnostics0; old budgets never reset or transfer. Use the existing signed localhost launcher/profile; no root/key/admin/power/provisioning changes. Stop on exhaustion or scope drift.
+Finite META-only caps: LOCAL3, required localhost CI2, independent LOCAL exact-main1. Reserve each ordinal before signing/activation; every failure/timeout/interruption consumes it. Source fixes require remaining LOCAL and fresh exact-source full success before CI. Product runs0, diagnostics0; old budgets never reset or transfer. Use the existing signed localhost launcher/profile; no root/key/admin/power/provisioning changes. Stop on exhaustion or scope drift.
+
+## Approved focused correction and local ordinal 3
+
+The user approved one additional LOCAL attempt after both original attempts failed. Ordinals 1 and 2 remain consumed; total LOCAL maximum is 3, and only ordinal 3 is newly available. CI2 and exact-main1 are unchanged and remain gated on fresh complete LOCAL success. Every timeout and isolation limit remains unchanged.
+
+The correction updates the negative test's exact mutation target from the obsolete 185-file assertion to the current 186-file assertion, asserts that the target occurs exactly once, and preserves the existing rejection assertion. No test identity, selection or expected case count changes. The plan record retains both failures and original approval/helper hashes. Original operator evidence is immutable; the additional authorization uses separately versioned helpers and approval.
 
 ## Current roadmap
 

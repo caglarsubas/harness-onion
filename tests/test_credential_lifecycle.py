@@ -307,7 +307,10 @@ def test_meta_reconciliation_has_no_broad_test_exemption(authority, kind):
     if kind == "extra": current["tests/unowned.py"] = b"pass\n"
     if kind == "before": before += b" "
     if kind == "record": record["metaReconciliation"]["currentPacketCount"] = 142
-    if kind == "assertion": current[path] = current[path].replace(b"assert len(paths) == 185", b"assert True", 1)
+    if kind == "assertion":
+        target = b"assert len(paths) == 186"
+        assert current[path].count(target) == 1
+        current[path] = current[path].replace(target, b"assert True", 1)
     if kind == "skip": current[path] = b"import pytest\npytest.skip('fast', allow_module_level=True)\n" + current[path]
     if kind == "unknown-recipe": record["metaReconciliation"]["testRecipes"]["unowned"] = {}
     assert validate_meta_test_preservation(record, before, current)

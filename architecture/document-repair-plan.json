@@ -3,7 +3,7 @@
     "diagnostics": 0,
     "metaCI": 2,
     "metaExactMain": 1,
-    "metaLocal": 2,
+    "metaLocal": 3,
     "oldReset": false,
     "oldTransfer": false,
     "productRuns": 0,
@@ -166,6 +166,52 @@
     "nested": 420,
     "trusted": 900,
     "workflowMinutes": 15
+  },
+  "localBudgetExtension": {
+    "additionalLocalMaximum": 1,
+    "approvedProposalSha256": "212c8694de41f322fc69e80ebb62cf347f396d777b486b901c5f387608390980",
+    "newLocalOrdinals": [
+      3
+    ],
+    "oldApprovalSha256": "4e748fd6284f8a9e9c621fa3f3499bedc61c80ecb321a5bbf28b74e548be8921",
+    "oldHelpers": {
+      "audit_local.py": "89916bcabbbd3ba3ccc0b8f1cce6b06daf1475831b7192c6d6b276ae5d217e99",
+      "check_source.py": "6c5fc653493dd038014cb71826fb02c4c2a7846b47f1d8d5365af8d1f69f49bc",
+      "run_local.py": "15b542ef4127d0e1a4341a3f05e54f0c3b2b0f36ebfb1e795d1b18e6e722dbaf"
+    },
+    "originalMaximum": 2,
+    "reset": false,
+    "retainedFailures": [
+      {
+        "commit": "bedb8b925ebb80c2c8127fd098a6aefd467d6607",
+        "elapsedSeconds": 767.8557076669999,
+        "logSha256": "2341aeb844d2ca9584903ff59a6065a869feea639700d9b7e6c05a632eb08ee7",
+        "ordinal": 1,
+        "reservationSha256": "211f3cd0e9ada5351f54cfac1d243a18f9f1bd849f6324c21a286c7a03f0b413",
+        "resultSha256": "cef21e435cd7894d5dbbd8cc5a2cb2921475fa82e964370598a573d94cb0aeaf",
+        "sourceUnchanged": true,
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE"
+      },
+      {
+        "commit": "3be6c613b6b3f4e51eef47706159d422b2a97922",
+        "elapsedSeconds": 665.6363129580001,
+        "logSha256": "7e5b561d7e42433b42e7bfd1c635e93cd69b9e3506981603ab9a3eca461ce97b",
+        "ordinal": 2,
+        "reservationSha256": "f26d9b4c9ad0f9332312c68572ae1d5e252353ca4253f0801a9d0d6758d34490",
+        "resultSha256": "1114e41f5742f474b37ca28da214dc19ae878e5e13332db60009c7bef6400665",
+        "sourceUnchanged": true,
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE"
+      }
+    ],
+    "retainedLocalOrdinals": [
+      1,
+      2
+    ],
+    "scope": "FOCUSED_NEGATIVE_VECTOR_CORRECTION_ONLY",
+    "target": "tests/test_credential_lifecycle.py::test_meta_reconciliation_has_no_broad_test_exemption",
+    "totalMaximum": 3,
+    "transfer": false,
+    "uniqueMutationTargetRequired": true
   },
   "metaBase": "5c5695e8bcd0ba95ff655b06ac397ef11f6cf0e0",
   "packetId": "MET-PERF-011",

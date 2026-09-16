@@ -92,3 +92,11 @@ def test_no_product_implementation_or_acceptance_is_published(authority):
     assert plan['candidate']['speedup']=='NOT_MEASURED'
     assert plan['gates']['tenantAcceptance'] is False
     assert plan['gates']['pr18Mutation'] is False
+
+    extension=plan['localBudgetExtension']
+    assert plan['budgets']['metaLocal']==3
+    assert extension['retainedLocalOrdinals']==[1,2] and extension['newLocalOrdinals']==[3]
+    assert extension['additionalLocalMaximum']==1 and extension['reset'] is False
+    for key in ('retainedLocalOrdinals','newLocalOrdinals','additionalLocalMaximum','reset','retainedFailures'):
+        changed=deepcopy(plan); changed['localBudgetExtension'][key]=None
+        with pytest.raises(ValueError): module.validate_plan(changed,bind=False)
