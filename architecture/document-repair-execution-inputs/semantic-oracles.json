@@ -1,0 +1,244 @@
+{
+  "schemaVersion": "planeon.proposed.document-oracles/v1",
+  "status": "REVIEW_ONLY_NOT_EXECUTED",
+  "baselineCommit": "092fcf475c6f3ebd455e3c354cddb7664ea1f900",
+  "sourceFunctionSha256": "6b9080531cc0e10346982d9ef43ba2caf1b698fcd9577c6b672db8c7faa713b3",
+  "requiredTestClass": "DocumentRepairTests",
+  "requiredMethods": [
+    {
+      "id": "DocumentRepairTests.test_compact_primitives",
+      "expectation": "null, true, false, zero, signed safe-integer extrema and NFC strings return the explicit corresponding built-in values.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_compact_containers",
+      "expectation": "Empty/nested arrays and sorted-key objects return explicit independent values, not candidate-produced expected values.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_final_newline",
+      "expectation": "Compact JSON plus one LF raises ConformanceError(PROXY_NONCANONICAL_BYTES, fixed proxy refused; no execution authority).",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_noncanonical_wire",
+      "expectation": "Spaces, CRLF, key-order changes, alternative escaping and trailing content retain NON_CANONICAL_JSON or INVALID_JSON as appropriate; classify each fixed raw input independently.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_duplicate_members",
+      "expectation": "Nested/top-level duplicate key a raises DUPLICATE_JSON_MEMBER with message duplicate member 'a'.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_invalid_utf8",
+      "expectation": "Invalid UTF-8 raises INVALID_UTF8: document is not UTF-8, after the initial wire-size gate.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_malformed_json",
+      "expectation": "Truncated/invalid strict JSON raises INVALID_JSON: document is not valid strict JSON.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_noncanonical_numbers",
+      "expectation": "Decimal/exponent/nonfinite forms raise NON_CANONICAL_NUMBER: floating-point values are not permitted.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_integer_bounds",
+      "expectation": "Bytes safe integer extrema accepted; +/-9007199254740992 raises INTEGER_OUT_OF_RANGE: integer exceeds the canonical safe range.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_unicode_nfc_and_surrogates",
+      "expectation": "NFD strings/keys raise NON_NORMALIZED_STRING; escaped lone surrogates preserve UnicodeEncodeError rather than being relabeled.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_wire_size_precedence",
+      "expectation": "Empty/over-limit bytes and nonpositive exact-int maximum raise PROXY_DATA_SIZE before parsing; malformed oversized bytes therefore report size first.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_depth_boundaries",
+      "expectation": "16 nested arrays ending in null accepted with adequate budget;17/32 fail PROXY_DATA_TYPE;33 fails DOCUMENT_TOO_DEEP during initial canonical parsing.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_collection_boundaries",
+      "expectation": "4096 array entries accepted with adequate maximum;4097 fails COLLECTION_TOO_LARGE. Dict member-boundary rows use separately generated unique, sorted keys.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_object_budget_and_encoded_size",
+      "expectation": "Object/list aggregate-budget and post-canonical encoded-size failures retain PROXY_DATA_SIZE and their original order; add combined-fault cases.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_global_document_bound",
+      "expectation": "Bytes over canonical MAX_FILE_BYTES with larger declared maximum fail DOCUMENT_TOO_LARGE; do not confuse this with proxy maximum.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_exact_error_contract",
+      "expectation": "All fixed rejection vectors compare exception class, reason, message and first failing boundary; native UnicodeEncodeError/TypeError remain native exceptions.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_bytes_subclass",
+      "expectation": "bytes subclasses follow original fallback and fail PROXY_DATA_TYPE; never enter exact-bytes optimization.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_mutable_buffers",
+      "expectation": "bytearray and memoryview fail PROXY_DATA_TYPE through unchanged fallback.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_container_subclasses",
+      "expectation": "dict/list/str/int subclasses retain PROXY_DATA_TYPE fallback behavior.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_bool_maximum",
+      "expectation": "b'0', True succeeds as0; b'0',False fails PROXY_DATA_SIZE; bool is never exact-int fast path.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_float_maximum",
+      "expectation": "b'0',1.0 retains accepted fallback value0; unsuitable strings/None preserve TypeError.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_integer_subclass_maximum",
+      "expectation": "An int subclass retains original fallback and any declared operator side effects.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_effectful_maximum",
+      "expectation": "A fixed maximum test double accepting one byte records ordered calls ge(1), sub(1), ge(1) on b'0'; failing first comparison stops before parsing.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_ordinary_object_fallback",
+      "expectation": "For ordinary dict/list input retain the entire original function suffix and detached-copy semantics; do not optimize object input.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_detached_input",
+      "expectation": "Changing caller-owned nested dict/list after return cannot change the returned graph.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_detached_result",
+      "expectation": "Changing returned nested containers cannot change the caller input or a later result.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_repeated_bytes",
+      "expectation": "Repeated identical bytes produce equal values but distinct mutable graphs; there is no cross-call cache.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_changed_bytes",
+      "expectation": "Subsequent changed/malformed byte inputs are revalidated; an earlier success never bypasses rejection.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_exact_owner_regions",
+      "expectation": "Runtime prefix/suffix/imports/signature/defaults fixed; candidate function exact digest. Test/doc old prefixes immutable; appended IDs/definitions closed.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_unchanged_inventory",
+      "expectation": "All135 paths and all132 non-owned files match exact mode,size,SHA256,Git blob; missing/extra/duplicate/symlink/hardlink/stale-current rows reject.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_resealed_substitutions",
+      "expectation": "Independent assemblers mutate current source and update their claimed digests; unknown region, wrong before-image, copied proof, changed old test or source outside document still reject.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    },
+    {
+      "id": "DocumentRepairTests.test_consumer_history_preserved",
+      "expectation": "Existing three stage3 paths remain inside the original path graph; every old consumer/proof/fixture byte unchanged. Fresh current collection includes1277 old plus32 new methods.",
+      "expectedEvidence": "UNEXECUTED_SOURCE_DERIVED_ORACLE"
+    }
+  ],
+  "newTestCount": 32,
+  "expectedTotalTestCount": 1309,
+  "expectedBackendTestCount": 1139,
+  "preservesInherited1277": true,
+  "existingTestFilePrefix": "BYTE_IDENTICAL",
+  "noProductionMonkeypatch": true,
+  "referenceExecution": "FORBIDDEN_STORED_SOURCE; expected values/errors must be literal or independently derived",
+  "wireExamples": [
+    {
+      "hex": "6e756c6c",
+      "maximum": 4,
+      "result": null
+    },
+    {
+      "hex": "7b7d",
+      "maximum": 2,
+      "result": {}
+    },
+    {
+      "hex": "5b305d",
+      "maximum": 3,
+      "result": [
+        0
+      ]
+    },
+    {
+      "hex": "7b7d0a",
+      "maximum": 3,
+      "reason": "PROXY_NONCANONICAL_BYTES",
+      "message": "fixed proxy refused; no execution authority"
+    },
+    {
+      "hex": "7b7d0d0a",
+      "maximum": 4,
+      "reason": "NON_CANONICAL_JSON",
+      "message": "document bytes are not canonical JSON"
+    },
+    {
+      "hex": "7b2261223a312c2261223a327d",
+      "maximum": 262144,
+      "reason": "DUPLICATE_JSON_MEMBER",
+      "message": "duplicate member 'a'"
+    },
+    {
+      "hex": "ff",
+      "maximum": 1,
+      "reason": "INVALID_UTF8",
+      "message": "document is not UTF-8"
+    },
+    {
+      "hex": "7b",
+      "maximum": 1,
+      "reason": "INVALID_JSON",
+      "message": "document is not valid strict JSON"
+    },
+    {
+      "hex": "",
+      "maximum": 0,
+      "reason": "PROXY_DATA_SIZE",
+      "message": "fixed proxy refused; no execution authority"
+    },
+    {
+      "hex": "312e30",
+      "maximum": 3,
+      "reason": "NON_CANONICAL_NUMBER",
+      "message": "floating-point values are not permitted"
+    }
+  ],
+  "runtimeAcceptance": false,
+  "notes": [
+    "This is a fixed review matrix, not a claim that new tests exist or passed.",
+    "If any source-derived expectation proves wrong, stop and amend the reviewed oracle; do not change production behavior to satisfy a mistaken test.",
+    "No change to public errors, canonical.py, cryptography, guard frequency, tenant isolation or resource-mutation behavior.",
+    "A count alone is not coverage; each matrix row needs its stated positive, negative and boundary assertions."
+  ]
+}

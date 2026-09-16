@@ -304,7 +304,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(checkpoint_history(path, inputs[path])) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 150 and len(packets) == 170 and set(packets) == old | set(NEW_IDS) | {"MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003", "MET-PERF-011"}, "exact155 catalog")
+        require(len(old) == 150 and len(packets) == 173 and set(packets) == old | set(NEW_IDS) | {"MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003", "MET-PERF-011", "MET-PERF-012", "CONF-PERF-006", "CONF-BENCH-002"}, "exact155 catalog")
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
         packet, product, reference = (packets[name] for name in NEW_IDS)
@@ -527,6 +527,10 @@ def validate_dispatch_ownership(packets):
         from validate_proxy_diagnostics import close_diagnostic_dispatch
     except ImportError:
         from scripts.validate_proxy_diagnostics import close_diagnostic_dispatch
+    try:
+        from validate_document_repair_execution import close_document_dispatch
+    except ImportError:
+        from scripts.validate_document_repair_execution import close_document_dispatch
     """No generic weakening; close only the ten immutable, exact scoped pairs."""
     try:
         from validate_packet_ownership import validate_packet_ownership
@@ -554,7 +558,7 @@ def validate_dispatch_ownership(packets):
             retired.update("unordered same-repository packets " + left + " and " + right + " overlap at "
                            + repr(path) + " and " + repr(path) for path in paths)
         require(len(retired) == 72 and all(errors.count(message) == 1 for message in retired), "exact72 diagnostics")
-        return close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired])))
+        return close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired]))))
     except (ValueError, TypeError, KeyError, OSError, RecursionError):
         return errors + ["missing or changed closed reference/candidate dispatch"]
 
@@ -568,7 +572,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 170 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 173 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

@@ -1,0 +1,30 @@
+import hashlib,json,statistics,sys,time
+from pathlib import Path
+from harness_conformance.live_mutation_admission import document
+def enc(v): return json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()
+def observer():
+ return sys.getprofile() is not None or sys.gettrace() is not None or any(sys.monitoring.get_tool(i) is not None or sys.monitoring.get_events(i) for i in range(6))
+def emit(**v): print(json.dumps(dict(evidenceClass='UNPROFILED_HELPER_MEASUREMENT_ONLY',**v),sort_keys=True),flush=True)
+if sys.version_info[:3]!=(3,12,14) or observer(): raise RuntimeError('pinned interpreter and absent observer required')
+p=Path('fixtures/live-backend/proxy-vectors.json')
+raw=p.read_bytes()
+if hashlib.sha256(raw).hexdigest()!='ba3cff195f1f615fddb98e2db6713c359d8dbd05699cb1710157fe374b27760f': raise RuntimeError('immutable fixture')
+v=json.loads(raw)
+cases=[('profile',v['proxy']['positive'],262144),('observation',v['observation']['positive']['observation'],65536),('request',v['observation']['positive']['request'],16384),('binding-zero',v['broker']['positive'][0]['binding'],65536),('binding-resource',v['broker']['positive'][1]['binding'],65536),('dispatch-zero',v['broker']['positive'][0]['request'],16384),('dispatch-resource',v['broker']['positive'][1]['request'],16384),('flat-array',list(range(256)),262144),('nested-object',{'a':[{'b':[1,True,None,'caf\u00e9']} for _ in range(32)]},262144),('unicode',{'label':'caf\u00e9','payload':'\u754c'*1024},262144)]
+manifest=[dict(id=i,maximum=m,raw=enc(x).decode(),rawSha256=hashlib.sha256(enc(x)).hexdigest(),bytes=len(enc(x))) for i,x,m in cases]
+if hashlib.sha256(enc(manifest)).hexdigest()!='ae3137b53e801c32d454036d244daa5a367f173c15128ed42cc304f03523b51c': raise RuntimeError('workload drift')
+inputs=[(i,enc(x),m,x) for i,x,m in cases]
+started=time.perf_counter(); results=[]
+for sample in range(8):
+ if observer(): raise RuntimeError('observer interference')
+ w,c=time.perf_counter(),time.thread_time()
+ for repeat in range(64):
+  for name,data,maximum,expected in inputs:
+   got=document(data,maximum)
+   if type(got) is not type(expected) or got!=expected: raise RuntimeError('semantic mismatch')
+   if time.perf_counter()-started>120: raise RuntimeError('fixed workload deadline')
+ wall,cpu=time.perf_counter()-w,time.thread_time()-c
+ if observer(): raise RuntimeError('observer interference')
+ if sample: results.append(dict(sample=sample,wall=wall,threadCpu=cpu))
+ emit(sample=sample,warmup=sample==0,wall=wall,threadCpu=cpu,calls=640)
+emit(status='COMPLETE',samples=results,workloadSha256='ae3137b53e801c32d454036d244daa5a367f173c15128ed42cc304f03523b51c',acceptance=False)
