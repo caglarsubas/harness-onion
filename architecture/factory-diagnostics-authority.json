@@ -1,0 +1,1705 @@
+{
+  "authorityPacket": "MET-PERF-014",
+  "inputFiles": {
+    "architecture/factory-diagnostics-inputs/c7-review.json": "a8e4dc5992fd53020af24d975adeeb186a6ef63889c246db542b95723b447be8",
+    "architecture/factory-diagnostics-inputs/c7-review.md": "30f55ff290f40a96c1624e832477a9d7040e776289cf2bf904c25a706f1b5d5d",
+    "architecture/factory-diagnostics-inputs/local01-deadline-stop.json": "02c2c771c94c68332afefc89940058b7a5545c3f084a8f20d8ccfffed73af2f4",
+    "architecture/factory-diagnostics-inputs/local01-result.json": "a2af67dec407c81690d745b26697b62df103dfb88727e0b4d2d0f2a0ade12e21",
+    "architecture/factory-diagnostics-inputs/local01-source-diagnosis.md": "cc0dfc5035bfa9cdc1158da5be169af2630bfa45c1602bcc1d47cfeffff92fae",
+    "architecture/factory-diagnostics-inputs/static-source.json": "deed7dc18f7b661efceb26e85e560166339185f19a651eac49f3d8d573d095ab",
+    "architecture/factory-diagnostics.json": "b498f29ead351048276618c2c55512e267264dc5eebd26386540eb90099174a4",
+    "diagnostics/conf_diag_004.py": "e8c32926f682435f1e65db6ecf5f28ecf44b9b39116aece2ebd2b1d15b8907d9",
+    "docs/alpha-2/FACTORY_DIAGNOSTICS.md": "a9e5894ffa73757d79d8ee232d5221edfa2a103b3d955547682a125628bb252e",
+    "task-packets/CONF-DIAG-004.yaml": "84942bccf1d05a3b069b547b5ae375c5972a30ae0c5ae045530e69ec95c70898",
+    "task-packets/MET-PERF-014.yaml": "d87e2cd1637e6ae206c7a82c5d0e35221e682b9efbb48e642adfcfb3afe31997",
+    "tests/test_factory_diagnostics.py": "19a33ec904495edc59e3557c9ddf77a23a6723c9b733deb659353e9a5faf015e"
+  },
+  "metaBaseline": "5b082fba8df155782b558d2afe4e902ae361c96c",
+  "metaRecipes": {
+    "README.md": {
+      "afterSha256": "daaa6d309db3079fce3d4f2f52ecc48ca8b1b4314cd2d821c2b0fa3d1b641549",
+      "beforeSha256": "bc2e55d4502189af4c87f939a4256e5aba6a89f58963c1411e2d50a582aa74f8",
+      "replacements": [
+        {
+          "after": "# Harness Engineering\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](docs/alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Harness Engineering\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/DEVELOPMENT_STATUS.md": {
+      "afterSha256": "f4164be795d9f0a433f1a41ef8e443a48665a1e65273279513a9f4a62687b71b",
+      "beforeSha256": "94054db79be3d8898bba8145dd0ad3f1b9edd5160fbefdf12b5127d321043dba",
+      "replacements": [
+        {
+          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n## Current integration gate - MET-REPAIR-018\n",
+          "before": "# Development checkpoint — Phase 0 to Alpha 2\n\n## Current integration gate - MET-REPAIR-018\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/MASTER_DEVELOPMENT_PLAN.md": {
+      "afterSha256": "015acad9cfff3e8538f7c58fed7b0a66c3ad86693ab04aa7e651ea163b3acb05",
+      "beforeSha256": "dd79548948038a9ee200aa8be5a5031d89b6178a9a0c206f6cf72c979444fdc8",
+      "replacements": [
+        {
+          "after": "# Master Development Plan\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Master Development Plan\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/READINESS_INDEX.md": {
+      "afterSha256": "cf865485db92c76d4ecd99990fd71e0203bd27e2791467d0aee767d83a4e53c6",
+      "beforeSha256": "321a562a977046df45d31650aae1afed03b7f09b939a13f308ed0c98e5525239",
+      "replacements": [
+        {
+          "after": "# Implementation Readiness Index\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Implementation Readiness Index\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/BENCHMARK_TRANSPORT.md": {
+      "afterSha256": "d80fc3d591ceb07e4cc26341c147bf392a84d3ca275fbf5add7da9128dc343a4",
+      "beforeSha256": "eb9d3c84db8d7b7899be5cceb6cdb4081f1a3c7396571f4a2e975f8725613b98",
+      "replacements": [
+        {
+          "after": "# Alpha 2 — benchmark argument transport correction\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Alpha 2 — benchmark argument transport correction\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/CANONICAL_REPAIR_PLAN.md": {
+      "afterSha256": "1723d44f41568f65fb90b57e72d90ff344bd09db1162e9d4c7e5ca1c43c5f553",
+      "beforeSha256": "a3c562f5b2b3608e61b735abefff2d6602ec74e374d66a67ef8eaa07edac008f",
+      "replacements": [
+        {
+          "after": "# Alpha 2 — canonicalization repair decision and remaining readiness gate\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Alpha 2 — canonicalization repair decision and remaining readiness gate\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/COMPLETION_INTEGRATION.md": {
+      "afterSha256": "eecf386b14e2f1f3b8a1b3fdbf7c81a9f9881dfd0558f1b8ba159517d9c2887c",
+      "beforeSha256": "0e96b562fa16c3ed49e18308e6ec3e9a71f8d5854a65958970f603552780d687",
+      "replacements": [
+        {
+          "after": "# Alpha 2 — completion-integration authority\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Alpha 2 — completion-integration authority\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/CONFORMANCE_COMPLETION.md": {
+      "afterSha256": "58f88b1aa51254a4aaf58a630e55e9ac0bfad91e22b9294c91cd9ce521c1f798",
+      "beforeSha256": "1f9608e4fadf21b95e679511a16844ba597d93f0ccf13437cadc726a8aaf1811",
+      "replacements": [
+        {
+          "after": "# Alpha 2 — conformance implementation completion\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Alpha 2 — conformance implementation completion\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md": {
+      "afterSha256": "1e83556122aa1c9fc1b21c8ab140bf335ea38ee826cc87bad83383fd671bfdaf",
+      "beforeSha256": "92defc6544d10a4d9484ceaa50a81359327fe27e4a69f2c8d6375132ae0542eb",
+      "replacements": [
+        {
+          "after": "# Alpha 2 — exact document repair authority\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Alpha 2 — exact document repair authority\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md": {
+      "afterSha256": "8723253f82d93e625e29d0bbaa217b1c97a51dde724b30af1a0243a6411fcf64",
+      "beforeSha256": "2978286c9a69bf363f336e543ae0e84cdbcd9dfcfeb216a61d70568ba9b4b65e",
+      "replacements": [
+        {
+          "after": "# Alpha 2 — bounded private document repair plan\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Alpha 2 — bounded private document repair plan\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/LIVE_BACKEND_READINESS.md": {
+      "afterSha256": "6b0d729246a835482c2c6d6e763f77d84e3d2f121e54705dfab62c0156619acf",
+      "beforeSha256": "4aff2e685adbd105f9c02a72611b40738c074ae430dc49fb87c67e71b9a3a54b",
+      "replacements": [
+        {
+          "after": "# Trusted Linux live-backend readiness — MET-LIVE-001\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Trusted Linux live-backend readiness — MET-LIVE-001\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md": {
+      "afterSha256": "edfa67213537d6b9b6c75219b40d083286c0fabdf90e9c1626d39f31ca3b7055",
+      "beforeSha256": "17828b5550befb9f5009a6138b1866debacd62efb7236f1cf82e756a218a8897",
+      "replacements": [
+        {
+          "after": "# Product adoption and multi-repository roadmap\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Product adoption and multi-repository roadmap\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/00-harness-engineering.md": {
+      "afterSha256": "c603ac9178526d2ac2fca5d64e61b0410f17f28def5bcc9a0947dfde6b5d23b8",
+      "beforeSha256": "dd2c618dc9804aaa8420f805575327f333e959e0c88e04406c1856889d37170e",
+      "replacements": [
+        {
+          "after": "# Repository Plan: `Harness-Engineering`\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](../alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Repository Plan: `Harness-Engineering`\n\n",
+          "count": 1
+        },
+        {
+          "after": "54. `MET-REPAIR-018`: reconcile accepted helper gates and publish separate completion-integration authority.\n55. `MET-PERF-014`: publish bounded factory diagnostics without product execution.\n\n",
+          "before": "54. `MET-REPAIR-018`: reconcile accepted helper gates and publish separate completion-integration authority.\n\n",
+          "count": 1
+        }
+      ]
+    },
+    "docs/repositories/12-mas-harness-conformance-labs.md": {
+      "afterSha256": "e46c769788eb5fb3494db96079d17a08e0892d5549325a92217404f247bf8756",
+      "beforeSha256": "41f0b23ae80d01b9923688bcb713ea33f6c2961c59aae51f61f1ae5aa3000018",
+      "replacements": [
+        {
+          "after": "# Repository Plan: `mas-harness-conformance-labs`\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](../alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Repository Plan: `mas-harness-conformance-labs`\n\n",
+          "count": 1
+        },
+        {
+          "after": "\n\n- `CONF-DIAG-004`: one immutable whole-backend observation after separate META gates; no product acceptance.\n\n## Testing, verification, and acceptance\n",
+          "before": "\n## Testing, verification, and acceptance\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_backend_timing.py": {
+      "afterSha256": "62572c7e2578c8786a7ffdb73d37333c39821522739c1470b3ced7fbd0f76144",
+      "beforeSha256": "0434fa3f415fc6f064e59c9cf0606538c79f91226e81179fc3f3f848a6e2c6a0",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 159 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, '159 immutable plus two new packets')\n",
+          "before": "        require(len(old) == 159 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, '159 immutable plus two new packets')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_benchmark_transport.py": {
+      "afterSha256": "c30a1c8b528a48718dce83bc3604e54898a0b02dcfda9bfa1b2fcd811965e9c0",
+      "beforeSha256": "fa833aeb3ead9299270a1521ddd98e67895645435c5d24f2f98bb775af5ae216",
+      "replacements": [
+        {
+          "after": "    print('Historical benchmark transport valid:179 current specifications;175-packet projection; original comparison allowance unchanged.')\n",
+          "before": "    print('Historical benchmark transport valid:177 current specifications;175-packet projection; original comparison allowance unchanged.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_broker_handoff.py": {
+      "afterSha256": "fb19ca54e01267910634604e636b4ab11aa23af8fee7da8d2cae5b34ed087ee9",
+      "beforeSha256": "45964b09888b67e93a7fa3df4bedefba8b979506c766985ed5f5133f347eb67a",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 142 and len(packets) == 179 and set(packets) == old | {\"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact catalog\")\n",
+          "before": "        require(len(old) == 142 and len(packets) == 177 and set(packets) == old | {\"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Broker handoff valid: 179 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Broker handoff valid: 177 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_canonical_repair_plan.py": {
+      "afterSha256": "cf0f15fe12d4aa6421ac52619128c0e399de343fd802f76c75d5fb72324a8ac8",
+      "beforeSha256": "9c3811de846400ebcbff3ee0998ba55aea64f679ad10d1fe1cc3560453b6c7b5",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 158 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'},\n",
+          "before": "        require(len(old) == 158 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'},\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_ci_performance.py": {
+      "afterSha256": "bcba66aa69ef61d432a043a58127f9450c9237e09f0024ef15d9c639466d1212",
+      "beforeSha256": "aa3eb37e575618da31575c74c997a9892d20ee44153bfe9b7dee86fa615d4e31",
+      "replacements": [
+        {
+          "after": "CURRENT_PACKET_COUNT = 179\n",
+          "before": "CURRENT_PACKET_COUNT = 177\n",
+          "count": 1
+        },
+        {
+          "after": "SUCCESSOR_ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\")\n",
+          "before": "SUCCESSOR_ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"CI performance authority valid: 179 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.\")\n",
+          "before": "        print(\"CI performance authority valid: 177 packets; historical 139 authority and all prior tests/both complete replays preserved; no native acceptance.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_completion_integration.py": {
+      "afterSha256": "893393a0419a9630abcc7e8a32be523514db5dd5b66eac33af6243bdbd2c207d",
+      "beforeSha256": "e348bc36513d7ec8ecf56fd0e632a48d60c5c9dbe84ac5a64c4750b0d14ba7f4",
+      "replacements": [
+        {
+          "after": "    from scripts.safe_yaml import safe_load\n\ntry:\n    from validate_factory_diagnostics import historical_bytes as factory_history, current_test_bytes as factory_current, validate_additions as factory_additions, historical_catalog as factory_catalog\nexcept ImportError:\n    from scripts.validate_factory_diagnostics import historical_bytes as factory_history, current_test_bytes as factory_current, validate_additions as factory_additions, historical_catalog as factory_catalog\n\n",
+          "before": "    from scripts.safe_yaml import safe_load\n\n",
+          "count": 1
+        },
+        {
+          "after": "def historical_bytes(path, raw):\n    raw = factory_history(path, raw)\n    # A closed code-pinned routing table, not an acceptance/result cache.\n",
+          "before": "def historical_bytes(path, raw):\n    # A closed code-pinned routing table, not an acceptance/result cache.\n",
+          "count": 1
+        },
+        {
+          "after": "        return factory_current(before)\n",
+          "before": "        return before\n",
+          "count": 1
+        },
+        {
+          "after": "    return factory_current(apply_recipe(before, matches[0]))\n",
+          "before": "    return apply_recipe(before, matches[0])\n",
+          "count": 1
+        },
+        {
+          "after": "            require(digest(canonical(packets.get(name))) == record[\"packetDigests\"][name], \"packet substitution\")\n        return factory_additions(packets)\n    except (ValueError, TypeError, RecursionError):\n",
+          "before": "            require(digest(canonical(packets.get(name))) == record[\"packetDigests\"][name], \"packet substitution\")\n        return []\n    except (ValueError, TypeError, RecursionError):\n",
+          "count": 1
+        },
+        {
+          "after": "    require(validate_additions(packets) == [], 'exact integration packets')\n    packets = factory_catalog(packets)\n    old = {Path(p).stem for p in record['protectedFiles']\n",
+          "before": "    require(validate_additions(packets) == [], 'exact integration packets')\n    old = {Path(p).stem for p in record['protectedFiles']\n",
+          "count": 1
+        },
+        {
+          "after": "            require(type(inputs[path]) is bytes and digest(factory_history(path,inputs[path])) == checksum, 'source drift: '+path)\n        for name in factory_catalog(packets):\n",
+          "before": "            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'source drift: '+path)\n        for name in packets:\n",
+          "count": 1
+        },
+        {
+          "after": "            require(apply_recipe(before,rule) == factory_history(path,inputs[path]), 'exact reversible metadata')\n",
+          "before": "            require(apply_recipe(before,rule) == inputs[path], 'exact reversible metadata')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_completion_profiling.py": {
+      "afterSha256": "9a5be1b3663df647c09ac2f88b83f98005b66b7a31a930ab9c7d409bd0851925",
+      "beforeSha256": "0c18b1ee5469664691d64e6c0341d34101753a338a3d09e0701aad5666ed4fec",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 167 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, '167 immutable plus two new packets')\n",
+          "before": "        require(len(old) == 167 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, '167 immutable plus two new packets')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Completion profiling authority valid:179 specifications;167 immutable packets; one diagnostic, no acceptance reset.')\n",
+          "before": "    print('Completion profiling authority valid:177 specifications;167 immutable packets; one diagnostic, no acceptance reset.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_completion.py": {
+      "afterSha256": "debc1719bd10b97933301076888bb49094821601a5f70b4cf658bc6b4040512c",
+      "beforeSha256": "b02eb015f66021d5f934e1d81ee73d0d27c3c27ffe465043187df34ed912d739",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 163 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, '163 immutable plus two successors')\n",
+          "before": "        require(len(old) == 163 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, '163 immutable plus two successors')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Conformance completion authority valid:179 specifications;163 unchanged packets; correction required before004; no product/native acceptance.')\n",
+          "before": "    print('Conformance completion authority valid:177 specifications;163 unchanged packets; correction required before004; no product/native acceptance.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_consumer_closure.py": {
+      "afterSha256": "34dab5b2dc10eccda4cbee9ef885739c4ae6dd2df73b5e3f0e82cfa9b5e1f052",
+      "beforeSha256": "38a739dc61041896a4c1c05f0670bf13da9cb30087b17ceb5376688c2f0be167",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 148 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact153 catalog\")\n",
+          "before": "        require(len(old) == 148 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact153 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Conformance performance authority valid: 179 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Conformance performance authority valid: 177 packets; 148 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_performance.py": {
+      "afterSha256": "459613322d86b04dc9f929a2384fc7450e596d28e72cd77d182435d120250663",
+      "beforeSha256": "ea5f2c9f39d7dcaeeb759d3f3cfc92ff705006f7b16ff0644c1644787e2dd4e7",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 144 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact148 catalog\")\n",
+          "before": "        require(len(old) == 144 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact148 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Conformance performance authority valid: 179 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Conformance performance authority valid: 177 packets; 144 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_performance_followup.py": {
+      "afterSha256": "e33517dfe5fd94322b2aa8b0a7729e3fbcfaec31278fe3cd483fd21773e97d4c",
+      "beforeSha256": "382bc5278085088c24471ecee4e7a5e5f3706c7dc17c122300f30896d9c18da2",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 146 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact150 catalog\")\n",
+          "before": "        require(len(old) == 146 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact150 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Conformance performance authority valid: 179 packets; 146 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Conformance performance authority valid: 177 packets; 146 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_publication.py": {
+      "afterSha256": "3f5a21ed4bbefa046681b983097e4efcbab947b706e3548b9819670b1c65f7f3",
+      "beforeSha256": "8440211cc5593d7f55cae96d141737a15f2db6d091a39df9459b1f71fe488342",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 162 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, '162 immutable plus one META')\n",
+          "before": "        require(len(old) == 162 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, '162 immutable plus one META')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Conformance publication authority valid:179 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')\n",
+          "before": "    print('Conformance publication authority valid:177 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_reference_measurement.py": {
+      "afterSha256": "26e828cea8f185dd3c7bb0bb96b110e0ebe559a13c01ed0c43ffbc70b0e0db4e",
+      "beforeSha256": "5440df6b2d7cc537b27c30998bef9d3ccb962c12e76a7445b53f2a6877dc0443",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 150 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact155 catalog\")\n",
+          "before": "        require(len(old) == 150 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact155 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        from validate_completion_integration import close_integration_dispatch\n        from validate_factory_diagnostics import close_factory_dispatch\n    except ImportError:\n",
+          "before": "        from validate_completion_integration import close_integration_dispatch\n    except ImportError:\n",
+          "count": 1
+        },
+        {
+          "after": "        from scripts.validate_completion_integration import close_integration_dispatch\n        from scripts.validate_factory_diagnostics import close_factory_dispatch\n    \"\"\"No generic weakening; close only the ten immutable, exact scoped pairs.\"\"\"\n",
+          "before": "        from scripts.validate_completion_integration import close_integration_dispatch\n    \"\"\"No generic weakening; close only the ten immutable, exact scoped pairs.\"\"\"\n",
+          "count": 1
+        },
+        {
+          "after": "        return close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired])))))))\n",
+          "before": "        return close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired]))))))\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Conformance performance authority valid: 179 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Conformance performance authority valid: 177 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_conformance_successor_checkpoint.py": {
+      "afterSha256": "ee604cfc459ebfb7041c5493998e0e84a42fd134c5764c173c98bc628a112042",
+      "beforeSha256": "53f7031917c0d169a63c18cc6f6308448e197361534c1f571d9138cd7e0b917c",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 153 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {\"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact156 catalog\")\n",
+          "before": "        require(len(old) == 153 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {\"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact156 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Successor checkpoint authority valid:179 packets;153 immutable YAML; two product paths; source data only.\")\n",
+          "before": "        print(\"Successor checkpoint authority valid:177 packets;153 immutable YAML; two product paths; source data only.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_credential_lifecycle.py": {
+      "afterSha256": "8f66bfc82701e3bea0c978f61ec3b77d2e55f2a9bdc1ca1715b32fb13330e6ce",
+      "beforeSha256": "f8a36d68eb0a83deb449b73f8750fd636509b6085e78762b4d0e939b9b7578ba",
+      "replacements": [
+        {
+          "after": "ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\")\n",
+          "before": "ADDITIONS = (\"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\")\n",
+          "count": 1
+        },
+        {
+          "after": "        require(len(old) == 139 and len(packets) == 179 and set(packets) == old | set(ADDITIONS),\n",
+          "before": "        require(len(old) == 139 and len(packets) == 177 and set(packets) == old | set(ADDITIONS),\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Credential lifecycle authority valid: 179 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "before": "        print(\"Credential lifecycle authority valid: 177 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_credential_ordering.py": {
+      "afterSha256": "f389969c5cad30f09f9b22540f9e2924a7fb490e44d7ba1a3b5b4ef0eef8b498",
+      "beforeSha256": "f7fb60ad4590ae484ca941b9b0379a679ed3301ca55a0998655bfff16ed1bae5",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 141 and len(packets) == 179 and set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"},\n",
+          "before": "        require(len(old) == 141 and len(packets) == 177 and set(packets) == old | {\"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"},\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Credential ordering valid: 179 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Credential ordering valid: 177 packets; 127/327 source checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_custody_handoff.py": {
+      "afterSha256": "8a13fd5fefec015e954f7c49f901f01661d827648dbd81b74e8bd39c73e828d6",
+      "beforeSha256": "a6b99dfb785d06b1bc095e6822d833415b1bc3308fe259cdc15976f2319acd3e",
+      "replacements": [
+        {
+          "after": "ADDITIONS = (\"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\")\n",
+          "before": "ADDITIONS = (\"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Custody handoff authority valid: 179 packets; 127-file/279-ID history preserved; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Custody handoff authority valid: 177 packets; 127-file/279-ID history preserved; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_document_repair_execution.py": {
+      "afterSha256": "dfdaeb164f6ae0054915a5153a474e0142363dc764ee267e58f82105fb8b0222",
+      "beforeSha256": "4cdaed0aa02bd9feae3588c1461ea3a38933629bae5c32eed502dbea5aa33e07",
+      "replacements": [
+        {
+          "after": "        require(len(old)==170 and len(packets)==179 and 'CONF-PERF-006' not in old, 'historical planning boundary')\n",
+          "before": "        require(len(old)==170 and len(packets)==177 and 'CONF-PERF-006' not in old, 'historical planning boundary')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Historical document repair execution valid:179 current specifications;173-packet projection; product and comparison not run.')\n",
+          "before": "    print('Historical document repair execution valid:177 current specifications;173-packet projection; product and comparison not run.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_readiness.py": {
+      "afterSha256": "a1fb899b67bbaaabb78bc429d33a7a76df0d4220422a257ec75c884efa4df535",
+      "beforeSha256": "c5857105966a9b33a18086d0ff66e1677c000e4cf1796070367831d61ffebfac",
+      "replacements": [
+        {
+          "after": "    if len(packets) != 179:\n        errors.append(\"Current catalog requires 179 packets; original Linux policy remains 118\")\n",
+          "before": "    if len(packets) != 177:\n        errors.append(\"Current catalog requires 177 packets; original Linux policy remains 118\")\n",
+          "count": 1
+        },
+        {
+          "after": "    print(\"Linux roadmap authority valid: 179 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.\")\n",
+          "before": "    print(\"Linux roadmap authority valid: 177 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_repair.py": {
+      "afterSha256": "5a5f1377ff5879e74593eb3ac306a164cad0ea77e6d3f086a1092b0ffdee8938",
+      "beforeSha256": "ca95788c2cd237d8713007cf2b0af014c360764b8d1bc3f86a69fee7c356e37b",
+      "replacements": [
+        {
+          "after": "    if len(packets) != 179:\n        errors.append(\"Current catalog requires exactly 179 packets; consumed amendment remains 120\")\n",
+          "before": "    if len(packets) != 177:\n        errors.append(\"Current catalog requires exactly 177 packets; consumed amendment remains 120\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Linux repair authority valid: 179 packets; 120-packet record preserved; native Linux remains unproven.\")\n",
+          "before": "        print(\"Linux repair authority valid: 177 packets; 120-packet record preserved; native Linux remains unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_linux_test_ownership.py": {
+      "afterSha256": "640394d4e9c33eec1ba785a1e731c17b31224f9ac3e842e27bf60ba2a11b4adb",
+      "beforeSha256": "0514dd8d9a9fe341eb024263138ec1e7158f19d9764d263908167c673dccf339",
+      "replacements": [
+        {
+          "after": "    if len(packets) != 179:\n        errors.append(\"Current catalog requires exactly 179 packets; Linux ownership record remains 121\")\n",
+          "before": "    if len(packets) != 177:\n        errors.append(\"Current catalog requires exactly 177 packets; Linux ownership record remains 121\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Linux test ownership valid: 179 packets; historical one-assertion grant preserved; native/live acceptance unproven.\")\n",
+          "before": "        print(\"Linux test ownership valid: 177 packets; historical one-assertion grant preserved; native/live acceptance unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_live_backend_readiness.py": {
+      "afterSha256": "f7eac40972f32ffdde53632168ead684903e9ae49b7fee641dd001373e253816",
+      "beforeSha256": "401617e925a399d04a25663777e866512d47931155c1906313492279b0f7718b",
+      "replacements": [
+        {
+          "after": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 179:\n            errors.append(\"current roadmap requires exactly 179 named packets; historical authority remains 130\")\n",
+          "before": "        if set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS) | set(PROXY_ADDITIONS) or len(packets) != 177:\n            errors.append(\"current roadmap requires exactly 177 named packets; historical authority remains 130\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Live backend roadmap valid: 179 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")\n",
+          "before": "        print(\"Live backend roadmap valid: 177 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_local_acceptance.py": {
+      "afterSha256": "25f4482fcb94cce6a7412f710d5c2deb8a2be5c92f4ceb93cf8e775b1cc0d383",
+      "beforeSha256": "c7424cc701e089c3a14cd6dd925b1c3b53109ae5ff3ba834edb3b40feb84666c",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 161 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, '161 unchanged plus one META')\n",
+          "before": "        require(len(old) == 161 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, '161 unchanged plus one META')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Local acceptance authority valid:179 specifications;161 unchanged packets; one additional local-only attempt.')\n",
+          "before": "    print('Local acceptance authority valid:177 specifications;161 unchanged packets; one additional local-only attempt.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_model_api_inventory.py": {
+      "afterSha256": "2dc10325993db2c4709610b7f1766aee815f81ea3b7175fba397214d78fefc1b",
+      "beforeSha256": "df18e92c9d9758dcabc16a6c770a751cf5da0847b052f801a52a2ae760749d43",
+      "replacements": [
+        {
+          "after": "    if len(packets) != 179:\n        errors.append(\"current catalog requires exactly 179 packets\")\n",
+          "before": "    if len(packets) != 177:\n        errors.append(\"current catalog requires exactly 177 packets\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Model inventory authority valid: 179 packets; exact predicate grant; product/native acceptance unproven.\")\n",
+          "before": "        print(\"Model inventory authority valid: 177 packets; exact predicate grant; product/native acceptance unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_model_fixture_scope.py": {
+      "afterSha256": "cfc236cd5c36c17d5e12a8b7ab3ace117c4fc959cd6d1cea4a1f5c2e1e3ad354",
+      "beforeSha256": "a2e33ade6d6a35f08a124782bad5a9ef3c5dac2149e661cbc249f7ccd46d8687",
+      "replacements": [
+        {
+          "after": "    if len(packets) != 179:\n        errors.append(\"current catalog requires exactly 179 packets; fixture publication remains 122\")\n",
+          "before": "    if len(packets) != 177:\n        errors.append(\"current catalog requires exactly 177 packets; fixture publication remains 122\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Model fixture authority valid: 179 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.\")\n",
+          "before": "        print(\"Model fixture authority valid: 177 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_native_qualification.py": {
+      "afterSha256": "6ab8a7f8f44aec6189f0441d87c6bad39a701e642256aeaaea60c04343381e52",
+      "beforeSha256": "dfc0792e24272ec45dc2436acb9a466112a92b6561b09238aceeb076e962a047",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 143 and len(packets) == 179 and set(packets) == old | {\"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"exact catalog\")\n",
+          "before": "        require(len(old) == 143 and len(packets) == 177 and set(packets) == old | {\"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"exact catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Native qualification authority valid: 179 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Native qualification authority valid: 177 packets; 127/327 checkpoint; DATA_CHECK_ONLY; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_packet_scalar_repair.py": {
+      "afterSha256": "7cfae8c10987c1ef82898f085d74bacba871d275f34519127089c793e9a526ee",
+      "beforeSha256": "8e921cfb3efe7e82fb5186f81d71e557117a93911c6df133833263dfa680768c",
+      "replacements": [
+        {
+          "after": "        print(\"Scalar repair authority valid: 179 packets; historical 132-packet record and 164 predecessor files unchanged.\")\n",
+          "before": "        print(\"Scalar repair authority valid: 177 packets; historical 132-packet record and 164 predecessor files unchanged.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_policy_observation.py": {
+      "afterSha256": "d719e9c90a6e338d38bd368677ad89012f74218e19a9868e8c5ee011a5363b4b",
+      "beforeSha256": "32b54c02e873e9816452098bf075d9b026f067ea2e3259fcedd5f7e47febc7b1",
+      "replacements": [
+        {
+          "after": "ADDITIONS = (\"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\")\n",
+          "before": "ADDITIONS = (\"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Policy observation authority valid: 179 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "before": "        print(\"Policy observation authority valid: 177 packets; unchanged 127-file/279-ID baseline; DATA_CHECK_ONLY, product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_provider_adoption.py": {
+      "afterSha256": "d7761277ee4007184188de7b4544998898cd4cb9f28ce06e640e080659fe8635",
+      "beforeSha256": "f90b20d8134e6d7c7bc5ed7e4985394ddf178582c12dc443f41b4eb2e2648e51",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 155 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-006', 'CONF-DIAG-001', 'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, 'exact158 catalog with155 immutable predecessors')\n",
+          "before": "        require(len(old) == 155 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-006', 'CONF-DIAG-001', 'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, 'exact158 catalog with155 immutable predecessors')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Provider adoption authority valid:179 packets;155 immutable predecessors;16 harnesses/13 repositories; planning only, no product qualification.')\n",
+          "before": "    print('Provider adoption authority valid:177 packets;155 immutable predecessors;16 harnesses/13 repositories; planning only, no product qualification.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_proxy_contract.py": {
+      "afterSha256": "84effbb9d2786cb22fdc878978b8d9a0c24d22b704a93a22c20fe13e806a92df",
+      "beforeSha256": "f1bab53d0d0ec243b812c85296f1fa78ffe260b0b349ba0963a02a66c490c9b3",
+      "replacements": [
+        {
+          "after": "ADDITIONS = (\"MET-REPAIR-009\", \"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\")\n",
+          "before": "ADDITIONS = (\"MET-REPAIR-009\", \"MET-REPAIR-010\", \"MET-REPAIR-011\", \"CONF-FIX-004\", \"MET-PERF-001\", \"MET-REPAIR-012\", \"CONF-FIX-005\", \"MET-REPAIR-013\", \"MET-REPAIR-014\", \"MET-REPAIR-015\", \"MET-PERF-002\", \"CONF-PERF-001\", \"MET-PERF-003\", \"CONF-PERF-002\", \"MET-PERF-004\", \"CONF-PERF-003\", \"MET-PERF-005\", \"CONF-PERF-004\", \"CONF-BENCH-001\", \"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Proxy prerequisite valid: 179 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")\n",
+          "before": "        print(\"Proxy prerequisite valid: 177 packets; 176 immutable authority files; 127-file/279-ID source checkpoint; product/native NOT_RUN.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_proxy_diagnostics.py": {
+      "afterSha256": "85abdc7721ac3bc91274d41b3303b10e2f9d79f4c2e2ba8b24131c61f3ca8a75",
+      "beforeSha256": "fe13c93187f4f8952da4c7c00158d289ffe157b93108d91c996410b9ca6d8af4",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 156 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, '169 specifications with156 immutable predecessors')\n",
+          "before": "        require(len(old) == 156 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-007', 'MET-PERF-008', 'CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, '169 specifications with156 immutable predecessors')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_readiness.py": {
+      "afterSha256": "751807e4e9c7f1eba552c12e3e1262f9ae736715b577957d263ae76591f8343b",
+      "beforeSha256": "08256f5cc49915d117455bdc877985c10ee55ebb9946b8b8506c89bb104da2eb",
+      "replacements": [
+        {
+          "after": "EXPECTED_PACKET_COUNT = 179\n",
+          "before": "EXPECTED_PACKET_COUNT = 177\n",
+          "count": 1
+        },
+        {
+          "after": "        authority_owner[\"task-packets/\" + packet_id + \".yaml\"] = \"MET-REPAIR-018\"\n    authority_owner.update({path: \"MET-PERF-014\"\n                            for path in packets[\"MET-PERF-014\"][\"allowedPaths\"]\n                            if path in authority_owner or path.startswith((\"architecture/\", \"scripts/\"))})\n    for packet_id in (\"MET-PERF-014\", \"CONF-DIAG-004\"):\n        authority_owner[\"task-packets/\" + packet_id + \".yaml\"] = \"MET-PERF-014\"\n    observation_authority_path = \"architecture/observations/data-harness-v1.json\"\n",
+          "before": "        authority_owner[\"task-packets/\" + packet_id + \".yaml\"] = \"MET-REPAIR-018\"\n    observation_authority_path = \"architecture/observations/data-harness-v1.json\"\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_readiness_repairs.py": {
+      "afterSha256": "76b3d5af913090588fa2e1a2a75cdadf736d7142013c23f9152f57669db4d130",
+      "beforeSha256": "86f17b2a32a332374861c5a71e2526215fea66eead6be8ee336e6e36d0d0f36e",
+      "replacements": [
+        {
+          "after": "    require(len(packets) == 179, \"current catalog requires exactly 179 packets; historical amendment remains 115\")\n",
+          "before": "    require(len(packets) == 177, \"current catalog requires exactly 177 packets; historical amendment remains 115\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_research_adoption.py": {
+      "afterSha256": "e37ce848d7f4da43fc2f75c790b3d61b9096b13237d80edd73bd5bef72638246",
+      "beforeSha256": "f268e0a67485de17f4724f259a754b19eab532c32fe4da4d1255c78ae40065bb",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 165 and len(packets) == 179 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008', 'MET-PERF-014', 'CONF-DIAG-004'}, '165 immutable plus one META')\n",
+          "before": "        require(len(old) == 165 and len(packets) == 177 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011', 'MET-PERF-012', 'CONF-PERF-006', 'CONF-BENCH-002', 'MET-PERF-013', 'CONF-BENCH-003', 'MET-REPAIR-018', 'CONF-FIX-008'}, '165 immutable plus one META')\n",
+          "count": 1
+        },
+        {
+          "after": "    print('Research adoption authority valid:179 specifications;165 unchanged packets;16 harnesses/13 repositories; no provider qualification or product execution.')\n",
+          "before": "    print('Research adoption authority valid:177 specifications;165 unchanged packets;16 harnesses/13 repositories; no provider qualification or product execution.')\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_reuse.py": {
+      "afterSha256": "338c3e05b87e80ddf3cd75c8d47356de34b8d712f62f6543c1883815ee1c1317",
+      "beforeSha256": "52cefbef6bbeebfc04d469a9c052fbde69f98caefa3994cfaceeab28f7a2c74a",
+      "replacements": [
+        {
+          "after": "    _require(len(packet_paths) == 179, f\"expected 179 task packets, found {len(packet_paths)}\")\n",
+          "before": "    _require(len(packet_paths) == 177, f\"expected 177 task packets, found {len(packet_paths)}\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_successor_inventory.py": {
+      "afterSha256": "871502e154f8ae5a486a98a6a28e3dc93b13e1ff453131a6505b14ae5b1abe4f",
+      "beforeSha256": "392ef7ed6aecef4ef41bd20a82eabc5e242cbdd7db3a10ca0f5cdfa3b7b0afb6",
+      "replacements": [
+        {
+          "after": "            errors.append(\"exact 179 authority inputs required\")\n",
+          "before": "            errors.append(\"exact 177 authority inputs required\")\n",
+          "count": 1
+        },
+        {
+          "after": "        print(\"Successor inventory authority valid: 179 packets; 179 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")\n",
+          "before": "        print(\"Successor inventory authority valid: 177 packets; 177 predecessor files unchanged; product correction NOT_RUN; native gate closed.\")\n",
+          "count": 1
+        }
+      ]
+    },
+    "scripts/validate_validation_performance.py": {
+      "afterSha256": "120864044d2ed2facb1e08a20d9a875a2f66f29533823629256d247bb6b8ba5b",
+      "beforeSha256": "2b3d4514724e49916324a85100fd563a37364679f9ff95f60929d522100bc52d",
+      "replacements": [
+        {
+          "after": "        require(len(old) == 166 and len(packets) == 179\n                and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\"}, \"166 immutable predecessors plus one repair\")\n",
+          "before": "        require(len(old) == 166 and len(packets) == 177\n                and set(packets) == old | set(NEW_IDS) | {\"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\"}, \"166 immutable predecessors plus one repair\")\n",
+          "count": 1
+        },
+        {
+          "after": "    print(\"Validation-performance authority valid:179 specifications;166 unchanged packets; \"\n",
+          "before": "    print(\"Validation-performance authority valid:177 specifications;166 unchanged packets; \"\n",
+          "count": 1
+        }
+      ]
+    },
+    "task-packets/README.md": {
+      "afterSha256": "a36c4c20803bfbf3e3f7af36933c9eca0d977047221e9f40adeee9fc6ddb3d33",
+      "beforeSha256": "c95d84477b7e92e80e09110ee91522153c7c2bdcf52366a7b5092540a31d4040",
+      "replacements": [
+        {
+          "after": "# Sol-High Task Packet Catalog\n\n## Current diagnostic gate - MET-PERF-014\n\n[Bounded factory diagnostics](../docs/alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.\nMET-REPAIR-018 DONE_SOURCE_GATES at5b082fb / PR129.\nCONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6; C7 source-only passed; LOCAL1 consumed,170 preceding tests passed, backend incomplete; LOCAL2 held; CI/main not run.\nMET-PERF-014 ONGOING_META_PUBLICATION;179 specifications,177 immutable prior packets.\nCONF-DIAG-004 WAITING_META_SOURCE_GATES: one read-only whole1447-case observation,41 factory counters plus1406 timing-only; not acceptance.\nSubsequent repair WAITING_DIAGNOSIS_AND_REVIEW; no guard optimization or fixture/watchdog change authorized.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nOlder headings below are retained publication checkpoints, not current execution authority.\n\n## Retained planning and historical checkpoints\n\n",
+          "before": "# Sol-High Task Packet Catalog\n\n",
+          "count": 1
+        },
+        {
+          "after": "| 177 | `CONF-FIX-008` | `mas-harness-conformance-labs` | Bounded completion successor after accepted helper repair |\n\n| 178 | `MET-PERF-014` | `Harness-Engineering` | Bounded factory diagnostic authority |\n| 179 | `CONF-DIAG-004` | `mas-harness-conformance-labs` | Read-only failed-candidate factory-call observation |\n",
+          "before": "| 177 | `CONF-FIX-008` | `mas-harness-conformance-labs` | Bounded completion successor after accepted helper repair |\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_alpha2_readiness.py": {
+      "afterSha256": "6522c3932b14df90cd1c13dd627292c9f145bb9f12fb9e79ec040ff59ebfe164",
+      "beforeSha256": "79ff66c268e3aa59d2a9f2c4b1eee462f570af2d025d13bf100ea694b59e457b",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_backend_timing.py": {
+      "afterSha256": "9f4ad8f4091e196627d2af2ee2d7a56ea40264f6ad2b02c2012d0514fa949dc6",
+      "beforeSha256": "53130aaa25d26482c852e67447ff567ee3c3056c1d67cd577180449aa297f8ed",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and 'CONF-PERF-005' not in packets\n",
+          "before": "    assert len(packets) == 177 and 'CONF-PERF-005' not in packets\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_benchmark_transport.py": {
+      "afterSha256": "5b2234485f7587232dd1221417e1b77e6a7beae7898a5ce125aa204ab49e7c00",
+      "beforeSha256": "12f7f1170576a2009c01e467a2092ebfd66e024faf9838309652a9ba47f5568b",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(module.historical_catalog(packets)) == 173\n",
+          "before": "    assert len(packets) == 177 and len(module.historical_catalog(packets)) == 173\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_broker_handoff.py": {
+      "afterSha256": "e463fdf40a6227ef7ed100acbc93a4a9a53f6d0f703bffc221b91274936b7888",
+      "beforeSha256": "489985f29e434ad7c4677db6af8e9277adb8783a5de6295b055583c254615ab9",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_canonical_repair_plan.py": {
+      "afterSha256": "6a2e8a0203262a551cb0b3a9af98a5b6f2739b3e4f01245336b7f96854b9002d",
+      "beforeSha256": "d20317033c1ceb0185a39867f1d9f4c9545d59dce37ff1d79d7183a976559406",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and 'CONF-PERF-005' not in packets\n",
+          "before": "    assert len(packets) == 177 and 'CONF-PERF-005' not in packets\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_ci_performance.py": {
+      "afterSha256": "ab900d3c88b147160251ad5752d1bf33ed2f86b57308b93be345d13ec73290bf",
+      "beforeSha256": "31582dc7571bd5983da08468986d78f519395ade0efaf69425ebe3c54273c9a2",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == CURRENT_PACKET_COUNT == 179\n",
+          "before": "    assert len(packets) == CURRENT_PACKET_COUNT == 177\n",
+          "count": 1
+        },
+        {
+          "after": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 179\"\n",
+          "before": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 177\"\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(paths) == 195\n",
+          "before": "    assert len(paths) == 193\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_completion_integration.py": {
+      "afterSha256": "682d19fd5fc4bbd11ab2176306d54798f4791ef28d68c6c75da22d2faf93b3ea",
+      "beforeSha256": "5c435a2d473f906d208467c29ffc14ec037c01956c9b20ddbeaefd34f07a3395",
+      "replacements": [
+        {
+          "after": "from scripts import validate_completion_integration as module\nfrom scripts.validate_factory_diagnostics import historical_bytes as factory_history\nfrom scripts.safe_yaml import safe_load\n",
+          "before": "from scripts import validate_completion_integration as module\nfrom scripts.safe_yaml import safe_load\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(packets) == 179 and len(module.historical_catalog(packets)) == 175\n",
+          "before": "    assert len(packets) == 177 and len(module.historical_catalog(packets)) == 175\n",
+          "count": 1
+        },
+        {
+          "after": "        assert module.apply_recipe(old,rule) == factory_history(path,inputs[path])\n",
+          "before": "        assert module.apply_recipe(old,rule) == inputs[path]\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_completion_profiling.py": {
+      "afterSha256": "b5bda49a80845d1625cceef97ad1466e1357c484da201fbe31d44407b245015d",
+      "beforeSha256": "ece2a5d79aca049b324c7e3f4686e38d1f6766e30a5d792d15294c89e951ca0c",
+      "replacements": [
+        {
+          "after": "    packets, record, inputs = authority\n    assert len(packets) == 179\n    for path, rule in record['metaRecipes'].items():\n",
+          "before": "    packets, record, inputs = authority\n    assert len(packets) == 177\n    for path, rule in record['metaRecipes'].items():\n",
+          "count": 1
+        },
+        {
+          "after": "    assert grant['draft'] == '1886aa2272f8d8bc73da60ebd7a6738f288de5fb'\n    assert len(packets) == 179\n    assert len([p for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')]) == 167\n",
+          "before": "    assert grant['draft'] == '1886aa2272f8d8bc73da60ebd7a6738f288de5fb'\n    assert len(packets) == 177\n    assert len([p for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')]) == 167\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_completion.py": {
+      "afterSha256": "603163bb02462294c898f574a40596f4c25d3815fb5e46a7cee07bb7cb6dda02",
+      "beforeSha256": "18d407c40a2ccf8c7fa1f16134c27fe3eeeb0c2575b19fa0ac275c1cd117294a",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and module.NEW_IDS == ('MET-REPAIR-017','CONF-FIX-007')\n",
+          "before": "    assert len(packets) == 177 and module.NEW_IDS == ('MET-REPAIR-017','CONF-FIX-007')\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_consumer_closure.py": {
+      "afterSha256": "710afc189c2c186686aeda29496ae7334ee65c6b2e4d0afeebbb4b68a49e778e",
+      "beforeSha256": "92e3bdab4ecb37da5460e9db9f527044c28c00387073e69bbe306bc407b69b27",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 102\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\")) for error in generic)\n",
+          "before": "    assert len(generic) == 100\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\")) for error in generic)\n",
+          "count": 1
+        },
+        {
+          "after": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\"))]\n",
+          "before": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\"))]\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_performance.py": {
+      "afterSha256": "1aa4382cbba0785399692e8ddddcf91c24416a958c144d522be5c3653a0b0e85",
+      "beforeSha256": "e83c046dde2d4f5990845de11096d62b691cbcf479a007640c514c40baf1c689",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_performance_followup.py": {
+      "afterSha256": "82e369cc05eaebef14bc311281decb65b4ae6177734468524556d0f954042d40",
+      "beforeSha256": "1edf3f1c3cabfc470507ed245dbdc094e458f8fc760c9f391eed192acd48c79a",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 102\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\")) for error in generic)\n",
+          "before": "    assert len(generic) == 100\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\")) for error in generic)\n",
+          "count": 1
+        },
+        {
+          "after": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\"))]\n",
+          "before": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\"))]\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_publication.py": {
+      "afterSha256": "614ba542987bbd81eabda3e4a4a8b27df145605d739cdd6eea478de65937b8d7",
+      "beforeSha256": "06cea8bd35059725e9ecb2f2a37d0edb5010d9c78733fa8be7eb70acfb521077",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and module.NEW_IDS == ('MET-PUBLISH-001',)\n",
+          "before": "    assert len(packets) == 177 and module.NEW_IDS == ('MET-PUBLISH-001',)\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_reference_measurement.py": {
+      "afterSha256": "1d28799020f9ea3bff040fcc76721ad216f27f9f7622b070817741849932eb08",
+      "beforeSha256": "484d21607c92ff9f2a832026a7dc0894a4522033b82231a06666c2f27fcaa496",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 102 and len(record[\"overlapPairs\"]) == 10\n",
+          "before": "    assert len(generic) == 100 and len(record[\"overlapPairs\"]) == 10\n",
+          "count": 1
+        },
+        {
+          "after": "    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\"])\n",
+          "before": "    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\"])\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_conformance_successor_checkpoint.py": {
+      "afterSha256": "08916307cdf359b94d6c57df02ba59e7dff5148d98fdba5765a7f0e57a919be9",
+      "beforeSha256": "2193a6252b7c32bb7192f78d3736408024b7eaf9b286839face3d5bcc7e117e0",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 102\n",
+          "before": "    assert len(generic) == 100\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(closed) == 94\n",
+          "before": "    assert len(closed) == 92\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_credential_lifecycle.py": {
+      "afterSha256": "f135c07ea3f0f9338e82ade4b90668fcb44d100d833c9ac8aa45797e495c5c05",
+      "beforeSha256": "d0ff9ea36792ef7f55f7fbfbbf31ced3ad9742c8c08ea40ec0980b8ccaaf45bc",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(record[\"protectedFiles\"]) == 245\n",
+          "before": "    assert len(packets) == 177 and len(record[\"protectedFiles\"]) == 245\n",
+          "count": 1
+        },
+        {
+          "after": "        target = b\"assert len(paths) == 195\"\n",
+          "before": "        target = b\"assert len(paths) == 193\"\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_credential_ordering.py": {
+      "afterSha256": "dd59d4849b4ce6b7b35849f2c8d15384c420eb9fc0137e8f23325e9cd33bfa54",
+      "beforeSha256": "b256ff20e3c839147542b70df6d64250e24902d492811ed1351695c1dc701f73",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_custody_handoff.py": {
+      "afterSha256": "237988d126774553ac4465ac71fd10eccaf430192f699fbb75fb1807e2499151",
+      "beforeSha256": "a28eb3df0ab1363c238afa692e4cef5cc6ece5927f939cb71477e841d56bb226",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(record[\"protectedFiles\"]) == 203\n",
+          "before": "    assert len(packets) == 177 and len(record[\"protectedFiles\"]) == 203\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_document_repair_execution.py": {
+      "afterSha256": "15a805bdd3d37b4625c9d3047ca5b9a209958f9a17240325c8e368b260509af0",
+      "beforeSha256": "fdd8be1539abbd6a066ef39d82e6e733ab7c9770ad6fe364648df0d6f87e3810",
+      "replacements": [
+        {
+          "after": "    assert len(packets)==179 and len(module.historical_catalog(packets))==170\n",
+          "before": "    assert len(packets)==177 and len(module.historical_catalog(packets))==170\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_document_repair_plan.py": {
+      "afterSha256": "54a2a344ab1d40000dc59df5037cc8e34231a325bb9caba54c6d35c3022632db",
+      "beforeSha256": "ef7c75cf179373dc449b0be1d6dab718c41de7d73d9d1f0973aec108502aaf42",
+      "replacements": [
+        {
+          "after": "    assert len(packets)==179 and len(historical_catalog(packets))==170 and module.NEW_IDS==('MET-PERF-011',)\n",
+          "before": "    assert len(packets)==177 and len(historical_catalog(packets))==170 and module.NEW_IDS==('MET-PERF-011',)\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_readiness.py": {
+      "afterSha256": "48aec899e8bd7f6172a0c4a5f610bc88b6ca650c045b604632b2887d30ba34a7",
+      "beforeSha256": "0483729224acd886a8264a82e2a3d8d58fce2f3da635685a5dff02cc60e355ff",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_repair.py": {
+      "afterSha256": "1a6ebb2ca74fad33ea7f9e14c90c05ed638821240ace586ab4e074a57cf13757",
+      "beforeSha256": "bacd44dd0447924a91ae05ccb08c0eae1ba79e11b280dd819afebf6780bd9cc1",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_linux_test_ownership.py": {
+      "afterSha256": "ae0f98355f2ecd3ca76f997f01d912f8848034a1db012b4609757854f96ecdee",
+      "beforeSha256": "58a6c51510c7a9ffa824f5f8d9faddcbf7a9225669b8cc56e72ea72dea917e77",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_live_backend_readiness.py": {
+      "afterSha256": "6b7f4b9f4bd9d98f49148289b36dba59ef3c08e5c53668101c38177947978a8d",
+      "beforeSha256": "c56a76ed09af5f95777eda72d40b2f0d6c70040fe0af2918fb795c9e4b2b1f42",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(raw) == 156\n",
+          "before": "    assert len(packets) == 177 and len(raw) == 156\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_local_acceptance.py": {
+      "afterSha256": "863d1daed5d254dde9a61f4303721d0c5526de0d3d47527d5d36d11ac36a2587",
+      "beforeSha256": "34991e9cc6f4cc9e9c0fb0d6f040970b23030f8adf16ce6112ab1471a950e0a6",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and module.NEW_IDS == ('MET-ACCEPT-001',)\n",
+          "before": "    assert len(packets) == 177 and module.NEW_IDS == ('MET-ACCEPT-001',)\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_model_api_inventory.py": {
+      "afterSha256": "593b216cfd1ccea26d9d58fa9010008a95a8be1feefe6d94e3bf846d1924f896",
+      "beforeSha256": "02dbdcd30420d825c19061363de117be3cfeb5bed9de08736b680428735e626a",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_model_fixture_scope.py": {
+      "afterSha256": "f88816b9bdd08d0d425801c14b2636396ca6979a2c80b875bb4392cdc42e5865",
+      "beforeSha256": "2fc0b025b79fffee8877a615d1c5a45ed7546bed51735f027621280fdcf35bf3",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_native_qualification.py": {
+      "afterSha256": "28fb53f4cc3dbcd690f54f9236be88ab7d6545490ce6aa4a38b28636d1a77a14",
+      "beforeSha256": "0a56289dcb2c02a67eaf3a087ac351a818fd6b41d144e508c6a91113af966ff1",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_packet_scalar_repair.py": {
+      "afterSha256": "3f8f84fd6c7293463490f1ede460f7a3a2aa332bc7e813a4c1c9386f95d1dec9",
+      "beforeSha256": "74892611c3051487b5b2b573914b8c30cfe29f4ea46c90d856b0b0d3f7a464ec",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(record[\"protectedFiles\"]) == 164 and len(raw) == 169\n",
+          "before": "    assert len(packets) == 177 and len(record[\"protectedFiles\"]) == 164 and len(raw) == 169\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_policy_observation.py": {
+      "afterSha256": "92f37916ef78c0b30da7bcfc26b85ccb8c8b8b491d110d2c3f49b1b79cc55890",
+      "beforeSha256": "d4c41846e0c7d35e2d0a1230507bca8a180da51c52e9729534ceef16aca33b12",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(record[\"protectedFiles\"]) == 186\n",
+          "before": "    assert len(packets) == 177 and len(record[\"protectedFiles\"]) == 186\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_provider_adoption.py": {
+      "afterSha256": "18e4b0e07bf09f49327fd6635b2e8fcaac9009f5d8ec0273b9f9e612b3672940",
+      "beforeSha256": "01ab40a33e9d033f4a5da24c55bbe4e185a098b0b7262692eea31b5b763601e3",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_proxy_contract.py": {
+      "afterSha256": "091a6f992a493ace91b7c0ac65d9b4ce90cb81b5a0641077200a5d0b6c874590",
+      "beforeSha256": "f646948c52aa5e04effe867076572d2bb00084d37700c2dafc77b0bf8da839b2",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(record[\"protectedFiles\"]) == 176\n",
+          "before": "    assert len(packets) == 177 and len(record[\"protectedFiles\"]) == 176\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_proxy_diagnostics.py": {
+      "afterSha256": "1bf1a25377f977343f04adee86dacb1d3607114e4e9ff5bc79fa81c526d5408b",
+      "beforeSha256": "f7900deb06fe3ab42b707b223370227817a782b57bfb520dd1c33422d62f0413",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_research_adoption.py": {
+      "afterSha256": "d82a694154368c1231c75fce170552107fcb6b299532e598db336c9f279d7b67",
+      "beforeSha256": "4b777fc4dced5279258b8beda2b0d843dbdef54e7b362b1f98a36b23f17f0347",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and module.NEW_IDS == ('MET-ADOPT-002',)\n",
+          "before": "    assert len(packets) == 177 and module.NEW_IDS == ('MET-ADOPT-002',)\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_reuse.py": {
+      "afterSha256": "07253eadefdca24e8a2936b15dc36ea00afdd5ad90643f644a7fcce5c3941bdc",
+      "beforeSha256": "c896088f67af5a36864ca7bb7c044a79f69feef59e61245c70a96b8349edea8f",
+      "replacements": [
+        {
+          "after": "    assert report.task_packets == 179\n",
+          "before": "    assert report.task_packets == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_successor_inventory.py": {
+      "afterSha256": "23fb9648f0d56bbc4b3ef3214403ca3b9d2450327f3961707195e27ae8921f52",
+      "beforeSha256": "76c1bda13304fbef82de1ad61c06528c6292f20248fa367f0bed274b524334da",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179 and len(record[\"protectedFiles\"]) == 170 and len(raw) == 175\n",
+          "before": "    assert len(packets) == 177 and len(record[\"protectedFiles\"]) == 170 and len(raw) == 175\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_task_packets.py": {
+      "afterSha256": "83bb6cad49dbf3ce1ad3f8edb1cc127c585039a6b10880c1b9eadd298371798a",
+      "beforeSha256": "28050718d733b7ec953f6968b4ce8d5ac477551f03d740e891c185ca278413dc",
+      "replacements": [
+        {
+          "after": "    assert len(files) == EXPECTED_PACKET_COUNT == 179\n",
+          "before": "    assert len(files) == EXPECTED_PACKET_COUNT == 177\n",
+          "count": 1
+        }
+      ]
+    },
+    "tests/test_validation_performance.py": {
+      "afterSha256": "1bb44d526a431d828f6c9c6ef87b2abf9dbedbb06b3650bb24c8e06ba56134a1",
+      "beforeSha256": "99a3f7095be25727aaa7a1b308b4e6eceb2e00702ef46d40e1d31ee980b1bf22",
+      "replacements": [
+        {
+          "after": "    assert len(packets) == 179\n",
+          "before": "    assert len(packets) == 177\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(indexed) == len(set(indexed)) == 179\n",
+          "before": "    assert len(indexed) == len(set(indexed)) == 177\n",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "navigationPaths": [
+    "README.md",
+    "docs/DEVELOPMENT_STATUS.md",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/READINESS_INDEX.md",
+    "docs/alpha-2/BENCHMARK_TRANSPORT.md",
+    "docs/alpha-2/COMPLETION_INTEGRATION.md",
+    "docs/alpha-2/CANONICAL_REPAIR_PLAN.md",
+    "docs/alpha-2/CONFORMANCE_COMPLETION.md",
+    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md",
+    "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md",
+    "docs/alpha-2/LIVE_BACKEND_READINESS.md",
+    "docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md",
+    "docs/repositories/00-harness-engineering.md",
+    "docs/repositories/12-mas-harness-conformance-labs.md",
+    "task-packets/README.md"
+  ],
+  "ownedPaths": [
+    "README.md",
+    "architecture/factory-diagnostics-authority.json",
+    "architecture/factory-diagnostics-inputs/c7-review.json",
+    "architecture/factory-diagnostics-inputs/c7-review.md",
+    "architecture/factory-diagnostics-inputs/local01-deadline-stop.json",
+    "architecture/factory-diagnostics-inputs/local01-result.json",
+    "architecture/factory-diagnostics-inputs/local01-source-diagnosis.md",
+    "architecture/factory-diagnostics-inputs/static-source.json",
+    "architecture/factory-diagnostics.json",
+    "diagnostics/conf_diag_004.py",
+    "docs/DEVELOPMENT_STATUS.md",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/READINESS_INDEX.md",
+    "docs/alpha-2/BENCHMARK_TRANSPORT.md",
+    "docs/alpha-2/CANONICAL_REPAIR_PLAN.md",
+    "docs/alpha-2/COMPLETION_INTEGRATION.md",
+    "docs/alpha-2/CONFORMANCE_COMPLETION.md",
+    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md",
+    "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md",
+    "docs/alpha-2/FACTORY_DIAGNOSTICS.md",
+    "docs/alpha-2/LIVE_BACKEND_READINESS.md",
+    "docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md",
+    "docs/repositories/00-harness-engineering.md",
+    "docs/repositories/12-mas-harness-conformance-labs.md",
+    "scripts/validate_backend_timing.py",
+    "scripts/validate_benchmark_transport.py",
+    "scripts/validate_broker_handoff.py",
+    "scripts/validate_canonical_repair_plan.py",
+    "scripts/validate_ci_performance.py",
+    "scripts/validate_completion_integration.py",
+    "scripts/validate_completion_profiling.py",
+    "scripts/validate_conformance_completion.py",
+    "scripts/validate_conformance_consumer_closure.py",
+    "scripts/validate_conformance_performance.py",
+    "scripts/validate_conformance_performance_followup.py",
+    "scripts/validate_conformance_publication.py",
+    "scripts/validate_conformance_reference_measurement.py",
+    "scripts/validate_conformance_successor_checkpoint.py",
+    "scripts/validate_credential_lifecycle.py",
+    "scripts/validate_credential_ordering.py",
+    "scripts/validate_custody_handoff.py",
+    "scripts/validate_document_repair_execution.py",
+    "scripts/validate_factory_diagnostics.py",
+    "scripts/validate_linux_readiness.py",
+    "scripts/validate_linux_repair.py",
+    "scripts/validate_linux_test_ownership.py",
+    "scripts/validate_live_backend_readiness.py",
+    "scripts/validate_local_acceptance.py",
+    "scripts/validate_model_api_inventory.py",
+    "scripts/validate_model_fixture_scope.py",
+    "scripts/validate_native_qualification.py",
+    "scripts/validate_packet_scalar_repair.py",
+    "scripts/validate_policy_observation.py",
+    "scripts/validate_provider_adoption.py",
+    "scripts/validate_proxy_contract.py",
+    "scripts/validate_proxy_diagnostics.py",
+    "scripts/validate_readiness.py",
+    "scripts/validate_readiness_repairs.py",
+    "scripts/validate_research_adoption.py",
+    "scripts/validate_reuse.py",
+    "scripts/validate_successor_inventory.py",
+    "scripts/validate_validation_performance.py",
+    "task-packets/CONF-DIAG-004.yaml",
+    "task-packets/MET-PERF-014.yaml",
+    "task-packets/README.md",
+    "tests/test_alpha2_readiness.py",
+    "tests/test_backend_timing.py",
+    "tests/test_benchmark_transport.py",
+    "tests/test_broker_handoff.py",
+    "tests/test_canonical_repair_plan.py",
+    "tests/test_ci_performance.py",
+    "tests/test_completion_integration.py",
+    "tests/test_completion_profiling.py",
+    "tests/test_conformance_completion.py",
+    "tests/test_conformance_consumer_closure.py",
+    "tests/test_conformance_performance.py",
+    "tests/test_conformance_performance_followup.py",
+    "tests/test_conformance_publication.py",
+    "tests/test_conformance_reference_measurement.py",
+    "tests/test_conformance_successor_checkpoint.py",
+    "tests/test_credential_lifecycle.py",
+    "tests/test_credential_ordering.py",
+    "tests/test_custody_handoff.py",
+    "tests/test_document_repair_execution.py",
+    "tests/test_document_repair_plan.py",
+    "tests/test_factory_diagnostics.py",
+    "tests/test_linux_readiness.py",
+    "tests/test_linux_repair.py",
+    "tests/test_linux_test_ownership.py",
+    "tests/test_live_backend_readiness.py",
+    "tests/test_local_acceptance.py",
+    "tests/test_model_api_inventory.py",
+    "tests/test_model_fixture_scope.py",
+    "tests/test_native_qualification.py",
+    "tests/test_packet_scalar_repair.py",
+    "tests/test_policy_observation.py",
+    "tests/test_provider_adoption.py",
+    "tests/test_proxy_contract.py",
+    "tests/test_proxy_diagnostics.py",
+    "tests/test_research_adoption.py",
+    "tests/test_reuse.py",
+    "tests/test_successor_inventory.py",
+    "tests/test_task_packets.py",
+    "tests/test_validation_performance.py"
+  ],
+  "packetDigests": {
+    "CONF-DIAG-004": "c78a581d73d95ccae0de3483394da046377fcf3e13dd2f5d1fbf67821d084b8d",
+    "MET-PERF-014": "1860e1d5ab25475ee821666452e0fb536101cfe73d8907f9b84ab0332f3b513b"
+  },
+  "protectedFiles": {
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "architecture/backend-timing-authority.json": "0c42acfbb91d50c7f93263f0d3ba5d304c4064b1758980990a09200907146cda",
+    "architecture/backend-timing.json": "23cdf745192d1ad649245704c92edd92b9da70653db6c3fb7ac63c900fe42b7d",
+    "architecture/benchmark-transport-authority.json": "79d6d83847b99c72fda2007b8cab5edc88d4fb50da10122189db701f89016127",
+    "architecture/benchmark-transport-inputs/candidate-freeze.json": "882de643ee26c649d38d63df1ccc99fa3b5fc3a69f4407b6f26aed217852ae86",
+    "architecture/benchmark-transport.json": "e20c29df5bfb8885e138260033637ad0de8bf6c905bc12fd808fb3385d984bad",
+    "architecture/broker-handoff-amendment.json": "1b5843241dc2574b26c8f24dae6fd6a341860cf2a6db9b0b560801e8ad629529",
+    "architecture/broker-handoff-inputs/channel.schema.json": "e7e9558fb50b7ba804222065734d1d4fb4694327bb2427a34ef8dffc945d56f9",
+    "architecture/canonical-repair-plan-authority.json": "adee77fc1561ff5e4c6d1bc622806320c8f12e14f705e82d0be455a492d1e2f5",
+    "architecture/canonical-repair-plan.json": "23041b9b7f7af686f445859a15ea94135955665eb536d810d01a763db60bb083",
+    "architecture/ci-performance-amendment.json": "2716be38eee78aefa1b3269a3a30659ae101794da25b9ee6ab30afefbbd19b38",
+    "architecture/completion-integration-authority.json": "7c6f2cd5a2c0c76487df897c853f1de577e8fc8bc1e1f5c3698b118621035793",
+    "architecture/completion-integration.json": "0b36ddc4626430b299fbb5ce3a99a8f94bcc4b54287781e3f8e8136e6b84878a",
+    "architecture/completion-profiling-authority.json": "19b97e955a280cee0e2e9f4afa8bc38eb344f59924ef6a37dd277334cf2474d9",
+    "architecture/completion-profiling.json": "3b4b4decb02cede34ae45dc4df74bfa1ed59a7d20042a89739ffc6d1e2ec38b8",
+    "architecture/conformance-completion-authority.json": "17447fa1df241ea8287adf1220c3804e431c0794c51d02ecc588b8269ad15b94",
+    "architecture/conformance-completion.json": "431a550dcc57a9a16597df6ae9772f64ac8e622997e643ac4ed43652d91e6376",
+    "architecture/conformance-consumer-closure.json": "0f42919cdd9d92685a4cd0ecd0ee471cdbdb05cd62b8cdaef334e340f14614ac",
+    "architecture/conformance-performance-amendment.json": "dc6019ef0c8ddb721a3f72ee10f98bb7925cc8313b09b74793865d01602d0243",
+    "architecture/conformance-performance-followup.json": "3e2ba8d1db0ca4ba7ea60a814cbc0f35554c3781f7b940d5c7d11c58a5932ff2",
+    "architecture/conformance-publication-authority.json": "742567802e0df4a9cb67ff029fb4f49953badf5e84117bfd935a7af4957db119",
+    "architecture/conformance-publication.json": "1285ec5851d727268ff5e31a72b1893a1eb8917deb740d29c572533869d2db89",
+    "architecture/conformance-reference-measurement.json": "01b97634ff6d8d6251c68413838cadf6dd6b2079cde3794c31ec97cac46fd589",
+    "architecture/conformance-successor-checkpoint.json": "73488d6a0066b23a95954048ccaf4bcf78ddc0f66d88c7818db2c25ff33f128b",
+    "architecture/credential-lifecycle-amendment.json": "e4f036bce09ebdea17b2b2d25d6a65678b88ec6e5dd7c18f550c3b45b6061da8",
+    "architecture/credential-ordering-amendment.json": "b4d367b1ff29c92f75304504e30920da25fd682b691f14aabf5f8705d0544c21",
+    "architecture/custody-handoff-amendment.json": "81a95c9d1b84aae1ae71d7fa293931fc1118eacd2083051d353875e7b55e2180",
+    "architecture/document-repair-authority.json": "ecd0b37b2959add14b681a646f1291e7d119f328eaf730bd850ceec761d47d2b",
+    "architecture/document-repair-execution-authority.json": "dcba5192b3d22f86cc0d54d225c11ae9f884a3fd1f5ae5376727252540340145",
+    "architecture/document-repair-execution.json": "ebc3571efc890eaa177c6c07467d2dea287fe21d6fe11b0a5357d8d19dd67d35",
+    "architecture/document-repair-plan.json": "c1de038cc085efca67acb5712672c22967f6b80fd27c068ba3295df42cd4ac31",
+    "architecture/linux-readiness-amendment.json": "3a59552dbadd6a9e7579038523787926b921c35a3c71d036d2705b1c95b804a6",
+    "architecture/linux-readiness.json": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+    "architecture/linux-test-ownership-amendment.json": "5aa1e79de247ebed7550b56db48266182941232d9036840beade99fbcf11172f",
+    "architecture/live-backend-roadmap.json": "06d55fab0d0e56cbbdedab975fd4e2371f06896a6298e96c8c4e23c5e50916e7",
+    "architecture/local-acceptance-authority.json": "d22a4cb6e3d0e8236722ff9bf102db9d70f39e9a1e91d8d8ca679bf03a1cbb28",
+    "architecture/local-acceptance.json": "14dbd4c8e53ac711ec9bfb7e4cb6db03f873d313503e74c7f183ef16c950997f",
+    "architecture/model-api-inventory-amendment.json": "7f298fdb1db878105d9925b5b07500f9cb6298f8b887d87d91edbc6210b48c7b",
+    "architecture/model-evidence-boundary.json": "5be8de011a0cc4769b919ce0a416cb73d791c92181920abca7e8793abb788b48",
+    "architecture/model-fixture-scope-amendment.json": "e46ea246e0ab64d7d6882822739b3029659138711f2bb426ea26fea064e08bd3",
+    "architecture/native-qualification-amendment.json": "e935cbd3045522cf3c5ad47161140e2444d55ebddfb74c09a641e4a0b66ca84a",
+    "architecture/native-qualification-inputs/qualification.schema.json": "bef248bfa82b234124c014f98e40c5791bced3171bb118b7ed1bb7b8daaf95c3",
+    "architecture/packet-scalar-amendment.json": "56b270f8d211f598cbf0183088430bd5ccc16e64eb089b865e117748c762b4e1",
+    "architecture/policy-observation-amendment.json": "0df7e72a65fc5eb1c20d59b8c62ebff377f160214192d681ea7f3d29b57e38c7",
+    "architecture/provider-adoption-authority.json": "9b143600b0885d8a010814720e1dd98b775faa971c27a903c8fce36f97493a56",
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "architecture/proxy-contract-amendment.json": "6c93e7db962cffa0281331c5220cdd8d5e453ab38ae39b4baa2e62be21a60600",
+    "architecture/proxy-diagnostics-authority.json": "4c0fe90fa317a3c0b102710d86a3c9795244bcf0505fdebb21899905f3c3628b",
+    "architecture/proxy-diagnostics.json": "3a02a48f186fd64f4bfb02e92738f435ee869abfd2fe8ca5526586ac00f7e3c7",
+    "architecture/readiness-repair-amendment.json": "c3caa938557f1b9bb195188e35edc946fbdea36f0f1b235ab23f2689ffc54912",
+    "architecture/readiness-repairs.json": "30db784918bb651cc81f26d23cb4b1d7f790ef260ef5e48a2d7ae2ae94c12a0d",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/research-adoption-authority.json": "37fd33e216e5ec7513f3af751bf5590399f918d4cfde4eea8c7bbbc4587d752b",
+    "architecture/research-adoption.json": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+    "architecture/reuse-map.schema.json": "a9f2980e12679a7292fc394f1e53c437a4e60dc16ba22129c0cb66dce1b759a3",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/successor-inventory-amendment.json": "d6bd95af8bc7dd3d497907df58cc843a1732dc12e74a401692e47449444c349d",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "architecture/validation-performance-authority.json": "88e3a3e95b32aa5eee7d34f9124bf60c724c538ba4ebad5a6ed906a0d3e62507",
+    "architecture/validation-performance.json": "0c985b6ea1ba2e9aa2e9a5ab47d933b893b90599ee5e3b832d6f6f3ddc4168b8",
+    "diagnostics/conf_diag_003.py": "cea27b7a29a7d0aa2d944f7e2389c53f015e627922c6e4a0348ce7c78d9373b9",
+    "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "docs/alpha-2/BROKER_HANDOFF_READINESS.md": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+    "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "scripts/validate_packet_ownership.py": "1f1a44601ce3f88713ae15d3af013d03f8f0eb30885a81645a0500bee64bf8ba",
+    "task-packets/CON-001.yaml": "88383a2c8bc66c959df0abc8bc1c8d86a852cac654cd1833327f8b06e2cf41b4",
+    "task-packets/CON-002.yaml": "1e266163e2990ca7412338e878cb6b41e8a769abc27802083c352d1fc7e6da20",
+    "task-packets/CON-003.yaml": "f54c40fba3c9ef2889851981e93f282ff069c4c40de222a18005d57241b7bb1a",
+    "task-packets/CON-004.yaml": "1613ae0d5f5f113d0208f811f36c998168094109b96d68f8e7c31798e62733a3",
+    "task-packets/CON-005.yaml": "1e5c7ac03625c08a7ff46b133e2b7689e5ef43de4782a5948f5f63823bcca4d6",
+    "task-packets/CON-006.yaml": "e05a3f0c7c9c51857ae8afa774cad5fcb75483bcca49f44da54375327fdafec0",
+    "task-packets/CON-007.yaml": "b5ab9498ff950345c0198a7a54fd3d62052f13a978f5113c69900f199dfb38ea",
+    "task-packets/CON-FIX-001.yaml": "15040a4811277880118d58121a7d23721d8a91b4ab6d3211f960189d6a351a14",
+    "task-packets/CON-MODEL-001.yaml": "d5f7ccf98a8dfa8862c204bd9be99cbfbc2307b98be00f0112f6e9dcb59abd9e",
+    "task-packets/CONF-001.yaml": "2ad6741244eb83c152b0880ffb3518b10a02d5cc65bf2e1012b879866069de48",
+    "task-packets/CONF-002.yaml": "7130dfaa116bcadd99cb29506be8cda8864643bb26b9216f7466c5e9085ebaab",
+    "task-packets/CONF-A1-001.yaml": "c076b578b6655c70b7ca7309d3a5b43e9e5cad79138b44c89025ab6e6b20b1b4",
+    "task-packets/CONF-A2-001.yaml": "574e85c20d97db27fa23ede3f5d7ebf043ff7980e237d21623aa05b331852bd8",
+    "task-packets/CONF-A3-001.yaml": "70c53e57e6d140bf088993e0db0a7e6da1a2cdda5f0810eb89dbe3215c2ea624",
+    "task-packets/CONF-AIR-001.yaml": "f6c08f690d1588db15b939beb0b86c5ecce40b19b33cea1db04413c2ecb8a666",
+    "task-packets/CONF-BENCH-001.yaml": "43589db82dd51ecdadb94f5165f2b4fe7d8ff9b137db356e6000a2f9788b9e16",
+    "task-packets/CONF-BENCH-002.yaml": "f4146505e7f56182df0cf66d147587128dc0ac769f46ecffd918bcfbf2502072",
+    "task-packets/CONF-BENCH-003.yaml": "6af3dd89c2b749bc409b619122f9fb8b349681a49168557aa90ae7e73c9ea01b",
+    "task-packets/CONF-DIAG-001.yaml": "f38420268211065a2bd0ef34b2d0d5e4bc4ee835bcd7d775b82b6a1e3c202950",
+    "task-packets/CONF-DIAG-002.yaml": "e0c78fc0c743e2bfafafead2bd8f3e8c343a895aa66bc7e2701887c6b3ceb51f",
+    "task-packets/CONF-DIAG-003.yaml": "03606cc382e46499b63e839d95f3d9161a90b205dc936a8438a167d15f7ecf52",
+    "task-packets/CONF-FIX-001.yaml": "b02d7c6f2872c61fbde5be10451ac8de08e8336ee032e85b468e40dfaf8790ac",
+    "task-packets/CONF-FIX-002.yaml": "c8639e527496660b8211f5bdcdb8f7470129b7d00f938c061d34630c797d8af4",
+    "task-packets/CONF-FIX-003.yaml": "19089018ab6b1e2dada65d1dc3715940037b0881c1db02217622455a8a91d5a1",
+    "task-packets/CONF-FIX-004.yaml": "6a41b419c4e5b02311e148b846d339216f1b512cf8025ae75de77e72ea3d8db0",
+    "task-packets/CONF-FIX-005.yaml": "6e3d31d5facfa69b9e38299317e4d6b9c7356566c5ded0594cbdeb965acdde0e",
+    "task-packets/CONF-FIX-006.yaml": "4ef0c643deaf202a3ab4ce42180ddb35196960e21553ae26ec231a735fee1c32",
+    "task-packets/CONF-FIX-007.yaml": "3a404ac9d470469d501379e7b634ac55c14634c56c2f10d6cf4e649b744a143e",
+    "task-packets/CONF-FIX-008.yaml": "ca7547e31274a19090b8da44faef553a12b247d78c4cb486d0ce1928afb671df",
+    "task-packets/CONF-K3S-001.yaml": "6178307a2845df6a369d666fec60653b167bfbb9b5086e8dbd58217d33229dc5",
+    "task-packets/CONF-K8S-001.yaml": "6626cd491cf266209e77b9f90c66cabc8c1fc36195ef87ea6278fa5c07db5056",
+    "task-packets/CONF-LINUX-001.yaml": "22f00544680f90a90b03420632bebf192a8c687549b519770fca5f98dd5fd6c9",
+    "task-packets/CONF-LIVE-001.yaml": "5c7ceb5094b1c5a29192b7bdea913b23f777698bd31224ca5d1958a793dba3b3",
+    "task-packets/CONF-LIVE-002.yaml": "05a6f03d19a1e12fafe278e5ec72c8adc6304766697b8682bc8d63092d47427f",
+    "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+    "task-packets/CONF-LIVE-004.yaml": "3cb0e1f7d163d7a420fbf2134b7ca5a7c70174acfca8646c341be83e6c23ff23",
+    "task-packets/CONF-LIVE-005.yaml": "b25b9a828907a25d46fea9ccce74d3f05f30cfb9623acd0b21e8dd359e1d9623",
+    "task-packets/CONF-LIVE-006.yaml": "f95c277cffdfb622f45a1b4b91a5292d9d9a5bfabc8f9388b3899cbb20c5213d",
+    "task-packets/CONF-OCP-001.yaml": "04e8bc10f8b9bf5e84b6d55fecd96985f991054d4ba0346cd7316667ecd93ee3",
+    "task-packets/CONF-PERF-001.yaml": "4a45a79639fe745ddec1460df08b7990979da921952bb5daf0cc2bf5d93b8e93",
+    "task-packets/CONF-PERF-002.yaml": "c0bae3ab228a431c6220768e3720ef723ded4efc3ccd3514df7f38a635f05a01",
+    "task-packets/CONF-PERF-003.yaml": "99a915ec683d04755f5423bcf5ade9214c4dc3a6971a611c7b5f7ab71adf48d1",
+    "task-packets/CONF-PERF-004.yaml": "9580efb06ed18abb8782ef24e7729469b64fc67e963eff9d599a77662a10debf",
+    "task-packets/CONF-PERF-006.yaml": "8dc4a6409bceb1669640ae44b3482de2cfc9c95d3089f54ccd1fb13b85100b9c",
+    "task-packets/CONF-SEC-001.yaml": "39eeaa83876002f57e29fffac39847f5d058aea128f447558213baa70687abdd",
+    "task-packets/CONF-UPG-001.yaml": "4c2cc8bdaae80a30f3a8492be724a8920b1ea6fb66dbce7383713ecdd24c2a42",
+    "task-packets/CONF-WG-001.yaml": "cd0685d9cdf8a018f4465d5223d950a557e4d523320891cc5d907496111442cd",
+    "task-packets/CTRL-001.yaml": "5e8d3d18a8245ccd985c77d8269b73333b510a2689a341edffd17dcfde77a8c3",
+    "task-packets/CTRL-002.yaml": "d0045acba54f420d6543581eebca1ae88e78c516576e2e8c1399762761bdcf25",
+    "task-packets/CTRL-003.yaml": "0bd59f60ae73a7e19c97f5d797cb8955f28a5f3a181326c5c4af8d57ed5d2bbe",
+    "task-packets/CTRL-004.yaml": "425faffab20090282bd60b17ac7cfc7942eeaaef0c2ff046b77d9736d77968d4",
+    "task-packets/CTRL-005.yaml": "da414f08217a1b60351a3c7da42784a4cb749c12520f2250f6526f17df72976f",
+    "task-packets/CTRL-006.yaml": "5b9f6ba920cb6d6eb5c192dfc104851d395772c57347ca69bc68aec6328709d1",
+    "task-packets/CTRL-007.yaml": "4a70eac5a350e7b48d2b8b180c02455a5953837050c57f46cd7dbafb86291822",
+    "task-packets/CTRL-FIX-001.yaml": "f1084924fe765b8d905a3156448bea636aec111b71a93e4a842dfbcab563b401",
+    "task-packets/CTRL-FIX-002.yaml": "621e7ba7ad0b8852cc7bc63e666c5ac25e92fe5a769481b491bb850f1eecdd97",
+    "task-packets/CTRL-FIX-003.yaml": "42876f9ab5ab8c227920fe6eee3a913b72f6940a989a8d128d627fbfea43c48f",
+    "task-packets/CTRL-INTEGRATE-001.yaml": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95",
+    "task-packets/DIST-001.yaml": "8de07c6a51176005765ef44aa4613b4443f610350d452daadbeae271b46bf48d",
+    "task-packets/DIST-002.yaml": "785b079851cbb207cbeb012adab16f9dbcbcd555eb49ec835147d77899d359a0",
+    "task-packets/DIST-003.yaml": "47a2951fd7957b780352cd0300d5b98af101509f43293c4daeaeae7626b9b5eb",
+    "task-packets/DIST-004.yaml": "f1ea5c7b9df565a3c28d3b7fd24cb4878fccfaa0e75cc9ef1f57171d56e60633",
+    "task-packets/DIST-005.yaml": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f",
+    "task-packets/DIST-AIR-001.yaml": "7a16e99750dd6044d56194a815ab2182d09759e27dea1cf6669d6366276ccb20",
+    "task-packets/DIST-FIX-001.yaml": "d65fd678adb17be1c6875eb0e8ca7e955d59e4df32bc263b20213f1de845c983",
+    "task-packets/DIST-OCI-001.yaml": "7211a4874c3236df8b257e2d8889180493ab8a0ece0812ef01fcf38ae257158e",
+    "task-packets/EXEC-001.yaml": "7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108",
+    "task-packets/EXEC-002.yaml": "a8eeb8d1a1c56c87329818c827d398a329356420fdc2dd0b9df8e8d23f4c76c5",
+    "task-packets/EXEC-ML-001.yaml": "ce65bd9b74e405b4dbc153430d9a05b245ba904c2372adc3a406a5de88e9c969",
+    "task-packets/EXEC-ORCH-001.yaml": "bab8ff0d2a85f22484c29011836c2458449755634bf27b3462199ef445354d75",
+    "task-packets/EXEC-PROT-001.yaml": "8dda3de5062124d3c2080ab5eaf68dd3d9b73f5e0f9c4fe646ec9284263201c2",
+    "task-packets/EXEC-SBX-001.yaml": "8fb5e9035117761d9cb0e66600e246103f08392f342ddff69143018c60bdb517",
+    "task-packets/EXEC-SBX-002.yaml": "fdec3da0f03a4e3cff03c642317616554454fc4767afee8180c141128b04cf49",
+    "task-packets/EXEC-TOOL-001.yaml": "c0d160591f0f5eed5f28ce0db0ff2c5f3a609beb3e253ed21a7caa354e83816d",
+    "task-packets/IND-001.yaml": "3d5778712ed09558c4df4c881745785311ca4f3be5ba7df4556930dd131cf86f",
+    "task-packets/IND-FIX-001.yaml": "0d3b1bf1a1b167275c5c7916a845c658f14e7fa69dc0383963ba4648c202145c",
+    "task-packets/IND-WG-001.yaml": "2766279b611409c8c0bc376b1161d3508e2485fa72c109222e90ceb60b13611c",
+    "task-packets/IND-WG-002.yaml": "78bd0d87b54b9987621c1c42d8363fcd73d67c46677fe354d9f39229778a10d9",
+    "task-packets/IND-WG-003.yaml": "897dc36776c08f73c93019cbcbe841a0f1ad2710385b28141b05602b53e3882e",
+    "task-packets/IND-WG-004.yaml": "20ed881b6010aa5b5bca07d85b92d49b053641e88b05884c61e6a1661902fb7f",
+    "task-packets/IND-WG-005.yaml": "033db2dd187457a94a8a346baf6aa11bd07ad6ac25cfc3d4d315a60b2e78ae38",
+    "task-packets/KN-001.yaml": "5e1790e09f99c70f41288fde9767447f8b655ec821f029d266aa9973301d81e2",
+    "task-packets/KN-002.yaml": "96a61677ee41b973a9282f858c4f355d54afe4b2c5f47d6cc18aea2114226fb6",
+    "task-packets/KN-DATA-001.yaml": "73422c32a67d78cbcb6e74447482022f3552b24fd8ca356da5da91c9c538e0d2",
+    "task-packets/KN-DATA-002.yaml": "ddd3b5f0f21705eb1ea07103dc91b194703dea50935e0e37c9796101e3239e40",
+    "task-packets/KN-DOM-001.yaml": "452fd1e14baa779023ca27511af9b9a8b4281ddc8dea51327b93e594700e9f56",
+    "task-packets/KN-MEM-001.yaml": "4ab3568fdfd01d500f205a2c5976526639a775c21ec09b8cf99cfdcfaaff3483",
+    "task-packets/KN-RET-001.yaml": "d417da2b27707a0b69590019e556f35cf6d6f737c37858c9099481323415a5b1",
+    "task-packets/MET-001.yaml": "43af6889dcf50d3ee8370cd5e761acc1a9fd989a44538b4db84a62df21f67880",
+    "task-packets/MET-002.yaml": "e93658d831f7dc2f1b228f03986117ca59af276fefe901e3802df117a2eb34c7",
+    "task-packets/MET-003.yaml": "d0bf1bc8cb15c536433528bf7b30aa3713e5ae44cb809d749fe8f344bccf3eea",
+    "task-packets/MET-004.yaml": "942bae46d9b7e8561f7a4474f465eb2397df7bbc48a34b90e8c91403f126012f",
+    "task-packets/MET-005.yaml": "aee54bd4c5219eb9ab7a751fb4d42008a5e05abc3188b9484a1eee8a1f628cba",
+    "task-packets/MET-A2-001.yaml": "fcee128a05f6e53e60461a53108bb652187ae7e67c1056a4f2dcb6fd6477b413",
+    "task-packets/MET-ACCEPT-001.yaml": "100fa8cd2e55323d6b99d75d9da079ba06a1414f2c85019b3246ba833d606f8d",
+    "task-packets/MET-ADOPT-001.yaml": "bb7c8bc5ef7cb67b808817280f5b6803a12bd182c5c944084ea5de4714cd7837",
+    "task-packets/MET-ADOPT-002.yaml": "9d4cd3a954a94daf3a624398e65d169c62d8b042ee8ab0588a375e8a7f832df2",
+    "task-packets/MET-LINUX-001.yaml": "b54b47708b13bf9c184345308466e6a23af159040aacdc62744d43135c8f5f04",
+    "task-packets/MET-LINUX-002.yaml": "7e2efb3daad8e5152028cfd35ced7449cd145a51fd3573b4e71981d29a8ee787",
+    "task-packets/MET-LIVE-001.yaml": "c37fa6eabc16e7a424b894c8b3863931a4fa6bb56baa20b75d447923bc38007c",
+    "task-packets/MET-OBS-AH-001.yaml": "9a527e5343d99e679c850a1dd416de9c4ed19f100caec0d1872f1dfc1424001a",
+    "task-packets/MET-OBS-MODEL-001.yaml": "7493f8f788f982df4cd6b32f3647c82f41b8989feee54fea8740fff5e61f1a9b",
+    "task-packets/MET-OBS-OCP-001.yaml": "9028852eaa2ddc2f7dc3559e38ab4d83bc3c6598dab97d10fb80846ed17fe711",
+    "task-packets/MET-OBS-SDK-001.yaml": "fe44c76c6160847435869accd0ec895ec0ff700bca3f7ec09843b535a0a21e95",
+    "task-packets/MET-P0-001.yaml": "41d838c56aa88e5c60e4b6768d28d3b24073fc63955309c89a49315c641192dc",
+    "task-packets/MET-P0-002.yaml": "6ffd3057b377f1d6c7fc47cae26472f010e83090b5c31d90cbb46c4e0a7d9611",
+    "task-packets/MET-P0-FIX-001.yaml": "1845f579a807d30e2880d4aee46b52e849092b0374fbf59f4ca31f8e66d45194",
+    "task-packets/MET-P0-FIX-002.yaml": "b12012d45b0b9f968816a21be7cc714491ba94fcb7ee1af348da9bcd520a6ef2",
+    "task-packets/MET-P0-FIX-003.yaml": "bf18a928240f0e0991287564d193a45a2699efa9aeb949b31dc112815a83cef2",
+    "task-packets/MET-P0-FIX-004.yaml": "c3614e7cace9d83299e70add53c6650c8668d156850f941904f64f871ad29807",
+    "task-packets/MET-PERF-001.yaml": "761c004a56df4e626c6e984e8fe0e0e7d4cec2a87bdb57a5f4ae40430930256a",
+    "task-packets/MET-PERF-002.yaml": "cfc550f705db0005bd9244fa61491d791730f39174062fdc6c23e98d53852b14",
+    "task-packets/MET-PERF-003.yaml": "7acb73ac5dcee82d261cddc13ef5eb0c012c32dead3a150d328aa806bd7fe5b8",
+    "task-packets/MET-PERF-004.yaml": "a50aeeeafcc1f81d08caa54a90ea64aa66b46bc7dae543e603b21406132fc002",
+    "task-packets/MET-PERF-005.yaml": "7ed4fd331c9f5b232fc2f513d09e6c3316d117037c46666fa27c3846d50db5e8",
+    "task-packets/MET-PERF-006.yaml": "e27a001db64c1c706adc4449551d15a4ba3baa5a34f773ad4feadf599d2aadff",
+    "task-packets/MET-PERF-007.yaml": "0df31820a57b329c3dce082b1b4869ef950613facc8b91aa1dd1f8a3dbc44145",
+    "task-packets/MET-PERF-008.yaml": "170c4ec0104eacaf326e863121450b93399564b3d38db098d832fc9357e2acf5",
+    "task-packets/MET-PERF-009.yaml": "102cf2f1faff1fc0f8a718a40f8264181559c741e85ecbfc5f30fdc5dc94ae54",
+    "task-packets/MET-PERF-010.yaml": "f568f10599b02758c22d67e053c8eff207f409d0584b7866832c4e95659e31b2",
+    "task-packets/MET-PERF-011.yaml": "a34726125505361a7498353f0211a1673a570032221ef40e2b0487f8b0255f62",
+    "task-packets/MET-PERF-012.yaml": "ec308735eb1420b3b9c4a0693b8f6c6697cb1a162dc26de31fdd850e8012b57d",
+    "task-packets/MET-PERF-013.yaml": "91d54c9b118caf892f9564ef5abef10b040012f83a3003d53fa538eb08383d8e",
+    "task-packets/MET-PUBLISH-001.yaml": "61cf7e849f5d143016d3357e0f148be7df18465b06a6705668592935bd084c58",
+    "task-packets/MET-REPAIR-001.yaml": "45ea3a94514ae1b7b06608fa4629603fbe3c908c726da66fa733ccaffcb03986",
+    "task-packets/MET-REPAIR-002.yaml": "75cd79e37a9a3a2adc645e322d8b8b6f27abf546d52b6fb821c275dedf4078e4",
+    "task-packets/MET-REPAIR-003.yaml": "6f07a6fe38f305ffc226999b19fedb5ec4082069c8d14dede36bd001e550abf1",
+    "task-packets/MET-REPAIR-004.yaml": "3217293d977e25f0c6e7f6e6bb0134c27d840fd8769dc285494ecc7f351f6d94",
+    "task-packets/MET-REPAIR-005.yaml": "680335751aab8ac403f73db751d67c0ba98fce09017d51eebd7fa36d7b9fb5d0",
+    "task-packets/MET-REPAIR-006.yaml": "365207085a6bc661164660008d9248f1414a821898497851da9f17cba9366e92",
+    "task-packets/MET-REPAIR-007.yaml": "e4bbc961a86663fd4e8f52a74524e335b579b75031c2fdc97ff3ed0b9714d756",
+    "task-packets/MET-REPAIR-008.yaml": "3a25b0653760488a41575696cf722bccce76d51bd2653ca8f1ccdef162cfc476",
+    "task-packets/MET-REPAIR-009.yaml": "15dc67a95231ca39755bd91ff5056e5cf5c1769340e09104ca0878715ce9bf97",
+    "task-packets/MET-REPAIR-010.yaml": "735b5bd31ddb8ce72d7a08f50658e3d34e4953c780be5ea0e704aded2f86b488",
+    "task-packets/MET-REPAIR-011.yaml": "68308a56b7d60b4083330f479868bf10b378a84c9d1cf25fcc1b055bf1444964",
+    "task-packets/MET-REPAIR-012.yaml": "98df418a71f5e42a50c92b7b118698ea9278f2f8c239dc80288fdbedb3739845",
+    "task-packets/MET-REPAIR-013.yaml": "dfbe04555e5ab402e6fe14946ff399b04d57a1f7007ab2f88cbb8123b2701738",
+    "task-packets/MET-REPAIR-014.yaml": "19ad702ccc750b57f4105d90796eb19f1314e31c9b4f7c4580da9eb7e5b27601",
+    "task-packets/MET-REPAIR-015.yaml": "a9a2ddc49852c4642b385acaba77061463a47d71025db72c302e8c1a6dfb2b76",
+    "task-packets/MET-REPAIR-016.yaml": "519ac3b1b8cdb6de648fd91b82029c9139b93d939e452eeac666cbbf92916ec2",
+    "task-packets/MET-REPAIR-017.yaml": "ed1b5da50f32e1762a6a6c0d5be423014b1168644073620b0a9dc7681a87c940",
+    "task-packets/MET-REPAIR-018.yaml": "50224dc06bd2d1ef1506e66ecceb6c94826e607fabf0e747f32144268f20eefe",
+    "task-packets/MODEL-001.yaml": "753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0",
+    "task-packets/MODEL-002.yaml": "25ac59868a1805845ab244ee7ab08590dd72c928c6821bd22bc47eb1c5c819c5",
+    "task-packets/MODEL-003.yaml": "25403133eb4bd1272f6719903832e4182d899c6c6d2613b9240ce417bd6af09f",
+    "task-packets/MODEL-004.yaml": "2b7260bd8bc5bf06880be4d2a06adab877ec6b956d1fe7b4ed40a619dad34ab3",
+    "task-packets/MODEL-LLAMACPP-001.yaml": "f151b3393cb61b9133f21488fb53f01117e0960078077b6439bdc612adda793d",
+    "task-packets/MODEL-OLLAMA-001.yaml": "31fd06d3fab1227e42661af30e025c33deb51e49fcdf291ab443b6f80780d768",
+    "task-packets/MODEL-VLLM-001.yaml": "681a93edcbead7333b8439e6ddc849bc7a4ee0b9008b8bbab60cd494cac00f4e",
+    "task-packets/OP-001.yaml": "9a64698615c1c1fa8ef899b50495d5249bec0a877f0e7f7a92e9058ef196b07b",
+    "task-packets/OP-002.yaml": "caeea13c1efffc147fd0ca2d4c270916ca12e61c2a7122962eff4b024d2bf2f4",
+    "task-packets/OP-003.yaml": "86fd96fc4cf016331ebe1c8c95a5c0faba9b8155439f324c381991ea7b1eba1b",
+    "task-packets/OP-004.yaml": "6b585f709a0f69283534e0fadbe90502bd335fc9754bb5c30b0624d26e3eb241",
+    "task-packets/OP-005.yaml": "9529029015e992d5cfffc4d0c2bcfe88e579834b8e27aff31607fb550799f09d",
+    "task-packets/OP-006.yaml": "fa376aee945c301717e12b79aa5c4ebd7869e6b924b6afabd3f184db32d1595e",
+    "task-packets/OP-007.yaml": "f4508ad47659315581d551939576d2307aa0043de4b71eabf99878de126b2548",
+    "task-packets/RUN-001.yaml": "4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457",
+    "task-packets/RUN-002.yaml": "cbda98c7e8f70f404c2316fa50e09eb66d18778a82ae2d64a16d20451a03c67e",
+    "task-packets/RUN-EXP-001.yaml": "2a134a3b0e344b18a35ef3b82f1d34aa74f79ef83ab0730cda2eb740bce4a541",
+    "task-packets/RUN-GW-001.yaml": "3695dc7de22d757f70528d9f23d0c4b46865b70a22c5c15f4bd423590544069a",
+    "task-packets/RUN-GW-002.yaml": "3745467874e1293eb93e8a32c36c50493568389d718b1e66650952352a733996",
+    "task-packets/SDK-001.yaml": "737990fc853fd50c22d211f0ada320585b304fe116cab881581575a9a6dca941",
+    "task-packets/SDK-002.yaml": "b791f5f514dec76ebfd37ea17c7b0ca024057fbe4ebc2443bcdf15e7ca18c151",
+    "task-packets/SDK-003.yaml": "49b413cbd44e8fefdb20b7c817c676b0b95d671a25f07a11c47fb9276ab1a7b5",
+    "task-packets/SDK-004.yaml": "8c24a6bc4429e29e97a64746d12de95d9b47bd7b3d48ca312d8c9a3aea8ec23a",
+    "task-packets/SDK-005.yaml": "b6db3bd5595dcae7aeaea71a3a5ca49b4044abfbe13d687d8cb49c1013c45a7a",
+    "task-packets/SDK-006.yaml": "dc7771e61400288b5b7e6c6b69b802430ededa03947bed2adaa5f6542a063edc",
+    "task-packets/SDK-007.yaml": "054feee9dfc45e76959a7182e47672dc95fb68558d2f1f7d97445eada3566054",
+    "task-packets/TRUST-001.yaml": "d4fec1372836a3c85458b1e489fabda0869cc38a8bc480a709dc94e0e5fb8b19",
+    "task-packets/TRUST-002.yaml": "cf80bc33b5517177e00f2d9e8bddb92c41f1c59b18a0cc2f54688a693a4ac151",
+    "task-packets/TRUST-003.yaml": "b0d1ccdb6a7545fbc58d8c32fa5e9835383608ba945ad948da06c8c6996af350",
+    "task-packets/TRUST-EVAL-001.yaml": "c0f5eaa5e35ea34fff04eb49ae4b500b4dbcc01221e11ece6b95b845c376828c",
+    "task-packets/TRUST-FIX-001.yaml": "68d753be5f9eb9edaaf696bb48ea7c40448c4205d2778a3172a62a5f5707cc6c",
+    "task-packets/TRUST-FIX-002.yaml": "f74a5004b51b8b16aa7a9c01036ac76bb1b396ddc692cc5736233639ee314893",
+    "task-packets/TRUST-GOV-001.yaml": "af7591bd4b20237ad54e942c65d4149540f4dca3d72b6478db6bb9e0afff3221",
+    "task-packets/TRUST-OBS-001.yaml": "760c4a519ec39f1a4a9523eca563d4e22597b06c8b8929913a7953d0f30f0290",
+    "task-packets/TRUST-REG-001.yaml": "83fc22106c0eeb31b032bd3f5820eb359855d5c928f9bf3be9cd7edf1563427e",
+    "tests/fixture_yaml.py": "cdcc55e5bdbf1272cb625cb23bb48b7f0051b415032749c09c4240f01697f986",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "schemaVersion": "planeon.internal.factory-diagnostics-authority/v1",
+  "unchangedTests": {
+    "ci/test_offline_runner.py": "46444c4218502f889f9d3e923c60604f6eff5434ab248a9cfc96976f38f06fcb",
+    "ci/test_warm_snapshot.py": "929be52a3835a0b0d28d355fd4b4f85fc0e5e210502c3b6c62c2b24348fafa24",
+    "tests/fixture_yaml.py": "cdcc55e5bdbf1272cb625cb23bb48b7f0051b415032749c09c4240f01697f986",
+    "tests/linux_runner/conftest.py": "414b64d997172139aa984294dbb9b9d136ac9197f8245580f6d8c05e84b3a0d4",
+    "tests/linux_runner/test_authority.py": "1a29bb42ca3a6fda8281c6e9e9fa79266107b1e244510563950e69ff3aa7cf90",
+    "tests/linux_runner/test_build_and_predecessors.py": "6990993b16abdd8b548e6edfba37e7c40ab6bdd10478a45ab029a3a06765c0c6",
+    "tests/linux_runner/test_isolation.py": "e5f6b98874ace99fb27667264b44deb797f18e5fafbda392b70476184e91c9f9",
+    "tests/linux_runner/test_manifest_gate.py": "3dcaa594833c855e2f5df621ae2786cb21e2d9aeeaae6833ca534f680a92098f",
+    "tests/linux_runner/test_toolchain.py": "19333875ae259280b4d64ee3dfb1c37618362fd94e3086381e92b636680941bf",
+    "tests/test_architecture.py": "4950bc15a766718f7841fdb3a549507c99e2eb67805eda952f536190d87301fa",
+    "tests/test_data_harness_v1_observation.py": "5404c7e707f159c4dbe5a279ca67bc47f9cc0da6839e49b8d9fdb6c254c9180f",
+    "tests/test_live_campaign_envelope.py": "c86fba5f72c8285ced6ab6039d65f6cc0ab78d8f79aa571e11879b14fc5424fd",
+    "tests/test_model_usage_observation.py": "3b6edd26186344584d7257eac61cc1e8b57b7de6fb34f16e865571a581b78e07",
+    "tests/test_readiness.py": "9694b99697768d759542b5d0cacb44ae8f04a75591254bda94555f1dc70ba280",
+    "tests/test_readiness_repairs.py": "2647e5b195cfeb891429d17e28a3b34714f74cacab83c08b11af5f0b29a20147",
+    "tests/test_reference_observer.py": "1ee810ee459404ff6d74cf7ce4ed1d62c139db6264a848acb57dd257474781d1",
+    "tests/test_release_lock.py": "41f1e77372f5536d2812041fb32e79f2bc7b8ccd3f776e59bc5f0bc5a0b10521",
+    "tests/test_repository_tree_observation.py": "555987fc9bc8d43400f9f7dcd5bc0a1e5a6bcc7c171097a8b1922c5487c37f8e",
+    "tests/test_validator_units.py": "fc301539333e3f9a833577fd1c879b9d23b969a9056a4c9ab5b721d80f363db6",
+    "tests/test_zero_bill.py": "0a3f0a4480afa0382737d52da976b7d72b7a2d79c9c5c22b2f8812caa33a2821"
+  }
+}
