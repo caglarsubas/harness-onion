@@ -66,6 +66,17 @@ PR18 speedup and cannot replace full acceptance or close C1-C7.
 
 ## META acceptance and historical boundaries
 
+LOCAL ordinal1 failed before tests: six exact path-overlap diagnostics exposed an
+omitted dispatch declaration. Its commit05cb628, full evidence and consumed ordinal
+remain retained. Ordinal2 is the only remaining LOCAL attempt; no budget extension.
+The correction follows the existing closed dispatch pattern: preserve blocked PR18
+without executing or retiring it, recognize the separately accepted-main repair
+branch and treat the benchmark's path as a read-only subject anchor. All five packet
+documents are digest-checked before closing only the six exact diagnostics. Unknown,
+missing, duplicate or changed diagnostics and any expanded packet still fail.
+The generic ownership validator remains unchanged. No fake accepted-predecessor
+edge, old packet modification or product source-history exemption is introduced.
+
 Exactly173 specifications:170 immutable predecessor YAML plus this META packet and
 two conditional successors. All accepted authority JSON/release/reuse/toolchain
 locks and old evidence remain immutable. The predecessor's planning-only assertions

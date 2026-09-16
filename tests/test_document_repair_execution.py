@@ -116,3 +116,30 @@ def test_publication_never_promotes_product_benchmark_or_tenant_acceptance(autho
     workload=module.parse(authority[2][module.INPUT_PREFIX+'workload.json'])
     assert workload['candidateCommit']=='MUST_BE_FROZEN_BEFORE_FIRST_EXECUTION'
     assert workload['qualification']['partialPooling'] is False
+
+
+def test_dispatch_closes_only_exact_pinned_fork_and_readonly_pairs(authority,monkeypatch):
+    packets=authority[0]
+    paths=packets['CONF-PERF-006']['allowedPaths']
+    pairs=[('CONF-BENCH-002','CONF-FIX-007',paths[:1]),('CONF-BENCH-002','CONF-LIVE-003',paths[:1]),
+           ('CONF-BENCH-002','CONF-PERF-006',paths[:1]),('CONF-FIX-007','CONF-PERF-006',paths)]
+    expected=['unordered same-repository packets '+a+' and '+b+' overlap at '+repr(p)+' and '+repr(p)
+              for a,b,selected in pairs for p in selected]
+    assert len(expected)==len(set(expected))==6
+    assert module.close_document_dispatch(packets,expected+['unrelated'])==['unrelated']
+    for bad in [[],expected[:-1],expected+expected[:1]]:
+        assert module.close_document_dispatch(packets,bad)==bad+['missing or changed closed document repair dispatch']
+    for name in ('MET-PERF-012','CONF-PERF-006','CONF-BENCH-002','CONF-FIX-007','CONF-LIVE-003'):
+        changed=deepcopy(packets); changed[name]['allowedPaths'].append('undeclared/')
+        assert module.close_document_dispatch(changed,expected)==expected+['missing or changed closed document repair dispatch']
+    raw=module.regular_bytes(module.ROOT,module.SPEC_PATH)
+    value=module.parse(raw)
+    for key in ('dispatch','retainedLocalFailure'):
+        changed=deepcopy(value); changed[key]=None
+        with pytest.raises(ValueError): module.validate_spec(changed,bind=False)
+    read=module.regular_bytes
+    monkeypatch.setattr(module,'regular_bytes',lambda root,path: raw+b' ' if path==module.SPEC_PATH else read(root,path))
+    # Formatting changes cannot alter semantics; a changed parsed dispatch still fails.
+    changed=deepcopy(value); changed['dispatch']['exactDiagnostics']=7
+    monkeypatch.setattr(module,'regular_bytes',lambda root,path: module.canonical(changed) if path==module.SPEC_PATH else read(root,path))
+    assert module.close_document_dispatch(packets,expected)==expected+['missing or changed closed document repair dispatch']

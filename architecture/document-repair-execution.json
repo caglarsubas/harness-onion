@@ -35,6 +35,39 @@
     "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
     "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
   },
+  "dispatch": {
+    "completionIntegrationAuthorityRequired": true,
+    "exactDiagnostics": 6,
+    "oldPacketAndProductEdits": false,
+    "overlapPairs": [
+      [
+        "CONF-BENCH-002",
+        "CONF-FIX-007",
+        1
+      ],
+      [
+        "CONF-BENCH-002",
+        "CONF-LIVE-003",
+        1
+      ],
+      [
+        "CONF-BENCH-002",
+        "CONF-PERF-006",
+        1
+      ],
+      [
+        "CONF-FIX-007",
+        "CONF-PERF-006",
+        3
+      ]
+    ],
+    "roles": {
+      "CONF-BENCH-002": "READ_ONLY_COMPARISON_NOT_SOURCE_OWNER",
+      "CONF-FIX-007": "PRESERVED_BLOCKED_DRAFT_NO_EXECUTION_OR_MUTATION",
+      "CONF-PERF-006": "SEPARATE_REPAIR_FROM_ACCEPTED_092FCF4_NOT_FROM_DRAFT"
+    },
+    "unknownErrorsPreserved": true
+  },
   "gates": {
     "billingChange": false,
     "dependencies": false,
@@ -69,6 +102,18 @@
   "preservedTestIds": 1277,
   "productAcceptance": false,
   "productExecutionInMetaRun": false,
+  "retainedLocalFailure": {
+    "commandsReached": 2,
+    "commit": "05cb6289872d8bf83fc353380cc0a29338a1ddbc",
+    "logSha256": "153661588aef0503575b307c989271e5627fb19263d023ad8e701fed822e0038",
+    "maximumLocal": 2,
+    "ordinal": 1,
+    "reason": "SIX_UNREPRESENTED_EXACT_DISPATCH_OVERLAPS",
+    "remainingLocal": 1,
+    "reset": false,
+    "resultSha256": "951c453acc0b052dabe11db9ddb68880f2726e1c5c895f1697a345048ed58bc7",
+    "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE"
+  },
   "reviewArtifacts": {
     "CONF-BENCH-002.proposed.yaml": "a262b5c8337230890748d2bb58a78d51cfb64944224bfbfe55f32f97972ca8c1",
     "CONF-PERF-006.proposed.yaml": "e4208c6613aedc2c3c7dabdce417f551558486657e4ab320fe271c205a6d8b37",
@@ -105,12 +150,12 @@
   "sourceScopeSha256": "b073b8588915edc01b344e5dfe0043a2baec3f116545457a4a6f36ca7ba78dd0",
   "status": "ONGOING_META_PUBLICATION",
   "testAccounting": {
-    "addedCases": 75,
+    "addedCases": 76,
     "baselineInner": 4039,
     "baselineOuter": 4288,
     "evidence": "STATIC_SOURCE_ACCOUNTING_NOT_ACCEPTANCE",
-    "expectedInner": 4114,
-    "expectedOuter": 4363,
+    "expectedInner": 4115,
+    "expectedOuter": 4364,
     "inheritedExpansion": [
       {
         "cases": 5,
@@ -195,9 +240,10 @@
       "test_current_first_bridge_refuses_stale_or_unreviewed_bytes[('docs/MASTER_DEVELOPMENT_PLAN.md',)]",
       "test_unicode_driver_matches_frozen_payload_and_rejects_double_escape",
       "test_unique_recipe_and_unchanged_test_routes_remain_closed",
-      "test_publication_never_promotes_product_benchmark_or_tenant_acceptance"
+      "test_publication_never_promotes_product_benchmark_or_tenant_acceptance",
+      "test_dispatch_closes_only_exact_pinned_fork_and_readonly_pairs"
     ],
-    "newCases": 45,
+    "newCases": 46,
     "testsCollectedOrRun": false
   },
   "unchangedProductFiles": 132

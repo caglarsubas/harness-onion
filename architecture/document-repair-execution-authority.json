@@ -5,12 +5,12 @@
     "architecture/document-repair-execution-inputs/semantic-oracles.json": "bc6ef8507e1749a6b47b988be5734603d5c21f7a01e68163de0b1ad34cbe15e9",
     "architecture/document-repair-execution-inputs/source-scope.json": "b073b8588915edc01b344e5dfe0043a2baec3f116545457a4a6f36ca7ba78dd0",
     "architecture/document-repair-execution-inputs/workload.json": "76d6f1c1c260219d4777ec799cfd1fe5e8bf364a80a4dcdc91ce7e6d422da25a",
-    "architecture/document-repair-execution.json": "deb57ee34f24d82ff3ba2328933c185c5812ea86482cafb0357b7abaf58982be",
-    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md": "b75c53c3863a99c1c8f36a5b8f4915602da74569b389e4b632bce18d84d4b3cf",
+    "architecture/document-repair-execution.json": "d4e436b773394e73995791edf2ca6929563e23bbc9f415233a29400801f6cd05",
+    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md": "39ae93b841c8eb51a477fcd5f506ff7f6924a882b09b7902f855afe65918378f",
     "task-packets/CONF-BENCH-002.yaml": "f4146505e7f56182df0cf66d147587128dc0ac769f46ecffd918bcfbf2502072",
     "task-packets/CONF-PERF-006.yaml": "8dc4a6409bceb1669640ae44b3482de2cfc9c95d3089f54ccd1fb13b85100b9c",
     "task-packets/MET-PERF-012.yaml": "6168ceec80fa4152db23abebba2951ed555560d64f419ba4232a0406262adfe6",
-    "tests/test_document_repair_execution.py": "44358819d317d675f86d3b29d8db0bc9f8ef672970240f398e7ea96242e9d911"
+    "tests/test_document_repair_execution.py": "e951d75dc0ef6b9210ff30cfa9de64be7d0696d5b8f1ff696a66e5ee75d7e6ea"
   },
   "metaBaseline": "abb67fde635dd45c8c3f6fbb3576a0a391300c91",
   "metaRecipes": {
@@ -290,12 +290,22 @@
       ]
     },
     "scripts/validate_conformance_reference_measurement.py": {
-      "afterSha256": "29d5a666fa170eaa231b537d44a802d07860e3240f4bc7ac1b4e095e8f104b55",
+      "afterSha256": "ad181819705ac813a272904d7c47e432446842224828070f5a995a56972628c2",
       "beforeSha256": "6c260bccd86ddbc31a86e6b34bea99b4e7b77a7a4e2b1be017b648ad22c1c414",
       "replacements": [
         {
           "after": "        require(len(old) == 150 and len(packets) == 173 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\"}, \"exact155 catalog\")\n",
           "before": "        require(len(old) == 150 and len(packets) == 170 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\"}, \"exact155 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        from scripts.validate_proxy_diagnostics import close_diagnostic_dispatch\n    try:\n        from validate_document_repair_execution import close_document_dispatch\n    except ImportError:\n        from scripts.validate_document_repair_execution import close_document_dispatch\n    \"\"\"No generic weakening; close only the ten immutable, exact scoped pairs.\"\"\"\n",
+          "before": "        from scripts.validate_proxy_diagnostics import close_diagnostic_dispatch\n    \"\"\"No generic weakening; close only the ten immutable, exact scoped pairs.\"\"\"\n",
+          "count": 1
+        },
+        {
+          "after": "        return close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired]))))\n",
+          "before": "        return close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired])))\n",
           "count": 1
         },
         {
