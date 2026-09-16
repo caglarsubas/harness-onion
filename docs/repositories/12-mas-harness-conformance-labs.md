@@ -1,5 +1,20 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current execution gate - MET-PERF-009 reconciliation
+
+[Completion profiling reconciliation](../alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING.
+MET-PERF-010 DONE_SOURCE_GATES at91b320b; accepted performance repair preserved.
+PR124 reconciliation ONGOING_PUBLICATION; LOCAL6/7 only (five old attempts consumed),
+CI2/exact-main1 maximum; full38 commands and both complete META suites.
+Catalog169 specifications; all167 accepted packet YAML and authority JSON immutable.
+CONF-DIAG-003 WAITING_META_SOURCE_GATES; no product execution in this coding turn.
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED; C1-C7 and full8-command acceptance remain.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; no native/runtime/tenant promotion.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current execution gate - MET-PERF-010
 
 [Bounded validation repair](../alpha-2/VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
@@ -322,6 +337,8 @@ CONF-LIVE-003 remains the sole owner. MET-ACCEPT-001 grants one additional LOCAL
 CONF-LIVE-003 local gate passed. MET-PUBLISH-001 separately scopes publication/CI/exact-main; it grants no product edits and creates no second product owner.
 
 `CONF-FIX-007` corrects remaining003 implementation in five existing paths, with no new source stage or native authority. Its reviewed completion and independent exact-main are mandatory before004.
+
+`CONF-DIAG-003` is one separate read-only1397-case diagnostic of draft25fab12 after all reconciled MET-PERF-009 source gates; no product edit, acceptance retry or coding PR.
 
 ## Testing, verification, and acceptance
 

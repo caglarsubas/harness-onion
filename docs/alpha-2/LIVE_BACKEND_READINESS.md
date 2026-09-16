@@ -1,5 +1,20 @@
 # Trusted Linux live-backend readiness — MET-LIVE-001
 
+## Current execution gate - MET-PERF-009 reconciliation
+
+[Completion profiling reconciliation](COMPLETION_PROFILING.md): Alpha2 ONGOING.
+MET-PERF-010 DONE_SOURCE_GATES at91b320b; accepted performance repair preserved.
+PR124 reconciliation ONGOING_PUBLICATION; LOCAL6/7 only (five old attempts consumed),
+CI2/exact-main1 maximum; full38 commands and both complete META suites.
+Catalog169 specifications; all167 accepted packet YAML and authority JSON immutable.
+CONF-DIAG-003 WAITING_META_SOURCE_GATES; no product execution in this coding turn.
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED; C1-C7 and full8-command acceptance remain.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; no native/runtime/tenant promotion.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current execution gate - MET-PERF-010
 
 [Bounded validation repair](VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.

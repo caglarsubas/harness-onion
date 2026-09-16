@@ -1,5 +1,20 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current execution gate - MET-PERF-009 reconciliation
+
+[Completion profiling reconciliation](../alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING.
+MET-PERF-010 DONE_SOURCE_GATES at91b320b; accepted performance repair preserved.
+PR124 reconciliation ONGOING_PUBLICATION; LOCAL6/7 only (five old attempts consumed),
+CI2/exact-main1 maximum; full38 commands and both complete META suites.
+Catalog169 specifications; all167 accepted packet YAML and authority JSON immutable.
+CONF-DIAG-003 WAITING_META_SOURCE_GATES; no product execution in this coding turn.
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED; C1-C7 and full8-command acceptance remain.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; no native/runtime/tenant promotion.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE.
+
+## Retained planning and historical checkpoints
+
 ## Current execution gate - MET-PERF-010
 
 [Bounded validation repair](../alpha-2/VALIDATION_PERFORMANCE_REPAIR.md): Alpha2 ONGOING.
@@ -187,6 +202,8 @@ Harness-Engineering/
 ├── task-packets/
 │   ├── README.md
 │   └── <one-file-per-packet>.yaml
+├── diagnostics/
+│   └── conf_diag_003.py
 ├── reference-observer/
 │   ├── harness-reference-observe.py
 │   └── harness-reference-extract.py
@@ -373,6 +390,8 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 48. `MET-ADOPT-002`: publish the research-led OSS adoption map, per-harness build-versus-integrate responsibilities and coordinated delivery gates without product changes.
 
 49. `MET-PERF-010`: independent bounded validation-performance repair; old draft/attempt evidence remains immutable.
+
+50. `MET-PERF-009`: reconcile existing profiling draft after accepted010; additional LOCAL6/7 only, no product execution or old budget reset.
 
 ## Testing, verification, and acceptance
 

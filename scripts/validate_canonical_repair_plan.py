@@ -195,7 +195,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(timing_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 158 and len(packets) == 167 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010'},
+        require(len(old) == 158 and len(packets) == 169 and set(packets) == old | set(NEW_IDS) | {'MET-PERF-008','CONF-DIAG-002', 'MET-ACCEPT-001', 'MET-PUBLISH-001', 'MET-REPAIR-017', 'CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003'},
                 'one new meta packet and158 immutable predecessors')
         require('CONF-PERF-005' not in packets, 'proposed product packet is not execution authority')
         for name in old | set(NEW_IDS):

@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_completion_profiling import historical_bytes as profiling_history, current_test_bytes as profiling_current, validate_additions as profiling_additions
+except ImportError:
+    from scripts.validate_completion_profiling import historical_bytes as profiling_history, current_test_bytes as profiling_current, validate_additions as profiling_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/validation-performance-authority.json"
 RECORD_SHA256 = "d914c4bbf00fe3d98a1db63c834203ef4452c10ca185a792c364aef0bbd06db4"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = profiling_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -120,9 +126,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
         require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return profiling_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return profiling_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -131,7 +137,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return profiling_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -190,13 +196,13 @@ def validate_authority(packets, record, inputs):
                 **{p: r["afterSha256"] for p, r in record["metaRecipes"].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), "fresh complete source inventory")
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum,
+            require(type(inputs[path]) is bytes and digest(profiling_history(path, inputs[path])) == checksum,
                     "changed source: " + path)
         old = {Path(p).stem for p in record["protectedFiles"]
                if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 166 and len(packets) == 167
-                and set(packets) == old | set(NEW_IDS), "166 immutable predecessors plus one repair")
-        for name in packets:
+        require(len(old) == 166 and len(packets) == 169
+                and set(packets) == old | set(NEW_IDS) | {"MET-PERF-009", "CONF-DIAG-003"}, "166 immutable predecessors plus one repair")
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/" + name + ".yaml"])),
                     "raw packet parity")
         packet, prior = packets["MET-PERF-010"], packets["MET-ADOPT-002"]
@@ -218,7 +224,7 @@ def validate_authority(packets, record, inputs):
             require(digest(inputs[path]) == checksum, "unchanged contract or lock")
         for path, rule in record["metaRecipes"].items():
             before = historical_bytes(path, inputs[path])
-            require(apply_recipe(before, rule) == inputs[path], "exact reversible repair")
+            require(apply_recipe(before, rule) == profiling_history(path, inputs[path]), "exact reversible repair")
             if path.startswith("tests/"):
                 require(test_ids(before) == test_ids(inputs[path]), "all inherited test identities")
         for path in record["navigationPaths"]:
@@ -238,5 +244,5 @@ if __name__ == "__main__":
     if errors:
         print("\n".join(errors))
         raise SystemExit(1)
-    print("Validation-performance authority valid:167 specifications;166 unchanged packets; "
+    print("Validation-performance authority valid:169 specifications;166 unchanged packets; "
           "bounded digest/fixture repair; no product or acceptance promotion.")

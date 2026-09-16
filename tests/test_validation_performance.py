@@ -9,6 +9,7 @@ import re
 import shutil
 
 import pytest
+from scripts.validate_completion_profiling import historical_bytes as profiling_history
 import yaml
 
 from ci.measure_yaml_parsing import shape
@@ -200,7 +201,7 @@ def test_real_large_fixture_parity_and_metadata_conflict(tmp_path):
 def test_complete167_authority_and_old_sources(authority):
     assert module.validate_authority(*authority) == []
     packets, record, inputs = authority
-    assert len(packets) == 167
+    assert len(packets) == 169
     assert module.NEW_IDS == ("MET-PERF-010",)
     assert len([p for p in record["protectedFiles"]
                 if p.startswith("task-packets/") and p.endswith(".yaml")]) == 166
@@ -210,7 +211,7 @@ def test_complete167_authority_and_old_sources(authority):
     assert re.findall(r"`(MET-PERF-010)`", section.group(1)) == ["MET-PERF-010"]
     indexed = re.findall(r"^\|\s*\d+\s*\|\s*`([A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+)`\s*\|",
                          inputs["task-packets/README.md"].decode(), re.M)
-    assert len(indexed) == len(set(indexed)) == 167
+    assert len(indexed) == len(set(indexed)) == 169
     assert set(indexed) == set(packets)
     vectors = module.parse(inputs[module.SPEC_PATH])["testVectors"]
     assert vectors["expectedAddedCases"] == 130
@@ -226,7 +227,7 @@ def test_complete167_authority_and_old_sources(authority):
             return ast.literal_eval(node.value)
         current = inputs[source_path]
         before = module.historical_bytes(source_path, current)
-        assert additions(current) == additions(before) + ("MET-PERF-010",)
+        assert additions(profiling_history(source_path, current)) == additions(before) + ("MET-PERF-010",)
         functions = [next(n for n in ast.parse(raw).body
                           if isinstance(n, ast.FunctionDef) and n.name == row["test"])
                      for raw in (module.historical_bytes(test_path, inputs[test_path]), inputs[test_path])]
@@ -245,7 +246,7 @@ def test_complete167_authority_and_old_sources(authority):
     assert vectors["expectedPasses"] == {"inner": 3866, "outer": 4115}
     for path, rule in record["metaRecipes"].items():
         before = module.historical_bytes(path, inputs[path])
-        assert module.apply_recipe(before, rule) == inputs[path]
+        assert module.apply_recipe(before, rule) == profiling_history(path, inputs[path])
         if path.startswith("tests/"):
             assert module.test_ids(before) == module.test_ids(inputs[path])
 
