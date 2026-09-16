@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_benchmark_transport import historical_bytes as transport_history, current_test_bytes as transport_current, validate_additions as transport_additions, historical_catalog as transport_catalog
+except ImportError:
+    from scripts.validate_benchmark_transport import historical_bytes as transport_history, current_test_bytes as transport_current, validate_additions as transport_additions, historical_catalog as transport_catalog
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = 'architecture/document-repair-execution-authority.json'
 RECORD_SHA256 = 'bafacca38370813f61965faa9076208b955502304b7245196d2956ad1f7d4617'
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = transport_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -120,9 +126,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
         require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return transport_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return transport_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -131,7 +137,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return transport_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -160,6 +166,7 @@ def historical_catalog(packets):
     record = _record()
     pinned(record)
     require(validate_additions(packets) == [], 'exact successor declarations before projection')
+    packets = transport_catalog(packets)
     old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
     require(len(old) == 170 and set(packets) == old | set(NEW_IDS), 'closed 173-packet catalog')
     return {name: packets[name] for name in old}
@@ -260,10 +267,10 @@ def validate_authority(packets,record,inputs):
         pins={**record['protectedFiles'],**record['inputFiles'],**{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs)==set(pins), 'complete fresh source inputs')
         for path,checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path])==checksum, 'source drift: '+path)
+            require(type(inputs[path]) is bytes and digest(transport_history(path,inputs[path]))==checksum, 'source drift: '+path)
         old=historical_catalog(packets)
-        require(len(old)==170 and len(packets)==173 and 'CONF-PERF-006' not in old, 'historical planning boundary')
-        for name in packets:
+        require(len(old)==170 and len(packets)==175 and 'CONF-PERF-006' not in old, 'historical planning boundary')
+        for name in transport_catalog(packets):
             require(canonical(packets[name])==canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'raw packet parity')
         meta=packets['MET-PERF-012']; prior=packets['MET-PERF-011']
         require(meta['repository']=='Harness-Engineering' and meta['predecessors']==['MET-PERF-011'] and meta['allowedPaths']==record['ownedPaths'], 'exact META owner')
@@ -284,7 +291,7 @@ def validate_authority(packets,record,inputs):
         for path,checksum in value['contractPins'].items(): require(digest(inputs[path])==checksum, 'immutable contract')
         for path,rule in record['metaRecipes'].items():
             before=historical_bytes(path,inputs[path])
-            require(apply_recipe(before,rule)==inputs[path], 'exact reversible metadata')
+            require(apply_recipe(before,rule)==transport_history(path,inputs[path]), 'exact reversible metadata')
             if path.startswith('tests/'): require(test_ids(before)==test_ids(inputs[path]), 'all inherited test identities')
         for path in record['navigationPaths']:
             require(all(s in inputs[path] for s in (b'DOCUMENT_REPAIR_AUTHORITY.md',b'MET-PERF-012',b'CONF-PERF-006',b'CONF-BENCH-002',b'WAITING_META',b'BLOCKED_LOCAL_BUDGET_EXHAUSTED',b'HARNESS_PAPER_REPOSITORY_MAP.md',b'NOT_DUE')), 'consistent current roadmap')
@@ -298,4 +305,4 @@ if __name__=='__main__':
     errors=validate_authority(packets,*load_inputs(ROOT))
     if errors:
         print('\n'.join(errors)); raise SystemExit(1)
-    print('Document repair execution authority valid:173 specifications;170 immutable packets; product and comparison not run.')
+    print('Historical document repair execution valid:175 current specifications;173-packet projection; product and comparison not run.')

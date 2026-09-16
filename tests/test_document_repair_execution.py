@@ -2,6 +2,7 @@
 from copy import deepcopy
 import pytest
 from scripts import validate_document_repair_execution as module
+from scripts.validate_benchmark_transport import historical_bytes as transport_history
 from scripts.safe_yaml import safe_load
 
 
@@ -14,14 +15,14 @@ def authority():
 def test_closed_authority_preserves_predecessors_and_full_recipe(authority):
     assert module.validate_authority(*authority)==[]
     packets,record,inputs=authority
-    assert len(packets)==173 and len(module.historical_catalog(packets))==170
+    assert len(packets)==175 and len(module.historical_catalog(packets))==170
     for path in ('ci/test_offline_runner.py','ci/test_warm_snapshot.py'):
         raw=module.regular_bytes(module.ROOT,path)
         assert module.digest(raw)==record['unchangedTests'][path]
         assert module.current_test_bytes(raw)==raw
     for path,rule in record['metaRecipes'].items():
         before=module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule)==inputs[path]
+        assert module.apply_recipe(before,rule)==transport_history(path,inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before)==module.test_ids(inputs[path])
             assert module.current_test_bytes(before)==inputs[path]
@@ -80,7 +81,7 @@ def test_fresh_authority_read_rejects_later_drift(monkeypatch):
 def test_current_first_bridge_refuses_stale_or_unreviewed_bytes(authority,path):
     raw=authority[2][path]; rule=authority[1]['metaRecipes'][path]
     old=module.historical_bytes(path,raw)
-    assert module.apply_recipe(old,rule)==raw
+    assert module.apply_recipe(old,rule)==transport_history(path,raw)
     with pytest.raises(ValueError): module.historical_bytes(path,old)
     with pytest.raises(ValueError): module.historical_bytes(path,raw+b'\n')
 

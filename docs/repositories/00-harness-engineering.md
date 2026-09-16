@@ -1,5 +1,20 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current publication gate - MET-PERF-013
+
+[Benchmark transport correction](../alpha-2/BENCHMARK_TRANSPORT.md): Alpha2 ONGOING.
+MET-PERF-012 DONE_SOURCE_GATES at9b8b30b / PR127; installed transport mismatch found before any comparison run.
+MET-PERF-013 ONGOING_PUBLICATION: META only,175 specifications,173 immutable prior packets.
+CONF-PERF-006 CANDIDATE_FROZEN atc0f4002; comparison and full product acceptance pending.
+CONF-BENCH-002 NON_DISPATCHABLE_RETAINED_HISTORY; CONF-BENCH-003 WAITING_META_SOURCE_GATES.
+One shared four-run B,C,C,B ledger, zero retries; no product or runner-policy change.
+CONF-FIX-007/PR18 BLOCKED_LOCAL_BUDGET_EXHAUSTED; CONF-LIVE-004/005/006 and CONF-A2-001 WAITING.
+Alpha3/4 WAITING. Model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current publication gate - MET-PERF-012
 
 [Document repair authority](../alpha-2/DOCUMENT_REPAIR_AUTHORITY.md): Alpha2 ONGOING.
@@ -423,6 +438,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 50. `MET-PERF-009`: reconcile existing profiling draft after accepted010; additional LOCAL6/7 only, no product execution or old budget reset.
 51. `MET-PERF-011`: publish bounded private document repair design; no product packet/allowance yet.
 52. `MET-PERF-012`: publish exact conditional document repair and read-only measurement authority.
+53. `MET-PERF-013`: publish exact argument transport correction and non-resettable comparison successor.
 
 ## Testing, verification, and acceptance
 
