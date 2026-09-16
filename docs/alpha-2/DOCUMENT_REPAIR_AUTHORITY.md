@@ -68,7 +68,7 @@ PR18 speedup and cannot replace full acceptance or close C1-C7.
 
 LOCAL ordinal1 failed before tests: six exact path-overlap diagnostics exposed an
 omitted dispatch declaration. Its commit05cb628, full evidence and consumed ordinal
-remain retained. Ordinal2 is the only remaining LOCAL attempt; no budget extension.
+remain retained. At that checkpoint, ordinal2 was the only remaining LOCAL attempt.
 The correction follows the existing closed dispatch pattern: preserve blocked PR18
 without executing or retiring it, recognize the separately accepted-main repair
 branch and treat the benchmark's path as a read-only subject anchor. All five packet
@@ -87,7 +87,7 @@ no arbitrary exemption, cached acceptance or historical source execution.
 
 Run all39 predecessor commands plus the new validator,40 total; both full suites
 and10 inherited isolation skips per suite remain. Freeze exact added and expanded
-case counts before signing. New META caps: LOCAL2, CI2, LOCAL_EXACT_MAIN1. Future
+case counts before signing. Amended META caps: LOCAL3 total, CI2, LOCAL_EXACT_MAIN1. Future
 product caps: LOCAL2, CI2, LOCAL_EXACT_MAIN1; measurement4 total,0 retries. Exclusive
 durable reservations precede signatures/activation. Every failure consumes its
 ordinal. No old allowance reset or transfer; no extra diagnostics.
@@ -97,6 +97,27 @@ Use only the existing signed localhost launcher. No root/key/admin/power changes
 warm-source access, dependency downloads, hosted/cloud/API spending or policy bypass.
 Source, CI, merge, artifact, native, deployment, runtime and tenant acceptance remain
 separate evidence. Publication can finish without claiming any product qualification.
+
+## Approved LOCAL ordinal3 amendment
+
+LOCAL2 at86efaac passed every declaration validator but failed10 inherited test
+cases; the enclosing replay was the eleventh outer failure. Nested4105 and
+outer4353 tests passed, with10 inherited skips per suite. Full evidence and both
+consumed reservations remain immutable; these failures are not acceptance.
+
+The approved correction updates four existing test modules' generic diagnostic
+count82 to88 and the successor's residual74 to80, then extends only explicit
+overlap-pair inventories with the four declared pairs accounting for six new
+diagnostics. Every prior pair, assertion, mutation, test identity and decorator
+remains. Generic ownership checks and the new exact-dispatch negative test remain
+unchanged. No product, benchmark, public-contract, isolation or timeout changes.
+
+Only LOCAL ordinal3 is newly authorized: one additional attempt, total cap3.
+Ordinals1/2 remain consumed. CI2 and LOCAL_EXACT_MAIN1 are unchanged and require
+a fresh complete LOCAL pass. All40 commands and expected4115 inner/4364 outer
+cases with10 inherited skips per replay remain. Another failure stops execution;
+no further retry, reset or transfer is permitted. The new record binds both
+failed results, original helpers, proposal and exact correction scope.
 
 ## Current roadmap
 

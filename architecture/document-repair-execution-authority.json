@@ -5,11 +5,11 @@
     "architecture/document-repair-execution-inputs/semantic-oracles.json": "bc6ef8507e1749a6b47b988be5734603d5c21f7a01e68163de0b1ad34cbe15e9",
     "architecture/document-repair-execution-inputs/source-scope.json": "b073b8588915edc01b344e5dfe0043a2baec3f116545457a4a6f36ca7ba78dd0",
     "architecture/document-repair-execution-inputs/workload.json": "76d6f1c1c260219d4777ec799cfd1fe5e8bf364a80a4dcdc91ce7e6d422da25a",
-    "architecture/document-repair-execution.json": "d4e436b773394e73995791edf2ca6929563e23bbc9f415233a29400801f6cd05",
-    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md": "39ae93b841c8eb51a477fcd5f506ff7f6924a882b09b7902f855afe65918378f",
+    "architecture/document-repair-execution.json": "ebc3571efc890eaa177c6c07467d2dea287fe21d6fe11b0a5357d8d19dd67d35",
+    "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md": "42e408b3799202ca763003884e5845e3bcb5ac55a39590109b512a528ca120f8",
     "task-packets/CONF-BENCH-002.yaml": "f4146505e7f56182df0cf66d147587128dc0ac769f46ecffd918bcfbf2502072",
     "task-packets/CONF-PERF-006.yaml": "8dc4a6409bceb1669640ae44b3482de2cfc9c95d3089f54ccd1fb13b85100b9c",
-    "task-packets/MET-PERF-012.yaml": "6168ceec80fa4152db23abebba2951ed555560d64f419ba4232a0406262adfe6",
+    "task-packets/MET-PERF-012.yaml": "ec308735eb1420b3b9c4a0693b8f6c6697cb1a162dc26de31fdd850e8012b57d",
     "tests/test_document_repair_execution.py": "e951d75dc0ef6b9210ff30cfa9de64be7d0696d5b8f1ff696a66e5ee75d7e6ea"
   },
   "metaBaseline": "abb67fde635dd45c8c3f6fbb3576a0a391300c91",
@@ -823,12 +823,22 @@
       ]
     },
     "tests/test_conformance_consumer_closure.py": {
-      "afterSha256": "289a3656742c6497ee6d67ed6ea6706c497bd82325650eefda58c82ab499f8e7",
+      "afterSha256": "67be9ad5d2c2c4984f7cd11988a481b9e0e1cc08bb9e96bd42433ba5494fdab2",
       "beforeSha256": "1b161ea424323ae6d948376493fd56d337c1e9e6133b45f571f30b866d54f33a",
       "replacements": [
         {
           "after": "    assert len(packets) == 173\n",
           "before": "    assert len(packets) == 170\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 88\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\")) for error in generic)\n",
+          "before": "    assert len(generic) == 82\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\")) for error in generic)\n",
+          "count": 1
+        },
+        {
+          "after": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\"))]\n",
+          "before": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\"))]\n",
           "count": 1
         }
       ]
@@ -845,12 +855,22 @@
       ]
     },
     "tests/test_conformance_performance_followup.py": {
-      "afterSha256": "14bf284a6251c970232eebb175b3ae2945480673bf3c2b1fc8a61c612e593884",
+      "afterSha256": "4ffaa185ae1a5d4963a7e088c23b24a4bdf8afea3a1f04a06d4ad8b7f86d0ce6",
       "beforeSha256": "1c51f2ce1253155352522644133874f0346f6af9c056e1ddb600c0b3c3ca15ec",
       "replacements": [
         {
           "after": "    assert len(packets) == 173\n",
           "before": "    assert len(packets) == 170\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 88\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\")) for error in generic)\n",
+          "before": "    assert len(generic) == 82\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\")) for error in generic)\n",
+          "count": 1
+        },
+        {
+          "after": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\"))]\n",
+          "before": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\"))]\n",
           "count": 1
         }
       ]
@@ -867,23 +887,43 @@
       ]
     },
     "tests/test_conformance_reference_measurement.py": {
-      "afterSha256": "fb32c74e9af4e8c5e1fcb600ee124511fbe12fe986704556b4aafaa4f2b064c3",
+      "afterSha256": "7542f07c9d43acefbf7f55207d04769883dc36e545d35a5d4ec7b307845ac32c",
       "beforeSha256": "c0ef70d1a9ad26922211cb65190e2ebb67f2a0f34fae3a854c9c8f49ba2ef4cf",
       "replacements": [
         {
           "after": "    assert len(packets) == 173\n",
           "before": "    assert len(packets) == 170\n",
           "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 88 and len(record[\"overlapPairs\"]) == 10\n",
+          "before": "    assert len(generic) == 82 and len(record[\"overlapPairs\"]) == 10\n",
+          "count": 1
+        },
+        {
+          "after": "    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\"])\n",
+          "before": "    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\"])\n",
+          "count": 1
         }
       ]
     },
     "tests/test_conformance_successor_checkpoint.py": {
-      "afterSha256": "5dcfc1037a64fe4d89dd8076785dfe150f515ddb31d8cc4b94e75025e609eadd",
+      "afterSha256": "3623f30c07626389950614cd77659953ef97a0cbdbf5dd7fa027dc31c16a56a2",
       "beforeSha256": "d9fef2aa1141a305b1c90d6896e4d68c87c5f893d937aa23ae7a741e548bc669",
       "replacements": [
         {
           "after": "    assert len(packets) == 173\n",
           "before": "    assert len(packets) == 170\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 88\n",
+          "before": "    assert len(generic) == 82\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(closed) == 80\n",
+          "before": "    assert len(closed) == 74\n",
           "count": 1
         }
       ]
@@ -1267,7 +1307,7 @@
   "packetDigests": {
     "CONF-BENCH-002": "a85691638978f8b538e86376381b70f6a01ad557c14aa6b60d7c6ec94895f741",
     "CONF-PERF-006": "ea19fdf460ef280257d0be5ee47f016b16a20887863a5355b335b17e25ca5a0d",
-    "MET-PERF-012": "cf2a08de4461cea7255f870e1e895b3a3a2586f9c2a39ce9d4b51f1738558588"
+    "MET-PERF-012": "ae18ab829c5c709c5b069db24ce52a2253af4642cac1eaa809fded7cb85bb19c"
   },
   "protectedFiles": {
     "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",

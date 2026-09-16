@@ -200,7 +200,7 @@ def test_exact72_closed_overlaps_preserve_generic_diagnostics(authority):
     from scripts.validate_packet_ownership import validate_packet_ownership
     packets, record, _ = authority
     generic = validate_packet_ownership(packets)
-    assert len(generic) == 82 and len(record["overlapPairs"]) == 10
+    assert len(generic) == 88 and len(record["overlapPairs"]) == 10
     assert sum(pair[2] for pair in record["overlapPairs"]) == 72
     assert validate_dispatch_ownership(packets) == []
 
@@ -221,7 +221,7 @@ def test_dispatch_never_hides_changed_or_unrelated_packets(authority, fault):
     result = validate_dispatch_ownership(packets)
     assert result
     allowed = [left+" and "+right for left,right,_ in record["overlapPairs"]]
-    allowed.extend(["CONF-BENCH-001 and CONF-FIX-006","CONF-FIX-006 and CONF-PERF-001","CONF-FIX-006 and CONF-PERF-002","CONF-FIX-006 and CONF-PERF-003", "CONF-DIAG-001 and CONF-LIVE-003", "CONF-DIAG-002 and CONF-LIVE-003"])
+    allowed.extend(["CONF-BENCH-001 and CONF-FIX-006","CONF-FIX-006 and CONF-PERF-001","CONF-FIX-006 and CONF-PERF-002","CONF-FIX-006 and CONF-PERF-003", "CONF-DIAG-001 and CONF-LIVE-003", "CONF-DIAG-002 and CONF-LIVE-003", "CONF-BENCH-002 and CONF-FIX-007", "CONF-BENCH-002 and CONF-LIVE-003", "CONF-BENCH-002 and CONF-PERF-006", "CONF-FIX-007 and CONF-PERF-006"])
     unrelated = [e for e in validate_packet_ownership(packets) if not any(pair in e for pair in allowed)]
     assert set(unrelated) <= set(result)
 

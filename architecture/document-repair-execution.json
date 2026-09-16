@@ -7,7 +7,7 @@
     },
     "meta": {
       "CI": 2,
-      "LOCAL": 2,
+      "LOCAL": 3,
       "LOCAL_EXACT_MAIN": 1
     },
     "product": {
@@ -87,6 +87,87 @@
     "nestedSeconds": 420,
     "trustedSeconds": 900,
     "workflowMinutes": 15
+  },
+  "localBudgetExtension": {
+    "additionalLocalMaximum": 1,
+    "approvalProposalSha256": "4459b3c6d2c28a420f7caf182d453e78a6d239cdf07cea7dcd42dba5c9c33827",
+    "correctionPaths": [
+      "tests/test_conformance_consumer_closure.py",
+      "tests/test_conformance_performance_followup.py",
+      "tests/test_conformance_reference_measurement.py",
+      "tests/test_conformance_successor_checkpoint.py"
+    ],
+    "currentGenericDiagnostics": 88,
+    "currentResidualDiagnostics": 80,
+    "extraPairs": [
+      [
+        "CONF-BENCH-002",
+        "CONF-FIX-007",
+        1
+      ],
+      [
+        "CONF-BENCH-002",
+        "CONF-LIVE-003",
+        1
+      ],
+      [
+        "CONF-BENCH-002",
+        "CONF-PERF-006",
+        1
+      ],
+      [
+        "CONF-FIX-007",
+        "CONF-PERF-006",
+        3
+      ]
+    ],
+    "newLocalOrdinals": [
+      3
+    ],
+    "oldApprovalSha256": "fff0fbb8ef190c66c91398a271fb0ffa896bde6de168eed352113887c265e3ad",
+    "oldHelpers": {
+      "audit_local.py": "20f1a042c7a47e86f979029bea1a64cded9d1f3b543be96be94cd4142c6b3ffc",
+      "audit_local_v2.py": "fb05c111059c06bd36fef616648f0e1002141c85852baf77ec3c53dd0f6d74d4",
+      "check_source.py": "61560122feef9eb6ba45702c4f9221b59e36952356f4c5aa951d771657271e03",
+      "check_source_v2.py": "ceaf5d01b1d5400d5efe5ed0470bbba6890df570059342c00082826c486f05f5",
+      "run_local.py": "90789ad3ef54c9d7bc2b513e958a41f9c4b283503086372595e2e73efb451ddd",
+      "run_local_v2.py": "7c6065927bb998964dfdda4537578721174dc8e7eff73f5d216149af5eac4b8b"
+    },
+    "originalMaximum": 2,
+    "preserveAllAssertionsAndTestIdentities": true,
+    "priorGenericDiagnostics": 82,
+    "priorResidualDiagnostics": 74,
+    "reset": false,
+    "retainedFailures": [
+      {
+        "commit": "05cb6289872d8bf83fc353380cc0a29338a1ddbc",
+        "elapsedSeconds": 16.868414291,
+        "logSha256": "153661588aef0503575b307c989271e5627fb19263d023ad8e701fed822e0038",
+        "ordinal": 1,
+        "reservationSha256": "6a6145508fa43a4867610c94f30b834d9fc3690869e89f9f4243f828db7ed455",
+        "resultSha256": "951c453acc0b052dabe11db9ddb68880f2726e1c5c895f1697a345048ed58bc7",
+        "sourceUnchanged": true,
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE"
+      },
+      {
+        "commit": "86efaac60764313b6a0269347bc9e2540097008e",
+        "elapsedSeconds": 466.99677916599995,
+        "logSha256": "128607fbcb87078fa6424c31860ab997fa7f91722783b9bbc0fbacaf54471d2b",
+        "ordinal": 2,
+        "reservationSha256": "f56a38d4ee01d93aa87da4b76e9c9d678f9cf91ac54bcca96ed65ddd28333041",
+        "resultSha256": "51ca50abb95756ed40994cc8d1585d6b2a0d6f0fc441449b5b4d1a4305166ca8",
+        "sourceUnchanged": true,
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE"
+      }
+    ],
+    "retainedLocalOrdinals": [
+      1,
+      2
+    ],
+    "scope": "FOUR_EXACT_DISPATCH_TEST_EXPECTATION_MIGRATIONS_ONLY",
+    "totalMaximum": 3,
+    "transfer": false,
+    "uniqueMutationTargets": true
   },
   "measurementDriverSha256": "2ae8a8ca39157ca7dd59158f86acdcea24e5fd7c755f8917bbf4af2fa0675995",
   "measurementManifestSha256": "76d6f1c1c260219d4777ec799cfd1fe5e8bf364a80a4dcdc91ce7e6d422da25a",
