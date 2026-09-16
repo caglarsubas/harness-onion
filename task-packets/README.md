@@ -1,5 +1,19 @@
 # Sol-High Task Packet Catalog
 
+## Current publication gate - MET-PERF-012
+
+[Document repair authority](../docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md): Alpha2 ONGOING.
+MET-PERF-011 DONE_SOURCE_GATES at abb67fd / PR126; old allowances remain consumed.
+MET-PERF-012 ONGOING_PUBLICATION: META only,173 specifications,170 immutable old packets.
+CONF-PERF-006 WAITING_META_SOURCE_GATES; CONF-BENCH-002 WAITING_META_AND_EXACT_CANDIDATE.
+This publication runs no product code or benchmark. CONF-DIAG-003 remains
+INCOMPLETE_DIAGNOSTIC_RETAINED; CONF-FIX-007/PR18 BLOCKED_LOCAL_BUDGET_EXHAUSTED.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE. Older headings below are historical publication states.
+
+## Retained planning and historical checkpoints
+
 ## Current planning gate - MET-PERF-011
 
 [Private document repair plan](../docs/alpha-2/DOCUMENT_REPAIR_PLAN.md): Alpha2 ONGOING.
@@ -697,3 +711,7 @@ local exact-main. No installation, new broker availability, paid service or live
 acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 
 | 170 | `MET-PERF-011` | `Harness-Engineering` | Bounded private document repair plan; no product execution |
+
+| 171 | `MET-PERF-012` | `Harness-Engineering` | Exact conditional document repair authority |
+| 172 | `CONF-PERF-006` | `mas-harness-conformance-labs` | Three-path document repair, gated |
+| 173 | `CONF-BENCH-002` | `mas-harness-conformance-labs` | Four read-only matched helper runs, gated |

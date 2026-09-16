@@ -1,0 +1,204 @@
+{
+  "benchmarkAcceptance": false,
+  "budgets": {
+    "measurement": {
+      "retries": 0,
+      "runs": 4
+    },
+    "meta": {
+      "CI": 2,
+      "LOCAL": 2,
+      "LOCAL_EXACT_MAIN": 1
+    },
+    "product": {
+      "CI": 2,
+      "LOCAL": 2,
+      "LOCAL_EXACT_MAIN": 1
+    },
+    "resetOld": false
+  },
+  "consumerEdits": [],
+  "contractPins": {
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "architecture/document-repair-authority.json": "ecd0b37b2959add14b681a646f1291e7d119f328eaf730bd850ceec761d47d2b",
+    "architecture/document-repair-plan.json": "c1de038cc085efca67acb5712672c22967f6b80fd27c068ba3295df42cd4ac31",
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/research-adoption.json": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "task-packets/CONF-FIX-007.yaml": "3a404ac9d470469d501379e7b634ac55c14634c56c2f10d6cf4e649b744a143e",
+    "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "gates": {
+    "billingChange": false,
+    "dependencies": false,
+    "modelEffort": "NOT_DUE",
+    "oldReset": false,
+    "oldTransfer": false,
+    "phase": "ALPHA_2_ONGOING",
+    "powerChange": false,
+    "pr18Mutation": false,
+    "rootPolicyChange": false,
+    "sourceChangeInvalidatesBenchmark": true,
+    "tenantAcceptance": false,
+    "warmSourceAccess": false
+  },
+  "limits": {
+    "localSeconds": 750,
+    "nestedSeconds": 420,
+    "trustedSeconds": 900,
+    "workflowMinutes": 15
+  },
+  "measurementDriverSha256": "2ae8a8ca39157ca7dd59158f86acdcea24e5fd7c755f8917bbf4af2fa0675995",
+  "measurementManifestSha256": "76d6f1c1c260219d4777ec799cfd1fe5e8bf364a80a4dcdc91ce7e6d422da25a",
+  "metaBase": "abb67fde635dd45c8c3f6fbb3576a0a391300c91",
+  "packetId": "MET-PERF-012",
+  "predecessorSourceGates": {
+    "commit": "abb67fde635dd45c8c3f6fbb3576a0a391300c91",
+    "packet": "MET-PERF-011",
+    "pr": 126,
+    "productAcceptance": false,
+    "status": "DONE_SOURCE_GATES_RECORDED"
+  },
+  "preservedTestIds": 1277,
+  "productAcceptance": false,
+  "productExecutionInMetaRun": false,
+  "reviewArtifacts": {
+    "CONF-BENCH-002.proposed.yaml": "a262b5c8337230890748d2bb58a78d51cfb64944224bfbfe55f32f97972ca8c1",
+    "CONF-PERF-006.proposed.yaml": "e4208c6613aedc2c3c7dabdce417f551558486657e4ab320fe271c205a6d8b37",
+    "MET-PERF-012.proposed.yaml": "011482e658ed44d6b8472cb3c86bbd7c0baff1c84f8485bbeb74c601b6f2d54a",
+    "REVIEW.md": "a8b9aaeefd58bf6f2eb826abd720edf04a2cdea8aa13cd9717522918699cb604",
+    "document-authority-proposal.json": "8050ab421b00c62f9c418d317fb54a4f9d3f753e39b96041b90af926437a598b"
+  },
+  "reviewCorrections": {
+    "change": "NONE_DRIVER_AND_WORKLOAD_PRESERVED",
+    "driverAfterSha256": "2ae8a8ca39157ca7dd59158f86acdcea24e5fd7c755f8917bbf4af2fa0675995",
+    "driverBeforeSha256": "2ae8a8ca39157ca7dd59158f86acdcea24e5fd7c755f8917bbf4af2fa0675995",
+    "workloadUnchanged": true
+  },
+  "runtimeRegion": {
+    "beforeSha256": "6b9080531cc0e10346982d9ef43ba2caf1b698fcd9577c6b672db8c7faa713b3",
+    "candidateSha256": "fe3b468872cb14db63f1b2bc1b5c4579703d1e8909c037f8e657ed2d2c26d97c",
+    "candidateSource": "def document(value, maximum=262144):\n    if type(value) is bytes and type(maximum) is int:\n        require(0 < len(value) <= maximum, \"PROXY_DATA_SIZE\")\n        raw, value = value, require_canonical_document(value)\n        encoded = canonical_bytes(value)\n        require(encoded == raw, \"PROXY_NONCANONICAL_BYTES\")\n        _bounded(value, maximum)\n        require(len(encoded) <= maximum, \"PROXY_DATA_SIZE\")\n        return value\n    if type(value) is bytes:\n        require(0 < len(value) <= maximum, \"PROXY_DATA_SIZE\")\n        raw, value = value, require_canonical_document(value)\n        require(canonical_bytes(value) == raw, \"PROXY_NONCANONICAL_BYTES\")\n    _bounded(value, maximum)\n    raw = canonical_bytes(value)\n    require(len(raw) <= maximum, \"PROXY_DATA_SIZE\")\n    return require_canonical_document(raw)\n",
+    "name": "document",
+    "originalFallbackVerbatim": true,
+    "path": "src/harness_conformance/live_mutation_admission.py"
+  },
+  "schemaVersion": "planeon.internal.document-repair-execution/v1",
+  "semanticManifestSha256": "bc6ef8507e1749a6b47b988be5734603d5c21f7a01e68163de0b1ad34cbe15e9",
+  "sequencing": [
+    "META_LOCAL_CI_MERGE_EXACT_MAIN",
+    "SEPARATE_THREE_PATH_PRODUCT_CANDIDATE",
+    "FREEZE_BOTH_COMMITS_TREES_FULL_INVENTORIES_AND_TOOLCHAIN",
+    "SEPARATE_FOUR_RUN_BCCB_PACKET",
+    "PRACTICAL_GAIN_AND_NOISE_GATE",
+    "FULL_EIGHT_COMMAND_PRODUCT_LOCAL_CI_MERGE_EXACT_MAIN",
+    "SEPARATE_PR18_COMPLETION_INTEGRATION",
+    "C1_C7_AND_CONF_LIVE_004"
+  ],
+  "sourceScopeSha256": "b073b8588915edc01b344e5dfe0043a2baec3f116545457a4a6f36ca7ba78dd0",
+  "status": "ONGOING_META_PUBLICATION",
+  "testAccounting": {
+    "addedCases": 75,
+    "baselineInner": 4039,
+    "baselineOuter": 4288,
+    "evidence": "STATIC_SOURCE_ACCOUNTING_NOT_ACCEPTANCE",
+    "expectedInner": 4114,
+    "expectedOuter": 4363,
+    "inheritedExpansion": [
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "MET-PERF-012"
+      },
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "CONF-PERF-006"
+      },
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "CONF-BENCH-002"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "MET-PERF-012"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "CONF-PERF-006"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "CONF-BENCH-002"
+      }
+    ],
+    "inheritedSkips": 10,
+    "newCaseIds": [
+      "test_closed_authority_preserves_predecessors_and_full_recipe",
+      "test_source_or_packet_substitution_refuses[('record',)]",
+      "test_source_or_packet_substitution_refuses[('missing',)]",
+      "test_source_or_packet_substitution_refuses[('extra',)]",
+      "test_source_or_packet_substitution_refuses[('old-packet',)]",
+      "test_source_or_packet_substitution_refuses[('new-packet',)]",
+      "test_source_or_packet_substitution_refuses[('recipe',)]",
+      "test_source_or_packet_substitution_refuses[('source',)]",
+      "test_source_or_packet_substitution_refuses[('guide',)]",
+      "test_source_or_packet_substitution_refuses[('test',)]",
+      "test_source_or_packet_substitution_refuses[('oracle',)]",
+      "test_source_or_packet_substitution_refuses[('workload',)]",
+      "test_source_or_packet_substitution_refuses[('driver',)]",
+      "test_resealed_scope_cannot_relax_authority[('runtimeRegion',)]",
+      "test_resealed_scope_cannot_relax_authority[('consumerEdits',)]",
+      "test_resealed_scope_cannot_relax_authority[('unchangedProductFiles',)]",
+      "test_resealed_scope_cannot_relax_authority[('preservedTestIds',)]",
+      "test_resealed_scope_cannot_relax_authority[('budgets',)]",
+      "test_resealed_scope_cannot_relax_authority[('limits',)]",
+      "test_resealed_scope_cannot_relax_authority[('sequencing',)]",
+      "test_resealed_scope_cannot_relax_authority[('gates',)]",
+      "test_resealed_scope_cannot_relax_authority[('contractPins',)]",
+      "test_resealed_scope_cannot_relax_authority[('productExecutionInMetaRun',)]",
+      "test_resealed_scope_cannot_relax_authority[('productAcceptance',)]",
+      "test_resealed_scope_cannot_relax_authority[('benchmarkAcceptance',)]",
+      "test_resealed_scope_cannot_relax_authority[('sourceScopeSha256',)]",
+      "test_resealed_scope_cannot_relax_authority[('semanticManifestSha256',)]",
+      "test_resealed_scope_cannot_relax_authority[('measurementManifestSha256',)]",
+      "test_resealed_scope_cannot_relax_authority[('measurementDriverSha256',)]",
+      "test_resealed_scope_cannot_relax_authority[('reviewCorrections',)]",
+      "test_resealed_scope_cannot_relax_authority[('testAccounting',)]",
+      "test_historical_projection_validates_successors_first[('missing',)]",
+      "test_historical_projection_validates_successors_first[('extra',)]",
+      "test_historical_projection_validates_successors_first[('changed',)]",
+      "test_historical_projection_validates_successors_first[('historical-only',)]",
+      "test_duplicate_nonfinite_authority_refuses[(b'{\"a\":1,\"a\":2}',)]",
+      "test_duplicate_nonfinite_authority_refuses[(b'{\"x\":NaN}',)]",
+      "test_duplicate_nonfinite_authority_refuses[(b'{\"x\":Infinity}',)]",
+      "test_fresh_authority_read_rejects_later_drift",
+      "test_current_first_bridge_refuses_stale_or_unreviewed_bytes[('scripts/validate_document_repair_plan.py',)]",
+      "test_current_first_bridge_refuses_stale_or_unreviewed_bytes[('tests/test_task_packets.py',)]",
+      "test_current_first_bridge_refuses_stale_or_unreviewed_bytes[('docs/MASTER_DEVELOPMENT_PLAN.md',)]",
+      "test_unicode_driver_matches_frozen_payload_and_rejects_double_escape",
+      "test_unique_recipe_and_unchanged_test_routes_remain_closed",
+      "test_publication_never_promotes_product_benchmark_or_tenant_acceptance"
+    ],
+    "newCases": 45,
+    "testsCollectedOrRun": false
+  },
+  "unchangedProductFiles": 132
+}

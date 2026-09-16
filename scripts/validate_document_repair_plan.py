@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_document_repair_execution import historical_bytes as execution_history, current_test_bytes as execution_current, validate_additions as execution_additions, historical_catalog
+except ImportError:
+    from scripts.validate_document_repair_execution import historical_bytes as execution_history, current_test_bytes as execution_current, validate_additions as execution_additions, historical_catalog
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = 'architecture/document-repair-authority.json'
 RECORD_SHA256 = '26713d4ee1ad0d7a35ecacb9d321f16355fc537b05bdf95f1485f9d35285bc63'
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = execution_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -120,9 +126,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
         require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return execution_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return execution_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -131,7 +137,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return execution_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -197,11 +203,12 @@ def validate_authority(packets,record,inputs):
         pinned(record)
         require(HISTORY_PATHS==set(record['metaRecipes']), 'exact history routing')
         require(validate_additions(packets)==[], 'exact new packet')
+        packets = historical_catalog(packets)
         pins={**record['protectedFiles'],**record['inputFiles'],
               **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs)==set(pins), 'complete fresh source inputs')
         for path,checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path])==checksum, 'source drift: '+path)
+            require(type(inputs[path]) is bytes and digest(execution_history(path,inputs[path]))==checksum, 'source drift: '+path)
         old={Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
         require(len(old)==169 and len(packets)==170 and set(packets)==old|set(NEW_IDS), '169 immutable plus one planning packet')
         require('CONF-PERF-006' not in packets and 'CONF-PERF-005' not in packets, 'no product grant')
@@ -222,7 +229,7 @@ def validate_authority(packets,record,inputs):
             require(digest(inputs[path])==checksum, 'immutable source contract')
         for path,rule in record['metaRecipes'].items():
             before=historical_bytes(path,inputs[path])
-            require(apply_recipe(before,rule)==inputs[path], 'exact reversible metadata')
+            require(apply_recipe(before,rule)==execution_history(path,inputs[path]), 'exact reversible metadata')
             if path.startswith('tests/'):
                 require(test_ids(before)==test_ids(inputs[path]), 'all inherited test identities')
         for path in record['navigationPaths']:
@@ -239,4 +246,4 @@ if __name__=='__main__':
     errors=validate_authority(packets,*load_inputs(ROOT))
     if errors:
         print('\n'.join(errors)); raise SystemExit(1)
-    print('Document repair plan valid:170 specifications;169 immutable packets; no product grant or retry reset.')
+    print('Historical document repair plan valid:170-packet projection; no historical product grant or retry reset.')
