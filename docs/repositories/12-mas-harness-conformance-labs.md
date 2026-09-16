@@ -1,5 +1,20 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current publication gate - MET-PERF-013
+
+[Benchmark transport correction](../alpha-2/BENCHMARK_TRANSPORT.md): Alpha2 ONGOING.
+MET-PERF-012 DONE_SOURCE_GATES at9b8b30b / PR127; installed transport mismatch found before any comparison run.
+MET-PERF-013 ONGOING_PUBLICATION: META only,175 specifications,173 immutable prior packets.
+CONF-PERF-006 CANDIDATE_FROZEN atc0f4002; comparison and full product acceptance pending.
+CONF-BENCH-002 NON_DISPATCHABLE_RETAINED_HISTORY; CONF-BENCH-003 WAITING_META_SOURCE_GATES.
+One shared four-run B,C,C,B ledger, zero retries; no product or runner-policy change.
+CONF-FIX-007/PR18 BLOCKED_LOCAL_BUDGET_EXHAUSTED; CONF-LIVE-004/005/006 and CONF-A2-001 WAITING.
+Alpha3/4 WAITING. Model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current publication gate - MET-PERF-012
 
 [Document repair authority](../alpha-2/DOCUMENT_REPAIR_AUTHORITY.md): Alpha2 ONGOING.
@@ -372,6 +387,9 @@ CONF-LIVE-003 local gate passed. MET-PUBLISH-001 separately scopes publication/C
 
 - `CONF-PERF-006`: exact three-path private document repair after META source gates.
 - `CONF-BENCH-002`: separate four-run read-only measurement; no acceptance claim.
+
+
+- `CONF-BENCH-003`: exact-driver read-only successor; same four-run comparison ledger.
 
 ## Testing, verification, and acceptance
 

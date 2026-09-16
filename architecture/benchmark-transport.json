@@ -1,0 +1,244 @@
+{
+  "baseline": {
+    "commit": "092fcf475c6f3ebd455e3c354cddb7664ea1f900",
+    "tree": "f5a25661c2df6c87e5d3429b0b5f62511c2e5988"
+  },
+  "benchmarkAcceptance": false,
+  "budgets": {
+    "meta": {
+      "CI": 2,
+      "LOCAL": 2,
+      "LOCAL_EXACT_MAIN": 1
+    },
+    "product": {
+      "CI": 2,
+      "LOCAL": 2,
+      "LOCAL_EXACT_MAIN": 1
+    },
+    "resetOld": false,
+    "transfer": false
+  },
+  "candidate": {
+    "commit": "c0f4002e8ab1ad037830831bca31d7a15980a046",
+    "freezeSha256": "882de643ee26c649d38d63df1ccc99fa3b5fc3a69f4407b6f26aed217852ae86",
+    "productSourceEdits": false,
+    "sourceAuthorityMeta": "9b8b30b4c0b718d3aa0083d518f4ff5892c7d715",
+    "sourceProofSha256": "0122ee71f769fe14edd90912ab143ce373db7bced202cea7162c87df94f7d82d",
+    "tree": "0627100bafa06443bfec1b4ab4ae17c86891186a"
+  },
+  "comparison": {
+    "activePacket": "CONF-BENCH-003",
+    "chargedPacketIds": [
+      "CONF-BENCH-002",
+      "CONF-BENCH-003"
+    ],
+    "driverSha256": "2ae8a8ca39157ca7dd59158f86acdcea24e5fd7c755f8917bbf4af2fa0675995",
+    "maximumExecutions": 4,
+    "requiresIndependentCompleteAudit": true,
+    "reservedAtApproval": 0,
+    "retiredPacket": "CONF-BENCH-002",
+    "retiredStatus": "NON_DISPATCHABLE_RETAINED_HISTORY",
+    "retries": 0,
+    "schedule": [
+      "BASELINE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "BASELINE"
+    ],
+    "sharedLedgerKey": "DOCUMENT-COMPARISON-002",
+    "successorSatisfiesGateFor": "CONF-PERF-006",
+    "thresholds": {
+      "allFourRunsRequired": true,
+      "ambientObserverAllowed": false,
+      "betweenBaselineMedianRatioMaximum": 1.2,
+      "candidateThreadCpuMedianRatioMaximum": 0.85,
+      "candidateWallMedianRatioMaximum": 0.9,
+      "fullAcceptanceSubstitute": false,
+      "hostInterruptionsAllowed": false,
+      "minimumSampleWallSeconds": 0.05,
+      "partialPooling": false,
+      "serviceSpeedupClaim": false,
+      "sourceUnchanged": true,
+      "withinRunMedianAbsoluteDeviationRatioMaximum": 0.15
+    },
+    "transportSha256": "435582160d2899fb68c2b70a08190e20c87edd434153006f375ad405915c5c4b",
+    "workloadSha256": "ae3137b53e801c32d454036d244daa5a367f173c15128ed42cc304f03523b51c"
+  },
+  "dispatchPairs": [
+    [
+      "CONF-BENCH-002",
+      "CONF-BENCH-003"
+    ],
+    [
+      "CONF-BENCH-003",
+      "CONF-FIX-007"
+    ],
+    [
+      "CONF-BENCH-003",
+      "CONF-LIVE-003"
+    ],
+    [
+      "CONF-BENCH-003",
+      "CONF-PERF-006"
+    ]
+  ],
+  "limits": {
+    "localSeconds": 750,
+    "nestedSeconds": 420,
+    "trustedSeconds": 900,
+    "workflowMinutes": 15,
+    "workloadSeconds": 120
+  },
+  "metaBase": "9b8b30b4c0b718d3aa0083d518f4ff5892c7d715",
+  "packetId": "MET-PERF-013",
+  "policy": {
+    "argumentMax": 4096,
+    "authoritySha256": "1db0eb53eb0179887bf31bf534322031842c07d66453089edf6596be215e6782",
+    "changed": false,
+    "forbiddenCodePoints": [
+      0,
+      13,
+      10
+    ],
+    "observedRefusal": "argv contents",
+    "preflightOnly": true,
+    "sha256": "6fcc0b0bcaf1eae8c0d967a04bc20dd255edb360873372aa737c4415d865aa50"
+  },
+  "predecessorSourceGates": {
+    "ciLogSha256": "a5a141a42894a514d4b343d5dc3803f4282f59d825d4d501d371cd749e33b269",
+    "ciRunId": 35061356515,
+    "commit": "9b8b30b4c0b718d3aa0083d518f4ff5892c7d715",
+    "exactMainLogSha256": "bec8381ec77c860612bfce463e079405311e7381c4acbbcea42dd5390912aaeb",
+    "localLogSha256": "4da064b480c5c3d8f8711d649536f10a39997cd90d6ba6705f3471e791bd491b",
+    "packet": "MET-PERF-012",
+    "pr": 127,
+    "status": "DONE_SOURCE_GATES_RECORDED"
+  },
+  "preservedArtifacts": {
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "architecture/document-repair-execution-authority.json": "dcba5192b3d22f86cc0d54d225c11ae9f884a3fd1f5ae5376727252540340145",
+    "architecture/document-repair-execution-inputs/benchmark.py.txt": "2ae8a8ca39157ca7dd59158f86acdcea24e5fd7c755f8917bbf4af2fa0675995",
+    "architecture/document-repair-execution-inputs/semantic-oracles.json": "bc6ef8507e1749a6b47b988be5734603d5c21f7a01e68163de0b1ad34cbe15e9",
+    "architecture/document-repair-execution-inputs/source-scope.json": "b073b8588915edc01b344e5dfe0043a2baec3f116545457a4a6f36ca7ba78dd0",
+    "architecture/document-repair-execution-inputs/workload.json": "76d6f1c1c260219d4777ec799cfd1fe5e8bf364a80a4dcdc91ce7e6d422da25a",
+    "architecture/document-repair-execution.json": "ebc3571efc890eaa177c6c07467d2dea287fe21d6fe11b0a5357d8d19dd67d35",
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/research-adoption.json": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "productAcceptance": false,
+  "productExecutionInMetaRun": false,
+  "proposalSha256": "8b2003e1b02916852570c9509e2b1d1c2c67c70360b6fdc4fdf1a62a174cefe8",
+  "schemaVersion": "planeon.internal.benchmark-transport/v1",
+  "status": "ONGOING_META_PUBLICATION",
+  "testAccounting": {
+    "addedCases": 85,
+    "baselineInner": 4115,
+    "baselineOuter": 4364,
+    "evidence": "STATIC_AST_NOT_ACCEPTANCE",
+    "expectedInner": 4200,
+    "expectedOuter": 4449,
+    "inheritedExpansion": [
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "MET-PERF-013"
+      },
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "CONF-BENCH-003"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "MET-PERF-013"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "CONF-BENCH-003"
+      }
+    ],
+    "inheritedSkips": 10,
+    "newCaseCount": 65,
+    "newCaseIds": [
+      "test_closed_transport_authority_and_historical_projection",
+      "test_old_multiline_rejected_new_exact_literal_accepted",
+      "test_installed_argument_boundary_parity[('nul',)]",
+      "test_installed_argument_boundary_parity[('cr',)]",
+      "test_installed_argument_boundary_parity[('lf',)]",
+      "test_installed_argument_boundary_parity[('empty',)]",
+      "test_installed_argument_boundary_parity[('too-long',)]",
+      "test_installed_argument_boundary_parity[('wrong-type',)]",
+      "test_installed_argument_boundary_parity[('shell',)]",
+      "test_installed_argument_boundary_parity[('sudo',)]",
+      "test_installed_argument_boundary_parity[('download',)]",
+      "test_installed_argument_boundary_parity[('recursive',)]",
+      "test_installed_argument_boundary_parity[('uv-online',)]",
+      "test_installed_argument_boundary_parity[('too-many-args',)]",
+      "test_installed_argument_boundary_parity[('too-many-commands',)]",
+      "test_installed_argument_boundary_parity[('empty-commands',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('statement',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('dynamic',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('wrong-literal',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('extra-arg',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('other-entry',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('trailing-space',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('changed-driver',)]",
+      "test_literal_transport_cannot_expand_or_substitute[('keyword',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('candidate',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('baseline',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('comparison',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('budgets',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('preservedArtifacts',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('policy',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('dispatchPairs',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('predecessorSourceGates',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('productExecutionInMetaRun',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('productAcceptance',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('benchmarkAcceptance',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('testAccounting',)]",
+      "test_resealed_scope_cannot_widen_boundaries[('proposalSha256',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('record',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('missing',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('extra',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('old-packet',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('new-packet',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('recipe',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('source',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('guide',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('freeze',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('driver',)]",
+      "test_packet_and_fresh_source_substitution_refuses[('workload',)]",
+      "test_catalog_is_current_first_and_closed[('missing',)]",
+      "test_catalog_is_current_first_and_closed[('extra',)]",
+      "test_catalog_is_current_first_and_closed[('changed',)]",
+      "test_catalog_is_current_first_and_closed[('historical-only',)]",
+      "test_shared_budget_preserves_order_and_charges_old_packet",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('failed',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('pending',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('partial',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('hole',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('bool-ordinal',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('duplicate',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('wrong-order',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('foreign',)]",
+      "test_bad_or_incomplete_reservation_never_grants_retry[('extra-field',)]",
+      "test_exact_four_dispatch_diagnostics_preserve_unknown_errors",
+      "test_fresh_record_and_history_routes_refuse_drift",
+      "test_no_execution_or_readiness_promotion"
+    ]
+  }
+}
