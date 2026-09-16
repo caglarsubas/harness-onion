@@ -10,6 +10,7 @@ import gc
 import threading
 import pytest
 from scripts import validate_completion_profiling as module
+from scripts.validate_document_repair_plan import historical_bytes as document_history
 from scripts.safe_yaml import safe_load
 
 
@@ -22,10 +23,10 @@ def authority():
 def test_all166_packets_and_inherited_test_ids_preserved(authority):
     assert module.validate_authority(*authority) == []
     packets, record, inputs = authority
-    assert len(packets) == 169
+    assert len(packets) == 170
     for path, rule in record['metaRecipes'].items():
         before = module.historical_bytes(path,inputs[path])
-        assert module.apply_recipe(before,rule) == inputs[path]
+        assert module.apply_recipe(before,rule) == document_history(path,inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]
@@ -311,7 +312,7 @@ def test_reconciliation_keeps_accepted_performance_and_observer(authority):
     grant = spec['reconciliation']
     assert grant['base'] == '91b320b9f8525e986260fc4792b01f125b5feae9'
     assert grant['draft'] == '1886aa2272f8d8bc73da60ebd7a6738f288de5fb'
-    assert len(packets) == 169
+    assert len(packets) == 170
     assert len([p for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')]) == 167
     assert packets['MET-PERF-009']['predecessors'] == ['MET-PERF-010']
     commands = packets['MET-PERF-009']['offlineAcceptanceCommands']
@@ -349,7 +350,7 @@ def test_current_first_routing_rejects_old_or_mutated_source(authority,path):
     inputs = authority[2]
     current = inputs[path]
     accepted = module.historical_bytes(path,current)
-    assert module.apply_recipe(accepted,authority[1]['metaRecipes'][path]) == current
+    assert module.apply_recipe(accepted,authority[1]['metaRecipes'][path]) == document_history(path,current)
     with pytest.raises(ValueError): module.historical_bytes(path,accepted)
     with pytest.raises(ValueError): module.historical_bytes(path,current+b'\n# altered\n')
     with pytest.raises(ValueError): repair.historical_bytes(path,accepted)

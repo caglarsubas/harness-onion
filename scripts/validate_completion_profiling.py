@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_document_repair_plan import historical_bytes as document_history, current_test_bytes as document_current, validate_additions as document_additions
+except ImportError:
+    from scripts.validate_document_repair_plan import historical_bytes as document_history, current_test_bytes as document_current, validate_additions as document_additions
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/completion-profiling-authority.json"
 RECORD_SHA256 = "abcd5ee23eaf9eb6da9ff8e40bff867fbae4c2cec75d53f9c23273e3b8e3c76a"
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = document_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -120,9 +126,9 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
         require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return document_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return document_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
@@ -131,7 +137,7 @@ def validate_additions(packets):
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
             require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return document_additions(packets)
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
 
@@ -228,10 +234,10 @@ def validate_authority(packets, record, inputs):
         pins = {**record['protectedFiles'], **record['inputFiles'], **{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), 'fresh complete source input set')
         for path, checksum in pins.items():
-            require(type(inputs[path]) is bytes and digest(inputs[path]) == checksum, 'changed source: '+path)
+            require(type(inputs[path]) is bytes and digest(document_history(path,inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 167 and len(packets) == 169 and set(packets) == old | set(NEW_IDS), '167 immutable plus two new packets')
-        for name in packets:
+        require(len(old) == 167 and len(packets) == 170 and set(packets) == old | set(NEW_IDS) | {"MET-PERF-011"}, '167 immutable plus two new packets')
+        for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'raw packet parity')
         meta, replay = (packets[name] for name in NEW_IDS)
         require(meta['allowedPaths'] == record['ownedPaths'] and meta['predecessors'] == ['MET-PERF-010']
@@ -256,7 +262,7 @@ def validate_authority(packets, record, inputs):
             require(digest(inputs[path]) == checksum, 'accepted performance input changed')
         for path, rule in record['metaRecipes'].items():
             before = historical_bytes(path,inputs[path])
-            require(apply_recipe(before,rule) == inputs[path], 'exact reversible metadata')
+            require(apply_recipe(before,rule) == document_history(path,inputs[path]), 'exact reversible metadata')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'all inherited tests retained')
         for path in record['navigationPaths']:
@@ -273,4 +279,4 @@ if __name__ == '__main__':
     errors = validate_authority(packets,*load_inputs(ROOT))
     if errors:
         print('\n'.join(errors)); raise SystemExit(1)
-    print('Completion profiling authority valid:169 specifications;167 immutable packets; one diagnostic, no acceptance reset.')
+    print('Completion profiling authority valid:170 specifications;167 immutable packets; one diagnostic, no acceptance reset.')

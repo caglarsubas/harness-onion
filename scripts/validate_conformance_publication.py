@@ -206,7 +206,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(completion_history(path, inputs[path])) == checksum, 'changed source: '+path)
         old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
-        require(len(old) == 162 and len(packets) == 169 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003'}, '162 immutable plus one META')
+        require(len(old) == 162 and len(packets) == 170 and set(packets) == old | set(NEW_IDS) | {'MET-REPAIR-017','CONF-FIX-007', 'MET-ADOPT-002', 'MET-PERF-010', 'MET-PERF-009', 'CONF-DIAG-003', 'MET-PERF-011'}, '162 immutable plus one META')
         require('CONF-PERF-005' not in packets, 'no speculative repair')
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet source parity')
@@ -249,4 +249,4 @@ if __name__ == '__main__':
     if errors:
         print('\n'.join(errors))
         raise SystemExit(1)
-    print('Conformance publication authority valid:169 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')
+    print('Conformance publication authority valid:170 specifications;162 unchanged packets; bounded later CI and LOCAL exact-main.')

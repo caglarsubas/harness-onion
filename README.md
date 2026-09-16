@@ -1,5 +1,20 @@
 # Harness Engineering
 
+## Current planning gate - MET-PERF-011
+
+[Private document repair plan](docs/alpha-2/DOCUMENT_REPAIR_PLAN.md): Alpha2 ONGOING.
+MET-PERF-009 source gates DONE_RECORDED at5c5695e; CONF-DIAG-003
+INCOMPLETE_DIAGNOSTIC_RETAINED:426/1397 completed,900-second timeout,0 retries.
+MET-PERF-011 ONGOING_PUBLICATION: META planning only;170 specifications,
+169 immutable old packets. Proposed CONF-PERF-006 WAITING_EXACT_PACKET;
+no product execution, retry reset, crypto/guard change or PR18 mutation.
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED; C1-C7/full8-command gates remain.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION;005/006/CONF-A2-001 WAITING.
+Preserve the [all16 harness/paper/OSS map](docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE. Older headings below are historical publication states.
+
+## Retained planning and historical checkpoints
+
 ## Current execution gate - MET-PERF-009 reconciliation
 
 [Completion profiling reconciliation](docs/alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING.

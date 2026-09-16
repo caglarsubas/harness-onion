@@ -1,0 +1,261 @@
+{
+  "budgets": {
+    "diagnostics": 0,
+    "metaCI": 2,
+    "metaExactMain": 1,
+    "metaLocal": 2,
+    "oldReset": false,
+    "oldTransfer": false,
+    "productRuns": 0,
+    "reserveBeforeActivation": true
+  },
+  "candidate": {
+    "crossCallCache": false,
+    "cryptoChange": false,
+    "fallback": "UNCHANGED_OTHER_TYPES_AND_MAXIMUMS",
+    "function": "document",
+    "functionSha256": "6b9080531cc0e10346982d9ef43ba2caf1b698fcd9577c6b672db8c7faa713b3",
+    "guardRemoval": false,
+    "implemented": false,
+    "path": "src/harness_conformance/live_mutation_admission.py",
+    "proposal": "REMOVE_REDUNDANT_SAME_INVOCATION_ROUND_TRIP",
+    "selection": "EXACT_BYTES_AND_EXACT_INT_MAXIMUM_ONLY",
+    "semantics": "PRESERVE_VALUE_DETACHMENT_EXCEPTION_TYPE_CODE_MESSAGE_ORDER",
+    "sharedCanonicalChange": false,
+    "speedup": "NOT_MEASURED"
+  },
+  "consumerMigration": "WAITING_EXACT_REGION_AND_PROOF_CLOSURE",
+  "consumers": {
+    "docs/live-backend/linux-boundary.md": {
+      "acceptedSha256": "157a7733b5df9dddc656d086f54e585b1508ef161e6849cdcc54cebc0b1ed7b3",
+      "subjectSha256": "157a7733b5df9dddc656d086f54e585b1508ef161e6849cdcc54cebc0b1ed7b3"
+    },
+    "docs/live-backend/proxy.md": {
+      "acceptedSha256": "f21d8b04b1c1c00b4ac6c7de5e5afab532baca4c19ed1b79db9c3d77c59b349b",
+      "subjectSha256": "44cc4f3b637ab81f659bb46ae60cdc7d25159b1db1018a23c41649e27d9cc354"
+    },
+    "fixtures/live-backend/baseline.json": {
+      "acceptedSha256": "c3dd610a748e018c9e015668567fbea9820a050022dc33375912f8f4aaa51a00",
+      "subjectSha256": "c3dd610a748e018c9e015668567fbea9820a050022dc33375912f8f4aaa51a00"
+    },
+    "src/harness_conformance/canonical.py": {
+      "acceptedSha256": "eb16aee5dda8f512b78b637361f0a057c7e944cd1b9eb888c88182c867e7794d",
+      "subjectSha256": "eb16aee5dda8f512b78b637361f0a057c7e944cd1b9eb888c88182c867e7794d"
+    },
+    "src/harness_conformance/crypto.py": {
+      "acceptedSha256": "bf4cd892d5a7b0dd38bf38b88f72657821d7f21575fce450e60a5a13950c0ca9",
+      "subjectSha256": "bf4cd892d5a7b0dd38bf38b88f72657821d7f21575fce450e60a5a13950c0ca9"
+    },
+    "src/harness_conformance/live_mutation_admission.py": {
+      "acceptedSha256": "b3a92d485716fb5df6b01273a0d0e4277813b052ce6720e7a90c27db29faea23",
+      "subjectSha256": "0acf44f2d992d948881898835238625af22c32a74d1c1acc11d078b049ed8f0d"
+    },
+    "src/harness_conformance/live_proxy_server.py": {
+      "acceptedSha256": "ee5435b63d9dc515992cde29c7dd3cd0aeddd81de7b9c865643a8b8d3ffd5ae9",
+      "subjectSha256": "704e1a9c716aec9cf6b4a4f70b543ffea0206009cc8831ab144d69bc8eed528a"
+    },
+    "tests/live_backend/_inventory.py": {
+      "acceptedSha256": "d341edcdf49dadf182c3fcc9926d373d13c83aa004d3cc74363312861a7f1e46",
+      "subjectSha256": "d341edcdf49dadf182c3fcc9926d373d13c83aa004d3cc74363312861a7f1e46"
+    },
+    "tests/live_backend/test_inventory.py": {
+      "acceptedSha256": "f128f05fc395c26de0c13c34953bfff297fa64f857f3f70aab56dbc9e3bcc8a1",
+      "subjectSha256": "f128f05fc395c26de0c13c34953bfff297fa64f857f3f70aab56dbc9e3bcc8a1"
+    },
+    "tests/live_backend/test_mutation_admission.py": {
+      "acceptedSha256": "b3bce862631f82dedb67928b7c81ca4cc2cf03fc78111d77b814cc549a7e4be1",
+      "subjectSha256": "5291cfa98edc0da23a85cd5a5e8945c4feb6ac9d8c558066a22e1fb1a3c89b8e"
+    },
+    "tests/live_backend/test_proxy_server.py": {
+      "acceptedSha256": "05e715db5e27b4560dc397ad15f4522490a9122e8efd0daa52563db1cd8f4a3c",
+      "subjectSha256": "7edcc67ae1f0463a0f2df9f2a06d6c9a0eda35290e30aa09099dd414f9369d81"
+    },
+    "tests/live_backend/test_supervisor.py": {
+      "acceptedSha256": "2c6fc822b453e57f0354e2a6876b016ea9d536216e77b2390f1026befaef7db1",
+      "subjectSha256": "2c6fc822b453e57f0354e2a6876b016ea9d536216e77b2390f1026befaef7db1"
+    },
+    "tests/platform/linux_baseline/_successor_inventory.py": {
+      "acceptedSha256": "0ab36ab0055b72d25dced1d0339a1dbacfafe29ea450b2935c171912405ea733",
+      "subjectSha256": "0ab36ab0055b72d25dced1d0339a1dbacfafe29ea450b2935c171912405ea733"
+    },
+    "tests/platform/linux_baseline/test_linux_inventory.py": {
+      "acceptedSha256": "3fdd36f47cfb3deb7edaab8685dbead5c90519a92844b5bc2266441d5160c338",
+      "subjectSha256": "3fdd36f47cfb3deb7edaab8685dbead5c90519a92844b5bc2266441d5160c338"
+    },
+    "tests/platform/linux_baseline/test_packet_scalars.py": {
+      "acceptedSha256": "c2ce177f7a462abcae70ae5c51cc2c50d1a3041dc7b9afa527a2e0c582932fe9",
+      "subjectSha256": "c2ce177f7a462abcae70ae5c51cc2c50d1a3041dc7b9afa527a2e0c582932fe9"
+    },
+    "tests/platform/linux_baseline/test_successor_inventory.py": {
+      "acceptedSha256": "46417d8566acedf4c60e396dfe27dcd94743e288eda9f1aeea2db5c27efd0b9e",
+      "subjectSha256": "46417d8566acedf4c60e396dfe27dcd94743e288eda9f1aeea2db5c27efd0b9e"
+    }
+  },
+  "contractPins": {
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "architecture/completion-profiling.json": "3b4b4decb02cede34ae45dc4df74bfa1ed59a7d20042a89739ffc6d1e2ec38b8",
+    "architecture/conformance-completion.json": "431a550dcc57a9a16597df6ae9772f64ac8e622997e643ac4ed43652d91e6376",
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/research-adoption.json": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "task-packets/CONF-DIAG-003.yaml": "03606cc382e46499b63e839d95f3d9161a90b205dc936a8438a167d15f7ecf52",
+    "task-packets/CONF-FIX-007.yaml": "3a404ac9d470469d501379e7b634ac55c14634c56c2f10d6cf4e649b744a143e",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "diagnostic": {
+    "activationSequence": 307,
+    "announcedTestCount": 427,
+    "commit": "25fab12c168ff686e863291098fce0f3dba629bd",
+    "completedTestCount": 426,
+    "elapsedSeconds": 902.035319875,
+    "expectedTestCount": 1397,
+    "logSha256": "339a4654a7e468831ca0f1d3b9e076e93de9c3df51b71e9e46f4f949ed9eeff2",
+    "metaCommit": "5c5695e8bcd0ba95ff655b06ac397ef11f6cf0e0",
+    "nativeAcceptance": false,
+    "packetId": "CONF-DIAG-003",
+    "packetSha256": "03606cc382e46499b63e839d95f3d9161a90b205dc936a8438a167d15f7ecf52",
+    "pendingTestCost": "NOT_MEASURED",
+    "pendingTestIdentity": "test_proxy_server.BrokerCreatedTests.test_fsync_generation_loss_keeps_uid_held_without_ack",
+    "remainingAttempts": 0,
+    "requestSha256": "ad244afed78f4bca4dbda15149a14953b47ce58bb509d09223dc0f34a678a62b",
+    "sourceAcceptance": false,
+    "status": "INCOMPLETE_DIAGNOSTIC_RETAINED",
+    "tenantAcceptance": false
+  },
+  "evidenceClass": "RETAINED_DIAGNOSTIC_DATA_AND_PROPOSAL_ONLY",
+  "evidenceDigests": {
+    "DIAGNOSTIC_REPORT.md": "b224287d7b3a01886c0b1eb8ce535c4ff9e184c3afa51fc5db21cb41463e07d8",
+    "activation-binding.json": "3594b0553587a038bc1cdafd7db5017a7d2da3e662397526de9c80cd9ef36a0b",
+    "after-inventory.json": "87e2504f36545ec37abdd7d6c0add00cba42a8a87fcccfaae5e7fcdbdf6bb617",
+    "audit.json": "d0e98e98b073ca46cd936eac73319969bb5ac2765ac09eef03215fed7b6fffcd",
+    "before-inventory.json": "87e2504f36545ec37abdd7d6c0add00cba42a8a87fcccfaae5e7fcdbdf6bb617",
+    "chunk-receipts.jsonl": "55a651c1fe948bb9986da585e6ec12af635db0d407a1d89cfea67a526bfd111f",
+    "host.json": "2da17318df270cf529b70329023636f2912dad27ba89de7691f4c49aa46f53e4",
+    "reservation.json": "aead227500085f71ad4480c57de0e738763837d88ad2010272fff2b7afd20b8a",
+    "result.json": "3478ed103f5e01de739c322be52c75a0f82fc98fea367731d113d1381965f212"
+  },
+  "gates": {
+    "billingChange": false,
+    "c1ThroughC7": true,
+    "dependencies": false,
+    "exactBenchmarkManifestBeforeRun": true,
+    "fullEightProductCommands": true,
+    "independentSemanticOracles": true,
+    "modelEffort": "NOT_DUE",
+    "noHistoricalSourceExecution": true,
+    "oldCanonicalNoGoPreserved": true,
+    "phase": "ALPHA_2_ONGOING",
+    "powerChange": false,
+    "pr18Mutation": false,
+    "preserveAllInheritedIdsAndAssertions": true,
+    "rootPolicyChange": false,
+    "sourceCiMergeExactMainSeparate": true,
+    "tenantAcceptance": false,
+    "unprofiledMatchedWorkloadRequired": true,
+    "warmSourceAccess": false,
+    "zeroProductSkips": true
+  },
+  "limits": {
+    "metaWall": 750,
+    "nested": 420,
+    "trusted": 900,
+    "workflowMinutes": 15
+  },
+  "metaBase": "5c5695e8bcd0ba95ff655b06ac397ef11f6cf0e0",
+  "packetId": "MET-PERF-011",
+  "productGrant": false,
+  "proposedOwnerPaths": [
+    "src/harness_conformance/live_mutation_admission.py",
+    "tests/live_backend/test_mutation_admission.py",
+    "docs/live-backend/proxy.md"
+  ],
+  "proposedPacketId": "CONF-PERF-006",
+  "readiness": "WAITING_EXACT_PRODUCT_AUTHORITY",
+  "schemaVersion": "planeon.internal.document-repair-plan/v1",
+  "sequencing": [
+    "META_PLAN_SOURCE_GATES",
+    "SEPARATE_EXECUTABLE_REPAIR_AUTHORITY",
+    "REPAIR_FROM_ACCEPTED_MAIN_NEW_BRANCH_AND_PR",
+    "FULL_REPAIR_ACCEPTANCE_CI_MERGE_EXACT_MAIN",
+    "SEPARATE_PR18_COMPLETION_INTEGRATION_AUTHORITY",
+    "C1_C7_AND_FULL_INTEGRATED_ACCEPTANCE",
+    "CONF_LIVE_004"
+  ],
+  "subject": {
+    "accepted": "092fcf475c6f3ebd455e3c354cddb7664ea1f900",
+    "acceptedBackendTests": 1107,
+    "acceptedTotalTests": 1277,
+    "backendTests": 1397,
+    "draft": "25fab12c168ff686e863291098fce0f3dba629bd",
+    "files": 135,
+    "pr": 18,
+    "prState": "OPEN_DRAFT_UNACCEPTED",
+    "totalTests": 1567,
+    "tree": "6f38052fb9a31e9fe8b9abb6b055ddd96f06854f"
+  },
+  "testAccounting": {
+    "addedCases": 42,
+    "baselineInner": 3997,
+    "baselineOuter": 4246,
+    "evidence": "STATIC_SOURCE_ACCOUNTING_NOT_ACCEPTANCE",
+    "expectedInner": 4039,
+    "expectedOuter": 4288,
+    "inheritedExpansion": [
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "MET-PERF-011"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "MET-PERF-011"
+      }
+    ],
+    "inheritedSkips": 10,
+    "newCaseIds": [
+      "test_closed_plan_preserves_every_predecessor_and_test_identity",
+      "test_source_or_packet_substitution_refuses[('record',)]",
+      "test_source_or_packet_substitution_refuses[('missing',)]",
+      "test_source_or_packet_substitution_refuses[('extra',)]",
+      "test_source_or_packet_substitution_refuses[('old-packet',)]",
+      "test_source_or_packet_substitution_refuses[('new-packet',)]",
+      "test_source_or_packet_substitution_refuses[('recipe',)]",
+      "test_source_or_packet_substitution_refuses[('source',)]",
+      "test_source_or_packet_substitution_refuses[('guide',)]",
+      "test_source_or_packet_substitution_refuses[('test',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('diagnostic',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('evidenceDigests',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('subject',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('candidate',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('consumers',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('consumerMigration',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('proposedOwnerPaths',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('sequencing',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('budgets',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('limits',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('gates',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('contractPins',)]",
+      "test_resealed_plan_cannot_change_scope_or_evidence[('productGrant',)]",
+      "test_duplicate_nonfinite_authority_refuses[(b'{\"a\":1,\"a\":2}',)]",
+      "test_duplicate_nonfinite_authority_refuses[(b'{\"x\":NaN}',)]",
+      "test_duplicate_nonfinite_authority_refuses[(b'{\"x\":Infinity}',)]",
+      "test_fresh_authority_read_rejects_later_drift",
+      "test_current_first_bridge_rejects_stale_or_unknown_bytes[('scripts/validate_completion_profiling.py',)]",
+      "test_current_first_bridge_rejects_stale_or_unknown_bytes[('tests/test_task_packets.py',)]",
+      "test_current_first_bridge_rejects_stale_or_unknown_bytes[('docs/MASTER_DEVELOPMENT_PLAN.md',)]",
+      "test_unique_recipe_and_unchanged_test_routes_remain_closed",
+      "test_no_product_implementation_or_acceptance_is_published"
+    ],
+    "newCases": 32,
+    "testsCollectedOrRun": false
+  }
+}

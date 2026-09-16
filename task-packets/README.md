@@ -1,5 +1,20 @@
 # Sol-High Task Packet Catalog
 
+## Current planning gate - MET-PERF-011
+
+[Private document repair plan](../docs/alpha-2/DOCUMENT_REPAIR_PLAN.md): Alpha2 ONGOING.
+MET-PERF-009 source gates DONE_RECORDED at5c5695e; CONF-DIAG-003
+INCOMPLETE_DIAGNOSTIC_RETAINED:426/1397 completed,900-second timeout,0 retries.
+MET-PERF-011 ONGOING_PUBLICATION: META planning only;170 specifications,
+169 immutable old packets. Proposed CONF-PERF-006 WAITING_EXACT_PACKET;
+no product execution, retry reset, crypto/guard change or PR18 mutation.
+CONF-FIX-007 BLOCKED_LOCAL_BUDGET_EXHAUSTED; C1-C7/full8-command gates remain.
+CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION;005/006/CONF-A2-001 WAITING.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Model-effort transition NOT_DUE. Older headings below are historical publication states.
+
+## Retained planning and historical checkpoints
+
 ## Current execution gate - MET-PERF-009 reconciliation
 
 [Completion profiling reconciliation](../docs/alpha-2/COMPLETION_PROFILING.md): Alpha2 ONGOING.
@@ -408,6 +423,8 @@ corrections. Production integration is independently required by CONF-A2-001.
 | 127 | `RUN-GW-002` | `mas-harness-runtime-plane` | Streaming and cancellation |
 | 128 | `CONF-A2-001` | `mas-harness-conformance-labs` | Read-only agent certification |
 
+- `MET-PERF-011`: bounded private document repair plan; no product grant.
+
 ## Alpha 3 — Governed action and interaction
 
 | Order | Packet | Repository | Acceptance slice |
@@ -678,3 +695,5 @@ paths/eight commands and source stages. This source-only publication requires22
 commands, both complete replays, required localhost PR CI, merge and independent
 local exact-main. No installation, new broker availability, paid service or live
 acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
+
+| 170 | `MET-PERF-011` | `Harness-Engineering` | Bounded private document repair plan; no product execution |
