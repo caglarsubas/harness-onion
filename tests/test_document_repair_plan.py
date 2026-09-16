@@ -16,6 +16,10 @@ def test_closed_plan_preserves_every_predecessor_and_test_identity(authority):
     packets,record,inputs=authority
     assert len(packets)==170 and module.NEW_IDS==('MET-PERF-011',)
     assert 'CONF-PERF-006' not in packets and 'CONF-PERF-005' not in packets
+    for path in ('ci/test_offline_runner.py','ci/test_warm_snapshot.py'):
+        raw=module.regular_bytes(module.ROOT,path)
+        assert module.digest(raw)==record['unchangedTests'][path]
+        assert module.current_test_bytes(raw)==raw
     for path,rule in record['metaRecipes'].items():
         before=module.historical_bytes(path,inputs[path])
         assert module.apply_recipe(before,rule)==inputs[path]

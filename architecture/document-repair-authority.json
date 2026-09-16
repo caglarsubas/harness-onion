@@ -4,7 +4,7 @@
     "architecture/document-repair-plan.json": "5caf3c347fb5b0544e44cfe625f58d422b35d86ca78745d84bab27fa315dc925",
     "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md": "204deec7865ad127db4b27b3fcf99851460e0c6d44904df79f70831d42e5c470",
     "task-packets/MET-PERF-011.yaml": "5d2ffd2571c89d5072da00fbdeb370b20ebff1c92c32f03e5b940ab8515c594d",
-    "tests/test_document_repair_plan.py": "1c80f24bab8af77aca1624fecb0d5968797872f13848ffa31b009af73d5b1ded"
+    "tests/test_document_repair_plan.py": "6030c3bd63cd53a5ef02e3e0fea411c92fe6149a77bc96449fc69382eafbd781"
   },
   "metaBaseline": "5c5695e8bcd0ba95ff655b06ac397ef11f6cf0e0",
   "metaRecipes": {
@@ -732,7 +732,7 @@
       ]
     },
     "tests/test_ci_performance.py": {
-      "afterSha256": "fe30dec78ca12b40f7a65c2e5a74fea222b74a7abea432a347380688a2387008",
+      "afterSha256": "60b47e748704f4f1a485d137867f6e66d53f56e28d269a1d2756aa106400a5a9",
       "beforeSha256": "91e75fa48e3f5d504424634adf6179acfaaeca0aac30a5d9595f19e349a489b0",
       "replacements": [
         {
@@ -743,6 +743,11 @@
         {
           "after": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 170\"\n",
           "before": "    target = b\"assert len(files) == EXPECTED_PACKET_COUNT == 169\"\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(paths) == 186\n",
+          "before": "    assert len(paths) == 185\n",
           "count": 1
         }
       ]
@@ -1423,6 +1428,8 @@
   },
   "schemaVersion": "planeon.internal.document-repair-authority/v1",
   "unchangedTests": {
+    "ci/test_offline_runner.py": "46444c4218502f889f9d3e923c60604f6eff5434ab248a9cfc96976f38f06fcb",
+    "ci/test_warm_snapshot.py": "929be52a3835a0b0d28d355fd4b4f85fc0e5e210502c3b6c62c2b24348fafa24",
     "tests/fixture_yaml.py": "cdcc55e5bdbf1272cb625cb23bb48b7f0051b415032749c09c4240f01697f986",
     "tests/linux_runner/conftest.py": "414b64d997172139aa984294dbb9b9d136ac9197f8245580f6d8c05e84b3a0d4",
     "tests/linux_runner/test_authority.py": "1a29bb42ca3a6fda8281c6e9e9fa79266107b1e244510563950e69ff3aa7cf90",
