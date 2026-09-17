@@ -26,7 +26,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/credential-lifecycle-amendment.json"
 RECORD_SHA256 = "851fd80ddeec7367405a3e8445e330290341e2b4d68bccf372c24a4b965c341c"
-ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003", "MET-PERF-011", "MET-PERF-012", "CONF-PERF-006", "CONF-BENCH-002", "MET-PERF-013", "CONF-BENCH-003", "MET-REPAIR-018", "CONF-FIX-008", "MET-PERF-014", "CONF-DIAG-004", "MET-PERF-015", "CONF-FIX-009", "MET-PERF-016", "MET-PERF-017", "CONF-FIX-010")
+ADDITIONS = ("MET-REPAIR-012", "CONF-FIX-005", "MET-REPAIR-013", "MET-REPAIR-014", "MET-REPAIR-015", "MET-PERF-002", "CONF-PERF-001", "MET-PERF-003", "CONF-PERF-002", "MET-PERF-004", "CONF-PERF-003", "MET-PERF-005", "CONF-PERF-004", "CONF-BENCH-001", "MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003", "MET-PERF-011", "MET-PERF-012", "CONF-PERF-006", "CONF-BENCH-002", "MET-PERF-013", "CONF-BENCH-003", "MET-REPAIR-018", "CONF-FIX-008", "MET-PERF-014", "CONF-DIAG-004", "MET-PERF-015", "CONF-FIX-009", "MET-PERF-016", "MET-PERF-017", "MET-REPAIR-019", "CONF-FIX-010")
 PACKET_DIGESTS = {"MET-REPAIR-012": "bb53b3538a50a6c4e26b7f40c6697376c3cb1cc5e3947dad573c9d45d9253a1e",
                   "CONF-FIX-005": "abb7c2a19d54f84789c2656164e1e9ac66f822620173401fe93c50d61cc5cf2a"}
 BEFORE_PATH = "architecture/credential-lifecycle-inputs/before.json"
@@ -250,7 +250,7 @@ def validate_credential_lifecycle(packets, record, inputs):
         pinned(record)
         errors = validate_additions(packets)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 139 and len(packets) == 184 and set(packets) == old | set(ADDITIONS),
+        require(len(old) == 139 and len(packets) == 185 and set(packets) == old | set(ADDITIONS),
                 "139 predecessors plus two credential packets and exact ordering authority required")
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact input map required")
@@ -319,7 +319,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Credential lifecycle authority valid: 184 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
+        print("Credential lifecycle authority valid: 185 packets; exact performance/test reconciliation; 127/305 checkpoint; DATA_CHECK_ONLY, product/native NOT_RUN.")
     return int(bool(errors))
 
 

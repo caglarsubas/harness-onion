@@ -1,5 +1,21 @@
 # Alpha 2 — bounded private document repair plan
 
+## Current source-only design publication — MET-REPAIR-019
+
+[Observation/enforcement publication](OBSERVATION_ENFORCEMENT_PUBLICATION.md): Alpha2 ONGOING.
+MET-PERF-017 DONE_SOURCE_GATES at be4d79e / PR133; separate exact-main evidence retained.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; both failed LOCAL attempts preserved.
+CONF-FIX-010 BLOCKED_SAFE_DESIGN; zero attempts, unchanged packet and current runtime contract.
+OBS-ARCH-DESIGN-001 DONE_DESIGN_REVIEW_ONLY;12 enforcement obligations OPEN_UNPROVEN.
+MET-REPAIR-019 ONGOING_PUBLICATION:185 specifications;184 old packets immutable; no product execution.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No runtime adoption, native or tenant acceptance; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+The delegated in-scope publication decision is not passing evidence or a security waiver.
+Earlier headings below are retained historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current repair gate - MET-PERF-017
 
 [Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.

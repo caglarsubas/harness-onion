@@ -1,0 +1,162 @@
+{
+  "nativeQualified": false,
+  "rows": [
+    {
+      "actorAndBypassRoutes": "Authority/code paths: rename, unlink, symlink/hardlink alias, retained writers, mode/label change",
+      "externalMaintainerSelected": null,
+      "id": "E01",
+      "invalidationEvidenceAndCleanup": "Deny update or drain before change; native transient rename/restore and alternate-writer tests; operator/R10, R12 verifies",
+      "mediatorAndRetainedObservations": "Independently reviewed path/ancestor and writer restrictions; keep no-follow named and retained-FD custody until proven",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Process-owned FDs: close/dup/reuse, fcntl inheritance, injected ancillary descriptors",
+      "externalMaintainerSelected": null,
+      "id": "E02",
+      "invalidationEvidenceAndCleanup": "Sticky refusal; close only actually acquired originals, never a reused unrelated FD; OS-double and native FD tests; R12",
+      "mediatorAndRetainedObservations": "Keep exact per-leaf owner, descriptor, flags and inheritance checks; fs-verity/MAC alone does not preserve a descriptor table",
+      "ownerIds": [
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Kernel views: mount/bind/overmount, propagation, setns/unshare, namespace substitution",
+      "externalMaintainerSelected": null,
+      "id": "E03",
+      "invalidationEvidenceAndCleanup": "Block if aliases/propagation escape mediator; native transient mount and namespace tests; operator/R10, R12",
+      "mediatorAndRetainedObservations": "Independent prohibition of role mutation and exclusion of authorized host updates; original root, filesystem and namespace identity observations retained",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "SELinux: policy load, enforcement/permissive/boolean changes, relabel, injection privilege",
+      "externalMaintainerSelected": null,
+      "id": "E04",
+      "invalidationEvidenceAndCleanup": "Deny first, external quiescence, change, fresh generation; both architecture ordering/ABA tests; operator/R10, R12",
+      "mediatorAndRetainedObservations": "Reviewed effective policy plus exclusive authorized update path; fresh active-policy/status observations, no stale open-policy snapshot",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Cgroups/BPF: migration, ancestor effective rules, attachment/link replacement, hidden maps/helpers",
+      "externalMaintainerSelected": null,
+      "id": "E05",
+      "invalidationEvidenceAndCleanup": "Existing sockets separately fenced under E10; ancestor/link bypass tests; operator/R10, R12",
+      "mediatorAndRetainedObservations": "Independently restricted migration/update/delegation; exact effective enrolled programs and finite limits still observed",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Code/maps: COW writes, dlopen, mprotect, memfd, executable aliases, ptrace/process_vm, thread/fork/exec",
+      "externalMaintainerSelected": null,
+      "id": "E06",
+      "invalidationEvidenceAndCleanup": "File verity alone insufficient; startup versus sealed steady state separately tested; operator/R10, R12",
+      "mediatorAndRetainedObservations": "Reviewed role policy/syscall/process lifecycle closure; fixed mapped dependency inventory; retain actual maps/labels/identity reads",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Peer/process replacement or autonomous death; socket path spoof, PID reuse",
+      "externalMaintainerSelected": null,
+      "id": "E07",
+      "invalidationEvidenceAndCleanup": "Death/restart closes, no reconnect/rebinding; native fork/crash/channel-loss tests; operator, R12",
+      "mediatorAndRetainedObservations": "Retained pidfd/start/credentials/path and original channel checks before/after exchange; independent admission/worker ownership",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Time, expiry, suspend, clock rollback, deadline-extension attempts",
+      "externalMaintainerSelected": null,
+      "id": "E08",
+      "invalidationEvidenceAndCleanup": "Expiry denies admission, triggers containment termination; suspend/clock/blocked-reader tests; operator, R12",
+      "mediatorAndRetainedObservations": "Fresh mono/wall checks and original bounds plus independent external expiry enforcement; no returned lease",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Observation computation: in-process mutable owner/flags, reentrancy, partial construction",
+      "externalMaintainerSelected": null,
+      "id": "E09",
+      "invalidationEvidenceAndCleanup": "Sticky failure; retain wrong-owner/reentrancy/resource-substitution tests and declared trusted-code limit; R12",
+      "mediatorAndRetainedObservations": "Exact factory and dynamic role guards; no assumption that a kernel policy prevents Python attribute corruption",
+      "ownerIds": [
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Resource effects: old connections, delayed queue, RBAC/impersonation/aggregate-grant bypass",
+      "externalMaintainerSelected": null,
+      "id": "E10",
+      "invalidationEvidenceAndCleanup": "Revoke before new effects; admitted remote work remains recorded/ambiguous; exact UID cleanup tests; operator/R10, R12",
+      "mediatorAndRetainedObservations": "Independent per-effect generation admission and serialized full policy paths; fresh scoped authority before credentials/actions",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Enforcer/host crash, storage/fsync ambiguity, history rollback, generation ABA",
+      "externalMaintainerSelected": null,
+      "id": "E11",
+      "invalidationEvidenceAndCleanup": "Hold capacity/nonces, reconcile explicitly; process-kill/partial-write/reboot tests; operator/R10, R12",
+      "mediatorAndRetainedObservations": "External deny-by-default restart and independently protected durable consumption; no in-process successful flag",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "actorAndBypassRoutes": "Quiescence/cleanup: frozen-but-live roles, descendants, escaped processes, pending API work",
+      "externalMaintainerSelected": null,
+      "id": "E12",
+      "invalidationEvidenceAndCleanup": "Deny first, reap/drain/retain ambiguity; never clear pending state to unblock; operator/R10, R12",
+      "mediatorAndRetainedObservations": "Independent ownership and termination proof, not a freeze request or worker report; current cleanup authority",
+      "ownerIds": [
+        "operator",
+        "conformance-labs"
+      ],
+      "proofEvidence": [],
+      "state": "OPEN_UNPROVEN"
+    }
+  ],
+  "runtimeAdoptionAuthorized": false,
+  "schemaVersion": "planeon.internal.observation-enforcement-matrix/v1",
+  "selectedEnforcer": null
+}
