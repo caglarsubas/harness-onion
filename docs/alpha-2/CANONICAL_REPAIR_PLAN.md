@@ -1,5 +1,20 @@
 # Alpha 2 — canonicalization repair decision and remaining readiness gate
 
+## Current validation repair — MET-PERF-018
+
+[Single-traversal catalog repair](CATALOG_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.
+MET-ENFORCE-001 DONE_SOURCE_GATES at cdb71ae / PR135; exact-main evidence retained.
+MET-PERF-018 ONGOING_SOURCE_REPAIR:187 specifications;186 accepted predecessor packets immutable.
+Draft PR136 / MET-ENFORCE-002 remains BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; not imported or retried.
+Repair duplicated META catalog traversals without caching authority or skipping fresh checks.
+W01 ONGOING_DESIGN; W02-W07 not dispatchable; all E01-E12 OPEN_UNPROVEN.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current enforcement ownership amendment — MET-ENFORCE-001
 
 [Host enforcement ownership and interfaces](ENFORCEMENT_INTEGRATION.md): Alpha2 ONGOING.

@@ -131,17 +131,21 @@ def current_test_bytes(before):
     return observation_current(apply_recipe(before, matches[0]))
 
 
+def _validate_local_additions(packets, record):
+    """Private digest check only; public entry points own successor validation."""
+    pinned(record)
+    require(type(packets) is dict, "packet mapping")
+    for name in NEW_IDS:
+        require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
+    return []
+
+
 def validate_additions(packets):
     try:
         packets = observation_catalog(packets)
-        record = _record()
-        require(type(packets) is dict, "packet mapping")
-        for name in NEW_IDS:
-            require(digest(canonical(packets.get(name))) == record["packetDigests"][name], "packet substitution")
-        return []
+        return _validate_local_additions(packets, _record())
     except (ValueError, TypeError, RecursionError):
         return ["missing or changed performance packets"]
-
 
 def test_ids(raw):
     result = []
@@ -164,8 +168,12 @@ SOURCE = 'architecture/guard-traversal-inputs/readiness.json'
 
 def historical_catalog(packets):
     record = _record(); pinned(record)
-    require(validate_additions(packets) == [], 'exact guard traversal packets')
-    packets = observation_catalog(packets)
+    try:
+        packets = observation_catalog(packets)
+        errors = _validate_local_additions(packets, _record())
+    except (ValueError, TypeError, RecursionError):
+        errors = ["missing or changed performance packets"]
+    require(errors == [], 'exact guard traversal packets')
     old = {Path(p).stem for p in record['protectedFiles']
            if p.startswith('task-packets/') and p.endswith('.yaml')}
     require(len(old) == 182 and set(packets) == old | set(NEW_IDS), 'closed 184-packet catalog')

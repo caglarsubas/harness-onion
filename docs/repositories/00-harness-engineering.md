@@ -1,5 +1,20 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current validation repair — MET-PERF-018
+
+[Single-traversal catalog repair](../alpha-2/CATALOG_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.
+MET-ENFORCE-001 DONE_SOURCE_GATES at cdb71ae / PR135; exact-main evidence retained.
+MET-PERF-018 ONGOING_SOURCE_REPAIR:187 specifications;186 accepted predecessor packets immutable.
+Draft PR136 / MET-ENFORCE-002 remains BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; not imported or retried.
+Repair duplicated META catalog traversals without caching authority or skipping fresh checks.
+W01 ONGOING_DESIGN; W02-W07 not dispatchable; all E01-E12 OPEN_UNPROVEN.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current enforcement ownership amendment — MET-ENFORCE-001
 
 [Host enforcement ownership and interfaces](../alpha-2/ENFORCEMENT_INTEGRATION.md): Alpha2 ONGOING.
@@ -553,6 +568,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 58. `MET-PERF-017`: publish guard-traversal design gate and conditional successor; no product execution.
 59. `MET-REPAIR-019`: publish reviewed design direction and unresolved proof obligations; no product execution.
 60. `MET-ENFORCE-001`: assign separate host-module source ownership and interface work; no runtime adoption.
+61. `MET-PERF-018`: repair duplicate catalog traversal; preserve blocked PR136 and its consumed allowances.
 
 ## Testing, verification, and acceptance
 
