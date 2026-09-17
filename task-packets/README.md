@@ -801,6 +801,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 179 | `CONF-DIAG-004` | `mas-harness-conformance-labs` | Read-only failed-candidate factory-call observation |
 
 | 180 | `MET-PERF-015` | `Harness-Engineering` | Bounded guard-cost repair authority |
-| 181 | `CONF-FIX-009` | `mas-harness-conformance-labs` | Independent-review gated guard-cost repair |
-
-| 182 | `MET-PERF-016` | `Harness-Engineering` | Narrow accounting-scope amendment |
+| 181 | `MET-PERF-016` | `Harness-Engineering` | Narrow accounting-scope amendment |
+| 182 | `CONF-FIX-009` | `mas-harness-conformance-labs` | Independent-review gated guard-cost repair |
