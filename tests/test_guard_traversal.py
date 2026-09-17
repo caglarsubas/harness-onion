@@ -14,6 +14,20 @@ def authority():
 def test_current_authority_and_reversible_history(authority):
     packets,record,inputs = authority
     assert module.validate_authority(*authority) == []
+    value = module.parse(inputs[module.SPEC_PATH])
+    errors = ['unordered same-repository packets '+r['left']+' and '+r['right']
+              +' overlap at '+repr(r['path'])+' and '+repr(r['path'])
+              for r in value['dispatchOverlaps']]
+    assert len(errors) == len(set(errors)) == 8
+    assert module.close_traversal_dispatch(packets, errors+['other']) == ['other']
+    assert module.close_traversal_dispatch(packets, list(reversed(errors))) == []
+    for bad in [[], errors[:-1], errors+errors[:1]]:
+        assert module.close_traversal_dispatch(packets,bad) == bad+['missing or changed traversal dispatch']
+    for name in ('CONF-FIX-010','CONF-FIX-007','CONF-BENCH-002','CONF-BENCH-003','CONF-DIAG-003'):
+        changed = deepcopy(packets); changed[name]['objective'] += 'x'
+        assert module.close_traversal_dispatch(changed,errors) == errors+['missing or changed traversal dispatch']
+    changed_spec = deepcopy(value); changed_spec['dispatchOverlaps'] = []
+    with pytest.raises(ValueError): module.validate_spec(changed_spec,bind=False)
     assert len(packets) == 184 and len(module.historical_catalog(packets)) == 182
     for p,rule in record['metaRecipes'].items():
         before = module.historical_bytes(p,inputs[p])

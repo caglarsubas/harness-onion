@@ -533,12 +533,14 @@ def validate_dispatch_ownership(packets):
         from validate_completion_integration import close_integration_dispatch
         from validate_factory_diagnostics import close_factory_dispatch
         from validate_guard_cost_repair import close_guard_dispatch
+        from validate_guard_traversal import close_traversal_dispatch
     except ImportError:
         from scripts.validate_document_repair_execution import close_document_dispatch
         from scripts.validate_benchmark_transport import close_transport_dispatch
         from scripts.validate_completion_integration import close_integration_dispatch
         from scripts.validate_factory_diagnostics import close_factory_dispatch
         from scripts.validate_guard_cost_repair import close_guard_dispatch
+        from scripts.validate_guard_traversal import close_traversal_dispatch
     """No generic weakening; close only the ten immutable, exact scoped pairs."""
     try:
         from validate_packet_ownership import validate_packet_ownership
@@ -566,7 +568,7 @@ def validate_dispatch_ownership(packets):
             retired.update("unordered same-repository packets " + left + " and " + right + " overlap at "
                            + repr(path) + " and " + repr(path) for path in paths)
         require(len(retired) == 72 and all(errors.count(message) == 1 for message in retired), "exact72 diagnostics")
-        return close_guard_dispatch(packets, close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired]))))))))
+        return close_traversal_dispatch(packets, close_guard_dispatch(packets, close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired])))))))))
     except (ValueError, TypeError, KeyError, OSError, RecursionError):
         return errors + ["missing or changed closed reference/candidate dispatch"]
 

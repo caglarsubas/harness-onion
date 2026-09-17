@@ -2,11 +2,11 @@
   "authorityPacket": "MET-PERF-017",
   "inputFiles": {
     "architecture/guard-traversal-inputs/readiness.json": "4b3cd768e8812eb8fc07e92f3cf80a18b73f6a3288ff927cb7ef823e2cfa636b",
-    "architecture/guard-traversal-plan.json": "f65c97f7bf88e04d4084393be9f0a4957e130d77cb54c83e39a2a6c5262d4d96",
-    "docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md": "97bbb1b8c78ed0bd824ceba06577aa872a3926fbfa76782c604f417f6c4103fd",
+    "architecture/guard-traversal-plan.json": "7aad7978ba88acbaa12e64154dca049f388b1faaae93ca606b40974340f80888",
+    "docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md": "d16a221e089f689b18862cf0b85e5614a8bfad7d2e6d299e77185922d17066eb",
     "task-packets/CONF-FIX-010.yaml": "e4eea58d0f5c18444d23863a1f9179fa183491007f92ce2fa2b92cd2a5cc417f",
     "task-packets/MET-PERF-017.yaml": "75185049c46551da48c2d86925bbb28ddba1fceeaa729906790f69f284748b72",
-    "tests/test_guard_traversal.py": "eab7e0010fc73298363f0d708e33931c9de56cc334654dd6a0cb4d32bdd3bc04"
+    "tests/test_guard_traversal.py": "0e23088c882d717e88a343049cd0ab41df03746a8428a1cd4abcda7db676d53d"
   },
   "metaBaseline": "4f7cd029a8d5f54317a56e873873e9d36a48c252",
   "metaRecipes": {
@@ -425,12 +425,27 @@
       ]
     },
     "scripts/validate_conformance_reference_measurement.py": {
-      "afterSha256": "9829291efd314265f058d3ec8cef8f09293029826f24a2030244bc3a0e69eff8",
+      "afterSha256": "895dc5583905cf232613e411d0905d78beced6ac758eb1ec5ffd8a0f071d8c1a",
       "beforeSha256": "9a2a1b47c4edf424103a7688cee5d38185d251baa31e5342a0b7c3fbf0b44150",
       "replacements": [
         {
           "after": "        require(len(old) == 150 and len(packets) == 184 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\", \"MET-PERF-015\", \"CONF-FIX-009\", \"MET-PERF-016\", \"MET-PERF-017\", \"CONF-FIX-010\"}, \"exact155 catalog\")\n",
           "before": "        require(len(old) == 150 and len(packets) == 182 and set(packets) == old | set(NEW_IDS) | {\"MET-REPAIR-016\", \"CONF-FIX-006\", \"MET-ADOPT-001\", \"MET-PERF-006\", \"CONF-DIAG-001\", \"MET-PERF-007\", \"MET-PERF-008\", \"CONF-DIAG-002\", \"MET-ACCEPT-001\", \"MET-PUBLISH-001\", \"MET-REPAIR-017\", \"CONF-FIX-007\", \"MET-ADOPT-002\", \"MET-PERF-010\", \"MET-PERF-009\", \"CONF-DIAG-003\", \"MET-PERF-011\", \"MET-PERF-012\", \"CONF-PERF-006\", \"CONF-BENCH-002\", \"MET-PERF-013\", \"CONF-BENCH-003\", \"MET-REPAIR-018\", \"CONF-FIX-008\", \"MET-PERF-014\", \"CONF-DIAG-004\", \"MET-PERF-015\", \"CONF-FIX-009\", \"MET-PERF-016\"}, \"exact155 catalog\")\n",
+          "count": 1
+        },
+        {
+          "after": "        from validate_guard_cost_repair import close_guard_dispatch\n        from validate_guard_traversal import close_traversal_dispatch\n    except ImportError:\n",
+          "before": "        from validate_guard_cost_repair import close_guard_dispatch\n    except ImportError:\n",
+          "count": 1
+        },
+        {
+          "after": "        from scripts.validate_guard_cost_repair import close_guard_dispatch\n        from scripts.validate_guard_traversal import close_traversal_dispatch\n    \"\"\"No generic weakening; close only the ten immutable, exact scoped pairs.\"\"\"\n",
+          "before": "        from scripts.validate_guard_cost_repair import close_guard_dispatch\n    \"\"\"No generic weakening; close only the ten immutable, exact scoped pairs.\"\"\"\n",
+          "count": 1
+        },
+        {
+          "after": "        return close_traversal_dispatch(packets, close_guard_dispatch(packets, close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired])))))))))\n",
+          "before": "        return close_guard_dispatch(packets, close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired]))))))))\n",
           "count": 1
         },
         {

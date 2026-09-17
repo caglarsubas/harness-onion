@@ -150,3 +150,17 @@ Freeze META test additions and inherited parameter expansions separately from pr
 Preparation, design review, source acceptance, CI, merge, exact-main, artifact, installation, runtime, assurance and tenant acceptance are separate. The packet never signs tenant acceptance. All20 native controls remain NOT_RUN_ENV_UNAVAILABLE until their separate installed Linux campaigns can actually run.
 
 The host-inventory install was independently verified in the prior turn. This preparation changes no root-owned policy, launcher, keys, signing identity, isolation backend, permissions, power state or administrator mechanism. No credential or warm-source content belongs in the proposed repository records.
+
+
+## Bounded catalog correction after LOCAL1
+
+The first META local attempt stopped after two of46 commands at18.08013525s:
+the generic ownership checker correctly reported eight unordered overlaps
+between conditional CONF-FIX-010 and retained unaccepted CONF-BENCH-002,
+CONF-BENCH-003, CONF-DIAG-003 and CONF-FIX-007. Its failure/reservation remain
+consumed. This correction adds a closed adapter for exactly those pinned
+packet/path pairs, like the existing predecessor adapters. It does not create
+accepted dependencies, waive arbitrary overlaps, modify the generic checker,
+change either packet or permit product execution. Unknown, duplicated, missing
+or substituted diagnostics/packets remain errors. LOCAL2 is the sole remaining
+local allowance. Test identities/counts and all46 commands remain unchanged.

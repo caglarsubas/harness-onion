@@ -40,6 +40,48 @@
     "traceAndInterleavingProof": true,
     "unprovenEquivalence": "STOP_NOT_WAIVE"
   },
+  "dispatchOverlaps": [
+    {
+      "left": "CONF-BENCH-002",
+      "path": "src/harness_conformance/live_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-BENCH-003",
+      "path": "src/harness_conformance/live_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-DIAG-003",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "src/harness_conformance/live_proxy_server.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "src/harness_conformance/live_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "tests/live_backend/test_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "docs/live-backend/proxy.md",
+      "right": "CONF-FIX-010"
+    }
+  ],
   "gates": {
     "billingChange": false,
     "frozenSourceAndIds": true,
