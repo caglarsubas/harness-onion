@@ -1,0 +1,299 @@
+{
+  "base": "cdb71ae1f6d639cc9ccd78d9089203b08e5ee8d5",
+  "duplicatedLayers": 4,
+  "rows": [
+    {
+      "aliases": {
+        "traversal_catalog": "scripts.validate_guard_traversal"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "traversal_catalog",
+          "require",
+          "regular_bytes",
+          "require",
+          "safe_load",
+          "historical_bytes",
+          "validate_additions",
+          "Path",
+          "canonical",
+          "canonical",
+          "len",
+          "set",
+          "safe_load",
+          "set"
+        ],
+        "validate_additions": [
+          "traversal_catalog",
+          "_record",
+          "require",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [
+        "traversal_catalog"
+      ],
+      "path": "scripts/validate_accounting_scope.py",
+      "sha256": "26a465dad8489877b2d05ae71a93c5b0ebc4054cdd9b1404eee3e1bf54c5d150"
+    },
+    {
+      "aliases": {
+        "integration_catalog": "scripts.validate_completion_integration"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "integration_catalog",
+          "require",
+          "validate_additions",
+          "Path",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "_record",
+          "require",
+          "integration_additions",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [],
+      "path": "scripts/validate_benchmark_transport.py",
+      "sha256": "ef76481ca77eb4be13ecbe0666eb2b1f46da5f8508c9559c767a84fef069b966"
+    },
+    {
+      "aliases": {
+        "factory_catalog": "scripts.validate_factory_diagnostics"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "factory_catalog",
+          "require",
+          "validate_additions",
+          "Path",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "_record",
+          "require",
+          "factory_additions",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [],
+      "path": "scripts/validate_completion_integration.py",
+      "sha256": "893393a0419a9630abcc7e8a32be523514db5dd5b66eac33af6243bdbd2c207d"
+    },
+    {
+      "aliases": {
+        "transport_catalog": "scripts.validate_benchmark_transport"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "transport_catalog",
+          "require",
+          "validate_additions",
+          "Path",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "_record",
+          "require",
+          "transport_additions",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [],
+      "path": "scripts/validate_document_repair_execution.py",
+      "sha256": "2b580b4630b79fb0f10ef7aaacd14f7075668e4de480e5c2710f1db8f2fac3d7"
+    },
+    {
+      "aliases": {},
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "require",
+          "Path",
+          "type",
+          "validate_additions",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "_record",
+          "require",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [],
+      "path": "scripts/validate_enforcement_integration.py",
+      "sha256": "4d1443f71b1b06891e936ace31cc9f1cd2a76d81b49b4d505aebe05ffddf9935"
+    },
+    {
+      "aliases": {
+        "guard_catalog": "scripts.validate_guard_cost_repair"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "guard_catalog",
+          "require",
+          "validate_additions",
+          "Path",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "_record",
+          "require",
+          "guard_additions",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [],
+      "path": "scripts/validate_factory_diagnostics.py",
+      "sha256": "2bd52c60e286fb65f864491ef2cbb56c77778b59efb4a23a4f7bfd07b82c494b"
+    },
+    {
+      "aliases": {
+        "accounting_catalog": "scripts.validate_accounting_scope"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "accounting_catalog",
+          "require",
+          "validate_additions",
+          "Path",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "accounting_catalog",
+          "_record",
+          "require",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [
+        "accounting_catalog"
+      ],
+      "path": "scripts/validate_guard_cost_repair.py",
+      "sha256": "e81c4fd2a332b00f47418b551a20b78e244b71550cd7e8e6a16ade655b870c4a"
+    },
+    {
+      "aliases": {
+        "observation_catalog": "scripts.validate_observation_enforcement"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "observation_catalog",
+          "require",
+          "validate_additions",
+          "Path",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "observation_catalog",
+          "_record",
+          "require",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [
+        "observation_catalog"
+      ],
+      "path": "scripts/validate_guard_traversal.py",
+      "sha256": "7857e4d36314afe05747cf82f15993efe3e4a7ef98479c7277f9096876e9fc8c"
+    },
+    {
+      "aliases": {
+        "integration_catalog": "scripts.validate_enforcement_integration"
+      },
+      "calls": {
+        "historical_catalog": [
+          "_record",
+          "pinned",
+          "require",
+          "integration_catalog",
+          "require",
+          "Path",
+          "type",
+          "validate_additions",
+          "len",
+          "set",
+          "set"
+        ],
+        "validate_additions": [
+          "integration_catalog",
+          "_record",
+          "require",
+          "require",
+          "type",
+          "digest",
+          "canonical"
+        ]
+      },
+      "duplicatedSuccessorTraversals": [
+        "integration_catalog"
+      ],
+      "path": "scripts/validate_observation_enforcement.py",
+      "sha256": "6d66885b14e5909dc93d3d918705e6ef08a2fbfc0b2f0014fc52000d55d1458a"
+    }
+  ],
+  "status": "STATIC_CALL_STRUCTURE_NOT_RUNTIME_MEASUREMENT"
+}

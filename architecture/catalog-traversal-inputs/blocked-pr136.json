@@ -1,0 +1,128 @@
+{
+  "attempts": {
+    "CI": {
+      "consumed": 0,
+      "maximum": 2
+    },
+    "LOCAL": {
+      "consumed": 2,
+      "maximum": 2
+    },
+    "LOCAL_EXACT_MAIN": {
+      "consumed": 0,
+      "maximum": 1
+    }
+  },
+  "jobs": [
+    {
+      "conclusion": "cancelled",
+      "id": 105279701631,
+      "runner_id": 0,
+      "runner_name": "",
+      "status": "completed"
+    }
+  ],
+  "local": [
+    {
+      "commandsReached": 47,
+      "commit": "24d22753f192aead68b672de9fc06dc4f18ab776",
+      "elapsedSeconds": 72.263101791,
+      "functionalPass": false,
+      "hostInterruptions": 0,
+      "label": "local01",
+      "logSha256": "0a7e8a4836ee4b3ba788d034e88ffba089bfb604dda0844ae800814b270dfa89",
+      "nativeAcceptance": false,
+      "performancePass": false,
+      "resultSha256": "035d1770cf3d7e2ef3fa87fc03156daa89e0138b7f81b0c1666cafb437437f52",
+      "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+      "tenantAcceptance": false,
+      "testSummaries": []
+    },
+    {
+      "commandsReached": 48,
+      "commit": "3bf938b9fc435bf8899a3f348288f73c77129557",
+      "elapsedSeconds": 748.430366125,
+      "functionalPass": false,
+      "hostInterruptions": 0,
+      "label": "local02",
+      "logSha256": "35d005ecfbe5ce51da95116ae0804d3847fb4607ec95d85700da56308703a13c",
+      "nativeAcceptance": false,
+      "performancePass": false,
+      "resultSha256": "96d6461db5a0c92bc54c768e7e324d29f2d72059b4be9323c04bc559e019e1f3",
+      "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+      "tenantAcceptance": false,
+      "testSummaries": [
+        [
+          "4706",
+          "10",
+          "364.91"
+        ]
+      ]
+    }
+  ],
+  "main": "cdb71ae1f6d639cc9ccd78d9089203b08e5ee8d5",
+  "merge": "NOT_MERGED",
+  "modelEffortTransition": "NOT_DUE",
+  "nativeAcceptance": false,
+  "next": "Separately scoped META validation-performance repair; no implicit extra attempt or budget transfer",
+  "openEnforcementObligations": 12,
+  "packetId": "MET-ENFORCE-002",
+  "phase": "Alpha 2",
+  "phaseComplete": false,
+  "pr": {
+    "baseRefOid": "cdb71ae1f6d639cc9ccd78d9089203b08e5ee8d5",
+    "headRefOid": "3bf938b9fc435bf8899a3f348288f73c77129557",
+    "isDraft": true,
+    "mergeStateStatus": "BLOCKED",
+    "number": 136,
+    "state": "OPEN",
+    "url": "https://github.com/caglarsubas/harness-onion/pull/136"
+  },
+  "productDrafts": [
+    {
+      "draft": true,
+      "head": "6785db60c96d2ec45b9188e59269b1d199769a64",
+      "number": 20
+    },
+    {
+      "draft": true,
+      "head": "25fab12c168ff686e863291098fce0f3dba629bd",
+      "number": 18
+    },
+    {
+      "draft": true,
+      "head": "4662764713e32df49d5a5e8732d9f8bae5947222",
+      "number": 15
+    },
+    {
+      "draft": true,
+      "head": "a1871274e4243d9166d528d8b75d754298d56852",
+      "number": 14
+    },
+    {
+      "draft": true,
+      "head": "0b71be2e967ef217584733ccfd00b8d4c5f1699f",
+      "number": 13
+    }
+  ],
+  "productExecution": false,
+  "productMain": "3a81c8ffb17be9e288c4368d443c57361d5a4fc8",
+  "requiredOpenDesignGates": [
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G09"
+  ],
+  "run": {
+    "conclusion": "cancelled",
+    "head_sha": "3bf938b9fc435bf8899a3f348288f73c77129557",
+    "id": 35244096772,
+    "status": "completed"
+  },
+  "runnerCount": 0,
+  "sourceReview": "PASS_FOR_SOURCE_PUBLICATION",
+  "status": "BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED",
+  "tenantAcceptance": false,
+  "w01Complete": false
+}

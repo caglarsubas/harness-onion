@@ -1,0 +1,159 @@
+{
+  "blockedDraft": {
+    "head": "3bf938b9fc435bf8899a3f348288f73c77129557",
+    "localConsumed": 2,
+    "packetImported": false,
+    "pr": 136,
+    "retryAuthorized": false,
+    "stoppedSha256": "bce5dce885b53f2af8499b8c80a423fc9aa4a6fa3f6de86febdd7ab592a39d88"
+  },
+  "budgets": {
+    "CI": 2,
+    "LOCAL": 2,
+    "LOCAL_EXACT_MAIN": 1,
+    "benchmarks": 0,
+    "diagnostics": 0,
+    "product": 0
+  },
+  "harnesses": 16,
+  "limits": {
+    "localSeconds": 750,
+    "nestedSeconds": 420,
+    "trustedSeconds": 900,
+    "workflowMinutes": 15
+  },
+  "metaBase": "cdb71ae1f6d639cc9ccd78d9089203b08e5ee8d5",
+  "modelEffortTransition": "NOT_DUE",
+  "nativeAcceptance": false,
+  "oldAttemptsReset": false,
+  "packetId": "MET-PERF-018",
+  "phaseComplete": false,
+  "planes": 4,
+  "productExecution": false,
+  "productPacketAdded": false,
+  "repair": {
+    "accountingRewritePreserved": true,
+    "cachedAcceptance": false,
+    "cachedAuthority": false,
+    "currentTestBytesAlgorithmChanged": false,
+    "historicalBytesAlgorithmChanged": false,
+    "historicalCodeExecution": false,
+    "initialAndPostProjectionFreshRecord": true,
+    "privateLocalDigestCheck": true,
+    "publicSkipFlag": false,
+    "successorTraversalsPerPublicEntry": 1
+  },
+  "repositories": 13,
+  "runtimeAdoptionAuthorized": false,
+  "schemaVersion": "planeon.internal.catalog-traversal-plan/v1",
+  "sourceCloseoutSha256": "32504cc096f003c4d90bb8a44e266c164d4311ae9a1377881c6d2f960e7d2376",
+  "sourceStates": {
+    "CONF-FIX-009": "BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED",
+    "CONF-FIX-010": "BLOCKED_SAFE_DESIGN",
+    "MET-ENFORCE-001": "DONE_SOURCE_GATES",
+    "MET-ENFORCE-002": "BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED"
+  },
+  "staticDiagnosis": {
+    "duplicatedAcceptedLayers": 4,
+    "evidence": "STATIC_DERIVATION_NOT_TIMING",
+    "terminalCallsBefore": [
+      2,
+      4,
+      8,
+      16,
+      24,
+      32,
+      40,
+      48
+    ]
+  },
+  "status": "ONGOING_SOURCE_REPAIR",
+  "targets": [
+    {
+      "path": "scripts/validate_guard_cost_repair.py",
+      "successorAlias": "accounting_catalog"
+    },
+    {
+      "path": "scripts/validate_accounting_scope.py",
+      "successorAlias": "traversal_catalog"
+    },
+    {
+      "path": "scripts/validate_guard_traversal.py",
+      "successorAlias": "observation_catalog"
+    },
+    {
+      "path": "scripts/validate_observation_enforcement.py",
+      "successorAlias": "integration_catalog"
+    },
+    {
+      "path": "scripts/validate_enforcement_integration.py",
+      "successorAlias": "integration_catalog"
+    }
+  ],
+  "tenantAcceptance": false,
+  "testAccounting": {
+    "baselineInner": 4631,
+    "baselineOuter": 4880,
+    "evidence": "STATIC_AST_NOT_ACCEPTANCE",
+    "expectedInner": 4694,
+    "expectedOuter": 4943,
+    "inheritedExpansion": 10,
+    "inheritedSkips": 10,
+    "newCaseCount": 53,
+    "newCaseIds": [
+      "test_exact_current_publication_and_history",
+      "test_resealed_member_refuses[('targets',)]",
+      "test_resealed_member_refuses[('staticDiagnosis',)]",
+      "test_resealed_member_refuses[('repair',)]",
+      "test_resealed_member_refuses[('blockedDraft',)]",
+      "test_resealed_member_refuses[('budgets',)]",
+      "test_resealed_member_refuses[('limits',)]",
+      "test_resealed_member_refuses[('sourceStates',)]",
+      "test_resealed_member_refuses[('productExecution',)]",
+      "test_resealed_member_refuses[('runtimeAdoptionAuthorized',)]",
+      "test_resealed_member_refuses[('nativeAcceptance',)]",
+      "test_resealed_member_refuses[('tenantAcceptance',)]",
+      "test_resealed_member_refuses[('phaseComplete',)]",
+      "test_resealed_member_refuses[('oldAttemptsReset',)]",
+      "test_resealed_member_refuses[('productPacketAdded',)]",
+      "test_resealed_member_refuses[('testAccounting',)]",
+      "test_each_public_entry_traverses_successor_once[('guard',)]",
+      "test_each_public_entry_traverses_successor_once[('accounting',)]",
+      "test_each_public_entry_traverses_successor_once[('traversal',)]",
+      "test_each_public_entry_traverses_successor_once[('observation',)]",
+      "test_each_public_entry_traverses_successor_once[('enforcement',)]",
+      "test_catalog_rereads_authority_after_projection[('guard',)]",
+      "test_catalog_rereads_authority_after_projection[('accounting',)]",
+      "test_catalog_rereads_authority_after_projection[('traversal',)]",
+      "test_catalog_rereads_authority_after_projection[('observation',)]",
+      "test_catalog_rereads_authority_after_projection[('enforcement',)]",
+      "test_repeated_additions_have_no_success_cache[('guard',)]",
+      "test_repeated_additions_have_no_success_cache[('accounting',)]",
+      "test_repeated_additions_have_no_success_cache[('traversal',)]",
+      "test_repeated_additions_have_no_success_cache[('observation',)]",
+      "test_repeated_additions_have_no_success_cache[('enforcement',)]",
+      "test_current_catalog_and_local_digests_cannot_be_laundered[('guard',)]",
+      "test_current_catalog_and_local_digests_cannot_be_laundered[('accounting',)]",
+      "test_current_catalog_and_local_digests_cannot_be_laundered[('traversal',)]",
+      "test_current_catalog_and_local_digests_cannot_be_laundered[('observation',)]",
+      "test_current_catalog_and_local_digests_cannot_be_laundered[('enforcement',)]",
+      "test_accounting_projection_is_current_first_and_nonmutating",
+      "test_malformed_local_values_preserve_public_refusals[('guard',)]",
+      "test_malformed_local_values_preserve_public_refusals[('accounting',)]",
+      "test_malformed_local_values_preserve_public_refusals[('traversal',)]",
+      "test_malformed_local_values_preserve_public_refusals[('observation',)]",
+      "test_malformed_local_values_preserve_public_refusals[('enforcement',)]",
+      "test_complete_current_input_closure[('missing',)]",
+      "test_complete_current_input_closure[('extra',)]",
+      "test_complete_current_input_closure[('old',)]",
+      "test_complete_current_input_closure[('packet',)]",
+      "test_complete_current_input_closure[('plan',)]",
+      "test_complete_current_input_closure[('guide',)]",
+      "test_complete_current_input_closure[('authority',)]",
+      "test_no_draft_retry_or_native_promotion",
+      "test_fresh_history_refuses_stale_bytes",
+      "test_every_recipe_refuses_changed_current_input",
+      "test_parser_rejects_duplicate_and_nonfinite_data"
+    ]
+  }
+}
