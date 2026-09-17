@@ -2,6 +2,7 @@
 from copy import deepcopy
 import pytest
 from scripts import validate_guard_traversal as module
+from scripts.validate_observation_enforcement import historical_bytes as observation_history
 from scripts.safe_yaml import safe_load
 
 
@@ -28,10 +29,10 @@ def test_current_authority_and_reversible_history(authority):
         assert module.close_traversal_dispatch(changed,errors) == errors+['missing or changed traversal dispatch']
     changed_spec = deepcopy(value); changed_spec['dispatchOverlaps'] = []
     with pytest.raises(ValueError): module.validate_spec(changed_spec,bind=False)
-    assert len(packets) == 184 and len(module.historical_catalog(packets)) == 182
+    assert len(packets) == 185 and len(module.historical_catalog(packets)) == 182
     for p,rule in record['metaRecipes'].items():
         before = module.historical_bytes(p,inputs[p])
-        assert module.apply_recipe(before,rule) == inputs[p]
+        assert module.apply_recipe(before,rule) == observation_history(p,inputs[p])
         if p.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[p])
             assert module.current_test_bytes(before) == inputs[p]

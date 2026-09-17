@@ -1,0 +1,100 @@
+{
+  "approvedForRuntime": false,
+  "autonomousEventTimingRequired": true,
+  "deltas": [
+    {
+      "existingBoundary": "`_Files.check`, line2310: fresh fstat/named-stat/inheritance with exact field/comparison order",
+      "id": "D01",
+      "lostWindowProof": "None selected for removal; E01/E02/E09 remain mandatory",
+      "proposedTreatment": "Preserve this leaf behavior and every invocation required by the retained local owner guards; do not memoize rows"
+    },
+    {
+      "existingBoundary": "Native `_tick`, line329, and `_kernel_inspection_tick`, line287: exact native custody, dynamic owner dispatch, fresh original phase deadline",
+      "id": "D02",
+      "lostWindowProof": "D03's change is not equivalent to the current full dynamic dispatch trace",
+      "proposedTreatment": "Preserve per-leaf tick locations and original fresh clocks; owner dispatch must not trigger a full snapshot recursively under a separately adopted contract"
+    },
+    {
+      "existingBoundary": "Self `_reader_tick`, line2663: dynamic `_tick`, reader ownership, authority/session/window, then root/epoch/root unless already sampling",
+      "id": "D03",
+      "lostWindowProof": "E03-E06 host stability is necessary but insufficient: every removed nested tick also removes E01/E02/E07-E09 observations; map those lost opportunities explicitly, never claim preserved counts/cadence",
+      "proposedTreatment": "Retain local guards at surviving I/O boundaries and dynamic observer/broker checks; candidate moves the whole root/epoch/root resampling responsibility to an explicit coordinator"
+    },
+    {
+      "existingBoundary": "Root `_reader_mounts`, line718: owner guard, original pins, native root reads and deadlines",
+      "id": "D04",
+      "lostWindowProof": "E03 proves intervening mount/namespace changes are excluded; E02/E08 local checks remain fresh",
+      "proposedTreatment": "Preserve complete before/after root samples when invoked; candidate removes recursive full snapshots from inner owner dispatch, not root identity observations inside the sample"
+    },
+    {
+      "existingBoundary": "Policy `_reader_epoch`, line1286: retained mapping/FD custody, status-mount/status/status-mount, post custody",
+      "id": "D05",
+      "lostWindowProof": "E03/E04 prove skipped between-leaf global resamples redundant under the new contract; not proof of unchanged trace",
+      "proposedTreatment": "Preserve sample content, both mount brackets, native fence behavior, errors and sticky failure; no stale policy-open reuse"
+    },
+    {
+      "existingBoundary": "`_observe`, `_checked`, `_own` and constructors, lines2721 onward and earlier role factories",
+      "id": "D06",
+      "lostWindowProof": "Exact startup/partial-initialization schedule and full caller map REQUIRED before any code; these functions are outside CONF-FIX-010's seven-symbol scope",
+      "proposedTreatment": "Candidate coordinator explicitly brackets each fixed component observation and applicable acquisition boundary; keep fresh policy checks surrounding component sequence"
+    },
+    {
+      "existingBoundary": "Observer/broker `_tick`, lines2869/3003: original sockets/pidfds/path/credentials/liveness and surrounding custody",
+      "id": "D07",
+      "lostWindowProof": "E07/E08 events cannot be replaced with a host-update exclusion claim",
+      "proposedTreatment": "Preserve dynamic role-specific checks and no observer transport recursion"
+    },
+    {
+      "existingBoundary": "`_phase`, close/unwind, authority/reservation/credential/effect paths",
+      "id": "D08",
+      "lostWindowProof": "No clock renewal, early successful publication, reused-FD close or new grant; C1-C5 unchanged",
+      "proposedTreatment": "Preserve original lifetime, no partial construction leaks or transferred close ownership, no credential/effect from observations"
+    }
+  ],
+  "exhaustive": false,
+  "indirectRemovalsIncluded": true,
+  "preservedLeafTests": 14,
+  "schemaVersion": "planeon.internal.observation-deltas/v1",
+  "windows": [
+    {
+      "id": "W01",
+      "oldDetectionOpportunity": "Mount/policy altered after native fstat, restored during subsequent fcntl; intervening native tick can reject",
+      "requiredClosure": "Independent active E03/E04 exclusion must prevent the change throughout the component, or retain the original global observation; sampling two endpoints alone fails"
+    },
+    {
+      "id": "W02",
+      "oldDetectionOpportunity": "Authority file or stored custody pin changes during a root/epoch sample",
+      "requiredClosure": "Retain fresh `_Files.check` and owner/pin comparisons with original short-circuit/exception behavior; no 'sampling' flag may skip them"
+    },
+    {
+      "id": "W03",
+      "oldDetectionOpportunity": "Status mount replaced while mmap still exposes matching bytes",
+      "requiredClosure": "Retain both status-mount brackets and original descriptor/path checks; additionally prove E03 for every global resample removed"
+    },
+    {
+      "id": "W04",
+      "oldDetectionOpportunity": "Peer exits or its socket path is replaced during component I/O",
+      "requiredClosure": "Keep original dynamic peer ticks before/after; independent effect denial handles stopped server/worker; no reconnect"
+    },
+    {
+      "id": "W05",
+      "oldDetectionOpportunity": "Revocation/expiry while a Python read is blocked",
+      "requiredClosure": "Original deadline/authority checks reject returned bytes; external admission closes independently; no lifetime renewal from a completed snapshot"
+    },
+    {
+      "id": "W06",
+      "oldDetectionOpportunity": "Root/kernel view temporarily changed during bootstrap before epoch_ready",
+      "requiredClosure": "Independent Layer E must already exclude that mutation; a later successful epoch sample cannot retroactively establish bootstrap safety"
+    },
+    {
+      "id": "W07",
+      "oldDetectionOpportunity": "Partial acquisition gets a real FD then its post-guard fails",
+      "requiredClosure": "Retain original close owner and unwind exactly once; never close a reused or caller-substituted descriptor"
+    },
+    {
+      "id": "W08",
+      "oldDetectionOpportunity": "Cgroup/filter/code changes after qualification but before an effect",
+      "requiredClosure": "Actual external E05/E06/E10 enforcement denies/invalidates the effect; repeated observations alone do not enforce exclusion"
+    }
+  ]
+}
