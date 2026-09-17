@@ -1,5 +1,20 @@
 # Alpha 2 — guarded-construction cost repair
 
+## Current reviewed interface candidate — MET-ENFORCE-002
+
+[W01 reviewed candidate and unresolved gates](HOST_INTERFACE_PUBLICATION.md): Alpha2 ONGOING.
+MET-ENFORCE-001 DONE_SOURCE_GATES at cdb71ae / PR135; exact-main evidence retained.
+MET-ENFORCE-002 ONGOING_SOURCE_PUBLICATION: 187 specifications; 186 prior packets immutable.
+W01 ONGOING_DESIGN: independent source-only review passed after G09 correlation correction.
+No adopted ABI, selected writer backend, installed gate or native qualification.
+G04-G07 and G09 remain open; all E01-E12 OPEN_UNPROVEN; W02-W07 not dispatchable.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current enforcement ownership amendment — MET-ENFORCE-001
 
 [Host enforcement ownership and interfaces](ENFORCEMENT_INTEGRATION.md): Alpha2 ONGOING.
