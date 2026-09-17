@@ -1,5 +1,20 @@
 # Sol-High Task Packet Catalog
 
+## Current reviewed interface candidate — MET-ENFORCE-002
+
+[W01 reviewed candidate and unresolved gates](../docs/alpha-2/HOST_INTERFACE_PUBLICATION.md): Alpha2 ONGOING.
+MET-ENFORCE-001 DONE_SOURCE_GATES at cdb71ae / PR135; exact-main evidence retained.
+MET-ENFORCE-002 ONGOING_SOURCE_PUBLICATION: 187 specifications; 186 prior packets immutable.
+W01 ONGOING_DESIGN: independent source-only review passed after G09 correlation correction.
+No adopted ABI, selected writer backend, installed gate or native qualification.
+G04-G07 and G09 remain open; all E01-E12 OPEN_UNPROVEN; W02-W07 not dispatchable.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current enforcement ownership amendment — MET-ENFORCE-001
 
 [Host enforcement ownership and interfaces](../docs/alpha-2/ENFORCEMENT_INTEGRATION.md): Alpha2 ONGOING.
@@ -854,3 +869,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 184 | `CONF-FIX-010` | `mas-harness-conformance-labs` | Conditional observation-equivalence repair |
 | 185 | `MET-REPAIR-019` | `Harness-Engineering` | Conditional observation/enforcement design publication |
 | 186 | `MET-ENFORCE-001` | `Harness-Engineering` | Host enforcement ownership and interface direction |
+| 187 | `MET-ENFORCE-002` | `Harness-Engineering` | Independently reviewed host-interface candidate and unresolved gates |
