@@ -1,5 +1,21 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current enforcement ownership amendment — MET-ENFORCE-001
+
+[Host enforcement ownership and interfaces](../alpha-2/ENFORCEMENT_INTEGRATION.md): Alpha2 ONGOING.
+MET-REPAIR-019 DONE_SOURCE_GATES at69dceab / PR134; separate exact-main evidence retained.
+MET-ENFORCE-001 ONGOING_SOURCE_PUBLICATION:186 specifications;185 prior packets immutable.
+R10 owns four planned host modules, separate from the nonroot Kubernetes controller.
+Delegated-cgroup profile direction selected for a later versioned ABI; current contracts unchanged.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+All12 enforcement obligations OPEN_UNPROVEN; W01 exact interface specification is next.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+No product execution, installed enforcer selection, native or tenant acceptance.
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current source-only design publication — MET-REPAIR-019
 
 [Observation/enforcement publication](../alpha-2/OBSERVATION_ENFORCEMENT_PUBLICATION.md): Alpha2 ONGOING.
@@ -536,6 +552,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 57. `MET-PERF-016`: publish one accounting-only fixture exception; no product execution.
 58. `MET-PERF-017`: publish guard-traversal design gate and conditional successor; no product execution.
 59. `MET-REPAIR-019`: publish reviewed design direction and unresolved proof obligations; no product execution.
+60. `MET-ENFORCE-001`: assign separate host-module source ownership and interface work; no runtime adoption.
 
 ## Testing, verification, and acceptance
 
