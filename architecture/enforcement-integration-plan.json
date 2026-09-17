@@ -1,0 +1,310 @@
+{
+  "backlog": [
+    {
+      "dispatchable": false,
+      "id": "W01",
+      "label": "HOST_INTERFACE_SPEC",
+      "ownerId": "operator",
+      "packetId": null,
+      "predecessors": [],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    },
+    {
+      "dispatchable": false,
+      "id": "W02",
+      "label": "NATIVE_PROFILE_CONTRACT",
+      "ownerId": "conformance-labs",
+      "packetId": null,
+      "predecessors": [
+        "W01"
+      ],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    },
+    {
+      "dispatchable": false,
+      "id": "W03",
+      "label": "HOST_PREREQUISITE_SOURCE",
+      "ownerId": "operator",
+      "packetId": null,
+      "predecessors": [
+        "W02"
+      ],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    },
+    {
+      "dispatchable": false,
+      "id": "W04",
+      "label": "ENFORCEMENT_TEST_SOURCE",
+      "ownerId": "conformance-labs",
+      "packetId": null,
+      "predecessors": [
+        "W02"
+      ],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    },
+    {
+      "dispatchable": false,
+      "id": "W05",
+      "label": "HOST_ARTIFACT_CLOSURE",
+      "ownerId": "distribution",
+      "packetId": null,
+      "predecessors": [
+        "W03"
+      ],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    },
+    {
+      "dispatchable": false,
+      "id": "W06",
+      "label": "NATIVE_ENFORCEMENT_PROOF",
+      "ownerId": "conformance-labs",
+      "packetId": null,
+      "predecessors": [
+        "W04",
+        "W05"
+      ],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    },
+    {
+      "dispatchable": false,
+      "id": "W07",
+      "label": "READER_TEMPORAL_SUCCESSOR",
+      "ownerId": "conformance-labs",
+      "packetId": null,
+      "predecessors": [
+        "W06"
+      ],
+      "state": "WAITING_EXACT_SUCCESSOR"
+    }
+  ],
+  "budgets": {
+    "CI": 2,
+    "LOCAL": 2,
+    "LOCAL_EXACT_MAIN": 1,
+    "benchmarks": 0,
+    "diagnostics": 0,
+    "product": 0
+  },
+  "decisions": [
+    {
+      "currentNativePathsChanged": false,
+      "direction": "VERSIONED_SYSTEMD_DELEGATED_PROFILE",
+      "id": "F01"
+    },
+    {
+      "direction": "PRESERVE_EXACT_SEVEN_HOOK_CONTRACT",
+      "genericControlsAcceptedAsProof": false,
+      "id": "F02"
+    },
+    {
+      "coversReads": true,
+      "direction": "INDEPENDENT_PER_OPERATION_GENERATION_ADMISSION",
+      "id": "F03",
+      "mechanismProven": false
+    }
+  ],
+  "harnesses": 16,
+  "independentReviewCompleted": false,
+  "limits": {
+    "localSeconds": 750,
+    "nestedSeconds": 420,
+    "trustedSeconds": 900,
+    "workflowMinutes": 15
+  },
+  "metaBase": "69dceab436cf16bcebade98ba4dd015505434215",
+  "modelEffortTransition": "NOT_DUE",
+  "modules": [
+    {
+      "artifactDigest": null,
+      "id": "host-containment",
+      "implementationPacket": null,
+      "language": null,
+      "logicalNamespace": "host-enforcement/host-containment/",
+      "nativeQualified": false,
+      "ownerId": "operator",
+      "separateFromController": true,
+      "state": "PLANNED_NOT_IMPLEMENTED"
+    },
+    {
+      "artifactDigest": null,
+      "id": "capacity-broker",
+      "implementationPacket": null,
+      "language": null,
+      "logicalNamespace": "host-enforcement/capacity-broker/",
+      "nativeQualified": false,
+      "ownerId": "operator",
+      "separateFromController": true,
+      "state": "PLANNED_NOT_IMPLEMENTED"
+    },
+    {
+      "artifactDigest": null,
+      "id": "policy-observer",
+      "implementationPacket": null,
+      "language": null,
+      "logicalNamespace": "host-enforcement/policy-observer/",
+      "nativeQualified": false,
+      "ownerId": "operator",
+      "separateFromController": true,
+      "state": "PLANNED_NOT_IMPLEMENTED"
+    },
+    {
+      "artifactDigest": null,
+      "id": "effect-admission",
+      "implementationPacket": null,
+      "language": null,
+      "logicalNamespace": "host-enforcement/effect-admission/",
+      "nativeQualified": false,
+      "ownerId": "operator",
+      "separateFromController": true,
+      "state": "PLANNED_NOT_IMPLEMENTED"
+    }
+  ],
+  "nativeAcceptance": false,
+  "obligations": [
+    {
+      "id": "E01",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E02",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E03",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E04",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E05",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E06",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E07",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E08",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E09",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E10",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E11",
+      "state": "OPEN_UNPROVEN"
+    },
+    {
+      "id": "E12",
+      "state": "OPEN_UNPROVEN"
+    }
+  ],
+  "oldAttemptsReset": false,
+  "packetId": "MET-ENFORCE-001",
+  "phaseComplete": false,
+  "planes": 4,
+  "productExecution": false,
+  "productPacketAdded": false,
+  "repositories": 13,
+  "researchProvenance": {
+    "externalFileDigests": {
+      "DECISIONS.md": "5248d0a963e2b69df68db114ba82c3dec2588df3c8260dc0f9238011f70af8b1",
+      "FEASIBILITY.md": "cc094060d1c24081a25dc679354c4bd7c2684f0e1d984eebc3205bd57f489079",
+      "README.md": "7a1046d759b9c4d382aa79e42ce49a5b6dbd5a15de96a8ca82cb64cd924da1b8",
+      "status.json": "2226d56c3ccbc65069511a5b054a1796ad532bb88e7a62b250f94f515a67277b"
+    },
+    "id": "OBS-ENFORCE-FEAS-001",
+    "independentReview": false,
+    "sourceCloseoutSha256": "2b6cd96d9afd000916621bc632044cd7f0b93ad6316700156570ccc8259e7db6",
+    "verdict": "FEASIBILITY_SCREEN_ONLY"
+  },
+  "runtimeAdoptionAuthorized": false,
+  "schemaVersion": "planeon.internal.enforcement-integration-plan/v1",
+  "sourceStates": {
+    "CONF-FIX-009": "BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED",
+    "CONF-FIX-010": "BLOCKED_SAFE_DESIGN",
+    "MET-REPAIR-019": "DONE_SOURCE_GATES"
+  },
+  "status": "ONGOING_SOURCE_ONLY_PUBLICATION",
+  "tenantAcceptance": false,
+  "testAccounting": {
+    "baselineInner": 4564,
+    "baselineOuter": 4813,
+    "evidence": "STATIC_AST_NOT_ACCEPTANCE",
+    "expectedInner": 4631,
+    "expectedOuter": 4880,
+    "inheritedExpansion": 10,
+    "inheritedSkips": 10,
+    "newCaseCount": 57,
+    "newCaseIds": [
+      "test_exact_current_publication_and_history",
+      "test_resealed_plan_member_refuses[('decisions',)]",
+      "test_resealed_plan_member_refuses[('modules',)]",
+      "test_resealed_plan_member_refuses[('backlog',)]",
+      "test_resealed_plan_member_refuses[('obligations',)]",
+      "test_resealed_plan_member_refuses[('budgets',)]",
+      "test_resealed_plan_member_refuses[('limits',)]",
+      "test_resealed_plan_member_refuses[('sourceStates',)]",
+      "test_resealed_plan_member_refuses[('researchProvenance',)]",
+      "test_resealed_plan_member_refuses[('oldAttemptsReset',)]",
+      "test_resealed_plan_member_refuses[('productPacketAdded',)]",
+      "test_resealed_plan_member_refuses[('productExecution',)]",
+      "test_resealed_plan_member_refuses[('runtimeAdoptionAuthorized',)]",
+      "test_resealed_plan_member_refuses[('independentReviewCompleted',)]",
+      "test_resealed_plan_member_refuses[('nativeAcceptance',)]",
+      "test_resealed_plan_member_refuses[('tenantAcceptance',)]",
+      "test_resealed_plan_member_refuses[('phaseComplete',)]",
+      "test_resealed_plan_member_refuses[('testAccounting',)]",
+      "test_each_module_owner_and_separation[(0,)]",
+      "test_each_module_owner_and_separation[(1,)]",
+      "test_each_module_owner_and_separation[(2,)]",
+      "test_each_module_owner_and_separation[(3,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(0,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(1,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(2,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(3,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(4,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(5,)]",
+      "test_backlog_cannot_dispatch_or_skip_predecessors[(6,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(0,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(1,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(2,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(3,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(4,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(5,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(6,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(7,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(8,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(9,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(10,)]",
+      "test_obligation_cannot_be_promoted_by_ownership[(11,)]",
+      "test_current_catalog_checked_before_history[('missing',)]",
+      "test_current_catalog_checked_before_history[('extra',)]",
+      "test_current_catalog_checked_before_history[('changed',)]",
+      "test_current_catalog_checked_before_history[('historical',)]",
+      "test_current_catalog_checked_before_history[('owner',)]",
+      "test_inputs_are_exact_current_data[('missing',)]",
+      "test_inputs_are_exact_current_data[('extra',)]",
+      "test_inputs_are_exact_current_data[('old',)]",
+      "test_inputs_are_exact_current_data[('packet',)]",
+      "test_inputs_are_exact_current_data[('plan',)]",
+      "test_inputs_are_exact_current_data[('guide',)]",
+      "test_inputs_are_exact_current_data[('authority',)]",
+      "test_fresh_history_refuses_stale_actual_bytes",
+      "test_every_current_recipe_checked_before_projection",
+      "test_prior_contracts_and_evidence_are_preserved",
+      "test_parser_rejects_duplicate_and_nonfinite_data"
+    ]
+  }
+}

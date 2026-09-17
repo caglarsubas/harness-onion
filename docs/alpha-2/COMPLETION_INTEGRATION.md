@@ -1,5 +1,21 @@
 # Alpha 2 — completion-integration authority
 
+## Current enforcement ownership amendment — MET-ENFORCE-001
+
+[Host enforcement ownership and interfaces](ENFORCEMENT_INTEGRATION.md): Alpha2 ONGOING.
+MET-REPAIR-019 DONE_SOURCE_GATES at69dceab / PR134; separate exact-main evidence retained.
+MET-ENFORCE-001 ONGOING_SOURCE_PUBLICATION:186 specifications;185 prior packets immutable.
+R10 owns four planned host modules, separate from the nonroot Kubernetes controller.
+Delegated-cgroup profile direction selected for a later versioned ABI; current contracts unchanged.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+All12 enforcement obligations OPEN_UNPROVEN; W01 exact interface specification is next.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+No product execution, installed enforcer selection, native or tenant acceptance.
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current source-only design publication — MET-REPAIR-019
 
 [Observation/enforcement publication](OBSERVATION_ENFORCEMENT_PUBLICATION.md): Alpha2 ONGOING.
