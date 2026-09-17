@@ -122,6 +122,9 @@ def test_review_subject_cannot_be_replaced(authority, label):
 
 def test_review_does_not_authorize_implementation(authority):
     value = module.parse(authority[2][module.SPEC_PATH])
+    for label in ('original', 'corrected'):
+        index = module.parse(authority[2]['architecture/host-interface-inputs/' + label + '/source-index.json'])
+        assert set(index['inputs']).issubset(authority[2])
     assert value['independentReviewCompleted'] is True
     assert value['review']['corrected']['verdict'] == 'PASS_FOR_SOURCE_PUBLICATION'
     assert value['requestActionCorrelationProven'] is False
