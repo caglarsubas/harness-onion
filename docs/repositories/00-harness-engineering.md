@@ -1,5 +1,19 @@
 # Repository Plan: `Harness-Engineering`
 
+## Current repair gate - MET-PERF-016
+
+[Accounting-scope amendment](../alpha-2/ACCOUNTING_SCOPE_AMENDMENT.md): Alpha2 ONGOING.
+MET-PERF-015 DONE_SOURCE_GATES at ee7a8eb / PR131.
+MET-PERF-016 ONGOING_META_PUBLICATION: one accounting-only fixture exception;182 specifications,180 immutable prior packets.
+CONF-FIX-009 WAITING_AMENDMENT_GATES_AND_REVIEW: prepared inherited source only; no repair or product execution in this META run.
+CONF-FIX-008 BLOCKED_LOCAL_FAILURE and CONF-DIAG-004 CLOSED_PARTIAL_DIAGNOSTIC; old drafts/evidence/allowances preserved.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Only the explicit accounting exception supersedes earlier fixture restrictions. Other older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current repair gate - MET-PERF-015
 
 [Guard-cost repair](../alpha-2/GUARD_COST_REPAIR.md): Alpha2 ONGOING.
@@ -488,6 +502,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 54. `MET-REPAIR-018`: reconcile accepted helper gates and publish separate completion-integration authority.
 55. `MET-PERF-014`: publish bounded factory diagnostics without product execution.
 56. `MET-PERF-015`: publish guard-cost repair without product execution.
+57. `MET-PERF-016`: publish one accounting-only fixture exception; no product execution.
 
 ## Testing, verification, and acceptance
 

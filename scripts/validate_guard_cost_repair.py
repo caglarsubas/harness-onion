@@ -14,6 +14,11 @@ try:
 except ImportError:
     from scripts.safe_yaml import safe_load
 
+try:
+    from validate_accounting_scope import historical_bytes as accounting_history, current_test_bytes as accounting_current, historical_catalog as accounting_catalog
+except ImportError:
+    from scripts.validate_accounting_scope import historical_bytes as accounting_history, current_test_bytes as accounting_current, historical_catalog as accounting_catalog
+
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = 'architecture/guard-cost-repair-authority.json'
 RECORD_SHA256 = '7dc039d4bfb889b36150cc82383da6fcc133cf32d2f1089f681afef6b1ca2bab'
@@ -94,6 +99,7 @@ def apply_recipe(before, rule):
 
 
 def historical_bytes(path, raw):
+    raw = accounting_history(path, raw)
     # A closed code-pinned routing table, not an acceptance/result cache.
     # Unchanged inputs still receive the predecessor caller's exact hash check.
     if path not in HISTORY_PATHS:
@@ -120,13 +126,14 @@ def current_test_bytes(before):
                if p.startswith("tests/") and r["beforeSha256"] == input_digest]
     if not matches:
         require(input_digest in record["unchangedTests"].values(), "unreviewed unchanged test")
-        return before
+        return accounting_current(before)
     require(len(matches) == 1, "unique predecessor")
-    return apply_recipe(before, matches[0])
+    return accounting_current(apply_recipe(before, matches[0]))
 
 
 def validate_additions(packets):
     try:
+        packets = accounting_catalog(packets)
         record = _record()
         require(type(packets) is dict, "packet mapping")
         for name in NEW_IDS:
@@ -159,6 +166,7 @@ AUDIT = 'architecture/guard-cost-repair-inputs/audit.json'
 def historical_catalog(packets):
     record = _record(); pinned(record)
     require(validate_additions(packets) == [], 'exact guard repair packets')
+    packets = accounting_catalog(packets)
     old = {Path(p).stem for p in record['protectedFiles'] if p.startswith('task-packets/') and p.endswith('.yaml')}
     require(len(old) == 179 and set(packets) == old | set(NEW_IDS), 'closed 181-packet catalog')
     return {name: packets[name] for name in old}
@@ -183,11 +191,12 @@ def close_guard_dispatch(packets, errors):
     try:
         record = _record(); pinned(record); historical_catalog(packets)
         value = parse(regular_bytes(ROOT,SPEC_PATH)); validate_spec(value)
+        packets = accounting_catalog(packets)
         exact = []
         for row in value['dispatchOverlaps']:
             a,b,path = row['left'],row['right'],row['path']
             for name in (a,b):
-                p = 'task-packets/'+name+'.yaml'; raw = regular_bytes(ROOT,p)
+                p = 'task-packets/'+name+'.yaml'; raw = accounting_history(p,regular_bytes(ROOT,p))
                 expected = record['inputFiles'].get(p,record['protectedFiles'].get(p))
                 require(digest(raw) == expected and canonical(safe_load(raw)) == canonical(packets[name]), 'exact overlap neighbors')
             require(path in packets[a]['allowedPaths'] and path in packets[b]['allowedPaths'], 'exact inherited source path')
@@ -205,9 +214,10 @@ def validate_authority(packets,record,inputs):
         pins = {**record['protectedFiles'],**record['inputFiles'],**{p:r['afterSha256'] for p,r in record['metaRecipes'].items()}}
         require(type(inputs) is dict and set(inputs) == set(pins), 'complete fresh inputs')
         for p,checksum in pins.items():
-            require(type(inputs[p]) is bytes and digest(inputs[p]) == checksum, 'source drift: '+p)
+            require(type(inputs[p]) is bytes and digest(accounting_history(p,inputs[p])) == checksum, 'source drift: '+p)
+        packets = accounting_catalog(packets)
         for name in packets:
-            require(canonical(packets[name]) == canonical(safe_load(inputs['task-packets/'+name+'.yaml'])), 'packet byte parity')
+            require(canonical(packets[name]) == canonical(safe_load(accounting_history('task-packets/'+name+'.yaml',inputs['task-packets/'+name+'.yaml']))), 'packet byte parity')
         value = parse(inputs[SPEC_PATH]); validate_spec(value)
         meta,product,prior = packets['MET-PERF-015'],packets['CONF-FIX-009'],old['MET-PERF-014']
         require(meta['repository'] == 'Harness-Engineering' and meta['predecessors'] == ['MET-PERF-014']
@@ -234,7 +244,7 @@ def validate_authority(packets,record,inputs):
             require(digest(inputs[path]) == checksum, 'preserved contracts and locks')
         for path,rule in record['metaRecipes'].items():
             before = historical_bytes(path,inputs[path])
-            require(apply_recipe(before,rule) == inputs[path], 'exact reversible metadata')
+            require(apply_recipe(before,rule) == accounting_history(path,inputs[path]), 'exact reversible metadata')
             if path.startswith('tests/'):
                 require(test_ids(before) == test_ids(inputs[path]), 'inherited test identities')
         for path in record['navigationPaths']:

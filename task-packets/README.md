@@ -1,5 +1,19 @@
 # Sol-High Task Packet Catalog
 
+## Current repair gate - MET-PERF-016
+
+[Accounting-scope amendment](../docs/alpha-2/ACCOUNTING_SCOPE_AMENDMENT.md): Alpha2 ONGOING.
+MET-PERF-015 DONE_SOURCE_GATES at ee7a8eb / PR131.
+MET-PERF-016 ONGOING_META_PUBLICATION: one accounting-only fixture exception;182 specifications,180 immutable prior packets.
+CONF-FIX-009 WAITING_AMENDMENT_GATES_AND_REVIEW: prepared inherited source only; no repair or product execution in this META run.
+CONF-FIX-008 BLOCKED_LOCAL_FAILURE and CONF-DIAG-004 CLOSED_PARTIAL_DIAGNOSTIC; old drafts/evidence/allowances preserved.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Only the explicit accounting exception supersedes earlier fixture restrictions. Other older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current repair gate - MET-PERF-015
 
 [Guard-cost repair](../docs/alpha-2/GUARD_COST_REPAIR.md): Alpha2 ONGOING.
@@ -787,4 +801,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 179 | `CONF-DIAG-004` | `mas-harness-conformance-labs` | Read-only failed-candidate factory-call observation |
 
 | 180 | `MET-PERF-015` | `Harness-Engineering` | Bounded guard-cost repair authority |
-| 181 | `CONF-FIX-009` | `mas-harness-conformance-labs` | Independent-review gated guard-cost repair |
+| 181 | `MET-PERF-016` | `Harness-Engineering` | Narrow accounting-scope amendment |
+| 182 | `CONF-FIX-009` | `mas-harness-conformance-labs` | Independent-review gated guard-cost repair |
