@@ -10,7 +10,7 @@
 | Alpha2 | MET-PERF-016 | DONE_SOURCE_GATES | Accepted4f7cd029 / PR132 |
 | Alpha2 operator | OPERATOR-INVENTORY-001 | DONE_INSTALLED_VERIFIED | Host repair only |
 | Alpha2 | CONF-FIX-009 | BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED | Two LOCAL slots consumed; second timed out at748.066739666s, exit247 |
-| Alpha2 | MET-PERF-017 | ONGOING_META_PUBLICATION | This design-gated successor plan; no product execution |
+| Alpha2 | MET-PERF-017 | BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED | This design-gated successor plan; no product execution |
 | Alpha2 | CONF-FIX-010 | WAITING_PUBLICATION_AND_SAFE_DESIGN | Separate product approval and independent review before implementation |
 | Alpha2 | CONF-LIVE-004/005/006 | WAITING_PREDECESSOR_CORRECTION | Native probes, packaging and campaigns |
 | Alpha2 | CONF-A2-001 | WAITING | Integrated read-only qualification |
@@ -164,3 +164,22 @@ accepted dependencies, waive arbitrary overlaps, modify the generic checker,
 change either packet or permit product execution. Unknown, duplicated, missing
 or substituted diagnostics/packets remain errors. LOCAL2 is the sole remaining
 local allowance. Test identities/counts and all46 commands remain unchanged.
+
+
+## Current unaccepted checkpoint after LOCAL2
+
+Both META LOCAL reservations are consumed. The second attempt completed the
+nested and outer test replays but failed inherited catalog assertions: four
+test modules still expected 110 generic overlaps (and102 after one historical
+adapter), and three negative cases omitted the new pinned neighbor pairs.
+Their current-catalog expectations are now118/110, preserving the old adapter's
+eight-error difference, all original unrelated-error rejection assertions,
+every test identity and all historical byte reconstruction. This source
+correction is static-only and has NOT passed LOCAL, CI, merge or exact-main.
+
+No retry is authorized here. A proposed amendment would increase this SAME
+META packet's LOCAL ceiling from2 to3, retaining both consumed attempts; CI2,
+LOCAL_EXACT_MAIN1, product/diagnostic allowances and all time limits stay
+unchanged. That proposal requires explicit approval and matching packet and
+operator revisions before any reservation. No new packet resets this budget.
+Product CONF-FIX-010 remains conditional and unexecuted.

@@ -2,8 +2,8 @@
   "authorityPacket": "MET-PERF-017",
   "inputFiles": {
     "architecture/guard-traversal-inputs/readiness.json": "4b3cd768e8812eb8fc07e92f3cf80a18b73f6a3288ff927cb7ef823e2cfa636b",
-    "architecture/guard-traversal-plan.json": "7aad7978ba88acbaa12e64154dca049f388b1faaae93ca606b40974340f80888",
-    "docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md": "d16a221e089f689b18862cf0b85e5614a8bfad7d2e6d299e77185922d17066eb",
+    "architecture/guard-traversal-plan.json": "f592aebe9f2b11a5c4c6b971c34eac2305458825a61b2e0192377e92b08c4d8a",
+    "docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md": "778955d11fc272b1e98cb817ac81bfd8062051e36239740569735e2598445e83",
     "task-packets/CONF-FIX-010.yaml": "e4eea58d0f5c18444d23863a1f9179fa183491007f92ce2fa2b92cd2a5cc417f",
     "task-packets/MET-PERF-017.yaml": "75185049c46551da48c2d86925bbb28ddba1fceeaa729906790f69f284748b72",
     "tests/test_guard_traversal.py": "0e23088c882d717e88a343049cd0ab41df03746a8428a1cd4abcda7db676d53d"
@@ -11,176 +11,176 @@
   "metaBaseline": "4f7cd029a8d5f54317a56e873873e9d36a48c252",
   "metaRecipes": {
     "README.md": {
-      "afterSha256": "aaa057d6e79c3efcbad4bf280630a954248037b8ed048cef52c77a3be01950a1",
+      "afterSha256": "df9d29d14683c7e78c718799bfc64892008d5b4c333d7d1f4ba54c14a1b7800e",
       "beforeSha256": "16742211b92450b9ef2a1def8397d7779bd026e45264028c5b416552166508c3",
       "replacements": [
         {
-          "after": "# Harness Engineering\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Harness Engineering\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Harness Engineering\n\n",
           "count": 1
         }
       ]
     },
     "docs/DEVELOPMENT_STATUS.md": {
-      "afterSha256": "9113d44c3e03262d447bc1b9fa3b6116dead04d70815e1ba07b18e757a6b5388",
+      "afterSha256": "ab063934b739a81def776c9d4639e0e4a948a49dce6cbd50a73792234616d3fd",
       "beforeSha256": "6394d1d65457de43766d72a16ddc1291c1087f8ec7792c3092b9abd3a71fd51f",
       "replacements": [
         {
-          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n## Current repair gate - MET-PERF-016\n",
+          "after": "# Development checkpoint — Phase 0 to Alpha 2\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n## Current repair gate - MET-PERF-016\n",
           "before": "# Development checkpoint — Phase 0 to Alpha 2\n\n## Current repair gate - MET-PERF-016\n",
           "count": 1
         }
       ]
     },
     "docs/MASTER_DEVELOPMENT_PLAN.md": {
-      "afterSha256": "e83ce51d20eb5ade6622801879e3f9b19db887747f16bae0d7fbc1efd73893b7",
+      "afterSha256": "d5e5411524ba0ab1d2aa22edf0c334e162f5c2e9385fb80675ecca48307ae5fe",
       "beforeSha256": "5309d5ad7a9b6ccb59186adcd30d6249f94f1f01a6daa46b2419d7e164584e04",
       "replacements": [
         {
-          "after": "# Master Development Plan\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Master Development Plan\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Master Development Plan\n\n",
           "count": 1
         }
       ]
     },
     "docs/READINESS_INDEX.md": {
-      "afterSha256": "b0ed36ac7099768abda5b7f477684a2f4f559f5fadc260e05da36d4b8a2f3c16",
+      "afterSha256": "0758ddb9033a5591d0fb5fcec420ae92e7e769331ee00eea4fe837fc3b8b55a1",
       "beforeSha256": "3cb00b17ab9fe7eaf1d7b322e20e178ff26f414c4c25a4687756e2aeed401e4b",
       "replacements": [
         {
-          "after": "# Implementation Readiness Index\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Implementation Readiness Index\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Implementation Readiness Index\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/ACCOUNTING_SCOPE_AMENDMENT.md": {
-      "afterSha256": "975cbec2f8a902305446f1c4f021d84678918c89882498f22e392b385b07bdf0",
+      "afterSha256": "631b5b012253c4eaa0deef46de9d15112fdaabe3b7cec9f710846cc20a3bd62e",
       "beforeSha256": "13be0c969d08504a321a3289041df241491c59259086f98f85a2f5ba0748451b",
       "replacements": [
         {
-          "after": "# Alpha 2 — source-accounting scope amendment\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — source-accounting scope amendment\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — source-accounting scope amendment\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/BENCHMARK_TRANSPORT.md": {
-      "afterSha256": "1a3d8e150a669abb748c984e11897eb5abaf6286918afabd2c78c22cbc8e57ee",
+      "afterSha256": "6d6f4a62a4c0ac4216528427a07f88a2b558fe530d66d7e5b70c31847693b244",
       "beforeSha256": "5d2df01d2a07ad39ad258ce8a48431a2c04055e847bbe4b345b5e9b3881ec8ff",
       "replacements": [
         {
-          "after": "# Alpha 2 — benchmark argument transport correction\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — benchmark argument transport correction\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — benchmark argument transport correction\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/CANONICAL_REPAIR_PLAN.md": {
-      "afterSha256": "1aed22155599f066529fbf4a125ee303ab5c2657eea958ee76b61e834843a857",
+      "afterSha256": "9a29a1b32be05ca974bc9f347dfa6e667e7c45df5d812c4307894c7b07aae708",
       "beforeSha256": "0967e5419873b80c7b8042062dfc606f2e3b29f7947df81d23809a155940d819",
       "replacements": [
         {
-          "after": "# Alpha 2 — canonicalization repair decision and remaining readiness gate\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — canonicalization repair decision and remaining readiness gate\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — canonicalization repair decision and remaining readiness gate\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/COMPLETION_INTEGRATION.md": {
-      "afterSha256": "adee559afb48b6123c998a675b4bd833199e08a0c66809eb743d7de1d95f6e35",
+      "afterSha256": "18795dcd72bd8ef0d8a6102a5fb759e48e27dec9b2cc43ab54bef072475986b2",
       "beforeSha256": "260e4de16b5837abccb7f4d9389fc80b641b2c3ca25c3162911dd032e211de11",
       "replacements": [
         {
-          "after": "# Alpha 2 — completion-integration authority\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — completion-integration authority\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — completion-integration authority\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/CONFORMANCE_COMPLETION.md": {
-      "afterSha256": "99686c6f33ae0da8eb0208e170d62296da922d51c9f0062241866201a3f37cb7",
+      "afterSha256": "d698193db4a99360ed782139ab301b75af0b04fa5a836b145e2f4387589e7e62",
       "beforeSha256": "cc4ee47b440ba83ef660f09ef73fdd44e7ed2b48092771084f5c721dcbc71e9e",
       "replacements": [
         {
-          "after": "# Alpha 2 — conformance implementation completion\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — conformance implementation completion\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — conformance implementation completion\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/DOCUMENT_REPAIR_AUTHORITY.md": {
-      "afterSha256": "da0a76b2c7d62d208e933fc9d5104a1c15775e96735b8ba5b35096635d20126e",
+      "afterSha256": "0589f67362509b2e6924bafc70a566e445537bedf0b713e492ff41c4f76ac700",
       "beforeSha256": "bcf36cad431f43eb9b0496deeef77cf9135044d3807c6c8bbaa16ceddbb4e9b7",
       "replacements": [
         {
-          "after": "# Alpha 2 — exact document repair authority\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — exact document repair authority\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — exact document repair authority\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/DOCUMENT_REPAIR_PLAN.md": {
-      "afterSha256": "2f62c52c47913ac2ae5c560b1fed4406afa315a95dfb84973955da58ac07597b",
+      "afterSha256": "0db32012addd4f4773ba1aeb1ae1d15ef6201a19c4532a0b9bb1bd24b1e3b138",
       "beforeSha256": "5dca2f2a46cf62c998f4ce25d6011c9a1aa07f8de3205ef6c77d0f0b0847a5c2",
       "replacements": [
         {
-          "after": "# Alpha 2 — bounded private document repair plan\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — bounded private document repair plan\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — bounded private document repair plan\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/FACTORY_DIAGNOSTICS.md": {
-      "afterSha256": "0c9588b3b409c492d762696c2e73afabfb5a6726828b5a93e9ef695d34172c85",
+      "afterSha256": "725341f16ec3307011d2ffbfb695c55c92efbe95af5d0d4b33c19980c7776f68",
       "beforeSha256": "6ff0617edd8ef6102dc9d8dba6eb63f0560f001699fe9dcd9168df95af6c592a",
       "replacements": [
         {
-          "after": "# Alpha 2 — bounded factory-call diagnostics\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — bounded factory-call diagnostics\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — bounded factory-call diagnostics\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/GUARD_COST_REPAIR.md": {
-      "afterSha256": "6e41cd427c0a8c0cc83e5229cc68829910454ab1cce5957114f93ef45c1443e4",
+      "afterSha256": "25fb2b0b0d7057f0243116a15d3e1ba8e48e82656237fbcabffb9c8fe62effdc",
       "beforeSha256": "aa84fab7e71eb516c443bfb493f5b940d9cbe542f03ce4761d40e9056a19cb22",
       "replacements": [
         {
-          "after": "# Alpha 2 — guarded-construction cost repair\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Alpha 2 — guarded-construction cost repair\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Alpha 2 — guarded-construction cost repair\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/LIVE_BACKEND_READINESS.md": {
-      "afterSha256": "4c93fa25071acc33122815b0680de29f1591971ad36ccab5402ac5c585014df5",
+      "afterSha256": "16d168fe051530dfb8baba2ff1137128ff17629f50e46aa17799144fe20f8214",
       "beforeSha256": "edc5fbf29a2822c2cb0d2783b7210aaaf3011cf299d080c9a76d309db29b3d0c",
       "replacements": [
         {
-          "after": "# Trusted Linux live-backend readiness — MET-LIVE-001\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Trusted Linux live-backend readiness — MET-LIVE-001\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Trusted Linux live-backend readiness — MET-LIVE-001\n\n",
           "count": 1
         }
       ]
     },
     "docs/alpha-2/PROVIDER_ADOPTION_ROADMAP.md": {
-      "afterSha256": "5a70222c0bbcb256114867cfa76f3b0f37a383b835b4fbf139fb3e3a41f32404",
+      "afterSha256": "253923a6d804c1e575e4d22c156f60ebf300794a3d8e8d0433ae06c8485966f3",
       "beforeSha256": "de9681ef422f11708a0103206c353251a56f25467c6ab356f913c1a9cb6c3a78",
       "replacements": [
         {
-          "after": "# Product adoption and multi-repository roadmap\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Product adoption and multi-repository roadmap\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Product adoption and multi-repository roadmap\n\n",
           "count": 1
         }
       ]
     },
     "docs/repositories/00-harness-engineering.md": {
-      "afterSha256": "025380ff7e220d40c28d7c5d41c7a7313e999dce14348ecd123c5c14c45d6c68",
+      "afterSha256": "631741de684c2841531feacadd0fedffbb4fbc3c229e0521f99c593421a742bb",
       "beforeSha256": "6ff314c84b898018b3740e0d18b1113b9da51348c5ac187bad467d0cc2f855ef",
       "replacements": [
         {
-          "after": "# Repository Plan: `Harness-Engineering`\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](../alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Repository Plan: `Harness-Engineering`\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](../alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Repository Plan: `Harness-Engineering`\n\n",
           "count": 1
         },
@@ -192,11 +192,11 @@
       ]
     },
     "docs/repositories/12-mas-harness-conformance-labs.md": {
-      "afterSha256": "6feb2782f4b987724d506826d712ebc1daec57588223c509310c8edf478591f8",
+      "afterSha256": "07eafbf0733f56fc81ca2d1d0f7d0cf682155b305e1a50c4f0e9e87b13771bbb",
       "beforeSha256": "e3963647fff4f66ebccd4513c1c9ab6fffca953f294b9ac7d129c878ed7a90b4",
       "replacements": [
         {
-          "after": "# Repository Plan: `mas-harness-conformance-labs`\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](../alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Repository Plan: `mas-harness-conformance-labs`\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](../alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Repository Plan: `mas-harness-conformance-labs`\n\n",
           "count": 1
         },
@@ -825,11 +825,11 @@
       ]
     },
     "task-packets/README.md": {
-      "afterSha256": "20f10acb3173231f513a8a38685d530a0d36459e27dac3bc0cbf81a972543bec",
+      "afterSha256": "2928393e9df2093140662584e6ed6d160e92f925d31d87087b140b7c56ca3ded",
       "beforeSha256": "5cd52fb004548710696094ec218a561eea453d1dc2625ccb7d45bf721b8ca669",
       "replacements": [
         {
-          "after": "# Sol-High Task Packet Catalog\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](../docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
+          "after": "# Sol-High Task Packet Catalog\n\n## Current repair gate - MET-PERF-017\n\n[Guard-traversal successor](../docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.\nMET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.\nOPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.\nCONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.\nMET-PERF-017 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED:184 specifications; all182 earlier packets immutable; no product execution.\nCONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.\nCONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.\nNo native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.\nPreserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).\nPrior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.\n\n## Retained planning and historical checkpoints\n\n",
           "before": "# Sol-High Task Packet Catalog\n\n",
           "count": 1
         },
@@ -976,12 +976,22 @@
       ]
     },
     "tests/test_conformance_consumer_closure.py": {
-      "afterSha256": "bb2f7af2d43b6b29c1c793b3a4677498c73d37aa892841f37004f580a519a01f",
+      "afterSha256": "c5514609a9432abecba8b8989ee22af2e6456ce56cd077d79ee72e3530312095",
       "beforeSha256": "c82d02f4e543c56186a6b099201e9d42ce661935aab7f5a0113a6c8e9f797a8e",
       "replacements": [
         {
           "after": "    assert len(packets) == 184\n",
           "before": "    assert len(packets) == 182\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 118\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\", \"CONF-BENCH-002 and CONF-FIX-010\", \"CONF-BENCH-003 and CONF-FIX-010\", \"CONF-DIAG-003 and CONF-FIX-010\", \"CONF-FIX-007 and CONF-FIX-010\")) for error in generic)\n",
+          "before": "    assert len(generic) == 110\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\")) for error in generic)\n",
+          "count": 1
+        },
+        {
+          "after": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\", \"CONF-BENCH-002 and CONF-FIX-010\", \"CONF-BENCH-003 and CONF-FIX-010\", \"CONF-DIAG-003 and CONF-FIX-010\", \"CONF-FIX-007 and CONF-FIX-010\"))]\n",
+          "before": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\"))]\n",
           "count": 1
         }
       ]
@@ -998,12 +1008,22 @@
       ]
     },
     "tests/test_conformance_performance_followup.py": {
-      "afterSha256": "94d81f68f9cbeb2eeb9a721a39e33f1b227828faef543d5d805cf9b00dce752c",
+      "afterSha256": "c112623df608a8744ea69990434a38388bcc40fcfc5c3f1624acda710a25e296",
       "beforeSha256": "522f1127c72230e76ec0a4ec075485e626248daa580017de4b9ec90f6e00dbc1",
       "replacements": [
         {
           "after": "    assert len(packets) == 184\n",
           "before": "    assert len(packets) == 182\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 118\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\", \"CONF-BENCH-002 and CONF-FIX-010\", \"CONF-BENCH-003 and CONF-FIX-010\", \"CONF-DIAG-003 and CONF-FIX-010\", \"CONF-FIX-007 and CONF-FIX-010\")) for error in generic)\n",
+          "before": "    assert len(generic) == 110\n    assert all(any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\")) for error in generic)\n",
+          "count": 1
+        },
+        {
+          "after": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\", \"CONF-BENCH-002 and CONF-FIX-010\", \"CONF-BENCH-003 and CONF-FIX-010\", \"CONF-DIAG-003 and CONF-FIX-010\", \"CONF-FIX-007 and CONF-FIX-010\"))]\n",
+          "before": "                 if not any(pair in error for pair in (\"CONF-BENCH-001 and CONF-PERF-001\", \"CONF-BENCH-001 and CONF-PERF-002\", \"CONF-BENCH-001 and CONF-PERF-003\", \"CONF-BENCH-001 and CONF-PERF-004\", \"CONF-PERF-001 and CONF-PERF-002\", \"CONF-PERF-001 and CONF-PERF-003\", \"CONF-PERF-001 and CONF-PERF-004\", \"CONF-PERF-002 and CONF-PERF-003\", \"CONF-PERF-002 and CONF-PERF-004\", \"CONF-PERF-003 and CONF-PERF-004\", \"CONF-BENCH-001 and CONF-FIX-006\", \"CONF-FIX-006 and CONF-PERF-001\", \"CONF-FIX-006 and CONF-PERF-002\", \"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\"))]\n",
           "count": 1
         }
       ]
@@ -1020,23 +1040,43 @@
       ]
     },
     "tests/test_conformance_reference_measurement.py": {
-      "afterSha256": "178075f95d0fd08afc9aaef6f58dd3fddb1a757cb0b83dc0e89ced805b889889",
+      "afterSha256": "68fac19e86ac88ba9b222408a10184f150a7e82b1936d63c283309fa80342097",
       "beforeSha256": "3b3a6a67e850250bfc4e6f989cb19b9ff9dff2af842dbb76b1a05442e9ed185c",
       "replacements": [
         {
           "after": "    assert len(packets) == 184\n",
           "before": "    assert len(packets) == 182\n",
           "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 118 and len(record[\"overlapPairs\"]) == 10\n",
+          "before": "    assert len(generic) == 110 and len(record[\"overlapPairs\"]) == 10\n",
+          "count": 1
+        },
+        {
+          "after": "    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\", \"CONF-BENCH-002 and CONF-FIX-010\", \"CONF-BENCH-003 and CONF-FIX-010\", \"CONF-DIAG-003 and CONF-FIX-010\", \"CONF-FIX-007 and CONF-FIX-010\"])\n",
+          "before": "    allowed.extend([\"CONF-BENCH-001 and CONF-FIX-006\",\"CONF-FIX-006 and CONF-PERF-001\",\"CONF-FIX-006 and CONF-PERF-002\",\"CONF-FIX-006 and CONF-PERF-003\", \"CONF-DIAG-001 and CONF-LIVE-003\", \"CONF-DIAG-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-LIVE-003\", \"CONF-BENCH-002 and CONF-PERF-006\", \"CONF-FIX-007 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-BENCH-003\", \"CONF-BENCH-003 and CONF-FIX-007\", \"CONF-BENCH-003 and CONF-LIVE-003\", \"CONF-BENCH-003 and CONF-PERF-006\", \"CONF-BENCH-002 and CONF-FIX-008\", \"CONF-BENCH-003 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-FIX-008\", \"CONF-FIX-007 and CONF-FIX-008\", \"CONF-DIAG-003 and CONF-DIAG-004\", \"CONF-DIAG-004 and CONF-FIX-007\", \"CONF-BENCH-002 and CONF-FIX-009\", \"CONF-BENCH-003 and CONF-FIX-009\", \"CONF-DIAG-003 and CONF-FIX-009\", \"CONF-FIX-007 and CONF-FIX-009\"])\n",
+          "count": 1
         }
       ]
     },
     "tests/test_conformance_successor_checkpoint.py": {
-      "afterSha256": "d4bccc03a6765f2b7360f13e9e5aff272cfda87f3ba299b167bdc3d761ec6884",
+      "afterSha256": "c6ea4bef91189af506aebb2a25e9ed72f9f1bec93caab6bd6f2f3483e079cd37",
       "beforeSha256": "b1f1677edb871772fc2f4cdc69993b96b6cd67729c06eb1eb2469c5000c925da",
       "replacements": [
         {
           "after": "    assert len(packets) == 184\n",
           "before": "    assert len(packets) == 182\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(generic) == 118\n",
+          "before": "    assert len(generic) == 110\n",
+          "count": 1
+        },
+        {
+          "after": "    assert len(closed) == 110\n",
+          "before": "    assert len(closed) == 102\n",
           "count": 1
         }
       ]
