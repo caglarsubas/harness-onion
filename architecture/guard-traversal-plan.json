@@ -16,7 +16,7 @@
     "diagnostics": 0,
     "meta": {
       "CI": 2,
-      "LOCAL": 2,
+      "LOCAL": 3,
       "LOCAL_EXACT_MAIN": 1
     },
     "metaProductExecutions": 0,
@@ -105,6 +105,55 @@
     "trustedSeconds": 900,
     "workflowMinutes": 15
   },
+  "localAllowanceAmendment": {
+    "additionalAttempts": 1,
+    "approved": true,
+    "ceiling": 3,
+    "changedStages": [
+      "LOCAL"
+    ],
+    "checkpointSha256": "73687f832e8fc7635b3105c5e320a408a2f328242ddd1e10d7defbb93bb07eee",
+    "consumedBeforeAmendment": 2,
+    "failures": {
+      "local01": {
+        "commandsReached": 2,
+        "commit": "c099c5a24c7d36b54f61f2fa6e1cc55f34619267",
+        "elapsedSeconds": 18.08013525,
+        "functionalPass": false,
+        "hostInterruptions": 0,
+        "label": "local01",
+        "logSha256": "0a11d125d2515510fac55a3a1325f9e51fb6e0eca85aaf105d4e3d6da2fac4c4",
+        "nativeAcceptance": false,
+        "performancePass": false,
+        "resultSha256": "d59206fc4602bdb7c151c2ae36f70ebde3b97c937565c17f10ba5bff3c82ccbe",
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+        "tenantAcceptance": false,
+        "testSummaries": []
+      },
+      "local02": {
+        "commandsReached": 45,
+        "commit": "0fad7cfb532527f02d349d568c9475c1b8c1013e",
+        "elapsedSeconds": 595.617890292,
+        "functionalPass": false,
+        "hostInterruptions": 0,
+        "label": "local02",
+        "logSha256": "ffc4dc5a4f0063452a8b8291b2ab75324b7d594e98136810b42aad6183090a16",
+        "nativeAcceptance": false,
+        "performancePass": false,
+        "resultSha256": "00c3004d1ea450101ef9179aaad6a70418f725bda12ca1bad922a0c4ca4f183e",
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+        "tenantAcceptance": false,
+        "testSummaries": []
+      }
+    },
+    "oldAttemptsRetained": true,
+    "packetId": "MET-PERF-017",
+    "priorCeiling": 2,
+    "priorHead": "8114fd77e446d27f5025a91ca7f2b780dcbe3b4a",
+    "priorPacketSha256": "75185049c46551da48c2d86925bbb28ddba1fceeaa729906790f69f284748b72",
+    "productAuthorityChanged": false,
+    "timeLimitsChanged": false
+  },
   "metaBase": "4f7cd029a8d5f54317a56e873873e9d36a48c252",
   "nativeAcceptance": false,
   "packetId": "MET-PERF-017",
@@ -150,7 +199,7 @@
   "productAcceptance": false,
   "productExecutionInMetaRun": false,
   "schemaVersion": "planeon.internal.guard-traversal-plan/v1",
-  "status": "BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED",
+  "status": "ONGOING_LOCAL3_ACCEPTANCE",
   "subject": {
     "accepted": false,
     "acceptedMain": "3a81c8ffb17be9e288c4368d443c57361d5a4fc8",

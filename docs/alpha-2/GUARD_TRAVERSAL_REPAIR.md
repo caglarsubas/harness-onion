@@ -10,11 +10,25 @@
 | Alpha2 | MET-PERF-016 | DONE_SOURCE_GATES | Accepted4f7cd029 / PR132 |
 | Alpha2 operator | OPERATOR-INVENTORY-001 | DONE_INSTALLED_VERIFIED | Host repair only |
 | Alpha2 | CONF-FIX-009 | BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED | Two LOCAL slots consumed; second timed out at748.066739666s, exit247 |
-| Alpha2 | MET-PERF-017 | BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED | This design-gated successor plan; no product execution |
+| Alpha2 | MET-PERF-017 | ONGOING_LOCAL3_ACCEPTANCE | This design-gated successor plan; no product execution |
 | Alpha2 | CONF-FIX-010 | WAITING_PUBLICATION_AND_SAFE_DESIGN | Separate product approval and independent review before implementation |
 | Alpha2 | CONF-LIVE-004/005/006 | WAITING_PREDECESSOR_CORRECTION | Native probes, packaging and campaigns |
 | Alpha2 | CONF-A2-001 | WAITING | Integrated read-only qualification |
 | Alpha3 / Alpha4 | Governed actions / enterprise qualification | WAITING | Later phases |
+
+## Approved same-packet LOCAL3 amendment
+
+The user approved increasing MET-PERF-017's LOCAL ceiling from2 to3. LOCAL1
+and LOCAL2 remain consumed and retained; only LOCAL3 is newly available.
+CI2, LOCAL_EXACT_MAIN1, all time limits, zero extra diagnostics/benchmarks and
+zero product executions remain unchanged. The same branch and PR133 continue.
+Reserve LOCAL3 before signed activation; a failure or interruption consumes it.
+No root-owned policy, signing key or administrator mechanism changes.
+
+The corrected catalog candidate has not yet passed LOCAL. Required localhost
+CI, protected merge and independent exact-main follow only after LOCAL passes.
+CONF-FIX-010 remains separately approval/design gated. The failed-run sections
+below are retained historical checkpoints, not the effective attempt allowance.
 
 ## Pinned predecessor and finite allowances
 
@@ -22,7 +36,7 @@ META accepted main4f7cd029a8d5f54317a56e873873e9d36a48c252; product accepted mai
 
 LOCAL2 completed five suites/170 tests; the backend suite did not complete. Result/log/reservation/signature/host-transition hashes are retained in architecture/guard-traversal-inputs/readiness.json. Reauthenticate originals independently; copied hashes do not certify signed custody or runtime. Buffered outer argv markers were absent after forced termination; this is not zero product execution. Keep every failed attempt, old draft, source and proof intact.
 
-META allowance LOCAL2/CI2/LOCAL_EXACT_MAIN1 is approved for this packet. The same finite allowance is proposed for the conditional product packet but is not activated by this publication. Each failure, timeout, interruption or reserved host refusal consumes an attempt; no reset, pooling or transfer. No diagnostic, benchmark, selective run or product execution in META. Keep750s local/main,420s nested,900s trusted and15-minute workflow limits. One active attempt; reserve before signing/activation. Existing signed localhost mechanism only; no administrator-policy change.
+The effective META allowance is LOCAL3/CI2/LOCAL_EXACT_MAIN1, with two LOCAL attempts already consumed. The conditional product proposal remains LOCAL2/CI2/LOCAL_EXACT_MAIN1 and is not activated by this publication. Each failure, timeout, interruption or reserved host refusal consumes an attempt; no reset, pooling or transfer. No diagnostic, benchmark, selective run or product execution in META. Keep750s local/main,420s nested,900s trusted and15-minute workflow limits. One active attempt; reserve before signing/activation. Existing signed localhost mechanism only; no administrator-policy change.
 
 Preserve182 old packet YAML and historical architecture JSON byte-for-byte; add two for184. META retains45 commands and adds one for46. Product retains eight commands,zero skips. All16 harnesses/four planes/13 repositories, production Linux Kubernetes/OpenShift and the [harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md) remain. Require **at least one qualified baseline for every released harness capability** at the first enterprise release. No warm-source access, paid API/key, hosted runner, cloud provisioning, downloads, telemetry default, root/key/admin/power change or native effects. Alpha2 open; model-effort transition NOT_DUE.
 
@@ -152,7 +166,7 @@ Preparation, design review, source acceptance, CI, merge, exact-main, artifact, 
 The host-inventory install was independently verified in the prior turn. This preparation changes no root-owned policy, launcher, keys, signing identity, isolation backend, permissions, power state or administrator mechanism. No credential or warm-source content belongs in the proposed repository records.
 
 
-## Bounded catalog correction after LOCAL1
+## Historical bounded catalog correction after LOCAL1
 
 The first META local attempt stopped after two of46 commands at18.08013525s:
 the generic ownership checker correctly reported eight unordered overlaps
@@ -166,7 +180,7 @@ or substituted diagnostics/packets remain errors. LOCAL2 is the sole remaining
 local allowance. Test identities/counts and all46 commands remain unchanged.
 
 
-## Current unaccepted checkpoint after LOCAL2
+## Historical unaccepted checkpoint after LOCAL2
 
 Both META LOCAL reservations are consumed. The second attempt completed the
 nested and outer test replays but failed inherited catalog assertions: four

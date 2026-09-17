@@ -86,6 +86,16 @@ def test_failure_is_not_acceptance_or_budget_reset(authority):
     assert source['completedSuiteTests'] == 170 and not source['backendComplete']
     assert value['budgets']['oldProductLocalConsumed'] == 2
     assert not value['budgets']['resetOld'] and not value['budgets']['transfer']
+    assert value['budgets']['meta'] == dict(LOCAL=3,CI=2,LOCAL_EXACT_MAIN=1)
+    assert value['budgets']['conditionalProduct'] == dict(LOCAL=2,CI=2,LOCAL_EXACT_MAIN=1)
+    amendment = value['localAllowanceAmendment']
+    assert amendment['approved'] is True and amendment['oldAttemptsRetained'] is True
+    assert (amendment['priorCeiling'],amendment['ceiling'],amendment['consumedBeforeAmendment'],
+            amendment['additionalAttempts']) == (2,3,2,1)
+    assert amendment['changedStages'] == ['LOCAL']
+    assert not amendment['timeLimitsChanged'] and not amendment['productAuthorityChanged']
+    changed = deepcopy(value); changed['localAllowanceAmendment']['consumedBeforeAmendment'] = 0
+    with pytest.raises(ValueError): module.validate_spec(changed,bind=False)
     assert not any(value[k] for k in ('productExecutionInMetaRun','productAcceptance',
                                      'nativeAcceptance','tenantAcceptance','phaseComplete'))
 
