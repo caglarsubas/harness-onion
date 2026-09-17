@@ -1,0 +1,286 @@
+{
+  "accountingConsumers": [
+    "_doc_current_sources",
+    "DocumentRepairTests.test_consumer_history_preserved",
+    "CompletionIntegrationSourceTests.setUp",
+    "GuardCostSourceTests.setUp",
+    "GuardCostSourceTests.test_actual_unfiltered_collection_matches_current_ast"
+  ],
+  "budgets": {
+    "benchmarks": 0,
+    "conditionalProduct": {
+      "CI": 2,
+      "LOCAL": 2,
+      "LOCAL_EXACT_MAIN": 1
+    },
+    "diagnostics": 0,
+    "meta": {
+      "CI": 2,
+      "LOCAL": 3,
+      "LOCAL_EXACT_MAIN": 1
+    },
+    "metaProductExecutions": 0,
+    "oldDiagnosticRetries": 0,
+    "oldProductCIConsumed": 0,
+    "oldProductLocal2Held": true,
+    "oldProductLocalConsumed": 2,
+    "oldProductMainConsumed": 0,
+    "resetOld": false,
+    "transfer": false
+  },
+  "designGate": {
+    "currentFirst": true,
+    "externallyEnforcedExclusionPresumed": false,
+    "independentReviewRequired": true,
+    "independentReviewStatus": "NOT_PERFORMED_FOR_SUCCESSOR",
+    "oldProofsImmutable": true,
+    "productStageApprovalRequired": true,
+    "safeDesignEstablished": false,
+    "temporalContractChange": false,
+    "traceAndInterleavingProof": true,
+    "unprovenEquivalence": "STOP_NOT_WAIVE"
+  },
+  "dispatchOverlaps": [
+    {
+      "left": "CONF-BENCH-002",
+      "path": "src/harness_conformance/live_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-BENCH-003",
+      "path": "src/harness_conformance/live_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-DIAG-003",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "src/harness_conformance/live_proxy_server.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "src/harness_conformance/live_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "tests/live_backend/test_proxy_server.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "tests/live_backend/test_mutation_admission.py",
+      "right": "CONF-FIX-010"
+    },
+    {
+      "left": "CONF-FIX-007",
+      "path": "docs/live-backend/proxy.md",
+      "right": "CONF-FIX-010"
+    }
+  ],
+  "gates": {
+    "billingChange": false,
+    "frozenSourceAndIds": true,
+    "fullEightProductCommands": true,
+    "independentC1C7CandidateReview": true,
+    "independentC1C7DesignReview": true,
+    "independentExactMain": true,
+    "independentSignedCustody": true,
+    "metaLocal": true,
+    "modelEffortTransition": "NOT_DUE",
+    "oneActiveExecution": true,
+    "protectedMerge": true,
+    "requiredLocalhostCI": true,
+    "reserveBeforeActivation": true,
+    "rootPolicyChange": false,
+    "zeroProductSkips": true
+  },
+  "limits": {
+    "localSeconds": 750,
+    "nestedSeconds": 420,
+    "trustedSeconds": 900,
+    "workflowMinutes": 15
+  },
+  "localAllowanceAmendment": {
+    "additionalAttempts": 1,
+    "approved": true,
+    "ceiling": 3,
+    "changedStages": [
+      "LOCAL"
+    ],
+    "checkpointSha256": "73687f832e8fc7635b3105c5e320a408a2f328242ddd1e10d7defbb93bb07eee",
+    "consumedBeforeAmendment": 2,
+    "failures": {
+      "local01": {
+        "commandsReached": 2,
+        "commit": "c099c5a24c7d36b54f61f2fa6e1cc55f34619267",
+        "elapsedSeconds": 18.08013525,
+        "functionalPass": false,
+        "hostInterruptions": 0,
+        "label": "local01",
+        "logSha256": "0a11d125d2515510fac55a3a1325f9e51fb6e0eca85aaf105d4e3d6da2fac4c4",
+        "nativeAcceptance": false,
+        "performancePass": false,
+        "resultSha256": "d59206fc4602bdb7c151c2ae36f70ebde3b97c937565c17f10ba5bff3c82ccbe",
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+        "tenantAcceptance": false,
+        "testSummaries": []
+      },
+      "local02": {
+        "commandsReached": 45,
+        "commit": "0fad7cfb532527f02d349d568c9475c1b8c1013e",
+        "elapsedSeconds": 595.617890292,
+        "functionalPass": false,
+        "hostInterruptions": 0,
+        "label": "local02",
+        "logSha256": "ffc4dc5a4f0063452a8b8291b2ab75324b7d594e98136810b42aad6183090a16",
+        "nativeAcceptance": false,
+        "performancePass": false,
+        "resultSha256": "00c3004d1ea450101ef9179aaad6a70418f725bda12ca1bad922a0c4ca4f183e",
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+        "tenantAcceptance": false,
+        "testSummaries": []
+      }
+    },
+    "oldAttemptsRetained": true,
+    "packetId": "MET-PERF-017",
+    "priorCeiling": 2,
+    "priorHead": "8114fd77e446d27f5025a91ca7f2b780dcbe3b4a",
+    "priorPacketSha256": "75185049c46551da48c2d86925bbb28ddba1fceeaa729906790f69f284748b72",
+    "productAuthorityChanged": false,
+    "timeLimitsChanged": false
+  },
+  "metaBase": "4f7cd029a8d5f54317a56e873873e9d36a48c252",
+  "nativeAcceptance": false,
+  "packetId": "MET-PERF-017",
+  "phaseComplete": false,
+  "preservedArtifacts": {
+    "AGENTS.md": "1c24e53dd86f52659a43d948747ae45e94ff256831372ecedc0b862c0deff7a1",
+    "architecture/accounting-scope-amendment.json": "f6b655dbf7837833feba0b0f148e94236edf78222579fc1801183c1433317179",
+    "architecture/accounting-scope-authority.json": "ad277badb5732a0073c6a93c9b1a71fabe5865c48567524ffc4dfb1af31c96cd",
+    "architecture/accounting-scope-inputs/readiness.json": "d3a24f87aadc25af651cdfbea053ff6ccb40397fad443494915cc311a6be0fdd",
+    "architecture/benchmark-transport-authority.json": "79d6d83847b99c72fda2007b8cab5edc88d4fb50da10122189db701f89016127",
+    "architecture/benchmark-transport-inputs/candidate-freeze.json": "882de643ee26c649d38d63df1ccc99fa3b5fc3a69f4407b6f26aed217852ae86",
+    "architecture/benchmark-transport.json": "e20c29df5bfb8885e138260033637ad0de8bf6c905bc12fd808fb3385d984bad",
+    "architecture/broker-handoff-inputs/channel.schema.json": "e7e9558fb50b7ba804222065734d1d4fb4694327bb2427a34ef8dffc945d56f9",
+    "architecture/completion-integration-authority.json": "7c6f2cd5a2c0c76487df897c853f1de577e8fc8bc1e1f5c3698b118621035793",
+    "architecture/completion-integration.json": "0b36ddc4626430b299fbb5ce3a99a8f94bcc4b54287781e3f8e8136e6b84878a",
+    "architecture/conformance-publication.json": "1285ec5851d727268ff5e31a72b1893a1eb8917deb740d29c572533869d2db89",
+    "architecture/factory-diagnostics-authority.json": "7470ecc4449635a91293aef6ea5f4e984ac772123e87ff59f1d5669acfd87834",
+    "architecture/factory-diagnostics-inputs/static-source.json": "deed7dc18f7b661efceb26e85e560166339185f19a651eac49f3d8d573d095ab",
+    "architecture/factory-diagnostics.json": "b498f29ead351048276618c2c55512e267264dc5eebd26386540eb90099174a4",
+    "architecture/guard-cost-repair-authority.json": "fa529db98fc48214b558e860afd7c19c36ce514e897f4efa52545306aa7d8f80",
+    "architecture/guard-cost-repair-inputs/audit.json": "dd3dc1d6153bedd4c06977a70ad1ba3c366fd845cde753e8b49ea4e7f13beb86",
+    "architecture/guard-cost-repair.json": "744e2d18b4a2ab9d8596f492b00a1026f87b4824f060edb29eabcaab47935a7e",
+    "architecture/local-acceptance.json": "14dbd4c8e53ac711ec9bfb7e4cb6db03f873d313503e74c7f183ef16c950997f",
+    "architecture/native-qualification-inputs/qualification.schema.json": "bef248bfa82b234124c014f98e40c5791bced3171bb118b7ed1bb7b8daaf95c3",
+    "architecture/provider-adoption.json": "f22930f0c32a3f552d955378c2f1bc355811c37123a25a8a3cc64d8ea17a4f47",
+    "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+    "architecture/research-adoption.json": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+    "architecture/reuse-map.yaml": "a4c612d46fbec6e098d3d48dfd1706a5529967207c04bef40f7900c0f269d741",
+    "architecture/reuse-path-index.yaml": "4146194a2833840c02369725727d61bd9b2c626eca89b95280f49683647a25c1",
+    "architecture/taxonomy.yaml": "3d77bad7f84ff2f6a203fa074dce8ceaabf8e471711a8249daa53d8cf3f0fa24",
+    "diagnostics/conf_diag_003.py": "cea27b7a29a7d0aa2d944f7e2389c53f015e627922c6e4a0348ce7c78d9373b9",
+    "diagnostics/conf_diag_004.py": "e8c32926f682435f1e65db6ecf5f28ecf44b9b39116aece2ebd2b1d15b8907d9",
+    "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+    "docs/TRUSTED_RUNNER_CONTRACT.md": "eccec1707e19bc8e2f4a078940e891d8e8f572b13d59e6a6327c0bc2d692a18e",
+    "docs/alpha-2/BROKER_HANDOFF_READINESS.md": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+    "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+    "release/repos.lock.json": "6067ca5e86c759c3efd914b037243e82577b40448d084df339b0abbf0d2999c4",
+    "requirements.lock": "f78e95f80f5cd159802ab08b997121af14810513c4b34d08588ee34382e137b7",
+    "task-packets/CONF-LIVE-003.yaml": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+    "task-packets/CONF-LIVE-004.yaml": "3cb0e1f7d163d7a420fbf2134b7ca5a7c70174acfca8646c341be83e6c23ff23",
+    "uv.lock": "78b80f44219e09eb34b83812d01e870edc70af2c8d6eaaa08ae26a8f45a2a7a9"
+  },
+  "productAcceptance": false,
+  "productExecutionInMetaRun": false,
+  "schemaVersion": "planeon.internal.guard-traversal-plan/v1",
+  "status": "ONGOING_LOCAL3_ACCEPTANCE",
+  "subject": {
+    "accepted": false,
+    "acceptedMain": "3a81c8ffb17be9e288c4368d443c57361d5a4fc8",
+    "backendTests": 1485,
+    "commit": "14f922b5fd262f10e3c836847a9dd18a4706dee4",
+    "failedSource": true,
+    "inventorySha256": "b24622c3f34260a59488cce832fb04c1a1a55cd278ebe35abfc9dfd5539d543e",
+    "packetId": "CONF-FIX-009",
+    "totalTests": 1655,
+    "trackedFiles": 135,
+    "tree": "7625f055178b6dfb4eae0ac66b64897cf4dd74e7"
+  },
+  "tenantAcceptance": false,
+  "testAccounting": {
+    "addedCases": 52,
+    "baselineInner": 4444,
+    "baselineOuter": 4693,
+    "evidence": "STATIC_AST_NOT_ACCEPTANCE",
+    "expectedInner": 4496,
+    "expectedOuter": 4745,
+    "inheritedExpansion": [
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "MET-PERF-017"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "MET-PERF-017"
+      },
+      {
+        "cases": 5,
+        "function": "test_each_new_packet_is_exact_and_cannot_expand_scope",
+        "module": "custody_handoff",
+        "packet": "CONF-FIX-010"
+      },
+      {
+        "cases": 5,
+        "function": "test_exact_packet_fields_cannot_expand",
+        "module": "credential_lifecycle",
+        "packet": "CONF-FIX-010"
+      }
+    ],
+    "inheritedSkips": 10,
+    "newCaseCount": 32,
+    "newCaseIds": [
+      "test_current_authority_and_reversible_history",
+      "test_resealed_scope_or_budget_change_refuses[('subject',)]",
+      "test_resealed_scope_or_budget_change_refuses[('accountingConsumers',)]",
+      "test_resealed_scope_or_budget_change_refuses[('designGate',)]",
+      "test_resealed_scope_or_budget_change_refuses[('budgets',)]",
+      "test_resealed_scope_or_budget_change_refuses[('limits',)]",
+      "test_resealed_scope_or_budget_change_refuses[('gates',)]",
+      "test_resealed_scope_or_budget_change_refuses[('testAccounting',)]",
+      "test_resealed_scope_or_budget_change_refuses[('preservedArtifacts',)]",
+      "test_resealed_scope_or_budget_change_refuses[('productExecutionInMetaRun',)]",
+      "test_resealed_scope_or_budget_change_refuses[('productAcceptance',)]",
+      "test_resealed_scope_or_budget_change_refuses[('nativeAcceptance',)]",
+      "test_resealed_scope_or_budget_change_refuses[('tenantAcceptance',)]",
+      "test_resealed_scope_or_budget_change_refuses[('phaseComplete',)]",
+      "test_substituted_input_or_packet_refuses[('record',)]",
+      "test_substituted_input_or_packet_refuses[('missing',)]",
+      "test_substituted_input_or_packet_refuses[('extra',)]",
+      "test_substituted_input_or_packet_refuses[('old',)]",
+      "test_substituted_input_or_packet_refuses[('meta',)]",
+      "test_substituted_input_or_packet_refuses[('product',)]",
+      "test_substituted_input_or_packet_refuses[('source',)]",
+      "test_substituted_input_or_packet_refuses[('guide',)]",
+      "test_current_catalog_before_history[('missing',)]",
+      "test_current_catalog_before_history[('extra',)]",
+      "test_current_catalog_before_history[('changed',)]",
+      "test_current_catalog_before_history[('historical-only',)]",
+      "test_current_catalog_before_history[('wrong-owner',)]",
+      "test_fresh_bytes_not_cached",
+      "test_failure_is_not_acceptance_or_budget_reset",
+      "test_five_accounting_consumers_and_unchanged_temporal_gate",
+      "test_product_recipe_and_all_previous_packets_preserved",
+      "test_history_refuses_current_tampering_before_projection"
+    ]
+  }
+}

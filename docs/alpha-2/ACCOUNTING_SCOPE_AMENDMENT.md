@@ -1,5 +1,20 @@
 # Alpha 2 — source-accounting scope amendment
 
+## Current repair gate - MET-PERF-017
+
+[Guard-traversal successor](GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.
+MET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.
+OPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.
+MET-PERF-017 ONGOING_LOCAL3_ACCEPTANCE (two prior attempts retained):184 specifications; all182 earlier packets immutable; no product execution.
+CONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](HARNESS_PAPER_REPOSITORY_MAP.md).
+Prior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.
+
+## Retained planning and historical checkpoints
+
 2026-09-17. MET-PERF-016 is a META-only amendment to the unexecuted
 CONF-FIX-009 packet. It does not implement or qualify the guard-cost repair.
 User approval covers the narrow accounting migration and an independent

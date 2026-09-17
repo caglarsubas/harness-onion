@@ -1,5 +1,20 @@
 # Repository Plan: `mas-harness-conformance-labs`
 
+## Current repair gate - MET-PERF-017
+
+[Guard-traversal successor](../alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.
+MET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.
+OPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.
+MET-PERF-017 ONGOING_LOCAL3_ACCEPTANCE (two prior attempts retained):184 specifications; all182 earlier packets immutable; no product execution.
+CONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Prior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.
+
+## Retained planning and historical checkpoints
+
 ## Current repair gate - MET-PERF-016
 
 [Accounting-scope amendment](../alpha-2/ACCOUNTING_SCOPE_AMENDMENT.md): Alpha2 ONGOING.
@@ -459,6 +474,8 @@ CONF-LIVE-003 local gate passed. MET-PUBLISH-001 separately scopes publication/C
 
 
 - `CONF-FIX-009`: independently reviewed guard-cost repair after META gates; no native acceptance.
+
+- `CONF-FIX-010`: conditional safe-design reviewed guard-traversal repair; separate product-stage approval.
 
 ## Testing, verification, and acceptance
 
