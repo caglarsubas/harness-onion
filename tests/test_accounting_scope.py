@@ -2,6 +2,7 @@
 from copy import deepcopy
 import pytest
 from scripts import validate_accounting_scope as module
+from scripts.validate_guard_traversal import historical_bytes as traversal_history
 from scripts.safe_yaml import safe_load
 
 
@@ -14,10 +15,10 @@ def authority():
 def test_current_authority_and_reversible_history(authority):
     packets,record,inputs = authority
     assert module.validate_authority(*authority) == []
-    assert len(packets) == 182 and len(module.historical_catalog(packets)) == 181
+    assert len(packets) == 184 and len(module.historical_catalog(packets)) == 181
     for p,rule in record['metaRecipes'].items():
         before = module.historical_bytes(p,inputs[p])
-        assert module.apply_recipe(before,rule) == inputs[p]
+        assert module.apply_recipe(before,rule) == traversal_history(p,inputs[p])
         if p.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[p])
             assert module.current_test_bytes(before) == inputs[p]

@@ -1,5 +1,20 @@
 # Sol-High Task Packet Catalog
 
+## Current repair gate - MET-PERF-017
+
+[Guard-traversal successor](../docs/alpha-2/GUARD_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.
+MET-PERF-016 DONE_SOURCE_GATES at4f7cd029 / PR132.
+OPERATOR-INVENTORY-001 DONE_INSTALLED_VERIFIED; host repair is not product acceptance.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED: two LOCAL slots consumed; LOCAL2 stopped at748.0667s, exit247.
+MET-PERF-017 ONGOING_META_PUBLICATION:184 specifications; all182 earlier packets immutable; no product execution.
+CONF-FIX-010 WAITING_PUBLICATION_AND_SAFE_DESIGN: independent design/candidate review and separate product-stage approval required.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Prior headings below are retained historical checkpoints, not current execution authority. A new allowance does not reset failed history or establish a safe repair.
+
+## Retained planning and historical checkpoints
+
 ## Current repair gate - MET-PERF-016
 
 [Accounting-scope amendment](../docs/alpha-2/ACCOUNTING_SCOPE_AMENDMENT.md): Alpha2 ONGOING.
@@ -803,3 +818,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 180 | `MET-PERF-015` | `Harness-Engineering` | Bounded guard-cost repair authority |
 | 181 | `MET-PERF-016` | `Harness-Engineering` | Narrow accounting-scope amendment |
 | 182 | `CONF-FIX-009` | `mas-harness-conformance-labs` | Independent-review gated guard-cost repair |
+| 183 | `MET-PERF-017` | `Harness-Engineering` | Guard-traversal successor publication |
+| 184 | `CONF-FIX-010` | `mas-harness-conformance-labs` | Conditional observation-equivalence repair |
