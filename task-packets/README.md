@@ -1,5 +1,20 @@
 # Sol-High Task Packet Catalog
 
+## Current repair gate - MET-PERF-015
+
+[Guard-cost repair](../docs/alpha-2/GUARD_COST_REPAIR.md): Alpha2 ONGOING.
+MET-PERF-014 DONE_SOURCE_GATES at ae33beb / PR130.
+CONF-DIAG-004 CLOSED_PARTIAL_DIAGNOSTIC: one attempt consumed,zero retries;1062 completed/1 unfinished/384 unreached; not acceptance.
+CONF-FIX-008 BLOCKED_LOCAL_FAILURE: draft PR20 at6785db6 unchanged; LOCAL1 consumed,LOCAL2 held; CI/main not run.
+MET-PERF-015 ONGOING_META_PUBLICATION;181 specifications,179 immutable prior packets.
+CONF-FIX-009 WAITING_META_GATES_AND_INDEPENDENT_REVIEW: separate guarded-cost design and repair; no implementation in this META run.
+CONF-LIVE-004/005/006 WAITING_PREDECESSOR_CORRECTION; CONF-A2-001 and Alpha3/4 WAITING.
+No native/runtime/tenant acceptance; Alpha2 open; model-effort transition NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](../docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Older headings below are retained publication checkpoints, not current execution authority.
+
+## Retained planning and historical checkpoints
+
 ## Current diagnostic gate - MET-PERF-014
 
 [Bounded factory diagnostics](../docs/alpha-2/FACTORY_DIAGNOSTICS.md): Alpha2 ONGOING.
@@ -770,3 +785,6 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 
 | 178 | `MET-PERF-014` | `Harness-Engineering` | Bounded factory diagnostic authority |
 | 179 | `CONF-DIAG-004` | `mas-harness-conformance-labs` | Read-only failed-candidate factory-call observation |
+
+| 180 | `MET-PERF-015` | `Harness-Engineering` | Bounded guard-cost repair authority |
+| 181 | `CONF-FIX-009` | `mas-harness-conformance-labs` | Independent-review gated guard-cost repair |

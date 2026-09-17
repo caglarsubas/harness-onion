@@ -9,6 +9,7 @@ from types import SimpleNamespace
 import unittest
 import pytest
 from scripts import validate_factory_diagnostics as module
+from scripts.validate_guard_cost_repair import historical_bytes as guard_history
 from scripts.safe_yaml import safe_load
 
 
@@ -21,10 +22,10 @@ def authority():
 def test_current_authority_and_exact_reversible_history(authority):
     packets,record,inputs = authority
     assert module.validate_authority(*authority) == []
-    assert len(packets) == 179 and len(module.historical_catalog(packets)) == 177
+    assert len(packets) == 181 and len(module.historical_catalog(packets)) == 177
     for p,rule in record['metaRecipes'].items():
         before = module.historical_bytes(p,inputs[p])
-        assert module.apply_recipe(before,rule) == inputs[p]
+        assert module.apply_recipe(before,rule) == guard_history(p,inputs[p])
         if p.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[p])
             assert module.current_test_bytes(before) == inputs[p]
