@@ -1,0 +1,89 @@
+{
+  "acceptedCloseoutSha256": "e89e9cdd2220aa4c3d4cfb9a129d0c4d4f846926e2f112b3629e3d1c2d3748ec",
+  "acceptedMain": "fe771b213a96bb6f0c1c9e3d1c47c18d21881cde",
+  "acceptedPredecessor": "MET-PERF-018",
+  "acceptedTree": "7bf3feb463f3f819af1932936a6c46a70b0a2917",
+  "bridgeAuthority": "architecture/catalog-traversal-authority.json",
+  "bridgeAuthoritySha256": "c84888a7fe3fd955922cdc4e45fab7308b1fcf02ba4273173c9e534c42e82169",
+  "historicalDraft": {
+    "accepted": false,
+    "ciConsumed": 0,
+    "exactMainConsumed": 0,
+    "head": "3bf938b9fc435bf8899a3f348288f73c77129557",
+    "localConsumed": 2,
+    "localEvidence": [
+      {
+        "commandsReached": 47,
+        "commit": "24d22753f192aead68b672de9fc06dc4f18ab776",
+        "elapsedSeconds": 72.263101791,
+        "functionalPass": false,
+        "hostInterruptions": 0,
+        "label": "local01",
+        "logSha256": "0a7e8a4836ee4b3ba788d034e88ffba089bfb604dda0844ae800814b270dfa89",
+        "nativeAcceptance": false,
+        "performancePass": false,
+        "resultSha256": "035d1770cf3d7e2ef3fa87fc03156daa89e0138b7f81b0c1666cafb437437f52",
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+        "tenantAcceptance": false,
+        "testSummaries": []
+      },
+      {
+        "commandsReached": 48,
+        "commit": "3bf938b9fc435bf8899a3f348288f73c77129557",
+        "elapsedSeconds": 748.430366125,
+        "functionalPass": false,
+        "hostInterruptions": 0,
+        "label": "local02",
+        "logSha256": "35d005ecfbe5ce51da95116ae0804d3847fb4607ec95d85700da56308703a13c",
+        "nativeAcceptance": false,
+        "performancePass": false,
+        "resultSha256": "96d6461db5a0c92bc54c768e7e324d29f2d72059b4be9323c04bc559e019e1f3",
+        "status": "FAILED_EVIDENCE_RETAINED_NOT_ACCEPTANCE",
+        "tenantAcceptance": false,
+        "testSummaries": [
+          [
+            "4706",
+            "10",
+            "364.91"
+          ]
+        ]
+      }
+    ],
+    "localMaximum": 2,
+    "packet": "MET-ENFORCE-002",
+    "pr": 136,
+    "stoppedSha256": "bce5dce885b53f2af8499b8c80a423fc9aa4a6fa3f6de86febdd7ab592a39d88"
+  },
+  "implementationReady": false,
+  "maximumCumulativeLineageLocal": 4,
+  "nativeAcceptance": false,
+  "newAllowance": {
+    "CI": 2,
+    "LOCAL": 2,
+    "LOCAL_EXACT_MAIN": 1
+  },
+  "oldAttemptsReset": false,
+  "oldPacketRetryAuthorized": false,
+  "priorLineageLocalConsumed": 2,
+  "publicContractChanged": false,
+  "reason": "Explicit successor publication after accepted single-traversal repair; original draft remains unaccepted.",
+  "reviewBase": "cdb71ae1f6d639cc9ccd78d9089203b08e5ee8d5",
+  "reviewedInputBridges": {
+    "docs/MASTER_DEVELOPMENT_PLAN.md": {
+      "afterSha256": "56e6e4536a9beda9148aa3a5dcd034e41cced36f73d1db012b1edffe654874f3",
+      "beforeSha256": "4f6a2c0c69fb7853d27bf6229c4b212025dd870f6a538cfe825f90923fe17a8b"
+    },
+    "docs/alpha-2/ENFORCEMENT_INTEGRATION.md": {
+      "afterSha256": "cf540a628d8bf89f243dce49839596313f55e0c467c93ce4ec955ddd41406c89",
+      "beforeSha256": "403ae8660787139f298d6a574c7229aa38a6dac0f3de3d719059eda42f08493a"
+    },
+    "docs/repositories/10-mas-harness-operator.md": {
+      "afterSha256": "8f58a4935688adea9ea578d0734d709011eb9cd083098115fd9aeeada164c60e",
+      "beforeSha256": "0f8cb53c693abf92e03663c541e33d19dd67edc975849b916a2d93a431971ebe"
+    }
+  },
+  "schemaVersion": "planeon.internal.host-interface-reconciliation/v1",
+  "successorPacket": "MET-ENFORCE-003",
+  "tenantAcceptance": false,
+  "w01Complete": false
+}

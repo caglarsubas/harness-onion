@@ -2,6 +2,7 @@
 from copy import deepcopy
 import pytest
 from scripts import validate_catalog_traversal as module
+from scripts.validate_host_interface import historical_bytes as integration_history
 from scripts import validate_guard_cost_repair, validate_accounting_scope, validate_guard_traversal
 from scripts import validate_observation_enforcement, validate_enforcement_integration
 from scripts.safe_yaml import safe_load
@@ -24,10 +25,10 @@ def authority():
 def test_exact_current_publication_and_history(authority):
     packets, record, inputs = authority
     assert module.validate_authority(*authority) == []
-    assert len(packets) == 187 and len(module.historical_catalog(packets)) == 186
+    assert len(packets) == 188 and len(module.historical_catalog(packets)) == 186
     for path, rule in record['metaRecipes'].items():
         before = module.historical_bytes(path, inputs[path])
-        assert module.apply_recipe(before, rule) == inputs[path]
+        assert module.apply_recipe(before, rule) == integration_history(path, inputs[path])
         if path.startswith('tests/'):
             assert module.test_ids(before) == module.test_ids(inputs[path])
             assert module.current_test_bytes(before) == inputs[path]

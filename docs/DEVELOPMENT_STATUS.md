@@ -1,5 +1,22 @@
 # Development checkpoint — Phase 0 to Alpha 2
 
+## Current reviewed interface candidate — MET-ENFORCE-003
+
+[W01 reviewed candidate and unresolved gates](alpha-2/HOST_INTERFACE_PUBLICATION.md): Alpha2 ONGOING.
+MET-PERF-018 DONE_SOURCE_GATES at fe771b2 / PR137; all gates retained.
+PR136 / MET-ENFORCE-002 remains blocked with two LOCAL attempts consumed.
+This explicit successor reconciles reviewed source on repaired main; no reset or old retry.
+MET-ENFORCE-003 ONGOING_SOURCE_PUBLICATION: 188 specifications; 187 prior packets immutable.
+W01 ONGOING_DESIGN: independent source-only review passed after G09 correlation correction.
+No adopted ABI, selected writer backend, installed gate or native qualification.
+G04-G07 and G09 remain open; all E01-E12 OPEN_UNPROVEN; W02-W07 not dispatchable.
+CONF-FIX-009 BLOCKED_LOCAL_ALLOWANCE_EXHAUSTED; CONF-FIX-010 BLOCKED_SAFE_DESIGN, zero attempts.
+CONF-LIVE-004/005/006 and CONF-A2-001 WAITING; Alpha3/4 WAITING; effort NOT_DUE.
+Preserve the [all16 harness/paper/OSS map](alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md).
+Earlier headings are historical checkpoints, not current dispatch authority.
+
+## Retained planning and historical checkpoints
+
 ## Current validation repair — MET-PERF-018
 
 [Single-traversal catalog repair](alpha-2/CATALOG_TRAVERSAL_REPAIR.md): Alpha2 ONGOING.
