@@ -1,6 +1,29 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-023 source preparation, October 11, 2026
+## Current checkpoint — MET-PERF-037 source preparation, October 11, 2026
+
+Alpha2 OPEN. MET-ENFORCE-023 (W02-CLEANUP) passed required verify (64/64, 459 s) and merged as main 6f813b7. Owner
+decisions (via the lane monitor): Q-N1 = A (R12 CONF-CI-002 suite migration first, then W04-1 test source) and Q-N2
+(slot 226 = PERF-035-F). MET-PERF-037 closes the MET-PERF-035 review's carried MINOR findings R3-01 and R3-02 in the
+parallel suite, a pinned transport file, under the owner's transport approval. MET-PERF-037 is the sole 226th
+specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2 | MET-PERF-037 / PERF-035-F | SOURCE_PREPARED | Parallel-suite follow-up as the 226th packet; owner transport approval, then verify |
+| Alpha2A | MET-ENFORCE-023 / W02-CLEANUP | VERIFY_PASSED_MERGED | Verify 459 s |
+| Alpha2A | W04 | IN_PROGRESS | R12 CONF-CI-002 suite migration (W04-1a), then W04-1 test source (parallel lane) |
+| Alpha2A | W03 | IN_PROGRESS | Host modules in the operator repository (primary lane) |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after LIC-HOST and W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the installed activation cap and the verifier's inheritance rule; the new
+layer validator adds no argv and runs inside the outer pytest), 420/750/900 s/15 min and 32 MiB. No cloud, runner registration,
+live/native/tenant or model-effort changes. Phase-end effort transition NOT_DUE.
+Prior checkpoints below are history only.
+
+## Historical W02-CLEANUP source checkpoint — MET-ENFORCE-023 source preparation, October 11, 2026
 
 Alpha2 OPEN. MET-ENFORCE-022 (W04-0) passed required verify (64/64, 441 s) and merged as main 4cb4510. R12 adopted the
 repository-aware verifier (CONF-CI-001, R12 #21) and R10 its bootstrap. Owner rule (via the lane monitor): slot 225 is
@@ -1390,7 +1413,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · W02d-V3 / MET-ENFORCE-020 · Publish the W02d successor seccomp-allowlists-v3 (Rust+musl NATIVE_STATIC rules) as reviewed data; pass required verify through the owner's App.
 - [x] Alpha 2A · LIC-HOST / MET-ENFORCE-021 · Publish license-policy amendment LIC-HOST-A1 as a reviewed overlay on the byte-identical base policy; pass required verify through the owner's App.
 - [x] Alpha 2A · W04-0 / MET-ENFORCE-022 · Publish the independent enforcement test plan W04-0 (TG-01..TG-08 against E01-E12) and the observation-window register schema as reviewed data; pass required verify through the owner's App.
-- [ ] Alpha 2A · W02-CLEANUP / MET-ENFORCE-023 · Publish the W02 notes errata (native-profile-v3, I06 v2) and the PERF-032-F checks as reviewed data; pass required verify through the owner's App.
+- [x] Alpha 2A · W02-CLEANUP / MET-ENFORCE-023 · Publish the W02 notes errata (native-profile-v3, I06 v2) and the PERF-032-F checks as reviewed data; pass required verify through the owner's App.
+- [ ] Alpha 2 · PERF-035-F / MET-PERF-037 · Close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; owner transport approval; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
