@@ -870,7 +870,7 @@
   },
   {
    "id": "S06",
-   "intent": "Injection queue order (model-defined): the AFTER failure queues behind the pending NEXT failures. The BIND succeeds; NEXT, NEXT torn and AFTER 0 are then pending; the ARM run fails the first record attempts and the queued remainder spills into the CLOSE run, and the GENERATION_STATUS between the two runs reads a journalDigest that differs if the AFTER failure were put in front of the queue",
+   "intent": "Injection queue order (model-defined): the AFTER failure queues behind the pending NEXT failures. The BIND succeeds; NEXT, NEXT torn and AFTER 0 are then pending; the ARM run fails the first record attempts, and the GENERATION_STATUS after it reads a journalDigest that differs if the AFTER failure were put in front of the queue. The CLOSE on the HELD generation writes no record, so the queued remainder stays pending and fails the RESTARTED record after GATE_RESTART (a pending failure crosses the restart, as in T104)",
    "config": "ACTIVE",
    "events": [
     {

@@ -29,7 +29,7 @@ operator repository (R10, `caglarsubas/mas-harness-operator`) holds or will hold
 | `architecture/i07-policy-write-v3/README.md` | `a2eab9365c8663c` | `a8c51a725b99…` | 100644 | `host-enforcement/contracts/i07-v3/README.md` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
 | `architecture/i07-policy-write-v2/README.md` | `a2eab9365c8663c` | `cde20d7fee86…` | 100644 | `host-enforcement/contracts/i07-v2/README.md` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
 | `architecture/i07-policy-write/README.md` | `a2eab9365c8663c` | `9e5cb3d1023b…` | 100644 | `host-enforcement/contracts/i07-v1/README.md` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
-| `architecture/i05-gate-channel-v3-supplement/vectors.json` | `MET-ENFORCE-024` | `a0215e534d53…` | 100644 | `host-enforcement/contracts/i05-v3-supplement/vectors.json` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
+| `architecture/i05-gate-channel-v3-supplement/vectors.json` | `MET-ENFORCE-024` | `1c00bdb3ea11…` | 100644 | `host-enforcement/contracts/i05-v3-supplement/vectors.json` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
 
 `IN_USE`: held since HE-000 and registered retroactively; `REGISTERED_BEFORE_USE`: registered before HE-002 merges.
 The supplementary vectors are published by this packet (`providerPacket` MET-ENFORCE-024), so their provider commit is
