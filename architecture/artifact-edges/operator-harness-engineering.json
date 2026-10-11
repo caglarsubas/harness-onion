@@ -8,13 +8,13 @@
  "rules": [
   "The consumer holds exactly these bytes and modes; a new file, or another version of a listed file, needs a new registry record (a harness-onion meta packet) before any consumer packet uses it.",
   "Data contracts, contract text and transport files only; no product implementation source crosses the repository boundary (architecture/repositories.yaml:10).",
-  "No graph of architecture/repositories.yaml has harness-engineering consuming the operator, so this edge keeps every unconditional graph acyclic (the layer checks it)."
+  "harness-engineering consumes no repository in any graph of architecture/repositories.yaml, so this edge cannot close a cycle; the layer checks every unconditional graph."
  ],
  "notArtifacts": [
   {
    "consumerPath": "host-enforcement/licenses/closure-1.99.0.json",
    "consumerPacket": "HE-001",
-   "reason": "R10's own generated file: the operator tool that generated it ran harness-onion's pinned classifier at a5a0625 outside R10, and no harness-onion byte is in R10"
+   "reason": "R10's own generated file: the operator tool that generated it ran harness-onion's pinned classifier at a5a0625 outside R10, and no byte of the classifier or its inputs is in R10"
   }
  ],
  "statuses": {
@@ -187,7 +187,7 @@
   {
    "providerPath": "architecture/i05-gate-channel-v3-supplement/vectors.json",
    "providerCommit": null,
-   "sha256": "f75e03a1e5ec3ca0eff50a8b357154eb72e5e9d2d2c5a27a0afc69ffcc9fcf67",
+   "sha256": "a0215e534d53dc713493966e225e943583a772cab5db711bdf86e69da037d247",
    "mode": "100644",
    "consumerPath": "host-enforcement/contracts/i05-v3-supplement/vectors.json",
    "consumerPacket": "HE-002",

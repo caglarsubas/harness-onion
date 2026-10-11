@@ -29,7 +29,7 @@ operator repository (R10, `caglarsubas/mas-harness-operator`) holds or will hold
 | `architecture/i07-policy-write-v3/README.md` | `a2eab9365c8663c` | `a8c51a725b99…` | 100644 | `host-enforcement/contracts/i07-v3/README.md` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
 | `architecture/i07-policy-write-v2/README.md` | `a2eab9365c8663c` | `cde20d7fee86…` | 100644 | `host-enforcement/contracts/i07-v2/README.md` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
 | `architecture/i07-policy-write/README.md` | `a2eab9365c8663c` | `9e5cb3d1023b…` | 100644 | `host-enforcement/contracts/i07-v1/README.md` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
-| `architecture/i05-gate-channel-v3-supplement/vectors.json` | `MET-ENFORCE-024` | `f75e03a1e5ec…` | 100644 | `host-enforcement/contracts/i05-v3-supplement/vectors.json` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
+| `architecture/i05-gate-channel-v3-supplement/vectors.json` | `MET-ENFORCE-024` | `a0215e534d53…` | 100644 | `host-enforcement/contracts/i05-v3-supplement/vectors.json` | HE-002 | BYTE_IDENTICAL | REGISTERED_BEFORE_USE |
 
 `IN_USE`: held since HE-000 and registered retroactively; `REGISTERED_BEFORE_USE`: registered before HE-002 merges.
 The supplementary vectors are published by this packet (`providerPacket` MET-ENFORCE-024), so their provider commit is
@@ -37,7 +37,9 @@ this packet's merge. Rules: the consumer holds exactly these bytes and modes, an
 listed file, needs a new registry record (a harness-onion meta packet) before any consumer packet uses it; only data
 contracts, contract text and transport files cross, never product implementation source (`repositories.yaml:10`); no
 graph of `repositories.yaml` has harness-engineering consuming the operator, so the edge keeps every unconditional graph
-acyclic. Not an artifact edge (`notArtifacts`): HE-001's closure table, R10's own generated file (the operator tool that
-generated it ran harness-onion's pinned classifier at `a5a0625` outside R10, and no harness-onion byte is in R10). The
+acyclic: harness-engineering consumes no repository in any graph, so this edge cannot close a cycle (the layer checks
+every unconditional graph). Not an artifact edge (`notArtifacts`): HE-001's closure table, R10's own generated file (the
+operator tool that generated it ran harness-onion's pinned classifier at `a5a0625` outside R10, and no byte of the
+classifier or its inputs is in R10). The
 conformance-labs repository (R12) also holds the four transport files; its edge is outside this record (owner decision
 Q-HE2-A covers the operator).

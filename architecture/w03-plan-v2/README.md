@@ -54,6 +54,8 @@ shapes a planned packet). These rows are derived, not decided word for word:
 | GATE-OPENAT (HE-002C, T04) | Q-HE2-G | the openat module, the source check and T04's trace |
 | EDGE-1 (W03-AMEND) | Q-HE2-A | the registration, and the rule that a later file or version needs a new record |
 | W03-AMEND as a planned packet | Q-HE2-F (5) | the vehicle must discharge its obligations (I05-4, EDGE-1) |
+| Supplementary S05 and S06 | Q-HE2-E (b) | accumulation and queue order are the cases the HE-002 design placed R10-locally (R10-L02); stated here at the source as well |
+| The supplement as the 13th HE-002 edge entry | Q-HE2-A | R10 may hold it as a contract file, so it is registered before use |
 
 Every other byte of the record is v1's. The v1 rules still hold for v2: every obligation names planned packets, every
 planned packet discharges an obligation, every cited source exists.
