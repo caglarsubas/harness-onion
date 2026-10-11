@@ -1,6 +1,31 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-037 source preparation, October 11, 2026
+## Current checkpoint — MET-ENFORCE-024 source preparation, October 11, 2026
+
+Alpha2 OPEN. MET-PERF-037 (PERF-035-F) passed required verify under the owner's transport approval and merged as main
+a2eab93. Owner decisions (via the lane monitor, 2026-10-11): the seven HE-002 questions Q-HE2-A to Q-HE2-G, all as
+recommended, and slot 227 for W03-AMEND. MET-ENFORCE-024 publishes the W03 plan v2 beside the byte-identical v1 (the HE-002
+split into HE-002, HE-002B and HE-002C, the I05 and I07 channel substrate in HE-003, the gate's single journal in HE-002C,
+the new HE-002S), the operator -> harness-engineering buildArtifact edge registry record (HE-000's transport files and
+HE-002's contract files) and the supplementary I05 v3 vectors that close AF2-I05-1. MET-ENFORCE-024 is the sole 227th
+specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-024 / W03-AMEND | SOURCE_PREPARED | W03 plan v2, edge record and supplementary vectors as the 227th packet; verify |
+| Alpha2 | MET-PERF-037 / PERF-035-F | VERIFY_PASSED_MERGED | Owner transport approval; merged as main a2eab93 |
+| Alpha2A | W03 | IN_PROGRESS | R10: HE-000, HE-000B and HE-001 merged; HE-002 (I05 logic) built locally, merges after this packet (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 suite migration and test source (parallel lane) |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the installed activation cap and the verifier's inheritance rule; the new
+layer validator adds no argv and runs inside the outer pytest), 420/750/900 s/15 min and 32 MiB. No cloud, runner registration,
+live/native/tenant or model-effort changes. Phase-end effort transition NOT_DUE.
+Prior checkpoints below are history only.
+
+## Historical PERF-035-F source checkpoint — MET-PERF-037 source preparation, October 11, 2026
 
 Alpha2 OPEN. MET-ENFORCE-023 (W02-CLEANUP) passed required verify (64/64, 459 s) and merged as main 6f813b7. Owner
 decisions (via the lane monitor): Q-N1 = A (R12 CONF-CI-002 suite migration first, then W04-1 test source) and Q-N2
@@ -1414,7 +1439,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LIC-HOST / MET-ENFORCE-021 · Publish license-policy amendment LIC-HOST-A1 as a reviewed overlay on the byte-identical base policy; pass required verify through the owner's App.
 - [x] Alpha 2A · W04-0 / MET-ENFORCE-022 · Publish the independent enforcement test plan W04-0 (TG-01..TG-08 against E01-E12) and the observation-window register schema as reviewed data; pass required verify through the owner's App.
 - [x] Alpha 2A · W02-CLEANUP / MET-ENFORCE-023 · Publish the W02 notes errata (native-profile-v3, I06 v2) and the PERF-032-F checks as reviewed data; pass required verify through the owner's App.
-- [ ] Alpha 2 · PERF-035-F / MET-PERF-037 · Close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; owner transport approval; pass required verify through the owner's App.
+- [x] Alpha 2 · PERF-035-F / MET-PERF-037 · Close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; owner transport approval; pass required verify through the owner's App.
+- [ ] Alpha 2A · W03-AMEND / MET-ENFORCE-024 · Publish the W03 plan v2 (the owner's HE-002 decisions), the operator -> harness-engineering buildArtifact edge record and the I05 v3 supplementary vectors after four independent review rounds; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
