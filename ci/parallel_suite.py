@@ -1,9 +1,11 @@
 """Run the outer packet suite on a pinned number of worker processes inside the one pytest command (MET-PERF-035).
 
 The packet's acceptance argv is unchanged; pyproject.toml's pytest addopts load this module (-p ci.parallel_suite).
-Only an invocation whose own arguments are all file or directory paths runs in parallel. An option, an @argument file
-or a node ID on the command line keeps pytest's serial loop, because workers re-read only the ini file and the
-environment. Interpreter flags (-W, -X, -B, ...) are passed on to every worker. The parent collects as usual and assigns
+Only an invocation started as `python [interpreter options] -m pytest <paths>`, with no in-process plugins, runs in
+parallel: its own pytest arguments must all be file or directory paths, because workers re-read only the ini file and
+the environment, and its interpreter options are passed to every worker verbatim (from sys.orig_argv). An option, an
+@argument file or a node ID on the command line, another way of starting pytest (the pytest script, pytest.main), or
+plugins handed to pytest.main keep pytest's serial loop (MET-PERF-037, review R3-01). The parent collects as usual and assigns
 whole test files to WORKERS worker processes by the pinned per-file weights. Each worker runs `python -m pytest -p
 ci.parallel_suite <its files>` in the same checkout and environment. It streams pytest's own serialized reports, and
 the warnings recorded while its tests run, to a private file. Worker output never reaches the parent's output, so the
@@ -13,7 +15,11 @@ forwarded warning through pytest_warning_recorded.
 
 PARENT_NODES run last, in the parent, with the standard protocol, after every worker has reported. These are the
 tests that read the complete session's own results, and the tests that write evidence lines past output capture, so
-that those lines reach the outer output.
+that those lines reach the outer output. An entry names a test function; every parametrization of it runs in the parent.
+A worker refuses to write past capture: pytest's own route for that (the capture manager's global_and_fixture_disabled,
+behind capsys/capfd/capsysbinary/capfdbinary.disabled(), conftest writers and live logging) fails the test there and
+fails the session (MET-PERF-037, review R3-02). Writes that bypass pytest (sys.__stdout__, os.write(1, ...)) are not
+intercepted; the layer test's AST guard lists such test functions instead.
 
 Fail closed. The session cannot pass unless all of the following hold:
 - each worker collected exactly its assigned node IDs, in order;
@@ -34,6 +40,7 @@ whose parent dies exits. Every invocation is serial when WORKERS is 1. Each work
 files than a serial run, so warnings that depend on process state (a cached warn, a ResourceWarning's tracemalloc
 hint) can differ from a serial run.
 """
+import contextlib
 import importlib
 import json
 import os
@@ -76,6 +83,28 @@ def _write(record):
     _sink.write(json.dumps(record) + "\n")
 
 
+def parent_node(nodeid):
+    """Whether a node runs in the parent: its test function, without a parametrization suffix, is in PARENT_NODES."""
+    return nodeid.split("[", 1)[0] in PARENT_NODES
+
+
+def interpreter_options():
+    """This interpreter's own options, verbatim, when it was started as `python [options] -m pytest ...`; else None."""
+    argv = list(getattr(sys, "orig_argv", ()))
+    if "-m" not in argv[1:]:
+        return None
+    index = argv.index("-m", 1)
+    return argv[1:index] if argv[index + 1:index + 2] == ["pytest"] else None
+
+
+@contextlib.contextmanager
+def _refuse_live_output(self):
+    """Worker only: writing past output capture would land in the worker log, not the outer output."""
+    _write({"kind": "live-output"})
+    pytest.fail("parallel suite: a worker test wrote past output capture; list it in PARENT_NODES")
+    yield
+
+
 def _watch_parent(parent):
     """Worker only: exit as soon as the parent pytest is gone, so that no worker outlives a killed session."""
     while True:
@@ -91,8 +120,10 @@ def pytest_configure(config):
     _inherited_serial = bool(os.environ.get(SERIAL_ENV))
     os.environ[SERIAL_ENV] = "1"
     if assignment:
-        _sink, _config = open(assignment + ".reports.jsonl", "x", buffering=1), config
-        record = json.loads(Path(assignment).read_text())
+        _sink, _config = open(assignment + ".reports.jsonl", "x", buffering=1, encoding="utf-8"), config
+        record = json.loads(Path(assignment).read_text(encoding="utf-8"))
+        from _pytest.capture import CaptureManager
+        CaptureManager.global_and_fixture_disabled = _refuse_live_output
         config._planeon_parallel_assigned = record["nodeids"]
         threading.Thread(target=_watch_parent, args=(record["parent"],), daemon=True).start()
 
@@ -108,9 +139,9 @@ def pytest_collection_modifyitems(session, config, items):
     assigned = getattr(config, "_planeon_parallel_assigned", None)
     if assigned is None:
         return
-    parent_only = [item for item in items if item.nodeid in PARENT_NODES]
+    parent_only = [item for item in items if parent_node(item.nodeid)]
     if parent_only:
-        items[:] = [item for item in items if item.nodeid not in PARENT_NODES]
+        items[:] = [item for item in items if not parent_node(item.nodeid)]
         config.hook.pytest_deselected(items=parent_only)
     if [item.nodeid for item in items] != assigned:
         _write({"kind": "mismatch"})
@@ -176,15 +207,17 @@ def worker_exit_problem(name, code, failed):
 
 
 def paths_only(config):
-    """Workers re-read only the ini file and the environment, so an option, an @file or a node ID keeps the run serial."""
-    return all(not str(arg).startswith(("-", "@")) and "::" not in str(arg) for arg in config.invocation_params.args)
+    """Workers re-read only the ini file and the environment, so an option, an @file or a node ID keeps the run serial,
+    and so do in-process plugins (pytest.main(plugins=...)), which a worker could not reproduce."""
+    return (not config.invocation_params.plugins
+            and all(not str(arg).startswith(("-", "@")) and "::" not in str(arg) for arg in config.invocation_params.args))
 
 
 def _plan(files, workers, root):
     """Longest first by pinned weight onto the least-loaded worker; unknown files weigh by their node count."""
     # Weights only balance the workers; a project without the table (a test's scratch tree) weighs by node count.
     table = root / WEIGHTS_PATH
-    weights = json.loads(table.read_text()) if table.is_file() else {}
+    weights = json.loads(table.read_text(encoding="utf-8")) if table.is_file() else {}
     weight = {name: float(weights.get(name, 0.05 * len(nodes))) for name, nodes in files.items()}
     buckets = [[0.0, []] for _ in range(workers)]
     for name in sorted(files, key=lambda name: (-weight[name], name)):
@@ -228,17 +261,18 @@ def pytest_runtestloop(session):
     global _seen
     config = session.config
     diagnostics = getattr(config, DIAGNOSTICS_KEY, None)
+    options = interpreter_options()
     if (_sink is not None or WORKERS == 1 or _inherited_serial or config.option.collectonly
-            or not session.items or not paths_only(config)):
+            or not session.items or not paths_only(config) or options is None):
         return None
     if session.testsfailed and not config.option.continue_on_collection_errors:
         raise session.Interrupted("%d error%s during collection" % (session.testsfailed, "s" if session.testsfailed != 1 else ""))
     items = {item.nodeid: item for item in session.items}
     if len(items) != len(session.items):
         _fail(session, ["%d duplicate node IDs" % (len(session.items) - len(items))])
-    files, parent_items = {}, [item for item in session.items if item.nodeid in PARENT_NODES]
+    files, parent_items = {}, [item for item in session.items if parent_node(item.nodeid)]
     for item in session.items:
-        if item.nodeid not in PARENT_NODES:
+        if not parent_node(item.nodeid):
             files.setdefault(item.nodeid.split("::", 1)[0], []).append(item.nodeid)
     work = Path(tempfile.mkdtemp(prefix="planeon-parallel-suite."))
     workers, problems, owner = [], [], {}
@@ -261,6 +295,9 @@ def pytest_runtestloop(session):
                     nodeid = report.nodeid
                 elif kind == "warning":
                     nodeid = record["nodeid"]
+                elif kind == "live-output":
+                    problems.append("%s: a test wrote past output capture in a worker" % worker["name"])
+                    continue
                 else:
                     problems.append("%s: %r record" % (worker["name"], kind))
                     continue
@@ -299,11 +336,11 @@ def pytest_runtestloop(session):
             assignment = work / ("worker%d.json" % index)
             nodeids = [node for name in names for node in files[name]]
             owner.update((node, assignment.name) for node in nodeids)
-            assignment.write_text(json.dumps({"nodeids": nodeids, "parent": os.getpid()}))
+            assignment.write_text(json.dumps({"nodeids": nodeids, "parent": os.getpid()}), encoding="utf-8")
             log = open(work / ("worker%d.log" % index), "wb")
             # Load this plugin explicitly too, so a worker never depends on the project configuration to report.
-            # The interpreter's own flags (-W, -X, -B, ...) are passed on, as they are not pytest arguments.
-            argv = [sys.executable, *subprocess._args_from_interpreter_flags(), "-m", "pytest", "-p", __name__, *names]
+            # The interpreter's own options are passed on verbatim, as they are not pytest arguments.
+            argv = [sys.executable, *options, "-m", "pytest", "-p", __name__, *names]
             process = subprocess.Popen(argv, cwd=str(config.rootpath),
                                        env={**os.environ, ASSIGNMENT_ENV: str(assignment)},
                                        stdout=log, stderr=subprocess.STDOUT)

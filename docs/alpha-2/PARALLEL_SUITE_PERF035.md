@@ -11,9 +11,11 @@ evenly over about 100 test files, and every packet adds to it. Owner decisions (
 - keep every validator, authority, freshness property and refusal unchanged.
 
 - **Parallel suite.** `ci/parallel_suite.py` is loaded by the pytest `addopts` in `pyproject.toml`.
-  - Only an invocation whose own arguments are all file or directory paths runs in parallel, as acceptance argv 63 does.
-    An option, an `@` argument file or a node ID keeps pytest's serial loop, because workers re-read only the ini file
-    and the environment. Interpreter flags (`-W`, `-X`, `-B`, ...) are passed on to every worker.
+  - Only an invocation started as `python [interpreter options] -m pytest <paths>`, with no in-process plugins, runs in
+    parallel, as acceptance argv 63 does. Its own pytest arguments must all be file or directory paths, because workers
+    re-read only the ini file and the environment; its interpreter options are passed to every worker verbatim, from
+    `sys.orig_argv`. An option, an `@` argument file or a node ID, another way of starting pytest (the `pytest` script,
+    `pytest.main`), or plugins handed to `pytest.main` keep pytest's serial loop (MET-PERF-037, review R3-01).
   - The parent collects as usual and assigns whole test files to 4 worker processes, by the pinned weights in
     `ci/parallel_suite_weights.json`.
   - Each worker runs `python -m pytest -p ci.parallel_suite <its files>` in the same checkout and sandbox. It streams
@@ -29,8 +31,14 @@ evenly over about 100 test files, and every packet adds to it. Owner decisions (
       which reads the whole session's results;
     - the two tests that print evidence lines past output capture (`LINUX_KIT_SOURCE_PACKAGE=`,
       `LINUX_NATIVE_INTEGRATION=`), so that those lines reach the outer output.
-    Two AST guards keep this complete. One lists every test, conftest, helper or hook implementation that touches
-    session-level state. The other requires `PARENT_NODES` to be exactly the live-output writers plus the proof.
+    An entry names a test function; every parametrization of it runs in the parent. A worker refuses to write past
+    output capture: pytest's own route for that (the capture manager's `global_and_fixture_disabled`, behind
+    `capsys`/`capfd`/`capsysbinary`/`capfdbinary.disabled()`, fixtures, class methods, conftest writers and live
+    logging) fails the test in the worker and fails the session (MET-PERF-037, review R3-02). Two AST guards add to
+    this. One lists every test, conftest, helper or hook implementation that touches session-level state. The other
+    requires `PARENT_NODES` to be exactly the module-level test functions that write past capture, directly or through
+    a helper of the same module, plus the proof; it is the only guard for writes that bypass pytest (`sys.__stdout__`,
+    `os.write(1, ...)`).
   - Fail closed. The session fails unless all of the following hold:
     - each worker collected exactly its assigned node list;
     - every report and warning came from the worker that owns its node;
