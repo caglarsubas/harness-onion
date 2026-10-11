@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-023
+## Current source preparation — MET-PERF-037
+
+PERF-035-F (MET-PERF-037): parallel-suite follow-up closing review findings R3-01 and R3-02 (ci/parallel_suite.py,
+transport change under the owner's approval). Alpha2 OPEN; 225 accepted plus PERF-037 only.
+
+## Historical W02-CLEANUP source preparation — MET-ENFORCE-023
 
 W02-CLEANUP (MET-ENFORCE-023): W02 notes errata for native-profile-v3 and I06 v2, and the PERF-032-F checks;
 DATA_CHECK_ONLY, no version ripple. Alpha2 OPEN; 224 accepted plus ENFORCE-023 only.
@@ -1297,3 +1302,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 223 | `MET-ENFORCE-021` | `Harness-Engineering` | LIC-HOST: license-policy amendment LIC-HOST-A1 (reviewed overlay, base byte-identical); DATA_CHECK_ONLY |
 | 224 | `MET-ENFORCE-022` | `Harness-Engineering` | W04-0: independent enforcement test plan and observation-window register schema; DATA_CHECK_ONLY |
 | 225 | `MET-ENFORCE-023` | `Harness-Engineering` | W02-CLEANUP: W02 notes errata (native-profile-v3, I06 v2) and PERF-032-F checks; DATA_CHECK_ONLY |
+| 226 | `MET-PERF-037` | `Harness-Engineering` | PERF-035-F: parallel-suite follow-up (review R3-01, R3-02) |
