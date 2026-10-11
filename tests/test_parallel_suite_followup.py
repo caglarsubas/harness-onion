@@ -781,7 +781,9 @@ _LIVE = {
 def _r3_scratch(tmp_path, live=None, extra=None):
     files = {"tests/test_x.py": "import os, sys\ndef test_digits():\n"
                                 "    assert sys.get_int_max_str_digits() == int(os.environ.get('SCRATCH_DIGITS', '4300'))\n"
-                                "def test_more():\n    pass\n",
+                                "def test_where():\n    import ci.parallel_suite as suite\n"
+                                "    expect = os.environ.get('SCRATCH_EXPECT')\n"
+                                "    assert expect is None or (suite._sink is not None) == (expect == 'worker')\n",
              "tests/test_y.py": "def test_y():\n    pass\n"}
     if live:
         files["tests/test_live.py"] = _LIVE[live]
@@ -803,11 +805,9 @@ def _r3_run(tmp_path, argv_tail, env_extra=None, live=None, extra=None):
     return _subprocess.run([_sys.executable, *argv_tail], cwd=tmp_path, env=env, capture_output=True, text=True, timeout=180)
 
 
-def _ran_in_parallel(tmp_path):
-    return bool(list((tmp_path / "tmp").glob("planeon-parallel-suite.*"))) or "parallel suite" in ""
-
-
 def test_interpreter_options_are_taken_verbatim_from_the_command_line(monkeypatch):
+    main = _sys.modules["__main__"]
+    monkeypatch.setattr(main, "__spec__", SimpleNamespace(name="pytest.__main__"), raising=False)
     for argv, expected in ((["/py", "-m", "pytest", "tests"], []),
                            (["/py", "-X", "int_max_str_digits=0", "-W", "error", "-m", "pytest", "tests"],
                             ["-X", "int_max_str_digits=0", "-W", "error"]),
@@ -815,6 +815,12 @@ def test_interpreter_options_are_taken_verbatim_from_the_command_line(monkeypatc
                            (["/venv/bin/pytest", "tests"], None), ([], None)):
         monkeypatch.setattr(_sys, "orig_argv", argv)
         assert SUITE.interpreter_options() == expected, argv
+    # A script that calls pytest.main is not `-m pytest`, whatever its argv says (review T1-2).
+    monkeypatch.setattr(_sys, "orig_argv", ["/py", "run.py", "-m", "pytest", "tests"])
+    monkeypatch.setattr(main, "__spec__", None, raising=False)
+    assert SUITE.interpreter_options() is None
+    monkeypatch.setattr(main, "__spec__", SimpleNamespace(name="other.__main__"), raising=False)
+    assert SUITE.interpreter_options() is None
 
 
 def test_in_process_plugins_keep_the_run_serial():
@@ -835,19 +841,29 @@ def test_an_interpreter_option_outside_the_flag_helper_reaches_every_worker(tmp_
     (tmp_path / "s").mkdir()
     (tmp_path / "p").mkdir()
     flags = ["-X", "int_max_str_digits=0"]
-    serial = _r3_run(tmp_path / "s", [*flags, "-m", "pytest", "tests"], {"SCRATCH_DIGITS": "0", SUITE.SERIAL_ENV: "1"})
-    parallel = _r3_run(tmp_path / "p", [*flags, "-m", "pytest", "tests"], {"SCRATCH_DIGITS": "0"})
+    serial = _r3_run(tmp_path / "s", [*flags, "-m", "pytest", "tests"],
+                     {"SCRATCH_DIGITS": "0", SUITE.SERIAL_ENV: "1", "SCRATCH_EXPECT": "parent"})
+    # The parallel run must really use workers (review T1-N1).
+    parallel = _r3_run(tmp_path / "p", [*flags, "-m", "pytest", "tests"], {"SCRATCH_DIGITS": "0", "SCRATCH_EXPECT": "worker"})
     assert serial.returncode == parallel.returncode == 0, parallel.stdout[-2000:]
     assert "INCOMPLETE" not in parallel.stdout
+
+
+def test_a_script_that_names_m_pytest_stays_serial(tmp_path):
+    # `python run.py -m pytest tests` is not `-m pytest`: run.py calls pytest.main itself (review T1-2).
+    extra = {"run.py": "import sys, pytest\nsys.exit(pytest.main(['tests']))\n"}
+    result = _r3_run(tmp_path, ["run.py", "-m", "pytest", "tests"], {"SCRATCH_EXPECT": "parent"}, extra=extra)
+    assert result.returncode == 0, result.stdout[-2000:]
 
 
 def test_an_in_process_plugin_run_stays_serial_and_passes(tmp_path):
     extra = {"tests/test_z.py": "def test_uses_the_plugin_fixture(special):\n    assert special == 42\n",
              "run.py": "import sys, pytest\nclass Plugin:\n    @pytest.fixture\n    def special(self):\n        return 42\n"
                        "sys.exit(pytest.main(['tests'], plugins=[Plugin()]))\n"}
-    result = _r3_run(tmp_path, ["run.py"], extra=extra)
+    result = _r3_run(tmp_path, ["run.py"], {"SCRATCH_EXPECT": "parent"}, extra=extra)
     assert result.returncode == 0, result.stdout[-2000:]
     assert not list((tmp_path / "tmp").glob("planeon-parallel-suite.*"))
+    # paths_only's own plugins rule is checked directly in test_in_process_plugins_keep_the_run_serial.
 
 
 @pytest.mark.parametrize("live", sorted(_LIVE))

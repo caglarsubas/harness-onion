@@ -3,9 +3,10 @@
 The packet's acceptance argv is unchanged; pyproject.toml's pytest addopts load this module (-p ci.parallel_suite).
 Only an invocation started as `python [interpreter options] -m pytest <paths>`, with no in-process plugins, runs in
 parallel: its own pytest arguments must all be file or directory paths, because workers re-read only the ini file and
-the environment, and its interpreter options are passed to every worker verbatim (from sys.orig_argv). An option, an
-@argument file or a node ID on the command line, another way of starting pytest (the pytest script, pytest.main), or
-plugins handed to pytest.main keep pytest's serial loop (MET-PERF-037, review R3-01). The parent collects as usual and assigns
+the environment, and its interpreter options are passed to every worker verbatim (from sys.orig_argv; the running
+__main__ must be pytest's own). An option, an @argument file or a node ID on the command line, another way of starting
+pytest (the pytest script, a script calling pytest.main), or plugins handed to pytest.main keep pytest's serial loop
+(MET-PERF-037, review R3-01). The parent collects as usual and assigns
 whole test files to WORKERS worker processes by the pinned per-file weights. Each worker runs `python -m pytest -p
 ci.parallel_suite <its files>` in the same checkout and environment. It streams pytest's own serialized reports, and
 the warnings recorded while its tests run, to a private file. Worker output never reaches the parent's output, so the
@@ -16,10 +17,13 @@ forwarded warning through pytest_warning_recorded.
 PARENT_NODES run last, in the parent, with the standard protocol, after every worker has reported. These are the
 tests that read the complete session's own results, and the tests that write evidence lines past output capture, so
 that those lines reach the outer output. An entry names a test function; every parametrization of it runs in the parent.
-A worker refuses to write past capture: pytest's own route for that (the capture manager's global_and_fixture_disabled,
-behind capsys/capfd/capsysbinary/capfdbinary.disabled(), conftest writers and live logging) fails the test there and
-fails the session (MET-PERF-037, review R3-02). Writes that bypass pytest (sys.__stdout__, os.write(1, ...)) are not
-intercepted; the layer test's AST guard lists such test functions instead.
+A worker refuses one route past capture: any call that looks up the capture manager's global_and_fixture_disabled after
+the worker has configured (capsys/capfd/capsysbinary/capfdbinary.disabled() in tests, fixtures and class methods, a
+conftest calling capman.global_and_fixture_disabled() while tests run, live logging) writes a refusal record and fails
+the test, so the session fails (MET-PERF-037, review R3-02). Not refused: a reference to that method bound before the
+worker configured (as the repository's own conftest.py diagnostics sink does, on purpose), suspend_global_capture()
+and its relatives, --setup-show and pdb. Writes to sys.__stdout__ or file descriptor 1 are captured by fd capture
+like any other output; they are not live output. The layer tests' AST guards, and review, cover what is not refused.
 
 Fail closed. The session cannot pass unless all of the following hold:
 - each worker collected exactly its assigned node IDs, in order;
@@ -89,7 +93,11 @@ def parent_node(nodeid):
 
 
 def interpreter_options():
-    """This interpreter's own options, verbatim, when it was started as `python [options] -m pytest ...`; else None."""
+    """This interpreter's own options, verbatim, when it was started as `python [options] -m pytest ...`; else None.
+    The running __main__ must be pytest's own: a script that calls pytest.main is not `-m pytest`, whatever its argv."""
+    main = getattr(sys.modules.get("__main__"), "__spec__", None)
+    if getattr(main, "name", None) != "pytest.__main__":
+        return None
     argv = list(getattr(sys, "orig_argv", ()))
     if "-m" not in argv[1:]:
         return None

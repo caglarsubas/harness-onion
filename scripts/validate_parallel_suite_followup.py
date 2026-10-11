@@ -23,7 +23,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/parallel-suite-followup-authority.json"
-AUTHORITY_SHA256 = "d18af0d396018b0f5767b2ea47696cbdd8512724b519ffbf1e366a367dd39106"
+AUTHORITY_SHA256 = "27f968342c23280d78b38f558f264949271be64946850354da7ebe947c94e8a2"
 VALIDATOR_PATH = "scripts/validate_parallel_suite_followup.py"
 BASE_COMMIT = "6f813b787dc96a50e68f21ea429a8603c96d357c"
 NEW_PACKET = "MET-PERF-037"
@@ -345,10 +345,11 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # <paths>` without in-process plugins runs in parallel, with the interpreter options passed to workers verbatim and
 # utf-8 text I/O (R3-01); PARENT_NODES match every parametrization, and a worker refuses to write past output capture
 # and fails the session (R3-02). Repository bytes are read only through reviewed_bytes, so a later bridged successor
-# projects its own edits away first. The exact reviewed text of the parallel suite is pinned, and its helpers are
-# executed from those bytes and checked here; the scratch-tree behaviour tests live in this layer's test.
+# projects its own edits away first. The exact reviewed text of the parallel suite is pinned; parent_node and
+# paths_only are executed from those bytes and checked here, while interpreter_options and the worker's live-output
+# refusal are fixed by the pin and exercised by this layer's scratch-tree tests.
 PARALLEL_SUITE = "ci/parallel_suite.py"
-SUITE_SHA256 = "c98d99b19788058d940f36a3ac154ba259ddd4a84706f1f9b7f38fdef9f335d6"
+SUITE_SHA256 = "51f18dadfcf6a650a93a547de4dea79fdfb4c3383e6a093bb5ade22eaadd4051"
 PARENT_NODES_EXPECTED = frozenset({
     "tests/linux_runner/test_build_and_predecessors.py::test_full_predecessor_suites_and_validators_remain_green",
     "tests/linux_runner/test_build_and_predecessors.py::test_byte_identical_package_and_source_inventory",
