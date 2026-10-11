@@ -11,12 +11,18 @@
  },
  "closes": "AF2-I05-1 (architecture/i05-gate-channel-v3/status.json:58)",
  "configs": {
-  "ACTIVE": "the ACTIVE configuration of the v3 vectors file"
+  "ACTIVE": {
+   "vectorsPath": "architecture/i05-gate-channel-v3/vectors.json",
+   "key": [
+    "configs",
+    "ACTIVE"
+   ]
+  }
  },
  "transcripts": [
   {
    "id": "S01",
-   "intent": "I05-4: a second STORAGE_FAIL_AFTER replaces a pending first one (AFTER 0, then AFTER 2): every non-injection output and the final snapshot equal S02's",
+   "intent": "I05-4: a second STORAGE_FAIL_AFTER replaces a pending first one (AFTER 0, then AFTER 1): every non-injection output and the final snapshot equal S02's",
    "config": "ACTIVE",
    "events": [
     {
@@ -59,7 +65,7 @@
     },
     {
      "type": "STORAGE_FAIL_AFTER",
-     "after": 2
+     "after": 1
     },
     {
      "type": "FRAME",
@@ -109,7 +115,7 @@
     {
      "response": {
       "result": "OK",
-      "state": "CLOSED",
+      "state": "HELD",
       "deniedActionIds": [
        1
       ]
@@ -170,12 +176,12 @@
       "CLOSED"
      ],
      [
-      "DENIED",
-      1
-     ],
-     [
       "INVALIDATED",
       "STORAGE_FAILURE",
+      "HELD"
+     ],
+     [
+      "RESTARTED",
       "HELD"
      ]
     ],
@@ -190,7 +196,7 @@
   },
   {
    "id": "S02",
-   "intent": "I05-4 reference: AFTER 2 alone",
+   "intent": "I05-4 reference: AFTER 1 alone (the CLOSED record succeeds; the INVALIDATED storage-failure path follows the failed DENIED record)",
    "config": "ACTIVE",
    "events": [
     {
@@ -229,7 +235,7 @@
     },
     {
      "type": "STORAGE_FAIL_AFTER",
-     "after": 2
+     "after": 1
     },
     {
      "type": "FRAME",
@@ -278,7 +284,7 @@
     {
      "response": {
       "result": "OK",
-      "state": "CLOSED",
+      "state": "HELD",
       "deniedActionIds": [
        1
       ]
@@ -339,12 +345,12 @@
       "CLOSED"
      ],
      [
-      "DENIED",
-      1
-     ],
-     [
       "INVALIDATED",
       "STORAGE_FAILURE",
+      "HELD"
+     ],
+     [
+      "RESTARTED",
       "HELD"
      ]
     ],
@@ -358,7 +364,7 @@
   },
   {
    "id": "S03",
-   "intent": "I05-4: the replacement also holds the other way (AFTER 2, then AFTER 0): every non-injection output and the final snapshot equal S04's",
+   "intent": "I05-4: the replacement also holds the other way (AFTER 1, then AFTER 0): every non-injection output and the final snapshot equal S04's",
    "config": "ACTIVE",
    "events": [
     {
@@ -397,7 +403,7 @@
     },
     {
      "type": "STORAGE_FAIL_AFTER",
-     "after": 2
+     "after": 1
     },
     {
      "type": "STORAGE_FAIL_AFTER",
@@ -531,7 +537,7 @@
   },
   {
    "id": "S04",
-   "intent": "I05-4 reference: AFTER 0 alone",
+   "intent": "I05-4 reference: AFTER 0 alone (the CLOSED record fails)",
    "config": "ACTIVE",
    "events": [
     {
@@ -698,7 +704,7 @@
   },
   {
    "id": "S05",
-   "intent": "Injection queue order (model-defined): NEXT, NEXT, then AFTER 0 fails the third record attempt, because the AFTER failure queues behind pending NEXT failures",
+   "intent": "Injection accumulation (model-defined): after NEXT, NEXT, an AFTER 0 failure is added to the two pending NEXT failures rather than replacing either, so three consecutive record attempts fail",
    "config": "ACTIVE",
    "events": [
     {

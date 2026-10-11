@@ -58,8 +58,8 @@
   },
   {
    "id": "Q-HE2-F",
-   "selected": "a",
-   "summary": "Plan changes: the HE-002/HE-002B/HE-002C split; the I05 and I07 channel substrate moves to HE-003; HE-002C owns the gate's single journal format, I07 records included; a new HE-002S takes SEC-4 and HI-7 for EFFECT_GATE; the vehicle is the meta packet W03-AMEND."
+   "selected": "all-five",
+   "summary": "Plan changes (all five, as the owner answered): the HE-002/HE-002B/HE-002C split; the I05 and I07 channel substrate moves to HE-003; HE-002C owns the gate's single journal format, I07 records included; a new HE-002S takes SEC-4 and HI-7 for EFFECT_GATE; the vehicle is the meta packet W03-AMEND."
   },
   {
    "id": "Q-HE2-G",
@@ -384,8 +384,8 @@
   },
   {
    "id": "I05-6",
-   "source": "architecture/i05-gate-channel-v3/README.md:46-64",
-   "text": "The I05 channel substrate: the AF_UNIX SOCK_SEQPACKET listener, one channel per generation, per-frame custody and the 2-second answer bound.",
+   "source": "architecture/i05-gate-channel-v3/README.md:46-52,63-64",
+   "text": "The I05 channel substrate: the AF_UNIX SOCK_SEQPACKET listener with one channel per generation, per-frame kernel custody, and the 2-second answer bound.",
    "packets": [
     "HE-003"
    ],
@@ -477,16 +477,25 @@
   {
    "id": "I07-3",
    "source": "architecture/i07-policy-write-v3/README.md:21",
-   "text": "The I07 v3 PolicyGate reproduces every I07 v3 vector exactly: kind, render, outcome, frame and byte checks, and transcripts.",
+   "text": "The I07 v3 frame and byte checks pass against the I07 v3 schema (the error-code prefix compared).",
+   "packets": [
+    "HE-002"
+   ],
+   "scope": "W03"
+  },
+  {
+   "id": "I07-4",
+   "source": "architecture/i07-policy-write-v3/README.md:21",
+   "text": "The I07 v3 PolicyGate reproduces every I07 v3 kind, render and outcome check and every transcript exactly.",
    "packets": [
     "HE-002B"
    ],
    "scope": "W03"
   },
   {
-   "id": "I07-4",
-   "source": "architecture/i07-policy-write-v3/README.md:43-46",
-   "text": "The I07 channel substrate: one writer session on the maintenance socket, per-frame custody and strict lockstep.",
+   "id": "I07-5",
+   "source": "architecture/i07-policy-write-v3/README.md:43-44",
+   "text": "The I07 channel substrate: one writer session at a time on the maintenance socket and per-frame custody.",
    "packets": [
     "HE-003"
    ],
@@ -505,7 +514,7 @@
   {
    "id": "EDGE-1",
    "source": "docs/alpha-2/ENFORCEMENT_INTEGRATION.md:111-113",
-   "text": "Register the operator -> harness-engineering buildArtifact edge for every harness-onion file R10 holds, before R10 uses it.",
+   "text": "Register the operator -> harness-engineering buildArtifact edge for every harness-onion file R10 holds, before R10 uses it; a later file, or another version of a listed file, needs a new registry record first.",
    "packets": [
     "W03-AMEND"
    ],
@@ -993,7 +1002,7 @@
  ],
  "notClaimed": [
   "No module logic exists in R10; HE-001 merged the host-enforcement scaffold only.",
-  "No host-enforcement artifact is built for or enrolled on a host.",
+  "No host-enforcement artifact is released or enrolled on a host; the verifier builds the scaffold binaries only to check them.",
   "E01-E12 stay OPEN_UNPROVEN."
  ]
 }
