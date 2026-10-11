@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-037
+## Current source preparation — MET-ENFORCE-024
+
+W03-AMEND (MET-ENFORCE-024): W03 plan v2 with the owner's HE-002 decisions Q-HE2-A to Q-HE2-G (v1 stays
+byte-identical), the operator -> harness-engineering buildArtifact edge registry record and the supplementary I05 v3
+vectors (AF2-I05-1). Alpha2 OPEN; 226 accepted plus MET-ENFORCE-024 only.
+
+## Historical PERF-035-F source preparation — MET-PERF-037
 
 PERF-035-F (MET-PERF-037): parallel-suite follow-up closing review findings R3-01 and R3-02 (ci/parallel_suite.py,
 transport change under the owner's approval). Alpha2 OPEN; 225 accepted plus PERF-037 only.
@@ -1063,6 +1069,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 98. `MET-ENFORCE-022`: publish the W04-0 independent enforcement test plan and observation-window register schema as reviewed data; source only.
 99. `MET-ENFORCE-023`: publish the W02 notes errata (native-profile-v3, I06 v2) and the PERF-032-F checks as reviewed data; source only.
 100. `MET-PERF-037`: close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; source only.
+101. `MET-ENFORCE-024`: publish the W03 plan v2 (the owner's HE-002 decisions), the operator -> harness-engineering buildArtifact edge record and the I05 v3 supplementary vectors; data only.
 
 ## Testing, verification, and acceptance
 

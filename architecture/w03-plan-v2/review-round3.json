@@ -1,0 +1,131 @@
+{
+ "schemaVersion": "harness.planeon.ai/w03-amendment-review/v1",
+ "kind": "w03-amendment-review",
+ "round": 3,
+ "reviewDate": "2026-10-11",
+ "subjectCommit": "1a4430dd12c4639a850109bdfbfb0fd8a3e4c0ef",
+ "subjectTree": "260a651bf98727332c15676982eea22a1d88a50b",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "C1",
+   "severity": "MINOR",
+   "location": "architecture/i05-gate-channel-v3-supplement/vectors.json S06 intent (line 873), the same text in README.md's table (line 20), and README.md line 10 ('here adds five transcripts')",
+   "finding": "Traced in the pinned model (scripts/trace_s06.py). The ARM run takes the first two queued failures: ARM fails clean (the AFTER-triggered position) and INVALIDATED fails torn, leaving TORN in the journal. The GENERATION_STATUS reads journalDigest over [BIND, TORN]. CLOSE_GENERATION on the HELD generation then writes no record at all (response OK, state HELD, deniedActionIds []). The remaining queued failure is taken by GATE_RESTART: RESTARTED fails, INVALIDATED succeeds, and the final journal is [BIND, TORN, INVALIDATED]. So the intent's 'the queued remainder spills into the CLOSE run' is wrong: the remainder spills into the restart, and S06, unlike S01-S04, carries a pending failure across GATE_RESTART. That is consistent with T104 and harmless to what S06 pins, because the distinguishing read happens before the restart. Separately, README line 10 still says the file adds five transcripts; there are six.",
+   "requiredChange": "Change S06's intent (and the README row) to say the remainder fails the restart's RESTARTED record, because CLOSE_GENERATION on a HELD generation writes no record, as T104 does for a pending NEXT. Optionally say the pinned read is before the restart. Change 'five transcripts' to 'six transcripts'. Text only; no expected value changes."
+  },
+  {
+   "id": "C2",
+   "severity": "NOTE",
+   "location": "~/.local/state/harness-onion-ci/tools/w03amend/pkt/semantic_block.py (draft, not part of this subject)",
+   "finding": "The draft covers decisions, plan changes, edge identity and counts, provider digests, acyclicity, supplement replay, equals and S02 != S04. Gaps, for the packet round: (1) validate_edge_registry does not close the record's keys or each artifact's keys. It does not check provider-path uniqueness (only consumer paths), the closed relation and status sets, that providerCommit is null with providerPacket MET-ENFORCE-024 only for the supplement and a 40-hex commit otherwise, or the DERIVED entry's consumerSha256 and derivation. It does not check modes against the provider files' executable bits, notArtifacts, or the stated fact that harness-engineering has no edge as consumer. (2) validate_supplement does not close the top-level and transcript keys, the evidenceClass and closes values, or that only S01 and S03 carry equals. A missing 'config' raises KeyError outside _bound. It does not re-check that S06 refutes the prepend variant (the builder does; optional). (3) FROZEN_PATHS holds only the v1 plan. architecture/repositories.yaml, which the record promises is unedited, plus the v1 README and scripts/w03_plan.py, could be frozen as well (all three are pinned by ERA anyway). (4) Make sure ERA_PINS includes the v2 plan, the v2 model, the three READMEs, the edge record and the supplement. (5) _graph_edges keeps conditional whenCapability edges. That is stricter than 'unconditional' but conservative, which is fine; state it.",
+   "requiredChange": "Consider (1)-(5) when finishing the layer. Not part of this subject."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "A4",
+   "round1Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "S05 states accumulation exactly: the merge variant fails S05 and the prepend variant passes it, as its wording allows. S06 now pins the queue order: both the prepend and the merge variants fail S06, while the model reproduces it."
+  },
+  {
+   "id": "A9",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "The derived table now names S05 and S06 (Q-HE2-E (b), R10-L02's cases stated at the source) and the supplement as the 13th HE-002 edge entry (Q-HE2-A)."
+  },
+  {
+   "id": "A11",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "The artifact label, modes, providerCommit null with providerPacket, and notArtifacts were already present in round 2. Round 3 fixes the two wording points (see B3). The supplement entry's sha256 a0215e53... equals the subject's vectors.json."
+  },
+  {
+   "id": "B1",
+   "round2Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "S06 uses the round-2 probe events and replays exactly. Per my re-run, S06 refutes the prepend variant, and the builder asserts the same. The README's general statement is now correct: the order is not visible within one failure run but shows in the journalDigest read between runs. The S06 intent misstates which event takes the queued remainder; see C1."
+  },
+  {
+   "id": "B2",
+   "round2Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "The layer draft's validate_supplement compares the final snapshots for S02 != S04 (semantic_block.py:246), and its equals check includes the final snapshot."
+  },
+  {
+   "id": "B3",
+   "round2Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "rules[2] now says harness-engineering consumes no repository in any graph, so the edge cannot close a cycle, and that the layer checks every unconditional graph. This holds: harness-engineering appears in architecture/repositories.yaml only in the repository list (line 137), in no edge. The notArtifacts reason now says no byte of the classifier or its inputs is in R10."
+  },
+  {
+   "id": "B4",
+   "round2Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "As A9."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject identity: branch head 1a4430d tree 260a651b, parent c6c2150; a2eab93..1a4430d adds the same 7 files; c6c2150..1a4430d changes 5 (plan.json and w03_plan_v2.py unchanged)",
+   "result": "PASS"
+  },
+  {
+   "check": "Reproducibility: ran the updated build_amend.py (git reads redirected to the worktree, including its prepend assertion) and write_docs.py on an a2eab93 archive",
+   "result": "PASS: all 7 files byte-identical; 21 packets, 78 obligations, S01-S06"
+  },
+  {
+   "check": "w03_plan_v2.py on v2 and mutation suite",
+   "result": "PASS: valid; every mutation refused (unchanged model and plan)"
+  },
+  {
+   "check": "Supplement re-run through the pinned v3 model (2c7985b5...), with the config resolved from configs.ACTIVE {vectorsPath, key}",
+   "result": "PASS: S01-S06 exactly equal; contract and model digests correct"
+  },
+  {
+   "check": "Alternative semantics on S01-S06",
+   "result": "S01 and S03 refute keep-first and both-pending; S05 refutes merge; S06 refutes prepend and merge"
+  },
+  {
+   "check": "equals relations and S02 != S04",
+   "result": "PASS (final snapshots differ)"
+  },
+  {
+   "check": "S06 record-attempt trace",
+   "result": "The remainder lands on GATE_RESTART, not CLOSE (C1); the distinguishing journalDigest read is before the restart"
+  },
+  {
+   "check": "Edge record changes",
+   "result": "Only rules[2], notArtifacts[0].reason and the supplement sha256 changed; the supplement sha256 equals the file; repositories.yaml has no edge involving harness-engineering"
+  },
+  {
+   "check": "Layer draft semantic_block.py (read only, not executed)",
+   "result": "Comments in C2"
+  },
+  {
+   "check": "Not run",
+   "result": "pytest, the repository validators, builds and cargo (not permitted); the layer draft has placeholders and was not executed"
+  }
+ ],
+ "sourcesRead": [
+  "architecture/w03-plan-v2/plan.json",
+  "architecture/w03-plan-v2/README.md",
+  "scripts/w03_plan_v2.py",
+  "architecture/artifact-edges/operator-harness-engineering.json",
+  "architecture/artifact-edges/README.md",
+  "architecture/i05-gate-channel-v3-supplement/vectors.json",
+  "architecture/i05-gate-channel-v3-supplement/README.md",
+  "~/.local/state/harness-onion-ci/tools/w03amend/build_amend.py",
+  "~/.local/state/harness-onion-ci/tools/w03amend/write_docs.py",
+  "scripts/i05_gate_channel_v3.py",
+  "architecture/i05-gate-channel-v3/vectors.json",
+  "architecture/repositories.yaml",
+  "~/.local/state/harness-onion-ci/tools/w03amend/pkt/semantic_block.py"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}
