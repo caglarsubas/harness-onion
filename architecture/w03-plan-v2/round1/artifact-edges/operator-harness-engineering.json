@@ -1,0 +1,173 @@
+{
+ "schemaVersion": "planeon.internal.artifact-edge-registry/v1",
+ "graph": "buildArtifact",
+ "consumer": "operator",
+ "provider": "harness-engineering",
+ "ownerDecision": "Q-HE2-A (2026-10-11, relayed by the lane monitor): register the operator -> harness-engineering buildArtifact edge as a new edge-registry record, covering HE-000's files retroactively; no repositories.yaml edit. The owner accepts such a record as registration.",
+ "rules": [
+  "The consumer holds exactly these bytes; a different version needs a new registry record first.",
+  "Data contracts, contract text and transport files only; no product implementation source crosses the repository boundary (architecture/repositories.yaml:10).",
+  "The provider never consumes the operator, so the buildArtifact graph stays acyclic."
+ ],
+ "statuses": {
+  "IN_USE": "held by the consumer since the named packet (registered retroactively)",
+  "REGISTERED_BEFORE_USE": "registered here before the named consumer packet merges"
+ },
+ "artifacts": [
+  {
+   "providerPath": "ci/verify-offline.sh",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "778cb0faf59786dc31559e5d96a399d1e3bb26a4576e0ee9ff70e1f6546bd114",
+   "consumerPath": "ci/verify-offline.sh",
+   "consumerPacket": "HE-000",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/warm-source-isolation.sh",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b",
+   "consumerPath": "ci/warm-source-isolation.sh",
+   "consumerPacket": "HE-000",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/network_canary.py",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099",
+   "consumerPath": "ci/network_canary.py",
+   "consumerPacket": "HE-000",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/run_packet_argv.py",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "c2ed0852fa499f194bc91291c32d08b303ea79be3ba7ca6cb29a786d585929f5",
+   "consumerPath": "ci/run_packet_argv.py",
+   "consumerPacket": "HE-000",
+   "relation": "DERIVED",
+   "status": "IN_USE",
+   "consumerSha256": "2d7982b2c9c307430fa5ef58e0e55bee6faf02e6d5c4c6ededfcc32722908ca2",
+   "derivation": "six child-environment allowlist names added (CARGO_NET_OFFLINE, GOFLAGS, GOMODCACHE, GOPROXY, GOSUMDB, GOTOOLCHAIN); owner decisions VX1-VX4 and Q-R10B"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/channel.schema.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "3bfee13c9d32e82fe5ab908eb6f716bc11881f9d57b324f8ea4a21a3ad35356f",
+   "consumerPath": "host-enforcement/contracts/i05-v3/channel.schema.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/outcome-mapping.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "4466f379f1cc669e047cffd8afa5fa88b2cc7648a51e2d38b17f0bd5e2252a3a",
+   "consumerPath": "host-enforcement/contracts/i05-v3/outcome-mapping.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/vectors.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "ab75d86fe54ade7ee2695ef84b200d0473e14e4112e64e7702032593658763ed",
+   "consumerPath": "host-enforcement/contracts/i05-v3/vectors.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "f82f43330125640d3ac946d2afc9a1804a21e5e60a7ac4b94e5d6cb6ed2ea3aa",
+   "consumerPath": "host-enforcement/contracts/i05-v3/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v2/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "1cb07cef90b0881c42370d8bbaeea08c6abc48478bed3939286b651601d2cca3",
+   "consumerPath": "host-enforcement/contracts/i05-v2/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "dc9aa22017b2cdf71f886fb7890aff3f6e7095b9afc25bd37645cb0dee23b498",
+   "consumerPath": "host-enforcement/contracts/i05-v1/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/channel.schema.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "c68721a1002fccc7d6e59eeee9016a0a0f4a7428fad714e5a3d90a362d30ce09",
+   "consumerPath": "host-enforcement/contracts/i07-v3/channel.schema.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/policy-kinds.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "4e427204b89959cb855d8641c3fa6f95d358b0b6a6a7730bfc7776adc4a173c0",
+   "consumerPath": "host-enforcement/contracts/i07-v3/policy-kinds.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/vectors.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "c4c24c5ff15618aa2f0fe0f016011359bc4316220c6e40d5168f9ee24b6f736d",
+   "consumerPath": "host-enforcement/contracts/i07-v3/vectors.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "a8c51a725b99d84351aba7a326196e7078c239ba4e28d3eaec1cf09fb3dca43d",
+   "consumerPath": "host-enforcement/contracts/i07-v3/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v2/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "cde20d7fee8661cd9314350849870fe5b0838b7914a60237d0eeb1f5dca39d39",
+   "consumerPath": "host-enforcement/contracts/i07-v2/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "9e5cb3d1023bc12b9e2643ae42dde5a87640cf04fc8ac1aa88350c65b12ba2dc",
+   "consumerPath": "host-enforcement/contracts/i07-v1/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3-supplement/vectors.json",
+   "providerCommit": "W03-AMEND",
+   "sha256": "3c135d5c01a4e40b1cc2bc3c8dd546b3768d05746f6f766173c7b308e23368bd",
+   "consumerPath": "host-enforcement/contracts/i05-v3-supplement/vectors.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  }
+ ]
+}

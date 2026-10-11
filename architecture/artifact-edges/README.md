@@ -1,6 +1,6 @@
 # Artifact edge registry — operator -> harness-engineering (buildArtifact)
 
-Alpha 2A; 2026-10-11. Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (published by W03-AMEND).
+Alpha 2A; 2026-10-11. Status: **ADOPTED_FOR_SOURCE_PUBLICATION** (published by W03-AMEND).
 
 `docs/alpha-2/ENFORCEMENT_INTEGRATION.md:111-113`: planned R10 interfaces "must use published contracts and immutable
 artifacts; implementation source must not cross repository boundaries. Exact new artifact edges must be registered by the

@@ -1,0 +1,88 @@
+{
+ "schemaVersion": "harness.planeon.ai/w03-amendment-review/v1",
+ "kind": "w03-amendment-review",
+ "round": 4,
+ "reviewDate": "2026-10-11",
+ "subjectCommit": "a83bb56428e305942f76813dae9c5f96f975cf52",
+ "subjectTree": "49ffcbbe13c944d218085284ed2067040b45adb2",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "D1",
+   "severity": "NOTE",
+   "location": "~/.local/state/harness-onion-ci/tools/w03amend/pkt/semantic_block.py (packet round)",
+   "finding": "Round 3's C2 is carried unchanged: in the layer, close the keys of the edge record and the supplement; check provider-path uniqueness, the relation and status sets, the null providerCommit with providerPacket only for the supplement, the DERIVED fields, modes and notArtifacts; restrict 'equals' to S01 and S03; consider freezing repositories.yaml; make sure ERA_PINS covers all 7 new files.",
+   "requiredChange": "Apply in the packet round."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "C1",
+   "round3Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "S06's intent and README row now match the pinned model's trace. The ARM run fails ARM (clean) and INVALIDATED (torn). The GENERATION_STATUS after it reads journalDigest over [BIND, TORN]. CLOSE_GENERATION on the HELD generation writes no record. The remaining failure fails RESTARTED after GATE_RESTART, then INVALIDATED succeeds; final journal [BIND, TORN, INVALIDATED]. The README's general sentence ('stays pending for a later record (in S06 the RESTARTED record after the restart)') is accurate, and the count now reads six. Compared with round 3, the only change in vectors.json is S06's intent: events, outputs and final snapshots are identical, and the file keeps its formatting."
+  },
+  {
+   "id": "C2",
+   "round3Severity": "NOTE",
+   "disposition": "CARRIED",
+   "evidence": "Layer-draft comments, to be applied in the packet round (not part of this subject)."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject identity: branch head a83bb56 tree 49ffcbbe, parent 1a4430d; a2eab93..a83bb56 adds the same 7 files; 1a4430d..a83bb56 changes 4 (supplement README and vectors, edge README and record); plan.json and w03_plan_v2.py unchanged",
+   "result": "PASS"
+  },
+  {
+   "check": "vectors.json compared with round 3 (parsed)",
+   "result": "PASS: only S06's intent differs; formatting kept"
+  },
+  {
+   "check": "Edge record and README: supplement sha256",
+   "result": "PASS: 1c00bdb3... equals the new vectors.json; no other edge change"
+  },
+  {
+   "check": "Supplement re-run through the pinned v3 model (2c7985b5...)",
+   "result": "PASS: S01-S06 exactly equal; contract and model digests correct"
+  },
+  {
+   "check": "S06 trace against the new intent",
+   "result": "PASS: matches step by step"
+  },
+  {
+   "check": "Alternative semantics",
+   "result": "S05 refutes merge; S06 refutes prepend and merge (unchanged)"
+  },
+  {
+   "check": "Reproducibility: ran the current build_amend.py (git reads redirected to the worktree) and write_docs.py on an a2eab93 archive",
+   "result": "PASS: all 7 files byte-identical"
+  },
+  {
+   "check": "w03_plan_v2.py on v2",
+   "result": "PASS"
+  },
+  {
+   "check": "Not run",
+   "result": "pytest, the repository validators, builds and cargo (not permitted); the layer and status records do not exist yet"
+  }
+ ],
+ "sourcesRead": [
+  "architecture/w03-plan-v2/plan.json",
+  "architecture/w03-plan-v2/README.md",
+  "scripts/w03_plan_v2.py",
+  "architecture/artifact-edges/operator-harness-engineering.json",
+  "architecture/artifact-edges/README.md",
+  "architecture/i05-gate-channel-v3-supplement/vectors.json",
+  "architecture/i05-gate-channel-v3-supplement/README.md",
+  "~/.local/state/harness-onion-ci/tools/w03amend/build_amend.py",
+  "~/.local/state/harness-onion-ci/tools/w03amend/write_docs.py",
+  "scripts/i05_gate_channel_v3.py",
+  "architecture/i05-gate-channel-v3/vectors.json"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

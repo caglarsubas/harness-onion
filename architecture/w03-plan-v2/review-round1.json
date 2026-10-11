@@ -1,0 +1,244 @@
+{
+ "schemaVersion": "harness.planeon.ai/w03-amendment-review/v1",
+ "kind": "w03-amendment-review",
+ "round": 1,
+ "reviewDate": "2026-10-11",
+ "subjectCommit": "fe64eaf6cae690e2ab2053b9e1b45770fd9260b4",
+ "subjectTree": "ec6bab464a174f4a5721eaee5c32ca0353998366",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "A1",
+   "severity": "MINOR",
+   "location": "architecture/w03-plan-v2/plan.json obligation I07-3 (and AMENDMENT.newObligations in scripts/w03_plan_v2.py; README 'What v2 changes')",
+   "finding": "I07-3 gives 'kind, render, outcome, frame and byte checks, and transcripts' to HE-002B alone. The same record says otherwise in two places: the Q-HE2-C summary ('HE-002 (I05 logic and the I07 frame and byte checks)') and HE-002's new summary ('... and the I07 v3 frame and byte checks'). DESIGN section 2 agrees with those two: HE-002 runs the 48 + 9 I07 frame and byte checks, and HE-002B runs the 79 kind, 7 render and 22 outcome checks and the 62 I07 transcripts. So the obligation register contradicts the split the owner approved.",
+   "requiredChange": "Either list I07-3's packets as [HE-002, HE-002B], or split I07-3: the I07 frame and byte checks to HE-002, the kind, render and outcome checks and the transcripts to HE-002B. Update AMENDMENT and the README table to match."
+  },
+  {
+   "id": "A2",
+   "severity": "MINOR",
+   "location": "plan.json ownerDecisions Q-HE2-F; SELECTED and AMENDMENT in scripts/w03_plan_v2.py; architecture/w03-plan-v2/README.md decision table",
+   "finding": "DESIGN section 12 gives Q-HE2-F no lettered options. It lists changes (1)-(5) and recommends all five, and the owner's verbatim answer (section 16) is 'C/F = all five plan changes'. Recording selected 'a' invents an option label, and the model's SELECTED table enforces that label. For comparison, Q-HE2-C's 'a', Q-HE2-E's 'a+b' and Q-HE2-G's 'b' are real options.",
+   "requiredChange": "Record Q-HE2-F's selection as what the owner chose (for example 'all-five' or '(1)-(5)') in the plan, in AMENDMENT and in SELECTED. Keep the summary."
+  },
+  {
+   "id": "A3",
+   "severity": "MINOR",
+   "location": "plan.json I07-4 (source architecture/i07-policy-write-v3/README.md:43-46) and I05-6 (source architecture/i05-gate-channel-v3/README.md:46-64)",
+   "finding": "Q-HE2-F (2) moves the 'channel substrate (listeners, per-frame custody, the 2-second answer bound)' to HE-003. I07-4 also gives HE-003 'strict lockstep', but lockstep is PolicyGate logic, not substrate: the I07 v3 model treats a writer frame sent out of lockstep as fatal LOCKSTEP (scripts/i07_policy_write_v3.py:311), and I07 transcripts that HE-002B replays under I07-3 pin it. That is more than the owner moved, and it overlaps HE-002B. Separately, I05-6 cites lines 46-64. Those lines include item 3 (opening, lockstep, digest chain) and item 4 (byte rules, decode_frame), which are HE-002 gate logic. Only items 1-2 and the 2-second bound (lines 63-64) are substrate.",
+   "requiredChange": "Drop 'strict lockstep' from I07-4, or reword it as the substrate delivering whole frames in order and leave the LOCKSTEP rule to HE-002B. Narrow I05-6's citation to the substrate lines (for example 46-53,63-64) and I07-4's to the session, socket and custody lines, or state the split explicitly."
+  },
+  {
+   "id": "A4",
+   "severity": "MINOR",
+   "location": "architecture/i05-gate-channel-v3-supplement/vectors.json S05 intent; README.md ('S05 pins the queue order')",
+   "finding": "I re-ran S05 with altered copies of the pinned model's _record. A variant that puts the AFTER failure in front of the pending NEXT failures gives exactly the published S05 outputs and final snapshot. Only a variant that merges the AFTER failure into a pending NEXT failure gives different results. With non-torn NEXT failures the order inside the queue cannot be observed: one probe with a torn NEXT and no armed action still did not separate the two orders. So S05 pins additivity, not order: the AFTER failure is one more failure after the pending ones, and the first three record attempts all fail. The explanation 'because the AFTER failure queues behind pending NEXT failures' describes the model's mechanism, but the vector does not pin it.",
+   "requiredChange": "Reword S05's intent and the README to the observable claim (with two NEXT failures pending, AFTER 0 adds a third failure, so the first three record attempts fail). If queue order is meant to be contract data, add a transcript in which the order is observable."
+  },
+  {
+   "id": "A5",
+   "severity": "MINOR",
+   "location": "plan.json EDGE-1; architecture/artifact-edges/operator-harness-engineering.json rules; architecture/artifact-edges/README.md ('holds or will hold')",
+   "finding": "EDGE-1 says 'every harness-onion file R10 holds, before R10 uses it', and only W03-AMEND discharges it. The README says the record lists every file R10 'holds or will hold'. That is complete only through HE-002. Later R10 packets will need more harness-onion data: HE-002S needs W02d's compiled seccomp programs or their compiler (DESIGN section 9), and HE-004 and others need their contract fixtures. The record's rules require a new record only for 'a different version', not for a new file. As written, the plan marks a recurring obligation as discharged by one meta packet.",
+   "requiredChange": "Either scope EDGE-1 to the HE-000 and HE-002 files (and change the README's 'will hold' to 'through HE-002'), or keep EDGE-1 standing. If standing: add a rule that any new file or new version needs a new registry record before the consuming R10 packet merges, and name the later packets that carry it."
+  },
+  {
+   "id": "A6",
+   "severity": "NOTE",
+   "location": "architecture/w03-plan-v2/ (successor beside the byte-identical v1)",
+   "finding": "Recording the change as a successor is an honest way to implement 'amending plan.json'. v1's plan.json, README.md and scripts/w03_plan.py are all digest-pinned (scripts/validate_backend_distribution.py ERA_SHA256 lines 427-431, architecture/backend-distribution-authority.json), so none of them can be edited or annotated without history projections. v2 is v1 plus exactly the decided changes, the v2 model refuses any other content change (see A7), and the repo already uses this successor pattern (for example I05 v2 to v3). What is missing: nothing inside plan v2 says it supersedes v1 (I05 v3's status.json has a 'supersedes' member), and v1 cannot point forward.",
+   "requiredChange": "Have the W03-AMEND authority or status record declare v2 the current W03 plan. Ideally also add a v2 member such as supersedes {path, sha256} and have the model enforce it. Tell the lane monitor in one line that 'amending' was implemented as a successor record."
+  },
+  {
+   "id": "A7",
+   "severity": "NOTE",
+   "location": "scripts/w03_plan_v2.py _amended and check",
+   "finding": "Mutation tests on a copy: the exact-amendment check refused all 15 content mutations (v1 fields, v1 and new obligation texts, extra packet, reordered packets and obligations, notClaimed, extra key, schema, decision summary and selection, HI-7 reassigned back). I then edited the AMENDMENT and the plan consistently, so the amendment check would pass, and the carried v1 rules still refused all 8 cases: unused packet, unplanned packet, missing source, line out of range, citing the v1 plan, unknown owner decision, duplicate packet, dropped required obligation. Duplicate keys and a changed v1 byte are refused. Gaps: (a) equality is semantic, so key-order and formatting-only changes are accepted. All leaves are strings, so there is no 1 == True aliasing. (b) The AMENDMENT is embedded in the model, so a joint edit of model and plan passes. (c) reassign, newSummaries and newPackets keys that match no v1 row are silently ignored. (d) A missing v1 file raises OSError, not ValueError, which is the same as v1's handling of its own record. (e) The __main__ message is still v1's.",
+   "requiredChange": "The layer validator must pin the v2 plan bytes and the v2 model bytes, and must restate the decided values independently. Optional: make _amended assert that each AMENDMENT key was applied exactly once."
+  },
+  {
+   "id": "A8",
+   "severity": "NOTE",
+   "location": "architecture/i05-gate-channel-v3-supplement/vectors.json S01, S02",
+   "finding": "The replacement is tested in both directions: an altered model that keeps the first injection fails both S01 and S03, and so does one that keeps both injections pending. But in S01 and S02 the CLOSE writes only CLOSED and DENIED, so the AFTER 2 failure lands on the RESTARTED record after GATE_RESTART (traced: after == 0 is still pending at the restart). The pair therefore also pins, without saying so, that an AFTER counter survives a replay restart. That is consistent with the model and with T104, which does the same for STORAGE_FAIL_NEXT.",
+   "requiredChange": "State this in S02's intent as model-defined behaviour, or use AFTER 1 (T111's injection) so the replacement shows inside one generation. HE-002C's process-restart re-run will need to carry pending injections across the restart."
+  },
+  {
+   "id": "A9",
+   "severity": "NOTE",
+   "location": "plan v2 ownerDecisions and new obligations; supplement S05; edge record entry for the supplement",
+   "finding": "Some content goes beyond the literal decisions. Besides F's five changes, the plan also records decisions B, D and G and adds I05-5, I07-3 (needed so HE-002 and HE-002B each discharge an obligation) and GATE-OPENAT (G's content). The supplement adds S05, which is R10-L02's queue case; the owner placed that case R10-locally under E(a), and it is not AF2-I05-1. The edge record registers the supplement as a 13th HE-002 file, while Q-HE2-A named 'these files' plus HE-000's four. Each addition is a defensible consequence of the decisions, and none changes a decided rule.",
+   "requiredChange": "Name these as derived additions in the README and the authority record (or drop S05), so the statement of fidelity to the owner's decisions is exact."
+  },
+  {
+   "id": "A10",
+   "severity": "NOTE",
+   "location": "plan v2 notClaimed[1]; architecture/w03-plan-v2/README.md 'Not claimed'",
+   "finding": "'No host-enforcement artifact is built for or enrolled on a host' can be read as false: at R10 d335f69, HE-001's verify builds both musl binaries and their SBOMs. The README's 'nothing is installed' is also inaccurate, because VERIFIER-EXT installed Rust 1.99.0 on the verifier (v2 is right to drop v1's 'No toolchain is installed'). The first non-claim is accurate: at d335f69 the module crates only parse argv and exit, and HE-002 exists only as an unmerged local branch.",
+   "requiredChange": "Reword, for example: 'No host-enforcement artifact is released, installed on or enrolled on a host; HE-001's verify builds scaffold binaries only.'"
+  },
+  {
+   "id": "A11",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/operator-harness-engineering.json and README.md",
+   "finding": "Verified: all 17 sha256 values match the provider bytes. 0e74704 is the launcher-contract commit named in VERIFIER-EXT section 2 and an ancestor of a2eab93; the other providers are a2eab93 and the subject tree. R10 origin/main d335f69 holds the four HE-000 files at the recorded digests, and its run_packet_argv.py equals consumerSha256; the diff from the provider is exactly the six added names. The 12 HE-002 files are absent at d335f69 and present at the recorded paths and digests on the local HE-002 branch fb5b0f3. No R10 blob in its whole history equals any harness-onion blob except the three byte-identical transport files. The 58-file pin count is correct. Remaining details: (a) providerCommit 'W03-AMEND' is a placeholder in a field that otherwise holds 40-hex commits. (b) The rule 'the provider never consumes the operator' is weaker than acyclicity needs; the graph is acyclic only because harness-engineering has no edge at all in repositories.yaml. (c) There is no artifact label like the one repositories.yaml's buildArtifact edges carry. (d) Git modes (0755/0644, which VERIFIER-EXT records) are not recorded. (e) Excluding HE-001's closure table is a judgment call: the table was generated from harness-onion a5a0625e's classifier, amendment and base policy (HE-001.yaml contracts), which is a data dependency even though no harness-onion file is held.",
+   "requiredChange": "Use a defined self-reference for the supplement's provider (for example providerCommit null plus providerPacket MET-ENFORCE-024). State the acyclicity rule as 'harness-engineering consumes no repository in buildArtifact'. Optionally record the modes. Cite HE-001.yaml for the closure-table exclusion."
+  },
+  {
+   "id": "A12",
+   "severity": "NOTE",
+   "location": "architecture/i05-gate-channel-v3-supplement/",
+   "finding": "Format points for the validator. The transcripts carry an extra 'equals' key; v3 transcripts have exactly config, events, final, id, intent and outputs, so 'in the v3 transcript format' holds only apart from that key. configs.ACTIVE is a prose string, not a reference. There is no status record yet (the README defers recording AF2-I05-1's closure until after review). 'traceability.json' is unqualified: it is architecture/enforcement-test-plan/traceability.json, which also pins v3 status.json, so the closure cannot be recorded there.",
+   "requiredChange": "Define the supplement's schema and add its status record in packet mechanics."
+  },
+  {
+   "id": "A13",
+   "severity": "NOTE",
+   "location": "outside this packet: mas-harness-conformance-labs",
+   "finding": "R12's origin/main 029abe7 holds the same four transport files byte-identical (VERIFIER-EXT v4), with no registered conformance-labs -> harness-engineering edge. docs/alpha-2/ENFORCEMENT_INTEGRATION.md:110-113 covers R12 as well. This is outside Q-HE2-A.",
+   "requiredChange": "Flag it to the lane monitor. No change needed in this packet."
+  },
+  {
+   "id": "A14",
+   "severity": "NOTE",
+   "location": "plan v2 ownerDecisions Q-HE2-A..G",
+   "finding": "R10's task-packets/HE-001.yaml cites 'owner decision Q-HE2 (a)' for the Command Line Tools dependency. That is a different question from this plan's Q-HE2-A..G set, and later readers may confuse the two.",
+   "requiredChange": "None required. Optionally disambiguate in the README."
+  },
+  {
+   "id": "A15",
+   "severity": "NOTE",
+   "location": "the future W03-AMEND layer validator (modelled on scripts/validate_license_amendment.py)",
+   "finding": "What the semantic layer must check. (1) ERA_SHA256 binding of the 7 files, review records, round copies and status record, plus FROZEN_PATHS that stay byte-identical: architecture/w03-plan/{plan.json,README.md}, scripts/w03_plan.py, architecture/repositories.yaml, and the I05 v3 schema, vectors, status and model. (2) Execute w03_plan_v2.py from era bytes, and independently restate the 13 decision ids and selections, the 4 new packet ids and their places, the 5 reassignments and the 6 new obligation ids. (3) For the edge record: closed keys; unique provider and consumer paths; each sha256 equal to the era bytes at the named provider (HE-000 files through historical projection if ci/ ever changes); the DERIVED entry's consumerSha256; the supplement's self-reference rule; acyclicity over repositories.yaml buildArtifact plus the registry edges; and repositories.yaml unchanged. (4) For the supplement: re-run every transcript through the era-pinned v3 model with v3 configs.ACTIVE and the v3 schema, requiring exact equality; check the equals relations over non-injection outputs and the final snapshot; check S02 != S04; check that contract.sha256 and model.sha256 equal the era digests. (5) The status record that closes AF2-I05-1 and declares v2 the current plan (A6). (6) Packet mechanics: allowedPaths equal to the new files plus authority, validator and packet; the 64 inherited argv entries.",
+   "requiredChange": "Write the layer validator to cover (1)-(6)."
+  }
+ ],
+ "dispositions": [],
+ "checksRun": [
+  {
+   "check": "Subject identity: fe64eaf tree ec6bab46, parent a2eab93; git diff a2eab93..fe64eaf",
+   "result": "PASS: exactly 7 files added, none modified (repositories.yaml and every pinned file unchanged)"
+  },
+  {
+   "check": "Reproducibility: ran build_amend.py (patched only to read git blobs from the worktree) and write_docs.py on an a2eab93 archive in the work dir",
+   "result": "PASS: all 7 outputs byte-identical to the subject"
+  },
+  {
+   "check": "v1 plan byte-identity: sha256 of architecture/w03-plan/plan.json at a2eab93 and in the subject",
+   "result": "PASS: 40b501f4... in both; v1 plan, README and model are pinned only by backend-distribution-authority.json and validate_backend_distribution.py"
+  },
+  {
+   "check": "v1 -> v2 diff of plan.json",
+   "result": "PASS: only the schema, 7 decisions, 4 packets, 2 summaries, 5 reassignments, 6 obligations and notClaimed changed; 17 -> 21 packets, 71 -> 77 obligations"
+  },
+  {
+   "check": "w03_plan.py on v1 and w03_plan_v2.py on v2 (harness-onion .venv python3 -I -B)",
+   "result": "PASS: both valid"
+  },
+  {
+   "check": "v2 model mutation tests (scripts/mutate_plan.py in the work dir)",
+   "result": "15/15 content mutations refused; key-order and compact-formatting variants accepted (semantic check); duplicate key refused; changed v1 bytes refused; missing v1 raises OSError; 8/8 v1-rule mutations refused when made consistently in AMENDMENT and plan"
+  },
+  {
+   "check": "Plan citations: I05 v3 README :22, :46-64, :325, :329-330; status.json:58; I07 v3 README :21, :43-46, :144, :145; I07 v1 README :163; ENFORCEMENT_INTEGRATION.md:111-113",
+   "result": "All exist and support the claims, except A1 (I07-3 packets) and A3 (I07-4 lockstep, I05-6 range)"
+  },
+  {
+   "check": "Every planned packet discharges an obligation (v2)",
+   "result": "PASS: HE-002B (I07-3), HE-002C (I05-3, I07-2, GATE-OPENAT), HE-002S (SEC-4, HI-7), W03-AMEND (I05-4, EDGE-1)"
+  },
+  {
+   "check": "EFFECT_GATE allowlist grants openat and not open (W02d v2 and v3, role and NATIVE_STATIC base)",
+   "result": "PASS: the Q-HE2-G summary is accurate"
+  },
+  {
+   "check": "notClaimed against R10 origin/main d335f69",
+   "result": "HE-001 is the latest merge; crates parse argv only; HE-002 exists only as local branch fb5b0f3 (unmerged); wording issue A10"
+  },
+  {
+   "check": "Edge registry sha256 values (17) against provider bytes via git show and the subject tree",
+   "result": "PASS: all match"
+  },
+  {
+   "check": "HE-000 consumer bytes at R10 origin/main d335f69",
+   "result": "PASS: 3 byte-identical; run_packet_argv.py = consumerSha256 2d7982b2..., diff = exactly six added allowlist names; modes match"
+  },
+  {
+   "check": "Provider commit 0e74704",
+   "result": "PASS: ancestor of a2eab93; named as the launcher-contract commit in VERIFIER-EXT section 2"
+  },
+  {
+   "check": "HE-002 consumer paths",
+   "result": "Absent at d335f69 (registered before use); local HE-002 branch fb5b0f3 holds all 12 at the recorded paths and digests"
+  },
+  {
+   "check": "Completeness: every R10 blob (origin/main and full history) against every harness-onion blob reachable from a2eab93",
+   "result": "Only the three byte-identical transport files match; no harness-onion file holds R10 bytes; closure-table judgment in A11"
+  },
+  {
+   "check": "Count of files pinning the repositories.yaml digest at a2eab93",
+   "result": "PASS: 58 (including release/repos.lock.json)"
+  },
+  {
+   "check": "Acyclicity of buildArtifact (repositories.yaml plus the new edge)",
+   "result": "PASS: harness-engineering has no edge in any graph, so operator -> harness-engineering closes no cycle; rule wording in A11"
+  },
+  {
+   "check": "Supplement re-run through the pinned v3 model (sha256 2c7985b5..., harness-onion .venv python3 -I -B)",
+   "result": "PASS: S01-S05 outputs and final snapshots exactly equal (Python and canonical-JSON equality); contract and model digests correct"
+  },
+  {
+   "check": "Supplement equals relations and S02 != S04",
+   "result": "PASS: S01 = S02 and S03 = S04 on non-injection outputs and final snapshot; S02 and S04 differ in final snapshot and channel outputs"
+  },
+  {
+   "check": "Supplement against alternative semantics (keep-first, both-pending, prepend, merge)",
+   "result": "S01 and S03 refute keep-first and both-pending; S05 refutes merge but not prepend (A4)"
+  },
+  {
+   "check": "Injections pending at GATE_RESTART across all 120 v3 transcripts",
+   "result": "Only T104 (one STORAGE_FAIL_NEXT); S01 and S02 add a pending AFTER at a restart (A8)"
+  },
+  {
+   "check": "R12 transport files (blob comparison)",
+   "result": "mas-harness-conformance-labs 029abe7 holds the four files byte-identical, no edge registered (A13)"
+  },
+  {
+   "check": "Not run",
+   "result": "pytest, the repository validators, builds and cargo (not permitted). Not checked for the new paths: packet mechanics, inventories and zero-bill scan behaviour. A PAUSE file appeared after all checks finished; this record was written with no further commands and was not machine-parsed"
+  }
+ ],
+ "sourcesRead": [
+  "architecture/w03-plan-v2/plan.json",
+  "architecture/w03-plan-v2/README.md",
+  "scripts/w03_plan_v2.py",
+  "architecture/artifact-edges/operator-harness-engineering.json",
+  "architecture/artifact-edges/README.md",
+  "architecture/i05-gate-channel-v3-supplement/vectors.json",
+  "architecture/i05-gate-channel-v3-supplement/README.md",
+  "~/.local/state/harness-onion-ci/tools/w03amend/build_amend.py",
+  "~/.local/state/harness-onion-ci/tools/w03amend/write_docs.py",
+  "scripts/i05_gate_channel_v3.py",
+  "architecture/i05-gate-channel-v3/vectors.json",
+  "~/.local/state/harness-onion-ci/tools/w03/he002/DESIGN.md",
+  "architecture/w03-plan/plan.json",
+  "architecture/w03-plan/README.md",
+  "scripts/w03_plan.py",
+  "architecture/repositories.yaml",
+  "architecture/i05-gate-channel-v3/README.md",
+  "architecture/i05-gate-channel-v3/status.json",
+  "architecture/i07-policy-write-v3/README.md",
+  "architecture/i07-policy-write/README.md",
+  "docs/alpha-2/ENFORCEMENT_INTEGRATION.md",
+  "scripts/validate_backend_distribution.py",
+  "scripts/validate_license_amendment.py",
+  "architecture/enforcement-test-plan/traceability.json",
+  "mas-harness-operator origin/main d335f69: ci/run_packet_argv.py, task-packets/HE-001.yaml, host-enforcement/",
+  "~/.local/state/harness-onion-ci/tools/verifier-ext/VERIFIER-EXT.md"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

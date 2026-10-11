@@ -1,6 +1,6 @@
 # W03 plan v2 — W03-AMEND (the owner's HE-002 decisions)
 
-Alpha 2A; 2026-10-11. Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW**.
+Alpha 2A; 2026-10-11. Status: **ADOPTED_FOR_SOURCE_PUBLICATION**.
 
 `plan.json` (`planeon.internal.w03-plan/v2`) is the successor of `../w03-plan/plan.json` (`planeon.internal.w03-plan/v1`,
 MET-ENFORCE-019, sha256 `40b501f48fe0eb13d64d2e0cf7fa542817f0fa3034d86058c233d1a3accaff9a`), which stays byte-identical because later records

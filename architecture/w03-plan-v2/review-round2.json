@@ -1,0 +1,211 @@
+{
+ "schemaVersion": "harness.planeon.ai/w03-amendment-review/v1",
+ "kind": "w03-amendment-review",
+ "round": 2,
+ "reviewDate": "2026-10-11",
+ "subjectCommit": "c6c21508fdf178f9d6be5d0c59dfd759611db1fc",
+ "subjectTree": "908da930315a6b408aad430638a2bfab3d6169ae",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "B1",
+   "severity": "MINOR",
+   "location": "architecture/i05-gate-channel-v3-supplement/README.md, last paragraph ('The order of failures inside the queue is not observable in the model's outputs (a clean failure leaves no record and failures fall on consecutive attempts), so no vector pins it.')",
+   "finding": "The claim is false. Each storage-failure cascade consumes only a bounded number of record attempts (the failed record, then INVALIDATED, then DENIED if an action is armed). So the queued failures can split across two events, and GENERATION_STATUS returns journalDigest between them. Probe in the pinned v3 model (scripts/order_probe.py in my work dir): GENERATION_STATUS, BIND_EXECUTION, STORAGE_FAIL_NEXT, STORAGE_FAIL_NEXT {torn: true}, STORAGE_FAIL_AFTER {after: 0}, ARM_ACTION, GENERATION_STATUS, CLOSE_GENERATION, GATE_RESTART. Results: ARM_ACTION is refused STORAGE_FAILURE in both variants. The second GENERATION_STATUS reports journalDigest sha256:ec2b97d3... under the model (AFTER failure appended behind the NEXT failures, so the torn NEXT falls inside ARM's cascade) and sha256:f505dbf8... under the prepend variant (the torn NEXT falls at the restart). The final snapshots are equal. A small systematic search with a status read between failure runs found 4 distinguishing cases in 147. The author's search used tails without that read. Since this README says the order is unobservable, an R10 implementation could take either order and still pass every vector, while diverging from the model on such event sequences.",
+   "requiredChange": "Replace the sentence with an accurate one. For example: the order is not observable in S01-S05; it is observable through a journalDigest read between two failure runs, which no vector pins; model-defined: an AFTER failure is appended behind the pending NEXT failures. Or add a transcript like the probe that pins the order, and list it as model-defined."
+  },
+  {
+   "id": "B2",
+   "severity": "NOTE",
+   "location": "architecture/i05-gate-channel-v3-supplement/vectors.json S02, S04",
+   "finding": "S02 is identical to v3 T111 in events, outputs and final snapshot. S02 and S04 now have equal non-injection outputs (both CLOSE responses are HELD with deniedActionIds [1], and both restarts are HELD). They differ only in the final snapshot's journal: CLOSED, INVALIDATED, RESTARTED versus INVALIDATED, DENIED, RESTARTED. The pair still shows the replacement in both directions, because 'equals' includes the final snapshot and the keep-first and both-pending variants each fail S01 and S03.",
+   "requiredChange": "Optional: cite T111 in S02's intent. The layer's S02 != S04 check must compare the final snapshots, not only the channel outputs."
+  },
+  {
+   "id": "B3",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/operator-harness-engineering.json rules[2] and notArtifacts[0].reason (and the README)",
+   "finding": "(a) 'No graph has harness-engineering consuming the operator, so this edge keeps every unconditional graph acyclic' still rules out only a direct back-edge. A cycle could also pass through another repository. The sufficient fact, which holds today, is that harness-engineering consumes no repository in any graph (repositories.yaml lists no edge with it as consumer). The rule defers to the layer, which must compute acyclicity over repositories.yaml plus the registry edges. (b) The notArtifacts reason says 'no harness-onion byte is in R10', which is literally false: R10 holds the three byte-identical HE-000 transport files. It means that no byte of the classifier or its inputs is in R10.",
+   "requiredChange": "(a) State that harness-engineering consumes no repository in any graph (or simply that the layer computes acyclicity). (b) Say that no byte of the classifier or its inputs is in R10."
+  },
+  {
+   "id": "B4",
+   "severity": "NOTE",
+   "location": "architecture/w03-plan-v2/README.md 'Recorded as decided, and derived from the decisions'",
+   "finding": "The derived table omits two additions from round-1 A9: S05 in the supplement (the queue case the owner placed R10-locally as R10-L02 under E(a), and not part of AF2-I05-1), and the edge record's 13th HE-002 entry for the supplement (Q-HE2-A named the six fixtures, the six READMEs and HE-000's files).",
+   "requiredChange": "Add both rows (derived from Q-HE2-E (b) and Q-HE2-A), or drop S05."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "A1",
+   "round1Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "The split now matches Q-HE2-C and HE-002's summary: I07-3 is the I07 frame and byte checks (HE-002), I07-4 is the PolicyGate's kind, render and outcome checks and transcripts (HE-002B), and I07-5 is the channel substrate (HE-003). 'The error-code prefix compared' matches scripts/validate_admission_channel_v3.py:571-576, which compares got.split(' ', 1)[0] with expect."
+  },
+  {
+   "id": "A2",
+   "round1Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "Q-HE2-F is now selected 'all-five' in the plan, AMENDMENT, SELECTED and the README."
+  },
+  {
+   "id": "A3",
+   "round1Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "I05-6 now cites 46-52,63-64 (items 1-2 and the 2-second bound) and its text drops lockstep and the byte rules. I07-5 cites 43-44 (one writer session at a time, custody on every frame) without lockstep. The derived table states that lockstep and the byte rules stay gate logic."
+  },
+  {
+   "id": "A4",
+   "round1Severity": "MINOR",
+   "disposition": "PARTIALLY_RESOLVED",
+   "evidence": "S05 is now correctly worded as accumulation: re-run under variants, the merge variant fails S05 and the prepend variant passes it, so S05 pins exactly the accumulation it now claims. But the README's new sentence saying the queue order is not observable in the model's outputs is false; see B1."
+  },
+  {
+   "id": "A5",
+   "round1Severity": "MINOR",
+   "disposition": "RESOLVED",
+   "evidence": "EDGE-1's text and the registry's first rule now require a new registry record (a harness-onion meta packet) for a later file or another version, before any consumer packet uses it."
+  },
+  {
+   "id": "A6",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED_FOR_SOURCE",
+   "evidence": "The plan README states that v2 supersedes v1 as the current W03 plan from W03-AMEND on. The status record and the layer validator that will also state it come with packet mechanics."
+  },
+  {
+   "id": "A7",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "Verified by mutation tests: a key-order-only variant and a compact-formatting variant are now refused ('in v1's exact formatting'). A reassign key or a newSummaries key that names no v1 row is refused. A missing v1 file raises ValueError. All 15 content mutations and all 11 v1-rule mutations (including dropping the required I07-5) are refused. The plan bytes are now fully determined by v1 plus AMENDMENT. The __main__ message is still v1's, which is trivial."
+  },
+  {
+   "id": "A8",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "Traced: S01 and S02 fail the DENIED record and S03 and S04 fail the CLOSED record, inside the CLOSE. No injection is pending at GATE_RESTART in any of S01-S05."
+  },
+  {
+   "id": "A9",
+   "round1Severity": "NOTE",
+   "disposition": "MOSTLY_RESOLVED",
+   "evidence": "A 'derived from the decisions' table now covers I05-5, I07-3, I07-4, I05-6, I07-5, GATE-OPENAT, EDGE-1 and W03-AMEND, and the README says why B, D and G are recorded. The table does not name S05 (R10-L02's case, which the owner placed R10-locally under E(a)) or the supplement's registration as a 13th HE-002 file; see B4."
+  },
+  {
+   "id": "A10",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "notClaimed now reads 'released or enrolled; the verifier builds the scaffold binaries only to check them'. The README says the Rust 1.99.0 toolchain is installed only for the verifier."
+  },
+  {
+   "id": "A11",
+   "round1Severity": "NOTE",
+   "disposition": "MOSTLY_RESOLVED",
+   "evidence": "Present: the artifact label, modes (all 17 provider modes verified; the HE-000 modes match R10 d335f69 and the 12 HE-002 modes match local branch fb5b0f3), providerCommit null with providerPacket MET-ENFORCE-024, and notArtifacts. Two wording points remain; see B3."
+  },
+  {
+   "id": "A12",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED_FOR_SOURCE",
+   "evidence": "configs.ACTIVE is now {vectorsPath, key}; the traceability path is qualified; the format (v3 transcripts plus an optional 'equals') is documented. The status record comes at adoption."
+  },
+  {
+   "id": "A13",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "The edge README states that R12 also holds the four transport files and that its edge is outside this record. The author will flag it to the lane monitor."
+  },
+  {
+   "id": "A14",
+   "round1Severity": "NOTE",
+   "disposition": "RESOLVED",
+   "evidence": "The plan README distinguishes HE-001's 'Q-HE2' from Q-HE2-A..G."
+  },
+  {
+   "id": "A15",
+   "round1Severity": "NOTE",
+   "disposition": "ACCEPTED",
+   "evidence": "The layer validator is not written yet. With A7's formatting check, the layer can pin the v2 plan bytes by digest."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject identity: c6c2150 tree 908da930, parent fe64eaf; a2eab93..c6c2150 adds the same 7 files and modifies none",
+   "result": "PASS"
+  },
+  {
+   "check": "Reproducibility: ran the updated build_amend.py (git reads redirected to the worktree) and write_docs.py on an a2eab93 archive",
+   "result": "PASS: all 7 files byte-identical; 21 packets, 78 obligations"
+  },
+  {
+   "check": "w03_plan.py on v1 and w03_plan_v2.py on v2 (harness-onion .venv python3 -I -B)",
+   "result": "PASS: both valid"
+  },
+  {
+   "check": "v2 model mutations (scripts/mutate_plan.py)",
+   "result": "15/15 content mutations refused; key-order-only and compact formatting refused; duplicate key refused; changed v1 bytes refused; missing v1 is ValueError; 11/11 v1-rule and amendment-key mutations refused"
+  },
+  {
+   "check": "New and changed citations: I05 v3 README 46-52,63-64; I07 v3 README :21 (twice) and 43-44; ENFORCEMENT_INTEGRATION.md:111-113; I07 frame-check comparison in the v3 validator",
+   "result": "PASS: text matches the lines"
+  },
+  {
+   "check": "Every planned packet discharges an obligation",
+   "result": "PASS: HE-002 (I05-4, I05-5, I07-3), HE-002B (I07-4), HE-002C (I05-3, I07-2, GATE-OPENAT), HE-002S (SEC-4, HI-7), HE-003 (+I05-6, I07-5), W03-AMEND (I05-4, EDGE-1)"
+  },
+  {
+   "check": "Edge record: 17 sha256 values and modes against provider bytes (0e74704, a2eab93, c6c2150 for the supplement)",
+   "result": "PASS"
+  },
+  {
+   "check": "Edge record consumer side",
+   "result": "HE-000's four files match at R10 d335f69 (bytes or consumerSha256, and modes); the 12 HE-002 files match at local branch fb5b0f3; the supplement is not yet copied (expected); provider and consumer paths are unique"
+  },
+  {
+   "check": "Supplement re-run through the pinned v3 model (2c7985b5...)",
+   "result": "PASS: S01-S05 exactly equal; contract and model digests correct; supplement sha256 f75e03a1... matches the edge record"
+  },
+  {
+   "check": "Supplement equals relations and S02 != S04",
+   "result": "PASS: S01 = S02 and S03 = S04; S02 and S04 differ in the final snapshot only (B2)"
+  },
+  {
+   "check": "Alternative injection semantics",
+   "result": "S01 and S03 refute keep-first and both-pending; S05 refutes merge and is satisfied by prepend (consistent with its accumulation wording)"
+  },
+  {
+   "check": "Failure placement relative to GATE_RESTART (trace)",
+   "result": "PASS: no injection pending at the restart in S01-S05"
+  },
+  {
+   "check": "Queue-order observability probe (scripts/order_probe.py)",
+   "result": "Observable: the hand probe plus 4/147 cases in a small search distinguish append from prepend through GENERATION_STATUS journalDigest (B1)"
+  },
+  {
+   "check": "Not run",
+   "result": "pytest, the repository validators, builds and cargo (not permitted); packet mechanics, status records and the layer validator do not exist yet"
+  }
+ ],
+ "sourcesRead": [
+  "architecture/w03-plan-v2/plan.json",
+  "architecture/w03-plan-v2/README.md",
+  "scripts/w03_plan_v2.py",
+  "architecture/artifact-edges/operator-harness-engineering.json",
+  "architecture/artifact-edges/README.md",
+  "architecture/i05-gate-channel-v3-supplement/vectors.json",
+  "architecture/i05-gate-channel-v3-supplement/README.md",
+  "~/.local/state/harness-onion-ci/tools/w03amend/build_amend.py",
+  "~/.local/state/harness-onion-ci/tools/w03amend/write_docs.py",
+  "scripts/i05_gate_channel_v3.py",
+  "architecture/i05-gate-channel-v3/vectors.json",
+  "scripts/validate_admission_channel_v3.py",
+  "architecture/i05-gate-channel-v3/README.md",
+  "architecture/i07-policy-write-v3/README.md",
+  "mas-harness-operator HE-002 branch fb5b0f3: host-enforcement/contracts/"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

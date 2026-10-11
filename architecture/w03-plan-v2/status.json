@@ -1,0 +1,69 @@
+{
+ "schemaVersion": "planeon.internal.w03-amendment-status/v1",
+ "workItem": "W03-AMEND",
+ "status": "ADOPTED_FOR_SOURCE_PUBLICATION",
+ "reviewedSubject": {
+  "commit": "a83bb56428e305942f76813dae9c5f96f975cf52",
+  "tree": "49ffcbbe13c944d218085284ed2067040b45adb2"
+ },
+ "supersedes": {
+  "path": "architecture/w03-plan/plan.json",
+  "sha256": "40b501f48fe0eb13d64d2e0cf7fa542817f0fa3034d86058c233d1a3accaff9a",
+  "by": "architecture/w03-plan-v2/plan.json"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "fe64eaf6cae690e2ab2053b9e1b45770fd9260b4",
+   "subjectTree": "ec6bab464a174f4a5721eaee5c32ca0353998366",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/w03-plan-v2/review-round1.json",
+   "snapshot": "architecture/w03-plan-v2/round1/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 2,
+   "subject": "c6c21508fdf178f9d6be5d0c59dfd759611db1fc",
+   "subjectTree": "908da930315a6b408aad430638a2bfab3d6169ae",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/w03-plan-v2/review-round2.json",
+   "snapshot": "architecture/w03-plan-v2/round2/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 3,
+   "subject": "1a4430dd12c4639a850109bdfbfb0fd8a3e4c0ef",
+   "subjectTree": "260a651bf98727332c15676982eea22a1d88a50b",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/w03-plan-v2/review-round3.json",
+   "snapshot": "architecture/w03-plan-v2/round3/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 4,
+   "subject": "a83bb56428e305942f76813dae9c5f96f975cf52",
+   "subjectTree": "49ffcbbe13c944d218085284ed2067040b45adb2",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/w03-plan-v2/review-round4.json",
+   "snapshot": null,
+   "severities": [
+    "NOTE"
+   ]
+  }
+ ],
+ "carried": [],
+ "nonClaims": [
+  "No R10 module logic exists; nothing is enrolled on a host.",
+  "E01-E12 stay OPEN_UNPROVEN.",
+  "The consumer side of the edge (R10's bytes) is checked by R10's own packets, not by this repository."
+ ]
+}

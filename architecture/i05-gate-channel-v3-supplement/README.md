@@ -1,6 +1,6 @@
 # I05 gate channel v3 — supplementary vectors (AF2-I05-1, plan obligation I05-4)
 
-Alpha 2A; 2026-10-11. Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (published by W03-AMEND).
+Alpha 2A; 2026-10-11. Status: **ADOPTED_FOR_SOURCE_PUBLICATION** (published by W03-AMEND).
 
 The I05 v3 contract (`../i05-gate-channel-v3/`, ADOPTED) carries one finding, AF2-I05-1
 (`../i05-gate-channel-v3/status.json:58`): no vector shows that a second `STORAGE_FAIL_AFTER` replaces a pending first one
