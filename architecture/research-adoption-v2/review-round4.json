@@ -1,0 +1,49 @@
+{
+ "schemaVersion": "harness.planeon.ai/research-adoption-v2-review/v1",
+ "kind": "research-adoption-v2-review",
+ "round": 4,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "3cb4b04ed422df6c6fef369170fc07251bc2533c",
+ "subjectTree": "dd3bc216a1674f50f72e91829bfd3715f109fd0d",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "R4-1",
+   "severity": "NOTE",
+   "location": "crosswalk.json definitions.reuseModes.LICENSE_BLOCKED (last sentence); checker REUSE_OUTCOMES['PLANNED_BASELINE']",
+   "finding": "The new precedence text says 'An index or a planned baseline keeps its mode whatever the licence'. For an index that matches the checker: INDEX_ONLY admits every repository outcome, and the probe giving an index a denied licence was accepted. For a planned baseline it overstates the rule. REUSE_OUTCOMES admits PLANNED_BASELINE only with DEFAULT_ALLOWED or PLANNED_UNRESOLVED, and the probe of letta as a planned baseline with no licence was rejected. No current record is affected: the four planned baselines are langfuse (PLANNED_UNRESOLVED), langgraph, promptfoo and letta (all DEFAULT_ALLOWED).",
+   "requiredChange": "None required. Optional: reword to 'An index keeps its mode whatever the licence; a planned baseline keeps its mode when its licence outcome is default-allowed or unresolved (NOASSERTION); in both cases the licence ceiling binds.'"
+  },
+  {
+   "id": "R4-2",
+   "severity": "NOTE",
+   "location": "scripts/research_adoption_v2.py (HYGIENE; licence-check derivation)",
+   "finding": "Residual limits. None affects the current data.\n(a) 'jdoe at example dot com', with a spelled-out dot and no brackets, is not matched. All bracketed and dotted-domain forms are now rejected.\n(b) The licenceStatedInPaper derivation tests whether 'NOT_FOUND' and 'licen' both appear anywhere in a status detail. A truthful detail such as 'VERIFIED for the code; NOT_FOUND for the corpus; licence stated as MIT' would therefore force the flag to false.\n(c) A detail must use the token 'NOT_FOUND'; a lower-case 'licence not found' is rejected. This fails closed, which is acceptable.\n(d) Rejecting 'available at <site>.com' is accepted as a deliberate fail-closed rule.\n(e) Bare names and free-form prompt residue remain review-only, as accepted earlier.",
+   "requiredChange": "None required. Optional: match 'dot' as a separator in the 'x at domain' rule, and test for 'NOT_FOUND for (a|the) licen' rather than co-occurrence of the two words."
+  }
+ ],
+ "dispositions": [
+  {"id": "R3-1", "round3Severity": "MINOR", "disposition": "RESOLVED", "evidence": "LICENSE_BLOCKED now says it takes precedence over REFERENCE_DESIGN unless the licence outcome is default-allowed, an allowed exception or open content. This matches REUSE_OUTCOMES and the data: phoenix, DeLM, mattermost, Self-Harness and OPHSD are LICENSE_BLOCKED, and claudes-c-compiler (open content) is REFERENCE_DESIGN. The probe putting phoenix in REFERENCE_DESIGN is still rejected. The '(review R2-2)' tag is gone. The planned-baseline half of the last sentence overstates the checker rule (R4-1, NOTE)."},
+  {"id": "R3-2", "round3Severity": "NOTE", "disposition": "RESOLVED", "evidence": "licenceStatedInPaper is now derived from the licence checks ('licen' matches either spelling). The probes rejected: true for MASS, true for VeriHarness, a detail claiming the licence verified while the flag is false, the 'license' spelling without a detail, a removed or licence-free detail, and a paper with no licence check. A coherent detail-plus-flag pair was accepted. Every seed paper has exactly one licence check, and all eight derive to false, which matches the round-3 grep of the PDFs. The '(at)', '( at )', '[at]', '{at}' and '(dot)' forms are rejected. The DESIGN_REFERENCE_ONLY wording now matches ceiling(), and DENY_MISSING_LICENSE explains the null licence. Rejecting 'available at <site>' is accepted as deliberate. Residual edges are in R4-2."}
+ ],
+ "checksRun": [
+  {"check": "Hard rules: PAUSE prefix on every command; every process under timeout; python3 -I -B; no network. Writes were confined to the review work directory. The worktree is clean at 3cb4b04e. No command ran longer than 60 s (the longest was the mutation probe, about 1.7 s), and peak RSS was under 70 MB.", "result": "PASS"},
+  {"check": "Scope: the parent of 3cb4b04e is 5268f109. git diff --stat 5268f109..3cb4b04e and 93d32e1..3cb4b04e touch only the three subject files. Round-3 bytes are unchanged in history (the 5268f109 crosswalk.json sha256 is still 39330416...).", "result": "PASS"},
+  {"check": "Reproducibility: git archive 3cb4b04e, then build_crosswalk.py WORKSPACE <archive> recheck-2026-10-12.json. crosswalk.json (e1b57c70...) and README.md (8b73cd06...) are byte-identical to the subject, and the checker is unchanged. scripts/research_adoption_v2.py reports 'valid: 19 papers (60 seed checks), 47 codebases (40 repositories pinned), 30 acceptance IDs'.", "result": "PASS"},
+  {"check": "Builder diff (build_crosswalk.round3.py against build_crosswalk.py) and the leaf diff of the round-3 and round-4 records: 0 removed, 0 added, 3 changed (the LICENSE_BLOCKED, DESIGN_REFERENCE_ONLY and DENY_MISSING_LICENSE definitions). Checker diff: hygiene bracket forms and the licence-check derivation.", "result": "PASS"},
+  {"check": "Definitions against the records and REUSE_OUTCOMES: the five LICENSE_BLOCKED reference designs, claudes-c-compiler as open content, the indexes and the planned baselines", "result": "PASS (planned-baseline wording in R4-1)"},
+  {"check": "Personal-data scan of crosswalk.json and README.md (seed-paper authors, RS-CLAUDE author column, 632 reference-list surnames, e-mail and obfuscated forms, corresponding-author, et al, home paths, dataset paths, citation-year patterns)", "result": "PASS"},
+  {"check": "Verbatim-overlap scan (8-token shingles, runs of 15 or more tokens) of 2,971 strings and README lines against the eight PDFs and three syntheses: the same 18 hits as before, and no long prose", "result": "PASS"},
+  {"check": "Mutation probe extended for round 4 (mutations4.py: the round-3 suite plus 10 cases; record edits are re-rendered through the checker's render()). 129 cases: 111 of 114 negative cases caught, 13 of 15 positive cases accepted. The misses are the free-form residue, a bare name and the spelled-out 'dot'. The two rejected positive cases are the co-occurrence derivation edge and the letta planned-baseline wording probe. All are NOTE level (R4-1, R4-2).", "result": "PASS with residual limits"},
+  {"check": "GitHub re-check or any network access", "result": "NOT RUN: forbidden by the brief"},
+  {"check": "R12 repository proposed-ID collision for CONF-MAS-001", "result": "NOT RUN: R12 not read (unchanged from earlier rounds)"}
+ ],
+ "sourcesRead": [
+  "git show / git diff / git archive 3cb4b04e against 5268f109: architecture/research-adoption-v2/crosswalk.json, architecture/research-adoption-v2/README.md, scripts/research_adoption_v2.py",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-000/build_crosswalk.py (diffed against build_crosswalk.round3.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-000/recheck-2026-10-12.json (builder input)",
+  "roadmap/roadmap.json, roadmap/research/grounding/*.json, roadmap/research/mas-harness-research-*.md (builder inputs and scans)",
+  "roadmap/research/papers/*.pdf page texts from round 1 (overlap and surname scans)"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}
