@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-024
+## Current source preparation — MET-ADOPT-003
+
+MAS-RA-000 (MET-ADOPT-003): research adoption v2 crosswalk, the October 2026 MAS-harness corpus mapped to the
+eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs; research-adoption.json and the
+harness paper map stay byte-identical. Alpha2 OPEN; 227 accepted plus MET-ADOPT-003 only.
+
+## Historical W03-AMEND source preparation — MET-ENFORCE-024
 
 W03-AMEND (MET-ENFORCE-024): W03 plan v2 with the owner's HE-002 decisions Q-HE2-A to Q-HE2-G (v1 stays
 byte-identical), the operator -> harness-engineering buildArtifact edge registry record and the supplementary I05 v3
@@ -1310,3 +1316,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 225 | `MET-ENFORCE-023` | `Harness-Engineering` | W02-CLEANUP: W02 notes errata (native-profile-v3, I06 v2) and PERF-032-F checks; DATA_CHECK_ONLY |
 | 226 | `MET-PERF-037` | `Harness-Engineering` | PERF-035-F: parallel-suite follow-up (review R3-01, R3-02) |
 | 227 | `MET-ENFORCE-024` | `Harness-Engineering` | W03-AMEND: W03 plan v2 (HE-002 decisions), operator edge registry record, I05 v3 supplementary vectors; DATA_CHECK_ONLY |
+| 228 | `MET-ADOPT-003` | `Harness-Engineering` | MAS-RA-000: research adoption v2 crosswalk (October 2026 MAS-harness corpus); META_PLANNING_ONLY |

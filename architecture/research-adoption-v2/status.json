@@ -1,0 +1,99 @@
+{
+ "schemaVersion": "planeon.internal.research-adoption-v2-status/v1",
+ "workItem": "MAS-RA-000",
+ "status": "ADOPTED_FOR_SOURCE_PUBLICATION",
+ "reviewedSubject": {
+  "commit": "3cb4b04ed422df6c6fef369170fc07251bc2533c",
+  "tree": "dd3bc216a1674f50f72e91829bfd3715f109fd0d"
+ },
+ "successorOf": {
+  "record": {
+   "path": "architecture/research-adoption.json",
+   "sha256": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5"
+  },
+  "map": {
+   "path": "docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md",
+   "sha256": "f6a891e8bdbcc579e60800773addd70ca29a2c4021c2dc95af62be93e91f061d"
+  },
+  "by": "architecture/research-adoption-v2/crosswalk.json"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "7753b173f08de6fe31e3fb8a41d82e3deca90dbc",
+   "subjectTree": "77ecb735ae5827190e0c872f160d305f7bcc9592",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/research-adoption-v2/review-round1.json",
+   "snapshot": null,
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "publicCopy": {
+    "reason": "the verbatim record cites a paper by its first author's surname; the published copy, written by the same reviewer, uses the arXiv id instead",
+    "verbatimSha256": "fb3e2ccc9426921391b5231bb14c8f18ad85451968d428e4434f93746f29757e"
+   },
+   "withheld": {
+    "reason": "the round-1 subject carried personal data copied from the grounding records (review R1-1); its bytes are not published, and its file digests bind it",
+    "sha256": {
+     "architecture/research-adoption-v2/crosswalk.json": "2c6460fdd248fbe102e1c62147fe3bdcd907c206631f9ceea8b1b5fd704749b8",
+     "architecture/research-adoption-v2/README.md": "6fccf6df0e4c7ef625bb7cc8b8aac45355f7692a208a25bda71e55b282c9bc99",
+     "scripts/research_adoption_v2.py": "353db63a2230ec780f5136cc9702b1d6a630cc8fef925e2349c3568dc11f4c8e"
+    }
+   }
+  },
+  {
+   "round": 2,
+   "subject": "21cdf3cca167c6ec5e972a608f5a92a8701dcf37",
+   "subjectTree": "dca0ff06eec794476ed8ef12861106572132ba88",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/research-adoption-v2/review-round2.json",
+   "snapshot": "architecture/research-adoption-v2/round2/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 3,
+   "subject": "5268f1092fcb965c7f0fd580c9f920f5f2df6eee",
+   "subjectTree": "863eec8ced7fa0290c5b8e415ab82a0b37228955",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/research-adoption-v2/review-round3.json",
+   "snapshot": "architecture/research-adoption-v2/round3/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 4,
+   "subject": "3cb4b04ed422df6c6fef369170fc07251bc2533c",
+   "subjectTree": "dd3bc216a1674f50f72e91829bfd3715f109fd0d",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/research-adoption-v2/review-round4.json",
+   "snapshot": null,
+   "severities": [
+    "NOTE"
+   ]
+  }
+ ],
+ "carried": [
+  {
+   "item": "R4-1",
+   "to": "MAS-RA-001..010 or a later research-adoption revision",
+   "action": "None required. Optional: reword to 'An index keeps its mode whatever the licence; a planned baseline keeps its mode when its licence outcome is default-allowed or unresolved (NOASSERTION); in both cases the licence ceiling binds.'"
+  },
+  {
+   "item": "R4-2",
+   "to": "MAS-RA-001..010 or a later research-adoption revision",
+   "action": "None required. Optional: match 'dot' as a separator in the 'x at domain' rule, and test for 'NOT_FOUND for (a|the) licen' rather than co-occurrence of the two words."
+  }
+ ],
+ "nonClaims": [
+  "No public contract, selector, catalog, policy or runtime change; MAS-RA-001..010 stay proposed.",
+  "No upstream is qualified, vendored, released or licence-cleared.",
+  "The research figures are reported results, not platform evidence."
+ ]
+}

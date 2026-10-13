@@ -1,0 +1,53 @@
+{
+ "schemaVersion": "harness.planeon.ai/research-adoption-v2-review/v1",
+ "kind": "research-adoption-v2-review",
+ "round": 3,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "5268f1092fcb965c7f0fd580c9f920f5f2df6eee",
+ "subjectTree": "863eec8ced7fa0290c5b8e415ab82a0b37228955",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R3-1",
+   "severity": "MINOR",
+   "location": "crosswalk.json definitions.reuseModes.LICENSE_BLOCKED (builder appends the sentence); README Definitions table",
+   "finding": "The precedence sentence added for R2-2 reads 'Assigned only when no other mode applies: an index, a planned baseline or a reference design keeps its mode, and its licence ceiling binds'. It now contradicts five records and the checker. Arize-ai/phoenix, yuzhenmao/DeLM, mattermost/mattermost, qzzqzzb/Self-Harness and the OPHSD repository are all used as design references. Their own texts say 'design reference only' or 'semantics only', and phoenix's 'what' calls it 'a reference for MAS-RA-003's mapping'. Under the sentence as written they should keep REFERENCE_DESIGN, yet all five are LICENSE_BLOCKED. The checker forbids REFERENCE_DESIGN for them: REUSE_OUTCOMES admits REFERENCE_DESIGN only with DEFAULT_ALLOWED, ALLOWED_EXCEPTION_EXPRESSION or OPEN_CONTENT, and the probe 'phoenix as REFERENCE_DESIGN' is rejected. Only the index and planned-baseline parts of the sentence match the data (langfuse, ai-boost/awesome-harness-engineering, EvoMap/awesome-agent-evolution). The reference-design case holds only for open content (claudes-c-compiler).",
+   "requiredChange": "Reword it to match REUSE_OUTCOMES. For example: 'Assigned only when no other mode applies: an index or a planned baseline keeps its mode, and so does a reference design whose licence outcome is default-allowed, an allowed exception or open content; the licence ceiling binds.' Optionally drop '(review R2-2)' from the public definition text."
+  },
+  {
+   "id": "R3-2",
+   "severity": "NOTE",
+   "location": "scripts/research_adoption_v2.py (licenceStatedInPaper rule, HYGIENE); builder LICENCE_STATED; definitions.licenceCeiling.DESIGN_REFERENCE_ONLY; upstreams[].roadmapCheck.license",
+   "finding": "Residual limits. None affects the current data; all eight licenceStatedInPaper values are correct (see checksRun).\n(a) licenceStatedInPaper is hard-coded in the builder and not cross-checked. The probe accepted true for MASS, whose only licence check is NOT_FOUND, and for VeriHarness, whose detail says NOT_FOUND for a licence.\n(b) The new statusDetail rule is lexical. A detail saying the licence was verified passes, and the spelling 'license' in a claim bypasses the rule.\n(c) Hygiene. '(at)' and '[at] … [dot]' obfuscations are not matched. The broadened 'x at domain' rule also flags legitimate site references such as 'available at veriharness.com.'; the record already rephrases around this twice.\n(d) Bare names and free-form prompt residue remain review-only, which is accepted.\n(e) Two optional wording points:\n  - DESIGN_REFERENCE_ONLY says 'open content used as code', but ceiling() applies to all open content. Keeping open content as design-reference-only is acceptable, but the definition text should match it.\n  - The meaning of roadmapCheck.license null ('no SPDX identifier', covering the roadmap's 'unknown' and 'NONE (no licence file)') is not stated in the record.",
+   "requiredChange": "None required. Optional:\n- Derive licenceStatedInPaper from the licence checks (false whenever the paper's licence-naming availability check is NOT_FOUND or its detail says NOT_FOUND for a licence).\n- Match 'licen[cs]e' and require 'NOT_FOUND' in that detail.\n- Add the '(at)'/'[at]' forms.\n- Align the DESIGN_REFERENCE_ONLY text with ceiling().\n- State the meaning of the roadmapCheck licence null in definitions."
+  }
+ ],
+ "dispositions": [
+  {"id": "R2-1", "round2Severity": "MINOR", "disposition": "RESOLVED", "evidence": "VeriHarness check 9 now reads 'A released rollout corpus and code; a licence statement.', with the statusDetail 'VERIFIED for the code and the rollout corpus; NOT_FOUND for a licence (pp. 1, 22)'. Round 2 confirmed there is no licence text on pp. 1 or 22; the only licence on p. 21 is the MIT licence of a dependency. Every seed paper now has licenceStatedInPaper false, and the README status table shows a 'Licence stated in the paper' column ('no' for all eight). I grepped all 249 PDF pages and no paper states a licence for its own code or data. The only hits are HarnessDev's third-party licences (pp. 6, 22), a verb use in JAZ (p. 14) and VeriHarness's MIT dependency (p. 21). The MASS claim 5 statusDetail now follows its cleaned text. The new checker rule rejects a removed or licence-free detail on VeriHarness 9 and JAZ 6. Its limits are in R3-2 (a) and (b)."},
+  {"id": "R2-2", "round2Severity": "MINOR", "disposition": "PARTIALLY_RESOLVED", "evidence": "The precedence sentence was appended to LICENSE_BLOCKED, and REUSE_AFTER_GATES gained 'The ceiling binds whatever the reuse mode.' The index and planned-baseline parts now explain langfuse and the two NOASSERTION awesome lists. The reference-design part is too broad and contradicts five LICENSE_BLOCKED records and REUSE_OUTCOMES (R3-1)."},
+  {"id": "R2-3", "round2Severity": "NOTE", "disposition": "RESOLVED", "evidence": "Done:\n- (a) The 'x at domain' rule now covers any domain and sentence-final forms. The probes with trailing period, end of string, comma, ')', .ac.uk and .co are all rejected, and 'released at github.com/…' and 'at 26.2% less cost' still pass.\n- (b) '~/' is rejected.\n- (e) A map mention must contain its own codebase id. The probes with langfuse's mention on phoenix and on letta are rejected.\n- (h) The VeriHarness status now reads 'arXiv 2610.00972v1 [cs.AI], 1 Oct 2026', matching p.1. The HarnessDev project-page fact is rephrased.\nAccepted as declined:\n- (c) Bare names and (d) the fixed residue list stay review-only.\n- (f) Open content stays design-reference-only and (g) roadmapCheck.license stays null. Both choices are acceptable; the optional wording for both is in R3-2 (e)."}
+ ],
+ "checksRun": [
+  {"check": "Hard rules: PAUSE prefix on every command; every process under timeout; python3 -I -B; no network. Writes were confined to the review work directory. The worktree is clean at 5268f109. No command ran longer than 60 s (the longest was the mutation probe, about 1.6 s), and peak RSS was under 70 MB.", "result": "PASS"},
+  {"check": "Scope: the parent of 5268f109 is 21cdf3cc. git diff --stat 21cdf3cc..5268f109 and 93d32e1..5268f109 touch only the three subject files. Round-2 bytes are unchanged in history (the 21cdf3cc crosswalk.json sha256 is still 76d5a8fc...).", "result": "PASS"},
+  {"check": "Reproducibility: git archive 5268f109, then build_crosswalk.py WORKSPACE <archive> recheck-2026-10-12.json. crosswalk.json (39330416...) and README.md (8cf678ca...) are byte-identical to the subject, and the checker is unchanged. scripts/research_adoption_v2.py reports 'valid: 19 papers (60 seed checks), 47 codebases (40 repositories pinned), 30 acceptance IDs'.", "result": "PASS"},
+  {"check": "Builder diff (build_crosswalk.round2.py against build_crosswalk.py) and the leaf diff of the round-2 and round-3 records: 0 removed, 9 added (8 licenceStatedInPaper and the VeriHarness 9 statusDetail), 6 changed (two definitions, VeriHarness 9 text, VeriHarness status, one HarnessDev fact, MASS 5 statusDetail). Nothing outside the round-2 findings changed.", "result": "PASS"},
+  {"check": "Licence statements in all eight PDFs (all page texts grepped for licence/license wording) against licenceStatedInPaper", "result": "PASS (no seed paper states a licence for its own release)"},
+  {"check": "VeriHarness status against the p.1 arXiv stamp (2610.00972v1 [cs.AI] 1 Oct 2026)", "result": "PASS"},
+  {"check": "Personal-data scan of crosswalk.json and README.md. It checks the 108 seed-paper authors, the RS-CLAUDE Part A author-column tokens and 632 reference-list surnames from the eight PDFs. It also checks for e-mail and obfuscated forms, corresponding-author, et al, affiliation and funding text, home paths including '~/', Hugging Face dataset paths and citation-year patterns.", "result": "PASS"},
+  {"check": "Verbatim-overlap scan (8-token shingles, runs of 15 or more tokens) of 2,971 strings and README lines against the eight PDFs and three syntheses. The 18 hits are the same as rounds 1 and 2; there is no long prose.", "result": "PASS"},
+  {"check": "Mutation probe extended for round 3 (mutations3.py: the round-2 suite plus 21 cases for the R2 changes; record edits are re-rendered through the checker's render()). 119 cases: 99 of 107 negative cases caught, 11 of 12 positive cases accepted. The misses are the free-form residue, a bare name, the '(at)' and '[at]…[dot]' forms, a lexical licence-detail bypass, licenceStatedInPaper set true twice and the 'license' spelling. The false positive is 'available at veriharness.com.'. All are in R3-2.", "result": "PASS with residual limits (R3-2)"},
+  {"check": "Checker properties: unchanged imports (hashlib, json, math, re); no network; reads only through the injected reader; closed seed key set now includes licenceStatedInPaper", "result": "PASS"},
+  {"check": "GitHub re-check or any network access", "result": "NOT RUN: forbidden by the brief"},
+  {"check": "R12 repository proposed-ID collision for CONF-MAS-001", "result": "NOT RUN: R12 not read (unchanged from rounds 1 and 2)"}
+ ],
+ "sourcesRead": [
+  "git show / git diff / git archive 5268f109 against 21cdf3cc: architecture/research-adoption-v2/crosswalk.json, architecture/research-adoption-v2/README.md, scripts/research_adoption_v2.py",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-000/build_crosswalk.py (diffed against build_crosswalk.round2.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-000/recheck-2026-10-12.json (builder input)",
+  "roadmap/roadmap.json, roadmap/research/grounding/*.json, roadmap/research/mas-harness-research-*.md (builder inputs and scans)",
+  "roadmap/research/papers/*.pdf page texts from round 1 (all pages grepped for licence wording; VeriHarness p.1; reference lists for the surname scan)",
+  "legal/third-party-license-policy.yaml (unchanged)"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

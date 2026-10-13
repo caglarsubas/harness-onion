@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-024
+## Current source preparation — MET-ADOPT-003
+
+MAS-RA-000 (MET-ADOPT-003): research adoption v2 crosswalk, the October 2026 MAS-harness corpus mapped to the
+eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs; research-adoption.json and the
+harness paper map stay byte-identical. Alpha2 OPEN; 227 accepted plus MET-ADOPT-003 only.
+
+## Historical W03-AMEND source preparation — MET-ENFORCE-024
 
 W03-AMEND (MET-ENFORCE-024): W03 plan v2 with the owner's HE-002 decisions Q-HE2-A to Q-HE2-G (v1 stays
 byte-identical), the operator -> harness-engineering buildArtifact edge registry record and the supplementary I05 v3
@@ -1070,6 +1076,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 99. `MET-ENFORCE-023`: publish the W02 notes errata (native-profile-v3, I06 v2) and the PERF-032-F checks as reviewed data; source only.
 100. `MET-PERF-037`: close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; source only.
 101. `MET-ENFORCE-024`: publish the W03 plan v2 (the owner's HE-002 decisions), the operator -> harness-engineering buildArtifact edge record and the I05 v3 supplementary vectors; data only.
+102. `MET-ADOPT-003`: publish the research adoption v2 crosswalk (the October 2026 MAS-harness corpus, the eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs) beside the byte-identical MET-ADOPT-002 record; data only.
 
 ## Testing, verification, and acceptance
 
