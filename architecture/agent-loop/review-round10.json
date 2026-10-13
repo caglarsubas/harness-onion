@@ -1,0 +1,440 @@
+{
+ "schemaVersion": "harness.planeon.ai/agent-loop-review/v1",
+ "kind": "agent-loop-review",
+ "round": 10,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "d6ad8f0801da22091f0c543879dde26817e20590",
+ "subjectTree": "72cb7d18f8e5ae81866458a79a0228506238736b",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R10-1",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _tainted (`s[\"stepId\"] not in repairers and any(c in tainted for c in s[\"consumes\"])`) and _overridden (the `repairers` of a parent's FAIL; `_fail_scope(v, holders[0], s[\"seq\"], frozenset(failed_by[b]))`); README 'A FAIL crosses the delegation boundary', third bullet",
+   "finding": "The repairer exemption waives the whole consumption edge for a delegation whose child FAILed the bytes. That includes the delegation's consumption of steps the FAIL covers only as derived from those bytes, for example a model step built on the failed artefact. Nothing checks the child against those derived bytes. The child can FAIL the original, repair it or not, build its delivered artefact on its own copy of the derived bytes, and the parent builds on the delegation. One loop refuses the same steps.\n- K1001: d consumes patch (X) and m2 (N, built on X). Its child FAILs X with unit-tests, makes no repair, and delivers O built on its copy of N. final builds on d. Accepted by rounds 5 to 10. The one-loop controls are refused: K1001c (o consumes m2) and K1001d (o consumes a fresh copy of N after the FAIL, through the copy edge).\n- K1002: K1001 where the child also repairs X to Y, passing every gate, and builds O on Y and N. Accepted.\n- K1003: K1001 under K821, with the parent's own unit-tests FAILing X after d. Accepted since round 9; round 8 refused it because d was covered.\n- K1004: d consumes only m2 (N); its child regenerates X and FAILs it. Accepted.\n- K1005 (control): K1003 without the child's FAIL is refused, so the exemption is what lets these through.\n- K1006: a valid form in which the child's revision itself reads N (a revision may consume covered bytes) and is delivered. Accepted, as in one loop (K1006c).\nThe README justifies the exemption as follows: 'it carries the child's repair, which the parent may build on ... since that FAIL's gate must pass the repair in the child'. That does not hold here, because the delegation's artefact is built on covered derived bytes, not only on the repair. 'Not claimed' names derived bytes that a later child regenerates without consuming them (C702). It does not name a delegation that consumes covered steps and is exempt.",
+   "requiredChange": "Close the gap, or state it.\nTo close it: an exempt delegation should carry only the child's repair of the failed bytes. In its child, bytes it consumed that the FAIL covers only as derived (not the failed bytes' holders) should be covered: a model or delegation step holding them, and anything that consumes such a step, except a revision of the failed bytes. Nothing else consumes them, and they are not delivered.\nChecked: sketch WORK/alt10, about 30 lines (`_repairer_inputs`, called after each `_fail_scope` that has repairers). Results:\n- the builder writes the same three files with all its assertions holding;\n- every earlier probe set is unchanged apart from P34's timing (rounds 2 to 9 and this round's J, G, F and S groups);\n- K1001 to K1004 are refused, and K1006 and K1006c stay accepted;\n- random parents show 1 further refusal in 40,000 (seed 9, two gates) and 18 in 120,000 (seed 10, three gates). In the three examined, the deciding delegation's artefact repeats covered bytes and is never used, and the child delivers them. That matches the README's choice that the delivery counts as a use;\n- the round-8 timing cases take about 1.2 to 1.6 times as long, because the sketch recomputes `_tainted` instead of reusing `_fail_scope`'s.\nThen pin K1001 (or K1003) as a refusal vector and K1006 as a valid one.\nOtherwise, state the limit under 'Not claimed': a delegation exempt as a repairer may hand its child bytes derived from the failed artefact, and the child may build on them."
+  },
+  {
+   "id": "R10-2",
+   "severity": "NOTE",
+   "location": "README 'A FAIL crosses the delegation boundary', the paragraph 'Only passes inside the child count for a child's revision. This fails closed in two cases that one loop accepts: ...'",
+   "finding": "The rule is stated accurately, and the two named cases (G901d and H906b) are refused as stated. The list of cases is not complete, though. The same rule refuses other loops that one loop accepts:\n- J1001: the parent's failing gate passes the delegation's Y after the delegation but before the FAIL. The README names only a pass 'after the FAIL'. One loop accepts it (J1001c).\n- J1002: the parent's failing gate passed the same bytes Y on an earlier holder, before the delegation. In one loop an earlier gate on the same bytes counts (J1002c).\n- J1003: the parent's own later FAIL, not a sibling's. The parent never uses d and repairs the patch itself; the child's delivered revision never passed unit-tests. One loop accepts it (J1003c). This case is new in round 10 (rounds 8 and 9 accept it). The README's second case names only 'a later sibling's failing gate'.\n- J1004: a sibling child's pass of the same bytes.\nJ1001, J1002 and J1004 were also refused by round 8 and accepted by round 9.",
+   "requiredChange": "State the class instead of 'two cases'. For example: 'This fails closed wherever one loop would count a pass outside the child: in the parent or a sibling, before or after the FAIL, on the delegation's artefact or on another holder of the same bytes. It also fails closed wherever the child delivers a revision that a later FAIL in the parent or a sibling covers, even if the parent never uses it (the delivery counts as a use).'"
+  },
+  {
+   "id": "R10-3",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _fail_scope docstring, last sentence; README line 3 (header); README 'Not claimed', 'FAILs across loops beyond the rules above'",
+   "finding": "Three wording residues:\n(1) _fail_scope ends with 'A child's FAIL is decided at its delegation, which is not covered itself.' The same docstring says that repairers are exempt 'from the consumption edge only'. V150 (K803d) shows that the deciding delegation is covered by the copy edge: _tainted returns it, and the write that consumes it is refused. R9-2 (1) raised this point, and the sentence survives in reworded form.\n(2) The README header says 'Alpha 2'. roadmap.json and the crosswalk at 82804a0 place MAS-RA-008 in Alpha 3. The sibling contracts MAS-RA-001 and -002 are Alpha 2 items, so for them the same header matches.\n(3) 'Not claimed' says that a FAIL does not cover 'a child that ran before the FAIL'. Since round 10, a later FAIL does re-gate that child's revisions. The statement is true of the coverage, but a reader may take it to exclude the re-gate as well.",
+   "requiredChange": "(1) Reword, for example: 'A child's FAIL is decided at its delegation: only later steps are checked, and the delegation itself is covered only through the copy edge.' (2) Say 'an Alpha 3 item built in Alpha 2 (owner decision Q-231)', or align the header with the phase. (3) Add 'beyond the re-gate of its revisions' to that item."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R9-1",
+   "disposition": "RESOLVED",
+   "evidence": "The adopted hunk equals sketch alt9's. `diff` against WORK/alt9/scripts/agent_loop.py shows only two differences in that hunk: the reworded comment above `everywhere`, and the dropped 'REVIEW SKETCH' tag on `_regate(cv, everywhere)`.\nRe-run results:\n- G901, G901e and G902 are refused;\n- G901b, G902b, V046 (K820) and V047 (K821) stay accepted;\n- G1001 to G1005 (a use inside the child, two rounds, three siblings, a FAIL on another holder of X, a retried revision) are refused, and the passing variants G1002b, G1003b and G1005b are accepted.\nV207 (G901b) and V208 (G901) are pinned over the lint-loop profile and child-run-24 and -25. V208 isolates the change: round 9 accepts it, and the builder checks that it passes once GATE_OVERRIDDEN is disabled. Run directly, round 8 refuses V207 and V208, round 9 accepts both, and round 10 accepts V207 and refuses V208.\nThe README states the rule and the fail-closed choice. Its list of cases is incomplete (R10-2). R10-1 is a separate gap in the exemption, independent of R9-1."
+  },
+  {
+   "finding": "R9-2",
+   "disposition": "PARTIAL",
+   "evidence": "Done:\n- (2) The parameter is `repairers` in _tainted and _fail_scope, and _tainted's docstring states the exemption ('exempt from the consumption edge only, never from the copy edge'). _overridden's docstring states the any-time re-gate.\n- (3) Line 559 is now 121 characters. No line exceeds the pre-existing 133-character TRACE_CODES line.\n- (1) _fail_scope's docstring now states the consumption edge only, the delegations up to the deciding one, and the parent's own FAILs.\nNot done: it still ends 'which is not covered itself', which V150 contradicts. Carried in R10-3 (1)."
+  },
+  {
+   "finding": "R9-3",
+   "disposition": "RESOLVED",
+   "evidence": "The adopted index equals sketch alt9i's (`first.setdefault(c[\"produces\"], c)`, built once per delegation), with only the comment reworded. Its lookup is equivalent: the `extra` keys are never None. Timings in this session on round 10, with round 9 in brackets:\n- K=200, T=200: 8.15 s (26.5 s); alt9i 8.27 s; peak RSS 228 MB;\n- K=100, T=200: 3.73 s (8.57 s);\n- K=100, T=100: 1.13 s (2.17 s)."
+  },
+  {
+   "finding": "R8-1..R8-5, R7-1..R7-6, R6-1..R6-5, R5-1..R5-4, R4-1..R4-3, R3-1..R3-7, R2-1..R2-11, R1-1..R1-16",
+   "disposition": "RESOLVED",
+   "evidence": "The earlier probe sets were re-run on round 10 with round 9's scripts, copied into WORK with only the work path changed: P/N (71), Q (39), round 4 (35), A-E (40), round 6 (44), round 7 (44), round 8 (32 + 3 K803 + 9 b), and round 9 (34 + 2 controls).\nEach equals its result under round 9's sketch alt9, with three exceptions, none of them a rule change:\n- N31 also lists child-run-24 and -25, which pass their own check;\n- Q31 counts 86 of 154 refusal cases, not 86 of 153;\n- P34 differs by timing jitter only.\nAgainst round 9 itself, only G901, G901d, G901e, G902 and H906b change, as R9-1 predicted."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject and scope.\n- The worktree is clean at d6ad8f08 (tree 72cb7d18) on codex/met-mas-006-agent-loop-gateway.\n- 82804a0..d6ad8f08 adds exactly the five files.\n- a7adee02..d6ad8f08 changes only README.md, vectors.json and agent_loop.py.\n- docs/ and schemas/ are unchanged: H10's and H11's documents keep blobs c602a324 and 2d626608.\n- DATA_CHECK_ONLY holds.",
+   "result": "PASS"
+  },
+  {
+   "check": "Adopted hunks. `git diff a7adee02 d6ad8f08` was compared with WORK/alt9 and WORK/alt9i (round 9's sketches). The `everywhere` hunk and the `first` index equal the sketches, apart from the reworded comments. The rest is the R9-2 docstrings and the rename.",
+   "result": "PASS except R10-3 (1)"
+  },
+  {
+   "check": "Reproducibility. ~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (identical to build_loop.r10.py; sha256 100c7871) was run with the venv python -I -B on a git-archive copy in WORK. It reported 208 cases (40 valid), 4 texts, and stores of 9 profiles and 26 traces, with all its assertions holding. `diff -r` against a second extraction found no change. Against build_loop.r9.py, the builder adds only P_LINT, lint_child, child-run-24 and -25, later_fail_other_gate and the two cases, as the brief states.",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay (python3 -I -B scripts/agent_loop.py): 208 cases and 4 texts. The README's counts hold:\n- 40 valid, 168 refused;\n- 9 profile entries, two unusable (misfiled, malformed);\n- 26 child traces, two failing their own check (child-run-bad TOTALS_MISMATCH, child-run-6 HOOK_NOT_REGISTERED);\n- six alsoRefusedBy cases.\nV001 to V206 and the earlier stores are byte-identical to round 9's.",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions. PLAN.md's Q-MAS8-A to -D lines equal the README's, verbatim (diff). The schemas and model hold:\n- recursionDepth and trace depth 0 to 1;\n- stepRetries 0 to 3 (default 1);\n- revision rounds 0 to 3 (default 3);\n- attempt 1 to 4;\n- a closed capability {grantDigest, toolId, manifestDigest, scope, expiresAt}, with no key material.",
+   "result": "PASS"
+  },
+  {
+   "check": "Sources.\n- Roadmap MAS-RA-008: the description, the three deliverables, H11/H10 primary and H13/H15 secondary, and the grounding pages.\n- Crosswalk at 82804a0: MAS-RA-008-A1 to -A3, gate CONF-A3-001, and HO-D2.\nThe README maps each.",
+   "result": "PASS except R10-3 (2): the header says Alpha 2, the item is Alpha 3"
+  },
+  {
+   "check": "Harness rules:\n- H11 l.55 (no retry of unknown side effects, no secret values, no model text as commands outside a signed manifest) and ll.149-150 (receipt lookup, OUTCOME_UNKNOWN);\n- H10 l.151 (no blind retry of a non-idempotent ambiguous outcome);\n- H13 l.18 (a probabilistic detector cannot override a deterministic denial);\n- H15 ll.53 and 60 (declared budgets, usage ledger).",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot checks (pdftotext -f N -l N, 22 pages):\n- JAZ pp. 4, 5, 7, 13, 14, 23, 24. p. 14: 13 events (Enter/Send/Complete/Exit for invoke, LLM query and REPL exec, plus LLMQueryRetry); abort at every event but InvokeExit and LLMQueryRetry; order-independent composition with unresolvable conflicts refused; spans closing Completed/Aborted/Failed. pp. 4-5: dynamic and local scope, and BudgetPool, IterationLimit and RecursionLimit. p. 7: depth 70, and the footnote counting the top-level agent as depth 1. p. 23: a subagent errors out when a limit is reached.\n- HERMES pp. 15, 16, 20, 21, 23: diagnosis cannot override deterministic failures (pp. 15, 21); B counts rounds after the initial pass; the diagnosis schema (p. 20); Table 12, where B from 3 to 5 adds 0.5, 0.9, 0.47 and 0.2.\n- HarnessDev pp. 5, 8, 22, 24, 27, 28: six modules; success/partial/failed; the 36,000 s limit and 500-step cap; provider-neutral config; final artefact validation.\n- Harness-Zero pp. 2, 8, 22, 23: one execute tool; the turn limit; single-level delegation with at most four concurrent subagents.",
+   "result": "PASS"
+  },
+  {
+   "check": "Dispositions: the round-2 to round-9 probe sets were re-run on round 10 (see dispositions).",
+   "result": "PASS"
+  },
+  {
+   "check": "Reviewer probes, round 10 (WORK/probes_r10.py; 42 probes, each run on rounds 10, 9 and 8 and against the schemas). Groups:\n- J: the README's fail-closed statement;\n- G: R9-1 varied;\n- K: the exemption's breadth;\n- F: first code and fail-closed stores;\n- S: schema agreement.\nWORK/older.py ran the K group on the round-5, -6 and -7 models.",
+   "result": "FAIL: K1001-K1004 accepted while one loop refuses (R10-1); J1001-J1004 refused as the rule says, but the README's list of cases is incomplete (R10-2). Everything else as expected."
+  },
+  {
+   "check": "Schema agreement.\n- S1001: 2,000 random single-point mutations (seed 10) of V207, V208, the lint-loop profile and child-run-24 and -25. A model SHAPE refusal coincides with schema rejection in every case, and nothing but Refused escapes.\n- S1002 to S1004, S1007: per-kind detail and per-event effects are refused by both.\n- S1005, S1006, S1009: refused by the model with a non-SHAPE code; the schema accepts them.\n- S1008: an observing BUDGET_WARNING hook is accepted by both.",
+   "result": "PASS"
+  },
+  {
+   "check": "Random differential (WORK/diff_r10.py, round 9's diff_r9.py with the models swapped; a three-gate option). Results:\n- 40,000 parents (seed 9, two gates): no difference between round 9, round 10, alt9 and alt9i;\n- 120,000 parents (seed 10, three gates): no difference;\n- no escapes.\nA first three-gate run silently used two gates (the flag was read after argv was replaced); it was fixed and re-run. Under that faulty run, round 9 against round 10 showed 1 difference (accepted to GATE_OVERRIDDEN, the R9-1 direction) and round 10 against alt9 none.",
+   "result": "PASS"
+  },
+  {
+   "check": "Fix sketch WORK/alt10 for R10-1: see R10-1's required change.",
+   "result": "PASS"
+  },
+  {
+   "check": "Timing. No command ran over 60 s; the longest took 30 s (the round-7 timing probes). Round 10, with round 9 in brackets:\n- sibling reach: see R9-3;\n- round-8 child-to-parent cases: 2,000 x 1 1.38 s (1.34), 2,000 x 10 1.55 s (1.54), 1,000 x 40 1.05 s (1.04);\n- round-7 cases: 250/250 at 4,004 tools 4.41 s (4.43), and the 1,000-delegation control 17.7 s (17.6); perf2: 500/500 at 4,004 tools 9.16 s (8.58), 2,000/2,000 3.42 s (3.38);\n- round-6 re-gate: g = u = 1,365 2.06 s (2.01), 819 chains 2.51 s (2.54);\n- round-5 pairs: at most 0.13 s;\n- new: the always-on child re-gate (WORK/perf_r10b.py), one child with 1,000 revision chains and a later parent FAIL: 3.40 s (2.76); 4 x 680: 6.29 s (6.06).",
+   "result": "PASS"
+  },
+  {
+   "check": "Hard rules.\n- Every shell command ran behind the PAUSE wait.\n- Nothing was written outside WORK, and no __pycache__ or .pyc appeared (find over the worktree, the tools directory and round 9's work directory).\n- The tools directory, round 9's work directory (copied from) and the worktree (clean at d6ad8f08) were read only.\n- No network was used.",
+   "result": "PASS"
+  },
+  {
+   "check": "Public hygiene. A grep of the five files for e-mail addresses, user paths, personal names and key material finds nothing. The README's statements were checked against the files and the model.",
+   "result": "PASS except R10-2 and R10-3 (NOTE, wording)"
+  }
+ ],
+ "probes": [
+  {
+   "id": "J1001",
+   "mutation": "the parent's unit-tests passes the delegation's Y after the delegation and BEFORE its own FAIL of X; final builds on d (README names only a pass 'after the FAIL')",
+   "expected": "GATE_OVERRIDDEN by the stated rule ('Only passes inside the child count'); one loop (J1001c) accepts",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "J1001c",
+   "mutation": "control for J1001 in one loop: unit-tests passes fix before failing patch; final consumes fix",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "J1002",
+   "mutation": "the parent's unit-tests passed the same bytes Y on an earlier holder (m0) before the delegation; then the child repairs X to Y (schema-check only), the parent's unit-tests FAILs X, final builds on d",
+   "expected": "GATE_OVERRIDDEN by the stated rule; one loop (J1002c) accepts: an earlier gate on the same bytes counts",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "J1002c",
+   "mutation": "control for J1002 in one loop",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "J1003",
+   "mutation": "the parent's OWN later FAIL (not a sibling's): d's child repairs X to Y (schema-check only) and delivers it; the parent's unit-tests FAILs X; the parent never uses d and revises patch itself (pfix passes unit-tests and schema-check)",
+   "expected": "GATE_OVERRIDDEN by the stated rule (the delivery counts as a use); one loop (J1003c) accepts. README's second case names only 'a later sibling's failing gate'",
+   "got": "GATE_OVERRIDDEN; round 9: accepted"
+  },
+  {
+   "id": "J1003c",
+   "mutation": "control for J1003 in one loop",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "J1004",
+   "mutation": "a sibling's pass: d1's child repairs X to Y (schema-check only); d2's child produces the same Y and unit-tests passes it; the parent's unit-tests FAILs X; final builds on d1",
+   "expected": "GATE_OVERRIDDEN by the stated rule; one loop would count the earlier pass on the same bytes",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1001",
+   "mutation": "G901 where the child builds Z on its repair Y (Y passed schema-check only) and delivers Z; the parent's later unit-tests FAILs X; final builds on d",
+   "expected": "GATE_OVERRIDDEN (Y is used inside the child)",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1002",
+   "mutation": "two revision rounds in the child (X -> Y -> Y2, schema-check FAILs X and Y); Y2 passes schema-check; the parent's later unit-tests FAILs X; final builds on d",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1002b",
+   "mutation": "two revision rounds in the child (X -> Y -> Y2, schema-check FAILs X and Y); Y2 passes schema-check and unit-tests; the parent's later unit-tests FAILs X; final builds on d",
+   "expected": "accepted",
+   "got": "accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1003",
+   "mutation": "three siblings: d1's child FAILs X with unit-tests and repairs it to Y (passing unit-tests, lint); d2's child FAILs X with lint, d3's with schema-check; the parent (policy passed X) builds on d1",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1003b",
+   "mutation": "three siblings: d1's child FAILs X with unit-tests and repairs it to Y (passing unit-tests, lint, schema-check); d2's child FAILs X with lint, d3's with schema-check; the parent (policy passed X) builds on d1",
+   "expected": "accepted",
+   "got": "accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1004",
+   "mutation": "G901 where the parent's later FAIL is on another holder of X: read-file reads patch back as the same bytes X and unit-tests FAILs the read",
+   "expected": "GATE_OVERRIDDEN (bytes, not steps)",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1005",
+   "mutation": "G901 where the child's revision ERRORs and its retry produces Y (passing schema-check)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G1005b",
+   "mutation": "G901 where the child's revision ERRORs and its retry produces Y (passing schema-check and unit-tests)",
+   "expected": "accepted",
+   "got": "accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K1001",
+   "mutation": "d consumes patch (X) and m2 (N, derived from X); its child FAILs X with unit-tests (no repair) and delivers O built on its copy of N; final builds on d (the child's FAIL, decided at d)",
+   "expected": "GATE_OVERRIDDEN as K1001c (one loop: N is covered, and O consumes it after the FAIL)",
+   "got": "accepted"
+  },
+  {
+   "id": "K1001c",
+   "mutation": "control for K1001 in one loop: regen (X) consumes patch, unit-tests FAILs regen, o consumes m2 (N)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K1001d",
+   "mutation": "control for K1001 in one loop with the child's own copy: after the FAIL a fresh model step nn repeats N (consuming nothing), lint passes it, o consumes nn",
+   "expected": "GATE_OVERRIDDEN (copy edge: nn repeats covered bytes)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K1002",
+   "mutation": "K1001 where the child also repairs X to Y (passing every gate) and builds O on Y and N",
+   "expected": "GATE_OVERRIDDEN as one loop (o consumes covered N)",
+   "got": "accepted"
+  },
+  {
+   "id": "K1003",
+   "mutation": "K1001 under K821: the parent's own unit-tests then FAILs X after the delegation too",
+   "expected": "GATE_OVERRIDDEN as one loop",
+   "got": "accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K1004",
+   "mutation": "K1001 where d consumes only m2 (N); its child regenerates X itself and FAILs it",
+   "expected": "GATE_OVERRIDDEN as one loop",
+   "got": "accepted"
+  },
+  {
+   "id": "K1005",
+   "mutation": "control: K1003 without the child's FAIL (no exemption): d consumes patch and m2, its child builds O on N; the parent's unit-tests FAILs X after d; final builds on d",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K1006",
+   "mutation": "a valid form of K1002: the child's revision itself reads N (a revision may consume covered bytes) and is delivered; final builds on d",
+   "expected": "accepted (one loop accepts a revision reading covered N; K1006c)",
+   "got": "accepted"
+  },
+  {
+   "id": "K1006c",
+   "mutation": "control for K1006 in one loop",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K1007",
+   "mutation": "a child whose delivered O consumed X before its own FAIL of X",
+   "expected": "UNKNOWN_REFERENCE (the child fails its own check: O is covered)",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "F1001",
+   "mutation": "V208 (G901) with the delegation's tokens off by one: TOTALS_MISMATCH precedes GATE_OVERRIDDEN",
+   "expected": "TOTALS_MISMATCH",
+   "got": "TOTALS_MISMATCH"
+  },
+  {
+   "id": "F1002",
+   "mutation": "V208 with child-run-24 missing from the store",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "F1003",
+   "mutation": "V208 with child-run-24 stored as a string",
+   "expected": "UNKNOWN_REFERENCE, no escape",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "F1004",
+   "mutation": "V208 with the lint-loop profile missing from the store",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "F1005",
+   "mutation": "V208 replayed after F1002-F1004 restore the stores",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN; round 9: accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "F1006",
+   "mutation": "V207 (G901b) whose final step names the delegation twice in consumes",
+   "expected": "accepted",
+   "got": "accepted; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "F1007",
+   "mutation": "V208 as a depth-1 trace naming a parent (it delegates, so depth 2 would be needed)",
+   "expected": "RECURSION_DEPTH",
+   "got": "RECURSION_DEPTH"
+  },
+  {
+   "id": "F1008",
+   "mutation": "V207 with the delegation retried (attempt 2, no retryOf)",
+   "expected": "RETRY_WITHOUT_TRACE",
+   "got": "RETRY_WITHOUT_TRACE; round 8: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "S1001",
+   "mutation": "2000 random single-point mutations (seed 10) of V207, V208, the lint-loop profile and the stored child-run-24 and -25: model SHAPE against schema rejection; nothing but Refused escapes",
+   "expected": "0 disagreements, 0 escapes",
+   "got": "0 disagreements (1698 SHAPE; codes {\"DUPLICATE_ID\": 4, \"ERROR_TRACE\": 7, \"GATE_OVERRIDDEN\": 11, \"RECURSION_DEPTH\": 7, \"RETRY_WITHOUT_TRACE\": 5, \"SHAPE\": 1698, \"STEP_ORDER\": 2, \"TOTALS_MISMATCH\": 4, \"UNKNOWN_REFERENCE\": 174, \"accepted\": 88})"
+  },
+  {
+   "id": "S1002",
+   "mutation": "a GATE detail with an effect added",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S1003",
+   "mutation": "a GATE step that consumes its subject",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S1004",
+   "mutation": "a DELEGATE detail with a subjectStepId",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S1005",
+   "mutation": "a GATE detail naming a gate the profile lacks",
+   "expected": "UNKNOWN_REFERENCE (schema accepts)",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "S1006",
+   "mutation": "the lint-loop profile with a second gate named lint",
+   "expected": "DUPLICATE_ID (schema accepts)",
+   "got": "DUPLICATE_ID"
+  },
+  {
+   "id": "S1007",
+   "mutation": "a profile hook on INVOKE_END with SUPPLY_OUTPUT (after an operation: no supply)",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S1008",
+   "mutation": "a profile hook on BUDGET_WARNING that only observes",
+   "expected": "accepted (both)",
+   "got": "accepted"
+  },
+  {
+   "id": "S1009",
+   "mutation": "a TOOL_RESULT_AFTER hook step recording SUPPLY_OUTPUT (its registration allows MODIFY_OUTPUT only)",
+   "expected": "HOOK_NOT_REGISTERED (schema accepts: the per-event effect is the profile's shape)",
+   "got": "HOOK_NOT_REGISTERED"
+  },
+  {
+   "id": "G901 (round-9 probe, re-run)",
+   "mutation": "K821 with two gates: d consumes patch (X, lint passed); its child FAILs X with schema-check and repairs it to Y, which only schema-check passes; then the parent's unit-tests FAILs X; the parent builds final on d (Y), which unit-tests never passed",
+   "expected": "GATE_OVERRIDDEN as G901c (one loop: the re-gate makes unit-tests pass Y)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G901d (round-9 probe, re-run)",
+   "mutation": "G901 where the parent's unit-tests passes the delegation's Y after its FAIL of X, before final uses it",
+   "expected": "accepted (the failing gate passes the answer)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G901e (round-9 probe, re-run)",
+   "mutation": "G901 where the parent writes the delegation's Y with write-file instead of building on it",
+   "expected": "GATE_OVERRIDDEN as G901",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G902 (round-9 probe, re-run)",
+   "mutation": "K820 with two gates: d1 consumes patch (X, schema-check passed); its child FAILs X with unit-tests and repairs it to Y (unit-tests passes Y); d2's child regenerates X and FAILs it with lint; the parent builds final on d1 (Y), which lint never passed",
+   "expected": "GATE_OVERRIDDEN as G902c (one loop)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "G902b (round-9 probe, re-run)",
+   "mutation": "G902 with d2's child FAILing X with unit-tests too (K820 under P9)",
+   "expected": "accepted (K820)",
+   "got": "accepted; round 8 (dd0d4a12): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "H906 (round-9 probe, re-run)",
+   "mutation": "sibling re-gate: d1's child FAILs X (unit-tests) and repairs it; d2's child regenerates X, FAILs it with lint, revises it to Y3, which only lint passes, and writes Y3",
+   "expected": "GATE_OVERRIDDEN (the earlier sibling's failing gate must pass the revision)",
+   "got": "GATE_OVERRIDDEN; round 8 (dd0d4a12): accepted"
+  },
+  {
+   "id": "H906b (round-9 probe, re-run)",
+   "mutation": "H906 with the revision also passing unit-tests",
+   "expected": "accepted",
+   "got": "GATE_OVERRIDDEN; round 8 (dd0d4a12): accepted"
+  },
+  {
+   "id": "G907 (round-9 probe, re-run)",
+   "mutation": "d consumes patch (X); its child FAILs X with unit-tests and delivers a fresh Q (no revision); then the parent's unit-tests FAILs X; final builds on d (Q)",
+   "expected": "accepted (as one loop's fresh step after a FAIL; informational)",
+   "got": "accepted; round 8 (dd0d4a12): GATE_OVERRIDDEN"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/BRIEF-r10.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/PLAN.md (Q-231, owner decisions Q-MAS8-A..D)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (= build_loop.r10.py; diffed against build_loop.r9.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/review-round{1,...,9}.json (verdicts; round 9 in full)",
+  "round 9's work: alt9/ and alt9i/ models, probes_r8.py, probes_r8b.py, probes_r9.py, controls_r9.py, diff_r9.py, perf_r9*.py, rerun/*.py and their outputs (copied into WORK)",
+  "subject d6ad8f08: architecture/agent-loop/{README.md, loop-profile.schema.json, loop-trace.schema.json, vectors.json}, scripts/agent_loop.py; git diff a7adee02..d6ad8f08 and 82804a0..d6ad8f08; models of rounds 9 (a7adee02), 8 (dd0d4a12), 7 (4ca90905), 6 (5708b1ab) and 5 (c248aa42)",
+  "roadmap/roadmap.json item MAS-RA-008 (and the phases of MAS-RA-001 and -002)",
+  "architecture/research-adoption-v2/crosswalk.json at 82804a0 (acceptance MAS-RA-008-A1..A3, CONF-A3-001, HO-D2)",
+  "docs/harnesses/execution.tool-skill-sandbox.md l.55, ll.149-150; execution.orchestration.md l.151; trust.security-safety.md l.18; trust.observability-finops.md ll.53, 60",
+  "architecture/verdict-ledger/README.md and architecture/run-manifest/README.md (header convention)",
+  "roadmap/research/papers: 2609.26891v1-jaz.pdf pp. 4, 5, 7, 13, 14, 23, 24 (keyword search of pp. 3-24); 2610.07832v1-hermes.pdf pp. 15, 16, 20, 21, 23; 2609.01437v1-harnessdev.pdf pp. 5, 8, 22, 24, 27, 28; 2609.24974v1-harness-zero.pdf pp. 2, 8, 22, 23"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

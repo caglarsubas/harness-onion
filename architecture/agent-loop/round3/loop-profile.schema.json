@@ -1,0 +1,356 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.agent-loop-profile/v1",
+ "title": "Agent-loop profile v1 (MAS-RA-008)",
+ "$comment": "The closed shape only: uniqueness (DUPLICATE_ID), order, references and every later rule are the reference model's (scripts/agent_loop.py), which refuses a document as SHAPE exactly when this schema rejects it. Numbers are integers.",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.agent-loop-profile/v1"
+  },
+  "profileId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "budgets": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "tokens": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 9007199254740991
+    },
+    "iterations": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100000
+    },
+    "wallClockSeconds": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 9007199254740991
+    },
+    "recursionDepth": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "contextWarningPercent": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100
+    }
+   },
+   "required": [
+    "contextWarningPercent",
+    "iterations",
+    "recursionDepth",
+    "tokens",
+    "wallClockSeconds"
+   ]
+  },
+  "retry": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "stepRetries": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 3,
+     "default": 1
+    }
+   },
+   "required": [
+    "stepRetries"
+   ]
+  },
+  "revision": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "rounds": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 3,
+     "default": 3
+    }
+   },
+   "required": [
+    "rounds"
+   ]
+  },
+  "hooks": {
+   "type": "array",
+   "minItems": 0,
+   "maxItems": 4096,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "hookId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "event": {
+      "enum": [
+       "INVOKE_START",
+       "INVOKE_END",
+       "MODEL_QUERY_BEFORE",
+       "MODEL_QUERY_AFTER",
+       "TOOL_CALL_BEFORE",
+       "TOOL_RESULT_AFTER",
+       "EXEC_BEFORE",
+       "EXEC_AFTER",
+       "BUDGET_WARNING",
+       "BUDGET_EXHAUSTED",
+       "STEP_ERROR",
+       "STEP_RETRY",
+       "HANDOFF"
+      ]
+     },
+     "effects": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 4096,
+      "items": {
+       "enum": [
+        "MODIFY_INPUT",
+        "SUPPLY_OUTPUT",
+        "MODIFY_OUTPUT",
+        "ABORT"
+       ]
+      }
+     },
+     "scope": {
+      "enum": [
+       "LOCAL",
+       "DYNAMIC"
+      ]
+     }
+    },
+    "required": [
+     "effects",
+     "event",
+     "hookId",
+     "scope"
+    ],
+    "allOf": [
+     {
+      "if": {
+       "properties": {
+        "event": {
+         "enum": [
+          "INVOKE_START",
+          "MODEL_QUERY_BEFORE",
+          "TOOL_CALL_BEFORE",
+          "EXEC_BEFORE"
+         ]
+        }
+       },
+       "required": [
+        "event"
+       ]
+      },
+      "then": {
+       "properties": {
+        "effects": {
+         "items": {
+          "enum": [
+           "MODIFY_INPUT",
+           "SUPPLY_OUTPUT",
+           "ABORT"
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "event": {
+         "enum": [
+          "INVOKE_END",
+          "MODEL_QUERY_AFTER",
+          "TOOL_RESULT_AFTER",
+          "EXEC_AFTER"
+         ]
+        }
+       },
+       "required": [
+        "event"
+       ]
+      },
+      "then": {
+       "properties": {
+        "effects": {
+         "items": {
+          "enum": [
+           "MODIFY_OUTPUT",
+           "ABORT"
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "event": {
+         "enum": [
+          "BUDGET_WARNING",
+          "BUDGET_EXHAUSTED",
+          "STEP_ERROR",
+          "STEP_RETRY"
+         ]
+        }
+       },
+       "required": [
+        "event"
+       ]
+      },
+      "then": {
+       "properties": {
+        "effects": {
+         "items": {
+          "enum": [
+           "ABORT"
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "event": {
+         "enum": [
+          "HANDOFF"
+         ]
+        }
+       },
+       "required": [
+        "event"
+       ]
+      },
+      "then": {
+       "properties": {
+        "effects": {
+         "maxItems": 0
+        }
+       }
+      }
+     }
+    ]
+   }
+  },
+  "gates": {
+   "type": "array",
+   "minItems": 0,
+   "maxItems": 4096,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "gateId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "kind": {
+      "enum": [
+       "SCHEMA",
+       "LINT",
+       "TEST",
+       "POLICY"
+      ]
+     }
+    },
+    "required": [
+     "gateId",
+     "kind"
+    ]
+   }
+  },
+  "tools": {
+   "type": "array",
+   "minItems": 0,
+   "maxItems": 4096,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "toolId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "manifestDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+     },
+     "inputSchemaDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+     },
+     "sideEffect": {
+      "enum": [
+       "READ_ONLY",
+       "WRITE"
+      ]
+     },
+     "idempotency": {
+      "enum": [
+       "NATIVE",
+       "RECEIPT_KEY",
+       "NONE"
+      ]
+     },
+     "trust": {
+      "enum": [
+       "TRUSTED",
+       "UNTRUSTED"
+      ]
+     },
+     "grantScope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^(?:[^\\ud800-\\udfff]|[\\ud800-\\udbff][\\udc00-\\udfff])*(?![\\s\\S])"
+     },
+     "credentialParams": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 4096,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+      }
+     }
+    },
+    "required": [
+     "credentialParams",
+     "grantScope",
+     "idempotency",
+     "inputSchemaDigest",
+     "manifestDigest",
+     "sideEffect",
+     "toolId",
+     "trust"
+    ]
+   }
+  }
+ },
+ "required": [
+  "budgets",
+  "gates",
+  "hooks",
+  "profileId",
+  "retry",
+  "revision",
+  "schemaVersion",
+  "tools"
+ ]
+}
