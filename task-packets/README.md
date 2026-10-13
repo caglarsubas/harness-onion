@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-MAS-006
+## Current source preparation — MET-ENFORCE-025
+
+MET-ENFORCE-025: the W02d v3 contract's compiled seccomp programs as data (seven roles on two architectures,
+recompiled by the pinned v3 compiler), the operator edge record v2, which registers twelve of them (all but
+SERVER's two, published and unregistered) for R10's packets, EDGE-2 (R12's four transport files) and
+W03-PLAN-AMEND-1; the v3 contract, the v1 edge record and the W03 plan v2 stay byte-identical. Alpha2 OPEN; 231
+accepted plus MET-ENFORCE-025 only.
+
+## Historical MAS-RA-008 source preparation — MET-MAS-006
 
 MAS-RA-008 (MET-MAS-006): the agent-loop kernel and tool-gateway contract candidate (loop profiles with budgets,
 bounded retries, revision rounds, hooks, gates and tool manifests; loop traces with tool calls and results,
@@ -1340,3 +1348,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 229 | `MET-MAS-001` | `Harness-Engineering` | MAS-RA-001: verdict and evidence ledger contract candidate (schema, check kinds, model, vectors); DATA_CHECK_ONLY |
 | 230 | `MET-MAS-002` | `Harness-Engineering` | MAS-RA-002: run manifest and configuration-level evaluation record contract candidate; DATA_CHECK_ONLY |
 | 231 | `MET-MAS-006` | `Harness-Engineering` | MAS-RA-008: agent-loop kernel and tool-gateway contract candidate; DATA_CHECK_ONLY |
+| 232 | `MET-ENFORCE-025` | `Harness-Engineering` | Compiled seccomp filter programs, edge registry records v2 (operator, EDGE-2) and W03-PLAN-AMEND-1; DATA_CHECK_ONLY |

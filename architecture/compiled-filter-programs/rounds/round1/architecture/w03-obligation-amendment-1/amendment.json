@@ -1,0 +1,31 @@
+{
+ "schemaVersion": "planeon.internal.w03-obligation-amendment/v1",
+ "id": "W03-PLAN-AMEND-1",
+ "amends": {
+  "path": "architecture/w03-plan-v2/plan.json",
+  "sha256": "sha256:a00470238431347da82cc47b1f1b6cf7cd51042d56694eea68d1373a3aaefb67",
+  "packet": "MET-ENFORCE-024"
+ },
+ "ownerDecision": "Q-HE2B-2 = (a) \"HE-003 owns both\" (2026-10-13, owner via the lane monitor, verbatim): HE-003 owns the real 10-second I07 write timer and the I07 apiserver HTTP/TLS client; HE-002B owns only the logical expiry (the TIMEOUT event, its abort record, HELD and the IO_AMBIGUOUS answer, as in T59/T61/T62). Record it in HE-002B's design and PR now; amend the W03 plan's obligation register in the next harness-onion meta packet that touches the plan (like EDGE-2); no extra packet now.",
+ "changes": [
+  {
+   "obligation": "I07-6",
+   "change": "ADDED",
+   "text": "The real 10-second I07 write timer and the I07 apiserver HTTP/TLS client.",
+   "source": "architecture/i07-policy-write-v3/README.md:34, :48, :145",
+   "packets": [
+    "HE-003"
+   ],
+   "scope": "W03"
+  },
+  {
+   "obligation": "I07-4",
+   "change": "SCOPED",
+   "scope": "HE-002B owns only the logical expiry of the 10-second bound: the TIMEOUT event, WRITE_TERMINAL IO_AMBIGUOUS {aborted: UPSTREAM_TIMEOUT}, HELD and the IO_AMBIGUOUS answer (T59, T61, T62)",
+   "packets": [
+    "HE-002B"
+   ]
+  }
+ ],
+ "unchanged": "Every other plan v2 obligation, packet and toolchain; plan v2 stays byte-identical."
+}

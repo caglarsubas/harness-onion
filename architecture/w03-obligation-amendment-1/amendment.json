@@ -1,0 +1,105 @@
+{
+ "schemaVersion": "planeon.internal.w03-obligation-amendment/v1",
+ "id": "W03-PLAN-AMEND-1",
+ "amends": {
+  "path": "architecture/w03-plan-v2/plan.json",
+  "sha256": "sha256:a00470238431347da82cc47b1f1b6cf7cd51042d56694eea68d1373a3aaefb67",
+  "packet": "MET-ENFORCE-024"
+ },
+ "ownerDecision": "Q-HE2B-2 = (a) \"HE-003 owns both\" (2026-10-13, owner via the lane monitor, verbatim): HE-003 owns the real 10-second I07 write timer and the I07 apiserver HTTP/TLS client; HE-002B owns only the logical expiry (the TIMEOUT event, its abort record, HELD and the IO_AMBIGUOUS answer, as in T59/T61/T62). Record it in HE-002B's design and PR now; amend the W03 plan's obligation register in the next harness-onion meta packet that touches the plan (like EDGE-2); no extra packet now.",
+ "ownerDecisions": [
+  "Q-HE2S-3 = (a) (2026-10-13, owner via the lane monitor, verbatim): HE-002S does the source re-check of the Rust 1.99.0 std paths the gate uses after the seal, recorded in MODEL_DEFINED with source lines; the Linux trace stays with T04.",
+  "Q-HE2S-4 = (a) (2026-10-13, owner via the lane monitor, verbatim): two-stage seal. Stage 1 before any input: core limit 0/0 with read-back, PR_SET_DUMPABLE 0, ambient cleared, bounding set and capset down to {CAP_SETPCAP, CAP_NET_BIND_SERVICE}. Between stages, only the signed configuration's read and check. Stage 2: drop to {kept}, no_new_privs, then the filter.",
+  "Q-HE2S-5 = (a) (2026-10-13, owner via the lane monitor, verbatim): the seal checks \"Threads: 1\" in /proc/self/status before stage 1, with a reviewed start-up-lint exception limited to gate-sys's seal.rs and that one path; HE-003's source check and T04's per-thread checks stay.",
+  "Q-HE2S-7 = (a) \"Keep gate dumpable\" (2026-10-13, owner via the lane monitor, verbatim): drop the PR_SET_DUMPABLE 0 step (amends Q-HE2S-4 (a)); keep the core limit at 0/0 with read-back. Carry to HE-008: core_pattern is not a pipe, or its helper honours RLIMIT_CORE 0. Carry to T04: a seccomp kill and a panic leave no core anywhere, and the broker's and inspector's reads of the gate succeed.",
+  "Q-HE2S-8 = (a) (2026-10-13, owner via the lane monitor, verbatim): move no_new_privs into stage 1, and repeat the \"Threads: 1\" check at the start of stage 2; HE-003's source check also covers the code between the stages.",
+  "Amendment scope = yes (2026-10-13, owner via the lane monitor, verbatim): add SEC-4 and HI-7 (+HE-003 call site, +HE-008 uid, unit start state and SELinux self-permissions) and SEC-QW4 (+HE-002S steady-state re-check) to W03-PLAN-AMEND-1 in slot 232, then one more light contract review round before adoption."
+ ],
+ "changes": [
+  {
+   "obligation": "I07-6",
+   "change": "ADDED",
+   "text": "The real 10-second I07 write timer and the I07 apiserver HTTP/TLS client.",
+   "source": "architecture/i07-policy-write-v3/README.md:34, :47-48 (the 10-second bound); owner decision Q-HE2B-2 (a) (the timer and the apiserver HTTP/TLS client)",
+   "packets": [
+    "HE-003"
+   ],
+   "scope": "W03"
+  },
+  {
+   "obligation": "I07-4",
+   "change": "NARROWED",
+   "ownership": "HE-002B owns only the logical expiry of the 10-second bound: the TIMEOUT event, WRITE_TERMINAL IO_AMBIGUOUS {aborted: UPSTREAM_TIMEOUT}, HELD and the IO_AMBIGUOUS answer (T59, T61, T62)",
+   "source": "architecture/i07-policy-write-v3/README.md:34 (the W2 row); owner decision Q-HE2B-2 (a)",
+   "packets": [
+    "HE-002B"
+   ],
+   "scope": "W03"
+  },
+  {
+   "obligation": "SEC-4",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-003",
+    "HE-008"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008"
+   ],
+   "shares": {
+    "HE-003": "the EFFECT_GATE call site: main calls the seal's stage 1 first (core limit, ambient, bounding set and capset down to at most {CAP_SETPCAP, CAP_NET_BIND_SERVICE}, no_new_privs), reads and checks only the signed configuration, derives kept from it (CAP_NET_BIND_SERVICE exactly when the signed I04 port is below 1024, else nothing) and passes it to stage 2 (a second single-thread check, the drop to {kept}, then the filter), and exits with a distinct status on any seal error; a source check that no socket or thread is created before the seal completes, covering the code between the stages (Q-HE2S-4, Q-HE2S-5, Q-HE2S-7, Q-HE2S-8)",
+    "HE-008": "for EFFECT_GATE: the unit uses no systemd seccomp option (W02d's carried F10) and starts the gate in a start state the seal accepts, so that the seal installs exactly the published program"
+   },
+   "source": "the amendment-scope decision; the HE-002S design (published with the HE-002S PR)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "HI-7",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-003"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008"
+   ],
+   "shares": {
+    "HE-003": "the EFFECT_GATE call site: main calls the seal's stage 1 first (core limit, ambient, bounding set and capset down to at most {CAP_SETPCAP, CAP_NET_BIND_SERVICE}, no_new_privs), reads and checks only the signed configuration, derives kept from it (CAP_NET_BIND_SERVICE exactly when the signed I04 port is below 1024, else nothing) and passes it to stage 2 (a second single-thread check, the drop to {kept}, then the filter), and exits with a distinct status on any seal error; a source check that no socket or thread is created before the seal completes, covering the code between the stages (Q-HE2S-4, Q-HE2S-5, Q-HE2S-7, Q-HE2S-8)",
+    "HE-008": "for EFFECT_GATE: uid 0 and gid 0; a start state the seal accepts (the full root set, or one already reduced within {CAP_SETPCAP, CAP_NET_BIND_SERVICE} whose permitted set holds kept, with nothing left to drop when CAP_SETPCAP is absent); the gate stays dumpable, and core_pattern is not a pipe or its helper honours RLIMIT_CORE 0; RUST_BACKTRACE unset; planeon_gate_t's self permissions the seal needs (capability setpcap; process setcap, getcap and setrlimit; dir search and file open and read on its own proc entries for /proc/self/status), with no process setrlimit on other domains"
+   },
+   "source": "the amendment-scope decision; the HE-002S design (published with the HE-002S PR)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "SEC-QW4",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-002S"
+   ],
+   "packets": [
+    "W03-0",
+    "W02D-V3",
+    "HE-002S",
+    "T04"
+   ],
+   "shares": {
+    "HE-002S": "the steady-state source re-check of the Rust 1.99.0 std paths the gate uses after the seal, recorded in MODEL_DEFINED with source lines (Q-HE2S-3 (a))"
+   },
+   "source": "the amendment-scope decision; owner decision Q-HE2S-3 (a)",
+   "scope": "W03"
+  }
+ ],
+ "shareRule": "A share adds to the named packet's part of the obligation as plan v2 states it; it never narrows it. An obligation's text is unchanged by PACKETS_ADDED (for SEC-QW4, 'steady state is W02d v3 and T04' gains HE-002S's source re-check beside them).",
+ "unchanged": "Every other plan v2 obligation, packet and toolchain; plan v2 stays byte-identical."
+}

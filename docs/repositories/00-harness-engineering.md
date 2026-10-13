@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-MAS-006
+## Current source preparation — MET-ENFORCE-025
+
+MET-ENFORCE-025: the W02d v3 contract's compiled seccomp programs as data (seven roles on two architectures,
+recompiled by the pinned v3 compiler), the operator edge record v2, which registers twelve of them (all but
+SERVER's two, published and unregistered) for R10's packets, EDGE-2 (R12's four transport files) and
+W03-PLAN-AMEND-1; the v3 contract, the v1 edge record and the W03 plan v2 stay byte-identical. Alpha2 OPEN; 231
+accepted plus MET-ENFORCE-025 only.
+
+## Historical MAS-RA-008 source preparation — MET-MAS-006
 
 MAS-RA-008 (MET-MAS-006): the agent-loop kernel and tool-gateway contract candidate (loop profiles with budgets,
 bounded retries, revision rounds, hooks, gates and tool manifests; loop traces with tool calls and results,
@@ -1100,6 +1108,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 103. `MET-MAS-001`: publish the verdict and evidence ledger contract candidate (schema, check-kind registry, reference model and vectors; UNRESOLVED maps to H16 WARN; H16 unchanged); data only.
 104. `MET-MAS-002`: publish the run manifest and configuration-level evaluation record contract candidate (schemas, reference model and vectors; a paired task-clustered distribution gate; H16 unchanged); data only.
 105. `MET-MAS-006`: publish the agent-loop kernel and tool-gateway contract candidate (schemas, reference model and vectors; bounded retries, revision rounds and deterministic-gate interleaving; H10 and H11 unchanged); data only.
+106. `MET-ENFORCE-025`: publish the compiled seccomp filter programs (the pinned v3 compiler's output for seven roles on two architectures), the edge registry records v2 (operator, EDGE-2) and the W03 obligation amendment 1; v3, v1 and plan v2 unchanged; data only.
 
 ## Testing, verification, and acceptance
 

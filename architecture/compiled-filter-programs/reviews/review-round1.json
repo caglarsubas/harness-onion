@@ -1,0 +1,160 @@
+{
+ "schemaVersion": "harness.planeon.ai/met-enforce-025-review/v1",
+ "round": 1,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "9522dd93f8241dedeb97bc356be4900a91e1ff71",
+ "subjectTree": "d02fb37e3eb20501f9de95e0f789b86678eb65f8",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "MINOR",
+   "location": "architecture/artifact-edges/operator-harness-engineering-v2.json (SERVER rows, note); architecture/artifact-edges/README-v2.md:21-24; architecture/compiled-filter-programs/README.md:49-50",
+   "finding": "SERVER's two programs sit in the operator (R10) edge record as PUBLISHED_UNREGISTERED with the note that their consumer 'is decided by HE-008's design (host image)'. No source supports that attribution: plan v2 SEC-4 names no packet for SERVER, plan v2 scope lists no server module in R10 (modules containment, broker, observer, gate, writer), and plan v2 A1-SERVER-MEMFD (from host-interface-amendment-w02d/amendment.json O-SERVER-MEMFD) names the SERVER role's code as today the R12 live backend, outside W03. The consumer repository of SERVER's programs, not only its packet, is therefore undecided, and it may not be the operator. The status itself is defined and fails closed (no consumer may hold the files), so nothing is opened. But the published record and both READMEs state an unsourced assignment.",
+   "requiredChange": "Drop the HE-008 attribution and state the sourced facts: SEC-4 names no SERVER packet, and A1-SERVER-MEMFD places the SERVER role's code in R12, outside W03. Then either keep SERVER's two files out of the operator record, so they are published in compiled-filter-programs/ only and registered later in whichever consumer's record, or keep the rows with a note saying the consumer repository and packet are both undecided. Keep the three texts consistent."
+  },
+  {
+   "id": "R1-2",
+   "severity": "MINOR",
+   "location": "architecture/artifact-edges/conformance-labs-harness-engineering.json (schemaVersion, artifacts[*].consumerCommit, missing notArtifacts)",
+   "finding": "The EDGE-2 record declares schemaVersion planeon.internal.artifact-edge-registry/v1, but it does not have the v1 shape that the only definition of v1 checks (scripts/validate_w03_amendment.py EDGE_KEYS and ARTIFACT_KEYS). Every row adds consumerCommit, an extra key the v1 artifact check refuses, and the record omits notArtifacts. The same packet bumps the operator record to v2 because it adds keys, so labelling a changed shape as v1 here is inconsistent.",
+   "requiredChange": "Either label EDGE-2 with a schema version that defines consumerCommit and an optional or empty notArtifacts (for example v2, documented in README-v2), or make it conform to v1: drop consumerCommit and state the read commit in the README and ownerDecision text, and add \"notArtifacts\": []. The later layer must check whichever shape is chosen."
+  },
+  {
+   "id": "R1-3",
+   "severity": "MINOR",
+   "location": "architecture/w03-obligation-amendment-1/amendment.json changes[1] (I07-4 SCOPED)",
+   "finding": "The amendment uses the key \"scope\" with two meanings. In I07-6 it carries plan v2's obligation field (\"W03\"; plan v2 uses only W03 and OUTSIDE_W03). In I07-4 it carries a narrative sentence about HE-002B's logical expiry. Applied to plan v2's register, I07-4's scope would become a sentence instead of W03. The I07-4 change also cites no source line, although the brief and plan v2's rows expect one: i07-policy-write-v3/README.md:34 states the W2 expiry rule and T59/T61/T62, and the owner decision is Q-HE2B-2.",
+   "requiredChange": "Put the I07-4 narrowing under its own key (for example \"limitation\" or \"scopedTo\"), keep or omit \"scope\" with plan v2's meaning, and add a \"source\" for the I07-4 change (architecture/i07-policy-write-v3/README.md:34, plus the owner decision). Update the README table to match."
+  },
+  {
+   "id": "R1-4",
+   "severity": "MINOR",
+   "location": "scripts/compiled_filter_programs.py compiler() (spec_from_file_location / exec_module)",
+   "finding": "The publisher digest-checks the compiler's bytes and then imports the compiler from its file path, so the code it executes is not bound to the bytes it checked. Reproduced in a WORK copy: I planted a bytecode cache (scripts/__pycache__/seccomp_allowlists_v3.cpython-312.pyc, which .gitignore hides) built from a modified compiler and stamped with the unchanged source's mtime and size. Under the documented -I -B invocation the modified code ran, and the check still printed '14 programs equal the pinned v3 compiler's output'. The output stays bound by v3's filterDigests, so no wrong program can be accepted. But the property 'recompiled with the pinned v3 compiler' (Q-HE2S-1, which the layer will rely on) is weaker than stated. The repository's precedent, _era_model in validate_w03_amendment.py, executes the verified bytes themselves.",
+   "requiredChange": "Execute the compiler from the digest-checked bytes (compile(sources[path], path, 'exec') into a fresh module, as _era_model does) instead of importing it from the file, so no bytecode cache is read or written. The later layer should do the same."
+  },
+  {
+   "id": "R1-5",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/README-v2.md",
+   "finding": "README-v2 does not describe what the v2 schema changes beyond supersedes: the ownerDecisions key, null consumerPath, consumerPacket and relation plus a note for PUBLISHED_UNREGISTERED rows, and that providerCommit null with providerPacket MET-ENFORCE-025 means this packet's merge commit (v1's README said so for the supplement). It also does not state how rule 2 applies to the new rows. That rule holds: the programs are data (Q-HE2S-1 calls them data files), and no compiler or script is registered. The rule-3 phrase 'the layer checks every unconditional graph' must also be honoured by the mechanics layer for both new records.",
+   "requiredChange": "Add a short schema paragraph and one sentence on rule 2 (the programs are the compiled form of the v3 contract, and no compiler source crosses). Carry the layer's acyclicity check for both records to the mechanics."
+  },
+  {
+   "id": "R1-6",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/operator-harness-engineering-v2.json (HE-002 rows)",
+   "finding": "As the owner-approved design requires (the 17 artefacts unchanged), v2 keeps HE-002's 13 rows REGISTERED_BEFORE_USE. But HE-002 has merged and R10 now holds those files, so the superseding record shows them as not yet in use. README-v2:25-26 discloses this; the record itself has no marker.",
+   "requiredChange": "Optional: a record-level sentence saying v1's rows keep their statuses as of v1's publication. No row change."
+  },
+  {
+   "id": "R1-7",
+   "severity": "NOTE",
+   "location": "architecture/w03-obligation-amendment-1/README.md:17-18; architecture/artifact-edges/README-v2.md:32-33",
+   "finding": "Three history claims could not be verified from the review sources or the permitted requests: 'HE-002B merged as R10 main eebfd18 (PR #8) with this scope', 'PR #21' and 'the latest commit touching each of them on 2026-10-13'. The EDGE-2 bytes at 9766c9cb were verified.",
+   "requiredChange": "Cite where each fact was checked (for example the lane monitor relay or the R10/R12 PR), or drop them. None is needed for the records."
+  },
+  {
+   "id": "R1-8",
+   "severity": "NOTE",
+   "location": "architecture/w03-obligation-amendment-1/amendment.json changes[0].source; README.md:14",
+   "finding": "The I07-6 source ':48' is the second half of a sentence that starts on line 47 ('which the gate bounds to / 10 seconds'). Line :145 ('the HTTP/TLS substrate (W03)') is also plan v2 I07-2's source (HE-002C, HE-007). Plan v2 README:39 reads I07-2 as the journal and the writer side, so there is no real conflict, but the register now cites one line under two owners.",
+   "requiredChange": "Cite :47-48. Optionally note that I07-2 keeps the journal and writer side (plan v2 README:39) and that the apiserver HTTP/TLS client of :145 is I07-6's."
+  },
+  {
+   "id": "R1-9",
+   "severity": "NOTE",
+   "location": "scripts/compiled_filter_programs.py main(); architecture/compiled-filter-programs/README.md:27-28",
+   "finding": "A missing program file makes check mode exit through a FileNotFoundError traceback rather than a 'compiled-filter-programs:' refusal. It still fails closed (exit 1). The README says the publisher refuses a source whose digest differs from 'the pinned value in index.json', but the pins are the script's SOURCES constants. index.json records them, and check mode refuses an index.json that differs.",
+   "requiredChange": "Check that the set of present files is exactly the 14 before reading bytes (or catch the missing file as a refusal). Reword the README: the pins are in the publisher, and index.json records them."
+  }
+ ],
+ "dispositions": [],
+ "checksRun": [
+  {
+   "check": "Scope: git diff --name-status 82804a0c..9522dd93 and diff -rq of git archive of both commits in WORK",
+   "result": "PASS: 22 files, all added, exactly the listed set; the full-tree diff shows only those new paths. No path starts with architecture/seccomp or scripts/seccomp. git diff 5fab673e..9522dd93 over architecture/seccomp-allowlists-v3 and scripts/seccomp_allowlists_v3.py is empty. The v1 edge record and README, plan v2 and repositories.yaml are unchanged and equal MET-ENFORCE-024's ERA_SHA256 pins (54bdc2d2, 5d62a665, a0047023, 02190a66)."
+  },
+  {
+   "check": "Programs: independent recompute of all 14 with the v3 module's compile_filter/program_bytes, loaded directly from the archived subject (WORK check_programs.py, venv python -I -B)",
+   "result": "PASS (137/137): the published bytes equal the v3 output. Each SHA-256 equals v3 filterDigests and filter_digest(); instruction counts equal programLengths; byte counts are 8 per instruction; index.json rows (path, instructions, bytes, sha256) match; programs/ holds exactly 14 files; the index source pins equal the v3 file bytes; all 14 modes are 100644."
+  },
+  {
+   "check": "Classic-BPF decode with an independent decoder (all 14, EFFECT_GATE in detail)",
+   "result": "PASS: decoded tuples equal the compiler's. Header: LD arch (k=4), JEQ AUDIT_ARCH (x86_64 0xC000003E, aarch64 0xC00000B7, constants checked independently) jt=1, RET KILL_PROCESS, LD nr; on x86_64 also JGE 0x40000000 jf=1 and RET KILL_PROCESS (x32 refusal). Terminal instruction is RET KILL_PROCESS. Only the compiler's opcodes appear, every jump target is in range, RET values are ALLOW, KILL_PROCESS or ERRNO, and loads are aligned inside seccomp_data. EFFECT_GATE: 183 instructions on aarch64, 194 on x86_64."
+  },
+  {
+   "check": "v3 decisionChecks on the published bytes (v3 run_filter, plus an independent interpreter)",
+   "result": "PASS: all 2953 decisionChecks, including 383 EFFECT_GATE checks with D1725 and D1912 (wrong architecture) and D1727 (x32 read) killed."
+  },
+  {
+   "check": "Publisher check and refusal tests on mutated copies in WORK",
+   "result": "PASS with R1-9: the unmodified copy passes. The publisher refuses a changed allowlists.json, a changed compiler source, a changed vectors.json, one flipped program byte, a truncated program, an extra file in programs/ and a changed index.json; a missing program exits 1 with a traceback. --write reproduces the 14 programs and index.json byte-identically."
+  },
+  {
+   "check": "Bytecode-cache test on the publisher (WORK copy)",
+   "result": "FINDING R1-4: a planted .pyc of a modified compiler, stamped with the unchanged source, executes under -I -B, and the check passes."
+  },
+  {
+   "check": "Edge record v2 (WORK check_records.py)",
+   "result": "PASS: artifacts[0:17] deep-equal v1's 17; graph, consumer, provider, ownerDecision, rules and notArtifacts equal v1's; statuses extend v1's unchanged; supersedes is {v1 path, sha256:54bdc2d2..., MET-ENFORCE-024} and matches the v1 bytes. 14 new rows: digest = index = file bytes, mode 100644, providerCommit null, providerPacket MET-ENFORCE-025, consumer path host-enforcement/contracts/seccomp-v3/<ROLE>.<arch>.bpf, BYTE_IDENTICAL, REGISTERED_BEFORE_USE. 31 unique provider paths and 29 unique non-null consumer paths. Serialisation is canonical."
+  },
+  {
+   "check": "Role-to-packet mapping against plan v2 SEC-4/HI-7 and packet summaries",
+   "result": "PASS for six roles: EFFECT_GATE→HE-002S, OBSERVER→HE-004, BROKER and WORKER→HE-005 ('embedding the exact worker filter'; HI spec 5.3 installs the worker filter in W4), HOST_CONTAINMENT→HE-006, POLICY_WRITER→HE-007. SERVER: R1-1. REGISTERED_BEFORE_USE for EFFECT_GATE is correct (HE-002S has not merged), although HE-002S DESIGN §4 sketched IN_USE."
+  },
+  {
+   "check": "Builder reproducibility: a copy of tools/enf025/build_records.py run on a WORK copy",
+   "result": "PASS: edge v2, EDGE-2 and amendment.json are byte-identical to the subject."
+  },
+  {
+   "check": "EDGE-2 network re-check: 4 read-only gh api GETs (contents API) of R12's four transport files at 9766c9cb02383968499a109c36f4b7a18ec532b0",
+   "result": "PASS for bytes: each file's sha256 and git blob id (recomputed locally) equal the record, the v1 provider row and the provider file at 0e747049 (blobs 770b8efa, 24df2745, 8ed96277, 2bd2d645). Modes: NOT RUN, because the contents API returns no mode and a tree or directory listing would read other R12 paths. The record's modes equal v1's provider modes and the provider's git modes at 0e747049. 'Latest commit touching each' and 'PR #21': NOT RUN."
+  },
+  {
+   "check": "EDGE-2 follows A13 (roadmap item EDGE-2)",
+   "result": "PASS: a separate record in this meta packet, which touches architecture/artifact-edges/. Its ownerDecision text equals the roadmap's A13 text, README-v2 quotes it verbatim, and its rules are v1's three. Schema label: R1-2."
+  },
+  {
+   "check": "Owner decisions verbatim (whitespace-normalised comparison with the HE-002S DESIGN §11, HE-002B DESIGN §12 and roadmap texts)",
+   "result": "PASS: Q-HE2S-1 and Q-HE2S-2 in edge v2; Q-HE2S-1 in compiled-filter-programs/README.md; Q-HE2B-2 in amendment.json and its README; A13 in EDGE-2 and README-v2."
+  },
+  {
+   "check": "Amendment: plan v2 binding, I07-6/I07-4 and cited lines",
+   "result": "PASS with R1-3 and R1-8: amends is {plan v2 path, sha256:a0047023..., MET-ENFORCE-024} and matches the bytes. I07-6 is new, for HE-003, scope W03. I07-4 exists with [HE-002B] and is scoped to the logical expiry, matching Q-HE2B-2 and i07-policy-write-v3/README.md:34 (T59, T61, T62). Cited lines 34, 47-48 and 145 were read and support the I07-6 text."
+  },
+  {
+   "check": "Rules: no implementation source crosses; acyclicity premise",
+   "result": "PASS: v2 registers only data files (programs) besides v1's rows; no script or compiler path is registered. A grep of repositories.yaml shows harness-engineering only as a repository id (line 137), never as a consumer; operator and conformance-labs are ids; line 10 is the cited boundary rule. The acyclicity code itself was not run (the mechanics layer's)."
+  },
+  {
+   "check": "Wording and hygiene of the 22 files",
+   "result": "PASS with R1-1, R1-5, R1-7 and R1-9: the README tables match index.json and the records (instruction counts, short digests, modes). No absolute home or temp paths, e-mail addresses or personal names. Non-ASCII is limited to typographic characters and the verbatim owner text."
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/enf025/reviews/BRIEF-r1.md",
+  "~/.local/state/harness-onion-ci/tools/enf025/NOTES.md",
+  "~/.local/state/harness-onion-ci/tools/enf025/build_records.py",
+  "~/.local/state/harness-onion-ci/tools/w03/he002s/DESIGN.md (whole)",
+  "~/.local/state/harness-onion-ci/tools/w03/he002b/DESIGN.md (lines 1-60, 200-294)",
+  "harness-onion-roadmap: roadmap/roadmap.json (item EDGE-2 and A13 mentions)",
+  "subject 9522dd93: all 22 added files",
+  "architecture/seccomp-allowlists-v3/{allowlists,syscalls,vectors}.json (structure, arches, decisionChecks, filterDigests, programLengths)",
+  "scripts/seccomp_allowlists_v3.py (lines 1-250)",
+  "architecture/artifact-edges/{README.md,operator-harness-engineering.json}",
+  "scripts/validate_w03_amendment.py (lines 370-773)",
+  "architecture/w03-plan-v2/plan.json (obligations, packets, scope); architecture/w03-plan-v2/README.md (grep); architecture/w03-plan/plan.json (I07 rows)",
+  "architecture/i07-policy-write-v3/README.md (lines 21, 30-50, 140-148)",
+  "architecture/repositories.yaml (lines 1-40, grep for repository ids)",
+  "architecture/host-interface-inputs/resolved/HOST_INTERFACE_SPEC.md (lines 396-424)",
+  "architecture/host-interface-amendment-w02d/amendment.json (lines 362-368)",
+  "R12 at 9766c9cb: ci/verify-offline.sh, ci/warm-source-isolation.sh, ci/network_canary.py, ci/run_packet_argv.py (contents API, read-only)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "4 read-only gh api GET requests to the GitHub contents API for R12's four named transport files at commit 9766c9cb02383968499a109c36f4b7a18ec532b0 (gh update notifier disabled); no other network access",
+  "personalDataSent": false
+ }
+}

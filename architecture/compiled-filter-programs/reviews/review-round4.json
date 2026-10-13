@@ -1,0 +1,127 @@
+{
+ "schemaVersion": "harness.planeon.ai/met-enforce-025-review/v1",
+ "round": 4,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "abe53d68950d95fd8ce1b0ce2da490d164744156",
+ "subjectTree": "d4e6bb4ffb3c33f07dff46a6b198401ccc2b8961",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "R4-1",
+   "severity": "NOTE",
+   "location": "architecture/w03-obligation-amendment-1/README.md:31-32; amendment.json changes[2].source, changes[3].source and the HE-003 shares",
+   "finding": "This is what remains of R3-5. The README and both `source` fields say that the HE-002S design 'is published with the HE-002S pull request', but nothing schedules that. The design's packet (§8) lists no design path, and its flow (§9) has no publication step. In the precedents, HE-002B's PR body (18 lines) and HE-002C's PR body (97 lines) do not carry their designs. Several parts of the shares come from that design and from no owner decision: `kept` derived from the I04 port, the distinct exit status, the accepted start states, the /proc/self reads, the gate staying dumpable on HE-008's side, and RUST_BACKTRACE (design §2, §5, §6). They are cited only to 'the HE-002S design', with no section, although R3-5 asked for §2 and §6. The HE-003 shares now end with one collective citation '(Q-HE2S-4, Q-HE2S-5, Q-HE2S-7, Q-HE2S-8)'. That covers the stage content, but it also covers the exit-status clause and the I04 clause, which come from the design. I compared the share texts with design revision 3 §2, §5, §6 and §14-§16, and they are faithful to it.",
+   "requiredChange": "Record the publication in the HE-002S design (§8 or §9), for example the PR body carries §2, §5 and §6, or the design is added at a stated path. Otherwise, word the README as an intent ('is to be published'). Add the design sections to the two `source` fields: §2 for the start states, preconditions and stages; §5 for RUST_BACKTRACE; §6 for the HE-003 carry. No owner decision is needed."
+  },
+  {
+   "id": "R4-2",
+   "severity": "NOTE",
+   "location": "architecture/w03-obligation-amendment-1/README.md:30-31",
+   "finding": "The README marks only Q-HE2S-7 as amending Q-HE2S-4. Q-HE2S-8 also amends it. Read verbatim, Q-HE2S-4 puts no_new_privs in stage 2 ('Stage 2: drop to {kept}, no_new_privs, then the filter'), while the HE-003 shares put it in stage 1, as Q-HE2S-8 ('move no_new_privs into stage 1') requires. The record is consistent because Q-HE2S-8 is carried verbatim beside Q-HE2S-4. Design §2 states the relation in full: 'Q-HE2S-4 (a), amended by Q-HE2S-7 (a) and Q-HE2S-8 (a)'.",
+   "requiredChange": "In the README, say that both decisions amend Q-HE2S-4. For example: 'Q-HE2S-7 (the gate stays dumpable) and Q-HE2S-8 (no_new_privs in stage 1, a second thread check), both amending Q-HE2S-4'."
+  },
+  {
+   "id": "R4-3",
+   "severity": "NOTE",
+   "location": "architecture/w03-obligation-amendment-1/amendment.json changes[2].shares.HE-008, changes[3].shares.HE-008; README.md:16-17",
+   "finding": "Two points about HE-008's shares, neither of which leaves an ownership gap. (1) SEC-4's share, 'the unit uses no systemd seccomp option (W02d's carried F10)', restates plan v2 obligation SEC-3. SEC-3 reads 'No systemd seccomp options on planeon units.', has packets [HE-008], and its source is seccomp-allowlists-v2/status.json:95, which is 'no systemd seccomp options (F10)'. The share does not name SEC-3, so a reader or the mechanics layer could count F10 as a second obligation. (2) HI-7's share calls its list 'a start state the seal accepts (the full root set, or one already reduced within {CAP_SETPCAP, CAP_NET_BIND_SERVICE} ...)'. Design §2 also accepts 'any superset of the targets below', so the list reads narrower than the seal's acceptance. As an obligation on HE-008 the narrower list is conservative, and the rest of the parenthetical is equivalent to design §2: the permitted set holds `kept`, and nothing is left to drop without CAP_SETPCAP.",
+   "requiredChange": "Write SEC-4's HE-008 share as '... no systemd seccomp option (plan v2 SEC-3, W02d's F10) ...'. Then either add 'or any superset of that target' to HI-7's start-state list, or say that HE-008 starts the gate in one of the listed states. The README rows follow."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R3-1",
+   "status": "RESOLVED",
+   "evidence": "README.md lines 12-18 form one table: the header 'Obligation | Change | Packets | Text, ownership or share', the delimiter, and the rows I07-6, I07-4, SEC-4, HI-7 and SEC-QW4, in that order with no blank line. Every row has four cells. A blank line 19 ends the table. The checker confirms this (tab lines contiguous, 7 lines)."
+  },
+  {
+   "finding": "R3-2",
+   "status": "RESOLVED",
+   "evidence": "Fix (1) was taken. SEC-4 has packetsAdded [HE-003, HE-008] and packets [HE-002S, HE-003, HE-004, HE-005, HE-006, HE-007, HE-008], which is plan v2's list plus the two added packets in plan v2's packet order. Both added packets have shares. HI-7 has packetsAdded [HE-003] and shares for HE-003 and HE-008. README:28-30 states the literal reading: 'HE-003 and HE-008 are added to SEC-4, and HE-003 to HI-7, which already lists HE-008'. That matches the scope decision and design §4, 'SEC-4 and HI-7 add HE-003 (...) and HE-008 (...)'. The HE-008 elements are split between the two obligations. SEC-4 gets F10 and the start state; HI-7 gets the uid, the start state, SELinux and the core items. The SEC-4 install step also depends on HI-7's uid/gid 0 and SELinux self-permissions, but HE-008 owns them there, so there is no gap. On F10, see R4-3."
+  },
+  {
+   "finding": "R3-3",
+   "status": "RESOLVED",
+   "evidence": "Both HE-003 shares (they are identical) and README:20-25 now say that HE-003 'derives kept from it (CAP_NET_BIND_SERVICE exactly when the signed I04 port is below 1024, else nothing) and passes it to stage 2'. This matches design §2 ('Between the stages ... yields `kept` ... HE-002S's API takes `kept` as a value') and HOST_INTERFACE_SPEC.md:405. HE-008's HI-7 share says 'uid 0 and gid 0', which matches design §2's getresuid/getresgid precondition. The README paragraph equals the JSON share without its decision citation; the checker compared them after backtick and whitespace normalisation."
+  },
+  {
+   "finding": "R3-4",
+   "status": "RESOLVED",
+   "evidence": "`shareRule` and README:34-38 state that 'A share adds to the named packet's part of the obligation as plan v2 states it; it never narrows it', and that an obligation's text is unchanged by PACKETS_ADDED. The SEC-QW4 quotation 'steady state is W02d v3 and T04' is an exact substring of plan v2's SEC-QW4 text. The second rule I asked for, that a listed packet without a share keeps its plan v2 part, is not stated in words. It follows from 'adds ... never narrows' together with `unchanged`. The schema check in the mechanics layer is carried to the mechanics, which are not under review."
+  },
+  {
+   "finding": "R3-5",
+   "status": "PARTIAL",
+   "evidence": "Q-HE2S-4, Q-HE2S-5, Q-HE2S-7 and Q-HE2S-8 are now in `ownerDecisions`. Under whitespace normalisation each equals its design line: Q-HE2S-4 and Q-HE2S-5 in §14, Q-HE2S-7 and Q-HE2S-8 in §15. Q-HE2S-3 (§11) and the scope decision (§14) are also still verbatim. The B-ids are gone from `source`, and the record says where the design becomes public. Two parts remain open: the design sections are not cited, and the publication is not scheduled anywhere. Both are carried as R4-1."
+  },
+  {
+   "finding": "Design revision 3 (HE-003 and HE-008 shares)",
+   "status": "RESOLVED",
+   "evidence": "HE-003's share now covers nnp in stage 1 (Q-HE2S-8), the second single-thread check at the start of stage 2 (Q-HE2S-8), and the source check over the code between the stages (Q-HE2S-8, design §6). Its stage-1 list has no dumpable step (Q-HE2S-7), and its 'at most' matches design §2's '∩ start bounding/permitted'. HE-008's HI-7 share covers the following, as design §2 'Start state', 'Preconditions' and 'Out', §5 (C8) and Q-HE2S-7 state them: the accepted start states (C2); the gate staying dumpable; core_pattern not a pipe or its helper honouring RLIMIT_CORE 0 (Q-HE2S-7's own carry to HE-008); RUST_BACKTRACE unset; capability setpcap; process setcap, getcap and setrlimit; dir search and file open and read for /proc/self/status (C4); and no process setrlimit on other domains. On precision, see R4-3 (2)."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Round-4 change: git diff 0b37f635 abe53d68, plus diff -rq of git archives of 0b37f635, abe53d68 and 82804a0c extracted into WORK",
+   "result": "PASS. Only architecture/w03-obligation-amendment-1/README.md and amendment.json differ from round 3. The other 20 subject files are byte-identical: 14 programs, index.json, the compiled README, the publisher, edge v2, README-v2 and EDGE-2. Against main 82804a0c, exactly the 22 listed files are added and nothing else changes; all are mode 100644. HEAD is abe53d68, the tree is d4e6bb4f, and git status (run with --no-optional-locks) is clean."
+  },
+  {
+   "check": "Scope pins and paths (WORK tools/check_r4.py; git diff 5fab673e abe53d68 over the v3 paths)",
+   "result": "PASS. The v1 edge record and README, plan v2 and repositories.yaml equal their pins (54bdc2d2, 5d62a665, a0047023, 02190a66). The v3 compiler, allowlists, syscalls and vectors equal their pins (65c1190c, 397e7954, 863f1df9, 18353cb3), and the v3 diff from 5fab673e is empty. No added path starts with architecture/seccomp or scripts/seccomp."
+  },
+  {
+   "check": "Programs, spot check (check_r4.py): the v3 module executed from its digest-checked bytes, compile_filter/program_bytes for all 14 roles and architectures, a classic-BPF decode of EFFECT_GATE, and v3 run_filter on the published bytes",
+   "result": "PASS. All 14 files equal the independent v3 output. Each SHA-256 equals v3 filterDigests and the index, and each count equals programLengths, the index and the compiled length (EFFECT_GATE: 183 instructions on aarch64, 194 on x86_64). The EFFECT_GATE header is LD arch, JEQ AUDIT_ARCH, RET KILL_PROCESS, LD nr, and on x86_64 also JGE 0x40000000 then RET KILL_PROCESS (x32 refusal). The terminal instruction is RET KILL_PROCESS, only the compiler's opcodes appear, and every conditional jump lands inside the program. All 2953 v3 decisionChecks pass on the published bytes, the 383 EFFECT_GATE checks among them, including D1725, D1727 and D1912, which return KILL_PROCESS."
+  },
+  {
+   "check": "Publisher on WORK copies (venv python -I -B, timeout 300): unmodified, changed compiler source, one flipped byte in EFFECT_GATE.x86_64.bpf, and --write after removing programs/ and index.json",
+   "result": "PASS. The unmodified copy exits 0. A changed source exits 1 with 'scripts/seccomp_allowlists_v3.py is not the pinned v3 source'. A changed program exits 1 with 'programs/EFFECT_GATE.x86_64.bpf differs from the pinned compiler's output'. Neither prints a traceback. --write reproduces programs/ and index.json byte-identically to the subject (diff -r is empty), and the check then exits 0. No __pycache__ or .pyc appears anywhere in WORK."
+  },
+  {
+   "check": "Records builder: a WORK copy of tools/enf025/build_records.py (sha256 ab29faad) run on a WORK tree holding the v1 record, plan v2 and the programs regenerated by the publisher's --write; also diffed against build_records.r3.py",
+   "result": "PASS. The builder printed 'wrote edge v2 (31 artefacts), EDGE-2 (4), amendment (5 changes)'. All three JSON records are byte-identical to the subject. Against the round-3 builder, the only changes are the round-4 items: Q_HE2S_4, _5, _7 and _8 and their place in ownerDecisions; the new HE003_CALL_SITE; HE008_SEC4; the new HE008_EFFECT_GATE; SEC-4's packetsAdded, packets and shares; both `source` strings; and shareRule."
+  },
+  {
+   "check": "Edge record v2 spot check (check_r4.py)",
+   "result": "PASS. artifacts[0:17] deep-equal v1's, there are 31 rows in all, and supersedes binds v1's bytes (path, sha256, MET-ENFORCE-024). All 14 program rows match the file bytes and are mode 100644 with providerPacket MET-ENFORCE-025. They follow plan v2's SEC-4/HI-7 role-to-packet map (EFFECT_GATE to HE-002S, OBSERVER to HE-004, BROKER and WORKER to HE-005, HOST_CONTAINMENT to HE-006, POLICY_WRITER to HE-007), with consumer path host-enforcement/contracts/seccomp-v3/<ROLE>.<arch>.bpf. SERVER is PUBLISHED_UNREGISTERED with null consumer fields, and that status is defined in `statuses`. The record is unchanged since round 3. Adding HE-003 and HE-008 to SEC-4 does not affect it, because neither holds a program, so 'plan v2 lists SERVER under no SEC-4 packet' still holds after the amendment."
+  },
+  {
+   "check": "EDGE-2 without network: round 3's saved contents-API responses for the four R12 files at 9766c9cb (read only from the round-3 work directory), compared with the record and with git show 0e747049:<path> and git ls-tree 0e747049",
+   "result": "PASS for bytes. For each of ci/verify-offline.sh, ci/warm-source-isolation.sh, ci/network_canary.py and ci/run_packet_argv.py, the decoded bytes' SHA-256 equals the record, v1's provider row and the provider file at 0e747049 (778cb0fa, f717f62f, 1be4a837, c2ed0852). The recomputed git blob id equals the API's sha, the size matches, and the response URL pins ref=9766c9cb02383968499a109c36f4b7a18ec532b0. Modes are the provider's at 0e747049 (100755, 100644, 100755, 100755), equal to the record, and the record's notes[1] discloses that the consumer modes were not read. The fresh gh api GETs were NOT RUN this round: the EDGE-2 record is byte-identical to round 3, and content at a pinned commit cannot change. The A13 text is in the roadmap."
+  },
+  {
+   "check": "Amendment (check_r4.py and manual reading against plan v2 and HE-002S design revision 3 §2, §4-§6 and §11-§16)",
+   "result": "PASS, with NOTEs R4-1 to R4-3. The JSON is canonical, the top-level key order includes shareRule, and `amends` binds plan v2 by SHA-256 (a0047023...). Under whitespace normalisation, ownerDecisions holds Q-HE2S-3 (§11), Q-HE2S-4 and Q-HE2S-5 (§14), Q-HE2S-7 and Q-HE2S-8 (§15) and the scope decision (§14) verbatim, each design line within its stated section. Q-HE2B-2 is unchanged and appears in HE-002B DESIGN. For SEC-4, HI-7 and SEC-QW4, the packets lists equal plan v2's plus the added packets in plan v2's order, every added packet has a share, share keys are listed packets, scope stays W03, and each change's key order is uniform. The I07-6 and I07-4 changes are unchanged. Plan v2's SEC-3 ('No systemd seccomp options on planeon units.', HE-008) confirms that F10 is already HE-008's (R4-3)."
+  },
+  {
+   "check": "READMEs against the records (check_r4.py and manual reading)",
+   "result": "PASS, with NOTE R4-2. The amendment README table is contiguous (R3-1). The SEC-4 and HI-7 HE-008 cells equal the JSON shares. The HE-003 paragraph equals the JSON share without its decision citation. The Shares paragraph equals shareRule. The packets column reads '+ HE-003, + HE-008' and '+ HE-003 (HE-008 already listed)'. The compiled-filter-programs README and README-v2 are unchanged since round 3, and their SEC-4 statements still hold after the amendment."
+  },
+  {
+   "check": "Hygiene of the 8 subject text files",
+   "result": "PASS. There are no absolute home or temp paths, `~/` paths, e-mail addresses or personal names. The only non-ASCII characters are the multiplication sign, em dash, ellipsis and arrow."
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/enf025/reviews/BRIEF-r4.md",
+  "~/.local/state/harness-onion-ci/tools/enf025/reviews/review-round3.json",
+  "~/.local/state/harness-onion-ci/tools/enf025/NOTES.md",
+  "~/.local/state/harness-onion-ci/tools/enf025/build_records.py (round 4), diffed against build_records.r3.py",
+  "~/.local/state/harness-onion-ci/tools/w03/he002s/DESIGN.md (revision 3, all sections)",
+  "~/.local/state/harness-onion-ci/tools/w03/he002b/DESIGN.md (Q-HE2B-2, by normalised comparison); he002b/PR_BODY.md and he002c/PR_BODY.md (line counts and grep for 'design', to check the publication precedent)",
+  "harness-onion-roadmap: roadmap/roadmap.json (A13 text, by comparison)",
+  "round-3 work directory (read only): tools/check_r3.py, check_r3.out, and r12/*.json (the contents-API responses saved in round 3)",
+  "subject abe53d68: git diff 0b37f635..abe53d68; both changed files in full; scripts/compiled_filter_programs.py; README-v2.md:15-30; compiled-filter-programs/README.md:45-56; the other files by hash or diff",
+  "architecture/w03-plan-v2/plan.json (packets; obligations SEC-3, SEC-4, HI-7, SEC-QW4, I07-4, I07-5 and every HE-008 or seccomp obligation)",
+  "architecture/seccomp-allowlists-v2/status.json:75-99 (F10, carriedToW03); architecture/seccomp-allowlists-v3/status.json:78-95",
+  "architecture/host-interface-inputs/resolved/HOST_INTERFACE_SPEC.md:400-422",
+  "architecture/artifact-edges/operator-harness-engineering.json (v1); architecture/repositories.yaml (by pin)",
+  "architecture/seccomp-allowlists-v3/{allowlists,syscalls,vectors}.json and scripts/seccomp_allowlists_v3.py (executed from verified bytes)",
+  "provider files at 0e747049 (git show, git ls-tree) for the four transport paths"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "None. No gh api or other network request was made this round. EDGE-2 was re-checked against round 3's saved responses and the local provider bytes.",
+  "personalDataSent": false
+ }
+}

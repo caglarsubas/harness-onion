@@ -1,0 +1,167 @@
+{
+ "schemaVersion": "harness.planeon.ai/met-enforce-025-review/v1",
+ "round": 2,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "3f637171826e7f912fb93f2fc28102ccd18583eb",
+ "subjectTree": "c1973eaec81e6ff961d1534b351564d6414aaf07",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "R2-1",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/README-v2.md:30-35 (Schema v2 paragraph)",
+   "finding": "The schema paragraph lists 'providerCommit null with a providerPacket' as a v2 addition, but v1 already defines it: v1 README.md:35 states it for the supplement row, v1 row 17 carries providerPacket MET-ENFORCE-024, and the v1 layer (scripts/validate_w03_amendment.py artifact()) admits providerPacket exactly when providerCommit is null. v2 only applies it to more rows. The paragraph also says the additions are 'used by both records here', but neither record carries all of them. The operator v2 record has supersedes, ownerDecisions, notes and two PUBLISHED_UNREGISTERED rows with note. EDGE-2 has only notes and consumerCommit, with no supersedes and no ownerDecisions. The paragraph does not say which additions are optional. Both records are internally correct: exact key sets were checked against v1's EDGE_KEYS and ARTIFACT_KEYS.",
+   "requiredChange": "Describe the providerPacket convention as carried from v1 (the supplement row) and now used for the programs. Say that each v2 addition is optional and appears only where it applies, and name which record carries which. The mechanics layer should pin each record's exact top-level and row key sets, as v1's identity() does."
+  },
+  {
+   "id": "R2-2",
+   "severity": "NOTE",
+   "location": "architecture/w03-obligation-amendment-1/amendment.json changes[0].source; README.md:12 and :14",
+   "finding": "After R1-8's fix, I07-6's source is 'architecture/i07-policy-write-v3/README.md:34, :47-48'. Both cited lines support the 10-second bound on the write's upstream exchange, but neither names an HTTP/TLS client; I checked, and neither line contains 'HTTP' or 'TLS'. The explicit 'I07 apiserver HTTP/TLS client' comes from owner decision Q-HE2B-2, which the record carries in ownerDecision. The I07-4 change cites that decision in its source, but I07-6 does not. Separately, the README table's last column is still headed 'Text or scope', although the I07-4 row now holds the ownership text (README:17-18 explains the split).",
+   "requiredChange": "Add 'owner decision Q-HE2B-2 (a)' to I07-6's source, in both the record and the README table. Optionally rename the column to 'Text or ownership'."
+  },
+  {
+   "id": "R2-3",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/conformance-labs-harness-engineering.json (notes, rows[*].mode)",
+   "finding": "README-v2:54-55 discloses that each EDGE-2 row's mode is the provider file's mode from v1, and that R12's modes were not read. The record does not say this. Its notes say only that four paths were read, while rule 1 says the consumer holds exactly these bytes and modes, and every row is IN_USE. This review could not check the modes either: the contents API returns no mode, and a tree listing would read other R12 paths. The bytes are verified.",
+   "requiredChange": "Add a sentence to the record's notes: mode is the provider file's mode (v1), and the consumer's mode was not read at consumerCommit. No row change."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R1-1",
+   "status": "RESOLVED",
+   "evidence": "'HE-008' appears in none of the eight subject text files (grep). The SERVER rows' note, README-v2:23-26 and compiled-filter-programs/README.md:50-52 state the same sourced facts, and I verified them in plan v2. SEC-4 lists HE-002S, HE-004, HE-005, HE-006 and HE-007, none of which is SERVER's. A1-SERVER-MEMFD has packets [R12], scope OUTSIDE_W03, and the text 'sealed-credential code, today the R12 live backend'. The consumer repository and packet are stated as undecided. Both rows stay PUBLISHED_UNREGISTERED, with null consumerPath, consumerPacket and relation. The status is defined and fails closed ('no consumer may hold it until a later record registers one'). The lead clause 'no W03 packet installs the SERVER role's program' agrees with plan v2: scope.modules has no server module, HOST_INTERFACE_SPEC 5.3 installs each filter in the role's own seal step, and SERVER's code is R12's. HI-7 lists HE-008, the host image (units, SELinux modules, seal configuration), but no source names it as SERVER's installer."
+  },
+  {
+   "finding": "R1-2",
+   "status": "RESOLVED",
+   "evidence": "EDGE-2 now has schemaVersion planeon.internal.artifact-edge-registry/v2, notArtifacts [] and notes. Its top-level key set is exactly v1's EDGE_KEYS plus notes, and its rows are exactly v1's ARTIFACT_KEYS plus consumerCommit. README-v2 names every v2 addition: supersedes, ownerDecisions, notes, PUBLISHED_UNREGISTERED with note, and consumerCommit. A precision residual is in R2-1. Checking the chosen shape in the layer belongs to the mechanics."
+  },
+  {
+   "finding": "R1-3",
+   "status": "RESOLVED",
+   "evidence": "I07-4's change is NARROWED, the narrowing sits in its own ownership field, it has no text key, and scope is 'W03' on both changes (plan v2's scope values are only W03 and OUTSIDE_W03). Its source is i07-policy-write-v3/README.md:34 plus Q-HE2B-2 (a); line 34 is the W2 row and contains '10 seconds', T59, T61 and T62. The README table row and lines 17-18 match the record. The column header residual is in R2-2."
+  },
+  {
+   "finding": "R1-4",
+   "status": "RESOLVED",
+   "evidence": "compiler(source) runs compile() and exec() on the digest-checked bytes inside a fresh types.ModuleType; importlib is gone. I re-ran the round-1 probe on WORK copies: a timestamp .pyc built from a modified compiler (it prints UNVERIFIED-COMPILER-CODE-RAN), stamped with the unchanged source's mtime and size. Under the venv python -I -B, the round-2 publisher did not execute the planted code (no marker) and passed on the true bytes. As a control, the round-1 publisher on the same planted tree printed the marker. The v3 module needs no __file__ and imports only hashlib, struct and typing. Carried to the mechanics: the layer should load the compiler the same way."
+  },
+  {
+   "finding": "R1-5",
+   "status": "RESOLVED",
+   "evidence": "README-v2:30-37 adds a schema v2 paragraph and the boundary-rule sentence ('the programs are data'), and the v2 record's notes[2] states the boundary rule as well. Residual precision is in R2-1. The acyclicity check for both records stays carried to the mechanics layer; the cycle rule texts are unchanged. A grep of repositories.yaml again shows harness-engineering only as a repository id (line 137) and never as a consumer."
+  },
+  {
+   "finding": "R1-6",
+   "status": "RESOLVED",
+   "evidence": "The v2 record's notes[0] says v1's 17 artefacts are carried unchanged with their statuses, and that HE-002 has since merged in R10. The tools/w03/he002b/DESIGN.md sources support this: line 3 records 'HE-002 merged, PR #7', and §1 says the inputs are 'all already in R10, registered and digest-pinned by HE-002'. artifacts[0:17] still deep-equal v1's."
+  },
+  {
+   "finding": "R1-7",
+   "status": "RESOLVED",
+   "evidence": "'PR #', 'eebfd18', 'latest commit' and '25f38a51' appear in none of the subject files (grep). One fact is kept in weaker form: amendment README:20, 'HE-002B has merged in R10 with this scope'. It is verifiable: tools/w03/he002c/DESIGN.md:3 records R10 base main eebfd18 '(HE-002B merged, PR #8)', and tools/w03/he002b/DESIGN.md §12 records Q-HE2B-2 in HE-002B's design."
+  },
+  {
+   "finding": "R1-8",
+   "status": "RESOLVED",
+   "evidence": "I07-6's source is now 'README.md:34, :47-48'. Lines 47-48 together form the sentence 'which the gate bounds to / 10 seconds'. ':145' is dropped, so plan v2 I07-2 no longer shares a cited line with I07-6. The consequence for the HTTP/TLS half of I07-6 is in R2-2."
+  },
+  {
+   "finding": "R1-9",
+   "status": "RESOLVED",
+   "evidence": "Check mode now compares the exact set of files in programs/ (an empty list when the directory is missing) before reading any bytes, and requires index.json to be a file. Results on WORK copies: a missing program gives 'compiled-filter-programs: programs/ holds exactly the 14 programs', exit 1. A missing programs/ gives the same refusal. A missing index.json gives 'compiled-filter-programs: index.json differs', exit 1. None of the three prints a traceback. compiled-filter-programs/README.md:27-28 now says the pins are 'the value the publisher pins (and index.json records)', which matches SOURCES and index.json source.files."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Scope: git diff --name-status 82804a0c..3f637171, git diff 9522dd93..3f637171, and diff -rq of git archives of 82804a0c, 9522dd93 and 3f637171 extracted into WORK",
+   "result": "PASS. Against main 82804a0c, exactly the 22 listed files are added and nothing else changes. Round 2 changes only seven of them: README-v2, EDGE-2, edge v2, compiled README, amendment README, amendment.json and the publisher; the 14 programs and index.json are unchanged since round 1. No path starts with architecture/seccomp or scripts/seccomp. git diff 5fab673e..3f637171 is empty over architecture/seccomp-allowlists-v3 and scripts/seccomp_allowlists_v3.py, and the four v3 source files have identical SHA-256 at 5fab673e and in the subject. The v1 edge record, the v1 README, plan v2 and repositories.yaml are unchanged (git diff --stat is empty) and equal MET-ENFORCE-024's ERA_SHA256 pins 54bdc2d2, 5d62a665, a0047023 and 02190a66. All 22 git modes are 100644."
+  },
+  {
+   "check": "Programs: independent recompute of all 14 through the v3 module's compile_filter/program_bytes; the v3 module is executed from its bytes after a SHA-256 check against 65c1190c (WORK tools/check_programs_r2.py, venv python -I -B)",
+   "result": "PASS, 137 of 137 checks. Every published file equals the v3 output byte for byte. Each SHA-256 equals both v3 filterDigests and filter_digest(). Instruction counts equal programLengths, and every file is 8 bytes per instruction. The index.json rows (path, instructions, bytes, sha256) match. programs/ holds exactly 14 files, and the index source pins equal the v3 file bytes."
+  },
+  {
+   "check": "Classic-BPF decode with an independent decoder (all 14; EFFECT_GATE in detail)",
+   "result": "PASS. The decoded tuples equal the compiler's. Each program starts with LD arch (k=4), then JEQ AUDIT_ARCH: x86_64 0xC000003E and aarch64 0xC00000B7, both computed independently from the uapi values. Then come RET KILL_PROCESS and LD nr. On x86_64 the header continues with JGE 0x40000000 and RET KILL_PROCESS, which refuses x32. Every program ends with RET KILL_PROCESS. Every jump stays in range, only the compiler's opcodes appear, RET values are only ALLOW, KILL_PROCESS or ERRNO, and every load is aligned and inside seccomp_data. EFFECT_GATE has 183 instructions on aarch64 and 194 on x86_64."
+  },
+  {
+   "check": "v3 decisionChecks on the published bytes (v3 run_filter, plus an independent interpreter)",
+   "result": "PASS. All 2953 decisionChecks pass, 383 of them EFFECT_GATE: BROKER 563, EFFECT_GATE 383, HOST_CONTAINMENT 359, OBSERVER 485, POLICY_WRITER 319, SERVER 489, WORKER 355. The wrong-architecture checks D1725 (x86_64) and D1912 (aarch64) and the x32 read D1727 return KILL_PROCESS on the published EFFECT_GATE bytes."
+  },
+  {
+   "check": "Publisher check and refusal tests on WORK copies (WORK tools/pubtests.sh; venv python -I -B under timeout 300)",
+   "result": "PASS. The unmodified copy passes. Every mutated copy exits 1 with a 'compiled-filter-programs:' refusal and no traceback. The mutations were: a changed compiler source, allowlists.json, syscalls.json or vectors.json ('is not the pinned v3 source'); one flipped program byte or a truncated program ('differs from the pinned compiler's output'); a missing program, a missing programs/ or an extra file ('programs/ holds exactly the 14 programs'); a missing or changed index.json ('index.json differs'). --write on a copy without programs/ and index.json reproduces them byte-identically, and the check then passes. -B left no __pycache__ except the two planted for the probe."
+  },
+  {
+   "check": "Bytecode-cache probe (R1-4 re-run), with the round-1 publisher as control",
+   "result": "PASS. The planted .pyc of a modified compiler is not executed by the round-2 publisher (no marker; the check passes on the true bytes). The round-1 publisher on an identical planted tree prints UNVERIFIED-COMPILER-CODE-RAN, which shows the planted .pyc is valid and would be loaded by import machinery."
+  },
+  {
+   "check": "Edge record v2 (WORK tools/check_records_r2.py)",
+   "result": "PASS. artifacts[0:17] deep-equal v1's 17. graph, consumer, provider, ownerDecision, rules and notArtifacts equal v1's. The statuses extend v1's unchanged with a defined PUBLISHED_UNREGISTERED. The top-level key set is v1's plus supersedes, ownerDecisions and notes. supersedes is {v1 path, sha256:54bdc2d2..., MET-ENFORCE-024} and matches the v1 bytes. For the 14 new rows: digest = index = file bytes, mode 100644, providerCommit null, providerPacket MET-ENFORCE-025, exact key sets. The 12 registered rows are BYTE_IDENTICAL and REGISTERED_BEFORE_USE at host-enforcement/contracts/seccomp-v3/<ROLE>.<arch>.bpf. The 2 SERVER rows are PUBLISHED_UNREGISTERED with null consumerPath, consumerPacket and relation, and one note that does not mention HE-008. The record has 31 unique provider paths and 29 unique non-null consumer paths, and its serialisation is canonical. Precision note on the schema text: R2-1."
+  },
+  {
+   "check": "Role-to-packet mapping against plan v2 (SEC-4, HI-7, scope, packets, A1-SERVER-MEMFD) and HOST_INTERFACE_SPEC 5.3",
+   "result": "PASS. EFFECT_GATE maps to HE-002S, OBSERVER to HE-004, BROKER and WORKER to HE-005 ('embedding the exact worker filter'), HOST_CONTAINMENT to HE-006 and POLICY_WRITER to HE-007. These are exactly SEC-4's five packets, and all are in HI-7. SERVER is under no SEC-4 packet, there is no server module in plan v2's R10 scope, and A1-SERVER-MEMFD places SERVER's sealed-credential code in R12, OUTSIDE_W03. HI-7 additionally lists HE-008, the host image. EFFECT_GATE's REGISTERED_BEFORE_USE status is correct, because Q-HE2S-2 says 'HE-002S merges after it'."
+  },
+  {
+   "check": "EDGE-2 network re-check: 4 read-only gh api GETs (contents API) of R12's ci/verify-offline.sh, ci/warm-source-isolation.sh, ci/network_canary.py and ci/run_packet_argv.py at 9766c9cb02383968499a109c36f4b7a18ec532b0",
+   "result": "PASS for bytes. For each file, the SHA-256, git blob id (recomputed locally) and size equal the record and the v1 provider row. The bytes also equal git show 0e747049:<path>. Blobs: 770b8efa, 24df2745, 8ed96277, 2bd2d645. SHA-256: 778cb0fa, f717f62f, 1be4a837, c2ed0852. Modes: NOT RUN at R12, because the contents API returns no mode and a tree listing would read other paths (R2-3). The record's modes equal v1's provider modes and the provider's git modes at 0e747049 (git ls-tree: 100755, 100644, 100755, 100755)."
+  },
+  {
+   "check": "EDGE-2 shape and A13",
+   "result": "PASS. The record is a separate one in this meta packet, which touches architecture/artifact-edges/. Its ownerDecision equals the roadmap's EDGE-2 A13 text, and README-v2 quotes it verbatim. Its rules are v1's three, its IN_USE status text equals v1's, and it has schemaVersion v2, notArtifacts [] and notes. Its key sets are exact, and its serialisation is canonical."
+  },
+  {
+   "check": "Owner decisions verbatim (whitespace-normalised comparison with HE-002S DESIGN §11, HE-002B DESIGN §12 and the roadmap)",
+   "result": "PASS. Q-HE2S-1 and Q-HE2S-2 are verbatim in the v2 record. Q-HE2S-1 is verbatim in compiled-filter-programs/README.md. Q-HE2B-2 is verbatim in amendment.json and its README. A13 is verbatim in EDGE-2 and README-v2."
+  },
+  {
+   "check": "Amendment: plan v2 binding, changes and cited lines",
+   "result": "PASS, with R2-2. amends is {plan v2 path, sha256:a0047023..., MET-ENFORCE-024} and matches the bytes. I07-6 does not exist in plan v2 and is ADDED for HE-003 with scope W03. I07-4 exists with [HE-002B]; it is NARROWED, with an ownership field faithful to Q-HE2B-2 and scope W03. Line 34 is the W2 row (10 seconds; T59, T61, T62), and lines 47-48 form the WRITE_OBJECT 10-second bound sentence. The serialisation is canonical."
+  },
+  {
+   "check": "Builder reproducibility: a WORK copy of tools/enf025/build_records.py run on a WORK tree (v1 record, compiled-filter-programs, plan v2)",
+   "result": "PASS. The edge v2 record, EDGE-2 and amendment.json are byte-identical to the subject."
+  },
+  {
+   "check": "Rules: no implementation source crosses the boundary; acyclicity premise",
+   "result": "PASS. Besides v1's rows, v2 registers only the 14 .bpf data files; no script or compiler path is registered. repositories.yaml names harness-engineering only as a repository id (line 137) and never as a consumer, and line 10 is the cited boundary rule. The acyclicity code itself was not run; it belongs to the mechanics layer."
+  },
+  {
+   "check": "Wording and hygiene of the 8 subject text files",
+   "result": "PASS, with R2-1, R2-2 and R2-3. The compiled README's instruction table matches index.json. The README-v2 program table matches the record's role, packet and status, and its EDGE-2 table matches the record's path, mode, short digest, relation and status. Across the subject there are no absolute home or temp paths, e-mail addresses or personal names, and no 'HE-008', 'PR #', 'eebfd18' or 'latest commit'. Non-ASCII characters are limited to the em dash, ellipsis, multiplication sign and arrow."
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/enf025/reviews/BRIEF-r2.md",
+  "~/.local/state/harness-onion-ci/tools/enf025/reviews/review-round1.json",
+  "~/.local/state/harness-onion-ci/tools/enf025/NOTES.md",
+  "~/.local/state/harness-onion-ci/tools/enf025/build_records.py (round 2), compared with build_records.r1.py",
+  "~/.local/state/harness-onion-ci/tools/w03/he002s/DESIGN.md (§11, lines 1-16)",
+  "~/.local/state/harness-onion-ci/tools/w03/he002b/DESIGN.md (headings, lines 1-12, §12)",
+  "~/.local/state/harness-onion-ci/tools/w03/he002c/DESIGN.md (lines 1-4)",
+  "harness-onion-roadmap: roadmap/roadmap.json (item EDGE-2)",
+  "round-1 work directory (read only): check_programs.py, check_records.py, mkpyc.py and their outputs",
+  "subject 3f637171: all 22 added files; git diff 9522dd93..3f637171",
+  "architecture/seccomp-allowlists-v3/{allowlists,syscalls,vectors}.json and scripts/seccomp_allowlists_v3.py (executed from verified bytes; imports and tail read)",
+  "architecture/artifact-edges/{README.md,operator-harness-engineering.json}",
+  "scripts/validate_w03_amendment.py (lines 415-425, 586-680)",
+  "architecture/w03-plan-v2/plan.json (scope, packets, obligations); architecture/w03-plan-v2/README.md (grep)",
+  "architecture/i07-policy-write-v3/README.md (lines 21, 30-50, 143-146)",
+  "architecture/repositories.yaml (line 10, grep for consumers and ids)",
+  "architecture/host-interface-inputs/resolved/HOST_INTERFACE_SPEC.md (lines 396-424)",
+  "architecture/host-interface-amendment-w02d/amendment.json (lines 355-372)",
+  "provider files at 0e747049 (git show, git ls-tree) for the four transport paths",
+  "R12 at 9766c9cb: ci/verify-offline.sh, ci/warm-source-isolation.sh, ci/network_canary.py, ci/run_packet_argv.py (contents API, read-only)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "4 read-only gh api GET requests to the GitHub contents API for R12's four named transport files at commit 9766c9cb02383968499a109c36f4b7a18ec532b0 (gh update notifier disabled, gh's own generic User-Agent); no other network access",
+  "personalDataSent": false
+ }
+}
