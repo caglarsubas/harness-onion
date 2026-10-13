@@ -1,0 +1,147 @@
+{
+ "schemaVersion": "harness.planeon.ai/run-manifest-review/v1",
+ "kind": "run-manifest-review",
+ "round": 3,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "480407b591ab04d6121df23276d15f580afb46b7",
+ "subjectTree": "973f6db717a6370c928d1276ea7880fcbeec5954",
+ "verdict": "CHANGES_REQUIRED",
+ "verdictNote": "One wording correction blocks (R3-1, README text only). No model, schema or vector change is required; a round-4 check can be confined to the two README sentences.",
+ "findings": [
+  {
+   "id": "R3-1",
+   "severity": "MINOR",
+   "location": "architecture/run-manifest/README.md, selection record paragraph (line 98) and 'Not claimed' > Selection (line 228)",
+   "finding": "The model's held-out rule now behaves as intended, but the README understates what evades it. 'Not claimed' says a held-out task escapes only when it is re-declared 'under a new ID, a new content digest and a new suite at once'. Changing the content digest plus only one of the other two is enough:\n- B1: in the same suite, h1..h3 re-declared as development under new IDs and new digests is accepted.\n- B2: in another suite, the same IDs h1..h3 under new digests are accepted, because ID matching is same-suite only (R3 confirms this from the other direction).\nAny route that keeps the digest is caught: B4 and B5 (new IDs with the same digests, in the same or another suite) give HELD_OUT_SELECTION. The selection paragraph's 'not even through a second declaration that lists them as development under the same contents, the same IDs or another suite' reads as if another suite alone is caught; B2 shows it is not unless the contents are unchanged. The model's behaviour is reasonable, since content digests and suite-local IDs are the only identities available; only the stated limit is wrong.",
+   "requiredChange": "State the rule and its limit exactly. For example, in the selection paragraph: '...not even through a second declaration that lists them as development with the same content digest (in any suite) or the same task ID (in the same suite)'. Under 'Not claimed': 'a held-out task re-declared under a new content digest, together with a new task ID or another suite, is indistinguishable from a new task'. Optionally add B1 or B2 as an accepted-by-design vector."
+  },
+  {
+   "id": "R3-2",
+   "severity": "NOTE",
+   "location": "README (distribution gate) and the compare docstring: 'c^2 Q exceeds 2^53 even for small suites'",
+   "finding": "As a general statement this is too strong. In the n = 4 vectors, c^2 Q is 8.2e17 (cmp-improved) and 2.8e19 (cmp-noise), both above 2^53, but 6.6e15 for cmp-near and 0 for cmp-flat, both below it. The 200-task figure (1.78e21) is correct.",
+   "requiredChange": "Optional: change 'exceeds' to 'can exceed'."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R2-1",
+   "disposition": "RESOLVED",
+   "evidence": "The model now matches content digests across all suites and task IDs within the same suite. Probes N3 (same suite, same IDs, new digests) and N4 (another suite, same digests) give HELD_OUT_SELECTION (vectors V83 and V84), and so do B4 and B5 (new IDs with the same digests, in the same or another suite). The wording of the remaining limit is inaccurate: R3-1."
+  },
+  {
+   "finding": "R2-2",
+   "disposition": "RESOLVED",
+   "evidence": "Only valid declarations filed under their own digest count. N5a, N5b, N5d and N5e, which gave SHAPE or HELD_OUT_SELECTION in round 2, are now accepted with the entries ignored. R4: V74 passes against the vector store, which holds a misfiled declaration and a malformed entry. A properly filed declaration dated after every run refuses the selection in the same suite (R1) and in another suite (R2), as the README now states."
+  },
+  {
+   "finding": "R2-3",
+   "disposition": "RESOLVED",
+   "evidence": "N2 (other evaluator) and N2b (other environment) are INCOMPARABLE (vector V85), and so is C1 (zero-run, base and other-evaluator candidates). In C2 a zero-run candidate imposes no locks and the selection is accepted, the same as for comparisons."
+  },
+  {
+   "finding": "R2-4",
+   "disposition": "RESOLVED",
+   "evidence": "The README, V57's intent and the compare docstring now name c^2 Q (1,783,298,234,126,772,000,000 in the 200-task vector, recomputed) and 'T and the sum of D_t^2'. A small wording note remains: R3-2."
+  },
+  {
+   "finding": "R2-5",
+   "disposition": "RESOLVED",
+   "evidence": "Stated in the README. N1 still gives UNRESOLVED (WARN), as documented."
+  },
+  {
+   "finding": "R2-6",
+   "disposition": "RESOLVED",
+   "evidence": "Stated in the README. P04d still gives WARN at tolerance 0, as documented."
+  },
+  {
+   "finding": "R2-7",
+   "disposition": "RESOLVED",
+   "evidence": "Stated under 'Not claimed'. N7 is still accepted, as documented."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject 480407b591ab04d6121df23276d15f580afb46b7, tree 973f6db717a6370c928d1276ea7880fcbeec5954, parent e8beee04; diff c0f535b..480407b5 is still exactly the eight files; worktree clean",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder sha256 b110033e... matches; on a git-archive copy it reproduces the six JSON files byte for byte",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay: 85 cases (25 valid), 2 texts, 15 critical values",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-1 and round-2 probes re-run (P01-P17d, N1-N8)",
+   "result": "PASS: unchanged where documented; N2, N2b, N3 and N4 now refused; N5a-e entries ignored"
+  },
+  {
+   "check": "Held-out bypass shapes B1-B5, retroactive hold-outs R1-R3, store hygiene R4",
+   "result": "Model PASS; README wording FAIL (R3-1)"
+  },
+  {
+   "check": "Candidate comparability with zero-run candidates (C1, C2)",
+   "result": "PASS"
+  },
+  {
+   "check": "Grid: compare(), nonInferior and h16_state against my rational re-implementation, 4,928 cases",
+   "result": "PASS (0 mismatches)"
+  },
+  {
+   "check": "t check: independent closed forms; 33 rows; critical(df) at or above the quantile for df 1..130 and a spread to 4095",
+   "result": "PASS"
+  },
+  {
+   "check": "Shape sweep: 48 mutations",
+   "result": "PASS (0 schema/model disagreements)"
+  },
+  {
+   "check": "Fail-closed probes (P22)",
+   "result": "PASS for checks; parse/digest API edges unchanged"
+  },
+  {
+   "check": "README counts and magnitudes (store counts; c^2 Q for the 200-task and n = 4 vectors)",
+   "result": "PASS, with the note R3-2"
+  },
+  {
+   "check": "Public hygiene: no personal data or local absolute paths in the eight files",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry run",
+   "result": "NOT RUN: out of scope (light work only)"
+  }
+ ],
+ "probes": {
+  "scripts": [
+   "probes/probes2r3.py",
+   "probes/probes3.py",
+   "probes/tcheck2.py",
+   "probes/failclosed2.py"
+  ],
+  "note": "Review-local scripts, python -I -B on a git-archive copy of the subject commit; each run finished in about 1 s under timeout 300.",
+  "keyResults": {
+   "B1": "same suite, new IDs + new digests: accepted",
+   "B2": "other suite, same IDs + new digests: accepted",
+   "B3": "other suite, new IDs + new digests: accepted (stated limit)",
+   "B4": "same suite, new IDs + same digests: HELD_OUT_SELECTION",
+   "B5": "other suite, new IDs + same digests: HELD_OUT_SELECTION",
+   "R1/R2": "properly filed declaration dated 2027 holding out t1: HELD_OUT_SELECTION (same and other suite)",
+   "R3": "other suite holding out the ID t1 under another digest: accepted",
+   "R4": "V74 against the vector store with misfiled and malformed entries: accepted",
+   "C1": "zero-run + base + other-evaluator candidates: INCOMPARABLE",
+   "C2": "zero-run + other-evaluator candidates: accepted"
+  }
+ },
+ "sourcesRead": [
+  "Subject at 480407b5: diff against e8beee04 (README, vectors, scripts/run_manifest.py) read in full",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-002/build_manifest.py (diff against build_manifest.r2.py)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

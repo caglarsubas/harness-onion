@@ -1,0 +1,138 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.distribution-gate/v1",
+ "title": "Distribution-gate comparison v1 (MAS-RA-002)",
+ "$comment": "The closed shape only: uniqueness (DUPLICATE_ID), references and every later rule are the reference model's (scripts/run_manifest.py), which refuses a document as SHAPE exactly when this schema rejects it. Numbers are integers.",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.distribution-gate/v1"
+  },
+  "comparisonId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "purpose": {
+   "enum": [
+    "NON_REGRESSION",
+    "IMPROVEMENT"
+   ]
+  },
+  "baselineDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "candidateDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "tolerance": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "version": {
+     "type": "string",
+     "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+    },
+    "ppm": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 1000000
+    }
+   },
+   "required": [
+    "ppm",
+    "version"
+   ]
+  },
+  "decision": {
+   "enum": [
+    "IMPROVED",
+    "WITHIN_NOISE",
+    "REGRESSED",
+    "UNRESOLVED"
+   ]
+  },
+  "unresolvedReason": {
+   "oneOf": [
+    {
+     "type": "null"
+    },
+    {
+     "enum": [
+      "INCOMPLETE",
+      "DIRTY_TREE",
+      "TOO_FEW_TASKS"
+     ]
+    }
+   ]
+  },
+  "statistics": {
+   "oneOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "tasks": {
+       "type": "integer",
+       "minimum": 2,
+       "maximum": 4096
+      },
+      "baselineRuns": {
+       "type": "integer",
+       "minimum": 3,
+       "maximum": 1000
+      },
+      "candidateRuns": {
+       "type": "integer",
+       "minimum": 3,
+       "maximum": 1000
+      },
+      "criticalThousandths": {
+       "type": "integer",
+       "minimum": 1000,
+       "maximum": 100000
+      },
+      "meanDifferencePpm": {
+       "type": "integer",
+       "minimum": -1000000,
+       "maximum": 1000000
+      },
+      "halfWidthPpm": {
+       "type": "integer",
+       "minimum": 0,
+       "maximum": 9007199254740991
+      },
+      "nonInferior": {
+       "type": "boolean"
+      }
+     },
+     "required": [
+      "baselineRuns",
+      "candidateRuns",
+      "criticalThousandths",
+      "halfWidthPpm",
+      "meanDifferencePpm",
+      "nonInferior",
+      "tasks"
+     ]
+    }
+   ]
+  }
+ },
+ "required": [
+  "baselineDigest",
+  "candidateDigest",
+  "comparisonId",
+  "decision",
+  "purpose",
+  "schemaVersion",
+  "statistics",
+  "tolerance",
+  "unresolvedReason"
+ ]
+}

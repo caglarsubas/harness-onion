@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-MAS-001
+## Current source preparation — MET-MAS-002
+
+MAS-RA-002 (MET-MAS-002): the run manifest and configuration-level evaluation record contract candidate
+(split declarations, run manifests, evaluation records, a paired task-clustered distribution gate, selection
+records); H16's harness document and the repository schemas stay byte-identical. Alpha2 OPEN; 229 accepted plus
+MET-MAS-002 only.
+
+## Historical MAS-RA-001 source preparation — MET-MAS-001
 
 MAS-RA-001 (MET-MAS-001): the verdict and evidence ledger contract candidate planeon.internal.verdict-ledger/v1
 (schema, check-kind registry, reference model and vectors; UNRESOLVED maps to H16 WARN); H16's harness document
@@ -1324,3 +1331,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 227 | `MET-ENFORCE-024` | `Harness-Engineering` | W03-AMEND: W03 plan v2 (HE-002 decisions), operator edge registry record, I05 v3 supplementary vectors; DATA_CHECK_ONLY |
 | 228 | `MET-ADOPT-003` | `Harness-Engineering` | MAS-RA-000: research adoption v2 crosswalk (October 2026 MAS-harness corpus); META_PLANNING_ONLY |
 | 229 | `MET-MAS-001` | `Harness-Engineering` | MAS-RA-001: verdict and evidence ledger contract candidate (schema, check kinds, model, vectors); DATA_CHECK_ONLY |
+| 230 | `MET-MAS-002` | `Harness-Engineering` | MAS-RA-002: run manifest and configuration-level evaluation record contract candidate; DATA_CHECK_ONLY |

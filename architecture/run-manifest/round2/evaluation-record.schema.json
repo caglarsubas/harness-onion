@@ -1,0 +1,207 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.evaluation-record/v1",
+ "title": "Configuration-level evaluation record v1 (MAS-RA-002)",
+ "$comment": "The closed shape only: uniqueness (DUPLICATE_ID), references and every later rule are the reference model's (scripts/run_manifest.py), which refuses a document as SHAPE exactly when this schema rejects it. Numbers are integers.",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.evaluation-record/v1"
+  },
+  "recordId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "scopeDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "suiteDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "configuration": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "model": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 128,
+       "pattern": "^(?:[^\\ud800-\\udfff]|[\\ud800-\\udbff][\\udc00-\\udfff])*(?![\\s\\S])"
+      },
+      "configurationDigest": {
+       "type": "string",
+       "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+      }
+     },
+     "required": [
+      "configurationDigest",
+      "id"
+     ]
+    },
+    "harness": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "commit": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{40}(?![\\s\\S])"
+      },
+      "dirty": {
+       "type": "boolean"
+      }
+     },
+     "required": [
+      "commit",
+      "dirty"
+     ]
+    },
+    "budget": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "tokensPerTask": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 9007199254740991
+      },
+      "costMicrosPerTask": {
+       "type": "integer",
+       "minimum": 0,
+       "maximum": 9007199254740991
+      },
+      "wallClockSecondsPerTask": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 9007199254740991
+      }
+     },
+     "required": [
+      "costMicrosPerTask",
+      "tokensPerTask",
+      "wallClockSecondsPerTask"
+     ]
+    },
+    "agentCount": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 1024
+    }
+   },
+   "required": [
+    "agentCount",
+    "budget",
+    "harness",
+    "model"
+   ]
+  },
+  "split": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "declarationDigest": {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+    },
+    "partition": {
+     "enum": [
+      "DEVELOPMENT",
+      "HELD_OUT"
+     ]
+    }
+   },
+   "required": [
+    "declarationDigest",
+    "partition"
+   ]
+  },
+  "repetitionsDeclared": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 1000
+  },
+  "runs": {
+   "type": "array",
+   "minItems": 0,
+   "maxItems": 4096,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "manifestDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+     },
+     "repetition": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+     },
+     "results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4096,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "taskId": {
+         "type": "string",
+         "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+        },
+        "score": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 1000000
+        },
+        "tokensTotal": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 9007199254740991
+        },
+        "cacheReadTokens": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 9007199254740991
+        },
+        "costMicros": {
+         "type": "integer",
+         "minimum": 0,
+         "maximum": 9007199254740991
+        }
+       },
+       "required": [
+        "cacheReadTokens",
+        "costMicros",
+        "score",
+        "taskId",
+        "tokensTotal"
+       ]
+      }
+     }
+    },
+    "required": [
+     "manifestDigest",
+     "repetition",
+     "results"
+    ]
+   }
+  }
+ },
+ "required": [
+  "configuration",
+  "recordId",
+  "repetitionsDeclared",
+  "runs",
+  "schemaVersion",
+  "scopeDigest",
+  "split",
+  "suiteDigest"
+ ]
+}
