@@ -1,0 +1,358 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.verdict-ledger/v1",
+ "title": "Verdict and evidence ledger v1 (MAS-RA-001)",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.verdict-ledger/v1"
+  },
+  "ledgerId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+  },
+  "subject": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "scopeDigest": {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+   },
+   "required": [
+    "scopeDigest"
+   ]
+  },
+  "contexts": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "contextId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "role": {
+      "enum": [
+       "GENERATOR",
+       "VERIFIER",
+       "RESOLVER",
+       "CHALLENGER",
+       "ADJUDICATOR",
+       "EVALUATOR"
+      ]
+     },
+     "inheritsFrom": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+      }
+     }
+    },
+    "required": [
+     "contextId",
+     "inheritsFrom",
+     "role"
+    ]
+   }
+  },
+  "claims": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "claimId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "requirement": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+     },
+     "values": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rollout": {
+         "type": "string",
+         "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "value": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 1024
+        }
+       },
+       "required": [
+        "rollout",
+        "value"
+       ]
+      }
+     }
+    },
+    "required": [
+     "claimId",
+     "requirement",
+     "values"
+    ]
+   }
+  },
+  "checks": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "checkId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "claimId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "kind": {
+      "type": "string"
+     },
+     "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+     },
+     "target": {
+      "enum": [
+       "DELIVERED",
+       "INTERMEDIATE"
+      ]
+     },
+     "contextId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "outcome": {
+      "enum": [
+       "PASS",
+       "FAIL",
+       "INCONCLUSIVE"
+      ]
+     },
+     "evidence": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+      }
+     },
+     "establishedValue": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+     }
+    },
+    "required": [
+     "checkId",
+     "claimId",
+     "contextId",
+     "evidence",
+     "kind",
+     "outcome",
+     "sequence",
+     "target"
+    ]
+   }
+  },
+  "evidence": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "evidenceId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "kind": {
+      "type": "string"
+     },
+     "contentDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+     },
+     "producedBy": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     }
+    },
+    "required": [
+     "contentDigest",
+     "evidenceId",
+     "kind",
+     "producedBy"
+    ]
+   }
+  },
+  "claimVerdicts": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "claimId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "verdict": {
+      "enum": [
+       "SUPPORTED",
+       "CONTRADICTED",
+       "NEW_VALUE_ESTABLISHED",
+       "UNRESOLVED"
+      ]
+     },
+     "checks": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+      }
+     },
+     "value": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+     }
+    },
+    "required": [
+     "checks",
+     "claimId",
+     "verdict"
+    ]
+   }
+  },
+  "verdict": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "status": {
+     "enum": [
+      "PASS",
+      "FAIL",
+      "UNRESOLVED"
+     ]
+    },
+    "producedBy": {
+     "type": "string",
+     "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+    },
+    "evidenceRefs": {
+     "type": "array",
+     "maxItems": 256,
+     "uniqueItems": true,
+     "items": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+     }
+    },
+    "policyViolations": {
+     "type": "array",
+     "maxItems": 256,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "policyId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+       },
+       "evidenceId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+       }
+      },
+      "required": [
+       "evidenceId",
+       "policyId"
+      ]
+     }
+    },
+    "unresolvedChecks": {
+     "type": "array",
+     "maxItems": 256,
+     "uniqueItems": true,
+     "items": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     }
+    },
+    "scores": {
+     "type": "object",
+     "maxProperties": 64,
+     "propertyNames": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+     },
+     "additionalProperties": {
+      "type": "number"
+     }
+    }
+   },
+   "required": [
+    "evidenceRefs",
+    "policyViolations",
+    "producedBy",
+    "scores",
+    "status",
+    "unresolvedChecks"
+   ]
+  },
+  "supersedes": {
+   "oneOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+   ]
+  }
+ },
+ "required": [
+  "checks",
+  "claimVerdicts",
+  "claims",
+  "contexts",
+  "evidence",
+  "ledgerId",
+  "schemaVersion",
+  "subject",
+  "supersedes",
+  "verdict"
+ ]
+}

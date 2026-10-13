@@ -1,6 +1,33 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ADOPT-003 source preparation, October 13, 2026
+## Current checkpoint — MET-MAS-001 source preparation, October 13, 2026
+
+Alpha2 OPEN. MET-ADOPT-003 (MAS-RA-000) passed required verify and merged as main 8d10a9d. Owner decisions (via the lane
+monitor, 2026-10-13): Q-229 (a), slot 229 is MAS-RA-001, built by the primary lane; Q-MAS1-A (a), a ledger's UNRESOLVED
+maps to H16 WARN and stays its own value; Q-MAS1-B (a), an internal contract candidate with no change to H16's harness
+document or the repository schemas; Q-MAS1-C (a), the producing context's identity and role are modelled and signing stays
+with H16's signer. MET-MAS-001 publishes the verdict and evidence ledger contract candidate
+planeon.internal.verdict-ledger/v1 (schema, check-kind registry, standard-library reference model and vectors) after five
+independent review rounds. MET-MAS-001 is the sole 229th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-MAS-001 / MAS-RA-001 | SOURCE_PREPARED | Verdict and evidence ledger contract as the 229th packet; verify |
+| Alpha2A | MET-ADOPT-003 / MAS-RA-000 | VERIFY_PASSED_MERGED | Merged as main 8d10a9d |
+| Alpha2A | W03 | IN_PROGRESS | R10: HE-000 to HE-002 merged; HE-002B (I07 PolicyGate) prepared (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 suite migration and test source (parallel lane) |
+| Alpha2A | MAS-RA-002, MAS-RA-003, MAS-RA-008 | WAITING_PACKET_PUBLICATION | Proposed contract packets |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Ready when this packet merges (verify-before-admit on the shared board) |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the installed activation cap and the verifier's inheritance rule; the new
+layer validator adds no argv and runs inside the outer pytest), 420/750/900 s/15 min and 32 MiB. No cloud, runner registration,
+live/native/tenant or model-effort changes. Phase-end effort transition NOT_DUE.
+Prior checkpoints below are history only.
+
+## Historical MAS-RA-000 source checkpoint — MET-ADOPT-003 source preparation, October 13, 2026
 
 Alpha2 OPEN. MET-ENFORCE-024 (W03-AMEND) passed required verify and merged as main 93d32e1. Owner decisions (via the lane
 monitor, 2026-10-12): Q-RA1 (a), one unauthenticated read-only re-check of the 41 named repositories, and Q-RA2 (a),
@@ -1467,7 +1494,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · W02-CLEANUP / MET-ENFORCE-023 · Publish the W02 notes errata (native-profile-v3, I06 v2) and the PERF-032-F checks as reviewed data; pass required verify through the owner's App.
 - [x] Alpha 2 · PERF-035-F / MET-PERF-037 · Close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; owner transport approval; pass required verify through the owner's App.
 - [x] Alpha 2A · W03-AMEND / MET-ENFORCE-024 · Publish the W03 plan v2 (the owner's HE-002 decisions), the operator -> harness-engineering buildArtifact edge record and the I05 v3 supplementary vectors after four independent review rounds; pass required verify through the owner's App.
-- [ ] Alpha 2A · MAS-RA-000 / MET-ADOPT-003 · Publish the research adoption v2 crosswalk (the October 2026 MAS-harness corpus, the eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs) after four independent review rounds; pass required verify through the owner's App.
+- [x] Alpha 2A · MAS-RA-000 / MET-ADOPT-003 · Publish the research adoption v2 crosswalk (the October 2026 MAS-harness corpus, the eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs) after four independent review rounds; pass required verify through the owner's App.
+- [ ] Alpha 2A · MAS-RA-001 / MET-MAS-001 · Publish the verdict and evidence ledger contract candidate (schema, check-kind registry, reference model and vectors; UNRESOLVED maps to H16 WARN) after five independent review rounds; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

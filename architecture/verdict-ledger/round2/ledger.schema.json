@@ -1,0 +1,381 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.verdict-ledger/v1",
+ "title": "Verdict and evidence ledger v1 (MAS-RA-001)",
+ "$comment": "The closed shape only: uniqueness (DUPLICATE_ID), references and every later rule are the reference model's (scripts/verdict_ledger.py), which refuses a document as LEDGER_SHAPE exactly when this schema rejects it. Numbers are integers (an integral JSON number such as 1.0 is the integer 1).",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.verdict-ledger/v1"
+  },
+  "ledgerId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "subject": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "scopeDigest": {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+    }
+   },
+   "required": [
+    "scopeDigest"
+   ]
+  },
+  "rollouts": {
+   "type": "array",
+   "maxItems": 256,
+   "items": {
+    "type": "string",
+    "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+   }
+  },
+  "contexts": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "contextId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "role": {
+      "enum": [
+       "GENERATOR",
+       "VERIFIER",
+       "RESOLVER",
+       "CHALLENGER",
+       "ADJUDICATOR",
+       "EVALUATOR"
+      ]
+     },
+     "inheritsFrom": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+      }
+     }
+    },
+    "required": [
+     "contextId",
+     "inheritsFrom",
+     "role"
+    ]
+   }
+  },
+  "claims": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "claimId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "requirement": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+     },
+     "delivered": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+     },
+     "rolloutValues": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rollout": {
+         "type": "string",
+         "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+        },
+        "value": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 1024,
+         "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+        }
+       },
+       "required": [
+        "rollout",
+        "value"
+       ]
+      }
+     }
+    },
+    "required": [
+     "claimId",
+     "delivered",
+     "requirement",
+     "rolloutValues"
+    ]
+   }
+  },
+  "checks": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "checkId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "claimId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+     },
+     "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+     },
+     "target": {
+      "enum": [
+       "DELIVERED",
+       "INTERMEDIATE"
+      ]
+     },
+     "contextId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "outcome": {
+      "enum": [
+       "PASS",
+       "FAIL",
+       "INCONCLUSIVE"
+      ]
+     },
+     "evidence": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+      }
+     },
+     "establishedValue": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+     }
+    },
+    "required": [
+     "checkId",
+     "claimId",
+     "contextId",
+     "evidence",
+     "kind",
+     "outcome",
+     "sequence",
+     "target"
+    ]
+   }
+  },
+  "evidence": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "evidenceId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+     },
+     "contentDigest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+     },
+     "producedBy": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     }
+    },
+    "required": [
+     "contentDigest",
+     "evidenceId",
+     "kind",
+     "producedBy"
+    ]
+   }
+  },
+  "claimVerdicts": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 256,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "claimId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "verdict": {
+      "enum": [
+       "SUPPORTED",
+       "CONTRADICTED",
+       "NEW_VALUE_ESTABLISHED",
+       "UNRESOLVED"
+      ]
+     },
+     "checks": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+      }
+     },
+     "value": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^\\ud800-\\udfff]*(?![\\s\\S])"
+     }
+    },
+    "required": [
+     "checks",
+     "claimId",
+     "verdict"
+    ]
+   }
+  },
+  "verdict": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "status": {
+     "enum": [
+      "PASS",
+      "FAIL",
+      "UNRESOLVED"
+     ]
+    },
+    "producedBy": {
+     "type": "string",
+     "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+    },
+    "evidenceRefs": {
+     "type": "array",
+     "maxItems": 256,
+     "items": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+     }
+    },
+    "policyViolations": {
+     "type": "array",
+     "maxItems": 256,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "policyId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+       },
+       "evidenceId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+       }
+      },
+      "required": [
+       "evidenceId",
+       "policyId"
+      ]
+     }
+    },
+    "unresolvedChecks": {
+     "type": "array",
+     "maxItems": 256,
+     "items": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     }
+    },
+    "scores": {
+     "type": "object",
+     "maxProperties": 64,
+     "propertyNames": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "additionalProperties": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+     }
+    }
+   },
+   "required": [
+    "evidenceRefs",
+    "policyViolations",
+    "producedBy",
+    "scores",
+    "status",
+    "unresolvedChecks"
+   ]
+  },
+  "supersedes": {
+   "oneOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+    }
+   ]
+  }
+ },
+ "required": [
+  "checks",
+  "claimVerdicts",
+  "claims",
+  "contexts",
+  "evidence",
+  "ledgerId",
+  "rollouts",
+  "schemaVersion",
+  "subject",
+  "supersedes",
+  "verdict"
+ ]
+}
