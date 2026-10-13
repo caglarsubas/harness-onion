@@ -1,0 +1,103 @@
+{
+ "schemaVersion": "planeon.internal.run-manifest-status/v1",
+ "workItem": "MAS-RA-002",
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "contract": {
+  "schemas": [
+   "architecture/run-manifest/split-declaration.schema.json",
+   "architecture/run-manifest/run-manifest.schema.json",
+   "architecture/run-manifest/evaluation-record.schema.json",
+   "architecture/run-manifest/distribution-gate.schema.json",
+   "architecture/run-manifest/selection-record.schema.json"
+  ],
+  "vectors": "architecture/run-manifest/vectors.json",
+  "model": "scripts/run_manifest.py",
+  "readme": "architecture/run-manifest/README.md"
+ },
+ "reviewedSubject": {
+  "commit": "b3078f2e4d4f8d148e9d424369a1f4ec0c58734c",
+  "tree": "225c5aefca2f6054b4be33d1f31a11d23382be3e"
+ },
+ "adoptionEdit": {
+  "path": "architecture/run-manifest/README.md",
+  "replaced": "Status: **CONTRACT_CANDIDATE_ROUND4_AWAITING_INDEPENDENT_REVIEW**.",
+  "with": "Status: **ADOPTED_CONTRACT_CANDIDATE** (independent review round 4: PASS_FOR_SOURCE_PUBLICATION; rounds and review records in `status.json`).",
+  "reviewedSha256": "f1a825b46a8fb3db2b0667c6a99c62df6054b50fc77ffb9253ecbb1a311f8a41",
+  "adoptedSha256": "279d374e5ddd1b6305611f3565a7af14046b305e59cf9634a88bd358818ce826"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "fcdfebf3c74fd998b50c5e91cbcc4d3fdf85e81d",
+   "subjectTree": "c51b54c6b1c9f4733238ae34ab3537bcfd5f3405",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/run-manifest/review-round1.json",
+   "snapshot": "architecture/run-manifest/round1/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/run-manifest/vectors.json": "cdf0582678e4423d3bda1ee896c3dd4ec356899f550d3cbbd6f5e70c2c5401ba"
+   }
+  },
+  {
+   "round": 2,
+   "subject": "e8beee043c7336cf2445d2b282e16a671f9d3ac5",
+   "subjectTree": "12fccf18dc623cef2c664f4e55b260c700e7ce5d",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/run-manifest/review-round2.json",
+   "snapshot": "architecture/run-manifest/round2/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/run-manifest/vectors.json": "6b9341c97e2935efe99256e267794b8be3660c5211176c213a42c08139d85eb2"
+   }
+  },
+  {
+   "round": 3,
+   "subject": "480407b591ab04d6121df23276d15f580afb46b7",
+   "subjectTree": "973f6db717a6370c928d1276ea7880fcbeec5954",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/run-manifest/review-round3.json",
+   "snapshot": "architecture/run-manifest/round3/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/run-manifest/vectors.json": "43bcd436efdfe4270677b7a8d04cca30859c41e6d8de1f6ff5413dc9770d44b3"
+   }
+  },
+  {
+   "round": 4,
+   "subject": "b3078f2e4d4f8d148e9d424369a1f4ec0c58734c",
+   "subjectTree": "225c5aefca2f6054b4be33d1f31a11d23382be3e",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/run-manifest/review-round4.json",
+   "snapshot": null,
+   "severities": []
+  }
+ ],
+ "carried": [],
+ "acceptance": [
+  "MAS-RA-002-A1",
+  "MAS-RA-002-A2",
+  "MAS-RA-002-A3"
+ ],
+ "ownerDecisions": [
+  "Q-MAS2-A (a)",
+  "Q-MAS2-B (a)",
+  "Q-MAS2-C (a)",
+  "Q-MAS2-D (a)",
+  "Q-230 (a)"
+ ],
+ "nonClaims": [
+  "An internal contract candidate: no public contract, selector, catalog, schema or runtime change; H16's harness document and the repository schemas are byte-identical.",
+  "No producer, consumer or service exists; the model runs only on the vectors; the R12 trial of a run-manifest record is a later parallel-lane R12 packet.",
+  "The cited figures are the source papers' results, not platform evidence."
+ ]
+}

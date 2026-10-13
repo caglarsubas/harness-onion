@@ -1,0 +1,71 @@
+{
+ "schemaVersion": "harness.planeon.ai/run-manifest-review/v1",
+ "kind": "run-manifest-review",
+ "round": 4,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "b3078f2e4d4f8d148e9d424369a1f4ec0c58734c",
+ "subjectTree": "225c5aefca2f6054b4be33d1f31a11d23382be3e",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "verdictNote": "Every finding of rounds 1-3 is resolved (R1-1..R1-13, R2-1..R2-7, R3-1..R3-2). No new finding. Two README lines (99 and 128) are now longer than the file's usual wrap width; this is cosmetic and not a finding.",
+ "findings": [],
+ "dispositions": [
+  {
+   "finding": "R3-1",
+   "disposition": "RESOLVED",
+   "evidence": "The selection paragraph now says 'with the same content digest (in any suite) or the same task ID (in the same suite)', which matches the model: N3, N4, B4 and B5 give HELD_OUT_SELECTION. 'Not claimed' now says 'a held-out task re-declared under a new content digest, together with a new task ID or another suite, is indistinguishable from a new task', which matches B1 (same suite, new IDs and new digests), B2 (another suite, same IDs, new digests) and B3 (all three changed), each accepted. B1-B5 were re-run on the round-4 archive with the same results."
+  },
+  {
+   "finding": "R3-2",
+   "disposition": "RESOLVED",
+   "evidence": "'exceeds' is now 'can exceed' in the README and in compare's docstring, which matches the n = 4 vectors (c^2 Q above 2^53 for cmp-improved and cmp-noise, below it for cmp-near and cmp-flat)."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject b3078f2e4d4f8d148e9d424369a1f4ec0c58734c, tree 225c5aefca2f6054b4be33d1f31a11d23382be3e, parent 480407b5; git diff 480407b5..b3078f2e touches README.md (4 lines) and one docstring line in scripts/run_manifest.py (5+/5-); diff c0f535b..b3078f2e is still exactly the eight files; worktree clean",
+   "result": "PASS"
+  },
+  {
+   "check": "Schemas and vectors unchanged (git diff --quiet on architecture/run-manifest/*.json)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model code unchanged apart from docstrings (Python AST of rounds 3 and 4 compared with docstrings removed)",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder sha256 b110033e... unchanged; on a git-archive copy of round 4 it reproduces the six JSON files byte for byte",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay: 85 cases, 2 texts, 15 critical values",
+   "result": "PASS"
+  },
+  {
+   "check": "Held-out bypass shapes B1-B5 re-run against round 4, compared with the new README text",
+   "result": "PASS (text and behaviour agree)"
+  },
+  {
+   "check": "Grid, t check and shape sweep",
+   "result": "NOT RUN again: the model code, schemas and vectors are unchanged since round 3, where all three passed (4,928 grid cases with 0 mismatches; t check for df 1..130 and a spread to 4095; 48 shape mutations with 0 disagreements)"
+  },
+  {
+   "check": "Public hygiene: no personal data or local absolute paths in the README",
+   "result": "PASS"
+  }
+ ],
+ "probes": {
+  "scripts": [
+   "probes/probes3.py"
+  ],
+  "note": "Review-local script, python -I -B on a git-archive copy of round 4; about 1 s under timeout 300."
+ },
+ "sourcesRead": [
+  "Subject at b3078f2e: full diff against 480407b5 (README.md, scripts/run_manifest.py)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

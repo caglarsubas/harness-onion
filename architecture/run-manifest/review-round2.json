@@ -1,0 +1,229 @@
+{
+ "schemaVersion": "harness.planeon.ai/run-manifest-review/v1",
+ "kind": "run-manifest-review",
+ "round": 2,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "e8beee043c7336cf2445d2b282e16a671f9d3ac5",
+ "subjectTree": "12fccf18dc623cef2c664f4e55b260c700e7ce5d",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R2-1",
+   "severity": "MINOR",
+   "location": "scripts/run_manifest.py check_selection (store-relative rule); README (selection record)",
+   "finding": "The store-relative held-out rule compares task content digests only, so it can be bypassed. Probe N3: a second declaration of the same suite lists split-001's held-out task IDs h1..h3 as DEVELOPMENT under new content digests. A selection on its records is accepted, although the README says held-out scores are never selection input 'not even through a second declaration that lists them as development'. Task digests are self-declared, and PARTITION_OVERLAP already matches by ID and by digest. Probe N4: the same held-out task digests declared as development under another suite digest are also accepted. The README limits the rule to the same suite, but the suite digest is self-declared too.",
+   "requiredChange": "Match by taskId and by taskDigest, as PARTITION_OVERLAP does. Either match task digests across every declaration in the store, whatever the suite, or state the same-suite limit, and its bypass through a new suite digest, under 'Not claimed'. Add a vector for the ID route."
+  },
+  {
+   "id": "R2-2",
+   "severity": "MINOR",
+   "location": "scripts/run_manifest.py check_selection (held set built from splits.values())",
+   "finding": "The rule reads every store entry raw: it neither runs check_split nor verifies the key against the entry's digest, unlike every other reference in the model. Adding one same-suite entry under a key that is not its digest to the store of the valid selection V74 changes the result in four ways:\n(N5a) an entry whose partitions is a list gives SHAPE;\n(N5e) an unhashable task digest gives SHAPE;\n(N5b) an entry that is not a declaration at all (wrong schemaVersion) still holds tasks out and gives HELD_OUT_SELECTION;\n(N5d) a PARTITION_EMPTY declaration does the same.\nThese are fail-closed, not false accepts, but two consumers with differently curated stores reach different results for the same selection. Separately, the rule ignores time: a valid declaration dated after every run that holds out a task used in development retroactively refuses the selection (N5c).",
+   "requiredChange": "Count only entries that pass check_split and whose key equals their digest. Alternatively, check every same-suite entry and refuse with its own code, and document that. Say in the README whether a later declaration may retroactively refuse a selection. Add a vector for a malformed or invalid entry."
+  },
+  {
+   "id": "R2-3",
+   "severity": "MINOR",
+   "location": "scripts/run_manifest.py check_selection (INCOMPARABLE); README (selection record)",
+   "finding": "A comparison now requires the same evaluator, dataset, fixture and environment locks, but selection candidates are compared on scope, suite and split only. Probe N2: a selection between the baseline and a candidate scored by another evaluator version is accepted, with an empty basis. Probe N2b: the same with another environment. The README says 'the candidates must be comparable', which now means two different things.",
+   "requiredChange": "Apply the comparison's lock comparability (comparableLocks, where present) to the selection's candidates, refusing a mismatch as INCOMPARABLE, and add a vector. Otherwise, state that a selection's candidates may differ in these locks."
+  },
+  {
+   "id": "R2-4",
+   "severity": "MINOR",
+   "location": "README (distribution gate: 'Q exceeds 2^53 for realistic suites (the 200-task vector)'); vectors.json V57 intent",
+   "finding": "In the 200-task vector, Q = 454,876,602,930,000 (about 4.5e14), which is below 2^53. T and the sum of D_t^2 are below it as well. What exceeds 2^53 is c^2 Q (about 1.8e21) and the L^2 and U^2 (n-1) 10^6 terms, so the conclusion that the arithmetic needs arbitrary-precision integers stands, but the stated reason, and V57's intent 'Q exceeds 2^53', are false. The builder asserts only tasks == 200 for this vector. The README also says 'T and Q are not recorded'; the dropped fields were T (sumDifference) and the sum of D_t^2 (sumSquares), not Q. My round-1 probe P02 (120 of 200 tasks flipped) does push Q past 2^53.",
+   "requiredChange": "Correct the README sentence and V57's intent, for example 'c^2 Q exceeds 2^53 (about 1.8e21 in the 200-task vector)'. Optionally make the builder assert the stated magnitude. Fix 'T and Q' to 'T and the sum of D_t^2'."
+  },
+  {
+   "id": "R2-5",
+   "severity": "NOTE",
+   "location": "scripts/run_manifest.py check_comparison (comparableLocks None)",
+   "finding": "A record with zero runs has no locks, so the lock test is skipped. In probe N1, a zero-run baseline against a candidate scored by another evaluator gives UNRESOLVED (INCOMPLETE, WARN) rather than INCOMPARABLE. This is no acceptance hole, because UNRESOLVED never maps to PASS, and a one-run candidate with other locks is INCOMPARABLE (N1b).",
+   "requiredChange": "Optional: state the behaviour in the README."
+  },
+  {
+   "id": "R2-6",
+   "severity": "NOTE",
+   "location": "README (H16 mapping); h16_state",
+   "finding": "With tolerance 0, NON_REGRESSION can pass only an IMPROVED candidate. Probe P04d: a candidate identical to its baseline (mean 0, half-width 0) is WITHIN_NOISE, not non-inferior, so WARN; with tolerance 10,000 it is PASS (P04c). This is mathematically consistent: a non-inferiority margin of 0 makes non-inferiority the same as superiority.",
+   "requiredChange": "Optional: say so in the README, or require a positive tolerance for NON_REGRESSION."
+  },
+  {
+   "id": "R2-7",
+   "severity": "NOTE",
+   "location": "scripts/run_manifest.py check_record and check_comparison (cacheKeyDigest)",
+   "finding": "Prompt-cache keys are distinct within a record only. In probe N7, a candidate whose runs reuse the baseline runs' cache keys is accepted (IMPROVED, PASS). 2609.26891 p.15 asks for a distinct key per run, and shared keys let one side's cost benefit from the other's cache.",
+   "requiredChange": "Optional: refuse shared cache keys between baseline and candidate in check_comparison, or state the limit (cost is not gated here)."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R1-1",
+   "disposition": "RESOLVED",
+   "evidence": "h16_state with nonInferior (U > 0 and U^2 (n-1) 10^6 > c^2 Q) checked. IMPROVED implies nonInferior and REGRESSED excludes it. P04 and P04b, PASS in round 1, are now WARN. P04c (identical candidate, tolerance 10,000) is PASS. Boundaries P17c (mean exactly -tol, Q = 0: not non-inferior, WARN) and P17d (-9,999: PASS) behave correctly. The grid against my rational re-implementation, now including nonInferior and h16_state, gives 4,928 cases and 0 mismatches (NON_REGRESSION WITHIN_NOISE: 159 PASS, 1,097 WARN). The README examples match the stored statistics (-2,000 +/- 1,300; -20,000 +/- 104,766; +30,000 +/- 85,211). Reading the plan's 'with the threshold met' as non-inferiority is for the owner to confirm."
+  },
+  {
+   "finding": "R1-2",
+   "disposition": "RESOLVED",
+   "evidence": "P06 (judge version changed within a record) and P12 (mixed seed modes) are CONFIGURATION_MIXED. P05 (other evaluator) and P07 (other dataset and fixture) are INCOMPARABLE. P07b (other prompts with the same evaluator, dataset, fixture and environment, i.e. a harness change) is accepted as intended. Vectors V39, V40, V66 and V67 are present. Residuals: R2-3 (selection candidates) and R2-5 (zero-run records)."
+  },
+  {
+   "finding": "R1-3",
+   "disposition": "RESOLVED",
+   "evidence": "Statistics are closed and bounded in both the schema and the model. P01 (boolean) and P03 (9.72e15) are now SHAPE in both; P03b (equal integral float) is accepted and normalised. P02 records only bounded statistics. N6: the extreme computed statistics (n 2 or 4096, k 3 or 1000) stay inside the bounds, so no valid comparison is unrecordable. The shape sweep gives 48 mutations and 0 disagreements, 20 of them on statistics. No schema still uses 2^53, and MAX_INT is 2^53 - 1. Residual wording: R2-4."
+  },
+  {
+   "finding": "R1-4",
+   "disposition": "RESOLVED",
+   "evidence": "critical(df) for df above 120 is 1980. My independent closed-form re-derivation confirms all 33 rows equal ceil(1000 t), critical(df) is at or above the quantile for df 1..130 and at 150, 200, 500, 1000, 2000 and 4095 (t(121) = 1.979764), and t falls monotonically over df 120..140. The builder's check is extended."
+  },
+  {
+   "finding": "R1-5",
+   "disposition": "PARTIALLY_RESOLVED",
+   "evidence": "P08 (the same digests re-declared as development) is now HELD_OUT_SELECTION, and V82 is present. Bypasses by ID with fresh digests and through another suite digest remain (R2-1), and the rule reads unvalidated store entries (R2-2)."
+  },
+  {
+   "finding": "R1-6",
+   "disposition": "RESOLVED",
+   "evidence": "The README lists each check's order. P09 (HELD_OUT_SELECTION first), P10 (run-by-run CONFIGURATION_MIXED before a later run's manifest SHAPE) and P15 (repetition swap: CONFIGURATION_MIXED) match it. Vectors V38 and V81 are present. Duplicate repetitions are attributed to DUPLICATE_ID."
+  },
+  {
+   "finding": "R1-7",
+   "disposition": "RESOLVED",
+   "evidence": "'Not claimed' now states that earlier attempts and retries are bound by H16's campaign records, with H16's retry rule quoted, and that append-only holds only by content addressing."
+  },
+  {
+   "finding": "R1-8",
+   "disposition": "RESOLVED",
+   "evidence": "The manifest has execution {cacheKeyDigest, parallelism}, cache keys are distinct within a record (DUPLICATE_ID, V41), and the record facts add tokensTotal and tokensMeanPerTaskRun (P16: 0 when tokens are 0). Residual: R2-7."
+  },
+  {
+   "finding": "R1-9",
+   "disposition": "RESOLVED",
+   "evidence": "The README states that a selection records its inputs and does not justify the choice; P14 is still accepted, as documented."
+  },
+  {
+   "finding": "R1-10",
+   "disposition": "RESOLVED",
+   "evidence": "P11: dirty now comes from the configuration (true for a zero-run dirty record). The cache share is defined at tokensTotal 0, budget overruns are stated as recorded but not gated, a zero cost cap is defined, and equal times are stated as allowed (P13). The parse and digest API edges outside checks are unchanged (P22) and acceptable."
+  },
+  {
+   "finding": "R1-11",
+   "disposition": "RESOLVED",
+   "evidence": "MILO p.1 (86.1 +/- 2.0 and 83.8 +/- 2.3) and p.12 (table) were re-checked in the PDF. The 'noise' reading is attributed to the crosswalk and Harness-Bench is named. Optional nit: the 'task-clustered' wording itself is on p.11."
+  },
+  {
+   "finding": "R1-12",
+   "disposition": "RESOLVED",
+   "evidence": "The H16 paragraph lists judge version and calibration evidence, the sole-authority limit, the signed record, scope and freshness."
+  },
+  {
+   "finding": "R1-13",
+   "disposition": "RESOLVED",
+   "evidence": "The README states that a multi-model configuration is identified only through configurationDigest."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject e8beee043c7336cf2445d2b282e16a671f9d3ac5, tree 12fccf18dc623cef2c664f4e55b260c700e7ce5d, parent fcdfebf3; git diff --name-only c0f535b..e8beee04 is exactly the eight files; H16 document and schemas/ untouched; worktree clean",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder sha256 96fab167... matches; run on a git-archive copy it reproduces the five schemas and vectors byte for byte (well under 60 s)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay: 82 cases (25 valid), 2 texts, 15 critical values",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-1 probes re-run in round-2 form (P01-P17d)",
+   "result": "PASS: every round-1 defect now behaves as the dispositions state"
+  },
+  {
+   "check": "Grid: compare(), nonInferior and h16_state against my rational re-implementation (4,928 cases: n 2..300, k pairs 3/3, 3/4, 5/3, 3/7, shifts at and around +/-tolerance, tolerance 0 and 10,000, both purposes)",
+   "result": "PASS (0 mismatches)"
+  },
+  {
+   "check": "t check: independent A&S 26.7.3/26.7.4 closed forms; 33 rows; critical(df) >= quantile for df 1..130 and a spread to 4095; monotone over 120..140",
+   "result": "PASS"
+  },
+  {
+   "check": "Shape sweep: 48 mutations over the five kinds (execution, 2^53 bounds and 20 statistics mutations included)",
+   "result": "PASS (0 schema/model disagreements)"
+  },
+  {
+   "check": "Extreme computed statistics within the closed bounds (N6)",
+   "result": "PASS"
+  },
+  {
+   "check": "Lock-equality rules, new holes (N1, N1b, N2, N2b, N7)",
+   "result": "R2-3 (selection candidates); R2-5 and R2-7 notes; N1b PASS"
+  },
+  {
+   "check": "Store-relative held-out rule, new holes (N3, N4, N5a-e)",
+   "result": "FAIL (R2-1, R2-2)"
+  },
+  {
+   "check": "Closed statistics, new holes (P01, P03, P03b, N6, sweep)",
+   "result": "PASS"
+  },
+  {
+   "check": "README claims against computed values (examples, 200-task vector magnitude N8)",
+   "result": "FAIL in one place (R2-4); examples PASS"
+  },
+  {
+   "check": "Fail-closed probes on odd stores and inputs (P22, round-2 IDs)",
+   "result": "PASS for checks; parse/digest API edges unchanged"
+  },
+  {
+   "check": "PDF re-check for R1-11: MILO pp. 1 and 12",
+   "result": "PASS"
+  },
+  {
+   "check": "Public hygiene: no personal data or local absolute paths in the eight files",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry run",
+   "result": "NOT RUN: out of scope (light work only)"
+  }
+ ],
+ "probes": {
+  "scripts": [
+   "probes/probes2.py",
+   "probes/tcheck2.py",
+   "probes/failclosed2.py"
+  ],
+  "note": "Review-local scripts, python -I -B on a git-archive copy of the subject commit; each run finished in about 1 s under timeout 300.",
+  "keyResults": {
+   "P04/P04b": "WITHIN_NOISE, not non-inferior: WARN (round 1: PASS)",
+   "P04c/P04d": "identical candidate: PASS at tolerance 10,000; WARN at tolerance 0",
+   "P05/P07": "INCOMPARABLE",
+   "P06/P12": "CONFIGURATION_MIXED",
+   "P08": "HELD_OUT_SELECTION",
+   "N1": "zero-run baseline vs other evaluator: UNRESOLVED (WARN)",
+   "N2/N2b": "selection among candidates with other evaluator/environment locks: accepted",
+   "N3": "held-out task IDs under new digests as development: accepted",
+   "N4": "held-out digests under another suite digest: accepted",
+   "N5a/N5e": "malformed same-suite store entry: SHAPE for a valid selection",
+   "N5b/N5d": "invalid store entry still holds tasks out: HELD_OUT_SELECTION",
+   "N5c": "declaration dated after every run refuses the selection retroactively",
+   "N7": "candidate reusing the baseline's cache keys: accepted",
+   "N8": "200-task vector: Q = 454,876,602,930,000 < 2^53; c^2 Q about 1.78e21 > 2^53"
+  }
+ },
+ "sourcesRead": [
+  "Subject at e8beee04: architecture/run-manifest/* and scripts/run_manifest.py (diff against fcdfebf3 read in full)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-002/build_manifest.py (diff against build_manifest.r1.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-002/PLAN.md (round 1)",
+  "docs/harnesses/trust.evaluation-assurance.md (round 1; unchanged)",
+  "roadmap/research/papers/2609.38349v1-milo.pdf pp. 1, 12"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

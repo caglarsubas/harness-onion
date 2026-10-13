@@ -1,0 +1,46 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.selection-record/v1",
+ "title": "Selection record v1 (MAS-RA-002)",
+ "$comment": "The closed shape only: uniqueness (DUPLICATE_ID), references and every later rule are the reference model's (scripts/run_manifest.py), which refuses a document as SHAPE exactly when this schema rejects it. Numbers are integers.",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.selection-record/v1"
+  },
+  "selectionId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "candidates": {
+   "type": "array",
+   "minItems": 2,
+   "maxItems": 4096,
+   "items": {
+    "type": "string",
+    "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+   }
+  },
+  "chosen": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "basis": {
+   "type": "array",
+   "minItems": 0,
+   "maxItems": 4096,
+   "items": {
+    "type": "string",
+    "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+   }
+  }
+ },
+ "required": [
+  "basis",
+  "candidates",
+  "chosen",
+  "schemaVersion",
+  "selectionId"
+ ]
+}

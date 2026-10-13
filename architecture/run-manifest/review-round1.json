@@ -1,0 +1,265 @@
+{
+ "schemaVersion": "harness.planeon.ai/run-manifest-review/v1",
+ "kind": "run-manifest-review",
+ "round": 1,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "fcdfebf3c74fd998b50c5e91cbcc4d3fdf85e81d",
+ "subjectTree": "c51b54c6b1c9f4733238ae34ab3537bcfd5f3405",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "MAJOR",
+   "location": "architecture/run-manifest/README.md (H16 mapping); scripts/run_manifest.py H16_STATE",
+   "finding": "For NON_REGRESSION, WITHIN_NOISE maps to PASS unconditionally, so a comparison too noisy or too small to detect anything passes whatever its mean loss. Probe P04 (vector stores, n = 4, k = 3): the candidate loses 45, 38 and 27 points on three tasks and gains 30 on one; meanDifferencePpm -200,000, halfWidthPpm 543,446, decision WITHIN_NOISE, h16EvidenceState PASS. Probe P04b (n = 2): the candidate loses 80 and 20 points on both tasks, mean -500,000, half-width 3,812,100, PASS. Failing to show a regression is not evidence of non-regression, and the rule rewards fewer tasks and noisier runs. The accepted plan's binding reads 'IMPROVED or WITHIN_NOISE with the threshold met is evidence for PASS'; the README drops the qualifier. The IMPROVEMENT mapping (only IMPROVED is PASS) is sound, and so are REGRESSED to FAIL and UNRESOLVED to WARN.",
+   "requiredChange": "Make NON_REGRESSION PASS require non-inferiority: the interval's lower bound is at or above minus the tolerance (N = T + n*tol > 0 and N^2 (n-1) 10^6 > c^2 Q, in the same integers). Map a WITHIN_NOISE that does not meet this to WARN (inconclusive), not PASS. Expose the test in the returned facts and in the statistics. Add vectors for a wide-interval loss (WARN) and a tight within-tolerance result (PASS). The four owner-decided outcomes stay as they are; only the H16 mapping changes. Because this reads the plan's 'with the threshold met' as non-inferiority, confirm the reading with the owner via the lane monitor if there is any doubt."
+  },
+  {
+   "id": "R1-2",
+   "severity": "MAJOR",
+   "location": "scripts/run_manifest.py check_record and check_comparison; README (records, distribution gate)",
+   "finding": "Nothing holds the measurement instrument fixed. The runs of one record may differ in any lock. In probe P06, repetition 2 used another judge version; the record is accepted and complete, and its scores are averaged with the others. A comparison accepts a baseline and a candidate scored by different evaluators: in probe P05 the baseline used evaluator-a 1.0.0 and the candidate evaluator-b 2.0.0, and the result is IMPROVED, which maps to PASS for IMPROVEMENT. Probe P07 is the same with different dataset and fixture digests: IMPROVED, PASS. The comparability check covers only scope, suite and split. A judge or data change can therefore pass as a harness improvement. This goes against the grounding the README cites: VeriHarness p.21 scores base and delivered rollouts in the same grading round to control judge drift (PDF checked), and the roadmap note says the same. It also goes against H16, which locks the judge and data per run and says judge disagreement is 'never silent averaging'.",
+   "requiredChange": "In check_record, require every run's locks to be identical. At minimum this covers evaluator {id, version, digest}, datasetDigest, fixtureDigest and environmentDigest; preferably it covers all locks, since a configuration whose resolved specs, prompts, tools, images or dependencies vary across repetitions is not one configuration. Refuse a mismatch as CONFIGURATION_MIXED or a new code. In check_comparison, refuse INCOMPARABLE unless baseline and candidate share the evaluator, datasetDigest and fixtureDigest, and state whether environmentDigest must match too. Return the record's locks, or a locks digest, in its facts. Add one refusal vector per rule and document the rules in the README."
+  },
+  {
+   "id": "R1-3",
+   "severity": "MAJOR",
+   "location": "architecture/run-manifest/distribution-gate.schema.json (statistics); scripts/run_manifest.py check_comparison and compare; README (canonical form, 'closed shapes', 'bit for bit')",
+   "finding": "The statistics object is open in the schema ({type: object}). In the model it is checked only by Python equality with the computed dict, and its values are unbounded. Three probes show the consequences. (P01) halfWidthPpm written as false is accepted because False == 0 in Python; the comparison then has two accepted encodings with different digests. (P02) A realistic comparison is accepted with sumSquares = 9,720,000,000,000,000, which is more than 2^53: k = 3, 200 binary tasks, 120 of them flipped. That value is outside the I-JSON exact-integer range, so an RFC 8785 implementation that works with IEEE doubles cannot reproduce the digest the model computes, and a selection's basis digest is not portable. (P03) The same comparison with sumSquares written as the equal number 9.72e15 is refused as SHAPE by the model, because digest() rejects a float above 2^53, while the schema accepts it. That contradicts the README and schema claim that the model refuses SHAPE exactly when the schema rejects. The README's 'the schemas state the closed shapes' is also false for statistics. Its claim that 'any consumer reproduces the decision bit for bit' holds only with arbitrary-precision integers: c^2 Q exceeds 2^53 in ordinary cases.",
+   "requiredChange": "Close statistics in the schema: null, or an object with exactly the nine integer members and bounds. Shape-check it in the model (integers only, no booleans, bounds) so that a malformed statistics object is SHAPE in both. Keep every recorded integer within +/-(2^53 - 1): drop sumSquares and sumDifference from the record (they can be recomputed), carry them as decimal strings, or bound k and n so that they fit. State in the README that the decision arithmetic needs arbitrary-precision integers. Add vectors: a boolean statistic (SHAPE), an oversized value (SHAPE in both), and a large realistic comparison. Optionally align MAX_INT with I-JSON's 2^53 - 1; 2^53 itself is exact as a double, the ledger uses the same bound, and the inclusive bound costs nothing in digests."
+  },
+  {
+   "id": "R1-4",
+   "severity": "MINOR",
+   "location": "scripts/run_manifest.py T_CRITICAL, Z_CRITICAL and critical(); vectors.json criticalValues; README; builder check_t_table",
+   "finding": "Above 120 degrees of freedom the model uses the normal value 1.960. That is below Student's t for every finite df: my own re-derivation gives 1.979764 at df 121, 1.964720 at 500 and 1.960543 at 4095. The README and the model comment call the table conservative, and it is not in that range. Probe P21 flips a decision: n = 122, mean gain 45,750 ppm, per-task spread +/-200,000, tolerance 10,000. With c = 1.960 the result is IMPROVED; with the conservative 1.980 it is WITHIN_NOISE. The builder checks only the tabulated rows and Z, and the vectors fix df 121 and 1000 at 1960. Every tabulated value and the next-lower-df rule for df 1 to 120 are correct.",
+   "requiredChange": "For df above 120, either use the df-120 value 1980, which is what the next-lower-tabulated-df rule gives, or tabulate more rows, rounded up, so that critical(df) is at least the true quantile for every df up to MAX_ITEMS - 1. Extend the builder's check to all df from 1 to 4095 and update the vectors and the README."
+  },
+  {
+   "id": "R1-5",
+   "severity": "MINOR",
+   "location": "scripts/run_manifest.py check_selection; README (selection record, Not claimed)",
+   "finding": "The held-out rule holds only within one declaration. In probe P08, a second split declaration over the same suite lists split-001's three HELD_OUT tasks, with the same IDs and digests, as its DEVELOPMENT partition. A selection between two DEVELOPMENT records on that second split is accepted, so held-out scores become selection input, which is what owner decision Q-MAS2-C refuses. The README does not mention this route.",
+   "requiredChange": "Add a store-relative rule, preferred: a used record whose partition contains a task digest that is HELD_OUT in any declaration of the same suite in the splits store is refused as HELD_OUT_SELECTION. Alternatively, require a suite's declarations to agree that a task held out once is never development. Add a vector. At minimum, state the limit under 'Not claimed'."
+  },
+  {
+   "id": "R1-6",
+   "severity": "MINOR",
+   "location": "architecture/run-manifest/README.md (Refusal codes; configuration-level evaluation record)",
+   "finding": "Several README statements about refusal codes do not match the model. (a) The README says each check 'raises the first code it meets, in this order'. But check_selection raises HELD_OUT_SELECTION before INCOMPARABLE, the opposite of the listed order. In probe P09 the candidates are both held out and on different splits, and the model returns HELD_OUT_SELECTION. Also, check_record interleaves each run's manifest check with that run's CONFIGURATION_MIXED test. In probe P10, run 1 is CONFIGURATION_MIXED and run 2 cites a SHAPE-invalid manifest, and the model returns CONFIGURATION_MIXED, so 'the first code of the first one that fails' is not literal. (b) The README says 'repetition indexes are distinct and within 1..k (REPETITIONS)', but a duplicate repetition is DUPLICATE_ID (vector V29). (c) A run whose repetition differs from its manifest's is CONFIGURATION_MIXED (probe P15), and the README does not say so.",
+   "requiredChange": "Describe the actual order of each check, including where referenced records are checked, or reorder the code to match the list. Correct the record paragraph. Add vectors for the selection order and for the repetition mismatch."
+  },
+  {
+   "id": "R1-7",
+   "severity": "MINOR",
+   "location": "architecture/run-manifest/README.md (records, Not claimed); scripts/run_manifest.py check_record",
+   "finding": "H16's retry rule is not mapped. H16 says 'evaluation failures do not retry into a pass' and 'Re-run produces a new record; it never edits the old verdict'. A record holds one run per repetition index and has no place for failed, abandoned or superseded attempts, so a re-run of a repetition silently replaces the earlier one. The plan lists 'append-only (a re-run is a new manifest)' among the rules the model enforces, each with refusal vectors. The README neither states that rule nor has a vector for it; content addressing gives only the 'new digest' half. 'Not claimed' covers omitted runs in general, but not retries.",
+   "requiredChange": "State how retries map. Either add an optional list of superseded or failed attempt manifests per repetition, so a replacement is visible, or say explicitly that attempts and retries are bound by H16's campaign records and that the plan's append-only rule is met only by content addressing. Then drop the plan's claim that it has refusal vectors."
+  },
+  {
+   "id": "R1-8",
+   "severity": "NOTE",
+   "location": "run-manifest.schema.json locks; README Grounding",
+   "finding": "The README cites 2609.26891 p.15 (PDF checked): a distinct prompt-cache key per run and at most three parallel runs for cost measurement. The manifest has no field for either, so whether cacheReadTokens is comparable across repetitions is unrecorded. Also, HarnessDev p.7 reports executor tokens as a total and a mean per task. The record holds the per-task values, but no derived total or mean appears in the facts or statistics.",
+   "requiredChange": "Optionally add cacheKeyDigest (distinct within a record) and a parallelism cap to the manifest, or say that they are not recorded. Optionally return token totals and means per record."
+  },
+  {
+   "id": "R1-9",
+   "severity": "NOTE",
+   "location": "scripts/run_manifest.py check_selection; vectors V62",
+   "finding": "A selection's basis does not constrain its choice. In probe P14 the chosen record is the one its only basis comparison found REGRESSED, and the selection is accepted. Separately, the basis half of HELD_OUT_SELECTION can never fire on its own, because SELECTION_BASIS requires basis records to be candidates. V62 therefore also violates SELECTION_BASIS and depends on the code order.",
+   "requiredChange": "State under 'Not claimed' that a selection records its inputs and does not justify its choice, or add a rule. Optionally note that V62 is order-dependent."
+  },
+  {
+   "id": "R1-10",
+   "severity": "NOTE",
+   "location": "scripts/run_manifest.py; README",
+   "finding": "Small edges. (P11) A zero-run record with harness.dirty true returns dirty false, because dirtiness is taken from the manifests; the record still compares as INCOMPLETE. (P12) A record may mix FIXED and PROVIDER_UNSEEDABLE runs. (P13) declaredAt == writtenAt == startedAt is accepted. The README's 'no later than' is accurate, but the plan and the owner decision say 'before'. (P16) tokensTotal 0 makes the stated cache share 0/0. (P16b) A result far over the budget caps is accepted; this is consistent with Q-MAS2-D, but the README does not say it. A costMicrosPerTask of 0 could mean 'no cap' or 'zero spend'. Outside the checks, parse() of a non-text value escapes AttributeError and digest() of a lone surrogate escapes UnicodeEncodeError; the ledger's parse behaves the same. Inside checks, every probe stayed fail-closed (P22).",
+   "requiredChange": "Optional: take dirty from the record's configuration; define the cache share when tokensTotal is 0; say that budget overruns are recorded and not gated; define a zero cost cap."
+  },
+  {
+   "id": "R1-11",
+   "severity": "NOTE",
+   "location": "README (distribution gate examples; Grounding)",
+   "finding": "MILO's 'about +/-2 points' and the 2.3-point lead (86.1 +/- 2.0 against 83.8 +/- 2.3, with overlapping intervals) are on p.1 and p.12 (Table 2a), not on the cited pp. 9, 11 and 22. Of those, p.11 states the task-clustered 95% CIs, p.9 the per-task caps and p.22 k = 3. A search of all 55 pages found no place where MILO calls the lead noise; that is the crosswalk's reading. Overlapping separate intervals are also not a paired test. Harness-Bench (2605.27922, a secondary source the crosswalk lists only for MAS-RA-002) is not cited.",
+   "requiredChange": "Cite p.1 and p.12 for the figures, attribute the 'noise' reading, and optionally cite Harness-Bench as secondary."
+  },
+  {
+   "id": "R1-12",
+   "severity": "NOTE",
+   "location": "README (H16 mapping)",
+   "finding": "The ledger README lists H16's judge-version and calibration evidence for model judgments among the H16 requirements that still apply. This README lists only 'signed evidence record, scope, freshness'. The evaluator here may be a model judge, and H16 never lets a model judge be the sole authority for deterministic or security claims.",
+   "requiredChange": "Add the judge version and calibration requirement, and the sole-authority limit, to the H16 paragraph."
+  },
+  {
+   "id": "R1-13",
+   "severity": "NOTE",
+   "location": "run-manifest.schema.json configuration.model",
+   "finding": "The configuration tuple names one model. With agentCount above 1 and agents on different models, the model identity rests on configurationDigest alone.",
+   "requiredChange": "State this in the README, or allow a per-role model list."
+  }
+ ],
+ "dispositions": [],
+ "checksRun": [
+  {
+   "check": "Scope: git diff --name-only c0f535b..fcdfebf3 is exactly the eight named files; parent is c0f535b; tree c51b54c6b1c9f4733238ae34ab3537bcfd5f3405; worktree clean",
+   "result": "PASS"
+  },
+  {
+   "check": "H16 document docs/harnesses/trust.evaluation-assurance.md and schemas/ untouched by the subject commit",
+   "result": "PASS"
+  },
+  {
+   "check": "DATA_CHECK_ONLY claim: no runtime, selector, catalog or public-schema file changed",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions Q-MAS2-A..D in the README are verbatim the plan's (line diff) and applied: internal candidate (A), paired task-clustered interval with four outcomes in integer arithmetic (B), held-out refused as selection input (C), budget in the tuple and cost beside the score, not gated (D)",
+   "result": "PASS (C weakened by R1-5)"
+  },
+  {
+   "check": "Builder reproducibility: build_manifest.py run on a git-archive copy reproduces the five schemas and vectors.json byte for byte (sha256 before and after identical; about 1 s)",
+   "result": "PASS"
+  },
+  {
+   "check": "Reference model self-replay (scripts/run_manifest.py run directly on the archive copy): 65 cases, 2 texts, 13 critical values",
+   "result": "PASS"
+  },
+  {
+   "check": "Roadmap item MAS-RA-002 elements present: RunManifest fields (harness commit, dirty flag, resolved specs, prompt, tool-schema, image and dependency-lock digests, model id and configuration, fixture and evaluator, seeds), reporting tuple, distribution gate with seeds, repetitions and tolerance, held-out splits declared before a run, environmental versus statistical reproducibility",
+   "result": "PASS"
+  },
+  {
+   "check": "Crosswalk acceptance IDs MAS-RA-002-A1..A3 covered (manifest schema and model; gate and tuple; split declaration format); harnesses H16 primary, H15 and H2 secondary as in the roadmap",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot checks with pdftotext (20 pages): HarnessDev pp. 1, 4, 6, 7, 12, 13, 23, 29; MILO pp. 9, 11, 22 (and all 55 pages searched for the 2.3-point lead); VeriHarness pp. 21, 27; 2609.24974 pp. 5, 6, 7, 23; 2609.26891 pp. 8, 15, 20",
+   "result": "PASS (page precision note R1-11)"
+  },
+  {
+   "check": "Algebra: D_t, T, Q, tol scaling and the IMPROVED/REGRESSED inequalities re-derived from the paired t interval on per-task means (signs, k_b != k_c, Q = 0, strict bounds)",
+   "result": "PASS"
+  },
+  {
+   "check": "compare() against my own rational (Fraction) re-implementation over a deterministic grid of 2,112 cases (n 2..122, k pairs 3/3, 3/4, 5/3, 3/7, shifts at and around the tolerance, tolerance 0 and 10,000; 953 REGRESSED, 1,040 WITHIN_NOISE, 119 IMPROVED): decision, meanDifferencePpm (floor) and halfWidthPpm (ceil)",
+   "result": "PASS (0 mismatches)"
+  },
+  {
+   "check": "Boundary: per-task mean exactly at the tolerance with Q = 0 gives WITHIN_NOISE; one ppm above gives IMPROVED (P17b, P17c); unequal k (P17)",
+   "result": "PASS"
+  },
+  {
+   "check": "t table re-derived independently (Abramowitz-Stegun 26.7.3/26.7.4 closed forms, bisection): all 33 rows equal ceil(1000 t_0.975); next-lower-df rule conservative for df 1..120",
+   "result": "PASS"
+  },
+  {
+   "check": "Critical value above df 120 conservative",
+   "result": "FAIL (R1-4)"
+  },
+  {
+   "check": "README worked examples (50,000 +/- 14,529; 30,000 +/- 85,211; -60,000 +/- 14,529) recomputed by hand",
+   "result": "PASS"
+  },
+  {
+   "check": "H16 mapping per purpose sound",
+   "result": "FAIL (R1-1 for NON_REGRESSION; IMPROVEMENT mapping PASS)"
+  },
+  {
+   "check": "Mutation probes P01-P22 (my own scripts on the archive copy; listed in findings and below)",
+   "result": "Done: 3 MAJOR-level and 4 MINOR-level defects found"
+  },
+  {
+   "check": "Schema/model SHAPE agreement over 45 shape mutations across the five kinds (one, 'uppercase digest', was a no-op because the fixture digest has no hex letters)",
+   "result": "PASS (0 disagreements)"
+  },
+  {
+   "check": "Schema/model SHAPE agreement on the statistics object",
+   "result": "FAIL (R1-3, probe P03)"
+  },
+  {
+   "check": "Fail-closed behaviour of the checks on odd stores and inputs (P22: None stores, wrong-typed store values, 5000-deep statistics, list documents, deep and oversized parse input)",
+   "result": "PASS (parse/digest API edges noted in R1-10)"
+  },
+  {
+   "check": "Referential re-checks: record re-checks its split and manifests, comparison its records, selection its comparisons and records (read and exercised via P05-P10, P14)",
+   "result": "PASS"
+  },
+  {
+   "check": "Vector minimality: each refusal vector is a single deviation isolating its code by the model's order",
+   "result": "PASS (V62 order-dependent, R1-9; V34 uses two edits to isolate, acceptable)"
+  },
+  {
+   "check": "README accuracy against the files (file table, case and store counts, code list, claims)",
+   "result": "FAIL in places (R1-3, R1-6); counts PASS"
+  },
+  {
+   "check": "Consistency with MAS-RA-001 (canonical form, parse, H16 mapping style)",
+   "result": "PASS with R1-12 (mapping paragraph omits the judge requirement the ledger lists)"
+  },
+  {
+   "check": "Public hygiene: no personal data, email address or local absolute path in the eight files",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry run",
+   "result": "NOT RUN: out of scope for this review (light work only)"
+  }
+ ],
+ "probes": {
+  "scripts": [
+   "probes/probes.py",
+   "probes/tcheck.py",
+   "probes/flip.py",
+   "probes/failclosed.py"
+  ],
+  "note": "Review-local scripts, run with the harness-onion venv python -I -B or system python3 -I -B on a git-archive copy of the subject commit; every command under timeout 300, each finished in about 1 s.",
+  "keyResults": {
+   "P01": "halfWidthPpm false accepted; digest differs from the integer form",
+   "P02": "k=3, n=200, 120 flips: IMPROVED with sumSquares 9,720,000,000,000,000 > 2^53, accepted",
+   "P03": "same with sumSquares as 9.72e15: model SHAPE, schema valid",
+   "P04": "mean -200,000 ppm, half-width 543,446: WITHIN_NOISE, NON_REGRESSION PASS",
+   "P04b": "n=2, mean -500,000 ppm: WITHIN_NOISE, NON_REGRESSION PASS",
+   "P05": "different evaluator for candidate: IMPROVED, IMPROVEMENT PASS",
+   "P06": "judge version changed within one record: accepted",
+   "P07": "different dataset and fixture digests: IMPROVED, PASS",
+   "P08": "held-out tasks re-declared as development in a second split: selection accepted",
+   "P09": "held-out and incomparable candidates: HELD_OUT_SELECTION (README order says INCOMPARABLE first)",
+   "P10": "CONFIGURATION_MIXED on run 1 wins over a SHAPE-invalid manifest on run 2",
+   "P11": "zero-run dirty record: facts dirty false",
+   "P12": "mixed seed modes accepted",
+   "P13": "equal timestamps accepted",
+   "P14": "selection of the REGRESSED candidate accepted",
+   "P15": "repetition mismatch: CONFIGURATION_MIXED",
+   "P16": "tokensTotal 0 accepted",
+   "P16b": "budget overrun accepted",
+   "P17": "k_b=3, k_c=5 accepted and correct",
+   "P17b": "mean at tolerance, Q=0: WITHIN_NOISE",
+   "P17c": "one ppm above: IMPROVED",
+   "P18": "BOM, duplicate member, lone surrogate, invalid UTF-8, overflow literal: SHAPE",
+   "P19": "45 shape mutations, 0 schema/model disagreements",
+   "P20": "2,112 grid cases, 0 mismatches against the rational reference",
+   "P21": "df 121: IMPROVED with 1.960, WITHIN_NOISE with 1.980",
+   "P22": "checks fail closed on odd stores and inputs"
+  }
+ },
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-002/PLAN.md (Q-230, Q-MAS2-A..D, binding to H16)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-002/build_manifest.py",
+  "Subject at fcdfebf3: architecture/run-manifest/{README.md, split-declaration.schema.json, run-manifest.schema.json, evaluation-record.schema.json, distribution-gate.schema.json, selection-record.schema.json, vectors.json}, scripts/run_manifest.py",
+  "roadmap/roadmap.json item MAS-RA-002 (workspace roadmap: description, deliverables, harnesses, grounding pages)",
+  "architecture/research-adoption-v2/crosswalk.json at c0f535b (acceptance MAS-RA-002-A1..A3, mappings, papers 2610.00972, 2609.38349, 2609.26891, 2609.01437, 2605.27922)",
+  "docs/harnesses/trust.evaluation-assurance.md (run lock, retry rule, evidence record fields, scope, states)",
+  "architecture/verdict-ledger/README.md and scripts/verdict_ledger.py at c0f535b (canonical form, parse, H16 mapping)",
+  "roadmap/research/papers/2609.01437v1-harnessdev.pdf pp. 1, 4, 6, 7, 12, 13, 23, 29",
+  "roadmap/research/papers/2609.38349v1-milo.pdf pp. 9, 11, 22 (text search over all 55 pages)",
+  "roadmap/research/papers/2610.00972v1-veriharness.pdf pp. 21, 27",
+  "roadmap/research/papers/2609.24974v1-harness-zero.pdf pp. 5, 6, 7, 23",
+  "roadmap/research/papers/2609.26891v1-jaz.pdf pp. 8, 15, 20"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}
