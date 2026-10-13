@@ -1,0 +1,688 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.agent-loop-trace/v1",
+ "title": "Agent-loop trace v1 (MAS-RA-008)",
+ "$comment": "The closed shape only: uniqueness (DUPLICATE_ID), order, references and every later rule are the reference model's (scripts/agent_loop.py), which refuses a document as SHAPE exactly when this schema rejects it. Numbers are integers.",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.agent-loop-trace/v1"
+  },
+  "traceId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "profileDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "depth": {
+   "type": "integer",
+   "minimum": 0,
+   "maximum": 1
+  },
+  "parentTraceId": {
+   "anyOf": [
+    {
+     "type": "null"
+    },
+    {
+     "type": "string",
+     "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+    }
+   ]
+  },
+  "startedAt": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z(?![\\s\\S])"
+  },
+  "steps": {
+   "type": "array",
+   "minItems": 0,
+   "maxItems": 4096,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "stepId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "seq": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+     },
+     "kind": {
+      "enum": [
+       "MODEL",
+       "TOOL",
+       "GATE",
+       "HOOK",
+       "HANDOFF",
+       "DELEGATE"
+      ]
+     },
+     "startedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z(?![\\s\\S])"
+     },
+     "tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+     },
+     "wallClockSeconds": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+     },
+     "outcome": {
+      "enum": [
+       "OK",
+       "FAIL",
+       "ERROR",
+       "UNKNOWN"
+      ]
+     },
+     "errorTraceDigest": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+       }
+      ]
+     },
+     "consumes": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 4096,
+      "items": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+      }
+     },
+     "produces": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+       }
+      ]
+     },
+     "attempt": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+     },
+     "retryOf": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+       }
+      ]
+     },
+     "feedback": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+       }
+      ]
+     },
+     "revises": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+       }
+      ]
+     },
+     "detail": {}
+    },
+    "required": [
+     "attempt",
+     "consumes",
+     "detail",
+     "errorTraceDigest",
+     "feedback",
+     "kind",
+     "outcome",
+     "produces",
+     "retryOf",
+     "revises",
+     "seq",
+     "startedAt",
+     "stepId",
+     "tokens",
+     "wallClockSeconds"
+    ],
+    "allOf": [
+     {
+      "if": {
+       "properties": {
+        "kind": {
+         "const": "MODEL"
+        }
+       },
+       "required": [
+        "kind"
+       ]
+      },
+      "then": {
+       "properties": {
+        "detail": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "inputDigest": {
+           "type": "string",
+           "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+          },
+          "credentialRefs": {
+           "type": "array",
+           "minItems": 0,
+           "maxItems": 4096,
+           "items": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+           }
+          }
+         },
+         "required": [
+          "credentialRefs",
+          "inputDigest"
+         ]
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "kind": {
+         "const": "TOOL"
+        }
+       },
+       "required": [
+        "kind"
+       ]
+      },
+      "then": {
+       "properties": {
+        "detail": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "call": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "toolId": {
+             "type": "string",
+             "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+            },
+            "manifestDigest": {
+             "type": "string",
+             "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+            },
+            "inputDigest": {
+             "type": "string",
+             "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+            },
+            "inputSchemaDigest": {
+             "type": "string",
+             "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+            },
+            "inputValid": {
+             "type": "boolean"
+            },
+            "launched": {
+             "type": "boolean"
+            },
+            "capability": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "grantDigest": {
+               "type": "string",
+               "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+              },
+              "toolId": {
+               "type": "string",
+               "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+              },
+              "manifestDigest": {
+               "type": "string",
+               "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+              },
+              "scope": {
+               "type": "string",
+               "minLength": 1,
+               "maxLength": 256,
+               "pattern": "^(?:[^\\ud800-\\udfff]|[\\ud800-\\udbff][\\udc00-\\udfff])*(?![\\s\\S])"
+              },
+              "expiresAt": {
+               "type": "string",
+               "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z(?![\\s\\S])"
+              }
+             },
+             "required": [
+              "expiresAt",
+              "grantDigest",
+              "manifestDigest",
+              "scope",
+              "toolId"
+             ]
+            },
+            "timeoutSeconds": {
+             "type": "integer",
+             "minimum": 1,
+             "maximum": 86400
+            },
+            "limits": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "memoryBytes": {
+               "type": "integer",
+               "minimum": 1,
+               "maximum": 9007199254740991
+              },
+              "cpuMillis": {
+               "type": "integer",
+               "minimum": 1,
+               "maximum": 9007199254740991
+              }
+             },
+             "required": [
+              "cpuMillis",
+              "memoryBytes"
+             ]
+            },
+            "credentials": {
+             "type": "array",
+             "minItems": 0,
+             "maxItems": 4096,
+             "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+               "param": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+               },
+               "brokerRef": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+               }
+              },
+              "required": [
+               "brokerRef",
+               "param"
+              ]
+             }
+            }
+           },
+           "required": [
+            "capability",
+            "credentials",
+            "inputDigest",
+            "inputSchemaDigest",
+            "inputValid",
+            "launched",
+            "limits",
+            "manifestDigest",
+            "timeoutSeconds",
+            "toolId"
+           ]
+          },
+          "result": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "outputDigest": {
+             "anyOf": [
+              {
+               "type": "null"
+              },
+              {
+               "type": "string",
+               "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+              }
+             ]
+            },
+            "trustLabel": {
+             "enum": [
+              "TRUSTED_TOOL_OUTPUT",
+              "UNTRUSTED_TOOL_OUTPUT"
+             ]
+            },
+            "provenance": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "toolId": {
+               "type": "string",
+               "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+              },
+              "callStepId": {
+               "type": "string",
+               "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+              },
+              "sandboxProfileDigest": {
+               "type": "string",
+               "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+              },
+              "receiptRef": {
+               "anyOf": [
+                {
+                 "type": "null"
+                },
+                {
+                 "type": "string",
+                 "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+                }
+               ]
+              }
+             },
+             "required": [
+              "callStepId",
+              "receiptRef",
+              "sandboxProfileDigest",
+              "toolId"
+             ]
+            }
+           },
+           "required": [
+            "outputDigest",
+            "provenance",
+            "trustLabel"
+           ]
+          }
+         },
+         "required": [
+          "call",
+          "result"
+         ]
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "kind": {
+         "const": "GATE"
+        }
+       },
+       "required": [
+        "kind"
+       ]
+      },
+      "then": {
+       "properties": {
+        "detail": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "gateId": {
+           "type": "string",
+           "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+          },
+          "subjectStepId": {
+           "type": "string",
+           "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+          }
+         },
+         "required": [
+          "gateId",
+          "subjectStepId"
+         ]
+        },
+        "consumes": {
+         "maxItems": 0
+        },
+        "produces": {
+         "type": "null"
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "kind": {
+         "const": "HOOK"
+        }
+       },
+       "required": [
+        "kind"
+       ]
+      },
+      "then": {
+       "properties": {
+        "detail": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "hookId": {
+           "type": "string",
+           "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+          },
+          "event": {
+           "enum": [
+            "INVOKE_START",
+            "INVOKE_END",
+            "MODEL_QUERY_BEFORE",
+            "MODEL_QUERY_AFTER",
+            "TOOL_CALL_BEFORE",
+            "TOOL_RESULT_AFTER",
+            "EXEC_BEFORE",
+            "EXEC_AFTER",
+            "BUDGET_WARNING",
+            "BUDGET_EXHAUSTED",
+            "STEP_ERROR",
+            "STEP_RETRY",
+            "HANDOFF"
+           ]
+          },
+          "effect": {
+           "anyOf": [
+            {
+             "type": "null"
+            },
+            {
+             "enum": [
+              "MODIFY_INPUT",
+              "SUPPLY_OUTPUT",
+              "MODIFY_OUTPUT",
+              "ABORT"
+             ]
+            }
+           ]
+          }
+         },
+         "required": [
+          "effect",
+          "event",
+          "hookId"
+         ]
+        },
+        "consumes": {
+         "maxItems": 0
+        },
+        "produces": {
+         "type": "null"
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "kind": {
+         "const": "HANDOFF"
+        }
+       },
+       "required": [
+        "kind"
+       ]
+      },
+      "then": {
+       "properties": {
+        "detail": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "reason": {
+           "type": "string",
+           "minLength": 1,
+           "maxLength": 1024,
+           "pattern": "^(?:[^\\ud800-\\udfff]|[\\ud800-\\udbff][\\udc00-\\udfff])*(?![\\s\\S])"
+          }
+         },
+         "required": [
+          "reason"
+         ]
+        },
+        "consumes": {
+         "maxItems": 0
+        },
+        "produces": {
+         "type": "null"
+        }
+       }
+      }
+     },
+     {
+      "if": {
+       "properties": {
+        "kind": {
+         "const": "DELEGATE"
+        }
+       },
+       "required": [
+        "kind"
+       ]
+      },
+      "then": {
+       "properties": {
+        "detail": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "childTraceDigest": {
+           "type": "string",
+           "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+          }
+         },
+         "required": [
+          "childTraceDigest"
+         ]
+        }
+       }
+      }
+     }
+    ]
+   }
+  },
+  "terminal": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "status": {
+     "enum": [
+      "COMPLETED",
+      "FAILED",
+      "HANDED_OFF",
+      "ABORTED"
+     ]
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "null"
+      },
+      {
+       "enum": [
+        "BUDGET_EXHAUSTED",
+        "HOOK_ABORT"
+       ]
+      }
+     ]
+    },
+    "delivered": {
+     "anyOf": [
+      {
+       "type": "null"
+      },
+      {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+      }
+     ]
+    }
+   },
+   "required": [
+    "delivered",
+    "reason",
+    "status"
+   ]
+  },
+  "totals": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "tokens": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 9007199254740991
+    },
+    "iterations": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 9007199254740991
+    },
+    "wallClockSeconds": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 9007199254740991
+    }
+   },
+   "required": [
+    "iterations",
+    "tokens",
+    "wallClockSeconds"
+   ]
+  }
+ },
+ "required": [
+  "depth",
+  "parentTraceId",
+  "profileDigest",
+  "schemaVersion",
+  "startedAt",
+  "steps",
+  "terminal",
+  "totals",
+  "traceId"
+ ]
+}

@@ -1,0 +1,581 @@
+{
+ "schemaVersion": "harness.planeon.ai/agent-loop-review/v1",
+ "kind": "agent-loop-review",
+ "round": 8,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "dd0d4a12df6361facdaeee1330634baaf1a0deb3",
+ "subjectTree": "825262b517a869fbe3247318d5e3de5532287d39",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R8-1",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _overridden (a child's FAILs: `_fail_scope(v, holders[0], s[\"seq\"], s[\"stepId\"])`) and _tainted (`or s[\"stepId\"] == repairer`); README 'A FAIL crosses the delegation boundary both ways', second bullet ('the delegation itself, which carries the child's repair, is not covered')",
+   "finding": "The R7-1 exemption is keyed to the deciding delegation alone, and it skips that delegation entirely. That is too wide on one side and too narrow on the other.\n(1) Too wide (K803d). m2 builds N on patch (X). A delegation consumes patch; its child's unit-tests FAILs X, and the child, revising nothing, delivers a fresh N that only schema-check passed. The parent writes the delegation's N and delivers a final step built on the write. Accepted. The same steps in one loop are refused (K803e), and so is the same parent with the FAIL decided in the parent (K803f: the delegation repeats covered bytes). The delegation carried no repair, and N reached a write that the gate that failed never checked. K803 (the child revises X to N, which passes unit-tests) is accepted too, while one loop refuses it (K803c: a revision returns bytes the FAIL covers).\n(2) Too narrow, and new in round 8 (K820). d1 consumes patch (X); its child FAILs X and repairs it (Y passes unit-tests). d2, consuming nothing, runs a child that regenerates X and FAILs it again. The parent builds its answer on d1. Refused GATE_OVERRIDDEN: under d2's FAIL, d1 is an ordinary consumer of patch. Round 7 accepts it, and so does the same loop in one trace (K820c: a revision of the artefact is never covered).\nThe README states neither case.",
+   "requiredChange": "Exempt every delegation up to the deciding one whose child FAILed those bytes, and only from the consumption edge: keep the copy edge, so that a delegation whose artefact repeats covered bytes is covered, as a revision returning them is. Pin K803d as a refusal vector and K820 as valid. Or state both limits under 'Not claimed'.\nChecked: sketch WORK/alt8. `_tainted` takes a set of repairers and skips only their consumption edge; `_overridden` collects each child's failed bytes once and passes the delegations so far. Results:\n- the builder rewrites the three JSON files byte for byte, its expectation, schema-agreement, isolation and coverage assertions hold, and the 200 vectors replay;\n- every round-1 to round-8 probe is unchanged except K803 and K803d (now refused) and K820 (now accepted);\n- a random differential of 40,000 parents with depth-1 children differs from round 8 in two cases, both of K803's class.\nOptional, same pattern: K821 (the parent's own later FAIL covers an earlier delegation that carried its child's repair) is refused in rounds 7 and 8 and accepted in one loop (K821c). Sketch WORK/alt8p passes the same delegations to the parent's own FAILs and accepts it; nothing else changes."
+  },
+  {
+   "id": "R8-2",
+   "severity": "NOTE",
+   "location": "README 'Not claimed' ('FAILs across loops beyond the rules above') and 'A FAIL crosses the delegation boundary both ways'",
+   "finding": "The new 'Not claimed' bullet names three residuals, all of a parent's FAIL reaching into a child. The child-to-parent direction has its own, which it does not name. Each is accepted, while the same steps in one loop are refused:\n- C801, a later sibling. The parent hands patch (X) to d1, whose child FAILs X and repairs it. d2 (consuming nothing) runs a child that regenerates X, gates it with schema-check only and writes it (C801c refused). 'Crosses one delegation boundary' implies the limit, but the parent holds X and the FAIL is decided in its record. C801b (the parent never holds X) is accepted as well.\n- K823, the mirror of C702. A child derives N from X before its FAIL of X; after the delegation the parent regenerates N and writes it (K823c refused).\n- K824, the mirror of C703. A child's revision Y passes schema-check only (unit-tests failed X) and is not used; the parent regenerates Y and writes it (K824c refused).",
+   "requiredChange": "Name these under 'Not claimed': a child's FAIL does not reach a later sibling, bytes the child derived, or the child's unverified revision bytes regenerated in the parent. Or close the sibling case.\nChecked: sketch WORK/alt8s adds one statement to alt8 (an earlier child's FAILs join `extra` for later children, as the parent's own do). It refuses C801 and C801b; the builder, the vectors and every other probe are unchanged against alt8."
+  },
+  {
+   "id": "R8-3",
+   "severity": "NOTE",
+   "location": "architecture/agent-loop/vectors.json (V142-V144); R7-1's required change ('Pin C705 as a refusal vector and C705b as valid')",
+   "finding": "The three new vectors are refusals (V142 C701, V143 C705, V144 R711). None of the 35 valid cases has a delegation whose child holds a FAIL, or a parent FAIL before a delegation whose child holds the failed bytes. So an implementation passes all 200 vectors while it:\n- covers the delegation itself (refusing C705b);\n- refuses any child that holds failed bytes (C707, C701b);\n- or drops the child revision's exemption.\nR7-1 asked for C705b as a valid vector.",
+   "requiredChange": "Pin valid controls: C705b (the parent builds on the child's repair) and C701b or K813b (the child's revision passes the parent's failing gates); with R8-1, K820."
+  },
+  {
+   "id": "R8-4",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _overridden ('The child's FAILs reach the parent': one `_fail_scope` and one holder scan per child FAIL; `_regate(cv, extra)`)",
+   "finding": "The child-to-parent reach runs one parent-wide pass per child FAIL, not per distinct failed bytes, and scans the parent's steps for holders on each. The measured case: each child FAILs bytes the parent holds g times, then delivers its own gated answer. Round 7 has no such pass. Times:\n- 2,000 delegations, g = 1: 1.48 s (round 7: 0.27 s);\n- 1,000 delegations, g = 10: 2.98 s (0.20 s);\n- 2,000 delegations, g = 10: 12.5 s (0.45 s);\n- 1,000 delegations, g = 40: 12.7 s (0.75 s).\nExtrapolated, not run: about 3 minutes at 4,000 delegations with g = 40. `_regate(cv, extra)` also repeats each child's own re-gate, which the child's own check already ran; with an empty `extra` it adds nothing.",
+   "requiredChange": "Group each child's FAILs by bytes and run one pass per distinct bytes per delegation. Sketch alt8 does this: 2,000 x 10 takes 1.63 s and 1,000 x 40 takes 1.10 s. Skip `_regate(cv, extra)` when `extra` is empty."
+  },
+  {
+   "id": "R8-5",
+   "severity": "NOTE",
+   "location": "README 'A FAIL crosses the delegation boundary both ways', second bullet; scripts/agent_loop.py lines 559 and 729",
+   "finding": "(1) The bullet says that after the delegation the parent may not consume or deliver 'a step that holds the bytes the child's gate failed'. The model covers what a FAIL in the parent would cover, so two more cases are refused:\n- a step that consumed a holder before the delegation (K806: a write of patch, consumed afterwards);\n- bytes derived from a holder (K811: m2 built on patch).\nThat is fail-closed, but the bullet reads narrower.\n(2) R7-6's 'later' was inserted into `_tainted`'s docstring without a rewrap, so line 559 is 125 characters. The new REVISION_BOUND line's trailing comment takes it to 134 characters, the longest line in the file.",
+   "requiredChange": "Say that a child's FAIL covers in the parent what a FAIL there would cover, apart from the delegation (as amended by R8-1). Rewrap the two lines."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R7-1",
+   "disposition": "PARTIAL",
+   "evidence": "The rule is resolved:\n- C705 is refused GATE_OVERRIDDEN and pinned as V143 (child-run-16);\n- C705b and C705c behave as in round 7's sketch;\n- `_fail_scope` and the child-to-parent pass equal alt7's hunks apart from docstrings and one comment.\nNot done: C705b, which R7-1 asked for, is not pinned as a valid vector (R8-3). The exemption's scope has new problems (R8-1)."
+  },
+  {
+   "finding": "R7-2",
+   "disposition": "RESOLVED",
+   "evidence": "C701 is refused and pinned as V142 (child-run-15). C701b and round-6 T604b are accepted. `_regate(v, extra)` equals alt7's. K802c and K813 are refused and K813b is accepted."
+  },
+  {
+   "finding": "R7-3",
+   "disposition": "RESOLVED",
+   "evidence": "_revision_bound refuses a successful revision without an artefact: R711 and R711d are REVISION_BOUND, pinned as V144. The README states it. K817 (an artefact-less revision that nothing uses, then a hand-off) is refused too, as stated."
+  },
+  {
+   "finding": "R7-4",
+   "disposition": "RESOLVED",
+   "evidence": "Each child's view is built once per delegation, and the parent's FAILs are grouped by bytes. Timings:\n- 500 FAILs and 500 delegations under a 4,004-tool profile: 9.15 s (alt7: 8.77 s; round 7: 32.1 s);\n- 2,000/2,000 under 4 tools: 3.18 s (alt7: 3.20 s);\n- the 250-delegation control: 4.25 s.\nThe new child-to-parent pass is R8-4."
+  },
+  {
+   "finding": "R7-5",
+   "disposition": "RESOLVED",
+   "evidence": "'Not claimed' names C702 (derived bytes in a later child), C704 (a child that ran before the FAIL) and C703 (a child copying an unpassed parent revision). All three stay accepted as stated. The child-to-parent mirrors are R8-2."
+  },
+  {
+   "finding": "R7-6",
+   "disposition": "RESOLVED",
+   "evidence": "The README paragraph is rewrapped, and `_tainted`'s docstring says 'every later model or delegation step'. That line now runs to 125 characters (R8-5)."
+  },
+  {
+   "finding": "R6-1..R6-5",
+   "disposition": "RESOLVED",
+   "evidence": "The round-6 probes (44) re-run on round 8 equal their alt7 results line for line, T604b and O601 included."
+  },
+  {
+   "finding": "R5-1..R5-4, R4-1..R4-3, R3-1..R3-7, R2-1..R2-11, R1-1..R1-16",
+   "disposition": "RESOLVED",
+   "evidence": "Re-run on round 8, each probe set equals its alt7 result. The sets are the round-2 P/N (71 plus the agreement pass), the round-3 Q (39), round 4 (35) and round-5 A-E (40). The only differences are N31, which now lists child-run-15 and -16, and Q31, which counts 151 refusal cases instead of 148."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject. The worktree is clean at dd0d4a12 (tree 825262b5) on codex/met-mas-006-agent-loop-gateway. 82804a0..dd0d4a12 adds exactly the five files. docs/ and schemas/ are unchanged; H10's and H11's documents are byte-identical to main. 4ca90905..dd0d4a12 touches only the README, vectors.json and scripts/agent_loop.py.",
+   "result": "PASS"
+  },
+  {
+   "check": "Adopted hunks. The round-8 agent_loop.py differs from WORK-r7/alt7/scripts/agent_loop.py only in the docstrings of _fail_scope, _regate and _overridden, the `_tainted` docstring's 'later' and the REVISION_BOUND line's comment. The builder's diff against build_loop.r7b.py adds child-run-15, child-run-16 and the three cases. build_loop.py is identical to build_loop.r8.py.",
+   "result": "PASS"
+  },
+  {
+   "check": "Reproducibility. ~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py, run with the venv python -I -B on a git-archive copy, rewrote the three JSON files byte for byte (diff -r of the copy: identical). Its schema-agreement, isolation and code-coverage assertions held.",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay (python3 -I -B scripts/agent_loop.py): 200 cases and 4 texts. The README's counts hold: 35 valid and 165 refused; every profile and trace code covered; the six alsoRefusedBy cases as listed; 8 profile and 17 trace store entries, with child-run-6 and child-run-bad failing their own check; unique case IDs.",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions. Schemas and model hold recursionDepth and trace depth 0..1, stepRetries 0..3 (default 1), revision.rounds 0..3 (default 3, a separate budget) and attempt 1..4. The capability is closed {grantDigest, toolId, manifestDigest, scope, expiresAt}. No key material is present. The README quotes Q-MAS8-A..D verbatim from PLAN.md (compared as strings).",
+   "result": "PASS"
+  },
+  {
+   "check": "Roadmap MAS-RA-008 (description, the three deliverables, grounding with pages, H11/H10 primary and H13/H15 secondary) and the crosswalk at 82804a0 (acceptance MAS-RA-008-A1..A3, HO-D2, gates CONF-A3-001): each deliverable is present (A1 profile, hooks, budgets and refusal vectors; A2 call and result with capability, provenance and trust label; A3 the retry, hand-off, revision and gate rules).",
+   "result": "PASS"
+  },
+  {
+   "check": "H11 l.55 (no retry of unknown side effects, no secret values, no model text as commands outside a signed manifest) and ll.149-150 (receipt-lookup retries, OUTCOME_UNKNOWN reconciled); H10 l.151; H13 l.18 (a probabilistic detector cannot override a deterministic denial). The round-8 change keeps these rules and extends the deterministic-FAIL rule across loops.",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot checks (pdftotext -f N -l N, 21 pages). JAZ:\n- p. 14: the 13 events (Enter, Send, Complete and Exit for invoke, LLM query and REPL exec, plus LLMQueryRetry); the effects per stage; order-independent composition with conflicts refused;\n- pp. 4-5: local and dynamic scope; BudgetPool, IterationLimit and RecursionLimit;\n- p. 7 and its footnote: depth 70, and depth 1 for the top-level agent.\nHERMES:\n- pp. 15-16: PASS/FAIL diagnosis; B revision rounds after the first pass, with previous plan and diagnosis fed back;\n- p. 20: the FAIL diagnosis schema;\n- p. 23: default B = 3, with B > 3 adding at most 0.9.\nHarnessDev:\n- p. 24: six modules;\n- p. 27: lifecycle hooks, verification and an honest 'partial' baseline;\n- p. 22: provider defaults.\nHarness-Zero:\n- p. 2: one execute tool;\n- p. 8: the turn limit;\n- p. 23: single-level delegation, no further delegation, at most four concurrent.",
+   "result": "PASS"
+  },
+  {
+   "check": "Dispositions: the round-1 to round-7 probe sets re-run on round 8. The sets are P/N, Q, round 4, A-E, round 6 and round 7 (44). Each equals its result under round 7's sketch alt7, apart from store and case counts. Against round 7, only C701 and C705 (GATE_OVERRIDDEN) and R711 and R711d (REVISION_BOUND) change.",
+   "result": "PASS"
+  },
+  {
+   "check": "Reviewer probes, round 8 (44 named, plus 3,000 random mutations). Groups:\n- a child's FAIL reaching a sibling (C);\n- the child-to-parent and parent-to-child reaches (K802-K824);\n- schema agreement (S801-S805);\n- first-code semantics (F801-F802).",
+   "result": "FAIL: K803d accepted and K820 refused (R8-1); C801, K823 and K824 accepted and unstated (R8-2); everything else as expected"
+  },
+  {
+   "check": "Schema agreement (S801): 3,000 random single-point mutations of V142-V144 and the stored child-run-15 and -16. A model SHAPE refusal coincides with schema rejection in every case, and nothing but Refused escapes. S802-S805: per-kind detail and inert-kind shapes refused by both.",
+   "result": "PASS"
+  },
+  {
+   "check": "Random differential: 40,000 parents with depth-1 children over three shared digests, comparing _overridden only. The 12,604 parents whose children fail their own FAIL rules are skipped. Round 7 against round 8: 750 differences, all round 8 refusing where a child's FAIL hits bytes the parent holds. Round 8 against sketch alt8: 2 differences, both of K803's class. No escapes.",
+   "result": "PASS"
+  },
+  {
+   "check": "Fix sketches (WORK/alt8, alt8s, alt8p; R8-1, R8-2, K821). For each sketch, the builder writes the same three JSON files with all its assertions holding, and the 200 vectors replay. The probe sets change only as R8-1 and R8-2 state.",
+   "result": "PASS"
+  },
+  {
+   "check": "Timing. No command ran over 60 s; the longest single check took 12.7 s. Results:\n- round-7 cases: 500/500 at 4,004 tools 9.15 s, 2,000/2,000 3.18 s, and the control of 1,000 delegations 17.6 s;\n- round-6 re-gate: g = u = 1,365 2.01 s, 819 chains 2.51 s;\n- round-5 pairs: at most 0.13 s;\n- the new child-to-parent pass: see R8-4.",
+   "result": "PASS except R8-4 (NOTE)"
+  },
+  {
+   "check": "Hard rules. Every shell command ran behind the PAUSE wait. Nothing was written outside WORK, and no __pycache__ or .pyc appeared in WORK, the tools directory or WORK-r7. The worktree stayed clean. There was no network access. One deviation: a one-off text replacement in the reviewer's own WORK/diff_r8.py ran under the system python3 without -I -B. It imported nothing and wrote only that file.",
+   "result": "PASS (one deviation noted)"
+  },
+  {
+   "check": "Public hygiene. A grep of the five files for e-mail addresses, user paths, personal names and key material finds nothing. README statements were checked against the files and the model; R8-1, R8-2 and R8-5 are the exceptions.",
+   "result": "PASS except R8-5 (NOTE)"
+  }
+ ],
+ "probes": [
+  {
+   "id": "C801",
+   "mutation": "a child's FAIL does not reach a later sibling: the parent's patch (X) passes schema-check and is handed to d1, whose child's unit-tests FAILs X (it revises and delivers Y); d2 (consuming nothing) runs a child that regenerates X, passes schema-check and writes X; the parent builds on d2 and delivers",
+   "expected": "GATE_OVERRIDDEN as C801c (one loop), or the limit stated: 'A FAIL crosses one delegation boundary' (this is two)",
+   "got": "accepted"
+  },
+  {
+   "id": "C801c",
+   "mutation": "control for C801 in one loop",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "C801b",
+   "mutation": "C801 where the parent never holds X: d1's child regenerates X and FAILs it; d2's child regenerates X and writes it",
+   "expected": "accepted (two boundaries; the parent holds nothing)",
+   "got": "accepted"
+  },
+  {
+   "id": "K802",
+   "mutation": "a parent's revision must pass the child's failing gate: unit-tests FAILs patch (X0); r1 revises it (Y) and passes unit-tests; a later child regenerates X0 and its schema-check FAILs it (and repairs it); the parent then writes r1, which schema-check never passed",
+   "expected": "GATE_OVERRIDDEN (README: a parent's revision of them must pass the child's failing gates)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K802b",
+   "mutation": "control for K802: schema-check passes r1 before the write",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K802c",
+   "mutation": "the parent's FAIL reaching the child: as K802b, but the child's revision passes only its own schema-check, not the parent's unit-tests that failed X0",
+   "expected": "GATE_OVERRIDDEN (R7-2's rule)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K803",
+   "mutation": "the delegation (the repairer) returns bytes derived from the failed artefact: m2 builds N on patch (X); the child FAILs X and revises it to N, which passes unit-tests; the parent builds on the delegation",
+   "expected": "accepted (README: the delegation itself is not covered); one loop refuses it (K803c: a revision returns bytes the FAIL covers)",
+   "got": "accepted"
+  },
+  {
+   "id": "K803c",
+   "mutation": "control for K803 in one loop",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K803d",
+   "mutation": "the delegation returns derived bytes without any repair: m2 builds N on patch (X); the child FAILs X (unit-tests), then delivers a fresh N that only schema-check passed; the parent writes the delegation's N",
+   "expected": "GATE_OVERRIDDEN as K803e/K803f, or stated",
+   "got": "accepted"
+  },
+  {
+   "id": "K803e",
+   "mutation": "control for K803d in one loop: regen consumes patch, unit-tests FAILs it, a fresh model step returns N, write-file consumes it",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K803f",
+   "mutation": "control for K803d with the FAIL in the parent: unit-tests FAILs patch; a later delegation returns N; the parent writes it",
+   "expected": "GATE_OVERRIDDEN (the delegation repeats covered bytes)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "F801",
+   "mutation": "C705's vector with an over-budget total as well: TOTALS_MISMATCH and BUDGET rules precede GATE_OVERRIDDEN",
+   "expected": "TOTALS_MISMATCH (first code)",
+   "got": "TOTALS_MISMATCH"
+  },
+  {
+   "id": "F802",
+   "mutation": "R711's vector where the artefact-less revision also skips its feedback: RETRY_WITHOUT_TRACE precedes REVISION_BOUND",
+   "expected": "RETRY_WITHOUT_TRACE (first code)",
+   "got": "RETRY_WITHOUT_TRACE"
+  },
+  {
+   "id": "K804",
+   "mutation": "a child FAILs X; after the delegation the parent itself regenerates X, gates it with schema-check and writes it",
+   "expected": "GATE_OVERRIDDEN (own bytes at any time)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K805",
+   "mutation": "a child FAILs X; the parent reads X back (trusted read-file output equal to X) after the delegation and write-file consumes the read",
+   "expected": "GATE_OVERRIDDEN (the read-back holds X)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K806",
+   "mutation": "a child FAILs X; the parent's write of patch before the delegation is consumed by the final step after it",
+   "expected": "GATE_OVERRIDDEN (round-5 A04's shape across the boundary)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K807",
+   "mutation": "control: a child FAILs X; after the delegation the parent only reads patch (read-only) and builds its answer on the delegation",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K808",
+   "mutation": "a child FAILs X; a second delegation consumes patch (X) after the first",
+   "expected": "GATE_OVERRIDDEN (stated: the parent may not consume a holder after the delegation)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K809",
+   "mutation": "a child's FAIL on a step without an artefact reaches nothing in the parent",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K810",
+   "mutation": "a child FAILs X; the parent's final model step after the delegation regenerates X and is delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K811",
+   "mutation": "a child FAILs X; m2 built N on patch before the delegation; the final step consumes m2 after it",
+   "expected": "GATE_OVERRIDDEN (derived bytes, before the FAIL included)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K812",
+   "mutation": "the parent's unit-tests FAILs X; a later child regenerates X, FAILs it with the same gate and repairs it (Y passes unit-tests); the parent builds on the delegation",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K813",
+   "mutation": "two parent gates FAIL X (unit-tests and schema-check); the child's repair passes unit-tests only and the child delivers it",
+   "expected": "GATE_OVERRIDDEN (schema-check failed the chain's bytes in the parent)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K813b",
+   "mutation": "control for K813: the child's repair passes both",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K814",
+   "mutation": "the parent's FAIL reaches the child: the child's revision passes the parent's unit-tests on a read-back holder of its bytes before the write",
+   "expected": "accepted (a gate on the same bytes decides the same)",
+   "got": "accepted"
+  },
+  {
+   "id": "K815",
+   "mutation": "the parent's FAIL reaches the child: the child writes its revision before the parent's unit-tests passes it",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K816",
+   "mutation": "the parent's holder of X is an earlier delegation (its child delivered X, gated); a later child FAILs X; the parent then consumes the earlier delegation",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K817",
+   "mutation": "a successful revision without an artefact that nothing uses, then a hand-off",
+   "expected": "REVISION_BOUND (stated: a revision that succeeded records its artefact)",
+   "got": "REVISION_BOUND"
+  },
+  {
+   "id": "K818",
+   "mutation": "a child FAILs X and hands off: the delegation failed, so the parent hands off",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K819",
+   "mutation": "a child FAILs X; the parent's later GATE re-runs unit-tests on patch and passes it, then writes patch",
+   "expected": "GATE_OVERRIDDEN (a later pass does not override the FAIL)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K820",
+   "mutation": "a later sibling's FAIL of the same bytes covers an earlier delegation's repair: d1 consumes patch (X), its child FAILs X and repairs it to Y (unit-tests passes Y); d2 (consuming nothing) runs a child that regenerates X and FAILs it again; the parent builds its answer on d1",
+   "expected": "accepted as in one loop (K820c: a revision of the artefact is never covered), or stated",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K820c",
+   "mutation": "control for K820 in one loop: regen1 consumes patch, FAILs, fix1 repairs it; regen2 regenerates X and FAILs again; final builds on fix1",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K821",
+   "mutation": "the parent's own later FAIL of the same bytes covers an earlier delegation's repair: d consumes patch (X), its child FAILs X and repairs it to Y; the parent's unit-tests then FAILs patch too; the parent builds on d",
+   "expected": "accepted as in one loop (K821c), or stated",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K821c",
+   "mutation": "control for K821 in one loop",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K822",
+   "mutation": "control: the same as K821 without the parent's later FAIL (C705b's shape)",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "K823",
+   "mutation": "the mirror of C702: a child derives N from X, then its unit-tests FAILs X; after the delegation the parent regenerates N, gates it with schema-check and writes it",
+   "expected": "GATE_OVERRIDDEN as K823c (one loop), or stated (the README's limit names only a later child regenerating derived bytes)",
+   "got": "accepted"
+  },
+  {
+   "id": "K823c",
+   "mutation": "control for K823 in one loop",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "K824",
+   "mutation": "the mirror of C703: a child's revision Y passes schema-check only (unit-tests failed X) and is not used; after the delegation the parent regenerates Y and writes it",
+   "expected": "GATE_OVERRIDDEN as K824c (one loop), or stated",
+   "got": "accepted"
+  },
+  {
+   "id": "K824c",
+   "mutation": "control for K824 in one loop",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "S801",
+   "mutation": "3000 random single-point mutations (seed 8) of the three new round-8 vectors and the two new stored child traces (checked as documents in their own right): model SHAPE against schema rejection, and nothing but Refused escapes",
+   "expected": "0 disagreements, 0 escapes",
+   "got": "0 disagreements (2586 SHAPE; codes {\"CAPABILITY_MISMATCH\": 12, \"ERROR_TRACE\": 12, \"GATE_OVERRIDDEN\": 29, \"None\": 47, \"PROVENANCE\": 21, \"RECURSION_DEPTH\": 9, \"RETRY_WITHOUT_TRACE\": 9, \"REVISION_BOUND\": 16, \"SHAPE\": 2586, \"STEP_ORDER\": 6, \"TOTALS_MISMATCH\": 9, \"UNGATED_CONSUMPTION\": 4, \"UNKNOWN_REFERENCE\": 240})"
+  },
+  {
+   "id": "S802",
+   "mutation": "a DELEGATE detail with an extra member (a gateId)",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S803",
+   "mutation": "a DELEGATE step whose detail is a GATE detail",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S804",
+   "mutation": "a GATE step that consumes the delegation",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S805",
+   "mutation": "a DELEGATE step with a null child digest",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "T801",
+   "mutation": "round 8: 500 delegations, each child FAILing the parent's held bytes 1 times (503 parent steps, 2000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.126 s"
+  },
+  {
+   "id": "T802",
+   "mutation": "round 7 (baseline, no child-to-parent reach): same document (503 parent steps, 2000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.055 s"
+  },
+  {
+   "id": "T803",
+   "mutation": "round 8 control: same, the parent does not hold the bytes (503 parent steps, 2000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.058 s"
+  },
+  {
+   "id": "T804",
+   "mutation": "round 8: 1000 delegations, each child FAILing the parent's held bytes 1 times (1003 parent steps, 4000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.412 s"
+  },
+  {
+   "id": "T805",
+   "mutation": "round 7 (baseline, no child-to-parent reach): same document (1003 parent steps, 4000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.115 s"
+  },
+  {
+   "id": "T806",
+   "mutation": "round 8 control: same, the parent does not hold the bytes (1003 parent steps, 4000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.137 s"
+  },
+  {
+   "id": "T807",
+   "mutation": "round 8: 2000 delegations, each child FAILing the parent's held bytes 1 times (2003 parent steps, 8000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 1.481 s"
+  },
+  {
+   "id": "T808",
+   "mutation": "round 7 (baseline, no child-to-parent reach): same document (2003 parent steps, 8000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.266 s"
+  },
+  {
+   "id": "T809",
+   "mutation": "round 8 control: same, the parent does not hold the bytes (2003 parent steps, 8000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.353 s"
+  },
+  {
+   "id": "T810",
+   "mutation": "round 8: 1000 delegations, each child FAILing the parent's held bytes 10 times (1003 parent steps, 13000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 2.982 s"
+  },
+  {
+   "id": "T811",
+   "mutation": "round 7 (baseline, no child-to-parent reach): same document (1003 parent steps, 13000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.204 s"
+  },
+  {
+   "id": "T812",
+   "mutation": "round 8 control: same, the parent does not hold the bytes (1003 parent steps, 13000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.376 s"
+  },
+  {
+   "id": "T813",
+   "mutation": "round 8: 2000 delegations, each child FAILing the parent's held bytes 10 times (2003 parent steps, 26000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 12.462 s"
+  },
+  {
+   "id": "T814",
+   "mutation": "round 7 (baseline, no child-to-parent reach): same document (2003 parent steps, 26000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.448 s"
+  },
+  {
+   "id": "T815",
+   "mutation": "round 8 control: same, the parent does not hold the bytes (2003 parent steps, 26000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 1.243 s"
+  },
+  {
+   "id": "T816",
+   "mutation": "round 8: 1000 delegations, each child FAILing the parent's held bytes 40 times (1003 parent steps, 43000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 12.708 s"
+  },
+  {
+   "id": "T817",
+   "mutation": "round 7 (baseline, no child-to-parent reach): same document (1003 parent steps, 43000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 0.751 s"
+  },
+  {
+   "id": "T818",
+   "mutation": "round 8 control: same, the parent does not hold the bytes (1003 parent steps, 43000 child steps)",
+   "expected": "seconds, against round 7",
+   "got": "accepted in 1.607 s"
+  },
+  {
+   "id": "T8A01",
+   "mutation": "sketch alt8: 500 delegations, each child FAILing the parent's held bytes 1 times",
+   "expected": "seconds",
+   "got": "accepted in 0.122 s"
+  },
+  {
+   "id": "T8A02",
+   "mutation": "sketch alt8: 1000 delegations, each child FAILing the parent's held bytes 1 times",
+   "expected": "seconds",
+   "got": "accepted in 0.394 s"
+  },
+  {
+   "id": "T8A03",
+   "mutation": "sketch alt8: 2000 delegations, each child FAILing the parent's held bytes 1 times",
+   "expected": "seconds",
+   "got": "accepted in 1.400 s"
+  },
+  {
+   "id": "T8A04",
+   "mutation": "sketch alt8: 1000 delegations, each child FAILing the parent's held bytes 10 times",
+   "expected": "seconds",
+   "got": "accepted in 0.465 s"
+  },
+  {
+   "id": "T8A05",
+   "mutation": "sketch alt8: 2000 delegations, each child FAILing the parent's held bytes 10 times",
+   "expected": "seconds",
+   "got": "accepted in 1.627 s"
+  },
+  {
+   "id": "T8A06",
+   "mutation": "sketch alt8: 1000 delegations, each child FAILing the parent's held bytes 40 times",
+   "expected": "seconds",
+   "got": "accepted in 1.101 s"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/BRIEF-r8.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/PLAN.md (owner decisions Q-MAS8-A..D)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (= build_loop.r8.py; diffed against build_loop.r7b.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/review-round{4,5,6,7}.json",
+  "WORK-r7: review-round7.json, alt7/scripts/agent_loop.py, make_alt7.py, probes_r7.py, rerun/*.py, perf2_r7.py, perf_regate_r7.py, diff_overridden.py and the alt7 probe outputs",
+  "subject dd0d4a12: architecture/agent-loop/{README.md, loop-profile.schema.json, loop-trace.schema.json, vectors.json}, scripts/agent_loop.py; git diff 4ca90905..dd0d4a12 and 82804a0..dd0d4a12",
+  "roadmap/roadmap.json item MAS-RA-008",
+  "architecture/research-adoption-v2/crosswalk.json at 82804a0 (acceptance MAS-RA-008-A1..A3, HO-D2)",
+  "docs/harnesses/execution.tool-skill-sandbox.md l.55, ll.149-150; execution.orchestration.md l.151; trust.security-safety.md l.18",
+  "roadmap/research/papers: 2609.26891v1-jaz.pdf pp. 4, 5, 7, 13, 14, 23, 24; 2610.07832v1-hermes.pdf pp. 15, 16, 20, 21, 23; 2609.01437v1-harnessdev.pdf pp. 5, 8, 22, 24, 27; 2609.24974v1-harness-zero.pdf pp. 2, 8, 22, 23"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

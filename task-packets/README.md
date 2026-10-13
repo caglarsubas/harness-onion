@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-MAS-002
+## Current source preparation — MET-MAS-006
+
+MAS-RA-008 (MET-MAS-006): the agent-loop kernel and tool-gateway contract candidate (loop profiles with budgets,
+bounded retries, revision rounds, hooks, gates and tool manifests; loop traces with tool calls and results,
+delegation and terminal status); H10's and H11's harness documents and the repository schemas stay
+byte-identical. Alpha2 OPEN; 230 accepted plus MET-MAS-006 only.
+
+## Historical MAS-RA-002 source preparation — MET-MAS-002
 
 MAS-RA-002 (MET-MAS-002): the run manifest and configuration-level evaluation record contract candidate
 (split declarations, run manifests, evaluation records, a paired task-clustered distribution gate, selection
@@ -1332,3 +1339,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 228 | `MET-ADOPT-003` | `Harness-Engineering` | MAS-RA-000: research adoption v2 crosswalk (October 2026 MAS-harness corpus); META_PLANNING_ONLY |
 | 229 | `MET-MAS-001` | `Harness-Engineering` | MAS-RA-001: verdict and evidence ledger contract candidate (schema, check kinds, model, vectors); DATA_CHECK_ONLY |
 | 230 | `MET-MAS-002` | `Harness-Engineering` | MAS-RA-002: run manifest and configuration-level evaluation record contract candidate; DATA_CHECK_ONLY |
+| 231 | `MET-MAS-006` | `Harness-Engineering` | MAS-RA-008: agent-loop kernel and tool-gateway contract candidate; DATA_CHECK_ONLY |

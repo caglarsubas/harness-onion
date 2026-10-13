@@ -1,0 +1,528 @@
+{
+ "schemaVersion": "harness.planeon.ai/agent-loop-review/v1",
+ "kind": "agent-loop-review",
+ "round": 5,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "c248aa4253b959be54381ca8954ab2d209d3027d",
+ "subjectTree": "1e0f6eec4392550c556f7460b2326ba88c2b493d",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R5-1",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _tainted (`s[\"seq\"] <= subject[\"seq\"]` skips every earlier step, and the holder clause matches later steps only); README 'A gate's FAIL is never overridden' ('Counting forward from the subject'; 'An artefact that held the bytes before the subject is not covered either'); vectors.json V045",
+   "finding": "Round 5 makes the failed artefact's own bytes forward-only too, not only the derived bytes. R4-1's option (a) kept the subject's own bytes on every holder. So a step that held the failed bytes before the gate's subject escapes the FAIL. That step, and anything that consumed it before the subject, can be delivered or consumed after the FAIL. Whether the bytes are decided depends only on which of two byte-identical steps the failing gate names. Accepted:\n- A01: plan (bytes X) passes unit-tests; patch regenerates X and unit-tests FAILs it; plan is delivered. A01c, where the failing run names plan instead, is refused GATE_OVERRIDDEN.\n- A02: patch passes schema-check; a read-back of patch returns X; unit-tests FAILs the read-back; patch is delivered. A02c, the FAIL on patch itself, is refused.\n- A03: web-search returns X and passes schema-check; a second search returns the same X and unit-tests FAILs it; the non-idempotent post-ticket consumes the first search.\n- A04: write-file applied plan (X) before patch (X) failed; a model step built on that write's result is delivered. Q04, the same with the write on patch, is refused.\n- G02 (round-4 probe): a write consumes the earlier x after a FAIL on y with x's bytes. It was GATE_OVERRIDDEN in round 4 and under the round-4 sketch; it is now accepted.\n- V045 pins the hole as a valid vector: plan passes schema-check only, a later byte-identical patch FAILs unit-tests, and plan is delivered.\nThe README's reason ('a gate's verdict can depend on the context it ran in') contradicts the contract's own interleaving rule ('A gate on the same bytes decides the same, so an earlier one counts'). A PASS on the same bytes counts at any time, while a FAIL counts only forward. That asymmetry fails open, and if context did matter, the later FAIL is the fresher verdict. The sibling ledger (MAS-RA-001 rule 4) makes any deterministic FAIL on the delivered quantity contradict it, whatever the order of checks (H13: a deterministic denial is not overridden). This partly reopens R1-1: the bytes a deterministic gate failed are delivered under another step, here an earlier one. The disposition cites S03c for the change, but S03c's coincident bytes are derived (a read of the patch), not the patch's own. The round-4 sketch accepts S03c and refuses G02.",
+   "requiredChange": "Keep the failed artefact's own bytes on every holder whatever its position, as R4-1 (a) asked and as the round-4 sketch does (`holders = _holders(v, subject)`, all of them tainted). Keep the forward-only, model-and-delegation-only matching for derived bytes. Make V045 a GATE_OVERRIDDEN refusal, or replace it with the real S03c shape (derived bytes held before the subject, valid). Pin A01 or A02 as a refusal vector. In the README, limit 'not covered before the subject' to derived bytes and drop the context rationale. Checked: the round-4 sketch's _tainted, on a copy of the round-5 repository:\n- replays the 192 vectors with exactly one mismatch, V045;\n- keeps every round-1/2 and round-3 probe result, and every round-4 probe result except G02 (GATE_OVERRIDDEN again);\n- refuses A01 to A04 and leaves the B to E probes unchanged;\n- keeps R4-2's single pass."
+  },
+  {
+   "id": "R5-2",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _gated and _ungated (any passing gate counts); README 'Revisions', 'Deterministic gates interleave with model steps', 'Terminal status' (FAILED)",
+   "finding": "A revision needs only some passing gate before it is consumed or delivered, not the gate that failed its target. C03: unit-tests FAILs patch; r1 revises it and passes schema-check only. unit-tests never runs again, and r1 is delivered COMPLETED (accepted). C03b is the same under the strict profile (one round), also accepted. TR_FAILED shows the honest outcome when r1 is re-tested and fails (FAILED). A kernel avoids that status by not re-running the gate. HERMES re-executes and re-diagnoses every revised plan until it passes or the budget is spent (pp. 15, 20). HarnessDev's honest status reserves success for 'reasonable evidence that the final artifact completes the task' (p. 27). The FAIL is not overridden in bytes, but it is answered without evidence, and COMPLETED overstates. A fresh, undeclared attempt is a stated non-claim. The declared revision path is not covered by it.",
+   "requiredChange": "Before a revision's bytes reach a consumer or the delivery, require that every gate that failed a step of its revision chain has passed them: an OK run of that gateId on a holder of the revision's bytes. Pin C03 as a refusal, with a valid control where the revision passes the gate that failed. Or state it under 'Not claimed': the kernel chooses the gates, and a revision may be delivered after any one passing gate. Checked: a sketch of the rule in _gated, on top of the R5-1 sketch, keeps every vector's expectation (only V045 changes, from R5-1). It refuses C03 and C03b UNGATED_CONSUMPTION and changes no other probe of rounds 1 to 5."
+  },
+  {
+   "id": "R5-3",
+   "severity": "NOTE",
+   "location": "README 'A gate's FAIL is never overridden' ('so a tool output that merely repeats common bytes (an empty result, an acknowledgement) is not covered'); scripts/agent_loop.py _tainted (holder and copy clauses)",
+   "finding": "The sentence holds for bytes derived from the artefact only. Two fail-closed reaches remain unstated, and each refuses a valid loop.\n(1) The failed artefact's own bytes are matched in every later step, tool outputs included. So when the failed artefact is itself common bytes, every later tool output that repeats them is covered. D03: web-search returns '[]' and schema-check FAILs it. A local index read returns the same '[]', and a model step built on that read is refused GATE_OVERRIDDEN (D03b, with other bytes, is accepted). D02, where the failed '{}' is a model artefact, is refused UNGATED_CONSUMPTION, which is the interleaving rule's stated byte reach.\n(2) A model step that repeats a derived output's short bytes is covered. D01: before unit-tests FAILs the gated patch, a judge model step returns 'approve' on it. After the revision passes, the same judge returns 'approve' on r1. A final step built on r1 and that verdict is refused GATE_OVERRIDDEN (D01b, with another verdict, is accepted).",
+   "requiredChange": "Say both reaches in the README beside that sentence, or narrow the sentence to derived bytes. Optionally advise that a judge's or check's output names its subject's digest, so equal verdicts on different subjects never share bytes."
+  },
+  {
+   "id": "R5-4",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _ungated, _consumers and _gated (unchanged since round 4)",
+   "finding": "_ungated calls _gated once per producer and consumer pair, and _gated recomputes _holders each time. Producers that share bytes share their consumers, so the check is cubic in steps. Measured: 100, 200 and 300 byte-identical model producers, each consumed by one write (201, 401 and 601 steps), take 0.09, 0.69 and 2.28 s. Extrapolated, not run: about 2,048 producers and 2,047 writes within the 4,096-step limit (about 3.6 MB) would take about 12 minutes. R4-2's path is now fine: 2,048 failing gates on one subject in 4,096 steps take 2.25 s.",
+   "requiredChange": "Index the steps by digest once, with the earliest OK gate per digest. Compute each digest's consumers once, not once per producer, so the check is near-linear. Optionally add a timing probe near the limit."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R4-1",
+   "disposition": "PARTIAL",
+   "evidence": "The over-reach is resolved: _tainted is one forward pass, and derived bytes are matched only into MODEL and DELEGATE steps. Re-run: S01, S01c, S02, S03 and S03c are accepted (they were GATE_OVERRIDDEN in round 4). Their controls S01b, S01d, S02b, S03b and S03d stay accepted. Q08 and Q02 are refused and pinned by V137 and V138; V044 and V046 pin S01 and S02 as valid. But option (a) also required keeping 'the subject's own bytes on every holder as now', and round 5 does not. That opens R5-1: G02 is accepted, against the sketch's GATE_OVERRIDDEN, and V045 pins the hole as valid. V045 is not S03c's shape: it repeats the failed artefact's own bytes, not bytes derived from it."
+  },
+  {
+   "finding": "R4-2",
+   "disposition": "RESOLVED",
+   "evidence": "The round-4 timing probe: 2,101 steps with 100 failing gates take 0.123 s (16.3 s in round 4). At the limit, 4,096 steps with 2,048 failing gates on one subject take 2.25 s. The pass runs once per failing gate, not once per distinct subject, but the bound is small. Another slow path remains (R5-4)."
+  },
+  {
+   "finding": "R4-3",
+   "disposition": "RESOLVED",
+   "evidence": "(1) The HOOK detail now exempts a HANDOFF-event hook ('only observes a loop that is already handing off'), and H03 is still accepted. (2) The README says the revision may consume all of it, and that a later round reads the previous round's artefact and diagnosis, not the original's. That matches HERMES p. 16 ('Previous Plan' and 'Diagnosis Feedback' from the previous iteration). S04, S04b and S04d keep their refusals, as now stated. (3) The depth mapping matches JAZ p. 7 n. 2 (top-level agent is depth 1) and pp. 16 and 18 (RecursionLimit(depth=1) disables subagents)."
+  },
+  {
+   "finding": "R3-1, R3-2, R3-4, R3-5, R3-6, R3-7",
+   "disposition": "RESOLVED",
+   "evidence": "The round-3 probe re-run (Q01 to Q33) is identical to round 4. Only Q31's count of refusal cases changes (140 to 142, the two new refusal vectors). The round-4 controls H01 to H08, R01, R02, S04 to S10, G01, G03 and G04 keep their results."
+  },
+  {
+   "finding": "R3-3",
+   "disposition": "RESOLVED",
+   "evidence": "_gated still has no producer lower bound: Q11 and Q11b are accepted, and V042 pins it. Its round-4 control G02 (a later FAIL on the same bytes) is now accepted; that regression is R5-1, not the gate-window defect."
+  },
+  {
+   "finding": "R2-1..R2-11",
+   "disposition": "RESOLVED",
+   "evidence": "The round-2 probes N01 to N31 give the same results as in round 4 (the output diff is empty apart from timings)."
+  },
+  {
+   "finding": "R1-1",
+   "disposition": "PARTIAL",
+   "evidence": "P01 (a fresh model step reproducing the failed digest, delivered) and P02 (a revision returning it) are still GATE_OVERRIDDEN. The earlier-step variant is reopened: A01, A02 and V045 deliver the failed bytes under an earlier step. Tracked as R5-1."
+  },
+  {
+   "finding": "R1-2..R1-16",
+   "disposition": "RESOLVED",
+   "evidence": "The round-1 probes P01 to P40, re-run through the round-2 script, give the same results as in round 4. That includes the agreement sweeps (P35 to P37: 0 disagreements), isolation (P38: 0 deviations), canonical agreement with MAS-RA-001 and -002 (P39: identical) and parse (P40)."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject: HEAD c248aa4253b9 and tree 1e0f6eec4392 as in the brief; the worktree is clean before and after the review",
+   "result": "PASS"
+  },
+  {
+   "check": "Scope: `git diff --name-status 82804a0c c248aa42` adds exactly the five files",
+   "result": "PASS"
+  },
+  {
+   "check": "Byte identity: the H10, H11, H13 and H15 documents and the schemas/ tree have the same blob or tree IDs at 82804a0c and c248aa42",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-5 delta: `git diff f6011a3a c248aa42` touches README.md, vectors.json and scripts/agent_loop.py (_tainted only)",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility: build_loop.py (byte-identical to build_loop.r5.py) on a git-archive copy rewrites the two schemas and vectors.json byte for byte (sha256 compared), with all its assertions passing (under 1 s)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay: `python3 -I -B scripts/agent_loop.py` on the archive copy gives 192 cases and 4 texts",
+   "result": "PASS"
+  },
+  {
+   "check": "README counts: 192 cases (36 valid, 156 refused); 7 profile entries; 14 child traces; 4 texts; 6 alsoRefusedBy; every profile and trace code has a refusal case; evidenceClass DATA_CHECK_ONLY",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions Q-MAS8-A to -D: verbatim in the README. Bounds unchanged since round 4 (recursionDepth 0..1, stepRetries 0..3, rounds 0..3). Capability reference fields checked (E09, E10). No key material.",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-1/2 probe re-run (r2rerun script on round 5): identical to round 4 apart from timings",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-3 probe re-run: identical apart from Q31's case count",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-4 probe re-run: S01, S01c, S02, S03 and S03c are now accepted as intended, but G02 changes from GATE_OVERRIDDEN to accepted",
+   "result": "FAIL: R5-1"
+  },
+  {
+   "check": "Round-4 timing probe: 2,101 steps take 0.123 s",
+   "result": "PASS"
+  },
+  {
+   "check": "Reviewer probes A, B and C",
+   "result": "FAIL: A01 to A04 (R5-1); C03 and C03b (R5-2)"
+  },
+  {
+   "check": "Reviewer probes D (valid loops refused)",
+   "result": "FAIL: D01 and D03 (R5-3, NOTE)"
+  },
+  {
+   "check": "Reviewer probes E01 to E20 (hook conflicts, effects per event, retries, credentials, capabilities, trust labels, unknown side effects, terminal status, references, shape agreement)",
+   "result": "PASS"
+  },
+  {
+   "check": "Schema and model agreement: P35 to P37 and Q30 re-run, 0 disagreements; E03, E17, E18 and E20 rejected by both, E19 accepted by both",
+   "result": "PASS"
+  },
+  {
+   "check": "Isolation: P38 re-run gives 0 deviations; the builder's isolation assertion passes",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-4 sketch _tainted on a round-5 copy: one vector mismatch (V045); A01 to A04 and G02 refused; all other probes unchanged (information)",
+   "result": "PASS"
+  },
+  {
+   "check": "R5-2 sketch on top of it: no further vector change; C03 and C03b refused; no other probe changed (information)",
+   "result": "PASS"
+  },
+  {
+   "check": "Timing near the limit: _overridden with 2,048 failing gates over 4,096 steps (2.25 s); _ungated with byte-identical producers grows cubically (R5-4)",
+   "result": "PASS (R5-4 NOTE)"
+  },
+  {
+   "check": "PDF spot checks (pdftotext -f N -l N):\n- JAZ pp. 4, 5, 7, 14, 16, 18, 23, 24: dynamic scope and local versus scoped hooks; depth 70 after 69 delegations and n. 2's depth convention; 13 events, effects, and conflicting writes refused; RecursionLimit(depth=1); a subagent erroring when a limit is reached;\n- HERMES pp. 15, 16, 20, 23: deterministic failures not overridden; revision loop and budget B; previous plan and diagnosis; B = 3 default, at most 0.9 points beyond;\n- HarnessDev pp. 5, 22, 24, 27, 28: six modules; 500-step and time caps; honest status; limited retries; final artefact validation;\n- Harness-Zero pp. 2, 8, 23: one execute tool; turn limit; single-level delegation, at most four concurrent.",
+   "result": "PASS"
+  },
+  {
+   "check": "H11 (l. 55, 149-150), H13 (l. 18, 53) and MAS-RA-001 rule 4 against the FAIL, retry and unknown-outcome rules",
+   "result": "PASS apart from R5-1"
+  },
+  {
+   "check": "Public hygiene: no names, email addresses or home paths in the five files (grep)",
+   "result": "PASS"
+  },
+  {
+   "check": "README accuracy against the model",
+   "result": "FAIL: R5-1 rationale and R5-3 sentence"
+  }
+ ],
+ "probes": [
+  {
+   "id": "A01",
+   "mutation": "plan (bytes X) passes unit-tests; patch regenerates the identical bytes X and unit-tests FAILs it (same gate, same bytes); plan is delivered",
+   "expected": "GATE_OVERRIDDEN (the delivered bytes are bytes a deterministic gate failed)",
+   "got": "accepted; under the round-4 sketch _tainted: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "A01c",
+   "mutation": "control for A01: the failing second run of unit-tests names plan itself (only the subject differs)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "A02",
+   "mutation": "the failing gate names a read-back copy: patch (X) passes schema-check; read-file reads patch back (output X); unit-tests FAILs the read-back; patch is delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "accepted; under the round-4 sketch _tainted: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "A02c",
+   "mutation": "control for A02: unit-tests FAILs patch itself",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "A03",
+   "mutation": "untrusted output: web-search returns X and schema-check passes it; a second web-search returns the same X and unit-tests FAILs it; post-ticket (non-idempotent WRITE) consumes the first search; a final model step is delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "accepted; under the round-4 sketch _tainted: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "A04",
+   "mutation": "a write applied an earlier holder before the subject: plan (X) passes schema-check, write-file applies plan; patch regenerates X and unit-tests FAILs it; a report model step built on the write's result is gated and delivered (Q04 with the write on the subject itself is refused)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "accepted; under the round-4 sketch _tainted: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "A04c",
+   "mutation": "control for A04 (round-4 Q04 shape): the write applied patch itself before the FAIL",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "B01",
+   "mutation": "a derived model artefact echoed by an undeclared tool read: next (built on patch, gated) holds N; unit-tests FAILs patch; read-file with no declared consumption returns N; write-file consumes the read",
+   "expected": "accepted (stated: tool outputs are matched only on the failed artefact's own bytes; declared consumption)",
+   "got": "accepted"
+  },
+  {
+   "id": "B02",
+   "mutation": "B01 with a fresh model step (not a tool) reproducing N after the FAIL, consumed by the write",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "B04",
+   "mutation": "a delegation after the FAIL, consuming nothing, whose child delivers N (the bytes of a model step built on the failed patch); a final model step consumes the delegation",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "C01",
+   "mutation": "a second-round revision returns the original failed bytes: patch X FAILs, r1 FAILs, r2 (revises r1) returns X, a later unit-tests run passes r2, r2 delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "C02",
+   "mutation": "revision of a later copy: patch X FAILs; a fresh model step regenerates X (a copy) and unit-tests FAILs it too; r revises the copy (with its diagnosis), passes, delivered",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "C03",
+   "mutation": "a revision delivered after a weaker gate only: unit-tests FAILs patch; r1 revises it and passes schema-check only (unit-tests never re-run); r1 delivered",
+   "expected": "a refusal or a stated rule (HERMES re-executes and re-diagnoses every revised plan)",
+   "got": "accepted; with the R5-2 sketch added: UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "C03b",
+   "mutation": "C03 under the strict profile (one revision round): r1 passes schema-check only and is delivered",
+   "expected": "as C03",
+   "got": "accepted; with the R5-2 sketch added: UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "D01",
+   "mutation": "a judge's verdict repeats: judge (model) reads gated patch and returns V ('approve'); unit-tests FAILs patch; r1 revises and passes; judge-2 reads r1 and returns the same verdict bytes V; final builds on r1 and judge-2, gated, delivered",
+   "expected": "accepted (judge-2 judged the revision, not the failed patch)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "D01b",
+   "mutation": "control for D01: judge-2 returns other bytes",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "D02",
+   "mutation": "a failed artefact with common bytes: plan returns K ('{}') and schema-check FAILs it; r1 revises and passes; read-file (no declared consumption) returns the same K ('{}' config); final builds on r1 and the read, gated, delivered",
+   "expected": "accepted (the read never saw the failed plan; README: a tool output that merely repeats common bytes is not covered)",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "D02b",
+   "mutation": "control for D02: the read returns other bytes",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "D03",
+   "mutation": "a failed output with common bytes: web-search returns K ('[]') and schema-check FAILs it; read-file (no declared consumption) of a local index returns the same K ('[]'); final builds on the read, gated, delivered",
+   "expected": "accepted (the read never saw the failed search; README: a tool output that merely repeats common bytes is not covered)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "D03b",
+   "mutation": "control for D03: the read returns other bytes",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "E01",
+   "mutation": "profile: a hook {MODIFY_INPUT, SUPPLY_OUTPUT} on TOOL_CALL_BEFORE beside another SUPPLY_OUTPUT hook there",
+   "expected": "HOOK_CONFLICT",
+   "got": "HOOK_CONFLICT"
+  },
+  {
+   "id": "E02",
+   "mutation": "profile: MODIFY_INPUT and ABORT by two hooks on EXEC_BEFORE (abort composes)",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "E03",
+   "mutation": "profile: MODIFY_INPUT on STEP_RETRY",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "E04",
+   "mutation": "trace: the observing HANDOFF hook recorded with effect ABORT before the hand-off",
+   "expected": "HOOK_NOT_REGISTERED",
+   "got": "HOOK_NOT_REGISTERED"
+  },
+  {
+   "id": "E05",
+   "mutation": "a third attempt under the default profile (stepRetries 1)",
+   "expected": "RETRY_BOUND",
+   "got": "RETRY_BOUND"
+  },
+  {
+   "id": "E06",
+   "mutation": "a disguised retry: read-file ERRORs, is not retried, a fresh read-file with another input succeeds",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "E07",
+   "mutation": "write-file carries a broker reference for a parameter it does not declare",
+   "expected": "CREDENTIAL_RULE",
+   "got": "CREDENTIAL_RULE"
+  },
+  {
+   "id": "E08",
+   "mutation": "a model step whose input resolved a brokered credential",
+   "expected": "CREDENTIAL_RULE",
+   "got": "CREDENTIAL_RULE"
+  },
+  {
+   "id": "E09",
+   "mutation": "a capability whose scope is not the tool's grant scope",
+   "expected": "CAPABILITY_MISMATCH",
+   "got": "CAPABILITY_MISMATCH"
+  },
+  {
+   "id": "E10",
+   "mutation": "a capability that expired before the call started",
+   "expected": "CAPABILITY_EXPIRED",
+   "got": "CAPABILITY_EXPIRED"
+  },
+  {
+   "id": "E11",
+   "mutation": "web-search (UNTRUSTED) labelled TRUSTED_TOOL_OUTPUT",
+   "expected": "TRUST_LABEL",
+   "got": "TRUST_LABEL"
+  },
+  {
+   "id": "E12",
+   "mutation": "UNKNOWN non-idempotent post-ticket retried with the same input",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED",
+   "got": "UNKNOWN_SIDE_EFFECT_RETRIED"
+  },
+  {
+   "id": "E13",
+   "mutation": "COMPLETED delivering a trusted tool step",
+   "expected": "TERMINAL_STATUS",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "E14",
+   "mutation": "ABORTED with reason BUDGET_EXHAUSTED while a hook aborted",
+   "expected": "TERMINAL_STATUS",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "E15",
+   "mutation": "a gate whose subject is a later step",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "E16",
+   "mutation": "FAILED with no failing gate (all steps OK)",
+   "expected": "TERMINAL_STATUS",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "E17",
+   "mutation": "a HANDOFF reason with a lone surrogate",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "E18",
+   "mutation": "a GATE step that declares consuming its subject",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "E19",
+   "mutation": "an integral float sequence number 2.0",
+   "expected": "accepted (both: an integer)",
+   "got": "accepted"
+  },
+  {
+   "id": "E20",
+   "mutation": "a TOOL step whose detail is a GATE detail",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "T-512-gates",
+   "mutation": "timing: failing gates 256 on one subject, 255 reads",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 0.038 s (512 steps)"
+  },
+  {
+   "id": "T-1024-gates",
+   "mutation": "timing: failing gates 512 on one subject, 511 reads",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 0.143 s (1024 steps)"
+  },
+  {
+   "id": "T-2048-gates",
+   "mutation": "timing: failing gates 1024 on one subject, 1023 reads",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 0.558 s (2048 steps)"
+  },
+  {
+   "id": "T-4096-gates",
+   "mutation": "timing: failing gates 2048 on one subject, 2047 reads",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 2.248 s (4096 steps)"
+  },
+  {
+   "id": "T-101-producers",
+   "mutation": "timing: 50 byte-identical model producers, 50 writes",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 0.013 s (101 steps)"
+  },
+  {
+   "id": "T-201-producers",
+   "mutation": "timing: 100 byte-identical model producers, 100 writes",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 0.090 s (201 steps)"
+  },
+  {
+   "id": "T-401-producers",
+   "mutation": "timing: 200 byte-identical model producers, 200 writes",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 0.690 s (401 steps)"
+  },
+  {
+   "id": "T-601-producers",
+   "mutation": "timing: 300 byte-identical model producers, 300 writes",
+   "expected": "a check time that stays small within the 4,096-step limit",
+   "got": "accepted in 2.280 s (601 steps)"
+  },
+  {
+   "id": "R4-S01",
+   "mutation": "[round-4 probe re-run on round 5] taint over-reach through a constant read output: tests FAIL patch; a read-only check of patch returns X; the revision r1 passes tests; the same read-only check of r1 returns the same bytes X (e.g. no findings); a fresh model step composes the summary from r1 and that check, is gated and delivered",
+   "expected": "accepted (nothing the FAIL decides reaches the summary: lint-r1 read the revision, not the failed patch)",
+   "got": "accepted"
+  },
+  {
+   "id": "R4-S01c",
+   "mutation": "[round-4 probe re-run on round 5] S01 where a second revision round reads the check of r1: r1 FAILs tests too, r2 revises r1 consuming r1, its diagnosis and lint-r1 (X), passes and is delivered",
+   "expected": "accepted (r2 is a declared revision of r1 within the budget)",
+   "got": "accepted"
+  },
+  {
+   "id": "R4-S02",
+   "mutation": "[round-4 probe re-run on round 5] taint over-reach through a write acknowledgment: write-file applied the patch before the FAIL and returned an acknowledgment W; tests FAIL patch; r1 passes; write-file applies r1 and returns the same acknowledgment bytes W; a fresh model step reads that write's result and is gated and delivered",
+   "expected": "accepted (the second write wrote the revision)",
+   "got": "accepted"
+  },
+  {
+   "id": "R4-S03",
+   "mutation": "[round-4 probe re-run on round 5] taint reaching back in time through coincident bytes: read0 (before everything) returns X; plan builds on read0 and is gated; patch builds on plan; tests FAIL patch; a read-only check of patch returns X; r1 passes; final builds on plan and r1, is gated and delivered",
+   "expected": "accepted (plan and read0 precede the failed patch and do not hold its bytes)",
+   "got": "accepted"
+  },
+  {
+   "id": "R4-S03c",
+   "mutation": "[round-4 probe re-run on round 5] S03 with the coincident read made AFTER the revision (lint returns X) and the plan delivered instead",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "R4-G02",
+   "mutation": "[round-4 probe re-run on round 5] earlier gate passes x; a later gate FAILs y holding the same bytes; a write then consumes x",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "accepted; under the round-4 sketch: GATE_OVERRIDDEN"
+  },
+  {
+   "id": "RERUN-SETS",
+   "mutation": "the round-1/2 (P01-P40, N01-N31), round-3 (Q01-Q33) and remaining round-4 (S01b-S10, G01, G03, G04, H01-H08, R01, R02) probe scripts, copied with paths changed, on the round-5 copy",
+   "expected": "the round-4 results, except S01, S01c, S02, S03 and S03c (accepted by design)",
+   "got": "identical apart from timings and Q31's case count; G02 changed to accepted (R5-1)"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/BRIEF-r5.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/PLAN.md (Q-231, Q-MAS8-A..D and the owner decisions)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (= build_loop.r5.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/review-round{1,2,3,4}.json (findings and dispositions)",
+  "the round-4 work directory: the probe scripts (probes_r4.py, r2rerun_r4.py, r3rerun_r4.py, perf_r4.py), their outputs and the sketch alt/scripts/agent_loop.py",
+  "architecture/agent-loop/README.md, loop-profile.schema.json, loop-trace.schema.json and vectors.json at c248aa42; vectors.json at f6011a3a",
+  "scripts/agent_loop.py at c248aa42 (whole file); git diff f6011a3a c248aa42",
+  "docs/harnesses/execution.tool-skill-sandbox.md (H11), docs/harnesses/trust.security-safety.md (H13): grep of the rules cited",
+  "architecture/verdict-ledger/README.md rule 4 (MAS-RA-001)",
+  "roadmap/research/papers: 2609.26891v1-jaz.pdf pp. 4, 5, 7, 13, 14, 16, 18, 23, 24; 2610.07832v1-hermes.pdf pp. 15, 16, 20, 21, 23; 2609.01437v1-harnessdev.pdf pp. 5, 8, 22, 24, 27, 28; 2609.24974v1-harness-zero.pdf pp. 2, 8, 22, 23"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

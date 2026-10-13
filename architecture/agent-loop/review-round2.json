@@ -1,0 +1,730 @@
+{
+ "schemaVersion": "harness.planeon.ai/agent-loop-review/v1",
+ "kind": "agent-loop-review",
+ "round": 2,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "3ab62e34aa386a20ac036e017fc75dd17f218f03",
+ "subjectTree": "68b5e7e0a89d860ef3edb60530694b800b7e417e",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R2-1",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _overridden; README 'A gate's FAIL is never overridden'",
+   "finding": "GATE_OVERRIDDEN does not follow the failed bytes through read-only tool outputs, although UNGATED_CONSUMPTION's reach now does (R1-3). A read-only tool that reads the artefact before the FAIL carries it past the FAIL: patch passes schema-check, read-file reads it, unit-tests FAILs patch, then write-file consumes the read's output: accepted (N01). A model step consuming that output after the FAIL is accepted and delivered (N02). The same trace with the read placed after the FAIL is refused (N02b), so the result depends only on timing. N01 is the write form of the refused vector 'delivering an artefact one gate passed and another failed', and it contradicts MAS-RA-001 rule 7 (a deterministic FAIL decides wherever it was observed), H13 ('a probabilistic detector cannot override a deterministic denial') and HERMES p. 15.",
+   "requiredChange": "After a FAIL, treat every step in the failed bytes' read-only reach as failed. That reach is the steps holding those bytes, plus the outputs of read-only tools that read any of them, whenever produced. No later write, model step or delegation may consume such a step, except a revision of the subject, and none may be delivered. State in the README whether a revision may consume these derived outputs. Add N01 and N02 as GATE_OVERRIDDEN vectors."
+  },
+  {
+   "id": "R2-2",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _View.unknown_unsafe, _unsafe_retry, _must_hand_off; README 'Bounded retry, then a human' and 'Delegation'",
+   "finding": "A parent may retry a DELEGATE whose child ended ABORTED. Of the in-loop side-effect retry rules, only the one for an UNKNOWN write without idempotency reaches into the child. So retrying the delegation re-runs a child's unresolved write that the same retry inside one loop could not. (1) A child's receipt-keyed write-file ends UNKNOWN and a DYNAMIC hook aborts the child; the parent re-delegates and the new child writes under another input, that is another receipt key: accepted (N25). In one loop the vector 'a receipt-keyed write retried with another input' is refused. (2) A child's non-idempotent post-ticket ends ERROR with no evidence of no effect and the child is aborted; the new child posts again: accepted (N26), while the in-loop case is refused. The same path also retries around a DYNAMIC hook's abort of a child, although the README says 'abort wins' (N07 accepted). And it gives a retried FAILED child a fresh revision budget on the same task (N24: two rounds under revision.rounds 1). R1-5 closed the HANDED_OFF path only. H11: 'Non-idempotent actions retry only with an authoritative receipt lookup proving no prior effect'.",
+   "requiredChange": "Retry a DELEGATE only when every in-loop side-effect retry rule would allow it. The simplest form: never retry a DELEGATE whose child ended after a step that must hand off (HANDED_OFF, or a hook abort following such a step), and make the parent hand off. Closing R2-3 also closes this part. State whether a child's HOOK_ABORT under a DYNAMIC hook may be retried around, and how revision rounds compose with the parent's retries. Add N25 and N26 as refusal vectors."
+  },
+  {
+   "id": "R2-3",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _handoff; README 'Every failing step is retried or hands off'",
+   "finding": "After a step that must hand off, a hook abort ends the loop in place of the human hand-off. An UNKNOWN non-idempotent post-ticket followed by the budget-stop abort ends ABORTED/HOOK_ABORT and is accepted (N09). The kernel's own abort at the same point is refused (vector 'retries spent and the loop aborts instead of handing off'). The sources disagree with this. Q-MAS8-C: 'then hand-off to a human'. H10: a non-idempotent ambiguous outcome 'pauses as INPUT_REQUIRED/operator review'. H11: OUTCOME_UNKNOWN 'requires operator/owner reconciliation'. The ABORTED alternative came from round 1's own suggestion for R1-7. The UNKNOWN case and the delegation path (R2-2) show it needs a limit.",
+   "requiredChange": "At least after an UNKNOWN side effect, require HANDED_OFF; an aborting hook can be recorded before the final HANDOFF step. Otherwise, state three things in the README: a hook abort ends the loop without a human; OUTCOME_UNKNOWN reconciliation stays with H10 and H11, outside the trace; and this narrows Q-MAS8-C's 'then hand-off to a human', which is an owner point. Add N09 with its decided result."
+  },
+  {
+   "id": "R2-4",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _consumers; loop-trace.schema.json step consumes/produces; README 'Deterministic gates interleave'",
+   "finding": "GATE, HOOK and HANDOFF steps may carry `consumes` and `produces`, but neither has a defined meaning on them, and the consumer reach follows only TOOL steps. So a HOOK or GATE step can relay an ungated model artefact to a write. A HOOK step that consumes the ungated patch and produces its digest, then is consumed by write-file: accepted (N04). A GATE step on another subject that declares consumes [patch], then is consumed by write-file: accepted (N04b). The reach is also keyed by step ID, while GATE_OVERRIDDEN is now keyed by bytes: a trusted read-only tool step whose output digest equals an ungated model artefact's feeds a write (N29 accepted).",
+   "requiredChange": "Refuse `produces` and `consumes` on GATE, HOOK and HANDOFF steps (a gate's subject and a hook's event live in `detail`), or follow the reach through every step kind. State in the README that the rule covers declared consumption only, or key it by bytes as GATE_OVERRIDDEN now is. Add N04 as a refusal vector."
+  },
+  {
+   "id": "R2-5",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _consumers (DELEGATE); README consumer list",
+   "finding": "A delegation can reach writes: the child runs under the same profile with its write tools, and its steps cannot name the parent's. Yet a DELEGATE counts as a consumer only of a model artefact, and only when it consumes it directly. An ungated model artefact read by a read-only tool whose output a DELEGATE consumes is accepted (N05). An untrusted web-search output handed straight to a DELEGATE is accepted (N06). Inside the child, nothing that came from the parent is visible to the child's own gate rule. So the R1-3 and R1-9 fixes can be bypassed through delegation.",
+   "requiredChange": "Treat a DELEGATE like a WRITE tool in the reach: a consumer of both producer kinds, directly or through read-only tool outputs. Add N05 and N06 as UNGATED_CONSUMPTION vectors, or state the gap in 'Not claimed'."
+  },
+  {
+   "id": "R2-6",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _revision_bound, _retry_trace; README 'Revisions' and 'Not claimed'",
+   "finding": "The revision budget binds declared revisions only. A fresh model step that consumes the failing GATE step, and so its diagnosis, without `revises` is a revision in all but name. Under revision.rounds 1: the draft fails, its one revision fails, then such a step passes and is delivered (N03 accepted: two rounds). The same works with no declared revision at all (N03b accepted). Unlike the disguised model retries that 'Not claimed' covers, this is detectable, because the gate step is named in `consumes`. It repeats R1-2's bypass.",
+   "requiredChange": "Allow only a revision of the gate's subject, or a retry of that revision, to consume a failed GATE step. Alternatively, count any model step that consumes a failed gate as a round of its subject's chain, or extend 'Not claimed' to undeclared revisions. Add N03."
+  },
+  {
+   "id": "R2-7",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _must_hand_off, _terminal; README 'Outcomes'",
+   "finding": "The outcome of a HOOK or HANDOFF step has no consequence. The egress-guard HOOK step ERRORs, and the post-ticket call it guards goes ahead to COMPLETED (N11 accepted). That fails open, while H13 keeps INPUT and RUNTIME guardrails fail-closed ('a detector error stays degraded and non-releasing'). A HANDOFF step that ERRORed still yields HANDED_OFF (N12 accepted), so the status can claim a hand-off that did not happen.",
+   "requiredChange": "Define these outcomes. A HOOK step that is not OK makes the loop abort or hand off (fail closed), and HANDED_OFF needs an OK HANDOFF step. Alternatively, restrict HOOK and HANDOFF steps to OK in the shape and say how a failing hook is recorded. Add vectors."
+  },
+  {
+   "id": "R2-8",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py (MODEL produces); README 'Outcomes'",
+   "finding": "The README says an OK step's output is its artefact and that ERROR means the operation did not complete. Yet a MODEL step that ended ERROR may carry `produces`, be gated, and be consumed by a write (N14 accepted). R1-8 fixed delivery only.",
+   "requiredChange": "Refuse `produces` on a MODEL step that is not OK, or state what a non-OK step's artefact is and who may consume it."
+  },
+  {
+   "id": "R2-9",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _tool_input, _unsafe_retry; README 'Model output is data' and 'Side effects'",
+   "finding": "The only way to record that a call was not launched is `inputValid` false. H11 lists policy, approval, artifact, RBAC, network-intent and isolation failures as preventing launch too (its DENIED state). A policy-denied receipt-keyed write with a schema-valid input therefore counts as launched, and its retry with a corrected input is refused UNKNOWN_SIDE_EFFECT_RETRIED (N30). A denied NONE write likewise needs a receiptRef before it may be retried.",
+   "requiredChange": "Record a pre-launch refusal separately from schema validity, for example with a `launched` flag, or by treating FAIL with no output and no receipt as not launched. Or state the limitation."
+  },
+  {
+   "id": "R2-10",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _terminal; README 'Hook placement' (Not claimed) and 'Terminal status'",
+   "finding": "A HANDOFF-event hook can be recorded only before the HANDOFF step it observes. Recorded after it, the trace is refused TERMINAL_STATUS (N13); recorded before, it passes (N13b). For other events, after-event hooks follow their operation's step (TR_OK's TOOL_RESULT_AFTER hook follows the tool step). Yet the README says hook placement is not checked.",
+   "requiredChange": "Say in the README that the HANDOFF step is always the last step and that a HANDOFF hook is recorded before it. Or let observing hooks follow the HANDOFF step."
+  },
+  {
+   "id": "R2-11",
+   "severity": "NOTE",
+   "location": "README 'The loop trace' (MODEL detail) and 'The loop profile' (Tools)",
+   "finding": "Three wording points. (1) 'Secrets never reach a model' overstates the check, which only requires a model step's declared credentialRefs to be empty; a secret in a tool output that a model reads is left to H11's redaction. (2) H11's four-valued sideEffect (none, reversible, compensatable, irreversible) is collapsed to READ_ONLY/WRITE without a stated mapping. (3) H11's per-execution human approval for irreversible tools is not recorded in a call. The README leaves approvals to H11, but 'Not claimed' does not say so.",
+   "requiredChange": "Narrow the secrets sentence to what is checked. Add one sentence mapping H11's side-effect classes onto READ_ONLY/WRITE. Add approvals to 'Not claimed'."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R1-1",
+   "disposition": "RESOLVED",
+   "evidence": "_overridden keys the rule by the subject's bytes. P01 (fresh copy) and P02 (same-bytes revision) are now refused GATE_OVERRIDDEN, and the vectors 'a fresh model step reproducing failed bytes' and 'a revision returning the failed bytes' pin them. Bytes derived through a read-only tool before the FAIL still escape; that is the new finding R2-1."
+  },
+  {
+   "finding": "R1-2",
+   "disposition": "RESOLVED",
+   "evidence": "_revision_bound allows one non-retry revision per step and bounds the chain. P03 and P04 are refused REVISION_BOUND; two sibling vectors pin them (rounds 1 and 3). P31 (a retry of a revision) is still accepted. Undeclared revisions that consume the failing gate remain open: R2-6."
+  },
+  {
+   "finding": "R1-3",
+   "disposition": "RESOLVED",
+   "evidence": "_consumers follows read-only tool outputs to writes, and DELEGATE is a direct consumer of model artefacts. P05 and P06 are refused UNGATED_CONSUMPTION; TR_READ_UNGATED stays valid, and the README states that model consumers are direct only. Indirect delegation and relay through HOOK or GATE steps remain open: R2-4, R2-5."
+  },
+  {
+   "finding": "R1-4",
+   "disposition": "RESOLVED",
+   "evidence": "The new code DELEGATION requires the parent's profile digest, a child start no earlier than its DELEGATE step, and disjoint grants. P10 and P15 are refused DELEGATION. P11 (a child recording the parent's DYNAMIC hook) is accepted. P12 is refused (the child's own conflicting profile fails UNKNOWN_REFERENCE; another profile fails DELEGATION). P13 is refused BUDGET_EXCEEDED, so the child's iterations are carried. A LOCAL hook in a child is refused HOOK_NOT_REGISTERED, and N18 (a child holding a later parent grant) is refused DELEGATION."
+  },
+  {
+   "finding": "R1-5",
+   "disposition": "RESOLVED",
+   "evidence": "P08 (re-delegation after the child HANDED_OFF) is refused HANDOFF_MISSING, and P09 (re-delegation after the child's UNKNOWN non-idempotent write) is refused UNKNOWN_SIDE_EFFECT_RETRIED, both pinned by vectors. The same class continues through children that ended ABORTED: R2-2 (N25, N26)."
+  },
+  {
+   "finding": "R1-6",
+   "disposition": "RESOLVED",
+   "evidence": "The README defines the outcomes. PROVENANCE requires a receipt on every OK write (P16 refused). A NONE write is retried only after a gateway refusal or with receipt evidence (P17 refused, N15 accepted), and a receipt-keyed retry needs the same input (vector). Pre-launch policy denial is a NOTE (R2-9); the delegation path is R2-2."
+  },
+  {
+   "finding": "R1-7",
+   "disposition": "RESOLVED",
+   "evidence": "Every unretried failing step other than a gate, hook or hand-off must hand off, and FAILED needs a gate that did not pass. P20 and P21 are refused HANDOFF_MISSING. The disguised-retry rule was removed, and P27 and P28 are still refused HANDOFF_MISSING. The ABORTED-by-hook alternative (as round 1 suggested) needs a limit for UNKNOWN side effects: R2-3."
+  },
+  {
+   "finding": "R1-8",
+   "disposition": "RESOLVED",
+   "evidence": "COMPLETED needs the delivered MODEL step to be OK. P22 is refused TERMINAL_STATUS and pinned by a vector. A non-OK step's artefact can still be consumed: NOTE R2-8."
+  },
+  {
+   "finding": "R1-9",
+   "disposition": "RESOLVED",
+   "evidence": "Untrusted tool outputs are producers. P07 is refused UNGATED_CONSUMPTION and TR_UNTRUSTED_GATED is valid. The delegation bypass is R2-5."
+  },
+  {
+   "finding": "R1-10",
+   "disposition": "RESOLVED",
+   "evidence": "check_profile refuses a SUPPLY_OUTPUT hook beside another hook's MODIFY_INPUT on one event: P33 is refused HOOK_CONFLICT, and one hook doing both is valid (vector). The README now says the 13 events adapt JAZ's and names the four operations; checked against JAZ p. 14 (Enter/Send/Complete/Exit per operation and LLMQueryRetry)."
+  },
+  {
+   "finding": "R1-11",
+   "disposition": "RESOLVED",
+   "evidence": "An ABORT on HANDOFF is SHAPE in both the schema and the model (P23). Two ABORT hooks on one event are recorded as the trailing steps (P26 accepted, TR_TWO_ABORTS valid), and aborts on two events are refused TERMINAL_STATUS (vector)."
+  },
+  {
+   "finding": "R1-12",
+   "disposition": "RESOLVED",
+   "evidence": "V058 uses SUPPLY_OUTPUT, and the attempt-skip vector runs under the 3-retry profile. The builder asserts isolation for every rule-phase refusal. My own re-run (P38) found 0 deviations: every case passes with its rule disabled or falls to its declared alsoRefusedBy (V073, V132, V138, V139)."
+  },
+  {
+   "finding": "R1-13",
+   "disposition": "RESOLVED",
+   "evidence": "The README cites Harness-Zero p. 8 for the turn limit; verified ('exhaust the turn limit', p. 8)."
+  },
+  {
+   "finding": "R1-14",
+   "disposition": "RESOLVED",
+   "evidence": "P14 is refused DUPLICATE_ID, P15 DELEGATION and P18 BUDGET_EXCEEDED. Grants are checked across the parent and its children (vector and N18). 'Not claimed' now covers cross-loop timing and grants across unrelated loops."
+  },
+  {
+   "finding": "R1-15",
+   "disposition": "RESOLVED",
+   "evidence": "A gateway-refused call (inputValid false, FAIL, no output, no receipt) is recordable: P19 accepted, TR_REFUSED_CALL valid, and N16 (a refused call with an output) refused INVALID_TOOL_INPUT. The README states the SUPPLY_OUTPUT accounting under MODEL."
+  },
+  {
+   "finding": "R1-16",
+   "disposition": "RESOLVED",
+   "evidence": "loop-profile.schema.json has `default` 1 on retry.stepRetries and 3 on revision.rounds, and the README says a producer writes both fields."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject: HEAD of the worktree is 3ab62e34 with tree 68b5e7e0, parent c488bcd3",
+   "result": "PASS"
+  },
+  {
+   "check": "Scope: exactly the five added files on 82804a0 (git diff --name-status); round 2 modifies four of them against c488bcd3 (README, loop-profile schema, vectors, model)",
+   "result": "PASS"
+  },
+  {
+   "check": "H10, H11, H13, H15 documents and schemas/ byte-identical (git diff 82804a0 3ab62e34 -- docs schemas: 0 lines)",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility: build_loop.py (identical to build_loop.r2.py) on a git archive copy reproduces both schemas and vectors.json byte for byte (sha256 before and after)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay: archive scripts/agent_loop.py replays 155 cases and 4 texts",
+   "result": "PASS"
+  },
+  {
+   "check": "README counts: 155 cases (24 valid, 131 refused), 7 profile entries (two unusable), 12 child traces (two fail their own check: child-run-6 HOOK_NOT_REGISTERED, child-run-bad TOTALS_MISMATCH; N31), four alsoRefusedBy cases; every profile and trace code has a refusal case",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions in the README are verbatim copies of PLAN.md (cmp of the four lines)",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-A: internal candidate under architecture/agent-loop/, R08 and CONF-A3-001 named, H10/H11 documents and schemas unchanged",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-B: recursion depth at most 1 with no override (schema and model maximum 1; depth-2 profile and trace vectors SHAPE; a depth-1 trace delegating is refused)",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-C bounds: stepRetries 0..3 with default 1, revision.rounds 0..3 with default 3, attempts within stepRetries + 1, each retry fed its error trace",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-C 'then hand-off to a human' after the bound",
+   "result": "FAIL: a hook abort may replace the hand-off (R2-3), and a parent may retry a child that aborted after an unresolved write (R2-2)"
+  },
+  {
+   "check": "Q-MAS8-D: per-call capability reference {grantDigest, toolId, manifestDigest, scope, expiresAt} with fields checked (CAPABILITY_MISMATCH, CAPABILITY_EXPIRED, unique grant per call and across parent and children); no key material in the vectors (digests only)",
+   "result": "PASS"
+  },
+  {
+   "check": "Roadmap MAS-RA-008 deliverables and crosswalk A1-A3: loop and hook contract with budget fields and refusal vectors (A1); tool-call and tool-result schemas with capability token, provenance and trust label (A2); bounded-retry and deterministic-gate interleaving rules (A3)",
+   "result": "PASS"
+  },
+  {
+   "check": "H11: no retry of unknown side effects",
+   "result": "FAIL: holds in one loop; through a delegation retry after a child's abort it does not (R2-2: N25, N26)"
+  },
+  {
+   "check": "H11: no secret values (broker references only, SHAPE for a value; model credentialRefs empty) and no model text as an executable command outside a signed manifest (a TOOL step names a profile tool, its manifest and input schema)",
+   "result": "PASS"
+  },
+  {
+   "check": "H13: a deterministic FAIL is never overridden; fail closed",
+   "result": "FAIL: the FAIL is overridden through a read-only tool output read before it (R2-1), and a failing hook fails open (R2-7)"
+  },
+  {
+   "check": "PDF spot checks (23 pages): JAZ pp. 4, 5, 7, 13, 14, 23, 24 (scope, built-in limits, depth 70, 13 events with Enter/Send/Complete/Exit, effects, conflicts refused, aborted span, a subagent erroring on a limit); HERMES pp. 9, 15, 16, 20, 21, 23 (B counts rounds after the first pass, default 3, 3 to 5 adds at most 0.9 points in F.3 on p. 23, diagnosis schema, deterministic failures not overridden); HarnessDev pp. 5, 8, 22, 24, 27, 28 (six modules, 441 degenerate submissions, 500-step and 7,200 s caps, honest success/partial/failed status, provider-neutral config); Harness-Zero pp. 2, 8, 22, 23 (one execute tool, turn limit, single-level delegation with at most four concurrent)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model read closely: rule order equals TRACE_CODES (module assert); first-code semantics; the profile is checked under its digest; child traces are checked in their own right; only Refused escapes (N21-N23 and the P35/P36 mutation sweeps found no escape; the one bare next() in _totals cannot fail because the child's delivered step is checked first)",
+   "result": "PASS"
+  },
+  {
+   "check": "Own mutation probes: 38 round-1 probes re-run on round-2 fixtures (P01-P23, P26-P40) and 33 new probes (N01-N26, N29-N31, N02b, N03b, N04b, N13b)",
+   "result": "PASS (run): every round-1 probe now gives the result its disposition states; 17 new probes are accepted where a refusal or a stated rule was expected, and 2 are refused where acceptance was expected (N13, N30): R2-1..R2-11"
+  },
+  {
+   "check": "Schema and model agreement: single-point mutations of 2 profiles and 6 traces, 36 detail swaps, and event/effect combinations (P35-P37)",
+   "result": "PASS"
+  },
+  {
+   "check": "Isolation of every rule-phase refusal vector (P38)",
+   "result": "PASS"
+  },
+  {
+   "check": "canonical() identical to run_manifest.canonical() and verdict_ledger.canonical() on all case and store documents; parse() refuses a BOM, 1e400, a nested duplicate, invalid UTF-8 and deep nesting as SHAPE (P39, P40)",
+   "result": "PASS"
+  },
+  {
+   "check": "Delegation DAG check time (P34): a child that fails short-circuits, so time grows linearly",
+   "result": "PASS"
+  },
+  {
+   "check": "Public hygiene: no personal data, local paths or key material in the five files",
+   "result": "PASS"
+  },
+  {
+   "check": "README accurate against the files (counts, codes, order, isolation cases, owner decisions)",
+   "result": "PASS (notes R2-10, R2-11)"
+  },
+  {
+   "check": "No overclaim: 'Not claimed' covers what the rules leave out",
+   "result": "FAIL: it does not name declared-only consumption (R2-4), undeclared revisions (R2-6) or approvals (R2-11)"
+  },
+  {
+   "check": "Light work only: no pytest, cargo, builds or dry runs; every command under timeout 300; none ran over 60 s (the longest, the probe script, took about 4 s)",
+   "result": "PASS"
+  }
+ ],
+ "probes": [
+  {
+   "id": "P01",
+   "mutation": "R1-1: patch (A16) fails unit-tests; a fresh MODEL step 'again' produces the same digest, schema-check passes it, COMPLETED delivers 'again'",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "P02",
+   "mutation": "R1-1: a revision of a failed draft returning the identical digest, gated and delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "P03",
+   "mutation": "R1-2: strict profile (rounds 1), sibling revision of draft after r1 failed",
+   "expected": "REVISION_BOUND",
+   "got": "REVISION_BOUND"
+  },
+  {
+   "id": "P04",
+   "mutation": "R1-2: default profile, five sibling revisions of one draft",
+   "expected": "REVISION_BOUND",
+   "got": "REVISION_BOUND"
+  },
+  {
+   "id": "P05",
+   "mutation": "R1-3: ungated model artefact -> READ_ONLY tool -> WRITE tool",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "P06",
+   "mutation": "R1-3: a DELEGATE step consuming an ungated model artefact directly",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "P07",
+   "mutation": "R1-9: UNTRUSTED web-search output consumed directly by the non-idempotent WRITE post-ticket, no gate",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "P08",
+   "mutation": "R1-5: child handed off; the parent retries the DELEGATE with a new child that completes",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P09",
+   "mutation": "R1-5: child's non-idempotent post-ticket UNKNOWN (child hands off); parent re-delegates and the new child posts the same ticket (CHILD_UNKNOWN / CHILD_TICKET)",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED or HANDOFF_MISSING",
+   "got": "UNKNOWN_SIDE_EFFECT_RETRIED"
+  },
+  {
+   "id": "P10",
+   "mutation": "R1-4: read-only parent profile delegates to a child under P0 that calls the WRITE post-ticket",
+   "expected": "DELEGATION",
+   "got": "DELEGATION"
+  },
+  {
+   "id": "P11",
+   "mutation": "R1-4: a depth-1 child under the parent's profile records the DYNAMIC egress-guard aborting",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P12",
+   "mutation": "R1-4: child under a profile adding its own SUPPLY_OUTPUT hook beside the parent's",
+   "expected": "UNKNOWN_REFERENCE (the child's own profile conflicts) or DELEGATION",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P13",
+   "mutation": "R1-4: iteration budget 7; the parent has 2 model steps and its child 6 (8 in all)",
+   "expected": "BUDGET_EXCEEDED",
+   "got": "BUDGET_EXCEEDED"
+  },
+  {
+   "id": "P14",
+   "mutation": "R1-14: one child digest delegated twice",
+   "expected": "DUPLICATE_ID",
+   "got": "DUPLICATE_ID"
+  },
+  {
+   "id": "P15",
+   "mutation": "R1-14: a child starting before its DELEGATE step (CHILD_EARLY)",
+   "expected": "DELEGATION",
+   "got": "DELEGATION"
+  },
+  {
+   "id": "P16",
+   "mutation": "R1-6: TR_OK's successful write-file with receiptRef null",
+   "expected": "PROVENANCE",
+   "got": "PROVENANCE"
+  },
+  {
+   "id": "P17",
+   "mutation": "R1-6: non-idempotent post-ticket ERROR (no evidence of no effect) retried with the same input",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED",
+   "got": "UNKNOWN_SIDE_EFFECT_RETRIED"
+  },
+  {
+   "id": "P18",
+   "mutation": "R1-14: TOOL step wallClockSeconds 120 against timeoutSeconds 60",
+   "expected": "BUDGET_EXCEEDED",
+   "got": "BUDGET_EXCEEDED"
+  },
+  {
+   "id": "P19",
+   "mutation": "R1-15: gateway-refused read (inputValid false, FAIL, no output, no receipt), retried with a fixed input",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P20",
+   "mutation": "R1-7: default profile, a model error, loop ends FAILED without retry or hand-off",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P21",
+   "mutation": "R1-7: the same under the 0-retry profile",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P22",
+   "mutation": "R1-8: COMPLETED delivering a MODEL step whose outcome is ERROR (retried; a gate passed its bytes)",
+   "expected": "TERMINAL_STATUS",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "P23",
+   "mutation": "R1-11: profile with an ABORT hook on HANDOFF",
+   "expected": "SHAPE",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "P26",
+   "mutation": "R1-11: two ABORT hooks on one event both recorded as the last steps",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P27",
+   "mutation": "retries spent on read-file, then a disguised retry with another input digest before the hand-off",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P28",
+   "mutation": "UNKNOWN non-idempotent post-ticket, then a read-only tool before the hand-off",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P29",
+   "mutation": "a failing gate retried by a passing run, then the artefact delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "P30",
+   "mutation": "a model step consuming a failed artefact laundered through a read-only tool AFTER the FAIL",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "P31",
+   "mutation": "a revision that errors, retried (same revises, attempt 2, its own error trace), succeeds",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P32",
+   "mutation": "capability expiresAt equal to the call's startedAt",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P33",
+   "mutation": "R1-10: MODIFY_INPUT (rewrite) and SUPPLY_OUTPUT (prompt-cache) by two hooks on MODEL_QUERY_BEFORE",
+   "expected": "HOOK_CONFLICT",
+   "got": "HOOK_CONFLICT"
+  },
+  {
+   "id": "N01",
+   "mutation": "failed bytes laundered through a read-only tool output read BEFORE the FAIL: patch passes schema-check, read-file reads it, unit-tests FAILs patch, then write-file consumes the read's output",
+   "expected": "GATE_OVERRIDDEN (a deterministic FAIL decides wherever its bytes flow; MAS-RA-001 rule 7)",
+   "got": "accepted"
+  },
+  {
+   "id": "N02",
+   "mutation": "the same, but a MODEL step consumes the pre-FAIL read output after the FAIL and is delivered",
+   "expected": "GATE_OVERRIDDEN (as 'a model step building on a failed artefact without revising it')",
+   "got": "accepted"
+  },
+  {
+   "id": "N02b",
+   "mutation": "control for N02: the read happens AFTER the FAIL (only the timing differs)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "N03",
+   "mutation": "strict profile (revision.rounds 1): draft fails, r1 (the one round) fails, then a fresh MODEL step that consumes the failing GATE step (its diagnosis) without declaring a revision, passes, delivered",
+   "expected": "REVISION_BOUND or a refusal (a second revision round in answer to a gate)",
+   "got": "accepted"
+  },
+  {
+   "id": "N03b",
+   "mutation": "same, with revision.rounds 0 never used: a fresh model step consumes the failing gate and is delivered",
+   "expected": "a refusal or a stated non-claim",
+   "got": "accepted"
+  },
+  {
+   "id": "N04",
+   "mutation": "an ungated model artefact passed through a HOOK step (consumes it, produces the same digest) to a WRITE",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "accepted"
+  },
+  {
+   "id": "N04b",
+   "mutation": "the same through a GATE step on another (passed) subject that declares consuming the ungated artefact",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "accepted"
+  },
+  {
+   "id": "N05",
+   "mutation": "an ungated model artefact read by a READ_ONLY tool whose output a DELEGATE consumes (the child runs under a profile with WRITE tools)",
+   "expected": "UNGATED_CONSUMPTION (a delegation can reach writes, as a write tool can)",
+   "got": "accepted"
+  },
+  {
+   "id": "N06",
+   "mutation": "an UNTRUSTED web-search output handed directly to a DELEGATE, no gate",
+   "expected": "UNGATED_CONSUMPTION or a stated rule",
+   "got": "accepted"
+  },
+  {
+   "id": "N07",
+   "mutation": "the parent's DYNAMIC egress-guard aborts the child (HOOK_ABORT); the parent retries the delegation and a new child completes",
+   "expected": "a refusal ('abort wins'; DYNAMIC reaches the loops it delegates to), or a stated rule",
+   "got": "accepted"
+  },
+  {
+   "id": "N08",
+   "mutation": "the child aborted by a hook and the parent continues without retrying it",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "N09",
+   "mutation": "an UNKNOWN non-idempotent post-ticket, then the budget-stop hook aborts: ABORTED/HOOK_ABORT, no hand-off",
+   "expected": "HANDOFF_MISSING if Q-MAS8-C's 'then hand-off to a human' and H10's operator review bind; accepted by the README's 'or ABORTED by a hook'",
+   "got": "accepted"
+  },
+  {
+   "id": "N10",
+   "mutation": "a child with an UNKNOWN non-idempotent write ends ABORTED by a hook; the parent retries the delegation and the new child posts the ticket",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED",
+   "got": "UNKNOWN_SIDE_EFFECT_RETRIED"
+  },
+  {
+   "id": "N11",
+   "mutation": "the egress-guard HOOK step itself ERRORs (the guard did not run), and the guarded post-ticket call proceeds; COMPLETED",
+   "expected": "a refusal (H13: fail closed), or a stated outcome rule for hooks",
+   "got": "accepted"
+  },
+  {
+   "id": "N12",
+   "mutation": "a HANDOFF step with outcome ERROR (the hand-off did not complete), status HANDED_OFF",
+   "expected": "a refusal or a stated rule",
+   "got": "accepted"
+  },
+  {
+   "id": "N13",
+   "mutation": "an observing HANDOFF-event hook recorded after the HANDOFF step it observes",
+   "expected": "accepted (README: 'After it, only hook steps follow')",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "N13b",
+   "mutation": "control: the same hook recorded before the HANDOFF step",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "N14",
+   "mutation": "a MODEL step that ended ERROR (did not complete) carries an artefact; it is retried, a gate passes the ERROR step's bytes and a WRITE consumes them",
+   "expected": "a refusal (README: only an OK step's output is its artefact) or a stated rule",
+   "got": "accepted"
+  },
+  {
+   "id": "N15",
+   "mutation": "a NONE write that ended FAIL after launch (inputValid true) with evidence of no effect, retried",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "N16",
+   "mutation": "a gateway-refused call recorded with an output digest (inputValid false, FAIL, output present)",
+   "expected": "INVALID_TOOL_INPUT",
+   "got": "INVALID_TOOL_INPUT"
+  },
+  {
+   "id": "N17",
+   "mutation": "a receipt-keyed write retried after OK? (a retry of a step that succeeded)",
+   "expected": "RETRY_WITHOUT_TRACE",
+   "got": "RETRY_WITHOUT_TRACE"
+  },
+  {
+   "id": "N18",
+   "mutation": "a child holding the grant of a parent tool call that comes AFTER the delegation",
+   "expected": "DELEGATION",
+   "got": "DELEGATION"
+  },
+  {
+   "id": "N19",
+   "mutation": "a depth-1 child that delegates again is refused in its own right; its parent then refuses it as a reference",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "N20",
+   "mutation": "a depth-1 trace standing alone, naming a parent that does not exist anywhere",
+   "expected": "accepted (no cross-store parent check; stated?)",
+   "got": "accepted"
+  },
+  {
+   "id": "N21",
+   "mutation": "check_trace(None)",
+   "expected": "SHAPE or UNKNOWN_REFERENCE, nothing else escapes",
+   "got": "SHAPE"
+  },
+  {
+   "id": "N22",
+   "mutation": "check_trace with stores None and a DELEGATE",
+   "expected": "SHAPE or UNKNOWN_REFERENCE, nothing else escapes",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "N23",
+   "mutation": "check_trace with a non-dict child in the trace store",
+   "expected": "SHAPE or UNKNOWN_REFERENCE, nothing else escapes",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "N25",
+   "mutation": "a child's receipt-keyed write-file ends UNKNOWN and the child is aborted by a DYNAMIC hook; the parent retries the delegation and the new child writes under ANOTHER input (another receipt key)",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED (in-loop analogue V-case 'a receipt-keyed write retried with another input' is refused)",
+   "got": "accepted"
+  },
+  {
+   "id": "N26",
+   "mutation": "a child's non-idempotent post-ticket ends ERROR with no receiptRef (no evidence of no effect) and a hook aborts the child; the parent re-delegates and the new child posts the ticket again (CHILD_TICKET)",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED (in-loop analogue is refused)",
+   "got": "accepted"
+  },
+  {
+   "id": "N24",
+   "mutation": "revision.rounds 1: a child spends its one round and ends FAILED; the parent retries the delegation and a second child gets a second round on the same task",
+   "expected": "a refusal, or a statement that revision rounds are per loop and multiply by the parent's retries",
+   "got": "accepted"
+  },
+  {
+   "id": "N29",
+   "mutation": "a write consuming a trusted read-only tool step whose output digest equals an ungated model artefact's (same bytes, no declared consumption of the model step)",
+   "expected": "UNGATED_CONSUMPTION if consumption were keyed by bytes as GATE_OVERRIDDEN now is",
+   "got": "accepted"
+  },
+  {
+   "id": "N30",
+   "mutation": "a receipt-keyed write-file denied before launch by policy (inputValid true: the input is schema-valid; FAIL, no output, no receipt), retried with a corrected input",
+   "expected": "accepted (H11: a policy or approval denial prevents launch, so no key was used)",
+   "got": "UNKNOWN_SIDE_EFFECT_RETRIED"
+  },
+  {
+   "id": "N31",
+   "mutation": "each of the 12 stored child traces checked in its own right",
+   "expected": "README: two fail their own check",
+   "got": "child-run:ok; child-run-10:ok; child-run-11:ok; child-run-2:ok; child-run-3:ok; child-run-4:ok; child-run-5:ok; child-run-6:HOOK_NOT_REGISTERED; child-run-7:ok; child-run-8:ok; child-run-9:ok; child-run-bad:TOTALS_MISMATCH"
+  },
+  {
+   "id": "P34",
+   "mutation": "delegation DAG of distinct depth-1 traces, two per level, each delegating to both traces of the next level",
+   "expected": "a quick refusal (a depth-1 trace may not delegate)",
+   "got": "4 levels: UNKNOWN_REFERENCE in 0.000 s; 8 levels: UNKNOWN_REFERENCE in 0.001 s; 10 levels: UNKNOWN_REFERENCE in 0.001 s; 12 levels: UNKNOWN_REFERENCE in 0.001 s"
+  },
+  {
+   "id": "P35",
+   "mutation": "2509 single-point mutations of the P0 and abort-twice profiles (type, value, delete key, add key)",
+   "expected": "the model refuses SHAPE exactly when the schema rejects; nothing escapes",
+   "got": "0 disagreements"
+  },
+  {
+   "id": "P36",
+   "mutation": "10043 single-point mutations of TR_OK, TR_REVISE_HANDOFF, PARENT, TR_HOOK_ABORT, TR_REFUSED_CALL and CHILD_HANDED",
+   "expected": "agreement; nothing escapes",
+   "got": "0 disagreements"
+  },
+  {
+   "id": "P37",
+   "mutation": "every step kind with every other kind's detail (36); every event with 7 effect lists in a profile hook (91) and with every effect or null in a trace HOOK step (65)",
+   "expected": "agreement",
+   "got": "0 detail-swap and 0 event/effect disagreements"
+  },
+  {
+   "id": "P38",
+   "mutation": "each rule-phase refusal vector re-run with its own rule disabled",
+   "expected": "accepted, or the declared alsoRefusedBy code",
+   "got": "0 deviations"
+  },
+  {
+   "id": "P39",
+   "mutation": "canonical() of all 167 case and store documents against run_manifest.canonical() and verdict_ledger.canonical()",
+   "expected": "identical bytes",
+   "got": "run_manifest identical; verdict_ledger identical"
+  },
+  {
+   "id": "P40",
+   "mutation": "parse(): a BOM, 1e400, a nested duplicate member, an integral 1.0, invalid UTF-8, 100000-deep nesting",
+   "expected": "SHAPE, SHAPE, SHAPE, accepted with the integer's digest, SHAPE, SHAPE",
+   "got": "BOM: SHAPE; 1e400 tokens: SHAPE; nested duplicate: SHAPE; integral 1.0 attempt: accepted; invalid UTF-8 bytes: SHAPE; deep nesting: SHAPE; digest(1.0) == digest(1): True"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/BRIEF-r2.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/PLAN.md (Q-231, Q-MAS8-A..D owner decisions)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (byte-identical to build_loop.r2.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/review-round1.json and the round-1 probe script and probe results (read only)",
+  "architecture/agent-loop/README.md, loop-profile.schema.json, loop-trace.schema.json, vectors.json at 3ab62e34",
+  "scripts/agent_loop.py at 3ab62e34; git diff c488bcd3 3ab62e34",
+  "roadmap/roadmap.json item MAS-RA-008 (planning workspace): description, deliverables, grounding with pages",
+  "architecture/research-adoption-v2/crosswalk.json at 82804a0 (acceptance MAS-RA-008-A1..A3, decision HO-D2)",
+  "docs/harnesses/execution.orchestration.md (H10), docs/harnesses/execution.tool-skill-sandbox.md (H11), docs/harnesses/trust.security-safety.md (H13); docs/harnesses/trust.observability-finops.md (H15) budget lines",
+  "architecture/verdict-ledger/README.md (rules 4 and 7: deterministic FAIL), scripts/verdict_ledger.py and scripts/run_manifest.py (canonical, parse)",
+  "roadmap/research/papers/2609.26891v1-jaz.pdf pp. 4, 5, 7, 13, 14, 23, 24 (full text searched for limits and exceptions)",
+  "roadmap/research/papers/2610.07832v1-hermes.pdf pp. 9, 15, 16, 20, 21, 23",
+  "roadmap/research/papers/2609.01437v1-harnessdev.pdf pp. 5, 8, 22, 24, 27, 28",
+  "roadmap/research/papers/2609.24974v1-harness-zero.pdf pp. 2, 8, 22, 23 (full text searched for the turn limit and delegation)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "notes": "Writes only in the review work directory (an archive copy, the probe script and its output, page text extracts, this record). The first shell command, which read this brief, ran before the PAUSE rule was known and had no PAUSE prefix; every later command carried it."
+ }
+}

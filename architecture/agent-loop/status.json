@@ -1,0 +1,233 @@
+{
+ "schemaVersion": "planeon.internal.agent-loop-status/v1",
+ "workItem": "MAS-RA-008",
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "contract": {
+  "schemas": [
+   "architecture/agent-loop/loop-profile.schema.json",
+   "architecture/agent-loop/loop-trace.schema.json"
+  ],
+  "vectors": "architecture/agent-loop/vectors.json",
+  "model": "scripts/agent_loop.py",
+  "readme": "architecture/agent-loop/README.md"
+ },
+ "reviewedSubject": {
+  "commit": "d6ad8f0801da22091f0c543879dde26817e20590",
+  "tree": "72cb7d18f8e5ae81866458a79a0228506238736b"
+ },
+ "adoptionEdit": {
+  "path": "architecture/agent-loop/README.md",
+  "replaced": "Status: **CONTRACT_CANDIDATE** (under independent review).",
+  "with": "Status: **ADOPTED_CONTRACT_CANDIDATE** (independent review rounds 1-10, the last final by owner decision; its findings fixed after it; rounds, review records and fixes in `status.json`).",
+  "reviewedSha256": "4f2ce4753d08507a14be4119c1aee95e06e695a1786213de854f1af70a88178e",
+  "adoptedSha256": "666c4221d3edbdd5187c17db9c43c122b1f7900a9fa0b3ddc430db3bee2b8e5a"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "c488bcd384f8cc29c7d53782c203477832129b85",
+   "subjectTree": "afe67ae73ba48798073eed2cca5b4810aac93955",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round1.json",
+   "snapshot": "architecture/agent-loop/round1/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "ff69350fc88628d311e7c31aadc4cbbdf0975afeb97b5f3f14e13717fe9de7e9"
+   }
+  },
+  {
+   "round": 2,
+   "subject": "3ab62e34aa386a20ac036e017fc75dd17f218f03",
+   "subjectTree": "68b5e7e0a89d860ef3edb60530694b800b7e417e",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round2.json",
+   "snapshot": "architecture/agent-loop/round2/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "8bc9f2dda817393d89b913f095408034403f814b07f2a3f995877e2cecb71a2d"
+   }
+  },
+  {
+   "round": 3,
+   "subject": "102782c20acaced9b3dd6ca6609c0c9a892ff161",
+   "subjectTree": "beddfcacce17b42230f43f2d52f26b05ccc786e6",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round3.json",
+   "snapshot": "architecture/agent-loop/round3/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "2a1076ab83faadc55fae9db4887ad35aea33b189d4895142b31038d13ff002ad"
+   }
+  },
+  {
+   "round": 4,
+   "subject": "f6011a3a93718f8d51753c837e542621467e34a1",
+   "subjectTree": "e90d967cb93d324df5f2d83320cd0de5c753d8cc",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round4.json",
+   "snapshot": "architecture/agent-loop/round4/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "9ca8b2b228c3cc76dfdd52a2af5ddaefcd2066f5b0ceb8fd4af20d58cc400c02"
+   }
+  },
+  {
+   "round": 5,
+   "subject": "c248aa4253b959be54381ca8954ab2d209d3027d",
+   "subjectTree": "1e0f6eec4392550c556f7460b2326ba88c2b493d",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round5.json",
+   "snapshot": "architecture/agent-loop/round5/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "819a9a5ec3b559d1272d4419b17db0d9ce7e941d7aa5f2aa63e751c4a7e6cb7e"
+   }
+  },
+  {
+   "round": 6,
+   "subject": "5708b1abfe14b4eca838b847459d71ed5c39f76d",
+   "subjectTree": "ce61007761b4cfb1eb6382b0bc0dc906eed6382e",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round6.json",
+   "snapshot": "architecture/agent-loop/round6/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "8b5d4cdb4220d8bd1935b1ac00c62978d2f28b80f4c56f751204da105e8b8731"
+   }
+  },
+  {
+   "round": 7,
+   "subject": "4ca90905ba7908af382fb45f82a645d551857a91",
+   "subjectTree": "e3e60e17639ff0fcef0cd401347daccd7201dcc2",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round7.json",
+   "snapshot": "architecture/agent-loop/round7/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "9b4c44d0dd0f0bce4b00a30d16ee9403c5b36880f20c76fc84730247f5611904"
+   }
+  },
+  {
+   "round": 8,
+   "subject": "dd0d4a12df6361facdaeee1330634baaf1a0deb3",
+   "subjectTree": "825262b517a869fbe3247318d5e3de5532287d39",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round8.json",
+   "snapshot": "architecture/agent-loop/round8/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "e502f31f5a927d61104fa980ccebc46bdb294e16e0e3e0cfb6a5a2c45fd91eef"
+   }
+  },
+  {
+   "round": 9,
+   "subject": "a7adee02bdc1158583e136f68737c9d850321128",
+   "subjectTree": "bc91398f69fa8d4ce83d31902dc812d760ff55b5",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round9.json",
+   "snapshot": "architecture/agent-loop/round9/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "930ddaeaef4135a0e7de26c6f29bdd6272905921ee2e3dbd51e2f589fa4b11df"
+   }
+  },
+  {
+   "round": 10,
+   "subject": "d6ad8f0801da22091f0c543879dde26817e20590",
+   "subjectTree": "72cb7d18f8e5ae81866458a79a0228506238736b",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/agent-loop/review-round10.json",
+   "snapshot": "architecture/agent-loop/round10/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/agent-loop/vectors.json": "d1efc602178b17d82053b13fc95efb870fb826a436e96a96e0e1014d09c85122"
+   }
+  }
+ ],
+ "carried": [],
+ "acceptance": [
+  "MAS-RA-008-A1",
+  "MAS-RA-008-A2",
+  "MAS-RA-008-A3"
+ ],
+ "ownerDecisions": [
+  "Q-MAS8-A (a)",
+  "Q-MAS8-B (a)",
+  "Q-MAS8-C (a)",
+  "Q-MAS8-D (a)",
+  "Q-231 (a)"
+ ],
+ "nonClaims": [
+  "An internal contract candidate: no public contract, selector, catalog, schema or runtime change; H10's and H11's harness documents and the repository schemas are byte-identical.",
+  "No agent-loop kernel, tool gateway or broker exists; the model runs only on the vectors.",
+  "The cited figures are the source papers' results, not platform evidence."
+ ],
+ "finalRoundFixes": {
+  "ownerDecision": "MAS-RA-008 cap: contract review round 10 is FINAL. MINORs and NOTEs found there are fixed or carried without another round; any MAJOR comes to the owner (via me) first.",
+  "ownerDecisionDate": "2026-10-13",
+  "reviewedSubject": {
+   "commit": "d6ad8f0801da22091f0c543879dde26817e20590",
+   "tree": "72cb7d18f8e5ae81866458a79a0228506238736b"
+  },
+  "fixedSubject": {
+   "commit": "03709498e24f554b578ba4467c03dc15d0ae1322",
+   "tree": "662efe420b6055856d14fb18427465079a65a8d7"
+  },
+  "changedFiles": [
+   "architecture/agent-loop/README.md",
+   "architecture/agent-loop/vectors.json",
+   "scripts/agent_loop.py"
+  ],
+  "dispositions": [
+   {
+    "finding": "R10-1",
+    "disposition": "FIXED",
+    "evidence": "The reviewer's sketch alt10 is adopted: _repairer_inputs and its two call sites; the model equals the sketch apart from docstrings (the sketch markers removed, the _fail_scope and _overridden docstrings reworded). An exempt delegation carries only the child's repair; in its child, the other covered inputs it consumed stay covered. Vectors V209 (K1006, a revision reading the derived bytes, valid) and V210 (K1001, a delivery built on them, GATE_OVERRIDDEN; round 10 accepts it), with the stored children child-run-26 and child-run-27. The README's third bullet of 'A FAIL crosses the delegation boundary' states the narrower exemption."
+   },
+   {
+    "finding": "R10-2",
+    "disposition": "FIXED",
+    "evidence": "The README states the class of fail-closed cases in the reviewer's words instead of two cases."
+   },
+   {
+    "finding": "R10-3",
+    "disposition": "FIXED",
+    "evidence": "(1) _fail_scope's docstring ends: the delegation itself is covered only through the copy edge; (2) the README header says Alpha 3, built in Alpha 2 (owner decision Q-231); (3) the 'Not claimed' item adds 'beyond the re-gate of its revisions'."
+   }
+  ]
+ }
+}

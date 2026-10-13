@@ -1,0 +1,484 @@
+{
+ "schemaVersion": "harness.planeon.ai/agent-loop-review/v1",
+ "kind": "agent-loop-review",
+ "round": 1,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "c488bcd384f8cc29c7d53782c203477832129b85",
+ "subjectTree": "afe67ae73ba48798073eed2cca5b4810aac93955",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _overridden; README 'Deterministic gates interleave' (GATE_OVERRIDDEN)",
+   "finding": "A gate's FAIL can be overridden through artefact identity. GATE_OVERRIDDEN is keyed by step ID only, so the bytes a deterministic gate failed can be delivered under another step: a fresh MODEL step that produces the same digest, or a 'revision' that returns the identical digest, passes a gate and is delivered COMPLETED (probes P01, P02 accepted). The README says a FAIL holds 'even if another gate, or a later run of the same gate, passes it'; the digest is in the record, so this is detectable and the H13 / MAS-RA-001 / HERMES rule is bypassed.",
+   "requiredChange": "Key the rule by artefact digest as well: once a gate FAILs a step whose artefact is X, no later step whose `produces` is X may be consumed (other than by a revision) or delivered, and a revision must produce a digest different from the artefact it revises. Add refusal vectors for both shapes (P01, P02)."
+  },
+  {
+   "id": "R1-2",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _revision_bound; README 'Revisions' (Q-MAS8-C)",
+   "finding": "The revision budget counts chain depth, so sibling revisions bypass it. Several revisions may each declare `revises` = the original draft with that draft's diagnosis; every chain is one round deep. Under the strict profile (rounds 1) two revision rounds pass (P03), and under the default profile (rounds 3) five sibling revisions pass (P04). Q-MAS8-C makes revision rounds a separate budget of at most 3, and HERMES's B is the number of rounds after the first pass (pp. 15-16, 21), not a depth. These revisions are declared, so unlike disguised model retries they are detectable.",
+   "requiredChange": "Count rounds per root artefact over the whole revision tree, for example by allowing each step to be revised at most once (retries of a revision, which share `revises` and carry `retryOf`, excepted) so revisions form a chain, then bounding the chain. Add the sibling vectors as REVISION_BOUND refusals."
+  },
+  {
+   "id": "R1-3",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _consumers / _ungated; README 'Deterministic gates interleave' (A3)",
+   "finding": "The gate-interleaving consumer set has two holes. (1) Laundering: an ungated model artefact read by a READ_ONLY tool whose output a WRITE tool then consumes reaches the write with no gate (P05 accepted); the read-only exemption is applied to direct consumption only and nothing follows the artefact through tool outputs. (2) A DELEGATE step is not a consumer, so an ungated model artefact can be handed to a delegated loop (P06 accepted). Both defeat A3's purpose, that an unchecked per-step error does not compound into a side effect.",
+   "requiredChange": "Make consumption transitive through TOOL steps at least for WRITE tools (a write tool that consumes a tool output derived from an ungated model artefact is UNGATED_CONSUMPTION), and add DELEGATE to the consumer kinds. State whether transitivity also applies to MODEL consumers (that would change the valid vector TR_READ_UNGATED) and add vectors."
+  },
+  {
+   "id": "R1-4",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _references / _recursion / _totals; README 'Hooks' (scope) and 'Totals and budgets'",
+   "finding": "Delegation escapes the parent's profile. The child's profile is unconstrained: a parent whose profile lists only read-only tools delegates to a child under another profile that calls the non-idempotent WRITE tool post-ticket (P10 accepted), and the child may also carry larger retry and revision bounds and fewer hooks. DYNAMIC scope ('this loop and the loops it delegates to'; JAZ p. 4: scoped hooks apply to all sub-invokes) has no trace semantics: a child cannot record the parent's DYNAMIC hook firing (P11 refused UNKNOWN_REFERENCE, a correct loop refused), and the parent's DYNAMIC hooks are never conflict-checked against the child's (P12: two SUPPLY_OUTPUT hooks on one event in the child's effective set, accepted). Iterations are not carried: a parent with an iteration budget of 2 delegates to a child that makes 6 model queries (P13 accepted), which contradicts the README's 'a delegation cannot hide spending from the parent's budget'.",
+   "requiredChange": "Bind the child's profile to the parent's in the delegation check (RECURSION_DEPTH or a new code): either the same profile digest in v1, or a restriction rule (child tools a subset of the parent's with the same manifest, schema, scope, side effect, idempotency and trust; child hooks include every DYNAMIC hook of the parent, so the child's own HOOK_CONFLICT check and HOOK steps cover them; child retry, revision and budgets not above the parent's). Carry the child's iterations into the parent's accounting or narrow the README claim to tokens and wall-clock. Add vectors."
+  },
+  {
+   "id": "R1-5",
+   "severity": "MAJOR",
+   "location": "scripts/agent_loop.py _exhausted / _unknown_retried / _handoff (DELEGATE steps)",
+   "finding": "A parent can override a child's hand-off and re-run an unknown side effect. A DELEGATE whose child HANDED_OFF (its retries spent) is an ordinary failing step, so the parent retries it with a new child that completes (P08 accepted): the hand-off to a human is ignored and nested bounds multiply (up to 4 x 4 attempts of one call). Worse, when the child handed off because its non-idempotent post-ticket ended UNKNOWN, the parent re-delegates and the new child posts the same ticket with the same input digest (P09 accepted), which breaks H11's 'never retry unknown side effects' and H10's 'never blindly retried'.",
+   "requiredChange": "A DELEGATE whose child ended HANDED_OFF, or whose child holds an unretried UNKNOWN step on a WRITE tool without idempotency, is never retried: it is followed only by hooks and a HANDOFF and the parent ends HANDED_OFF (extend _exhausted / unknown_unsafe to DELEGATE). Add refusal vectors for P08 and P09."
+  },
+  {
+   "id": "R1-6",
+   "severity": "MAJOR",
+   "location": "loop-trace.schema.json result.provenance.receiptRef; scripts/agent_loop.py _provenance / _retry_trace; README 'TOOL' and 'Bounded retry'",
+   "finding": "Tool receipts and non-idempotent retries are not specified, though HO-D2 makes this item CONF-A3-001's dependency for 'tool receipts, outcome review, bounded retry'. `receiptRef` is nullable and unchecked: a successful write-file call with no receipt passes (P16). The outcomes OK / FAIL / ERROR / UNKNOWN are not defined, and only UNKNOWN blocks a retry, so a non-idempotent post-ticket call that ended ERROR is retried with no receipt or lookup (P17 accepted). H11: 'Non-idempotent actions retry only with an authoritative receipt lookup proving no prior effect'; H10 lists 'retry policy for an operation lacking idempotency/receipt semantics' as a conflict.",
+   "requiredChange": "Define the outcomes against H11's execution states (for example FAIL/ERROR = settled with no external effect, as the broker established; UNKNOWN = H11's OUTCOME_UNKNOWN). Require a receiptRef on every OK result of a WRITE tool. Allow a retry of a WRITE tool without NATIVE idempotency only when the failed step records the evidence of no prior effect (a receipt or lookup reference), or refuse it. Add vectors."
+  },
+  {
+   "id": "R1-7",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _exhausted / _handoff / _terminal (FAILED)",
+   "finding": "A loop can skip the retry-then-hand-off path by not using its retries: under the default profile a model step errors and the loop ends FAILED with neither retry nor hand-off (P20 accepted), while the same trace under the 0-retry profile is refused HANDOFF_MISSING (P21). A larger retry allowance thus weakens the hand-off obligation of Q-MAS8-C.",
+   "requiredChange": "Make a failing step (other than a gate or hook) that is not retried end in a hand-off whatever its attempt, unless the loop ABORTED; or define FAILED narrowly (for example a gate-failed artefact whose revision budget is spent) and refuse FAILED otherwise. Add the P20 vector."
+  },
+  {
+   "id": "R1-8",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _terminal (COMPLETED)",
+   "finding": "The delivered step's own outcome is not checked: COMPLETED delivers a MODEL step whose outcome is ERROR (it was retried and a gate passed its bytes) (P22 accepted). 'The status is honest' (HarnessDev's honest status, p. 27) implies the delivered artefact comes from a step that succeeded.",
+   "requiredChange": "Require the delivered step's outcome to be OK (and, for the child of a DELEGATE, the same holds through the child's own check). Add a TERMINAL_STATUS vector."
+  },
+  {
+   "id": "R1-9",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _model_artifacts; README 'Not claimed' (trust labels)",
+   "finding": "Trust labels have no consequence in any rule: an UNTRUSTED tool output (web-search) is consumed directly by the non-idempotent WRITE tool post-ticket with no gate (P07 accepted). H13 lists output and tool injection among its tests; the README's non-claim covers whether an output carried an injection, not this flow.",
+   "requiredChange": "Either treat an UNTRUSTED_TOOL_OUTPUT consumed by a WRITE tool like a model artefact (a passing gate on that tool step between production and consumption) or add this flow explicitly to 'Not claimed'."
+  },
+  {
+   "id": "R1-10",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py EVENT_EFFECTS / check_profile; README 'Hooks' and 'Effects compose'",
+   "finding": "The hook model departs from JAZ's staged events without saying so. JAZ (p. 14) has 13 events as Enter/Send/Complete/Exit per operation plus LLMQueryRetry: Enter modifies inputs, Send (which sees the modified inputs) supplies the output. The contract merges Enter and Send into one BEFORE event, so a MODIFY_INPUT hook and a SUPPLY_OUTPUT hook on one event are neither a conflict nor ordered (P33 accepted): a cache or mock hook can answer from the unmodified (for example unredacted) input. The README also says the 13 events cover 'three operations, before and after each', but the set has four before/after pairs (invoke, model query, tool call, execution) plus five others, and it reuses JAZ's count for a different set.",
+   "requiredChange": "Either stage the composition (SUPPLY_OUTPUT sees the input after every MODIFY_INPUT on the event) or refuse MODIFY_INPUT together with SUPPLY_OUTPUT on one event as HOOK_CONFLICT; correct the README wording and say the event set is an adaptation of JAZ's, not JAZ's."
+  },
+  {
+   "id": "R1-11",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _terminal (HOOK_ABORT); EVENT_EFFECTS[HANDOFF]",
+   "finding": "Some hook aborts the profile accepts can never be recorded. A hook with ABORT on the HANDOFF event is accepted (P23), but no trace can record it firing: after the HANDOFF step it breaks 'the hand-off is the last step', before it the trace cannot end ABORTED (P24, P25 refused TERMINAL_STATUS). Two ABORT hooks on one event, which vector V004 says compose, cannot both be recorded because only the first abort may be the last step (P26 refused).",
+   "requiredChange": "Define what ABORT on HANDOFF means (or remove it from that event's allowed effects) and let simultaneous aborts on one event be recorded (for example all abort steps of the final event at the end). Add vectors."
+  },
+  {
+   "id": "R1-12",
+   "severity": "MINOR",
+   "location": "architecture/agent-loop/vectors.json V058, V098",
+   "finding": "Two refusal vectors do not isolate their code. With its own rule disabled, V058 ('a hook step with an effect its hook did not register', effect ABORT on the last step) is still refused TERMINAL_STATUS, and V098 ('a retry skipping an attempt number', attempt 3 under one retry) is still refused RETRY_BOUND (P38). Every other rule-phase vector isolates its code.",
+   "requiredChange": "Use an unregistered non-abort effect for V058 (for example SUPPLY_OUTPUT on the TOOL_RESULT_AFTER hook) and a profile with retries to spare for V098 (for example the 3-retry profile). Optionally assert isolation in the builder."
+  },
+  {
+   "id": "R1-13",
+   "severity": "NOTE",
+   "location": "README 'Grounding' (Harness-Zero)",
+   "finding": "Harness-Zero's 'turn limit' is not on the cited pages 2, 22-23; it appears on p. 8 ('exhaust the turn limit'). One execute tool, fresh shell and single-level delegation (at most four concurrent) are on p. 23. The page list is inherited from the roadmap grounding.",
+   "requiredChange": "Add p. 8 to the Harness-Zero citation or drop 'a turn limit' (and correct the crosswalk or roadmap grounding when next edited)."
+  },
+  {
+   "id": "R1-14",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py (cross-trace and timing consistency); README 'Not claimed'",
+   "finding": "Some consistency is unchecked and not listed as a non-claim: one child digest delegated twice in a parent is counted twice (P14); a child may start before its parent and its DELEGATE step (P15); grant digests are unique only within one trace, not across a parent and its children; a TOOL step may run longer than its call's timeoutSeconds (P18).",
+   "requiredChange": "Check these or add them to 'Not claimed'."
+  },
+  {
+   "id": "R1-15",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _tool_input; README 'TOOL' and 'Hooks'",
+   "finding": "`inputValid` admits only true, so a call the gateway refused before launch (the typed boundary working) cannot be recorded (P19 refused INVALID_TOOL_INPUT); and an operation skipped by SUPPLY_OUTPUT has no stated accounting (whether a MODEL step and an iteration are recorded).",
+   "requiredChange": "Optionally allow a refused call (inputValid false, outcome FAIL or ERROR, no output, no receipt) and state the SUPPLY_OUTPUT accounting; otherwise say so in the README."
+  },
+  {
+   "id": "R1-16",
+   "severity": "NOTE",
+   "location": "loop-profile.schema.json retry.stepRetries, revision.rounds",
+   "finding": "Q-MAS8-C's defaults (one retry; three revision rounds) are not encoded: both fields are required with no default, so the default lives only in the README prose.",
+   "requiredChange": "Add JSON Schema `default` annotations (1 and 3) or state that producers must default to them."
+  }
+ ],
+ "dispositions": [],
+ "checksRun": [
+  {
+   "check": "Scope: exactly the five added files at c488bcd3 on 82804a0 (git diff --name-status)",
+   "result": "PASS"
+  },
+  {
+   "check": "H10 and H11 harness documents, docs/ and schemas/ unchanged (git diff --quiet 82804a0..c488bcd3 -- docs schemas)",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility: build_loop.py on a git archive copy reproduces both schemas and vectors.json byte for byte (sha256 before and after; README and model untouched)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay of 124 cases and 4 texts (venv python and system python, -I -B)",
+   "result": "PASS"
+  },
+  {
+   "check": "Vector counts against README: 124 cases, 17 valid, 107 refused, 4 texts, stores 6 profiles / 4 traces, every profile and trace code covered, evidenceClass DATA_CHECK_ONLY",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-A internal candidate, no H10/H11 document or schema change",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-B depth at most 1 with no override (schema max 1, MAX_DEPTH 1, no override field)",
+   "result": "PASS"
+  },
+  {
+   "check": "Q-MAS8-C retries at most 3, error trace fed back, hand-off after the bound; revision budget at most 3",
+   "result": "FAIL: shape bounds hold; revision budget bypassed by sibling revisions (R1-2), hand-off bypassed via delegation (R1-5) and via FAILED (R1-7); defaults not encoded (R1-16)"
+  },
+  {
+   "check": "Q-MAS8-D per-call capability reference: grant digest, tool, manifest, scope, expiry checked; no key material in vectors",
+   "result": "PASS"
+  },
+  {
+   "check": "Roadmap item and A1-A3 elements present (budgets, hooks, refusal vectors; call/result with capability, provenance, trust label; retry and gate interleaving rules)",
+   "result": "PASS with gaps: receipt behaviour (R1-6), gate rule holes (R1-1, R1-3)"
+  },
+  {
+   "check": "H11 rules: no retry of unknown side effects / no secret values / no model text as commands outside a signed manifest",
+   "result": "FAIL: unknown side effects re-run through delegation (R1-5) and ERROR on a non-idempotent write retried (R1-6); secrets only as broker digests and model credentialRefs empty: PASS; typed tool boundary: PASS"
+  },
+  {
+   "check": "H13 controls (capability references, broker-only credentials, deterministic FAIL never overridden)",
+   "result": "FAIL: FAIL override via artefact identity (R1-1); trust label without consequence (R1-9)"
+  },
+  {
+   "check": "Hook-conflict rule",
+   "result": "FAIL: no cross-scope check for DYNAMIC hooks (R1-4); MODIFY_INPUT with SUPPLY_OUTPUT on one event unresolved (R1-10)"
+  },
+  {
+   "check": "Delegation accounting",
+   "result": "FAIL: child profile unconstrained, iterations hidden (R1-4)"
+  },
+  {
+   "check": "Terminal-status rules",
+   "result": "FAIL: delivered step outcome unchecked (R1-8); unrecordable aborts (R1-11)"
+  },
+  {
+   "check": "Fail-closed model: no exception other than Refused in 40 probes and 7,803 single-point mutations",
+   "result": "PASS"
+  },
+  {
+   "check": "Schema/model SHAPE agreement: 1,213 profile and 6,590 trace mutations, 36 detail swaps, 104 event x effect cases",
+   "result": "PASS (0 disagreements)"
+  },
+  {
+   "check": "Delegation check cost: DAGs of 4-14 levels with two delegations per level refused in about 1 ms (a refused child short-circuits; no exponential re-checking)",
+   "result": "PASS"
+  },
+  {
+   "check": "Refusal vectors isolate their code (each rule-phase vector re-run with its rule disabled)",
+   "result": "FAIL: V058 and V098 (R1-12)"
+  },
+  {
+   "check": "canonical/digest/parse consistent with MAS-RA-002 (identical canonical bytes for all 124 case documents; BOM, 1e400 and nested duplicates SHAPE; integral 1.0 normalised)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot checks (pdftotext): JAZ pp. 4, 5, 7, 13, 14, 23, 24; HERMES pp. 15, 16, 20, 21, 23; HarnessDev pp. 5, 8, 22, 24, 27, 28; Harness-Zero pp. 2, 8, 22, 23",
+   "result": "PASS except Harness-Zero 'turn limit' page (R1-13)"
+  },
+  {
+   "check": "Public hygiene: no email, names, home paths, keys or tokens in the five files",
+   "result": "PASS"
+  },
+  {
+   "check": "README accuracy and non-claims",
+   "result": "FAIL: iteration spending claim (R1-4), JAZ event wording (R1-10); otherwise accurate"
+  },
+  {
+   "check": "No command over 60 s (longest about 2 s)",
+   "result": "PASS"
+  }
+ ],
+ "probes": [
+  {
+   "id": "P01",
+   "mutation": "patch (A16) fails unit-tests; a fresh MODEL step 'again' produces the same digest A16 (no consumes), schema-check passes it, COMPLETED delivers 'again'",
+   "expected": "GATE_OVERRIDDEN (the bytes a deterministic gate failed are delivered)",
+   "got": "accepted"
+  },
+  {
+   "id": "P02",
+   "mutation": "a revision of a failed draft that returns the identical artefact digest (A3), then passes a gate and is delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "accepted"
+  },
+  {
+   "id": "P03",
+   "mutation": "strict profile (revision.rounds 1): draft fails; r1 revises draft and fails; r1b revises draft again (sibling, chain depth 1) with the first diagnosis, passes, delivered: two revision rounds",
+   "expected": "REVISION_BOUND",
+   "got": "accepted"
+  },
+  {
+   "id": "P04",
+   "mutation": "default profile (rounds 3): five sibling revisions of one draft, each declaring revises=draft",
+   "expected": "REVISION_BOUND",
+   "got": "accepted"
+  },
+  {
+   "id": "P05",
+   "mutation": "an ungated model artefact read by a READ_ONLY tool whose output a WRITE tool then consumes; the delivered summary is gated",
+   "expected": "UNGATED_CONSUMPTION (model content reaches a write tool without a gate)",
+   "got": "accepted"
+  },
+  {
+   "id": "P06",
+   "mutation": "a DELEGATE step consumes an ungated model artefact (the child loop receives it)",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "accepted"
+  },
+  {
+   "id": "P07",
+   "mutation": "an UNTRUSTED tool output (web-search) consumed directly by a non-idempotent WRITE tool, no gate",
+   "expected": "a gate (if trust labels had a consequence); README states no such rule",
+   "got": "accepted"
+  },
+  {
+   "id": "P08",
+   "mutation": "the child handed off (its retries spent); the parent retries the DELEGATE (attempt 2) with a new child that completes, then delivers",
+   "expected": "a refusal: the child's hand-off to a human is overridden and the retry bound multiplies",
+   "got": "accepted"
+  },
+  {
+   "id": "P09",
+   "mutation": "the child's non-idempotent post-ticket ends UNKNOWN and the child hands off; the parent re-delegates and the new child posts the same ticket (same tool and input digest)",
+   "expected": "UNKNOWN_SIDE_EFFECT_RETRIED or HANDOFF_MISSING (H11: unknown side effects are never retried)",
+   "got": "accepted"
+  },
+  {
+   "id": "P10",
+   "mutation": "a parent whose profile lists only read-only tools delegates to a child under another profile that calls the non-idempotent post-ticket WRITE tool",
+   "expected": "a refusal (least privilege escapes through delegation)",
+   "got": "accepted"
+  },
+  {
+   "id": "P11",
+   "mutation": "parent profile P0 registers egress-guard with scope DYNAMIC; a child under a profile without hooks records that hook aborting before its tool call",
+   "expected": "accepted (README: DYNAMIC = this loop and the loops it delegates to)",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P12",
+   "mutation": "parent's DYNAMIC SUPPLY_OUTPUT hook on MODEL_QUERY_BEFORE plus the child's own SUPPLY_OUTPUT hook on the same event (the child's effective hooks conflict)",
+   "expected": "HOOK_CONFLICT",
+   "got": "accepted"
+  },
+  {
+   "id": "P13",
+   "mutation": "a parent with an iteration budget of 2 delegates to a child that makes 6 model queries; the parent counts 1 iteration",
+   "expected": "BUDGET_EXCEEDED (README: a delegation cannot hide spending from the parent's budget)",
+   "got": "accepted"
+  },
+  {
+   "id": "P14",
+   "mutation": "a parent delegating twice to the same child digest (one child run counted twice)",
+   "expected": "a refusal or a stated rule",
+   "got": "accepted"
+  },
+  {
+   "id": "P15",
+   "mutation": "a child trace that starts an hour before the parent and its DELEGATE step",
+   "expected": "a refusal (time order across the delegation)",
+   "got": "accepted"
+  },
+  {
+   "id": "P16",
+   "mutation": "TR_OK's successful write-file call with receiptRef null",
+   "expected": "a refusal (a settled write carries its receipt; HO-D2 assigns tool receipts to this item)",
+   "got": "accepted"
+  },
+  {
+   "id": "P17",
+   "mutation": "a non-idempotent post-ticket call with outcome ERROR retried (attempt 2) with no receipt or lookup evidence",
+   "expected": "a refusal or an outcome definition (H11: non-idempotent actions retry only with an authoritative receipt lookup proving no prior effect)",
+   "got": "accepted"
+  },
+  {
+   "id": "P18",
+   "mutation": "TOOL step wallClockSeconds 120 against its call's timeoutSeconds 60",
+   "expected": "a refusal or a stated non-claim",
+   "got": "accepted"
+  },
+  {
+   "id": "P19",
+   "mutation": "a gateway-refused call: inputValid false, outcome ERROR, no output, then a fixed call",
+   "expected": "accepted (a refused call is the typed boundary working)",
+   "got": "INVALID_TOOL_INPUT"
+  },
+  {
+   "id": "P20",
+   "mutation": "default profile (1 retry): a model step errors and the loop ends FAILED, neither retried nor handed off",
+   "expected": "HANDOFF_MISSING (Q-MAS8-C: retry, then hand-off to a human)",
+   "got": "accepted"
+  },
+  {
+   "id": "P21",
+   "mutation": "the same under the strict profile (0 retries)",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P22",
+   "mutation": "COMPLETED delivers a MODEL step whose outcome is ERROR (it was retried; a gate passed its bytes)",
+   "expected": "TERMINAL_STATUS",
+   "got": "accepted"
+  },
+  {
+   "id": "P23",
+   "mutation": "profile with an ABORT hook on the HANDOFF event",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P24",
+   "mutation": "that hook fires with ABORT after the HANDOFF step: ABORTED, HOOK_ABORT",
+   "expected": "accepted (the registered effect on its event)",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "P25",
+   "mutation": "that hook fires with ABORT before the HANDOFF step, which ends the trace: HANDED_OFF",
+   "expected": "accepted or the previous one",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "P26",
+   "mutation": "two ABORT hooks on one event (vector V004 says they compose) both fire and both are recorded",
+   "expected": "accepted",
+   "got": "TERMINAL_STATUS"
+  },
+  {
+   "id": "P27",
+   "mutation": "retries spent on read-file, then a disguised retry with another input digest before the hand-off",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P28",
+   "mutation": "UNKNOWN on non-idempotent post-ticket, then a read-only tool before the hand-off",
+   "expected": "HANDOFF_MISSING",
+   "got": "HANDOFF_MISSING"
+  },
+  {
+   "id": "P29",
+   "mutation": "a failing gate retried (retryOf, attempt 2) by a passing run, then the artefact delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "P30",
+   "mutation": "a model step consuming a failed artefact laundered through a read-only tool",
+   "expected": "GATE_OVERRIDDEN or UNGATED_CONSUMPTION",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "P31",
+   "mutation": "a revision whose retry (same revises, attempt 2, the revision's own error trace) succeeds",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "P32",
+   "mutation": "capability expiresAt equal to the call's startedAt",
+   "expected": "accepted (boundary: README 'has not expired when the call starts')",
+   "got": "accepted"
+  },
+  {
+   "id": "P33",
+   "mutation": "profile: MODIFY_INPUT (rewrite) and SUPPLY_OUTPUT (prompt-cache) by two hooks on MODEL_QUERY_BEFORE",
+   "expected": "not a conflict under the stated rule; JAZ stages these on Enter and Send",
+   "got": "accepted"
+  },
+  {
+   "id": "P34",
+   "mutation": "delegation DAG: a depth-0 trace and depth-1 traces each with two DELEGATE steps to the next level (levels 4, 8, 12, 14)",
+   "expected": "a quick refusal (a depth-1 trace may not delegate)",
+   "got": "4 levels: UNKNOWN_REFERENCE in 0.000 s; 8 levels: UNKNOWN_REFERENCE in 0.001 s; 12 levels: UNKNOWN_REFERENCE in 0.001 s; 14 levels: UNKNOWN_REFERENCE in 0.001 s"
+  },
+  {
+   "id": "P35",
+   "mutation": "1213 single-point mutations of the P0 profile (type, value, delete key, add key)",
+   "expected": "the model refuses SHAPE exactly when the schema rejects",
+   "got": "0 disagreements"
+  },
+  {
+   "id": "P36",
+   "mutation": "6590 single-point mutations of TR_OK, TR_REVISE_HANDOFF, PARENT and TR_HOOK_ABORT",
+   "expected": "agreement",
+   "got": "0 disagreements"
+  },
+  {
+   "id": "P37",
+   "mutation": "every step kind with every other kind's detail (36), every event x effect in a profile hook and in a trace HOOK step (52 + 52)",
+   "expected": "agreement",
+   "got": "0 detail-swap and 0 event/effect disagreements"
+  },
+  {
+   "id": "P38",
+   "mutation": "each rule-phase refusal vector re-run with its own rule disabled",
+   "expected": "accepted (the case breaks only its rule)",
+   "got": "2 cases break another rule too: V058 HOOK_NOT_REGISTERED->TERMINAL_STATUS; V098 RETRY_WITHOUT_TRACE->RETRY_BOUND"
+  },
+  {
+   "id": "P39",
+   "mutation": "canonical() of all 124 case documents against run_manifest.canonical()",
+   "expected": "identical bytes",
+   "got": "identical"
+  },
+  {
+   "id": "P40",
+   "mutation": "parse(): a BOM, 1e400, a nested duplicate member, an integral 1.0",
+   "expected": "SHAPE, SHAPE, SHAPE, accepted with the integer's digest",
+   "got": "BOM: SHAPE; 1e400 tokens: SHAPE; nested duplicate: SHAPE; integral 1.0 attempt: accepted; digest(1.0) == digest(1): True"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/BRIEF-r1.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/PLAN.md (Q-231, Q-MAS8-A..D)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py",
+  "architecture/agent-loop/README.md, loop-profile.schema.json, loop-trace.schema.json, vectors.json at c488bcd3",
+  "scripts/agent_loop.py at c488bcd3",
+  "roadmap/roadmap.json items MAS-RA-008 and CONF-A3-001 (planning workspace)",
+  "architecture/research-adoption-v2/crosswalk.json at 82804a0 (acceptance MAS-RA-008-A1..A3, HO-D2, mappings 10, 11, 13, 15)",
+  "docs/harnesses/execution.orchestration.md (H10), docs/harnesses/execution.tool-skill-sandbox.md (H11), docs/harnesses/trust.security-safety.md (H13); docs/harnesses/trust.observability-finops.md (H15) budget lines only (usage ledger, budget states WARNING/EXHAUSTED)",
+  "scripts/verdict_ledger.py and scripts/run_manifest.py canonical/parse/guard helpers (MAS-RA-001, MAS-RA-002)",
+  "roadmap/research/papers/2609.26891v1-jaz.pdf pp. 4, 5, 7, 13, 14, 23, 24",
+  "roadmap/research/papers/2610.07832v1-hermes.pdf pp. 15, 16, 20, 21, 23",
+  "roadmap/research/papers/2609.01437v1-harnessdev.pdf pp. 5, 8, 22, 24, 27, 28",
+  "roadmap/research/papers/2609.24974v1-harness-zero.pdf pp. 2, 8, 22, 23 (all pages searched for 'turn limit')"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

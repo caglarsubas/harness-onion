@@ -1,0 +1,685 @@
+{
+ "schemaVersion": "harness.planeon.ai/agent-loop-review/v1",
+ "kind": "agent-loop-review",
+ "round": 6,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "5708b1abfe14b4eca838b847459d71ed5c39f76d",
+ "subjectTree": "ce61007761b4cfb1eb6382b0bc0dc906eed6382e",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R6-1",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _overridden, second loop (the re-gate rule: `chain`, `needed`, `uses`); README 'A gate's FAIL is never overridden' ('A revision is used only after every gate that failed an artefact of its chain passes its bytes; using it means being consumed by anything but a read-only tool or its own revision, or being delivered')",
+   "finding": "The round-6 re-gate rule (R5-2) is keyed by step IDs, while every other gate rule follows the bytes. Three consequences:\n(1) Uses miss read-only relays. A write or delegation that consumes a read-only tool's reading of the revision is not a use. R601: unit-tests FAILs patch; r1 revises it and passes schema-check only; read-file reads r1; write-file consumes the read (accepted). R602: the same with a read-back that returns r1's own bytes (accepted). R601c, the write consuming r1 directly, is refused GATE_OVERRIDDEN. The interleaving rule counts exactly these relays as consumption for writes and delegations ('directly or through the outputs of read-only tools'). R5-2 asked for the gate to pass the revision's bytes before they 'reach a consumer'.\n(2) The needed gates miss FAILs on holders of the chain's bytes. R604: schema-check FAILs a read-back of patch (bytes X); unit-tests FAILs patch; r1 revises patch, passes unit-tests only and is delivered (accepted). R604c, with schema-check failing patch itself, is refused. R605: plan (X) FAILs schema-check; patch regenerates X and FAILs unit-tests; r1 revises patch, passes unit-tests only and is delivered (accepted). Round 6's own-bytes rule treats a FAIL on a holder as a FAIL of the same artefact (A01, A02 are refused). The re-gate rule does not.\n(3) A fail-closed side effect. A revision that ended ERROR has no bytes, yet a step that consumes it counts as a use. R606: the retry of an ERRORed revision lists the failed attempt in `consumes` and is refused GATE_OVERRIDDEN. R606d, the same retry shape outside revisions, is accepted. The README does not state this refusal.",
+   "requiredChange": "Compute a revision's uses the way the interleaving rule computes consumers of its bytes. Count, after the revision:\n- a write or delegation consuming any holder of its bytes, directly or through read-only tool outputs;\n- a model step consuming a holder directly, other than a revision of it;\n- the delivery of a holder.\nTake the needed gates from FAILs on any holder of a chain step's bytes. Skip revisions that produced nothing. Pin R601 and R604 (or R605) as refusal vectors and say the rule in the README. Checked: a sketch of exactly this on a copy of the round-6 model (WORK/alt) does the following:\n- replays the 193 vectors unchanged, and the builder's isolation check still holds;\n- leaves every round-1 to round-5 probe result unchanged;\n- refuses R601, R602, R604 and R605, and accepts R606;\n- also refuses R603, a cache-hit copy of r1's bytes delivered. That part (delivery of a holder) is optional, since 'Undeclared attempts' covers fresh steps;\n- is linear per revision (see R6-4)."
+  },
+  {
+   "id": "R6-2",
+   "severity": "MINOR",
+   "location": "scripts/agent_loop.py _overridden/_tainted (only this trace's steps); README 'A gate's FAIL is never overridden' ('every step holding the failed artefact's own bytes, at any time and of any kind') and 'Not claimed'",
+   "finding": "The FAIL's own-bytes reach stops at the loop boundary. T604: unit-tests FAILs patch (X) in the parent. A delegation after the FAIL consumes nothing. Its child, under the same profile, regenerates X, passes it through schema-check and writes it with write-file. The child delivers a report, and the parent builds on the delegation and delivers. Accepted. T604c, the same steps inside one loop, is refused GATE_OVERRIDDEN, as is a child that delivers the failed bytes (round-5 B04 and the 'delegation delivering the failed bytes' vector). The README gives the reason a delegation counts as a consumer: 'a delegated loop can write, and it cannot name its parent's steps'. But neither the FAIL rule nor 'Not claimed' says that a parent's FAIL does not reach its delegated loop's steps. So a weaker gate inside a child launders bytes a parent's deterministic gate failed into a write.",
+   "requiredChange": "Apply the parent's FAIL to a delegated loop's steps as to its own. A child step holding the failed bytes is covered. A child step consuming what it covers is refused, except a read-only tool or a revision, and so is the child delivering it. Or state the limit under 'Not claimed'. Checked: a sketch on WORK/alt2 (about ten lines in _overridden: _tainted on the child's view for each DELEGATE after the FAIL whose child holds the failed bytes) does the following:\n- replays the 193 vectors unchanged, and isolation still holds;\n- leaves every round-1 to round-5 probe unchanged;\n- refuses T604;\n- accepts T604b, a child whose own gate fails the regenerated X and whose own revision passes (the in-loop analogue, round-5 C02, is accepted)."
+  },
+  {
+   "id": "R6-3",
+   "severity": "NOTE",
+   "location": "README 'A gate's FAIL is never overridden', third bullet ('every model or delegation step whose artefact repeats the bytes of anything it covers') and the next paragraph",
+   "finding": "The model matches derived bytes forward only. _tainted makes one pass in append order, as round 5 asked and as S03 and S03c require. Round 6 dropped the README's 'Counting forward from the subject' because the own bytes now count 'at any time'. The derived-bytes bullet lost its direction with it. T601: m0 (bytes N) is gated early. Later, next, built on patch, returns the same N. unit-tests FAILs patch, and a write consumes m0. Accepted, correctly by design. But the README read literally covers m0.",
+   "requiredChange": "Say 'every later model or delegation step whose artefact repeats the bytes of anything it covers'. Add that derived bytes are matched forward only, while the artefact's own bytes are matched at any time."
+  },
+  {
+   "id": "R6-4",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _overridden, second loop (`for use in uses: all(any(... for x in v.steps) for gate in needed)`)",
+   "finding": "R5-4's fix makes the interleaving pass linear per digest. The new re-gate loop scans every step for each use and each needed gate, so it is cubic. Measured: patch FAILs g distinct gates, r1 passes all g, and g writes consume r1. g = 200 takes 0.43 s, 300 takes 1.33 s, 400 takes 3.05 s, and 680 (2,042 steps) takes 14.6 s. Extrapolated, not run: about 2 minutes at 1,365 gates and 1,364 writes (4,096 steps; the profile may list up to 4,096 gates).",
+   "requiredChange": "Index once per revision: the earliest passing run of each gate on the revision's holders, and the earliest use. Optionally add a timing probe. The R6-1 sketch does this and takes 1.97 s on the 4,096-step case (2.48 s on 819 independent revised chains)."
+  },
+  {
+   "id": "R6-5",
+   "severity": "NOTE",
+   "location": "scripts/agent_loop.py _unsafe_retry (only RECEIPT_KEY must keep its input); README 'Side effects are never repeated unsafely'",
+   "finding": "A launched, natively idempotent write that ended UNKNOWN may be retried with another input. O601: a NATIVE WRITE tool (put-object) ends UNKNOWN and its retry writes another input. Accepted. Native idempotency makes repeating the same call safe, not a different one. The first call's effect stays unreconciled, which H11 requires for OUTCOME_UNKNOWN ('requires operator/owner reconciliation'). The receipt-key rule already demands the same input for the same reason. The vectors' profiles have no NATIVE write tool, so no vector shows the case.",
+   "requiredChange": "Require the same input for a retry of a launched NATIVE write that ended UNKNOWN, as for RECEIPT_KEY. Or state that such a retry may change its input and leaves the first call's effect to H11's reconciliation."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R5-1",
+   "disposition": "RESOLVED",
+   "evidence": "_tainted now starts from _holders(subject): every holder of the failed bytes, at any time and of any kind, is tainted. A01, A02, A03 and A04 are refused GATE_OVERRIDDEN (round 5: accepted), as is G02 again. V045 is replaced by V137, a GATE_OVERRIDDEN vector for the same document. Derived bytes stay forward-only and model-and-delegation-only: B01, S03 and S03c are accepted, and B02 and B04 are refused. The README drops the context rationale. Remaining wording gap: R6-3."
+  },
+  {
+   "finding": "R5-2",
+   "disposition": "PARTIAL",
+   "evidence": "C03 and C03b are now refused GATE_OVERRIDDEN, V138 pins the class, and R607 (two rounds, two gates) and R608 (a delegation) are refused. But the rule follows step IDs, not the bytes. A revision reaches a write through a read-only relay (R601, R602), and FAILs on holders of the chain's bytes are not needed (R604, R605). See R6-1."
+  },
+  {
+   "finding": "R5-3",
+   "disposition": "RESOLVED",
+   "evidence": "The README now states the deliberate over-approximation: own bytes matched everywhere, a failed empty search result covering a later identical one (D03, refused), and a repeated verdict string (D01, refused). It states that a trusted tool output holding an ungated model artefact's bytes holds it (D02 refused UNGATED_CONSUMPTION; U603 and U605 likewise). It advises producers to record distinct bytes."
+  },
+  {
+   "finding": "R5-4",
+   "disposition": "RESOLVED",
+   "evidence": "_ungated runs one pass per distinct digest. Timings for k byte-identical producers with k writes: 300 takes 0.011 s (round 5: 2.28 s), and 2,047 (4,095 steps, about 4 MB) takes 0.29 s (round 5 extrapolated about 12 min). A 20,000-trace random differential against round 5's _ungated (c248aa42) gave identical verdicts (14,971 refused by both, the rest accepted by both). The new re-gate loop has its own super-linear path: R6-4."
+  },
+  {
+   "finding": "R4-1, R4-2, R4-3",
+   "disposition": "RESOLVED",
+   "evidence": "Round-4 probes (S01-S10, G01-G04, H01-H08, R01, R02) re-run on round 6: identical to round 5, except G02, which is GATE_OVERRIDDEN again as R5-1 required. 2,048 failing gates on one subject in 4,096 steps take 2.38 s."
+  },
+  {
+   "finding": "R3-1..R3-7",
+   "disposition": "RESOLVED",
+   "evidence": "Round-3 probes Q01-Q33 re-run on round 6: identical to round 5 (Q31's count reflects 144 refusal cases)."
+  },
+  {
+   "finding": "R2-1..R2-11",
+   "disposition": "RESOLVED",
+   "evidence": "Round-1/2 probes P01-P40 and N01-N31 re-run on round 6: identical to round 5. P39 shows canonical form identical to run_manifest and verdict_ledger. P40 shows parse edge cases are SHAPE."
+  },
+  {
+   "finding": "R1-1",
+   "disposition": "RESOLVED",
+   "evidence": "The R5-1 reopening is closed. The failed bytes are covered on every holder, earlier ones included (A01, A02, V137)."
+  },
+  {
+   "finding": "R1-2..R1-16",
+   "disposition": "RESOLVED",
+   "evidence": "Covered by the unchanged round-1/2 probe re-run and the vectors."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject: worktree HEAD and tree are 5708b1ab / ce610077, the worktree is clean, and the diff 82804a0..5708b1ab adds exactly the five files (README, two schemas, vectors.json, scripts/agent_loop.py). The diff c248aa42..5708b1ab touches README, vectors.json and agent_loop.py only. docs/ and schemas/ are unchanged (empty diff), so H10's and H11's documents are byte-identical.",
+   "result": "PASS"
+  },
+  {
+   "check": "Reproducibility: ~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (identical to build_loop.r6.py) run with the venv python -I -B on a git-archive copy rewrote the three JSON files byte for byte. Its schema agreement, isolation and code-coverage assertions passed: 193 cases, 35 valid, 4 texts, stores of 7 profiles and 14 traces.",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay (python3 -I -B scripts/agent_loop.py): 193 cases and 4 texts. Store traces: 12 pass, while child-run-bad (TOTALS_MISMATCH) and child-run-6 (HOOK_NOT_REGISTERED) fail as stated. Store profiles: conflicting-loop HOOK_CONFLICT, misfiled under a foreign digest, and one malformed (SHAPE), as stated. The README counts and the six alsoRefusedBy cases match.",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions: recursion depth 0..1, no override (schema and model max 1); stepRetries 0..3 (default 1, annotation); revision.rounds 0..3 (default 3), a separate budget; feedback = the error trace on every retry; hand-off after an unretried failure; per-call capability {grantDigest, toolId, manifestDigest, scope, expiresAt} with fields checked; broker refs only, no key material; DATA_CHECK_ONLY.",
+   "result": "PASS"
+  },
+  {
+   "check": "Roadmap MAS-RA-008 deliverables and crosswalk A1-A3 (82804a0): loop and hook contract with budget fields and refusal vectors; tool-call and tool-result schemas with capability token, provenance and trust label; bounded-retry and gate-interleaving rules. Harness roles (H11, H10 primary; H13, H15 secondary) and the HO-D2 receipt, outcome and bounded-retry scope are present. contextWarningPercent is declared only, as the README says.",
+   "result": "PASS"
+  },
+  {
+   "check": "H10/H11/H13 rules: H11 l.55 (no retry of unknown side effects, no secret values, no model text as commands outside a signed manifest) and ll.149-150 (non-idempotent retry only with receipt evidence; OUTCOME_UNKNOWN needs reconciliation); H10 l.151 (ambiguous non-idempotent outcome to operator review); H13 l.18 (a probabilistic detector cannot override a deterministic denial).",
+   "result": "PASS except R6-5 (NOTE)"
+  },
+  {
+   "check": "PDF spot checks (pdftotext -f N -l N, 18 pages):\n- JAZ pp. 4, 5, 7, 14 and 23: resource-control hooks; local versus scoped hooks; depth 70 and n. 2's depth convention; 13 events with effects per stage, abort, conflicting writes refused and the Aborted span; a subagent erroring when a limit is reached.\n- HERMES pp. 15, 16, 20, 21 and 23: the diagnosis cannot override deterministic failures; B rounds after the first pass; re-execution until pass or budget; default B = 3, returns at most 0.9 beyond.\n- HarnessDev pp. 8, 22, 24, 27 and 28: 441 degenerate submissions; 500 steps and 7,200 s; six modules; honest status; provider-neutral config.\n- Harness-Zero pp. 2, 8 and 23: one execute tool; turn limit; single-level delegation, at most four concurrent.",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-5 probes (A-E, 40) re-run on round 6. Changed exactly A01-A04 (now refused) and C03/C03b (now refused); the rest are unchanged. D01, D02 and D03 are refused, as the README now states.",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-1/2 (71), round-3 (39) and round-4 (35) probe sets re-run on round 6: unchanged from round 5, except G02, refused again (R5-1) and Q31's case count.",
+   "result": "PASS"
+  },
+  {
+   "check": "Reviewer probes round 6 (44): re-gate rule, taint, interleaving pass, schema agreement and other rules.",
+   "result": "FAIL: R601, R602, R604 and R605 accepted (R6-1); R606 refused (R6-1); T604 accepted (R6-2); O601 accepted (R6-5)"
+  },
+  {
+   "check": "Schema agreement on the reviewer's shape probes S601-S611. A model SHAPE refusal coincides with schema rejection in every case. S601 (an effect outside its event's set on a HOOK step) passes the schema and falls to HOOK_NOT_REGISTERED, as specified.",
+   "result": "PASS"
+  },
+  {
+   "check": "Fix sketches. WORK/alt holds R6-1 and R6-4; WORK/alt2 holds R6-1, R6-4 and R6-2. Each replays the 193 vectors with no mismatch and passes the builder's isolation rule. All earlier probe sets are unchanged. Only the targeted reviewer probes change.",
+   "result": "PASS"
+  },
+  {
+   "check": "Timing (no command over 60 s; the longest, the re-gate timing run, took 19 s). Round-5 cases: 2,048 failing gates in 4,096 steps take 2.38 s; 300 producers take 0.011 s; 2,047 producers take 0.29 s. New cases: re-gate cubic (R6-4); 1,365 distinct gated and written artefacts (4,095 steps) take 0.87 s; 819 revised chains (4,095 steps) take 2.42 s.",
+   "result": "PASS except R6-4 (NOTE)"
+  },
+  {
+   "check": "Public hygiene: no personal data, user paths, e-mail addresses or key material in the five files (grep). README statements checked against the files, apart from R6-3's wording.",
+   "result": "PASS except R6-3 (NOTE)"
+  }
+ ],
+ "probes": [
+  {
+   "id": "R601",
+   "mutation": "re-gate through a read-only relay: unit-tests FAILs patch; r1 revises it (Y) and passes schema-check only; read-file reads r1 (output Z); write-file consumes the read; a final model step on the write's acknowledgement is gated and delivered",
+   "expected": "GATE_OVERRIDDEN (R5-2: r1's bytes reach a write, through a read-only tool, before unit-tests passes them)",
+   "got": "accepted; under the review sketch (WORK/alt2): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R601c",
+   "mutation": "control for R601: write-file consumes r1 directly (only the relay removed)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R601d",
+   "mutation": "control for R601: unit-tests passes r1 before the relay and the write",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "R602",
+   "mutation": "re-gate through a read-back of the revision's own bytes: as R601, but read-file returns Y (r1's bytes) and write-file consumes the read-back",
+   "expected": "GATE_OVERRIDDEN (the write consumes a holder of r1's bytes)",
+   "got": "accepted; under the review sketch (WORK/alt2): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R603",
+   "mutation": "a fresh model step reproducing the revision's bytes Y (a cache hit), consuming nothing, delivered after schema-check only",
+   "expected": "accepted by the stated non-claim (a fresh step reading neither the failed artefact nor its diagnosis is not a revision); a byte-keyed re-gate would refuse it",
+   "got": "accepted; under the review sketch (WORK/alt2): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R604",
+   "mutation": "the needed gates are found by step ID, not bytes: schema-check FAILs a read-back of patch (output X); unit-tests FAILs patch; r1 revises patch and passes unit-tests only; r1 delivered",
+   "expected": "GATE_OVERRIDDEN (schema-check failed the chain's artefact X, on a holder, and never passes r1)",
+   "got": "accepted; under the review sketch (WORK/alt2): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R604c",
+   "mutation": "control for R604: schema-check FAILs patch itself (only the subject differs)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R605",
+   "mutation": "needed gates through an earlier identical holder: plan (X) FAILs schema-check; patch regenerates X and FAILs unit-tests; r1 revises patch and passes unit-tests only; r1 delivered",
+   "expected": "GATE_OVERRIDDEN (schema-check failed X; a gate on the same bytes decides the same)",
+   "got": "accepted; under the review sketch (WORK/alt2): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R605c",
+   "mutation": "control for R605: r1 passes both gates",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "R606",
+   "mutation": "a retry of a revision that ERRORed declares consuming the failed attempt (no artefact); the retry passes unit-tests and is delivered",
+   "expected": "accepted (the failed attempt holds no bytes to re-gate)",
+   "got": "GATE_OVERRIDDEN; under the review sketch (WORK/alt2): accepted"
+  },
+  {
+   "id": "R606c",
+   "mutation": "control for R606: the same retry without consuming the failed attempt",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "R606d",
+   "mutation": "control for R606 outside revisions: a model retry that declares consuming its ERRORed first attempt",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "R607",
+   "mutation": "two rounds: unit-tests FAILs patch; r1 passes unit-tests but FAILs schema-check; r2 revises r1 and passes schema-check only; r2 delivered",
+   "expected": "GATE_OVERRIDDEN (unit-tests failed a step of r2's chain)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R607c",
+   "mutation": "control for R607: r2 passes both gates",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "R608",
+   "mutation": "a revision handed to a delegation after schema-check only (unit-tests failed its target)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R609",
+   "mutation": "the needed gate passed an earlier holder of the revision's bytes: e0 (Y) passes unit-tests; patch (X) FAILs unit-tests; r1 revises patch and returns Y; r1 delivered",
+   "expected": "accepted (a gate on the same bytes decides the same; an earlier one counts)",
+   "got": "accepted"
+  },
+  {
+   "id": "T601",
+   "mutation": "derived bytes, backwards: m0 (N) is gated early; patch (X) is gated; next builds on patch and returns the same N; unit-tests FAILs patch; write-file consumes m0",
+   "expected": "accepted by design (derived bytes are matched forward only, as round 5 asked); the README's third bullet, read literally, covers m0",
+   "got": "accepted"
+  },
+  {
+   "id": "T601b",
+   "mutation": "control for T601: m0 comes after next (forward)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "T602",
+   "mutation": "a write's acknowledgement coincides with the failed bytes X after the FAIL; a model step builds on it",
+   "expected": "a refusal (stated over-approximation: the artefact's own bytes are matched everywhere; UNGATED_CONSUMPTION first, since patch was never passed)",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "T603",
+   "mutation": "a revision of an earlier holder: plan (X) FAILs schema-check; patch regenerates X and FAILs unit-tests; r1 revises plan (consuming plan and patch) and passes both gates; delivered",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "T604",
+   "mutation": "the FAIL stops at the loop boundary: unit-tests FAILs patch (X) in the parent; a delegation after the FAIL, consuming nothing, runs a child that regenerates X, passes it through schema-check and writes it; the child delivers a report; the parent builds on the delegation and delivers",
+   "expected": "GATE_OVERRIDDEN by the README's own-bytes reach, or a stated limit (the same steps in one loop are refused)",
+   "got": "accepted; under the review sketch (WORK/alt2): GATE_OVERRIDDEN"
+  },
+  {
+   "id": "T604c",
+   "mutation": "control for T604 within one loop: the parent itself regenerates X, gates it with schema-check and writes it",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "T604b",
+   "mutation": "control for T604: the child regenerates X, its own unit-tests FAILs it, it revises and delivers the passing revision (the in-loop analogue, round-5 C02, is accepted)",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "U601",
+   "mutation": "an earlier gate on an untrusted output with the same bytes counts: web-search returns X and passes schema-check; a model step then produces X; write-file consumes the model step",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "U602",
+   "mutation": "a write consumes an ungated model artefact; only later does a gate pass an untrusted output with the same bytes",
+   "expected": "UNGATED_CONSUMPTION",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "U603",
+   "mutation": "a trusted read returned X before any model step; a model step later produces X (never gated); a write then consumes the earlier read",
+   "expected": "UNGATED_CONSUMPTION (stated: a tool output whose bytes equal an ungated model artefact counts as holding it)",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "U604",
+   "mutation": "control for U603: the write consumes the read before the model step exists",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "U605",
+   "mutation": "a model step reads an untrusted output whose bytes an earlier ungated model step produced",
+   "expected": "UNGATED_CONSUMPTION (stated: the untrusted output holds the model artefact's bytes)",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "S601",
+   "mutation": "a HOOK step whose effect is not allowed on its event (MODIFY_INPUT on STEP_ERROR)",
+   "expected": "HOOK_NOT_REGISTERED, schema accepts (the HOOK detail's effect is checked against the registration)",
+   "got": "HOOK_NOT_REGISTERED"
+  },
+  {
+   "id": "S602",
+   "mutation": "a tool result's provenance without receiptRef",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S603",
+   "mutation": "a HANDOFF step declaring consumption",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S604",
+   "mutation": "a DELEGATE detail with an extra member",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S605",
+   "mutation": "a MODEL detail credential reference that is not a digest",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S606",
+   "mutation": "a boolean sequence number",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S607",
+   "mutation": "inputValid given as the integer 1",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S608",
+   "mutation": "attempt 0",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S609",
+   "mutation": "profile: an observing hook on HANDOFF with LOCAL scope",
+   "expected": "accepted (both)",
+   "got": "accepted"
+  },
+  {
+   "id": "S610",
+   "mutation": "profile: a hook with effects null",
+   "expected": "SHAPE (both)",
+   "got": "SHAPE (schema rejects)"
+  },
+  {
+   "id": "S611",
+   "mutation": "a gate whose subject is another gate step (no artefact)",
+   "expected": "accepted or a stated rule",
+   "got": "accepted"
+  },
+  {
+   "id": "O601",
+   "mutation": "an UNKNOWN natively idempotent write retried with another input (another object)",
+   "expected": "accepted by the rules as written (only RECEIPT_KEY writes must keep their input); a NOTE at most",
+   "got": "accepted"
+  },
+  {
+   "id": "O602",
+   "mutation": "FAILED where the only non-OK gate ERRORed and its retry passed (nothing failed)",
+   "expected": "accepted (FAILED under-claims; a NOTE at most)",
+   "got": "accepted"
+  },
+  {
+   "id": "O603",
+   "mutation": "profile: MODIFY_INPUT on INVOKE_START by one hook and SUPPLY_OUTPUT on MODEL_QUERY_BEFORE by another (different events)",
+   "expected": "accepted",
+   "got": "accepted"
+  },
+  {
+   "id": "O604",
+   "mutation": "a delegation reported OK whose child COMPLETED, retried anyway",
+   "expected": "RETRY_WITHOUT_TRACE",
+   "got": "RETRY_WITHOUT_TRACE"
+  },
+  {
+   "id": "O605",
+   "mutation": "a failed gate retried by the same gate on another subject",
+   "expected": "RETRY_WITHOUT_TRACE",
+   "got": "RETRY_WITHOUT_TRACE"
+  },
+  {
+   "id": "R5-A01",
+   "mutation": "[round-5 probe re-run on round 6] plan (bytes X) passes unit-tests; patch regenerates the identical bytes X and unit-tests FAILs it (same gate, same bytes); plan is delivered",
+   "expected": "GATE_OVERRIDDEN (the delivered bytes are bytes a deterministic gate failed)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-A02",
+   "mutation": "[round-5 probe re-run on round 6] the failing gate names a read-back copy: patch (X) passes schema-check; read-file reads patch back (output X); unit-tests FAILs the read-back; patch is delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-A03",
+   "mutation": "[round-5 probe re-run on round 6] untrusted output: web-search returns X and schema-check passes it; a second web-search returns the same X and unit-tests FAILs it; post-ticket (non-idempotent WRITE) consumes the first search; a final model step is delivered",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-A04",
+   "mutation": "[round-5 probe re-run on round 6] a write applied an earlier holder before the subject: plan (X) passes schema-check, write-file applies plan; patch regenerates X and unit-tests FAILs it; a report model step built on the write's result is gated and delivered (Q04 with the write on the subject itself is refused)",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-C03",
+   "mutation": "[round-5 probe re-run on round 6] a revision delivered after a weaker gate only: unit-tests FAILs patch; r1 revises it and passes schema-check only (unit-tests never re-run); r1 delivered",
+   "expected": "a refusal or a stated rule (HERMES re-executes and re-diagnoses every revised plan)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-C03b",
+   "mutation": "[round-5 probe re-run on round 6] C03 under the strict profile (one revision round): r1 passes schema-check only and is delivered",
+   "expected": "as C03",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-D01",
+   "mutation": "[round-5 probe re-run on round 6] a judge's verdict repeats: judge (model) reads gated patch and returns V ('approve'); unit-tests FAILs patch; r1 revises and passes; judge-2 reads r1 and returns the same verdict bytes V; final builds on r1 and judge-2, gated, delivered",
+   "expected": "accepted (judge-2 judged the revision, not the failed patch)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R5-D02",
+   "mutation": "[round-5 probe re-run on round 6] a failed artefact with common bytes: plan returns K ('{}') and schema-check FAILs it; r1 revises and passes; read-file (no declared consumption) returns the same K ('{}' config); final builds on r1 and the read, gated, delivered",
+   "expected": "accepted (the read never saw the failed plan; README: a tool output that merely repeats common bytes is not covered)",
+   "got": "UNGATED_CONSUMPTION"
+  },
+  {
+   "id": "R5-D03",
+   "mutation": "[round-5 probe re-run on round 6] a failed output with common bytes: web-search returns K ('[]') and schema-check FAILs it; read-file (no declared consumption) of a local index returns the same K ('[]'); final builds on the read, gated, delivered",
+   "expected": "accepted (the read never saw the failed search; README: a tool output that merely repeats common bytes is not covered)",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "R4-G02",
+   "mutation": "[round-4 probe re-run on round 6] an earlier gate passes x; a later gate FAILs y holding the same bytes; a write then consumes x",
+   "expected": "GATE_OVERRIDDEN",
+   "got": "GATE_OVERRIDDEN"
+  },
+  {
+   "id": "RERUN-SETS",
+   "mutation": "the round-1/2 (P01-P40, N01-N31), round-3 (Q01-Q33), round-4 (S, G, H, R) and round-5 (A-E) probe scripts, copied into WORK with paths changed, on the round-6 archive",
+   "expected": "round-5 results except the R5-1/R5-2 changes",
+   "got": "identical apart from A01-A04, C03, C03b, G02 (now refused) and Q31's case count"
+  },
+  {
+   "id": "T-r5-512",
+   "mutation": "timing (round-5 case): failing gates 256 on one subject, 255 reads",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.041 s"
+  },
+  {
+   "id": "T-r5-1024",
+   "mutation": "timing (round-5 case): failing gates 512 on one subject, 511 reads",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.151 s"
+  },
+  {
+   "id": "T-r5-2048",
+   "mutation": "timing (round-5 case): failing gates 1024 on one subject, 1023 reads",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.615 s"
+  },
+  {
+   "id": "T-r5-4096",
+   "mutation": "timing (round-5 case): failing gates 2048 on one subject, 2047 reads",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 2.382 s"
+  },
+  {
+   "id": "T-r5-101",
+   "mutation": "timing (round-5 case): 50 byte-identical model producers, 50 writes",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.001 s"
+  },
+  {
+   "id": "T-r5-201",
+   "mutation": "timing (round-5 case): 100 byte-identical model producers, 100 writes",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.003 s"
+  },
+  {
+   "id": "T-r5-401",
+   "mutation": "timing (round-5 case): 200 byte-identical model producers, 200 writes",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.007 s"
+  },
+  {
+   "id": "T-r5-601",
+   "mutation": "timing (round-5 case): 300 byte-identical model producers, 300 writes",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.011 s"
+  },
+  {
+   "id": "T-R54-2049",
+   "mutation": "timing: 1024 byte-identical model producers, 1024 writes (1979692 bytes)",
+   "expected": "near-linear (R5-4)",
+   "got": "accepted in 0.080 s"
+  },
+  {
+   "id": "T-R54-4095",
+   "mutation": "timing: 2047 byte-identical model producers, 2047 writes (3962267 bytes)",
+   "expected": "near-linear (R5-4)",
+   "got": "accepted in 0.292 s"
+  },
+  {
+   "id": "T-r6-77",
+   "mutation": "timing: re-gate: 25 distinct gates FAIL patch, r1 passes all, 25 writes consume r1",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.002 s"
+  },
+  {
+   "id": "T-r6-152",
+   "mutation": "timing: re-gate: 50 distinct gates FAIL patch, r1 passes all, 50 writes consume r1",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.010 s"
+  },
+  {
+   "id": "T-r6-302",
+   "mutation": "timing: re-gate: 100 distinct gates FAIL patch, r1 passes all, 100 writes consume r1",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.061 s"
+  },
+  {
+   "id": "T-r6-452",
+   "mutation": "timing: re-gate: 150 distinct gates FAIL patch, r1 passes all, 150 writes consume r1",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.190 s"
+  },
+  {
+   "id": "T-r6-602",
+   "mutation": "timing: re-gate: 200 distinct gates FAIL patch, r1 passes all, 200 writes consume r1",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.431 s"
+  },
+  {
+   "id": "T-r6-768",
+   "mutation": "timing: 256 distinct model artefacts, each gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.033 s"
+  },
+  {
+   "id": "T-r6-1536",
+   "mutation": "timing: 512 distinct model artefacts, each gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.134 s"
+  },
+  {
+   "id": "T-r6-3072",
+   "mutation": "timing: 1024 distinct model artefacts, each gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.510 s"
+  },
+  {
+   "id": "T-r6-4095",
+   "mutation": "timing: 1365 distinct model artefacts, each gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.867 s"
+  },
+  {
+   "id": "T-r6-1025",
+   "mutation": "timing: 205 failed artefacts, each revised, re-gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.143 s"
+  },
+  {
+   "id": "T-r6-2050",
+   "mutation": "timing: 410 failed artefacts, each revised, re-gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 0.575 s"
+  },
+  {
+   "id": "T-r6-4095",
+   "mutation": "timing: 819 failed artefacts, each revised, re-gated and written",
+   "expected": "small within the 4,096-step limit",
+   "got": "accepted in 2.420 s"
+  },
+  {
+   "id": "T-regate-902",
+   "mutation": "timing: re-gate, 300 distinct gates FAIL patch, r1 passes all, 300 writes consume r1",
+   "expected": "small within the limit",
+   "got": "accepted in 1.331 s (R6-4)"
+  },
+  {
+   "id": "T-regate-1202",
+   "mutation": "timing: re-gate, 400 distinct gates FAIL patch, r1 passes all, 400 writes consume r1",
+   "expected": "small within the limit",
+   "got": "accepted in 3.046 s (R6-4)"
+  },
+  {
+   "id": "T-regate-2042",
+   "mutation": "timing: re-gate, 680 distinct gates FAIL patch, r1 passes all, 680 writes consume r1",
+   "expected": "small within the limit",
+   "got": "accepted in 14.605 s (R6-4)"
+  },
+  {
+   "id": "T-sketch-re-gate-g=u=680",
+   "mutation": "timing of the review sketch (WORK/alt): re-gate g=u=680",
+   "expected": "near-linear",
+   "got": "accepted in 0.488 s"
+  },
+  {
+   "id": "T-sketch-re-gate-g=u=1365",
+   "mutation": "timing of the review sketch (WORK/alt): re-gate g=u=1365",
+   "expected": "near-linear",
+   "got": "accepted in 1.972 s"
+  },
+  {
+   "id": "T-sketch-819-chains",
+   "mutation": "timing of the review sketch (WORK/alt): 819 chains",
+   "expected": "near-linear",
+   "got": "accepted in 2.475 s"
+  },
+  {
+   "id": "T-sketch-1365-distinct",
+   "mutation": "timing of the review sketch (WORK/alt): 1365 distinct",
+   "expected": "near-linear",
+   "got": "accepted in 0.868 s"
+  },
+  {
+   "id": "DIFF-UNGATED",
+   "mutation": "differential: 20000 random 3-10-step traces (seed 6), round-5 _ungated (c248aa42) against round-6 _ungated",
+   "expected": "identical verdicts (R5-4 is a performance change)",
+   "got": "20000 identical (14971 refused by both), 0 differ"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/BRIEF-r6.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/PLAN.md (Q-231, Q-MAS8-A..D)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/build_loop.py (= build_loop.r6.py)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-008/reviews/review-round1.json .. review-round5.json",
+  "round-5 probe scripts probes_r5.py, probes_r5on.py, r2rerun_r5on.py, r3rerun_r5on.py, perf_r5on.py (copied into WORK)",
+  "architecture/agent-loop/README.md, loop-profile.schema.json, loop-trace.schema.json, vectors.json at 5708b1ab",
+  "scripts/agent_loop.py at 5708b1ab and at c248aa42; git diff c248aa42 5708b1ab",
+  "roadmap/roadmap.json item MAS-RA-008 (description, deliverables, grounding pages)",
+  "architecture/research-adoption-v2/crosswalk.json at 82804a0 (acceptance MAS-RA-008-A1..A3, HO-D2, mappings H10, H11, H13, H15)",
+  "docs/harnesses/execution.orchestration.md, execution.tool-skill-sandbox.md, trust.security-safety.md, trust.observability-finops.md",
+  "scripts/run_manifest.py and scripts/verdict_ledger.py (canonical-form comparison via P39)",
+  "roadmap/research/papers/2609.26891v1-jaz.pdf pp. 4, 5, 7, 13, 14, 23, 24 (full text searched for exceptions)",
+  "roadmap/research/papers/2610.07832v1-hermes.pdf pp. 15, 16, 20, 21, 23",
+  "roadmap/research/papers/2609.01437v1-harnessdev.pdf pp. 5, 8, 22, 24, 27, 28",
+  "roadmap/research/papers/2609.24974v1-harness-zero.pdf pp. 2, 8, 22, 23"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}
