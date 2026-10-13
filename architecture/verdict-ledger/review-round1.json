@@ -1,0 +1,312 @@
+{
+ "schemaVersion": "harness.planeon.ai/verdict-ledger-review/v1",
+ "kind": "verdict-ledger-review",
+ "round": 1,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "c0161d2e51f885a883d739c587f8bb2c37f41585",
+ "subjectTree": "eec60763009e66e52883c0655af303978e061117",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:219-221; README rule 4",
+   "finding": "The deterministic-denial rule is narrowed to target DELIVERED. A deterministic FAIL on an INTERMEDIATE target (test or policy denial) is ignored, so a model-based PASS settles the claim and the ledger is PASS / H16 PASS (probes P01: DETERMINISTIC_TEST FAIL at INTERMEDIATE + challenger PASS -> ACCEPTED PASS; P02: DETERMINISTIC_POLICY FAIL at INTERMEDIATE -> ACCEPTED PASS). The roadmap item ('a probabilistic check cannot override a deterministic denial', H13), the plan's rule 4 ('no model-based result overrides a deterministic FAIL or denial'), H13's document ('A probabilistic detector cannot override a deterministic denial') and HERMES pp. 15, 21-22 (failing task-visible tests or other observed execution failures cannot be PASS on model judgment) state the rule without a target restriction. The DELIVERED/INTERMEDIATE distinction (rule 7) is about what counts as confirmation, not about which failures may be overridden.",
+   "requiredChange": "Apply DETERMINISTIC_OVERRIDE to every deterministic FAIL of the claim whatever its target (a deterministic FAIL at an intermediate makes the claim CONTRADICTED, or at least never SUPPORTED/NEW_VALUE_ESTABLISHED), update README rule 4, and add refusal vectors for an intermediate test FAIL and an intermediate policy denial."
+  },
+  {
+   "id": "R1-2",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:186-194 (evidence rows); check-kinds.json; README rules 3 and 5",
+   "finding": "Evidence `producedBy` is only reference-checked; its role is never checked against the evidence kind or the citing check. Consequences: (a) self-reported status under another label: a TEST_RESULT produced by the GENERATOR context is the sole support of a SUPPORTED claim and the ledger is PASS (P03), which defeats rule 3 and HarnessDev p.7 (credit only from the real diff or final environment state, never from what the harness asserts); (b) the resolver's check cites an ARTIFACT produced by the challenger context, i.e. reads its record (P04), against VeriHarness p.21 ('neither reads the other's record') and p.20 ('cannot see each other'); (c) an ADJUDICATION check cites a RESOLVER_REPORT produced by the generator (P05); (d) one content digest can be registered under two kinds, e.g. the same content as ARTIFACT and as TEST_RESULT (P41). All four are ACCEPTED with status PASS.",
+   "requiredChange": "Bind evidence producers: check-result kinds (TEST_RESULT, SCHEMA_RESULT, POLICY_RESULT, REGRESSION_RUN) must be produced by a checking context (the citing check's own context or a registered checking role), never by GENERATOR; RESOLVER_REPORT only by RESOLVER and CHALLENGER_REPORT only by CHALLENGER; a RESOLVER check may not cite evidence produced by a CHALLENGER context and vice versa; state which kinds a GENERATOR may produce (subject outputs such as ARTIFACT, DIFF, TRACE, REPRODUCER script, if intended). Refuse one digest under two kinds or decide and document it. Add a refusal code (or reuse PRODUCER_ROLE_NOT_ALLOWED/CONTEXTS_NOT_ISOLATED) with one vector per case."
+  },
+  {
+   "id": "R1-3",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:196-210; README rule 5",
+   "finding": "Context isolation is checked only on direct (one-hop) `inheritsFrom` edges and only for some role pairs. (a) Transitive leak: the resolver inherits a VERIFIER context that inherits the challenger (P07, ACCEPTED PASS). (b) Relabelled adjudication: the verdict producer may be an EVALUATOR that inherits the resolver and the challenger (P08, ACCEPTED PASS), so ADJUDICATION_NOT_FRESH is bypassed by choosing the other verdict-producer role, against VeriHarness p.6 (a fresh context 'without inheriting either investigator's conversational history') and p.10 (merging costs 0.8 points). (c) The roadmap item says 'generator, verifier and evaluator contexts are isolated', but an EVALUATOR verdict producer may inherit the VERIFIER context (P39, ACCEPTED PASS). Cycles between contexts are also accepted (P09).",
+   "requiredChange": "Compute isolation over the transitive closure of `inheritsFrom` (and refuse cycles); require every verdict producer (ADJUDICATOR and EVALUATOR) to start fresh, or to inherit no VERIFIER, RESOLVER, CHALLENGER or GENERATOR context; add vectors for the two-hop leak, the inheriting EVALUATOR verdict producer and a cycle; align README rule 5 with the roadmap's generator/verifier/evaluator isolation."
+  },
+  {
+   "id": "R1-4",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:226-245 (claim verdicts); README rules 1, 2, 6",
+   "finding": "A settled claim verdict may cite any subset of the claim's checks and ignores contrary non-deterministic outcomes. A CONSENSUS_CHALLENGER FAIL on the delivered quantity with ARTIFACT evidence exists for C1, the SUPPORTED verdict omits it and the ledger is PASS (P10); citing it changes nothing (P11). The challenger's evidence against the consensus is dropped without an adjudication check, which is the consensus-over-evidence failure the contract exists to prevent (VeriHarness p.6: adjudication upholds, overturns or leaves findings unresolved; H16: judge disagreement yields WARN/FAIL, 'never silent averaging').",
+   "requiredChange": "Require a settled verdict to account for every evidence-backed check of the claim on the delivered quantity: when any such check has the opposite outcome, the verdict is UNRESOLVED unless an ADJUDICATION check (fresh context, with evidence, sequenced after the conflicting checks) decides it; add refusal vectors for the omitted and the cited contrary check, and a valid vector with an adjudicated conflict."
+  },
+  {
+   "id": "R1-5",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:237-240; README rule 8",
+   "finding": "The CONSISTENCY_ONLY rule is satisfied by any non-REGRESSION_RUN confirming kind, so HERMES's own documented weakness passes: a green regression run plus a model-based check reading the DIFF, with no reproducer, is SUPPORTED and the ledger is PASS (P12). HERMES p.29 describes exactly this input (successful regression run, candidate diff, issue; every reproducer discarded) and says the PASS means 'consistent ... rather than independently certifying'; the crosswalk's HERMES implication asks for a task-specific reproducer or a consistency-only label. README rule 8's 'or other confirming evidence' is undefined and lets the model reading the diff count as confirmation.",
+   "requiredChange": "Define what confirms alongside a regression run (e.g. a REPRODUCER, or a deterministic check other than the regression run on the delivered quantity) and refuse a claim whose only deterministic support is REGRESSION_RUN even when model-based checks are added; add the HERMES p.29 shape as a refusal vector; cite p.29."
+  },
+  {
+   "id": "R1-6",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:138-146, 241-245 (aggregate, NEW_VALUE rule); README 'The ledger' and 'Status and H16'; vector L01",
+   "finding": "The claim `values` are never read by any rule, and the contract does not define whether the subject (and its DELIVERED quantity) is a pool rollout or the revised delivery. Consequences: NEW_VALUE_ESTABLISHED aggregates to PASS / H16 PASS although by VeriHarness's definition (p.3, p.5) it means the pool's values were contradicted and a correction absent from the pool was found (L01: rollouts 17 / 19 / ABSENT, resolver establishes 18, ledger PASS); if a deterministic test also shows the delivered value wrong, the same facts are refused (P14: DETERMINISTIC_OVERRIDE), so the result depends on which checks were run; a NEW_VALUE_ESTABLISHED value may equal the unanimous pool value (P13) or the omission sentinel ABSENT (P37); SUPPORTED on a disputed claim names no value (P16); an omission need not be explicit ABSENT, a claim may simply drop a rollout (P40, against the roadmap's 'absent explicit', VeriHarness pp. 3, 19); an INCONCLUSIVE check may carry an establishedValue (P15). All ACCEPTED.",
+   "requiredChange": "State what the subject is relative to the rollouts (for example: the delivered artifact is a named rollout, or the revised delivery whose value is recorded), bind SUPPORTED and NEW_VALUE_ESTABLISHED to that delivered value, and make the aggregation follow from it (a corrected value that the delivered subject does not carry cannot be PASS). Require a new value to be absent from the pool and not ABSENT, refuse establishedValue on non-PASS checks, and require every claim to list the same rollout set with ABSENT for an omission; add vectors for each."
+  },
+  {
+   "id": "R1-7",
+   "severity": "MINOR",
+   "location": "README 'Refusal codes, in the order the model applies them'; scripts/verdict_ledger.py:33 (CODES), 186-245",
+   "finding": "The first-code semantics do not follow the documented CODES order. Rules are interleaved per row, per check and per claim, and VALUE_NOT_ESTABLISHED and NO_EVIDENCE have early and late sites. Probes with two violations: P29 reports VALUE_NOT_ESTABLISHED (19th) instead of GENERATING_CONTEXT_VERDICT (10th); P30 VALUE_NOT_ESTABLISHED instead of NO_EVIDENCE (14th); P31 EVIDENCE_REF_UNBOUND (20th) instead of NO_EVIDENCE; P32 NOT_EVIDENCE (5th) instead of EVIDENCE_KIND_UNKNOWN (4th); P33 DETERMINISTIC_OVERRIDE (13th) instead of DETERMINISTIC_ORDER (12th). A second implementation that follows the README order disagrees with the model on multi-violation ledgers.",
+   "requiredChange": "Either apply each rule over the whole ledger before the next (so the first failing code in CODES is reported) or document the actual evaluation order (per evidence row, per check, per claim, with the two-site codes); add multi-violation vectors that pin the reported code."
+  },
+  {
+   "id": "R1-8",
+   "severity": "MINOR",
+   "location": "scripts/verdict_ledger.py:56-61, 154-159, 115-127",
+   "finding": "Not fail-closed as stated: exceptions other than Refused escape check_ledger. A NaN or infinite score passes the shape check and digest() raises ValueError (P19, P20); a lone surrogate in a free-text field raises UnicodeEncodeError (P21 requirement, P22 establishedValue). Python's json.loads accepts NaN/Infinity by default and the schema (Python jsonschema) accepts all four documents. Because Refused subclasses ValueError, a caller catching ValueError cannot tell these from refusals, and a caller reading `.code` crashes.",
+   "requiredChange": "Refuse non-finite numbers and strings that are not valid Unicode scalar sequences as LEDGER_SHAPE inside _shape (or catch ValueError/UnicodeError in check_ledger and map them to LEDGER_SHAPE); add vectors."
+  },
+  {
+   "id": "R1-9",
+   "severity": "MINOR",
+   "location": "ledger.schema.json vs scripts/verdict_ledger.py:_shape; builder schema-agreement assertion",
+   "finding": "The schema accepts documents the model refuses as LEDGER_SHAPE, although the builder asserts the two agree. A sweep of 1,704 single-leaf mutations of L01 found 58 such documents and none in the other direction: 54 are a trailing newline on any pattern-checked string (IDs, digests: Python jsonschema uses re.search, where `$` matches before a final newline, while the model uses \\Z; P25, P26), 4 are an integral float sequence such as 1.0 (JSON Schema `integer` accepts it; P23). A duplicate rollout inside one claim is also schema-valid but LEDGER_SHAPE (P24); 2020-12 cannot express that uniqueness.",
+   "requiredChange": "Make the schema exclude a trailing newline under both regex dialects (e.g. append (?![\\s\\S]) to the patterns) or document the Python-dialect gap; either accept integral floats in the model or state the stricter integer rule; report duplicate rollouts as DUPLICATE_ID rather than LEDGER_SHAPE so 'LEDGER_SHAPE iff schema-invalid' holds; add these shapes to the builder's agreement assertion."
+  },
+  {
+   "id": "R1-10",
+   "severity": "MINOR",
+   "location": "scripts/verdict_ledger.py:56-61 (canonical, digest); README rule 10 and 'The ledger' (subject.scopeDigest)",
+   "finding": "The ledger digest that `supersedes` must equal is Python json.dumps output (sorted keys, ensure_ascii=False, Python float repr), which the README does not specify. JSON-equal ledgers digest differently ({\"x\":1} vs {\"x\":1.0}; a score of 1 vs 1.0 gives two digests), and RFC 8785 would print 1.0 as 1, so a non-Python producer cannot reproduce `supersedes`. How `subject.scopeDigest` is derived from H16's nine-field scope tuple is also unspecified (the README lists only part of the tuple).",
+   "requiredChange": "Specify the canonical form (RFC 8785 is what the repository's other signed payloads use) and implement it, or restrict numbers so one encoding exists; specify the scopeDigest derivation over H16's full tuple; add a history vector with a float score."
+  },
+  {
+   "id": "R1-11",
+   "severity": "MINOR",
+   "location": "README rules 3, 4, 6, 8",
+   "finding": "Citation accuracy (eight-plus pages checked in the seed PDFs, most correct). Rule 3 attributes 'model-reported confidence' to HarnessDev pp. 6-7, 25, 27, but the word does not occur in HarnessDev (nor in VeriHarness or HERMES); those pages ground self-reported status only, and the confidence rule comes from the roadmap item and syntheses. Rule 8 cites 'HERMES' without a page; the source is p.29. Rule 4 cites HERMES p.29, which is about the regression-run weakness, not deterministic-first. Rule 6's 'a recomputation that matches the pool' is grounded on VeriHarness pp. 10-11, not on the cited pp. 2, 4, 19.",
+   "requiredChange": "Attribute model-reported confidence to the roadmap item / syntheses, cite HERMES p.29 in rule 8 and drop it from rule 4, and cite pp. 10-11 for the recomputation clause."
+  },
+  {
+   "id": "R1-12",
+   "severity": "MINOR",
+   "location": "check-kinds.json (CONSENSUS_CHALLENGER establishesValue false); vector L38; README rule 9",
+   "finding": "The challenger may not establish a value, but VeriHarness Figure 3 (p.4) shows the challenger finding the correction (USD -> EUR) that adjudication then applies, and p.3 says evidence can establish a correction absent from the pool. The asymmetry (resolver yes, challenger no) may be a sound design choice (the adjudicator establishes the final value), but the README gives no grounding or reason for it.",
+   "requiredChange": "Either allow the challenger to establish a value, or state in rule 9 that challenger corrections are carried as CHALLENGER_REPORT evidence and established by ADJUDICATION, citing p.4 and p.6."
+  },
+  {
+   "id": "R1-13",
+   "severity": "MINOR",
+   "location": "README 'Status and H16'; check-kinds.json h16EvidenceState",
+   "finding": "'PASS is PASS' maps a ledger whose only support is a model-based check (P17: one MODEL_BASED_WITH_EVIDENCE PASS reading an ARTIFACT, no deterministic check, ACCEPTED PASS) onto H16 PASS, while H16 says local-model judgments are accompanied by deterministic checks and judge-version/calibration evidence and that an LLM judge is never the sole authority for deterministic or security claims. UNRESOLVED -> WARN and FAIL -> FAIL are consistent with H16's evidence states and blocking statuses, and the README does say a ledger becomes H16 evidence only through H16's own signed record.",
+   "requiredChange": "State that the mapping gives the ledger's status only and that H16's own requirements (deterministic accompaniment, judge calibration, scope tuple, signer) still apply before it counts as H16 PASS, or add a claim class so a deterministic/security claim cannot be settled by model-based checks alone."
+  },
+  {
+   "id": "R1-14",
+   "severity": "NOTE",
+   "location": "vectors.json (refusal vectors); scripts/verdict_ledger.py:253",
+   "finding": "Rule isolation: with its own code suppressed, 25 of the 39 refusal vectors are accepted (single violation). The other 14 fall to a later, consequential rule of the same defect (e.g. L18/L19 NOT_EVIDENCE -> EVIDENCE_KIND_NOT_ALLOWED, L33 INTERMEDIATE_TARGET -> CONSENSUS_ONLY, L27 -> VERDICT_PRODUCER_ROLE), so each still reports its intended code first; L17-L19 could isolate their code with an uncited evidence row. The ledger-level NO_EVIDENCE site (line 253) never changes the accept/refuse result: with claims non-empty, a PASS or FAIL whose relied set is empty always also fails UNRESOLVED_PROMOTED or STATUS_MISMATCH, which is why L42 falls to UNRESOLVED_PROMOTED.",
+   "requiredChange": "Optional: isolate L17-L19 with uncited evidence rows; keep or drop the second NO_EVIDENCE site and say it is defence in depth."
+  },
+  {
+   "id": "R1-15",
+   "severity": "NOTE",
+   "location": "vectors.json histories; scripts/verdict_ledger.py:281-294; README 'Files'",
+   "finding": "HISTORY_SHAPE has no vector (probes H01/H02 confirm it works). The model's __main__ replays only the ledger vectors, not the histories, the aggregation rows or the recorded status/h16EvidenceState. 'every vector is checked against both' holds for the 46 ledger vectors only (the builder schema-checks those). A successor reusing its predecessor's ledgerId is accepted (H05); editing the last ledger is undetectable by construction (H06).",
+   "requiredChange": "Add a HISTORY_SHAPE vector, replay histories and aggregation rows in __main__, narrow the README sentence, and decide whether ledgerIds must be unique within a history."
+  },
+  {
+   "id": "R1-16",
+   "severity": "NOTE",
+   "location": "README 'Not claimed'",
+   "finding": "Not modelled and not listed as not claimed: the roadmap grounding's information boundary (the verifier never sees the grader, rubric or reference answers; VeriHarness pp. 3, 7, 19, 21), the consensus/disputed routing the values would allow, and the fact that context identity and role are declared, not authenticated (one agent can appear under two context IDs; authentication is H16's signer by Q-MAS1-C). MAS-RA-010 and CONF-A3-001 (roadmap B1 consumers) are not named among the future consumers.",
+   "requiredChange": "List these under 'Not claimed' (or model them), and name MAS-RA-010 / CONF-A3-001 if intended."
+  },
+  {
+   "id": "R1-17",
+   "severity": "NOTE",
+   "location": "~/.local/state/harness-onion-ci/tools/mas-ra-001/build_ledger.py:1 (outside the subject)",
+   "finding": "The builder's docstring says it writes README.md as well, but it writes only the three JSON files (the README is hand-written; its archive copy was untouched by the run).",
+   "requiredChange": "Correct the docstring."
+  }
+ ],
+ "dispositions": [],
+ "checksRun": [
+  {
+   "check": "Subject identity: HEAD c0161d2e..., tree eec60763..., parent 8d10a9d (228), branch codex/met-mas-001-verdict-evidence-ledger, worktree clean before and after the review",
+   "result": "PASS"
+  },
+  {
+   "check": "Scope: git diff --name-status 8d10a9d c0161d2e lists exactly the five added files",
+   "result": "PASS"
+  },
+  {
+   "check": "H16 document and schemas/ byte-identical to 8d10a9d (git diff --quiet)",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility: git archive of c0161d2e, build_ledger.py run with the venv python -I -B (0.13 s, ~42 MB RSS); check-kinds.json, ledger.schema.json, vectors.json byte-identical (sha256)",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay (python3 -I -B scripts/verdict_ledger.py): 46 ledger vectors",
+   "result": "PASS"
+  },
+  {
+   "check": "Vector inventory: 46 ledgers (7 valid, 39 refused, all 23 codes), 4 histories, 5 aggregation rows, as the README states",
+   "result": "PASS"
+  },
+  {
+   "check": "README check-kind registry table against check-kinds.json (roles, evidence kinds, establishesValue, notEvidence/notConfirmation/consistencyOnly)",
+   "result": "PASS"
+  },
+  {
+   "check": "README refusal-code list identical to CODES and vectors.json codes",
+   "result": "PASS"
+  },
+  {
+   "check": "First-code semantics follow the documented order (multi-violation probes P29-P34)",
+   "result": "FAIL: P29-P33 report a later code (R1-7)"
+  },
+  {
+   "check": "Owner decisions Q-MAS1-A..C quoted verbatim from the plan and applied (UNRESOLVED->WARN kept as own value; architecture/verdict-ledger/, no H16 change; producer identity/role modelled, generator verdict refused, no signing)",
+   "result": "PASS"
+  },
+  {
+   "check": "Roadmap description elements present: verdict fields, evidence-free / consensus-only / generating-context negative vectors, deterministic-first, consensus is not correctness, delivered quantity, consistency-only, self-reported status",
+   "result": "PASS for presence; gaps in R1-1..R1-6"
+  },
+  {
+   "check": "Roadmap 'generator, verifier and evaluator contexts are isolated'",
+   "result": "FAIL: EVALUATOR verdict producer may inherit VERIFIER (P39, R1-3)"
+  },
+  {
+   "check": "Crosswalk at 8d10a9d: acceptance IDs MAS-RA-001-A1..A3, layer L4, principle P3, OI-2 and OI-7 carried to MAS-RA-001",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.2 (Fig. 2: 34% wrong, 74% correct candidate, Opus 4.8, APEX-Agents)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.3 (support / contradict / establish a correction absent from the pool; unresolved; omission a distinct value)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.4 (34% / 74% / 47%; Fig. 3 challenger finds the EUR correction)",
+   "result": "PASS (Fig. 3 informs R1-12)"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.5 (resolver records a new value only when evidence establishes one)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.6 (separate contexts; fresh adjudication without inheriting history; record links claim, check, evidence, verdict)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.10-11 (merging costs 0.8; 70% at an intermediate; recomputation matching the pool is not confirmation)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.12 (record links every claim; no scalar rollout score)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.19 (434 tasks, 1,692 claims, Opus 4.8 on APEX-Agents, 'absent' value)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness pp.20-21 (contexts cannot see each other; neither reads the other's record; fresh adjudication context)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check VeriHarness p.27 (Table 7: 70% intermediate)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check HERMES pp.15, 21, 22 (diagnosis cannot override deterministic execution failures)",
+   "result": "PASS"
+  },
+  {
+   "check": "PDF spot-check HERMES p.29 (green regression run, reproducers discarded, PASS means consistent, not certified)",
+   "result": "PASS for the source; cited without a page in rule 8 and under rule 4 (R1-11)"
+  },
+  {
+   "check": "PDF spot-check HarnessDev pp.6-7, 25, 27 (self-reported status never a scoring input; honest tri-state status)",
+   "result": "PASS for self-reported status"
+  },
+  {
+   "check": "Full-text search for 'confidence' in HarnessDev, VeriHarness, HERMES",
+   "result": "FAIL: no occurrence; rule 3 attribution (R1-11)"
+  },
+  {
+   "check": "Reviewer mutation probes: 42 ledger probes (P00 control .. P41) and 7 history probes; review work directory probes.py (sha256:500854cd4ec38abb2c3c5166e9d77537f968006ada5d2426da1c826152e87f4a), probes-result.json (sha256:1b1e004551e50b82430cc821650c75f02c51875eb418e5ef61e94c983d15aef7)",
+   "result": "FAIL: 25 accepted, 13 refused, 4 escaped; should-refuse ledgers accepted (P01-P05, P07, P08, P10-P13, P39, P40), non-Refused exceptions (P19-P22)"
+  },
+  {
+   "check": "Vector rule isolation (own code suppressed; isolation.py sha256:b443d4af49a11312c26b9d0584ada4f85fdf6819d785fca61c37f81b0d98deb8, isolation-result.json sha256:eaba0732d5d3f47f17e6e73add0f2e79a1154a3a3beab8812224c6a05d6693fa)",
+   "result": "PASS with notes: 25 of 39 isolate; 14 cascade to a consequential later rule (R1-14)"
+  },
+  {
+   "check": "Schema/model shape agreement sweep: 1,704 single-leaf mutations of L01 under jsonschema Draft 2020-12",
+   "result": "FAIL: 58 schema-valid documents refused as LEDGER_SHAPE, 0 in reverse (R1-9)"
+  },
+  {
+   "check": "Fail-closed: only Refused escapes check_ledger",
+   "result": "FAIL: ValueError / UnicodeEncodeError escape (R1-8)"
+  },
+  {
+   "check": "Aggregation rows A01-A05 against aggregate() and h16EvidenceState",
+   "result": "PASS (cover FAIL-over-UNRESOLVED, policy FAIL, unresolved check, unresolved claim, PASS)"
+  },
+  {
+   "check": "Histories S01-S04 and extra history probes H01-H07 (shape, 3-chain, middle edit, duplicate ledgerId, last edit, invalid member)",
+   "result": "PASS for chain logic; notes in R1-15"
+  },
+  {
+   "check": "H16 binding: evidence states MISSING/COLLECTING/PASS/WARN/FAIL/STALE; WARN in blockingStatuses; UNRESOLVED->WARN; README says the ledger is H16 evidence only through H16's signed record",
+   "result": "PASS (mapping caveat R1-13)"
+  },
+  {
+   "check": "H13 rule text (docs/harnesses/trust.security-safety.md) for the deterministic-denial rule",
+   "result": "PASS for the source; narrower in the contract (R1-1)"
+  },
+  {
+   "check": "Public hygiene: no personal data, author names, absolute or private paths in the five files (git grep)",
+   "result": "PASS"
+  },
+  {
+   "check": "Command time and memory: every command under timeout 300, none over 60 s; measured peak RSS about 42 MB (builder and probe runs)",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry runs",
+   "result": "NOT RUN: excluded by the brief"
+  },
+  {
+   "check": "Schema validation with an ECMA-262 regex dialect validator",
+   "result": "NOT RUN: no such validator installed and no network; the newline gap is shown for Python jsonschema only"
+  }
+ ],
+ "sourcesRead": [
+  "review brief, round 1 (review work directory) and its template ~/.local/state/harness-onion-ci/tools/mas-ra-001/reviews/BRIEF-r1.md (compared; placeholders only differ)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-001/PLAN.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-001/build_ledger.py",
+  "architecture/verdict-ledger/README.md",
+  "architecture/verdict-ledger/ledger.schema.json",
+  "architecture/verdict-ledger/check-kinds.json",
+  "architecture/verdict-ledger/vectors.json",
+  "scripts/verdict_ledger.py",
+  "docs/harnesses/trust.evaluation-assurance.md (H16)",
+  "docs/harnesses/trust.security-safety.md (H13 rule line only)",
+  "AGENTS.md (repository rules, as displayed)",
+  "architecture/research-adoption-v2/crosswalk.json at 8d10a9d (MAS-RA-001 acceptance, L4, P3, CE-4, OI-2, OI-7, VeriHarness / HERMES / HarnessDev grounding facts and implications)",
+  "roadmap/roadmap.json in the planning workspace (item MAS-RA-001: description, deliverables, grounding with pages)",
+  "roadmap/research/papers/2610.00972v1-veriharness.pdf pp. 2-7, 10-12, 19-21, 27 and full-text search",
+  "roadmap/research/papers/2610.07832v1-hermes.pdf pp. 15, 21, 22, 29 and full-text search",
+  "roadmap/research/papers/2609.01437v1-harnessdev.pdf pp. 6, 7, 25, 27 and full-text search"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

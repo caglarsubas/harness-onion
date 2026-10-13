@@ -1,0 +1,79 @@
+{
+ "schemaVersion": "harness.planeon.ai/verdict-ledger-review/v1",
+ "kind": "verdict-ledger-review",
+ "round": 5,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "2cf5617b55bf992ed77debc174cfd13ba40d1737",
+ "subjectTree": "d6496f1a28f140fd1c7165d0ba07e288dd2924a8",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [],
+ "dispositions": [
+  {
+   "id": "R4-1",
+   "status": "RESOLVED",
+   "note": "Resolved by narrowing the wording, the second option I offered. Rule 10 ('Append-only; no improvement without new evidence') now states what check_history enforces: a better ledger status needs a relied-on digest no earlier ledger holds, and each claim whose verdict improves, matched by claim ID, needs such a digest among that claim's checks; a successor may get worse. It calls this a floor, not retry control, and names the shapes it lets through: another check's changed outcome on unchanged evidence (my Y09, Y10), a renamed or dropped claim (Y06, Y07), and a policy violation no longer listed (Y11). It leaves the legitimacy of a re-run to H16's run lock, campaign records and no-retry-into-a-pass rule. 'Not claimed' adds that retry control is not claimed. Re-running my round-4 history probes on this commit gives the same results as round 4, and every result now matches the README. The superseded wording 'the ledger refuses re-judging identical evidence' is gone."
+  },
+  {
+   "id": "R4-2",
+   "status": "RESOLVED",
+   "note": "Rule 10 and 'Not claimed' now say keeping one history per subject is H16's, and a ledger presented as the first of a second history for the same subject is a fork that only H16's records can show. My fork probe is still accepted by check_history, as the README now says."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject identity: HEAD 2cf5617b..., tree d6496f1a..., parent 12d7fe42 (round 4), base 8d10a9d; worktree clean",
+   "result": "PASS"
+  },
+  {
+   "check": "Only README changed: git diff --stat 12d7fe42..2cf5617b shows architecture/verdict-ledger/README.md alone (16+/10-); git diff --quiet over scripts/, check-kinds.json, ledger.schema.json and vectors.json is clean; docs/ and schemas/ unchanged against 8d10a9d",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder hash 32097c32... unchanged",
+   "result": "PASS"
+  },
+  {
+   "check": "Byte reproduction on a git archive of 2cf5617b (venv python -I -B under nice, 0.36 s, about 50 MB RSS): the three JSON files are byte-identical to the commit and have the same sha256 as round 4's",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay: 112 ledgers, 7 texts, 12 histories, 6 aggregation rows, 2 scope digests",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-4 history and parse probes re-run on round 5 (probes4-on-r5.json), compared with round 4",
+   "result": "PASS: identical"
+  },
+  {
+   "check": "README rule 10 and the new 'Not claimed' entry read against check_history and _new_evidence (status rank against the predecessor, claim rank against the predecessor by claim ID, cumulative set of earlier evidence rows, relied set for the status, the claim's checks for a claim)",
+   "result": "PASS: claims no more than the model enforces"
+  },
+  {
+   "check": "Remaining README mentions of retry and successors (rule 6: 're-adjudication belongs in a successor ledger with new evidence (rule 10)')",
+   "result": "PASS: consistent with the floor"
+  },
+  {
+   "check": "Public hygiene: no personal data or private paths in the README (git grep)",
+   "result": "PASS"
+  },
+  {
+   "check": "Command time and memory: every command under timeout 300 and nice, none over 60 s",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry runs",
+   "result": "NOT RUN: excluded by the brief"
+  }
+ ],
+ "sourcesRead": [
+  "round-5 change list (coordinator message) and the round-1 brief (same rules)",
+  "git diff 12d7fe42..2cf5617b (README.md) and git diff --quiet over the other four files",
+  "scripts/verdict_ledger.py check_history and _new_evidence at 2cf5617b (unchanged from round 4)",
+  "own round-4 record and probe results (review work directory)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

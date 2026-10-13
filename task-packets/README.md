@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ADOPT-003
+## Current source preparation — MET-MAS-001
+
+MAS-RA-001 (MET-MAS-001): the verdict and evidence ledger contract candidate planeon.internal.verdict-ledger/v1
+(schema, check-kind registry, reference model and vectors; UNRESOLVED maps to H16 WARN); H16's harness document
+and the repository schemas stay byte-identical. Alpha2 OPEN; 228 accepted plus MET-MAS-001 only.
+
+## Historical MAS-RA-000 source preparation — MET-ADOPT-003
 
 MAS-RA-000 (MET-ADOPT-003): research adoption v2 crosswalk, the October 2026 MAS-harness corpus mapped to the
 eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs; research-adoption.json and the
@@ -1317,3 +1323,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 226 | `MET-PERF-037` | `Harness-Engineering` | PERF-035-F: parallel-suite follow-up (review R3-01, R3-02) |
 | 227 | `MET-ENFORCE-024` | `Harness-Engineering` | W03-AMEND: W03 plan v2 (HE-002 decisions), operator edge registry record, I05 v3 supplementary vectors; DATA_CHECK_ONLY |
 | 228 | `MET-ADOPT-003` | `Harness-Engineering` | MAS-RA-000: research adoption v2 crosswalk (October 2026 MAS-harness corpus); META_PLANNING_ONLY |
+| 229 | `MET-MAS-001` | `Harness-Engineering` | MAS-RA-001: verdict and evidence ledger contract candidate (schema, check kinds, model, vectors); DATA_CHECK_ONLY |

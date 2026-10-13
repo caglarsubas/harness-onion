@@ -1,0 +1,175 @@
+{
+ "schemaVersion": "planeon.internal.verdict-check-kinds/v1",
+ "contextRoles": [
+  "GENERATOR",
+  "VERIFIER",
+  "RESOLVER",
+  "CHALLENGER",
+  "ADJUDICATOR",
+  "EVALUATOR"
+ ],
+ "verdictProducerRoles": [
+  "ADJUDICATOR",
+  "EVALUATOR"
+ ],
+ "checkKinds": [
+  {
+   "kind": "DETERMINISTIC_TEST",
+   "deterministic": true,
+   "optional": false,
+   "producerRoles": [
+    "VERIFIER",
+    "EVALUATOR"
+   ],
+   "evidenceKinds": [
+    "TEST_RESULT",
+    "REPRODUCER",
+    "REGRESSION_RUN"
+   ],
+   "establishesValue": true
+  },
+  {
+   "kind": "DETERMINISTIC_SCHEMA",
+   "deterministic": true,
+   "optional": false,
+   "producerRoles": [
+    "VERIFIER",
+    "EVALUATOR"
+   ],
+   "evidenceKinds": [
+    "SCHEMA_RESULT"
+   ],
+   "establishesValue": false
+  },
+  {
+   "kind": "DETERMINISTIC_POLICY",
+   "deterministic": true,
+   "optional": false,
+   "producerRoles": [
+    "VERIFIER",
+    "EVALUATOR"
+   ],
+   "evidenceKinds": [
+    "POLICY_RESULT"
+   ],
+   "establishesValue": false
+  },
+  {
+   "kind": "MODEL_BASED_WITH_EVIDENCE",
+   "deterministic": false,
+   "optional": false,
+   "producerRoles": [
+    "VERIFIER"
+   ],
+   "evidenceKinds": [
+    "ARTIFACT",
+    "TRACE",
+    "DIFF",
+    "ENVIRONMENT_STATE",
+    "DOCUMENT_EXTRACT",
+    "ROLLOUT_AGREEMENT",
+    "POOL_RECOMPUTATION"
+   ],
+   "establishesValue": false
+  },
+  {
+   "kind": "DISAGREEMENT_RESOLVER",
+   "deterministic": false,
+   "optional": true,
+   "producerRoles": [
+    "RESOLVER"
+   ],
+   "evidenceKinds": [
+    "ARTIFACT",
+    "TRACE",
+    "DIFF",
+    "ENVIRONMENT_STATE",
+    "DOCUMENT_EXTRACT",
+    "TEST_RESULT"
+   ],
+   "establishesValue": true
+  },
+  {
+   "kind": "CONSENSUS_CHALLENGER",
+   "deterministic": false,
+   "optional": true,
+   "producerRoles": [
+    "CHALLENGER"
+   ],
+   "evidenceKinds": [
+    "ARTIFACT",
+    "TRACE",
+    "DIFF",
+    "ENVIRONMENT_STATE",
+    "DOCUMENT_EXTRACT",
+    "TEST_RESULT"
+   ],
+   "establishesValue": false
+  },
+  {
+   "kind": "ADJUDICATION",
+   "deterministic": false,
+   "optional": false,
+   "producerRoles": [
+    "ADJUDICATOR"
+   ],
+   "evidenceKinds": [
+    "ARTIFACT",
+    "TRACE",
+    "DIFF",
+    "ENVIRONMENT_STATE",
+    "DOCUMENT_EXTRACT",
+    "TEST_RESULT",
+    "RESOLVER_REPORT",
+    "CHALLENGER_REPORT"
+   ],
+   "establishesValue": true
+  }
+ ],
+ "evidenceKinds": [
+  "TEST_RESULT",
+  "REPRODUCER",
+  "REGRESSION_RUN",
+  "SCHEMA_RESULT",
+  "POLICY_RESULT",
+  "ARTIFACT",
+  "TRACE",
+  "DIFF",
+  "ENVIRONMENT_STATE",
+  "DOCUMENT_EXTRACT",
+  "ROLLOUT_AGREEMENT",
+  "POOL_RECOMPUTATION",
+  "RESOLVER_REPORT",
+  "CHALLENGER_REPORT"
+ ],
+ "notEvidence": [
+  "MODEL_CONFIDENCE",
+  "SELF_REPORTED_STATUS"
+ ],
+ "notConfirmation": [
+  "ROLLOUT_AGREEMENT",
+  "POOL_RECOMPUTATION"
+ ],
+ "consistencyOnly": [
+  "REGRESSION_RUN"
+ ],
+ "provenance": {
+  "subjectOutputs": [
+   "ARTIFACT",
+   "TRACE",
+   "DIFF"
+  ],
+  "reports": {
+   "RESOLVER_REPORT": "RESOLVER",
+   "CHALLENGER_REPORT": "CHALLENGER"
+  }
+ },
+ "policyViolationKinds": [
+  "POLICY_RESULT"
+ ],
+ "h16EvidenceState": {
+  "PASS": "PASS",
+  "FAIL": "FAIL",
+  "UNRESOLVED": "WARN"
+ }
+}

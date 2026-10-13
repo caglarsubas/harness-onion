@@ -1,0 +1,122 @@
+{
+ "schemaVersion": "harness.planeon.ai/verdict-ledger-review/v1",
+ "kind": "verdict-ledger-review",
+ "round": 4,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "12d7fe428801aeabf425972cb5ed65010863e10f",
+ "subjectTree": "4e35120f40776d426516adab1f2bd20593d9a3d6",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "R4-1",
+   "severity": "MINOR",
+   "location": "scripts/verdict_ledger.py:583-620 (_new_evidence, check_history); README rule 10",
+   "finding": "HISTORY_RETRY needs one new digest somewhere: anywhere in the relied set when the status improves, or anywhere among an improving claim's checks, matched by claimId. It does not need new evidence where the improvement happened, so one unrelated re-run lets an improvement on identical evidence through. Each case below is ACCEPTED with only one other check re-run:\n- Y06: the contradicted claim is renamed (C1 to C1b) and passes on the identical test digest.\n- Y07: the contradicted claim is dropped from the successor.\n- Y09: the challenger goes from INCONCLUSIVE to PASS on the same artifact digest while the claim verdict stays SUPPORTED, so only the status improves.\n- Y10: the resolver goes from INCONCLUSIVE to PASS on the same E4 while the claim's deterministic test is re-run.\n- Y11: a policy violation disappears with no new policy evidence.\nThe exact shapes are refused (my H08, S09-S11, alternating PASS/FAIL/PASS Y01, Y04, Y05, the dropped claim without a re-run Y08, an uncited new row Y12), and getting worse stays free (Y13). The README's 'the ledger refuses re-judging identical evidence' is broader than what is enforced, though it rightly leaves the legitimacy of a re-run to H16.",
+   "requiredChange": "Either localize the rule:\n- the claim set (claimId with its requirement) is stable across a history, so a renamed or dropped claim is refused;\n- a status improvement must come from improved claims or checks, each with a new digest among the checks whose outcome changed;\n- removing a policy violation needs new POLICY_RESULT evidence.\nOr narrow README rule 10 to what is enforced (at least one new relied digest, and one per improving claim ID) and name these shapes as H16's to judge. Add the shapes as vectors either way. This may land before adoption or be carried as a named open item."
+  },
+  {
+   "id": "R4-2",
+   "severity": "NOTE",
+   "location": "README rule 10",
+   "finding": "A history can be restarted. The newest ledger of any retry, presented as the first ledger of a new history (supersedes null), is accepted, so HISTORY_RETRY binds only the history a consumer is given. The README already says the newest ledger is bound only once a successor or H16's record names it.",
+   "requiredChange": "Optional: say that H16 keeps one history per subject and that a ledger with supersedes null for a subject that already has a history is a fork for H16 to refuse."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "R3-1",
+   "status": "RESOLVED",
+   "note": "Implemented as I asked: HISTORY_RETRY refuses a successor that improves the status or a claim verdict without a new digest. Refused: my H08 (FAIL re-adjudicated to PASS on identical evidence), vectors S09-S11, and my probes Y01 (PASS, FAIL, PASS), Y04, Y05, Y08 and Y12. Accepted as intended: Y02, Y03 (each step re-runs what changed) and Y13 (worse without new evidence). S01 now carries re-observed evidence. The bypasses through unrelated re-runs, renamed or dropped claims and policy removal are new finding R4-1."
+  },
+  {
+   "id": "R3-2",
+   "status": "RESOLVED",
+   "note": "README rule 6 now says a report is bound to its producing context, not to a claim, and that a producer needing a report per claim uses a context per claim."
+  },
+  {
+   "id": "R3-3",
+   "status": "RESOLVED",
+   "note": "parse now refuses a str that is not valid Unicode. A surrogate pair held as two code points and a lone surrogate code point are refused by parse and check_text alike (LEDGER_SHAPE); an astral character, written directly or as an escaped pair, still parses and checks PASS. The README's agreement sentence is reworded."
+  },
+  {
+   "id": "R3-4",
+   "status": "RESOLVED",
+   "note": "No behaviour change. README rule 6 now says adjudications agree in outcome and established value ('both name the same value or neither does'); M12 is still refused, as documented."
+  },
+  {
+   "id": "R3-5",
+   "status": "RESOLVED",
+   "note": "'Not claimed' now says a ledger cannot show that every check that ran was recorded: CHECK_OMITTED binds verdicts to the checks the ledger holds, and H16's run lock pins the suite."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject identity: HEAD 12d7fe42..., tree 4e35120f..., parent fb522ab5 (round 3), base 8d10a9d; worktree clean before and after",
+   "result": "PASS"
+  },
+  {
+   "check": "Scope: exactly the five added files against 8d10a9d; docs/ and schemas/ unchanged; diff fb522ab5..12d7fe42 touches README.md, vectors.json and scripts/verdict_ledger.py",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder hash 32097c32... as stated",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility on a git archive of 12d7fe42 (venv python -I -B under nice, 0.37 s, about 50 MB RSS): the three JSON files are byte-identical, and the builder printed 112 ledgers, 12 histories and an 874-document sweep in agreement",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay: 112 ledgers, 7 texts, 12 histories, 6 aggregation rows, 2 scope digests",
+   "result": "PASS"
+  },
+  {
+   "check": "Regression: round-3 probe set (76 ledger probes, 9 text probes, 8 history probes, 2,352-document sweep) re-run on round 4 (probes3-on-r4.json sha256:a36929834a073c72db61b257c85ea5013cee737b00325321a050f7abfbbe71d4)",
+   "result": "PASS: no ledger or text result changed; H08 changed from ACCEPTED to HISTORY_RETRY; sweep 0/0/0"
+  },
+  {
+   "check": "Round-4 history probes Y01-Y13 and a fork probe (probes4.py sha256:3c3a061b8eeaf454375027dc33d651dfda5be3b89f265ce90dc2fee856d76e87, probes4-result.json sha256:f02297b2981ddc2fcb0728eb92a5d41ee3786c06c726657b832a60b07dbbe915)",
+   "result": "PASS for the specified rule; Y06, Y07, Y09, Y10, Y11 accepted (R4-1); fork accepted (R4-2)"
+  },
+  {
+   "check": "parse on str input: surrogate pair held as two code points, lone surrogate code point, astral character directly and as an escaped pair",
+   "result": "PASS"
+  },
+  {
+   "check": "Independent isolation (patched _refuse; isolation4-result.json)",
+   "result": "PASS: agrees with withoutOwnRule on 76 of 76"
+  },
+  {
+   "check": "Independent RFC 8785 digests in node (jcs_check.js)",
+   "result": "PASS: 21 of 21 (16 valid ledgers, D01-D02, supersedes links of S01, S07, S12)"
+  },
+  {
+   "check": "README changes for R3-2, R3-3, R3-4, R3-5 and rule 10 read against the model",
+   "result": "PASS (rule 10 wording: R4-1)"
+  },
+  {
+   "check": "Public hygiene: no personal data or private paths in the five files (git grep)",
+   "result": "PASS"
+  },
+  {
+   "check": "Command time and memory: every command under timeout 300 and under nice, none over 60 s, measured peak RSS about 50 MB",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry runs",
+   "result": "NOT RUN: excluded by the brief"
+  }
+ ],
+ "sourcesRead": [
+  "round-4 change list (coordinator message) and the round-1 brief (same rules)",
+  "own round-1 to round-3 records and probe sets (review work directory)",
+  "git diff fb522ab5..12d7fe42 of scripts/verdict_ledger.py and README.md; vectors.json history rows at 12d7fe42",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-001/build_ledger.py (round 4; run and hashed)",
+  "docs/harnesses/trust.evaluation-assurance.md (H16 retry rule, as read in round 1; unchanged)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

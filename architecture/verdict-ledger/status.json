@@ -1,0 +1,113 @@
+{
+ "schemaVersion": "planeon.internal.verdict-ledger-status/v1",
+ "workItem": "MAS-RA-001",
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "contract": {
+  "schema": "architecture/verdict-ledger/ledger.schema.json",
+  "checkKinds": "architecture/verdict-ledger/check-kinds.json",
+  "vectors": "architecture/verdict-ledger/vectors.json",
+  "model": "scripts/verdict_ledger.py",
+  "readme": "architecture/verdict-ledger/README.md"
+ },
+ "reviewedSubject": {
+  "commit": "2cf5617b55bf992ed77debc174cfd13ba40d1737",
+  "tree": "d6496f1a28f140fd1c7165d0ba07e288dd2924a8"
+ },
+ "adoptionEdit": {
+  "path": "architecture/verdict-ledger/README.md",
+  "replaced": "Status: **CONTRACT_CANDIDATE_ROUND5_AWAITING_INDEPENDENT_REVIEW**.",
+  "with": "Status: **ADOPTED_CONTRACT_CANDIDATE** (independent review round 5: PASS_FOR_SOURCE_PUBLICATION; rounds and review records in `status.json`).",
+  "reviewedSha256": "e8e38618b862b5537811ff6324f195f486f4e5a6d6bdbf1eda563d8ce3c5b2ad",
+  "adoptedSha256": "dde6efc45fc2e1ad675635d0a18a1d6a82b49c960616af239f47071e2914e3f7"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "c0161d2e51f885a883d739c587f8bb2c37f41585",
+   "subjectTree": "eec60763009e66e52883c0655af303978e061117",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/verdict-ledger/review-round1.json",
+   "snapshot": "architecture/verdict-ledger/round1/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/verdict-ledger/vectors.json": "cd54d6e95a878b2a5f0e1c8723afd3d2dceca79a3c0b3679f54e3727bed55f03"
+   }
+  },
+  {
+   "round": 2,
+   "subject": "62c8a734469c5fb469849c2667f135ae95f6042f",
+   "subjectTree": "b56bf0e94c681afbe24b221d44c20d8815b13bd1",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/verdict-ledger/review-round2.json",
+   "snapshot": "architecture/verdict-ledger/round2/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/verdict-ledger/vectors.json": "9a5ef2ecf4401c1d3989f3fa18406554ef4bed0880028971e451ffe7c2680151"
+   }
+  },
+  {
+   "round": 3,
+   "subject": "fb522ab52403b4470f6ce607329cd36337eccba9",
+   "subjectTree": "2fc3158af85aaddd7a255cd13de70a8b987a677f",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/verdict-ledger/review-round3.json",
+   "snapshot": "architecture/verdict-ledger/round3/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/verdict-ledger/vectors.json": "85c00685874cc59067c524fff5368d402f0c91f265f8acde8105a57cb416a4b5"
+   }
+  },
+  {
+   "round": 4,
+   "subject": "12d7fe428801aeabf425972cb5ed65010863e10f",
+   "subjectTree": "4e35120f40776d426516adab1f2bd20593d9a3d6",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/verdict-ledger/review-round4.json",
+   "snapshot": "architecture/verdict-ledger/round4/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/verdict-ledger/vectors.json": "d2331fc2278c7bc48f1c107586ac29e466fbd9216c33b6c060fee3af7ce585b5"
+   }
+  },
+  {
+   "round": 5,
+   "subject": "2cf5617b55bf992ed77debc174cfd13ba40d1737",
+   "subjectTree": "d6496f1a28f140fd1c7165d0ba07e288dd2924a8",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/verdict-ledger/review-round5.json",
+   "snapshot": null,
+   "severities": []
+  }
+ ],
+ "carried": [],
+ "acceptance": [
+  "MAS-RA-001-A1",
+  "MAS-RA-001-A2",
+  "MAS-RA-001-A3"
+ ],
+ "ownerDecisions": [
+  "Q-MAS1-A (a)",
+  "Q-MAS1-B (a)",
+  "Q-MAS1-C (a)",
+  "Q-229 (a)"
+ ],
+ "nonClaims": [
+  "An internal contract candidate: no public contract, selector, catalog, schema or runtime change; H16's harness document and the repository schemas are byte-identical.",
+  "No producer, consumer, service or signing path exists; the model runs only on the vectors.",
+  "The cited figures are the source papers' results, not platform evidence."
+ ]
+}

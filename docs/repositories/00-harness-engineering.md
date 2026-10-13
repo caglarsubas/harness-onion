@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ADOPT-003
+## Current source preparation — MET-MAS-001
+
+MAS-RA-001 (MET-MAS-001): the verdict and evidence ledger contract candidate planeon.internal.verdict-ledger/v1
+(schema, check-kind registry, reference model and vectors; UNRESOLVED maps to H16 WARN); H16's harness document
+and the repository schemas stay byte-identical. Alpha2 OPEN; 228 accepted plus MET-MAS-001 only.
+
+## Historical MAS-RA-000 source preparation — MET-ADOPT-003
 
 MAS-RA-000 (MET-ADOPT-003): research adoption v2 crosswalk, the October 2026 MAS-harness corpus mapped to the
 eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs; research-adoption.json and the
@@ -1077,6 +1083,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 100. `MET-PERF-037`: close the parallel suite's carried review findings R3-01 and R3-02 with every refusal unchanged; source only.
 101. `MET-ENFORCE-024`: publish the W03 plan v2 (the owner's HE-002 decisions), the operator -> harness-engineering buildArtifact edge record and the I05 v3 supplementary vectors; data only.
 102. `MET-ADOPT-003`: publish the research adoption v2 crosswalk (the October 2026 MAS-harness corpus, the eight layers, the sixteen harnesses and the MAS-RA-001..010 acceptance IDs) beside the byte-identical MET-ADOPT-002 record; data only.
+103. `MET-MAS-001`: publish the verdict and evidence ledger contract candidate (schema, check-kind registry, reference model and vectors; UNRESOLVED maps to H16 WARN; H16 unchanged); data only.
 
 ## Testing, verification, and acceptance
 

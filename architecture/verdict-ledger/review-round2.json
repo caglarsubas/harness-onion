@@ -1,0 +1,255 @@
+{
+ "schemaVersion": "harness.planeon.ai/verdict-ledger-review/v1",
+ "kind": "verdict-ledger-review",
+ "round": 2,
+ "reviewDate": "2026-10-13",
+ "subjectCommit": "62c8a734469c5fb469849c2667f135ae95f6042f",
+ "subjectTree": "b56bf0e94c681afbe24b221d44c20d8815b13bd1",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R2-1",
+   "severity": "MAJOR",
+   "location": "scripts/verdict_ledger.py:396-417 (_adjudication_after, _adjudicated); README rule 6",
+   "finding": "The disagreement rule lets the last adjudication win. An earlier adjudication with the other outcome is just one more conflicting check, so any later adjudication decides. Challenger FAIL (sequence 3), adjudication FAIL (5), then a second fresh adjudicator's PASS (6): C1 is SUPPORTED, the ledger PASS and its H16 state PASS (probe N03). The same adjudicator context reversing itself is accepted too (N04), and with competing corrections two adjudications establishing 18 and 20 are accepted with the later value (N21). Re-running adjudication until it agrees is selection by retry: H16, which rule 6 cites, makes judge disagreement WARN/FAIL ('never silent averaging'), and VeriHarness p.6 has one fresh adjudication. Related: the deciding adjudication need not cite the record it overturns. It may cite only the generator's ARTIFACT (N05, ACCEPTED PASS). For a conflicting VERIFIER model-based check it cannot cite that record at all: there is no verifier report kind, and provenance refuses the verifier's own evidence (N22, EVIDENCE_PROVENANCE).",
+   "requiredChange": "Within one ledger, refuse (or require UNRESOLVED for) a claim whose ADJUDICATION checks differ in outcome or in established value; a re-adjudication belongs in a successor ledger. Require the deciding adjudication to cite the report of every conflicting resolver or challenger check, and decide how a conflicting verifier check's record reaches the adjudicator (a report kind, or a provenance exception). Add the N03, N04, N05 and N21 shapes as vectors."
+  },
+  {
+   "id": "R2-2",
+   "severity": "MINOR",
+   "location": "scripts/verdict_ledger.py:293-326 (_provenance, _isolated); README rule 5",
+   "finding": "Generator contexts can relay one checker's history to another. A GENERATOR may inherit any context except a verdict producer (P36, ACCEPTED), and every check may cite subject outputs (ARTIFACT, TRACE, DIFF) from any GENERATOR. A generator that inherits the challenger produces an ARTIFACT that the resolver cites (N01); the reverse also works, through a TRACE (N02). Both are ACCEPTED with H16 PASS, so README rule 5's 'a resolver never reads the challenger's record nor the reverse' overclaims. There is a legitimate reading (a revision context producing the revised delivery that every checker assesses), but the contract neither tells the delivered subject's outputs apart from other generator outputs nor models a revision. VeriHarness p.21 continues delivery in the adjudication context, and no check may cite outputs produced there.",
+   "requiredChange": "Either forbid a GENERATOR from inheriting checking contexts, or count a generator's ancestors when a check cites its outputs (refuse a resolver citing outputs of a generator that descends from a challenger, and the reverse). State how a revised delivery is modelled. Add N01 and N02 as vectors."
+  },
+  {
+   "id": "R2-3",
+   "severity": "MINOR",
+   "location": "README 'Canonical form and digests'; scripts/verdict_ledger.py (check_ledger; __main__ text replay)",
+   "finding": "The model checks parsed values, so it cannot see a duplicate member name in the raw text. Python keeps the last duplicate: raw L01 with an extra earlier 'ledgerId' member (R01), or a duplicated score member (R02), is ACCEPTED with L01's digest. A parser that keeps the first member reads a different ledger with a different digest, so two consumers can disagree on a supersedes link. RFC 8785 takes I-JSON input, which has no duplicate names. The raw-text vectors T01-T05 cover NaN, infinities and lone surrogates, but not duplicate names.",
+   "requiredChange": "State that ledgers are I-JSON (RFC 7493). Provide a parse helper that refuses duplicate member names as LEDGER_SHAPE (for example json.loads with an object_pairs_hook) and use it for the text vectors. Add a duplicate-member text vector."
+  },
+  {
+   "id": "R2-4",
+   "severity": "MINOR",
+   "location": "ledger.schema.json TEXT/KIND pattern ^[^\\ud800-\\udfff]*(?![\\s\\S]); README shape paragraph",
+   "finding": "The free-text pattern behaves differently by regex dialect. Without the u flag, an ECMA-262 engine reads an astral-plane character as two surrogate code units, so the pattern refuses it. Checked in node 24: 'a' + U+1F600 + 'b' matches in Python and in ECMA with the u flag, but not without it; lone surrogates are refused in all three. A schema consumer whose validator compiles patterns without u would refuse text the model accepts. The README says the patterns behave alike in both dialects, and the builder's agreement assertion runs only Python jsonschema. The end-of-input lookahead and the IDENT pattern behave the same in all three (checked); DIGEST uses the same ASCII-only construction.",
+   "requiredChange": "State that patterns need Unicode (u-flag) semantics, or use a text pattern that also accepts well-formed surrogate pairs in non-u mode. Add an astral-plane text to the agreement vectors."
+  },
+  {
+   "id": "R2-5",
+   "severity": "NOTE",
+   "location": "scripts/verdict_ledger.py:402-413 (conflicts), 425-429 (_value); README rules 6, 7, 9",
+   "finding": "A model-based FAIL with evidence at an INTERMEDIATE target never counts as a disagreement. A SUPPORTED claim therefore needs no adjudication for it, and the ledger is ACCEPTED PASS (N06, N18). Separately, an establishedValue on an INTERMEDIATE check is compared with the claim's delivered value, which is a different quantity. So a deterministic PASS at an intermediate that names the intermediate value is refused as VALUE_NOT_ESTABLISHED (N07).",
+   "requiredChange": "Optional: say in rule 7 that intermediate model-based failures are recorded but never conflict (or make them conflicts), and refuse or ignore establishedValue on INTERMEDIATE checks."
+  },
+  {
+   "id": "R2-6",
+   "severity": "NOTE",
+   "location": "scripts/verdict_ledger.py:493-505 (h16_evidence_state), 385-393 (_consistency); README 'Status and H16'",
+   "finding": "Any deterministic check satisfies both H16's deterministic accompaniment and the consistency rule, including a format-only schema check. L01's C2 value is judged only by the resolver; its one deterministic check is a schema check, and the ledger maps to H16 PASS (N16). A regression run plus a schema PASS on the delivered quantity confirms (N08), which matches my own R1-5 suggestion. The README extends H16's 'sole authority for deterministic/security claims' to every claim, which is the conservative direction.",
+   "requiredChange": "Optional: note that a format-only check confirms nothing about a value, or limit the H16 PASS exemption to checks that test the value."
+  },
+  {
+   "id": "R2-7",
+   "severity": "NOTE",
+   "location": "scripts/verdict_ledger.py:229 (one digest per row), 304-310 (own-context provenance)",
+   "finding": "Two contexts that produce byte-identical deterministic output cannot both record it. A second row with that digest is DUPLICATE_ID, and citing the first context's row is EVIDENCE_PROVENANCE (N09).",
+   "requiredChange": "Optional: require check results to embed their producing context (so the digests differ), or relax one of the two rules."
+  },
+  {
+   "id": "R2-8",
+   "severity": "NOTE",
+   "location": "scripts/verdict_ledger.py:358-361 (_no_evidence); README rule 1",
+   "finding": "The ledger-level NO_EVIDENCE clause tests the declared evidenceRefs, not the digests the ledger relies on. A PASS that relies on no digest but declares an unbound one therefore reports EVIDENCE_REF_UNBOUND (P31). The README defines the clause as 'a PASS or FAIL relying on no digest' and promises the earliest code. This is defence in depth only: whether the ledger is refused does not change.",
+   "requiredChange": "Test the relied set in the clause (_relied), or reword the README."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "R1-1",
+   "status": "RESOLVED",
+   "note": "DETERMINISTIC_OVERRIDE now covers every deterministic FAIL, whatever its target. P01 (test FAIL at an intermediate) and P02 (policy denial at an intermediate) are refused, and so is P38 (a deterministic FAIL left UNRESOLVED). Vectors L66-L68 cover these, L11 is a valid contradiction by an intermediate FAIL alone, and README rule 4 now says any target."
+  },
+  {
+   "id": "R1-2",
+   "status": "RESOLVED",
+   "note": "EVIDENCE_PROVENANCE refuses P03 (generator TEST_RESULT), P04 (resolver cites the challenger's ARTIFACT), P05 (generator RESOLVER_REPORT) and P06 (a verifier cites the challenger's TEST_RESULT). P41 (one digest under two kinds) is DUPLICATE_ID, N14 (generator ENVIRONMENT_STATE) is refused, and policy-violation evidence must be a non-generator POLICY_RESULT (P18 refused). The relay through generator contexts that remains is new finding R2-2."
+  },
+  {
+   "id": "R1-3",
+   "status": "RESOLVED",
+   "note": "Isolation is now checked over the transitive closure. Refused: P07 (two-hop leak), P09 (cycle), P08 and P39 (CONTEXT_NOT_FRESH for an inheriting EVALUATOR) and L58 (inheriting a verdict producer). The generator relay is R2-2."
+  },
+  {
+   "id": "R1-4",
+   "status": "RESOLVED",
+   "note": "Done as I asked: P10 (omitted contrary check) is CHECK_OMITTED, P11 (cited, unadjudicated) is DISAGREEMENT_UNADJUDICATED, adjudication sequenced too early is refused (L78), and L10 is a valid adjudicated conflict. The last-adjudication-wins hole that this fix opens is new finding R2-1."
+  },
+  {
+   "id": "R1-5",
+   "status": "RESOLVED",
+   "note": "P12 (the HERMES p.29 shape) is refused as CONSISTENCY_ONLY (vectors L75, L76), and README rule 8 cites p.29. A schema or test result on the delivered quantity confirms a regression run (N08), as my own suggestion allowed; see R2-6."
+  },
+  {
+   "id": "R1-6",
+   "status": "RESOLVED",
+   "note": "The subject is defined; claims carry delivered and rolloutValues; NEW_VALUE_ESTABLISHED aggregates to FAIL (A02, L08, L09). Refused: P13 (new value in the pool), P37 (ABSENT), P40 (dropped rollout, ROLLOUT_SET) and P15 (establishedValue on an INCONCLUSIVE check). P14 is now a valid FAIL (L09), so the round-1 inconsistency is gone. The deviation from my wording is accepted: with outcomes relative to the delivered value, a FAIL is the check that contradicts it, so its establishedValue is the correction (consistent with VeriHarness p.5: a new value is recorded only when evidence establishes it). It is refused on INCONCLUSIVE and must equal the delivered value on PASS (L86, L87). The INTERMEDIATE case is R2-5."
+  },
+  {
+   "id": "R1-7",
+   "status": "RESOLVED",
+   "note": "Rules now run as whole-ledger passes in CODES order (the RULES tuple is asserted against CODES). My two-violation probes P29, P30, P32, P33 and P34 report the earliest code, and vectors L95-L99 pin it. P31 shows a difference in the NO_EVIDENCE definition, not the order (R2-8)."
+  },
+  {
+   "id": "R1-8",
+   "status": "RESOLVED",
+   "note": "P19-P22 (NaN, infinity, two lone surrogates as Python values) are LEDGER_SHAPE. Raw-text vectors T01-T05 replay. My 2,352-document sweep, including NaN, fraction, very large integer, surrogate and astral-character mutations, raised nothing other than Refused."
+  },
+  {
+   "id": "R1-9",
+   "status": "RESOLVED",
+   "note": "My round-1 sweep, extended to 2,352 single-leaf mutations, finds 0 disagreements either way between Python jsonschema and the model (round 1: 58). P23-P27 agree, and the builder's own 874-document sweep passed in the reproduction. The ECMA non-u behaviour of the new surrogate pattern is R2-4."
+  },
+  {
+   "id": "R1-10",
+   "status": "RESOLVED",
+   "note": "Numbers are integers only, and canonical() is RFC 8785 on that value space. An independent node JCS implementation (jcs_check.js) reproduced the 13 valid ledger digests, both scope digests and the S01/S07 supersedes links (17 of 17). The integer 1 and the float 1.0 digest alike, -0.0 serializes as 0, and control-character and U+2028 escaping match node's. Duplicate member names are R2-3."
+  },
+  {
+   "id": "R1-11",
+   "status": "RESOLVED",
+   "note": "Rule 3 attributes model-reported confidence to the roadmap item and syntheses. Rule 4 cites HERMES pp. 15, 21-22, rule 8 cites p.29, and rule 6 cites pp. 10-11 for the recomputation. I re-checked these against my round-1 page extracts."
+  },
+  {
+   "id": "R1-12",
+   "status": "RESOLVED",
+   "note": "README rule 9 explains the asymmetry: a challenger's correction travels as a CHALLENGER_REPORT and is established by ADJUDICATION (VeriHarness p.4 Fig. 3, p.6)."
+  },
+  {
+   "id": "R1-13",
+   "status": "RESOLVED",
+   "note": "A PASS with a supported claim that has no deterministic deciding check on the delivered quantity now maps to WARN (P17, L12). The README says H16's own requirements (calibration, scope tuple, freshness, signed record) still apply. Granularity note: R2-6."
+  },
+  {
+   "id": "R1-14",
+   "status": "RESOLVED",
+   "note": "My independent suppression (patching _refuse) agrees with the recorded withoutOwnRule on all 66 rule-pass refusals, and 51 of them isolate. The uncited not-evidence rows (L38, L39) isolate, and the README documents the NO_EVIDENCE defence in depth."
+  },
+  {
+   "id": "R1-15",
+   "status": "RESOLVED",
+   "note": "S05 is HISTORY_SHAPE and S06/H05 are HISTORY_ID_REUSED. __main__ replays ledgers (status, H16 state, digest, withoutOwnRule), texts, histories, aggregation rows and scope digests; I ran it: 99 / 5 / 8 / 6 / 2. The README is narrowed and says when the newest ledger becomes bound (H06)."
+  },
+  {
+   "id": "R1-16",
+   "status": "RESOLVED",
+   "note": "'Not claimed' lists the information boundary, consensus/disputed routing and declared-not-authenticated roles, and MAS-RA-010 and CONF-A3-001 are named as consumers."
+  },
+  {
+   "id": "R1-17",
+   "status": "RESOLVED",
+   "note": "The builder's docstring says README.md is written by hand, and the builder run left the archived README untouched."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Subject identity: HEAD 62c8a734..., tree b56bf0e9..., parent c0161d2e (round 1), base 8d10a9d; worktree clean before and after",
+   "result": "PASS"
+  },
+  {
+   "check": "Scope: git diff --name-status 8d10a9d 62c8a734 lists exactly the five added files; docs/ and schemas/ unchanged",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder hash: build_ledger.py sha256 ffd93720... as stated",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility on a git archive of 62c8a734 (venv python -I -B, 0.40 s, about 46 MB RSS): the three JSON files are byte-identical; the builder printed 99 ledgers, 13 valid, 51 of 66 isolating, an 874-document shape sweep in agreement",
+   "result": "PASS"
+  },
+  {
+   "check": "Model self-replay (python3 -I -B scripts/verdict_ledger.py): 99 ledgers, 5 texts, 8 histories, 6 aggregation rows, 2 scope digests",
+   "result": "PASS"
+  },
+  {
+   "check": "README inventory, registry table and code order against check-kinds.json, CODES, RULES and vectors.json",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-1 probes re-expressed for round 2 (P00-P41 except P16, which no longer applies): every round-1 hole is now refused with the intended code",
+   "result": "PASS (P31 nuance: R2-8)"
+  },
+  {
+   "check": "New probes N01-N22 on the round-2 rules (provenance, adjudication, value semantics, H16 mapping)",
+   "result": "FAIL: N03, N04, N05, N21 (R2-1); N01, N02 (R2-2); notes N06-N09, N16, N18"
+  },
+  {
+   "check": "Probe totals: 63 ledger probes (38 refused, 25 accepted, 0 escaped), 2 raw-text probes, 7 history probes; review work directory probes2.py sha256:27d01178ce217c8d745884d48b8c419271dffe442e98a59eb553a511314489fd, probes2-result.json sha256:6ef54f8f685fb1e6fb5e6b2994359b05d84c61d5eadca871380d34b58dfe16b4",
+   "result": "PASS for the run; findings above"
+  },
+  {
+   "check": "Schema/model sweep: 2,352 single-leaf mutations of L01 under jsonschema Draft 2020-12 (Python)",
+   "result": "PASS: 0 schema-only accepts, 0 model-only accepts, 0 escapes"
+  },
+  {
+   "check": "Isolation, independent: own code suppressed by patching _refuse (isolation.py sha256:b443d4af...; isolation2-result.json sha256:1bea9908bf6a415cdc9e19dd80670c6692024e95064250d46445864a9dba1c79)",
+   "result": "PASS: agrees with withoutOwnRule on 66 of 66"
+  },
+  {
+   "check": "Independent RFC 8785 check in node (jcs_check.js sha256:953a530092368c0c2dde5d87a6a7cb6c8e038d464fd6010c50df04918c9f582c)",
+   "result": "PASS: 17 of 17 digests (13 valid ledgers, D01-D02, S01/S07 links)"
+  },
+  {
+   "check": "Regex dialects for the schema patterns (node 24 without and with the u flag, Python re)",
+   "result": "FAIL for the text pattern without the u flag (R2-4); PASS for the end-of-input lookahead and the IDENT pattern"
+  },
+  {
+   "check": "Raw text with duplicate member names (R01, R02)",
+   "result": "FAIL: accepted with L01's digest (R2-3)"
+  },
+  {
+   "check": "Histories H01-H07 (shape, non-list, 3-chain, middle edit, ID reuse, newest edit, invalid member)",
+   "result": "PASS (H06 accepted, as the README now states)"
+  },
+  {
+   "check": "Owner decisions Q-MAS1-A..C text unchanged from round 1 and still applied",
+   "result": "PASS"
+  },
+  {
+   "check": "README citations re-checked against the round-1 page extracts (VeriHarness pp. 2-7, 10-12, 19-21, 27; HERMES pp. 15, 21, 22, 29; HarnessDev pp. 6-7, 25, 27)",
+   "result": "PASS"
+  },
+  {
+   "check": "H16 binding: UNRESOLVED and model-only PASS map to WARN; README says the ledger is not H16 evidence by itself",
+   "result": "PASS (granularity note R2-6)"
+  },
+  {
+   "check": "Public hygiene: no personal data or private paths in the five files (git grep)",
+   "result": "PASS"
+  },
+  {
+   "check": "Command time and memory: every command under timeout 300, none over 60 s, measured peak RSS about 46 MB",
+   "result": "PASS"
+  },
+  {
+   "check": "pytest suite, cargo, builds, dry runs",
+   "result": "NOT RUN: excluded by the brief"
+  }
+ ],
+ "sourcesRead": [
+  "round-2 change list (coordinator message) and the round-1 brief (same rules)",
+  "own round-1 record review-round1.json (review work directory)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-001/build_ledger.py (round 2)",
+  "architecture/verdict-ledger/README.md, ledger.schema.json, check-kinds.json, vectors.json at 62c8a734",
+  "scripts/verdict_ledger.py at 62c8a734",
+  "git diff c0161d2e..62c8a734 (check-kinds.json, README owner-decision lines)",
+  "AGENTS.md (repository rules, as displayed)",
+  "round-1 page extracts of roadmap/research/papers/2610.00972v1-veriharness.pdf, 2610.07832v1-hermes.pdf, 2609.01437v1-harnessdev.pdf; H16 and H13 documents as read in round 1 (unchanged at 62c8a734)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}
