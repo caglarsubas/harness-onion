@@ -1,0 +1,888 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.run-event-log/v1",
+ "title": "Run-event log (MAS-RA-003)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "events",
+  "rootRunId",
+  "schemaVersion",
+  "sources",
+  "traceId"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.run-event-log/v1"
+  },
+  "rootRunId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "traceId": {
+   "type": "string",
+   "pattern": "^(?!0{32}(?![\\s\\S]))[0-9a-f]{32}(?![\\s\\S])"
+  },
+  "sources": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "loopTraceDigest",
+    "runManifestDigest",
+    "verdictLedgerDigest"
+   ],
+   "properties": {
+    "loopTraceDigest": {
+     "oneOf": [
+      {
+       "type": "null"
+      },
+      {
+       "type": "string",
+       "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+      }
+     ]
+    },
+    "runManifestDigest": {
+     "oneOf": [
+      {
+       "type": "null"
+      },
+      {
+       "type": "string",
+       "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+      }
+     ]
+    },
+    "verdictLedgerDigest": {
+     "oneOf": [
+      {
+       "type": "null"
+      },
+      {
+       "type": "string",
+       "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+      }
+     ]
+    }
+   }
+  },
+  "events": {
+   "type": "array",
+   "minItems": 2,
+   "maxItems": 65536,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "sequence",
+     "logicalTime",
+     "timeMs",
+     "runId",
+     "agentId",
+     "spanId",
+     "parentSpanId",
+     "operation",
+     "phase",
+     "name",
+     "outcome",
+     "payloadRef",
+     "inputHash",
+     "outputHash",
+     "attributes"
+    ],
+    "properties": {
+     "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+     },
+     "logicalTime": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+     },
+     "timeMs": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+     },
+     "runId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "agentId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "spanId": {
+      "type": "string",
+      "pattern": "^(?!0{16}(?![\\s\\S]))[0-9a-f]{16}(?![\\s\\S])"
+     },
+     "parentSpanId": {
+      "oneOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^(?!0{16}(?![\\s\\S]))[0-9a-f]{16}(?![\\s\\S])"
+       }
+      ]
+     },
+     "operation": {
+      "enum": [
+       "RUN",
+       "AGENT_INVOKE",
+       "MODEL_CALL",
+       "TOOL_CALL",
+       "VERIFICATION",
+       "HOOK",
+       "HANDOFF",
+       "MESSAGE",
+       "ENVIRONMENT",
+       "CLAIM",
+       "MERGE"
+      ]
+     },
+     "phase": {
+      "enum": [
+       "START",
+       "END",
+       "POINT"
+      ]
+     },
+     "name": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "outcome": true,
+     "payloadRef": {
+      "oneOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "digest",
+         "store"
+        ],
+        "properties": {
+         "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+         },
+         "store": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         }
+        }
+       }
+      ]
+     },
+     "inputHash": {
+      "oneOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+       }
+      ]
+     },
+     "outputHash": {
+      "oneOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+       }
+      ]
+     },
+     "attributes": true
+    },
+    "oneOf": [
+     {
+      "properties": {
+       "operation": {
+        "const": "RUN"
+       },
+       "phase": {
+        "const": "START"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "depth",
+         "parentRunId"
+        ],
+        "properties": {
+         "depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+         },
+         "parentRunId": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+           }
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "RUN"
+       },
+       "phase": {
+        "const": "END"
+       },
+       "outcome": {
+        "enum": [
+         "COMPLETED",
+         "FAILED",
+         "HANDED_OFF",
+         "ABORTED"
+        ]
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "costMicros",
+         "iterations",
+         "tokens"
+        ],
+        "properties": {
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         },
+         "iterations": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         },
+         "costMicros": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+           }
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "AGENT_INVOKE"
+       },
+       "phase": {
+        "const": "START"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "childRunId"
+        ],
+        "properties": {
+         "childRunId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "AGENT_INVOKE"
+       },
+       "phase": {
+        "const": "END"
+       },
+       "outcome": {
+        "enum": [
+         "OK",
+         "FAIL",
+         "ERROR",
+         "UNKNOWN"
+        ]
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "tokens"
+        ],
+        "properties": {
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "MODEL_CALL"
+       },
+       "phase": {
+        "const": "START"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "attempt",
+         "model",
+         "provider",
+         "revisesSpanId"
+        ],
+        "properties": {
+         "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+         },
+         "revisesSpanId": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^(?!0{16}(?![\\s\\S]))[0-9a-f]{16}(?![\\s\\S])"
+           }
+          ]
+         },
+         "provider": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+           }
+          ]
+         },
+         "model": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+           }
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "MODEL_CALL"
+       },
+       "phase": {
+        "const": "END"
+       },
+       "outcome": {
+        "enum": [
+         "OK",
+         "FAIL",
+         "ERROR",
+         "UNKNOWN"
+        ]
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "tokens"
+        ],
+        "properties": {
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "TOOL_CALL"
+       },
+       "phase": {
+        "const": "START"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "attempt",
+         "grantDigest",
+         "inputValid",
+         "launched",
+         "manifestDigest",
+         "toolId"
+        ],
+        "properties": {
+         "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+         },
+         "toolId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "manifestDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+         },
+         "inputValid": {
+          "type": "boolean"
+         },
+         "launched": {
+          "type": "boolean"
+         },
+         "grantDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "TOOL_CALL"
+       },
+       "phase": {
+        "const": "END"
+       },
+       "outcome": {
+        "enum": [
+         "OK",
+         "FAIL",
+         "ERROR",
+         "UNKNOWN"
+        ]
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "receiptRef",
+         "tokens",
+         "trustLabel"
+        ],
+        "properties": {
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         },
+         "trustLabel": {
+          "enum": [
+           "TRUSTED_TOOL_OUTPUT",
+           "UNTRUSTED_TOOL_OUTPUT"
+          ]
+         },
+         "receiptRef": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+           }
+          ]
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "VERIFICATION"
+       },
+       "phase": {
+        "const": "START"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "attempt",
+         "gateId",
+         "subjectSpanId"
+        ],
+        "properties": {
+         "gateId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "subjectSpanId": {
+          "type": "string",
+          "pattern": "^(?!0{16}(?![\\s\\S]))[0-9a-f]{16}(?![\\s\\S])"
+         },
+         "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "VERIFICATION"
+       },
+       "phase": {
+        "const": "END"
+       },
+       "outcome": {
+        "enum": [
+         "OK",
+         "FAIL",
+         "ERROR",
+         "UNKNOWN"
+        ]
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "tokens"
+        ],
+        "properties": {
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         }
+        }
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "HOOK"
+       },
+       "phase": {
+        "const": "POINT"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "effect",
+         "event",
+         "hookId",
+         "result",
+         "tokens"
+        ],
+        "properties": {
+         "hookId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "event": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "effect": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+           }
+          ]
+         },
+         "result": {
+          "enum": [
+           "OK",
+           "FAIL",
+           "ERROR",
+           "UNKNOWN"
+          ]
+         },
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         }
+        }
+       },
+       "parentSpanId": {
+        "type": "null"
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "HANDOFF"
+       },
+       "phase": {
+        "const": "POINT"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "reasonDigest",
+         "tokens"
+        ],
+        "properties": {
+         "reasonDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+         },
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         }
+        }
+       },
+       "parentSpanId": {
+        "type": "null"
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "MESSAGE"
+       },
+       "phase": {
+        "const": "POINT"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "direction",
+         "fromAgent",
+         "messageId",
+         "toAgent",
+         "tokens"
+        ],
+        "properties": {
+         "messageId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "direction": {
+          "enum": [
+           "SEND",
+           "RECEIVE"
+          ]
+         },
+         "fromAgent": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "toAgent": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+         }
+        }
+       },
+       "parentSpanId": {
+        "type": "null"
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "ENVIRONMENT"
+       },
+       "phase": {
+        "const": "POINT"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "stateDigest",
+         "transition"
+        ],
+        "properties": {
+         "transition": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "stateDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+         }
+        }
+       },
+       "parentSpanId": {
+        "type": "null"
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "CLAIM"
+       },
+       "phase": {
+        "const": "POINT"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "claimId",
+         "conflictsWith",
+         "taskDigest"
+        ],
+        "properties": {
+         "claimId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "taskDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+         },
+         "conflictsWith": {
+          "oneOf": [
+           {
+            "type": "null"
+           },
+           {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+           }
+          ]
+         }
+        }
+       },
+       "parentSpanId": {
+        "type": "null"
+       }
+      }
+     },
+     {
+      "properties": {
+       "operation": {
+        "const": "MERGE"
+       },
+       "phase": {
+        "const": "POINT"
+       },
+       "outcome": {
+        "type": "null"
+       },
+       "attributes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "conflict",
+         "mergeId"
+        ],
+        "properties": {
+         "mergeId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+         },
+         "conflict": {
+          "type": "boolean"
+         }
+        }
+       },
+       "parentSpanId": {
+        "type": "null"
+       }
+      }
+     }
+    ]
+   }
+  }
+ }
+}
