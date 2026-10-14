@@ -1,6 +1,13 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-038
+## Current source preparation — MET-ADOPT-004
+
+MET-ADOPT-004 (RA-LICENSE-001): research adoption v3, the licence clarification of litellm, pgvector, langfuse and
+phoenix at pinned commits (licence texts by git blob id and SHA-256 only; per-part SPDX sets and outcomes under policy
+0.3.0, with scoped artifacts) and the 29 planned baselines re-checked once with pinned HEAD commits; the 2026-09 record,
+its map and the v2 crosswalk stay byte-identical. Alpha2 OPEN; 234 accepted plus MET-ADOPT-004 only.
+
+## Historical load-deadlines source preparation — MET-PERF-038
 
 MET-PERF-038: the in-repository limits that host load could trip, raised to fit verifier bundle v4 (a load gate
 before the run and a 1200 s cap): the parallel-suite worker deadline 600 -> 900 s and the nested predecessor bound
@@ -1126,6 +1133,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 106. `MET-ENFORCE-025`: publish the compiled seccomp filter programs (the pinned v3 compiler's output for seven roles on two architectures), the edge registry records v2 (operator, EDGE-2) and the W03 obligation amendment 1; v3, v1 and plan v2 unchanged; data only.
 107. `MET-MAS-003`: publish the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003: the run-event log, eighteen exact metrics, the MAST vocabulary, the derivation from MAS-RA-008 traces and the OTel projection); H15, H16, H10 and the schemas unchanged; data only.
 108. `MET-PERF-038`: raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap; fail-closed; a successor limits record; transport change.
+109. `MET-ADOPT-004`: record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only, per-part SPDX sets and policy-0.3.0 outcomes) and the 29 planned baselines' recheck as research adoption v3; v1, its map and v2 unchanged; data only.
 
 ## Testing, verification, and acceptance
 

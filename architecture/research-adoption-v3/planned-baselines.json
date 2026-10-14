@@ -1,0 +1,998 @@
+{
+ "schemaVersion": "planeon.internal.research-adoption-baselines/v3",
+ "workItem": "RA-LICENSE-001",
+ "metaPacketId": "MET-ADOPT-004",
+ "metaBase": "0d776f75bdca0844d4c6884a29c9fb82b3a61c78",
+ "evidenceClass": "META_PLANNING_ONLY",
+ "checkedAt": "2026-10-14",
+ "source": {
+  "path": "architecture/research-adoption.json",
+  "sha256": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5",
+  "selection": "the repositories its mappings[].preferredUpstreams name, in its upstreams order (the roadmap's research.plannedBaselines)."
+ },
+ "baselines": [
+  {
+   "repository": "a2aproject/a2a-python",
+   "url": "https://github.com/a2aproject/a2a-python",
+   "harnessIds": [
+    "execution.protocol-interoperability"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 2141,
+    "pushedAt": "2026-09-10T12:25:51Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 2200,
+    "pushedAt": "2026-10-14T13:33:58Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "a4c4fc91a22778f3d805e5e592bf690915a33033",
+    "checkedAt": "2026-10-14T15:03:16Z",
+    "headCheckedAt": "2026-10-14T15:03:16Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 59
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "ag-ui-protocol/ag-ui",
+   "url": "https://github.com/ag-ui-protocol/ag-ui",
+   "harnessIds": [
+    "runtime.experience"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 15892,
+    "pushedAt": "2026-09-14T23:51:04Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 16529,
+    "pushedAt": "2026-10-14T15:02:32Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "72e8ad1802ce9a0525af1398d0de288d9b496317",
+    "checkedAt": "2026-10-14T15:03:18Z",
+    "headCheckedAt": "2026-10-14T15:03:18Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 637
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "BerriAI/litellm",
+   "url": "https://github.com/BerriAI/litellm",
+   "harnessIds": [
+    "runtime.ai-gateway"
+   ],
+   "previous": {
+    "license": "NOASSERTION",
+    "stars": 58741,
+    "pushedAt": "2026-09-15T02:56:03Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "NOASSERTION",
+    "stars": 61237,
+    "pushedAt": "2026-10-14T14:58:30Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "ccc656873d846e0883b25bce897721bd0e55648c",
+    "checkedAt": "2026-10-14T15:03:20Z",
+    "headCheckedAt": "2026-10-14T15:03:20Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 2496
+   },
+   "policyOutcome": "PLANNED_UNRESOLVED",
+   "licenceCeiling": "DESIGN_REFERENCE_ONLY",
+   "clarification": {
+    "record": "architecture/research-adoption-v3/licences.json",
+    "outcome": "DENY_UNKNOWN_LICENSE",
+    "licenceCeiling": "DESIGN_REFERENCE_ONLY",
+    "scopedArtifacts": 1
+   }
+  },
+  {
+   "repository": "bytecodealliance/wasmtime",
+   "url": "https://github.com/bytecodealliance/wasmtime",
+   "harnessIds": [
+    "execution.tool-skill-sandbox"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 18637,
+    "pushedAt": "2026-09-14T21:31:49Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 18722,
+    "pushedAt": "2026-10-14T14:55:19Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "0072becdb34dff90331367527f49177ef7605d1e",
+    "checkedAt": "2026-10-14T15:03:23Z",
+    "headCheckedAt": "2026-10-14T15:03:23Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 85
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "CopilotKit/CopilotKit",
+   "url": "https://github.com/CopilotKit/CopilotKit",
+   "harnessIds": [
+    "runtime.experience"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 37357,
+    "pushedAt": "2026-09-15T00:58:54Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 38007,
+    "pushedAt": "2026-10-14T14:55:14Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "9bf2dcecc4f1e133c42ac14c72e89c371355df6e",
+    "checkedAt": "2026-10-14T15:03:25Z",
+    "headCheckedAt": "2026-10-14T15:03:25Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 650
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "data-privacy-stack/presidio",
+   "url": "https://github.com/data-privacy-stack/presidio",
+   "harnessIds": [
+    "trust.security-safety"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 10862,
+    "pushedAt": "2026-09-14T20:37:19Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 11325,
+    "pushedAt": "2026-10-09T05:18:46Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "2523c7b74a469270c5c78bb253f140eafca21e31",
+    "checkedAt": "2026-10-14T15:03:28Z",
+    "headCheckedAt": "2026-10-14T15:03:28Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 463
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "fivetran/great_expectations",
+   "url": "https://github.com/fivetran/great_expectations",
+   "harnessIds": [
+    "knowledge.data-integration"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 11794,
+    "pushedAt": "2026-09-14T13:34:50Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 11872,
+    "pushedAt": "2026-10-14T14:58:13Z",
+    "archived": false,
+    "defaultBranch": "develop",
+    "headRef": "refs/heads/develop",
+    "headCommit": "6a331541098a9d8e12ea83fb7bd6e976bde0520e",
+    "checkedAt": "2026-10-14T15:03:30Z",
+    "headCheckedAt": "2026-10-14T15:03:30Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 78
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "ggml-org/llama.cpp",
+   "url": "https://github.com/ggml-org/llama.cpp",
+   "harnessIds": [
+    "runtime.model-inference"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 128245,
+    "pushedAt": "2026-09-14T23:11:26Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 131161,
+    "pushedAt": "2026-10-14T14:51:48Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "62df1815bc053066761f4eac58e288f23778e164",
+    "checkedAt": "2026-10-14T15:03:32Z",
+    "headCheckedAt": "2026-10-14T15:03:32Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 2916
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "google/gvisor",
+   "url": "https://github.com/google/gvisor",
+   "harnessIds": [
+    "execution.tool-skill-sandbox"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 19321,
+    "pushedAt": "2026-09-15T03:04:38Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 19673,
+    "pushedAt": "2026-10-14T14:38:23Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "3cd71284c0396d09e31fd5b1ef789f492c015a56",
+    "checkedAt": "2026-10-14T15:03:35Z",
+    "headCheckedAt": "2026-10-14T15:03:35Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 352
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "helm/helm",
+   "url": "https://github.com/helm/helm",
+   "harnessIds": [
+    "runtime.infrastructure"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 30246,
+    "pushedAt": "2026-09-14T23:17:21Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 30322,
+    "pushedAt": "2026-10-14T14:10:46Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "7a061f4f29aeedc09d5bfd7be46b468fdb15b73d",
+    "checkedAt": "2026-10-14T15:03:37Z",
+    "headCheckedAt": "2026-10-14T15:03:37Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 76
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "kubernetes/kubernetes",
+   "url": "https://github.com/kubernetes/kubernetes",
+   "harnessIds": [
+    "runtime.infrastructure"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 127717,
+    "pushedAt": "2026-09-14T21:45:19Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 128211,
+    "pushedAt": "2026-10-14T14:44:23Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "7e0dd0230332bf0fb458a4e837a875b46227f6b9",
+    "checkedAt": "2026-10-14T15:03:39Z",
+    "headCheckedAt": "2026-10-14T15:03:39Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 494
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "mem0ai/mem0",
+   "url": "https://github.com/mem0ai/mem0",
+   "harnessIds": [
+    "knowledge.memory-state"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 65297,
+    "pushedAt": "2026-09-14T19:12:46Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 67174,
+    "pushedAt": "2026-10-14T12:38:46Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "d26ba5e4518cef7fff3c66d4f715b21adf9feabe",
+    "checkedAt": "2026-10-14T15:03:48Z",
+    "headCheckedAt": "2026-10-14T15:32:46Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 1877
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "microsoft/onnxruntime",
+   "url": "https://github.com/microsoft/onnxruntime",
+   "harnessIds": [
+    "execution.ml-decision"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 21854,
+    "pushedAt": "2026-09-15T02:58:33Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 22079,
+    "pushedAt": "2026-10-14T14:15:39Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "a5e205be24752d13bfe9ad38ea7722f1eeec9fed",
+    "checkedAt": "2026-10-14T15:08:48Z",
+    "headCheckedAt": "2026-10-14T15:08:48Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 225
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "mlflow/mlflow",
+   "url": "https://github.com/mlflow/mlflow",
+   "harnessIds": [
+    "trust.governance-agentops"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 27953,
+    "pushedAt": "2026-09-15T02:47:05Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 28380,
+    "pushedAt": "2026-10-14T14:58:17Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "c4736e82d0cd29bcfc0c8d9b4fbcfee65b3b9dd4",
+    "checkedAt": "2026-10-14T15:08:52Z",
+    "headCheckedAt": "2026-10-14T15:08:52Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 427
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "modelcontextprotocol/python-sdk",
+   "url": "https://github.com/modelcontextprotocol/python-sdk",
+   "harnessIds": [
+    "execution.protocol-interoperability"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 24299,
+    "pushedAt": "2026-09-10T13:23:39Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 24571,
+    "pushedAt": "2026-10-13T10:21:52Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "754254c08fe1c3eda18b69da3d336106fe8d72d6",
+    "checkedAt": "2026-10-14T15:08:54Z",
+    "headCheckedAt": "2026-10-14T15:08:54Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 272
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "ollama/ollama",
+   "url": "https://github.com/ollama/ollama",
+   "harnessIds": [
+    "runtime.model-inference"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 180972,
+    "pushedAt": "2026-09-15T01:01:36Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 183131,
+    "pushedAt": "2026-10-14T14:41:10Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "cf410b09f026cb8c3ca96798268e848dd9ca3157",
+    "checkedAt": "2026-10-14T15:08:56Z",
+    "headCheckedAt": "2026-10-14T15:08:56Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 2159
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "open-policy-agent/opa",
+   "url": "https://github.com/open-policy-agent/opa",
+   "harnessIds": [
+    "trust.security-safety",
+    "trust.governance-agentops"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 12233,
+    "pushedAt": "2026-09-14T19:32:43Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 12365,
+    "pushedAt": "2026-10-14T12:46:44Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "43e3b1239443f7bbcef6970fbd300f76e861df72",
+    "checkedAt": "2026-10-14T15:09:00Z",
+    "headCheckedAt": "2026-10-14T15:09:00Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 132
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "open-telemetry/opentelemetry-collector",
+   "url": "https://github.com/open-telemetry/opentelemetry-collector",
+   "harnessIds": [
+    "trust.observability-finops"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 7551,
+    "pushedAt": "2026-09-15T00:41:26Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 7657,
+    "pushedAt": "2026-10-14T04:28:28Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "cc53f169aaaa013ee22218fdd3d0e3429e56105c",
+    "checkedAt": "2026-10-14T15:09:01Z",
+    "headCheckedAt": "2026-10-14T15:09:01Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 106
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "OpenLineage/OpenLineage",
+   "url": "https://github.com/OpenLineage/OpenLineage",
+   "harnessIds": [
+    "knowledge.data-integration"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 2656,
+    "pushedAt": "2026-09-14T15:41:08Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 2705,
+    "pushedAt": "2026-10-14T11:11:54Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "f79de21eca4ed974264d3ac179f16f6b2bc8c3c7",
+    "checkedAt": "2026-10-14T15:09:04Z",
+    "headCheckedAt": "2026-10-14T15:09:04Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 49
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "pgvector/pgvector",
+   "url": "https://github.com/pgvector/pgvector",
+   "harnessIds": [
+    "knowledge.retrieval-context"
+   ],
+   "previous": {
+    "license": "NOASSERTION",
+    "stars": 23016,
+    "pushedAt": "2026-09-10T13:49:14Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "NOASSERTION",
+    "stars": 23357,
+    "pushedAt": "2026-10-08T04:39:04Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "f37c13f68b57d2c3472b2214fbcff699d6d34876",
+    "checkedAt": "2026-10-14T15:09:05Z",
+    "headCheckedAt": "2026-10-14T15:09:05Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 341
+   },
+   "policyOutcome": "PLANNED_UNRESOLVED",
+   "licenceCeiling": "DESIGN_REFERENCE_ONLY",
+   "clarification": {
+    "record": "architecture/research-adoption-v3/licences.json",
+    "outcome": "DEFAULT_ALLOWED",
+    "licenceCeiling": "REUSE_AFTER_GATES",
+    "scopedArtifacts": 0
+   }
+  },
+  {
+   "repository": "prometheus/prometheus",
+   "url": "https://github.com/prometheus/prometheus",
+   "harnessIds": [
+    "trust.observability-finops"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 66072,
+    "pushedAt": "2026-09-14T18:41:48Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 66547,
+    "pushedAt": "2026-10-14T14:28:25Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "617120b43094223407db1864c2a48d7ed06ad4b2",
+    "checkedAt": "2026-10-14T15:09:07Z",
+    "headCheckedAt": "2026-10-14T15:09:07Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 475
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "RDFLib/pySHACL",
+   "url": "https://github.com/RDFLib/pySHACL",
+   "harnessIds": [
+    "knowledge.domain-semantic"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 348,
+    "pushedAt": "2026-07-28T01:35:01Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 359,
+    "pushedAt": "2026-07-28T01:35:01Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "469cca7a22a078b36c167c1e8dadecf5e5ec6c75",
+    "checkedAt": "2026-10-14T15:09:09Z",
+    "headCheckedAt": "2026-10-14T15:09:09Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 11
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "RDFLib/rdflib",
+   "url": "https://github.com/RDFLib/rdflib",
+   "harnessIds": [
+    "knowledge.domain-semantic"
+   ],
+   "previous": {
+    "license": "BSD-3-Clause",
+    "stars": 2511,
+    "pushedAt": "2026-09-15T03:11:20Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "BSD-3-Clause",
+    "stars": 2527,
+    "pushedAt": "2026-10-13T07:13:18Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "9099a782e5ed38ee11a41aaad2c1071a3b89437a",
+    "checkedAt": "2026-10-14T15:09:12Z",
+    "headCheckedAt": "2026-10-14T15:09:12Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 16
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "run-llama/llama_index",
+   "url": "https://github.com/run-llama/llama_index",
+   "harnessIds": [
+    "knowledge.retrieval-context"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 52161,
+    "pushedAt": "2026-09-15T01:48:43Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 52494,
+    "pushedAt": "2026-10-14T14:53:34Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "c8535c3999b9a8a669274fb1d8fae48b1583f84d",
+    "checkedAt": "2026-10-14T15:09:13Z",
+    "headCheckedAt": "2026-10-14T15:09:13Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 333
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "scikit-learn/scikit-learn",
+   "url": "https://github.com/scikit-learn/scikit-learn",
+   "harnessIds": [
+    "execution.ml-decision"
+   ],
+   "previous": {
+    "license": "BSD-3-Clause",
+    "stars": 67255,
+    "pushedAt": "2026-09-14T23:49:53Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "BSD-3-Clause",
+    "stars": 67595,
+    "pushedAt": "2026-10-14T13:00:44Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "d0e22aee7bbef7b310a2f08227c214ff6df9a526",
+    "checkedAt": "2026-10-14T15:09:15Z",
+    "headCheckedAt": "2026-10-14T15:09:15Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 340
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "temporalio/temporal",
+   "url": "https://github.com/temporalio/temporal",
+   "harnessIds": [
+    "execution.orchestration"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 23032,
+    "pushedAt": "2026-09-15T02:14:33Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 23698,
+    "pushedAt": "2026-10-14T13:04:48Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "2ac4e9b64260a835a938dd379b18bcecfad13d4e",
+    "checkedAt": "2026-10-14T15:09:18Z",
+    "headCheckedAt": "2026-10-14T15:09:18Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 666
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "trinodb/trino",
+   "url": "https://github.com/trinodb/trino",
+   "harnessIds": [
+    "knowledge.data-integration"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 13237,
+    "pushedAt": "2026-09-15T03:05:13Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 13333,
+    "pushedAt": "2026-10-14T10:41:49Z",
+    "archived": false,
+    "defaultBranch": "master",
+    "headRef": "refs/heads/master",
+    "headCommit": "2896467bf3a1e3397851763be4806f1e9211baf0",
+    "checkedAt": "2026-10-14T15:09:20Z",
+    "headCheckedAt": "2026-10-14T15:09:20Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 96
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "UKGovernmentBEIS/inspect_ai",
+   "url": "https://github.com/UKGovernmentBEIS/inspect_ai",
+   "harnessIds": [
+    "trust.evaluation-assurance"
+   ],
+   "previous": {
+    "license": "MIT",
+    "stars": 2772,
+    "pushedAt": "2026-09-15T03:09:17Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "MIT",
+    "stars": 3003,
+    "pushedAt": "2026-10-14T13:15:20Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "be4fd1fba7bd6c31bf5f708a4d90f3fca969ae07",
+    "checkedAt": "2026-10-14T15:09:22Z",
+    "headCheckedAt": "2026-10-14T15:09:22Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 231
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "url": "https://github.com/vllm-project/vllm",
+   "harnessIds": [
+    "runtime.model-inference"
+   ],
+   "previous": {
+    "license": "Apache-2.0",
+    "stars": 91770,
+    "pushedAt": "2026-09-15T02:52:43Z",
+    "archived": false,
+    "checkedAt": "2026-09-15"
+   },
+   "current": {
+    "license": "Apache-2.0",
+    "stars": 93778,
+    "pushedAt": "2026-10-14T15:03:12Z",
+    "archived": false,
+    "defaultBranch": "main",
+    "headRef": "refs/heads/main",
+    "headCommit": "bf6c80c7e80c2c88547a5caca3a3f9b1ea321f0b",
+    "checkedAt": "2026-10-14T15:09:23Z",
+    "headCheckedAt": "2026-10-14T15:09:23Z"
+   },
+   "changes": {
+    "license": false,
+    "archived": false,
+    "stars": 2008
+   },
+   "policyOutcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "clarification": null
+  }
+ ],
+ "summary": {
+  "baselines": 29,
+  "licenceChanged": 0,
+  "archivedChanged": 0,
+  "archived": 0,
+  "policyOutcomes": {
+   "DEFAULT_ALLOWED": 27,
+   "PLANNED_UNRESOLVED": 2
+  },
+  "clarified": 2
+ },
+ "nonClaims": [
+  "The re-checked values are dated GitHub metadata and a pinned HEAD commit, not artifact or licence closure evidence.",
+  "The 2026-09 record and the roadmap's planned-baseline list are not rewritten here; the roadmap takes these values through its own update."
+ ]
+}
