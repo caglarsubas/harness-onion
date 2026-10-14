@@ -1,6 +1,34 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-038 source preparation, October 14, 2026
+## Current checkpoint — MET-ADOPT-004 source preparation, October 15, 2026
+
+Alpha2 OPEN. MET-PERF-038 (load-tolerant deadlines for verifier bundle v4) passed required verify and merged as main
+0d776f7. Owner decisions (via the lane monitor, 2026-10-14): Q-HO4-2 (a), a small data-only licence-clarification item
+(RA-LICENSE-001) for litellm, pgvector, langfuse and phoenix; Q-HO4-3, the 29 planned baselines' recheck folded into it
+("Fold into RA-LICENSE-001"); Q-HO4-4 (a), no re-rating; Q-RL-AB and Q-RL-C, the exact approved reads (with the user's
+chat permission); Q-RL-LAYOUT, research adoption v3 (architecture/research-adoption-v3/) as a successor revision beside
+the byte-identical 2026-09 record, its map and the v2 crosswalk. MET-ADOPT-004 is the sole 235th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ADOPT-004 / RA-LICENSE-001 | SOURCE_PREPARED | Licence clarification (litellm, pgvector, langfuse, phoenix) and the 29-baseline recheck (235th packet); review; verify |
+| Alpha2A | MET-PERF-038 | VERIFY_PASSED_MERGED | Merged as main 0d776f7 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-004, MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumers of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the installed activation cap and the verifier's inheritance rule; the new
+layer validator adds no argv and runs inside the outer pytest) and 32 MiB. Data only: the licence texts stay
+operator-side and the records carry their git blob ids and SHA-256 digests; no policy, catalog, rating, cloud, runner
+registration, live/native/tenant or model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints below are
+history only.
+
+## Historical load-deadlines source checkpoint — MET-PERF-038 source preparation, October 14, 2026
 
 Alpha2 OPEN. MET-MAS-003 (MAS-RA-003) passed required verify and merged as main 5cf7fae, after two earlier verifies of it
 failed on host load (the parallel suite's 600 s worker deadline killed a worker). Owner decisions (via the lane monitor,
@@ -1639,7 +1667,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · MAS-RA-008 / MET-MAS-006 · Publish the agent-loop kernel and tool-gateway contract candidate (schemas, reference model and vectors; bounded retries, revision rounds and deterministic-gate interleaving) after ten independent review rounds; pass required verify through the owner's App.
 - [x] Alpha 2A · W03 / MET-ENFORCE-025 · Publish the compiled seccomp filter programs, the edge registry records v2 (operator, EDGE-2) and W03-PLAN-AMEND-1 after four independent review rounds; pass required verify through the owner's App.
 - [x] Alpha 2A · MAS-RA-003 / MET-MAS-003 · Publish the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate after three independent review rounds; pass required verify through the owner's App.
-- [ ] Alpha 2A · MET-PERF-038 · Raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap, fail-closed, with a successor limits record; pass required verify through the owner's App after the owner's transport approval.
+- [x] Alpha 2A · MET-PERF-038 · Raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap, fail-closed, with a successor limits record; pass required verify through the owner's App after the owner's transport approval.
+- [ ] Alpha 2A · RA-LICENSE-001 / MET-ADOPT-004 · Record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only) and the 29 planned baselines' recheck as research adoption v3 after independent review; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

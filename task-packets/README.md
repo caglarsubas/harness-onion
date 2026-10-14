@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-038
+## Current source preparation — MET-ADOPT-004
+
+MET-ADOPT-004 (RA-LICENSE-001): research adoption v3, the licence clarification of litellm, pgvector, langfuse and
+phoenix at pinned commits (licence texts by git blob id and SHA-256 only; per-part SPDX sets and outcomes under policy
+0.3.0, with scoped artifacts) and the 29 planned baselines re-checked once with pinned HEAD commits; the 2026-09 record,
+its map and the v2 crosswalk stay byte-identical. Alpha2 OPEN; 234 accepted plus MET-ADOPT-004 only.
+
+## Historical load-deadlines source preparation — MET-PERF-038
 
 MET-PERF-038: the in-repository limits that host load could trip, raised to fit verifier bundle v4 (a load gate
 before the run and a 1200 s cap): the parallel-suite worker deadline 600 -> 900 s and the nested predecessor bound
@@ -1366,3 +1373,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 232 | `MET-ENFORCE-025` | `Harness-Engineering` | Compiled seccomp filter programs, edge registry records v2 (operator, EDGE-2) and W03-PLAN-AMEND-1; DATA_CHECK_ONLY |
 | 233 | `MET-MAS-003` | `Harness-Engineering` | Run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003); DATA_CHECK_ONLY |
 | 234 | `MET-PERF-038` | `Harness-Engineering` | Load-tolerant in-repository deadlines for verifier bundle v4 (parallel suite 900 s, nested 600 s); SOURCE_DELTA_ONLY |
+| 235 | `MET-ADOPT-004` | `Harness-Engineering` | RA-LICENSE-001: research adoption v3, licence clarification (litellm, pgvector, langfuse, phoenix) and the 29-baseline recheck; DATA_CHECK_ONLY |

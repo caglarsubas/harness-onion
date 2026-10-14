@@ -1,0 +1,970 @@
+{
+ "schemaVersion": "planeon.internal.research-adoption-licences/v3",
+ "workItem": "RA-LICENSE-001",
+ "metaPacketId": "MET-ADOPT-004",
+ "metaBase": "0d776f75bdca0844d4c6884a29c9fb82b3a61c78",
+ "evidenceClass": "META_PLANNING_ONLY",
+ "checkedAt": "2026-10-14",
+ "bindings": {
+  "record": {
+   "path": "architecture/research-adoption.json",
+   "sha256": "18dadbbe9aa29b69d18b9ded27e27f6057cf03b437190d14477b2c6908dbc5d5"
+  },
+  "map": {
+   "path": "docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md",
+   "sha256": "f6a891e8bdbcc579e60800773addd70ca29a2c4021c2dc95af62be93e91f061d"
+  },
+  "crosswalk": {
+   "path": "architecture/research-adoption-v2/crosswalk.json",
+   "sha256": "e1b57c70a63f9b71994b2c25b4c786c9721f34ef34f08729ae6e9fc209010a75"
+  },
+  "licensePolicy": {
+   "path": "legal/third-party-license-policy.yaml",
+   "sha256": "fa3a4398acafc3960eaaae9f5396d4e96d91e6ff252b83f6c53e1f5f0d8a40d0"
+  }
+ },
+ "boundaries": {
+  "publicContractChange": false,
+  "policyChange": false,
+  "catalogChange": false,
+  "runtimeChange": false,
+  "packetDispatch": false,
+  "ratingChange": false,
+  "licenceTextsPublished": false,
+  "copyAuthorization": false,
+  "networkAtValidation": false
+ },
+ "decisions": [
+  {
+   "id": "Q-HO4-2",
+   "date": "2026-10-14",
+   "selected": "a",
+   "by": "owner, via the lane monitor",
+   "text": "A small data-only licence-clarification item (litellm, pgvector, langfuse, phoenix), its download after the owner's approval of exact files, sources and sizes (as the roadmap records it)."
+  },
+  {
+   "id": "Q-HO4-3",
+   "date": "2026-10-14",
+   "selected": "a, placement amended",
+   "by": "owner, via the lane monitor",
+   "text": "The 29 planned baselines' recheck in the next research-adoption revision; placement, verbatim: \"Fold into RA-LICENSE-001\" (one owner-approved read-only pass for both)."
+  },
+  {
+   "id": "Q-HO4-4",
+   "date": "2026-10-14",
+   "selected": "a",
+   "by": "owner, via the lane monitor",
+   "text": "No re-rating; HO-D1 holds."
+  },
+  {
+   "id": "Q-RL-AB",
+   "date": "2026-10-14",
+   "selected": "approve",
+   "by": "owner, via the lane monitor",
+   "text": "\"Approve Stage A+B\", exactly as you specified. Stage A: 31 repositories, git ls-remote --symref HEAD plus GET api.github.com/repos/<o>/<r>, about 0.3 MB in total. Stage B: recursive git/trees at the Stage-A commit for litellm, pgvector, langfuse and phoenix; abort any response over 10 MB; keep only LICENSE*/LICENCE*/COPYING*/NOTICE* paths, shas and sizes. Conditions: unauthenticated, no credential helper, User-Agent \"harness-onion-review\", no personal data, nothing else fetched. Stage C's exact file list comes back to me for the owner's second yes."
+  },
+  {
+   "id": "USER-CHAT-AB",
+   "date": "2026-10-14",
+   "selected": "yes",
+   "by": "the user, in this session's chat",
+   "text": "The user's own chat permission for Stage A and Stage B exactly as listed (31 repositories: git ls-remote --symref HEAD and GET api.github.com/repos/<o>/<r>; 4 recursive git/trees reads at the Stage A commit, 10 MB cap, licence-file paths/shas/sizes kept only): \"yes\""
+  },
+  {
+   "id": "Q-RL-LAYOUT",
+   "date": "2026-10-14",
+   "selected": "research-adoption-v3",
+   "by": "owner, via the lane monitor",
+   "text": "Layout settled: architecture/research-adoption-v3/ (MET-ADOPT-004) as a successor revision; v1, v2 and the 2026-09 map stay byte-identical. I added architecture/research-adoption-v3, scripts/research_adoption_v3, scripts/validate_research_adoption_v3 and tests/test_research_adoption_v3 to your ownedPaths (no clash with the primary's)."
+  },
+  {
+   "id": "Q-RL-C",
+   "date": "2026-10-14",
+   "selected": "approve",
+   "by": "owner, via the lane monitor",
+   "text": "(1) Stage C APPROVED exactly as listed: 15 unique blobs, 75,125 bytes, by unauthenticated GET https://raw.githubusercontent.com/<o>/<r>/<commit>/<path> at the pinned commits (litellm ccc65687: 4, pgvector f37c13f6: 1, langfuse fb4449ad: 3, phoenix 57f89514: 7). Generic UA, no personal data in any request or header, stored operator-side with digests. Abort on any size or blob mismatch, and fetch nothing beyond the list. (2) mem0ai/mem0: ONE more ls-remote retry is approved. If it fails, record TIMEOUT."
+  },
+  {
+   "id": "USER-CHAT-C",
+   "date": "2026-10-14",
+   "selected": "yes",
+   "by": "the user, in this session's chat",
+   "text": "The user's own chat permission for Stage C (the 15 listed licence blobs, 75,125 bytes, from raw.githubusercontent.com at the pinned commits) and one more ls-remote retry for mem0ai/mem0: \"yes\""
+  }
+ ],
+ "method": {
+  "access": "Every read was unauthenticated: git without any configuration or credential helper, HTTP with the generic User-Agent harness-onion-review, and no personal data in any request, header or URL.",
+  "stages": [
+   {
+    "stage": "A",
+    "requests": 62,
+    "decision": "Q-RL-AB",
+    "what": "git ls-remote --symref HEAD and GET api.github.com/repos/<owner>/<repo> for 31 repositories (the 29 planned baselines, langfuse/langfuse and Arize-ai/phoenix); kept: licence identifier, stars, last push, archived, default branch, HEAD ref and commit, check time."
+   },
+   {
+    "stage": "A-RETRY",
+    "requests": 1,
+    "decision": "Q-RL-C",
+    "what": "One more git ls-remote for mem0ai/mem0, whose Stage A ls-remote had timed out at 120 s and 180 s; it returned the HEAD ref and commit."
+   },
+   {
+    "stage": "B",
+    "requests": 4,
+    "decision": "Q-RL-AB",
+    "what": "GET api.github.com/repos/<owner>/<repo>/git/trees/<commit>?recursive=1 at the Stage A commit for the four repositories, under a 10 MB cap, none truncated; kept: the path, git blob id and size of every entry whose base name starts with LICENSE, LICENCE, COPYING or NOTICE, case-insensitively."
+   },
+   {
+    "stage": "C",
+    "requests": 15,
+    "decision": "Q-RL-C",
+    "what": "GET raw.githubusercontent.com/<owner>/<repo>/<commit>/<path> for the 15 distinct licence blobs (75,125 bytes); every response's size and git blob id matched the Stage B listing."
+   }
+  ],
+  "rerun": "A first Stage A pass stopped at a 60 s ls-remote timeout; the identical approved requests were re-run with longer timeouts, and only the complete pass is recorded.",
+  "evidence": "The licence texts and raw responses stay operator-side. These records carry git blob ids, sizes and SHA-256 digests only, never a licence text."
+ },
+ "rules": {
+  "scope": "A licence text without a stated scope governs its own directory only; a subdirectory that carries its own licence text is a separate part (the nearest licence text). A text whose wording states a scope (a root LICENSE that names directories under another licence, or the text it designates for them) governs every directory under the stated prefixes except the excluded ones, nested licence texts included, so such a part holds both identifiers. A same-blob copy of a scope-stating text in a subdirectory governs that directory only: the directories its words name are the repository's, not the copy's.",
+  "aggregation": "A part's licence set is the SPDX identifiers of the texts governing it. A part, a repository (all its parts) and a scoped artifact take the highest-precedence outcome present under policy 0.3.0 (DENIED, then UNKNOWN as DENY_UNKNOWN_LICENSE, PLANNED_UNRESOLVED, OPTIONAL_EXPLICIT_REVIEW, OPEN_CONTENT, ALLOWED_EXCEPTION_EXPRESSION, DEFAULT_ALLOWED), and every member's obligations apply.",
+  "ceiling": "REUSE_AFTER_GATES for DEFAULT_ALLOWED and ALLOWED_EXCEPTION_EXPRESSION, DESIGN_REFERENCE_ONLY otherwise (the v2 crosswalk's rule).",
+  "scopedArtifact": "A proper subset of a repository's parts named for planning, such as the tree without an enterprise directory or one subpackage; an adoption re-establishes the licence set on the artifact it actually takes. Its licence set covers only the licence texts in its directories at the pinned commit: dependency closure, vendored or third-party code without its own licence text, and any reach into an excluded directory stay open."
+ },
+ "repositories": [
+  {
+   "repository": "BerriAI/litellm",
+   "url": "https://github.com/BerriAI/litellm",
+   "pinnedCommit": "ccc656873d846e0883b25bce897721bd0e55648c",
+   "headRef": "refs/heads/main",
+   "githubLicense": "NOASSERTION",
+   "checkedAt": "2026-10-14T15:03:20Z",
+   "previous": {
+    "record": "architecture/research-adoption.json",
+    "githubLicense": "NOASSERTION",
+    "policyOutcome": "PLANNED_UNRESOLVED",
+    "licenceCeiling": "DESIGN_REFERENCE_ONLY"
+   },
+   "listing": {
+    "checkedAt": "2026-10-14T15:09:31Z",
+    "entries": 16646,
+    "truncated": false
+   },
+   "licenceTexts": [
+    {
+     "path": "LICENSE",
+     "blob": "3bfef5bae9b48c334acf426d5b7f21bc1913aab9",
+     "size": 1419,
+     "sha256": "b170d6bf8e8835dd357e011681db028f4d51e2fb0ea892058f56e01fb39b8273",
+     "spdx": "MIT",
+     "evidence": "a scope statement (content under the enterprise/ directory is under the enterprise licence, all other content is MIT) followed by the MIT permission notice",
+     "covers": [
+      ""
+     ],
+     "except": [
+      "enterprise/"
+     ],
+     "scopeStatedBy": "LICENSE",
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "enterprise/LICENSE.md",
+     "blob": "c8607439adfe19df15cf78a04e5964237a89b9bc",
+     "size": 2223,
+     "sha256": "a3160d1176cb556447255ca8652855486d681f8025550291828796a439e1b2f9",
+     "spdx": "LicenseRef-BerriAI-Enterprise",
+     "evidence": "the BerriAI Enterprise licence: production use only under the vendor's subscription terms and a valid enterprise licence; not an SPDX-listed licence",
+     "covers": [
+      "enterprise/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "litellm-proxy-extras/LICENSE",
+     "blob": "3bfef5bae9b48c334acf426d5b7f21bc1913aab9",
+     "size": 1419,
+     "sha256": "b170d6bf8e8835dd357e011681db028f4d51e2fb0ea892058f56e01fb39b8273",
+     "spdx": "MIT",
+     "evidence": "a scope statement (content under the enterprise/ directory is under the enterprise licence, all other content is MIT) followed by the MIT permission notice",
+     "covers": [
+      "litellm-proxy-extras/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": false,
+     "sameBlobAs": {
+      "repository": "BerriAI/litellm",
+      "path": "LICENSE"
+     }
+    },
+    {
+     "path": "terraform/provider/LICENSE",
+     "blob": "967d4ac9b42751c871b1295b3bcb12e54be82784",
+     "size": 1610,
+     "sha256": "a82f7ec70737c73fe4c78ec1f58c0d7aeec36e25500ccc1922f7bae1bb39104e",
+     "spdx": "LicenseRef-Truncated-Apache-2.0",
+     "evidence": "the opening of the Apache License 2.0 text only: it stops inside section 1 (Definitions) and has no grant clause, so it is not identified as Apache-2.0 (note N-4)",
+     "covers": [
+      "terraform/provider/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "vscode-extension/LICENSE",
+     "blob": "dd11dc523500992ecbce9bffb20f532b884c094c",
+     "size": 1065,
+     "sha256": "bedb01b52def8531f9c294b69a533afd787d0076f3cb99914d579b79a5e77d9d",
+     "spdx": "MIT",
+     "evidence": "the MIT licence text",
+     "covers": [
+      "vscode-extension/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    }
+   ],
+   "otherNamedFiles": [
+    {
+     "path": "license_cache.json",
+     "blob": "dc061b48f4f9634da6d30a792e0e4bf30efe6f73",
+     "size": 72782
+    },
+    {
+     "path": "tests/code_coverage_tests/license_cache.json",
+     "blob": "e7b1157a2405bd149aee005b8339eca19426054e",
+     "size": 49245
+    },
+    {
+     "path": "tests/e2e/ui/tests/proxy-admin/license.spec.ts",
+     "blob": "37a0e324f272162cadf4cd6aa94e24cf32b4b73e",
+     "size": 1584
+    },
+    {
+     "path": "ui/litellm-dashboard/src/components/LicenseExpiryBanner.test.tsx",
+     "blob": "627d108e65f93be0051613c09885bee62799f080",
+     "size": 4468
+    },
+    {
+     "path": "ui/litellm-dashboard/src/components/LicenseExpiryBanner.tsx",
+     "blob": "5867a45bc3180b74366ce660fea4cc1e7bf295dc",
+     "size": 3551
+    },
+    {
+     "path": "ui/litellm-dashboard/src/utils/licenseUtils.test.ts",
+     "blob": "8a489c30c2dfb4dbd2a987f540cb41b39bf89fb4",
+     "size": 2864
+    },
+    {
+     "path": "ui/litellm-dashboard/src/utils/licenseUtils.ts",
+     "blob": "4ba39dabe0b3890a605fcb3fa8eaaad0222370e4",
+     "size": 1863
+    }
+   ],
+   "parts": [
+    {
+     "directory": "",
+     "licenceSet": [
+      "MIT"
+     ],
+     "governedBy": [
+      "LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "enterprise/",
+     "licenceSet": [
+      "LicenseRef-BerriAI-Enterprise"
+     ],
+     "governedBy": [
+      "enterprise/LICENSE.md"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE"
+    },
+    {
+     "directory": "litellm-proxy-extras/",
+     "licenceSet": [
+      "MIT"
+     ],
+     "governedBy": [
+      "LICENSE",
+      "litellm-proxy-extras/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "terraform/provider/",
+     "licenceSet": [
+      "LicenseRef-Truncated-Apache-2.0",
+      "MIT"
+     ],
+     "governedBy": [
+      "LICENSE",
+      "terraform/provider/LICENSE"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE"
+    },
+    {
+     "directory": "vscode-extension/",
+     "licenceSet": [
+      "MIT"
+     ],
+     "governedBy": [
+      "LICENSE",
+      "vscode-extension/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    }
+   ],
+   "outcome": "DENY_UNKNOWN_LICENSE",
+   "licenceCeiling": "DESIGN_REFERENCE_ONLY",
+   "scopedArtifacts": [
+    {
+     "id": "litellm-without-enterprise-and-terraform-provider",
+     "directories": [
+      "",
+      "litellm-proxy-extras/",
+      "vscode-extension/"
+     ],
+     "licenceSet": [
+      "MIT"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    }
+   ]
+  },
+  {
+   "repository": "pgvector/pgvector",
+   "url": "https://github.com/pgvector/pgvector",
+   "pinnedCommit": "f37c13f68b57d2c3472b2214fbcff699d6d34876",
+   "headRef": "refs/heads/master",
+   "githubLicense": "NOASSERTION",
+   "checkedAt": "2026-10-14T15:09:05Z",
+   "previous": {
+    "record": "architecture/research-adoption.json",
+    "githubLicense": "NOASSERTION",
+    "policyOutcome": "PLANNED_UNRESOLVED",
+    "licenceCeiling": "DESIGN_REFERENCE_ONLY"
+   },
+   "listing": {
+    "checkedAt": "2026-10-14T15:09:34Z",
+    "entries": 169,
+    "truncated": false
+   },
+   "licenceTexts": [
+    {
+     "path": "LICENSE",
+     "blob": "fc5f177fa5d9c0d20a949f4b4faa028999977008",
+     "size": 1104,
+     "sha256": "6bba9ebeb73e27477463b05e5ef1bf303bccbddb3db9bbc95905d351604d6a87",
+     "spdx": "PostgreSQL",
+     "evidence": "the PostgreSQL Licence text",
+     "covers": [
+      ""
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    }
+   ],
+   "otherNamedFiles": [],
+   "parts": [
+    {
+     "directory": "",
+     "licenceSet": [
+      "PostgreSQL"
+     ],
+     "governedBy": [
+      "LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    }
+   ],
+   "outcome": "DEFAULT_ALLOWED",
+   "licenceCeiling": "REUSE_AFTER_GATES",
+   "scopedArtifacts": []
+  },
+  {
+   "repository": "langfuse/langfuse",
+   "url": "https://github.com/langfuse/langfuse",
+   "pinnedCommit": "fb4449adbdd9f4686e015cb97ac1130b15586a85",
+   "headRef": "refs/heads/main",
+   "githubLicense": "NOASSERTION",
+   "checkedAt": "2026-10-14T15:09:26Z",
+   "previous": {
+    "record": "architecture/research-adoption-v2/crosswalk.json",
+    "githubLicense": "NOASSERTION",
+    "policyOutcome": "PLANNED_UNRESOLVED",
+    "licenceCeiling": "DESIGN_REFERENCE_ONLY"
+   },
+   "listing": {
+    "checkedAt": "2026-10-14T15:09:35Z",
+    "entries": 8910,
+    "truncated": false
+   },
+   "licenceTexts": [
+    {
+     "path": ".agents/skills/skill-creator/license.txt",
+     "blob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+     "size": 11358,
+     "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      ".agents/skills/skill-creator/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "LICENSE",
+     "blob": "cf2d4abed1de0891f5dd4a20490ee5033f011605",
+     "size": 1612,
+     "sha256": "fd09d42b5b16606ad2042cc1edf3a82da1c47743709f170c959c74758af229d6",
+     "spdx": "MIT",
+     "evidence": "a scope statement (content under ee/, web/src/ee/ and worker/src/ee/ is under ee/LICENSE, third-party components keep their own licences, all other content is MIT) followed by the MIT permission notice",
+     "covers": [
+      ""
+     ],
+     "except": [
+      "ee/",
+      "web/src/ee/",
+      "worker/src/ee/"
+     ],
+     "scopeStatedBy": "LICENSE",
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "ee/LICENSE",
+     "blob": "3e78f3e97ac04d255328733b8c479d62bbaebadf",
+     "size": 2633,
+     "sha256": "760f5202be4f31f9f8ca43a3c558bebaa5187fa7d7eccad6a32de8392cdccee6",
+     "spdx": "LicenseRef-Langfuse-Enterprise",
+     "evidence": "the Langfuse Enterprise licence: commercial terms for the enterprise directories the root LICENSE names; not an SPDX-listed licence",
+     "covers": [
+      "ee/",
+      "web/src/ee/",
+      "worker/src/ee/"
+     ],
+     "except": [],
+     "scopeStatedBy": "LICENSE",
+     "fetched": true,
+     "sameBlobAs": null
+    }
+   ],
+   "otherNamedFiles": [
+    {
+     "path": ".github/workflows/licencecheck.yml",
+     "blob": "9b9eb3f4d6576b4c3a4baf151b1617bccca0387c",
+     "size": 2405
+    }
+   ],
+   "parts": [
+    {
+     "directory": "",
+     "licenceSet": [
+      "MIT"
+     ],
+     "governedBy": [
+      "LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": ".agents/skills/skill-creator/",
+     "licenceSet": [
+      "Apache-2.0",
+      "MIT"
+     ],
+     "governedBy": [
+      ".agents/skills/skill-creator/license.txt",
+      "LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "ee/",
+     "licenceSet": [
+      "LicenseRef-Langfuse-Enterprise"
+     ],
+     "governedBy": [
+      "ee/LICENSE"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE"
+    },
+    {
+     "directory": "web/src/ee/",
+     "licenceSet": [
+      "LicenseRef-Langfuse-Enterprise"
+     ],
+     "governedBy": [
+      "ee/LICENSE"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE"
+    },
+    {
+     "directory": "worker/src/ee/",
+     "licenceSet": [
+      "LicenseRef-Langfuse-Enterprise"
+     ],
+     "governedBy": [
+      "ee/LICENSE"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE"
+    }
+   ],
+   "outcome": "DENY_UNKNOWN_LICENSE",
+   "licenceCeiling": "DESIGN_REFERENCE_ONLY",
+   "scopedArtifacts": [
+    {
+     "id": "langfuse-without-ee",
+     "directories": [
+      "",
+      ".agents/skills/skill-creator/"
+     ],
+     "licenceSet": [
+      "Apache-2.0",
+      "MIT"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    }
+   ]
+  },
+  {
+   "repository": "Arize-ai/phoenix",
+   "url": "https://github.com/Arize-ai/phoenix",
+   "pinnedCommit": "57f8951466de3fa120196ba9a0396b254ea8882d",
+   "headRef": "refs/heads/main",
+   "githubLicense": "NOASSERTION",
+   "checkedAt": "2026-10-14T15:09:29Z",
+   "previous": {
+    "record": "architecture/research-adoption-v2/crosswalk.json",
+    "githubLicense": "NOASSERTION",
+    "policyOutcome": "PLANNED_UNRESOLVED",
+    "licenceCeiling": "DESIGN_REFERENCE_ONLY"
+   },
+   "listing": {
+    "checkedAt": "2026-10-14T15:09:37Z",
+    "entries": 9792,
+    "truncated": false
+   },
+   "licenceTexts": [
+    {
+     "path": "LICENSE",
+     "blob": "23d3aa7c871a4eb153186073e3d2b72d586f64be",
+     "size": 3794,
+     "sha256": "1c5916f5112e30e92f291002bb02cf4f4851c9d1dbdf3360f9f745b7de2d775f",
+     "spdx": "Elastic-2.0",
+     "evidence": "the Elastic License 2.0 text",
+     "covers": [
+      ""
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "js/packages/phoenix-cli/LICENSE",
+     "blob": "314cc24fb517b5cd03dce11ec5d719bfff007e99",
+     "size": 11372,
+     "sha256": "869963dbff4a3f4e5dc08aabae02b1310a819d41883a669a31400dc35f3b586d",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "js/packages/phoenix-cli/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "js/packages/phoenix-config/LICENSE",
+     "blob": "314cc24fb517b5cd03dce11ec5d719bfff007e99",
+     "size": 11372,
+     "sha256": "869963dbff4a3f4e5dc08aabae02b1310a819d41883a669a31400dc35f3b586d",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "js/packages/phoenix-config/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": false,
+     "sameBlobAs": {
+      "repository": "Arize-ai/phoenix",
+      "path": "js/packages/phoenix-cli/LICENSE"
+     }
+    },
+    {
+     "path": "js/packages/phoenix-evals/LICENSE",
+     "blob": "b9d26d72ccd93b938a99d819748b904b75f71eb1",
+     "size": 11374,
+     "sha256": "1d0cf3d5d40e37421c0e1cdaf45670c3edf16a70bcb95bf90b0b8abc14817ea2",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "js/packages/phoenix-evals/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "js/packages/phoenix-mcp/LICENSE",
+     "blob": "1d13d891197e29ba0cf36787c91221ad36065775",
+     "size": 11371,
+     "sha256": "2244539aa0d8efefb33b65e94ce10ff7381025e6e4bb35ceb976b5f0b202f46d",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "js/packages/phoenix-mcp/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "packages/phoenix-client/LICENSE",
+     "blob": "c3d0cba85d6ba9c892cd5ad59cd78ccb2c67381c",
+     "size": 10775,
+     "sha256": "eaf2723a549ed4fd3d7696ca1882b228f1b8ac308664c17d76b1b55dca054e0f",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "packages/phoenix-client/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "packages/phoenix-evals/LICENSE",
+     "blob": "23d3aa7c871a4eb153186073e3d2b72d586f64be",
+     "size": 3794,
+     "sha256": "1c5916f5112e30e92f291002bb02cf4f4851c9d1dbdf3360f9f745b7de2d775f",
+     "spdx": "Elastic-2.0",
+     "evidence": "the Elastic License 2.0 text",
+     "covers": [
+      "packages/phoenix-evals/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": false,
+     "sameBlobAs": {
+      "repository": "Arize-ai/phoenix",
+      "path": "LICENSE"
+     }
+    },
+    {
+     "path": "packages/phoenix-otel/LICENSE",
+     "blob": "c3d0cba85d6ba9c892cd5ad59cd78ccb2c67381c",
+     "size": 10775,
+     "sha256": "eaf2723a549ed4fd3d7696ca1882b228f1b8ac308664c17d76b1b55dca054e0f",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "packages/phoenix-otel/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": false,
+     "sameBlobAs": {
+      "repository": "Arize-ai/phoenix",
+      "path": "packages/phoenix-client/LICENSE"
+     }
+    },
+    {
+     "path": "packages/phoenix-sqlean/LICENSE",
+     "blob": "673f46f4a88d2779fef26dc610734de7e8b538fa",
+     "size": 949,
+     "sha256": "1eefe6802a5cab3964b69c38ef3d8005fb95fe7ef6ac0984cad9f61b38c26d39",
+     "spdx": "Zlib",
+     "evidence": "the zlib licence text; Zlib is on no list of the policy",
+     "covers": [
+      "packages/phoenix-sqlean/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    },
+    {
+     "path": "src/phoenix/vendor/json_canonicalization_scheme/LICENSE",
+     "blob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+     "size": 11358,
+     "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+     "spdx": "Apache-2.0",
+     "evidence": "the Apache License 2.0 text",
+     "covers": [
+      "src/phoenix/vendor/json_canonicalization_scheme/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": false,
+     "sameBlobAs": {
+      "repository": "langfuse/langfuse",
+      "path": ".agents/skills/skill-creator/license.txt"
+     }
+    },
+    {
+     "path": "src/phoenix/vendor/json_canonicalization_scheme/LICENSE.PSF",
+     "blob": "c6e7e49fb84209f088d196fb56112f0ece3fffcc",
+     "size": 2466,
+     "sha256": "af99833f38f9849acc41e2ca1de50a3cb266e712713efa6f377bae4befb16482",
+     "spdx": "PSF-2.0",
+     "evidence": "the Python Software Foundation licence agreement, version 2",
+     "covers": [
+      "src/phoenix/vendor/json_canonicalization_scheme/"
+     ],
+     "except": [],
+     "scopeStatedBy": null,
+     "fetched": true,
+     "sameBlobAs": null
+    }
+   ],
+   "otherNamedFiles": [
+    {
+     "path": "docs/phoenix/self-hosting/license.mdx",
+     "blob": "ce842aa93d2cad3d61c1854a8039f2c55a13a954",
+     "size": 444
+    }
+   ],
+   "parts": [
+    {
+     "directory": "",
+     "licenceSet": [
+      "Elastic-2.0"
+     ],
+     "governedBy": [
+      "LICENSE"
+     ],
+     "outcome": "DENIED"
+    },
+    {
+     "directory": "js/packages/phoenix-cli/",
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "governedBy": [
+      "js/packages/phoenix-cli/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "js/packages/phoenix-config/",
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "governedBy": [
+      "js/packages/phoenix-config/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "js/packages/phoenix-evals/",
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "governedBy": [
+      "js/packages/phoenix-evals/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "js/packages/phoenix-mcp/",
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "governedBy": [
+      "js/packages/phoenix-mcp/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "packages/phoenix-client/",
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "governedBy": [
+      "packages/phoenix-client/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "packages/phoenix-evals/",
+     "licenceSet": [
+      "Elastic-2.0"
+     ],
+     "governedBy": [
+      "packages/phoenix-evals/LICENSE"
+     ],
+     "outcome": "DENIED"
+    },
+    {
+     "directory": "packages/phoenix-otel/",
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "governedBy": [
+      "packages/phoenix-otel/LICENSE"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    },
+    {
+     "directory": "packages/phoenix-sqlean/",
+     "licenceSet": [
+      "Zlib"
+     ],
+     "governedBy": [
+      "packages/phoenix-sqlean/LICENSE"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE"
+    },
+    {
+     "directory": "src/phoenix/vendor/json_canonicalization_scheme/",
+     "licenceSet": [
+      "Apache-2.0",
+      "PSF-2.0"
+     ],
+     "governedBy": [
+      "src/phoenix/vendor/json_canonicalization_scheme/LICENSE",
+      "src/phoenix/vendor/json_canonicalization_scheme/LICENSE.PSF"
+     ],
+     "outcome": "DEFAULT_ALLOWED"
+    }
+   ],
+   "outcome": "DENIED",
+   "licenceCeiling": "DESIGN_REFERENCE_ONLY",
+   "scopedArtifacts": [
+    {
+     "id": "phoenix-js-cli",
+     "directories": [
+      "js/packages/phoenix-cli/"
+     ],
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    },
+    {
+     "id": "phoenix-js-config",
+     "directories": [
+      "js/packages/phoenix-config/"
+     ],
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    },
+    {
+     "id": "phoenix-js-evals",
+     "directories": [
+      "js/packages/phoenix-evals/"
+     ],
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    },
+    {
+     "id": "phoenix-js-mcp",
+     "directories": [
+      "js/packages/phoenix-mcp/"
+     ],
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    },
+    {
+     "id": "phoenix-client",
+     "directories": [
+      "packages/phoenix-client/"
+     ],
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    },
+    {
+     "id": "phoenix-otel",
+     "directories": [
+      "packages/phoenix-otel/"
+     ],
+     "licenceSet": [
+      "Apache-2.0"
+     ],
+     "outcome": "DEFAULT_ALLOWED",
+     "licenceCeiling": "REUSE_AFTER_GATES"
+    },
+    {
+     "id": "phoenix-sqlean",
+     "directories": [
+      "packages/phoenix-sqlean/"
+     ],
+     "licenceSet": [
+      "Zlib"
+     ],
+     "outcome": "DENY_UNKNOWN_LICENSE",
+     "licenceCeiling": "DESIGN_REFERENCE_ONLY"
+    }
+   ]
+  }
+ ],
+ "notes": [
+  {
+   "id": "N-1",
+   "repository": "BerriAI/litellm",
+   "subject": "enterprise licence file name",
+   "text": "The root LICENSE names \"enterprise/LICENSE\"; the tree at the pinned commit has enterprise/LICENSE.md and no enterprise/LICENSE, so the record takes enterprise/LICENSE.md as the enterprise licence text. Recorded, not a blocker (lane monitor, 2026-10-14)."
+  },
+  {
+   "id": "N-2",
+   "repository": "Arize-ai/phoenix",
+   "subject": "Zlib",
+   "text": "packages/phoenix-sqlean/LICENSE is the zlib licence. Zlib is on no list of policy 0.3.0, so that directory and its scoped artifact are DENY_UNKNOWN_LICENSE until a policy revision classifies Zlib. Recorded, not a blocker (lane monitor, 2026-10-14)."
+  },
+  {
+   "id": "N-3",
+   "repository": "langfuse/langfuse",
+   "subject": "third-party components",
+   "text": "The root LICENSE keeps third-party components under their original licences. The record unions the root's MIT with the Apache-2.0 text of .agents/skills/skill-creator, which keeps both sets of obligations and changes no outcome."
+  },
+  {
+   "id": "N-4",
+   "repository": "BerriAI/litellm",
+   "subject": "truncated terraform provider licence",
+   "text": "terraform/provider/LICENSE at the pinned commit holds only the opening 1,610 bytes of the Apache License 2.0 text and stops inside its definitions, with no grant (review R1-1). The record does not identify it as Apache-2.0: it is LicenseRef-Truncated-Apache-2.0, so that directory is DENY_UNKNOWN_LICENSE although the root's stated scope also puts it under MIT, and the scoped artifact leaves it out. A complete text at a later commit would need a new read."
+  }
+ ],
+ "nonClaims": [
+  "No public contract, policy, catalog, rating or runtime change and no task packet dispatched; item ratings and statuses stay as they are (Q-HO4-4, HO-D1).",
+  "No upstream is qualified, vendored, released or copy-authorized: path decisions stay REFERENCE_ONLY_PENDING_PATH_REVIEW, and an adoption needs the policy's custody evidence (component inventory, per-component SPDX, SBOM, notice) for the artifact it takes.",
+  "A scoped artifact is a planning scope over the repository tree at the pinned commit, not a published package.",
+  "No dependency closure is claimed: the 2026-09 record's exclusion \"with dependency closure\" and the v2 crosswalk's OSS-only closure review stay open for every scoped artifact, as do vendored or third-party components without their own licence text.",
+  "The identifications are an operator's reading of the texts bound here by digest, not legal advice."
+ ]
+}
