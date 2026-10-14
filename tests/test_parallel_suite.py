@@ -914,8 +914,10 @@ def test_an_inherited_ignored_hangup_stays_ignored(tmp_path):
 
 
 def test_deadline_fits_inside_the_verify_budget():
-    # argv 1-62 take about 2 minutes, so a 600 s worker deadline fires before the local 750 s and trusted 900 s caps.
-    assert SUITE.DEADLINE_SECONDS == 600
+    # argv 1-62 take about 2 minutes and the launcher's setup about 1, so a 900 s worker deadline fires before the
+    # trusted 1200 s cap (bundle v4, MET-PERF-038), leaving the parent nodes their time; the unchanged local 750 s gate
+    # can still stop a local run before the deadline fires.
+    assert SUITE.DEADLINE_SECONDS == 900
 
 
 _SESSION_ATTRIBUTES = {"session", "pluginmanager", "stats", "testscollected", "testsfailed", "terminalreporter",

@@ -168,7 +168,7 @@ def _in_session_predecessor_proof(request, env, targets):
         return None
     started = time.monotonic()
     collect = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", *targets],
-                             cwd=ROOT, env=env, capture_output=True, text=True, timeout=420, close_fds=True)
+                             cwd=ROOT, env=env, capture_output=True, text=True, timeout=600, close_fds=True)
     expected = {line for line in collect.stdout.splitlines() if "::" in line and not line.startswith(" ")}
     if collect.returncode != 0 or not expected or session_nodes != expected:
         return None
@@ -202,7 +202,7 @@ def test_full_predecessor_suites_and_validators_remain_green(capsys):
     if proof is not None:
         # The outer session already ran every predecessor test; prove it instead of re-running.
         identity = {"ordinal": 1, "total": len(commands), "label": labels[0]}
-        _publish_predecessor_record(capsys, {**identity, "event": "START", "timeoutSeconds": 420})
+        _publish_predecessor_record(capsys, {**identity, "event": "START", "timeoutSeconds": 600})
         _publish_predecessor_record(capsys, {**identity, "event": "END",
                                              "returncode": 0 if not (proof["failed"] or proof["incomplete"]) else 1, **proof})
         assert proof["failed"] == 0 and proof["incomplete"] == 0, "predecessor suite failed in this session: " + json.dumps(proof)
@@ -211,9 +211,9 @@ def test_full_predecessor_suites_and_validators_remain_green(capsys):
             continue
         identity = {"ordinal": ordinal, "total": len(commands), "label": labels[ordinal - 1]}
         started = time.monotonic()
-        _publish_predecessor_record(capsys, {**identity, "event": "START", "timeoutSeconds": 420})
+        _publish_predecessor_record(capsys, {**identity, "event": "START", "timeoutSeconds": 600})
         try:
-            result = subprocess.run(argv, cwd=ROOT, env=env, capture_output=True, text=True, timeout=420, close_fds=True)
+            result = subprocess.run(argv, cwd=ROOT, env=env, capture_output=True, text=True, timeout=600, close_fds=True)
         except BaseException as exc:
             try:
                 record = {**identity, "event": "EXCEPTION", "failureType": type(exc).__name__,

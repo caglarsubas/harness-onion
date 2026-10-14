@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "harness.planeon.ai/load-deadlines/v1",
+  "packet": "MET-PERF-038",
+  "evidenceClass": "SOURCE_DELTA_ONLY",
+  "verifierBundle": {
+    "version": "v4",
+    "launcherCapSeconds": 1200,
+    "runSeconds": 1260,
+    "ttlSeconds": 1800,
+    "loadGate": {
+      "fiveMinuteLoadBelow": 4.0,
+      "oneMinuteLoadBelow": 6.0,
+      "checkedEveryPoll": true,
+      "waitsBeforeTheCheckRunIsClaimed": true,
+      "boundedWaitSeconds": 3600,
+      "afterBoundedWait": "KEEP_WAITING_WITH_ESCALATION_AND_OPERATOR_OVERRIDE_FILE"
+    },
+    "scope": "ONE_SETTING_FOR_ALL_THREE_REPOSITORIES",
+    "installedBy": "the owner (root change); not part of this repository"
+  },
+  "budgetSeconds": {
+    "launcherCapSeconds": 1200,
+    "launcherSetupSeconds": 60,
+    "argvBeforeSuiteSeconds": 120,
+    "parallelSuiteDeadlineSeconds": 900,
+    "parentNodesSeconds": 90
+  },
+  "inRepoLimits": [
+    {
+      "name": "parallelSuiteWorkerDeadlineSeconds",
+      "path": "ci/parallel_suite.py",
+      "before": 600,
+      "after": 900
+    },
+    {
+      "name": "nestedPredecessorSeconds",
+      "path": "tests/linux_runner/test_build_and_predecessors.py",
+      "before": 420,
+      "after": 600
+    }
+  ],
+  "unchanged": [
+    {
+      "name": "parallelSuiteWorkers",
+      "path": "ci/parallel_suite.py",
+      "value": 4
+    },
+    {
+      "name": "parallelSuiteParentNodes",
+      "path": "ci/parallel_suite.py",
+      "value": "the three MET-PERF-037 parent nodes"
+    },
+    {
+      "name": "linuxRunnerLauncherCapSeconds",
+      "path": "ci/linux-runner/launcher.py",
+      "value": 900
+    },
+    {
+      "name": "workflowTimeoutMinutes",
+      "path": ".github/workflows/verify.yml",
+      "value": 15
+    },
+    {
+      "name": "historicalLimitRecords",
+      "path": "architecture/",
+      "value": "every earlier record stating 420/900/15 stays byte-identical"
+    }
+  ],
+  "ownerDecisions": [
+    {
+      "id": "Q-PERF-DL",
+      "selected": "Bundle v4 + PERF deadlines",
+      "date": "2026-10-14",
+      "decision": "The owner chose \"Bundle v4 + PERF deadlines\": the primary builds verifier bundle v4 (a load gate before the run plus a 1200 s cap; owner root change), and YOU build a PERF packet. It takes harness-onion slot 233 now, before MAS-RA-003, which is re-based to 234 afterwards. PERF packet scope (you own the parallel suite from 216/226): raise the in-repo deadlines that load can trip: the parallel suite's 600 s deadline and the nested 420 s predecessor run, with headroom under the new 1200 s cap; update the repo pins of the host limit (tests/test_ci_performance.py \"host 900\", the packet contract text, the workflow minutes) consistently with bundle v4; keep the parallel suite fail-closed, with the same node accounting. This is a ci/ transport change, so it needs the owner's per-head approval file. Coordinate the exact new values with the primary's bundle v4 through me."
+    },
+    {
+      "id": "Q-DL1",
+      "selected": "a",
+      "date": "2026-10-14",
+      "decision": "parallel-suite deadline 600 → 900 s, nested predecessor 420 → 600 s, workflow timeout 15 → 20 min."
+    },
+    {
+      "id": "Q-DL2",
+      "selected": "a",
+      "date": "2026-10-14",
+      "decision": "keep the historical 420/900/15 records; add the successor limits record."
+    },
+    {
+      "id": "Q-DL3",
+      "selected": "a",
+      "date": "2026-10-14",
+      "decision": "include verify.yml's timeout-minutes (bridged); leave ci/linux-runner/launcher.py's min(900) alone."
+    },
+    {
+      "id": "Q-V4-VALUES",
+      "selected": "a",
+      "date": "2026-10-14",
+      "decision": "Bundle v4 values (owner Q-V4-1..5 (a)), for your successor record: launcher cap 1200 s; RUN_SECONDS 1260; TTL 1800; load gate quiet = 5-min < 4.0 AND 1-min < 6.0, checked every poll; the wait happens BEFORE the check run is claimed (outside the job); bounded wait 3600 s, then keep waiting with escalation plus an operator override file; one setting for all three repositories."
+    },
+    {
+      "id": "Q-DL3-B",
+      "selected": "b",
+      "date": "2026-10-14",
+      "decision": "\"Keep verify.yml at 15\": leave the workflow file untouched (amends Q-DL3 to (c)). The limits record and README say the workflow timeout stays at 15 min as a pinned record value, because the app verifier never runs in that workflow job. No validator-refusal change."
+    },
+    {
+      "id": "Q-ORDER-187",
+      "selected": "187 first",
+      "date": "2026-10-14",
+      "decision": "handle pr-187 first, then 188"
+    }
+  ]
+}

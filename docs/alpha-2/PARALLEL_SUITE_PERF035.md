@@ -48,7 +48,7 @@ evenly over about 100 test files, and every packet adds to it. Owner decisions (
     - every report and warning came from the worker that owns its node;
     - every node reported exactly one setup and one teardown, and a call if and only if its setup passed;
     - every record decoded;
-    - every worker exited 0, or 1 with a failed report of its own, within 600 s.
+    - every worker exited 0, or 1 with a failed report of its own, within 900 s (MET-PERF-038; 600 s before).
   - A failure names the problems (worker-supplied text as repr) and each worker's in-flight node, and adds a
     "parallel-suite-incomplete" count to the final summary line; an interruption adds "parallel-suite-interrupted". The
     exit code is the authority.
