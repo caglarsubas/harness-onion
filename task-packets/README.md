@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-MAS-003
+## Current source preparation — MET-PERF-038
+
+MET-PERF-038: the in-repository limits that host load could trip, raised to fit verifier bundle v4 (a load gate
+before the run and a 1200 s cap): the parallel-suite worker deadline 600 -> 900 s and the nested predecessor bound
+420 -> 600 s, with a successor limits record; the suite stays fail-closed, the 15 min workflow timeout stays, and every
+earlier record stating 420/900/15 stays byte-identical. Alpha2 OPEN; 233 accepted plus MET-PERF-038 only.
+
+## Historical MAS-RA-003 source preparation — MET-MAS-003
 
 MET-MAS-003: the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003): the
 run-event log, eighteen exact MAS metrics and the MAST annotation vocabulary, with a derivation from MAS-RA-008
@@ -1358,3 +1365,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 231 | `MET-MAS-006` | `Harness-Engineering` | MAS-RA-008: agent-loop kernel and tool-gateway contract candidate; DATA_CHECK_ONLY |
 | 232 | `MET-ENFORCE-025` | `Harness-Engineering` | Compiled seccomp filter programs, edge registry records v2 (operator, EDGE-2) and W03-PLAN-AMEND-1; DATA_CHECK_ONLY |
 | 233 | `MET-MAS-003` | `Harness-Engineering` | Run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003); DATA_CHECK_ONLY |
+| 234 | `MET-PERF-038` | `Harness-Engineering` | Load-tolerant in-repository deadlines for verifier bundle v4 (parallel suite 900 s, nested 600 s); SOURCE_DELTA_ONLY |

@@ -119,7 +119,7 @@ def test_diagnostics_preserve_exact_seven_commands_flags_and_start_order(replay)
     expected_options = {
         "cwd": predecessor.ROOT,
         "env": {**replay.environ, "PYTHONDONTWRITEBYTECODE": "1"},
-        "capture_output": True, "text": True, "timeout": 420, "close_fds": True,
+        "capture_output": True, "text": True, "timeout": 600, "close_fds": True,
     }
     assert all(options == expected_options for _, options in replay.calls)
     assert replay.timeline == [event for ordinal in range(1, 8) for event in (
@@ -130,7 +130,7 @@ def test_diagnostics_preserve_exact_seven_commands_flags_and_start_order(replay)
     for ordinal, label in enumerate(labels, start=1):
         start, end = replay.events[(ordinal - 1) * 2:ordinal * 2]
         assert start == {"ordinal": ordinal, "total": 7, "label": label,
-                         "event": "START", "timeoutSeconds": 420}
+                         "event": "START", "timeoutSeconds": 600}
         assert end == {"ordinal": ordinal, "total": 7, "label": label,
                        "event": "END", "returncode": 0, "elapsedSeconds": 1.0,
                        **({"pytestDiagnostics": replay.summary} if ordinal == 1 else {})}

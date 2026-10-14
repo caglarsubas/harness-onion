@@ -1,6 +1,13 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-MAS-003
+## Current source preparation — MET-PERF-038
+
+MET-PERF-038: the in-repository limits that host load could trip, raised to fit verifier bundle v4 (a load gate
+before the run and a 1200 s cap): the parallel-suite worker deadline 600 -> 900 s and the nested predecessor bound
+420 -> 600 s, with a successor limits record; the suite stays fail-closed, the 15 min workflow timeout stays, and every
+earlier record stating 420/900/15 stays byte-identical. Alpha2 OPEN; 233 accepted plus MET-PERF-038 only.
+
+## Historical MAS-RA-003 source preparation — MET-MAS-003
 
 MET-MAS-003: the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003): the
 run-event log, eighteen exact MAS metrics and the MAST annotation vocabulary, with a derivation from MAS-RA-008
@@ -1118,6 +1125,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 105. `MET-MAS-006`: publish the agent-loop kernel and tool-gateway contract candidate (schemas, reference model and vectors; bounded retries, revision rounds and deterministic-gate interleaving; H10 and H11 unchanged); data only.
 106. `MET-ENFORCE-025`: publish the compiled seccomp filter programs (the pinned v3 compiler's output for seven roles on two architectures), the edge registry records v2 (operator, EDGE-2) and the W03 obligation amendment 1; v3, v1 and plan v2 unchanged; data only.
 107. `MET-MAS-003`: publish the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003: the run-event log, eighteen exact metrics, the MAST vocabulary, the derivation from MAS-RA-008 traces and the OTel projection); H15, H16, H10 and the schemas unchanged; data only.
+108. `MET-PERF-038`: raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap; fail-closed; a successor limits record; transport change.
 
 ## Testing, verification, and acceptance
 
