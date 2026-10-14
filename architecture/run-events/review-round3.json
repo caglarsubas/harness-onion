@@ -1,0 +1,712 @@
+{
+ "schemaVersion": "harness.planeon.ai/run-events-review/v1",
+ "kind": "run-events-review",
+ "round": 3,
+ "reviewDate": "2026-10-14",
+ "subjectCommit": "9495150ce6677e44ce6c6df0b7c03eb7dcc471d5",
+ "subjectTree": "aa9ef02576c6d3884db9c87f8c332d70dc83209c",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "R3-1",
+   "severity": "NOTE",
+   "location": "scripts/run_events.py to_otel/_operation_error (the AGENT_INVOKE END, projected as the plain delegate span); README OTel mapping (status bullet, Delegations bullet)",
+   "finding": "With R2-3's binding, a delegation's outcome follows from its child run's: it is OK exactly when the child COMPLETED. _operation_error still marks the delegate span ERROR on any non-OK outcome, so its status repeats the child's or contradicts it. In the team projection, the failed w2 delegation is two error spans: delegate ERROR FAIL and invoke_agent ERROR FAILED (P92). When the child run is HANDED_OFF, its invoke_agent span is UNSET ('ended as designed'), but the delegate span, which the binding forces to a non-OK outcome, is ERROR FAIL (P93). The README avoids counting agent invocations twice and says a hand-off is not an error; error counts across spans do not yet follow either point. No derived vector log has a failed delegation (P91).",
+   "requiredChange": "Optionally leave the delegate span's status UNSET (the child invoke_agent span carries the outcome), or state in the README that a failed or handed-off delegation also marks its delegate span as an error."
+  }
+ ],
+ "dispositions": [
+  {
+   "finding": "R2-1",
+   "disposition": "RESOLVED",
+   "evidence": "derive_log refuses DERIVATION for a gate whose subject is a HOOK or HANDOFF step (by_id kind check) and for any emitted time above 2^53 - 1 ms (in emit). My V021 hook-gate trace passes MAS-RA-008 and is refused DERIVATION by derive_log (P30). New vector R040 (the derived V021 log naming the builder's hook-gated trace) gives DERIVATION (P90) and is isolated (passes with DERIVATION disabled). The 10^13 s step is refused DERIVATION (P70). Gates on a GATE or a DELEGATE step still derive and pass (P72, P73). The README and docstring state the three preconditions, and 36 of 36 valid traces still derive and pass (P50)."
+  },
+  {
+   "finding": "R2-2",
+   "disposition": "RESOLVED",
+   "evidence": "RUN_SCOPE (done_before) requires the subject's and the revised span's END to come earlier in the sequence than the verification's or revision's START, in the same run. P31, P32, P33 and P34 are now RUN_SCOPE, and new vector R027 (a verification of its own open run span) is RUN_SCOPE and isolated. The order is by sequence only, as stated in Not claimed. I confirmed the reason: in the 36 derived logs, 24 verifications start before their subject ends in time (for example V044: 60000 ms against 66000 ms; P74), so a time rule would refuse valid derived logs. A verification after its subject in the sequence but earlier in time is accepted, as stated (P75). Revision targets: an ended AGENT_INVOKE of the same run may be revised (P84), an open one or another run's may not (P85, P83). Every derived log still satisfies the rule (P51: 0 and 0)."
+  },
+  {
+   "finding": "R2-3",
+   "disposition": "RESOLVED",
+   "evidence": "RUN_SCOPE binds each AGENT_INVOKE END to its child RUN END: OK exactly when the child COMPLETED, with the same outputHash, payloadRef and tokens. P36 (OK with output over a FAILED child) and P37 (tokens 99, also vector R028, isolated) are RUN_SCOPE. Further probes: FAIL over a COMPLETED child (P77), the same digest in another store (P78), and OK without output (P79) are RUN_SCOPE. UNKNOWN over a FAILED child is accepted (P76). All derived logs satisfy the binding by MAS-RA-008's TOTALS_MISMATCH, and all 36 pass. The README's RUN_SCOPE text matches the code. A consequence for the OTel status is NOTE R3-1."
+  },
+  {
+   "finding": "R2-4",
+   "disposition": "RESOLVED",
+   "evidence": "MESSAGE_PAIRING requires the send's timeMs to be no later than the receive's. P35 (receive at 1000 ms, send at 3200 ms) and P82 (1 ms early) are MESSAGE_PAIRING, and an equal time is accepted (P81). New vector R035 (receive at 3100 ms) is isolated. The README rule text says 'no later in time'."
+  },
+  {
+   "finding": "R2-5",
+   "disposition": "RESOLVED",
+   "evidence": "The README list of fields left to the trace now names the profile digest, the terminal reason (P63), the error-trace digest of non-gate steps, a tool call's timeout, limits and sandbox-profile digest, and a delegation's child trace digest. The attributes row states that a run's tokens and cost are inclusive. Point event names are described as 'planeon.' plus the operation in lower case, matching OTEL_POINT_EVENTS."
+  },
+  {
+   "finding": "R2-6",
+   "disposition": "RESOLVED",
+   "evidence": "_operation_error marks ERROR only for a step ending FAIL, ERROR or UNKNOWN (a verification only on ERROR) and a run ending FAILED or ABORTED. P62: the derived V022 HANDED_OFF root and the team's FAIL verify span are UNSET. P86 and P87: the team's verify spans are UNSET, V043's ERRORed gate is an ERROR verify span, and V024's ABORTED root is ERROR. The pinned projections differ from round 2 only in status and error.type (P88). The README bullet matches. The delegate span's status is NOTE R3-1."
+  }
+ ],
+ "checksRun": [
+  {
+   "check": "Scope: exactly the six files against 5da1265; the round-3 change (a93d55c5..9495150c) touches README.md, vectors.json and scripts/run_events.py; the three schemas are byte-identical to round 2",
+   "result": "PASS"
+  },
+  {
+   "check": "H15, H16 and H10 documents, schemas/, architecture/agent-loop, scripts/agent_loop.py, architecture/run-manifest and scripts/run_manifest.py blob-identical at 5da1265 and 9495150c",
+   "result": "PASS"
+  },
+  {
+   "check": "DATA_CHECK_ONLY: no runtime, selector, catalog, schemas/ or public-contract change",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder reproducibility: build_events.py run twice on a git archive of 9495150c reproduces the four JSON files byte for byte (sha256), 2-3 s each; the builder diff against build_events.r2.py adds only the R2-1 trace and the four new cases",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay: python3 -I -B scripts/run_events.py on the archive (52 cases, 3 texts, 2 OTel projections)",
+   "result": "PASS"
+  },
+  {
+   "check": "Vector counts: 14 valid, 38 refused, every log, metric and annotation code at least once; 13 logs and 2 manifests in the store (README matches)",
+   "result": "PASS"
+  },
+  {
+   "check": "Round-2 dispositions R2-1..R2-6 re-checked by probe (P30-P37, P51, P62, P63, P70 re-run on the round-3 subject)",
+   "result": "PASS (6 RESOLVED)"
+  },
+  {
+   "check": "Round-1 disposition probes P01-P29 re-run on the round-3 subject",
+   "result": "PASS (all results unchanged)"
+  },
+  {
+   "check": "Log rules: span, point, scope, time, message and claim bypass probes re-run (P38-P49), and new probes on the R2-2, R2-3 and R2-4 rules (P75-P85)",
+   "result": "PASS"
+  },
+  {
+   "check": "New rules against valid inputs: all 36 valid agent-loop traces derive and pass, byte-identical under reversed member order; gates on GATE and DELEGATE steps still derive and pass",
+   "result": "PASS"
+  },
+  {
+   "check": "Derivation preconditions: hook-gated trace and over-range times refused DERIVATION; README and docstring state all three",
+   "result": "PASS"
+  },
+  {
+   "check": "Metrics: independent recomputation of the three valid reports (own script, ms grid)",
+   "result": "PASS (54 of 54 equal)"
+  },
+  {
+   "check": "MAST vocabulary, OTel table, OTel source hashes, never-emitted list and metric list unchanged from round 2 (vectors compared); OTel table re-checked against the 7 pinned files (own safe_yaml parse)",
+   "result": "PASS"
+  },
+  {
+   "check": "OTel: to_otel status after R2-6 (verdicts, hand-offs, failed operations)",
+   "result": "PASS; delegate span status NOTE R3-1"
+  },
+  {
+   "check": "Fail-closed: only Refused escapes; malformed input is SHAPE; loop argument (None, foreign model)",
+   "result": "PASS (0 non-Refused exceptions in 11,745 mutations; a foreign loop's RuntimeError escapes, as accepted in round 1)"
+  },
+  {
+   "check": "Schema/model agreement under the single-leaf sweep (11,745 mutations)",
+   "result": "PASS (2 disagreements, both the schemaAccepts case)"
+  },
+  {
+   "check": "Isolation of rule-phase log refusal cases (own re-run with each case's rule disabled)",
+   "result": "PASS (20 of 20)"
+  },
+  {
+   "check": "Owner-decision quotes against PLAN.md (own script)",
+   "result": "PASS (8 of 8)"
+  },
+  {
+   "check": "Public hygiene: no personal data, no absolute user paths, no e-mail address in the six files; MAST definitions not restated",
+   "result": "PASS"
+  },
+  {
+   "check": "README accuracy against the files and the model",
+   "result": "PASS (note R3-1)"
+  },
+  {
+   "check": "pytest, cargo, builds, dry runs",
+   "result": "NOT RUN: excluded by the brief (light work only)"
+  }
+ ],
+ "probes": [
+  {
+   "id": "P01",
+   "mutation": "R012 (V020 derived with manifest and costMicros 125000) as committed",
+   "expected": "None",
+   "got": "null"
+  },
+  {
+   "id": "P02",
+   "mutation": "R012 with root costMicros 125000 -> 7 (derivation re-run with the log's own bindings)",
+   "expected": "None (cost is a binding, not in the trace)",
+   "got": "null"
+  },
+  {
+   "id": "P03",
+   "mutation": "R012 with the manifest unnamed (bindings: no manifest, cost kept)",
+   "expected": "None",
+   "got": "null"
+  },
+  {
+   "id": "P04",
+   "mutation": "R012 naming a stored ledger while its manifest's ledgerDigest is null",
+   "expected": "SOURCE_BINDING",
+   "got": "SOURCE_BINDING"
+  },
+  {
+   "id": "P05",
+   "mutation": "derived parent log (V032) with the child RUN END costMicros 5",
+   "expected": "DERIVATION",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P06",
+   "mutation": "R013 report over the manifest-bound log",
+   "expected": "None; cost_per_success DEFINED",
+   "got": "[null, [125000, 1, \"DEFINED\"]]"
+  },
+  {
+   "id": "P07",
+   "mutation": "R012 naming a manifest stored under a key that is not its digest",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P08",
+   "mutation": "MODEL_CALL START attributes in the team log and in derived V020",
+   "expected": "provider and model present; null in derived",
+   "got": "[[\"attempt\", \"model\", \"provider\", \"revisesSpanId\"], null, null]"
+  },
+  {
+   "id": "P09",
+   "mutation": "to_otel(derived V020): chat spans carrying gen_ai.provider.name",
+   "expected": "0 (stated in the README)",
+   "got": "0"
+  },
+  {
+   "id": "P10",
+   "mutation": "R039 (V032 child reusing the parent's trace id) replayed",
+   "expected": "DERIVATION",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P11",
+   "mutation": "agent-loop V046 with its second child's traceId set to the first child's",
+   "expected": "agent-loop PASS; derive_log DERIVATION",
+   "got": "[null, \"DERIVATION\"]"
+  },
+  {
+   "id": "P12",
+   "mutation": "team: w1's RECEIVE of m1 recorded in orch-run on the orchestrator's RUN span (agentId w1)",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P13",
+   "mutation": "team: CLAIM c3 with agentId ghost (R026)",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P14",
+   "mutation": "team: root RUN END at 100 ms",
+   "expected": "TIME_ORDER",
+   "got": "TIME_ORDER"
+  },
+  {
+   "id": "P15",
+   "mutation": "team: w1 draft END at 9000 ms (after its run's and the root's END)",
+   "expected": "TIME_ORDER",
+   "got": "TIME_ORDER"
+  },
+  {
+   "id": "P16",
+   "mutation": "team: w1's SEND of m2 at 3350 ms, after w1's RUN END (3300)",
+   "expected": "TIME_ORDER",
+   "got": "TIME_ORDER"
+  },
+  {
+   "id": "P17",
+   "mutation": "store maps the team digest to the baseline's bytes; report runs [team digest], baseline the baseline (round-1 P17)",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P18",
+   "mutation": "annotation of the team digest with another log stored under it (round-1 P18)",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P19",
+   "mutation": "team naming an arbitrary JSON value stored under a key that is not its digest (round-1 P14)",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P20",
+   "mutation": "team naming an arbitrary JSON value as its manifest, stored under its own digest",
+   "expected": "SOURCE_BINDING",
+   "got": "SOURCE_BINDING"
+  },
+  {
+   "id": "P21",
+   "mutation": "R051 (annotation of a stored log that fails the log check) and R043 (mis-keyed log) replayed",
+   "expected": "ANNOTATION_INPUT, UNKNOWN_REFERENCE",
+   "got": "[\"ANNOTATION_INPUT\", \"UNKNOWN_REFERENCE\"]"
+  },
+  {
+   "id": "P22",
+   "mutation": "derived V050 (a hook that ERRORs aborts the loop): HOOK point attributes, and the log check",
+   "expected": "result ERROR; passes",
+   "got": "[[[\"ERROR\", null, 0]], null]"
+  },
+  {
+   "id": "P23",
+   "mutation": "every RUN END of the 36 derived logs: tokens equal the sum of its own END and HOOK/HANDOFF point tokens",
+   "expected": "0 mismatches",
+   "got": "0 mismatches of 45 runs"
+  },
+  {
+   "id": "P24",
+   "mutation": "evidence_coverage of derived V042, V032, V044, V046, V020 (round-1 P44)",
+   "expected": "1/1 for fully gated loops",
+   "got": "{\"V042\": [1, 1, \"DEFINED\"], \"V032\": [1, 1, \"DEFINED\"], \"V044\": [1, 1, \"DEFINED\"], \"V046\": [1, 1, \"DEFINED\"], \"V020\": [1, 1, \"DEFINED\"]}"
+  },
+  {
+   "id": "P25",
+   "mutation": "team report verifier_disagreement (keys: (unit-tests, X) OK+FAIL across w1 and w2; (schema-check, X) OK; (schema-check, F) UNKNOWN)",
+   "expected": "1/3",
+   "got": "[1, 3, \"DEFINED\"]"
+  },
+  {
+   "id": "P26",
+   "mutation": "pinned projections: null attribute values; invoke_agent directly under invoke_agent; span names",
+   "expected": "0; 0; no run or agent ids",
+   "got": "[0, 0, [\"chat\", \"chat team-model\", \"delegate\", \"execute_tool write-file\", \"invoke_agent\", \"verify schema-check\", \"verify unit-tests\"]]"
+  },
+  {
+   "id": "P27",
+   "mutation": "pinned projections: spans carrying gen_ai.evaluation.result",
+   "expected": "the evaluated (subject) spans, never a verify span",
+   "got": "[[\"chat team-model\", \"unit-tests\"], [\"chat team-model\", \"unit-tests\"], [\"chat team-model\", \"schema-check\"], [\"chat team-model\", \"schema-check\"], [\"chat\", \"schema-check\"], [\"chat\", \"schema-check\"]]"
+  },
+  {
+   "id": "P28",
+   "mutation": "parse: escaped lone high surrogate in a value, lone low surrogate in a member name, a valid escaped pair, raw CESU bytes of a surrogate",
+   "expected": "SHAPE, SHAPE, None, SHAPE",
+   "got": "[\"SHAPE\", \"SHAPE\", null, \"SHAPE\"]"
+  },
+  {
+   "id": "P29",
+   "mutation": "R044 (METRIC_INPUT): its metrics equal compute_metrics of its own runs and baseline",
+   "expected": "True (isolated from METRIC_VALUE)",
+   "got": "true"
+  },
+  {
+   "id": "P30",
+   "mutation": "agent-loop V021 plus a passing GATE (unit-tests) whose subject is the HOOK step 'audit' (totals unchanged)",
+   "expected": "agent-loop PASS; derive_log refuses DERIVATION (stated precondition)",
+   "got": "agent-loop None (PASS); derive_log DERIVATION"
+  },
+  {
+   "id": "P31",
+   "mutation": "team: w1's unit-tests verification of its draft runs 1100-1200 ms, inside the draft span (1000-3000), its START and END before the draft's END",
+   "expected": "RUN_SCOPE (subject not ended before the verification starts)",
+   "got": "RUN_SCOPE (the round-2 coverage effect no longer reaches a report: the log is refused)"
+  },
+  {
+   "id": "P32",
+   "mutation": "team: the root's schema-check verification of the merge span runs 4400-4450 ms and ends OK, before the merge span ends (5000 ms) and produces F",
+   "expected": "RUN_SCOPE (subject not ended before the verification starts)",
+   "got": "RUN_SCOPE (the round-2 coverage effect no longer reaches a report: the log is refused)"
+  },
+  {
+   "id": "P33",
+   "mutation": "team: the root 'check' verification names the root RUN span (open) as its subject and ends OK",
+   "expected": "RUN_SCOPE (own RUN span has not ended)",
+   "got": "RUN_SCOPE (the round-2 coverage effect no longer reaches a report: the log is refused)"
+  },
+  {
+   "id": "P34",
+   "mutation": "team: w2's redraft (revising w2's draft) runs 2000-2100 ms nested inside the draft span it revises",
+   "expected": "RUN_SCOPE (revised span has not ended)",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P35",
+   "mutation": "team: the orchestrator's RECEIVE of m2 at 1000 ms, w1's SEND at 3200 ms (logical order kept)",
+   "expected": "MESSAGE_PAIRING",
+   "got": "MESSAGE_PAIRING"
+  },
+  {
+   "id": "P36",
+   "mutation": "team: invoke-2 END OK with output X while its child w2-run ends FAILED with no output",
+   "expected": "RUN_SCOPE (delegation bound to its child run)",
+   "got": "RUN_SCOPE (the round-2 coverage effect no longer reaches a report: the log is refused)"
+  },
+  {
+   "id": "P37",
+   "mutation": "team: invoke-1 END tokens 99 while its child w1-run ends with 2000",
+   "expected": "RUN_SCOPE (delegation bound to its child run)",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P38",
+   "mutation": "team: MERGE g2 attached to the merge span after that span's END",
+   "expected": "SPAN_ORDER",
+   "got": "SPAN_ORDER"
+  },
+  {
+   "id": "P39",
+   "mutation": "team: invoke-1 END before w1-run END in sequence",
+   "expected": "SPAN_ORDER",
+   "got": "SPAN_ORDER"
+  },
+  {
+   "id": "P40",
+   "mutation": "team: w1-run START at 900 ms, before its AGENT_INVOKE starts (1000 ms)",
+   "expected": "TIME_ORDER",
+   "got": "TIME_ORDER"
+  },
+  {
+   "id": "P41",
+   "mutation": "team: MERGE g1 at 5050 ms, after its merge span ended (5000 ms)",
+   "expected": "TIME_ORDER",
+   "got": "TIME_ORDER"
+  },
+  {
+   "id": "P42",
+   "mutation": "team: m1's RECEIVE (by w1) rewritten to toAgent w2",
+   "expected": "MESSAGE_PAIRING",
+   "got": "MESSAGE_PAIRING"
+  },
+  {
+   "id": "P43",
+   "mutation": "team: m1 received with a different payload reference",
+   "expected": "MESSAGE_PAIRING",
+   "got": "MESSAGE_PAIRING"
+  },
+  {
+   "id": "P44",
+   "mutation": "team: m1's RECEIVE recorded before its SEND in sequence",
+   "expected": "MESSAGE_PAIRING",
+   "got": "LOGICAL_TIME"
+  },
+  {
+   "id": "P45",
+   "mutation": "team: w2's claim c2 names the later claim c3 as its conflict",
+   "expected": "CLAIM_CONFLICT",
+   "got": "CLAIM_CONFLICT"
+  },
+  {
+   "id": "P46",
+   "mutation": "team: w2's claim c3 moved to task 30 (w1 holds c1 on it) recording no conflict",
+   "expected": "CLAIM_CONFLICT",
+   "got": "CLAIM_CONFLICT"
+  },
+  {
+   "id": "P47",
+   "mutation": "team: w2-run opened as a second root (no parent span)",
+   "expected": "RUN_BOUNDS",
+   "got": "RUN_BOUNDS"
+  },
+  {
+   "id": "P48",
+   "mutation": "team: w1-run at depth 0 under invoke-1",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P49",
+   "mutation": "team: invoke-1 names w2-run while w1-run opens under it",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P50",
+   "mutation": "derive all valid agent-loop traces, again from a copy with reversed member order; check each log",
+   "expected": "36 derive and pass; byte-identical",
+   "got": "[36, 36, 36]"
+  },
+  {
+   "id": "P51",
+   "mutation": "derived logs: verifications whose subject span ends after the verification starts, and revisions whose target ends after the revision starts",
+   "expected": "0 and 0 (so a 'subject ended first' rule holds for every derived log)",
+   "got": "[0, 0]"
+  },
+  {
+   "id": "P52",
+   "mutation": "derived V020 log with one tool END 1 s later",
+   "expected": "DERIVATION",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P53",
+   "mutation": "derived V020 log checked with loop=None",
+   "expected": "SHAPE",
+   "got": "SHAPE"
+  },
+  {
+   "id": "P54",
+   "mutation": "derived V020 log checked with a loop model whose check_trace raises RuntimeError",
+   "expected": "escapes (caller-trusted code; round-1 R1-13 item 3)",
+   "got": "RuntimeError escaped"
+  },
+  {
+   "id": "P55",
+   "mutation": "team log checked with loop=None (no loop trace named)",
+   "expected": "None (loop unused)",
+   "got": "null"
+  },
+  {
+   "id": "P56",
+   "mutation": "report over the team log (3 agents) and a single-agent log",
+   "expected": "METRIC_INPUT",
+   "got": "METRIC_INPUT"
+  },
+  {
+   "id": "P57",
+   "mutation": "team report with two metric rows swapped",
+   "expected": "METRIC_VALUE",
+   "got": "METRIC_VALUE"
+  },
+  {
+   "id": "P58",
+   "mutation": "team report with every numerator written as a float (1.0 form)",
+   "expected": "None (canonical form unchanged)",
+   "got": "null"
+  },
+  {
+   "id": "P59",
+   "mutation": "team report naming the team log twice",
+   "expected": "SHAPE",
+   "got": "SHAPE"
+  },
+  {
+   "id": "P60",
+   "mutation": "compute_metrics on a log whose times are all 0 ms, as run and baseline",
+   "expected": "speedup and parallel_efficiency UNDEFINED; idle_time 0",
+   "got": "[[0, 0, \"UNDEFINED\"], [0, 0, \"UNDEFINED\"], [0, 1, \"DEFINED\"]]"
+  },
+  {
+   "id": "P61",
+   "mutation": "compute_metrics with a zero-duration baseline",
+   "expected": "speedup 0/1 DEFINED",
+   "got": "[0, 1, \"DEFINED\"]"
+  },
+  {
+   "id": "P62",
+   "mutation": "to_otel status of the derived V022 (HANDED_OFF) root span and the team's failing unit-tests verify span",
+   "expected": "HANDED_OFF root span UNSET; the FAIL verify span UNSET (verdict in the evaluation event)",
+   "got": "[[[\"UNSET\", null]], [[\"UNSET\", null], [\"UNSET\", null]]]"
+  },
+  {
+   "id": "P63",
+   "mutation": "derived V024 (hook abort) and V025 (budget exhausted): trace terminal reason vs the log's RUN END",
+   "expected": "the terminal reason listed in the README as left to the trace",
+   "got": "{\"V024\": [\"HOOK_ABORT\", \"ABORTED\", null], \"V025\": [\"BUDGET_EXHAUSTED\", \"ABORTED\", null]}; README lists the terminal reason as left to the trace: True"
+  },
+  {
+   "id": "P64",
+   "mutation": "derived V020 log checked with stores whose 'traces' is a JSON list",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P65",
+   "mutation": "derived V020 log checked with stores None",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "P66",
+   "mutation": "a log naming a stored loop trace (under its digest) that fails MAS-RA-008's check",
+   "expected": "DERIVATION",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P67",
+   "mutation": "a log naming a stored JSON list as its loop trace",
+   "expected": "DERIVATION",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P68",
+   "mutation": "derive_log called with bindings missing two keys",
+   "expected": "DERIVATION",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P69",
+   "mutation": "annotation of the manifest-bound derived log citing its last event",
+   "expected": "None",
+   "got": "null"
+  },
+  {
+   "id": "P70",
+   "mutation": "agent-loop V021 under a copy of its profile with a wall-clock budget of 2^53 - 1 s and its MODEL step draft-2 at 10^13 s (totals updated)",
+   "expected": "agent-loop PASS; derive_log refuses DERIVATION (stated precondition)",
+   "got": "agent-loop None (PASS); derive_log refused DERIVATION"
+  },
+  {
+   "id": "P71",
+   "mutation": "single-leaf mutation sweep (own script, unchanged from round 2) over the team log, the manifest-bound derived log, the team report and the annotation of the round-3 subject",
+   "expected": "agreement except the documented schemaAccepts case; only Refused raised",
+   "got": "11745 mutations; 2 disagreements, both annotation evidence out of order (the schemaAccepts case); 0 non-Refused exceptions; 56.2 s, peak RSS 51 MB"
+  },
+  {
+   "id": "P72",
+   "mutation": "agent-loop V021 plus a passing GATE whose subject is its GATE step 'schema'",
+   "expected": "agent-loop PASS; derived log passes",
+   "got": "[null, null, null]"
+  },
+  {
+   "id": "P73",
+   "mutation": "agent-loop V032 plus a passing GATE whose subject is its DELEGATE step",
+   "expected": "agent-loop PASS; derived log passes",
+   "got": "[null, null, null]"
+  },
+  {
+   "id": "P74",
+   "mutation": "derived logs of the 36 valid traces: verifications that start, in time, before their subject ends",
+   "expected": "some (step times overlap), so a time rule would refuse valid derived logs",
+   "got": "24, e.g. [('V044', 60000, 66000), ('V044', 300000, 306000), ('V045', 360000, 366000)]"
+  },
+  {
+   "id": "P75",
+   "mutation": "team: w1's unit-tests verification START/END kept after the draft END in the sequence, at 2500-2600 ms (the draft ends at 3000 ms)",
+   "expected": "accepted (subject order is by sequence; stated in Not claimed)",
+   "got": "null"
+  },
+  {
+   "id": "P76",
+   "mutation": "team: invoke-2 END UNKNOWN while its child w2-run ended FAILED",
+   "expected": "None (any non-OK outcome matches a child that did not complete)",
+   "got": "null"
+  },
+  {
+   "id": "P77",
+   "mutation": "team: invoke-1 END FAIL while its child w1-run COMPLETED",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P78",
+   "mutation": "team: invoke-1 END payloadRef names the same digest in another store",
+   "expected": "RUN_SCOPE (payload bound exactly)",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P79",
+   "mutation": "team: invoke-1 END OK with no output while w1-run COMPLETED with X",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P80",
+   "mutation": "team: w1-run END and invoke-1 END both with tokens 1999 (consistent pair, root total unchanged)",
+   "expected": "None (inclusive totals are stated, not checked)",
+   "got": "null"
+  },
+  {
+   "id": "P81",
+   "mutation": "team: the orchestrator's RECEIVE of m2 at the send's time (3200 ms)",
+   "expected": "None (no later than its receive)",
+   "got": "null"
+  },
+  {
+   "id": "P82",
+   "mutation": "team: the orchestrator's RECEIVE of m2 at 3199 ms, 1 ms before its send",
+   "expected": "MESSAGE_PAIRING",
+   "got": "MESSAGE_PAIRING"
+  },
+  {
+   "id": "P83",
+   "mutation": "team: w2's redraft names the orchestrator's invoke-1 (another run) as the span it revises",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P84",
+   "mutation": "team: the orchestrator's review revises its own invoke-1 delegation, which ended at seq 20 before review starts (seq 23)",
+   "expected": "None (an ended AGENT_INVOKE of the same run may be revised)",
+   "got": "null"
+  },
+  {
+   "id": "P85",
+   "mutation": "team: the orchestrator's review (seq 23) revises invoke-2, which ends later (seq 36)",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P86",
+   "mutation": "to_otel of the team log: verify spans, invoke_agent and delegate spans, failed tool calls",
+   "expected": "verify UNSET (verdicts in events); FAILED run and FAIL delegation ERROR; tool FAIL ERROR",
+   "got": "[[\"invoke_agent\", \"UNSET\", null], [\"delegate\", \"UNSET\", null], [\"delegate\", \"ERROR\", \"FAIL\"], [\"invoke_agent\", \"UNSET\", null], [\"invoke_agent\", \"ERROR\", \"FAILED\"], [\"verify unit-tests\", \"UNSET\", null], [\"execute_tool write-file\", \"ERROR\", \"FAIL\"], [\"execute_tool write-file\", \"ERROR\", \"FAIL\"], [\"verify unit-tests\", \"UNSET\", null], [\"verify schema-check\", \"UNSET\", null], [\"verify schema-check\", \"UNSET\", null]]"
+  },
+  {
+   "id": "P87",
+   "mutation": "to_otel of derived V024 (ABORTED), V043 (a gate that ERRORed, retried) and V022 (HANDED_OFF)",
+   "expected": "ABORTED root ERROR; the ERRORed verify span ERROR; HANDED_OFF root UNSET",
+   "got": "{\"V024\": [[\"invoke_agent\", \"ERROR\", \"ABORTED\"]], \"V043\": [[\"invoke_agent\", \"UNSET\", null], [\"verify unit-tests\", \"ERROR\", \"ERROR\"], [\"verify unit-tests\", \"UNSET\", null]], \"V022\": [[\"invoke_agent\", \"UNSET\", null], [\"verify unit-tests\", \"UNSET\", null], [\"verify unit-tests\", \"UNSET\", null], [\"execute_tool post-ticket\", \"ERROR\", \"UNKNOWN\"]]}"
+  },
+  {
+   "id": "P88",
+   "mutation": "round-3 vs round-2 pinned OTel projections with status and error.type removed",
+   "expected": "equal",
+   "got": "true"
+  },
+  {
+   "id": "P89",
+   "mutation": "the derived V021 log added to the store, checked",
+   "expected": "None",
+   "got": "[null]"
+  },
+  {
+   "id": "P90",
+   "mutation": "R040 (the derived V021 log naming the hook-gated trace) replayed; derive_log on that trace directly",
+   "expected": "DERIVATION; DERIVATION",
+   "got": "[\"DERIVATION\", \"DERIVATION\"]"
+  },
+  {
+   "id": "P91",
+   "mutation": "derived logs of the 36 valid traces: status of each delegate span and of its child invoke_agent span (child outcome)",
+   "expected": "one error per failed delegation; a hand-off not an error",
+   "got": "[[\"V032\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V034\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V044\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V045\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V046\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V046\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V047\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V207\", \"UNSET\", \"UNSET\", \"COMPLETED\"], [\"V209\", \"UNSET\", \"UNSET\", \"COMPLETED\"]]"
+  },
+  {
+   "id": "P92",
+   "mutation": "team projection: spans with status ERROR",
+   "expected": "one per failed operation",
+   "got": "[[\"delegate\", \"FAIL\"], [\"invoke_agent\", \"FAILED\"], [\"execute_tool write-file\", \"FAIL\"], [\"execute_tool write-file\", \"FAIL\"]]"
+  },
+  {
+   "id": "P93",
+   "mutation": "team: w2-run ends HANDED_OFF (invoke-2 stays FAIL, as the binding requires); its projection",
+   "expected": "accepted; a hand-off is not an error on either span",
+   "got": "[null, [[\"invoke_agent\", \"UNSET\", null], [\"delegate\", \"UNSET\", null], [\"delegate\", \"ERROR\", \"FAIL\"], [\"invoke_agent\", \"UNSET\", null], [\"invoke_agent\", \"UNSET\", null]]]"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-003/reviews/BRIEF-r2.md (the brief, reused for round 3) and the coordinator's round-3 request",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-003/build_events.py (diffed against build_events.r2.py; run twice on a git archive copy of 9495150c); run_events.r2.py compared with the round-2 subject's model (identical)",
+  "git diff a93d55c5 9495150c (scripts/run_events.py and README.md read in full; vectors.json by script)",
+  "architecture/run-events/* and scripts/run_events.py at 9495150c",
+  "architecture/agent-loop/vectors.json and scripts/agent_loop.py at 5da1265 (unchanged; valid traces by script)",
+  "~/.local/state/harness-onion-ci/evidence/otel-genai-4e8a2812/ (7 files hashed; spans.yaml, registry.yaml, events.yaml and manifest.yaml parsed with scripts/safe_yaml.py loaded by path)",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-003/PLAN.md (owner-decision quotes)",
+  "architecture/verdict-ledger and run-manifest review-round*.json at 5da1265 (verdict convention for NOTE-only rounds)",
+  "round-2 record and probe scripts in WORK (re-run on the round-3 archive)"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

@@ -1,0 +1,538 @@
+{
+ "schemaVersion": "harness.planeon.ai/run-events-review/v1",
+ "kind": "run-events-review",
+ "round": 1,
+ "reviewDate": "2026-10-14",
+ "subjectCommit": "7c46ec1a336ec7fd0e3c942cd982fe7cbe181805",
+ "subjectTree": "d1bf18b2057d51b2e7df727f2f31786cbaa849eb",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "MAJOR",
+   "location": "scripts/run_events.py _derivation, derive_log; README 'The run-event log', 'Derivation'; OTel table (MODEL_CALL)",
+   "finding": "A log derived from a loop trace can never also name its run manifest or verdict ledger, or carry a cost. DERIVATION compares the whole document with derive_log's output, and derive_log fixes sources.runManifestDigest, sources.verdictLedgerDigest and the root RUN END costUnits to null. Probes P11, P12 and P13 (V020's derived log plus a stored manifest, a stored ledger, or costUnits 5) are all refused DERIVATION. Consequences: (1) Q-MAS3-B ('loop trace, ledger and manifest referenced by digest') holds only for logs that are not derived, although the README presents the three sources as independently optional. (2) cost_per_success is UNDEFINED for every derived log. (3) The OTel mapping's exporter source for MODEL_CALL (the run manifest) cannot be reached from a derived log, and the MAS-RA-002 manifest has no trace or log reference either, so nothing links the two.",
+   "requiredChange": "Let derive_log take the run-manifest and verdict-ledger digests and the root cost as inputs, or leave those three fields out of the DERIVATION comparison. Check a named manifest or ledger against its store (see R1-7) and state the binding intended between manifest.runId and rootRunId. Add a valid vector: a derived log that names a manifest and has a defined cost_per_success, with the cost units tied to the manifest's costMicros (Q-MAS3-E)."
+  },
+  {
+   "id": "R1-2",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py OTEL_SPANS['MODEL_CALL'].exporterSupplied; README OTel table; builder check_otel_mapping",
+   "finding": "The pinned spans.yaml makes gen_ai.provider.name required for gen_ai.client.inference. The contract says the exporter supplies it from 'the run manifest's model provider (MAS-RA-002)', but the MAS-RA-002 run manifest has no provider field: configuration.model is {id, configurationDigest}. Its README also says a multi-agent configuration that uses several models is identified only through configurationDigest, so gen_ai.request.model per call is not available from the manifest either. The builder accepts any exporterSupplied entry as free text without checking the named source, so the claim that every required attribute is 'emitted or supplied by the exporter' rests on a field that does not exist.",
+   "requiredChange": "Name a source that holds the value, for example H2's inference-contract record behind configurationDigest. Otherwise carry the provider and model identity on MODEL_CALL START as identifiers, or state that projected chat spans lack a required attribute until a source exists. Correct the README table to match."
+  },
+  {
+   "id": "R1-3",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py derive_log (span_id_for, run ids); README 'Derivation'",
+   "finding": "Run ids and span ids come from MAS-RA-008 traceIds, which MAS-RA-008 does not require to be unique within a delegation tree. Two traces built from the vectors pass MAS-RA-008's check_trace but derive into logs refused DUPLICATE_ID: in P15, V046's second child reuses the first child's traceId; in P16, V032's child reuses its parent's traceId. The README's claim is limited to the vectors and holds there (I derived and checked all 36 valid agent-loop traces: 36 pass). But derive_log is described as turning any trace that passes its own check into its log.",
+   "requiredChange": "Derive run ids and span ids from a path that is unique by construction, such as the parent span plus the child trace digest. Otherwise state the precondition (unique traceIds in a delegation tree) in derive_log and the README, and refuse with DERIVATION, with a vector."
+  },
+  {
+   "id": "R1-4",
+   "severity": "MINOR",
+   "location": "architecture/run-events/*.schema.json (every pattern); builder schema-agreement check",
+   "finding": "Every schema pattern ends in '$'. Python's '$' also matches before a trailing newline, and the builder's own validator (jsonschema 4.24.0, Draft 2020-12) uses Python's re, so it accepts identifiers, digests and span or trace ids with a trailing newline. The model anchors with \\Z and refuses them as SHAPE. I ran 3,828 single-leaf mutations over the team log (header and first 14 events), the team report and the annotation: 87 disagreements, all trailing newlines, and none in the other direction. Examples are P20-P24. The README's statement that the model refuses as SHAPE exactly when the schema rejects is therefore false under the builder's validator. The sibling contracts (agent-loop, run-manifest, verdict-ledger) use (?![\\s\\S]) for this reason; verdict-ledger round 1 raised the same finding (R1-9).",
+   "requiredChange": "Anchor every pattern with (?![\\s\\S]), including inside the all-zero span and trace id lookaheads, and add a trailing-newline mutation to the builder's agreement check."
+  },
+  {
+   "id": "R1-5",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py _run_scope / _message_pairing; metrics using agentId",
+   "finding": "No rule binds an event's agentId to its run. In P06, w1's RECEIVE of m1 is recorded inside orch-run on the orchestrator's RUN span and accepted, so a message is received in another agent's run. In P19, one CLAIM point with an invented agentId 'ghost' is accepted; it raises the agent count N from 3 to 4 and moves parallel_efficiency from 300/13 to 225/13. Agent identity also decides the root-agent split in orchestrator_bottleneck_time, 'another agent' in duplicated_work_ratio and 'the same agent' in stalled_turns, so a log can shift these by relabelling events inside one run. Every vector log, derived or hand-written, has exactly one agent per run.",
+   "requiredChange": "Require every event's agentId to equal its run's RUN START agentId (in RUN_SCOPE), with a refusal vector. Otherwise define runs that hold several agents and how N and the per-agent metrics count them."
+  },
+  {
+   "id": "R1-6",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py _time_order, derive_log (END times); README 'Not claimed' (derived times)",
+   "finding": "The time rules order only starts. In P03 the root RUN END is moved to 100 ms while every child event is later; the log is accepted, speedup goes from 900/13 to 3600/1 and idle_time from 4600 to 1200. In P02 a worker span ends at 9000 ms, after both its own run's END (3300 ms) and the root's END (5200 ms), and is accepted. The README limits the overhang to derived times. But P03 is a hand-written log, and derived logs never place a START or point after their run's END: P42 counts 0 of 36 such events, with 10 END overhangs. timeMs is defined as milliseconds from the root run's start, yet nothing requires the root START to be at 0 ms.",
+   "requiredChange": "Add a TIME_ORDER clause that no START or point lies after its run's END time; every derived log already satisfies it. Either have derive_log set each RUN and AGENT_INVOKE END to the maximum time of its contents and require END containment, or state in Not claimed that speedup, efficiency and idle time trust the RUN END time even when events lie after it. Require the root START timeMs to be 0."
+  },
+  {
+   "id": "R1-7",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py check_report, check_annotation, _unknown_reference",
+   "finding": "Stored records are not bound to the digests that name them, and some are not checked at all. check_report and check_annotation read stores['logs'][d] without checking that digest(record) == d. In P17 the store holds the single-agent baseline's bytes under the team log's digest; a report naming that digest as its run and the baseline's digest as baseline (the same bytes under two keys) is accepted with speedup 1/1. P18 is the same pattern for an annotation, and check_annotation also never checks that the annotated log passes check_log. For sources, runManifestDigest and verdictLedgerDigest pass when any value is stored under the key (P14 stores an arbitrary object whose digest is not the key). MAS-RA-008 checks digest(profile) == profileDigest and the child trace digests.",
+   "requiredChange": "Refuse UNKNOWN_REFERENCE unless digest(stored record) equals its key, for logs in reports and annotations and for source records. Check annotated logs with check_log. Check manifests and ledgers with their own models (MAS-RA-002, MAS-RA-001), or state in the README that they are checked for presence only."
+  },
+  {
+   "id": "R1-8",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py derive_log (HOOK, HANDOFF, GATE)",
+   "finding": "The derivation drops step outcomes of HOOK steps. In V050 a hook that ERRORs aborts the loop, and its derived log shows a HOOK point with effect null and no outcome (P43), identical to an OK observing hook. Only the RUN END ABORTED hints at it. The derivation also drops the tokens of GATE, HOOK and HANDOFF steps, so a RUN END's tokens may exceed what its spans show with no visible source. It drops retryOf, feedback and consumes as well, though the trace digest still reaches them. The brief asks whether outcomes are kept faithfully, and for hooks they are not.",
+   "requiredChange": "Carry the hook step's outcome (an outcome attribute on HOOK points, or HOOK as a span) and the tokens of gate, hook and hand-off steps. Otherwise list in the README what a derived log omits, and that the referenced trace is the record of those fields."
+  },
+  {
+   "id": "R1-9",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py compute_metrics (verifier_disagreement, evidence_coverage); README metric table; vectors annotation a2",
+   "finding": "verifier_disagreement counts a span that two different gates verified with OK and FAIL as disagreement. In the team log unit-tests FAILs and schema-check passes on the redraft. Different gates check different properties, and the syntheses' sense (VeriHarness) is verifiers disagreeing on the same claim; yet the vector annotation reads this pair as FM-3.3 Incorrect verification. evidence_coverage keys verifications by subject span id, while MAS-RA-008, the derivation's source, decides gates by bytes ('a gate on the same bytes decides the same'). Its denominator also counts trusted tool outputs, which MAS-RA-008 never gates. So derived logs of fully gated loops score below 1 (P44): V042 (a cache hit reproducing gated bytes) 1/4, V032 2/3, V044 3/5.",
+   "requiredChange": "Define disagreement as verifications by the same gate (gateId), or of the same property, on the same subject (span or bytes) with both OK and FAIL. State the coverage key (span or bytes) and which outputs count. Revisit annotation a2 and add vectors."
+  },
+  {
+   "id": "R1-10",
+   "severity": "MINOR",
+   "location": "scripts/run_events.py to_otel; README OTel table; vectors otelProjections",
+   "finding": "The OTel projection has four problems. (a) Point events carry null-valued attributes: the pinned team projection has two planeon.conflictsWith nulls (P45), and HOOK effect can be null too. OpenTelemetry attribute values must not be null. (b) gen_ai.evaluation.result sits on the VERIFICATION span, although the pinned events.yaml says it SHOULD be parented to the GenAI operation span being evaluated, and subjectSpanId is known. (c) Every delegation projects two nested invoke_agent spans with the same name, the same times and the same planeon.tokens (AGENT_INVOKE and the child RUN; P46 finds 3 in the two projections). That doubles agent-invocation counts and token sums for any OTel consumer, and the root's planeon.tokens already includes its children. (d) Derived logs use run ids as agent names, so span names such as 'invoke_agent parent-run' have per-run cardinality (P47), against H15's bounded-cardinality requirement and OTel's span-name guidance.",
+   "requiredChange": "Omit null-valued attributes. Parent the evaluation event to the subject span, or state the deviation. Project a delegation as one invoke_agent span: AGENT_INVOKE, with the child RUN as a plain span, or the reverse. State that planeon.tokens is inclusive and not to be summed. State the agent-name cardinality of derived logs, or use a low-cardinality name."
+  },
+  {
+   "id": "R1-11",
+   "severity": "NOTE",
+   "location": "README 'Not claimed'",
+   "finding": "Some limits on what a log can express are not stated. A RECEIVE needs a SEND in the same log, so a message from an external A2A peer cannot be recorded. Each messageId has one SEND and one RECEIVE, so there is no broadcast. Claims are never released, so a sequential hand-over of a task to another agent must be recorded as a conflicting claim and raises conflicting_claim_rate. Depth is at most 1 (inherited from Q-MAS8-B), so MAS-RA-004 hierarchies deeper than one level cannot be logged.",
+   "requiredChange": "Add these to Not claimed, or relax the rules if MAS-RA-004 needs them."
+  },
+  {
+   "id": "R1-12",
+   "severity": "NOTE",
+   "location": "README; scripts/run_events.py constants and parse",
+   "finding": "Wording and accuracy. (1) The owner-decisions heading says verbatim, but Q-233 is truncated without a mark and Q-MAS3-F is composed from option (a) and the correction. (2) 'otelSource records each file's SHA-256': it records 4 of the 7 downloaded files. The evidence MANIFEST and SHA256SUMS hold all 7, and I verified all 7. (3) The never-emitted list includes gen_ai.agent.description and gen_ai.tool.description, but omits gen_ai.main_agent.description and gen_ai.skill.description, which are free text of the same kind. (4) The MAST names match Appendix A's sentence case exactly, except that 'Ignored other agent's input' uses an ASCII apostrophe where the paper uses U+2019. Figure 1 uses title case. (5) The table gives the MODEL_CALL name as 'chat {model}', while the pinned projection emits 'chat'. (6) The README does not state METRIC_INPUT's conditions: every log passes check_log, the runs share an agent count, and the baseline has one agent and is not among the runs. (7) parse accepts an escaped lone surrogate (P41: a report unit '\\ud800' is METRIC_VALUE, not SHAPE), although it claims I-JSON. MAS-RA-008's parse does the same (P48). (8) Q-MAS3-C holds by design (no content field) rather than by construction: 64-character identifiers (name, agentId, toolId and others) can carry short text, and the projection puts some of them in span names.",
+   "requiredChange": "Mark the elisions and the composed Q-MAS3-F text, or quote in full. Say '4 of the 7 files'. Extend or explain the never-emitted list. Use U+2019 or note the normalisation. Align the MODEL_CALL name row. State METRIC_INPUT. Optionally refuse lone surrogates in parse."
+  },
+  {
+   "id": "R1-13",
+   "severity": "NOTE",
+   "location": "builder ~/.local/state/harness-onion-ci/tools/mas-ra-003/build_events.py (operator-side, not under review)",
+   "finding": "(1) The builder's docstring is stale: it says the OTel mapping and the MAST vocabulary are not built yet, and names two schemas. (2) Isolation is asserted for log cases only. The METRIC_INPUT case (R032) is not isolated: its metrics are not those of its runs and baseline, so it would also be METRIC_VALUE (P40). (3) For the record: a loop model passed as `loop` that raises a non-Refused exception escapes check_log (P37). That is acceptable because the caller chooses and trusts that code, and with MAS-RA-008's model only Refused escapes. (4) The owner's correction says the PDF has 20 pages; pdfinfo reports 47. The sha256 and size match, and the contract does not repeat the page count.",
+   "requiredChange": "Refresh the builder docstring. Optionally make the METRIC_INPUT case's metrics those of its inputs, or record alsoRefusedBy."
+  }
+ ],
+ "dispositions": [],
+ "checksRun": [
+  {
+   "check": "Scope: exactly the six files added (git diff --name-status 5da1265..7c46ec1a)",
+   "result": "PASS"
+  },
+  {
+   "check": "H15, H16, H10 documents and schemas/ blob-identical at 5da1265 and the subject (git rev-parse of each path)",
+   "result": "PASS"
+  },
+  {
+   "check": "DATA_CHECK_ONLY: no runtime, selector, catalog, schemas/ or public-contract change",
+   "result": "PASS"
+  },
+  {
+   "check": "Owner decisions Q-MAS3-A, C, D, E, F applied as recorded",
+   "result": "PASS (wording notes in R1-12)"
+  },
+  {
+   "check": "Owner decision Q-MAS3-B applied (trace, manifest and ledger by digest; derivation)",
+   "result": "FAIL: R1-1"
+  },
+  {
+   "check": "Roadmap item and A1-A3 elements present: RunEvent fields, OTel mapping, 18 metrics with formulas and units, 14 MAST modes",
+   "result": "PASS (model identity source: R1-2)"
+  },
+  {
+   "check": "Payloads by reference only; no content field in any schema or the model (Q-MAS3-C)",
+   "result": "PASS (R1-12 item 8)"
+  },
+  {
+   "check": "Builder reproducibility: build_events.py on a git archive of 7c46ec1a reproduces the four JSON files byte for byte, two runs",
+   "result": "PASS"
+  },
+  {
+   "check": "Model replay (python3 -I -B scripts/run_events.py on the archive): 39 cases, 2 texts, 2 projections",
+   "result": "PASS"
+  },
+  {
+   "check": "Vector counts: 12 valid, 27 refused, every log, metric and annotation code at least once; 9 logs in the store",
+   "result": "PASS"
+  },
+  {
+   "check": "Log rules probes (ordering, span, scope, time, message, claim)",
+   "result": "FAIL: R1-5, R1-6 (scope, message and claim bypass probes P04, P05, P08-P10, P31-P35 refused as expected)"
+  },
+  {
+   "check": "Derivation: all 36 valid agent-loop traces derive into logs that pass every rule",
+   "result": "PASS"
+  },
+  {
+   "check": "Derivation: every valid MAS-RA-008 trace derives into a passing log",
+   "result": "FAIL: R1-3"
+  },
+  {
+   "check": "Derivation fidelity (step kinds, nesting, times, identifiers, outcomes)",
+   "result": "FAIL: R1-8"
+  },
+  {
+   "check": "Derivation determinism (byte-identical rebuilds; no set or hash order in output)",
+   "result": "PASS"
+  },
+  {
+   "check": "A log cannot claim a trace it does not equal (whole-document equality, digest bound through sources)",
+   "result": "PASS"
+  },
+  {
+   "check": "Metrics: independent recomputation (own script, no call into the model) of all 18 values of both valid reports",
+   "result": "PASS (36 of 36 equal; team values also match my hand computation, T1 = 360000 ms)"
+  },
+  {
+   "check": "Metrics: exact rationals in lowest terms; UNDEFINED exactly on a zero denominator (P38, P39)",
+   "result": "PASS"
+  },
+  {
+   "check": "Metrics: distortion by crafted logs",
+   "result": "FAIL: R1-5, R1-6, R1-7, R1-9"
+  },
+  {
+   "check": "MAST: 14 names and 3 categories against the PDF (pdftotext pp. 2, 17, 18); page citations; sha256 1b9e317a...",
+   "result": "PASS (apostrophe note R1-12)"
+  },
+  {
+   "check": "MAST: definitions cited, not restated; annotation never changes a verdict",
+   "result": "PASS"
+  },
+  {
+   "check": "OTel: sha256 of all 7 pinned files against SHA256SUMS and MANIFEST.json; the 4 in otelSource",
+   "result": "PASS"
+  },
+  {
+   "check": "OTel: span types and kinds, operation-name members, attribute existence, required attributes (own safe_yaml parse), evaluation event, never-emitted keys exist",
+   "result": "PASS"
+  },
+  {
+   "check": "OTel: exporter-supplied required attribute has a real source",
+   "result": "FAIL: R1-2"
+  },
+  {
+   "check": "OTel: to_otel projection (ids, parents, names, status, error.type, events)",
+   "result": "FAIL: R1-10"
+  },
+  {
+   "check": "Fail-closed: malformed input is SHAPE, only Refused escapes (P30, P36; P37 foreign loop model)",
+   "result": "PASS (R1-13 item 3)"
+  },
+  {
+   "check": "Schema/model agreement: 3,828 single-leaf mutations plus targeted probes",
+   "result": "FAIL: R1-4 (87 disagreements, all trailing newline)"
+  },
+  {
+   "check": "Isolation of refusal vectors (the builder's assertion for log cases re-run by reproduction; report case P40)",
+   "result": "PASS for log cases; NOTE R1-13"
+  },
+  {
+   "check": "Public hygiene: no personal data, no absolute user paths, no e-mail in the six files",
+   "result": "PASS"
+  },
+  {
+   "check": "README accuracy against the files",
+   "result": "PASS with notes R1-12"
+  },
+  {
+   "check": "pytest, cargo, builds, dry runs",
+   "result": "NOT RUN: excluded by the brief (light work only)"
+  }
+ ],
+ "probes": [
+  {
+   "id": "P01",
+   "mutation": "team log: a payloadRef with an extra inline 'content' member",
+   "expected": "SHAPE; schema rejects",
+   "got": "SHAPE; schema accepts=False"
+  },
+  {
+   "id": "P02",
+   "mutation": "team log: w1's draft MODEL_CALL END at 9000 ms, after the root RUN END (5200 ms) and after w1's own RUN END (3300 ms)",
+   "expected": "refused (a span ending after its parent run ended) or a stated limitation",
+   "got": "None"
+  },
+  {
+   "id": "P03",
+   "mutation": "team log: root RUN END timeMs 5200 -> 100 (every child event is later than the root's END)",
+   "expected": "refused (a run ends before events inside it)",
+   "got": "None; speedup (900, 13) -> (3600, 1), idle_time (4600, 1) -> (1200, 1)"
+  },
+  {
+   "id": "P04",
+   "mutation": "team log: MERGE g2 moved after its MODEL_CALL span's END",
+   "expected": "SPAN_ORDER",
+   "got": "SPAN_ORDER"
+  },
+  {
+   "id": "P05",
+   "mutation": "team log: w1's draft span (runId w1-run) parented to the orchestrator's RUN span",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P06",
+   "mutation": "team log: w1's RECEIVE of m1 recorded in orch-run on the orchestrator's RUN span (agentId stays w1)",
+   "expected": "refused (an event of one agent inside another agent's run)",
+   "got": "None"
+  },
+  {
+   "id": "P07",
+   "mutation": "team log: orchestrator RECEIVE of m2 at 50 ms, SEND at 3200 ms (logical order kept)",
+   "expected": "accepted (only logical time orders messages; clock skew)",
+   "got": "None"
+  },
+  {
+   "id": "P08",
+   "mutation": "team log: m1 (sent to w1) received by w2 with toAgent rewritten",
+   "expected": "MESSAGE_PAIRING",
+   "got": "MESSAGE_PAIRING"
+  },
+  {
+   "id": "P09",
+   "mutation": "team log: w2's claim c3 (task 31) names w2's own claim c2 (task 30)",
+   "expected": "CLAIM_CONFLICT",
+   "got": "CLAIM_CONFLICT"
+  },
+  {
+   "id": "P10",
+   "mutation": "team log: the orchestrator claims task 30 (already claimed by w1 and w2) recording no conflict",
+   "expected": "CLAIM_CONFLICT",
+   "got": "CLAIM_CONFLICT"
+  },
+  {
+   "id": "P11",
+   "mutation": "derived log of agent-loop V020 additionally naming a run manifest held in the store",
+   "expected": "accepted (Q-MAS3-B: trace, manifest and ledger by digest)",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P12",
+   "mutation": "derived log of V020 additionally naming a verdict ledger held in the store",
+   "expected": "accepted",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P13",
+   "mutation": "derived log of V020 with its root RUN END costUnits 5 (from a run manifest)",
+   "expected": "accepted (cost from the manifest)",
+   "got": "DERIVATION"
+  },
+  {
+   "id": "P14",
+   "mutation": "team log naming an arbitrary non-manifest JSON value stored under a digest that is not its digest",
+   "expected": "UNKNOWN_REFERENCE (record not checked, digest not bound)",
+   "got": "None"
+  },
+  {
+   "id": "P15",
+   "mutation": "agent-loop V046 with its second delegated child's traceId set to the first child's (digest updated)",
+   "expected": "the derived log passes (README: every valid trace derives into a passing log)",
+   "got": "agent-loop check PASS; derived log: DUPLICATE_ID"
+  },
+  {
+   "id": "P16",
+   "mutation": "agent-loop V032 with its child's traceId equal to the parent's traceId (digest updated)",
+   "expected": "the derived log passes",
+   "got": "agent-loop check PASS; derived log: DUPLICATE_ID"
+  },
+  {
+   "id": "P17",
+   "mutation": "store maps the team log's digest to the single-agent baseline's bytes; a report names that digest as its run and the baseline's digest as baseline, metrics computed from what is stored",
+   "expected": "UNKNOWN_REFERENCE (a stored record must hash to its key, as MAS-RA-008 checks for profiles and child traces)",
+   "got": "accepted; speedup (1, 1) with run and baseline the same bytes under two keys"
+  },
+  {
+   "id": "P18",
+   "mutation": "annotation naming the team log's digest when the store holds another log under it (evidence [1])",
+   "expected": "UNKNOWN_REFERENCE",
+   "got": "accepted"
+  },
+  {
+   "id": "P19",
+   "mutation": "team log: one CLAIM point with agentId 'ghost' on w2's run span",
+   "expected": "refused (an event's agent is its run's agent)",
+   "got": "None; agents 3 -> 4; parallel_efficiency (300, 13) -> (225, 13)"
+  },
+  {
+   "id": "P20",
+   "mutation": "team log: rootRunId 'orch-run\\n'",
+   "expected": "model SHAPE and schema rejects (agreement)",
+   "got": "model SHAPE; schema accepts=True"
+  },
+  {
+   "id": "P21",
+   "mutation": "team log: a payloadRef digest with a trailing newline",
+   "expected": "model SHAPE and schema rejects (agreement)",
+   "got": "model SHAPE; schema accepts=True"
+  },
+  {
+   "id": "P22",
+   "mutation": "team log: traceId with a trailing newline",
+   "expected": "model SHAPE and schema rejects (agreement)",
+   "got": "model SHAPE; schema accepts=True"
+  },
+  {
+   "id": "P23",
+   "mutation": "annotation: annotator 'reviewer\\n'",
+   "expected": "model SHAPE and schema rejects",
+   "got": "model SHAPE; schema accepts=True"
+  },
+  {
+   "id": "P24",
+   "mutation": "report: a run digest with a trailing newline",
+   "expected": "model SHAPE and schema rejects",
+   "got": "model SHAPE; schema accepts=True"
+  },
+  {
+   "id": "P25",
+   "mutation": "team log: a timeMs written 1000.0",
+   "expected": "accepted by both (integral number), same digest",
+   "got": "model None; schema accepts=True; digest unchanged=True"
+  },
+  {
+   "id": "P26",
+   "mutation": "team log: tokens true",
+   "expected": "SHAPE; schema rejects",
+   "got": "model SHAPE; schema accepts=False"
+  },
+  {
+   "id": "P27",
+   "mutation": "team log: tokens 2^53",
+   "expected": "SHAPE; schema rejects",
+   "got": "model SHAPE; schema accepts=False"
+  },
+  {
+   "id": "P28",
+   "mutation": "team log: an outcome on a POINT",
+   "expected": "SHAPE; schema rejects",
+   "got": "model SHAPE; schema accepts=False"
+  },
+  {
+   "id": "P29",
+   "mutation": "team log: a MERGE event with phase START",
+   "expected": "SHAPE; schema rejects",
+   "got": "model SHAPE; schema accepts=False"
+  },
+  {
+   "id": "P30",
+   "mutation": "team log: a string in place of an event",
+   "expected": "SHAPE (no other exception)",
+   "got": "model SHAPE; schema accepts=False"
+  },
+  {
+   "id": "P31",
+   "mutation": "team log: w2's test verification names the later 'schema' span as its subject",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P32",
+   "mutation": "team log: the redraft revises a TOOL_CALL span",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P33",
+   "mutation": "team log: invoke-1 names child run w3-run while w1-run opens under it",
+   "expected": "RUN_SCOPE",
+   "got": "RUN_SCOPE"
+  },
+  {
+   "id": "P34",
+   "mutation": "team log: w1's RUN START at 900 ms, its AGENT_INVOKE at 1000 ms",
+   "expected": "TIME_ORDER",
+   "got": "TIME_ORDER"
+  },
+  {
+   "id": "P35",
+   "mutation": "team log: a MERGE point appended after the root RUN END",
+   "expected": "RUN_BOUNDS",
+   "got": "RUN_BOUNDS"
+  },
+  {
+   "id": "P36",
+   "mutation": "derived log of V020 checked with loop=None",
+   "expected": "SHAPE or another Refused code; nothing else escapes",
+   "got": "SHAPE"
+  },
+  {
+   "id": "P37",
+   "mutation": "derived log of V020 checked with a loop model whose check_trace raises RuntimeError",
+   "expected": "only Refused escapes (if the loop model is trusted, a RuntimeError is the loop's defect)",
+   "got": "escaped RuntimeError"
+  },
+  {
+   "id": "P38",
+   "mutation": "team report: duplicated_work_ratio written 2/6 instead of 1/3",
+   "expected": "METRIC_VALUE (lowest terms)",
+   "got": "METRIC_VALUE"
+  },
+  {
+   "id": "P39",
+   "mutation": "singles report: speedup UNDEFINED with numerator 1",
+   "expected": "METRIC_VALUE",
+   "got": "METRIC_VALUE"
+  },
+  {
+   "id": "P40",
+   "mutation": "the METRIC_INPUT vector with the input rule ignored: are its metrics those of its runs?",
+   "expected": "isolated (metrics equal)",
+   "got": "metrics equal=False (so it would also be METRIC_VALUE)"
+  },
+  {
+   "id": "P41",
+   "mutation": "report text with unit \"\\ud800\" (an escaped lone surrogate; I-JSON forbids it)",
+   "expected": "SHAPE (parse claims I-JSON)",
+   "got": "METRIC_VALUE"
+  },
+  {
+   "id": "P42",
+   "mutation": "derive all 36 valid agent-loop traces; count spans whose END time exceeds their parent's END time, and STARTs or points after their run's END time",
+   "expected": "0 STARTs/points after their run's END (so a containment rule for starts would hold for every derived log)",
+   "got": "36 logs; 10 span ENDs after the parent's END; 0 STARTs/points after their run's END"
+  },
+  {
+   "id": "P43",
+   "mutation": "derived log of agent-loop V050 (a hook that ERRORs aborts the loop)",
+   "expected": "the hook step's ERROR outcome visible in the log",
+   "got": "events: [[\"RUN\", \"START\", null, {\"depth\": 0, \"parentRunId\": null}], [\"MODEL_CALL\", \"START\", null, {\"attempt\": 1, \"revisesSpanId\": null}], [\"MODEL_CALL\", \"END\", \"OK\", {\"tokens\": 1500}], [\"HOOK\", \"POINT\", null, {\"hookId\": \"egress-guard\", \"event\": \"TOOL_CALL_BEFORE\", \"effect\": null}], [\"RUN\", \"END\", \"ABORTED\", {\"tokens\": 1500, \"iterations\": 1, \"costUnits\": null}]]"
+  },
+  {
+   "id": "P44",
+   "mutation": "evidence_coverage of the derived logs of V042 (a cache hit reproducing gated bytes), V032 and V044 (delegations whose delivered artefact was gated in the child)",
+   "expected": "1/1 where MAS-RA-008 counts every artefact as gated by bytes",
+   "got": "{\"V032\": [2, 3, \"DEFINED\"], \"V042\": [1, 4, \"DEFINED\"], \"V044\": [3, 5, \"DEFINED\"]}"
+  },
+  {
+   "id": "P45",
+   "mutation": "scan the two pinned OTel projections for attributes whose value is null",
+   "expected": "none (OTel attribute values must not be null)",
+   "got": "2 null-valued attributes, e.g. [('invoke_agent w1', 'planeon.claim', 'planeon.conflictsWith'), ('invoke_agent w2', 'planeon.claim', 'planeon.conflictsWith')]"
+  },
+  {
+   "id": "P46",
+   "mutation": "scan the projections for an invoke_agent span directly under an invoke_agent span with the same name",
+   "expected": "one invoke_agent span per delegation",
+   "got": "3 nested duplicates: ['invoke_agent w1', 'invoke_agent w2', 'invoke_agent child-run']"
+  },
+  {
+   "id": "P47",
+   "mutation": "span names in the projection of the derived parent log",
+   "expected": "low-cardinality names",
+   "got": "[\"chat\", \"execute_tool write-file\", \"invoke_agent child-run\", \"invoke_agent orch\", \"invoke_agent parent-run\", \"invoke_agent w1\", \"invoke_agent w2\", \"verify schema-check\", \"verify unit-tests\"]"
+  },
+  {
+   "id": "P48",
+   "mutation": "MAS-RA-008's parse on a text with an escaped lone surrogate (for comparison with P41)",
+   "expected": "comparison only",
+   "got": "accepted"
+  }
+ ],
+ "sourcesRead": [
+  "~/.local/state/harness-onion-ci/tools/mas-ra-003/reviews/BRIEF-r1.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-003/PLAN.md",
+  "~/.local/state/harness-onion-ci/tools/mas-ra-003/build_events.py (read in full; run on a git archive copy, twice)",
+  "~/.local/state/harness-onion-ci/evidence/otel-genai-4e8a2812/MANIFEST.json, SHA256SUMS; all 7 model files hashed; model/manifest.yaml and model/gen-ai/events.yaml read; registry.yaml and spans.yaml parsed with scripts/safe_yaml.py (loaded by path)",
+  "roadmap/research/papers/2503.13657.pdf (sha256 checked; pdfinfo; pdftotext pages 2, 7, 8, 17, 18)",
+  "roadmap/roadmap.json (item MAS-RA-003); roadmap/research/mas-harness-research-gpt.md and -claude.md (metric and verification passages, by grep)",
+  "architecture/run-events/README.md, run-event-log.schema.json, mas-metrics.schema.json, mast-annotation.schema.json, vectors.json and scripts/run_events.py at 7c46ec1a (read in full; vectors by script)",
+  "architecture/agent-loop/README.md, scripts/agent_loop.py (shape, view, rules, check_trace), architecture/agent-loop/vectors.json at 5da1265",
+  "architecture/research-adoption-v2/crosswalk.json at 5da1265 (MAS-RA-003 item, OTEL-GENAI, MAST, MCP, A2A)",
+  "docs/harnesses/trust.observability-finops.md (redaction, attribution and cardinality lines), docs/harnesses/trust.evaluation-assurance.md (head), docs/harnesses/execution.orchestration.md (events lines)",
+  "architecture/run-manifest/README.md (records section) and run-manifest.schema.json (configuration)",
+  "architecture/verdict-ledger, run-manifest and agent-loop schemas (pattern anchors) and their review-round1.json (severity calibration); scripts/safe_yaml.py"
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

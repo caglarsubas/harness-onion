@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-025
+## Current source preparation — MET-MAS-003
+
+MET-MAS-003: the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003): the
+run-event log, eighteen exact MAS metrics and the MAST annotation vocabulary, with a derivation from MAS-RA-008
+loop traces and an OTel GenAI projection pinned to semantic-conventions-genai 4e8a2812; adopted after three
+independent review rounds; H15's, H16's and H10's documents and the repository schemas stay byte-identical. Alpha2
+OPEN; 232 accepted plus MET-MAS-003 only.
+
+## Historical W03 source preparation — MET-ENFORCE-025
 
 MET-ENFORCE-025: the W02d v3 contract's compiled seccomp programs as data (seven roles on two architectures,
 recompiled by the pinned v3 compiler), the operator edge record v2, which registers twelve of them (all but
@@ -1349,3 +1357,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 230 | `MET-MAS-002` | `Harness-Engineering` | MAS-RA-002: run manifest and configuration-level evaluation record contract candidate; DATA_CHECK_ONLY |
 | 231 | `MET-MAS-006` | `Harness-Engineering` | MAS-RA-008: agent-loop kernel and tool-gateway contract candidate; DATA_CHECK_ONLY |
 | 232 | `MET-ENFORCE-025` | `Harness-Engineering` | Compiled seccomp filter programs, edge registry records v2 (operator, EDGE-2) and W03-PLAN-AMEND-1; DATA_CHECK_ONLY |
+| 233 | `MET-MAS-003` | `Harness-Engineering` | Run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003); DATA_CHECK_ONLY |

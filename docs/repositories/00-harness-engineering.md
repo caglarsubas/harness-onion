@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-025
+## Current source preparation — MET-MAS-003
+
+MET-MAS-003: the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003): the
+run-event log, eighteen exact MAS metrics and the MAST annotation vocabulary, with a derivation from MAS-RA-008
+loop traces and an OTel GenAI projection pinned to semantic-conventions-genai 4e8a2812; adopted after three
+independent review rounds; H15's, H16's and H10's documents and the repository schemas stay byte-identical. Alpha2
+OPEN; 232 accepted plus MET-MAS-003 only.
+
+## Historical W03 source preparation — MET-ENFORCE-025
 
 MET-ENFORCE-025: the W02d v3 contract's compiled seccomp programs as data (seven roles on two architectures,
 recompiled by the pinned v3 compiler), the operator edge record v2, which registers twelve of them (all but
@@ -1109,6 +1117,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 104. `MET-MAS-002`: publish the run manifest and configuration-level evaluation record contract candidate (schemas, reference model and vectors; a paired task-clustered distribution gate; H16 unchanged); data only.
 105. `MET-MAS-006`: publish the agent-loop kernel and tool-gateway contract candidate (schemas, reference model and vectors; bounded retries, revision rounds and deterministic-gate interleaving; H10 and H11 unchanged); data only.
 106. `MET-ENFORCE-025`: publish the compiled seccomp filter programs (the pinned v3 compiler's output for seven roles on two architectures), the edge registry records v2 (operator, EDGE-2) and the W03 obligation amendment 1; v3, v1 and plan v2 unchanged; data only.
+107. `MET-MAS-003`: publish the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003: the run-event log, eighteen exact metrics, the MAST vocabulary, the derivation from MAS-RA-008 traces and the OTel projection); H15, H16, H10 and the schemas unchanged; data only.
 
 ## Testing, verification, and acceptance
 

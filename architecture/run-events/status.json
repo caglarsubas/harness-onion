@@ -1,0 +1,97 @@
+{
+ "schemaVersion": "planeon.internal.run-events-status/v1",
+ "workItem": "MAS-RA-003",
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "contract": {
+  "schemas": [
+   "architecture/run-events/run-event-log.schema.json",
+   "architecture/run-events/mas-metrics.schema.json",
+   "architecture/run-events/mast-annotation.schema.json"
+  ],
+  "vectors": "architecture/run-events/vectors.json",
+  "model": "scripts/run_events.py",
+  "readme": "architecture/run-events/README.md"
+ },
+ "reviewedSubject": {
+  "commit": "9495150ce6677e44ce6c6df0b7c03eb7dcc471d5",
+  "tree": "aa9ef02576c6d3884db9c87f8c332d70dc83209c"
+ },
+ "adoptionEdit": {
+  "path": "architecture/run-events/README.md",
+  "replaced": "Status: **CONTRACT_CANDIDATE** (independent review round 3).",
+  "with": "Status: **ADOPTED_CONTRACT_CANDIDATE** (independent review round 3: PASS_FOR_SOURCE_PUBLICATION; rounds and review records in `status.json`).",
+  "reviewedSha256": "32ba789dc9d75f1838d4cbeb4813be55820c920d8306714fe4fc02cec3eb0dfb",
+  "adoptedSha256": "b970b144f9770cb94946ea6baf72bfb3eb9f630384debc41e5a98437df471ddb"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "7c46ec1a336ec7fd0e3c942cd982fe7cbe181805",
+   "subjectTree": "d1bf18b2057d51b2e7df727f2f31786cbaa849eb",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/run-events/review-round1.json",
+   "snapshot": "architecture/run-events/round1/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/run-events/vectors.json": "1d8b1a0f29a36d9617f1a59ec5fc1b34d6785b278b333c3a8130fc77be43acb0"
+   }
+  },
+  {
+   "round": 2,
+   "subject": "a93d55c50ee41648262c7b944ae10e7d8bf4469f",
+   "subjectTree": "4e6d20ddd277b9175eebc2a4eebe11ac272e8ba6",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/run-events/review-round2.json",
+   "snapshot": "architecture/run-events/round2/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/run-events/vectors.json": "bcc59d2951076f1669a97161b8c06a4fa5f7e563487c1567820d974e602d3ca4"
+   }
+  },
+  {
+   "round": 3,
+   "subject": "9495150ce6677e44ce6c6df0b7c03eb7dcc471d5",
+   "subjectTree": "aa9ef02576c6d3884db9c87f8c332d70dc83209c",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/run-events/review-round3.json",
+   "snapshot": null,
+   "severities": [
+    "NOTE"
+   ]
+  }
+ ],
+ "carried": [
+  {
+   "item": "R3-1",
+   "severity": "NOTE",
+   "to": "the first consumer (MAS-RA-004 or R09) or a later run-events revision",
+   "action": "Optionally leave the delegate span's status UNSET (the child invoke_agent span carries the outcome), or state in the README that a failed or handed-off delegation also marks its delegate span as an error."
+  }
+ ],
+ "acceptance": [
+  "MAS-RA-003-A1",
+  "MAS-RA-003-A2",
+  "MAS-RA-003-A3"
+ ],
+ "ownerDecisions": [
+  "Q-233 (a)",
+  "Q-MAS3-A (a)",
+  "Q-MAS3-B (a)",
+  "Q-MAS3-C (a)",
+  "Q-MAS3-D (D-a)",
+  "Q-MAS3-E (a)",
+  "Q-MAS3-F (a), as corrected"
+ ],
+ "nonClaims": [
+  "An internal contract candidate: no public contract, selector, catalog, schema or runtime change; H15's, H16's and H10's harness documents and the repository schemas are byte-identical.",
+  "No collector, exporter, store or dashboard exists (H15's TRUST-OBS-001 and SDK-002); no telemetry leaves the tenant; the model runs only on the vectors.",
+  "The OpenTelemetry GenAI conventions are pinned at a development-stability commit, re-pinned at their first release; the MAST vocabulary is the paper's, cited by page, its definitions not restated."
+ ]
+}
