@@ -1,0 +1,97 @@
+{
+ "schemaVersion": "planeon.internal.w03-obligation-amendment/v1",
+ "id": "W03-PLAN-AMEND-1",
+ "amends": {
+  "path": "architecture/w03-plan-v2/plan.json",
+  "sha256": "sha256:a00470238431347da82cc47b1f1b6cf7cd51042d56694eea68d1373a3aaefb67",
+  "packet": "MET-ENFORCE-024"
+ },
+ "ownerDecision": "Q-HE2B-2 = (a) \"HE-003 owns both\" (2026-10-13, owner via the lane monitor, verbatim): HE-003 owns the real 10-second I07 write timer and the I07 apiserver HTTP/TLS client; HE-002B owns only the logical expiry (the TIMEOUT event, its abort record, HELD and the IO_AMBIGUOUS answer, as in T59/T61/T62). Record it in HE-002B's design and PR now; amend the W03 plan's obligation register in the next harness-onion meta packet that touches the plan (like EDGE-2); no extra packet now.",
+ "ownerDecisions": [
+  "Q-HE2S-3 = (a) (2026-10-13, owner via the lane monitor, verbatim): HE-002S does the source re-check of the Rust 1.99.0 std paths the gate uses after the seal, recorded in MODEL_DEFINED with source lines; the Linux trace stays with T04.",
+  "Amendment scope = yes (2026-10-13, owner via the lane monitor, verbatim): add SEC-4 and HI-7 (+HE-003 call site, +HE-008 uid, unit start state and SELinux self-permissions) and SEC-QW4 (+HE-002S steady-state re-check) to W03-PLAN-AMEND-1 in slot 232, then one more light contract review round before adoption."
+ ],
+ "changes": [
+  {
+   "obligation": "I07-6",
+   "change": "ADDED",
+   "text": "The real 10-second I07 write timer and the I07 apiserver HTTP/TLS client.",
+   "source": "architecture/i07-policy-write-v3/README.md:34, :47-48 (the 10-second bound); owner decision Q-HE2B-2 (a) (the timer and the apiserver HTTP/TLS client)",
+   "packets": [
+    "HE-003"
+   ],
+   "scope": "W03"
+  },
+  {
+   "obligation": "I07-4",
+   "change": "NARROWED",
+   "ownership": "HE-002B owns only the logical expiry of the 10-second bound: the TIMEOUT event, WRITE_TERMINAL IO_AMBIGUOUS {aborted: UPSTREAM_TIMEOUT}, HELD and the IO_AMBIGUOUS answer (T59, T61, T62)",
+   "source": "architecture/i07-policy-write-v3/README.md:34 (the W2 row); owner decision Q-HE2B-2 (a)",
+   "packets": [
+    "HE-002B"
+   ],
+   "scope": "W03"
+  },
+  {
+   "obligation": "SEC-4",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-003"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004",
+    "HE-005",
+    "HE-006",
+    "HE-007"
+   ],
+   "shares": {
+    "HE-003": "the EFFECT_GATE call site: main calls the seal's stage 1 first, reads and checks only the signed configuration, calls stage 2, and exits with a distinct status on any seal error (owner decision Q-HE2S-4 (a)); a source check that main calls the seal before any socket or thread (Q-HE2S-5 (a))"
+   },
+   "source": "the amendment-scope decision; HE-002S design revision 2 (B6)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "HI-7",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-003"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008"
+   ],
+   "shares": {
+    "HE-003": "the EFFECT_GATE call site: main calls the seal's stage 1 first, reads and checks only the signed configuration, calls stage 2, and exits with a distinct status on any seal error (owner decision Q-HE2S-4 (a)); a source check that main calls the seal before any socket or thread (Q-HE2S-5 (a))",
+    "HE-008": "for EFFECT_GATE: uid 0; the unit's start state (the full root set, or a set already reduced to the target bounding set when CAP_SETPCAP is absent); and planeon_gate_t's self permissions the seal needs (capability setpcap; process setcap, getcap and setrlimit), with no process setrlimit on other domains"
+   },
+   "source": "the amendment-scope decision; HE-002S design revision 2 (B4, B6)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "SEC-QW4",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-002S"
+   ],
+   "packets": [
+    "W03-0",
+    "W02D-V3",
+    "HE-002S",
+    "T04"
+   ],
+   "shares": {
+    "HE-002S": "the steady-state source re-check of the Rust 1.99.0 std paths the gate uses after the seal, recorded in MODEL_DEFINED with source lines (Q-HE2S-3 (a))"
+   },
+   "source": "the amendment-scope decision; owner decision Q-HE2S-3 (a)",
+   "scope": "W03"
+  }
+ ],
+ "unchanged": "Every other plan v2 obligation, packet and toolchain; plan v2 stays byte-identical."
+}

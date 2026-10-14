@@ -1,0 +1,67 @@
+{
+ "schemaVersion": "planeon.internal.artifact-edge-registry/v2",
+ "graph": "buildArtifact",
+ "consumer": "conformance-labs",
+ "provider": "harness-engineering",
+ "artifact": "offline-transport-files",
+ "ownerDecision": "A13 (2026-10-11, owner via the lane monitor): a separate later record in the next harness-onion meta packet that touches the registry; R12's CONF-CI-001 bootstrap is the precedent until then.",
+ "rules": [
+  "The consumer holds exactly these bytes and modes; a new file, or another version of a listed file, needs a new registry record (a harness-onion meta packet) before any consumer packet uses it.",
+  "Data contracts, contract text and transport files only; no product implementation source crosses the repository boundary (architecture/repositories.yaml:10).",
+  "harness-engineering consumes no repository in any graph of architecture/repositories.yaml, so this edge cannot close a cycle; the layer checks every unconditional graph."
+ ],
+ "notArtifacts": [],
+ "statuses": {
+  "IN_USE": "held by the consumer since the named packet (registered retroactively)"
+ },
+ "notes": [
+  "consumerCommit is the consumer packet's merge commit at which the four files were read; only those four paths were read in the consumer repository.",
+  "The modes are the provider files' modes as v1 records them; the consumer's own modes were not read, since listing its tree would read other paths."
+ ],
+ "artifacts": [
+  {
+   "providerPath": "ci/verify-offline.sh",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "778cb0faf59786dc31559e5d96a399d1e3bb26a4576e0ee9ff70e1f6546bd114",
+   "mode": "100755",
+   "consumerPath": "ci/verify-offline.sh",
+   "consumerPacket": "CONF-CI-001",
+   "consumerCommit": "9766c9cb02383968499a109c36f4b7a18ec532b0",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/warm-source-isolation.sh",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b",
+   "mode": "100644",
+   "consumerPath": "ci/warm-source-isolation.sh",
+   "consumerPacket": "CONF-CI-001",
+   "consumerCommit": "9766c9cb02383968499a109c36f4b7a18ec532b0",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/network_canary.py",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099",
+   "mode": "100755",
+   "consumerPath": "ci/network_canary.py",
+   "consumerPacket": "CONF-CI-001",
+   "consumerCommit": "9766c9cb02383968499a109c36f4b7a18ec532b0",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/run_packet_argv.py",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "c2ed0852fa499f194bc91291c32d08b303ea79be3ba7ca6cb29a786d585929f5",
+   "mode": "100755",
+   "consumerPath": "ci/run_packet_argv.py",
+   "consumerPacket": "CONF-CI-001",
+   "consumerCommit": "9766c9cb02383968499a109c36f4b7a18ec532b0",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  }
+ ]
+}

@@ -1,0 +1,370 @@
+{
+ "schemaVersion": "planeon.internal.artifact-edge-registry/v2",
+ "graph": "buildArtifact",
+ "consumer": "operator",
+ "provider": "harness-engineering",
+ "artifact": "w03-transport-effect-gate-contracts-and-compiled-filter-programs",
+ "ownerDecision": "Q-HE2-A (2026-10-11, relayed by the lane monitor): register the operator -> harness-engineering buildArtifact edge as a new edge-registry record, covering HE-000's files retroactively; no repositories.yaml edit. The owner accepts such a record as registration.",
+ "rules": [
+  "The consumer holds exactly these bytes and modes; a new file, or another version of a listed file, needs a new registry record (a harness-onion meta packet) before any consumer packet uses it.",
+  "Data contracts, contract text and transport files only; no product implementation source crosses the repository boundary (architecture/repositories.yaml:10).",
+  "harness-engineering consumes no repository in any graph of architecture/repositories.yaml, so this edge cannot close a cycle; the layer checks every unconditional graph."
+ ],
+ "notArtifacts": [
+  {
+   "consumerPath": "host-enforcement/licenses/closure-1.99.0.json",
+   "consumerPacket": "HE-001",
+   "reason": "R10's own generated file: the operator tool that generated it ran harness-onion's pinned classifier at a5a0625 outside R10, and no byte of the classifier or its inputs is in R10"
+  }
+ ],
+ "statuses": {
+  "IN_USE": "held by the consumer since the named packet (registered retroactively)",
+  "REGISTERED_BEFORE_USE": "registered here before the named consumer packet merges",
+  "PUBLISHED_UNREGISTERED": "published by the named provider packet; no consumer path or packet is registered yet, so no consumer may hold it until a later record registers one"
+ },
+ "artifacts": [
+  {
+   "providerPath": "ci/verify-offline.sh",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "778cb0faf59786dc31559e5d96a399d1e3bb26a4576e0ee9ff70e1f6546bd114",
+   "mode": "100755",
+   "consumerPath": "ci/verify-offline.sh",
+   "consumerPacket": "HE-000",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/warm-source-isolation.sh",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b",
+   "mode": "100644",
+   "consumerPath": "ci/warm-source-isolation.sh",
+   "consumerPacket": "HE-000",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/network_canary.py",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099",
+   "mode": "100755",
+   "consumerPath": "ci/network_canary.py",
+   "consumerPacket": "HE-000",
+   "relation": "BYTE_IDENTICAL",
+   "status": "IN_USE"
+  },
+  {
+   "providerPath": "ci/run_packet_argv.py",
+   "providerCommit": "0e747049cba3eca9ec5b0334e0314525d053a83c",
+   "sha256": "c2ed0852fa499f194bc91291c32d08b303ea79be3ba7ca6cb29a786d585929f5",
+   "mode": "100755",
+   "consumerPath": "ci/run_packet_argv.py",
+   "consumerPacket": "HE-000",
+   "relation": "DERIVED",
+   "status": "IN_USE",
+   "consumerSha256": "2d7982b2c9c307430fa5ef58e0e55bee6faf02e6d5c4c6ededfcc32722908ca2",
+   "derivation": "six child-environment allowlist names added (CARGO_NET_OFFLINE, GOFLAGS, GOMODCACHE, GOPROXY, GOSUMDB, GOTOOLCHAIN); owner decisions VX1-VX4 and Q-R10B"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/channel.schema.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "3bfee13c9d32e82fe5ab908eb6f716bc11881f9d57b324f8ea4a21a3ad35356f",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v3/channel.schema.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/outcome-mapping.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "4466f379f1cc669e047cffd8afa5fa88b2cc7648a51e2d38b17f0bd5e2252a3a",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v3/outcome-mapping.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/vectors.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "ab75d86fe54ade7ee2695ef84b200d0473e14e4112e64e7702032593658763ed",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v3/vectors.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "f82f43330125640d3ac946d2afc9a1804a21e5e60a7ac4b94e5d6cb6ed2ea3aa",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v3/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v2/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "1cb07cef90b0881c42370d8bbaeea08c6abc48478bed3939286b651601d2cca3",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v2/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "dc9aa22017b2cdf71f886fb7890aff3f6e7095b9afc25bd37645cb0dee23b498",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v1/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/channel.schema.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "c68721a1002fccc7d6e59eeee9016a0a0f4a7428fad714e5a3d90a362d30ce09",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i07-v3/channel.schema.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/policy-kinds.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "4e427204b89959cb855d8641c3fa6f95d358b0b6a6a7730bfc7776adc4a173c0",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i07-v3/policy-kinds.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/vectors.json",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "c4c24c5ff15618aa2f0fe0f016011359bc4316220c6e40d5168f9ee24b6f736d",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i07-v3/vectors.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v3/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "a8c51a725b99d84351aba7a326196e7078c239ba4e28d3eaec1cf09fb3dca43d",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i07-v3/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write-v2/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "cde20d7fee8661cd9314350849870fe5b0838b7914a60237d0eeb1f5dca39d39",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i07-v2/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i07-policy-write/README.md",
+   "providerCommit": "a2eab9365c8663cc1ae23a666e864b821f600fa6",
+   "sha256": "9e5cb3d1023bc12b9e2643ae42dde5a87640cf04fc8ac1aa88350c65b12ba2dc",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i07-v1/README.md",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE"
+  },
+  {
+   "providerPath": "architecture/i05-gate-channel-v3-supplement/vectors.json",
+   "providerCommit": null,
+   "sha256": "1c00bdb3ea112af6098a09158cce3e4a7a6098c9670f490ead4ca65d8bdbb5ac",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/i05-v3-supplement/vectors.json",
+   "consumerPacket": "HE-002",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-024"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/BROKER.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "bc9c5a3797277ca753b5168e8e55132e1878fed2a726de361fd7d80e0fababf8",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/BROKER.aarch64.bpf",
+   "consumerPacket": "HE-005",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/BROKER.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "95221bd0db753aa22ead2eb49eeac8dae3d24c3dad72811de86c9392f4894dcc",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/BROKER.x86_64.bpf",
+   "consumerPacket": "HE-005",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/EFFECT_GATE.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "0ccbd7d090212fe52d366a2d68515670de40557cbc6fd07531653b404bb7105a",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/EFFECT_GATE.aarch64.bpf",
+   "consumerPacket": "HE-002S",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/EFFECT_GATE.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "ee85e9d225ad687aec82f83cb7d7c1be95f16df5f68eec5b56ee913d6cd86115",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/EFFECT_GATE.x86_64.bpf",
+   "consumerPacket": "HE-002S",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/HOST_CONTAINMENT.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "d9d57ecb4919ad453684be62b6e2b65c9818033c47291e8e7240f7c2224880eb",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/HOST_CONTAINMENT.aarch64.bpf",
+   "consumerPacket": "HE-006",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/HOST_CONTAINMENT.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "d0d0db066e8942bbe987bd89a8441ab4e84b1cb9933b3bad24d8fb6eb0a51292",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/HOST_CONTAINMENT.x86_64.bpf",
+   "consumerPacket": "HE-006",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/OBSERVER.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "d31c841042de456bb784e8412f61429be7700aea2ffa508af2637283ebcb3707",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/OBSERVER.aarch64.bpf",
+   "consumerPacket": "HE-004",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/OBSERVER.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "e793aae5ad04a7c82a67d3f102b837064e645a585b83ace0586169a1746eb25a",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/OBSERVER.x86_64.bpf",
+   "consumerPacket": "HE-004",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/POLICY_WRITER.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "e3bf65e0ff60d6766eac92672ad21a3c34097e183f03de416c9ad2ba50d71a5b",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/POLICY_WRITER.aarch64.bpf",
+   "consumerPacket": "HE-007",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/POLICY_WRITER.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "0f690b0e2f18b1b092bc42f4042dc334cafa3aae81fb96851f569ba71f20d1bf",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/POLICY_WRITER.x86_64.bpf",
+   "consumerPacket": "HE-007",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/SERVER.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "a1bcb2de10f5a54d32578d9f26e3d7db69b0cfad8d868feea1914585fbb7f05a",
+   "mode": "100644",
+   "consumerPath": null,
+   "consumerPacket": null,
+   "relation": null,
+   "status": "PUBLISHED_UNREGISTERED",
+   "providerPacket": "MET-ENFORCE-025",
+   "note": "no W03 packet installs the SERVER role's program: plan v2 lists SERVER under no SEC-4 packet, and its sealed-credential code is today R12's live backend (plan v2 obligation A1-SERVER-MEMFD, scope OUTSIDE_W03); the consumer repository and packet are undecided, and a later record registers them"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/SERVER.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "2e7af1da50b7d5df3cdcf8c18eb545f4972b2309b68d9eecba2e5f6ba5d1d8a7",
+   "mode": "100644",
+   "consumerPath": null,
+   "consumerPacket": null,
+   "relation": null,
+   "status": "PUBLISHED_UNREGISTERED",
+   "providerPacket": "MET-ENFORCE-025",
+   "note": "no W03 packet installs the SERVER role's program: plan v2 lists SERVER under no SEC-4 packet, and its sealed-credential code is today R12's live backend (plan v2 obligation A1-SERVER-MEMFD, scope OUTSIDE_W03); the consumer repository and packet are undecided, and a later record registers them"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/WORKER.aarch64.bpf",
+   "providerCommit": null,
+   "sha256": "cc04a4710495d3794b0d295613a2f2bd330524a328cb6963a819565bac2acb40",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/WORKER.aarch64.bpf",
+   "consumerPacket": "HE-005",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  },
+  {
+   "providerPath": "architecture/compiled-filter-programs/programs/WORKER.x86_64.bpf",
+   "providerCommit": null,
+   "sha256": "5616c9099324e441674f8e589b6c705ae95f6a4a697f10e761565d0735689d45",
+   "mode": "100644",
+   "consumerPath": "host-enforcement/contracts/seccomp-v3/WORKER.x86_64.bpf",
+   "consumerPacket": "HE-005",
+   "relation": "BYTE_IDENTICAL",
+   "status": "REGISTERED_BEFORE_USE",
+   "providerPacket": "MET-ENFORCE-025"
+  }
+ ],
+ "supersedes": {
+  "path": "architecture/artifact-edges/operator-harness-engineering.json",
+  "sha256": "sha256:54bdc2d22676720419f51cd1bad5eedc909e6f848ed09cd363e351889af9d1fe",
+  "packet": "MET-ENFORCE-024"
+ },
+ "ownerDecisions": [
+  "Q-HE2S-1 = (a) (2026-10-13, owner via the lane monitor, verbatim): a harness-onion meta packet publishes the compiled seccomp programs as data files; its layer recompiles them with the pinned v3 compiler and checks them against the published digests; R10 vendors EFFECT_GATE's two files byte-identically, gate.py pins their sha256, and the seal embeds them.",
+  "Q-HE2S-2 = (a), all 14 (2026-10-13, owner via the lane monitor, verbatim): a new small primary-lane meta packet publishes all 7 roles × 2 architectures plus edge registry record v2. It ALSO carries EDGE-2 (the R12 conformance-labs → harness-engineering edge record that rides the next registry-touching packet, owner A13) and W03-PLAN-AMEND-1 (the obligation-register amendment, owner Q-HE2B-2). HE-002S merges after it."
+ ],
+ "notes": [
+  "v1's 17 artefacts are carried unchanged, statuses included: HE-002's 13 contract files were REGISTERED_BEFORE_USE when v1 was published, and HE-002 has since merged in R10, so the consumer holds them now.",
+  "A program row with providerCommit null is published by its providerPacket (this packet); its commit is that packet's merge commit.",
+  "The programs are data (the v3 contract's compiled filters), not implementation source, so the boundary rule holds."
+ ]
+}
