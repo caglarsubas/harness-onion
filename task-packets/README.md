@@ -3,8 +3,8 @@
 ## Current source preparation — MET-PERF-039
 
 MET-PERF-039 (PERF-039): six parallel-suite workers instead of four (owner Q-PERF39-1 (a)); measured 627.1 s, 361.0 s
-and 324.9 s for four, six and eight workers on main e7516160. Every fail-closed rule and the weights are unchanged. A
-ci/ transport change. Alpha2 OPEN; 237 accepted plus MET-PERF-039 only.
+and 324.9 s for four, six and eight workers on main e7516160, about 21-29% faster with six once the four-worker run's
+host slowdown is allowed for. Every fail-closed rule and the weights are unchanged. A ci/ transport change. Alpha2 OPEN; 237 accepted plus MET-PERF-039 only.
 
 ## Historical seccomp-v4 source preparation — MET-ENFORCE-027
 

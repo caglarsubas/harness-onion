@@ -853,10 +853,11 @@ def test_the_record_is_restated_exactly(monkeypatch, change):
         profile.validate_pytest_headroom()
 
 
-@pytest.mark.parametrize("name, value", [("WORKERS_AFTER", 8), ("SUITE_BEFORE_SHA256", "0" * 64)])
-def test_the_restatements_are_checked(monkeypatch, name, value):
+@pytest.mark.parametrize("name, value, message", [("WORKERS_AFTER", 8, "six workers"),
+                                                   ("SUITE_BEFORE_SHA256", "0" * 64, "exactly the worker-count line changed")])
+def test_the_restatements_are_checked(monkeypatch, name, value, message):
     monkeypatch.setattr(profile, name, value)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=message):
         profile.validate_pytest_headroom()
 
 
@@ -869,4 +870,37 @@ def test_the_suite_page_states_six_workers(monkeypatch, old, new):
     assert raw.count(old) == 1
     _rebind(monkeypatch, {profile.SUITE_PAGE: raw.replace(old, new)})
     with pytest.raises(ValueError, match="parallel-suite page states six workers"):
+        profile.validate_pytest_headroom()
+
+
+def test_the_parent_nodes_are_checked_behind_the_pin(monkeypatch):
+    raw = profile.reviewed_bytes(profile.PARALLEL_SUITE)
+    old = b'"tests/linux_runner/test_isolation.py::test_real_integration_is_not_faked_on_development_host",\n'
+    assert raw.count(old) == 1
+    _rebind(monkeypatch, {profile.PARALLEL_SUITE: raw.replace(old, b"")})
+    with pytest.raises(ValueError, match="deadline, parent nodes"):
+        profile.validate_pytest_headroom()
+
+
+@pytest.mark.parametrize("path, extra, message", [
+    ("tests/test_parallel_suite.py", b"# SUITE.WORKERS == 4\n", "parallel-suite test pins six workers"),
+    ("docs/alpha-2/PARALLEL_SUITE_PERF035.md", b"\nOnce assigned to 4 worker processes, each file stays put.\n",
+     "parallel-suite page states six workers"),
+])
+def test_a_stale_four_worker_statement_is_refused(monkeypatch, path, extra, message):
+    _rebind(monkeypatch, {path: profile.reviewed_bytes(path) + extra})
+    with pytest.raises(ValueError, match=message):
+        profile.validate_pytest_headroom()
+
+
+@pytest.mark.parametrize("change", ["decisions", "weights"])
+def test_the_restatement_must_state_this_change(monkeypatch, change):
+    restated = json.loads(json.dumps(profile.HEADROOM))
+    if change == "decisions":
+        restated["ownerDecisions"] = restated["ownerDecisions"][:1]
+    else:
+        next(row for row in restated["unchanged"] if row["name"] == "parallelSuiteWeights")["sha256"] = "0" * 64
+    monkeypatch.setattr(profile, "HEADROOM", restated)
+    _rebind(monkeypatch, {profile.RECORD: _dump(restated)})
+    with pytest.raises(ValueError, match="the record states this change and the owner's decision"):
         profile.validate_pytest_headroom()

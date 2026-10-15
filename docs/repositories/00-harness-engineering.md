@@ -3,8 +3,9 @@
 ## Current source preparation — MET-PERF-039
 
 MET-PERF-039 (PERF-039): the parallel suite's worker count rises from 4 to 6 (owner Q-PERF39-1 (a)) to restore the
-outer pytest's headroom under the 900 s worker deadline. Measured on main e7516160 with four, six and eight workers,
-argv 63 took 627.1 s, 361.0 s and 324.9 s. The deadline, the accounting, the parent nodes, the serial rule and the
+outer pytest's headroom under the 900 s worker deadline. Measured once each on main e7516160 with four, six and eight
+workers, argv 63 took 627.1 s, 361.0 s and 324.9 s; the four-worker run was slowed by host state, so six workers save
+about 21-29% under the same conditions. The deadline, the accounting, the parent nodes, the serial rule and the
 weights are unchanged. A ci/ transport change with the owner's approval on the exact head. Alpha2 OPEN; 237 accepted
 plus MET-PERF-039 only.
 

@@ -23,7 +23,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/pytest-headroom-authority.json"
-AUTHORITY_SHA256 = "b1bb31b499ee7bd02f37c0463ae550a393abd1377c11a78ba2623c53504dfec5"
+AUTHORITY_SHA256 = "87c5201fb0dd559584df17c83f3d24536d7fadc04524f22936559978bcf2d634"
 VALIDATOR_PATH = "scripts/validate_pytest_headroom.py"
 BASE_COMMIT = "e7516160468c213862b337b344d240fde5f7328c"
 NEW_PACKET = "MET-PERF-039"
@@ -351,6 +351,7 @@ PARALLEL_SUITE = "ci/parallel_suite.py"
 SUITE_TEST = "tests/test_parallel_suite.py"
 # The current-status page states the worker count, as MET-PERF-038 updated it for the deadline (review S1-2).
 SUITE_PAGE = "docs/alpha-2/PARALLEL_SUITE_PERF035.md"
+WEIGHTS = "ci/parallel_suite_weights.json"
 RECORD = "architecture/pytest-headroom/workers.json"
 README = "architecture/pytest-headroom/README.md"
 # The weights and the PERF-038 limits record stay byte-identical (the owner did not refresh the weights).
@@ -362,6 +363,7 @@ ERA_SHA256 = MappingProxyType({
     "ci/parallel_suite.py": "4fe4e24951c6a4f023361f9e840e8343a68e5af713754ff7acdf523e475495d5",
     "tests/test_parallel_suite.py": "1d8af26e73282f6e593cb7e239cf1ba1959838b140ceca697941757d28a795ea",
     "docs/alpha-2/PARALLEL_SUITE_PERF035.md": "fca0042bb87856ff88926c7a044abb7afd692c9c589f4df391be85f43735d8e8",
+    "ci/parallel_suite_weights.json": "2c1b27f6281e996accbcbc43169dec2041676f1831b0c2e02cb8e09a3395ec3f",
 })
 WORKERS_BEFORE, WORKERS_AFTER, DEADLINE_SECONDS = 4, 6, 900
 SUITE_BEFORE_SHA256 = "14a7dd6db3d4f1b9b97408ffad49c5c977ce8813c81d975ca8dfe9d919c26b34"
@@ -536,7 +538,9 @@ def validate_pytest_headroom() -> None:
     change = HEADROOM["change"]
     require(change["before"] == WORKERS_BEFORE and change["after"] == WORKERS_AFTER
             and change["beforeSha256"] == SUITE_BEFORE_SHA256 and change["afterSha256"] == ERA_SHA256[PARALLEL_SUITE]
-            and [row["id"] for row in HEADROOM["ownerDecisions"]] == ["Q-PERF39-1", "Q-PERF39-1-CONFIRM", "Q-PERF39-1-CONFIRM-2"],
+            and [row["id"] for row in HEADROOM["ownerDecisions"]] == ["Q-PERF39-1", "Q-PERF39-1-CONFIRM", "Q-PERF39-1-CONFIRM-2"]
+            and {row["name"]: row.get("sha256") for row in HEADROOM["unchanged"]}["parallelSuiteWeights"]
+            == ERA_SHA256[WEIGHTS],
             "the record states this change and the owner's decision")
 
 

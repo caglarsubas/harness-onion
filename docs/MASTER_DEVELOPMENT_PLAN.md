@@ -3,10 +3,11 @@
 ## Current checkpoint — MET-PERF-039 source preparation, October 15, 2026
 
 Alpha2 OPEN. MET-ENFORCE-027 (SECCOMP-V3-READLINKAT, seccomp allowlists v4) passed required verify and merged as main
-e751616. Under host load the outer pytest had come within 1.5 s of the parallel suite's 900 s worker deadline (the
-236th packet's dry run). Measured on main e7516160 with four, six and eight workers, it took 627.1 s, 361.0 s and
-324.9 s. Owner decision Q-PERF39-1 (a), 2026-10-15, via the lane monitor: six workers, every fail-closed rule kept,
-weights not refreshed. MET-PERF-039 is the sole 238th specification.
+e751616. Under host load the outer pytest (argv 63) took 901.5 s against the parallel suite's 900 s worker deadline
+(the 236th packet's dry run). Measured once each on main e7516160 with four, six and eight workers, it took 627.1 s,
+361.0 s and 324.9 s; the four-worker run was slowed by host state, so six workers save about 21-29% under the same
+conditions. Owner decision Q-PERF39-1 (a), 2026-10-15, via the lane monitor, confirmed twice: six workers, every
+fail-closed rule kept, weights not refreshed (a later ci/ change). MET-PERF-039 is the sole 238th specification.
 
 | Phase | ID | Status | Description / gate |
 |---|---|---|---|
