@@ -16,16 +16,17 @@ E01-E12 stay OPEN_UNPROVEN.
 
 | File | What it is |
 |---|---|
-| `amendment.json` | `planeon.internal.host-interface-amendment/v2`: the pinned W02D base and record; the owner decisions; seven counted substring replacements (four DECIDED, three EDITORIAL); one disposition per decision; five obligations; the closed list of superseded clauses; one residual; the stated non-amendments |
-| `HOST_INTERFACE_SPEC.md` | The effective specification: the W02D effective text with the seven items applied |
+| `amendment.json` | `planeon.internal.host-interface-amendment/v2`: the pinned W02D base and record; the owner decisions; eight counted substring replacements (five DECIDED, three EDITORIAL); one disposition per decision; six obligations; the closed list of 16 superseded clauses; two residuals; the stated non-amendments |
+| `HOST_INTERFACE_SPEC.md` | The effective specification: the W02D effective text with the eight items applied |
 | `scripts/host_interface_amendment_v2.py` | The standard-library model. `check(read)` checks: the W02D record digest; the closed HS43 record; every superseded file's digest and its quoted clause; that applying the items to the pinned W02D bytes gives exactly the published bytes |
 
 The model leaves nothing free-standing in the amended text:
-- a DECIDED item must sit inside the section and lines it names;
+- a DECIDED item must sit inside the section and lines it names, and only §4.3, §5.3 and §7 may change;
 - every owner decision is cited, and each disposition lists every item that cites it;
 - the title rename and the head sentence are fixed;
 - section 12 is rendered from the record alone;
-- the superseded clauses must be exactly the model's closed list, in order.
+- the superseded clauses must be exactly the model's closed list, in order;
+- the two residuals and the six obligations must all be present, in order.
 
 ## Changes
 
@@ -33,7 +34,8 @@ The model leaves nothing free-standing in the amended text:
 |---|---|---|---|
 | H1 | §4.3 | See below | Q-HE2S-10, Q-HE2S-7, Q-HE2S-9, Q-HE3A-1, Q-HS43-1, Q-HS43-2, Q-HS43-3 |
 | H2 | §5.3 EFFECT_GATE, capabilities | The gate's peer reads include the writer's ptrace-gated `exe` link | Q-HE3A-1 |
-| H3 | §5.3 EFFECT_GATE, seccomp | `readlinkat` only with a non-negative dirfd, judged on the low 32 bits (so never AT_FDCWD in any encoding). The filter does not bind which link is read: an absolute path ignores the dirfd, so `procAccess` and the gate's code do that. `readlink` (x86_64) and `readlinkat(AT_FDCWD, …)` (musl's aarch64 `readlink`) stay KILL_PROCESS | Q-HE3A-1, Q-HE3A-1b, HS43-START |
+| H5 | §5.3 EFFECT_GATE, capabilities | None: the signed I04 port is 1024 or above, so the gate keeps no capability after its seal (the "below 1024" exception goes) | Q-HE2S-9 |
+| H3 | §5.3 EFFECT_GATE, seccomp | `readlinkat` only with a non-negative dirfd, judged on the low 32 bits (so never AT_FDCWD in any encoding). The filter does not bind which link is read: an absolute path ignores the dirfd, so `procAccess` and the gate's code do that. `readlink` (x86_64) and `readlinkat(AT_FDCWD, …)` (musl's aarch64 `readlink`) stay KILL_PROCESS | Q-HE3A-1, Q-HE3A-1b, HS43-START, SECCOMP-DIRFD-DIRECTION |
 | H4 | §7 BIND_EXECUTION | The digest is the gate's mutual qualification record, as I05 defines it, with the narrower gate-side half | Q-HE2S-10, Q-HS43-2 |
 | E1 | title | Names both amendments | — |
 | E2 | head | Says HS43 is applied on top of the byte-identical W02D text | — |
@@ -43,7 +45,7 @@ H1 makes five changes to §4.3:
 - The broker's check of the gate keeps its five parts. Its artifact read works because the gate holds no capability
   (Q-HE2S-9) and stays dumpable (Q-HE2S-7).
 - Peer start times are compared with a reference taken without a race: a pidfd that names the connected process
-  (SO_PEERPIDFD or SCM_PIDFD).
+  (SO_PEERPIDFD or SCM_PIDFD), the stat read, then a pidfd poll showing the process has not exited.
 - The gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED, with no artifact check.
 - The broker's executable identity follows from its label.
 - The writer keeps the artifact check: its exe link must equal the enrolled path exactly, with no " (deleted)". The
@@ -70,17 +72,21 @@ SELinux then checks `file read` from the reader's domain on the target's domain.
 
 ## Superseded clauses (owner decision Q-HS43-2 (a))
 
-HS43 overrides nine adopted clauses, quoted exactly in `amendment.json` and in §12. Their files stay byte-identical:
-- I05 v1, v2 and v3, Channel 2: the gate no longer verifies the broker's executable.
+HS43 overrides 16 adopted clauses, quoted exactly in `amendment.json` and in §12. Their files stay byte-identical:
+- The W01 base (`host-interface-inputs/corrected/`): both sides "authenticate exact installed peer artifacts" now
+  follows §4.3: the gate does not authenticate the broker's artifact.
+- I05 v1, v2 and v3, Channel 2: the gate no longer verifies the broker's executable, and "The broker verifies the
+  gate's frames the same way" now means the broker's own five-part list, which HS43 does not narrow.
 - I07 v1, Channel 2, inherited by v2 and v3:
   - the writer is qualified by its own §4.3 rule, not "the way it qualifies the broker";
   - its artifact check is the exact exe-link path, not a per-frame fs-verity digest.
 - W01 §7's "broker peer qualification digest" becomes the mutual record, through item H4.
-- Three matrix v4 README statements: the writer check also reads its gated exe link. `matrix.json` is unchanged.
+- Three statements each in the matrix v3 and v4 READMEs: the writer check also reads its gated exe link. The
+  matrices' data are unchanged.
 
 A successor of each contract adopts the text. This follows the W02-CLEANUP errata precedent (Q-S A).
 
-## Residual (owner decision Q-HS43-3 (a))
+## Residuals (owner decision Q-HS43-3 (a))
 
 R-WRITER-PROC: a dumpable writer lets every uid-0 role with `procAccess` on it read its ptrace-gated entries. Those
 roles are the server, the observer and the broker as well as the gate, and the entries are exe, cwd, root, fd, fdinfo,
@@ -88,14 +94,21 @@ environ and maps. `mem` and `process_vm_*` stay refused, because they need ptrac
 Obligation O-MATRIX-WRITER-PROCACCESS has the queued SELinux matrix amendment (SELINUX-MATRIX-I04-KEYCERT) evaluate
 narrowing that access to the gate.
 
+R-GATE-PROC: the gate stays dumpable (Q-HE2S-7) and holds no capability. So the broker, the server and the observer,
+all uid 0 with `procAccess` on it, can read its ptrace-gated entries, for example environ, maps, cwd and the fd
+links. Reopening a credential through an fd link still meets SELinux's file checks on the credential type (A09).
+Obligation O-MATRIX-GATE-PROCACCESS has the same matrix amendment evaluate which of those reads the server's and the
+observer's captures need; the broker keeps the gate's exe link.
+
 ## Obligations
 
 | Id | Owner | Summary |
 |---|---|---|
 | O-SECCOMP-V3-READLINKAT | the next parallel-lane packet | The EFFECT_GATE `readlinkat` rule: a non-negative dirfd on the low 32 bits, one masked condition `(arg0 & 0x80000000) == 0` (direction accepted 2026-10-15); `readlink` unlisted; vectors for AT_FDCWD in both encodings and -1 |
-| O-W03-WRITER-EXE | W03 (HE-007) | Writer uid/gid 0, empty permitted set, dumpable through a credential-free exec; gate fs uid/gid 0; a race-free pidfd; an oversized buffer; an exact path |
-| O-W03-PEER-EXE | W03 | Gate dumpable, uid/gid 0, no capability after the seal; race-free peer pidfds and start times |
+| O-W03-WRITER-EXE | W03 (HE-007) | Writer uid/gid 0, empty permitted set (the exec raises none), dumpable through a credential-free exec; gate fs uid/gid 0; a race-free pidfd; an oversized buffer; an exact path |
+| O-W03-PEER-EXE | W03 | Gate dumpable, uid/gid 0, no capability after the seal; broker fs uid/gid 0; race-free peer pidfds and start times (stat read, then pidfd poll) |
 | O-MATRIX-WRITER-PROCACCESS | SELINUX-MATRIX-I04-KEYCERT | Evaluate narrowing the writer's `procAccess` to the gate |
+| O-MATRIX-GATE-PROCACCESS | SELINUX-MATRIX-I04-KEYCERT | Evaluate narrowing the server's and the observer's reads of the gate's gated entries |
 | O-T04-HS43 | T04 | Native confirmation. The writer read succeeds. The broker read fails with EACCES, and the audited `capability sys_ptrace` denial is expected. The broker reads the gate. On x86_64 `readlink` kills the gate, and on both architectures `readlinkat` with AT_FDCWD in either encoding, or with -1, kills it. The path check refuses a longer path and " (deleted)" |
 
 ## Not amended

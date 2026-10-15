@@ -300,31 +300,36 @@ the only writer path, which is G04 evidence.
 
 - BROKER qualifies EFFECT_GATE as a peer (artifact, label, cgroup, pidfd/start, SO_PEERCRED) before BIND_EXECUTION.
   Its artifact check reads the gate's `/proc/<pid>/exe` link, which the kernel allows as long as the gate holds no
-  capability (the signed I04 port is 1024 or above, Q-HE2S-9 (a)), stays dumpable (Q-HE2S-7 (a)) and runs with uid
-  and gid 0 like the broker (O-W03-PEER-EXE).
-- A peer's start time is compared on every frame with a reference taken without a race at its first frame, through a
-  pidfd that names the connected process itself (SO_PEERPIDFD, or SCM_PIDFD on a frame); a pidfd_open of the
-  SO_PEERCRED pid alone does not give one, because that pid may already name a later process (HS43).
+  capability (the signed I04 port is 1024 or above, Q-HE2S-9 (a)), stays dumpable (Q-HE2S-7 (a)) and runs with uids
+  and gids 0 that equal the broker's filesystem uid and gid (O-W03-PEER-EXE).
+- A peer's start time is compared on every frame with a reference taken without a race at its first frame: the
+  qualifier holds a pidfd that names the connected process itself (SO_PEERPIDFD, or SCM_PIDFD on a frame), reads
+  `/proc/<pid>/stat`, and then confirms through that pidfd (poll) that the process has not exited, so the entry was
+  that process's. A pidfd_open of the SO_PEERCRED pid alone does not give such a reference, because that pid may
+  already name a later process (HS43).
 - EFFECT_GATE qualifies the broker on every I05 frame by label, cgroup, pidfd/start and SO_PEERCRED (HS43). It does
   not check the broker's artifact. Reading `/proc/<pid>/exe` is a ptrace-mode read (PTRACE_MODE_READ_FSCREDS);
   without CAP_SYS_PTRACE, which no role holds, the kernel allows it only if the target's permitted capabilities are a
   subset of the reader's effective ones, and the broker's (§5.3) are not a subset of the gate's, so the kernel
   refuses the gate that read. The broker's executable identity follows from its label instead: SELinux matrix v4
   (`architecture/selinux-matrix-v2/`) lets `planeon_broker_t` be entered only from init through
-  `planeon_broker_exec_t`, which only a maintenance boot may relabel, and denies `execute_no_trans` on every type.
+  `planeon_broker_exec_t` and denies `execute_no_trans` on every type, so the label identifies the executable as long
+  as only the enrolled broker artifact carries that type.
 - EFFECT_GATE qualifies the writer on every I07 frame by artifact, label, cgroup, pidfd/start and SO_PEERCRED (HS43).
-  For the artifact it opens the `/proc/<pid>` directory of the pidfd's process, with no window in which the PID could
-  be reused, and reads its `exe` link with `readlinkat` on that directory descriptor (§5.3) into a buffer longer than
-  the enrolled writer path (§4.2); the link must equal that path exactly, with no " (deleted)" suffix. The fs-verity
-  digest is enforced on the sealed file the path names; the gate does not re-measure it per frame (opening the link
-  and FS_IOC_MEASURE_VERITY are not in its allowlist). The kernel allows the read without CAP_SYS_PTRACE only while
-  the gate's filesystem uid and gid equal the writer's real, effective and saved uids and gids (all 0), the writer is
-  dumpable, and the writer's permitted capabilities are a subset of the gate's effective ones, which the writer's
-  empty set (§5.3) always is; SELinux matrix v4 gives `planeon_gate_t` `file read` on `planeon_policy_writer_t`
-  (`procAccess`), the LSM check of that read. Yama (ptrace_scope 3) limits only ptrace attach, not this read, and
-  /proc must be mounted without a hidepid option that hides the peers. Obligation O-W03-WRITER-EXE holds both sides
-  to this. Until the gate's filter admits `readlinkat` (O-SECCOMP-V3-READLINKAT), the writer's artifact check is
-  decided but open (Q-HE3A-1b) and the other four checks apply.
+  For the artifact it opens the `/proc/<pid>` directory of the pidfd's process and confirms through the pidfd that
+  the process is still alive after the open, so no PID reuse can intervene, then reads its `exe` link with
+  `readlinkat` on that directory descriptor (§5.3) into a buffer longer than the enrolled writer path (§4.2); the
+  link must equal that path exactly, with no " (deleted)" suffix. The fs-verity digest is enforced on the sealed file
+  the path names (§4.2, at enrollment); the gate does not re-measure it per frame, which would need
+  FS_IOC_MEASURE_VERITY, an ioctl its allowlist does not admit. The kernel allows the read without CAP_SYS_PTRACE
+  only while the gate's filesystem uid and gid equal the writer's real, effective and saved uids and gids (all 0),
+  the writer is dumpable, and the writer's permitted capabilities are a subset of the gate's effective ones, which
+  the writer's empty set (§5.3) always is; SELinux matrix v4 gives `planeon_gate_t` `file read` on
+  `planeon_policy_writer_t` (`procAccess`), the LSM check of that read. Yama (ptrace_scope 3) limits only ptrace
+  attach, not this read, and /proc must be mounted with hidepid=0 (the default), or the gate loses sight of its
+  peers' entries. Obligation O-W03-WRITER-EXE holds both sides to this. Until the gate's filter admits `readlinkat`
+  (O-SECCOMP-V3-READLINKAT), the writer's artifact check is decided but open (Q-HE3A-1b) and the other four checks
+  apply.
 - SERVER and OBSERVER do not talk to the gate except SERVER over I04 TLS. Their v1
   peer duties are unchanged.
 - The gate's generation must equal the observer/broker generation carried in
@@ -433,7 +438,7 @@ policy, not assumed from the boolean's name.
 | SERVER | 0 | CAP_NET_ADMIN, CAP_BPF (inspection only); CAP_NET_BIND_SERVICE only if the signed listener port is below 1024 | Allowlist: I/O on held FDs, socket(AF_INET/AF_INET6 stream, AF_UNIX seqpacket), connect/accept4, memory and clock calls TLS needs, `bpf` with arg0 in {7,15,16}, memfd_create with flags exactly MFD_CLOEXEC and MFD_NOEXEC_SEAL for the sealed-credential path (the kernel clears the exec bits and sets F_SEAL_EXEC on every call, and further seals stay possible; the existing code passes MFD_CLOEXEC and MFD_ALLOW_SEALING and must change first, obligation O-SERVER-MEMFD), pidfd_open, inspection reads (read-only `openat`, `read`, `pread64`, `lseek`, `fstat`, `newfstatat`, `statx`, `fstatfs`, `getdents64` and `readlinkat`; `ioctl` only FS_IOC_MEASURE_VERITY; `membarrier` only cmd 0, 8 or 16 with flags 0 and cpu 0; W02d-QC). Seccomp checks only the open flags of these reads; which files they reach is set by the role's SELinux domain (`architecture/selinux-matrix-v2/`), exit. Denied: execve/execveat, clone3 (its flags are in a struct seccomp cannot read; it fails with ENOSYS rather than KILL_PROCESS, W02d-QB), clone without CLONE_THREAD, mount family, setns, unshare, ptrace, process_vm_*, init/finit_module, kexec_* | `planeon_server_t`: no execmem/execmod/execstack, no ptrace; `name_connect` only to the I04 gate port; `connectto` only to its existing observer/broker sockets; no `planeon_kubeapi_port_t` |
 | OBSERVER | 0 | CAP_NET_ADMIN, CAP_BPF (inspection only) | As SERVER without listener; I06 read connection allowed | `planeon_observer_t`: `name_connect` to `planeon_kubeapi_port_t`; read-only to policy credential |
 | BROKER | 0 | CAP_NET_ADMIN, CAP_BPF (inspection); CAP_SETUID and CAP_SETGID, which the pre-exec child inherits and gives up in W4. No CAP_KILL: termination uses `cgroup.kill` on its own delegated leaf | As SERVER plus clone3, setresuid/setresgid, close_range, and execveat with flags limited to AT_EMPTY_PATH. The child inherits this filter, so it must cover the child's pre-exec steps; the narrower worker filter is installed in W4 and stacks on it. The inherited broker filter stays after exec and the kernel applies the most restrictive action of the two, so the broker allowlist covers the worker's (W02d-QD). The broker runs under exactly one filter, its own (W03 adds none, W02d F10), so the worker shows `Seccomp_filters: 2`. clone3 cannot be argument-filtered, so its use is bounded by `pids.max`, SELinux transitions and the W1-W6 sequence, not by seccomp | `planeon_broker_t`: `execute` only on the worker executable type, with a forced transition to `planeon_worker_t`; no other entrypoint |
-| EFFECT_GATE | 0 | None, except CAP_NET_BIND_SERVICE if the signed I04 port is below 1024. It reads root-owned 0400 credentials as owner, does no BPF inspection, and qualifies peers with pidfd, SO_PEERCRED and same-uid /proc reads its policy allows, including the writer's ptrace-gated `exe` link (§4.3, HS43) | Network I/O, fsync/fdatasync, flock, the AF_UNIX listeners for I05/I07 and the I04 TLS listener; `readlinkat` only with a non-negative directory descriptor, judged on the low 32 bits of the argument because the kernel reads it as an `int`, so never AT_FDCWD in any encoding (§4.3, HS43, O-SECCOMP-V3-READLINKAT). Seccomp sees only that descriptor, and an absolute path ignores it, so which links the gate reads is set by `planeon_gate_t`'s `/proc` access (`procAccess`) and by the gate's code (O-W03-WRITER-EXE), not by the filter. `readlink` (x86_64), and `readlinkat` with AT_FDCWD (musl's `readlink` on aarch64), stay KILL_PROCESS; no exec, no clone3 (it fails with ENOSYS, W02d-QB), clone only with CLONE_THREAD | `planeon_gate_t`: sole reader of the two upstream credential files; `name_connect` to `planeon_kubeapi_port_t` |
+| EFFECT_GATE | 0 | None: the signed I04 port is 1024 or above, so the gate keeps no capability after its seal (Q-HE2S-9 (a), HS43). It reads root-owned 0400 credentials as owner, does no BPF inspection, and qualifies peers with pidfd, SO_PEERCRED and same-uid /proc reads its policy allows, including the writer's ptrace-gated `exe` link (§4.3, HS43) | Network I/O, fsync/fdatasync, flock, the AF_UNIX listeners for I05/I07 and the I04 TLS listener; `readlinkat` only with a non-negative directory descriptor, judged on the low 32 bits of the argument because the kernel reads it as an `int`, so never AT_FDCWD in any encoding (§4.3, HS43, O-SECCOMP-V3-READLINKAT). Seccomp sees only that descriptor, and an absolute path ignores it, so which links the gate reads is set by `planeon_gate_t`'s SELinux permissions on the links' types (`procAccess` for `/proc` entries), by the kernel's ptrace-read rules and by the gate's code (O-W03-WRITER-EXE), not by the filter. `readlink` (x86_64), and `readlinkat` with AT_FDCWD (musl's `readlink` on aarch64), stay KILL_PROCESS; no exec, no clone3 (it fails with ENOSYS, W02d-QB), clone only with CLONE_THREAD | `planeon_gate_t`: sole reader of the two upstream credential files; `name_connect` to `planeon_kubeapi_port_t` |
 | WORKER | signed 10000..2147483647 | Empty | The W02d worker allowlist (`architecture/seccomp-allowlists-v2/`, W02d-Q1): its CPython 3.12 runtime base, FD3 seqpacket I/O on fd 3 only, reads of the read-only root and exit; `execveat` only with flags AT_EMPTY_PATH, for W5 (W02d-QA); `clone3` fails with ENOSYS (W02d-QB); no socket creation, no `bpf`. The inherited broker filter stays installed and covers it (W02d-QD) | `planeon_worker_t`: no network `name_connect`, no ptrace, read-only root; no `execute_no_trans` on any type (SELinux matrix v4 A60.18) and no `transition` or `nnp_transition` into any declared domain (A24-A32), and the host policy gives it none into any other domain (obligation O-W03-WORKER-EXEC), so a second exec that the worker filter admits is still refused |
 | POLICY_WRITER | 0 | Empty | AF_UNIX connect to I07, I/O, exit | `planeon_policy_writer_t`: `connectto` I07 only |
 | HOST_CONTAINMENT | 0 | CAP_BPF and CAP_NET_ADMIN (program load), plus any capability its cgroup labelling, pinning and fs-verity steps need, which W02 enumerates; one-shot | Allowlist for the S2-S5 steps only | `planeon_contain_t`: only domain with `bpf { prog_load }`, `security { setbool }` and relabel on planeon types; enterable once per boot (S2/S4) |
@@ -680,29 +685,38 @@ gives every change and its reason.
 |---|---|---|
 | H1 | 4.3 | Q-HE2S-10, Q-HE2S-7, Q-HE2S-9, Q-HE3A-1, Q-HS43-1, Q-HS43-2, Q-HS43-3 |
 | H2 | 5.3 EFFECT_GATE row, capabilities | Q-HE3A-1 |
-| H3 | 5.3 EFFECT_GATE row, seccomp | Q-HE3A-1, Q-HE3A-1b, HS43-START |
+| H3 | 5.3 EFFECT_GATE row, seccomp | Q-HE3A-1, Q-HE3A-1b, HS43-START, SECCOMP-DIRFD-DIRECTION |
+| H5 | 5.3 EFFECT_GATE row, capabilities | Q-HE2S-9 |
 | H4 | 7 | Q-HE2S-10, Q-HS43-2 |
 
 Adopted text HS43 overrides (each file stays byte-identical; HS43 governs, and a successor of that contract adopts it):
 
 | Superseded clause | In | Replaced by |
 |---|---|---|
+| "authenticate exact installed peer artifacts, manifest/trust custody, PID/start," | `architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md` | for I05 and I07, the rules of W01 §4.3 as amended by HS43: the gate does not authenticate the broker's artifact, while the broker still authenticates the gate's and the gate the writer's (H1) |
 | "PID/start identity, executable, label and cgroup" | `architecture/i05-gate-channel/README.md` | the gate verifies the broker's SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, label and cgroup, not its executable (W01 §4.3 as amended by HS43) (H1) |
+| "The broker verifies the gate's frames the same way" | `architecture/i05-gate-channel/README.md` | the broker verifies the gate's frames by SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, executable, label and cgroup: its own list, which HS43 does not narrow (H1) |
 | "PID/start identity, executable, label and cgroup" | `architecture/i05-gate-channel-v2/README.md` | the gate verifies the broker's SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, label and cgroup, not its executable (W01 §4.3 as amended by HS43) (H1) |
+| "The broker verifies the gate's frames the same way" | `architecture/i05-gate-channel-v2/README.md` | the broker verifies the gate's frames by SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, executable, label and cgroup: its own list, which HS43 does not narrow (H1) |
 | "PID/start identity, executable, label and cgroup" | `architecture/i05-gate-channel-v3/README.md` | the gate verifies the broker's SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, label and cgroup, not its executable (W01 §4.3 as amended by HS43) (H1) |
+| "The broker verifies the gate's frames the same way" | `architecture/i05-gate-channel-v3/README.md` | the broker verifies the gate's frames by SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, executable, label and cgroup: its own list, which HS43 does not narrow (H1) |
 | "qualifies the writer peer the way it qualifies the broker" | `architecture/i07-policy-write/README.md` | qualifies the writer peer by its own W01 §4.3 rule (HS43), which keeps the artifact check the broker's no longer has; inherited by I07 v2 and v3 (H1) |
 | "writer artifact `/opt/planeon/bin/harness-policy-write` (fs-verity digest under its signed manifest, §4.2)" | `architecture/i07-policy-write/README.md` | the writer's exe link equal to the enrolled path exactly, with no " (deleted)"; the fs-verity digest is enforced on the sealed file at enrollment, not re-measured per frame (HS43); inherited by I07 v2 and v3 (H1) |
 | "and the broker peer qualification digest (§4.3)" | `architecture/host-interface-amendment-w02d/HOST_INTERFACE_SPEC.md` | the peer-qualification digest of the gate's mutual qualification record, whose gate-side half HS43 narrows (H4) |
+| "Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries" | `architecture/selinux-matrix/README.md` | the gate's check of the writer also reads the writer's ptrace-gated exe link (HS43); matrix.json is unchanged (H1) |
+| "Executable identity follows from the peer's label" | `architecture/selinux-matrix/README.md` | for the broker; the writer's executable is also checked through its exe link (HS43) (H1) |
+| "Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; executable identity" | `architecture/selinux-matrix/README.md` | as above: the gate also reads the writer's exe link (HS43) (H1) |
 | "Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries" | `architecture/selinux-matrix-v2/README.md` | the gate's check of the writer also reads the writer's ptrace-gated exe link (HS43); matrix.json is unchanged (H1) |
 | "Executable identity follows from the peer's label" | `architecture/selinux-matrix-v2/README.md` | for the broker; the writer's executable is also checked through its exe link (HS43) (H1) |
 | "Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; executable identity" | `architecture/selinux-matrix-v2/README.md` | as above: the gate also reads the writer's exe link (HS43) (H1) |
 
 Stated residuals:
 
-- R-WRITER-PROC: A dumpable writer lets every uid-0 role with procAccess on it read its ptrace-gated entries (exe, cwd, root, fd, fdinfo, environ, maps): the server, the observer and the broker as well as the gate. mem and process_vm_* stay refused, because they need ptrace attach, which Yama ptrace_scope 3 refuses. Follow-up: obligation O-MATRIX-WRITER-PROCACCESS, in the queued SELinux matrix amendment SELINUX-MATRIX-I04-KEYCERT (Q-HS43-3).
+- R-WRITER-PROC: A dumpable writer lets every uid-0 role with procAccess on it read its ptrace-gated entries, for example exe, cwd, root, fd, fdinfo, environ and maps: the server, the observer and the broker as well as the gate. mem and process_vm_* stay refused, because they need ptrace attach, which Yama ptrace_scope 3 refuses. Follow-up: obligation O-MATRIX-WRITER-PROCACCESS, in the queued SELinux matrix amendment SELINUX-MATRIX-I04-KEYCERT (Q-HS43-3).
+- R-GATE-PROC: The gate stays dumpable (Q-HE2S-7 (a)) and holds no capability, so every uid-0 role with procAccess on it (the broker, the server and the observer) can read its ptrace-gated entries, for example environ, maps, cwd and the fd links; reopening a credential through an fd link still meets SELinux's file checks on the credential type (matrix v4 A09). mem and process_vm_* stay refused, because they need ptrace attach, which Yama ptrace_scope 3 refuses. Follow-up: obligation O-MATRIX-GATE-PROCACCESS, in the queued SELinux matrix amendment SELINUX-MATRIX-I04-KEYCERT (Q-HS43-3, Q-HE2S-7).
 
 The data follow in order (Q-HE3A-1b): the W02d v3 allowlist (`architecture/seccomp-allowlists-v3/`) gains the
 EFFECT_GATE `readlinkat` rule in its own packet, then the EFFECT_GATE programs and the edge record are republished,
 then R10 re-vendors them and adds the check.
 
-Obligations: O-SECCOMP-V3-READLINKAT (the allowlist rule), O-W03-WRITER-EXE (the writer's credentials and dumpability, and the read bound to the frame's process), O-W03-PEER-EXE (the gate readable by the broker, and race-free peer pidfds), O-MATRIX-WRITER-PROCACCESS (narrowing the writer's /proc readers, residual R-WRITER-PROC), O-T04-HS43 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.
+Obligations: O-SECCOMP-V3-READLINKAT (the allowlist rule), O-W03-WRITER-EXE (the writer's credentials and dumpability, and the read bound to the frame's process), O-W03-PEER-EXE (the gate readable by the broker, and race-free peer pidfds), O-MATRIX-WRITER-PROCACCESS (narrowing the writer's /proc readers, residual R-WRITER-PROC), O-MATRIX-GATE-PROCACCESS (narrowing the gate's /proc readers, residual R-GATE-PROC), O-T04-HS43 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.

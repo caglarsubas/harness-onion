@@ -54,20 +54,32 @@ END_LINE = "O-T04-AMEND (native confirmation). Every E01-E12 obligation stays OP
 # The closed list of adopted clauses HS43 overrides (owner decision Q-HS43-2 (a)): a record must quote exactly these, in
 # this order, so nothing else is superseded silently. Each file stays byte-identical.
 _I05_CLAUSE = "PID/start identity, executable, label and cgroup"
-_MATRIX = "architecture/selinux-matrix-v2/README.md"
+_I05_BROKER = "The broker verifies the gate's frames the same way"
+_MATRIX_CLAUSES = ("Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries",
+                   "Executable identity follows from the peer's label",
+                   "Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; "
+                   "executable identity")
 SUPERSEDED = (
+    ("architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md",
+     "authenticate exact installed peer artifacts, manifest/trust custody, PID/start,"),
     ("architecture/i05-gate-channel/README.md", _I05_CLAUSE),
+    ("architecture/i05-gate-channel/README.md", _I05_BROKER),
     ("architecture/i05-gate-channel-v2/README.md", _I05_CLAUSE),
+    ("architecture/i05-gate-channel-v2/README.md", _I05_BROKER),
     ("architecture/i05-gate-channel-v3/README.md", _I05_CLAUSE),
+    ("architecture/i05-gate-channel-v3/README.md", _I05_BROKER),
     ("architecture/i07-policy-write/README.md", "qualifies the writer peer the way it qualifies the broker"),
     ("architecture/i07-policy-write/README.md",
      "writer artifact `/opt/planeon/bin/harness-policy-write` (fs-verity digest under its signed manifest, §4.2)"),
     (BASE_PATH, "and the broker peer qualification digest (§4.3)"),
-    (_MATRIX, "Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries"),
-    (_MATRIX, "Executable identity follows from the peer's label"),
-    (_MATRIX, "Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; "
-              "executable identity"),
-)
+) + tuple(("architecture/selinux-matrix/README.md", clause) for clause in _MATRIX_CLAUSES) \
+  + tuple(("architecture/selinux-matrix-v2/README.md", clause) for clause in _MATRIX_CLAUSES)
+# Q-HS43-3 (a): the stated residuals and the obligations that follow them up must stay in the record.
+REQUIRED_RESIDUALS = ("R-WRITER-PROC", "R-GATE-PROC")
+REQUIRED_OBLIGATIONS = ("O-SECCOMP-V3-READLINKAT", "O-W03-WRITER-EXE", "O-W03-PEER-EXE", "O-MATRIX-WRITER-PROCACCESS",
+                        "O-MATRIX-GATE-PROCACCESS", "O-T04-HS43")
+# A DECIDED item may change only these sections: who qualifies whom, the per-role policy table and the I05 table.
+DECIDED_SECTIONS = ("4.3", "5.3", "7")
 SECTION12_INTRO = (
     "HS43 changes how the effect gate qualifies its two local peers (§4.3) and states the one system call the writer's\n"
     "executable check needs (§5.3); the gate's filter admits that call only once O-SECCOMP-V3-READLINKAT lands. It is\n"
@@ -228,7 +240,7 @@ def check_record(record: Any, base: bytes) -> None:
                     "editorial item %s is a fixed or rendered edge" % item["id"])
         else:
             match = SECTION.fullmatch(item["section"])
-            require(match is not None and _section_of(text, item["current"]) == match.group(1)
+            require(match is not None and match.group(1) in DECIDED_SECTIONS and _section_of(text, item["current"]) == match.group(1)
                     and item["baseLines"] == _base_lines(text, item["current"]),
                     "decided item %s sits in the section and lines it names" % item["id"])
     require(all(any(decision in item["decisions"] for item in items) for decision in ids), "every owner decision is cited")
@@ -243,6 +255,9 @@ def check_record(record: Any, base: bytes) -> None:
                 and _text(row["summary"]), "disposition of %r names every citing item and known obligations" % row["decision"])
         used |= set(row["obligations"])
     require(used == set(obligation_ids), "every obligation answers an owner decision")
+    require(obligation_ids == list(REQUIRED_OBLIGATIONS)
+            and [row["id"] for row in record["residuals"]] == list(REQUIRED_RESIDUALS),
+            "the required obligations and residuals, in order")
     # Obligations the base text already names (W02D's) are not HS43's; the new text names exactly the record's.
     named = {ref for item in items
              for ref in set(OBLIGATION_REF.findall(item["proposed"])) - set(OBLIGATION_REF.findall(item["current"]))}
