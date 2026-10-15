@@ -47,7 +47,7 @@
    "id": "Q-HS43-1",
    "date": "2026-10-15",
    "state": "OWNER_DECIDED",
-   "decision": "(a) the gate's broker qualification drops only the artifact and keeps pidfd/start",
+   "decision": "(a) drop only the artifact check for the gate's broker qualification and keep \"pidfd/start\". The start time comes from the ungated /proc/<pid>/stat and closes the PID-reuse window between SO_PEERCRED and pidfd_open.",
    "source": "owner decision via the lane monitor, 2026-10-15"
   }
  ],
