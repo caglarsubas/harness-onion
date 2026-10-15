@@ -72,14 +72,19 @@ SUPERSEDED = (
     ("architecture/i07-policy-write/README.md",
      "writer artifact `/opt/planeon/bin/harness-policy-write` (fs-verity digest under its signed manifest, §4.2)"),
     (BASE_PATH, "and the broker peer qualification digest (§4.3)"),
+    ("architecture/native-profile-v2/README.md", "CAP_NET_BIND_SERVICE only with a signed port below 1024"),
 ) + tuple(("architecture/selinux-matrix/README.md", clause) for clause in _MATRIX_CLAUSES) \
   + tuple(("architecture/selinux-matrix-v2/README.md", clause) for clause in _MATRIX_CLAUSES)
 # Q-HS43-3 (a): the stated residuals and the obligations that follow them up must stay in the record.
 REQUIRED_RESIDUALS = ("R-WRITER-PROC", "R-GATE-PROC")
 REQUIRED_OBLIGATIONS = ("O-SECCOMP-V3-READLINKAT", "O-W03-WRITER-EXE", "O-W03-PEER-EXE", "O-MATRIX-WRITER-PROCACCESS",
-                        "O-MATRIX-GATE-PROCACCESS", "O-T04-HS43")
-# A DECIDED item may change only these sections: who qualifies whom, the per-role policy table and the I05 table.
+                        "O-MATRIX-GATE-PROCACCESS", "O-MATRIX-GATE-NETBIND", "O-NATIVE-GATE-NOCAP", "O-T04-HS43")
+# The DECIDED items, in order; none may be dropped or added without changing this module.
+REQUIRED_DECIDED = ("H1", "H2", "H3", "H5", "H4")
+# A DECIDED item may change only these sections: who qualifies whom, the per-role policy table and the I05 table; in the
+# two tables only the EFFECT_GATE row and the BIND_EXECUTION row.
 DECIDED_SECTIONS = ("4.3", "5.3", "7")
+DECIDED_ROWS = {"5.3": "| EFFECT_GATE |", "7": "| BIND_EXECUTION |"}
 SECTION12_INTRO = (
     "HS43 changes how the effect gate qualifies its two local peers (§4.3) and states the one system call the writer's\n"
     "executable check needs (§5.3); the gate's filter admits that call only once O-SECCOMP-V3-READLINKAT lands. It is\n"
@@ -243,6 +248,11 @@ def check_record(record: Any, base: bytes) -> None:
             require(match is not None and match.group(1) in DECIDED_SECTIONS and _section_of(text, item["current"]) == match.group(1)
                     and item["baseLines"] == _base_lines(text, item["current"]),
                     "decided item %s sits in the section and lines it names" % item["id"])
+            row_prefix = DECIDED_ROWS.get(match.group(1))
+            line_start = text.rfind("\n", 0, text.index(item["current"])) + 1
+            require(row_prefix is None or ("\n" not in item["current"].rstrip("\n")
+                                           and text[line_start:].startswith(row_prefix)),
+                    "decided item %s changes only its table's permitted row" % item["id"])
     require(all(any(decision in item["decisions"] for item in items) for decision in ids), "every owner decision is cited")
     dispositions = record["dispositions"]
     require(type(dispositions) is list and [row.get("decision") for row in dispositions if type(row) is dict] == ids,
@@ -255,6 +265,7 @@ def check_record(record: Any, base: bytes) -> None:
                 and _text(row["summary"]), "disposition of %r names every citing item and known obligations" % row["decision"])
         used |= set(row["obligations"])
     require(used == set(obligation_ids), "every obligation answers an owner decision")
+    require([item["id"] for item in items if item["kind"] == "DECIDED"] == list(REQUIRED_DECIDED), "the required items")
     require(obligation_ids == list(REQUIRED_OBLIGATIONS)
             and [row["id"] for row in record["residuals"]] == list(REQUIRED_RESIDUALS),
             "the required obligations and residuals, in order")

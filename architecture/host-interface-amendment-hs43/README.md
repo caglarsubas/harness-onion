@@ -16,17 +16,17 @@ E01-E12 stay OPEN_UNPROVEN.
 
 | File | What it is |
 |---|---|
-| `amendment.json` | `planeon.internal.host-interface-amendment/v2`: the pinned W02D base and record; the owner decisions; eight counted substring replacements (five DECIDED, three EDITORIAL); one disposition per decision; six obligations; the closed list of 16 superseded clauses; two residuals; the stated non-amendments |
+| `amendment.json` | `planeon.internal.host-interface-amendment/v2`: the pinned W02D base and record; the owner decisions; eight counted substring replacements (five DECIDED, three EDITORIAL); one disposition per decision; eight obligations; the closed list of 17 superseded clauses; two residuals; the stated non-amendments |
 | `HOST_INTERFACE_SPEC.md` | The effective specification: the W02D effective text with the eight items applied |
 | `scripts/host_interface_amendment_v2.py` | The standard-library model. `check(read)` checks: the W02D record digest; the closed HS43 record; every superseded file's digest and its quoted clause; that applying the items to the pinned W02D bytes gives exactly the published bytes |
 
 The model leaves nothing free-standing in the amended text:
-- a DECIDED item must sit inside the section and lines it names, and only §4.3, §5.3 and §7 may change;
+- a DECIDED item must sit inside the section and lines it names; only §4.3, the §5.3 EFFECT_GATE row and the §7 BIND_EXECUTION row may change;
 - every owner decision is cited, and each disposition lists every item that cites it;
 - the title rename and the head sentence are fixed;
 - section 12 is rendered from the record alone;
 - the superseded clauses must be exactly the model's closed list, in order;
-- the two residuals and the six obligations must all be present, in order.
+- the five DECIDED items, the two residuals and the eight obligations must all be present, in order.
 
 ## Changes
 
@@ -72,7 +72,7 @@ SELinux then checks `file read` from the reader's domain on the target's domain.
 
 ## Superseded clauses (owner decision Q-HS43-2 (a))
 
-HS43 overrides 16 adopted clauses, quoted exactly in `amendment.json` and in §12. Their files stay byte-identical:
+HS43 overrides 17 adopted clauses, quoted exactly in `amendment.json` and in §12. Their files stay byte-identical:
 - The W01 base (`host-interface-inputs/corrected/`): both sides "authenticate exact installed peer artifacts" now
   follows §4.3: the gate does not authenticate the broker's artifact.
 - I05 v1, v2 and v3, Channel 2: the gate no longer verifies the broker's executable, and "The broker verifies the
@@ -81,6 +81,9 @@ HS43 overrides 16 adopted clauses, quoted exactly in `amendment.json` and in §1
   - the writer is qualified by its own §4.3 rule, not "the way it qualifies the broker";
   - its artifact check is the exact exe-link path, not a per-frame fs-verity digest.
 - W01 §7's "broker peer qualification digest" becomes the mutual record, through item H4.
+- Native profile v2's README "CAP_NET_BIND_SERVICE only with a signed port below 1024" now holds for the server only
+  (H5). The v3 schema and model still admit the gate capability, so O-NATIVE-GATE-NOCAP asks the next native profile
+  successor to refuse it.
 - Three statements each in the matrix v3 and v4 READMEs: the writer check also reads its gated exe link. The
   matrices' data are unchanged.
 
@@ -105,10 +108,12 @@ observer's captures need; the broker keeps the gate's exe link.
 | Id | Owner | Summary |
 |---|---|---|
 | O-SECCOMP-V3-READLINKAT | the next parallel-lane packet | The EFFECT_GATE `readlinkat` rule: a non-negative dirfd on the low 32 bits, one masked condition `(arg0 & 0x80000000) == 0` (direction accepted 2026-10-15); `readlink` unlisted; vectors for AT_FDCWD in both encodings and -1 |
-| O-W03-WRITER-EXE | W03 (HE-007) | Writer uid/gid 0, empty permitted set (the exec raises none), dumpable through a credential-free exec; gate fs uid/gid 0; a race-free pidfd; an oversized buffer; an exact path |
-| O-W03-PEER-EXE | W03 | Gate dumpable, uid/gid 0, no capability after the seal; broker fs uid/gid 0; race-free peer pidfds and start times (stat read, then pidfd poll) |
+| O-W03-WRITER-EXE | W03 (HE-007) | Writer uid/gid 0, started by an ordinary root exec (dumpable), then drops every capability itself with `capset` (host policy grants `process setcap`); gate fs uid/gid 0; a race-free pidfd; an oversized buffer; an exact path |
+| O-W03-PEER-EXE | W03 | Gate dumpable, uid/gid 0, no capability after the seal; broker fs uid/gid 0; race-free peer pidfds and start times (stat read, then pidfd poll); only the enrolled broker artifact labelled `planeon_broker_exec_t` |
 | O-MATRIX-WRITER-PROCACCESS | SELINUX-MATRIX-I04-KEYCERT | Evaluate narrowing the writer's `procAccess` to the gate |
 | O-MATRIX-GATE-PROCACCESS | SELINUX-MATRIX-I04-KEYCERT | Evaluate narrowing the server's and the observer's reads of the gate's gated entries |
+| O-MATRIX-GATE-NETBIND | SELINUX-MATRIX-I04-KEYCERT | Drop `net_bind_service` from the gate (A48), or record why it stays an upper bound |
+| O-NATIVE-GATE-NOCAP | the next native profile successor (primary lane) | Refuse CAP_NET_BIND_SERVICE and an I04 port below 1024 for EFFECT_GATE |
 | O-T04-HS43 | T04 | Native confirmation. The writer read succeeds. The broker read fails with EACCES, and the audited `capability sys_ptrace` denial is expected. The broker reads the gate. On x86_64 `readlink` kills the gate, and on both architectures `readlinkat` with AT_FDCWD in either encoding, or with -1, kills it. The path check refuses a longer path and " (deleted)" |
 
 ## Not amended

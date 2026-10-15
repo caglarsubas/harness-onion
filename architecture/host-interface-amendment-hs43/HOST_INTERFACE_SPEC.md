@@ -683,17 +683,17 @@ gives every change and its reason.
 
 | Item | Where | Decisions |
 |---|---|---|
-| H1 | 4.3 | Q-HE2S-10, Q-HE2S-7, Q-HE2S-9, Q-HE3A-1, Q-HS43-1, Q-HS43-2, Q-HS43-3 |
+| H1 | 4.3 | Q-HE2S-10, Q-HE2S-7, Q-HE2S-9, Q-HE3A-1, Q-HS43-1, Q-HS43-2, Q-HS43-3, HS43-GATE-RESIDUAL-CONFIRM |
 | H2 | 5.3 EFFECT_GATE row, capabilities | Q-HE3A-1 |
 | H3 | 5.3 EFFECT_GATE row, seccomp | Q-HE3A-1, Q-HE3A-1b, HS43-START, SECCOMP-DIRFD-DIRECTION |
-| H5 | 5.3 EFFECT_GATE row, capabilities | Q-HE2S-9 |
-| H4 | 7 | Q-HE2S-10, Q-HS43-2 |
+| H5 | 5.3 EFFECT_GATE row, capabilities | Q-HE2S-9, HS43-H5-CONFIRM |
+| H4 | 7 | Q-HE2S-10, Q-HS43-2, HS43-H4-CONFIRM |
 
 Adopted text HS43 overrides (each file stays byte-identical; HS43 governs, and a successor of that contract adopts it):
 
 | Superseded clause | In | Replaced by |
 |---|---|---|
-| "authenticate exact installed peer artifacts, manifest/trust custody, PID/start," | `architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md` | for I05 and I07, the rules of W01 §4.3 as amended by HS43: the gate does not authenticate the broker's artifact, while the broker still authenticates the gate's and the gate the writer's (H1) |
+| "authenticate exact installed peer artifacts, manifest/trust custody, PID/start," | `architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md` | for I05 and I07, the rules of W01 §4.3 as amended by HS43: the gate does not authenticate the broker's installed artifact or its manifest/trust custody per frame; those rest on the broker's label, whose only entrypoint is the enrolled artifact's type (O-W03-PEER-EXE), while the broker still authenticates the gate's artifact and the gate the writer's (H1) |
 | "PID/start identity, executable, label and cgroup" | `architecture/i05-gate-channel/README.md` | the gate verifies the broker's SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, label and cgroup, not its executable (W01 §4.3 as amended by HS43) (H1) |
 | "The broker verifies the gate's frames the same way" | `architecture/i05-gate-channel/README.md` | the broker verifies the gate's frames by SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, executable, label and cgroup: its own list, which HS43 does not narrow (H1) |
 | "PID/start identity, executable, label and cgroup" | `architecture/i05-gate-channel-v2/README.md` | the gate verifies the broker's SO_PEERCRED and SCM_CREDENTIALS, pidfd/start, label and cgroup, not its executable (W01 §4.3 as amended by HS43) (H1) |
@@ -703,6 +703,7 @@ Adopted text HS43 overrides (each file stays byte-identical; HS43 governs, and a
 | "qualifies the writer peer the way it qualifies the broker" | `architecture/i07-policy-write/README.md` | qualifies the writer peer by its own W01 §4.3 rule (HS43), which keeps the artifact check the broker's no longer has; inherited by I07 v2 and v3 (H1) |
 | "writer artifact `/opt/planeon/bin/harness-policy-write` (fs-verity digest under its signed manifest, §4.2)" | `architecture/i07-policy-write/README.md` | the writer's exe link equal to the enrolled path exactly, with no " (deleted)"; the fs-verity digest is enforced on the sealed file at enrollment, not re-measured per frame (HS43); inherited by I07 v2 and v3 (H1) |
 | "and the broker peer qualification digest (§4.3)" | `architecture/host-interface-amendment-w02d/HOST_INTERFACE_SPEC.md` | the peer-qualification digest of the gate's mutual qualification record, whose gate-side half HS43 narrows (H4) |
+| "CAP_NET_BIND_SERVICE only with a signed port below 1024" | `architecture/native-profile-v2/README.md` | for the server only; EFFECT_GATE holds none, because its signed I04 port is 1024 or above (W01 §5.3 as amended by HS43, H5; O-NATIVE-GATE-NOCAP) (H5) |
 | "Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries" | `architecture/selinux-matrix/README.md` | the gate's check of the writer also reads the writer's ptrace-gated exe link (HS43); matrix.json is unchanged (H1) |
 | "Executable identity follows from the peer's label" | `architecture/selinux-matrix/README.md` | for the broker; the writer's executable is also checked through its exe link (HS43) (H1) |
 | "Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; executable identity" | `architecture/selinux-matrix/README.md` | as above: the gate also reads the writer's exe link (HS43) (H1) |
@@ -719,4 +720,4 @@ The data follow in order (Q-HE3A-1b): the W02d v3 allowlist (`architecture/secco
 EFFECT_GATE `readlinkat` rule in its own packet, then the EFFECT_GATE programs and the edge record are republished,
 then R10 re-vendors them and adds the check.
 
-Obligations: O-SECCOMP-V3-READLINKAT (the allowlist rule), O-W03-WRITER-EXE (the writer's credentials and dumpability, and the read bound to the frame's process), O-W03-PEER-EXE (the gate readable by the broker, and race-free peer pidfds), O-MATRIX-WRITER-PROCACCESS (narrowing the writer's /proc readers, residual R-WRITER-PROC), O-MATRIX-GATE-PROCACCESS (narrowing the gate's /proc readers, residual R-GATE-PROC), O-T04-HS43 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.
+Obligations: O-SECCOMP-V3-READLINKAT (the allowlist rule), O-W03-WRITER-EXE (the writer's credentials and dumpability, and the read bound to the frame's process), O-W03-PEER-EXE (the gate readable by the broker, race-free peer pidfds, and the broker's label), O-MATRIX-WRITER-PROCACCESS (narrowing the writer's /proc readers, residual R-WRITER-PROC), O-MATRIX-GATE-PROCACCESS (narrowing the gate's /proc readers, residual R-GATE-PROC), O-MATRIX-GATE-NETBIND (the gate's net_bind_service grant), O-NATIVE-GATE-NOCAP (the native profile's gate capability rule), O-T04-HS43 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.
