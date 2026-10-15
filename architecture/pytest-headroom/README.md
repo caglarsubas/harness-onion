@@ -9,7 +9,8 @@ took 901.5 s under a load of 13 to 14, and the whole run took 1232.7 s. Its requ
 
 Owner decision Q-PERF39-1 (a), 2026-10-15, relayed by the lane monitor, raises the suite's worker count from 4 to 6
 with nothing else changed. After the correction below, the owner confirmed it the same day: "proceed with 6 workers, no
-weight refresh". Both decisions are quoted in `workers.json`.
+weight refresh", and again after seeing the corrected gain and the 1200 s cap note: "proceed with 6 workers". All
+three decisions are quoted in `workers.json`.
 
 | Setting | Path | Before | After |
 |---|---|---|---|
