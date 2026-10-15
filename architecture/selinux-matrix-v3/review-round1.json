@@ -1,0 +1,111 @@
+{
+ "round": 1,
+ "subject": "a945229e4f4f3a1b0591d6a19797a487fa77a984",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "XR1-1",
+   "severity": "MAJOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 254,
+   "summary": "v5 re-publishes, verbatim, the three matrix v4 README clauses that HS43 supersedes, instead of adopting HS43's replacement texts, and they contradict v5's own HS43 section. Required: replace the clauses at README:254, :256 and :433 with HS43's replacements (or equivalent wording that cites HS43). The gate's check of the writer also reads the writer's ptrace-gated exe link. Executable identity from the label applies to the gate's check of the broker. The broker's check of the gate reads the gate's exe link.",
+   "evidence": "HS43 HOST_INTERFACE_SPEC.md:692: 'Adopted text HS43 overrides (each file stays byte-identical; HS43 governs, and a successor of that contract adopts it)'. HOST_INTERFACE_SPEC.md:710-712 and amendment.json supersedes[14..16] list three clauses for architecture/selinux-matrix-v2/README.md: 'Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries', 'Executable identity follows from the peer's label', and 'Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; executable identity'. v5 is that contract's successor (README:6), yet grep -F finds all three unchanged in the v5 README at lines 254, 256 and 433. v5's own README:38-49 says three things those clauses deny: the gate checks the writer's executable on every I07 frame, the broker checks the gate's artifact, and P1 reads the gate's /proc/<pid>/exe. All three are ptrace-gated reads. Because v5 is dated after HS43, the re-published text can be read as putting the superseded rule back in force."
+  },
+  {
+   "id": "XR1-2",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 24,
+   "summary": "The gate's grant on the two parent cgroups is wider than the monitor's approved Q-MX-5 (a) shape, which was 'dir search on its two parents'. The README's description of the READ group is also incomplete. Two ways to fix it: (a) express search-only access on the parents, which needs a model change, and tighten A38/A39.<parent> to match; or (b) record an explicit monitor or owner confirmation of the full READ group as an upper bound. In both cases, list the group's permissions correctly.",
+   "evidence": "owner_decisions.json SLOT240-FACTS-2-AND-Q-MX: 'Q-MX-5 = (a): as you specified (gate READ on planeon_cgroup_worker_t, dir search on its two parents, procAccess gate->planeon_worker_t, ...)'. The design draft that was put to the monitor asked for 'dir search on planeon_cgroup_slice_t and planeon_cgroup_delegate_t'. matrix.json instead gives planeon_gate_t the whole READ group on both types, for both dir and file. In selinux_matrix_v3.FILE_PERMS, READ is read, open, getattr, map, ioctl, lock, search, watch, watch_reads, watch_mount, watch_sb, watch_with_perm and audit_access. README:24-25 says the group is 'dir search, open, read and getattr, and file open and read', which leaves out file getattr, map, ioctl, lock, the watch permissions and audit_access. A38.planeon_cgroup_slice_t, A39.planeon_cgroup_slice_t and A38/A39.planeon_cgroup_delegate_t allow the gate, so the assertions pin the wider grant. The README says 'It is not search alone' but does not say that this departs from the approved wording or that anyone confirmed the departure."
+  },
+  {
+   "id": "XR1-3",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 330,
+   "summary": "The F2 section still says that only init, containment, the reader roles and the broker can open or read planeon cgroup controls. In v5 the gate opens and reads three planeon cgroup types. Update item 1 and the closing sentence (README:347-348) to name the gate on the slice, the delegated service cgroup and the probe-worker leaf (A38/A39.<type>). Also state that its descriptors grant no write (A40-A43). For example, CLONE_INTO_CGROUP needs write on the common ancestor's cgroup.procs (cgroup_attach_permissions, then cgroup_procs_write_permission), and the gate lacks it on the slice.",
+   "evidence": "README:328-331: '... needs `open` and `read` or `write` on `planeon_cgroup_*_t`. Only init, containment, the reader roles and the broker get them, each within its rows (A38-A43; F02, F03).' README:347-348: 'no domain outside the enumerated ones can read, write or detach planeon cgroup controls'. On the v5 matrix, allowed(ENROLLED_SEALED, planeon_gate_t, planeon_cgroup_worker_t, file, read) is True (Q51), and so are dir search, open and read on the slice and delegate types (Q52, Q53; the allow lists of A38/A39.<type>). The Assertions table row at README:292 was updated; the F2 section was not."
+  },
+  {
+   "id": "XR1-4",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/matrix.json",
+   "line": 1396,
+   "summary": "HS43 H5 says the gate holds no capability, but the assertions pin this only for capability net_bind_service (A48). v5's safety argument for the new gate-to-worker /proc grant depends on the gate holding no CAP_SYS_PTRACE, and no assertion pins that. A grant of cap_userns net_bind_service also passes every assertion (brief question 4). Add deny assertions that the gate holds nothing in capability, capability2, cap_userns and cap2_userns (sources [planeon_gate_t], allow []). Add mutations for at least capability sys_ptrace and cap_userns net_bind_service.",
+   "evidence": "Probe on a scratch copy: for each of the 82 single-capability grants, apply_ops set capabilities[planeon_gate_t] to that one grant, then ran check_matrix and failed_assertions. 78 of the 82 pass all 126 assertions. Only four are caught: capability dac_read_search (A45), cap_userns dac_read_search (A46), capability sys_admin (A47) and capability net_bind_service (A48, as M56 shows). Grants that pass include capability sys_ptrace, dac_override, setuid and net_admin, and cap_userns net_bind_service. README:28-29 depends on 'the gate holds no CAP_SYS_PTRACE (or any capability), so the gate reaches only the worker's ungated entries'. HS43 amendment.json dispositions[2] depends on 'The gate holds no capability (H5), so its permitted set lies inside the broker's', which is what lets the broker read the gate's exe link under commoncap cap_ptrace_access_check. Kernel basis (Linux v6.12): __ptrace_may_access lets a caller whose uid differs from the worker's through only with ptrace_has_cap(CAP_SYS_PTRACE). With sys_ptrace, the new procAccess entry (procAccess[47]) would expose the worker's gated entries: environ, maps and the fd links. The data is correct as written: the gate has no capabilities key and allowed() returns False. This is a gap in the assertions, not a wrong grant. A sys_ptrace grant to the server, observer or broker also passes every assertion, although W01 §5.3 says 'no CAP_SYS_PTRACE' for all roles. That gap predates v5."
+  },
+  {
+   "id": "XR1-5",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 21,
+   "summary": "The README presents both HS43 /proc evaluations as settled ('Evaluated'; 'Outcome: not narrowed') and never says that the monitor sent Q-MX-2 and Q-MX-3 to the owner. 'Still open' lists only a later native-profile successor. State that both outcomes are provisional until the owner answers Q-MX-2 and Q-MX-3, and list both questions under 'Still open'. Otherwise, publish only after the owner answers.",
+   "evidence": "owner_decisions.json SLOT240-FACTS-2-AND-Q-MX: 'Q-MX-2 and Q-MX-3: re-frame for the owner.' REVIEW_BRIEF.md:50-51: they 'go to the owner. Until they are answered, the contract keeps both peer sets and records why.' grep finds neither 'Q-MX-2' nor 'Q-MX-3' in the README. README:21 says 'Evaluated. Both peer sets stay as they are'. README:39 and :47 say 'Outcome: **not narrowed**'. README:529 lists only 'The narrowing ... once a native-profile successor names the capturing role'. The reasons themselves are correct. Native profile v3 P5 (README:72-75) counts processes per planeon domain, including the writer's. P1 (README:60) records /proc/<pid>/exe. The native-profile v3 schema names only the inspected role, and F-CAP-1 states that no published contract names the capturing role."
+  },
+  {
+   "id": "XR1-6",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 112,
+   "summary": "The Files row says matrix.json holds '109 deny assertions', which is v4's count. v5 has 126. Change it to 126.",
+   "evidence": "README:112: '... per-source closures and 109 deny assertions'. README:279: '126 deny properties'. matrix.json has 126 assertions (builder output 'assertions 126'), and v4 had 109. The other counts in the row and in the vectors row are correct: 19 domains, 58 types, 17 transitions, and 2,368 access checks (611 allow, 1,749 deny, 8 outside) with 65 mutations."
+  },
+  {
+   "id": "XR1-7",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 34,
+   "summary": "The kernel facts the brief asks about hold for Linux v6.12, but some statements in the v5 text are overstated or incomplete. (1) README:34-36 'a reader keeps either all of a target's entries or none' is only true of the matrix's single procAccess group. (2) README:250-252 leaves out the dumpable precondition. (3) The list '(stat, status, cgroup)' at README:29 reads as complete, but it is not. (4) The empty slice cgroup.procs at README:26-27 is observed in native profile v3 P5, not inferred from the cgroup v2 rule. None of these changes an outcome.",
+   "evidence": "Confirmed from my own knowledge of v6.12. pid_update_inode calls security_task_to_inode (selinux_task_to_inode), which labels every /proc/<pid> inode with task_sid_obj(target). __ptrace_may_access requires the caller's (fs)uid and gid to match the target's uid, euid, suid and gids, or ptrace_has_cap(CAP_SYS_PTRACE). It then checks get_dumpable() == SUID_DUMP_USER, then runs cap_ptrace_access_check and selinux_ptrace_access_check, which checks file read on the target SID for PTRACE_MODE_READ. Under ptrace_scope 3, yama_ptrace_access_check refuses only PTRACE_MODE_ATTACH. mem_open needs ATTACH (via __mem_open), and so does process_vm_rw (via mm_access with PTRACE_MODE_ATTACH_REALCREDS). Path walks check dir search per component through may_lookup, inode_permission and selinux_inode_permission, on genfs-labelled kernfs nodes. The worker runs as a signed uid of at least 10000 and the gate as uid 0 (resolved spec §5.3), so the gate reaches only ungated entries. Details of the four points: (1) SELinux distinguishes permissions, not only domains. readlink of /proc/<pid>/exe needs dir search, lnk_file read (selinux_inode_readlink) and file read through the ptrace hook, but no file open. environ, maps and status need file open (open_perms). The model cannot express that split, and P1/P6 may need status anyway, so the outcome stands; HS43 framed it the same way. (2) HS43's R-GATE-PROC and R-WRITER-PROC both rest on the dumpable precondition. (3) cmdline, comm, statm, limits and mountinfo are also ungated, and so is attr/current given process getattr. (4) The 'no secret' conclusion does not depend on how emptiness is established."
+  },
+  {
+   "id": "XR1-8",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 482,
+   "summary": "G1 is only half closed. 'Booleans and states' (README:154-155) now names W01's record. The round-3 disposition row for K1 still says 'carried to W02a-F and T04'. Add W01's record there too.",
+   "evidence": "v4 review-round2.json G1 requiredChange: 'add W01's record to the two remaining K1 mentions, or point them to the introduction'. README:22 says G1 is done. README:482 is unchanged from v4."
+  },
+  {
+   "id": "XR1-9",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 30,
+   "summary": "The citation '(A42, N08)' covers only the time before the seal: A42's only state is ENROLLED_CONTAINMENT. After the seal, the probe worker's cgroup.kill and cgroup.procs are protected by A43. Cite A42 and A43.",
+   "evidence": "matrix.json: A42 has states [ENROLLED_CONTAINMENT]. A43 has states [ENROLLED_SEALED, MAINTENANCE_BOOT] with allow [init_t, planeon_broker_t]. Mutation M61 (gate WRITE on planeon_cgroup_worker_t) fails A42 and A43."
+  },
+  {
+   "id": "XR1-10",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 75,
+   "summary": "The README cites 'the matrix's one-type-per-credential rule' right next to a type, planeon_gate_i04_cert_t, that holds two objects: the serving chain and the client CA. Folding them into one type is allowed (F-I04-2) and is argued correctly at README:73-74: both are public, sha256-pinned, read only by the gate and written only by maintenance. Reword the rule, for example as one type per secret credential, with public material that has the same single reader allowed to share a type.",
+   "evidence": "README:69-76. matrix.json planeon_gate_i04_cert_t: READ gate only. A67 is tight: its allow list equals the set of domains that can reach the type."
+  },
+  {
+   "id": "XR1-11",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 61,
+   "summary": "README:61-63 says how the server holds its trust anchor and its own client credential 'is not fixed by any published contract'. Resolved spec §4.2 does fix the mechanism: the server pins the endpoint SPKI and keeps its own KUBERNETES_PROXY_SERVER_MTLS credential. What is not fixed is which files and types hold them. The monitor's fact said 'isn't fixed in any W03 design'. The conclusion that the server reads none of the gate's files is unaffected.",
+   "evidence": "architecture/host-interface-inputs/resolved/HOST_INTERFACE_SPEC.md:288-290; owner_decisions.json F-I04-1."
+  },
+  {
+   "id": "XR1-12",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/REVIEW_BRIEF.md",
+   "line": 58,
+   "summary": "The brief's question-1 list of disclosed changes leaves out A59.planeon_worker_t gaining the gate. README:20 discloses that change.",
+   "evidence": "Structural diff of v4 against v5: the only differences are assertions[8,19,20,43,45,46,55,103] plus 17 appended assertions, the gate's capabilities key removed, procAccess[47] appended, types[40,45,47] changed and types[56,57] appended, and schemaVersion. Index 103 is A59.planeon_worker_t, which adds planeon_gate_t to its allow list. Every other difference matches the brief's list."
+  },
+  {
+   "id": "XR1-13",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 20,
+   "summary": "The README does not say what the gate reads from the worker's /proc. Counting the probe worker's processes from the cgroup needs only search on the three directories and open/read of the leaf's cgroup.procs. The procAccess grant is the owner's (Q-HE3D-2 (a), Q-MX-5 (a)). One sentence on what it is for, such as checking each counted PID's label or state, would let the I05 successor be checked against it.",
+   "evidence": "owner_decisions.json Q-HE3D-2. matrix.json procAccess[47] = {planeon_gate_t -> planeon_worker_t}, which grants dir, file and lnk_file READ plus process getattr."
+  }
+ ]
+}

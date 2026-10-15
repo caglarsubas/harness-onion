@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-039
+## Current source preparation — MET-ENFORCE-028
+
+MET-ENFORCE-028 (SELINUX-MATRIX-I04-KEYCERT): SELinux matrix v5, the successor of the byte-identical v4. The gate's I04
+mutual-TLS material gets two types read by the gate alone (`planeon_gate_i04_key_t`, `planeon_gate_i04_cert_t`); the gate
+holds no capability (HS43 H5); it reads the probe-worker cgroup, only searches its two parents and reads the worker's
+ungated /proc (Q-HE3D-2 (a)); the observer takes the native profile's captures, and the writer's and the gate's /proc
+narrow to {gate, observer} and {broker, observer} (Q-MX-2 (b), Q-MX-3 (b)). DATA_CHECK_ONLY. Alpha2 OPEN; 238 accepted
+plus MET-ENFORCE-028 only.
+
+## Historical pytest-headroom source preparation — MET-PERF-039
 
 MET-PERF-039 (PERF-039): the parallel suite's worker count rises from 4 to 6 (owner Q-PERF39-1 (a)) to restore the
 outer pytest's headroom under the 900 s worker deadline. Measured once each on main e7516160 with four, six and eight
@@ -1163,6 +1172,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 110. `MET-ENFORCE-026`: publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest; a closed list of 17 overridden clauses, two residuals, eight obligations); W02D, the W01 inputs and the overridden files unchanged; specification only.
 111. `MET-ENFORCE-027`: publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change); v3 and HS43 unchanged; DATA_CHECK_ONLY.
 112. `MET-PERF-039`: raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; ci/ transport change.
+113. `MET-ENFORCE-028`: publish SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); v3, v4, HS43 and the native profile unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

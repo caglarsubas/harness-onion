@@ -1,0 +1,39 @@
+{
+ "round": 4,
+ "subject": "9c87690d1bc4708093cddc5e40314a44fabbdd09",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "XR4-1",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 326,
+   "summary": "XR3-1 is closed in the change table (README:20), which now discloses that A09 and A67 cover every READ permission. The Assertions table still uses the older short descriptions, 'A09 covers the gate's I04 private key as well' (README:326) and 'Only the gate reads its I04 serving chain and client CA' (README:340). Aligning these two rows with the change table would make the README consistent.",
+   "evidence": "matrix.json: A09 and A67 list all 13 READ permissions. README:20 states the coverage. README:326 and :340 are unchanged since round 2."
+  },
+  {
+   "id": "XR4-2",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/REVIEW_BRIEF.md",
+   "line": 76,
+   "summary": "The brief's question-1 list of changes to v4 data names A59.planeon_worker_t but not the allow-list changes of A59.planeon_policy_writer_t and A59.planeon_gate_t. Both are v4 assertions and both keep their indices. README:23 and the brief's question 6 do cover them.",
+   "evidence": "Comparing matrix.json with v4 by index, the changed v4 assertions are: A09 (perms, ref, statement, targets); A12, A13 and A36 (targets); A38, A39 and A48 (allow, ref, statement); A59.planeon_worker_t, A59.planeon_gate_t and A59.planeon_policy_writer_t (allow). Every other v4 assertion is unchanged, and v4 assertion indices 0-108 are stable."
+  },
+  {
+   "id": "XR4-3",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 61,
+   "summary": "'No other reader role could either' holds for reading another role's image, but it misses the obvious route for the carried P1 captures: self-capture. A process can always read its own exe link, and a second process in the same domain passes both the uid rule and the capability rule. So the broker, a low-port server and the worker can each capture their own image. Naming this route would help the native-profile successor that receives the carry.",
+   "evidence": "Kernel basis (Linux v6.12): __ptrace_may_access returns 0 at once for same_thread_group(task, current). Between two processes with the same uid and the same permitted capabilities, the uid check passes and so does cap_ptrace_access_check (cap_issubset of equal sets), provided the target is dumpable. A domain's own /proc is outside the matrix (vector O03), so no procAccess entry is needed."
+  },
+  {
+   "id": "XR4-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 80,
+   "summary": "Two points on how the owner decision is recorded; neither changes the data.\n(1) Scope. The owner's words 'The server and broker lose the reads they have no duty for' are applied to the three writer and gate pairs. The README should say so explicitly. In v4 the server's and broker's remaining /proc reads (of the observer, containment, the worker, the backend components and Pods) were also justified as reader-role captures. P1 and P5 now go to the observer, while backend captures are still unassigned. If the owner meant the decision more broadly, those reads need the same treatment, through a further question.\n(2) Provenance. README:81 says the owner chose (b) 'after seeing the analysis above'. That analysis now includes the capability limit added after XR3-2: the observer cannot capture the broker's image, a low-port server's or the worker's. If the owner decided before that paragraph existed, write 'after seeing the options analysis', and have the monitor confirm the owner knows that P1's broker capture is carried. The narrowing itself stays sound, because no reader can capture these images whichever role is designated.",
+   "evidence": "owner_decisions.json Q-MX-2-3-OWNER: '... after seeing your analysis, chose your recommendation ... The server and broker lose the reads they have no duty for'. README:23 and :67-77 apply this to server->writer, broker->writer and server->gate only. The matrix keeps the server's and broker's other v4 procAccess entries (procAccess: READERS x INSPECTED). XR3-2, which added the capability-limit text, was raised in round 3, while the owner decision was being recorded (commit a8aaea15)."
+  }
+ ]
+}

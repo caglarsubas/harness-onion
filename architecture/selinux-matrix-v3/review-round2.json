@@ -1,0 +1,55 @@
+{
+ "round": 2,
+ "subject": "93ff9efd4d6be04ffa4741ced7bdf11fb87f1f76",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "XR2-1",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 279,
+   "summary": "The text added to fix XR1-1 says 'the native profile's P1 role captures read each role's exe link'. The bullet just above it says that 'no role reads the other-uid worker's ... gated entries'. The WORKER is one of the roles P1 captures, and its exe link is a gated entry the kernel refuses to every reader. Limit the P1 statement to the uid-0 roles. Also state that P1's WORKER exe capture is refused by the uid rule, and carry that to the native-profile successor.",
+   "evidence": "README:274-276 says the uids must match unless CAP_SYS_PTRACE, which no role holds, and that 'no role reads the other-uid worker's or the kubelet's gated entries'. README:279 and README:465 say the P1 role captures read each role's exe link. Native profile v3 P1 (native-profile-v3/README.md:60) says 'Each role capture records the process image (/proc/<pid>/exe: path, device, inode) of the inspected process and of every cgroup member', and the capture schema's role enum includes WORKER. Resolved spec §5.3 gives the WORKER a signed uid of 10000..2147483647 and every reader uid 0, with no CAP_SYS_PTRACE for any role. Kernel basis (Linux v6.12): reading or stat-ing /proc/<pid>/exe goes through proc_pid_get_link, then proc_fd_access_allowed, then ptrace_may_access(PTRACE_MODE_READ_FSCREDS). In __ptrace_may_access, a mismatched fsuid fails unless ptrace_has_cap(CAP_SYS_PTRACE). The tension between P1 and the matrix predates v5; v5 now states both sides as fact."
+  },
+  {
+   "id": "XR2-2",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 208,
+   "summary": "Several rows still describe the gate's parent-cgroup grant as it was before the XR1-2 narrowing. (1) The Cgroups row (README:208) says the gate has READ 'on the slice, the delegated service cgroup and the probe-worker leaf'; it now has READ on the leaf only and dir search alone on the two parents. (2) The 'A38.*, A39.* (v5)' row (README:328) says each type is 'searched, opened and read only by its own readers (the gate only on the slice, the delegated service cgroup and the probe-worker leaf)'. A38.<parent> and A39.<parent> now exclude the gate and do not cover search, which A38S.<parent> covers. (3) The spec-mapping rows leave out A38S.* (README:556) and A68.* (README:554). Correct all of them.",
+   "evidence": "matrix.json: types[40] and types[45] give the gate READ entry {classes: [dir], perms: [search]}. A38.planeon_cgroup_slice_t and A38.planeon_cgroup_delegate_t have perms [open, read, getattr] and allow lists without planeon_gate_t, and the same holds for A39.<parent>. A38S.<parent> has perms [search] and allows the gate. README:23, :29-31, :317 and :360-361 were updated correctly; README:208, :328, :554 and :556 were not."
+  },
+  {
+   "id": "XR2-3",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 277,
+   "summary": "The exception list now attached to 'Captures and peer checks therefore use ... ungated entries' names the gate's check of the writer and the P1 captures. It leaves out the broker's check of the gate, which reads the gate's exe link (HS43 H1: 'the broker still authenticates the gate's artifact'; R-GATE-PROC). HS43's own replacement text for this clause leaves it out too, so v5 follows HS43 to the letter. README:60 states the broker check. Adding it to the exception list would make the list complete.",
+   "evidence": "HS43 HOST_INTERFACE_SPEC.md:696 (the supersedes row for the corrected spec) and amendment.json dispositions[1]: 'The gate stays dumpable, so the broker can read its exe link'. v5 README:59-60: 'the broker, which checks the gate's artifact (HS43)'."
+  },
+  {
+   "id": "XR2-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 560,
+   "summary": "The XR1-5 fix is mostly in place: the change-table row and the HS43 /proc section now say the decision is the owner's and open (Q-MX-2, Q-MX-3), and they list the options. 'Still open' still presents the /proc narrowing as waiting for a native-profile successor to name the capturing role. It does not mention the owner's open decision, even though option (b) would narrow without waiting for a successor. Name Q-MX-2 and Q-MX-3 there.",
+   "evidence": "README:560: 'The narrowing of the writer's and the gate's `/proc` peers once a native-profile successor names the capturing role.' README:42-44 and :65-72 say the owner's decision is open and list options (a)-(c)."
+  },
+  {
+   "id": "XR2-5",
+   "severity": "NOTE",
+   "file": "scripts/selinux_matrix_v3.py",
+   "line": 97,
+   "summary": "The narrowed-grant extension is closed in check_matrix and exact in allowed(), and it leaves v4 semantics unchanged. It does, however, make the READ group non-atomic, while the existing assertions check only some of its permissions: A09 and A67 check read and open, A38/A38S check search, open, read and getattr, and A39 checks open and read. A narrowed grant that lists only unchecked READ permissions therefore passes every assertion. The exposure is metadata at most, because none of those permissions opens the file, so this does not block. Consider extending the per-type and credential assertions to the whole READ group, or restricting in check_matrix which permissions a narrowed grant may list.",
+   "evidence": "Probe on a scratch copy. Each single-permission widening of the gate's parent grant, {classes: {dir, C}, perms: {search, P}}, was checked. 19 widenings pass all 132 assertions on each parent: dir map, ioctl, lock, watch, watch_reads, watch_mount, watch_sb, watch_with_perm and audit_access, and file map, ioctl, lock, search, watch, watch_reads, watch_mount, watch_sb, watch_with_perm and audit_access. A server READ entry {classes: [file], perms: [getattr]} on planeon_gate_i04_key_t also passes every assertion. Closure checks: check_matrix refuses a narrowed ANY_DOMAIN grant, empty lists, a class the type lacks, non-list values, extra keys, non-READ groups (M71) and a missing list (M72). The v5 allowed() reproduces all v4 access vectors on the v4 matrix, and failed_assertions on v4 is []."
+  },
+  {
+   "id": "XR2-6",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 275,
+   "summary": "Cosmetic. README:274-276 has a broken wrap ('So the gate cannot read the / broker's `exe`, and no role reads the / other-uid worker's ...'). In matrix.json, A67 now comes after the four A68.<class> assertions (index 131). No v4 index is affected.",
+   "evidence": "README:274-276. matrix.json:3269 (A68.capability) and :3433 (A67)."
+  }
+ ]
+}
