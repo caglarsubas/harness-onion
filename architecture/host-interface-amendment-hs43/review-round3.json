@@ -1,0 +1,63 @@
+{
+ "round": 3,
+ "subject": "f7e5cc086c9322f331dec7a5902bb290d176cc8b",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "HR3-1",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+   "line": "441 (H5, EFFECT_GATE row, capabilities); architecture/host-interface-amendment-hs43/amendment.json (H5, notAmended)",
+   "summary": "H5 makes the gate's capability set 'None' (Q-HE2S-9 (a)). Four adopted data contracts still let the gate hold CAP_NET_BIND_SERVICE with a signed port below 1024, and HS43 records none of them. They are not in the closed list, not carried as obligations, and not mentioned in notAmended. notAmended in fact keeps 'SELinux matrix v4's matrix.json' as unchanged. These are silent supersessions introduced by H5.",
+   "evidence": "architecture/native-profile-v3/qualification.schema.json, $defs/roles/properties/EFFECT_GATE/capabilities: enum [[], [\"CAP_NET_BIND_SERVICE\"]]. scripts/native_qualification_v3.py:327-328: 'CAP_NET_BIND_SERVICE only for a signed port below 1024'. architecture/native-profile-v2/README.md:77: 'CAP_NET_BIND_SERVICE only with a signed port below 1024'. Both native-profile contracts are ADOPTED_DATA_CONTRACT. architecture/selinux-matrix-v2/matrix.json:1394 (A48) and selinux-matrix/matrix.json:1394: 'CAP_NET_BIND_SERVICE only for systemd, the server and gate (enrolled only with a signed port below 1024), ...'. Both matrices grant planeon_gate_t 'capability net_bind_service'; README A45-A48 (v4:220, v3:184) list the gate. Scenario: a qualification record with EFFECT_GATE capabilities [CAP_NET_BIND_SERVICE] and a signed I04 port of 443 passes native-profile v3 but breaks W01 §5.3 as amended by H5. The broker's read of the gate's exe link then fails (the gate's permitted set is outside the broker's), so the broker never connects. This fails closed, but the contracts disagree. Required: carry these as obligations for their successors (the queued matrix amendment SELINUX-MATRIX-I04-KEYCERT: drop the gate from A48 and its grant; the native-profile successor: EFFECT_GATE capabilities [[]]), or add the text clauses to the closed list. H5 is still pending the monitor; if H5 is dropped, say in §12 that Q-HE2S-9 forecloses the branch instead."
+  },
+  {
+   "id": "HR3-2",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "O-W03-WRITER-EXE (obligations[1].text)",
+   "summary": "O-W03-WRITER-EXE's only concrete mechanism, 'SECBIT_NOROOT and an empty bounding set in the starter', cannot be carried out by the starter. Both steps need CAP_SETPCAP, and planeon_admin_t, the only domain that may start the writer, does not hold it in matrix v4.",
+   "evidence": "Linux v6.12, from my own knowledge: PR_SET_SECUREBITS (cap_task_prctl) and PR_CAPBSET_DROP (cap_prctl_drop) both return EPERM without CAP_SETPCAP, and SELinux then checks 'capability setpcap' for the caller. matrix.json: EXECUTE on planeon_policy_writer_exec_t belongs only to planeon_admin_t. planeon_admin_t's capabilities are closed: chown, dac_override, fowner, fsetid, kill, setgid, setuid, net_bind_service, sys_boot, sys_nice, sys_resource, audit_write (no setpcap; README decision 6). A route that works: a root starter whose permitted set covers its bounding set (an ordinary root login). Its exec gives permitted = bounding (cap_bprm_creds_from_file), which is a subset of the starter's, so commit_creds keeps the writer dumpable. The writer then empties its own sets with capset before it installs its filter. Dropping needs no capability, but it does need SELinux 'process setcap' for planeon_policy_writer_t, which matrix v4 does not model, and the writer's filter has no capset. Required: replace the example with that route, or name a starter that holds setpcap."
+  },
+  {
+   "id": "HR3-3",
+   "severity": "NOTE",
+   "file": "scripts/host_interface_amendment_v2.py",
+   "line": "54-82, 240-260",
+   "summary": "Probes re-run. The required residuals and obligations and the section limit now refuse P2b, P5c and P12-P14, and the round-2 refusals still hold. Still ACCEPTED: free text in the replacement and residual fields, any DECIDED edit inside §5.3 or §7, and removing H5.",
+   "evidence": "REFUSED: P2, P2b (an extra residual), P3, P4, P5 (mislabelled), P5c (§2.4), P6, P7, P8, P9, P10, P11, P11b, P12, P13, P14, P16 (an extra obligation). ACCEPTED: P2c (an I05 replacement rewritten); P2d (R-WRITER-PROC text replaced by 'The gate may exec the writer artifact.'); P5b (BROKER row 'execute on any type', labelled 5.3); P5d (§7 ARM_ACTION row rewritten to 'Runs no flush', labelled 7); P5e (WORKER uid set to 0, labelled '5.3 WORKER row'); P15 (H5 removed with its disposition entry). check() passes on the worktree (8 items, 16 superseded clauses, 2 residuals, 6 obligations, effective 2c54f65e...). Optional: bind each DECIDED item to its row (the EFFECT_GATE row, the BIND_EXECUTION row) rather than to a whole section."
+  },
+  {
+   "id": "HR3-4",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "dispositions (Q-HS43-2, Q-HS43-3, Q-HE2S-9); residuals[1]",
+   "summary": "Two additions are pending monitor confirmation, and one summary is stale.",
+   "evidence": "(a) H5 cites Q-HE2S-9 (a), whose text ('signed I04 port >= 1024 (gate keeps no capability after the seal)') does not mention W01 §5.3. (b) R-GATE-PROC and O-MATRIX-GATE-PROCACCESS cite Q-HS43-3, whose text covers only the writer, together with Q-HE2S-7. The README heads both residuals 'owner decision Q-HS43-3 (a)'. Both additions exceed the decisions' wording until the monitor confirms them, as the author flagged. (c) The Q-HS43-2 disposition summary still lists '(I05 v1-v3, I07 v1 ..., W01 §7, the matrix v4 README)'. It omits the W01 base clause, the three I05 'same way' rows and the matrix v3 rows now in the 16-clause list."
+  },
+  {
+   "id": "HR3-5",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "O-MATRIX-WRITER-PROCACCESS, O-MATRIX-GATE-PROCACCESS; architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md 715-716",
+   "summary": "The two procAccess obligations imply SELinux can narrow the gated entries alone. It cannot: gated and ungated /proc entries carry the same label and are checked with the same permission.",
+   "evidence": "From my own knowledge of v6.12. Every /proc/<pid> inode takes the task's SID (selinux_task_to_inode). The ptrace-read LSM check is 'file read' on that SID (selinux_ptrace_access_check), the same permission a read of stat, status or cgroup needs. environ and maps are class file, like stat and status, so dropping them through procAccess also drops the captures' ungated reads. Only class lnk_file (exe, cwd, root, fd/*) separates. Native-profile v3 P1 also records every role's /proc/<pid>/exe (README:60), so whoever captures the gate needs its exe link, not only the broker. The evaluation should state these limits. 'Evaluate' leaves room for it, so this is not a defect of the obligation."
+  },
+  {
+   "id": "HR3-6",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+   "line": "310-317; architecture/host-interface-amendment-hs43/amendment.json (O-T04-HS43, base supersedes row)",
+   "summary": "A few open ends remain.",
+   "evidence": "(a) H1 now says the label identifies the broker's executable 'as long as only the enrolled broker artifact carries that type'. Nothing binds that condition. Add it to O-T04-HS43 (exactly one file labelled planeon_broker_exec_t, the enrolled artifact) or to an obligation on the maintenance boot's file contexts. (b) O-T04-HS43 still has no PID-reuse case for the stat-then-poll procedure (asked in HR2-4). (c) The base-clause replacement (corrected HOST_INTERFACE_SPEC.md:66-68) drops the gate's artifact authentication of the broker. It does not say whether the gate still checks the broker's 'manifest/trust custody', the next item in the quoted clause; Q-HS43-1 drops 'only the artifact'. (d) The original DRAFT-001 needs no row: reconciliation.json says 'original draft remains unaccepted'."
+  },
+  {
+   "id": "HR3-7",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "-",
+   "summary": "Status of the round-2 findings.",
+   "evidence": "HR2-1 closed (W01 base clause listed, quote exact, file pinned). HR2-2 closed (three I05 'same way' rows keep the broker's five checks). HR2-3 closed (matrix v3 rows). HR2-4 closed in H1 and O-W03-PEER-EXE (stat read, then pidfd poll; the writer path is confirmed alive after the open); the T04 PID-reuse case is still missing (HR3-6b). HR2-5 closed (only the ioctl is said to be missing). HR2-6 closed by H5, which raises HR3-1. HR2-7 closed by R-GATE-PROC and O-MATRIX-GATE-PROCACCESS, pending the monitor (HR3-4b, HR3-5). HR2-8 mostly closed (HR3-3). HR2-9: H4 is the author's reading, as instructed. HR2-10 closed (SECCOMP-DIRFD-DIRECTION recorded and cited by H3; the link-scope wording is fixed). HR2-11 closed: broker fs uid/gid in O-W03-PEER-EXE; exec capability recomputation named (HR3-2 is about the example); hidepid=0; the relabel sentence replaced by an explicit condition (HR3-6a); the residual lists say 'for example'. HR2-12: provenance unchanged."
+  }
+ ]
+}

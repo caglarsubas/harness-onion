@@ -1,0 +1,128 @@
+{
+ "schemaVersion": "planeon.internal.host-interface-amendment-status/v1",
+ "designLabel": "HOST-INTERFACE-DRAFT-002-HS43",
+ "amends": {
+  "path": "architecture/host-interface-amendment-w02d/HOST_INTERFACE_SPEC.md",
+  "sha256": "2ac2751cbddd7fae20ee92a93a8fc18c7988dd0c96853d1ccb2d08cb3753f83b",
+  "designLabel": "HOST-INTERFACE-DRAFT-002-W02D"
+ },
+ "effective": {
+  "path": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+  "sha256": "b4f46b3a79c45691d7029a79849a555aca5ca7a6e6c600958147935f806888e9"
+ },
+ "reviewRounds": [
+  {
+   "round": 1,
+   "record": "architecture/host-interface-amendment-hs43/review-round1.json",
+   "recordSha256": "e47b7bbf02eab405a149fe4d32cbe322e2478fa0c02175047382acbc7e1d93b9",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "910dd222ee79333cbe5139897fdb70dae24ccf6a",
+   "subjectDirectory": "architecture/host-interface-amendment-hs43/round1/"
+  },
+  {
+   "round": 2,
+   "record": "architecture/host-interface-amendment-hs43/review-round2.json",
+   "recordSha256": "e44df5199a7a36b5d4d4b4f3724ae5c1eb20b381b3f5f17f7320602980069ba1",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "887e95f4fb6bb5f7a5c91f9471e50bcfd2502418",
+   "subjectDirectory": "architecture/host-interface-amendment-hs43/round2/"
+  },
+  {
+   "round": 3,
+   "record": "architecture/host-interface-amendment-hs43/review-round3.json",
+   "recordSha256": "59224861c3dbbf167af96350e1716773ffe1cff61aaaf3211541f6e8f2bd5438",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "f7e5cc086c9322f331dec7a5902bb290d176cc8b",
+   "subjectDirectory": "architecture/host-interface-amendment-hs43/round3/"
+  },
+  {
+   "round": 4,
+   "record": "architecture/host-interface-amendment-hs43/review-round4.json",
+   "recordSha256": "bf6fa6912571e3bdfb344d84e5b1cc54c0e866c25a06a4009788bff05c0190d4",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "subjectCommit": "0493d704ed8429935cdb3f425731ca0a031a472f",
+   "subjectDirectory": "CURRENT"
+  }
+ ],
+ "closedFindings": {
+  "HR1-1": "CLOSED in round 2",
+  "HR1-2": "CLOSED in round 2",
+  "HR1-3": "CLOSED in round 2",
+  "HR1-4": "CLOSED in round 2",
+  "HR1-5": "CLOSED in round 2",
+  "HR1-6": "CLOSED in round 2",
+  "HR1-7": "CLOSED in round 2",
+  "HR1-8": "CLOSED in round 2",
+  "HR1-9": "CLOSED in round 2",
+  "HR1-10": "CLOSED in round 2",
+  "HR1-11": "CLOSED in round 2",
+  "HR1-12": "CLOSED in round 2",
+  "HR2-1": "CLOSED in round 3",
+  "HR2-2": "CLOSED in round 3",
+  "HR2-3": "CLOSED in round 3",
+  "HR2-4": "CLOSED in round 3",
+  "HR2-5": "CLOSED in round 3",
+  "HR2-6": "CLOSED in round 3",
+  "HR2-7": "CLOSED in round 3",
+  "HR2-8": "CLOSED in round 3",
+  "HR2-9": "CLOSED in round 3",
+  "HR2-10": "CLOSED in round 3",
+  "HR2-11": "CLOSED in round 3",
+  "HR2-12": "CLOSED in round 3",
+  "HR3-1": "CLOSED in round 4",
+  "HR3-2": "CLOSED in round 4",
+  "HR3-3": "CLOSED in round 4",
+  "HR3-4": "CLOSED in round 4",
+  "HR3-5": "CLOSED in round 4",
+  "HR3-6": "CLOSED in round 4",
+  "HR3-7": "CLOSED in round 4"
+ },
+ "carriedFindings": {
+  "HR4-1": "next revision (NOTE): The new row binding checks only an item's current text. Its proposed text may still contain newlines, so a row-bound item can insert whole new rows into the §5.3 table. Free text in proposed, replacement and residual fields is still accepted; that is by design, since review covers content.",
+  "HR4-2": "next revision (NOTE): The corrected writer route (an ordinary root exec, then a capset drop) gives the empty permitted set the ptrace read needs. It leaves the writer's bounding set as the starter's, though the §5.3 header asks for 'bounding equal' (empty for POLICY_WRITER). Under matrix v4 the writer cannot empty its bounding set itself. This tension predates HS43 and is inert, but worth recording.",
+  "HR4-3": "next revision (NOTE): Wording and provenance nits.",
+  "HR4-4": "next revision (NOTE): Status of the round-3 findings. No MAJOR or MINOR finding remains."
+ },
+ "ownerDecisions": [
+  "Q-HE2S-10",
+  "Q-HE2S-7",
+  "Q-HE2S-9",
+  "Q-HE3A-1",
+  "Q-HE3A-1b",
+  "HS43-START",
+  "Q-HS43-1",
+  "Q-HS43-2",
+  "Q-HS43-3",
+  "SECCOMP-DIRFD-DIRECTION",
+  "HS43-H5-CONFIRM",
+  "HS43-GATE-RESIDUAL-CONFIRM",
+  "HS43-H4-CONFIRM"
+ ],
+ "supersededClauses": 17,
+ "residuals": [
+  "R-WRITER-PROC",
+  "R-GATE-PROC"
+ ],
+ "obligations": [
+  "O-SECCOMP-V3-READLINKAT",
+  "O-W03-WRITER-EXE",
+  "O-W03-PEER-EXE",
+  "O-MATRIX-WRITER-PROCACCESS",
+  "O-MATRIX-GATE-PROCACCESS",
+  "O-MATRIX-GATE-NETBIND",
+  "O-NATIVE-GATE-NOCAP",
+  "O-T04-HS43"
+ ],
+ "enforcementObligations": "E01-E12 OPEN_UNPROVEN",
+ "contractState": "ADOPTED_AMENDMENT",
+ "independentReviewer": "separate agent, four rounds; round 4 PASS_FOR_SOURCE_PUBLICATION on the subject commit",
+ "readmeStatusNote": "README.md keeps its reviewed 'AWAITING_REVIEW' line; adoption is recorded here only",
+ "implementationReady": false,
+ "filtersInstalled": false,
+ "roleCodeChanged": false,
+ "nativeAcceptance": false,
+ "tenantAcceptance": false,
+ "productExecution": false,
+ "runnerActivated": false,
+ "phaseComplete": false
+}
