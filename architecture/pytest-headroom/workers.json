@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "harness.planeon.ai/pytest-headroom/v1",
+  "packet": "MET-PERF-039",
+  "evidenceClass": "SOURCE_DELTA_ONLY",
+  "change": {
+    "name": "parallelSuiteWorkers",
+    "path": "ci/parallel_suite.py",
+    "before": 4,
+    "after": 6,
+    "beforeSha256": "14a7dd6db3d4f1b9b97408ffad49c5c977ce8813c81d975ca8dfe9d919c26b34",
+    "afterSha256": "4fe4e24951c6a4f023361f9e840e8343a68e5af713754ff7acdf523e475495d5",
+    "onlyLineChanged": {
+      "before": "WORKERS = 4",
+      "after": "WORKERS = 6"
+    }
+  },
+  "matchingTests": [
+    {
+      "path": "tests/test_parallel_suite.py",
+      "before": "    assert SUITE.WORKERS == 4",
+      "after": "    assert SUITE.WORKERS == 6"
+    }
+  ],
+  "unchanged": [
+    {
+      "name": "parallelSuiteWorkerDeadlineSeconds",
+      "path": "ci/parallel_suite.py",
+      "value": 900
+    },
+    {
+      "name": "parallelSuiteParentNodes",
+      "path": "ci/parallel_suite.py",
+      "value": "the three MET-PERF-037 parent nodes"
+    },
+    {
+      "name": "parallelSuiteSerialEnvironment",
+      "path": "ci/parallel_suite.py",
+      "value": "PLANEON_PARALLEL_SUITE_SERIAL"
+    },
+    {
+      "name": "parallelSuiteWeights",
+      "path": "ci/parallel_suite_weights.json",
+      "sha256": "2c1b27f6281e996accbcbc43169dec2041676f1831b0c2e02cb8e09a3395ec3f"
+    },
+    {
+      "name": "failClosedAccounting",
+      "path": "ci/parallel_suite.py",
+      "value": "exact assignment, ownership of every report and warning, one setup and teardown per node and a call iff setup passed, every line decoded, every worker exits 0 or 1 with a failure before the deadline"
+    },
+    {
+      "name": "acceptanceArgv",
+      "path": "task-packets/MET-ENFORCE-027.yaml",
+      "value": "the 64 inherited commands"
+    }
+  ],
+  "measurements": {
+    "main": "e7516160468c213862b337b344d240fde5f7328c",
+    "method": "argv 63 of MET-ENFORCE-027 on a clean checkout; the parallel suite's worker count set for the top-level session only by an out-of-tree pytest plugin (no repository byte change)",
+    "runs": [
+      {
+        "workers": 4,
+        "wallSeconds": 627.1,
+        "summedTestSeconds": 2254.6,
+        "peakTreeRssMiB": 1514,
+        "load1Mean": 8.51,
+        "load1Max": 10.53,
+        "passed": 11252,
+        "failed": 0
+      },
+      {
+        "workers": 6,
+        "wallSeconds": 361.0,
+        "summedTestSeconds": 1774.6,
+        "peakTreeRssMiB": 2035,
+        "load1Mean": 9.17,
+        "load1Max": 11.55,
+        "passed": 11252,
+        "failed": 0
+      },
+      {
+        "workers": 8,
+        "wallSeconds": 324.9,
+        "summedTestSeconds": 2030.8,
+        "peakTreeRssMiB": 2471,
+        "load1Mean": 10.48,
+        "load1Max": 14.04,
+        "passed": 11252,
+        "failed": 0
+      }
+    ]
+  },
+  "ownerDecisions": [
+    {
+      "id": "Q-PERF39-1",
+      "date": "2026-10-15",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "Owner decision Q-PERF39-1 = (a), 6 workers, 2026-10-15. MET-PERF-039 (slot 238): ci/parallel_suite.py WORKERS 4 → 6 plus the matching tests. Every fail-closed rule stays (900 s deadline, worker-exit accounting, incomplete-node refusal, serial fallback). Weights are not refreshed."
+    }
+  ]
+}

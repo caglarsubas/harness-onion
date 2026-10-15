@@ -757,7 +757,7 @@ SUITE = _load("_met_perf_035_parallel_suite_copy", "ci/parallel_suite.py")
 
 def test_parallel_suite_constants_weights_and_session_loading(request):
     linux = _load("_met_perf_035_linux_conftest_copy", "tests/linux_runner/conftest.py")
-    assert SUITE.WORKERS == 4
+    assert SUITE.WORKERS == 6
     assert linux.PREDECESSOR_PROOF_NODE in SUITE.PARENT_NODES and len(SUITE.PARENT_NODES) == 3
     weights = json.loads(profile.reviewed_bytes(SUITE.WEIGHTS_PATH))
     assert weights and all(type(name) is str and name.endswith(".py") and type(value) in (int, float) and value >= 0

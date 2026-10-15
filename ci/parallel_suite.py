@@ -60,7 +60,7 @@ from pathlib import Path
 
 import pytest
 
-WORKERS = 4
+WORKERS = 6
 DEADLINE_SECONDS = 900
 WEIGHTS_PATH = "ci/parallel_suite_weights.json"
 ASSIGNMENT_ENV = "PLANEON_PARALLEL_SUITE_ASSIGNMENT"
