@@ -44,6 +44,9 @@ AND_K = 0x54        # BPF_ALU | BPF_AND | BPF_K
 RET_K = 0x06        # BPF_RET | BPF_K
 OFFSET_NR, OFFSET_ARCH, OFFSET_ARGS = 0, 4, 16       # struct seccomp_data
 FULL = 0xFFFFFFFF
+# HS43: a negative int dirfd has bit 31 of the low word set; AT_FDCWD is -100. Fixed here, checked against the table.
+DIRFD_SIGN_BIT = 0x80000000
+AT_FDCWD_LOW32 = 0xFFFFFF9C
 
 
 def require(condition: bool, message: str) -> None:
@@ -275,11 +278,12 @@ def check_policy(policy: dict, table: dict) -> None:
                     any(c["arg"] == 0 and c["mask"] == FULL and c["eq"] in allowed for c in alt) for alt in rules["prctl"]),
                     "prctl only PR_SET_NAME, and PR_SET_NO_NEW_PRIVS for the broker (W02d-V3): " + role)
             if role == "EFFECT_GATE":
-                sign = table["constants"]["DIRFD_SIGN_BIT"]
-                require("readlinkat" not in rules or (rules["readlinkat"] is not None and type(rules["readlinkat"]) is list
-                        and all(any(c["arg"] == 0 and c["mask"] & sign and not c["eq"] & sign for c in alt)
-                                for alt in rules["readlinkat"])),
-                        "readlinkat only with a non-negative dirfd (HS43): " + role)
+                require(table["constants"].get("DIRFD_SIGN_BIT") == DIRFD_SIGN_BIT
+                        and table["constants"].get("AT_FDCWD_LOW32") == AT_FDCWD_LOW32, "dirfd constants (HS43)")
+                # Every alternative tests bit 31 of arg 0 and requires it clear, so AT_FDCWD and every negative dirfd fail.
+                require("readlinkat" not in rules or (type(rules["readlinkat"]) is list and all(
+                        any(c["arg"] == 0 and c["mask"] & DIRFD_SIGN_BIT and not c["eq"] & DIRFD_SIGN_BIT for c in alt)
+                        for alt in rules["readlinkat"])), "readlinkat only with a non-negative dirfd (HS43): " + role)
                 require("readlink" not in rules, "no readlink for the gate (HS43): " + role)
             require(("execveat" in rules) == (role in ("BROKER", "WORKER")) and "execve" not in rules,
                     "exec only through the broker's and the worker's W5 execveat: " + role)

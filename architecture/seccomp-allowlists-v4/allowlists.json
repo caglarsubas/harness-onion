@@ -33,26 +33,6 @@
    "id": "W01-AMEND-QW3"
   },
   {
-   "date": "2026-10-13",
-   "decision": "(c) readlink exe for the I07 writer",
-   "id": "Q-HE3A-1"
-  },
-  {
-   "date": "2026-10-13",
-   "decision": "(a) the readlink exe check lands after the chain: the seccomp v3 readlinkat duty for EFFECT_GATE (parallel lane), then republished programs and edge record v3 (primary), then the R10 re-vendor and check",
-   "id": "Q-HE3A-1b"
-  },
-  {
-   "date": "2026-10-15",
-   "decision": "the EFFECT_GATE readlinkat duty for the I07 writer's /proc exe link, readlinkat allowed only with dirfd != AT_FDCWD (this keeps musl aarch64 readlink killed); the seccomp v3 allowlist amendment follows as its own next packet",
-   "id": "HS43-START"
-  },
-  {
-   "date": "2026-10-15",
-   "decision": "the single masked condition (arg0 & 0x80000000) == 0, a non-negative dirfd (so never AT_FDCWD), is the direction, since it is stricter and consistent with Q-HE3A-1b (lane monitor, owner-delegated)",
-   "id": "SECCOMP-DIRFD-DIRECTION"
-  },
-  {
    "date": "2026-10-10",
    "decision": "NATIVE_STATIC adds three narrow rules for the Rust+musl steady state: mremap only with flags == MREMAP_MAYMOVE (musl mallocng realloc of large chunks), prctl only with arg0 == PR_SET_NAME (std and tokio thread names), and tkill (musl abort and raise); setresuid/setresgid threaded signalling, available_parallelism file reads and units starting roles with fds 0-2 open are W03 trace items",
    "id": "W02d-V3"
@@ -61,6 +41,31 @@
    "date": "2026-10-10",
    "decision": "the native roles are Rust with musl, fully static (analysed reference: musl 1.2.5, Rust 1.90.0; W03 pins these or re-checks against W02d); NATIVE_STATIC adds poll, which Rust std calls on fds 0-2 at start-up and musl issues as SYS_poll on x86_64 (aarch64 has no poll syscall); musl creates threads with clone, never clone3, so the clone3 ENOSYS rule serves the CPython roles' glibc",
    "id": "W01-AMEND-QW4"
+  },
+  {
+   "date": "2026-10-13",
+   "decision": "(c) readlink exe for the I07 writer",
+   "id": "Q-HE3A-1"
+  },
+  {
+   "date": "2026-10-13",
+   "decision": "(a) HE-003A merges first; the readlink exe check is decided-but-open, landing after the chain: seccomp v3 readlinkat duty for EFFECT_GATE (parallel lane, with/after the slot-234 \u00a74.3 amendment) \u2192 republished programs + edge record v3 (primary) \u2192 R10 re-vendor + check. HE-007 obligations: writer uid/gid 0, dumpable, empty permitted set.",
+   "id": "Q-HE3A-1b"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "start HS-4.3-AMEND now in your lane, as harness-onion slot 236: Q-HE2S-10 (a): amend HOST_INTERFACE_SPEC \u00a74.3 so the gate qualifies the broker by label, cgroup, pidfd and SO_PEERCRED; the EFFECT_GATE readlinkat duty sentence for the I07 writer's /proc exe link (Q-HE3A-1 (c) / 1b (a)), noting that readlinkat is allowed only with dirfd != AT_FDCWD (this keeps musl aarch64 readlink killed). The seccomp v3 allowlist amendment follows as its own next packet",
+   "id": "HS43-START"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "(accepted) Noted for SECCOMP-V3-READLINKAT: the single masked condition (arg0 & 0x80000000) == 0, \"a non-negative dirfd (so never AT_FDCWD)\", is accepted as the direction, since it's stricter and consistent with Q-HE3A-1b.",
+   "id": "SECCOMP-DIRFD-DIRECTION"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "Slot 237 = SECCOMP-V3-READLINKAT (yours). The direction is the single masked condition (arg0 & 0x80000000) == 0, as HS43 records. Contract first; use the standing fetch for the rebase onto 0879eb1.",
+   "id": "SEC-RL-START"
   }
  ],
  "roles": {

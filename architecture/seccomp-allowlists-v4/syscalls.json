@@ -17,8 +17,11 @@
    "torvalds/linux@v6.12 (commit adc218676eef25575469234709c2d87185ca223a) include/uapi/linux/fcntl.h:93,101,107",
    "execveat(int fd, const char *filename, argv, envp, int flags) - flags is arg4 (torvalds/linux@v6.12 (commit adc218676eef25575469234709c2d87185ca223a) fs/exec.c:2105-2109)"
   ],
-  "AT_FDCWD": [
-   "torvalds/linux@v6.12 (commit adc218676eef25575469234709c2d87185ca223a) include/uapi/linux/fcntl.h:93 (AT_FDCWD -100, 0xffffff9c as a 32-bit int; readlinkat reads dirfd as an int)"
+  "AT_FDCWD_LOW32": [
+   "torvalds/linux@v6.12 (commit adc218676eef25575469234709c2d87185ca223a) include/uapi/linux/fcntl.h:93 (AT_FDCWD -100, 0xffffff9c as a 32-bit int)"
+  ],
+  "DIRFD_SIGN_BIT": [
+   "torvalds/linux@v6.12 (commit adc218676eef25575469234709c2d87185ca223a) include/uapi/linux/fcntl.h:93 (AT_FDCWD is negative; readlinkat reads dirfd as an int, so a negative dirfd has bit 31 of the low word set)"
   ],
   "ENOSYS": [
    "torvalds/linux@v6.12 (commit adc218676eef25575469234709c2d87185ca223a) include/uapi/asm-generic/errno.h:18"
