@@ -17,8 +17,8 @@ evenly over about 100 test files, and every packet adds to it. Owner decisions (
     `sys.orig_argv`, and the running `__main__` must be pytest's own. An option, an `@` argument file or a node ID,
     another way of starting pytest (the `pytest` script, a script calling `pytest.main`), or plugins handed to
     `pytest.main` keep pytest's serial loop (MET-PERF-037, review R3-01).
-  - The parent collects as usual and assigns whole test files to 4 worker processes, by the pinned weights in
-    `ci/parallel_suite_weights.json`.
+  - The parent collects as usual and assigns whole test files to 6 worker processes (MET-PERF-039; 4 before), by the
+    pinned weights in `ci/parallel_suite_weights.json`.
   - Each worker runs `python -m pytest -p ci.parallel_suite <its files>` in the same checkout and sandbox. It streams
     pytest's own serialized reports, and the warnings recorded while its tests run, to a private file.
   - The parent restores each report's tuple fields (JSON has none) and replays it through its own hooks: terminal

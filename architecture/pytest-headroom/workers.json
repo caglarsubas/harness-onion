@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "harness.planeon.ai/pytest-headroom/v1",
+  "packet": "MET-PERF-039",
+  "evidenceClass": "SOURCE_DELTA_ONLY",
+  "change": {
+    "name": "parallelSuiteWorkers",
+    "path": "ci/parallel_suite.py",
+    "before": 4,
+    "after": 6,
+    "beforeSha256": "14a7dd6db3d4f1b9b97408ffad49c5c977ce8813c81d975ca8dfe9d919c26b34",
+    "afterSha256": "4fe4e24951c6a4f023361f9e840e8343a68e5af713754ff7acdf523e475495d5",
+    "onlyLineChanged": {
+      "before": "WORKERS = 4",
+      "after": "WORKERS = 6"
+    }
+  },
+  "matchingFiles": [
+    {
+      "path": "tests/test_parallel_suite.py",
+      "before": "    assert SUITE.WORKERS == 4",
+      "after": "    assert SUITE.WORKERS == 6"
+    },
+    {
+      "path": "docs/alpha-2/PARALLEL_SUITE_PERF035.md",
+      "before": "  - The parent collects as usual and assigns whole test files to 4 worker processes, by the pinned weights in",
+      "after": "  - The parent collects as usual and assigns whole test files to 6 worker processes (MET-PERF-039; 4 before), by the"
+    }
+  ],
+  "unchanged": [
+    {
+      "name": "parallelSuiteWorkerDeadlineSeconds",
+      "path": "ci/parallel_suite.py",
+      "value": 900
+    },
+    {
+      "name": "parallelSuiteParentNodes",
+      "path": "ci/parallel_suite.py",
+      "value": "the three MET-PERF-037 parent nodes"
+    },
+    {
+      "name": "parallelSuiteSerialEnvironment",
+      "path": "ci/parallel_suite.py",
+      "value": "PLANEON_PARALLEL_SUITE_SERIAL"
+    },
+    {
+      "name": "parallelSuiteWeights",
+      "path": "ci/parallel_suite_weights.json",
+      "sha256": "2c1b27f6281e996accbcbc43169dec2041676f1831b0c2e02cb8e09a3395ec3f"
+    },
+    {
+      "name": "failClosedAccounting",
+      "path": "ci/parallel_suite.py",
+      "value": "exact assignment, ownership of every report and warning, one setup and teardown per node and a call iff setup passed, every line decoded, every worker exits 0 or 1 with a failure before the deadline"
+    },
+    {
+      "name": "acceptanceArgv",
+      "path": "task-packets/MET-ENFORCE-027.yaml",
+      "value": "the 64 inherited commands"
+    }
+  ],
+  "measurements": {
+    "main": "e7516160468c213862b337b344d240fde5f7328c",
+    "method": "argv 63 of MET-ENFORCE-027 on a clean checkout; the parallel suite's worker count set for the top-level session only by an out-of-tree pytest plugin (no repository byte change)",
+    "runs": [
+      {
+        "workers": 4,
+        "wallSeconds": 627.1,
+        "summedTestSeconds": 2254.6,
+        "peakTreeRssMiB": 1514,
+        "load1Mean": 8.51,
+        "load1Max": 10.53,
+        "passed": 11252,
+        "failed": 0
+      },
+      {
+        "workers": 6,
+        "wallSeconds": 361.0,
+        "summedTestSeconds": 1774.6,
+        "peakTreeRssMiB": 2035,
+        "load1Mean": 9.17,
+        "load1Max": 11.55,
+        "passed": 11252,
+        "failed": 0
+      },
+      {
+        "workers": 8,
+        "wallSeconds": 324.9,
+        "summedTestSeconds": 2030.8,
+        "peakTreeRssMiB": 2471,
+        "load1Mean": 10.48,
+        "load1Max": 14.04,
+        "passed": 11252,
+        "failed": 0
+      }
+    ],
+    "runOrder": [
+      4,
+      6,
+      8
+    ],
+    "runsPerWorkerCount": 1,
+    "caveat": "The four-worker run ran first, and during its first ~300 s every file ran about 1.7 times as long as in the six-worker run (host state, not the plan). Replaying the six-worker run's per-file times through the suite's planner at four workers gives an estimated 455-512 s, so six workers save about 21-29%, not 42% (source review round 1, S1-1).",
+    "estimatedFourWorkerSecondsSameConditions": {
+      "low": 455,
+      "high": 512
+    },
+    "pinnedWeightsImbalanceSixWorkers": {
+      "slowestWorkerSeconds": 324.6,
+      "evenSplitSeconds": 290.8,
+      "parentNodesExcluded": true,
+      "unweightedFiles": 22
+    }
+  },
+  "carried": [
+    {
+      "id": "WEIGHTS-REFRESH",
+      "decision": "Q-PERF39-1-CONFIRM",
+      "what": "refresh ci/parallel_suite_weights.json from measured per-file times, including the 22 files without a pinned weight",
+      "how": "a later, separate ci/ change"
+    }
+  ],
+  "ownerDecisions": [
+    {
+      "id": "Q-PERF39-1",
+      "date": "2026-10-15",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "Owner decision Q-PERF39-1 = (a), 6 workers, 2026-10-15. MET-PERF-039 (slot 238): ci/parallel_suite.py WORKERS 4 → 6 plus the matching tests. Every fail-closed rule stays (900 s deadline, worker-exit accounting, incomplete-node refusal, serial fallback). Weights are not refreshed."
+    },
+    {
+      "id": "Q-PERF39-1-CONFIRM",
+      "date": "2026-10-15",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "The owner confirms, after seeing your correction: \"proceed with 6 workers, no weight refresh\" (2026-10-15). Record it with Q-PERF39-1. Add the weight refresh, including the 22 unweighted files, as a carried follow-up: a later separate ci/ change."
+    },
+    {
+      "id": "Q-PERF39-1-CONFIRM-2",
+      "date": "2026-10-15",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "The owner has seen the corrected gain (21-29%) and the 1200 s cap note and says \"proceed with 6 workers\" (2026-10-15)."
+    }
+  ]
+}

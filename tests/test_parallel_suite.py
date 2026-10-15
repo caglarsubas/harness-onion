@@ -57,7 +57,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 237 and len(accepted) == 215
+    assert len(current) == 238 and len(accepted) == 215
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -78,7 +78,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(yprofile.historical_catalog(current)) == 214
     assert len(xprofile.historical_catalog(current)) == 213
     assert len(pprofile.historical_catalog(current)) == 212
@@ -757,7 +758,7 @@ SUITE = _load("_met_perf_035_parallel_suite_copy", "ci/parallel_suite.py")
 
 def test_parallel_suite_constants_weights_and_session_loading(request):
     linux = _load("_met_perf_035_linux_conftest_copy", "tests/linux_runner/conftest.py")
-    assert SUITE.WORKERS == 4
+    assert SUITE.WORKERS == 6
     assert linux.PREDECESSOR_PROOF_NODE in SUITE.PARENT_NODES and len(SUITE.PARENT_NODES) == 3
     weights = json.loads(profile.reviewed_bytes(SUITE.WEIGHTS_PATH))
     assert weights and all(type(name) is str and name.endswith(".py") and type(value) in (int, float) and value >= 0
