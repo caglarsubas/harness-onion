@@ -1,0 +1,82 @@
+{
+ "schemaVersion": "planeon.internal.met-enforce-029-status/v1",
+ "packet": "MET-ENFORCE-029",
+ "roadmapItem": "PROGRAMS-REPUBLISH",
+ "contractState": "CANDIDATE",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "base": "9f251d5d07772cbfb9987c422f3fca79748fad34",
+ "rebase": "the contract adds new files only; it is reviewed on this base and rebased unchanged onto slot 239's merge at mechanics time (Q-PR-10)",
+ "predecessor": {
+  "directory": "architecture/compiled-filter-programs/",
+  "packet": "MET-ENFORCE-025",
+  "status": "architecture/compiled-filter-programs/status.json"
+ },
+ "source": {
+  "directory": "architecture/seccomp-allowlists-v4/",
+  "packet": "MET-ENFORCE-027",
+  "commit": "e7516160468c213862b337b344d240fde5f7328c"
+ },
+ "contractFiles": [
+  "architecture/compiled-filter-programs-v2/README.md",
+  "architecture/compiled-filter-programs-v2/REVIEW_BRIEF.md",
+  "architecture/compiled-filter-programs-v2/index.json",
+  "architecture/compiled-filter-programs-v2/programs/EFFECT_GATE.aarch64.bpf",
+  "architecture/compiled-filter-programs-v2/programs/EFFECT_GATE.x86_64.bpf",
+  "architecture/compiled-filter-programs-v2/status.json",
+  "architecture/artifact-edges/README-v3.md",
+  "architecture/artifact-edges/operator-harness-engineering-v3.json",
+  "scripts/compiled_filter_programs_v2.py"
+ ],
+ "reviewRounds": [],
+ "keptCopies": [],
+ "ownerDecisions": [
+  {
+   "id": "Q-HE3A-1",
+   "date": "2026-10-13",
+   "decision": "(c) readlink exe for the I07 writer",
+   "source": "owner via the lane monitor; quoted verbatim as architecture/host-interface-amendment-hs43/amendment.json and architecture/seccomp-allowlists-v4/allowlists.json record it"
+  },
+  {
+   "id": "Q-HE3A-1b",
+   "date": "2026-10-13",
+   "decision": "(a) HE-003A merges first; the readlink exe check is decided-but-open, landing after the chain: seccomp v3 readlinkat duty for EFFECT_GATE (parallel lane, with/after the slot-234 §4.3 amendment) → republished programs + edge record v3 (primary) → R10 re-vendor + check. HE-007 obligations: writer uid/gid 0, dumpable, empty permitted set.",
+   "source": "owner via the lane monitor; quoted verbatim as architecture/host-interface-amendment-hs43/amendment.json and architecture/seccomp-allowlists-v4/allowlists.json record it"
+  },
+  {
+   "id": "Q-HE3D-3",
+   "date": "2026-10-15",
+   "decision": "(a): the writer exe check isn't in HE-003D. It goes in HE-003A2 after the seccomp and programs chain merges; the enrolled path comes from the configuration (G4).",
+   "source": "the lane monitor under the owner's delegation, HE-003D decisions; quoted verbatim"
+  },
+  {
+   "id": "Q-PR-1..10",
+   "date": "2026-10-15",
+   "decision": "[lane monitor] PROGRAMS-REPUBLISH: Q-PR-1..10 = (a), all of them. Monitor (owner-delegated), 2026-10-15; record verbatim.\n- a new architecture/compiled-filter-programs-v2/;\n- only EFFECT_GATE re-emitted, with the other 12 proven equal to 232's bytes;\n- edge record v3 = v2's 31 rows plus 2;\n- the R10 consumer path contracts/seccomp-v4/;\n- the other rows unchanged;\n- the pinned v4 model plus the exact 6-instruction-block layer check;\n- v4 vector replay;\n- a status.json adoption discharging v4's obligation;\n- no riders;\n- MET-ENFORCE-029, with the contract reviewed on 9f251d5 and rebased unchanged onto 239's merge at mechanics time.\nGo ahead with the contract design and the independent review, as light work.",
+   "source": "the lane monitor under the owner's delegation, PROGRAMS-REPUBLISH decisions; the message quoted verbatim"
+  }
+ ],
+ "discharges": {
+  "record": "architecture/seccomp-allowlists-v4/status.json",
+  "openObligation": "the compiled filter programs and the edge record are republished from v4 (Q-HE3A-1b)",
+  "how": "the two EFFECT_GATE programs are republished from v4 here, the twelve others are proven equal to MET-ENFORCE-025's, and edge record v3 registers the two; recorded in this file only, since v4's own files stay byte-identical (Q-PR-8)"
+ },
+ "openObligations": [
+  "T04/W02a-F: boot-time proof that the installed filter equals the published digest (W02d-Q3)",
+  "O-W03-WRITER-EXE: the gate's writer-executable check stays decided but open until R10's HE-003A2 vendors these programs and adds the check (Q-HE3A-1b, Q-HE3D-3 (a))"
+ ],
+ "carriedToR10": {
+  "packet": "HE-003A2",
+  "items": [
+   "vendor architecture/compiled-filter-programs-v2/programs/EFFECT_GATE.<arch>.bpf byte-identically at host-enforcement/contracts/seccomp-v4/EFFECT_GATE.<arch>.bpf (edge record v3), and decide whether contracts/seccomp-v3/EFFECT_GATE.* stays (R10's contract check refuses any unpinned file under contracts/)",
+   "PROVENANCE.md: cite MET-ENFORCE-029, its merge commit and edge record v3",
+   "gate.py CONTRACTS: pin the two new digests, and its test's contract-file count",
+   "the seal: the include_bytes! paths, the length pins 194/183 -> 200/189 (x86_64/aarch64), and the digest and size pins (1552/1464 -> 1600/1512 bytes)",
+   "readlinkat leaves KILLED_WRAPPERS: under v4 it is argument-filtered on both targets, no longer unconditionally killed",
+   "MODEL_DEFINED.md: the \"After the seal\" rows",
+   "the writer executable check itself: readlinkat on the retained /proc/<pid> directory descriptor, compared exactly with the enrolled writer path from configuration format v2 (Q-HE3D-3 (a), O-W03-WRITER-EXE)",
+   "HE-003D PR N1/N2"
+  ]
+ },
+ "reviewerIndependence": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "README.md keeps its 'SUCCESSOR_CANDIDATE_AWAITING_INDEPENDENT_REVIEW' status line after adoption; the adoption is recorded in this file only (as MET-ENFORCE-027)"
+}
