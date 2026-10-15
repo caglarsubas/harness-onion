@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """SELinux domain, type, boolean and permission matrix v5 (SELINUX-MATRIX-I04-KEYCERT): closed data and its evaluator.
 
-The successor of `selinux_matrix_v2` (matrix v4, adopted and frozen). The evaluator is unchanged; only the matrix
-version differs. The v5 matrix adds the effect gate's I04 serving credential type, drops the gate's
-net_bind_service (HS43 H5), gives the gate its observedWorkers source (owner decision Q-HE3D-2 (a)) and records the
-HS43 /proc evaluations, in its data and text.
+The successor of `selinux_matrix_v2` (matrix v4, adopted and frozen). The v5 matrix adds the effect gate's I04
+credential types, takes every capability from the gate (HS43 H5), gives the gate its observedWorkers source (owner
+decision Q-HE3D-2 (a)) and records the HS43 /proc evaluations. The evaluator is v4's with one extension: a READ grant on
+a type may be narrowed to listed classes and permissions (`classes`, `perms`), so a path walk can be granted
+`dir search` alone; a narrowed grant gives nothing outside its lists.
 
 DATA_CHECK_ONLY reference model for the planeon and qualification-backend SELinux policy the reviewed
 W01 design selects (HOST-INTERFACE-DRAFT-002 sections 2.1 P1/P2/P4/P5/P9, 2.3, 4.1-4.3, 5.1-5.5) and
@@ -93,6 +94,12 @@ def granted(entries: list, domain: str, booleans: dict) -> bool:
     return any(e["domain"] in (domain, ANY_DOMAIN) and holds(e.get("when"), booleans) for e in entries)
 
 
+def _granted_file(entries: list, domain: str, booleans: dict, cls: str, perm: str) -> bool:
+    """A file-class grant; a narrowed READ entry reaches only its listed classes and permissions (v5)."""
+    return any(e["domain"] in (domain, ANY_DOMAIN) and holds(e.get("when"), booleans)
+               and cls in e.get("classes", (cls,)) and perm in e.get("perms", (perm,)) for e in entries)
+
+
 def _pair(entries: list, source: str, target: str, booleans: dict) -> bool:
     return any(e["domain"] == source and e["target"] == target and holds(e.get("when"), booleans) for e in entries)
 
@@ -127,7 +134,7 @@ def allowed(matrix: dict, state: str, source: str, target: str, cls: str, perm: 
         if target not in types:
             return False if _source_closed(matrix, source, cls, perm) else None
         entry = types[target]
-        return cls in entry["classes"] and granted(entry["access"].get(group, []), source, booleans)
+        return cls in entry["classes"] and _granted_file(entry["access"].get(group, []), source, booleans, cls, perm)
     if cls in CAP_CLASSES:
         if perm not in CAP_CLASSES[cls]:
             return None
@@ -244,6 +251,16 @@ def check_matrix(matrix: dict) -> None:
         for group, entries in t["access"].items():
             # Only READ of a non-secret type may be granted to every domain.
             known(entries, "type " + t["name"], public=group == "READ" and t["category"] in PUBLIC_READ)
+            for e in entries:
+                # v5: only a READ grant to a declared domain may be narrowed, to non-empty subsets of the type's
+                # classes and the group's permissions.
+                require(set(e) <= {"domain", "when", "classes", "perms"}
+                        and (("classes" not in e and "perms" not in e) or (
+                            group == "READ" and e["domain"] in domains
+                            and set(e) >= {"classes", "perms"}
+                            and type(e["classes"]) is list and e["classes"] and set(e["classes"]) <= set(t["classes"])
+                            and type(e["perms"]) is list and e["perms"] and set(e["perms"]) <= set(FILE_PERMS[group]))),
+                        "narrowed grant on %s: %s" % (t["name"], e))
         if t["category"] in GENFS_CATEGORIES:
             # No relabel on a genfs-only filesystem, and exactly one genfscon rule gives the type.
             require(not t["access"].get("RELABEL") and [g["type"] for g in matrix["genfscon"]].count(t["name"]) == 1,

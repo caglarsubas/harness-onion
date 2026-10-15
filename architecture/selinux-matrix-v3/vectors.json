@@ -18764,36 +18764,6 @@
    "class": "file",
    "expect": true,
    "id": "C1783",
-   "intent": "A39: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "file",
-   "expect": true,
-   "id": "C1784",
-   "intent": "A39: planeon_gate_t is allowed (ENROLLED_SEALED)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "file",
-   "expect": true,
-   "id": "C1785",
-   "intent": "A39: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "MAINTENANCE_BOOT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "file",
-   "expect": true,
-   "id": "C1786",
    "intent": "A59.planeon_worker_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -18803,7 +18773,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1787",
+   "id": "C1784",
    "intent": "A59.planeon_worker_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -18813,7 +18783,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1788",
+   "id": "C1785",
    "intent": "A59.planeon_worker_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -18823,10 +18793,40 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1789",
+   "id": "C1786",
    "intent": "A38.planeon_cgroup_slice_t: init_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
+   "perm": "open",
    "source": "init_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1787",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1788",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1789",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_observer_t",
    "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_slice_t"
   },
@@ -18834,58 +18834,18 @@
    "class": "dir",
    "expect": true,
    "id": "C1790",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_contain_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C1791",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_server_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C1792",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_observer_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C1793",
    "intent": "A38.planeon_cgroup_slice_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_broker_t",
    "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_slice_t"
   },
   {
    "class": "dir",
-   "expect": true,
-   "id": "C1794",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "dir",
    "expect": false,
-   "id": "C1795",
+   "id": "C1791",
    "intent": "A38.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_admin_t",
    "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_slice_t"
@@ -18893,9 +18853,9 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1796",
+   "id": "C1792",
    "intent": "A38.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
+   "perm": "open",
    "source": "OTHER_DOMAIN",
    "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_slice_t"
@@ -18903,9 +18863,9 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1797",
+   "id": "C1793",
    "intent": "A38.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_worker_t",
    "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_slice_t"
@@ -18913,9 +18873,9 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1798",
+   "id": "C1794",
    "intent": "A38.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
+   "perm": "open",
    "source": "qualk8s_container_t",
    "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_slice_t"
@@ -18923,9 +18883,9 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1799",
+   "id": "C1795",
    "intent": "A38.planeon_cgroup_slice_t: init_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
+   "perm": "open",
    "source": "init_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_cgroup_slice_t"
@@ -18933,9 +18893,9 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1800",
+   "id": "C1796",
    "intent": "A38.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_contain_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_cgroup_slice_t"
@@ -18943,9 +18903,9 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1801",
+   "id": "C1797",
    "intent": "A38.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_server_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_cgroup_slice_t"
@@ -18953,9 +18913,9 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1802",
+   "id": "C1798",
    "intent": "A38.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_observer_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_cgroup_slice_t"
@@ -18963,10 +18923,50 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1803",
+   "id": "C1799",
    "intent": "A38.planeon_cgroup_slice_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
+   "perm": "open",
    "source": "planeon_broker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1800",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1801",
+   "intent": "A38.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1802",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1803",
+   "intent": "A38.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "qualk8s_container_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_cgroup_slice_t"
   },
@@ -18974,7 +18974,247 @@
    "class": "dir",
    "expect": true,
    "id": "C1804",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
+   "intent": "A38.planeon_cgroup_slice_t: init_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "init_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1805",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_contain_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1806",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_server_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1807",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_observer_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1808",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_broker_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1809",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_admin_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1810",
+   "intent": "A38.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "OTHER_DOMAIN",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1811",
+   "intent": "A38.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_worker_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1812",
+   "intent": "A38.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "qualk8s_container_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1813",
+   "intent": "A38S.planeon_cgroup_slice_t: init_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "init_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1814",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1815",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1816",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1817",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1818",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1819",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1820",
+   "intent": "A38S.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1821",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C1822",
+   "intent": "A38S.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1823",
+   "intent": "A38S.planeon_cgroup_slice_t: init_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "init_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1824",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1825",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1826",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1827",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C1828",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_gate_t",
    "state": "ENROLLED_SEALED",
@@ -18983,8 +19223,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1805",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "id": "C1829",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
    "state": "ENROLLED_SEALED",
@@ -18993,8 +19233,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1806",
-   "intent": "A38.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "id": "C1830",
+   "intent": "A38S.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
    "state": "ENROLLED_SEALED",
@@ -19003,8 +19243,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1807",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "id": "C1831",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
    "state": "ENROLLED_SEALED",
@@ -19013,8 +19253,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1808",
-   "intent": "A38.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
+   "id": "C1832",
+   "intent": "A38S.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
    "state": "ENROLLED_SEALED",
@@ -19023,8 +19263,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1809",
-   "intent": "A38.planeon_cgroup_slice_t: init_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C1833",
+   "intent": "A38S.planeon_cgroup_slice_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
    "state": "MAINTENANCE_BOOT",
@@ -19033,8 +19273,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1810",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C1834",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
    "state": "MAINTENANCE_BOOT",
@@ -19043,8 +19283,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1811",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C1835",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
    "state": "MAINTENANCE_BOOT",
@@ -19053,8 +19293,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1812",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C1836",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
    "state": "MAINTENANCE_BOOT",
@@ -19063,8 +19303,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1813",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C1837",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
    "state": "MAINTENANCE_BOOT",
@@ -19073,8 +19313,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1814",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C1838",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_gate_t",
    "state": "MAINTENANCE_BOOT",
@@ -19083,8 +19323,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1815",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "id": "C1839",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
    "state": "MAINTENANCE_BOOT",
@@ -19093,8 +19333,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1816",
-   "intent": "A38.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "id": "C1840",
+   "intent": "A38S.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
    "state": "MAINTENANCE_BOOT",
@@ -19103,8 +19343,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1817",
-   "intent": "A38.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "id": "C1841",
+   "intent": "A38S.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
    "state": "MAINTENANCE_BOOT",
@@ -19113,8 +19353,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1818",
-   "intent": "A38.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
+   "id": "C1842",
+   "intent": "A38S.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
    "state": "MAINTENANCE_BOOT",
@@ -19123,7 +19363,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1819",
+   "id": "C1843",
    "intent": "A39.planeon_cgroup_slice_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -19133,7 +19373,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1820",
+   "id": "C1844",
    "intent": "A39.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -19143,7 +19383,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1821",
+   "id": "C1845",
    "intent": "A39.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -19153,7 +19393,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1822",
+   "id": "C1846",
    "intent": "A39.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -19163,7 +19403,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1823",
+   "id": "C1847",
    "intent": "A39.planeon_cgroup_slice_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -19172,18 +19412,8 @@
   },
   {
    "class": "file",
-   "expect": true,
-   "id": "C1824",
-   "intent": "A39.planeon_cgroup_slice_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "file",
    "expect": false,
-   "id": "C1825",
+   "id": "C1848",
    "intent": "A39.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -19193,7 +19423,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1826",
+   "id": "C1849",
    "intent": "A39.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -19203,7 +19433,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1827",
+   "id": "C1850",
    "intent": "A39.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -19213,7 +19443,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1828",
+   "id": "C1851",
    "intent": "A39.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -19223,7 +19453,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1829",
+   "id": "C1852",
    "intent": "A39.planeon_cgroup_slice_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -19233,7 +19463,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1830",
+   "id": "C1853",
    "intent": "A39.planeon_cgroup_slice_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -19243,7 +19473,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1831",
+   "id": "C1854",
    "intent": "A39.planeon_cgroup_slice_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -19253,7 +19483,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1832",
+   "id": "C1855",
    "intent": "A39.planeon_cgroup_slice_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -19263,7 +19493,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1833",
+   "id": "C1856",
    "intent": "A39.planeon_cgroup_slice_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -19272,18 +19502,8 @@
   },
   {
    "class": "file",
-   "expect": true,
-   "id": "C1834",
-   "intent": "A39.planeon_cgroup_slice_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "file",
    "expect": false,
-   "id": "C1835",
+   "id": "C1857",
    "intent": "A39.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -19293,7 +19513,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1836",
+   "id": "C1858",
    "intent": "A39.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -19303,7 +19523,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1837",
+   "id": "C1859",
    "intent": "A39.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -19313,7 +19533,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1838",
+   "id": "C1860",
    "intent": "A39.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -19323,7 +19543,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1839",
+   "id": "C1861",
    "intent": "A39.planeon_cgroup_slice_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -19333,7 +19553,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1840",
+   "id": "C1862",
    "intent": "A39.planeon_cgroup_slice_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -19343,7 +19563,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1841",
+   "id": "C1863",
    "intent": "A39.planeon_cgroup_slice_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -19353,7 +19573,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1842",
+   "id": "C1864",
    "intent": "A39.planeon_cgroup_slice_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -19363,7 +19583,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1843",
+   "id": "C1865",
    "intent": "A39.planeon_cgroup_slice_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -19372,18 +19592,8 @@
   },
   {
    "class": "file",
-   "expect": true,
-   "id": "C1844",
-   "intent": "A39.planeon_cgroup_slice_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "MAINTENANCE_BOOT",
-   "target": "planeon_cgroup_slice_t"
-  },
-  {
-   "class": "file",
    "expect": false,
-   "id": "C1845",
+   "id": "C1866",
    "intent": "A39.planeon_cgroup_slice_t: planeon_admin_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -19393,7 +19603,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1846",
+   "id": "C1867",
    "intent": "A39.planeon_cgroup_slice_t: OTHER_DOMAIN is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -19403,7 +19613,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1847",
+   "id": "C1868",
    "intent": "A39.planeon_cgroup_slice_t: planeon_worker_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -19413,7 +19623,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1848",
+   "id": "C1869",
    "intent": "A39.planeon_cgroup_slice_t: qualk8s_container_t is denied planeon_cgroup_slice_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -19423,7 +19633,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1849",
+   "id": "C1870",
    "intent": "A38.planeon_cgroup_contain_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "init_t",
@@ -19433,7 +19643,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1850",
+   "id": "C1871",
    "intent": "A38.planeon_cgroup_contain_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -19443,7 +19653,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1851",
+   "id": "C1872",
    "intent": "A38.planeon_cgroup_contain_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -19453,7 +19663,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1852",
+   "id": "C1873",
    "intent": "A38.planeon_cgroup_contain_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -19463,7 +19673,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1853",
+   "id": "C1874",
    "intent": "A38.planeon_cgroup_contain_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -19473,7 +19683,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1854",
+   "id": "C1875",
    "intent": "A38.planeon_cgroup_contain_t: planeon_admin_t is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -19483,7 +19693,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1855",
+   "id": "C1876",
    "intent": "A38.planeon_cgroup_contain_t: OTHER_DOMAIN is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -19493,7 +19703,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1856",
+   "id": "C1877",
    "intent": "A38.planeon_cgroup_contain_t: planeon_worker_t is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -19503,7 +19713,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1857",
+   "id": "C1878",
    "intent": "A38.planeon_cgroup_contain_t: qualk8s_container_t is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -19513,7 +19723,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1858",
+   "id": "C1879",
    "intent": "A38.planeon_cgroup_contain_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "init_t",
@@ -19523,7 +19733,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1859",
+   "id": "C1880",
    "intent": "A38.planeon_cgroup_contain_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -19533,7 +19743,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1860",
+   "id": "C1881",
    "intent": "A38.planeon_cgroup_contain_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -19543,7 +19753,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1861",
+   "id": "C1882",
    "intent": "A38.planeon_cgroup_contain_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -19553,7 +19763,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1862",
+   "id": "C1883",
    "intent": "A38.planeon_cgroup_contain_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -19563,7 +19773,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1863",
+   "id": "C1884",
    "intent": "A38.planeon_cgroup_contain_t: planeon_admin_t is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -19573,7 +19783,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1864",
+   "id": "C1885",
    "intent": "A38.planeon_cgroup_contain_t: OTHER_DOMAIN is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -19583,7 +19793,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1865",
+   "id": "C1886",
    "intent": "A38.planeon_cgroup_contain_t: planeon_worker_t is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -19593,7 +19803,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1866",
+   "id": "C1887",
    "intent": "A38.planeon_cgroup_contain_t: qualk8s_container_t is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -19603,7 +19813,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1867",
+   "id": "C1888",
    "intent": "A38.planeon_cgroup_contain_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
@@ -19613,7 +19823,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1868",
+   "id": "C1889",
    "intent": "A38.planeon_cgroup_contain_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -19623,7 +19833,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1869",
+   "id": "C1890",
    "intent": "A38.planeon_cgroup_contain_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -19633,7 +19843,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1870",
+   "id": "C1891",
    "intent": "A38.planeon_cgroup_contain_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -19643,7 +19853,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1871",
+   "id": "C1892",
    "intent": "A38.planeon_cgroup_contain_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -19653,7 +19863,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1872",
+   "id": "C1893",
    "intent": "A38.planeon_cgroup_contain_t: planeon_admin_t is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -19663,7 +19873,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1873",
+   "id": "C1894",
    "intent": "A38.planeon_cgroup_contain_t: OTHER_DOMAIN is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -19673,7 +19883,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1874",
+   "id": "C1895",
    "intent": "A38.planeon_cgroup_contain_t: planeon_worker_t is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -19683,7 +19893,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1875",
+   "id": "C1896",
    "intent": "A38.planeon_cgroup_contain_t: qualk8s_container_t is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -19693,7 +19903,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1876",
+   "id": "C1897",
    "intent": "A39.planeon_cgroup_contain_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -19703,7 +19913,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1877",
+   "id": "C1898",
    "intent": "A39.planeon_cgroup_contain_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -19713,7 +19923,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1878",
+   "id": "C1899",
    "intent": "A39.planeon_cgroup_contain_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -19723,7 +19933,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1879",
+   "id": "C1900",
    "intent": "A39.planeon_cgroup_contain_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -19733,7 +19943,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1880",
+   "id": "C1901",
    "intent": "A39.planeon_cgroup_contain_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -19743,7 +19953,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1881",
+   "id": "C1902",
    "intent": "A39.planeon_cgroup_contain_t: planeon_admin_t is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -19753,7 +19963,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1882",
+   "id": "C1903",
    "intent": "A39.planeon_cgroup_contain_t: OTHER_DOMAIN is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -19763,7 +19973,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1883",
+   "id": "C1904",
    "intent": "A39.planeon_cgroup_contain_t: planeon_worker_t is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -19773,7 +19983,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1884",
+   "id": "C1905",
    "intent": "A39.planeon_cgroup_contain_t: qualk8s_container_t is denied planeon_cgroup_contain_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -19783,7 +19993,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1885",
+   "id": "C1906",
    "intent": "A39.planeon_cgroup_contain_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -19793,7 +20003,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1886",
+   "id": "C1907",
    "intent": "A39.planeon_cgroup_contain_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -19803,7 +20013,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1887",
+   "id": "C1908",
    "intent": "A39.planeon_cgroup_contain_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -19813,7 +20023,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1888",
+   "id": "C1909",
    "intent": "A39.planeon_cgroup_contain_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -19823,7 +20033,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1889",
+   "id": "C1910",
    "intent": "A39.planeon_cgroup_contain_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -19833,7 +20043,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1890",
+   "id": "C1911",
    "intent": "A39.planeon_cgroup_contain_t: planeon_admin_t is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -19843,7 +20053,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1891",
+   "id": "C1912",
    "intent": "A39.planeon_cgroup_contain_t: OTHER_DOMAIN is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -19853,7 +20063,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1892",
+   "id": "C1913",
    "intent": "A39.planeon_cgroup_contain_t: planeon_worker_t is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -19863,7 +20073,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1893",
+   "id": "C1914",
    "intent": "A39.planeon_cgroup_contain_t: qualk8s_container_t is denied planeon_cgroup_contain_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -19873,7 +20083,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1894",
+   "id": "C1915",
    "intent": "A39.planeon_cgroup_contain_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -19883,7 +20093,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1895",
+   "id": "C1916",
    "intent": "A39.planeon_cgroup_contain_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -19893,7 +20103,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1896",
+   "id": "C1917",
    "intent": "A39.planeon_cgroup_contain_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -19903,7 +20113,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1897",
+   "id": "C1918",
    "intent": "A39.planeon_cgroup_contain_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -19913,7 +20123,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1898",
+   "id": "C1919",
    "intent": "A39.planeon_cgroup_contain_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -19923,7 +20133,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1899",
+   "id": "C1920",
    "intent": "A39.planeon_cgroup_contain_t: planeon_admin_t is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -19933,7 +20143,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1900",
+   "id": "C1921",
    "intent": "A39.planeon_cgroup_contain_t: OTHER_DOMAIN is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -19943,7 +20153,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1901",
+   "id": "C1922",
    "intent": "A39.planeon_cgroup_contain_t: planeon_worker_t is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -19953,7 +20163,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1902",
+   "id": "C1923",
    "intent": "A39.planeon_cgroup_contain_t: qualk8s_container_t is denied planeon_cgroup_contain_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -19963,7 +20173,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1903",
+   "id": "C1924",
    "intent": "A38.planeon_cgroup_server_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "init_t",
@@ -19973,7 +20183,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1904",
+   "id": "C1925",
    "intent": "A38.planeon_cgroup_server_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -19983,7 +20193,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1905",
+   "id": "C1926",
    "intent": "A38.planeon_cgroup_server_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -19993,7 +20203,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1906",
+   "id": "C1927",
    "intent": "A38.planeon_cgroup_server_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -20003,7 +20213,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1907",
+   "id": "C1928",
    "intent": "A38.planeon_cgroup_server_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -20013,7 +20223,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1908",
+   "id": "C1929",
    "intent": "A38.planeon_cgroup_server_t: planeon_admin_t is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -20023,7 +20233,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1909",
+   "id": "C1930",
    "intent": "A38.planeon_cgroup_server_t: OTHER_DOMAIN is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -20033,7 +20243,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1910",
+   "id": "C1931",
    "intent": "A38.planeon_cgroup_server_t: planeon_worker_t is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -20043,7 +20253,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1911",
+   "id": "C1932",
    "intent": "A38.planeon_cgroup_server_t: qualk8s_container_t is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -20053,7 +20263,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1912",
+   "id": "C1933",
    "intent": "A38.planeon_cgroup_server_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "init_t",
@@ -20063,7 +20273,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1913",
+   "id": "C1934",
    "intent": "A38.planeon_cgroup_server_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -20073,7 +20283,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1914",
+   "id": "C1935",
    "intent": "A38.planeon_cgroup_server_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -20083,7 +20293,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1915",
+   "id": "C1936",
    "intent": "A38.planeon_cgroup_server_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -20093,7 +20303,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1916",
+   "id": "C1937",
    "intent": "A38.planeon_cgroup_server_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -20103,7 +20313,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1917",
+   "id": "C1938",
    "intent": "A38.planeon_cgroup_server_t: planeon_admin_t is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -20113,7 +20323,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1918",
+   "id": "C1939",
    "intent": "A38.planeon_cgroup_server_t: OTHER_DOMAIN is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -20123,7 +20333,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1919",
+   "id": "C1940",
    "intent": "A38.planeon_cgroup_server_t: planeon_worker_t is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -20133,7 +20343,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1920",
+   "id": "C1941",
    "intent": "A38.planeon_cgroup_server_t: qualk8s_container_t is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -20143,7 +20353,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1921",
+   "id": "C1942",
    "intent": "A38.planeon_cgroup_server_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
@@ -20153,7 +20363,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1922",
+   "id": "C1943",
    "intent": "A38.planeon_cgroup_server_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -20163,7 +20373,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1923",
+   "id": "C1944",
    "intent": "A38.planeon_cgroup_server_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -20173,7 +20383,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1924",
+   "id": "C1945",
    "intent": "A38.planeon_cgroup_server_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -20183,7 +20393,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1925",
+   "id": "C1946",
    "intent": "A38.planeon_cgroup_server_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -20193,7 +20403,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1926",
+   "id": "C1947",
    "intent": "A38.planeon_cgroup_server_t: planeon_admin_t is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -20203,7 +20413,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1927",
+   "id": "C1948",
    "intent": "A38.planeon_cgroup_server_t: OTHER_DOMAIN is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -20213,7 +20423,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1928",
+   "id": "C1949",
    "intent": "A38.planeon_cgroup_server_t: planeon_worker_t is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -20223,7 +20433,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1929",
+   "id": "C1950",
    "intent": "A38.planeon_cgroup_server_t: qualk8s_container_t is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -20233,7 +20443,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1930",
+   "id": "C1951",
    "intent": "A39.planeon_cgroup_server_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -20243,7 +20453,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1931",
+   "id": "C1952",
    "intent": "A39.planeon_cgroup_server_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -20253,7 +20463,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1932",
+   "id": "C1953",
    "intent": "A39.planeon_cgroup_server_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -20263,7 +20473,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1933",
+   "id": "C1954",
    "intent": "A39.planeon_cgroup_server_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -20273,7 +20483,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1934",
+   "id": "C1955",
    "intent": "A39.planeon_cgroup_server_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -20283,7 +20493,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1935",
+   "id": "C1956",
    "intent": "A39.planeon_cgroup_server_t: planeon_admin_t is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -20293,7 +20503,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1936",
+   "id": "C1957",
    "intent": "A39.planeon_cgroup_server_t: OTHER_DOMAIN is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -20303,7 +20513,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1937",
+   "id": "C1958",
    "intent": "A39.planeon_cgroup_server_t: planeon_worker_t is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -20313,7 +20523,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1938",
+   "id": "C1959",
    "intent": "A39.planeon_cgroup_server_t: qualk8s_container_t is denied planeon_cgroup_server_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -20323,7 +20533,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1939",
+   "id": "C1960",
    "intent": "A39.planeon_cgroup_server_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -20333,7 +20543,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1940",
+   "id": "C1961",
    "intent": "A39.planeon_cgroup_server_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -20343,7 +20553,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1941",
+   "id": "C1962",
    "intent": "A39.planeon_cgroup_server_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -20353,7 +20563,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1942",
+   "id": "C1963",
    "intent": "A39.planeon_cgroup_server_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -20363,7 +20573,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1943",
+   "id": "C1964",
    "intent": "A39.planeon_cgroup_server_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -20373,7 +20583,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1944",
+   "id": "C1965",
    "intent": "A39.planeon_cgroup_server_t: planeon_admin_t is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -20383,7 +20593,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1945",
+   "id": "C1966",
    "intent": "A39.planeon_cgroup_server_t: OTHER_DOMAIN is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -20393,7 +20603,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1946",
+   "id": "C1967",
    "intent": "A39.planeon_cgroup_server_t: planeon_worker_t is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -20403,7 +20613,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1947",
+   "id": "C1968",
    "intent": "A39.planeon_cgroup_server_t: qualk8s_container_t is denied planeon_cgroup_server_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -20413,7 +20623,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1948",
+   "id": "C1969",
    "intent": "A39.planeon_cgroup_server_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -20423,7 +20633,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1949",
+   "id": "C1970",
    "intent": "A39.planeon_cgroup_server_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -20433,7 +20643,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1950",
+   "id": "C1971",
    "intent": "A39.planeon_cgroup_server_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -20443,7 +20653,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1951",
+   "id": "C1972",
    "intent": "A39.planeon_cgroup_server_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -20453,7 +20663,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1952",
+   "id": "C1973",
    "intent": "A39.planeon_cgroup_server_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -20463,7 +20673,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1953",
+   "id": "C1974",
    "intent": "A39.planeon_cgroup_server_t: planeon_admin_t is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -20473,7 +20683,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1954",
+   "id": "C1975",
    "intent": "A39.planeon_cgroup_server_t: OTHER_DOMAIN is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -20483,7 +20693,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1955",
+   "id": "C1976",
    "intent": "A39.planeon_cgroup_server_t: planeon_worker_t is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -20493,7 +20703,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1956",
+   "id": "C1977",
    "intent": "A39.planeon_cgroup_server_t: qualk8s_container_t is denied planeon_cgroup_server_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -20503,7 +20713,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1957",
+   "id": "C1978",
    "intent": "A38.planeon_cgroup_observer_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "init_t",
@@ -20513,7 +20723,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1958",
+   "id": "C1979",
    "intent": "A38.planeon_cgroup_observer_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -20523,7 +20733,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1959",
+   "id": "C1980",
    "intent": "A38.planeon_cgroup_observer_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -20533,7 +20743,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1960",
+   "id": "C1981",
    "intent": "A38.planeon_cgroup_observer_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -20543,7 +20753,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1961",
+   "id": "C1982",
    "intent": "A38.planeon_cgroup_observer_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -20553,7 +20763,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1962",
+   "id": "C1983",
    "intent": "A38.planeon_cgroup_observer_t: planeon_admin_t is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -20563,7 +20773,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1963",
+   "id": "C1984",
    "intent": "A38.planeon_cgroup_observer_t: OTHER_DOMAIN is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -20573,7 +20783,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1964",
+   "id": "C1985",
    "intent": "A38.planeon_cgroup_observer_t: planeon_worker_t is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -20583,7 +20793,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1965",
+   "id": "C1986",
    "intent": "A38.planeon_cgroup_observer_t: qualk8s_container_t is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -20593,7 +20803,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1966",
+   "id": "C1987",
    "intent": "A38.planeon_cgroup_observer_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "init_t",
@@ -20603,7 +20813,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1967",
+   "id": "C1988",
    "intent": "A38.planeon_cgroup_observer_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -20613,7 +20823,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1968",
+   "id": "C1989",
    "intent": "A38.planeon_cgroup_observer_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -20623,7 +20833,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1969",
+   "id": "C1990",
    "intent": "A38.planeon_cgroup_observer_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -20633,7 +20843,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1970",
+   "id": "C1991",
    "intent": "A38.planeon_cgroup_observer_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -20643,7 +20853,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1971",
+   "id": "C1992",
    "intent": "A38.planeon_cgroup_observer_t: planeon_admin_t is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -20653,7 +20863,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1972",
+   "id": "C1993",
    "intent": "A38.planeon_cgroup_observer_t: OTHER_DOMAIN is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -20663,7 +20873,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1973",
+   "id": "C1994",
    "intent": "A38.planeon_cgroup_observer_t: planeon_worker_t is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -20673,7 +20883,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1974",
+   "id": "C1995",
    "intent": "A38.planeon_cgroup_observer_t: qualk8s_container_t is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -20683,7 +20893,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1975",
+   "id": "C1996",
    "intent": "A38.planeon_cgroup_observer_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
@@ -20693,7 +20903,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1976",
+   "id": "C1997",
    "intent": "A38.planeon_cgroup_observer_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -20703,7 +20913,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1977",
+   "id": "C1998",
    "intent": "A38.planeon_cgroup_observer_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -20713,7 +20923,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1978",
+   "id": "C1999",
    "intent": "A38.planeon_cgroup_observer_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -20723,7 +20933,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C1979",
+   "id": "C2000",
    "intent": "A38.planeon_cgroup_observer_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -20733,7 +20943,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1980",
+   "id": "C2001",
    "intent": "A38.planeon_cgroup_observer_t: planeon_admin_t is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -20743,7 +20953,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1981",
+   "id": "C2002",
    "intent": "A38.planeon_cgroup_observer_t: OTHER_DOMAIN is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -20753,7 +20963,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1982",
+   "id": "C2003",
    "intent": "A38.planeon_cgroup_observer_t: planeon_worker_t is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -20763,7 +20973,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C1983",
+   "id": "C2004",
    "intent": "A38.planeon_cgroup_observer_t: qualk8s_container_t is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -20773,7 +20983,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1984",
+   "id": "C2005",
    "intent": "A39.planeon_cgroup_observer_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -20783,7 +20993,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1985",
+   "id": "C2006",
    "intent": "A39.planeon_cgroup_observer_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -20793,7 +21003,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1986",
+   "id": "C2007",
    "intent": "A39.planeon_cgroup_observer_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -20803,7 +21013,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1987",
+   "id": "C2008",
    "intent": "A39.planeon_cgroup_observer_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -20813,7 +21023,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1988",
+   "id": "C2009",
    "intent": "A39.planeon_cgroup_observer_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -20823,7 +21033,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1989",
+   "id": "C2010",
    "intent": "A39.planeon_cgroup_observer_t: planeon_admin_t is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -20833,7 +21043,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1990",
+   "id": "C2011",
    "intent": "A39.planeon_cgroup_observer_t: OTHER_DOMAIN is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -20843,7 +21053,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1991",
+   "id": "C2012",
    "intent": "A39.planeon_cgroup_observer_t: planeon_worker_t is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -20853,7 +21063,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1992",
+   "id": "C2013",
    "intent": "A39.planeon_cgroup_observer_t: qualk8s_container_t is denied planeon_cgroup_observer_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -20863,7 +21073,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1993",
+   "id": "C2014",
    "intent": "A39.planeon_cgroup_observer_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -20873,7 +21083,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1994",
+   "id": "C2015",
    "intent": "A39.planeon_cgroup_observer_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -20883,7 +21093,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1995",
+   "id": "C2016",
    "intent": "A39.planeon_cgroup_observer_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -20893,7 +21103,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1996",
+   "id": "C2017",
    "intent": "A39.planeon_cgroup_observer_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -20903,7 +21113,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C1997",
+   "id": "C2018",
    "intent": "A39.planeon_cgroup_observer_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -20913,7 +21123,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1998",
+   "id": "C2019",
    "intent": "A39.planeon_cgroup_observer_t: planeon_admin_t is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -20923,7 +21133,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C1999",
+   "id": "C2020",
    "intent": "A39.planeon_cgroup_observer_t: OTHER_DOMAIN is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -20933,7 +21143,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2000",
+   "id": "C2021",
    "intent": "A39.planeon_cgroup_observer_t: planeon_worker_t is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -20943,7 +21153,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2001",
+   "id": "C2022",
    "intent": "A39.planeon_cgroup_observer_t: qualk8s_container_t is denied planeon_cgroup_observer_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -20953,7 +21163,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2002",
+   "id": "C2023",
    "intent": "A39.planeon_cgroup_observer_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -20963,7 +21173,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2003",
+   "id": "C2024",
    "intent": "A39.planeon_cgroup_observer_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -20973,7 +21183,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2004",
+   "id": "C2025",
    "intent": "A39.planeon_cgroup_observer_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -20983,7 +21193,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2005",
+   "id": "C2026",
    "intent": "A39.planeon_cgroup_observer_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -20993,7 +21203,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2006",
+   "id": "C2027",
    "intent": "A39.planeon_cgroup_observer_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -21003,7 +21213,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2007",
+   "id": "C2028",
    "intent": "A39.planeon_cgroup_observer_t: planeon_admin_t is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -21013,7 +21223,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2008",
+   "id": "C2029",
    "intent": "A39.planeon_cgroup_observer_t: OTHER_DOMAIN is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -21023,7 +21233,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2009",
+   "id": "C2030",
    "intent": "A39.planeon_cgroup_observer_t: planeon_worker_t is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -21033,7 +21243,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2010",
+   "id": "C2031",
    "intent": "A39.planeon_cgroup_observer_t: qualk8s_container_t is denied planeon_cgroup_observer_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -21043,7 +21253,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2011",
+   "id": "C2032",
    "intent": "A38.planeon_cgroup_gate_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "init_t",
@@ -21053,7 +21263,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2012",
+   "id": "C2033",
    "intent": "A38.planeon_cgroup_gate_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -21063,7 +21273,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2013",
+   "id": "C2034",
    "intent": "A38.planeon_cgroup_gate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -21073,7 +21283,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2014",
+   "id": "C2035",
    "intent": "A38.planeon_cgroup_gate_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -21083,7 +21293,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2015",
+   "id": "C2036",
    "intent": "A38.planeon_cgroup_gate_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -21093,7 +21303,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2016",
+   "id": "C2037",
    "intent": "A38.planeon_cgroup_gate_t: planeon_admin_t is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -21103,7 +21313,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2017",
+   "id": "C2038",
    "intent": "A38.planeon_cgroup_gate_t: OTHER_DOMAIN is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -21113,7 +21323,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2018",
+   "id": "C2039",
    "intent": "A38.planeon_cgroup_gate_t: planeon_worker_t is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -21123,7 +21333,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2019",
+   "id": "C2040",
    "intent": "A38.planeon_cgroup_gate_t: qualk8s_container_t is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -21133,7 +21343,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2020",
+   "id": "C2041",
    "intent": "A38.planeon_cgroup_gate_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "init_t",
@@ -21143,7 +21353,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2021",
+   "id": "C2042",
    "intent": "A38.planeon_cgroup_gate_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -21153,7 +21363,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2022",
+   "id": "C2043",
    "intent": "A38.planeon_cgroup_gate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -21163,7 +21373,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2023",
+   "id": "C2044",
    "intent": "A38.planeon_cgroup_gate_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -21173,7 +21383,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2024",
+   "id": "C2045",
    "intent": "A38.planeon_cgroup_gate_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -21183,7 +21393,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2025",
+   "id": "C2046",
    "intent": "A38.planeon_cgroup_gate_t: planeon_admin_t is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -21193,7 +21403,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2026",
+   "id": "C2047",
    "intent": "A38.planeon_cgroup_gate_t: OTHER_DOMAIN is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -21203,7 +21413,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2027",
+   "id": "C2048",
    "intent": "A38.planeon_cgroup_gate_t: planeon_worker_t is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -21213,7 +21423,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2028",
+   "id": "C2049",
    "intent": "A38.planeon_cgroup_gate_t: qualk8s_container_t is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -21223,7 +21433,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2029",
+   "id": "C2050",
    "intent": "A38.planeon_cgroup_gate_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
@@ -21233,7 +21443,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2030",
+   "id": "C2051",
    "intent": "A38.planeon_cgroup_gate_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -21243,7 +21453,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2031",
+   "id": "C2052",
    "intent": "A38.planeon_cgroup_gate_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -21253,7 +21463,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2032",
+   "id": "C2053",
    "intent": "A38.planeon_cgroup_gate_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -21263,7 +21473,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2033",
+   "id": "C2054",
    "intent": "A38.planeon_cgroup_gate_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -21273,7 +21483,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2034",
+   "id": "C2055",
    "intent": "A38.planeon_cgroup_gate_t: planeon_admin_t is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -21283,7 +21493,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2035",
+   "id": "C2056",
    "intent": "A38.planeon_cgroup_gate_t: OTHER_DOMAIN is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -21293,7 +21503,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2036",
+   "id": "C2057",
    "intent": "A38.planeon_cgroup_gate_t: planeon_worker_t is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -21303,7 +21513,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2037",
+   "id": "C2058",
    "intent": "A38.planeon_cgroup_gate_t: qualk8s_container_t is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -21313,7 +21523,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2038",
+   "id": "C2059",
    "intent": "A39.planeon_cgroup_gate_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -21323,7 +21533,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2039",
+   "id": "C2060",
    "intent": "A39.planeon_cgroup_gate_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -21333,7 +21543,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2040",
+   "id": "C2061",
    "intent": "A39.planeon_cgroup_gate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -21343,7 +21553,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2041",
+   "id": "C2062",
    "intent": "A39.planeon_cgroup_gate_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -21353,7 +21563,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2042",
+   "id": "C2063",
    "intent": "A39.planeon_cgroup_gate_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -21363,7 +21573,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2043",
+   "id": "C2064",
    "intent": "A39.planeon_cgroup_gate_t: planeon_admin_t is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -21373,7 +21583,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2044",
+   "id": "C2065",
    "intent": "A39.planeon_cgroup_gate_t: OTHER_DOMAIN is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -21383,7 +21593,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2045",
+   "id": "C2066",
    "intent": "A39.planeon_cgroup_gate_t: planeon_worker_t is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -21393,7 +21603,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2046",
+   "id": "C2067",
    "intent": "A39.planeon_cgroup_gate_t: qualk8s_container_t is denied planeon_cgroup_gate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -21403,7 +21613,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2047",
+   "id": "C2068",
    "intent": "A39.planeon_cgroup_gate_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -21413,7 +21623,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2048",
+   "id": "C2069",
    "intent": "A39.planeon_cgroup_gate_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -21423,7 +21633,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2049",
+   "id": "C2070",
    "intent": "A39.planeon_cgroup_gate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -21433,7 +21643,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2050",
+   "id": "C2071",
    "intent": "A39.planeon_cgroup_gate_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -21443,7 +21653,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2051",
+   "id": "C2072",
    "intent": "A39.planeon_cgroup_gate_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -21453,7 +21663,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2052",
+   "id": "C2073",
    "intent": "A39.planeon_cgroup_gate_t: planeon_admin_t is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -21463,7 +21673,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2053",
+   "id": "C2074",
    "intent": "A39.planeon_cgroup_gate_t: OTHER_DOMAIN is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -21473,7 +21683,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2054",
+   "id": "C2075",
    "intent": "A39.planeon_cgroup_gate_t: planeon_worker_t is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -21483,7 +21693,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2055",
+   "id": "C2076",
    "intent": "A39.planeon_cgroup_gate_t: qualk8s_container_t is denied planeon_cgroup_gate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -21493,7 +21703,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2056",
+   "id": "C2077",
    "intent": "A39.planeon_cgroup_gate_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -21503,7 +21713,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2057",
+   "id": "C2078",
    "intent": "A39.planeon_cgroup_gate_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -21513,7 +21723,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2058",
+   "id": "C2079",
    "intent": "A39.planeon_cgroup_gate_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -21523,7 +21733,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2059",
+   "id": "C2080",
    "intent": "A39.planeon_cgroup_gate_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -21533,7 +21743,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2060",
+   "id": "C2081",
    "intent": "A39.planeon_cgroup_gate_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -21543,7 +21753,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2061",
+   "id": "C2082",
    "intent": "A39.planeon_cgroup_gate_t: planeon_admin_t is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -21553,7 +21763,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2062",
+   "id": "C2083",
    "intent": "A39.planeon_cgroup_gate_t: OTHER_DOMAIN is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -21563,7 +21773,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2063",
+   "id": "C2084",
    "intent": "A39.planeon_cgroup_gate_t: planeon_worker_t is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -21573,7 +21783,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2064",
+   "id": "C2085",
    "intent": "A39.planeon_cgroup_gate_t: qualk8s_container_t is denied planeon_cgroup_gate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -21583,228 +21793,498 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2065",
-   "intent": "A38.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "init_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2066",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_contain_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2067",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_server_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2068",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_observer_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2069",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_broker_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2070",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2071",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_admin_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2072",
-   "intent": "A38.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "OTHER_DOMAIN",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2073",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "planeon_worker_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2074",
-   "intent": "A38.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
-   "perm": "search",
-   "source": "qualk8s_container_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2075",
-   "intent": "A38.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "init_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2076",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_contain_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2077",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_server_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2078",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_observer_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2079",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_broker_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2080",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2081",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_admin_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2082",
-   "intent": "A38.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "OTHER_DOMAIN",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2083",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "planeon_worker_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": false,
-   "id": "C2084",
-   "intent": "A38.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
-   "perm": "search",
-   "source": "qualk8s_container_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
-   "id": "C2085",
-   "intent": "A38.planeon_cgroup_delegate_t: init_t is allowed (MAINTENANCE_BOOT)",
-   "perm": "search",
-   "source": "init_t",
-   "state": "MAINTENANCE_BOOT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "dir",
-   "expect": true,
    "id": "C2086",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
-   "perm": "search",
-   "source": "planeon_contain_t",
-   "state": "MAINTENANCE_BOOT",
+   "intent": "A38.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "init_t",
+   "state": "ENROLLED_CONTAINMENT",
    "target": "planeon_cgroup_delegate_t"
   },
   {
    "class": "dir",
    "expect": true,
    "id": "C2087",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2088",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2089",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2090",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2091",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2092",
+   "intent": "A38.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2093",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2094",
+   "intent": "A38.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "open",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2095",
+   "intent": "A38.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "init_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2096",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2097",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2098",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2099",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2100",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2101",
+   "intent": "A38.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2102",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2103",
+   "intent": "A38.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "open",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2104",
+   "intent": "A38.planeon_cgroup_delegate_t: init_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "init_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2105",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_contain_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2106",
    "intent": "A38.planeon_cgroup_delegate_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_server_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2107",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_observer_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2108",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_broker_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2109",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_admin_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2110",
+   "intent": "A38.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "OTHER_DOMAIN",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2111",
+   "intent": "A38.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "planeon_worker_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2112",
+   "intent": "A38.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "perm": "open",
+   "source": "qualk8s_container_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2113",
+   "intent": "A38S.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "init_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2114",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2115",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2116",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2117",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2118",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2119",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2120",
+   "intent": "A38S.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2121",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2122",
+   "intent": "A38S.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
+   "perm": "search",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2123",
+   "intent": "A38S.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "init_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2124",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_contain_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2125",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2126",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2127",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2128",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2129",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2130",
+   "intent": "A38S.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2131",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "C2132",
+   "intent": "A38S.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
+   "perm": "search",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2133",
+   "intent": "A38S.planeon_cgroup_delegate_t: init_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "search",
+   "source": "init_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2134",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "search",
+   "source": "planeon_contain_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "dir",
+   "expect": true,
+   "id": "C2135",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
    "state": "MAINTENANCE_BOOT",
@@ -21813,8 +22293,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2088",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C2136",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
    "state": "MAINTENANCE_BOOT",
@@ -21823,8 +22303,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2089",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C2137",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
    "state": "MAINTENANCE_BOOT",
@@ -21833,8 +22313,8 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2090",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
+   "id": "C2138",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_gate_t",
    "state": "MAINTENANCE_BOOT",
@@ -21843,8 +22323,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2091",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "id": "C2139",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
    "state": "MAINTENANCE_BOOT",
@@ -21853,8 +22333,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2092",
-   "intent": "A38.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "id": "C2140",
+   "intent": "A38S.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
    "state": "MAINTENANCE_BOOT",
@@ -21863,8 +22343,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2093",
-   "intent": "A38.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "id": "C2141",
+   "intent": "A38S.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
    "state": "MAINTENANCE_BOOT",
@@ -21873,8 +22353,8 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2094",
-   "intent": "A38.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
+   "id": "C2142",
+   "intent": "A38S.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
    "state": "MAINTENANCE_BOOT",
@@ -21883,7 +22363,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2095",
+   "id": "C2143",
    "intent": "A39.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -21893,7 +22373,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2096",
+   "id": "C2144",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -21903,7 +22383,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2097",
+   "id": "C2145",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -21913,7 +22393,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2098",
+   "id": "C2146",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -21923,7 +22403,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2099",
+   "id": "C2147",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -21932,18 +22412,8 @@
   },
   {
    "class": "file",
-   "expect": true,
-   "id": "C2100",
-   "intent": "A39.planeon_cgroup_delegate_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_CONTAINMENT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "file",
    "expect": false,
-   "id": "C2101",
+   "id": "C2148",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -21953,7 +22423,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2102",
+   "id": "C2149",
    "intent": "A39.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -21963,7 +22433,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2103",
+   "id": "C2150",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -21973,7 +22443,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2104",
+   "id": "C2151",
    "intent": "A39.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -21983,7 +22453,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2105",
+   "id": "C2152",
    "intent": "A39.planeon_cgroup_delegate_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -21993,7 +22463,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2106",
+   "id": "C2153",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -22003,7 +22473,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2107",
+   "id": "C2154",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -22013,7 +22483,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2108",
+   "id": "C2155",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -22023,7 +22493,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2109",
+   "id": "C2156",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -22032,18 +22502,8 @@
   },
   {
    "class": "file",
-   "expect": true,
-   "id": "C2110",
-   "intent": "A39.planeon_cgroup_delegate_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "ENROLLED_SEALED",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "file",
    "expect": false,
-   "id": "C2111",
+   "id": "C2157",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -22053,7 +22513,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2112",
+   "id": "C2158",
    "intent": "A39.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -22063,7 +22523,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2113",
+   "id": "C2159",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -22073,7 +22533,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2114",
+   "id": "C2160",
    "intent": "A39.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -22083,7 +22543,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2115",
+   "id": "C2161",
    "intent": "A39.planeon_cgroup_delegate_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -22093,7 +22553,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2116",
+   "id": "C2162",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -22103,7 +22563,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2117",
+   "id": "C2163",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -22113,7 +22573,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2118",
+   "id": "C2164",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -22123,7 +22583,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2119",
+   "id": "C2165",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -22132,18 +22592,8 @@
   },
   {
    "class": "file",
-   "expect": true,
-   "id": "C2120",
-   "intent": "A39.planeon_cgroup_delegate_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
-   "perm": "open",
-   "source": "planeon_gate_t",
-   "state": "MAINTENANCE_BOOT",
-   "target": "planeon_cgroup_delegate_t"
-  },
-  {
-   "class": "file",
    "expect": false,
-   "id": "C2121",
+   "id": "C2166",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_admin_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -22153,7 +22603,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2122",
+   "id": "C2167",
    "intent": "A39.planeon_cgroup_delegate_t: OTHER_DOMAIN is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -22163,7 +22613,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2123",
+   "id": "C2168",
    "intent": "A39.planeon_cgroup_delegate_t: planeon_worker_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -22173,7 +22623,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2124",
+   "id": "C2169",
    "intent": "A39.planeon_cgroup_delegate_t: qualk8s_container_t is denied planeon_cgroup_delegate_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -22183,7 +22633,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2125",
+   "id": "C2170",
    "intent": "A38.planeon_cgroup_broker_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "init_t",
@@ -22193,7 +22643,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2126",
+   "id": "C2171",
    "intent": "A38.planeon_cgroup_broker_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -22203,7 +22653,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2127",
+   "id": "C2172",
    "intent": "A38.planeon_cgroup_broker_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -22213,7 +22663,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2128",
+   "id": "C2173",
    "intent": "A38.planeon_cgroup_broker_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -22223,7 +22673,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2129",
+   "id": "C2174",
    "intent": "A38.planeon_cgroup_broker_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -22233,7 +22683,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2130",
+   "id": "C2175",
    "intent": "A38.planeon_cgroup_broker_t: planeon_admin_t is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -22243,7 +22693,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2131",
+   "id": "C2176",
    "intent": "A38.planeon_cgroup_broker_t: OTHER_DOMAIN is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -22253,7 +22703,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2132",
+   "id": "C2177",
    "intent": "A38.planeon_cgroup_broker_t: planeon_worker_t is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -22263,7 +22713,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2133",
+   "id": "C2178",
    "intent": "A38.planeon_cgroup_broker_t: qualk8s_container_t is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -22273,7 +22723,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2134",
+   "id": "C2179",
    "intent": "A38.planeon_cgroup_broker_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "init_t",
@@ -22283,7 +22733,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2135",
+   "id": "C2180",
    "intent": "A38.planeon_cgroup_broker_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -22293,7 +22743,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2136",
+   "id": "C2181",
    "intent": "A38.planeon_cgroup_broker_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -22303,7 +22753,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2137",
+   "id": "C2182",
    "intent": "A38.planeon_cgroup_broker_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -22313,7 +22763,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2138",
+   "id": "C2183",
    "intent": "A38.planeon_cgroup_broker_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -22323,7 +22773,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2139",
+   "id": "C2184",
    "intent": "A38.planeon_cgroup_broker_t: planeon_admin_t is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -22333,7 +22783,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2140",
+   "id": "C2185",
    "intent": "A38.planeon_cgroup_broker_t: OTHER_DOMAIN is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -22343,7 +22793,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2141",
+   "id": "C2186",
    "intent": "A38.planeon_cgroup_broker_t: planeon_worker_t is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -22353,7 +22803,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2142",
+   "id": "C2187",
    "intent": "A38.planeon_cgroup_broker_t: qualk8s_container_t is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -22363,7 +22813,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2143",
+   "id": "C2188",
    "intent": "A38.planeon_cgroup_broker_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
@@ -22373,7 +22823,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2144",
+   "id": "C2189",
    "intent": "A38.planeon_cgroup_broker_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -22383,7 +22833,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2145",
+   "id": "C2190",
    "intent": "A38.planeon_cgroup_broker_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -22393,7 +22843,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2146",
+   "id": "C2191",
    "intent": "A38.planeon_cgroup_broker_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -22403,7 +22853,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2147",
+   "id": "C2192",
    "intent": "A38.planeon_cgroup_broker_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -22413,7 +22863,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2148",
+   "id": "C2193",
    "intent": "A38.planeon_cgroup_broker_t: planeon_admin_t is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -22423,7 +22873,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2149",
+   "id": "C2194",
    "intent": "A38.planeon_cgroup_broker_t: OTHER_DOMAIN is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -22433,7 +22883,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2150",
+   "id": "C2195",
    "intent": "A38.planeon_cgroup_broker_t: planeon_worker_t is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -22443,7 +22893,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2151",
+   "id": "C2196",
    "intent": "A38.planeon_cgroup_broker_t: qualk8s_container_t is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -22453,7 +22903,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2152",
+   "id": "C2197",
    "intent": "A39.planeon_cgroup_broker_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -22463,7 +22913,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2153",
+   "id": "C2198",
    "intent": "A39.planeon_cgroup_broker_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -22473,7 +22923,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2154",
+   "id": "C2199",
    "intent": "A39.planeon_cgroup_broker_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -22483,7 +22933,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2155",
+   "id": "C2200",
    "intent": "A39.planeon_cgroup_broker_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -22493,7 +22943,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2156",
+   "id": "C2201",
    "intent": "A39.planeon_cgroup_broker_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -22503,7 +22953,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2157",
+   "id": "C2202",
    "intent": "A39.planeon_cgroup_broker_t: planeon_admin_t is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -22513,7 +22963,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2158",
+   "id": "C2203",
    "intent": "A39.planeon_cgroup_broker_t: OTHER_DOMAIN is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -22523,7 +22973,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2159",
+   "id": "C2204",
    "intent": "A39.planeon_cgroup_broker_t: planeon_worker_t is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -22533,7 +22983,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2160",
+   "id": "C2205",
    "intent": "A39.planeon_cgroup_broker_t: qualk8s_container_t is denied planeon_cgroup_broker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -22543,7 +22993,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2161",
+   "id": "C2206",
    "intent": "A39.planeon_cgroup_broker_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -22553,7 +23003,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2162",
+   "id": "C2207",
    "intent": "A39.planeon_cgroup_broker_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -22563,7 +23013,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2163",
+   "id": "C2208",
    "intent": "A39.planeon_cgroup_broker_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -22573,7 +23023,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2164",
+   "id": "C2209",
    "intent": "A39.planeon_cgroup_broker_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -22583,7 +23033,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2165",
+   "id": "C2210",
    "intent": "A39.planeon_cgroup_broker_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -22593,7 +23043,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2166",
+   "id": "C2211",
    "intent": "A39.planeon_cgroup_broker_t: planeon_admin_t is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -22603,7 +23053,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2167",
+   "id": "C2212",
    "intent": "A39.planeon_cgroup_broker_t: OTHER_DOMAIN is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -22613,7 +23063,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2168",
+   "id": "C2213",
    "intent": "A39.planeon_cgroup_broker_t: planeon_worker_t is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -22623,7 +23073,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2169",
+   "id": "C2214",
    "intent": "A39.planeon_cgroup_broker_t: qualk8s_container_t is denied planeon_cgroup_broker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -22633,7 +23083,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2170",
+   "id": "C2215",
    "intent": "A39.planeon_cgroup_broker_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -22643,7 +23093,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2171",
+   "id": "C2216",
    "intent": "A39.planeon_cgroup_broker_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -22653,7 +23103,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2172",
+   "id": "C2217",
    "intent": "A39.planeon_cgroup_broker_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -22663,7 +23113,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2173",
+   "id": "C2218",
    "intent": "A39.planeon_cgroup_broker_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -22673,7 +23123,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2174",
+   "id": "C2219",
    "intent": "A39.planeon_cgroup_broker_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -22683,7 +23133,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2175",
+   "id": "C2220",
    "intent": "A39.planeon_cgroup_broker_t: planeon_admin_t is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -22693,7 +23143,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2176",
+   "id": "C2221",
    "intent": "A39.planeon_cgroup_broker_t: OTHER_DOMAIN is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -22703,7 +23153,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2177",
+   "id": "C2222",
    "intent": "A39.planeon_cgroup_broker_t: planeon_worker_t is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -22713,7 +23163,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2178",
+   "id": "C2223",
    "intent": "A39.planeon_cgroup_broker_t: qualk8s_container_t is denied planeon_cgroup_broker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -22723,7 +23173,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2179",
+   "id": "C2224",
    "intent": "A38.planeon_cgroup_worker_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "init_t",
@@ -22733,7 +23183,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2180",
+   "id": "C2225",
    "intent": "A38.planeon_cgroup_worker_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -22743,7 +23193,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2181",
+   "id": "C2226",
    "intent": "A38.planeon_cgroup_worker_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -22753,7 +23203,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2182",
+   "id": "C2227",
    "intent": "A38.planeon_cgroup_worker_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -22763,7 +23213,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2183",
+   "id": "C2228",
    "intent": "A38.planeon_cgroup_worker_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -22773,7 +23223,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2184",
+   "id": "C2229",
    "intent": "A38.planeon_cgroup_worker_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_gate_t",
@@ -22783,7 +23233,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2185",
+   "id": "C2230",
    "intent": "A38.planeon_cgroup_worker_t: planeon_admin_t is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -22793,7 +23243,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2186",
+   "id": "C2231",
    "intent": "A38.planeon_cgroup_worker_t: OTHER_DOMAIN is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -22803,7 +23253,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2187",
+   "id": "C2232",
    "intent": "A38.planeon_cgroup_worker_t: planeon_worker_t is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -22813,7 +23263,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2188",
+   "id": "C2233",
    "intent": "A38.planeon_cgroup_worker_t: qualk8s_container_t is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -22823,7 +23273,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2189",
+   "id": "C2234",
    "intent": "A38.planeon_cgroup_worker_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "init_t",
@@ -22833,7 +23283,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2190",
+   "id": "C2235",
    "intent": "A38.planeon_cgroup_worker_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -22843,7 +23293,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2191",
+   "id": "C2236",
    "intent": "A38.planeon_cgroup_worker_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -22853,7 +23303,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2192",
+   "id": "C2237",
    "intent": "A38.planeon_cgroup_worker_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -22863,7 +23313,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2193",
+   "id": "C2238",
    "intent": "A38.planeon_cgroup_worker_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -22873,7 +23323,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2194",
+   "id": "C2239",
    "intent": "A38.planeon_cgroup_worker_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_gate_t",
@@ -22883,7 +23333,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2195",
+   "id": "C2240",
    "intent": "A38.planeon_cgroup_worker_t: planeon_admin_t is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -22893,7 +23343,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2196",
+   "id": "C2241",
    "intent": "A38.planeon_cgroup_worker_t: OTHER_DOMAIN is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -22903,7 +23353,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2197",
+   "id": "C2242",
    "intent": "A38.planeon_cgroup_worker_t: planeon_worker_t is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -22913,7 +23363,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2198",
+   "id": "C2243",
    "intent": "A38.planeon_cgroup_worker_t: qualk8s_container_t is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -22923,7 +23373,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2199",
+   "id": "C2244",
    "intent": "A38.planeon_cgroup_worker_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "init_t",
@@ -22933,7 +23383,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2200",
+   "id": "C2245",
    "intent": "A38.planeon_cgroup_worker_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_contain_t",
@@ -22943,7 +23393,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2201",
+   "id": "C2246",
    "intent": "A38.planeon_cgroup_worker_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_server_t",
@@ -22953,7 +23403,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2202",
+   "id": "C2247",
    "intent": "A38.planeon_cgroup_worker_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_observer_t",
@@ -22963,7 +23413,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2203",
+   "id": "C2248",
    "intent": "A38.planeon_cgroup_worker_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_broker_t",
@@ -22973,7 +23423,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "C2204",
+   "id": "C2249",
    "intent": "A38.planeon_cgroup_worker_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_gate_t",
@@ -22983,7 +23433,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2205",
+   "id": "C2250",
    "intent": "A38.planeon_cgroup_worker_t: planeon_admin_t is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_admin_t",
@@ -22993,7 +23443,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2206",
+   "id": "C2251",
    "intent": "A38.planeon_cgroup_worker_t: OTHER_DOMAIN is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "OTHER_DOMAIN",
@@ -23003,7 +23453,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2207",
+   "id": "C2252",
    "intent": "A38.planeon_cgroup_worker_t: planeon_worker_t is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "planeon_worker_t",
@@ -23013,7 +23463,7 @@
   {
    "class": "dir",
    "expect": false,
-   "id": "C2208",
+   "id": "C2253",
    "intent": "A38.planeon_cgroup_worker_t: qualk8s_container_t is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "search",
    "source": "qualk8s_container_t",
@@ -23023,7 +23473,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2209",
+   "id": "C2254",
    "intent": "A39.planeon_cgroup_worker_t: init_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "init_t",
@@ -23033,7 +23483,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2210",
+   "id": "C2255",
    "intent": "A39.planeon_cgroup_worker_t: planeon_contain_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -23043,7 +23493,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2211",
+   "id": "C2256",
    "intent": "A39.planeon_cgroup_worker_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -23053,7 +23503,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2212",
+   "id": "C2257",
    "intent": "A39.planeon_cgroup_worker_t: planeon_observer_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -23063,7 +23513,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2213",
+   "id": "C2258",
    "intent": "A39.planeon_cgroup_worker_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -23073,7 +23523,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2214",
+   "id": "C2259",
    "intent": "A39.planeon_cgroup_worker_t: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_gate_t",
@@ -23083,7 +23533,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2215",
+   "id": "C2260",
    "intent": "A39.planeon_cgroup_worker_t: planeon_admin_t is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -23093,7 +23543,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2216",
+   "id": "C2261",
    "intent": "A39.planeon_cgroup_worker_t: OTHER_DOMAIN is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -23103,7 +23553,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2217",
+   "id": "C2262",
    "intent": "A39.planeon_cgroup_worker_t: planeon_worker_t is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -23113,7 +23563,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2218",
+   "id": "C2263",
    "intent": "A39.planeon_cgroup_worker_t: qualk8s_container_t is denied planeon_cgroup_worker_t (ENROLLED_CONTAINMENT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -23123,7 +23573,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2219",
+   "id": "C2264",
    "intent": "A39.planeon_cgroup_worker_t: init_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "init_t",
@@ -23133,7 +23583,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2220",
+   "id": "C2265",
    "intent": "A39.planeon_cgroup_worker_t: planeon_contain_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -23143,7 +23593,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2221",
+   "id": "C2266",
    "intent": "A39.planeon_cgroup_worker_t: planeon_server_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -23153,7 +23603,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2222",
+   "id": "C2267",
    "intent": "A39.planeon_cgroup_worker_t: planeon_observer_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -23163,7 +23613,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2223",
+   "id": "C2268",
    "intent": "A39.planeon_cgroup_worker_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -23173,7 +23623,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2224",
+   "id": "C2269",
    "intent": "A39.planeon_cgroup_worker_t: planeon_gate_t is allowed (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_gate_t",
@@ -23183,7 +23633,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2225",
+   "id": "C2270",
    "intent": "A39.planeon_cgroup_worker_t: planeon_admin_t is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -23193,7 +23643,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2226",
+   "id": "C2271",
    "intent": "A39.planeon_cgroup_worker_t: OTHER_DOMAIN is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -23203,7 +23653,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2227",
+   "id": "C2272",
    "intent": "A39.planeon_cgroup_worker_t: planeon_worker_t is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -23213,7 +23663,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2228",
+   "id": "C2273",
    "intent": "A39.planeon_cgroup_worker_t: qualk8s_container_t is denied planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -23223,7 +23673,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2229",
+   "id": "C2274",
    "intent": "A39.planeon_cgroup_worker_t: init_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "init_t",
@@ -23233,7 +23683,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2230",
+   "id": "C2275",
    "intent": "A39.planeon_cgroup_worker_t: planeon_contain_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_contain_t",
@@ -23243,7 +23693,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2231",
+   "id": "C2276",
    "intent": "A39.planeon_cgroup_worker_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_server_t",
@@ -23253,7 +23703,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2232",
+   "id": "C2277",
    "intent": "A39.planeon_cgroup_worker_t: planeon_observer_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_observer_t",
@@ -23263,7 +23713,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2233",
+   "id": "C2278",
    "intent": "A39.planeon_cgroup_worker_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_broker_t",
@@ -23273,7 +23723,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2234",
+   "id": "C2279",
    "intent": "A39.planeon_cgroup_worker_t: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_gate_t",
@@ -23283,7 +23733,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2235",
+   "id": "C2280",
    "intent": "A39.planeon_cgroup_worker_t: planeon_admin_t is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_admin_t",
@@ -23293,7 +23743,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2236",
+   "id": "C2281",
    "intent": "A39.planeon_cgroup_worker_t: OTHER_DOMAIN is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "OTHER_DOMAIN",
@@ -23303,7 +23753,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2237",
+   "id": "C2282",
    "intent": "A39.planeon_cgroup_worker_t: planeon_worker_t is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "planeon_worker_t",
@@ -23313,7 +23763,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2238",
+   "id": "C2283",
    "intent": "A39.planeon_cgroup_worker_t: qualk8s_container_t is denied planeon_cgroup_worker_t (MAINTENANCE_BOOT)",
    "perm": "open",
    "source": "qualk8s_container_t",
@@ -23321,9 +23771,129 @@
    "target": "planeon_cgroup_worker_t"
   },
   {
+   "class": "capability",
+   "expect": false,
+   "id": "C2284",
+   "intent": "A68.capability: planeon_gate_t is denied planeon_gate_t (ENROLLED_CONTAINMENT)",
+   "perm": "chown",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "capability",
+   "expect": false,
+   "id": "C2285",
+   "intent": "A68.capability: planeon_gate_t is denied planeon_gate_t (ENROLLED_SEALED)",
+   "perm": "chown",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "capability",
+   "expect": false,
+   "id": "C2286",
+   "intent": "A68.capability: planeon_gate_t is denied planeon_gate_t (MAINTENANCE_BOOT)",
+   "perm": "chown",
+   "source": "planeon_gate_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "capability2",
+   "expect": false,
+   "id": "C2287",
+   "intent": "A68.capability2: planeon_gate_t is denied planeon_gate_t (ENROLLED_CONTAINMENT)",
+   "perm": "mac_override",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "capability2",
+   "expect": false,
+   "id": "C2288",
+   "intent": "A68.capability2: planeon_gate_t is denied planeon_gate_t (ENROLLED_SEALED)",
+   "perm": "mac_override",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "capability2",
+   "expect": false,
+   "id": "C2289",
+   "intent": "A68.capability2: planeon_gate_t is denied planeon_gate_t (MAINTENANCE_BOOT)",
+   "perm": "mac_override",
+   "source": "planeon_gate_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap_userns",
+   "expect": false,
+   "id": "C2290",
+   "intent": "A68.cap_userns: planeon_gate_t is denied planeon_gate_t (ENROLLED_CONTAINMENT)",
+   "perm": "chown",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap_userns",
+   "expect": false,
+   "id": "C2291",
+   "intent": "A68.cap_userns: planeon_gate_t is denied planeon_gate_t (ENROLLED_SEALED)",
+   "perm": "chown",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap_userns",
+   "expect": false,
+   "id": "C2292",
+   "intent": "A68.cap_userns: planeon_gate_t is denied planeon_gate_t (MAINTENANCE_BOOT)",
+   "perm": "chown",
+   "source": "planeon_gate_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap2_userns",
+   "expect": false,
+   "id": "C2293",
+   "intent": "A68.cap2_userns: planeon_gate_t is denied planeon_gate_t (ENROLLED_CONTAINMENT)",
+   "perm": "mac_override",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap2_userns",
+   "expect": false,
+   "id": "C2294",
+   "intent": "A68.cap2_userns: planeon_gate_t is denied planeon_gate_t (ENROLLED_SEALED)",
+   "perm": "mac_override",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap2_userns",
+   "expect": false,
+   "id": "C2295",
+   "intent": "A68.cap2_userns: planeon_gate_t is denied planeon_gate_t (MAINTENANCE_BOOT)",
+   "perm": "mac_override",
+   "source": "planeon_gate_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_t"
+  },
+  {
    "class": "file",
    "expect": true,
-   "id": "C2239",
+   "id": "C2296",
    "intent": "A67: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -23333,7 +23903,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2240",
+   "id": "C2297",
    "intent": "A67: planeon_admin_t is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
    "perm": "read",
    "source": "planeon_admin_t",
@@ -23343,7 +23913,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2241",
+   "id": "C2298",
    "intent": "A67: OTHER_DOMAIN is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
    "perm": "read",
    "source": "OTHER_DOMAIN",
@@ -23353,7 +23923,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2242",
+   "id": "C2299",
    "intent": "A67: planeon_worker_t is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
    "perm": "read",
    "source": "planeon_worker_t",
@@ -23363,7 +23933,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2243",
+   "id": "C2300",
    "intent": "A67: qualk8s_container_t is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
    "perm": "read",
    "source": "qualk8s_container_t",
@@ -23373,7 +23943,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2244",
+   "id": "C2301",
    "intent": "A67: planeon_gate_t is allowed (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -23383,7 +23953,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2245",
+   "id": "C2302",
    "intent": "A67: planeon_admin_t is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_admin_t",
@@ -23393,7 +23963,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2246",
+   "id": "C2303",
    "intent": "A67: OTHER_DOMAIN is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
    "perm": "read",
    "source": "OTHER_DOMAIN",
@@ -23403,7 +23973,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2247",
+   "id": "C2304",
    "intent": "A67: planeon_worker_t is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_worker_t",
@@ -23413,7 +23983,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2248",
+   "id": "C2305",
    "intent": "A67: qualk8s_container_t is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
    "perm": "read",
    "source": "qualk8s_container_t",
@@ -23423,7 +23993,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "C2249",
+   "id": "C2306",
    "intent": "A67: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -23433,7 +24003,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2250",
+   "id": "C2307",
    "intent": "A67: planeon_admin_t is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
    "perm": "read",
    "source": "planeon_admin_t",
@@ -23443,7 +24013,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2251",
+   "id": "C2308",
    "intent": "A67: OTHER_DOMAIN is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
    "perm": "read",
    "source": "OTHER_DOMAIN",
@@ -23453,7 +24023,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2252",
+   "id": "C2309",
    "intent": "A67: planeon_worker_t is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
    "perm": "read",
    "source": "planeon_worker_t",
@@ -23463,7 +24033,7 @@
   {
    "class": "file",
    "expect": false,
-   "id": "C2253",
+   "id": "C2310",
    "intent": "A67: qualk8s_container_t is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
    "perm": "read",
    "source": "qualk8s_container_t",
@@ -23679,6 +24249,46 @@
    "source": "planeon_maint_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "N14",
+   "intent": "Q-MX-5: the gate cannot open the slice's files (it only searches the slice directory)",
+   "perm": "read",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_slice_t"
+  },
+  {
+   "class": "dir",
+   "expect": false,
+   "id": "N15",
+   "intent": "Q-MX-5: the gate cannot open the delegated service cgroup directory (search only)",
+   "perm": "open",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_cgroup_delegate_t"
+  },
+  {
+   "class": "capability",
+   "expect": false,
+   "id": "N16",
+   "intent": "HS43 H5: the gate holds no CAP_SYS_PTRACE",
+   "perm": "sys_ptrace",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "cap_userns",
+   "expect": false,
+   "id": "N17",
+   "intent": "HS43 H5: the gate holds no CAP_NET_BIND_SERVICE in a user namespace either",
+   "perm": "net_bind_service",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
   }
  ],
  "evidenceClass": "DATA_CHECK_ONLY",
@@ -24958,7 +25568,8 @@
   {
    "expect": {
     "failedAssertions": [
-     "A48"
+     "A48",
+     "A68.capability"
     ]
    },
    "id": "M56",
@@ -25186,6 +25797,179 @@
      ],
      "value": {
       "domain": "planeon_maint_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A68.capability"
+    ]
+   },
+   "id": "M66",
+   "intent": "review XR1-4: the gate is granted CAP_SYS_PTRACE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capabilities",
+      "planeon_gate_t"
+     ],
+     "value": [
+      {
+       "capability": "sys_ptrace",
+       "class": "capability"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A68.cap_userns"
+    ]
+   },
+   "id": "M67",
+   "intent": "review XR1-4: the gate is granted CAP_NET_BIND_SERVICE in a user namespace",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capabilities",
+      "planeon_gate_t"
+     ],
+     "value": [
+      {
+       "capability": "net_bind_service",
+       "class": "cap_userns"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A38.planeon_cgroup_slice_t",
+     "A39.planeon_cgroup_slice_t"
+    ]
+   },
+   "id": "M68",
+   "intent": "review XR1-2: the gate gets the whole READ group on the slice, not only dir search",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "types",
+      40,
+      "access",
+      "READ"
+     ],
+     "value": {
+      "domain": "planeon_gate_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A38.planeon_cgroup_delegate_t"
+    ]
+   },
+   "id": "M69",
+   "intent": "review XR1-2: the gate's narrowed grant on the delegated service cgroup widens to dir open",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "types",
+      45,
+      "access",
+      "READ",
+      5,
+      "perms"
+     ],
+     "value": [
+      "search",
+      "open"
+     ]
+    }
+   ]
+  },
+  {
+   "expect": {
+    "matrixError": "narrowed grant on planeon_cgroup_slice_t: {'classes': ['dir'], 'domain': 'planeon_gate_t', 'perms': ['write']}"
+   },
+   "id": "M70",
+   "intent": "v5: a narrowed grant lists only permissions of its own group",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "types",
+      40,
+      "access",
+      "READ",
+      5,
+      "perms"
+     ],
+     "value": [
+      "write"
+     ]
+    }
+   ]
+  },
+  {
+   "expect": {
+    "matrixError": "narrowed grant on planeon_cgroup_worker_t: {'classes': ['file'], 'domain': 'planeon_gate_t', 'perms': ['write']}"
+   },
+   "id": "M71",
+   "intent": "v5: only a READ grant may be narrowed",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "types",
+      47,
+      "access",
+      "WRITE"
+     ],
+     "value": {
+      "classes": [
+       "file"
+      ],
+      "domain": "planeon_gate_t",
+      "perms": [
+       "write"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "matrixError": "narrowed grant on planeon_cgroup_slice_t: {'domain': 'planeon_gate_t', 'perms': ['search']}"
+   },
+   "id": "M72",
+   "intent": "v5: a narrowed grant needs both lists",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "types",
+      40,
+      "access",
+      "READ",
+      5
+     ],
+     "value": {
+      "domain": "planeon_gate_t",
+      "perms": [
+       "search"
+      ]
      }
     }
    ]

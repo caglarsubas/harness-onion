@@ -1,6 +1,9 @@
-# Independent review brief — SELinux matrix v5 (SELINUX-MATRIX-I04-KEYCERT), round 1
+# Independent review brief — SELinux matrix v5 (SELINUX-MATRIX-I04-KEYCERT), round 2
 
 Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a verdict.
+
+Round 1 (`review-round1.json`, after adoption) returned CHANGES_REQUIRED: 1 MAJOR, 5 MINOR and 7 NOTE findings, XR1-1 to
+XR1-13. Each is answered in the bytes as listed under "Round-1 answers" below.
 
 v5 is the successor of the adopted matrix v4 `../selinux-matrix-v2/` (`planeon.internal.selinux-matrix/v4`; review round
 2 PASS_FOR_SOURCE_PUBLICATION, with G1 carried). The v4 bytes stay unchanged. README.md ("What v5 changes", "HS43 /proc
@@ -58,33 +61,55 @@ working tree is part of the subject.
 1. **Successor fidelity.** Is v5 the v4 matrix plus exactly the disclosed changes? Those are:
    - the two new types, appended last;
    - the gate's capability entry removed;
-   - the gate's READ on three cgroup types;
+   - the gate's READ on the probe-worker leaf, and narrowed `dir search` grants on its two parents;
    - one `procAccess` entry, appended last;
    - the A09, A38, A39 and A48 changes;
    - A38.<type> and A39.<type>;
-   - A67;
+   - A67, A68.<class> and A38S.<type>;
+   - A59.planeon_worker_t gaining the gate;
+   - the evaluator's one extension (narrowed READ grants), and nothing else in the evaluator;
    - A12, A13 and A36 gaining the new types as targets.
 
    Is every other v4 datum unchanged, and is every v4 type, `procAccess` entry and assertion index stable? Is v4
    byte-identical?
 2. **Vectors.** Is every v4 vector kept with its identifier and position? Is every changed expectation listed in
-   `v5Changes` with a true reason? Does every access and mutation check produce exactly its stated result? Do all 126
+   `v5Changes` with a true reason? Does every access and mutation check produce exactly its stated result? Do all 132
    assertions hold on the v5 matrix?
 3. **The I04 credentials.** Do `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` give read only to the gate, and
    write and relabel only to the maintenance domain in the maintenance boot? Can any mutation that grants another reader
    pass A09 or A67? Is the shape (key alone; chain and client CA together) argued correctly from the facts?
 4. **No capability for the gate.** Is the gate's `net_bind_service` gone from every route? Can a mutation that grants
    it pass A48?
-5. **The Q-HE3D-2 grant.** Is it exactly what the gate needs to count the probe worker's processes from its cgroup, and
-   no more beyond what the README states (the parents' READ group)? Does each A38.<type> and A39.<type> allow exactly
+5. **The Q-HE3D-2 grant.** Is it exactly what Q-MX-5 (a) approved (READ on the leaf, `dir search` on its two parents,
+   `procAccess` on the worker), with nothing more? Is the narrowed-grant extension closed in `check_matrix` and exact in
+   `allowed`, and can a narrowed grant reach anything outside its lists? Does each A38.<type> and A39.<type> allow exactly
    that type's readers? Do the stated kernel facts hold for Linux v6.12: ptrace-gated entries need the uid match or
    CAP_SYS_PTRACE, and SELinux labels each `/proc/<pid>` entry with the target's domain? Do they give the gate the
    worker's ungated entries only?
+5b. **No capability for the gate (A68).** Does any capability-class grant to the gate pass all assertions?
 6. **HS43 /proc evaluations.** Are the two "not narrowed" outcomes justified by the published native profile (P1, P5)?
    Is the statement that no published contract names the capturing role true? Do the residuals stay as HS43 states
    them?
 7. **Overclaims.** Does anything claim a policy module, a compiled or loaded policy, a selected distribution, the I04
    file paths, or any E01-E12 proof?
+
+## Round-1 answers
+
+| Finding | Answer |
+|---|---|
+| XR1-1 MAJOR | The three v4 README clauses HS43 supersedes now carry HS43's replacements: the gate also reads the writer's exe link, and P1 captures read exe links |
+| XR1-2 MINOR | The gate's grant on the two parents is narrowed to `dir search` (evaluator extension; A38S.<type>; N14, N15; M68-M72) |
+| XR1-3 MINOR | The F2 statement names the gate's v5 read |
+| XR1-4 MINOR | A68.<class>: the gate holds no permission of any capability class (N16, N17; M66, M67) |
+| XR1-5 MINOR | The HS43 /proc section and its change-table row say the decision is the owner's and open (Q-MX-2, Q-MX-3), and list the options |
+| XR1-6 MINOR | The Files row states the assertion count |
+| XR1-7 NOTE | The /proc statement is per class (exe needs `lnk_file read`), names the dumpable precondition, and gives ungated entries as examples |
+| XR1-8 NOTE | Both places name K1's carry to W01's record |
+| XR1-9 NOTE | A42 and A43 cited |
+| XR1-10 NOTE | One type per credential, the chain and client CA counted as one public trust bundle |
+| XR1-11 NOTE | The resolved spec's server-side mechanism is stated |
+| XR1-12 NOTE | Question 1 lists A59.planeon_worker_t and the new assertions |
+| XR1-13 NOTE | The README says what the grant reaches on the leaf, the parents and the worker's /proc |
 
 ## How to check
 
