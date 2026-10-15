@@ -186,7 +186,7 @@
    ],
    "ref": "W01 5.3; v5",
    "sources": "ALL",
-   "statement": "The gate is the sole reader of its three credentials: the two upstream client credentials and its I04 serving credential",
+   "statement": "The gate is the sole reader of its two upstream client credentials and its I04 serving private key",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -195,7 +195,7 @@
    "targets": [
     "planeon_gate_effect_cred_t",
     "planeon_gate_writer_cred_t",
-    "planeon_gate_i04_cred_t"
+    "planeon_gate_i04_key_t"
    ]
   },
   {
@@ -473,7 +473,8 @@
     "qualk8s_kubelet_cred_t",
     "qualk8s_netpol_cred_t",
     "qualk8s_proxy_cred_t",
-    "planeon_gate_i04_cred_t"
+    "planeon_gate_i04_key_t",
+    "planeon_gate_i04_cert_t"
    ]
   },
   {
@@ -531,7 +532,8 @@
     "qualk8s_kubelet_cred_t",
     "qualk8s_netpol_cred_t",
     "qualk8s_proxy_cred_t",
-    "planeon_gate_i04_cred_t"
+    "planeon_gate_i04_key_t",
+    "planeon_gate_i04_cert_t"
    ]
   },
   {
@@ -1084,7 +1086,8 @@
     "planeon_gate_journal_t",
     "qualk8s_datastore_data_t",
     "qualk8s_container_file_t",
-    "planeon_gate_i04_cred_t"
+    "planeon_gate_i04_key_t",
+    "planeon_gate_i04_cert_t"
    ]
   },
   {
@@ -3212,6 +3215,28 @@
    ],
    "targets": [
     "planeon_cgroup_worker_t"
+   ]
+  },
+  {
+   "allow": [
+    "planeon_gate_t"
+   ],
+   "class": "file",
+   "id": "A67",
+   "perms": [
+    "read",
+    "open"
+   ],
+   "ref": "Resolved spec 4.2; Q-HE3D-8; Q-MX-1",
+   "sources": "ALL",
+   "statement": "Only the gate reads its I04 serving chain and its client CA",
+   "states": [
+    "ENROLLED_CONTAINMENT",
+    "ENROLLED_SEALED",
+    "MAINTENANCE_BOOT"
+   ],
+   "targets": [
+    "planeon_gate_i04_cert_t"
    ]
   }
  ],
@@ -7010,8 +7035,39 @@
    "classes": [
     "file"
    ],
-   "label": "system_u:object_r:planeon_gate_i04_cred_t:s0",
-   "name": "planeon_gate_i04_cred_t"
+   "label": "system_u:object_r:planeon_gate_i04_key_t:s0",
+   "name": "planeon_gate_i04_key_t"
+  },
+  {
+   "access": {
+    "READ": [
+     {
+      "domain": "planeon_gate_t"
+     }
+    ],
+    "RELABEL": [
+     {
+      "domain": "planeon_maint_t",
+      "when": {
+       "planeon_maintenance_mode": 1
+      }
+     }
+    ],
+    "WRITE": [
+     {
+      "domain": "planeon_maint_t",
+      "when": {
+       "planeon_maintenance_mode": 1
+      }
+     }
+    ]
+   },
+   "category": "CREDENTIAL",
+   "classes": [
+    "file"
+   ],
+   "label": "system_u:object_r:planeon_gate_i04_cert_t:s0",
+   "name": "planeon_gate_i04_cert_t"
   }
  ]
 }

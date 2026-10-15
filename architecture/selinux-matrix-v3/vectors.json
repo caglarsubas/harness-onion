@@ -23323,17 +23323,177 @@
   {
    "class": "file",
    "expect": true,
-   "id": "Q49",
-   "intent": "required by the design: planeon_gate_t file read planeon_gate_i04_cred_t (ENROLLED_SEALED)",
+   "id": "C2239",
+   "intent": "A67: planeon_gate_t is allowed (ENROLLED_CONTAINMENT)",
+   "perm": "read",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2240",
+   "intent": "A67: planeon_admin_t is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
+   "perm": "read",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2241",
+   "intent": "A67: OTHER_DOMAIN is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
+   "perm": "read",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2242",
+   "intent": "A67: planeon_worker_t is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
+   "perm": "read",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2243",
+   "intent": "A67: qualk8s_container_t is denied planeon_gate_i04_cert_t (ENROLLED_CONTAINMENT)",
+   "perm": "read",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_CONTAINMENT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": true,
+   "id": "C2244",
+   "intent": "A67: planeon_gate_t is allowed (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_gate_t",
    "state": "ENROLLED_SEALED",
-   "target": "planeon_gate_i04_cred_t"
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2245",
+   "intent": "A67: planeon_admin_t is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "planeon_admin_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2246",
+   "intent": "A67: OTHER_DOMAIN is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "OTHER_DOMAIN",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2247",
+   "intent": "A67: planeon_worker_t is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "planeon_worker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2248",
+   "intent": "A67: qualk8s_container_t is denied planeon_gate_i04_cert_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "qualk8s_container_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": true,
+   "id": "C2249",
+   "intent": "A67: planeon_gate_t is allowed (MAINTENANCE_BOOT)",
+   "perm": "read",
+   "source": "planeon_gate_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2250",
+   "intent": "A67: planeon_admin_t is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
+   "perm": "read",
+   "source": "planeon_admin_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2251",
+   "intent": "A67: OTHER_DOMAIN is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
+   "perm": "read",
+   "source": "OTHER_DOMAIN",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2252",
+   "intent": "A67: planeon_worker_t is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
+   "perm": "read",
+   "source": "planeon_worker_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "C2253",
+   "intent": "A67: qualk8s_container_t is denied planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
+   "perm": "read",
+   "source": "qualk8s_container_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": true,
+   "id": "Q49",
+   "intent": "required by the design: planeon_gate_t file read planeon_gate_i04_key_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_key_t"
   },
   {
    "class": "file",
    "expect": true,
    "id": "Q50",
+   "intent": "required by the design: planeon_gate_t file read planeon_gate_i04_cert_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": true,
+   "id": "Q51",
    "intent": "required by the design: planeon_gate_t file read planeon_cgroup_worker_t (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -23343,7 +23503,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "Q51",
+   "id": "Q52",
    "intent": "required by the design: planeon_gate_t dir search planeon_cgroup_slice_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_gate_t",
@@ -23353,7 +23513,7 @@
   {
    "class": "dir",
    "expect": true,
-   "id": "Q52",
+   "id": "Q53",
    "intent": "required by the design: planeon_gate_t dir search planeon_cgroup_delegate_t (ENROLLED_SEALED)",
    "perm": "search",
    "source": "planeon_gate_t",
@@ -23363,7 +23523,7 @@
   {
    "class": "file",
    "expect": true,
-   "id": "Q53",
+   "id": "Q54",
    "intent": "required by the design: planeon_gate_t file read planeon_worker_t (ENROLLED_SEALED)",
    "perm": "read",
    "source": "planeon_gate_t",
@@ -23373,12 +23533,22 @@
   {
    "class": "file",
    "expect": true,
-   "id": "Q54",
-   "intent": "required by the design: planeon_maint_t file write planeon_gate_i04_cred_t (MAINTENANCE_BOOT)",
+   "id": "Q55",
+   "intent": "required by the design: planeon_maint_t file write planeon_gate_i04_key_t (MAINTENANCE_BOOT)",
    "perm": "write",
    "source": "planeon_maint_t",
    "state": "MAINTENANCE_BOOT",
-   "target": "planeon_gate_i04_cred_t"
+   "target": "planeon_gate_i04_key_t"
+  },
+  {
+   "class": "file",
+   "expect": true,
+   "id": "Q56",
+   "intent": "required by the design: planeon_maint_t file write planeon_gate_i04_cert_t (MAINTENANCE_BOOT)",
+   "perm": "write",
+   "source": "planeon_maint_t",
+   "state": "MAINTENANCE_BOOT",
+   "target": "planeon_gate_i04_cert_t"
   },
   {
    "class": "capability",
@@ -23394,31 +23564,31 @@
    "class": "file",
    "expect": false,
    "id": "N02",
-   "intent": "the server does not read the gate's I04 serving credential (it pins the endpoint SPKI)",
+   "intent": "the server does not read the gate's I04 private key (it pins the endpoint SPKI)",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "ENROLLED_SEALED",
-   "target": "planeon_gate_i04_cred_t"
+   "target": "planeon_gate_i04_key_t"
   },
   {
    "class": "file",
    "expect": false,
    "id": "N03",
-   "intent": "the observer does not read the gate's I04 serving credential",
+   "intent": "the observer does not read the gate's I04 private key",
    "perm": "read",
    "source": "planeon_observer_t",
    "state": "ENROLLED_SEALED",
-   "target": "planeon_gate_i04_cred_t"
+   "target": "planeon_gate_i04_key_t"
   },
   {
    "class": "file",
    "expect": false,
    "id": "N04",
-   "intent": "the broker does not read the gate's I04 serving credential",
+   "intent": "the broker does not read the gate's I04 private key",
    "perm": "read",
    "source": "planeon_broker_t",
    "state": "ENROLLED_SEALED",
-   "target": "planeon_gate_i04_cred_t"
+   "target": "planeon_gate_i04_key_t"
   },
   {
    "class": "file",
@@ -23474,11 +23644,41 @@
    "class": "file",
    "expect": false,
    "id": "N10",
-   "intent": "the maintenance domain cannot write the I04 credential in an enrolled boot (sealed types, A12)",
+   "intent": "the maintenance domain cannot write the I04 private key in an enrolled boot (sealed types, A12)",
    "perm": "write",
    "source": "planeon_maint_t",
    "state": "ENROLLED_SEALED",
-   "target": "planeon_gate_i04_cred_t"
+   "target": "planeon_gate_i04_key_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "N11",
+   "intent": "the server does not read the gate's I04 chain or client CA (least privilege; Q-MX-1)",
+   "perm": "read",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "N12",
+   "intent": "the observer does not read the gate's I04 chain or client CA",
+   "perm": "read",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "N13",
+   "intent": "the maintenance domain cannot write the I04 chain or client CA in an enrolled boot",
+   "perm": "write",
+   "source": "planeon_maint_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_i04_cert_t"
   }
  ],
  "evidenceClass": "DATA_CHECK_ONLY",
@@ -24786,7 +24986,7 @@
     ]
    },
    "id": "M57",
-   "intent": "the server reads the gate's I04 serving credential",
+   "intent": "the server reads the gate's I04 private key",
    "ops": [
     {
      "op": "append",
@@ -24809,7 +25009,7 @@
     ]
    },
    "id": "M58",
-   "intent": "the I04 serving credential is writable in an enrolled boot",
+   "intent": "the I04 private key is writable in an enrolled boot",
    "ops": [
     {
      "op": "append",
@@ -24940,6 +25140,52 @@
      "value": {
       "domain": "planeon_gate_t",
       "target": "planeon_observer_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A67"
+    ]
+   },
+   "id": "M64",
+   "intent": "Q-MX-1: the server reads the gate's I04 chain and client CA",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "types",
+      57,
+      "access",
+      "READ"
+     ],
+     "value": {
+      "domain": "planeon_server_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A12"
+    ]
+   },
+   "id": "M65",
+   "intent": "the gate's I04 chain and client CA are writable in an enrolled boot",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "types",
+      57,
+      "access",
+      "WRITE"
+     ],
+     "value": {
+      "domain": "planeon_maint_t"
      }
     }
    ]

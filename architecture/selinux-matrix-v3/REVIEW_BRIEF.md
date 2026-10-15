@@ -31,13 +31,24 @@ working tree is part of the subject.
   `planeon_worker_t`.
 - Facts relayed by the lane monitor, 2026-10-15:
   - The I04 server credential (the KUBERNETES_API_PROXY endpoint's key and certificate chain, resolved spec §4.2) has
-    no named type in v4. A new dedicated type, or filing it under `planeon_gate_effect_cred_t`, is the contract's
-    choice.
+    no named type in v4.
+  - I04 is mutual TLS 1.3. The gate reads three DER files: its serving private key (PKCS#8), its serving certificate
+    chain and exactly one client CA (owner Q-HE3D-8 (a)).
+  - How the server holds its trust anchor and client credential is not fixed by any published contract, so treat the
+    server as reading the gate's material only if a published contract says so.
+  - No published contract assigns which reader role takes the native profile's P1 and P5 captures.
   - The gate's signed configuration is at `/etc/planeon/effect-gate/config.json` and `config.json.sig`
     (Q-HE3D-5 (a)), labelled `planeon_etc_t` and writable only by `planeon_maint_t` in maintenance mode.
   - The configuration pins its credential and CA files by sha256. HE-008 fixes the credential file paths; this
     matrix fixes the type and access.
   - The config-signer public key is compiled in (Q-HE3D-7 (d)).
+- Monitor decisions (owner-delegated), 2026-10-15:
+  - Q-MX-1 (a): separate credential types, gate-only READ on the key, least privilege elsewhere; the key type joins A09.
+    The shape, including the client CA, is the contract's.
+  - Q-MX-4 (a): drop the gate's `net_bind_service` and its A48 grant.
+  - Q-MX-5 (a): the Q-HE3D-2 grant as specified.
+  - Q-MX-2 and Q-MX-3 (narrowing the writer's and the gate's `/proc` peers) go to the owner. Until they are answered,
+    the contract keeps both peer sets and records why.
 - HS43 (`architecture/host-interface-amendment-hs43/amendment.json`):
   - W01 §5.3 EFFECT_GATE has no capability (H5).
   - The three O-MATRIX obligations above.
@@ -45,22 +56,23 @@ working tree is part of the subject.
 ## Questions to answer
 
 1. **Successor fidelity.** Is v5 the v4 matrix plus exactly the disclosed changes? Those are:
-   - the new type, appended last;
+   - the two new types, appended last;
    - the gate's capability entry removed;
    - the gate's READ on three cgroup types;
    - one `procAccess` entry, appended last;
    - the A09, A38, A39 and A48 changes;
    - A38.<type> and A39.<type>;
-   - A12, A13 and A36 gaining the new type as a target.
+   - A67;
+   - A12, A13 and A36 gaining the new types as targets.
 
    Is every other v4 datum unchanged, and is every v4 type, `procAccess` entry and assertion index stable? Is v4
    byte-identical?
 2. **Vectors.** Is every v4 vector kept with its identifier and position? Is every changed expectation listed in
-   `v5Changes` with a true reason? Does every access and mutation check produce exactly its stated result? Do all 125
+   `v5Changes` with a true reason? Does every access and mutation check produce exactly its stated result? Do all 126
    assertions hold on the v5 matrix?
-3. **The I04 credential.** Does `planeon_gate_i04_cred_t` give read only to the gate, and write and relabel only to the
-   maintenance domain in the maintenance boot? Can any mutation that grants another reader pass A09? Is the "dedicated
-   type" choice argued correctly from the published contracts?
+3. **The I04 credentials.** Do `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` give read only to the gate, and
+   write and relabel only to the maintenance domain in the maintenance boot? Can any mutation that grants another reader
+   pass A09 or A67? Is the shape (key alone; chain and client CA together) argued correctly from the facts?
 4. **No capability for the gate.** Is the gate's `net_bind_service` gone from every route? Can a mutation that grants
    it pass A48?
 5. **The Q-HE3D-2 grant.** Is it exactly what the gate needs to count the probe worker's processes from its cgroup, and

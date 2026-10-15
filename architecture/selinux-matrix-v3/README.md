@@ -15,9 +15,9 @@ slot 240, after slot 239.
 
 | Source | v5 rule | Vectors |
 |---|---|---|
-| Monitor decision, 2026-10-15 (owner-delegated): the I04 key/cert type, before HE-008 | New CREDENTIAL type `planeon_gate_i04_cred_t` for the gate's I04 serving credential. This is the signed KUBERNETES_API_PROXY endpoint's private key and certificate chain, which the resolved spec §4.2 makes the gate's TLS listener identity. READ the gate only; WRITE and RELABEL only by the maintenance domain in the maintenance boot, like every credential. A09 now covers the gate's three credentials. The type is appended after the last v4 type, so every v4 type keeps its index. | Q49, Q54; N02-N04, N10; M57, M58; A09, A12, A13 and A36 list it among their targets |
-| HS43 O-MATRIX-GATE-NETBIND (W01 §5.3 as amended by HS43 H5, Q-HE2S-9 (a)) | The gate holds no capability. `net_bind_service` is dropped from its capabilities and from A48's allow list: the signed I04 port is 1024 or above. | N01; M56; the three v4 checks of the gate's `net_bind_service` now deny it (`v5Changes`) |
-| Owner decision Q-HE3D-2 (a), 2026-10-15: the gate's source for observedWorkers | The gate counts the probe worker's processes from its cgroup. It gets READ on `planeon_cgroup_worker_t` (the `probe-worker` leaf) and on the two parents its path walk crosses: `planeon_cgroup_slice_t` and `planeon_cgroup_delegate_t`. It also gets `procAccess` on `planeon_worker_t`. A38 and A39 become union bounds that include the gate. New per-type assertions A38.<type> and A39.<type> give each of the eight cgroup types exactly its readers. A59.planeon_worker_t gains the gate. | Q50-Q53; N05-N09; M59-M63; M24 now also names A38.planeon_cgroup_broker_t and A39.planeon_cgroup_broker_t (`v5Changes`) |
+| Monitor decisions, 2026-10-15 (owner-delegated): the I04 key/cert types before HE-008, Q-MX-1 (a) | I04 is mutual TLS 1.3, and the gate reads three DER files: its serving private key (PKCS#8), its serving certificate chain and exactly one client CA (owner Q-HE3D-8 (a)). The resolved spec §4.2 makes the key and chain the gate's TLS listener identity, the signed KUBERNETES_API_PROXY endpoint identity. Two new CREDENTIAL types: `planeon_gate_i04_key_t` for the private key, and `planeon_gate_i04_cert_t` for the chain and the client CA. READ the gate only; WRITE and RELABEL only by the maintenance domain in the maintenance boot, like every credential. The key joins A09 (the gate's credentials); A67 keeps the public chain and CA to the gate as well (least privilege). Both types are appended after the last v4 type, so every v4 type keeps its index. | Q49, Q50, Q55, Q56; N02-N04, N10-N13; M57, M58, M64, M65; A09 or A67, and A12, A13 and A36, list them among their targets |
+| HS43 O-MATRIX-GATE-NETBIND (W01 §5.3 as amended by HS43 H5, Q-HE2S-9 (a); the monitor's Q-MX-4 (a)) | The gate holds no capability. `net_bind_service` is dropped from its capabilities and from A48's allow list: the signed I04 port is 1024 or above. | N01; M56; the three v4 checks of the gate's `net_bind_service` now deny it (`v5Changes`) |
+| Owner decision Q-HE3D-2 (a), 2026-10-15, with the monitor's Q-MX-5 (a): the gate's source for observedWorkers | The gate counts the probe worker's processes from its cgroup. It gets READ on `planeon_cgroup_worker_t` (the `probe-worker` leaf) and on the two parents its path walk crosses: `planeon_cgroup_slice_t` and `planeon_cgroup_delegate_t`. It also gets `procAccess` on `planeon_worker_t`. A38 and A39 become union bounds that include the gate. New per-type assertions A38.<type> and A39.<type> give each of the eight cgroup types exactly its readers. A59.planeon_worker_t gains the gate. | Q51-Q54; N05-N09; M59-M63; M24 now also names A38.planeon_cgroup_broker_t and A39.planeon_cgroup_broker_t (`v5Changes`) |
 | HS43 O-MATRIX-WRITER-PROCACCESS and O-MATRIX-GATE-PROCACCESS | Evaluated. Both peer sets stay as they are; the outcome and reasons are under "HS43 /proc evaluations". | — |
 | v4 carried G1 (NOTE) | "Booleans and states" names K1's carry to W01's record, as the introduction of v4 does. | — |
 
@@ -57,20 +57,23 @@ Both outcomes keep v4's peer sets as an upper bound, and the per-target assertio
   probe-worker cgroup and `procAccess` to `planeon_worker_t`. An I05 successor that takes observedWorkers from the
   worker cgroup (KERNEL) follows this matrix.
 - **Facts relayed by the lane monitor, 2026-10-15** (published-contract pointers and owner decisions):
-  - The I04 server credential has no named type in v4.
+  - The I04 server credential has no named type in v4. I04 is mutual TLS 1.3. The gate reads its serving private key
+    (PKCS#8), its serving certificate chain and exactly one client CA (Q-HE3D-8 (a)), all DER. How the server holds its
+    trust anchor for the gate and its own client credential is the server's side and is not fixed by any published
+    contract, so the matrix gives the server no read of the gate's files.
   - The gate's signed configuration is at `/etc/planeon/effect-gate/config.json` and `config.json.sig` (Q-HE3D-5 (a)),
     labelled `planeon_etc_t` and written only by the maintenance domain in maintenance mode.
   - The configuration pins its credential and CA files by sha256. HE-008 fixes the credential file paths; this matrix
     fixes their type and access.
   - The config-signer public key is compiled into the binary (Q-HE3D-7 (d)), so no key file needs a type.
-- **Contract choice: a dedicated type rather than filing under `planeon_gate_effect_cred_t`.**
-  - The I04 key is the endpoint identity the server pins (SPKI). The effect credential is the gate's upstream client
-    credential. They are different identities with different installation and rotation, so a separate label keeps
-    them apart for maintenance and audit at no runtime cost.
-  - It follows the matrix's one-type-per-credential rule: the gate's two credentials, and one `qualk8s_<component>_cred_t`
-    per API client.
-  - The CA files the configuration names are public. Kept beside the configuration, they are `planeon_etc_t`.
-  - The server reads no file of the gate's.
+- **Q-MX-1 (a), monitor (owner-delegated), 2026-10-15: separate types, gate-only READ on the key, least privilege
+  elsewhere; the key joins A09.** The shape is this contract's:
+  - The key has its own type. It is the endpoint identity the server pins (SPKI), distinct from the gate's upstream
+    client credentials, with its own installation and rotation.
+  - The chain and the client CA share one type. Both are public, pinned by sha256 in the signed configuration, read by
+    the gate alone and written by maintenance alone, so a third label would change no access.
+  - It follows the matrix's one-type-per-credential rule: the gate's two upstream credentials, and one
+    `qualk8s_<component>_cred_t` per API client.
 
 ## History: v4 (W02e-F)
 
@@ -106,8 +109,8 @@ evaluator `scripts/selinux_matrix_v2.py` is the v3 evaluator with only the matri
 
 | File | Content |
 |---|---|
-| `matrix.json` | `planeon.internal.selinux-matrix/v5`. It holds three booleans and three boot states, 19 domains, 57 types, 6 sockets, 4 ports, 17 transitions, 12 genfscon rules, 4 named type transitions, the capability, `bpf`, `security`, `process`, `process2` and `service` grants, `/proc` access, per-source closures and 109 deny assertions |
-| `vectors.json` | 2,348 access checks (606 allow, 1,734 deny, 8 outside, each with its state and intent), 63 mutation checks, the W02a slot values (unchanged) and `v5Changes`, which lists every v4 vector whose expected result changes under v5, with its reason |
+| `matrix.json` | `planeon.internal.selinux-matrix/v5`. It holds three booleans and three boot states, 19 domains, 58 types, 6 sockets, 4 ports, 17 transitions, 12 genfscon rules, 4 named type transitions, the capability, `bpf`, `security`, `process`, `process2` and `service` grants, `/proc` access, per-source closures and 109 deny assertions |
+| `vectors.json` | 2,368 access checks (611 allow, 1,749 deny, 8 outside, each with its state and intent), 65 mutation checks, the W02a slot values (unchanged) and `v5Changes`, which lists every v4 vector whose expected result changes under v5, with its reason |
 | `../../scripts/selinux_matrix_v3.py` | Reference evaluator (v4's, with the matrix version changed): `allowed`, `check_matrix`, `failed_assertions`, `w02a_slots`, `apply_ops` |
 
 ## What the matrix closes
@@ -178,7 +181,7 @@ unconfined or privileged type, such as container-selinux's `kubelet_t`, `contain
 | Entrypoints | one `*_exec_t` per role, lifecycle, maintenance and backend domain (16) | READ any domain; EXECUTE the starter only; ENTRYPOINT the entered domain only; EXECUTE_NO_TRANS nobody; WRITE/RELABEL `planeon_maint_t` only in the maintenance boot, which also enables fs-verity |
 | Interpreter | `planeon_interpreter_exec_t` (Python for SERVER and WORKER) | EXECUTE init, broker, server, worker; never an entrypoint; nobody runs it without a transition |
 | Sealed configuration and units | `planeon_etc_t`, `qualk8s_config_t`, `planeon_unit_file_t`, `qualk8s_unit_file_t` | READ any; WRITE/RELABEL maintenance only |
-| Credentials | `planeon_server_cred_t`, `planeon_observer_cred_t`, `planeon_gate_effect_cred_t`, `planeon_gate_writer_cred_t`, `planeon_gate_i04_cred_t` (v5), `qualk8s_sa_key_t`, `qualk8s_encryption_key_t`, one `qualk8s_<component>_cred_t` per API client | READ the owners only; WRITE/RELABEL maintenance only (W01 §5.5 M5) |
+| Credentials | `planeon_server_cred_t`, `planeon_observer_cred_t`, `planeon_gate_effect_cred_t`, `planeon_gate_writer_cred_t`, `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (v5), `qualk8s_sa_key_t`, `qualk8s_encryption_key_t`, one `qualk8s_<component>_cred_t` per API client | READ the owners only; WRITE/RELABEL maintenance only (W01 §5.5 M5) |
 | Socket files | I05, I07, observer, broker, datastore and runtime socket files | The listener and its one connector |
 | Cgroups | `planeon_cgroup_{slice,contain,server,observer,gate,delegate,broker,worker}_t` | READ init, containment and the reader roles, and (v5, Q-HE3D-2 (a)) the gate on the slice, the delegated service cgroup and the `probe-worker` leaf; WRITE init, containment before the seal, and the broker on its delegated service cgroup (`delegate`) and its `broker` and `probe-worker` leaves; RELABEL nobody |
 | bpffs pins, seal marker | `planeon_bpf_pin_t`, `planeon_seal_t` | READ containment and the reader roles. Pins: WRITE containment before the seal, labelled by genfscon. Seal marker: WRITE containment in the enrolled boot (S5), labelled by a named type transition |
@@ -273,14 +276,14 @@ unconfined or privileged type, such as container-selinux's `kubelet_t`, `contain
 
 ## Assertions
 
-125 deny properties, each evaluated for every listed boot state, target and source. Sources are every domain plus
+126 deny properties, each evaluated for every listed boot state, target and source. Sources are every domain plus
 `OTHER_DOMAIN`, the declared domains, or a listed set; for capabilities only declared domains count, because undeclared
 host domains' capabilities are outside the matrix.
 
 | IDs | Property | Source |
 |---|---|---|
 | A01-A08 | Apiserver port (P2), I04 port, datastore socket (P1), runtime socket (P9), I05 and I07: exactly the enumerated connectors and binders | W01 §2.1, §5.3; W02b; W02c |
-| A09-A11.9 | Each credential readable by its owners only; A09 covers the gate's three credentials (v5) | W01 §5.3, §2.1 P4 |
+| A09-A11.9 | Each credential readable by its owners only; A09 covers the gate's I04 private key as well (v5) | W01 §5.3, §2.1 P4 |
 | A12-A13 | No sealed type written or relabelled in an enrolled boot, fs-verity included; only the maintenance domain in the maintenance boot | W01 §5.5; R8 |
 | A14-A19 | `prog_load`: containment before the seal and the runtime (E1). No BPF maps. `prog_run` on containment programs: containment as loader before the seal and the reader roles. `prog_run` on the runtime's programs: the runtime alone | W01 §5.1; E1; R1 |
 | A20-A23 | `setbool` only by containment and systemd in the initial state; nothing after the seal; maintenance only in the maintenance boot; never `setenforce` | W01 §5.2 S4, §5.5; N4 |
@@ -294,10 +297,11 @@ host domains' capabilities are outside the matrix.
 | A60.* | 28 per-source closures: each closed source gets nothing beyond its listed ports, sockets and (no) `execute_no_trans`, including an undeclared port, socket and program type | W01 §5.3; R5, N5 |
 | A61-A65 | The server alone binds its listener; the three planeon boolean files only by their writers in the initial state, by nobody afterwards | W01 §5.3, §5.2, §5.5; N2, N4 |
 | A66 (v4) | Before the seal no domain loads policy | W01 §5.2 S1, S4; K3 |
+| A67 (v5) | Only the gate reads its I04 serving chain and client CA | Resolved §4.2; Q-HE3D-8; Q-MX-1 |
 | A38.*, A39.* (v5) | 16 per-type assertions: each planeon cgroup type is searched, opened and read only by its own readers (the gate only on the slice, the delegated service cgroup and the probe-worker leaf) | W01 §5.1; F2; Q-HE3D-2 (a) |
 
-The 63 mutation checks show the assertions are not vacuous.
-- 50 add a forbidden grant (M51-M55 new in v4, M56-M63 new in v5) and name exactly the assertions it breaks. For example, the server connecting to the apiserver
+The 65 mutation checks show the assertions are not vacuous.
+- 52 add a forbidden grant (M51-M55 new in v4, M56-M65 new in v5) and name exactly the assertions it breaks. For example, the server connecting to the apiserver
   port breaks A01 and its per-source closure A60.1.name_connect; containment writing an artifact before the seal (fs-verity)
   breaks A12; the maintenance domain clearing maintenance mode breaks A65.
 - Two remove a per-source closure and change the result.
@@ -515,14 +519,14 @@ OPEN_UNPROVEN. The W01, W02a, W02g, W02b and W02c bytes, HS43 and the adopted v3
 | §5.3 per-role domains and key denials | Domains, capabilities, A01-A11, A32-A37, A45-A48, A56-A60, A59.* |
 | §5.4 worker exec after `no_new_privs`, kill through the pidfd | A29, A58; `nnp_transition` |
 | §5.5 sealed types, `planeon_maint_t`, `planeon_maintenance_mode` | A12, A13, A22, A26, A27, A30 |
-| Resolved §4.2: the gate's TLS listener identity is the signed KUBERNETES_API_PROXY endpoint identity (v5) | `planeon_gate_i04_cred_t`, A09 |
+| Resolved §4.2: the gate's TLS listener identity is the signed KUBERNETES_API_PROXY endpoint identity (v5) | `planeon_gate_i04_key_t` (A09), `planeon_gate_i04_cert_t` (A67) |
 | §5.3 EFFECT_GATE as amended by HS43 H5: no capability (v5) | Capabilities, A48; O-MATRIX-GATE-NETBIND |
 | HS43 O-MATRIX-WRITER-PROCACCESS, O-MATRIX-GATE-PROCACCESS (v5) | "HS43 /proc evaluations"; A59.* |
 | Owner decision Q-HE3D-2 (a): the gate's observedWorkers source (v5) | Cgroup row, `procAccess`, A38.*, A39.*, A59.planeon_worker_t |
 
 ## Still open
 
-All E01-E12 and T01-T08. The I04 credential file paths (HE-008) and their labelling as `planeon_gate_i04_cred_t` (W03). The narrowing of the writer's and the gate's `/proc` peers once a native-profile successor names the capturing role. The I05 successor that takes observedWorkers from the worker cgroup. The binary policy, its conditionals and its behaviour on the enrolled kernel (T04). The backend
+All E01-E12 and T01-T08. The I04 credential file paths (HE-008) and their labelling as `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (W03). The narrowing of the writer's and the gate's `/proc` peers once a native-profile successor names the capturing role. The I05 successor that takes observedWorkers from the worker cgroup. The binary policy, its conditionals and its behaviour on the enrolled kernel (T04). The backend
 policy module, the selected runtime's BPF behaviour and the selected distribution (W03). The effective-program census
 (W02a-F). The seccomp filters (W02d). The W02a schema constants for these labels (W02a-F). W03-W07 remain gated. Alpha2
 remains open; model-effort transition NOT_DUE.
