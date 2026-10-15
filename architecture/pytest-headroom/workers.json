@@ -14,11 +14,16 @@
       "after": "WORKERS = 6"
     }
   },
-  "matchingTests": [
+  "matchingFiles": [
     {
       "path": "tests/test_parallel_suite.py",
       "before": "    assert SUITE.WORKERS == 4",
       "after": "    assert SUITE.WORKERS == 6"
+    },
+    {
+      "path": "docs/alpha-2/PARALLEL_SUITE_PERF035.md",
+      "before": "  - The parent collects as usual and assigns whole test files to 4 worker processes, by the pinned weights in",
+      "after": "  - The parent collects as usual and assigns whole test files to 6 worker processes (MET-PERF-039; 4 before), by the"
     }
   ],
   "unchanged": [
@@ -87,14 +92,45 @@
         "passed": 11252,
         "failed": 0
       }
-    ]
+    ],
+    "runOrder": [
+      4,
+      6,
+      8
+    ],
+    "runsPerWorkerCount": 1,
+    "caveat": "The four-worker run ran first, and during its first ~300 s every file ran about 1.7 times as long as in the six-worker run (host state, not the plan). Replaying the six-worker run's per-file times through the suite's planner at four workers gives an estimated 455-512 s, so six workers save about 21-29%, not 42% (source review round 1, S1-1).",
+    "estimatedFourWorkerSecondsSameConditions": {
+      "low": 455,
+      "high": 512
+    },
+    "pinnedWeightsImbalanceSixWorkers": {
+      "slowestWorkerSeconds": 324.6,
+      "evenSplitSeconds": 290.8,
+      "parentNodesExcluded": true,
+      "unweightedFiles": 22
+    }
   },
+  "carried": [
+    {
+      "id": "WEIGHTS-REFRESH",
+      "decision": "Q-PERF39-1-CONFIRM",
+      "what": "refresh ci/parallel_suite_weights.json from measured per-file times, including the 22 files without a pinned weight",
+      "how": "a later, separate ci/ change"
+    }
+  ],
   "ownerDecisions": [
     {
       "id": "Q-PERF39-1",
       "date": "2026-10-15",
       "source": "lane monitor (relayed owner decision)",
       "decision": "Owner decision Q-PERF39-1 = (a), 6 workers, 2026-10-15. MET-PERF-039 (slot 238): ci/parallel_suite.py WORKERS 4 → 6 plus the matching tests. Every fail-closed rule stays (900 s deadline, worker-exit accounting, incomplete-node refusal, serial fallback). Weights are not refreshed."
+    },
+    {
+      "id": "Q-PERF39-1-CONFIRM",
+      "date": "2026-10-15",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "The owner confirms, after seeing your correction: \"proceed with 6 workers, no weight refresh\" (2026-10-15). Record it with Q-PERF39-1. Add the weight refresh, including the 22 unweighted files, as a carried follow-up: a later separate ci/ change."
     }
   ]
 }

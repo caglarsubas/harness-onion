@@ -4,19 +4,22 @@ Alpha 2A; 2026-10-15. Evidence class `SOURCE_DELTA_ONLY`.
 
 The outer pytest (argv 63) runs inside the parallel suite (`ci/parallel_suite.py`, MET-PERF-035) with a fail-closed
 900 s worker deadline (MET-PERF-038). Under host load its margin disappeared. In the 236th packet's dry run, argv 63
-took 901.5 s under a 1-minute load of about 14. That run passed only because the workers finished just before the
-deadline. Its required verify took 1006 s, with pytest at 752.65 s, under a mean load of 11.
+took 901.5 s under a load of 13 to 14, and the whole run took 1232.7 s. Its required verify took 1006 s, with pytest at
+752.65 s, under a mean load of 11.
 
-Owner decision Q-PERF39-1 (a), 2026-10-15, relayed by the lane monitor, is quoted in `workers.json`. It raises the
-suite's worker count from 4 to 6, with nothing else changed:
+Owner decision Q-PERF39-1 (a), 2026-10-15, relayed by the lane monitor, raises the suite's worker count from 4 to 6
+with nothing else changed. After the correction below, the owner confirmed it the same day: "proceed with 6 workers, no
+weight refresh". Both decisions are quoted in `workers.json`.
 
 | Setting | Path | Before | After |
 |---|---|---|---|
 | Parallel-suite workers | `ci/parallel_suite.py` | 4 | 6 |
 
-The measurements behind the decision were taken on main `e7516160`, the 237-packet main, before this packet. Each run
-was argv 63 on a clean checkout. The worker count was set for the top-level session only, by an out-of-tree pytest
-plugin, with no repository byte changed.
+## Measurements
+
+The measurements were taken on main `e7516160`, the 237-packet main, before this packet. Each was argv 63 on a clean
+checkout, with the worker count set for the top-level session only by an out-of-tree pytest plugin. No repository byte
+changed. They ran once each, in the order 4, 6, 8.
 
 | Workers | Wall | Summed test time | Peak memory of the session tree | 1-minute load, mean / max | Result |
 |---|---|---|---|---|---|
@@ -24,13 +27,27 @@ plugin, with no repository byte changed.
 | 6 | 361.0 s | 1,774.6 s | 2,035 MiB | 9.17 / 11.55 | 11,252 passed |
 | 8 | 324.9 s | 2,030.8 s | 2,471 MiB | 10.48 / 14.04 | 11,252 passed |
 
-Six workers cut argv 63's wall time by 42% against four. Eight saved another 10%, with more memory and load, and their
-summed test time rose again from contention. The per-file weights (`ci/parallel_suite_weights.json`) are not refreshed.
-Replaying the six-worker run's own per-file times through the suite's planner, with the pinned weights, puts the
-slowest worker about 10% above an even split: 326 s against 296 s. Weights refreshed from measured times would recover
-roughly 30 s of the 361 s wall time; this packet leaves that for later.
+**The four-worker run overstates the gain.** It ran first, and during its first ~300 s every test file ran about 1.7
+times as long as in the six-worker run. That was host state, not the plan: summed test time fell by 21% between the two
+runs, which adding workers cannot cause. Replaying the six-worker run's own per-file times through the suite's planner
+at four workers gives an estimated 455 to 512 s under the same conditions. So six workers save about 21% to 29%, not
+the 42% the raw table shows (independent source review round 1, S1-1). Eight workers saved about another 10%, with more
+memory and load, and their summed test time rose again from contention.
 
-Unchanged by this packet:
+**The weights are not refreshed.** On the six-worker run's own per-file times, the pinned weights in
+`ci/parallel_suite_weights.json` put the slowest worker about 12% above an even split: 324.6 s against 290.8 s, with the
+three parent nodes excluded. Refreshed weights would recover roughly 30 s, and 22 test files have no pinned weight at
+all. The owner carried this to a later, separate ci/ change.
+
+## What changes, and what does not
+
+Changed:
+- `WORKERS` in `ci/parallel_suite.py`.
+- Its one live test pin: `tests/test_parallel_suite.py` checks the current suite's constant.
+- The current-status page `docs/alpha-2/PARALLEL_SUITE_PERF035.md`, which now says six worker processes (four before),
+  as MET-PERF-038 updated the same page for its deadline.
+
+Unchanged:
 - Every fail-closed rule of the parallel suite:
   - the 900 s worker deadline;
   - exact assignment and ownership of every report and warning;
@@ -43,14 +60,24 @@ Unchanged by this packet:
   bundle v4 values recorded in `architecture/load-deadlines/limits.json`.
 
 Every earlier record that states four workers stays byte-identical, as the record of what its packet decided. The
-216th, 226th and 234th layers check their own era's suite, which the inverse authority restores. The only live pin is
-`tests/test_parallel_suite.py`'s constant check, which this packet updates to six.
+216th, 226th and 234th layers check their own era's suite, page and test, which the inverse authority restores.
+
+## Risks
+
+- **The 1200 s cap.** Under heavy load the verifier's 1200 s cap, not the 900 s deadline, is the binding limit. In the
+  236 dry run, argv 1-62 and 64 took about 331 s against the 120 s budgeted for them. At that load, a 21% to
+  29% faster pytest leaves roughly 100 to 170 s under the cap.
+- **Memory.** Peak memory rises by about 0.5 GiB, to about 2 GiB, on a 128 GiB host.
+- **Load.** The extra load (about +1) comes after bundle v4's load gate, which checks only before a run is claimed.
+- **Contention.** Under heavy external load the gain shrinks, which is exactly the case that motivated the change.
+- **Small runners.** `WORKERS` is a fixed count: a runner with six or fewer cores would be oversubscribed.
 
 `workers.json` records:
 - the change, with the suite's digests before and after;
-- the matching test line;
+- the matching test and page lines;
 - the unchanged settings;
-- the measurements;
-- the owner decision, quoted verbatim.
+- the measurements and their caveat;
+- the carried follow-up;
+- the owner decisions, quoted verbatim.
 
 It is a transport change, so the owner's approval file goes on the exact head of the PR.
