@@ -16992,9 +16992,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1700",
-   "intent": "A59.planeon_gate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
+   "intent": "A59.planeon_gate_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT) [v5: denied; owner Q-MX-3 (b): the gate's /proc is read only by the broker and the observer]",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "ENROLLED_CONTAINMENT",
@@ -17062,9 +17062,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1707",
-   "intent": "A59.planeon_gate_t: planeon_server_t is allowed (ENROLLED_SEALED)",
+   "intent": "A59.planeon_gate_t: planeon_server_t is allowed (ENROLLED_SEALED) [v5: denied; owner Q-MX-3 (b): the gate's /proc is read only by the broker and the observer]",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "ENROLLED_SEALED",
@@ -17132,9 +17132,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1714",
-   "intent": "A59.planeon_gate_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
+   "intent": "A59.planeon_gate_t: planeon_server_t is allowed (MAINTENANCE_BOOT) [v5: denied; owner Q-MX-3 (b): the gate's /proc is read only by the broker and the observer]",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "MAINTENANCE_BOOT",
@@ -17182,9 +17182,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1719",
-   "intent": "A59.planeon_policy_writer_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT)",
+   "intent": "A59.planeon_policy_writer_t: planeon_broker_t is allowed (ENROLLED_CONTAINMENT) [v5: denied; owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer]",
    "perm": "read",
    "source": "planeon_broker_t",
    "state": "ENROLLED_CONTAINMENT",
@@ -17212,9 +17212,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1722",
-   "intent": "A59.planeon_policy_writer_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT)",
+   "intent": "A59.planeon_policy_writer_t: planeon_server_t is allowed (ENROLLED_CONTAINMENT) [v5: denied; owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer]",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "ENROLLED_CONTAINMENT",
@@ -17262,9 +17262,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1727",
-   "intent": "A59.planeon_policy_writer_t: planeon_broker_t is allowed (ENROLLED_SEALED)",
+   "intent": "A59.planeon_policy_writer_t: planeon_broker_t is allowed (ENROLLED_SEALED) [v5: denied; owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer]",
    "perm": "read",
    "source": "planeon_broker_t",
    "state": "ENROLLED_SEALED",
@@ -17292,9 +17292,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1730",
-   "intent": "A59.planeon_policy_writer_t: planeon_server_t is allowed (ENROLLED_SEALED)",
+   "intent": "A59.planeon_policy_writer_t: planeon_server_t is allowed (ENROLLED_SEALED) [v5: denied; owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer]",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "ENROLLED_SEALED",
@@ -17342,9 +17342,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1735",
-   "intent": "A59.planeon_policy_writer_t: planeon_broker_t is allowed (MAINTENANCE_BOOT)",
+   "intent": "A59.planeon_policy_writer_t: planeon_broker_t is allowed (MAINTENANCE_BOOT) [v5: denied; owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer]",
    "perm": "read",
    "source": "planeon_broker_t",
    "state": "MAINTENANCE_BOOT",
@@ -17372,9 +17372,9 @@
   },
   {
    "class": "file",
-   "expect": true,
+   "expect": false,
    "id": "C1738",
-   "intent": "A59.planeon_policy_writer_t: planeon_server_t is allowed (MAINTENANCE_BOOT)",
+   "intent": "A59.planeon_policy_writer_t: planeon_server_t is allowed (MAINTENANCE_BOOT) [v5: denied; owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer]",
    "perm": "read",
    "source": "planeon_server_t",
    "state": "MAINTENANCE_BOOT",
@@ -24121,6 +24121,26 @@
    "target": "planeon_gate_i04_cert_t"
   },
   {
+   "class": "file",
+   "expect": true,
+   "id": "Q57",
+   "intent": "required by the design: planeon_observer_t file read planeon_policy_writer_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_policy_writer_t"
+  },
+  {
+   "class": "lnk_file",
+   "expect": true,
+   "id": "Q58",
+   "intent": "required by the design: planeon_observer_t lnk_file read planeon_gate_t (ENROLLED_SEALED)",
+   "perm": "read",
+   "source": "planeon_observer_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
    "class": "capability",
    "expect": false,
    "id": "N01",
@@ -24287,6 +24307,46 @@
    "intent": "HS43 H5: the gate holds no CAP_NET_BIND_SERVICE in a user namespace either",
    "perm": "net_bind_service",
    "source": "planeon_gate_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "N18",
+   "intent": "Q-MX-2 (b): the server does not read the writer's /proc",
+   "perm": "read",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_policy_writer_t"
+  },
+  {
+   "class": "file",
+   "expect": false,
+   "id": "N19",
+   "intent": "Q-MX-2 (b): the broker does not read the writer's /proc",
+   "perm": "read",
+   "source": "planeon_broker_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_policy_writer_t"
+  },
+  {
+   "class": "lnk_file",
+   "expect": false,
+   "id": "N20",
+   "intent": "Q-MX-3 (b): the server does not read the gate's /proc, its exe link included",
+   "perm": "read",
+   "source": "planeon_server_t",
+   "state": "ENROLLED_SEALED",
+   "target": "planeon_gate_t"
+  },
+  {
+   "class": "process",
+   "expect": false,
+   "id": "N21",
+   "intent": "Q-MX-3 (b): the server does not getattr the gate's process",
+   "perm": "getattr",
+   "source": "planeon_server_t",
    "state": "ENROLLED_SEALED",
    "target": "planeon_gate_t"
   }
@@ -25973,6 +26033,69 @@
      }
     }
    ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A59.planeon_policy_writer_t"
+    ]
+   },
+   "id": "M73",
+   "intent": "Q-MX-2 (b): the server reads the writer's /proc again",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "procAccess"
+     ],
+     "value": {
+      "domain": "planeon_server_t",
+      "target": "planeon_policy_writer_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A59.planeon_policy_writer_t"
+    ]
+   },
+   "id": "M74",
+   "intent": "Q-MX-2 (b): the broker reads the writer's /proc again",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "procAccess"
+     ],
+     "value": {
+      "domain": "planeon_broker_t",
+      "target": "planeon_policy_writer_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "failedAssertions": [
+     "A59.planeon_gate_t"
+    ]
+   },
+   "id": "M75",
+   "intent": "Q-MX-3 (b): the server reads the gate's /proc again",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "procAccess"
+     ],
+     "value": {
+      "domain": "planeon_server_t",
+      "target": "planeon_gate_t"
+     }
+    }
+   ]
   }
  ],
  "v5Changes": [
@@ -25991,6 +26114,60 @@
   {
    "id": "C694",
    "reason": "HS43 H5 (W01 5.3 as amended): the gate holds no capability",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1700",
+   "reason": "owner Q-MX-3 (b): the gate's /proc is read only by the broker and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1707",
+   "reason": "owner Q-MX-3 (b): the gate's /proc is read only by the broker and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1714",
+   "reason": "owner Q-MX-3 (b): the gate's /proc is read only by the broker and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1719",
+   "reason": "owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1722",
+   "reason": "owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1727",
+   "reason": "owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1730",
+   "reason": "owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1735",
+   "reason": "owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer",
+   "v4Expect": true,
+   "v5Expect": false
+  },
+  {
+   "id": "C1738",
+   "reason": "owner Q-MX-2 (b): the writer's /proc is read only by the gate and the observer",
    "v4Expect": true,
    "v5Expect": false
   },

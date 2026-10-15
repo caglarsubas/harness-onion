@@ -2683,8 +2683,7 @@
   {
    "allow": [
     "planeon_broker_t",
-    "planeon_observer_t",
-    "planeon_server_t"
+    "planeon_observer_t"
    ],
    "class": "file",
    "id": "A59.planeon_gate_t",
@@ -2706,10 +2705,8 @@
   },
   {
    "allow": [
-    "planeon_broker_t",
     "planeon_gate_t",
-    "planeon_observer_t",
-    "planeon_server_t"
+    "planeon_observer_t"
    ],
    "class": "file",
    "id": "A59.planeon_policy_writer_t",
@@ -4401,14 +4398,6 @@
   },
   {
    "domain": "planeon_server_t",
-   "target": "planeon_gate_t"
-  },
-  {
-   "domain": "planeon_server_t",
-   "target": "planeon_policy_writer_t"
-  },
-  {
-   "domain": "planeon_server_t",
    "target": "planeon_contain_t"
   },
   {
@@ -4514,10 +4503,6 @@
   {
    "domain": "planeon_broker_t",
    "target": "planeon_observer_t"
-  },
-  {
-   "domain": "planeon_broker_t",
-   "target": "planeon_policy_writer_t"
   },
   {
    "domain": "planeon_broker_t",

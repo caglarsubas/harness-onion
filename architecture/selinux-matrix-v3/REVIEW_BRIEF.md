@@ -51,8 +51,11 @@ working tree is part of the subject.
     The shape, including the client CA, is the contract's.
   - Q-MX-4 (a): drop the gate's `net_bind_service` and its A48 grant.
   - Q-MX-5 (a): the Q-HE3D-2 grant as specified.
-  - Q-MX-2 and Q-MX-3 (narrowing the writer's and the gate's `/proc` peers) go to the owner. Until they are answered,
-    the contract keeps both peer sets and records why.
+- Owner decisions Q-MX-2 (b) and Q-MX-3 (b), 2026-10-15 (the owner first chose "keep and record" from the earlier
+  framing, then the recommendation after the analysis): the observer takes the native profile's P1 and P5 captures
+  (carried to the next native-profile successor and W03); the writer's `/proc` narrows to the gate and the observer, the
+  gate's to the broker and the observer, with A59 per-target pins and mutations. The same message accepts the Q-MX-1
+  shape.
 - HS43 (`architecture/host-interface-amendment-hs43/amendment.json`):
   - W01 §5.3 EFFECT_GATE has no capability (H5).
   - The three O-MATRIX obligations above.
@@ -63,7 +66,8 @@ working tree is part of the subject.
    - the two new types, appended last;
    - the gate's capability entry removed;
    - the gate's READ on the probe-worker leaf, and narrowed `dir search` grants on its two parents;
-   - one `procAccess` entry, appended last;
+   - one `procAccess` entry appended last (the gate to the worker), and three v4 entries removed (the server and the
+     broker to the writer, the server to the gate; Q-MX-2 (b), Q-MX-3 (b));
    - the A09, A38, A39 and A48 changes;
    - A38.<type> and A39.<type>;
    - A67, A68.<class> and A38S.<type>;
@@ -71,8 +75,8 @@ working tree is part of the subject.
    - the evaluator's one extension (narrowed READ grants), and nothing else in the evaluator;
    - A12, A13 and A36 gaining the new types as targets.
 
-   Is every other v4 datum unchanged, and is every v4 type, `procAccess` entry and assertion index stable? Is v4
-   byte-identical?
+   Is every other v4 datum unchanged, and is every v4 type and assertion index stable? Is v4 byte-identical? (`procAccess`
+   entries after a removed one move up; no v4 mutation addresses `procAccess` by index.)
 2. **Vectors.** Is every v4 vector kept with its identifier and position? Is every changed expectation listed in
    `v5Changes` with a true reason? Does every access and mutation check produce exactly its stated result? Do all 132
    assertions hold on the v5 matrix?
@@ -88,9 +92,9 @@ working tree is part of the subject.
    CAP_SYS_PTRACE, and SELinux labels each `/proc/<pid>` entry with the target's domain? Do they give the gate the
    worker's ungated entries only?
 5b. **No capability for the gate (A68).** Does any capability-class grant to the gate pass all assertions?
-6. **HS43 /proc evaluations.** Are the two "not narrowed" outcomes justified by the published native profile (P1, P5)?
-   Is the statement that no published contract names the capturing role true? Do the residuals stay as HS43 states
-   them?
+6. **HS43 /proc evaluations.** Do the narrowed peer sets keep every duty the published contracts state (the gate's
+   writer check, the broker's artifact check, the P1 and P5 captures by the designated observer)? Do the residuals
+   narrow as stated? Do A59.planeon_policy_writer_t and A59.planeon_gate_t pin the new sets?
 7. **Overclaims.** Does anything claim a policy module, a compiled or loaded policy, a selected distribution, the I04
    file paths, or any E01-E12 proof?
 
