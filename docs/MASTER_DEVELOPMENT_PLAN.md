@@ -3,12 +3,13 @@
 ## Current checkpoint — MET-ENFORCE-026 source preparation, October 15, 2026
 
 Alpha2 OPEN. MET-ADOPT-004 (RA-LICENSE-001, research adoption v3) passed required verify and merged as main 8665a9b.
-Owner decisions (via the lane monitor): Q-HE2S-10 (a), 2026-10-13, the effect gate qualifies the broker by label, cgroup,
-pidfd and SO_PEERCRED; Q-HE3A-1 (c) and Q-HE3A-1b (a), the gate checks the I07 writer's executable through its /proc exe
-link once the seccomp chain lands; Q-HE2S-7 (a) and Q-HE2S-9 (a), the gate stays dumpable and holds no capability; and,
-2026-10-15, HS-4.3-AMEND as slot 236 with readlinkat only for a dirfd other than AT_FDCWD, Q-HS43-1 (a) (pidfd/start
-kept), and the monitor's owner-delegated Q-HS43-2 (a) (a closed, model-checked list of overridden clauses) and Q-HS43-3
-(a) (stated residuals with matrix obligations). MET-ENFORCE-026 is the sole 236th specification.
+Owner decisions (via the lane monitor): Q-HE2S-10 (a), 2026-10-13, the effect gate qualifies the broker by label,
+cgroup, pidfd and SO_PEERCRED; Q-HE3A-1 (c) and Q-HE3A-1b (a), the gate checks the I07 writer's executable through its
+/proc exe link once the seccomp chain lands; Q-HE2S-7 (a) and Q-HE2S-9 (a), the gate stays dumpable and holds no
+capability; and, 2026-10-15, HS-4.3-AMEND as slot 236 with readlinkat only for a dirfd other than AT_FDCWD (adopted as a
+non-negative dirfd, which also refuses -1), Q-HS43-1 (a) (pidfd/start kept), and the monitor's owner-delegated Q-HS43-2
+(a) (a closed, model-checked list of overridden clauses) and Q-HS43-3 (a) (stated residuals with matrix obligations).
+MET-ENFORCE-026 is the sole 236th specification.
 
 | Phase | ID | Status | Description / gate |
 |---|---|---|---|
@@ -18,7 +19,11 @@ kept), and the monitor's owner-delegated Q-HS43-2 (a) (a closed, model-checked l
 | Alpha2A | SELINUX-MATRIX-I04-KEYCERT | WAITING_PACKET_PUBLICATION | The I04 key/cert type plus the HS43 matrix obligations, after SECCOMP-V3-READLINKAT |
 | Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
 | Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-004, MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumers of MAS-RA-003, now merged |
 | Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
 | Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
 
 Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.

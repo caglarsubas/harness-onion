@@ -3,6 +3,7 @@ import ast
 import json
 from copy import deepcopy
 import os
+import re
 from pathlib import Path
 from types import MappingProxyType
 
@@ -768,8 +769,30 @@ def test_the_amendment_holds_for_this_era():
 def test_every_era_file_is_bound_by_digest(monkeypatch, path):
     original = profile.reviewed_bytes
     monkeypatch.setattr(profile, "reviewed_bytes", lambda target: original(target) + b" " if target == path else original(target))
-    with pytest.raises(ValueError, match="unreviewed host interface hs43 source: " + path):
+    with pytest.raises(ValueError, match=re.escape("unreviewed host interface hs43 source: " + path)):
         profile.validate_host_interface_hs43()
+
+
+def test_the_model_runs_from_this_eras_bytes(monkeypatch):
+    raw = profile.reviewed_bytes(profile.MODEL)
+    changed = raw.replace(b"    require(read(EFFECTIVE_PATH) == effective, \"published effective specification\")\n    return record\n",
+                          b"    require(read(EFFECTIVE_PATH) == effective, \"published effective specification\")\n"
+                          b"    record[\"designLabel\"] = \"X\"\n    return record\n")
+    assert changed != raw
+    _rebind(monkeypatch, {profile.MODEL: changed})
+    with pytest.raises(ValueError, match="the amendment record as restated"):
+        profile.validate_host_interface_hs43()
+
+
+def test_the_model_imports_only_the_standard_library():
+    tree = ast.parse(profile.reviewed_bytes(profile.MODEL))
+    names = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            names |= {alias.name for alias in node.names}
+        elif isinstance(node, ast.ImportFrom):
+            names.add(node.module)
+    assert names == {"__future__", "hashlib", "json", "re", "typing"}
 
 
 def test_a_path_outside_the_era_is_refused():

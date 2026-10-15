@@ -23,7 +23,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/host-interface-hs43-authority.json"
-AUTHORITY_SHA256 = "f39c00e14a7b1964c5b22683d50d7e0a92ec4d4abb858ccde12e985b00b76f22"
+AUTHORITY_SHA256 = "9d043558269642f2b3e1e67a1b3d99f8723a558fc44dc3aa84199d297077d233"
 VALIDATOR_PATH = "scripts/validate_host_interface_hs43.py"
 BASE_COMMIT = "8665a9bc847e61a9748380e891925332cbdf4bb5"
 NEW_PACKET = "MET-ENFORCE-026"
