@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-039
+## Current source preparation — MET-ENFORCE-028
+
+MET-ENFORCE-028 (SELINUX-MATRIX-I04-KEYCERT): SELinux matrix v5, the successor of the byte-identical v4: the gate's I04
+key and chain/CA types, no gate capability, the gate's worker-cgroup read (Q-HE3D-2 (a)) and the HS43 /proc narrowing
+(Q-MX-2 (b), Q-MX-3 (b)). DATA_CHECK_ONLY. Alpha2 OPEN; 238 accepted plus MET-ENFORCE-028 only.
+
+## Historical pytest-headroom source preparation — MET-PERF-039
 
 MET-PERF-039 (PERF-039): six parallel-suite workers instead of four (owner Q-PERF39-1 (a)); measured 627.1 s, 361.0 s
 and 324.9 s for four, six and eight workers on main e7516160, about 21-29% faster with six once the four-worker run's
@@ -1398,3 +1404,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 236 | `MET-ENFORCE-026` | `Harness-Engineering` | HS-4.3-AMEND: amendment HS43 of the W01 host-interface specification (gate broker/writer qualification, capability and readlinkat cells, BIND digest; closed list of 17 overridden clauses); SPECIFICATION_ONLY |
 | 237 | `MET-ENFORCE-027` | `Harness-Engineering` | SECCOMP-V3-READLINKAT: seccomp allowlists v4, the EFFECT_GATE readlinkat rule with a non-negative dirfd (HS43 obligation O-SECCOMP-V3-READLINKAT); only the gate's digests change; DATA_CHECK_ONLY |
 | 238 | `MET-PERF-039` | `Harness-Engineering` | PERF-039: six parallel-suite workers (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; SOURCE_DELTA_ONLY |
+| 239 | `MET-ENFORCE-028` | `Harness-Engineering` | SELINUX-MATRIX-I04-KEYCERT: SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); DATA_CHECK_ONLY |
