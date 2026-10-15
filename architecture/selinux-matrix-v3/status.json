@@ -122,7 +122,8 @@
   "V4-G1": "closed in v5: both README places name K1's carry to W01's record",
   "P1-CAPTURES": "next native-profile successor (the primary lane's O-NATIVE-GATE-NOCAP packet) and W03: the observer is the designated capturing role (owner Q-MX-2 (b), Q-MX-3 (b)); P1's image capture of the broker, the other-uid worker and the server while it holds CAP_NET_BIND_SERVICE cannot be taken through their exe links by any reader role and needs another route (review XR3-2; self-capture, review XR4-3)",
   "I04-INSTALL": "HE-008 and W03: the I04 key, chain and client CA paths; the maintenance domain installs them by create-and-relabel, since it has no READ permission on planeon_gate_i04_key_t or planeon_gate_i04_cert_t (review XR3-4)",
-  "I05-OBSERVED-WORKERS": "the I05 successor that takes observedWorkers from the worker cgroup follows this matrix (Q-HE3D-2 (a))"
+  "I05-OBSERVED-WORKERS": "the I05 successor that takes observedWorkers from the worker cgroup follows this matrix (Q-HE3D-2 (a))",
+  "MATRIX-READER-NARROWING": "a later matrix revision evaluates narrowing the server's and broker's other /proc reads (observer, containment, worker, backends, Pods) pair by pair, each with a duty check; no change in v5 (monitor decision, owner-delegated, 2026-10-15; review XR4-4)"
  },
  "ownerDecisions": [
   {
@@ -166,6 +167,18 @@
    "date": "2026-10-15",
    "source": "lane monitor (relayed owner decisions)",
    "decision": "Owner decisions for slot 240, 2026-10-15. Record verbatim, including that the owner first chose \"keep and record\" from the earlier framing and then, after seeing your analysis, chose your recommendation: Q-MX-2 = (b) and Q-MX-3 = (b). The OBSERVER is designated as the role that takes the native profile's P1 role captures and P5 lifecycle capture. That designation is carried to the next native-profile successor (primary's O-NATIVE-GATE-NOCAP packet) and to W03. The writer's /proc narrows to {gate, observer}. The gate's /proc narrows to {broker, observer}. The server and broker lose the reads they have no duty for, with A59 per-target pins plus mutations. Q-MX-1: your two-type shape is accepted: planeon_gate_i04_key_t (joins A09), and planeon_gate_i04_cert_t for the chain plus the one client CA, both gate-only READ and maintenance-only write. Q-MX-4 (a) and Q-MX-5 (a): as decided earlier."
+  },
+  {
+   "id": "XR4-4-MONITOR",
+   "date": "2026-10-15",
+   "source": "lane monitor (owner-delegated decision and confirmation)",
+   "decision": "XR4-4: 1. Monitor decision (owner-delegated): carried item MATRIX-READER-NARROWING. A later matrix revision evaluates narrowing the server's and broker's other /proc reads (observer, containment, worker, backends, Pods) pair by pair, each with a duty check. No change in 239. 2. Confirmed: the owner was told the XR3-2 kernel limit (the broker's, worker's and low-port server's exe images need another P1 route, carried) right after the Q-MX-2/3 choice. Record it as \"owner informed of XR3-2 after the decision; decision unchanged\"."
+  },
+  {
+   "id": "SLOT-SWAP-239",
+   "date": "2026-10-15",
+   "source": "lane monitor",
+   "decision": "SLOT SWAP: SELINUX-MATRIX-I04-KEYCERT becomes harness-onion slot 239, and PROGRAMS-REPUBLISH moves to 240. Start packet mechanics now on 9f251d5 (the current main), using 238 MET-PERF-039 and 237 MET-ENFORCE-027 as templates."
   }
  ],
  "contractState": "ADOPTED_DATA_CONTRACT",
@@ -200,5 +213,8 @@
  "w02aSchemaConstantsFixed": false,
  "productExecution": false,
  "runnerActivated": false,
- "phaseComplete": false
+ "phaseComplete": false,
+ "ownerDecisionNotes": {
+  "Q-MX-2-3-OWNER": "owner informed of XR3-2 after the decision; decision unchanged (lane monitor, 2026-10-15)"
+ }
 }
