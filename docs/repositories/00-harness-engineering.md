@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-027
+## Current source preparation — MET-PERF-039
+
+MET-PERF-039 (PERF-039): the parallel suite's worker count rises from 4 to 6 (owner Q-PERF39-1 (a)) to restore the
+outer pytest's headroom under the 900 s worker deadline. Measured on main e7516160 with four, six and eight workers,
+argv 63 took 627.1 s, 361.0 s and 324.9 s. The deadline, the accounting, the parent nodes, the serial rule and the
+weights are unchanged. A ci/ transport change with the owner's approval on the exact head. Alpha2 OPEN; 237 accepted
+plus MET-PERF-039 only.
+
+## Historical seccomp-v4 source preparation — MET-ENFORCE-027
 
 MET-ENFORCE-027 (SECCOMP-V3-READLINKAT): seccomp allowlists v4, the W02d successor of the byte-identical v3 contract,
 with one rule added for HS43 obligation O-SECCOMP-V3-READLINKAT: the effect gate may call readlinkat only with a
@@ -1153,6 +1161,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 109. `MET-ADOPT-004`: record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only, per-part SPDX sets and policy-0.3.0 outcomes) and the 29 planned baselines' recheck as research adoption v3; v1, its map and v2 unchanged; data only.
 110. `MET-ENFORCE-026`: publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest; a closed list of 17 overridden clauses, two residuals, eight obligations); W02D, the W01 inputs and the overridden files unchanged; specification only.
 111. `MET-ENFORCE-027`: publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change); v3 and HS43 unchanged; DATA_CHECK_ONLY.
+112. `MET-PERF-039`: raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; ci/ transport change.
 
 ## Testing, verification, and acceptance
 

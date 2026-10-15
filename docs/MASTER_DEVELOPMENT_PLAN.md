@@ -1,6 +1,35 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-027 source preparation, October 15, 2026
+## Current checkpoint — MET-PERF-039 source preparation, October 15, 2026
+
+Alpha2 OPEN. MET-ENFORCE-027 (SECCOMP-V3-READLINKAT, seccomp allowlists v4) passed required verify and merged as main
+e751616. Under host load the outer pytest had come within 1.5 s of the parallel suite's 900 s worker deadline (the
+236th packet's dry run). Measured on main e7516160 with four, six and eight workers, it took 627.1 s, 361.0 s and
+324.9 s. Owner decision Q-PERF39-1 (a), 2026-10-15, via the lane monitor: six workers, every fail-closed rule kept,
+weights not refreshed. MET-PERF-039 is the sole 238th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-039 / PERF-039 | SOURCE_PREPARED | Six parallel-suite workers (238th packet; owner Q-PERF39-1 (a)); source review; packet review; transport approval; verify |
+| Alpha2A | MET-ENFORCE-027 / SECCOMP-V3-READLINKAT | VERIFY_PASSED_MERGED | Merged as main e751616 |
+| Alpha2A | SELINUX-MATRIX-I04-KEYCERT | WAITING_PACKET_PUBLICATION | The I04 key/cert type, the HS43 matrix obligations and the gate's worker-cgroup read (owner Q-HE3D-2 (a)), after PERF-039 (parallel lane) |
+| Alpha2A | I05-OBSERVED-WORKERS | BLOCKED | I05 successor taking observedWorkers from the worker cgroup (owner Q-HE3D-2 (a)), after SELINUX-MATRIX-I04-KEYCERT (parallel lane) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-004, MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumers of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+A ci/ transport change: only the worker count changes (4 -> 6), with its one live test pin; the 900 s deadline, the
+accounting, the parent nodes, the serial rule and the weights stay; every earlier record that states four workers stays
+byte-identical. It needs the owner's transport approval on the exact head. No cloud, runner, live/native/tenant or
+model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical seccomp-v4 source checkpoint — MET-ENFORCE-027 source preparation, October 15, 2026
 
 Alpha2 OPEN. MET-ENFORCE-026 (HS-4.3-AMEND, amendment HS43 of the W01 host-interface specification) passed required
 verify and merged as main 0879eb1. Its obligation O-SECCOMP-V3-READLINKAT asks for the effect gate's readlinkat rule.
@@ -1730,7 +1759,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · MET-PERF-038 · Raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap, fail-closed, with a successor limits record; pass required verify through the owner's App after the owner's transport approval.
 - [x] Alpha 2A · RA-LICENSE-001 / MET-ADOPT-004 · Record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only) and the 29 planned baselines' recheck as research adoption v3 after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · HS-4.3-AMEND / MET-ENFORCE-026 · Publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest, a closed list of overridden clauses, two residuals and eight obligations) after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · SECCOMP-V3-READLINKAT / MET-ENFORCE-027 · Publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change) after independent review; pass required verify through the owner's App.
+- [x] Alpha 2A · SECCOMP-V3-READLINKAT / MET-ENFORCE-027 · Publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change) after independent review; pass required verify through the owner's App.
+- [ ] Alpha 2A · PERF-039 / MET-PERF-039 · Raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)) with every fail-closed rule kept, after independent review and the owner's transport approval; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

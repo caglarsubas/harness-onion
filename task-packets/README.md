@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-027
+## Current source preparation — MET-PERF-039
+
+MET-PERF-039 (PERF-039): six parallel-suite workers instead of four (owner Q-PERF39-1 (a)); measured 627.1 s, 361.0 s
+and 324.9 s for four, six and eight workers on main e7516160. Every fail-closed rule and the weights are unchanged. A
+ci/ transport change. Alpha2 OPEN; 237 accepted plus MET-PERF-039 only.
+
+## Historical seccomp-v4 source preparation — MET-ENFORCE-027
 
 MET-ENFORCE-027 (SECCOMP-V3-READLINKAT): seccomp allowlists v4, the W02d successor of the byte-identical v3 contract:
 the effect gate may call readlinkat only with a non-negative dirfd ((arg0 & 0x80000000) == 0) and never readlink, for
@@ -1391,3 +1397,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 235 | `MET-ADOPT-004` | `Harness-Engineering` | RA-LICENSE-001: research adoption v3, licence clarification (litellm, pgvector, langfuse, phoenix) and the 29-baseline recheck; DATA_CHECK_ONLY |
 | 236 | `MET-ENFORCE-026` | `Harness-Engineering` | HS-4.3-AMEND: amendment HS43 of the W01 host-interface specification (gate broker/writer qualification, capability and readlinkat cells, BIND digest; closed list of 17 overridden clauses); SPECIFICATION_ONLY |
 | 237 | `MET-ENFORCE-027` | `Harness-Engineering` | SECCOMP-V3-READLINKAT: seccomp allowlists v4, the EFFECT_GATE readlinkat rule with a non-negative dirfd (HS43 obligation O-SECCOMP-V3-READLINKAT); only the gate's digests change; DATA_CHECK_ONLY |
+| 238 | `MET-PERF-039` | `Harness-Engineering` | PERF-039: six parallel-suite workers (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; SOURCE_DELTA_ONLY |
