@@ -51,6 +51,23 @@ HEAD_EXTENSION = ("Amendment HS43 (`HOST-INTERFACE-DRAFT-002-HS43`, section 12) 
                   "stays byte-identical (`architecture/host-interface-amendment-w02d/HOST_INTERFACE_SPEC.md`);\n"
                   "`architecture/host-interface-amendment-hs43/amendment.json` lists its changes.\n")
 END_LINE = "O-T04-AMEND (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.\n"
+# The closed list of adopted clauses HS43 overrides (owner decision Q-HS43-2 (a)): a record must quote exactly these, in
+# this order, so nothing else is superseded silently. Each file stays byte-identical.
+_I05_CLAUSE = "PID/start identity, executable, label and cgroup"
+_MATRIX = "architecture/selinux-matrix-v2/README.md"
+SUPERSEDED = (
+    ("architecture/i05-gate-channel/README.md", _I05_CLAUSE),
+    ("architecture/i05-gate-channel-v2/README.md", _I05_CLAUSE),
+    ("architecture/i05-gate-channel-v3/README.md", _I05_CLAUSE),
+    ("architecture/i07-policy-write/README.md", "qualifies the writer peer the way it qualifies the broker"),
+    ("architecture/i07-policy-write/README.md",
+     "writer artifact `/opt/planeon/bin/harness-policy-write` (fs-verity digest under its signed manifest, §4.2)"),
+    (BASE_PATH, "and the broker peer qualification digest (§4.3)"),
+    (_MATRIX, "Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries"),
+    (_MATRIX, "Executable identity follows from the peer's label"),
+    (_MATRIX, "Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; "
+              "executable identity"),
+)
 SECTION12_INTRO = (
     "HS43 changes how the effect gate qualifies its two local peers (§4.3) and states the one system call the writer's\n"
     "executable check needs (§5.3); the gate's filter admits that call only once O-SECCOMP-V3-READLINKAT lands. It is\n"
@@ -185,6 +202,8 @@ def check_record(record: Any, base: bytes) -> None:
     item_ids = [item.get("id") if type(item) is dict else None for item in items]
     require(len(item_ids) == len(set(item_ids)), "unique amendment items")
     require(type(record["supersedes"]) is list and type(record["residuals"]) is list, "superseded clauses and residuals")
+    require([(row.get("path"), row.get("quote")) if type(row) is dict else None for row in record["supersedes"]]
+            == list(SUPERSEDED), "the closed list of superseded clauses, in order")
     for row in record["supersedes"]:
         _closed(row, SUPERSEDES_KEYS, "closed superseded clause")
         require(_text(row["path"]) and type(row["sha256"]) is str and re.fullmatch("[0-9a-f]{64}", row["sha256"]) is not None

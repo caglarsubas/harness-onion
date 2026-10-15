@@ -5,8 +5,9 @@ HS-4.3-AMEND, harness-onion slot 236 (owner decision 2026-10-15, via the lane mo
 
 HS43 changes how the effect gate qualifies its two local peers (W01 §4.3) and states the one system call the writer's
 executable check needs (W01 §5.3, EFFECT_GATE row). It is applied to the effective text of amendment W02D
-(`architecture/host-interface-amendment-w02d/HOST_INTERFACE_SPEC.md`), which stays byte-identical, as do its record and
-the reviewed v2 file under `architecture/host-interface-inputs/resolved/`.
+(`architecture/host-interface-amendment-w02d/HOST_INTERFACE_SPEC.md`). That text stays byte-identical, as do its record,
+the reviewed v2 file under `architecture/host-interface-inputs/resolved/`, and every contract file whose clauses HS43
+overrides.
 
 This is a specification change only. It installs nothing, adds no allowlist data and proves no enforcement obligation;
 E01-E12 stay OPEN_UNPROVEN.
@@ -15,61 +16,91 @@ E01-E12 stay OPEN_UNPROVEN.
 
 | File | What it is |
 |---|---|
-| `amendment.json` | `planeon.internal.host-interface-amendment/v2`: the pinned W02D base and record, the owner decisions, six counted substring replacements (three DECIDED, three EDITORIAL), one disposition per cited decision, three obligations and the stated non-amendments |
-| `HOST_INTERFACE_SPEC.md` | The effective specification: the W02D effective text with the six items applied |
-| `scripts/host_interface_amendment_v2.py` | The standard-library model: `check(read)` checks the W02D record digest, the closed HS43 record, and that applying the items to the pinned W02D bytes gives exactly the published bytes |
+| `amendment.json` | `planeon.internal.host-interface-amendment/v2`: the pinned W02D base and record; the owner decisions; seven counted substring replacements (four DECIDED, three EDITORIAL); one disposition per decision; five obligations; the closed list of superseded clauses; one residual; the stated non-amendments |
+| `HOST_INTERFACE_SPEC.md` | The effective specification: the W02D effective text with the seven items applied |
+| `scripts/host_interface_amendment_v2.py` | The standard-library model. `check(read)` checks: the W02D record digest; the closed HS43 record; every superseded file's digest and its quoted clause; that applying the items to the pinned W02D bytes gives exactly the published bytes |
+
+The model leaves nothing free-standing in the amended text:
+- a DECIDED item must sit inside the section and lines it names;
+- every owner decision is cited, and each disposition lists every item that cites it;
+- the title rename and the head sentence are fixed;
+- section 12 is rendered from the record alone;
+- the superseded clauses must be exactly the model's closed list, in order.
 
 ## Changes
 
 | Item | Where | Change | Decisions |
 |---|---|---|---|
-| H1 | §4.3 | The gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED, with no artifact check, and says why: the broker's `/proc/<pid>/exe` is ptrace-gated, its permitted capabilities are not a subset of the gate's and no role holds CAP_SYS_PTRACE; its executable identity follows from its label (SELinux matrix v4: entry only through `planeon_broker_exec_t`, `execute_no_trans` closed). The writer keeps the artifact check, through `readlinkat` of its exe link on an open `/proc/<pid>` directory of the frame's own process, with the kernel's preconditions stated | Q-HE2S-10, Q-HE3A-1, Q-HS43-1 |
+| H1 | §4.3 | See below | Q-HE2S-10, Q-HE2S-7, Q-HE2S-9, Q-HE3A-1, Q-HS43-1, Q-HS43-2, Q-HS43-3 |
 | H2 | §5.3 EFFECT_GATE, capabilities | The gate's peer reads include the writer's ptrace-gated `exe` link | Q-HE3A-1 |
-| H3 | §5.3 EFFECT_GATE, seccomp | `readlinkat` only with a dirfd other than AT_FDCWD, judged on the low 32 bits; `readlink` and `readlinkat(AT_FDCWD, …)` (musl's aarch64 `readlink`) stay KILL_PROCESS | Q-HE3A-1, Q-HE3A-1b, HS43-START |
+| H3 | §5.3 EFFECT_GATE, seccomp | `readlinkat` only with a non-negative dirfd, judged on the low 32 bits (so never AT_FDCWD in any encoding). The filter does not bind which link is read: an absolute path ignores the dirfd, so `procAccess` and the gate's code do that. `readlink` (x86_64) and `readlinkat(AT_FDCWD, …)` (musl's aarch64 `readlink`) stay KILL_PROCESS | Q-HE3A-1, Q-HE3A-1b, HS43-START |
+| H4 | §7 BIND_EXECUTION | The digest is the gate's mutual qualification record, as I05 defines it, with the narrower gate-side half | Q-HE2S-10, Q-HS43-2 |
 | E1 | title | Names both amendments | — |
 | E2 | head | Says HS43 is applied on top of the byte-identical W02D text | — |
-| E3 | §12 (new) | Lists the items, the order of the data packets and the obligations | — |
+| E3 | §12 (new) | Rendered from the record: items, superseded clauses, residual, data order, obligations | — |
+
+H1 makes five changes to §4.3:
+- The broker's check of the gate keeps its five parts. Its artifact read works because the gate holds no capability
+  (Q-HE2S-9) and stays dumpable (Q-HE2S-7).
+- Peer start times are compared with a reference taken without a race: a pidfd that names the connected process
+  (SO_PEERPIDFD or SCM_PIDFD).
+- The gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED, with no artifact check.
+- The broker's executable identity follows from its label.
+- The writer keeps the artifact check: its exe link must equal the enrolled path exactly, with no " (deleted)". The
+  fs-verity digest is enforced on the sealed file, not re-measured per frame. The kernel preconditions are stated.
 
 ## Why the gate can read the writer's exe link but not the broker's
 
 Reading `/proc/<pid>/exe` is a ptrace-mode read (`PTRACE_MODE_READ_FSCREDS`). Without CAP_SYS_PTRACE, which no role
-holds, the kernel allows it only when the reader's filesystem uid and gid equal the target's real, effective and saved
-uids and gids, the target is dumpable, and the target's permitted capabilities are a subset of the reader's
-(commoncap). SELinux then checks `file read` from the reader's domain on the target's domain, which matrix v4's
-`procAccess` gives `planeon_gate_t` for both `planeon_broker_t` and `planeon_policy_writer_t`.
+holds, the kernel allows it only when all of these hold:
+- the reader's filesystem uid and gid equal the target's real, effective and saved uids and gids;
+- the target is dumpable;
+- the target's permitted capabilities are a subset of the reader's effective ones (commoncap, one user namespace).
 
-- The broker (uid 0) holds CAP_NET_ADMIN, CAP_BPF, CAP_SETUID and CAP_SETGID; the gate holds none (CAP_NET_BIND_SERVICE
-  at most). The subset rule fails, so the gate cannot read the broker's exe link. The matrix v4 README already says so.
-- The writer runs as uid 0 with an empty capability set (§5.3). It is dumpable while it changes no credentials and
-  can read its own artifact (matrix v4 gives every domain READ on `planeon_policy_writer_exec_t`). The gate (uid 0)
-  can therefore read its exe link. Obligation O-W03-WRITER-EXE keeps those conditions, as Q-HE3A-1b's HE-007 items say.
+SELinux then checks `file read` from the reader's domain on the target's domain. Matrix v4's `procAccess` gives that to
+`planeon_gate_t` for both `planeon_broker_t` and `planeon_policy_writer_t`. Yama (`ptrace_scope` 3) limits only attach.
 
-## The readlinkat duty and its data
+- **The broker:** it holds CAP_NET_ADMIN, CAP_BPF, CAP_SETUID and CAP_SETGID, and the gate holds none. The subset rule
+  fails, so the gate cannot read the broker's exe link. The matrix v4 README already says so.
+- **The writer:** it runs as uid 0 with an empty capability set (§5.3). It stays dumpable while its exec changes no
+  credentials: no set-id bit, no file capabilities, equal uids and gids, and an artifact its starter
+  (`planeon_admin_t`) can read. The gate (uid and gid 0) can therefore read its exe link.
+- **The obligations:** O-W03-WRITER-EXE keeps these conditions, as Q-HE3A-1b's HE-007 items say. O-W03-PEER-EXE keeps
+  the gate readable by the broker.
 
-The gate opens `/proc/<pid>` as a directory and calls `readlinkat(dirfd, "exe", …)`. The W02d v3 allowlist
-(`architecture/seccomp-allowlists-v3/`) has no `readlinkat` for EFFECT_GATE today. Its own next packet adds the rule
-(O-SECCOMP-V3-READLINKAT). Then the programs and the edge record are republished, and R10 re-vendors them and adds the
-check (Q-HE3A-1b). Until then the writer's artifact check is decided but open.
+## Superseded clauses (owner decision Q-HS43-2 (a))
 
-The rule admits any dirfd except AT_FDCWD (-100). Two details carry over to that packet:
-- musl implements `readlink` on aarch64 as `readlinkat(AT_FDCWD, …)`, so refusing AT_FDCWD keeps it killed.
-  `readlink` itself (x86_64) stays unlisted.
-- The kernel reads dirfd as an `int`, so the rule must judge only the low 32 bits. A full 64-bit inequality would admit
-  `0x00000000ffffff9c`, which the kernel reads as AT_FDCWD.
-- The v3 model's argument conditions are masked equalities. An inequality needs 32 single-bit alternatives or a model
-  extension; that packet decides.
+HS43 overrides nine adopted clauses, quoted exactly in `amendment.json` and in §12. Their files stay byte-identical:
+- I05 v1, v2 and v3, Channel 2: the gate no longer verifies the broker's executable.
+- I07 v1, Channel 2, inherited by v2 and v3:
+  - the writer is qualified by its own §4.3 rule, not "the way it qualifies the broker";
+  - its artifact check is the exact exe-link path, not a per-frame fs-verity digest.
+- W01 §7's "broker peer qualification digest" becomes the mutual record, through item H4.
+- Three matrix v4 README statements: the writer check also reads its gated exe link. `matrix.json` is unchanged.
+
+A successor of each contract adopts the text. This follows the W02-CLEANUP errata precedent (Q-S A).
+
+## Residual (owner decision Q-HS43-3 (a))
+
+R-WRITER-PROC: a dumpable writer lets every uid-0 role with `procAccess` on it read its ptrace-gated entries. Those
+roles are the server, the observer and the broker as well as the gate, and the entries are exe, cwd, root, fd, fdinfo,
+environ and maps. `mem` and `process_vm_*` stay refused, because they need ptrace attach and Yama refuses it.
+Obligation O-MATRIX-WRITER-PROCACCESS has the queued SELinux matrix amendment (SELINUX-MATRIX-I04-KEYCERT) evaluate
+narrowing that access to the gate.
 
 ## Obligations
 
 | Id | Owner | Summary |
 |---|---|---|
-| O-SECCOMP-V3-READLINKAT | the next parallel-lane packet | The EFFECT_GATE `readlinkat` rule (x86_64 and aarch64, low 32 bits ≠ AT_FDCWD), `readlink` unlisted, vectors republished |
-| O-W03-WRITER-EXE | W03 (HE-007) | Writer uid/gid equal the gate's (0), dumpable, empty permitted set; the read bound to the frame's own process; exact artifact path |
-| O-T04-HS43 | T04 | Native confirmation: the writer read succeeds, the broker read fails with EACCES, `readlink` and `readlinkat(AT_FDCWD, …)` kill the gate |
+| O-SECCOMP-V3-READLINKAT | the next parallel-lane packet | The EFFECT_GATE `readlinkat` rule: a non-negative dirfd on the low 32 bits, one masked condition `(arg0 & 0x80000000) == 0` (direction accepted 2026-10-15); `readlink` unlisted; vectors for AT_FDCWD in both encodings and -1 |
+| O-W03-WRITER-EXE | W03 (HE-007) | Writer uid/gid 0, empty permitted set, dumpable through a credential-free exec; gate fs uid/gid 0; a race-free pidfd; an oversized buffer; an exact path |
+| O-W03-PEER-EXE | W03 | Gate dumpable, uid/gid 0, no capability after the seal; race-free peer pidfds and start times |
+| O-MATRIX-WRITER-PROCACCESS | SELINUX-MATRIX-I04-KEYCERT | Evaluate narrowing the writer's `procAccess` to the gate |
+| O-T04-HS43 | T04 | Native confirmation. The writer read succeeds. The broker read fails with EACCES, and the audited `capability sys_ptrace` denial is expected. The broker reads the gate. On x86_64 `readlink` kills the gate, and on both architectures `readlinkat` with AT_FDCWD in either encoding, or with -1, kills it. The path check refuses a longer path and " (deleted)" |
 
 ## Not amended
 
-- The broker's qualification of the gate and the BIND_EXECUTION digest of it.
-- The W02d v3 allowlist data, compiled programs and edge record (their own later packets).
-- SELinux matrix v4, which already gives the gate the writer's and the broker's `/proc`.
+- The broker's qualification of the gate (five checks); HS43 only states the kernel preconditions of its artifact read.
+- The W02d v3 allowlist data, compiled programs and edge record (their own later packets, Q-HE3A-1b).
+- SELinux matrix v4's `matrix.json`.
 - Every other W01 text, gate disposition and E01-E12 obligation.

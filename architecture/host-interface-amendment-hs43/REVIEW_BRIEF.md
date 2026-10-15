@@ -13,7 +13,14 @@ Review the HS43 amendment for publication: `amendment.json`, `HOST_INTERFACE_SPE
   dumpable, empty permitted set.
 - HS43-START (2026-10-15): the EFFECT_GATE `readlinkat` duty sentence, with `readlinkat` allowed only with
   dirfd != AT_FDCWD, so musl's aarch64 `readlink` stays killed. The seccomp v3 allowlist amendment is its own next packet.
-- Q-HS43-1: the gate's broker qualification drops only the artifact and keeps pidfd/start (if recorded in the record).
+- Q-HS43-1 (a): the gate's broker qualification drops only the artifact and keeps pidfd/start.
+- Q-HS43-2 (a) (monitor, owner-delegated): a closed, model-checked supersession list. It quotes I05 v1-v3 Channel 2
+  "executable", I07 v1 Channel 2's artifact clause (inherited by v2/v3) and §7's "broker peer qualification digest",
+  each with its replacement. The files stay byte-identical. The matrix v4 README statements are added as well.
+- Q-HS43-3 (a) (monitor, owner-delegated): the dumpable-writer exposure is a stated residual with obligation
+  O-MATRIX-WRITER-PROCACCESS for the queued SELinux matrix amendment, named in §12.
+- Q-HE2S-7 (a) and Q-HE2S-9 (a): the gate stays dumpable and holds no capability. These are the preconditions of the
+  broker's artifact read of the gate.
 
 ## Check at least
 
@@ -47,7 +54,12 @@ Review the HS43 amendment for publication: `amendment.json`, `HOST_INTERFACE_SPE
    - Dispositions cover exactly the cited decisions.
    - The obligations named in the new text equal the record's.
    - Is anything accepted that should not be?
-5. **Scope.** Owner decisions only, no W03 or R10 design content, and no claim of enforcement.
+5. **Supersession and residual.**
+   - Is the supersession list complete? Look for any adopted clause still requiring the gate to check the broker's
+     executable or the writer's digest per frame.
+   - Is every quote exact, and every replacement right?
+   - Is the residual's reach stated correctly?
+6. **Scope.** Owner decisions only, no W03 or R10 design content, and no claim of enforcement.
 
 Verdict: `PASS_FOR_SOURCE_PUBLICATION` or `CHANGES_REQUIRED`, with findings `{id, severity MAJOR|MINOR|NOTE, file, line,
 summary, evidence}`.
