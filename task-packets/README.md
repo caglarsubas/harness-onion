@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-026
+## Current source preparation — MET-ENFORCE-027
+
+MET-ENFORCE-027 (SECCOMP-V3-READLINKAT): seccomp allowlists v4, the W02d successor of the byte-identical v3 contract:
+the effect gate may call readlinkat only with a non-negative dirfd ((arg0 & 0x80000000) == 0) and never readlink, for
+HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's filter digests change. DATA_CHECK_ONLY. Alpha2 OPEN; 236
+accepted plus MET-ENFORCE-027 only.
+
+## Historical host-interface-hs43 source preparation — MET-ENFORCE-026
 
 MET-ENFORCE-026 (HS-4.3-AMEND): amendment HS43 of the W01 host-interface specification on top of the byte-identical
 W02D effective text: the effect gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED without an
@@ -1383,3 +1390,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 234 | `MET-PERF-038` | `Harness-Engineering` | Load-tolerant in-repository deadlines for verifier bundle v4 (parallel suite 900 s, nested 600 s); SOURCE_DELTA_ONLY |
 | 235 | `MET-ADOPT-004` | `Harness-Engineering` | RA-LICENSE-001: research adoption v3, licence clarification (litellm, pgvector, langfuse, phoenix) and the 29-baseline recheck; DATA_CHECK_ONLY |
 | 236 | `MET-ENFORCE-026` | `Harness-Engineering` | HS-4.3-AMEND: amendment HS43 of the W01 host-interface specification (gate broker/writer qualification, capability and readlinkat cells, BIND digest; closed list of 17 overridden clauses); SPECIFICATION_ONLY |
+| 237 | `MET-ENFORCE-027` | `Harness-Engineering` | SECCOMP-V3-READLINKAT: seccomp allowlists v4, the EFFECT_GATE readlinkat rule with a non-negative dirfd (HS43 obligation O-SECCOMP-V3-READLINKAT); only the gate's digests change; DATA_CHECK_ONLY |

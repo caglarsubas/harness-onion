@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-026
+## Current source preparation — MET-ENFORCE-027
+
+MET-ENFORCE-027 (SECCOMP-V3-READLINKAT): seccomp allowlists v4, the W02d successor of the byte-identical v3 contract,
+with one rule added for HS43 obligation O-SECCOMP-V3-READLINKAT: the effect gate may call readlinkat only with a
+non-negative dirfd ((arg0 & 0x80000000) == 0, so never AT_FDCWD in either encoding) and never readlink. Only the gate's
+filter digests change; 2971 decision checks, 355 worker stack checks and 23 policy mutations replay through the reference
+model. DATA_CHECK_ONLY. Alpha2 OPEN; 236 accepted plus MET-ENFORCE-027 only.
+
+## Historical host-interface-hs43 source preparation — MET-ENFORCE-026
 
 MET-ENFORCE-026 (HS-4.3-AMEND): amendment HS43 of the W01 host-interface specification, applied on top of the
 byte-identical W02D effective text: the effect gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED
@@ -1144,6 +1152,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 108. `MET-PERF-038`: raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap; fail-closed; a successor limits record; transport change.
 109. `MET-ADOPT-004`: record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only, per-part SPDX sets and policy-0.3.0 outcomes) and the 29 planned baselines' recheck as research adoption v3; v1, its map and v2 unchanged; data only.
 110. `MET-ENFORCE-026`: publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest; a closed list of 17 overridden clauses, two residuals, eight obligations); W02D, the W01 inputs and the overridden files unchanged; specification only.
+111. `MET-ENFORCE-027`: publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change); v3 and HS43 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

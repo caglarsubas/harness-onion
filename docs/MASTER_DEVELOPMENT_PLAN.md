@@ -1,6 +1,35 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-026 source preparation, October 15, 2026
+## Current checkpoint — MET-ENFORCE-027 source preparation, October 15, 2026
+
+Alpha2 OPEN. MET-ENFORCE-026 (HS-4.3-AMEND, amendment HS43 of the W01 host-interface specification) passed required
+verify and merged as main 0879eb1. Its obligation O-SECCOMP-V3-READLINKAT asks for the effect gate's readlinkat rule.
+Owner decisions: Q-HE3A-1 (c) and Q-HE3A-1b (a), 2026-10-13; HS43-START and the lane monitor's owner-delegated dirfd
+direction (arg0 & 0x80000000) == 0, 2026-10-15; and SEC-RL-START, 2026-10-15, which starts SECCOMP-V3-READLINKAT as slot
+237 (lane monitor). MET-ENFORCE-027 is the sole 237th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-027 / SECCOMP-V3-READLINKAT | SOURCE_PREPARED | Seccomp allowlists v4: the EFFECT_GATE readlinkat rule for obligation O-SECCOMP-V3-READLINKAT (237th packet); three contract review rounds, PASS; packet review; verify |
+| Alpha2A | MET-ENFORCE-026 / HS-4.3-AMEND | VERIFY_PASSED_MERGED | Merged as main 0879eb1 |
+| Alpha2A | PERF-039 | WAITING_PACKET_PUBLICATION | Pytest headroom under the 900 s parallel-suite worker deadline (parallel lane), after SECCOMP-V3-READLINKAT |
+| Alpha2A | SELINUX-MATRIX-I04-KEYCERT | WAITING_PACKET_PUBLICATION | The I04 key/cert type plus the HS43 matrix obligations, after SECCOMP-V3-READLINKAT |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-004, MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumers of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: the seccomp allowlists v1, v2 and v3 and the HS43 amendment stay byte-identical; only EFFECT_GATE's
+filter digests change; no filter is installed, the compiled programs and the edge record are not republished (the
+primary lane does that from v4), and no role code, matrix, profile, cloud, runner, live/native/tenant or model-effort
+change. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical host-interface-hs43 source checkpoint — MET-ENFORCE-026 source preparation, October 15, 2026
 
 Alpha2 OPEN. MET-ADOPT-004 (RA-LICENSE-001, research adoption v3) passed required verify and merged as main 8665a9b.
 Owner decisions (via the lane monitor): Q-HE2S-10 (a), 2026-10-13, the effect gate qualifies the broker by label,
@@ -1700,7 +1729,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · MAS-RA-003 / MET-MAS-003 · Publish the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate after three independent review rounds; pass required verify through the owner's App.
 - [x] Alpha 2A · MET-PERF-038 · Raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap, fail-closed, with a successor limits record; pass required verify through the owner's App after the owner's transport approval.
 - [x] Alpha 2A · RA-LICENSE-001 / MET-ADOPT-004 · Record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only) and the 29 planned baselines' recheck as research adoption v3 after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · HS-4.3-AMEND / MET-ENFORCE-026 · Publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest, a closed list of overridden clauses, two residuals and eight obligations) after independent review; pass required verify through the owner's App.
+- [x] Alpha 2A · HS-4.3-AMEND / MET-ENFORCE-026 · Publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest, a closed list of overridden clauses, two residuals and eight obligations) after independent review; pass required verify through the owner's App.
+- [ ] Alpha 2A · SECCOMP-V3-READLINKAT / MET-ENFORCE-027 · Publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change) after independent review; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

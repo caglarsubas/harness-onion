@@ -1,0 +1,63 @@
+{
+ "round": 1,
+ "subject": "faef548f12953bebfbbc3c7e334a68ef711ecd26",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "SR1-1",
+   "severity": "MINOR",
+   "file": "architecture/seccomp-allowlists-v4/vectors.json",
+   "line": 50914,
+   "summary": "The 21 policy mutations do not cover two of the refusals the new gate check exists for: a readlinkat mask without bit 31, and a bit-31 condition on an argument other than 0. A weakened check reproduces every published mutation result while accepting a rule that admits AT_FDCWD. Add mutations such as M22 (EFFECT_GATE readlinkat {arg 0, mask 0x1, eq 0}: an even dirfd, which admits 0xffffff9c) and M23 (EFFECT_GATE readlinkat {arg 1, mask 0x80000000, eq 0}). Optionally add M24: the good alternative plus a second alternative with no arg-0 condition.",
+   "evidence": "In a scratch copy, I replaced the model's predicate at scripts/seccomp_allowlists_v4.py:280, `any(c[\"arg\"] == 0 and c[\"mask\"] & sign and not c[\"eq\"] & sign for c in alt)`, with `any(not c[\"eq\"] & sign for c in alt)`. The weakened model still accepts the v4 policy and reproduces all 21 of 21 published mutation messages (M19 is unconditional, so the rule becomes None; M20 has eq 0xffffff9c with bit 31 set; M21 is readlink). It also accepts EFFECT_GATE readlinkat {arg 0, mask 1, eq 0}, whose compiled filter allows AT_FDCWD. The published model itself is correct: it refuses mask 0x7fffffff eq 3, mask 1 eq 0, mask 0x80000000 eq 0x80000000, a bit-31 condition on arg 1, a good alternative plus a bare alternative on arg 2, and an errno rule. So this is a gap in the evidence, not a model bug."
+  },
+  {
+   "id": "SR1-2",
+   "severity": "NOTE",
+   "file": "scripts/seccomp_allowlists_v4.py",
+   "line": 278,
+   "summary": "The new check takes the sign bit from the table (`table[\"constants\"][\"DIRFD_SIGN_BIT\"]`) and does not pin it to 0x80000000. A table that lacks the constant raises KeyError, not ValueError, and the read happens even when the gate has no readlinkat. AT_FDCWD_LOW32 is published but never used by the model. This follows the v3 pattern (MREMAP_MAYMOVE and PR_SET_NAME also come from the table), so it is a NOTE. Still, the property this packet exists for would be sturdier if the model required DIRFD_SIGN_BIT == 0x80000000, the int sign bit, which is not a kernel-defined constant.",
+   "evidence": "In a scratch copy with DIRFD_SIGN_BIT set to 1, check_policy accepts EFFECT_GATE readlinkat {arg 0, mask 1, eq 0}, and the compiled x86_64 filter returns ALLOW for dirfd 0xffffffffffffff9c. With DIRFD_SIGN_BIT deleted, check_policy(v4 policy) raises KeyError. With AT_FDCWD_LOW32 set to 12345, it still accepts. Running the v4 model on the v3 data raises KeyError 'DIRFD_SIGN_BIT'."
+  },
+  {
+   "id": "SR1-3",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/syscalls.json",
+   "line": 20,
+   "summary": "Besides the two new constants, syscalls.json also gains a constantCitations key, \"AT_FDCWD\". REVIEW_BRIEF item 1 does not mention it, and its name matches neither new constant (AT_FDCWD_LOW32, DIRFD_SIGN_BIT). DIRFD_SIGN_BIT has no citation of its own. Either name both constants in the citation text or note that DIRFD_SIGN_BIT is derived (the sign bit of a 32-bit int). I did not verify the line number fcntl.h:93: kernel source is outside what this review reads, and from memory AT_FDCWD (-100) is defined in include/uapi/linux/fcntl.h, but I cannot confirm the exact line.",
+   "evidence": "Structural JSON diff of v3 against v4 syscalls.json shows exactly four differences: /constantCitations/AT_FDCWD ADDED, /constants/AT_FDCWD_LOW32 = 4294967196 ADDED, /constants/DIRFD_SIGN_BIT = 2147483648 ADDED, and the schemaVersion change from v3 to v4. Every syscall entry, citation, source sha256 and denied list is unchanged."
+  },
+  {
+   "id": "SR1-4",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/README.md",
+   "line": 7,
+   "summary": "The text of obligation O-SECCOMP-V3-READLINKAT (HS43 amendment.json obligations[0]) and HS43 §12 say the rule is added to architecture/seccomp-allowlists-v3/. The packet instead publishes the successor v4 and keeps v3 byte-identical. That matches the repository's successor convention (v2 to v3), and the README says so. The packet mechanics (status/closure record, still absent: v4 has no status.json or source-index.json, unlike v3) should state explicitly that v4 discharges O-SECCOMP-V3-READLINKAT. They should also state that the primary lane's republished EFFECT_GATE programs and edge record derive from v4, whose digests differ from v3's for EFFECT_GATE only.",
+   "evidence": "HS43 amendment.json obligations[0].text: \"Add to the EFFECT_GATE row of architecture/seccomp-allowlists-v3/ a readlinkat rule ...\". HOST_INTERFACE_SPEC.md (HS43) near line 719: \"the W02d v3 allowlist (`architecture/seccomp-allowlists-v3/`) gains the EFFECT_GATE `readlinkat` rule in its own packet\". `git diff --quiet 0879eb14..faef548f -- architecture/seccomp-allowlists-v3 scripts/seccomp_allowlists_v3.py architecture/host-interface-amendment-hs43` is clean, and the diff adds only the six v4 files."
+  },
+  {
+   "id": "SR1-5",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/allowlists.json",
+   "line": 43,
+   "summary": "The four new ownerDecisions entries abridge the HS43 record rather than quote it. Q-HE3A-1b drops \"HE-003A merges first\" and the HE-007 clause. HS43-START keeps only the readlinkat sentence. SECCOMP-DIRFD-DIRECTION drops \"accepted as\". The meaning the allowlist depends on is kept: the order of the chain, dirfd != AT_FDCWD, and the masked direction. The v3 records are also short paraphrases. Consider citing architecture/host-interface-amendment-hs43/amendment.json as the full text. The four entries are also inserted before W02d-V3 (2026-10-10), so the list is not in date order. That is cosmetic.",
+   "evidence": "HS43 amendment.json ownerDecisions[4] (Q-HE3A-1b): \"(a) HE-003A merges first; the readlink exe check is decided-but-open, landing after the chain: ... HE-007 obligations: writer uid/gid 0, dumpable, empty permitted set.\" v4 allowlists.json Q-HE3A-1b: \"(a) the readlink exe check lands after the chain: ...\". The JSON diff shows only additions (8 to 12 entries, none changed or removed), and the existing entries are unchanged."
+  },
+  {
+   "id": "SR1-6",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/vectors.json",
+   "line": null,
+   "summary": "The x86_64 vector \"EFFECT_GATE readlink (HS43)\" (nr 89, all arguments 0, KILL_PROCESS) duplicates the generic check \"EFFECT_GATE readlink with zero arguments\", which v3 already carried. The two differ only in intent. Harmless. A non-zero argument (for example arg0 = 3) would add information.",
+   "evidence": "Comparing the v3 and v4 decision checks as a set keyed on (role, arch, nr, args, auditArch, intent): v3 has 2953 and v4 has 2972. All 2953 v3 checks are present in v4. The only expectation changes are the two \"EFFECT_GATE readlinkat with zero arguments\" checks, KILL_PROCESS to ALLOW (dirfd 0 is non-negative), as intended. There are 19 new checks: 3 generic and 6 specific per architecture, plus readlink on x86_64."
+  },
+  {
+   "id": "SR1-7",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/README.md",
+   "line": 20,
+   "summary": "The README's kernel, BPF and musl claims hold, from my own knowledge of Linux v6.12 and musl 1.2.5. Kernel: fs/stat.c SYSCALL_DEFINE4(readlinkat, int, dfd, ...) passes dfd to do_readlinkat as an int. The x86_64 and arm64 syscall wrappers (__se_sys_* taking longs, then __do_sys_* through __SC_CAST) truncate the register to 32 bits, and path_init compares that int with AT_FDCWD, so 0x00000000ffffff9c is AT_FDCWD. Seccomp: populate_seccomp_data copies the full 64-bit arguments from syscall_get_arguments, and seccomp_check_filter admits only 32-bit aligned BPF_LD|BPF_W|BPF_ABS loads, so offset 16 is the low word on these little-endian ABIs (auditArch 0xC000003E, 0xC00000B7). musl: src/unistd/readlink.c calls SYS_readlinkat with AT_FDCWD when SYS_readlink is undefined, as on aarch64, and the int -100 is sign-extended to 0xffffffffffffff9c. For the gate's code (outside this contract): with readlink and AT_FDCWD readlinkat killed, any musl realpath() (which uses readlink per component since 1.2.2) and Rust std read_link, current_exe or canonicalize kill the gate. Only readlinkat on the /proc/<pid> descriptor is admitted, as HS43 §4.3 and O-W03-WRITER-EXE already require.",
+   "evidence": "The compiled EFFECT_GATE program has 6 new instructions on each architecture: JEQ nr (267 on x86_64, 78 on aarch64) jf=5; LD_W_ABS 0x10; AND 0x80000000; JEQ 0 jt=0 jf=1; RET ALLOW; RET KILL_PROCESS. These sit at index 173 (x86_64) and 34 (aarch64). The program prefix and suffix are instruction-identical to v3 (194 to 200 and 183 to 189). For 279 arg0 values, each with 3 sets of other arguments, on both architectures (1674 cases: 29 hand-picked edge values, plus 150 random 64-bit and 100 random 32-bit values), decide equals run_filter equals ALLOW exactly when (arg0 & 0xffffffff) < 0x80000000. The hand-picked values include 0xffffffffffffff9c, 0x00000000ffffff9c, 0x1ffffff9c, 0x80000000ffffff9c, 0xffffffff00000003, 0xffffffff7fffffff, -1, 0x80000000, 0x7fffffff, 0xffffff9b and 0xffffff9d. Also confirmed: readlink (x86_64 nr 89) is killed whatever the arguments, x32 readlinkat is killed, wrong-arch readlinkat is killed, and every other role's readlinkat and readlink actions are unchanged from v3. check_policy passes, the 14 digests and lengths recompute and match, the 2972 decision checks replay, all 355 stack checks hold, and the 21 mutations reproduce their exact messages."
+  }
+ ]
+}
