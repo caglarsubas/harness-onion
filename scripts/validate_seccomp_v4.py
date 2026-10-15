@@ -635,12 +635,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "seccomp v4 validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 239
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET},
-            "closed 239-packet catalog retaining the 237-packet checkpoint")
+    require(len(paths) == 240
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET},
+            "closed 240-packet catalog retaining the 237-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = record["packetSha256"] if path.stem == NEW_PACKET else record["baselinePackets"][path.stem]
@@ -678,4 +678,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Seccomp allowlists v4 valid: 239 current specifications; 237-packet checkpoint and exact 236-packet predecessor; contract reviewed.")
+    print("Seccomp allowlists v4 valid: 240 current specifications; 237-packet checkpoint and exact 236-packet predecessor; contract reviewed.")
