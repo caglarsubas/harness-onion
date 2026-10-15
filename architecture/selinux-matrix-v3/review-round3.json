@@ -1,0 +1,39 @@
+{
+ "round": 3,
+ "subject": "02275deba52d3c8c44d7aa084a39950571a62fe2",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "XR3-1",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 21,
+   "summary": "Round 3 widens A09, a v4 assertion, from read and open to all 13 READ permissions, and gives A67 the same coverage. The README does not disclose either change, although README:8 says v5 'changes only the items below'. In the change table (README:21) A09 only gains the key. The Assertions table still reads 'A09 covers the gate's I04 private key as well' (README:312) and 'Only the gate reads its I04 serving chain and client CA' (README:326). The brief's question-1 list says only 'the A09 ... changes'. Disclose the widening in the change table, both Assertions rows and the brief. Also say what it now pins: in every state, including the maintenance boot, no domain but the gate has getattr, map, ioctl, lock, the watch permissions or audit_access on planeon_gate_effect_cred_t and planeon_gate_writer_cred_t (both v4 types), while A10 and A11.* for the other credentials still cover read and open only.",
+   "evidence": "Comparing matrix.json with v4 by index: A09 (index 8) changed in perms, ref, statement and targets, with perms going from v4 ['read', 'open'] to the 13-entry READ list starting 'read', 'open'. Its v4 C-vectors are unchanged because the builder samples perms[0]. A67 perms went from ['read', 'open'] to all 13. The only other changes to v4 assertions are the disclosed targets of A12, A13 and A36, the allow lists of A38, A39 and A48, and A59.planeon_worker_t. The union assertions A38 and A39 keep their v4 perms. README:8, :21, :312 and :326 and REVIEW_BRIEF.md:67 do not mention the perms change; only the brief's 'Round-2 answers' row and the matrix A09 statement '(every READ permission, v5)' do."
+  },
+  {
+   "id": "XR3-2",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 279,
+   "summary": "The XR2-1 fix says that P1 role captures 'read the exe link of each uid-0 role'. That leaves out the capability rule the README itself states at :34-35 and :273: the reader's capabilities must cover the target's. My XR2-1 suggestion missed this too. The broker's permitted set (net_admin, setuid, setgid, bpf) is covered by no other reader, so neither the server nor the observer can read the broker's exe link. The observer also cannot read the server's when the server holds net_bind_service (signed port below 1024). This matters for the open owner decision: option (b), recommended at README:68-70, makes the observer the capturing role, which would leave P1's BROKER capture, and a low-port SERVER capture, refused by the kernel. Fix: limit the statement to targets whose permitted capabilities the capturing reader covers. State this constraint in option (b) before Q-MX-2/Q-MX-3 are decided; for example, the broker covers every uid-0 role except a low-port server. Carry it to the native-profile successor together with the worker.",
+   "evidence": "Kernel basis (Linux v6.12): readlink or stat on /proc/<pid>/exe goes through proc_pid_get_link, then proc_fd_access_allowed, then ptrace_may_access(PTRACE_MODE_READ_FSCREDS), then __ptrace_may_access. The uid check passes for uid-0 peers. The dumpable check follows, then security_ptrace_access_check, then cap_ptrace_access_check. In FSCREDS mode that check requires cap_issubset(target cap_permitted, caller cap_effective) or ns_capable(CAP_SYS_PTRACE), and no role holds CAP_SYS_PTRACE (resolved spec §5.3). Capability sets from matrix.json, matching resolved spec §5.3: server net_admin, net_bind_service, bpf (net_bind_service only with a port below 1024); observer net_admin, bpf; broker net_admin, setuid, setgid, bpf; gate, writer and worker none. Native profile v3 P1 (native-profile-v3/README.md:60) records /proc/<pid>/exe of every role capture's processes. README:274-275 already concludes 'the gate cannot read the broker's exe' from the same rule."
+  },
+  {
+   "id": "XR3-3",
+   "severity": "NOTE",
+   "file": "scripts/selinux_matrix_v3.py",
+   "line": 254,
+   "summary": "XR2-5 is fixed for the assertions v5 touched: no single READ permission granted to the gate on either parent, or to the server on either I04 type, passes all assertions. The narrowed-grant extension still applies to every type, though, and the other assertions (A10, A11.*, the pin, seal-marker, journal and socket-file assertions) still cover only some READ permissions. A narrowed grant of getattr or watch to the admin domain passes all 132 assertions on 22 non-public types. Exposure is metadata at most. Restricting narrowing in check_matrix to what v5 uses (CGROUP types, class dir, perms within {search}) would close this without touching any v4 assertion.",
+   "evidence": "Probe on a scratch copy, 148 cases in 15.7 s. Gate parent widenings that pass: none. Server single READ permissions on planeon_gate_i04_key_t or planeon_gate_i04_cert_t that pass: none. A narrowed admin READ {classes: [first class], perms: [getattr] or [watch]} passes on: planeon_server_cred_t, planeon_observer_cred_t, qualk8s_sa_key_t, qualk8s_encryption_key_t, the six qualk8s_<component>_cred_t types, the six socket-file types, planeon_run_t, planeon_bpf_pin_t, planeon_seal_t, planeon_gate_journal_t, qualk8s_datastore_data_t and qualk8s_container_file_t."
+  },
+  {
+   "id": "XR3-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v3/README.md",
+   "line": 312,
+   "summary": "In the maintenance boot, the matrix gives the maintenance domain WRITE, create and relabelto on planeon_gate_i04_key_t and planeon_gate_i04_cert_t, but not open or getattr. A09 and A67 now pin both. The kernel checks file open on every open, including O_CREAT and O_WRONLY (open_perms is required, decision 8), so an I04 credential cannot be written in place under its final type. It must be created under another type, written and then relabelled (relabelfrom, relabelto), which is the file-context route the README names. Afterwards maintenance cannot lstat it, run restorecon on it, or read it back to check the signed configuration's sha256 pin. This predates v5 (v4 A09-A11 already pinned open for every credential), but it is worth stating for HE-008 and W03, which fix the installation.",
+   "evidence": "allowed() on the v5 matrix in MAINTENANCE_BOOT for planeon_maint_t on planeon_gate_i04_key_t: open False, getattr False, write True, create True, relabelto True. A narrowed maintenance-mode READ of [open] or [getattr] for planeon_maint_t on the key or on planeon_gate_effect_cred_t fails A09. Kernel basis: selinux_file_open calls open_file_to_av, which adds FILE__OPEN when the open_perms policy capability is set. lstat goes through security_inode_getattr and checks FILE__GETATTR."
+  }
+ ]
+}
