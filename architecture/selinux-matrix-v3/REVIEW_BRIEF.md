@@ -1,9 +1,10 @@
-# Independent review brief — SELinux matrix v5 (SELINUX-MATRIX-I04-KEYCERT), round 2
+# Independent review brief — SELinux matrix v5 (SELINUX-MATRIX-I04-KEYCERT), round 3
 
 Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a verdict.
 
 Round 1 (`review-round1.json`, after adoption) returned CHANGES_REQUIRED: 1 MAJOR, 5 MINOR and 7 NOTE findings, XR1-1 to
-XR1-13. Each is answered in the bytes as listed under "Round-1 answers" below.
+XR1-13. Round 2 (`review-round2.json`) returned CHANGES_REQUIRED: 2 MINOR and 4 NOTE findings, XR2-1 to XR2-6. Each is
+answered in the bytes as listed under "Round-1 answers" and "Round-2 answers" below.
 
 v5 is the successor of the adopted matrix v4 `../selinux-matrix-v2/` (`planeon.internal.selinux-matrix/v4`; review round
 2 PASS_FOR_SOURCE_PUBLICATION, with G1 carried). The v4 bytes stay unchanged. README.md ("What v5 changes", "HS43 /proc
@@ -110,6 +111,17 @@ working tree is part of the subject.
 | XR1-11 NOTE | The resolved spec's server-side mechanism is stated |
 | XR1-12 NOTE | Question 1 lists A59.planeon_worker_t and the new assertions |
 | XR1-13 NOTE | The README says what the grant reaches on the leaf, the parents and the worker's /proc |
+
+## Round-2 answers
+
+| Finding | Answer |
+|---|---|
+| XR2-1 MINOR | P1's exe-link reads are limited to the uid-0 roles; the other-uid worker's image capture is carried to the next native-profile successor ("Still open") |
+| XR2-2 MINOR | The Cgroups row, the A38/A39 per-type row and the spec mapping state the narrowed parent grant, A38S and A68 |
+| XR2-3 NOTE | The exception list names the broker's read of the gate's exe link (HS43) |
+| XR2-4 NOTE | "Still open" names the owner's open Q-MX-2 and Q-MX-3 |
+| XR2-5 NOTE | A09, A67 and every A38.<type>/A39.<type> now cover every READ permission (A38.<type> of the two parents: every one but search). No single READ permission granted to the gate on a parent, or to the server on either I04 type, passes all assertions |
+| XR2-6 NOTE | The broken line is rewrapped; A67 now precedes the per-type and A68 assertions |
 
 ## How to check
 

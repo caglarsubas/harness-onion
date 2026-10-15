@@ -182,11 +182,22 @@
    "id": "A09",
    "perms": [
     "read",
-    "open"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.3; v5",
    "sources": "ALL",
-   "statement": "The gate is the sole reader of its two upstream client credentials and its I04 serving private key",
+   "statement": "The gate is the sole reader of its two upstream client credentials and its I04 serving private key (every READ permission, v5)",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2781,6 +2792,39 @@
   },
   {
    "allow": [
+    "planeon_gate_t"
+   ],
+   "class": "file",
+   "id": "A67",
+   "perms": [
+    "read",
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
+   ],
+   "ref": "Resolved spec 4.2; Q-HE3D-8; Q-MX-1",
+   "sources": "ALL",
+   "statement": "Only the gate has any READ permission on its I04 serving chain and client CA",
+   "states": [
+    "ENROLLED_CONTAINMENT",
+    "ENROLLED_SEALED",
+    "MAINTENANCE_BOOT"
+   ],
+   "targets": [
+    "planeon_gate_i04_cert_t"
+   ]
+  },
+  {
+   "allow": [
     "init_t",
     "planeon_contain_t",
     "planeon_server_t",
@@ -2790,13 +2834,22 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_slice_t",
    "perms": [
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open, read or getattr planeon_cgroup_slice_t directories",
+   "statement": "Only the enumerated readers have any READ permission but search on planeon_cgroup_slice_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2843,12 +2896,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_slice_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_slice_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_slice_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2869,14 +2933,23 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_contain_t",
    "perms": [
-    "search",
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers search or open planeon_cgroup_contain_t directories",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_contain_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2897,12 +2970,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_contain_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_contain_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_contain_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2923,14 +3007,23 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_server_t",
    "perms": [
-    "search",
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers search or open planeon_cgroup_server_t directories",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_server_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2951,12 +3044,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_server_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_server_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_server_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -2977,14 +3081,23 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_observer_t",
    "perms": [
-    "search",
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers search or open planeon_cgroup_observer_t directories",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_observer_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3005,12 +3118,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_observer_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_observer_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_observer_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3031,14 +3155,23 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_gate_t",
    "perms": [
-    "search",
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers search or open planeon_cgroup_gate_t directories",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_gate_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3059,12 +3192,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_gate_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_gate_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_gate_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3085,13 +3229,22 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_delegate_t",
    "perms": [
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open, read or getattr planeon_cgroup_delegate_t directories",
+   "statement": "Only the enumerated readers have any READ permission but search on planeon_cgroup_delegate_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3138,12 +3291,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_delegate_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_delegate_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_delegate_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3164,14 +3328,23 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_broker_t",
    "perms": [
-    "search",
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers search or open planeon_cgroup_broker_t directories",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_broker_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3192,12 +3365,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_broker_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_broker_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_broker_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3219,14 +3403,23 @@
    "class": "dir",
    "id": "A38.planeon_cgroup_worker_t",
    "perms": [
-    "search",
-    "open",
     "read",
-    "getattr"
+    "open",
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers search or open planeon_cgroup_worker_t directories",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_worker_t directories",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3248,12 +3441,23 @@
    "class": "file",
    "id": "A39.planeon_cgroup_worker_t",
    "perms": [
+    "read",
     "open",
-    "read"
+    "getattr",
+    "map",
+    "ioctl",
+    "lock",
+    "search",
+    "watch",
+    "watch_reads",
+    "watch_mount",
+    "watch_sb",
+    "watch_with_perm",
+    "audit_access"
    ],
    "ref": "W01 5.1; F2; Q-HE3D-2",
    "sources": "ALL",
-   "statement": "Only the enumerated readers open or read planeon_cgroup_worker_t files",
+   "statement": "Only the enumerated readers have any READ permission on planeon_cgroup_worker_t files",
    "states": [
     "ENROLLED_CONTAINMENT",
     "ENROLLED_SEALED",
@@ -3423,28 +3627,6 @@
    ],
    "targets": [
     "SELF"
-   ]
-  },
-  {
-   "allow": [
-    "planeon_gate_t"
-   ],
-   "class": "file",
-   "id": "A67",
-   "perms": [
-    "read",
-    "open"
-   ],
-   "ref": "Resolved spec 4.2; Q-HE3D-8; Q-MX-1",
-   "sources": "ALL",
-   "statement": "Only the gate reads its I04 serving chain and its client CA",
-   "states": [
-    "ENROLLED_CONTAINMENT",
-    "ENROLLED_SEALED",
-    "MAINTENANCE_BOOT"
-   ],
-   "targets": [
-    "planeon_gate_i04_cert_t"
    ]
   }
  ],

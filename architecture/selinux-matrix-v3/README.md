@@ -205,7 +205,7 @@ unconfined or privileged type, such as container-selinux's `kubelet_t`, `contain
 | Sealed configuration and units | `planeon_etc_t`, `qualk8s_config_t`, `planeon_unit_file_t`, `qualk8s_unit_file_t` | READ any; WRITE/RELABEL maintenance only |
 | Credentials | `planeon_server_cred_t`, `planeon_observer_cred_t`, `planeon_gate_effect_cred_t`, `planeon_gate_writer_cred_t`, `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (v5), `qualk8s_sa_key_t`, `qualk8s_encryption_key_t`, one `qualk8s_<component>_cred_t` per API client | READ the owners only; WRITE/RELABEL maintenance only (W01 §5.5 M5) |
 | Socket files | I05, I07, observer, broker, datastore and runtime socket files | The listener and its one connector |
-| Cgroups | `planeon_cgroup_{slice,contain,server,observer,gate,delegate,broker,worker}_t` | READ init, containment and the reader roles, and (v5, Q-HE3D-2 (a)) the gate on the slice, the delegated service cgroup and the `probe-worker` leaf; WRITE init, containment before the seal, and the broker on its delegated service cgroup (`delegate`) and its `broker` and `probe-worker` leaves; RELABEL nobody |
+| Cgroups | `planeon_cgroup_{slice,contain,server,observer,gate,delegate,broker,worker}_t` | READ init, containment and the reader roles, and (v5, Q-HE3D-2 (a)) the gate on the `probe-worker` leaf, with only `dir search` on the slice and the delegated service cgroup; WRITE init, containment before the seal, and the broker on its delegated service cgroup (`delegate`) and its `broker` and `probe-worker` leaves; RELABEL nobody |
 | bpffs pins, seal marker | `planeon_bpf_pin_t`, `planeon_seal_t` | READ containment and the reader roles. Pins: WRITE containment before the seal, labelled by genfscon. Seal marker: WRITE containment in the enrolled boot (S5), labelled by a named type transition |
 | Boolean files | `planeon_bool_maintenance_t`, `planeon_bool_containment_t`, `planeon_bool_policyload_t` (selinuxfs genfscon) | READ any; WRITE only as described under Booleans and states |
 | Journal, data | `planeon_gate_journal_t`, `qualk8s_datastore_data_t` | The owner; the maintenance domain only in the maintenance boot (reconciliation, restore: counterexample 25) |
@@ -272,11 +272,12 @@ unconfined or privileged type, such as container-selinux's `kubelet_t`, `contain
   - SELinux checks a `/proc/<pid>` entry as an access to the target domain. Ptrace-gated entries (`exe`, `fd`, `cwd`,
     `environ`, `mem`) also need the kernel's own rules: the reader's capabilities must cover the target's, and the uids must
     match unless CAP_SYS_PTRACE, which no role holds; the target must also be dumpable. So the gate cannot read the
-    broker's `exe`, and no role reads the
-    other-uid worker's or the kubelet's gated entries.
+    broker's `exe`, and no role reads the other-uid worker's or the kubelet's gated entries.
   - Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries (`status`, `stat`,
-    `cgroup`) (review R4), except that the gate's check of the writer also reads the writer's ptrace-gated exe link
-    (HS43; `procAccess` already grants that read), and the native profile's P1 role captures read each role's exe link.
+    `cgroup`) (review R4), except for three exe-link reads: the gate's check of the writer reads the writer's exe link
+    (HS43), the broker's artifact check reads the gate's (HS43), and the native profile's P1 role captures read the exe
+    link of each uid-0 role. `procAccess` already grants these reads. No reader can read the other-uid worker's exe link,
+    so P1's capture of the worker's image is carried to the next native-profile successor.
   - Executable identity follows from the peer's label for the broker; the writer's executable is also checked through
     its exe link (HS43). The matrix lets each planeon domain be entered only through its
     sealed entrypoint type, and the per-source closure denies `execute_no_trans` on every type, declared or not, so no
@@ -325,7 +326,7 @@ host domains' capabilities are outside the matrix.
 | A67 (v5) | Only the gate reads its I04 serving chain and client CA | Resolved §4.2; Q-HE3D-8; Q-MX-1 |
 | A68.* (v5) | The gate holds no permission of any capability class | W01 §5.3 as amended by HS43 H5; review XR1-4 |
 | A38S.* (v5) | The slice and the delegated service cgroup are searched only by their readers and the gate | Q-HE3D-2 (a); Q-MX-5 |
-| A38.*, A39.* (v5) | 16 per-type assertions: each planeon cgroup type is searched, opened and read only by its own readers (the gate only on the slice, the delegated service cgroup and the probe-worker leaf) | W01 §5.1; F2; Q-HE3D-2 (a) |
+| A38.*, A39.* (v5) | 16 per-type assertions, over every READ permission: each planeon cgroup type is read only by its own readers (the gate only on the probe-worker leaf; on the slice and the delegated service cgroup A38.<type> leaves out search, which A38S.<type> covers) | W01 §5.1; F2; Q-HE3D-2 (a) |
 
 The 72 mutation checks show the assertions are not vacuous.
 - 56 add a forbidden grant (M51-M55 new in v4, M56-M69 new in v5) and name exactly the assertions it breaks. For example, the server connecting to the apiserver
@@ -462,7 +463,8 @@ E1 amends W01 §5.3 and is carried to W01's record, W03 and T04.
    domain and reads no role's `/proc`.
 7. Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; executable identity
    follows from the label and the entrypoint closure (review R4). As above, HS43 adds that the gate also reads the
-   writer's exe link, and the native profile's P1 captures read each role's exe link.
+   writer's exe link, the broker reads the gate's, and the native profile's P1 captures read the exe link of each uid-0
+   role (the other-uid worker's is refused to every reader; carried to the next native-profile successor).
 8. Required policy capabilities: `cgroup_seclabel`, `open_perms`, `network_peer_controls`, `nnp_nosuid_transition`.
 9. Backend capability sets are declared, not observed (W03 confirms them against the selected distribution): kubelet and
    runtime as listed, network-policy agent and proxy `net_admin` and `net_raw`, apiserver, controller-manager, scheduler and
@@ -551,13 +553,13 @@ OPEN_UNPROVEN. The W01, W02a, W02g, W02b and W02c bytes, HS43 and the adopted v3
 | §5.4 worker exec after `no_new_privs`, kill through the pidfd | A29, A58; `nnp_transition` |
 | §5.5 sealed types, `planeon_maint_t`, `planeon_maintenance_mode` | A12, A13, A22, A26, A27, A30 |
 | Resolved §4.2: the gate's TLS listener identity is the signed KUBERNETES_API_PROXY endpoint identity (v5) | `planeon_gate_i04_key_t` (A09), `planeon_gate_i04_cert_t` (A67) |
-| §5.3 EFFECT_GATE as amended by HS43 H5: no capability (v5) | Capabilities, A48; O-MATRIX-GATE-NETBIND |
+| §5.3 EFFECT_GATE as amended by HS43 H5: no capability (v5) | Capabilities, A48, A68.*; O-MATRIX-GATE-NETBIND |
 | HS43 O-MATRIX-WRITER-PROCACCESS, O-MATRIX-GATE-PROCACCESS (v5) | "HS43 /proc evaluations"; A59.* |
-| Owner decision Q-HE3D-2 (a): the gate's observedWorkers source (v5) | Cgroup row, `procAccess`, A38.*, A39.*, A59.planeon_worker_t |
+| Owner decision Q-HE3D-2 (a): the gate's observedWorkers source (v5) | Cgroup row, `procAccess`, A38.*, A38S.*, A39.*, A59.planeon_worker_t |
 
 ## Still open
 
-All E01-E12 and T01-T08. The I04 credential file paths (HE-008) and their labelling as `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (W03). The narrowing of the writer's and the gate's `/proc` peers once a native-profile successor names the capturing role. The I05 successor that takes observedWorkers from the worker cgroup. The binary policy, its conditionals and its behaviour on the enrolled kernel (T04). The backend
+All E01-E12 and T01-T08. The I04 credential file paths (HE-008) and their labelling as `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (W03). The owner's decisions Q-MX-2 and Q-MX-3 on narrowing the writer's and the gate's `/proc` peers (open; the matrix keeps both sets until then). P1's capture of the other-uid worker's image, which no reader can take (next native-profile successor). The I05 successor that takes observedWorkers from the worker cgroup. The binary policy, its conditionals and its behaviour on the enrolled kernel (T04). The backend
 policy module, the selected runtime's BPF behaviour and the selected distribution (W03). The effective-program census
 (W02a-F). The seccomp filters (W02d). The W02a schema constants for these labels (W02a-F). W03-W07 remain gated. Alpha2
 remains open; model-effort transition NOT_DUE.
