@@ -146,6 +146,7 @@
   },
   {
    "id": "Q-HE3D-2",
+   "choice": "(a)",
    "date": "2026-10-15",
    "source": "lane monitor (relayed owner decision)",
    "decision": "The gate has no allowed source for observedWorkers, so production BIND fails closed until fixed; the fix is routed to the parallel lane: (1) SELINUX-MATRIX-I04-KEYCERT also carries the grant: gate READ on the probe-worker cgroup and procAccess to planeon_worker_t; (2) a new queued item: an I05 successor where observedWorkers comes from the worker cgroup (KERNEL), after that grant. No change to slot 237."
@@ -178,7 +179,7 @@
    "id": "SLOT-SWAP-239",
    "date": "2026-10-15",
    "source": "lane monitor",
-   "decision": "SLOT SWAP: SELINUX-MATRIX-I04-KEYCERT becomes harness-onion slot 239, and PROGRAMS-REPUBLISH moves to 240. Start packet mechanics now on 9f251d5 (the current main), using 238 MET-PERF-039 and 237 MET-ENFORCE-027 as templates."
+   "decision": "SLOT SWAP: your matrix is ready before PROGRAMS-REPUBLISH (still in its dossier), and neither depends on the other. So SELINUX-MATRIX-I04-KEYCERT becomes harness-onion slot 239, and PROGRAMS-REPUBLISH moves to 240. Start packet mechanics now on 9f251d5 (the current main), using 238 MET-PERF-039 and 237 MET-ENFORCE-027 as templates."
   }
  ],
  "contractState": "ADOPTED_DATA_CONTRACT",
@@ -216,5 +217,6 @@
  "phaseComplete": false,
  "ownerDecisionNotes": {
   "Q-MX-2-3-OWNER": "owner informed of XR3-2 after the decision; decision unchanged (lane monitor, 2026-10-15)"
- }
+ },
+ "slotNote": "README.md's 'slot 240, after slot 239' predates the lane monitor's slot swap of 2026-10-15 (SLOT-SWAP-239): this contract is published as harness-onion slot 239, MET-ENFORCE-028; PROGRAMS-REPUBLISH moved to 240"
 }

@@ -23,7 +23,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/selinux-matrix-v3-authority.json"
-AUTHORITY_SHA256 = "fe17b8dd03a2b3346b5f6696c38257eafc055cfe7e797878088d81fc4e7b7744"
+AUTHORITY_SHA256 = "9bd941a975f743a78a8306d1036fe43113d75538efb8eb351810b94ff328b6b8"
 VALIDATOR_PATH = "scripts/validate_selinux_matrix_v3.py"
 BASE_COMMIT = "9f251d5d07772cbfb9987c422f3fca79748fad34"
 NEW_PACKET = "MET-ENFORCE-028"
@@ -452,6 +452,8 @@ FROZEN_PATHS = (
     "architecture/selinux-matrix/source-index.json",
     "architecture/selinux-matrix/status.json",
     "architecture/selinux-matrix/vectors.json",
+    "scripts/host_interface_amendment_v2.py",
+    "scripts/native_qualification_v3.py",
     "scripts/selinux_matrix.py",
     "scripts/selinux_matrix_v2.py",
 )
@@ -481,7 +483,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/selinux-matrix-v3/round3/architecture/selinux-matrix-v3/vectors.json": "c7916ca99b4fafe05b1bbe85635ab51306ed12d9e56d82b03282a55f7f658944",
     "architecture/selinux-matrix-v3/round3/scripts/selinux_matrix_v3.py": "85d4185c029c17aa078eccf15259f8dab15e60260544861590c95609f57fc5ef",
     "architecture/selinux-matrix-v3/source-index.json": "c101e23ff4f97cc567bf21250b191395f282b52f00c4bc8bed1360d3ffbaebd3",
-    "architecture/selinux-matrix-v3/status.json": "076243686f959f34f0dac0b94a13dfef8687471f6450c387bbe300100bb3d8ce",
+    "architecture/selinux-matrix-v3/status.json": "bf6664e2390b9a6ddeb7acb5e452c0f111bb856b57545f66482f00e34759e30f",
     "architecture/selinux-matrix-v3/vectors.json": "e1c2bc892bbc60baa54dc033ef829ea406066f7ebde5d3e83c28e3076e8cde5c",
     "scripts/selinux_matrix_v3.py": "86ea304f2177cf71b148233259d6ae5686d6aef7f1fa2294f9be421749776fcb",
 })
@@ -543,7 +545,7 @@ FALSE_FLAGS = ("nativeAcceptance", "tenantAcceptance", "policyModuleWritten", "p
                "seccompFiltersDefined", "w02aSchemaConstantsFixed", "productExecution", "runnerActivated", "phaseComplete")
 STATUS_KEYS = frozenset({"schemaVersion", "contract", "supersedes", "reviewRounds", "closedFindings", "carriedFindings",
                          "carriedElsewhere", "ownerDecisions", "ownerDecisionNotes", "contractState", "obligations",
-                         "hs43Obligations", "independentReviewer", "readmeStatusNote", "f2", *FALSE_FLAGS})
+                         "hs43Obligations", "independentReviewer", "readmeStatusNote", "slotNote", "f2", *FALSE_FLAGS})
 ROUND_KEYS = frozenset({"round", "record", "recordSha256", "verdict", "subjectCommit", "subjectSha256", "subjectDirectory"})
 
 
@@ -674,11 +676,11 @@ def replay_v5_vectors(model: types.ModuleType, matrix: dict, vectors: dict, v4_v
         require(ok, "mutation check " + row["id"])
     changed = set(V5_CHANGES)
     for key in ("accessChecks", "mutationChecks"):
-        old = v4_vectors[key]
-        new = vectors[key][:len(old)] if key == "accessChecks" else [r for r in vectors[key] if r["id"] in {o["id"] for o in old}]
-        require([r["id"] for r in new] == [r["id"] for r in old]
+        old, new = v4_vectors[key], vectors[key][:len(v4_vectors[key])]
+        ids = [r["id"] for r in vectors[key]]
+        require(len(set(ids)) == len(ids) and [r["id"] for r in new] == [r["id"] for r in old]
                 and {o["id"] for o, n in zip(old, new) if o != n} == {o["id"] for o in old} & changed,
-                "every v4 %s vector is kept; only the listed ones change" % key)
+                "every v4 %s vector is kept at its position; only the listed ones change" % key)
     return len(vectors["accessChecks"]) + len(vectors["mutationChecks"])
 
 

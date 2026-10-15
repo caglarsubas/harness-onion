@@ -825,6 +825,7 @@ def test_the_evaluator_imports_only_the_standard_library():
     ("verdict", "adopted after the round-4 pass"), ("subject", "adopted after the round-4 pass"),
     ("flag", "adopted after the round-4 pass"), ("state", "adopted after the round-4 pass"),
     ("decisions", "adopted after the round-4 pass"), ("hs43", "adopted after the round-4 pass"),
+    ("slot_note", "adopted after the round-4 pass"),
     ("extra", "adopted after the round-4 pass"),
     ("record", "review round 1 is bound to its exact subject bytes"),
     ("subject_bytes", "review round 3 is bound to its exact subject bytes"),
@@ -845,6 +846,8 @@ def test_the_status_must_record_the_round_4_pass(monkeypatch, change, message):
         status["ownerDecisions"].pop()
     elif change == "hs43":
         status["hs43Obligations"]["O-MATRIX-GATE-NETBIND"] = "OPEN"
+    elif change == "slot_note":
+        del status["slotNote"]
     elif change == "extra":
         status["implementationReady"] = True
     elif change == "record":
@@ -951,3 +954,40 @@ def test_a_changed_v4_vector_outside_the_listed_ones_is_refused():
     vectors["accessChecks"][1]["intent"] += " (edited)"
     with pytest.raises(ValueError, match="every v4 accessChecks vector is kept"):
         profile.replay_v5_vectors(model, matrix, vectors, v4_vectors)
+
+
+@pytest.mark.parametrize("change", ["mutation_edited", "mutation_moved", "duplicate_id"])
+def test_v4_vectors_keep_their_identifiers_and_positions(change):
+    model = profile._era_model()
+    matrix = _json(profile.V5_DIR + "matrix.json")
+    vectors, v4_vectors = _json(profile.V5_DIR + "vectors.json"), _json(profile.V4_DIR + "vectors.json")
+    key = "accessChecks" if change == "duplicate_id" else "mutationChecks"
+    if change == "mutation_edited":
+        vectors["mutationChecks"][0]["intent"] += " (edited)"
+    elif change == "mutation_moved":
+        vectors["mutationChecks"].insert(10, vectors["mutationChecks"].pop())
+    else:
+        vectors["accessChecks"][-1]["id"] = vectors["accessChecks"][0]["id"]
+    with pytest.raises(ValueError, match="every v4 %s vector is kept at its position" % key):
+        profile.replay_v5_vectors(model, matrix, vectors, v4_vectors)
+
+
+@pytest.mark.parametrize("name, value", [("COUNTS", {"assertions": 133, "types": 58, "accessChecks": 2435, "mutationChecks": 76}),
+                                         ("COUNTS", {"assertions": 132, "types": 57, "accessChecks": 2435, "mutationChecks": 76})])
+def test_the_assertion_and_type_counts_are_checked(monkeypatch, name, value):
+    monkeypatch.setattr(profile, name, value)
+    with pytest.raises(ValueError, match="every deny assertion holds"):
+        profile.validate_selinux_matrix_v3()
+
+
+def test_a_failing_assertion_is_refused(monkeypatch):
+    original = profile._era_model
+
+    def failing():
+        model = original()
+        model.failed_assertions = lambda matrix: ["A01"]
+        return model
+
+    monkeypatch.setattr(profile, "_era_model", failing)
+    with pytest.raises(ValueError, match="every deny assertion holds"):
+        profile.validate_selinux_matrix_v3()
