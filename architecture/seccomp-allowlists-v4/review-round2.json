@@ -1,0 +1,47 @@
+{
+ "round": 2,
+ "subject": "29a464fa1267e36a25380d5a6d40698358e41db2",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "SR2-1",
+   "severity": "MINOR",
+   "file": "architecture/seccomp-allowlists-v4/vectors.json",
+   "line": 50961,
+   "summary": "The intent of M22 is false. It says the rule {arg 0, mask 0x7fffffff, eq 3} \"admits AT_FDCWD\", but that rule refuses AT_FDCWD in both encodings, because 0xffffff9c & 0x7fffffff = 0x7fffff9c, not 3. What it admits is the negative dirfd 0x80000003 (-2147483645). The mutation still tests what SR1-1 asked for, since check_policy refuses it. The fix is one line, either of: (a) reword the intent to say it admits a negative dirfd such as 0x80000003; (b) change M22 to {arg 0, mask 0x1, eq 0}, which does admit AT_FDCWD, because 0xffffff9c is even.",
+   "evidence": "I compiled M22's rule into the EFFECT_GATE filter in place of the real rule, bypassing check_policy. On both x86_64 and aarch64, run_filter gives: dirfd 0xffffffffffffff9c KILL_PROCESS, 0x00000000ffffff9c KILL_PROCESS, -1 KILL_PROCESS, 3 ALLOW, 0x80000003 ALLOW, 0xffffffff80000003 ALLOW. Appended to the real rule as M22 adds it, AT_FDCWD is still KILL_PROCESS and 0x80000003 is ALLOW."
+  },
+  {
+   "id": "SR2-2",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/README.md",
+   "line": 16,
+   "summary": "Three pieces of text are stale after the r1 fixes. (1) README:16-17 says all decisions are \"quoted as HS43's record holds them\", but SEC-RL-START is not in HS43's record. Its only source is the lane monitor's message, and its text carries lane process (\"(yours)\", \"use the standing fetch for the rebase onto 0879eb1\"). Consider recording its source, as the HS43 record's entries do. (2) REVIEW_BRIEF.md:13 still says the owner decisions add \"only Q-HE3A-1, Q-HE3A-1b, HS43-START and SECCOMP-DIRFD-DIRECTION\"; there are now five. (3) README:58 still says \"two policy checks\", but the gate block now also refuses a table whose dirfd constants differ.",
+   "evidence": "Comparing allowlists.json with the HS43 record (amendment.json ownerDecisions): Q-HE3A-1, Q-HE3A-1b, HS43-START and SECCOMP-DIRFD-DIRECTION match it verbatim in decision and date. SEC-RL-START has no entry in that record or in tools/hs43/owner_decisions.json. scripts/seccomp_allowlists_v4.py:281-282 holds the new require(..., \"dirfd constants (HS43)\")."
+  },
+  {
+   "id": "SR2-3",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/syscalls.json",
+   "line": 23,
+   "summary": "The DIRFD_SIGN_BIT citation credits fcntl.h:93 with \"readlinkat reads dirfd as an int\". That fact is in fs/stat.c, SYSCALL_DEFINE4(readlinkat, int, dfd, ...); bit 31 itself is two's-complement arithmetic, not a header value. Consider adding the fs/stat.c citation. I accept the line fcntl.h:93 for AT_FDCWD: the author states it, and v3's published AT_EMPTY_PATH citation (fcntl.h:93,101,107) agrees. I did not read kernel source.",
+   "evidence": "v4 syscalls.json constantCitations gains exactly AT_FDCWD_LOW32 and DIRFD_SIGN_BIT, and the r1 key AT_FDCWD is gone. The v3 syscalls.json:17 AT_EMPTY_PATH citation is \"include/uapi/linux/fcntl.h:93,101,107\"."
+  },
+  {
+   "id": "SR2-4",
+   "severity": "NOTE",
+   "file": "scripts/seccomp_allowlists_v4.py",
+   "line": 281,
+   "summary": "No published vector exercises the new table-constants check: removing it changes none of the 23 mutation results. This is harmless, because the predicate now uses the module constants, so table values can no longer widen what the check accepts. The check is a consistency guard. Optionally add a table mutation vector. The == comparison would also accept a float such as 2147483648.0, which is cosmetic.",
+   "evidence": "Weakened-model runs (scratch copies, each variant against the 23 published mutations): the r1 weakening (eq only) is caught by M22 and M23; dropping the mask-bit-31 test by M22; dropping arg == 0 by M23; dropping the eq-clear test by M20; changing all to any over alternatives by M20, M22 and M23; dropping the readlink check by M21; dropping the constants check by nothing. Direct probes: a table with DIRFD_SIGN_BIT = 1, a table without it, and a table with AT_FDCWD_LOW32 = 12345 are each refused with \"dirfd constants (HS43)\"."
+  },
+  {
+   "id": "SR2-5",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/allowlists.json",
+   "line": 52,
+   "summary": "Because Q-HE3A-1b is now quoted verbatim, allowlists.json carries the IDs HE-003A and HE-007 and the clause \"R10 re-vendor + check\". These are verbatim text of the HS43 record already on main, item IDs only, so I do not count them as W03/R10 material. I did not read any W03/R10 source to check this.",
+   "evidence": "The Q-HE3A-1b decision equals HS43 amendment.json ownerDecisions[4].decision exactly."
+  }
+ ]
+}

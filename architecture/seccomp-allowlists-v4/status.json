@@ -1,0 +1,215 @@
+{
+ "schemaVersion": "planeon.internal.seccomp-allowlists-status/v4",
+ "contract": "planeon.internal.seccomp-allowlists/v4",
+ "kernel": {
+  "tag": "v6.12",
+  "commit": "adc218676eef25575469234709c2d87185ca223a"
+ },
+ "supersedes": {
+  "directory": "architecture/seccomp-allowlists-v3/",
+  "contract": "planeon.internal.seccomp-allowlists/v3",
+  "status": "architecture/seccomp-allowlists-v3/status.json"
+ },
+ "discharges": {
+  "obligation": "O-SECCOMP-V3-READLINKAT",
+  "record": "architecture/host-interface-amendment-hs43/amendment.json",
+  "how": "in data, by this byte-identical-predecessor successor of v3 (README)"
+ },
+ "ownerDecisions": [
+  {
+   "date": "2026-10-09",
+   "decision": "W02d defines the WORKER allowlist from the worker's duties; the W01 section 5.3 WORKER row text 'Existing worker allowlist' is amended to 'the W02d worker allowlist' (carried to W01's record)",
+   "id": "W02d-Q1"
+  },
+  {
+   "date": "2026-10-09",
+   "decision": "exact duty syscalls per role from its row plus one closed runtime base per role (CPython 3.12 for SERVER and WORKER, one native static base for the five native roles); W03's language and libc must fit inside it or W02d reopens",
+   "id": "W02d-Q2"
+  },
+  {
+   "date": "2026-10-09",
+   "decision": "seccompFilterDigest is the SHA-256 of the classic-BPF sock_filter array (little-endian) the reference compiler emits per role and architecture; the boot-time proof that the installed filter equals it is an open T04/W02a-F obligation",
+   "id": "W02d-Q3"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "the broker kills the worker through cgroup.kill only (it has no CAP_KILL); W6 becomes freeze, cgroup.kill, wait for populated 0, and the unused pidfd_send_signal grant is dropped",
+   "id": "W01-AMEND-QW1"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "the broker runs with no supplementary groups and W3 checks the child holds none; no role may grant setgroups",
+   "id": "W01-AMEND-QW2"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "M-a: memfd_create flags are MFD_CLOEXEC | MFD_NOEXEC_SEAL, so the kernel clears exec and sets F_SEAL_EXEC on every call with no reliance on host state (not a vm.memfd_noexec pin, which a CAP_SYS_ADMIN holder in the initial namespaces can lower)",
+   "id": "W01-AMEND-QW3"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "NATIVE_STATIC adds three narrow rules for the Rust+musl steady state: mremap only with flags == MREMAP_MAYMOVE (musl mallocng realloc of large chunks), prctl only with arg0 == PR_SET_NAME (std and tokio thread names), and tkill (musl abort and raise); setresuid/setresgid threaded signalling, available_parallelism file reads and units starting roles with fds 0-2 open are W03 trace items",
+   "id": "W02d-V3"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "the native roles are Rust with musl, fully static (analysed reference: musl 1.2.5, Rust 1.90.0; W03 pins these or re-checks against W02d); NATIVE_STATIC adds poll, which Rust std calls on fds 0-2 at start-up and musl issues as SYS_poll on x86_64 (aarch64 has no poll syscall); musl creates threads with clone, never clone3, so the clone3 ENOSYS rule serves the CPython roles' glibc",
+   "id": "W01-AMEND-QW4"
+  },
+  {
+   "date": "2026-10-13",
+   "decision": "(c) readlink exe for the I07 writer",
+   "id": "Q-HE3A-1"
+  },
+  {
+   "date": "2026-10-13",
+   "decision": "(a) HE-003A merges first; the readlink exe check is decided-but-open, landing after the chain: seccomp v3 readlinkat duty for EFFECT_GATE (parallel lane, with/after the slot-234 §4.3 amendment) → republished programs + edge record v3 (primary) → R10 re-vendor + check. HE-007 obligations: writer uid/gid 0, dumpable, empty permitted set.",
+   "id": "Q-HE3A-1b"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "start HS-4.3-AMEND now in your lane, as harness-onion slot 236: Q-HE2S-10 (a): amend HOST_INTERFACE_SPEC §4.3 so the gate qualifies the broker by label, cgroup, pidfd and SO_PEERCRED; the EFFECT_GATE readlinkat duty sentence for the I07 writer's /proc exe link (Q-HE3A-1 (c) / 1b (a)), noting that readlinkat is allowed only with dirfd != AT_FDCWD (this keeps musl aarch64 readlink killed). The seccomp v3 allowlist amendment follows as its own next packet",
+   "id": "HS43-START"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "(accepted) Noted for SECCOMP-V3-READLINKAT: the single masked condition (arg0 & 0x80000000) == 0, \"a non-negative dirfd (so never AT_FDCWD)\", is accepted as the direction, since it's stricter and consistent with Q-HE3A-1b.",
+   "id": "SECCOMP-DIRFD-DIRECTION"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "slot 237 is SECCOMP-V3-READLINKAT, contract first; its direction is the single masked condition (arg0 & 0x80000000) == 0, as HS43 records (lane monitor, 2026-10-15)",
+   "id": "SEC-RL-START"
+  }
+ ],
+ "reviewRounds": [
+  {
+   "round": 1,
+   "record": "architecture/seccomp-allowlists-v4/review-round1.json",
+   "recordSha256": "8739fb46e9d6719d1ff41165f57dfa92a4a60582cf1f8c6c7884bb66fedc0b6c",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "faef548f12953bebfbbc3c7e334a68ef711ecd26",
+   "subjectSha256": {
+    "architecture/seccomp-allowlists-v4/README.md": "02564ce8393b5853b569246e8f709f6e8bad2cba1fea999bafffc11036117cd3",
+    "architecture/seccomp-allowlists-v4/REVIEW_BRIEF.md": "a9f91fe198b1c6ec4864f290137a962643ba01fc65676e0ef97c9bee526a4d1d",
+    "architecture/seccomp-allowlists-v4/syscalls.json": "cd15c9c13d21223517706e17b9b19109567dc2f20f89a2d53bae5524cc71cc7d",
+    "architecture/seccomp-allowlists-v4/allowlists.json": "a7b7980af7b76d407cc042a4d239aeb43209610f79af9f1da720e11cba0c1753",
+    "architecture/seccomp-allowlists-v4/vectors.json": "c4b8826e7215231197a9a549984f4bb8ae16ebdba47947ca438d1fbca3a9af81",
+    "scripts/seccomp_allowlists_v4.py": "62e6f9435c2282be4ab048086f1042d649e5cd0d5abce9fed9a74404264916e1"
+   },
+   "subjectDirectory": "architecture/seccomp-allowlists-v4/round1/",
+   "keptCopies": [
+    "architecture/seccomp-allowlists-v4/README.md",
+    "architecture/seccomp-allowlists-v4/REVIEW_BRIEF.md",
+    "architecture/seccomp-allowlists-v4/syscalls.json",
+    "architecture/seccomp-allowlists-v4/allowlists.json",
+    "architecture/seccomp-allowlists-v4/vectors.json",
+    "scripts/seccomp_allowlists_v4.py"
+   ]
+  },
+  {
+   "round": 2,
+   "record": "architecture/seccomp-allowlists-v4/review-round2.json",
+   "recordSha256": "39dce3f3e8f2424a7f3c4dcabf172b589b3e7ce8eb7153297f68d6fcd536a7f2",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "29a464fa1267e36a25380d5a6d40698358e41db2",
+   "subjectSha256": {
+    "architecture/seccomp-allowlists-v4/README.md": "42e4ed95b3c2f216590648d66deca383d9a7d378c14c66051c2e6cdc958a7ff4",
+    "architecture/seccomp-allowlists-v4/REVIEW_BRIEF.md": "a9f91fe198b1c6ec4864f290137a962643ba01fc65676e0ef97c9bee526a4d1d",
+    "architecture/seccomp-allowlists-v4/syscalls.json": "ec2457d89e02fd3d9b4fb9957aee4c99ffe4a19471fc1ac4b3e963f55b89fd92",
+    "architecture/seccomp-allowlists-v4/allowlists.json": "455bb489df568718f2dc9b9e0d15fbbcfdedf25d852aa3118e529e787c710e36",
+    "architecture/seccomp-allowlists-v4/vectors.json": "ac8daa0c6c13d84825565b7e52fa23564731585584f7d46a66363b50bed71816",
+    "scripts/seccomp_allowlists_v4.py": "f88e3eab1a154260b2a33d7a1eadb5a78f29d49579219d3aaf55041ec861e9bf"
+   },
+   "subjectDirectory": "architecture/seccomp-allowlists-v4/round2/",
+   "keptCopies": [
+    "architecture/seccomp-allowlists-v4/README.md",
+    "architecture/seccomp-allowlists-v4/REVIEW_BRIEF.md",
+    "architecture/seccomp-allowlists-v4/syscalls.json",
+    "architecture/seccomp-allowlists-v4/allowlists.json",
+    "architecture/seccomp-allowlists-v4/vectors.json"
+   ]
+  },
+  {
+   "round": 3,
+   "record": "architecture/seccomp-allowlists-v4/review-round3.json",
+   "recordSha256": "3ca2648f1827febe0b9121644d6d16f988f8eb64e23507c2f043caabb5f634cb",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "subjectCommit": "bebd9974c49bf89bcab8ddb60d1a09556291a482",
+   "subjectSha256": {
+    "architecture/seccomp-allowlists-v4/README.md": "bdca37825c2e6a6f7d8797c256fab7e891fb26b6660dcb78a84f3613cde54f25",
+    "architecture/seccomp-allowlists-v4/REVIEW_BRIEF.md": "4fb717b9f0c2de80b432a20ea8846b8d68d2772a97c69bb7bac33cac7e401105",
+    "architecture/seccomp-allowlists-v4/syscalls.json": "d759e341afcbcf2dccd8eafce136a303d2275efceeac1525ef2200b6e65fe53d",
+    "architecture/seccomp-allowlists-v4/allowlists.json": "4dcfb2dfea82eabd04024b35d9dac4bb487b6c0051f7e6e16bbd00426cf6b2ff",
+    "architecture/seccomp-allowlists-v4/vectors.json": "9a918c15bbcb6378b282df9a5da8389289bf505f9f8eb5e1a50b9c5bb6f92187",
+    "scripts/seccomp_allowlists_v4.py": "f88e3eab1a154260b2a33d7a1eadb5a78f29d49579219d3aaf55041ec861e9bf"
+   },
+   "subjectDirectory": "CURRENT"
+  }
+ ],
+ "closedFindings": {
+  "SR1-1": "CLOSED in round 2",
+  "SR1-2": "CLOSED in round 2",
+  "SR1-3": "CLOSED in round 2",
+  "SR1-4": "CLOSED in round 2",
+  "SR1-5": "CLOSED in round 2",
+  "SR1-6": "CLOSED in round 2",
+  "SR1-7": "NOTE confirming the README's kernel, BPF and musl claims; no change needed",
+  "SR2-1": "CLOSED in round 3",
+  "SR2-2": "CLOSED in round 3",
+  "SR2-3": "CLOSED in round 3",
+  "SR2-4": "carried as SR3-1",
+  "SR2-5": "carried as SR3-2"
+ },
+ "carriedFindings": {
+  "SR3-1": "carried (NOTE): Carried from SR2-4, unchanged by design. No published mutation tests the table-constants check: removing it changes none of the 23 results. This is harmless, because the readlinkat check uses the model's own fixed DIRFD_SIGN_BIT, so table values cannot widen what it accepts. A table-mutation vector remains optional.",
+  "SR3-2": "carried (NOTE): Carried from SR2-5, unchanged by design. Q-HE3A-1b is quoted verbatim from the HS43 record already on main, so it names the item IDs HE-003A and HE-007 and \"R10 re-vendor + check\". These are IDs only, so I do not count them as W03/R10 material. I read no W03/R10 source."
+ },
+ "carriedToW03": [
+  "runtime bases are closed requirements; trace the selected build at start-up and steady state on both arches",
+  "glibc 2.34+ without CET/shadow-stack arch_prctl at start-up",
+  "no systemd seccomp options (F10)",
+  "install exactly the compiled programs",
+  "the broker runs with no supplementary groups",
+  "pin musl 1.2.5 and Rust 1.90.0 for the native roles, or re-check the NATIVE_STATIC base and the clone3 rule against W02d for the pinned versions (W01-AMEND-QW4)",
+  "the SERVER role's sealed-credential code passes MFD_CLOEXEC | MFD_NOEXEC_SEAL (O-SERVER-MEMFD)",
+  "no transition or nnp_transition out of planeon_worker_t (O-W03-WORKER-EXEC)",
+  "trace the Rust/musl native roles against NATIVE_STATIC, including review note R4-1's paths (thread names, tkill in setresuid/setresgid and abort, available_parallelism, stdio open at start)",
+  "musl's setresuid/setresgid signal the other threads when threaded; the broker's W4 child uses the raw syscalls (W02d-V3)",
+  "Rust std's available_parallelism reads cgroup and /proc files; a role calling it needs those reads or must not call it (W02d-V3)",
+  "units start every native role with fds 0-2 open (W02d-V3)",
+  "no role or crate calls pthread_getattr_np on the main thread: musl probes with mremap flags 0, which v3 kills (review R1-2)",
+  "the gate reads the writer's /proc/<pid>/exe only with readlinkat on its open /proc/<pid> descriptor; musl realpath() and Rust std read_link, current_exe and canonicalize reach readlinkat(AT_FDCWD, ...) or readlink and kill the gate under v4 (O-W03-WRITER-EXE)"
+ ],
+ "openObligations": [
+  "T04/W02a-F: boot-time proof that the installed filter equals the published v4 digest (W02d-Q3)",
+  "the compiled filter programs and the edge record are republished from v4 (Q-HE3A-1b)",
+  "the gate's writer-executable check stays decided but open until the programs are re-vendored and the check is added (O-W03-WRITER-EXE)"
+ ],
+ "contractState": "ADOPTED_DATA_CONTRACT",
+ "obligations": {
+  "E01": "OPEN_UNPROVEN",
+  "E02": "OPEN_UNPROVEN",
+  "E03": "OPEN_UNPROVEN",
+  "E04": "OPEN_UNPROVEN",
+  "E05": "OPEN_UNPROVEN",
+  "E06": "OPEN_UNPROVEN",
+  "E07": "OPEN_UNPROVEN",
+  "E08": "OPEN_UNPROVEN",
+  "E09": "OPEN_UNPROVEN",
+  "E10": "OPEN_UNPROVEN",
+  "E11": "OPEN_UNPROVEN",
+  "E12": "OPEN_UNPROVEN"
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "README.md keeps its reviewed 'SUCCESSOR_CANDIDATE_AWAITING_INDEPENDENT_REVIEW' line; adoption is recorded here only",
+ "nativeAcceptance": false,
+ "tenantAcceptance": false,
+ "filtersInstalled": false,
+ "roleCodeExists": false,
+ "traceValidated": false,
+ "distributionSelected": false,
+ "productExecution": false,
+ "runnerActivated": false,
+ "phaseComplete": false
+}

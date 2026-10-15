@@ -1,0 +1,23 @@
+{
+ "round": 3,
+ "subject": "bebd9974c49bf89bcab8ddb60d1a09556291a482",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "SR3-1",
+   "severity": "NOTE",
+   "file": "scripts/seccomp_allowlists_v4.py",
+   "line": 281,
+   "summary": "Carried from SR2-4, unchanged by design. No published mutation tests the table-constants check: removing it changes none of the 23 results. This is harmless, because the readlinkat check uses the model's own fixed DIRFD_SIGN_BIT, so table values cannot widen what it accepts. A table-mutation vector remains optional.",
+   "evidence": "Weakened-model runs against the 23 published mutations at bebd9974: removing the mask-bit-31 test is caught by M22; removing the arg == 0 test by M23; removing the eq-clear test by M20; changing all to any over alternatives by M20, M22 and M23; the round-1 eq-only weakening by M22 and M23; removing the readlink check by M21; removing the constants check by none. Direct probes: tables with DIRFD_SIGN_BIT = 1, with DIRFD_SIGN_BIT missing, or with AT_FDCWD_LOW32 = 12345 are each refused with \"dirfd constants (HS43)\"."
+  },
+  {
+   "id": "SR3-2",
+   "severity": "NOTE",
+   "file": "architecture/seccomp-allowlists-v4/allowlists.json",
+   "line": 52,
+   "summary": "Carried from SR2-5, unchanged by design. Q-HE3A-1b is quoted verbatim from the HS43 record already on main, so it names the item IDs HE-003A and HE-007 and \"R10 re-vendor + check\". These are IDs only, so I do not count them as W03/R10 material. I read no W03/R10 source.",
+   "evidence": "The Q-HE3A-1, Q-HE3A-1b, HS43-START and SECCOMP-DIRFD-DIRECTION decision texts and dates equal those in HS43 amendment.json ownerDecisions exactly."
+  }
+ ]
+}
