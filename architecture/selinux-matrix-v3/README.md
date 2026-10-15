@@ -7,9 +7,8 @@ v5 is the successor of the adopted matrix v4 `../selinux-matrix-v2/` (`planeon.i
 review round 2 PASS_FOR_SOURCE_PUBLICATION with G1 carried). Later layers pin the v4 bytes, so v4 stays byte-identical
 and v5 is published beside it, as v4 was beside v3. v5 keeps the v4 matrix and changes only the items below. The
 reference evaluator `scripts/selinux_matrix_v3.py` is the v4 evaluator with the matrix version changed and one extension:
-a READ grant on a type may be narrowed to listed classes and permissions (`classes` and `perms`, both non-empty subsets,
-only on READ and only for a declared domain; `check_matrix` refuses anything else). A narrowed grant gives nothing
-outside its lists.
+a READ grant on a cgroup type, to a declared domain, may be narrowed to `dir search` (`"classes": ["dir"], "perms":
+["search"]`). `check_matrix` refuses every other narrowing, and a narrowed grant gives nothing outside its lists.
 
 Roadmap item SELINUX-MATRIX-I04-KEYCERT; accepted base main `9f251d5` (238 packets). The packet that publishes v5 is
 slot 240, after slot 239.
@@ -18,7 +17,7 @@ slot 240, after slot 239.
 
 | Source | v5 rule | Vectors |
 |---|---|---|
-| Monitor decisions, 2026-10-15 (owner-delegated): the I04 key/cert types before HE-008, Q-MX-1 (a) | I04 is mutual TLS 1.3, and the gate reads three DER files: its serving private key (PKCS#8), its serving certificate chain and exactly one client CA (owner Q-HE3D-8 (a)). The resolved spec §4.2 makes the key and chain the gate's TLS listener identity, the signed KUBERNETES_API_PROXY endpoint identity. Two new CREDENTIAL types: `planeon_gate_i04_key_t` for the private key, and `planeon_gate_i04_cert_t` for the chain and the client CA. READ the gate only; WRITE and RELABEL only by the maintenance domain in the maintenance boot, like every credential. The key joins A09 (the gate's credentials); A67 keeps the public chain and CA to the gate as well (least privilege). Both types are appended after the last v4 type, so every v4 type keeps its index. | Q49, Q50, Q55, Q56; N02-N04, N10-N13; M57, M58, M64, M65; A09 or A67, and A12, A13 and A36, list them among their targets |
+| Monitor decisions, 2026-10-15 (owner-delegated): the I04 key/cert types before HE-008, Q-MX-1 (a) | I04 is mutual TLS 1.3, and the gate reads three DER files: its serving private key (PKCS#8), its serving certificate chain and exactly one client CA (owner Q-HE3D-8 (a)). The resolved spec §4.2 makes the key and chain the gate's TLS listener identity, the signed KUBERNETES_API_PROXY endpoint identity. Two new CREDENTIAL types: `planeon_gate_i04_key_t` for the private key, and `planeon_gate_i04_cert_t` for the chain and the client CA. READ the gate only; WRITE and RELABEL only by the maintenance domain in the maintenance boot, like every credential. The key joins A09 (the gate's credentials); A67 keeps the public chain and CA to the gate as well (least privilege). Both types are appended after the last v4 type, so every v4 type keeps its index. A09 (a v4 assertion) and the new A67 cover every READ permission, not only `read` and `open`: no other domain gets any READ permission on the gate's three credentials or its chain and CA, `getattr` included, in any state, the maintenance boot included. The other credential assertions (A10, A11.*) keep v4's `read` and `open`. | Q49, Q50, Q55, Q56; N02-N04, N10-N13; M57, M58, M64, M65; A09 or A67, and A12, A13 and A36, list them among their targets |
 | HS43 O-MATRIX-GATE-NETBIND (W01 §5.3 as amended by HS43 H5, Q-HE2S-9 (a); the monitor's Q-MX-4 (a)) | The gate holds no capability. `net_bind_service` is dropped from its capabilities and from A48's allow list: the signed I04 port is 1024 or above. A68.<class> asserts that the gate holds no permission of any capability class (`capability`, `capability2`, `cap_userns`, `cap2_userns`), so no grant, CAP_SYS_PTRACE included, can return unnoticed (review XR1-4). | N01, N16, N17; M56, M66, M67; the three v4 checks of the gate's `net_bind_service` now deny it (`v5Changes`) |
 | Owner decision Q-HE3D-2 (a), 2026-10-15, with the monitor's Q-MX-5 (a): the gate's source for observedWorkers | The gate gets READ on `planeon_cgroup_worker_t` (the `probe-worker` leaf). On the two parents its path walk crosses, `planeon_cgroup_slice_t` and `planeon_cgroup_delegate_t`, it gets only `dir search` (a narrowed grant). It also gets `procAccess` on `planeon_worker_t`. A38 and A39 become union bounds that include the gate. Per-type assertions give each of the eight cgroup types exactly its readers: A38.<type> and A39.<type>, and for the two parents A38S.<type> (search only, the gate included). A59.planeon_worker_t gains the gate. | Q51-Q54; N05-N09, N14, N15; M59-M63, M68, M69; M70-M72 (narrowed grants are closed); M24 now also names A38.planeon_cgroup_broker_t and A39.planeon_cgroup_broker_t (`v5Changes`) |
 | HS43 O-MATRIX-WRITER-PROCACCESS and O-MATRIX-GATE-PROCACCESS; owner decisions Q-MX-2 (b) and Q-MX-3 (b), 2026-10-15 | The observer is designated as the role that takes the native profile's P1 role captures and P5 lifecycle capture. The writer's `/proc` narrows to the gate and the observer, and the gate's to the broker and the observer: three v4 `procAccess` entries are removed (server to writer, broker to writer, server to gate). A59.planeon_policy_writer_t and A59.planeon_gate_t pin the new sets. | Q57, Q58; N18-N21; M73-M75; nine v4 checks of the removed pairs now deny them (`v5Changes`) |
@@ -55,6 +54,13 @@ The duties that need these reads, from the published contracts:
 - The native profile v3 P1 role captures read each role's exe link, and the P5 lifecycle capture counts the processes of
   every planeon domain, the writer's included. No published contract named the role that takes these captures; the
   owner has now designated the observer, the inspection role and the least network-exposed of the three reader roles.
+- The kernel limits which exe links any reader can read: the reader's capabilities must cover the target's
+  (`cap_ptrace_access_check`) and the uids must match. The observer holds CAP_NET_ADMIN and CAP_BPF. It reads the
+  gate's and the writer's exe links (neither holds a capability the observer lacks) and P5's counts, which need no gated
+  entry. It cannot read the exe link of the broker (CAP_SETUID and CAP_SETGID), of the server when the server holds
+  CAP_NET_BIND_SERVICE (a signed port below 1024), or of the other-uid worker. No other reader role could either: the
+  server lacks the broker's capabilities as well. P1's image capture of those roles needs another route, carried to the
+  next native-profile successor with the observer's designation (review XR3-2).
 - The server reaches the gate only over I04 TLS and has no duty with the writer; the broker has no duty with the
   writer.
 
@@ -137,7 +143,7 @@ evaluator `scripts/selinux_matrix_v2.py` is the v3 evaluator with only the matri
 | File | Content |
 |---|---|
 | `matrix.json` | `planeon.internal.selinux-matrix/v5`. It holds three booleans and three boot states, 19 domains, 58 types, 6 sockets, 4 ports, 17 transitions, 12 genfscon rules, 4 named type transitions, the capability, `bpf`, `security`, `process`, `process2` and `service` grants, `/proc` access, per-source closures and 132 deny assertions |
-| `vectors.json` | 2,435 access checks (625 allow, 1,802 deny, 8 outside, each with its state and intent), 75 mutation checks, the W02a slot values (unchanged) and `v5Changes`, which lists every v4 vector whose expected result changes under v5, with its reason |
+| `vectors.json` | 2,435 access checks (625 allow, 1,802 deny, 8 outside, each with its state and intent), 76 mutation checks, the W02a slot values (unchanged) and `v5Changes`, which lists every v4 vector whose expected result changes under v5, with its reason |
 | `../../scripts/selinux_matrix_v3.py` | Reference evaluator (v4's, with the matrix version changed and narrowed READ grants): `allowed`, `check_matrix`, `failed_assertions`, `w02a_slots`, `apply_ops` |
 
 ## What the matrix closes
@@ -282,9 +288,10 @@ unconfined or privileged type, such as container-selinux's `kubelet_t`, `contain
   - Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries (`status`, `stat`,
     `cgroup`) (review R4), except for three exe-link reads: the gate's check of the writer reads the writer's exe link
     (HS43), the broker's artifact check reads the gate's (HS43), and the native profile's P1 role captures, which the
-    observer takes (owner Q-MX-2 (b), Q-MX-3 (b)), read the exe link of each uid-0 role. `procAccess` grants these
-    reads. No reader can read the other-uid worker's exe link,
-    so P1's capture of the worker's image is carried to the next native-profile successor.
+    observer takes (owner Q-MX-2 (b), Q-MX-3 (b)), read the exe link of each role whose uid matches and whose
+    capabilities the observer's cover. `procAccess` grants these reads. No reader can read the exe link of the broker
+    (its capabilities), of the server while it holds CAP_NET_BIND_SERVICE, or of the other-uid worker, so P1's capture
+    of their images is carried to the next native-profile successor (review XR3-2).
   - Executable identity follows from the peer's label for the broker; the writer's executable is also checked through
     its exe link (HS43). The matrix lets each planeon domain be entered only through its
     sealed entrypoint type, and the per-source closure denies `execute_no_trans` on every type, declared or not, so no
@@ -335,12 +342,12 @@ host domains' capabilities are outside the matrix.
 | A38S.* (v5) | The slice and the delegated service cgroup are searched only by their readers and the gate | Q-HE3D-2 (a); Q-MX-5 |
 | A38.*, A39.* (v5) | 16 per-type assertions, over every READ permission: each planeon cgroup type is read only by its own readers (the gate only on the probe-worker leaf; on the slice and the delegated service cgroup A38.<type> leaves out search, which A38S.<type> covers) | W01 §5.1; F2; Q-HE3D-2 (a) |
 
-The 75 mutation checks show the assertions are not vacuous.
-- 59 add a forbidden grant (M51-M55 new in v4, M56-M69 and M73-M75 new in v5) and name exactly the assertions it breaks. For example, the server connecting to the apiserver
+The 76 mutation checks show the assertions are not vacuous.
+- 58 add a forbidden grant (M51-M55 new in v4, M56-M68 and M73-M75 new in v5) and name exactly the assertions it breaks. For example, the server connecting to the apiserver
   port breaks A01 and its per-source closure A60.1.name_connect; containment writing an artifact before the seal (fs-verity)
   breaks A12; the maintenance domain clearing maintenance mode breaks A65.
 - Two remove a per-source closure and change the result.
-- Fourteen are refused by `check_matrix`:
+- Sixteen are refused by `check_matrix`:
   - an unconfined backend type;
   - an undeclared domain;
   - a world-readable credential;
@@ -352,8 +359,8 @@ The 75 mutation checks show the assertions are not vacuous.
   - a type transition under a cgroup parent;
   - a cgroup type without its genfscon rule;
   - a relabel grant on a genfs-labelled type;
-  - a narrowed grant listing a permission outside its group, a narrowed grant on a group other than READ, and a narrowed
-    grant missing one of its two lists (v5).
+  - five narrowed grants other than cgroup `dir search` (v5): a permission outside the READ group, a group other than READ,
+    a missing list, search with open, and a narrowed grant on a non-cgroup type.
 
 ## W01 finding F2: the cgroup gate, stated exactly
 
@@ -470,8 +477,9 @@ E1 amends W01 §5.3 and is carried to W01's record, W03 and T04.
    domain and reads no role's `/proc`.
 7. Peer qualification and captures use SO_PEERCRED, SO_PEERSEC, pidfds and ungated `/proc` entries; executable identity
    follows from the label and the entrypoint closure (review R4). As above, HS43 adds that the gate also reads the
-   writer's exe link, the broker reads the gate's, and the native profile's P1 captures read the exe link of each uid-0
-   role (the other-uid worker's is refused to every reader; carried to the next native-profile successor).
+   writer's exe link, the broker reads the gate's, and the native profile's P1 captures read the exe links the kernel
+   allows the observer (not the broker's, the other-uid worker's, or the server's while it holds CAP_NET_BIND_SERVICE;
+   carried to the next native-profile successor).
 8. Required policy capabilities: `cgroup_seclabel`, `open_perms`, `network_peer_controls`, `nnp_nosuid_transition`.
 9. Backend capability sets are declared, not observed (W03 confirms them against the selected distribution): kubelet and
    runtime as listed, network-policy agent and proxy `net_admin` and `net_raw`, apiserver, controller-manager, scheduler and
@@ -566,7 +574,7 @@ OPEN_UNPROVEN. The W01, W02a, W02g, W02b and W02c bytes, HS43 and the adopted v3
 
 ## Still open
 
-All E01-E12 and T01-T08. The I04 credential file paths (HE-008) and their labelling as `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (W03). The observer's designation as the capturing role, carried to the next native-profile successor (the primary lane's O-NATIVE-GATE-NOCAP packet) and W03 (owner Q-MX-2 (b), Q-MX-3 (b)). P1's capture of the other-uid worker's image, which no reader can take (next native-profile successor). The I05 successor that takes observedWorkers from the worker cgroup. The binary policy, its conditionals and its behaviour on the enrolled kernel (T04). The backend
+All E01-E12 and T01-T08. The I04 credential file paths (HE-008) and their labelling as `planeon_gate_i04_key_t` and `planeon_gate_i04_cert_t` (W03). The observer's designation as the capturing role, carried to the next native-profile successor (the primary lane's O-NATIVE-GATE-NOCAP packet) and W03 (owner Q-MX-2 (b), Q-MX-3 (b)). The maintenance domain installs the I04 key and chain by creating them under a type it may open and relabelling them: it has no READ permission, `open` and `getattr` included, on `planeon_gate_i04_key_t` or `planeon_gate_i04_cert_t` (A09, A67), so it cannot write or stat them in place (HE-008, W03; review XR3-4). P1's capture of the broker's, the other-uid worker's and (with CAP_NET_BIND_SERVICE) the server's image, which no reader can take (next native-profile successor). The I05 successor that takes observedWorkers from the worker cgroup. The binary policy, its conditionals and its behaviour on the enrolled kernel (T04). The backend
 policy module, the selected runtime's BPF behaviour and the selected distribution (W03). The effective-program census
 (W02a-F). The seccomp filters (W02d). The W02a schema constants for these labels (W02a-F). W03-W07 remain gated. Alpha2
 remains open; model-effort transition NOT_DUE.

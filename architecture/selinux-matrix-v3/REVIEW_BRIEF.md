@@ -1,10 +1,12 @@
-# Independent review brief — SELinux matrix v5 (SELINUX-MATRIX-I04-KEYCERT), round 3
+# Independent review brief — SELinux matrix v5 (SELINUX-MATRIX-I04-KEYCERT), round 4
 
 Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a verdict.
 
 Round 1 (`review-round1.json`, after adoption) returned CHANGES_REQUIRED: 1 MAJOR, 5 MINOR and 7 NOTE findings, XR1-1 to
 XR1-13. Round 2 (`review-round2.json`) returned CHANGES_REQUIRED: 2 MINOR and 4 NOTE findings, XR2-1 to XR2-6. Each is
-answered in the bytes as listed under "Round-1 answers" and "Round-2 answers" below.
+answered in the bytes as listed under "Round-1 answers" and "Round-2 answers" below. Round 3 (`review-round3.json`)
+returned CHANGES_REQUIRED: 2 MINOR and 2 NOTE findings, XR3-1 to XR3-4, answered under "Round-3 answers". Between rounds
+3 and 4 the owner decided Q-MX-2 (b) and Q-MX-3 (b), which the subject now carries.
 
 v5 is the successor of the adopted matrix v4 `../selinux-matrix-v2/` (`planeon.internal.selinux-matrix/v4`; review round
 2 PASS_FOR_SOURCE_PUBLICATION, with G1 carried). The v4 bytes stay unchanged. README.md ("What v5 changes", "HS43 /proc
@@ -126,6 +128,15 @@ working tree is part of the subject.
 | XR2-4 NOTE | "Still open" names the owner's open Q-MX-2 and Q-MX-3 |
 | XR2-5 NOTE | A09, A67 and every A38.<type>/A39.<type> now cover every READ permission (A38.<type> of the two parents: every one but search). No single READ permission granted to the gate on a parent, or to the server on either I04 type, passes all assertions |
 | XR2-6 NOTE | The broken line is rewrapped; A67 now precedes the per-type and A68 assertions |
+
+## Round-3 answers
+
+| Finding | Answer |
+|---|---|
+| XR3-1 MINOR | "What v5 changes" discloses that A09 (a v4 assertion) and A67 cover every READ permission, getattr included, in every state, and that A10 and A11.* keep read and open |
+| XR3-2 MINOR | The capability rule is stated: the observer cannot read the broker's exe link, the server's while it holds CAP_NET_BIND_SERVICE, or the worker's; P1's capture of those images is carried to the next native-profile successor. The narrowing the owner decided stays sound: the observer reads the gate's and the writer's exe links and P5's ungated counts |
+| XR3-3 NOTE | `check_matrix` accepts only one narrowed grant: READ on a cgroup type, to a declared domain, limited to `dir search` (M69 and M76 now refused) |
+| XR3-4 NOTE | "Still open" states that the maintenance domain installs the I04 key and chain by create-and-relabel, and cannot write or stat them in place (HE-008, W03) |
 
 ## How to check
 

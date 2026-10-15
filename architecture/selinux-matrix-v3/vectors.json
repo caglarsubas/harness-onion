@@ -25935,12 +25935,10 @@
   },
   {
    "expect": {
-    "failedAssertions": [
-     "A38.planeon_cgroup_delegate_t"
-    ]
+    "matrixError": "narrowed grant on planeon_cgroup_delegate_t: {'classes': ['dir'], 'domain': 'planeon_gate_t', 'perms': ['search', 'open']}"
    },
    "id": "M69",
-   "intent": "review XR1-2: the gate's narrowed grant on the delegated service cgroup widens to dir open",
+   "intent": "review XR1-2, XR3-3: a narrowed grant wider than dir search (search and open on the delegated service cgroup) is refused",
    "ops": [
     {
      "op": "set",
@@ -26093,6 +26091,33 @@
      "value": {
       "domain": "planeon_server_t",
       "target": "planeon_gate_t"
+     }
+    }
+   ]
+  },
+  {
+   "expect": {
+    "matrixError": "narrowed grant on planeon_gate_i04_key_t: {'classes': ['file'], 'domain': 'planeon_admin_t', 'perms': ['getattr']}"
+   },
+   "id": "M76",
+   "intent": "review XR3-3: a narrowed grant on a non-cgroup type (the admin domain's getattr on the I04 key) is refused",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "types",
+      56,
+      "access",
+      "READ"
+     ],
+     "value": {
+      "classes": [
+       "file"
+      ],
+      "domain": "planeon_admin_t",
+      "perms": [
+       "getattr"
+      ]
      }
     }
    ]

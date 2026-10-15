@@ -4,8 +4,8 @@
 The successor of `selinux_matrix_v2` (matrix v4, adopted and frozen). The v5 matrix adds the effect gate's I04
 credential types, takes every capability from the gate (HS43 H5), gives the gate its observedWorkers source (owner
 decision Q-HE3D-2 (a)) and records the HS43 /proc evaluations. The evaluator is v4's with one extension: a READ grant on
-a type may be narrowed to listed classes and permissions (`classes`, `perms`), so a path walk can be granted
-`dir search` alone; a narrowed grant gives nothing outside its lists.
+a cgroup type may be narrowed to `dir search` (`classes`, `perms`), so a path walk can be granted search alone; a
+narrowed grant gives nothing outside its lists, and no other narrowing is accepted.
 
 DATA_CHECK_ONLY reference model for the planeon and qualification-backend SELinux policy the reviewed
 W01 design selects (HOST-INTERFACE-DRAFT-002 sections 2.1 P1/P2/P4/P5/P9, 2.3, 4.1-4.3, 5.1-5.5) and
@@ -252,14 +252,12 @@ def check_matrix(matrix: dict) -> None:
             # Only READ of a non-secret type may be granted to every domain.
             known(entries, "type " + t["name"], public=group == "READ" and t["category"] in PUBLIC_READ)
             for e in entries:
-                # v5: only a READ grant to a declared domain may be narrowed, to non-empty subsets of the type's
-                # classes and the group's permissions.
+                # v5: the one narrowed grant the matrix accepts is READ on a cgroup type, to a declared domain,
+                # limited to `dir search` (a path walk through a cgroup directory; review XR3-3).
                 require(set(e) <= {"domain", "when", "classes", "perms"}
                         and (("classes" not in e and "perms" not in e) or (
-                            group == "READ" and e["domain"] in domains
-                            and set(e) >= {"classes", "perms"}
-                            and type(e["classes"]) is list and e["classes"] and set(e["classes"]) <= set(t["classes"])
-                            and type(e["perms"]) is list and e["perms"] and set(e["perms"]) <= set(FILE_PERMS[group]))),
+                            group == "READ" and t["category"] == "CGROUP" and e["domain"] in domains
+                            and e.get("classes") == ["dir"] and e.get("perms") == ["search"])),
                         "narrowed grant on %s: %s" % (t["name"], e))
         if t["category"] in GENFS_CATEGORIES:
             # No relabel on a genfs-only filesystem, and exactly one genfscon rule gives the type.
