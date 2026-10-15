@@ -13,8 +13,8 @@ gave the effect gate a `readlinkat` duty, and its obligation O-SECCOMP-V3-READLI
 
 Owner decisions: Q-HE3A-1 (c) and Q-HE3A-1b (a), 2026-10-13. HS43-START, 2026-10-15. The direction
 `(arg0 & 0x80000000) == 0` was accepted by the lane monitor under the owner's delegation, 2026-10-15
-(SECCOMP-DIRFD-DIRECTION). SEC-RL-START, 2026-10-15, starts slot 237. All are recorded in `allowlists.json`, quoted as
-HS43's record holds them.
+(SECCOMP-DIRFD-DIRECTION). SEC-RL-START, 2026-10-15, starts slot 237 (lane monitor). All are recorded in
+`allowlists.json`; the first four are quoted as HS43's record holds them.
 
 The obligation names v3's EFFECT_GATE row. The repository publishes data changes as byte-identical-predecessor successors
 (v2 → v3 → v4), so v4 discharges O-SECCOMP-V3-READLINKAT. The republished programs and the edge record derive from v4.
@@ -53,9 +53,10 @@ The obligation names v3's EFFECT_GATE row. The repository publishes data changes
     - M19, an unconditional `readlinkat`;
     - M20, `readlinkat` with dirfd == AT_FDCWD;
     - M21, `readlink`;
-    - M22, a dirfd condition whose mask lacks bit 31;
+    - M22, a dirfd condition whose mask lacks bit 31 (mask 0x1, value 0, which admits AT_FDCWD);
     - M23, the bit-31 condition on argument 1 instead of the dirfd.
-- `scripts/seccomp_allowlists_v4.py` is the v3 model plus two policy checks for EFFECT_GATE:
+- `scripts/seccomp_allowlists_v4.py` is the v3 model plus three policy checks for EFFECT_GATE:
+  - the table's `DIRFD_SIGN_BIT` and `AT_FDCWD_LOW32` must equal the model's own fixed values;
   - every `readlinkat` alternative must include a condition on arg 0 whose mask has bit 31 and whose value clears it;
   - no `readlink`.
 

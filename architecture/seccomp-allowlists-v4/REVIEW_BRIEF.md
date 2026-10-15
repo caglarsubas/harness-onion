@@ -10,7 +10,7 @@ O-SECCOMP-V3-READLINKAT in `architecture/host-interface-amendment-hs43/amendment
 1. **Exactly one rule added.** Against v3:
    - only EFFECT_GATE's duties gain one `readlinkat` row with `{"arg": 0, "mask": 0x80000000, "eq": 0}`;
    - the constants add only `AT_FDCWD_LOW32` and `DIRFD_SIGN_BIT`;
-   - the owner decisions add only Q-HE3A-1, Q-HE3A-1b, HS43-START and SECCOMP-DIRFD-DIRECTION;
+   - the owner decisions add only Q-HE3A-1, Q-HE3A-1b, HS43-START, SECCOMP-DIRFD-DIRECTION and SEC-RL-START;
    - only EFFECT_GATE's filter digests and program lengths change.
 
    Diff the v3 and v4 JSON yourself.

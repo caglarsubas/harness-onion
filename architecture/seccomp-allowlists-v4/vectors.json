@@ -50947,8 +50947,8 @@
        [
         {
          "arg": 0,
-         "eq": 3,
-         "mask": 2147483647
+         "eq": 0,
+         "mask": 1
         }
        ]
       ]
@@ -50958,7 +50958,7 @@
    },
    "expect": "readlinkat only with a non-negative dirfd (HS43): EFFECT_GATE",
    "id": "M22",
-   "intent": "EFFECT_GATE readlinkat with a dirfd condition whose mask lacks bit 31 (it admits AT_FDCWD)",
+   "intent": "EFFECT_GATE readlinkat with a dirfd condition whose mask lacks bit 31 (mask 0x1, value 0: it admits AT_FDCWD)",
    "role": "EFFECT_GATE"
   },
   {
