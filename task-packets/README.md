@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ADOPT-004
+## Current source preparation — MET-ENFORCE-026
+
+MET-ENFORCE-026 (HS-4.3-AMEND): amendment HS43 of the W01 host-interface specification on top of the byte-identical
+W02D effective text: the effect gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED without an
+artifact check and the writer by artifact through its /proc exe link; the gate holds no capability and may call
+readlinkat only with a non-negative dirfd; the BIND digest is the gate's mutual qualification record; a closed list of
+17 overridden adopted clauses, two residuals and eight obligations. Alpha2 OPEN; 235 accepted plus MET-ENFORCE-026 only.
+
+## Historical research-adoption-v3 source preparation — MET-ADOPT-004
 
 MET-ADOPT-004 (RA-LICENSE-001): research adoption v3, the licence clarification of litellm, pgvector, langfuse and
 phoenix at pinned commits (licence texts by git blob id and SHA-256 only; per-part SPDX sets and outcomes under policy
@@ -1374,3 +1382,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 233 | `MET-MAS-003` | `Harness-Engineering` | Run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003); DATA_CHECK_ONLY |
 | 234 | `MET-PERF-038` | `Harness-Engineering` | Load-tolerant in-repository deadlines for verifier bundle v4 (parallel suite 900 s, nested 600 s); SOURCE_DELTA_ONLY |
 | 235 | `MET-ADOPT-004` | `Harness-Engineering` | RA-LICENSE-001: research adoption v3, licence clarification (litellm, pgvector, langfuse, phoenix) and the 29-baseline recheck; DATA_CHECK_ONLY |
+| 236 | `MET-ENFORCE-026` | `Harness-Engineering` | HS-4.3-AMEND: amendment HS43 of the W01 host-interface specification (gate broker/writer qualification, capability and readlinkat cells, BIND digest; closed list of 17 overridden clauses); SPECIFICATION_ONLY |

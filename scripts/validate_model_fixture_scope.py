@@ -72,8 +72,8 @@ def validate_model_fixture_scope(packets: Any, record: Any, snapshots: Any) -> l
         errors.append("model fixture amendment evidence or scope changed")
     if not isinstance(packets, dict):
         return [*errors, "model fixture authority requires a packet mapping"]
-    if len(packets) != 235:
-        errors.append("current catalog requires exactly 235 packets; fixture publication remains 122")
+    if len(packets) != 236:
+        errors.append("current catalog requires exactly 236 packets; fixture publication remains 122")
     if not same(packets.get("MET-REPAIR-005"), EXPECTED_META):
         errors.append("MET-REPAIR-005 whole-packet scope changed")
     if not same(packets.get("CON-MODEL-001"), amend_inventory_packet(amend_model_packet(EXPECTED_BEFORE))):
@@ -125,7 +125,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Model fixture authority valid: 235 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.")
+        print("Model fixture authority valid: 236 packets; historical 122-packet helper grant unchanged; product/native acceptance unproven.")
     return int(bool(errors))
 
 
