@@ -1,0 +1,103 @@
+{
+ "round": 1,
+ "subject": "910dd222ee79333cbe5139897fdb70dae24ccf6a",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "HR1-1",
+   "severity": "MAJOR",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "199-202 (notAmended); architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md 303-309, 666-685",
+   "summary": "HS43 drops the gate's check of the broker's executable, but the adopted I05 contracts (v1, v2, v3) still require the gate to verify the broker's executable on every frame, with any deviation fatal, citing W01 §4.3. The adopted I07 contract still says the gate qualifies the writer 'the way it qualifies the broker on I05 (W01 §4.3)' and checks the writer artifact by its fs-verity digest. HS43 does not reconcile or record either contract. Its notAmended mentions only W01 text, so it reads as if nothing else is affected.",
+   "evidence": "architecture/i05-gate-channel-v3/README.md:50-52 (contractState ADOPTED_DATA_CONTRACT), identical in i05-gate-channel-v2/README.md:50-52 and i05-gate-channel/README.md:34-35: 'On every received frame the gate verifies the broker's kernel peer identity: SO_PEERCRED and the frame's SCM_CREDENTIALS, the retained pidfd and PID/start identity, executable, label and cgroup (base §3, §4.3). Any deviation is fatal.' The list came from I05 round-1 F10, which restated W01 §4.3's 'the same way' (i05-gate-channel/review-round1.json:83). After HS43, H1 (spec 303-309) says the gate 'does not check the broker's artifact' and that the kernel refuses the read. Scenario: a gate built to the adopted I05 v3 rule reads /proc/<broker>/exe on the first GENERATION_STATUS frame. It gets EACCES (v6.12, from my own knowledge: proc_pid_readlink -> proc_fd_access_allowed -> ptrace_may_access -> cap_ptrace_access_check), counts that as a peer deviation and closes the channel without a response, so no execution ever binds. A gate built to HS43 breaks the adopted I05 rule instead. architecture/i07-policy-write/README.md:37-42, carried 'As v1' by i07-policy-write-v3/README.md:43-44, also still reads 'the way it qualifies the broker on I05 (W01 §4.3)' and checks the writer artifact by 'fs-verity digest under its signed manifest'. HS43's writer check is an exact path comparison of the exe link, and nothing states the seal argument that turns that path into the digest. Required: in notAmended and §12 (an editorial extension is enough), record that I05 v1-v3 Channel item 2 'executable' on the gate side is replaced by H1's label-derived identity, and that I07 item 2 now reads as H1's exe-link path check. Then carry an obligation for the I05/I07 successors to restate both."
+  },
+  {
+   "id": "HR1-2",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+   "line": "569; architecture/host-interface-amendment-hs43/amendment.json 199",
+   "summary": "Before HS43 both qualification directions had the same five fields; now they differ. §7's 'broker peer qualification digest (§4.3)' is left as it was, and it now has two possible readings. The record picks one (the broker's qualification of the gate only), which contradicts the adopted I05 definition (the gate's own mutual qualification record).",
+   "evidence": "Spec line 569 is unchanged. amendment.json:199: 'The broker's qualification of the gate (...) and the BIND_EXECUTION digest of it (§7) are unchanged'. i05-gate-channel-v3/README.md:52: 'a cross-check of the mutual qualification record'. Line 100: 'peerQualificationDigest | KERNEL: the gate's own mutual qualification record | Must equal it (fatal)'. Both readings cause a problem. If the digest covers the mutual record, HS43 removed the broker artifact from its gate-side half, so the digest's content changed and is not 'unchanged'. If it covers only the broker's view, I05's definition is wrong. Required: say in §12, or in a decided item, which qualification or qualifications the digest covers after HS43, and make notAmended[0] match."
+  },
+  {
+   "id": "HR1-3",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+   "line": "312-314, 431; architecture/host-interface-amendment-hs43/README.md 49-58",
+   "summary": "Two passages imply that the seccomp rule binds the read, and it cannot. H1 says the writer read is 'never through a path the PID could be reused under (§5.3)'. H3 says the readlinkat rule is 'for the writer's /proc/<pid>/exe link'. Seccomp sees only the dirfd number, and the kernel ignores dirfd when the pathname is absolute. So the rule neither limits the path nor ties the read to a /proc/<pid> descriptor, and §5.3 has no PID-reuse rule for '(§5.3)' to point to.",
+   "evidence": "Linux v6.12, from my own knowledge: readlinkat -> do_readlinkat -> user_path_at(dfd, ...) -> path_init(). An absolute name jumps to the root and never looks at dfd, and classic BPF cannot read the pathname pointer. Scenario: under the obliged rule, readlinkat(5, \"/proc/1234/exe\", buf, n) with any open fd 5 (the journal, a listener) passes the filter and reads through a path whose PID can be reused. With 'any dirfd except AT_FDCWD' (32 single-bit alternatives), even readlinkat(-1, \"/proc/1234/exe\") passes: scripts/seccomp_allowlists_v3.py _holds() admits arg0 = 0xffffffffffffffff under that rule (checked on scratch data). Which links the gate can read is set by planeon_gate_t's lnk_file permissions. Binding the read to the frame's process is code (O-W03-WRITER-EXE). This is the same class as W02D review R1-4 (MINOR); that fix added 'Seccomp checks only the open flags...; which files they reach is set by the role's SELinux domain'. Required: drop '(§5.3)' or point it at the right place. State that the dirfd test only keeps libc readlink() killed, and that the PID-reuse-free binding is O-W03-WRITER-EXE's. Suggest naming a procedure: a pidfd from SO_PEERPIDFD or SCM_PIDFD (v6.5+), open /proc/<pid>, then ppoll the pidfd to confirm the process is still running after the open. getsockopt, recvmsg, openat and ppoll are already in the gate's v3 allowlist."
+  },
+  {
+   "id": "HR1-4",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "199; architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md 301-302, 430-431",
+   "summary": "notAmended keeps the broker's artifact check of the gate 'unchanged'. But under the commoncap rule HS43 itself states, the broker cannot read the gate's exe link whenever the gate holds CAP_NET_BIND_SERVICE, which §5.3 allows when the signed I04 port is below 1024. No text and no obligation keeps the gate dumpable or its gids equal to the broker's either.",
+   "evidence": "security/commoncap.c cap_ptrace_access_check (v6.12, from my own knowledge): without CAP_SYS_PTRACE, a PTRACE_MODE_READ_FSCREDS reader passes only if the target's cap_permitted is a subset of the reader's cap_effective. The gate's permitted set {CAP_NET_BIND_SERVICE} (spec 431) is not a subset of the broker's {CAP_NET_ADMIN, CAP_BPF, CAP_SETUID, CAP_SETGID} (spec 430). So the broker's readlink of /proc/<gate>/exe gets EACCES. The broker connects only 'after it has qualified the gate as a peer (§4.3)' (i05-gate-channel-v3/README.md:46-48) and 'treats any deviation as peer failure' (:76). So in that configuration it never connects and BIND_EXECUTION never happens. kernel/ptrace.c __ptrace_may_access also requires the gate to be dumpable and its uid/gid triples to equal the broker's fsuid/fsgid. SELinux is not the obstacle, because matrix.json procAccess grants planeon_broker_t READ on planeon_gate_t. Required: state the precondition as an obligation (the gate's permitted set inside the broker's effective set, i.e. I04 port >= 1024; gate dumpable; equal gids) and add the broker->gate read to O-T04-HS43, or record it as an open owner question. Do not call the check 'unchanged' without one of these."
+  },
+  {
+   "id": "HR1-5",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "190 (O-W03-WRITER-EXE); architecture/host-interface-amendment-hs43/README.md 43-45",
+   "summary": "O-W03-WRITER-EXE and the README name the wrong subject for the exec-time readability rule ('its artifact readable by its own domain'). They also leave out the other exec-time conditions under which the kernel makes the writer non-dumpable.",
+   "evidence": "v6.12 fs/exec.c begin_new_exec and kernel/cred.c commit_creds, from my own knowledge. would_dump() runs inode_permission(MAY_READ) on the executable before commit_creds(bprm->cred). So the SELinux file read and DAC checks run with the starter's credentials, not the writer's own domain. The starter is planeon_admin_t, the only domain with EXECUTE on planeon_policy_writer_exec_t in matrix.json. begin_new_exec also sets suid_dumpable when euid != uid or egid != gid at exec. commit_creds sets suid_dumpable when the exec changes euid, egid, fsuid or fsgid, or when the new permitted set is not a subset of the starter's (cred_cap_issubset). An example is a root starter whose permitted set is narrower than its bounding set. Matrix v4 grants READ to ANY_DOMAIN on the exec type, so the outcome holds today, but W03 will build and test against this obligation's wording. Required: 'the starter's domain and fsuid can read the artifact; the exec changes no uid or gid and gives no capability beyond the starter's; nothing clears PR_SET_DUMPABLE'. After its filter is installed, the POLICY_WRITER filter admits only PR_SET_NAME for prctl, so only code that runs before the filter can clear it."
+  },
+  {
+   "id": "HR1-6",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "201; architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md 318-320, 682; architecture/host-interface-amendment-hs43/README.md 74",
+   "summary": "HS43 says SELinux matrix v4 needs no change, but two statements in the adopted matrix v4 README no longer hold for the gate's writer check. Also, a dumpable writer lets every uid-0 role with procAccess on it read its ptrace-gated entries: the server, the observer and the broker, not just the gate. HS43 records neither.",
+   "evidence": "architecture/selinux-matrix-v2/README.md:181 'Captures and peer checks therefore use SO_PEERCRED, SO_PEERSEC, pidfds and ungated entries'. Lines 183 and 358 (decision 7) say executable identity follows from the label and the entrypoint closure. H1 now has the writer check use the gated exe entry. matrix.json procAccess grants planeon_server_t, planeon_observer_t and planeon_broker_t (as well as planeon_gate_t) READ on planeon_policy_writer_t. Each is uid 0, and its effective set contains the writer's empty permitted set. So once O-W03-WRITER-EXE makes the writer dumpable (it rules out PR_SET_DUMPABLE 0), __ptrace_may_access passes for all of them. They can read the writer's exe, cwd, root, fd/* and fdinfo, environ and maps. mem and process_vm_* stay blocked: they need PTRACE_MODE_ATTACH, and Yama ptrace_scope=3 refuses that. Required: list the matrix README statements in notAmended as superseded for the gate's I07 check. State the exposure, and either accept it with a reason (e.g. the writer carries no secret in its environment or descriptors, as an obligation) or carry a matrix successor item that narrows procAccess on planeon_policy_writer_t to the gate."
+  },
+  {
+   "id": "HR1-7",
+   "severity": "NOTE",
+   "file": "scripts/host_interface_amendment_v2.py",
+   "line": "87-91, 137-157",
+   "summary": "The model checks where editorial items sit but not what they say, and it does not bound decided items either. It accepts records that change more than the brief's scope allows. The published bytes are within scope: I checked by diff that only lines 1, 6-8, 299-322, 431 and 666-685 change.",
+   "evidence": "Probes on scratch copies, with the effective bytes and pin recomputed as an author would, all ACCEPTED: P2, E3 appends 'The gate may also read the broker's exe link with CAP_SYS_PTRACE.'; P3, E2 appends a normative sentence to the head paragraph; P4, Q-HE3A-1's disposition omits H3 although H3 cites it; P5, a DECIDED item labelled section 4.3 rewrites the BROKER row's SELinux cell ('execute on any type'); P6, an extra uncited owner decision; P7, wrong baseLines. Sanity probes were REFUSED: an unknown obligation in E3, and a title change outside the fixed pair. The W02D model has the same editorial pattern. Optional: pin E2/E3's appended text, bound DECIDED items' current text to §4.3 and the EFFECT_GATE row, and require each disposition to list every item that cites its decision."
+  },
+  {
+   "id": "HR1-8",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "185 (O-SECCOMP-V3-READLINKAT); architecture/host-interface-amendment-hs43/README.md 54-60",
+   "summary": "The claim that the rule 'needs 32 single-bit alternatives or a model extension' is not right. One masked equality, (arg0 & 0x80000000) == 0, admits every descriptor the kernel can hand out and refuses AT_FDCWD in both encodings, within the v3 model as it is. The obligation's 'admits any dirfd except AT_FDCWD' forbids that stricter rule, although H3 ('only with') and HS43-START allow it.",
+   "evidence": "Checked with seccomp_allowlists_v3._check_condition and _holds on scratch data. The one-condition rule admits fd 0, fd 3, 2^30 and (2^32 | 3). It refuses 0xffffffffffffff9c, 0x00000000ffffff9c and -1. Valid fds are below 2^31, since sysctl_nr_open_max is at most INT_MAX (own knowledge). Refusing other negative dirfds loses nothing, because readlinkat with a negative dirfd other than AT_FDCWD either fails EBADF or, with an absolute path, ignores dirfd anyway. Suggest: 'admits no dirfd whose low 32 bits are AT_FDCWD (it may refuse more)'."
+  },
+  {
+   "id": "HR1-9",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+   "line": "305-306, 315-318; architecture/host-interface-amendment-hs43/README.md 35-39",
+   "summary": "The kernel rule could be stated more precisely, and three ambient conditions are left unsaid: the gate's own gid, Yama ptrace_scope=3 and the /proc mount options.",
+   "evidence": "From my own knowledge of v6.12. (a) cap_ptrace_access_check compares the target's cap_permitted with the reader's cap_effective (FSCREDS mode), and only inside the same user namespace. HS43 says 'a subset of the gate's'. This makes no difference while permitted equals effective (§5.3 header) and every role runs in init_user_ns. (b) __ptrace_may_access compares the gate's fsuid and fsgid. §5.3 pins only the gate's uid; its gid 0 follows only indirectly, from the root:root I05/I07 socket files it creates. O-W03-WRITER-EXE binds only the writer. (c) §5.2 S5 sets kernel.yama.ptrace_scope=3. yama_ptrace_access_check acts only on PTRACE_MODE_ATTACH, so the read is unaffected. A sentence would stop readers from assuming otherwise. (d) The broker's ungated stat, cgroup and attr reads and the /proc/<pid> open need /proc mounted without hidepid. With hidepid set, has_pid_permissions falls back to ptrace_may_access, which fails for the broker, so the gate could no longer see /proc/<broker>."
+  },
+  {
+   "id": "HR1-10",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "190, 195 (O-W03-WRITER-EXE, O-T04-HS43)",
+   "summary": "Some details are missing from the native-confirmation and writer obligations.",
+   "evidence": "Kernel claims are from my own knowledge of v6.12. (a) The expected EACCES on the broker read also logs an AVC denial for 'capability sys_ptrace' in planeon_gate_t, because cap_ptrace_access_check calls the audited ns_capable(). T04 should expect it and not count it as a policy breach. (b) 'readlink ... kill the gate on both architectures': aarch64 has no readlink syscall (syscalls.json aarch64 null), so the aarch64 case is libc readlink() -> readlinkat(AT_FDCWD). (c) Add vectors for readlinkat with dirfd 0x00000000ffffff9c (must kill) and with an absolute path (see HR1-3). (d) readlinkat truncates silently and adds no NUL. An 'exact' comparison must use a buffer longer than the expected path and require the returned length to equal it. Otherwise a longer path truncated to the buffer, such as /opt/planeon/bin/harness-policy-write-x, compares equal. A ' (deleted)' suffix must be refused."
+  },
+  {
+   "id": "HR1-11",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "50 (Q-HS43-1)",
+   "summary": "The decision's rationale ('the start time ... closes the PID-reuse window between SO_PEERCRED and pidfd_open') holds only if the start time is compared with a reference captured without the race. §4.3 does not say what that reference is. The decision is the owner's; this is a precision note for the obligation.",
+   "evidence": "Kernel claims are from my own knowledge of v6.12 (net/core/sock.c, kernel/pid.c pidfd_prepare). SO_PEERCRED's pid comes from sk_peer_pid, captured at connect(). pid_vnr still reports that number after the peer is reaped, so pidfd_open(number) can name a later process. A start time read through the new pidfd's /proc entry belongs to that later process. v6.12 SO_PEERPIDFD and SCM_PIDFD (v6.5+) return a pidfd for the struct pid itself and refuse a reaped peer. Both are already admitted by the gate's unconditional getsockopt and recvmsg. A start time captured that way at first qualification and checked on every later frame matches the owner's decision."
+  },
+  {
+   "id": "HR1-12",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+   "line": "303, 318-319, 669",
+   "summary": "Wording and provenance details.",
+   "evidence": "(a) §12 says HS43 'gives the gate the one system call'. The filter does not admit it yet. The README's 'states' is accurate, and §12 should match. (b) In H1, line 303 is 103 characters while the surrounding lines wrap at about 85, and line 319 ('  the writer's `/proc`') is a stray short line. (c) The label substitute for the broker's artifact assumes exactly one file carries planeon_broker_exec_t. Nothing states that, though the cgroup check narrows it. (d) The texts of Q-HE2S-10, Q-HE3A-1 and Q-HE3A-1b match the review brief's summaries, but I did not check them against handoff/STATE.md. Those are R10-lane decisions, which the independence rule keeps out of this review. Q-HS43-1 matches owner_decisions.json word for word, apart from the '(a) ' prefix. W02D record and effective digests match the pins (2ac2751c..., 8c20ccc2...), and the model's check() passes on the worktree."
+  }
+ ]
+}

@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ADOPT-004
+## Current source preparation — MET-ENFORCE-026
+
+MET-ENFORCE-026 (HS-4.3-AMEND): amendment HS43 of the W01 host-interface specification, applied on top of the
+byte-identical W02D effective text: the effect gate qualifies the broker by label, cgroup, pidfd/start and SO_PEERCRED
+without an artifact check, and the writer by artifact through its /proc exe link; the gate holds no capability and may
+call readlinkat only with a non-negative dirfd; the BIND digest is the gate's mutual qualification record; a closed,
+model-checked list of 17 overridden adopted clauses (their files stay byte-identical), two stated residuals and eight
+obligations. Alpha2 OPEN; 235 accepted plus MET-ENFORCE-026 only.
+
+## Historical research-adoption-v3 source preparation — MET-ADOPT-004
 
 MET-ADOPT-004 (RA-LICENSE-001): research adoption v3, the licence clarification of litellm, pgvector, langfuse and
 phoenix at pinned commits (licence texts by git blob id and SHA-256 only; per-part SPDX sets and outcomes under policy
@@ -1134,6 +1143,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 107. `MET-MAS-003`: publish the run-event, OpenTelemetry GenAI mapping and MAS metrics contract candidate (MAS-RA-003: the run-event log, eighteen exact metrics, the MAST vocabulary, the derivation from MAS-RA-008 traces and the OTel projection); H15, H16, H10 and the schemas unchanged; data only.
 108. `MET-PERF-038`: raise the parallel-suite worker deadline (900 s) and the nested predecessor bound (600 s) under verifier bundle v4's 1200 s cap; fail-closed; a successor limits record; transport change.
 109. `MET-ADOPT-004`: record the licence clarification of litellm, pgvector, langfuse and phoenix at pinned commits (digests only, per-part SPDX sets and policy-0.3.0 outcomes) and the 29 planned baselines' recheck as research adoption v3; v1, its map and v2 unchanged; data only.
+110. `MET-ENFORCE-026`: publish amendment HS43 of the W01 host-interface specification (the gate's broker and writer qualification, its capability and readlinkat cells, the BIND digest; a closed list of 17 overridden clauses, two residuals, eight obligations); W02D, the W01 inputs and the overridden files unchanged; specification only.
 
 ## Testing, verification, and acceptance
 

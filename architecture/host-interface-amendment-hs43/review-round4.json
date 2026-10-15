@@ -1,0 +1,39 @@
+{
+ "round": 4,
+ "subject": "0493d704ed8429935cdb3f425731ca0a031a472f",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "HR4-1",
+   "severity": "NOTE",
+   "file": "scripts/host_interface_amendment_v2.py",
+   "line": "83-87 (REQUIRED_DECIDED, DECIDED_ROWS), 251-255",
+   "summary": "The new row binding checks only an item's current text. Its proposed text may still contain newlines, so a row-bound item can insert whole new rows into the §5.3 table. Free text in proposed, replacement and residual fields is still accepted; that is by design, since review covers content.",
+   "evidence": "Probes on scratch copies, with §12 re-rendered and the pin recomputed. ACCEPTED: P17 (H5's proposed text starts with a new row '| POLICY_WRITER2 | 0 | CAP_SYS_ADMIN, CAP_SYS_PTRACE | Everything | `unconfined_t` |' before the gate row); P18 (H2's proposed text appends a second '| WORKER | 0 | All | All | none |' row); P19 (H1 rewritten so the writer check drops 'artifact'); P2c and P2d (replacement or residual text rewritten). Now REFUSED: P5b, P5d and P5e (row binding), P15 (H5 removed: required items and the native-profile row). P2, P2b, P3-P14 and P16 are refused as before. Optional: require that a row-bound item's proposed text has no newline."
+  },
+  {
+   "id": "HR4-2",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "O-W03-WRITER-EXE (obligations[1].text); architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md 436, 443",
+   "summary": "The corrected writer route (an ordinary root exec, then a capset drop) gives the empty permitted set the ptrace read needs. It leaves the writer's bounding set as the starter's, though the §5.3 header asks for 'bounding equal' (empty for POLICY_WRITER). Under matrix v4 the writer cannot empty its bounding set itself. This tension predates HS43 and is inert, but worth recording.",
+   "evidence": "From my own knowledge of v6.12. capset (cap_capset) cannot change the bounding set. PR_CAPBSET_DROP (cap_prctl_drop) needs CAP_SETPCAP, and SELinux then checks 'capability setpcap'. matrix.json grants setpcap only to init_t and qualk8s_runtime_t; planeon_policy_writer_t has no capability grant. The starter (planeon_admin_t) has no setpcap either. A full bounding set with an empty permitted set, no_new_privs and no exec in the writer's filter gains nothing back, so the gap is inert. Suggest one sentence or a carried item: the writer's bounding set stays the starter's, or §5.3's header needs an exception for the writer."
+  },
+  {
+   "id": "HR4-3",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "obligations, supersedes[0], residuals[1]; architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md 301-304",
+   "summary": "Wording and provenance nits.",
+   "evidence": "(a) O-MATRIX-GATE-PROCACCESS: 'a reader keeps either all of the gate's entries or none' overstates. Class lnk_file (exe, cwd, root, fd/*) can be withheld separately from class file. But P1 needs the exe link, and environ and maps share class file with stat and status, so the practical conclusion holds. (b) The base-clause replacement says the gate does not authenticate the broker's artifact or manifest/trust custody 'per frame'. H1 says the gate never checks it, so 'per frame' invites reading that it does at the first frame. (c) O-W03-WRITER-EXE: '... which matrix v4 gives READ ..., so the exec grants nothing beyond the starter's own set'. READ is what keeps the exec dumpable (would_dump). 'Grants nothing' comes from a root exec yielding permitted = bounding, within the starter's set. (d) R-GATE-PROC's decisions are Q-HS43-3 and Q-HE2S-7; HS43-GATE-RESIDUAL-CONFIRM, which carries O-MATRIX-GATE-PROCACCESS, is not listed. (e) H1's first bullet gives the kernel preconditions of the broker's read but not its SELinux side (matrix procAccess planeon_broker_t -> planeon_gate_t, 'file read'), which the writer bullet does state."
+  },
+  {
+   "id": "HR4-4",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs43/amendment.json",
+   "line": "-",
+   "summary": "Status of the round-3 findings. No MAJOR or MINOR finding remains.",
+   "evidence": "HR3-1 closed: native-profile v2 README row 17 is pinned; O-NATIVE-GATE-NOCAP covers the v3 schema enum and model rule; O-MATRIX-GATE-NETBIND covers A48 and the grant; notAmended states both; HS43-H5-CONFIRM calls A48 a consistent upper bound. O-NATIVE-GATE-NOCAP assigns work to the primary lane's next native-profile successor, so the lane monitor should acknowledge that handoff. HR3-2 closed: the route is a root exec, then a self capset drop, with the host granting 'process setcap' (bounding-set note in HR4-2). HR3-3 closed for the probes it named (HR4-1 is a narrower residue). HR3-4 closed: three monitor confirmations recorded word for word from owner_decisions.json and cited by H1/H5/H4; Q-HS43-2 summary updated. HR3-5 closed (whole-view narrowing and P1 stated; nit in HR4-3a). HR3-6 closed: file-context obligation in O-W03-PEER-EXE; PID-reuse and file-context cases in O-T04-HS43; base replacement covers manifest/trust custody (nit in HR4-3b). check() passes on the worktree: 8 items, 17 superseded clauses, 2 residuals, 8 obligations, 13 owner decisions, effective b4f46b3a.... Searching for adopted clauses still requiring the gate to check the broker's executable, the writer's per-frame digest, or the gate's CAP_NET_BIND_SERVICE found none outside the list, its obligations and the stated upper bounds (matrix v3/v4 A48 and README A45-A48). docs/alpha-2 restates none of them."
+  }
+ ]
+}
