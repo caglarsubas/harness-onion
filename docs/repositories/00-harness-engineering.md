@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-030
+## Current source preparation — MET-ENFORCE-031
+
+MET-ENFORCE-031 (LICENCE-POLICY-AMEND): license-policy amendment LIC-HOST-A2, one overlay list that makes Zlib
+default-allowed globally through A1's unchanged classifier (monitor LIC-ZLIB, L2-1 (a), L2-2 (a)). The base policy 0.3.0,
+A1 and the research-adoption record stay byte-identical; the phoenix-sqlean effect is stated, not applied. The layer
+carries LIC-HOST-F P2-F1 and P2-F2 and the A2 review's LR2-4 and LR3-2. DATA_CHECK_ONLY. Alpha2 OPEN; 242 accepted plus
+MET-ENFORCE-031 only.
+
+## Historical I05 gate channel v4 source preparation — MET-ENFORCE-030
 
 MET-ENFORCE-030 (I05-OBSERVED-WORKERS): the I05 gate channel v4, a model, vectors and README successor of the adopted v3.
 At every BIND the gate reads the probe-worker cgroup's cgroup.procs, opens a pidfd, checks the worker's start time in
@@ -1202,6 +1210,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 114. `MET-ENFORCE-029`: publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; MET-ENFORCE-025's programs, allowlists v3 and v4 and edge records v1 and v2 unchanged; DATA_CHECK_ONLY.
 115. `MET-PERF-040`: give back verify headroom lost to the history chain's depth (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change; DATA_CHECK_ONLY.
 116. `MET-ENFORCE-030`: publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, every failure WORKER_NOT_OBSERVED); the v3 contract, supplement and model unchanged; DATA_CHECK_ONLY.
+117. `MET-ENFORCE-031`: publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay); the base policy, A1 and its classifier unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

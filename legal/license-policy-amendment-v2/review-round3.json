@@ -1,0 +1,23 @@
+{
+ "round": 3,
+ "subject": "2e81e2f1508fe61561741cdaf0d9b13e5e155f64",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "LR3-1",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 123,
+   "summary": "The LR1-4 disposition is right in substance but loosely worded. It says '(answered fully in round 2, LR2-2)', but the memo was added in this round-3 subject. It also says 'The packet layer pins the import closure and verifies every read' in the present tense, for work that is still to be done.",
+   "evidence": "git diff fa657f49..2e81e2f1 adds _once and the read = _once(read) line (scripts/license_amendment_v2.py:138-150). So LR2-2 was raised by round 2 and answered in round 3, not 'in round 2'. 'Every path is read once' is true for the injected reader. An instrumented reader counted exactly 1 read of each of the 6 paths. The A1 module file is still read a second time, outside the reader, by the identity check at line 156, which README:97-100 correctly lists as carried (LR2-4). README:97-101 says 'carried' for the closure pin, but the LR1-4 row states it as already done. Suggested wording: '(completed in round 3, after LR2-2)', 'every path is read once through the reader', and 'the 242 packet layer will pin the import closure and verify every read'. No behaviour depends on this."
+  },
+  {
+   "id": "LR3-2",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 97,
+   "summary": "Two of the items carried to packet 242 (the safe_yaml import-closure pin and the LR2-4 identity-read routing) live only in README prose and a code comment. amendment.json's carriedFindings is closed by check to P2-F1/P2-F2. LR2-4's import-name point is not carried: the 242 layer must make its era-loaded A1 importable as `license_amendment`.",
+   "evidence": "README:97-101 lists three carried items. scripts/license_amendment_v2.py:154-155 comments on the closure and the LR2-4 routing. record() requires carriedFindings ids == ['P2-F1', 'P2-F2'] (line 110), so the record cannot hold the other two. Round-2 LR2-4's evidence also notes that A2 imports A1 by name (lines 23-26). If the 242 layer loads A1 from verified bytes, as the 223 layer's _era_model does, it must make that module the one `import license_amendment` resolves to. If it does not, the identity check hashes an on-disk file that may not be the code that runs. Nothing in the subject is wrong; the identity check is fail-closed today (with a1.__file__ pointed at another file: REFUSED 'the running A1 classifier is the pinned one'). Suggest that the 242 packet brief list all four acceptance items: P2-F1, P2-F2, the safe_yaml closure pin, and the identity-check routing together with the import-name injection."
+  }
+ ]
+}
