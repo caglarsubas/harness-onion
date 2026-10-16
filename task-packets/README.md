@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-031
+## Current source preparation — MET-ENFORCE-032
+
+MET-ENFORCE-032 (W03-PLAN-AMEND-2): W03 obligation-register amendment 2 (plan v2's HE-004 refined into its five parts;
+HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4 (v3's 33 rows plus 12 registered before
+use), adopted after three independent review rounds. DATA_CHECK_ONLY. Alpha2 OPEN; 243 accepted plus MET-ENFORCE-032 only.
+
+## Historical license-policy amendment A2 source preparation — MET-ENFORCE-031
 
 MET-ENFORCE-031 (LICENCE-POLICY-AMEND): license-policy amendment LIC-HOST-A2, Zlib default-allowed globally as an overlay
 on the byte-identical base policy 0.3.0 and A1 (monitor LIC-ZLIB, L2-1 (a), L2-2 (a)). DATA_CHECK_ONLY. Alpha2 OPEN; 242
@@ -1434,3 +1440,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 241 | `MET-PERF-040` | `Harness-Engineering` | PERF-040: chain-depth headroom (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change; DATA_CHECK_ONLY |
 | 242 | `MET-ENFORCE-030` | `Harness-Engineering` | I05-OBSERVED-WORKERS: I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, every failure WORKER_NOT_OBSERVED, the v3 wire unchanged); DATA_CHECK_ONLY |
 | 243 | `MET-ENFORCE-031` | `Harness-Engineering` | LICENCE-POLICY-AMEND: license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay on the byte-identical base policy and A1); DATA_CHECK_ONLY |
+| 244 | `MET-ENFORCE-032` | `Harness-Engineering` | W03-PLAN-AMEND-2: W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; DATA_CHECK_ONLY |

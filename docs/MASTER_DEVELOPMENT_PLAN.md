@@ -1,6 +1,32 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-031 source preparation, October 16, 2026
+## Current checkpoint — MET-ENFORCE-032 source preparation, October 16, 2026
+
+Alpha2 OPEN. MET-ENFORCE-031 (LICENCE-POLICY-AMEND, license-policy amendment LIC-HOST-A2) passed required verify in 592 s
+and merged as main b0635f8. W03-PLAN-AMEND-2 records the policy observer's split (the monitor's owner-delegated Q-HE4-2 (a)),
+I01 as a plan obligation (Q-HE4-1 (a)), the T04 audit-trace route for the observer's wrapper evidence and R10's adoption
+of the I05 gate channel v4, and publishes the operator edge record v4 for HE-004B1 and HE-003A3. MET-ENFORCE-032 is the
+sole 244th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-032 / W03-PLAN-AMEND-2 | SOURCE_PREPARED | W03 obligation-register amendment 2 (244th packet): plan v2's HE-004 refined into HE-004A, HE-004B1, HE-004C, HE-004D1 and HE-004D2 (closed change kind REFINED, plan v2's text byte for byte), the new packets HE-004-I01 and HE-003A3 with I01-1, OBS-RBAC-1, OBS-INV-1, I05-7 and I05-8, applied after amendment 1; operator edge record v4 (v3's 33 rows plus 12 registered before use); adopted by the monitor (owner-delegated) after contract review round 3, PASS; packet review; verify |
+| Alpha2A | MET-ENFORCE-031 / LICENCE-POLICY-AMEND | VERIFY_PASSED_MERGED | Merged as main b0635f8 (verify 592 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-004, MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumers of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: plan v2, amendment 1, edge record v3 and the 12 registered provider files stay byte-identical; no R10
+file changes, the registered files are not used before the R10 consumer packets, and no role code, cloud, runner,
+live/native/tenant or model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical license-policy amendment A2 source checkpoint — MET-ENFORCE-031 source preparation, October 16, 2026
 
 Alpha2 OPEN. MET-ENFORCE-030 (I05-OBSERVED-WORKERS, the I05 gate channel v4) passed required verify in 816 s and merged as
 main fd362f9. LICENCE-POLICY-AMEND resolves phoenix-sqlean's DENY_UNKNOWN_LICENSE (RA-LICENSE-001 note N-2) by making Zlib
@@ -1902,7 +1928,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · PROGRAMS-REPUBLISH / MET-ENFORCE-029 · Publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2 after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · PERF-040 / MET-PERF-040 · Give back verify headroom lost to the history chain's depth: test-local exact sharing (15 never-shared tests), canonical byte-minimal authority hunks, refreshed weights at six workers and the matrix v5 replay order; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · I05-OBSERVED-WORKERS / MET-ENFORCE-030 · Publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, the v3 wire unchanged) after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · LICENCE-POLICY-AMEND / MET-ENFORCE-031 · Publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally; the base policy and A1 byte-identical) after independent review; pass required verify through the owner's App.
+- [x] Alpha 2A · LICENCE-POLICY-AMEND / MET-ENFORCE-031 · Publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally; the base policy and A1 byte-identical) after independent review; pass required verify through the owner's App.
+- [ ] Alpha 2A · W03-PLAN-AMEND-2 / MET-ENFORCE-032 · Publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4 after independent review; plan v2, amendment 1 and edge record v3 byte-identical; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
