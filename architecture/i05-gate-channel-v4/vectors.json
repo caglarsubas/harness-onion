@@ -700,7 +700,66 @@
     {
      "fatal": "OPENING_FRAME_REQUIRED"
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "FATAL:OPENING_FRAME_REQUIRED",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "CLOSED",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [
+     [
+      "INVALIDATED",
+      "OPENING_FRAME_REQUIRED",
+      "HELD"
+     ]
+    ],
+    "state": "HELD"
+   },
+   "from": {
+    "event": 0,
+    "transcript": "T15"
+   },
+   "id": "OB02",
+   "intent": "order: FATAL:OPENING_FRAME_REQUIRED comes before the observation (from v3 T15, event 0), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "fatal": "OPENING_FRAME_REQUIRED"
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "FATAL:PEER_QUALIFICATION_MISMATCH",
@@ -755,7 +814,7 @@
     "event": 1,
     "transcript": "T14"
    },
-   "id": "OB02",
+   "id": "OB03",
    "intent": "order: FATAL:PEER_QUALIFICATION_MISMATCH comes before the observation (from v3 T14, event 1), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -779,7 +838,88 @@
     {
      "fatal": "PEER_QUALIFICATION_MISMATCH"
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "FATAL:PEER_QUALIFICATION_MISMATCH",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "CLOSED",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [
+     [
+      "INVALIDATED",
+      "PEER_QUALIFICATION_MISMATCH",
+      "HELD"
+     ]
+    ],
+    "state": "HELD"
+   },
+   "from": {
+    "event": 1,
+    "transcript": "T14"
+   },
+   "id": "OB04",
+   "intent": "order: FATAL:PEER_QUALIFICATION_MISMATCH comes before the observation (from v3 T14, event 1), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "fatal": "PEER_QUALIFICATION_MISMATCH"
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "NOT_ACTIVE",
@@ -828,7 +968,7 @@
     "event": 1,
     "transcript": "T37"
    },
-   "id": "OB03",
+   "id": "OB05",
    "intent": "order: NOT_ACTIVE comes before the observation (from v3 T37, event 1), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -855,7 +995,85 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "NOT_ACTIVE",
+   "config": "OBSERVING_INSPECTING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "INSPECTING"
+   },
+   "from": {
+    "event": 1,
+    "transcript": "T37"
+   },
+   "id": "OB06",
+   "intent": "order: NOT_ACTIVE comes before the observation (from v3 T37, event 1), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "INSPECTING"
+     }
+    },
+    {
+     "response": {
+      "reason": "NOT_ACTIVE",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "ACTION_OUTSTANDING",
@@ -1006,7 +1224,7 @@
     "event": 7,
     "transcript": "T42"
    },
-   "id": "OB04",
+   "id": "OB07",
    "intent": "order: ACTION_OUTSTANDING comes before the observation (from v3 T42, event 7), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [
     {
@@ -1069,7 +1287,223 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "ACTION_OUTSTANDING",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    },
+    {
+     "operation": "ARM_ACTION",
+     "payload": {
+      "actionId": 1,
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "manifestDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "recordedUid": null,
+      "requestTemplateDigest": "sha256:3a27a2635d71e1c068c2be15e3f027bec15470b7ec035fd421bb51179337f57c",
+      "verb": "CREATE"
+     },
+     "type": "FRAME"
+    },
+    {
+     "conn": "c1",
+     "type": "BACKLOG"
+    },
+    {
+     "conn": "c1",
+     "type": "ACCEPT"
+    },
+    {
+     "bodyDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+     "certificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+     "conn": "c1",
+     "head": "POST /api/v1/namespaces/planeon-qual/pods HTTP/1.1\r\nHost: 198.51.100.7:6443\r\nAccept: application/json\r\nContent-Type: application/json\r\nContent-Length: 1234\r\n\r\n",
+     "type": "REQUEST"
+    },
+    {
+     "bodyDigest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+     "conn": "c1",
+     "httpStatus": 201,
+     "resourceVersion": "41",
+     "type": "UPSTREAM_RESPONSE",
+     "uid": "11111111-aaaa-4bbb-8ccc-000000000001"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "2222222222222222222222222222222222222222222222222222222222222222",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "reservationDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "runNonce": "run-two",
+      "serverCertificateDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {
+     "1": {
+      "admittedBeforeInvalidation": false,
+      "classification": "DELIVERED_RESULT",
+      "sealed": false,
+      "status": "TERMINAL"
+     }
+    },
+    "boundExecutionId": "1111111111111111111111111111111111111111111111111111111111111111",
+    "channel": "OPEN",
+    "connections": {
+     "c1": "CLOSED"
+    },
+    "counters": {
+     "consumptions": 1,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 1
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [
+     [
+      "BIND",
+      "1111111111111111111111111111111111111111111111111111111111111111",
+      "run-one",
+      "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      [
+       "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+       "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+       "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      [
+       "ConfigMap/planeon-qual/probe-config",
+       "Pod/planeon-qual/probe-pod",
+       "Service/planeon-qual/probe-service"
+      ]
+     ],
+     [
+      "ARM",
+      1,
+      "CREATE",
+      "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      null,
+      "sha256:3a27a2635d71e1c068c2be15e3f027bec15470b7ec035fd421bb51179337f57c"
+     ],
+     [
+      "CONSUMED",
+      1
+     ],
+     [
+      "TERMINAL",
+      1,
+      "DELIVERED_RESULT",
+      false,
+      {
+       "httpStatus": 201,
+       "observedResourceVersion": "41",
+       "observedUid": "11111111-aaaa-4bbb-8ccc-000000000001",
+       "resultDigest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+      }
+     ]
+    ],
+    "state": "ACTIVE"
+   },
+   "from": {
+    "event": 7,
+    "transcript": "T42"
+   },
+   "id": "OB08",
+   "intent": "order: ACTION_OUTSTANDING comes before the observation (from v3 T42, event 7), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [
+    {
+     "result": "OBSERVED",
+     "step": null,
+     "workerPid": 4100,
+     "workerStartTicks": 900001
+    }
+   ],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "caseManifestSetDigest": "sha256:51435c24c91efce536c060353b403798a5eaadea60fa7d88ee9a829b15ba9e19",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "result": "OK"
+     }
+    },
+    {
+     "response": {
+      "actionId": 1,
+      "flushedConnections": 0,
+      "result": "OK"
+     }
+    },
+    {},
+    {
+     "stamp": {
+      "actionId": 1,
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111"
+     }
+    },
+    {
+     "actionId": 1,
+     "decision": "FORWARD"
+    },
+    {
+     "classification": "DELIVERED_RESULT",
+     "relayed": true
+    },
+    {
+     "response": {
+      "reason": "ACTION_OUTSTANDING",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "EXECUTION_REPLAY",
@@ -1118,7 +1552,7 @@
     "event": 1,
     "transcript": "T75"
    },
-   "id": "OB05",
+   "id": "OB09",
    "intent": "order: EXECUTION_REPLAY comes before the observation (from v3 T75, event 1), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -1145,7 +1579,85 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "EXECUTION_REPLAY",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "2222222222222222222222222222222222222222222222222222222222222222",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "reservationDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "runNonce": "run-zero",
+      "serverCertificateDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "ACTIVE"
+   },
+   "from": {
+    "event": 1,
+    "transcript": "T75"
+   },
+   "id": "OB10",
+   "intent": "order: EXECUTION_REPLAY comes before the observation (from v3 T75, event 1), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "reason": "EXECUTION_REPLAY",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "GENERATION_MISMATCH",
@@ -1211,7 +1723,7 @@
     "event": 2,
     "transcript": "T13"
    },
-   "id": "OB06",
+   "id": "OB11",
    "intent": "order: GENERATION_MISMATCH comes before the observation (from v3 T13, event 2), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -1244,7 +1756,108 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "GENERATION_MISMATCH",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "ACTIVE"
+   },
+   "from": {
+    "event": 2,
+    "transcript": "T13"
+   },
+   "id": "OB12",
+   "intent": "order: GENERATION_MISMATCH comes before the observation (from v3 T13, event 2), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "reason": "UNKNOWN_BINDING",
+      "result": "REFUSED"
+     }
+    },
+    {
+     "response": {
+      "reason": "GENERATION_MISMATCH",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "UNKNOWN_BINDING",
@@ -1293,7 +1906,7 @@
     "event": 1,
     "transcript": "T13"
    },
-   "id": "OB07",
+   "id": "OB13",
    "intent": "order: UNKNOWN_BINDING comes before the observation (from v3 T13, event 1), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -1320,7 +1933,85 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "UNKNOWN_BINDING",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "ACTIVE"
+   },
+   "from": {
+    "event": 1,
+    "transcript": "T13"
+   },
+   "id": "OB14",
+   "intent": "order: UNKNOWN_BINDING comes before the observation (from v3 T13, event 1), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "reason": "UNKNOWN_BINDING",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "CERTIFICATE_MISMATCH",
@@ -1403,7 +2094,7 @@
     "event": 3,
     "transcript": "T13"
    },
-   "id": "OB08",
+   "id": "OB15",
    "intent": "order: CERTIFICATE_MISMATCH comes before the observation (from v3 T13, event 3), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -1442,7 +2133,131 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "CERTIFICATE_MISMATCH",
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "workerPid": 4100,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "ACTIVE"
+   },
+   "from": {
+    "event": 3,
+    "transcript": "T13"
+   },
+   "id": "OB16",
+   "intent": "order: CERTIFICATE_MISMATCH comes before the observation (from v3 T13, event 3), with leaf member 4100 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "reason": "UNKNOWN_BINDING",
+      "result": "REFUSED"
+     }
+    },
+    {
+     "response": {
+      "reason": "GENERATION_MISMATCH",
+      "result": "REFUSED"
+     }
+    },
+    {
+     "response": {
+      "reason": "CERTIFICATE_MISMATCH",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   },
   {
    "answer": "MANIFEST_REUSED",
@@ -1491,7 +2306,7 @@
     "event": 1,
     "transcript": "T95"
    },
-   "id": "OB09",
+   "id": "OB17",
    "intent": "order: MANIFEST_REUSED comes before the observation (from v3 T95, event 1), with the non-member 5100 named; nothing is observed for this BIND",
    "observations": [],
    "outputs": [
@@ -1518,7 +2333,85 @@
       "result": "REFUSED"
      }
     }
-   ]
+   ],
+   "worker": "OUTSIDER"
+  },
+  {
+   "answer": "MANIFEST_REUSED",
+   "config": "OBSERVING_LATER",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "executionId": "3333333333333333333333333333333333333333333333333333333333333333",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-three",
+      "serverCertificateDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000c03",
+      "workerPid": 4300,
+      "workerStartTicks": 900009
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "ACTIVE"
+   },
+   "from": {
+    "event": 1,
+    "transcript": "T95"
+   },
+   "id": "OB18",
+   "intent": "order: MANIFEST_REUSED comes before the observation (from v3 T95, event 1), with leaf member 4300 with a start time not its own named; nothing is observed for this BIND",
+   "observations": [],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "reason": "MANIFEST_REUSED",
+      "result": "REFUSED"
+     }
+    }
+   ],
+   "worker": "WRONG_START"
   }
  ],
  "schemaVersion": "planeon.internal.effect-gate-model-vectors/v4",

@@ -1,6 +1,6 @@
 # I05 broker-gate channel v4 — I05-OBSERVED-WORKERS contract (DATA_CHECK_ONLY)
 
-Alpha 2A; 2026-10-16. Status: **CONTRACT_CANDIDATE_ROUND4_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`).
+Alpha 2A; 2026-10-16. Status: **CONTRACT_CANDIDATE_ROUND5_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`).
 
 v4 succeeds the adopted I05 v3 contract `../i05-gate-channel-v3/` (`planeon.internal.effect-gate-frame/v3`,
 ADOPTED_DATA_CONTRACT) and its supplement `../i05-gate-channel-v3-supplement/`. Later layers pin the v3 bytes
@@ -25,7 +25,7 @@ sequencing decision SEQ-241-242).
 
 | File | Content |
 |---|---|
-| `vectors.json` | `planeon.internal.effect-gate-model-vectors/v4`: v3 inputs pinned by SHA-256, three configurations (OBSERVING and two for the order transcripts), 20 observation transcripts O01-O20 (each with outputs, final snapshot and local observation log), 9 order transcripts OB01-OB09, 9 configuration refusals C01-C09 and 9 model-event refusals M01-M09 |
+| `vectors.json` | `planeon.internal.effect-gate-model-vectors/v4`: v3 inputs pinned by SHA-256, three configurations (OBSERVING and two for the order transcripts), 20 observation transcripts O01-O20 (each with outputs, final snapshot and local observation log), 18 order transcripts OB01-OB18, 9 configuration refusals C01-C09 and 9 model-event refusals M01-M09 |
 | `../../scripts/i05_gate_channel_v4.py` | Reference model: the v3 model with the gate's observation (`Gate._observe_worker`), `convert_v3_config`, `replay_observed` and `check_vectors` |
 | `../i05-gate-channel-v3/channel.schema.json`, `outcome-mapping.json` | Unchanged; v4 uses them as they are |
 
@@ -33,12 +33,12 @@ The v4 model is a copy of the v3 model with the changes below. The v3-to-v4 diff
 `scripts/i05_gate_channel_v4.py` is the review surface. Every function that checks or renders the wire (`decode_frame`,
 `check_frame`, `render_request`, `template_digest`, `identity_of`, `check_agreement`) is unchanged.
 
-`check_vectors(vectors, files)` makes 268 checks:
+`check_vectors(vectors, files)` makes 277 checks:
 
 - **v3 replay (221 checks).** Every v3 transcript (120) and supplement transcript (6), with its configuration converted by
   `convert_v3_config`, replays under v4 to the same outputs and final snapshot. Every v3 configuration refusal (5), frame
   check (34), byte check (14) and agreement case (42) gives v3's expected answer.
-- **v4 vectors (47 checks).** The 20 observation transcripts, 9 order transcripts, 9 configuration refusals and 9
+- **v4 vectors (56 checks).** The 20 observation transcripts, 18 order transcripts, 9 configuration refusals and 9
   model-event refusals.
 
 ## What v4 changes
@@ -55,9 +55,9 @@ The v4 model is a copy of the v3 model with the changes below. The v3-to-v4 diff
 
 The gate observes only for a BIND that passes every v3 check before it (peer, state, outstanding actions, replay,
 generation, binding, certificate, manifest reuse). So the answer to a BIND that fails one of those checks is v3's, whatever
-its worker, and nothing is observed for it (order transcripts OB01-OB09). Frame-level refusals (an invalid frame,
+its worker, and nothing is observed for it (order transcripts OB01-OB18). Frame-level refusals (an invalid frame,
 CHAIN_BROKEN, CHALLENGE_MISMATCH and the other fatal frame answers) come earlier still: the BIND handler is not reached
-(OB01 pins one of them, OPENING_FRAME_REQUIRED). The gate holds a directory fd on the cgroup2 mount and one on `/proc`,
+(OB01 and OB02 pin one of them, OPENING_FRAME_REQUIRED). The gate holds a directory fd on the cgroup2 mount and one on `/proc`,
 and opens every file with `openat` relative to one of them (Q-HE2S-G (b)). It closes every fd the observation opens,
 the pidfd included, on every path, a failure path included.
 
@@ -125,10 +125,12 @@ Rules:
    - The cause and the failing step go to the local diagnostic log. The wire answer does not say which step failed.
    - The log is best effort. A failed or full log write is dropped (R10 may count drops). It never becomes a
      STORAGE_FAILURE, never closes the channel and never changes the answer.
-5. **Reading and parsing.** The gate reads with plain `read(2)` calls into a bounded buffer and asks for no file
-   metadata. On linux-gnu, Rust std's `read_to_end` first calls `metadata` (statx), and glibc's `fstat` on x86_64 is
-   `newfstatat`. Neither is on the EFFECT_GATE allowlist, and the default action kills the gate (constraint C1). Each
-   file is read until a `read` returns 0, because `cgroup.procs` is a seq_file that
+5. **Reading and parsing.** The gate reads with plain `read(2)` calls into a bounded buffer and does not size the read
+   from file metadata. The gate's runtime base is static musl (W01-AMEND-QW4), where Rust std's `read_to_end` adds
+   `fstat` and `lseek`, both allowed; there the risk is an unbounded read, which the bounds below rule out. On a
+   linux-gnu build the same call would use `statx`, and glibc's x86_64 `fstat` is `newfstatat`: neither is allowed, and
+   the default action would kill the gate (constraint C1). Each file is read until a `read` returns 0, because
+   `cgroup.procs` is a seq_file that
    returns about one page per call.
    - **Bounds.** `cgroup.procs` is read to at most 65536 bytes and `stat` to at most 4096 bytes. Content beyond either
      bound is unreadable.
@@ -226,7 +228,7 @@ What the two readings mean in v4:
 
 | Constraint (SLOT241-FACTS, 2026-10-16) | How v4 meets it |
 |---|---|
-| C1 "Seccomp allowlists v4 (main), EFFECT_GATE: only syscalls on that allowlist are usable." | The observation uses only these syscalls. `openat`, `read`, `pread64`, `fstat`, `lseek` and `close` are in the EFFECT_GATE duty rows (`architecture/seccomp-allowlists-v4/allowlists.json`). `pidfd_open` is in the row "peers qualified with pidfd, SO_PEERCRED and same-uid /proc reads". `ppoll`, `epoll_*` and (x86_64) `poll` come from the NATIVE_STATIC runtime base. No `getdents64`, `statx`, `newfstatat`, `inotify_*`, `waitid` or `pidfd_getfd`. |
+| C1 "Seccomp allowlists v4 (main), EFFECT_GATE: only syscalls on that allowlist are usable." | The observation's syscalls are `openat`, `read`, `close`, `pidfd_open` and a poll. `openat`, `read` and `close` are in the EFFECT_GATE duty rows (`architecture/seccomp-allowlists-v4/allowlists.json`; `fstat` and `lseek`, which musl's std read adds, are there too). `pidfd_open` is in the row "peers qualified with pidfd, SO_PEERCRED and same-uid /proc reads". `ppoll`, `epoll_*` and (x86_64) `poll` come from the NATIVE_STATIC runtime base. No `getdents64`, `statx`, `newfstatat`, `inotify_*`, `waitid` or `pidfd_getfd`. |
 | C2 "Owner Q-HE2S-G (b): the gate opens files only via openat on dir fds (no std::fs opens)." | Every open is an `openat` relative to the held cgroup2-root or `/proc` directory fd. |
 | C3 "Matrix v5 (main): only the probe-worker leaf READ, search on its two parents, and procAccess to planeon_worker_t; the worker is other-uid, so only cgroup.procs, stat and status are reachable." | The path walk crosses `planeon.slice` and `planeon-capacity-broker.service` (search only) to the `probe-worker` leaf (READ: `cgroup.procs`). `/proc/<pid>/stat` uses procAccess on `planeon_worker_t`. The `status` entry is not needed. |
 | C4 "HS43 precedent (owner Q-HS43-1 (a)): the identity is pid plus the start time from /proc/<pid>/stat, race-free where possible (pidfd); a pidfd for another process needs pidfd_open." | The identity is (workerPid, workerStartTicks), with the start time from `/proc/<pid>/stat` field 22. `pidfd_open` gives the pidfd, and rule 1 makes the reads race-free. |
@@ -276,25 +278,32 @@ v3's.
   WORKER_NOT_OBSERVED or STORAGE_FAILURE (a BIND record that fails after the observation). A BIND answered before it
   has no entry.
 
-**OB01-OB09** pin the order. Each names its v3 source (`from`) and must be exactly that transcript's prefix, ending in a
-BIND answered before the observation, with only that BIND's worker replaced by the process outside the leaf. The checker
-also requires that the process is not a leaf member in the kernel at that BIND, that every injection is consumed, and that
-the answer is v3's. Nothing is observed for that BIND:
+**OB01-OB18** pin the order. Each names its v3 source (`from`, an unmutated v3 BIND) and must be exactly that
+transcript's prefix, ending in a BIND answered before the observation, with only that BIND's worker replaced. Each answer
+is pinned twice, with the two workers the observation would refuse at different steps (`worker`):
+- OUTSIDER: the process outside the leaf (5100), refused at step 1;
+- WRONG_START: the configuration's first leaf member with a start time that is not its own (900009), listed at step 1
+  and refused at step 3.
+
+The checker also requires that, in the kernel at that BIND, the worker would not be observed (not a member, or a member
+with another start), that every injection is consumed, and that the answer is v3's. Nothing is observed for that BIND.
+Each pair, in order (OUTSIDER first):
 
 | ID | Answer before the observation | From v3 |
 |---|---|---|
-| OB01 | Fatal OPENING_FRAME_REQUIRED (a frame-level answer) | T15 |
-| OB02 | Fatal PEER_QUALIFICATION_MISMATCH | T14 |
-| OB03 | NOT_ACTIVE | T37 (INSPECTING) |
-| OB04 | ACTION_OUTSTANDING | T42 |
-| OB05 | EXECUTION_REPLAY | T75 |
-| OB06 | GENERATION_MISMATCH | T13 |
-| OB07 | UNKNOWN_BINDING | T13 |
-| OB08 | CERTIFICATE_MISMATCH | T13 |
-| OB09 | MANIFEST_REUSED | T95 (LATER) |
+| OB01, OB02 | Fatal OPENING_FRAME_REQUIRED (a frame-level answer) | T15 |
+| OB03, OB04 | Fatal PEER_QUALIFICATION_MISMATCH | T14 |
+| OB05, OB06 | NOT_ACTIVE | T37 (INSPECTING) |
+| OB07, OB08 | ACTION_OUTSTANDING | T42 |
+| OB09, OB10 | EXECUTION_REPLAY | T75 |
+| OB11, OB12 | GENERATION_MISMATCH | T13 |
+| OB13, OB14 | UNKNOWN_BINDING | T13 |
+| OB15, OB16 | CERTIFICATE_MISMATCH | T13 |
+| OB17, OB18 | MANIFEST_REUSED | T95 (LATER) |
 
-`check_vectors` requires every answer of `BEFORE_OBSERVATION` to be pinned this way. A model that observes first, or
-before any one of these checks, is refused.
+`check_vectors` requires every answer of `BEFORE_OBSERVATION` to be pinned with both workers. A model that observes
+first, or that runs a step-1 or step-3 check before any one of these checks, gives a different answer for one of these
+rows and is refused. Other reorderings that no worker in these rows can reveal are not pinned.
 
 **C01-C09** refuse malformed configurations:
 - a static `observedWorkers` list;
@@ -327,8 +336,7 @@ before any one of these checks, is refused.
 - Wording only, since the syscalls are already allowed. A later seccomp or HS43 revision may reword:
   - the seccomp row "peers qualified with pidfd, SO_PEERCRED and same-uid /proc reads", and HS43 §5.3's EFFECT_GATE row
     with the same words, to cover the gate's other-uid `stat` read;
-  - the row labelled for the durable journal and failure marker (`openat`, `pread64`, `fstat`, `lseek`), which the
-    observation also uses.
+  - the row labelled for the durable journal and failure marker, which holds the observation's `openat`.
 - The host preconditions of rules 2, 8 and 9 (W03/T04):
   - the leaf stays a domain cgroup with no threaded descendants;
   - one pid namespace and one time namespace (or boottime offset);
@@ -353,7 +361,7 @@ before any one of these checks, is refused.
 
 | Finding | Disposition |
 |---|---|
-| IR2-1 MINOR, order not pinned | P01-P08 (renamed OB01-OB09 in round 3) pin every answer before the observation with a non-member worker. The log is paired only with the BINDs that reach the observation. The observe-first and observe-before-MANIFEST_REUSED mutants are refused |
+| IR2-1 MINOR, order not pinned | P01-P08 (round 3 renamed them OB02-OB09 and added OB01; round 4 pinned each answer with two workers, OB01-OB18) pin every answer before the observation with a non-member worker. The log is paired only with the BINDs that reach the observation. The observe-first and observe-before-MANIFEST_REUSED mutants are refused |
 | IR2-2 NOTE, time namespace | Rule 8: one time namespace or boottime offset, with the kernel basis; different offsets fail closed |
 | IR2-3 NOTE, log write failure | Rule 4: the log is best effort; a failed write is dropped and never becomes a STORAGE_FAILURE |
 | IR2-4 NOTE, B1-B6 | "Decisions" defines all six, B2, B3 and B5 by the decided Q-I5 answers |
@@ -371,5 +379,15 @@ before any one of these checks, is refused.
 | IR3-4 NOTE, poll events | Step 5 requests POLLIN |
 | IR3-5 NOTE, C1 pitfall | Rule 5: plain `read(2)` and no metadata; why `read_to_end` and glibc `fstat` would be killed |
 | IR3-6 NOTE, Still open | Adds the time namespace, the procfs instance and the `gid=` group |
-| IR3-7 NOTE, wording | CAP_CHECKPOINT_RESTORE and forked children (rule 1); O11's real-kernel cause; order rows renamed OB01-OB09; the B1-B6 attribution names the B-DEFAULTS record |
+| IR3-7 NOTE, wording | CAP_CHECKPOINT_RESTORE and forked children (rule 1); O11's real-kernel cause; order rows renamed (P01-P08 became OB02-OB09; OB01 new); the B1-B6 attribution names the B-DEFAULTS record |
 | IR3-8 NOTE | Summary only |
+
+## Round-4 findings and dispositions
+
+| Finding | Disposition |
+|---|---|
+| IR4-1 MINOR, order pinned for one worker kind | Each answer is pinned with two workers, OUTSIDER (refused at step 1) and WRONG_START (listed, refused at step 3): OB01-OB18. The start-first and observe-first-if-listed variants are refused. The README now says exactly what the rows pin |
+| IR4-2 NOTE, malformed `from`; mutate | `from` is type-checked before use (ValueError), and its v3 BIND must be unmutated |
+| IR4-3 NOTE, musl | Rule 5 is stated for the static musl base (`fstat` and `lseek`, allowed; the bound matters); the C1 row lists the observation's own syscalls |
+| IR4-4 NOTE, rename wording | Corrected: P01-P08 became OB02-OB09 and OB01 was new; round 4 doubled them |
+| IR4-5 NOTE | Summary only |

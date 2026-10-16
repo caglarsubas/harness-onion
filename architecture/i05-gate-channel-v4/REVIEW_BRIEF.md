@@ -1,12 +1,13 @@
-# Independent review brief — I05 broker-gate channel v4 (I05-OBSERVED-WORKERS), round 4
+# Independent review brief — I05 broker-gate channel v4 (I05-OBSERVED-WORKERS), round 5
 
-Status: **CONTRACT_CANDIDATE_ROUND4_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
+Status: **CONTRACT_CANDIDATE_ROUND5_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
 verdict.
 
 Round 1 returned CHANGES_REQUIRED: 4 MINOR findings and 4 NOTEs, IR1-1 to IR1-8. README "Round-1 findings and
 dispositions" answers each one in the bytes. Round 2 returned CHANGES_REQUIRED: 1 MINOR finding and 6 NOTEs, IR2-1 to
 IR2-7, answered under "Round-2 findings and dispositions". Round 3 returned CHANGES_REQUIRED: 1 MINOR finding
-and 7 NOTEs, IR3-1 to IR3-8, answered under "Round-3 findings and dispositions".
+and 7 NOTEs, IR3-1 to IR3-8, answered under "Round-3 findings and dispositions". Round 4 returned CHANGES_REQUIRED:
+1 MINOR finding and 4 NOTEs, IR4-1 to IR4-5, answered under "Round-4 findings and dispositions".
 
 v4 succeeds the adopted I05 v3 contract `../i05-gate-channel-v3/` and its supplement
 `../i05-gate-channel-v3-supplement/`, whose bytes stay unchanged. README.md states what v4 changes and why. Read it in
@@ -84,15 +85,14 @@ Are they precise, and do they fail closed?
    - Is any ptrace-gated entry read?
    - Does any claim about kernel behaviour lack its stated basis? These are: starttime printed without ptrace access;
      `pidfd_open` without `PIDFD_THREAD` refusing a thread ID; `cgroup.procs` listing only the leaf's own TGIDs.
-5. **Vectors and checker.** (Include O17-O19, the order transcripts OB01-OB09 and their source binding, the three exact configurations, the
+5. **Vectors and checker.** (Include O17-O19, the order transcripts OB01-OB18 (two workers per answer) and their source binding, the three exact configurations, the
    (step, cause) coverage and the log pairing.)
    - Is `check_vectors` closed (exact key sets, ordered IDs, floors)?
    - Does it refuse tampering?
    - Is coverage complete: every cause, every step's read failure, and the races?
    - Are the configuration and event refusals exact?
    - Is OBSERVING exactly v3's ACTIVE, converted, plus two processes?
-6. **Rounds 1 to 3.** Does each disposition in README's round-1, round-2 and round-3 tables answer its finding in the
-   bytes?
+6. **Rounds 1 to 4.** Does each disposition in README's round-1 to round-4 tables answer its finding in the bytes?
 7. **Overclaims.** Does anything claim an installed gate, a real `/proc` read, R10 adoption, a native result or any
    E01-E12 proof?
 

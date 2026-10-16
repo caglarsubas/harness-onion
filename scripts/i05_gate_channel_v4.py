@@ -1069,7 +1069,7 @@ V3_FILES = {"schema": "architecture/i05-gate-channel-v3/channel.schema.json",
             "supplement": "architecture/i05-gate-channel-v3-supplement/vectors.json"}
 V3_FLOORS = {"transcripts": 120, "agreement": 42, "frames": 34, "byteFrames": 14, "configRefusals": 5}
 SUPPLEMENT_FLOOR = 6
-V4_FLOORS = {"transcripts": 20, "orderTranscripts": 9, "configRefusals": 9, "eventRefusals": 9}
+V4_FLOORS = {"transcripts": 20, "orderTranscripts": 18, "configRefusals": 9, "eventRefusals": 9}
 REFUSAL_PREFIX = {"configRefusals": "C", "eventRefusals": "M"}      # M: malformed model events (not the E01-E12 claims)
 # Every BIND answer that comes before the observation (README "The observation"): a BIND refused this way is never
 # observed, whatever its worker. A fatal answer is named "FATAL:" plus its reason.
@@ -1081,6 +1081,10 @@ INPUT_TYPES = {"bytes": bytes, "bytearray": bytearray, "str": lambda raw: raw.de
 # OBSERVING = v3's ACTIVE converted (4100 and 4200 in the leaf), plus these two processes, exactly.
 OUTSIDER = {"pid": 5100, "startTicks": 800001, "cgroup": "/planeon.slice/planeon-proxy-server.service"}
 OBSERVING_EXTRA = ({"pid": 4300, "startTicks": 900003, "cgroup": PROBE_WORKER_CGROUP}, OUTSIDER)
+# The two workers each order transcript names: the process outside the leaf, and a leaf member's PID with a start
+# time that is not its own (it would fail at step 1 or at step 3 if it were observed).
+WRONG_START_TICKS = 900009
+ORDER_WORKERS = ("OUTSIDER", "WRONG_START")
 # The v4 configurations: each is a v3 configuration converted, plus exactly these processes (the order transcripts' two
 # other configurations add only the process outside the leaf; v3's LATER already lists 4300).
 V4_CONFIGS = {"OBSERVING": ("ACTIVE", OBSERVING_EXTRA), "OBSERVING_INSPECTING": ("INSPECTING", (OUTSIDER,)),
@@ -1248,17 +1252,24 @@ def check_vectors(vectors: Any, files: dict) -> int:
     require(ids == ["OB%02d" % n for n in range(1, len(ids) + 1)], "order transcripts in order")
     covered, v3_rows = set(), {row["id"]: row for row in v3["transcripts"]}
     for row in vectors["orderTranscripts"]:
-        require(type(row) is dict and set(row) == {"id", "intent", "from", "config", "events", "outputs", "final",
-                                                   "observations", "answer"} and row["config"] in V4_CONFIGS,
-                "closed order transcript")
-        # Exactly a v3 transcript's prefix in that v3 configuration, its last BIND naming the process outside the leaf.
-        source = v3_rows[row["from"]["transcript"]]
-        index = row["from"]["event"]
+        require(type(row) is dict and set(row) == {"id", "intent", "from", "worker", "config", "events", "outputs",
+                                                   "final", "observations", "answer"} and row["config"] in V4_CONFIGS
+                and row["worker"] in ORDER_WORKERS, "closed order transcript")
+        origin = row["from"]
+        require(type(origin) is dict and set(origin) == {"transcript", "event"} and origin["transcript"] in v3_rows
+                and type(origin["event"]) is int, "an order transcript names its v3 source")
+        source, index = v3_rows[origin["transcript"]], origin["event"]
+        require(0 <= index < len(source["events"]) and source["events"][index].get("operation") == "BIND_EXECUTION"
+                and not source["events"][index].get("mutate") and V4_CONFIGS[row["config"]][0] == source["config"],
+                "an order transcript names an unmutated v3 BIND in its configuration")
+        # Exactly that v3 prefix, its last BIND naming the row's worker: the process outside the leaf, or the first leaf
+        # member's PID with a start time that is not its own.
+        leaf = [proc for proc in configs[row["config"]]["kernel"]["processes"] if proc["cgroup"] == PROBE_WORKER_CGROUP]
+        worker = ((OUTSIDER["pid"], OUTSIDER["startTicks"]) if row["worker"] == "OUTSIDER"
+                  else (leaf[0]["pid"], WRONG_START_TICKS))
+        require(row["worker"] == "OUTSIDER" or leaf[0]["startTicks"] != WRONG_START_TICKS, "a wrong start time")
         expected = copy.deepcopy(source["events"][:index + 1])
-        require(type(index) is int and set(row["from"]) == {"transcript", "event"} and 0 <= index < len(source["events"])
-                and expected[-1].get("operation") == "BIND_EXECUTION"
-                and V4_CONFIGS[row["config"]][0] == source["config"], "an order transcript names its v3 source")
-        expected[-1]["payload"]["workerPid"], expected[-1]["payload"]["workerStartTicks"] = OUTSIDER["pid"], OUTSIDER["startTicks"]
+        expected[-1]["payload"]["workerPid"], expected[-1]["payload"]["workerStartTicks"] = worker
         require(row["events"] == expected, "an order transcript is its v3 prefix with only the worker replaced: " + row["id"])
         gate, outputs = _run(configs[row["config"]], row["events"], schema)
         require(outputs == row["outputs"] and gate.snapshot() == row["final"] and gate.observations == row["observations"],
@@ -1267,12 +1278,14 @@ def check_vectors(vectors: Any, files: dict) -> int:
         require(bind_answer(outputs[-1]) == row["answer"] and row["answer"] in BEFORE_OBSERVATION
                 and bind_answer(source["outputs"][index]) == row["answer"],
                 "an order transcript ends in v3's answer, given before the observation: " + row["id"])
-        # The worker it names is not a member of the leaf in the kernel at that BIND.
-        before = _run(configs[row["config"]], row["events"][:-1], schema)[0]
-        require(OUTSIDER["pid"] not in [p for p, proc in before.kernel.items() if proc["cgroup"] == PROBE_WORKER_CGROUP],
-                "its worker is not a member at the BIND: " + row["id"])
+        # In the kernel at that BIND, the worker named is not observable: not a member, or a member with another start.
+        before = _run(configs[row["config"]], row["events"][:-1], schema)[0].kernel
+        members = {p: proc["startTicks"] for p, proc in before.items() if proc["cgroup"] == PROBE_WORKER_CGROUP}
+        require(members.get(worker[0]) != worker[1] and (row["worker"] == "OUTSIDER") == (worker[0] not in members),
+                "its worker would not be observed at the BIND: " + row["id"])
         _paired(row["events"], outputs, gate.observations, row["id"])
-        covered.add(row["answer"])
+        covered.add((row["answer"], row["worker"]))
         checks += 1
-    require(covered == set(BEFORE_OBSERVATION), "every answer before the observation is pinned with a non-member")
+    require(covered == {(answer, worker) for answer in BEFORE_OBSERVATION for worker in ORDER_WORKERS},
+            "every answer before the observation is pinned with both unobservable workers")
     return checks
