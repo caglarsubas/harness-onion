@@ -82,8 +82,9 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 240 and len(accepted) == 238
-    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET}
+    assert len(current) == 241 and len(accepted) == 238
+    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
+                                            profile.successor.successor.NEW_PACKET}
     assert len(phr.historical_catalog(current)) == 237
     assert len(sv4.historical_catalog(current)) == 236
     assert len(hs43.historical_catalog(current)) == 235
@@ -935,23 +936,25 @@ def test_the_restatements_are_checked(monkeypatch, name, value, message):
 
 
 @pytest.mark.parametrize("change, message", [
-    ("first_access", "access check C001"),
+    ("first_access", "access check C1780"),
     ("v5_changes", "closed matrix v5 vectors"),
     ("count", "closed matrix v5 vectors"),
-    ("first_mutation", "mutation check M01"),
+    ("first_mutation", "mutation check M56"),
 ])
 def test_every_vector_replays(change, message):
     model = profile._era_model()
     matrix = _json(profile.V5_DIR + "matrix.json")
     vectors, v4_vectors = _json(profile.V5_DIR + "vectors.json"), _json(profile.V4_DIR + "vectors.json")
+    # The first vectors v5 adds: identifier and position checks (run first) pass, so the replay must refuse them.
+    first_access, first_mutation = len(v4_vectors["accessChecks"]), len(v4_vectors["mutationChecks"])
     if change == "first_access":
-        vectors["accessChecks"][0]["expect"] = not vectors["accessChecks"][0]["expect"]
+        vectors["accessChecks"][first_access]["expect"] = not vectors["accessChecks"][first_access]["expect"]
     elif change == "v5_changes":
         vectors["v5Changes"].pop()
     elif change == "count":
         vectors["accessChecks"].pop()
     else:
-        vectors["mutationChecks"][0]["expect"] = {"failedAssertions": ["A02"]}
+        vectors["mutationChecks"][first_mutation]["expect"] = {"failedAssertions": ["A02"]}
     with pytest.raises(ValueError, match=message):
         profile.replay_v5_vectors(model, matrix, vectors, v4_vectors)
 

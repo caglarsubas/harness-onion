@@ -685,6 +685,14 @@ def replay_v5_vectors(model: types.ModuleType, matrix: dict, vectors: dict, v4_v
             == model.w02a_slots(matrix)
             and len(vectors["accessChecks"]) == COUNTS["accessChecks"] and len(vectors["mutationChecks"]) == COUNTS["mutationChecks"]
             and tuple(row["id"] for row in vectors["v5Changes"]) == V5_CHANGES, "closed matrix v5 vectors")
+    # MET-PERF-040 (239 packet review P2-1): the cheap identifier and position checks run before the replay.
+    changed = set(V5_CHANGES)
+    for key in ("accessChecks", "mutationChecks"):
+        old, new = v4_vectors[key], vectors[key][:len(v4_vectors[key])]
+        ids = [r["id"] for r in vectors[key]]
+        require(len(set(ids)) == len(ids) and [r["id"] for r in new] == [r["id"] for r in old]
+                and {o["id"] for o, n in zip(old, new) if o != n} == {o["id"] for o in old} & changed,
+                "every v4 %s vector is kept at its position; only the listed ones change" % key)
     for row in vectors["accessChecks"]:
         require(model.allowed(matrix, row["state"], row["source"], row["target"], row["class"], row["perm"]) is row["expect"],
                 "access check " + row["id"])
@@ -696,13 +704,6 @@ def replay_v5_vectors(model: types.ModuleType, matrix: dict, vectors: dict, v4_v
         except ValueError as exc:
             ok = set(row["expect"]) == {"matrixError"} and row["expect"]["matrixError"] == str(exc)
         require(ok, "mutation check " + row["id"])
-    changed = set(V5_CHANGES)
-    for key in ("accessChecks", "mutationChecks"):
-        old, new = v4_vectors[key], vectors[key][:len(v4_vectors[key])]
-        ids = [r["id"] for r in vectors[key]]
-        require(len(set(ids)) == len(ids) and [r["id"] for r in new] == [r["id"] for r in old]
-                and {o["id"] for o, n in zip(old, new) if o != n} == {o["id"] for o in old} & changed,
-                "every v4 %s vector is kept at its position; only the listed ones change" % key)
     return len(vectors["accessChecks"]) + len(vectors["mutationChecks"])
 
 
@@ -732,12 +733,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "SELinux matrix v5 validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 240
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET},
-            "closed 240-packet catalog retaining the 239-packet checkpoint")
+    require(len(paths) == 241
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET},
+            "closed 241-packet catalog retaining the 239-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem == successor.NEW_PACKET:
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = record["packetSha256"] if path.stem == NEW_PACKET else record["baselinePackets"][path.stem]
@@ -775,4 +776,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("SELinux matrix v5 valid: 240 current specifications; 239-packet checkpoint and exact 238-packet predecessor; contract reviewed.")
+    print("SELinux matrix v5 valid: 241 current specifications; 239-packet checkpoint and exact 238-packet predecessor; contract reviewed.")

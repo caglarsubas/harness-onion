@@ -1,0 +1,230 @@
+{
+ "schemaVersion": "planeon.internal.chain-depth-headroom/v1",
+ "workItem": "PERF-040",
+ "baseMain": "d2ef7083d241a6bc1adb8ef923cc558d550fcd2b",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "ownerDecisions": [
+  {
+   "id": "PERF-040-FIRST",
+   "date": "2026-10-16",
+   "source": "owner decision, relayed by the lane monitor",
+   "text": "240 is merged: harness-onion main d2ef708 (PR #194). But its verify took 994 s (pytest 689 s at mean load only 6.35), leaving ~206 s under the 1200 s cap.\nOWNER DECISION, 2026-10-16: PERF-040 first. Slot 241 = PERF-040 (your lane). It addresses the chain-depth growth (older layer tests slowing as the packet chain deepens) plus WEIGHTS-REFRESH, and P2-1's inventory-before-replay trim if it fits.\n- I05 v4 becomes slot 242 and LIC-HOST-A2 slot 243. Their contract reviews continue now; their mechanics wait until 241 merges.\n- PERF-040: measure first (scratch, on d2ef708; I'll set HOLD_CARGO for the primary when you ask), then the contract, owner questions with the numbers, the packet and the approval file if ci/ changes.\n- Use your PLAN.md growth data. The target: give back several hundred seconds of headroom, not tens.\nNoted: 241 and 242 round-1 fixes (8783f2b1, fa657f49); round 2 is running on both. Carried IR1-3 and IR1-4 go to W03/T04."
+  },
+  {
+   "id": "Q-PERF40-1..3",
+   "date": "2026-10-16",
+   "source": "owner decisions, relayed by the lane monitor",
+   "text": "Owner decisions for PERF-040 (slot 241), 2026-10-16. Record verbatim.\n- Q-PERF40-1 = (a): test-local exact sharing for every test except the pinned never-shared list (the 14 freshness and identity function names, which cover future layers by name). Validators are unchanged and keep reading fresh per route. About −44% summed.\n- Q-PERF40-2 = (a): NO validator-level sharing. The PERF-033/035 freshness rule stands.\n- Q-PERF40-3 = (a): keep six workers; revisit after L1.\nThe defaults L3 (constant-size successor expressions), L5 (WEIGHTS-REFRESH) and L6 (P2-1) go in the packet too, unless one makes it unwieldy; tell me if you want to split them.\nIf it touches ci/ (the weights file under L5), the owner approves the head. Contract, review, packet, dry run on my word. 242 and 243 follow."
+  },
+  {
+   "id": "Q-PERF40-4",
+   "date": "2026-10-16",
+   "source": "lane monitor (owner-delegated)",
+   "text": "Q-PERF40-4 = (a), monitor (owner-delegated), 2026-10-16. L3 was my default, not an owner decision, so the mechanism is mine to set.\n- Byte-minimal inverse hunks from tools/build_authority.py: −88% hunk payload, with no repo code change and parsers that already accept them.\n- The new layer checks that its own hunks are minimal.\n- Record that later packets' authorities depend on the builder staying minimal. Add a guard in the layer, or a carried rule that every later packet's layer checks its own minimality.\nThe plan is accepted as stated: L1 conftest with the 14 pinned names, L5 weights (a ci/ change, so owner approval on the head), L6, and the bridge of 240's layer.\nGo ahead with the contract and source review."
+  }
+ ],
+ "testSharing": {
+  "decidedBy": "Q-PERF40-1",
+  "conftest": {
+   "path": "tests/conftest.py",
+   "sha256": "d4c9542ca315b5e585f2196189bcc86d76739740e9d2fa58b60a37ecdaf3b6af"
+  },
+  "sharedFunction": "historical_bytes",
+  "modules": "every module in sys.modules whose last name component starts with validate_ and whose global historical_bytes is callable (defined there or re-exported), unless it is already a wrapper",
+  "key": "the exact positional arguments when every one is a str or bytes value (its type and the value, by equality); any other call, and any call with keywords, reaches the real function",
+  "scope": "one test (a function-scoped autouse fixture, torn down after monkeypatch's teardown): each wrapper is created for one test and bound to that test's own memo, and shares only while that memo is the active one; at any other time it calls the real function; after the test the module globals the test wrapped, and every top-level global of each validate_* module first imported during the test, are unwrapped to the real function (a wrapper held elsewhere stays inert); a function that is already a wrapper is never wrapped again",
+  "refusalsMemoised": false,
+  "sharingChangesValidators": false,
+  "neverShared": [
+   {
+    "name": "test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse",
+    "reason": "already shares through PERF-031's helper, and its closing validation after the undo must stay fully fresh (added after source review round 1, S1-3)"
+   },
+   {
+    "name": "test_each_projection_freshly_rechecks_complete_authority",
+    "reason": "every projection must re-read the complete authority"
+   },
+   {
+    "name": "test_each_protected_input_rechecked_not_cached",
+    "reason": "checks the identity (__module__) of a projection function; it already shares through PERF-031's helper"
+   },
+   {
+    "name": "test_every_input_pin_is_enforced",
+    "reason": "checks the identity (__module__) of a projection function; it already shares through PERF-031's helper"
+   },
+   {
+    "name": "test_every_newer_authority_is_read_exactly_once_per_route",
+    "reason": "counts each route's authority reads; a shared repeat reads none"
+   },
+   {
+    "name": "test_every_projection_rechecks_actual_authority_bytes",
+    "reason": "every projection must re-read the actual authority bytes"
+   },
+   {
+    "name": "test_freshness_only_routes_read_full_authority_without_reparsing",
+    "reason": "freshness-only routes read the full authority"
+   },
+   {
+    "name": "test_full_predecessor_suites_and_validators_remain_green",
+    "reason": "reads the outer session's predecessor outcomes, so in M3 it failed only because the freshness tests it reads had failed under the prototype; listed by the owner decision as a guard, its entry has no effect on sharing (source review round 1, S1-9)"
+   },
+   {
+    "name": "test_history_routes_still_refuse_second_call_authority_drift",
+    "reason": "drift between two identical calls must be refused"
+   },
+   {
+    "name": "test_newest_authority_is_freshly_checked_on_every_route",
+    "reason": "a tampered authority must be refused on every route; a shared repeat would not re-read it"
+   },
+   {
+    "name": "test_performance_predecessor_and_exact_twenty_commands",
+    "reason": "checks the identity (__module__) of a projection function; it already shares through PERF-031's helper"
+   },
+   {
+    "name": "test_real_projection_refuses_authority_drift_even_with_warm_conversion",
+    "reason": "drift is refused even after a warm conversion"
+   },
+   {
+    "name": "test_schema_performance_authority_is_rechecked_through_every_history_route",
+    "reason": "freshness through every history route"
+   },
+   {
+    "name": "test_warm_conversion_still_runs_fresh_interleaved_integrity",
+    "reason": "pins the interleaving of fresh reads; it failed in M3 only because the prototype wrapped loop_fixture's monkeypatched fake, and it passes shared under this conftest (source review round 2, S2-3); kept as the owner's list"
+   },
+   {
+    "name": "test_warm_success_then_current_packet_map_drift_still_refuses",
+    "reason": "pins the interleaving of fresh reads; it failed in M3 only because the prototype wrapped loop_fixture's monkeypatched fake, and it passes shared under this conftest (source review round 2, S2-3); kept as the owner's list"
+   }
+  ],
+  "neverSharedOrigin": "the 14 names that fail under sharing in run M3 (Q-PERF40-1), plus test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse, which passes under sharing but would lose the point of its fully fresh closing validation (source review round 1, S1-3)"
+ },
+ "authorityHunks": {
+  "decidedBy": "Q-PERF40-4",
+  "rule": "canonical byte-minimal reverse hunks, computed from the after (current) and before (base) bytes of each changed file",
+  "algorithm": [
+   "split both into lines, keeping line ends (bytes.splitlines(keepends=True))",
+   "difflib.SequenceMatcher(None, after_lines, before_lines, autojunk=False).get_opcodes(); skip equal runs",
+   "a run with the same number of lines on both sides becomes one run per differing line pair; any other run stays whole",
+   "each run drops the bytes its two sides share at the start, then at the end (the end trim never overlaps the start trim)",
+   "in order, a run that starts at or before the end of the previous run's removed bytes is merged into it",
+   "each run becomes {at, removeBase64, insertBase64} with canonical base64"
+  ],
+  "builder": "the operator-side authority builder (tools/build_authority.py, outside the repository); it stops with an error instead of writing more than the parsers' 4,096 hunks for one file",
+  "guard": "the MET-PERF-040 layer recomputes the canonical hunks of every file its authority changes, from that file's bytes at this layer's era (the current bytes projected back through any later layers) and the base bytes its inverse gives, and refuses its authority unless the recorded hunks are exactly those",
+  "carriedRule": "every later packet's layer does the same for its own authority, from its own era's bytes (later authorities stay small only while their hunks stay canonical)",
+  "builderChecks": "explicit fail-closed checks that python -O does not remove: the reconstruction, ordering, effective hunks and at most 4,096 hunks per file",
+  "measuredOn240": {
+   "lineHunkJsonKiB": 1453,
+   "minimalHunkJsonKiB": 165
+  }
+ },
+ "weights": {
+  "decidedBy": "PERF-040-FIRST (WEIGHTS-REFRESH)",
+  "path": "ci/parallel_suite_weights.json",
+  "beforeSha256": "2c1b27f6281e996accbcbc43169dec2041676f1831b0c2e02cb8e09a3395ec3f",
+  "afterSha256": "4b23112661d8ed592474fea16ced62c1bf94c99e7bfd23c113797a5299ab0b45",
+  "source": "runs M3 (argv 63, six workers, sharing applied to every test) and M2 at six workers, on main d2ef708",
+  "scaled": {
+   "tests/test_selinux_matrix_v3.py": "x 17.7/41.7, the serial effect of the replay reorder measured with sharing"
+  },
+  "files": 127,
+  "previouslyUnweighted": 25,
+  "derivation": "node by node: a shared node at its M3 seconds; a never-shared node at its unshared M2 six-worker seconds scaled by the runs' mean loads (8.2 / 11.06); the parallel suite's three parent nodes left out (they run in the parent after the workers); tests/test_selinux_matrix_v3.py scaled by 17.7 / 41.7",
+  "plannedBusiestWorkerSeconds": {
+   "planner": "ci/parallel_suite._plan's rule (longest first by pinned weight, unknown files 0.05 x node count, onto the least summed weight), applied to the derived per-file seconds",
+   "oldWeights": 359.7,
+   "newWeights": 284.1,
+   "evenSplit": 283.7
+  },
+  "workers": 6,
+  "workersDecidedBy": "Q-PERF40-3"
+ },
+ "replayOrder": {
+  "decidedBy": "PERF-040-FIRST (P2-1)",
+  "file": "scripts/validate_selinux_matrix_v3.py",
+  "function": "replay_v5_vectors",
+  "change": "the identifier and position checks of the v4 vectors run before the replay loops; the requires and messages are unchanged",
+  "testChange": "tests/test_selinux_matrix_v3.py: the first_access and first_mutation faults move to the first vectors v5 adds (C1780, M56), so that the replay, not the position check, refuses them",
+  "measuredSerialSeconds": {
+   "before": 41.7,
+   "after": 17.7
+  },
+  "source": {
+   "record": "239 MET-ENFORCE-028 packet review round 2 (author-side record; not published on main)",
+   "finding": {
+    "id": "P2-1",
+    "severity": "NOTE",
+    "file": "tests/test_selinux_matrix_v3.py",
+    "line": 959,
+    "summary": "The P1-2 tests roughly doubled the file's cost. test_selinux_matrix_v3.py now runs six full replays at about 6.6 s each and took 47.5 s serial for 277 tests (26.7 s in round 1). Four of the six are negative tests: test_a_changed_v4_vector_outside_the_listed_ones_is_refused and the three test_v4_vectors_keep_their_identifiers_and_positions cases. They fail only after replaying every vector, because replay_v5_vectors checks the v4 inventory after the replay. This is not a headroom risk: test_credential_lifecycle takes 70.5 s. The file still plans at 0.05 x 277 = 13.9 against about 47.5 s actual (carried WEIGHTS-REFRESH).",
+    "evidence": "Serial run on 28a66bed: test_selinux_matrix_v3.py 47.5 s, test_pytest_headroom.py 7.1 s, test_seccomp_v4.py 12.2 s. The slowest calls are the chain test (7.39 s), the era test (6.75 s) and the four inventory-negative tests (6.59-6.65 s each). Optional: run the closed-vector and inventory checks before the replay loop, which saves about 26 s with the same requires and messages."
+   }
+  }
+ },
+ "measurements": {
+  "host": "18 CPUs; a virtual machine held about 200% CPU throughout",
+  "M1": {
+   "mode": "per-test probe, six workers (instrumented)",
+   "wallSeconds": 726.0,
+   "summedTestSeconds": 3680.4,
+   "authorityReads": 15153651,
+   "authorityTerabytes": 9.3,
+   "authorityReadSeconds": 1146,
+   "historicalBytesCalls": 12416087,
+   "distinctPerTest": 3574519
+  },
+  "M2": [
+   {
+    "workers": 6,
+    "wallSeconds": 644.1,
+    "summedTestSeconds": 3074.4,
+    "load1Mean": 11.06
+   },
+   {
+    "workers": 8,
+    "wallSeconds": 779.0,
+    "summedTestSeconds": 5015.2,
+    "load1Mean": 18.46
+   },
+   {
+    "workers": 10,
+    "wallSeconds": 485.4,
+    "summedTestSeconds": 3928.7,
+    "load1Mean": 13.95
+   },
+   {
+    "workers": 12,
+    "wallSeconds": 478.9,
+    "summedTestSeconds": 4758.2,
+    "load1Mean": 25.68
+   }
+  ],
+  "M3": {
+   "mode": "sharing on every test, six workers, by the out-of-tree prototype (wrapping in the call phase only; the never-shared tests were shared too)",
+   "wallSeconds": 377.2,
+   "summedTestSeconds": 1707.9,
+   "load1Mean": 8.2,
+   "peakTreeRssMiB": 2737,
+   "failedTests": 1537,
+   "failedFunctionNames": 14,
+   "caveats": [
+    "M3 ran at a lower host load than the six-worker baseline (8.2 against 11.1)",
+    "the prototype also shared the never-shared tests; at their unshared times they add about 135 s of worker time (three files carry most of it: test_credential_lifecycle, test_ci_performance and test_credential_ordering)",
+    "the parent node test_full_predecessor_suites_and_validators_remain_green failed early in M3 (3.9 s) and so skipped its six validator subprocesses, about 50 s after the workers in M2; M3's wall leaves that out",
+    "so the packet's expected wall is about the busiest worker (about 284 s at M3's load with the new weights) plus about 50 s of parent nodes plus session overhead, a cut of about a third to two fifths against M2's 644 s; the packet's dry run measures it",
+    "peak tree memory rose 23% (2,737 against 2,218 MiB)"
+   ]
+  },
+  "prototype": {
+   "functions": 3,
+   "beforeSeconds": 70.2,
+   "afterSeconds": 17.6
+  }
+ },
+ "notClaimed": [
+  "No validator's freshness rule changes: every route still reads its authority fresh (Q-PERF40-2).",
+  "The measurements are DATA_CHECK_ONLY local runs on a loaded host; the verify time on the CI host is measured by the packet's own verify.",
+  "The worker count stays six (Q-PERF40-3)."
+ ]
+}

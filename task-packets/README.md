@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-029
+## Current source preparation — MET-PERF-040
+
+MET-PERF-040 (PERF-040): chain-depth headroom. Test-local exact sharing of history projections except 15 never-shared
+tests, canonical byte-minimal authority hunks, refreshed parallel-suite weights at six workers and the matrix v5 replay
+order (owner Q-PERF40-1..3 (a); monitor Q-PERF40-4 (a)); no validator freshness change. Alpha2 OPEN; 240 accepted plus
+MET-PERF-040 only.
+
+## Historical compiled filter programs v2 source preparation — MET-ENFORCE-029
 
 MET-ENFORCE-029 (PROGRAMS-REPUBLISH): compiled filter programs v2, EFFECT_GATE's two programs republished from seccomp
 allowlists v4 with the six-instruction readlinkat block, an index of all fourteen v4 programs and edge record v3 (v2's 31
@@ -1412,3 +1419,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 238 | `MET-PERF-039` | `Harness-Engineering` | PERF-039: six parallel-suite workers (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; SOURCE_DELTA_ONLY |
 | 239 | `MET-ENFORCE-028` | `Harness-Engineering` | SELINUX-MATRIX-I04-KEYCERT: SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); DATA_CHECK_ONLY |
 | 240 | `MET-ENFORCE-029` | `Harness-Engineering` | PROGRAMS-REPUBLISH: compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; DATA_CHECK_ONLY |
+| 241 | `MET-PERF-040` | `Harness-Engineering` | PERF-040: chain-depth headroom (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change; DATA_CHECK_ONLY |
