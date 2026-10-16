@@ -1,10 +1,11 @@
-# Independent review brief: LIC-HOST-A2 (LICENCE-POLICY-AMEND), round 2
+# Independent review brief: LIC-HOST-A2 (LICENCE-POLICY-AMEND), round 3
 
-Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
+Status: **CONTRACT_CANDIDATE_ROUND3_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
 verdict.
 
 Round 1 returned CHANGES_REQUIRED: 3 MINOR findings and 5 NOTEs, LR1-1 to LR1-8. README "Round-1 findings and
-dispositions" answers each one in the bytes.
+dispositions" answers each one in the bytes. Round 2 returned CHANGES_REQUIRED: 2 MINOR findings and 3 NOTEs, LR2-1 to
+LR2-5, answered under "Round-2 findings and dispositions".
 
 ## Subject
 
@@ -42,7 +43,8 @@ The decisions to carry out are in README "Decisions" and, verbatim, in `amendmen
    (the author-side record of 223's packet review round 2, named in your task brief), with dispositions that answer
    them?
    Is the phoenix-sqlean effect stated correctly, and without changing that record?
-5. **Round 1.** Does each disposition in README "Round-1 findings and dispositions" answer its finding in the bytes?
+5. **Rounds 1 and 2.** Does each disposition in README "Round-1 findings and dispositions" and "Round-2 findings and
+   dispositions" answer its finding in the bytes?
 6. **Overclaims.** Does anything claim a release, a legal opinion, a switched consumer, or a change to the research
    record?
 

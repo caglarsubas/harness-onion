@@ -135,11 +135,24 @@ def check(read) -> dict:
         raise ValueError("malformed A2 record: %s" % error) from None
 
 
+def _once(read):
+    """The reader, memoised per path: A1's check and A2's pins and replay see the same bytes of each path."""
+    seen = {}
+
+    def memo(path: str) -> bytes:
+        if path not in seen:
+            seen[path] = read(path)
+        return seen[path]
+    return memo
+
+
 def _check(read) -> tuple:
+    read = _once(read)
     _, policy1 = a1._check(read)                     # A1 as adopted, its 88 vectors included
-    raws = {path: read(path) for path in (a1.RECORD_PATH, a1.VECTORS_PATH, A1_MODEL_PATH)}   # read once, hashed, used
+    raws = {path: read(path) for path in (a1.RECORD_PATH, a1.VECTORS_PATH, A1_MODEL_PATH)}   # the bytes A1's check used
     pins = {path: _sha(raw) for path, raw in raws.items()}
-    # The A1 classifier that runs is the pinned one (the packet layer pins its import closure, safe_yaml included).
+    # The A1 classifier that runs is the pinned one. This reads the imported module's own file, outside the reader; the
+    # packet layer pins the import closure (safe_yaml included) and routes this identity check (carried, review LR2-4).
     require(_sha(Path(a1.__file__).read_bytes()) == pins[A1_MODEL_PATH], "the running A1 classifier is the pinned one")
     value = record(read(RECORD_PATH), pins)
     base = read(a1.BASE_PATH)

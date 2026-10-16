@@ -1,6 +1,6 @@
 # License-policy amendment LIC-HOST-A2: Zlib default-allowed (DATA_CHECK_ONLY)
 
-Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`). 2026-10-16. Publication
+Status: **CONTRACT_CANDIDATE_ROUND3_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`). 2026-10-16. Publication
 slot 242 (LICENCE-POLICY-AMEND), after slot 241.
 
 A2 makes the SPDX identifier `Zlib` default-allowed, everywhere and for every component, exactly as the base policy's own
@@ -39,9 +39,9 @@ An additional default-allowed term is classified exactly as a term of the base's
 `check` refuses an added term that is on any base list, or that is an A1 class term, decision or election. So no base or
 A1 outcome of any other term changes. A compound listed exactly in the base keeps its base outcome.
 
-Matching stays exact (`EXACT_SPDX_EXPRESSION`). Only the identifier `Zlib`, in the SPDX list's spelling, is added.
-- SPDX itself matches identifiers case-insensitively, but the base does not. So `zlib` stays UNKNOWN, and a consumer
-  normalises an identifier to the list spelling before it classifies.
+Matching stays exact (`EXACT_SPDX_EXPRESSION`). Only the identifier `Zlib`, in the SPDX list's spelling, is added, and
+A2 adds no case normalisation.
+- SPDX itself matches identifiers case-insensitively, but the base does not. So `zlib` stays UNKNOWN.
 - `zlib-acknowledgement` (another SPDX identifier), `Zlib+` and `Zlib WITH <exception>` are other terms, and they stay
   UNKNOWN.
 
@@ -65,7 +65,7 @@ Matching stays exact (`EXACT_SPDX_EXPRESSION`). Only the identifier `Zlib`, in t
 
 **A1's own vectors.** All 88 replay under A2 to their A1 results. The one with a Zlib leaf ("MIT OR Zlib OR Apache-2.0"
 for miniz_oxide) elects Apache-2.0 either way. `check` computes the changed list and requires it to equal the recorded
-list, which is empty. It also requires every change to come through an exact added term. A WITH term counts whole, so
+list, which is empty. It also requires every changed case to contain the exact added term. A WITH term counts whole, so
 "Zlib WITH LLVM-exception" is not the term Zlib, and a change to REFUSED is not exempt.
 
 ## Effect on RA-LICENSE-001 (L2-2)
@@ -91,9 +91,14 @@ are in `amendment.json`:
   denied term, an unknown term, and an open-content term outside ARTIFACT.
 - **P2-F2.** The layer's verified-read helper will check era membership before it reads a path.
 
-`check` reads A1's vectors once, then hashes and replays those same bytes. It also requires the A1 classifier it imports
-to be the pinned file. Pinning that classifier's import closure (`safe_yaml.py`) and making every read a verified one are
-the packet layer's job.
+`check` memoises its reader per path. So A1's own check, A2's pins and A2's replay all see the same bytes of each path,
+each read once. It also requires the A1 classifier it imports to be the pinned file.
+
+Three items are carried to packet 242's layer:
+- pinning that classifier's import closure (`safe_yaml.py`);
+- routing the classifier identity check, which reads the module's own file, through the layer's verified reads (review
+  LR2-4);
+- P2-F1 and P2-F2 above.
 
 ## Not claimed
 
@@ -115,8 +120,18 @@ the packet layer's job.
 | LR1-1 MINOR, kinds and custodies | Zlib alone is DEFAULT_ALLOWED in cases for all 8 kinds and all 4 base custodies, and `check` requires that coverage |
 | LR1-2 MINOR, consumers of the base | The README and the non-claims say that the research model reads the base directly, that the later revision must classify with A2, and that direct base readers keep Zlib UNKNOWN until then |
 | LR1-3 MINOR, inexact change check | Terms are compared whole (a WITH term is not its base licence), and the REFUSED exemption is removed. A simulated drift that allows "Zlib WITH LLVM-exception" is refused |
-| LR1-4 NOTE, reads and the running classifier | A1's vectors are read once, then hashed and replayed. The imported A1 classifier must equal the pinned bytes. The packet layer pins the import closure and verifies every read |
+| LR1-4 NOTE, reads and the running classifier | The reader is memoised per path, so every path is read once and A1's check, A2's pins and the replay share those bytes (answered fully in round 2, LR2-2). The imported A1 classifier must equal the pinned bytes. The packet layer pins the import closure and verifies every read |
 | LR1-5 NOTE, other election changes | Cases and README cover Zlib elected over an exception expression, open content and the A1 class, and "GPL-3.0-only OR Zlib" |
 | LR1-6 NOTE, SPDX case | The README and the rule state that SPDX matching is case-insensitive while the base is exact. The near-miss case uses `zlib-acknowledgement` |
 | LR1-7 NOTE, dispositions | Both dispositions are in the future tense and name the 242 packet review as the check |
 | LR1-8 NOTE, author-side paths | The brief no longer names author-side paths |
+
+## Round-2 findings and dispositions
+
+| Finding | Disposition |
+|---|---|
+| LR2-1 MINOR, normalisation clause | Removed. A2 adds no case normalisation, and matching stays exact |
+| LR2-2 MINOR, reads | `check` memoises its reader per path (`_once`), so A1's check and A2's pins and replay see the same bytes, each path read once |
+| LR2-3 NOTE, change guard | The README says what the guard checks: every changed case contains the exact added term |
+| LR2-4 NOTE, classifier identity read | Carried to packet 242's layer, next to P2-F1 and P2-F2 |
+| LR2-5 NOTE, a compound with Zlib for gmp | No change. This is A1's rule, and any base default-allowed term behaves the same way |
