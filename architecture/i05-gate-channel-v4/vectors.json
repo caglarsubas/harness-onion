@@ -442,6 +442,7 @@
    "observations": [
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -537,6 +538,7 @@
    "observations": [
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4300,
      "workerStartTicks": 900003
     }
@@ -620,6 +622,7 @@
    "observations": [
     {
      "result": "NOT_A_MEMBER",
+     "step": "CGROUP_PROCS",
      "workerPid": 5100,
      "workerStartTicks": 800001
     }
@@ -714,6 +717,7 @@
    "observations": [
     {
      "result": "START_MISMATCH",
+     "step": "STAT",
      "workerPid": 4100,
      "workerStartTicks": 900009
     }
@@ -795,6 +799,7 @@
    "observations": [
     {
      "result": "NOT_A_MEMBER",
+     "step": "CGROUP_PROCS",
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -911,11 +916,13 @@
    "observations": [
     {
      "result": "CGROUP_PROCS_UNREADABLE",
+     "step": "CGROUP_PROCS",
      "workerPid": 4100,
      "workerStartTicks": 900001
     },
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1039,11 +1046,13 @@
    "observations": [
     {
      "result": "PIDFD_OPEN_FAILED",
+     "step": "PIDFD_OPEN",
      "workerPid": 4100,
      "workerStartTicks": 900001
     },
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1167,11 +1176,13 @@
    "observations": [
     {
      "result": "STAT_UNREADABLE",
+     "step": "STAT",
      "workerPid": 4100,
      "workerStartTicks": 900001
     },
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1295,11 +1306,13 @@
    "observations": [
     {
      "result": "CGROUP_RECHECK_UNREADABLE",
+     "step": "CGROUP_RECHECK",
      "workerPid": 4100,
      "workerStartTicks": 900001
     },
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1423,11 +1436,13 @@
    "observations": [
     {
      "result": "PIDFD_POLL_FAILED",
+     "step": "PIDFD_ALIVE",
      "workerPid": 4100,
      "workerStartTicks": 900001
     },
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1521,6 +1536,7 @@
    "observations": [
     {
      "result": "PROCESS_GONE",
+     "step": "PIDFD_OPEN",
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1617,6 +1633,7 @@
    "observations": [
     {
      "result": "START_MISMATCH",
+     "step": "STAT",
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1714,6 +1731,7 @@
    "observations": [
     {
      "result": "PIDFD_EXITED",
+     "step": "PIDFD_ALIVE",
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1802,6 +1820,7 @@
    "observations": [
     {
      "result": "NOT_IN_PROBE_WORKER_CGROUP",
+     "step": "CGROUP_RECHECK",
      "workerPid": 4100,
      "workerStartTicks": 900001
     }
@@ -1903,6 +1922,7 @@
    "observations": [
     {
      "result": "OBSERVED",
+     "step": null,
      "workerPid": 4400,
      "workerStartTicks": 900040
     }
@@ -1990,6 +2010,355 @@
    "observations": [
     {
      "result": "PIDFD_EXITED",
+     "step": "PIDFD_ALIVE",
+     "workerPid": 4100,
+     "workerStartTicks": 900001
+    }
+   ],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {},
+    {
+     "response": {
+      "reason": "WORKER_NOT_OBSERVED",
+      "result": "REFUSED"
+     }
+    }
+   ]
+  },
+  {
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    },
+    {
+     "pid": 4100,
+     "type": "KERNEL_EXIT"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "2222222222222222222222222222222222222222222222222222222222222222",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-two",
+      "serverCertificateDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": "1111111111111111111111111111111111111111111111111111111111111111",
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [
+     [
+      "BIND",
+      "1111111111111111111111111111111111111111111111111111111111111111",
+      "run-one",
+      "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      [
+       "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+       "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+       "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      [
+       "ConfigMap/planeon-qual/probe-config",
+       "Pod/planeon-qual/probe-pod",
+       "Service/planeon-qual/probe-service"
+      ]
+     ]
+    ],
+    "state": "ACTIVE"
+   },
+   "id": "O17",
+   "intent": "Q-I5-1: no cached answer: the worker observed at the first BIND exits, and the next BIND naming it (run two) is refused (NOT_A_MEMBER)",
+   "observations": [
+    {
+     "result": "OBSERVED",
+     "step": null,
+     "workerPid": 4100,
+     "workerStartTicks": 900001
+    },
+    {
+     "result": "NOT_A_MEMBER",
+     "step": "CGROUP_PROCS",
+     "workerPid": 4100,
+     "workerStartTicks": 900001
+    }
+   ],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "caseManifestSetDigest": "sha256:51435c24c91efce536c060353b403798a5eaadea60fa7d88ee9a829b15ba9e19",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "result": "OK"
+     }
+    },
+    {},
+    {
+     "response": {
+      "reason": "WORKER_NOT_OBSERVED",
+      "result": "REFUSED"
+     }
+    }
+   ]
+  },
+  {
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    },
+    {
+     "cgroup": "/planeon.slice/planeon-proxy-server.service",
+     "pid": 4100,
+     "type": "KERNEL_MOVE"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "2222222222222222222222222222222222222222222222222222222222222222",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-two",
+      "serverCertificateDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": "1111111111111111111111111111111111111111111111111111111111111111",
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [
+     [
+      "BIND",
+      "1111111111111111111111111111111111111111111111111111111111111111",
+      "run-one",
+      "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      [
+       "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+       "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+       "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      [
+       "ConfigMap/planeon-qual/probe-config",
+       "Pod/planeon-qual/probe-pod",
+       "Service/planeon-qual/probe-service"
+      ]
+     ]
+    ],
+    "state": "ACTIVE"
+   },
+   "id": "O18",
+   "intent": "Q-I5-1: the worker observed at the first BIND is moved out of the leaf, and the next BIND naming it is refused (NOT_A_MEMBER)",
+   "observations": [
+    {
+     "result": "OBSERVED",
+     "step": null,
+     "workerPid": 4100,
+     "workerStartTicks": 900001
+    },
+    {
+     "result": "NOT_A_MEMBER",
+     "step": "CGROUP_PROCS",
+     "workerPid": 4100,
+     "workerStartTicks": 900001
+    }
+   ],
+   "outputs": [
+    {
+     "response": {
+      "armedActionId": null,
+      "boundExecutionId": null,
+      "counters": {
+       "consumptions": 0,
+       "correlationRefusals": 0,
+       "flushClosures": 0,
+       "stampsIssued": 0
+      },
+      "drainPending": false,
+      "inFlightActionId": null,
+      "journalDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "result": "OK",
+      "state": "ACTIVE"
+     }
+    },
+    {
+     "response": {
+      "caseManifestSetDigest": "sha256:51435c24c91efce536c060353b403798a5eaadea60fa7d88ee9a829b15ba9e19",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "result": "OK"
+     }
+    },
+    {},
+    {
+     "response": {
+      "reason": "WORKER_NOT_OBSERVED",
+      "result": "REFUSED"
+     }
+    }
+   ]
+  },
+  {
+   "config": "OBSERVING",
+   "events": [
+    {
+     "operation": "GENERATION_STATUS",
+     "payload": {},
+     "type": "FRAME"
+    },
+    {
+     "after": "PIDFD_OPEN",
+     "event": {
+      "pid": 4100,
+      "type": "KERNEL_EXIT"
+     },
+     "type": "OBSERVATION_RACE_NEXT"
+    },
+    {
+     "operation": "BIND_EXECUTION",
+     "payload": {
+      "bindingDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "caseId": "KUBERNETES_SMOKE",
+      "dispatchGeneration": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionId": "1111111111111111111111111111111111111111111111111111111111111111",
+      "peerQualificationDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "requestDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "reservationDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "runNonce": "run-one",
+      "serverCertificateDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "workerPid": 4100,
+      "workerStartTicks": 900001
+     },
+     "type": "FRAME"
+    }
+   ],
+   "final": {
+    "actions": {},
+    "boundExecutionId": null,
+    "channel": "OPEN",
+    "connections": {},
+    "counters": {
+     "consumptions": 0,
+     "correlationRefusals": 0,
+     "flushClosures": 0,
+     "stampsIssued": 0
+    },
+    "drainPending": false,
+    "failureMarker": [],
+    "journal": [],
+    "state": "ACTIVE"
+   },
+   "id": "O19",
+   "intent": "Q-I5-3 race: the held worker exits after pidfd_open with no reuse; its stat is gone (PROCESS_GONE at STAT)",
+   "observations": [
+    {
+     "result": "PROCESS_GONE",
+     "step": "STAT",
      "workerPid": 4100,
      "workerStartTicks": 900001
     }

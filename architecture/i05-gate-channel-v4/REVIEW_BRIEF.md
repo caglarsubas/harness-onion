@@ -1,13 +1,16 @@
-# Independent review brief — I05 broker-gate channel v4 (I05-OBSERVED-WORKERS), round 1
+# Independent review brief — I05 broker-gate channel v4 (I05-OBSERVED-WORKERS), round 2
 
-Status: **CONTRACT_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
+Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
 verdict.
+
+Round 1 returned CHANGES_REQUIRED: 4 MINOR findings and 4 NOTEs, IR1-1 to IR1-8. README "Round-1 findings and
+dispositions" answers each one in the bytes.
 
 v4 succeeds the adopted I05 v3 contract `../i05-gate-channel-v3/` and its supplement
 `../i05-gate-channel-v3-supplement/`, whose bytes stay unchanged. README.md states what v4 changes and why. Read it in
 these sections:
 - "What v4 changes";
-- "The observation", with rules 1-7;
+- "The observation", with rules 1-9;
 - "Decisions (verbatim)";
 - "Constraints".
 
@@ -28,8 +31,8 @@ The v3-to-v4 diff of the model is the main review surface. Nothing else in the w
 
 ## Owner decisions and facts v4 must carry out
 
-They are recorded verbatim in README "Decisions (verbatim)" and "Constraints", and in the author's record
-`~/.local/state/harness-onion-ci/tools/i05ow/owner_decisions.json`:
+They are recorded verbatim in README "Decisions (verbatim)" and "Constraints", and in the author's decision record,
+which your task brief names:
 - **Q-I5-1..4** (owner Q-I5-4; monitor, owner-delegated, Q-I5-1..3), each (a):
   - a fresh read at every BIND;
   - every failure gives WORKER_NOT_OBSERVED, non-fatal and retryable, journaled locally, with no wire change;
@@ -42,14 +45,17 @@ They are recorded verbatim in README "Decisions (verbatim)" and "Constraints", a
   - C3: matrix v5 reachability (the leaf's cgroup.procs, and the worker's stat and status);
   - C4: the HS43 identity, pid plus start time, race-free via pidfd.
 
-## Author's interpretations to examine
+## Confirmed readings and the author's own rules
 
-1. **"journaled locally"** is read as a local diagnostic log, not the I05 durable journal (README "Decisions",
-   first reading). Is that the only reading consistent with "no wire change" and with v3 replaying unchanged?
-2. **"stat starttime and cgroup check"** is implemented as a second read of the leaf's `cgroup.procs` (step 4), not as a
-   read of `/proc/<pid>/cgroup`. Is this race-free under rule 1, and within C3?
-3. **Bounds and parsing in rule 5** (a 4096-byte stat line, a 65536-byte cgroup.procs) are the author's own. They are not
-   modelled; are they stated precisely enough?
+The monitor confirmed both readings of the decisions (Q-I5-READINGS, quoted in README "Decisions"):
+- "journaled locally" is a local diagnostic log;
+- the cgroup check is a second `cgroup.procs` read.
+
+Examine the rules the author added on their own:
+- rule 5's bounds and parsing;
+- rules 2, 8 and 9's host preconditions, carried to W03/T04.
+
+Are they precise, and do they fail closed?
 
 ## What to check
 
@@ -76,21 +82,21 @@ They are recorded verbatim in README "Decisions (verbatim)" and "Constraints", a
    - Is any ptrace-gated entry read?
    - Does any claim about kernel behaviour lack its stated basis? These are: starttime printed without ptrace access;
      `pidfd_open` without `PIDFD_THREAD` refusing a thread ID; `cgroup.procs` listing only the leaf's own TGIDs.
-5. **Vectors and checker.**
+5. **Vectors and checker.** (Include the new O17-O19, the exact OBSERVING and the (step, cause) coverage.)
    - Is `check_vectors` closed (exact key sets, ordered IDs, floors)?
    - Does it refuse tampering?
    - Is coverage complete: every cause, every step's read failure, and the races?
    - Are the configuration and event refusals exact?
    - Is OBSERVING exactly v3's ACTIVE, converted, plus two processes?
-6. **Overclaims.** Does anything claim an installed gate, a real `/proc` read, R10 adoption, a native result or any
+6. **Round 1.** Does each disposition in README "Round-1 findings and dispositions" answer its finding in the bytes?
+7. **Overclaims.** Does anything claim an installed gate, a real `/proc` read, R10 adoption, a native result or any
    E01-E12 proof?
 
 ## How to check
 
 You may run the v3 and v4 models read-only from the repository root (`python3 -I -B`, loading the scripts by path), and
-`check_vectors` with the pinned v3 files. You may also run the builders
-`~/.local/state/harness-onion-ci/tools/i05ow/make_model_v4.py` and `build_v4.py` against a copy of the repository in your
-scratch directory, never against the worktree.
+`check_vectors` with the pinned v3 files. You may also run the author's builders, which your task brief names,
+against a copy of the repository in your scratch directory, never against the worktree.
 
 Run one process at a time, each at most 120 seconds. Do not run the repository test suite or validators, and do not
 modify any repository file. Scratch files go outside the repository. Stop at once when asked to pause, and continue only

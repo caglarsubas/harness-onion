@@ -58,6 +58,12 @@ READ_FAILURES = {"CGROUP_PROCS": "CGROUP_PROCS_UNREADABLE", "PIDFD_OPEN": "PIDFD
                  "CGROUP_RECHECK": "CGROUP_RECHECK_UNREADABLE", "PIDFD_ALIVE": "PIDFD_POLL_FAILED"}
 OBSERVATION_CAUSES = tuple(READ_FAILURES.values()) + ("NOT_A_MEMBER", "PROCESS_GONE", "START_MISMATCH",
                                                       "NOT_IN_PROBE_WORKER_CGROUP", "PIDFD_EXITED")
+# Every (failing step, local cause) the observation can give.
+OBSERVATION_OUTCOMES = (("CGROUP_PROCS", "CGROUP_PROCS_UNREADABLE"), ("CGROUP_PROCS", "NOT_A_MEMBER"),
+                        ("PIDFD_OPEN", "PIDFD_OPEN_FAILED"), ("PIDFD_OPEN", "PROCESS_GONE"),
+                        ("STAT", "STAT_UNREADABLE"), ("STAT", "PROCESS_GONE"), ("STAT", "START_MISMATCH"),
+                        ("CGROUP_RECHECK", "CGROUP_RECHECK_UNREADABLE"), ("CGROUP_RECHECK", "NOT_IN_PROBE_WORKER_CGROUP"),
+                        ("PIDFD_ALIVE", "PIDFD_POLL_FAILED"), ("PIDFD_ALIVE", "PIDFD_EXITED"))
 # Test inputs only: the kernel changes between the gate's reads (closed shapes).
 KERNEL_EVENTS = {"KERNEL_SPAWN": {"type", "pid", "startTicks", "cgroup"}, "KERNEL_EXIT": {"type", "pid"},
                  "KERNEL_MOVE": {"type", "pid", "cgroup"}}
@@ -389,36 +395,39 @@ class Gate:
             return True
         return False
 
-    def _observe_worker(self, pid: Any, start: Any) -> str | None:
-        """The gate's observation of the worker a BIND names (Q-I5-1 and Q-I5-3): None when observed, else the cause."""
+    def _observe_worker(self, pid: Any, start: Any) -> tuple | None:
+        """The gate's observation of the worker a BIND names (Q-I5-1 and Q-I5-3): None when observed, else the failing
+        step and its cause. KERNEL_EXIT stands for exit and reap together: a zombie stays visible to pidfd_open and
+        /proc/<pid>/stat on a real kernel, so the local cause can differ there (README rule 1); the wire answer does not."""
         if self._read_fails("CGROUP_PROCS"):
-            return READ_FAILURES["CGROUP_PROCS"]
+            return "CGROUP_PROCS", READ_FAILURES["CGROUP_PROCS"]
         members = sorted(p for p, proc in self.kernel.items() if proc["cgroup"] == PROBE_WORKER_CGROUP)
         self._after("CGROUP_PROCS")
         if pid not in members:
-            return "NOT_A_MEMBER"
+            return "CGROUP_PROCS", "NOT_A_MEMBER"
         if self._read_fails("PIDFD_OPEN"):
-            return READ_FAILURES["PIDFD_OPEN"]
+            return "PIDFD_OPEN", READ_FAILURES["PIDFD_OPEN"]
         if pid not in self.kernel:
-            return "PROCESS_GONE"                    # pidfd_open: ESRCH
+            return "PIDFD_OPEN", "PROCESS_GONE"  # pidfd_open: ESRCH
         held = self.kernel[pid]["serial"]
         self._after("PIDFD_OPEN")
         if self._read_fails("STAT"):
-            return READ_FAILURES["STAT"]
+            return "STAT", READ_FAILURES["STAT"]
         if pid not in self.kernel:
-            return "PROCESS_GONE"
+            return "STAT", "PROCESS_GONE"
         if self.kernel[pid]["startTicks"] != start:
-            return "START_MISMATCH"
+            return "STAT", "START_MISMATCH"
         self._after("STAT")
         if self._read_fails("CGROUP_RECHECK"):
-            return READ_FAILURES["CGROUP_RECHECK"]
+            return "CGROUP_RECHECK", READ_FAILURES["CGROUP_RECHECK"]
         if pid not in [p for p, proc in self.kernel.items() if proc["cgroup"] == PROBE_WORKER_CGROUP]:
-            return "NOT_IN_PROBE_WORKER_CGROUP"     # no longer listed (moved out, or exited and not reused there)
+            # No longer listed: moved out, or exited and not reused there.
+            return "CGROUP_RECHECK", "NOT_IN_PROBE_WORKER_CGROUP"
         self._after("CGROUP_RECHECK")
         if self._read_fails("PIDFD_ALIVE"):
-            return READ_FAILURES["PIDFD_ALIVE"]
+            return "PIDFD_ALIVE", READ_FAILURES["PIDFD_ALIVE"]
         if self.kernel.get(pid, {}).get("serial") != held:
-            return "PIDFD_EXITED"                    # the held process exited; a later reuse of the PID does not count
+            return "PIDFD_ALIVE", "PIDFD_EXITED"  # the held process exited; a later reuse of the PID does not count
         return None
 
     # -- durable journal and failure marker
@@ -891,10 +900,11 @@ class Gate:
         identities = sorted(identity_of(self.manifests[d]) for d in digests)
         if any(d in self.prior_digests for d in digests) or any(i in self.prior_identities for i in identities):
             return self._refused("MANIFEST_REUSED")      # a run never re-uses an earlier generation's manifest
-        cause = self._observe_worker(p["workerPid"], p["workerStartTicks"])
+        failed = self._observe_worker(p["workerPid"], p["workerStartTicks"])
         self.observations.append({"workerPid": p["workerPid"], "workerStartTicks": p["workerStartTicks"],
-                                  "result": "OBSERVED" if cause is None else cause})
-        if cause is not None:
+                                  "result": "OBSERVED" if failed is None else failed[1],
+                                  "step": None if failed is None else failed[0]})
+        if failed is not None:
             return self._refused("WORKER_NOT_OBSERVED")   # Q-I5-2: one wire answer; the cause stays local
         if not self._record("BIND", p["executionId"], p["runNonce"], p["reservationDigest"], digests, identities):
             return self._refused("STORAGE_FAILURE")
@@ -1059,8 +1069,11 @@ V3_FILES = {"schema": "architecture/i05-gate-channel-v3/channel.schema.json",
             "supplement": "architecture/i05-gate-channel-v3-supplement/vectors.json"}
 V3_FLOORS = {"transcripts": 120, "agreement": 42, "frames": 34, "byteFrames": 14, "configRefusals": 5}
 SUPPLEMENT_FLOOR = 6
-V4_FLOORS = {"transcripts": 16, "configRefusals": 9, "eventRefusals": 9}
+V4_FLOORS = {"transcripts": 19, "configRefusals": 9, "eventRefusals": 9}
 INPUT_TYPES = {"bytes": bytes, "bytearray": bytearray, "str": lambda raw: raw.decode("ascii")}
+# OBSERVING = v3's ACTIVE converted (4100 and 4200 in the leaf), plus these two processes, exactly.
+OBSERVING_EXTRA = ({"pid": 4300, "startTicks": 900003, "cgroup": PROBE_WORKER_CGROUP},
+                   {"pid": 5100, "startTicks": 800001, "cgroup": "/planeon.slice/planeon-proxy-server.service"})
 
 
 def _refusal(call) -> str | None:
@@ -1143,8 +1156,8 @@ def check_vectors(vectors: Any, files: dict) -> int:
     converted = convert_v3_config(v3["configs"]["ACTIVE"])
     listed = converted["kernel"]["processes"]
     require(_without(observing, "kernel") == _without(converted, "kernel")
-            and observing["kernel"]["processes"][:len(listed)] == listed,
-            "OBSERVING is v3's ACTIVE converted, with more processes")
+            and observing["kernel"]["processes"] == listed + list(OBSERVING_EXTRA),
+            "OBSERVING is v3's ACTIVE converted, plus exactly two processes")
     for key, call in (("configRefusals", lambda row: Gate(dict(copy.deepcopy(observing), **copy.deepcopy(row["override"])))),
                       ("eventRefusals", lambda row: _run(observing, row["events"], schema))):
         ids = [row.get("id") for row in vectors[key]]
@@ -1158,7 +1171,7 @@ def check_vectors(vectors: Any, files: dict) -> int:
     # 3. The gate's observation at each BIND (Q-I5-1..4).
     ids = [row.get("id") for row in vectors["transcripts"]]
     require(ids == ["O%02d" % n for n in range(1, len(ids) + 1)], "observation transcripts in order")
-    results = set()
+    outcomes, recached = set(), False
     for row in vectors["transcripts"]:
         require(type(row) is dict and set(row) == {"id", "intent", "config", "events", "outputs", "final", "observations"}
                 and row["config"] == "OBSERVING", "closed transcript " + row["id"])
@@ -1171,15 +1184,20 @@ def check_vectors(vectors: Any, files: dict) -> int:
         for n, seen in zip(binds, gate.observations):
             answer = outputs[n].get("response", {})
             if seen["result"] == "OBSERVED":
-                require(answer.get("result") == "OK", "an observed worker binds in " + row["id"])
+                require(seen["step"] is None and answer.get("result") == "OK", "an observed worker binds in " + row["id"])
             else:
                 # Q-I5-2: one wire answer, non-fatal, and nothing durable: the gate's snapshot is unchanged.
                 before = _run(observing, row["events"][:n], schema)[0].snapshot()
-                require(seen["result"] in OBSERVATION_CAUSES and outputs[n] == {"response": {"result": "REFUSED",
-                                                                                            "reason": "WORKER_NOT_OBSERVED"}}
+                require((seen["step"], seen["result"]) in OBSERVATION_OUTCOMES
+                        and outputs[n] == {"response": {"result": "REFUSED", "reason": "WORKER_NOT_OBSERVED"}}
                         and _run(observing, row["events"][:n + 1], schema)[0].snapshot() == before,
                         "a refused observation is WORKER_NOT_OBSERVED and records nothing in " + row["id"])
-            results.add(seen["result"])
+            outcomes.add((seen["step"], seen["result"]))
+        # Q-I5-1: no cached answer: the same worker observed at one BIND is refused at a later one once the kernel moved on.
+        seen = [(o["workerPid"], o["workerStartTicks"], o["result"]) for o in gate.observations]
+        recached |= any(a[:2] == b[:2] and a[2] == "OBSERVED" and b[2] != "OBSERVED"
+                        for i, a in enumerate(seen) for b in seen[i + 1:])
         checks += 1
-    require(results == set(OBSERVATION_CAUSES) | {"OBSERVED"}, "every observation cause is exercised")
+    require(outcomes == set(OBSERVATION_OUTCOMES) | {(None, "OBSERVED")}, "every step's every outcome is exercised")
+    require(recached, "a later BIND re-observes a worker observed earlier (Q-I5-1)")
     return checks
