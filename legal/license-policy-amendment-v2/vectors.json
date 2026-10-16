@@ -107,6 +107,101 @@
       "note": "L2-2: the RA-LICENSE-001 N-2 directory, were it ported (illustrative; the research record is unchanged)"
     },
     {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-module",
+        "kind": "GO_MODULE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "a Go module"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-binary",
+        "kind": "UPSTREAM_BINARY",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "an upstream binary"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-tool",
+        "kind": "HOST_OS_PROGRAM",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "a host program"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "COMPOSITE_REVIEW_REQUIRED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "composite-review custody"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "TENANT_ATTESTED_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "tenant-attested custody"
+    },
+    {
       "expression": "zlib",
       "component": {
         "name": "zlib-licensed-crate",
@@ -126,7 +221,7 @@
       "note": "exact matching: another case is not Zlib"
     },
     {
-      "expression": "Zlib-acknowledgement",
+      "expression": "zlib-acknowledgement",
       "component": {
         "name": "zlib-licensed-crate",
         "kind": "CRATE",
@@ -142,7 +237,7 @@
         "outcome": "UNKNOWN",
         "elections": []
       },
-      "note": "another SPDX identifier"
+      "note": "another SPDX identifier (the SPDX list spells it with a lowercase z)"
     },
     {
       "expression": "Zlib+",
@@ -459,6 +554,117 @@
         ]
       },
       "note": "the election ranking prefers a default-allowed term to an approved review"
+    },
+    {
+      "expression": "Apache-2.0 WITH LLVM-exception OR Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "Apache-2.0 WITH LLVM-exception OR Zlib",
+            "elected": "Apache-2.0 WITH LLVM-exception"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "Apache-2.0 WITH LLVM-exception OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "the election ranking prefers a default-allowed term to an allowed exception expression"
+    },
+    {
+      "expression": "CC0-1.0 OR Zlib",
+      "component": {
+        "name": "zlib-licensed-fixture",
+        "kind": "ARTIFACT",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "CC0-1.0 OR Zlib",
+            "elected": "CC0-1.0"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "CC0-1.0 OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "the election ranking prefers a default-allowed term to open content"
+    },
+    {
+      "expression": "LGPL-2.1-or-later OR Zlib",
+      "component": {
+        "name": "glibc",
+        "kind": "HOST_OS_LIBRARY",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "LGPL-2.1-or-later OR Zlib",
+            "elected": "LGPL-2.1-or-later"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "LGPL-2.1-or-later OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "the election ranking prefers a default-allowed term to the A1 host-OS class"
+    },
+    {
+      "expression": "GPL-3.0-only OR Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "GPL-3.0-only OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "an unapproved review alternative no longer decides the OR"
     },
     {
       "expression": "MIT/Zlib",

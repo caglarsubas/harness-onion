@@ -1,6 +1,6 @@
 # License-policy amendment LIC-HOST-A2: Zlib default-allowed (DATA_CHECK_ONLY)
 
-Status: **CONTRACT_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`). 2026-10-16. Publication
+Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`). 2026-10-16. Publication
 slot 242 (LICENCE-POLICY-AMEND), after slot 241.
 
 A2 makes the SPDX identifier `Zlib` default-allowed, everywhere and for every component, exactly as the base policy's own
@@ -25,7 +25,7 @@ A2 makes the SPDX identifier `Zlib` default-allowed, everywhere and for every co
 | File | Content |
 |---|---|
 | `amendment.json` | `planeon.internal.license-policy-amendment/v2`. It holds: the base pin; the A1 pins (record, vectors, classifier, by SHA-256); the three decisions; `additionalDefaultAllowedSpdx: ["Zlib"]` and its rule; the phoenix-sqlean effect; the carried findings P2-F1 and P2-F2, verbatim with their source; and non-claims |
-| `vectors.json` | `planeon.internal.license-policy-amendment-vectors/v3`. It holds the A1 replay (the pinned A1 vectors and the exact list of A1 results that A2 changes, which is empty) and 25 cases, each with its expected A1 and A2 result |
+| `vectors.json` | `planeon.internal.license-policy-amendment-vectors/v3`. It holds the A1 replay (the pinned A1 vectors and the exact list of A1 results that A2 changes, which is empty) and 34 cases, each with its expected A1 and A2 result |
 | `../../scripts/license_amendment_v2.py` | `record`, `effective_policy` and `check`. A2 adds no classifier of its own: it builds A1's `Policy` with Zlib added to DEFAULT_ALLOWED |
 
 ## The rule
@@ -39,17 +39,25 @@ An additional default-allowed term is classified exactly as a term of the base's
 `check` refuses an added term that is on any base list, or that is an A1 class term, decision or election. So no base or
 A1 outcome of any other term changes. A compound listed exactly in the base keeps its base outcome.
 
-Matching stays exact (`EXACT_SPDX_EXPRESSION`). Only the identifier `Zlib`, with that case, is added. `zlib`,
-`Zlib-acknowledgement`, `Zlib+` and `Zlib WITH ...` stay UNKNOWN.
+Matching stays exact (`EXACT_SPDX_EXPRESSION`). Only the identifier `Zlib`, in the SPDX list's spelling, is added.
+- SPDX itself matches identifiers case-insensitively, but the base does not. So `zlib` stays UNKNOWN, and a consumer
+  normalises an identifier to the list spelling before it classifies.
+- `zlib-acknowledgement` (another SPDX identifier), `Zlib+` and `Zlib WITH <exception>` are other terms, and they stay
+  UNKNOWN.
 
 **What A2 changes, as the vectors show:**
-- **Alone.** Zlib goes from UNKNOWN to DEFAULT_ALLOWED: as a crate, an artifact, the zlib host library, and a static
-  library in a planeon binary. Default-allowed is not scoped like the A1 class.
-- **OR.** An OR with a blocked alternative is accepted with Zlib elected ("Zlib OR SSPL-1.0", "Zlib/SSPL-1.0" as a legacy
-  crate field).
+- **Alone.** Zlib goes from UNKNOWN to DEFAULT_ALLOWED in every component kind and every base custody. The cases
+  include the zlib host library and a static library in a planeon binary. Default-allowed is not scoped like the A1
+  class. `check` requires a case for each kind and custody.
+- **OR.** An OR with a blocked alternative is accepted with Zlib elected. Examples: "Zlib OR SSPL-1.0", "Zlib/SSPL-1.0"
+  as a legacy crate field, and "GPL-3.0-only OR Zlib", which was OPTIONAL_EXPLICIT_REVIEW.
 - **AND.** "Zlib AND MIT" is accepted.
-- **Election ranking.** For nft, "GPL-2.0-only OR Zlib" now elects Zlib rather than the approved review: default-allowed
-  ranks before an approved review.
+- **Election ranking.** A1's ranking puts default-allowed before every other accepted category, so Zlib is now elected
+  over:
+  - an allowed exception expression ("Apache-2.0 WITH LLVM-exception OR Zlib");
+  - open content ("CC0-1.0 OR Zlib" for an artifact);
+  - the A1 host-OS class ("LGPL-2.1-or-later OR Zlib" for glibc);
+  - an approved review ("GPL-2.0-only OR Zlib" for nft).
 - **Unchanged.** Ties among default-allowed terms go by canonical text ("MIT OR Zlib" elects MIT), and Apache-2.0 is still
   elected first. A base denial is never weakened ("Zlib AND SSPL-1.0" is DENIED). A review requirement or an out-of-scope
   term elsewhere in an AND still blocks it.
@@ -57,7 +65,8 @@ Matching stays exact (`EXACT_SPDX_EXPRESSION`). Only the identifier `Zlib`, with
 
 **A1's own vectors.** All 88 replay under A2 to their A1 results. The one with a Zlib leaf ("MIT OR Zlib OR Apache-2.0"
 for miniz_oxide) elects Apache-2.0 either way. `check` computes the changed list and requires it to equal the recorded
-list, which is empty, and it requires every change to come through an added term.
+list, which is empty. It also requires every change to come through an exact added term. A WITH term counts whole, so
+"Zlib WITH LLVM-exception" is not the term Zlib, and a change to REFUSED is not exempt.
 
 ## Effect on RA-LICENSE-001 (L2-2)
 
@@ -66,27 +75,48 @@ DENY_UNKNOWN_LICENSE, with ceiling DESIGN_REFERENCE_ONLY (note N-2).
 - **Under A2,** that directory's expression classifies as DEFAULT_ALLOWED.
 - **The research record stays byte-identical.** A later research-adoption revision re-runs its check and decides the
   ceiling.
+- **That revision must classify with A2.** The research-adoption model (`scripts/research_adoption_v3.py`) reads the base
+  policy's lists directly, not through A1 or A2. Re-running it as it stands would still give DENY_UNKNOWN_LICENSE.
 - **Not changed by this record:** the scoped artifact or any reuse decision.
 
 ## Carried findings P2-F1 and P2-F2
 
 These are 223 MET-ENFORCE-021's (LIC-HOST-F) packet-review round-2 NOTEs. Their only record is the author-side review
 file, which is not published on main. So `amendment.json` quotes each one's finding and required change verbatim, with
-the source (round, date, subject commit). The A2 layer of packet 242 carries both fixes; the dispositions are in
-`amendment.json`:
-- **P2-F1.** The layer's validator replays every A1 and A2 vector itself through `classify`, with a ValueError counted as
-  REFUSED. Its decided cases include negative ones: an explicit-review term outside its decision's scope, a base denied
-  term, an unknown term, and an open-content term outside ARTIFACT.
-- **P2-F2.** The layer's verified-read helper checks era membership before it reads a path.
+the source (round, date, subject commit). Both fixes are to be carried into packet 242's A2 layer
+(`validate_license_amendment_v2.py`), which is not written yet, and the 242 packet review checks them. The dispositions
+are in `amendment.json`:
+- **P2-F1.** The layer's validator will replay every A1 and A2 vector itself through `classify`, with a ValueError counted
+  as REFUSED. Its decided cases will include negative ones: an explicit-review term outside its decision's scope, a base
+  denied term, an unknown term, and an open-content term outside ARTIFACT.
+- **P2-F2.** The layer's verified-read helper will check era membership before it reads a path.
+
+`check` reads A1's vectors once, then hashes and replays those same bytes. It also requires the A1 classifier it imports
+to be the pinned file. Pinning that classifier's import closure (`safe_yaml.py`) and making every read a verified one are
+the packet layer's job.
 
 ## Not claimed
 
 - Nothing is released by this record, and it is not legal advice. The decisions above are the approving authority.
-- No consumer of A1 is switched to A2 by this record. The license gates that classify with A1 adopt A2 in their own
-  packets.
+- No consumer is switched to A2 by this record. The license gates that classify with A1 adopt A2 in their own packets.
+- Consumers that read the base policy's lists directly, for example `scripts/research_adoption_v3.py`, keep Zlib UNKNOWN
+  until they classify with A2.
 - The zlib licence's own conditions are obligations of any reuse:
   - the origin is not misrepresented;
   - altered source versions are plainly marked;
   - the notice stays in source distributions.
 
   The base's NOTICE requirement and per-blob porting records carry them. This record adds no other mechanism.
+
+## Round-1 findings and dispositions
+
+| Finding | Disposition |
+|---|---|
+| LR1-1 MINOR, kinds and custodies | Zlib alone is DEFAULT_ALLOWED in cases for all 8 kinds and all 4 base custodies, and `check` requires that coverage |
+| LR1-2 MINOR, consumers of the base | The README and the non-claims say that the research model reads the base directly, that the later revision must classify with A2, and that direct base readers keep Zlib UNKNOWN until then |
+| LR1-3 MINOR, inexact change check | Terms are compared whole (a WITH term is not its base licence), and the REFUSED exemption is removed. A simulated drift that allows "Zlib WITH LLVM-exception" is refused |
+| LR1-4 NOTE, reads and the running classifier | A1's vectors are read once, then hashed and replayed. The imported A1 classifier must equal the pinned bytes. The packet layer pins the import closure and verifies every read |
+| LR1-5 NOTE, other election changes | Cases and README cover Zlib elected over an exception expression, open content and the A1 class, and "GPL-3.0-only OR Zlib" |
+| LR1-6 NOTE, SPDX case | The README and the rule state that SPDX matching is case-insensitive while the base is exact. The near-miss case uses `zlib-acknowledgement` |
+| LR1-7 NOTE, dispositions | Both dispositions are in the future tense and name the 242 packet review as the check |
+| LR1-8 NOTE, author-side paths | The brief no longer names author-side paths |

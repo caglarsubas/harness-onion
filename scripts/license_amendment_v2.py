@@ -18,6 +18,8 @@ check(read) validates:
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 try:
     import license_amendment as a1
 except ImportError:
@@ -31,7 +33,9 @@ VECTORS_SCHEMA = "planeon.internal.license-policy-amendment-vectors/v3"
 AMENDMENT_ID = "LIC-HOST-A2"
 ADDED_DEFAULT_ALLOWED = ("Zlib",)
 OWNER_DECISIONS = (("LIC-ZLIB", "2026-10-15"), ("L2-1", "2026-10-16"), ("L2-2", "2026-10-16"))
-MIN_CASES = 20
+MIN_CASES = 30
+# Zlib alone must be shown default-allowed in every component kind and every base custody (L2-1 (a): globally).
+CUSTODIES = ("REPOSITORY_BUILT", "UPSTREAM_PINNED", "COMPOSITE_REVIEW_REQUIRED", "TENANT_ATTESTED_PINNED")
 # The outcomes the new cases must reach under A2 (Zlib alone, in each compound and election, blocked, refused and
 # exactly matched only).
 REQUIRED_A2_OUTCOMES = ("DEFAULT_ALLOWED", "ACCEPTED_OR", "ACCEPTED_AND", "DENIED", "UNKNOWN",
@@ -54,7 +58,8 @@ def _result(policy, case: dict) -> dict:
 
 
 def _leaves(expression: str, crate_field: bool) -> set:
-    """Every license id in the expression (after legacy normalisation); empty when it does not parse."""
+    """Every exact term of the expression (after legacy normalisation), a WITH term whole; empty when it does not
+    parse. So "Zlib WITH LLVM-exception" is not the term Zlib."""
     try:
         node = a1.parse(a1.normalise_legacy(expression) if crate_field else expression)
     except ValueError:
@@ -63,7 +68,7 @@ def _leaves(expression: str, crate_field: bool) -> set:
     while stack:
         item = stack.pop()
         if type(item) is str:
-            found.update(part for part in item.split(" WITH ")[:1])
+            found.add(item)
         else:
             stack.extend(item[1])
     return found
@@ -132,7 +137,10 @@ def check(read) -> dict:
 
 def _check(read) -> tuple:
     _, policy1 = a1._check(read)                     # A1 as adopted, its 88 vectors included
-    pins = {path: _sha(read(path)) for path in (a1.RECORD_PATH, a1.VECTORS_PATH, A1_MODEL_PATH)}
+    raws = {path: read(path) for path in (a1.RECORD_PATH, a1.VECTORS_PATH, A1_MODEL_PATH)}   # read once, hashed, used
+    pins = {path: _sha(raw) for path, raw in raws.items()}
+    # The A1 classifier that runs is the pinned one (the packet layer pins its import closure, safe_yaml included).
+    require(_sha(Path(a1.__file__).read_bytes()) == pins[A1_MODEL_PATH], "the running A1 classifier is the pinned one")
     value = record(read(RECORD_PATH), pins)
     base = read(a1.BASE_PATH)
     require(_sha(base) == a1.BASE_SHA256, "the base policy changed")
@@ -151,7 +159,7 @@ def _check(read) -> tuple:
     a1._closed(replay, ("vectors", "changed"), "closed A1 replay")
     require(replay["vectors"] == {"path": a1.VECTORS_PATH, "sha256": pins[a1.VECTORS_PATH]}, "the replayed A1 vectors")
     changed = []
-    for case in a1._json(read(a1.VECTORS_PATH))["cases"]:
+    for case in a1._json(raws[a1.VECTORS_PATH])["cases"]:
         before, after = _result(policy1, case), _result(policy, case)
         if before != after:
             require(added & _leaves(case["expression"], case["component"]["crateField"]),
@@ -177,8 +185,12 @@ def _check(read) -> tuple:
     require(set(REQUIRED_A2_OUTCOMES) <= {case["a2"]["outcome"] for case in cases}, "the A2 cases reach every required outcome")
     require(any(case["a1"] != case["a2"] for case in cases) and any(case["a1"] == case["a2"] for case in cases),
             "the A2 cases include changed results and unchanged controls")
-    require(all(added & _leaves(case["expression"], case["component"]["crateField"]) or case["a2"]["outcome"] == "REFUSED"
-                or case["a1"] == case["a2"] for case in cases), "a result changes only through an added term")
+    require(all(added & _leaves(case["expression"], case["component"]["crateField"]) or case["a1"] == case["a2"]
+                for case in cases), "a result changes only through an added term")
+    alone = [case["component"] for case in cases if case["expression"] in added
+             and case["a2"] == {"outcome": "DEFAULT_ALLOWED", "elections": []}]
+    require({c["kind"] for c in alone} == set(a1.KINDS) and set(CUSTODIES) <= {c["custody"] for c in alone},
+            "an added term alone is shown default-allowed in every kind and every base custody")
     return value, policy
 
 
