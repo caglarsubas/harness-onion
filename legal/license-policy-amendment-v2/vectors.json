@@ -1,0 +1,555 @@
+{
+  "schemaVersion": "planeon.internal.license-policy-amendment-vectors/v3",
+  "a1Replay": {
+    "vectors": {
+      "path": "legal/license-policy-amendment/vectors.json",
+      "sha256": "fd2af21605c04420f76d148b71cf39e026251931df215e77eafce8c925549b24"
+    },
+    "changed": []
+  },
+  "cases": [
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "Zlib alone: unknown under A1, default-allowed under A2"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib-licensed-fixture",
+        "kind": "ARTIFACT",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "L2-1 (a): every kind, an artifact included"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib",
+        "kind": "HOST_OS_LIBRARY",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "the zlib host library itself"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "zlib",
+        "kind": "STATIC_SYSTEM_LIBRARY",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": {
+          "name": "planeon-effect-gate",
+          "custody": "REPOSITORY_BUILT"
+        }
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "linked into a planeon binary: default-allowed is not scoped like the A1 class"
+    },
+    {
+      "expression": "Zlib",
+      "component": {
+        "name": "phoenix-sqlean",
+        "kind": "PLANEON_SOURCE",
+        "custody": "REPOSITORY_BUILT",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DEFAULT_ALLOWED",
+        "elections": []
+      },
+      "note": "L2-2: the RA-LICENSE-001 N-2 directory, were it ported (illustrative; the research record is unchanged)"
+    },
+    {
+      "expression": "zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "note": "exact matching: another case is not Zlib"
+    },
+    {
+      "expression": "Zlib-acknowledgement",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "note": "another SPDX identifier"
+    },
+    {
+      "expression": "Zlib+",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "note": "an or-later form is not listed"
+    },
+    {
+      "expression": "Zlib WITH LLVM-exception",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "note": "a WITH expression is its own exact term"
+    },
+    {
+      "expression": "MIT OR Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "MIT OR Zlib",
+            "elected": "MIT"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "MIT OR Zlib",
+            "elected": "MIT"
+          }
+        ]
+      },
+      "note": "a tie of default-allowed terms is broken by canonical text: MIT"
+    },
+    {
+      "expression": "Apache-2.0 OR Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "Apache-2.0 OR Zlib",
+            "elected": "Apache-2.0"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "Apache-2.0 OR Zlib",
+            "elected": "Apache-2.0"
+          }
+        ]
+      },
+      "note": "the core licence is elected first"
+    },
+    {
+      "expression": "Zlib OR SSPL-1.0",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "SSPL-1.0 OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "OR-choice: Zlib is the accepted alternative; under A1 the least restrictive blocking outcome"
+    },
+    {
+      "expression": "Zlib OR LicenseRef-Proprietary",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "LicenseRef-Proprietary OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "an unknown alternative does not block an OR"
+    },
+    {
+      "expression": "Zlib AND MIT",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "ACCEPTED_AND",
+        "elections": []
+      },
+      "note": "AND-term: every term accepted"
+    },
+    {
+      "expression": "(Zlib OR MIT) AND Apache-2.0",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_AND",
+        "elections": [
+          {
+            "group": "MIT OR Zlib",
+            "elected": "MIT"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_AND",
+        "elections": [
+          {
+            "group": "MIT OR Zlib",
+            "elected": "MIT"
+          }
+        ]
+      },
+      "note": "a nested OR group elects MIT either way"
+    },
+    {
+      "expression": "Zlib AND SSPL-1.0",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "DENIED",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "DENIED",
+        "elections": []
+      },
+      "note": "a base denial is never weakened"
+    },
+    {
+      "expression": "Zlib AND GPL-3.0-only",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "elections": []
+      },
+      "note": "the review requirement of the other term remains"
+    },
+    {
+      "expression": "Zlib AND GPL-2.0-or-later",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "OUT_OF_SCOPE",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "OUT_OF_SCOPE",
+        "elections": []
+      },
+      "note": "an A1 class term outside its component stays out of scope"
+    },
+    {
+      "expression": "Zlib AND CC0-1.0",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "OUT_OF_SCOPE",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "OUT_OF_SCOPE",
+        "elections": []
+      },
+      "note": "open content outside ARTIFACT stays out of scope (under A1 too: the tie with UNKNOWN goes to the first canonical term)"
+    },
+    {
+      "expression": "Zlib AND CC0-1.0",
+      "component": {
+        "name": "zlib-licensed-fixture",
+        "kind": "ARTIFACT",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "ACCEPTED_AND",
+        "elections": []
+      },
+      "note": "open content in an ARTIFACT, with Zlib"
+    },
+    {
+      "expression": "GPL-2.0-only OR Zlib",
+      "component": {
+        "name": "nft",
+        "kind": "HOST_OS_PROGRAM",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "GPL-2.0-only OR Zlib",
+            "elected": "GPL-2.0-only"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "GPL-2.0-only OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "the election ranking prefers a default-allowed term to an approved review"
+    },
+    {
+      "expression": "MIT/Zlib",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": true,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "MIT OR Zlib",
+            "elected": "MIT"
+          }
+        ]
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "MIT OR Zlib",
+            "elected": "MIT"
+          }
+        ]
+      },
+      "note": "a legacy crate field is read as OR"
+    },
+    {
+      "expression": "Zlib/SSPL-1.0",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": true,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "UNKNOWN",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "ACCEPTED_OR",
+        "elections": [
+          {
+            "group": "SSPL-1.0 OR Zlib",
+            "elected": "Zlib"
+          }
+        ]
+      },
+      "note": "a legacy crate field with a denied alternative"
+    },
+    {
+      "expression": "Zlib AND NOASSERTION",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "REFUSED",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "REFUSED",
+        "elections": []
+      },
+      "note": "a whole-field value inside an expression is refused"
+    },
+    {
+      "expression": "Zlib and MIT",
+      "component": {
+        "name": "zlib-licensed-crate",
+        "kind": "CRATE",
+        "custody": "UPSTREAM_PINNED",
+        "crateField": false,
+        "linkedInto": null
+      },
+      "a1": {
+        "outcome": "REFUSED",
+        "elections": []
+      },
+      "a2": {
+        "outcome": "REFUSED",
+        "elections": []
+      },
+      "note": "operators are uppercase only"
+    }
+  ]
+}
