@@ -1,0 +1,329 @@
+{
+ "schemaVersion": "planeon.internal.w03-obligation-amendment/v2",
+ "id": "W03-PLAN-AMEND-2",
+ "amends": {
+  "path": "architecture/w03-plan-v2/plan.json",
+  "sha256": "sha256:a00470238431347da82cc47b1f1b6cf7cd51042d56694eea68d1373a3aaefb67",
+  "packet": "MET-ENFORCE-024"
+ },
+ "after": {
+  "path": "architecture/w03-obligation-amendment-1/amendment.json",
+  "sha256": "sha256:2a98e28989f41d69b27a580db8113e56d5adc1fcc1a4b96517997ce7b01f4bd2",
+  "packet": "MET-ENFORCE-025"
+ },
+ "ownerDecisions": [
+  "Owner (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4-1 = (a): the R10 observer produces I01, kept out of HE-004A-C. A seccomp successor adds an AF_UNIX listener for OBSERVER (as the broker has), plus its republish, routed to the parallel lane. I01 is recorded as a plan obligation in the next W03-plan meta packet, and an I01 packet follows.",
+  "Owner (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4-9 = (a): the observer's pre-ACTIVE result is an input to HE-008's off-host enrollment, so no ACTIVE configuration is signed without it. HE-004 defines the check and its record; HE-008 binds it. The ALPHA apiserver metric is accepted for v1.37.1, as a residual re-checked at every Kubernetes upgrade.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4-2 = (a): the split is HE-004A substrate, then B (I06/ADM-4 logic), then C (apiserver client), then D (captures and NP-3, after the native-profile successor).",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4-3/4 = (a): captures and the freeze wait for the native-profile successor (XR3-2 and XR4-3 routes), with no cgroup write grant for the observer.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4-10 = (a): outputs are in-memory records until decided with I01 and the successor.",
+  "Monitor (2026-10-16, relayed by the lane monitor, verbatim): G5-G7 are carried: HE-008 observer shares, systemd starting the observer with its final bounding set, RBAC provisioning, W02-PROD.",
+  "Owner (2026-10-16, relayed by the lane monitor, verbatim): SEC-4 for OBSERVER rests on: the digest- and length-pinned programs, present exactly once per binary; the post-seal and linked-source rules; and T04's installed-filter proof.",
+  "Owner (2026-10-16, relayed by the lane monitor, verbatim): OWNER DECISION 2026-10-16 on OBSERVER-WRAPPER-INVENTORY's route: \"T04 trace with seccomp audit records\".",
+  "Owner, its meaning as relayed (2026-10-16, relayed by the lane monitor, verbatim): The criterion is zero seccomp-kill audit records (audit type 1326) for planeon-observer, over a T04 workload that exercises every observer entry point. - It comes with a coverage report listing the entry points exercised. - It is runtime evidence at T04 (Linux, HE-008 era).",
+  "Owner, its scope as relayed (2026-10-16, relayed by the lane monitor, verbatim): What it does NOT change: the no-wrapper-classifier rule stays. No agent builds a wrapper classifier, table or inventory, by any route, now or at T04.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4B-0 (a): HE-004B1 first; B2 per Q-HE4B-11. Q-HE4B-1 (a): check_qualification and the acceptance token in HE-004D, bound to the record digest. Q-HE4B-2 (c): test-side localisation with the existing is_valid, plus the listed prefix fallback. Q-HE4B-4 (a): embedded digest-pinned bytes only. Q-HE4B-5 (a): two private literals as exact expressions. Q-HE4B-7 (a): the next operator edge record supersedes the current one by sha256, carries B1's 10 rows with full commits, and is published by W03-PLAN-AMEND-2. Include the I05-v4 rows in the same record if they are ready by then. Q-HE4B-8 (a): B compares and defines the record; C parses and supplies the pinned hash; HE-008 binds by digest. Q-HE4B-9 (a): closed request specs with completeness checks; the shared NotServed input (MutatingAdmissionPolicy kinds only); metadata-only OR05 lists; quota headroom goes to C. Q-HE4B-10 (a)+(c): production returns Unavailable without touching the fixture path; the v2 halves of X02–X04 are replayed. Q-HE4B-11 (b): fold B2 into HE-004D after native-profile v4 and the I06 successor, and split D so its v4-only captures aren't held. Q-HE4-5 and Q-HE4-6 are decided with C; Q-HE4-7 and Q-HE4-8 go through Q-HE4B-10/11 and Q-HE4B-7 as listed.",
+  "Owner (typed in the monitor chat) (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4B-3 (a) \"Direct grants only\": - R1-7 on direct User system:apiserver bindings only; - refuse OR03 and dangling role refs; - drop and count other subjects' non-resource rules; - no group expansion.",
+  "Owner (typed in the monitor chat) (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4B-6 (a) \"crates/observer\": - the modules go in crates/observer, linking i05-protocol (closure +1); - the residual (i05-protocol Value's memory-only Drop) is accepted and recorded; - the gate stays byte-identical.",
+  "Owner (typed in the monitor chat) (2026-10-16, relayed by the lane monitor, verbatim): Q-HE4B-12 (a) \"Fields as proposed\": - the fields are metric name, plugin, apiserver_id_hash, Kubernetes version, observation binding (record digest or nonce, plus window), pinned and loaded hash, verdict; - UNAVAILABLE unless the version is v1.37.1 and exactly one sample comes from the expected plugin; - HE-008 checks the binding and freshness.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): Agreed: one operator edge record carrying the I05 v4 rows and HE-004B1's 10 rows, published by W03-PLAN-AMEND-2.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): 1. Packet names: - HE-004B1, HE-004C, HE-004D1, HE-004D2 and HE-004-I01 are accepted. - The I05-v4 adoption is HE-003A3, since it continues the I05 gate-channel family after HE-003A and HE-003A2. If an R10 convention says otherwise, propose it at the contract review.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): 2. HE-004A's MERGED status goes in the README only. amendment.json stays normative and timeless. The README may cite dcaf26f as a fact at authoring time.",
+  "Monitor, owner-delegated (2026-10-16, relayed by the lane monitor, verbatim): 3. \"REFINED\" is accepted as a new change kind, with two conditions: - add it to the closed list of change kinds, with a one-line definition; - have the checker prove that each refined obligation's text is byte-identical to plan v2, and that its parts exactly cover the replaced packet."
+ ],
+ "changeKinds": {
+  "ADDED": "A new obligation, with its text, source, packets and scope, and optional shares for its packets.",
+  "REFINED": "Plan v2's packet in an obligation's list is replaced by its named parts; the text stays byte-identical to plan v2's; shares may name the parts or any other packet in the list after the change.",
+  "PACKETS_ADDED": "Packets added to an obligation's list, each with its share, as in amendment 1."
+ },
+ "packetRefinements": [
+  {
+   "packet": "HE-004",
+   "where": "R10",
+   "parts": [
+    {
+     "id": "HE-004A",
+     "summary": "The observer substrate: the binary, its two-stage seal accepting only a start bounding set of exactly {CAP_NET_ADMIN, CAP_BPF}, the vendored OBSERVER programs installed with TSYNC, the pinned not-yet-serving exit, and the observer's gate rules."
+    },
+    {
+     "id": "HE-004B1",
+     "summary": "The I06 RBAC snapshot: an R10-defined effective-RBAC producer over apiserver lists paired with closed request specs (R1-7 on direct User system:apiserver bindings, OR03 and dangling role references refused; other subjects' non-resource rules dropped and counted; no group expansion), the IC00-IC05 and v2 IC03 check, the OR02, OR05 and OR06 predicates, the ADM-4 comparison and its pre-ACTIVE record. Pure logic, host-tested."
+    },
+    {
+     "id": "HE-004C",
+     "summary": "The apiserver read client and live wiring: requests exactly per HE-004B1's specs, with API discovery attesting an unserved kind; /readyz (OR07); the inputs of the ADM-4 comparison (the /metrics samples, the expected plugin label, the Kubernetes version, the observation binding) and the pinned manifest hash from the observer's signed configuration; OR01; quota headroom; watch continuity, cross-list consistency and restart invalidation; the observer's read grants, which follow HE-004B1's request specs and are provisioned with the I06 successor (Q-HE4-6, G5-G7)."
+    },
+    {
+     "id": "HE-004D1",
+     "summary": "Kernel captures and the inspector policy (NP-3), after the native-profile successor (native-profile v4)."
+    },
+    {
+     "id": "HE-004D2",
+     "summary": "The I06 evidence composition (I06-2): check_evidence with W02a check_record and check_qualification and the acceptance token bound to the record digest, production UNAVAILABLE until W02-PROD; after native-profile v4 and the I06 successor."
+    }
+   ]
+  }
+ ],
+ "newPackets": [
+  {
+   "id": "HE-004-I01",
+   "where": "R10",
+   "summary": "The I01 OBSERVE_POLICY producer in the policy observer, after an OBSERVER seccomp successor gives it the AF_UNIX listener, its republished programs and an edge record registering them."
+  },
+  {
+   "id": "HE-003A3",
+   "where": "R10",
+   "summary": "R10's adoption of the I05 gate channel v4 (MET-ENFORCE-030), continuing the I05 gate-channel family after HE-003A and HE-003A2: the gate's worker observation at every BIND replaces the static observedWorkers source; no wire change."
+  }
+ ],
+ "changes": [
+  {
+   "obligation": "I01-1",
+   "change": "ADDED",
+   "text": "The R10 policy observer serves I01 to the protected server as the corrected spec defines it (AF_UNIX SOCK_SEQPACKET at /run/planeon/live-proxy/policy-observer.sock; only OBSERVE_POLICY; the exact current request/response schema), after an OBSERVER seccomp successor gives it the listener (bind, listen, accept4), the republished OBSERVER programs and an edge record registering them.",
+   "source": "architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md:52 (I01); owner decision Q-HE4-1 (a)",
+   "packets": [
+    "HE-004-I01"
+   ],
+   "scope": "W03"
+  },
+  {
+   "obligation": "I06-2",
+   "change": "REFINED",
+   "text": "R1-5: compose check_evidence with check_qualification per record; keep W02a caller obligations 1 and 4.",
+   "replaced": "HE-004",
+   "parts": [
+    "HE-004D2"
+   ],
+   "packets": [
+    "HE-004D2"
+   ],
+   "shares": {
+    "HE-004D2": "the composition, check_qualification and the acceptance token bound to the record digest; the production path returns UNAVAILABLE without reaching the fixture path until W02-PROD"
+   },
+   "source": "monitor decisions (owner-delegated) Q-HE4-2 (a), Q-HE4B-1 (a), Q-HE4B-10 (a)+(c), Q-HE4B-11 (b)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "I06-3",
+   "change": "REFINED",
+   "text": "R1-7: refuse a snapshot when a non-resource-URL rule is bound to system:apiserver.",
+   "replaced": "HE-004",
+   "parts": [
+    "HE-004B1"
+   ],
+   "packets": [
+    "HE-004B1"
+   ],
+   "shares": {
+    "HE-004B1": "the producer refuses a non-resource-URL rule in a role bound directly to {User, system:apiserver}; OR03 and dangling role references refuse; other subjects' non-resource rules are dropped and counted; groups are not expanded"
+   },
+   "source": "owner decision Q-HE4B-3 (a) \"Direct grants only\"",
+   "scope": "W03"
+  },
+  {
+   "obligation": "ADM-4",
+   "change": "REFINED",
+   "text": "The observer checks the loaded manifest hash before ACTIVE.",
+   "replaced": "HE-004",
+   "parts": [
+    "HE-004B1",
+    "HE-004C"
+   ],
+   "packets": [
+    "HE-004B1",
+    "HE-004C"
+   ],
+   "shares": {
+    "HE-004B1": "the comparison and the pre-ACTIVE record: metric name, plugin, apiserver_id_hash, Kubernetes version, observation binding (record digest or nonce, plus window), pinned and loaded hash, verdict; UNAVAILABLE unless the version is v1.37.1 and exactly one sample comes from the expected plugin",
+    "HE-004C": "the metric samples it parses and the pinned hash from the observer's signed configuration"
+   },
+   "source": "owner decisions Q-HE4-9 (a), Q-HE4B-12 (a); monitor decision Q-HE4B-8 (a)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "ADM-4",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "HE-008"
+   ],
+   "packets": [
+    "HE-004B1",
+    "HE-004C",
+    "HE-008"
+   ],
+   "shares": {
+    "HE-008": "binds the pre-ACTIVE record by digest into the off-host enrollment, so no ACTIVE configuration is signed without it, and checks its observation binding against the enrollment and the window's freshness; the ALPHA metric is accepted for v1.37.1, as a residual re-checked at every Kubernetes upgrade"
+   },
+   "source": "owner decisions Q-HE4-9 (a), Q-HE4B-12 (a)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "NP-3",
+   "change": "REFINED",
+   "text": "Inspection freezes through an ancestor and never writes the broker leaf's cgroup.freeze.",
+   "replaced": "HE-004",
+   "parts": [
+    "HE-004D1"
+   ],
+   "packets": [
+    "HE-004D1"
+   ],
+   "shares": {
+    "HE-004D1": "after native-profile v4, with no cgroup write grant for the observer"
+   },
+   "source": "monitor decisions Q-HE4-2 (a), Q-HE4-3/4 (a)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "SEC-4",
+   "change": "REFINED",
+   "text": "Install exactly the compiled programs.",
+   "replaced": "HE-004",
+   "parts": [
+    "HE-004A"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004A",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008"
+   ],
+   "shares": {
+    "HE-004A": "the OBSERVER call site and seal",
+    "HE-008": "for OBSERVER: the unit uses no systemd seccomp option and starts the observer in a start state the seal accepts (bounding set already {CAP_NET_ADMIN, CAP_BPF}), so that the seal installs exactly the published OBSERVER program"
+   },
+   "source": "monitor decision Q-HE4-2 (a); carried G5-G7",
+   "scope": "W03"
+  },
+  {
+   "obligation": "HI-7",
+   "change": "REFINED",
+   "text": "Per-role uid, capabilities, seccomp and SELinux.",
+   "replaced": "HE-004",
+   "parts": [
+    "HE-004A"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004A",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008"
+   ],
+   "shares": {
+    "HE-004A": "the OBSERVER seal's start and end state",
+    "HE-008": "for OBSERVER: uid 0 and gid 0; the final bounding set {CAP_NET_ADMIN, CAP_BPF} at start (matrix v5 grants planeon_observer_t no setpcap); no AmbientCapabilities=; RUST_BACKTRACE unset; fds 0-2 open; the observer stays dumpable, and core_pattern is not a pipe or its helper honours RLIMIT_CORE 0; planeon_observer_t's self permissions the seal needs (process setcap, getcap and setrlimit; its own /proc/self/status reads), with no process setrlimit or getrlimit on other domains (prlimit64 is unconditional in the OBSERVER row); no Restart= before HE-004B1 and HE-004C have merged"
+   },
+   "source": "monitor decision Q-HE4-2 (a); carried G5-G7",
+   "scope": "W03"
+  },
+  {
+   "obligation": "SEC-4",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "T04"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004A",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008",
+    "T04"
+   ],
+   "shares": {
+    "T04": "for OBSERVER, the installed-filter proof: the installed filter equals the OBSERVER program digest, Seccomp_filters: 1, and the post-seal exit path traced"
+   },
+   "source": "owner decision Q-HE4A-B2 (a) (SEC-4 for OBSERVER rests on T04's installed-filter proof, among others)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "HI-7",
+   "change": "PACKETS_ADDED",
+   "packetsAdded": [
+    "T04"
+   ],
+   "packets": [
+    "HE-002S",
+    "HE-003",
+    "HE-004A",
+    "HE-005",
+    "HE-006",
+    "HE-007",
+    "HE-008",
+    "T04"
+   ],
+   "shares": {
+    "T04": "for OBSERVER: the CAP_LAST_CAP check, TSYNC and dumpability at exec"
+   },
+   "source": "HE-004A's carried items (R10 MODEL_DEFINED, the HE-004A section); owner decision Q-HE4A-B2 (a)",
+   "scope": "W03"
+  },
+  {
+   "obligation": "OBS-INV-1",
+   "change": "ADDED",
+   "text": "planeon-observer: zero seccomp-kill audit records (audit type 1326) over a T04 workload that exercises every observer entry point, with a coverage report listing the entry points exercised; runtime evidence at T04 (Linux, HE-008 era). No agent builds a wrapper classifier, table or inventory, by any route, now or at T04.",
+   "source": "owner decision 2026-10-16 on OBSERVER-WRAPPER-INVENTORY's route (\"T04 trace with seccomp audit records\")",
+   "packets": [
+    "HE-008",
+    "T04"
+   ],
+   "shares": {
+    "HE-008": "the enrolled host and observer unit the trace runs on",
+    "T04": "the workload, the audit-record trace and the coverage report"
+   },
+   "scope": "W03"
+  },
+  {
+   "obligation": "I05-7",
+   "change": "ADDED",
+   "text": "At every BIND that has passed every v3 check, the gate observes the BIND's worker in I05 v4's five steps (cgroup.procs lists it; pidfd_open; the stat start time equals the BIND's; cgroup.procs again; the pidfd still alive); every failure is the existing non-fatal, retryable WORKER_NOT_OBSERVED with nothing durable written; the static observedWorkers source and R10's empty-list rule are removed.",
+   "source": "architecture/i05-gate-channel-v4/README.md:56-70, :119-127 (the observation and its failures), :332-333 (the real-kernel observation still open); architecture/i05-gate-channel-v4/status.json:191 (R10-ADOPTION)",
+   "packets": [
+    "HE-003A3",
+    "T04"
+   ],
+   "scope": "W03",
+   "shares": {
+    "HE-003A3": "the observation in R10 and the removal of the static source",
+    "T04": "the observation on a real kernel"
+   }
+  },
+  {
+   "obligation": "I05-8",
+   "change": "ADDED",
+   "text": "I05 v4's host preconditions: the probe-worker leaf stays a domain cgroup with no threaded descendants; the gate, the broker and the worker share one pid namespace and one time namespace, or at least one boottime offset; the gate's /proc directory fd is that namespace's procfs, mounted with hidepid=0, and the gate is not in the mount's gid= group; the gate obtains its cgroup2-root and /proc directory fds at start, and has dir search on the cgroup2 root, whose own type is host policy outside matrix v5.",
+   "source": "architecture/i05-gate-channel-v4/README.md:101-113, :151-186; architecture/i05-gate-channel-v4/status.json:190 (HOST-PRECONDITIONS, W03/T04)",
+   "packets": [
+    "HE-003A3",
+    "HE-005",
+    "HE-008",
+    "T04"
+   ],
+   "shares": {
+    "HE-003A3": "obtains the cgroup2-root and /proc directory fds at start",
+    "HE-005": "the broker keeps the probe-worker leaf a domain cgroup with no threaded descendants",
+    "HE-008": "the namespaces, the procfs mount options (hidepid=0, the gate outside gid=) and the cgroup2 root's host policy granting the gate dir search",
+    "T04": "checks each precondition on the enrolled host"
+   },
+   "scope": "W03"
+  }
+ ],
+ "shareRule": "A share adds to the named packet's part of the obligation as plan v2 states it; it never narrows it. A share may name any packet in the obligation's list after the change, and a later share for the same packet adds to its earlier shares (amendment 1's and this amendment's).",
+ "refinementRule": "Every obligation whose list holds the refined packet after amendment 1 has a REFINED row; the parts named by the REFINED rows together are exactly the refined packet's parts; no row keeps the refined packet; and each REFINED row's text is plan v2's text byte for byte. Rows for one obligation apply in order, after amendment 1.",
+ "dependencyNames": {
+  "native-profile v4": "the native-profile successor (primary-lane meta packet; not a plan v2 packet)",
+  "the I06 successor": "plan v2's W02G-F2 (the I06 successor bound to the production profile)",
+  "W02-PROD": "the roadmap item covering plan v2's W02A-F2 and W02G-F2",
+  "an OBSERVER seccomp successor": "a parallel-lane seccomp allowlist successor and its program republish (meta packets; not plan v2 packets)"
+ },
+ "unchanged": "Every other plan v2 obligation, packet and toolchain, and every amendment 1 change; plan v2 and amendment 1 stay byte-identical."
+}

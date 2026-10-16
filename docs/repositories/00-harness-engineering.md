@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-031
+## Current source preparation — MET-ENFORCE-032
+
+MET-ENFORCE-032 (W03-PLAN-AMEND-2): W03 obligation-register amendment 2, applied after amendment 1. Plan v2's HE-004 is
+refined into HE-004A, HE-004B1, HE-004C, HE-004D1 and HE-004D2 (REFINED rows keep plan v2's text byte for byte); I01-1,
+OBS-RBAC-1, OBS-INV-1, I05-7 and I05-8 are added, with the new packets HE-004-I01 and HE-003A3; the operator edge record
+v4 carries v3's 33 rows and registers 12 provider files before use. Adopted by the lane monitor (owner-delegated) after
+three independent review rounds; C3-2 is carried to the packet review. DATA_CHECK_ONLY. Alpha2 OPEN; 243 accepted plus
+MET-ENFORCE-032 only.
+
+## Historical license-policy amendment A2 source preparation — MET-ENFORCE-031
 
 MET-ENFORCE-031 (LICENCE-POLICY-AMEND): license-policy amendment LIC-HOST-A2, one overlay list that makes Zlib
 default-allowed globally through A1's unchanged classifier (monitor LIC-ZLIB, L2-1 (a), L2-2 (a)). The base policy 0.3.0,
@@ -1211,6 +1220,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 115. `MET-PERF-040`: give back verify headroom lost to the history chain's depth (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change; DATA_CHECK_ONLY.
 116. `MET-ENFORCE-030`: publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, every failure WORKER_NOT_OBSERVED); the v3 contract, supplement and model unchanged; DATA_CHECK_ONLY.
 117. `MET-ENFORCE-031`: publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay); the base policy, A1 and its classifier unchanged; DATA_CHECK_ONLY.
+118. `MET-ENFORCE-032`: publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; plan v2, amendment 1 and edge record v3 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

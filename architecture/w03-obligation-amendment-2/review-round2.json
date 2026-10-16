@@ -1,0 +1,188 @@
+{
+ "subject": {
+  "architecture/w03-obligation-amendment-2/amendment.json": "08c4cf9487dad4a151d1058bc6102e3605bb25abb7441136a5f5de65efe64fcf",
+  "architecture/w03-obligation-amendment-2/README.md": "f30da109aeac2d56ea49863f285a285807bc10fd00cbcb5e9f5cbe4eda8d57e4",
+  "architecture/artifact-edges/operator-harness-engineering-v4.json": "0fb56e0a9c4c265110cf54e369ca0af8fa0adee0b7dc826840ea657a39426672",
+  "architecture/artifact-edges/README-v4.md": "d76c176d98a43398de2e46d524d3cafb5b0c1a8f5284ff7a9c96958600114351"
+ },
+ "reviewer": "independent agent",
+ "verdict": "CHANGES_REQUIRED",
+ "round1Resolutions": [
+  {
+   "id": "C1-1",
+   "status": "RESOLVED",
+   "note": "HI-7's HE-008 share now ends its self-permissions clause with \"with no process setrlimit or getrlimit on other domains (prlimit64 is unconditional in the OBSERVER row)\"."
+  },
+  {
+   "id": "C1-2",
+   "status": "RESOLVED",
+   "note": "SEC-4 PACKETS_ADDED +T04: the installed filter equals the OBSERVER digest, Seccomp_filters: 1, the post-seal exit path. HI-7 PACKETS_ADDED +T04: CAP_LAST_CAP, TSYNC, dumpability at exec. Each packet list is the REFINED row's list plus T04. Q-HE4A-B2's SEC-4 bullet is quoted verbatim, but its entry does not carry the decision id (C2-1)."
+  },
+  {
+   "id": "C1-3",
+   "status": "RESOLVED",
+   "note": "I06-2's source says \"monitor decisions (owner-delegated) Q-HE4-2 (a), ...\". The README says \"the monitor's owner-delegated decision Q-HE4-2 (a)\"."
+  },
+  {
+   "id": "C1-4",
+   "status": "RESOLVED",
+   "note": "OBS-INV-1 now uses the owner's sentence verbatim."
+  },
+  {
+   "id": "C1-5",
+   "status": "RESOLVED",
+   "note": "I05-7 now reads \"At every BIND that has passed every v3 check, the gate observes ... in I05 v4's five steps (...)\". T04 is added with \"the observation on a real kernel\", and README:332-333 is cited. Checked against README:56-70 and :119-127: only the BIND record's write follows the observation (O20), and that is not a v3 check."
+  },
+  {
+   "id": "C1-6",
+   "status": "RESOLVED",
+   "note": "I05-8 adds HE-003A3 (root fds at start), dir search on the cgroup2 root (HE-008's share grants it) and \"or at least one boottime offset\". All three match README:154-180 and :340-345 and status.json:190."
+  },
+  {
+   "id": "C1-7",
+   "status": "RESOLVED",
+   "note": "I01-1 carries SOCK_SEQPACKET, the socket path, 'only OBSERVE_POLICY' and the exact current schema, \"as the corrected spec defines it\"."
+  },
+  {
+   "id": "C1-8",
+   "status": "RESOLVED",
+   "note": "In the JSON: ADDED and REFINED definitions name shares; shareRule says later shares add to earlier ones; refinementRule has the every-holder clause and \"no row keeps\". Builder lines 217-218 assert holders == REFINED obligations and that no row lists HE-004. The README's change-kinds paragraph was not updated (C2-4)."
+  },
+  {
+   "id": "C1-9",
+   "status": "PARTLY",
+   "note": "The RBAC grants left HI-7, which is good. They now sit only in HE-004C's summary: \"the observer's read grants, which follow HE-004B1's request specs and are provisioned with the I06 successor (Q-HE4-6, G5-G7)\". That states as settled what the monitor deferred (\"Q-HE4-5 and Q-HE4-6 are decided with C\"); the content is the dossier's and DESIGN-B's recommendation, not a decision. HE-008's carried RBAC item (a34a429 MODEL_DEFINED, HE-004A 'Carried'/HE-008: \"the RBAC grants\") is now in no row or summary. The closure fact behind the dependency (planeon:policy-observer allowedGrants [], identity-closure.json:1765-1774) is not stated. Here 'the I06 successor' is the W02-PROD one (dossier Q-HE4-6), which differs from HE-004D2's (C2-2).",
+   "requiredChange": "Word it as pending, e.g. \"the observer's read grants, decided with this packet (Q-HE4-6): the I06 closure gives planeon:policy-observer no grants today, so the I06 successor in W02-PROD must name them and HE-008 provisions them (G5-G7; HE-004A's carried items)\". The obligation row then comes with the packet that decides Q-HE4-6."
+  },
+  {
+   "id": "C1-10",
+   "status": "RESOLVED",
+   "note": "Only the agreement line is quoted, verbatim, in both JSON files."
+  },
+  {
+   "id": "C1-11",
+   "status": "RESOLVED",
+   "note": "The README's 'Why' names HE-003A3, I05-7 and I05-8. README-v4 says \"HE-003A2 and HE-004A (HE-004's first part) have since merged\" (still without 'at authoring time'; acceptable in a README)."
+  },
+  {
+   "id": "C1-12",
+   "status": "PARTLY",
+   "note": "(a) The packet-names confirmation is quoted. (b) v3's null-providerCommit note is carried verbatim. (c) The label convention is now stated, but inaccurately (C2-3)."
+  },
+  {
+   "id": "C1-13",
+   "status": "RESOLVED",
+   "note": "HE-004C's summary names discovery, /readyz, the ADM-4 inputs (samples, expected plugin label, Kubernetes version, observation binding), cross-list consistency and restart invalidation. Not quoting the Q-HE4A-1 reading is acceptable."
+  },
+  {
+   "id": "C1-14",
+   "status": "PARTLY",
+   "note": "dependencyNames is added and its four keys match the phrases in use. One mapping is unsupported (C2-2)."
+  },
+  {
+   "id": "C1-15",
+   "status": "RESOLVED",
+   "note": "Recorded as a mechanics checklist item in DRAFT section 8. It runs at mechanics, and this review has not observed it."
+  }
+ ],
+ "findings": [
+  {
+   "id": "C2-1",
+   "severity": "MINOR",
+   "location": "amendment.json ownerDecisions[6]; changes[SEC-4 PACKETS_ADDED].source, changes[HI-7 PACKETS_ADDED].source",
+   "finding": "The new entry reads \"Owner (2026-10-16, relayed by the lane monitor, verbatim): SEC-4 for OBSERVER rests on: ...\". The bullet is verbatim (OWNER_DECISIONS.md:53), but the entry does not say which decision it is. The two T04 rows cite \"owner decision Q-HE4A-B2 (a)\". Of all decision ids cited in change sources, Q-HE4A-B2 is the only one that appears in no ownerDecisions entry (scripted check). The HI-7 T04 row also cites Q-HE4A-B2, but that decision speaks of SEC-4 only. HI-7's T04 items come from HE-004A's carried list.",
+   "requiredChange": "Label the entry \"Owner, Q-HE4A-B2 = (a) (2026-10-16, relayed by the lane monitor, verbatim): SEC-4 for OBSERVER rests on: ...\". This follows the relayed header \"Owner decision Q-HE4A-B2 = (a), 2026-10-16.\" and leaves out its relay instruction. Cite HI-7's T04 row to HE-004A's carried items only (R10 MODEL_DEFINED at a34a429, HE-004A 'Carried', T04)."
+  },
+  {
+   "id": "C2-2",
+   "severity": "MINOR",
+   "location": "amendment.json dependencyNames[\"the I06 successor\"]",
+   "finding": "dependencyNames maps \"the I06 successor\" to \"plan v2's W02G-F2 (the I06 successor bound to the production profile)\" and calls native-profile v4 \"not a plan v2 packet\". HE-004D2 waits for 'the I06 successor' by Q-HE4B-11 (b). DESIGN-B section 1.1 gives that decision's basis: \"I06 R1-4 makes every W02a successor need an I06 successor\", so the I06 successor HE-004D2 waits for is the one bound to native-profile v4. That is W02G-F2 only if native-profile v4 is, or leads directly to, the production profile W02A-F2, which neither decision states. The term is also used in a second sense in HE-004C's summary (the W02-PROD successor of the dossier's Q-HE4-6). With one fixed mapping, HE-004D2 could be sequenced after the production I06 successor without any decision saying so.",
+   "requiredChange": "Map it as the sources support, e.g. \"the I06 successor bound to native-profile v4 (I06 R1-4); W02G-F2 when native-profile v4 is the production profile W02A-F2\". Keep the W02-PROD sense separate, as \"W02G-F2\", in HE-004C's summary. Alternatively, get the monitor to confirm that the two are the same."
+  },
+  {
+   "id": "C2-3",
+   "severity": "MINOR",
+   "location": "operator-harness-engineering-v4.json notes[2] (consumer-label convention)",
+   "finding": "The note says \"consumerPacket names the packet that first holds the files: the plan v2 packet for rows registered before a split (HE-004, ...) and the R10 packet where the plan already names it (HE-003A2; HE-003A3, ...)\". Two parts are inaccurate. (a) Neither plan v2 nor amendment 1 names HE-003A2: plan v2 names HE-003, and HE-003A2 is an R10 part. (b) B1's 10 rows are registered in the same packet that publishes the split, not before it, and B1's files are first held by HE-004B1. By the note's own rule they would be labelled HE-004B1, yet they carry HE-004. This also clashes with notes[1], which justifies HE-004 by the bytes rule.",
+   "requiredChange": "Restate the convention to match the rows, e.g. \"consumerPacket is a label; the edge rule binds bytes, modes and versions. Carried rows keep their labels (v3 used the R10 part HE-003A2). B1's rows use the plan v2 packet HE-004, which this packet refines (HE-004B1 first holds them). The I05 v4 rows use HE-003A3, which this packet adds.\" Alternatively, relabel B1's rows HE-004B1."
+  },
+  {
+   "id": "C2-4",
+   "severity": "NOTE",
+   "location": "amendment README 'Change kinds' paragraph; README-v4 summary line",
+   "finding": "The amendment README still defines ADDED as \"a new obligation with its text, source, packets and scope\" with no shares, and states only \"no REFINED row keeps HE-004\". The JSON now has share clauses, the later-shares-add rule, the every-holder clause, \"no row keeps\" and dependencyNames. README-v4 cites \"monitor decisions Q-HE4B-7 (a) and the one-record sequencing\", but the record now also quotes the packet-names confirmation and states a label convention.",
+   "requiredChange": "Regenerate both README paragraphs from the JSON's current rules and decisions."
+  },
+  {
+   "id": "C2-5",
+   "severity": "NOTE",
+   "location": "amendment.json changes[HI-7 PACKETS_ADDED].shares[\"T04\"]",
+   "finding": "\"the CAP_LAST_CAP check\" is vague. The carried item is \"PR_CAPBSET_READ(41) returns EINVAL on the target kernel (CAP_LAST_CAP 40)\" (MODEL_DEFINED HE-004A 'Carried'/T04).",
+   "requiredChange": "Optional: state the check as carried."
+  },
+  {
+   "id": "C2-6",
+   "severity": "NOTE",
+   "location": "amendment.json refinementRule; build_contract.py refined()",
+   "finding": "The rule says each holder \"has a REFINED row\", not exactly one. refined() computes 'before' from the post-amendment-1 list, not from the running state, so the builder would accept a second REFINED row for the same obligation. Applied in order, such a row has nothing to replace, so the content is sound today (one REFINED row per obligation, checked).",
+   "requiredChange": "Optional: write \"exactly one REFINED row\", and have the packet checker apply rows in order against the running list."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Subject sha256",
+   "result": "PASS: all four equal the coordinator's values."
+  },
+  {
+   "check": "Reproduction",
+   "result": "PASS: the updated build_contract.py with i05_rows.json, run with python3 -I -B into WORK/regen, gives output byte-identical to contract/ (diff -r). No .pyc was created."
+  },
+  {
+   "check": "Bindings",
+   "result": "PASS: unchanged (plan v2 a0047023..., amendment 1 2a98e289..., edge v3 106ea91a..., all at fd362f9e; origin/main is still fd362f9e)."
+  },
+  {
+   "check": "ownerDecisions verbatim",
+   "result": "PASS with C2-1: all 18 entries match OWNER_DECISIONS.md's quoted lines (17 exactly; the Q-HE4B-0..11 entry once bullet markers are removed). The edge record's 3 decisions are a subset. Q-HE4A-B2 is the only cited decision id with no entry."
+  },
+  {
+   "check": "T04 PACKETS_ADDED rows (SEC-4, HI-7)",
+   "result": "PASS with C2-1 and C2-5: each packets list equals the preceding REFINED row's list plus T04 (the builder derives it from the running list). Shares equal the added packets and are scoped 'for OBSERVER'. The share content matches HE-004A's carried T04 items and Q-HE4A-B2's installed-filter leg."
+  },
+  {
+   "check": "refinementRule clause and assertion",
+   "result": "PASS with C2-6: the six HE-004 holders after amendment 1 are exactly the six REFINED obligations, each with one REFINED row. No row lists HE-004. The union of parts equals the five parts. Texts are plan v2's byte for byte. The builder asserts all of this (lines 216-222)."
+  },
+  {
+   "check": "I05-7 and I05-8 against the v4 README and status",
+   "result": "PASS: texts, packets and shares match README:56-70, :101-113, :119-127, :151-186, :332-333, :340-345 and status.json:190-191. The HE-003A3, HE-005, HE-008 and T04 shares are each grounded in those lines."
+  },
+  {
+   "check": "HI-7 and SEC-4 HE-008 shares",
+   "result": "Every HE-004A carried HE-008 item is present except the RBAC grants, which moved to HE-004C's summary (C1-9)."
+  },
+  {
+   "check": "Edge record",
+   "result": "PASS with C2-3: v3's 33 rows are identical in values and key order. For the 12 new rows, sha256, mode and last-change commit re-verified at fd362f9e, and they are unchanged from candidate 1. Own keys: artifact, supersedes, ownerDecisions, notes. v3's null-providerCommit note is carried verbatim."
+  },
+  {
+   "check": "dependencyNames",
+   "result": "Its keys match the phrases used in the contract. 'native-profile v4', 'W02-PROD' (supported by HE-004 dossier :52) and 'an OBSERVER seccomp successor' are fine. 'the I06 successor' is not supported (C2-2)."
+  },
+  {
+   "check": "Independence and privacy",
+   "result": "PASS: no W04 or R12 test-design content. The only R12 mentions are in v3's carried SERVER rows. No email address, name or home path appears. No forbidden path was opened, and artifact-edges/ was read by exact path only."
+  },
+  {
+   "check": "Not run",
+   "result": "No cargo, pytest, builds or validators. No harness-onion script run or imported. No network."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}
