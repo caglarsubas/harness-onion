@@ -1,6 +1,6 @@
 # I05 broker-gate channel v4 — I05-OBSERVED-WORKERS contract (DATA_CHECK_ONLY)
 
-Alpha 2A; 2026-10-16. Status: **CONTRACT_CANDIDATE_ROUND3_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`).
+Alpha 2A; 2026-10-16. Status: **CONTRACT_CANDIDATE_ROUND4_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`).
 
 v4 succeeds the adopted I05 v3 contract `../i05-gate-channel-v3/` (`planeon.internal.effect-gate-frame/v3`,
 ADOPTED_DATA_CONTRACT) and its supplement `../i05-gate-channel-v3-supplement/`. Later layers pin the v3 bytes
@@ -25,7 +25,7 @@ sequencing decision SEQ-241-242).
 
 | File | Content |
 |---|---|
-| `vectors.json` | `planeon.internal.effect-gate-model-vectors/v4`: v3 inputs pinned by SHA-256, three configurations (OBSERVING and two for the order transcripts), 19 observation transcripts O01-O19 (each with outputs, final snapshot and local observation log), 8 order transcripts P01-P08, 9 configuration refusals C01-C09 and 9 model-event refusals M01-M09 |
+| `vectors.json` | `planeon.internal.effect-gate-model-vectors/v4`: v3 inputs pinned by SHA-256, three configurations (OBSERVING and two for the order transcripts), 20 observation transcripts O01-O20 (each with outputs, final snapshot and local observation log), 9 order transcripts OB01-OB09, 9 configuration refusals C01-C09 and 9 model-event refusals M01-M09 |
 | `../../scripts/i05_gate_channel_v4.py` | Reference model: the v3 model with the gate's observation (`Gate._observe_worker`), `convert_v3_config`, `replay_observed` and `check_vectors` |
 | `../i05-gate-channel-v3/channel.schema.json`, `outcome-mapping.json` | Unchanged; v4 uses them as they are |
 
@@ -33,12 +33,12 @@ The v4 model is a copy of the v3 model with the changes below. The v3-to-v4 diff
 `scripts/i05_gate_channel_v4.py` is the review surface. Every function that checks or renders the wire (`decode_frame`,
 `check_frame`, `render_request`, `template_digest`, `identity_of`, `check_agreement`) is unchanged.
 
-`check_vectors(vectors, files)` makes 266 checks:
+`check_vectors(vectors, files)` makes 268 checks:
 
 - **v3 replay (221 checks).** Every v3 transcript (120) and supplement transcript (6), with its configuration converted by
   `convert_v3_config`, replays under v4 to the same outputs and final snapshot. Every v3 configuration refusal (5), frame
   check (34), byte check (14) and agreement case (42) gives v3's expected answer.
-- **v4 vectors (45 checks).** The 19 observation transcripts, 8 order transcripts, 9 configuration refusals and 9
+- **v4 vectors (47 checks).** The 20 observation transcripts, 9 order transcripts, 9 configuration refusals and 9
   model-event refusals.
 
 ## What v4 changes
@@ -55,7 +55,9 @@ The v4 model is a copy of the v3 model with the changes below. The v3-to-v4 diff
 
 The gate observes only for a BIND that passes every v3 check before it (peer, state, outstanding actions, replay,
 generation, binding, certificate, manifest reuse). So the answer to a BIND that fails one of those checks is v3's, whatever
-its worker, and nothing is observed for it (order transcripts P01-P08). The gate holds a directory fd on the cgroup2 mount and one on `/proc`,
+its worker, and nothing is observed for it (order transcripts OB01-OB09). Frame-level refusals (an invalid frame,
+CHAIN_BROKEN, CHALLENGE_MISMATCH and the other fatal frame answers) come earlier still: the BIND handler is not reached
+(OB01 pins one of them, OPENING_FRAME_REQUIRED). The gate holds a directory fd on the cgroup2 mount and one on `/proc`,
 and opens every file with `openat` relative to one of them (Q-HE2S-G (b)). It closes every fd the observation opens,
 the pidfd included, on every path, a failure path included.
 
@@ -65,7 +67,7 @@ the pidfd included, on every path, a failure path included.
 | 2 PIDFD_OPEN | `pidfd_open(workerPid, 0)` | A pidfd is returned | ESRCH: PROCESS_GONE. Any other error: PIDFD_OPEN_FAILED |
 | 3 STAT | `openat` `<pid>/stat` from the `/proc` fd, `read`, `close`; starttime is field 22 | starttime equals workerStartTicks | Unreadable or malformed: STAT_UNREADABLE. Gone (ENOENT or ESRCH): PROCESS_GONE. Other value: START_MISMATCH |
 | 4 CGROUP_RECHECK | `cgroup.procs` of the leaf again, as in step 1 | workerPid is still listed | Unreadable: CGROUP_RECHECK_UNREADABLE. Not listed: NOT_IN_PROBE_WORKER_CGROUP |
-| 5 PIDFD_ALIVE | `ppoll` (or `poll` or epoll) on the pidfd with a zero timeout, then `close` the pidfd | The poll returns 0, with no event at all: the held process has not exited | Poll error: PIDFD_POLL_FAILED. Any returned event (POLLIN, POLLHUP, POLLERR or POLLNVAL): PIDFD_EXITED |
+| 5 PIDFD_ALIVE | `ppoll` (or `poll` or epoll) on the pidfd requesting POLLIN, with a zero timeout, then `close` the pidfd | The poll returns 0, with no event at all: the held process has not exited | Poll error: PIDFD_POLL_FAILED. Any returned event (POLLIN, POLLHUP, POLLERR or POLLNVAL): PIDFD_EXITED |
 
 Rules:
 
@@ -77,8 +79,9 @@ Rules:
    - A reuse with the same start ticks in the same leaf is caught only by step 5 (O13).
    - Under B6, a reuse of the same (pid, start ticks) before step 2 is the named identity. It would need a PID wrap
      within one clock tick, or a privileged process choosing the PID (`clone3` `set_tid`, or `ns_last_pid`, which need
-     CAP_SYS_ADMIN over the pid namespace) and then getting into the leaf, which only init, the broker and, before the
-     seal, containment can write (matrix v5 A42, A43).
+     CAP_SYS_ADMIN or CAP_CHECKPOINT_RESTORE over the pid namespace) and then getting into the leaf. Only init, the
+     broker and, before the seal, containment can write the leaf's `cgroup.procs` (matrix v5 A42, A43); a child forked
+     by a leaf member starts in the leaf, and is a member under B4.
 
    The kernel facts behind this are stated from knowledge of Linux v6.12, not from a run (the author's, confirmed by the
    round-1 review), with the functions named:
@@ -122,7 +125,10 @@ Rules:
    - The cause and the failing step go to the local diagnostic log. The wire answer does not say which step failed.
    - The log is best effort. A failed or full log write is dropped (R10 may count drops). It never becomes a
      STORAGE_FAILURE, never closes the channel and never changes the answer.
-5. **Reading and parsing.** Each file is read until a `read` returns 0, because `cgroup.procs` is a seq_file that
+5. **Reading and parsing.** The gate reads with plain `read(2)` calls into a bounded buffer and asks for no file
+   metadata. On linux-gnu, Rust std's `read_to_end` first calls `metadata` (statx), and glibc's `fstat` on x86_64 is
+   `newfstatat`. Neither is on the EFFECT_GATE allowlist, and the default action kills the gate (constraint C1). Each
+   file is read until a `read` returns 0, because `cgroup.procs` is a seq_file that
    returns about one page per call.
    - **Bounds.** `cgroup.procs` is read to at most 65536 bytes and `stat` to at most 4096 bytes. Content beyond either
      bound is unreadable.
@@ -189,8 +195,9 @@ Rules:
   > still not exited. Defaults B1, B4 and B6 hold as you stated. So I05 v4 is a model, vectors and README successor; the
   > v3 frame schema bytes and its supplement stay byte-identical.
 
-- **B1-B6, as v4 defines them.** The monitor relayed that v4 defines B1-B6 and R10 follows. The defaults B1, B4 and
-  B6 hold as stated to the monitor; B2, B3 and B5 are the decided Q-I5 answers:
+- **B1-B6, as v4 defines them.** The monitor relayed that v4 defines B1-B6 and R10 follows. The author sent B1-B6 with
+  defaults (recorded as B-DEFAULTS in the author's decision record). The monitor's text holds the defaults B1, B4 and B6
+  "as you stated"; Q-I5-1 and Q-I5-2 decide B2, B3 and B5 as their defaults proposed:
   - B1, the mechanism: `cgroup.procs` plus `/proc/<pid>/stat` starttime, pidfd-confirmed (steps 1-5, Q-I5-3);
   - B2, the timing: a fresh read at every BIND, no cache (Q-I5-1, rule 3);
   - B3, failure: every failure refuses with WORKER_NOT_OBSERVED, non-fatal and retryable (Q-I5-2, rule 4);
@@ -247,7 +254,7 @@ v3's.
 | O04 | The right PID with another start time | START_MISMATCH |
 | O05 | The worker exited before the BIND | NOT_A_MEMBER |
 | O06-O10 | Each step's read fails once; the retried BIND binds | CGROUP_PROCS_UNREADABLE, PIDFD_OPEN_FAILED, STAT_UNREADABLE, CGROUP_RECHECK_UNREADABLE, PIDFD_POLL_FAILED, then OBSERVED |
-| O11 | Race: the worker exits after step 1 | PROCESS_GONE at step 2 (on a real kernel, until reaped, see rule 1) |
+| O11 | Race: the worker exits after step 1 | PROCESS_GONE at step 2. On a real kernel, an exited worker that is not yet reaped gives NOT_IN_PROBE_WORKER_CGROUP or PIDFD_EXITED instead (rule 1) |
 | O12 | Race: after step 1 the PID is reused outside the leaf with another start | START_MISMATCH |
 | O13 | Race: after step 2 the PID is reused in the leaf with the same start | PIDFD_EXITED |
 | O14 | Race: the worker is moved out of the leaf after step 3 | NOT_IN_PROBE_WORKER_CGROUP |
@@ -256,29 +263,35 @@ v3's.
 | O17 | The worker observed at one BIND exits; the next BIND (run two) names it | OBSERVED, then NOT_A_MEMBER |
 | O18 | The worker observed at one BIND moves out of the leaf; the next BIND names it | OBSERVED, then NOT_A_MEMBER |
 | O19 | Race: the held worker exits after step 2, with no reuse | PROCESS_GONE at step 3 |
+| O20 | The worker is observed, then the BIND record's write fails | OBSERVED in the log, v3's STORAGE_FAILURE answer |
 
 `check_vectors` requires all of the following:
 - Every (failing step, cause) pair the observation can give occurs at least once: eleven pairs (the model's
   `OBSERVATION_OUTCOMES`), and OBSERVED.
 - Some transcript refuses, at a later BIND, a worker it observed earlier (Q-I5-1).
+- Some transcript's observed BIND fails at its record and keeps its log entry (O20).
+- Observation transcripts send unmutated frames.
 - Every injection is consumed by the end of its transcript.
 - The observation log pairs, in order, with exactly the BINDs that reach the observation: those answered OK,
   WORKER_NOT_OBSERVED or STORAGE_FAILURE (a BIND record that fails after the observation). A BIND answered before it
   has no entry.
 
-**P01-P08** pin the order. Each is a v3 transcript's prefix that ends in a BIND answered before the observation, with that
-BIND's worker replaced by the process outside the leaf. The answer stays v3's, and nothing is observed for that BIND:
+**OB01-OB09** pin the order. Each names its v3 source (`from`) and must be exactly that transcript's prefix, ending in a
+BIND answered before the observation, with only that BIND's worker replaced by the process outside the leaf. The checker
+also requires that the process is not a leaf member in the kernel at that BIND, that every injection is consumed, and that
+the answer is v3's. Nothing is observed for that BIND:
 
 | ID | Answer before the observation | From v3 |
 |---|---|---|
-| P01 | Fatal PEER_QUALIFICATION_MISMATCH | T14 |
-| P02 | NOT_ACTIVE | T37 (INSPECTING) |
-| P03 | ACTION_OUTSTANDING | T42 |
-| P04 | EXECUTION_REPLAY | T75 |
-| P05 | GENERATION_MISMATCH | T13 |
-| P06 | UNKNOWN_BINDING | T13 |
-| P07 | CERTIFICATE_MISMATCH | T13 |
-| P08 | MANIFEST_REUSED | T95 (LATER) |
+| OB01 | Fatal OPENING_FRAME_REQUIRED (a frame-level answer) | T15 |
+| OB02 | Fatal PEER_QUALIFICATION_MISMATCH | T14 |
+| OB03 | NOT_ACTIVE | T37 (INSPECTING) |
+| OB04 | ACTION_OUTSTANDING | T42 |
+| OB05 | EXECUTION_REPLAY | T75 |
+| OB06 | GENERATION_MISMATCH | T13 |
+| OB07 | UNKNOWN_BINDING | T13 |
+| OB08 | CERTIFICATE_MISMATCH | T13 |
+| OB09 | MANIFEST_REUSED | T95 (LATER) |
 
 `check_vectors` requires every answer of `BEFORE_OBSERVATION` to be pinned this way. A model that observes first, or
 before any one of these checks, is refused.
@@ -318,7 +331,9 @@ before any one of these checks, is refused.
     observation also uses.
 - The host preconditions of rules 2, 8 and 9 (W03/T04):
   - the leaf stays a domain cgroup with no threaded descendants;
-  - one pid namespace and `hidepid=0`;
+  - one pid namespace and one time namespace (or boottime offset);
+  - the gate's `/proc` fd is that pid namespace's procfs instance (excluded by precondition, not detected);
+  - `hidepid=0`, and the gate outside the mount's `gid=` group;
   - the cgroup2 root's dir search.
 
 ## Round-1 findings and dispositions
@@ -338,10 +353,23 @@ before any one of these checks, is refused.
 
 | Finding | Disposition |
 |---|---|
-| IR2-1 MINOR, order not pinned | P01-P08 pin every answer before the observation with a non-member worker. The log is paired only with the BINDs that reach the observation. The observe-first and observe-before-MANIFEST_REUSED mutants are refused |
+| IR2-1 MINOR, order not pinned | P01-P08 (renamed OB01-OB09 in round 3) pin every answer before the observation with a non-member worker. The log is paired only with the BINDs that reach the observation. The observe-first and observe-before-MANIFEST_REUSED mutants are refused |
 | IR2-2 NOTE, time namespace | Rule 8: one time namespace or boottime offset, with the kernel basis; different offsets fail closed |
 | IR2-3 NOTE, log write failure | Rule 4: the log is best effort; a failed write is dropped and never becomes a STORAGE_FAILURE |
 | IR2-4 NOTE, B1-B6 | "Decisions" defines all six, B2, B3 and B5 by the decided Q-I5 answers |
 | IR2-5 NOTE, wording | Step 5 passes only on a poll with no event. Rule 1 names `set_tid` and `ns_last_pid`. Rule 8 names the `gid=` exemption and `hidepid=ptraceable` |
 | IR2-6 NOTE, E-prefix | The model-event refusals are M01-M09 |
 | IR2-7 NOTE | Summary only; no change |
+
+## Round-3 findings and dispositions
+
+| Finding | Disposition |
+|---|---|
+| IR3-1 MINOR, order rows could be tampered | Each order row names its v3 source and must equal that prefix with only the worker replaced; the worker's non-membership is checked in the kernel at the BIND; injections must be consumed. The mutate, KERNEL_MOVE and unconsumed-injection tampers are refused |
+| IR3-2 NOTE, frame-level answers | The README says they come earlier still; OB01 pins OPENING_FRAME_REQUIRED, which is in `BEFORE_OBSERVATION` |
+| IR3-3 NOTE, STORAGE_FAILURE after observation | O20, and `check_vectors` requires such a case with its log entry |
+| IR3-4 NOTE, poll events | Step 5 requests POLLIN |
+| IR3-5 NOTE, C1 pitfall | Rule 5: plain `read(2)` and no metadata; why `read_to_end` and glibc `fstat` would be killed |
+| IR3-6 NOTE, Still open | Adds the time namespace, the procfs instance and the `gid=` group |
+| IR3-7 NOTE, wording | CAP_CHECKPOINT_RESTORE and forked children (rule 1); O11's real-kernel cause; order rows renamed OB01-OB09; the B1-B6 attribution names the B-DEFAULTS record |
+| IR3-8 NOTE | Summary only |

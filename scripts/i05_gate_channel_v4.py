@@ -1069,11 +1069,11 @@ V3_FILES = {"schema": "architecture/i05-gate-channel-v3/channel.schema.json",
             "supplement": "architecture/i05-gate-channel-v3-supplement/vectors.json"}
 V3_FLOORS = {"transcripts": 120, "agreement": 42, "frames": 34, "byteFrames": 14, "configRefusals": 5}
 SUPPLEMENT_FLOOR = 6
-V4_FLOORS = {"transcripts": 19, "orderTranscripts": 8, "configRefusals": 9, "eventRefusals": 9}
+V4_FLOORS = {"transcripts": 20, "orderTranscripts": 9, "configRefusals": 9, "eventRefusals": 9}
 REFUSAL_PREFIX = {"configRefusals": "C", "eventRefusals": "M"}      # M: malformed model events (not the E01-E12 claims)
 # Every BIND answer that comes before the observation (README "The observation"): a BIND refused this way is never
 # observed, whatever its worker. A fatal answer is named "FATAL:" plus its reason.
-BEFORE_OBSERVATION = ("FATAL:PEER_QUALIFICATION_MISMATCH", "NOT_ACTIVE", "ACTION_OUTSTANDING", "EXECUTION_REPLAY",
+BEFORE_OBSERVATION = ("FATAL:OPENING_FRAME_REQUIRED", "FATAL:PEER_QUALIFICATION_MISMATCH", "NOT_ACTIVE", "ACTION_OUTSTANDING", "EXECUTION_REPLAY",
                       "GENERATION_MISMATCH", "UNKNOWN_BINDING", "CERTIFICATE_MISMATCH", "MANIFEST_REUSED")
 # The BIND answers that follow an observation: bound, refused by it, or refused by the BIND record's storage failure.
 AFTER_OBSERVATION = ("OK", "WORKER_NOT_OBSERVED", "STORAGE_FAILURE")
@@ -1208,10 +1208,11 @@ def check_vectors(vectors: Any, files: dict) -> int:
     # 3. The gate's observation at each BIND (Q-I5-1..4).
     ids = [row.get("id") for row in vectors["transcripts"]]
     require(ids == ["O%02d" % n for n in range(1, len(ids) + 1)], "observation transcripts in order")
-    outcomes, recached = set(), False
+    outcomes, recached, stored = set(), False, False
     for row in vectors["transcripts"]:
         require(type(row) is dict and set(row) == {"id", "intent", "config", "events", "outputs", "final", "observations"}
                 and row["config"] == "OBSERVING", "closed transcript " + row["id"])
+        require(not any(event.get("mutate") for event in row["events"]), "observation transcripts send unmutated frames")
         gate, outputs = _run(observing, row["events"], schema)
         require(outputs == row["outputs"] and gate.snapshot() == row["final"] and gate.observations == row["observations"],
                 "I05 v4 transcript " + row["id"])
@@ -1222,7 +1223,10 @@ def check_vectors(vectors: Any, files: dict) -> int:
         for n, seen in zip(binds, gate.observations):
             answer = outputs[n].get("response", {})
             if seen["result"] == "OBSERVED":
-                require(seen["step"] is None and answer.get("result") == "OK", "an observed worker binds in " + row["id"])
+                # Observed: it binds, or its BIND record fails after the observation (STORAGE_FAILURE, v3's rule).
+                require(seen["step"] is None and bind_answer(outputs[n]) in ("OK", "STORAGE_FAILURE"),
+                        "an observed worker binds, or its record fails, in " + row["id"])
+                stored |= bind_answer(outputs[n]) == "STORAGE_FAILURE"
             else:
                 # Q-I5-2: one wire answer, non-fatal, and nothing durable: the gate's snapshot is unchanged.
                 before = _run(observing, row["events"][:n], schema)[0].snapshot()
@@ -1238,21 +1242,35 @@ def check_vectors(vectors: Any, files: dict) -> int:
         checks += 1
     require(outcomes == set(OBSERVATION_OUTCOMES) | {(None, "OBSERVED")}, "every step's every outcome is exercised")
     require(recached, "a later BIND re-observes a worker observed earlier (Q-I5-1)")
+    require(stored, "an observed BIND whose record then fails keeps its log entry")
     # 4. The order: a BIND answered before the observation is never observed, even when it names a non-member.
     ids = [row.get("id") for row in vectors["orderTranscripts"]]
-    require(ids == ["P%02d" % n for n in range(1, len(ids) + 1)], "order transcripts in order")
-    covered = set()
+    require(ids == ["OB%02d" % n for n in range(1, len(ids) + 1)], "order transcripts in order")
+    covered, v3_rows = set(), {row["id"]: row for row in v3["transcripts"]}
     for row in vectors["orderTranscripts"]:
-        require(type(row) is dict and set(row) == {"id", "intent", "config", "events", "outputs", "final", "observations",
-                                                   "answer"} and row["config"] in V4_CONFIGS, "closed order transcript")
+        require(type(row) is dict and set(row) == {"id", "intent", "from", "config", "events", "outputs", "final",
+                                                   "observations", "answer"} and row["config"] in V4_CONFIGS,
+                "closed order transcript")
+        # Exactly a v3 transcript's prefix in that v3 configuration, its last BIND naming the process outside the leaf.
+        source = v3_rows[row["from"]["transcript"]]
+        index = row["from"]["event"]
+        expected = copy.deepcopy(source["events"][:index + 1])
+        require(type(index) is int and set(row["from"]) == {"transcript", "event"} and 0 <= index < len(source["events"])
+                and expected[-1].get("operation") == "BIND_EXECUTION"
+                and V4_CONFIGS[row["config"]][0] == source["config"], "an order transcript names its v3 source")
+        expected[-1]["payload"]["workerPid"], expected[-1]["payload"]["workerStartTicks"] = OUTSIDER["pid"], OUTSIDER["startTicks"]
+        require(row["events"] == expected, "an order transcript is its v3 prefix with only the worker replaced: " + row["id"])
         gate, outputs = _run(configs[row["config"]], row["events"], schema)
         require(outputs == row["outputs"] and gate.snapshot() == row["final"] and gate.observations == row["observations"],
                 "I05 v4 order transcript " + row["id"])
-        last = row["events"][-1]
-        require(last.get("operation") == "BIND_EXECUTION" and bind_answer(outputs[-1]) == row["answer"]
-                and row["answer"] in BEFORE_OBSERVATION, "an order transcript ends in a BIND answered before observation")
-        process = {proc["pid"]: proc for proc in configs[row["config"]]["kernel"]["processes"]}.get(last["payload"]["workerPid"])
-        require(process is None or process["cgroup"] != PROBE_WORKER_CGROUP, "its worker is not a member: " + row["id"])
+        require(not gate.observation_fails and not gate.observation_races, "every injection is consumed in " + row["id"])
+        require(bind_answer(outputs[-1]) == row["answer"] and row["answer"] in BEFORE_OBSERVATION
+                and bind_answer(source["outputs"][index]) == row["answer"],
+                "an order transcript ends in v3's answer, given before the observation: " + row["id"])
+        # The worker it names is not a member of the leaf in the kernel at that BIND.
+        before = _run(configs[row["config"]], row["events"][:-1], schema)[0]
+        require(OUTSIDER["pid"] not in [p for p, proc in before.kernel.items() if proc["cgroup"] == PROBE_WORKER_CGROUP],
+                "its worker is not a member at the BIND: " + row["id"])
         _paired(row["events"], outputs, gate.observations, row["id"])
         covered.add(row["answer"])
         checks += 1
