@@ -6,7 +6,8 @@ distinct input, each mutation included, still reaches the real projection, and a
 validators' freshness rule is unchanged: each one still reads its authority fresh on every route (Q-PERF40-2 (a)).
 
 The sharing is bound to one test:
-- each wrapper shares only while its own test is active; outside it, a wrapper is inert and calls the real function;
+- each wrapper is created for one test and bound to that test's own memo; it shares only while that memo is the active
+  one, and at any other time (another test, a never-shared test, outside tests) it calls the real function;
 - after the test, every wrapper is replaced by its real function in each module the test wrapped and in every validate_*
   module first imported during the test (which may have bound a wrapper at import);
 - a function that is already a wrapper is never wrapped again.
@@ -37,7 +38,7 @@ NEVER_SHARED = frozenset({
     "test_full_predecessor_suites_and_validators_remain_green",
 })
 EXACT_TYPES = (str, bytes)
-_ACTIVE = {"memo": None}          # the current test's memo while a shared test runs, else None
+_ACTIVE = {"memo": None}          # the running shared test's memo, else None
 _MARK = "_met_perf_040_exact_share"
 
 
@@ -45,10 +46,9 @@ def _is_wrapper(value):
     return callable(value) and getattr(value, _MARK, False) is True
 
 
-def _shared(real):
+def _shared(real, memo):
     def historical_bytes(*args, **kwargs):
-        memo = _ACTIVE["memo"]
-        if memo is None or kwargs or not args or any(type(arg) not in EXACT_TYPES for arg in args):
+        if _ACTIVE["memo"] is not memo or kwargs or not args or any(type(arg) not in EXACT_TYPES for arg in args):
             return real(*args, **kwargs)
         key = (real, tuple((type(arg), arg) for arg in args))
         if key not in memo:
@@ -76,14 +76,13 @@ def _exact_history_sharing(request):
     if getattr(request.node, "originalname", request.node.name) in NEVER_SHARED:
         yield
         return
-    before = set(sys.modules)
-    wrapped = []
+    before, memo, wrapped = set(sys.modules), {}, []
     for _, module in _layers():
         real = vars(module).get("historical_bytes")
         if callable(real) and not _is_wrapper(real):
-            module.historical_bytes = _shared(real)
+            module.historical_bytes = _shared(real, memo)
             wrapped.append(module)
-    _ACTIVE["memo"] = {}
+    _ACTIVE["memo"] = memo
     try:
         yield
     finally:

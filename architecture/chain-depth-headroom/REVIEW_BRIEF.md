@@ -1,10 +1,11 @@
-# Independent source review brief — chain-depth headroom (PERF-040), round 2
+# Independent source review brief — chain-depth headroom (PERF-040), round 3
 
-Status: **SOURCE_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
+Status: **SOURCE_CANDIDATE_ROUND3_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
 verdict. The packet mechanics (the new layer, counts, bridges, the authority) come after this review.
 
 Round 1 returned CHANGES_REQUIRED: 1 MAJOR, 6 MINOR and 4 NOTE findings, S1-1 to S1-11. README "Source review round 1:
-findings and dispositions" answers each one in the bytes.
+findings and dispositions" answers each one in the bytes. Round 2 returned CHANGES_REQUIRED: 1 MINOR and 5 NOTE findings,
+S2-1 to S2-6, answered under "Source review round 2".
 
 ## Subject
 
@@ -48,7 +49,7 @@ the weights generator.
    - Do the moved faults still test the replay?
    - Does any test or vector depend on the old order?
 6. **The record.** Are the decisions quoted verbatim, and P2-1 exactly? Are the measurements stated with their caveats?
-7. **Round 1.** Does each disposition in README "Source review round 1" answer its finding in the bytes?
+7. **Rounds 1 and 2.** Does each disposition in README's two source-review tables answer its finding in the bytes?
 8. **Overclaims.** Does anything claim a CI result, a freshness change, or a worker-count change?
 
 ## How to check

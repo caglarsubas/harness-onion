@@ -27,14 +27,14 @@
   "decidedBy": "Q-PERF40-1",
   "conftest": {
    "path": "tests/conftest.py",
-   "sha256": "4bc25484308101fa686849d3eddd5b81d051dcb165e2a1a6ef0d2c4abc9ec8ca"
+   "sha256": "d4c9542ca315b5e585f2196189bcc86d76739740e9d2fa58b60a37ecdaf3b6af"
   },
   "sharedFunction": "historical_bytes",
-  "modules": "every module in sys.modules whose last name component starts with validate_ and that defines historical_bytes",
+  "modules": "every module in sys.modules whose last name component starts with validate_ and whose global historical_bytes is callable (defined there or re-exported), unless it is already a wrapper",
   "key": "the exact positional arguments when every one is a str or bytes value (its type and the value, by equality); any other call, and any call with keywords, reaches the real function",
-  "scope": "one test (a function-scoped autouse fixture, torn down after monkeypatch's teardown): a wrapper shares only while its own test is active and is inert (calls the real function) otherwise; after the test every wrapper is replaced by its real function in each module the test wrapped and in every validate_* module first imported during the test; a function that is already a wrapper is never wrapped again",
+  "scope": "one test (a function-scoped autouse fixture, torn down after monkeypatch's teardown): each wrapper is created for one test and bound to that test's own memo, and shares only while that memo is the active one; at any other time it calls the real function; after the test the module globals the test wrapped, and every top-level global of each validate_* module first imported during the test, are unwrapped to the real function (a wrapper held elsewhere stays inert); a function that is already a wrapper is never wrapped again",
   "refusalsMemoised": false,
-  "validatorsChanged": false,
+  "sharingChangesValidators": false,
   "neverShared": [
    {
     "name": "test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse",
@@ -90,11 +90,11 @@
    },
    {
     "name": "test_warm_conversion_still_runs_fresh_interleaved_integrity",
-    "reason": "pins the interleaving of fresh reads"
+    "reason": "pins the interleaving of fresh reads; it failed in M3 only because the prototype wrapped loop_fixture's monkeypatched fake, and it passes shared under this conftest (source review round 2, S2-3); kept as the owner's list"
    },
    {
     "name": "test_warm_success_then_current_packet_map_drift_still_refuses",
-    "reason": "pins the interleaving of fresh reads"
+    "reason": "pins the interleaving of fresh reads; it failed in M3 only because the prototype wrapped loop_fixture's monkeypatched fake, and it passes shared under this conftest (source review round 2, S2-3); kept as the owner's list"
    }
   ],
   "neverSharedOrigin": "the 14 names that fail under sharing in run M3 (Q-PERF40-1), plus test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse, which passes under sharing but would lose the point of its fully fresh closing validation (source review round 1, S1-3)"
@@ -111,8 +111,9 @@
    "each run becomes {at, removeBase64, insertBase64} with canonical base64"
   ],
   "builder": "the operator-side authority builder (tools/build_authority.py, outside the repository); it stops with an error instead of writing more than the parsers' 4,096 hunks for one file",
-  "guard": "the MET-PERF-040 layer recomputes the canonical hunks of every file its authority changes, from the base bytes and the current bytes, and refuses its authority unless the recorded hunks are exactly those",
-  "carriedRule": "every later packet's layer does the same for its own authority (later authorities stay small only while their hunks stay canonical)",
+  "guard": "the MET-PERF-040 layer recomputes the canonical hunks of every file its authority changes, from that file's bytes at this layer's era (the current bytes projected back through any later layers) and the base bytes its inverse gives, and refuses its authority unless the recorded hunks are exactly those",
+  "carriedRule": "every later packet's layer does the same for its own authority, from its own era's bytes (later authorities stay small only while their hunks stay canonical)",
+  "builderChecks": "explicit fail-closed checks that python -O does not remove: the reconstruction, ordering, effective hunks and at most 4,096 hunks per file",
   "measuredOn240": {
    "lineHunkJsonKiB": 1453,
    "minimalHunkJsonKiB": 165
@@ -122,19 +123,19 @@
   "decidedBy": "PERF-040-FIRST (WEIGHTS-REFRESH)",
   "path": "ci/parallel_suite_weights.json",
   "beforeSha256": "2c1b27f6281e996accbcbc43169dec2041676f1831b0c2e02cb8e09a3395ec3f",
-  "afterSha256": "d41bf4c166c02dd8b59caea475ad79561f5ecb58c4976d931340b1ab007f6fe6",
-  "source": "per-file summed seconds of run M3 (argv 63, six workers, sharing applied to every test) on main d2ef708",
+  "afterSha256": "4b23112661d8ed592474fea16ced62c1bf94c99e7bfd23c113797a5299ab0b45",
+  "source": "runs M3 (argv 63, six workers, sharing applied to every test) and M2 at six workers, on main d2ef708",
   "scaled": {
    "tests/test_selinux_matrix_v3.py": "x 17.7/41.7, the serial effect of the replay reorder measured with sharing"
   },
   "files": 127,
   "previouslyUnweighted": 25,
+  "derivation": "node by node: a shared node at its M3 seconds; a never-shared node at its unshared M2 six-worker seconds scaled by the runs' mean loads (8.2 / 11.06); the parallel suite's three parent nodes left out (they run in the parent after the workers); tests/test_selinux_matrix_v3.py scaled by 17.7 / 41.7",
   "plannedBusiestWorkerSeconds": {
-   "planner": "ci/parallel_suite._plan's rule (longest first by pinned weight, unknown files 0.05 x node count, onto the least summed weight), applied to M3's per-file seconds with the matrix file's seconds scaled like its weight",
-   "oldWeights": 357.4,
-   "newWeights": 274.2,
-   "evenSplit": 274.0,
-   "newWeightsOnUnscaledM3": 337.8
+   "planner": "ci/parallel_suite._plan's rule (longest first by pinned weight, unknown files 0.05 x node count, onto the least summed weight), applied to the derived per-file seconds",
+   "oldWeights": 359.7,
+   "newWeights": 284.1,
+   "evenSplit": 283.7
   },
   "workers": 6,
   "workersDecidedBy": "Q-PERF40-3"
@@ -209,7 +210,9 @@
    "failedFunctionNames": 14,
    "caveats": [
     "M3 ran at a lower host load than the six-worker baseline (8.2 against 11.1)",
-    "with the never-shared tests unshared, the expected cut of summed test time is about 40%, not 44% (source review round 1, S1-7)",
+    "the prototype also shared the never-shared tests; at their unshared times they add about 135 s of worker time (three files carry most of it: test_credential_lifecycle, test_ci_performance and test_credential_ordering)",
+    "the parent node test_full_predecessor_suites_and_validators_remain_green failed early in M3 (3.9 s) and so skipped its six validator subprocesses, about 50 s after the workers in M2; M3's wall leaves that out",
+    "so the packet's expected wall is about the busiest worker (about 284 s at M3's load with the new weights) plus about 50 s of parent nodes plus session overhead, a cut of about a third to two fifths against M2's 644 s; the packet's dry run measures it",
     "peak tree memory rose 23% (2,737 against 2,218 MiB)"
    ]
   },
