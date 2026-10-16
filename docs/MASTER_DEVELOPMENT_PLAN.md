@@ -9,7 +9,7 @@ lines its chain bump rewrites. MET-PERF-040 is the sole 241st specification.
 
 | Phase | ID | Status | Description / gate |
 |---|---|---|---|
-| Alpha2A | MET-PERF-040 / PERF-040 | SOURCE_PREPARED | Chain-depth headroom (241st packet): test-local exact sharing of history projections except 15 never-shared tests (Q-PERF40-1 (a)), canonical byte-minimal authority hunks (Q-PERF40-4 (a)), refreshed parallel-suite weights for all 127 test files at six workers (Q-PERF40-3 (a)) and the matrix v5 replay order (P2-1); no validator freshness change (Q-PERF40-2 (a)); source review; packet review; verify |
+| Alpha2A | MET-PERF-040 / PERF-040 | SOURCE_PREPARED | Chain-depth headroom (241st packet): test-local exact sharing of history projections except 15 never-shared tests (Q-PERF40-1 (a)), canonical byte-minimal authority hunks (Q-PERF40-4 (a)), refreshed parallel-suite weights for all 127 test files at six workers (Q-PERF40-3 (a)) and the matrix v5 replay order (P2-1); no validator freshness change (Q-PERF40-2 (a)); source review; packet review; owner approval of the exact head (ci/ weights); verify |
 | Alpha2A | MET-ENFORCE-029 / PROGRAMS-REPUBLISH | VERIFY_PASSED_MERGED | Merged as main d2ef708 |
 | Alpha2A | I05-OBSERVED-WORKERS | WAITING_PACKET_PUBLICATION | I05 v4 contract adopted (slot 242, parallel lane), after PERF-040 |
 | Alpha2A | LICENCE-POLICY-AMEND | WAITING_PACKET_PUBLICATION | LIC-HOST-A2 (Zlib) contract adopted (slot 243, parallel lane) |
@@ -24,8 +24,9 @@ lines its chain bump rewrites. MET-PERF-040 is the sole 241st specification.
 
 Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
 The worker count stays six. No validator's freshness rule changes: every route still reads its authority fresh. The
-weights are a ci/ change, approved by the owner on the exact head. No role code, cloud, runner, live/native/tenant or
-model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+weights are a ci/ change, which needs the owner's approval of the exact head before verify. No role code, cloud,
+runner, live/native/tenant or model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints below are
+history only.
 
 ## Historical compiled filter programs v2 source checkpoint — MET-ENFORCE-029 source preparation, October 16, 2026
 

@@ -24,7 +24,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/chain-depth-headroom-authority.json"
-AUTHORITY_SHA256 = "d43aee00de61eab44c87c6dc921c910f989879d1efd5fd22d01bacd31de372d7"
+AUTHORITY_SHA256 = "3c6d5d1d632704f5c88c0098bf1dd7c51563ef115a777c10346077e180854da1"
 VALIDATOR_PATH = "scripts/validate_chain_depth_headroom.py"
 BASE_COMMIT = "d2ef7083d241a6bc1adb8ef923cc558d550fcd2b"
 NEW_PACKET = "MET-PERF-040"

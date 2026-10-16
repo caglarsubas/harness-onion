@@ -1192,7 +1192,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 112. `MET-PERF-039`: raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; ci/ transport change.
 113. `MET-ENFORCE-028`: publish SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); v3, v4, HS43 and the native profile unchanged; DATA_CHECK_ONLY.
 114. `MET-ENFORCE-029`: publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; MET-ENFORCE-025's programs, allowlists v3 and v4 and edge records v1 and v2 unchanged; DATA_CHECK_ONLY.
-115. `MET-PERF-040`: give back verify headroom lost to the history chain's depth (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change.
+115. `MET-PERF-040`: give back verify headroom lost to the history chain's depth (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

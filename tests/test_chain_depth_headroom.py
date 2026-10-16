@@ -899,8 +899,8 @@ def test_the_weights_cover_every_test_file_exactly(monkeypatch, change):
     if change == "unsorted":
         items = sorted(weights.items(), reverse=True)
         raw = (json.dumps(dict(items), indent=1) + "\n").encode()
-    with pytest.raises(ValueError):
-        _rebind(monkeypatch, {profile.WEIGHTS: raw})
+    _rebind(monkeypatch, {profile.WEIGHTS: raw})
+    with pytest.raises(ValueError, match="refreshed weights for every test file"):
         profile.validate_chain_depth_headroom()
 
 
@@ -1006,3 +1006,61 @@ def test_the_never_shared_names_are_pinned_by_name():
     assert {"test_newest_authority_is_freshly_checked_on_every_route",
             "test_every_newer_authority_is_read_exactly_once_per_route"} <= profile.NEVER_SHARED
     assert len(profile.NEVER_SHARED) == 15
+
+
+def _with_conftest(monkeypatch, changed):
+    record = _record()
+    record["testSharing"]["conftest"]["sha256"] = profile.digest(changed)
+    _rebind(monkeypatch, {profile.CONFTEST: changed, profile.RECORD: _dump(record)})
+
+
+@pytest.mark.parametrize("change, message", [
+    ("not_literal", "one literal never-shared set"),
+    ("two_assignments", "one literal never-shared set"),
+    ("duplicate", "distinct never-shared names"),
+    ("no_fixture", "the conftest shares exactly as recorded"),
+    ("not_autouse", "the conftest shares exactly as recorded"),
+])
+def test_the_conftest_structure_is_checked(monkeypatch, change, message):
+    raw = profile.reviewed_bytes(profile.CONFTEST)
+    head = b"NEVER_SHARED = frozenset({\n"
+    name = sorted(profile.NEVER_SHARED)[0].encode()
+    if change == "not_literal":
+        start = raw.index(head)
+        end = raw.index(b"})\n", start) + 3
+        changed = raw[:start] + b"_NAMES = " + raw[start + len(b"NEVER_SHARED = frozenset("):end - 2] + b"\n" \
+            + b"NEVER_SHARED = frozenset(_NAMES)\n" + raw[end:]
+    elif change == "two_assignments":
+        changed = raw.replace(b"EXACT_TYPES = (str, bytes)\n", b"EXACT_TYPES = (str, bytes)\nNEVER_SHARED = frozenset()\n", 1)
+    elif change == "duplicate":
+        changed = raw.replace(head, head + b'    "' + name + b'",\n', 1)
+    elif change == "no_fixture":
+        changed = raw.replace(b"def _exact_history_sharing(request):", b"def _exact_history_sharing_renamed(request):", 1)
+    else:
+        changed = raw.replace(b"@pytest.fixture(autouse=True)", b"@pytest.fixture(autouse=False)", 1)
+    assert changed != raw
+    _with_conftest(monkeypatch, changed)
+    with pytest.raises(ValueError, match=re.escape(message)):
+        profile.validate_chain_depth_headroom()
+
+
+@pytest.mark.parametrize("path", ["README", "REVIEW_BRIEF"])
+def test_the_contract_texts_must_be_utf8(monkeypatch, path):
+    target = getattr(profile, path)
+    _rebind(monkeypatch, {target: profile.reviewed_bytes(target) + b"\xff"})
+    with pytest.raises(ValueError, match=re.escape("chain-depth-headroom source is not UTF-8: " + target)):
+        profile.validate_chain_depth_headroom()
+
+
+@pytest.mark.parametrize("change", ["new_file_projected", "matrix_layer_absent", "matrix_test_absent"])
+def test_the_changed_and_new_files_are_exactly_these(monkeypatch, change):
+    rules = dict(profile._PROJECTION_RULES)
+    if change == "new_file_projected":
+        rules[profile.README] = rules[profile.MATRIX_TEST]
+    elif change == "matrix_layer_absent":
+        rules.pop(profile.MATRIX_LAYER)
+    else:
+        rules.pop(profile.MATRIX_TEST)
+    monkeypatch.setattr(profile, "_PROJECTION_RULES", MappingProxyType(rules))
+    with pytest.raises(ValueError, match="the changed and the new files"):
+        profile.validate_chain_depth_headroom()
