@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-028
+## Current source preparation — MET-ENFORCE-029
+
+MET-ENFORCE-029 (PROGRAMS-REPUBLISH): compiled filter programs v2, EFFECT_GATE's two programs republished from seccomp
+allowlists v4 with the six-instruction readlinkat block, an index of all fourteen v4 programs and edge record v3 (v2's 31
+rows plus 2) for R10's HE-003A2 (Q-PR-1..10 (a)). DATA_CHECK_ONLY. Alpha2 OPEN; 239 accepted plus MET-ENFORCE-029 only.
+
+## Historical SELinux matrix v5 source preparation — MET-ENFORCE-028
 
 MET-ENFORCE-028 (SELINUX-MATRIX-I04-KEYCERT): SELinux matrix v5, the successor of the byte-identical v4: the gate's I04
 key and chain/CA types, no gate capability, the gate's worker-cgroup read (Q-HE3D-2 (a)) and the HS43 /proc narrowing
@@ -1405,3 +1411,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 237 | `MET-ENFORCE-027` | `Harness-Engineering` | SECCOMP-V3-READLINKAT: seccomp allowlists v4, the EFFECT_GATE readlinkat rule with a non-negative dirfd (HS43 obligation O-SECCOMP-V3-READLINKAT); only the gate's digests change; DATA_CHECK_ONLY |
 | 238 | `MET-PERF-039` | `Harness-Engineering` | PERF-039: six parallel-suite workers (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; SOURCE_DELTA_ONLY |
 | 239 | `MET-ENFORCE-028` | `Harness-Engineering` | SELINUX-MATRIX-I04-KEYCERT: SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); DATA_CHECK_ONLY |
+| 240 | `MET-ENFORCE-029` | `Harness-Engineering` | PROGRAMS-REPUBLISH: compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; DATA_CHECK_ONLY |

@@ -1,0 +1,83 @@
+{
+ "round": 1,
+ "subject": {
+  "commit": "325ad78446ee3d5a2882c48a582e3152fc50184f",
+  "tree": "6b874264f478fcbeacc56f7751e22c7e3e4d5f25",
+  "base": "9f251d5d07772cbfb9987c422f3fca79748fad34"
+ },
+ "reviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "NOTE",
+   "location": "scripts/compiled_filter_programs_v2.py:74-77, 123, 189-192",
+   "finding": "The publisher reads with Path.read_bytes and lists with is_dir/iterdir, and all of these follow symlinks. On a copy in WORK, replacing programs/EFFECT_GATE.x86_64.bpf with a symlink to identical bytes outside the directory still passed (rc 0). The publisher also closes only programs/, not the rest of architecture/compiled-filter-programs-v2/. The committed state is correct: git ls-tree shows both programs as regular 100644 blobs. Every other tamper attempt was refused: a changed byte in any of the 4 pinned v4 sources, the predecessor index or a predecessor program; an extra file, dotfile or subdirectory in programs/; a missing program or programs/ directory; an appended instruction; a changed index (whitespace, key order or a missing file); and an extra argument.",
+   "requiredChange": "None for source publication. The MET-ENFORCE-029 layer should check the git mode (100644, not a symlink) of the two programs and the closed file set of architecture/compiled-filter-programs-v2/."
+  },
+  {
+   "id": "R1-2",
+   "severity": "NOTE",
+   "location": "architecture/artifact-edges/operator-harness-engineering-v3.json notes[0] and notes[2] (lines 390, 392); architecture/artifact-edges/README-v3.md:23-31",
+   "finding": "rules[0] says that the consumer holds exactly these bytes. v3 carries v2's two EFFECT_GATE rows (HE-002S, contracts/seccomp-v3/) as recorded and leaves to R10 whether HE-003A2 keeps contracts/seccomp-v3/EFFECT_GATE.*. If R10 removes them, the newest record would still list files the consumer no longer holds, and schema v2 has no status for retiring a row. This is owner-decided (Q-PR-3, Q-PR-5) and follows v2's precedent for carried rows; it is noted only so that the next record handles it.",
+   "requiredChange": "None now. Carry this item: if HE-003A2 removes the seccomp-v3 EFFECT_GATE files, the next operator edge record must drop or retire those two rows."
+  },
+  {
+   "id": "R1-3",
+   "severity": "NOTE",
+   "location": "operator-harness-engineering-v3.json artifacts[31..32].consumerPacket; README-v3.md:23",
+   "finding": "No harness-onion record on the base names HE-003A2: grep over architecture, docs, task-packets and scripts finds nothing. W03-PLAN-AMEND-1 lists SEC-4 under HE-002S and HE-003..HE-008, and HE-003's share is the EFFECT_GATE call site. The record identifies HE-003A2 only through Q-HE3D-3 (a). Registering HE-003A2 in the plan is deferred: no riders (Q-PR-9; dossier Q-240-9). The dossier's Q-240-4 suggested a note that 'HE-003A2 carries HE-003's SEC-4 share'. The record does not include it, and that wording would be imprecise in any case, because the register gives EFFECT_GATE's program-embedding share to HE-002S.",
+   "requiredChange": "None for publication. The layer's restated role-to-consumer-packet map must admit HE-003A2 for the two new rows, and a later W03-plan meta packet should register HE-003A2."
+  },
+  {
+   "id": "R1-4",
+   "severity": "NOTE",
+   "location": "architecture/compiled-filter-programs-v2/status.json:81 (readmeStatusNote)",
+   "finding": "readmeStatusNote names only README.md. architecture/artifact-edges/README-v3.md also carries 'SUCCESSOR_CANDIDATE_AWAITING_INDEPENDENT_REVIEW' and sends adoption to this status.json, so under status-only adoption it keeps that line too.",
+   "requiredChange": "Optional: at adoption, name both README files in readmeStatusNote, or have the layer restate both status lines."
+  },
+  {
+   "id": "R1-5",
+   "severity": "NOTE",
+   "location": "architecture/compiled-filter-programs-v2/REVIEW_BRIEF.md:19-20 and 63-64",
+   "finding": "The brief says both 'write nothing in the worktree' and that the record is 'recorded as review-round<N>.json in this directory'. Its finding shape {id, severity, file, line, summary, evidence} also differs from the shape the lane requested for this round, {id, severity, location, finding, requiredChange}, which this record uses. This record was written to WORK only.",
+   "requiredChange": "Optional: say that the reviewer returns the record and the author commits it, and fix one finding shape for the layer to restate."
+  },
+  {
+   "id": "R1-6",
+   "severity": "NOTE",
+   "location": "status.json 'rebase', 'packet', 'schemaVersion'; README.md:1-3; operator-harness-engineering-v3.json providerPacket; scripts/compiled_filter_programs_v2.py:2",
+   "finding": "MET-ENFORCE-029 is hard-coded in five of the nine files, and the contract is to be 'rebased unchanged onto slot 239's merge' (Q-PR-10). That holds only if slot 239 does not take MET-ENFORCE-029 and does not add or change any of the nine paths, or the frozen predecessors they pin (the v4 sources, MET-ENFORCE-025's directory, edge record v2). Base main has no MET-ENFORCE-028 or MET-ENFORCE-029 yet.",
+   "requiredChange": "None now. At mechanics, confirm that 239's merge leaves these paths and pins untouched before claiming an unchanged rebase; if the id changes, run a new review round."
+  },
+  {
+   "id": "R1-7",
+   "severity": "NOTE",
+   "location": "scripts/compiled_filter_programs_v2.py (scope); index.json; status.json",
+   "finding": "The publisher does not check these, so the layer has to restate them: edge record v3 (key sets, v2's 31 rows byte-identical and in order, the 2 new rows, the supersedes digest 749e70f1...); both README status lines; the status.json content and the discharge text; readlinkat vectors per architecture (the publisher checks only the total of 20; the data has 10 and 10); the index path convention (v2 rows are repository-relative, while MET-ENFORCE-025's index uses directory-relative 'programs/...'). Q-HE3D-3 and Q-PR-1..10 are first recorded in harness-onion by this contract. Q-PR-1..10 matches OWNER_DECISIONS.md byte for byte. I did not open Q-HE3D-3's primary record (W03 rule); its text equals the dossier's quotation. 'HE-003D PR N1/N2' is an opaque R10 name, which the brief allows.",
+   "requiredChange": "None for publication. These are inputs for the MET-ENFORCE-029 layer."
+  }
+ ],
+ "checksRun": [
+  "Scope: git diff --name-status 9f251d5..325ad78 shows exactly 9 added files (A only, nothing modified, deleted or renamed); 325ad78's parent is 9f251d5 and its tree is 6b874264; the worktree is clean, with nothing untracked or ignored, before and after the run.",
+  "Frozen: git diff --quiet 9f251d5 325ad78 is empty over architecture/compiled-filter-programs, scripts/compiled_filter_programs.py, seccomp-allowlists-v3 and -v4, both models, edge records v1 and v2, EDGE-2, README.md, README-v2.md, repositories.yaml, w03-plan-v2 and host-interface-amendment-hs43.",
+  "Pins: the 4 v4 source digests in the publisher equal the files on base, on e7516160 (git show), source-index.json round 3 and v4 status.json round 3 (PASS_FOR_SOURCE_PUBLICATION, subject bebd9974). e7516160 is 'MET-ENFORCE-027 ... (#191)' and an ancestor of 9f251d5; git diff e7516160 9f251d5 over the v3 and v4 dirs, both models, compiled-filter-programs, artifact-edges and HS43 is empty. The predecessor index sha256 equals 9136ce1f...; all 14 MET-ENFORCE-025 files match their index rows.",
+  "Publisher CHECK mode (no --write) passed, rc 0: 'python3 -I -B scripts/compiled_filter_programs_v2.py' in a git-archive copy in WORK and in the worktree, reporting 401 vectors (aarch64 195, x86_64 206; 20 readlinkat). It left no __pycache__, and a hashed file listing showed the WORK copy unchanged.",
+  "Publisher security, on fresh copies in WORK: the model is exec'd from the verified in-memory bytes, with no import route. Planted scripts/json.py, struct.py, hashlib.py and types.py, and a planted __pycache__/seccomp_allowlists_v4.cpython-312.pyc, did not run. Refused: a changed model, allowlists, syscalls or vectors file; a changed predecessor index; a changed predecessor BROKER or EFFECT_GATE program; a changed published program; an appended instruction; .DS_Store, an extra .bpf or a subdirectory in programs/; a missing program or programs/ directory; index.json with a trailing space, reordered keys or a missing file; an extra argument. Accepted: a symlink to identical bytes (R1-1).",
+  "Independent decode (own code, no repository import): each new program is MET-ENFORCE-025's v3 EFFECT_GATE with exactly 6 instructions inserted, x86_64 at index 173 (nr 267, between 257 openat and 271 ppoll) and aarch64 at index 34 (nr 78, between 73 ppoll and 80 fstat). Common prefix and suffix cover all the rest. The inserted bytes equal the README table. Syscall tests are v3's plus readlinkat, in ascending order; no v3 jump before the insertion point lands past it. x86_64 sha256:4e516f16..., 200 instructions, 1600 bytes; aarch64 sha256:8de80a2b..., 189, 1512; both equal v4 filterDigests and programLengths.",
+  "The 12 unchanged programs: v4 filterDigests and programLengths equal v3's for the 6 other roles and differ for EFFECT_GATE only. Recompiling all 14 with the pinned v4 model, exec'd from verified bytes, equals exactly the files index.json names. Recompiling with the pinned v3 model equals all 14 MET-ENFORCE-025 files. The source of _ins, _body, compile_filter, program_bytes, seccomp_data and run_filter is identical in v3 and v4.",
+  "Vector replay with my own classic-BPF interpreter: all 401 EFFECT_GATE decisions (206 x86_64, 195 aarch64; 10+10 readlinkat) give their recorded action, and so do all 2971 v4 decisionChecks through all 14 indexed programs. My own probes on both architectures, with args 1-5 all zero and all ones: AT_FDCWD as 0xffffffffffffff9c and 0xffffff9c, -1 (64- and 32-bit), 0x80000000, 0xffffffff80000000, -2, 0xc0000000 and 0x1ffffff9c are KILL_PROCESS; 0x8000000000000000, 0x8000000000000003, 0x123456787fffffff, 0xffffffff00000005, 0x7fffffff, 0x40000000 and 0 are ALLOW, matching the kernel's int dirfd. A wrong audit arch, x32 readlinkat and x86_64 readlink(89) are killed. Neighbour syscalls are unchanged, and a sweep of nr 0..1023 under two argument patterns shows v4 == v3 except readlinkat (killed in v3).",
+  "index.json: keys in order schemaVersion, evidenceClass, format, source, predecessor, programs; schema planeon.internal.compiled-filter-programs/v2; DATA_CHECK_ONLY; format string byte-equal to MET-ENFORCE-025's; source keys and order equal 025's (v4 dir, MET-ENFORCE-027, e7516160, 4 pins); predecessor {path, sha256 of 025's index, MET-ENFORCE-025}. 14 rows in sorted role x (aarch64, x86_64) order, each with exactly {role, arch, path, instructions, bytes, sha256}. 2 paths point into compiled-filter-programs-v2/programs/ and 12 into compiled-filter-programs/programs/; for those 12, values equal 025's rows with the path rebased to repository-relative. The canonical dump is indent=1 with a trailing newline.",
+  "Edge record v3: top-level keys and order equal v2's; schemaVersion (registry v2), graph, consumer, provider, ownerDecision, rules, notArtifacts and statuses equal v2's; only 'artifact' differs. v2's 31 rows are equal in content, key order and order, and v2's artifacts text is a byte-exact prefix of v3's. Exactly 2 more rows, with v2 gate-row keys: providerPath compiled-filter-programs-v2/programs/EFFECT_GATE.<arch>.bpf, providerCommit null, the published sha256, mode 100644, consumerPath host-enforcement/contracts/seccomp-v4/EFFECT_GATE.<arch>.bpf, HE-003A2, BYTE_IDENTICAL, REGISTERED_BEFORE_USE, MET-ENFORCE-029. supersedes {v2 path, sha256:749e70f1... = sha256 of v2 on base, MET-ENFORCE-025}. No new row key or status. Edge sha256 values equal index.json for all 14 indexed programs. v1 rules == v2 rules.",
+  "status.json: Q-HE3A-1 and Q-HE3A-1b text and date are byte-equal across the HS43 amendment.json, v4 allowlists.json and v4 status.json, and appear verbatim in edge v3 and the README (whitespace-normalised). Q-PR-1..10 is byte-equal to the OWNER_DECISIONS.md quote block, in status, edge v3 and the README. Q-HE3D-3 equals '(a): ' plus the dossier's quotation; the primary he003d record was not opened. The dossier digest prefix is 52bcda0ab2db0c8b, as OWNER_DECISIONS.md cites. The discharge openObligation is byte-equal to seccomp-allowlists-v4/status.json:186. T04 and O-W03-WRITER-EXE stay open. contractState is CANDIDATE, with reviewRounds and keptCopies empty; contractFiles is exactly the 9 added files. carriedToR10 has 8 items in the same order as the README's 8 bullets and the design's section 4.",
+  "READMEs: the length table matches v4 programLengths for all 7 roles; v3 cells (183/1464 0ccbd7d0...7105a, 194/1552 ee85e9d2...86115) match 025's index; the block table, the 'between' syscall names (from v4 syscalls.json) and the 20 readlinkat dirfd outcomes match the data; the v4 rule (arg 0, eq 0, mask 0x80000000) matches allowlists.json; README-v3's quotation of the v1 rule is in rules[0]; v2's gate rows are HE-002S/seccomp-v3/REGISTERED_BEFORE_USE; v2's SERVER rows are PUBLISHED_UNREGISTERED; harness-engineering appears in no repositories.yaml graph edge.",
+  "Sector-catalog scans, applied by copying test_sector_catalog.py's pure scan functions into WORK, not by running pytest: none of the 8 new non-Python files names architecture/providers.yaml, architecture/services.yaml or docs/PROVIDER_MODULE_CATALOG.md or holds a BASE_DIGESTS value; the publisher names no catalog, and _lists_a_catalog_directory is False for it (it lists only its own programs/), so no NAMING_RECORDS, PINNING_RECORDS, LITERAL_READERS or GLOB_READERS entry is needed. The tripwire self-test behaved as the test expects.",
+  "zero_bill_scan (read, not run): _should_scan covers only implementation roots, workflows, .tf and Dockerfiles, so the new architecture/ and scripts/ files are outside its text rules.",
+  "Personal data: no email address, home path or personal name in the 7 new text files (grep)."
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ }
+}

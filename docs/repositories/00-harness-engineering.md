@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-028
+## Current source preparation — MET-ENFORCE-029
+
+MET-ENFORCE-029 (PROGRAMS-REPUBLISH): compiled filter programs v2. EFFECT_GATE's two programs are republished from the
+adopted seccomp allowlists v4: each is MET-ENFORCE-025's v3 program with one six-instruction `readlinkat` block (x86_64
+at instruction 173, 200 instructions; aarch64 at 34, 189 instructions). An index covers all fourteen v4 programs, twelve
+at MET-ENFORCE-025's unchanged paths, and edge record v3 (v2's 31 rows plus 2) registers the two for R10's HE-003A2 under
+`host-enforcement/contracts/seccomp-v4/` (owner Q-HE3A-1 (c), Q-HE3A-1b (a); monitor Q-HE3D-3 (a), Q-PR-1..10 (a)).
+DATA_CHECK_ONLY. Alpha2 OPEN; 239 accepted plus MET-ENFORCE-029 only.
+
+## Historical SELinux matrix v5 source preparation — MET-ENFORCE-028
 
 MET-ENFORCE-028 (SELINUX-MATRIX-I04-KEYCERT): SELinux matrix v5, the successor of the byte-identical v4. The gate's I04
 mutual-TLS material gets two types read by the gate alone (`planeon_gate_i04_key_t`, `planeon_gate_i04_cert_t`); the gate
@@ -1173,6 +1182,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 111. `MET-ENFORCE-027`: publish seccomp allowlists v4 (the EFFECT_GATE readlinkat rule with a non-negative dirfd for HS43 obligation O-SECCOMP-V3-READLINKAT; only the gate's digests change); v3 and HS43 unchanged; DATA_CHECK_ONLY.
 112. `MET-PERF-039`: raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; ci/ transport change.
 113. `MET-ENFORCE-028`: publish SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); v3, v4, HS43 and the native profile unchanged; DATA_CHECK_ONLY.
+114. `MET-ENFORCE-029`: publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; MET-ENFORCE-025's programs, allowlists v3 and v4 and edge records v1 and v2 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 
