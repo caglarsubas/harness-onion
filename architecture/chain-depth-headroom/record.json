@@ -27,15 +27,19 @@
   "decidedBy": "Q-PERF40-1",
   "conftest": {
    "path": "tests/conftest.py",
-   "sha256": "937093af811e50da1426dc457d459c28736a8fddbb1b9bac50b9494bbcfffa58"
+   "sha256": "4bc25484308101fa686849d3eddd5b81d051dcb165e2a1a6ef0d2c4abc9ec8ca"
   },
   "sharedFunction": "historical_bytes",
   "modules": "every module in sys.modules whose last name component starts with validate_ and that defines historical_bytes",
   "key": "the exact positional arguments when every one is a str or bytes value (its type and the value, by equality); any other call, and any call with keywords, reaches the real function",
-  "scope": "one test (a function-scoped autouse fixture); the real functions are restored after monkeypatch's teardown",
+  "scope": "one test (a function-scoped autouse fixture, torn down after monkeypatch's teardown): a wrapper shares only while its own test is active and is inert (calls the real function) otherwise; after the test every wrapper is replaced by its real function in each module the test wrapped and in every validate_* module first imported during the test; a function that is already a wrapper is never wrapped again",
   "refusalsMemoised": false,
   "validatorsChanged": false,
   "neverShared": [
+   {
+    "name": "test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse",
+    "reason": "already shares through PERF-031's helper, and its closing validation after the undo must stay fully fresh (added after source review round 1, S1-3)"
+   },
    {
     "name": "test_each_projection_freshly_rechecks_complete_authority",
     "reason": "every projection must re-read the complete authority"
@@ -62,7 +66,7 @@
    },
    {
     "name": "test_full_predecessor_suites_and_validators_remain_green",
-    "reason": "runs the predecessor suites, freshness tests included, inside its own call"
+    "reason": "reads the outer session's predecessor outcomes, so in M3 it failed only because the freshness tests it reads had failed under the prototype; listed by the owner decision as a guard, its entry has no effect on sharing (source review round 1, S1-9)"
    },
    {
     "name": "test_history_routes_still_refuse_second_call_authority_drift",
@@ -92,14 +96,23 @@
     "name": "test_warm_success_then_current_packet_map_drift_still_refuses",
     "reason": "pins the interleaving of fresh reads"
    }
-  ]
+  ],
+  "neverSharedOrigin": "the 14 names that fail under sharing in run M3 (Q-PERF40-1), plus test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse, which passes under sharing but would lose the point of its fully fresh closing validation (source review round 1, S1-3)"
  },
  "authorityHunks": {
   "decidedBy": "Q-PERF40-4",
-  "rule": "byte-minimal reverse hunks: a changed run of equal line counts is split per line; every run keeps only the bytes that differ (no common first or last byte while both sides are non-empty); runs that would touch are merged, so hunks stay strictly ordered with at least one unchanged byte between them",
-  "builder": "the operator-side authority builder (tools/build_authority.py, outside the repository)",
-  "guard": "the MET-PERF-040 layer refuses its own authority unless every hunk is minimal",
-  "carriedRule": "every later packet's layer checks that its own authority's hunks are minimal, because later authorities stay small only while the builder does",
+  "rule": "canonical byte-minimal reverse hunks, computed from the after (current) and before (base) bytes of each changed file",
+  "algorithm": [
+   "split both into lines, keeping line ends (bytes.splitlines(keepends=True))",
+   "difflib.SequenceMatcher(None, after_lines, before_lines, autojunk=False).get_opcodes(); skip equal runs",
+   "a run with the same number of lines on both sides becomes one run per differing line pair; any other run stays whole",
+   "each run drops the bytes its two sides share at the start, then at the end (the end trim never overlaps the start trim)",
+   "in order, a run that starts at or before the end of the previous run's removed bytes is merged into it",
+   "each run becomes {at, removeBase64, insertBase64} with canonical base64"
+  ],
+  "builder": "the operator-side authority builder (tools/build_authority.py, outside the repository); it stops with an error instead of writing more than the parsers' 4,096 hunks for one file",
+  "guard": "the MET-PERF-040 layer recomputes the canonical hunks of every file its authority changes, from the base bytes and the current bytes, and refuses its authority unless the recorded hunks are exactly those",
+  "carriedRule": "every later packet's layer does the same for its own authority (later authorities stay small only while their hunks stay canonical)",
   "measuredOn240": {
    "lineHunkJsonKiB": 1453,
    "minimalHunkJsonKiB": 165
@@ -116,10 +129,12 @@
   },
   "files": 127,
   "previouslyUnweighted": 25,
-  "plannedSlowestWorkerSecondsOnM3": {
-   "oldWeights": 346,
-   "newWeights": 285,
-   "even": 285
+  "plannedBusiestWorkerSeconds": {
+   "planner": "ci/parallel_suite._plan's rule (longest first by pinned weight, unknown files 0.05 x node count, onto the least summed weight), applied to M3's per-file seconds with the matrix file's seconds scaled like its weight",
+   "oldWeights": 357.4,
+   "newWeights": 274.2,
+   "evenSplit": 274.0,
+   "newWeightsOnUnscaledM3": 337.8
   },
   "workers": 6,
   "workersDecidedBy": "Q-PERF40-3"
@@ -185,12 +200,18 @@
    }
   ],
   "M3": {
-   "mode": "sharing on every test, six workers",
+   "mode": "sharing on every test, six workers, by the out-of-tree prototype (wrapping in the call phase only; the never-shared tests were shared too)",
    "wallSeconds": 377.2,
    "summedTestSeconds": 1707.9,
    "load1Mean": 8.2,
+   "peakTreeRssMiB": 2737,
    "failedTests": 1537,
-   "failedFunctionNames": 14
+   "failedFunctionNames": 14,
+   "caveats": [
+    "M3 ran at a lower host load than the six-worker baseline (8.2 against 11.1)",
+    "with the never-shared tests unshared, the expected cut of summed test time is about 40%, not 44% (source review round 1, S1-7)",
+    "peak tree memory rose 23% (2,737 against 2,218 MiB)"
+   ]
   },
   "prototype": {
    "functions": 3,

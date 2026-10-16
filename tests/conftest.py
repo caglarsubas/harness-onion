@@ -1,14 +1,19 @@
 """MET-PERF-040 (owner decision Q-PERF40-1 (a), 2026-10-16): test-local exact sharing of history projections.
 
 Within one test, every loaded history layer's historical_bytes is memoised by its exact arguments (each one a str or
-bytes value, compared by equality), so a repeated identical projection is computed once per test. Every distinct
-input, each mutation included, still reaches the real projection, and a refusal is never memoised. The validators are
-unchanged: each one still reads its authority fresh on every route (Q-PERF40-2 (a)).
+bytes value, compared by type and equality), so a repeated identical projection is computed once per test. Every
+distinct input, each mutation included, still reaches the real projection, and a refusal is never memoised. The
+validators' freshness rule is unchanged: each one still reads its authority fresh on every route (Q-PERF40-2 (a)).
 
-Tests whose purpose is that freshness, or the identity of these functions, are never shared. They are named in
-NEVER_SHARED by function name, so a later layer's tests of the same name are covered too. The real functions are
-restored after each test, after monkeypatch's own teardown (this autouse fixture is set up first, so it is torn down
-last).
+The sharing is bound to one test:
+- each wrapper shares only while its own test is active; outside it, a wrapper is inert and calls the real function;
+- after the test, every wrapper is replaced by its real function in each module the test wrapped and in every validate_*
+  module first imported during the test (which may have bound a wrapper at import);
+- a function that is already a wrapper is never wrapped again.
+
+Tests whose purpose is that freshness, or the identity of these functions, or a fully fresh closing validation, are
+never shared. They are named in NEVER_SHARED by function name, so a later layer's tests of the same name are covered too.
+This autouse fixture is set up before monkeypatch, so its teardown runs after monkeypatch's.
 """
 import sys
 
@@ -28,24 +33,42 @@ NEVER_SHARED = frozenset({
     "test_each_protected_input_rechecked_not_cached",
     "test_every_input_pin_is_enforced",
     "test_performance_predecessor_and_exact_twenty_commands",
+    "test_each_locked_input_is_checked_and_unknown_or_missing_files_refuse",
     "test_full_predecessor_suites_and_validators_remain_green",
 })
 EXACT_TYPES = (str, bytes)
+_ACTIVE = {"memo": None}          # the current test's memo while a shared test runs, else None
+_MARK = "_met_perf_040_exact_share"
+
+
+def _is_wrapper(value):
+    return callable(value) and getattr(value, _MARK, False) is True
 
 
 def _shared(real):
-    seen = {}
-
     def historical_bytes(*args, **kwargs):
-        if kwargs or not args or any(type(arg) not in EXACT_TYPES for arg in args):
+        memo = _ACTIVE["memo"]
+        if memo is None or kwargs or not args or any(type(arg) not in EXACT_TYPES for arg in args):
             return real(*args, **kwargs)
-        key = tuple((type(arg), arg) for arg in args)
-        if key not in seen:
-            seen[key] = real(*args)
-        return seen[key]
+        key = (real, tuple((type(arg), arg) for arg in args))
+        if key not in memo:
+            memo[key] = real(*args)
+        return memo[key]
 
     historical_bytes.__wrapped__ = real
+    setattr(historical_bytes, _MARK, True)
     return historical_bytes
+
+
+def _layers():
+    return [(name, module) for name, module in list(sys.modules.items())
+            if module is not None and name.rpartition(".")[2].startswith("validate_")]
+
+
+def _unwrap(value):
+    while _is_wrapper(value):
+        value = value.__wrapped__
+    return value
 
 
 @pytest.fixture(autouse=True)
@@ -53,16 +76,22 @@ def _exact_history_sharing(request):
     if getattr(request.node, "originalname", request.node.name) in NEVER_SHARED:
         yield
         return
-    restore = []
-    for name, module in list(sys.modules.items()):
-        if module is None or not name.rpartition(".")[2].startswith("validate_"):
-            continue
+    before = set(sys.modules)
+    wrapped = []
+    for _, module in _layers():
         real = vars(module).get("historical_bytes")
-        if callable(real):
+        if callable(real) and not _is_wrapper(real):
             module.historical_bytes = _shared(real)
-            restore.append((module, real))
+            wrapped.append(module)
+    _ACTIVE["memo"] = {}
     try:
         yield
     finally:
-        for module, real in restore:
-            module.historical_bytes = real
+        _ACTIVE["memo"] = None
+        for module in wrapped:
+            module.historical_bytes = _unwrap(vars(module).get("historical_bytes"))
+        for name, module in _layers():
+            if name not in before:
+                for attribute, value in list(vars(module).items()):
+                    if _is_wrapper(value):
+                        setattr(module, attribute, _unwrap(value))

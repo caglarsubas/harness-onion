@@ -1,7 +1,10 @@
-# Independent source review brief — chain-depth headroom (PERF-040), round 1
+# Independent source review brief — chain-depth headroom (PERF-040), round 2
 
-Status: **SOURCE_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
+Status: **SOURCE_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW**. The authoring agent wrote this brief. It is not a
 verdict. The packet mechanics (the new layer, counts, bridges, the authority) come after this review.
+
+Round 1 returned CHANGES_REQUIRED: 1 MAJOR, 6 MINOR and 4 NOTE findings, S1-1 to S1-11. README "Source review round 1:
+findings and dispositions" answers each one in the bytes.
 
 ## Subject
 
@@ -45,15 +48,17 @@ the weights generator.
    - Do the moved faults still test the replay?
    - Does any test or vector depend on the old order?
 6. **The record.** Are the decisions quoted verbatim, and P2-1 exactly? Are the measurements stated with their caveats?
-7. **Overclaims.** Does anything claim a CI result, a freshness change, or a worker-count change?
+7. **Round 1.** Does each disposition in README "Source review round 1" answer its finding in the bytes?
+8. **Overclaims.** Does anything claim a CI result, a freshness change, or a worker-count change?
 
 ## How to check
 
 You may run single test files or small sets with the shared venv's python, serially, at most 120 s each. You may run the
 author's tools against a copy of the repository in your scratch directory. Do not run the full suite, a dry run, or
-anything against the worktree that writes. Note that before the packet mechanics, two tests of
-`tests/test_selinux_matrix_v3.py` (the history-chain and packet-bytes tests) refuse the changed 239 validator as an
-unreviewed source; that is expected until the new layer records its inverse.
+anything against the worktree that writes. Before the packet mechanics, every layer test that pins the weights file or
+239's validator refuses the changed bytes as an unreviewed source. For example, two tests of
+`tests/test_selinux_matrix_v3.py` (the history-chain and packet-bytes tests) and two of `tests/test_parallel_suite.py`
+(the history-chain and reviewed-text tests). That is expected until the new layer records its inverse.
 
 ## Result
 
