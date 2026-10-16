@@ -1,6 +1,6 @@
 # I05 broker-gate channel v4 — I05-OBSERVED-WORKERS contract (DATA_CHECK_ONLY)
 
-Alpha 2A; 2026-10-16. Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`).
+Alpha 2A; 2026-10-16. Status: **CONTRACT_CANDIDATE_ROUND3_AWAITING_INDEPENDENT_REVIEW** (brief: `REVIEW_BRIEF.md`).
 
 v4 succeeds the adopted I05 v3 contract `../i05-gate-channel-v3/` (`planeon.internal.effect-gate-frame/v3`,
 ADOPTED_DATA_CONTRACT) and its supplement `../i05-gate-channel-v3-supplement/`. Later layers pin the v3 bytes
@@ -25,7 +25,7 @@ sequencing decision SEQ-241-242).
 
 | File | Content |
 |---|---|
-| `vectors.json` | `planeon.internal.effect-gate-model-vectors/v4`: v3 inputs pinned by SHA-256, one configuration (OBSERVING), 19 observation transcripts O01-O19 (each with outputs, final snapshot and local observation log), 9 configuration refusals C01-C09 and 9 event refusals E01-E09 |
+| `vectors.json` | `planeon.internal.effect-gate-model-vectors/v4`: v3 inputs pinned by SHA-256, three configurations (OBSERVING and two for the order transcripts), 19 observation transcripts O01-O19 (each with outputs, final snapshot and local observation log), 8 order transcripts P01-P08, 9 configuration refusals C01-C09 and 9 model-event refusals M01-M09 |
 | `../../scripts/i05_gate_channel_v4.py` | Reference model: the v3 model with the gate's observation (`Gate._observe_worker`), `convert_v3_config`, `replay_observed` and `check_vectors` |
 | `../i05-gate-channel-v3/channel.schema.json`, `outcome-mapping.json` | Unchanged; v4 uses them as they are |
 
@@ -33,12 +33,13 @@ The v4 model is a copy of the v3 model with the changes below. The v3-to-v4 diff
 `scripts/i05_gate_channel_v4.py` is the review surface. Every function that checks or renders the wire (`decode_frame`,
 `check_frame`, `render_request`, `template_digest`, `identity_of`, `check_agreement`) is unchanged.
 
-`check_vectors(vectors, files)` makes 258 checks:
+`check_vectors(vectors, files)` makes 266 checks:
 
 - **v3 replay (221 checks).** Every v3 transcript (120) and supplement transcript (6), with its configuration converted by
   `convert_v3_config`, replays under v4 to the same outputs and final snapshot. Every v3 configuration refusal (5), frame
   check (34), byte check (14) and agreement case (42) gives v3's expected answer.
-- **v4 vectors (37 checks).** The 19 transcripts, 9 configuration refusals and 9 event refusals.
+- **v4 vectors (45 checks).** The 19 observation transcripts, 8 order transcripts, 9 configuration refusals and 9
+  model-event refusals.
 
 ## What v4 changes
 
@@ -47,13 +48,14 @@ The v4 model is a copy of the v3 model with the changes below. The v3-to-v4 diff
 | Worker source | `observedWorkers`, a static list of (pid, start ticks) pairs in the gate's configuration | No list. The configuration lists no workers. The model takes a `kernel` table (`processes`: pid, start ticks, cgroup) that stands for the kernel the gate reads. A configuration with `observedWorkers` is refused (C01). |
 | BIND check | (pid, start) in the list, else WORKER_NOT_OBSERVED | The observation below, at every BIND, else WORKER_NOT_OBSERVED |
 | Refusal cause | None recorded | A local diagnostic log (`Gate.observations`): pid, start ticks, result and the failing step per observation. It is not the durable journal, not in the snapshot and not on the wire. |
-| Model-only events | v3's injections | Also KERNEL_SPAWN, KERNEL_EXIT and KERNEL_MOVE (the kernel moves on), OBSERVATION_FAIL_NEXT {step} (a read fails) and OBSERVATION_RACE_NEXT {after, event} (a kernel event lands between two reads). These are test inputs, never channel frames, and their shapes are closed (E01-E09). |
+| Model-only events | v3's injections | Also KERNEL_SPAWN, KERNEL_EXIT and KERNEL_MOVE (the kernel moves on), OBSERVATION_FAIL_NEXT {step} (a read fails) and OBSERVATION_RACE_NEXT {after, event} (a kernel event lands between two reads). These are test inputs, never channel frames, and their shapes are closed (M01-M09). |
 | Conversion | — | `convert_v3_config`: each v3 `observedWorkers` pair becomes a live process in the probe-worker leaf. |
 
 ## The observation
 
 The gate observes only for a BIND that passes every v3 check before it (peer, state, outstanding actions, replay,
-generation, binding, certificate, manifest reuse). The gate holds a directory fd on the cgroup2 mount and one on `/proc`,
+generation, binding, certificate, manifest reuse). So the answer to a BIND that fails one of those checks is v3's, whatever
+its worker, and nothing is observed for it (order transcripts P01-P08). The gate holds a directory fd on the cgroup2 mount and one on `/proc`,
 and opens every file with `openat` relative to one of them (Q-HE2S-G (b)). It closes every fd the observation opens,
 the pidfd included, on every path, a failure path included.
 
@@ -63,7 +65,7 @@ the pidfd included, on every path, a failure path included.
 | 2 PIDFD_OPEN | `pidfd_open(workerPid, 0)` | A pidfd is returned | ESRCH: PROCESS_GONE. Any other error: PIDFD_OPEN_FAILED |
 | 3 STAT | `openat` `<pid>/stat` from the `/proc` fd, `read`, `close`; starttime is field 22 | starttime equals workerStartTicks | Unreadable or malformed: STAT_UNREADABLE. Gone (ENOENT or ESRCH): PROCESS_GONE. Other value: START_MISMATCH |
 | 4 CGROUP_RECHECK | `cgroup.procs` of the leaf again, as in step 1 | workerPid is still listed | Unreadable: CGROUP_RECHECK_UNREADABLE. Not listed: NOT_IN_PROBE_WORKER_CGROUP |
-| 5 PIDFD_ALIVE | `ppoll` (or `poll` or epoll) on the pidfd with a zero timeout, then `close` the pidfd | Not readable: the held process has not exited | Poll error: PIDFD_POLL_FAILED. Readable (exited): PIDFD_EXITED |
+| 5 PIDFD_ALIVE | `ppoll` (or `poll` or epoll) on the pidfd with a zero timeout, then `close` the pidfd | The poll returns 0, with no event at all: the held process has not exited | Poll error: PIDFD_POLL_FAILED. Any returned event (POLLIN, POLLHUP, POLLERR or POLLNVAL): PIDFD_EXITED |
 
 Rules:
 
@@ -73,8 +75,10 @@ Rules:
    - Step 1 runs before the pidfd exists and only selects candidates. Step 4 re-proves membership for the held process.
    - An exit anywhere in the span refuses, even when nothing else takes the PID (O16).
    - A reuse with the same start ticks in the same leaf is caught only by step 5 (O13).
-   - Under B6, a reuse of the same (pid, start ticks) before step 2 is the named identity; it would need a PID wrap
-     within one clock tick.
+   - Under B6, a reuse of the same (pid, start ticks) before step 2 is the named identity. It would need a PID wrap
+     within one clock tick, or a privileged process choosing the PID (`clone3` `set_tid`, or `ns_last_pid`, which need
+     CAP_SYS_ADMIN over the pid namespace) and then getting into the leaf, which only init, the broker and, before the
+     seal, containment can write (matrix v5 A42, A43).
 
    The kernel facts behind this are stated from knowledge of Linux v6.12, not from a run (the author's, confirmed by the
    round-1 review), with the functions named:
@@ -116,6 +120,8 @@ Rules:
    - It writes nothing durable: the gate's whole snapshot, the durable journal and the failure marker included, is
      unchanged by the refused BIND. `check_vectors` checks this for every refused observation.
    - The cause and the failing step go to the local diagnostic log. The wire answer does not say which step failed.
+   - The log is best effort. A failed or full log write is dropped (R10 may count drops). It never becomes a
+     STORAGE_FAILURE, never closes the channel and never changes the answer.
 5. **Reading and parsing.** Each file is read until a `read` returns 0, because `cgroup.procs` is a seq_file that
    returns about one page per call.
    - **Bounds.** `cgroup.procs` is read to at most 65536 bytes and `stat` to at most 4096 bytes. Content beyond either
@@ -140,6 +146,9 @@ Rules:
 8. **Pid namespace and procfs (preconditions).** workerPid is the broker's number, so v4 requires the following. W03/T04
    checks them.
    - The gate, the broker and the worker share one pid namespace.
+   - They share one time namespace, or at least one boottime offset. `/proc/<pid>/stat` shifts starttime by the reader's
+     boottime offset (`do_task_stat`, `timens_add_boottime_ns`), so different offsets give START_MISMATCH at every BIND,
+     which fails closed.
    - The gate's `/proc` fd is the procfs instance of that namespace.
    - That `/proc` is mounted with `hidepid=0`. HS43 already requires this for the writer case (O-W03-WRITER-EXE), and
      v4 depends on it more strictly because the worker runs as another uid.
@@ -150,9 +159,11 @@ Rules:
 
    Two failures are closed:
    - A gate in a private pid namespace sees `0` or other numbers in `cgroup.procs`, giving NOT_A_MEMBER.
-   - Under `hidepid` other than 0, the other-uid worker's entry is refused (`has_pid_permissions`), since the gate holds
-     no capability (matrix v5 A68). Every BIND then fails: STAT_UNREADABLE, or PROCESS_GONE under `hidepid=invisible`.
-     systemd's `ProtectProc=` on the gate's unit does this.
+   - Under `hidepid` other than 0 (`noaccess`, `invisible` or `ptraceable`), the other-uid worker's entry is refused
+     (`has_pid_permissions`, which requires ptrace access), since the gate holds no capability (matrix v5 A68). The one
+     exemption, membership of the mount's `gid=` group, is not given to the gate; W03/T04 checks this. Every BIND then
+     fails: STAT_UNREADABLE, or PROCESS_GONE where the entry is invisible. systemd's `ProtectProc=` on the gate's unit
+     does this.
 
    A `/proc` fd of another pid namespace is excluded by precondition, not detected: a step-3 read there could be of
    another process, guarded only by the start-time equality.
@@ -178,10 +189,14 @@ Rules:
   > still not exited. Defaults B1, B4 and B6 hold as you stated. So I05 v4 is a model, vectors and README successor; the
   > v3 frame schema bytes and its supplement stay byte-identical.
 
-- **The defaults B1, B4 and B6.** As stated to the monitor:
-  - B1: `cgroup.procs` plus `/proc/<pid>/stat` starttime;
-  - B4: any matching member;
-  - B6: the identity is (pid, starttime).
+- **B1-B6, as v4 defines them.** The monitor relayed that v4 defines B1-B6 and R10 follows. The defaults B1, B4 and
+  B6 hold as stated to the monitor; B2, B3 and B5 are the decided Q-I5 answers:
+  - B1, the mechanism: `cgroup.procs` plus `/proc/<pid>/stat` starttime, pidfd-confirmed (steps 1-5, Q-I5-3);
+  - B2, the timing: a fresh read at every BIND, no cache (Q-I5-1, rule 3);
+  - B3, failure: every failure refuses with WORKER_NOT_OBSERVED, non-fatal and retryable (Q-I5-2, rule 4);
+  - B4, membership: any member of the leaf may be named; the named one must be a member (Q-I5-4, rule 2);
+  - B5, the wire: no change; the frames stay v3 (Q-I5-2);
+  - B6, the identity: (pid, starttime) (rule 1).
 - **SEQ-241-242 (lane monitor, 2026-10-16).** Slot 241 is I05-OBSERVED-WORKERS (I05 v4, observedWorkers from the
   probe-worker cgroup, KERNEL) in the parallel lane.
 
@@ -214,13 +229,15 @@ v4. So I05 v4 DEFINES B1-B6, and R10 follows it."
 
 ## Vectors
 
-The one configuration is **OBSERVING**:
+The main configuration is **OBSERVING**:
 - v3's ACTIVE, converted: its two workers 4100 (start 900001) and 4200 (900002) become leaf members;
 - a third leaf member, 4300 (900003);
 - a process outside the leaf, 5100 (800001), in `/planeon.slice/planeon-proxy-server.service`.
 
-`check_vectors` refuses an OBSERVING that is not exactly this: v3's converted processes followed by the model's
-`OBSERVING_EXTRA`, with the other keys v3's.
+The order transcripts also use **OBSERVING_INSPECTING** and **OBSERVING_LATER**: v3's INSPECTING and LATER, converted,
+plus only the process outside the leaf (v3's LATER already lists 4300). `check_vectors` refuses a configuration that is
+not exactly its v3 source's converted processes followed by the model's listed ones (`V4_CONFIGS`), with the other keys
+v3's.
 
 | ID | Case | Result |
 |---|---|---|
@@ -245,7 +262,26 @@ The one configuration is **OBSERVING**:
   `OBSERVATION_OUTCOMES`), and OBSERVED.
 - Some transcript refuses, at a later BIND, a worker it observed earlier (Q-I5-1).
 - Every injection is consumed by the end of its transcript.
-- There is one observation per BIND.
+- The observation log pairs, in order, with exactly the BINDs that reach the observation: those answered OK,
+  WORKER_NOT_OBSERVED or STORAGE_FAILURE (a BIND record that fails after the observation). A BIND answered before it
+  has no entry.
+
+**P01-P08** pin the order. Each is a v3 transcript's prefix that ends in a BIND answered before the observation, with that
+BIND's worker replaced by the process outside the leaf. The answer stays v3's, and nothing is observed for that BIND:
+
+| ID | Answer before the observation | From v3 |
+|---|---|---|
+| P01 | Fatal PEER_QUALIFICATION_MISMATCH | T14 |
+| P02 | NOT_ACTIVE | T37 (INSPECTING) |
+| P03 | ACTION_OUTSTANDING | T42 |
+| P04 | EXECUTION_REPLAY | T75 |
+| P05 | GENERATION_MISMATCH | T13 |
+| P06 | UNKNOWN_BINDING | T13 |
+| P07 | CERTIFICATE_MISMATCH | T13 |
+| P08 | MANIFEST_REUSED | T95 (LATER) |
+
+`check_vectors` requires every answer of `BEFORE_OBSERVATION` to be pinned this way. A model that observes first, or
+before any one of these checks, is refused.
 
 **C01-C09** refuse malformed configurations:
 - a static `observedWorkers` list;
@@ -253,7 +289,7 @@ The one configuration is **OBSERVING**:
 - a process with another field;
 - a duplicate PID, a boolean PID, a relative cgroup path or a negative start time.
 
-**E01-E09** refuse malformed model events:
+**M01-M09** refuse malformed model events (named M so as not to be read as the E01-E12 claims):
 - an exit of an unknown PID;
 - a spawn on a live PID;
 - open spawn or move shapes, or a move to a relative cgroup;
@@ -297,3 +333,15 @@ The one configuration is **OBSERVING**:
 | IR1-6 NOTE, reading and parsing | Rule 5: read until EOF; duplicate and unordered PIDs accepted; the TGID form; `0` never matches; the whole `stat` content parsed; every fd closed on every path; exact wording on the fields withheld without ptrace access |
 | IR1-7 NOTE, host edges | Rule 9 covers the root fds, the worker's label before exec, and a replaced leaf (the census, review N8). "Still open" names the duty-row wording |
 | IR1-8 NOTE, confirmations | The monitor's confirmation is quoted verbatim (Q-I5-READINGS) |
+
+## Round-2 findings and dispositions
+
+| Finding | Disposition |
+|---|---|
+| IR2-1 MINOR, order not pinned | P01-P08 pin every answer before the observation with a non-member worker. The log is paired only with the BINDs that reach the observation. The observe-first and observe-before-MANIFEST_REUSED mutants are refused |
+| IR2-2 NOTE, time namespace | Rule 8: one time namespace or boottime offset, with the kernel basis; different offsets fail closed |
+| IR2-3 NOTE, log write failure | Rule 4: the log is best effort; a failed write is dropped and never becomes a STORAGE_FAILURE |
+| IR2-4 NOTE, B1-B6 | "Decisions" defines all six, B2, B3 and B5 by the decided Q-I5 answers |
+| IR2-5 NOTE, wording | Step 5 passes only on a poll with no event. Rule 1 names `set_tid` and `ns_last_pid`. Rule 8 names the `gid=` exemption and `hidepid=ptraceable` |
+| IR2-6 NOTE, E-prefix | The model-event refusals are M01-M09 |
+| IR2-7 NOTE | Summary only; no change |

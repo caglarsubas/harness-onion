@@ -1069,11 +1069,22 @@ V3_FILES = {"schema": "architecture/i05-gate-channel-v3/channel.schema.json",
             "supplement": "architecture/i05-gate-channel-v3-supplement/vectors.json"}
 V3_FLOORS = {"transcripts": 120, "agreement": 42, "frames": 34, "byteFrames": 14, "configRefusals": 5}
 SUPPLEMENT_FLOOR = 6
-V4_FLOORS = {"transcripts": 19, "configRefusals": 9, "eventRefusals": 9}
+V4_FLOORS = {"transcripts": 19, "orderTranscripts": 8, "configRefusals": 9, "eventRefusals": 9}
+REFUSAL_PREFIX = {"configRefusals": "C", "eventRefusals": "M"}      # M: malformed model events (not the E01-E12 claims)
+# Every BIND answer that comes before the observation (README "The observation"): a BIND refused this way is never
+# observed, whatever its worker. A fatal answer is named "FATAL:" plus its reason.
+BEFORE_OBSERVATION = ("FATAL:PEER_QUALIFICATION_MISMATCH", "NOT_ACTIVE", "ACTION_OUTSTANDING", "EXECUTION_REPLAY",
+                      "GENERATION_MISMATCH", "UNKNOWN_BINDING", "CERTIFICATE_MISMATCH", "MANIFEST_REUSED")
+# The BIND answers that follow an observation: bound, refused by it, or refused by the BIND record's storage failure.
+AFTER_OBSERVATION = ("OK", "WORKER_NOT_OBSERVED", "STORAGE_FAILURE")
 INPUT_TYPES = {"bytes": bytes, "bytearray": bytearray, "str": lambda raw: raw.decode("ascii")}
 # OBSERVING = v3's ACTIVE converted (4100 and 4200 in the leaf), plus these two processes, exactly.
-OBSERVING_EXTRA = ({"pid": 4300, "startTicks": 900003, "cgroup": PROBE_WORKER_CGROUP},
-                   {"pid": 5100, "startTicks": 800001, "cgroup": "/planeon.slice/planeon-proxy-server.service"})
+OUTSIDER = {"pid": 5100, "startTicks": 800001, "cgroup": "/planeon.slice/planeon-proxy-server.service"}
+OBSERVING_EXTRA = ({"pid": 4300, "startTicks": 900003, "cgroup": PROBE_WORKER_CGROUP}, OUTSIDER)
+# The v4 configurations: each is a v3 configuration converted, plus exactly these processes (the order transcripts' two
+# other configurations add only the process outside the leaf; v3's LATER already lists 4300).
+V4_CONFIGS = {"OBSERVING": ("ACTIVE", OBSERVING_EXTRA), "OBSERVING_INSPECTING": ("INSPECTING", (OUTSIDER,)),
+              "OBSERVING_LATER": ("LATER", (OUTSIDER,))}
 
 
 def _refusal(call) -> str | None:
@@ -1098,6 +1109,32 @@ def _without(value: dict, key: str) -> dict:
     return {k: v for k, v in value.items() if k != key}
 
 
+def bind_answer(output: dict) -> str:
+    """A BIND event's answer as one name: OK, a refusal reason, or FATAL: plus the fatal reason."""
+    if "response" in output:
+        response = output["response"]
+        return "OK" if response.get("result") == "OK" else response["reason"]
+    require(set(output) >= {"fatal"}, "a BIND answer")
+    return "FATAL:" + output["fatal"]
+
+
+def _paired(events: list, outputs: list, observations: list, label: str) -> list:
+    """Pair the observation log with the BINDs that reach the observation, in order; a BIND answered before it has none."""
+    reached = []
+    for event, output in zip(events, outputs):
+        if event.get("type") == "FRAME" and event.get("operation") == "BIND_EXECUTION":
+            answer = bind_answer(output)
+            require(answer in AFTER_OBSERVATION or answer in BEFORE_OBSERVATION, "a known BIND answer in " + label)
+            if answer in AFTER_OBSERVATION:
+                reached.append(answer)
+    require(len(reached) == len(observations), "one observation per BIND that reaches it in " + label)
+    for answer, seen in zip(reached, observations):
+        require((seen["result"] == "OBSERVED") == (answer != "WORKER_NOT_OBSERVED")
+                and (seen["result"] == "OBSERVED") == (seen["step"] is None),
+                "the observation decides the BIND in " + label)
+    return reached
+
+
 def check_vectors(vectors: Any, files: dict) -> int:
     """DATA_CHECK_ONLY: replay every v4 vector, and every v3 and supplement vector under v4.
 
@@ -1105,7 +1142,7 @@ def check_vectors(vectors: Any, files: dict) -> int:
     Returns the number of checks; any mismatch raises ValueError."""
     require(type(vectors) is dict and set(vectors) == {"schemaVersion", "evidenceClass", "modelVersion", "frameVersion", "v3",
                                                        "v3Replay", "configs", "configRefusals", "eventRefusals",
-                                                       "transcripts"}
+                                                       "transcripts", "orderTranscripts"}
             and vectors["schemaVersion"] == VECTORS_VERSION and vectors["evidenceClass"] == "DATA_CHECK_ONLY"
             and vectors["modelVersion"] == MODEL_VERSION and vectors["frameVersion"] == FRAME_VERSION
             and type(vectors["v3Replay"]) is str
@@ -1148,20 +1185,20 @@ def check_vectors(vectors: Any, files: dict) -> int:
         raw = INPUT_TYPES[row["inputType"]](_strict_base64(row["base64"]))
         require(_refusal(lambda: decode_frame(raw, schema)) == row["expect"], "v3 byte frame under v4 " + row["id"])
         checks += 1
-    # 2. The v4 configuration: v3's ACTIVE with its static list replaced by the kernel's process table.
+    # 2. The v4 configurations: each a v3 configuration with its static list replaced by the kernel's process table.
     configs = vectors["configs"]
-    require(type(configs) is dict and set(configs) == {"OBSERVING"}, "one v4 configuration")
+    require(type(configs) is dict and set(configs) == set(V4_CONFIGS), "the v4 configurations")
+    for name, (source, extra) in V4_CONFIGS.items():
+        Gate(copy.deepcopy(configs[name]))
+        converted = convert_v3_config(v3["configs"][source])
+        require(_without(configs[name], "kernel") == _without(converted, "kernel")
+                and configs[name]["kernel"]["processes"] == converted["kernel"]["processes"] + list(extra),
+                name + " is v3's " + source + " converted, plus exactly its listed processes")
     observing = configs["OBSERVING"]
-    Gate(copy.deepcopy(observing))
-    converted = convert_v3_config(v3["configs"]["ACTIVE"])
-    listed = converted["kernel"]["processes"]
-    require(_without(observing, "kernel") == _without(converted, "kernel")
-            and observing["kernel"]["processes"] == listed + list(OBSERVING_EXTRA),
-            "OBSERVING is v3's ACTIVE converted, plus exactly two processes")
     for key, call in (("configRefusals", lambda row: Gate(dict(copy.deepcopy(observing), **copy.deepcopy(row["override"])))),
                       ("eventRefusals", lambda row: _run(observing, row["events"], schema))):
         ids = [row.get("id") for row in vectors[key]]
-        require(ids == [key[0].upper() + "%02d" % n for n in range(1, len(ids) + 1)], key + " in order")
+        require(ids == [REFUSAL_PREFIX[key] + "%02d" % n for n in range(1, len(ids) + 1)], key + " in order")
         for row in vectors[key]:
             require(type(row) is dict and set(row) == {"id", "intent", "override" if key == "configRefusals" else "events",
                                                        "expect"}, "closed " + key + " row")
@@ -1180,7 +1217,8 @@ def check_vectors(vectors: Any, files: dict) -> int:
                 "I05 v4 transcript " + row["id"])
         require(not gate.observation_fails and not gate.observation_races, "every injection is consumed in " + row["id"])
         binds = [n for n, event in enumerate(row["events"]) if event.get("operation") == "BIND_EXECUTION"]
-        require(len(binds) == len(gate.observations), "one observation per BIND in " + row["id"])
+        require(len(_paired(row["events"], outputs, gate.observations, row["id"])) == len(binds),
+                "every BIND of an observation transcript reaches the observation: " + row["id"])
         for n, seen in zip(binds, gate.observations):
             answer = outputs[n].get("response", {})
             if seen["result"] == "OBSERVED":
@@ -1200,4 +1238,23 @@ def check_vectors(vectors: Any, files: dict) -> int:
         checks += 1
     require(outcomes == set(OBSERVATION_OUTCOMES) | {(None, "OBSERVED")}, "every step's every outcome is exercised")
     require(recached, "a later BIND re-observes a worker observed earlier (Q-I5-1)")
+    # 4. The order: a BIND answered before the observation is never observed, even when it names a non-member.
+    ids = [row.get("id") for row in vectors["orderTranscripts"]]
+    require(ids == ["P%02d" % n for n in range(1, len(ids) + 1)], "order transcripts in order")
+    covered = set()
+    for row in vectors["orderTranscripts"]:
+        require(type(row) is dict and set(row) == {"id", "intent", "config", "events", "outputs", "final", "observations",
+                                                   "answer"} and row["config"] in V4_CONFIGS, "closed order transcript")
+        gate, outputs = _run(configs[row["config"]], row["events"], schema)
+        require(outputs == row["outputs"] and gate.snapshot() == row["final"] and gate.observations == row["observations"],
+                "I05 v4 order transcript " + row["id"])
+        last = row["events"][-1]
+        require(last.get("operation") == "BIND_EXECUTION" and bind_answer(outputs[-1]) == row["answer"]
+                and row["answer"] in BEFORE_OBSERVATION, "an order transcript ends in a BIND answered before observation")
+        process = {proc["pid"]: proc for proc in configs[row["config"]]["kernel"]["processes"]}.get(last["payload"]["workerPid"])
+        require(process is None or process["cgroup"] != PROBE_WORKER_CGROUP, "its worker is not a member: " + row["id"])
+        _paired(row["events"], outputs, gate.observations, row["id"])
+        covered.add(row["answer"])
+        checks += 1
+    require(covered == set(BEFORE_OBSERVATION), "every answer before the observation is pinned with a non-member")
     return checks
