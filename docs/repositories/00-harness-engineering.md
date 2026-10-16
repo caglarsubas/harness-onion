@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-029
+## Current source preparation — MET-PERF-040
+
+MET-PERF-040 (PERF-040): chain-depth headroom. A new `tests/conftest.py` shares repeated identical history projections
+within one test (exact str/bytes arguments, refusals never memoised, each wrapper bound to its own test), except for 15
+pinned never-shared tests (owner Q-PERF40-1 (a)); no validator's freshness rule changes (Q-PERF40-2 (a)). The authority
+uses canonical byte-minimal reverse hunks, which the new layer recomputes and requires (Q-PERF40-4 (a)); the parallel
+suite's weights cover all 127 test files at six workers (Q-PERF40-3 (a)); the matrix v5 layer runs its position checks
+before the replay (P2-1). Alpha2 OPEN; 240 accepted plus MET-PERF-040 only.
+
+## Historical compiled filter programs v2 source preparation — MET-ENFORCE-029
 
 MET-ENFORCE-029 (PROGRAMS-REPUBLISH): compiled filter programs v2. EFFECT_GATE's two programs are republished from the
 adopted seccomp allowlists v4: each is MET-ENFORCE-025's v3 program with one six-instruction `readlinkat` block (x86_64
@@ -1183,6 +1192,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 112. `MET-PERF-039`: raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)); deadline, accounting, parent nodes, serial rule and weights unchanged; ci/ transport change.
 113. `MET-ENFORCE-028`: publish SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); v3, v4, HS43 and the native profile unchanged; DATA_CHECK_ONLY.
 114. `MET-ENFORCE-029`: publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; MET-ENFORCE-025's programs, allowlists v3 and v4 and edge records v1 and v2 unchanged; DATA_CHECK_ONLY.
+115. `MET-PERF-040`: give back verify headroom lost to the history chain's depth (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change.
 
 ## Testing, verification, and acceptance
 
