@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-040
+## Current source preparation — MET-ENFORCE-030
+
+MET-ENFORCE-030 (I05-OBSERVED-WORKERS): the I05 gate channel v4, a model, vectors and README successor of the adopted v3.
+At every BIND the gate reads the probe-worker cgroup's cgroup.procs, opens a pidfd, checks the worker's start time in
+/proc/<pid>/stat, reads cgroup.procs again and polls the pidfd; any failure refuses with the existing WORKER_NOT_OBSERVED,
+non-fatal and retryable, and the v3 frames stay byte-identical (owner Q-HE3D-2 (a), Q-I5-4 (a); monitor Q-I5-1..3 (a)).
+DATA_CHECK_ONLY. Alpha2 OPEN; 241 accepted plus MET-ENFORCE-030 only.
+
+## Historical chain-depth headroom source preparation — MET-PERF-040
 
 MET-PERF-040 (PERF-040): chain-depth headroom. A new `tests/conftest.py` shares repeated identical history projections
 within one test (exact str/bytes arguments, refusals never memoised, each wrapper bound to its own test), except for 15
@@ -1193,6 +1201,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 113. `MET-ENFORCE-028`: publish SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing); v3, v4, HS43 and the native profile unchanged; DATA_CHECK_ONLY.
 114. `MET-ENFORCE-029`: publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2; MET-ENFORCE-025's programs, allowlists v3 and v4 and edge records v1 and v2 unchanged; DATA_CHECK_ONLY.
 115. `MET-PERF-040`: give back verify headroom lost to the history chain's depth (test-local exact sharing with 15 never-shared tests, canonical byte-minimal authority hunks, refreshed weights at six workers, the matrix v5 replay order); no validator freshness change; DATA_CHECK_ONLY.
+116. `MET-ENFORCE-030`: publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, every failure WORKER_NOT_OBSERVED); the v3 contract, supplement and model unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 
