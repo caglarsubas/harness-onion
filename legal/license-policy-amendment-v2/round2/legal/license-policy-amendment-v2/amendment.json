@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "planeon.internal.license-policy-amendment/v2",
+  "amendmentId": "LIC-HOST-A2",
+  "base": {
+    "path": "legal/third-party-license-policy.yaml",
+    "sha256": "fa3a4398acafc3960eaaae9f5396d4e96d91e6ff252b83f6c53e1f5f0d8a40d0",
+    "policyVersion": "0.3.0"
+  },
+  "predecessor": {
+    "amendmentId": "LIC-HOST-A1",
+    "record": {
+      "path": "legal/license-policy-amendment/amendment.json",
+      "sha256": "f6a8c0796857cf40906df3e6bc483122988b91271cc77b3aaed4d4e213d864c2"
+    },
+    "vectors": {
+      "path": "legal/license-policy-amendment/vectors.json",
+      "sha256": "fd2af21605c04420f76d148b71cf39e026251931df215e77eafce8c925549b24"
+    },
+    "model": {
+      "path": "scripts/license_amendment.py",
+      "sha256": "58758a4a7bb6bbcf49daf1880cc423566da306cfd90dceadfa1b4b7c53ec28cd"
+    }
+  },
+  "ownerDecisions": [
+    {
+      "id": "LIC-ZLIB",
+      "date": "2026-10-15",
+      "via": "lane monitor (owner-delegated); recorded verbatim in the roadmap item LICENCE-POLICY-AMEND (harness-onion-roadmap roadmap/roadmap.json)",
+      "selected": null,
+      "text": "Monitor decision (owner-delegated), 2026-10-15: add Zlib to licence policy 0.3.0's allowed list in the next licence-layer packet, folding in LIC-HOST-F P2-F1/P2-F2; that resolves phoenix-sqlean's DENY_UNKNOWN_LICENSE (RA-LICENSE-001 note N-2)."
+    },
+    {
+      "id": "L2-1",
+      "date": "2026-10-16",
+      "via": "lane monitor (owner-delegated), cross-session message, 2026-10-16",
+      "selected": "a",
+      "text": "L2-1 = (a): Zlib is default-allowed globally, like MIT. It's OSI-approved, permissive and Apache-compatible, matching the decided \"allowed list\"."
+    },
+    {
+      "id": "L2-2",
+      "date": "2026-10-16",
+      "via": "lane monitor (owner-delegated), cross-session message, 2026-10-16",
+      "selected": "a",
+      "text": "L2-2 = (a): A2 states the effect on phoenix-sqlean. RA-LICENSE-001's record stays byte-identical, and a later adoption revision re-runs the check."
+    }
+  ],
+  "additionalDefaultAllowedSpdx": [
+    "Zlib"
+  ],
+  "rule": "An additional default-allowed term is classified exactly as a term of the base's defaultAllowedSpdx: DEFAULT_ALLOWED for every component, kind and custody (L2-1 (a): globally), with A1's leaf order, election ranking, OR-choice, AND-term, legacy-slash and precedence rules unchanged. It takes the base's release admission (DEFAULT_ALLOWED is an allowed final classification) and requirements (SBOM, NOTICE). It is on no base list and is not an A1 class term, decision or election, so no base or A1 outcome of any other term changes, and a compound listed exactly in the base keeps its base outcome. Matching stays exact (EXACT_SPDX_EXPRESSION): only the identifier Zlib, in the SPDX list's spelling, is added. SPDX itself matches identifiers case-insensitively, but the base does not, so zlib stays UNKNOWN and a consumer normalises an identifier to the list spelling before classifying; zlib-acknowledgement, Zlib+ and Zlib WITH an exception are other terms and stay UNKNOWN.",
+  "effects": [
+    {
+      "record": "architecture/research-adoption-v3/README.md (RA-LICENSE-001, note N-2)",
+      "subject": "Arize-ai/phoenix packages/phoenix-sqlean/ (Zlib)",
+      "expression": "Zlib",
+      "recorded": "DENY_UNKNOWN_LICENSE",
+      "underA2": "DEFAULT_ALLOWED",
+      "recordChanged": false,
+      "decidedBy": "L2-2"
+    }
+  ],
+  "carriedFindings": [
+    {
+      "id": "P2-F1",
+      "source": "223 MET-ENFORCE-021 (LIC-HOST-F) packet review round 2, 2026-10-10, subject commit cf04fb497dba671199543507b2b7438e132b1609; author-side record tools/lichost/pkt/reviews/review-round2.json, not published on main",
+      "severity": "NOTE",
+      "location": "scripts/validate_license_amendment.py validate_license_amendment() (DECIDED_CASES binding); the 88-vector replay lives only in the era module's _check",
+      "finding": "The validator still relies on the model's own _check to replay the 88 pinned vectors, and DECIDED_CASES holds only class, approval and election cases. It has no negative case for the decision-record scope, base denial, unknown terms or open-content scope. Probe (probe3.py, in memory, model re-pinned): with _check reduced to `return record(read(RECORD_PATH)), Policy(base_categories(read(BASE_PATH)))`, which keeps the correct policy and skips the vector replay, the run is ACCEPTED (H3). The run is still ACCEPTED when the re-pinned model also approves every explicit-review term for any subject (H4), accepts open content for every kind (H5), or accepts denied and unknown terms (H6). With the vector replay intact, the H4 weakening is refused by the vector \"GPL-2.0-only for other-program\" (H4b). This needs a re-pinned ERA_SHA256, which means editing this validator, whose normalized bytes the authority pins. The digest pin therefore still guards the actual bytes, and this is defence-in-depth only.",
+      "requiredChange": "None blocking. Optionally, replay the pinned vectors in the validator: for each case in _json(AMEND_DIR + 'vectors.json')['cases'], call module.classify(policy, ...) (ValueError counts as REFUSED) and compare outcome and elections. Then the '88 vectors' claim no longer depends on the module's own replay, and H3 to H6 are refused. Alternatively, add negative DECIDED_CASES (e.g. GPL-2.0-only for a CRATE gives OPTIONAL_EXPLICIT_REVIEW, a base denied term gives DENIED, an open-content term for a CRATE gives OUT_OF_SCOPE, an unlisted term gives UNKNOWN).",
+      "disposition": "To be carried into the A2 layer of packet 242 (validate_license_amendment_v2.py, not yet written): it will replay every A1 and A2 vector on the validator side through classify (a ValueError counting as REFUSED), comparing outcome and elections, and its decided cases will include negative ones: an explicit-review term outside its decision's scope, a base denied term, an unknown term and an open-content term outside ARTIFACT. The 242 packet review checks it."
+    },
+    {
+      "id": "P2-F2",
+      "source": "223 MET-ENFORCE-021 (LIC-HOST-F) packet review round 2, 2026-10-10, subject commit cf04fb497dba671199543507b2b7438e132b1609; author-side record tools/lichost/pkt/reviews/review-round2.json, not published on main",
+      "severity": "NOTE",
+      "location": "scripts/validate_license_amendment.py:426-432 (_verified)",
+      "finding": "_verified reads the path before it checks that the path is in the era. So a path outside the era is read through reviewed_bytes, a bounded regular-file read, before it is refused. A missing path raises FileNotFoundError, an OSError, instead of the ValueError refusal. Reproduction: _verified('legal/third-party-license-policy.yaml.bak') raises FileNotFoundError, and _bound does not convert it. No current caller passes a non-era path: the era module reads only its three constant paths, and the status rows are constrained to review-round%d.json. The refusal itself holds, so this is polish.",
+      "requiredChange": "None blocking. Optionally, check `path in ERA_SHA256` first and refuse with the existing message before calling reviewed_bytes.",
+      "disposition": "To be carried into the A2 layer of packet 242: its verified-read helper will check that a path is in the layer's era before reading it, and refuse any other path with the existing ValueError message. The 242 packet review checks it."
+    }
+  ],
+  "notClaimed": [
+    "Nothing is released by this record, and it is not legal advice: the owner's and the lane monitor's (owner-delegated) decisions are the approving authority.",
+    "The research-adoption record architecture/research-adoption-v3/ is unchanged (L2-2 (a)); phoenix-sqlean's reuse ceiling, now DESIGN_REFERENCE_ONLY, is for a later research-adoption revision to re-run.",
+    "No consumer is switched to A2 by this record; the license gates that classify with A1 adopt A2 in their own packets.",
+    "Consumers that read the base policy's lists directly, not through A1 or A2 (for example scripts/research_adoption_v3.py), keep Zlib UNKNOWN until they classify with A2: re-running the research-adoption model as it stands still gives DENY_UNKNOWN_LICENSE for phoenix-sqlean, so the later research-adoption revision must classify with A2.",
+    "The zlib licence's own conditions (the origin is not misrepresented, altered source versions are plainly marked, the notice stays in source distributions) are obligations of any reuse; the base's NOTICE requirement and per-blob porting records carry them, and this record adds no other mechanism."
+  ]
+}

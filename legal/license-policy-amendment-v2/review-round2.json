@@ -1,0 +1,47 @@
+{
+ "round": 2,
+ "subject": "fa657f49f33e9db371b711300fbf6fe85c3db0b6",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "LR2-1",
+   "severity": "MINOR",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 43,
+   "summary": "Round 2 added a consumer rule that no decision covers: 'a consumer normalises an identifier to the list spelling before it classifies'. It sits in README 'The rule' and in amendment.json's normative rule field (line 50). It conflicts with exact matching and with 'no base or A1 outcome of any other term changes', and A2's own classify does not do it.",
+   "evidence": "README.md:43-44 says: 'So `zlib` stays UNKNOWN, and a consumer normalises an identifier to the list spelling before it classifies.' amendment.json:50 (rule) says: '...so zlib stays UNKNOWN and a consumer normalises an identifier to the list spelling before classifying'. This sentence is new in round 2 (git diff 60472192..fa657f49, README hunk at lines 28-30). Neither the base (expressionMatching EXACT_SPDX_EXPRESSION), A1's README or record, nor scripts/license_amendment.py has any case normalisation. A1 normalises only legacy 'A/B' crate fields. LIC-ZLIB, L2-1 and L2-2 decide only that Zlib is added. If the sentence is read as a rule, a consumer that follows it changes outcomes for other terms. Under A2's classify, 'mit', 'apache-2.0', 'gpl-2.0-only' and 'sspl-1.0' for a CRATE are each UNKNOWN today. Normalised, they would become DEFAULT_ALLOWED, DEFAULT_ALLOWED, OPTIONAL_EXPLICIT_REVIEW and DENIED. The record also contradicts itself: it says zlib stays UNKNOWN (vector 11 expects UNKNOWN), and in the same sentence it tells consumers to turn it into Zlib, which is DEFAULT_ALLOWED. The SPDX point rests on my own knowledge, not checked online. SPDX 2.3 Annex D recommends case-insensitive matching of licence identifiers and notes that the canonical list case matters, so the first half of the sentence is right. Whether the policy should adopt normalisation is a licensing decision (AGENTS.md rule 9). Fix: drop the consumer clause, or make it descriptive, e.g. 'so zlib stays UNKNOWN (fail-closed); A2 adds no case normalisation'. Apply this in both README.md:43-44 and amendment.json:50, then rebuild."
+  },
+  {
+   "id": "LR2-2",
+   "severity": "MINOR",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 94,
+   "summary": "The LR1-4 disposition claims something the bytes do not do. README:94 says 'check reads A1's vectors once, then hashes and replays those same bytes', and README:118 says 'A1's vectors are read once'. But check reads the A1 vectors, the A1 record and the base twice each, and A1's own check validates the unhashed first read.",
+   "evidence": "scripts/license_amendment_v2.py:139 calls a1._check(read), which reads the A1 record, the base and the A1 vectors. Line 140 then reads the A1 record, the A1 vectors and the A1 model again. Only these second reads are hashed and pinned. An instrumented reader on the scratch copy counted: A1 vectors 2, A1 record 2, base 2, A1 model 1, A2 record 1, A2 vectors 1. The A2 replay (lines 161-168) compares A1-policy and A2-policy results on the hashed bytes. It never compares them with each vector's recorded outcome, so the 88 recorded A1 expectations are checked only by a1._check, on the first, unhashed read. Probe (in memory): the reader returned a valid 16-case subset of the A1 vectors on the first read only. a1.check accepts that subset, and a2.check was ACCEPTED. On the second read instead, it was REFUSED ('the A1 pins'). A different A1 record (notClaimed changed) on the first read was likewise ACCEPTED. So the M8 class of LR1-4 has moved from read 3 to read 1. The residual risk is still the NOTE-level one that LR1-4 named: the packet layer's verified reader closes it, and README:95-96 assigns that to the packet layer. But the disposition and README:94 state the property as already true. Fix, either: (a) in _check, wrap `read` in a per-path memo before a1._check, so A1's check, the pins and the replay use one read of each path (also make line 145 use the memo); or (b) reword README:94 and :118, and the line 140 comment, to say that only A2's own replay uses the hashed bytes."
+  },
+  {
+   "id": "LR2-3",
+   "severity": "NOTE",
+   "file": "scripts/license_amendment_v2.py",
+   "line": 188,
+   "summary": "The LR1-3 fix holds: whole WITH leaves, no REFUSED exemption, and the M7 drift is refused. The guard still only checks that a changed case contains an exact added term. So README:67-68's 'every change to come through an exact added term' is a little stronger than the check. The overlap check for elections is a substring test.",
+   "evidence": "Probes (in memory, A2 policy drifted through Policy.leaf). M7 made 'Zlib WITH LLVM-exception' DEFAULT_ALLOWED under A2, with vector 14 expecting it: REFUSED ('a result changes only through an added term'). An accepted-to-REFUSED change for 'MIT' without Zlib: REFUSED. Case-insensitive drift on 'zlib': REFUSED. M7b used the same drift, with vector 14's expression changed to 'Zlib AND Zlib WITH LLVM-exception' and expecting ACCEPTED_AND: ACCEPTED. The honest result is UNKNOWN (M7c, the undrifted control, ACCEPTED with UNKNOWN). Such a drift is caught only by the vectors' explicit expectations, which is the primary guard, so this is wording. Suggest 'requires an exact added term among the leaves of every changed case'. Separately, lines 151-153 test `term in group` on the election group strings, a substring test. It fails closed: for example, 'GPL-2.0' would be refused as an election term. LR1-3's optional 'added terms are bare SPDX ids' check is not implemented. Harmless while ADDED_DEFAULT_ALLOWED is the pinned constant ('Zlib',)."
+  },
+  {
+   "id": "LR2-4",
+   "severity": "NOTE",
+   "file": "scripts/license_amendment_v2.py",
+   "line": 143,
+   "summary": "The running-classifier check reads a1.__file__ directly from disk, outside the injected reader. The 242 layer must either route this read through its verified reads or replace the check.",
+   "evidence": "Line 143: require(_sha(Path(a1.__file__).read_bytes()) == pins[A1_MODEL_PATH], ...). Probe: with a1.__file__ pointed at another file, the check was REFUSED ('the running A1 classifier is the pinned one'), so it works as the README says. But it is an unverified raw read. The 223 layer's _era_model (scripts/validate_license_amendment.py:479-482) compiles verified bytes and sets module.__file__ to ROOT/path. If the 242 layer loads A1 the same way, this line adds an unverified read that the layer's no-stray-open property (223 round-2 P1-F4) does not allow. It would also hash the file on disk, not the bytes that were compiled. If the injected module has no __file__, check fails with 'malformed A2 record' (AttributeError), which is fail-closed. Also, A2 imports A1 by name (`import license_amendment`), so the 242 layer must inject its era-loaded A1 under that name. Suggest carrying this as a 242 acceptance item next to P2-F1/P2-F2."
+  },
+  {
+   "id": "LR2-5",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 61,
+   "summary": "The base's compound review entries match only their exact text. So for gmp, 'Apache-2.0 AND LGPL-3.0-or-later AND Zlib' goes from UNKNOWN (A1) to ACCEPTED_AND (A2). This is A1's existing rule: any base default-allowed term does the same. No vector or README line shows it.",
+   "evidence": "Classified on the scratch copy for gmp (HOST_OS_LIBRARY, UPSTREAM_PINNED). 'Apache-2.0 AND LGPL-3.0-or-later' is OPTIONAL_EXPLICIT_REVIEW under A1 and A2 (an exact base entry). 'Apache-2.0 AND LGPL-3.0-or-later AND W3C-20150513' is ACCEPTED_AND under A1. 'Apache-2.0 AND BSD-3-Clause AND LGPL-3.0-or-later' is ACCEPTED_AND under A1. 'Apache-2.0 AND LGPL-3.0-or-later AND Zlib' is UNKNOWN under A1 and ACCEPTED_AND under A2. The leaf LGPL-3.0-or-later is approved for gmp by A1's Q-L2 decision. Only the exact compound keeps its base review outcome (classify, license_amendment.py:306-310). The same holds for nft with GPL-2.0-only. So Zlib behaves exactly like a base default-allowed term, as L2-1 (a) decides, and README:40's 'a compound listed exactly in the base keeps its base outcome' is accurate. README:61-63 ('A review requirement ... elsewhere in an AND still blocks it') is true for an unapproved review leaf. This answers brief check 2. No change is required. Optionally, add one sentence or vector."
+  }
+ ]
+}

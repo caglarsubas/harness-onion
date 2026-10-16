@@ -1,0 +1,71 @@
+{
+ "round": 1,
+ "subject": "604721921e7f620bb7d8383f1662827769dc50ff",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "LR1-1",
+   "severity": "MINOR",
+   "file": "legal/license-policy-amendment-v2/vectors.json",
+   "line": 10,
+   "summary": "The vectors test Zlib alone for only 5 of A1's 8 kinds and 2 custodies. The rule claims every component, kind and custody, and the brief asks for each kind.",
+   "evidence": "The 25 cases have Zlib alone as CRATE, ARTIFACT, HOST_OS_LIBRARY, STATIC_SYSTEM_LIBRARY (linked into a REPOSITORY_BUILT binary) and PLANEON_SOURCE. There is no case for GO_MODULE, UPSTREAM_BINARY or HOST_OS_PROGRAM. There is none with custody COMPOSITE_REVIEW_REQUIRED or TENANT_ATTESTED_PINNED (the base's other custodies), and none for a legacy crate field alone. amendment.json:50 and README.md:34 claim DEFAULT_ALLOWED 'for every component, kind and custody'. The behaviour itself is right. A differential probe ran 338 cases: 17 templates x 8 kinds x 2 custodies, plus nft, glibc, libnftnl, gmp and libpathrs. Zlib under A2 matched the base default-allowed term W3C-20150513 (same sort position) under A1, with 0 mismatches. So only the recorded evidence is missing. Fix: add Zlib alone for the 3 missing kinds and the 2 missing custodies, and optionally as a crate field. Then have check require a DEFAULT_ALLOWED 'Zlib' case for every entry of a1.KINDS."
+  },
+  {
+   "id": "LR1-2",
+   "severity": "MINOR",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 66,
+   "summary": "The phoenix-sqlean effect leaves out that RA-LICENSE-001's model reads the base lists directly, so simply re-running it still gives DENY_UNKNOWN_LICENSE. The consumer non-claim names only A1 consumers.",
+   "evidence": "scripts/research_adoption_v3.py reads legal/third-party-license-policy.yaml itself: POLICY_PATH at line 34, defaultAllowedSpdx parsed at line 212, the read at line 271. It consumes neither A1 nor A2. tests/test_research_adoption_v3.py:881-882 pin ['MIT','Zlib'] -> DENY_UNKNOWN_LICENSE, and the v3 profile refuses a changed policy file. README.md:67-68 ('A later research-adoption revision re-runs its check and decides the ceiling') and amendment.json notClaimed[1] read as if re-running the check is enough. notClaimed[2] and README.md:85-86 say only that A1 consumers adopt A2 later. The effect under A2's classifier (DEFAULT_ALLOWED) is stated correctly. The research record is byte-identical: git diff 5e83b257..60472192 adds only the five subject files. Fix: say that consumers reading the base directly, RA-LICENSE-001's model included, keep Zlib UNKNOWN until they adopt the A2 overlay. Say that the later revision must classify with A2, not only re-run, to reach DEFAULT_ALLOWED. The research record needs no change."
+  },
+  {
+   "id": "LR1-3",
+   "severity": "MINOR",
+   "file": "scripts/license_amendment_v2.py",
+   "line": 66,
+   "summary": "The guard 'a result changes only through an added term' is not exact: _leaves strips ' WITH <exception>', and line 180 also exempts any A2 REFUSED. So README.md:59-60's claim fails for WITH forms.",
+   "evidence": "_leaves('Zlib WITH LLVM-exception', False) returns {'Zlib'}. Under exact matching the term is 'Zlib WITH LLVM-exception', and README.md:42-43 says it stays UNKNOWN. Probe M7 (in memory): the A2 policy was drifted to also make 'Zlib WITH LLVM-exception' DEFAULT_ALLOWED, and vector 9 was changed to expect that. check ACCEPTED it, and both guards (line 157 and lines 180-181) let it through. Line 180's 'or a2 REFUSED' exemption is never needed, because A1 and A2 share the parser and so refuse the same expressions. It does let an accepted-to-refused change through, and line 157 has no such exemption. Fix: collect whole leaf strings (found.add(item)) and drop the REFUSED exemption. Optionally require each added term to be a bare SPDX license id. Probe M6: a compound added term 'Zlib OR SSPL-1.0' passes the overlap checks and is refused only by the vectors."
+  },
+  {
+   "id": "LR1-4",
+   "severity": "NOTE",
+   "file": "scripts/license_amendment_v2.py",
+   "line": 134,
+   "summary": "check hashes one read of each A1 file but uses another: the A1 replay parses an unhashed third read, and the A1 classifier that runs is the imported module, not the hashed bytes.",
+   "evidence": "Reads in one check: A1 vectors 3, A1 record 2, base 2, A1 model 1 (hashed only). Pins are computed on the second read (line 135), and the replay parses a third read (line 154). Probe M8: a reader that returns a one-case A1 vectors file on the third read was ACCEPTED, so the replay covered 1 case, not 88. Likewise, a1._check validates the A1 record from a different read than the one pinned. The classifier that runs is whatever 'import license_amendment' resolves to. scripts/safe_yaml.py, which A1 uses to parse the base, is not pinned. This is closed if the packet layer's reader re-checks every read against its era digests and loads the pinned A1 module bytes, as the 223 layer's _verified does (round-2 P1-F4). Hence NOTE. Optional fix: in _check, read each path once, then hash and parse the same bytes."
+  },
+  {
+   "id": "LR1-5",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/README.md",
+   "line": 45,
+   "summary": "'What A2 changes' names only the approved-review election change. A2 also changes elections against an exception expression, open content and the A1 class, and accepts an OR whose other choice needs review. No case covers these.",
+   "evidence": "Differential probe, A1 -> A2 on the same expression: 'Apache-2.0 WITH LLVM-exception OR Zlib' elects Zlib instead of the exception expression (rank 1 before rank 2). 'CC0-1.0 OR Zlib' for an ARTIFACT elects Zlib instead of the open-content term. 'GPL-2.0-or-later OR Zlib' for libnftnl and 'LGPL-2.1-or-later OR Zlib' for glibc linked into runc elect Zlib instead of the class term. 'Zlib OR GPL-3.0-only' goes from OPTIONAL_EXPLICIT_REVIEW to ACCEPTED_OR. All of these follow A1's ranking and OR-choice rules, so they are correct. Listing them, with a case or two, would complete the stated effect."
+  },
+  {
+   "id": "LR1-6",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/vectors.json",
+   "line": 110,
+   "summary": "The near-miss notes rest on the policy's exact matching, not on licence identity. SPDX matches licence ids case-insensitively, and the SPDX list spells the acknowledgement variant with a lowercase z.",
+   "evidence": "This rests on my own knowledge of the SPDX specification (Annex D) and the SPDX licence list, not checked online (no network). SPDX matches licence identifiers case-insensitively, so 'zlib' names the same licence as 'Zlib'. The policy's EXACT_SPDX_EXPRESSION makes it UNKNOWN. That fails closed and matches the base, where 'mit' is UNKNOWN too. Vector 6's note 'another case is not Zlib' would read better as 'exact matching: only the spelling Zlib is listed'. To my knowledge, the SPDX list id for the zlib/libpng licence with acknowledgement is 'zlib-acknowledgement', with a lowercase z. Vector 7 (line 129) and README.md:43 use 'Zlib-acknowledgement', which is valid but not the canonical spelling; the canonical one is the more realistic near miss. Also from my own knowledge: 'Zlib' is the SPDX id of the zlib License, the licence is OSI-approved, and the README's three conditions match its text."
+  },
+  {
+   "id": "LR1-7",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/amendment.json",
+   "line": 70,
+   "summary": "P2-F1 and P2-F2 are quoted exactly. Their dispositions describe validate_license_amendment_v2.py of packet 242, which is not in this subject, in the present tense.",
+   "evidence": "In both rows, severity, location, finding and requiredChange equal the strings in the source review-round2.json. The source's round (2), date (2026-10-10) and subject commit cf04fb497dba671199543507b2b7438e132b1609 match. The dispositions answer the findings: a validator-side replay of every A1 and A2 vector (ValueError counts as REFUSED, outcome and elections compared); negative decided cases for an out-of-scope review term, a base denial, an unknown term and open content outside ARTIFACT; and an era-membership check before any read. They are commitments, though. scripts/validate_license_amendment.py (the 223 layer) is unchanged, so both findings still hold for that era. Suggest future-tense wording or an explicit 'verified in the 242 packet review', and use both as acceptance criteria there."
+  },
+  {
+   "id": "LR1-8",
+   "severity": "NOTE",
+   "file": "legal/license-policy-amendment-v2/REVIEW_BRIEF.md",
+   "line": 38,
+   "summary": "The brief, which will be published, names operator-local state paths (~/.local/state/...).",
+   "evidence": "REVIEW_BRIEF.md:38 and :46 cite '~/.local/state/harness-onion-ci/tools/...'. They contain no username or other personal data. But they are author-side paths, which amendment.json itself describes as not published on main, and A1's published REVIEW_BRIEF.md has no such paths. Consider 'the author-side review record (not published)' and 'the author-side builder' instead."
+  }
+ ]
+}
