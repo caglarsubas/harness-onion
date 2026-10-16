@@ -1,0 +1,71 @@
+{
+ "round": 1,
+ "subject": "276b988f4e8d3887b77b10defb9cef56d6417613",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "IR1-1",
+   "severity": "MINOR",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 150,
+   "summary": "The OBSERVING description is wrong, and check_vectors does not enforce the README's 'exactly this extension' claim. v3's ACTIVE converts to two leaf members, 4100 (900001) and 4200 (900002), so OBSERVING has three leaf members (4100, 4200, 4300) and one process outside the leaf (5100). README:150-152 names only 4100 and calls 4300 'a second leaf member'. README:154 says check_vectors refuses an OBSERVING that is not exactly this extension. The check (scripts/i05_gate_channel_v4.py:1143-1147) only compares the non-kernel keys and requires v3's converted processes as a prefix, so the two added processes are not pinned.",
+   "evidence": "v3 vectors.json configs.ACTIVE.observedWorkers = [[4100, 900001], [4200, 900002]]. Tamper runs of check_vectors on a scratch archive of 276b988, each a single change to OBSERVING: append a leaf process (4500, 900077): PASS(255); append a process in '/x': PASS(255); move 5100 to '/other': PASS(255); delete 5100: PASS(255). O03 gives NOT_A_MEMBER whether or not 5100 exists. Deleting 4300 is refused only through O02's replay. Fix: require kernel.processes to equal the converted list plus [4300 (900003) in the leaf, 5100 (800001) in /planeon.slice/planeon-proxy-server.service] exactly, or drop the claim. Also correct README:150-152."
+  },
+  {
+   "id": "IR1-2",
+   "severity": "MINOR",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 78,
+   "summary": "No vector pins rule 3's 'caches no earlier answer' (Q-I5-1), and none exercises the step-3 'Gone' branch. No transcript BINDs again after an OBSERVED answer with the kernel changed in between, so a gate that caches positive answers passes all 255 checks. O05 has the exit before any BIND, not after one. Separately, no race after PIDFD_OPEN lets the held process exit without a reuse, so README step 3's 'Gone (ENOENT or ESRCH): PROCESS_GONE' (model lines 408-409) is never reached by the vectors.",
+   "evidence": "Mutants of a scratch copy of the model, run through check_vectors: M1, cache (pid, start) after an OBSERVED answer and skip later reads: PASS(255). M7, stop observing after the first OBSERVED answer: PASS(255). M9, report the step-3 gone case as START_MISMATCH: PASS(255). M10, delete the step-3 gone check: PASS(255). For contrast, these mutants are killed: no step 5 (O13), no step 4 (O14), other members refuse, and a durable journal record of the refusal (v3 T13). A second BIND is reachable: OBSERVING.runs holds run-one and run-two. The scratch replay [GENERATION_STATUS, BIND run-one pid 4100, KERNEL_EXIT 4100, BIND run-two pid 4100] gives OK, then REFUSED WORKER_NOT_OBSERVED, logged NOT_A_MEMBER. build_v4.py defines RUN2 and bind(second=True), but no case uses them. Fix: add that transcript (a re-BIND after the observed worker exits, and ideally after it moves out of the leaf). Also add a race after PIDFD_OPEN carrying KERNEL_EXIT alone, giving PROCESS_GONE at step 3."
+  },
+  {
+   "id": "IR1-3",
+   "severity": "MINOR",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 75,
+   "summary": "Rule 2 says cgroup.procs lists only the leaf's own thread-group IDs, so a worker in a child of the leaf is NOT_A_MEMBER. That kernel claim is false for a threaded subtree, and the README gives no kernel basis for it. It holds for a domain leaf whose children are domain cgroups. A threaded-domain leaf also lists the processes of its threaded descendants, and a threaded leaf refuses the read.",
+   "evidence": "Reviewer's own kernel knowledge (Linux v6.12, kernel/cgroup/cgroup.c). cgroup_procs_start returns -EOPNOTSUPP when cgroup_is_threaded(cgrp). Otherwise it starts the iterator with CSS_TASK_ITER_PROCS | CSS_TASK_ITER_THREADED, and css_task_iter_next_css_set then also walks the domain css_set's threaded_csets. So thread-group leaders placed in threaded child cgroups appear in the threaded domain's cgroup.procs. Documentation/admin-guide/cgroup-v2.rst agrees: a threaded domain's cgroup.procs holds the PIDs of every process in the subtree and is not readable inside the subtree. The PROCS behaviour is as the README states: css_task_iter_advance skips non-leaders and dying leaders whose signal->live is 0, and the iterator walks only the cgroup's own cset links, so processes in domain children are not listed. Fix: either require the leaf to stay a domain cgroup with no threaded descendants (an obligation for the broker or for W03/T04) or accept the threaded semantics, and name the functions. A threaded leaf fails closed: EOPNOTSUPP gives CGROUP_PROCS_UNREADABLE."
+  },
+  {
+   "id": "IR1-4",
+   "severity": "MINOR",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 69,
+   "summary": "Rule 1's race-freedom argument and rule 5's starttime claim rest on two preconditions the README never states. The gate's /proc fd must belong to the gate's own pid namespace, which is also the broker's (workerPid is the broker's number). /proc must be mounted with hidepid=0. Rule 7 covers only the cgroup namespace.",
+   "evidence": "Reviewer's own kernel knowledge (v6.12). pidfd_open resolves the number with find_get_pid, in task_active_pid_ns(current). cgroup.procs prints task_pid_vnr, in the reader's active pid namespace, and prints 0 for a task it cannot see. openat('<pid>/stat') on the /proc fd resolves in that procfs instance's namespace (proc_pid_lookup, using the superblock's proc_pid_ns). If the /proc fd belongs to another pid namespace, step 3 reads another process's stat, and rule 1's span argument no longer applies. Only the starttime equality then stands between that read and a false OBSERVED. With hidepid other than 0, proc_pid_permission and has_pid_permissions require ptrace_may_access(PTRACE_MODE_READ_FSCREDS) unless the reader is in the gid= group. The gate holds no capability (matrix v5 A68) and the worker runs as another uid, so every BIND fails: EPERM gives STAT_UNREADABLE, and ENOENT under hidepid=invisible gives PROCESS_GONE. systemd ProtectProc= on the gate's unit does this, for example. Rule 5's sentence that the kernel prints starttime for a reader without ptrace access is true of do_task_stat, but only once the entry is reachable. HS43 already requires hidepid=0 for the writer case (architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md:329, O-W03-WRITER-EXE), and v4 depends on it more strictly because the worker runs as another uid. Fix: add a rule that names both preconditions. It should say that a private pid namespace (cgroup.procs then lists 0 or other numbers, giving NOT_A_MEMBER) and hidepid both fail closed, exclude a foreign procfs instance by precondition, and carry the check to W03/T04."
+  },
+  {
+   "id": "IR1-5",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 69,
+   "summary": "Rule 1 is sound for zombies, reaping, PID reuse and the poll of a non-child pidfd. The README never mentions zombies, though, and the model's KERNEL_EXIT stands for exit and reap together. On a real kernel, a worker that has exited but is not yet reaped stays visible to pidfd_open and to /proc/<pid>/stat, so the local cause can differ from the vectors'. For O11 ('exits after step 1') it is NOT_IN_PROBE_WORKER_CGROUP or PIDFD_EXITED, not PROCESS_GONE, until the broker reaps the worker. The wire answer is the same.",
+   "evidence": "Reviewer's own kernel knowledge (v6.12). A PID number is freed only at reap (release_task, __unhash_process, detach_pid, free_pid). A pidfd's reference to the struct pid does not keep the number. pidfd_open (pidfd_prepare: pid_has_task(pid, PIDTYPE_TGID)) succeeds on a zombie leader, and without PIDFD_THREAD returns EINVAL for a non-leader thread ID, as rule 2 says. pidfd_poll (fs/pidfs.c since v6.9) reports EPOLLIN once the leader has exit_state set and thread_group_empty, and EPOLLIN|EPOLLHUP once the task is reaped. That holds for any holder, child or not, and a zero-timeout poll needs no wakeup. cgroup.procs skips a dying leader whose signal->live is 0 (css_task_iter_advance), so a zombie never passes step 4 or step 5. A leader that has exited while other threads run is listed and not readable, which correctly counts it as alive. de_thread keeps the TGID and start time across an exec by a non-leader thread. A reuse of the same (pid, start ticks) before step 2 is, under B6, the named identity; it would need a PID wrap within one clock tick. Suggest: state these facts in rule 1, document KERNEL_EXIT as exit plus reap (or model the zombie state), and give O11's real-kernel cause for T04."
+  },
+  {
+   "id": "IR1-6",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 87,
+   "summary": "On interpretation 3: the bounds are precise, but the read and parse rules leave gaps an implementer could fill wrongly. Each gap fails closed rather than unsafe.",
+   "evidence": "(a) Steps 1, 3 and 4 say 'read'. cgroup.procs is a seq_file that returns at most about one page per read() call. The rule should say: read until a read returns 0, and refuse beyond 65536 bytes. A single read misses members past the first 4 KiB. (b) cgroup-v2.rst says a PID may appear more than once and in any order. Say that both are accepted. (c) For 'decimal TGID', state the kernel's form: ASCII digits with no sign and no leading zero. Also say that a 0 line (a task outside the reader's pid namespace) never matches, since workerPid is at least 2. (d) For stat, parse the whole file content, not a 'line'. The comm can contain a newline (prctl PR_SET_NAME; /proc/<pid>/stat prints comm unescaped), and the fields after the last ')' are separated by single spaces and end in one newline. (e) Close every fd the observation opens, the pidfd included, on every failure path, not only at step 5. A leak under repeated refusals would end in EMFILE for the gate's other opens. (f) Wording: without ptrace access, do_task_stat prints start_code and end_code as 1, not 0, and also withholds wchan and exit_code, so 'the memory layout and stack fields' is approximate. The starttime claim itself is correct: do_task_stat prints start_time without any permitted check."
+  },
+  {
+   "id": "IR1-7",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 141,
+   "summary": "C1-C3 hold for the steps as written. Four edges each deserve one sentence in the README: how the root directory fds are obtained, the worker's label at BIND, the duty-row wording, and the leaf's identity.",
+   "evidence": "(a) README:56 has the gate hold directory fds on the cgroup2 root and on /proc, but does not say how or when C2 ('openat on dir fds') obtains them, for example before the seal. matrix.json has no genfscon rule for the cgroup2 root directory, so it is a host type outside matrix v5, and the gate's walk needs dir search there as well as on the two planeon parents. Say that this is host policy and a W03/T04 check. (b) The C3 row says /proc/<pid>/stat uses procAccess on planeon_worker_t. If a BIND can arrive before HS43 W5's exec (in W2-W4 the child is still planeon_broker_t), the read uses the gate's procAccess to planeon_broker_t, which matrix v5 also grants. Say which case applies. (c) Besides the seccomp row text already listed as open, the openat/pread64/fstat/lseek row is labelled 'the durable journal and failure marker', and HS43 section 5.3's EFFECT_GATE row says 'same-uid /proc reads'. Both are wording only; the syscalls are allowed. (d) Steps 1 and 4 open the leaf by path each time. A leaf the broker removed and recreated (same path and label, without the sealed programs) therefore still passes; matrix v5's README covers this case with the readers' census, review N8. Either cite the census as the control, or have the gate hold a leaf directory fd opened at start (its fstat st_ino is the cgroup id) and openat cgroup.procs relative to it. No syscall outside C1 is used: openat, read, close and pidfd_open are in EFFECT_GATE rows, and ppoll, poll (x86_64 only) and epoll_* are in NATIVE_STATIC (allowlists.json, and syscalls.json at v6.12)."
+  },
+  {
+   "id": "IR1-8",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 124,
+   "summary": "Interpretations 1 and 2 are sound, and the monitor has since confirmed both. The subject README still records them only as the author's readings 'recorded for review', so the next revision should carry the confirmation verbatim.",
+   "evidence": "During this review, owner_decisions.json gained Q-I5-READINGS (lane monitor, 2026-10-16). It confirms that (i) 'journaled locally' means a local diagnostic log, not the I05 durable journal, and that (ii) the cgroup check is a second cgroup.procs read with the pidfd held. Reading (i) is the only one consistent with Q-I5-2 and the v3 replay. A mutant that writes a durable record on the refusal is killed at v3 T13, because its journal and final snapshot change. A durable write that can fail would also turn the refusal into a STORAGE_FAILURE, contradicting 'non-fatal'. Reading (ii) is race-free under rule 1: the PID stays bound to the held process from step 2 to step 5, so a listing at step 4 is the held process's. It stays inside C3 and needs no path parsing. Checked and found as claimed: v3 and the supplement are byte-identical to base, since the diff only adds four files. check_vectors makes 255 checks (221 replaying v3, 34 on the v4 vectors). The builders reproduce the model and the vectors byte for byte from a scratch archive. Only Gate.__init__, _dispatch, _op_bind_execution, the new kernel methods and the replay helpers change, so every wire function is unchanged. Every refused observation returns the existing WORKER_NOT_OBSERVED, with the snapshot (journal and failure marker included) unchanged and the channel OPEN. Nothing claims an installed gate, a /proc read, R10 adoption or an E01-E12 proof."
+  }
+ ]
+}

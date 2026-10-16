@@ -1,6 +1,32 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-040 source preparation, October 16, 2026
+## Current checkpoint — MET-ENFORCE-030 source preparation, October 16, 2026
+
+Alpha2 OPEN. MET-PERF-040 (PERF-040, chain-depth headroom) passed required verify in 566 s and merged as main 3cba117.
+I05-OBSERVED-WORKERS answers the second half of owner decision Q-HE3D-2 (a): production BIND fails closed until the gate
+has an allowed source for the worker it binds. The I05 gate channel v4 defines that source; R10 adopts it in its own
+packet. MET-ENFORCE-030 is the sole 242nd specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-030 / I05-OBSERVED-WORKERS | SOURCE_PREPARED | I05 gate channel v4 (242nd packet): the gate observes the broker's probe-worker cgroup at every BIND (cgroup.procs, pidfd_open, stat starttime, cgroup.procs again, pidfd poll), every failure the existing WORKER_NOT_OBSERVED, the v3 wire byte-identical (owner Q-HE3D-2 (a), Q-I5-4 (a); monitor Q-I5-1..3 (a)); contract review round 5, PASS; packet review; verify |
+| Alpha2A | MET-PERF-040 / PERF-040 | VERIFY_PASSED_MERGED | Merged as main 3cba117 (verify 566 s) |
+| Alpha2A | LICENCE-POLICY-AMEND | WAITING_PACKET_PUBLICATION | LIC-HOST-A2 (Zlib) contract adopted (slot 243, parallel lane) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-004, MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumers of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: the I05 v3 contract, its supplement and its model stay byte-identical; no gate is installed, nothing
+reads /proc, no R10 file changes, and no role code, cloud, runner, live/native/tenant or model-effort change. Phase-end
+effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical chain-depth headroom source checkpoint — MET-PERF-040 source preparation, October 16, 2026
 
 Alpha2 OPEN. MET-ENFORCE-029 (PROGRAMS-REPUBLISH, compiled filter programs v2) passed required verify and merged as main
 d2ef708, with 994 s of the 1200 s cap. The owner put PERF-040 first (PERF-040-FIRST): most test time went to fresh
@@ -1849,7 +1875,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · PERF-039 / MET-PERF-039 · Raise the parallel suite's worker count from 4 to 6 (owner Q-PERF39-1 (a)) with every fail-closed rule kept, after independent review and the owner's transport approval; pass required verify through the owner's App.
 - [x] Alpha 2A · SELINUX-MATRIX-I04-KEYCERT / MET-ENFORCE-028 · Publish SELinux matrix v5 (the gate's I04 key and chain/CA types, no gate capability, the gate's worker-cgroup read, the HS43 /proc narrowing) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · PROGRAMS-REPUBLISH / MET-ENFORCE-029 · Publish compiled filter programs v2 (EFFECT_GATE's two programs republished from seccomp allowlists v4 with the readlinkat block, an index of all fourteen) and edge record v3 for R10's HE-003A2 after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · PERF-040 / MET-PERF-040 · Give back verify headroom lost to the history chain's depth: test-local exact sharing (15 never-shared tests), canonical byte-minimal authority hunks, refreshed weights at six workers and the matrix v5 replay order; pass required verify through the owner's App after the owner approves the exact head.
+- [x] Alpha 2A · PERF-040 / MET-PERF-040 · Give back verify headroom lost to the history chain's depth: test-local exact sharing (15 never-shared tests), canonical byte-minimal authority hunks, refreshed weights at six workers and the matrix v5 replay order; pass required verify through the owner's App after the owner approves the exact head.
+- [ ] Alpha 2A · I05-OBSERVED-WORKERS / MET-ENFORCE-030 · Publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, the v3 wire unchanged) after independent review; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

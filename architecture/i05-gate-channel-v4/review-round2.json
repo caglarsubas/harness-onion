@@ -1,0 +1,63 @@
+{
+ "round": 2,
+ "subject": "8783f2b18e82bf72465183afeb8e299d882fb9b2",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "IR2-1",
+   "severity": "MINOR",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 55,
+   "summary": "README:55 says the gate observes only for a BIND that passes every v3 check before it. Nothing pins that order, and check_vectors cannot hold a vector that would. A gate that observes first passes all 258 checks. Where the model gives a permanent v3 reason, such as EXECUTION_REPLAY, that gate gives WORKER_NOT_OBSERVED, which Q-I5-2 makes retryable. The BIND is refused either way, so this is not a safety hole; the answer on the wire differs.",
+   "evidence": "Mutants of a scratch copy of the model, run through check_vectors with the subject vectors. M23 moves the observation and its log entry to just after the peer check: PASS(258). M24 moves it to just before MANIFEST_REUSED: PASS(258). The order shows on the wire; scratch replays on OBSERVING:\n(1) [GENERATION_STATUS, BIND run-one 4100, KERNEL_EXIT 4100, the same BIND again]: the model answers EXECUTION_REPLAY; M23 answers WORKER_NOT_OBSERVED and logs NOT_A_MEMBER at CGROUP_PROCS.\n(2) A BIND naming 5100 with another dispatchGeneration: the model answers GENERATION_MISMATCH with no log entry; M23 answers WORKER_NOT_OBSERVED.\n(3) A BIND naming 5100 with an unknown runNonce: the model answers UNKNOWN_BINDING; M23 answers WORKER_NOT_OBSERVED.\nREADME rule 4 makes WORKER_NOT_OBSERVED retryable. EXECUTION_REPLAY is durable across generations, and UNKNOWN_BINDING and GENERATION_MISMATCH do not change on a retry. An observe-first gate therefore turns permanent refusals into retryable ones whenever the named worker has gone, and v4 makes that common. v3's static list made it rare. The v3 replay does not pin the order either: M23 passes all 221 v3 checks.\ncheck_vectors cannot hold the needed vector. Appending the model's own correct transcript of case (1) as O20 is refused with 'one observation per BIND in O20' (scripts/i05_gate_channel_v4.py:1183; README:248), because zip(binds, gate.observations) assumes that every BIND reaches the observation.\nFix: add transcripts in which a BIND that names a worker the gate cannot observe fails a v3 check before the observation: case (1), and a non-member with GENERATION_MISMATCH or UNKNOWN_BINDING. Each expects v3's reason and no log entry. Pair log entries only with the BINDs that reach the observation (answered OK, WORKER_NOT_OBSERVED or STORAGE_FAILURE), require none for the others, and reword README:248."
+  },
+  {
+   "id": "IR2-2",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 140,
+   "summary": "Rule 8 lists the pid-namespace and procfs preconditions but not the time namespace. /proc/<pid>/stat prints starttime shifted by the reader's boottime offset. v4 is the first contract to compare a start time the broker read with one the gate reads, so the two must share a time namespace or have equal boottime offsets. Otherwise every BIND gives START_MISMATCH, which fails closed.",
+   "evidence": "Reviewer's own knowledge of Linux v6.12, not a run: do_task_stat (fs/proc/array.c) prints start_time = nsec_to_clock_t(timens_add_boottime_ns(task->start_boottime)), and timens_add_boottime_ns adds the boottime offset of current's time namespace, here the reader's. HS43's start-time checks compare a reference with a later read by the same qualifier, so the offset cancels there. In v4, workerStartTicks is the broker's reading and step 3 is the gate's own. Both units normally run in the initial time namespace (offset 0), and the gate's filter has no unshare or setns. A host that starts either unit inside a time namespace with a boottime offset makes every BIND fail closed. Suggest one more rule-8 bullet, checked by W03/T04."
+  },
+  {
+   "id": "IR2-3",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 196,
+   "summary": "The contract never says what a failed write to the local diagnostic log does. An R10 gate that sends that failure through the durable store's path would turn a non-fatal refusal into an urgent STORAGE_FAILURE. That contradicts Q-I5-2.",
+   "evidence": "README:196-199 and 'Still open' leave the log's storage, retention and format to R10. The model's log is an in-memory list that cannot fail. In the model, a failed durable write (Gate._record, _storage_failure) makes the generation HELD, writes the failure marker and denies an armed action. If R10 writes the log with the same failure handling, a refused observation is no longer non-fatal and retryable, and the snapshot changes. The OBSERVED path is logged too, so a log failure there could also refuse a valid BIND. Suggest one sentence: the log is best effort, and a failure to write it changes neither the BIND's answer nor the gate's state."
+  },
+  {
+   "id": "IR2-4",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 181,
+   "summary": "The monitor's relay says 'I05 v4 DEFINES B1-B6, and R10 follows it'. The README defines only B1, B4 and B6, and B2, B3 and B5 never appear, so R10 cannot look them up in v4.",
+   "evidence": "Searching the README and the model for B1-B6 finds only README:76, 178, 181-184 and 212-213. Q-I5-1 to Q-I5-3 (a fresh read, the failure handling, the pidfd confirmation) presumably decide B2, B3 and B5, but nothing says which decides which. Suggest a six-row table mapping each of B1-B6 to its decision and rule."
+  },
+  {
+   "id": "IR2-5",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 66,
+   "summary": "Three statements are less precise than the rest of the observation rules. Each one fails closed or is bounded:\n(a) step 5's pass condition;\n(b) rule 1's 'PID wrap within one clock tick';\n(c) rule 8's hidepid sentence.",
+   "evidence": "Reviewer's own knowledge of Linux v6.12, not a run.\n(a) README:66 passes on 'Not readable'. pidfd_poll (fs/pidfs.c) returns EPOLLIN|EPOLLRDNORM once the thread group has exited, and EPOLLHUP as well once it is reaped. A poll on a bad descriptor gives POLLNVAL. 'Pass only when ppoll returns 0 (no revents); any revents refuses' leaves no room for a POLLIN-only test.\n(b) README:76-77 says a reuse of the same (pid, start ticks) before step 2 'would need a PID wrap within one clock tick'. A process with CAP_CHECKPOINT_RESTORE or CAP_SYS_ADMIN can also choose the PID through clone3 set_tid or ns_last_pid (checkpoint_restore_ns_capable). It must still put the process in the leaf, which only init, the broker and containment before the seal can do (matrix v5 A42, A43). The conclusion stands, but the stated reason is incomplete.\n(c) README:153-154: has_pid_permissions also admits a reader in the mount's gid= group, and hidepid=ptraceable gives ENOENT (PROCESS_GONE) like hidepid=invisible. Rule 8 requires hidepid=0, so neither changes the outcome."
+  },
+  {
+   "id": "IR2-6",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 256,
+   "summary": "The event-refusal vector IDs E01-E09 (README:28, 50, 256) reuse the prefix of the enforcement claims E01-E12, which the same README keeps OPEN_UNPROVEN (README:19, 274). A reader can take an E0n vector for evidence of claim E0n.",
+   "evidence": "check_vectors builds the prefix from the key name (key[0].upper() for eventRefusals). v3 already has this pattern: its T-numbered transcripts sit beside T01-T08. Wording only. One sentence in 'Files' would do, saying that the C, E and O vector IDs are not the E01-E12 or T01-T08 claim IDs."
+  },
+  {
+   "id": "IR2-7",
+   "severity": "NOTE",
+   "file": "architecture/i05-gate-channel-v4/README.md",
+   "line": 288,
+   "summary": "Round 1 is answered in the bytes: each of IR1-1 to IR1-8 matches its disposition. No wire change, Q-I5-2 and C1-C4 hold as far as checked. The builders reproduce the model and the vectors byte for byte, and nothing overclaims.",
+   "evidence": "Every check below ran on a scratch archive of the subject:\n- check_vectors: PASS(258), that is 221 v3 replay checks and 37 v4 checks.\n- Builders: make_model_v4.py and build_v4.py rebuild the model and vectors.json byte-identical (cmp).\n- Diffs: base..subject only adds the four subject files, so v3 and the supplement are unchanged. The v3-to-v4 model diff has no hunk in decode_frame, check_frame, render_request, template_digest, identity_of or check_agreement. The observation answers only with v3's WORKER_NOT_OBSERVED, and the model-only events answer {}.\n- IR1-1: six tampers of OBSERVING are each refused with 'OBSERVING is v3's ACTIVE converted, plus exactly two processes': an added leaf process, an added process in /x, 5100 moved, 5100 deleted, 4300 deleted, and the list reversed. README:217-223 names 4100, 4200, 4300 and 5100.\n- IR1-2, round-1 mutants: M1 (a cache) and M7 (stop after the first OBSERVED) die at O17, M9 at O19, M10 at O19 (KeyError).\n- IR1-2, vector tampers: O17 and O18 replaced by copies of O01 fail the Q-I5-1 requirement, and O19 replaced fails the (step, cause) coverage.\n- IR1-2, further mutants, all killed: step 4 reusing step 1's list (O14); step 5 testing the number rather than the held process (O13); no ESRCH at step 2 (O11); no step 4 (O14); no step 5 (O13); a refusal that is fatal, journalled or counted (v3 T13); other members refusing; any member passing step 1 (O03); the observation after the durable record (T13).\n- IR1-3: rule 2 agrees with cgroup_procs_start (EOPNOTSUPP on a threaded cgroup) and css_task_iter_next_css_set (threaded_csets). This is reviewer v6.12 knowledge.\n- IR1-4: rule 8 has both preconditions, the fail-closed cases and the foreign procfs excluded by precondition. Its HS43 citation is right (HOST_INTERFACE_SPEC.md:329, hidepid=0, O-W03-WRITER-EXE).\n- IR1-5: rule 1 agrees with pidfd_prepare (EINVAL without a PIDTYPE_TGID task, ESRCH from find_get_pid), pidfd_poll, css_task_iter_advance (a dying leader is skipped once signal->live is 0) and de_thread (start time copied, TGID kept).\n- IR1-6: rule 5 covers points (a)-(f), and its bounds fail closed.\n- IR1-7: in matrix.json the gate has procAccess to planeon_broker_t, planeon_policy_writer_t and planeon_worker_t, and rule 9 agrees with HS43 W1-W6. 'Still open' names both seccomp rows and HS43 §5.3.\n- IR1-8: the quotes of Q-I5-DECISIONS and Q-I5-READINGS match owner_decisions.json exactly (compared by program), and all four C quotes are substrings of SLOT241-FACTS.\n- C1: in allowlists.json (defaultAction KILL_PROCESS), the EFFECT_GATE rows hold openat, read, close and pidfd_open, and NATIVE_STATIC holds ppoll, epoll_* and poll (x86_64 only, per syscalls.json). No statx or getdents64 is needed.\n- Rule 1 is sound (reviewer v6.12 knowledge). free_pid runs only at release_task. The struct pid a pidfd holds is never reattached after free_pid, apart from de_thread's exchange_tids within the same thread group. pidfd_poll is readable when pid_task is NULL or the leader has exit_state set and its thread group is empty, and a zero-timeout poll needs no wakeup.\n- Interleavings: a worker moved into the leaf only between steps 1 and 4 is refused at step 1. One that leaves after step 1 and returns before step 4 passes, which is still a membership read with the pidfd held. Only init, the broker and containment write the leaf (A42, A43).\n- Negligible: check_vectors does not type-check 'intent' (an integer passes), and some malformed configurations raise KeyError rather than ValueError (still refused)."
+  }
+ ]
+}
