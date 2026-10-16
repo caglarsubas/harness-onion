@@ -1,0 +1,177 @@
+{
+ "subject": {
+  "architecture/w03-obligation-amendment-2/amendment.json": "b1272b6c3f8945832a240eb6262528b31a9a81edc4cab2461b9835fa3b2a68d8",
+  "architecture/w03-obligation-amendment-2/README.md": "cfb355ffcb187002f63bdc406c0310e028f9b40ad4bd48af24eccc0aeccdf040",
+  "architecture/artifact-edges/operator-harness-engineering-v4.json": "a485965a65070c7bb8660ae0f47b10a2eea8bd4988b4272c665a15ed22800a09",
+  "architecture/artifact-edges/README-v4.md": "af0b82b3906daf059a354876d6a0df9abc61dd0c029af1ccd41c08e12ba5084b"
+ },
+ "reviewer": "independent agent",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "C1-1",
+   "severity": "MAJOR",
+   "location": "amendment.json changes[HI-7, REFINED].shares[\"HE-008\"] (and the README row generated from it)",
+   "finding": "The HE-008 OBSERVER share drops one carried item: no process setrlimit/getrlimit for planeon_observer_t on other domains. HE-004A's R10 record carries it to HE-008 (MODEL_DEFINED.md at a34a429, HE-004A 'Carried': \"no setrlimit/getrlimit on other domains (prlimit64 is unconditional in the OBSERVER row)\"). DESIGN-A section 1 carries it too. Design review A round 1, D1-6 item (3), asked the next W03-plan meta packet to record it as an HE-008 OBSERVER share (G5). Every other carried HE-008 item is in the share. Amendment 1's EFFECT_GATE share has the same clause (\"with no process setrlimit on other domains\"). This item makes up for a seccomp rule that is unconditional, so leaving it out drops a security constraint from the register.",
+   "requiredChange": "Add to the HI-7 HE-008 share: \"no process setrlimit or getrlimit for planeon_observer_t on other domains (prlimit64 is unconditional in the OBSERVER row)\". Then regenerate the README."
+  },
+  {
+   "id": "C1-2",
+   "severity": "MAJOR",
+   "location": "amendment.json changes[SEC-4, REFINED] and ownerDecisions",
+   "finding": "Owner decision Q-HE4A-B2 (a) (OWNER_DECISIONS.md:53) states: \"SEC-4 for OBSERVER rests on: the digest- and length-pinned programs, present exactly once per binary; the post-seal and linked-source rules; and T04's installed-filter proof.\" The contract does not quote Q-HE4A-B2 (DRAFT.md section 1 planned to), and SEC-4's packet list after the change has no T04. The same decision dropped the wrapper inventory, so T04's proof that the installed filter equals the OBSERVER digest is one of SEC-4's three stated legs for OBSERVER, and no plan packet owns it. HE-004A's carried T04 items have no packet either (MODEL_DEFINED 'Carried'/T04; DESIGN-A section 1): the installed filter equals the OBSERVER digest, Seccomp_filters: 1, the post-seal exit-path trace, PR_CAPBSET_READ(41) returns EINVAL, and TSYNC and dumpability at exec.",
+   "requiredChange": "Quote Q-HE4A-B2 verbatim: its SEC-4 bullet and its inventory bullets, with the classifier-stop context as recorded. Add a SEC-4 PACKETS_ADDED row (+T04) with the share \"for OBSERVER: the installed filter equals the OBSERVER digest (Seccomp_filters: 1)\". For the other carried T04 checks (CAP_LAST_CAP, TSYNC and dumpability at exec, the exit-path trace), add T04 to HI-7, or state where they live. This is not a T04 design."
+  },
+  {
+   "id": "C1-3",
+   "severity": "MINOR",
+   "location": "amendment.json changes[I06-2].source; amendment README 'Why'",
+   "finding": "Q-HE4-2 is called an owner decision in two places: I06-2's source (\"owner decisions Q-HE4-2 (a)\") and the README (\"split by owner decision Q-HE4-2 (a)\"). OWNER_DECISIONS.md:11-12 lists Q-HE4-2 under 'Monitor (owner-delegated)'. The contract's own ownerDecisions entry and the NP-3, SEC-4 and HI-7 sources call it a monitor decision.",
+   "requiredChange": "I06-2 source: \"monitor decisions Q-HE4-2 (a), Q-HE4B-1 (a), Q-HE4B-10 (a)+(c), Q-HE4B-11 (b)\". README: \"split by the monitor's owner-delegated decision Q-HE4-2 (a)\"."
+  },
+  {
+   "id": "C1-4",
+   "severity": "MINOR",
+   "location": "amendment.json changes[OBS-INV-1].text",
+   "finding": "The text says \"No wrapper classifier, table or inventory is built, by any route.\" The owner's scope sentence is \"No agent builds a wrapper classifier, table or inventory, by any route, now or at T04.\" The contract drops the rule's subject (agents) and its time scope. The obligation therefore forbids more than the owner did: it also forbids a human-curated list, which Q-HE4A-B2 named as a possible route.",
+   "requiredChange": "Use the owner's sentence: \"No agent builds a wrapper classifier, table or inventory, by any route, now or at T04.\""
+  },
+  {
+   "id": "C1-5",
+   "severity": "MINOR",
+   "location": "amendment.json changes[I05-7] (from i05_rows.json)",
+   "finding": "(a) The parenthetical \"(cgroup.procs, pidfd_open, the stat start time, cgroup.procs again, the pidfd still alive)\" comes right after \"every v3 check\", so it reads as the list of v3 checks. It lists the five observation steps (I05 v4 README:64-70). The v3 checks are peer, state, outstanding actions, replay, generation, binding, certificate and manifest reuse (README:56-57). (b) README:332-333 says \"The observation on a real kernel (pidfd and stat behaviour, the bounds in rule 5) is native work for R10's adoption and T04\", but I05-7 names only HE-003A3.",
+   "requiredChange": "Move the parenthetical after \"observes the BIND's worker\", or name the v3 checks. Add T04, citing README:332-333, with the share \"the observation on a real kernel: pidfd and stat behaviour and rule 5's bounds\"."
+  },
+  {
+   "id": "C1-6",
+   "severity": "MINOR",
+   "location": "amendment.json changes[I05-8] (from i05_rows.json)",
+   "finding": "(a) \"The gate obtains its cgroup2-root and /proc directory fds at start\" is gate code (README:179: \"R10 obtains the two root directory fds at start, under C2\"), but HE-003A3 is not in I05-8's packets or shares, so no packet owns that clause. (b) The source's cgroup2-root precondition is the gate's dir search there (status.json:190 \"the cgroup2 root's dir search (IR1-7)\"; README:179-180 and :345). The text instead says \"the cgroup2 root's own type is host policy\", which is a fact, not an obligation, and HE-008's share repeats the vague \"the cgroup2 root's host policy\". (c) \"one time namespace\" drops the source's \"or at least one boottime offset\" (README:157 and :342).",
+   "requiredChange": "Give the root-fd clause to HE-003A3, either as an I05-8 packet with that share or by moving the clause to I05-7. State the precondition as \"host policy grants the gate dir search on the cgroup2 root (T04 checks it)\". Keep \"one time namespace, or at least one boottime offset\"."
+  },
+  {
+   "id": "C1-7",
+   "severity": "MINOR",
+   "location": "amendment.json changes[I01-1].text",
+   "finding": "The cited line (corrected HOST_INTERFACE_SPEC.md:52) defines I01 as \"AF_UNIX/SOCK_SEQPACKET /run/planeon/live-proxy/policy-observer.sock; only OBSERVE_POLICY; exact current request/response schema\". It sits under 'Existing interfaces — byte-compatible, no changes now'. The ADDED text keeps AF_UNIX and OBSERVE_POLICY but drops SOCK_SEQPACKET, the socket path, 'only' and the exact current schema. As written, the obligation does not bind HE-004-I01 to the existing byte-compatible contract.",
+   "requiredChange": "Add the spec line's terms. For example: \"... produces I01 as the existing contract defines it: AF_UNIX SOCK_SEQPACKET on /run/planeon/live-proxy/policy-observer.sock, only OBSERVE_POLICY, the exact current request/response schema (byte-compatible), after ...\"."
+  },
+  {
+   "id": "C1-8",
+   "severity": "MINOR",
+   "location": "amendment.json changeKinds, shareRule, refinementRule",
+   "finding": "(a) The ADDED definition names text, source, packets and scope, but OBS-INV-1 and I05-8 also carry shares. The REFINED definition covers only replacing the packet, but every REFINED row carries shares. The SEC-4 and HI-7 REFINED rows also give a share to HE-008, which is not one of the parts; only shareRule's new last sentence allows that. (b) No rule says how a share combines with an earlier share of the same packet: HE-008 already holds amendment 1's EFFECT_GATE shares in SEC-4 and HI-7. (c) refinementRule does not require every obligation that lists HE-004 after amendment 1 to have a REFINED row. That holds today (6 of 6: ADM-4, HI-7, I06-2, I06-3, NP-3, SEC-4), but the checker proves the rule, not today's content.",
+   "requiredChange": "Make each one-line definition name the shares its rows may carry (REFINED: shares for its parts and, under shareRule, for other packets in the list). Add a sentence that a share adds to the packet's earlier shares. Add to refinementRule: \"every obligation whose post-amendment-1 list names the refined packet has exactly one REFINED row\"."
+  },
+  {
+   "id": "C1-9",
+   "severity": "MINOR",
+   "location": "amendment.json changes[HI-7, REFINED].shares[\"HE-008\"], last clause",
+   "finding": "The HE-008 share includes \"the observer's RBAC grants, which follow HE-004B1's request specs (decided with HE-004C)\". HI-7 is \"Per-role uid, capabilities, seccomp and SELinux\", and Kubernetes RBAC grants fall outside that text. The I06 v1 closure also gives User planeon:policy-observer allowedGrants [] (identity-closure.json:1765-1774 at fd362f9e). Grants that only HE-008 provisions would therefore fail the observer's own IC check. The HE-004 dossier's Q-HE4-6 recommendation and the carried G5-G7 (\"RBAC provisioning, W02-PROD\") give the naming to the I06 successor. Q-HE4-6 is still to be decided with C.",
+   "requiredChange": "Move the RBAC grants out of HI-7. Either add their own obligation naming HE-004C (decides, Q-HE4-6), HE-008 (provisions) and W02G-F2 (the closure names them), or state the closure dependency and leave the row to the packet that decides Q-HE4-6."
+  },
+  {
+   "id": "C1-10",
+   "severity": "NOTE",
+   "location": "amendment.json ownerDecisions[13]; operator-harness-engineering-v4.json ownerDecisions[1]",
+   "finding": "The sequencing quote includes transient queue state: \"That packet is now queued as **slot 244 (primary)**, right after 243 LIC-HOST-A2 (parallel, mechanics running).\" It is verbatim and dated. Confirmation 2 still asks that amendment.json stay timeless, and the decision the record relies on is the first bullet, \"one operator edge record ...\". The markdown bold also ends up inside the JSON.",
+   "requiredChange": "Optional: in the JSON files, quote only the first bullet (it is verbatim on its own line), and keep the slot in the READMEs."
+  },
+  {
+   "id": "C1-11",
+   "severity": "NOTE",
+   "location": "amendment README 'Why'; README-v4 'Carried rows'",
+   "finding": "The amendment README's 'Why' explains the observer split, I01 and the T04 trace, but not the I05 v4 adoption: HE-003A3, I05-7, I05-8 and the edge record's two I05 rows. README-v4 says \"both consumers have since merged in R10\", but the consumer label of the OBSERVER rows is HE-004, and only HE-004A has merged. The JSON note says this correctly. README-v4 also states the merge without 'at authoring time'.",
+   "requiredChange": "Add one sentence on HE-003A3 and I05-7/I05-8 (I05 v4, R10-ADOPTION, HOST-PRECONDITIONS). In README-v4 write \"HE-003A2 and HE-004A (HE-004's first part) had merged in R10 at authoring time\"."
+  },
+  {
+   "id": "C1-12",
+   "severity": "NOTE",
+   "location": "operator-harness-engineering-v4.json ownerDecisions and notes",
+   "finding": "(a) The edge record's ownerDecisions leave out confirmation 1 (packet names), which is the basis of the HE-003A3 consumer label on two rows. (b) v4 does not repeat v3's note that a row with a null providerCommit is published by its providerPacket, yet it carries 17 such rows. (c) Consumer labels mix the plan packet (HE-004, for B1's rows) with an R10 part name (HE-003A3, as v3 used HE-003A2). The bytes rule makes this harmless, but neither convention is stated.",
+   "requiredChange": "Optional: quote confirmation 1 in the edge record, carry v3's null-providerCommit sentence into v4's notes, and say which label convention applies."
+  },
+  {
+   "id": "C1-13",
+   "severity": "NOTE",
+   "location": "amendment.json packetRefinements[HE-004C].summary; changes[ADM-4, REFINED].shares[\"HE-004C\"]",
+   "finding": "In DESIGN-B, C also supplies the Kubernetes version, the expected plugin label and the observation binding (section 4.5), attests NotServed through discovery (section 4.1) and owns cross-list consistency (section 1). The observer's signed configuration arrives with C under the Q-HE4A-1 reading (OWNER_DECISIONS.md:73), which is not quoted. Naming these would show which packet produces the binding that HE-008 checks.",
+   "requiredChange": "Optional: add them to HE-004C's summary or share, and quote the Q-HE4A-1 reading."
+  },
+  {
+   "id": "C1-14",
+   "severity": "NOTE",
+   "location": "amendment.json changes[I01-1], changes[I06-2].shares, packetRefinements (HE-004D1, HE-004D2), newPackets[HE-004-I01]",
+   "finding": "Several dependencies use labels that are not plan packet ids: 'an OBSERVER seccomp successor', 'native-profile v4', 'the I06 successor' and 'W02-PROD' (a roadmap item). Plan v2 records parallel-lane preconditions as meta packets (W02D-V2, W02D-V3), and production I06 as W02A-F2 and W02G-F2 (I06-1, SEL-W02A-F2).",
+   "requiredChange": "Optional: map them to W02A-F2 and W02G-F2 where they are those packets, or add meta-packet entries, so the register traces each dependency."
+  },
+  {
+   "id": "C1-15",
+   "severity": "NOTE",
+   "location": "packet mechanics (slot 244, after 243)",
+   "finding": "All inputs are pinned at fd362f9e. Slot 244 builds after 243 (LIC-HOST-A2) merges.",
+   "requiredChange": "At mechanics, re-check at the new base that none of the 12 provider paths, plan v2, amendment 1 or edge v3 has changed, so each providerCommit is still the last-change commit. Regenerate if anything has."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Subject sha256 (4 files)",
+   "result": "PASS: all four equal the brief's values (shasum -a 256)."
+  },
+  {
+   "check": "Reproduction",
+   "result": "PASS: ran the author's tools/w03/amend2/build_contract.py (an operator generator, not a harness-onion script) with python3 -I -B, OUT in WORK, with i05_rows.json. diff -r against contract/ shows the output byte-identical. No .pyc was created."
+  },
+  {
+   "check": "Bindings",
+   "result": "PASS: git show fd362f9e gives plan v2 a0047023...efb67, amendment 1 2a98e289...f4bd2 and edge v3 106ea91a...15f3. amends, after and supersedes match, with packets MET-ENFORCE-024, -025 and -029 (v3 last changed in d2ef7083, MET-ENFORCE-029). The four new paths are absent at fd362f9e (exact-path ls-tree; artifact-edges/ never listed)."
+  },
+  {
+   "check": "ownerDecisions verbatim",
+   "result": "PASS with C1-3 and C1-10: 16 of 17 entries are exact substrings of OWNER_DECISIONS.md's quoted lines, flattened. Entry 9 (Q-HE4B-0..11) matches once bullet markers are removed. Owner and monitor labels match the source. No relay instruction is quoted ('Record verbatim', 'Draft its contract', 'Tell me which' are excluded). Missing: Q-HE4A-B2 (C1-2)."
+  },
+  {
+   "check": "Packet refinements vs Q-HE4-2, Q-HE4B-0/-1/-11 and the names confirmation",
+   "result": "PASS: the parts are A, B1, C, D1 and D2. B2 is folded into D2; D is split so D1 (captures, NP-3) waits only for native-profile v4 and D2 also waits for the I06 successor. Names match confirmation 1. Summaries agree with MODEL_DEFINED R86-R90 and DESIGN-B 1.1. No merge status appears in any summary."
+  },
+  {
+   "check": "REFINED rows (monitor's two conditions)",
+   "result": "PASS: after amendment 1, exactly six obligations list HE-004 (ADM-4, HI-7, I06-2, I06-3, NP-3, SEC-4), and all six are refined. Each text is plan v2's, byte for byte. packets equals the post-amendment-1 list with HE-004 replaced in place. The union of parts equals the five parts. No obligation lists HE-004 afterwards. Scope is W03 throughout. ADM-4 PACKETS_ADDED equals the REFINED list plus HE-008. Rule wording: C1-8."
+  },
+  {
+   "check": "ADDED rows vs cited sources",
+   "result": "I01-1 checked against the corrected spec:52 (C1-7). I05-7 checked against I05 v4 README:56-70 and :119-127 and status.json:191 (C1-5). I05-8 checked against README:101-113 and :151-186 and status.json:190 (C1-6). OBS-INV-1 checked against the route decision and its meaning and scope (C1-4). The new ids are unused in plan v2. I05 v4's status.json records ADOPTED_DATA_CONTRACT (round 5 PASS)."
+  },
+  {
+   "check": "Shares vs decisions and records",
+   "result": "ADM-4 B1, C and HE-008 shares match Q-HE4-9, Q-HE4B-8 and Q-HE4B-12 (C1-13 optional). The I06-2 D2 share matches Q-HE4B-1, -10 and -11. The NP-3 D1 share matches Q-HE4-3/4. The I06-3 share does not narrow plan v2: I06 v2 status.json:51 reads 'bound to User system:apiserver', which the direct-binding reading matches. The HE-008 OBSERVER shares were checked against HE-004A's carried list (a34a429 MODEL_DEFINED), DESIGN-A section 1 and design review A r1 D1-6: setrlimit is missing (C1-1), the T04 items are unassigned (C1-2), and RBAC sits under HI-7 (C1-9)."
+  },
+  {
+   "check": "Edge record v4",
+   "result": "PASS: v3's 33 rows are identical to v4's first 33 in values and key order. Non-artifact keys equal v3's except artifact, supersedes, ownerDecisions and notes, as in v3 itself, so no key is added. For all 12 new rows, sha256, mode 100644, byte size and providerCommit (git log -1 at fd362f9e) match the provider bytes. Consumer packets: HE-004 on 10 rows, HE-003A3 on 2. No duplicate provider or consumer path. B1's rows equal DESIGN-B section 2. The I05 rows equal the README plus vectors set of the I05-v4 dossier section 5, following v3 precedent (model pinned by digest, no row). The I05 v4 vectors pin the four v3 files at the sha256 edge v3 registers, so the note is accurate. Wording: C1-12."
+  },
+  {
+   "check": "READMEs",
+   "result": "Both are candidates (CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW). HE-004A's merge (dcaf26f) appears only in the amendment README, as an authoring-time fact. The tables are generated from the JSON and match it. Wording: C1-3 and C1-11."
+  },
+  {
+   "check": "HE-003A3 name vs R10 convention",
+   "result": "R10 task-packets at a34a429 (HE-003A, HE-003A2, HE-002C-F, ...) number later iterations of a part as A2 and A3. No conflicting convention found."
+  },
+  {
+   "check": "Independence and privacy",
+   "result": "PASS: no W04 or R12 test-design content. The only R12 mentions are in v3's carried SERVER rows. No email address, personal name or home path appears in the four files. R12 repo, tools/w04, W04 memory, the EDGE-2 record, ENFORCEMENT_TEST_PLAN, enforcement-test-plan/, keys, github-app, /var/db/harness-ci and operator-private: none opened. artifact-edges/ read only by exact path."
+  },
+  {
+   "check": "Not run",
+   "result": "No cargo, pytest, builds or validators. No harness-onion script run or imported (validate_*.py read as text only via git show/grep). No network."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}

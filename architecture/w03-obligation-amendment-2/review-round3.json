@@ -1,0 +1,114 @@
+{
+ "subject": {
+  "architecture/w03-obligation-amendment-2/amendment.json": "6c650a16be2748887be50ac23e446679e424ede4a9fc8d1df8428f2441e56fc7",
+  "architecture/w03-obligation-amendment-2/README.md": "12aa75c3b669c85e429e2c90e7ac9848d557d6d75f792a9bd3ae3827d33d3b40",
+  "architecture/artifact-edges/operator-harness-engineering-v4.json": "e30772ff8826650c46d1a8d384625929975e47f2de5cc9030680b5fdb5e7fc86",
+  "architecture/artifact-edges/README-v4.md": "11e6bbefc27d82d359c7f48a873374786a760881693fd7d9ec7e88916ab2558b"
+ },
+ "reviewer": "independent agent",
+ "verdict": "PASS_FOR_ADOPTION",
+ "verdictNote": "No MAJOR. Per the cap, C3-1 (MINOR) and C3-2 (NOTE) carry to the packet review.",
+ "round2Resolutions": [
+  {
+   "id": "C1-9",
+   "status": "RESOLVED",
+   "note": "The new ADDED OBS-RBAC-1 (HE-004C, HE-008) states the closure fact (identity-closure.json:1765-1774, allowedGrants []), says an I06 successor must name the grants, gives HE-004C fail-closed use and HE-008 provisioning (carried G5-G7), and records Q-HE4-6 as open. HE-004C's summary refers to it. One wording issue is carried (C3-1)."
+  },
+  {
+   "id": "C1-12",
+   "status": "RESOLVED",
+   "note": "With C2-3 fixed, all three parts are done."
+  },
+  {
+   "id": "C1-14",
+   "status": "RESOLVED",
+   "note": "With C2-2 fixed, all four mappings are supported."
+  },
+  {
+   "id": "C2-1",
+   "status": "RESOLVED",
+   "note": "The entry is labelled \"Owner, Q-HE4A-B2 = (a)\", consistent with the relayed header \"Owner decision Q-HE4A-B2 = (a), 2026-10-16.\", and the bullet is still verbatim. Every decision id cited in change sources now appears in ownerDecisions (scripted). HI-7's T04 row cites only HE-004A's carried items."
+  },
+  {
+   "id": "C2-2",
+   "status": "RESOLVED",
+   "note": "The mapping now reads: an I06 successor bound to the W02a profile in use (I06 R1-4); W02G-F2 is the production one; whether HE-004D2's is W02G-F2 is not decided. This matches I06 v2 status.json R1-4 and DESIGN-B section 1.1. HE-004C's summary no longer uses the term."
+  },
+  {
+   "id": "C2-3",
+   "status": "RESOLVED",
+   "note": "The note now states the labels accurately: HE-004 is the plan v2 packet the 10 rows serve, with HE-004B1 as the part that holds them, under the bytes rule; HE-003A3 comes from the names decision; v3's labels are carried. It agrees with notes[1]."
+  },
+  {
+   "id": "C2-4",
+   "status": "RESOLVED",
+   "note": "The amendment README's change-kinds paragraph matches changeKinds, shareRule, refinementRule and dependencyNames. README-v4 names the three quoted decisions. It does not mention the label note, which is acceptable."
+  },
+  {
+   "id": "C2-5",
+   "status": "RESOLVED",
+   "note": "The share reads \"PR_CAPBSET_READ(41) returns EINVAL on the target kernel (the CAP_LAST_CAP check), TSYNC, and dumpability at exec\"."
+  },
+  {
+   "id": "C2-6",
+   "status": "RESOLVED",
+   "note": "refinementRule now says \"exactly one REFINED row, its first row in this amendment\". The builder asserts that the sorted REFINED obligations equal the HE-004 holders, which also catches a duplicate row, and that each holder's first row is REFINED. Verified: ADM-4, SEC-4 and HI-7 each have REFINED then PACKETS_ADDED; the other three have REFINED only."
+  }
+ ],
+ "findings": [
+  {
+   "id": "C3-1",
+   "severity": "MINOR",
+   "location": "amendment.json changes[OBS-RBAC-1].text (first sentence)",
+   "finding": "\"The policy observer's Kubernetes read grants are exactly those HE-004B1's request specs need.\" HE-004B1's closed request specs cover only the list requests: the RBAC kinds, ServiceAccounts, the OR02 and OR06 kinds and the OR05 Secret lists (DESIGN-B section 4.1). HE-004C's own requests also need grants: API discovery (the NotServed attestation), nonResourceURL /metrics (ADM-4) and /readyz (OR07). DESIGN-B's Q-HE4-6 routing lists all three among the grants. Read literally, 'exactly' excludes them, which conflicts with ADM-4's live read and with OBS-RBAC-1's own HE-004C share (\"states the grants its requests need\").",
+   "requiredChange": "At the packet review, or at the HE-004C packet that decides Q-HE4-6: \"exactly those HE-004C's requests need (HE-004B1's request specs, API discovery, /metrics and /readyz)\". This is carried under the cap and does not block adoption."
+  },
+  {
+   "id": "C3-2",
+   "severity": "NOTE",
+   "location": "amendment.json changes[OBS-RBAC-1].packets",
+   "finding": "The text makes provisioning wait for \"an I06 successor that names them\", but no I06-successor packet is in the list. The HE-004 dossier's Q-HE4-6 recommendation points to the W02-PROD successor (W02G-F2). While Q-HE4-6 is open, leaving the packet out is consistent.",
+   "requiredChange": "Optional, when Q-HE4-6 is decided: add the naming I06 successor (for example W02G-F2) with its share."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Subject sha256",
+   "result": "PASS: all four equal the coordinator's values."
+  },
+  {
+   "check": "Reproduction",
+   "result": "PASS: the builder with i05_rows.json (python3 -I -B, output to WORK/regen) gives output byte-identical to contract/. No .pyc was created."
+  },
+  {
+   "check": "Delta against candidate 2",
+   "result": "I diffed candidate 3 against my regenerated candidate 2. The only changes are the seven listed: the B2 label, HE-004C's summary, HI-7's T04 share and source, the OBS-RBAC-1 row, refinementRule, dependencyNames['the I06 successor'], the edge consumer-label note, and the two README paragraphs (plus the table row). The edge rows are untouched."
+  },
+  {
+   "check": "OBS-RBAC-1 against its sources",
+   "result": "The id is new in plan v2. identity-closure.json:1765-1774 at fd362f9e is the planeon:policy-observer entry with allowedGrants []. 'RBAC provisioning' is verbatim from the G5-G7 decision. Q-HE4-6 is 'decided with C' per the Q-HE4B relay. ADDED with shares fits changeKinds, and the shares name only listed packets. Wording: C3-1 and C3-2."
+  },
+  {
+   "check": "Decisions and cited ids",
+   "result": "PASS: the Q-HE4A-B2 entry is verbatim, and no cited decision id is missing from ownerDecisions."
+  },
+  {
+   "check": "Bindings and base",
+   "result": "Unchanged; origin/main is still fd362f9e."
+  },
+  {
+   "check": "Independence and privacy",
+   "result": "PASS: no new W04 or R12 content and no personal data. Same path restrictions as before."
+  },
+  {
+   "check": "Not run",
+   "result": "No cargo, pytest, builds or validators. No harness-onion script run or imported. No network."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}
