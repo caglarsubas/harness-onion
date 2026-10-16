@@ -685,6 +685,14 @@ def replay_v5_vectors(model: types.ModuleType, matrix: dict, vectors: dict, v4_v
             == model.w02a_slots(matrix)
             and len(vectors["accessChecks"]) == COUNTS["accessChecks"] and len(vectors["mutationChecks"]) == COUNTS["mutationChecks"]
             and tuple(row["id"] for row in vectors["v5Changes"]) == V5_CHANGES, "closed matrix v5 vectors")
+    # MET-PERF-040 (239 packet review P2-1): the cheap identifier and position checks run before the replay.
+    changed = set(V5_CHANGES)
+    for key in ("accessChecks", "mutationChecks"):
+        old, new = v4_vectors[key], vectors[key][:len(v4_vectors[key])]
+        ids = [r["id"] for r in vectors[key]]
+        require(len(set(ids)) == len(ids) and [r["id"] for r in new] == [r["id"] for r in old]
+                and {o["id"] for o, n in zip(old, new) if o != n} == {o["id"] for o in old} & changed,
+                "every v4 %s vector is kept at its position; only the listed ones change" % key)
     for row in vectors["accessChecks"]:
         require(model.allowed(matrix, row["state"], row["source"], row["target"], row["class"], row["perm"]) is row["expect"],
                 "access check " + row["id"])
@@ -696,13 +704,6 @@ def replay_v5_vectors(model: types.ModuleType, matrix: dict, vectors: dict, v4_v
         except ValueError as exc:
             ok = set(row["expect"]) == {"matrixError"} and row["expect"]["matrixError"] == str(exc)
         require(ok, "mutation check " + row["id"])
-    changed = set(V5_CHANGES)
-    for key in ("accessChecks", "mutationChecks"):
-        old, new = v4_vectors[key], vectors[key][:len(v4_vectors[key])]
-        ids = [r["id"] for r in vectors[key]]
-        require(len(set(ids)) == len(ids) and [r["id"] for r in new] == [r["id"] for r in old]
-                and {o["id"] for o, n in zip(old, new) if o != n} == {o["id"] for o in old} & changed,
-                "every v4 %s vector is kept at its position; only the listed ones change" % key)
     return len(vectors["accessChecks"]) + len(vectors["mutationChecks"])
 
 
