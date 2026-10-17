@@ -898,7 +898,7 @@ def test_no_file_under_a_predecessor_directory_may_change(monkeypatch, prefix):
 @pytest.mark.parametrize("change", ["schema", "work_item", "packet", "state", "adoption", "base", "review_base",
                                     "contracts", "reviewer", "note", "note_lines", "record_paths", "non_claims",
                                     "closed", "carried_dropped", "carried_order", "carried_elsewhere", "carried_action",
-                                    "extra_key", "key_order"])
+                                    "extra_key", "key_order", "scope_missing", "scope_changed"])
 def test_the_status_is_closed_and_records_the_adoption(monkeypatch, change):
     status = _status()
     carried = status["carried"]
@@ -940,6 +940,10 @@ def test_the_status_is_closed_and_records_the_adoption(monkeypatch, change):
         carried[2]["action"] = " "
     elif change == "extra_key":
         status["installed"] = False
+    elif change == "scope_missing":
+        del status["evidenceClassesScope"]
+    elif change == "scope_changed":
+        status["evidenceClassesScope"] = status["evidenceClassesScope"].replace("is met for what", "is met for all of what")
     else:
         status = {key: status[key] for key in reversed(list(status))}
     _rebind(monkeypatch, {profile.STATUS_PATH: _dump(status)})
@@ -1315,6 +1319,151 @@ def test_a_matrix_v5_change_is_refused(monkeypatch, change, message):
     _rebind(monkeypatch, {profile.MATRIX: _dump(matrix)})
     with pytest.raises(ValueError, match=re.escape(message)):
         profile.validate_label_constants()
+
+
+def test_the_class_table_holds_where_the_model_decides():
+    assert profile.validate_evidence_classes(profile.era_modules()) is None
+    assert profile.EVIDENCE_SCOPE in profile.validate_evidence_classes.__doc__
+    assert _status()["evidenceClassesScope"] == profile.EVIDENCE_SCOPE
+    assert dict(profile.EVIDENCE_COLUMNS) == {"OBSERVED_TARGET": "OBSERVED", "LABEL_BOUND_TARGET": "LABEL_BOUND",
+                                              "OBSERVER_OWN": "DECLARED_T04"}
+    schema = _load(profile.NP4_SCHEMA)
+    admitted = profile.schema_admitted(schema)
+    assert admitted == {"SERVER": [False, True], "OBSERVER": [False], "BROKER": [False], "WORKER": [False],
+                        "EFFECT_GATE": [False]}
+    targets = schema["$defs"]["evidenceClasses"]["const"]["captureTargets"]
+    named = [pair for text in targets.values() for pair in profile._target_pairs(text, admitted)]
+    assert len(named) == 6 and sorted(named) == sorted((role, holds) for role in profile.CAPTURE_ROLES
+                                                       for holds in admitted[role])
+
+
+def _targets_with(change):
+    schema = _load(profile.NP4_SCHEMA)
+    change(schema["$defs"]["evidenceClasses"]["const"])
+    return schema
+
+
+def _row_1(table):
+    return next(row for row in table["capture"] if row["fields"] == list(profile.ROW_1))
+
+
+@pytest.mark.parametrize("change, message", [
+    ("role_moved", "capture_class decides the role's column: BROKER without CAP_NET_BIND_SERVICE, listed in OBSERVED_TARGET"),
+    ("server_condition_swapped", "capture_class decides the role's column: SERVER with CAP_NET_BIND_SERVICE, listed in "
+                                 "OBSERVED_TARGET"),
+    ("observer_moved", "capture_class decides the role's column: OBSERVER"),
+    ("out_of_grammar_words", "captureTargets text outside the closed grammar or naming a capability set the schema "
+                             "forbids: OBSERVED_TARGET"),
+    ("out_of_grammar_separator", "captureTargets text outside the closed grammar or naming a capability set the schema "
+                                 "forbids: LABEL_BOUND_TARGET"),
+    ("out_of_grammar_capability", "captureTargets text outside the closed grammar or naming a capability set the schema "
+                                  "forbids: OBSERVED_TARGET"),
+    ("out_of_grammar_trailing", "captureTargets text outside the closed grammar or naming a capability set the schema "
+                                "forbids: OBSERVER_OWN"),
+    ("condition_forbidden", "captureTargets text outside the closed grammar or naming a capability set the schema "
+                            "forbids: LABEL_BOUND_TARGET"),
+    ("extra_column", "the capture columns are the fixed column-to-class map"),
+    ("role_twice", "the capture columns list every role and admitted capability set exactly once"),
+    ("role_missing", "the capture columns list every role and admitted capability set exactly once"),
+    ("gate_admits_capability", "capture_class decides the role's column: EFFECT_GATE with CAP_NET_BIND_SERVICE, listed "
+                               "in OBSERVED_TARGET"),
+    ("cell_changed", "check_capture refuses process.exe deleted for BROKER"),
+    ("cell_out_of_grammar", "row 1's cells name their column's class, present or absent")])
+def test_a_changed_class_table_is_refused(monkeypatch, change, message):
+    def edit(table):
+        targets = table["captureTargets"]
+        if change == "role_moved":
+            targets["OBSERVED_TARGET"] = "EFFECT_GATE; BROKER; SERVER whose recorded capabilities exclude CAP_NET_BIND_SERVICE"
+            targets["LABEL_BOUND_TARGET"] = "WORKER; SERVER whose recorded capabilities include CAP_NET_BIND_SERVICE"
+        elif change == "server_condition_swapped":
+            targets["OBSERVED_TARGET"] = targets["OBSERVED_TARGET"].replace("exclude", "include")
+            targets["LABEL_BOUND_TARGET"] = targets["LABEL_BOUND_TARGET"].replace("include", "exclude")
+        elif change == "observer_moved":
+            targets["OBSERVED_TARGET"] = "OBSERVER; " + targets["OBSERVED_TARGET"]
+            targets["OBSERVER_OWN"] = "EFFECT_GATE (its own capture)"
+            targets["OBSERVED_TARGET"] = targets["OBSERVED_TARGET"].replace("EFFECT_GATE; ", "")
+        elif change == "out_of_grammar_words":
+            targets["OBSERVED_TARGET"] = "EFFECT_GATE; SERVER unless CAP_NET_BIND_SERVICE is recorded"
+        elif change == "out_of_grammar_separator":
+            targets["LABEL_BOUND_TARGET"] = targets["LABEL_BOUND_TARGET"].replace("; ", ";", 1)
+        elif change == "out_of_grammar_capability":
+            targets["OBSERVED_TARGET"] = targets["OBSERVED_TARGET"].replace("CAP_NET_BIND_SERVICE", "CAP_SYS_ADMIN")
+        elif change == "out_of_grammar_trailing":
+            targets["OBSERVER_OWN"] += "; "
+        elif change == "condition_forbidden":
+            targets["LABEL_BOUND_TARGET"] = ("BROKER whose recorded capabilities exclude CAP_NET_BIND_SERVICE; "
+                                             "BROKER whose recorded capabilities include CAP_NET_BIND_SERVICE; WORKER; "
+                                             "SERVER whose recorded capabilities include CAP_NET_BIND_SERVICE")
+        elif change == "extra_column":
+            targets["ENTRY_BOUND_TARGET"] = "EFFECT_GATE"
+        elif change == "role_twice":
+            targets["LABEL_BOUND_TARGET"] = "WORKER; " + targets["LABEL_BOUND_TARGET"]
+        elif change == "role_missing":
+            targets["LABEL_BOUND_TARGET"] = targets["LABEL_BOUND_TARGET"].replace("WORKER; ", "")
+        elif change == "cell_changed":
+            _row_1(table)["LABEL_BOUND_TARGET"] = "LABEL_BOUND"
+        elif change == "cell_out_of_grammar":
+            _row_1(table)["OBSERVER_OWN"] = "DECLARED_T04 (not captured)"
+    schema = _targets_with(edit)
+    if change == "gate_admits_capability":
+        # The guard: a schema that admitted CAP_NET_BIND_SERVICE for the gate would make the bare EFFECT_GATE item
+        # stand for that set too, which the model classes LABEL_BOUND.
+        schema["$defs"]["roles"]["properties"]["EFFECT_GATE"]["properties"]["capabilities"] = {
+            "enum": [[], ["CAP_NET_BIND_SERVICE"]]}
+    _rebind(monkeypatch, {profile.NP4_SCHEMA: _dump(schema)})
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: " + message)):
+        profile.validate_evidence_classes(profile.era_modules())
+
+
+@pytest.mark.parametrize("entry", ["LABEL_BOUND_TARGET", "OBSERVER_OWN"])
+def test_a_changed_class_map_entry_is_refused(monkeypatch, entry):
+    monkeypatch.setattr(profile, "EVIDENCE_COLUMNS", MappingProxyType(dict(profile.EVIDENCE_COLUMNS, **{entry: "OBSERVED"})))
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: capture_class decides the role's "
+                                                   "column: ")):
+        profile.validate_evidence_classes(profile.era_modules())
+
+
+def test_a_model_that_moves_a_role_is_refused():
+    m = profile.era_modules()
+    m.np4.capture_class = lambda record, role: "OBSERVED"
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: capture_class decides the role's "
+                                                   "column: BROKER")):
+        profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("field", ["process.exe", "executableMaps"])
+def test_a_probe_whose_refusal_disappears_is_refused(field):
+    """A model that forgives one deleted row-1 field: the probe that deletes it is no longer refused."""
+    m = profile.era_modules()
+    original = m.np4.check_capture
+    path = profile.ROW_1[field]
+
+    def forgiving(record, capture, role, schema, previous=None):
+        node = capture
+        for key in path[:-1]:
+            node = node[key]
+        if capture["role"] in ("SERVER", "EFFECT_GATE") and path[-1] not in node:
+            return None
+        return original(record, capture, role, schema, previous)
+    m.np4.check_capture = forgiving
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses %s deleted for "
+                                                   % field)):
+        profile.validate_evidence_classes(m)
+
+
+def test_a_probe_whose_addition_is_forgiven_is_refused():
+    """A model that accepts an added row-1 field on the observer's own capture."""
+    m = profile.era_modules()
+    original = m.np4.check_capture
+
+    def forgiving(record, capture, role, schema, previous=None):
+        if role == "OBSERVER" and "executableMaps" in capture:
+            capture = {key: value for key, value in capture.items() if key != "executableMaps"}
+        return original(record, capture, role, schema, previous)
+    m.np4.check_capture = forgiving
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses executableMaps "
+                                                   "added for OBSERVER")):
+        profile.validate_evidence_classes(m)
 
 
 def test_the_models_are_executed_from_this_eras_bytes(monkeypatch):
