@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-032
+## Current source preparation — MET-MAS-004
+
+MET-MAS-004 (MAS-RA-004): topology and coordination v1, a TopologySpec with its derived role-block vector, a coordinator
+board on exclusive leased claims with an independent verify-before-merge, a declared selection rule over eligible
+baselines and the run-events v1 mapping (owner MAS-RA-004 and Q-M4-1..11 (a)). DATA_CHECK_ONLY. Alpha2 OPEN; 244 accepted
+plus MET-MAS-004 only.
+
+## Historical W03 obligation-register amendment 2 source preparation — MET-ENFORCE-032
 
 MET-ENFORCE-032 (W03-PLAN-AMEND-2): W03 obligation-register amendment 2 (plan v2's HE-004 refined into its five parts;
 HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4 (v3's 33 rows plus 12 registered before
@@ -1441,3 +1448,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 242 | `MET-ENFORCE-030` | `Harness-Engineering` | I05-OBSERVED-WORKERS: I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, every failure WORKER_NOT_OBSERVED, the v3 wire unchanged); DATA_CHECK_ONLY |
 | 243 | `MET-ENFORCE-031` | `Harness-Engineering` | LICENCE-POLICY-AMEND: license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay on the byte-identical base policy and A1); DATA_CHECK_ONLY |
 | 244 | `MET-ENFORCE-032` | `Harness-Engineering` | W03-PLAN-AMEND-2: W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; DATA_CHECK_ONLY |
+| 245 | `MET-MAS-004` | `Harness-Engineering` | MAS-RA-004: topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); DATA_CHECK_ONLY |

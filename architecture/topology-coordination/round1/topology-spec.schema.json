@@ -1,0 +1,235 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.topology-spec/v1",
+ "title": "TopologySpec (MAS-RA-004, internal contract candidate)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "agentBudget",
+  "agents",
+  "arbitrationPolicy",
+  "assignmentPolicy",
+  "concurrency",
+  "deadlineSeconds",
+  "edges",
+  "leaseSeconds",
+  "mode",
+  "nodes",
+  "objectiveId",
+  "schemaVersion",
+  "selection",
+  "topologyId"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.topology-spec/v1"
+  },
+  "topologyId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "objectiveId": {
+   "type": "string",
+   "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+  },
+  "mode": {
+   "enum": [
+    "SINGLE_AGENT",
+    "CENTRAL",
+    "DECENTRALIZED"
+   ]
+  },
+  "agents": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 3,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "budgets",
+     "modelRef",
+     "objectiveId",
+     "role"
+    ],
+    "properties": {
+     "role": {
+      "enum": [
+       "COORDINATOR",
+       "WORKER",
+       "VERIFIER"
+      ]
+     },
+     "objectiveId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "modelRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "backboneId",
+       "configurationDigest"
+      ],
+      "properties": {
+       "backboneId": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+       },
+       "configurationDigest": {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+       }
+      }
+     },
+     "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "iterations",
+       "recursionDepth",
+       "tokens",
+       "wallClockSeconds"
+      ],
+      "properties": {
+       "tokens": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 9007199254740991
+       },
+       "iterations": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000000
+       },
+       "wallClockSeconds": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 2592000
+       },
+       "recursionDepth": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1
+       }
+      }
+     }
+    }
+   }
+  },
+  "nodes": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 1024,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "nodeId",
+     "role"
+    ],
+    "properties": {
+     "nodeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "role": {
+      "enum": [
+       "COORDINATOR",
+       "WORKER",
+       "VERIFIER"
+      ]
+     }
+    }
+   }
+  },
+  "edges": {
+   "type": "array",
+   "maxItems": 65536,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "from",
+     "kind",
+     "to"
+    ],
+    "properties": {
+     "from": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "to": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}(?![\\s\\S])"
+     },
+     "kind": {
+      "enum": [
+       "DELEGATE",
+       "MESSAGE"
+      ]
+     }
+    }
+   }
+  },
+  "assignmentPolicy": {
+   "enum": [
+    "CLAIM_FROM_BOARD",
+    "COORDINATOR_ASSIGNS",
+    "NONE"
+   ]
+  },
+  "arbitrationPolicy": {
+   "const": "EARLIEST_THEN_NODE_ID"
+  },
+  "concurrency": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 1024
+  },
+  "leaseSeconds": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 86400
+  },
+  "deadlineSeconds": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 2592000
+  },
+  "agentBudget": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 1024
+  },
+  "selection": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "baselineRecordDigest",
+    "outcome",
+    "taskShape"
+   ],
+   "properties": {
+    "taskShape": {
+     "enum": [
+      "SEQUENTIAL",
+      "TOOL_HEAVY",
+      "DECOMPOSABLE"
+     ]
+    },
+    "baselineRecordDigest": {
+     "type": "string",
+     "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+    },
+    "outcome": {
+     "enum": [
+      "SINGLE_AGENT",
+      "ORCHESTRATOR_WORKER",
+      "SELF_ORGANIZING"
+     ]
+    }
+   }
+  }
+ }
+}

@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-032
+## Current source preparation — MET-MAS-004
+
+MET-MAS-004 (MAS-RA-004): topology and coordination v1. A TopologySpec declares the agents, roles, budgets and edges of one
+objective and derives a role-block vector; a coordinator board hands out work items only as exclusive leased claims
+(compare-and-set, expiry, deterministic arbitration) and merges a claim's work only after a PASS verdict from a different
+context, recorded in a MAS-RA-001 ledger bound to that claim and work; a declared selection rule at 45/100 compares an
+eligible MAS-RA-002 single-agent baseline; CLAIM, MERGE and MESSAGE map to run-events v1, with the gaps stated. Owner
+MAS-RA-004 and Q-M4-1..11 (a). DATA_CHECK_ONLY. Alpha2 OPEN; 244 accepted plus MET-MAS-004 only.
+
+## Historical W03 obligation-register amendment 2 source preparation — MET-ENFORCE-032
 
 MET-ENFORCE-032 (W03-PLAN-AMEND-2): W03 obligation-register amendment 2, applied after amendment 1. Plan v2's HE-004 is
 refined into HE-004A, HE-004B1, HE-004C, HE-004D1 and HE-004D2 (REFINED rows keep plan v2's text byte for byte); I01-1,
@@ -1221,6 +1230,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 116. `MET-ENFORCE-030`: publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, every failure WORKER_NOT_OBSERVED); the v3 contract, supplement and model unchanged; DATA_CHECK_ONLY.
 117. `MET-ENFORCE-031`: publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay); the base policy, A1 and its classifier unchanged; DATA_CHECK_ONLY.
 118. `MET-ENFORCE-032`: publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; plan v2, amendment 1 and edge record v3 unchanged; DATA_CHECK_ONLY.
+119. `MET-MAS-004`: publish topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); the MAS-RA-001, -002, -003 and -008 contracts unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

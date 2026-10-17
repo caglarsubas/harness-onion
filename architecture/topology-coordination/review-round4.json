@@ -1,0 +1,59 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "kind": "MAS-RA-004 contract review",
+ "round": 4,
+ "reviewDate": "2026-10-16",
+ "subjectCommit": "a1ed9a55b65516846c2ad384948fa314a94adc2a",
+ "subjectTree": "8020f67f01518b2438cde065c41440201a9c880d",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "M4R4-1",
+   "severity": "MINOR",
+   "location": "vectors T49 and stores.splits; scripts/topology_coordination.py _held_out (held_digests); README A3 ('MAS-RA-002's store-relative rule')",
+   "finding": "MAS-RA-002's held-out rule has two routes, and the vectors leave one property of the content-digest route unpinned. The rule is 'by content digest in any suite, by task ID in the same suite'. Round 4 pins the ID route's suite boundary: N03 is now killed by T01/T02 through the new other-suite declaration. But the content-digest route is exercised only within one suite. T49's record alt-a (split-alt, suite ..000001) is held out by split-001, split-late and split-one, all of the same suite. A mutant that restricts the digest route to the record's own suite (R13) passes every vector. The model is right. In probe P03, a valid declaration of another suite that holds out T02's first DEVELOPMENT task by digest only (another task ID) makes dev-low NOT_ELIGIBLE. Under R13 the same record stays eligible (3/10), so it would unlock SELF_ORGANIZING. That cross-suite digest route is what stops a held-out task renamed into another suite from being used as selection input (Q-MAS2-C (a), the subject of round 1's M4R1-2).",
+   "requiredChange": "Add a vector in which only a declaration of another suite holds out a record's DEVELOPMENT task by content digest (with a different task ID), and the record is refused SELECTION. For example, move T49's holding declaration to another suite, or add a T52 on such a declaration."
+  },
+  {
+   "id": "M4R4-2",
+   "severity": "NOTE",
+   "location": "scripts/topology_coordination.py _scope_text (transcript tenantId and scope text members)",
+   "finding": "The no-surrogate part of the scope-text rule is not exercised for Python-object inputs. Mutant R16 (surrogates allowed) passes every vector. Text inputs are unaffected, because parse() already refuses any lone surrogate as SHAPE (text X03), and schema and model agree (round-3 probe P05).",
+   "requiredChange": "Optional: a SHAPE vector with a lone surrogate in tenantId or in a scope member."
+  },
+  {
+   "id": "M4R4-3",
+   "severity": "NOTE",
+   "location": "vectors.json stores.splits",
+   "finding": "Two different valid declarations share the splitId 'split-other-suite': the original one (suite ..000004, o1-o3 / o9) and the new one (suite ..e2d400, o1 / t1). MAS-RA-002 does not require unique split ids, and nothing depends on it, but the README text 'plus one of another suite' is easier to follow with a distinct id.",
+   "requiredChange": "Optional: rename the new declaration."
+  }
+ ],
+ "dispositions": [
+  {"finding": "M4R3-1", "result": "ADDRESSED: s10b (t=133, w2) applies after x12 (v1 < w2) and is VERDICT_NOT_PASS on work A by hand (verdicts on i4: FAIL on A, PASS on B); s11 then merges B; R01 (claim's latest verdict), R02 (latest verdict's work only) and R17 (any PASS on the work) are killed"},
+  {"finding": "M4R3-2", "result": "ADDRESSED: the new valid declaration of another suite holds out task ID t1 with another digest; base-dev and dev-low stay eligible (T01, T02), killing N03; B09u (empty) and B09v (257 characters) differ from B01 only in tenantId and are SHAPE in schema and model, killing R08, R14, R15; the surrogate sub-rule stays unexercised (M4R4-2)"},
+  {"finding": "M4R3-3", "result": "ACCEPTED: no change, equivalent for JSON input"}
+ ],
+ "checksRun": [
+  {"check": "Subject: HEAD a1ed9a55b65516846c2ad384948fa314a94adc2a, tree 8020f67f01518b2438cde065c41440201a9c880d; git diff 61a88e46..a1ed9a55 touches README.md and vectors.json only (model and schemas unchanged)", "result": "PASS"},
+  {"check": "python3 -I -B scripts/topology_coordination.py: 94 cases, 3 texts, 18 selection rows, 2 kinds cases, 2 v1 embeddings", "result": "PASS (0.11 s)"},
+  {"check": "Hand check of s10b in B01 (62 operations) in (t, agent, opId) order, its gap entry and i4's final state (MERGED w2 v3)", "result": "PASS"},
+  {"check": "Held-out routes in the stores: every valid declaration, its suite and which declarations hold out T01, T02, T49 and T51's DEVELOPMENT tasks, by which route", "result": "T51: ID route, same suite; T01/T02: ID in another suite only (eligible); T49: digest route, same suite only (M4R4-1)"},
+  {"check": "Schemas vs vectors on SHAPE (jsonschema 4.24.0, harness-onion venv, offline): all 94 cases", "result": "PASS (0 disagreements)"},
+  {"check": "My round-3 survivors N03, R01, R02, R08 and 6 new mutants (R12-R17) through the published runner's full logic", "result": "N03, R01, R02, R08, R12, R14, R15, R17 killed; R13 and R16 survive (M4R4-1, M4R4-2)"},
+  {"check": "My full list of 42 earlier mutants re-run", "result": "37 killed; survivors are the 5 equivalents N24, N25, N26, N27, R09"},
+  {"check": "The builder's 58 mutants (mutants.py + mutants_r2.py) through the published runner's full logic", "result": "53 killed; survivors M06, M07, M08, M15, N13, equivalent as stated"},
+  {"check": "Read-only: git status --porcelain --ignored empty; no __pycache__ left; scratch dir removed", "result": "PASS"}
+ ],
+ "probes": [
+  {"id": "P01", "mutation": "R01, R02, R17 on the merge; R08, R14, R15, R16 on the tenant text; N03, R12, R13 on the held-out routes", "expected": "each killed or equivalent", "got": "R13 and R16 survive; the rest are killed"},
+  {"id": "P02", "mutation": "B01's s10b and its neighbours in application order", "expected": "x12 before s10b, VERDICT_NOT_PASS", "got": "x12 (133, v1), s10b (133, w2) VERDICT_NOT_PASS, s11 (134) ACCEPTED"},
+  {"id": "P03", "mutation": "stores plus a valid declaration of another suite holding out T02's first DEVELOPMENT task by digest only; baseline_score of dev-low, model and R13", "expected": "NOT_ELIGIBLE (content digest, any suite)", "got": "model NOT_ELIGIBLE; R13 OK (3, 10) (M4R4-1)"},
+  {"id": "P04", "mutation": "B09u and B09v against B01", "expected": "only tenantId differs", "got": "only tenantId differs (lengths 0 and 257)"}
+ ],
+ "sourcesRead": [
+  "git diff 61a88e46..a1ed9a55 (README.md in full; vectors.json through scripts)",
+  "~/.local/state/harness-onion-ci/tools/masra004/mutants_r2.py (N14, N15, N16 added) and mutants.py's MUTANTS list"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}
