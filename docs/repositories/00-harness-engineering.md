@@ -1,6 +1,17 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-MAS-004
+## Current source preparation — MET-ENFORCE-033
+
+MET-ENFORCE-033 (NATIVE-PROFILE-V4): native-profile v4 and I06 v3. The effect gate holds no capability (O-NATIVE-GATE-NOCAP). The
+observer is the capturer; each captured field has an evidence class by role and recorded capability set; the processes
+whose executable link the observer cannot read are label-bound (the observed domain label, the measured entrypoint file
+and declared premises, each with a named T04 proof); entrypoint labels are schema constants, with single-file closures for
+the static roles and the interpreter closure for the interpreted ones; the worker leaf qualifies only inside a frozen
+bracket. I06 v3 binds I06's evidence to native-profile v4; operator edge record v5 registers 9 files for HE-004D1 and
+HE-004D2. Adopted by the lane monitor (owner-delegated) after three independent review rounds. DATA_CHECK_ONLY. Alpha2
+OPEN; 245 accepted plus MET-ENFORCE-033 only.
+
+## Historical topology and coordination v1 source preparation — MET-MAS-004
 
 MET-MAS-004 (MAS-RA-004): topology and coordination v1. A TopologySpec declares the agents, roles, budgets and edges of one
 objective and derives a role-block vector; a coordinator board hands out work items only as exclusive leased claims
@@ -1231,6 +1242,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 117. `MET-ENFORCE-031`: publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay); the base policy, A1 and its classifier unchanged; DATA_CHECK_ONLY.
 118. `MET-ENFORCE-032`: publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; plan v2, amendment 1 and edge record v3 unchanged; DATA_CHECK_ONLY.
 119. `MET-MAS-004`: publish topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); the MAS-RA-001, -002, -003 and -008 contracts unchanged; DATA_CHECK_ONLY.
+120. `MET-ENFORCE-033`: publish native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, the capture routes, the inspector obligation restated, I06 bound to native-profile v4) and operator edge record v5; earlier contracts unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 
