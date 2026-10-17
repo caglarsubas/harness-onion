@@ -1,0 +1,96 @@
+{
+  "subject": {
+    "commit": "0a2ecd7157e732b8d7965ed6e985203e733b1d19",
+    "tree": "e68017219f4736c828818389d2c07b0fcd1ae696",
+    "parent": "b0635f81e5ba3b6538fc0cfd28a78f0fea962f50",
+    "design": "DESIGN.md revision 2.2, sha256 9cd3a5f09b58ebcd80bdc80a733bfd8511679f1a35dca79729f75a84ae35039d"
+  },
+  "reviewer": "independent agent",
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "N1-1",
+      "severity": "MAJOR",
+      "location": "scripts/native_qualification_v4.py check_record (entrypoint-label block, lines 394-409, and the backend label block, lines 442-448); README 'Evidence classes' P-b and 'T04 proofs' T04-ENTRYPOINT-CENSUS row",
+      "finding": "Nothing stops a second enrolled file from carrying a LABEL_BOUND role's (or an ENTRY_BOUND backend's) entrypoint type, or the interpreter type, so a record that itself declares a second entry file for the domain still qualifies. P-b and T04-ENTRYPOINT-CENSUS cover only files outside the enrolled set. The model checks only the subject's own executable label and the exec-segment files of interpreted closures, so the inside-the-set half falls between them. T04-LABELS would then confirm the bad labels as declared. The observer measures only the role's executable, so under P-a the broker, worker or low-port server domain may have been entered through the other file, and 'domain entry plus the measured file' no longer binds the image (backends likewise). Reviewer probes, each with every capture rebound to the mutated record (digest, file observations, the gate's maps): check_record and check_qualification both return None (accepted) for (a) a gate library labelled planeon_broker_exec_t, (b) a worker data file (no executable segment) labelled planeon_worker_exec_t, (c) a server data file labelled planeon_worker_exec_t, (d) a HOST_CONTAINMENT closure library labelled planeon_broker_exec_t, (e) a kubelet library labelled planeon_broker_exec_t, (f) a kubelet library labelled qualk8s_scheduler_exec_t (a second scheduler entry file), and (g) a gate library labelled planeon_interpreter_exec_t, outside every interpreted closure, which the interpreted domains may EXECUTE and so map without the closure recording it.",
+      "requiredChange": "Add a check_record rule over files and backendFiles: a file whose label is any subject's entrypoint constant (the five roles' and two lifecycle subjects' executableLabel, the eight backend executableLabel constants) must be that subject's executable. planeon_interpreter_exec_t (interpreterLabel) may label only executable-segment files of an interpreted role's closure, never a role, lifecycle or backend executable or a file in a native, lifecycle or backend closure. Optionally also refuse matrix v5's other ENTRYPOINT types (planeon_maint_exec_t, qualk8s_container_file_t) on enrolled files. Add negatives for cases (a)-(g), with the I06 v3 SC00 consequence if any. State in the README (P-b, T04-ENTRYPOINT-CENSUS, Entrypoints and labels) that the in-set half of the census is the model's rule and the out-of-set half is T04's."
+    },
+    {
+      "id": "N1-2",
+      "severity": "MAJOR",
+      "location": "scripts/native_qualification_v4.py _member_sets (lines 460-473); schema $defs/memberSet (no uniqueness of (pid, startTicks) rows)",
+      "finding": "The bracket rule does not check that the before/after member sets cover the reported members. _member_sets compares len(before) == len(counts) == len(members) and maps each before row to a member's thread count. It never requires the (pid, startTicks) keys of the rows to be distinct or to equal the members' keys, and the schema has no outer uniqueness. A WORKER capture whose memberSetBefore and memberSetAfter both list the inspected worker twice, omitting co-member 3013, passes check_capture and check_qualification (reviewer probe on positive 1: both None). So a co-member can be reported in cgroupMembers without the frozen-bracket reads showing it before and after. That is the broker-side change inside the bracket which owner decision Q-NP4D-10 (a) and D2-1 require to be refused. The README claim that 'the sets must also be exactly the reported members and thread counts' is not enforced. (Single-process leaves are safe, because len(members) == 1 forces the one row to be the inspected process.)",
+      "requiredChange": "In _member_sets, require the (pid, startTicks) keys of memberSetBefore to be unique and equal as a set to the members' keys (equality with memberSetAfter then follows from the existing canonical comparison), or make the schema refuse duplicate (pid, startTicks) rows. Add WORKER negatives: duplicate rows hiding a co-member, and one pid listed twice with different thread lists."
+    },
+    {
+      "id": "N1-3",
+      "severity": "MINOR",
+      "location": "architecture/native-profile-v4/vectors.json N18-N31, N37-N38; README 'Capture shapes and the proof list' last bullet",
+      "finding": "Design §3.7 (from D1-5's required change) asks for each forbidden field present 'with an equal and with a different value', and the README claims this coverage. Classifying the vectors against the positives shows a different value only for process.exe (N19 for the low-port server, N24 for the broker, V08 for the observer). executableMaps, namespaceInodes and cgroupMembers[].exe appear only with the observed or recorded value (N20-N23, N25-N31, N37, N38). WORKER has no different-value case at all, and the observer has no equal-value process.exe case and no cgroupMembers[].exe case. Every refusal is presence-based (schema 'not', model membership test), so behaviour is unaffected; this is coverage and a README overclaim.",
+      "requiredChange": "Add the missing different-value negatives (maps, namespaces and member exe for the broker, the worker and the low-port server; observer member exe and equal-value exe), or narrow the README sentence to what the vectors pin."
+    },
+    {
+      "id": "N1-4",
+      "severity": "NOTE",
+      "location": "architecture/native-profile-v4/README.md 'Minimum kernel versions'",
+      "finding": "By the reviewer's recollection, not verified (no network, no kernel source read), the SELinux user_namespace class and its create permission arrived with the LSM userns_create hook in Linux 6.1, not 6.0. The other versions (Seccomp_filters 5.9, cgroup v2 freezer 5.2, pidfd_open 5.3, CLONE_INTO_CGROUP 5.7, FS_IOC_MEASURE_VERITY 5.4, BPF_LSM_CGROUP 6.0) match the reviewer's recollection. No effect on the enrolled v6.12 kernel.",
+      "requiredChange": "Re-check the user_namespace entry, or keep it explicitly as an author's reading for T04 to confirm, as the README already frames it."
+    },
+    {
+      "id": "N1-5",
+      "severity": "NOTE",
+      "location": "architecture/i06-backend-profile-v3/README.md line 106 ('No production evidence yet')",
+      "finding": "The moved text reads 'v2 is also bound to W02a v4 itself'. The sentence describes the model's own binding, so it should name v3. I06 v2 stays bound to W02a v3.",
+      "requiredChange": "Change that 'v2' to 'v3', or keep v2's sentence and add a v3 one."
+    },
+    {
+      "id": "N1-6",
+      "severity": "NOTE",
+      "location": "architecture/artifact-edges/operator-harness-engineering-v5.json supersedes; README-v5.md 'Open items'",
+      "finding": "v5 supersedes the adopted but unmerged edge v4 by digest (e30772ff..., which equals the file in the amend2 contract directory), and README-v5 requires slot 244 to merge first. If v4's bytes change before or at its merge, v5's supersedes digest and its copy of v4's 45 rows become stale. Neither text says the mechanics re-derive them.",
+      "requiredChange": "State in README-v5's open items that the mechanics re-verify v4's merged digest and 45 rows, and re-derive v5 if they differ, alongside filling the six providerPacket TBD values."
+    }
+  ],
+  "flaggedPoints": [
+    {"point": 1, "position": "agree", "reason": "criteria.json is the effective v2 criteria byte-for-byte except schemaVersion /v3, SC00 and SC08 requirement texts (v3->v4, SC08 restating that v4 refuses a shared executable but allows shared content) and two source strings; evidence record version /v2 is kept and a v2-format evidence naming another W02a version is refused (X07)."},
+    {"point": 2, "position": "agree", "reason": "executableLabel/interpreterLabel are schema consts per role, lifecycle subject and backend component; the model compares the executable file row's label with them. All 15 constants and the interpreter type equal matrix v5's unique ENTRYPOINT type per subject (reviewer cross-check). See N1-1 for the missing in-inventory uniqueness."},
+    {"point": 3, "position": "agree", "reason": "observerProcess holds only cgroup inode and limits (path is a process-level /proc fact, DECLARED for the observer); observerMember holds only the pid; the model checks exactly one member, inode/limits equality, pidsCurrent <= pidsMax, programs and census, consistent with design §3.3 row 3 and D2-6/D3-6."},
+    {"point": 4, "position": "amend", "reason": "Fields and placement are sound (WORKER requires both frozen flags, other roles forbid them, check_capture refuses an unfrozen worker capture so check_qualification fails closed per Q-NP4D-10 (a)), but the member-set coverage rule must require unique keys equal to the members' keys (N1-2)."},
+    {"point": 5, "position": "agree", "reason": "The seal marker label is DECLARED_T04 (T04-LABELS) in design §3.3; observedHardening.sealMarker drops it and the rest of hardeningObserved keeps v3's equality (reviewer probe: a label in hardeningObserved is refused by the schema)."},
+    {"point": 6, "position": "agree", "reason": "Backend one-file-per-component by path matches design §3.4 with content distinctness left to SC08 (G19/G20 replay as stated). The ordered t04Proofs const is stricter than 'equal the closed set' but canonical and stated as ordered (a reordered list is refused, reviewer variant). The two messages split 'all OBSERVED fields absent' from 'some absent', both refusals. evidenceClasses is unreferenced and so validates nothing; it is pinned by the schema digest, and the layer validator's cross-check is correctly left as an open item. Running the new record rules after v3's ownership rules keeps every v3 refusal (replay). The low-port fifth positive plus A11 is sound: positive 4 qualifies with a LABEL_BOUND server capture, and NBS on a high port is still refused."},
+    {"point": 7, "position": "amend", "reason": "Both stay author's readings for W03/T04. The W5 execveat statement (the script reaches the interpreter as /dev/fd/<fd>; ENOENT if the descriptor is close-on-exec) matches the reviewer's understanding of execveat(2), unverified here. One version reading is probably off: user_namespace create, 6.1 rather than 6.0 by the reviewer's recollection (N1-4)."},
+    {"point": 8, "position": "agree", "reason": "'two roles share an entrypoint label' is unreachable (distinct schema consts, N67 is the schema refusal). The 'capabilities == []' half of the gate rule is likewise dead under the schema const, which is harmless defence in depth. V21 and C13 are the only double-defect cases. The reviewer's analysis of N01-N102 found every schema refusal a single schema error (51/51) and every model refusal schema-valid (51/51)."},
+    {"point": 9, "position": "agree", "reason": "N98/N99 re-pin v3's binding rule that C13 no longer reaches, and N101/N102 pin the executable-map rule that v3 never pinned; they are correctly recorded as pre-existing gaps, not v4 changes."},
+    {"point": 10, "position": "agree", "reason": "Schema 3810 -> 4539 lines (incl. evidenceClasses), model 688 -> 1004 lines of which about 200 are check_vectors (v3 kept it in validate_native_profile_v3.py), 102 new negatives; the overrun is coverage, not new rules beyond the design."},
+    {"point": 11, "position": "agree", "reason": "Same pattern as I06 v2 (bare import with scripts. fallback, no __main__); the v2 -> v3 model diff is the binding lines plus the appended check_vectors."},
+    {"point": 12, "position": "agree", "reason": "Design §8 names slot 244's v4 as the superseded record; v5 carries v4's 45 rows unchanged and in order and the 6 packet-published rows correctly use providerCommit null with providerPacket TBD; see N1-6 for the re-derivation condition."}
+  ],
+  "checks": [
+    {"check": "Subject identity: rev-parse of commit, tree and parent; diff --stat b0635f81..0a2ecd71", "result": "commit 0a2ecd71, tree e6801721, parent b0635f81; exactly the 14 added files of the brief"},
+    {"check": "Design and decisions: sha256 of DESIGN.md and DESIGN.rev2.2.md; read DESIGN, OWNER_DECISIONS, the round 1-3 design review findings", "result": "9cd3a5f0...035039d for both; BUILD_REPORT.md absent, so the brief's 12-point list was used"},
+    {"check": "Both models' own vector replays from git-archive copy in WORK (python3 -I -B, timeout 600, after PAUSE and HOLD waits; Python 3.12.4, jsonschema 4.24.0)", "result": "native_qualification_v4.check_vectors 405 checks (5 positives, 346 negatives, 17 accepted, 15 cross-version, 22 migration); i06_backend_profile_v3.check_vectors 151 checks; both pass"},
+    {"check": "Full read of v3 and v4 models; diff v3 -> v4", "result": "v3 rules all present; changes are the gate split, capture_class, presence rules, declared-field removal, seccompFilters, frozen bracket, member sets, closures, label checks, backend one-file rule, v3 history in migration, errata comment, appended check_vectors"},
+    {"check": "Structural schema diff v3 -> v4 (process/member/cgroup/file/program shapes, capture conditionals, t04Proofs)", "result": "removals limited to declared fields (labels, seccomp digest/action, rlimitCore) and the LABEL_BOUND/observer conditionals; no other v3 constraint dropped"},
+    {"check": "Label constants vs matrix v5 (architecture/selinux-matrix-v3/matrix.json ENTRYPOINT grants per subject, INTERPRETER type)", "result": "all 7 planeon and 8 backend executableLabel consts equal the unique matrix v5 entrypoint type; planeon_interpreter_exec_t is EXECUTE-only (init, broker, server, worker)"},
+    {"check": "Matrix references A12, A32, A33, A35, A36, A37, A47, A60.15-21, A68.*, vector O03; HS43 spec BROKER row; seccomp v4 pidfd_open", "result": "all present with the meanings the README states; HS43 says the worker shows Seccomp_filters: 2; pidfd_open rows present in seccomp v4 allowlists"},
+    {"check": "Errata adoption: R6-1g comment; effective v3 README digest; v4 README 'Adopted v3 text' vs effective README (both directions)", "result": "R6-1g new text present and old text absent in v4 model; digest fd12a0de... matches; adopted sections verbatim at line level, no effective rule line dropped"},
+    {"check": "v3 replay accounting and changed refusals (R28, R29, C13, C27-C29, L05, V08, V22, V45, A01, A05) and re-derived ops (C14-C18, Q03, V08, V18, V56)", "result": "counts reconcile (207+2+35+102 negatives; 7+4+6 accepted; 14+1 cross; 14+8 migration); each stated reason matches the schema/model behaviour; positives' relabelling correct (8 planeon files per positive; backend labels enforced by check_record)"},
+    {"check": "New negatives N01-N102: schema-error counts of each mutated object; model-message mapping", "result": "51 schema refusals each with exactly one schema error; 51 model refusals on schema-valid data; only 'process/kernel custody differs' and 'unenrolled cgroup member' are shared messages (v3 messages)"},
+    {"check": "Reviewer variants of new negatives (worker co-member 3 filters, gate leaf gaining a process, worker script with server type, observer data file, reordered t04Proofs, observer count 0, worker thread added in bracket, low-port server with ns and empty maps, gate on port 80)", "result": "each refused by the rule its original names (or schema for the empty maps list)"},
+    {"check": "Soundness probes: invented exe (broker member; low-port server member), declared fields as observed (seccompFilterDigest, rlimitCore, seal-marker label in hardeningObserved, observer cgroup label, file entry label), unfrozen worker (flags 0; flags absent), member gone inside bracket, static-role shared library, backend running image and maps, observer self-claims (threadsUniform, member exe, frozen flag), NBS on a high port, OBSERVED server reporting the script image", "result": "all refused"},
+    {"check": "Soundness probes: second entrypoint/interpreter label inside the enrolled inventory (7 variants) and duplicate member-set rows in the worker bracket", "result": "accepted by check_qualification: findings N1-1 and N1-2"},
+    {"check": "Informational probe: observer cgroup.procs pid equal to the server's pid", "result": "accepted; v3's (pid, start) uniqueness cannot run for the observer since its start is declared, and the README states this; not raised"},
+    {"check": "Forbidden-field negatives classified equal/different against the positives", "result": "different values only for process.exe (N19, N24, V08): finding N1-3"},
+    {"check": "I06 v3: model diff v2 -> v3; criteria diff vs effective v2 criteria; README diff vs effective v2 README; replay asserts (snapshot cases carried, G19 changed, G20 SC08, positives refused in production)", "result": "binding move plus check_vectors only; criteria changes limited to schemaVersion and SC00/SC08; README accurate except N1-5; production still refused"},
+    {"check": "Edge v5 vs adopted v4 (amend2 contract file, sha256 e30772ff...)", "result": "first 45 rows identical and in order; rules, notArtifacts, statuses, ownerDecision copied; 9 new rows with sha256 and mode 100644 matching the candidate blobs; v1-v3 schema commits equal git log last-change (3f52d53c, 46bcc3e3, a29c93c7); 6 packet rows null + TBD; consumer labels HE-004D1 / HE-004D2 as design §8; ownerDecisions quote the NP4 decisions verbatim"},
+    {"check": "source-index.json of native-profile-v4 and i06-backend-profile-v3", "result": "49 path/sha256 entries, 0 mismatches; baseTree 6759da49 equals b0635f81^{tree}"},
+    {"check": "READMEs: residuals and T04 proofs vs design §11, reader duties, kernel versions, overclaims; personal-data scan of the 14 files", "result": "§11 residuals and the ten T04 proofs complete; no native/measured/installed claims; no email address, name or user path in any subject file"},
+    {"check": "Independence and hygiene", "result": "No R12 repository, tools/w04, W04 memory, enforcement-test or conformance-labs path opened. The first git-archive extraction into WORK included base/candidate paths whose names contain enforcement-test, enforcement_test or conformance-labs; they were deleted from WORK unopened. No .pyc written outside WORK; no git state changed; no pytest, validators, builds or cargo."}
+  ],
+  "actions": {
+    "filesEdited": false,
+    "networkAccessed": "none",
+    "personalDataSent": false,
+    "inventoryToolingAttempted": false
+  }
+}

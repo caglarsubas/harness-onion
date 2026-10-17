@@ -1,0 +1,69 @@
+{
+  "subject": {
+    "commit": "3c34a3a5ff5879d2bcf5e6691bc08eeaf59dbf41",
+    "tree": "870a6195eb30b973801c0f67cd7321bcf1264398",
+    "parent": "0a2ecd7157e732b8d7965ed6e985203e733b1d19",
+    "changeSurface": "git diff 0a2ecd71..3c34a3a5: 10 files (model, v4 vectors, v4 README and brief, both source indexes, I06 v3 README and brief, edge v5 and README-v5); schema, I06 v3 model, vectors and criteria unchanged",
+    "round1Record": "contract-review-round1.json sha256 6a22a9ae1d422def7d487780da79b9ddb84d9283dabf53a7c5bfc952463e34d9 (equals the earlierRounds recordSha256 in both source indexes)"
+  },
+  "reviewer": "independent agent",
+  "verdict": "CHANGES_REQUIRED",
+  "round1Resolutions": [
+    {"id": "N1-1", "status": "PARTLY", "evidence": "The new check_record rule refuses all seven round-1 probes (a)-(g) when re-run against candidate 2 ('entrypoint type labels a file other than its subject's executable' / 'interpreter type outside the interpreted closures'). An ordinary gate library in its own type is still accepted. N103-N110 pin these. But the rule compares whole label strings, so the same SELinux type spelled with another user, role or MLS level still gives a second entry file: see N2-1."},
+    {"id": "N1-2", "status": "RESOLVED", "evidence": "The keyed _member_sets refuses the round-1 duplicate-row probe ('member set lists a process or thread twice'). It also refuses the reviewer's further probes: one pid listed twice with two start times and the co-member omitted ('member set differs from the cgroup members'), and one tid listed twice with two start times. Rows in another order are still accepted. N111-N117 cover the worker bracket, the no-fork roles and the broker. N87 now names the duplicate rule, correctly for its operation: tid 30002 twice with two start times. N114 is the schema's uniqueItems refusal of an exact repeated thread row, a single schema error."},
+    {"id": "N1-3", "status": "RESOLVED", "evidence": "Reviewer classification against the positives: all 16 (role, field) cells, for BROKER, WORKER, the low-port SERVER and OBSERVER over process.exe, member exe, executableMaps and namespaceInodes, now have an equal-value and a different-value negative (e.g. N121-N126, N118-N120, N127-N131). The README sentence names them."},
+    {"id": "N1-4", "status": "RESOLVED", "evidence": "The user_namespace version is no longer asserted; both readings are named, the author's for T04 to verify, and v6.12 has the feature under either reading."},
+    {"id": "N1-5", "status": "RESOLVED", "evidence": "I06 v3 README restores 'v2 is also bound to W02a v3 itself' and adds the v3/W02a v4 sentence (see N2-3 for the stale title)."},
+    {"id": "N1-6", "status": "RESOLVED", "evidence": "README-v5 open items now require the mechanics to re-check the merged edge v4 (sha256 e30772ff... and its 45 rows in order) and to re-derive v5 if either differs."}
+  ],
+  "findings": [
+    {
+      "id": "N2-1",
+      "severity": "MAJOR",
+      "location": "scripts/native_qualification_v4.py check_record, the in-set census block (entry_files lookup and interpreter_labels test); README 'Entrypoints and labels' ('So a record cannot declare a second entry file for any domain') and the P-b in-set/out-of-set split",
+      "finding": "The in-set census looks up and compares whole selinuxLabel strings, but SELinux grants entrypoint (and EXECUTE for the interpreter type) by type alone. `files[].selinuxLabel` is a free printable string in the schema, and `backendFiles[].selinuxLabel` allows system_r or object_r. So the same type under another context spelling passes, and the record still declares a second entry file for a LABEL_BOUND or ENTRY_BOUND domain. That is the hole N1-1 was meant to close. The rule claims to hold the census's in-set half, while T04-ENTRYPOINT-CENSUS keeps only the out-of-set half, so nothing covers these. Reviewer probes, with every capture rebound to the mutated record (check_record and check_qualification both None, so accepted): a gate library 'unconfined_u:object_r:planeon_broker_exec_t:s0'; a gate library 'system_u:object_r:planeon_broker_exec_t:s0:c0'; a worker data file 'system_u:system_r:planeon_worker_exec_t:s0'; a kubelet library 'system_u:system_r:qualk8s_scheduler_exec_t:s0', which the backend file pattern itself admits; a containment library 'system_u:object_r:planeon_broker_exec_t:s0-s0'; and a gate library 'system_u:object_r:planeon_interpreter_exec_t:s0:c1'. The exact-constant spelling of each is refused.",
+      "requiredChange": "Make the in-set census type-based. Either (a) in check_record, require every enrolled file label (files and backendFiles) to be a well-formed context and compare its type field (the third ':' field) with the types of the entrypoint constants and of interpreterLabel, in both halves of the rule; or (b) constrain both inventories' selinuxLabel in the schema to the canonical 'system_u:object_r:<type>:s0' form, so that string equality is type equality (this changes the schema digest and edge row). Add negatives for the user, role and level variants (a planeon file, a backend file, and the interpreter type). Keep the README's 'cannot declare a second entry file' sentence only once it is true."
+    },
+    {
+      "id": "N2-2",
+      "severity": "NOTE",
+      "location": "scripts/native_qualification_v4.py check_record, `subjects = ... + list(components.values())`",
+      "finding": "The in-set census only knows the exec types of the backend components present in the record. Under v4's schema the only backend profile is the eight-component unit-distribution fixture (componentKeys const), so qualk8s_proxy_exec_t and qualk8s_netpol_exec_t are always covered today. A successor that admits a six-component profile would leave those two types uncovered.",
+      "requiredChange": "Carry to the packet review or the W02-PROD successor: build the set of exec types from all eight component constants, not from the components present."
+    },
+    {
+      "id": "N2-3",
+      "severity": "NOTE",
+      "location": "architecture/i06-backend-profile-v3/README.md line 1",
+      "finding": "The title still reads 'I06 backend profile v3 — native-profile v4 binding, round 1' although the status line says ROUND2.",
+      "requiredChange": "Carry to the packet review: drop the round from the title, or update it."
+    }
+  ],
+  "optionalItemWeighed": {
+    "item": "N1-1 optional part: refuse matrix v5's other ENTRYPOINT types (planeon_maint_exec_t, qualk8s_container_file_t) on enrolled files",
+    "position": "not required in this contract; keeping it as an open item is right",
+    "reason": "v4's LABEL_BOUND and ENTRY_BOUND claims cover only captured domains. planeon_maint_t is entered only when planeon_maintenance_mode is 1, and the record pins it to 0 (schema const; the boolean equalities are kept as OUT_OF_SCOPE_HOST/T04). qualk8s_container_t (pods) is no capture target. A reviewer probe confirms both labels are accepted today; neither weakens a claim v4 makes. Refusing them would need the model to carry matrix types beyond the subjects' own constants, which the design keeps out (no matrix pin, D1-13). That belongs with the layer validator's matrix cross-check, or with a successor that captures those domains. N2-1's type-based comparison is required either way."
+  },
+  "checks": [
+    {"check": "Subject identity: rev-parse of commit, tree and parent; git log; diff --stat 0a2ecd71..3c34a3a5; full read of the model, edge, README, brief and I06 diffs", "result": "3c34a3a5 / 870a6195, parent 0a2ecd71; 10 files changed; schema, I06 model, vectors and criteria untouched"},
+    {"check": "Both models' own vector replays from a git-archive copy in r2 WORK (enforcement-test, conformance-labs and w04 paths excluded at extraction, 0 such paths present; python3 -I -B, timeout 600, after PAUSE and HOLD waits)", "result": "native_qualification_v4.check_vectors 494 checks (5 + 435 + 17 + 15 + 22); i06_backend_profile_v3.check_vectors 151 checks; both pass. The replay still enforces every v3 and errata case's refusal (version names moved), so no new rule changes a v3 or errata result"},
+    {"check": "Round-1 probe tool re-run against candidate 2", "result": "34 probes, 27 should-refuse; UNSOUND: []. Matches the builder's report, verified independently"},
+    {"check": "Round-2 probes: label spelling variants against the in-set census (6), exact-constant control, matrix v5's other entrypoint types (2, informational), member-set key probes (2) and an order control", "result": "6 spelling variants accepted (N2-1); control refused; planeon_maint_exec_t and qualk8s_container_file_t accepted (open item); key probes refused; reordered rows accepted"},
+    {"check": "New negatives N01-N191: schema-error count of each mutated object; model-message mapping", "result": "123 schema refusals, each exactly one schema error; 68 model refusals, each on schema-valid data; no message missing from the model"},
+    {"check": "Reviewer variants of earlier negatives (worker filters, gate leaf gains a process, worker script type, observer data file, reordered t04Proofs, observer count 0, thread added inside the bracket, gate on port 80)", "result": "each refused by its named rule"},
+    {"check": "N1-3 coverage: equal versus different classification of forbidden-field negatives against the positives", "result": "16/16 (role, field) cells have both an equal-value and a different-value case"},
+    {"check": "In-set rule versus v3's ownership rules: placement after every earlier record rule; replay of v3 record negatives and accepted cases; N110 (interpreter-type library outside the tree, listed by SERVER and EFFECT_GATE)", "result": "the rule runs last, so v3 refusals keep their order; it complements v3's native-only rule, which only refuses tree paths and tree content; every file is owned (v3), so every file is in some closure"},
+    {"check": "Edge v5 at candidate 2 against the adopted v4 file and the candidate blobs", "result": "45 rows identical and in order; supersedes unchanged (e30772ff..., MET-ENFORCE-032); only the native-profile v4 vectors/README and I06 v3 README rows changed (7418ce72..., 7bb1a354..., 6f0c6b85...); all 9 new-row digests equal their blobs at 3c34a3a5 (v1-v3 schema rows at their commits); non-row parts unchanged"},
+    {"check": "source-index.json of both contract directories", "result": "49 path/sha256 entries, 0 mismatches; round 2; earlierRounds names the round-1 subject 0a2ecd71 and the round-1 record digest 6a22a9ae..."},
+    {"check": "README round-2 text: dispositions table, the in-set/out-of-set census split, member-set wording, N1-4 wording, coverage sentence, open items", "result": "accurate apart from the second-entry-file overclaim (N2-1); N1-4 wording sound; the optional N1-1 part is listed as not done"},
+    {"check": "Schema facts behind N2-1, N2-2 and the optional item: file and backendFile label patterns, backendProfile oneOf, booleans", "result": "planeon file label is free printable text; backend label allows system_r or object_r; the only profile is the eight-component fixture; planeon_maintenance_mode is const 0"},
+    {"check": "Personal-data scan of the added lines of the round-2 diff", "result": "none"},
+    {"check": "Independence and hygiene", "result": "No R12 repository, tools/w04, W04 memory, enforcement-test or conformance-labs path opened; archive extraction excluded them. No .pyc in WORK or the repository; no git state changed; no pytest, validators, builds or cargo; round-1 tools copied into r2 WORK and run from there"}
+  ],
+  "actions": {
+    "filesEdited": false,
+    "networkAccessed": "none",
+    "personalDataSent": false,
+    "inventoryToolingAttempted": false
+  }
+}
