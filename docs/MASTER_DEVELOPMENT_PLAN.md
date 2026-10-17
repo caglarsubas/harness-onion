@@ -1,6 +1,32 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-032 source preparation, October 16, 2026
+## Current checkpoint — MET-MAS-004 source preparation, October 17, 2026
+
+Alpha2 OPEN. MET-ENFORCE-032 (W03-PLAN-AMEND-2) passed required verify in 580 s and merged as main c69e55f. MAS-RA-004
+publishes topology and coordination v1, the H10 coordination contract the MAS-RA research block ranks next: a declared
+topology, a board that hands out work only as exclusive leased claims and merges it only after an independent verdict,
+and a declared selection rule that compares a topology's eligible single-agent baseline with the reported threshold.
+MET-MAS-004 is the sole 245th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-MAS-004 / MAS-RA-004 | SOURCE_PREPARED | Topology and coordination v1 (245th packet): a TopologySpec with its derived role-block vector, a coordinator board on exclusive leased claims with an independent verify-before-merge bound to a MAS-RA-001 ledger, a declared selection rule at 45/100 over eligible MAS-RA-002 baselines and the run-events v1 mapping with its gaps (owner MAS-RA-004 and Q-M4-1..11 (a)); contract review round 5, PASS; packet review; verify |
+| Alpha2A | MET-ENFORCE-032 / W03-PLAN-AMEND-2 | VERIFY_PASSED_MERGED | Merged as main c69e55f (verify 580 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: the MAS-RA-001, MAS-RA-002, MAS-RA-003 and MAS-RA-008 contracts and models and every harness document
+stay byte-identical; nothing runs (no coordinator, board storage or executor), and no role code, cloud, runner,
+live/native/tenant or model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical W03 obligation-register amendment 2 source checkpoint — MET-ENFORCE-032 source preparation, October 16, 2026
 
 Alpha2 OPEN. MET-ENFORCE-031 (LICENCE-POLICY-AMEND, license-policy amendment LIC-HOST-A2) passed required verify in 592 s
 and merged as main b0635f8. W03-PLAN-AMEND-2 records the policy observer's split (the monitor's owner-delegated Q-HE4-2 (a)),
@@ -1929,7 +1955,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · PERF-040 / MET-PERF-040 · Give back verify headroom lost to the history chain's depth: test-local exact sharing (15 never-shared tests), canonical byte-minimal authority hunks, refreshed weights at six workers and the matrix v5 replay order; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · I05-OBSERVED-WORKERS / MET-ENFORCE-030 · Publish the I05 gate channel v4 (the gate observes the probe-worker cgroup at every BIND, pidfd-confirmed, the v3 wire unchanged) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · LICENCE-POLICY-AMEND / MET-ENFORCE-031 · Publish license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally; the base policy and A1 byte-identical) after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · W03-PLAN-AMEND-2 / MET-ENFORCE-032 · Publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4 after independent review; plan v2, amendment 1 and edge record v3 byte-identical; pass required verify through the owner's App.
+- [x] Alpha 2A · W03-PLAN-AMEND-2 / MET-ENFORCE-032 · Publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4 after independent review; plan v2, amendment 1 and edge record v3 byte-identical; pass required verify through the owner's App.
+- [ ] Alpha 2A · MAS-RA-004 / MET-MAS-004 · Publish topology and coordination v1 (TopologySpec and role-block vector, the coordinator board with verify-before-merge, the declared selection rule, the run-events v1 mapping) after independent review; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

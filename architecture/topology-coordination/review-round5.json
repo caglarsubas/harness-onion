@@ -1,0 +1,44 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "kind": "MAS-RA-004 contract review",
+ "round": 5,
+ "reviewDate": "2026-10-16",
+ "subjectCommit": "df0b51c4219df7a57a2924ffc2c24ccb51978095",
+ "subjectTree": "1d7042d37679554d9bf0029b64ce1195cb751fa0",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "findings": [
+  {
+   "id": "M4R5-1",
+   "severity": "NOTE",
+   "location": "README 'Review round 4 ... and dispositions', row M4R4-2",
+   "finding": "The reason given for not adding a surrogate object vector is inaccurate. A JSON escape such as \\ud800 is valid text in the UTF-8 vectors file, and the runner reads vectors.json with json.loads, not with the I-JSON parse(). It would load as a lone-surrogate string. Probe P04: B01 with tenantId 't\\ud800' loaded that way is SHAPE under the model and REPLAY under mutant R16 (surrogates allowed), so such a vector is writable and would kill R16. Only the stated reason is wrong; the contract's rule and behaviour are right.",
+   "requiredChange": "Optional: add the vector, written with a \\ud800 escape, or reword the reason (for example 'not added: text input already refuses it at parse')."
+  }
+ ],
+ "dispositions": [
+  {"finding": "M4R4-1", "result": "ADDRESSED: T52 differs from T02 only in baselineRecordDigest. Its record xdigest-base hashes to its key and is accepted by MAS-RA-002's check_record (complete, 3 runs, clean, agentCount 1, DEVELOPMENT, task y1). Its three manifests (oneb-run1..3, repetitions 1-3, distinct fixed seeds 14-16, distinct cache keys) are each accepted by check_manifest. Its own split-xdigest-base is valid, in the record's suite. The only declaration holding out y1 is split-xdigest-other: valid, another suite, digest route only, under ID z9. Without that declaration the record is eligible (3/10) and T52 is valid, so T52 isolates the cross-suite digest route; no other topology case depends on it. R13 (the builder's N17) is killed by T52"},
+  {"finding": "M4R4-2", "result": "ACCEPTED as no change; the stated reason is inaccurate (M4R5-1, NOTE)"},
+  {"finding": "M4R4-3", "result": "ADDRESSED: the declaration is now split-xsuite-id-holdout (same content, new key; the old key is removed); N03 is still killed by T01/T02/T03"}
+ ],
+ "checksRun": [
+  {"check": "Subject: HEAD df0b51c4219df7a57a2924ffc2c24ccb51978095, tree 1d7042d37679554d9bf0029b64ce1195cb751fa0; git diff a1ed9a55..df0b51c4 touches README.md and vectors.json only (model and schemas unchanged)", "result": "PASS"},
+  {"check": "python3 -I -B scripts/topology_coordination.py: 95 cases, 3 texts, 18 selection rows, 2 kinds cases, 2 v1 embeddings", "result": "PASS (0.11 s)"},
+  {"check": "Vectors diff against round 4: stores +1 record, +3 manifests, +3/-1 splits; cases +T52; texts, selection rows, kinds cases, embeddings and header unchanged", "result": "PASS"},
+  {"check": "T52 under MAS-RA-002's own model (check_record, check_manifest x3, check_split), the declarations that hold its task out and by which route, and T52 / every other topology case with split-xdigest-other removed", "result": "PASS (see M4R4-1 disposition)"},
+  {"check": "My R13, R16 and N03 plus new R18 (digest route other suites only) and R20 (record's own declaration skipped) through the published runner's full logic", "result": "R13 killed by T52, N03 by T01-T03, R18 by T49; R16 survives (M4R5-1); R20 is equivalent (a valid declaration never holds out its own DEVELOPMENT tasks: PARTITION_OVERLAP)"},
+  {"check": "The builder's 59 mutants (mutants.py + mutants_r2.py) through the published runner's full logic", "result": "54 killed; survivors M06, M07, M08, M15, N13, equivalent as stated"},
+  {"check": "Read-only: git status --porcelain --ignored empty; no __pycache__ left; scratch dir removed", "result": "PASS"}
+ ],
+ "probes": [
+  {"id": "P01", "mutation": "T52 with split-xdigest-other removed from the stores", "expected": "eligible, valid", "got": "baseline OK (3, 10); T52 valid"},
+  {"id": "P02", "mutation": "every other topology case with split-xdigest-other removed", "expected": "unchanged answers", "got": "unchanged"},
+  {"id": "P03", "mutation": "R13, R16, R18, R20, N03", "expected": "killed or equivalent", "got": "R13, R18, N03 killed; R20 equivalent; R16 survives"},
+  {"id": "P04", "mutation": "json.loads of an escaped \\ud800 tenant in UTF-8 bytes; B01 with tenantId 't\\ud800', model and R16", "expected": "a writable object vector", "got": "lone-surrogate string loaded; model SHAPE, R16 REPLAY (M4R5-1)"}
+ ],
+ "sourcesRead": [
+  "git diff a1ed9a55..df0b51c4 (README.md in full; vectors.json through scripts, compared with the round-4 vectors read by git show)",
+  "~/.local/state/harness-onion-ci/tools/masra004/mutants_r2.py (N17) and mutants.py's MUTANTS list",
+  "scripts/run_manifest.py (check_split, check_manifest, check_record), as read in earlier rounds"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

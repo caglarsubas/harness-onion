@@ -1,0 +1,101 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "kind": "MAS-RA-004 contract review",
+ "round": 2,
+ "reviewDate": "2026-10-16",
+ "subjectCommit": "6a41f0e305a252d8b2d7654bc778c973540ed16b",
+ "subjectTree": "00150da8c2b560ec80707c8ea8a434a10181a054",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "M4R2-1",
+   "severity": "MINOR",
+   "location": "scripts/topology_coordination.py claim_subject, _Board._verify; README A2 'Independent verification (Q-M4-9 (a))'",
+   "finding": "A verdict's binding to 'this claim' is only as unique as (transcriptId, item, claim opId), and nothing makes transcript ids unique. The scope's tenantId, profileDigest, bundleDigest, routeId and routeDigest are unconstrained, and the topology is not part of the scope. Probe P02: a ledger written for transcript id 'probe-1' under tenant 'tenant-zz' binds in another run that reuses the id 'probe-1' (same item i1, same claim opId a1), and the holder's MERGE is ACCEPTED. So the round-1 disposition's claim that one ledger cannot verify another claim holds within one transcript, but not across board runs or tenants that reuse ids. No vector covers it: a mutant that compares only the item part of subjectId (N15) passes every vector.",
+   "requiredChange": "Make the claim's name unique: for example, bind the topology digest into the scope (routeDigest = topologyDigest, or include it in subjectId), and state that a transcript id is unique per board run and tenant. Otherwise list the assumption under Not claimed. Add a vector: a ledger for the same transcript/item/claim names but another run (another tenant or topology) is LEDGER_MISMATCH."
+  },
+  {
+   "id": "M4R2-2",
+   "severity": "MINOR",
+   "location": "scripts/topology_coordination.py _Board._verify (check_history over the claim's ledgers); README A2 'Verdict history'",
+   "finding": "The history rule allows one work per claim, and the README does not say so. A MAS-RA-001 history keeps one subject, and the scope's subjectDigest (the work) is part of that subject. So once a claim has a verdict, a verdict on revised work is VERDICT_HISTORY, whether the new ledger is fresh or supersedes the old one. Probes P01a and P01b: FAIL on work A, then PASS on revised work B, gives VERDICT_HISTORY and then VERDICT_NOT_PASS on the merge of B. Revision works only by RELEASE and a new claim (P01c), which in decentralized mode opens the item to other workers. The README's 'a superseding ledger may make the status better (on new evidence)' reads as if a fix-and-reverify loop works within a claim; it works only for the same work.",
+   "requiredChange": "Either state it ('one work per claim: a revised delivery needs a new claim') and add a vector, or keep a history per (claim, work digest), as MAS-RA-001 treats a revised delivery as a new subject, with MERGE reading the latest verdict on the merged work."
+  },
+  {
+   "id": "M4R2-3",
+   "severity": "MINOR",
+   "location": "vectors.json; README 'Vectors' ('A mutation check of the model kills every meaningful single-point mutant (37 of 41; the other four are equivalent)')",
+   "finding": "Several new rules are still untested, and the README's mutation claim covers only the builder's own list. I ran 30 further single-point mutants through the published runner's full logic: cases, texts, selection rows, header, and both embeddings with MAS-RA-003's check_log. 13 non-equivalent mutants pass every vector, and the model answers each case correctly in my probes. The surviving rules:\n- held-out by task ID in the same suite: N02 ignores task ids, N03 accepts any suite (only the content-digest route is tested, by T49);\n- 'a stored record must hash to its key' for topologies (transcript N10, binding N09) and manifests (N08), and _stored without its hash check (N07); probe P09 shows a misfiled topology correctly answered UNKNOWN_REFERENCE;\n- scope subjectType BOARD_CLAIM (N14; probe P03);\n- the transcript part of subjectId (N15, see M4R2-1);\n- a third ledger in a claim's history (N18, which uses only the last previous ledger; probe P05: PASS, then FAIL, then a PASS re-judging the first PASS's evidence is correctly VERDICT_HISTORY via HISTORY_RETRY);\n- VERDICT_NOT_PASS before WORK_MISMATCH (N20; probe P06);\n- MODE for a central transcript whose id is a node id (N22; probe P07);\n- leases expiring after the deadline (N23): the round-1 behaviour passes every vector. The model is fixed (probe P04: a lease ending at 3560, next operation at 3601, gives i1 OPEN with an EXPIRY at 3560), but B01's expiries all happen at operations before the deadline, so the M4R1-4 disposition ('B01's board and gaps record them') does not pin the fix;\n- the kinds pin (the builder's M46): killed only by the extra wrong-kinds check in tools/masra004/mutants.py, not by the published vectors or runner;\n- the binding's schemaVersion (N13).\nThe builder's equivalence claims hold:\n- M06, M07 and M08 are each equivalent alone. An OPEN item's verdicts are unobservable (VERIFY there is NOT_HELD, MERGE NOT_HOLDER), and every way back to HELD resets them. The three together are killed.\n- M15 is equivalent. ASSIGN needs a COORDINATOR agent, MODE_STRUCTURE allows none on the board, and SINGLE_AGENT has no board.\nMy own equivalents: N19 (one subject per claim, so the first and the latest verdicts name the same work), N24, N25 (the scope shape equals scope_digest's rule), and N26/N27 (redundant with _stored).",
+   "requiredChange": "Add vectors until each non-equivalent survivor above is killed:\n- a record whose DEVELOPMENT task id is held out in the same suite (another suite must not count);\n- a topology and a manifest stored under a key they do not hash to;\n- a bound scope with another subjectType;\n- a cross-transcript ledger;\n- a valid three-ledger history and a HISTORY_RETRY one;\n- a MERGE with a FAIL latest verdict and the wrong work;\n- a central transcript id equal to a node id;\n- a lease that ends before the deadline, processed only by a post-deadline operation;\n- a runner check that a wrong kinds record is UNKNOWN_REFERENCE;\n- a binding with a wrong schemaVersion.\nReword the README's mutation sentence to name the list it covers."
+  },
+  {
+   "id": "M4R2-4",
+   "severity": "NOTE",
+   "location": "scripts/topology_coordination.py check_transcript (digest(kinds) == KINDS_DIGEST); README 'any other record is UNKNOWN_REFERENCE'",
+   "finding": "Probe P08: a kinds record with an extra member is UNKNOWN_REFERENCE, as stated, but one containing a non-integral number (1.5) is SHAPE, because digest() refuses it before the comparison.",
+   "requiredChange": "Optional: catch the canonicalisation refusal and answer UNKNOWN_REFERENCE, or qualify the README sentence."
+  },
+  {
+   "id": "M4R2-5",
+   "severity": "NOTE",
+   "location": "vector B09",
+   "finding": "B09 ('a verdict without its scope') removes the scope from four VERIFY operations. One removal reaches SHAPE.",
+   "requiredChange": "Optional: remove one scope only."
+  }
+ ],
+ "dispositions": [
+  {"finding": "M4R1-1", "result": "ADDRESSED within one transcript (x3 another item, x7 another holder's claim, x2b/x7 reclaim, x7s false scope, x7g another GENERATOR, sw wrong work: all checked by hand and by ledger subject recomputation); residual across transcripts: M4R2-1"},
+  {"finding": "M4R1-2", "result": "ADDRESSED: T02/T05 and the board topology rest on dev-low (DEVELOPMENT, 3/10); T48 HELD_OUT, T49 store-held-out (content-digest route), T50 dirty; task-id route untested (M4R2-3)"},
+  {"finding": "M4R1-3", "result": "ADDRESSED: VERIFY is a gap; MESSAGE tokens null; root agent derived (c1, board-run-1); both embeddings pass check_log (B01: 3 runs, 3 agents; B02: 4 runs, 4 agents; RECEIVE after SEND, tokens supplied)"},
+  {"finding": "M4R1-4", "result": "ADDRESSED in the model (probe P04), NOT PINNED by the vectors (M4R2-3, N23)"},
+  {"finding": "M4R1-5", "result": "ADDRESSED: x5 FAIL then unrelated PASS VERDICT_HISTORY, B02 UNRESOLVED then PASS on new evidence, x8/x9 PASS then FAIL; three-ledger histories untested (M4R2-3)"},
+  {"finding": "M4R1-6", "result": "ADDRESSED: T46 incomplete-low and T47 multi-low score 3/10; the builder's M51/M52 killed"},
+  {"finding": "M4R1-7", "result": "PARTLY: every round-1 survivor I listed is now killed by the published runner, except the four equivalents; new rules have survivors (M4R2-3)"},
+  {"finding": "M4R1-8", "result": "ADDRESSED: closed binding record, BINDING = vector sum, R01-R08; caller-asserted pairing in Not claimed"},
+  {"finding": "M4R1-9", "result": "ADDRESSED: iterations 1..100,000 in schema and model (T16; schema agrees at 100000/100001)"},
+  {"finding": "M4R1-10", "result": "ADDRESSED: arXiv 2512.08296, v1 for 'about 45%' (180 configurations), v3 for 260 and +80.8%/-70.0%, as reported by RS-CLAUDE, not read (README A3, Grounding, docstring)"},
+  {"finding": "M4R1-11", "result": "ADDRESSED: Carried lists every gap step the model emits (EXPIRY, RETRY, REFUSED, MESSAGE_TYPE, RENEW, RELEASE, VERIFY) plus the board root run; Not claimed extended"},
+  {"finding": "M4R1-12", "result": "ADDRESSED in the model; not exercised by the published vectors (M4R2-3); SHAPE edge (M4R2-4)"},
+  {"finding": "M4R1-13", "result": "ADDRESSED: both stated in A2"},
+  {"finding": "M4R1-14", "result": "ADDRESSED: AgentSpec order wording and T07; T30 edits only nodes and edges; runner asserts codes, threshold and kindsDigest"}
+ ],
+ "checksRun": [
+  {"check": "Subject: HEAD 6a41f0e305a252d8b2d7654bc778c973540ed16b, tree 00150da8c2b560ec80707c8ea8a434a10181a054; git diff a4cbf0d8..6a41f0e3 touches only architecture/topology-coordination/ (README, REVIEW_BRIEF, three schemas, vectors) and scripts/topology_coordination.py", "result": "PASS"},
+  {"check": "python3 -I -B scripts/topology_coordination.py: 85 cases, 3 texts, 18 selection rows, 2 v1 embeddings", "result": "PASS (0.09 s)"},
+  {"check": "Stores: every topology, record, manifest and ledger hashes to its key; the two non-hashing split entries are the deliberate misfiled and malformed declarations; every record, split and ledger checked by its own model (base-held, dirty-low, incomplete-low, alt-a, multi-low NOT_ELIGIBLE as intended; 1b7d5bbb TASK_SET; c25d9213 LEDGER_SHAPE)", "result": "PASS"},
+  {"check": "Every VERIFY in B01/B02: scope_digest(scope) recomputed against the ledger subject, contexts and status read, answer derived by hand", "result": "PASS"},
+  {"check": "Hand trace of B01 end to end (48 operations: answers, final board i1 MERGED v3, i2 HELD v5, i3 OPEN v4, i4 OPEN v3, mapping incl. a7/a10 conflictsWith null for the same agent, gaps incl. EXPIRY at exactly 84, 85, 150, 180)", "result": "PASS"},
+  {"check": "Hand trace of B02 end to end (28 operations; q15 conflictsWith q14, the latest other agent; root agent board-run-1)", "result": "PASS"},
+  {"check": "B03 is B02's operations reversed, and its facts (answers, board, rootAgent, mapping, gaps) equal B02's", "result": "PASS"},
+  {"check": "Schemas vs model on SHAPE (jsonschema 4.24.0, harness-onion venv, offline): all 85 cases plus 24 own deviations of the scope, workDigest, new result codes, binding record and iterations bound", "result": "PASS (0 disagreements)"},
+  {"check": "Refusal minimality of the new and changed vectors (T16, T30, T35-T38, T41-T50, B06, B09, B19, B20, B23, B27, R02-R08) against the nearest valid document", "result": "PASS except B09 (M4R2-5)"},
+  {"check": "Builder's 41 mutants through the published runner's full logic (incl. embeddings)", "result": "36 killed; survivors M06, M07, M08, M15 (equivalent, confirmed) and M46 (killed only by the builder's harness)"},
+  {"check": "Own 30 round-2 mutants (eligibility, content addressing, binding, scope, history, merge, MODE, deadline expiry, mapping)", "result": "12 killed; 13 non-equivalent survivors (M4R2-3); 5 equivalent"},
+  {"check": "Decisions Q-M4-1..11 against the README after the changes", "result": "PASS; Q-M4-9's binding residual in M4R2-1"},
+  {"check": "Read-only: git status --porcelain --ignored empty; no __pycache__ in the worktree, scratch dir or venv", "result": "PASS"}
+ ],
+ "probes": [
+  {"id": "P01a", "mutation": "claim a1: VERIFY FAIL on work A, VERIFY fresh PASS on revised work B, MERGE B", "expected": "README silent", "got": "x2 VERDICT_HISTORY, MERGE VERDICT_NOT_PASS (M4R2-2)"},
+  {"id": "P01b", "mutation": "as P01a with the PASS on B superseding the FAIL on A", "expected": "README silent", "got": "VERDICT_HISTORY, VERDICT_NOT_PASS"},
+  {"id": "P01c", "mutation": "FAIL on A, RELEASE, re-ASSIGN (claim a2), PASS on B, MERGE B", "expected": "ACCEPTED", "got": "all ACCEPTED"},
+  {"id": "P02", "mutation": "ledger whose scope names transcript id probe-1/i1/a1 under tenant tenant-zz, used in another run with the same transcript id", "expected": "LEDGER_MISMATCH (another run)", "got": "VERIFY and MERGE ACCEPTED (M4R2-1)"},
+  {"id": "P03", "mutation": "bound ledger whose scope subjectType is PULL_REQUEST", "expected": "LEDGER_MISMATCH", "got": "LEDGER_MISMATCH (untested, N14)"},
+  {"id": "P04", "mutation": "ASSIGN at 3500 (lease to 3560), next operation at 3601", "expected": "i1 OPEN, EXPIRY at 3560", "got": "as expected (untested, N23)"},
+  {"id": "P05", "mutation": "PASS L1, FAIL L2 superseding L1, PASS L3 superseding L2 on L1's evidence only; MAS-RA-001 check_history([L1,L2,L3]) and ([L2,L3])", "expected": "x3 VERDICT_HISTORY", "got": "VERDICT_HISTORY; HISTORY_RETRY and HISTORY_BROKEN (untested, N18)"},
+  {"id": "P06", "mutation": "MERGE with latest verdict FAIL and the wrong work", "expected": "VERDICT_NOT_PASS", "got": "VERDICT_NOT_PASS (untested, N20)"},
+  {"id": "P07", "mutation": "central transcript id 'w1'", "expected": "MODE", "got": "MODE (untested, N22)"},
+  {"id": "P08", "mutation": "B01 with kinds plus an extra member; with an extra 1.5", "expected": "UNKNOWN_REFERENCE both", "got": "UNKNOWN_REFERENCE; SHAPE (M4R2-4)"},
+  {"id": "P09", "mutation": "B01 against a copy of the central topology stored under a key it does not hash to", "expected": "UNKNOWN_REFERENCE", "got": "UNKNOWN_REFERENCE (untested, N07-N10)"},
+  {"id": "P10", "mutation": "check_log on both embeddings; runs, messages and logical times inspected", "expected": "accepted", "got": "B01 3 runs/3 agents, B02 4 runs/4 agents; tokens 1; RECEIVE logical time after SEND"},
+  {"id": "P11", "mutation": "the builder's 41 mutants through the published runner", "expected": "only equivalents survive", "got": "M06, M07, M08, M15 (equivalent) and M46 survive"},
+  {"id": "P12", "mutation": "30 own mutants N01-N30", "expected": "each killed or equivalent", "got": "survivors N02, N03, N07, N08, N09, N10, N13, N14, N15, N18, N20, N22, N23 (non-equivalent); N19, N24, N25, N26, N27 equivalent"},
+  {"id": "P13", "mutation": "24 own SHAPE deviations (scope members, lengths 256/257, surrogate, astral, newline, workDigest, results, binding, iterations)", "expected": "schema = model", "got": "0 disagreements"}
+ ],
+ "sourcesRead": [
+  "architecture/topology-coordination/README.md, REVIEW_BRIEF.md, the three schemas (diffs and new binding schema), vectors.json (all cases, stores, facts and embeddings, through scripts)",
+  "scripts/topology_coordination.py (in full)",
+  "scripts/verdict_ledger.py (scope_digest, check_history), scripts/run_manifest.py (check_split, check_record, check_selection), scripts/run_events.py (check_log rules), scripts/agent_loop.py (profile budgets), as read in round 1",
+  "~/.local/state/harness-onion-ci/tools/masra004/mutants.py (in full)"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

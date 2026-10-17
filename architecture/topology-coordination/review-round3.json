@@ -1,0 +1,64 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "kind": "MAS-RA-004 contract review",
+ "round": 3,
+ "reviewDate": "2026-10-16",
+ "subjectCommit": "61a88e467d16b3dc4cddaef0aba8e55861dd4021",
+ "subjectTree": "748bf9fc49a89865b3f32c4bf027f6282a51a8d0",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "M4R3-1",
+   "severity": "MINOR",
+   "location": "vector B01 (item i4: x11, s9, s10, x12, s11); scripts/topology_coordination.py _Board.apply (MERGE: on_work); README A2 'Verdict history, per work' and the M4R2-2 disposition ('A stays VERDICT_NOT_PASS')",
+   "finding": "The per-work merge rule is not pinned in the one case where it matters: merging the failed work after the revised work has passed. On i4 the vectors merge A only before B's PASS (s10 at 132; x12 is at 133), and then merge B (s11). Two mutants pass every vector. R01 reads the status from the claim's latest verdict instead of this work's latest. R02 counts only the latest verdict's work. Probe P01 adds a MERGE of work A at t=134 (after x12, before s11): the model answers VERDICT_NOT_PASS and then merges B; R01 answers ACCEPTED and merges the FAILed work A; R02 answers WORK_MISMATCH. So an implementation that merges FAILed work whenever any later verdict on the claim passed satisfies every published vector. The model itself is right.",
+   "requiredChange": "Add a MERGE of work A after x12 on i4 (for example opId s10b at t=134, VERDICT_NOT_PASS), so that both R01 and R02 are killed."
+  },
+  {
+   "id": "M4R3-2",
+   "severity": "MINOR",
+   "location": "vectors T51 and stores.splits; scripts/topology_coordination.py _held_out (held_ids) and check_transcript (tenantId shape)",
+   "finding": "Two rules are still unpinned. (1) The task-ID route of MAS-RA-002's held-out rule counts only declarations in the record's own suite. T51 proves the ID route fires within one suite, but no vector shows that a declaration in another suite holding out the same task ID does not make a record ineligible. The mutant that drops the suite condition (N03) passes every vector. Round 2's required change asked for this ('another suite must not count'), so the M4R2-3 disposition is partial. (2) The new transcript tenantId is SHAPE-checked as MAS-RA-001 scope text (1..256 characters, no surrogate). B09t covers only its absence, so a mutant that drops the text check (R08) passes every vector. Schema and model agree on empty, 257-character, surrogate, numeric and null tenants (probe P05).",
+   "requiredChange": "Add a valid declaration in another suite that holds out one of a still-eligible record's DEVELOPMENT task IDs (with another task digest), and keep that record's topology valid. Add a SHAPE vector with an empty or 257-character tenantId."
+  },
+  {
+   "id": "M4R3-3",
+   "severity": "NOTE",
+   "location": "scripts/topology_coordination.py check_transcript (pinned = digest(kinds) == KINDS_DIGEST, except clause)",
+   "finding": "Narrowing the kinds guard to `except Refused` (R09) passes every vector. It is equivalent for any kinds record parsed from JSON: every non-canonical JSON value raises Refused in canonical(). It differs only for non-JSON Python values or extreme nesting, which _guarded would answer SHAPE.",
+   "requiredChange": "None required."
+  }
+ ],
+ "dispositions": [
+  {"finding": "M4R2-1", "result": "ADDRESSED: transcript tenantId; scope tenantId and routeDigest must be the transcript's tenant and topology; x1c (other tenant), x1d (other route), x1e (other subjectType), x1f (other run) are LEDGER_MISMATCH, by hand and with recomputed scope digests; the uniqueness assumption is in A2 and Not claimed"},
+  {"finding": "M4R2-2", "result": "ADDRESSED in the model and README (per-(claim, work) histories; MERGE precedence NO_VERDICT, WORK_MISMATCH, VERDICT_NOT_PASS, tested by s9/s10; revised work B merges, s11), but the decisive case is unpinned (M4R3-1)"},
+  {"finding": "M4R2-3", "result": "ADDRESSED except one item: every survivor I reported is now killed by the published runner (T51, B12k, R10, R11, x1e, x1f, y2c/y2d/d2, s9/s10, B20c, z2, kindsCases, R09), except 'another suite must not count' (N03, M4R3-2); the README's mutation claim now names its scope"},
+  {"finding": "M4R2-4", "result": "ADDRESSED: kinds with 1.5 is UNKNOWN_REFERENCE (kindsCases, run by the runner)"},
+  {"finding": "M4R2-5", "result": "ADDRESSED: B09 differs from B01 in one operation; no shared verdict objects in B01"}
+ ],
+ "checksRun": [
+  {"check": "Subject: HEAD 61a88e467d16b3dc4cddaef0aba8e55861dd4021, tree 748bf9fc49a89865b3f32c4bf027f6282a51a8d0; git diff 6a41f0e3..61a88e46 touches README.md, board-transcript.schema.json, vectors.json and scripts/topology_coordination.py only", "result": "PASS"},
+  {"check": "python3 -I -B scripts/topology_coordination.py: 92 cases, 3 texts, 18 selection rows, 2 kinds cases, 2 v1 embeddings", "result": "PASS (0.11 s)"},
+  {"check": "Hand check of B01's 13 new operations, x1c-x1f, x11, s9, s10, x12, s11, a11, r8, r9, z2, in the full (t, agent, opId) order: answers; final board i1 MERGED v3, i2 OPEN v6 (EXPIRY at 3660, after the deadline, recorded at z2), i3 OPEN v4, i4 MERGED w2 v3, i5 OPEN v3 (EXPIRY at 220, r9 NOT_HOLDER: a renewal's lease from its own time); mapping (s11 MERGE, a11 and a10 CLAIMs, conflictsWith null); gaps", "result": "PASS"},
+  {"check": "Hand check of B02's 3 new operations: y2c (third ledger, FAIL superseding the PASS, ACCEPTED), y2d (reused ledger-0002, VERDICT_HISTORY), d2 (latest on the work FAIL, VERDICT_NOT_PASS), with g2, y2b, e1 at t 14-15 ordered p3 < v1 and d2 < e1", "result": "PASS"},
+  {"check": "Every new VERIFY: scope_digest recomputed against the ledger subject, tenant/route/type/subjectId/claim compared with the transcript, contexts and status read", "result": "PASS"},
+  {"check": "Schemas vs model on SHAPE (jsonschema 4.24.0, harness-onion venv, offline): all 92 cases and 7 transcript tenantId variants", "result": "PASS (0 disagreements)"},
+  {"check": "The builder's 55 mutants (mutants.py + mutants_r2.py) through the published runner's full logic", "result": "50 killed; survivors M06, M07, M08, M15, N13: equivalent as stated (N13: Refused subclasses ValueError)"},
+  {"check": "My 30 round-2 mutants re-pointed to the round-3 code, plus A-M46 and 11 round-3 mutants (R01-R11)", "result": "33 killed; non-equivalent survivors N03, R01, R02, R08 (M4R3-1, M4R3-2); equivalent N24, N25, N26, N27, and R09 for JSON input (M4R3-3)"},
+  {"check": "Read-only: git status --porcelain --ignored empty; no __pycache__ in the worktree or scratch dir, no new .pyc in the venv", "result": "PASS"}
+ ],
+ "probes": [
+  {"id": "P01", "mutation": "B01 plus a MERGE of work A on i4 at t=134 (after x12's PASS on work B, before s11); model, R01 and R02", "expected": "VERDICT_NOT_PASS, then s11 ACCEPTED", "got": "model: VERDICT_NOT_PASS, s11 ACCEPTED; R01: ACCEPTED (FAILed work merged), s11 NOT_HOLDER; R02: WORK_MISMATCH (M4R3-1)"},
+  {"id": "P02", "mutation": "B09 against B01", "expected": "one operation differs", "got": "operation 19 only; no shared verdict objects"},
+  {"id": "P03", "mutation": "the builder's 55 mutants through the published runner", "expected": "only the 5 stated equivalents survive", "got": "M06, M07, M08, M15, N13 survive"},
+  {"id": "P04", "mutation": "T51's record and the declarations in the stores", "expected": "ID route in the same suite", "got": "ren-a (split-renamed, DEVELOPMENT h1-h3) held out by ID by split-001/split-late; no other-suite declaration shares a DEVELOPMENT task ID of an eligible record (N03 untested)"},
+  {"id": "P05", "mutation": "transcript tenantId empty, 256, 257, surrogate, number, newline, null", "expected": "schema = model", "got": "agree on all 7"},
+  {"id": "P06", "mutation": "42 own mutants (N01-N30, A-M46, R01-R11) through the published runner", "expected": "each killed or equivalent", "got": "survivors N03, R01, R02, R08 (non-equivalent); N24-N27, R09 equivalent"}
+ ],
+ "sourcesRead": [
+  "git diff 6a41f0e3..61a88e46 (README.md, board-transcript.schema.json, scripts/topology_coordination.py in full; vectors.json through scripts)",
+  "~/.local/state/harness-onion-ci/tools/masra004/mutants_r2.py (in full); mutants.py's MUTANTS list",
+  "scripts/verdict_ledger.py, scripts/run_manifest.py, scripts/run_events.py, scripts/agent_loop.py, as read in rounds 1 and 2"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

@@ -1,0 +1,166 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "kind": "MAS-RA-004 contract review",
+ "round": 1,
+ "reviewDate": "2026-10-16",
+ "subjectCommit": "a4cbf0d8f32eb3432b5475ca121f9a8de2c4c628",
+ "subjectTree": "c7eff4a56dd24ecafa05b2990ce99d137e33476d",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "M4R1-1",
+   "severity": "MAJOR",
+   "location": "scripts/topology_coordination.py _Board.apply (VERIFY, MERGE), check_transcript (verdict binding); README A2 VERIFY/MERGE rows and 'Independent verification (Q-M4-9 (a))'; board-transcript.schema.json VERIFY variant",
+   "finding": "The verify-before-merge gate is not bound to the work it gates. VERIFY carries only a ledgerDigest and checks only that the ledger names the verifying node as a VERIFIER context and the holder as a GENERATOR context; MERGE names no content. A MAS-RA-001 ledger is about one subject (subject.scopeDigest, H16's scope tuple), but nothing ties that subject to the item or the claim, and all six stored ledgers share one scopeDigest. Probe P01 (stored central topology): v1 VERIFYs i1 with ledger a307aa25 (w1 GENERATOR, v1 VERIFIER, PASS), w1 MERGEs i1; then w1 is assigned i2, v1 VERIFYs i2 with the same ledger, w1 MERGEs i2: every answer ACCEPTED, both items MERGED. One PASS ledger therefore merges every later item and every later claim (including a reclaim of the same item after an expiry) of the same holder. Q-M4-9 (a) holds only in the weak form 'some PASS ledger naming these two contexts exists', not 'this work was independently verified'.",
+   "requiredChange": "Bind each verdict to the claim's work: for example, the item (or the MERGE) declares the delivered subject (a scopeDigest, or MAS-RA-001's scope tuple with subjectId = the item and subjectDigest = what is merged), and VERIFY refuses (LEDGER_MISMATCH) a ledger whose subject.scopeDigest differs; also refuse a ledger digest already bound to another claim. Add vectors: the same ledger on a second item, and on a reclaim of the same item. If the binding is deliberately left out of v1, that needs a monitor/owner decision and an explicit Not-claimed and Carried entry."
+  },
+  {
+   "id": "M4R1-2",
+   "severity": "MAJOR",
+   "location": "scripts/topology_coordination.py baseline_score; README A3; vectors T02, T05 and the stored board topology a0afb866 (used by B02, B03)",
+   "finding": "Held-out scores are used as selection input. The valid board topology (T02, T05, stored a0afb866) cites record base-held (9a7defcf), whose split partition is HELD_OUT; its baseline 11/30 is what unlocks SELF_ORGANIZING. MAS-RA-002's adopted owner decision Q-MAS2-C (a) says held-out scores are refused as input to any selection, and its check_selection refuses HELD_OUT_SELECTION on the partition and on the store-relative held-out task rule. baseline_score checks only that the record is accepted, complete and agentCount 1. The topology's `selection` decides which outcomes are allowed from that score, so a held-out score steers the selection.",
+   "requiredChange": "Refuse (SELECTION) a baseline record on the HELD_OUT partition, and one scoring a task that a valid declaration in the stores holds out (MAS-RA-002's store-relative rule). Re-base T02, T05 and the stored board topology on a DEVELOPMENT record below 45/100, add a refusal vector, and state the rule in README A3. Consider also MAS-RA-002's treatment of a dirty-tree record (its gate answers UNRESOLVED), or say why a dirty baseline is acceptable here."
+  },
+  {
+   "id": "M4R1-3",
+   "severity": "MAJOR",
+   "location": "scripts/topology_coordination.py check_transcript (mapping for VERIFY and MESSAGE, gaps); README 'Mapping into run-events v1 (Q-M4-4 (a))', Carried",
+   "finding": "The VERIFY mapping is not representable in run-events v1, and the gaps list omits it. Probe P14: the derived CLAIM, MERGE and MESSAGE points of B01 (root run c1), B02 and B03 (a synthetic root 'board' run), embedded in a minimal v1 log, pass MAS-RA-003's check_log (CLAIM_CONFLICT, MESSAGE_PAIRING, RUN_SCOPE one agent per run, LOGICAL_TIME), but only once MESSAGE carries v1's required `tokens` attribute. P15: MESSAGE attributes as derived (no tokens) are SHAPE. P16: a VERIFICATION span with the derived attributes {ledgerDigest} is SHAPE (v1's VERIFICATION START attributes are the closed set {gateId, subjectSpanId, attempt}). P17: with v1's own attributes, the subject (the holder's work) is a span of another run, which v1 refuses (RUN_SCOPE: a verification's subject is a span of the same run). A v1 log also has one sources.verdictLedgerDigest, while a transcript cites several ledgers. Q-M4-4 (a) named the mapping as CLAIM on acquire, MERGE on merge and MESSAGE on message; the extra VERIFY mapping is v1-invalid. The decentralized root board run also adds an agent that is no node and is outside the vector and agentBudget (B02's embedded log has 5 agents for a 4-node topology); the DESIGN listed 'the board root run' as a gap, but the README does not.",
+   "requiredChange": "Move VERIFY to the gaps (independent cross-run verification, its ledger reference and status, several ledgers per log) carried to run-events v2, and drop VERIFICATION from the derived v1 points or derive a v1-valid form. Add `tokens` to the derived MESSAGE points, or list token counts as a gap, and say that RECEIVE needs a later logical time than SEND. Name the decentralized root run's agent, or list it as a gap. Add a check (in the runner or a vector) that embeds the derived points in a v1 log and runs MAS-RA-003's check_log."
+  },
+  {
+   "id": "M4R1-4",
+   "severity": "MINOR",
+   "location": "scripts/topology_coordination.py check_transcript ('if o[\"t\"] <= topology[\"deadlineSeconds\"]: board.expire'); README A2 'Board'; vector B01 facts (board, gaps)",
+   "finding": "After the deadline the model stops expiring leases. The README says every HELD record whose lease ended (leaseUntil <= t) becomes OPEN before each operation at time t, with no exception. B01: a8 assigns i3 to w1 at 101 (leaseUntil 161); the next operation is z1 at 3601 (DEADLINE). The recorded final board is i3 HELD w1 v3, and the gaps have no EXPIRY, although the lease ended at 161, before the deadline of 3600. Under the README rule, i3 is OPEN v4 with an EXPIRY {i3, at 161, claim a8}. Probes P04/P04b show the reported board depends on whether some operation happened at or before the deadline: with an operation at 3600, i1's expiry at 60 is recorded; without one, i1 stays HELD. Mutant M03 ('expire also after the deadline') is killed only by B01's facts, so the vectors pin the divergent behaviour.",
+   "requiredChange": "Before every operation, expire leases up to min(t, deadlineSeconds) (or up to t), so that the final board and gaps record every lease that ended. Correct B01's board and gaps, and add a vector. Alternatively, state the deadline exception in the README, but then the board still misses expiries that happened before the deadline."
+  },
+  {
+   "id": "M4R1-5",
+   "severity": "MINOR",
+   "location": "scripts/topology_coordination.py _Board.apply (MERGE uses r['verdicts'][-1]); README A2 MERGE row",
+   "finding": "Successive verdicts on one claim are not checked as a MAS-RA-001 history. Probe P11: v1 VERIFYs i1 with a FAIL ledger for w1 and then with an unrelated PASS ledger (no supersedes chain); w1's MERGE is ACCEPTED, because the latest verdict wins. MAS-RA-001's check_history refuses that pair (HISTORY_BROKEN), and its HISTORY_RETRY rule (H16: evaluation failures do not retry into a pass) needs new evidence before a status improves. The board lets a second verdict on the same work flip a FAIL into a PASS without either.",
+   "requiredChange": "Check the ledgers bound to a claim with MAS-RA-001's check_history (a refusal is LEDGER_MISMATCH or a new answer), or state in the README and Not claimed why 'latest wins' across unrelated ledgers is acceptable. Add a vector."
+  },
+  {
+   "id": "M4R1-6",
+   "severity": "MINOR",
+   "location": "vectors T38, T39; scripts/topology_coordination.py baseline_score",
+   "finding": "T38 and T39 do not reach the rules they name. The incomplete record cand-incomplete (fad46c1b) scores 4,795,000 / (4 x 2 x 10^6) = 959/1600 (about 0.599), and the two-agent record multi-agent (1ff58d90) scores 1/2. Both are at or above 45/100, so both board topologies are SELECTION by the threshold alone. Mutants M23 (completeness unchecked) and M24 (agentCount unchecked) pass every vector. The model does enforce both rules (read), but no vector shows it.",
+   "requiredChange": "Re-base T38 and T39 on records below 45/100: an incomplete single-agent record and a complete two-agent record, so that only the named rule refuses."
+  },
+  {
+   "id": "M4R1-7",
+   "severity": "MINOR",
+   "location": "vectors.json (cases B01-B24, T01-T40, R01-R02); README A2 board rules and precedence, A1 MODE_STRUCTURE, check_run_binding",
+   "finding": "Many README rules are untested. Of 40 single-point mutants of the model, 28 pass every vector; 2 of those are equivalent (M22: only a self-edge is possible on one node; M32: _stored already checks the ledger digest). The rest are meaningful survivors: expiry at exactly leaseUntil (M01, <= vs <); the deadline boundary t = deadlineSeconds (M02); a renewal keeps verdicts (M04); the latest verdict decides, so FAIL after PASS is VERDICT_NOT_PASS (M05); verdicts end with the claim (M06, M07, M08; a model that never clears verdicts on release, expiry or reclaim also passes every vector); precedence pairs CONCURRENCY_LIMIT/STALE_VERSION (M09), NOT_PERMITTED/HELD (M10), NOT_HELD/SELF_VERIFICATION (M11), STALE_VERSION/NO_VERDICT (M12); a retry of a retry (M13); a retry after the deadline repeats its answer (M14); ASSIGN in DECENTRALIZED is NOT_PERMITTED (M15); conflictsWith names the latest claim by another agent (M16, M17); CENTRAL with no WORKER (M18); a DELEGATE edge on the board (M19); COORDINATOR recursionDepth 1 (M20); SINGLE_AGENT concurrency 1 (M21); a renewal's lease runs from t (M37); a MESSAGE gap for requiredAction alone (M38); a binding manifest that MAS-RA-002 refuses (M27); agentCount equal to agentBudget (M28). The model answers each of these as the README says (probes P02, P03, P05b, P06-P10, P19), but an implementation can get any of them wrong and still pass. The brief's own edge list (expiry at exactly leaseUntil, retry across the deadline, verdicts after renewal or reclaim, FAIL after PASS) is among the survivors.",
+   "requiredChange": "Add vectors, mostly as extra operations in B01/B02 or small new transcripts and topology cases, until each meaningful mutant above is killed. Optionally keep the mutation list as a builder check."
+  },
+  {
+   "id": "M4R1-8",
+   "severity": "MINOR",
+   "location": "scripts/topology_coordination.py check_run_binding; README A1 'check_run_binding'; vectors R01, R02",
+   "finding": "The run binding identifies nothing about the topology. Q-M4-6 (a) says the topology is reported with the run, but no record carries that report. check_run_binding takes a topology object and a manifest object. The vectors' binding documents {topologyDigest, manifestDigest} have no schema and are resolved by the runner, not by the model. The only rule is agentCount <= agentBudget. The valid R01 binds the single-agent baseline's run manifest (base-run1, agentCount 1) to the 4-node central topology, which cannot be a run of that topology. A manifest that MAS-RA-002 refuses is answered UNKNOWN_REFERENCE (probe P18), but the README does not name that code and no vector covers it.",
+   "requiredChange": "Either define a closed binding record (topologyDigest and manifestDigest, looked up and hash-checked in the stores) checked by the model, or state in Not claimed that the pairing is caller-asserted. Decide whether a run of the topology must report agentCount equal to the vector's sum, and fix R01 accordingly. Name UNKNOWN_REFERENCE in the README, and add vectors for it and for agentCount = agentBudget."
+  },
+  {
+   "id": "M4R1-9",
+   "severity": "MINOR",
+   "location": "topology-spec.schema.json budgets.iterations; scripts/topology_coordination.py _topology_shape; README A1 'the budgets reuse the MAS-RA-008 agent-loop vocabulary'",
+   "finding": "The AgentSpec budgets reuse MAS-RA-008's names but not its ranges. iterations is 1..1,000,000 here, but 1..100,000 in the agent-loop profile (scripts/agent_loop.py:198). Probe P21: a WORKER AgentSpec with 500,000 iterations is a valid topology, but no MAS-RA-008 loop profile can carry it. wallClockSeconds is narrower here (at most 2,592,000), which is a safe subset.",
+   "requiredChange": "Cap iterations at 100,000 in the schema and the model, or state the difference and its reason in the README."
+  },
+  {
+   "id": "M4R1-10",
+   "severity": "MINOR",
+   "location": "README A3 'SELECTION_THRESHOLD' provenance, Grounding; scripts/topology_coordination.py module docstring",
+   "finding": "The provenance mixes the study's versions. One sentence attributes '260 configurations; +80.8% ... -70.0%' and 'about 45%' to the same study. The adopted research-adoption-v2 record gives the 260/+80.8/-70.0 figures as the v3 abstract, as reported by RS-CLAUDE. The author's own dossier (B4, item 10) records that the ~45% figure is from the v1 abstract, that v1 had 180 configurations, and that the paper is SECONDARY_AS_REPORTED by RS-CLAUDE and was not read. Neither the README nor the docstring gives the arXiv id or which version each figure comes from, and they do not say the paper was not read. Q-M4-5 (a) asks for honest citation as Kim et al. v1.",
+   "requiredChange": "Cite arXiv 2512.08296: v1 abstract for 'about 45%' (and its 180 configurations), and v3 abstract for 260 configurations and +80.8% / -70.0%. Say these are as reported by RS-CLAUDE and that the paper was not read. Make the same correction in the model docstring and the Grounding entry."
+  },
+  {
+   "id": "M4R1-11",
+   "severity": "MINOR",
+   "location": "README 'Mapping into run-events v1' (gaps) vs 'Carried'; 'Not claimed'",
+   "finding": "The Carried list does not match the gaps it cites. The Mapping section's gaps include renewals, every refused operation and retries. Carried ('the gaps above') lists release, lease, expiry, broadcast, depth > 1, external A2A peers, message types and required actions, and leaves out refused operations and retries (and VERIFY, after M4R1-3). Not claimed also lacks several limits the contract has: the verdict's subject is not bound (unless M4R1-1 is fixed), the run binding is caller-asserted (M4R1-8), the baseline's relevance to the task is declared and not checked, and a replayed retry answer is historical (NOTE M4R1-13).",
+   "requiredChange": "Make Carried list every gap the model emits, plus the board root run and VERIFY. Add the missing limits to Not claimed."
+  },
+  {
+   "id": "M4R1-12",
+   "severity": "NOTE",
+   "location": "scripts/topology_coordination.py check_transcript(kinds); README Record format",
+   "finding": "The MAS-RA-001 check-kinds record is caller-supplied data. It is neither content-addressed nor recorded in the transcript, so a transcript's answers depend on which kinds bytes the caller passes. The runs and ledgers models are caller-chosen by design (as in MAS-RA-003), but kinds is plain data and is cheap to pin.",
+   "requiredChange": "Optional: pin the kinds digest (a constant or a store lookup), or record it in the transcript."
+  },
+  {
+   "id": "M4R1-13",
+   "severity": "NOTE",
+   "location": "README A2 'Durable, idempotent transitions'",
+   "finding": "A replayed answer is historical. In probe P05, w1's retry of its t=0 ASSIGN at t=100 answers ACCEPTED, while at the same t the item (expired at 60) is assigned to w2. Exclusivity holds because RENEW and MERGE re-check the record, but the README should say so. Relatedly, VERIFY changes the record (its verdicts) without a version bump, so a MERGE's expectedVersion does not witness verdict changes. That is safe only because the merge reads the latest verdict atomically, and MAS-RA-009's storage needs to know it.",
+   "requiredChange": "Optional: state both points in the README, or bump the version on VERIFY."
+  },
+  {
+   "id": "M4R1-14",
+   "severity": "NOTE",
+   "location": "README A1 'The roles are COORDINATOR, WORKER and VERIFIER, in that fixed block order'; vector T27; the vector runner",
+   "finding": "Three small points. (1) The sentence reads as an order on `agents`, but the model accepts any order (probe P20: VERIFIER, COORDINATOR, WORKER is valid); the order is the vector's. (2) T27 also changes concurrency from 2 to 1, which is not needed: MODE_STRUCTURE precedes BUDGET. (3) The runner does not assert the vectors' header (codes, selectionThreshold) against the model's constants; they agree today.",
+   "requiredChange": "Optional: reword (1), drop the concurrency edit in (2), and add the header assertion in (3)."
+  }
+ ],
+ "checksRun": [
+  {"check": "Scope: git diff --stat b0635f81..a4cbf0d8 adds exactly README.md, REVIEW_BRIEF.md, two schemas, vectors.json under architecture/topology-coordination/ and scripts/topology_coordination.py; no earlier file, harness document or repository schema changes", "result": "PASS"},
+  {"check": "Subject: HEAD a4cbf0d8f32eb3432b5475ca121f9a8de2c4c628, tree c7eff4a56dd24ecafa05b2990ce99d137e33476d", "result": "PASS"},
+  {"check": "python3 -I -B scripts/topology_coordination.py: 66 cases, 3 texts, 18 selection rows replay", "result": "PASS (0.05 s)"},
+  {"check": "Stores: every key in topologies, records, manifests, splits and ledgers hashes to its record; every split, manifest, record and ledger checked by its own contract's model: all valid except the intended refusals (record 1b7d5bbb TASK_SET for T21, ledger c25d9213 LEDGER_SHAPE for B16), which also hash to their keys", "result": "PASS"},
+  {"check": "Baselines by hand: base-dev 6.6e6/12e6 = 11/20; base-held 3.3e6/9e6 = 11/30; edge-045 1.35e6/3e6 = 9/20; formula and lowest terms match the model", "result": "PASS"},
+  {"check": "Selection rows (18) against the README rule, including the 45/100 boundary", "result": "PASS"},
+  {"check": "Hand trace of B01 end to end (27 operations in (t, agent, opId) order): every answer, the mapping and the gaps", "result": "PASS for answers and mapping; board/gaps follow the model, not the README rule, for i3 (M4R1-4)"},
+  {"check": "Hand trace of B02 end to end (18 operations): every answer, final board, mapping (conflictsWith q5, q8) and gaps", "result": "PASS"},
+  {"check": "B03 is B02's operations reversed, and its facts equal B02's", "result": "PASS"},
+  {"check": "Refusal minimality: each refusal diffed against its nearest valid document", "result": "PASS except T38, T39 (M4R1-6); T27 not minimal (M4R1-14)"},
+  {"check": "Schemas vs model on SHAPE: jsonschema 4.24.0 (harness-onion venv, offline, Draft 2020-12, check_schema OK) over all 64 topology/transcript cases and 52 own minimal deviations (ranges, floats, booleans, trailing newline, 64/65-char ids, non-ASCII digit, closed members, oneOf variants, retryOf null, broadcast, empty items)", "result": "PASS (0 disagreements)"},
+  {"check": "Decisions vs the README: owner Q-M4-2/3/5/9 and monitor Q-M4-1/4/6/7/8/10/11 (tools/masra004/owner_decisions.json, QUESTIONS.md options)", "result": "Q-M4-1, 2, 3, 7, 8, 10, 11 met; Q-M4-4 mapping overreaches (M4R1-3); Q-M4-5 provenance (M4R1-10); Q-M4-6 'reported with the run' (M4R1-8); Q-M4-9 weak (M4R1-1)"},
+  {"check": "run-events v1 embedding of the derived points into a minimal v1 log, checked by MAS-RA-003's check_log", "result": "CLAIM/MERGE/MESSAGE PASS with tokens added; MESSAGE as derived SHAPE; VERIFICATION SHAPE / RUN_SCOPE (M4R1-3)"},
+  {"check": "Cross-contract: baseline completeness, single-agent status, MAS-RA-002 acceptance and digest; ledger context roles and status from MAS-RA-001's check_ledger; check_run_binding", "result": "Enforced in the model; held-out partition not checked (M4R1-2); binding weak (M4R1-8); history not checked (M4R1-5)"},
+  {"check": "Mutation testing: 40 single-point mutants of the model in memory, plus 4 combined, each replaying every vector", "result": "FAIL: 28 survivors, 26 non-equivalent (M4R1-6, M4R1-7)"},
+  {"check": "Read-only: git status --porcelain --ignored empty after the review; no __pycache__ in the worktree or scratch dir, no new .pyc in the venv", "result": "PASS"}
+ ],
+ "probes": [
+  {"id": "P01", "mutation": "central: assign i1 to w1, v1 VERIFY i1 with ledger a307aa25, w1 MERGE i1; assign i2 to w1, v1 VERIFY i2 with the same ledger, w1 MERGE i2", "expected": "the second VERIFY refused (verdict not about i2)", "got": "all ACCEPTED; i1 and i2 MERGED (M4R1-1)"},
+  {"id": "P02", "mutation": "RENEW at t = 59 and at t = leaseUntil = 60", "expected": "ACCEPTED, NOT_HOLDER", "got": "ACCEPTED, NOT_HOLDER (README-consistent; untested)"},
+  {"id": "P03", "mutation": "ASSIGN at t = deadlineSeconds (3600) and at 3601", "expected": "ACCEPTED, DEADLINE", "got": "ACCEPTED, DEADLINE (untested)"},
+  {"id": "P04", "mutation": "assign i1 at 0 (leaseUntil 60), next operation at 3601", "expected": "final board i1 OPEN v2, gap EXPIRY at 60", "got": "i1 HELD v1, no EXPIRY gap (M4R1-4)"},
+  {"id": "P04b", "mutation": "as P04 with one operation at 3600 before the 3601 operation", "expected": "same final state as P04", "got": "i1 OPEN v2, EXPIRY at 60: differs from P04"},
+  {"id": "P05", "mutation": "w1's ASSIGN at 0 retried at 100 (after expiry at 60); c1 assigns i1 to w2 at 100", "expected": "retry repeats ACCEPTED; w2's assign ACCEPTED", "got": "as expected; both ACCEPTED at t=100 (M4R1-13)"},
+  {"id": "P05b", "mutation": "retry at 4000, after the deadline", "expected": "the original answer", "got": "ACCEPTED (untested)"},
+  {"id": "P06", "mutation": "VERIFY PASS, RENEW, MERGE", "expected": "MERGE ACCEPTED (a renewal keeps verdicts)", "got": "ACCEPTED (untested)"},
+  {"id": "P07", "mutation": "VERIFY PASS, lease expires, same worker reassigned, MERGE", "expected": "NO_VERDICT", "got": "NO_VERDICT (untested)"},
+  {"id": "P08", "mutation": "coordinator RELEASE of an expired claim at t = leaseUntil", "expected": "NOT_HOLDER", "got": "NOT_HOLDER"},
+  {"id": "P09", "mutation": "two items held to the limit; third ASSIGN at the instant both expire", "expected": "ACCEPTED (concurrency counted after expiries)", "got": "ACCEPTED"},
+  {"id": "P10", "mutation": "VERIFY PASS then VERIFY FAIL (constructed FAIL ledger for w1, accepted by MAS-RA-001), MERGE", "expected": "VERDICT_NOT_PASS", "got": "VERDICT_NOT_PASS (untested)"},
+  {"id": "P11", "mutation": "VERIFY FAIL then VERIFY PASS (unrelated ledgers), MERGE; and MAS-RA-001 check_history([FAIL, PASS])", "expected": "merge refused, or a stated limit", "got": "MERGE ACCEPTED; check_history REFUSED HISTORY_BROKEN (M4R1-5)"},
+  {"id": "P12", "mutation": "at t = leaseUntil: holder's RENEW and the coordinator's ASSIGN to another worker", "expected": "deterministic by (t, agent, opId)", "got": "ASSIGN ACCEPTED (c1 < w1), RENEW NOT_HOLDER"},
+  {"id": "P13", "mutation": "a MERGE retried at 3000", "expected": "ACCEPTED replayed, no change", "got": "ACCEPTED, board unchanged"},
+  {"id": "P14", "mutation": "B01 (root c1), B02 and B03 (root 'board') derived CLAIM/MERGE/MESSAGE points, MESSAGE with tokens 0, in a minimal v1 log", "expected": "check_log accepts", "got": "accepted (B02: 5 agents for 4 nodes)"},
+  {"id": "P15", "mutation": "as P14 with MESSAGE attributes as derived (no tokens)", "expected": "accepted per the README", "got": "SHAPE"},
+  {"id": "P16", "mutation": "as P14 plus VERIFICATION spans with the derived attributes {ledgerDigest}", "expected": "accepted per the README", "got": "SHAPE"},
+  {"id": "P17", "mutation": "as P16 with v1 attributes {gateId, subjectSpanId = the holder's run span, attempt}", "expected": "accepted per the README", "got": "RUN_SCOPE"},
+  {"id": "P18", "mutation": "check_run_binding: manifest with an extra member; a list; agentCount 8 = agentBudget; the 1-agent baseline manifest on the 4-node central topology", "expected": "refused, refused, accepted, refused or stated", "got": "UNKNOWN_REFERENCE, UNKNOWN_REFERENCE, accepted, accepted (M4R1-8)"},
+  {"id": "P19", "mutation": "topology: DELEGATE edge between board peers; CENTRAL with no WORKER; COORDINATOR AgentSpec recursionDepth 0", "expected": "MODE_STRUCTURE each", "got": "MODE_STRUCTURE each (untested)"},
+  {"id": "P20", "mutation": "T01 with agents ordered VERIFIER, COORDINATOR, WORKER", "expected": "README ambiguous", "got": "valid (M4R1-14)"},
+  {"id": "P21", "mutation": "T01 with WORKER iterations 500000", "expected": "SHAPE if the agent-loop range is reused", "got": "valid (M4R1-9)"},
+  {"id": "P22", "mutation": "52 own SHAPE deviations, schema vs model", "expected": "agreement", "got": "0 disagreements"},
+  {"id": "P23", "mutation": "40 single-point model mutants + combined M06+M07+M08 (verdicts never cleared)", "expected": "each killed by some vector", "got": "28 survive (2 equivalent); verdicts-never-cleared survives (M4R1-7)"}
+ ],
+ "sourcesRead": [
+  "architecture/topology-coordination/REVIEW_BRIEF.md, README.md, topology-spec.schema.json, board-transcript.schema.json (in full); vectors.json (all cases, stores and facts, through scripts)",
+  "scripts/topology_coordination.py (in full)",
+  "scripts/run_events.py (lines 1-760: shape, rules, derive_log, metrics start)",
+  "scripts/run_manifest.py (header, check_split, check_manifest, check_record, check_selection)",
+  "scripts/verdict_ledger.py (header, shape, isolation rules, check_ledger, check_history docstring); architecture/verdict-ledger/check-kinds.json",
+  "scripts/agent_loop.py (profile budget shape)",
+  "architecture/run-events/README.md and architecture/run-manifest/README.md (searched for claims, verification, held-out selection); architecture/run-events/review-round1.json (record format)",
+  "architecture/research-adoption-v2/README.md (Kim et al. row), docs/harnesses/execution.orchestration.md (searched for PostgreSQL, Temporal)",
+  "~/.local/state/harness-onion-ci/tools/masra004/QUESTIONS.md, owner_decisions.json, DESIGN.md, DOSSIER.md (B4 and open items 8-22)"
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

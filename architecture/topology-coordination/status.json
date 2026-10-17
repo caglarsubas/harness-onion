@@ -1,0 +1,217 @@
+{
+ "schemaVersion": "planeon.internal.topology-coordination-status/v1",
+ "workItem": "MAS-RA-004",
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "contract": {
+  "schemas": [
+   "architecture/topology-coordination/topology-spec.schema.json",
+   "architecture/topology-coordination/board-transcript.schema.json",
+   "architecture/topology-coordination/topology-run-binding.schema.json"
+  ],
+  "vectors": "architecture/topology-coordination/vectors.json",
+  "model": "scripts/topology_coordination.py",
+  "readme": "architecture/topology-coordination/README.md"
+ },
+ "reviewedSubject": {
+  "commit": "df0b51c4219df7a57a2924ffc2c24ccb51978095",
+  "tree": "1d7042d37679554d9bf0029b64ce1195cb751fa0"
+ },
+ "adoptionEdit": {
+  "path": "architecture/topology-coordination/README.md",
+  "replaced": "Status: **CONTRACT_CANDIDATE**\n(internal, DATA_CHECK_ONLY; independent review round 5 pending).",
+  "with": "Status: **ADOPTED_CONTRACT_CANDIDATE**\n(internal, DATA_CHECK_ONLY; independent review round 5: PASS_FOR_SOURCE_PUBLICATION; rounds and review records in `status.json`).",
+  "reviewedSha256": "dc888027ef03576e90b1d66fdb81f90277bfb279fdcecbd9a677d8689aef544c",
+  "adoptedSha256": "890af54aa39c6fbec35615bec8cadb5ffa62c33a5ccce0e21b7af5fcd3fb9c90"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "a4cbf0d8f32eb3432b5475ca121f9a8de2c4c628",
+   "subjectTree": "c7eff4a56dd24ecafa05b2990ce99d137e33476d",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/topology-coordination/review-round1.json",
+   "snapshot": "architecture/topology-coordination/round1/",
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ],
+   "absent": [
+    "architecture/topology-coordination/topology-run-binding.schema.json"
+   ],
+   "digestOnly": {
+    "architecture/topology-coordination/vectors.json": "59ae5c4a61bb3d51e1953842c92ccb3644b60f7429c12731d29cac2f7426f469"
+   }
+  },
+  {
+   "round": 2,
+   "subject": "6a41f0e305a252d8b2d7654bc778c973540ed16b",
+   "subjectTree": "00150da8c2b560ec80707c8ea8a434a10181a054",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/topology-coordination/review-round2.json",
+   "snapshot": "architecture/topology-coordination/round2/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/topology-coordination/vectors.json": "5dccf31d0e2c5f880d99c96d6695160e0d1242df1f5b6d3fd970050acf3656bb"
+   }
+  },
+  {
+   "round": 3,
+   "subject": "61a88e467d16b3dc4cddaef0aba8e55861dd4021",
+   "subjectTree": "748bf9fc49a89865b3f32c4bf027f6282a51a8d0",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/topology-coordination/review-round3.json",
+   "snapshot": "architecture/topology-coordination/round3/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/topology-coordination/vectors.json": "c0c08b5958078f20049b8925cbe26fcb99b1f1ccf5caed85b9ba8ea1e73ab3d0"
+   }
+  },
+  {
+   "round": 4,
+   "subject": "a1ed9a55b65516846c2ad384948fa314a94adc2a",
+   "subjectTree": "8020f67f01518b2438cde065c41440201a9c880d",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/topology-coordination/review-round4.json",
+   "snapshot": "architecture/topology-coordination/round4/",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "digestOnly": {
+    "architecture/topology-coordination/vectors.json": "6d30bd57deffab67b9f9ac4140c70abc2cbbc759679a95013c70c86e7faaf807"
+   }
+  },
+  {
+   "round": 5,
+   "subject": "df0b51c4219df7a57a2924ffc2c24ccb51978095",
+   "subjectTree": "1d7042d37679554d9bf0029b64ce1195cb751fa0",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "record": "architecture/topology-coordination/review-round5.json",
+   "snapshot": null,
+   "severities": [
+    "NOTE"
+   ]
+  }
+ ],
+ "carried": [
+  {
+   "item": "M4R5-1",
+   "severity": "NOTE",
+   "to": "the MET-MAS-004 packet review or a later topology-coordination revision",
+   "action": "Optional: add the vector, written with a \\ud800 escape, or reword the reason (for example 'not added: text input already refuses it at parse')."
+  }
+ ],
+ "acceptance": [
+  "MAS-RA-004-A1",
+  "MAS-RA-004-A2",
+  "MAS-RA-004-A3"
+ ],
+ "ownerDecisions": [
+  "MAS-RA-004 (owner)",
+  "Q-M4-1 (a) (monitor)",
+  "Q-M4-2 (a) (owner)",
+  "Q-M4-3 (a) (owner)",
+  "Q-M4-4 (a) (monitor)",
+  "Q-M4-5 (a) (owner)",
+  "Q-M4-6 (a) (monitor)",
+  "Q-M4-7 (a) (monitor)",
+  "Q-M4-8 (a) (monitor)",
+  "Q-M4-9 (a) (owner)",
+  "Q-M4-10 (a) (monitor)",
+  "Q-M4-11 (a) (monitor)"
+ ],
+ "nonClaims": [
+  "An internal contract candidate: no public contract, selector, catalog, schema or runtime change; H10's, H9's, H8's and H13's harness documents, the repository schemas and every earlier contract are byte-identical.",
+  "Nothing runs: no coordinator, board, board storage (MAS-RA-009) or executor (EXEC-TEMPORAL-001); the model runs only on the vectors.",
+  "Objectives, roles, the task shape, contexts and run bindings are declared, not authenticated; the selection threshold is a secondary, declared default (Kim et al. v1, as reported by RS-CLAUDE, not read)."
+ ],
+ "postReviewRedactions": {
+  "decision": "LOCAL-PATHS (lane monitor, owner-delegated, 2026-10-16): no absolute local path in a newly published harness-onion file; no semantic change; owner P1-3, 2026-10-17: \"Drop the hashes\"; owner PD1-1, 2026-10-17: \"Accept, fix wording\"",
+  "placeholders": {
+   "<workspace>": "the CI state directory of the operator's account",
+   "<scratch>": "the reviewer's temporary directory",
+   "<home>": "the operator account's home directory (withheld)",
+   "<tmp>": "the session's temporary directory (withheld)"
+  },
+  "recordedAs": "no digest of a removed string or of a pre-redaction file; the reviewed subjects' git tree and commit ids stay in the review records and status",
+  "files": [
+   {
+    "path": "architecture/topology-coordination/REVIEW_BRIEF.md",
+    "afterSha256": "6eb00d5ecf7329c9215c07b0fc44cb6e1815dd723f26dbbf4597afd5049ab52f",
+    "replaced": [
+     {
+      "fromForm": "<home>/.local/state/harness-onion-ci/lane-guard/HOLD_BY_VERIFY",
+      "to": "<workspace>/lane-guard/HOLD_BY_VERIFY"
+     },
+     {
+      "fromForm": "<tmp>/masra004-review.XXXX",
+      "to": "<scratch>/masra004-review.XXXX"
+     }
+    ]
+   },
+   {
+    "path": "architecture/topology-coordination/round1/REVIEW_BRIEF.md",
+    "afterSha256": "9fad2ef1b65488a20b176850305a763b52fb654a983d004e59c24ed707bf97ba",
+    "replaced": [
+     {
+      "fromForm": "<home>/.local/state/harness-onion-ci/lane-guard/HOLD_BY_VERIFY",
+      "to": "<workspace>/lane-guard/HOLD_BY_VERIFY"
+     },
+     {
+      "fromForm": "<tmp>/masra004-review.XXXX",
+      "to": "<scratch>/masra004-review.XXXX"
+     }
+    ]
+   },
+   {
+    "path": "architecture/topology-coordination/round2/REVIEW_BRIEF.md",
+    "afterSha256": "6eb00d5ecf7329c9215c07b0fc44cb6e1815dd723f26dbbf4597afd5049ab52f",
+    "replaced": [
+     {
+      "fromForm": "<home>/.local/state/harness-onion-ci/lane-guard/HOLD_BY_VERIFY",
+      "to": "<workspace>/lane-guard/HOLD_BY_VERIFY"
+     },
+     {
+      "fromForm": "<tmp>/masra004-review.XXXX",
+      "to": "<scratch>/masra004-review.XXXX"
+     }
+    ]
+   },
+   {
+    "path": "architecture/topology-coordination/round3/REVIEW_BRIEF.md",
+    "afterSha256": "6eb00d5ecf7329c9215c07b0fc44cb6e1815dd723f26dbbf4597afd5049ab52f",
+    "replaced": [
+     {
+      "fromForm": "<home>/.local/state/harness-onion-ci/lane-guard/HOLD_BY_VERIFY",
+      "to": "<workspace>/lane-guard/HOLD_BY_VERIFY"
+     },
+     {
+      "fromForm": "<tmp>/masra004-review.XXXX",
+      "to": "<scratch>/masra004-review.XXXX"
+     }
+    ]
+   },
+   {
+    "path": "architecture/topology-coordination/round4/REVIEW_BRIEF.md",
+    "afterSha256": "6eb00d5ecf7329c9215c07b0fc44cb6e1815dd723f26dbbf4597afd5049ab52f",
+    "replaced": [
+     {
+      "fromForm": "<home>/.local/state/harness-onion-ci/lane-guard/HOLD_BY_VERIFY",
+      "to": "<workspace>/lane-guard/HOLD_BY_VERIFY"
+     },
+     {
+      "fromForm": "<tmp>/masra004-review.XXXX",
+      "to": "<scratch>/masra004-review.XXXX"
+     }
+    ]
+   }
+  ]
+ }
+}

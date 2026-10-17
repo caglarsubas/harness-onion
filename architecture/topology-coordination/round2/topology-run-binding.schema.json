@@ -1,0 +1,25 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.topology-run-binding/v1",
+ "title": "Topology run binding (MAS-RA-004, internal contract candidate)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "manifestDigest",
+  "schemaVersion",
+  "topologyDigest"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.topology-run-binding/v1"
+  },
+  "topologyDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "manifestDigest": {
+   "type": "string",
+   "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+  }
+ }
+}
