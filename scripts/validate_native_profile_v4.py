@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/native-profile-v4-authority.json"
-AUTHORITY_SHA256 = "cf9b5005c36f8ef48aec8d8eba3c68782f6ff34d08644eefc0a18f97bdc3dc84"
+AUTHORITY_SHA256 = "0170e8989724665959607fa1680da3b9ea877c5d9aeab49d0ffb65c929600227"
 VALIDATOR_PATH = "scripts/validate_native_profile_v4.py"
 BASE_COMMIT = "75669de34d6305abca3bf2ddf3699f1dbb888c6e"
 NEW_PACKET = "MET-ENFORCE-033"
@@ -412,9 +412,10 @@ STATUS_KEYS = ("schemaVersion", "workItem", "packet", "status", "adoption", "bas
 # its refusal messages.
 EVIDENCE_SCOPE = ("README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model "
                   "decides — each role's capture class, for every capability set the schema admits (SERVER with and "
-                  "without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables name, "
-                  "probed through check_capture (deleted where its class requires it, added where its class forbids it) "
-                  "— and the remaining cells, which name no exact path, are prose pinned by the schema digest.")
+                  "without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables "
+                  "name, probed through the model's capture checks (deleted where its class requires it, added where "
+                  "its class forbids it) — and the remaining cells, which name no exact path, are prose pinned by the "
+                  "schema digest.")
 # The fixed column-to-class map of the class table's P1 columns and the model's capture_class results.
 EVIDENCE_COLUMNS = MappingProxyType({"OBSERVED_TARGET": "OBSERVED", "LABEL_BOUND_TARGET": "LABEL_BOUND",
                                      "OBSERVER_OWN": "DECLARED_T04"})
@@ -440,8 +441,6 @@ PROSE_FIELDS = MappingProxyType({
     "files[] (device, inode, uid, gid, nlink, contentDigest, measuredVerity)": "a group of the file measurements' fields",
     "bpfPrograms.*.pinLabel": "a wildcard over the hooks",
     "bpfPrograms.*.program.pinLabel": "a wildcard over the hooks",
-    "cgroupFrozenBefore": "the WORKER-only frozen bracket: only the WORKER capture holds it, so no column decides it",
-    "cgroupFrozenAfter": "the WORKER-only frozen bracket: only the WORKER capture holds it, so no column decides it",
     "sealMarker (path, digest, uid, mode)": "a group of the seal marker's fields",
     "process (pid, startTicks, processLabel, cgroupPath)": "a group of the backend process's fields",
     "executable (path, contentDigest, measuredVerity)": "a group of the backend executable's fields"})
@@ -457,6 +456,10 @@ DECLARED_ROLE_FIELDS = MappingProxyType({
     "process.seccompDefaultAction": ("seccompDefaultAction",), "process.cgroup.path": ("cgroup", "path"),
     "process.cgroup.selinuxLabel": ("cgroup", "selinuxLabel")})
 DECLARED_SEAL_LABEL = ("hardeningObserved.sealMarker.selinuxLabel", "sealMarker.selinuxLabel")
+# The WORKER-only frozen bracket (owner Q-NP4D-10 (a)): the class table marks cgroupFrozenBefore and cgroupFrozenAfter
+# OBSERVED in every column, and the model holds them in the WORKER capture alone, so these exact paths are probed on the
+# WORKER captures only.
+ROLE_SCOPED_FIELDS = MappingProxyType({"cgroupFrozenBefore": ("WORKER",), "cgroupFrozenAfter": ("WORKER",)})
 DECLARED_FILE_LABEL = "files[].entry.selinuxLabel"
 ROW_KEYS = ("round", "record", "recordSha256", "verdict", "subject", "subjectTree", "subjectParent", "subjectSha256",
             "severities")
@@ -658,7 +661,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/native-profile-v4/review-round2.json": "09d4035d8ab726e432a636aab9176a4d8b0a93041345b6cf7ee04a9aab89066b",
     "architecture/native-profile-v4/review-round3.json": "60f72eef0be1fea1a99ed883ff514aab966a2fee9e3bf84c0b39ac227a38e8a3",
     "architecture/native-profile-v4/source-index.json": "6e2c325054ffd5edee3d71c4163dd38bef42b6b255bbdeae5e2c37814ef178fb",
-    "architecture/native-profile-v4/status.json": "c5d3a123405f1782093f4116c16ca72541e9a0740cc74c073a7e0cd6657141ab",
+    "architecture/native-profile-v4/status.json": "b998d1151cfe7fada1d4e30829064ceaad5d9c1220f407c6c865bc47c197143c",
     "architecture/native-profile-v4/vectors.json": "dede64ab3202a9e28094f062b5dad868c13ca02423e2380af8666ecf2e7a86e6",
     "architecture/native-qualification-inputs/qualification.schema.json": "bef248bfa82b234124c014f98e40c5791bced3171bb118b7ed1bb7b8daaf95c3",
     "architecture/native-qualification-inputs/vectors.json": "cd1be009b721bb596887335184a33ab8e1f24aed8215477b63e28f058110748f",
@@ -1098,7 +1101,7 @@ def _probe(capture: dict, path: tuple, value: Any, delete: bool) -> dict:
 def validate_evidence_classes(m: types.SimpleNamespace) -> None:
     """The schema's evidenceClasses constant against this era's native-profile v4 model, through the model's own
     functions (design section 3.7; README "Open items").
-    README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model decides — each role's capture class, for every capability set the schema admits (SERVER with and without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables name, probed through check_capture (deleted where its class requires it, added where its class forbids it) — and the remaining cells, which name no exact path, are prose pinned by the schema digest.
+    README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model decides — each role's capture class, for every capability set the schema admits (SERVER with and without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables name, probed through the model's capture checks (deleted where its class requires it, added where its class forbids it) — and the remaining cells, which name no exact path, are prose pinned by the schema digest.
     (a) capture_class, called for the 5 roles on every positive record with each capability set the schema admits for
     the role (CAP_NET_BIND_SERVICE recorded or not, as the role's capabilities constant or enum allows), gives the class
     EVIDENCE_COLUMNS fixes for the column whose captureTargets text, read with the closed grammar, lists that role and
@@ -1109,7 +1112,9 @@ def validate_evidence_classes(m: types.SimpleNamespace) -> None:
     the model's check for its capture (check_capture for the P1 rows, by the capture's column; check_lifecycle_capture
     and check_backend_capture for the lifecycle and backend rows): deleted where its cell requires the field, which must
     be refused, and added where its cell forbids it, with the record's declared value (or, where the record declares
-    none, another capture's), which must be refused."""
+    none, another capture's), which must be refused; the WORKER-only frozen bracket's two paths are probed on the WORKER
+    captures only (ROLE_SCOPED_FIELDS).
+    For the OUT_OF_SCOPE_HOST, CONSISTENCY_ONLY and ENTRY_BOUND cells the probes test presence only, not the equality or consistency those classes state."""
     schema, positives = _json(NP4_SCHEMA), _json(NP4_VECTORS)["positive"]
     table, pairs, admitted = {}, {}, {}
     _bound(lambda: table.update(schema["$defs"]["evidenceClasses"]["const"]) is None and set(table) == EVIDENCE_KEYS
@@ -1147,6 +1152,10 @@ def validate_evidence_classes(m: types.SimpleNamespace) -> None:
     exact, prose = evidence_cells(table)
     _bound(lambda: sorted(field for _name, _number, field in prose) == sorted(PROSE_FIELDS),
            _evidence_message("the prose fields are exactly the listed ones"))
+    _bound(lambda: set(ROLE_SCOPED_FIELDS) <= {field for name, _number, field, _path, _presence in exact if name == "capture"}
+           and all(set(roles) <= set(CAPTURE_ROLES) for roles in ROLE_SCOPED_FIELDS.values()),
+           _evidence_message("the role-scoped fields are exact P1 paths of known roles"))
+    scoped_probes = {field: 0 for field in ROLE_SCOPED_FIELDS}
     columns = {name: column for column, name in EVIDENCE_COLUMNS.items()}
 
     def refuses(check: Any, *args: Any) -> bool:
@@ -1160,8 +1169,10 @@ def validate_evidence_classes(m: types.SimpleNamespace) -> None:
                    and m.np4.explain(m.np4.check_capture, record, capture, role, schema) is None,
                    _evidence_message("check_capture accepts the positive capture: " + role))
             for name, _number, field, path, presence in exact:
-                if name != "capture":
+                if name != "capture" or role not in ROLE_SCOPED_FIELDS.get(field, CAPTURE_ROLES):
                     continue
+                if field in scoped_probes:
+                    scoped_probes[field] += 1
                 required = presence[column[0]]
                 _bound(lambda: refuses(m.np4.check_capture, record, _probe(
                            capture, path, None if required else _declared(record, role, field, capture, p["captures"]),
@@ -1169,6 +1180,8 @@ def validate_evidence_classes(m: types.SimpleNamespace) -> None:
                        _evidence_message("check_capture refuses %s %s for %s" % (field, "deleted" if required else "added",
                                                                                 role)))
         lifecycle = p["lifecycle"]
+        _bound(lambda: all(count > 0 for count in scoped_probes.values()),
+               _evidence_message("every role-scoped field is probed on its roles' captures"))
         _bound(lambda: m.np4.explain(m.np4.check_lifecycle_capture, record, lifecycle, schema) is None,
                _evidence_message("check_lifecycle_capture accepts the positive lifecycle capture"))
         for name, _number, field, path, presence in exact:

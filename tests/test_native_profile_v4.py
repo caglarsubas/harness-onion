@@ -1335,10 +1335,13 @@ def test_the_class_table_holds_where_the_model_decides():
     named = [pair for text in table["captureTargets"].values() for pair in profile._target_pairs(text, admitted)]
     assert len(named) == 6 and sorted(named) == sorted((role, holds) for role in profile.CAPTURE_ROLES
                                                        for holds in admitted[role])
-    # The cell classification: 62 exact capture paths (47 P1, 12 lifecycle, 3 backend) and the 11 listed prose fields.
+    # The cell classification: 64 exact capture paths (49 P1, 12 lifecycle, 3 backend) and the 9 listed prose fields;
+    # the frozen bracket's two paths are exact and probed on the WORKER captures only.
     exact, prose = profile.evidence_cells(table)
     counts = {name: len([row for row in exact if row[0] == name]) for name in profile.EVIDENCE_TABLES}
-    assert counts == {"capture": 47, "lifecycleCapture": 12, "backendCapture": 3}
+    assert counts == {"capture": 49, "lifecycleCapture": 12, "backendCapture": 3} and len(profile.PROSE_FIELDS) == 9
+    assert dict(profile.ROLE_SCOPED_FIELDS) == {"cgroupFrozenBefore": ("WORKER",), "cgroupFrozenAfter": ("WORKER",)}
+    assert set(profile.ROLE_SCOPED_FIELDS) <= {row[2] for row in exact if row[0] == "capture"}
     assert sorted(field for _name, _number, field in prose) == sorted(profile.PROSE_FIELDS)
     assert all(row[3] == profile._capture_path(row[2]) for row in exact)
 
@@ -1513,6 +1516,25 @@ def test_a_p1_addition_probe_whose_refusal_disappears_is_refused(role, field):
     with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses %s added for %s"
                                                    % (field, role))):
         profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("field", ["cgroupFrozenBefore", "cgroupFrozenAfter"])
+def test_a_worker_probe_whose_refusal_disappears_is_refused(field):
+    """A model that forgives a deleted frozen-bracket field on the WORKER capture: the WORKER probe is no longer refused."""
+    m = profile.era_modules()
+    m.np4.check_capture = _forgive_deleted(m.np4.check_capture, field, ("WORKER",))
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses %s deleted for "
+                                                   "WORKER" % field)):
+        profile.validate_evidence_classes(m)
+
+
+def test_the_frozen_bracket_is_probed_on_the_worker_captures_only(monkeypatch):
+    """Without the WORKER scope the frozen bracket's paths would be required in every capture, which the model does not
+    hold: the first probe on a capture without them refuses."""
+    monkeypatch.setattr(profile, "ROLE_SCOPED_FIELDS", MappingProxyType({}))
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses "
+                                                   "cgroupFrozenBefore deleted for SERVER")):
+        profile.validate_evidence_classes(profile.era_modules())
 
 
 @pytest.mark.parametrize("field, kind", [("runFsType", "deleted"), ("domainProcessCounts", "deleted"), ("host", "deleted"),
