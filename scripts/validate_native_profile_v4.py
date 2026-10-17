@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/native-profile-v4-authority.json"
-AUTHORITY_SHA256 = "877be01e77b876f501f4eada190d1e328ce0359a3b795b8acf0819861479d77b"
+AUTHORITY_SHA256 = "7299496878b4a9eeb4786557efba0923811018c6e2171260b7270aaccaf59527"
 VALIDATOR_PATH = "scripts/validate_native_profile_v4.py"
 BASE_COMMIT = "75669de34d6305abca3bf2ddf3699f1dbb888c6e"
 NEW_PACKET = "MET-ENFORCE-033"
@@ -350,7 +350,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # it is read, and every era file is bound by digest on every read. The adoption is checked against the status record:
 # the 14 adopted files are candidate 3's bytes except edge record v5's six providerPacket values, which name this packet
 # on the same lines (no README line moved); three review rounds bound to their published records, rounds 1 and 2 also to
-# both source indexes; the verbatim adoption decision; the closed findings as the later rounds resolved them. Both models
+# both source indexes; the verbatim adoption decision; the closed findings as the later rounds resolved them. The
+# schema's label constants are cross-checked against matrix v5 (design section 3.4, D1-13). Both models
 # are executed from this era's bytes (I06 v3 with this era's I06 v1 and native-profile v4 models as its imports) and replay
 # every vector over their pinned inputs here, in the validator. Native-profile v1 to v3, I06 v1 and v2, the W02 notes
 # errata, matrix v5, seccomp v4, HS43, edge records v1 to v4 and every source-index pin stay byte-identical. This layer's
@@ -632,6 +633,17 @@ ERA_SHA256 = MappingProxyType({
     "scripts/seccomp_allowlists_v4.py": "f88e3eab1a154260b2a33d7a1eadb5a78f29d49579219d3aaf55041ec861e9bf",
     "scripts/selinux_matrix_v3.py": "86ea304f2177cf71b148233259d6ae5686d6aef7f1fa2294f9be421749776fcb",
 })
+# The schema's label table (README "Entrypoints and labels"): each subject key's executableLabel constant and the
+# interpreted roles' interpreterLabel constant, cross-checked here against matrix v5, which v4's model does not pin
+# (design section 3.4, D1-13: "schema constants cross-checked by the layer").
+MATRIX = "architecture/selinux-matrix-v3/matrix.json"
+MATRIX_VERSION = "planeon.internal.selinux-matrix/v5"
+LABEL_SUBJECTS = ("SERVER", "OBSERVER", "BROKER", "WORKER", "EFFECT_GATE", "HOST_CONTAINMENT", "POLICY_WRITER",
+                  "APISERVER", "DATASTORE", "CONTROLLER_MANAGER", "SCHEDULER", "KUBELET", "CONTAINER_RUNTIME",
+                  "SERVICE_PROXY", "NETWORK_POLICY_AGENT")
+INTERPRETED_ROLES = ("SERVER", "WORKER")
+INTERPRETER_TYPE = "planeon_interpreter_exec_t"
+TYPE_CHARACTERS = frozenset("abcdefghijklmnopqrstuvwxyz0123456789_")
 NEW_FILES = SUBJECT + (STATUS_PATH,) + tuple(NP4_DIR + "review-round%d.json" % number for number in (1, 2, 3))
 # Absolute local path markers, matched case-insensitively; spelled in parts, so this file holds none of them.
 LOCAL_PATH_MARKERS = (b"/" + b"users/", b"/" + b"private/", b".local" + b"/state")
@@ -842,6 +854,65 @@ def validate_edge_record_v5() -> None:
            "each provider path, and each new consumer path, is registered once")
 
 
+def _label_type(label: Any) -> str | None:
+    """The type of a canonical file context system_u:object_r:<type>:s0; anything else has none."""
+    parts = label.split(":") if type(label) is str else []
+    canonical_form = (len(parts) == 4 and parts[0] == "system_u" and parts[1] == "object_r" and parts[3] == "s0"
+                      and len(parts[2]) > 2 and parts[2].endswith("_t") and set(parts[2]) <= TYPE_CHARACTERS)
+    return parts[2] if canonical_form else None
+
+
+def schema_label_table(schema: dict) -> tuple[dict, dict]:
+    """The schema's executableLabel constant per subject key (roles, lifecycle subjects, backend components) and the
+    interpreterLabel constant per role, read from the constants where the schema fixes them."""
+    defs = schema["$defs"]
+    labels = {key: spec["properties"]["executableLabel"]["const"]
+              for group in ("roles", "lifecycleSubjects") for key, spec in defs[group]["properties"].items()}
+    for key, spec in defs["backendComponents"]["properties"].items():
+        consts = [part["properties"]["executableLabel"]["const"] for part in spec["allOf"]
+                  if "executableLabel" in part.get("properties", {})]
+        labels[key] = consts[0] if len(consts) == 1 else None
+    interpreters = {key: spec["properties"]["interpreterLabel"]["const"] for key, spec in defs["roles"]["properties"].items()}
+    return labels, interpreters
+
+
+def validate_label_constants() -> None:
+    """The schema's label constants against matrix v5, read from this era's bytes (design section 3.4, D1-13): each of
+    the 15 subject keys has exactly one matrix v5 domain; its label is canonical and names a declared type, with that
+    type's own label, whose ENTRYPOINT grants name exactly that domain and no other; the interpreted roles' label names
+    planeon_interpreter_exec_t, declared, with EXECUTE for their domains and no ENTRYPOINT grant."""
+    schema, matrix = _json(NP4_SCHEMA), _json(MATRIX)
+    table, declared = {}, {}
+    _bound(lambda: table.update(zip(("labels", "interpreters"), schema_label_table(schema))) is None
+           and tuple(table["labels"]) == LABEL_SUBJECTS
+           and tuple(key for key, label in table["interpreters"].items() if label is not None) == INTERPRETED_ROLES
+           and matrix["schemaVersion"] == MATRIX_VERSION,
+           "the schema's label table names the 15 subjects and the interpreted roles")
+    _bound(lambda: all(type(row) is dict and type(row["name"]) is str and type(row["access"]) is dict
+                       for row in matrix["types"])
+           and len({row["name"] for row in matrix["types"]}) == len(matrix["types"])
+           and declared.update({row["name"]: row for row in matrix["types"]}) is None,
+           "matrix v5 declares each type once")
+
+    def granted(name: str, kind: str) -> set:
+        return {row["domain"] for row in declared[name]["access"].get(kind, [])}
+
+    for key in LABEL_SUBJECTS:
+        label = table["labels"][key]
+        _bound(lambda: len([row for row in matrix["domains"] if row["subject"] == key]) == 1
+               and _label_type(label) in declared and declared[_label_type(label)]["label"] == label
+               and granted(_label_type(label), "ENTRYPOINT")
+               == {next(row["name"] for row in matrix["domains"] if row["subject"] == key)},
+               "the %s label is canonical and enters exactly its matrix v5 domain: %s" % (key, label))
+    interpreter = {label for label in table["interpreters"].values() if label is not None}
+    _bound(lambda: len(interpreter) == 1 and _label_type(min(interpreter)) == INTERPRETER_TYPE
+           and INTERPRETER_TYPE in declared and declared[INTERPRETER_TYPE]["label"] == min(interpreter)
+           and granted(INTERPRETER_TYPE, "ENTRYPOINT") == set()
+           and {row["name"] for row in matrix["domains"] if row["subject"] in INTERPRETED_ROLES}
+           <= granted(INTERPRETER_TYPE, "EXECUTE"),
+           "the interpreter label is canonical, declared, executable by the interpreted roles' domains, and enters none")
+
+
 def replay_models(m: types.SimpleNamespace) -> None:
     """Both models replay every vector over their pinned inputs, read through this era's verified bytes."""
     np4_vectors, i06_vectors = _json(NP4_VECTORS), _json(I06_VECTORS)
@@ -859,8 +930,8 @@ def replay_models(m: types.SimpleNamespace) -> None:
 
 
 def validate_native_profile_v4() -> None:
-    """Every reviewed byte and the adoption record first; then the source indexes, edge record v5, both models from this
-    era's bytes and their replays."""
+    """Every reviewed byte and the adoption record first; then the source indexes, edge record v5, the label constants
+    against matrix v5, both models from this era's bytes and their replays."""
     for path in FROZEN_PATHS:
         require(path not in _PROJECTION_RULES, FROZEN_MESSAGE)
     require(not any(path.startswith(FROZEN_PREFIXES) for path in _PROJECTION_RULES), FROZEN_MESSAGE)
@@ -869,6 +940,7 @@ def validate_native_profile_v4() -> None:
     status = validate_adoption()
     validate_source_indexes(status)
     validate_edge_record_v5()
+    validate_label_constants()
     replay_models(era_modules())
     validate_canonical_hunks()
 

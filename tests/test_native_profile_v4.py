@@ -1232,6 +1232,91 @@ def test_the_new_rows_are_restated_with_their_commits_and_this_packet():
     assert profile.ASSIGNED == ('"providerPacket": "%s"' % profile.NEW_PACKET).encode("ascii")
 
 
+def test_the_label_table_holds_against_matrix_v5():
+    labels, interpreters = profile.schema_label_table(_load(profile.NP4_SCHEMA))
+    assert tuple(labels) == profile.LABEL_SUBJECTS and all(profile._label_type(label) for label in labels.values())
+    assert {key for key, label in interpreters.items() if label is not None} == set(profile.INTERPRETED_ROLES)
+    assert profile.MATRIX in profile.ERA_SHA256 and profile.MATRIX in profile.FROZEN_PATHS
+    assert profile.validate_label_constants() is None
+
+
+def _set_label(defs, key, label):
+    if key in defs["roles"]["properties"]:
+        defs["roles"]["properties"][key]["properties"]["executableLabel"]["const"] = label
+    elif key in defs["lifecycleSubjects"]["properties"]:
+        defs["lifecycleSubjects"]["properties"][key]["properties"]["executableLabel"]["const"] = label
+    else:
+        defs["backendComponents"]["properties"][key]["allOf"][1]["properties"]["executableLabel"]["const"] = label
+
+
+def _matrix_type(matrix, name):
+    return next(row for row in matrix["types"] if row["name"] == name)
+
+
+@pytest.mark.parametrize("change, message", [
+    ("type_changed", "the BROKER label is canonical and enters exactly its matrix v5 domain"),
+    ("type_undeclared", "the POLICY_WRITER label is canonical and enters exactly its matrix v5 domain"),
+    ("backend_type_changed", "the KUBELET label is canonical and enters exactly its matrix v5 domain"),
+    ("role_not_canonical", "the EFFECT_GATE label is canonical and enters exactly its matrix v5 domain"),
+    ("range_not_canonical", "the OBSERVER label is canonical and enters exactly its matrix v5 domain"),
+    ("interpreter_type_changed", "the interpreter label is canonical, declared"),
+    ("interpreter_role_added", "the schema's label table names the 15 subjects and the interpreted roles")])
+def test_a_changed_label_constant_is_refused(monkeypatch, change, message):
+    schema = _load(profile.NP4_SCHEMA)
+    defs = schema["$defs"]
+    interpreter = defs["roles"]["properties"]["SERVER"]["properties"]["interpreterLabel"]["const"]
+    if change == "type_changed":
+        _set_label(defs, "BROKER", "system_u:object_r:planeon_worker_exec_t:s0")
+    elif change == "type_undeclared":
+        _set_label(defs, "POLICY_WRITER", "system_u:object_r:planeon_writer_exec_t:s0")
+    elif change == "backend_type_changed":
+        _set_label(defs, "KUBELET", "system_u:object_r:qualk8s_runtime_exec_t:s0")
+    elif change == "role_not_canonical":
+        _set_label(defs, "EFFECT_GATE", "system_u:system_r:planeon_gate_exec_t:s0")
+    elif change == "range_not_canonical":
+        _set_label(defs, "OBSERVER", "system_u:object_r:planeon_observer_exec_t:s0-s0")
+    elif change == "interpreter_type_changed":
+        defs["roles"]["properties"]["WORKER"]["properties"]["interpreterLabel"]["const"] = "system_u:object_r:bin_t:s0"
+    else:
+        defs["roles"]["properties"]["OBSERVER"]["properties"]["interpreterLabel"]["const"] = interpreter
+    _rebind(monkeypatch, {profile.NP4_SCHEMA: _dump(schema)})
+    with pytest.raises(ValueError, match=re.escape(message)):
+        profile.validate_label_constants()
+
+
+@pytest.mark.parametrize("change, message", [
+    ("second_entrypoint", "the EFFECT_GATE label is canonical and enters exactly its matrix v5 domain"),
+    ("entrypoint_moved", "the WORKER label is canonical and enters exactly its matrix v5 domain"),
+    ("backend_second_entrypoint", "the DATASTORE label is canonical and enters exactly its matrix v5 domain"),
+    ("two_domains", "the SERVER label is canonical and enters exactly its matrix v5 domain"),
+    ("type_label_differs", "the SERVICE_PROXY label is canonical and enters exactly its matrix v5 domain"),
+    ("interpreter_entrypoint", "the interpreter label is canonical, declared"),
+    ("interpreter_not_executable", "the interpreter label is canonical, declared"),
+    ("type_twice", "matrix v5 declares each type once")])
+def test_a_matrix_v5_change_is_refused(monkeypatch, change, message):
+    matrix = _load(profile.MATRIX)
+    if change == "second_entrypoint":
+        _matrix_type(matrix, "planeon_gate_exec_t")["access"]["ENTRYPOINT"].append({"domain": "planeon_server_t"})
+    elif change == "entrypoint_moved":
+        _matrix_type(matrix, "planeon_worker_exec_t")["access"]["ENTRYPOINT"][0]["domain"] = "planeon_broker_t"
+    elif change == "backend_second_entrypoint":
+        _matrix_type(matrix, "qualk8s_datastore_exec_t")["access"]["ENTRYPOINT"].append({"domain": "qualk8s_apiserver_t"})
+    elif change == "two_domains":
+        matrix["domains"].append(dict(matrix["domains"][0], name="planeon_server_two_t"))
+    elif change == "type_label_differs":
+        _matrix_type(matrix, "qualk8s_proxy_exec_t")["label"] = "system_u:object_r:qualk8s_proxy_exec_t:s0:c1"
+    elif change == "interpreter_entrypoint":
+        _matrix_type(matrix, profile.INTERPRETER_TYPE)["access"]["ENTRYPOINT"] = [{"domain": "planeon_worker_t"}]
+    elif change == "interpreter_not_executable":
+        access = _matrix_type(matrix, profile.INTERPRETER_TYPE)["access"]
+        access["EXECUTE"] = [row for row in access["EXECUTE"] if row["domain"] != "planeon_worker_t"]
+    else:
+        matrix["types"].append(dict(matrix["types"][0]))
+    _rebind(monkeypatch, {profile.MATRIX: _dump(matrix)})
+    with pytest.raises(ValueError, match=re.escape(message)):
+        profile.validate_label_constants()
+
+
 def test_the_models_are_executed_from_this_eras_bytes(monkeypatch):
     built = []
     original = profile._era_model
