@@ -1331,10 +1331,16 @@ def test_the_class_table_holds_where_the_model_decides():
     admitted = profile.schema_admitted(schema)
     assert admitted == {"SERVER": [False, True], "OBSERVER": [False], "BROKER": [False], "WORKER": [False],
                         "EFFECT_GATE": [False]}
-    targets = schema["$defs"]["evidenceClasses"]["const"]["captureTargets"]
-    named = [pair for text in targets.values() for pair in profile._target_pairs(text, admitted)]
+    table = schema["$defs"]["evidenceClasses"]["const"]
+    named = [pair for text in table["captureTargets"].values() for pair in profile._target_pairs(text, admitted)]
     assert len(named) == 6 and sorted(named) == sorted((role, holds) for role in profile.CAPTURE_ROLES
                                                        for holds in admitted[role])
+    # The cell classification: 62 exact capture paths (47 P1, 12 lifecycle, 3 backend) and the 11 listed prose fields.
+    exact, prose = profile.evidence_cells(table)
+    counts = {name: len([row for row in exact if row[0] == name]) for name in profile.EVIDENCE_TABLES}
+    assert counts == {"capture": 47, "lifecycleCapture": 12, "backendCapture": 3}
+    assert sorted(field for _name, _number, field in prose) == sorted(profile.PROSE_FIELDS)
+    assert all(row[3] == profile._capture_path(row[2]) for row in exact)
 
 
 def _targets_with(change):
@@ -1343,8 +1349,16 @@ def _targets_with(change):
     return schema
 
 
-def _row_1(table):
-    return next(row for row in table["capture"] if row["fields"] == list(profile.ROW_1))
+def _models_for(schema):
+    """This era's models, with the native-profile v4 model's schema pin moved to a mutated schema, so that a check
+    over the mutated table reaches the rule it names rather than the model's schema pin (packet review P1-1)."""
+    m = profile.era_modules()
+    m.np4.SCHEMA_SHA256 = m.np4.digest(m.np4.canonical(schema))
+    return m
+
+
+def _row_with(table, name, field):
+    return next(row for row in table[name] if field in row["fields"])
 
 
 @pytest.mark.parametrize("change, message", [
@@ -1363,12 +1377,18 @@ def _row_1(table):
     ("condition_forbidden", "captureTargets text outside the closed grammar or naming a capability set the schema "
                             "forbids: LABEL_BOUND_TARGET"),
     ("extra_column", "the capture columns are the fixed column-to-class map"),
+    ("extra_table", "the capture columns are the fixed column-to-class map"),
     ("role_twice", "the capture columns list every role and admitted capability set exactly once"),
     ("role_missing", "the capture columns list every role and admitted capability set exactly once"),
     ("gate_admits_capability", "capture_class decides the role's column: EFFECT_GATE with CAP_NET_BIND_SERVICE, listed "
                                "in OBSERVED_TARGET"),
     ("cell_changed", "check_capture refuses process.exe deleted for BROKER"),
-    ("cell_out_of_grammar", "row 1's cells name their column's class, present or absent")])
+    ("cell_marked_absent", "check_capture refuses process.uid added for SERVER"),
+    ("cell_out_of_grammar", "a class table row outside the closed grammar: capture row 1"),
+    ("lifecycle_cell_out_of_grammar", "a class table row outside the closed grammar: lifecycleCapture row 3"),
+    ("prose_unlisted", "a class table row outside the closed grammar: capture row 2"),
+    ("backend_prose_unlisted", "a class table row outside the closed grammar: backendCapture row 1"),
+    ("prose_made_a_path", "the prose fields are exactly the listed ones")])
 def test_a_changed_class_table_is_refused(monkeypatch, change, message):
     def edit(table):
         targets = table["captureTargets"]
@@ -1396,14 +1416,31 @@ def test_a_changed_class_table_is_refused(monkeypatch, change, message):
                                              "SERVER whose recorded capabilities include CAP_NET_BIND_SERVICE")
         elif change == "extra_column":
             targets["ENTRY_BOUND_TARGET"] = "EFFECT_GATE"
+        elif change == "extra_table":
+            table["hostCapture"] = []
         elif change == "role_twice":
             targets["LABEL_BOUND_TARGET"] = "WORKER; " + targets["LABEL_BOUND_TARGET"]
         elif change == "role_missing":
             targets["LABEL_BOUND_TARGET"] = targets["LABEL_BOUND_TARGET"].replace("WORKER; ", "")
         elif change == "cell_changed":
-            _row_1(table)["LABEL_BOUND_TARGET"] = "LABEL_BOUND"
+            # The LABEL_BOUND capture lacks process.exe, so the probe cannot delete it: the KeyError inside the probe is
+            # the refusal (_bound turns it into this message).
+            _row_with(table, "capture", "process.exe")["LABEL_BOUND_TARGET"] = "LABEL_BOUND"
+        elif change == "cell_marked_absent":
+            _row_with(table, "capture", "process.uid")["OBSERVED_TARGET"] = "OBSERVED (absent)"
         elif change == "cell_out_of_grammar":
-            _row_1(table)["OBSERVER_OWN"] = "DECLARED_T04 (not captured)"
+            _row_with(table, "capture", "process.exe")["OBSERVER_OWN"] = "DECLARED_T04 (not captured)"
+        elif change == "lifecycle_cell_out_of_grammar":
+            _row_with(table, "lifecycleCapture", "sealMarker.selinuxLabel")["class"] = "DECLARED_T04 (not captured)"
+        elif change == "prose_unlisted":
+            fields = _row_with(table, "capture", "process.uid")["fields"]
+            fields[fields.index("cgroupMembers[] (process fields)")] = "cgroupMembers[] (some process fields)"
+        elif change == "backend_prose_unlisted":
+            fields = table["backendCapture"][0]["fields"]
+            fields[fields.index("process (pid, startTicks, processLabel, cgroupPath)")] = "process (pid)"
+        elif change == "prose_made_a_path":
+            fields = _row_with(table, "capture", "bpfPrograms.*.pinLabel")["fields"]
+            fields[fields.index("bpfPrograms.*.pinLabel")] = "bpfPrograms.pinLabel"
     schema = _targets_with(edit)
     if change == "gate_admits_capability":
         # The guard: a schema that admitted CAP_NET_BIND_SERVICE for the gate would make the bare EFFECT_GATE item
@@ -1412,7 +1449,7 @@ def test_a_changed_class_table_is_refused(monkeypatch, change, message):
             "enum": [[], ["CAP_NET_BIND_SERVICE"]]}
     _rebind(monkeypatch, {profile.NP4_SCHEMA: _dump(schema)})
     with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: " + message)):
-        profile.validate_evidence_classes(profile.era_modules())
+        profile.validate_evidence_classes(_models_for(schema))
 
 
 @pytest.mark.parametrize("entry", ["LABEL_BOUND_TARGET", "OBSERVER_OWN"])
@@ -1431,39 +1468,94 @@ def test_a_model_that_moves_a_role_is_refused():
         profile.validate_evidence_classes(m)
 
 
-@pytest.mark.parametrize("field", ["process.exe", "executableMaps"])
-def test_a_probe_whose_refusal_disappears_is_refused(field):
-    """A model that forgives one deleted row-1 field: the probe that deletes it is no longer refused."""
-    m = profile.era_modules()
-    original = m.np4.check_capture
-    path = profile.ROW_1[field]
+def _forgive_deleted(original, field, roles):
+    """A model check that accepts a capture of the named roles missing the field."""
+    path = profile._capture_path(field)
 
-    def forgiving(record, capture, role, schema, previous=None):
-        node = capture
-        for key in path[:-1]:
-            node = node[key]
-        if capture["role"] in ("SERVER", "EFFECT_GATE") and path[-1] not in node:
+    def forgiving(record, capture, *args):
+        if (roles is None or capture.get("role", capture.get("component")) in roles) and not profile._has(capture, path):
             return None
-        return original(record, capture, role, schema, previous)
-    m.np4.check_capture = forgiving
+        return original(record, capture, *args)
+    return forgiving
+
+
+def _forgive_added(original, field, roles):
+    """A model check that strips the field from a capture of the named roles before checking it."""
+    path = profile._capture_path(field)
+
+    def forgiving(record, capture, *args):
+        if (roles is None or capture.get("role") in roles) and profile._has(capture, path):
+            capture = profile._probe(capture, path, None, True)
+        return original(record, capture, *args)
+    return forgiving
+
+
+@pytest.mark.parametrize("field", ["process.exe", "executableMaps", "process.uid", "memberSetBefore", "pidsCurrent",
+                                   "host", "deadlineMs"])
+def test_a_p1_deletion_probe_whose_refusal_disappears_is_refused(field):
+    """A model that forgives one deleted field on the OBSERVED captures: the probe that deletes it is no longer refused."""
+    m = profile.era_modules()
+    m.np4.check_capture = _forgive_deleted(m.np4.check_capture, field, ("SERVER", "EFFECT_GATE"))
     with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses %s deleted for "
                                                    % field)):
         profile.validate_evidence_classes(m)
 
 
-def test_a_probe_whose_addition_is_forgiven_is_refused():
-    """A model that accepts an added row-1 field on the observer's own capture."""
+@pytest.mark.parametrize("role, field", [("OBSERVER", "executableMaps"), ("OBSERVER", "process.uid"),
+                                         ("BROKER", "process.exe"), ("SERVER", "process.rlimitCore"),
+                                         ("SERVER", "process.seccompFilterDigest"), ("SERVER", "process.cgroup.selinuxLabel"),
+                                         ("SERVER", "files[].entry.selinuxLabel"),
+                                         ("SERVER", "hardeningObserved.sealMarker.selinuxLabel")])
+def test_a_p1_addition_probe_whose_refusal_disappears_is_refused(role, field):
+    """A model that accepts one added field on one role's capture: the probe that adds it is no longer refused."""
     m = profile.era_modules()
-    original = m.np4.check_capture
-
-    def forgiving(record, capture, role, schema, previous=None):
-        if role == "OBSERVER" and "executableMaps" in capture:
-            capture = {key: value for key, value in capture.items() if key != "executableMaps"}
-        return original(record, capture, role, schema, previous)
-    m.np4.check_capture = forgiving
-    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses executableMaps "
-                                                   "added for OBSERVER")):
+    m.np4.check_capture = _forgive_added(m.np4.check_capture, field, (role,))
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses %s added for %s"
+                                                   % (field, role))):
         profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("field, kind", [("runFsType", "deleted"), ("domainProcessCounts", "deleted"), ("host", "deleted"),
+                                         ("observedAt", "deleted"), ("sealMarker.selinuxLabel", "added")])
+def test_a_lifecycle_probe_whose_refusal_disappears_is_refused(field, kind):
+    m = profile.era_modules()
+    forgive = _forgive_deleted if kind == "deleted" else _forgive_added
+    m.np4.check_lifecycle_capture = forgive(m.np4.check_lifecycle_capture, field, None)
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_lifecycle_capture refuses %s %s"
+                                                   % (field, kind))):
+        profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("field", ["host", "qualificationDigest", "observedAt"])
+def test_a_backend_probe_whose_refusal_disappears_is_refused(field):
+    m = profile.era_modules()
+    m.np4.check_backend_capture = _forgive_deleted(m.np4.check_backend_capture, field, None)
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_backend_capture refuses %s "
+                                                   "deleted for APISERVER" % field)):
+        profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("check, message", [
+    ("check_capture", "check_capture accepts the positive capture: SERVER"),
+    ("check_lifecycle_capture", "check_lifecycle_capture accepts the positive lifecycle capture"),
+    ("check_backend_capture", "check_backend_capture accepts the positive backend capture: APISERVER")])
+def test_a_model_that_refuses_a_positive_capture_is_refused(check, message):
+    m = profile.era_modules()
+
+    def refusing(*args):
+        raise ValueError("refused")
+    setattr(m.np4, check, refusing)
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: " + message)):
+        profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("prefix", profile.FROZEN_PREFIXES)
+def test_no_file_this_packet_adds_may_sit_under_a_predecessor_directory(monkeypatch, prefix):
+    record = profile.authority()
+    added = dict(record, newFiles=dict(record["newFiles"], **{prefix + "added.json": "0" * 64}))
+    monkeypatch.setattr(profile, "authority", lambda: added)
+    with pytest.raises(ValueError, match=re.escape(profile.FROZEN_MESSAGE)):
+        profile.validate_native_profile_v4()
 
 
 def test_the_models_are_executed_from_this_eras_bytes(monkeypatch):
@@ -1488,6 +1580,8 @@ def test_the_models_read_no_unverified_byte(monkeypatch):
     """Every byte the check uses comes through reviewed_bytes and every mode through reviewed_mode: with those served from
     memory and every other file read refused, the whole check still holds (the models read nothing themselves)."""
     profile.era_modules()   # the models' library imports load before reads are refused
+    record = profile.authority()   # the chain's own authority read, checked by the generic routes, is pinned here
+    monkeypatch.setattr(profile, "authority", lambda: record)
     paths = set(profile.ERA_SHA256) | set(profile._PROJECTION_RULES)
     served = {path: profile.reviewed_bytes(path) for path in paths}
     modes = {row[0]: profile.reviewed_mode(row[0]) for row in profile.NEW_ROWS}

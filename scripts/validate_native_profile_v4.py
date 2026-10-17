@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/native-profile-v4-authority.json"
-AUTHORITY_SHA256 = "d12c46407d2e8e36ab040de59ca658bad1f40dc3f8531492d0e2f23b0ead8b22"
+AUTHORITY_SHA256 = "cf9b5005c36f8ef48aec8d8eba3c68782f6ff34d08644eefc0a18f97bdc3dc84"
 VALIDATOR_PATH = "scripts/validate_native_profile_v4.py"
 BASE_COMMIT = "75669de34d6305abca3bf2ddf3699f1dbb888c6e"
 NEW_PACKET = "MET-ENFORCE-033"
@@ -407,12 +407,14 @@ ROUNDS = ((1, "CHANGES_REQUIRED", "0a2ecd7157e732b8d7965ed6e985203e733b1d19", "e
 STATUS_KEYS = ("schemaVersion", "workItem", "packet", "status", "adoption", "baseMain", "reviewBase", "contracts",
                "adoptedSubject", "adoptionEdit", "independentReviewer", "readmeStatusNote", "recordPaths", "rounds",
                "closedFindings", "carried", "nonClaims", "evidenceClassesScope")
-# The evidenceClasses cross-check's scope, in the lane monitor's words (owner-delegated, 2026-10-17): this sentence
-# appears in the status record, in validate_evidence_classes's docstring and in its refusal messages.
+# The evidenceClasses cross-check's scope, in the words the lane monitor agreed (owner-delegated, 2026-10-17, after
+# packet review round 1): this sentence appears in the status record, in validate_evidence_classes's docstring and in
+# its refusal messages.
 EVIDENCE_SCOPE = ("README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model "
                   "decides — each role's capture class, for every capability set the schema admits (SERVER with and "
-                  "without CAP_NET_BIND_SERVICE), against its column, and row 1's four fields probed through check_capture "
-                  "— and the per-field, lifecycle and backend rows are prose pinned by the schema digest.")
+                  "without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables name, "
+                  "probed through check_capture (deleted where its class requires it, added where its class forbids it) "
+                  "— and the remaining cells, which name no exact path, are prose pinned by the schema digest.")
 # The fixed column-to-class map of the class table's P1 columns and the model's capture_class results.
 EVIDENCE_COLUMNS = MappingProxyType({"OBSERVED_TARGET": "OBSERVED", "LABEL_BOUND_TARGET": "LABEL_BOUND",
                                      "OBSERVER_OWN": "DECLARED_T04"})
@@ -423,9 +425,39 @@ CAPABILITY = "CAP_NET_BIND_SERVICE"
 TARGET_SUFFIXES = (("", None), (" (its own capture)", None),
                    (" whose recorded capabilities include " + CAPABILITY, True),
                    (" whose recorded capabilities exclude " + CAPABILITY, False))
-# Row 1 of the class table, in its order, and where each field sits in a capture.
-ROW_1 = MappingProxyType({"process.exe": ("process", "exe"), "cgroupMembers[].exe": ("cgroupMembers", 0, "exe"),
-                          "executableMaps": ("executableMaps",), "process.namespaceInodes": ("process", "namespaceInodes")})
+# The class tables (the P1 capture rows, the lifecycle and the backend rows) and their closed cell grammar. A field is
+# either an exact capture path (dot-separated names; a name ending in "[]" stands for each element and is probed on the
+# first), probed through the model, or one of the prose fields listed here with why it names no exact path; any other
+# field refuses. A cell is one of the table's classes, alone (the field is in the capture) or marked absent with one of
+# the listed notes (the field is not in the capture); any other cell refuses.
+EVIDENCE_TABLES = ("capture", "lifecycleCapture", "backendCapture")
+EVIDENCE_KEYS = frozenset({"classes", "captureTargets", "capture", "lifecycleCapture", "backendCapture", "capturer"})
+ABSENCE_NOTES = ("", "; corroborated by process.seccompFilters and cgroupMembers[].seccompFilters", "; no corroboration")
+PROSE_FIELDS = MappingProxyType({
+    "cgroupMembers[] (process fields)": "a group of every member's process fields",
+    "process.cgroup (inode, limits)": "a group of the role cgroup's fields",
+    "cgroupMembers (count)": "a count, not a path",
+    "files[] (device, inode, uid, gid, nlink, contentDigest, measuredVerity)": "a group of the file measurements' fields",
+    "bpfPrograms.*.pinLabel": "a wildcard over the hooks",
+    "bpfPrograms.*.program.pinLabel": "a wildcard over the hooks",
+    "cgroupFrozenBefore": "the WORKER-only frozen bracket: only the WORKER capture holds it, so no column decides it",
+    "cgroupFrozenAfter": "the WORKER-only frozen bracket: only the WORKER capture holds it, so no column decides it",
+    "sealMarker (path, digest, uid, mode)": "a group of the seal marker's fields",
+    "process (pid, startTicks, processLabel, cgroupPath)": "a group of the backend process's fields",
+    "executable (path, contentDigest, measuredVerity)": "a group of the backend executable's fields"})
+# An added field carries the record's declared value: the role's own field (roles[role]), the seal marker's label, or
+# the label of the file the capture's first file entry names. A field the record does not declare carries its value in
+# another capture of the same positive that holds it.
+DECLARED_ROLE_FIELDS = MappingProxyType({
+    "process.uid": ("uid",), "process.gid": ("gid",), "process.processLabel": ("processLabel",),
+    "process.namespaceInodes": ("namespaceInodes",), "process.seccompMode": ("seccompMode",),
+    "process.noNewPrivs": ("noNewPrivs",), "process.capPermitted": ("capabilities",),
+    "process.capEffective": ("capabilities",), "process.capBounding": ("capabilities",),
+    "process.rlimitCore": ("rlimitCore",), "process.seccompFilterDigest": ("seccompFilterDigest",),
+    "process.seccompDefaultAction": ("seccompDefaultAction",), "process.cgroup.path": ("cgroup", "path"),
+    "process.cgroup.selinuxLabel": ("cgroup", "selinuxLabel")})
+DECLARED_SEAL_LABEL = ("hardeningObserved.sealMarker.selinuxLabel", "sealMarker.selinuxLabel")
+DECLARED_FILE_LABEL = "files[].entry.selinuxLabel"
 ROW_KEYS = ("round", "record", "recordSha256", "verdict", "subject", "subjectTree", "subjectParent", "subjectSha256",
             "severities")
 EDIT_KEYS = ("path", "replaced", "with", "count", "rows", "candidateSha256", "adoptedSha256", "lineCount")
@@ -626,7 +658,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/native-profile-v4/review-round2.json": "09d4035d8ab726e432a636aab9176a4d8b0a93041345b6cf7ee04a9aab89066b",
     "architecture/native-profile-v4/review-round3.json": "60f72eef0be1fea1a99ed883ff514aab966a2fee9e3bf84c0b39ac227a38e8a3",
     "architecture/native-profile-v4/source-index.json": "6e2c325054ffd5edee3d71c4163dd38bef42b6b255bbdeae5e2c37814ef178fb",
-    "architecture/native-profile-v4/status.json": "5abcb2220e3a5e6a9a89713aeeec024ae0a7d7faf707f701b61122a1b0d56110",
+    "architecture/native-profile-v4/status.json": "c5d3a123405f1782093f4116c16ca72541e9a0740cc74c073a7e0cd6657141ab",
     "architecture/native-profile-v4/vectors.json": "dede64ab3202a9e28094f062b5dad868c13ca02423e2380af8666ecf2e7a86e6",
     "architecture/native-qualification-inputs/qualification.schema.json": "bef248bfa82b234124c014f98e40c5791bced3171bb118b7ed1bb7b8daaf95c3",
     "architecture/native-qualification-inputs/vectors.json": "cd1be009b721bb596887335184a33ab8e1f24aed8215477b63e28f058110748f",
@@ -967,35 +999,121 @@ def _target_pairs(text: Any, admitted: dict) -> list:
     return pairs
 
 
-def _probe(capture: dict, path: tuple, donor: dict | None) -> dict:
-    """The capture with one row-1 field deleted (donor None), or added with an OBSERVED capture's value."""
-    probe = copy.deepcopy(capture)
-    node, source = probe, donor
+def _capture_path(field: Any) -> tuple | None:
+    """The capture path a field names exactly: dot-separated names, a name ending in [] standing for each element
+    (probed on the first); None for any other text."""
+    if type(field) is not str:
+        return None
+    path: list = []
+    for name in field.split("."):
+        each = name.endswith("[]")
+        name = name[:-2] if each else name
+        if not (name and name.isascii() and name.isalpha()):
+            return None
+        path += [name, 0] if each else [name]
+    return tuple(path)
+
+
+def _cell_present(cell: Any, classes: Any) -> bool:
+    """A class-table cell read with the closed grammar: True for a class alone (the field is in the capture), False for
+    a class marked absent with a listed note (it is not); any other cell refuses."""
+    require(type(cell) is str and type(classes) is list, "class table cell")
+    if cell in classes:
+        return True
+    marked = [name for name in classes for note in ABSENCE_NOTES if cell == name + " (absent" + note + ")"]
+    require(len(marked) == 1, "class table cell outside the grammar")
+    return False
+
+
+def evidence_cells(table: dict) -> tuple[list, list]:
+    """Every row field of the three class tables, read with the closed grammar: the exact capture paths, each with
+    (table, row number, field, path, presence per P1 column or None), and the prose fields (table, row number, field).
+    A field that is neither an exact path nor a listed prose field refuses."""
+    exact, prose = [], []
+    for name in EVIDENCE_TABLES:
+        for number, row in enumerate(table[name], 1):
+            cells = ({column: row[column] for column in EVIDENCE_COLUMNS} if name == "capture" else {None: row["class"]})
+            presence = {column: _cell_present(cell, table["classes"]) for column, cell in cells.items()}
+            require(type(row["fields"]) is list and len(row["fields"]) > 0, "class table row")
+            for field in row["fields"]:
+                path = _capture_path(field)
+                require(field in PROSE_FIELDS or path is not None,
+                        "a class table field neither an exact capture path nor listed prose")
+                if field in PROSE_FIELDS:
+                    prose.append((name, number, field))
+                else:
+                    exact.append((name, number, field, path, presence))
+    return exact, prose
+
+
+def _has(value: Any, path: tuple) -> bool:
+    for key in path:
+        if not ((type(value) is dict and key in value) or (type(value) is list and type(key) is int and key < len(value))):
+            return False
+        value = value[key]
+    return True
+
+
+def _at(value: Any, path: tuple) -> Any:
+    for key in path:
+        value = value[key]
+    return value
+
+
+def _declared(record: dict, role: str | None, field: str, capture: dict, others: list) -> Any:
+    """The value an added field carries: the record's declared value, or, where the record declares none, the value in
+    another capture of the same positive that holds the field."""
+    if field in DECLARED_ROLE_FIELDS:
+        return _at(record["roles"][role], DECLARED_ROLE_FIELDS[field])
+    if field in DECLARED_SEAL_LABEL:
+        return record["hardening"]["sealMarker"]["selinuxLabel"]
+    if field == DECLARED_FILE_LABEL:
+        path = capture["files"][0]["entry"]["path"]
+        rows = [row for row in record["files"] if row["path"] == path]
+        require(len(rows) == 1, "the record declares the file")
+        return rows[0]["selinuxLabel"]
+    path = _capture_path(field)
+    holders = [other for other in others if path is not None and _has(other, path)]
+    require(len(holders) > 0, "another capture holds the field")
+    return _at(holders[0], path)
+
+
+def _probe(capture: dict, path: tuple, value: Any, delete: bool) -> dict:
+    """The capture with one field deleted, or added with the given value; only the containers on the path are copied,
+    so the positive is never changed."""
+    probe = dict(capture)
+    node = probe
     for key in path[:-1]:
-        node = node[key]
-        source = None if donor is None else source[key]
-    if donor is None:
+        child = node[key]
+        child = list(child) if type(child) is list else dict(child)
+        node[key] = child
+        node = child
+    if delete:
         del node[path[-1]]
     else:
-        node[path[-1]] = copy.deepcopy(source[path[-1]])
+        node[path[-1]] = copy.deepcopy(value)
     return probe
 
 
 def validate_evidence_classes(m: types.SimpleNamespace) -> None:
     """The schema's evidenceClasses constant against this era's native-profile v4 model, through the model's own
     functions (design section 3.7; README "Open items").
-    README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model decides — each role's capture class, for every capability set the schema admits (SERVER with and without CAP_NET_BIND_SERVICE), against its column, and row 1's four fields probed through check_capture — and the per-field, lifecycle and backend rows are prose pinned by the schema digest.
+    README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model decides — each role's capture class, for every capability set the schema admits (SERVER with and without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables name, probed through check_capture (deleted where its class requires it, added where its class forbids it) — and the remaining cells, which name no exact path, are prose pinned by the schema digest.
     (a) capture_class, called for the 5 roles on every positive record with each capability set the schema admits for
     the role (CAP_NET_BIND_SERVICE recorded or not, as the role's capabilities constant or enum allows), gives the class
     EVIDENCE_COLUMNS fixes for the column whose captureTargets text, read with the closed grammar, lists that role and
     capability set: a role listed without a condition stands for every set the schema admits for it, a condition naming
-    a set the schema forbids refuses, and the columns list every admitted role and set exactly once. (b) Row 1's cells are
-    their column's class, present or "(absent)"; on every positive capture, which check_capture accepts, deleting each
-    of row 1's four fields is refused where the cell is present, and adding it (with an OBSERVED capture's value) is
-    refused where the cell is absent."""
+    a set the schema forbids refuses, and the columns list every admitted role and set exactly once. (b) Every row field
+    of the three class tables is an exact capture path or a listed prose field, and every cell is a class alone or marked
+    absent (the closed grammar). On every positive, whose captures the model accepts, each exact path is probed through
+    the model's check for its capture (check_capture for the P1 rows, by the capture's column; check_lifecycle_capture
+    and check_backend_capture for the lifecycle and backend rows): deleted where its cell requires the field, which must
+    be refused, and added where its cell forbids it, with the record's declared value (or, where the record declares
+    none, another capture's), which must be refused."""
     schema, positives = _json(NP4_SCHEMA), _json(NP4_VECTORS)["positive"]
     table, pairs, admitted = {}, {}, {}
-    _bound(lambda: table.update(schema["$defs"]["evidenceClasses"]["const"]) is None
+    _bound(lambda: table.update(schema["$defs"]["evidenceClasses"]["const"]) is None and set(table) == EVIDENCE_KEYS
+           and all(type(table[name]) is list and all(type(row) is dict for row in table[name]) for name in EVIDENCE_TABLES)
            and admitted.update(schema_admitted(schema)) is None
            and tuple(m.np4.ROLES) == CAPTURE_ROLES and tuple(table["captureTargets"]) == tuple(EVIDENCE_COLUMNS)
            and set(EVIDENCE_COLUMNS.values()) <= set(table["classes"]),
@@ -1021,28 +1139,59 @@ def validate_evidence_classes(m: types.SimpleNamespace) -> None:
                    and all(decided(p, role, holds) == EVIDENCE_COLUMNS[column] for p in positives),
                    _evidence_message("capture_class decides the role's column: %s %s %s, listed in %s"
                                      % (role, "with" if holds else "without", CAPABILITY, column)))
-    row1 = [item for item in table["capture"] if type(item) is dict and item.get("fields") == list(ROW_1)]
-    _bound(lambda: len(row1) == 1
-           and all(row1[0][column] in (name, name + " (absent)") for column, name in EVIDENCE_COLUMNS.items()),
-           _evidence_message("row 1's cells name their column's class, present or absent"))
-    absent = {name: row1[0][column].endswith(" (absent)") for column, name in EVIDENCE_COLUMNS.items()}
+    for name in EVIDENCE_TABLES:
+        for number, row in enumerate(table[name], 1):
+            _bound(lambda: evidence_cells(dict(table, **{other: [] for other in EVIDENCE_TABLES if other != name},
+                                               **{name: [row]})) is not None,
+                   _evidence_message("a class table row outside the closed grammar: %s row %d" % (name, number)))
+    exact, prose = evidence_cells(table)
+    _bound(lambda: sorted(field for _name, _number, field in prose) == sorted(PROSE_FIELDS),
+           _evidence_message("the prose fields are exactly the listed ones"))
+    columns = {name: column for column, name in EVIDENCE_COLUMNS.items()}
+
+    def refuses(check: Any, *args: Any) -> bool:
+        return m.np4.explain(check, *args) is not None
+
     for p in positives:
-        record, donors = p["record"], []
-        _bound(lambda: donors.extend(capture for capture in p["captures"]
-                                     if absent.get(m.np4.capture_class(record, capture["role"])) is False) is None
-               and len(donors) > 0,
-               _evidence_message("every positive holds a capture whose row-1 cells are present"))
+        record = p["record"]
         for capture in p["captures"]:
-            role, decision = capture["role"], []
-            _bound(lambda: decision.append(m.np4.capture_class(record, role)) is None and decision[0] in absent
+            role, column = capture["role"], []
+            _bound(lambda: column.append(columns[m.np4.capture_class(record, role)]) is None
                    and m.np4.explain(m.np4.check_capture, record, capture, role, schema) is None,
                    _evidence_message("check_capture accepts the positive capture: " + role))
-            adds = absent[decision[0]]
-            for field, path in ROW_1.items():
-                _bound(lambda: m.np4.explain(m.np4.check_capture, record,
-                                             _probe(capture, path, donors[0] if adds else None), role, schema) is not None,
-                       _evidence_message("check_capture refuses %s %s for %s" % (field, "added" if adds else "deleted",
+            for name, _number, field, path, presence in exact:
+                if name != "capture":
+                    continue
+                required = presence[column[0]]
+                _bound(lambda: refuses(m.np4.check_capture, record, _probe(
+                           capture, path, None if required else _declared(record, role, field, capture, p["captures"]),
+                           required), role, schema),
+                       _evidence_message("check_capture refuses %s %s for %s" % (field, "deleted" if required else "added",
                                                                                 role)))
+        lifecycle = p["lifecycle"]
+        _bound(lambda: m.np4.explain(m.np4.check_lifecycle_capture, record, lifecycle, schema) is None,
+               _evidence_message("check_lifecycle_capture accepts the positive lifecycle capture"))
+        for name, _number, field, path, presence in exact:
+            if name != "lifecycleCapture":
+                continue
+            required = presence[None]
+            _bound(lambda: refuses(m.np4.check_lifecycle_capture, record, _probe(
+                       lifecycle, path, None if required else _declared(record, None, field, lifecycle, []), required),
+                       schema),
+                   _evidence_message("check_lifecycle_capture refuses %s %s" % (field, "deleted" if required else "added")))
+        for backend in p["backendCaptures"]:
+            component = backend["component"]
+            _bound(lambda: m.np4.explain(m.np4.check_backend_capture, record, backend, schema) is None,
+                   _evidence_message("check_backend_capture accepts the positive backend capture: " + str(component)))
+            for name, _number, field, path, presence in exact:
+                if name != "backendCapture":
+                    continue
+                required = presence[None]
+                _bound(lambda: refuses(m.np4.check_backend_capture, record, _probe(
+                           backend, path, None if required else _declared(record, None, field, backend, []), required),
+                           schema),
+                       _evidence_message("check_backend_capture refuses %s %s for %s"
+                                         % (field, "deleted" if required else "added", component)))
 
 
 def replay_models(m: types.SimpleNamespace) -> None:
@@ -1067,7 +1216,9 @@ def validate_native_profile_v4() -> None:
     decides, and the replays."""
     for path in FROZEN_PATHS:
         require(path not in _PROJECTION_RULES, FROZEN_MESSAGE)
-    require(not any(path.startswith(FROZEN_PREFIXES) for path in _PROJECTION_RULES), FROZEN_MESSAGE)
+    # Neither a file this packet changes nor one it adds may sit under a predecessor's directory (packet review P1-3).
+    added = authority()["newFiles"]
+    require(not any(path.startswith(FROZEN_PREFIXES) for path in list(_PROJECTION_RULES) + list(added)), FROZEN_MESSAGE)
     for path in ERA_SHA256:
         _verified(path)
     status = validate_adoption()
