@@ -1,0 +1,41 @@
+{
+  "subject": {
+    "commit": "5a3e6820cf23325dd8c68f8c083d53ac805f2b06",
+    "tree": "f8ce4ab0d73588437020e6ee49ac260584b22c58",
+    "parent": "3c34a3a5ff5879d2bcf5e6691bc08eeaf59dbf41",
+    "changeSurface": "git diff 3c34a3a5..5a3e6820: 11 files (schema label patterns, model _type and census, v4 vectors N192-N200 and A16, READMEs, briefs, source indexes, edge v5 and README-v5)",
+    "earlierRecords": "round 1 sha256 6a22a9ae1d42..., round 2 sha256 09d4035d8ab7... (both equal the earlierRounds digests in the two source indexes)"
+  },
+  "reviewer": "independent agent",
+  "verdict": "PASS_FOR_ADOPTION",
+  "round2Resolutions": [
+    {"id": "N2-1", "status": "RESOLVED", "evidence": "The schema now admits only 'system_u:object_r:[a-z0-9_]+_t:s0' for files[].selinuxLabel and backendFiles[].selinuxLabel, and the model compares type fields (_type) in the entrypoint, backend exec and interpreter rules and in both parts of the in-set census. With canonical labels, type equality is the same as string equality. All six round-2 spelling probes (another user, an MCS category, role system_r on a planeon and on a backend file, an MCS interpreter type, range s0-s0) are refused by the schema pattern under check_record and check_qualification. The exact-constant control is refused by the census, and an ordinary library in its own type is accepted (A16). N192-N200 pin these, each a single schema error. The README's 'cannot declare a second entry file ... under any spelling' is now true."},
+    {"id": "N2-2", "status": "RESOLVED", "evidence": "By code reading: entry_files is seeded with all eight backend exec types, read from the schema's backendComponents constants (schema digest-pinned by _shape before use) and mapped to None, so a file whose type belongs to an absent component is refused. It cannot be reached in data under v4: the only backend profile's componentKeys const lists all eight. The README records it as a successor guard."},
+    {"id": "N2-3", "status": "RESOLVED", "evidence": "The I06 v3 README title, the status lines and the briefs now say round 3."}
+  ],
+  "findings": [],
+  "builderReadingAssessed": {
+    "reading": "No path-conditional schema rules for executable files; the fixed types are enforced by the model through the executableLabel and interpreterLabel constants",
+    "position": "sound",
+    "reason": "The constants are schema consts, so the type is closed in the schema as design §3.4/D1-13 requires. The model compares each subject's executable file with its constant, and the interpreted closures' executable-segment files with interpreterLabel. Labels are canonical, so the comparison is exact, and it is reachable and pinned (N63-N66, N68-N70, N75, N76). For backends a path-conditional rule is impossible, because their executable paths are data, not schema constants. For planeon roles it would only duplicate the model rule and make it unreachable. Coverage is complete: every enrolled file is owned by some closure (v3), each subject executable's type is fixed, and the census refuses any other file carrying an entrypoint, exec or interpreter type."
+  },
+  "wholeStringCaptureEqualitiesAssessed": {
+    "position": "no gap",
+    "reason": "After v4 removed the declared labels from captures, the only capture-to-record label comparisons left are processLabel: the inspected process and each member against the role's record processLabel, and each backend capture against its component's processLabel. Each of these record values is a schema const. Equality with a constant only refuses: a variant spelling of the right type fails closed and is never accepted. No rule accepts on capture-label inequality. domainProcessCounts are keyed by type, and backend-domain separation uses the type field or per-component constants. The record-side whole-string checks (roleCgroup, pin and seal-marker labels, processLabel) also compare with constants."
+  },
+  "checks": [
+    {"check": "Subject identity and diff: rev-parse of commit, tree and parent; diff --stat and full model and schema diff 3c34a3a5..5a3e6820; README, README-v5 and I06 README diffs read", "result": "5a3e6820 / f8ce4ab0 on 3c34a3a5; changes as the coordinator listed"},
+    {"check": "Both models' own vector replays from a git-archive copy in r3 WORK (enforcement-test, conformance-labs and w04 paths excluded, 0 present; python3 -I -B, timeout 600, after PAUSE and HOLD waits)", "result": "native_qualification_v4.check_vectors 504 checks (5 + 444 + 18 + 15 + 22); i06_backend_profile_v3.check_vectors 151; both pass. Every v3 and errata case keeps its refusal, and CHANGED_V3_REFUSALS is unchanged"},
+    {"check": "probes.py (round-1 probes) and probes2.py (round-2 probes) re-run", "result": "probes.py: 34 probes, 27 should-refuse, UNSOUND []. probes2.py: 12 probes, 9 should-refuse, UNSOUND []; planeon_maint_exec_t and qualk8s_container_file_t still accepted (informational; the open item stands as weighed in round 2)"},
+    {"check": "negatives.py: N01-N200 single-defect analysis and reviewer variants", "result": "132 schema refusals, each exactly one schema error; 68 model refusals, each on schema-valid data; all variants refused by their named rules"},
+    {"check": "Edge v5 against the adopted v4 and the candidate blobs; source indexes", "result": "45 rows identical and in order, supersedes unchanged; the changed rows are the v4 schema, vectors and README and the I06 v3 README (c3e91c08..., dede64ab..., a4205a53..., 9ee406f4...), all equal to their blobs; both source indexes 0 mismatches, round 3"},
+    {"check": "Personal-data scan of the added lines in the round-3 diff", "result": "none"},
+    {"check": "Independence and hygiene", "result": "No R12 repository, tools/w04, W04 memory, enforcement-test or conformance-labs path opened; no .pyc written; no git state changed; no pytest, validators, builds or cargo"}
+  ],
+  "actions": {
+    "filesEdited": false,
+    "networkAccessed": "none",
+    "personalDataSent": false,
+    "inventoryToolingAttempted": false
+  }
+}

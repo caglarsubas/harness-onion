@@ -1,0 +1,216 @@
+{
+ "schemaVersion": "planeon.internal.native-profile-v4-status/v1",
+ "workItem": "NATIVE-PROFILE-V4",
+ "packet": "MET-ENFORCE-033",
+ "status": "ADOPTED",
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated",
+  "date": "2026-10-16",
+  "decision": "[lane monitor] **ADOPTED**: native-profile v4 + I06 v3 contract candidate 3. Monitor decision (owner-delegated), 2026-10-16, on r3 PASS_FOR_ADOPTION."
+ },
+ "baseMain": "75669de34d6305abca3bf2ddf3699f1dbb888c6e",
+ "reviewBase": "b0635f81e5ba3b6538fc0cfd28a78f0fea962f50",
+ "contracts": {
+  "nativeProfileV4": {
+   "schema": "architecture/native-profile-v4/qualification.schema.json",
+   "vectors": "architecture/native-profile-v4/vectors.json",
+   "model": "scripts/native_qualification_v4.py",
+   "readme": "architecture/native-profile-v4/README.md",
+   "sourceIndex": "architecture/native-profile-v4/source-index.json"
+  },
+  "i06BackendProfileV3": {
+   "criteria": "architecture/i06-backend-profile-v3/criteria.json",
+   "vectors": "architecture/i06-backend-profile-v3/vectors.json",
+   "model": "scripts/i06_backend_profile_v3.py",
+   "readme": "architecture/i06-backend-profile-v3/README.md",
+   "sourceIndex": "architecture/i06-backend-profile-v3/source-index.json"
+  },
+  "edgeRecordV5": {
+   "record": "architecture/artifact-edges/operator-harness-engineering-v5.json",
+   "readme": "architecture/artifact-edges/README-v5.md"
+  }
+ },
+ "adoptedSubject": {
+  "architecture/native-profile-v4/README.md": "a4205a5388dc83827bb39670bcc9477b030f29829128abf19f7578321c170174",
+  "architecture/native-profile-v4/REVIEW_BRIEF.md": "293b9fc1f4affd9be0ff5d38bbc15dae902c22f5761a0ecdbc82d4f9c24fefea",
+  "architecture/native-profile-v4/qualification.schema.json": "c3e91c087ebc6a13e8a96a066f80710ac968c8def434d1d1b97415811715ed10",
+  "architecture/native-profile-v4/vectors.json": "dede64ab3202a9e28094f062b5dad868c13ca02423e2380af8666ecf2e7a86e6",
+  "architecture/native-profile-v4/source-index.json": "6e2c325054ffd5edee3d71c4163dd38bef42b6b255bbdeae5e2c37814ef178fb",
+  "scripts/native_qualification_v4.py": "f7c718072d1ffbb9b8bbc310e6141d476ea5f25296f70ff8c1bc9ada3db02387",
+  "architecture/i06-backend-profile-v3/README.md": "9ee406f43060f266a7b5dd2679aa8352f0815584c45e33d0ab193ea7f90c0c77",
+  "architecture/i06-backend-profile-v3/REVIEW_BRIEF.md": "ca7bbf5e858c940b32058acf8475242fb1ad898afb92584bfac7f79914f93891",
+  "architecture/i06-backend-profile-v3/criteria.json": "752533c57b5f93e4c4158a9c17b52eb88d236a3632ab0b66b669e8f8041f57c7",
+  "architecture/i06-backend-profile-v3/vectors.json": "4752b648abdd82d21ea622a1b26c721143577478c0a2491204e0d584c1d6f081",
+  "architecture/i06-backend-profile-v3/source-index.json": "7740a01dcd1a9fe41a106532d5ddde37a1cce70e2244c6638d480953532a14c1",
+  "scripts/i06_backend_profile_v3.py": "dfb00e90199d436ae63b79261f2e04870d7861cb0f7a424971657a4d777754de",
+  "architecture/artifact-edges/operator-harness-engineering-v5.json": "89b47ef8f865b31911eb8da2b08a5a3c22b2d92a62599cb6fdfccbfe7f79e3c0",
+  "architecture/artifact-edges/README-v5.md": "6409a17c2fb0b5ae5df3055c86a3e4cb1e2cb3deacd490c4d547cc1d50a9b6ad"
+ },
+ "adoptionEdit": {
+  "path": "architecture/artifact-edges/operator-harness-engineering-v5.json",
+  "replaced": "\"providerPacket\": \"TBD\"",
+  "with": "\"providerPacket\": \"MET-ENFORCE-033\"",
+  "count": 6,
+  "rows": [
+   "architecture/native-profile-v4/qualification.schema.json",
+   "architecture/native-profile-v4/vectors.json",
+   "architecture/native-profile-v4/README.md",
+   "architecture/i06-backend-profile-v3/vectors.json",
+   "architecture/i06-backend-profile-v3/criteria.json",
+   "architecture/i06-backend-profile-v3/README.md"
+  ],
+  "candidateSha256": "bca25c0c221e7a539a1b5ccb0cab4bb4891be60d663ff64f2ac4dd62f8d75438",
+  "adoptedSha256": "89b47ef8f865b31911eb8da2b08a5a3c22b2d92a62599cb6fdfccbfe7f79e3c0",
+  "lineCount": 610
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "Every adopted file except edge record v5 is candidate 3's bytes: architecture/native-profile-v4/README.md, architecture/i06-backend-profile-v3/README.md, architecture/artifact-edges/README-v5.md and both REVIEW_BRIEF.md files keep their reviewed text, including the 'CONTRACT_CANDIDATE_ROUND3_AWAITING_INDEPENDENT_REVIEW' status lines and the lines saying that the packet id is assigned with the slot at adoption; no README line moved. Edge record v5's six providerPacket values are the one adoption edit, on the same lines; the assignment to MET-ENFORCE-033 is recorded here only",
+ "recordPaths": "The three review records are published byte-identical to the reviewer's records and hold no local path or personal data; each recordSha256 is of the published bytes. The contract-review brief is not published (the in-repo REVIEW_BRIEF.md files are the published briefs), and no round copies are published: each round's subject is recorded by its commit, tree and parent and the SHA-256 of its 14 files",
+ "rounds": [
+  {
+   "round": 1,
+   "record": "architecture/native-profile-v4/review-round1.json",
+   "recordSha256": "6a22a9ae1d422def7d487780da79b9ddb84d9283dabf53a7c5bfc952463e34d9",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": "0a2ecd7157e732b8d7965ed6e985203e733b1d19",
+   "subjectTree": "e68017219f4736c828818389d2c07b0fcd1ae696",
+   "subjectParent": "b0635f81e5ba3b6538fc0cfd28a78f0fea962f50",
+   "subjectSha256": {
+    "architecture/native-profile-v4/README.md": "eba4a12b99f62428ab5a612dbf3df1c247579ce126b44245babc9f9a7d304e2a",
+    "architecture/native-profile-v4/REVIEW_BRIEF.md": "e5c88d38dd9bef473eaf5c166c9d16bf87477856599592628c083a1583859259",
+    "architecture/native-profile-v4/qualification.schema.json": "357b3d6e465780310bce82a7547ee6ac5121d01129a5bebcc2ea751663369236",
+    "architecture/native-profile-v4/vectors.json": "f5bd7a85aa403d878ee35a57fbdba94847bcc6a4c540968071d2b765c57b4d9d",
+    "architecture/native-profile-v4/source-index.json": "11be18396803c89eb1c5b64d20fc8c09e4716315267d66cb0a64c4a173953d40",
+    "scripts/native_qualification_v4.py": "26e17c4d25b99ee99211774f95bf268176aaa87ae114e424adeeb1e20b127d56",
+    "architecture/i06-backend-profile-v3/README.md": "6227d92f3b9a6039b2bdb18e903b77e01687ffe9308fc1a15d7731e62d795709",
+    "architecture/i06-backend-profile-v3/REVIEW_BRIEF.md": "4b647a9ac71b450491dc73d0dc9ee02e9a998f267906988d3f31b03686466d68",
+    "architecture/i06-backend-profile-v3/criteria.json": "752533c57b5f93e4c4158a9c17b52eb88d236a3632ab0b66b669e8f8041f57c7",
+    "architecture/i06-backend-profile-v3/vectors.json": "4752b648abdd82d21ea622a1b26c721143577478c0a2491204e0d584c1d6f081",
+    "architecture/i06-backend-profile-v3/source-index.json": "bf8a22668d31fb4dbc7f6cffe8b3f9e5f3e9711bef184d4fa0c1d97b49791fca",
+    "scripts/i06_backend_profile_v3.py": "dfb00e90199d436ae63b79261f2e04870d7861cb0f7a424971657a4d777754de",
+    "architecture/artifact-edges/operator-harness-engineering-v5.json": "346a572277d6a7af60377d5a460c3782d3c62c2ca20c9b938ede929790667d5d",
+    "architecture/artifact-edges/README-v5.md": "b86f47b329a333a13796ccb80d5909cb23eb5f512b4771ad5551250f2f9c5e4f"
+   },
+   "severities": [
+    "MAJOR",
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 2,
+   "record": "architecture/native-profile-v4/review-round2.json",
+   "recordSha256": "09d4035d8ab726e432a636aab9176a4d8b0a93041345b6cf7ee04a9aab89066b",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": "3c34a3a5ff5879d2bcf5e6691bc08eeaf59dbf41",
+   "subjectTree": "870a6195eb30b973801c0f67cd7321bcf1264398",
+   "subjectParent": "0a2ecd7157e732b8d7965ed6e985203e733b1d19",
+   "subjectSha256": {
+    "architecture/native-profile-v4/README.md": "7bb1a354f584f6bb158882797cbdc694dc28bf0ee2e3c4cb3823de25b166c2ad",
+    "architecture/native-profile-v4/REVIEW_BRIEF.md": "8a63553efae328b64019eeecc52d0c190d15281670b9970f08610e62dcb27366",
+    "architecture/native-profile-v4/qualification.schema.json": "357b3d6e465780310bce82a7547ee6ac5121d01129a5bebcc2ea751663369236",
+    "architecture/native-profile-v4/vectors.json": "7418ce72cd2920beff0a405b8abc8d4c0fb77f46f3ce22ed923b57bc514d9c69",
+    "architecture/native-profile-v4/source-index.json": "fc83f4c68f93ef64ea3ce73398d60683dab37e301ed3e5bc16a772ba7bc2c603",
+    "scripts/native_qualification_v4.py": "bd2d6b33bd56ab6580f25f139339a685b5f013fd33cb2c702b3e9032d03deef7",
+    "architecture/i06-backend-profile-v3/README.md": "6f0c6b85dfad389598d584fba4585cf4871a690ee02fbbf02dcb85b8ecdf1dcf",
+    "architecture/i06-backend-profile-v3/REVIEW_BRIEF.md": "4ec06ca74275abfd7fdfbd7b0ed6e97ecf911c72cc77e62a77bb683282c3a4b8",
+    "architecture/i06-backend-profile-v3/criteria.json": "752533c57b5f93e4c4158a9c17b52eb88d236a3632ab0b66b669e8f8041f57c7",
+    "architecture/i06-backend-profile-v3/vectors.json": "4752b648abdd82d21ea622a1b26c721143577478c0a2491204e0d584c1d6f081",
+    "architecture/i06-backend-profile-v3/source-index.json": "cf78838a7c49a14df8d53dece8d54b2d1b7b2c14af6476821e4b6ef0bb6f7b17",
+    "scripts/i06_backend_profile_v3.py": "dfb00e90199d436ae63b79261f2e04870d7861cb0f7a424971657a4d777754de",
+    "architecture/artifact-edges/operator-harness-engineering-v5.json": "24d1d2b635bb0ea553a10f9e74c8024ac427809d56e2229db1bca41310622b0e",
+    "architecture/artifact-edges/README-v5.md": "651bd2b23ade4cc762b9ae94298e78113f8ecb7507db40473acdbbd5d055cea1"
+   },
+   "severities": [
+    "MAJOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 3,
+   "record": "architecture/native-profile-v4/review-round3.json",
+   "recordSha256": "60f72eef0be1fea1a99ed883ff514aab966a2fee9e3bf84c0b39ac227a38e8a3",
+   "verdict": "PASS_FOR_ADOPTION",
+   "subject": "5a3e6820cf23325dd8c68f8c083d53ac805f2b06",
+   "subjectTree": "f8ce4ab0d73588437020e6ee49ac260584b22c58",
+   "subjectParent": "3c34a3a5ff5879d2bcf5e6691bc08eeaf59dbf41",
+   "subjectSha256": {
+    "architecture/native-profile-v4/README.md": "a4205a5388dc83827bb39670bcc9477b030f29829128abf19f7578321c170174",
+    "architecture/native-profile-v4/REVIEW_BRIEF.md": "293b9fc1f4affd9be0ff5d38bbc15dae902c22f5761a0ecdbc82d4f9c24fefea",
+    "architecture/native-profile-v4/qualification.schema.json": "c3e91c087ebc6a13e8a96a066f80710ac968c8def434d1d1b97415811715ed10",
+    "architecture/native-profile-v4/vectors.json": "dede64ab3202a9e28094f062b5dad868c13ca02423e2380af8666ecf2e7a86e6",
+    "architecture/native-profile-v4/source-index.json": "6e2c325054ffd5edee3d71c4163dd38bef42b6b255bbdeae5e2c37814ef178fb",
+    "scripts/native_qualification_v4.py": "f7c718072d1ffbb9b8bbc310e6141d476ea5f25296f70ff8c1bc9ada3db02387",
+    "architecture/i06-backend-profile-v3/README.md": "9ee406f43060f266a7b5dd2679aa8352f0815584c45e33d0ab193ea7f90c0c77",
+    "architecture/i06-backend-profile-v3/REVIEW_BRIEF.md": "ca7bbf5e858c940b32058acf8475242fb1ad898afb92584bfac7f79914f93891",
+    "architecture/i06-backend-profile-v3/criteria.json": "752533c57b5f93e4c4158a9c17b52eb88d236a3632ab0b66b669e8f8041f57c7",
+    "architecture/i06-backend-profile-v3/vectors.json": "4752b648abdd82d21ea622a1b26c721143577478c0a2491204e0d584c1d6f081",
+    "architecture/i06-backend-profile-v3/source-index.json": "7740a01dcd1a9fe41a106532d5ddde37a1cce70e2244c6638d480953532a14c1",
+    "scripts/i06_backend_profile_v3.py": "dfb00e90199d436ae63b79261f2e04870d7861cb0f7a424971657a4d777754de",
+    "architecture/artifact-edges/operator-harness-engineering-v5.json": "bca25c0c221e7a539a1b5ccb0cab4bb4891be60d663ff64f2ac4dd62f8d75438",
+    "architecture/artifact-edges/README-v5.md": "6409a17c2fb0b5ae5df3055c86a3e4cb1e2cb3deacd490c4d547cc1d50a9b6ad"
+   },
+   "severities": []
+  }
+ ],
+ "closedFindings": {
+  "N1-1": "CLOSED in round 3 (PARTLY in round 2; its remainder, N2-1, RESOLVED in round 3)",
+  "N1-2": "CLOSED in round 2",
+  "N1-3": "CLOSED in round 2",
+  "N1-4": "CLOSED in round 2",
+  "N1-5": "CLOSED in round 2",
+  "N1-6": "CLOSED in round 2 (README-v5's open item); the re-check it requires is DISCHARGED at mechanics (see carried)",
+  "N2-1": "CLOSED in round 3",
+  "N2-2": "CLOSED in round 3",
+  "N2-3": "CLOSED in round 3"
+ },
+ "carried": [
+  {
+   "item": "N1-6 (contract review round 1, NOTE): the edge v4 re-check",
+   "to": "the packet mechanics",
+   "action": "discharged at mechanics: edge record v4 equals sha256 e30772ff8826650c46d1a8d384625929975e47f2de5cc9030680b5fdb5e7fc86 at 244's merge c69e55f and at the accepted base 75669de, and its 45 rows are the rows v5 carries, in order, so v5 is not re-derived; the six providerPacket values name MET-ENFORCE-033"
+  },
+  {
+   "item": "The matrix successor: an execute_no_trans closure for the qualk8s sources and a filesystem-class closure for context= mounts (design sections 3.2, 3.6 and 11)",
+   "to": "the parallel lane (routed by the lane monitor at adoption) and T04",
+   "action": "until then the backends claim only domain entry plus measured file (ENTRY_BOUND) and the census of context= mounts stays a T04-ENTRYPOINT-CENSUS premise"
+  },
+  {
+   "item": "BROKER-CLONE-INTO-CGROUP (design sections 3.5, 4 and 11)",
+   "to": "the parallel lane (routed by the lane monitor at adoption), as a W02d/W03 obligation",
+   "action": "the broker spawns with CLONE_INTO_CGROUP and no namespace flags; T04-BROKER-SPAWN proves it"
+  },
+  {
+   "item": "HE-008 duties (design sections 3.3, 3.4, 5 and 11)",
+   "to": "HE-008",
+   "action": "measure the observer's file at off-host enrollment; check that each interpreted role's script names the record's interpreterPath on its first line; extend NP-2's ledger obligation to v3 records"
+  },
+  {
+   "item": "The T04 proof list (design section 11)",
+   "to": "T04",
+   "action": "T04-ENTRYPOINT, T04-ENTRYPOINT-CENSUS, T04-MAPS-STATIC, T04-MAPS-INTERPRETER, T04-NS-SHARED, T04-SECCOMP-INSTALLED, T04-LABELS, T04-RLIMIT, T04-OBSERVER-IDENTITY and T04-BROKER-SPAWN, and the observer's same-domain /proc reads (with W03)"
+  },
+  {
+   "item": "HE-004D1 and HE-004D2, the consumers (design sections 8 and 10)",
+   "to": "HE-004D1 and HE-004D2",
+   "action": "they build after this packet on edge record v5's nine rows; HE-004D1 (with I01) owns authenticating the capturer, and HE-004D2 composes the I06 v3 evidence with check_qualification"
+  },
+  {
+   "item": "W03 obligations (design sections 3.3 and 4)",
+   "to": "W03",
+   "action": "the low-port server stays dumpable; /proc carries no hidepid restriction; the broker freezes the probe-worker leaf at quiescent points (the worker leaf's unfrozen-member residual: availability, not safety)"
+  },
+  {
+   "item": "Later decisions (design section 11)",
+   "to": "W01, W02-PROD and a later I06 successor",
+   "action": "W01: whether the server needs CAP_NET_BIND_SERVICE; W02-PROD: the production profile, W02G-F2 and D-HELPER-TYPES; a later I06 successor: OBS-RBAC-1's grants"
+  }
+ ],
+ "nonClaims": [
+  "Native-profile v1, v2 and v3, I06 v1 and v2, the W02 notes errata, matrix v5, seccomp v4, HS43 and edge records v1 to v4 are byte-identical.",
+  "No capture route was exercised on a host: no real kernel, SELinux policy, bpffs, cgroup, boot loader or TPM was observed, and every declared premise stays a named T04 proof.",
+  "I06 v3 is fixture-only: production evidence stays refused (W02-PROD), and OBS-RBAC-1's grants are not in it.",
+  "The nine files edge record v5 registers are not used before HE-004D1 and HE-004D2."
+ ],
+ "evidenceClassesScope": "README line 600's cross-check of `evidenceClasses` 'against the model' is met for what the model decides — each role's capture class, for every capability set the schema admits (SERVER with and without CAP_NET_BIND_SERVICE), against its column, and every exact capture path the class tables name, probed through the model's capture checks (deleted where its class requires it, added where its class forbids it) — and the remaining cells, which name no exact path, are prose pinned by the schema digest."
+}

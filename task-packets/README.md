@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-MAS-004
+## Current source preparation — MET-ENFORCE-033
+
+MET-ENFORCE-033 (NATIVE-PROFILE-V4): native-profile v4 (v3 plus O-NATIVE-GATE-NOCAP, the capture routes and the restated inspector
+obligation), I06 v3 bound to it, and operator edge record v5 (v4's 45 rows plus 9 registered before use), adopted after
+three independent review rounds. DATA_CHECK_ONLY. Alpha2 OPEN; 245 accepted plus MET-ENFORCE-033 only.
+
+## Historical topology and coordination v1 source preparation — MET-MAS-004
 
 MET-MAS-004 (MAS-RA-004): topology and coordination v1, a TopologySpec with its derived role-block vector, a coordinator
 board on exclusive leased claims with an independent verify-before-merge, a declared selection rule over eligible
@@ -1449,3 +1455,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 243 | `MET-ENFORCE-031` | `Harness-Engineering` | LICENCE-POLICY-AMEND: license-policy amendment LIC-HOST-A2 (Zlib default-allowed globally, as an overlay on the byte-identical base policy and A1); DATA_CHECK_ONLY |
 | 244 | `MET-ENFORCE-032` | `Harness-Engineering` | W03-PLAN-AMEND-2: W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; DATA_CHECK_ONLY |
 | 245 | `MET-MAS-004` | `Harness-Engineering` | MAS-RA-004: topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); DATA_CHECK_ONLY |
+| 246 | `MET-ENFORCE-033` | `Harness-Engineering` | NATIVE-PROFILE-V4: native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, capture routes, inspector obligation, I06 bound to native-profile v4) and operator edge record v5; DATA_CHECK_ONLY |
