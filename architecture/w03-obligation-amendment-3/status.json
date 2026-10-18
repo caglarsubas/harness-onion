@@ -1,0 +1,181 @@
+{
+ "schemaVersion": "planeon.internal.w03-obligation-amendment-3-status/v1",
+ "workItem": "W03-PLAN-AMEND-3",
+ "amendmentId": "W03-PLAN-AMEND-3",
+ "status": "ADOPTED",
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated",
+  "date": "2026-10-18",
+  "candidate": 5,
+  "decision": "Monitor: RE-ADOPT AMEND-3 candidate 5 for slot 250 (amendment.json ddf5e9ab, README 1e2092e8, build_contract.py 101b795f), on round 4's PASS_FOR_ADOPTION (f38a2b7b), which states the c3→c4→c5 delta explicitly. NOTEs C4-1..4 are noted, and candidate 5 stays frozen. Record this verbatim and dated (it supersedes the candidate-4 adoption). Mechanics wait for 249's merge: PR #203's verify is starting now. I'll give the word after the merge."
+ },
+ "supersededAdoption": {
+  "candidate": 4,
+  "date": "2026-10-18",
+  "decision": "\"Monitor: ADOPT candidate 4 for slot 250 (amendment.json c013efd9, README b662e6f3, build_contract.py 8a742132). No round 4. Condition: the packet review must check the c3→c4 diff explicitly, a single added \"source\" line on carried[1], verified against native-profile-v4 README:494, plus the DRAFT-only wording. It must state that nothing else changed since round 3's PASS (6fba6636).\nMechanics (packet build, pre-check, dry run, push) wait for 249's merge and my word. 249's pre-check is running now. Packet id at mechanics.\"",
+  "why": "Q-HE4D1-D2 = (a): keep the 60 s cadence (Q-HE4D1-6 (a)); the WORKER attempt goes first in each set, right after the scrape. NP-9's minimum becomes \"one observer cycle plus the scrape-to-set bound plus one 2 s window, plus margin\". R10 states the number, and HE-005 keeps how often. The owner accepts the longer probe-worker freeze.",
+  "instruction": "Record these verbatim and dated. Do AMEND-3 candidate 5: change only the NP-9 minimum text (HE-005's share, T04's share and the decision quote), then a short delta review r4. Then ask me to re-adopt; my candidate-4 adoption is superseded by this. D1 rev 2 folds everything else."
+ },
+ "baseMain": "a3b9e6e7aedd68e092f3601aa729b61be7241755",
+ "reviewBase": "f4bb0000df9ec4bdaac54d3e6488d691e2001f28",
+ "adoptedSubject": {
+  "architecture/w03-obligation-amendment-3/amendment.json": "ddf5e9abd4c23d4fb09031693466079c68ea2a07c8068a5cdcde0b9bb7d2882b",
+  "architecture/w03-obligation-amendment-3/README.md": "1e2092e83133d51a888c3cea237bd97928c7679980a8db3d52075b1c089a78c0"
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "README.md keeps its reviewed 'CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW' status line; adoption is recorded here only",
+ "recordPaths": "Out-of-repo paths in the published review records and REVIEW_BRIEF.md are abbreviated: the absolute workspace directory prefix is written <workspace>/ and the session scratch directory prefix <scratch>/; nothing else is changed, and each recordSha256 is of the published bytes",
+ "candidates": [
+  {
+   "candidate": 1,
+   "sha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "e8aafd081e65976b71368f2e757aa654fbd1f5f9d714f01ba8c42a9e8a3e22a5",
+    "architecture/w03-obligation-amendment-3/README.md": "6e8831a011d6d9ac2c973e13e16cc2a28de833f0b2bf23055785de20d54f6474"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate1/",
+   "keptCopies": [
+    "architecture/w03-obligation-amendment-3/amendment.json",
+    "architecture/w03-obligation-amendment-3/README.md"
+   ]
+  },
+  {
+   "candidate": 2,
+   "sha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "5454deca5af15b6cf2a1b42580ed8eaecbe7c8576f7b814e0df8d904e00a3974",
+    "architecture/w03-obligation-amendment-3/README.md": "b7312dfab2220454fdc3c7d9d395671606fb40c9fcf5169cfaf915f1ccb914a1"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate2/",
+   "keptCopies": [
+    "architecture/w03-obligation-amendment-3/amendment.json",
+    "architecture/w03-obligation-amendment-3/README.md"
+   ]
+  },
+  {
+   "candidate": 3,
+   "sha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "0876f9b29c9431b5ff5a3e9f516067e3a7a9d855f253f63d24fe408d1a4f77b1",
+    "architecture/w03-obligation-amendment-3/README.md": "b662e6f36f1409486961370e7ac7662c578e881c69b16c369a98732862ceef13"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate3/",
+   "keptCopies": [
+    "architecture/w03-obligation-amendment-3/amendment.json",
+    "architecture/w03-obligation-amendment-3/README.md"
+   ]
+  },
+  {
+   "candidate": 4,
+   "sha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "c013efd9725636830a29c71c2bd61ad2ad7dd5e1262a73475cd50a4370e16416",
+    "architecture/w03-obligation-amendment-3/README.md": "b662e6f36f1409486961370e7ac7662c578e881c69b16c369a98732862ceef13"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate4/",
+   "keptCopies": [
+    "architecture/w03-obligation-amendment-3/amendment.json",
+    "architecture/w03-obligation-amendment-3/README.md"
+   ]
+  },
+  {
+   "candidate": 5,
+   "sha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "ddf5e9abd4c23d4fb09031693466079c68ea2a07c8068a5cdcde0b9bb7d2882b",
+    "architecture/w03-obligation-amendment-3/README.md": "1e2092e83133d51a888c3cea237bd97928c7679980a8db3d52075b1c089a78c0"
+   },
+   "snapshot": null,
+   "keptCopies": []
+  }
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "record": "architecture/w03-obligation-amendment-3/review-round1.json",
+   "recordSha256": "126af92049598048b7375ee5959eb2ecbf26e3512c9f16a10a57a9c1ee120519",
+   "verdict": "CHANGES_REQUIRED",
+   "candidate": 1,
+   "subjectSha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "e8aafd081e65976b71368f2e757aa654fbd1f5f9d714f01ba8c42a9e8a3e22a5",
+    "architecture/w03-obligation-amendment-3/README.md": "6e8831a011d6d9ac2c973e13e16cc2a28de833f0b2bf23055785de20d54f6474"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate1/"
+  },
+  {
+   "round": 2,
+   "record": "architecture/w03-obligation-amendment-3/review-round2.json",
+   "recordSha256": "df49466e204b3dbc1c8d5ba0e2109473b6394290d57c7c6a3282dfc00cf14ed1",
+   "verdict": "PASS_FOR_ADOPTION",
+   "candidate": 2,
+   "subjectSha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "5454deca5af15b6cf2a1b42580ed8eaecbe7c8576f7b814e0df8d904e00a3974",
+    "architecture/w03-obligation-amendment-3/README.md": "b7312dfab2220454fdc3c7d9d395671606fb40c9fcf5169cfaf915f1ccb914a1"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate2/"
+  },
+  {
+   "round": 3,
+   "record": "architecture/w03-obligation-amendment-3/review-round3.json",
+   "recordSha256": "6fba6636847758910c19c8c817c5b1e2451b814c551ad4125b7f50e578563991",
+   "verdict": "PASS_FOR_ADOPTION",
+   "candidate": 3,
+   "subjectSha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "0876f9b29c9431b5ff5a3e9f516067e3a7a9d855f253f63d24fe408d1a4f77b1",
+    "architecture/w03-obligation-amendment-3/README.md": "b662e6f36f1409486961370e7ac7662c578e881c69b16c369a98732862ceef13"
+   },
+   "snapshot": "architecture/w03-obligation-amendment-3/candidate3/"
+  },
+  {
+   "round": 4,
+   "record": "architecture/w03-obligation-amendment-3/review-round4.json",
+   "recordSha256": "f38a2b7b33d1fe3ed9432066792e1713608c6068d29f4da0abf5640e8d471eb2",
+   "verdict": "PASS_FOR_ADOPTION",
+   "candidate": 5,
+   "subjectSha256": {
+    "architecture/w03-obligation-amendment-3/amendment.json": "ddf5e9abd4c23d4fb09031693466079c68ea2a07c8068a5cdcde0b9bb7d2882b",
+    "architecture/w03-obligation-amendment-3/README.md": "1e2092e83133d51a888c3cea237bd97928c7679980a8db3d52075b1c089a78c0"
+   },
+   "snapshot": null
+  }
+ ],
+ "closedFindings": {
+  "C1-1": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-2": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-3": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-4": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-5": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-6": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-7": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-8": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C1-9": "CLOSED in candidate 2 (round 2: FIXED)",
+  "C2-1": "CLOSED in candidate 3 (round 3: FIXED)",
+  "C2-2": "CLOSED in candidate 3 (round 3: FIXED)",
+  "C2-3": "CLOSED in candidate 3 (round 3: FIXED)",
+  "C2-4": "CLOSED in candidate 3 (round 3: FIXED)",
+  "C3-1": "APPLIED in candidate 4: carried[1].source names architecture/native-profile-v4/README.md:494 (round 4, c3ToC4)",
+  "C3-2": "APPLIED in candidate 4: DRAFT.md wording only; the DRAFT is not published (round 4, c3ToC4)",
+  "C4-1": "KEPT as a builder tripwire: the contract builder still asserts the superseded NP-9 minimum line once and uses it nowhere; candidate 5 stays frozen (the monitor's re-adoption)",
+  "C4-2": "HANDED to the HE-004D1 design: R10's worst-case number (see carried)",
+  "C4-3": "HANDED to the HE-004D1 design: the WORKER attempt first in each set (see carried)",
+  "C4-4": "DRAFT-only: the DRAFT is not published"
+ },
+ "carried": [
+  {
+   "item": "amendment.json carried[0]-[4]",
+   "to": "as each item names",
+   "action": "normative in the adopted amendment.json; this record restates none of them"
+  },
+  {
+   "item": "C4-3 (contract review round 4, NOTE): the WORKER attempt first in each set, right after the scrape",
+   "to": "the HE-004D1 design (revision 2)",
+   "action": "carry the R10 duty owner decision Q-HE4D1-D2 (a) creates, which only HE-005's NP-9 share names, in HE-004D1's own design; a later amendment may add it to HE-004D1's row or packet scope"
+  },
+  {
+   "item": "C4-2 (contract review round 4, NOTE): R10's worst-case number for NP-9's minimum",
+   "to": "the HE-004D1 design (revision 2)",
+   "action": "define the number with worst-case terms: one observer cycle as the largest spacing between consecutive cycle starts, overrun included; the scrape-to-set bound covering the WORKER attempt's start offset, the progress read and the scrape's variable duration included, or a margin that absorbs them; and state the epoch caveat (after the first set; a restart resets the phase, availability not safety)"
+  }
+ ],
+ "nonClaims": [
+  "Plan v2, amendments 1 and 2 and edge record v5 are byte-identical.",
+  "No edge record is published in this packet.",
+  "No R10 file changes in this packet.",
+  "The HE-004D1 design is not part of this packet."
+ ]
+}

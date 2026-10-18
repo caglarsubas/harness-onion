@@ -1,0 +1,60 @@
+{
+ "subject": "tools/w03/amend3 candidate 2 (amendment.json sha256 5454deca5af15b6cf2a1b42580ed8eaecbe7c8576f7b814e0df8d904e00a3974; README.md b7312dfab2220454fdc3c7d9d395671606fb40c9fcf5169cfaf915f1ccb914a1; build_contract.py b9788dcb9f01a4442e7d2f6360f773b910dcce257d9be3fcfdf05d8b10f1a9aa)",
+ "reviewer": "independent agent",
+ "round": 2,
+ "verdict": "PASS_FOR_ADOPTION",
+ "priorFindings": [
+  {"id": "C1-1", "severity": "MAJOR", "status": "FIXED", "note": "Item (3) now covers dir search on the path directories of the seal marker /run/planeon/containment/sealed (/run among them; /run/planeon is the matrix's planeon_run_t, matrix v5 README:265) and of the Q-HE4D1-2 (a) record file. Item (4) names the /run tmpfs as the seal marker's filesystem. The HE-008 object list and T04's check both name /run's type. Schema :885 is cited for the path. Q-HE4D1-8 (a)'s 'path directories' covers all of this. The record file's own read is not an OBS-HOSTPOL-1 access; see C2-1."},
+  {"id": "C1-2", "severity": "MINOR", "status": "FIXED", "note": "T04's check is now per (type, class). /proc root's type, class dir: getattr, open, read and search. Types outside the matrix of the walked directories, /run's included, class dir: search. Filesystem types, class filesystem: getattr. planeon_observer_t, classes dir, file and lnk_file: matrix v5's READ group; class process: getattr present. No write over those pairs. All of HI-7's OBSERVER self permissions sit outside the check, the /proc/self link read included (amendment 2:221; compiled-filter-programs status:144). It is closable. Same-type objects differ by class (cgroup2 and bpffs root dirs against their superblocks; the /proc root dir against the /proc/self lnk_file), so nothing collides."},
+  {"id": "C1-3", "severity": "MINOR", "status": "FIXED", "note": "np3Route now states that NP-3's first clause, 'Inspection freezes through an ancestor' (plan.json:287), is replaced by NP-9 and not met by the inspector. It cites Q-HE4-3/4 (a) (amendment 2:18), native-profile v4 README:284, Q-NP4D-8 (a) (:282) and Q-NP4D-10 (a) (:302-303). The second clause is structural (:310-311). The route records the decisions' effect and narrows nothing beyond them. The README carries the same paragraph."},
+  {"id": "C1-4", "severity": "MINOR", "status": "FIXED", "note": "HE-005's NP-9 share carries the precedence rule. A quiescent freeze is taken only on a leaf not already held frozen by W1-W4 or W6. Its thaw never thaws such a leaf. An expiry or invalidation inside a bracket proceeds to W6 without thawing (HS43:462-477, :482-486). T04's share proves the thaw rule. Timing is still left to HE-005's design per Q-A3-4 (a)."},
+  {"id": "C1-5", "severity": "NOTE", "status": "FIXED", "note": "`unchanged` cites edge v5 :497-529, the v3 schema row :550-559 and the byte rule :608. The spans were computed and verified by exact-path read."},
+  {"id": "C1-6", "severity": "NOTE", "status": "FIXED", "note": "Matrix v6 is cited beside v5: selinux-matrix-v4/README.md:632 for the Cgroups row (the builder asserts the broker clause in both), and :245 for the observer's procAccess, written as 'unchanged in v6'."},
+  {"id": "C1-7", "severity": "NOTE", "status": "FIXED", "note": "The README 'Change kinds' paragraph explains why amendment 1's NARROWED kind (I07-4) does not fit."},
+  {"id": "C1-8", "severity": "NOTE", "status": "FIXED", "note": "packetScopes[0].handOffs names HE-008 (signing, Q-HE4D1-2 (a); 'HE-008 signs it' verified at DOSSIER-D1.md:545) and HE-004-I01 (capturer authentication, Q-HE4D1-10 (a)). Both appear in `carried`."},
+  {"id": "C1-9", "severity": "NOTE", "status": "FIXED", "note": "packetScopes[0].dossier.use states the hash is provenance only (dossier unpublished; options quoted verbatim)."}
+ ],
+ "findings": [
+  {
+   "id": "C2-1",
+   "severity": "NOTE",
+   "location": "amendment.json changes[0] item (3); packetScopes[0].handOffs[0]",
+   "finding": "Item (3) covers the record file's path directories but not the record file's own read. Under 'exactly', that read must come from matrix v5/v6. The matrix lets planeon_observer_t READ planeon_etc_t (SEALED_CONFIG, file and dir) and planeon_observer_cred_t (CREDENTIAL), so the credentials' FileRef pattern of Q-HE4D1-2 (a) fits. A host-typed location would need a file read outside the five accesses, the same kind of gap as C1-1.",
+   "requiredChange": "Recommended, non-blocking: add a clause to (3) or the HE-008 hand-off saying the record file itself carries a type matrix v5/v6 lets planeon_observer_t READ (planeon_etc_t or planeon_observer_cred_t). Otherwise keep it on the HE-004D1 design review's list (DRAFT section 8), with a candidate change if the design picks a host type."
+  },
+  {
+   "id": "C2-2",
+   "severity": "NOTE",
+   "location": "README.md 'Why'; ownerDecisions[0] (AMEND3-SCOPE)",
+   "finding": "The quoted AMEND3-SCOPE agrees to 'the scope (1)–(3) as you wrote it'. The published contract never lists (1)-(3) in that form; the README says only 'three items'. A reader of the repository cannot resolve the reference. Candidate 1's draft had the list.",
+   "requiredChange": "Optional: list the three items in the README's 'Why' as the author wrote them. (1) the observer's host-policy share plus a T04 check; (2) the HE-005 quiescent-freeze obligation; (3) HE-004D1's scope and decisions with the accepted residuals, plus the Q-HE3-3 share-text correction."
+  },
+  {
+   "id": "C2-3",
+   "severity": "NOTE",
+   "location": "amendment.json carried[1], carried[2]",
+   "finding": "Both hand-off carries give 'monitor decision Q-A3-7 (a)' as their decision. Q-A3-7 (a) names only 'native-profile v4's other unregistered W03 items'. The hand-offs' own decisions are Q-HE4D1-2 (a) and Q-HE4D1-10 (a) (already in handOffs). Deferring them to a later row follows from the agreed scope rather than from Q-A3-7 alone.",
+   "requiredChange": "Optional: cite the hand-off's own decision, with AMEND3-SCOPE as the reason it is carried, or keep Q-A3-7 (a) and add the Q-HE4D1 id."
+  },
+  {
+   "id": "C2-4",
+   "severity": "NOTE",
+   "location": "README.md OBS/NP table, NP-9 row",
+   "finding": "The HE-005 share now ends with a full stop, and the README's cell joiner adds '; ', so the row reads '(Q-A3-4 (a)).; HE-004D1: ...'. This is cosmetic and README only; amendment.json is unaffected.",
+   "requiredChange": "Optional: strip a trailing full stop before joining shares in the README cell."
+  }
+ ],
+ "questions": [],
+ "checks": [
+  {"check": "Subject hashes", "result": "amendment.json 5454deca..., README.md b7312dfa..., build_contract.py b9788dcb... match the coordinator's; rounds/c2 identical to the top-level files; rounds/c1 equals round 1's subject"},
+  {"check": "Builder re-run on a copy in WORK (python3 -I -B, clone harness-onion-npv4, pin f4bb0000)", "result": "Both outputs byte-identical (cmp); no .pyc written"},
+  {"check": "14 ownerDecisions verbatim (independent script, exact whole-line match)", "result": "Each matches exactly one line inside its dated section: AMEND3-SCOPE at amend3/OWNER_DECISIONS.md:5; Q-A3-1..8 at :9-16; Q-HE4D1 lines at he004/OWNER_DECISIONS.md:250-253; Q-HE3-3 at he003/SCOPE.md:87. No relay line quoted ('Fold these into candidate 2', 'Record all of these verbatim', 'GO for the D1 design')"},
+  {"check": "Structural diff candidate 1 to 2", "result": "Only expected changes: OBS-HOSTPOL-1 text, source and shares; NP-9 source and HE-005/T04 shares; np3Route; residuals[1]; packetScopeRule; dependencyNames; unchanged; ownerDecisions (9 added); new keys carried, handOffs, dossier.use. Unchanged: NP-9 text and packets, the 12 dossier options, both SHARE_CORRECTED rows, bindings, changeKinds, shareRule, correctionRule"},
+  {"check": "Every file:line citation in amendment.json resolved against the pinned bytes", "result": "All 38 unique ranges land on the stated content, including the new ones: plan :287, amendment 2 :18 and :221, compiled-filter status :144, matrix v5 README :265, matrix v6 README :245 and :632, schema :885, HS43 :462-477, amendment 2 status :104-108 (C3-2), edge v5 :550-559 and :608"},
+  {"check": "Matrix READ coverage for the C1-1 objects", "result": "The observer READs planeon_run_t, planeon_seal_t, planeon_etc_t and planeon_observer_cred_t in matrix v5 and v6 (matrix.json types). So /run (var_run_t, host) is the only directory added on the seal marker's walk outside the matrix. Record file: see C2-1"},
+  {"check": "Id uniqueness (process-tightened)", "result": "git grep -w for NP-9, OBS-HOSTPOL-1 and SHARE_CORRECTED over architecture/ at f4bb0000, excluding every artifact-edges directory by glob (':(exclude,glob)**/artifact-edges/**') and architecture/enforcement-test-plan: no match. Edge v5 checked by exact-path read only: no match"},
+  {"check": "Privacy in the contract files", "result": "No /Users/, /private/tmp, /home/, '@', '~/', tools/w03 or local username in amendment.json or README.md. The only non-ASCII character is the en dash in the verbatim AMEND3-SCOPE quote"},
+  {"check": "Process", "result": "architecture/artifact-edges/ was read only by exact file path (git show of operator-harness-engineering-v5.json); it was never listed, grepped, walked or archived. No R12, tools/w04, /var/db/harness-ci or other forbidden path touched"}
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

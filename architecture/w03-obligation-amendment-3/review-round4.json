@@ -1,0 +1,58 @@
+{
+ "subject": "tools/w03/amend3 candidate 5 (amendment.json sha256 ddf5e9abd4c23d4fb09031693466079c68ea2a07c8068a5cdcde0b9bb7d2882b; README.md 1e2092e83133d51a888c3cea237bd97928c7679980a8db3d52075b1c089a78c0; build_contract.py 101b795fd2cd875d00a6c7e8d83d419d9971ff439718abce265ae11a2a1280b2; DRAFT.md 6730271f5af1bdeb0fab94deb8c4e901c071cc187e59d3c6441646f46bd0363d)",
+ "reviewer": "independent agent",
+ "round": 4,
+ "verdict": "PASS_FOR_ADOPTION",
+ "changesSinceRound3": {
+  "round3Record": "contract-review-round3.json sha256 6fba6636847758910c19c8c817c5b1e2451b814c551ad4125b7f50e578563991, PASS_FOR_ADOPTION on candidate 3 (amendment.json 0876f9b2..., README.md b662e6f3..., build_contract.py f8315791...)",
+  "c3ToC4": "amendment.json: exactly one added key, carried[1].source = 'architecture/native-profile-v4/README.md:494' (one raw JSON line). That line is the P1 running-image row: '/proc/<pid>/exe: path, device, inode ... with the device and inode observed for that file', the rule the same-device carry serves (read by exact path at f4bb0000). README.md byte-identical (b662e6f3). build_contract.py adds the asserted running_image citation (and a whitespace-only edit in one call). DRAFT.md: wording only (titles, the section 00 table, the section 1 Q-A3-4 row quoting candidate 3's wording, output hashes). Nothing else changed.",
+  "c4ToC5": "amendment.json: exactly four values changed (eight raw lines), no key added or removed. (1) ownerDecisions[14]: the monitor's 'NP-9 minimum' quote (OWNER_DECISIONS.md:22) is replaced by the owner's Q-HE4D1-D2 = (a) line (:35). (2) changes[1].source: 'monitor decisions Q-A3-4 (a) and the NP-9 minimum (2026-10-18)' becomes 'monitor decision Q-A3-4 (a); owner decision Q-HE4D1-D2 (a) (the NP-9 minimum)'. (3) changes[1].shares.HE-005: the minimum sentence is replaced. (4) changes[1].shares.T04: the proved minimum is replaced. README.md: the 'Why' count sentence ('its two decisions on the HE-004D1 design's asks and the owner's Q-HE4D1-D2 (the NP-9 minimum)') and the NP-9 table row, which the builder derives from the JSON. Everything else in both files is byte-identical to candidate 4, key by key: OBS-HOSTPOL-1 (text, source, the HE-008 share with the dontaudit recommendation, T04's 'exactly' check), NP-9's text and packets, HE-004D1's NP-9 share, the C1-4 precedence rule, both SHARE_CORRECTED rows, packetScopes, carried[0]-[4] (the same-device carry included), the change kinds and rules, bindings, dependencyNames and unchanged."
+ },
+ "checks": [
+  {"check": "Subject hashes", "result": "Top-level files equal rounds/c5 and match the coordinator's: amendment.json ddf5e9ab..., README.md 1e2092e8..., build_contract.py 101b795f...; rounds/c4 amendment.json c013efd9..., README b662e6f3..., build 8a742132...; rounds/c3 equals round 3's subject"},
+  {"check": "Rebuild (python3 -I -B, copy in scratch, clone harness-onion-npv4, pin f4bb0000)", "result": "Both outputs byte-identical to candidate 5 (cmp); no .pyc written"},
+  {"check": "c3->c4 diff, as the monitor's adoption condition requires", "result": "Only carried[1].source added, verified against native-profile-v4/README.md:494; DRAFT-only wording otherwise; README identical"},
+  {"check": "c4->c5 diff, key by key", "result": "Only ownerDecisions[14], changes[1].source, changes[1].shares.HE-005 and changes[1].shares.T04 changed; README only the 'Why' count and the derived NP-9 row"},
+  {"check": "Decision quote", "result": "ownerDecisions[14] equals OWNER_DECISIONS.md:35 after '> - ' by exact whole-line match, once; the builder also checks it inside its dated section (the 2026-10-18 Q-HE4D1-D2/-D3 relay). The relay lines :34 and :38 and the Q-HE4D1-D3/-D1 lines (:36-37) are not quoted. 17 ownerDecisions in total"},
+  {"check": "Dropping line 22", "result": "Correct. The owner's Q-HE4D1-D2 (a) explicitly replaces NP-9's minimum ('NP-9's minimum becomes ...'), and the monitor superseded its candidate-4 adoption. Nothing in amendment.json or README.md still cites the monitor's NP-9 minimum: 0 occurrences of 'aligned', of the old source phrase and of the 'three decisions' count. The NP-9 source now cites Q-HE4D1-D2 (a). 'refined by the NP-9 minimum' now refers to the minimum the same share attributes to Q-HE4D1-D2 (a). The other two asks (dontaudit, same device) stay quoted from :23-24"},
+  {"check": "The builder's line-22 check", "result": "ASKS still parses the '- NP-9 minimum:' sub-bullet and asserts it occurs exactly once in OWNER_DECISIONS.md. The value is then excluded from ownerDecisions and used nowhere else, so it affects no output. It is now only a history tripwire (C4-1)"},
+  {"check": "HE-005's NP-9 share", "result": "The new minimum sits right after the C1-4 precedence rule: 'Each quiescent freeze holds frozen for at least one observer cycle, plus the scrape-to-set bound, plus one 2 s inspection window, plus margin (the NP-9 minimum, Q-HE4D1-D2 (a)); R10 (the HE-004D1 design) states the number, and HE-005 keeps how often.' It then says 'The minimum rests on an R10 obligation, not HE-005's: the observer's WORKER attempt comes first in each set, right after the scrape (HE-004D1, Q-HE4D1-D2 (a)).' Q-A3-4 (a) still leaves the rest to HE-005. This matches the quoted decision"},
+  {"check": "T04's NP-9 share", "result": "Proves that the freeze 'holds frozen for at least one observer cycle, plus the scrape-to-set bound, plus one 2 s inspection window, plus margin (the number R10 states)'. The rest is unchanged: the capture inside the bracket, the precedence rule, no cgroup.freeze write by the observer"},
+  {"check": "Achievability against D1-2's coincidence analysis", "result": "Achievable as stated. Within an epoch, set starts follow cycle starts that are one observer cycle apart, and the WORKER attempt is fixed first in each set, at an offset from its cycle start of at most the scrape-to-set bound. Any interval in which the leaf holds frozen 1 for at least one cycle + that bound + 2 s therefore contains the start of some cycle and the whole attempt of that cycle. This is D1-2's required condition (its requiredChange (2)). The share promises a hold duration, not alignment, and no phase knowledge is required of the broker. Precision for R10's number: C4-2"},
+  {"check": "Citations", "result": "44 unique ranges resolve on the pinned bytes: round 3's 43 unchanged, plus native-profile-v4/README.md:494"},
+  {"check": "Privacy", "result": "No /Users/, /private/tmp, /home/, '@', '~/', tools/w03 or local username in amendment.json or README.md; the only non-ASCII character is the en dash in the verbatim AMEND3-SCOPE quote"},
+  {"check": "Process", "result": "architecture/artifact-edges/ read only by exact file path (git show of operator-harness-engineering-v5.json); never listed, grepped, walked or archived. No new ids, so no repository-wide search. The HE-004D1 design review record was read under tools/w03/ only. No R12, tools/w04, /var/db/harness-ci or other forbidden path touched"}
+ ],
+ "findings": [
+  {
+   "id": "C4-1",
+   "severity": "NOTE",
+   "location": "build_contract.py ASKS (the 'NP-9 minimum:' entry)",
+   "finding": "The builder still parses the superseded line 22 and asserts it is unique, but never uses it. It no longer matters for the output. Its only effect is that the build would fail if the decisions file ever marked or removed that historical line.",
+   "requiredChange": "Optional: drop 'NP-9 minimum:' from ASKS, or keep it with a comment saying it is a deliberate history tripwire."
+  },
+  {
+   "id": "C4-2",
+   "severity": "NOTE",
+   "location": "changes[1].shares.HE-005 ('R10 ... states the number'); for HE-004D1 design revision 2",
+   "finding": "The coincidence argument holds only if R10's terms are worst-case values. 'One observer cycle' must be the largest spacing between consecutive cycle starts, including any overrun. 'The scrape-to-set bound' must bound the WORKER attempt's start offset from its cycle start, including the progress read and the scrape's own variable duration; otherwise the margin must absorb that variation. The guarantee also holds only within an epoch, after the first set. An observer restart resets the phase, which costs availability, not safety. The contract wording is right; this concerns how R10 defines its number.",
+   "requiredChange": "None in the contract. The HE-004D1 design should define the number with these terms and state the epoch caveat."
+  },
+  {
+   "id": "C4-3",
+   "severity": "NOTE",
+   "location": "changes[1].shares.HE-004D1; packetScopes[0]",
+   "finding": "The R10 duty Q-HE4D1-D2 (a) creates (the WORKER attempt first in each set, right after the scrape) is named only inside HE-005's share, attributed to HE-004D1. HE-004D1's own NP-9 share and its packet scope (decisions Q-HE4D1-1..12) do not record it. That follows the owner's instruction to change only the NP-9 minimum text in candidate 5.",
+   "requiredChange": "None now. HE-004D1 design revision 2 carries the duty. A later amendment may add it to HE-004D1's row or packet scope."
+  },
+  {
+   "id": "C4-4",
+   "severity": "NOTE",
+   "location": "DRAFT.md section 8 (line 186)",
+   "finding": "The open point for HE-005's and HE-004D1's designs still says 'NP-9 now fixes the minimum (one 2 s inspection window, aligned with the observer's 60 s cycle)', which Q-HE4D1-D2 (a) superseded. Lines 51 and 87 are labelled history. The DRAFT is not published.",
+   "requiredChange": "Optional: restate the open point with the Q-HE4D1-D2 minimum (R10 states the number; HE-005 keeps how often)."
+  }
+ ],
+ "questions": [],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}
