@@ -1,0 +1,62 @@
+{
+ "round": 4,
+ "subjectCommit": "5bbb90e299cfedbd718ce5901246a0a531001e2f",
+ "subjectTree": "21feb044c983ca5cb3e57cdd8aaf317b6edd6bfb",
+ "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "RP4-1",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 55,
+   "summary": "The new CLI sentence (the RP3-4 disposition) says that a file which 'is not well-formed UTF-8 JSON' is refused, with the error's class named. That is not what the checker does. It passes raw bytes to json.loads, which detects the encoding, so a UTF-8 file with a byte-order mark and UTF-16 or UTF-32 files (with or without a BOM) are decoded and accepted. Ill-formed UTF-8 that encodes a surrogate (bytes ED A0 80) is refused by a rule, not by the error's class. The sha256 is unaffected because it is taken over the canonical UTF-8 form, and free text is checked after decoding, so nothing unsafe passes. Only the README's statement overstates the strictness, and so does 'JSON is parsed strictly' (line 72).",
+   "evidence": "scripts/lab_run_plan.py line 131 (json.loads on bytes) and line 446 (_load). CLI probes on P0's plan written to <scratch>/files/ in five encodings: UTF-8, UTF-8 with BOM, UTF-16-LE with BOM, UTF-16-BE without BOM and UTF-32-LE. Each one prints 'accepted; plan sha256 24a93e8d...' and exits 0. 'teardown' with a UTF-16 plan and a UTF-16 lease is accepted too. A truncated document prints 'refused: JSONDecodeError'. A 0xFF byte prints 'refused: UnicodeDecodeError'. ED A0 80 inside a string prints 'refused: a string is not valid Unicode (a lone surrogate)'. A missing file prints 'refused: FileNotFoundError'. Each of these exits 1. Fix, either way: (a) in strict(), decode the bytes as UTF-8 with errors='strict' and refuse a leading U+FEFF before json.loads; a parse negative whose raw starts with U+FEFF then pins it. (b) Reword the sentence to: not well-formed JSON in an encoding Python's json module detects (UTF-8, UTF-16 or UTF-32, a BOM allowed)."
+  },
+  {
+   "id": "RP4-2",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 229,
+   "summary": "Published run evidence cites the plan id and the lease id. The checker refuses them only when they hold the run project's own id (N60, L11). Their free part can still hold another project id of the owner's organisation, such as the lab foundation's, and Q-RP-3 (a) says no organisation project id is published. 'Not claimed' says only that keeping a person's name out of them rests on the owner's review.",
+   "evidence": "The id patterns ^RP-/^LE-[0-9]{8}-[a-z0-9][a-z0-9-]{0,30}[a-z0-9]$ (run-plan.schema.json line 31, lease.schema.json line 22) admit any project-id-shaped string of 6 to 30 characters. check_plan (line 273) and check_lease (line 339) compare only plan.project.id. Probe (<scratch>/probe3.py): P0 with planId 'RP-20261019-example-lab-foundation' is accepted. A lease with leaseId 'LE-20261020-example-lab-foundation' that binds that plan is accepted too. Q-RP-3 (b), a published denylist, was not chosen, so the owner's review is the only control. Fix: extend the clause to 'That they carry no person's name and no other project id of the organisation rests on the owner's review.'"
+  },
+  {
+   "id": "RP4-3",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 199,
+   "summary": "An SSH-accessed run (P1 opens port 22 for operator access) is likely to leave something outside the eighteen classes. To the reviewer's knowledge, not verified offline, gcloud compute ssh without OS Login adds the operator's public key to the project-wide metadata, and the key's comment carries a username. That key outlives the instances and is accepted on later instances in the kept run project. Project metadata is none of the eighteen classes, and the teardown steps do not remove it. The new 'Not claimed' line on kinds outside the classes covers this in principle; naming it would make the gap concrete.",
+   "evidence": "README lines 195-205 (runbook steps 4 and 5) and lines 225-226. vectors.json P1: ingress on port 22 with the reason 'operator access through the owner's private VPN range (example)'. RESOURCE_CLASSES (scripts/lab_run_plan.py lines 71-73) has no metadata class. Advice: a runbook line that requires OS Login, or instance-level keys only, for operator access; or a teardown step that removes any project-wide SSH key the run added."
+  },
+  {
+   "id": "RP4-4",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/status.json",
+   "line": 18,
+   "summary": "The RP3-5 disposition lists three things for the adoption record: rounds 1 to 4, MON-18-CLASSES-KEEP-R1 and the voided earlier round-3 attempt. It leaves out an item that RP2-13 and RP3-5 both asked for: OBSERVER_IDENTITY is always kept, which goes beyond PLAN.md's residual (the project, the billing link and the audit logs). The README states the rule (lines 94 and 175), but no status record says that it departs from the plan the owner answered.",
+   "evidence": "The brief's disposition row for RP3-5. review-round3.json RP3-5 and review-round2.json RP2-13. PLAN.md lines 36-37. status.json line 18 ('reviewRounds': []), and none of its ownerDecisions mentions OBSERVER_IDENTITY. Fix: record it at adoption with the rounds."
+  }
+ ],
+ "checked": [
+  "ids: git rev-parse gives HEAD = 5bbb90e299cfedbd718ce5901246a0a531001e2f, tree 21feb044c983ca5cb3e57cdd8aaf317b6edd6bfb, parent f560209d04b7e0f07b2480219718a8a6dbdb21ef; candidate 4 (88291da1a91e294a29052379c6b69a0cd5f1f2f4) is present: PASS",
+  "scope: git diff --name-status f560209d 5bbb90e2 lists exactly the 8 brief files, all added (4013 insertions); no existing file changes. git diff 88291da1 5bbb90e2 touches only README.md, vectors.json (N62-N68 added) and scripts/lab_run_plan.py (docstring, comment, billing pattern); status.json is unchanged: PASS",
+  "self-test: python3 -I -B scripts/lab_run_plan.py exits 0 with 3 positives and 68 plan, 11 lease, 20 teardown and 8 parse negatives; README line 41 (99 negatives = 68 + 11 + 20, plus 8 parse) matches: PASS",
+  "RP3-1: README lines 132-137 state the four-character tails of AKIA, ASIA, AIza, ya29., 1// and gh*_, and the billing shape (three hyphen-joined groups of six hexadecimal digits, either case, anywhere). FORBIDDEN_TEXT line 91 drops the \\b anchors, and the comment at lines 85-86 agrees. N62 ('acct_01ABCD-23EF45-6789AB' in workload.description) is refused only by the billing pattern, and candidate 4's anchored pattern does not match it (probe), so the vector pins the change: RESOLVED",
+  "RP3-2: 'Not claimed' (lines 225-226) and runbook step 4 (line 197) say that only the eighteen classes are counted, that the run keeps to them and that this rests on the owner's review. The module docstring (lines 13-14) is narrowed to the eighteen classes: RESOLVED",
+  "RP3-3: N63-N68 are refused with 'schema ... type', minLength, maxLength (301 characters), minItems, maxItems and uniqueItems. Mutation probe: with the keyword deleted from a copy of the schema, N64-N68 are accepted and N63 ends in a TypeError in the cost rule, so each vector depends on its keyword. Every keyword of the subset the schemas use now has a negative: RESOLVED",
+  "RP3-4: README lines 55-57 match the CLI for unreadable files, bad JSON and bad UTF-8 bytes (probes: JSONDecodeError, UnicodeDecodeError, FileNotFoundError; exit 1, no traceback; usage exit 2). The sentence overstates the encoding strictness: RP4-1",
+  "RP3-5: deferred to adoption; an empty reviewRounds is acceptable for a candidate. The disposition leaves out the OBSERVER_IDENTITY record: RP4-4",
+  "free-text shapes: each of the 17 free-text negatives (N46-N58, N61, N62, L10, T18) trips exactly one FORBIDDEN_TEXT pattern, the one its intent names, and each of the 15 patterns has a vector. No string in any positive plan, lease or report trips a pattern. The unanchored billing pattern cannot match hex ids without hyphens (commit, sha256): PASS",
+  "check_schema: 27 malformed schemas are refused: a type list with object; properties without a type; misplaced item counts; an enum given as a string or empty; an unknown or duplicate type name; a mistyped or invalid pattern; lengths on an integer; an array without items; items on a string; $ref, format, exclusiveMaximum, anyOf; uniqueItems on a string or given as 1; a boolean minimum; a negative maxLength; unclosed or mismatched required; a non-string title; an items list; a bare description. 5 valid forms are accepted: PASS",
+  "subset semantics: const and enum compare with type equality (true vs 1 and 1 vs true are refused); pattern uses fullmatch (a trailing newline is refused); integer and number refuse booleans; uniqueItems compares canonical bytes (two equal objects with keys in another order are refused): PASS",
+  "strict parsing: S01-S08 replay. 10^12 and -10^12 are accepted and -10^12-1 is refused. 1E3, 0.1e1, -0.0 and 1e-400 are refused as integral. -0 parses to 0, so the canonical form stays single: PASS",
+  "rules beyond the schemas (read in full; unchanged since candidate 4 apart from FORBIDDEN_TEXT): rate card age at preparation and at lease start; SKU uniqueness on the card and among items; SKU and unit match; amount and total within half a cent; per-type hour coverage summed over groups and per-SKU disk coverage, each with a 0.005 shortfall; total at most the ceiling; reason exactly with an external address; strict IPv4 networks; the /16 cap on the collapsed union in every plan; private-only sources without an external address; CLASS_ROLES; the residual always keeping PROJECT and OBSERVER_IDENTITY; the project id only as project.id and absent from the lease; the lease sha256 binding, window, preparation date and rate-card age; the teardown's lease re-check, bindings, observer, prefix, ordered zero classes, kept subset, ordering, overrun and one-day window. Every require() has a negative, and each negative's refusal matches its intent: PASS",
+  "README against the checker and schemas: every section compared (files, CLI, schema subset, numbers, plan table, roles, cost, exposure, canonical form, free text, lease, teardown). Accurate except RP4-1. The runbook matches Q-RP-0..9 (a), VR-D1 and the 2026-10-15 decision. 'Not claimed' is honest, with the advice in RP4-2 and RP4-3",
+  "invented data: the new values are visibly invented (acct_01ABCD-23EF45-6789AB in sequential hex, 301 x characters, thresholds 0.1-0.5, a duplicated viewer role). The earlier vectors are unchanged: example-qual-run-0001, example-images, example-workload-repo, OA-EXAMPLE-0001, obs-*, 10.8.0.0/24, 198.51.100.0/24, 198.18.0.0/15, a rate card labelled EXAMPLE, token samples marked EXAMPLE, an e-mail sample at example.com: PASS",
+  "privacy: grep of the 8 new files for absolute path prefixes (home, temporary and system directories) finds none. The at-sign appears only in the rule text (README line 130, checker line 87) and N46's example.com sample. Credential shapes appear only in the rule text and the EXAMPLE vectors. No organisation project id, account identity or credential: PASS",
+  "sector-catalog scans (read from tests/test_sector_catalog.py at 5bbb90e2, not run): no new file names architecture/providers.yaml, architecture/services.yaml or docs/PROVIDER_MODULE_CATALOG.md (nor their basenames in the .py) or holds one of the three BASE_DIGESTS. The checker has no os or glob import and no glob, rglob, iterdir or walk call, and does not import sector_catalog. REVIEW_BRIEF.md names tests/test_sector_catalog.py, which is not a catalog path: PASS",
+  "read-only: git status --short --ignored on scripts/ and architecture/lab-run-plan/ is empty after all runs; there is no __pycache__; probes and probe files are only under <scratch>/: PASS",
+  "reviewer disclosure: no network access. Files were read only through the prefixed shell and only from the brief's list. Before the first command, the session environment had pre-loaded the operator's memory index (one-line titles) into the reviewer's context. No memory note was opened by any tool, and nothing from that index is used in this review"
+ ]
+}

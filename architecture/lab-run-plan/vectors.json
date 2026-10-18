@@ -1,0 +1,2448 @@
+{
+ "schemaVersion": "planeon.internal.lab-run-plan-vectors/v1",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "positives": [
+  {
+   "id": "P0",
+   "intent": "CONF-LINUX-001 on one host for 6 hours, no exposure",
+   "plan": {
+    "schemaVersion": "planeon.internal.lab-run-plan/v1",
+    "planId": "RP-20261019-conf-linux-01",
+    "preparedAt": "2026-10-19",
+    "purpose": {
+     "gate": "CONF-LINUX-001",
+     "packetId": null,
+     "summary": "Fresh native Linux AMD64 run of the early Linux foundation campaign"
+    },
+    "workload": {
+     "repository": "example-workload-repo",
+     "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "argvSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+     "description": "The campaign's offline acceptance argv at the pinned commit"
+    },
+    "project": {
+     "id": "example-qual-run-0001",
+     "separateFromLabFoundation": true
+    },
+    "location": {
+     "region": "europe-west4",
+     "zone": "europe-west4-a"
+    },
+    "machines": [
+     {
+      "role": "linux-host",
+      "machineType": "e2-standard-8",
+      "count": 1,
+      "bootDiskGb": 100,
+      "bootDiskSku": "pd-balanced",
+      "image": {
+       "project": "example-images",
+       "family": "example-linux-lts",
+       "name": "example-linux-lts-v20261001"
+      }
+     }
+    ],
+    "maxDurationHours": 6,
+    "cost": {
+     "currency": "USD",
+     "rateCard": {
+      "date": "2026-10-15",
+      "source": "EXAMPLE rate card invented for the contract vectors; not a price quote",
+      "rates": [
+       {
+        "sku": "e2-standard-8",
+        "unit": "hour",
+        "price": 0.3
+       },
+       {
+        "sku": "pd-balanced",
+        "unit": "gb-month",
+        "price": 0.1
+       }
+      ]
+     },
+     "lineItems": [
+      {
+       "sku": "e2-standard-8",
+       "unit": "hour",
+       "quantity": 6,
+       "amount": 1.8
+      },
+      {
+       "sku": "pd-balanced",
+       "unit": "gb-month",
+       "quantity": 0.82,
+       "amount": 0.08
+      }
+     ],
+     "total": 1.88,
+     "ceiling": 5
+    },
+    "budget": {
+     "alertOnly": true,
+     "alertThresholds": [
+      0.5,
+      0.9
+     ]
+    },
+    "exposure": {
+     "externalIp": false,
+     "externalIpReason": null,
+     "ingress": []
+    },
+    "observer": {
+     "identity": "obs-linux-run-01",
+     "scope": "RUN_PROJECT",
+     "roles": [
+      "roles/compute.viewer",
+      "roles/logging.viewer",
+      "roles/iam.securityReviewer"
+     ],
+     "exportedKeys": false,
+     "payloadFree": true
+    },
+    "credentials": {
+     "inPlan": false,
+     "heldBy": "OWNER"
+    },
+    "teardown": {
+     "namePrefix": "run-linux-01-",
+     "steps": [
+      "delete every compute and network resource in the run project, and every bucket and service account named with the run's prefix",
+      "delete every user-managed service-account key in the run project",
+      "revoke the IAM bindings granted since the lease started, except the observer's own viewer bindings",
+      "the observer lists every resource class; the owner revokes the observer after accepting the report"
+     ],
+     "keep": [
+      "PROJECT",
+      "AUDIT_LOGS",
+      "OBSERVER_IDENTITY"
+     ],
+     "residualCheckBy": "OBSERVER"
+    },
+    "approval": {
+     "requiredFrom": "OWNER",
+     "binds": "PLAN_SHA256"
+    }
+   },
+   "lease": {
+    "schemaVersion": "planeon.internal.lab-run-lease/v1",
+    "leaseId": "LE-20261020-conf-linux-01",
+    "planId": "RP-20261019-conf-linux-01",
+    "planSha256": "24a93e8d2299ffbb2fd6d73bd54fd077781dec55548441be49abbbc52670f427",
+    "approval": {
+     "by": "OWNER",
+     "reference": "OA-EXAMPLE-0001"
+    },
+    "startsAt": "2026-10-20T08:00:00Z",
+    "expiresAt": "2026-10-20T14:00:00Z"
+   },
+   "teardown": {
+    "schemaVersion": "planeon.internal.lab-run-teardown/v1",
+    "leaseId": "LE-20261020-conf-linux-01",
+    "planSha256": "24a93e8d2299ffbb2fd6d73bd54fd077781dec55548441be49abbbc52670f427",
+    "observer": "obs-linux-run-01",
+    "namePrefix": "run-linux-01-",
+    "teardownCompletedAt": "2026-10-20T13:30:00Z",
+    "observedAt": "2026-10-20T14:15:00Z",
+    "resources": {
+     "INSTANCES": 0,
+     "INSTANCE_GROUPS": 0,
+     "INSTANCE_TEMPLATES": 0,
+     "DISKS": 0,
+     "SNAPSHOTS": 0,
+     "IMAGES": 0,
+     "ADDRESSES": 0,
+     "NETWORKS": 0,
+     "SUBNETWORKS": 0,
+     "FIREWALL_RULES": 0,
+     "ROUTES": 0,
+     "ROUTERS": 0,
+     "NAT_GATEWAYS": 0,
+     "FORWARDING_RULES": 0,
+     "BUCKETS": 0,
+     "SERVICE_ACCOUNTS": 0,
+     "SERVICE_ACCOUNT_KEYS": 0,
+     "IAM_BINDINGS_ADDED": 0
+    },
+    "kept": [
+     "PROJECT",
+     "AUDIT_LOGS",
+     "OBSERVER_IDENTITY"
+    ],
+    "payloadFree": true
+   }
+  },
+  {
+   "id": "P1",
+   "intent": "W06 on three hosts of one machine type for 12 hours, one listed ingress from a private VPN range",
+   "plan": {
+    "schemaVersion": "planeon.internal.lab-run-plan/v1",
+    "planId": "RP-20261019-w06-native-01",
+    "preparedAt": "2026-10-19",
+    "purpose": {
+     "gate": "W06",
+     "packetId": null,
+     "summary": "Native enforcement proof run on three hosts"
+    },
+    "workload": {
+     "repository": "example-workload-repo",
+     "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "argvSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+     "description": "The campaign's offline acceptance argv at the pinned commit"
+    },
+    "project": {
+     "id": "example-qual-run-0001",
+     "separateFromLabFoundation": true
+    },
+    "location": {
+     "region": "europe-west4",
+     "zone": "europe-west4-a"
+    },
+    "machines": [
+     {
+      "role": "control",
+      "machineType": "e2-standard-4",
+      "count": 1,
+      "bootDiskGb": 50,
+      "bootDiskSku": "pd-balanced",
+      "image": {
+       "project": "example-images",
+       "family": "example-linux-lts",
+       "name": "example-linux-lts-v20261001"
+      }
+     },
+     {
+      "role": "worker",
+      "machineType": "e2-standard-4",
+      "count": 2,
+      "bootDiskGb": 50,
+      "bootDiskSku": "pd-balanced",
+      "image": {
+       "project": "example-images",
+       "family": "example-linux-lts",
+       "name": "example-linux-lts-v20261001"
+      }
+     }
+    ],
+    "maxDurationHours": 12,
+    "cost": {
+     "currency": "USD",
+     "rateCard": {
+      "date": "2026-10-15",
+      "source": "EXAMPLE rate card invented for the contract vectors; not a price quote",
+      "rates": [
+       {
+        "sku": "e2-standard-4",
+        "unit": "hour",
+        "price": 0.15
+       },
+       {
+        "sku": "pd-balanced",
+        "unit": "gb-month",
+        "price": 0.1
+       }
+      ]
+     },
+     "lineItems": [
+      {
+       "sku": "e2-standard-4",
+       "unit": "hour",
+       "quantity": 36,
+       "amount": 5.4
+      },
+      {
+       "sku": "pd-balanced",
+       "unit": "gb-month",
+       "quantity": 2.47,
+       "amount": 0.25
+      }
+     ],
+     "total": 5.65,
+     "ceiling": 10
+    },
+    "budget": {
+     "alertOnly": true,
+     "alertThresholds": [
+      0.5,
+      0.9
+     ]
+    },
+    "exposure": {
+     "externalIp": false,
+     "externalIpReason": null,
+     "ingress": [
+      {
+       "port": 22,
+       "protocol": "tcp",
+       "sourceRange": "10.8.0.0/24",
+       "reason": "operator access through the owner's private VPN range (example)"
+      }
+     ]
+    },
+    "observer": {
+     "identity": "obs-w06-run-01",
+     "scope": "RUN_PROJECT",
+     "roles": [
+      "roles/compute.viewer",
+      "roles/logging.viewer",
+      "roles/iam.securityReviewer",
+      "roles/monitoring.viewer"
+     ],
+     "exportedKeys": false,
+     "payloadFree": true
+    },
+    "credentials": {
+     "inPlan": false,
+     "heldBy": "OWNER"
+    },
+    "teardown": {
+     "namePrefix": "run-w06-01-",
+     "steps": [
+      "delete every compute and network resource in the run project, and every bucket and service account named with the run's prefix",
+      "delete every user-managed service-account key in the run project",
+      "revoke the IAM bindings granted since the lease started, except the observer's own viewer bindings",
+      "the observer lists every resource class; the owner revokes the observer after accepting the report"
+     ],
+     "keep": [
+      "PROJECT",
+      "BILLING_LINK",
+      "AUDIT_LOGS",
+      "OBSERVER_IDENTITY"
+     ],
+     "residualCheckBy": "OBSERVER"
+    },
+    "approval": {
+     "requiredFrom": "OWNER",
+     "binds": "PLAN_SHA256"
+    }
+   },
+   "lease": {
+    "schemaVersion": "planeon.internal.lab-run-lease/v1",
+    "leaseId": "LE-20261021-w06-native-01",
+    "planId": "RP-20261019-w06-native-01",
+    "planSha256": "18a0c419d8571873d6e9cb6bac9b313f0fe8854ab1a13d831a79ea9b7e8d28b4",
+    "approval": {
+     "by": "OWNER",
+     "reference": "OA-EXAMPLE-0001"
+    },
+    "startsAt": "2026-10-21T06:00:00Z",
+    "expiresAt": "2026-10-21T18:00:00Z"
+   },
+   "teardown": {
+    "schemaVersion": "planeon.internal.lab-run-teardown/v1",
+    "leaseId": "LE-20261021-w06-native-01",
+    "planSha256": "18a0c419d8571873d6e9cb6bac9b313f0fe8854ab1a13d831a79ea9b7e8d28b4",
+    "observer": "obs-w06-run-01",
+    "namePrefix": "run-w06-01-",
+    "teardownCompletedAt": "2026-10-21T17:00:00Z",
+    "observedAt": "2026-10-21T18:10:00Z",
+    "resources": {
+     "INSTANCES": 0,
+     "INSTANCE_GROUPS": 0,
+     "INSTANCE_TEMPLATES": 0,
+     "DISKS": 0,
+     "SNAPSHOTS": 0,
+     "IMAGES": 0,
+     "ADDRESSES": 0,
+     "NETWORKS": 0,
+     "SUBNETWORKS": 0,
+     "FIREWALL_RULES": 0,
+     "ROUTES": 0,
+     "ROUTERS": 0,
+     "NAT_GATEWAYS": 0,
+     "FORWARDING_RULES": 0,
+     "BUCKETS": 0,
+     "SERVICE_ACCOUNTS": 0,
+     "SERVICE_ACCOUNT_KEYS": 0,
+     "IAM_BINDINGS_ADDED": 0
+    },
+    "kept": [
+     "PROJECT",
+     "BILLING_LINK",
+     "AUDIT_LOGS",
+     "OBSERVER_IDENTITY"
+    ],
+    "payloadFree": true
+   }
+  },
+  {
+   "id": "P2",
+   "intent": "a PACKET run with a listed external address, a rate card exactly 31 days old and a lease on the preparation day",
+   "plan": {
+    "schemaVersion": "planeon.internal.lab-run-plan/v1",
+    "planId": "RP-20261019-packet-run-01",
+    "preparedAt": "2026-10-19",
+    "purpose": {
+     "gate": "PACKET",
+     "packetId": "EXAMPLE-RUN-001",
+     "summary": "A packet's own run with an external address"
+    },
+    "workload": {
+     "repository": "example-workload-repo",
+     "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "argvSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+     "description": "The campaign's offline acceptance argv at the pinned commit"
+    },
+    "project": {
+     "id": "example-qual-run-0001",
+     "separateFromLabFoundation": true
+    },
+    "location": {
+     "region": "europe-west4",
+     "zone": "europe-west4-a"
+    },
+    "machines": [
+     {
+      "role": "linux-host",
+      "machineType": "e2-standard-8",
+      "count": 1,
+      "bootDiskGb": 100,
+      "bootDiskSku": "pd-balanced",
+      "image": {
+       "project": "example-images",
+       "family": "example-linux-lts",
+       "name": "example-linux-lts-v20261001"
+      }
+     }
+    ],
+    "maxDurationHours": 6,
+    "cost": {
+     "currency": "USD",
+     "rateCard": {
+      "date": "2026-09-18",
+      "source": "EXAMPLE rate card invented for the contract vectors; not a price quote",
+      "rates": [
+       {
+        "sku": "e2-standard-8",
+        "unit": "hour",
+        "price": 0.3
+       },
+       {
+        "sku": "pd-balanced",
+        "unit": "gb-month",
+        "price": 0.1
+       }
+      ]
+     },
+     "lineItems": [
+      {
+       "sku": "e2-standard-8",
+       "unit": "hour",
+       "quantity": 6,
+       "amount": 1.8
+      },
+      {
+       "sku": "pd-balanced",
+       "unit": "gb-month",
+       "quantity": 0.82,
+       "amount": 0.08
+      }
+     ],
+     "total": 1.88,
+     "ceiling": 5
+    },
+    "budget": {
+     "alertOnly": true,
+     "alertThresholds": [
+      0.5,
+      0.9
+     ]
+    },
+    "exposure": {
+     "externalIp": true,
+     "externalIpReason": "the workload's test client connects from a documentation network (example)",
+     "ingress": [
+      {
+       "port": 443,
+       "protocol": "tcp",
+       "sourceRange": "198.51.100.0/24",
+       "reason": "test client (example)"
+      }
+     ]
+    },
+    "observer": {
+     "identity": "obs-packet-run-01",
+     "scope": "RUN_PROJECT",
+     "roles": [
+      "roles/compute.viewer",
+      "roles/logging.viewer",
+      "roles/iam.securityReviewer"
+     ],
+     "exportedKeys": false,
+     "payloadFree": true
+    },
+    "credentials": {
+     "inPlan": false,
+     "heldBy": "OWNER"
+    },
+    "teardown": {
+     "namePrefix": "run-packet-01-",
+     "steps": [
+      "delete every compute and network resource in the run project, and every bucket and service account named with the run's prefix",
+      "delete every user-managed service-account key in the run project",
+      "revoke the IAM bindings granted since the lease started, except the observer's own viewer bindings",
+      "the observer lists every resource class; the owner revokes the observer after accepting the report"
+     ],
+     "keep": [
+      "PROJECT",
+      "AUDIT_LOGS",
+      "OBSERVER_IDENTITY"
+     ],
+     "residualCheckBy": "OBSERVER"
+    },
+    "approval": {
+     "requiredFrom": "OWNER",
+     "binds": "PLAN_SHA256"
+    }
+   },
+   "lease": {
+    "schemaVersion": "planeon.internal.lab-run-lease/v1",
+    "leaseId": "LE-20261019-packet-run-01",
+    "planId": "RP-20261019-packet-run-01",
+    "planSha256": "1f3f6a16c3a66fec09cb42b27edb5f1f049f2fde5597de95afb212e9bec6e9ae",
+    "approval": {
+     "by": "OWNER",
+     "reference": "OA-EXAMPLE-0001"
+    },
+    "startsAt": "2026-10-19T09:00:00Z",
+    "expiresAt": "2026-10-19T15:00:00Z"
+   },
+   "teardown": {
+    "schemaVersion": "planeon.internal.lab-run-teardown/v1",
+    "leaseId": "LE-20261019-packet-run-01",
+    "planSha256": "1f3f6a16c3a66fec09cb42b27edb5f1f049f2fde5597de95afb212e9bec6e9ae",
+    "observer": "obs-packet-run-01",
+    "namePrefix": "run-packet-01-",
+    "teardownCompletedAt": "2026-10-19T14:00:00Z",
+    "observedAt": "2026-10-20T15:00:00Z",
+    "resources": {
+     "INSTANCES": 0,
+     "INSTANCE_GROUPS": 0,
+     "INSTANCE_TEMPLATES": 0,
+     "DISKS": 0,
+     "SNAPSHOTS": 0,
+     "IMAGES": 0,
+     "ADDRESSES": 0,
+     "NETWORKS": 0,
+     "SUBNETWORKS": 0,
+     "FIREWALL_RULES": 0,
+     "ROUTES": 0,
+     "ROUTERS": 0,
+     "NAT_GATEWAYS": 0,
+     "FORWARDING_RULES": 0,
+     "BUCKETS": 0,
+     "SERVICE_ACCOUNTS": 0,
+     "SERVICE_ACCOUNT_KEYS": 0,
+     "IAM_BINDINGS_ADDED": 0
+    },
+    "kept": [
+     "PROJECT",
+     "OBSERVER_IDENTITY"
+    ],
+    "payloadFree": true
+   }
+  }
+ ],
+ "negatives": [
+  {
+   "id": "N01",
+   "intent": "an earlier plan schema version",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "schemaVersion"
+     ],
+     "value": "planeon.internal.lab-run-plan/v0"
+    }
+   ],
+   "refusal": "schema $.schemaVersion const"
+  },
+  {
+   "id": "N02",
+   "intent": "an unknown top-level key",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "notes"
+     ],
+     "value": "x"
+    }
+   ],
+   "refusal": "schema $ closed object"
+  },
+  {
+   "id": "N03",
+   "intent": "the budget section missing",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "budget"
+     ]
+    }
+   ],
+   "refusal": "schema $ closed object"
+  },
+  {
+   "id": "N04",
+   "intent": "a project not declared separate from the lab foundation",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "project",
+      "separateFromLabFoundation"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "schema $.project.separateFromLabFoundation const"
+  },
+  {
+   "id": "N05",
+   "intent": "a project id in the wrong form (upper case)",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "project",
+      "id"
+     ],
+     "value": "Example-Qual-Run"
+    }
+   ],
+   "refusal": "schema $.project.id pattern"
+  },
+  {
+   "id": "N06",
+   "intent": "budgets that claim to stop spend",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "budget",
+      "alertOnly"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "schema $.budget.alertOnly const"
+  },
+  {
+   "id": "N07",
+   "intent": "an observer role outside the viewer list",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observer",
+      "roles",
+      1
+     ],
+     "value": "roles/compute.admin"
+    }
+   ],
+   "refusal": "schema $.observer.roles[1] enum"
+  },
+  {
+   "id": "N08",
+   "intent": "an observer with exported keys",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observer",
+      "exportedKeys"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "schema $.observer.exportedKeys const"
+  },
+  {
+   "id": "N09",
+   "intent": "credentials carried in the plan",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "credentials",
+      "inPlan"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "schema $.credentials.inPlan const"
+  },
+  {
+   "id": "N10",
+   "intent": "approval bound to the plan id instead of its sha256",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "approval",
+      "binds"
+     ],
+     "value": "PLAN_ID"
+    }
+   ],
+   "refusal": "schema $.approval.binds const"
+  },
+  {
+   "id": "N11",
+   "intent": "a zero maximum duration",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "maxDurationHours"
+     ],
+     "value": 0
+    }
+   ],
+   "refusal": "schema $.maxDurationHours exclusiveMinimum"
+  },
+  {
+   "id": "N12",
+   "intent": "a maximum duration above 72 hours",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "maxDurationHours"
+     ],
+     "value": 100
+    }
+   ],
+   "refusal": "schema $.maxDurationHours maximum"
+  },
+  {
+   "id": "N13",
+   "intent": "a machine group of zero machines",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machines",
+      0,
+      "count"
+     ],
+     "value": 0
+    }
+   ],
+   "refusal": "schema $.machines[0].count minimum"
+  },
+  {
+   "id": "N14",
+   "intent": "a residual class outside the closed list",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "keep",
+      0
+     ],
+     "value": "INSTANCES"
+    }
+   ],
+   "refusal": "schema $.teardown.keep[0] enum"
+  },
+  {
+   "id": "N15",
+   "intent": "a residual check by someone other than the observer",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "residualCheckBy"
+     ],
+     "value": "OWNER"
+    }
+   ],
+   "refusal": "schema $.teardown.residualCheckBy const"
+  },
+  {
+   "id": "N16",
+   "intent": "observer roles bound beyond the run project",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observer",
+      "scope"
+     ],
+     "value": "ORGANISATION"
+    }
+   ],
+   "refusal": "schema $.observer.scope const"
+  },
+  {
+   "id": "N17",
+   "intent": "a run-name prefix in the wrong form",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "namePrefix"
+     ],
+     "value": "linux-01"
+    }
+   ],
+   "refusal": "schema $.teardown.namePrefix pattern"
+  },
+  {
+   "id": "N18",
+   "intent": "a private /8 ingress source without an external address (the /16 cap applies to every plan)",
+   "positive": 1,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "sourceRange"
+     ],
+     "value": "10.0.0.0/8"
+    }
+   ],
+   "refusal": "the ingress sources together cover at most 65536 addresses"
+  },
+  {
+   "id": "N19",
+   "intent": "an observer that cannot list buckets, service accounts, keys or the IAM policy",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observer",
+      "roles"
+     ],
+     "value": [
+      "roles/compute.viewer",
+      "roles/logging.viewer"
+     ]
+    }
+   ],
+   "refusal": "the observer's roles list every class the report counts"
+  },
+  {
+   "id": "N20",
+   "intent": "a zone outside the plan's region",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "location",
+      "zone"
+     ],
+     "value": "europe-west1-b"
+    }
+   ],
+   "refusal": "the zone lies in the plan's region"
+  },
+  {
+   "id": "N21",
+   "intent": "a rate card dated 32 days before the plan (31 is accepted, P2)",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "rateCard",
+      "date"
+     ],
+     "value": "2026-09-17"
+    }
+   ],
+   "refusal": "the rate card is dated at most 31 days before the plan"
+  },
+  {
+   "id": "N22",
+   "intent": "a rate card dated after the plan",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "rateCard",
+      "date"
+     ],
+     "value": "2026-10-20"
+    }
+   ],
+   "refusal": "the rate card is dated at most 31 days before the plan"
+  },
+  {
+   "id": "N23",
+   "intent": "a PACKET run without a packet id",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "gate"
+     ],
+     "value": "PACKET"
+    }
+   ],
+   "refusal": "a packet id is named exactly for a PACKET run"
+  },
+  {
+   "id": "N24",
+   "intent": "a gate run that also names a packet id",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "packetId"
+     ],
+     "value": "EXAMPLE-RUN-001"
+    }
+   ],
+   "refusal": "a packet id is named exactly for a PACKET run"
+  },
+  {
+   "id": "N25",
+   "intent": "a line item SKU not on the rate card",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      1,
+      "sku"
+     ],
+     "value": "pd-ssd"
+    }
+   ],
+   "refusal": "a line item uses a rate card SKU and unit"
+  },
+  {
+   "id": "N26",
+   "intent": "a line item in another unit than its rate",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      1,
+      "unit"
+     ],
+     "value": "hour"
+    }
+   ],
+   "refusal": "a line item uses a rate card SKU and unit"
+  },
+  {
+   "id": "N27",
+   "intent": "a line item amount that is not quantity times rate",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      0,
+      "amount"
+     ],
+     "value": 1.2
+    }
+   ],
+   "refusal": "a line item's amount is its quantity at its rate"
+  },
+  {
+   "id": "N28",
+   "intent": "a line item SKU listed twice",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "cost",
+      "lineItems"
+     ],
+     "value": {
+      "sku": "pd-balanced",
+      "unit": "gb-month",
+      "quantity": 0.82,
+      "amount": 0.08
+     }
+    }
+   ],
+   "refusal": "each line item SKU once"
+  },
+  {
+   "id": "N29",
+   "intent": "machine hours short of the whole maximum duration",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      0,
+      "quantity"
+     ],
+     "value": 4
+    },
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      0,
+      "amount"
+     ],
+     "value": 1.2
+    },
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "total"
+     ],
+     "value": 1.28
+    }
+   ],
+   "refusal": "the estimate covers every machine's hours and boot disk for the whole maximum duration"
+  },
+  {
+   "id": "N30",
+   "intent": "machine hours that count one of three machines of a type",
+   "positive": 1,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      0,
+      "quantity"
+     ],
+     "value": 12
+    },
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      0,
+      "amount"
+     ],
+     "value": 1.8
+    },
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "total"
+     ],
+     "value": 2.05
+    }
+   ],
+   "refusal": "the estimate covers every machine's hours and boot disk for the whole maximum duration"
+  },
+  {
+   "id": "N31",
+   "intent": "a machine type with no line item",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machines",
+      0,
+      "machineType"
+     ],
+     "value": "e2-standard-16"
+    }
+   ],
+   "refusal": "the estimate covers every machine's hours and boot disk for the whole maximum duration"
+  },
+  {
+   "id": "N32",
+   "intent": "boot disk GB-months short of the whole maximum duration",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      1,
+      "quantity"
+     ],
+     "value": 0.5
+    },
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "lineItems",
+      1,
+      "amount"
+     ],
+     "value": 0.05
+    },
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "total"
+     ],
+     "value": 1.85
+    }
+   ],
+   "refusal": "the estimate covers every machine's hours and boot disk for the whole maximum duration"
+  },
+  {
+   "id": "N33",
+   "intent": "a boot disk priced by a SKU with no line item",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machines",
+      0,
+      "bootDiskSku"
+     ],
+     "value": "pd-ssd"
+    }
+   ],
+   "refusal": "the estimate covers every machine's hours and boot disk for the whole maximum duration"
+  },
+  {
+   "id": "N34",
+   "intent": "a total that is not the sum of the line items",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "total"
+     ],
+     "value": 1.5
+    }
+   ],
+   "refusal": "the total is the sum of the line items"
+  },
+  {
+   "id": "N35",
+   "intent": "an estimate above the owner's ceiling",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "ceiling"
+     ],
+     "value": 1.5
+    }
+   ],
+   "refusal": "the estimate stays under the owner's ceiling"
+  },
+  {
+   "id": "N36",
+   "intent": "a rate card listing one SKU twice",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "rateCard",
+      "rates",
+      1
+     ],
+     "value": {
+      "sku": "e2-standard-8",
+      "unit": "hour",
+      "price": 0.3
+     }
+    }
+   ],
+   "refusal": "each rate card SKU once"
+  },
+  {
+   "id": "N37",
+   "intent": "an external address without its reason",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "externalIp"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "an external address names its reason"
+  },
+  {
+   "id": "N38",
+   "intent": "a reason for an external address the plan does not have",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "externalIpReason"
+     ],
+     "value": "debugging"
+    }
+   ],
+   "refusal": "an external address names its reason"
+  },
+  {
+   "id": "N39",
+   "intent": "ingress open to the whole internet",
+   "positive": 2,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "sourceRange"
+     ],
+     "value": "0.0.0.0/0"
+    }
+   ],
+   "refusal": "the ingress sources together cover at most 65536 addresses"
+  },
+  {
+   "id": "N40",
+   "intent": "two ingress halves that together cover the whole internet",
+   "positive": 2,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "sourceRange"
+     ],
+     "value": "0.0.0.0/1"
+    },
+    {
+     "op": "append",
+     "path": [
+      "exposure",
+      "ingress"
+     ],
+     "value": {
+      "port": 443,
+      "protocol": "tcp",
+      "sourceRange": "128.0.0.0/1",
+      "reason": "test client (example)"
+     }
+    }
+   ],
+   "refusal": "the ingress sources together cover at most 65536 addresses"
+  },
+  {
+   "id": "N41",
+   "intent": "two /16 ingress ranges together above a /16",
+   "positive": 2,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "sourceRange"
+     ],
+     "value": "198.18.0.0/16"
+    },
+    {
+     "op": "append",
+     "path": [
+      "exposure",
+      "ingress"
+     ],
+     "value": {
+      "port": 443,
+      "protocol": "tcp",
+      "sourceRange": "198.19.0.0/16",
+      "reason": "test client (example)"
+     }
+    }
+   ],
+   "refusal": "the ingress sources together cover at most 65536 addresses"
+  },
+  {
+   "id": "N42",
+   "intent": "ingress from a public range without an external address",
+   "positive": 1,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "sourceRange"
+     ],
+     "value": "198.51.100.0/24"
+    }
+   ],
+   "refusal": "without an external address every ingress source is a private network"
+  },
+  {
+   "id": "N43",
+   "intent": "an ingress range with host bits set",
+   "positive": 1,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "sourceRange"
+     ],
+     "value": "10.8.0.7/24"
+    }
+   ],
+   "refusal": "an ingress source range is a network address with its prefix"
+  },
+  {
+   "id": "N44",
+   "intent": "a residual that does not keep the separate run project",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "keep"
+     ],
+     "value": [
+      "AUDIT_LOGS",
+      "OBSERVER_IDENTITY"
+     ]
+    }
+   ],
+   "refusal": "the residual always keeps the run project and the observer identity"
+  },
+  {
+   "id": "N45",
+   "intent": "a residual that does not keep the observer identity that reports",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "keep"
+     ],
+     "value": [
+      "PROJECT",
+      "AUDIT_LOGS"
+     ]
+    }
+   ],
+   "refusal": "the residual always keeps the run project and the observer identity"
+  },
+  {
+   "id": "N46",
+   "intent": "an e-mail-shaped identity in free text",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": "contact the run owner at ops@example.com"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.purpose.summary"
+  },
+  {
+   "id": "N47",
+   "intent": "a key marker in a teardown step",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "steps",
+      0
+     ],
+     "value": "paste -----BEGIN CERTIFICATE----- here"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.teardown.steps[0]"
+  },
+  {
+   "id": "N48",
+   "intent": "a billing-account-shaped id in the rate card source",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "rateCard",
+      "source"
+     ],
+     "value": "export of billing 01ABCD-23EF45-6789AB"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.cost.rateCard.source"
+  },
+  {
+   "id": "N49",
+   "intent": "a private-key marker in the summary",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": "the run's PRIVATE KEY stays with the owner"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.purpose.summary"
+  },
+  {
+   "id": "N50",
+   "intent": "an API-key shape in the workload description",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "workload",
+      "description"
+     ],
+     "value": "argv with AIzaEXAMPLEkey000"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.workload.description"
+  },
+  {
+   "id": "N51",
+   "intent": "a GitHub token shape in a teardown step",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "steps",
+      1
+     ],
+     "value": "revoke ghp_EXAMPLE0000 afterwards"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.teardown.steps[1]"
+  },
+  {
+   "id": "N52",
+   "intent": "a Slack token prefix in the summary",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": "notify xoxb-example when done"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.purpose.summary"
+  },
+  {
+   "id": "N53",
+   "intent": "an OAuth access-token shape in the workload description",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "workload",
+      "description"
+     ],
+     "value": "token ya29.EXAMPLEtoken for the run"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.workload.description"
+  },
+  {
+   "id": "N54",
+   "intent": "an OAuth refresh-token shape in an ingress reason",
+   "positive": 1,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "ingress",
+      0,
+      "reason"
+     ],
+     "value": "refresh 1//EXAMPLErefresh"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.exposure.ingress[0].reason"
+  },
+  {
+   "id": "N55",
+   "intent": "a fine-grained GitHub token prefix in the summary",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": "clone with github_pat_EXAMPLE"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.purpose.summary"
+  },
+  {
+   "id": "N56",
+   "intent": "a key file's private_key_id field in a teardown step",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "steps",
+      2
+     ],
+     "value": "check private_key_id 0123"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.teardown.steps[2]"
+  },
+  {
+   "id": "N57",
+   "intent": "a lower-case billing-account-shaped id in the workload description",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "workload",
+      "description"
+     ],
+     "value": "billing export 01abcd-23ef45-6789ab"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.workload.description"
+  },
+  {
+   "id": "N58",
+   "intent": "a temporary access-key shape in the external address reason",
+   "positive": 2,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exposure",
+      "externalIpReason"
+     ],
+     "value": "client signs with ASIAEXAMPLE00000"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.exposure.externalIpReason"
+  },
+  {
+   "id": "N59",
+   "intent": "a zero price on the rate card",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "cost",
+      "rateCard",
+      "rates",
+      0,
+      "price"
+     ],
+     "value": 0
+    }
+   ],
+   "refusal": "schema $.cost.rateCard.rates[0].price exclusiveMinimum"
+  },
+  {
+   "id": "N60",
+   "intent": "a plan id that embeds the run project's id",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "planId"
+     ],
+     "value": "RP-20261019-example-qual-run-0001"
+    }
+   ],
+   "refusal": "the run project's id appears in the plan only as project.id"
+  },
+  {
+   "id": "N61",
+   "intent": "an OAuth client-secret prefix in the summary",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": "client GOCSPX-EXAMPLEsecret"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.purpose.summary"
+  },
+  {
+   "id": "N62",
+   "intent": "a billing-account-shaped id joined to a word by an underscore",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "workload",
+      "description"
+     ],
+     "value": "acct_01ABCD-23EF45-6789AB"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.workload.description"
+  },
+  {
+   "id": "N63",
+   "intent": "a maximum duration written as a string",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "maxDurationHours"
+     ],
+     "value": "6"
+    }
+   ],
+   "refusal": "schema $.maxDurationHours type"
+  },
+  {
+   "id": "N64",
+   "intent": "an empty summary",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": ""
+    }
+   ],
+   "refusal": "schema $.purpose.summary minLength"
+  },
+  {
+   "id": "N65",
+   "intent": "a summary longer than 300 characters",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "purpose",
+      "summary"
+     ],
+     "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+   ],
+   "refusal": "schema $.purpose.summary maxLength"
+  },
+  {
+   "id": "N66",
+   "intent": "a plan without machines",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machines"
+     ],
+     "value": []
+    }
+   ],
+   "refusal": "schema $.machines minItems"
+  },
+  {
+   "id": "N67",
+   "intent": "five budget alert thresholds",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "budget",
+      "alertThresholds"
+     ],
+     "value": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+     ]
+    }
+   ],
+   "refusal": "schema $.budget.alertThresholds maxItems"
+  },
+  {
+   "id": "N68",
+   "intent": "an observer role listed twice",
+   "positive": 0,
+   "target": "plan",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "observer",
+      "roles"
+     ],
+     "value": "roles/compute.viewer"
+    }
+   ],
+   "refusal": "schema $.observer.roles uniqueItems"
+  },
+  {
+   "id": "L01",
+   "intent": "a lease for another plan sha256",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "planSha256"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "the lease binds this plan's sha256"
+  },
+  {
+   "id": "L02",
+   "intent": "a lease naming another plan id",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "planId"
+     ],
+     "value": "RP-20261019-other-plan"
+    }
+   ],
+   "refusal": "the lease binds this plan's sha256"
+  },
+  {
+   "id": "L03",
+   "intent": "a lease that expires before it starts",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "expiresAt"
+     ],
+     "value": "2026-10-20T07:00:00Z"
+    }
+   ],
+   "refusal": "the lease expires after it starts"
+  },
+  {
+   "id": "L04",
+   "intent": "a lease longer than the plan's maximum duration",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "expiresAt"
+     ],
+     "value": "2026-10-20T15:00:00Z"
+    }
+   ],
+   "refusal": "the lease lasts at most the plan's maximum duration"
+  },
+  {
+   "id": "L05",
+   "intent": "a lease that starts before the plan was prepared",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "startsAt"
+     ],
+     "value": "2026-10-18T08:00:00Z"
+    },
+    {
+     "op": "set",
+     "path": [
+      "expiresAt"
+     ],
+     "value": "2026-10-18T14:00:00Z"
+    }
+   ],
+   "refusal": "the lease starts on or after the plan's preparation date"
+  },
+  {
+   "id": "L06",
+   "intent": "a lease that starts more than 31 days after the rate card's date",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "startsAt"
+     ],
+     "value": "2026-11-16T08:00:00Z"
+    },
+    {
+     "op": "set",
+     "path": [
+      "expiresAt"
+     ],
+     "value": "2026-11-16T14:00:00Z"
+    }
+   ],
+   "refusal": "the lease starts at most 31 days after the rate card's date"
+  },
+  {
+   "id": "L07",
+   "intent": "an approval by someone other than the owner",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "approval",
+      "by"
+     ],
+     "value": "LANE"
+    }
+   ],
+   "refusal": "schema $.approval.by const"
+  },
+  {
+   "id": "L08",
+   "intent": "an approval reference shaped like a person's name",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "approval",
+      "reference"
+     ],
+     "value": "first.last"
+    }
+   ],
+   "refusal": "schema $.approval.reference pattern"
+  },
+  {
+   "id": "L09",
+   "intent": "a lease time with an offset instead of UTC",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "startsAt"
+     ],
+     "value": "2026-10-20T08:00:00+02:00"
+    }
+   ],
+   "refusal": "schema $.startsAt pattern"
+  },
+  {
+   "id": "L10",
+   "intent": "an access-key shape as the approval reference",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "approval",
+      "reference"
+     ],
+     "value": "OA-AKIAEXAMPLE0000"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.approval.reference"
+  },
+  {
+   "id": "L11",
+   "intent": "a lease id that embeds the run project's id",
+   "positive": 0,
+   "target": "lease",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "leaseId"
+     ],
+     "value": "LE-20261020-example-qual-run-0001"
+    }
+   ],
+   "refusal": "the lease does not carry the run project's id"
+  },
+  {
+   "id": "T01",
+   "intent": "an instance left after teardown",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "resources",
+      "INSTANCES"
+     ],
+     "value": 1
+    }
+   ],
+   "refusal": "no INSTANCES remains after teardown"
+  },
+  {
+   "id": "T02",
+   "intent": "a network left after teardown",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "resources",
+      "NETWORKS"
+     ],
+     "value": 1
+    }
+   ],
+   "refusal": "no NETWORKS remains after teardown"
+  },
+  {
+   "id": "T03",
+   "intent": "a service-account key left after teardown",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "resources",
+      "SERVICE_ACCOUNT_KEYS"
+     ],
+     "value": 1
+    }
+   ],
+   "refusal": "no SERVICE_ACCOUNT_KEYS remains after teardown"
+  },
+  {
+   "id": "T04",
+   "intent": "an IAM binding added for the run left after teardown",
+   "positive": 1,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "resources",
+      "IAM_BINDINGS_ADDED"
+     ],
+     "value": 2
+    }
+   ],
+   "refusal": "no IAM_BINDINGS_ADDED remains after teardown"
+  },
+  {
+   "id": "T05",
+   "intent": "a report that omits a resource class",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "resources",
+      "BUCKETS"
+     ]
+    }
+   ],
+   "refusal": "schema $.resources closed object"
+  },
+  {
+   "id": "T06",
+   "intent": "a report listing the resource classes in another order",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "resources"
+     ],
+     "value": {
+      "IAM_BINDINGS_ADDED": 0,
+      "SERVICE_ACCOUNT_KEYS": 0,
+      "SERVICE_ACCOUNTS": 0,
+      "BUCKETS": 0,
+      "FORWARDING_RULES": 0,
+      "NAT_GATEWAYS": 0,
+      "ROUTERS": 0,
+      "ROUTES": 0,
+      "FIREWALL_RULES": 0,
+      "SUBNETWORKS": 0,
+      "NETWORKS": 0,
+      "ADDRESSES": 0,
+      "IMAGES": 0,
+      "SNAPSHOTS": 0,
+      "DISKS": 0,
+      "INSTANCE_TEMPLATES": 0,
+      "INSTANCE_GROUPS": 0,
+      "INSTANCES": 0
+     }
+    }
+   ],
+   "refusal": "the report lists every resource class, in order"
+  },
+  {
+   "id": "T07",
+   "intent": "a kept class outside the plan's residual",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "kept"
+     ],
+     "value": [
+      "PROJECT",
+      "OBSERVER_IDENTITY",
+      "BILLING_LINK"
+     ]
+    }
+   ],
+   "refusal": "only the plan's residual is kept, always with the run project and the observer identity"
+  },
+  {
+   "id": "T08",
+   "intent": "a report whose kept list omits the observer identity",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "kept"
+     ],
+     "value": [
+      "PROJECT",
+      "AUDIT_LOGS"
+     ]
+    }
+   ],
+   "refusal": "only the plan's residual is kept, always with the run project and the observer identity"
+  },
+  {
+   "id": "T09",
+   "intent": "a report by another observer",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observer"
+     ],
+     "value": "obs-someone-else"
+    }
+   ],
+   "refusal": "the run's own observer reports"
+  },
+  {
+   "id": "T10",
+   "intent": "a report counting another run-name prefix",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "namePrefix"
+     ],
+     "value": "run-other-01-"
+    }
+   ],
+   "refusal": "the report counts the plan's run-name prefix"
+  },
+  {
+   "id": "T11",
+   "intent": "a teardown completed after the lease expired",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardownCompletedAt"
+     ],
+     "value": "2026-10-20T14:30:00Z"
+    },
+    {
+     "op": "set",
+     "path": [
+      "observedAt"
+     ],
+     "value": "2026-10-20T14:45:00Z"
+    }
+   ],
+   "refusal": "lease overrun: the teardown completed after the lease expired"
+  },
+  {
+   "id": "T12",
+   "intent": "a teardown completed before the lease started",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardownCompletedAt"
+     ],
+     "value": "2026-10-20T07:00:00Z"
+    }
+   ],
+   "refusal": "the teardown completes within the run and before it is observed"
+  },
+  {
+   "id": "T13",
+   "intent": "an observation before the teardown completed",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observedAt"
+     ],
+     "value": "2026-10-20T13:00:00Z"
+    }
+   ],
+   "refusal": "the teardown completes within the run and before it is observed"
+  },
+  {
+   "id": "T14",
+   "intent": "an observation more than a day after the lease expired",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observedAt"
+     ],
+     "value": "2026-10-21T15:00:00Z"
+    }
+   ],
+   "refusal": "the residual is observed after the lease expires and within a day of it"
+  },
+  {
+   "id": "T15",
+   "intent": "a report bound to another lease",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "leaseId"
+     ],
+     "value": "LE-20261020-other-lease"
+    }
+   ],
+   "refusal": "the report binds this lease and plan"
+  },
+  {
+   "id": "T16",
+   "intent": "a report bound to another plan sha256",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "planSha256"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "the report binds this lease and plan"
+  },
+  {
+   "id": "T17",
+   "intent": "a report carrying payload",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "payloadFree"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "schema $.payloadFree const"
+  },
+  {
+   "id": "T18",
+   "intent": "a service-account domain as the reporting observer",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observer"
+     ],
+     "value": "obs-gserviceaccount"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.observer"
+  },
+  {
+   "id": "T19",
+   "intent": "a report against a lease longer than the plan allows (the lease is checked again)",
+   "positive": 0,
+   "target": "lease-at-teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "expiresAt"
+     ],
+     "value": "2026-10-20T15:00:00Z"
+    }
+   ],
+   "refusal": "the lease lasts at most the plan's maximum duration"
+  },
+  {
+   "id": "T20",
+   "intent": "an observation while the lease is still running",
+   "positive": 0,
+   "target": "teardown",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "observedAt"
+     ],
+     "value": "2026-10-20T13:45:00Z"
+    }
+   ],
+   "refusal": "the residual is observed after the lease expires and within a day of it"
+  }
+ ],
+ "parseNegatives": [
+  {
+   "id": "S01",
+   "intent": "a duplicate key",
+   "raw": "{\"a\": 1, \"a\": 2}",
+   "refusal": "duplicate key a"
+  },
+  {
+   "id": "S02",
+   "intent": "a NaN",
+   "raw": "{\"a\": NaN}",
+   "refusal": "non-finite number NaN"
+  },
+  {
+   "id": "S03",
+   "intent": "a negative infinity",
+   "raw": "{\"a\": -Infinity}",
+   "refusal": "non-finite number -Infinity"
+  },
+  {
+   "id": "S04",
+   "intent": "an integral number with a decimal point",
+   "raw": "{\"a\": 6.0}",
+   "refusal": "an integral number is written without a decimal point or exponent: 6.0"
+  },
+  {
+   "id": "S05",
+   "intent": "an integral number with an exponent",
+   "raw": "{\"a\": 1e3}",
+   "refusal": "an integral number is written without a decimal point or exponent: 1e3"
+  },
+  {
+   "id": "S06",
+   "intent": "a number that overflows to infinity",
+   "raw": "{\"a\": 1e400}",
+   "refusal": "non-finite number 1e400"
+  },
+  {
+   "id": "S07",
+   "intent": "an integer beyond 10^12",
+   "raw": "{\"a\": 1000000000001}",
+   "refusal": "integer out of range"
+  },
+  {
+   "id": "S08",
+   "intent": "a lone surrogate escape",
+   "raw": "{\"a\": \"\\ud800\"}",
+   "refusal": "a string is not valid Unicode (a lone surrogate)"
+  },
+  {
+   "id": "S09",
+   "intent": "a UTF-8 byte-order mark before the document",
+   "raw": "\ufeff{\"a\": 1}",
+   "refusal": "a document is UTF-8 without a byte-order mark"
+  }
+ ]
+}

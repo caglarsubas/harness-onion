@@ -1,0 +1,186 @@
+{
+ "schemaVersion": "planeon.internal.met-linux-007-status/v1",
+ "packet": "MET-LINUX-007",
+ "roadmapItem": "LAB-RUNPLAN-001",
+ "contractState": "ADOPTED_DATA_CONTRACT",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef",
+ "contractFiles": [
+  "architecture/lab-run-plan/README.md",
+  "architecture/lab-run-plan/REVIEW_BRIEF.md",
+  "architecture/lab-run-plan/run-plan.schema.json",
+  "architecture/lab-run-plan/lease.schema.json",
+  "architecture/lab-run-plan/teardown-report.schema.json",
+  "architecture/lab-run-plan/vectors.json",
+  "architecture/lab-run-plan/status.json",
+  "scripts/lab_run_plan.py"
+ ],
+ "reviewRounds": [
+  {
+   "round": 1,
+   "record": "architecture/lab-run-plan/review-round1.json",
+   "recordSha256": "sha256:d6fa8b0f24a7761eb8c8c0b0cd1a4c14dc8f7204070848aff018467cbd16a308",
+   "subject": {
+    "commit": "7c744bb044d533da9f35e10fba2dbe975add4c1c",
+    "tree": "19a7638284330511839b0be72966ee2d0efdccb3",
+    "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RP1-1 MINOR",
+    "RP1-2 MINOR",
+    "RP1-3 MINOR",
+    "RP1-4 MINOR",
+    "RP1-5 MINOR",
+    "RP1-6 MINOR",
+    "RP1-7 MINOR",
+    "RP1-8 MINOR",
+    "RP1-9 MINOR",
+    "RP1-10 MINOR",
+    "RP1-11 MINOR",
+    "RP1-12 MINOR",
+    "RP1-13 NOTE",
+    "RP1-14 NOTE",
+    "RP1-15 NOTE",
+    "RP1-16 NOTE",
+    "RP1-17 NOTE",
+    "RP1-18 NOTE",
+    "RP1-19 NOTE"
+   ]
+  },
+  {
+   "round": 2,
+   "record": "architecture/lab-run-plan/review-round2.json",
+   "recordSha256": "sha256:2f2f17a788e5e167942d45f802ddb054ef7a677b2b413b511882d6159ebb643d",
+   "subject": {
+    "commit": "c62698480d4cb51e90a1c45d1bc1cfa0518dfeeb",
+    "tree": "767d5fd7df8e67344f48289237d0cdc8dfaba4e5",
+    "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RP2-1 MINOR",
+    "RP2-2 MINOR",
+    "RP2-3 MINOR",
+    "RP2-4 MINOR",
+    "RP2-5 MINOR",
+    "RP2-6 MINOR",
+    "RP2-7 MINOR",
+    "RP2-8 NOTE",
+    "RP2-9 NOTE",
+    "RP2-10 NOTE",
+    "RP2-11 NOTE",
+    "RP2-12 NOTE",
+    "RP2-13 NOTE"
+   ]
+  },
+  {
+   "round": 3,
+   "record": "architecture/lab-run-plan/review-round3.json",
+   "recordSha256": "sha256:ba5aecc5833175f04021002771f5d0c6c82946e03727d12b90d6afc5fffcfed4",
+   "subject": {
+    "commit": "88291da1a91e294a29052379c6b69a0cd5f1f2f4",
+    "tree": "20bbd829515daeefadaf4bd69ff8321c6d2f980f",
+    "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RP3-1 MINOR",
+    "RP3-2 MINOR",
+    "RP3-3 NOTE",
+    "RP3-4 NOTE",
+    "RP3-5 NOTE"
+   ]
+  },
+  {
+   "round": 4,
+   "record": "architecture/lab-run-plan/review-round4.json",
+   "recordSha256": "sha256:7c994afa6b602b2bf6c884011b4a04033a125804c921725e31cd4beee23b6ec7",
+   "subject": {
+    "commit": "5bbb90e299cfedbd718ce5901246a0a531001e2f",
+    "tree": "21feb044c983ca5cb3e57cdd8aaf317b6edd6bfb",
+    "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RP4-1 MINOR",
+    "RP4-2 NOTE",
+    "RP4-3 NOTE",
+    "RP4-4 NOTE"
+   ]
+  },
+  {
+   "round": 5,
+   "record": "architecture/lab-run-plan/review-round5.json",
+   "recordSha256": "sha256:2493f9bc8323626f2edb36a8752bb7b5bf9fcc7e372caaa4b1dd4b1940c626a8",
+   "subject": {
+    "commit": "305918af9de0996199e7f51a98c377ee41e1f18c",
+    "tree": "50bdc21081bfbd128d878874a4419c25b57ffd4e",
+    "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef"
+   },
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "findings": [
+    "RP5-1 NOTE",
+    "RP5-2 NOTE",
+    "RP5-3 NOTE",
+    "RP5-4 NOTE"
+   ]
+  }
+ ],
+ "ownerDecisions": [
+  {
+   "id": "Q-RP-0..9",
+   "date": "2026-10-19",
+   "decision": "Monitor relay, owner decisions on LAB-RUNPLAN-001, 2026-10-19:\n- Q-RP-0 (a): clean room. Design from the roadmap text (VR-D1) and the 2026-10-15 decision only; the owner's lab repo is not read.\n- Q-RP-3 (a): no org project ids published. The plan declares it's separate, the owner confirms that at approval, and the vectors use invented ids.\n- Q-RP-4 (a): a dedicated read-only observer per run, with closed viewer roles, no exported keys, payload-free.\n- Q-RP-1, 2, 5, 6, 7, 8, 9: all (a) as in PLAN.md: three documents with one checker; the rate-card cost recomputed against the owner's ceiling, with budgets alert-only; no exposure by default; approval binds the plan sha256 through the lease; id MET-LINUX-007 (confirmed free on main); runbook in the README only; R12 edge later.\nSLOT 251 is yours (MET-LINUX-007). Record these verbatim and dated. GO for the contract draft and the contract review rounds (light, no network; no credentials, project ids or account identities anywhere). The pre-check, dry run and push need my word.",
+   "source": "owner decisions relayed by the lane monitor; the message quoted verbatim"
+  },
+  {
+   "id": "VR-D1",
+   "date": "2026-10-17",
+   "decision": "run-plan contract in the full set",
+   "source": "owner, as the roadmap item LAB-RUNPLAN-001 records it"
+  },
+  {
+   "id": "LINUX-CAPACITY",
+   "date": "2026-10-15",
+   "decision": "Linux capacity for CONF-LINUX-001 and W06 is the owner's GCP compute, and each run plan goes to the owner first",
+   "source": "owner via the lane monitor, as the roadmap items CONF-LINUX-001 and W06 record it"
+  },
+  {
+   "id": "MON-18-CLASSES-KEEP-R1",
+   "date": "2026-10-19",
+   "decision": "Monitor: keep the 18 resource classes. They're stricter and within the owner's (a). Keep round 1: its slips were harmless and it didn't pass anyway. Carry on with r2.",
+   "source": "the lane monitor on review round 1; the message quoted verbatim"
+  },
+  {
+   "id": "MON-R3-KEEP-IF-OWN-NOTES",
+   "date": "2026-10-19",
+   "decision": "Monitor: (a) keep round 3, on one condition. The memory directory is shared with the primary lane, so confirm the two notes the reviewer opened were your own lane's (W04/parallel) and held no W03/R10 design material. Record their file names in the round's disclosure. If either was a primary-lane note, choose (b) and void the round instead. Give the exact prefix inline in round 4's prompt, as you planned. Candidate 4 then goes to round 4.",
+   "source": "the lane monitor on an earlier round-3 attempt, voided under this condition; the message quoted verbatim"
+  }
+ ],
+ "cleanRoom": "designed from the roadmap text (VR-D1) and the 2026-10-15 decision only; the owner's warm-start lab repository was not read (Q-RP-0 (a); AGENTS rules 4 and 10; WARM-PROVENANCE-001 open)",
+ "notPublished": [
+  "credentials",
+  "project ids of the owner's organisation",
+  "account identities",
+  "approval identities"
+ ],
+ "consumers": {
+  "R12": "CONF-LINUX-001 and W06 run plans; an edge record registers the consumption when an R12 packet vendors the contract (Q-RP-9 (a))"
+ },
+ "reviewerIndependence": "SEPARATE_AGENT_NOT_AUTHOR",
+ "cloudRunExecuted": false,
+ "costIncurred": false,
+ "credentialsHandled": false,
+ "nativeAcceptance": false,
+ "tenantAcceptance": false,
+ "carriedNotes": {
+  "RP2-13": "OBSERVER_IDENTITY is always kept, beyond PLAN.md's residual (the project, the billing link and the audit logs): the observer that makes the report must still exist when it lists, and the owner revokes it after accepting the report.",
+  "RP5-1": "A UTF-16 or UTF-32 file without a byte-order mark is valid UTF-8 byte for byte and is refused as JSONDecodeError, not by the encoding rule; nothing that should be refused is accepted.",
+  "RP5-2": "No vector holds invalid UTF-8 bytes (a parse negative's raw is a JSON string encoded as UTF-8); a later vector format could carry raw bytes, for example as hex.",
+  "RP5-3": "No negative covers a line item in the wrong unit for the coverage rule (item unit equal to the needed unit); a later packet can add one.",
+  "RP5-4": "Without an external address every ingress source must be RFC 1918, so a provider forwarding range (for example a TCP forwarding proxy range) needs a private network path or an external address; a closed list of provider ranges is a later decision."
+ },
+ "adoptionEdit": "contractState CANDIDATE -> ADOPTED_DATA_CONTRACT; reviewRounds, the lane monitor's MON-18-CLASSES-KEEP-R1 and MON-R3-KEEP-IF-OWN-NOTES rows, carriedNotes and adoptionEdit added (review round 2, RP2-13); the review records were written outside the worktree and copied here as review-round1.json to review-round5.json; round 1 is kept although its reviewer reported harmless procedural slips, as the lane monitor decided; a round-3 attempt on candidate 3 was voided under the lane monitor's condition (its reviewer opened two of the other lane's operational notes before reading its brief) and is not published, and its findings were addressed in candidate 4, which round 3 reviewed; every earlier round's MINOR findings were fixed in the next candidate; README.md keeps its candidate status line, and the adoption is recorded in this file only; no other contract file changed"
+}
