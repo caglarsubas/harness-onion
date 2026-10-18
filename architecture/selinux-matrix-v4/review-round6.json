@@ -1,0 +1,68 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 6,
+ "subjectCommit": "ddbd5e9e3e7e81c7900d2d84f5f533effa19e9fb",
+ "subjectTree": "035270b0c08acd20ba425df9a23ee153f14e5ae1",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV6-1",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/REVIEW_BRIEF.md",
+   "line": 98,
+   "summary": "Candidate 6 did not update the brief's by-index list of changed v5 data or its question-2 counts. Line 98 says 'Everything else, `types` included, is v5's', but v5 type rows 33-36 now differ from v5. Line 94 says 74 assertions are appended (132-205); it is now 82 (132-213). Line 107 gives 206 assertions, 4,519 access checks and 106 mutation checks; it is now 214, 4,600 and 114. Line 33 says vectors.json 'appends' the new checks. In fact they are inserted inside each kind group (Q98-Q109 after Q97, N41-N49 after N40, M107-M109 and M110-M114 inside their mutation groups), so candidate 5's v6-only vectors move: access checks from index 4439, mutation checks from index 94.",
+   "evidence": "Comparing matrix.json types with ../selinux-matrix-v3/matrix.json by index, only 33-36 differ, each by the appended narrowed init_t entries. IDs and expectations of every candidate-5 vector are unchanged, and v5 positions (access 0-2434, mutation 0-75) are kept, as README:58 claims. README:49, :59-60 and :75-76 state the change correctly. Earlier inaccuracies confined to the brief while the README was correct (XR4-2, XV5-2) were NOTEs.",
+   "requiredChange": "Update REVIEW_BRIEF.md lines 33, 94, 98 and 107 to candidate 6's data (types 33-36; 82 appended assertions, 132-213; 214/4,600/114; 'inserted within each kind group')."
+  },
+  {
+   "id": "XV6-2",
+   "severity": "NOTE",
+   "file": "scripts/selinux_matrix_v4.py",
+   "line": 352,
+   "summary": "check_matrix's named-type-transition rule tests 'the source may write the parent' with granted(), which ignores a classes/perms narrowing. v5 never narrowed WRITE, so the test was exact. Under candidate 6, init_t's narrowed `sock_file unlink` counts as WRITE, so check_matrix now accepts a named type transition from init_t under a planeon socket-file parent, which candidate 5 refused. The delta therefore changes check_matrix behaviour outside _cleanup_grant, although the brief says the evaluator adds 'nothing else'.",
+   "evidence": "Scratch mutation: append typeTransitions {source: init_t, parent: planeon_i05_sock_t, class: sock_file, name: x.sock, new: planeon_i05_sock_t}. Candidate 5 refuses it ('type transition ...'). Candidate 6 accepts it, and all 214 assertions hold. The rule can never fire, because Linux v6.12 selinux_determine_inode_label computes a new inode's type from its parent directory and a socket inode has no children. No allowed() answer changes, so the effect is inert.",
+   "requiredChange": "Optional: test the parent with _granted_file(..., 'dir', 'add_name'), or require 'dir' in the parent type's classes, and add a mutation. Otherwise disclose the side effect."
+  },
+  {
+   "id": "XV6-3",
+   "severity": "NOTE",
+   "file": "scripts/selinux_matrix_v4.py",
+   "line": 256,
+   "summary": "_cleanup_grant maps each socket-file type to one listener through a dict built over `sockets`. If two socket rows name the same file type, only the last row's listener counts, and check_matrix does not require one socket row per socket-file type.",
+   "evidence": "Two-op scratch mutation: append a socket row {object: planeon_x_socket_t, listener: planeon_gate_t, file: qualk8s_runtime_sock_t, connect: []}, plus the narrowed init_t unlink on qualk8s_runtime_sock_t. check_matrix accepts it and all 214 assertions hold, and allowed(init_t, qualk8s_runtime_sock_t, sock_file, unlink) becomes True. Only access check N45 would flip; no assertion pins the backend socket files against init_t. The reverse (a backend-listener row appended for planeon_i05_sock_t) fails closed. As with XV5-1, the route needs a visible change to another row, so this is defence in depth, not an open route.",
+   "requiredChange": "Optional: in check_matrix, require every socket row that names the type to have a resident listener (or one row per socket-file type). Optionally also add an assertion that init_t neither stats nor unlinks qualk8s_datastore_sock_t or qualk8s_runtime_sock_t."
+  },
+  {
+   "id": "XV6-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 747,
+   "summary": "A79.<type> lists the READ, WRITE and RELABEL permissions other than getattr and unlink. Its statement ('systemd may only stat and unlink', matrix.json:7137 and siblings) and the README Assertions row ('may do nothing else to it') claim more than that. An EXECUTE, EXECUTE_NO_TRANS or EXECMOD grant to init_t on a planeon socket-file type passes check_matrix and every assertion.",
+   "evidence": "Scratch mutation setting access.EXECUTE = [{domain: init_t}] on planeon_i05_sock_t: check_matrix passes and failed_assertions is empty. check_matrix refuses ENTRYPOINT (the XV4-1 rule). The gap is inert in Linux v6.12: may_open returns -EACCES for MAY_EXEC on an S_IFSOCK inode before inode_permission, so no exec reaches the SELinux execute check. README:79-80 already states the true scope ('no other READ, WRITE or RELABEL permission').",
+   "requiredChange": "Optional: narrow A79's statement and the README row to 'no other READ, WRITE or RELABEL permission', or add the remaining file-class permissions to A79."
+  },
+  {
+   "id": "XV6-5",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 69,
+   "summary": "The quoted owner decision drops the '1.' and '2.' numbering and the final sentence 'v6 still adopts after slot 246.' without marking the omission. The README's other quotes mark elisions with '...'.",
+   "evidence": "Compared owner_decisions.json SOL-SYSTEMD-CLEANS with README:69-72. Apart from the numbering and the last sentence, the wording is identical. The omitted sentence agrees with Q-MX6-1 (a) (adopt after 246 merges), so nothing is contradicted.",
+   "requiredChange": "Optional: quote the full text, or mark the elision."
+  },
+  {
+   "id": "XV6-6",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 81,
+   "summary": "The removal works under the pinned matrix, and the matrix closes no permission it needs. Two premises are worth stating. (a) Q106-Q109 pin only dir search, write, remove_name and rmdir. The cleanup also opens, lists and stats the directory (dir open, read, getattr); init_t's unconditional v5 READ on planeon_run_t grants these, but no check pins them. (b) The directory type. systemd creates RuntimeDirectory= paths with its label-aware mkdir, which sets an fscreate context from the loaded file contexts, and selinux_determine_inode_label prefers that fscreate SID over a named type transition or inheritance. So /run/planeon, live-proxy and maintenance carry planeon_run_t only if W03's file contexts say so, while README:661-668 names only the named type transition for systemd's /run/planeon. By my reading, a base-policy /run/.* entry would otherwise give var_run_t, and host policy would then decide the cleanup.",
+   "evidence": "Kernel facts (Linux v6.12, security/selinux/hooks.c and fs/namei.c), from my own knowledge. unlink: may_delete -> inode_permission(dir, MAY_WRITE|MAY_EXEC) -> selinux_inode_permission gives dir write+search; selinux_inode_unlink -> may_link(MAY_UNLINK) gives dir search+remove_name on the directory, then sock_file unlink on the victim (its inode class). rmdir: the same on the parent, plus dir rmdir via may_link(MAY_RMDIR). Path walk: may_lookup -> dir search. stat: selinux_inode_getattr -> getattr. Opening and listing: selinux_inode_permission(MAY_READ) and selinux_file_open (dir read, open), then selinux_file_permission from iterate_dir (dir read). connect: unix_find_bsd -> path_permission(MAY_WRITE) -> sock_file write, which A79 denies to init_t. systemd facts, also my own knowledge: on stop the manager (PID 1, init_t) removes each RuntimeDirectory= leaf (planeon/live-proxy, planeon/maintenance; not /run/planeon) via exec_context_destroy_runtime_directory -> rm_rf(path, REMOVE_ROOT). Some versions fstatat each non-directory entry (hence sock_file getattr). rm_rf's temporary-filesystem test (statfs -> selinux_sb_statfs -> filesystem getattr on /run's tmpfs superblock) has a host label outside the matrix. Scratch check: allowed(init_t, planeon_run_t, dir, p) is True for open, read, getattr, search, write, remove_name and rmdir in all three states, and var_run_t answers None. The grant cannot tell a stale socket from a live one, and I01, I02 and I05 share live-proxy. README:90-92 rightly assigns that, and the shared-RuntimeDirectory semantics, to HS53/W03/T04.",
+   "requiredChange": "Optional: add access checks for init_t dir open, read and getattr on planeon_run_t. Also record a W03/T04 obligation that the file contexts label /run/planeon and its RuntimeDirectory= leaves planeon_run_t, because systemd's label-aware mkdir overrides the named type transition."
+  }
+ ]
+}

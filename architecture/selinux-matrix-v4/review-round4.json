@@ -1,0 +1,32 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 4,
+ "subjectCommit": "6720a5ee834b5f16238993268a771e15e8864aac",
+ "subjectTree": "4a98182c02f829a475f7e6146c8ee15600c946ed",
+ "verdict": "CHANGES_REQUIRED",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV4-1",
+   "severity": "MINOR",
+   "file": "scripts/selinux_matrix_v4.py",
+   "line": 284,
+   "summary": "An entry grant to the wrong domain can still pass check_matrix and all 207 assertions. Granting the maintenance domain, systemd or the admin login `file entrypoint` on any declared type that is neither an entry type nor the interpreter is caught by nothing.",
+   "evidence": "Scratch probe on the round-4 matrix: 206 single ENTRYPOINT grants, each run through check_matrix and failed_assertions. Results: the interpreter type for each of the 19 domains is all caught (A77.planeon_interpreter_exec_t, plus the A60 entry closures). Each of the 17 entry types for each of planeon_maint_t, init_t, planeon_admin_t and one wrong closed domain is all caught (A77.<type>). Each of the 40 other declared types (sealed configuration, unit files, credentials, sockets, cgroups, pins, seal marker, boolean files, journal, data, /run) for planeon_maint_t, init_t and planeon_admin_t: 120 of 120 pass check_matrix and all 207 assertions. For example, planeon_maint_t entered through planeon_etc_t, a file the maintenance domain itself writes in the maintenance boot, or through qualk8s_datastore_data_t. The sixteen closed domains are covered by A60.49-A60.64. check_matrix accepts an ENTRYPOINT group on any type category; only ANY_DOMAIN is refused.",
+   "requiredChange": "Add one check_matrix rule: an ENTRYPOINT grant only on an ENTRYPOINT- or CONTAINER_FILE-category type (or exactly on the types `entry_types` derives). Add a mutation such as M106 (planeon_maint_t ENTRYPOINT on planeon_etc_t is refused). Alternatively add an assertion over every domain refusing `file entrypoint` on the 40 non-entry declared types."
+  },
+  {
+   "id": "XV4-2",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 250,
+   "summary": "MX6-O8 is scoped to mounts made 'in the host mount namespace'. A mount made in another namespace can still reach the host through shared propagation.",
+   "evidence": "A namespace created with unshare(CLONE_NEWNS) keeps the shared peer groups of the mounts it copied. systemd makes mounts shared by default. A mount source that unshares and then mounts on a shared /run (or another ancestor) without first making it private propagates that mount into the host namespace, which the 'in the host mount namespace' wording does not catch. SELinux's mounton check is on the path's type, whatever the namespace, so a type-based W03 rule still refuses it. Only the wording is narrow.",
+   "requiredChange": "Write 'mounts made in, or propagating into, the host mount namespace' (or 'whatever the namespace, on a path whose type is ...'), so the obligation matches how the type-based mounton rule enforces it."
+  }
+ ]
+}

@@ -1,0 +1,122 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 1,
+ "subjectCommit": "7f1a4e1885eef0c4803e5d015d997436d23be0c5",
+ "subjectTree": "36c155a330df063ab6b0b203c1d9cc133970fdf6",
+ "verdict": "CHANGES_REQUIRED",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV1-1",
+   "severity": "MAJOR",
+   "file": "architecture/selinux-matrix-v4/matrix.json",
+   "line": 6003,
+   "summary": "A plain context=C mount needs `filesystem relabelfrom` on C itself, which v6 denies to both mount sources. So under a policy that meets v6, no context= mount of container content succeeds. This contradicts the design the README states and the owner's Q-MX6-4 (a) wording.",
+   "evidence": "Kernel basis (my own knowledge of Linux v6.12 security/selinux/hooks.c, selinux_set_mnt_opts): for context= without fscontext=, it calls may_context_mount_sb_relabel(C) (relabelfrom on the old superblock label, relabelto C) and then sets sbsec->sid = C. Next, `if (!rootcontext_sid) rootcontext_sid = context_sid;` runs, and the rootcontext block calls may_context_mount_inode_relabel(C). That function checks `filesystem relabelfrom` from the mounting domain on sbsec->sid, which is now C, then associate C->C. The matrix grants associate C->C (Q67), the second half of that same check, but filesystem.relabelfrom is empty (matrix.json:6003). A70 (matrix.json:4772) lists qualk8s_container_file_t among its 58 targets, N31 (vectors.json:40206) expects False, and M78 (vectors.json:42341) treats the grant as a breach. The owner text lists \"relabelfrom/relabelto ... on context= labels\". In a scratch replay, granting relabelfrom on C to the kubelet and the runtime fails only A70. README:79-82 leaves out the implicit rootcontext check, and README:92-96 gives a reason for the denial that the associate closure already covers.",
+   "requiredChange": "Grant `filesystem relabelfrom` on qualk8s_container_file_t to both mount sources. Drop C from A70's targets. Flip or retarget N31 and M78. Correct README:79-82, :92-96, the change-table row (:32) and the A70-A74 row: A73 is what refuses fscontext=C chaining and rootcontext=/defcontext= over a container-content superblock, not relabelfrom. Also consider closing `associate` into C for every source type, declared or not. Then fscontext=C,context=X with an undeclared X is refused as well; today associate X->C is None for an undeclared X."
+  },
+  {
+   "id": "XV1-2",
+   "severity": "MAJOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 62,
+   "summary": "The new closures refuse execute_no_trans and transitions into undeclared domains. But `file entrypoint` on an undeclared type stays outside the matrix for every domain. So a closed domain can still be entered with an undeclared binary through a declared transition: runtime to Pod, init to each backend, broker to worker. Owner Q-MX6-2/Q-MX6-3 (a) say undeclared binaries are refused, Pod domain included, and the data does not meet that.",
+   "evidence": "Evaluator, ENROLLED_SEALED: allowed(qualk8s_container_t, bin_t, file, entrypoint) = None; qualk8s_runtime_t -> qualk8s_container_t process transition = True; process2 nnp_transition = True; the runtime's file execute on bin_t = None. The same holds for every domain (planeon_worker_t entrypoint bin_t = None). Kernel basis (v6.12 selinux_bprm_creds_for_exec, plus the MAY_EXEC open check): an exec transition checks `process transition` (a domain pair), `file entrypoint` (new domain to the file's type) and `file execute` (old domain to the file's type). None of these is tied to the matrix's declared entry type. So a policy that grants qualk8s_container_t entrypoint on a host type meets v6, and the runtime can then start a Pod process from any host binary of that type. A systemd unit with SELinuxContext= could likewise enter a backend domain from a host binary. NP4's P-a / T04-ENTRYPOINT (NP4 README:115, :319, 'enters each captured domain only through its entrypoint constant type') covers captured roles and backends. It does not cover qualk8s_container_t, which the owner put in the closure. The README's argument (:62-67) presents execute_no_trans plus the transition closure as complete, but the host-policy bypass the monitor cited for Q-MX6D-1 is still open through entry. The carried v5 sentence README:511-512 ('lets each planeon domain be entered only through its sealed entrypoint type') holds only for declared types.",
+   "requiredChange": "Add a per-source `file entrypoint` closure (the entered domain is the subject of that check) for the nine qualk8s domains at least, and preferably for all sixteen closed sources. Then entrypoint on any type the matrix does not grant is False, declared or not. Extend check_matrix's closure shapes, and add A60 assertions with undeclared samples (bin_t, container_runtime_exec_t), positive and negative checks, and a closure-removal mutation. Update the Q-MX6D-1 argument (:60-70), the consequence text (:50-56), MX6-O1 and README:511-512."
+  },
+  {
+   "id": "XV1-3",
+   "severity": "MAJOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 132,
+   "summary": "The duty check behind the 25 removed /proc pairs does not evaluate the v1 peer duties that HS43 §4.3 keeps unchanged. The published v1 design has the server qualify its observer and broker peers through their /proc. So removing server->observer and server->broker (and possibly broker->server) is not shown to remove only reads that no duty needs.",
+   "evidence": "HS43 HOST_INTERFACE_SPEC.md:333-334: 'SERVER and OBSERVER do not talk to the gate except SERVER over I04 TLS. Their v1 peer duties are unchanged.' NP4 README:354-355 leaves the server's and the broker's 'other duties' to this evaluation. README:132-133 argues only that no role checks the server, which is the other direction, and from that concludes that no server duty reads another process's /proc. docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md:77-104 has the server's fixed factory 'qualify active peers'. It retains PID/start time and the pidfd, compares UID/GID, label, namespace inodes and cgroup membership with the enrolled role, reads /proc/<retained-pid>/exe and the ns links, and says 'Actual peer proc access must already be permitted'. docs/alpha-2/OBSERVATION_ENFORCEMENT_DESIGN.md:160: 'peer qualification precedes its use'. The published test inventory (architecture/accounting-scope-inputs/readiness.json:1385-1404, :1561-1578) lists server-side KernelBrokerInspectionTests and KernelObserverInspectionTests, for example test_proc_start_must_join_original_socket_process_before_code_reads. Under v6 these reads are False (A69.planeon_server_t, matrix.json:4622, whose statement says 'no peer check').",
+   "requiredChange": "Evaluate the v1 peer duties pair by pair: server->observer (I01), server->broker (I02), broker->server, and any v1 check of the worker. Keep each pair a live duty needs, or record a monitor/owner decision that retires that v1 peer qualification, stating its effect on I01/I02. Then correct README:128-138 and the statements of A69.planeon_server_t and A69.planeon_broker_t."
+  },
+  {
+   "id": "XV1-4",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 208,
+   "summary": "Owner and monitor decisions recorded after the subject commit are missing. Q-MX6D-1 and Q-MX6D-2 are now decided (a), but the README and brief still say 'pending'. The owner's 'Keep, T04 uses v5' named limitation is absent, and so is the monitor's requested statement that the transition closure binds R10's worker.",
+   "evidence": "<workspace>/tools/matrix-v6/owner_decisions.json: Q-MX6-KEEP-T04-V5 (owner, verbatim 'Keep, T04 uses v5'; the monitor asks that 'T04 cluster qualification runs against matrix v5' until D-HELPER-TYPES be recorded 'as a named limitation in v6's README') and Q-MX6D-MONITOR (Q-MX6D-1 (a), Q-MX6D-2 (a); 'State explicitly that this binds R10's worker'). README:31, :34 and :208-210 and REVIEW_BRIEF.md:40-41 say pending. A search of the README finds no named limitation and no R10 statement. The subject commit (23:00:19) predates the record's last update.",
+   "requiredChange": "Quote both records verbatim under 'Owner and monitor decisions for v6'. Mark Q-MX6D-1 and Q-MX6D-2 decided in the change table, in :208-210 and in the brief. Add the named limitation (T04 cluster qualification against v5 until D-HELPER-TYPES; v6 is the tightened target) to the intro and 'Still open', and state that A60.34 binds R10's worker."
+  },
+  {
+   "id": "XV1-5",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 110,
+   "summary": "MX6-O3 is too narrow in one clause and too broad in another. It names only image- or block-backed filesystems, which misses native-label filesystems. Its associate clause would forbid the declared /run objects that matrix v5 itself places on tmpfs.",
+   "evidence": "(a) Kernel basis (v6.12 selinux_set_mnt_opts): when the filesystem passes SECURITY_LSM_NATIVE_LABELS and no context= is given (labeled NFS v4.2 with security_label), the behaviour becomes SECURITY_FS_USE_NATIVE and labels come from the server with no relabel check. FUSE, virtiofs or 9p carry stored labels likewise wherever the selected policy uses fs_use_xattr for them. The kubelet mounts network volumes, and README:117-118 and :174 cover only 'image- or block-backed'. (b) The clause 'no declared type except qualk8s_container_file_t may be associated with those types' (:115-116, :174) applies to the host type of the mount sources' context= mounts. Their tmpfs volumes start from the host tmpfs superblock type (fs_use_trans), the same type /run's tmpfs carries unless systemd mounts it with fscontext=. may_create checks associate from each new file's type to that superblock type, and v5 creates planeon_run_t, planeon_seal_t and the I05/I07 socket types on /run by named type transitions (README:479-486), with the other socket types by W03 rules. So the clause cannot hold together with v5. What P-b needs is the clause for entrypoint, interpreter and closure types. rootcontext=R on a kubelet tmpfs can still label the root directory with one of the /run types.",
+   "requiredChange": "Reword MX6-O3 and README:110-118. First, the mount sources mount no filesystem whose labels come from the filesystem itself (xattr or native labelling: block devices, loop images, erofs/squashfs, labeled NFS, FUSE/virtiofs/9p under fs_use_xattr) unless context=C is given. Second, no entrypoint, interpreter or closure executable-segment type may be associated with the host types of their context= mounts. State the remaining rootcontext= residual for the declared /run types."
+  },
+  {
+   "id": "XV1-6",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/matrix.json",
+   "line": 5113,
+   "summary": "A75.dir and A75.file also leave out qualk8s_runtime_sock_t, not only A75.sock_file as the README says. Their statements claim 'no declared dir/file but container content', and a mutation shows the gap.",
+   "evidence": "All three A75.* assertions share one 56-type target list without qualk8s_runtime_sock_t (matrix.json:5113, :5190). README:101-103 says 'A75.sock_file leaves that one type out'. In a scratch replay, setting qualk8s_runtime_sock_t's classes to [sock_file, dir] passes check_matrix and all 173 assertions, while the kubelet and the runtime gain `dir mounton` on it through the socket file's WRITE upper bound.",
+   "requiredChange": "Add qualk8s_runtime_sock_t to the targets of A75.dir and A75.file (both still hold today, because the type has no dir or file class), or disclose the exclusion in the statements and the README. Optionally restrict `classes` per category in check_matrix."
+  },
+  {
+   "id": "XV1-7",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 130,
+   "summary": "The kept broker->worker /proc pair is justified by W3, but W3 reads the pre-exec child, which still runs in planeon_broker_t. That is a same-domain read outside the matrix (O03), so W3 needs no procAccess to planeon_worker_t.",
+   "evidence": "HS43 §5.4 W2-W5: clone3 creates the child in the broker's domain, and it enters planeon_worker_t only at W5's execveat. W3 runs while the child is frozen, before exec, so its /proc/<pid> entries carry planeon_broker_t (selinux_task_to_inode). NP4 README:297 calls it 'a pre-exec broker-domain child'. No published duty in §4.3 or §5.4 has the broker read the worker after W5: W6 uses waitid(P_PIDFD) and cgroup.events. README:130, :138 and A69.planeon_broker_t's statement cite W3.",
+   "requiredChange": "Name a post-exec duty that needs broker->planeon_worker_t (for example, if §4.3's per-frame start-time check applies to the I03 peer), or remove the pair (A59.planeon_worker_t follows). Correct the README rows either way."
+  },
+  {
+   "id": "XV1-8",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 172,
+   "summary": "MX6-O1 and MX6-O6 attach to T04-ENTRYPOINT 'by reference', but NP4 fixes that proof's content, and it covers neither A60.22-A60.46 nor the server's and broker's narrowed /proc. MX6-O6 names no other owner.",
+   "evidence": "NP4 README:319: T04-ENTRYPOINT covers A12, A32, A33, A37, A60.15-21 and the observer's procAccess 'as matrix v5 grants it'. NP4 is byte-frozen (Q-MX6-5 (a)), and the owner decided T04 cluster qualification runs against v5 until D-HELPER-TYPES (XV1-4). So no T04 proof under NP4 checks MX6-O6 or the A60.22-46 half of MX6-O1.",
+   "requiredChange": "Give MX6-O6, and the A60.22-A60.46 half of MX6-O1, owners that can prove them (the W03 policy module plus the next native-profile or T04 successor). State in the T04 section that no NP4 proof checks these rows today."
+  },
+  {
+   "id": "XV1-9",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 83,
+   "summary": "Under the new mount API the `mount` and `remount` checks may not be reached. The label checks still apply, so no label route opens, but A71's mount and remount closures bind only the mount(2) path.",
+   "evidence": "My reading of v6.12 fs/namespace.c, for T04 to confirm: security_sb_kern_mount (`filesystem mount`) is called from do_new_mount_fc (mount(2)), not from fsmount(2). selinux_mount's `remount` check is reached only through path_mount, not through fspick plus fsconfig(FSCONFIG_CMD_RECONFIGURE) (reconfigure_super -> selinux_sb_remount, which compares options with no AVC check) or mount_setattr. selinux_set_mnt_opts (via vfs_get_tree) and selinux_move_mount (mounton) cover both APIs.",
+   "requiredChange": "State this in the kernel basis (:79-85), or narrow the mount/remount wording to the mount(2) path."
+  },
+  {
+   "id": "XV1-10",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 51,
+   "summary": "Scope of 'runs no program without a transition at all', and how complete the stated consequences are.",
+   "evidence": "The closures bind execve. A domain can still map PROT_EXEC any file it may `file execute`/`map` (undeclared libraries, outside the matrix) and run it through a userland loader. A `#!` entry script's interpreter needs only `file execute`, because v6.12 checks entrypoint and execute_no_trans once, on the script (selinux_bprm_creds_for_exec). T04-MAPS-* covers this for planeon roles; a successor that binds a backend's running image (MX6-O1) needs the same. Consequences: with A37, a Pod process can run no second program from its own image (N37). The service proxy's iptables-restore and conntrack and the kubelet's other helpers are refused too, so the helper list at :53-56 reads as exhaustive but is not.",
+   "requiredChange": "Say 'executes no program (execve)', name the mapping route and its owner, and add the Pod-internal consequence. Mark the helper list as examples."
+  },
+  {
+   "id": "XV1-11",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 175,
+   "summary": "Execution or mounting that systemd does on a closed source's behalf is not covered.",
+   "evidence": "A closed source that can reach systemd's manager interface can ask it to run an undeclared program or a mount as a transient unit (StartTransientUnit; systemd-run without --scope). The program then runs in init_t or a host domain, so neither the execute_no_trans closure nor the transition closure applies. Transient units are not matrix unit types, so the `service` and D-Bus permissions are outside the matrix. MX6-O2 covers systemd's mounts, but no row covers execution.",
+   "requiredChange": "Add an obligation row (W03/T04): no closed source can start transient units or call systemd's manager interface."
+  },
+  {
+   "id": "XV1-12",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/matrix.json",
+   "line": 1654,
+   "summary": "Two small consistency points.",
+   "evidence": "A59's allow list ([gate, broker, observer, broker]) names planeon_broker_t twice, carried from v5's list, which v6 edits anyway. README:13-18 lists one new check_matrix rule, while the evaluator adds four: the closed filesystem table, the associate pairs, the new closure shapes, and one closure per domain and class (M97).",
+   "requiredChange": "Deduplicate A59's allow list. List all four new check_matrix rules in the README intro and the evaluator docstring."
+  }
+ ]
+}
