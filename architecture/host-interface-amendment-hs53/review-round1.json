@@ -1,0 +1,112 @@
+{
+ "round": 1,
+ "subjectCommit": "97b294d3282b8b1e555c84ad1ae3847f053e8603",
+ "subjectTree": "8bf0e6578dcc05485fbd934f440ca0be0eaa79c7",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "SOL1-1",
+   "severity": "MAJOR",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 203,
+   "summary": "O-W03-OBSERVER-UNIT and H1 put the 'fresh path at each start' on the observer's unit or on 'something that runs outside the observer's filter', but adopted matrix v5, which HS53 keeps unchanged, lets no such process remove or even stat the observer's socket file. Under the pinned contracts no agent can clear a stale I01 path except the observer itself, which the text excludes.",
+   "evidence": "Matrix v5 type planeon_observer_sock_t (<worktree>/architecture/selinux-matrix-v3/matrix.json:6650-6675) grants READ and WRITE (WRITE includes unlink) only to planeon_observer_t and planeon_server_t. selinux_matrix_v3.allowed() returns False, meaning closed rather than open, for init_t sock_file unlink and getattr on planeon_observer_sock_t in ENROLLED_CONTAINMENT, ENROLLED_SEALED and MAINTENANCE_BOOT. planeon_run_t WRITE (dir remove_name) excludes planeon_server_t. The v5 OBSERVER filter has no unlink or unlinkat, and the closed syscall table has neither. So systemd's RuntimeDirectory= cleanup, an ExecStartPre helper and tmpfiles (all init_t) cannot remove the stale socket, and the server cannot either. Only planeon_observer_t can, that is, the observer before it installs its filter. Three texts exclude that route: H1 (spec line 448, 'come from the observer's unit, not from further calls'), the README (lines 74-83, 'O-W03-OBSERVER-UNIT puts all of this on the unit') and the obligation ('The observer itself adds no ... unlinkat call'). Q-SOL-3 (a)'s premise (the unit gives a fresh bind) therefore does not hold under matrix v5. After any observer stop or crash within a boot, the obligation's own precondition ('a stale observer socket path must be gone before the observer binds') cannot be met, and T04's 'no stale path is left before a bind' would fail. The same closure stops RuntimeDirectory= cleanup from removing the broker's or the gate's live sockets, so the 'no unit's stop removes another listener's socket' outcome holds incidentally. Fix: name the clearing agent and show matrix v5 permits it. One option is the observer's own startup in planeon_observer_t before its filter, with no new filter call. Another is a recorded matrix obligation granting the chosen clearer sock_file getattr and unlink on planeon_observer_sock_t. Then have O-T04-HS53 check it. Either may need the owner's word on Q-SOL-3."
+  },
+  {
+   "id": "SOL1-2",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 215,
+   "summary": "The shared-directory statement names only I02's capacity-broker.sock, but /run/planeon/live-proxy/ also holds the gate's I05 socket. O-T04-HS53's 'neither unit's stop or restart removes the other listener's live socket' covers two units where there are three.",
+   "evidence": "<worktree>/architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md:60 and architecture/i05-gate-channel-v3/README.md:47 place I05 at /run/planeon/live-proxy/effect-admission.sock. Matrix v5's typeTransitions label effect-admission.sock under planeon_run_t. HS53 README line 80 and O-W03-OBSERVER-UNIT (amendment.json:203) mention only capacity-broker.sock. O-T04-HS53 (amendment.json:215) checks 'neither unit ... the other listener'. Fix: name all three listeners (observer, broker, gate) in the obligation and the T04 check."
+  },
+  {
+   "id": "SOL1-3",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 277,
+   "summary": "Residual R-OBSERVER-TCP-LISTEN and O-T04-HS53 understate the TCP-listen surface. They frame the observer's TCP sockets as 'the I06 read connection', omit the listen-without-bind path, and leave T04's 'a TCP listen by the observer is refused' without cases. The obligations do close it, because denying tcp_socket listen covers every path.",
+   "evidence": "(a) The v5 OBSERVER filter admits socket(AF_INET or AF_INET6, SOCK_STREAM, 0 or 6) (effective rules, both architectures). So bind and listen reach freshly created TCP sockets, not only the I06 connection; this is the practical path. (b) In v6.12 <research>/net/socket.c:1883-1895, listen() runs only security_socket_listen before the protocol's listen and never security_socket_bind. An autobound listener therefore meets neither name_bind nor node_bind, and only tcp_socket listen refuses it; the autobind itself is in net/ipv4/af_inet.c, which the research tree lacks. (c) The name_bind exemptions (port 0, ip_local_port_range) come from security/selinux/hooks.c, which is not in the research tree, and are stated as kernel fact. The range part is already adopted text (matrix v5 README 'Port numbers'); the port-0 part is new. Closure: since every listen reaches security_socket_listen, O-W03-OBSERVER-TCP's 'no tcp_socket listen', checked by T04 and later O-MATRIX-OBSERVER-TCP, closes all paths, and node_bind adds the bind-only case. The observer filter has no io_uring_* calls, so the io_uring bind/listen route is also closed. Fix: say 'its TCP sockets, including any it creates', name the listen-without-bind path, and make O-T04-HS53 try listen without bind, bind to port 0 then listen, and bind inside ip_local_port_range then listen, on AF_INET and AF_INET6."
+  },
+  {
+   "id": "SOL1-4",
+   "severity": "MINOR",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 236,
+   "summary": "The closed list of four superseded clauses is not the complete set of adopted text that says the observer is an external, pre-existing or independently installed operator prerequisite. The guide quote is also cut mid-sentence, so the replacement leaves the rest of the sentence and the next one in force.",
+   "evidence": "docs/alpha-2/POLICY_OBSERVATION_READINESS.md:31 ('Independent capacity operator | Pre-existing protected observation service'), :34 ('Documents the observer as a separately installed prerequisite, not an included or provisioned service') and :37-41. The quoted 'The producer is an external operator prerequisite' continues 'like the pre-existing API proxy and admission controls, not an unimplemented product packet disguised as DONE. An operator must supply an open-source, reviewed implementation meeting this protocol and the native tests below.' With the replacement applied, that continuation now attaches to HE-004-I01. architecture/policy-observation-amendment.json:333 ('An absent independently installed observer remains an explicit external prerequisite'). The MET-REPAIR-010 summary 'The observer is a separately installed open-source operator prerequisite, not an available or deployed product.' appears at docs/alpha-2/LIVE_BACKEND_READINESS.md:784-785, docs/READINESS_INDEX.md:678-679, docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md:491-492, docs/adr/0004-sol-high-packet-boundary.md:298-299, docs/repositories/00-harness-engineering.md:1443-1444 and docs/repositories/12-mas-harness-conformance-labs.md:736-737. H3's general sentence ('supersedes for I01 the earlier statements ...') covers these in spirit. But the model's comment ('so nothing else is superseded silently') and README line 87 ('Four adopted clauses') claim the list is complete. The four quotes themselves are exact: each occurs once in its pinned file and the digests match. Fix: extend the closed list with whole sentences (at least guide :31, :34 and :37-41 and the channel record's contract line), or state that HS53 governs every restatement and name the files."
+  },
+  {
+   "id": "SOL1-5",
+   "severity": "MINOR",
+   "file": "scripts/host_interface_amendment_v3.py",
+   "line": 242,
+   "summary": "The model's place checks bind only an item's current text. H1's proposed text can add a newline (a new table row or a heading) or extra cells and still pass check_record, and H3's append-only check accepts any appended text, including a new heading. This is weaker than README lines 35-38 claim.",
+   "evidence": "Mutations run against check_record on the published record and the pinned HS43 bytes. Accepted: H1 proposed plus '\\n| NEWROLE | 0 | x | y | z |'; H1 proposed with an injected '## 99.' heading; H3 current plus '\\n### 4.9 Injected ...'. Refused, correctly: H1 moved into the SERVER row, wrong section, H1/H3 ids swapped, H2 any other pair, H3 rewrite or prepend. The row test (lines 243-246) checks only that current is one line starting '| OBSERVER |'. The gap is inherited from v2's DECIDED_ROWS. In full check() only the author-set effective digest stops such a record, and the published bytes are correct. Fix: for row-scoped items, require proposed to have no newline and the same count of unescaped '|' as current; for H3, require the appended text to be '- ' bullet lines with no heading."
+  },
+  {
+   "id": "SOL1-6",
+   "severity": "NOTE",
+   "file": "scripts/host_interface_amendment_v3.py",
+   "line": 269,
+   "summary": "The 'recorded but not named' half of 'the amended text names exactly the record's obligations' is vacuous. E3's rendered section 13 lists every recorded obligation, so the guard that actually holds is REQUIRED_OBLIGATIONS.",
+   "evidence": "Dropping '(O-W03-OBSERVER-UNIT)' from H1's proposed text still passes check_record, because E3 names it. The 'named but not recorded' half works: adding O-UNRECORDED-X to H1 is refused. Inherited from v2. Consider computing 'named' over the DECIDED items only."
+  },
+  {
+   "id": "SOL1-7",
+   "severity": "NOTE",
+   "file": "scripts/seccomp_allowlists_v5.py",
+   "line": 302,
+   "summary": "The HS53 source check is a prefix, so a duty citing any line of the HS53 specification may grant bind or listen to OBSERVER.",
+   "evidence": "HS53_SOURCE (line 57) is 'architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md:'. A mutation adding {'name':'bind'} to an OBSERVER duty whose source is '...HOST_INTERFACE_SPEC.md:1' passes check_policy. M28 (a non-HS53 source), a runtime-base grant and an HS43-sourced duty are refused. Consider pinning ':448' or the OBSERVER row."
+  },
+  {
+   "id": "SOL1-8",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 83,
+   "summary": "'For I01 only' cannot be enforced by seccomp among AF_UNIX sockets either. Only SELinux bounds further observer AF_UNIX listeners, and H1 states the seccomp limit only against TCP.",
+   "evidence": "The v5 OBSERVER filter admits socket(AF_UNIX, SOCK_SEQPACKET) and unconditional bind and listen, so the observer could listen on another path or an abstract name. Matrix v5 lets planeon_observer_t create, bind, listen and accept on any unix_stream_socket of its own label (selinux_matrix_v3.allowed), with connectto into planeon_observer_t only from planeon_server_t. The bound is therefore SELinux's connectto plus the sock_file rules W03 adds. One sentence beside the TCP residual would make this explicit."
+  },
+  {
+   "id": "SOL1-9",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 50,
+   "summary": "Hygiene: beyond the obligation id I01-1 and the packet name HE-004-I01, the published files carry 'A/B1/C/D1/D2' and 'HE-004' (F-SOL-1), 'HE-004' (O-PROGRAMS-V3-OBSERVER, line 227) and Q-HE4-1.",
+   "evidence": "All are already published on main: docs/MASTER_DEVELOPMENT_PLAN.md:33,39 and docs/repositories/00-harness-engineering.md:14-16 name the HE-004A/B1/C/D1/D2 refinement and Q-HE4-1. F-SOL-1 is a verbatim fact, so this is advisory only. allowlists.json repeats F-SOL-1. No local absolute paths, e-mail addresses or other personal data were found in the eleven new files."
+  },
+  {
+   "id": "SOL1-10",
+   "severity": "NOTE",
+   "file": "architecture/host-interface-amendment-hs53/amendment.json",
+   "line": 227,
+   "summary": "Q-SOL-1 (a) says packet 2 is 'programs v3 plus edge v5', while O-PROGRAMS-V3-OBSERVER says the edge record 'takes the next free version'.",
+   "evidence": "Today these coincide: edge record v4 is the latest, from MET-ENFORCE-032. Either align the obligation with the decision text or say why the version is left open."
+  }
+ ],
+ "checked": [
+  "Subject: git rev-parse gives commit 97b294d3282b8b1e555c84ad1ae3847f053e8603, tree 8bf0e6578dcc05485fbd934f440ca0be0eaa79c7. The worktree is clean. The commit only adds 11 files and modifies or deletes none.",
+  "HS53 check(read), reading through git show at the subject commit: PASS. The HS43 record digest, the HS43 base digest, the four superseded-file digests, each quote occurring exactly once, and the effective bytes equal to the pinned HS53 bytes all hold.",
+  "v2 to v3 model diff: only the constants, render_section13, DECIDED_PLACES (section and row per item id, replacing DECIDED_SECTIONS/DECIDED_ROWS), the fixed H2 POINTER pair and the APPEND_ONLY check for H3 change. Every other line of logic is identical.",
+  "HS53 mutations, with E3 re-rendered where needed. Refused: H1 in the SERVER row; H1 with section 4.3; H1/H3 ids swapped; another H2 pointer; other H2 text; H3 rewrite; H3 prepend; supersedes dropped, extra or reordered; quote altered; replacement altered; supersede digest wrong; residual dropped or extra; obligation dropped, extra or reordered; obligation named but not recorded; H2 dropped; extra DECIDED H4; disposition missing a citing item; uncited decision; E1 not fixed; unknown item in supersedes; empty notAmended. Accepted: H1 proposed injecting a row or heading; H3 appending a heading (SOL1-5); obligation named only by section 13 (SOL1-6); altered decision text (the model does not pin the wording; it is a review check).",
+  "H1 against base I01 (corrected spec :52), the guide (:47-49) and matrix v5: I01 is server to observer over AF_UNIX/SOCK_SEQPACKET. The matrix v5 socket row has listener planeon_observer_t, object planeon_observer_t, file planeon_observer_sock_t and connector planeon_server_t only. selinux_matrix_v3.allowed gives the observer create/bind/listen/accept and the server connectto only. The observer is the listener of no other socket. The H1 SELinux cell matches.",
+  "accept4 in v6.12 <research>/net/socket.c: SYSCALL_DEFINE4(accept4, ..., int, flags) is at 2030-2034, and 'flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK)' gives EINVAL at 1982-1983. In include/linux/net.h:80-83, SOCK_CLOEXEC is O_CLOEXEC and SOCK_NONBLOCK is O_NONBLOCK. In include/uapi/asm-generic/fcntl.h:39,63, O_NONBLOCK is 00004000 (0x800) and O_CLOEXEC is 02000000 (0x80000). arm64 uapi asm/fcntl.h:23-26 overrides only O_DIRECTORY, O_NOFOLLOW, O_DIRECT and O_LARGEFILE. x86 has no arch fcntl.h in the tree; asm-generic Kbuild mandatory-y fcntl.h applies. Syscall numbers and citations match: bind 49/200, listen 50/201, accept4 288/242 (syscall_64.tbl:61,62,300; scripts/syscall.tbl:244,245,288).",
+  "Seccomp limit 'no descriptor family': correct and stated. bind and listen take only an fd, a pointer and integers (net/socket.c:1857-1913).",
+  "The AF_UNIX SOCK_SEQPACKET to unix_stream_socket mapping cannot be checked in the research tree (no security/). The README, section 13 and O-T04-HS53 call it the author's reading, and T04 confirms it. Matrix v5 already relies on the same mapping for I05/I07 (rows A07/A08), so the weight is appropriate.",
+  "The name_bind exemptions (port 0, ip_local_port_range), the TCP autobind on listen (net/ipv4/af_inet.c), AF_UNIX bind mode and umask (net/unix/af_unix.c) and EADDRINUSE on an existing path cannot be checked in the research tree, which holds only net/socket.c of net/. Verified there: listen() calls security_socket_listen and never security_socket_bind (SOL1-3).",
+  "Q-SOL-1..4 and F-SOL-1: the HS53 record and v5 allowlists.json hold identical id, date and decision. Each disposition's items equal the citing items, and its obligations answer the decision (Q-SOL-1: seccomp v5 plus packet 2; Q-SOL-2: v5 rule plus W03 TCP, T04 and matrix; Q-SOL-3: unit plus T04; Q-SOL-4: R10 design choice; F-SOL-1: R10 plus packet 2). Verbatim fidelity to the monitor relay cannot be checked from the allowed reads.",
+  "H3 and the replacements: H3 only appends after the 4.3 bullet (base 333-334). The replacements keep the I01 protocol, path, modes, framing, limits, peer checks and the other channel-record fields. The race-free start-time reference is left to HE-004-I01, as Q-SOL-4 (a) says.",
+  "Seccomp v5 diff against v4: allowlists.json changes only in schemaVersion, five appended decisions (equal to HS53's) and one OBSERVER duty at index 10 (before clone3), citing HS53 spec :448. That duty grants bind, listen and accept4 with three alternatives [{arg 3, mask 0xFFFFFFFF, eq 0|0x80000|0x80800}]. All other roles, both runtime bases, mode and defaultAction are equal. syscalls.json adds only the constants SOCK_CLOEXEC=524288 and SOCK_NONBLOCK=2048, and citations for those two and accept4. Effective rules differ only for OBSERVER in bind, listen and accept4.",
+  "v5 check_policy passes. The recompiled filterDigests and programLengths equal the published ones. Only OBSERVER's digests change; its lengths go 238->253 (x86_64) and 227->242 (aarch64). Recompiled v4 digests equal the published v4 digests.",
+  "Vectors replay: 3069 decision checks agree under decide and run_filter; 365 worker-stack checks pass; 28 mutations are refused with their stated messages (M24-M28 included). The new checks match the README.",
+  "Own replay of the 2971 v4 decision checks under v5: 2965 unchanged, 6 changed (OBSERVER zero-argument accept4, bind and listen on both architectures, KILL_PROCESS to ALLOW). This equals v5Changes, whose sha256 matches the v4 vectors.json. v4 worker-stack checks and v4 mutations give the same results under v5.",
+  "Own probes, decide equal to the compiled program on both architectures. OBSERVER accept4 allows flags 0, 0x80000 and 0x80800 under high words 0, 1<<32, 0xFFFFFFFF<<32 and 0x80000000<<32, and with any other argument set to all ones. It kills 0x800, 0x80801, 0x40000, 1, 0x80000000, 0xFFFFFFFF, every other single bit and every single-bit flip of 0x80800. Across 3000 random argument sets per architecture, bind and listen always allow and accept4 follows the low word of arg 3 exactly. SERVER, BROKER and EFFECT_GATE allow accept4, bind and listen; WORKER, POLICY_WRITER and HOST_CONTAINMENT kill them. A wrong audit arch and x32 kill. 0 failures.",
+  "BPF: the OBSERVER accept4 body loads only offset 40 (low word of arg 3) before each JEQ. No OBSERVER program loads offsets 20, 28, 36, 44, 52 or 60 (high words). bind and listen are plain JEQ nr then RET ALLOW.",
+  "v5 model diff against v4: only the docstring, the constants and the OBSERVER block in check_policy change. Own mutations: refused are bind or accept4 in the runtime base, a fourth flag (0x800 or 0x80801), an extra condition, a subset of the flags, an errno rule, a duty sourced from HS43, and tampered or missing table constants. Accepted are another HS53 line (SOL1-7), and other roles' accept4 rules, which stay unaffected.",
+  "Consistency: the v5 README limits (no descriptor family, R-OBSERVER-TCP-LISTEN, SERVER/BROKER row text kept from v4) agree with HS53. allowlists.json rows 'the signed listener (OBSERVER is ...)' are unchanged from v4. HS53 spec line 448 is the OBSERVER row.",
+  "O-W03-OBSERVER-UNIT achievability against matrix v5. Model queries: init_t has no sock_file unlink or getattr on planeon_observer_sock_t in any state; the server has no remove_name on planeon_run_t; only planeon_observer_t can clear the path (SOL1-1). Native profile v3 README:101-103 forbids handing roles socket-activated descriptors, as HS53 states.",
+  "Scope: no HS43, matrix v5/v6, seccomp v4, compiled-program or edge-record file is touched. No local absolute paths or e-mail addresses appear in the 11 new files. W03/R10 identifiers beyond I01-1 and HE-004-I01 are listed in SOL1-9.",
+  "Process: every command was prefixed with the PAUSE and HOLD_BY_VERIFY waits and run under timeout of 600 s or less. 'ulimit -v 4000000' was attempted each time, but this macOS host rejects RLIMIT_AS (setrlimit EINVAL), so only small single processes were run. Python was run only as python3 -I -B. Scratch files were kept under <scratch>/sol-review-r1/. No network was used and nothing in the worktree was modified."
+ ]
+}

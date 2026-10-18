@@ -1,0 +1,421 @@
+{
+ "schemaVersion": "planeon.internal.host-interface-amendment/v2",
+ "designLabel": "HOST-INTERFACE-DRAFT-002-HS53",
+ "base": {
+  "path": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+  "sha256": "b4f46b3a79c45691d7029a79849a555aca5ca7a6e6c600958147935f806888e9",
+  "designLabel": "HOST-INTERFACE-DRAFT-002-HS43",
+  "record": {
+   "path": "architecture/host-interface-amendment-hs43/amendment.json",
+   "sha256": "6a3719cdc659d7ccfde3598bdec06a31896fa82de810cf73ccc1f7ca3dc7f24c"
+  }
+ },
+ "effective": {
+  "path": "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+  "sha256": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75"
+ },
+ "ownerDecisions": [
+  {
+   "id": "Q-SOL-1",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-SOL-1 (a): two packets, (1) the W01 amendment (OBSERVER row, I01 only) plus seccomp v5, and (2) programs v3 plus edge v5. The stale H:446-447 pointer gets fixed in packet 1.",
+   "source": "lane monitor (owner-delegated), 2026-10-17"
+  },
+  {
+   "id": "Q-SOL-2",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-SOL-2 (a) \"Seccomp + SELinux\": bind and listen unconditional; accept4 flags only {0, CLOEXEC, CLOEXEC|NONBLOCK}; the TCP-listen boundary is stated as SELinux's, with a W03 obligation (no tcp_socket listen/node_bind for planeon_observer_t), a T04 check, and a later matrix revision to close it in data. Matrix v6 stays frozen.",
+   "source": "owner, typed in the monitor chat and relayed verbatim by the lane monitor, 2026-10-17"
+  },
+  {
+   "id": "Q-SOL-3",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-SOL-3 (a): a W03 unit obligation (RuntimeDirectory= 0700, UMask=0177, no socket activation, a fresh bind at each start), with no new calls.",
+   "source": "lane monitor (owner-delegated), 2026-10-17"
+  },
+  {
+   "id": "Q-SOL-4",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-SOL-4 (a) \"v1 duties, design decides\": keep the v1 peer duties (H:333-334); R10's HE-004-I01 design decides on HS43's race-free pidfd rule.",
+   "source": "owner, typed in the monitor chat and relayed verbatim by the lane monitor, 2026-10-17"
+  },
+  {
+   "id": "F-SOL-1",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "I01's producer is R10's HE-004-I01. Owner Q-HE4-1 (a): \"the R10 observer produces I01 later\". It is recorded as obligation I01-1 (ADDED) in W03-PLAN-AMEND-2 (MET-ENFORCE-032, merged c69e55f), which refines HE-004 into A/B1/C/D1/D2 plus HE-004-I01. So the base spec's external operator prerequisite is superseded for I01 by that amendment. [...] Note: \"edge v5\" for packet 2 will collide in name with native-profile v4's edge record v5 (slot 246). Check the next free edge version at drafting time; it is probably v6.",
+   "source": "lane monitor, 2026-10-17: a fact carrying owner decision Q-HE4-1 (a) as recorded in W03-PLAN-AMEND-2 (MET-ENFORCE-032, harness-onion main c69e55f)"
+  },
+  {
+   "id": "Q-SOL-5",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-SOL-5 = (a), monitor decision (owner-delegated). It refines my Q-SOL-3 (a) without new calls. O-W03-OBSERVER-UNIT states the outcome, and T04 checks it: the directory is shared with I02; no unit's stop or restart removes another listener's live socket; a stale observer path is cleared before bind, by something outside the observer's filter; the observer adds no unlink, umask or fchmod. (b) is out because seccomp can't bound the path. (c) is out because it breaks I01 byte-compatibility. Record it, and keep the systemd behaviour as a stated T04 question, not an assumption.",
+   "source": "lane monitor (owner-delegated), 2026-10-17"
+  },
+  {
+   "id": "SOL-SYSTEMD-CLEANS",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "1. \"systemd cleans\": for all three roles (gate, broker, observer): bind after the seal and never unlink; systemd's standard RuntimeDirectory= cleans up stale paths; the matrix grants init_t getattr and unlink on the planeon socket files and directory removal on their planeon_run_t directories. 2. \"Into matrix v6\": reopen the frozen matrix v6 for one more review round to add that grant. v6 still adopts after slot 246.",
+   "source": "owner, typed in the monitor chat, relayed verbatim by the lane monitor; supersedes the monitor's Q-SOL-6 (c)"
+  },
+  {
+   "id": "Q-SOL-7",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-SOL-7 = (a), monitor decision (owner-delegated). It refines the owner's \"systemd cleans\" without changing it, and it is the one-directory-owner pattern I flagged to the owner when the v6 grant landed. Word it as: one small directory unit, ordered before the three listeners, owns /run/planeon/live-proxy: RuntimeDirectory= with RuntimeDirectoryPreserve=yes and mode 0700; the listener units do not list that directory; before each listener starts, systemd removes only that listener's own fixed socket path (ExecStartPre= `rm -f <its path>`, running as init_t under matrix v6's grant); the listener binds after its seal and never unlinks. Add a W03/T04 obligation that the pre-start step runs as init_t, with no domain transition on that exec. If T04 finds otherwise, it comes back to me and then the owner.",
+   "source": "lane monitor (owner-delegated), 2026-10-17"
+  },
+  {
+   "id": "Q-MX6-R6",
+   "date": "2026-10-17",
+   "state": "OWNER_DECIDED",
+   "decision": "XV6-6's file-context point goes into status.json as a W03/T04 carry, and as one clause in HS53's O-W03-OBSERVER-UNIT: \"W03's file contexts label /run/planeon and its subdirectories planeon_run_t; T04 checks it\".",
+   "source": "lane monitor (owner-delegated), 2026-10-17 (an excerpt: the rest of the decision is matrix v6's)"
+  }
+ ],
+ "items": [
+  {
+   "id": "E1",
+   "kind": "EDITORIAL",
+   "section": "title",
+   "baseLines": "1",
+   "current": "# W01 host interfaces — gate resolutions, candidate v2 with amendments W02D and HS43\n",
+   "proposed": "# W01 host interfaces — gate resolutions, candidate v2 with amendments W02D, HS43 and HS53\n",
+   "occurrences": 1,
+   "decisions": [],
+   "why": "The title names the three amendments."
+  },
+  {
+   "id": "E2",
+   "kind": "EDITORIAL",
+   "section": "head",
+   "baseLines": "8",
+   "current": "`architecture/host-interface-amendment-hs43/amendment.json` lists its changes.\n",
+   "proposed": "`architecture/host-interface-amendment-hs43/amendment.json` lists its changes.\nAmendment HS53 (`HOST-INTERFACE-DRAFT-002-HS53`, section 13) is applied on top of the HS43 effective text,\nwhich also stays byte-identical (`architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md`);\n`architecture/host-interface-amendment-hs53/amendment.json` lists its changes.\n",
+   "occurrences": 1,
+   "decisions": [],
+   "why": "The head says HS53 is applied on top of the byte-identical HS43 effective text."
+  },
+  {
+   "id": "H1",
+   "kind": "DECIDED",
+   "section": "5.3 OBSERVER row, seccomp and SELinux",
+   "baseLines": "439",
+   "current": "As SERVER without listener; I06 read connection allowed | `planeon_observer_t`: `name_connect` to `planeon_kubeapi_port_t`; read-only to policy credential |",
+   "proposed": "As SERVER without its signed TCP listener; I06 read connection allowed. For I01 only, an AF_UNIX SOCK_SEQPACKET listener (HS53): `bind` and `listen`, and `accept4` only with flags 0, SOCK_CLOEXEC, or SOCK_CLOEXEC with SOCK_NONBLOCK, judged on the low 32 bits of the argument because the kernel reads it as an `int` (O-SECCOMP-V5-OBSERVER-LISTENER). Seccomp sees only a descriptor, so it cannot tell the I01 socket from any TCP socket the observer holds or creates (it keeps `socket` for AF_INET and AF_INET6 streams, for the I06 read connection): `bind` and `listen` reach those too, including a `listen` without `bind`, and the TCP-listen boundary is SELinux's (O-W03-OBSERVER-TCP, O-T04-HS53; residual R-OBSERVER-TCP-LISTEN). Among AF_UNIX sockets, too, the filter cannot hold the listener to I01's path; SELinux limits who may connect to the observer's sockets (only the server, `connectto`) and which socket files the observer may create (`planeon_observer_sock_t`). The socket's 0700 directory and its 0600 mode come from the units. The observer binds after its seal and never unlinks: one directory unit keeps /run/planeon/live-proxy for all three listeners, and before the observer starts, systemd removes only its stale I01 path (a pre-start step as init_t, which SELinux matrix v6 permits), so the filter adds no `unlink` (O-W03-OBSERVER-UNIT, O-W03-OBSERVER-PRESTART, O-MATRIX-OBSERVER-SOCK-CLEAR) | `planeon_observer_t`: `name_connect` to `planeon_kubeapi_port_t`; read-only to policy credential; the I01 listener: `create`, `bind`, `listen` and `accept` on its own `unix_stream_socket` (an AF_UNIX SOCK_SEQPACKET socket is checked in that class), socket file `planeon_observer_sock_t`, the server its only connector (SELinux matrix v5, `architecture/selinux-matrix-v3/`); no `tcp_socket` `listen` and no `node_bind` (O-W03-OBSERVER-TCP; a later matrix revision closes them in data, O-MATRIX-OBSERVER-TCP) |",
+   "occurrences": 1,
+   "decisions": [
+    "Q-SOL-1",
+    "Q-SOL-2",
+    "Q-SOL-3",
+    "F-SOL-1",
+    "Q-SOL-5",
+    "SOL-SYSTEMD-CLEANS",
+    "Q-SOL-7",
+    "Q-MX6-R6"
+   ],
+   "why": "I01 has the server connect to the observer (base §3), and matrix v5 already makes planeon_observer_t that socket's listener, but the row gave the observer no listener, which W01 says blocks implementation rather than being added quietly. The row now grants the I01 listener with the accept4 flags limited, states that the filter cannot refuse a TCP listen, which SELinux must, puts the socket's directory and mode on the units (the directory unit and the observer's unit), and has systemd clear a stale path (the observer binds after its seal and never unlinks), under matrix v6's grant."
+  },
+  {
+   "id": "H2",
+   "kind": "DECIDED",
+   "section": "5.3 text after the table",
+   "baseLines": "447",
+   "current": "are W02 data (W02d, `architecture/seccomp-allowlists-v2/`), generated",
+   "proposed": "are W02 data (W02d; the current successor is `architecture/seccomp-allowlists-v5/`, HS53), generated",
+   "occurrences": 1,
+   "decisions": [
+    "Q-SOL-1"
+   ],
+   "why": "The pointer named the v2 allowlists as the W02 data; v3 and v4 followed and v5 comes with HS53."
+  },
+  {
+   "id": "H3",
+   "kind": "DECIDED",
+   "section": "4.3",
+   "baseLines": "333-334",
+   "current": "- SERVER and OBSERVER do not talk to the gate except SERVER over I04 TLS. Their v1\n  peer duties are unchanged.\n",
+   "proposed": "- SERVER and OBSERVER do not talk to the gate except SERVER over I04 TLS. Their v1\n  peer duties are unchanged.\n- I01's producer is R10's HE-004-I01: obligation I01-1 of W03-PLAN-AMEND-2 (MET-ENFORCE-032, harness-onion main\n  c69e55f; owner decision Q-HE4-1 (a)), which supersedes for I01 the earlier statements that the producer is a\n  pre-existing, independently installed operator prerequisite (§13). The observer listens on I01 (§5.3, HS53); both\n  ends keep the v1 peer duties, the server's checks of the observer and the observer's of the server\n  (`docs/alpha-2/POLICY_OBSERVATION_READINESS.md`), unchanged. HE-004-I01's design decides whether the race-free\n  start-time reference above also applies to I01, and records the choice; it re-vendors the republished OBSERVER\n  programs (O-PROGRAMS-V3-OBSERVER) and serves I01 (Q-SOL-4 (a), O-R10-HE004-I01).\n",
+   "occurrences": 1,
+   "decisions": [
+    "Q-SOL-4",
+    "F-SOL-1"
+   ],
+   "why": "Who produces I01 is now recorded (F-SOL-1), and the peer duties on I01 stay v1's, with HE-004-I01's design deciding on HS43's race-free start-time reference (Q-SOL-4 (a))."
+  },
+  {
+   "id": "E3",
+   "kind": "EDITORIAL",
+   "section": "13 (new)",
+   "baseLines": "end",
+   "current": "O-T04-HS43 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.\n",
+   "proposed": "O-T04-HS43 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.\n\n## 13. Amendment HS53 (2026-10-17)\n\nHS53 lets the observer hold the one listener I01 needs (§5.3 OBSERVER row) and records who produces I01 (§4.3); the\nobserver's filter admits the listener only once O-SECCOMP-V5-OBSERVER-LISTENER lands. It is applied to the HS43\neffective text, which stays byte-identical; `architecture/host-interface-amendment-hs53/amendment.json` gives every\nchange and its reason.\n\n| Item | Where | Decisions |\n|---|---|---|\n| H1 | 5.3 OBSERVER row, seccomp and SELinux | Q-SOL-1, Q-SOL-2, Q-SOL-3, F-SOL-1, Q-SOL-5, SOL-SYSTEMD-CLEANS, Q-SOL-7, Q-MX6-R6 |\n| H2 | 5.3 text after the table | Q-SOL-1 |\n| H3 | 4.3 | Q-SOL-4, F-SOL-1 |\n\nAdopted text HS53 overrides (each file stays byte-identical; HS53 governs, and a successor of that contract adopts it):\n\n| Superseded clause | In | Replaced by |\n|---|---|---|\n| \"Existing fixed native observer, read-only to policy\" | `architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md` | a fixed native observer, read-only to policy, whose I01 producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53) (H3) |\n| \"Pre-existing protected observation service\" | `docs/alpha-2/POLICY_OBSERVATION_READINESS.md` | the protected observation service, whose I01 producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53) (H3) |\n| \"Documents the observer as a separately installed prerequisite, not an included or provisioned service\" | `docs/alpha-2/POLICY_OBSERVATION_READINESS.md` | documents the observer as a prerequisite of live execution that R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53) produces (H3) |\n| \"The producer is an external operator prerequisite, like the pre-existing API proxy and admission controls, not an unimplemented product packet disguised as DONE. An operator must supply an open-source, reviewed implementation meeting this protocol and the native tests below.\" | `docs/alpha-2/POLICY_OBSERVATION_READINESS.md` | for I01, the producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53), not an operator-supplied implementation; until it is installed, protected live execution stays NOT_RUN_ENV_UNAVAILABLE as this guide says. The guide's protocol, path, modes, framing, limits and peer checks are unchanged (H3) |\n| \"PREEXISTING_INDEPENDENTLY_INSTALLED_OPEN_SOURCE_PRODUCER\" | `architecture/policy-observation-amendment.json` | the operator prerequisite of this channel record: for I01, the observer is produced by R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53); the record's other fields are unchanged (H3) |\n| \"An absent independently installed observer remains an explicit external prerequisite, not product/native PASS.\" | `architecture/policy-observation-amendment.json` | an absent observer remains a prerequisite, not product/native PASS; for I01 it is produced by R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53) (H3) |\n| \"The broker and observer are separately installed, reviewed open-source operator prerequisites, not product implementations represented as DONE.\" | `docs/alpha-2/BROKER_HANDOFF_READINESS.md` | for the observer, I01's producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53); the broker's statement is unchanged (H3) |\n| \"as SERVER without the listener; the I06 read connection (connect)\" | `architecture/seccomp-allowlists/README.md` | as SERVER without its signed TCP listener; the I06 read connection (connect); and, in seccomp v5, the I01 listener of W01 §5.3 as amended by HS53 (bind, listen, and accept4 with flags 0, SOCK_CLOEXEC or SOCK_CLOEXEC\\|SOCK_NONBLOCK) (H1) |\n\nStated residuals:\n\n- R-OBSERVER-TCP-LISTEN: The observer's filter admits bind and listen on every descriptor it holds, including any TCP socket it creates (its filter keeps socket for AF_INET and AF_INET6 streams, for the I06 read connection), because seccomp sees only the descriptor. A listen without bind reaches only SELinux's tcp_socket listen check (v6.12 net/socket.c:1883-1895 calls security_socket_listen, never security_socket_bind), and, by the author's reading of v6.12 SELinux, name_bind is not checked for port 0 or for ports inside ip_local_port_range. So unless the host policy denies planeon_observer_t tcp_socket listen, the observer can open a TCP listener; denying node_bind as well refuses a bind to any TCP port. Follow-up: obligations O-W03-OBSERVER-TCP and O-T04-HS53, then O-MATRIX-OBSERVER-TCP in data (Q-SOL-2).\n\nThe data follow in order (Q-SOL-1 (a)): the W02d allowlist successor (`architecture/seccomp-allowlists-v5/`) gains\nthe OBSERVER I01 listener rule in the same packet as this amendment, then the OBSERVER programs and the edge record\nare republished, then R10's HE-004-I01 re-vendors them and serves I01.\n\nObligations: O-SECCOMP-V5-OBSERVER-LISTENER (the allowlist rule), O-W03-OBSERVER-UNIT (the socket's directory, mode and freshness), O-W03-OBSERVER-PRESTART (the pre-start removal runs as init_t), O-W03-OBSERVER-TCP (no TCP listener for the observer), O-T04-HS53 (native confirmation), O-MATRIX-OBSERVER-TCP (the observer's TCP listen closed in data), O-MATRIX-OBSERVER-SOCK-CLEAR (systemd's grant to clear a stale I01 path (met once matrix v6 is adopted)), O-PROGRAMS-V3-OBSERVER (the OBSERVER programs and the edge record), O-R10-HE004-I01 (the observer serves I01). Every E01-E12 obligation stays OPEN_UNPROVEN.\n",
+   "occurrences": 1,
+   "decisions": [],
+   "why": "Section 13 lists the items, the superseded clauses, the residual, the order of the data and the obligations."
+  }
+ ],
+ "dispositions": [
+  {
+   "decision": "Q-SOL-1",
+   "items": [
+    "H1",
+    "H2"
+   ],
+   "obligations": [
+    "O-SECCOMP-V5-OBSERVER-LISTENER",
+    "O-PROGRAMS-V3-OBSERVER"
+   ],
+   "summary": "Two packets: this amendment with seccomp v5, then the OBSERVER programs and the edge record; the stale W02 data pointer names the current successor (H2)."
+  },
+  {
+   "decision": "Q-SOL-2",
+   "items": [
+    "H1"
+   ],
+   "obligations": [
+    "O-SECCOMP-V5-OBSERVER-LISTENER",
+    "O-W03-OBSERVER-TCP",
+    "O-T04-HS53",
+    "O-MATRIX-OBSERVER-TCP"
+   ],
+   "summary": "bind and listen unconditional, accept4 with three flag values; the TCP-listen boundary is SELinux's, in W03's policy, T04's check and a later matrix revision; residual R-OBSERVER-TCP-LISTEN."
+  },
+  {
+   "decision": "Q-SOL-3",
+   "items": [
+    "H1"
+   ],
+   "obligations": [
+    "O-W03-OBSERVER-UNIT",
+    "O-T04-HS53"
+   ],
+   "summary": "The socket's directory and mode come from the units (the directory unit and the observer's unit), with no new filter call."
+  },
+  {
+   "decision": "Q-SOL-4",
+   "items": [
+    "H3"
+   ],
+   "obligations": [
+    "O-R10-HE004-I01"
+   ],
+   "summary": "The v1 peer duties stay; HE-004-I01's design decides on HS43's race-free start-time reference."
+  },
+  {
+   "decision": "F-SOL-1",
+   "items": [
+    "H1",
+    "H3"
+   ],
+   "obligations": [
+    "O-R10-HE004-I01",
+    "O-PROGRAMS-V3-OBSERVER"
+   ],
+   "summary": "I01's producer is R10's HE-004-I01; the earlier external-prerequisite statements are superseded for I01."
+  },
+  {
+   "decision": "Q-SOL-5",
+   "items": [
+    "H1"
+   ],
+   "obligations": [
+    "O-W03-OBSERVER-UNIT",
+    "O-T04-HS53"
+   ],
+   "summary": "The shared socket directory (I01, I02, I05): no unit's stop or restart removes another listener's socket, and systemd's handling of it is a T04 question."
+  },
+  {
+   "decision": "SOL-SYSTEMD-CLEANS",
+   "items": [
+    "H1"
+   ],
+   "obligations": [
+    "O-W03-OBSERVER-UNIT",
+    "O-MATRIX-OBSERVER-SOCK-CLEAR",
+    "O-T04-HS53"
+   ],
+   "summary": "The observer binds after its seal and never unlinks; systemd clears a stale I01 path (the directory unit and pre-start step of Q-SOL-7 (a)) under matrix v6's grant to init_t."
+  },
+  {
+   "decision": "Q-SOL-7",
+   "items": [
+    "H1"
+   ],
+   "obligations": [
+    "O-W03-OBSERVER-UNIT",
+    "O-W03-OBSERVER-PRESTART",
+    "O-T04-HS53"
+   ],
+   "summary": "One directory unit owns /run/planeon/live-proxy and keeps it; before each listener starts, systemd removes only that listener's own socket path, as init_t; the listener binds after its seal and never unlinks."
+  },
+  {
+   "decision": "Q-MX6-R6",
+   "items": [
+    "H1"
+   ],
+   "obligations": [
+    "O-W03-OBSERVER-UNIT",
+    "O-T04-HS53"
+   ],
+   "summary": "W03's file contexts label /run/planeon and its subdirectories planeon_run_t, and T04 checks it."
+  }
+ ],
+ "obligations": [
+  {
+   "id": "O-SECCOMP-V5-OBSERVER-LISTENER",
+   "label": "the allowlist rule",
+   "owner": "the W02d allowlist successor v5 (architecture/seccomp-allowlists-v5/), in the same packet as HS53 (Q-SOL-1 (a))",
+   "text": "Add to the OBSERVER row of the W02d allowlists, for x86_64 and aarch64, one duty citing HS53's §5.3 OBSERVER row: bind and listen unconditional, and accept4 only when the low 32 bits of argument 3 equal 0, SOCK_CLOEXEC (0x80000) or SOCK_CLOEXEC|SOCK_NONBLOCK (0x80800), so SOCK_NONBLOCK alone and every other bit are killed. Keep the runtime bases and every other role unchanged, and replay the v4 vectors: only OBSERVER's bind, listen and accept4 decisions may change, from KILL_PROCESS to ALLOW."
+  },
+  {
+   "id": "O-W03-OBSERVER-UNIT",
+   "label": "the socket's directory, mode and freshness",
+   "owner": "W03 (the directory unit and the observer's unit; R10's HE-004-I01)",
+   "text": "Give I01's socket its required directory, mode and freshness with no new filter call (Q-SOL-3 (a), as refined by Q-SOL-7 (a)). One small directory unit, ordered before the three listeners (observer, broker, gate) and pulled in by each (After= and Requires= on it), owns /run/planeon/live-proxy: RuntimeDirectory= with RuntimeDirectoryPreserve=yes and mode 0700, root:root. The listener units do not list that directory, so no listener's stop or restart removes it or another listener's live socket (Q-SOL-5 (a)); the directory holds I01's policy-observer.sock, I02's capacity-broker.sock and I05's effect-admission.sock. The observer's unit has UMask=0177, so the socket that bind creates is root:root 0600, and no socket activation (native profile v3 forbids sockets created elsewhere). The observer binds after its seal and never unlinks (owner decision SOL-SYSTEMD-CLEANS, for the gate, the broker and the observer alike); for a fresh bind at each start, systemd removes only the observer's own fixed socket path before it starts (ExecStartPre= `rm -f /run/planeon/live-proxy/policy-observer.sock`, running as init_t under matrix v6's grant, O-MATRIX-OBSERVER-SOCK-CLEAR; that it runs as init_t is O-W03-OBSERVER-PRESTART). W03's file contexts label /run/planeon and its subdirectories planeon_run_t; T04 checks it (Q-MX6-R6: systemd creates RuntimeDirectory= paths with the labels its file contexts give, which take precedence over the matrix's named type transition). The I01 socket file is labelled planeon_observer_sock_t by W03's rule for it (matrix v5 leaves that rule to W03; without it the observer's bind is refused, which fails safe). The observer's filter adds no unlink, umask, fchmod or fchmodat call."
+  },
+  {
+   "id": "O-W03-OBSERVER-PRESTART",
+   "label": "the pre-start removal runs as init_t",
+   "owner": "W03 (the observer's unit and the host policy), checked by T04",
+   "text": "The observer unit's ExecStartPre= step that removes the stale I01 socket path runs as init_t: the host policy gives no domain transition on that exec, so the removal uses matrix v6's init_t grant on planeon_observer_sock_t and nothing else. The step runs in the observer's unit, so that unit's cgroup and limits apply to it; it ends before the observer starts, and the native profile's per-cgroup captures are taken from the running observer, not during the step. If T04 finds that the step runs in another domain, the question goes back to the lane monitor and then the owner (Q-SOL-7 (a))."
+  },
+  {
+   "id": "O-W03-OBSERVER-TCP",
+   "label": "no TCP listener for the observer",
+   "owner": "W03 (the host SELinux policy module)",
+   "text": "Give planeon_observer_t no tcp_socket listen and no node_bind (name_bind is already closed by matrix v5), so a bind or listen that the observer's filter admits on a TCP socket is refused by SELinux, including on port 0 and on ports inside ip_local_port_range, where name_bind is not checked (Q-SOL-2 (a))."
+  },
+  {
+   "id": "O-T04-HS53",
+   "label": "native confirmation",
+   "owner": "T04",
+   "text": "On the enrolled kernel and policy, confirm: the observer's installed filter is the v5 OBSERVER program; accept4 on the I01 socket with flags 0, SOCK_CLOEXEC and SOCK_CLOEXEC|SOCK_NONBLOCK succeeds, and with SOCK_NONBLOCK alone kills the observer; an AF_UNIX SOCK_SEQPACKET socket is checked in the unix_stream_socket class (the author's reading of v6.12 socket_type_to_security_class); the installed policy gives planeon_observer_t no tcp_socket listen and no node_bind, and a TCP listen by the observer is refused, in each of these cases on AF_INET and AF_INET6: listen without bind, bind to port 0 then listen, and bind to a port inside ip_local_port_range then listen; the socket's directory is root:root 0700 and the socket root:root 0600, and no socket activation is used; no unit's stop or restart removes another listener's live socket (observer, broker or gate): the directory unit keeps /run/planeon/live-proxy (RuntimeDirectoryPreserve=yes) and the listener units do not list it; starting the observer alone, with the directory unit inactive, starts the directory unit first, and the observer does not start without it (After= and Requires=); before the observer's next bind its pre-start step removes only its own stale I01 path and runs as init_t, with no domain transition on that exec, and the installed policy gives init_t on planeon_observer_sock_t only matrix v6's getattr and unlink; /run/planeon and its subdirectories are labelled planeon_run_t by W03's file contexts, and the I01 socket file planeon_observer_sock_t; and the installed filter still kills unlinkat (and unlink on x86_64; aarch64 has no unlink syscall) (Q-SOL-5 (a), SOL-SYSTEMD-CLEANS, Q-SOL-7 (a))."
+  },
+  {
+   "id": "O-MATRIX-OBSERVER-TCP",
+   "label": "the observer's TCP listen closed in data",
+   "owner": "the next SELinux matrix revision after matrix v6 (matrix v6 does not take it up, Q-SOL-2 (a); its one reopening added only systemd's socket-file grant, SOL-SYSTEMD-CLEANS)",
+   "text": "Add tcp_socket listen and node_bind to the matrix's closed permissions for planeon_observer_t, with an assertion that the observer holds neither, so the boundary O-W03-OBSERVER-TCP sets in host policy is also checked in data."
+  },
+  {
+   "id": "O-MATRIX-OBSERVER-SOCK-CLEAR",
+   "label": "systemd's grant to clear a stale I01 path (met once matrix v6 is adopted)",
+   "owner": "SELinux matrix v6 (architecture/selinux-matrix-v4/, SELINUX-MATRIX-V6 candidate 7, which passed its review round 7, recorded in its status at adoption; owner decision SOL-SYSTEMD-CLEANS), whose packet precedes this one",
+   "text": "Under matrix v5 only planeon_observer_t and planeon_server_t may unlink planeon_observer_sock_t, and init_t may not even stat it, so systemd could not clear a stale I01 path. Matrix v6 grants init_t sock_file getattr and unlink on the four planeon listener socket files, planeon_observer_sock_t among them, and nothing else on them (its assertions A78 and A79); the directory permissions the removal needs are v5's grants on planeon_run_t. Met once matrix v6 is adopted; this amendment's packet re-checks that the grant is on its base."
+  },
+  {
+   "id": "O-PROGRAMS-V3-OBSERVER",
+   "label": "the OBSERVER programs and the edge record",
+   "owner": "the parallel lane's next harness-onion packet (packet 2 of SECCOMP-OBSERVER-LISTENER, Q-SOL-1 (a))",
+   "text": "Republish the OBSERVER's two compiled programs (x86_64 and aarch64) from seccomp v5 and the edge record that binds them for HE-004, as PROGRAMS-REPUBLISH did for EFFECT_GATE; no other role's program changes. The edge record takes the next free version: Q-SOL-1 (a) named edge v5, and the monitor's note with F-SOL-1 says v5 belongs to native-profile v4's edge record (slot 246), so it is probably v6."
+  },
+  {
+   "id": "O-R10-HE004-I01",
+   "label": "the observer serves I01",
+   "owner": "R10's HE-004-I01 (primary lane; obligation I01-1 of W03-PLAN-AMEND-2)",
+   "text": "Re-vendor the republished OBSERVER programs, install them as the observer's filter, and serve I01 on its fixed path with the v1 peer duties in both directions; decide whether HS43's race-free start-time reference applies to I01 and record the choice (Q-SOL-4 (a))."
+  }
+ ],
+ "supersedes": [
+  {
+   "path": "architecture/host-interface-inputs/corrected/HOST_INTERFACE_SPEC.md",
+   "sha256": "1b0bee7e46e3cd730b3f878179ac36d0f062ce70ed6c843788ab634aead16ef0",
+   "quote": "Existing fixed native observer, read-only to policy",
+   "replacement": "a fixed native observer, read-only to policy, whose I01 producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53)",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "sha256": "65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c",
+   "quote": "Pre-existing protected observation service",
+   "replacement": "the protected observation service, whose I01 producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53)",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "sha256": "65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c",
+   "quote": "Documents the observer as a separately installed prerequisite, not an included or provisioned service",
+   "replacement": "documents the observer as a prerequisite of live execution that R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53) produces",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "sha256": "65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c",
+   "quote": "The producer is an external operator prerequisite, like the pre-existing API\nproxy and admission controls, not an unimplemented product packet disguised as\nDONE. An operator must supply an open-source, reviewed implementation meeting\nthis protocol and the native tests below.",
+   "replacement": "for I01, the producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53), not an operator-supplied implementation; until it is installed, protected live execution stays NOT_RUN_ENV_UNAVAILABLE as this guide says. The guide's protocol, path, modes, framing, limits and peer checks are unchanged",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "architecture/policy-observation-amendment.json",
+   "sha256": "0df7e72a65fc5eb1c20d59b8c62ebff377f160214192d681ea7f3d29b57e38c7",
+   "quote": "PREEXISTING_INDEPENDENTLY_INSTALLED_OPEN_SOURCE_PRODUCER",
+   "replacement": "the operator prerequisite of this channel record: for I01, the observer is produced by R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53); the record's other fields are unchanged",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "architecture/policy-observation-amendment.json",
+   "sha256": "0df7e72a65fc5eb1c20d59b8c62ebff377f160214192d681ea7f3d29b57e38c7",
+   "quote": "An absent independently installed observer remains an explicit external prerequisite, not product/native PASS.",
+   "replacement": "an absent observer remains a prerequisite, not product/native PASS; for I01 it is produced by R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53)",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "sha256": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+   "quote": "The broker and observer are separately installed, reviewed open-source operator\nprerequisites, not product implementations represented as DONE.",
+   "replacement": "for the observer, I01's producer is R10's HE-004-I01 (obligation I01-1 of W03-PLAN-AMEND-2, MET-ENFORCE-032, main c69e55f; W01 §4.3 as amended by HS53); the broker's statement is unchanged",
+   "items": [
+    "H3"
+   ]
+  },
+  {
+   "path": "architecture/seccomp-allowlists/README.md",
+   "sha256": "510b41f0b13b1463f2b79651d438880c9342026aab6127da7de363df7d475139",
+   "quote": "as SERVER without the listener; the I06 read connection (connect)",
+   "replacement": "as SERVER without its signed TCP listener; the I06 read connection (connect); and, in seccomp v5, the I01 listener of W01 §5.3 as amended by HS53 (bind, listen, and accept4 with flags 0, SOCK_CLOEXEC or SOCK_CLOEXEC|SOCK_NONBLOCK)",
+   "items": [
+    "H1"
+   ]
+  }
+ ],
+ "residuals": [
+  {
+   "id": "R-OBSERVER-TCP-LISTEN",
+   "text": "The observer's filter admits bind and listen on every descriptor it holds, including any TCP socket it creates (its filter keeps socket for AF_INET and AF_INET6 streams, for the I06 read connection), because seccomp sees only the descriptor. A listen without bind reaches only SELinux's tcp_socket listen check (v6.12 net/socket.c:1883-1895 calls security_socket_listen, never security_socket_bind), and, by the author's reading of v6.12 SELinux, name_bind is not checked for port 0 or for ports inside ip_local_port_range. So unless the host policy denies planeon_observer_t tcp_socket listen, the observer can open a TCP listener; denying node_bind as well refuses a bind to any TCP port.",
+   "followUp": "obligations O-W03-OBSERVER-TCP and O-T04-HS53, then O-MATRIX-OBSERVER-TCP in data",
+   "decisions": [
+    "Q-SOL-2"
+   ]
+  }
+ ],
+ "notAmended": [
+  "The I01 wire: its fixed path, schema, framing, limits and timing (docs/alpha-2/POLICY_OBSERVATION_READINESS.md, architecture/policy-observation-inputs/), and the channel record's other fields, including installationAuthorized and producerAvailable",
+  "The v1 peer duties of SERVER and OBSERVER, in both directions (Q-SOL-4 (a))",
+  "The SERVER, BROKER, EFFECT_GATE, WORKER, POLICY_WRITER and HOST_CONTAINMENT rows; the WORKER cell's pointer to architecture/seccomp-allowlists-v2/, where the W02d worker allowlist was defined, which v3 to v5 keep",
+  "SELinux matrix v5, and matrix v6, whose one reopening for HS53's purposes added only systemd's socket-file grant (O-MATRIX-OBSERVER-SOCK-CLEAR): the TCP closure follows in a later revision (O-MATRIX-OBSERVER-TCP)",
+  "Statements that stay true with R10's producer: that the observer is a prerequisite of live execution whose absence leaves it NOT_RUN_ENV_UNAVAILABLE, that it is a preinstalled native process with its own manifest, and the start-up order (for example docs/alpha-2/CREDENTIAL_LIFECYCLE_REPAIR.md, docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md, the base specification's startup order and README); records of merged packets: the task records task-packets/*.yaml (for example MET-REPAIR-010.yaml, which repeats the channel record's contract line, and MET-REPAIR-014.yaml) and docs/alpha-2/BROKER_HANDOFF_READINESS.md on packet 005; and byte snapshots of earlier states: docs/history/, architecture/*-inputs/meta-before.json, architecture/host-interface-inputs/original/ (the input the corrected base replaced) and the review-round snapshots architecture/*/round*/",
+  "The MET-REPAIR-010 summary \"The observer is a separately installed open-source operator prerequisite, not an available or deployed product.\" in seven living catalogs: docs/alpha-2/LIVE_BACKEND_READINESS.md, docs/READINESS_INDEX.md, docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md, docs/adr/0004-sol-high-packet-boundary.md, docs/repositories/00-harness-engineering.md, docs/repositories/12-mas-harness-conformance-labs.md and task-packets/README.md. It records that packet; HS53 governs it for I01 (the producer is R10's HE-004-I01). The files are named here rather than pinned: two of them (docs/repositories/00-harness-engineering.md and task-packets/README.md) change with nearly every packet, and all seven stay unpinned so that a catalog edit never needs an HS53 successor (reviews SOL5-2, SOL6-1)",
+  "Seccomp v4, which stays byte-identical; v5 is its successor",
+  "The gate's I05 and I07 sockets and the broker's I02 socket: the same owner decision applies to them (bind after the seal, never unlink, systemd cleans; matrix v6's grant covers their socket files), and so does the directory-unit and pre-start pattern (Q-SOL-7 (a); I07's own directory, /run/planeon/maintenance, too), but their units are W03's and their W01 rows are not amended here (SOL-SYSTEMD-CLEANS)",
+  "Every other W01 text, gate disposition and E01-E12 obligation"
+ ]
+}

@@ -1,0 +1,179 @@
+{
+ "schemaVersion": "planeon.internal.seccomp-allowlists-status/v5",
+ "contract": "planeon.internal.seccomp-allowlists/v5",
+ "kernel": {
+  "tag": "v6.12",
+  "commit": "adc218676eef25575469234709c2d87185ca223a"
+ },
+ "supersedes": {
+  "directory": "architecture/seccomp-allowlists-v4/",
+  "contract": "planeon.internal.seccomp-allowlists/v4",
+  "status": "architecture/seccomp-allowlists-v4/status.json"
+ },
+ "discharges": {
+  "obligation": "O-SECCOMP-V5-OBSERVER-LISTENER",
+  "record": "architecture/host-interface-amendment-hs53/amendment.json",
+  "how": "in data, by this byte-identical-predecessor successor of v4 (README)"
+ },
+ "ownerDecisions": [
+  {
+   "date": "2026-10-09",
+   "decision": "W02d defines the WORKER allowlist from the worker's duties; the W01 section 5.3 WORKER row text 'Existing worker allowlist' is amended to 'the W02d worker allowlist' (carried to W01's record)",
+   "id": "W02d-Q1"
+  },
+  {
+   "date": "2026-10-09",
+   "decision": "exact duty syscalls per role from its row plus one closed runtime base per role (CPython 3.12 for SERVER and WORKER, one native static base for the five native roles); W03's language and libc must fit inside it or W02d reopens",
+   "id": "W02d-Q2"
+  },
+  {
+   "date": "2026-10-09",
+   "decision": "seccompFilterDigest is the SHA-256 of the classic-BPF sock_filter array (little-endian) the reference compiler emits per role and architecture; the boot-time proof that the installed filter equals it is an open T04/W02a-F obligation",
+   "id": "W02d-Q3"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "the broker kills the worker through cgroup.kill only (it has no CAP_KILL); W6 becomes freeze, cgroup.kill, wait for populated 0, and the unused pidfd_send_signal grant is dropped",
+   "id": "W01-AMEND-QW1"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "the broker runs with no supplementary groups and W3 checks the child holds none; no role may grant setgroups",
+   "id": "W01-AMEND-QW2"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "M-a: memfd_create flags are MFD_CLOEXEC | MFD_NOEXEC_SEAL, so the kernel clears exec and sets F_SEAL_EXEC on every call with no reliance on host state (not a vm.memfd_noexec pin, which a CAP_SYS_ADMIN holder in the initial namespaces can lower)",
+   "id": "W01-AMEND-QW3"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "NATIVE_STATIC adds three narrow rules for the Rust+musl steady state: mremap only with flags == MREMAP_MAYMOVE (musl mallocng realloc of large chunks), prctl only with arg0 == PR_SET_NAME (std and tokio thread names), and tkill (musl abort and raise); setresuid/setresgid threaded signalling, available_parallelism file reads and units starting roles with fds 0-2 open are W03 trace items",
+   "id": "W02d-V3"
+  },
+  {
+   "date": "2026-10-10",
+   "decision": "the native roles are Rust with musl, fully static (analysed reference: musl 1.2.5, Rust 1.90.0; W03 pins these or re-checks against W02d); NATIVE_STATIC adds poll, which Rust std calls on fds 0-2 at start-up and musl issues as SYS_poll on x86_64 (aarch64 has no poll syscall); musl creates threads with clone, never clone3, so the clone3 ENOSYS rule serves the CPython roles' glibc",
+   "id": "W01-AMEND-QW4"
+  },
+  {
+   "date": "2026-10-13",
+   "decision": "(c) readlink exe for the I07 writer",
+   "id": "Q-HE3A-1"
+  },
+  {
+   "date": "2026-10-13",
+   "decision": "(a) HE-003A merges first; the readlink exe check is decided-but-open, landing after the chain: seccomp v3 readlinkat duty for EFFECT_GATE (parallel lane, with/after the slot-234 §4.3 amendment) → republished programs + edge record v3 (primary) → R10 re-vendor + check. HE-007 obligations: writer uid/gid 0, dumpable, empty permitted set.",
+   "id": "Q-HE3A-1b"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "start HS-4.3-AMEND now in your lane, as harness-onion slot 236: Q-HE2S-10 (a): amend HOST_INTERFACE_SPEC §4.3 so the gate qualifies the broker by label, cgroup, pidfd and SO_PEERCRED; the EFFECT_GATE readlinkat duty sentence for the I07 writer's /proc exe link (Q-HE3A-1 (c) / 1b (a)), noting that readlinkat is allowed only with dirfd != AT_FDCWD (this keeps musl aarch64 readlink killed). The seccomp v3 allowlist amendment follows as its own next packet",
+   "id": "HS43-START"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "(accepted) Noted for SECCOMP-V3-READLINKAT: the single masked condition (arg0 & 0x80000000) == 0, \"a non-negative dirfd (so never AT_FDCWD)\", is accepted as the direction, since it's stricter and consistent with Q-HE3A-1b.",
+   "id": "SECCOMP-DIRFD-DIRECTION"
+  },
+  {
+   "date": "2026-10-15",
+   "decision": "slot 237 is SECCOMP-V3-READLINKAT, contract first; its direction is the single masked condition (arg0 & 0x80000000) == 0, as HS43 records (lane monitor, 2026-10-15)",
+   "id": "SEC-RL-START"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "Q-SOL-1 (a): two packets, (1) the W01 amendment (OBSERVER row, I01 only) plus seccomp v5, and (2) programs v3 plus edge v5. The stale H:446-447 pointer gets fixed in packet 1.",
+   "id": "Q-SOL-1"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "Q-SOL-2 (a) \"Seccomp + SELinux\": bind and listen unconditional; accept4 flags only {0, CLOEXEC, CLOEXEC|NONBLOCK}; the TCP-listen boundary is stated as SELinux's, with a W03 obligation (no tcp_socket listen/node_bind for planeon_observer_t), a T04 check, and a later matrix revision to close it in data. Matrix v6 stays frozen.",
+   "id": "Q-SOL-2"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "Q-SOL-3 (a): a W03 unit obligation (RuntimeDirectory= 0700, UMask=0177, no socket activation, a fresh bind at each start), with no new calls.",
+   "id": "Q-SOL-3"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "Q-SOL-4 (a) \"v1 duties, design decides\": keep the v1 peer duties (H:333-334); R10's HE-004-I01 design decides on HS43's race-free pidfd rule.",
+   "id": "Q-SOL-4"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "I01's producer is R10's HE-004-I01. Owner Q-HE4-1 (a): \"the R10 observer produces I01 later\". It is recorded as obligation I01-1 (ADDED) in W03-PLAN-AMEND-2 (MET-ENFORCE-032, merged c69e55f), which refines HE-004 into A/B1/C/D1/D2 plus HE-004-I01. So the base spec's external operator prerequisite is superseded for I01 by that amendment. [...] Note: \"edge v5\" for packet 2 will collide in name with native-profile v4's edge record v5 (slot 246). Check the next free edge version at drafting time; it is probably v6.",
+   "id": "F-SOL-1"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "Q-SOL-5 = (a), monitor decision (owner-delegated). It refines my Q-SOL-3 (a) without new calls. O-W03-OBSERVER-UNIT states the outcome, and T04 checks it: the directory is shared with I02; no unit's stop or restart removes another listener's live socket; a stale observer path is cleared before bind, by something outside the observer's filter; the observer adds no unlink, umask or fchmod. (b) is out because seccomp can't bound the path. (c) is out because it breaks I01 byte-compatibility. Record it, and keep the systemd behaviour as a stated T04 question, not an assumption.",
+   "id": "Q-SOL-5"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "1. \"systemd cleans\": for all three roles (gate, broker, observer): bind after the seal and never unlink; systemd's standard RuntimeDirectory= cleans up stale paths; the matrix grants init_t getattr and unlink on the planeon socket files and directory removal on their planeon_run_t directories. 2. \"Into matrix v6\": reopen the frozen matrix v6 for one more review round to add that grant. v6 still adopts after slot 246.",
+   "id": "SOL-SYSTEMD-CLEANS"
+  },
+  {
+   "date": "2026-10-17",
+   "decision": "Q-SOL-7 = (a), monitor decision (owner-delegated). It refines the owner's \"systemd cleans\" without changing it, and it is the one-directory-owner pattern I flagged to the owner when the v6 grant landed. Word it as: one small directory unit, ordered before the three listeners, owns /run/planeon/live-proxy: RuntimeDirectory= with RuntimeDirectoryPreserve=yes and mode 0700; the listener units do not list that directory; before each listener starts, systemd removes only that listener's own fixed socket path (ExecStartPre= `rm -f <its path>`, running as init_t under matrix v6's grant); the listener binds after its seal and never unlinks. Add a W03/T04 obligation that the pre-start step runs as init_t, with no domain transition on that exec. If T04 finds otherwise, it comes back to me and then the owner.",
+   "id": "Q-SOL-7"
+  }
+ ],
+ "jointReview": {
+  "with": "architecture/host-interface-amendment-hs53/",
+  "status": "architecture/host-interface-amendment-hs53/status.json",
+  "sourceIndex": "architecture/host-interface-amendment-hs53/source-index.json",
+  "rounds": 8,
+  "passSubject": "c97a2df22b6ebe7e1905afb1aae2292721aba12e"
+ },
+ "carriedToW03": [
+  "runtime bases are closed requirements; trace the selected build at start-up and steady state on both arches",
+  "glibc 2.34+ without CET/shadow-stack arch_prctl at start-up",
+  "no systemd seccomp options (F10)",
+  "install exactly the compiled programs",
+  "the broker runs with no supplementary groups",
+  "pin musl 1.2.5 and Rust 1.90.0 for the native roles, or re-check the NATIVE_STATIC base and the clone3 rule against W02d for the pinned versions (W01-AMEND-QW4)",
+  "the SERVER role's sealed-credential code passes MFD_CLOEXEC | MFD_NOEXEC_SEAL (O-SERVER-MEMFD)",
+  "no transition or nnp_transition out of planeon_worker_t (O-W03-WORKER-EXEC)",
+  "trace the Rust/musl native roles against NATIVE_STATIC, including review note R4-1's paths (thread names, tkill in setresuid/setresgid and abort, available_parallelism, stdio open at start)",
+  "musl's setresuid/setresgid signal the other threads when threaded; the broker's W4 child uses the raw syscalls (W02d-V3)",
+  "Rust std's available_parallelism reads cgroup and /proc files; a role calling it needs those reads or must not call it (W02d-V3)",
+  "units start every native role with fds 0-2 open (W02d-V3)",
+  "no role or crate calls pthread_getattr_np on the main thread: musl probes with mremap flags 0, which v3 kills (review R1-2)",
+  "the gate reads the writer's /proc/<pid>/exe only with readlinkat on its open /proc/<pid> descriptor; musl realpath() and Rust std read_link, current_exe and canonicalize reach readlinkat(AT_FDCWD, ...) or readlink and kill the gate under v4 (O-W03-WRITER-EXE)"
+ ],
+ "openObligations": [
+  "T04/W02a-F: boot-time proof that the installed filter equals the published v5 digest (W02d-Q3)",
+  "OBSERVER's compiled programs and the edge record are republished from v5 (O-PROGRAMS-V3-OBSERVER)",
+  "R10's HE-004-I01 re-vendors them (O-R10-HE004-I01)"
+ ],
+ "contractState": "ADOPTED_DATA_CONTRACT",
+ "obligations": {
+  "E01": "OPEN_UNPROVEN",
+  "E02": "OPEN_UNPROVEN",
+  "E03": "OPEN_UNPROVEN",
+  "E04": "OPEN_UNPROVEN",
+  "E05": "OPEN_UNPROVEN",
+  "E06": "OPEN_UNPROVEN",
+  "E07": "OPEN_UNPROVEN",
+  "E08": "OPEN_UNPROVEN",
+  "E09": "OPEN_UNPROVEN",
+  "E10": "OPEN_UNPROVEN",
+  "E11": "OPEN_UNPROVEN",
+  "E12": "OPEN_UNPROVEN"
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "README.md keeps its reviewed 'SUCCESSOR_CANDIDATE_AWAITING_INDEPENDENT_REVIEW' line; adoption is recorded here only",
+ "nativeAcceptance": false,
+ "tenantAcceptance": false,
+ "filtersInstalled": false,
+ "roleCodeExists": false,
+ "traceValidated": false,
+ "distributionSelected": false,
+ "productExecution": false,
+ "runnerActivated": false,
+ "phaseComplete": false
+}
