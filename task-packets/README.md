@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-036
+## Current source preparation — MET-ENFORCE-037
+
+MET-ENFORCE-037 (W03-PLAN-AMEND-3): W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's share in
+amendment 1's SEC-4 and HI-7 rows corrected; HE-004D1's packet scope), re-adopted after four independent review rounds.
+DATA_CHECK_ONLY. Alpha2 OPEN; 249 accepted plus MET-ENFORCE-037 only.
+
+## Historical compiled filter programs v3 source preparation — MET-ENFORCE-036
 
 MET-ENFORCE-036 (SECCOMP-OBSERVER-LISTENER, packet 2): the compiled filter programs v3, OBSERVER's two programs republished
 from seccomp allowlists v5, and edge record v6, which registers them for R10's HE-004-I01 (lane monitor Q-P2-1..4 (a)).
@@ -1478,3 +1484,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 247 | `MET-ENFORCE-034` | `Harness-Engineering` | SELINUX-MATRIX-V6: the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); DATA_CHECK_ONLY |
 | 248 | `MET-ENFORCE-035` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 1: W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); DATA_CHECK_ONLY |
 | 249 | `MET-ENFORCE-036` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 2: compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); DATA_CHECK_ONLY |
+| 250 | `MET-ENFORCE-037` | `Harness-Engineering` | W03-PLAN-AMEND-3: W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); DATA_CHECK_ONLY |

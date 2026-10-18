@@ -1,6 +1,32 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-036 source preparation, October 18, 2026
+## Current checkpoint — MET-ENFORCE-037 source preparation, October 18, 2026
+
+Alpha2 OPEN. MET-ENFORCE-036 (SECCOMP-OBSERVER-LISTENER packet 2) passed required verify in 720 s and merged as main a3b9e6e.
+W03-PLAN-AMEND-3 records the policy observer's host-policy share and the broker's quiescent-freeze obligation that
+HE-004D1's captures need (owner Q-HE4D1-8 and -9 (a); the NP-9 minimum from owner Q-HE4D1-D2 (a)), corrects HE-003's
+amendment-1 share as owner Q-HE3-3 (a) directs, and records HE-004D1's scope and decisions (owner Q-HE4D1-1..12 (a)).
+MET-ENFORCE-037 is the sole 250th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-037 / W03-PLAN-AMEND-3 | SOURCE_PREPARED | W03 obligation-register amendment 3 (250th packet): OBS-HOSTPOL-1 (the policy observer's host-policy share for HE-008 plus a T04 check) and NP-9 (the broker's quiescent freeze of the probe-worker leaf, HE-005) added, HE-003's share in amendment 1's SEC-4 and HI-7 rows corrected as owner decision Q-HE3-3 (a) directs (closed change kind SHARE_CORRECTED), and HE-004D1's packet scope with its decisions, hand-offs and residuals, applied after amendments 1 and 2; candidate 5 re-adopted by the monitor (owner-delegated) after contract review round 4, PASS; packet review; verify |
+| Alpha2A | MET-ENFORCE-036 / SECCOMP-OBSERVER-LISTENER | VERIFY_PASSED_MERGED | Merged as main a3b9e6e (verify 720 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: plan v2, amendments 1 and 2, edge record v5 and every file the amendment cites stay byte-identical; no
+edge record is published, no R10 file changes, and no role code, cloud, runner, live/native/tenant or model-effort change.
+Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical compiled filter programs v3 source checkpoint — MET-ENFORCE-036 source preparation, October 18, 2026
 
 Alpha2 OPEN. MET-ENFORCE-035 (SECCOMP-OBSERVER-LISTENER packet 1) passed required verify in 978 s and merged as main f4bb000.
 SECCOMP-OBSERVER-LISTENER packet 2 publishes the compiled filter programs v3 beside the byte-identical v1 and v2: only
@@ -2066,7 +2092,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · NATIVE-PROFILE-V4 / MET-ENFORCE-033 · Publish native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, the capture routes, the restated inspector obligation, I06 bound to native-profile v4) and operator edge record v5 after independent review; earlier contracts byte-identical; pass required verify through the owner's App.
 - [x] Alpha 2A · SELINUX-MATRIX-V6 / MET-ENFORCE-034 · Publish the SELinux matrix v6 (fail-closed source closures, the filesystem tables, entry closures, the /proc reader narrowing, systemd's listener-socket cleanup) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · SECCOMP-OBSERVER-LISTENER / MET-ENFORCE-035 · Publish W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup) after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · SECCOMP-OBSERVER-LISTENER / MET-ENFORCE-036 · Publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (the two programs for R10's HE-004-I01) after independent review; pass required verify through the owner's App.
+- [x] Alpha 2A · SECCOMP-OBSERVER-LISTENER / MET-ENFORCE-036 · Publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (the two programs for R10's HE-004-I01) after independent review; pass required verify through the owner's App.
+- [ ] Alpha 2A · W03-PLAN-AMEND-3 / MET-ENFORCE-037 · Publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope) after independent review; plan v2, amendments 1 and 2 and edge record v5 byte-identical; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
