@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-036
+## Current source preparation — MET-ENFORCE-037
+
+MET-ENFORCE-037 (W03-PLAN-AMEND-3): W03 obligation-register amendment 3, applied after amendments 1 and 2. OBS-HOSTPOL-1
+adds the policy observer's host-policy share (HE-008) with a T04 check, NP-9 the broker's quiescent freeze of the
+probe-worker leaf (HE-005, with HE-004D1's bracket and T04's proof), and two SHARE_CORRECTED rows correct HE-003's share
+in amendment 1's SEC-4 and HI-7 rows as owner decision Q-HE3-3 (a) directs; HE-004D1's packet scope records its decisions,
+hand-offs and accepted residuals. Candidate 5 was re-adopted by the lane monitor (owner-delegated) after four independent
+review rounds. DATA_CHECK_ONLY. Alpha2 OPEN; 249 accepted plus MET-ENFORCE-037 only.
+
+## Historical compiled filter programs v3 source preparation — MET-ENFORCE-036
 
 MET-ENFORCE-036 (SECCOMP-OBSERVER-LISTENER, packet 2): the compiled filter programs v3 and edge record v6. OBSERVER's two
 programs are republished from seccomp allowlists v5, each the earlier program with exactly the bind/listen pair and the
@@ -1272,6 +1281,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 121. `MET-ENFORCE-034`: publish the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); matrix v5, HS43 and native-profile v4 unchanged; DATA_CHECK_ONLY.
 122. `MET-ENFORCE-035`: publish W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); HS43, seccomp v4 and matrices v5 and v6 unchanged; DATA_CHECK_ONLY.
 123. `MET-ENFORCE-036`: publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); HS53, seccomp v5 and the earlier programs and edge records unchanged; DATA_CHECK_ONLY.
+124. `MET-ENFORCE-037`: publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); plan v2, amendments 1 and 2 and edge record v5 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

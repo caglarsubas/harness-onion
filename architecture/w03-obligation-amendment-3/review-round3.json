@@ -1,0 +1,45 @@
+{
+ "subject": "tools/w03/amend3 candidate 3 (amendment.json sha256 0876f9b29c9431b5ff5a3e9f516067e3a7a9d855f253f63d24fe408d1a4f77b1; README.md b662e6f36f1409486961370e7ac7662c578e881c69b16c369a98732862ceef13; build_contract.py f8315791b61f0978600fa20ac4b51b009d22646da66e1648e03e2a4dd2ed34b2; DRAFT.md 194a1a5e5480a4e6df19130cce346f99727ff9571ec3df722e5b23398dd2aa68)",
+ "reviewer": "independent agent",
+ "round": 3,
+ "verdict": "PASS_FOR_ADOPTION",
+ "priorFindings": [
+  {"id": "C2-1", "severity": "NOTE", "status": "FIXED", "note": "Item (3) now says the record file must sit in a location typed planeon_etc_t or planeon_observer_cred_t, which matrix v5 lets planeon_observer_t read, unchanged in v6, so its own read needs no grant. Verified by exact path and line. selinux-matrix-v3/matrix.json:6096-6127 is exactly the planeon_etc_t type object (SEALED_CONFIG, file and dir, READ ANY_DOMAIN). :6255-6285 is exactly the planeon_observer_cred_t object (CREDENTIAL, file, READ planeon_observer_t). Both spans are whole objects bounded by the neighbouring objects. selinux-matrix-v3/README.md:216-217 are the Sealed configuration ('READ any') and Credentials ('READ the owners only') rows. selinux-matrix-v4/README.md:629-630 repeat both rows unchanged in v6."},
+  {"id": "C2-2", "severity": "NOTE", "status": "FIXED", "note": "The README 'Why' now lists the scope (1)-(3) as the author wrote it and maps each to the contract's parts."},
+  {"id": "C2-3", "severity": "NOTE", "status": "FIXED", "note": "carried[2] and carried[3] (the hand-offs) cite 'owner decision Q-HE4D1-2 (a)' and 'Q-HE4D1-10 (a)', each with 'carried under the agreed scope (AMEND3-SCOPE)'. Q-A3-7 (a) now covers carried[0] only."},
+  {"id": "C2-4", "severity": "NOTE", "status": "FIXED", "note": "No '.; ' left in the README. The NP-9 cell joins as '... refined by the NP-9 minimum); HE-004D1: ...'."}
+ ],
+ "monitorDecisions": [
+  {"decision": "(a) NP-9 minimum (OWNER_DECISIONS.md:22)", "status": "FOLDED", "note": "Quoted as ownerDecisions[14] by exact whole-line match ('>    - ' + text, one occurrence). HE-005's NP-9 share states it right after the C1-4 precedence rule: 'Each quiescent freeze holds for at least one 2 s inspection window, aligned with the observer's 60 s cycle (the NP-9 minimum).' Everything else stays HE-005's ('Q-A3-4 (a), refined by the NP-9 minimum'). T04's NP-9 share now proves the freeze 'holds for at least one 2 s inspection window aligned with the observer's 60 s cycle'. NP-9's source names the decision. NP-9's text and packets are unchanged. Nothing conflicts with the precedence rule: an expiry inside a bracket still proceeds to W6 without thawing, and the leaf stays frozen. How the alignment is achieved without a broker-observer channel is routed to HE-005's and D1's designs (DRAFT section 8)."},
+  {"decision": "(b) dontaudit (OWNER_DECISIONS.md:23)", "status": "FOLDED", "note": "Quoted as ownerDecisions[15] by exact whole-line match. OBS-HOSTPOL-1's HE-008 share ends with 'Recommended, not a grant (monitor, 2026-10-18): a dontaudit rule for the denials the host-wide /proc scan meets on domains outside procAccess; T04's check counts grants only, so it is unchanged'. It is a recommendation, never a grant. Limiting it to domains outside procAccess keeps any denial on a planeon or qualk8s domain (a P-a failure) visible. OBS-HOSTPOL-1's T04 share is byte-identical to candidate 2 (verified). The citation native-profile-v4/README.md:119-121 is the P-a sentence: 'The host-wide /proc label scan behind the P5 domainProcessCounts is complete only then: a process whose attr/current read fails cannot be told apart from one in another domain.'"},
+  {"decision": "(c) same device in maps and stat (OWNER_DECISIONS.md:24)", "status": "FOLDED", "note": "Quoted as ownerDecisions[16] by exact whole-line match. carried[1] reads 'the enrolled filesystems report the same device in maps and stat', to 'a later W03 plan amendment, with Q-A3-7's items'. The relay lines (:21 '2. AMEND-3 interplay, monitor decisions:', :25 'Fold these into AMEND-3 candidate 2 ...') are not quoted."}
+ ],
+ "findings": [
+  {
+   "id": "C3-1",
+   "severity": "NOTE",
+   "location": "amendment.json carried[1]",
+   "finding": "The same-device item has no `source` pointer, unlike carried[0]. The quoted decision gives its provenance, but not which native-profile v4 rule it serves. That rule is the P1 running-image and executableMaps device/inode equality (native-profile-v4/README.md:494).",
+   "requiredChange": "Optional: add a source pointer such as 'architecture/native-profile-v4/README.md:494 (the observed device and inode of each image and mapped file)'."
+  },
+  {
+   "id": "C3-2",
+   "severity": "NOTE",
+   "location": "DRAFT.md section 1, Q-A3-4 (a) row",
+   "finding": "The row still quotes candidate 2's sentence 'The points' definition, frequency and duration are HE-005's design (Q-A3-4 (a)).'. Candidate 3's share now says 'Everything else about the points (... beyond that minimum) is HE-005's design (Q-A3-4 (a), refined by the NP-9 minimum)'. Section 0 records the change; the DRAFT is not published.",
+   "requiredChange": "Optional: update the row or mark it as candidate 2's wording."
+  }
+ ],
+ "questions": [],
+ "checks": [
+  {"check": "Subject hashes", "result": "amendment.json 0876f9b2..., README.md b662e6f3..., build_contract.py f8315791..., DRAFT.md 194a1a5e... match the coordinator's; the top-level files are byte-identical to rounds/c3"},
+  {"check": "Builder re-run on a copy in scratch (python3 -I -B, clone harness-onion-npv4, pin f4bb0000)", "result": "Both outputs byte-identical (cmp); no .pyc written"},
+  {"check": "Structural diff candidate 2 to 3", "result": "Changed: OBS-HOSTPOL-1 text (C2-1 clause), source and HE-008 share (dontaudit); NP-9 HE-005 and T04 shares and source (minimum); carried re-indexed (new [1]; old [1]-[3] now [2]-[4], [2]/[3] decisions re-cited); ownerDecisions[14]-[16] appended, [0]-[13] unchanged. Byte-identical: OBS-HOSTPOL-1 T04 share, NP-9 text and packets, both SHARE_CORRECTED rows, packetScopes (scope, np3Route, decisions, handOffs, residuals), changeKinds, shareRule, correctionRule, packetScopeRule, amends, after, dependencyNames, unchanged"},
+  {"check": "Round-1 fixes still hold", "result": "C1-1 item (3) seal marker and /run walk and the HE-008/T04 object lists present; C1-2 per-(type, class) T04 check unchanged; C1-3 np3Route unchanged; C1-4 precedence rule present in HE-005's and T04's NP-9 shares; C1-5..C1-9 unchanged"},
+  {"check": "carried[] re-indexing", "result": "amendment.json and README reference only packetScopes[0].handOffs[0]/[1], which are unchanged; README's Carried list follows the new order; DRAFT's references (carried[0], [1], [2]/[3], [4]) match candidate 3's indices"},
+  {"check": "Citations resolved against the pinned bytes", "result": "43 unique ranges, all on the stated content: the 38 from round 2 unchanged plus selinux-matrix-v3/README.md:216-217, matrix.json:6096-6127 and :6255-6285, selinux-matrix-v4/README.md:629-630, native-profile-v4/README.md:119-121"},
+  {"check": "Privacy in the contract files", "result": "No /Users/, /private/tmp, /home/, '@', '~/', tools/w03 or local username in amendment.json or README.md; the only non-ASCII character is the en dash in the verbatim AMEND3-SCOPE quote"},
+  {"check": "Process", "result": "architecture/artifact-edges/ read only by exact file path (git show of operator-harness-engineering-v5.json); never listed, grepped, walked or archived. No new ids in this round, so no repository-wide search was run. No R12, tools/w04, /var/db/harness-ci or other forbidden path touched"}
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}

@@ -1,0 +1,131 @@
+{
+ "subject": "tools/w03/amend3 candidate 1 (amendment.json sha256 e8aafd081e65976b71368f2e757aa654fbd1f5f9d714f01ba8c42a9e8a3e22a5; README.md 6e8831a011d6d9ac2c973e13e16cc2a28de833f0b2bf23055785de20d54f6474; build_contract.py a8e038c6b282bbfd45b24a65aabcdbfaa0209f89171f0f189e08a0d897c3f7f5)",
+ "reviewer": "independent agent",
+ "round": 1,
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "C1-1",
+   "severity": "MAJOR",
+   "location": "amendment.json changes[0] (OBS-HOSTPOL-1) text and HE-008 share; README.md OBS-HOSTPOL-1 row",
+   "finding": "OBS-HOSTPOL-1 says planeon_observer_t 'gets exactly' accesses (1)-(5), as the complete set of its host-policy accesses outside matrix v5 and v6 that its captures need. That set leaves out dir search on /run. The P5 lifecycle capture reads the seal marker at the schema-fixed path /run/planeon/containment/sealed (qualification.schema.json:885; sealMarker path, digest, uid and mode OBSERVED, native-profile v4 README:180-184), and item (4) needs a descriptor on the /run tmpfs for runFsType. Matrix v5 labels /run/planeon planeon_run_t by a named type transition whose parent is var_run_t (matrix.json typeTransitions; selinux-matrix-v3/README.md:265). So /run's own type is host policy outside matrix v5 and v6, and reaching /run/planeon needs dir search on it. No item gives that: (2) covers only the paths to the cgroup2 and bpffs roots, and (3) only the paths of the enrolled files. The seal marker is not an enrolled file; the dossier's section 4 lists it in its own row, as READABLE through planeon_run_t, without its parent. With 'exactly', HE-008 may not grant this access, and the P5 capture could never be taken on the enrolled host. That fails closed, but it means the contract forbids an access the captures need. The record file of Q-HE4D1-2 (a) (path in the signed configuration, read with gate_sys::Dir after the seal) may raise the same question if it does not sit in a directory the observer already holds.",
+   "requiredChange": "Add the walk to /run/planeon to the closed set. For example, widen (3) to 'dir search on each directory on the path of every enrolled file, and of the seal marker, that it opens and measures', or name /run with the directories in (2). Add '/run' to the HE-008 share's object list and to T04's objects. Confirm from the D1 design where the Q-HE4D1-2 (a) record file lives, and add its path directories if they are not already covered. Q-HE4D1-8 (a)'s 'path directories' covers both additions, so no new decision is needed. Alternatively, drop 'exactly' from the obligation text and scope the closure to the listed objects only; but then say which packet grants the other host directories the walks cross."
+  },
+  {
+   "id": "C1-2",
+   "severity": "MINOR",
+   "location": "amendment.json changes[0] shares.T04 (and item (5) of the text)",
+   "finding": "T04's check is 'exactly these accesses on these objects: each listed permission present, no other permission and no write (HI-7's self process permissions aside)'. Installed policy is expressed per type and class. Item (5)'s object, the observer's own /proc entries, has the observer's own type. That type is also the target of its own sockets (matrix v5's grants on its listener sockets; HE-004C's TCP client), of capability and process self rules, and of HI-7's OBSERVER seal permissions (w03-obligation-amendment-2/amendment.json:221). Those include 'its own /proc/self/status reads', which, per the carried HE-002S-D2 note (compiled-filter-programs/status.json:144), also need read on the /proc/self link, a lnk_file of the /proc root's type. At type level, 'no other permission and no write' fails on these legitimate grants. At object level it is not a check T04 can run against installed policy. The exemption names only HI-7's 'process' permissions, not the /proc/self reads.",
+   "requiredChange": "State T04's check per (type of the object, class). On the /proc root's type, class dir: exactly getattr, open, read and search. On the walked and path directories' types, class dir: exactly search. Class filesystem on the three filesystem types: getattr. On its own domain: dir, file and lnk_file exactly matrix v5's READ group, plus process getattr present. 'No write' applies over those pairs. Other classes on its own type (sockets, capability, process self rules), and all of HI-7's OBSERVER self permissions (not only its process permissions), lie outside the check."
+  },
+  {
+   "id": "C1-3",
+   "severity": "MINOR",
+   "location": "amendment.json packetScopes[0].np3Route; README.md 'HE-004D1's scope' paragraph",
+   "finding": "np3Route says NP-3 'is discharged through native-profile v4's inspector obligation' and addresses only NP-3's second clause ('never writes the broker leaf's cgroup.freeze', structural per README:310-311). NP-3's text (plan.json:287) begins 'Inspection freezes through an ancestor'. The NP-3 source (native-profile-v3/status.json:59, P6) has inspectors 'freezing through an ancestor'. Under Q-HE4-3/4 (a) (no cgroup write grant) and native-profile v4 README:284, the inspection freezes nothing, ancestors included. The dossier says so itself (section 10.1: NP-3's plan text 'cannot be discharged literally'). As written, the route over-claims a discharge of the first clause, which the observer cannot meet.",
+   "requiredChange": "Say it explicitly. Under Q-HE4-3/4 (a) the inspection freezes nothing, so NP-3's ancestor freeze is not met by the inspector. Under Q-NP4D-8 (a) and Q-NP4D-10 (a), the frozen state a WORKER capture needs comes from the broker's own write to its leaf (NP-9). NP-3's text stays plan v2's byte for byte, and its 'never writes' half is structural. Cite plan.json:287 and the decisions. This adds no status and narrows nothing beyond what those decisions already did."
+  },
+  {
+   "id": "C1-4",
+   "severity": "MINOR",
+   "location": "amendment.json changes[1] (NP-9) shares.HE-005",
+   "finding": "NP-9 claims 'the residual is availability, not safety'. That holds only if the quiescent freeze and thaw never interfere with the broker's safety freezes. W1-W4 hold the leaf frozen until W3's checks pass, and W6 freezes on expiry or invalidation before cgroup.kill (HOST_INTERFACE_SPEC.md:462-486). A quiescent 'thaw after' that undid either freeze would let a pre-exec child run before W3's checks, or a worker run past its expiry. The share says only 'beside W1's and W6's freezes'.",
+   "requiredChange": "Add one precedence sentence to the HE-005 share, without fixing timing (Q-A3-4 (a)). A quiescent freeze is taken only on a leaf that is not otherwise held frozen. Its thaw never thaws a leaf that W1-W4 or W6 holds frozen. An expiry or invalidation inside a quiescent bracket proceeds to W6 without thawing. T04's share could check the same."
+  },
+  {
+   "id": "C1-5",
+   "severity": "NOTE",
+   "location": "amendment.json unchanged; DRAFT.md section 4 last row",
+   "finding": "The no-edge-record claim cites only edge v5's three HE-004D1 rows (operator-harness-engineering-v5.json:497-529, verified). Q-HE4D1-11 (a)'s X12-X14 also replay under the native-profile v3 schema, whose row is labelled HE-004D2 (:550-559) and usable by D1 under the byte rule (:608). The claim holds, but its citation is incomplete. DRAFT.md gives that row as ':550-560'; the row ends at 559.",
+   "requiredChange": "Cite :550-559 and :608 beside :497-529 in `unchanged`, and correct the draft's span."
+  },
+  {
+   "id": "C1-6",
+   "severity": "NOTE",
+   "location": "amendment.json changes[1] shares.HE-005; changes[0] text item (5)",
+   "finding": "Matrix v6 (architecture/selinux-matrix-v4/, contract planeon.internal.selinux-matrix/v6, superseding v5) is on main at f4bb0000, and OBS-HOSTPOL-1 already says 'outside matrix v5 and v6'. The HE-005 share cites only v5's Cgroups row (selinux-matrix-v3/README.md:219); v6 repeats the same row at selinux-matrix-v4/README.md:632. Item (5) names 'matrix v5's procAccess'; v6 keeps the observer's 15 pairs unchanged (selinux-matrix-v4/README.md:245, 248-250).",
+   "requiredChange": "Cite v6 beside v5 (README:632 for the broker's cgroup.freeze WRITE; :245 for the observer's procAccess), or write 'matrix v5's (unchanged in v6)'."
+  },
+  {
+   "id": "C1-7",
+   "severity": "NOTE",
+   "location": "DRAFT.md section 3 (SHARE_CORRECTED justification); README.md 'Change kinds'",
+   "finding": "The justification compares SHARE_CORRECTED only with amendment 2's closed kinds. Amendment 1 also used a NARROWED kind (I07-4, an ownership narrowing by owner decision), which amendment 2's closed list did not carry. NARROWED does not fit here: it records an obligation's narrowed ownership, with no byte-quoted replacement of a share. Saying so would close the obvious reviewer question.",
+   "requiredChange": "Optional: add one line naming amendment 1's NARROWED and why the new kind is used instead."
+  },
+  {
+   "id": "C1-8",
+   "severity": "NOTE",
+   "location": "amendment.json packetScopes[0] (decisions Q-HE4D1-2, residuals[1])",
+   "finding": "Two hand-offs that the selected options imply have no register row. First, Q-HE4D1-2: the owner chose it 'as in the dossier', and the dossier's recommendation adds 'HE-008 signs it' (DOSSIER-D1.md:545). The packet scope records option (a) only, not the HE-008 hand-off. Second, capturer authentication is carried to HE-004-I01 only as a residual in HE-004D1's scope; HE-004-I01's register row I01-1 does not mention it.",
+   "requiredChange": "Name the HE-008 signing hand-off in packetScopes (packet plus decision), as packetScopeRule allows. Add both items to the list routed under Q-A3-7, so a later amendment gives them rows."
+  },
+  {
+   "id": "C1-9",
+   "severity": "NOTE",
+   "location": "amendment.json packetScopes[0].dossier",
+   "finding": "The dossier is bound by sha256 but lives in the operator workspace, outside harness-onion, so the hash cannot be checked from the repository. The (a) options are quoted verbatim, so nothing normative depends on the hash.",
+   "requiredChange": "Optional: say the dossier is unpublished and that its hash is provenance only, since the options are quoted verbatim."
+  }
+ ],
+ "questions": [
+  {
+   "id": "Q-A3-1",
+   "position": "agree (a)",
+   "reason": "Q-HE3-3 and SCOPE.md's carried item name HE-003's share only. The rest stays true. Stage 1's 'down to at most {CAP_SETPCAP, CAP_NET_BIND_SERVICE}' is an upper bound. HE-002S design section 18 (Q-HE2S-9 consequence) gives the accepted starts as the full root set or any superset of {CAP_SETPCAP}, or a start within {CAP_SETPCAP} with nothing left to drop. With kept empty, every start that amendment 1's HE-008 HI-7 text admits falls in that set; {CAP_NET_BIND_SERVICE} alone is excluded by its own 'nothing left to drop' clause. Record the NOTE as one sentence in the README, so the omission reads as deliberate. Note that compiled-filter-programs/status.json:145 phrases HE-008's starts more narrowly ('a start within {CAP_SETPCAP}') than the design does."
+  },
+  {
+   "id": "Q-A3-2",
+   "position": "agree (a), subject to C1-1 and C1-2",
+   "reason": "Explicit sets are what make T04's check closable. bpffs is rightly left out of the fstatfs list: BPF_OBJ_GET refuses a non-bpffs object, and the readiness doc's fstatfs list (NATIVE_QUALIFICATION_READINESS.md:92-94) names procfs, sysfs, selinuxfs and cgroup2. sysfs and selinuxfs serve the OUT_OF_SCOPE_HOST roots /sys/kernel and /sys/fs/selinux, and matrix v6 README:185 leaves statfs by domains that are not mount sources to W03. The D1 design is not written yet, so its review should confirm the sets. For example, if D1 fstat()s the cgroup2 or bpffs root to refuse substituted bind mounts (readiness :94), it needs dir getattr there. Any mismatch found before adoption goes into candidate 2."
+  },
+  {
+   "id": "Q-A3-3",
+   "position": "agree (a)",
+   "reason": "Q-HE4D1-8 (a) names an HE-008 share plus a T04 check. The packet scope's sentence 'The host policy its captures need outside matrix v5 and v6 is OBS-HOSTPOL-1's' already binds D1's side. I05-8's HE-003A3 share is a functional duty with no D1 analogue beyond that scope. As review guidance, D1's design should list each host access its captures make against the closed set; that would have caught C1-1."
+  },
+  {
+   "id": "Q-A3-4",
+   "position": "amend (a)",
+   "reason": "Leave the points, frequency and hold time to HE-005's design (the residual is availability), but add C1-4's precedence rule, which is a safety rule rather than timing. (b)'s examples are fine as review guidance, but 'held at least 2 s' is not enough on its own: the observer has no frozen signal, and Q-HE4D1-6 (a) checks once per 60 s cycle, so the hold must cover the observer's polling as well as its inspection. HE-005's and D1's designs need to agree on that."
+  },
+  {
+   "id": "Q-A3-5",
+   "position": "agree (a)",
+   "reason": "The scope agreement is what excludes the edge record and the host-field drop. The monitor's message should be quoted verbatim in ownerDecisions, so the exclusions trace to a recorded decision rather than to the author's paraphrase."
+  },
+  {
+   "id": "Q-A3-6",
+   "position": "agree (a)",
+   "reason": "The I06 successor packet has no id. Adding it under a dependency name would go beyond the agreed three-item scope, and the amendment that names the packet can add it to OBS-RBAC-1 by PACKETS_ADDED."
+  },
+  {
+   "id": "Q-A3-7",
+   "position": "agree (a), with additions",
+   "reason": "This keeps the candidate to the agreed scope. Add to the routed list Q-HE4D1-2's 'HE-008 signs it' and capturer authentication to HE-004-I01 (C1-8). Note that I05-8's HE-008 share already fixes hidepid=0 on the procfs mount, which partly covers native-profile v4's '/proc without a hidepid restriction'."
+  },
+  {
+   "id": "Q-A3-8",
+   "position": "agree (a)",
+   "reason": "The SHARE_CORRECTED rows already bind amendment 1 by sha256 in `corrects` (equal to after[0], verified), and correctionRule refers to 'one amendment bound in `after`', so an ordered list states both the binding and the apply order. Schema v3 marks the shape change; the layer validator must accept the object form for v2 only."
+  }
+ ],
+ "checks": [
+  {"check": "Candidate hashes against the brief", "result": "build_contract.py a8e038c6..., amendment.json e8aafd08..., README.md 6e8831a0... all match"},
+  {"check": "Builder re-run on a copy in WORK (python3 -I -B, clone harness-onion-npv4, pin f4bb0000)", "result": "Both outputs byte-identical to the candidate (cmp); no .pyc written"},
+  {"check": "Bindings: sha256 of plan v2, amendments 1 and 2, edge v5 at f4bb0000 (git show, shasum)", "result": "a0047023...aefb67, 2a98e289...1f4bd2, a1d86186...f234f0b, 89b47ef8...e3c0 all match amends/after; corrects.sha256 equals after[0]; dossier ff9ace8e...2522 matches"},
+  {"check": "Owner decisions verbatim (independent script, exact-line match)", "result": "Four lines at OWNER_DECISIONS.md:250-253 inside the 2026-10-18 HE-004D1 section (header :246); Q-HE3-3 at SCOPE.md:87 inside the 2026-10-14 section; relay line deliberately not quoted"},
+  {"check": "Dossier (a) options and titles verbatim (wrapped lines joined)", "result": "All 12 match DOSSIER-D1.md:536-575; each option ends at '; (b)' or before '*Recommendation:*'; Q-HE4D1-6 questionCondition is the question's own sentence"},
+  {"check": "SHARE_CORRECTED arithmetic", "result": "`replaced` occurs once in each amendment 1 HE-003 share (lines 56, 78; rows 39-61, 62-83); corrected share == old.replace(replaced, replacement); packets equal the post-amendment-2 lists (am2 rows 226-247, 248-269); no amendment 2 HE-003 share for SEC-4/HI-7; correction matches Q-HE3-3 (a) and Q-HE2S-9 (a) (status.json:145; HE-002S design section 18)"},
+  {"check": "Change kinds and rules", "result": "ADDED, REFINED, PACKETS_ADDED byte-identical to amendment 2; shareRule keeps amendment 2's first sentence; amendment 1's NARROWED not carried (C1-7)"},
+  {"check": "Id collisions", "result": "NP-9 and OBS-HOSTPOL-1 absent from plan v2 and amendments 1-2 (script) and from architecture/ at f4bb0000 (git grep -w, no match); NP family ends at NP-8; OBS family is OBS-RBAC-1, OBS-INV-1"},
+  {"check": "Every file:line citation in amendment.json resolved against the pinned bytes", "result": "All 26 unique ranges, plus the corrects rowLines and shareLine (am1 39-61, 56, 62-83, 78), land on the stated content (native-profile v4 README/status/schema, matrix v5 README:158/219/497, readiness :92-94, HS43 :462/:482-486, compiled-filter status :145, am2 :57-58/:315-333, plan :284-292, edge v5 :497-529)"},
+  {"check": "OBS-HOSTPOL-1 against the dossier (sections 4, 9.4), Q-HE4D1-8 (a), matrix v5/v6, readiness doc", "result": "Items (1)-(5) match the dossier's NOT FOUND (host policy) rows; fstatfs set justified (sysfs/selinuxfs are OUT_OF_SCOPE_HOST roots; bpffs validated by BPF_OBJ_GET; matrix v6 README:185 leaves non-mount-source statfs to W03); /run search missing (C1-1); T04 check needs per-(type, class) scoping (C1-2); form consistent with I05-8"},
+  {"check": "NP-9 against native-profile v4 README:282-311, :335-336, status.json:198-202, HS43 W1-W6, matrix v5 :219", "result": "Placement on HE-005 correct (plan v2 HE-005 = broker, W1-W6); existing WRITE grant covers the freeze; bracket text matches Q-NP4D-10 (a); NP-3 first clause unaddressed (C1-3); W1/W6 precedence missing (C1-4)"},
+  {"check": "packetScopes against the 12 decisions and native-profile v4", "result": "Scope adds to amendment 2's HE-004D1 summary and narrows nothing; residuals accurate (field list README:134-136; owner's acceptance words; capturer status.json:196; availability README:305-306); hand-offs C1-8"},
+  {"check": "README matches JSON; status line", "result": "Consistent; status CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW"},
+  {"check": "Privacy in the contract files", "result": "No /Users/, /private/tmp, /home/, '@', '~/', tools/w03 path, local username or non-ASCII character in amendment.json or README.md"},
+  {"check": "Disclosure", "result": "The id git grep over architecture/ excluded the two forbidden top-level paths by pathspec, but it traversed architecture/artifact-edges/ and a historical copy under architecture/compiled-filter-programs/rounds/round1/architecture/artifact-edges/. It printed no match and no content. No other access to the forbidden or independence paths; R12, tools/w04 and /var/db/harness-ci were not touched."}
+ ],
+ "actions": {"filesEdited": false, "networkAccessed": "none", "personalDataSent": false}
+}
