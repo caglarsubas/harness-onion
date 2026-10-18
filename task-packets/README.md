@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-033
+## Current source preparation — MET-ENFORCE-034
+
+MET-ENFORCE-034 (SELINUX-MATRIX-V6): the SELinux matrix v6, v5 plus the fail-closed source closures, the filesystem tables
+for context= mounts, entry closures, the /proc reader narrowing and systemd's narrowed listener-socket cleanup, coupled to
+the merged native-profile v4 (owner Q-MX6-2/3/4/7, "Keep, T04 uses v5", SOL-SYSTEMD-CLEANS). DATA_CHECK_ONLY. Alpha2 OPEN;
+246 accepted plus MET-ENFORCE-034 only.
+
+## Historical native-profile v4 source preparation — MET-ENFORCE-033
 
 MET-ENFORCE-033 (NATIVE-PROFILE-V4): native-profile v4 (v3 plus O-NATIVE-GATE-NOCAP, the capture routes and the restated inspector
 obligation), I06 v3 bound to it, and operator edge record v5 (v4's 45 rows plus 9 registered before use), adopted after
@@ -1456,3 +1463,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 244 | `MET-ENFORCE-032` | `Harness-Engineering` | W03-PLAN-AMEND-2: W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; DATA_CHECK_ONLY |
 | 245 | `MET-MAS-004` | `Harness-Engineering` | MAS-RA-004: topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); DATA_CHECK_ONLY |
 | 246 | `MET-ENFORCE-033` | `Harness-Engineering` | NATIVE-PROFILE-V4: native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, capture routes, inspector obligation, I06 bound to native-profile v4) and operator edge record v5; DATA_CHECK_ONLY |
+| 247 | `MET-ENFORCE-034` | `Harness-Engineering` | SELINUX-MATRIX-V6: the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); DATA_CHECK_ONLY |

@@ -1,0 +1,59 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 2,
+ "subjectCommit": "e398cb5328acb121b2cc473a5057f1febe0d784a",
+ "subjectTree": "0565f22baadc0679b702a558dfdb7c60a2e34c0d",
+ "verdict": "CHANGES_REQUIRED",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV2-1",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 154,
+   "summary": "The /run residual's safety argument covers mounts over /run/planeon only. A mount source can mount over a host-typed ancestor, such as /run itself, and recreate the /run/planeon paths with its own content. The residual's 'socket files' also include the runtime and datastore sockets, which do not live under /run/planeon.",
+   "evidence": "matrix.json typeTransitions: /run/planeon is created by init_t under parent `var_run_t`, a host type, so `mounton` on /run (and on /, /opt, /etc) is outside the matrix. A75.dir covers planeon_run_t only. A mount source with mounton on the /run directory can mount a tmpfs there and recreate planeon/sealed and planeon/live-proxy/*.sock. With context=C that content is container content, which no planeon reader may read, so it fails closed. A plain tmpfs (fs_use_trans, so not a stored-label filesystem, and MX6-O3 clause 1 does not apply) yields host-typed objects whose READ by the readers is outside the matrix. NP4's P5 capture observes the seal marker's path, digest, uid and mode, but its label is DECLARED_T04 (NP4 README:180-182), so a forged marker is stopped only by W03's policy. README:560 shows the datastore and runtime socket files get W03-named paths, not /run/planeon paths, so 'readers find these objects by fixed path under /run/planeon' (README:156-157) does not cover them.",
+   "requiredChange": "Add an obligation row (W03; the T04 successor that adopts v6). The mount sources hold mounton only on their own mount points (kubelet pod and volume directories, runtime state and rootfs directories, container content), never on a directory that is, or is an ancestor of, a planeon or backend path (/, /run, /opt, /etc, the datastore and runtime socket directories, /sys/fs/cgroup, /sys/fs/bpf). Scope the residual sentence to the /run/planeon objects."
+  },
+  {
+   "id": "XV2-2",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 217,
+   "summary": "MX6-O2, MX6-O3 and MX6-O5 cite NP4 proofs as '(extended)', against the monitor's 'by reference' decisions. README:217 implies NP4 proofs check those three rows today, but they check them only in part or not at all.",
+   "evidence": "Monitor Q-MX6-5 (a) says 'T04 by reference to native-profile v4's proof ids ... no errata', and Q-MX6D-2 (a) says 'an obligation row (T04-LABELS by reference)' (README:256, :268). REVIEW_BRIEF.md:89 asks whether the rows are 'by reference only'. NP4's T04-ENTRYPOINT-CENSUS (NP4 README:320) checks P-b's outcome for entrypoint, interpreter and closure types only. It does not check MX6-O2 for other declared types, or MX6-O3's mount rules. NP4's T04-LABELS (README:325) checks that enrolled files carry their declared labels. Labels of non-executable enrolled files are free (NP4's open item, README:606-607), so it does not refuse the two types MX6-O5 names. Also, README:32 says v6's rows bind 'the T04 successor that adopts v6', but MX6-O2, O3 and O5 do not name it.",
+   "requiredChange": "Write 'by reference' as decided, and say for each of MX6-O2, O3 and O5 what the NP4 proof checks: outcome only, or nothing for O5's refusal. Add 'the T04 successor that adopts v6' to their owners. Reword README:217 so it does not imply that NP4 proofs check those rows."
+  },
+  {
+   "id": "XV2-3",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 146,
+   "summary": "MX6-O3: the scope of clause 1 and a consequence of clause 2.",
+   "evidence": "(a) 'mount no filesystem whose labels come from the filesystem itself ... unless with context=' (README:149, :224), read literally, covers bind and move mounts of existing trees on xattr filesystems. MS_BIND takes no context=, and the runtime needs bind mounts for Pod volumes and rootfs assembly. A bind mount creates no label: selinux_mount checks only mounton for it. (b) Clause 2 says no entrypoint, interpreter or closure type may be associated with the host types of the mount sources' context= mounts. Entrypoint types must be associated with the root filesystem's superblock type (README:152). In refpolicy-derived base policies, ext4, xfs and btrfs share one fs_use_xattr type (fs_t), and overlay often does too. So the mount sources could hold relabelfrom on none of them: no context= mount of a disk or overlay filesystem, unless W03 gives those superblocks a type no P-b type is associated with.",
+   "requiredChange": "Limit clause 1 to mounts that instantiate a superblock (mount(2) with a new source, fsopen/fsmount), and say bind and move mounts are label-neutral. State clause 2's consequence as a W03 selection requirement."
+  },
+  {
+   "id": "XV2-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 167,
+   "summary": "The pair-by-pair duty list does not mention v1's worker check of its original broker.",
+   "evidence": "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md:242-244: '004's installed worker may use the same fixed reader for itself/original broker through its separately exact installed factory and parent/FD3 guards ... WORKER qualifies only inside broker-owned startup.' That is a v1 read of planeon_broker_t by the worker. Neither v5 nor v6 grants a worker->broker pair (A59.planeon_broker_t allows the gate, the observer and the server). HS43 §4.3 keeps only SERVER's and OBSERVER's v1 peer duties, and the W02d worker allowlist reads only the read-only root, so the check is presumably retired. README:161-193 does not say so.",
+   "requiredChange": "Add one sentence saying the v1 worker's check of its original broker is retired under HS43 (no pair needed), or name its owner."
+  },
+  {
+   "id": "XV2-5",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 95,
+   "summary": "Two small accuracy points.",
+   "evidence": "(a) README:95-96 and :587-588 say every planeon domain is entered only through its sealed entrypoint type, 'now ... for undeclared types too'. But planeon_maint_t is not a closed source: allowed(planeon_maint_t, bin_t, file, entrypoint) = None, while all sixteen closed domains give False and are entered only through their granted type (checked by evaluator, all states). (b) M97's intent (vectors.json:45389) still reads 'one closure per domain and class', but the rule now keys on domain, class and permission (README:662).",
+   "requiredChange": "Limit the sentence to the sixteen closed domains (the maintenance domain and the admin login excepted), or close the maintenance domain's entry as well. Update M97's intent."
+  }
+ ]
+}

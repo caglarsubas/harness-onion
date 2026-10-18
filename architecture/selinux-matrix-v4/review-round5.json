@@ -1,0 +1,32 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 5,
+ "subjectCommit": "bb202bf4d2c7a628491c55f002e3fe0aa47a8456",
+ "subjectTree": "848db7c8d0ad003ee846478b0c389a4c22dfd68a",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV5-1",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 268,
+   "summary": "Invariant (c) ('never an entrypoint, for any domain') now rests on the type's `category` field. Reclassify the interpreter as ENTRYPOINT, grant it to an unclosed domain, and nothing catches it. So the dropped A77.planeon_interpreter_exec_t was not unable to fail.",
+   "evidence": "Scratch two-op mutations on the round-5 matrix. Setting planeon_interpreter_exec_t's category to ENTRYPOINT and granting ENTRYPOINT to planeon_maint_t passes check_matrix and all 206 assertions. The same holds for planeon_etc_t recategorised to ENTRYPOINT for planeon_maint_t, and for qualk8s_datastore_data_t recategorised to CONTAINER_FILE for planeon_admin_t. The interpreter recategorised and granted to planeon_server_t is caught (A60.49.entrypoint). Candidate 4's A77.planeon_interpreter_exec_t would have failed in the first case. check_matrix does not tie the ENTRYPOINT or CONTAINER_FILE category to particular types. A recategorisation is a visible change to a type row, so this is defence in depth, not an open route.",
+   "requiredChange": "Optional. Restore A77.planeon_interpreter_exec_t (it can fail, so it is not vacuous) with a two-op mutation, or have check_matrix fix the ENTRYPOINT category to the sixteen declared exec types and CONTAINER_FILE to qualk8s_container_file_t."
+  },
+  {
+   "id": "XV5-2",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/REVIEW_BRIEF.md",
+   "line": 137,
+   "summary": "The brief's 'Round-3 answers' row for XV3-1 still says 'the interpreter type none (M104, M105)'.",
+   "evidence": "Since candidate 5, A77 no longer covers the interpreter, and M104 is a check_matrix refusal. README:348 has the updated wording; REVIEW_BRIEF.md:137 does not.",
+   "requiredChange": "Align the brief's row with README:348, or mark it as the round-3 state."
+  }
+ ]
+}

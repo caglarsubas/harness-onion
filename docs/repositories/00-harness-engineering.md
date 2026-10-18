@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-033
+## Current source preparation — MET-ENFORCE-034
+
+MET-ENFORCE-034 (SELINUX-MATRIX-V6): the SELinux matrix v6, v5 plus fail-closed source closures (the qualk8s sources'
+execute_no_trans, process transition and dyntransition over every declared domain, filesystem relabelto), a filesystem
+table and mount sources for context= mounts, entry closures, the /proc reader narrowing (the server reads only its
+observer's and broker's /proc, the broker only the gate's) and systemd's narrowed getattr and unlink on the four planeon
+listener socket types; coupled to the merged native-profile v4. Owner Q-MX6-2/3/4/7, "Keep, T04 uses v5" and
+SOL-SYSTEMD-CLEANS. DATA_CHECK_ONLY. Alpha2 OPEN; 246 accepted plus MET-ENFORCE-034 only.
+
+## Historical native-profile v4 source preparation — MET-ENFORCE-033
 
 MET-ENFORCE-033 (NATIVE-PROFILE-V4): native-profile v4 and I06 v3. The effect gate holds no capability (O-NATIVE-GATE-NOCAP). The
 observer is the capturer; each captured field has an evidence class by role and recorded capability set; the processes
@@ -1243,6 +1252,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 118. `MET-ENFORCE-032`: publish W03 obligation-register amendment 2 (HE-004 refined into its parts; HE-004-I01 and HE-003A3 with their obligations) and the operator edge record v4; plan v2, amendment 1 and edge record v3 unchanged; DATA_CHECK_ONLY.
 119. `MET-MAS-004`: publish topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); the MAS-RA-001, -002, -003 and -008 contracts unchanged; DATA_CHECK_ONLY.
 120. `MET-ENFORCE-033`: publish native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, the capture routes, the inspector obligation restated, I06 bound to native-profile v4) and operator edge record v5; earlier contracts unchanged; DATA_CHECK_ONLY.
+121. `MET-ENFORCE-034`: publish the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); matrix v5, HS43 and native-profile v4 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

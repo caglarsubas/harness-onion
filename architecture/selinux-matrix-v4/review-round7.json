@@ -1,0 +1,50 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 7,
+ "subjectCommit": "d45a0d8bf79a244fcdccf41e3537450e32d01f4d",
+ "subjectTree": "dc88c8095c57acb94b70f4e9ba6a11886f09a5ad",
+ "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV7-1",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/matrix.json",
+   "line": 7102,
+   "summary": "A79.<type> now covers EXECUTE and EXECMOD, as Q-MX6-R6 (b) decided. It still leaves out execute_no_trans. Its statement ('systemd may only stat and unlink ...', matrix.json:7102, 7174, 7246, 7318) and the README Assertions row ('may do nothing else to it', README:762) therefore claim one permission more than the assertion pins.",
+   "evidence": "Scratch mutation on <scratch>/repo (git archive d45a0d8b): set types[<sock>].access.EXECUTE_NO_TRANS = [{domain: init_t}] on each of the four planeon listener socket types. check_matrix passes and failed_assertions is empty. EXECUTE and EXECMOD now each break exactly A79.<type> on all four types. ENTRYPOINT is refused by check_matrix (the XV4-1 rule). A narrowed {classes: [sock_file], perms: [execute]} entry is refused as a narrowed grant. A79 now lacks only getattr, unlink, execute_no_trans and entrypoint among the file permissions. The gap is inert. This kernel fact is from my own knowledge (Linux v6.12): fs/namei.c may_open returns -EACCES for MAY_EXEC on an S_IFSOCK inode, and do_open_execat rejects non-regular files, so an exec never reaches the execute_no_trans check in security/selinux/hooks.c selinux_bprm_creds_for_exec. README:79-80 states the exact scope ('no other READ, WRITE, RELABEL, EXECUTE or EXECMOD permission'). Candidate 7 matches the monitor's decision, so this is a wording residue, not a defect.",
+   "requiredChange": "None for this candidate. Optionally, in a successor, add execute_no_trans to A79.<type>, or word the statement and the README row as 'no other READ, WRITE, RELABEL, EXECUTE or EXECMOD permission'. Alternatively, record it as carried."
+  },
+  {
+   "id": "XV7-2",
+   "severity": "NOTE",
+   "file": "scripts/selinux_matrix_v4.py",
+   "line": 353,
+   "summary": "The XV6-2 fix is correct: a narrowed grant no longer counts as WRITE, M116 is refused, and candidate 5's behaviour is restored. The rule asks whether a WRITE entry reaches 'dir add_name'. It does not ask whether the parent type labels directories, as allowed() does (line 158: cls in entry['classes']). README:89-90 ('needs dir add_name on the parent') is therefore slightly stronger than the code.",
+   "evidence": "On <scratch> copies of bb202bf4, ddbd5e9e and d45a0d8b: M116 is refused by candidate 7 ('type transition ...'). The candidate-6 evaluator accepts it (all assertions hold), so the first type-transition require passes and the parent rule does the refusing. The candidate-5 evaluator refuses the candidate-7 data earlier, as a narrowed grant. The three declared named type transitions give the same answer under granted() and _granted_file(dir, add_name). Appending {source: <listener>, parent: <its socket-file type>, class: sock_file, name: x.sock, new: <same>} for each of the four listeners passes candidate 7. The same append passes candidate 5 on its own data. Yet allowed(planeon_gate_t, planeon_i05_sock_t, dir, add_name) is False. On every matrix candidate 5 accepts, the old and new rules agree: v5/c5 accept no narrowed WRITE entry, and for an unnarrowed entry _granted_file equals granted. The residue is inert. This kernel fact is from my own knowledge (Linux v6.12): security/selinux/hooks.c may_create checks dir search and add_name on the parent directory inode, and a socket inode is never a directory (path walk returns ENOTDIR).",
+   "requiredChange": "None. Optionally, in a successor, also require 'dir' in types[r['parent']]['classes'], so the rule matches allowed() and README:90 exactly."
+  },
+  {
+   "id": "XV7-3",
+   "severity": "NOTE",
+   "file": "scripts/selinux_matrix_v4.py",
+   "line": 118,
+   "summary": "Two docstrings did not follow the XV6-2 change. The module docstring's list of extensions to v5 (lines 8-25) does not mention that v5's named-type-transition rule now uses _granted_file. REVIEW_BRIEF.md:125-127 question 1 uses that list as the yardstick. _granted_file's docstring still describes only 'a narrowed READ entry ... (v5)', but the function now also serves this WRITE check and the candidate-6 narrowed WRITE shape.",
+   "evidence": "The candidate-6 to candidate-7 evaluator diff is the rule and its two-line comment (lines 351-354) and nothing else. The candidate-5 to candidate-7 diff adds only _cleanup_grant, its docstring bullet, the narrowed-grant clause and this rule. The code comment and README:89-90 disclose the change, and on every v5-valid matrix the behaviour is unchanged (XV7-2), so successor fidelity holds.",
+   "requiredChange": "None. Optionally add one docstring clause, e.g. 'the v5 named-type-transition rule counts a narrowed grant only for dir add_name (review XV6-2)', and generalise _granted_file's docstring."
+  },
+  {
+   "id": "XV7-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 417,
+   "summary": "The round-6 disposition rows for XV6-3 and XV6-6 (README:417, 420) point to records outside the subject. 'Carried (status)' points to a status.json that architecture/selinux-matrix-v4 does not yet have at d45a0d8b. 'Also stated in HS53's O-W03-OBSERVER-UNIT' points to an HS53 candidate that is not in this tree or on base main.",
+   "evidence": "git ls-tree d45a0d8b architecture/selinux-matrix-v4/ lists only README.md, REVIEW_BRIEF.md, matrix.json and vectors.json. No host-interface-amendment-hs53 directory is in the tree. Monitor Q-MX6-R6 (owner_decisions.json) plans both: XV6-3 and the XV6-6 pins and file-context carry into status.json, and the clause in HS53's O-W03-OBSERVER-UNIT. The rows are true as plans; the review cannot check them yet.",
+   "requiredChange": "None now. At packet mechanics or adoption, check that status.json carries XV6-3 and XV6-6, and that the adopted HS53 O-W03-OBSERVER-UNIT contains the file-context clause. Otherwise reword README:420."
+  }
+ ]
+}

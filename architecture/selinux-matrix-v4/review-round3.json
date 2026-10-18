@@ -1,0 +1,59 @@
+{
+ "schemaVersion": "harness.planeon.ai/mas-contract-review/v1",
+ "round": 3,
+ "subjectCommit": "ce83d913abc48eded33b566bae7a23be20a02724",
+ "subjectTree": "ab95d748ffb3e54ce6655fef39957911cedc69ca",
+ "verdict": "CHANGES_REQUIRED",
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false
+ },
+ "findings": [
+  {
+   "id": "XV3-1",
+   "severity": "MINOR",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 266,
+   "summary": "Invariant (c) says planeon_interpreter_exec_t 'is never an entrypoint', but the listed pins hold that only for the sixteen closed domains. Making the interpreter an entrypoint of the maintenance domain, systemd or the admin login breaks no assertion and no vector.",
+   "evidence": "Scratch mutations on the round-3 matrix, appending an ENTRYPOINT grant on planeon_interpreter_exec_t: for planeon_server_t it fails A60.49.entrypoint and N39; for planeon_worker_t, A60.52.entrypoint and N40; for qualk8s_kubelet_t, A60.59.entrypoint. For planeon_maint_t, init_t and planeon_admin_t it fails 0 of the 189 assertions and 0 of the 4,321 access checks. These three domains are not closed sources (README:95-98). No v5 assertion pins the interpreter's ENTRYPOINT group: the v5 type row says 'never an entrypoint' only as data. The same holds for the other declared exec types toward these three domains. For example, ENTRYPOINT on planeon_server_exec_t for planeon_maint_t, on planeon_gate_exec_t for planeon_admin_t, or on qualk8s_kubelet_exec_t for init_t each breaks nothing.",
+   "requiredChange": "Either add one assertion (sources ALL, every state: no domain holds `file entrypoint` on planeon_interpreter_exec_t), with a mutation that breaks it, or narrow invariant (c)'s wording to the sixteen closed domains. Preferably also pin that each declared entrypoint type enters only its own domain, for every source."
+  },
+  {
+   "id": "XV3-2",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 264,
+   "summary": "Invariant (a) leaves out the gate's read of the pre-exec child, which I05 v4 relies on through the gate-to-broker pair.",
+   "evidence": "architecture/i05-gate-channel-v4/README.md:181-183: the observation reads the pre-exec child (still in planeon_broker_t) 'through the gate's procAccess to planeon_broker_t', and only after the exec the worker. Rule 6 and C3 (:148, :233) confirm the gate-to-worker half. Dropping the gate->broker pair fails Q14 and C1659/C1666/C1673, so it is pinned, but the invariant row does not name it. I did not read HE-003A3 (independence rule); I checked the published I05 v4 contract instead.",
+   "requiredChange": "Add the gate-to-broker pair to invariant (a) (I05 v4 README:181-183; pinned by Q14)."
+  },
+  {
+   "id": "XV3-3",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 266,
+   "summary": "Invariant (c) cites 'NP4 §3.4 and Q-NP4D-1', which cannot be found in NP4 at 5a3e6820.",
+   "evidence": "NP4's published files at 5a3e6820 (README.md, REVIEW_BRIEF.md, schema, vectors, source-index) have no numbered §3.4. The only '3.4' is NP4 README:399, 'DESIGN 3.4', which is about static native closures (observer, broker), not interpreted roles. Q-NP4D-1's text is not in the repository. NP4's own statement of the interpreted-role entry is README:202-213 ('the executable is the script, whose type is the domain's entrypoint type ... the image is the interpreter its first line names').",
+   "requiredChange": "Cite NP4 README:202-213 and the relay that carried Q-NP4D-1 (as monitor MX6-PROVENANCE asked for other NP4 decisions), instead of '§3.4'."
+  },
+  {
+   "id": "XV3-4",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 249,
+   "summary": "MX6-O8's scope could be stated more tightly.",
+   "evidence": "(a) The examples omit the kernel views the readers depend on: /proc (every capture and P5's label scan), /sys/fs/cgroup, /sys/fs/bpf and /sys/fs/selinux. A host-namespace mount over /proc redirects all /proc reads. The v1 readers' fstatfs and mount-identity checks (NATIVE_QUALIFICATION_READINESS.md:92-97) are defence in depth, not a substitute. (b) 'their state directories' as allowed mount points can contain backend files (for example the kubelet's credential and config), so a mount on the state directory itself contradicts 'never on an ancestor of a ... backend path'. Mount points inside them are what is meant. (c) Mounts the runtime makes inside a Pod's own mount namespace (proc, sys, dev at the Pod root) resolve inside 'the Pod roots they assemble'. Saying the rule is about paths as they resolve in the host mount namespace removes doubt. (d) By my reading of v6.12, SELinux has no pivot_root hook. A propagation change (mount --make-private) is checked as mounton on its path, and pivot_root in the host namespace normally needs the root made private first, so MX6-O8 covers it only if 'mount' is read to include propagation changes and pivot_root (T04 to confirm).",
+   "requiredChange": "Name /proc and /sys (with cgroup, bpf and selinuxfs) among the protected ancestors. Say 'mount points inside their state directories', and say the rule is about the host mount namespace. State that propagation changes and pivot_root in the host namespace count as mounts under MX6-O8."
+  },
+  {
+   "id": "XV3-5",
+   "severity": "NOTE",
+   "file": "architecture/selinux-matrix-v4/README.md",
+   "line": 233,
+   "summary": "Two wording leftovers in the rewritten T04 section.",
+   "evidence": "README:233-234 still says 'names the NP4 proof it extends where one exists, by reference only', which mixes 'extends' with 'by reference'. README:237-238 says 'the T04 successor that adopts v6 owns each', but MX6-O4's owner column names W02-PROD and the matrix successor, not that T04 successor.",
+   "requiredChange": "Write 'names the NP4 proof it cites, by reference only', and either add the T04 successor to MX6-O4's owners or exempt MX6-O4 in the sentence."
+  }
+ ]
+}

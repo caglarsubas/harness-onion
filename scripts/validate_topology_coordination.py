@@ -716,12 +716,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "topology coordination validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 246
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET},
-            "closed 246-packet catalog retaining the 245-packet checkpoint")
+    require(len(paths) == 247
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET},
+            "closed 247-packet catalog retaining the 245-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem == successor.NEW_PACKET:
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = record["packetSha256"] if path.stem == NEW_PACKET else record["baselinePackets"][path.stem]
@@ -759,4 +759,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Topology and coordination v1 valid: 246 current specifications; 245-packet checkpoint and exact 244-packet predecessor; contract reviewed.")
+    print("Topology and coordination v1 valid: 247 current specifications; 245-packet checkpoint and exact 244-packet predecessor; contract reviewed.")
