@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-034
+## Current source preparation — MET-ENFORCE-035
+
+MET-ENFORCE-035 (SECCOMP-OBSERVER-LISTENER, packet 1): W01 amendment HS53 and the seccomp allowlists v5. OBSERVER gets the
+I01 AF_UNIX SOCK_SEQPACKET listener (bind, listen, accept4 with flags 0, SOCK_CLOEXEC or SOCK_CLOEXEC|SOCK_NONBLOCK); the
+filter cannot refuse a TCP listen, so that boundary is SELinux's (residual R-OBSERVER-TCP-LISTEN); the socket's directory
+and mode come from the units, and the observer binds after its seal while systemd clears only its stale path before it
+starts, under matrix v6's init_t grant. Owner Q-SOL-2/4 and SOL-SYSTEMD-CLEANS. DATA_CHECK_ONLY. Alpha2 OPEN; 247 accepted
+plus MET-ENFORCE-035 only.
+
+## Historical SELinux matrix v6 source preparation — MET-ENFORCE-034
 
 MET-ENFORCE-034 (SELINUX-MATRIX-V6): the SELinux matrix v6, v5 plus fail-closed source closures (the qualk8s sources'
 execute_no_trans, process transition and dyntransition over every declared domain, filesystem relabelto), a filesystem
@@ -1253,6 +1262,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 119. `MET-MAS-004`: publish topology and coordination v1 (TopologySpec and role-block vector, coordinator board with verify-before-merge, declared selection rule, run-events v1 mapping); the MAS-RA-001, -002, -003 and -008 contracts unchanged; DATA_CHECK_ONLY.
 120. `MET-ENFORCE-033`: publish native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, the capture routes, the inspector obligation restated, I06 bound to native-profile v4) and operator edge record v5; earlier contracts unchanged; DATA_CHECK_ONLY.
 121. `MET-ENFORCE-034`: publish the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); matrix v5, HS43 and native-profile v4 unchanged; DATA_CHECK_ONLY.
+122. `MET-ENFORCE-035`: publish W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); HS43, seccomp v4 and matrices v5 and v6 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

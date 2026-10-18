@@ -1,0 +1,466 @@
+{
+ "schemaVersion": "planeon.internal.host-interface-amendment-status/v1",
+ "designLabel": "HOST-INTERFACE-DRAFT-002-HS53",
+ "amends": {
+  "path": "architecture/host-interface-amendment-hs43/HOST_INTERFACE_SPEC.md",
+  "sha256": "b4f46b3a79c45691d7029a79849a555aca5ca7a6e6c600958147935f806888e9",
+  "designLabel": "HOST-INTERFACE-DRAFT-002-HS43"
+ },
+ "effective": {
+  "path": "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+  "sha256": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75"
+ },
+ "jointReview": {
+  "with": "architecture/seccomp-allowlists-v5/",
+  "status": "architecture/seccomp-allowlists-v5/status.json"
+ },
+ "reviewRounds": [
+  {
+   "round": 1,
+   "record": "architecture/host-interface-amendment-hs53/review-round1.json",
+   "recordSha256": "3c61bfe50e8dcceb8588ed73d308b1ba3cbcc5780cc5c4cfe2dd2235746cbebb",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "97b294d3282b8b1e555c84ad1ae3847f053e8603",
+   "subjectTree": "8bf0e6578dcc05485fbd934f440ca0be0eaa79c7",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "d2b302bf308eafc71853e3a0cd1dee99725a3d446a1889af36982db07eadd794",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "bbbe89aa3bf6c8f688dcbeb42ed422ca036e5247dac5513b17fcd312dbe292ea",
+    "architecture/host-interface-amendment-hs53/README.md": "24dcd85a58cf1d2987e32fc88f0e991730dee1bc154678af02a2f11fa7301654",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "f3622edb011ab66aa7973de80ab5fb065568793fdf2746cb93749bb1b40cecaa",
+    "scripts/host_interface_amendment_v3.py": "6d054c78f6d849265abf85923f4c6f3b06866c4f2535657e74a37d71db8e4c3e",
+    "architecture/seccomp-allowlists-v5/README.md": "3d0665d4f5a5dc8d349a155b2dc9b601f8cb9efbd51cbfdb94bcc021d0a0d82b",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "97ce5e1efa5a860f23bc297b89e935ff95c4844c89f03dedb5524c101d6b39fc",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "bc62df4339088358a48e50ff37bed3594b41e399d232606a9691f25454b39911",
+    "architecture/seccomp-allowlists-v5/vectors.json": "85c04894a0b1b70c7a6940885079c20698f9da7bb2bc0aadff628f32bdafaf2d",
+    "scripts/seccomp_allowlists_v5.py": "3bc130c346ed5de004ab074fb40cc72fdb74d47406817c975519235c80a65907"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round1/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/amendment.json",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "scripts/host_interface_amendment_v3.py",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md",
+    "architecture/seccomp-allowlists-v5/allowlists.json",
+    "scripts/seccomp_allowlists_v5.py"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 2,
+   "record": "architecture/host-interface-amendment-hs53/review-round2.json",
+   "recordSha256": "f5eb711f951e8a6d831f505c09481f6584ae3cf0e923089827e8281b00706fa3",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "55c380a1f5358e3a8cace8d4f862aa44144188a4",
+   "subjectTree": "0f1d4187f5af3e18a67174f7aec98939b5a18de3",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "de7f386b8cddc298a1133c73ced640105e66fe6f77248c32e2909212e709534e",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "132ff8b14b5dcfc452fe2a4fefb6c3c143543a69bd56ee716d0177bba93af1e3",
+    "architecture/host-interface-amendment-hs53/README.md": "87628a1f4143263573733bfda61c651174fa9e5a138f2187dbdb22ea4d97006b",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "32f2e1c5e3b6f32ca0a1c3fa082948356f5a45ca0d73dc852efbfd205698fdb2",
+    "scripts/host_interface_amendment_v3.py": "df50863f7004b849da0bd4f40d8826973b81f59a2dcf0362ca70fe4cfd98c512",
+    "architecture/seccomp-allowlists-v5/README.md": "5aa7d50d9a5ce1e98543da17958cdda2d23c0c56aded7a4103183d9b48e11fd1",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "1d01dc9699173ad70877be7ea1b060ef9b464fc4cbb68ba4d8f1c406289f1561",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "34681900bcc6a98ab331cff03472d373720d3d4e9e036e3cfefaa5795d3a3997",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round2/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/amendment.json",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "scripts/host_interface_amendment_v3.py",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md",
+    "architecture/seccomp-allowlists-v5/allowlists.json"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 3,
+   "record": "architecture/host-interface-amendment-hs53/review-round3.json",
+   "recordSha256": "88213cff08c2ed6206d04c1a8a6bc8583a0c5519b743d805d44bebede4fc6409",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "5d75b55f35f4aa4f4014d93fafb8a91c8b339364",
+   "subjectTree": "91ab41f55198e5d00980e56ed42b3c51d111a038",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "991a913c70a9c190989fe9ab9c3ab8c5d12b3eb99e01cc80384f58721b02c212",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "dd9760ec622a8f0ed0a4c3f39e70523210bc1e471e0823d6f2dc2e12c6a62b65",
+    "architecture/host-interface-amendment-hs53/README.md": "c9920f8f41ba68749738f3f0321bc4857b71c1baa90eaee223c024897012da46",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "5da8d9dcd9d1cf900d1a23146ccf8d78efc6f62d1ba0b1d19420fb3e95579388",
+    "scripts/host_interface_amendment_v3.py": "c46aeefffcb00e7972fe6657b83517a916584bf31f2a448ace5d1afb54f98285",
+    "architecture/seccomp-allowlists-v5/README.md": "c2388f3bcb60a4e6f2261bda09335a7260f20a0eb05fc5d38975a4057bbdf64e",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "a869d94145c8c1f3fa7b9745acf921d26ec1e210991cd52fe0786b2c3d7a7526",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "f326b407aad2489c4349829864f0084f0835e25613a4a2ad44da7ebeb12de3ae",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round3/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/amendment.json",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "scripts/host_interface_amendment_v3.py",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md",
+    "architecture/seccomp-allowlists-v5/allowlists.json"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 4,
+   "record": "architecture/host-interface-amendment-hs53/review-round4.json",
+   "recordSha256": "5a8b8552e0b3dcc3669192298a2d2f540368b2d7844de693d7fbdaa214e24d1f",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "69a3b8f9dbb1a4a091ac1e6bb1e9c4a85cc05bdd",
+   "subjectTree": "11ed0111368c91f9574dae455397f8510cee8f2c",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "8ce40f7c7245154ad569d9d7e01ad8a57ef940ba02891df242aa59c5995fe8ab",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "1847fc69fb219f6f5db3561289a6f0bd65f6569a42b730c11cb299a7554b6371",
+    "architecture/host-interface-amendment-hs53/README.md": "03f8706cbe6a6ba3a09d06a76306a91a9bbde2baf68e0380c5524e97041c19d2",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "c0c91d6df5b7e1d0b8ead3220ab31ce8d9e57891b34ebb24ffa9837ad4607bed",
+    "scripts/host_interface_amendment_v3.py": "dadadc45f7f703404d9c872cf45bf2b84c43570e17aa8e534b15e4df418f0286",
+    "architecture/seccomp-allowlists-v5/README.md": "a53840583d3f1fc30fdb0303ef94595f2c79f691fbeb69226c81e82263c57c7f",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "0f86034c6f4ad0ee70306b4edbc9749099f2075f6cc0e4a67d427436ee220c02",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "879909a86037b153a951770b4a47a8c075364fbd7cf9a44405537807621b55a8",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round4/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/amendment.json",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "scripts/host_interface_amendment_v3.py",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 5,
+   "record": "architecture/host-interface-amendment-hs53/review-round5.json",
+   "recordSha256": "ba55a54bbcb4752cae0daa64bd91ca2e3932a9e7d12a3d8aa96e12fb60bf89de",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "08355e022ed839bbcfa4cbf071c45d49acac5429",
+   "subjectTree": "e7b762aacfb477fc83c6caf7d2bfefcf7ec1ae3a",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "0c4d40fe6891e49cae9483ab58d7e79fc735cceba63bb190b99f7a9757362858",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "0359f36e6a23c87bf26ec9c90092638d9d438c600f6d2e709842b70c3e17aad3",
+    "architecture/host-interface-amendment-hs53/README.md": "dd06f2a29a883b69c231c7826891d1062929b41f48fa4c2b95c10098e9173236",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "e12cade23c8f9b5df8c95df15adf6592a92e92af2e0f76ceaaee78c2be8cc2b4",
+    "scripts/host_interface_amendment_v3.py": "ef2186a76e6e956d2f0426ecaf8ed56fa039dfbcea8536360b537f204cff30b9",
+    "architecture/seccomp-allowlists-v5/README.md": "b64b564147ffd0c68f4de276bae672b18235a591467925c59a9d65a9f1e987ef",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "51c2a5f57759c90ce59015f5b43991ea7935cc4939a99c6fbf22022972b6089d",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "879909a86037b153a951770b4a47a8c075364fbd7cf9a44405537807621b55a8",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round5/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/amendment.json",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "scripts/host_interface_amendment_v3.py",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 6,
+   "record": "architecture/host-interface-amendment-hs53/review-round6.json",
+   "recordSha256": "27764aaa83b46d3a8d4a87108649ac821954a5c5f64aa7d12e2f34ea634b8615",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "065c4ca46ff5f0196aff48604656c358be78ed44",
+   "subjectTree": "631843baf5dde8c57545767c011548f3a0f12d59",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "ca8e8d61795f1ae0479c16f04d23b6cd0e20ff9866b9921f2c67d8d7a3d1ca6e",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75",
+    "architecture/host-interface-amendment-hs53/README.md": "0c833856fb6507ba1559e1687c67e8700b8fe745f936ac5d1cd173fb15fcaf69",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "66fc6aea6b95fcce9a814535ff67e6aae2ff6de7f5641469d52f18ba5217b815",
+    "scripts/host_interface_amendment_v3.py": "8ced0ec22d7d66b90cc4ea5e706e9f24e91c512c371f12836ad20c5601ed4a13",
+    "architecture/seccomp-allowlists-v5/README.md": "f9ffc01a22605f57194e0d0f5a3590ba8a7c7612361c7a28f439f880d6fd2149",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "886d5fa34a7336d5f14fe0ef261ffc39faf7590f77b077aeba5c165e2e94bff5",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "879909a86037b153a951770b4a47a8c075364fbd7cf9a44405537807621b55a8",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round6/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/amendment.json",
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "scripts/host_interface_amendment_v3.py",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 7,
+   "record": "architecture/host-interface-amendment-hs53/review-round7.json",
+   "recordSha256": "897df943326a299f41bd351325f00ff89abc111b84e9f0aee74151825bec288a",
+   "verdict": "CHANGES_REQUIRED",
+   "subjectCommit": "ab83c9c0ebc970d2172a280e796141b833810052",
+   "subjectTree": "2d320ecf1841b07016fe6c986068bf454ccedd75",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "e4255685a38f183d9cd5e5411ee83cc3dee6442e578831296d9789109824d763",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75",
+    "architecture/host-interface-amendment-hs53/README.md": "36971ffb8d791d8db124b2be96cdcd62cd725c5b5d995f0cfc4ce62b18ccfdfe",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "cf15d278ad473f71d684b89fca61afcb0c801f21372653977d9ea0fcb47788ff",
+    "scripts/host_interface_amendment_v3.py": "86abc79670c4534602b023855ce74e99eab8d6497bdfe745a8c52d18bd4468c0",
+    "architecture/seccomp-allowlists-v5/README.md": "61363c7a85d95ff97ffabe64fc90d1ccf97ad89ad1bd9631a35ed8b7df43105b",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "ae09a534fd20e1f393ab3deb9ad3d82910dedf150d3ceb751a8e69657c501c9c",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "879909a86037b153a951770b4a47a8c075364fbd7cf9a44405537807621b55a8",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "architecture/host-interface-amendment-hs53/round7/",
+   "keptCopies": [
+    "architecture/host-interface-amendment-hs53/README.md",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md",
+    "architecture/seccomp-allowlists-v5/README.md",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md"
+   ],
+   "digestOnly": [
+    "architecture/seccomp-allowlists-v5/vectors.json"
+   ]
+  },
+  {
+   "round": 8,
+   "record": "architecture/host-interface-amendment-hs53/review-round8.json",
+   "recordSha256": "360b8cd6934043bd7af06712611660c09f86f5544a6cac81623834916a1a04ab",
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "subjectCommit": "c97a2df22b6ebe7e1905afb1aae2292721aba12e",
+   "subjectTree": "169704d6f6325b9daeb263902937a02663be748c",
+   "subjectSha256": {
+    "architecture/host-interface-amendment-hs53/amendment.json": "e4255685a38f183d9cd5e5411ee83cc3dee6442e578831296d9789109824d763",
+    "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75",
+    "architecture/host-interface-amendment-hs53/README.md": "ece0b242ec28b90ff891570d4d72438c3e244e922f7580435c05cd90ad64f676",
+    "architecture/host-interface-amendment-hs53/REVIEW_BRIEF.md": "310f57b8d3e079f82de1ac53cb03a3ab8d5745acb98b654a72a046e11106d9be",
+    "scripts/host_interface_amendment_v3.py": "86abc79670c4534602b023855ce74e99eab8d6497bdfe745a8c52d18bd4468c0",
+    "architecture/seccomp-allowlists-v5/README.md": "b9fe31df72c029ac2d8df97c2719c37cbd6d87e173c923a40bb07830d285e7df",
+    "architecture/seccomp-allowlists-v5/REVIEW_BRIEF.md": "e5d71eccde2d81247d9a4f2622e1140a44ae81d82cbd639f608cd1664a62027f",
+    "architecture/seccomp-allowlists-v5/syscalls.json": "fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+    "architecture/seccomp-allowlists-v5/allowlists.json": "879909a86037b153a951770b4a47a8c075364fbd7cf9a44405537807621b55a8",
+    "architecture/seccomp-allowlists-v5/vectors.json": "4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd",
+    "scripts/seccomp_allowlists_v5.py": "fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7"
+   },
+   "subjectDirectory": "CURRENT"
+  }
+ ],
+ "closedFindings": {
+  "SOL1-1": "CLOSED in round 2",
+  "SOL1-2": "CLOSED in round 2",
+  "SOL1-3": "CLOSED in round 2",
+  "SOL1-4": "CLOSED in round 2",
+  "SOL1-5": "CLOSED in round 2",
+  "SOL1-6": "CLOSED in round 2",
+  "SOL1-7": "CLOSED in round 2",
+  "SOL1-8": "CLOSED in round 2",
+  "SOL1-9": "NOTE answered in candidate 2's README table without a change",
+  "SOL1-10": "CLOSED in round 2",
+  "SOL2-1": "CLOSED in round 3",
+  "SOL2-2": "CLOSED in round 3",
+  "SOL2-3": "CLOSED in round 3",
+  "SOL2-4": "CLOSED in round 3",
+  "SOL2-5": "CLOSED in round 3",
+  "SOL2-6": "CLOSED in round 3",
+  "SOL3-1": "CLOSED in round 4",
+  "SOL3-2": "CLOSED in round 4",
+  "SOL3-3": "CLOSED in round 4",
+  "SOL3-4": "CLOSED in round 4",
+  "SOL3-5": "CLOSED in round 4",
+  "SOL3-6": "CLOSED in round 4",
+  "SOL4-1": "CLOSED in round 5",
+  "SOL4-2": "CLOSED in round 5",
+  "SOL4-3": "CLOSED in round 5",
+  "SOL4-4": "CLOSED in round 5",
+  "SOL4-5": "CLOSED in round 5",
+  "SOL4-6": "CLOSED in round 5",
+  "SOL4-7": "CLOSED in round 5",
+  "SOL5-1": "CLOSED in round 6",
+  "SOL5-2": "CLOSED in round 6",
+  "SOL5-3": "CLOSED in round 6",
+  "SOL5-4": "CLOSED in round 6",
+  "SOL5-5": "CLOSED in round 6",
+  "SOL6-1": "CLOSED in round 7",
+  "SOL6-4": "CLOSED in round 7",
+  "SOL7-1": "CLOSED in round 8",
+  "SOL7-4": "CLOSED in round 8"
+ },
+ "carriedFindings": {
+  "SOL6-2": "carried (NOTE, round 6): Since candidate 6, the effective W01 text no longer says that HS53 governs the MET-REPAIR-010 summary in any of the seven catalogs. H3 (spec lines 338-340) points to section 13 for 'the earlier statements' it supersedes for I01, but section 13 lists only the eight pinned clauses. The governing sentence ('HS53 governs it for I01') now appears only in the record's notAmended, which the model calls 'stated non-amendments', and in the README.",
+  "SOL6-3": "carried (NOTE, round 6): render_section13 escapes only the superseded quote and replacement cells (_cell). The item table's 'Where' and 'Decisions' cells, the residual bullet and the obligation labels are rendered raw. A line feed or an unescaped pipe in an item section, a decision id, a residual text or an obligation label changes section 13's structure, and check_record accepts it. README lines 47-48 ('so no item, quote or rendered cell starts a line unseen') hold only for the separators other than the line feed.",
+  "SOL6-5": "carried (NOTE, round 6): Because the listener units do not list /run/planeon/live-proxy, systemd does not open that directory for writing in their mount namespace. If W03 hardens the observer's unit with ProtectSystem=strict or a read-only /run, both the ExecStartPre= `rm -f` and the observer's bind would fail unless the unit names the directory in ReadWritePaths=. O-W03-OBSERVER-UNIT does not state this coupling.",
+  "SOL7-2": "carried (NOTE, round 7): H1's AF_UNIX limit says SELinux limits 'which socket files the observer may create (planeon_observer_sock_t)'. The same wording is at spec :449, README :85-88 and v5 README :42-44. In matrix v5's data this holds only among the matrix's own types. For undeclared types it rests on W03's policy module, and no obligation binds that. The connector limit (connectto) does hold in data.",
+  "SOL7-3": "carried (NOTE, round 7): The replacement for the guide's producer sentences (spec :755) drops the producer's duty to meet 'the native tests below'. Its list of what stays unchanged ('protocol, path, modes, framing, limits and peer checks') does not name the guide's native follow-up.",
+  "SOL8-1": "carried (NOTE, round 8): The Round 2 table row for SOL2-1 holds a literal pipe inside a code span (`|`). In a GitHub-flavoured Markdown table an unescaped pipe splits the cell even inside a code span, so the row has 4 separators under a 2-column header: the disposition renders cut off after 'not a space, `#`, `' (a stray backtick), and 'or `>`' is dropped as an excess cell. It is a historical row, the rule it describes was replaced by H3's fixed pair in candidate 4, and no contract text, data or program is affected.",
+  "SOL8-2": "carried (NOTE, round 8): The status line cites 'SOL6-1 (a)'. The option letter has no source a reader can check. Q-SOL-7 (a) is a decision in amendment.json; SOL6-1 is a review finding id, and the README's own Round 6 row (line 241) gives the decision in words with no letter. Round 6's text names the kept-unpinned choice as the second of two ('either ... or ...'), and the brief gives no letter either.",
+  "SOL8-3": "carried (NOTE, round 8): The SOL7-4 fix replaces the count with 'tighter checks (each named in the round tables at the end)'. Not each one is named there. The v2 to v3 model diff adds six checks: per-item DECIDED_PLACES, the fixed H2 POINTER, the H1 row line and cell check, the fixed H3 pair, LINE_SEPARATORS, and DECIDED-only naming with no item naming another obligation. The round tables name the H1 line and cell check (SOL1-5, SOL2-1), the H3 pair (SOL3-1, SOL4-1), the line separators (SOL5-1) and 'DECIDED items must name every obligation' (SOL1-6), and mention H2's pointer only in passing (SOL3-1, SOL4-1). Per-item places and 'no item may name another' appear in none of them. All six are named in the list directly under the table (README:37-51).",
+  "SOL8-4": "carried (NOTE, round 8): The SOL7-1 disposition says both READMEs' status lines and both briefs 'name the current round and the rounds answered'. Only the HS53 README's status line does ('round 8 ... candidate 8 answers rounds 1 to 7'). The v5 README's status line (architecture/seccomp-allowlists-v5/README.md:3) names only 'round 8'. That is enough to close SOL7-1, whose v5 point was the stale round, so only the sentence overstates.",
+  "SOL8-5": "carried (NOTE, round 8): Item 7 now lists the README changes since candidate 1 as 'the TCP and AF_UNIX paragraph, SOL4-4; the Q-SOL-3 line's units, SOL6-4; the status line's round'. The README diff since candidate 1 has more hunks: the source cell :448 to :449, the Q-SOL-5, SOL-SYSTEMD-CLEANS/Q-SOL-7 and F-SOL-1 decision bullets, '28 to 29 policy mutations' with the M29 bullet, and the model bullet that cites HS53_ROW. Item 7 covers them only by implication, through 'SOL1-7 (the pinned row line, M29)' and 'its decision list'. SOL7-4 was an undercount of exactly this kind, so a reviewer following item 7 literally would meet seven or eight hunks for three named ones."
+ },
+ "ownerDecisions": [
+  "Q-SOL-1",
+  "Q-SOL-2",
+  "Q-SOL-3",
+  "Q-SOL-4",
+  "F-SOL-1",
+  "Q-SOL-5",
+  "SOL-SYSTEMD-CLEANS",
+  "Q-SOL-7",
+  "Q-MX6-R6"
+ ],
+ "reviewDecisions": [
+  {
+   "id": "SOL2-6-CONFIRM",
+   "date": "2026-10-17",
+   "via": "lane monitor (owner-delegated)",
+   "text": "SOL2-6 confirmed: drop Q-SOL-6 from the published record. It was superseded before publication, and dropping it keeps the R10 seal detail out. Keep it in your local owner_decisions.json, marked superseded, so the history survives in the bridge. Independence: accepted as disclosed. File names only, no W03 match, plus one line from a published harness-onion snapshot of obligation amendment 1, which is a harness-onion contract, not W03 design or source. The tightened r3 brief, with forbidden paths excluded up front and no snapshot printing, is right. SOL2-1..5 are accepted as fixed. Continue r3."
+  },
+  {
+   "id": "SOL4-7-ACCEPT",
+   "date": "2026-10-17",
+   "via": "lane monitor (owner-delegated)",
+   "text": "SOL4-7's refinement is accepted: \"ordered before the three listeners and pulled in by each (After= and Requires= on it)\". Requires= fails closed: a listener doesn't start without its directory unit. Fine as the W03 outcome. SOL4-1..6 are accepted as fixed. Continue r5, reading and replays only, until I report 246's dry run has ended."
+  },
+  {
+   "id": "SOL6-1-MONITOR",
+   "date": "2026-10-18",
+   "via": "lane monitor (owner-delegated, contract-review findings)",
+   "text": "SOL6-1: (a). Keep candidate 6's unpinning of all seven copies and correct the stated reason everywhere: two copies change with nearly every packet, and all seven stay unpinned so that a catalog edit never needs an HS53 successor. Fold the SOL6-4 string fixes into candidate 7. Carry SOL6-2, -3 and -5 as NOTEs. Then run review round 7. This is a monitor decision under the owner's delegation for contract-review findings; I'll tell the owner."
+  }
+ ],
+ "supersededClauses": 8,
+ "residuals": [
+  "R-OBSERVER-TCP-LISTEN"
+ ],
+ "obligations": [
+  "O-SECCOMP-V5-OBSERVER-LISTENER",
+  "O-W03-OBSERVER-UNIT",
+  "O-W03-OBSERVER-PRESTART",
+  "O-W03-OBSERVER-TCP",
+  "O-T04-HS53",
+  "O-MATRIX-OBSERVER-TCP",
+  "O-MATRIX-OBSERVER-SOCK-CLEAR",
+  "O-PROGRAMS-V3-OBSERVER",
+  "O-R10-HE004-I01"
+ ],
+ "matrixV6InitTGrant": {
+  "matrix": "architecture/selinux-matrix-v4/matrix.json",
+  "commit": "422bd18a9b6974f5200120185d940d92288634b2",
+  "evaluator": "scripts/selinux_matrix_v4.py",
+  "states": [
+   "ENROLLED_CONTAINMENT",
+   "ENROLLED_SEALED",
+   "MAINTENANCE_BOOT"
+  ],
+  "sockets": [
+   "planeon_i05_sock_t",
+   "planeon_i07_sock_t",
+   "planeon_observer_sock_t",
+   "planeon_broker_sock_t"
+  ],
+  "granted": [
+   "getattr",
+   "unlink"
+  ],
+  "result": "init_t may only getattr and unlink sock_file on the four planeon listener socket types, in every state"
+ },
+ "enforcementObligations": "E01-E12 OPEN_UNPROVEN",
+ "contractState": "ADOPTED_AMENDMENT",
+ "independentReviewer": "separate agents, eight rounds; round 8 PASS_FOR_SOURCE_PUBLICATION on the subject commit",
+ "readmeStatusNote": "README.md keeps its reviewed 'AWAITING_REVIEW' line; adoption is recorded here only",
+ "implementationReady": false,
+ "filtersInstalled": false,
+ "roleCodeChanged": false,
+ "nativeAcceptance": false,
+ "tenantAcceptance": false,
+ "productExecution": false,
+ "runnerActivated": false,
+ "phaseComplete": false,
+ "postReviewRedactions": {
+  "decision": "LOCAL-PATHS (lane monitor, owner-delegated, 2026-10-18, option (b)): no absolute local path in a newly published file; the reviewers' scratch directory is replaced by a placeholder after review, with no semantic change, and the verbatim records stay operator-side",
+  "replacement": {
+   "replacedHex": "2f707269766174652f746d702f",
+   "replacedLength": 13,
+   "replacedForm": "the operator host's temporary-directory prefix (given in hex so that no published file holds the path)",
+   "by": "<scratch>/"
+  },
+  "placeholder": {
+   "<scratch>": "the reviewer's temporary directory on the operator's host"
+  },
+  "files": [
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round1.json",
+    "beforeSha256": "15338c3d4c534daedf0644050ec95753076587dee93e300e3c698ac13d5484d1",
+    "afterSha256": "3c61bfe50e8dcceb8588ed73d308b1ba3cbcc5780cc5c4cfe2dd2235746cbebb",
+    "count": 1
+   },
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round2.json",
+    "beforeSha256": "bd53a6f199b5e01bf71ec7743b1fcfe22efee4df9d3f6d2de81c999197090ba5",
+    "afterSha256": "f5eb711f951e8a6d831f505c09481f6584ae3cf0e923089827e8281b00706fa3",
+    "count": 1
+   },
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round3.json",
+    "beforeSha256": "b5e88fc909be1fec75591e6ea97a68b4dca7e073814eaa993d21dabdf4c1e1f7",
+    "afterSha256": "88213cff08c2ed6206d04c1a8a6bc8583a0c5519b743d805d44bebede4fc6409",
+    "count": 1
+   },
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round4.json",
+    "beforeSha256": "7f09aa64ae7e6c0d99b3d44a50afae66b1f0b58bacb1a7362cff3038f3fa541f",
+    "afterSha256": "5a8b8552e0b3dcc3669192298a2d2f540368b2d7844de693d7fbdaa214e24d1f",
+    "count": 1
+   },
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round5.json",
+    "beforeSha256": "408443817f5ee959be8f9c70a342f75dec1394f3ea02493910be0e254f7d9f48",
+    "afterSha256": "ba55a54bbcb4752cae0daa64bd91ca2e3932a9e7d12a3d8aa96e12fb60bf89de",
+    "count": 1
+   },
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round6.json",
+    "beforeSha256": "adecfb6a8a3af9e88958621a7c11f4f8f7af9f3424180917541cbb31f71bcf14",
+    "afterSha256": "27764aaa83b46d3a8d4a87108649ac821954a5c5f64aa7d12e2f34ea634b8615",
+    "count": 1
+   },
+   {
+    "path": "architecture/host-interface-amendment-hs53/review-round7.json",
+    "beforeSha256": "3d7665ab515355afad62bed74bd112f27ef9f374ca54047ab1e590945394a17f",
+    "afterSha256": "897df943326a299f41bd351325f00ff89abc111b84e9f0aee74151825bec288a",
+    "count": 1
+   }
+  ]
+ }
+}
