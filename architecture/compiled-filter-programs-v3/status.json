@@ -1,0 +1,129 @@
+{
+ "schemaVersion": "planeon.internal.met-enforce-036-status/v1",
+ "packet": "MET-ENFORCE-036",
+ "roadmapItem": "SECCOMP-OBSERVER-LISTENER",
+ "roadmapPacket": "packet 2 of 2 (Q-SOL-1 (a))",
+ "contractState": "ADOPTED_DATA_CONTRACT",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "base": "f4bb0000df9ec4bdaac54d3e6488d691e2001f28",
+ "rebase": "the contract adds new files only; if main moves before the mechanics, it is rebased unchanged and the mechanics re-check every pin and edge record v5's digest on the new base",
+ "predecessor": {
+  "directory": "architecture/compiled-filter-programs-v2/",
+  "packet": "MET-ENFORCE-029",
+  "status": "architecture/compiled-filter-programs-v2/status.json"
+ },
+ "source": {
+  "directory": "architecture/seccomp-allowlists-v5/",
+  "packet": "MET-ENFORCE-035",
+  "commit": "f4bb0000df9ec4bdaac54d3e6488d691e2001f28"
+ },
+ "contractFiles": [
+  "architecture/compiled-filter-programs-v3/README.md",
+  "architecture/compiled-filter-programs-v3/REVIEW_BRIEF.md",
+  "architecture/compiled-filter-programs-v3/index.json",
+  "architecture/compiled-filter-programs-v3/programs/OBSERVER.aarch64.bpf",
+  "architecture/compiled-filter-programs-v3/programs/OBSERVER.x86_64.bpf",
+  "architecture/compiled-filter-programs-v3/status.json",
+  "architecture/artifact-edges/README-v6.md",
+  "architecture/artifact-edges/operator-harness-engineering-v6.json",
+  "scripts/compiled_filter_programs_v3.py"
+ ],
+ "reviewRounds": [
+  {
+   "round": 1,
+   "record": "architecture/compiled-filter-programs-v3/review-round1.json",
+   "recordSha256": "sha256:7df04fd0ca592ad6e8600521a280e3bf78b685c721196826f93ead00160c3d4a",
+   "subject": {
+    "commit": "c79873ee31e64fbf6cdf6dbc2a90b07b6706246d",
+    "tree": "f5bc4bc953ad22797f49bdf2be75c8632ffdebcf",
+    "base": "f4bb0000df9ec4bdaac54d3e6488d691e2001f28"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "P3R1-1 MINOR",
+    "P3R1-2 NOTE",
+    "P3R1-3 NOTE",
+    "P3R1-4 NOTE",
+    "P3R1-5 NOTE",
+    "P3R1-6 NOTE"
+   ]
+  },
+  {
+   "round": 2,
+   "record": "architecture/compiled-filter-programs-v3/review-round2.json",
+   "recordSha256": "sha256:55f7698fceda8bdadd7ca411b69d956c1f65fcb12862246391846aca387a6cb3",
+   "subject": {
+    "commit": "e52a884d9e4564652c1f034b84ab391a661b01ed",
+    "tree": "5a35eee8f8e81d0a079c300508ee9a6b0bab3b89",
+    "base": "f4bb0000df9ec4bdaac54d3e6488d691e2001f28"
+   },
+   "verdict": "PASS_FOR_SOURCE_PUBLICATION",
+   "findings": [
+    "P3R2-1 NOTE",
+    "P3R2-2 NOTE"
+   ]
+  }
+ ],
+ "keptCopies": [],
+ "ownerDecisions": [
+  {
+   "id": "Q-SOL-1",
+   "date": "2026-10-17",
+   "decision": "Q-SOL-1 (a): two packets, (1) the W01 amendment (OBSERVER row, I01 only) plus seccomp v5, and (2) programs v3 plus edge v5. The stale H:446-447 pointer gets fixed in packet 1.",
+   "source": "lane monitor (owner-delegated); quoted verbatim as architecture/host-interface-amendment-hs53/amendment.json records it"
+  },
+  {
+   "id": "F-SOL-1",
+   "date": "2026-10-17",
+   "decision": "Note: \"edge v5\" for packet 2 will collide in name with native-profile v4's edge record v5 (slot 246). Check the next free edge version at drafting time; it is probably v6.",
+   "source": "lane monitor; the note of F-SOL-1, quoted verbatim as architecture/host-interface-amendment-hs53/amendment.json records it"
+  },
+  {
+   "id": "Q-P2-1..4",
+   "date": "2026-10-18",
+   "decision": "SLOT 249 = MET-ENFORCE-036 is confirmed (not on main, unclaimed), branch codex/met-enforce-036-observer-programs-v3, and harness-onion-obsprog is registered as your worktree. Monitor decisions, consistent with 240's owner-approved PROGRAMS-REPUBLISH pattern (I'll tell the owner): Q-P2-1 (a): only OBSERVER's two programs plus the index of 14. Q-P2-3 (a): keep the seccomp-v3 OBSERVER rows for HE-004 unchanged. Q-P2-4 (a): one or two light contract-review rounds, then adoption, then mechanics on template 248, then the packet review. Q-P2-2: I've asked the primary for the HE-004-I01 vendor path(s), path level only, and will relay the answer. Until then, draft the rows as (a) with the seccomp-v5/ path. GO for the contract draft and the contract review rounds (light work). The pre-check, dry run and push need my word.",
+   "source": "the lane monitor under the owner's delegation, consistent with PROGRAMS-REPUBLISH's owner-approved pattern; the message quoted verbatim"
+  },
+  {
+   "id": "Q-P2-2",
+   "date": "2026-10-18",
+   "decision": "Q-P2-2 = (a), with the primary lane's facts at path level: HE-004-I01 vendors host-enforcement/contracts/seccomp-v5/OBSERVER.x86_64.bpf and host-enforcement/contracts/seccomp-v5/OBSERVER.aarch64.bpf, mode 100644, REGISTERED_BEFORE_USE. This follows R10's convention contracts/seccomp-v<N>/<ROLE>.<arch>.bpf, where N is the seccomp contract version compiled from. No other file is decided. R10 has never vendored allowlists or spec texts, so v5's allowlists and HS53's effective spec need no rows. A possible I01 wire vector comes in a later edge record. The v3 OBSERVER rows stay unchanged, per Q-P2-3 (a). Register the two .bpf rows only.",
+   "source": "the lane monitor, relaying the primary lane's facts at path level; the message quoted verbatim"
+  }
+ ],
+ "discharges": [
+  {
+   "record": "architecture/host-interface-amendment-hs53/amendment.json",
+   "obligation": "O-PROGRAMS-V3-OBSERVER",
+   "text": "Republish the OBSERVER's two compiled programs (x86_64 and aarch64) from seccomp v5 and the edge record that binds them for HE-004, as PROGRAMS-REPUBLISH did for EFFECT_GATE; no other role's program changes. The edge record takes the next free version: Q-SOL-1 (a) named edge v5, and the monitor's note with F-SOL-1 says v5 belongs to native-profile v4's edge record (slot 246), so it is probably v6."
+  },
+  {
+   "record": "architecture/seccomp-allowlists-v5/status.json",
+   "openObligation": "OBSERVER's compiled programs and the edge record are republished from v5 (O-PROGRAMS-V3-OBSERVER)"
+  }
+ ],
+ "dischargeHow": "the two OBSERVER programs are republished from v5 here, the twelve others are proven equal to the files MET-ENFORCE-029's index lists, and edge record v6 registers the two for HE-004-I01; recorded in this file only, since HS53's and v5's files stay byte-identical",
+ "openObligations": [
+  "T04/W02a-F: boot-time proof that the installed OBSERVER filter equals the published digest (W02d-Q3)",
+  "O-R10-HE004-I01: Re-vendor the republished OBSERVER programs, install them as the observer's filter, and serve I01 on its fixed path with the v1 peer duties in both directions; decide whether HS43's race-free start-time reference applies to I01 and record the choice (Q-SOL-4 (a))."
+ ],
+ "carriedToR10": {
+  "packet": "HE-004-I01",
+  "items": [
+   "vendor architecture/compiled-filter-programs-v3/programs/OBSERVER.<arch>.bpf byte-identically, mode 100644, at host-enforcement/contracts/seccomp-v5/OBSERVER.<arch>.bpf (edge record v6), and decide whether contracts/seccomp-v3/OBSERVER.* stays (edge v2's HE-004 rows are carried unchanged, Q-P2-3 (a))",
+   "the observer's installed filter is exactly these bytes: 253 instructions (2024 bytes) on x86_64 and 242 (1936 bytes) on aarch64, sha256:a20d2a956393b3af72799eaad5fa2c4a3cd82f38bf3842c0dea7c42012e525b9 and sha256:887bf07824d7c1e6ec6db991473935d31500e0c78fac345058972a0f777ad184",
+   "serve I01 on its fixed path with the v1 peer duties in both directions, and record whether HS43's race-free start-time reference applies to I01 (O-R10-HE004-I01, Q-SOL-4 (a))",
+   "cite MET-ENFORCE-036, its merge commit and edge record v6 wherever R10 records the programs' provenance"
+  ]
+ },
+ "reviewerIndependence": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "README.md and architecture/artifact-edges/README-v6.md keep their 'SUCCESSOR_CANDIDATE_AWAITING_INDEPENDENT_REVIEW' status lines after adoption; the adoption is recorded in this file only (as MET-ENFORCE-029)",
+ "carriedNotes": {
+  "P3R1-2": "the publisher follows symlinks and polices only programs/; the mechanics layer checks git modes (100644 regular files) and the contract directory's complete file set through reviewed_mode and reviewed_tree (as MET-ENFORCE-029's R1-1)",
+  "P3R1-3": "the publisher reads bind, listen and accept4's numbers from the digest-pinned v5 syscall table; the mechanics layer restates them with the insertion indexes",
+  "P3R1-4": "the publisher checks neither edge record v6, status.json, the decision quotes nor the README status lines; the mechanics layer restates them (as MET-ENFORCE-029's R1-7)",
+  "P3R2-1": "both READMEs name the first monitor message by its decisions (Q-P2-1, -3 and -4) rather than by the id Q-P2-1..4 that status.json and edge record v6 use; that id range also covers Q-P2-2, which the message defers and the second message decides",
+  "P3R2-2": "met by this adoption: both review records are copied into this directory and bound in reviewRounds, and P3R1-2, -3 and -4 are recorded here, so the README's 'review note P3R1-5' resolves"
+ },
+ "adoptionEdit": "contractState CANDIDATE -> ADOPTED_DATA_CONTRACT; reviewRounds, readmeStatusNote, carriedNotes and adoptionEdit added; the review records were written outside the worktree and copied here as review-round1.json and review-round2.json; round 1's MINOR P3R1-1 and its NOTEs P3R1-5 and P3R1-6 were fixed in candidate 2; an earlier round-2 attempt on the same subject was voided under the brief's hard rules (two procedural breaches its reviewer reported itself) and is not published; no other contract file changed"
+}

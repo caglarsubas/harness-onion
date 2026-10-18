@@ -1,0 +1,135 @@
+{
+ "schemaVersion": "planeon.internal.compiled-filter-programs/v3",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "format": "the kernel's struct sock_filter array, 8 bytes per instruction, little-endian (u16 code, u8 jt, u8 jf, u32 k), as the pinned compiler's program_bytes emits it",
+ "source": {
+  "contract": "architecture/seccomp-allowlists-v5/",
+  "packet": "MET-ENFORCE-035",
+  "commit": "f4bb0000df9ec4bdaac54d3e6488d691e2001f28",
+  "files": {
+   "scripts/seccomp_allowlists_v5.py": "sha256:fc57bb40f4f2537005e46689d9fc39a0dd98d4ebe141f9aace961e9520f1e0a7",
+   "architecture/seccomp-allowlists-v5/allowlists.json": "sha256:879909a86037b153a951770b4a47a8c075364fbd7cf9a44405537807621b55a8",
+   "architecture/seccomp-allowlists-v5/syscalls.json": "sha256:fe9a603e780b576f666a219da119eedad5271a675998aba2d6d581fb53ebac07",
+   "architecture/seccomp-allowlists-v5/vectors.json": "sha256:4539410a9bb66e2aca62931567253c3c70b382672cc2b8f8207d4ea3d4661ecd"
+  }
+ },
+ "predecessor": {
+  "path": "architecture/compiled-filter-programs-v2/index.json",
+  "sha256": "sha256:59581bbfb75e81f364382833b94be6c42f4e2a658c49711b4e72712434ef69cb",
+  "packet": "MET-ENFORCE-029"
+ },
+ "programs": [
+  {
+   "role": "BROKER",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs/programs/BROKER.aarch64.bpf",
+   "instructions": 311,
+   "bytes": 2488,
+   "sha256": "sha256:bc9c5a3797277ca753b5168e8e55132e1878fed2a726de361fd7d80e0fababf8"
+  },
+  {
+   "role": "BROKER",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs/programs/BROKER.x86_64.bpf",
+   "instructions": 326,
+   "bytes": 2608,
+   "sha256": "sha256:95221bd0db753aa22ead2eb49eeac8dae3d24c3dad72811de86c9392f4894dcc"
+  },
+  {
+   "role": "EFFECT_GATE",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs-v2/programs/EFFECT_GATE.aarch64.bpf",
+   "instructions": 189,
+   "bytes": 1512,
+   "sha256": "sha256:8de80a2b597b84d9f5ace818e76ef15d4b15a5b02013bb479ca4fdf73df3d044"
+  },
+  {
+   "role": "EFFECT_GATE",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs-v2/programs/EFFECT_GATE.x86_64.bpf",
+   "instructions": 200,
+   "bytes": 1600,
+   "sha256": "sha256:4e516f1682098c90edd568f8f214d3de01b404a2c144104596fc4e3262f6e7a3"
+  },
+  {
+   "role": "HOST_CONTAINMENT",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs/programs/HOST_CONTAINMENT.aarch64.bpf",
+   "instructions": 130,
+   "bytes": 1040,
+   "sha256": "sha256:d9d57ecb4919ad453684be62b6e2b65c9818033c47291e8e7240f7c2224880eb"
+  },
+  {
+   "role": "HOST_CONTAINMENT",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs/programs/HOST_CONTAINMENT.x86_64.bpf",
+   "instructions": 141,
+   "bytes": 1128,
+   "sha256": "sha256:d0d0db066e8942bbe987bd89a8441ab4e84b1cb9933b3bad24d8fb6eb0a51292"
+  },
+  {
+   "role": "OBSERVER",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs-v3/programs/OBSERVER.aarch64.bpf",
+   "instructions": 242,
+   "bytes": 1936,
+   "sha256": "sha256:887bf07824d7c1e6ec6db991473935d31500e0c78fac345058972a0f777ad184"
+  },
+  {
+   "role": "OBSERVER",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs-v3/programs/OBSERVER.x86_64.bpf",
+   "instructions": 253,
+   "bytes": 2024,
+   "sha256": "sha256:a20d2a956393b3af72799eaad5fa2c4a3cd82f38bf3842c0dea7c42012e525b9"
+  },
+  {
+   "role": "POLICY_WRITER",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs/programs/POLICY_WRITER.aarch64.bpf",
+   "instructions": 115,
+   "bytes": 920,
+   "sha256": "sha256:e3bf65e0ff60d6766eac92672ad21a3c34097e183f03de416c9ad2ba50d71a5b"
+  },
+  {
+   "role": "POLICY_WRITER",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs/programs/POLICY_WRITER.x86_64.bpf",
+   "instructions": 126,
+   "bytes": 1008,
+   "sha256": "sha256:0f690b0e2f18b1b092bc42f4042dc334cafa3aae81fb96851f569ba71f20d1bf"
+  },
+  {
+   "role": "SERVER",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs/programs/SERVER.aarch64.bpf",
+   "instructions": 261,
+   "bytes": 2088,
+   "sha256": "sha256:a1bcb2de10f5a54d32578d9f26e3d7db69b0cfad8d868feea1914585fbb7f05a"
+  },
+  {
+   "role": "SERVER",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs/programs/SERVER.x86_64.bpf",
+   "instructions": 276,
+   "bytes": 2208,
+   "sha256": "sha256:2e7af1da50b7d5df3cdcf8c18eb545f4972b2309b68d9eecba2e5f6ba5d1d8a7"
+  },
+  {
+   "role": "WORKER",
+   "arch": "aarch64",
+   "path": "architecture/compiled-filter-programs/programs/WORKER.aarch64.bpf",
+   "instructions": 172,
+   "bytes": 1376,
+   "sha256": "sha256:cc04a4710495d3794b0d295613a2f2bd330524a328cb6963a819565bac2acb40"
+  },
+  {
+   "role": "WORKER",
+   "arch": "x86_64",
+   "path": "architecture/compiled-filter-programs/programs/WORKER.x86_64.bpf",
+   "instructions": 187,
+   "bytes": 1496,
+   "sha256": "sha256:5616c9099324e441674f8e589b6c705ae95f6a4a697f10e761565d0735689d45"
+  }
+ ]
+}

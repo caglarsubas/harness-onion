@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-035
+## Current source preparation — MET-ENFORCE-036
+
+MET-ENFORCE-036 (SECCOMP-OBSERVER-LISTENER, packet 2): the compiled filter programs v3, OBSERVER's two programs republished
+from seccomp allowlists v5, and edge record v6, which registers them for R10's HE-004-I01 (lane monitor Q-P2-1..4 (a)).
+DATA_CHECK_ONLY. Alpha2 OPEN; 248 accepted plus MET-ENFORCE-036 only.
+
+## Historical seccomp observer listener source preparation — MET-ENFORCE-035
 
 MET-ENFORCE-035 (SECCOMP-OBSERVER-LISTENER, packet 1): W01 amendment HS53 and the seccomp allowlists v5, OBSERVER's I01
 listener with the TCP-listen boundary on SELinux and systemd's stale-socket cleanup under matrix v6's grant (owner
@@ -1471,3 +1477,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 246 | `MET-ENFORCE-033` | `Harness-Engineering` | NATIVE-PROFILE-V4: native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, capture routes, inspector obligation, I06 bound to native-profile v4) and operator edge record v5; DATA_CHECK_ONLY |
 | 247 | `MET-ENFORCE-034` | `Harness-Engineering` | SELINUX-MATRIX-V6: the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); DATA_CHECK_ONLY |
 | 248 | `MET-ENFORCE-035` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 1: W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); DATA_CHECK_ONLY |
+| 249 | `MET-ENFORCE-036` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 2: compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); DATA_CHECK_ONLY |

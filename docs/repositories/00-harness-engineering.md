@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-035
+## Current source preparation — MET-ENFORCE-036
+
+MET-ENFORCE-036 (SECCOMP-OBSERVER-LISTENER, packet 2): the compiled filter programs v3 and edge record v6. OBSERVER's two
+programs are republished from seccomp allowlists v5, each the earlier program with exactly the bind/listen pair and the
+accept4 flag block inserted; the twelve other programs are proven byte-identical to the indexed ones; and edge record v6
+registers the two for R10's HE-004-I01 under contracts/seccomp-v5/. Lane monitor Q-P2-1..4 (a). DATA_CHECK_ONLY. Alpha2
+OPEN; 248 accepted plus MET-ENFORCE-036 only.
+
+## Historical seccomp observer listener source preparation — MET-ENFORCE-035
 
 MET-ENFORCE-035 (SECCOMP-OBSERVER-LISTENER, packet 1): W01 amendment HS53 and the seccomp allowlists v5. OBSERVER gets the
 I01 AF_UNIX SOCK_SEQPACKET listener (bind, listen, accept4 with flags 0, SOCK_CLOEXEC or SOCK_CLOEXEC|SOCK_NONBLOCK); the
@@ -1263,6 +1271,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 120. `MET-ENFORCE-033`: publish native-profile v4 and I06 v3 (O-NATIVE-GATE-NOCAP, the capture routes, the inspector obligation restated, I06 bound to native-profile v4) and operator edge record v5; earlier contracts unchanged; DATA_CHECK_ONLY.
 121. `MET-ENFORCE-034`: publish the SELinux matrix v6 (fail-closed source closures, filesystem tables, entry closures, /proc reader narrowing, systemd's listener-socket cleanup); matrix v5, HS43 and native-profile v4 unchanged; DATA_CHECK_ONLY.
 122. `MET-ENFORCE-035`: publish W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); HS43, seccomp v4 and matrices v5 and v6 unchanged; DATA_CHECK_ONLY.
+123. `MET-ENFORCE-036`: publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); HS53, seccomp v5 and the earlier programs and edge records unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 
