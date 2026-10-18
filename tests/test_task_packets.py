@@ -73,7 +73,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 248
+    assert len(files) == EXPECTED_PACKET_COUNT == 249
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
