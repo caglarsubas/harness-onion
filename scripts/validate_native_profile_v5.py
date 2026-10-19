@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/native-profile-v5-authority.json"
-AUTHORITY_SHA256 = "8a8757130fc0201270b8af51b1b47014e3cdc61a5c9093aa3b99a530c66684b0"
+AUTHORITY_SHA256 = "b1b03db348d27e92002664576c2f1f1936148f99a2a95e83d031740ccd3d5c0a"
 VALIDATOR_PATH = "scripts/validate_native_profile_v5.py"
 BASE_COMMIT = "35b733b523f46b2ccba095ea046efe5d42bfa583"
 NEW_PACKET = "MET-ENFORCE-038"
@@ -470,7 +470,8 @@ CANDIDATE_NON_CLAIMS = 3
 ROUND_KEYS = ("round", "subjectBuilderSha256", "verdict", "recordSha256", "record", "candidate", "subjectSha256",
               "severities")
 EDIT_KEYS = ("path", "replaced", "with", "count", "rows", "candidateSha256", "adoptedSha256", "lineCount")
-# The decisions record's last section, its first line, verbatim (the lane monitor's owner-delegated adoption).
+# The first line of the decisions record's 2026-10-19 adoption section, verbatim (the lane monitor's owner-delegated
+# adoption).
 ADOPTION = {'decidedBy': 'the lane monitor, owner-delegated',
  'date': '2026-10-19',
  'decision': 'Monitor: ADOPT candidate 4 for slot 252 (NATIVE-PROFILE-V5), on r4 PASS_FOR_ADOPTION (b8356184). The '

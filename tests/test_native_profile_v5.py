@@ -1536,6 +1536,8 @@ def test_the_class_table_is_read_with_the_closed_grammar():
     counts = {name: len([row for row in exact if row[0] == name]) for name in profile.EVIDENCE_TABLES}
     assert counts == {"capture": 48, "lifecycleCapture": 12, "backendCapture": 3} and len(profile.PROSE_FIELDS) == 9
     assert sorted(field for _name, _number, field in prose) == sorted(profile.PROSE_FIELDS)
+    assert dict(profile.ROLE_SCOPED_FIELDS) == {"cgroupFrozenBefore": ("WORKER",), "cgroupFrozenAfter": ("WORKER",)}
+    assert set(profile.ROLE_SCOPED_FIELDS) <= {row[2] for row in exact if row[0] == "capture"}
     host = [row for row in exact if row[2] in profile.HOST_FIELDS[row[0]]]
     assert len(host) == 11 and all(not any(row[4].values()) for row in host)
     assert "hardeningObserved.sealMarker.selinuxLabel" not in {row[2] for row in exact}
@@ -1662,6 +1664,29 @@ def test_a_p1_addition_probe_whose_refusal_disappears_is_refused(role, field):
     with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: check_capture refuses %s added for %s"
                                                    % (field, role))):
         profile.validate_evidence_classes(m)
+
+
+@pytest.mark.parametrize("scoped", [
+    {"cgroupFrozenBefore": ("WORKER",), "cgroupFrozenAfter": ("WORKER",), "runFsType": ("WORKER",)},
+    {"cgroupFrozenBefore": ("WORKER",), "cgroupFrozenAfter": ("WORKER", "KUBELET")}])
+def test_the_role_scoped_fields_are_exact_p1_paths_of_known_roles(monkeypatch, scoped):
+    """A role-scoped field that is not an exact P1 path (runFsType is a lifecycle path), or a role outside the capture
+    roles, is refused before any probe."""
+    monkeypatch.setattr(profile, "ROLE_SCOPED_FIELDS", MappingProxyType(scoped))
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: the role-scoped fields are exact "
+                                                   "P1 paths of known roles")):
+        profile.validate_evidence_classes(profile.era_modules())
+
+
+@pytest.mark.parametrize("scoped", [{"cgroupFrozenBefore": (), "cgroupFrozenAfter": ("WORKER",)},
+                                    {"cgroupFrozenBefore": ("WORKER",), "cgroupFrozenAfter": ()}])
+def test_every_role_scoped_field_is_probed_on_its_roles_captures(monkeypatch, scoped):
+    """A role-scoped field scoped to no role is skipped on every capture, so its probe count stays 0 and the check
+    refuses before any probe refusal."""
+    monkeypatch.setattr(profile, "ROLE_SCOPED_FIELDS", MappingProxyType(scoped))
+    with pytest.raises(ValueError, match=re.escape("evidenceClasses against the model: every role-scoped field is probed "
+                                                   "on its roles' captures")):
+        profile.validate_evidence_classes(profile.era_modules())
 
 
 def test_the_frozen_bracket_is_probed_on_the_worker_captures_only(monkeypatch):
