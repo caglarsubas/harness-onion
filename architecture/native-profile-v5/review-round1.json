@@ -1,0 +1,194 @@
+{
+ "subject": "tools/w03/npv4-errata candidate 1 (build_contract.py sha256 9eed3c45900d7c03993887e8958022c15b2c082e4150d1ba512d8d64ce68cf6a, vectors.json sha256 f9f7e870d5c941254daef9ac9c77f2801420385e971e84295eca3b70ffa371b4)",
+ "reviewer": "independent agent",
+ "round": 1,
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "E1-1",
+   "severity": "MINOR",
+   "location": "vectors.json Q03; README.md:166-167 (\"Q03 is replayed unchanged\"); DRAFT open item 1; SCOPE.md section 1.4",
+   "finding": "Q03's operation sets captures[1] to a whole v4 capture: discriminator planeon.internal.native-qualification-capture/v4 and all seven dropped fields. It is the only v5 case whose operations carry a v4 object, and the only replayed case outside C10, C11, L08, N134, N135, V39 and V40 whose operations name a dropped field. SCOPE section 1.4 says 'No qualification ... case touches a host field', so Q-NPE-4 (a)'s '7' rests on an incomplete count. The model result is correct: v5 refuses Q03 with 'one capture per resident role', and so it would with the v5 positive's SERVER capture in the same slot (tested). But v4 re-derived v3's Q03 for exactly this reason (REDERIVED_V3_OPS, native_qualification_v4.py:858; its row's 'rederived' says 'the duplicated server capture is the v4 positive's'). As kept, D2's qualification replay (DOSSIER-D2 E-2 pins these 13 texts) only matches if a port evaluates the role-count rule on raw JSON before it parses any capture as v5. A typed v5 parse with closed fields fails first.",
+   "requiredChange": "Bring Q03 to the monitor as a question (see Q-1), because Q-NPE-4 (a) fixes the count at 7. Option (i): re-derive Q03 as an eighth case whose refusal is unchanged. Its value becomes the v5 positive's SERVER capture, the row records rederived and reason, and check_vectors gets a separate re-derivation kind for it. Option (ii): keep it. Then the README must say that Q03's value carries the v4 discriminator and the seven fields, and that a port reaches 'one capture per resident role' before any capture parse. Under either option, record that the scope's count missed Q03."
+  },
+  {
+   "id": "E1-2",
+   "severity": "MINOR",
+   "location": "scripts/native_qualification_v5.py check_vectors (re-derivation rule, lines 436-440; added-case rule, lines 445-447)",
+   "finding": "check_vectors does not pin what the README says the re-derivations keep. The README (lines 152-154) says each re-derived operation sets the whole field 'to the v4 positive's value with the same edit', but the rule checks only key order, the unchanged keys, v4Refusal and the new refusal. A tamper probe that replaced C10's re-derived value with a different hardening value (modulesDisabled 5) was ACCEPTED (284 checks). The values as built are right: for all 7 cases the value equals v4's operation applied to the v4 positive's field. Two more probes were accepted. The free-text 'rederived' and 'reason' can be replaced with anything (v4 has the same weakness). H01 can be renamed to a v4 record id ('R12'), because added ids are checked only against the replayed targets' ids. The builder asserts id disjointness, but check_vectors does not.",
+   "requiredChange": "In check_vectors, require for each re-derived row that v4's ops are a single 'set' whose path starts with the row's field, and that op['value'] == _apply(_subject(old positive, o), o['ops'])[field]. Require the added rows' ids to be disjoint from every v4 id (negative, accepted, crossVersion and migration), or to be exactly H01-H18 in order. Optionally pin the rederived and reason texts per dropped field, as the builder generates them."
+  },
+  {
+   "id": "E1-3",
+   "severity": "MINOR",
+   "location": "README.md 'Files' (lines 70-74) and 'What v5 changes' (lines 84-93)",
+   "finding": "The README says each function is 'v4's functions with the changes below', but the table leaves out several changes the per-function diff shows. (a) check_capture, check_lifecycle_capture and check_backend_capture also gain the record_schema parameter, and they shape the record with v4's _shape. The table names the new signature only for check_qualification. (b) _shape's refusal text changes to 'unreviewed v5 capture schema'. (c) The discriminator refusals become 'not a v5 capture', 'not a v5 lifecycle capture' and 'not a v5 backend capture'. Only the cross-version section mentions these. (d) validate_capture's signature and message change, and so does validate_qualification's message. All are correct in the model, but a port that reads the README as the complete change set (R10 pins refusal texts) would miss the new texts and parameters.",
+   "requiredChange": "List every per-function change in 'What v5 changes': the record_schema parameter and the v4 record shape step in all three capture checks, the three discriminator refusals, _shape's new refusal text, and the validate_capture and validate_qualification signatures and messages. The README's change set then equals the diff."
+  },
+  {
+   "id": "E1-4",
+   "severity": "MINOR",
+   "location": "README.md 'Text in force' (lines 50-54); v4 README.md at f560209",
+   "finding": "'Text in force' says that for v5 captures only v4's OUT_OF_SCOPE_HOST bullet (cited as :134, but the bullet spans :134-136) and its table row (:159) are replaced. Other v4 statements that stay 'in force' contradict v5. v4 README:158 makes the seal marker label 'in hardeningObserved' a DECLARED_T04 capture field, and v5 removes that path from the label row. v4 README:183-184 classes the P5 'booleans and the boot entry' as OUT_OF_SCOPE_HOST capture fields. v4 README:471-472 (representation choice 5) says 'the rest of hardeningObserved keeps v3's equality (OUT_OF_SCOPE_HOST)', and v5 removes that equality. (:264's 'seal marker label in hardeningObserved' becomes moot.)",
+   "requiredChange": "In 'Text in force', name every v4 README statement that v5 replaces for captures: :134-136, :158 (the 'seal marker in hardeningObserved' part), :159, :183-184 (the booleans and boot entry clause) and :471-472, and optionally :264. Cite the bullet as :134-136 in the intro and in 'Who reads them'."
+  },
+  {
+   "id": "E1-5",
+   "severity": "MINOR",
+   "location": "README.md 'The four T04 proofs' (lines 118-123); build_contract.py PROOFS",
+   "finding": "Two of the four proofs are not stated as obligations that T04 can close. T04-HOST-LOCKS requires the booleans and hardening settings to equal the record's 'for the whole enrolled boot'. But the enrolled boot itself sets them before the seal: one-way sysctls such as modules_disabled and kexec_load_disabled, yama ptrace_scope, and the booleans at policy load. A literal proof therefore cannot hold. T04-POLICY-STABLE says 'for the whole enrolled boot' and then narrows it to 'no policy load after the seal', so the window is stated two ways. T04-HOST-BOOT is anchored correctly ('for every capture of the record's window'). Coverage is otherwise complete: every dropped fact (the four host members; status and sequence, policy digest, booleans, every hardening member, the boot entry) falls under exactly one proof. The relation to the v4 record's t04Proofs is stated correctly: that constant is v4's ten (schema const, README:313-328).",
+   "requiredChange": "Anchor T04-POLICY-STABLE and T04-HOST-LOCKS at the seal, for example 'from the seal until the enrolled boot ends (so at every capture of the record's window)', and keep 'no policy load after the seal' as the content of T04-POLICY-STABLE. Regenerate the README and status hostProofs text accordingly."
+  },
+  {
+   "id": "E1-6",
+   "severity": "MINOR",
+   "location": "architecture/native-profile-v5/source-index.json 'subject' and 'predecessorInputs'",
+   "finding": "The index's subject pins status.json (ba35f390...) and edge record v7 (a3fb46ee...). Adoption rewrites both: status.json gains rounds and adoption, and the edge rows' providerPacket TBD is replaced, as v4's adoptionEdit did for edge v5. An index adopted as reviewed bytes would then carry two stale digests. v4's index (6e2c3250...) left out both its status and its edge record. Separately, the README cites architecture/w03-plan-v2/plan.json:405 and the builder binds plan.json's sha256 (BOUND), but predecessorInputs does not list plan.json.",
+   "requiredChange": "Drop status.json and the edge v7 record from source-index 'subject'. Keep the README, schema, vectors and model, and README-v7 if wanted, since its bytes do not change at adoption. Alternatively, state in the index and status that those two are pinned at their candidate bytes and rewritten at adoption. Add architecture/w03-plan-v2/plan.json to predecessorInputs."
+  },
+  {
+   "id": "E1-7",
+   "severity": "NOTE",
+   "location": "DRAFT open item 8 (FROZEN_PREFIXES gaining native-profile-v4/ and i06-backend-profile-v3/); README.md 'Open items' (lines 242-244)",
+   "finding": "The v5 model binds 24 v4 names, including the private _shape, _bounded, _within, _path, _same_set, _result, _apply and _member_sets, and calls v4.check_record and v4.check_migration. Nothing in v5's model or vectors pins the v4 model's bytes. check_vectors pins only the v4 schema's identity through v4.SCHEMA_SHA256. The two prefixes the draft names do not cover scripts/native_qualification_v4.py or scripts/i06_backend_profile_v3.py.",
+   "requiredChange": "List among the mechanics obligations that the layer freezes scripts/native_qualification_v4.py (f7c71807...) and scripts/i06_backend_profile_v3.py (dfb00e90...) by exact path or digest. In the README's open item, say 'native-profile v1 to v4 (models included)'."
+  },
+  {
+   "id": "E1-8",
+   "severity": "NOTE",
+   "location": "README.md lines 11-12, 61-64, 80-82, 109-112, 196-198",
+   "finding": "Wording that over- or mis-states. (a) The intro says the packet 'discharges W03-PLAN-AMEND-3's residual (amendment.json:151, :282)', but :282 is the dependency name 'the host-field drop', not a residual; status.json states this correctly. (b) 'Every kept definition equals v4's as data, except the three variants' leaves out evidenceClasses, which also changes. (c) Caller obligation 5 ('record_schema is native-profile v4's schema') is enforced by v4's _shape (tested: 'unreviewed v4 qualification schema'), but v4's heading defines caller obligations as stated and not checked. (d) 'P1's hardeningObserved only copied those two facts' is inaccurate. It also carried lockdown, modulesDisabled, kexecLoadDisabled, yamaPtraceScope, unprivilegedBpfDisabled, bpfJitHarden and moduleSetDigest. None was observed (OUT_OF_SCOPE_HOST), so the conclusion 'P1 loses nothing observed' holds. (e) The closed set says each pair is refused 'once' with each value, but the different-value half of (capture, hardeningObserved) is held by C10, C11, N134 and N135, and check_vectors checks set equality.",
+   "requiredChange": "(a) Say 'its residual (:151) and dependency name (:282)'. (b) Add 'and evidenceClasses (below)'. (c) State item 5 as a check that v4's _shape enforces, not as a caller obligation. (d) Say that P1's hardeningObserved held the declared hardening settings, which were never observed, and copies of the marker and runFsType that P5 observes. (e) Say 'at least once'."
+  },
+  {
+   "id": "E1-9",
+   "severity": "NOTE",
+   "location": "build_contract.py HISTORY_ROWS switch (lines 152-176, 1141-1143, 1188-1191)",
+   "finding": "The switch works. It was tested on a builder copy in WORK with a stand-in quoted line; the stand-in and outputs were deleted and nothing was recorded. It gives 62 rows. The 3 history rows carry providerCommit 3f52d53c..., 46bcc3e3... and a29c93c7..., sha256 cd1be009..., 6d58d1f3... and 14af47a6..., and mode 100644. Like v6's v1-v3 schema rows, they have no providerPacket. The schema, vectors and model bytes are unchanged, and the READMEs and notes adapt. Three weaknesses remain. The Q-HE4D2-3 line is accepted from anywhere in either decisions file, while every other quote must sit inside its dated section. Its edge v7 ownerDecisions label carries no date ('owner via the lane monitor, verbatim'), while the Q-NPE labels and v6's labels are dated. README-v7 then reads 'Q-NPE-1 (c), Q-NPE-6 (a) and Q-NPE-7 (a), and Q-HE4D2-3'.",
+   "requiredChange": "Require the Q-HE4D2-3 line inside a dated '## ' section of its file, put that date in the ownerDecisions label, and fix the README-v7 list ('Q-NPE-1 (c), Q-NPE-6 (a), Q-NPE-7 (a) and Q-HE4D2-3')."
+  },
+  {
+   "id": "E1-10",
+   "severity": "NOTE",
+   "location": "architecture/native-profile-v5/status.json",
+   "finding": "The status file is accurate for a candidate. Its discharges (amendment.json:151 and :282) are correct, supersedes names the three v4 capture discriminators, keeps names the v4 record and directory, and the counts match the vectors. Its ownerDecisions omit the Q-NEXT-D2 lines that the README quotes. workItem 'NATIVE-PROFILE-V5' is the author's name. The adoption-time fields that v4 carries (reviewBase, adoptionEdit for providerPacket TBD, independentReviewer, recordPaths) are not yet present, as expected.",
+   "requiredChange": "Quote the two Q-NEXT-D2 lines in ownerDecisions too, or state why they are omitted. At adoption, have the monitor confirm the workItem name, and add reviewBase (f560209), adoptionEdit and recordPaths, the last stating where the unpublished review brief is kept and its sha256."
+  }
+ ],
+ "questions": [
+  {
+   "id": "Q-1",
+   "position": "Re-derive Q03 as an eighth, refusal-preserving case: captures[1] becomes the v5 positive's SERVER capture, which still refuses with 'one capture per resident role' (tested). This needs the monitor's word, because Q-NPE-4 (a) says 7. If the monitor keeps 7, keep Q03 as v4's row, with the README port note from E1-1.",
+   "reason": "SCOPE section 1.4's count of host-touching cases missed Q03. v4 re-derived v3's Q03 for the same reason. As kept, Q03 is the only v5 vector carrying a v4 object, and it constrains D2's port order for the 13 qualification texts it pins."
+  },
+  {
+   "id": "Q-2",
+   "position": "Keep workItem NATIVE-PROFILE-V5 unless the roadmap item has another name. The monitor sets it at adoption.",
+   "reason": "DRAFT open item 4: the roadmap item's name is the monitor's."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Reproduce: builder run twice with OUT in WORK and TMPDIR in WORK (python3 -I -B), against the harness-onion-npv4 clone at f560209 (tree bc850922...)",
+   "result": "PASS. run1 == run2 == contract/ == rounds/c1/contract/ byte for byte. The 8 output digests equal the brief and DRAFT (README 4fa497cc, schema 70bda124, vectors f9f7e870, status ba35f390, source-index 937f3da3, model 84143a47, edge v7 a3fb46ee, README-v7 f1d43d98). build_contract.py 9eed3c45 equals rounds/c1. SCOPE.md e9e66c08. No .pyc was written."
+  },
+  {
+   "check": "Exact-line quoting of decisions (README, status.json, edge v7)",
+   "result": "PASS. Each of the README's 13 quoted lines equals exactly one source line: 10 from the dated scope section of npv4-errata/OWNER_DECISIONS.md, 2 Q-NEXT-D2 lines, and the Q-HE4D1-1 line at he004/OWNER_DECISIONS.md:250, inside its 2026-10-18 section at :246. The 11 status ownerDecisions and 3 edge v7 quotes equal their source lines without '> ' and '- '."
+  },
+  {
+   "check": "Replay: staged WORK tree (git show f560209 inputs plus the generated files), v5 check_vectors",
+   "result": "PASS: 284 checks, every expected result met."
+  },
+  {
+   "check": "explain spot checks",
+   "result": "PASS. All 7 re-derived cases (C10, C11, L08, N134, N135, V39, V40): the v5 refusal is 'schema $ additionalProperties', v4Refusal equals v4's refusal, and the value equals v4's operation applied to the v4 positive's field. All of H01-H18: the 11 'record's value' cases equal the v4 positive's capture value, the other 7 differ, and every one is refused with 'schema $ additionalProperties'. Q01, Q03, V18, V56, N96, C01, C27, L05, N118, N150, V07, A13 and A15 equal their pins. Schema swaps are refused: the v5 schema as record_schema gives 'unreviewed v4 qualification schema', and the v4 schema as the capture schema gives 'unreviewed v5 capture schema'. A retained capture carrying host gives 'invalid retained capture'."
+  },
+  {
+   "check": "Tamper probes on in-memory copies (check_vectors)",
+   "result": "Refused, naming the rule: wrong C10 v4Refusal; H12 turned into a different-value half (closed set); C01 intent edited (replay rule); host put back in a positive capture; X12 without ['$','required']. ACCEPTED (gaps, see E1-2): C10 re-derived value replaced by another different value; C10 rederived/reason text replaced; H01 renamed to a v4 record id."
+  },
+  {
+   "check": "Form (c)",
+   "result": "PASS. The v5 schema has no record variant (oneOf: capture, lifecycleCapture, backendCapture). The v5 model calls v4.check_record, v4.check_migration and v4._shape(record, 'record', record_schema). The 12 v4/I06 v3 files in v4's adoptedSubject hash to their adopted digests at f560209 (hashed independently). The 4 new paths are absent at the pin. I06 v3 needs no change: it binds the v4 record through v4.check_record."
+  },
+  {
+   "check": "Schema",
+   "result": "PASS. Exactly 11 (variant, field) pairs leave properties and required, in order: capture 7, lifecycleCapture 3, backendCapture 1. Relative to v4's 26-definition capture closure exactly 5 definitions leave: host, observedBooleans, observedBootEntry, observedHardening and status. v5 keeps 22 definitions (3 variants, 18 reached, evidenceClasses) in v4's order, and all 18 equal v4's. The variants' other keys (type, additionalProperties, allOf) and kept properties are equal and in order. The discriminators are /v5 and $id is urn:planeon:internal:native-qualification-capture:v5. evidenceClasses changes only the host rows (P1 split into 4, P5 into 3, backend 1; every cell 'OUT_OF_SCOPE_HOST (absent)' with its field's proof) and drops hardeningObserved.sealMarker.selinuxLabel from the DECLARED_T04 label row. classes, captureTargets and capturer are unchanged. The keyword set equals the v4 capture closure's (D2 E-1). There is no /opt/planeon/, /run/planeon or /sys/fs text, and the canonical digest 5f6703ca... is pinned in the model and vectors."
+  },
+  {
+   "check": "Model: per-function v4-to-v5 diff (AST spans)",
+   "result": "PASS, with E1-3. _shape, check_capture, check_lifecycle_capture, check_backend_capture, check_qualification, validate_capture and validate_qualification differ from v4 only by: record_schema in the signatures, the v5 discriminators and texts, v4._shape for the record, the removed host rules (v4 :518-525, :660-661 host half, :670-671, :697-698 host half), the retained list (22 to 15 fields, order kept), and the check_record and check_migration calls through v4. check_qualification keeps v4's cross-capture rules in v4's order. All 24 bound names equal their v4 attributes and are all used. No other v4 global is referenced."
+  },
+  {
+   "check": "check_vectors rigour",
+   "result": "The replay rule is strong: an unchanged row must equal v4's row, with only MECHANICAL renames. The closed set of 22 halves is enforced by set equality over single-field 'set' operations. The cross-version shift is enforced: ids X09-X14 in v4's order, shifted kinds, mapped expects, and mustInclude equal to v4's plus ['$','required']. The re-derivation and id rules are weak; see E1-2."
+  },
+  {
+   "check": "Vectors",
+   "result": "PASS. Counts: 5 positives, 266 negatives (capture 211, lifecycle 29, backend 7, qualification 19), 7 accepted, 6 cross-version. The positives' record, profile and endpoints serialize identically to v4's (D2 E-2), and none of the 70 captures carries a dropped field. The 19 qualification refusals equal v4's (13 distinct texts). The capture family has 247 negatives (148 schema, 99 model), 35 model texts (v4 37; 'host lock state differs' and 'observed on a boot entry other than the enrolled one' leave). The capture-family replay is 70+7+247+6 = 330 (v4: 70+7+229+6 = 312). The re-derivations keep each case's intent text and edit. Of the replayed v4 cases, the operations of exactly 8 name a dropped field: the 7 plus Q03 (E1-1)."
+  },
+  {
+   "check": "The four T04 proofs",
+   "result": "Coverage is complete and the t04Proofs relation is stated correctly (v4's const is the ten at README:313-328). Two windows cannot be closed as stated; see E1-5."
+  },
+  {
+   "check": "Edge v7",
+   "result": "PASS. Keys and key order equal v6's. schemaVersion, graph, consumer, provider, ownerDecision, rules, notArtifacts and statuses are copied (schema v2). v6's 56 rows are carried identically and in order. supersedes binds v6's file sha256 0ac7c2da... as MET-ENFORCE-036 (git log: a3b9e6e, the 249th packet). The 3 new rows carry the generated bytes' sha256, mode 100644, host-enforcement/contracts/native-profile-v5/ consumer paths, HE-004D2, BYTE_IDENTICAL, REGISTERED_BEFORE_USE, providerCommit null and providerPacket TBD, with v6's v4-row key order. ownerDecisions are verbatim. The file is the indent-1 dump. v6's native-profile v1-v3 schema rows are labelled HE-004D2, as the notes say."
+  },
+  {
+   "check": "HISTORY_ROWS switch (Q-HE4D2-3), on a WORK copy with a stand-in line; stand-in and outputs deleted, nothing recorded",
+   "result": "PASS, with E1-9. One line plus the recorded decision gives 62 rows with the dossier's commits and digests. The schema, vectors and model bytes are unchanged."
+  },
+  {
+   "check": "README citations at f560209",
+   "result": "PASS, with E1-4 and E1-8. These are right: v4 model :518, :519-521, :522-524, :670, :525, :671, :647-652, :660-661, :697-698, :629-639, :231-239, :399-400, :732, :306, :272-284, :664-666; v4 README :134 (bullet start), :159, :313; amendment.json :151 and :282; plan.json :405 (the I06-2 id line). The counts, 'Consumers' and 'The even sequence' are accurate."
+  },
+  {
+   "check": "status.json and source-index.json",
+   "result": "Digests, discharges, supersedes, keeps and counts are correct. See E1-6 (subject includes two files rewritten at adoption; plan.json missing) and E1-10."
+  },
+  {
+   "check": "No local paths or personal data in the 8 contract files",
+   "result": "PASS. Scans for home-directory, temporary-directory and operator-state path prefixes, user names and e-mail patterns found nothing."
+  },
+  {
+   "check": "DRAFT open item 1 (Q03 left as v4-shaped)",
+   "result": "AMEND: the model result is right, but the scope count missed Q03 and v4's own precedent re-derived it. Bring it to the monitor (E1-1, Q-1)."
+  },
+  {
+   "check": "DRAFT open item 2 (the even-policy test only in check_record)",
+   "result": "AGREE. It is a record rule (:306). check_qualification runs check_record first. v4's standalone check_capture ran only the record's shape, never check_record, so it was never a record validator. No vector pinned it."
+  },
+  {
+   "check": "DRAFT open item 3 (v5 binds v4's private helpers by name)",
+   "result": "AGREE, with an amendment: acceptable because v4 is frozen, provided the mechanics freeze scripts/native_qualification_v4.py (and I06 v3's script) by exact path or digest (E1-7). The binding is complete and every bound name is used."
+  },
+  {
+   "check": "DRAFT open item 4 (status.json at candidate stage; workItem NATIVE-PROFILE-V5)",
+   "result": "AGREE, with an amendment: having a candidate status is fine and its fields are accurate, but source-index must not pin status.json or edge v7 (E1-6). The workItem name is the monitor's to confirm (Q-2, E1-10)."
+  },
+  {
+   "check": "DRAFT open item 5 (no in-repo REVIEW_BRIEF.md)",
+   "result": "AGREE, with an amendment: the operator brief holds local paths and is not publishable as is. At adoption, status.json should record, as v4's recordPaths did, that the brief is kept outside the repository, with its sha256, so the published review records name what they answered (E1-10)."
+  },
+  {
+   "check": "DRAFT open item 6 (X12-X14 also require ['$','required'])",
+   "result": "AGREE. The pairs are present in the v4 schema's errors (replayed), and check_vectors pins the exact widened list. It is a sound strengthening."
+  },
+  {
+   "check": "DRAFT open item 7 (edge v7 history rows switch)",
+   "result": "AGREE, with an amendment: it works as described (tested, 62 rows). Tighten the decision lookup and date its label (E1-9)."
+  },
+  {
+   "check": "DRAFT open item 8 (mechanics obligations, including the base re-check after 251)",
+   "result": "AGREE, with amendments. Add the exact-path freeze of both scripts (E1-7). At the merged base, re-verify every bound and pinned input digest (the 12 adopted files; edge v6 0ac7c2da...; AMEND-3 ddf5e9ab...; plan v2 a0047023...; the v1-v3 inputs), and that edge v7 is still the next free version, so the README's f560209 line citations stay valid. Keep f560209 as the review base, as v4 kept reviewBase. Have the evidenceClasses cross-check also confirm that the 8 host rows' proofs are exactly status hostProofs."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}

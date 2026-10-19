@@ -1,0 +1,310 @@
+{
+ "schemaVersion": "planeon.internal.native-profile-v5-status/v1",
+ "workItem": "NATIVE-PROFILE-V5",
+ "packet": "MET-ENFORCE-038",
+ "slot": 252,
+ "status": "ADOPTED",
+ "candidate": 4,
+ "baseMain": "35b733b523f46b2ccba095ea046efe5d42bfa583",
+ "reviewBase": "f560209d04b7e0f07b2480219718a8a6dbdb21ef",
+ "supersedes": [
+  "planeon.internal.native-qualification-capture/v4",
+  "planeon.internal.native-qualification-lifecycle/v4",
+  "planeon.internal.native-qualification-backend/v4"
+ ],
+ "keeps": {
+  "record": "planeon.internal.native-qualification/v4",
+  "contract": "architecture/native-profile-v4/"
+ },
+ "contracts": {
+  "nativeProfileV5": {
+   "schema": "architecture/native-profile-v5/qualification.schema.json",
+   "vectors": "architecture/native-profile-v5/vectors.json",
+   "model": "scripts/native_qualification_v5.py",
+   "readme": "architecture/native-profile-v5/README.md",
+   "sourceIndex": "architecture/native-profile-v5/source-index.json"
+  },
+  "edgeRecordV7": {
+   "record": "architecture/artifact-edges/operator-harness-engineering-v7.json",
+   "readme": "architecture/artifact-edges/README-v7.md"
+  }
+ },
+ "ownerDecisions": [
+  "Monitor relay, owner decisions on the slot-252 scope (SCOPE.md e9e66c08), 2026-10-19:",
+  "Q-NPE-1 (c): a capture-only native-profile v5. The record stays planeon.internal.native-qualification/v4, and v4 and I06 v3 stay frozen.",
+  "Q-NPE-2 (a): all seven host fields become record-only and are dropped from the captures, with the record unchanged. Observed booleans stay a later candidate; off-host attestation is carried to HE-008/T04.",
+  "Q-NPE-3 (b): keep OUT_OF_SCOPE_HOST \"absent\" with four named T04 proofs (T04-HOST-BOOT, T04-POLICY-STABLE, T04-HOST-LOCKS, T04-BOOT-ENTRY).",
+  "Q-NPE-4 (a): re-derive the 7 affected vectors in place (ids kept, v4 refusal recorded), add 18 negatives, and replay only the capture and qualification cases.",
+  "Q-NPE-5 (a): the ClusterRole I06 successor gets its own slot after 252 and before HE-008.",
+  "Q-NPE-6 (a): edge v7 (v8 if 251 publishes one first; it doesn't, so v7) with 3 rows labelled HE-004D2. Switch to (b) only if the D2 dossier advises a re-vendor first; bring that back to me.",
+  "Q-NPE-7 (a): architecture/native-profile-v5/ and scripts/native_qualification_v5.py.",
+  "Q-NPE-8 (a): keep the retained-capture rule minus the 7 fields.",
+  "Record these verbatim and dated. GO for the contract draft and the contract review rounds (light). Mechanics wait for 251's merge and my word.",
+  "Monitor relay, owner decisions, 2026-10-19:",
+  "Q-HE4D2-3 = (a): widen edge v7 by 3 rows for the v1–v3 history vectors (62 rows), for the exact 413-check replay.",
+  "Monitor decisions (contract details, owner-delegated; I'll tell the owner):",
+  "Q-NPE-9 (a): re-derive Q03 as an eighth case with its refusal unchanged, using the v5 SERVER capture. Record the scope miscount; this amends Q-NPE-4's \"7\" to 8.",
+  "Q-NPE-10: NATIVE-PROFILE-V5.",
+  "Monitor relay, owner decision Q-NEXT-D2 = (a), 2026-10-19: two light tracks now, nothing heavy:",
+  "(i) scope and draft the NATIVE-PROFILE-V4 host-field errata/successor contract for harness-onion slot 252, with contract review rounds; mechanics on my word after 251 merges;",
+  "Q-HE4D1-1 = (a): fill the host fields from the record's declared values, marked R10-side as not observed (a MODEL_DEFINED row); HE-008 and T04 keep the real reads. The owner accepts that those equalities are vacuous until a follow-up successor or errata drops them from captures."
+ ],
+ "scopeErratum": "SCOPE.md section 1.4 counted seven host-touching replayed cases; Q03 is the eighth (Q-NPE-9 (a) amends Q-NPE-4 (a)'s 7 to 8)",
+ "discharges": [
+  {
+   "path": "architecture/w03-obligation-amendment-3/amendment.json",
+   "line": 151,
+   "item": "W03-PLAN-AMEND-3's residual: the vacuous host-field equalities"
+  },
+  {
+   "path": "architecture/w03-obligation-amendment-3/amendment.json",
+   "line": 282,
+   "item": "W03-PLAN-AMEND-3's dependency name: the host-field drop"
+  }
+ ],
+ "hostProofs": [
+  {
+   "proof": "T04-HOST-BOOT",
+   "shows": "the running boot and kernel equal the record's `host` (`bootId`, `machine`, `kernelRelease`, `kernelNotesDigest`) for every capture of the record's window"
+  },
+  {
+   "proof": "T04-POLICY-STABLE",
+   "shows": "from the seal until the enrolled boot ends (so at every capture of the record's window), the active SELinux policy is the record's `selinux.policyDigest`, with the record's status: no policy load after the seal (the bracket that `selinuxBefore` and `selinuxAfter` stood for)"
+  },
+  {
+   "proof": "T04-HOST-LOCKS",
+   "shows": "from the seal until the enrolled boot ends (so at every capture of the record's window), the SELinux booleans and the kernel hardening settings equal the record's `selinux.booleans` and `hardening`"
+  },
+  {
+   "proof": "T04-BOOT-ENTRY",
+   "shows": "the boot ran from the record's enrolled boot entry, measured rather than loader-reported (v4's decision 2 leaves the measurement to T04)"
+  }
+ ],
+ "counts": {
+  "checks": 284,
+  "positive": 5,
+  "negative": 266,
+  "accepted": 7,
+  "crossVersion": 6,
+  "rederived": [
+   "C10",
+   "C11",
+   "L08",
+   "N134",
+   "N135",
+   "V39",
+   "V40"
+  ],
+  "rederivedSameRefusal": [
+   "Q03"
+  ],
+  "added": [
+   "H01",
+   "H02",
+   "H03",
+   "H04",
+   "H05",
+   "H06",
+   "H07",
+   "H08",
+   "H09",
+   "H10",
+   "H11",
+   "H12",
+   "H13",
+   "H14",
+   "H15",
+   "H16",
+   "H17",
+   "H18"
+  ],
+  "captureFamilyReplay": 330,
+  "edgeRows": 62
+ },
+ "carried": [
+  {
+   "item": "E4-1 (contract review round 4, NOTE): the README's 2026-10-19 quote block leaves out two lines of the decisions record without marking them (the D2 design decisions Q-HE4D2-1, 2 and 4-11, and the line recording 251's merge as 35b733b and the mechanics GO), as the Q-NEXT-D2 block leaves out its line (ii)",
+   "to": "a later revision of the native-profile v5 README",
+   "action": "the README keeps its reviewed text and the monitor's adoption carries E4-1; the omitted lines decide nothing in this contract, and a later revision marks the omission or quotes them"
+  },
+  {
+   "item": "E4-2 (contract review round 4, NOTE): the contract builder does not cross-check the HE-004 decisions record's copy of the quoted decision lines",
+   "to": "the contract builder (operator tooling, outside the repository)",
+   "action": "at its next regeneration, assert that each quoted line, where the HE-004 decisions record holds it, is byte-identical there; the monitor's adoption carries E4-2, and the adopted files are unaffected"
+  },
+  {
+   "item": "E1-7 (contract review round 1, NOTE): the freeze of native-profile v4's model, which v5 binds by name",
+   "to": "this packet's layer validator (scripts/validate_native_profile_v5.py)",
+   "action": "discharged: the layer binds scripts/native_qualification_v4.py (sha256 f7c718072d1ffbb9b8bbc310e6141d476ea5f25296f70ff8c1bc9ada3db02387) and scripts/i06_backend_profile_v3.py (sha256 dfb00e90199d436ae63b79261f2e04870d7861cb0f7a424971657a4d777754de) by exact path and digest, executes v5's model with this era's v4 model as its import, and keeps native-profile v1 to v4 (models included), I06 v1 to v3 (models included) and edge records v1 to v6 byte-identical"
+  },
+  {
+   "item": "T04-HOST-BOOT, T04-POLICY-STABLE, T04-HOST-LOCKS and T04-BOOT-ENTRY",
+   "to": "T04",
+   "action": "prove T04-HOST-BOOT, T04-POLICY-STABLE, T04-HOST-LOCKS and T04-BOOT-ENTRY as hostProofs states them, with native-profile v4's ten proofs"
+  },
+  {
+   "item": "the real reads of the seven host facts and any off-host attestation of them",
+   "to": "HE-008 and T04",
+   "action": "read the seven host facts on the host; HE-008 carries any off-host attestation of them (Q-NPE-2 (a)); no v5 capture carries them"
+  },
+  {
+   "item": "observed booleans",
+   "to": "a later candidate (Q-NPE-2 (a))",
+   "action": "observed SELinux booleans stay a later candidate; v5 adds none"
+  },
+  {
+   "item": "the ClusterRole I06 successor (OBS-RBAC-1)",
+   "to": "its own slot after 252, before HE-008 (Q-NPE-5 (a))",
+   "action": "OBS-RBAC-1's grants get their own I06 successor; I06 v3 is unchanged here"
+  },
+  {
+   "item": "HE-004D1's re-vendor of the capture contract",
+   "to": "HE-004D2 (edge v7's consumer label)",
+   "action": "HE-004D2 consumes edge record v7's six new rows (native-profile v5's schema, vectors and README, and the native-profile v1, v2 and v3 vectors), carries HE-004D1's re-vendor to v5 captures and composes v5's check_qualification with I06 v3; nothing uses the rows before it"
+  }
+ ],
+ "nonClaims": [
+  "Native-profile v1 to v4, I06 v3, the W02 notes errata and edge records v1 to v6 are byte-identical.",
+  "No capture route was exercised on a host; dropping the fields proves none of the host facts.",
+  "The record contract is native-profile v4's, unchanged.",
+  "The six files edge record v7 registers are not used before HE-004D2.",
+  "No R10 file changes in this packet, and no I06 v3 or native-profile v4 file or model changes."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "subjectBuilderSha256": "9eed3c45900d7c03993887e8958022c15b2c082e4150d1ba512d8d64ce68cf6a",
+   "verdict": "CHANGES_REQUIRED",
+   "recordSha256": "0626a1f6f2bc878b25256dfa071b47ffe73f67a423c3c183e6b8d898235e8aab",
+   "record": "architecture/native-profile-v5/review-round1.json",
+   "candidate": 1,
+   "subjectSha256": {
+    "architecture/native-profile-v5/README.md": "4fa497cc0909408a9b950fe63603b912b1e7eac3b518f9eb23cc1b5468c0b5c5",
+    "architecture/native-profile-v5/qualification.schema.json": "70bda12463cee83301bc10fa6285023dc0e07b281a87ca70d44ec746cf262113",
+    "architecture/native-profile-v5/vectors.json": "f9f7e870d5c941254daef9ac9c77f2801420385e971e84295eca3b70ffa371b4",
+    "architecture/native-profile-v5/source-index.json": "937f3da39a76f35de4ed3dcfebb7db87f3a28b808edc6899bc1f5f59449eb6ba",
+    "scripts/native_qualification_v5.py": "84143a477addb7942923641d18ec6ffa73e1e96217ddb312291c50e40495f3e8",
+    "architecture/artifact-edges/operator-harness-engineering-v7.json": "a3fb46eed4bfd6275d4468a372c2a39700df1562581bf5ddeec290f7465c0b1f",
+    "architecture/artifact-edges/README-v7.md": "f1d43d984649779244e67c7cddbfaa364953605ba9020176e93c74a4c7eb67d1",
+    "architecture/native-profile-v5/status.json": "ba35f3903554762a9a2004e4c5f5ef5350b9c51183a99e682c81f003b8a7d9ad"
+   },
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 2,
+   "subjectBuilderSha256": "d8c23d0bba6af32e2fb7f420e46e0ebd03af445192ea1e330ecc824488d46d82",
+   "verdict": "CHANGES_REQUIRED",
+   "recordSha256": "695cf190ea0f277b574f43b8c00ffdefeb20650403e7166319e5371524f7a44f",
+   "record": "architecture/native-profile-v5/review-round2.json",
+   "candidate": 2,
+   "subjectSha256": {
+    "architecture/native-profile-v5/README.md": "f9e5fae359f16e1786ecc121c91f26738da2e0f0af1dc0df110ec10850cfacce",
+    "architecture/native-profile-v5/qualification.schema.json": "70bda12463cee83301bc10fa6285023dc0e07b281a87ca70d44ec746cf262113",
+    "architecture/native-profile-v5/vectors.json": "f9f7e870d5c941254daef9ac9c77f2801420385e971e84295eca3b70ffa371b4",
+    "architecture/native-profile-v5/source-index.json": "ead145988ecf45988ac539e81f85fdd29cbcf084f5cd85927c3fe05e69f5aa05",
+    "scripts/native_qualification_v5.py": "c0f0b8d94acee59dd3b6b555671d449b6ff25a9c8dbb9ff40a73c8c0847cd718",
+    "architecture/artifact-edges/operator-harness-engineering-v7.json": "e51c6f440bf7ae134ba472775ce558f5483c0375cf87f1cf9e8a6880cacdb007",
+    "architecture/artifact-edges/README-v7.md": "acb595b09654ec9abdd1f88eafb6cd726fa379e26355d1190960794369c38c51",
+    "architecture/native-profile-v5/status.json": "1be1dc03ae5ef99c03b343800b3bec586ef58a6bc627d7fdc73093ce1e9e7647"
+   },
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 3,
+   "subjectBuilderSha256": "33cf3f06f298f82f5747fcc2c2fd17ac19ca54412a5d8f628ba547133d71eff2",
+   "verdict": "PASS_FOR_ADOPTION",
+   "recordSha256": "3b5f9dec0c436618057910e8fb10257cb21cc363bc12ac7441be3831f33bcc32",
+   "record": "architecture/native-profile-v5/review-round3.json",
+   "candidate": 3,
+   "subjectSha256": {
+    "architecture/native-profile-v5/README.md": "01733f4bf1be9bc06e0df737d11a005bc3049562c8e085424acc9a12fa270cb1",
+    "architecture/native-profile-v5/qualification.schema.json": "70bda12463cee83301bc10fa6285023dc0e07b281a87ca70d44ec746cf262113",
+    "architecture/native-profile-v5/vectors.json": "f9f7e870d5c941254daef9ac9c77f2801420385e971e84295eca3b70ffa371b4",
+    "architecture/native-profile-v5/source-index.json": "eb2944b6be266e33348d286dce1d56ffc429ad868d5dcd244cadc29e652aa63c",
+    "scripts/native_qualification_v5.py": "7f1c3a589e0234f174f5b53ec6c39a8b790b998f793931ed781789f796d8a4cc",
+    "architecture/artifact-edges/operator-harness-engineering-v7.json": "20b07665d34aa5407f2b0225495e53fb2b7bd47de638b83485ac3aa5f5185c52",
+    "architecture/artifact-edges/README-v7.md": "3c1edbffb93df7b29e065ce43c66f380a532c0bd39053de89d941fecb2db9857",
+    "architecture/native-profile-v5/status.json": "47797b4779d6d4430d55bf3f997ec4a019e1e2c431018df527e3f811cd5cbd37"
+   },
+   "severities": [
+    "NOTE"
+   ]
+  },
+  {
+   "round": 4,
+   "subjectBuilderSha256": "ba42bea8a337b5bcaf70572887c349d0280ad2dff3c6400f978d139274572187",
+   "verdict": "PASS_FOR_ADOPTION",
+   "recordSha256": "b8356184bd7ec0f4f50c9e6463ca6c6403e037d2f8a1eaa0a6bd3dcb552bda4f",
+   "record": "architecture/native-profile-v5/review-round4.json",
+   "candidate": 4,
+   "subjectSha256": {
+    "architecture/native-profile-v5/README.md": "76b584ca769f0afdd5142fcf3f96e3b5b2d053a172d5713f970dc77594e77692",
+    "architecture/native-profile-v5/qualification.schema.json": "70bda12463cee83301bc10fa6285023dc0e07b281a87ca70d44ec746cf262113",
+    "architecture/native-profile-v5/vectors.json": "b630c362b20bfa7b362bb2ee28734a403303a0dc54b2d627c11a332b226333a1",
+    "architecture/native-profile-v5/source-index.json": "68cd8f2777405b9a5c6605c99f96d03de317d0444c562f8b0b019a57a4f9fd08",
+    "scripts/native_qualification_v5.py": "d9926f4d18c82a5da31b903fea47c42319d29268a63a26171a7e71aa4c2480a5",
+    "architecture/artifact-edges/operator-harness-engineering-v7.json": "8e7b001e3b980aa242472a03226d51e6a8410006d6dd6afd99f9d18f28bc2031",
+    "architecture/artifact-edges/README-v7.md": "7131d500eac2085871254a250a4a84c24b17456891dd5f3b2478d85153f1a378",
+    "architecture/native-profile-v5/status.json": "654d117f7cd319a1bc749fa81945c9e075e824902cfb4f42cec6fe444dd7da81"
+   },
+   "severities": [
+    "NOTE"
+   ]
+  }
+ ],
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated",
+  "date": "2026-10-19",
+  "decision": "Monitor: ADOPT candidate 4 for slot 252 (NATIVE-PROFILE-V5), on r4 PASS_FOR_ADOPTION (b8356184). The files: README 76b584ca, schema 70bda124, vectors b630c362, status 654d117f, source-index 68cd8f27, model d9926f4d, edge v7 8e7b001e (62 rows), README-v7 7131d500, builder ba42bea8. Carry E4-1 and E4-2; record the mechanics base 35b733b in status.json at adoption."
+ },
+ "adoptedSubject": {
+  "architecture/native-profile-v5/README.md": "76b584ca769f0afdd5142fcf3f96e3b5b2d053a172d5713f970dc77594e77692",
+  "architecture/native-profile-v5/qualification.schema.json": "70bda12463cee83301bc10fa6285023dc0e07b281a87ca70d44ec746cf262113",
+  "architecture/native-profile-v5/vectors.json": "b630c362b20bfa7b362bb2ee28734a403303a0dc54b2d627c11a332b226333a1",
+  "architecture/native-profile-v5/source-index.json": "68cd8f2777405b9a5c6605c99f96d03de317d0444c562f8b0b019a57a4f9fd08",
+  "scripts/native_qualification_v5.py": "d9926f4d18c82a5da31b903fea47c42319d29268a63a26171a7e71aa4c2480a5",
+  "architecture/artifact-edges/operator-harness-engineering-v7.json": "6af45e361a66331a9ee0216d3eea42f3a17770fd3c7d33e78e2a025d301bfa92",
+  "architecture/artifact-edges/README-v7.md": "7131d500eac2085871254a250a4a84c24b17456891dd5f3b2478d85153f1a378"
+ },
+ "adoptionEdit": {
+  "path": "architecture/artifact-edges/operator-harness-engineering-v7.json",
+  "replaced": "\"providerPacket\": \"TBD\"",
+  "with": "\"providerPacket\": \"MET-ENFORCE-038\"",
+  "count": 3,
+  "rows": [
+   "architecture/native-profile-v5/qualification.schema.json",
+   "architecture/native-profile-v5/vectors.json",
+   "architecture/native-profile-v5/README.md"
+  ],
+  "candidateSha256": "8e7b001e3b980aa242472a03226d51e6a8410006d6dd6afd99f9d18f28bc2031",
+  "adoptedSha256": "6af45e361a66331a9ee0216d3eea42f3a17770fd3c7d33e78e2a025d301bfa92",
+  "lineCount": 697
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "Every adopted file except edge record v7 and this status record is candidate 4's bytes: architecture/native-profile-v5/README.md and architecture/artifact-edges/README-v7.md keep their reviewed text, including the 'CONTRACT_CANDIDATE_ROUND4_AWAITING_INDEPENDENT_REVIEW' status lines and the lines saying that the packet id is assigned with the slot at adoption and that the review records are added with the status record at adoption; no README line moved, as slots 244 and 246 kept theirs. Edge record v7's three providerPacket values and this record's adoption fields are the adoption edits; the assignment to MET-ENFORCE-038 is recorded here only",
+ "recordPaths": "The four review records are published byte-identical to the reviewers' records as architecture/native-profile-v5/review-round1.json to review-round4.json; they hold no local path or personal data, and each recordSha256 is of the published bytes. The contract review brief is kept with the coordinator outside the repository and is not published (round 4's brief, sha256 22664be7c6e2a495f40aadf147672de7ee134ac57346f6642e0916dfd073861f), and no round copies are published: each round's subject is recorded by its candidate number, its contract builder's SHA-256 and the SHA-256 of the candidate's eight files",
+ "closedFindings": {
+  "E1-1": "CLOSED in round 4 (OPEN_BY_DESIGN in rounds 2 and 3, pending Q-NPE-9; candidate 4 applies Q-NPE-9 (a) and round 4 checked Q03: PASS)",
+  "E1-2": "CLOSED in round 2",
+  "E1-3": "CLOSED in round 2",
+  "E1-4": "CLOSED in round 3 (PARTLY in round 2; its remainder, E2-1, RESOLVED in round 3)",
+  "E1-5": "CLOSED in round 2",
+  "E1-6": "CLOSED in round 2",
+  "E1-7": "CLOSED in round 2 (README open items); the freeze it requires is DISCHARGED by this packet's layer (see carried)",
+  "E1-8": "CLOSED in round 2",
+  "E1-9": "CLOSED in round 2",
+  "E1-10": "CLOSED in round 2",
+  "E2-1": "CLOSED in round 3",
+  "E2-2": "CLOSED in round 3",
+  "E2-3": "CLOSED in round 3",
+  "E3-1": "CLOSED in round 4 (applied in candidate 4; round 4 checked E3-1: PASS)",
+  "E4-1": "CARRIED as the monitor's adoption directs (see carried)",
+  "E4-2": "CARRIED as the monitor's adoption directs (see carried)"
+ }
+}
