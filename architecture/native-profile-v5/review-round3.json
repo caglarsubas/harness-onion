@@ -1,0 +1,76 @@
+{
+ "subject": "tools/w03/npv4-errata candidate 3 (build_contract.py sha256 33cf3f06f298f82f5747fcc2c2fd17ac19ca54412a5d8f628ba547133d71eff2, README sha256 01733f4bf1be9bc06e0df737d11a005bc3049562c8e085424acc9a12fa270cb1)",
+ "reviewer": "independent agent",
+ "round": 3,
+ "verdict": "PASS_FOR_ADOPTION",
+ "roundTwoDispositions": [
+  {
+   "id": "E2-1",
+   "status": "RESOLVED",
+   "note": "Every line that 'Text in force' names holds the quoted statement at f560209 and is classed correctly. Replaced: :134-136, :158, :159, :183-184, :471-472, :505 (the K1 row's last sentence, by 'The host facts' and T04-BOOT-ENTRY) and :538 (the observed lockdown value, by T04-HOST-LOCKS). Narrowed: :19-20 (the class stays, its cells read 'absent') and :511-513 (only T04-BOOT-ENTRY tells a maintenance boot apart). The K1 limits at :514-536 stay. Moot: :264 and :581's first sentence. I read all 626 lines of v4's README (sha256 a4205a53...) and found no other statement on the seven fields or on what captures report that is left in force and contradicts v5. Four consistent lines are absent from DRAFT.md's search table (the DRAFT is not a contract file): :161-162 (v4's own evidenceClasses constant), :331 ('the ten proofs above', which v5 extends), :409-411 (the version discriminators no JSON case reaches) and :417-420 ('v4 keeps v3's boot-entry rules'; all 40 R63 cases target the record, so the rules meant are record rules, which v5 keeps)."
+  },
+  {
+   "id": "E2-2",
+   "status": "RESOLVED",
+   "note": "NEW_CASES declares (id, target, role or component, field, same-value) for H01-H18. It equals the tuple I computed independently from the vectors' H rows against the v4 positives. check_vectors requires each added row to match. Refused: H01/H02 operations swapped ('v5 case as declared: H01'); H18's component changed to APISERVER ('... H18'); H09/H11 operations swapped, a field swap across declared cases ('... H09'); H15/H16 operations swapped, a field swap within lifecycle ('... H15'); H12's role changed to SERVER with the same-value kept ('... H12'); and H17's component changed to KUBELET ('... H17'). A lifecycle case given a component is refused by the key-shape rule ('the v5 cases H01-H18 refuse a dropped field'). H01's same-value flag flipped is refused by the closed set first, since every H half is unique. Another different value for H02 is accepted, as declared ('another', not a fixed value). The generator's 11 self-tests pass."
+  },
+  {
+   "id": "E2-3",
+   "status": "RESOLVED",
+   "note": "Prepared and inactive in candidate 3. On WORK copies with stand-in lines (copies, stand-ins and outputs deleted; no decision recorded), both modes give 284 checks and the neutral heading 'The decision on Q03 (2026-10-19, relayed by the lane monitor):'. Under 'a' the replayed-rows sentence reads '... equals v4's row as data, except Q03 (below), ...'. Under 'b' there is no exception, and the model and vectors are byte-identical to candidate 3. One optional wording point is in E3-1."
+  }
+ ],
+ "findings": [
+  {
+   "id": "E3-1",
+   "severity": "NOTE",
+   "location": "build_contract.py, the 'Replayed v4 cases' sentence under Q03_MODE 'a', and the E2-3 row of the round-2 dispositions table",
+   "finding": "Two wording points arise only when Q03_MODE is switched on, and neither affects candidate 3. (a) Under 'a', the sentence reads 'A replayed row equals v4's row as data, except Q03 (below), v4's v3Refusal, reason and rederived annotations included'. The inserted clause can be read as also excepting the annotations. (b) Under 'a' or 'b', the E2-3 disposition still ends 'Candidate 3 leaves the switch off (Q-NPE-9 is pending)'. That is historically true, but it is the only disposition that does not adapt to the mode, while E1-1's does.",
+   "requiredChange": "Optional, at the switch-on regeneration: under 'a', write 'A replayed row other than Q03 (below) equals v4's row as data, ...'. Let the E2-3 disposition add the mode it now carries."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Reproduce: two builder runs with OUT and TMPDIR in WORK (python3 -I -B), clone at f560209",
+   "result": "PASS. run1 == run2 == contract/ == rounds/c3/contract/. The 8 digests equal the brief: README 01733f4b, schema 70bda124, vectors f9f7e870, status 47797b47, source-index eb2944b6, model 7f1c3a58, edge v7 20b07665, README-v7 3c1edbff. build_contract.py 33cf3f06 equals rounds/c3. The schema and vectors are byte-identical to candidate 2. The builder verified both review records (0626a1f6, 695cf190) and the 12 adopted v4 and I06 v3 files at the pin, and wrote new files only. No .pyc was written."
+  },
+  {
+   "check": "Replay over a staged WORK tree (git show f560209 inputs plus the generated files)",
+   "result": "PASS: v5 check_vectors gives 284 checks, every expected result met."
+  },
+  {
+   "check": "E2-1: exhaustive read of v4's README at f560209 (all 626 lines) and the classification of every named line",
+   "result": "PASS. Each named line holds its quoted statement and is classed correctly. No remaining statement on the seven fields or on what captures report contradicts v5. Lines I checked beyond DRAFT.md's table: :161-162, :331, :409-411 and :417-420, all consistent. All 40 R63 cases target the record."
+  },
+  {
+   "check": "E2-2 probes on in-memory copies (10 probes)",
+   "result": "PASS. Every declared-content tamper is refused, naming the case (see the E2-2 disposition). The control gives 284."
+  },
+  {
+   "check": "E2-3 switch tests on WORK copies with stand-in Q-NPE-9 lines, deleted afterwards",
+   "result": "PASS. Modes 'a' and 'b' each give 284 checks with the neutral, dated heading. 'a' adds the exception clause and changes the model and vectors, Q03 only, as tested in round 2. 'b' changes the README, status and derived digests only."
+  },
+  {
+   "check": "Nothing else moved (candidate 2 to 3 output diffs)",
+   "result": "PASS. Schema and vectors are identical. The model changes only NEW_CASES and its check (E2-2). status.json changes candidate 3 and rounds plus round 2. source-index changes round 3, the README, model and README-v7 digests, and earlierRounds plus round 2. Edge v7 changes only the README row's sha256. README-v7 changes the ROUND3 status line and the README digest. The README hunks are the status line, the intro (round 2), 'Text in force' (E2-1), the E1-1 and E1-4 rows, and the round-2 dispositions table."
+  },
+  {
+   "check": "Exact-line decision quotes",
+   "result": "PASS: 13 README lines, 13 status.json ownerDecisions and 3 edge v7 quotes, each equal to its source line. OWNER_DECISIONS.md is unchanged (4de4828a)."
+  },
+  {
+   "check": "No local paths or personal data in the 8 contract files",
+   "result": "PASS. Scans for home-directory, temporary-directory and operator-state path prefixes, user names and e-mail patterns found nothing."
+  },
+  {
+   "check": "E1-1 (Q03)",
+   "result": "Still open by design, waiting for Q-NPE-9. Both prepared paths are correct (round 2), and turning either on is a mechanical regeneration for a short delta round."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}

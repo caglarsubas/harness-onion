@@ -1,6 +1,33 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-LINUX-007 source preparation, October 19, 2026
+## Current checkpoint — MET-ENFORCE-038 source preparation, October 19, 2026
+
+Alpha2 OPEN. MET-LINUX-007 (LAB-RUNPLAN-001) passed required verify in 736 s and merged as main 35b733b. NATIVE-PROFILE-V5
+publishes the capture-only native-profile v5: the P1, P5 and backend captures without the seven host, policy and boot
+fields that HE-004D1 can only fill from the record, which become record-only with four named T04 proofs, while the
+record contract stays native-profile v4's (owner Q-NPE-1 to Q-NPE-8 and Q-HE4D2-3 (a); the monitor's Q-NPE-9 (a) and
+Q-NPE-10); and edge record v7, v6's 56 rows plus 6 for HE-004D2. It discharges W03-PLAN-AMEND-3's residual and dependency
+name. MET-ENFORCE-038 is the sole 252nd specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-038 / NATIVE-PROFILE-V5 | SOURCE_PREPARED | Capture-only native-profile v5 (252nd packet): native-profile v4's P1, P5 and backend captures without the seven host, policy and boot fields, which become record-only with four named T04 proofs (T04-HOST-BOOT, T04-POLICY-STABLE, T04-HOST-LOCKS, T04-BOOT-ENTRY), the record contract staying native-profile v4's, 8 re-derived and 18 new vectors (284 checks), and edge record v7 (v6's 56 rows plus 6 for HE-004D2); candidate 4 adopted by the monitor (owner-delegated) after contract review round 4, PASS; packet review; verify |
+| Alpha2 | MET-LINUX-007 / LAB-RUNPLAN-001 | VERIFY_PASSED_MERGED | Merged as main 35b733b (verify 736 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: native-profile v1 to v4, I06 v1 to v3 (their models included), the W02 notes errata and edge records v1
+to v6 stay byte-identical; no R10 file changes, and no role code, cloud, runner, live/native/tenant or model-effort
+change. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical lab run-plan contract v1 source checkpoint — MET-LINUX-007 source preparation, October 19, 2026
 
 Alpha2 OPEN. MET-ENFORCE-037 (W03-PLAN-AMEND-3) passed required verify in 916 s and merged as main f560209. LAB-RUNPLAN-001
 publishes the lab run-plan contract v1: closed schemas for a qualification run plan on the owner's GCP compute, its lease
@@ -2120,7 +2147,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · SECCOMP-OBSERVER-LISTENER / MET-ENFORCE-035 · Publish W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · SECCOMP-OBSERVER-LISTENER / MET-ENFORCE-036 · Publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (the two programs for R10's HE-004-I01) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · W03-PLAN-AMEND-3 / MET-ENFORCE-037 · Publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope) after independent review; plan v2, amendments 1 and 2 and edge record v5 byte-identical; pass required verify through the owner's App.
-- [ ] Alpha 2 · LAB-RUNPLAN-001 / MET-LINUX-007 · Publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) after independent review; pass required verify through the owner's App.
+- [x] Alpha 2 · LAB-RUNPLAN-001 / MET-LINUX-007 · Publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) after independent review; pass required verify through the owner's App.
+- [ ] Alpha 2A · NATIVE-PROFILE-V5 / MET-ENFORCE-038 · Publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2) after independent review; native-profile v1 to v4, I06 v1 to v3 and edge records v1 to v6 byte-identical; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
