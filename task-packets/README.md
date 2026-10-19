@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-LINUX-007
+## Current source preparation — MET-ENFORCE-038
+
+MET-ENFORCE-038 (NATIVE-PROFILE-V5): the capture-only native-profile v5 (native-profile v4's captures without the seven
+host, policy and boot fields, which become record-only with four T04 proofs; the record stays native-profile v4's) and
+edge record v7 (HE-004D2), adopted after four independent review rounds. DATA_CHECK_ONLY. Alpha2 OPEN; 251 accepted plus
+MET-ENFORCE-038 only.
+
+## Historical lab run-plan contract v1 source preparation — MET-LINUX-007
 
 MET-LINUX-007 (LAB-RUNPLAN-001): the lab run-plan contract v1, closed schemas for a qualification run plan on the owner's
 GCP compute, its lease and its teardown-residual report, with vectors and an offline checker (owner VR-D1, Q-RP-0..9
@@ -1492,3 +1499,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 249 | `MET-ENFORCE-036` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 2: compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); DATA_CHECK_ONLY |
 | 250 | `MET-ENFORCE-037` | `Harness-Engineering` | W03-PLAN-AMEND-3: W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); DATA_CHECK_ONLY |
 | 251 | `MET-LINUX-007` | `Harness-Engineering` | LAB-RUNPLAN-001: lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; DATA_CHECK_ONLY |
+| 252 | `MET-ENFORCE-038` | `Harness-Engineering` | NATIVE-PROFILE-V5: capture-only native-profile v5 (the seven host fields record-only with four T04 proofs) and edge record v7 (HE-004D2); DATA_CHECK_ONLY |

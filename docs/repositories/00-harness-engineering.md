@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-LINUX-007
+## Current source preparation — MET-ENFORCE-038
+
+MET-ENFORCE-038 (NATIVE-PROFILE-V5): the capture-only native-profile v5 under architecture/native-profile-v5/ and its
+reference model scripts/native_qualification_v5.py, which imports native-profile v4's model unchanged. The three capture
+variants drop the seven host, policy and boot fields, which become record-only with four named T04 proofs; the record,
+its checks and its migration stay native-profile v4's. Edge record v7 registers the v5 schema, vectors and README and the
+native-profile v1 to v3 vectors for HE-004D2. Candidate 4 was adopted by the lane monitor (owner-delegated) after four
+independent review rounds. DATA_CHECK_ONLY. Alpha2 OPEN; 251 accepted plus MET-ENFORCE-038 only.
+
+## Historical lab run-plan contract v1 source preparation — MET-LINUX-007
 
 MET-LINUX-007 (LAB-RUNPLAN-001): the lab run-plan contract v1 under architecture/lab-run-plan/ and its offline checker
 scripts/lab_run_plan.py. A run plan states what runs where, a dated cost estimate under the owner's ceiling, alert-only
@@ -1291,6 +1300,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 123. `MET-ENFORCE-036`: publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); HS53, seccomp v5 and the earlier programs and edge records unchanged; DATA_CHECK_ONLY.
 124. `MET-ENFORCE-037`: publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); plan v2, amendments 1 and 2 and edge record v5 unchanged; DATA_CHECK_ONLY.
 125. `MET-LINUX-007`: publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; the edge records and the registry unchanged; DATA_CHECK_ONLY.
+126. `MET-ENFORCE-038`: publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2); native-profile v4, I06 v3 and edge records v1 to v6 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 
