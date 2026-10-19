@@ -99,8 +99,8 @@ def validate_live_backend_readiness(
             from scripts.validate_successor_inventory import ADDITIONS as SUCCESSORS, validate_additions as validate_successors
             from scripts.validate_proxy_contract import ADDITIONS as PROXY_ADDITIONS, validate_additions as validate_proxy_additions
         if (set(packets) != old_ids | set(NEW_IDS) | set(ADDITIONS) | set(SUCCESSORS)
-                | set(PROXY_ADDITIONS) | {"MET-UNIFY-005", "MET-RUNNER-001", "MET-PERF-028", "MET-LINUX-005", "MET-VERIFY-001", "MET-PERF-029", "MET-PERF-030", "MET-LINUX-006", "MET-VERIFY-002", "MET-VERIFY-003", "MET-VERIFY-004", "MET-ENFORCE-004", "MET-ENFORCE-005", "MET-ENFORCE-006", "MET-ENFORCE-007", "MET-PERF-031", "MET-ENFORCE-008", "MET-ENFORCE-009", "MET-SECTOR-001", "MET-PERF-032", "MET-ENFORCE-010", "MET-ENFORCE-011", "MET-ENFORCE-012", "MET-ENFORCE-013", "MET-ENFORCE-014", "MET-ENFORCE-015", "MET-ENFORCE-016", "MET-PERF-035", "MET-PERF-036", "MET-SECTOR-002", "MET-ENFORCE-017", "MET-ENFORCE-018", "MET-ENFORCE-019", "MET-ENFORCE-020", "MET-ENFORCE-021", "MET-ENFORCE-022", "MET-ENFORCE-023", "MET-PERF-037", "MET-ENFORCE-024", "MET-ADOPT-003", "MET-MAS-001", "MET-MAS-002", "MET-MAS-006", "MET-ENFORCE-025", "MET-MAS-003", "MET-PERF-038", "MET-ADOPT-004", "MET-ENFORCE-026", "MET-ENFORCE-027", "MET-PERF-039", "MET-ENFORCE-028", "MET-ENFORCE-029", "MET-PERF-040", "MET-ENFORCE-030", "MET-ENFORCE-031", "MET-ENFORCE-032", "MET-MAS-004", "MET-ENFORCE-033", "MET-ENFORCE-034", "MET-ENFORCE-035", "MET-ENFORCE-036", "MET-ENFORCE-037"} or len(packets) != 250):
-            errors.append("current roadmap requires exactly 250 named packets; historical authority remains 130")
+                | set(PROXY_ADDITIONS) | {"MET-UNIFY-005", "MET-RUNNER-001", "MET-PERF-028", "MET-LINUX-005", "MET-VERIFY-001", "MET-PERF-029", "MET-PERF-030", "MET-LINUX-006", "MET-VERIFY-002", "MET-VERIFY-003", "MET-VERIFY-004", "MET-ENFORCE-004", "MET-ENFORCE-005", "MET-ENFORCE-006", "MET-ENFORCE-007", "MET-PERF-031", "MET-ENFORCE-008", "MET-ENFORCE-009", "MET-SECTOR-001", "MET-PERF-032", "MET-ENFORCE-010", "MET-ENFORCE-011", "MET-ENFORCE-012", "MET-ENFORCE-013", "MET-ENFORCE-014", "MET-ENFORCE-015", "MET-ENFORCE-016", "MET-PERF-035", "MET-PERF-036", "MET-SECTOR-002", "MET-ENFORCE-017", "MET-ENFORCE-018", "MET-ENFORCE-019", "MET-ENFORCE-020", "MET-ENFORCE-021", "MET-ENFORCE-022", "MET-ENFORCE-023", "MET-PERF-037", "MET-ENFORCE-024", "MET-ADOPT-003", "MET-MAS-001", "MET-MAS-002", "MET-MAS-006", "MET-ENFORCE-025", "MET-MAS-003", "MET-PERF-038", "MET-ADOPT-004", "MET-ENFORCE-026", "MET-ENFORCE-027", "MET-PERF-039", "MET-ENFORCE-028", "MET-ENFORCE-029", "MET-PERF-040", "MET-ENFORCE-030", "MET-ENFORCE-031", "MET-ENFORCE-032", "MET-MAS-004", "MET-ENFORCE-033", "MET-ENFORCE-034", "MET-ENFORCE-035", "MET-ENFORCE-036", "MET-ENFORCE-037", "MET-LINUX-007"} or len(packets) != 251):
+            errors.append("current roadmap requires exactly 251 named packets; historical authority remains 130")
         errors.extend(validate_additions(packets))
         errors.extend(validate_successors(packets))
         errors.extend(validate_proxy_additions(packets))
@@ -152,7 +152,7 @@ def main() -> int:
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Live backend roadmap valid: 250 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
+        print("Live backend roadmap valid: 251 packets; historical 130-packet authority and 156 predecessor files unchanged; source-only, native gate closed.")
     return bool(errors)
 
 

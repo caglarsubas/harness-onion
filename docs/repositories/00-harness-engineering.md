@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-037
+## Current source preparation — MET-LINUX-007
+
+MET-LINUX-007 (LAB-RUNPLAN-001): the lab run-plan contract v1 under architecture/lab-run-plan/ and its offline checker
+scripts/lab_run_plan.py. A run plan states what runs where, a dated cost estimate under the owner's ceiling, alert-only
+budgets, no exposure unless listed, a dedicated read-only observer and owner-held credentials; its lease binds the plan's
+sha256; its teardown-residual report shows nothing beyond the plan's residual. Owner VR-D1 and Q-RP-0..9 (a).
+DATA_CHECK_ONLY. Alpha2 OPEN; 250 accepted plus MET-LINUX-007 only.
+
+## Historical W03 plan amendment 3 source preparation — MET-ENFORCE-037
 
 MET-ENFORCE-037 (W03-PLAN-AMEND-3): W03 obligation-register amendment 3, applied after amendments 1 and 2. OBS-HOSTPOL-1
 adds the policy observer's host-policy share (HE-008) with a T04 check, NP-9 the broker's quiescent freeze of the
@@ -1282,6 +1290,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 122. `MET-ENFORCE-035`: publish W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); HS43, seccomp v4 and matrices v5 and v6 unchanged; DATA_CHECK_ONLY.
 123. `MET-ENFORCE-036`: publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); HS53, seccomp v5 and the earlier programs and edge records unchanged; DATA_CHECK_ONLY.
 124. `MET-ENFORCE-037`: publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); plan v2, amendments 1 and 2 and edge record v5 unchanged; DATA_CHECK_ONLY.
+125. `MET-LINUX-007`: publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; the edge records and the registry unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 

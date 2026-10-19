@@ -1,0 +1,162 @@
+{
+ "$id": "planeon.internal.lab-run-teardown/v1",
+ "title": "Teardown-residual report of one leased run",
+ "type": "object",
+ "description": "What the run's observer saw after teardown. Closed: every resource class is listed.",
+ "additionalProperties": false,
+ "required": [
+  "schemaVersion",
+  "leaseId",
+  "planSha256",
+  "observer",
+  "namePrefix",
+  "teardownCompletedAt",
+  "observedAt",
+  "resources",
+  "kept",
+  "payloadFree"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.lab-run-teardown/v1"
+  },
+  "leaseId": {
+   "type": "string",
+   "pattern": "^LE-[0-9]{8}-[a-z0-9][a-z0-9-]{0,30}[a-z0-9]$"
+  },
+  "planSha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "observer": {
+   "type": "string",
+   "pattern": "^obs-[a-z0-9][a-z0-9-]{0,22}[a-z0-9]$"
+  },
+  "namePrefix": {
+   "type": "string",
+   "pattern": "^run-[a-z0-9][a-z0-9-]{0,20}[a-z0-9]-$"
+  },
+  "teardownCompletedAt": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+  },
+  "observedAt": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+  },
+  "resources": {
+   "type": "object",
+   "description": "For each class, what remains after teardown: every resource of the fourteen compute and network classes in the run project, named with the prefix or not; buckets and service accounts named with the plan's prefix; every user-managed service-account key in the run project, the observer's own included; and the IAM bindings granted on the run project since the lease started, other than the observer's own viewer bindings.",
+   "additionalProperties": false,
+   "required": [
+    "INSTANCES",
+    "INSTANCE_GROUPS",
+    "INSTANCE_TEMPLATES",
+    "DISKS",
+    "SNAPSHOTS",
+    "IMAGES",
+    "ADDRESSES",
+    "NETWORKS",
+    "SUBNETWORKS",
+    "FIREWALL_RULES",
+    "ROUTES",
+    "ROUTERS",
+    "NAT_GATEWAYS",
+    "FORWARDING_RULES",
+    "BUCKETS",
+    "SERVICE_ACCOUNTS",
+    "SERVICE_ACCOUNT_KEYS",
+    "IAM_BINDINGS_ADDED"
+   ],
+   "properties": {
+    "INSTANCES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "INSTANCE_GROUPS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "INSTANCE_TEMPLATES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "DISKS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "SNAPSHOTS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "IMAGES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "ADDRESSES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "NETWORKS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "SUBNETWORKS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "FIREWALL_RULES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "ROUTES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "ROUTERS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "NAT_GATEWAYS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "FORWARDING_RULES": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "BUCKETS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "SERVICE_ACCOUNTS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "SERVICE_ACCOUNT_KEYS": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "IAM_BINDINGS_ADDED": {
+     "type": "integer",
+     "minimum": 0
+    }
+   }
+  },
+  "kept": {
+   "type": "array",
+   "uniqueItems": true,
+   "items": {
+    "enum": [
+     "PROJECT",
+     "BILLING_LINK",
+     "AUDIT_LOGS",
+     "OBSERVER_IDENTITY"
+    ]
+   }
+  },
+  "payloadFree": {
+   "const": true
+  }
+ }
+}

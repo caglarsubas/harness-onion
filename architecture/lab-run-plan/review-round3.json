@@ -1,0 +1,75 @@
+{
+ "round": 3,
+ "subjectCommit": "88291da1a91e294a29052379c6b69a0cd5f1f2f4",
+ "subjectTree": "20bbd829515daeefadaf4bd69ff8321c6d2f980f",
+ "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "RP3-1",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 131,
+   "summary": "The free-text rule is narrower than the README states. README lines 131-134 refuse 'an access-key, token or client-secret prefix anywhere in a string' and 'a billing-account-shaped id, in either case'. In the checker, six of the prefixes (AKIA, ASIA, AIza, gh*_, ya29., 1//) match only with a four-character tail from a fixed alphabet, and the billing shape keeps \\b anchors, so a billing id joined to a letter, digit or underscore passes.",
+   "evidence": "scripts/lab_run_plan.py lines 87-91 (FORBIDDEN_TEXT); the comment at lines 85-86 states the tails and the anchors, the README does not. Probe (<scratch>/probe2.py, check_plan on P0 with purpose.summary changed): 'key AKIA', 'key AKIAexample', 'tok ya29.ab', 'tok 1//ab', 'tok ghp_abc', 'tok AIzaab', 'acct_01ABCD-23EF45-6789AB' and 'billing x01ABCD-23EF45-6789AB' are all accepted; 'billingAccounts/01ABCD-23EF45-6789AB' is refused. Real keys and tokens carry long tails, so the practical gap is the underscore- or letter-joined billing id. Fix: say in the README that those prefixes need four token characters after them (or drop the tails), and bound the billing shape with (?<![0-9A-Za-z]) and (?![0-9A-Za-z]) instead of \\b (or say that it must stand alone), with a vector for the underscore-joined form."
+  },
+  {
+   "id": "RP3-2",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 221,
+   "summary": "'Not claimed' does not say that resource kinds outside the eighteen classes are not counted. The report counts eighteen classes only, yet the module docstring says the report 'must be nothing the run created beyond the plan's residual', and runbook step 5 has the run delete 'every compute and network resource in the run project'. A resource of another kind that the run leaves behind passes with every count at 0.",
+   "evidence": "scripts/lab_run_plan.py lines 13-14 (docstring) and 71-73 (RESOURCE_CLASSES); README lines 155-164, 174 and 196-198. 'Not claimed' (lines 207-228) names only unprefixed buckets and service accounts and IAM bindings granted before the lease or on kept resources. Examples, from the reviewer's knowledge and not verified offline: a Compute Engine reservation (billed like running machines) or a machine image (stored and billed) left in the run project; and a resource of another service that needs no VPC network, such as a publicly invokable Cloud Run service, which is the kind of exposure Q-RP-5 (a) asks the residual check to confirm is gone (its invoker binding sits on the service, not the project, so IAM_BINDINGS_ADDED does not see it either). NETWORKS at 0 does rule out most network-attached kinds, since a network cannot be deleted while they use it (also reviewer's knowledge). The class list itself is the monitor's word (MON-18-CLASSES-KEEP-R1) and need not change. Fix: one 'Not claimed' line (only the eighteen classes are counted; other kinds rest on the teardown steps and the owner's review), and narrow the docstring sentence to the listed classes."
+  },
+  {
+   "id": "RP3-3",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/vectors.json",
+   "line": 547,
+   "summary": "Six keywords of the schema subset have no negative vector: type, minLength, maxLength, minItems, maxItems and uniqueItems. The checker refuses each correctly, but a broken implementation of any of them would still replay.",
+   "evidence": "Recorded schema refusals cover only const, enum, exclusiveMinimum, maximum, minimum, closed object and pattern. Probe (<scratch>/probe3.py): a duplicate observer role ('schema $.observer.roles uniqueItems'), five ingress rules on P1 ('schema $.exposure.ingress maxItems'), an empty summary ('... minLength'), a 301-character summary ('... maxLength'), no machines ('schema $.machines minItems') and a string or boolean count ('schema $.machines[0].count type') are each refused as expected. One plan negative each would pin them."
+  },
+  {
+   "id": "RP3-4",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 55,
+   "summary": "A document that is not valid JSON or not valid UTF-8, or one nested too deep, is refused with the exception's class name, not with a rule. 'A refused document prints refused: <rule>' could say 'a rule, or the error's name'.",
+   "evidence": "scripts/lab_run_plan.py lines 470-472. CLI probes from the repository root (files under <scratch>/files/): a truncated document prints 'refused: JSONDecodeError', a 0xFF byte 'refused: UnicodeDecodeError', 100000 nested arrays 'refused: RecursionError', a missing file 'refused: FileNotFoundError' and a directory 'refused: IsADirectoryError', each with exit 1 and no traceback. The behaviour is fail-closed and correct; only the wording is loose."
+  },
+  {
+   "id": "RP3-5",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/status.json",
+   "line": 18,
+   "summary": "reviewRounds is still empty; the RP2-13 disposition defers the record to adoption, which is acceptable for a candidate. At adoption, record rounds 1 to 3, MON-18-CLASSES-KEEP-R1, the always-kept OBSERVER_IDENTITY beyond PLAN.md's residual, and that an earlier round-3 attempt on candidate 4 was voided by the monitor (MON-R3-KEEP-IF-OWN-NOTES), so the round numbering is explained.",
+   "evidence": "status.json line 18 ('reviewRounds': []); README line 4 says review rounds and adoption are recorded in status.json; the owner decisions file holds MON-18-CLASSES-KEEP-R1 and MON-R3-KEEP-IF-OWN-NOTES; PLAN.md lines 36-37 list the residual as the project, the billing link and the audit logs."
+  }
+ ],
+ "checked": [
+  "git rev-parse: HEAD and 88291da1 = 88291da1a91e294a29052379c6b69a0cd5f1f2f4, tree 20bbd829515daeefadaf4bd69ff8321c6d2f980f, parent f560209d04b7e0f07b2480219718a8a6dbdb21ef: PASS",
+  "scope: git diff --stat f560209d 88291da1 lists exactly the 8 brief files, all new (3885 insertions, 0 deletions); no existing file changes: PASS",
+  "self-test: python3 -I -B scripts/lab_run_plan.py exits 0: 3 positives; negatives 61 plan, 11 lease, 20 teardown (T19 lease-at-teardown counted as teardown), 8 parse; the README's counts (line 41) match: PASS",
+  "positives: each plan, lease and teardown accepted in replay and through the CLI (P0 plan, lease and teardown modes print sha256 24a93e8d...); each lease's planSha256 equals the recomputed plan sha256 for P0-P2: PASS",
+  "negatives: all 92 read one by one; each refusal matches its intent and fires at the intended rule (cost negatives keep amount and total consistent so only coverage, amount, total or ceiling fails; N36 trips the rate-card rule before the line-item rule; T11 passes ordering and fails only the overrun; T20 passes ordering and overrun and fails only the window); T19 changes the lease and is refused by the teardown's lease re-check; S01-S08 are refused by strict(): PASS",
+  "forbidden shapes: each of the 15 FORBIDDEN_TEXT patterns is tripped by exactly one changed string, and every pattern has a vector (N46-N58, N61, L10 AKIA, T18 service-account domain): PASS",
+  "rule coverage: every refusal in check_plan, _check_cost, _check_exposure, check_lease and check_teardown has at least one negative; schema keywords type, minLength, maxLength, minItems, maxItems and uniqueItems have none (RP3-3)",
+  "check_schema: 35 malformed schemas probed (misplaced or mistyped bounds, lengths, pattern, item counts, uniqueItems; type lists with object; empty or string enum; unknown or duplicate type names; non-string annotations; missing type/const/enum; unclosed objects; required mismatch or duplicates; arrays without items; items on strings; format, $ref, anyOf, exclusiveMaximum) all refused; 4 valid forms accepted. An unhashable entry in required raises TypeError rather than ValueError (fails closed; only a future schema edit could reach it): PASS",
+  "subset semantics: const and enum compare with type equality (true vs 1 refused), pattern uses re.fullmatch (a trailing newline cannot slip past $), integer refuses bool and float, uniqueItems compares canonical bytes, closed objects require exactly the declared keys: PASS",
+  "strict parsing: duplicate keys, NaN, -Infinity, 6.0, 1e3, 1e400, 10^12+1 and a lone surrogate refused with the README's reasons; the integer length check short-circuits before int(); invalid calendar dates and times (2026-02-30, 24:00:00, 23:59:60) are refused as ValueError, not traced back: PASS",
+  "CLI: usage errors exit 2 before any file is read; missing file, directory, bad JSON, bad UTF-8, deep nesting and a lone surrogate each print 'refused: ...' and exit 1 with no traceback; the sha256 is computed inside the try; only acceptance prints a sha256 (RP3-4 wording only)",
+  "cost rules: rate card age at preparation (N21, N22, P2 at exactly 31 days) and at the lease start (L06); SKU once on the card (N36) and among items (N28); SKU and unit match (N25, N26); amount within half a cent (N27); coverage per machine type summed over groups (N30) and per disk SKU, with the 0.005 shortfall (5.996 h of 6 accepted, 5.994 h refused; P0's disk 0.82 of 0.8219 accepted); total (N34); total at most the ceiling (equal accepted, N35); zero price refused by the schema (N59): PASS",
+  "exposure rules: reason iff external address (N37, N38); strict network form, leading zeros refused (N43); /16 cap on the collapsed union in every plan (N18 private /8, N39, N40 halves, N41 two adjacent /16s collapse to a /15); private-only sources without an external address (N42): PASS",
+  "observer: CLASS_ROLES requires compute.viewer, logging.viewer and iam.securityReviewer; removing any one of them is refused (N19 and two probes); every positive holds all three; that the roles in fact list each class rests on the provider's role definitions and is under 'Not claimed': PASS",
+  "project id: counted across every string value of the plan (N60; image.project equal to project.id is refused too) and absent from the lease (L11); the plan id and lease id patterns are lower case, so the published ids cannot carry it. Matching is a case-sensitive substring count, so an upper-case rendering in free text passes and an unlucky project id that is a substring of another field (for example equal to a machine role) is refused; both are harmless",
+  "lease: binds planId and the recomputed sha256 (L01, L02); start before expiry (L03); duration at most maxDurationHours (L04); starts on or after preparedAt (L05); UTC Z times only (L09); approval reference upper-case OA- label (L08); free text (L10): PASS",
+  "teardown: re-checks the lease first (T19); binds leaseId and planSha256 (T15, T16); the plan's observer (T09) and prefix (T10); all 18 classes in order (T05, T06) and zero (T01-T04); kept within the plan's residual and always with PROJECT and OBSERVER_IDENTITY (T07, T08, empty kept refused); start <= completed <= observed (T12, T13); overrun (T11); expiry <= observed <= expiry + 1 day (T14, T20; P2 at exactly one day, completed = observed = expiry accepted): PASS",
+  "dispositions RP2-1..RP2-13: each verified in the diff c6269848..88291da1 and in the files (cap scope text; CLASS_ROLES and N19; class scopes in README, constant comment and teardown schema; runbook step 1 and 'Not claimed'; new shapes and vectors; strict surrogate refusal and CLI order; L10, T18, T19, S01-S08, N18, N19; check_schema applicability; README number form; runbook step 5 and cost wording; 'Not claimed' additions and N59; N60 and L11). RP2-13 is deferred to adoption (RP3-5): PASS",
+  "candidate-4 changes: observation window (T20; P0 and P1 observe 15 and 10 minutes after expiry); IAM baseline in runbook step 1 and 'Not claimed'; name-shaped labels in 'Not claimed'; N41 on 198.18.0.0/16 and 198.19.0.0/16; unanchored token prefixes, four-character tails, case-insensitive service-account domain, GOCSPX- (N61); type/const/enum required in every schema; machine-type SKU and threshold wording: PASS, except that the README does not state the tails (RP3-1)",
+  "README accuracy: sections, cost, exposure, canonical form, lease and teardown text match the checker and schemas, except RP3-1 and RP3-2; runbook matches Q-RP-0..9 (a), VR-D1 and the 2026-10-15 decision; status.json quotes the owner relay verbatim as in the owner decisions file",
+  "invented data: project example-qual-run-0001, image project example-images, repository example-workload-repo, OA-EXAMPLE-0001, obs-* observers, ranges 10.8.0.0/24, 198.51.100.0/24 (documentation), 198.18.0.0/15 (benchmarking), rate card labelled 'EXAMPLE ... not a price quote', token samples marked EXAMPLE, e-mail sample at example.com: PASS",
+  "privacy: no absolute local path, home path, real e-mail address, account id or credential in the 8 new files (grep for path prefixes, the at-sign outside the rule text, token shapes outside FORBIDDEN_TEXT and the README rule list): PASS",
+  "sector-catalog scans (read from tests/test_sector_catalog.py, not run): no new file names architecture/providers.yaml, architecture/services.yaml or docs/PROVIDER_MODULE_CATALOG.md or holds one of the three BASE_DIGESTS; the checker uses no os/glob listing call and does not import sector_catalog: PASS",
+  "read-only: the worktree status is clean (including ignored files) after all runs; no __pycache__ under scripts/ or the contract directory; probes and probe documents only under <scratch>/: PASS"
+ ]
+}

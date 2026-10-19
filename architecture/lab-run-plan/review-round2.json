@@ -1,0 +1,147 @@
+{
+ "round": 2,
+ "subjectCommit": "c62698480d4cb51e90a1c45d1bc1cfa0518dfeeb",
+ "subjectTree": "767d5fd7df8e67344f48289237d0cdc8dfaba4e5",
+ "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "RP2-1",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 109,
+   "summary": "The README, the constant comment and _check_exposure's docstring scope the 65,536-address cap to plans with an external address ('With one, ...'; 'without one, every source is an RFC 1918 private network'), but the code applies the cap to every plan. A plan without an external address whose private VPN source is a /8 or /12 follows the README and is refused.",
+   "evidence": "scripts/lab_run_plan.py lines 56-57 and 256-257 state the split; lines 268-270 compute the collapsed union unconditionally. Probe (<scratch>/probe.py): P1 (externalIp false) with sourceRange 10.0.0.0/8 refused with 'the ingress sources together cover at most 65536 addresses'; 10.8.0.0/16 accepted. No vector pins either behaviour. Fix: say the cap always applies, or apply it only with an external address."
+  },
+  {
+   "id": "RP2-2",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 213,
+   "summary": "Nothing relates the observer's roles to the classes its report must count. No positive's observer holds roles/iam.securityReviewer (P0 and P2 hold only the compute and logging viewer roles, P1 adds monitoring viewer), yet every report states 0 BUCKETS, SERVICE_ACCOUNTS, SERVICE_ACCOUNT_KEYS and IAM_BINDINGS_ADDED. Cloud Storage and IAM lie outside Compute Engine, and to this reviewer's knowledge (not verified offline) the compute, logging and monitoring viewer roles do not grant listing buckets, service accounts, their keys or the project IAM policy. A 0 from an observer that cannot list a class passes exactly like a true 0.",
+   "evidence": "vectors.json lines 96-99 (P0 roles), 284-288 (P1) and the P2 observer; teardown-report.schema.json lines 128-143; check_plan and check_teardown read observer.roles only through the schema enum. Fix: require a role set that can list all 18 classes (for example roles/compute.viewer with roles/iam.securityReviewer), or a closed class-to-role map checked in check_plan."
+  },
+  {
+   "id": "RP2-3",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/teardown-report.schema.json",
+   "line": 49,
+   "summary": "RP1-3 is only partly closed. 'Created for the run means named with the prefix' gives 17 classes a scope, but IAM bindings carry no names, so IAM_BINDINGS_ADDED ('bindings added for the run other than the observer's own viewer bindings') still has no rule an observer can apply: no baseline or member rule says which bindings the run added (for example a role granted to a principal outside the prefix). And the observer's own service account (obs-...) is outside the run-name prefix, so a key exported for it, which exportedKeys false forbids, is never counted by SERVICE_ACCOUNT_KEYS and appears nowhere in the report.",
+   "evidence": "README lines 140-141; teardown-report.schema.json line 49; run-plan.schema.json line 422 (observer pattern ^obs-) and line 478 (prefix ^run-), so the two never overlap; lines 440-442 (exportedKeys const false). Fix: define IAM_BINDINGS_ADDED operationally (for example every binding on the run project not in a pre-run baseline the plan records, less the observer's viewer bindings), and count the observer's user-managed keys (or add a class for them that must be 0)."
+  },
+  {
+   "id": "RP2-4",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 140,
+   "summary": "The residual sees only prefixed resources, and the exposure rules check only the declared ingress, so nothing covers unprefixed resources in the run project, which is always kept and may serve several runs (all three positives use one run project id). A default network with its allow rules (GCP creates one in a new project unless an organisation policy skips it; reviewer's knowledge, not verified offline), or any resource a run creates without the prefix, can carry ingress and cost while every count is 0. The plan has no field for the run's network, and 'Not claimed' does not mention unprefixed resources, although Q-RP-5 (a) says the residual check confirms the exposure is gone.",
+   "evidence": "README lines 132-141 and 163-164 (runbook step 4: 'with the plan's exposure'); run-plan.schema.json lines 348-407 (exposure names no network); vectors.json lines 24, 193 and 384 (one run project id for P0-P2). Fix: a plan field naming the run's own prefixed network, plus a runbook step or observer count showing the run project holds no other network or firewall rule; or a 'Not claimed' line."
+  },
+  {
+   "id": "RP2-5",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 69,
+   "summary": "The free-text rule misses the credential shapes most likely in a GCP run plan: Google OAuth access tokens (prefix ya29.) and refresh tokens (prefix 1//) pass, as do GitHub fine-grained tokens (github_pat_), AWS temporary keys (ASIA), a service-account key file's private_key_id field and a lower-case billing-account shape. The README (line 114) and the RP1-12 disposition say an access-key or token prefix is refused.",
+   "evidence": "Probe: purpose.summary set to each of these shapes (invented values) is accepted by check_plan; the AKIA, AIza, gh*_, xox*- shapes, the service-account domain and the PEM BEGIN marker are refused. FORBIDDEN_TEXT (lines 69-71) is case-sensitive and has no Google token prefix. 'Not claimed' (line 183) keeps the limit honest. Fix: add ya29. and 1// followed by token characters, github_pat_, ASIA, private_key_id and a case-insensitive billing-account shape, each with a vector."
+  },
+  {
+   "id": "RP2-6",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 89,
+   "summary": "strict() accepts lone UTF-16 surrogate escapes. A plan whose free text holds one passes check_plan but has no UTF-8 canonical form: 'plan PLAN' then ends in a UnicodeEncodeError traceback from plan_sha256, which line 398 calls outside the try, and 'lease' prints 'refused: UnicodeEncodeError'. This contradicts the RP1-11 disposition ('the CLI prints a refusal instead of a traceback') and the README's 'exactly one canonical form'. A usage error (line 384, outside the try) and a missing file (FileNotFoundError is not caught) also end in tracebacks.",
+   "evidence": "Probe: <scratch>/p0-plan-surrogate.json (P0 with one surrogate escape in purpose.summary): check_plan accepts; CLI plan exits 1 with a traceback ending 'UnicodeEncodeError ... surrogates not allowed'; CLI lease prints 'refused: UnicodeEncodeError'. CLI 'lease' with one path: traceback 'ValueError: usage ...'; a missing file: traceback 'FileNotFoundError'. All fail closed (exit 1). Fix: refuse strings that do not encode to UTF-8 in strict(), or compute canonical() inside check_plan, and move the usage check inside the try and catch OSError."
+  },
+  {
+   "id": "RP2-7",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/vectors.json",
+   "line": 541,
+   "summary": "Reachable rules without a negative: (1) the free-text rule in check_lease (line 279) and check_teardown (line 296), reachable through the lease's approval.reference and the report's ids, while N46-N48 target plans only; (2) five of the nine FORBIDDEN_TEXT shapes (AKIA, AIza, gh*_, xox*-, the service-account domain) have no vector, so a broken pattern would still replay; (3) check_teardown's lease re-check (RP1-9, line 294) has no vector, and the vector format cannot express one because ops change only the target document; (4) the strict-parse refusals (duplicate key, non-finite number, integral float, integer limit) have no replayable test. Ids N18 and N19 are skipped (cosmetic).",
+   "evidence": "Probes: a lease approval.reference of 'OA-' plus an access-key shape, and of 'OA-' plus a billing-account shape, are refused with 'no credential, account identity or billing account in $.approval.reference'; a report observer 'obs-gserviceaccount' is refused at $.observer; a teardown checked against a 7 h lease on the 6 h P0 plan is refused with 'the lease lasts at most the plan's maximum duration'. Each refuses correctly, but no vector records it. Fix: lease and teardown free-text negatives, one negative per FORBIDDEN_TEXT shape, a teardown vector that can override the lease, and a small raw-JSON negative table for strict()."
+  },
+  {
+   "id": "RP2-8",
+   "severity": "NOTE",
+   "file": "scripts/lab_run_plan.py",
+   "line": 116,
+   "summary": "check_schema now enforces the keyword set and object and array closure (RP1-1 closed), but not where a keyword applies or its value type. A misplaced keyword is silently ineffective, and an enum written as a string matches its characters, so 'cannot drift apart silently' still has gaps for a future edit. The published schemas are unaffected.",
+   "evidence": "Probe: check_schema accepts {minItems: 2} with no type, and shape then accepts [1]; it accepts {enum: 'abc'}, and shape accepts 'a'; it accepts {type: 'strnig'} and {type: 'string', pattern: 5}. Fix: per-keyword applicability (item counts only with type array, pattern and lengths only with string, bounds only with number or integer) and value types (enum a non-empty list, pattern a string, type names from the known set)."
+  },
+  {
+   "id": "RP2-9",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 112,
+   "summary": "Integral numbers now have one form (RP1-13), but non-integral numbers are serialized as Python's json module does (1e-05 rather than 0.00001), and the canonical-form sentence does not say so. An independent tool, for example one following RFC 8785, would hash a plan with a small price differently. Say that scripts/lab_run_plan.py is the reference for the sha256, or specify the number form.",
+   "evidence": "Probe: canonical(0.00001) is b'1e-05' and canonical(0.0001) is b'0.0001'. canonical() (line 82) uses json.dumps with sort_keys and ensure_ascii False."
+  },
+  {
+   "id": "RP2-10",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 165,
+   "summary": "Two wording gaps. (a) Runbook step 5 puts the observer's listing 'before the lease expires', while the checker and P2 accept an observation up to a day after expiry. (b) The cost rules say 'at least count x maximum duration', 'each SKU appears ... once among the line items' and 'under the owner's ceiling', but coverage allows a shortfall of 0.005 hours or GB-months (P0's disk item 0.82 is below the 0.82192 needed), a rate card SKU may have no line item, and the total may equal the ceiling.",
+   "evidence": "README lines 96-101 and 165-169; scripts/lab_run_plan.py lines 249 (quantity >= needed - CENT), 252 (total <= ceiling) and 311; vectors.json P2 observedAt is 24 h after its expiresAt. Probes: 5.996 hours for a 6 h maximum accepted; an extra rate card SKU with no line item accepted; a total equal to the ceiling accepted."
+  },
+  {
+   "id": "RP2-11",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 174,
+   "summary": "'Not claimed' could also state that the lease is not authenticated (approval.by is a const and the reference an opaque label, so the checker cannot see that the owner issued it; the owner's custody of every credential is the control), that the observer's scope, roles, absence of exported keys and revocation after the report are declarations, and that rate card prices are not checked against their source (a zero price passes coverage and the ceiling).",
+   "evidence": "lease.schema.json lines 32-49; run-plan.schema.json lines 408-447. Probe: P0 with a machine price of 0, amount 0 and total 0.08 accepted."
+  },
+  {
+   "id": "RP2-12",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 171,
+   "summary": "Published run evidence cites the plan id and the lease id, whose free part uses the same alphabet as a project id, and nothing stops either from embedding the real run project id. Refusing a plan whose project.id occurs in planId or teardown.namePrefix, and a lease whose leaseId holds it, would keep runbook step 6 safe by construction (Q-RP-3 (a)).",
+   "evidence": "Probe: P0 with planId 'RP-20261019-' followed by its own project.id accepted. run-plan.schema.json lines 31 and 111; lease.schema.json line 22."
+  },
+  {
+   "id": "RP2-13",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/status.json",
+   "line": 18,
+   "summary": "status.json records no review round although round 1 returned CHANGES_REQUIRED, and it does not record the monitor's word MON-18-CLASSES-KEEP-R1 (keep the 18 classes and round 1) or that OBSERVER_IDENTITY is now always kept, beyond PLAN.md's residual (the project, the billing link, the audit logs). Record both rounds, the monitor's word and the residual change at adoption.",
+   "evidence": "status.json line 18 ('reviewRounds': []); its ownerDecisions ids are Q-RP-0..9, VR-D1 and LINUX-CAPACITY; the owner decisions file also holds MON-18-CLASSES-KEEP-R1; PLAN.md lines 36-37."
+  }
+ ],
+ "checked": [
+  "git rev-parse: subject c62698480d4cb51e90a1c45d1bc1cfa0518dfeeb, tree 767d5fd7df8e67344f48289237d0cdc8dfaba4e5, parent = base f560209d04b7e0f07b2480219718a8a6dbdb21ef (one commit); round 1 subject 7c744bb044d533da9f35e10fba2dbe975add4c1c present - PASS",
+  "git diff --name-status base..subject: 8 files, all added (A); no existing file changes - PASS",
+  "<worktree> git status of scripts/ and architecture/lab-run-plan/ clean; no scripts/__pycache__ after the probes - PASS",
+  "python3 -I -B scripts/lab_run_plan.py: 'schemas closed; 3 positives (plan, lease and teardown each accepted); negatives: 46 plan, 9 lease, 17 teardown, each refused as recorded', exit 0; README line 41 counts match - PASS",
+  "CLI plan, lease and teardown modes on P0 copies in <scratch>/: each accepted, plan sha256 1a122f06... equal to the P0 lease's planSha256 - PASS",
+  "RP1-1: check_schema refuses type [object, null] with properties, properties without type, an object without additionalProperties false, required differing from properties, items without type array, type [array, null], oneOf and $schema - PASS; residual keyword-placement gaps RP2-8",
+  "RP1-2: collapsed-union cap with N39 (0.0.0.0/0), N40 (two halves), N41 (two /16) and N42 (public source without an external address) - PASS; documented scope wrong, RP2-1",
+  "RP1-3: prefix scope in README, schema description and plan and report namePrefix (T10); observer viewer bindings excluded; PROJECT and OBSERVER_IDENTITY always kept in plan (N44, N45) and report (T08) - PARTIAL, RP2-3 and RP2-4",
+  "RP1-4: 18 classes identical and in the same order in the schema, RESOURCE_CLASSES and the README; the monitor's word to keep them is in the owner decisions file - PASS; listability RP2-2",
+  "RP1-5 and RP1-6: runbook step 6 and the image line under 'Not claimed' - PASS; RP2-12",
+  "RP1-7: lease start at most 31 days after the rate card (L06 refuses 32 days, P2 accepts 31) - PASS",
+  "RP1-8: bootDiskSku and gb-month coverage (N32, N33), hour coverage summed per machine type (N29, N30, N31), other charges stated under 'Not claimed' - PASS; wording RP2-10",
+  "RP1-9: lease and teardown CLI modes run check_plan first; check_teardown calls check_lease first (probe: a 7 h lease refused inside check_teardown) - PASS; no vector, RP2-7",
+  "RP1-10: N28, T06, T16, T12, N31, N21 with P2 exist and refuse or accept as intended - PASS",
+  "RP1-11: strict() refuses 6.0, 1e400, NaN, 1.5e300, a duplicate key and 10^12+1, accepts 10^12 - PASS; surrogate and traceback gap RP2-6",
+  "RP1-12: free text checked in plan, lease and report (probes); approval reference pattern ^OA-... (L08); limit under 'Not claimed' - PASS; gaps RP2-5 and RP2-7",
+  "RP1-13: integral numbers refused as floats, one form - PASS; float form RP2-9",
+  "RP1-14: no $schema in any of the three schemas; README states the checker's own semantics - PASS",
+  "RP1-15: P1 ingress from 10.8.0.0/24 without an external address; P2 external address with 198.51.100.0/24 - PASS",
+  "RP1-16: T14 refuses an observation 25 h after expiry, P2 accepts 24 h - PASS",
+  "RP1-17: observer.scope const RUN_PROJECT, N16 - PASS",
+  "RP1-18: example-workload-repo in all positives - PASS",
+  "RP1-19: the duplicated role, keep-class and UTC checks are gone from the checker - PASS",
+  "schema subset by reading and probes: types (bool excluded from integer and number), const and enum with type equality, pattern by re.fullmatch with ASCII classes, lengths, bounds with exclusiveMinimum, closed objects, items, uniqueItems by canonical bytes - PASS",
+  "the three schemas: closed (check_schema passes on load) and matching the README section table - PASS",
+  "cost recomputation, exposure, observer, residual, lease binding (planId and canonical sha256), window, preparation date, rate-card age, teardown bindings, zero counts, kept classes, order, overrun and observation window - work as written; gaps RP2-1 to RP2-4, RP2-10",
+  "vectors: 3 positives accepted; each of the 72 negatives traced (ops against intent) and refused by its intended rule, none pre-empted by an earlier rule; missing negatives RP2-7",
+  "invented data: example-* projects, example-workload-repo, placeholder commit and argv digests, OA-EXAMPLE-0001, 198.51.100.0/24 (documentation network), 10.8.0.0/24 (private), prices labelled EXAMPLE; the e-mail-shaped negative N46 uses the reserved example.com domain - PASS",
+  "privacy scan of the 8 files: no absolute local path; at-sign hits only in the README rule text, the checker's pattern and N46; key and billing shapes only in N47, N48 and the checker's patterns - PASS",
+  "tests/test_sector_catalog.py scans applied by reading and grep: no catalog name or base digest in the 7 non-Python files or the checker; no os or glob listing, walk, iterdir or sector_catalog use in scripts/lab_run_plan.py - PASS",
+  "status.json Q-RP-0..9 text and date equal the owner decisions file verbatim - PASS; README decisions and runbook match Q-RP-0..9 (a), VR-D1 and the 2026-10-15 decision; 'Not claimed' honest but incomplete (RP2-4, RP2-11)",
+  "method: no network of any kind; every shell command behind the PAUSE and HOLD_BY_VERIFY waits, one at a time; the pinned python3 -I -B under timeout 120; probes and copies only in <scratch>/; the worktree untouched"
+ ]
+}

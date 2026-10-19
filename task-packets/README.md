@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-037
+## Current source preparation — MET-LINUX-007
+
+MET-LINUX-007 (LAB-RUNPLAN-001): the lab run-plan contract v1, closed schemas for a qualification run plan on the owner's
+GCP compute, its lease and its teardown-residual report, with vectors and an offline checker (owner VR-D1, Q-RP-0..9
+(a)). DATA_CHECK_ONLY. Alpha2 OPEN; 250 accepted plus MET-LINUX-007 only.
+
+## Historical W03 plan amendment 3 source preparation — MET-ENFORCE-037
 
 MET-ENFORCE-037 (W03-PLAN-AMEND-3): W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's share in
 amendment 1's SEC-4 and HI-7 rows corrected; HE-004D1's packet scope), re-adopted after four independent review rounds.
@@ -1485,3 +1491,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 248 | `MET-ENFORCE-035` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 1: W01 amendment HS53 and the seccomp allowlists v5 (OBSERVER's I01 listener, the SELinux TCP-listen boundary, systemd's stale-socket cleanup); DATA_CHECK_ONLY |
 | 249 | `MET-ENFORCE-036` | `Harness-Engineering` | SECCOMP-OBSERVER-LISTENER packet 2: compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (HE-004-I01); DATA_CHECK_ONLY |
 | 250 | `MET-ENFORCE-037` | `Harness-Engineering` | W03-PLAN-AMEND-3: W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); DATA_CHECK_ONLY |
+| 251 | `MET-LINUX-007` | `Harness-Engineering` | LAB-RUNPLAN-001: lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; DATA_CHECK_ONLY |

@@ -1,0 +1,59 @@
+{
+ "$id": "planeon.internal.lab-run-lease/v1",
+ "title": "Lease for one approved run plan",
+ "type": "object",
+ "description": "The owner's approval of one plan sha256, with its window. Closed.",
+ "additionalProperties": false,
+ "required": [
+  "schemaVersion",
+  "leaseId",
+  "planId",
+  "planSha256",
+  "approval",
+  "startsAt",
+  "expiresAt"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.lab-run-lease/v1"
+  },
+  "leaseId": {
+   "type": "string",
+   "pattern": "^LE-[0-9]{8}-[a-z0-9][a-z0-9-]{0,30}[a-z0-9]$"
+  },
+  "planId": {
+   "type": "string",
+   "pattern": "^RP-[0-9]{8}-[a-z0-9][a-z0-9-]{0,30}[a-z0-9]$"
+  },
+  "planSha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "approval": {
+   "type": "object",
+   "description": "The owner's approval reference (an opaque label, never an identity).",
+   "additionalProperties": false,
+   "required": [
+    "by",
+    "reference"
+   ],
+   "properties": {
+    "by": {
+     "const": "OWNER"
+    },
+    "reference": {
+     "type": "string",
+     "pattern": "^OA-[A-Z0-9][A-Z0-9-]{2,40}$"
+    }
+   }
+  },
+  "startsAt": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+  },
+  "expiresAt": {
+   "type": "string",
+   "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+  }
+ }
+}

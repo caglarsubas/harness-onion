@@ -1,0 +1,178 @@
+{
+ "round": 1,
+ "subjectCommit": "7c744bb044d533da9f35e10fba2dbe975add4c1c",
+ "subjectTree": "19a7638284330511839b0be72966ee2d0efdccb3",
+ "base": "f560209d04b7e0f07b2480219718a8a6dbdb21ef",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "RP1-1",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 92,
+   "summary": "check_schema enforces closure (additionalProperties false, required == properties) and recurses only when \"type\" is exactly the string \"object\". An object schema typed [\"object\", \"null\"], or one with \"properties\" and no \"type\", is accepted unclosed, and shape() then checks none of its properties. The README's 'every object is closed ... cannot drift apart silently' guarantee therefore does not hold for a future schema edit.",
+   "evidence": "Probe (<scratch>/probe.py): check_schema({\"type\": [\"object\", \"null\"], \"properties\": {\"a\": {\"type\": \"string\"}}}) accepted; shape({\"a\": \"x\", \"evil\": 1}, same schema) accepted; check_schema({\"properties\": {\"a\": {\"type\": \"string\"}}}) accepted. The three published schemas use neither form, so today's verdicts are unaffected. Fix: refuse a type list containing \"object\", and refuse properties/required/additionalProperties unless type is exactly \"object\"."
+  },
+  {
+   "id": "RP1-2",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 221,
+   "summary": "'No ingress range is open to the whole internet' is checked per rule (prefixlen > 0). Several rules can together cover the whole internet, and a single /1 is accepted.",
+   "evidence": "Probe: P1 with ingress sourceRanges 0.0.0.0/1 and 128.0.0.0/1 (tcp 22) accepted by check_plan; together they are all of IPv4. README line 64 states the rule. Fix: refuse when the union of ranges covers 0.0.0.0/0, set a minimum prefix length for public ranges, or state the limit under 'Not claimed'."
+  },
+  {
+   "id": "RP1-3",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/teardown-report.schema.json",
+   "line": 45,
+   "summary": "The residual counts are not defined so that a truthful report can pass. The report is made by the run's dedicated observer at observedAt, using the viewer roles bound to it for the run, but IAM_BINDINGS_ADDED must be 0. The schema counts resources 'left in the run project', while the teardown steps delete only 'the run's' firewall rules and routes. Nothing says whether the observer's own bindings and keys, or the project's pre-existing defaults, are excluded. So either an honest listing is refused, or a passing one silently excludes them. OBSERVER_IDENTITY is also keepable, although PLAN.md's residual named only the project, the billing link and the audit logs.",
+   "evidence": "teardown-report.schema.json line 45: 'Resources of each class left in the run project after teardown'. README lines 92 and 97: 'IAM bindings added for the run', 'zero in every class'. The P0 and P1 reports show IAM_BINDINGS_ADDED 0 at observedAt 13:45 and 17:10, while the reporter is the observer holding plan.observer.roles. P0 teardown step: 'delete the run's firewall rules and routes'. Fix: define the scope of each count (created for the run; the observer's own bindings excluded and revoked after the report), and say how the observer's bindings and the kept identity are cleaned up."
+  },
+  {
+   "id": "RP1-4",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/teardown-report.schema.json",
+   "line": 43,
+   "summary": "The closed class list has no class for VPC networks or subnetworks, service accounts the run creates (only their keys are counted), forwarding rules or load balancers, instance templates or groups, or Cloud Routers. A run that creates any of these can report zero everywhere and pass, although they can carry cost or exposure (Q-RP-5: 'the residual check confirms it is gone'). The README says the observer lists 'every resource class'.",
+   "evidence": "teardown-report.schema.json lines 47-58 list 11 classes; scripts/lab_run_plan.py lines 51-52 (RESOURCE_CLASSES). PLAN.md lists the same 11 classes, so extending the list, or adding a 'Not claimed' line, may need the owner's word."
+  },
+  {
+   "id": "RP1-5",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 118,
+   "summary": "A real plan carries the run project's id (project.id). It may also carry an organisation's private image project (machines[].image.project accepts any project-id-shaped string). Runbook step 6 keeps the plan, lease and report 'with the run's evidence' but does not say where, while step 1 says no organisation project id is written into any repository. Nothing states that real plans stay out of repositories, or that published evidence cites only the plan id and sha256.",
+   "evidence": "README line 118 and lines 108-109; run-plan.schema.json lines 110 and 182. Probe: image.project 'example-org-private-images' accepted. Owner relay (status.json): 'no credentials, project ids or account identities anywhere'. Fix: say that real plans, leases and reports are kept outside every repository and only plan id and sha256 are published, or replace project.id with an opaque label the owner resolves."
+  },
+  {
+   "id": "RP1-6",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 60,
+   "summary": "The README says each machine group uses 'a public image pinned by its exact name', but nothing checks that the image is public: image.project is any project id. 'Not claimed' does not mention it.",
+   "evidence": "run-plan.schema.json lines 182-184: pattern ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ only. Probe: a non-public image project was accepted. Fix: a closed list of public image projects, or a 'Not claimed' line saying the owner confirms it."
+  },
+  {
+   "id": "RP1-7",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 235,
+   "summary": "The rate card's age is measured only against the author-set preparedAt. The lease may start any time afterwards, so a card that was fresh at preparation can be stale by approval, and the 31-day rule then says nothing about prices at run time.",
+   "evidence": "Probe: P0's lease moved to 2027-10-20T08:00:00Z..14:00:00Z accepted (rate card 2026-10-15, 370 days before the start). Fix: bound startsAt.date() minus rateCard.date (or startsAt minus preparedAt) by 31 days."
+  },
+  {
+   "id": "RP1-8",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 205,
+   "summary": "Cost coverage requires only an hourly line item whose SKU equals the machineType, a naming convention the README does not state. Boot disks (bootDiskGb x count) and a declared external address need no line item, so an estimate can leave them out and still pass under the ceiling.",
+   "evidence": "Probe: P0 without the pd-balanced line item (total 1.8) accepted; P0 with externalIp true and a reason, but no address line item, accepted. README line 62 says 'every machine is covered for the whole maximum duration'."
+  },
+  {
+   "id": "RP1-9",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 320,
+   "summary": "There is no route to check a real lease or teardown report. main() accepts only no arguments (the vectors) or 'plan PATH', and the runbook (steps 3 and 5) never runs the checker on a lease or report. check_teardown also does not re-check the lease, so a report can pass against a lease that check_lease refuses.",
+   "evidence": "main() lines 318-325. Probe: a 78 h lease is refused by check_lease ('the lease lasts at most the plan's maximum duration'), yet check_teardown accepts a report completed 54 h after its start against that lease. Fix: 'lease PLAN LEASE' and 'teardown PLAN LEASE REPORT' modes that chain check_plan, check_lease and check_teardown, used in the runbook."
+  },
+  {
+   "id": "RP1-10",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/vectors.json",
+   "line": 1,
+   "summary": "Six reachable refusals or branches have no negative vector: 'each line item SKU once'; 'the report lists every resource class, in order'; the planSha256 half of 'the report binds this lease and plan' (T09 changes only leaseId); the start <= completed half of 'the teardown completes within the run...' (T08 covers observed < completed); the coverage branch where a machine type has no line item; and the 31/32-day rate-card boundary.",
+   "evidence": "Probe: each one refuses correctly when built (line item SKU twice; classes reversed; report planSha256 zeros; teardownCompletedAt 07:00 before the lease start; machineType e2-standard-16; rate card 2026-09-18 accepted and 2026-09-17 refused). No vector has these refusal strings or edits."
+  },
+  {
+   "id": "RP1-11",
+   "severity": "MINOR",
+   "file": "scripts/lab_run_plan.py",
+   "line": 73,
+   "summary": "strict() says non-finite numbers are refused, but an overflowing literal such as 1e400 parses to inf. A plan with ceiling 1e400 passes check_plan, and 'plan PATH' then crashes in plan_sha256 with a traceback. An integer quantity of 10**400 raises OverflowError, which explain() does not catch. Both fail closed (exit 1, no sha256), but the docstring is inaccurate and neither yields a recorded refusal.",
+   "evidence": "Probe: strict(...'\"ceiling\": 1e400'...) yields inf; check_plan accepted; CLI 'plan <scratch>/inf-plan.json' exits 1 with 'ValueError: Out of range float values are not JSON compliant: inf'. A quantity of 10**400 gives 'OverflowError int too large to convert to float'. Fix: a parse_float that refuses non-finite values, maxima on ceiling and quantity, or catching ArithmeticError."
+  },
+  {
+   "id": "RP1-12",
+   "severity": "MINOR",
+   "file": "architecture/lab-run-plan/run-plan.schema.json",
+   "line": 64,
+   "summary": "A plan can carry a credential or an account identity in free text. The summary, workload.description, rateCard.source, externalIpReason, ingress reasons and teardown steps accept any characters. The lease's approval.reference ('an opaque label, never an identity') accepts a name-shaped value. credentials.inPlan is a declaration, and 'Not claimed' does not say that free text is unchecked.",
+   "evidence": "Probe: the summary set to a private-key marker plus an API-key-shaped string, a teardown step with an e-mail-shaped address at example.com, and rateCard.source with a billing-account-shaped id were all accepted by check_plan. A lease with approval.reference 'first.last' was accepted by check_lease. Fix: refuse '@', key and token markers in free-text fields, tighten the reference pattern (for example ^OA-[A-Z0-9-]+$), or state the limit under 'Not claimed'."
+  },
+  {
+   "id": "RP1-13",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/README.md",
+   "line": 73,
+   "summary": "The canonical form is underspecified for an independent implementation. Numbers are serialized as Python's json does (6 and 6.0 hash differently), and non-ASCII is emitted raw. Say 'as computed by scripts/lab_run_plan.py', or adopt RFC 8785.",
+   "evidence": "Probe: the P0 sha256 starts 1bff6e4b; the same plan with lineItems[0].quantity 6.0 starts 2705db3d, and both are accepted. The positive leases' planSha256 equal the recomputed hashes."
+  },
+  {
+   "id": "RP1-14",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/run-plan.schema.json",
+   "line": 2,
+   "summary": "The schemas declare the 2020-12 dialect, but the subset's semantics differ from it: 'integer' refuses 1.0, and uniqueItems treats 1 and 1.0 as distinct. A generic validator would give other verdicts. Worth one README line.",
+   "evidence": "Probe: alertThresholds [1, 1.0] accepted; machines[0].count 1.0 refused with 'schema $.machines[0].count type'."
+  },
+  {
+   "id": "RP1-15",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/vectors.json",
+   "line": 259,
+   "summary": "Positive P1 lists an SSH ingress from a public range while externalIp is false. The checker does not relate ingress to an external address. This is harmless, but the example models an exposure that cannot take effect.",
+   "evidence": "vectors.json lines 256-266; scripts/lab_run_plan.py lines 214-222."
+  },
+  {
+   "id": "RP1-16",
+   "severity": "NOTE",
+   "file": "scripts/lab_run_plan.py",
+   "line": 253,
+   "summary": "The lease-overrun rule rests on the reported teardownCompletedAt, and observedAt has no bound after expiry. Consider bounding observedAt, or naming the source of teardownCompletedAt (for example, the audit-log time of the last deletion).",
+   "evidence": "check_teardown lines 251-254 bound only start <= completed <= observed and completed <= expiry."
+  },
+  {
+   "id": "RP1-17",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/run-plan.schema.json",
+   "line": 418,
+   "summary": "The observer section does not state where its viewer roles are bound. A binding above the run project would let the observer see the lab foundation. Consider a const scope such as RUN_PROJECT.",
+   "evidence": "The observer object has only identity, roles, exportedKeys and payloadFree (lines 405-438)."
+  },
+  {
+   "id": "RP1-18",
+   "severity": "NOTE",
+   "file": "architecture/lab-run-plan/vectors.json",
+   "line": 18,
+   "summary": "workload.repository 'mas-harness-conformance-labs' is not visibly invented (PLAN.md calls the R12 consumer 'conformance-labs'). It is not personal data, but the brief asks for visibly invented names; 'example-workload-repo' would do.",
+   "evidence": "Every other id is invented: example-qual-run-0001, example-images, obs-*, OA-EXAMPLE-0001, 198.51.100.0/24 (a documentation network), and prices labelled 'EXAMPLE rate card ... not a price quote'."
+  },
+  {
+   "id": "RP1-19",
+   "severity": "NOTE",
+   "file": "scripts/lab_run_plan.py",
+   "line": 184,
+   "summary": "Three refusals cannot be reached, because the schema refuses first: the VIEWER_ROLES subset check (line 184), the closed-class part of the keep check (line 186) and 'times are UTC with a Z suffix' (line 165) are pre-empted by schema enums and patterns. This is harmless defence in depth, but no vector can exercise them.",
+   "evidence": "N07 (roles/compute.admin) and N14 (INSTANCES) are refused by the schema enum, and L07 by the schema pattern. Probe: roles/owner is refused with 'schema $.observer.roles[0] enum'."
+  }
+ ],
+ "checked": [
+  "git rev-parse: subject 7c744bb044d533da9f35e10fba2dbe975add4c1c, tree 19a7638284330511839b0be72966ee2d0efdccb3, parent = base f560209d04b7e0f07b2480219718a8a6dbdb21ef (one commit)",
+  "git diff --name-status base..subject: 8 files, all added (A); no existing file changes - PASS",
+  "<worktree> git status clean; no scripts/__pycache__ after the probes - PASS",
+  "python3 -I -B scripts/lab_run_plan.py: 'schemas closed; 2 positives ...; negatives: 33 plan, 7 lease, 10 teardown, each refused as recorded', exit 0 - PASS",
+  "schema subset by reading and probes: types (bool excluded from integer and number), const and enum with type equality, pattern by re.fullmatch (patterns use ASCII classes only), lengths, bounds, closed objects, items, uniqueItems via canonical bytes - correct for the published schemas; closure gap for type lists or missing type (RP1-1); unknown keyword such as oneOf refused - PASS",
+  "the three schemas: every object type 'object' with additionalProperties false and required == properties - PASS; README section table matches the schemas apart from RP1-6",
+  "cost rules: SKU once, SKU and unit match, amount within 0.005, coverage summed per machine type x maxDurationHours, total, ceiling - work as written; gaps RP1-7 and RP1-8",
+  "exposure rules: external address with reason (both directions), prefix > 0, strict network form, IPv4-only pattern - work; union gap RP1-2",
+  "observer, residual, lease binding (planId + canonical sha256), window, preparation date, teardown bindings, zero counts, kept subset, ordering, overrun - work as written; definition gaps RP1-3 and RP1-4",
+  "vectors: 2 positives accepted; each of the 50 negatives traced (ops against intent) and refused by its intended rule, none by an earlier rule; positive lease sha256 = recomputed plan sha256; missing negatives RP1-10",
+  "invented data: example-* projects, 198.51.100.0/24 (TEST-NET-2), placeholder commit and argv digests, prices labelled invented; RP1-18 for the repository name",
+  "privacy scan of the diff: no absolute local path, e-mail address, personal name, service-account address or key material - PASS",
+  "tests/test_sector_catalog.py scans applied by reading: 0 catalog path or base-digest hits in the 7 non-Python files under architecture/lab-run-plan/; no catalog name and no os, glob, walk or iterdir listing in scripts/lab_run_plan.py - PASS",
+  "status.json owner decision text equals the owner decisions file verbatim (text and date) - PASS; README decisions and runbook match Q-RP-0..9 (a), VR-D1 and the 2026-10-15 decision; 'Not claimed' is honest but incomplete (RP1-5, RP1-6, RP1-12)",
+  "network: none used; Python only as the pinned python3 -I -B under timeout 120; probes in <scratch>/"
+ ]
+}
