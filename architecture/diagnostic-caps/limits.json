@@ -1,0 +1,772 @@
+{
+  "schemaVersion": "harness.planeon.ai/diagnostic-caps/v1",
+  "packet": "MET-PERF-041",
+  "slot": 253,
+  "evidenceClass": "SOURCE_DELTA_ONLY",
+  "acceptedBase": {
+    "commit": "27c54605a3dcdbe86522a6bd18a5e19faa5cb40b",
+    "tree": "334820b5cfc09d41824c2db07f385f765aba70fb",
+    "packets": 252,
+    "newestPacket": "MET-ENFORCE-038",
+    "newestPacketVerifySeconds": 857
+  },
+  "module": "ci/pytest_diagnostics.py",
+  "plan": {
+    "path": "tools/w03/diagcap/PLAN.md",
+    "revision": 3,
+    "sha256": "5a2175d8681c8680e03c9f6b0975a8d4e216b6ed231f633d686d4feb113a28b1",
+    "buildNotes": {
+      "path": "tools/w03/diagcap/PLAN_NOTES_R3.md",
+      "sha256": "f50132a451e50ca2c9d505914ac55ee159e2daa4db01f4c50eb524a781d2d5de",
+      "items": [
+        "C3-1",
+        "C3-2"
+      ]
+    }
+  },
+  "contractReviews": [
+    {
+      "round": 1,
+      "planRevision": 1,
+      "verdict": "CHANGES_REQUIRED",
+      "record": "tools/w03/diagcap/contract-review-round1.json",
+      "recordSha256": "6d2d2811627a812479462f5614275f79f51f728f14d951ac70caab1cbdaf35f3",
+      "findings": [
+        "C1-1",
+        "C1-2",
+        "C1-3",
+        "C1-4",
+        "C1-5",
+        "C1-6",
+        "C1-7",
+        "C1-8",
+        "C1-9",
+        "C1-10",
+        "C1-11"
+      ]
+    },
+    {
+      "round": 2,
+      "planRevision": 2,
+      "verdict": "CHANGES_REQUIRED",
+      "record": "tools/w03/diagcap/contract-review-round2.json",
+      "recordSha256": "0e17d828318fe81f1561fc3e9bab36303bab7b94bb21e735e370e2bad48050b6",
+      "findings": [
+        "C2-1",
+        "C2-2",
+        "C2-3",
+        "C2-4",
+        "C2-5"
+      ]
+    },
+    {
+      "round": 3,
+      "planRevision": 3,
+      "verdict": "PASS_FOR_BUILD",
+      "record": "tools/w03/diagcap/contract-review-round3.json",
+      "recordSha256": "fc7dd376b2aee76cf31176ac841f301ba0335ca2b061a93ed275174ccec92bcd",
+      "findings": [
+        "C3-1",
+        "C3-2"
+      ]
+    }
+  ],
+  "measurement": {
+    "run": "MET-ENFORCE-039's Mac dry run (head 31a7d52e), argv 63, the outer pytest",
+    "result": "16306 passed in 666.74s, then failed closed by the diagnostics stream",
+    "tests": 16306,
+    "sessionSeconds": 666.74,
+    "sessionEnd": {
+      "exitCode": 1,
+      "failed": 0,
+      "incomplete": true,
+      "reasons": [
+        "OUTPUT_LIMIT"
+      ],
+      "dropped": 3396
+    },
+    "recordsWritten": 94442,
+    "records": {
+      "START": {
+        "count": 47220,
+        "meanBytes": 235.3,
+        "maxBytes": 244
+      },
+      "END": {
+        "count": 47220,
+        "meanBytes": 208.8,
+        "maxBytes": 213
+      },
+      "ERROR": {
+        "count": 1,
+        "bytes": 96
+      },
+      "SESSION_END": {
+        "count": 1,
+        "bytes": 200
+      }
+    },
+    "diagnosticBytes": 20969573,
+    "producer": "one Diagnostics per pytest process (conftest.py), sink fd 2; under the parallel suite the parent replays every worker's reports into its own single Diagnostics, and each worker's own sink carries only its share"
+  },
+  "ceiling": {
+    "outputLimitBytes": 33554432,
+    "source": "the owner's verifier, verify_pr.py:79 (OUTPUT_LIMIT = 32 * 1024 * 1024), enforced at :558 (output ceiling exceeded); not part of this repository",
+    "bounds": "the launcher's combined stdout and stderr for the whole run",
+    "changed": false,
+    "streamCapBytes": 31457280,
+    "reserveBytes": 2097152,
+    "rule": "MAX_PROCESS_BYTES + reserveBytes <= outputLimitBytes",
+    "otherOutputBytes": {
+      "argv1To62Logs": 55774,
+      "argv63NonDiagnostic": 25000,
+      "argv64ZeroBillScan": 956,
+      "runnerEchoLines": 7988,
+      "totalAbout": 89718
+    },
+    "otherOutputNote": "the launcher's, canary's and runner's few success-path lines were read, not measured",
+    "reserveOverOtherOutputAbout": 23.4,
+    "wholeRunAtWBoundaryAboutBytes": 31545000
+  },
+  "recordModel": {
+    "start": "the 64-hex node digest, a label of at most 70 characters (already at the schema maximum in every measured log), the phase, seq and tUs",
+    "end": "the node, phase, outcome, durationUs, tUs, seq and xfail",
+    "growth": "sizes grow only by digits: seq gains a sixth digit after 99,999 (the cap allows 140,000), and tUs and durationUs reach at most 10 digits inside the 1200 s verify cap",
+    "acceptance": "a non-control record is written only while events_written + 1 + 2 <= event_limit and bytes_written + len(record) + 2 * MAX_RECORD_BYTES <= byte_limit; SESSION_END (control) is written without the reserve",
+    "digits": "the 900 s worker deadline keeps the parent's tUs below 1e9 us (9 digits), assuming collection, the three PARENT_NODES and finish fit in the remaining 100 s; the 6 x 900 s duration budget over the roughly 68,700 END records of a full run averages under 100,000 us (5 digits), which bounds the mean, not each record's digit count (C3-1)"
+  },
+  "profiles": {
+    "clock": {
+      "firstCallSeconds": 0.0,
+      "laterCallBaseSeconds": 100.0,
+      "stepPerCallSeconds": 1e-06
+    },
+    "W": {
+      "node": "tests/test_xxxxxxxxxxxxxxxxxxxxxxxxxxx.py::test_yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy[%d]",
+      "phases": [
+        "teardown",
+        "teardown",
+        "teardown"
+      ],
+      "outcome": "skipped",
+      "durationSeconds": 0.099999,
+      "xfail": false
+    },
+    "R": {
+      "node": "tests/test_xxxxxxxxxxxxxxxxxxxxxxxxxxx.py::test_yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy[%d]",
+      "phases": [
+        "setup",
+        "call",
+        "teardown"
+      ],
+      "outcome": "passed",
+      "durationSeconds": 0.012345,
+      "xfail": false
+    },
+    "S": {
+      "node": "x::y[%d]",
+      "phases": [
+        "setup",
+        "call",
+        "teardown"
+      ],
+      "outcome": "passed",
+      "durationSeconds": 0.012345,
+      "xfail": false
+    }
+  },
+  "profileRules": [
+    "Each profile is driven through the module's own Diagnostics with its default limits (as conftest.py constructs it), a counting sink and finish(0), with three START/END pairs per test.",
+    "The clock's first call returns 0.0 (the origin); its n-th call returns 100.0 + n x 1e-6 s, so every tUs after the first record has exactly 9 digits.",
+    "W and R node ids give the 70-character label test_xxxxxxxxxxxxxxxxxxxxxxxxxxx.py[:32]::test_yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy; S's x::y[i] gives the label <redacted-node>; %d is the test's index from 0."
+  ],
+  "caps": [
+    {
+      "name": "MAX_PROCESS_BYTES",
+      "before": 20971520,
+      "after": 31457280,
+      "beforeSource": "20 * 1024 * 1024",
+      "afterSource": "30 * 1024 * 1024"
+    },
+    {
+      "name": "MAX_EVENTS",
+      "before": 100000,
+      "after": 140000,
+      "beforeSource": "100_000",
+      "afterSource": "140_000"
+    },
+    {
+      "name": "MAX_SCAN_LINES",
+      "before": 110000,
+      "after": 154000,
+      "beforeSource": "110_000",
+      "afterSource": "MAX_EVENTS + MAX_EVENTS // 10"
+    },
+    {
+      "name": "MAX_SCAN_BYTES",
+      "before": 22020096,
+      "after": 32505856,
+      "beforeSource": "MAX_PROCESS_BYTES + 1024 * 1024",
+      "afterSource": "MAX_PROCESS_BYTES + 1024 * 1024"
+    }
+  ],
+  "unchanged": [
+    {
+      "name": "MAX_RECORD_BYTES",
+      "value": 1024
+    },
+    {
+      "name": "MAX_NODE_CHARS",
+      "value": 65536
+    },
+    {
+      "name": "MAX_FAILURES",
+      "value": 16
+    },
+    {
+      "name": "everythingElse",
+      "value": "the record schema, every fail-closed rule, the 64 argv, .github/workflows/verify.yml, conftest.py and the verifier"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "W",
+      "profile": "W",
+      "module": "candidate",
+      "lastPass": 22874,
+      "firstFail": 22875,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 31455196,
+      "firstFailBytes": 31455306,
+      "note": "worst case at constant maximum digits: the maximum among profiles whose records all carry the same digit counts (C3-1)"
+    },
+    {
+      "id": "R",
+      "profile": "R",
+      "module": "candidate",
+      "lastPass": 23159,
+      "firstFail": 23160,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 31454789,
+      "firstFailBytes": 31455352,
+      "note": "realistic"
+    },
+    {
+      "id": "S",
+      "profile": "S",
+      "module": "candidate",
+      "lastPass": 23333,
+      "firstFail": 23334,
+      "reason": "EVENT_LIMIT",
+      "lastPassBytes": 27842006,
+      "firstFailBytes": 27842114,
+      "note": "small records: the event cap binds first"
+    },
+    {
+      "id": "WB",
+      "profile": "WB",
+      "module": "candidate",
+      "lastPass": 22836,
+      "firstFail": 22837,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 31455144,
+      "firstFailBytes": 31455498,
+      "note": "C3-1: W with 9-digit tUs and the digit-sum maximum under the 6 x 900 s duration budget (k END records at 100,000 us and the rest at 10,000 us, k = floor((5.4e9 - 3T x 10,000) / 90,000)); the lower bound under that argument"
+    },
+    {
+      "id": "W10",
+      "profile": "W10",
+      "module": "candidate",
+      "lastPass": 22775,
+      "firstFail": 22776,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 31455226,
+      "firstFailBytes": 31455336,
+      "note": "C3-1: W with 10-digit tUs (clock base 1000 s), which only a run past the deadlines could produce"
+    },
+    {
+      "id": "W10D",
+      "profile": "W10D",
+      "module": "candidate",
+      "lastPass": 22531,
+      "firstFail": 22532,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 31455007,
+      "firstFailBytes": 31455363,
+      "note": "C3-1: W10 with 10-digit durations (9999.999999 s)"
+    },
+    {
+      "id": "baseW",
+      "profile": "W",
+      "module": "base",
+      "lastPass": 15269,
+      "firstFail": 15270,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 20968680,
+      "firstFailBytes": 20969705,
+      "note": "control: the base module (20 MiB / 100,000 events)"
+    },
+    {
+      "id": "baseR",
+      "profile": "R",
+      "module": "base",
+      "lastPass": 15461,
+      "firstFail": 15462,
+      "reason": "OUTPUT_LIMIT",
+      "lastPassBytes": 20969647,
+      "firstFailBytes": 20969756,
+      "note": "control: the base module (20 MiB / 100,000 events)"
+    }
+  ],
+  "boundaryRules": [
+    "Found with the real module (27c5460's bytes with the three constants set), a counting sink and the pinned profiles; identical to contract review round 3's independent oracle.",
+    "Whatever the profile, the stream never exceeds byte_limit (31,457,280 B): the largest first-failing stream above is 31,455,363 B.",
+    "Before the change, profile R at 16,306 tests (the incident) fails with OUTPUT_LIMIT, first failing at test 15,462."
+  ],
+  "headroom": {
+    "lastPassingTests": 22874,
+    "measuredTests": 16306,
+    "testsOverMeasured": 6568,
+    "packets": [
+      {
+        "testsPerPacket": 700,
+        "packets": 9,
+        "basis": "an aggregate rate: 2.4 times the 20-packet mean and 1.85 times the 9-packet mean"
+      },
+      {
+        "testsPerPacket": 378,
+        "packets": 17,
+        "basis": "the recent 9-packet mean"
+      },
+      {
+        "testsPerPacket": 288,
+        "packets": 22,
+        "basis": "the 20-packet mean"
+      }
+    ],
+    "budgetMixedLowerBound": {
+      "lastPassingTests": 22836,
+      "testsOverMeasured": 6530
+    },
+    "timeLimits": "At 253's load (41 ms per test) the 1200 s verify cap binds near 20,000 tests and the 900 s worker deadline near 22,000; on a quiet host (25 ms per test) the cap binds near 33,000. Diagnostics stop being the first limit under load."
+  },
+  "growth": [
+    {
+      "fromSlot": 233,
+      "toSlot": 234,
+      "testsFrom": 10543,
+      "testsTo": 10722,
+      "increment": 179,
+      "packets": 1
+    },
+    {
+      "fromSlot": 234,
+      "toSlot": 238,
+      "testsFrom": 10722,
+      "testsTo": 11394,
+      "increment": 672,
+      "packets": 4
+    },
+    {
+      "fromSlot": 238,
+      "toSlot": 241,
+      "testsFrom": 11394,
+      "testsTo": 12231,
+      "increment": 837,
+      "packets": 3
+    },
+    {
+      "fromSlot": 241,
+      "toSlot": 244,
+      "testsFrom": 12231,
+      "testsTo": 12905,
+      "increment": 674,
+      "packets": 3
+    },
+    {
+      "fromSlot": 244,
+      "toSlot": 246,
+      "testsFrom": 12905,
+      "testsTo": 13588,
+      "increment": 683,
+      "packets": 2
+    },
+    {
+      "fromSlot": 246,
+      "toSlot": 250,
+      "testsFrom": 13588,
+      "testsTo": 14879,
+      "increment": 1291,
+      "packets": 4
+    },
+    {
+      "fromSlot": 250,
+      "toSlot": 252,
+      "testsFrom": 14879,
+      "testsTo": 15652,
+      "increment": 773,
+      "packets": 2
+    },
+    {
+      "fromSlot": 252,
+      "toSlot": 253,
+      "testsFrom": 15652,
+      "testsTo": 16306,
+      "increment": 654,
+      "packets": 1
+    }
+  ],
+  "growthNote": "Only two single-packet increments were measured (179 and 654). 700 per packet is an aggregate rate; a single packet inside a multi-packet gap may have added more.",
+  "consumers": [
+    {
+      "name": "Diagnostics.__init__",
+      "path": "ci/pytest_diagnostics.py",
+      "status": "follows the constants",
+      "detail": "accepts limits up to MAX_PROCESS_BYTES and MAX_EVENTS"
+    },
+    {
+      "name": "_valid_record",
+      "path": "ci/pytest_diagnostics.py",
+      "status": "follows the constants",
+      "detail": "accepts seq up to MAX_EVENTS and SESSION_END counts up to 2 x MAX_EVENTS"
+    },
+    {
+      "name": "summarize_nested",
+      "path": "ci/pytest_diagnostics.py",
+      "status": "follows the constants",
+      "detail": "reads separated nested stderr (capture_output), where each record ends its own line; the 10% allowance in the derived MAX_SCAN_LINES covers non-diagnostic stderr lines (C1-10); a full-size nested stream at the caps is scanned completely, one byte past MAX_SCAN_BYTES gives INPUT_LIMIT and one line past MAX_SCAN_LINES gives SCAN_LIMIT"
+    },
+    {
+      "name": "the predecessor fallback",
+      "path": "tests/linux_runner/test_build_and_predecessors.py",
+      "status": "fits at the new caps",
+      "detail": "used when the in-session proof is unavailable, it runs the whole predecessor suite (15,971 tests in 253's proof) in a nested serial pytest, a full-size producer under the same caps, which summarize_nested must report COMPLETE; its line-59 comment ('up to 20MiB of nested structured stderr') becomes stale and stays unchanged on purpose, because the file is digest-pinned by earlier layers and a comment-only edit would add a pin churn; PREDECESSOR_OUTPUT_LIMIT (65,536) is a separate limit, unchanged"
+    },
+    {
+      "name": "the parallel suite",
+      "path": "ci/parallel_suite.py",
+      "status": "no change",
+      "detail": "the parent's single stream carries every worker's replayed reports; each worker's sink carries only its share"
+    },
+    {
+      "name": "MET-PERF-021's tests",
+      "path": "tests/test_pytest_diagnostics.py",
+      "status": "no edit; the oracle",
+      "detail": "uses the constants symbolically and monkeypatches the scan limits"
+    }
+  ],
+  "pins": [
+    {
+      "path": "tests/test_diagnostic_repair.py",
+      "line": 133,
+      "kind": "live",
+      "pins": "ci/pytest_diagnostics.py",
+      "before": "67416db359a8d5953b469e33b92f0b29f3377fdd6daff7fe1a2958e8bc503a23",
+      "after": "ac9e70395413356f6348180c0c61a7adec57999f770feed59967b6eac7167745",
+      "route": "moves to the new file's digest; this packet's reverse hunk spans line 133's bytes only"
+    },
+    {
+      "path": "architecture/packet-schema-performance-authority.json",
+      "kind": "historical (MET-PERF-028 newFiles)",
+      "pins": "ci/pytest_diagnostics.py",
+      "value": "67416db359a8d5953b469e33b92f0b29f3377fdd6daff7fe1a2958e8bc503a23",
+      "route": "checked through successor.historical_bytes by scripts/validate_packet_schema_performance.py (argv 51); stays byte-identical, reached through this packet's reverse hunk"
+    },
+    {
+      "path": "architecture/packet-schema-performance-authority.json",
+      "kind": "historical (MET-PERF-028 newFiles)",
+      "pins": "tests/test_diagnostic_repair.py",
+      "value": "89aaa588c5d130021faa51d90697a09015e34f1038bd85efc1ed9d6d9979f181",
+      "route": "reached through this packet's reverse hunk and then MET-PERF-038's"
+    },
+    {
+      "path": "architecture/load-deadlines-authority.json",
+      "kind": "historical (MET-PERF-038 changedFiles)",
+      "pins": "tests/test_diagnostic_repair.py",
+      "value": {
+        "before": "89aaa588c5d130021faa51d90697a09015e34f1038bd85efc1ed9d6d9979f181",
+        "after": "7b666bb8bab73ea37037292a53e8f7029f1a9128e0d6379dd75533f2b5e558a2"
+      },
+      "route": "reached through this packet's reverse hunk"
+    },
+    {
+      "path": "scripts/validate_load_deadlines.py",
+      "kind": "historical (MET-PERF-038 ERA_SHA256)",
+      "pins": "tests/test_diagnostic_repair.py",
+      "value": "7b666bb8bab73ea37037292a53e8f7029f1a9128e0d6379dd75533f2b5e558a2",
+      "route": "read through reviewed_bytes, which projects this packet's change away first"
+    },
+    {
+      "path": "tests/test_diagnostic_repair.py",
+      "line": 132,
+      "kind": "live, unchanged",
+      "pins": "tests/linux_runner/test_predecessor_diagnostics.py",
+      "value": "3c0afe5686f0c39cea2f68d97f50549d0faba890539c3e20aae1d88b2305139f",
+      "route": "the mutant at tests/test_load_deadlines.py:859-860 replaces it (3c0afe56 -> 58cabbee) through reviewed_bytes, after the successor projection; this packet's hunk touches line 133 only, so line 132 and that mutant are untouched (C3-2)"
+    }
+  ],
+  "historicalLimitRecords": [
+    {
+      "path": "task-packets/MET-PERF-028.yaml",
+      "sha256": "cfa07a1e6d738a0b4ddf531530cba686d0d6c7931e68623c86a63dcdb0e29722",
+      "sentences": [
+        "Fixed added-diagnostic ceilings are20MiB/process,1024bytes/record,100000records",
+        "Existing32MiB outer ceiling stays unchanged",
+        "do not echo up to20MiB of metadata through pytest traceback",
+        "Keep nested420/local750/trusted900/workflow15min,32MiB outer output ceiling, both full replays and all inherited skips",
+        "Keep all53 commands,420/750/900s,15-minute and32MiB limits"
+      ],
+      "status": "byte-identical; each sentence occurs exactly once, as the record of what MET-PERF-028 decided"
+    },
+    {
+      "path": "architecture/packet-schema-performance-authority.json",
+      "sha256": "b22765d800ef757891addcd308570efeefaca1637b806fd28008a800c0cdff4f",
+      "status": "MET-PERF-028's authority, byte-identical"
+    },
+    {
+      "path": "architecture/load-deadlines-authority.json",
+      "sha256": "f36e25091fc2c440935d0f8ae5f0687acce9998f30dff5a7cf8327b0a89ce0ab",
+      "status": "MET-PERF-038's authority, byte-identical"
+    },
+    {
+      "path": "architecture/load-deadlines/limits.json",
+      "sha256": "f9c152fd4b7e074e5b63b1649e35e2cc2c651060c1ae48d91c078b8690f0f11f",
+      "status": "MET-PERF-038's limits record, byte-identical"
+    },
+    {
+      "path": "architecture/load-deadlines/README.md",
+      "sha256": "36ee4dd227603e6ebef164a20555c30fabfbd59c0c0dbbd2526579478dcb81c1",
+      "status": "MET-PERF-038's README, byte-identical"
+    },
+    {
+      "path": "task-packets/",
+      "sha256": null,
+      "status": "the 51 of the 252 predecessor packet YAMLs that state the 32 MiB outer output ceiling stay byte-identical (pinned by this layer's baselinePackets) and stay true"
+    }
+  ],
+  "executedChecks": {
+    "W": {
+      "module": "candidate",
+      "profile": "W",
+      "reason": "OUTPUT_LIMIT",
+      "lastPass": {
+        "tests": 22874,
+        "exitCode": 0,
+        "incomplete": false,
+        "reasons": [],
+        "events": 137245,
+        "bytes": 31455196,
+        "dropped": 0,
+        "firstIncompleteTest": null,
+        "sinkBytes": 31455196,
+        "sinkRecords": 137245
+      },
+      "firstFail": {
+        "tests": 22875,
+        "exitCode": 1,
+        "incomplete": true,
+        "reasons": [
+          "OUTPUT_LIMIT"
+        ],
+        "events": 137246,
+        "bytes": 31455306,
+        "dropped": 6,
+        "firstIncompleteTest": 22875,
+        "sinkBytes": 31455306,
+        "sinkRecords": 137246
+      }
+    },
+    "S": {
+      "module": "candidate",
+      "profile": "S",
+      "reason": "EVENT_LIMIT",
+      "lastPass": {
+        "tests": 23333,
+        "exitCode": 0,
+        "incomplete": false,
+        "reasons": [],
+        "events": 139999,
+        "bytes": 27842006,
+        "dropped": 0,
+        "firstIncompleteTest": null,
+        "sinkBytes": 27842006,
+        "sinkRecords": 139999
+      },
+      "firstFail": {
+        "tests": 23334,
+        "exitCode": 1,
+        "incomplete": true,
+        "reasons": [
+          "EVENT_LIMIT"
+        ],
+        "events": 140000,
+        "bytes": 27842114,
+        "dropped": 6,
+        "firstIncompleteTest": 23334,
+        "sinkBytes": 27842114,
+        "sinkRecords": 140000
+      }
+    },
+    "scan": {
+      "stream": "profile W's stream at its last passing count, padded with non-diagnostic lines (one before it, the rest after its SESSION_END)",
+      "exact": {
+        "status": "COMPLETE",
+        "incompleteReasons": [],
+        "inputBytes": 32505856,
+        "scannedBytes": 32505856,
+        "inputTruncatedBytes": 0,
+        "records": 137245,
+        "malformed": 0,
+        "nonDiagnosticLines": 16755,
+        "completionSeen": true,
+        "starts": 68622,
+        "ends": 68622,
+        "failed": 0,
+        "skipped": 68622,
+        "sessionEnd": {
+          "exitCode": 0,
+          "incomplete": false,
+          "reasons": [],
+          "dropped": 0
+        }
+      },
+      "oneBytePast": {
+        "status": "INCOMPLETE",
+        "incompleteReasons": [
+          "INPUT_LIMIT"
+        ],
+        "inputBytes": 32505857,
+        "scannedBytes": 32505793,
+        "inputTruncatedBytes": 64,
+        "records": 137245,
+        "malformed": 0,
+        "nonDiagnosticLines": 16754,
+        "completionSeen": true,
+        "starts": 68622,
+        "ends": 68622,
+        "failed": 0,
+        "skipped": 68622,
+        "sessionEnd": {
+          "exitCode": 0,
+          "incomplete": false,
+          "reasons": [],
+          "dropped": 0
+        }
+      },
+      "oneLinePast": {
+        "status": "INCOMPLETE",
+        "incompleteReasons": [
+          "SCAN_LIMIT"
+        ],
+        "inputBytes": 32505856,
+        "scannedBytes": 32505856,
+        "inputTruncatedBytes": 0,
+        "records": 137245,
+        "malformed": 0,
+        "nonDiagnosticLines": 16755,
+        "completionSeen": true,
+        "starts": 68622,
+        "ends": 68622,
+        "failed": 0,
+        "skipped": 68622,
+        "sessionEnd": {
+          "exitCode": 0,
+          "incomplete": false,
+          "reasons": [],
+          "dropped": 0
+        }
+      }
+    },
+    "incident": {
+      "module": "base",
+      "profile": "R",
+      "outcome": {
+        "tests": 16306,
+        "exitCode": 1,
+        "incomplete": true,
+        "reasons": [
+          "OUTPUT_LIMIT"
+        ],
+        "events": 92768,
+        "bytes": 20969759,
+        "dropped": 5070,
+        "firstIncompleteTest": 15462,
+        "sinkBytes": 20969759,
+        "sinkRecords": 92768
+      }
+    }
+  },
+  "measuredCost": {
+    "checks": "the executed checks once each: profile W at 22,874 (collecting the stream) and 22,875, profile S at 23,333 and 23,334, the three summarize_nested streams and the base module's profile R at 16,306",
+    "producerRuns": 5,
+    "summarizeRuns": 3,
+    "wallSeconds": 3.72,
+    "peakRssMiB": 213.9,
+    "processRssBeforeMiB": 18.1,
+    "measuredBy": "the packet builder, in one fresh process, with the layer's own executed-check code (CPython 3.12.4), at a 1-minute host load average of about 9 to 19 on 18 CPUs",
+    "budget": "PLAN.md section 8: about 1-2 s per producer run and at most about 400 MB in all; the new test file has no pinned parallel-suite weight (0.05 x its node count), so the checks may land on a loaded worker: about 10-25 s more in argv 63 at 253's load"
+  },
+  "memory": "summarize_nested holds the caller's captured stderr (a str in the predecessor driver), an encoded bytes copy and, on INPUT_LIMIT, up to two slices of up to MAX_SCAN_BYTES: about input + input + 2 x 31 MiB, roughly 200 MB for a full-size stream (review round 1 measured about 411 MB at the 64 MiB caps); the layer test's full-size checks stay under 400 MB in all",
+  "oracle": [
+    "MET-PERF-021's own tests/test_pytest_diagnostics.py passes unchanged (pinned here by digest).",
+    "Each contract review ran its own replay oracle in scratch; round 3's (a copy of the module at 27c5460 and the candidate, sha256 ac9e7039) reproduced every boundary row exactly, and round 1's confirmed the failure mode under the old caps and the boundary method."
+  ],
+  "residuals": [
+    {
+      "id": "C1-11",
+      "status": "pre-existing, out of scope",
+      "text": "The predecessor fallback's serial nested run (about 16,000 tests) cannot finish inside its 600 s timeout at today's size, whatever the caps; this packet fixes only the diagnostics side of that path."
+    }
+  ],
+  "reviewNotes": [
+    {
+      "id": "C3-1",
+      "text": "W is the worst case among profiles whose records all carry the same digit counts. Under the 6 x 900 s average-duration argument, mixed 5- and 6-digit durations give 22,836 tests (WB, 38 below W), and 9-digit tUs also assumes collection plus the parent-run tests finish within 100 s; nothing changes in practice: the stream never exceeds byte_limit and the headroom stays about 9, 17 and 22 packets."
+    },
+    {
+      "id": "C3-2",
+      "text": "The 3c0afe56 pin in tests/test_diagnostic_repair.py is on line 132, not 131; the reverse hunk touches line 133 only, so line 132 and the mutant at tests/test_load_deadlines.py:859-860 are untouched."
+    }
+  ],
+  "structuralFollowUp": {
+    "id": "CHAIN-COMPACTION-001",
+    "decision": "D9a, after slot 254",
+    "scope": "the structural follow-up for both the time and the output ceiling"
+  },
+  "nextSlot": "MET-ENFORCE-039 (I06-RBAC-V4) moves to slot 254 and re-runs its mechanics on this packet's merge",
+  "ownerDecisions": [
+    {
+      "id": "Q-253-DIAG",
+      "selected": "a",
+      "date": "2026-10-20",
+      "decision": "(a) ci/ cap packet first (Recommended)",
+      "relayed": [
+        "Monitor: owner decision Q-253-DIAG (2026-10-20, via the lane monitor), verbatim: \"(a) ci/ cap packet first (Recommended)\". Record it verbatim and dated.",
+        "",
+        "What that means:",
+        "- A small ci/ packet takes harness-onion slot 253, before I06-RBAC-V4. It raises the diagnostics caps in ci/pytest_diagnostics.py (bytes, events and the derived scan limits) and updates its bound tests and pins, with tests/test_diagnostic_repair.py's digest of the file as one of them. Follow MET-PERF-038's precedent.",
+        "- MET-ENFORCE-039 moves to slot 254. You re-run its mechanics on the new merge, then the light checks, a delta packet review, the pre-check and the dry run.",
+        "- You own both packets. Choose the new packet's id (a MET-PERF-04x presumably) and tell me.",
+        "",
+        "Gate material under D5a: ci/ needs the owner's transport approval of the exact PR head, and a per-PR merge approval. The review records need the D5a fields; this is a contract change, so include an oracle outside the candidate.",
+        "",
+        "Size the new caps from a measured projection rather than a guess. Use 253's 63.log counts (48,918 starts and ends, about 219 B per record), add headroom for N future packets, and state N. Also check that every consumer of these limits stays consistent: summarize_nested, test_build_and_predecessors.py, and the parallel suite's per-worker sinks, if they apply.",
+        "",
+        "Flow: plan and contract, then review, build, packet review, pre-check and dry run on my word, then the PR. I prepare the owner's approval command, and the verify runs after it. Light work may start now. D2's re-sim and delta r4 continue."
+      ]
+    },
+    {
+      "id": "Q-DIAGCAP-SIZE",
+      "selected": "A",
+      "date": "2026-10-20",
+      "decision": "(A) Stay under 32 MiB (Recommended)",
+      "relayed": [
+        "Monitor: owner decision Q-DIAGCAP-SIZE (2026-10-20, via the lane monitor), verbatim: \"(A) Stay under 32 MiB (Recommended)\". Record it verbatim and dated.",
+        "- Size the caps under the verifier's 32 MiB OUTPUT_LIMIT, with no root change: MAX_PROCESS_BYTES 30 MiB, MAX_EVENTS 140k, MAX_SCAN_LINES 154k, MAX_SCAN_BYTES derived.",
+        "- State the headroom (about 9 to 22 packets) and the reserve for all other output (2 MiB).",
+        "- Name CHAIN-COMPACTION-001 as the structural follow-up.",
+        "Write PLAN r2 with C1-2..C1-7, then contract review r2 (fresh, D5a fields). Light work, go ahead."
+      ]
+    }
+  ]
+}
