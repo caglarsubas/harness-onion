@@ -1,6 +1,35 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-038 source preparation, October 19, 2026
+## Current checkpoint — MET-PERF-041 source preparation, October 20, 2026
+
+Alpha2 OPEN. MET-ENFORCE-038 (NATIVE-PROFILE-V5) passed required verify in 857 s and merged as main 27c5460. MET-ENFORCE-039's
+dry run then failed closed at argv 63 on the pytest diagnostics stream: 16,306 tests passed, but the outer pytest's
+diagnostics reached their 20 MiB cap. The owner put a small ci/ packet first (Q-253-DIAG (a)) and sized it under the
+verifier's 32 MiB output ceiling (Q-DIAGCAP-SIZE (A)): MAX_PROCESS_BYTES 30 MiB, MAX_EVENTS 140,000, MAX_SCAN_LINES
+derived as MAX_EVENTS + MAX_EVENTS // 10, MAX_SCAN_BYTES following, and 2 MiB reserved for all other output. The
+worst case at constant maximum digits fits 22,874 tests, about 9 to 22 packets of headroom; CHAIN-COMPACTION-001 is the
+structural follow-up. I06-RBAC-V4 (MET-ENFORCE-039) moves to slot 254. MET-PERF-041 is the sole 253rd specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-041 | SOURCE_PREPARED | Pytest-diagnostics caps (253rd packet) under the owner's verifier's 32 MiB output ceiling: MAX_PROCESS_BYTES 20 -> 30 MiB, MAX_EVENTS 100,000 -> 140,000, MAX_SCAN_LINES derived (154,000), MAX_SCAN_BYTES following, 2 MiB reserved for all other output (owner Q-253-DIAG (a), Q-DIAGCAP-SIZE (A)); three contract review rounds, PASS_FOR_BUILD; packet review; owner approval of the exact head (ci/); verify |
+| Alpha2A | MET-ENFORCE-038 / NATIVE-PROFILE-V5 | VERIFY_PASSED_MERGED | Merged as main 27c5460 (verify 857 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+The record schema and every fail-closed rule are unchanged, and every earlier record stating the 20 MiB caps stays
+byte-identical. The caps are a ci/ change, which needs the owner's approval of the exact head before verify. No role
+code, cloud, runner, live/native/tenant or model-effort change. Phase-end effort transition NOT_DUE. Prior checkpoints
+below are history only.
+
+## Historical capture-only native-profile v5 source checkpoint — MET-ENFORCE-038 source preparation, October 19, 2026
 
 Alpha2 OPEN. MET-LINUX-007 (LAB-RUNPLAN-001) passed required verify in 736 s and merged as main 35b733b. NATIVE-PROFILE-V5
 publishes the capture-only native-profile v5: the P1, P5 and backend captures without the seven host, policy and boot
@@ -2148,7 +2177,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · SECCOMP-OBSERVER-LISTENER / MET-ENFORCE-036 · Publish the compiled filter programs v3 (OBSERVER republished from seccomp allowlists v5) and edge record v6 (the two programs for R10's HE-004-I01) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · W03-PLAN-AMEND-3 / MET-ENFORCE-037 · Publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope) after independent review; plan v2, amendments 1 and 2 and edge record v5 byte-identical; pass required verify through the owner's App.
 - [x] Alpha 2 · LAB-RUNPLAN-001 / MET-LINUX-007 · Publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) after independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · NATIVE-PROFILE-V5 / MET-ENFORCE-038 · Publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2) after independent review; native-profile v1 to v4, I06 v1 to v3 and edge records v1 to v6 byte-identical; pass required verify through the owner's App.
+- [x] Alpha 2A · NATIVE-PROFILE-V5 / MET-ENFORCE-038 · Publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2) after independent review; native-profile v1 to v4, I06 v1 to v3 and edge records v1 to v6 byte-identical; pass required verify through the owner's App.
+- [ ] Alpha 2A · MET-PERF-041 · Raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output, fail-closed, with a diagnostic-caps contract record; pass required verify through the owner's App after the owner approves the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
