@@ -97,8 +97,9 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 253 and len(accepted) == 251
-    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET}
+    assert len(current) == 254 and len(accepted) == 251
+    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
+                                            profile.successor.successor.NEW_PACKET}
     assert len(lrp.historical_catalog(current)) == 250
     assert len(wpa3.historical_catalog(current)) == 249
     assert len(cfp3.historical_catalog(current)) == 248

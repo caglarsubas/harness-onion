@@ -1,0 +1,99 @@
+{
+ "subject": "tools/w03/i06-rbac candidate 1 (build_contract.py sha256 c46edf13d77f2fafd6889ef53715075a888f77adb0f4720aea729f35f2702efd, README sha256 35d385c43710ed43170f02a1610929517a349021899486f162e1305c44672f1e)",
+ "reviewer": "independent agent",
+ "round": 1,
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "R1-1",
+   "severity": "MINOR",
+   "location": "scripts/i06_backend_profile_v4.py check_vectors (section counts and the closing 'unique vector identifiers' check)",
+   "finding": "check_vectors pins each section's count and each case's result, but not which cases a section holds. In one probe I moved SN01 into crossVersion as a base-v4 case, dropped XR01, and added a copy of SN02 as SN99 to keep the counts. That edited vector was ACCEPTED (132 checks). XR01, the case where I06 v4 refuses v3's own snapshot positive, can therefore be lost without notice, and any meaningful case can be swapped for a trivial one. The uniqueness check covers only v4's own sections: renaming SN01 to S06, a v3 snapshot case id that v4 replays, was also ACCEPTED.",
+   "requiredChange": "Pin the case set in the model: the ids of each section, in order, and the shape of the two anchor cases (XR01 on base v3 with no ops, XR02 on base v4 with no ops). Require v4's ids to be disjoint from the replayed v3 snapshot ids. Add the probe to the generator's self-tests."
+  },
+  {
+   "id": "R1-2",
+   "severity": "MINOR",
+   "location": "README.md 'Consumers' (HE-004-I01) and 'The exact pin'; the model's module docstring; criteria RB06",
+   "finding": "Q-RBAC-3 (a) reads: 'Any other binding naming the observer ... makes the observer refuse its snapshot.' v4 splits the pin into two independent functions. check_rbac_snapshot covers RB05. check_observer_rbac covers RB01-RB04 and RB06 over the live lists. Nothing composes them, and no caller obligation says the snapshot is refused when check_observer_rbac refuses. Nor does any obligation require the two checks to judge the same RBAC lists, read at one resourceVersion, that produced the snapshot. The README says only that HE-004-I01 'adds RB05 to the snapshot check and runs RB01-RB04 and RB06 over the RBAC lists it already reads'. A port could therefore run RB06 as a warning, or on a different read, and still match the contract text. ON48, a role holding only non-resource URLs bound to the observer, shows why this matters: only RB06 sees it.",
+   "requiredChange": "State a caller obligation in the README, the model docstring and RB06's requirement text. The observer accepts its snapshot only if check_rbac_snapshot accepts it and check_observer_rbac accepts the RBAC lists the snapshot was produced from. Alternatively, add a composed function, for example check_observer_snapshot(snapshot, objects, closure, inventory, bootstrap, namespace), and pin it in the vectors."
+  },
+  {
+   "id": "R1-3",
+   "severity": "MINOR",
+   "location": "README.md 'Stock group grants', 'Who is the observer', the RB05 and RB06 rows and 'Not claimed'; status.json carried",
+   "finding": "The certificate makes the observer a member of system:authenticated whatever its O. Any non-stock binding to that group therefore widens the observer, and both checks accept it. My probes: a ClusterRoleBinding of Group system:authenticated to a role holding nonResourceURLs ['*'] was ACCEPTED by check_observer_rbac. So was one to a role with get and list on secrets. The same group gaining get secrets at CLUSTER was ACCEPTED by check_rbac_snapshot, because reads are none of I06's policy-relevant categories. Q-RBAC-7 (a) limits the claim to 'the observer's own bindings', and the README carries the *stock* system:authenticated grants to T04. Non-stock grants to the observer's implicit group are neither 'own bindings' nor 'stock', and no item carries them. The RB06 row justifies leaving Group subjects out with 'the certificate has no O', which does not apply to system:authenticated. RB05 says 'nothing else at any scope', which a reader can take to mean the observer's effective authority.",
+   "requiredChange": "Say plainly in the RB06 row, 'Who is the observer' and 'Not claimed' that only bindings naming User planeon:policy-observer are pinned. Grants that reach it through system:authenticated beyond the stock bootstrap ones are neither pinned here nor checked by I06 when they are reads. Carry that residual to a named owner, T04 and/or HE-004-I01, in status.json carried. If the monitor prefers, ask whether RB06 should also refuse non-stock bindings to system:authenticated (see the question in this record's checks)."
+  },
+  {
+   "id": "R1-4",
+   "severity": "NOTE",
+   "location": "scripts/i06_backend_profile_v4.py check_vectors (inputs and criteria)",
+   "finding": "Frozen inputs and the RB rows' text are pinned only through vectors.json's own `inputs` digests, so any edit that also updates those digests passes. My probes, with the pin updated: one I06 v3 snapshot negative replaced by a different consistent case was ACCEPTED; I07 v3's K22 payload edited together with ON45 was ACCEPTED; RB03's requirement or source text edited in criteria.json was ACCEPTED. Without the pin update each was refused. vectors.json is itself sha256-pinned by edge v8, so this is a hardening point, the same pattern as I06 v3 and native-profile v5.",
+   "requiredChange": "Optional: embed the digests of the frozen inputs (v3 vectors 4752b648..., v3 criteria 752533c5..., I07 v3 vectors c4c24c5f..., writer inventory, closure, bootstrap) and the RB00-RB06 rows (or their digest) as model constants, and assert them in check_vectors."
+  },
+  {
+   "id": "R1-5",
+   "severity": "NOTE",
+   "location": "README.md 'The exact pin', 'Why a successor', 'Still open' and 'Consumers'",
+   "finding": "Wording. (a) 'R10's producer drops every subject's non-resource rules but the loopback user's (rbac.rs:7)': for the loopback user R10 refuses to produce the snapshot (rbac.rs:4-6) rather than keeping the rules. (b) 'v3 accepts the observer with any read added or removed: get or every verb on secrets ...': every verb is not a read; the accurate claim is that v3 accepts any non-policy-relevant grant. (c) 'Still open: v3's list ... carried unchanged' also carries v3's item about the edge-v5 providerPacket TBD, which v3's adoption (MET-ENFORCE-033) discharged. (d) 'labels, annotations ..., ownerReferences and finalizers are refused (ON26-ON28, ON38)': no case holds finalizers. The model refuses them (my probe: 'RB03 ... metadata holds finalizers'). (e) observer-rbac.json residuals[0].ruleIndex is 0-based while the prose and the RB02 refusals number rules from 1. (f) The HE-008 bullet names check_observer_rbac only, while Q-RBAC-4 (a)'s option text has HE-008 check RB00-RB04, which includes the document check.",
+   "requiredChange": "(a) Say 'drops other subjects' non-resource rules and refuses one bound to the loopback user'. (b) Say 'any grant outside I06's policy-relevant categories'. (c) Carry v3's list 'less OBS-RBAC-1's naming and the discharged edge-v5 item'. (d) Add a finalizers case, or drop the word from the citation. (e) Say that ruleIndex is 0-based (rule 1). (f) Add RB00 (check_observer_document on the vendored document) to HE-008's checks."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Reproduce: two builder runs (one per command) with OUT and TMPDIR in WORK, clone at 27c5460 (tree 334820b5), R10 worktree at 1a0c529 (tree 8c1ae5e1)",
+   "result": "PASS. run1 == run2 == contract/ == rounds/c1/contract/ byte for byte, and the two run logs are identical. The 9 digests equal the brief: README 35d385c4, observer-rbac 71305d7f, criteria 38f775d4, vectors fc9bac94, status bf6f6344, source-index 4b824e2b, model efd50b51, edge v8 da6ba2cc, README-v8 b3172a64. build_contract.py c46edf13 equals rounds/c1. SCOPE.md d09da60e. The builder ran its 20 self-test probes (all refused) and checked 145 frozen files. No .pyc was written."
+  },
+  {
+   "check": "Replay over a staged WORK tree (git show 27c5460 inputs plus the generated files)",
+   "result": "PASS. v4 check_vectors gives 132 checks with bare-name imports and 132 as scripts.* (a namespace package, no __init__). I06 v3's own check_vectors gives 151 as the control. check_evidence is v3's function object, and v4's v3 module is the imported v3."
+  },
+  {
+   "check": "The role against R10, derived independently from R10's source at 1a0c529 (read as text)",
+   "result": "PASS. Request is built only in requests.rs: 7 struct literals in 7 builders (list, discovery_group, discovery_version, version, readyz, metrics, progress). A git grep of the observer crate's src finds no other constructor. http::render, called once (client.rs:453), writes 'GET <target> HTTP/1.1' and nothing else (http.rs:55-58). The observe.rs call sites are 656, 680, 757, 764, 810, 847, 867, 986, 1134, 1135 and 1136. Resource::ALL has 20 specs covering exactly the 19 (group, resource) pairs of rules 1-7 (OR05's two share core secrets), all cluster-wide with no label selector. Fresh, Exact and Probe are list; Watch is watch. The fixed targets are /apis/admissionregistration.k8s.io and /apis/admissionregistration.k8s.io/<v> (v validated as [a-z0-9]{1,63}, at most 16), /version, /readyz/poststarthook/rbac/bootstrap-roles, /metrics, and /api/v1/namespaces?limit=1 (list namespaces). The derived set is 19 pairs × {list, watch} plus 5 URLs × get = 43 grants in 8 rules. It equals OBSERVER_RULES; every request is covered and every grant is used. R10's observer_grants() (c_support/mod.rs:369-386, with the b1_rbac_support helpers) equals the contract rule for rule and in order, with the same names and the subject apiGroup rbac.authorization.k8s.io. R10's producer (rbac.rs:242-250) emits a subject's rules in binding then rule order, so RB05's in-order comparison matches what R10 produces for one binding. The /apis/admissionregistration.k8s.io/* pattern is sound: under the apiserver's request-info rules, /apis/<group>/<version> is a non-resource path and anything deeper is a resource request, and stock system:discovery already grants /apis/*. /version under API discovery follows R116 and the stock system:discovery grouping."
+  },
+  {
+   "check": "Tamper probes on check_vectors (in-memory copies; pins updated where stated)",
+   "result": "Refused: ON01's and D06's refusals loosened; ON01 and OA01 swapped between sections; a v3 snapshot negative dropped (with or without the pin); a v3 refusal text edited (pin updated); K22/K23 labels swapped; ON45 moved to the accepted cases; I07 K22 edited without the pin; the snapshot positive's observer rules reordered; the closure's observer made mustBePresent or given ALL grants (pin updated); SA01's v3Result changed; XR06's v4Result changed; check_evidence wrapped. ACCEPTED (findings): SN01 moved into crossVersion with XR01 dropped and the counts kept (R1-1); SN01 renamed S06 (R1-1); a v3 case replaced consistently with the pin updated, I07 K22 plus ON45 edited with the pin updated, and RB03's requirement or source text edited with the pin updated (R1-4)."
+  },
+  {
+   "check": "Direct probes on check_observer_rbac and check_rbac_snapshot",
+   "result": "Refused as expected: a second ClusterRoleBinding of the observer's role to the observer, and a RoleBinding named planeon:policy-observer naming it (RB06); another binding naming the User without apiGroup (RB06); deletionTimestamp, namespace and finalizers in metadata (RB01/RB03); aggregationRule null (RB01); rule verbs null (RB02); rules null (RB02, 0 rules); the contract binding with null subjects, apiGroup '' or an extra subject key (RB04); a binding of kind ClusterRole (RB03). In the snapshot, a duplicate observer, the observer with exists false, and an extra rule key are all refused by v3's IC00 first, unchanged. Every verb on secrets, which v3 accepts, is refused by RB05. Accepted as designed: arbitrary uid and managedFields content (ignored, grants nothing); resourceNames null with nonResourceURLs []; a Group of the observer's name; another binding with null subjects. Accepted and open: the observer's ClusterRole bound to another User or to Group system:authenticated (open item 2, RB07); non-stock bindings to Group system:authenticated granting nonResourceURLs * or Secret reads (R1-3)."
+  },
+  {
+   "check": "Exhaustive README and README-v8 read, every file:line citation rechecked",
+   "result": "Mostly right, with R1-2, R1-3 and R1-5. Correct at 27c5460: amendment-2 :270-284 (OBS-RBAC-1; its text and HE-008's share at :273, :281); identity-closure :1751, :1765-1774; I06 v3 README :18, :192; native-profile-v5 README :41 (the Q-NPE-5 quote); I06 v3 vectors :3870 (its observer: get, list and watch on four groups, admission *, none of the four kinds); v1 model :237, :624, :638; v3 model :91-99; bootstrap :13, :17, :72 (system:monitoring adds nodes/metrics); I06 v1 README :218, :237; plan :450 (I06-7); I07 policy-kinds :97-111; I07 vectors :2289 (K22), :2326 (K23); I06 v3 criteria :162 (OR05); AMEND-3 :33, :273; AMEND-2 status :104-108. Correct at R10 1a0c529: http.rs:56; requests.rs 25, 29, 31, 33, 82, 84, 103, 109, 112, 116, 133, 138, 142, 146, 150, 154; observe.rs 77, 656, 680, 757, 764, 790, 810, 847, 867, 986, 998, 1134-1136; inputs.rs 89, 102-147, 158-159; rbac.rs 7, 252-256; c_support 369-385; MODEL_DEFINED 1531 (R99: resources beside non-resource URLs are Malformed; absent or null lists empty), 1686 (R116: the rules, /version under discovery, list and watch on secrets allow full reads), 1779 (I01's re-assessment at 1781), 1805-1806 (403 outside the role). The counts, the vectors table and the cross-version table equal the vectors."
+  },
+  {
+   "check": "Exact-line quoting",
+   "result": "PASS. The README's 7 quoted lines, status.json's 7 ownerDecisions and edge v8's 2 quotes each equal exactly one source line. Q-HE4-6 is he004 OWNER_DECISIONS.md :240, inside its 2026-10-18 HE-004C section. Q-NPE-5 is npv4-errata :16, inside the dated slot-252 section. The five slot-253 lines are i06-rbac :9-13, inside the dated 2026-10-19 section. There is no paraphrase inside a quote."
+  },
+  {
+   "check": "Edge v8",
+   "result": "PASS. There are 66 rows, v7's 62 identical and in order. Keys and key order are v7's, and the copied members are equal. supersedes binds v7's sha256 6af45e36... at 27c5460 (MET-ENFORCE-038). The 4 new rows' sha256 equal the files, with mode 100644, providerCommit null, providerPacket TBD and v7's key order. Labels: observer-rbac.json and README go to HE-008, criteria and vectors to HE-004-I01, under host-enforcement/contracts/i06-v4/, with no pair colliding with v7. The six other check_vectors inputs are each registered in a v7 row with the same bytes (HE-004D2, HE-002, HE-004). The file is the indent-1 dump. Probed by exact path, operator-harness-engineering-v8.json, README-v8.md and v9 are absent at 27c5460."
+  },
+  {
+   "check": "status.json, source-index.json and byte identity",
+   "result": "PASS. source-index's subject (README, criteria, observer-rbac, vectors, model, README-v8; status.json and edge v8 left out) matches the generated bytes. All 22 predecessorInputs match their files at 27c5460, and the 9 r10Inputs match their files at 1a0c529. All 9 generated paths are absent at the pin, so the packet adds files only. status.json's discharges (I06 v3 README :192; native-profile-v5 status.json :156) and counts are right. There are no local paths or personal data in any of the 9 contract files."
+  },
+  {
+   "check": "Decisions Q-RBAC-1..8",
+   "result": "Applied as decided, with R1-2 (Q-RBAC-3's 'refuse its snapshot' needs the stated composition) and R1-3 (Q-RBAC-7's limit needs stating and carrying). Nothing is decided beyond them, except the contract details flagged in DRAFT item 4."
+  },
+  {
+   "check": "Question for the monitor or owner (DRAFT open item 2, RB07 role exclusivity)",
+   "result": "Position: add RB07. No ClusterRoleBinding or RoleBinding other than the contract's may reference ClusterRole planeon:policy-observer, whatever its subjects. The probes show that a binding of the role to another User, or to Group system:authenticated, passes both checks, and the latter hands every authenticated user cluster-wide list and watch on secrets. HE-008 creates exactly two objects, so no legitimate second reference exists. The check is one line and fails closed, and it serves Q-RBAC-3's 'pin exactly'. Because it goes beyond Q-RBAC-3's words ('any other binding naming the observer'), it needs the monitor's or owner's word. RB07 does not close the wider blind spot that any Secret-read grant to any subject is invisible to I06's categories; R1-3 asks that this be stated and carried."
+  },
+  {
+   "check": "DRAFT open items 1-6",
+   "result": "1 (work item TBD): agree; the monitor names it, as Q-NPE-10 did for 252. 2 (role exclusivity): add RB07 with the monitor's word (see above). 3 (the '20 pairs' scope erratum): agree. R116 enumerates correctly, and the README states 20 specs and 19 pairs. 4 (contract details): agree with labels and annotations refused (HE-008 must not use a client-side apply), rules exact and in order (R10's producer and the apiserver keep role order), the server-metadata list, the RB prefix, criteria carrying v3's 30 rows, and the identity block; state that ruleIndex is 0-based (R1-5). 5 (I07 v3 as an input): agree; verified in v7's rows with the same bytes. 6 (the request-attribute mapping): agree; T04 confirms it."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}

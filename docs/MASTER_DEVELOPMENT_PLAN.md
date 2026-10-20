@@ -1,6 +1,35 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-041 source preparation, October 20, 2026
+## Current checkpoint — MET-ENFORCE-039 source preparation, October 20, 2026
+
+Alpha2 OPEN. MET-PERF-041 (the pytest-diagnostics caps) passed required verify in 869 s and merged as main 585364b. I06-RBAC-V4
+publishes the I06 backend profile v4, a delta successor of I06 v3 that keeps v3's evidence rule (check_evidence is v3's
+function object) and pins the policy observer's one closed ClusterRole and binding exactly: list and watch on the 19
+(group, resource) pairs of HE-004C's 20 request specs and get on five non-resource URLs, with criteria RB00 to RB07
+(owner Q-HE4-6 (a) and Q-RBAC-1 to Q-RBAC-8 (a); the monitor's Q-RBAC-9 (a), Q-RBAC-10 and Q-RBAC-11 (a)); and edge
+record v8, v7's 62 rows plus 4 for HE-008 and HE-004-I01. It discharges I06 v3's and native-profile v5's carry of the
+ClusterRole successor. MET-PERF-041 took slot 253 (owner Q-253-DIAG (a)), so the adopted status record's slot moved from
+253 to 254 (the monitor's slot edit). MET-ENFORCE-039 is the sole 254th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-039 / I06-RBAC-V4 | SOURCE_PREPARED | I06 backend profile v4 (254th packet): a delta successor of I06 v3 that keeps v3's evidence rule (check_evidence is v3's function object) and pins the policy observer's one closed ClusterRole and binding exactly (list and watch on the 19 (group, resource) pairs of HE-004C's 20 request specs, get on five non-resource URLs; criteria RB00 to RB07, 151 checks), and edge record v8 (v7's 62 rows plus 4 for HE-008 and HE-004-I01); candidate 2 adopted by the monitor (owner-delegated) after contract review round 2, PASS; moved from slot 253 to 254 (owner Q-253-DIAG (a)); packet review; verify |
+| Alpha2A | MET-PERF-041 | VERIFY_PASSED_MERGED | Merged as main 585364b (verify 869 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+DATA_CHECK_ONLY: I06 v1 to v3 and native-profile v1 to v5 (their models included) and edge records v1 to v7 stay
+byte-identical; no R10 file changes, and no role code, cloud, runner, live/native/tenant or model-effort change.
+Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical pytest-diagnostics caps source checkpoint — MET-PERF-041 source preparation, October 20, 2026
 
 Alpha2 OPEN. MET-ENFORCE-038 (NATIVE-PROFILE-V5) passed required verify in 857 s and merged as main 27c5460. MET-ENFORCE-039's
 dry run then failed closed at argv 63 on the pytest diagnostics stream: 16,306 tests passed, but the outer pytest's
@@ -2178,7 +2207,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · W03-PLAN-AMEND-3 / MET-ENFORCE-037 · Publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope) after independent review; plan v2, amendments 1 and 2 and edge record v5 byte-identical; pass required verify through the owner's App.
 - [x] Alpha 2 · LAB-RUNPLAN-001 / MET-LINUX-007 · Publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · NATIVE-PROFILE-V5 / MET-ENFORCE-038 · Publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2) after independent review; native-profile v1 to v4, I06 v1 to v3 and edge records v1 to v6 byte-identical; pass required verify through the owner's App.
-- [ ] Alpha 2A · MET-PERF-041 · Raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output, fail-closed, with a diagnostic-caps contract record; pass required verify through the owner's App after the owner approves the exact head.
+- [x] Alpha 2A · MET-PERF-041 · Raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output, fail-closed, with a diagnostic-caps contract record; pass required verify through the owner's App after the owner approves the exact head.
+- [ ] Alpha 2A · I06-RBAC-V4 / MET-ENFORCE-039 · Publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01) after independent review; I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 byte-identical; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
