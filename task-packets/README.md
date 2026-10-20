@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-041
+## Current source preparation — MET-ENFORCE-039
+
+MET-ENFORCE-039 (I06-RBAC-V4): the I06 backend profile v4 (I06 v3's evidence rule unchanged, plus the policy observer's
+one closed ClusterRole and binding pinned exactly by criteria RB00 to RB07) and edge record v8 (HE-008, HE-004-I01),
+adopted after two independent review rounds. DATA_CHECK_ONLY. Alpha2 OPEN; 253 accepted plus MET-ENFORCE-039 only.
+
+## Historical pytest-diagnostics caps source preparation — MET-PERF-041
 
 MET-PERF-041: the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the
 verifier's 32 MiB output ceiling, with 2 MiB reserved for all other output and a diagnostic-caps contract record (owner
@@ -1507,3 +1513,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 251 | `MET-LINUX-007` | `Harness-Engineering` | LAB-RUNPLAN-001: lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; DATA_CHECK_ONLY |
 | 252 | `MET-ENFORCE-038` | `Harness-Engineering` | NATIVE-PROFILE-V5: capture-only native-profile v5 (the seven host fields record-only with four T04 proofs) and edge record v7 (HE-004D2); DATA_CHECK_ONLY |
 | 253 | `MET-PERF-041` | `Harness-Engineering` | Pytest-diagnostics caps under the verifier's 32 MiB output ceiling (30 MiB, 140,000 events, the scan limits derived; 2 MiB reserve); SOURCE_DELTA_ONLY |
+| 254 | `MET-ENFORCE-039` | `Harness-Engineering` | I06-RBAC-V4: I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly) and edge record v8 (HE-008, HE-004-I01); DATA_CHECK_ONLY |

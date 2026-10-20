@@ -1,6 +1,16 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-041
+## Current source preparation — MET-ENFORCE-039
+
+MET-ENFORCE-039 (I06-RBAC-V4): the I06 backend profile v4 under architecture/i06-backend-profile-v4/ and its reference
+model scripts/i06_backend_profile_v4.py, which imports I06 v3's model unchanged (check_evidence is v3's function object).
+v4 adds the policy observer's role document (one closed ClusterRole and its binding, both planeon:policy-observer) and
+criteria RB00 to RB07, which pin the observer's grants exactly and refuse any other binding naming the observer or
+reaching its role. Edge record v8 registers the role document, README, criteria and vectors for HE-008 and HE-004-I01.
+Candidate 2 was adopted by the lane monitor (owner-delegated) after two independent review rounds; the packet moved from
+slot 253 to 254 after MET-PERF-041. DATA_CHECK_ONLY. Alpha2 OPEN; 253 accepted plus MET-ENFORCE-039 only.
+
+## Historical pytest-diagnostics caps source preparation — MET-PERF-041
 
 MET-PERF-041: the pytest-diagnostics caps in `ci/pytest_diagnostics.py`, raised under the owner's verifier's 32 MiB output
 ceiling (owner Q-253-DIAG (a), Q-DIAGCAP-SIZE (A)): MAX_PROCESS_BYTES 20 -> 30 MiB, MAX_EVENTS 100,000 -> 140,000 and
@@ -1312,6 +1322,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 125. `MET-LINUX-007`: publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; the edge records and the registry unchanged; DATA_CHECK_ONLY.
 126. `MET-ENFORCE-038`: publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2); native-profile v4, I06 v3 and edge records v1 to v6 unchanged; DATA_CHECK_ONLY.
 127. `MET-PERF-041`: raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output; fail-closed, the record schema unchanged; SOURCE_DELTA_ONLY.
+128. `MET-ENFORCE-039`: publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01); I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 unchanged; DATA_CHECK_ONLY.
 
 ## Testing, verification, and acceptance
 
