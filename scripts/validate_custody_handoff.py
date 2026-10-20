@@ -257,7 +257,7 @@ def validate_custody_handoff(packets, record, inputs):
         pinned(record)
         errors = validate_additions(packets)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/")}
-        require(len(old) == 136 and set(packets) == old | set(ADDITIONS) | {"MET-UNIFY-005", "MET-RUNNER-001", "MET-PERF-028", "MET-LINUX-005", "MET-VERIFY-001", "MET-PERF-029", "MET-PERF-030", "MET-LINUX-006", "MET-VERIFY-002", "MET-VERIFY-003", "MET-VERIFY-004", "MET-ENFORCE-004", "MET-ENFORCE-005", "MET-ENFORCE-006", "MET-ENFORCE-007", "MET-PERF-031", "MET-ENFORCE-008", "MET-ENFORCE-009", "MET-SECTOR-001", "MET-PERF-032", "MET-ENFORCE-010", "MET-ENFORCE-011", "MET-ENFORCE-012", "MET-ENFORCE-013", "MET-ENFORCE-014", "MET-ENFORCE-015", "MET-ENFORCE-016", "MET-PERF-035", "MET-PERF-036", "MET-SECTOR-002", "MET-ENFORCE-017", "MET-ENFORCE-018", "MET-ENFORCE-019", "MET-ENFORCE-020", "MET-ENFORCE-021", "MET-ENFORCE-022", "MET-ENFORCE-023", "MET-PERF-037", "MET-ENFORCE-024", "MET-ADOPT-003", "MET-MAS-001", "MET-MAS-002", "MET-MAS-006", "MET-ENFORCE-025", "MET-MAS-003", "MET-PERF-038", "MET-ADOPT-004", "MET-ENFORCE-026", "MET-ENFORCE-027", "MET-PERF-039", "MET-ENFORCE-028", "MET-ENFORCE-029", "MET-PERF-040", "MET-ENFORCE-030", "MET-ENFORCE-031", "MET-ENFORCE-032", "MET-MAS-004", "MET-ENFORCE-033", "MET-ENFORCE-034", "MET-ENFORCE-035", "MET-ENFORCE-036", "MET-ENFORCE-037", "MET-LINUX-007", "MET-ENFORCE-038"}, "136 predecessors plus two custody packets required")
+        require(len(old) == 136 and set(packets) == old | set(ADDITIONS) | {"MET-UNIFY-005", "MET-RUNNER-001", "MET-PERF-028", "MET-LINUX-005", "MET-VERIFY-001", "MET-PERF-029", "MET-PERF-030", "MET-LINUX-006", "MET-VERIFY-002", "MET-VERIFY-003", "MET-VERIFY-004", "MET-ENFORCE-004", "MET-ENFORCE-005", "MET-ENFORCE-006", "MET-ENFORCE-007", "MET-PERF-031", "MET-ENFORCE-008", "MET-ENFORCE-009", "MET-SECTOR-001", "MET-PERF-032", "MET-ENFORCE-010", "MET-ENFORCE-011", "MET-ENFORCE-012", "MET-ENFORCE-013", "MET-ENFORCE-014", "MET-ENFORCE-015", "MET-ENFORCE-016", "MET-PERF-035", "MET-PERF-036", "MET-SECTOR-002", "MET-ENFORCE-017", "MET-ENFORCE-018", "MET-ENFORCE-019", "MET-ENFORCE-020", "MET-ENFORCE-021", "MET-ENFORCE-022", "MET-ENFORCE-023", "MET-PERF-037", "MET-ENFORCE-024", "MET-ADOPT-003", "MET-MAS-001", "MET-MAS-002", "MET-MAS-006", "MET-ENFORCE-025", "MET-MAS-003", "MET-PERF-038", "MET-ADOPT-004", "MET-ENFORCE-026", "MET-ENFORCE-027", "MET-PERF-039", "MET-ENFORCE-028", "MET-ENFORCE-029", "MET-PERF-040", "MET-ENFORCE-030", "MET-ENFORCE-031", "MET-ENFORCE-032", "MET-MAS-004", "MET-ENFORCE-033", "MET-ENFORCE-034", "MET-ENFORCE-035", "MET-ENFORCE-036", "MET-ENFORCE-037", "MET-LINUX-007", "MET-ENFORCE-038", "MET-PERF-041"}, "136 predecessors plus two custody packets required")
         pins = {**record["protectedFiles"], **record["inputFiles"]}
         require(type(inputs) is dict and set(inputs) == set(pins), "exact custody input inventory required")
         for path, checksum in pins.items():
@@ -292,7 +292,7 @@ def main():
     for error in errors:
         print("ERROR: " + error)
     if not errors:
-        print("Custody handoff authority valid: 252 packets; 127-file/279-ID history preserved; product/native NOT_RUN.")
+        print("Custody handoff authority valid: 253 packets; 127-file/279-ID history preserved; product/native NOT_RUN.")
     return int(bool(errors))
 
 

@@ -1,6 +1,16 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-038
+## Current source preparation — MET-PERF-041
+
+MET-PERF-041: the pytest-diagnostics caps in `ci/pytest_diagnostics.py`, raised under the owner's verifier's 32 MiB output
+ceiling (owner Q-253-DIAG (a), Q-DIAGCAP-SIZE (A)): MAX_PROCESS_BYTES 20 -> 30 MiB, MAX_EVENTS 100,000 -> 140,000 and
+MAX_SCAN_LINES derived as MAX_EVENTS + MAX_EVENTS // 10, with MAX_SCAN_BYTES following and 2 MiB reserved for all other
+output; the live digest pin in `tests/test_diagnostic_repair.py` follows. The contract record
+`architecture/diagnostic-caps/` holds the measurement, the pinned boundary profiles, the headroom and the historical
+records, and the new layer executes the boundary checks from its era's bytes. Alpha2 OPEN; 252 accepted plus MET-PERF-041
+only.
+
+## Historical capture-only native-profile v5 source preparation — MET-ENFORCE-038
 
 MET-ENFORCE-038 (NATIVE-PROFILE-V5): the capture-only native-profile v5 under architecture/native-profile-v5/ and its
 reference model scripts/native_qualification_v5.py, which imports native-profile v4's model unchanged. The three capture
@@ -1301,6 +1311,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 124. `MET-ENFORCE-037`: publish W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); plan v2, amendments 1 and 2 and edge record v5 unchanged; DATA_CHECK_ONLY.
 125. `MET-LINUX-007`: publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; the edge records and the registry unchanged; DATA_CHECK_ONLY.
 126. `MET-ENFORCE-038`: publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2); native-profile v4, I06 v3 and edge records v1 to v6 unchanged; DATA_CHECK_ONLY.
+127. `MET-PERF-041`: raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output; fail-closed, the record schema unchanged; SOURCE_DELTA_ONLY.
 
 ## Testing, verification, and acceptance
 

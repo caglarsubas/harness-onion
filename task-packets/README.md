@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-038
+## Current source preparation — MET-PERF-041
+
+MET-PERF-041: the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the
+verifier's 32 MiB output ceiling, with 2 MiB reserved for all other output and a diagnostic-caps contract record (owner
+Q-253-DIAG (a), Q-DIAGCAP-SIZE (A)). SOURCE_DELTA_ONLY. Alpha2 OPEN; 252 accepted plus MET-PERF-041 only.
+
+## Historical capture-only native-profile v5 source preparation — MET-ENFORCE-038
 
 MET-ENFORCE-038 (NATIVE-PROFILE-V5): the capture-only native-profile v5 (native-profile v4's captures without the seven
 host, policy and boot fields, which become record-only with four T04 proofs; the record stays native-profile v4's) and
@@ -1500,3 +1506,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 250 | `MET-ENFORCE-037` | `Harness-Engineering` | W03-PLAN-AMEND-3: W03 obligation-register amendment 3 (OBS-HOSTPOL-1 and NP-9 added; HE-003's amendment-1 share corrected; HE-004D1's packet scope); DATA_CHECK_ONLY |
 | 251 | `MET-LINUX-007` | `Harness-Engineering` | LAB-RUNPLAN-001: lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) for the owner's GCP qualification runs; DATA_CHECK_ONLY |
 | 252 | `MET-ENFORCE-038` | `Harness-Engineering` | NATIVE-PROFILE-V5: capture-only native-profile v5 (the seven host fields record-only with four T04 proofs) and edge record v7 (HE-004D2); DATA_CHECK_ONLY |
+| 253 | `MET-PERF-041` | `Harness-Engineering` | Pytest-diagnostics caps under the verifier's 32 MiB output ceiling (30 MiB, 140,000 events, the scan limits derived; 2 MiB reserve); SOURCE_DELTA_ONLY |
