@@ -320,7 +320,7 @@
   ],
   "boundaryRules": [
     "Found with the real module (27c5460's bytes with the three constants set), a counting sink and the pinned profiles; identical to contract review round 3's independent oracle.",
-    "Whatever the profile, the stream never exceeds byte_limit (31,457,280 B): the largest first-failing stream above is 31,455,363 B.",
+    "Whatever the profile, the stream never exceeds byte_limit (31,457,280 B): the largest first-failing stream above is 31,455,498 B (WB).",
     "Before the change, profile R at 16,306 tests (the incident) fails with OUTPUT_LIMIT, first failing at test 15,462."
   ],
   "headroom": {
@@ -502,7 +502,7 @@
       "kind": "live, unchanged",
       "pins": "tests/linux_runner/test_predecessor_diagnostics.py",
       "value": "3c0afe5686f0c39cea2f68d97f50549d0faba890539c3e20aae1d88b2305139f",
-      "route": "the mutant at tests/test_load_deadlines.py:859-860 replaces it (3c0afe56 -> 58cabbee) through reviewed_bytes, after the successor projection; this packet's hunk touches line 133 only, so line 132 and that mutant are untouched (C3-2)"
+      "route": "the mutant at tests/test_load_deadlines.py:859-860 (27c5460's lines; 860-861 at this packet's head, where the bridge inserts one line above them, the content unchanged) replaces it (3c0afe56 -> 58cabbee) through reviewed_bytes, after the successor projection; this packet's hunk touches line 133 only, so line 132 and that mutant are untouched (C3-2)"
     }
   ],
   "historicalLimitRecords": [
@@ -700,10 +700,10 @@
     "checks": "the executed checks once each: profile W at 22,874 (collecting the stream) and 22,875, profile S at 23,333 and 23,334, the three summarize_nested streams and the base module's profile R at 16,306",
     "producerRuns": 5,
     "summarizeRuns": 3,
-    "wallSeconds": 3.72,
-    "peakRssMiB": 213.9,
-    "processRssBeforeMiB": 18.1,
-    "measuredBy": "the packet builder, in one fresh process, with the layer's own executed-check code (CPython 3.12.4), at a 1-minute host load average of about 9 to 19 on 18 CPUs",
+    "wallSeconds": 3.81,
+    "peakRssMiB": 214.4,
+    "processRssBeforeMiB": 26.5,
+    "measuredBy": "the packet builder, in one fresh process, with the layer's own executed-check code under the repository venv's interpreter, the one the verify runs (CPython 3.12.14), at a 1-minute host load average of about 5.8 on 18 CPUs",
     "budget": "PLAN.md section 8: about 1-2 s per producer run and at most about 400 MB in all; the new test file has no pinned parallel-suite weight (0.05 x its node count), so the checks may land on a loaded worker: about 10-25 s more in argv 63 at 253's load"
   },
   "memory": "summarize_nested holds the caller's captured stderr (a str in the predecessor driver), an encoded bytes copy and, on INPUT_LIMIT, up to two slices of up to MAX_SCAN_BYTES: about input + input + 2 x 31 MiB, roughly 200 MB for a full-size stream (review round 1 measured about 411 MB at the 64 MiB caps); the layer test's full-size checks stay under 400 MB in all",
@@ -725,7 +725,7 @@
     },
     {
       "id": "C3-2",
-      "text": "The 3c0afe56 pin in tests/test_diagnostic_repair.py is on line 132, not 131; the reverse hunk touches line 133 only, so line 132 and the mutant at tests/test_load_deadlines.py:859-860 are untouched."
+      "text": "The 3c0afe56 pin in tests/test_diagnostic_repair.py is on line 132, not 131; the reverse hunk touches line 133 only, so line 132 and the mutant at tests/test_load_deadlines.py:859-860 (27c5460's lines; 860-861 at this packet's head, where the bridge inserts one line above them, the content unchanged) are untouched."
     }
   ],
   "structuralFollowUp": {

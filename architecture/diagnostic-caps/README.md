@@ -47,7 +47,7 @@ The digits follow from the 900 s worker deadline: the parent's `tUs` stays below
 | R (control) | before | 15,461 | 15,462 | OUTPUT_LIMIT | 20,969,647 B |
 | R at 16,306 tests (the incident) | before | | fails | OUTPUT_LIMIT | first failing test 15,462 |
 
-They are identical to contract review round 3's independent oracle. Whatever the profile, the stream never exceeds `byte_limit` (31,457,280 B; the largest first-failing stream above is 31,455,363 B). At W's boundary the stream ends at 31,455,196 B; with about 90 KB of other output the whole run is about 31.55 MB against the 33.55 MB ceiling.
+They are identical to contract review round 3's independent oracle. Whatever the profile, the stream never exceeds `byte_limit` (31,457,280 B; the largest first-failing stream above is 31,455,498 B, WB). At W's boundary the stream ends at 31,455,196 B; with about 90 KB of other output the whole run is about 31.55 MB against the 33.55 MB ceiling.
 
 ## Headroom
 
@@ -79,7 +79,7 @@ Known residual (C1-11), pre-existing and out of scope: the predecessor fallback'
 
 ## Pins
 
-- Live: `tests/test_diagnostic_repair.py` line 133 pins `ci/pytest_diagnostics.py` and moves from 67416db3 to the new file's digest. Line 132 (3c0afe56, the predecessor diagnostics test) stays byte-identical; the mutant at `tests/test_load_deadlines.py:859-860` replaces it through `reviewed_bytes`, after the successor projection, and this packet's reverse hunk spans line 133's bytes only (C3-2).
+- Live: `tests/test_diagnostic_repair.py` line 133 pins `ci/pytest_diagnostics.py` and moves from 67416db3 to the new file's digest. Line 132 (3c0afe56, the predecessor diagnostics test) stays byte-identical; the mutant at `tests/test_load_deadlines.py:859-860` (27c5460's lines; 860-861 at this packet's head, where the bridge inserts one line above them, the content unchanged) replaces it through `reviewed_bytes`, after the successor projection, and this packet's reverse hunk spans line 133's bytes only (C3-2).
 - Historical, byte-identical and reached through this packet's reverse hunks: MET-PERF-028's authority `newFiles` (`ci/pytest_diagnostics.py` 67416db3, checked through `successor.historical_bytes` by `scripts/validate_packet_schema_performance.py`, argv 51; `tests/test_diagnostic_repair.py` 89aaa588); MET-PERF-038's authority `changedFiles` (before 89aaa588, after 7b666bb8) and `scripts/validate_load_deadlines.py`'s `ERA_SHA256` (7b666bb8).
 
 ## Historical records
@@ -103,7 +103,7 @@ MET-PERF-028's authority and MET-PERF-038's records stay byte-identical, and eve
 3. `summarize_nested` reports COMPLETE on a stream of exactly `MAX_SCAN_BYTES` and `MAX_SCAN_LINES` (W's stream padded with non-diagnostic lines), INPUT_LIMIT one byte past, and SCAN_LIMIT one line past;
 4. control: the base module (27c5460's bytes, through this layer's own inverse) fails profile R at 16,306 tests with OUTPUT_LIMIT.
 
-Measured at build time by the packet builder, in one fresh process, with the layer's own executed-check code (CPython 3.12.4), at a 1-minute host load average of about 9 to 19 on 18 CPUs: 3.72 s and a peak RSS of 213.9 MiB for the whole set. Mutants run at small scale with the caps rewritten, and every check has a failing test.
+Measured at build time by the packet builder, in one fresh process, with the layer's own executed-check code under the repository venv's interpreter, the one the verify runs (CPython 3.12.14), at a 1-minute host load average of about 5.8 on 18 CPUs: 3.81 s and a peak RSS of 214.4 MiB for the whole set. Mutants run at small scale with the caps rewritten, and every check has a failing test.
 
 ## Owner decisions (verbatim)
 

@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/diagnostic-caps-authority.json"
-AUTHORITY_SHA256 = "58a6f7bfdfbcaf87f6a2c4b90249538b20417178863d8f70899b32994f5dba29"
+AUTHORITY_SHA256 = "819b038d6efc8f4bef84d38ee216386ed3e233abbd444e8b0c48ce96bd77c1cb"
 VALIDATOR_PATH = "scripts/validate_diagnostic_caps.py"
 BASE_COMMIT = "27c54605a3dcdbe86522a6bd18a5e19faa5cb40b"
 NEW_PACKET = "MET-PERF-041"
@@ -378,8 +378,8 @@ PERF_038_VALIDATOR = "scripts/validate_load_deadlines.py"
 PERF_038_RECORDS = ("architecture/load-deadlines/limits.json", "architecture/load-deadlines/README.md")
 HISTORICAL_RECORDS = (PERF_028_PACKET, PERF_028_AUTHORITY, PERF_038_AUTHORITY) + PERF_038_RECORDS
 ERA_SHA256 = MappingProxyType({
-    "architecture/diagnostic-caps/README.md": "516fce11125fadfbee8865f727cddf106c93e9c11d10615ae42ef6c47d9b24bf",
-    "architecture/diagnostic-caps/limits.json": "ba3a4ce5a5b6f31ef8da281434fcb7507e01b4cfa3750df3d0a83c93148a6226",
+    "architecture/diagnostic-caps/README.md": "8216ec1b3e12bbce15fead83884517251db77d3034ee63e7a92c24591f4af4bf",
+    "architecture/diagnostic-caps/limits.json": "5b95b1a42bc15a4de3a8f74e7520ee09da94a15ddd00ef2e8da2c738ca4f0a2c",
     "architecture/load-deadlines-authority.json": "f36e25091fc2c440935d0f8ae5f0687acce9998f30dff5a7cf8327b0a89ce0ab",
     "architecture/load-deadlines/README.md": "36ee4dd227603e6ebef164a20555c30fabfbd59c0c0dbbd2526579478dcb81c1",
     "architecture/load-deadlines/limits.json": "f9c152fd4b7e074e5b63b1649e35e2cc2c651060c1ae48d91c078b8690f0f11f",
@@ -672,7 +672,7 @@ LIMITS = {'schemaVersion': 'harness.planeon.ai/diagnostic-caps/v1',
  'boundaryRules': ["Found with the real module (27c5460's bytes with the three constants set), a counting sink and "
                    "the pinned profiles; identical to contract review round 3's independent oracle.",
                    'Whatever the profile, the stream never exceeds byte_limit (31,457,280 B): the largest '
-                   'first-failing stream above is 31,455,363 B.',
+                   'first-failing stream above is 31,455,498 B (WB).',
                    'Before the change, profile R at 16,306 tests (the incident) fails with OUTPUT_LIMIT, first '
                    'failing at test 15,462.'],
  'headroom': {'lastPassingTests': 22874,
@@ -765,9 +765,10 @@ LIMITS = {'schemaVersion': 'harness.planeon.ai/diagnostic-caps/v1',
            'kind': 'live, unchanged',
            'pins': 'tests/linux_runner/test_predecessor_diagnostics.py',
            'value': '3c0afe5686f0c39cea2f68d97f50549d0faba890539c3e20aae1d88b2305139f',
-           'route': 'the mutant at tests/test_load_deadlines.py:859-860 replaces it (3c0afe56 -> 58cabbee) through '
-                    "reviewed_bytes, after the successor projection; this packet's hunk touches line 133 only, so "
-                    'line 132 and that mutant are untouched (C3-2)'}],
+           'route': "the mutant at tests/test_load_deadlines.py:859-860 (27c5460's lines; 860-861 at this packet's "
+                    'head, where the bridge inserts one line above them, the content unchanged) replaces it '
+                    "(3c0afe56 -> 58cabbee) through reviewed_bytes, after the successor projection; this packet's "
+                    'hunk touches line 133 only, so line 132 and that mutant are untouched (C3-2)'}],
  'historicalLimitRecords': [{'path': 'task-packets/MET-PERF-028.yaml',
                              'sha256': 'cfa07a1e6d738a0b4ddf531530cba686d0d6c7931e68623c86a63dcdb0e29722',
                              'sentences': ['Fixed added-diagnostic ceilings '
@@ -912,12 +913,12 @@ LIMITS = {'schemaVersion': 'harness.planeon.ai/diagnostic-caps/v1',
                             "base module's profile R at 16,306",
                   'producerRuns': 5,
                   'summarizeRuns': 3,
-                  'wallSeconds': 3.72,
-                  'peakRssMiB': 213.9,
-                  'processRssBeforeMiB': 18.1,
+                  'wallSeconds': 3.81,
+                  'peakRssMiB': 214.4,
+                  'processRssBeforeMiB': 26.5,
                   'measuredBy': "the packet builder, in one fresh process, with the layer's own executed-check "
-                                'code (CPython 3.12.4), at a 1-minute host load average of about 9 to 19 on 18 '
-                                'CPUs',
+                                "code under the repository venv's interpreter, the one the verify runs (CPython "
+                                '3.12.14), at a 1-minute host load average of about 5.8 on 18 CPUs',
                   'budget': 'PLAN.md section 8: about 1-2 s per producer run and at most about 400 MB in all; the '
                             'new test file has no pinned parallel-suite weight (0.05 x its node count), so the '
                             "checks may land on a loaded worker: about 10-25 s more in argv 63 at 253's load"},
@@ -943,7 +944,8 @@ LIMITS = {'schemaVersion': 'harness.planeon.ai/diagnostic-caps/v1',
                  {'id': 'C3-2',
                   'text': 'The 3c0afe56 pin in tests/test_diagnostic_repair.py is on line 132, not 131; the '
                           'reverse hunk touches line 133 only, so line 132 and the mutant at '
-                          'tests/test_load_deadlines.py:859-860 are untouched.'}],
+                          "tests/test_load_deadlines.py:859-860 (27c5460's lines; 860-861 at this packet's head, "
+                          'where the bridge inserts one line above them, the content unchanged) are untouched.'}],
  'structuralFollowUp': {'id': 'CHAIN-COMPACTION-001',
                         'decision': 'D9a, after slot 254',
                         'scope': 'the structural follow-up for both the time and the output ceiling'},
