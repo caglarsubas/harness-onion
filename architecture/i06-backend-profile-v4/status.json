@@ -1,0 +1,248 @@
+{
+ "schemaVersion": "planeon.internal.i06-backend-profile-v4-status/v1",
+ "contract": "SEALED_SINGLE_NODE_CONTROL_PLANE_V1/i06-backend-profile/v4",
+ "supersedes": "SEALED_SINGLE_NODE_CONTROL_PLANE_V1/i06-backend-profile/v3",
+ "workItem": "I06-RBAC-V4",
+ "packet": "MET-ENFORCE-039",
+ "slot": 254,
+ "status": "ADOPTED",
+ "candidate": 2,
+ "baseMain": "585364b94e3e4a8bf1418ef750ce3d71cd38f95a",
+ "reviewBase": "27c54605a3dcdbe86522a6bd18a5e19faa5cb40b",
+ "keeps": {
+  "checkEvidence": "scripts/i06_backend_profile_v3.py check_evidence (the same function object)",
+  "evidenceRecord": "planeon.internal.i06-distribution-evidence/v2",
+  "snapshotRecord": "planeon.internal.i06-rbac-snapshot/v1",
+  "identityClosure": "architecture/i06-backend-profile/identity-closure.json"
+ },
+ "contracts": {
+  "i06BackendProfileV4": {
+   "criteria": "architecture/i06-backend-profile-v4/criteria.json",
+   "observerRbac": "architecture/i06-backend-profile-v4/observer-rbac.json",
+   "vectors": "architecture/i06-backend-profile-v4/vectors.json",
+   "model": "scripts/i06_backend_profile_v4.py",
+   "readme": "architecture/i06-backend-profile-v4/README.md",
+   "sourceIndex": "architecture/i06-backend-profile-v4/source-index.json"
+  },
+  "edgeRecordV8": {
+   "record": "architecture/artifact-edges/operator-harness-engineering-v8.json",
+   "readme": "architecture/artifact-edges/README-v8.md"
+  }
+ },
+ "ownerDecisions": [
+  "Q-HE4-6 = (a): one closed ClusterRole, named by the next I06 successor and provisioned by HE-008; the client certificate is exactly CN=planeon:policy-observer with no O groups and the clientAuth EKU; a refused read exits 82. The owner ACCEPTS the residual that `list secrets` returns Secret data, to be re-assessed at HE-004-I01, with the optional audit check carried.",
+  "Q-NPE-5 (a): the ClusterRole I06 successor gets its own slot after 252 and before HE-008.",
+  "Monitor relay, owner decisions on slot 253 (SCOPE.md d09da60e), 2026-10-19:",
+  "Q-RBAC-1 (a): a delta I06 v4 that imports v3, keeps check_evidence exactly as v3's, and adds the role document and an exact pin. The owner accepts a third I06 successor.",
+  "Q-RBAC-3 (a): pin exactly. Any other binding naming the observer, including the writer's RoleBinding to Role planeon-policy-observer, makes the observer refuse its snapshot. Narrowing the writer's role names is carried to W02G-F2 and an I07 successor.",
+  "Q-RBAC-2, 4, 5, 6, 7 and 8: all (a) as in SCOPE.md (names planeon:policy-observer; HE-008 and HE-004-I01 both check; the Secret audit check decided at I01; AMEND links it later; closure covers the observer's own bindings; the provisioning route is left to HE-008 under the stated constraints).",
+  "Record these verbatim and dated. SLOT 253 is yours (packet id at mechanics). GO for the contract draft and review rounds (light).",
+  "Monitor decisions, 2026-10-19 (a strict tightening within the owner's exact-pin intent; I'll tell the owner):",
+  "Q-RBAC-9 = (a): add RB07, so that only the contract's ClusterRoleBinding may reference ClusterRole planeon:policy-observer, and any other binding of that role to any subject refuses. Give it negatives: a second ClusterRoleBinding, a RoleBinding referencing the ClusterRole, and an aggregated role.",
+  "Q-RBAC-10 = \"I06-RBAC-V4\". The visionary or a lane adds the roadmap item under the lock at merge time.",
+  "The R116/DESIGN-C correction is noted and carried. Fold RB07 and the r1 fixes into candidate 2, then the delta round. The listed details (labels refused, rule order, ignored metadata) are for the reviewer to judge.",
+  "Monitor: Q-RBAC-11 = (a), consistent with the owner's Q-RBAC-7 (a): closure covers the observer's own bindings only. State the system:authenticated limit plainly and carry it to T04 (cluster-wide check over non-stock bindings to that group) and to HE-004-I01. Don't add (b) as a switch unless it's genuinely trivial; a dormant stricter mode is review surface we don't need. If the owner wants (b) later, it becomes a successor. R1-1 to R1-5 and RB07 go into candidate 2, then the delta r2. I'll tell the owner about the limit."
+ ],
+ "discharges": [
+  {
+   "path": "architecture/i06-backend-profile-v3/README.md",
+   "line": 192,
+   "item": "OBS-RBAC-1's grants go to the I06 successor after v3 (Q-NP4D-7 (a))"
+  },
+  {
+   "path": "architecture/native-profile-v5/status.json",
+   "line": 156,
+   "item": "native-profile v5's carry: the ClusterRole I06 successor (Q-NPE-5 (a))"
+  }
+ ],
+ "observerRole": {
+  "name": "planeon:policy-observer",
+  "binding": "planeon:policy-observer",
+  "subject": {
+   "kind": "User",
+   "name": "planeon:policy-observer"
+  },
+  "pairs": 19,
+  "requestSpecs": 20,
+  "grants": 43,
+  "rules": 8
+ },
+ "residuals": [
+  {
+   "id": "SECRET-READS",
+   "decision": "Q-HE4-6 (a)",
+   "reassessedAt": "HE-004-I01"
+  }
+ ],
+ "r10CrossCheck": {
+  "specs": 20,
+  "pairs": 19,
+  "targets": 88,
+  "grants": 43,
+  "builders": 7,
+  "testRole": "equal",
+  "repository": "mas-harness-operator",
+  "commit": "1a0c529cfa9333c507b21c03bb49bc5c5212d8ef",
+  "tree": "8c1ae5e164d53879bb8baf1953b0b7be268b017b"
+ },
+ "counts": {
+  "checks": 151,
+  "v3SnapshotReplayed": 43,
+  "refusalTexts": 49,
+  "edgeRows": 66,
+  "documentNegative": 7,
+  "objectsAccepted": 6,
+  "objectsNegative": 61,
+  "snapshotAccepted": 2,
+  "snapshotNegative": 14,
+  "crossVersion": 6,
+  "composed": 7
+ },
+ "carried": [
+  {
+   "item": "R2-1 (contract review round 2, NOTE): check_vectors pins each section's case ids in order, the XR01 and XR02 anchors and v4's ids disjoint from v3's, but not a case's content under a pinned id (CO02 or CO03 repointed to another object case, or XR03 made a copy of XR02, was accepted)",
+   "to": "a later I06 successor's model (optional hardening, not blocking)",
+   "action": "the adopted model keeps its reviewed bytes and the monitor's adoption carries R2-1; a successor may pin the composed rows (id, snapshotCase, objectsCase) and the cross-version rows' base, or a digest of each case section, as model constants, as RB_ROWS_SHA256 does for the criteria"
+  },
+  {
+   "item": "R2-2 (contract review round 2, NOTE): RB07's roleRef test reads two invalid roleRef kinds naming the observer's ClusterRole (a lower-case 'clusterrole', and kind Role in a ClusterRoleBinding) as valid instead of refusing them; the apiserver rejects both and R10's producer refuses such a roleRef as Malformed (R99), so this is no live bypass",
+   "to": "a later I06 successor's model (optional hardening, not blocking)",
+   "action": "the adopted model keeps its reviewed bytes and the monitor's adoption carries R2-2; a successor may refuse any other binding's roleRef whose kind is not ClusterRole (in a ClusterRoleBinding) or Role or ClusterRole (in a RoleBinding), as R99 does"
+  },
+  {
+   "item": "the provisioning route, under SC03, OR02 and the certificate rule; check_observer_document on the vendored document and check_observer_rbac on the manifest before applying",
+   "to": "HE-008 (Q-RBAC-4 (a), Q-RBAC-8 (a))",
+   "action": "HE-008 vendors the role document and the README (edge record v8), provisions the ClusterRole and its binding by the route it chooses under SC03, OR02 and the certificate rule, and runs check_observer_document on the vendored document and check_observer_rbac on its manifest before applying"
+  },
+  {
+   "item": "the observer accepts a snapshot only through check_observer_snapshot, on the RBAC lists of the same read at the snapshot's one resourceVersion (the caller obligation); the Secret residual's re-assessment; the audit-check decision",
+   "to": "HE-004-I01 (Q-RBAC-3 (a), Q-RBAC-4 (a), Q-RBAC-5 (a))",
+   "action": "HE-004-I01 vendors the criteria and vectors (edge record v8), accepts the observer's snapshot only through check_observer_snapshot over the RBAC lists of the same read, re-assesses the Secret residual and decides the audit check"
+  },
+  {
+   "item": "403 on reads outside the role; the certificate subject; the stock system:authenticated roles; the audit check if adopted",
+   "to": "T04 (Q-RBAC-7 (a))",
+   "action": "T04 checks on a cluster the 403 on reads outside the role, the certificate subject and the stock system:authenticated roles, and the audit check if it is adopted"
+  },
+  {
+   "item": "the system:authenticated limit: only bindings naming User planeon:policy-observer are pinned, with RB07's role references; grants that reach the observer through system:authenticated beyond the stock bootstrap ones are neither pinned nor seen by I06 when they are reads",
+   "to": "T04 (a cluster-wide check over non-stock bindings to Group system:authenticated) and HE-004-I01 (Q-RBAC-11 (a))",
+   "action": "T04 runs the cluster-wide check over non-stock bindings to Group system:authenticated and HE-004-I01 carries the limit; v4 adds no stricter mode (Q-RBAC-11 (a))"
+  },
+  {
+   "item": "narrowing the writer's role names (Role planeon-policy-observer)",
+   "to": "W02G-F2 and an I07 successor (Q-RBAC-3 (a))",
+   "action": "W02G-F2 and an I07 successor narrow the writer's role names; until then any other binding naming the observer, the writer's RoleBinding to Role planeon-policy-observer included, makes the observer refuse its snapshot (RB06)"
+  },
+  {
+   "item": "adding this packet to OBS-RBAC-1 by PACKETS_ADDED, with its id",
+   "to": "the next W03 plan amendment (Q-RBAC-6 (a); Q-A3-6 (a); AMEND-2 C3-2)",
+   "action": "the next W03 plan amendment adds MET-ENFORCE-039 to OBS-RBAC-1 by PACKETS_ADDED"
+  },
+  {
+   "item": "the HE-004C design text's '20 pairs': 20 request specs, 19 (group, resource) pairs; R116 enumerates correctly",
+   "to": "a clarifying note at R10's next MODEL_DEFINED touch (R10 is not edited here)",
+   "action": "R10's next MODEL_DEFINED touch states 20 request specs and 19 (group, resource) pairs; no R10 file changes in this packet"
+  }
+ ],
+ "nonClaims": [
+  "I06 v1, v2 and v3, native-profile v1 to v5 and edge records v1 to v7 are byte-identical; this packet adds files only.",
+  "No evidence rule changes: check_evidence is v3's function object, and production evidence stays refused.",
+  "No cluster is observed and nothing is provisioned; the request-attribute mapping is confirmed only by T04.",
+  "Grants that reach the observer through system:authenticated beyond the stock bootstrap ones are not pinned (Q-RBAC-11 (a))."
+ ],
+ "rounds": [
+  {
+   "round": 1,
+   "candidate": 1,
+   "subjectBuilderSha256": "c46edf13d77f2fafd6889ef53715075a888f77adb0f4720aea729f35f2702efd",
+   "verdict": "CHANGES_REQUIRED",
+   "recordSha256": "06e61ab685c20345c6d6205c024ee8fc924a770c09f54a1156566cb8b5467299",
+   "record": "architecture/i06-backend-profile-v4/review-round1.json",
+   "subjectSha256": {
+    "architecture/i06-backend-profile-v4/README.md": "35d385c43710ed43170f02a1610929517a349021899486f162e1305c44672f1e",
+    "architecture/i06-backend-profile-v4/criteria.json": "38f775d4894eb48be268fc15f1f547bf0bd00f18b2842b10c49bb8476c27fb1a",
+    "architecture/i06-backend-profile-v4/observer-rbac.json": "71305d7f7ab231e01b33b4de43f3a49efa37f6e1fb463b98b076e9b216e266d8",
+    "architecture/i06-backend-profile-v4/vectors.json": "fc9bac94c60c53a69f5cf25af0ce2e5946d7c490211ac1693c60038a90544ad9",
+    "architecture/i06-backend-profile-v4/source-index.json": "4b824e2bc4c1bb519d4d33c50dcbd2f11f233a1b9af0cb991f72df083524df87",
+    "scripts/i06_backend_profile_v4.py": "efd50b51e8d45524459e20d343e2180abb09088358c57ed7e9882d9df259c991",
+    "architecture/artifact-edges/operator-harness-engineering-v8.json": "da6ba2ccbc157ce4fc89bbed5b84434e50bf98fd27a2120ba3d7d101cb1e6b26",
+    "architecture/artifact-edges/README-v8.md": "b3172a640d0f59a02bd4a92dfe8b68e54c57ddd82a85b81a11e1ad12a5516184",
+    "architecture/i06-backend-profile-v4/status.json": "bf6f6344156d059017ee9081e70921ba324535cfdb55214b07a93e9e65f0ac89"
+   },
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ]
+  },
+  {
+   "round": 2,
+   "candidate": 2,
+   "subjectBuilderSha256": "99ba072c75c7ba843ed0d5bda0f6ba38deb1fdb6f6df28ac2ad2a7417d197a78",
+   "verdict": "PASS_FOR_ADOPTION",
+   "recordSha256": "fb0f3a5d010e872b516b3f9d598d67be2158bd14df755dc5e00f223adc8449f8",
+   "record": "architecture/i06-backend-profile-v4/review-round2.json",
+   "subjectSha256": {
+    "architecture/i06-backend-profile-v4/README.md": "d58b0385299d3f393c4f1ae936e18c8f45b9ae0f0c469f0c29627dd8ecb705ae",
+    "architecture/i06-backend-profile-v4/criteria.json": "10aa3a8fe08a930e3a4a13f7a11b38404cd82bd1a12164a40ef13141af37d09a",
+    "architecture/i06-backend-profile-v4/observer-rbac.json": "71305d7f7ab231e01b33b4de43f3a49efa37f6e1fb463b98b076e9b216e266d8",
+    "architecture/i06-backend-profile-v4/vectors.json": "27aba3bf7296a08b90adef1663d6498fda9ae98499707d0c0950aa6c4ba14eb7",
+    "architecture/i06-backend-profile-v4/source-index.json": "2f2238e3ba5965d010036efe61de1da0a180c7edbd8e0632b9b1f91df0f9372f",
+    "scripts/i06_backend_profile_v4.py": "7f97acfe9060e79c101f264f5bf61610bf421326c689216cbaf41df7e38e6d2a",
+    "architecture/artifact-edges/operator-harness-engineering-v8.json": "719b71549c33228c559026e9a1b5ad5a848c67c384b705f5bfa91a79d4cf02c7",
+    "architecture/artifact-edges/README-v8.md": "e5dea489087b0d58c9e1559ce6ee1a07ef2e7567a9d04841d80b3f20e67dc0d9",
+    "architecture/i06-backend-profile-v4/status.json": "e0f60b00f03b0317bbdf85643cbdca1506773d94cda6691a72961e3c9523b930"
+   },
+   "severities": [
+    "NOTE"
+   ]
+  }
+ ],
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated",
+  "date": "2026-10-19",
+  "decision": "Monitor: ADOPT candidate 2 for slot 253 (I06-RBAC-V4), on r2 PASS_FOR_ADOPTION (fb0f3a5d). The files: README d58b0385, observer-rbac.json 71305d7f, criteria 10aa3a8f, vectors 27aba3bf, status e0f60b00, source-index 2f2238e3, model 7f97acfe, edge v8 719b7154 (66 rows), README-v8 e5dea489, builder 99ba072c. Keep c2 frozen and carry R2-1 and R2-2 in status.json at adoption."
+ },
+ "adoptedSubject": {
+  "architecture/i06-backend-profile-v4/README.md": "d58b0385299d3f393c4f1ae936e18c8f45b9ae0f0c469f0c29627dd8ecb705ae",
+  "architecture/i06-backend-profile-v4/criteria.json": "10aa3a8fe08a930e3a4a13f7a11b38404cd82bd1a12164a40ef13141af37d09a",
+  "architecture/i06-backend-profile-v4/observer-rbac.json": "71305d7f7ab231e01b33b4de43f3a49efa37f6e1fb463b98b076e9b216e266d8",
+  "architecture/i06-backend-profile-v4/vectors.json": "27aba3bf7296a08b90adef1663d6498fda9ae98499707d0c0950aa6c4ba14eb7",
+  "architecture/i06-backend-profile-v4/source-index.json": "2f2238e3ba5965d010036efe61de1da0a180c7edbd8e0632b9b1f91df0f9372f",
+  "scripts/i06_backend_profile_v4.py": "7f97acfe9060e79c101f264f5bf61610bf421326c689216cbaf41df7e38e6d2a",
+  "architecture/artifact-edges/operator-harness-engineering-v8.json": "623cf10bf19cfba1806f5699007f39c7f6ba38f72d92069548421c4dccd21573",
+  "architecture/artifact-edges/README-v8.md": "e5dea489087b0d58c9e1559ce6ee1a07ef2e7567a9d04841d80b3f20e67dc0d9"
+ },
+ "adoptionEdit": {
+  "path": "architecture/artifact-edges/operator-harness-engineering-v8.json",
+  "replaced": "\"providerPacket\": \"TBD\"",
+  "with": "\"providerPacket\": \"MET-ENFORCE-039\"",
+  "count": 4,
+  "rows": [
+   "architecture/i06-backend-profile-v4/observer-rbac.json",
+   "architecture/i06-backend-profile-v4/README.md",
+   "architecture/i06-backend-profile-v4/criteria.json",
+   "architecture/i06-backend-profile-v4/vectors.json"
+  ],
+  "candidateSha256": "719b71549c33228c559026e9a1b5ad5a848c67c384b705f5bfa91a79d4cf02c7",
+  "adoptedSha256": "623cf10bf19cfba1806f5699007f39c7f6ba38f72d92069548421c4dccd21573",
+  "lineCount": 739
+ },
+ "slotEdit": {
+  "before": 253,
+  "after": 254,
+  "decision": "owner Q-253-DIAG (a): MET-PERF-041 took slot 253"
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "readmeStatusNote": "Every adopted file except edge record v8 and this status record is candidate 2's bytes: architecture/i06-backend-profile-v4/README.md and architecture/artifact-edges/README-v8.md keep their reviewed text, including the 'CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW' status lines and the lines saying that the packet id is assigned at mechanics and that edge record v8's providerPacket TBD is filled then; no README line moved, as slots 244, 246 and 252 kept theirs. MET-PERF-041 then took slot 253 (owner Q-253-DIAG (a)) and this packet moved to slot 254 (the lane monitor's decision MON-254-SLOTEDIT, option (a)): the README heading, the verbatim relays naming slot 253 and edge record v8's slot-253 note stay byte-exact, and the move is recorded here only, as slotEdit. Edge record v8's four providerPacket values, this record's slot value and its adoption fields are the adoption edits; the assignment to MET-ENFORCE-039 is recorded here only",
+ "recordPaths": "The two review records are published byte-identical to the reviewers' records as architecture/i06-backend-profile-v4/review-round1.json and review-round2.json; they hold no local path or personal data, and each recordSha256 is of the published bytes. The contract review brief is kept with the coordinator outside the repository and is not published (round 2's brief, sha256 5fedddda71ad7aa3346fa6238c8d7740931300d5805462fa43f26f960d83abbc), and no round copies are published: each round's subject is recorded by its candidate number, its contract builder's SHA-256 and the SHA-256 of the candidate's nine files",
+ "closedFindings": {
+  "R1-1": "CLOSED in round 2",
+  "R1-2": "CLOSED in round 2",
+  "R1-3": "CLOSED in round 2",
+  "R1-4": "CLOSED in round 2",
+  "R1-5": "CLOSED in round 2",
+  "R2-1": "CARRIED as the monitor's adoption directs (see carried)",
+  "R2-2": "CARRIED as the monitor's adoption directs (see carried)"
+ }
+}

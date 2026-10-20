@@ -1,0 +1,74 @@
+{
+ "subject": "tools/w03/i06-rbac candidate 2 (build_contract.py sha256 99ba072c75c7ba843ed0d5bda0f6ba38deb1fdb6f6df28ac2ad2a7417d197a78, README sha256 d58b0385299d3f393c4f1ae936e18c8f45b9ae0f0c469f0c29627dd8ecb705ae)",
+ "reviewer": "independent agent",
+ "round": 2,
+ "verdict": "PASS_FOR_ADOPTION",
+ "findings": [
+  {
+   "id": "R2-1",
+   "severity": "NOTE",
+   "location": "scripts/i06_backend_profile_v4.py check_vectors (CASE_IDS, ANCHORS, the composed loop)",
+   "finding": "R1-1 is fixed as asked: the model pins each section's ids in order, the XR01/XR02 anchors and disjointness from v3's ids. A case's content under a pinned id is still free, though. CO02 repointed to ON47 (a binding the snapshot can see) with ON47's refusal was ACCEPTED (151 checks). So was CO03 repointed to ON01, and so was XR03 made a copy of XR02. CO02 and CO03 are the README's 'exact snapshots refused only by the lists', and they could drift into ordinary cases unnoticed. Cross-references give partial cover: editing ON48 or ON56 themselves is refused through CO02 or CO03.",
+   "requiredChange": "Optional hardening: pin the composed rows (id, snapshotCase, objectsCase) and the cross-version rows' base, or a digest of each case section, as model constants, as RB_ROWS_SHA256 does for the criteria. Not blocking."
+  },
+  {
+   "id": "R2-2",
+   "severity": "NOTE",
+   "location": "scripts/i06_backend_profile_v4.py check_observer_rbac, RB07's roleRef test",
+   "finding": "RB07 matches a roleRef on kind == 'ClusterRole' and name == 'planeon:policy-observer'. Two invalid roleRef kinds naming the observer's ClusterRole pass: a lower-case 'clusterrole', and kind 'Role' in a ClusterRoleBinding. Neither can exist in a live cluster, because the apiserver's RBAC validation rejects both, and R10's producer refuses such a roleRef as Malformed (R99, MODEL_DEFINED.md:1531). So this is no live bypass. It is only a gap against RB07's own fail-closed wording, 'a roleRef ... that cannot be read refuses', since the model reads these roleRefs as valid instead of refusing them.",
+   "requiredChange": "Optional: refuse any other binding's roleRef whose kind is not ClusterRole (in a ClusterRoleBinding) or Role/ClusterRole (in a RoleBinding), as R99 does. Not blocking."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Reproduce: two builder runs (one per command) with OUT and TMPDIR in WORK, clone at 27c5460, R10 at 1a0c529",
+   "result": "PASS. run1 == run2 == contract/ == rounds/c2/contract/ byte for byte, and the two logs are identical. The 9 digests equal the brief: README d58b0385, observer-rbac 71305d7f (unchanged), criteria 10aa3a8f, vectors 27aba3bf, status e0f60b00, source-index 2f2238e3, model 7f97acfe, edge v8 719b7154, README-v8 e5dea489. build_contract.py 99ba072c equals rounds/c2. The builder pins the round-1 record (06e61ab6) and passed its 32 self-test probes. No .pyc was written."
+  },
+  {
+   "check": "Replay over a staged WORK tree (git show 27c5460 inputs, re-hashed, plus the generated files)",
+   "result": "PASS. v4 check_vectors gives 151 checks with bare-name imports and 151 as scripts.*. I06 v3's own check_vectors gives 151 as the control. check_evidence is v3's function object."
+  },
+  {
+   "check": "R1-1, the case set",
+   "result": "RESOLVED. My round-1 probes are refused: SN01 moved into crossVersion with XR01 dropped and the counts kept ('the I06 v4 case set'); SN01 renamed S06 ('the I06 v4 case set'); ON01 and OA01 swapped ('the I06 v4 case set'). CASE_IDS lists every section's ids in order, and the counts follow from it. ANCHORS are XR01 (base v3, no ops) and XR02 (base v4, no ops). v4's ids are asserted disjoint from v3's 43 replayed snapshot ids. Swapping a meaningful case for a trivial one under the same id remains possible for the composed and non-anchor cross-version rows (R2-1)."
+  },
+  {
+   "check": "R1-2, the composition",
+   "result": "RESOLVED. check_observer_snapshot runs check_rbac_snapshot (IC00-IC05, RB05) first, then check_observer_rbac (RB01-RB04, RB06, RB07). The caller obligation is stated in the model docstring, the function's docstring, RB06's requirement, the README's 'The exact pin' (with 'Neither check is a warning, and the lists may not come from another read'), 'Consumers' and 'Still open', and status.json carried. It reads: the observer accepts its snapshot only if this accepts, on the ClusterRoles, ClusterRoleBindings and RoleBindings of the same read, at the snapshot's one resourceVersion, from which the snapshot was produced. This excludes a warning-only port and another read. CO02 (ON48: a role holding only nonResourceURLs ['*'] bound to the observer, whose rules R10's producer drops) and CO03 (ON56: an unbound aggregate with an empty selector, which reaches no subject) are real lists-only refusals over the exact snapshot. CO05 and CO06 show the snapshot's refusal coming first. My extra probe, the positive snapshot with lists that bind the role to system:authenticated, refuses with RB07."
+  },
+  {
+   "check": "R1-3 and Q-RBAC-11 (a), the system:authenticated limit",
+   "result": "RESOLVED. It is stated plainly in the RB05 row ('the snapshot does not expand groups'), the RB06 row, 'Group grants: the limit' (which names the two passing examples), 'Who is the observer', 'Not claimed' and the model docstring. status.json carries it to T04 ('a cluster-wide check over non-stock bindings to Group system:authenticated') and HE-004-I01, and adds a nonClaim. No stricter mode or switch exists: the model and README have no mode constant or flag. My round-1 probes on that group are still accepted, as the decision intends."
+  },
+  {
+   "check": "R1-4, frozen pins",
+   "result": "RESOLVED. My round-1 pin-updated probes are now refused. A v3 case replaced, a v3 negative dropped, or a v3 refusal edited each refuse with 'a frozen input differs from the model's pin: v3Vectors'. K22 edited with ON45 refuses on i07Vectors. The closure edits refuse on closure. RB03's requirement or source text edited refuses with 'the RB criteria rows differ from the model's pin'. FROZEN_INPUTS equals the six files at 27c5460 (4752b648, 752533c5, c4c24c5f, 8e6b3b75, 0a9b82ff, 7529c2a7). RB_ROWS_SHA256 c7a07c9d... equals my sha256 over the canonical RB00-RB07 rows, and the README's RB table equals those rows' requirement texts."
+  },
+  {
+   "check": "R1-5, wording (a)-(f)",
+   "result": "RESOLVED. (a) 'drops other subjects' non-resource rules and refuses one bound to the loopback user (rbac.rs:4-7)'. (b) 'any grant outside I06's policy-relevant categories added, or any read removed'. (c) 'Still open' excludes the edge-v5 providerPacket item that MET-ENFORCE-033 discharged. (d) ON61 (finalizers, RB01) exists and is cited with ON26-ON28 and ON38. (e) 'its ruleIndex is 0-based: 0 is rule 1'. (f) HE-008 runs check_observer_document (RB00) on the vendored document and check_observer_rbac on its manifest, in the README and in status.json carried."
+  },
+  {
+   "check": "RB07 (Q-RBAC-9 (a)): code, cases, coverage and bypass probes",
+   "result": "PASS, with R2-2. The decision's three negatives exist: a second ClusterRoleBinding (ON52 to system:authenticated, ON53), a RoleBinding referencing the ClusterRole (ON54, and ON55 without a roleRef apiGroup), and aggregated roles (ON56 empty selector, ON57 DoesNotExist, ON58 NotIn). ON59 (unknown operator) and ON60 (non-object roleRef) refuse as unreadable. OA05 (matchLabels, Exists, In, an empty selector list) and OA06 (a namespaced Role of the same name) are accepted. Both coverage rules refuse when their cases are removed; the generator's self-tests confirm this. My probes refused: a RoleBinding in kube-system; roleRef apiGroup example.com; a roleRef with an extra key; a null roleRef; the contract binding copied under another name; selectors {matchLabels: {}, matchExpressions: []}, {matchLabels: null, NotIn}, and a stock matchLabels selector followed by a NotIn selector; and malformed rules (a dict selector list, a list aggregationRule, operator 'notin', an unknown selector member). My probes accepted, correctly: matchLabels with NotIn in one selector, which needs a label; In and Exists only; Exists with DoesNotExist; a ClusterRole name differing in case; a namespaced Role of the same name. Accepted as a NOTE: invalid roleRef kinds (R2-2). The selector logic is right because the contract role has no labels (RB01), and an unlabeled object is matched only by a selector with no matchLabels whose expressions are all NotIn or DoesNotExist. The README's 'aggregation controller is required-disabled' cites I06 v1 README :129, which sits under 'Required-disabled controllers (SC06)' (:124)."
+  },
+  {
+   "check": "The author's two open details",
+   "result": "Agree with both. (1) An aggregationRule with a null or empty clusterRoleSelectors list, an aggregationRule {} or an aggregationRule null is accepted: it selects nothing, upstream validation requires at least one selector anyway, and the aggregation controller is required-disabled. (2) A composed case pairs one snapshot case and one object case as given. The function cannot prove that the two come from one read; the caller obligation does that, and the README says so."
+  },
+  {
+   "check": "Exact-line quoting and the work item",
+   "result": "PASS. The README's 12 quoted lines and status.json's 12 ownerDecisions each equal exactly one source line inside its dated section: i06-rbac :17-20 (the Q-RBAC-9/10 section) and :24 (the Q-RBAC-11 section), plus the round-1 seven. Edge v8's 2 quotes are unchanged. workItem 'I06-RBAC-V4' is parsed by the builder from the Q-RBAC-10 quoted line and asserted."
+  },
+  {
+   "check": "Nothing else moved (candidate 1 to 2)",
+   "result": "PASS. In vectors.json, evidence, v3SnapshotCases, snapshotPositive, objectsPositive, documentNegative, snapshotAccepted, snapshotNegative and crossVersion are unchanged. Every candidate-1 object case is unchanged; OA05-OA06 and ON52-ON61 are added, plus the composed section. inputs changes only in the criteria digest. observer-rbac.json is byte-identical. Edge v8 has 66 rows, the first 62 equal to v7's in order, and the 4 new rows keep path, label, mode, status and TBD; only the README, criteria and vectors digests change, each matching its file. supersedes is v7's 6af45e36. README-v8 changes only the ROUND2 line and the three digests. status.json and source-index change only as listed: workItem, candidate, the 5 quotes, counts, carried items, nonClaims, round 1 and the digests. The 22 predecessorInputs match 27c5460, all 9 generated paths and v9 are absent at the pin, and there are no local paths or personal data in the 9 files."
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "inventoryToolingAttempted": false
+ }
+}
