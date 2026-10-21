@@ -1,0 +1,177 @@
+{
+ "schemaVersion": "planeon.internal.evolution-surface-status/v1",
+ "workItem": "EVOLUTION-SURFACE-001",
+ "packet": "MET-GOV-001",
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "contract": {
+  "record": "architecture/evolution-surface/evolution-surface.json",
+  "schema": "architecture/evolution-surface/evolution-surface.schema.json",
+  "vectors": "architecture/evolution-surface/vectors.json",
+  "model": "scripts/evolution_surface.py",
+  "readme": "architecture/evolution-surface/README.md"
+ },
+ "reviewedSubject": {
+  "commit": "72901245456b93012316041d085aaa4377d2eb1d",
+  "tree": "add5ba4be50f711b6fcb7574a4ebe09e335079b0"
+ },
+ "noteFold": {
+  "commit": "82186be408e0fbe165f8b86531059197c8e2da7c",
+  "tree": "6cc2acd5efbeba7677d78a08560f1741896b24c7",
+  "decision": "Fold small fixes, no round (Recommended)",
+  "ruling": "MON-GOV-R5-KEEP",
+  "items": [
+   "G1R5-1",
+   "G1R5-2",
+   "G1R5-3",
+   "G1R5-4"
+  ],
+  "files": {
+   "architecture/evolution-surface/README.md": {
+    "reviewedSha256": "289db88bbb52cb4bea183123ab156594b96940dac2499a16aadcb24a3ab3c4a4",
+    "foldSha256": "7fb87670c95433a47c1a022dc41c91f6e4cda63b58f0d81522f7261ee47d67e4"
+   },
+   "architecture/evolution-surface/vectors.json": {
+    "reviewedSha256": "f263222665824613a6ccee55601cf8d38053ae82cafea211141ecd3b5072dd58",
+    "foldSha256": "49c484302705217493411e7a6c7f8d352e0aaae6814be1a0f7031524e98ab512"
+   },
+   "scripts/evolution_surface.py": {
+    "reviewedSha256": "514f73ba94493ee27c797f079b51a3b1d79587fe881ab9a843a0e9e9072ca283",
+    "foldSha256": "f38fa6d00ec5fbbbcab8ff01d0e56824e805327b872dc1e23e579e522a681fd9"
+   },
+   "tests/test_evolution_surface.py": {
+    "reviewedSha256": "93fc61bc5db5761622891edbd83f8036f8ea41dbbc01022b256f4a004c00a672",
+    "foldSha256": "aaf600ef3d7fe73dced1276701c0f6ae06c59654c57093c60e38038864e3eb18"
+   }
+  },
+  "check": "the packet review after the chain mechanics checks the fold first"
+ },
+ "adoptionEdit": {
+  "path": "architecture/evolution-surface/README.md",
+  "replaced": "Status: **CONTRACT_CANDIDATE** (internal, DATA_CHECK_ONLY; independent contract review pending).",
+  "with": "Status: **ADOPTED_CONTRACT_CANDIDATE** (internal, DATA_CHECK_ONLY; independent contract review round 5:\nPASS_FOR_ADOPTION, with the owner's NOTE fold; rounds and review records in `status.json`).",
+  "foldSha256": "7fb87670c95433a47c1a022dc41c91f6e4cda63b58f0d81522f7261ee47d67e4",
+  "adoptedSha256": "6705a308b3748a201e8cee7448740b5ef4099c3b2d5c0c1769bb95c4175934ed"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "subject": "a47b58ee3f8b12d57fc2bd813df11828d30041b2",
+   "subjectTree": "b444006b37f27d0d539b9c01b2b978e564ca51bf",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/evolution-surface/review-round1.json",
+   "recordSha256": "ee803c3a647092075625ae8520cc0c820e17acd6f42b25695335a8fd58f65244",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "snapshot": "architecture/evolution-surface/round1/",
+   "digestOnly": {
+    "architecture/evolution-surface/vectors.json": "c928432e1bf4be35f1792b5b672d55112cbf5bd59937f970ee973d73a956cd37"
+   }
+  },
+  {
+   "round": 2,
+   "subject": "60b37471b1dfee55a6a7484e76da864c102d86b8",
+   "subjectTree": "eda9e8c2263a995f727daa9c9ca4c80a565c097e",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/evolution-surface/review-round2.json",
+   "recordSha256": "069d00325a589711b854d81f760308534ad65c4a456164f6b0c5e5e54e59b03b",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "snapshot": "architecture/evolution-surface/round2/",
+   "digestOnly": {
+    "architecture/evolution-surface/vectors.json": "d506be12e942c4a6fd558fcaf0868925dc3b8affe0fc328024ecc41acc05316e"
+   }
+  },
+  {
+   "round": 3,
+   "subject": "1d517f1e26b386b552cd394e482932b1302372d8",
+   "subjectTree": "2580d9befd1cd71d6df791b7902af331f5d2f663",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/evolution-surface/review-round3.json",
+   "recordSha256": "df2a8761668d6f5500ec4c0cea89c6a26efa2e579666a96c2625f46ba11304e0",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "snapshot": "architecture/evolution-surface/round3/",
+   "digestOnly": {
+    "architecture/evolution-surface/vectors.json": "430f89cd3c28abe6e0fc9e514c4876452a5cc93a7f8087e6b3ec0ef8f401766b"
+   }
+  },
+  {
+   "round": 4,
+   "subject": "97fa3e8b81184f08fba3d30495450a9fcde87b2d",
+   "subjectTree": "de64d05274bad094fb64ef24cc54643dc612469d",
+   "verdict": "CHANGES_REQUIRED",
+   "record": "architecture/evolution-surface/review-round4.json",
+   "recordSha256": "193c6fb6dcec8134d1d89369c996c3d62ab7f36643048277168d3a3b3c2c7d5b",
+   "severities": [
+    "MINOR",
+    "NOTE"
+   ],
+   "snapshot": "architecture/evolution-surface/round4/",
+   "digestOnly": {
+    "architecture/evolution-surface/vectors.json": "430f89cd3c28abe6e0fc9e514c4876452a5cc93a7f8087e6b3ec0ef8f401766b"
+   }
+  },
+  {
+   "round": 5,
+   "subject": "72901245456b93012316041d085aaa4377d2eb1d",
+   "subjectTree": "add5ba4be50f711b6fcb7574a4ebe09e335079b0",
+   "verdict": "PASS_FOR_ADOPTION",
+   "record": "architecture/evolution-surface/review-round5.json",
+   "recordSha256": "dcd467bad420fd3eb5d29fa518a539ca4ac6c5350bd5e5b2f7610c5c9a6cb16c",
+   "severities": [
+    "NOTE"
+   ],
+   "snapshot": "architecture/evolution-surface/round5/",
+   "digestOnly": {
+    "architecture/evolution-surface/vectors.json": "f263222665824613a6ccee55601cf8d38053ae82cafea211141ecd3b5072dd58"
+   }
+  }
+ ],
+ "carried": [
+  {
+   "item": "G1R5-1",
+   "severity": "NOTE",
+   "to": "the owner's NOTE fold (82186be4)",
+   "action": "Optional. Say in the README that an any-depth skip directory that vanished, or an entry inside one, is absent (or, if the owner wants the narrower reading, pass the parent path in both places), and add a test that substitutes os.scandir for a directory inside and outside a skip directory."
+  },
+  {
+   "item": "G1R5-2",
+   "severity": "NOTE",
+   "to": "the owner's NOTE fold (82186be4)",
+   "action": "Optional. Refuse an empty root (and, if wanted, a root with a '..' component) before normalizing, or use the normalized spelling only for the linked-root test, as Q-GOV-CAP's words say; or state the lexical normalization in the README."
+  },
+  {
+   "item": "G1R5-3",
+   "severity": "NOTE",
+   "to": "the owner's NOTE fold (82186be4)",
+   "action": "Optional. In the target half also refuse when _case_variant(rel, classes, _resolve_spelling(rel, classes)) holds, and compare the ancestor test case-folded, so F1 holds in both halves."
+  },
+  {
+   "item": "G1R5-4",
+   "severity": "NOTE",
+   "to": "the owner's NOTE fold (82186be4)",
+   "action": "Optional. Use a variant with a data-class spelling in R19 and Q09 (for example docs/Harnesses/x.md), keeping the expectations null."
+  }
+ ],
+ "ownerDecisions": [
+  "Q-ES-1..7 (owner, 2026-10-21): \"Accept, but gate it (Recommended)\"; Q-ES-6 (b): gate material",
+  "Q-ES-CAP (owner, 2026-10-21): \"(a) Build rev 4 (Recommended)\"",
+  "Q-ES-D1 (owner, 2026-10-21): \"(a) Add all 12 + own (Recommended)\"",
+  "Q-ES-D2 (owner, 2026-10-21): \"(a) Verifier + runner docs (Recommended)\"",
+  "Q-ES-D3 (owner, 2026-10-21): \"(a) Monitor, head-bound (Recommended)\"",
+  "MON-ES-ID (monitor, 2026-10-21): packet id MET-GOV-001",
+  "Q-GOV-CAP (owner, 2026-10-21): \"One delta r5, then cap (Recommended)\"",
+  "MON-GOV-R5-KEEP and the owner's NOTE fold (2026-10-21): \"Fold small fixes, no round (Recommended)\""
+ ],
+ "nonClaims": [
+  "An internal contract candidate: nothing runs and nothing is enforced; MAS-RA-005's admission gate and R09 consume the record later, and until then the lane monitor applies the programme level by hand.",
+  "No harness document, repository schema or earlier contract changes.",
+  "Roles and paths are declared data; the record does not authenticate who acts."
+ ]
+}

@@ -1,0 +1,443 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.evolution-surface/v1",
+ "title": "Evolution surface record (EVOLUTION-SURFACE-001, internal contract candidate)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schemaVersion",
+  "surfaceId",
+  "version",
+  "operations",
+  "levels"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.evolution-surface/v1"
+  },
+  "surfaceId": {
+   "type": "string",
+   "pattern": "^[a-z0-9][a-z0-9-]{0,63}(?![\\s\\S])"
+  },
+  "version": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 9007199254740991
+  },
+  "operations": {
+   "const": [
+    "propose",
+    "generate",
+    "test",
+    "approve",
+    "activate"
+   ]
+  },
+  "levels": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "product",
+    "programme"
+   ],
+   "properties": {
+    "product": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "roles",
+      "classes"
+     ],
+     "properties": {
+      "roles": {
+       "type": "array",
+       "minItems": 1,
+       "maxItems": 64,
+       "items": {
+        "$ref": "#/$defs/productRole"
+       }
+      },
+      "classes": {
+       "type": "array",
+       "minItems": 1,
+       "maxItems": 256,
+       "items": {
+        "$ref": "#/$defs/productClass"
+       }
+      }
+     }
+    },
+    "programme": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "roles",
+      "classes",
+      "coverageSkip"
+     ],
+     "properties": {
+      "roles": {
+       "type": "array",
+       "minItems": 1,
+       "maxItems": 64,
+       "items": {
+        "$ref": "#/$defs/programmeRole"
+       }
+      },
+      "classes": {
+       "type": "array",
+       "minItems": 1,
+       "maxItems": 256,
+       "items": {
+        "$ref": "#/$defs/programmeClass"
+       }
+      },
+      "coverageSkip": {
+       "$ref": "#/$defs/coverageSkip"
+      }
+     }
+    }
+   }
+  }
+ },
+ "$defs": {
+  "text": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 2000
+  },
+  "roleList": {
+   "type": "array",
+   "uniqueItems": true,
+   "maxItems": 64,
+   "items": {
+    "type": "string",
+    "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+   }
+  },
+  "operations": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "propose",
+    "generate",
+    "test",
+    "approve",
+    "activate"
+   ],
+   "properties": {
+    "propose": {
+     "$ref": "#/$defs/roleList"
+    },
+    "generate": {
+     "$ref": "#/$defs/roleList"
+    },
+    "test": {
+     "$ref": "#/$defs/roleList"
+    },
+    "approve": {
+     "$ref": "#/$defs/roleList"
+    },
+    "activate": {
+     "$ref": "#/$defs/roleList"
+    }
+   }
+  },
+  "pathEntry": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "exact"
+     ],
+     "properties": {
+      "exact": {
+       "type": "string",
+       "maxLength": 4096,
+       "pattern": "^(?!/)(?!(?:.*/)?\\.\\.?(?:/|(?![\\s\\S])))(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+(?![\\s\\S])"
+      }
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "prefix"
+     ],
+     "properties": {
+      "prefix": {
+       "type": "string",
+       "maxLength": 4096,
+       "pattern": "^(?!/)(?!(?:.*/)?\\.\\.?(?:/|(?![\\s\\S])))(?:[A-Za-z0-9_.-]+/)+(?![\\s\\S])"
+      }
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "under",
+      "name"
+     ],
+     "properties": {
+      "under": {
+       "type": "string",
+       "maxLength": 4096,
+       "pattern": "^(?!/)(?!(?:.*/)?\\.\\.?(?:/|(?![\\s\\S])))(?:[A-Za-z0-9_.-]+/)+(?![\\s\\S])"
+      },
+      "name": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9_.*?\\[\\]-]{1,128}(?![\\s\\S])"
+      }
+     }
+    }
+   ]
+  },
+  "productRole": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "kind",
+    "plane",
+    "description"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+    },
+    "kind": {
+     "enum": [
+      "AGENT",
+      "HUMAN",
+      "SERVICE"
+     ]
+    },
+    "plane": {
+     "enum": [
+      "Runtime",
+      "Knowledge",
+      "Execution",
+      "Trust"
+     ]
+    },
+    "description": {
+     "$ref": "#/$defs/text"
+    }
+   }
+  },
+  "programmeRole": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "kind",
+    "description"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+    },
+    "kind": {
+     "enum": [
+      "AGENT",
+      "HUMAN",
+      "SERVICE"
+     ]
+    },
+    "description": {
+     "$ref": "#/$defs/text"
+    }
+   }
+  },
+  "productClass": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "description",
+    "neverAutonomous",
+    "appendOnly",
+    "twoPerson",
+    "approvalBinding",
+    "governs",
+    "independentOf",
+    "operations",
+    "grounds"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+    },
+    "description": {
+     "$ref": "#/$defs/text"
+    },
+    "neverAutonomous": {
+     "type": "boolean"
+    },
+    "appendOnly": {
+     "type": "boolean"
+    },
+    "twoPerson": {
+     "type": "boolean"
+    },
+    "approvalBinding": {
+     "const": "CONTENT"
+    },
+    "governs": {
+     "$ref": "#/$defs/roleList"
+    },
+    "independentOf": {
+     "type": "array",
+     "uniqueItems": true,
+     "maxItems": 64,
+     "items": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+     }
+    },
+    "operations": {
+     "$ref": "#/$defs/operations"
+    },
+    "grounds": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 16,
+     "items": {
+      "$ref": "#/$defs/text"
+     }
+    }
+   }
+  },
+  "programmeClass": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "description",
+    "neverAutonomous",
+    "appendOnly",
+    "twoPerson",
+    "approvalBinding",
+    "governs",
+    "independentOf",
+    "operations",
+    "grounds"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+    },
+    "description": {
+     "$ref": "#/$defs/text"
+    },
+    "neverAutonomous": {
+     "type": "boolean"
+    },
+    "appendOnly": {
+     "type": "boolean"
+    },
+    "twoPerson": {
+     "type": "boolean"
+    },
+    "approvalBinding": {
+     "enum": [
+      "CONTENT",
+      "CHANGE"
+     ]
+    },
+    "governs": {
+     "$ref": "#/$defs/roleList"
+    },
+    "independentOf": {
+     "type": "array",
+     "uniqueItems": true,
+     "maxItems": 64,
+     "items": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{0,63}(?![\\s\\S])"
+     }
+    },
+    "operations": {
+     "$ref": "#/$defs/operations"
+    },
+    "grounds": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 16,
+     "items": {
+      "$ref": "#/$defs/text"
+     }
+    },
+    "paths": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 256,
+     "items": {
+      "$ref": "#/$defs/pathEntry"
+     }
+    }
+   },
+   "if": {
+    "required": [
+     "approvalBinding"
+    ],
+    "properties": {
+     "approvalBinding": {
+      "const": "CHANGE"
+     }
+    }
+   },
+   "then": {
+    "not": {
+     "required": [
+      "paths"
+     ]
+    }
+   }
+  },
+  "coverageSkip": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "rootNames",
+    "anyDepthDirectories",
+    "anyDepthFilePatterns"
+   ],
+   "properties": {
+    "rootNames": {
+     "type": "array",
+     "uniqueItems": true,
+     "maxItems": 64,
+     "items": {
+      "type": "string",
+      "pattern": "^(?!\\.\\.?(?![\\s\\S]))[A-Za-z0-9_.-]{1,255}(?![\\s\\S])"
+     }
+    },
+    "anyDepthDirectories": {
+     "type": "array",
+     "uniqueItems": true,
+     "maxItems": 64,
+     "items": {
+      "type": "string",
+      "pattern": "^(?!\\.\\.?(?![\\s\\S]))[A-Za-z0-9_.-]{1,255}(?![\\s\\S])"
+     }
+    },
+    "anyDepthFilePatterns": {
+     "type": "array",
+     "uniqueItems": true,
+     "maxItems": 64,
+     "items": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.*?\\[\\]-]{1,128}(?![\\s\\S])"
+     }
+    }
+   }
+  }
+ }
+}
