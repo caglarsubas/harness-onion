@@ -1,0 +1,97 @@
+{
+ "schemaVersion": "planeon.internal.edge-record-v9-status/v1",
+ "workItem": "EDGE-V9",
+ "packet": "MET-ENFORCE-040",
+ "slot": 256,
+ "status": "ADOPTED",
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated",
+  "date": "2026-10-22",
+  "decision": "[lane monitor] **ADOPTED**: EDGE-V9 candidate 2 as is (edge v9 197f30e4, README-v9 8cde7d19, builder 6573f4d0). Monitor decision (owner-delegated), on delta r2 PASS_FOR_ADOPTION."
+ },
+ "baseMain": "6835a6edf7137ba11d4aed4b93c02be4c8694369",
+ "adoptedSubject": {
+  "architecture/artifact-edges/operator-harness-engineering-v9.json": "197f30e4e1e0be1dcacd71f1095c91e2333fe9d6ea05b8194578160e471605d7",
+  "architecture/artifact-edges/README-v9.md": "8cde7d199a00dd19edd9b8fc699b4f065d730ab245af7af77edca9e32a8fbf09"
+ },
+ "builder": {
+  "path": "build_contract.py (kept with the lane's records)",
+  "sha256": "6573f4d00ccd86bb182ef9244c3709c95edbb4f17472a0d28cd0ac44738d6de9",
+  "rerunAtBase": "E1-4: candidate 2 was built at 6835a6edf7137ba11d4aed4b93c02be4c8694369 (MET-PERF-042 merged) and its two runs were byte-identical; adoption re-checked edge v8, both provider files and the free paths there, by exact path"
+ },
+ "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+ "rounds": [
+  {
+   "round": 1,
+   "record": "architecture/edge-record-v9/review-round1.json",
+   "recordSha256": "0265457922a7074cff647b73749936f1556b9bc341d3fbc4c73df1165f30290b",
+   "verdict": "CHANGES_REQUIRED",
+   "base": "29c84b36dad2f6f9822b71cd959064f0202d9868",
+   "subjectSha256": {
+    "architecture/artifact-edges/operator-harness-engineering-v9.json": "6d4f92f70cfb97686f23389e00a25b3eb20b72257abad3b38c8684edbda35826",
+    "architecture/artifact-edges/README-v9.md": "a5f34c9ef92015903431910b09d08d61c031542c17f700b7a24709d38504b502"
+   },
+   "builderSha256": "6920125293ad6234af3363ebd65562d23ed7b1f1f09a8d073e68a79ceec3f1cc",
+   "briefSha256": "312b33ad46a2ac320dabfb4e7b558e42934be1d248795692d85ffba3be324696",
+   "severities": {
+    "MAJOR": 0,
+    "MINOR": 2,
+    "NOTE": 3
+   }
+  },
+  {
+   "round": 2,
+   "record": "architecture/edge-record-v9/review-round2.json",
+   "recordSha256": "220c77f3a305bd9608c2fd307c250f36880d8b143597c15115d899e6bc046cdd",
+   "verdict": "PASS_FOR_ADOPTION",
+   "base": "6835a6edf7137ba11d4aed4b93c02be4c8694369",
+   "subjectSha256": {
+    "architecture/artifact-edges/operator-harness-engineering-v9.json": "197f30e4e1e0be1dcacd71f1095c91e2333fe9d6ea05b8194578160e471605d7",
+    "architecture/artifact-edges/README-v9.md": "8cde7d199a00dd19edd9b8fc699b4f065d730ab245af7af77edca9e32a8fbf09"
+   },
+   "builderSha256": "6573f4d00ccd86bb182ef9244c3709c95edbb4f17472a0d28cd0ac44738d6de9",
+   "briefSha256": "e5389095f8c6aa89dc928092649819f5436830ffcabc348182c79a375ddc7822",
+   "severities": {
+    "MAJOR": 0,
+    "MINOR": 0,
+    "NOTE": 2
+   }
+  }
+ ],
+ "closedFindings": {
+  "E1-1": "CLOSED in round 2 (Q-EV9-1b (a): the readiness doc named as deliberately unregistered)",
+  "E1-2": "CLOSED in round 2 (the replay-scope note)",
+  "E1-3": "CLOSED in round 2 (every added path checked free by exact path)",
+  "E1-4": "CLOSED in round 2 (the builder re-run at the mechanics base)",
+  "E1-5": "DISCHARGED at adoption (recorded below)"
+ },
+ "carried": [
+  {
+   "item": "E2-1 (contract review round 2, NOTE)",
+   "to": "kept as adopted",
+   "action": "the Q-EV9-1b quote in operator-harness-engineering-v9.json's ownerDecisions keeps a stray closing '**'; the text stays verbatim and nothing renders it (adoption decision)"
+  },
+  {
+   "item": "E2-2 (contract review round 2, NOTE)",
+   "to": "the lane's builder",
+   "action": "the builder's docstring still says candidate 1 and Q-EV9-1..5; the outputs are unaffected"
+  },
+  {
+   "item": "255's identity rule (E1-4)",
+   "to": "this packet's pre-check and verify",
+   "action": "the first packet built under MET-PERF-042's step rule: its chain bump and bridge must pass test_identity_rule_holds_on_the_live_chain and the runtime binding check on every run"
+  }
+ ],
+ "slips": [
+  {
+   "id": "MON-256-LSTREE-SLIP",
+   "ruling": "accepted by the lane monitor, 2026-10-22",
+   "what": "while checking that v9 was free, the author listed architecture/artifact-edges/ at the base and printed only the count of matching names (0); no name was shown or used; it was re-checked by exact path, and every later check is by exact path only"
+  }
+ ],
+ "nonClaims": [
+  "Edge records v1 to v8 and EDGE-2 are byte-identical.",
+  "No R10 file changes in this packet; HE-004-I01's U7 vendors the two registered files later.",
+  "docs/alpha-2/POLICY_OBSERVATION_READINESS.md and architecture/proxy-contract-inputs/vectors.json are not registered (Q-EV9-1b (a); the replay-scope note)."
+ ]
+}

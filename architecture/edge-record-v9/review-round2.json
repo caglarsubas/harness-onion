@@ -1,0 +1,142 @@
+{
+ "round": 2,
+ "subject": {
+  "edgeV9Sha256": "197f30e4e1e0be1dcacd71f1095c91e2333fe9d6ea05b8194578160e471605d7",
+  "readmeV9Sha256": "8cde7d199a00dd19edd9b8fc699b4f065d730ab245af7af77edca9e32a8fbf09",
+  "builderSha256": "6573f4d00ccd86bb182ef9244c3709c95edbb4f17472a0d28cd0ac44738d6de9",
+  "base": "6835a6edf7137ba11d4aed4b93c02be4c8694369"
+ },
+ "reviewer": "independent agent",
+ "verdict": "PASS_FOR_ADOPTION",
+ "round1Resolutions": [
+  {
+   "id": "E1-1",
+   "status": "RESOLVED",
+   "evidence": "notes[4] and README-v9 'Not registered' name docs/alpha-2/POLICY_OBSERVATION_READINESS.md as deliberately unregistered: a specification document R10 reads and cites but does not vendor (Q-EV9-1b (a)), matching the Q-EV9-1b wording 'a specification document, read and cited, not vendored'. At 6835a6ed the file exists (100644, blob 51bcc910, sha256 65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c, last change 108e6195 MET-REPAIR-010); architecture/policy-observation-amendment.json pins it as channel.guidePath and as the third of exactly 3 inputFiles beside CS and PV, which supports 'pins beside the two files'; it carries the wire rules (one datagram each way, canonical JSON, request <= 16 KiB, response <= 64 KiB). No v8 or v9 row names it as providerPath or consumerPath. Rows stay at exactly two (Q-EV9-1b (a))."
+  },
+  {
+   "id": "E1-2",
+   "status": "RESOLVED",
+   "evidence": "notes[5] and the new README 'Replay scope' paragraph state the replay scope, and the statement is true at 6835a6ed. Request cases (5 request negatives + positive.request): the schema's only 3 $refs are internal (#/$defs/binding|request|observation, all at /oneOf), $defs/request has no $ref, $schema is the 2020-12 meta-schema, the vectors hold no file references; bindingDigest e10d89fd... recomputes from the vectors' own binding (sorted-key compact JSON), runNonce equals binding.scope.runNonce, previous is null so the initial-chain rule (sequence 1, zero previous digest) decides negatives 4 and 5. Binding/observation cases: the harness-onion oracle validate_messages (scripts/validate_policy_observation.py at 6835a6ed, read as text, not run) takes the profile = positive of architecture/proxy-contract-inputs/vectors.json on every call; binding checks (profileDigest, scope, namespace uid, policy digests, preexisting refs) and the observation quota-headroom check read it; binding.profileDigest fc569e17... equals sha256 of its canonical positive; binding.scope equals its scope minus apiEndpointId. That file (sha256 edf32ddf..., last change 33de300c MET-REPAIR-009) is in no v8 or v9 row."
+  },
+  {
+   "id": "E1-3",
+   "status": "RESOLVED",
+   "evidence": "build_contract.py now loops over EDGE9, README9 and architecture/edge-record-v9 with git cat-file -e at PIN (exact paths). This reviewer ran the same exact-path checks at 6835a6ed: operator-harness-engineering-v9.json, README-v9.md, architecture/edge-record-v9 and architecture/edge-record-v9/status.json all rc 128 (absent). README 'Open items' now names all three."
+  },
+  {
+   "id": "E1-4",
+   "status": "RESOLVED",
+   "evidence": "PIN moved to 6835a6ed (255 MET-PERF-042, #209, sole parent 29c84b36). At 6835a6ed: edge v8 sha256 623cf10bf19cfba1806f5699007f39c7f6ba38f72d92069548421c4dccd21573 (blob 5e9cdfbe, last change still 29c84b36 MET-ENFORCE-039), 66 rows, equal to v9's first 66 in order; CS fb69b772... 41771 bytes and PV 1bfb4677... 14486 bytes, both 100644, last change 108e61953d52, bytes equal at 108e6195. Two builder runs rc 0, byte-identical, equal to contract/ and rounds/c2/. README 'Open items' adds the builder re-run on the mechanics base. Carried to mechanics as round 1 specified: record the re-run and 255's identity-rule check in architecture/edge-record-v9/status.json."
+  },
+  {
+   "id": "E1-5",
+   "status": "CARRIED",
+   "evidence": "Nothing was required of the candidate. v9 still leaves MON-256-LSTREE-SLIP out of ownerDecisions (the 8 entries are Q-HE4I1-10, Q-I01A-1, Q-EV9-1 (a)..5 (a), Q-EV9-1b). Recording it in architecture/edge-record-v9/status.json happens at adoption."
+  }
+ ],
+ "findings": [
+  {
+   "id": "E2-1",
+   "severity": "NOTE",
+   "location": "operator-harness-engineering-v9.json ownerDecisions[7]; build_contract.py quoted() + decisions (two successive [2:] slices)",
+   "finding": "The Q-EV9-1b quote reads 'Q-EV9-1b = (a)**, monitor decision ...' with a dangling closing bold marker. The builder drops the first 2 characters twice: for the '> - ' lines this removes the blockquote and list marker, but for the '> **Q-EV9-1b = (a)**' line it removes the blockquote and only the opening '**'. The text is still an exact, contiguous substring of the one source line, inside its dated section, occurring once (verified), so it is verbatim. Only the markup is unbalanced. Q-EV9-4's quote already keeps '**MET-ENFORCE-040**' whole, so the record's own convention keeps markup.",
+   "requiredChange": "None for adoption. If a candidate 3 is cut for another reason, quote this line from after '> ' only, so it reads '**Q-EV9-1b = (a)**, ...' (still a contiguous substring, markup balanced)."
+  },
+  {
+   "id": "E2-2",
+   "severity": "NOTE",
+   "location": "build_contract.py module docstring (lines 1-9)",
+   "finding": "The docstring still says 'candidate 1' and lists the decisions as 'Q-EV9-1..5'. The code builds CANDIDATE = 2 and also quotes Q-EV9-1b. The builder is not one of the two published files, and neither output is affected.",
+   "requiredChange": "None for the contract. Refresh the docstring the next time the builder is edited, or before the builder is committed anywhere."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Brief sha256 e5389095... and round-1 brief sha256 312b33ad... before following them; round-1 hard rules applied with WORK = edgev9-review-r2",
+   "result": "PASS"
+  },
+  {
+   "check": "Subject hashes: staged contract/ v9 197f30e4..., README 8cde7d19..., builder 6573f4d0...; rounds/c2 equal to contract/ (cmp); rounds/c1 6d4f92f7.../a5f34c9e...; build_contract.c1.py 6920125...",
+   "result": "PASS"
+  },
+  {
+   "check": "Base: 6835a6ed resolves; subject 'MET-PERF-042 ... (255th packet) (#209)'; sole parent 29c84b36",
+   "result": "PASS"
+  },
+  {
+   "check": "Delta JSON (c1 vs c2): same keys and order; all 68 rows identical; schemaVersion, graph, consumer, provider, artifact, ownerDecision, rules, notArtifacts, statuses, supersedes equal; ownerDecisions keeps c1's 7 and adds 1 (Q-EV9-1b); notes keep c1's 4 and add 2 (readiness doc, replay scope); text diff has exactly these two hunks",
+   "result": "PASS"
+  },
+  {
+   "check": "Delta README (c1 vs c2 diff): changes only the status line (ROUND1 -> ROUND2), the decisions sentence (adds Q-EV9-1b), a new 'Replay scope' paragraph, the readiness doc in 'Not registered', and the extended 'Open items'",
+   "result": "PASS"
+  },
+  {
+   "check": "Builder delta (c1 vs c2 diff): PIN and CANDIDATE, three exact-path free checks, RD and proxy-vector existence/unregistered asserts, Q-EV9-1b quote, two notes, README text; nothing else",
+   "result": "PASS"
+  },
+  {
+   "check": "v9 vs v8 at 6835a6ed: top-level keys and order equal; schemaVersion/graph/consumer/provider/ownerDecision/rules/notArtifacts/statuses equal; first 66 rows equal in order; supersedes = {v8 path, sha256:623cf10b...21573, MET-ENFORCE-039}; v8.supersedes.packet MET-ENFORCE-038",
+   "result": "PASS"
+  },
+  {
+   "check": "New rows at 6835a6ed: providerCommit 108e6195..., sha256 equal to base bytes, mode 100644, consumer host-enforcement/contracts/i01-v1/{channel.schema.json,vectors.json}, HE-004-I01, BYTE_IDENTICAL, REGISTERED_BEFORE_USE",
+   "result": "PASS"
+  },
+  {
+   "check": "E1-1: readiness doc at 6835a6ed (sha256 65778040..., 100644, last change 108e6195); amendment record channel.guidePath and inputFiles (exactly CS, PV, RD); wire rules present in the doc; no v8/v9 row names it",
+   "result": "PASS"
+  },
+  {
+   "check": "E1-2 request cases: 3 internal $refs only, $defs/request self-contained (consts for schemaVersion and operation, patterns, sequence minimum 1); bindingDigest recomputes; runNonce = binding.scope.runNonce; previous null; each of the 5 request negatives is decidable from the schema, the vectors' binding and the initial-chain rule",
+   "result": "PASS"
+  },
+  {
+   "check": "E1-2 binding/observation cases: validate_messages (read as text, not run) reads the proxy-vector profile on every call; profileDigest fc569e17... = sha256 of the canonical proxy positive; binding.scope = proxy scope minus apiEndpointId; all 5 binding negatives target profile-bound fields; proxy vectors in no v8/v9 row",
+   "result": "PASS. Nuance: many observation negatives (e.g. challenge, runNonce, sequence, times, enforcement) can be decided from the two files alone, but accepting the positive observation needs profile.quota, so the class-level 'needs a later record first' is conservative and correct"
+  },
+  {
+   "check": "E1-3: exact-path git cat-file -e at 6835a6ed for v9 JSON, README-v9.md, architecture/edge-record-v9, architecture/edge-record-v9/status.json",
+   "result": "PASS: all rc 128 (absent)"
+  },
+  {
+   "check": "E1-4: v8 at 6835a6ed sha256 623cf10b..., 66 rows, last change 29c84b36; CS/PV bytes, sizes, mode 100644, last change 108e6195, bytes equal at 108e6195",
+   "result": "PASS"
+  },
+  {
+   "check": "E1-4: builder run twice (python3 -I -B, GIT_OPTIONAL_LOCKS=0) into WORK/build1 and WORK/build2",
+   "result": "PASS: both rc 0 (all builder asserts held at 6835a6ed), byte-identical, equal to contract/ and rounds/c2/ (197f30e4..., 8cde7d19...)"
+  },
+  {
+   "check": "Quotes: all 8 ownerDecisions entries are exact contiguous substrings of exactly one line of their file, inside the dated section, occurring once; dates in attributions match the headers; Q-EV9-1b in its own 2026-10-22 section (prefix stripped '> **')",
+   "result": "PASS (see E2-1 for the dangling markup)"
+  },
+  {
+   "check": "he004 OWNER_DECISIONS.md read only programmatically for the two quoted sections",
+   "result": "DONE"
+  },
+  {
+   "check": "README-v8 status-line precedent (exact path): v8 kept its candidate status line and moved adoption to status.json, as v9 does",
+   "result": "CONSISTENT"
+  },
+  {
+   "check": "Hygiene in both c2 files: legacy term (search string built from parts), the user name (derived at run time), /users/, /private/, /home/, ~/, /tmp, /var/, desktop/, .local/state, email pattern, '@'",
+   "result": "PASS: zero hits"
+  },
+  {
+   "check": "Claims about R10 (U7 replays only request cases; R10 reads and cites the readiness doc; DESIGN-I01A sections)",
+   "result": "NOT VERIFIED: R10 is outside this review's read scope; consistent with Q-I01A-1, Q-EV9-1/2 and Q-EV9-1b"
+  },
+  {
+   "check": "Not run: pytest, validators, dry run, cargo; R12, tools/w04, the enforcement-test-plan files and directory never opened; edge directory never listed, globbed or grepped; working files of the checkout never read; no network",
+   "result": "CONFIRMED"
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "edgeDirListed": false
+ }
+}
