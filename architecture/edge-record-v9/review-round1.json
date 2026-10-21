@@ -1,0 +1,155 @@
+{
+ "subject": {
+  "edgeV9Sha256": "6d4f92f70cfb97686f23389e00a25b3eb20b72257abad3b38c8684edbda35826",
+  "readmeV9Sha256": "a5f34c9ef92015903431910b09d08d61c031542c17f700b7a24709d38504b502",
+  "builderSha256": "6920125293ad6234af3363ebd65562d23ed7b1f1f09a8d073e68a79ceec3f1cc",
+  "base": "29c84b36dad2f6f9822b71cd959064f0202d9868"
+ },
+ "reviewer": "independent agent",
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "E1-1",
+   "severity": "MINOR",
+   "location": "operator-harness-engineering-v9.json notes[3]; README-v9.md 'Not registered'",
+   "finding": "The I01 wire has a third pinned input that the contract neither registers nor names as unregistered: docs/alpha-2/POLICY_OBSERVATION_READINESS.md (sha256 65778040919c5eb7335f2c104d983ca920b877b1b123f961556a6bcae36d232c). architecture/policy-observation-amendment.json at 29c84b36 names it as channel.guidePath and pins it in inputFiles next to CS and PV. It carries the wire's normative rules: one datagram each way, canonical JSON, request <= 16 KiB, response <= 64 KiB, the echo fields and the chain digest. Every earlier contract that R10 vendors (I05 v1-v4, I07 v1-v3, I06 v1-v4, admission v3, native-profile v4/v5) has its contract text registered next to the schema and vectors. SCOPE.md put Q-EV9-1 (b) as 'add other pending rows (none are known)', so the delegated scope decision was made without this file in view. The candidate is faithful to Q-EV9-1 (a), so no row is wrong.",
+   "requiredChange": "Name the guide in notes and in the README's 'Not registered' paragraph (pinned by MET-REPAIR-010, not vendored by HE-004-I01, so no consumer may hold it without a later record). First get the monitor's confirmation that U7 does not vendor it. If U7 does vendor it, a revised Q-EV9-1 adds a third row (BYTE_IDENTICAL, 100644, providerCommit 108e6195, consumer host-enforcement/contracts/i01-v1/)."
+  },
+  {
+   "id": "E1-2",
+   "severity": "MINOR",
+   "location": "operator-harness-engineering-v9.json notes; README-v9.md 'Consumer (Q-EV9-2 (a))'",
+   "finding": "The record does not say what else the replay needs, though v8's README did ('Every other input of v4's check_vectors is already registered'). Request-case replay needs no other harness-onion file. The schema's three $refs are all internal (#/$defs/binding|request|observation) and $schema is the standard 2020-12 meta-schema. The request's bindingDigest e10d89fd... equals sha256 of the canonical vectors' own binding. runNonce comes from binding.scope, and positive.previous is null, so the request opens the chain. But the vendored vectors.json also holds 5 binding and 17 observation negatives, plus a positive whose binding.profileDigest fc569e17... is the sha256 of the canonical positive of architecture/proxy-contract-inputs/vectors.json. That file is not registered in v8 or v9, and the harness-onion oracle (validate_messages) reads it for the profile-digest, scope, policy-digest and quota checks.",
+   "requiredChange": "Add a note and a README sentence stating that U7's request-case replay needs only CS and PV (internal $refs only; the binding digest is over the vectors' own binding). Also state that replaying the binding or observation cases would need architecture/proxy-contract-inputs/vectors.json, which is unregistered, so HE-004-I01 may not vendor or replay those cases until a later record registers it."
+  },
+  {
+   "id": "E1-3",
+   "severity": "NOTE",
+   "location": "build_contract.py (free-version check); README-v9.md 'Open items'",
+   "finding": "The builder checks by exact path only that operator-harness-engineering-v9.json is free. It does not check README-v9.md or the new architecture/edge-record-v9/ directory (Q-EV9-3 (a)). This reviewer checked all three by exact path at 29c84b36 (git cat-file -e, rc 128 each), so they are free now.",
+   "requiredChange": "None for the candidate. At mechanics, also check by exact path that README-v9.md and architecture/edge-record-v9/ are free on 255's merge commit."
+  },
+  {
+   "id": "E1-4",
+   "severity": "NOTE",
+   "location": "build_contract.py PIN and edge8 supersedes assertion; README-v9.md 'Open items'",
+   "finding": "The builder hard-codes PIN 29c84b36 and asserts that v8 supersedes MET-ENFORCE-038. Q-EV9-5 (a) puts the mechanics on 255's merge commit. Under SCOPE.md, 256 is the first packet built under 255's chain-compaction identity rule. The README's open items cover re-checking v8's digest and rows, the provider files and v9 being free, but not the base move or 255's rule.",
+   "requiredChange": "None for the contract text. At mechanics, re-run the builder (or its checks) against 255's merge commit and record the result in architecture/edge-record-v9/status.json, together with 255's identity-rule check."
+  },
+  {
+   "id": "E1-5",
+   "severity": "NOTE",
+   "location": "architecture/edge-record-v9/status.json (written at adoption)",
+   "finding": "MON-256-LSTREE-SLIP is recorded in tools/w03/edgev9/OWNER_DECISIONS.md, and the monitor said 'Record it'. The edge record correctly leaves it out, since it is a process record, not a decision behind the registry rows.",
+   "requiredChange": "None for the candidate. Record MON-256-LSTREE-SLIP in the status record at adoption."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Brief sha256 312b33ad... before following it; staged candidate, rounds/c1 copy, builder, SCOPE.md (9424cbc3...) hashes",
+   "result": "PASS: all equal the stated values; contract/ and rounds/c1/ each hold exactly the two files"
+  },
+  {
+   "check": "v9 free at 29c84b36 by exact path (git cat-file -e) for operator-harness-engineering-v9.json, README-v9.md, architecture/edge-record-v9 and its status.json",
+   "result": "PASS: all absent (rc 128)"
+  },
+  {
+   "check": "v8 at 29c84b36 by exact path: sha256 623cf10b...21573, 66 rows, last change 29c84b36 (MET-ENFORCE-039, 254th packet)",
+   "result": "PASS"
+  },
+  {
+   "check": "v9 first 66 rows equal v8's in value, per-row key order and serialized text (the v9 row text starts with v8's exact 66-row text)",
+   "result": "PASS"
+  },
+  {
+   "check": "Top-level keys and order equal v8's; schemaVersion/graph/consumer/provider equal; ownerDecision, rules, notArtifacts, statuses byte-identical (the serialized segment ownerDecision..artifacts is equal)",
+   "result": "PASS"
+  },
+  {
+   "check": "supersedes = {v8 path, sha256:623cf10b...21573, MET-ENFORCE-039}",
+   "result": "PASS"
+  },
+  {
+   "check": "New rows: sha256/size/mode at 29c84b36 (fb69b772... 41771 100644; 1bfb4677... 14486 100644)",
+   "result": "PASS"
+  },
+  {
+   "check": "New rows: last-change commit = 108e61953d522106db7c8de65ee19120a952853b (the files' only commit, MET-REPAIR-010 #104); bytes and blob ids equal at 108e6195",
+   "result": "PASS"
+  },
+  {
+   "check": "New rows: BYTE_IDENTICAL, REGISTERED_BEFORE_USE (a defined status), consumer paths host-enforcement/contracts/i01-v1/{channel.schema.json,vectors.json}, consumer packet HE-004-I01 (v8's label for I01a rows 54, 55, 64, 65); key set and order equal v8's 33 plain rows",
+   "result": "PASS"
+  },
+  {
+   "check": "No collision: neither provider path nor consumer path in v8; no v8 row under policy-observation or an i01 consumer path; the provider directory holds only these two files",
+   "result": "PASS"
+  },
+  {
+   "check": "providerPacket omitted: v4's 12 rows for already-published files (I06 v2/v1, admission v3, I05 v4 at fd362f9) and v5/v7's history rows carry the last-change commit and no providerPacket; providerCommit null + providerPacket is used only for packet-published files (v3 note); schema v2 has no providerPacket requirement (34 of v8's rows lack it)",
+   "result": "PASS: consistent with the rules and with v4 and v8"
+  },
+  {
+   "check": "Scope: schema $refs (3, all internal), $id is a URI, not a file; vectors contain no file references; the request-case replay is self-contained (bindingDigest recomputed with sorted-keys compact JSON equals the vectors' request)",
+   "result": "PASS for request cases; see E1-2 for binding/observation cases"
+  },
+  {
+   "check": "Scope: scripts/validate_policy_observation.py left unregistered (models and validators pinned by digest, as v8 did for scripts/i06_backend_profile_v4.py)",
+   "result": "PASS: consistent with precedent"
+  },
+  {
+   "check": "Scope: other pinned inputs of the I01 wire (amendment record channel/inputFiles)",
+   "result": "FINDING E1-1 (guide not named)"
+  },
+  {
+   "check": "Decisions verbatim: each of the 7 ownerDecisions entries, with its '> - ' prefix restored, is exactly one line of its file, inside its dated section (2 in he004 sections 2026-10-21; 5 in the edgev9 section 2026-10-22), and occurs once as a substring; the dates in the attributions match the headers",
+   "result": "PASS"
+  },
+  {
+   "check": "he004 decisions read only within the two quoted sections (programmatic extraction by header)",
+   "result": "DONE"
+  },
+  {
+   "check": "README-v9 table against JSON (path, sha prefix, bytes, commit prefix, packet, consumer path, status)",
+   "result": "PASS"
+  },
+  {
+   "check": "README-v9 claims: v1 rule text (v1 at operator-harness-engineering.json, via v2's supersedes path) quoted exactly; v8 sha256 and 66 rows; 'unchanged since MET-REPAIR-010'; v4 convention; schema v2 with no key or status added; ownerDecision/rules/notArtifacts/statuses copied; harness-engineering consumes no repository in any of the 4 graphs of architecture/repositories.yaml (and dependsOn [])",
+   "result": "PASS"
+  },
+  {
+   "check": "README-v9 claim that U7 replays only the request cases against its own request check",
+   "result": "NOT VERIFIED: R10 is not in this review's read scope; it is consistent with Q-I01A-1 and Q-EV9-1/2"
+  },
+  {
+   "check": "README-v9 claim 'v1 to v8 and EDGE-2 stay byte-identical'",
+   "result": "CONSISTENT: the candidate writes only two new files; EDGE-2 not opened (the edge dir is read by exact path only)"
+  },
+  {
+   "check": "README-v9 open items: v8 digest/rows re-check, provider bytes/mode/commit, v9 free",
+   "result": "PASS, complete as briefed; see notes E1-3/E1-4 for mechanics additions"
+  },
+  {
+   "check": "No local path, email address, user name or legacy term in README-v9 or edge v9 (search strings built from parts)",
+   "result": "PASS: zero hits"
+  },
+  {
+   "check": "Builder: two runs (python3 -I -B, GIT_OPTIONAL_LOCKS=0) into WORK/build1 and WORK/build2",
+   "result": "PASS: both rc 0, byte-identical, equal to contract/ and rounds/c1/ (6d4f92f7..., a5f34c9e...)"
+  },
+  {
+   "check": "Builder edge-dir access by code reading: only git show of the exact v8 path and git cat-file -e of the exact v9 path; ls-tree only on the two provider paths",
+   "result": "PASS"
+  },
+  {
+   "check": "Not run: pytest, validators, dry run, cargo; R12, tools/w04, the enforcement-test-plan files and directory never opened; edge directory never listed",
+   "result": "CONFIRMED"
+  }
+ ],
+ "actions": {
+  "filesEdited": false,
+  "networkAccessed": "none",
+  "personalDataSent": false,
+  "edgeDirListed": false
+ }
+}
