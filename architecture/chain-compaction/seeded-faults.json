@@ -1,0 +1,344 @@
+{
+ "schemaVersion": "harness.planeon.ai/chain-compaction-seeded-faults/v1",
+ "plan": "CHAIN-COMPACTION-001 PLAN revision 11, section 6 M3",
+ "source": {
+  "run": "20261021T1637",
+  "reportSha256": "4c54c857279378a02ff598d9ef6d78b2fe31d82a20a8440bbe52ac84d8e5fc63",
+  "resultsSha256": "33bf7351e381199de842fc2dfda68bf18950d7b4dd0587b827d2975fe3db142b",
+  "casesSha256": "43f929a696dd955f5b83cb0d8a7ea4744436ad03f751b0c15e7b81fb29b28a72",
+  "checkSha256": "e2b659f6c82532dd470234ea163a7aa94e5c327b5108b087b3994c7ca1a10d68",
+  "runSeconds": 702.1,
+  "runs": 721
+ },
+ "subject": {
+  "head": {
+   "commit": "b5867e9179bd510b644ad0d6cf5882419dd9fcf9",
+   "tree": "d54f86218b476812011562901acabc24d0d3f1a7"
+  },
+  "base": {
+   "tree": "c324d86adf419da9bdb247bf26bb552b9528d869"
+  }
+ },
+ "counts": {
+  "plan": {
+   "R1": 67,
+   "R2": 66,
+   "R3": 65,
+   "R4": 9,
+   "R5": 6,
+   "R6": 66,
+   "R7": 63,
+   "R8": 67,
+   "R10": 18,
+   "R12": 132
+  },
+  "generated": {
+   "R1": 67,
+   "R2": 66,
+   "R3": 65,
+   "R4": 9,
+   "R5": 6,
+   "R6": 66,
+   "R7": 63,
+   "R8": 67,
+   "R10": 18,
+   "R12": 132
+  },
+  "total": 559,
+  "run": 352,
+  "outOfScope": 207,
+  "outOfScopeByClass": {
+   "R1": 67,
+   "R3": 65,
+   "R4": 9,
+   "R12a": 66
+  },
+  "benign": 18
+ },
+ "scope": {
+  "decision": "Run 352, rest out of scope (Recommended)",
+  "date": "2026-10-21",
+  "words": "M3 scope: \"Run 352, rest out of scope (Recommended)\". Only the 352 cases under the four approved transforms run. The 207 cases that need \"insert an early return\" or \"retarget to `_checked_own_authority_raw`\" are recorded as out of scope, so the static-only rule stays intact. Do not build or keep those two transforms.",
+  "transformsNotBuilt": {
+   "insert an early return": [
+    "R1",
+    "R12a"
+   ],
+   "retarget to _checked_own_authority_raw": [
+    "R3",
+    "R4"
+   ]
+  }
+ },
+ "transforms": {
+  "delete_statement": [
+   "R2",
+   "R5"
+  ],
+  "replace_return": [
+   "R6",
+   "R12b"
+  ],
+  "slice_result": [
+   "R8",
+   "R10"
+  ],
+  "change_constant": [
+   "R10"
+  ],
+  "data": {
+   "r7_safe_load_once": [
+    "R7"
+   ]
+  }
+ },
+ "partI": {
+  "classes": {
+   "R1": {
+    "cases": 67,
+    "run": 0,
+    "outOfScope": 67,
+    "pass": 0,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R2": {
+    "cases": 66,
+    "run": 66,
+    "outOfScope": 0,
+    "pass": 65,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 1,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R3": {
+    "cases": 65,
+    "run": 0,
+    "outOfScope": 65,
+    "pass": 0,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R4": {
+    "cases": 9,
+    "run": 0,
+    "outOfScope": 9,
+    "pass": 0,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R5": {
+    "cases": 6,
+    "run": 6,
+    "outOfScope": 0,
+    "pass": 6,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R6": {
+    "cases": 66,
+    "run": 66,
+    "outOfScope": 0,
+    "pass": 66,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R7": {
+    "cases": 63,
+    "run": 63,
+    "outOfScope": 0,
+    "pass": 63,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R8": {
+    "cases": 67,
+    "run": 67,
+    "outOfScope": 0,
+    "pass": 66,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 1,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R10": {
+    "cases": 18,
+    "run": 18,
+    "outOfScope": 0,
+    "pass": 12,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 6
+   },
+   "R12a": {
+    "cases": 66,
+    "run": 0,
+    "outOfScope": 66,
+    "pass": 0,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   },
+   "R12b": {
+    "cases": 66,
+    "run": 66,
+    "outOfScope": 0,
+    "pass": 66,
+    "fail": 0,
+    "baseMissed": 0,
+    "headOnlyKilled": 0,
+    "headOnlyMissed": 0,
+    "collectionKilled": 0
+   }
+  },
+  "notes": {
+   "headOnlyKilled": "the base has no target for that case: R2 at 254 (the base's head form) and R8 at 255 (the base has no slot 255)",
+   "baseMissed": "no case was missed by the base",
+   "fail": "no case failed"
+  },
+  "verdict": {
+   "raw": "FAIL (6 INVALID)",
+   "ruling": "MON-M3-COLLECT-KILL",
+   "final": "PASS"
+  },
+  "words": "**Ruling MON-M3-COLLECT-KILL:** the 6 R10 MAX_FILE_BYTES→0 cases (196, 210, 223, 234, 246, 253) are recorded as \"killed at collection in both suites, identical refusal\". That makes part (i) PASS. Do not re-run them at near-limit values. In seeded-faults.json, list each case with:"
+ },
+ "collectionKills": [
+  {
+   "case": "R10-MAX-196",
+   "slot": 196,
+   "module": "scripts.validate_portable_warm_snapshot_temp",
+   "fault": "MAX_FILE_BYTES 16777216 -> 0 (change_constant)",
+   "testFile": "tests/test_portable_warm_snapshot_temp.py",
+   "refusal": "bounded regular source file (ValueError), raised while the test file is collected",
+   "rc": {
+    "base": 4,
+    "head": 4
+   },
+   "nodeReports": {
+    "base": 0,
+    "head": 0
+   },
+   "harnessRawLabel": "INVALID"
+  },
+  {
+   "case": "R10-MAX-210",
+   "slot": 210,
+   "module": "scripts.validate_i05_gate_channel_v2",
+   "fault": "MAX_FILE_BYTES 16777216 -> 0 (change_constant)",
+   "testFile": "tests/test_i05_gate_channel_v2.py",
+   "refusal": "bounded regular source file (ValueError), raised while the test file is collected",
+   "rc": {
+    "base": 4,
+    "head": 4
+   },
+   "nodeReports": {
+    "base": 0,
+    "head": 0
+   },
+   "harnessRawLabel": "INVALID"
+  },
+  {
+   "case": "R10-MAX-223",
+   "slot": 223,
+   "module": "scripts.validate_license_amendment",
+   "fault": "MAX_FILE_BYTES 16777216 -> 0 (change_constant)",
+   "testFile": "tests/test_license_amendment.py",
+   "refusal": "bounded regular source file (ValueError), raised while the test file is collected",
+   "rc": {
+    "base": 4,
+    "head": 4
+   },
+   "nodeReports": {
+    "base": 0,
+    "head": 0
+   },
+   "harnessRawLabel": "INVALID"
+  },
+  {
+   "case": "R10-MAX-234",
+   "slot": 234,
+   "module": "scripts.validate_load_deadlines",
+   "fault": "MAX_FILE_BYTES 16777216 -> 0 (change_constant)",
+   "testFile": "tests/test_load_deadlines.py",
+   "refusal": "bounded regular source file (ValueError), raised while the test file is collected",
+   "rc": {
+    "base": 4,
+    "head": 4
+   },
+   "nodeReports": {
+    "base": 0,
+    "head": 0
+   },
+   "harnessRawLabel": "INVALID"
+  },
+  {
+   "case": "R10-MAX-246",
+   "slot": 246,
+   "module": "scripts.validate_native_profile_v4",
+   "fault": "MAX_FILE_BYTES 16777216 -> 0 (change_constant)",
+   "testFile": "tests/test_native_profile_v4.py",
+   "refusal": "bounded regular source file (ValueError), raised while the test file is collected",
+   "rc": {
+    "base": 4,
+    "head": 4
+   },
+   "nodeReports": {
+    "base": 0,
+    "head": 0
+   },
+   "harnessRawLabel": "INVALID"
+  },
+  {
+   "case": "R10-MAX-253",
+   "slot": 253,
+   "module": "scripts.validate_diagnostic_caps",
+   "fault": "MAX_FILE_BYTES 16777216 -> 0 (change_constant)",
+   "testFile": "tests/test_diagnostic_caps.py",
+   "refusal": "bounded regular source file (ValueError), raised while the test file is collected",
+   "rc": {
+    "base": 4,
+    "head": 4
+   },
+   "nodeReports": {
+    "base": 0,
+    "head": 0
+   },
+   "harnessRawLabel": "INVALID"
+  }
+ ],
+ "benign": {
+  "cases": 18,
+  "refused": 18,
+  "verdict": "PASS"
+ },
+ "partII": {
+  "parametrizations": 264,
+  "verdict": "PASS"
+ }
+}

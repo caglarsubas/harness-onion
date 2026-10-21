@@ -1,6 +1,39 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-039 source preparation, October 20, 2026
+## Current checkpoint — MET-PERF-042 source preparation, October 21, 2026
+
+Alpha2 OPEN. MET-ENFORCE-039 (I06-RBAC-V4) passed required verify in 956 s and merged as main 29c84b3. CHAIN-COMPACTION-001
+(owner decision PA-D9 (D9a); plan revision 11) compacts the history chain's test scaffold where the cost report shows no
+loss of a required check. In the 63 bridged scaffold test files only two tests change and every test name stays: the
+route test keeps its 8 own routes and the adjacent one (2,079 route nodes leave the suite, each with an identical-input
+twin in the head's full fan-in), and the payload test keeps one mutation plus a check of the layer's expected-payload
+table against digests the test computes itself from the disk YAML. tests/conftest.py shares test-side YAML parses per
+test module (owner Q-CC-2 (a)) and never shares the two new identity tests. The identity rule becomes a standing rule
+(owner Q-CC-IDENTITY (a)): scripts/chain_identity.py checks the chain walk, the class rules, the step rule against the
+bump and bridge vocabularies, the binding rule and the head's allow-list, over the era in the new layer and over the live
+tree in its test, which also runs the runtime binding check. One inherited edit outside C2 (owner Q-CC-F1 (a)) widens
+241's pinned never-shared set by the two identity tests. MET-PERF-042 is the sole 255th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-042 / CHAIN-COMPACTION-001 | SOURCE_PREPARED | Chain compaction (255th packet): in the 63 bridged scaffold test files the route test keeps its 8 own routes and the adjacent one, and the payload test keeps one mutation plus a check of the layer's expected-payload table against digests the test computes from the disk YAML (2,079 route nodes leave the suite, each with an identical-input twin in the head's full fan-in); test-side YAML parse sharing per test module in tests/conftest.py; the identity rule as a standing rule (scripts/chain_identity.py: the walk, class, step, binding and allow-list rules, and the runtime binding check in the layer's test); one inherited edit outside C2 (owner Q-CC-F1 (a)); M2, M3, packet review; verify |
+| Alpha2A | MET-ENFORCE-039 / I06-RBAC-V4 | VERIFY_PASSED_MERGED | Merged as main 29c84b3 (verify 956 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path changes, no validator under scripts/ shares or caches, and no timeout, worker or deadline change. M2 (the
+measured A/B: B1 0.819 and B4 0.661, owner-accepted) and M3 (the seeded-fault evidence: 352 cases, 0 FAIL) ran on the
+lane monitor's word; their records are ab.json and seeded-faults.json. Phase-end effort
+transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical I06 backend profile v4 source checkpoint — MET-ENFORCE-039 source preparation, October 20, 2026
 
 Alpha2 OPEN. MET-PERF-041 (the pytest-diagnostics caps) passed required verify in 869 s and merged as main 585364b. I06-RBAC-V4
 publishes the I06 backend profile v4, a delta successor of I06 v3 that keeps v3's evidence rule (check_evidence is v3's
@@ -2208,7 +2241,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2 · LAB-RUNPLAN-001 / MET-LINUX-007 · Publish the lab run-plan contract v1 (run plan, lease and teardown-residual report with an offline checker) after independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · NATIVE-PROFILE-V5 / MET-ENFORCE-038 · Publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2) after independent review; native-profile v1 to v4, I06 v1 to v3 and edge records v1 to v6 byte-identical; pass required verify through the owner's App.
 - [x] Alpha 2A · MET-PERF-041 · Raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output, fail-closed, with a diagnostic-caps contract record; pass required verify through the owner's App after the owner approves the exact head.
-- [ ] Alpha 2A · I06-RBAC-V4 / MET-ENFORCE-039 · Publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01) after independent review; I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 byte-identical; pass required verify through the owner's App.
+- [x] Alpha 2A · I06-RBAC-V4 / MET-ENFORCE-039 · Publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01) after independent review; I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 byte-identical; pass required verify through the owner's App.
+- [ ] Alpha 2A · CHAIN-COMPACTION-001 / MET-PERF-042 · Compact the history chain's route and payload scaffold tests in the 63 bridged layers (head full fan-in, identical-input twins), share test-side YAML parses per module, and adopt the identity rule as a standing rule; M2 (B1 0.819, B4 0.661 owner-accepted), M3 (0 FAIL), independent review; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

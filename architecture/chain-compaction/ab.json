@@ -1,0 +1,259 @@
+{
+ "schemaVersion": "harness.planeon.ai/chain-compaction-ab/v1",
+ "plan": "CHAIN-COMPACTION-001 PLAN revision 11, section 5 (the bars) and section 6 M2",
+ "mode": "PARTIAL (owner M2-PARTIAL)",
+ "modeNote": "Run under the owner's M2-PARTIAL (load 27-90, partial runs expected). In fact all four full runs and all 80 serial runs completed, with 0 deadline-cut nodes, so every bar is computed over complete data.",
+ "ownerMode": "Monitor: the owner answered the M2 re-run question. Record it verbatim: \"Partial measurement now\". That is option (b): run under the current load and compute B1 only over files that completed in all four runs, flagged partial.",
+ "source": {
+  "run": "20261021T1516",
+  "reportSha256": "e07ab2a851298639355e74213bb861a17c01363ed3d27c847ead1c17dd4b023c",
+  "resultsSha256": "5075c59d6dc8ae20d070fea6b56416a9c377f2d0c9d946eb9f516ff0e9aefb14",
+  "runSeconds": 4470.6
+ },
+ "subject": {
+  "base": {
+   "commit": "87266c73be76fdf3c9b174631247cdfb77c1f6d1",
+   "tree": "c324d86adf419da9bdb247bf26bb552b9528d869",
+   "note": "the accepted base's tree (29c84b36's tree c324d86a)"
+  },
+  "measuredHead": {
+   "commit": "ed000a8bf4822702890f0fad2e5afc510017247f",
+   "tree": "473abdc83bb7d65d7fd3c4465e8b93190f225871"
+  },
+  "fixAfterMeasurement": {
+   "commit": "b5867e9179bd510b644ad0d6cf5882419dd9fcf9",
+   "tree": "d54f86218b476812011562901acabc24d0d3f1a7",
+   "decision": "MON-255-TESTSTRING-FIX",
+   "files": 4,
+   "diff": [
+    "tests/test_chain_compaction.py: the README check's match string (1 line)",
+    "scripts/validate_chain_compaction.py: the digest pins (the test file and decisions.md), five decision headers, the authority pin",
+    "architecture/chain-compaction/decisions.md: five verbatim decision sections (MON-255-DECISIONS-KEEP)",
+    "architecture/chain-compaction-authority.json: rebuilt"
+   ],
+   "unchanged": "C1, C2, the conftest and the layer's runtime code; M2 is not re-run for it"
+  }
+ },
+ "collected": {
+  "base": 16560,
+  "head": 14916
+ },
+ "B1": {
+  "definition": "the sum of per-test CPU over the 141 inherited argv-63 files, head / base, mean of the two full runs per tree",
+  "ratio": 0.8187,
+  "baseCpu": [
+   2956.398,
+   2768.89
+  ],
+  "headCpu": [
+   2597.553,
+   2089.534
+  ],
+  "perRunRatios": [
+   0.8786,
+   0.9381,
+   0.7068,
+   0.7546
+  ],
+  "files": 141,
+  "inheritedFiles": 141,
+  "coverage": "141 of 141 files; 100% of their base M1 CPU",
+  "straddle": "the per-run ratios (0.7068 to 0.9381) straddle the 0.88 and 0.91 lines, so noise alone could move B1 across them; the mean is 0.8187",
+  "linesStraddled": [
+   0.88,
+   0.91
+  ],
+  "status": "owner-accepted"
+ },
+ "B2": {
+  "cpu": 42.891,
+  "bound": 129.775,
+  "nodes": 435,
+  "nodeCap": 700,
+  "met": true,
+  "headRunsComplete": 2
+ },
+ "B3": {
+  "base": 16560,
+  "head": 14916,
+  "scaffoldNodeDelta": -2079,
+  "expectedScaffoldDelta": -2079,
+  "bound": 14916,
+  "met": true,
+  "status": "complete",
+  "source": "collect-only"
+ },
+ "B4": {
+  "file": "tests/test_i06_backend_profile_v4.py",
+  "genericNames": 28,
+  "ratioFull": 0.6611,
+  "baseCpuFull": [
+   14.641,
+   15.011
+  ],
+  "headCpuFull": [
+   11.882,
+   7.722
+  ],
+  "ratioSerial": 0.6682,
+  "baseCpuSerial": [
+   11.833,
+   10.662
+  ],
+  "headCpuSerial": [
+   7.365,
+   7.666
+  ],
+  "bound": 0.65,
+  "status": "owner-accepted"
+ },
+ "B5": {
+  "walls": {
+   "full1-base": 749.749,
+   "full1-head": 624.956,
+   "full2-base": 700.042,
+   "full2-head": 515.867
+  },
+  "load1m5m": {
+   "full1-base": {
+    "start": [
+     15.28,
+     25.94
+    ],
+    "end": [
+     8.5,
+     17.96
+    ]
+   },
+   "full1-head": {
+    "start": [
+     8.5,
+     17.96
+    ],
+    "end": [
+     9.42,
+     12.12
+    ]
+   },
+   "full2-base": {
+    "start": [
+     9.42,
+     12.12
+    ],
+    "end": [
+     8.69,
+     12.12
+    ]
+   },
+   "full2-head": {
+    "start": [
+     8.69,
+     12.12
+    ],
+    "end": [
+     11.39,
+     11.43
+    ]
+   }
+  },
+  "spread": {
+   "base": {
+    "commonFilesCpu": {
+     "cv": 0.0328,
+     "max": 2956.398,
+     "min": 2768.89
+    },
+    "wall": {
+     "cv": 0.0343,
+     "max": 749.749,
+     "min": 700.042
+    }
+   },
+   "head": {
+    "commonFilesCpu": {
+     "cv": 0.1084,
+     "max": 2597.553,
+     "min": 2089.534
+    },
+    "wall": {
+     "cv": 0.0956,
+     "max": 624.956,
+     "min": 515.867
+    }
+   }
+  }
+ },
+ "notPassedInHeadRuns": {
+  "nodes": [
+   "tests/linux_runner/test_build_and_predecessors.py::test_full_predecessor_suites_and_validators_remain_green",
+   "tests/test_chain_compaction.py::test_every_check_has_a_test_that_makes_it_fail"
+  ],
+  "note": "in both head full runs: the README check's match string (fixed by MON-255-TESTSTRING-FIX) and the in-session predecessor proof, which fails when any predecessor node fails"
+ },
+ "serialSample": {
+  "changed": [
+   "tests/test_linux_runner_contract.py",
+   "tests/test_in_session_predecessor_proof.py",
+   "tests/test_portable_warm_snapshot_temp.py",
+   "tests/test_i05_gate_channel_v2.py",
+   "tests/test_parallel_suite.py",
+   "tests/test_license_amendment.py",
+   "tests/test_run_manifest.py",
+   "tests/test_load_deadlines.py",
+   "tests/test_compiled_filter_programs_v2.py",
+   "tests/test_native_profile_v4.py",
+   "tests/test_w03_plan_amend_3.py",
+   "tests/test_native_profile_v5.py",
+   "tests/test_diagnostic_caps.py",
+   "tests/test_i06_backend_profile_v4.py"
+  ],
+  "controls": [
+   "tests/test_readiness_repairs.py",
+   "tests/test_readiness.py",
+   "tests/test_architecture.py",
+   "tests/test_data_harness_v1_observation.py",
+   "tests/test_authority_recheck_reuse.py",
+   "tests/test_model_usage_observation.py"
+  ],
+  "controlsChoice": "MON-M2-CONTROLS: The 6 controls are the costliest unchanged, non-chain-layer test files by M1 CPU. They are within the plan's \"6 unchanged non-layer files\" and are recorded as your choice.",
+  "ratios": {
+   "tests/test_architecture.py": 0.9981,
+   "tests/test_authority_recheck_reuse.py": 1.0412,
+   "tests/test_compiled_filter_programs_v2.py": 0.7944,
+   "tests/test_data_harness_v1_observation.py": 0.9556,
+   "tests/test_diagnostic_caps.py": 0.8652,
+   "tests/test_i05_gate_channel_v2.py": 0.8026,
+   "tests/test_i06_backend_profile_v4.py": 1.0246,
+   "tests/test_in_session_predecessor_proof.py": 0.5876,
+   "tests/test_license_amendment.py": 0.7742,
+   "tests/test_linux_runner_contract.py": 0.5183,
+   "tests/test_load_deadlines.py": 0.5906,
+   "tests/test_model_usage_observation.py": 1.6131,
+   "tests/test_native_profile_v4.py": 1.0526,
+   "tests/test_native_profile_v5.py": 1.0082,
+   "tests/test_parallel_suite.py": 0.7102,
+   "tests/test_portable_warm_snapshot_temp.py": 0.4717,
+   "tests/test_readiness.py": 1.0159,
+   "tests/test_readiness_repairs.py": 2.2109,
+   "tests/test_run_manifest.py": 0.6754,
+   "tests/test_w03_plan_amend_3.py": 0.3921
+  },
+  "runs": 80
+ },
+ "ownerAcceptance": {
+  "decision": "Accept and continue (Recommended)",
+  "date": "2026-10-21",
+  "accepted": [
+   "B1",
+   "B4"
+  ],
+  "words": "255 B1/B4: \"Accept and continue (Recommended)\". B1 = 0.819 (the mean; per-run ratios 0.71-0.94 straddle the lines) and B4 = 0.661 are recorded as owner-accepted. Continue to M3, the packet review, pre-check, dry run and push."
+ },
+ "laterLever": {
+  "item": "safe_yaml_load",
+  "cpuSeconds": 268.6,
+  "share": "10.4%",
+  "status": "not taken; a possible later PERF item",
+  "words": "The `safe_yaml_load` lever is not taken; record it as a possible later PERF item, with your measured 268.6 cpu-s (10.4%) correction."
+ }
+}

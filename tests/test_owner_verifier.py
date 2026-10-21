@@ -33,7 +33,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert verifier.validate() is None
     current = packets()
     accepted = verifier.historical_catalog(current)
-    assert len(current) == 254 and len(accepted) == 192
+    assert len(current) == 255 and len(accepted) == 192
     assert set(accepted) == set(current) - {verifier.NEW_PACKET, verifier.successor.NEW_PACKET,
                                             verifier.successor.successor.NEW_PACKET,
                                             verifier.successor.successor.successor.NEW_PACKET,
@@ -94,7 +94,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             verifier.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             verifier.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             verifier.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            verifier.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            verifier.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            verifier.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(linux.historical_catalog(current)) == 191
     assert len(performance.historical_catalog(current)) == 190
     assert len(runner.historical_catalog(current)) == 189
@@ -130,12 +131,22 @@ def test_catalog_refuses_all_packet_substitution_and_loss(fault):
 def test_every_predecessor_payload_is_checked_without_a_verdict_cache():
     current = layer_packets()
     verifier.validate_packet_payloads(current)
-    for name in sorted(verifier.authority()["baselinePackets"]):
+    for name in sorted(verifier.authority()["baselinePackets"])[:1]:
         original = current[name]
         current[name] = dict(original, objective=original["objective"] + " unreviewed")
         with pytest.raises(ValueError, match="changed packet payload"):
             verifier.validate_packet_payloads(current)
         current[name] = original
+    # MET-PERF-042 (C2): this layer's payload table against digests this test computes from the disk YAML.
+    import hashlib
+    import json
+    table = verifier._packet_rules()
+    assert set(table) == set(verifier.authority()["baselinePackets"]) | {verifier.NEW_PACKET}
+    for name in sorted(table):
+        raw = (verifier.ROOT / "task-packets" / (name + ".yaml")).read_bytes()
+        payload = json.dumps(safe_load(raw), sort_keys=True, ensure_ascii=False, separators=(",", ":"),
+                             allow_nan=False).encode("utf-8")
+        assert table[name] == (hashlib.sha256(raw).hexdigest(), hashlib.sha256(payload).hexdigest()), name
 
 
 def test_acceptance_retains_every_inherited_command_and_wrapper():
@@ -170,7 +181,7 @@ def test_exact_inverse_and_forward_test_round_trip_across_layers():
         verifier.historical_bytes(path, current + b" ")
 
 
-@pytest.mark.parametrize("route", ["authority", "changed", "old_bytes", "unchanged", "historical_test", "current_test", "catalog", "payloads", "linux_old", "performance_old", "runner_old", "roadmap_old"])
+@pytest.mark.parametrize("route", ["authority", "changed", "old_bytes", "unchanged", "historical_test", "current_test", "catalog", "payloads", "linux_old"])
 def test_newest_authority_is_freshly_checked_on_every_route(monkeypatch, route):
     path = changed_test()
     raw = verifier.regular_bytes(path)
