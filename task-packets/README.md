@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-040
+## Current source preparation — MET-GOV-001
+
+MET-GOV-001 (EVOLUTION-SURFACE-001): the evolution surface record v1 (who may propose, generate, test, approve and
+activate each artifact class; the derived gate-material list), its model and vectors, with its status, review records and
+round snapshots under architecture/evolution-surface/; gate material. Alpha2 OPEN; 256 accepted plus MET-GOV-001 only.
+
+## Historical edge record v9 source preparation — MET-ENFORCE-040
 
 MET-ENFORCE-040 (EDGE-V9): operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for
 HE-004-I01, registered before use), with its status and review records under architecture/edge-record-v9/; the first
@@ -1528,3 +1534,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 254 | `MET-ENFORCE-039` | `Harness-Engineering` | I06-RBAC-V4: I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly) and edge record v8 (HE-008, HE-004-I01); DATA_CHECK_ONLY |
 | 255 | `MET-PERF-042` | `Harness-Engineering` | CHAIN-COMPACTION-001: chain compaction (C1 and C2) under the standing identity rule; no ci/ path |
 | 256 | `MET-ENFORCE-040` | `Harness-Engineering` | EDGE-V9: operator edge record v9 (the I01 wire's channel schema and vectors for HE-004-I01, registered before use); DATA_CHECK_ONLY |
+| 257 | `MET-GOV-001` | `Harness-Engineering` | EVOLUTION-SURFACE-001: evolution surface record v1 (roles per artifact class; the derived gate-material list), model and vectors; gate material |

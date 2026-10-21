@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-040
+## Current source preparation — MET-GOV-001
+
+MET-GOV-001 (EVOLUTION-SURFACE-001): the evolution surface record v1 under architecture/evolution-surface/ (the record, its
+schema, vectors and README, with the status, the five review records and the round snapshots) and its standard-library
+reference model scripts/evolution_surface.py. Nothing runs and nothing is enforced; the record is gate material (Q-ES-6 (b)), so the owner approves the merge per PR, bound to the head.
+No earlier contract changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 256 accepted plus
+MET-GOV-001 only.
+
+## Historical edge record v9 source preparation — MET-ENFORCE-040
 
 MET-ENFORCE-040 (EDGE-V9): operator edge record v9 under architecture/artifact-edges/ (v8's 66 rows plus 2 that register
 the I01 wire's channel schema and vectors, architecture/policy-observation-inputs/, for HE-004-I01 under
@@ -1342,6 +1350,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 128. `MET-ENFORCE-039`: publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01); I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 unchanged; DATA_CHECK_ONLY.
 129. `MET-PERF-042`: compact the history chain's route and payload scaffold tests in the 63 bridged layers, share test-side YAML parses per test module, and adopt the identity rule as a standing rule; no ci/ path, no validator-side sharing.
 130. `MET-ENFORCE-040`: publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use); edge records v1 to v8 byte-identical, no R10 change.
+131. `MET-GOV-001`: publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its reference model and vectors; gate material, the owner's per-PR merge approval; no earlier contract changes.
 
 ## Testing, verification, and acceptance
 
