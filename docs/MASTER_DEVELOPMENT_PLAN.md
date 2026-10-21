@@ -1,6 +1,36 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-042 source preparation, October 21, 2026
+## Current checkpoint — MET-ENFORCE-040 source preparation, October 22, 2026
+
+Alpha2 OPEN. MET-PERF-042 (CHAIN-COMPACTION-001) passed required verify in 987 s and merged as main 6835a6e. EDGE-V9 (owner
+decisions Q-HE4I1-10 (a) and Q-I01A-1; the lane monitor's owner-delegated Q-EV9-1 to Q-EV9-5 and Q-EV9-1b) publishes
+the operator -> harness-engineering edge record v9 before HE-004-I01's step U7 vendors the I01 wire: edge record v8's 66
+rows unchanged and in order, plus 2 rows that register architecture/policy-observation-inputs/channel.schema.json and
+vectors.json (MET-REPAIR-010's files, unchanged since) for HE-004-I01 under host-enforcement/contracts/i01-v1/, each
+BYTE_IDENTICAL and REGISTERED_BEFORE_USE with its last-change commit and no providerPacket. Candidate 2 was adopted by the
+lane monitor after two independent contract review rounds (the second PASS_FOR_ADOPTION); the status and review records
+are in architecture/edge-record-v9/. Edge records v1 to v8 and the two provider files stay byte-identical. It is the
+first packet built under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump
+vocabulary, 255's layer by the bridge vocabulary, and 255's test keeps its 8 own routes and the adjacent one and one
+payload mutation (C2), while the new head's test keeps the full fan-in. MET-ENFORCE-040 is the sole 256th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-040 / EDGE-V9 | SOURCE_PREPARED | Operator edge record v9 (256th packet): edge record v8's 66 rows unchanged plus 2 that register the I01 wire's channel schema and vectors (architecture/policy-observation-inputs/, BYTE_IDENTICAL, REGISTERED_BEFORE_USE) for HE-004-I01 under host-enforcement/contracts/i01-v1/; adopted after two independent contract review rounds; the first packet built under MET-PERF-042's identity rule and step rule; packet review; verify |
+| Alpha2A | MET-PERF-042 / CHAIN-COMPACTION-001 | VERIFY_PASSED_MERGED | Merged as main 6835a6e (verify 987 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path and no R10 file changes. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical chain compaction source checkpoint — MET-PERF-042 source preparation, October 21, 2026
 
 Alpha2 OPEN. MET-ENFORCE-039 (I06-RBAC-V4) passed required verify in 956 s and merged as main 29c84b3. CHAIN-COMPACTION-001
 (owner decision PA-D9 (D9a); plan revision 11) compacts the history chain's test scaffold where the cost report shows no
@@ -2242,7 +2272,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · NATIVE-PROFILE-V5 / MET-ENFORCE-038 · Publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2) after independent review; native-profile v1 to v4, I06 v1 to v3 and edge records v1 to v6 byte-identical; pass required verify through the owner's App.
 - [x] Alpha 2A · MET-PERF-041 · Raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output, fail-closed, with a diagnostic-caps contract record; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · I06-RBAC-V4 / MET-ENFORCE-039 · Publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01) after independent review; I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 byte-identical; pass required verify through the owner's App.
-- [ ] Alpha 2A · CHAIN-COMPACTION-001 / MET-PERF-042 · Compact the history chain's route and payload scaffold tests in the 63 bridged layers (head full fan-in, identical-input twins), share test-side YAML parses per module, and adopt the identity rule as a standing rule; M2 (B1 0.819, B4 0.661 owner-accepted), M3 (0 FAIL), independent review; pass required verify through the owner's App.
+- [x] Alpha 2A · CHAIN-COMPACTION-001 / MET-PERF-042 · Compact the history chain's route and payload scaffold tests in the 63 bridged layers (head full fan-in, identical-input twins), share test-side YAML parses per module, and adopt the identity rule as a standing rule; M2 (B1 0.819, B4 0.661 owner-accepted), M3 (0 FAIL), independent review; pass required verify through the owner's App.
+- [ ] Alpha 2A · EDGE-V9 / MET-ENFORCE-040 · Publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use) after independent contract review; the first packet built under the identity rule and step rule; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

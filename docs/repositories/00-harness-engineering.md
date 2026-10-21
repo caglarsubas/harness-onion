@@ -1,6 +1,14 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-042
+## Current source preparation — MET-ENFORCE-040
+
+MET-ENFORCE-040 (EDGE-V9): operator edge record v9 under architecture/artifact-edges/ (v8's 66 rows plus 2 that register
+the I01 wire's channel schema and vectors, architecture/policy-observation-inputs/, for HE-004-I01 under
+host-enforcement/contracts/i01-v1/, before U7 vendors them), with README-v9 and the status and review records under
+architecture/edge-record-v9/. Edge records v1 to v8 and the provider files stay byte-identical; no R10 file changes. The
+first packet built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 255 accepted plus MET-ENFORCE-040 only.
+
+## Historical chain compaction source preparation — MET-PERF-042
 
 MET-PERF-042 (CHAIN-COMPACTION-001): the history chain's test scaffold is compacted in the 63 bridged layers (the route
 test keeps its 8 own routes and the adjacent one; the payload test keeps one mutation and checks the layer's
@@ -1333,6 +1341,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 127. `MET-PERF-041`: raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output; fail-closed, the record schema unchanged; SOURCE_DELTA_ONLY.
 128. `MET-ENFORCE-039`: publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01); I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 unchanged; DATA_CHECK_ONLY.
 129. `MET-PERF-042`: compact the history chain's route and payload scaffold tests in the 63 bridged layers, share test-side YAML parses per test module, and adopt the identity rule as a standing rule; no ci/ path, no validator-side sharing.
+130. `MET-ENFORCE-040`: publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use); edge records v1 to v8 byte-identical, no R10 change.
 
 ## Testing, verification, and acceptance
 

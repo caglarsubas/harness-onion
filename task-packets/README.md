@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-042
+## Current source preparation — MET-ENFORCE-040
+
+MET-ENFORCE-040 (EDGE-V9): operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for
+HE-004-I01, registered before use), with its status and review records under architecture/edge-record-v9/; the first
+packet built under the identity rule and step rule. Alpha2 OPEN; 255 accepted plus MET-ENFORCE-040 only.
+
+## Historical chain compaction source preparation — MET-PERF-042
 
 MET-PERF-042 (CHAIN-COMPACTION-001): chain compaction (C2 in the 63 bridged scaffold test files, the head's full fan-in,
 C1 test-side YAML parse sharing) under the standing identity rule; records under architecture/chain-compaction/. Alpha2
@@ -1521,3 +1527,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 253 | `MET-PERF-041` | `Harness-Engineering` | Pytest-diagnostics caps under the verifier's 32 MiB output ceiling (30 MiB, 140,000 events, the scan limits derived; 2 MiB reserve); SOURCE_DELTA_ONLY |
 | 254 | `MET-ENFORCE-039` | `Harness-Engineering` | I06-RBAC-V4: I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly) and edge record v8 (HE-008, HE-004-I01); DATA_CHECK_ONLY |
 | 255 | `MET-PERF-042` | `Harness-Engineering` | CHAIN-COMPACTION-001: chain compaction (C1 and C2) under the standing identity rule; no ci/ path |
+| 256 | `MET-ENFORCE-040` | `Harness-Engineering` | EDGE-V9: operator edge record v9 (the I01 wire's channel schema and vectors for HE-004-I01, registered before use); DATA_CHECK_ONLY |
