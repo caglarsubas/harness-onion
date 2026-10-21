@@ -89,7 +89,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 254 and len(accepted) == 243
+    assert len(current) == 255 and len(accepted) == 243
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -99,7 +99,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(la2.historical_catalog(current)) == 242
     assert len(i5v4.historical_catalog(current)) == 241
     assert len(cdh.historical_catalog(current)) == 240
@@ -186,12 +187,22 @@ def test_catalog_refuses_all_packet_substitution_and_loss(fault):
 def test_every_predecessor_payload_is_checked_without_a_verdict_cache():
     current = layer_packets()
     profile.validate_packet_payloads(current)
-    for name in sorted(profile.authority()["baselinePackets"]):
+    for name in sorted(profile.authority()["baselinePackets"])[:1]:
         original = current[name]
         current[name] = dict(original, objective=original["objective"] + " unreviewed")
         with pytest.raises(ValueError, match="changed packet payload"):
             profile.validate_packet_payloads(current)
         current[name] = original
+    # MET-PERF-042 (C2): this layer's payload table against digests this test computes from the disk YAML.
+    import hashlib
+    import json
+    table = profile._packet_rules()
+    assert set(table) == set(profile.authority()["baselinePackets"]) | {profile.NEW_PACKET}
+    for name in sorted(table):
+        raw = (profile.ROOT / "task-packets" / (name + ".yaml")).read_bytes()
+        payload = json.dumps(safe_load(raw), sort_keys=True, ensure_ascii=False, separators=(",", ":"),
+                             allow_nan=False).encode("utf-8")
+        assert table[name] == (hashlib.sha256(raw).hexdigest(), hashlib.sha256(payload).hexdigest()), name
 
 
 def test_acceptance_retains_every_inherited_command_and_wrapper():
@@ -328,7 +339,7 @@ def test_exact_inverse_and_forward_test_round_trip_across_layers():
         profile.historical_bytes(path, current + b" ")
 
 
-@pytest.mark.parametrize("route", ["authority", "changed", "old_bytes", "unchanged", "historical_test", "current_test", "catalog", "payloads", "la2_old", "i5v4_old", "cdh_old", "cfp2_old", "smx_old", "phr_old", "sv4_old", "hs43_old", "rav3_old", "deadlines_old", "events_old", "filters_old", "loop_old", "manifest_old", "ledger_old", "adoption_old", "amendment_old", "bprofile_old", "mprofile_old", "eprofile_old", "lprofile_old", "fprofile_old", "oprofile_old", "uprofile_old", "jprofile_old", "kprofile_old", "tprofile_old", "zprofile_old", "yprofile_old", "xprofile_old", "pprofile_old", "aprofile_old", "vprofile_old", "cprofile_old", "qprofile_old", "hprofile_old", "dprofile_old", "sprofile_old", "wprofile_old", "rprofile_old", "gprofile_old", "iprofile_old", "nprofile_old", "resolution_old", "account_old", "canary_old", "isolated_old", "portable_old", "proof_old", "recheck_old", "verifier_old", "linux_old", "performance_old", "runner_old", "roadmap_old"])
+@pytest.mark.parametrize("route", ["authority", "changed", "old_bytes", "unchanged", "historical_test", "current_test", "catalog", "payloads", "la2_old"])
 def test_newest_authority_is_freshly_checked_on_every_route(monkeypatch, route):
     path = changed_test()
     raw = profile.regular_bytes(path)

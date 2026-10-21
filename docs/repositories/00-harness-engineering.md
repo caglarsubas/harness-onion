@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-039
+## Current source preparation — MET-PERF-042
+
+MET-PERF-042 (CHAIN-COMPACTION-001): the history chain's test scaffold is compacted in the 63 bridged layers (the route
+test keeps its 8 own routes and the adjacent one; the payload test keeps one mutation and checks the layer's
+expected-payload table against digests computed by the test from the disk YAML), the head keeps the full fan-in,
+tests/conftest.py shares test-side YAML parses per test module, and the identity rule (scripts/chain_identity.py) is a
+standing rule checked over every era and the live tree. The records are under architecture/chain-compaction/. Alpha2
+OPEN; 254 accepted plus MET-PERF-042 only.
+
+## Historical I06 backend profile v4 source preparation — MET-ENFORCE-039
 
 MET-ENFORCE-039 (I06-RBAC-V4): the I06 backend profile v4 under architecture/i06-backend-profile-v4/ and its reference
 model scripts/i06_backend_profile_v4.py, which imports I06 v3's model unchanged (check_evidence is v3's function object).
@@ -1323,6 +1332,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 126. `MET-ENFORCE-038`: publish the capture-only native-profile v5 (the seven host fields record-only with four T04 proofs; the record native-profile v4's) and edge record v7 (HE-004D2); native-profile v4, I06 v3 and edge records v1 to v6 unchanged; DATA_CHECK_ONLY.
 127. `MET-PERF-041`: raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output; fail-closed, the record schema unchanged; SOURCE_DELTA_ONLY.
 128. `MET-ENFORCE-039`: publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01); I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 unchanged; DATA_CHECK_ONLY.
+129. `MET-PERF-042`: compact the history chain's route and payload scaffold tests in the 63 bridged layers, share test-side YAML parses per test module, and adopt the identity rule as a standing rule; no ci/ path, no validator-side sharing.
 
 ## Testing, verification, and acceptance
 
