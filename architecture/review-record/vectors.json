@@ -938,7 +938,7 @@
       "path": [
        "series"
       ],
-      "value": "EXAMPLE-003/contract"
+      "value": "EXAMPLE-009/contract"
      }
     ]
    },
@@ -3680,7 +3680,7 @@
    ]
   },
   {
-   "id": "merge-exact-series-with-a-voided-sibling",
+   "id": "merge-series-under-no-prefix-with-a-voided-sibling",
    "expect": null,
    "head": {
     "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
@@ -3689,6 +3689,112 @@
    "voided": [
     "EXAMPLE-001/pr-first"
    ],
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-voided-not-a-list",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": "EXAMPLE-003/first",
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-voided-null",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": null,
    "cited": [
     {
      "recordPath": "architecture/example/pr-round1.json",

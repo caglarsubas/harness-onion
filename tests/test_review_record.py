@@ -22,7 +22,7 @@ SCHEMAS = {name: json.loads((ROOT / "schemas" / ("%s.schema.json" % name)).read_
 
 def test_every_vector_replays():
     counts = rr.replay(VECTORS)
-    assert counts == {"reviews": 62, "series": 10, "oracles": 10, "prOracles": 5, "merges": 13, "registries": 13,
+    assert counts == {"reviews": 62, "series": 10, "oracles": 10, "prOracles": 5, "merges": 15, "registries": 13,
                       "legacy": 7, "trees": 16, "privacy": 5}
 
 

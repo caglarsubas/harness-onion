@@ -233,7 +233,7 @@ its own and is refused NO_IDENTITY, before DUPLICATE_IDENTITY is reached.
 - Only an ORACLE_AGENT fixes a defective oracle, under a new oracle identity, with the monitor's ruling; the candidate's
   author never edits the file.
 
-**The merge** (the monitor's check, B-4): `check_merge(cited, registry, head)`.
+**The merge** (the monitor's check, B-4): `check_merge(cited, registry, head, voided=())`.
 - **The citations (RR2C1-1).** A merge-decision record cites every round of each cited head-bound series, from
   round 1, by path and sha256, record and identity alike.
 - **The check:**
@@ -247,25 +247,32 @@ its own and is refused NO_IDENTITY, before DUPLICATE_IDENTITY is reached.
 - **A VOID round** (Q-RR2-VOID (b), the monitor's ruling). A round ruled VOID stays on record, and `check_series` refuses
   it (RULING). So a series that holds a VOID round never counts for a merge, and a published one fails the in-suite
   check.
-  - **Recovery always passes an owner gate.** The lane reruns under a new series id with its own exact-id registry
-    entry, which is a registry change and so needs the owner's per-PR approval.
-  - **Under a prefix entry** (Q-RR2-VOID-PREFIX (b), RR2C3-1) a new id would already be covered, so the rerun still
-    needs its own exact-id entry.
-  - **Enforcement.** The monitor enforces this at merge (MONITOR.md section 4): for every cited series registered only
-    under a prefix, no sibling series under the same prefix may hold a VOID round, unless the cited series has an
-    exact-id entry.
-  - **The mechanical part:** `check_merge(cited, registry, head, voided)` takes the series ids that hold a VOID round,
-    which the monitor lists from its own and the owner's rulings. A cited series with no exact-id entry counts for
-    nothing while a sibling under its prefix is listed.
+  - **Recovery always passes an owner gate.** The lane reruns under a new series id with a registry entry of its own,
+    which is a registry change and so needs the owner's per-PR approval.
+  - **Under a prefix entry** (Q-RR2-VOID-PREFIX (b), as corrected by contract r4, RR2C4-1). A prefix `X/` covers every
+    series of packet X, since a series id has one slash. B-3 refuses an exact id beneath that prefix. So:
+    - the rerun's entry uses another packet-id part (for example `X-R1/contract`, or a new prefix);
+    - while any series under `X/` holds a VOID round, every series under `X/` counts for nothing until the registry
+      changes. A pattern has one kind (B-3), so this stops that packet's series of that kind.
+    - A series with an exact entry is under no prefix, so a voided series elsewhere never stops it.
+  - **Enforcement.** The monitor enforces this at merge (MONITOR.md section 4): no cited series under a prefix entry
+    counts while another series under that prefix holds a VOID round.
+  - **The mechanical part:** `check_merge(cited, registry, head, voided)` takes a list of the series ids that hold a
+    VOID round, which the monitor builds from its own and the owner's rulings. A cited series under a prefix counts
+    for nothing while another series under that prefix is listed. Anything but a list or tuple of strings refuses the
+    merge (RR2C4-3).
   - **Coverage:** every VOID ruling the monitor passes in. A VOID round is only ever made by such a ruling, so the
-    list is complete when the monitor builds it from its decision records. The in-suite check needs no part of it,
-    since a published VOID round already fails there.
+    list is complete when the monitor builds it from its decision records.
+    - The in-suite check needs no part of it, since a published VOID round already fails there.
+    - A VOID round kept only in local records never reaches the in-suite check, so the merge check is the only
+      enforcement for it (RR2C4-4).
   - **A stricter question kept for the owner, if this proves fragile:** refuse prefix entries for CONTRACT, PACKET
     and PR series.
   - A later relaxation, for the owner if VOID rounds become common: `check_series` could accept VOID on a non-final
     round, which would never count. That would remove the owner gate on recovery, so it is not taken here.
 - **Before each harness-onion merge the monitor also:**
   - checks the lane's record directory, so that no round after the cited final exists;
+  - passes its VOID rulings to `check_merge` as `voided` (the VOID-prefix rule above);
   - reads an unpushed reviewed commit, such as a pre-squash commit, read-only from the lane's local repository;
   - runs `check_pr_oracles` and `check_tree` over the PR head's checkout (B-9).
 
@@ -356,9 +363,8 @@ Owner decision Q-RR2-NAMES: "Load hashes locally (Recommended)". This narrows B-
     verdict and ruling NONE_NEEDED or KEEP;
   - separately, the monitor checks the lane's record directory, so that no round after the cited final exists
     (RR2C3-3);
-  - and, for every cited series registered only under a prefix, that no sibling under that prefix holds a VOID round
-    unless the cited series has an exact-id entry, passing its VOID rulings to `check_merge` as `voided`
-    (Q-RR2-VOID-PREFIX (b)).
+  - and, for every cited series under a prefix entry, that no other series under that prefix holds a VOID round,
+    passing its VOID rulings to `check_merge` as `voided` (Q-RR2-VOID-PREFIX (b), as corrected by RR2C4-1).
 - D5a's "flag records without identity or brief digest" becomes `check_review` before each harness-onion merge.
 - The gate list gains the four GATE_REVIEW_PROCESS entries below.
 - R10 and R12 keep their current sidecars until they adopt v2 in their own packets.

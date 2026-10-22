@@ -588,8 +588,10 @@ def check_pr_oracles(changed_paths, identities, read_bytes_at_head, contract_ser
 # ---------------------------------------------------------------- the merge (the monitor's check)
 
 def _voided_sibling(registry, series: str, voided) -> bool:
-    """Q-RR2-VOID-PREFIX (b): a series registered only under a prefix entry, while another series under that prefix
-    holds a VOID round. A rerun after a VOID needs its own exact-id entry (an owner-approved registry change)."""
+    """Q-RR2-VOID-PREFIX (b), as corrected by contract r4 (RR2C4-1): a series under a prefix entry, while another series
+    under that prefix holds a VOID round. Every series under that prefix then counts for nothing until the registry
+    changes; the rerun needs an entry with another packet-id part (an owner-approved registry change), since B-3 refuses
+    an exact id beneath a prefix. A series with an exact entry is under no prefix (B-3), so it is never stopped here."""
     if any(b["series"] == series for b in registry["briefs"]):
         return False
     prefixes = {b["series"] for b in registry["briefs"] if b["series"].endswith("/") and series.startswith(b["series"])}
@@ -599,8 +601,9 @@ def _voided_sibling(registry, series: str, voided) -> bool:
 def check_merge(cited, registry, head, voided=()) -> list:
     """`cited` is a list of {record, recordPath, identity, identityPath} (bytes and paths) for the head-bound final
     rounds a merge cites, with every round of each such series from round 1 (B-4, RR2C1-1); `head` is {commit, tree}.
-    `voided` lists the series ids that hold a VOID round, from the monitor's and the owner's rulings: a cited series
-    with no exact-id registry entry counts for nothing while a sibling under its prefix is listed (Q-RR2-VOID-PREFIX).
+    `voided` is a list of the series ids that hold a VOID round, from the monitor's and the owner's rulings; a cited
+    series under a prefix entry counts for nothing while another series under that prefix is listed (Q-RR2-VOID-PREFIX,
+    RR2C4-1). Anything but a list or tuple of strings refuses the merge (RR2C4-3).
     Each cited series must pass `check_series` (head-less: earlier rounds reviewed earlier trees), and its final round,
     the highest, must pass `check_review` against the head with a passing verdict and a counting ruling (NONE_NEEDED
     or KEEP). A cited record that cannot be read as a round (a string series and an integer round) refuses the whole
@@ -615,7 +618,7 @@ def check_merge(cited, registry, head, voided=()) -> list:
         _refuse(type(r) is dict and type(r.get("series")) is str and _int(r.get("round"), 1), "NO_HEAD_BOUND_ROUND")
         groups.setdefault(r["series"], []).append((r["round"], c))
     passing = []
-    voided = [v for v in voided if type(v) is str]
+    _refuse(type(voided) in (list, tuple) and all(type(v) is str for v in voided), "NO_HEAD_BOUND_ROUND")
     for series, items in sorted(groups.items()):
         if _voided_sibling(registry, series, voided):
             continue
