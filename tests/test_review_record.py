@@ -923,6 +923,11 @@ def test_the_era_holds_the_new_files_and_the_three_surface_files():
     ([], ["architecture/other/README.md"], "only the contract's directory is added"),
     ([None], [], "no model changes"),
     ([], [3], "only the contract's directory is added"),
+    (["scripts/chain_identity.py"], [], "no model changes"),
+    (["scripts/policy_observation_digests.py"], [], "no model changes"),
+    (["scripts/validate_x.txt"], [], "no model changes"),
+    (["tests/conftest.py"], [], "no model changes"),
+    (["conftest.py"], [], "no model changes"),
 ])
 def test_the_freeze_refuses_other_architecture_and_model_changes(changed, added, message):
     profile.check_freeze(list(profile.SURFACE_CHANGED) + ["scripts/validate_chain_compaction.py"],
@@ -1148,38 +1153,80 @@ def test_each_round_is_bound_to_its_record_and_identity(number, change):
         profile.check_round(number, row, record_raw, identity_raw)
 
 
-@pytest.mark.parametrize("change", ["missing_round", "pending_ruling", "other_registry", "changed_record", "base",
-                                    "self_review", "final_verdict"])
+def _rebound(records, identities, number, record_change=None, identity_change=None):
+    """Round `number` changed, with its identity re-bound to the changed record's bytes, so that only the rule the change
+    targets can fail (packet review r1, P1-3)."""
+    records, identities = list(records), list(identities)
+    path, raw = records[number - 1]
+    record = json.loads(raw)
+    if record_change:
+        record_change(record)
+    raw = json.dumps(record).encode("utf-8")
+    identity = json.loads(identities[number - 1][1])
+    identity["record"]["sha256"] = profile.digest(raw)
+    if identity_change:
+        identity_change(identity)
+    records[number - 1] = (path, raw)
+    identities[number - 1] = (identities[number - 1][0], json.dumps(identity).encode("utf-8"))
+    return records, identities
+
+
+def _set(*steps):
+    def change(value):
+        for keys, item in steps:
+            node = value
+            for key in keys[:-1]:
+                node = node[key]
+            if item is _DROP:
+                del node[keys[-1]]
+            else:
+                node[keys[-1]] = item
+    return change
+
+
+_DROP = object()
+SERIES_CHANGES = {
+    # each rule of _series_holds and _counting, one failing case each, the other bindings kept
+    "record_path": lambda r, i, reg: ([(profile.IDENTITIES[0], r[0][1])] + r[1:], i, reg),
+    "identity_path": lambda r, i, reg: (r, [(profile.RECORDS[0], i[0][1])] + i[1:], reg),
+    "series": lambda r, i, reg: _rebound(r, i, 2, _set((["series"], "MET-GOV-002/other"))) + (reg,),
+    "round": lambda r, i, reg: _rebound(r, i, 2, _set((["round"], 7))) + (reg,),
+    "kind": lambda r, i, reg: _rebound(r, i, 2, _set((["kind"], "PACKET"))) + (reg,),
+    "verdict_unknown": lambda r, i, reg: _rebound(r, i, 2, _set((["verdict"], "PASS_FOR_BUILD"))) + (reg,),
+    "binding": lambda r, i, reg: (r, _rebound(r, i, 2, None, _set((["record", "sha256"], "0" * 64)))[1], reg),
+    "brief": lambda r, i, reg: _rebound(r, i, 2, _set((["briefSha256"], "0" * 64)), _set((["briefSha256"], "0" * 64))) + (reg,),
+    "brief_mismatch": lambda r, i, reg: _rebound(r, i, 2, None, _set((["briefSha256"], "0" * 64))) + (reg,),
+    "subject": lambda r, i, reg: _rebound(r, i, 2, None, _set((["subject", "tree"], "0" * 40))) + (reg,),
+    "base_identity": lambda r, i, reg: _rebound(r, i, 2, None, _set((["base", "tree"], "0" * 40))) + (reg,),
+    "base_chain": lambda r, i, reg: _rebound(r, i, 3, _set((["base", "tree"], "0" * 40)),
+                                             _set((["base", "tree"], "0" * 40))) + (reg,),
+    "full_round_late": lambda r, i, reg: _rebound(r, i, 3, _set((["base"], _DROP)), _set((["base"], _DROP))) + (reg,),
+    "ruling_pending": lambda r, i, reg: _rebound(r, i, 2, None, _set((["ruling"], {"decision": "PENDING"}))) + (reg,),
+    "ruling_keep_without_ref": lambda r, i, reg: _rebound(r, i, 2, None, _set((["ruling", "ref"], _DROP))) + (reg,),
+    "ruling_none_needed_with_disclosure": lambda r, i, reg: _rebound(
+        r, i, 2, None, _set((["ruling"], {"decision": "NONE_NEEDED"}))) + (reg,),
+    "self_review": lambda r, i, reg: _rebound(r, i, 1, None, lambda v: v["reviewer"].__setitem__(
+        "agentId", v["operator"]["agentId"])) + (reg,),
+    "author_review": lambda r, i, reg: _rebound(r, i, 1, None, lambda v: v["reviewer"].__setitem__(
+        "agentId", v["author"]["agentIds"][0])) + (reg,),
+    "final_verdict": lambda r, i, reg: _rebound(r, i, profile.ROUNDS, _set((["verdict"], "CHANGES_REQUIRED"))) + (reg,),
+    "final_subject": lambda r, i, reg: _rebound(r, i, profile.ROUNDS, _set((["subject", "tree"], "0" * 40)),
+                                                _set((["subject", "tree"], "0" * 40))) + (reg,),
+    "missing_round": lambda r, i, reg: (r[:-1], i[:-1], reg),
+    "registry_brief": lambda r, i, reg: (r, i, json.dumps(dict(json.loads(reg), briefs=[
+        b for b in json.loads(reg)["briefs"] if b["series"] != profile.SERIES])).encode("utf-8")),
+}
+
+
+@pytest.mark.parametrize("change", sorted(SERIES_CHANGES))
 def test_the_rounds_form_one_valid_series_ending_in_adoption(change):
     records = [(path, profile._verified(path)) for path in profile.RECORDS]
     identities = [(path, profile._verified(path)) for path in profile.IDENTITIES]
     registry = profile._verified(profile.REGISTRY_PATH)
     profile.check_series(records, identities, registry)
-    if change == "missing_round":
-        records = records[:-1]
-        identities = identities[:-1]
-    elif change == "pending_ruling":
-        identity = json.loads(identities[-1][1])
-        identity["ruling"] = {"decision": "PENDING"}
-        identities[-1] = (identities[-1][0], json.dumps(identity).encode("utf-8"))
-    elif change == "other_registry":
-        value = json.loads(registry)
-        value["briefs"] = [b for b in value["briefs"] if b["series"] != profile.SERIES]
-        registry = json.dumps(value).encode("utf-8")
-    elif change == "changed_record":
-        records[0] = (records[0][0], records[0][1] + b" ")
-    elif change == "base":
-        record = json.loads(records[1][1])
-        record["base"] = record["subject"]
-        records[1] = (records[1][0], json.dumps(record).encode("utf-8"))
-    elif change == "self_review":
-        identity = json.loads(identities[0][1])
-        identity["reviewer"]["agentId"] = identity["operator"]["agentId"]
-        identities[0] = (identities[0][0], json.dumps(identity).encode("utf-8"))
-    else:
-        record = json.loads(records[-1][1])
-        record["verdict"] = "CHANGES_REQUIRED"
-        records[-1] = (records[-1][0], json.dumps(record).encode("utf-8"))
+    # The re-binding alone changes nothing a rule checks, so the unchanged series still holds after it.
+    profile.check_series(*_rebound(records, identities, 2), registry)
+    records, identities, registry = SERIES_CHANGES[change](records, identities, registry)
     with pytest.raises(ValueError, match="the rounds form one valid series"):
         profile.check_series(records, identities, registry)
 

@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/review-record-authority.json"
-AUTHORITY_SHA256 = "55efa4c540278ca33755c1ccf0a32143ce70c33e72618fcce9e3d52148828cda"
+AUTHORITY_SHA256 = "ba14abf6853bc482103b12f1f7f82ab1e88170f4dd416972336f4e76cd93b573"
 VALIDATOR_PATH = "scripts/validate_review_record.py"
 BASE_COMMIT = "2043cc27883448e3ff030b7868110e295f32fe09"
 NEW_PACKET = "MET-GOV-002"
@@ -363,7 +363,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # era's verified bytes, never imported: its vectors replay); the published registry pins the published brief; the frozen
 # list was derived at this packet's base; and the evolution surface record v2 (its model,
 # from this era's bytes, derives 31 gate-material entries including the four GATE_REVIEW_PROCESS ones, and its vectors
-# replay). This layer reads the frozen list only to load and count it (Q-RR2-LEGACY (c)). Last, this layer's own inverse
+# replay). This layer reads the frozen list only to hash it, scan it for local paths and load it to count its entries
+# (Q-RR2-LEGACY (c)). Last, this layer's own inverse
 # hunks are the canonical byte-minimal ones, recomputed from its era's bytes (MET-PERF-040's carried rule).
 CONTRACT_DIR = "architecture/review-record"
 README_PATH = CONTRACT_DIR + "/README.md"
@@ -596,10 +597,12 @@ def era_models() -> tuple:
 
 def check_freeze(changed: Any, added: Any) -> None:
     """Under architecture/ this packet changes only MET-GOV-001's record, vectors and README, and adds only the contract's
-    directory; it changes no model under scripts/ (the chain's validators aside)."""
+    directory; under scripts/ it changes only chain validators (scripts/validate_*.py), so no model, the identity checker
+    included, changes; and neither conftest.py changes (packet review r1, P1-2)."""
     for path in list(changed):
         require(type(path) is str and (not path.startswith("architecture/") or path in SURFACE_CHANGED)
-                and path not in (SURFACE_MODEL, MODEL_PATH),
+                and (not path.startswith("scripts/") or (path.startswith("scripts/validate_") and path.endswith(".py")))
+                and path not in ("conftest.py", "tests/conftest.py"),
                 "under architecture/ only MET-GOV-001's record, vectors and README change, and no model changes: "
                 + str(path))
     for path in list(added):
@@ -746,7 +749,8 @@ def check_series(records: Any, identities: Any, registry_raw: Any) -> None:
 
 def validate_adoption() -> None:
     """The status record, the adopted files and the README's one edit, every round with its record and identity, and
-    the series under the reference model."""
+    the series under the contract's rules as this layer restates them (the reference model's own check_series runs over
+    the same rounds in the in-suite pre-check)."""
     status = _json(STATUS_PATH)
     check_status(status)
     check_subject(status)
@@ -810,8 +814,9 @@ def check_surface(es: Any, record: Any, vectors: Any) -> None:
 
 
 def validate_model(models: tuple) -> None:
-    """The model, run from this era's bytes, replays its vectors and loads the published registry and frozen list; the
-    evolution surface model, from this era's bytes, checks record v2."""
+    """The model, run from this era's bytes, replays its vectors; the published registry and frozen list are read with
+    parse (the model's load rules replay in its vectors and run in the in-suite tests); the evolution surface model, from
+    this era's bytes, checks record v2."""
     model, es = models
     check_vector_replay(model, _json(VECTORS_PATH))
     check_registry(_verified(REGISTRY_PATH), _verified(BRIEF_PATH))
