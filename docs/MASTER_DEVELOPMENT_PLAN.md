@@ -1,6 +1,42 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-041 source preparation, October 22, 2026
+## Current checkpoint — MET-GOV-002 source preparation, October 22, 2026
+
+Alpha2 OPEN. MET-ENFORCE-041 (DIGEST-CONTRACT) passed required verify and merged as main 2043cc2. REVIEW-RECORD-V2 (owner
+decisions Q-RR2-1..5 "Accept all five (a) (Recommended)", Q-RR2-6 "Gate material (Recommended)", Q-RR2-CAP, D-3
+"File-byte sha256 (Recommended)" and Q-RR2-NAMES "Load hashes locally (Recommended)"; the lane monitor's owner-delegated
+rulings, among them Q-RR2-ID (a), Q-RR2-LEGACY (c), Q-RR2-FROZEN, Q-RR2-VOID (b) and Q-RR2-ADOPT-SHAPE (a)) publishes the
+review record v2 contract under architecture/review-record/: two records per review round bound by the file-byte
+sha256 (the reviewer's record and the lane's identity), a brief registry, the frozen list of the 169 review records and 2
+oracle tests that predate v2 (derived at this packet's base by the lane that may read every file and copied in
+unopened), oracle identities (D5a), four closed schemas, a standard-library reference model and checker
+(scripts/review_record.py) and replayable vectors, with the in-suite pre-check tests/test_review_records_in_tree.py. It
+amends MET-GOV-001's evolution surface record to version 2 (the GATE_REVIEW_PROCESS class: the derived gate-material list
+grows from 27 to 31 entries). It was adopted after five independent contract review rounds by separate agents (round 5
+PASS_FOR_ADOPTION, NOTEs only), recorded in the contract's own v2 form; the status and the five rounds with their
+identities are in architecture/review-record/, and the D5a oracle tests, written outside the candidate, are
+tests/test_review_record_oracle.py and MET-GOV-001's oracle file scoped to the record's version 2. The packet is gate material (Q-RR2-6), so the owner approves the merge per PR, bound to the head.
+It is built under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump
+vocabulary, 258's layer by the bridge vocabulary, and 258's test keeps its 8 own routes and the adjacent one and one
+payload mutation (C2), while the new head's test keeps the full fan-in. MET-GOV-002 is the sole 259th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-GOV-002 / REVIEW-RECORD-V2 | SOURCE_PREPARED | Review record v2 (259th packet): two records per review round bound by digest, the brief registry, the frozen list, oracle identities, schemas, model and vectors; the evolution surface record v2 (gate list 27 -> 31); adopted after five independent contract review rounds; gate material, the owner's per-PR merge approval |
+| Alpha2A | MET-ENFORCE-041 / DIGEST-CONTRACT | VERIFY_PASSED_MERGED | Merged as main 2043cc2 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path and no R10 file changes. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical I01 digest contract source checkpoint — MET-ENFORCE-041 source preparation, October 22, 2026
 
 Alpha2 OPEN. MET-GOV-001 (EVOLUTION-SURFACE-001) passed required verify in 743 s and merged as main 30f41e6. DIGEST-CONTRACT (owner decisions
 Q-HE4I1-2 (c)+(a) and Q-DIG-3 / Q-DIG-7 "Accept, check at T04"; the lane monitor's owner-delegated Q-I01B-1 to Q-I01B-5,
@@ -2344,7 +2380,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · CHAIN-COMPACTION-001 / MET-PERF-042 · Compact the history chain's route and payload scaffold tests in the 63 bridged layers (head full fan-in, identical-input twins), share test-side YAML parses per module, and adopt the identity rule as a standing rule; M2 (B1 0.819, B4 0.661 owner-accepted), M3 (0 FAIL), independent review; pass required verify through the owner's App.
 - [x] Alpha 2A · EDGE-V9 / MET-ENFORCE-040 · Publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use) after independent contract review; the first packet built under the identity rule and step rule; pass required verify through the owner's App.
 - [x] Alpha 2A · EVOLUTION-SURFACE-001 / MET-GOV-001 · Publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its model and vectors, after five independent contract review rounds and the owner's NOTE fold; gate material; pass required verify through the owner's App after the owner approves the exact head.
-- [ ] Alpha 2A · DIGEST-CONTRACT / MET-ENFORCE-041 · Publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B after independent design and contract review; the layer test runs VPO's validate_messages on the complete I01 positive (C1-1); pass required verify through the owner's App.
+- [x] Alpha 2A · DIGEST-CONTRACT / MET-ENFORCE-041 · Publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B after independent design and contract review; the layer test runs VPO's validate_messages on the complete I01 positive (C1-1); pass required verify through the owner's App.
+- [ ] Alpha 2A · REVIEW-RECORD-V2 / MET-GOV-002 · Publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31), after five independent contract review rounds; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

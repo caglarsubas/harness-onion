@@ -734,6 +734,7 @@ GLOB_READERS = frozenset({
     "ci/lock_warm_snapshot.py",
     "ci/measure_yaml_parsing.py",
     "scripts/evolution_surface.py",
+    "scripts/review_record.py",
     "scripts/zero_bill_scan.py",
     "tests/test_ci_performance.py",
     "tests/test_sector_catalog.py",

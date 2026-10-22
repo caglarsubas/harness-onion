@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-041
+## Current source preparation — MET-GOV-002
+
+MET-GOV-002 (REVIEW-RECORD-V2): the review record v2 contract (two records per review round bound by digest, the brief
+registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution
+surface record v2, with its status, contract rounds and identities under architecture/review-record/; gate material.
+Alpha2 OPEN; 258 accepted plus MET-GOV-002 only.
+
+## Historical I01 digest contract source preparation — MET-ENFORCE-041
 
 MET-ENFORCE-041 (DIGEST-CONTRACT): the I01 digest contract (the seven projection objects and four enforcement digests:
 definitions, model and vectors, DATA_CHECK_ONLY) and operator edge record v10 for HE-004-I01B, with its status, review
@@ -1543,3 +1550,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 256 | `MET-ENFORCE-040` | `Harness-Engineering` | EDGE-V9: operator edge record v9 (the I01 wire's channel schema and vectors for HE-004-I01, registered before use); DATA_CHECK_ONLY |
 | 257 | `MET-GOV-001` | `Harness-Engineering` | EVOLUTION-SURFACE-001: evolution surface record v1 (roles per artifact class; the derived gate-material list), model and vectors; gate material |
 | 258 | `MET-ENFORCE-041` | `Harness-Engineering` | DIGEST-CONTRACT: the I01 digest contract (seven projection objects, four enforcement digests; definitions, model and vectors) and operator edge record v10 for HE-004-I01B; DATA_CHECK_ONLY |
+| 259 | `MET-GOV-002` | `Harness-Engineering` | REVIEW-RECORD-V2: review record v2 (two records per round bound by digest; the registry, the frozen list, oracle identities), model, schemas and vectors; the evolution surface record v2; gate material |
