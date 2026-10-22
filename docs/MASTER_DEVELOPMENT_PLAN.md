@@ -1,6 +1,39 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-040 source preparation, October 22, 2026
+## Current checkpoint — MET-GOV-001 source preparation, October 22, 2026
+
+Alpha2 OPEN. MET-ENFORCE-040 (EDGE-V9) passed required verify in 726 s and merged as main 26a8aff. EVOLUTION-SURFACE-001
+(owner decisions Q-ES-1..7, "Accept, but gate it (Recommended)", with Q-ES-6 (b); Q-ES-CAP (a), Q-ES-D1 (a) to Q-ES-D3
+(a), Q-GOV-CAP and the owner's NOTE fold; packet id MON-ES-ID) publishes the evolution surface record v1: which roles may
+propose, generate, test, approve and activate each artifact class, at the product level (the four planes' evolution
+roles, the evolvable and the never-autonomous artifact classes) and at the programme level (Harness-Onion's own artifacts
+by repository path, and its bridge records), with the derived gate-material list, a closed schema, a standard-library
+reference model (scripts/evolution_surface.py) and replayable vectors. It was adopted after five independent contract
+review rounds (the fifth PASS_FOR_ADOPTION) and the owner's fold of round 5's four NOTEs with no further round; the
+status, the five review records and the round snapshots are in architecture/evolution-surface/. Nothing runs and nothing
+is enforced: MAS-RA-005's admission gate and R09 consume the record later. The record is gate material (Q-ES-6 (b)): the
+owner approves this packet's merge per PR, bound to the head. It is built under MET-PERF-042's identity rule and step
+rule, as 256 was: every older chain validator changes only by the bump vocabulary, 256's layer by the bridge vocabulary,
+and 256's test keeps its 8 own routes and the adjacent one and one payload mutation (C2), while the new head's test keeps
+the full fan-in. MET-GOV-001 is the sole 257th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-GOV-001 / EVOLUTION-SURFACE-001 | SOURCE_PREPARED | Evolution surface record v1 (257th packet): who may propose, generate, test, approve and activate each artifact class at the product and programme levels, with the derived gate-material list, schema, model and vectors; adopted after five independent contract review rounds and the owner's NOTE fold; gate material, the owner's per-PR merge approval |
+| Alpha2A | MET-ENFORCE-040 / EDGE-V9 | VERIFY_PASSED_MERGED | Merged as main 26a8aff (verify 726 s) |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path and no R10 file changes. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical edge record v9 source checkpoint — MET-ENFORCE-040 source preparation, October 22, 2026
 
 Alpha2 OPEN. MET-PERF-042 (CHAIN-COMPACTION-001) passed required verify in 987 s and merged as main 6835a6e. EDGE-V9 (owner
 decisions Q-HE4I1-10 (a) and Q-I01A-1; the lane monitor's owner-delegated Q-EV9-1 to Q-EV9-5 and Q-EV9-1b) publishes
@@ -2273,7 +2306,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · MET-PERF-041 · Raise the pytest-diagnostics caps (30 MiB per process, 140,000 events, the scan limits derived) under the verifier's 32 MiB output ceiling with 2 MiB reserved for all other output, fail-closed, with a diagnostic-caps contract record; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · I06-RBAC-V4 / MET-ENFORCE-039 · Publish the I06 backend profile v4 (the policy observer's ClusterRole and binding pinned exactly; check_evidence v3's) and edge record v8 (HE-008, HE-004-I01) after independent review; I06 v1 to v3, native-profile v1 to v5 and edge records v1 to v7 byte-identical; pass required verify through the owner's App.
 - [x] Alpha 2A · CHAIN-COMPACTION-001 / MET-PERF-042 · Compact the history chain's route and payload scaffold tests in the 63 bridged layers (head full fan-in, identical-input twins), share test-side YAML parses per module, and adopt the identity rule as a standing rule; M2 (B1 0.819, B4 0.661 owner-accepted), M3 (0 FAIL), independent review; pass required verify through the owner's App.
-- [ ] Alpha 2A · EDGE-V9 / MET-ENFORCE-040 · Publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use) after independent contract review; the first packet built under the identity rule and step rule; pass required verify through the owner's App.
+- [x] Alpha 2A · EDGE-V9 / MET-ENFORCE-040 · Publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use) after independent contract review; the first packet built under the identity rule and step rule; pass required verify through the owner's App.
+- [ ] Alpha 2A · EVOLUTION-SURFACE-001 / MET-GOV-001 · Publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its model and vectors, after five independent contract review rounds and the owner's NOTE fold; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.

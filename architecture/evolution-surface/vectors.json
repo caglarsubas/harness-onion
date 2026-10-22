@@ -1,0 +1,2409 @@
+{
+ "schemaVersion": "planeon.internal.evolution-surface-vectors/v1",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "recordDigest": "sha256:407faa4f0c0f1dd133fefc141293f1998c2663dc9b2a0abea146bfe64bfcef6f",
+ "codes": [
+  "SHAPE",
+  "DUPLICATE_ID",
+  "UNKNOWN_REFERENCE",
+  "NEVER_AUTONOMOUS",
+  "SELF_GOVERNANCE",
+  "SEPARATION_OF_DUTIES",
+  "TWO_PERSON",
+  "ACTIVATION_WITHOUT_APPROVAL",
+  "APPEND_ONLY",
+  "INDEPENDENCE",
+  "PATHS",
+  "INDEPENDENT_EVIDENCE",
+  "COVERAGE"
+ ],
+ "reasons": [
+  "NOT_LISTED",
+  "NEVER_AUTONOMOUS",
+  "SELF_GOVERNANCE",
+  "SEPARATION_OF_DUTIES",
+  "APPEND_ONLY",
+  "INDEPENDENCE"
+ ],
+ "decisions": [
+  {
+   "id": "P01",
+   "grounds": "E2E-13 (guardrail)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "TRUST_POLICY",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P02",
+   "grounds": "E2E-13 (guardrail)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "TRUST_POLICY",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS"
+    ]
+   }
+  },
+  {
+   "id": "P03",
+   "grounds": "E2E-13 (judge)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "EVALUATOR_RUBRIC",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P04",
+   "grounds": "E2E-13 (judge)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "EVALUATOR_RUBRIC",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "P05",
+   "grounds": "P27 (thresholds)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "ACCEPTANCE_THRESHOLD",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P06",
+   "grounds": "P27 (thresholds)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "ACCEPTANCE_THRESHOLD",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "P07",
+   "grounds": "P27 (thresholds)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "ACCEPTANCE_THRESHOLD",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS"
+    ]
+   }
+  },
+  {
+   "id": "P08",
+   "grounds": "P27 (credential grant)",
+   "level": "product",
+   "role": "TASK_AGENT",
+   "class": "CREDENTIAL",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS"
+    ]
+   }
+  },
+  {
+   "id": "P09",
+   "grounds": "P27 (gate bypass)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "APPROVAL_OR_ROLLOUT_GATE",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS"
+    ]
+   }
+  },
+  {
+   "id": "P10",
+   "grounds": "P27 (own promotion code)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "PROMOTION_AUTHORITY_CODE",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P11",
+   "grounds": "P27 (own promotion code)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "PROMOTION_AUTHORITY_CODE",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "P12",
+   "grounds": "H14 RBAC (own promotion)",
+   "level": "product",
+   "role": "TRUST_APPROVER",
+   "class": "PROMOTION_AUTHORITY_CODE",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "P13",
+   "grounds": "H14 RBAC (own promotion)",
+   "level": "product",
+   "role": "TRUST_APPROVER",
+   "class": "PROMOTION_AUTHORITY_CODE",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P14",
+   "grounds": "P28 (Trust approves its own policy)",
+   "level": "product",
+   "role": "TRUST_APPROVER",
+   "class": "TRUST_POLICY",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "P15",
+   "grounds": "P28 (self-approval)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "PROMPT",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SEPARATION_OF_DUTIES"
+    ]
+   }
+  },
+  {
+   "id": "P16",
+   "grounds": "P28 (self-assurance)",
+   "level": "product",
+   "role": "TRUST_EVALUATOR",
+   "class": "PROMPT",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SEPARATION_OF_DUTIES"
+    ]
+   }
+  },
+  {
+   "id": "P17",
+   "grounds": "P27 (activation without approval)",
+   "level": "product",
+   "role": "EVOLUTION_AGENT",
+   "class": "PROMPT",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P18",
+   "grounds": "P27 (ephemeral, not persistent)",
+   "level": "product",
+   "role": "TASK_AGENT",
+   "class": "PROMPT",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "P19",
+   "grounds": "P27 (ephemeral, not persistent)",
+   "level": "product",
+   "role": "TASK_AGENT",
+   "class": "PROMPT",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "G01",
+   "grounds": "PA-D5 (gate approval)",
+   "level": "programme",
+   "role": "LANE_SESSION",
+   "class": "GATE_CI",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE",
+     "SEPARATION_OF_DUTIES"
+    ]
+   }
+  },
+  {
+   "id": "G02",
+   "grounds": "PA-D5 (gate approval)",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "GATE_CI",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "G03",
+   "grounds": "PA-D5 (gate approval)",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "GATE_SCHEMAS",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "G04",
+   "grounds": "C6 (agents' rules)",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "GATE_POLICIES",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "G05",
+   "grounds": "Verifier admission rule 4",
+   "level": "programme",
+   "role": "VERIFIER",
+   "class": "GATE_CI",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE",
+     "SEPARATION_OF_DUTIES"
+    ]
+   }
+  },
+  {
+   "id": "G06",
+   "grounds": "PLAN (reviewer edits gate material)",
+   "level": "programme",
+   "role": "REVIEWER_AGENT",
+   "class": "GATE_LEGAL",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "INDEPENDENCE"
+    ]
+   }
+  },
+  {
+   "id": "G07",
+   "grounds": "PLAN (reviewer approves own review)",
+   "level": "programme",
+   "role": "REVIEWER_AGENT",
+   "class": "REVIEW_RECORD",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SEPARATION_OF_DUTIES"
+    ]
+   }
+  },
+  {
+   "id": "G08",
+   "grounds": "P28 (reviewer approves what it reviewed)",
+   "level": "programme",
+   "role": "REVIEWER_AGENT",
+   "class": "CONTRACT_AND_SOURCE",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SEPARATION_OF_DUTIES"
+    ]
+   }
+  },
+  {
+   "id": "G09",
+   "grounds": "D5a (lane writes its review)",
+   "level": "programme",
+   "role": "LANE_SESSION",
+   "class": "REVIEW_RECORD",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "INDEPENDENCE"
+    ]
+   }
+  },
+  {
+   "id": "G10",
+   "grounds": "D5a (lane writes its oracle)",
+   "level": "programme",
+   "role": "LANE_SESSION",
+   "class": "ORACLE_TESTS",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "INDEPENDENCE"
+    ]
+   }
+  },
+  {
+   "id": "G11",
+   "grounds": "D5a (oracle writes the candidate)",
+   "level": "programme",
+   "role": "ORACLE_AGENT",
+   "class": "CONTRACT_AND_SOURCE",
+   "op": "generate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "INDEPENDENCE"
+    ]
+   }
+  },
+  {
+   "id": "G12",
+   "grounds": "D5a (merge records)",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "MERGE_DECISION_RECORD",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SEPARATION_OF_DUTIES",
+     "APPEND_ONLY"
+    ]
+   }
+  },
+  {
+   "id": "G13",
+   "grounds": "Q-ES-6 (b) (the record itself)",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "EVOLUTION_SURFACE",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "SELF_GOVERNANCE"
+    ]
+   }
+  },
+  {
+   "id": "G14",
+   "grounds": "Root bundle",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "VERIFIER_BUNDLE",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED",
+     "NEVER_AUTONOMOUS"
+    ]
+   }
+  },
+  {
+   "id": "G15",
+   "grounds": "H14 conflict (roadmap status)",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "ROADMAP_STATUS",
+   "op": "propose",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "G16",
+   "grounds": "Roadmap scope is the owner's",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "ROADMAP_SCOPE",
+   "op": "approve",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "G17",
+   "grounds": "Roadmap lock",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "ROADMAP_STATUS",
+   "op": "activate",
+   "expect": {
+    "decision": "DENIED",
+    "reasons": [
+     "NOT_LISTED"
+    ]
+   }
+  },
+  {
+   "id": "A01",
+   "grounds": "H14 governance-service approves under policy",
+   "level": "product",
+   "role": "TRUST_APPROVER",
+   "class": "PROMPT",
+   "op": "approve",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A02",
+   "grounds": "Human calibration (invariant 10)",
+   "level": "product",
+   "role": "HUMAN_APPROVER",
+   "class": "EVALUATOR_RUBRIC",
+   "op": "test",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A03",
+   "grounds": "Data-only standing authority, under its conditions",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "CONTRACT_AND_SOURCE",
+   "op": "approve",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A04",
+   "grounds": "The merge of an owner-approved head (Q-ES-D3 (a))",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "GATE_CI",
+   "op": "activate",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A05",
+   "grounds": "PA-D5 (owner approves gate material)",
+   "level": "programme",
+   "role": "OWNER",
+   "class": "GATE_CI",
+   "op": "approve",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A06",
+   "grounds": "The roadmap lock grant",
+   "level": "programme",
+   "role": "LANE_MONITOR",
+   "class": "ROADMAP_STATUS",
+   "op": "approve",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A07",
+   "grounds": "Roadmap scope is the owner's",
+   "level": "programme",
+   "role": "OWNER",
+   "class": "ROADMAP_SCOPE",
+   "op": "approve",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  },
+  {
+   "id": "A08",
+   "grounds": "The lock holder's write",
+   "level": "programme",
+   "role": "LANE_SESSION",
+   "class": "ROADMAP_STATUS",
+   "op": "activate",
+   "expect": {
+    "decision": "ALLOWED",
+    "reasons": []
+   }
+  }
+ ],
+ "invariants": [
+  {
+   "id": "I01",
+   "intent": "SHAPE: an unknown top-level member",
+   "mutation": [
+    {
+     "path": [
+      "extra"
+     ],
+     "value": 1
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I02",
+   "intent": "SHAPE: a missing member",
+   "mutation": [
+    {
+     "path": [
+      "surfaceId"
+     ],
+     "delete": true
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I03",
+   "intent": "SHAPE: version 0",
+   "mutation": [
+    {
+     "path": [
+      "version"
+     ],
+     "value": 0
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I04",
+   "intent": "SHAPE: the operations reordered",
+   "mutation": [
+    {
+     "path": [
+      "operations"
+     ],
+     "value": [
+      "generate",
+      "propose",
+      "test",
+      "approve",
+      "activate"
+     ]
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I05",
+   "intent": "SHAPE: a role id that breaks the pattern",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "roles",
+      0,
+      "id"
+     ],
+     "value": "evolution_agent"
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I06",
+   "intent": "SHAPE: a duplicate role in a role list",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "operations",
+      "propose",
+      2
+     ],
+     "value": "TASK_AGENT"
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I07",
+   "intent": "SHAPE: a product class with paths",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "paths"
+     ],
+     "value": [
+      {
+       "prefix": "x/"
+      }
+     ]
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I08",
+   "intent": "SHAPE: a change-bound class with paths",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#ROADMAP_STATUS",
+      "paths"
+     ],
+     "value": [
+      {
+       "prefix": "roadmap/"
+      }
+     ]
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I09",
+   "intent": "SHAPE: a programme role with a plane",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "roles",
+      0,
+      "plane"
+     ],
+     "value": "Trust"
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I10",
+   "intent": "SHAPE: a path entry with a '..' segment",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#GATE_LEGAL",
+      "paths",
+      0
+     ],
+     "value": {
+      "prefix": "legal/../ci/"
+     }
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I11",
+   "intent": "SHAPE: a product class with change binding",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "approvalBinding"
+     ],
+     "value": "CHANGE"
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I12",
+   "intent": "DUPLICATE_ID: two classes with one id",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#MODEL_WEIGHTS",
+      "id"
+     ],
+     "value": "MODEL_ADAPTER"
+    }
+   ],
+   "expect": "DUPLICATE_ID"
+  },
+  {
+   "id": "I13",
+   "intent": "UNKNOWN_REFERENCE: a role from the other level",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "operations",
+      "test",
+      2
+     ],
+     "value": "VERIFIER"
+    }
+   ],
+   "expect": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "I14",
+   "intent": "UNKNOWN_REFERENCE: independentOf names a missing class",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#ORACLE_TESTS",
+      "independentOf",
+      9
+     ],
+     "value": "NO_SUCH_CLASS"
+    }
+   ],
+   "expect": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "I15",
+   "intent": "NEVER_AUTONOMOUS (invariant 2): an agent activates the guardrail",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#TRUST_POLICY",
+      "operations",
+      "activate",
+      1
+     ],
+     "value": "EVOLUTION_AGENT"
+    }
+   ],
+   "expect": "NEVER_AUTONOMOUS"
+  },
+  {
+   "id": "I16",
+   "intent": "NEVER_AUTONOMOUS (invariant 2, E2-12): a model-driven Trust approver must be declared an AGENT",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "roles",
+      "#TRUST_APPROVER",
+      "kind"
+     ],
+     "value": "AGENT"
+    }
+   ],
+   "expect": "NEVER_AUTONOMOUS"
+  },
+  {
+   "id": "I17",
+   "intent": "SELF_GOVERNANCE (invariant 3): the monitor approves CI gate material",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#GATE_CI",
+      "operations",
+      "approve",
+      1
+     ],
+     "value": "LANE_MONITOR"
+    }
+   ],
+   "expect": "SELF_GOVERNANCE"
+  },
+  {
+   "id": "I18",
+   "intent": "SEPARATION_OF_DUTIES (invariant 4): the evaluator also approves",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "operations",
+      "approve",
+      2
+     ],
+     "value": "TRUST_EVALUATOR"
+    }
+   ],
+   "expect": "SEPARATION_OF_DUTIES"
+  },
+  {
+   "id": "I19",
+   "intent": "TWO_PERSON (invariant 4): the flag without a human in two duties",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "twoPerson"
+     ],
+     "value": true
+    }
+   ],
+   "expect": "TWO_PERSON"
+  },
+  {
+   "id": "I20",
+   "intent": "TWO_PERSON (invariant 4): a human calibrates and approves without the flag",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#EVALUATOR_RUBRIC",
+      "twoPerson"
+     ],
+     "value": false
+    }
+   ],
+   "expect": "TWO_PERSON"
+  },
+  {
+   "id": "I21",
+   "intent": "ACTIVATION_WITHOUT_APPROVAL (invariant 5)",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#ROADMAP_SCOPE",
+      "operations",
+      "approve"
+     ],
+     "value": []
+    }
+   ],
+   "expect": "ACTIVATION_WITHOUT_APPROVAL"
+  },
+  {
+   "id": "I22",
+   "intent": "APPEND_ONLY (invariant 6): a merge record gets an approver",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#MERGE_DECISION_RECORD",
+      "operations",
+      "approve"
+     ],
+     "value": [
+      "OWNER"
+     ]
+    }
+   ],
+   "expect": "APPEND_ONLY"
+  },
+  {
+   "id": "I23",
+   "intent": "INDEPENDENCE (invariant 7): the lane writes its own oracle",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#ORACLE_TESTS",
+      "operations",
+      "generate",
+      1
+     ],
+     "value": "LANE_SESSION"
+    }
+   ],
+   "expect": "INDEPENDENCE"
+  },
+  {
+   "id": "I24",
+   "intent": "INDEPENDENCE (invariant 7): the reviewer generates the candidate",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#CONTRACT_AND_SOURCE",
+      "operations",
+      "generate",
+      1
+     ],
+     "value": "REVIEWER_AGENT"
+    }
+   ],
+   "expect": "INDEPENDENCE"
+  },
+  {
+   "id": "I25",
+   "intent": "PATHS (invariant 8): one entry claimed by two classes",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#REPOSITORY_ROOT",
+      "paths",
+      8
+     ],
+     "value": {
+      "exact": "pyproject.toml"
+     }
+    }
+   ],
+   "expect": "PATHS"
+  },
+  {
+   "id": "I26",
+   "intent": "PATHS (invariant 8): gate review directories differ from the gate prefixes",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#GATE_REVIEW_RECORD",
+      "paths",
+      0
+     ],
+     "delete": true
+    }
+   ],
+   "expect": "PATHS"
+  },
+  {
+   "id": "I27",
+   "intent": "INDEPENDENT_EVIDENCE (invariant 10): only the generator tests",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "product",
+      "classes",
+      "#PROMPT",
+      "operations",
+      "test"
+     ],
+     "value": [
+      "EVOLUTION_AGENT"
+     ]
+    }
+   ],
+   "expect": "INDEPENDENT_EVIDENCE"
+  },
+  {
+   "id": "I28",
+   "intent": "SHAPE comes first: a shape break and an invariant break together",
+   "mutation": [
+    {
+     "path": [
+      "version"
+     ],
+     "value": -1
+    },
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#GATE_CI",
+      "operations",
+      "approve",
+      1
+     ],
+     "value": "LANE_MONITOR"
+    }
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "I29",
+   "intent": "PATHS (invariant 8, G1R1-3): a data class names an exact file inside a Gate prefix",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#REPOSITORY_ROOT",
+      "paths",
+      8
+     ],
+     "value": {
+      "exact": "ci/parallel_suite.py"
+     }
+    }
+   ],
+   "expect": "PATHS"
+  },
+  {
+   "id": "I30",
+   "intent": "PATHS (invariant 8, G1R1-3): a data class names a prefix inside a Gate prefix",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#CONTRACT_AND_SOURCE",
+      "paths",
+      8
+     ],
+     "value": {
+      "prefix": "ci/sub/"
+     }
+    }
+   ],
+   "expect": "PATHS"
+  },
+  {
+   "id": "I31",
+   "intent": "PATHS (invariant 8, G1R1-3): a data review class adds an under directory equal to a Gate prefix",
+   "mutation": [
+    {
+     "path": [
+      "levels",
+      "programme",
+      "classes",
+      "#REVIEW_RECORD",
+      "paths",
+      1
+     ],
+     "value": {
+      "under": "policies/",
+      "name": "*.json"
+     }
+    }
+   ],
+   "expect": "PATHS"
+  }
+ ],
+ "texts": [
+  {
+   "id": "T01",
+   "intent": "duplicate member names",
+   "text": "{\"a\": 1, \"a\": 2}",
+   "expect": "SHAPE"
+  },
+  {
+   "id": "T02",
+   "intent": "NaN",
+   "text": "NaN",
+   "expect": "SHAPE"
+  },
+  {
+   "id": "T03",
+   "intent": "an escaped lone surrogate",
+   "text": "\"\\ud800\"",
+   "expect": "SHAPE"
+  },
+  {
+   "id": "T04",
+   "intent": "truncated text",
+   "text": "{\"schemaVersion\": ",
+   "expect": "SHAPE"
+  },
+  {
+   "id": "T05",
+   "intent": "a valid text that is not a record",
+   "text": "[]",
+   "expect": "SHAPE"
+  }
+ ],
+ "paths": [
+  {
+   "id": "R01",
+   "intent": "an exact entry",
+   "path": "pyproject.toml",
+   "expect": "GATE_CI"
+  },
+  {
+   "id": "R02",
+   "intent": "C10: the root conftest.py",
+   "path": "conftest.py",
+   "expect": "GATE_CI"
+  },
+  {
+   "id": "R03",
+   "intent": "tests/conftest.py stays data",
+   "path": "tests/conftest.py",
+   "expect": "CONTRACT_AND_SOURCE"
+  },
+  {
+   "id": "R04",
+   "intent": "a prefix",
+   "path": "ci/parallel_suite.py",
+   "expect": "GATE_CI"
+  },
+  {
+   "id": "R05",
+   "intent": "the longest prefix",
+   "path": "docs/harnesses/trust.governance-agentops.md",
+   "expect": "GATE_HARNESS_DOCS"
+  },
+  {
+   "id": "R06",
+   "intent": "a shorter prefix",
+   "path": "docs/MASTER_DEVELOPMENT_PLAN.md",
+   "expect": "CONTRACT_AND_SOURCE"
+  },
+  {
+   "id": "R07",
+   "intent": "an equal-length tie: under-plus-name beats the prefix",
+   "path": "tests/test_evolution_surface_oracle.py",
+   "expect": "ORACLE_TESTS"
+  },
+  {
+   "id": "R08",
+   "intent": "an equal-length tie in architecture/",
+   "path": "architecture/topology-coordination/review-round1.json",
+   "expect": "REVIEW_RECORD"
+  },
+  {
+   "id": "R09",
+   "intent": "the longest directory: a gate review record",
+   "path": "architecture/evolution-surface/review-round1.json",
+   "expect": "GATE_REVIEW_RECORD"
+  },
+  {
+   "id": "R10",
+   "intent": "the record's own contract text",
+   "path": "architecture/evolution-surface/README.md",
+   "expect": "EVOLUTION_SURFACE"
+  },
+  {
+   "id": "R11",
+   "intent": "any depth",
+   "path": "legal/license-policy-amendment/round1/REVIEW_BRIEF.md",
+   "expect": "GATE_REVIEW_BRIEF"
+  },
+  {
+   "id": "R12",
+   "intent": "case-sensitive names",
+   "path": "architecture/x/review-round1.JSON",
+   "expect": "CONTRACT_AND_SOURCE"
+  },
+  {
+   "id": "R13",
+   "intent": "a new top-level file falls in no class",
+   "path": "NEWFILE.md",
+   "expect": null
+  },
+  {
+   "id": "R14",
+   "intent": "C7: the zero-bill fixtures",
+   "path": "tests/fixtures/zero-bill/cases.yaml",
+   "expect": "GATE_POLICIES"
+  },
+  {
+   "id": "R15",
+   "intent": "a candidate's own test stays data",
+   "path": "tests/test_evolution_surface.py",
+   "expect": "CONTRACT_AND_SOURCE"
+  },
+  {
+   "id": "R16",
+   "intent": "C13",
+   "path": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "expect": "GATE_VERIFIER_DOCS"
+  },
+  {
+   "id": "R19",
+   "intent": "F1: a case variant of a gate directory inside a data directory falls in no class (data before F1)",
+   "path": "docs/Harnesses/x.md",
+   "expect": null
+  },
+  {
+   "id": "R20",
+   "intent": "F1: a case variant of a gate file falls in no class",
+   "path": "scripts/Evolution_Surface.py",
+   "expect": null
+  },
+  {
+   "id": "R21",
+   "intent": "F1: a gate file reached through a case variant of its directory falls in no class",
+   "path": "docs/Alpha-2/OWNER_OPERATED_VERIFIER.md",
+   "expect": null
+  },
+  {
+   "id": "R22",
+   "intent": "F1: an ordinary data path keeps its class",
+   "path": "docs/alpha-1/x.md",
+   "expect": "CONTRACT_AND_SOURCE"
+  },
+  {
+   "id": "R23",
+   "intent": "F1: a data file in a directory that also holds gate files keeps its class, in any case",
+   "path": "docs/Alpha-2/x.md",
+   "expect": "CONTRACT_AND_SOURCE"
+  },
+  {
+   "id": "R17",
+   "intent": "an ambiguous path falls in no class (synthetic record)",
+   "record": {
+    "schemaVersion": "planeon.internal.evolution-surface/v1",
+    "surfaceId": "synthetic",
+    "version": 1,
+    "operations": [
+     "propose",
+     "generate",
+     "test",
+     "approve",
+     "activate"
+    ],
+    "levels": {
+     "product": {
+      "roles": [
+       {
+        "id": "H",
+        "kind": "HUMAN",
+        "plane": "Trust",
+        "description": "A human."
+       }
+      ],
+      "classes": [
+       {
+        "id": "C",
+        "description": "One class.",
+        "neverAutonomous": false,
+        "appendOnly": false,
+        "twoPerson": false,
+        "approvalBinding": "CONTENT",
+        "governs": [],
+        "independentOf": [],
+        "operations": {
+         "propose": [
+          "H"
+         ],
+         "generate": [
+          "H"
+         ],
+         "test": [],
+         "approve": [],
+         "activate": []
+        },
+        "grounds": [
+         "synthetic"
+        ]
+       }
+      ]
+     },
+     "programme": {
+      "roles": [
+       {
+        "id": "A",
+        "kind": "AGENT",
+        "description": "An agent."
+       },
+       {
+        "id": "M",
+        "kind": "HUMAN",
+        "description": "A human."
+       }
+      ],
+      "classes": [
+       {
+        "id": "X",
+        "description": "Markdown under x/.",
+        "paths": [
+         {
+          "under": "x/",
+          "name": "*.md"
+         }
+        ],
+        "neverAutonomous": false,
+        "appendOnly": false,
+        "twoPerson": true,
+        "approvalBinding": "CONTENT",
+        "governs": [],
+        "independentOf": [],
+        "operations": {
+         "propose": [
+          "A"
+         ],
+         "generate": [
+          "A"
+         ],
+         "test": [
+          "M"
+         ],
+         "approve": [
+          "M"
+         ],
+         "activate": [
+          "M"
+         ]
+        },
+        "grounds": [
+         "synthetic"
+        ]
+       },
+       {
+        "id": "Y",
+        "description": "Names starting with a under x/.",
+        "paths": [
+         {
+          "under": "x/",
+          "name": "a*"
+         }
+        ],
+        "neverAutonomous": false,
+        "appendOnly": false,
+        "twoPerson": true,
+        "approvalBinding": "CONTENT",
+        "governs": [],
+        "independentOf": [],
+        "operations": {
+         "propose": [
+          "A"
+         ],
+         "generate": [
+          "A"
+         ],
+         "test": [
+          "M"
+         ],
+         "approve": [
+          "M"
+         ],
+         "activate": [
+          "M"
+         ]
+        },
+        "grounds": [
+         "synthetic"
+        ]
+       }
+      ],
+      "coverageSkip": {
+       "rootNames": [],
+       "anyDepthDirectories": [],
+       "anyDepthFilePatterns": []
+      }
+     }
+    }
+   },
+   "path": "x/a.md",
+   "expect": null
+  },
+  {
+   "id": "R18",
+   "intent": "one match in the synthetic record",
+   "record": {
+    "schemaVersion": "planeon.internal.evolution-surface/v1",
+    "surfaceId": "synthetic",
+    "version": 1,
+    "operations": [
+     "propose",
+     "generate",
+     "test",
+     "approve",
+     "activate"
+    ],
+    "levels": {
+     "product": {
+      "roles": [
+       {
+        "id": "H",
+        "kind": "HUMAN",
+        "plane": "Trust",
+        "description": "A human."
+       }
+      ],
+      "classes": [
+       {
+        "id": "C",
+        "description": "One class.",
+        "neverAutonomous": false,
+        "appendOnly": false,
+        "twoPerson": false,
+        "approvalBinding": "CONTENT",
+        "governs": [],
+        "independentOf": [],
+        "operations": {
+         "propose": [
+          "H"
+         ],
+         "generate": [
+          "H"
+         ],
+         "test": [],
+         "approve": [],
+         "activate": []
+        },
+        "grounds": [
+         "synthetic"
+        ]
+       }
+      ]
+     },
+     "programme": {
+      "roles": [
+       {
+        "id": "A",
+        "kind": "AGENT",
+        "description": "An agent."
+       },
+       {
+        "id": "M",
+        "kind": "HUMAN",
+        "description": "A human."
+       }
+      ],
+      "classes": [
+       {
+        "id": "X",
+        "description": "Markdown under x/.",
+        "paths": [
+         {
+          "under": "x/",
+          "name": "*.md"
+         }
+        ],
+        "neverAutonomous": false,
+        "appendOnly": false,
+        "twoPerson": true,
+        "approvalBinding": "CONTENT",
+        "governs": [],
+        "independentOf": [],
+        "operations": {
+         "propose": [
+          "A"
+         ],
+         "generate": [
+          "A"
+         ],
+         "test": [
+          "M"
+         ],
+         "approve": [
+          "M"
+         ],
+         "activate": [
+          "M"
+         ]
+        },
+        "grounds": [
+         "synthetic"
+        ]
+       },
+       {
+        "id": "Y",
+        "description": "Names starting with a under x/.",
+        "paths": [
+         {
+          "under": "x/",
+          "name": "a*"
+         }
+        ],
+        "neverAutonomous": false,
+        "appendOnly": false,
+        "twoPerson": true,
+        "approvalBinding": "CONTENT",
+        "governs": [],
+        "independentOf": [],
+        "operations": {
+         "propose": [
+          "A"
+         ],
+         "generate": [
+          "A"
+         ],
+         "test": [
+          "M"
+         ],
+         "approve": [
+          "M"
+         ],
+         "activate": [
+          "M"
+         ]
+        },
+        "grounds": [
+         "synthetic"
+        ]
+       }
+      ],
+      "coverageSkip": {
+       "rootNames": [],
+       "anyDepthDirectories": [],
+       "anyDepthFilePatterns": []
+      }
+     }
+    }
+   },
+   "path": "x/b.md",
+   "expect": "X"
+  }
+ ],
+ "skip": [
+  {
+   "id": "S01",
+   "intent": "the worktree .git file at the root",
+   "path": ".git",
+   "skipped": true
+  },
+  {
+   "id": "S02",
+   "intent": ".github/ is not skipped by the root .git rule (components, not prefixes)",
+   "path": ".github/workflows/verify.yml",
+   "skipped": false
+  },
+  {
+   "id": "S03",
+   "intent": "the root .venv",
+   "path": ".venv/lib/site.py",
+   "skipped": true
+  },
+  {
+   "id": "S04",
+   "intent": "a nested .venv is not a root name",
+   "path": "docs/.venv/x.md",
+   "skipped": false
+  },
+  {
+   "id": "S05",
+   "intent": "an any-depth cache directory",
+   "path": "scripts/__pycache__/x.cpython-312.pyc",
+   "skipped": true
+  },
+  {
+   "id": "S06",
+   "intent": "a bytecode file anywhere",
+   "path": "scripts/x.pyc",
+   "skipped": true
+  },
+  {
+   "id": "S07",
+   "intent": "a .DS_Store file",
+   "path": "docs/.DS_Store",
+   "skipped": true
+  },
+  {
+   "id": "S08",
+   "intent": "dist/ is checked",
+   "path": "dist/x.txt",
+   "skipped": false
+  }
+ ],
+ "prs": [
+  {
+   "id": "Q01",
+   "intent": "data-only paths",
+   "paths": [
+    "architecture/topology-coordination/README.md",
+    "tests/test_x.py",
+    "docs/MASTER_DEVELOPMENT_PLAN.md"
+   ],
+   "approvers": [
+    "LANE_MONITOR",
+    "OWNER"
+   ],
+   "activators": [
+    "LANE_MONITOR",
+    "OWNER"
+   ]
+  },
+  {
+   "id": "Q02",
+   "intent": "a CI change with a test",
+   "paths": [
+    "ci/parallel_suite.py",
+    "tests/test_x.py"
+   ],
+   "approvers": [
+    "OWNER"
+   ],
+   "activators": [
+    "LANE_MONITOR",
+    "OWNER"
+   ]
+  },
+  {
+   "id": "Q03",
+   "intent": "the root conftest.py alone (C10)",
+   "paths": [
+    "conftest.py"
+   ],
+   "approvers": [
+    "OWNER"
+   ],
+   "activators": [
+    "LANE_MONITOR",
+    "OWNER"
+   ]
+  },
+  {
+   "id": "Q04",
+   "intent": "this packet's own paths",
+   "paths": [
+    "architecture/evolution-surface/README.md",
+    "architecture/evolution-surface/review-round1.json",
+    "architecture/evolution-surface-authority.json",
+    "scripts/evolution_surface.py",
+    "scripts/validate_evolution_surface.py",
+    "tests/test_evolution_surface.py",
+    "tests/test_evolution_surface_oracle.py",
+    "task-packets/MET-X-001.yaml",
+    "docs/MASTER_DEVELOPMENT_PLAN.md"
+   ],
+   "approvers": [
+    "OWNER"
+   ],
+   "activators": [
+    "LANE_MONITOR",
+    "OWNER"
+   ]
+  },
+  {
+   "id": "Q05",
+   "intent": "an oracle test alone",
+   "paths": [
+    "tests/test_evolution_surface_oracle.py"
+   ],
+   "approvers": [
+    "LANE_MONITOR",
+    "OWNER"
+   ],
+   "activators": [
+    "LANE_MONITOR",
+    "OWNER"
+   ]
+  },
+  {
+   "id": "Q06",
+   "intent": "a rename from a data path to a gate path (both sides)",
+   "paths": [
+    "docs/x.md",
+    "policies/x.yaml"
+   ],
+   "approvers": [
+    "OWNER"
+   ],
+   "activators": [
+    "LANE_MONITOR",
+    "OWNER"
+   ]
+  },
+  {
+   "id": "Q07",
+   "intent": "a path in no class",
+   "paths": [
+    "README.md",
+    "NEWFILE.md"
+   ],
+   "approvers": null,
+   "activators": null
+  },
+  {
+   "id": "Q08",
+   "intent": "no changed paths",
+   "paths": [],
+   "approvers": null,
+   "activators": null
+  },
+  {
+   "id": "Q09",
+   "intent": "F1: a case variant of gate material in a PR (data-only approvers before F1)",
+   "paths": [
+    "docs/x.md",
+    "docs/Harnesses/x.md"
+   ],
+   "approvers": null,
+   "activators": null
+  }
+ ],
+ "coverage": [
+  {
+   "id": "V01",
+   "intent": "a new top-level file is unclassified",
+   "files": [
+    "NEWFILE.md",
+    "conftest.py",
+    ".github/workflows/verify.yml"
+   ],
+   "expect": {
+    "unclassified": [
+     "NEWFILE.md"
+    ],
+    "ambiguous": []
+   }
+  },
+  {
+   "id": "V02",
+   "intent": "every file classified",
+   "files": [
+    "README.md",
+    "ci/x.py",
+    "docs/x.md"
+   ],
+   "expect": {
+    "unclassified": [],
+    "ambiguous": []
+   }
+  }
+ ],
+ "requests": [
+  {
+   "id": "U01",
+   "intent": "an unknown role",
+   "call": "decide",
+   "args": [
+    "programme",
+    "NOBODY",
+    "GATE_CI",
+    "approve"
+   ],
+   "expect": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "U02",
+   "intent": "a role from the other level",
+   "call": "decide",
+   "args": [
+    "product",
+    "OWNER",
+    "PROMPT",
+    "approve"
+   ],
+   "expect": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "U03",
+   "intent": "an unknown operation",
+   "call": "decide",
+   "args": [
+    "programme",
+    "OWNER",
+    "GATE_CI",
+    "merge"
+   ],
+   "expect": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "U04",
+   "intent": "a non-string class name (G1R1-6)",
+   "call": "decide",
+   "args": [
+    "programme",
+    "OWNER",
+    [
+     "GATE_CI"
+    ],
+    "approve"
+   ],
+   "expect": "UNKNOWN_REFERENCE"
+  },
+  {
+   "id": "U05",
+   "intent": "a malformed path",
+   "call": "resolve",
+   "args": [
+    "a//b"
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "U06",
+   "intent": "an absolute path in a PR",
+   "call": "pr_approvers",
+   "args": [
+    [
+     "/etc/x"
+    ]
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "U07",
+   "intent": "a '..' segment in a PR",
+   "call": "pr_activators",
+   "args": [
+    [
+     "docs/../ci/x.py"
+    ]
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "U08",
+   "intent": "a malformed skip query",
+   "call": "skipped",
+   "args": [
+    "./x"
+   ],
+   "expect": "SHAPE"
+  },
+  {
+   "id": "U09",
+   "intent": "an unclassified file fails the coverage check (invariant 9)",
+   "call": "check_paths",
+   "args": [
+    [
+     "README.md",
+     "NEWFILE.md"
+    ]
+   ],
+   "expect": "COVERAGE"
+  },
+  {
+   "id": "U10",
+   "intent": "every file classified passes the coverage check",
+   "call": "check_paths",
+   "args": [
+    [
+     "README.md",
+     "ci/x.py"
+    ]
+   ],
+   "expect": null
+  }
+ ],
+ "derivation": {
+  "convention": "PA-D5's list read literally: 'verifier docs' is OWNER_OPERATED_VERIFIER.md only; C5 is an extension",
+  "paD5": [
+   {
+    "prefix": "ci/"
+   },
+   {
+    "prefix": "schemas/"
+   },
+   {
+    "prefix": "policies/"
+   },
+   {
+    "prefix": "legal/"
+   },
+   {
+    "prefix": "docs/harnesses/"
+   },
+   {
+    "exact": "docs/alpha-2/OWNER_OPERATED_VERIFIER.md"
+   }
+  ],
+  "acceptedExtensions": [
+   {
+    "id": "D1-i",
+    "grounds": "Q-ES-6 (b) and Q-ES-D1 (a): the record's own entries",
+    "entries": [
+     {
+      "prefix": "architecture/evolution-surface/"
+     },
+     {
+      "exact": "architecture/evolution-surface-authority.json"
+     },
+     {
+      "exact": "scripts/evolution_surface.py"
+     }
+    ]
+   },
+   {
+    "id": "C1",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "prefix": ".github/"
+     }
+    ]
+   },
+   {
+    "id": "C2",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "BILLING_POLICY.md"
+     }
+    ]
+   },
+   {
+    "id": "C3",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "release/evidence-policy.yaml"
+     }
+    ]
+   },
+   {
+    "id": "C4",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "LICENSE"
+     },
+     {
+      "exact": "NOTICE"
+     }
+    ]
+   },
+   {
+    "id": "C5",
+    "grounds": "Q-ES-D2 (a)",
+    "entries": [
+     {
+      "exact": "docs/TRUSTED_RUNNER_CONTRACT.md"
+     },
+     {
+      "exact": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md"
+     },
+     {
+      "prefix": "docs/linux-runner/"
+     }
+    ]
+   },
+   {
+    "id": "C6",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "AGENTS.md"
+     }
+    ]
+   },
+   {
+    "id": "C7",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "scripts/zero_bill_scan.py"
+     },
+     {
+      "prefix": "tests/fixtures/zero-bill/"
+     }
+    ]
+   },
+   {
+    "id": "C8",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "pyproject.toml"
+     }
+    ]
+   },
+   {
+    "id": "C9",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "release/repos.lock.json"
+     }
+    ]
+   },
+   {
+    "id": "C10",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "conftest.py"
+     }
+    ]
+   },
+   {
+    "id": "C11",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "scripts/check_release_lock.py"
+     },
+     {
+      "exact": "scripts/build_release_lock.py"
+     }
+    ]
+   },
+   {
+    "id": "C12",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md"
+     }
+    ]
+   },
+   {
+    "id": "C13",
+    "grounds": "Q-ES-D1 (a)",
+    "entries": [
+     {
+      "exact": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md"
+     }
+    ]
+   }
+  ],
+  "derived": [
+   {
+    "exact": "AGENTS.md"
+   },
+   {
+    "exact": "BILLING_POLICY.md"
+   },
+   {
+    "exact": "LICENSE"
+   },
+   {
+    "exact": "NOTICE"
+   },
+   {
+    "exact": "architecture/evolution-surface-authority.json"
+   },
+   {
+    "exact": "conftest.py"
+   },
+   {
+    "exact": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md"
+   },
+   {
+    "exact": "docs/TRUSTED_RUNNER_CONTRACT.md"
+   },
+   {
+    "exact": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md"
+   },
+   {
+    "exact": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md"
+   },
+   {
+    "exact": "docs/alpha-2/OWNER_OPERATED_VERIFIER.md"
+   },
+   {
+    "exact": "pyproject.toml"
+   },
+   {
+    "exact": "release/evidence-policy.yaml"
+   },
+   {
+    "exact": "release/repos.lock.json"
+   },
+   {
+    "exact": "scripts/build_release_lock.py"
+   },
+   {
+    "exact": "scripts/check_release_lock.py"
+   },
+   {
+    "exact": "scripts/evolution_surface.py"
+   },
+   {
+    "exact": "scripts/zero_bill_scan.py"
+   },
+   {
+    "prefix": ".github/"
+   },
+   {
+    "prefix": "architecture/evolution-surface/"
+   },
+   {
+    "prefix": "ci/"
+   },
+   {
+    "prefix": "docs/harnesses/"
+   },
+   {
+    "prefix": "docs/linux-runner/"
+   },
+   {
+    "prefix": "legal/"
+   },
+   {
+    "prefix": "policies/"
+   },
+   {
+    "prefix": "schemas/"
+   },
+   {
+    "prefix": "tests/fixtures/zero-bill/"
+   }
+  ],
+  "difference": [
+   {
+    "exact": "AGENTS.md"
+   },
+   {
+    "exact": "BILLING_POLICY.md"
+   },
+   {
+    "exact": "LICENSE"
+   },
+   {
+    "exact": "NOTICE"
+   },
+   {
+    "exact": "architecture/evolution-surface-authority.json"
+   },
+   {
+    "exact": "conftest.py"
+   },
+   {
+    "exact": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md"
+   },
+   {
+    "exact": "docs/TRUSTED_RUNNER_CONTRACT.md"
+   },
+   {
+    "exact": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md"
+   },
+   {
+    "exact": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md"
+   },
+   {
+    "exact": "pyproject.toml"
+   },
+   {
+    "exact": "release/evidence-policy.yaml"
+   },
+   {
+    "exact": "release/repos.lock.json"
+   },
+   {
+    "exact": "scripts/build_release_lock.py"
+   },
+   {
+    "exact": "scripts/check_release_lock.py"
+   },
+   {
+    "exact": "scripts/evolution_surface.py"
+   },
+   {
+    "exact": "scripts/zero_bill_scan.py"
+   },
+   {
+    "prefix": ".github/"
+   },
+   {
+    "prefix": "architecture/evolution-surface/"
+   },
+   {
+    "prefix": "docs/linux-runner/"
+   },
+   {
+    "prefix": "tests/fixtures/zero-bill/"
+   }
+  ]
+ },
+ "consumerCases": [
+  {
+   "id": "K01",
+   "grounds": "E2E-10",
+   "case": "an approval past its expiry, or already used",
+   "expected": "blocked; a fresh, scoped approval is needed"
+  },
+  {
+   "id": "K02",
+   "grounds": "P28",
+   "case": "an approval replayed for a different digest, or head",
+   "expected": "refused"
+  },
+  {
+   "id": "K03",
+   "grounds": "P28",
+   "case": "a bundle holding only the generator's own result",
+   "expected": "no activation"
+  },
+  {
+   "id": "K04",
+   "grounds": "E2E-14",
+   "case": "the self-score passes, the independent gate fails",
+   "expected": "no activation; the rejection and its evidence are kept"
+  },
+  {
+   "id": "K05",
+   "grounds": "E2E-13",
+   "case": "a refused attempt",
+   "expected": "Trust enforcement unchanged; the attempt is audited"
+  },
+  {
+   "id": "K06",
+   "grounds": "Q-ES-D3 (a)",
+   "case": "a tree mismatch after a merge",
+   "expected": "stop, record and report; a revert is a new PR"
+  },
+  {
+   "id": "K07",
+   "grounds": "E2E-16",
+   "case": "an evolvable class rolled back by its activator under policy, to the most recent earlier version activated under a then-valid approval and still CERTIFIED",
+   "expected": "allowed; the regressed version's artifacts and lineage are kept"
+  },
+  {
+   "id": "K08",
+   "grounds": "E2E-16",
+   "case": "an approval-free rollback of a never-autonomous or role-governing class, or at the programme level",
+   "expected": "refused; a fresh approval is needed"
+  },
+  {
+   "id": "K09",
+   "grounds": "H14",
+   "case": "a rollback to a version that is deprecated, retired or revoked",
+   "expected": "refused"
+  },
+  {
+   "id": "K10",
+   "grounds": "E2E-16",
+   "case": "a canary exhibits a verified regression",
+   "expected": "exposure contained; rollback or mitigation follows policy; artifacts and lineage kept"
+  },
+  {
+   "id": "K11",
+   "grounds": "Q-ES-D3 (a); MONITOR.md section 4",
+   "case": "main moved after the verify, before the merge",
+   "expected": "no merge; the monitor stops, records it and reports to the owner; a merge needs a verify whose main sha equals current main, on a head that contains it, and a re-pushed head needs a new approval"
+  },
+  {
+   "id": "K12",
+   "grounds": "Q-ES-D3 (a)",
+   "case": "a merge-decision record that does not bind the full 40-hex head sha",
+   "expected": "refused as a record"
+  }
+ ]
+}

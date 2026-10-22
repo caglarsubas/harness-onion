@@ -1,0 +1,1536 @@
+{
+ "schemaVersion": "planeon.internal.evolution-surface/v1",
+ "surfaceId": "harness-onion",
+ "version": 1,
+ "operations": [
+  "propose",
+  "generate",
+  "test",
+  "approve",
+  "activate"
+ ],
+ "levels": {
+  "product": {
+   "roles": [
+    {
+     "id": "EVOLUTION_AGENT",
+     "kind": "AGENT",
+     "plane": "Execution",
+     "description": "Mines trajectories, generates candidates and pre-tests them before the Trust plane's independent assessment."
+    },
+    {
+     "id": "TASK_AGENT",
+     "kind": "AGENT",
+     "plane": "Execution",
+     "description": "Runs tasks; its reasoning is ephemeral and never a persistent change, so it only proposes (P27)."
+    },
+    {
+     "id": "KNOWLEDGE_CURATOR",
+     "kind": "SERVICE",
+     "plane": "Knowledge",
+     "description": "Curates trajectories, datasets and approved procedural knowledge."
+    },
+    {
+     "id": "TRUST_EVALUATOR",
+     "kind": "SERVICE",
+     "plane": "Trust",
+     "description": "Independent assurance: evaluations and calibrated graders."
+    },
+    {
+     "id": "TRUST_APPROVER",
+     "kind": "SERVICE",
+     "plane": "Trust",
+     "description": "H14's governance-service (approval under policy) and registry-service (the promote, an immutable active pointer); a service identity cannot approve its own promotion."
+    },
+    {
+     "id": "RUNTIME_ACTIVATOR",
+     "kind": "SERVICE",
+     "plane": "Runtime",
+     "description": "Canary, activation and rollback of approved versions."
+    },
+    {
+     "id": "HUMAN_APPROVER",
+     "kind": "HUMAN",
+     "plane": "Trust",
+     "description": "The accountable owner, where policy requires a human."
+    }
+   ],
+   "classes": [
+    {
+     "id": "PROMPT",
+     "description": "Prompts.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "EVOLUTION_AGENT"
+      ],
+      "test": [
+       "EVOLUTION_AGENT",
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "TRUST_APPROVER",
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "RUNTIME_ACTIVATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "PROCEDURAL_SKILL_GRAPH",
+     "description": "Procedural skills and graphs.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "EVOLUTION_AGENT"
+      ],
+      "test": [
+       "EVOLUTION_AGENT",
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "TRUST_APPROVER",
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "RUNTIME_ACTIVATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "ROUTING_STRATEGY",
+     "description": "Routing strategies.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "EVOLUTION_AGENT"
+      ],
+      "test": [
+       "EVOLUTION_AGENT",
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "TRUST_APPROVER",
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "RUNTIME_ACTIVATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "TOOL_CONFIGURATION",
+     "description": "Tool configurations.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "EVOLUTION_AGENT"
+      ],
+      "test": [
+       "EVOLUTION_AGENT",
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "TRUST_APPROVER",
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "RUNTIME_ACTIVATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "MEMORY_KNOWLEDGE",
+     "description": "Memory and approved procedural knowledge.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT",
+       "KNOWLEDGE_CURATOR"
+      ],
+      "generate": [
+       "KNOWLEDGE_CURATOR"
+      ],
+      "test": [
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "TRUST_APPROVER"
+      ],
+      "activate": [
+       "KNOWLEDGE_CURATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "MODEL_ADAPTER",
+     "description": "Model adapters.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT"
+      ],
+      "generate": [
+       "EVOLUTION_AGENT"
+      ],
+      "test": [
+       "EVOLUTION_AGENT",
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "RUNTIME_ACTIVATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "MODEL_WEIGHTS",
+     "description": "Model weights.",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT"
+      ],
+      "generate": [
+       "EVOLUTION_AGENT"
+      ],
+      "test": [
+       "EVOLUTION_AGENT",
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "RUNTIME_ACTIVATOR"
+      ]
+     },
+     "grounds": [
+      "P27: candidate changes to this artifact follow artifact-specific validation and approval",
+      "P28: generation, evaluation evidence and promotion authorization are independent"
+     ]
+    },
+    {
+     "id": "EVALUATOR_RUBRIC",
+     "description": "Graders, rubrics and holdout splits.",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": true,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "EVOLUTION_AGENT",
+      "TASK_AGENT",
+      "KNOWLEDGE_CURATOR"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "TRUST_EVALUATOR"
+      ],
+      "test": [
+       "TRUST_EVALUATOR",
+       "HUMAN_APPROVER"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "TRUST_APPROVER"
+      ]
+     },
+     "grounds": [
+      "P27 validation checks: controls on evaluator configurations",
+      "P28: grader versions and holdout data are protected",
+      "E2E-13: the judge"
+     ]
+    },
+    {
+     "id": "ACCEPTANCE_THRESHOLD",
+     "description": "Evaluator acceptance thresholds.",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": true,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "EVOLUTION_AGENT",
+      "TASK_AGENT",
+      "KNOWLEDGE_CURATOR"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "HUMAN_APPROVER"
+      ],
+      "test": [
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "TRUST_APPROVER"
+      ]
+     },
+     "grounds": [
+      "P27: agents must not unilaterally change this artifact",
+      "P28: thresholds are protected"
+     ]
+    },
+    {
+     "id": "TRUST_POLICY",
+     "description": "Guardrails and policy logic.",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": true,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "EVOLUTION_AGENT",
+      "TASK_AGENT",
+      "KNOWLEDGE_CURATOR",
+      "RUNTIME_ACTIVATOR",
+      "TRUST_EVALUATOR",
+      "TRUST_APPROVER"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "HUMAN_APPROVER"
+      ],
+      "test": [
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "TRUST_APPROVER"
+      ]
+     },
+     "grounds": [
+      "P27: agents must not unilaterally change this artifact",
+      "E2E-13: the guardrail"
+     ]
+    },
+    {
+     "id": "CREDENTIAL",
+     "description": "Credential grants and scopes.",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": true,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "EVOLUTION_AGENT",
+      "TASK_AGENT",
+      "KNOWLEDGE_CURATOR",
+      "RUNTIME_ACTIVATOR",
+      "TRUST_EVALUATOR",
+      "TRUST_APPROVER"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "HUMAN_APPROVER"
+      ],
+      "test": [
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "HUMAN_APPROVER"
+      ]
+     },
+     "grounds": [
+      "P27: agents must not unilaterally change this artifact"
+     ]
+    },
+    {
+     "id": "APPROVAL_OR_ROLLOUT_GATE",
+     "description": "Approval and rollout gates.",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": true,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "EVOLUTION_AGENT",
+      "TASK_AGENT",
+      "KNOWLEDGE_CURATOR",
+      "RUNTIME_ACTIVATOR"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "HUMAN_APPROVER"
+      ],
+      "test": [
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "TRUST_APPROVER"
+      ]
+     },
+     "grounds": [
+      "P27: agents must not unilaterally change this artifact"
+     ]
+    },
+    {
+     "id": "PROMOTION_AUTHORITY_CODE",
+     "description": "The code that independently authorizes promotion.",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": true,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "EVOLUTION_AGENT",
+      "TASK_AGENT",
+      "KNOWLEDGE_CURATOR",
+      "TRUST_EVALUATOR",
+      "TRUST_APPROVER",
+      "RUNTIME_ACTIVATOR"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "EVOLUTION_AGENT",
+       "TASK_AGENT"
+      ],
+      "generate": [
+       "HUMAN_APPROVER"
+      ],
+      "test": [
+       "TRUST_EVALUATOR"
+      ],
+      "approve": [
+       "HUMAN_APPROVER"
+      ],
+      "activate": [
+       "HUMAN_APPROVER"
+      ]
+     },
+     "grounds": [
+      "P27: agents must not unilaterally change this artifact",
+      "H14 RBAC: a service identity cannot approve its own promotion"
+     ]
+    }
+   ]
+  },
+  "programme": {
+   "roles": [
+    {
+     "id": "LANE_SESSION",
+     "kind": "AGENT",
+     "description": "A lane build session: writes candidates, briefs and mechanics."
+    },
+    {
+     "id": "REVIEWER_AGENT",
+     "kind": "AGENT",
+     "description": "An independent reviewer agent working from a pinned brief."
+    },
+    {
+     "id": "ORACLE_AGENT",
+     "kind": "AGENT",
+     "description": "An independent agent that writes oracle tests for a contract packet."
+    },
+    {
+     "id": "ROADMAP_VISIONARY",
+     "kind": "AGENT",
+     "description": "The roadmap visionary session."
+    },
+    {
+     "id": "LANE_MONITOR",
+     "kind": "AGENT",
+     "description": "The lane monitor: relays owner decisions, holds the roadmap lock and executes merges."
+    },
+    {
+     "id": "OWNER",
+     "kind": "HUMAN",
+     "description": "The owner."
+    },
+    {
+     "id": "VERIFIER",
+     "kind": "SERVICE",
+     "description": "The owner-operated verifier and its root-installed launcher."
+    }
+   ],
+   "classes": [
+    {
+     "id": "CONTRACT_AND_SOURCE",
+     "description": "Contracts, scripts, tests, docs, task packets and other source.",
+     "paths": [
+      {
+       "prefix": "architecture/"
+      },
+      {
+       "prefix": "scripts/"
+      },
+      {
+       "prefix": "tests/"
+      },
+      {
+       "prefix": "docs/"
+      },
+      {
+       "prefix": "task-packets/"
+      },
+      {
+       "prefix": "diagnostics/"
+      },
+      {
+       "prefix": "reference-observer/"
+      },
+      {
+       "prefix": "release/"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "ORACLE_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "LANE_MONITOR",
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "MONITOR.md section 4 and D5a: the monitor's data approval needs an independent review PASS on the exact head, a successful verify on it, a CLEAN PR, a head and tree cross-check, review records naming reviewer and brief sha256, oracle tests outside the candidate for contract packets, anything open sent to the owner first, an immutable merge-decision record, and the owner told after each merge"
+     ]
+    },
+    {
+     "id": "REPOSITORY_ROOT",
+     "description": "Root files that no verify argv runs or that the installed environment pins.",
+     "paths": [
+      {
+       "exact": "README.md"
+      },
+      {
+       "exact": "CONTRIBUTING.md"
+      },
+      {
+       "exact": "SECURITY.md"
+      },
+      {
+       "exact": ".gitignore"
+      },
+      {
+       "exact": ".impeccable.md"
+      },
+      {
+       "exact": "Makefile"
+      },
+      {
+       "exact": "requirements.lock"
+      },
+      {
+       "exact": "uv.lock"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "LANE_MONITOR",
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "MONITOR.md section 4 and D5a: the monitor's data approval needs an independent review PASS on the exact head, a successful verify on it, a CLEAN PR, a head and tree cross-check, review records naming reviewer and brief sha256, oracle tests outside the candidate for contract packets, anything open sent to the owner first, an immutable merge-decision record, and the owner told after each merge"
+     ]
+    },
+    {
+     "id": "GATE_CI",
+     "description": "The verifier's CI transport, its workflow and the pytest configuration and plugin hooks of its argv.",
+     "paths": [
+      {
+       "prefix": "ci/"
+      },
+      {
+       "prefix": ".github/"
+      },
+      {
+       "exact": "pyproject.toml"
+      },
+      {
+       "exact": "conftest.py"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "LANE_MONITOR",
+      "VERIFIER"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)",
+      "Q-ES-D1 (a), 2026-10-21: accepted gate-material candidate C1 (.github/), C8 (pyproject.toml), C10 (root conftest.py)"
+     ]
+    },
+    {
+     "id": "GATE_SCHEMAS",
+     "description": "Repository schemas.",
+     "paths": [
+      {
+       "prefix": "schemas/"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)"
+     ]
+    },
+    {
+     "id": "GATE_POLICIES",
+     "description": "Policies, the agents' execution rules, zero-bill enforcement and the release promotion decision.",
+     "paths": [
+      {
+       "prefix": "policies/"
+      },
+      {
+       "prefix": "tests/fixtures/zero-bill/"
+      },
+      {
+       "exact": "AGENTS.md"
+      },
+      {
+       "exact": "BILLING_POLICY.md"
+      },
+      {
+       "exact": "release/evidence-policy.yaml"
+      },
+      {
+       "exact": "release/repos.lock.json"
+      },
+      {
+       "exact": "scripts/zero_bill_scan.py"
+      },
+      {
+       "exact": "scripts/check_release_lock.py"
+      },
+      {
+       "exact": "scripts/build_release_lock.py"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "LANE_MONITOR",
+      "REVIEWER_AGENT",
+      "ORACLE_AGENT"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)",
+      "Q-ES-D1 (a), 2026-10-21: accepted gate-material candidate C2, C3, C6, C7, C9, C11"
+     ]
+    },
+    {
+     "id": "GATE_LEGAL",
+     "description": "Legal material.",
+     "paths": [
+      {
+       "prefix": "legal/"
+      },
+      {
+       "exact": "LICENSE"
+      },
+      {
+       "exact": "NOTICE"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)",
+      "Q-ES-D1 (a), 2026-10-21: accepted gate-material candidate C4 (LICENSE, NOTICE)"
+     ]
+    },
+    {
+     "id": "GATE_HARNESS_DOCS",
+     "description": "Harness documents.",
+     "paths": [
+      {
+       "prefix": "docs/harnesses/"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)"
+     ]
+    },
+    {
+     "id": "GATE_VERIFIER_DOCS",
+     "description": "Verifier and trusted-runner documents.",
+     "paths": [
+      {
+       "exact": "docs/alpha-2/OWNER_OPERATED_VERIFIER.md"
+      },
+      {
+       "exact": "docs/TRUSTED_RUNNER_CONTRACT.md"
+      },
+      {
+       "exact": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md"
+      },
+      {
+       "exact": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md"
+      },
+      {
+       "exact": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md"
+      },
+      {
+       "prefix": "docs/linux-runner/"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "LANE_MONITOR",
+      "VERIFIER"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)",
+      "Q-ES-D2 (a), 2026-10-21: verifier docs are OWNER_OPERATED_VERIFIER.md plus C5",
+      "Q-ES-D1 (a), 2026-10-21: accepted gate-material candidate C12, C13"
+     ]
+    },
+    {
+     "id": "EVOLUTION_SURFACE",
+     "description": "This record, its contract text, its model and its authority.",
+     "paths": [
+      {
+       "prefix": "architecture/evolution-surface/"
+      },
+      {
+       "exact": "architecture/evolution-surface-authority.json"
+      },
+      {
+       "exact": "scripts/evolution_surface.py"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "REVIEWER_AGENT",
+      "ORACLE_AGENT",
+      "ROADMAP_VISIONARY",
+      "LANE_MONITOR"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "ORACLE_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "Q-ES-6 (b), 2026-10-21: the record defines who approves gate material, so it is gate material",
+      "Q-ES-D1 (a), 2026-10-21: accepted gate-material candidate D1-i"
+     ]
+    },
+    {
+     "id": "ORACLE_TESTS",
+     "description": "Oracle tests for a contract packet, written outside the candidate.",
+     "paths": [
+      {
+       "under": "tests/",
+       "name": "test_*oracle*.py"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION"
+     ],
+     "independentOf": [
+      "CONTRACT_AND_SOURCE",
+      "REPOSITORY_ROOT",
+      "GATE_CI",
+      "GATE_SCHEMAS",
+      "GATE_POLICIES",
+      "GATE_LEGAL",
+      "GATE_HARNESS_DOCS",
+      "GATE_VERIFIER_DOCS",
+      "EVOLUTION_SURFACE"
+     ],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "ORACLE_AGENT"
+      ],
+      "test": [
+       "VERIFIER"
+      ],
+      "approve": [
+       "LANE_MONITOR",
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "D5a: oracle tests outside the candidate",
+      "MONITOR.md section 4 and D5a: the monitor's data approval needs an independent review PASS on the exact head, a successful verify on it, a CLEAN PR, a head and tree cross-check, review records naming reviewer and brief sha256, oracle tests outside the candidate for contract packets, anything open sent to the owner first, an immutable merge-decision record, and the owner told after each merge"
+     ]
+    },
+    {
+     "id": "REVIEW_BRIEF",
+     "description": "Pinned reviewer briefs for data directories.",
+     "paths": [
+      {
+       "under": "architecture/",
+       "name": "REVIEW_BRIEF*.md"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "REVIEWER_AGENT"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "VERIFIER"
+      ],
+      "approve": [
+       "LANE_MONITOR",
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "D5a: a pinned reviewer brief, named by sha256 in every review record",
+      "MONITOR.md section 4 and D5a: the monitor's data approval needs an independent review PASS on the exact head, a successful verify on it, a CLEAN PR, a head and tree cross-check, review records naming reviewer and brief sha256, oracle tests outside the candidate for contract packets, anything open sent to the owner first, an immutable merge-decision record, and the owner told after each merge"
+     ]
+    },
+    {
+     "id": "REVIEW_RECORD",
+     "description": "Independent review records for data directories.",
+     "paths": [
+      {
+       "under": "architecture/",
+       "name": "review-round*.json"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION"
+     ],
+     "independentOf": [
+      "CONTRACT_AND_SOURCE",
+      "REPOSITORY_ROOT",
+      "GATE_CI",
+      "GATE_SCHEMAS",
+      "GATE_POLICIES",
+      "GATE_LEGAL",
+      "GATE_HARNESS_DOCS",
+      "GATE_VERIFIER_DOCS",
+      "EVOLUTION_SURFACE"
+     ],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "REVIEWER_AGENT"
+      ],
+      "test": [
+       "VERIFIER"
+      ],
+      "approve": [
+       "LANE_MONITOR",
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "D5a: reviewer identity and brief digest in every review record",
+      "MONITOR.md section 4 and D5a: the monitor's data approval needs an independent review PASS on the exact head, a successful verify on it, a CLEAN PR, a head and tree cross-check, review records naming reviewer and brief sha256, oracle tests outside the candidate for contract packets, anything open sent to the owner first, an immutable merge-decision record, and the owner told after each merge"
+     ]
+    },
+    {
+     "id": "GATE_REVIEW_BRIEF",
+     "description": "Pinned reviewer briefs inside gate directories.",
+     "paths": [
+      {
+       "under": "ci/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": ".github/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "schemas/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "policies/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "tests/fixtures/zero-bill/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "legal/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "docs/harnesses/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "docs/linux-runner/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "architecture/evolution-surface/",
+       "name": "REVIEW_BRIEF*.md"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "REVIEWER_AGENT"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)"
+     ]
+    },
+    {
+     "id": "GATE_REVIEW_RECORD",
+     "description": "Independent review records inside gate directories.",
+     "paths": [
+      {
+       "under": "ci/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": ".github/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "schemas/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "policies/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "tests/fixtures/zero-bill/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "legal/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "docs/harnesses/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "docs/linux-runner/",
+       "name": "review-round*.json"
+      },
+      {
+       "under": "architecture/evolution-surface/",
+       "name": "review-round*.json"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION"
+     ],
+     "independentOf": [
+      "CONTRACT_AND_SOURCE",
+      "REPOSITORY_ROOT",
+      "GATE_CI",
+      "GATE_SCHEMAS",
+      "GATE_POLICIES",
+      "GATE_LEGAL",
+      "GATE_HARNESS_DOCS",
+      "GATE_VERIFIER_DOCS",
+      "EVOLUTION_SURFACE"
+     ],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "REVIEWER_AGENT"
+      ],
+      "test": [
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)"
+     ]
+    },
+    {
+     "id": "VERIFIER_BUNDLE",
+     "description": "The root-installed verifier bundle (bridge; no repository path).",
+     "neverAutonomous": true,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "REVIEWER_AGENT",
+      "ORACLE_AGENT",
+      "ROADMAP_VISIONARY",
+      "LANE_MONITOR"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "Owner-installed root bundles; drafts are reviewed, then installed by the owner"
+     ]
+    },
+    {
+     "id": "MERGE_DECISION_RECORD",
+     "description": "Immutable merge-decision records (bridge).",
+     "neverAutonomous": false,
+     "appendOnly": true,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [],
+      "generate": [
+       "LANE_MONITOR"
+      ],
+      "test": [],
+      "approve": [],
+      "activate": []
+     },
+     "grounds": [
+      "D5a: immutable merge-decision records"
+     ]
+    },
+    {
+     "id": "OWNER_DECISION_RECORD",
+     "description": "Owner decision records: verbatim relays and copies (bridge).",
+     "neverAutonomous": false,
+     "appendOnly": true,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [],
+      "generate": [
+       "LANE_MONITOR",
+       "LANE_SESSION"
+      ],
+      "test": [],
+      "approve": [],
+      "activate": []
+     },
+     "grounds": [
+      "D6a: the digest-bound owner decision ledger committed by checkpoint.py"
+     ]
+    },
+    {
+     "id": "ROADMAP_STATUS",
+     "description": "Status and evidence fields of existing roadmap items, as packets merge (bridge).",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CHANGE",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION",
+       "OWNER"
+      ],
+      "generate": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION"
+      ],
+      "test": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION"
+      ],
+      "approve": [
+       "LANE_MONITOR"
+      ],
+      "activate": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION"
+      ]
+     },
+     "grounds": [
+      "The roadmap lock: the monitor grants it for a named change and checks the written digests at its return"
+     ]
+    },
+    {
+     "id": "ROADMAP_SCOPE",
+     "description": "New, removed or rescoped roadmap items and priorities (bridge).",
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CHANGE",
+     "governs": [],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION"
+      ],
+      "test": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "ROADMAP_VISIONARY",
+       "LANE_SESSION"
+      ]
+     },
+     "grounds": [
+      "Roadmap scope follows the owner's relayed decisions"
+     ]
+    }
+   ],
+   "coverageSkip": {
+    "rootNames": [
+     ".git",
+     ".venv"
+    ],
+    "anyDepthDirectories": [
+     "__pycache__",
+     ".pytest_cache",
+     ".ruff_cache",
+     ".mypy_cache"
+    ],
+    "anyDepthFilePatterns": [
+     "*.py[cod]",
+     ".DS_Store"
+    ]
+   }
+  }
+ }
+}

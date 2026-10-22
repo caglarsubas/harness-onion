@@ -549,8 +549,8 @@ def validate_linux_readiness(packets: Any, policy: Any) -> list[str]:
         errors.append("Linux publication policy changed or claims unverified readiness")
     if not isinstance(packets, dict):
         return [*errors, "Linux packet catalog must be an object"]
-    if len(packets) != 256:
-        errors.append("Current catalog requires 256 packets; original Linux policy remains 118")
+    if len(packets) != 257:
+        errors.append("Current catalog requires 257 packets; original Linux policy remains 118")
     for packet_id, expected in EXPECTED_PACKETS.items():
         if packet_id == "CONF-LINUX-001":
             expected = amend_linux_test_packet(amend_linux_packet(expected))
@@ -581,7 +581,7 @@ def main() -> int:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("Linux roadmap authority valid: 256 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.")
+    print("Linux roadmap authority valid: 257 packets; historical 118/120/121-packet authorities preserved; live Linux acceptance remains unproven.")
     return 0
 
 
