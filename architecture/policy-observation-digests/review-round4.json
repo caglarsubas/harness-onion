@@ -1,0 +1,140 @@
+{
+ "subject": {
+  "candidate": 4,
+  "files": {
+   "architecture/policy-observation-digests/README.md": "e393dd11c75f527829bb6522c5643cb593b6dc67e2788f5e280ce9de0f4166ae",
+   "architecture/policy-observation-digests/definitions.json": "086692065cfc9da101f770fa39c50af2e2650a169595526e9860fc805478c2aa",
+   "architecture/policy-observation-digests/vectors.json": "bd9f04bd04fcccc584bcab341ec649bcead567fe349c57e30958eaaf2ea64f84",
+   "scripts/policy_observation_digests.py": "01298fb5c6acdae3248174265bbe576dd553eeb19bce1a48cb1e2734972c09c5",
+   "architecture/artifact-edges/operator-harness-engineering-v10.json": "a4fad53dfadbe8a5d79d4049fbba83173adaacec8d33df5ca377aa288539364e",
+   "architecture/artifact-edges/README-v10.md": "3ae925596532dc491ceee829893793b49fb684a501ecdc049db6651062e79128"
+  },
+  "build": {
+   "tools/w03/digest/build_contract.py": "8d0567ff1dfc00887f013af8663bdf2e0c0cbc6416860438aac53d85df9db61e",
+   "tools/w03/digest/src/policy_observation_digests.py": "01298fb5c6acdae3248174265bbe576dd553eeb19bce1a48cb1e2734972c09c5",
+   "tools/w03/digest/src/README.md": "e393dd11c75f527829bb6522c5643cb593b6dc67e2788f5e280ce9de0f4166ae",
+   "tools/w03/digest/BUILD_REPORT_C4.md": "69c582ee5dd04bef0317efd9ebedece1f26ec2faae495e9a0d013ebad22bbfda"
+  },
+  "baseline": {
+   "candidate": 3,
+   "reviewedBy": "tools/w03/digest/reviews/contract-review-round3.json (92ca9a332b2cbddfbd92fd64df89d6e3d57c65f4e9c66ae881f7d4678a49749b), PASS_FOR_ADOPTION",
+   "note": "The six files under tools/w03/digest/rounds/c3/contract/ hash to round 3's subject.files exactly, and rounds/c3/build_contract.c3.py is 0f9911fce052af213ed180407f7708186244bec18e378cdcc2a5992219f736c3, the build round 3 reviewed. BUILD_REPORT_C3.md is f75d4bc468e93ffdc0696a18606334ce62bb8791ef425a27039822c68e3b1a22."
+  },
+  "decisions": "tools/w03/digest/OWNER_DECISIONS.md (8f95ea961ee9c3e728057b160a48542a8a855e249f23c75a366022a433d0921f, 18,888 bytes; its first 18,309 bytes hash to the build's pin a8f2e8c7ebd54959d0b3648ac879f4c911b2ea4cd160df31abb1dcc0c69d756a and its first 15,521 bytes to candidate 3's pin ea1cbcd2354f54fb5c229e1d22cf07f8528c7deffc6a280fab6f68141513f46b, so the file was only appended to; the appended part is the monitor's candidate-4 note admitting a data-only change to the dict definitions() returns)",
+  "repository": "<workspace>/harness-onion at 30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7"
+ },
+ "reviewer": "independent agent",
+ "model": "claude-opus-5-5",
+ "brief": {
+  "path": "tools/w03/digest/CONTRACT_REVIEW_BRIEF_R4.md",
+  "sha256": "51aa5b6dd4b10ed795ce1d446c7ed055f89ebbe61662c4b034f22c48082fa0e3"
+ },
+ "verdict": "PASS_FOR_ADOPTION",
+ "verdictNote": "Candidate 4 applies exactly R-ORC (a)'s two text clarifications (the i06 input clause in README 5.2 and definitions.json, and the corrected 5.2 order sentence) plus edge v10's three row hashes and README-v10's three table lines that follow from the final bytes. The model differs only by one data member in the dict _digest_definitions() returns, which definitions() returns as enforcementDigests; no derivation, check or vector code changed (AST). vectors.json differs only in its definitions pin; all 152 candidate-3 vectors are byte-identical. Both clauses say what the model does (37 probe calls, all as the text states). The build is deterministic and reproduces the STAGE tree byte for byte; the self-check passes 320 checks. Two NOTEs, none above NOTE.",
+ "diff": [
+  {
+   "path": "scripts/policy_observation_digests.py",
+   "change": "c3f8de97... to 01298fb5..., +5 -1 lines, one hunk at lines 916-920: inside the rbacClosureDigest entry of the dict _digest_definitions() returns (inputs), 'frozenInputs': sorted(FROZEN_INPUTS) gains a sibling 'callerSupplied': {'i06': '<the clause text>'}. _digest_definitions is called only from definitions() (enforcementDigests). AST comparison over the whole module: 120 top-level statements in both; 119 are ast.dump-identical, including definitions(), _enforcement, enforcement, _frozen_i06, _namespace, _rbac, check_vectors, _check_complete, main, every constant and the module docstring (52 of the 53 functions); in _digest_definitions the only node difference is the added dict member, whose value is a Dict of Constant nodes (data only). Matches BUILD_REPORT_C4's quoted lines exactly.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/policy-observation-digests/definitions.json",
+   "change": "89429ead... to 08669206..., +4 -1 lines (the -1 is frozenInputs' closing bracket gaining a comma). Recursive structural diff over the whole document: exactly one difference, the added member enforcementDigests.rbacClosureDigest.inputs.callerSupplied = {\"i06\": \"{closure, inventory, bootstrap}: each the parsed JSON of its frozenInputs file, pinned by path and sha256; a missing i06, or one without exactly those three members, refuses rbacClosureDigest: malformed input\"}. refusalTexts unchanged (90), the closure's refusals unchanged (21, 'rbacClosureDigest: malformed input' first). The file re-dumps byte-identically and equals the model's definitions() (main's check passes in the self-check).",
+   "ruled": true
+  },
+  {
+   "path": "architecture/policy-observation-digests/README.md",
+   "change": "ab979d02... to e393dd11..., +8 -2 lines, section 5.2 only. Candidate 3's sentence 'Before them, the closure refuses with rbac's texts, including \"rbac: malformed input\" and B1's (section 4.5).' is replaced by the order sentence: the closure first refuses a missing or ill-shaped qualification namespace with its own text, \"rbacClosureDigest: malformed input\"; then rbac's texts, including \"rbac: malformed input\", and B1's (section 4.5); then it checks the i06 input and runs the I06 checks. One bullet is added, 'The i06 input': the caller-supplied i06 = {closure, inventory, bootstrap}, the three files of definitions.json frozenInputs (paths named), each parsed as JSON and pinned by path and sha256; a missing i06, or one without exactly those three members, refuses \"rbacClosureDigest: malformed input\" (section 3.4, which is 'Malformed input'). No other line changed.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/policy-observation-digests/vectors.json",
+   "change": "be9607bd... to bd9f04bd..., +1 -1 line: contract.canonicalSha256 07b8ae33... to e9e30051..., each the sha256 of its own candidate's definitions.json canonical bytes (recomputed independently). schemaVersion, evidenceClass, nativeAcceptance, sources, fixtures, helpers (16), vectors (152) and complete identical on canonical bytes. Candidate 4 with candidate 3's pin restored, re-dumped as the build writes (indent 1, ensure_ascii True), is byte-identical to candidate 3's file. Size unchanged at 468,843 bytes.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/artifact-edges/operator-harness-engineering-v10.json",
+   "change": "e1a9ae47... to a4fad53d..., +3 -3 lines: the three contract rows' sha256 are now 08669206..., bd9f04bd... and e393dd11..., each equal to the STAGE file's sha256. The other 69 rows and every other member (schemaVersion, graph, consumer, provider, artifact, ownerDecision, rules, notArtifacts, statuses, supersedes, ownerDecisions, notes) are identical. Size unchanged at 36,172 bytes.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/artifact-edges/README-v10.md",
+   "change": "c5703eed... to 3ae92559..., +3 -3 lines: the three table rows' sha256 prefixes (086692065cfc, bd9f04bd04fc, e393dd11c75f) and sizes (35,940, 468,843, 46,944), equal to edge v10's rows and to the files' byte counts. No other line changed; size 4,753 bytes in both.",
+   "ruled": true
+  },
+  {
+   "path": "tools/w03/digest/build_contract.py (build, not a STAGE file)",
+   "change": "0f9911fc... to 8d0567ff..., four hunks: (a) the docstring names candidate 4; (b) SRC_MODEL_SHA and SRC_README_SHA pin the new src digests; (c) DECISIONS_LENGTH and DECISIONS_SHA are 18309 and a8f2e8c7...; (d) the H_ORC section header and one RELIED entry quoting '> - **R-ORC (a):** a narrow candidate 4, contract text only:'. All four are the brief's allowed kinds (pins its sources' digests, names the candidate, quotes the ruling). The git helper, the fixtures, every vector definition and the output code are unchanged.",
+   "ruled": true
+  },
+  {
+   "path": "tools/w03/digest/src/ (build sources)",
+   "change": "src/policy_observation_digests.py and src/README.md are byte-identical to the STAGE model and README (same sha256).",
+   "ruled": true
+  }
+ ],
+ "c3VectorsIdentical": true,
+ "probes": [
+  {"probe": "Setup: a WORK tree (selfcheck/) with the candidate-4 model, its seven pinned dependencies (VPC, safe_yaml, admission v3, I06 v1, v3, v4, native v4) and the three frozen I06 inputs, each taken by git show 30f41e6f:<exact file> and sha256-checked against FROZEN_MODELS, FROZEN_INPUTS and the build's INPUTS; i06 = the three files parsed as JSON. Each dependency's import lines read first: stdlib, jsonschema, yaml and each other only; VPC's lazy VPO import sits only in validate_additions, which nothing here calls, and VPO is not in WORK.", "result": "all ten hashes equal their pins"},
+  {"probe": "control: the closure fixture with the valid i06", "result": "sha256:77adfbb7d2ab887c27283ddddc2222f8a7914a73fd7a1e2e45546175eaf7de18, RC-00's pinned digest"},
+  {"probe": "i06 None, and the i06 argument omitted (default None)", "result": "\"rbacClosureDigest: malformed input\" (both)"},
+  {"probe": "i06 without closure; without inventory; without bootstrap", "result": "\"rbacClosureDigest: malformed input\" (all three)"},
+  {"probe": "i06 with an extra fourth member; an empty dict; a list of the three values; a JSON string of the dict", "result": "\"rbacClosureDigest: malformed input\" (all four)"},
+  {"probe": "valid i06, the snapshots of RC-01, RC-02 and RC-03 (the vectors pinning the I06 text; each passes B1 and fails the I06 checks)", "result": "\"rbacClosureDigest: I06 closure check not passed\" (all three)"},
+  {"probe": "the same three snapshots with i06 missing", "result": "\"rbacClosureDigest: malformed input\" (all three): the i06 check precedes the I06 checks, as the order sentence says"},
+  {"probe": "the same three snapshots with the qualification namespace deleted, valid i06", "result": "\"rbacClosureDigest: malformed input\" (all three)"},
+  {"probe": "i06 with the three members but ill-shaped or wrong content: closure = \"x\"; all three {}; closure and inventory swapped", "result": "\"rbacClosureDigest: I06 closure check not passed\" (all three): I06 v1's explain turns the check's ValueError/TypeError/KeyError into a verdict text. Consistent with the text, which names \"malformed input\" only for a missing i06 or a wrong member set (see C4-1)"},
+  {"probe": "namespace present, valid i06: a ClusterRoleBinding subject of kind Robot; a ClusterRoleBinding ServiceAccount subject without a namespace; a dangling roleRef", "result": "\"rbac: malformed subject kind\"; \"rbac: malformed subject namespace\"; \"rbac: role does not exist\""},
+  {"probe": "the Robot B1 refusal present, valid i06, with the namespace deleted; empty; the integer 5; the whole configuration deleted", "result": "\"rbacClosureDigest: malformed input\" (all four): before any B1 text"},
+  {"probe": "the dangling roleRef present, namespace deleted, valid i06", "result": "\"rbacClosureDigest: malformed input\""},
+  {"probe": "the Robot B1 refusal, namespace deleted, i06 missing", "result": "\"rbacClosureDigest: malformed input\""},
+  {"probe": "namespace present, i06 missing, with the Robot B1 refusal; with the dangling roleRef", "result": "\"rbac: malformed subject kind\"; \"rbac: role does not exist\": B1 and rbac's texts precede the i06 check"},
+  {"probe": "lists.clusterRoles = \"x\", namespace present, with valid i06 and with i06 missing; lists deleted, namespace present", "result": "\"rbac: malformed input\" (all three)"},
+  {"probe": "lists.clusterRoles = \"x\", namespace deleted, valid i06", "result": "\"rbacClosureDigest: malformed input\""},
+  {"probe": "Mutant M-ORDER (WORK/mut1 only): the closure runs _rbac before the namespace step, then the unchanged code", "result": "survives all 320 checks of the candidate-4 vectors; on the probe 'Robot B1 refusal + namespace deleted' it answers \"rbac: malformed subject kind\" instead of \"rbacClosureDigest: malformed input\" (see C4-2)"}
+ ],
+ "findings": [
+  {
+   "id": "C4-1",
+   "severity": "NOTE",
+   "location": "README 5.2 bullet 'The i06 input'; definitions.json enforcementDigests.rbacClosureDigest.inputs.callerSupplied.i06; model _frozen_i06",
+   "finding": "The clause states exactly what the model checks: _frozen_i06 refuses unless i06 is a dict whose key set is exactly {closure, inventory, bootstrap}. It renders R-ORC's 'missing or ill-shaped i06' as 'a missing i06, or one without exactly those three members'. The model does not check the members' content against the frozenInputs pins at call time: with the three members present but ill-shaped or wrong content, the call reaches the I06 checks and refuses \"rbacClosureDigest: I06 closure check not passed\" (probed for \"x\", three {} and swapped files). 'pinned by path and sha256' therefore reads as the caller's obligation, as I06 v4's own check_observer_snapshot docstring words its 'Caller obligation'. A port that verifies the pin per call and refuses \"malformed input\" for wrong content would differ from the model in text only. No safety effect: the closure document and its digest never depend on i06's content, the digest is still compared with the signed binding, and R10 and HE-008 embed the frozen bytes.",
+   "requiredChange": "None for candidate 4 (R-ORC admits no further text). Optional, in a later revision: one sentence saying the member content is the caller's obligation and that content which is present but wrong reaches the I06 checks."
+  },
+  {
+   "id": "C4-2",
+   "severity": "NOTE",
+   "location": "README 5.2 order sentence; vectors.json (MI-01 only); vector row format (no i06 member)",
+   "finding": "The two clarified behaviours are now stated in the text and are the model's behaviour, but vectors.json does not pin either beyond MI-01. MI-01 deletes the namespace on a snapshot with no B1 refusal, so the namespace-before-B1 order is not pinned: mutant M-ORDER (B1 run first, the c3-implied order) survives all 320 checks and changes the probed text. The vector row format has no i06 member, and check_vectors always passes the frozen i06, so the i06 refusal cannot be pinned in vectors.json at all. So R10, which replays vectors.json, would not catch a port that diverges on either point. The effect is on refusal text only: every variant refuses. The harness-onion oracle tests are where these behaviours are pinned (R-ORC steps 4-5). R-ORC (a) rules out vector changes in candidate 4, so candidate 4 is correct not to add any.",
+   "requiredChange": "None for candidate 4. Optional, in a later revision (for example the List-form revision, beside C3-1's optional vector): a closure vector with the namespace deleted and a Robot ClusterRoleBinding subject, expecting \"rbacClosureDigest: malformed input\"."
+  }
+ ],
+ "checks": [
+  {"check": "Brief sha256 computed with shasum -a 256; output name checked against the round (contract review, round 4)", "result": "51aa5b6dd4b10ed795ce1d446c7ed055f89ebbe61662c4b034f22c48082fa0e3, equal to the launch prompt's pin; record written as contract-review-round4.json"},
+  {"check": "Subject hashes against the brief's table: the six STAGE files, build_contract.py, BUILD_REPORT_C4.md, contract-review-round3.json and OWNER_DECISIONS.md", "result": "all ten equal"},
+  {"check": "Candidate-3 baseline: rounds/c3/contract/** against round 3's subject.files; rounds/c3/build_contract.c3.py against round 3's build pin", "result": "all six files equal; build 0f9911fc... equal"},
+  {"check": "R-ORC (a) read verbatim in OWNER_DECISIONS.md (section 'the oracle findings'), and the appended candidate-4 section", "result": "admits the i06 = {closure, inventory, bootstrap} clause in 5.2 and definitions.json, the corrected 5.2 order sentence, edge v10's three row hashes, and (appended section) a data-only change to the dict definitions() returns; 'No change to model code, vectors or other text'"},
+  {"check": "Unified diff c3 to c4 of all six STAGE files and of the build script", "result": "every hunk is classified in 'diff'; no unruled change"},
+  {"check": "Model: AST comparison of the whole module (brief item 1)", "result": "only _digest_definitions differs, by one added dict member whose value is Dict/Constant nodes; all other 119 top-level statements identical, including definitions() and every derivation, check and vector function"},
+  {"check": "definitions.json recursive structural diff; equality with the model's definitions()", "result": "exactly one added member (inputs.callerSupplied); refusalTexts and the closure's refusals unchanged; main()'s equality check passes"},
+  {"check": "The 152 candidate-3 vectors compared by id on canonical bytes (brief item 2)", "result": "152 identical, 0 changed, 0 missing, 0 added, same order; helpers 16 identical; only the top-level member 'contract' differs"},
+  {"check": "vectors.json definitions pin, candidates 3 and 4", "result": "each equals the sha256 of its own definitions.json's canonical bytes (independent canonical: sort_keys, compact separators, ensure_ascii False); c4 with c3's pin restored re-dumps to c3's bytes exactly"},
+  {"check": "README clauses against the model's code path (_enforcement for rbacClosureDigest: _namespace, then _rbac, then _frozen_i06, then I06 v4 check_observer_snapshot through I06 v1 explain, then document_bound)", "result": "the order sentence matches the code order; the i06 clause matches _frozen_i06; the probes confirm both (37 calls of enforcement('rbacClosureDigest', ...) in WORK/scripts/probes.py, 0 mismatches; plus the mutant probe)"},
+  {"check": "Cross-references in the new text", "result": "section 3.4 is 'Malformed input'; section 4.5 holds B1's table; the three named paths and the frozenInputs pins equal definitions.json's top-level frozenInputs and FROZEN_INPUTS; the text's refusal strings are all in refusalTexts and in the closure's refusals"},
+  {"check": "Build script git helper read before running (brief item 4, R-C1-9 (a))", "result": "Unchanged from candidate 3. git_argv is the only argv builder; subprocess is called only in git() and git_exists(), both through git_argv. Allowed: show PIN:<file in INPUTS>; rev-parse <commit in COMMITS>; log -1 --format=%H <commit> -- <non-empty pathspec, all in INPUTS>; ls-tree <commit> -- <one path in INPUTS> (every INPUTS key is an exact file path); diff --name-only <c1> <c2> -- <non-empty pathspec, all in INPUTS>; cat-file -e <commit>:<path in INPUTS or the six FREE_PATHS>. Commits are limited to PIN and DESIGN_PIN. Any other form raises GitFormRefused, and a load-time self-test checks eight refused forms. GIT_OPTIONAL_LOCKS=0 is set. VPO is not in INPUTS. The exec'd dependencies import only stdlib, jsonschema, yaml and each other."},
+  {"check": "Determinism (brief item 4)", "result": "Two runs of python3 -I -B WORK/tools/build_contract.py <workspace>/harness-onion OUT into fresh WORK/run1 and WORK/run2 (WORK/tools holds copies of build_contract.py, src/ and OWNER_DECISIONS.md) both exited 0 with 16 helpers, 152 vectors and 320 checks and identical logs. The same six-file set; diff -r and cmp show both byte-identical to each other and to the STAGE tree."},
+  {"check": "Model self-check from a WORK copy (brief item 4)", "result": "python3 -I -B WORK/selfcheck/scripts/policy_observation_digests.py prints 'Policy observation digests valid: 320 checks (16 helper, 152 vectors, 1 complete I01 positive); DATA_CHECK_ONLY, product/native NOT_RUN.' and exits 0 (unchanged from candidate 3)"},
+  {"check": "Edge v10 and README-v10 follow the final bytes", "result": "the three rows' sha256 equal the STAGE files' sha256; README-v10's prefixes and sizes equal them and the byte counts"},
+  {"check": "Hygiene (brief item 5): the six STAGE files scanned for a user-home, private-temp or tmp path prefix, the home directory, the account name, a tilde-home prefix, the local-state and CI-state folder names, the workspace parent path, an at sign, an email-like string and the legacy term (scan strings built from parts; counts only)", "result": "0 hits in all six files. Neither README has a status line: 'status' occurs only in 'the packet's status record', 'No status, resourceVersion, managedFields' (a field rule), 'statuses' and the edge table's Status column."},
+  {"check": "README wrap (the build report's disclosed long line)", "result": "the new bullet's line 360 is 126 characters; candidate 3's README already has ten non-table lines over 120, so this is not new in kind; not a finding"}
+ ],
+ "notChecked": [
+  "The oracle test file, its report and the full F-ORC-1/F-ORC-2 descriptions: per the brief, only R-ORC's text in OWNER_DECISIONS.md was used. Whether the oracle's updated tests pass at 419/419 was not run.",
+  "A full re-review of candidate 3's content (design conformance, attack cases, VPC helper mutants, round 2's model mutants, the 67-of-90 texts-in-vectors count): rounds 2 and 3 passed it, and this round is the narrow delta R-ORC (a) asks for.",
+  "VPO's rules (no change in the delta touches them). VPO and validate_readiness were neither imported, copied nor read.",
+  "No product, native, R10 port, layer test (tests/test_policy_observation_digests.py), pytest, cargo, verifier or sim run.",
+  "tools/w03/digest/rounds/c3/adopt_digest.c3.py exists beside the candidate-3 files but is not in the brief's list; it was not opened.",
+  "The mas-harness-operator checkout and the R10 citations: build_contract.py takes only harness-onion, and this round did not open R10.",
+  "The checkout's working-tree state after the two build runs: no git form beyond show <commit>:<file> was run by this reviewer; the build used only the helper's read-only forms with GIT_OPTIONAL_LOCKS=0."
+ ]
+}

@@ -1,0 +1,122 @@
+{
+ "subject": {
+  "candidate": 3,
+  "files": {
+   "architecture/policy-observation-digests/README.md": "ab979d024e98aa5abcaa0967a94928929c42b27650cbbf62ecfcefc60bc61d4b",
+   "architecture/policy-observation-digests/definitions.json": "89429eadda1d9795db1da3f48559537480a8081aa4c00032c7ff3d44491d8680",
+   "architecture/policy-observation-digests/vectors.json": "be9607bdf1560dc0aca60e04cdfde849c0c8828be4e815a0ea778381d26cb17e",
+   "scripts/policy_observation_digests.py": "c3f8de97192e12e4abdbc469e6d3e7344caac3cfe8a54519a9a902f5d64c1150",
+   "architecture/artifact-edges/operator-harness-engineering-v10.json": "e1a9ae47cdc65abb5a3a059506e7dd17c0d354f8f7a8060b211dad701f59e824",
+   "architecture/artifact-edges/README-v10.md": "c5703eed46b010b2ddca83502657145f9786fc902aaae29e70700a6928db786f"
+  },
+  "build": {
+   "tools/w03/digest/build_contract.py": "0f9911fce052af213ed180407f7708186244bec18e378cdcc2a5992219f736c3",
+   "tools/w03/digest/src/policy_observation_digests.py": "c3f8de97192e12e4abdbc469e6d3e7344caac3cfe8a54519a9a902f5d64c1150",
+   "tools/w03/digest/src/README.md": "ab979d024e98aa5abcaa0967a94928929c42b27650cbbf62ecfcefc60bc61d4b",
+   "tools/w03/digest/BUILD_REPORT_C3.md": "f75d4bc468e93ffdc0696a18606334ce62bb8791ef425a27039822c68e3b1a22"
+  },
+  "baseline": {
+   "candidate": 2,
+   "reviewedBy": "tools/w03/digest/reviews/contract-review-round2.json (38c76f4559e0f8eb4ddf658682f96fa8daa30c8207db3d25001ac31156056a11)",
+   "note": "The six files under tools/w03/digest/rounds/c2/contract/ hash to round 2's subject exactly, and rounds/c2/build_contract.c2.py is 789fb94f6edded4e89c18080dca3be23d63d0c5cc35d68370efb8f1ddda81545, the build round 2 reviewed."
+  },
+  "decisions": "tools/w03/digest/OWNER_DECISIONS.md (ea1cbcd2354f54fb5c229e1d22cf07f8528c7deffc6a280fab6f68141513f46b, 15,521 bytes)",
+  "repository": "<workspace>/harness-onion at 30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7"
+ },
+ "reviewer": "independent agent",
+ "model": "claude-opus-5-5",
+ "brief": {
+  "path": "tools/w03/digest/CONTRACT_REVIEW_BRIEF_R3.md",
+  "sha256": "a6deff5e0e4d93ffabf904bd4f46c630a05f68f89780213aab2e358bff1542b0"
+ },
+ "verdict": "PASS_FOR_ADOPTION",
+ "verdictNote": "Candidate 3 applies exactly R-C2 (a)'s three changes (G-22b, RB-32, C2-3's text additions) and edge v10's row digests and README-v10's matching table lines that follow from them. No other change in any STAGE file. The 150 candidate-2 vectors are byte-identical. The build is deterministic and reproduces the STAGE tree byte for byte. The model's self-check passes 320 checks. Two NOTEs, neither above NOTE.",
+ "diff": [
+  {
+   "path": "scripts/policy_observation_digests.py",
+   "change": "516231ef... to c3f8de97..., +3 -2 lines, two data literals only. (1) _digest_definitions: rbacClosureDigest's refusals gain [\"rbac: malformed input\"] before B1's 'rbac: malformed <field>' texts. (2) definitions(): captureGate.refusals gain [key + \": malformed input\" for key in GATED]. These are exactly the two lists definitions() returns for C2-3. No derivation, check, vector, refusal_texts or UNREACHABLE code changed (the unified diff has only these two hunks).",
+   "ruled": true
+  },
+  {
+   "path": "architecture/policy-observation-digests/definitions.json",
+   "change": "1a97df32... to 89429ead..., +5 -1 lines. Structural diff over the whole document: enforcementDigests.rbacClosureDigest.refusals 20 to 21 entries ('rbac: malformed input' added at index 6, candidate 2's order kept); captureGate.refusals 6 to 9 entries ('mutationBroker: malformed input', 'networkEnforcementDigest: malformed input', 'hostPreflightDigest: malformed input' appended). Nothing else differs. refusalTexts is unchanged at 90 entries, and it already held all four texts. The file equals the model's definitions() (main's check passes in the self-check).",
+   "ruled": true
+  },
+  {
+   "path": "architecture/policy-observation-digests/README.md",
+   "change": "935a6108... to ab979d02..., +2 -1 lines, in section 5.2 only: after 'Those checks are unchanged.' it adds 'Before them, the closure refuses with rbac's texts, including \"rbac: malformed input\" and B1's (section 4.5).' This is C2-3's requiredChange wording.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/policy-observation-digests/vectors.json",
+   "change": "d34d1990... to be9607bd.... RB-32 is inserted after RB-31 and G-22b after G-22 (150 to 152 rows). contract.canonicalSha256 changes from f5e9d212... to 07b8ae33..., which is the sha256 of the canonical bytes of candidate 3's definitions.json (recomputed independently; candidate 2's pin likewise equals its own definitions). schemaVersion, evidenceClass, nativeAcceptance, sources, fixtures, helpers (16) and complete are identical. Removing the two new rows and restoring candidate 2's pin, then re-dumping in the build's format, reproduces candidate 2's file byte for byte.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/artifact-edges/operator-harness-engineering-v10.json",
+   "change": "f8264a8b... to e1a9ae47..., +3 -3 lines: the three contract rows' sha256 are now 89429ead..., be9607bd... and ab979d02..., the final bytes' sha256. The other 69 rows and every other member are identical. The size is unchanged at 36,172 bytes.",
+   "ruled": true
+  },
+  {
+   "path": "architecture/artifact-edges/README-v10.md",
+   "change": "ba18b2a8... to c5703eed..., +3 -3 lines: the three table rows' sha256 prefixes (89429eadda1d, be9607bdf156, ab979d024e98) and sizes (35,686, 468,843 and 46,271). They match edge v10's rows and the files' byte counts. No other line changed.",
+   "ruled": true
+  },
+  {
+   "path": "tools/w03/digest/build_contract.py (build, not a STAGE file)",
+   "change": "789fb94f... to 0f9911fc.... (a) The docstring names candidate 3. (b) SRC_MODEL_SHA and SRC_README_SHA pin the new src digests. (c) DECISIONS_LENGTH and DECISIONS_SHA are now 15521 and ea1cbcd2...; the file's first 13,003 bytes still hash to candidate 2's pin 6c549188..., so OWNER_DECISIONS.md was only appended to. (d) The H_CR2 header, the RELIED entry for '> - **R-C2 (a):**' and an assert that the quote contains 'G-22b, RB-32'. (e) The V('RB-32', ...) and V('G-22b', ...) definitions. (a) to (c) are the brief's allowed kinds. (d) and (e) fall outside the brief's literal allowance; see C3-2. The git helper, the fixtures, every other vector definition and the output code are unchanged.",
+   "ruled": true
+  },
+  {
+   "path": "tools/w03/digest/src/ (build sources)",
+   "change": "src/policy_observation_digests.py and src/README.md are byte-identical to the STAGE model and README (same sha256).",
+   "ruled": true
+  }
+ ],
+ "c2VectorsIdentical": true,
+ "findings": [
+  {
+   "id": "C3-1",
+   "severity": "NOTE",
+   "location": "definitions enforcementDigests.rbacClosureDigest.refusals ('rbac: malformed input'); README 5.2's new clause; vectors (none for this route)",
+   "finding": "C2-3's text addition is in place, and the model does produce it on the closure route. Probed: clusterRoles = \"x\", roles deleted, and roleBindings = {} on the unit snapshot each give 'rbac: malformed input' for rbacClosureDigest. No vector pins this route, though. The text occurs only in MI-01, for the rbac projection, reached through the qualification-namespace check. So a port or model that reports malformed RBAC lists on the closure as 'rbacClosureDigest: malformed input' still passes everything. Probed: a WORK mutant that re-raises the closure's 'rbac: malformed input' as 'rbacClosureDigest: malformed input' survives all 320 checks. The impact is text-level only: the value refuses either way, and VPO's external text is unchanged. R-C2 (a) admitted text additions only for C2-3, so a vector here would have been outside candidate 3. Candidate 3 is correct not to add one.",
+   "requiredChange": "None for candidate 3. Optional, in a later revision (for example the List-form revision): a vector on the unit snapshot with lists.clusterRoles = \"x\", expecting rbacClosureDigest 'rbac: malformed input' (and the same for the rbac projection)."
+  },
+  {
+   "id": "C3-2",
+   "severity": "NOTE",
+   "location": "tools/w03/digest/build_contract.py diff c2 to c3: the H_CR2 header, the R-C2 RELIED quote and its assert, and V('RB-32') and V('G-22b')",
+   "finding": "The brief allows build_contract.py to differ 'only where it pins its sources' digests or names the candidate'. Besides those changes, the build's diff adds the two ruled vectors' definitions and a verbatim-quote check of the R-C2 (a) line. I judge both to follow from R-C2 (a). vectors.json is generated by this script, so G-22b and RB-32 cannot exist without their V() definitions. The R-C2 quote uses the build's existing decisions-pinning mechanism, the same way candidate 2 quoted R-C1-9: the line must occur exactly once, inside its dated section, in the pinned file. It changes no output byte. Neither touches the git helper, the fixtures or any other vector. They are recorded here only because the brief asks to name every change outside its literal list.",
+   "requiredChange": "None."
+  }
+ ],
+ "checks": [
+  {"check": "Brief sha256 computed with shasum -a 256", "result": "a6deff5e0e4d93ffabf904bd4f46c630a05f68f89780213aab2e358bff1542b0, equal to the launch prompt's pin"},
+  {"check": "Subject hashes: the six STAGE files, build_contract.py, BUILD_REPORT_C3.md, contract-review-round2.json and OWNER_DECISIONS.md against the brief's table", "result": "all ten equal"},
+  {"check": "Candidate-2 baseline: rounds/c2/contract/** against round 2's subject.files; rounds/c2/build_contract.c2.py against round 2's and BUILD_REPORT_C2's build pin", "result": "all six files equal; build 789fb94f... equal"},
+  {"check": "R-C2 (a) read verbatim in OWNER_DECISIONS.md (section 'contract review round 2'); C2-1..C2-3 requiredChange texts read in full", "result": "exactly three changes admitted: G-22b, RB-32, and C2-3's text additions (the definitions list, one 5.2 clause, and the three gate malformed texts)"},
+  {"check": "Unified diff c2 to c3 of all six STAGE files and of the build script", "result": "every hunk is classified in 'diff'; no unruled change in any STAGE file"},
+  {"check": "Model diff limited to definitions() data (brief item 1)", "result": "two hunks, both inside the two refusal-list literals; no derivation, check or vector code changed"},
+  {"check": "definitions.json structural diff (recursive, every member)", "result": "only enforcementDigests.rbacClosureDigest.refusals (+1) and captureGate.refusals (+3) differ; refusalTexts unchanged (90)"},
+  {"check": "vectors.json contract pin, candidate 2 and candidate 3", "result": "each equals the sha256 of the canonical bytes of its own definitions.json (independent canonical: sort_keys, compact separators, ensure_ascii False)"},
+  {"check": "The 150 candidate-2 vectors compared by id on canonical bytes (brief item 2)", "result": "150 identical, 0 changed, 0 missing, candidate 2's order kept; the new ids are RB-32 (after RB-31) and G-22b (after G-22)"},
+  {"check": "vectors.json file-level: candidate 3 minus RB-32 and G-22b, with candidate 2's pin restored, re-dumped as the build writes (indent 1, ensure_ascii True)", "result": "byte-identical to candidate 2's vectors.json"},
+  {"check": "G-22b against C2-1's requiredChange (brief item 3)", "result": "Matches. Its ops equal G-22's except the answer's wallMs, which is 40 s earlier: {monotonicMs 700000, wallMs = completed set's startedWallMs + 60000}. The sets are (600000, completed) and (660000, incomplete). The monotonic age from the completed set's own start is 100000 ms, over the 90000 ms bound; the wall age is 60000 ms, inside it. The age from the newest entry would be 40000 ms. Expect and model agree: 'capture set too old' for mutationBroker, networkEnforcementDigest and hostPreflightDigest."},
+  {"check": "RB-32 against C2-2's requiredChange (brief item 3)", "result": "Matches. RoleBinding 'a' is in the qualification namespace (unit-namespace) with roleRef ClusterRole 'missing-role' (absent from the unit ClusterRoles). ClusterRoleBinding 'b' has roleRef 'unit-viewer' (present) and subject kind Robot. The model gives 'rbac: malformed subject kind' for rbac and rbacClosureDigest. With 'a' alone the result is 'rbac: role does not exist'; with 'b' alone, 'rbac: malformed subject kind'. So the binding order decides the text."},
+  {"check": "RB-32's rbacClosureDigest pin (brief item 1, judge)", "result": "Within C2-2. RB-31, the precedent C2-2 cites, pins both rbac and rbacClosureDigest. The closure runs the same _rbac, so the pinned text is the same one C2-2 names and is the model's actual output. It adds coverage of B1's order on the closure route, with no new text and no model change."},
+  {"check": "Mutation probes on WORK copies of the model (round 2's P1, P3, P4)", "result": "P1 (monotonic start from the newest entry) and P3 (largest scheduled start) die at G-16 on the full set and at G-22b with G-16 removed. They survive only with both G-16 and G-22b removed. P4 (bindings sorted by name alone) dies at RB-32 ('rbac: role does not exist') and survives only with RB-32 removed. The unmutated model passes every set."},
+  {"check": "C2-3 texts producible (brief item 4)", "result": "'rbac: malformed input' on rbacClosureDigest: produced when clusterRoles = \"x\", roles is deleted, or roleBindings = {} (the source is _rbac's list-shape check under the key 'rbac', run inside the closure before _frozen_i06 and I06's check). The three '<key>: malformed input' gate texts: produced by capture_gate's data-shape check for a float answer, an extra capture member, and a set row without slots, and already pinned by G-20. All four texts are in refusalTexts and in the respective key's own list. README 5.2's clause states the closure inherits rbac's texts; README 3.4 already covers malformed capture data."},
+  {"check": "Git helper of build_contract.py read before running (brief item 5, R-C1-9 (a))", "result": "Unchanged from candidate 2. git_argv is the only argv builder, and subprocess is called only through git() and git_exists(), both via git_argv. Allowed forms: show PIN:<file in INPUTS>; rev-parse <commit in COMMITS>; log -1 --format=%H <commit> -- <non-empty pathspec, all in INPUTS>; ls-tree <commit> -- <one path in INPUTS> (all files; the blob type is asserted); diff --name-only <c1> <c2> -- <non-empty pathspec, all in INPUTS>; cat-file -e <commit>:<path in INPUTS or the six free paths>. Any other form raises GitFormRefused, and a load-time self-test checks eight refused forms. GIT_OPTIONAL_LOCKS=0 is set. VPO is not in INPUTS and is never shown. The executed dependencies (safe_yaml, VPC, admission v3, I06 v1/v3/v4, native v4) import only stdlib, jsonschema, yaml and each other at module level. VPC's lazy VPO import sits only in validate_additions, which neither the build nor the model calls."},
+  {"check": "Determinism (brief item 5)", "result": "Two runs of python3 -I -B build_contract.py <workspace>/harness-onion OUT into fresh WORK/run1 and WORK/run2 both exited 0, with 16 helpers, 152 vectors and 320 checks. Both produced the same six-file set, and cmp and diff -r show both byte-identical to each other and to the STAGE tree."},
+  {"check": "Model self-check from a WORK copy (brief item 5)", "result": "python3 -I -B WORK/selfcheck/scripts/policy_observation_digests.py prints 'Policy observation digests valid: 320 checks (16 helper, 152 vectors, 1 complete I01 positive); DATA_CHECK_ONLY, product/native NOT_RUN.' and exits 0 (candidate 2: 315; +2 RB-32, +3 G-22b). The tree holds the STAGE files plus the model's pinned import closure and frozen I06 inputs, taken by git show at 30f41e6f and each sha256-checked against FROZEN_MODELS, FROZEN_INPUTS and the build's INPUTS."},
+  {"check": "Edge v10 and README-v10 follow the final bytes", "result": "the three rows' sha256 equal the STAGE files' sha256; README-v10's prefixes and sizes equal them and wc -c"},
+  {"check": "Hygiene (brief item 6)", "result": "No STAGE file contains a user-home, private-temp or tmp path prefix, the home directory, the account name, a tilde-home prefix, the local state or CI state folder names, an at sign, an email-like string or the legacy term (all scan strings built from parts; counts printed, never matches). Neither README has a status line: the word 'status' appears only in 'the packet's status record', a field list and the edge table's Status column."}
+ ],
+ "notChecked": [
+  "A full re-review of candidate 2's content (design conformance, attack cases, the 67-of-90 texts-in-vectors count, VPC helper mutants and round 2's other model mutants): round 2 passed it, and this round is the narrow delta R-C2 (a) asks for.",
+  "The builder's '90 pinned refusal texts, of which 67 occur in a vector' count was not recomputed. Only the four added texts and 'rbac: malformed subject kind' were traced to vectors.",
+  "VPO's rules (no change in the delta touches them). VPO and validate_readiness were neither imported, copied nor read.",
+  "No product, native, R10 port, layer test (tests/test_policy_observation_digests.py), pytest, cargo, verifier or sim run.",
+  "The mas-harness-operator checkout that BUILD_REPORT_C3 mentions: build_contract.py takes only harness-onion, and this round did not open it."
+ ]
+}

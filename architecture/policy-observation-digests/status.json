@@ -1,0 +1,452 @@
+{
+ "schemaVersion": "planeon.internal.policy-observation-digests-status/v1",
+ "workItem": "DIGEST-CONTRACT (the I01 digest contract)",
+ "packet": "MET-ENFORCE-041",
+ "slot": 258,
+ "status": "ADOPTED",
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated (2026-10-22)",
+  "date": "2026-10-22",
+  "decision": "A clean r3 goes straight to adoption without asking me again. Anything above NOTE comes back to me.",
+  "condition": "contract review round 3 clean (NOTE findings only)",
+  "readoption": "a clean r4 means re-adoption, a new commit replacing 871d582b, with status.json gaining contract round 4",
+  "readoptionCondition": "contract review round 4 clean (NOTE findings only), after the D5a oracle tests found two contract-text gaps (F-ORC-1, F-ORC-2; R-ORC (a))",
+  "supersededAdoption": "candidate 3, local commit 871d582b1ae18b621340578d1772988b320ad8f4, never pushed, kept on the local branch met-enforce-041-adoption-c3-871d582b"
+ },
+ "baseMain": "30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7",
+ "adoptedSubject": {
+  "architecture/policy-observation-digests/README.md": "e393dd11c75f527829bb6522c5643cb593b6dc67e2788f5e280ce9de0f4166ae",
+  "architecture/policy-observation-digests/definitions.json": "086692065cfc9da101f770fa39c50af2e2650a169595526e9860fc805478c2aa",
+  "architecture/policy-observation-digests/vectors.json": "bd9f04bd04fcccc584bcab341ec649bcead567fe349c57e30958eaaf2ea64f84",
+  "scripts/policy_observation_digests.py": "01298fb5c6acdae3248174265bbe576dd553eeb19bce1a48cb1e2734972c09c5",
+  "architecture/artifact-edges/operator-harness-engineering-v10.json": "a4fad53dfadbe8a5d79d4049fbba83173adaacec8d33df5ca377aa288539364e",
+  "architecture/artifact-edges/README-v10.md": "3ae925596532dc491ceee829893793b49fb684a501ecdc049db6651062e79128"
+ },
+ "builder": {
+  "path": "build_contract.py (kept with the lane's records)",
+  "sha256": {
+   "c1": "ac0a181bc58bdc979a06d4da461306a72dd11bc0d84a5345ac621f0b16b8c052",
+   "c2": "789fb94f6edded4e89c18080dca3be23d63d0c5cc35d68370efb8f1ddda81545",
+   "c3": "0f9911fce052af213ed180407f7708186244bec18e378cdcc2a5992219f736c3",
+   "c4": "8d0567ff1dfc00887f013af8663bdf2e0c0cbc6416860438aac53d85df9db61e"
+  },
+  "determinism": "each candidate's STAGE build and two fresh builds were byte-identical; contract reviews 2 and 3 re-ran the builder twice into fresh directories"
+ },
+ "independentReviewers": "SEPARATE_AGENTS_NOT_AUTHOR (one fresh agent per round)",
+ "reviews": [
+  {
+   "review": "design round 1",
+   "record": "architecture/policy-observation-digests/design/review-round1.json",
+   "recordSha256": "46f233d50620c5b6fee8c55f2a35c568db8d2cb0f15b2b35f8c7c37483583a2b",
+   "verdict": "CHANGES_REQUIRED",
+   "base": "26a8affb",
+   "subject": {
+    "DESIGN.md rev 1": "f03d8091a3cb4de460e60666f22194a2b37a844a4c4ecbff3d4da062ce41cd7e"
+   },
+   "brief": "architecture/policy-observation-digests/design/REVIEW_BRIEF_R1.md",
+   "briefSha256": "b0caf537f233c555922ff2e23b85e4e3c8d276cc87e5db41d3101093bc1b1c81",
+   "findings": [
+    "D1-1",
+    "D1-2",
+    "D1-3",
+    "D1-4",
+    "D1-5",
+    "D1-6",
+    "D1-7",
+    "D1-8",
+    "D1-9",
+    "D1-10",
+    "D1-11",
+    "D1-12",
+    "D1-13",
+    "D1-14",
+    "D1-15",
+    "D1-16",
+    "D1-17",
+    "D1-18",
+    "D1-19"
+   ],
+   "severities": {
+    "MAJOR": 5,
+    "MINOR": 10,
+    "NOTE": 4
+   }
+  },
+  {
+   "review": "design round 2",
+   "record": "architecture/policy-observation-digests/design/review-round2.json",
+   "recordSha256": "7226f334e4327da6212d76a8c6851a3b3e4f8e6c44f62365c7325b705ee898e1",
+   "verdict": "CHANGES_REQUIRED",
+   "base": "26a8affb",
+   "subject": {
+    "DESIGN.md rev 2": "206f293b79c74dddab43dd7343c4d97fca626fd634fd2d6c7eba8431055829a0"
+   },
+   "brief": "architecture/policy-observation-digests/design/REVIEW_BRIEF_R2.md",
+   "briefSha256": "4e59dea57140f8814b675a8615978b03080aa1c8a3b56077499ac3e481493087",
+   "findings": [
+    "D2-1",
+    "D2-2",
+    "D2-3",
+    "D2-4",
+    "D2-5",
+    "D2-6",
+    "D2-7"
+   ],
+   "severities": {
+    "MAJOR": 1,
+    "MINOR": 4,
+    "NOTE": 2
+   }
+  },
+  {
+   "review": "design round 3",
+   "record": "architecture/policy-observation-digests/design/review-round3.json",
+   "recordSha256": "f684b90f6c231d7220f52f35bb8b388519facaaaf4d058a354295898e8690017",
+   "verdict": "PASS_FOR_CONTRACT",
+   "base": "26a8affb",
+   "subject": {
+    "DESIGN.md rev 3": "73cd9f6ddeab744b6b9c222204a9bdd4d0a0eef54e4c6f6321fe80bf28a9c083"
+   },
+   "brief": "architecture/policy-observation-digests/design/REVIEW_BRIEF_R3.md",
+   "briefSha256": "9dd961b0d6753ad1b2cf544a7a7ee23665b64952f9c829da8017fe608d68e0b4",
+   "findings": [
+    "D3-1",
+    "D3-2",
+    "D3-3",
+    "D3-4",
+    "D3-5",
+    "D3-6",
+    "D3-7"
+   ],
+   "severities": {
+    "MINOR": 2,
+    "NOTE": 5
+   }
+  },
+  {
+   "review": "contract round 1",
+   "record": "architecture/policy-observation-digests/review-round1.json",
+   "recordSha256": "6a7c55c4152b9619c3d9b26993e51ecbeb137949477f277e141815fe794cb28e",
+   "verdict": "CHANGES_REQUIRED",
+   "base": "30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7",
+   "subject": "candidate 1",
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R1.md",
+   "briefSha256": "970bb67a7bf0c1d1419c93fd8eefa9167614bdc964c17da1bac030099be3a8a6",
+   "findings": [
+    "C1-1",
+    "C1-2",
+    "C1-3",
+    "C1-4",
+    "C1-5",
+    "C1-6",
+    "C1-7",
+    "C1-8",
+    "C1-9",
+    "C1-10",
+    "C1-11"
+   ],
+   "severities": {
+    "MAJOR": 1,
+    "MINOR": 2,
+    "NOTE": 8
+   }
+  },
+  {
+   "review": "contract round 2",
+   "record": "architecture/policy-observation-digests/review-round2.json",
+   "recordSha256": "38c76f4559e0f8eb4ddf658682f96fa8daa30c8207db3d25001ac31156056a11",
+   "verdict": "PASS_FOR_ADOPTION",
+   "base": "30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7",
+   "subject": "candidate 2",
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R2.md",
+   "briefSha256": "c6ca3cffe9183a441231b234072da52b3bfbd6bf1e72020c1e84be3eba7e8169",
+   "findings": [
+    "C2-1",
+    "C2-2",
+    "C2-3"
+   ],
+   "severities": {
+    "NOTE": 3
+   }
+  },
+  {
+   "review": "contract round 3",
+   "record": "architecture/policy-observation-digests/review-round3.json",
+   "recordSha256": "92ca9a332b2cbddfbd92fd64df89d6e3d57c65f4e9c66ae881f7d4678a49749b",
+   "verdict": "PASS_FOR_ADOPTION",
+   "base": "30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7",
+   "subject": "candidate 3",
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R3.md",
+   "briefSha256": "a6deff5e0e4d93ffabf904bd4f46c630a05f68f89780213aab2e358bff1542b0",
+   "findings": [
+    "C3-1",
+    "C3-2"
+   ],
+   "severities": {
+    "NOTE": 2
+   }
+  },
+  {
+   "review": "contract round 4",
+   "record": "architecture/policy-observation-digests/review-round4.json",
+   "recordSha256": "e5f8f0fe94ebf12039255daf7663ac2d2e00f3309ed2ebc30c7499460bf4fb96",
+   "verdict": "PASS_FOR_ADOPTION",
+   "base": "30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7",
+   "subject": "candidate 4",
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R4.md",
+   "briefSha256": "51aa5b6dd4b10ed795ce1d446c7ed055f89ebbe61662c4b034f22c48082fa0e3",
+   "findings": [
+    "C4-1",
+    "C4-2"
+   ],
+   "severities": {
+    "NOTE": 2
+   }
+  }
+ ],
+ "briefRedactions": [
+  {
+   "brief": "architecture/policy-observation-digests/design/REVIEW_BRIEF_R1.md",
+   "reviewedSha256": "b0caf537f233c555922ff2e23b85e4e3c8d276cc87e5db41d3101093bc1b1c81",
+   "publishedSha256": "0ef80d824b5c23c8f0e7009d657cfcef246248eca01841c2960f484757c20e54",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/policy-observation-digests/design/REVIEW_BRIEF_R2.md",
+   "reviewedSha256": "4e59dea57140f8814b675a8615978b03080aa1c8a3b56077499ac3e481493087",
+   "publishedSha256": "21583900bdf11f06f65b766405bc12152c68ad551ec212b8a833c2bf85f41a20",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/policy-observation-digests/design/REVIEW_BRIEF_R3.md",
+   "reviewedSha256": "9dd961b0d6753ad1b2cf544a7a7ee23665b64952f9c829da8017fe608d68e0b4",
+   "publishedSha256": "90b3f1ba37e6c307365f161808c4d2442cca691e0a63704c4e38d980842c915e",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R1.md",
+   "reviewedSha256": "970bb67a7bf0c1d1419c93fd8eefa9167614bdc964c17da1bac030099be3a8a6",
+   "publishedSha256": "b42755352b00d26bd1ec15375ab6889ff970cd620a713404800181c8d1f90606",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R2.md",
+   "reviewedSha256": "c6ca3cffe9183a441231b234072da52b3bfbd6bf1e72020c1e84be3eba7e8169",
+   "publishedSha256": "cca0d8f31434934281ca2142e124a41e87e799e0275b75e7d9152f83e2cff87a",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R3.md",
+   "reviewedSha256": "a6deff5e0e4d93ffabf904bd4f46c630a05f68f89780213aab2e358bff1542b0",
+   "publishedSha256": "f52f507fceda2768a995f49c625080633ab68155c6788b5b2a5e66968597aecc",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/policy-observation-digests/REVIEW_BRIEF_R4.md",
+   "reviewedSha256": "51aa5b6dd4b10ed795ce1d446c7ed055f89ebbe61662c4b034f22c48082fa0e3",
+   "publishedSha256": "4e8eeb929ed6c5f41b01dcf7ba1ada1c7acb4ccec9455699570c6b99831f2e73",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  }
+ ],
+ "carried": [
+  {
+   "item": "C1-1 (contract review round 1, ruled binding)",
+   "to": "this packet's layer test",
+   "action": "tests/test_policy_observation_digests.py asserts, with no skip, expected-failure mark or import guard, validate_messages(...) == [] and validate_profile(...) == [] on the complete positive, and that each refuses when one preexisting reference changes (README section 10)"
+  },
+  {
+   "item": "D3-1 and C1-7 (the capture gate's inputs)",
+   "to": "HE-004-I01B (R10)",
+   "action": "the capture view records each completed set's own scheduled start on the monotonic clock, and the I01 service receives a millisecond wall reading of the same clock as set_started_ms"
+  },
+  {
+   "item": "Q-CB-11 (a)",
+   "to": "HE-004-I01B (R10)",
+   "action": "the capture verdicts carry no record digest; I01B's design states how each set is bound to the record"
+  },
+  {
+   "item": "Section 6 (the configuration successor)",
+   "to": "HE-004-I01B and HE-008",
+   "action": "the successor carries the signed expected values and the three sealed admission values (ipFamily, serviceCIDR, defaultTolerationSeconds); HE-008 computes them with this model at enrollment"
+  },
+  {
+   "item": "Q-CB-15 (a) and contract review round 2",
+   "to": "the List-form revision (several NetworkPolicies)",
+   "action": "add the sort vector for networkPolicies (round-1 mutant 22), undetectable while v1 refuses a second NetworkPolicy (NP-02, NE-05)"
+  },
+  {
+   "item": "The residuals R-ADM-LIST, R-PSA-CONFIG, R-NET-DATAPATH, R-NET-AGENT, R-DEFAULTS, R-RBAC-COMPLETE and R-BROKER-LIVE",
+   "to": "T04 (and HE-005 where named)",
+   "action": "each holds its named check in README section 8; none is claimed here"
+  },
+  {
+   "item": "C3-1 (contract review round 3, NOTE)",
+   "to": "a later contract revision",
+   "action": "no vector pins rbacClosureDigest's 'rbac: malformed input' route; text-only (the value refuses either way), and R-C2 (a) admitted only text for C2-3"
+  },
+  {
+   "item": "C3-2 (contract review round 3, NOTE)",
+   "to": "kept as adopted",
+   "action": "the builder's two vector definitions and its R-C2 quote check follow from R-C2 (a); no change"
+  },
+  {
+   "item": "C4-1 (contract review round 4, NOTE)",
+   "to": "a later contract revision",
+   "action": "the model checks that i06 has exactly its three member names, not that their content matches the pinned files; wrong content refuses 'I06 closure check not passed'; text-only, the caller's duty as written"
+  },
+  {
+   "item": "C4-2 (contract review round 4, NOTE)",
+   "to": "a later contract revision",
+   "action": "vectors.json does not pin the closure's namespace-first order or the i06 clause (its rows carry no i06); the D5a oracle tests cover both; R-ORC (a) admitted no vector change"
+  }
+ ],
+ "slips": [
+  {
+   "id": "MON-DIG-LSTREE",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "the dossier agent listed about ten named directories one level deep; no excluded path and no root; later briefs say git grep -l or exact paths only"
+  },
+  {
+   "id": "MON-DIG-R3-BRIEF-NAME",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "design review round 3's brief named its output after round 2; the launch prompt said round 3 and nothing was overwritten; briefs' output names are checked before hashing"
+  },
+  {
+   "id": "MON-DIG-BUILD-ETP-IMPORT",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "while trying VPO in a scratch copy, the builder's import chain copied and executed scripts/validate_enforcement_test_plan.py; it was never opened and was deleted; the contract does not depend on it; VPO is imported only in the full pre-check and verify"
+  },
+  {
+   "id": "MON-DIG-BUILD-LSTREE",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "one git show of a directory printed its entry names into a scratch file, deleted unread"
+  },
+  {
+   "id": "MON-DIG-BUILD-NOPAUSE",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "one early build command ran without the PAUSE prefix and timeout; it wrote one helper"
+  },
+  {
+   "id": "MON-DIG-CR1-WC",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "contract review round 1 counted lines of four launch records outside its list; nothing opened"
+  },
+  {
+   "id": "MON-DIG-CR2-SHOWS",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "contract review round 2 used git show -s on two commits (metadata) and discarded a jq probe that rounded a float; git show -s is now forbidden in review briefs"
+  },
+  {
+   "id": "MON-DIG-ORACLE-GREP",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "the oracle agent's first grep of the model printed its import lines and one-line constants with its def lines; no function body was read and no expected value comes from them"
+  },
+  {
+   "id": "MON-DIG-ORACLE-SLIPS",
+   "ruling": "KEEP, the lane monitor under owner delegation, 2026-10-22",
+   "what": "the oracle agent read only def lines and docstring openers of three admission v3 functions to call them, listed folder names only, and deleted a stderr file after checking it"
+  },
+  {
+   "id": "MON-DIG-CR4-BG",
+   "ruling": "disclosed in contract review round 4's record; reported to the lane monitor, 2026-10-22",
+   "what": "one reviewer command ran in the background and waited on a PAUSE/HOLD file; the reviewer stopped it and re-ran the work in the foreground with the prefix, so one process ran at a time"
+  }
+ ],
+ "nonClaims": [
+  "DATA_CHECK_ONLY: the model returns errors or derived values, never a protected handle or native acceptance.",
+  "No R10 file changes in this packet; HE-004-I01B vendors the four rows edge v10 registers.",
+  "The I01 v1 wire (channel schema, vectors, readiness document) is unchanged.",
+  "VPO's validate_messages on the complete positive runs in this packet's layer test, in the pre-check and verify only (Q-CB-6 (b)); no builder or reviewer imported VPO after MON-DIG-BUILD-ETP-IMPORT."
+ ]
+}

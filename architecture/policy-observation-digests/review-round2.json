@@ -1,0 +1,865 @@
+{
+  "subject": {
+    "candidate": 2,
+    "files": {
+      "architecture/policy-observation-digests/README.md": "935a61084c2a7e07b317e60a47db02ae178d273f2770e511cdc5a28d42b79a8e",
+      "architecture/policy-observation-digests/definitions.json": "1a97df323be20345d7bbf836e019d0eafc32d3b906e8e19254c0d45c735e4f4a",
+      "architecture/policy-observation-digests/vectors.json": "d34d1990e7919803c9ef9b18fcae76c9c3fd4caa11296c416ac38d25adb58e5f",
+      "scripts/policy_observation_digests.py": "516231ef47faefeb9369dc0a935c24c6680e4a3cc439a40af7f027dd55eb64e5",
+      "architecture/artifact-edges/operator-harness-engineering-v10.json": "f8264a8be26dafb58f218f7c6ecb4d23d41f12f3884f8d0ba7b23df1e9f7b615",
+      "architecture/artifact-edges/README-v10.md": "ba18b2a818ac688ef9cb88d05cd0d876e40ccbe93de09b76bee716a3eb8627ec"
+    }
+  },
+  "reviewer": "independent agent",
+  "model": "claude-opus-5-5",
+  "brief": {
+    "path": "tools/w03/digest/CONTRACT_REVIEW_BRIEF_R2.md",
+    "sha256": "c6ca3cffe9183a441231b234072da52b3bfbd6bf1e72020c1e84be3eba7e8169"
+  },
+  "verdict": "PASS_FOR_ADOPTION",
+  "verdictNote": "Candidate 2 resolves all eleven round-1 findings as the record required and the monitor accepted. C1-1's wording is in README sections 10 and 11 and in _check_complete's docstring; C1-4 has all four vectors; C1-6's four texts are dropped and shown to be unreachable; C1-8 leaves no status line. Every change from candidate 1 maps to a C1 finding, R-C1-9 or Q-CB-14. The model's derivation code is unchanged, and all 135 candidate-1 vectors are byte-identical. Of the 11 round-1 model survivors, 10 are now killed. The one left, the unsorted networkPolicies list, is equivalent in v1: NP-02 and NE-05 refuse two NetworkPolicies before the sort, on every path. All 20 helper mutants behave as in round 1 (18 rejected, 2 equivalent). The 67 attack cases tally 20/2/0, 18/4/0 and 18/5/0, round 1's figures. build_contract.py's git helper enforces R-C1-9 (a) exactly; two fresh runs are byte-identical to STAGE. VPC accepts the complete positive. Edge v10 and hygiene hold. The three findings are NOTEs. Each is optional or a precision fix that can be carried: a sharper G-22 (C2-1), a vector for the ClusterRoleBinding-first order (C2-2), and two refusal lists that are not exhaustive (C2-3, unchanged since candidate 1).",
+  "round1": [
+    {
+      "id": "C1-1",
+      "status": "resolved",
+      "note": "README section 10 has the record's bullet verbatim, after the complete-positive bullet. It names the layer test (tests/test_policy_observation_digests.py), and assertions (1) validate_messages with CS, (2) validate_profile with PPS and (3) each one's refusal on a changed observedDigest, 'with no skip, expected-failure mark or import guard', and 'a layer run that does not execute them fails'. Section 11 has a reader-duty bullet that cites it. _check_complete's docstring names the test and its assertions. On paper the wording fits VPO: validate_messages(binding, request, observation, profile, schema, now, previous=None) at 30f41e6f (HO:VPO:82). For (3), a changed observedDigest breaks profileDigest first, so VPO returns 'invalid protected observation data'. For VPC, (3) was run (see checks). TPO already imports VPO, so the test adds no new import to the pre-check. Cosmetic only: the section-10 bullet is one unwrapped line of about 900 characters, where the README otherwise wraps at 120. The bytes are final either way."
+    },
+    {
+      "id": "C1-2",
+      "status": "resolved",
+      "note": "G-21 (answer.monotonicMs 599999 = latest scheduled start - 1, wall age 30 s) and G-22 (an incomplete set at +60 s, answered 100 s after the completed set's start, 40 s after the incomplete entry's) each expect all three 'capture set too old'. Both pass, and G-21 alone kills the negative-monotonic-age mutant (re-run with G-21 removed: it survives). G-22 follows the record's wording but sets the wall age to 100 s too, so it does not catch a port that reads only the monotonic start from the newer entry. G-16 still catches that port (C2-1, NOTE)."
+    },
+    {
+      "id": "C1-3",
+      "status": "resolved",
+      "note": "MB-07 (rlimitCore deleted), MB-08 (cgroup.pidsMax deleted) and MB-09 (an extra member) each refuse 'mutationBroker: broker row incomplete'. They kill all three row mutants: extras admitted (MB-09), only the 14 document members required (MB-07, in both the strict and the loose form), cgroup unchecked (MB-08)."
+    },
+    {
+      "id": "C1-4",
+      "status": "resolved",
+      "note": "All four vectors, as the monitor ruled: NP-15 (peer {ipBlock, podSelector}), NP-16 (endPort \"8080\"), NP-17 (rule with an extra member), NP-18 (port with an extra member). Each refuses 'networkPolicy: selector form outside v1' and kills its round-1 survivor (36, 39, 41, 42)."
+    },
+    {
+      "id": "C1-5",
+      "status": "resolved",
+      "note": "RB-31: ClusterRoleBindings 'z' (subject kind Robot) then 'a' (dangling roleRef) give 'rbac: role does not exist' for rbac and rbacClosureDigest. It kills the sort-removed and reversed-sort mutants (both report 'rbac: malformed subject kind'). The ClusterRoleBinding-before-RoleBinding part of B1's order stays unpinned (C2-2, NOTE)."
+    },
+    {
+      "id": "C1-6",
+      "status": "resolved",
+      "note": "The four texts are absent from refusalTexts (90 texts, was 94) and from every per-key list (the model's UNREACHABLE set). README section 9 states why. Re-probed in WORK: a float or a 2^60 integer in an RBAC rule list, a float name or a float subject name gives B1's malformed texts; a float in aggregationRule gives the aggregation refusal; a float unread member or subject apiGroup is never read. document_bound is the only raiser of '<key>: float refused' and 'integer out of range', and both RBAC documents hold only strings, booleans, lists and objects."
+    },
+    {
+      "id": "C1-7",
+      "status": "resolved",
+      "note": "README 3.3 'The port' now ends: 'The answer's wall time is a millisecond reading of the same wall clock as set_started_ms, handed to the I01 service with the view.' definitions captureGate.dataShape.answer says the same for wallMs and names monotonicMs' clock. The R10 anchors hold at dd7422ed: host-enforcement/crates/observer/src/capture.rs:1250-1251 (set_started_ms = wall, compared with valid_from x 1000); client.rs:274-275 (the I01 service gets the wire's wall second)."
+    },
+    {
+      "id": "C1-8",
+      "status": "resolved",
+      "note": "No status line in either file. Contract README line 3: 'Adoption is recorded in the packet's status record, not here.' README-v10 line 3: 'Review rounds and adoption are recorded in the packet's status record, not here.' A scan for 'Status:', 'AWAITING', 'CANDIDATE_<n>' and 'ROUND<n>_' finds nothing in the six files. Edge v10's three contract rows carry the sha256 of the final STAGE bytes."
+    },
+    {
+      "id": "C1-9",
+      "status": "resolved",
+      "note": "R-C1-9 (a) is implemented in git_argv, the only argv builder (see checks). Two determinism runs in fresh WORK directories are byte-identical to STAGE."
+    },
+    {
+      "id": "C1-10",
+      "status": "resolved",
+      "note": "RB-28 (two non-resource rules) is the reference. RB-29 (duplicated across a second ClusterRole and reordered) has the same digest, and RB-30 (a changed verb) a different one. RC-11 (an impersonate grant on users to the namespace ServiceAccount on the closure snapshot) gives 'rbacClosureDigest: I06 closure check not passed', and rbac differs from RC-00. BUILD_REPORT_C2 section 7 maps R1-7 to RC-11 (with RC-03) and R2-38 to RB-29 (with RB-30)."
+    },
+    {
+      "id": "C1-11",
+      "status": "resolved",
+      "note": "README 5.3: 'This part refuses with networkPolicy's texts, including \"networkPolicy: malformed input\" and networkPolicy's exactness texts (section 3.2)'. The closure digest has the analogous gap for 'rbac: malformed input', unchanged since candidate 1 (C2-3, NOTE)."
+    }
+  ],
+  "findings": [
+    {
+      "id": "C2-1",
+      "severity": "NOTE",
+      "location": "vectors G-22 (and G-16); README 3.3 item 2; D3-1",
+      "finding": "G-22 sets the answer 100 s after the completed set's start on both clocks, so the wall age alone refuses it. It therefore does not catch the monotonic-only form of D3-1's hazard: a port that takes the monotonic start from the newer (advanced) entry while the wall start stays set_started_ms. Mutants P1 (monotonic start from the newest set entry) and P3 (the largest scheduled start of any entry) survive with G-16 removed and die only at G-16, through the negative-age rule, because G-16's incomplete set lies after its answer. The both-clocks mutant P2 does die at G-22. No security outcome changes: the mutants die on the current vectors, and an honest wall clock bounds the age. Still, the monotonic start rule is pinned only through G-16's negative age, the incidental route round 1 named.",
+      "requiredChange": "Optional: add a vector that is G-22 with the wall clock 40 s back, answer {monotonicMs: 700000, wallMs: startedWallMs of the completed set + 60000}, expecting all three 'capture set too old'. Probed in WORK as G-22b: the model refuses it (319 checks pass with it), and it kills P1 and P3 with G-16 removed."
+    },
+    {
+      "id": "C2-2",
+      "severity": "NOTE",
+      "location": "README 4.5 / definitions b1Refusals.order ('ClusterRoleBindings by name, then RoleBindings by namespace and name'); model _rbac bindings.sort; RB-31",
+      "finding": "RB-31 pins the name order among ClusterRoleBindings. A mutant that sorts all bindings by name alone, dropping 'ClusterRoleBindings before RoleBindings', survives all 315 checks (P4). It changes only which refusal text is reported when a RoleBinding and a ClusterRoleBinding both refuse differently, not whether the snapshot refuses. VPO's external text is unaffected.",
+      "requiredChange": "Optional: a vector with a RoleBinding 'a' in the qualification namespace (dangling roleRef) and a ClusterRoleBinding 'b' (subject kind Robot), expecting 'rbac: malformed subject kind'. Probed in WORK as RB-32: the model gives that text, and P4 gives 'rbac: role does not exist'."
+    },
+    {
+      "id": "C2-3",
+      "severity": "NOTE",
+      "location": "definitions enforcementDigests.rbacClosureDigest.refusals and captureGate.refusals; README 5.2 (unchanged since candidate 1)",
+      "finding": "Two refusal lists are not exhaustive. (1) rbacClosureDigest can refuse 'rbac: malformed input' when an RBAC list is missing or not a list: _rbac's shape check (model lines 395-400) runs under the key 'rbac'. Probed: clusterRoles = \"x\" on the closure snapshot. That text is pinned in refusalTexts and in rbac's list, but not in rbacClosureDigest's list, and README 5.2 does not say the closure digest inherits it. README 3.4's '<key>: malformed input' would lead a port to emit 'rbacClosureDigest: malformed input'. This is C1-11's class for the network digest. (2) captureGate.refusals omits '<key>: malformed input', which the gate's own data-shape check raises (G-20 pins all three). Those texts are in each gated key's own list. Text-level only: the value refuses either way, and VPO's external text is unchanged.",
+      "requiredChange": "Add 'rbac: malformed input' to rbacClosureDigest's refusals, and a clause in README 5.2 like C1-11's: the closure refuses with rbac's texts, including 'rbac: malformed input' and B1's. Optionally add the three gate malformed texts to captureGate.refusals."
+    }
+  ],
+  "mutations": {
+    "helpers": [
+      {
+        "function": "canonical",
+        "mutation": "sort_keys=False",
+        "rejectedBy": "helper vector CAN-01"
+      },
+      {
+        "function": "canonical",
+        "mutation": "ensure_ascii=True",
+        "rejectedBy": "helper vector CAN-02"
+      },
+      {
+        "function": "canonical",
+        "mutation": "separators=(\", \", \":\")",
+        "rejectedBy": "helper vector CAN-01"
+      },
+      {
+        "function": "canonical",
+        "mutation": "trailing newline: .encode() + b\"\\n\"",
+        "rejectedBy": "helper vector CAN-01"
+      },
+      {
+        "function": "canonical",
+        "mutation": "allow_nan=True",
+        "equivalent": "equivalent: allow_nan affects only non-finite floats. The model's parser refuses NaN and Infinity (parse_constant), and document_bound's float pre-walk refuses every float before a document reaches canonical. All 315 checks pass under the mutant."
+      },
+      {
+        "function": "digest",
+        "mutation": "hashlib.sha3_256",
+        "rejectedBy": "helper vector DIG-01"
+      },
+      {
+        "function": "digest",
+        "mutation": "uppercase hex",
+        "rejectedBy": "helper vector DIG-01"
+      },
+      {
+        "function": "digest",
+        "mutation": "\"sha256:\" prefix added",
+        "rejectedBy": "helper vector DIG-01"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "depth <= 17",
+        "rejectedBy": "helper vector BND-06"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "depth <= 15",
+        "rejectedBy": "helper vector BND-05"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "budget 262145",
+        "rejectedBy": "helper vector BND-08"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "budget 262143",
+        "rejectedBy": "helper vector BND-07"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "magnitude 9007199254740992",
+        "rejectedBy": "helper vector BND-02"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "magnitude 9007199254740990",
+        "rejectedBy": "helper vector BND-01"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "abs dropped",
+        "rejectedBy": "helper vector BND-04"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "strings charged 1",
+        "rejectedBy": "helper vector BND-08"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "keys not charged",
+        "rejectedBy": "helper vector BND-08"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "budget[0] > 0",
+        "rejectedBy": "helper vector BND-07"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "integer message changed (\"integer too large\")",
+        "rejectedBy": "helper vector BND-02"
+      },
+      {
+        "function": "_bounded",
+        "mutation": "float admitted as data",
+        "equivalent": "equivalent: the model calls _bounded only from document_bound, whose float pre-walk refuses every float first. All 315 checks pass under the mutant."
+      }
+    ],
+    "round1Survivors": [
+      {
+        "point": "gate clock",
+        "mutation": "negative monotonic age admitted",
+        "killedBy": "vector G-21 gate mutationBroker (G-21 alone: with G-21 removed it survives)"
+      },
+      {
+        "point": "sort networkPolicies",
+        "mutation": "unsorted (served order); also tried: reverse canonical order",
+        "survived": "equivalent in v1: exactly one NetworkPolicy reaches the sort. The count refusal (model line 500) runs before the documents are built and before sorted() (line 634), on the only path into networkEnforcementDigest, and NP-02/NE-05 pin it (Q-CB-15)"
+      },
+      {
+        "point": "sort bindings",
+        "mutation": "B1's binding order not applied (sort removed); also tried: reversed",
+        "killedBy": "vector RB-31 rbac refusal ('rbac: malformed subject kind' instead of 'rbac: role does not exist')"
+      },
+      {
+        "point": "networkPolicy form",
+        "mutation": "a peer needs ipBlock but may carry selectors",
+        "killedBy": "vector NP-15 networkPolicy"
+      },
+      {
+        "point": "networkPolicy form",
+        "mutation": "endPort unchecked",
+        "killedBy": "vector NP-16 networkPolicy"
+      },
+      {
+        "point": "networkPolicy form",
+        "mutation": "rule members not closed",
+        "killedBy": "vector NP-17 networkPolicy"
+      },
+      {
+        "point": "networkPolicy form",
+        "mutation": "port members not closed",
+        "killedBy": "vector NP-18 networkPolicy"
+      },
+      {
+        "point": "podSecurityLabels",
+        "mutation": "prefix without its slash",
+        "killedBy": "vector AP-14 admissionPolicy digest"
+      },
+      {
+        "point": "BROKER members",
+        "mutation": "row check: extra members admitted",
+        "killedBy": "vector MB-09 mutationBroker"
+      },
+      {
+        "point": "BROKER members",
+        "mutation": "row check: only the 14 document members required (strict and loose forms)",
+        "killedBy": "vector MB-07 mutationBroker"
+      },
+      {
+        "point": "BROKER members",
+        "mutation": "cgroup members not checked",
+        "killedBy": "vector MB-08 mutationBroker"
+      }
+    ],
+    "round1KillsSample": [
+      {
+        "mutation": "gate bound: monotonic bound + 1 ms",
+        "killedBy": "G-08"
+      },
+      {
+        "mutation": "gate clock: wall clock only",
+        "killedBy": "G-08"
+      },
+      {
+        "mutation": "gate clock: negative wall age admitted",
+        "killedBy": "G-11"
+      },
+      {
+        "mutation": "gate set: incomplete sets counted",
+        "killedBy": "G-16"
+      },
+      {
+        "mutation": "gate set: first completed set instead of the latest",
+        "killedBy": "G-05"
+      },
+      {
+        "mutation": "sort rules: sorted, not deduplicated",
+        "killedBy": "RB-11"
+      },
+      {
+        "mutation": "networkPolicy form: selector peers admitted",
+        "killedBy": "NP-07"
+      },
+      {
+        "mutation": "networkPolicy form: non-empty podSelector admitted",
+        "killedBy": "NP-06"
+      },
+      {
+        "mutation": "closure shape: closure gate skipped",
+        "killedBy": "RC-01"
+      },
+      {
+        "mutation": "non-resource scope: always CLUSTER",
+        "killedBy": "RB-26"
+      },
+      {
+        "mutation": "non-resource scope: entries dropped",
+        "killedBy": "P-UNIT"
+      },
+      {
+        "mutation": "exactness: float pre-walk removed",
+        "killedBy": "helper vector BND-09"
+      },
+      {
+        "mutation": "BROKER members: capabilities left out of the document (projection only)",
+        "killedBy": "P-UNIT"
+      }
+    ],
+    "reviewerProbes": [
+      {
+        "mutation": "P1: gate monotonic start from the newest set entry, wall start from the latest completed set",
+        "killedBy": "G-16 only (survives with G-16 removed; G-22 does not kill it; probe G-22b does), C2-1"
+      },
+      {
+        "mutation": "P2: both starts from the newest set entry",
+        "killedBy": "G-16, and G-22 independently"
+      },
+      {
+        "mutation": "P3: monotonic start = the largest scheduled start of any entry",
+        "killedBy": "G-16 only (as P1), C2-1"
+      },
+      {
+        "mutation": "P4: bindings sorted by name only (ClusterRoleBinding-first dropped)",
+        "survived": "all 315 checks pass; probe RB-32 kills it, C2-2"
+      },
+      {
+        "mutation": "P5: B1 binding order reversed",
+        "killedBy": "RB-31"
+      },
+      {
+        "mutation": "count check in _network_documents removed",
+        "killedBy": "NE-05 (two NetworkPolicies reach the sort and yield a digest)"
+      },
+      {
+        "mutation": "one-object count check in the projection removed",
+        "killedBy": "RQ-01 first (shared with networkPolicy's NP-02)"
+      }
+    ]
+  },
+  "attackCases": {
+    "tallies": {
+      "round1": {
+        "refused": 20,
+        "residual": 2,
+        "PASSES-WRONGLY": 0,
+        "contractReviewRound1": "20/2/0"
+      },
+      "round2": {
+        "refused": 18,
+        "residual": 4,
+        "PASSES-WRONGLY": 0,
+        "contractReviewRound1": "18/4/0"
+      },
+      "round3": {
+        "refused": 18,
+        "residual": 5,
+        "PASSES-WRONGLY": 0,
+        "contractReviewRound1": "18/5/0"
+      }
+    },
+    "basis": "Every candidate-1 vector is byte-identical in candidate 2 (per-vector content hashes), the model's derivation code is unchanged (the diff touches only the refusal-text lists, the gate's dataShape descriptions and one docstring), and the RESIDUALS are unchanged, so every round-1 outcome still holds. All 135 old and 15 new vectors pass in the 315-check replay. Seven mappings gain or change vectors (below). Every vector id cited (85) exists in candidate 2.",
+    "cases": [
+      {
+        "set": "round1",
+        "case": "Second ResourceQuota",
+        "outcome": "refused",
+        "vector": "RQ-02"
+      },
+      {
+        "set": "round1",
+        "case": "Changed LimitRange spec, equal digest",
+        "outcome": "refused",
+        "vector": "LR-06, RQ-06; floats RQ-07, integers RQ-08/RQ-09"
+      },
+      {
+        "set": "round1",
+        "case": "Aggregated ClusterRole bound in the namespace or by a ClusterRoleBinding",
+        "outcome": "refused",
+        "vector": "RB-09, RB-10, OB-11"
+      },
+      {
+        "set": "round1",
+        "case": "Aggregated ClusterRole bound only elsewhere, rules change by labels",
+        "outcome": "refused",
+        "vector": "RC-09: enters the closure with its stored rules, so a change differs from the signed closure value"
+      },
+      {
+        "set": "round1",
+        "case": "NetworkPolicy added beside the bound one",
+        "outcome": "refused",
+        "vector": "NP-02, NE-05"
+      },
+      {
+        "set": "round1",
+        "case": "ClusterRoleBinding added that reaches the namespace",
+        "outcome": "refused",
+        "vector": "RC-04, RB-14"
+      },
+      {
+        "set": "round1",
+        "case": "RoleBinding grant moved to a ClusterRoleBinding",
+        "outcome": "refused",
+        "vector": "RB-14, RC-10"
+      },
+      {
+        "set": "round1",
+        "case": "Impersonation or bind/escalate grant to a namespace subject",
+        "outcome": "refused",
+        "vector": "RC-11 (an impersonate grant on users to the namespace ServiceAccount: I06 closure check not passed; rbac differs from RC-00), RC-03 (bind/escalate on the same I06 closure path)"
+      },
+      {
+        "set": "round1",
+        "case": "ClusterRoleBinding granting nonResourceURLs [\"*\"]",
+        "outcome": "refused",
+        "vector": "RC-04"
+      },
+      {
+        "set": "round1",
+        "case": "Namespace relabelled to match a namespaceSelector peer",
+        "outcome": "refused",
+        "vector": "NP-07; NP-15 (a selector beside ipBlock refuses)"
+      },
+      {
+        "set": "round1",
+        "case": "Pod labels outside a podSelector",
+        "outcome": "refused",
+        "vector": "NP-06, NP-08; NP-15"
+      },
+      {
+        "set": "round1",
+        "case": "Broker row matches, live OBSERVED field differs",
+        "outcome": "refused",
+        "vector": "G-04, OB-07"
+      },
+      {
+        "set": "round1",
+        "case": "Broker image or seccomp filter differs",
+        "outcome": "residual",
+        "vector": "R-BROKER-LIVE; MB-03 shows seccompFilterDigest bound in the document"
+      },
+      {
+        "set": "round1",
+        "case": "API-registered ValidatingAdmissionPolicy exists",
+        "outcome": "refused",
+        "vector": "AP-04, AP-05, AP-07"
+      },
+      {
+        "set": "round1",
+        "case": "admissionPolicy rendered from other bytes",
+        "outcome": "refused",
+        "vector": "AP-01, AP-02, AP-03"
+      },
+      {
+        "set": "round1",
+        "case": "Network agent flags changed",
+        "outcome": "residual",
+        "vector": "R-NET-DATAPATH; no vector (unobservable)"
+      },
+      {
+        "set": "round1",
+        "case": "Record without NETWORK_POLICY_AGENT",
+        "outcome": "refused",
+        "vector": "NE-01, NE-02"
+      },
+      {
+        "set": "round1",
+        "case": "hostPreflightDigest while the host no longer matches",
+        "outcome": "refused",
+        "vector": "G-02, G-18, G-19, OB-07"
+      },
+      {
+        "set": "round1",
+        "case": "Echo: synthetic identities from the binding",
+        "outcome": "refused",
+        "vector": "OB-02, OB-03, OB-05"
+      },
+      {
+        "set": "round1",
+        "case": "Echo: identities and digests from the binding",
+        "outcome": "refused",
+        "vector": "OB-02..OB-05, OB-08, OB-12"
+      },
+      {
+        "set": "round1",
+        "case": "mutationBroker from the broker binding",
+        "outcome": "refused",
+        "vector": "OB-06, MB-06"
+      },
+      {
+        "set": "round1",
+        "case": "enforce-mountable-secrets annotation",
+        "outcome": "refused",
+        "vector": "SA-02"
+      },
+      {
+        "set": "round2",
+        "case": "Capture view expired",
+        "outcome": "refused",
+        "vector": "G-14"
+      },
+      {
+        "set": "round2",
+        "case": "Slot passed earlier, not now",
+        "outcome": "refused",
+        "vector": "G-17, G-05"
+      },
+      {
+        "set": "round2",
+        "case": "Only some slots ran",
+        "outcome": "refused",
+        "vector": "G-02, G-18, G-19"
+      },
+      {
+        "set": "round2",
+        "case": "Host change after the snapshot, quiet API",
+        "outcome": "refused",
+        "vector": "G-05, OB-07"
+      },
+      {
+        "set": "round2",
+        "case": "Capture sets stop (stale view)",
+        "outcome": "refused",
+        "vector": "G-07, G-08, G-10, OB-10"
+      },
+      {
+        "set": "round2",
+        "case": "Pinned hash rendered, loaded directory has a second file",
+        "outcome": "refused",
+        "vector": "AP-02 (the loaded hash differs)"
+      },
+      {
+        "set": "round2",
+        "case": "Successor's sealed values differ from the release's",
+        "outcome": "refused",
+        "vector": "AP-03"
+      },
+      {
+        "set": "round2",
+        "case": "Pod Security label on the qualification namespace",
+        "outcome": "refused",
+        "vector": "AP-09, AP-11"
+      },
+      {
+        "set": "round2",
+        "case": "Pod Security label on another namespace",
+        "outcome": "residual",
+        "vector": "outside the I01 binding (I06 v2 N6); AP-10 shows no effect"
+      },
+      {
+        "set": "round2",
+        "case": "PodSecurity exemption or lowered default",
+        "outcome": "residual",
+        "vector": "R-PSA-CONFIG; no vector"
+      },
+      {
+        "set": "round2",
+        "case": "ipBlock peer with except",
+        "outcome": "refused",
+        "vector": "NP-11 (admitted; digest differs from the default-deny binding)"
+      },
+      {
+        "set": "round2",
+        "case": "Ingress rule with no from",
+        "outcome": "refused",
+        "vector": "NP-12"
+      },
+      {
+        "set": "round2",
+        "case": "policyTypes change",
+        "outcome": "refused",
+        "vector": "NP-13"
+      },
+      {
+        "set": "round2",
+        "case": "ClusterRoleBinding to a ClusterRole with namespaced rules",
+        "outcome": "refused",
+        "vector": "RB-14, RC-10"
+      },
+      {
+        "set": "round2",
+        "case": "RoleBinding to a ClusterRole here and elsewhere",
+        "outcome": "refused",
+        "vector": "RB-15, RC-05"
+      },
+      {
+        "set": "round2",
+        "case": "RoleBinding elsewhere to a ClusterRole with nonResourceURLs",
+        "outcome": "refused",
+        "vector": "RC-06"
+      },
+      {
+        "set": "round2",
+        "case": "Non-resource rules duplicated or reordered",
+        "outcome": "refused",
+        "vector": "RB-29 (duplicated across a second ClusterRole and reordered: RB-28 digest), RB-30 (a verb change alters it)"
+      },
+      {
+        "set": "round2",
+        "case": "Grant moved between same-named ServiceAccounts",
+        "outcome": "refused",
+        "vector": "RB-12/RB-13, RC-07/RC-08"
+      },
+      {
+        "set": "round2",
+        "case": "API object with the suffix before the guard",
+        "outcome": "refused",
+        "vector": "AP-05"
+      },
+      {
+        "set": "round2",
+        "case": "Echo: fixed identities",
+        "outcome": "refused",
+        "vector": "OB-02, OB-03, OB-05"
+      },
+      {
+        "set": "round2",
+        "case": "Echo: agent record values",
+        "outcome": "residual",
+        "vector": "R-NET-AGENT; NE-03 shows they stay bound"
+      },
+      {
+        "set": "round2",
+        "case": "Echo: BROKER endpoint ids and executableLabel",
+        "outcome": "residual",
+        "vector": "R-BROKER-LIVE; P-UNIT's document carries them"
+      },
+      {
+        "set": "round3",
+        "case": "Set fails between two answers",
+        "outcome": "refused",
+        "vector": "G-05 against G-06"
+      },
+      {
+        "set": "round3",
+        "case": "Cycle escalates, no set",
+        "outcome": "refused",
+        "vector": "G-09, G-10; G-22 (a later incomplete set does not refresh the age)"
+      },
+      {
+        "set": "round3",
+        "case": "Re-snapshot up to 120 s",
+        "outcome": "refused",
+        "vector": "G-10, OB-10"
+      },
+      {
+        "set": "round3",
+        "case": "Wall clock stepped back > 90 s",
+        "outcome": "refused",
+        "vector": "G-11, G-12; G-08 (monotonic over the bound with the wall age in bound); G-21 (negative monotonic age)"
+      },
+      {
+        "set": "round3",
+        "case": "Wall clock stepped forward",
+        "outcome": "refused",
+        "vector": "G-13; expiry G-14"
+      },
+      {
+        "set": "round3",
+        "case": "Answer during a set",
+        "outcome": "refused",
+        "vector": "not possible in R10 (single-threaded); G-16"
+      },
+      {
+        "set": "round3",
+        "case": "Host change between sets, or reverted",
+        "outcome": "residual",
+        "vector": "accepted sampling window (R3-B, README 3.3); no vector"
+      },
+      {
+        "set": "round3",
+        "case": "Renamed static admission object",
+        "outcome": "refused",
+        "vector": "AP-05, AP-03"
+      },
+      {
+        "set": "round3",
+        "case": "API object with a rendered name, or a policy with a binding's name",
+        "outcome": "residual",
+        "vector": "AP-08 (rendered (kind, name) admitted, R-ADM-LIST); the kind swap now refuses, AP-06"
+      },
+      {
+        "set": "round3",
+        "case": "Binding whose policyName points elsewhere",
+        "outcome": "refused",
+        "vector": "AP-07; a rendered name falls to the case above"
+      },
+      {
+        "set": "round3",
+        "case": "ServiceAccount subject with a namespace",
+        "outcome": "refused",
+        "vector": "RB-12, RB-15"
+      },
+      {
+        "set": "round3",
+        "case": "ServiceAccount subject without a namespace",
+        "outcome": "refused",
+        "vector": "P-UNIT, RB-02, RB-01"
+      },
+      {
+        "set": "round3",
+        "case": "Group or User subject; User named like a ServiceAccount",
+        "outcome": "refused",
+        "vector": "RB-27; P-UNIT (Group)"
+      },
+      {
+        "set": "round3",
+        "case": "Non-resource rule through a RoleBinding in the namespace",
+        "outcome": "refused",
+        "vector": "RB-26"
+      },
+      {
+        "set": "round3",
+        "case": "Port with endPort",
+        "outcome": "refused",
+        "vector": "NP-11; NP-16 (a non-integer endPort refuses)"
+      },
+      {
+        "set": "round3",
+        "case": "Port as a string of digits",
+        "outcome": "refused",
+        "vector": "NP-10"
+      },
+      {
+        "set": "round3",
+        "case": "Ports entry with no port",
+        "outcome": "refused",
+        "vector": "NP-11"
+      },
+      {
+        "set": "round3",
+        "case": "R-PSA-CONFIG precision",
+        "outcome": "residual",
+        "vector": "residual text names the APISERVER backendFiles row; no vector"
+      },
+      {
+        "set": "round3",
+        "case": "Agent's running image differs",
+        "outcome": "residual",
+        "vector": "R-NET-AGENT (image added, T04-ENTRYPOINT/-CENSUS); unobservable"
+      },
+      {
+        "set": "round3",
+        "case": "Agent executable replaced",
+        "outcome": "refused",
+        "vector": "G-03"
+      },
+      {
+        "set": "round3",
+        "case": "R-BROKER-LIVE precision",
+        "outcome": "residual",
+        "vector": "residual text; no vector"
+      },
+      {
+        "set": "round3",
+        "case": "Echo anywhere",
+        "outcome": "refused",
+        "vector": "OB-02..OB-06, OB-12"
+      },
+      {
+        "set": "round3",
+        "case": "Gated value from a set under another record",
+        "outcome": "refused",
+        "vector": "no vector: R10's capture binding (qualificationDigest, capture_check.rs:619) and the epoch-immutable record (Q-CB-11)"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "Q-CB-14",
+      "position": "agree",
+      "reason": "AP-14 (a label 'pod-security.kubernetes.io.example/enforce' leaves admissionPolicy's digest equal to P-UNIT's) kills round-1 survivor 49 and pins the README's prefix with its slash. It is a pure positive, adds no rule, and is explained by the r2 instruction to re-run the survivors. Keep it."
+    },
+    {
+      "id": "Q-CB-15",
+      "position": "agree",
+      "reason": "Equivalent in v1, and the monitor's condition holds. NP-02 and NE-05 each append a selector-free NetworkPolicy in the qualification namespace and refuse 'networkPolicy: count is not one'. The count check in _network_documents runs before any document is built or sorted, on the only path into networkEnforcementDigest, and removing it is killed by NE-05. The List-form revision that admits several NetworkPolicies should add a vector with two policies out of canonical order and its digest relation."
+    },
+    {
+      "id": "Q-CB-16",
+      "position": "agree",
+      "reason": "(a). The obligation falls on harness-onion's packet test, which R10 never runs. The vendored README (BYTE_IDENTICAL, binding) and the model docstring state it with the test path and the three assertions. A layerTest member would put a harness-onion test path into R10's vendored data and add nothing the README does not already bind. The layer validator or the mechanics can check the test file directly at adoption."
+    }
+  ],
+  "checks": [
+    {
+      "check": "Brief sha256",
+      "result": "c6ca3cffe9183a441231b234072da52b3bfbd6bf1e72020c1e84be3eba7e8169, computed with shasum; matches the launch prompt."
+    },
+    {
+      "check": "Subject and input sha256",
+      "result": "All match the brief: the six STAGE files, build_contract.py (789fb94f...), BUILD_REPORT_C2 (3fee2799...), contract-review-round1.json (6a7c55c4...), DESIGN.rev3 (73cd9f6d...), OWNER_DECISIONS (6c549188..., 13,003 bytes) and design reviews 1-3 (46f233d5..., 7226f334..., f684b90f...). Candidate 1's six files equal round 1's subject hashes, and build_contract.c1.py is ac0a181b.... TOOLS/src model and README equal the STAGE model and README."
+    },
+    {
+      "check": "Commit pins",
+      "result": "<workspace>/harness-onion 30f41e6f5fb2ffdcef7d72e9e90825e66a17cca7, tree cc7d44f5 (MET-GOV-001). <workspace>/mas-harness-operator dd7422ed3af2779ef789df6fb5d0e134ec766ba1, tree d3a4f9ed (HE-004-I01A2)."
+    },
+    {
+      "check": "2. Delta, file by file (diff in WORK)",
+      "result": "Model: the UNREACHABLE set filtering refusal_texts() and the per-key malformed()/bound() lists (C1-6); the dataShape.answer descriptions (C1-7); _check_complete's docstring (C1-1). No derivation code changed. README: the status line replaced (C1-8), the 3.3 port sentence (C1-7), the 5.3 clause (C1-11), the section-9 paragraph (C1-6), and the section 10 and 11 bullets (C1-1). definitions.json: the four texts removed from refusalTexts and the rbac/rbacClosureDigest lists (C1-6), and the answer descriptions (C1-7). vectors.json: only the contract pin (it follows definitions) and 15 vectors appended. fixtures, helpers, complete and sources are hash-equal, and all 135 old vectors are byte-identical. New vectors: AP-14 (Q-CB-14 / survivor 49), NP-15..18 (C1-4), RB-28..30 and RC-11 (C1-10), RB-31 (C1-5), MB-07..09 (C1-3), G-21 and G-22 (C1-2). Edge v10: only the three contract sha256s. README-v10: the status line (C1-8) and the table's sha256 and bytes. build_contract.py: the git helper (R-C1-9), the decisions pin moved to 13,003 bytes with three new quotes, the 15 vectors, and the README-v10 text. Every change is explained by a C1 finding, R-C1-9 or Q-CB-14; no unexplained change found."
+    },
+    {
+      "check": "Self-check from a WORK copy",
+      "result": "python3 -I -B on WORK/sc2: the STAGE model, definitions and vectors, plus VPC, safe_yaml, admission v3, I06 v1/v3/v4, native_qualification_v4 and the three I06 inputs by git show at 30f41e6f, each sha256 equal to FROZEN_MODELS, FROZEN_INPUTS and the build's INPUTS. Result: 'Policy observation digests valid: 315 checks (16 helper, 150 vectors, 1 complete I01 positive)', rc 0. The import closure was checked first: VPC imports datetime, hashlib, json, pathlib, stat, jsonschema, yaml and safe_yaml, and its VPO import is lazy inside validate_additions, which the model never calls. No importlib, exec or subprocess appears in the closure."
+    },
+    {
+      "check": "3. Mutants (51 byte-level mutants under WORK/mut, plus probes under WORK/probe and WORK/probe2, run one at a time)",
+      "result": "Round-1 survivors: 10 of 11 killed (G-21, RB-31, NP-15, NP-16, NP-17, NP-18, AP-14, MB-09, MB-07, MB-08). Unsorted networkPolicies survives, equivalent in v1. No survivor changes a security outcome. Helpers: all 20 of round 1's list re-run; 18 are rejected by their helper vectors, and allow_nan=True and float-admitted stay equivalent, with the reasons recorded. A sample of 13 round-1 kills is still killed. Reviewer probes: P1/P3 are killed only by G-16 (C2-1), and P4 survives (C2-2)."
+    },
+    {
+      "check": "Coordinator's added check (the monitor's Q-CB-15 condition)",
+      "result": "PASS. NP-02 appends 'networkpolicy-second' and NE-05 appends 'second', each a selector-free NetworkPolicy in unit-namespace (the qualification namespace). They pin 'networkPolicy: count is not one' for the networkPolicy projection and networkEnforcementDigest respectively, and both pass in the replay. Model: the only entry to networkEnforcementDigest is enforcement() -> _enforcement() -> _network_documents(), reached from observed(), enforcement_digests(), check_vectors and _check_complete. _in_namespace filters to the qualification namespace before the count. _refuse(len(items) == 1) (line 500) precedes the documents loop (501-508), and sorted(policies, key=canonical) (line 634) runs only after _network_documents returns. The projection path has its own count check (line 568) and no sort. With line 500 removed, NE-05 fails (two policies reach the sort and give a digest). No path lets two NetworkPolicies reach the sort."
+    },
+    {
+      "check": "4. Attack cases (22 + 22 + 23)",
+      "result": "Round 1 20/2/0, round 2 18/4/0, round 3 18/5/0 (refused/residual/PASSES-WRONGLY), equal to round 1's tallies. Updated mappings: R1-7 RC-11 (+RC-03); R1-9 and R1-10 also NP-15; R2-38 RB-29/RB-30; R3-1 also G-22; R3-3 also G-08/G-21; R3-14 also NP-16."
+    },
+    {
+      "check": "5. Determinism (R-C1-9 (a))",
+      "result": "The git helper was read first (build_contract.py lines 111-178). git_argv is the only argv builder, and git() and git_exists() run only its output with GIT_OPTIONAL_LOCKS=0. It allows: show PIN:<file> with the file in INPUTS; rev-parse on PIN or DESIGN_PIN; log -1 --format=%H <pin> -- <paths>, with paths required and all in INPUTS; ls-tree <pin> -- <one INPUTS file>, with the entry asserted to be a 100644 blob; diff --name-only <pin> <pin> -- <paths>, with paths required and all in INPUTS; cat-file -e <pin>:<path>, with the path in INPUTS or the six STAGE paths. Anything else raises GitFormRefused, and the helper self-tests eight refused forms before any git runs. INPUTS holds files only, no glob characters, and neither VPO nor any enforcement-test-plan path. Two runs, python3 -I -B WORK/tools/build_contract.py <workspace>/harness-onion into fresh WORK/det1 and WORK/det2 (with a WORK copy of OWNER_DECISIONS.md, 6c549188, beside it as the build expects): both rc 0, identical output logs, the same six files, each byte-identical (cmp) to STAGE and to TOOLS/contract. counts helpers 16, vectors 150, checks 315."
+    },
+    {
+      "check": "6. Complete I01 positive",
+      "result": "VPC validate_profile(complete.profile, PPS) == [] from a WORK copy of VPC (PPS 209349cc... by git show). Controls: PPV's positive gives []. Changing each of the three preexisting references' observedDigest gives ['invalid strict proxy profile data']. Only validate_proxy_contract was loaded (no VPO). VPO not imported: complete, fixtures, CS and VPO are unchanged since candidate 1 (hash-equal sections, same pin), so round 1's paper check of the 44 comparisons stands. Re-read on paper: VPO lines 82-139 (validate_messages' signature and comparisons) confirm the README's assertion (1) argument order, and that a changed observedDigest refuses (profile digest)."
+    },
+    {
+      "check": "7. Edge record v10",
+      "result": "v9 by exact path at 30f41e6f (sha256 197f30e4...). v10 has 72 artifacts; the first 68 equal v9's, in order. The key order, schemaVersion, graph, consumer, provider, ownerDecision, rules, notArtifacts and statuses equal v9's. The three contract rows carry 1a97df32..., d34d1990... and 935a6108... (the final STAGE bytes), with providerCommit null, providerPacket MET-ENFORCE-041, HE-004-I01B, BYTE_IDENTICAL, REGISTERED_BEFORE_USE and 100644. The PPV row: edf32ddf..., 33de300c, no providerPacket, 12,799 bytes. supersedes = {v9 path, sha256:197f30e4..., MET-ENFORCE-040}. PPS is not registered. README-v10's table bytes (35,528, 465,711, 46,159) match."
+    },
+    {
+      "check": "8. Hygiene (scan strings built from parts on the command line)",
+      "result": "No user-home, private-temp, home, temp or tilde path prefix, no at sign, no account-name part, no legacy term and no 'by digest' in any of the six STAGE files. Neither README has a status line. VPC is described as imported by name with behaviour pinned by the helper vectors (README 0, definitions sharedHelpers.pinnedBy)."
+    },
+    {
+      "check": "Refusal texts (C1-6, Q-CB-12)",
+      "result": "refusalTexts holds 90. Vectors produce 67 of them; nothing unpinned is produced. The 23 without a vector are all per-key float, integer or document-bound instances of the shared document_bound path. Every vector refusal is in its key's projection or digest list, except G-20's three gate malformed texts, which captureGate.refusals omits (C2-3)."
+    },
+    {
+      "check": "9. New questions Q-CB-14..16",
+      "result": "Agree with all three (see questions)."
+    },
+    {
+      "check": "1. Fidelity to DESIGN rev 3 and the rulings",
+      "result": "Read on the delta: the derivation code is unchanged from candidate 1, which round 1 found faithful. The C1-6 removal follows the design's 'one per step' rule (design §9 and §3's '<key>: float refused' template) for steps that cannot occur, as the monitor accepted. C1-7 states the port side of D3-1's wall age. The C1-1 obligation implements Q-CB-6 (b). Nothing relaxes a ruling."
+    }
+  ],
+  "notChecked": [
+    "VPO was not imported, copied or run. Its validate_messages was judged by reading lines 1-38 (imports) and 82-139 with git show.",
+    "Not all 64 round-1 model kills were re-run. A sample of 13 was, and all are still killed. The rest hold because the derivation code and all 135 candidate-1 vectors are unchanged (shown by the diff and per-vector hashes).",
+    "The design reviews 1-3 were hashed but not re-read, and the design was read only where the delta touches it (§3's exactness and gate rules, §9's vectors and positive).",
+    "The I06 closure check's internals (frozen, sha256-pinned) were not re-read.",
+    "Kubernetes behaviour (validation of ipBlock beside selectors, pruning of unknown members) was not re-judged.",
+    "R10 was read only for two anchors, by exact path at dd7422ed (capture.rs:1246-1253 and client.rs:268-285), after one pruned git grep -l for set_started_ms.",
+    "Gate material was not re-derived (the monitor does that at merge).",
+    "No cargo, pytest, verifier, sim, apiserver or network. Nothing was run inside a checkout or written to one. The build ran only through its own helper.",
+    "Beyond the brief's named copies, Python also read: git-show copies of the model's frozen import closure and the three I06 inputs (needed to replay the vectors and run the mutants, as in round 1); PPS and PPV (data); and a WORK copy of OWNER_DECISIONS.md, which the build reads beside itself. The round-1 record's case table was read with jq only, never Python.",
+    "Disclosed. The commit pins were read with 'git show -s --format' on the two commits (metadata only, no listing), a form beyond 'git show <commit>:<path>'. A first probe that removed G-16 used jq, which rewrote BND-09's float as an integer; those results were discarded and the probe re-run with a float-preserving copy.",
+    "By rule, the R12 repository, tools/w04, the enforcement-test-plan directory and document, scripts/validate_enforcement_test_plan.py, tests/test_enforcement_test_plan.py, scripts/validate_readiness.py, R12's tests/enforcement, any tools path outside the listed digest files, and the forbidden paths were not opened."
+  ]
+}
