@@ -1,6 +1,16 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-GOV-001
+## Current source preparation — MET-ENFORCE-041
+
+MET-ENFORCE-041 (DIGEST-CONTRACT): the I01 digest contract under architecture/policy-observation-digests/ (README,
+definitions, vectors, with the status, the seven review records and the seven redacted briefs) and its standard-library
+reference model scripts/policy_observation_digests.py, which fix how the policy observer derives the I01 v1 answer's seven
+projection objects and four enforcement digests; and operator edge record v10 under architecture/artifact-edges/ (v9's 68
+rows plus the contract's three data files and the proxy-contract vectors for HE-004-I01B, registered before use). The I01
+v1 wire and edge records v1 to v9 stay byte-identical; no R10 file changes. Built under MET-PERF-042's identity rule and
+step rule. Alpha2 OPEN; 257 accepted plus MET-ENFORCE-041 only.
+
+## Historical evolution surface source preparation — MET-GOV-001
 
 MET-GOV-001 (EVOLUTION-SURFACE-001): the evolution surface record v1 under architecture/evolution-surface/ (the record, its
 schema, vectors and README, with the status, the five review records and the round snapshots) and its standard-library
@@ -1351,6 +1361,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 129. `MET-PERF-042`: compact the history chain's route and payload scaffold tests in the 63 bridged layers, share test-side YAML parses per test module, and adopt the identity rule as a standing rule; no ci/ path, no validator-side sharing.
 130. `MET-ENFORCE-040`: publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use); edge records v1 to v8 byte-identical, no R10 change.
 131. `MET-GOV-001`: publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its reference model and vectors; gate material, the owner's per-PR merge approval; no earlier contract changes.
+132. `MET-ENFORCE-041`: publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B; the I01 v1 wire and edge records v1 to v9 byte-identical, no R10 change.
 
 ## Testing, verification, and acceptance
 
