@@ -4688,6 +4688,66 @@
    }
   },
   {
+   "id": "tree-schema-named-like-an-oracle-identity",
+   "expect": null,
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "schemas/oracle-identity.schema.json": "{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"title\": \"example oracle identity schema\", \"type\": \"object\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-stray-oracle-identity-in-schemas",
+   "expect": "SHAPE",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "schemas/oracle-identity-x.json": "{\"schemaVersion\": \"x\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
    "id": "tree-registry-privacy",
    "expect": "PRIVACY",
    "files": {

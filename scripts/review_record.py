@@ -66,7 +66,9 @@ ORACLE_OPTIONAL = ("disclosures",)
 ORACLE_TESTS = ("tests/", "test_*oracle*.py")
 RECORD_NAME = re.compile(r"^review-round([1-9][0-9]{0,3})\.json$")
 IDENTITY_NAME = "review-identity-round%d.json"
-ORACLE_NAME = "oracle-identity*.json"
+# An oracle identity by exact file name: oracle-identity.json or oracle-identity-<part>[-<part>...].json, each part
+# [a-z0-9]+. A schema such as oracle-identity.schema.json is not an identity (the monitor's Q-GOV2-PRE-INTREE (a)).
+ORACLE_NAME = re.compile(r"^oracle-identity(?:-[a-z0-9]+)*\.json$")
 # PRIVACY by digest only, so no published file holds a name token or the legacy term. Name tokens: {length: sha256 of
 # each token}, matched against every substring of that length in the lowercased text. The table ships empty (owner
 # Q-RR2-NAMES): a short token's digest is easily reversed, so the digests stay in an unpublished local file that
@@ -655,7 +657,8 @@ def check_tree(root, legacy, registry, repository: str) -> dict:
       `round` is n, bound by the `review-identity-round<n>.json` beside it (RR2C1-6); every frozen record is present
       (RR2C1-8). Else LEGACY_CHANGED, SHAPE or NO_IDENTITY.
     - Every directory's v2 rounds form one valid series, and no series spans two directories (SERIES_FORK).
-    - Every `oracle-identity*.json` passes `check_oracle` with its file's bytes, ORACLE_DIGEST when the file is absent.
+    - Every file named by ORACLE_NAME (`oracle-identity.json` or `oracle-identity-<part>.json`, parts [a-z0-9]+), in
+      any directory, passes `check_oracle` with its file's bytes, ORACLE_DIGEST when the file is absent.
     - Every ORACLE_TESTS file is frozen with its current bytes' digest or bound by an oracle identity, and every frozen
       oracle test is present (ORACLE_MISSING)."""
     raw_registry = registry if isinstance(registry, (bytes, bytearray, str)) else None
@@ -702,7 +705,7 @@ def check_tree(root, legacy, registry, repository: str) -> dict:
         facts = check_series(records, identities, registry, repository=repository)
         _refuse(facts["series"] not in ids_seen, "SERIES_FORK")
         ids_seen[facts["series"]] = directory
-    oracle_ids = [rel for rel in paths if fnmatch.fnmatchcase(posixpath.basename(rel), ORACLE_NAME)]
+    oracle_ids = [rel for rel in paths if ORACLE_NAME.fullmatch(posixpath.basename(rel))]
     bound: dict = {}
     for rel in oracle_ids:
         raw = read(rel)

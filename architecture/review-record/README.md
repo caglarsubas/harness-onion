@@ -128,8 +128,13 @@ valid only when `disclosures` is absent or empty; otherwise KEEP or VOID, as for
 |---|---|---|
 | `review-round<n>.json` | review record | REVIEWER_AGENT |
 | `review-identity-round<n>.json` | identity, beside its record | LANE_SESSION |
-| `oracle-identity*.json` | oracle identity | LANE_SESSION |
+| `oracle-identity.json`, `oracle-identity-<part>.json` | oracle identity | LANE_SESSION |
 | `REVIEW_BRIEF*.md` | pinned brief | LANE_SESSION |
+
+**Oracle identity names are exact** (`ORACLE_NAME`, the monitor's Q-GOV2-PRE-INTREE (a)): `oracle-identity.json`, or
+`oracle-identity-` followed by one or more hyphen-separated parts of `[a-z0-9]+`, then `.json`. The rule holds in every
+directory. Any other name, such as the schema `oracle-identity.schema.json`, is not an oracle identity and binds nothing.
+A file with a matching name that is not a valid identity is still SHAPE.
 
 **Where records live:**
 - DESIGN and CONTRACT series are published in their contract directory.
@@ -285,8 +290,8 @@ its own and is refused NO_IDENTITY, before DUPLICATE_IDENTITY is reached.
     absent (RR2C1-8).
 - **Series.** Each directory's v2 rounds pass `check_series`, with the repository given. A series id found in two
   directories is SERIES_FORK.
-- **Oracle identities.** Every `oracle-identity*.json` passes `check_oracle` with its file's bytes. That covers PRIVACY,
-  and ORACLE_DIGEST when the file is absent. A malformed one is SHAPE.
+- **Oracle identities.** Every file whose name matches `ORACLE_NAME` (above) passes `check_oracle` with its file's
+  bytes. That covers PRIVACY, and ORACLE_DIGEST when the file is absent. A malformed one is SHAPE.
 - **Oracle tests.** Every ORACLE_TESTS file is on the frozen list with its current bytes' digest, or is bound by an
   oracle identity. A frozen oracle test that is absent is ORACLE_MISSING, and so is any other unbound one.
 - **The walk.** `.git`, `__pycache__` and `.pytest_cache` are not walked. The check expects a clean checkout: an
