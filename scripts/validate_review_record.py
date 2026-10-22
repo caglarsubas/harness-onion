@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/review-record-authority.json"
-AUTHORITY_SHA256 = "ba14abf6853bc482103b12f1f7f82ab1e88170f4dd416972336f4e76cd93b573"
+AUTHORITY_SHA256 = "510f82e4433320a690fb4d02f4b3326b0026b4f2868e5d9abc10cc752e1cf8a6"
 VALIDATOR_PATH = "scripts/validate_review_record.py"
 BASE_COMMIT = "2043cc27883448e3ff030b7868110e295f32fe09"
 NEW_PACKET = "MET-GOV-002"
@@ -597,14 +597,15 @@ def era_models() -> tuple:
 
 def check_freeze(changed: Any, added: Any) -> None:
     """Under architecture/ this packet changes only MET-GOV-001's record, vectors and README, and adds only the contract's
-    directory; under scripts/ it changes only chain validators (scripts/validate_*.py), so no model, the identity checker
-    included, changes; and neither conftest.py changes (packet review r1, P1-2)."""
+    directory; under scripts/ it changes only chain validators (scripts/validate_*.py, one level deep), so no model, the
+    identity checker included, changes; and neither conftest.py changes (packet review r1, P1-2; r2, P2-4)."""
     for path in list(changed):
         require(type(path) is str and (not path.startswith("architecture/") or path in SURFACE_CHANGED)
-                and (not path.startswith("scripts/") or (path.startswith("scripts/validate_") and path.endswith(".py")))
+                and (not path.startswith("scripts/") or (path.startswith("scripts/validate_") and path.endswith(".py")
+                                                         and path.count("/") == 1))
                 and path not in ("conftest.py", "tests/conftest.py"),
-                "under architecture/ only MET-GOV-001's record, vectors and README change, and no model changes: "
-                + str(path))
+                "under architecture/ only MET-GOV-001's record, vectors and README change, no model changes and no "
+                "conftest change: " + str(path))
     for path in list(added):
         require(type(path) is str and (not path.startswith("architecture/") or path.startswith(CONTRACT_DIR + "/")),
                 "under architecture/ only the contract's directory is added: " + str(path))

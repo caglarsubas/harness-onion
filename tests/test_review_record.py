@@ -926,8 +926,9 @@ def test_the_era_holds_the_new_files_and_the_three_surface_files():
     (["scripts/chain_identity.py"], [], "no model changes"),
     (["scripts/policy_observation_digests.py"], [], "no model changes"),
     (["scripts/validate_x.txt"], [], "no model changes"),
-    (["tests/conftest.py"], [], "no model changes"),
-    (["conftest.py"], [], "no model changes"),
+    (["scripts/validate_x/y.py"], [], "no model changes"),
+    (["tests/conftest.py"], [], "no conftest change"),
+    (["conftest.py"], [], "no conftest change"),
 ])
 def test_the_freeze_refuses_other_architecture_and_model_changes(changed, added, message):
     profile.check_freeze(list(profile.SURFACE_CHANGED) + ["scripts/validate_chain_compaction.py"],
@@ -1184,6 +1185,14 @@ def _set(*steps):
     return change
 
 
+def _review_by_an_author(identity):
+    """The reviewer becomes an author who is not the operator, so only the reviewer-not-author rule can fail (packet
+    review r2, P2-1)."""
+    authors = [agent for agent in identity["author"]["agentIds"] if agent != identity["operator"]["agentId"]]
+    assert authors
+    identity["reviewer"]["agentId"] = authors[0]
+
+
 _DROP = object()
 SERIES_CHANGES = {
     # each rule of _series_holds and _counting, one failing case each, the other bindings kept
@@ -1203,19 +1212,42 @@ SERIES_CHANGES = {
     "full_round_late": lambda r, i, reg: _rebound(r, i, 3, _set((["base"], _DROP)), _set((["base"], _DROP))) + (reg,),
     "ruling_pending": lambda r, i, reg: _rebound(r, i, 2, None, _set((["ruling"], {"decision": "PENDING"}))) + (reg,),
     "ruling_keep_without_ref": lambda r, i, reg: _rebound(r, i, 2, None, _set((["ruling", "ref"], _DROP))) + (reg,),
+    "ruling_keep_without_by": lambda r, i, reg: _rebound(r, i, 2, None, _set((["ruling", "by"], _DROP))) + (reg,),
+    "ruling_keep_without_date": lambda r, i, reg: _rebound(r, i, 2, None, _set((["ruling", "date"], _DROP))) + (reg,),
     "ruling_none_needed_with_disclosure": lambda r, i, reg: _rebound(
         r, i, 2, None, _set((["ruling"], {"decision": "NONE_NEEDED"}))) + (reg,),
+    "ruling_none_needed_with_interruption": lambda r, i, reg: _rebound(
+        r, i, 2, _set((["disclosures"], [])), _set((["ruling"], {"decision": "NONE_NEEDED"}),
+                                                   (["interruptions"], ["stopped once"]))) + (reg,),
+    "ruling_none_needed_with_relay": lambda r, i, reg: _rebound(
+        r, i, 2, _set((["disclosures"], [])), _set((["ruling"], {"decision": "NONE_NEEDED"}),
+                                                   (["operatorRelays"], ["relayed once"]))) + (reg,),
     "self_review": lambda r, i, reg: _rebound(r, i, 1, None, lambda v: v["reviewer"].__setitem__(
         "agentId", v["operator"]["agentId"])) + (reg,),
-    "author_review": lambda r, i, reg: _rebound(r, i, 1, None, lambda v: v["reviewer"].__setitem__(
-        "agentId", v["author"]["agentIds"][0])) + (reg,),
+    "author_review": lambda r, i, reg: _rebound(r, i, 1, None, _review_by_an_author) + (reg,),
     "final_verdict": lambda r, i, reg: _rebound(r, i, profile.ROUNDS, _set((["verdict"], "CHANGES_REQUIRED"))) + (reg,),
     "final_subject": lambda r, i, reg: _rebound(r, i, profile.ROUNDS, _set((["subject", "tree"], "0" * 40)),
                                                 _set((["subject", "tree"], "0" * 40))) + (reg,),
     "missing_round": lambda r, i, reg: (r[:-1], i[:-1], reg),
+    "extra_identity": lambda r, i, reg: (r, i + i[-1:], reg),
     "registry_brief": lambda r, i, reg: (r, i, json.dumps(dict(json.loads(reg), briefs=[
         b for b in json.loads(reg)["briefs"] if b["series"] != profile.SERIES])).encode("utf-8")),
+    "registry_brief_superseded": lambda r, i, reg: (r, i, json.dumps(dict(json.loads(reg), briefs=[
+        dict(b, supersededAt="2026-10-22T00:00:00Z") if b["series"] == profile.SERIES else b
+        for b in json.loads(reg)["briefs"]])).encode("utf-8")),
 }
+
+
+def test_a_none_needed_round_with_no_disclosure_interruption_or_relay_holds():
+    """The NONE_NEEDED cases' base: round 2 with its disclosures cleared and a NONE_NEEDED ruling holds, so each case
+    fails only on the interruption or relay it adds (packet review r2, P2-2)."""
+    records = [(path, profile._verified(path)) for path in profile.RECORDS]
+    identities = [(path, profile._verified(path)) for path in profile.IDENTITIES]
+    identity = json.loads(identities[1][1])
+    assert identity["interruptions"] == [] and identity["operatorRelays"] == []
+    profile.check_series(*_rebound(records, identities, 2, _set((["disclosures"], [])),
+                                   _set((["ruling"], {"decision": "NONE_NEEDED"}))),
+                         profile._verified(profile.REGISTRY_PATH))
 
 
 @pytest.mark.parametrize("change", sorted(SERIES_CHANGES))
