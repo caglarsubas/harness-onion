@@ -1,7 +1,7 @@
 {
  "schemaVersion": "planeon.internal.evolution-surface-vectors/v1",
  "evidenceClass": "DATA_CHECK_ONLY",
- "recordDigest": "sha256:407faa4f0c0f1dd133fefc141293f1998c2663dc9b2a0abea146bfe64bfcef6f",
+ "recordDigest": "sha256:458a8639a179d3be8d3cb0744d98de26f06db7eb19510502cb322289fabb5135",
  "codes": [
   "SHAPE",
   "DUPLICATE_ID",
@@ -2181,6 +2181,24 @@
       "exact": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md"
      }
     ]
+   },
+   {
+    "id": "RR2",
+    "grounds": "Q-RR2-6 (b) (owner, 2026-10-21), with D-1 and D-2 named in the owner's per-PR ask",
+    "entries": [
+     {
+      "prefix": "architecture/review-record/"
+     },
+     {
+      "exact": "architecture/review-record-authority.json"
+     },
+     {
+      "exact": "scripts/review_record.py"
+     },
+     {
+      "exact": "tests/test_review_records_in_tree.py"
+     }
+    ]
    }
   ],
   "derived": [
@@ -2198,6 +2216,9 @@
    },
    {
     "exact": "architecture/evolution-surface-authority.json"
+   },
+   {
+    "exact": "architecture/review-record-authority.json"
    },
    {
     "exact": "conftest.py"
@@ -2236,13 +2257,22 @@
     "exact": "scripts/evolution_surface.py"
    },
    {
+    "exact": "scripts/review_record.py"
+   },
+   {
     "exact": "scripts/zero_bill_scan.py"
+   },
+   {
+    "exact": "tests/test_review_records_in_tree.py"
    },
    {
     "prefix": ".github/"
    },
    {
     "prefix": "architecture/evolution-surface/"
+   },
+   {
+    "prefix": "architecture/review-record/"
    },
    {
     "prefix": "ci/"
@@ -2283,6 +2313,9 @@
     "exact": "architecture/evolution-surface-authority.json"
    },
    {
+    "exact": "architecture/review-record-authority.json"
+   },
+   {
     "exact": "conftest.py"
    },
    {
@@ -2316,13 +2349,22 @@
     "exact": "scripts/evolution_surface.py"
    },
    {
+    "exact": "scripts/review_record.py"
+   },
+   {
     "exact": "scripts/zero_bill_scan.py"
+   },
+   {
+    "exact": "tests/test_review_records_in_tree.py"
    },
    {
     "prefix": ".github/"
    },
    {
     "prefix": "architecture/evolution-surface/"
+   },
+   {
+    "prefix": "architecture/review-record/"
    },
    {
     "prefix": "docs/linux-runner/"

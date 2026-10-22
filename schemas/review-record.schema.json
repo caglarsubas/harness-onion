@@ -1,0 +1,348 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.review-record/v2",
+ "title": "Review record v2 (written by the reviewer)",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "briefSha256",
+  "checked",
+  "disclosures",
+  "findings",
+  "kind",
+  "reviewDate",
+  "reviewer",
+  "round",
+  "rulesSha256",
+  "schemaVersion",
+  "series",
+  "subject",
+  "verdict",
+  "wrapperSha256"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.review-record/v2"
+  },
+  "kind": {
+   "type": "string",
+   "maxLength": 4000
+  },
+  "series": {
+   "type": "string",
+   "pattern": "^[A-Z][A-Z0-9-]{1,63}/[a-z][a-z0-9-]{0,31}(?![\\s\\S])"
+  },
+  "round": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 9007199254740991
+  },
+  "subject": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "commit",
+      "repository",
+      "tree"
+     ],
+     "properties": {
+      "repository": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9._-]{1,100}(?![\\s\\S])"
+      },
+      "commit": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{40}(?![\\s\\S])"
+      },
+      "tree": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{40}(?![\\s\\S])"
+      }
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "path",
+      "sha256"
+     ],
+     "properties": {
+      "path": {
+       "type": "string",
+       "pattern": "^(?!/)(?!(?:.*/)?\\.\\.?(?:/|(?![\\s\\S])))(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+(?![\\s\\S])"
+      },
+      "sha256": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+      }
+     }
+    }
+   ]
+  },
+  "reviewDate": {
+   "type": "string",
+   "format": "date",
+   "pattern": "^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])(?![\\s\\S])"
+  },
+  "briefSha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+  },
+  "rulesSha256": {
+   "oneOf": [
+    {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "wrapperSha256": {
+   "oneOf": [
+    {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "reviewer": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "model",
+    "role"
+   ],
+   "properties": {
+    "model": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "role": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "verdict": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 4000
+  },
+  "findings": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "blocks",
+     "finding",
+     "id",
+     "location",
+     "requiredChange",
+     "severity"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "severity": {
+      "enum": [
+       "MAJOR",
+       "MINOR",
+       "NOTE"
+      ]
+     },
+     "location": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "finding": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "requiredChange": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "blocks": {
+      "type": "boolean"
+     }
+    }
+   }
+  },
+  "checked": {
+   "type": "array",
+   "minItems": 1,
+   "items": {
+    "oneOf": [
+     {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "check",
+       "result"
+      ],
+      "properties": {
+       "check": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "result": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    ]
+   }
+  },
+  "disclosures": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 4000
+   }
+  },
+  "base": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "commit",
+      "repository",
+      "tree"
+     ],
+     "properties": {
+      "repository": {
+       "type": "string",
+       "pattern": "^[A-Za-z0-9._-]{1,100}(?![\\s\\S])"
+      },
+      "commit": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{40}(?![\\s\\S])"
+      },
+      "tree": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{40}(?![\\s\\S])"
+      }
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "path",
+      "sha256"
+     ],
+     "properties": {
+      "path": {
+       "type": "string",
+       "pattern": "^(?!/)(?!(?:.*/)?\\.\\.?(?:/|(?![\\s\\S])))(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+(?![\\s\\S])"
+      },
+      "sha256": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+      }
+     }
+    }
+   ]
+  },
+  "bindingRules": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "met",
+     "note",
+     "rule"
+    ],
+    "properties": {
+     "rule": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "met": {
+      "type": "boolean"
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "dispositions": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "status"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "status": {
+      "enum": [
+       "ADDRESSED",
+       "PARTLY",
+       "NOT"
+      ]
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "notChecked": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 4000
+   }
+  },
+  "questions": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 4000
+   }
+  }
+ }
+}

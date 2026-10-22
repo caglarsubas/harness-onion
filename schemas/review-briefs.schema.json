@@ -1,0 +1,199 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.review-briefs/v1",
+ "title": "Review brief registry v1",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "briefs",
+  "kinds",
+  "schemaVersion"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.review-briefs/v1"
+  },
+  "kinds": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "CONTRACT",
+    "DESIGN",
+    "PACKET",
+    "PR"
+   ],
+   "properties": {
+    "DESIGN": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "passing",
+      "verdicts"
+     ],
+     "properties": {
+      "verdicts": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "passing": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "CONTRACT": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "passing",
+      "verdicts"
+     ],
+     "properties": {
+      "verdicts": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "passing": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "PACKET": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "passing",
+      "verdicts"
+     ],
+     "properties": {
+      "verdicts": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "passing": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "PR": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "passing",
+      "verdicts"
+     ],
+     "properties": {
+      "verdicts": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "passing": {
+       "type": "array",
+       "minItems": 1,
+       "uniqueItems": true,
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    }
+   }
+  },
+  "briefs": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "kind",
+     "path",
+     "series",
+     "sha256",
+     "version"
+    ],
+    "properties": {
+     "kind": {
+      "enum": [
+       "DESIGN",
+       "CONTRACT",
+       "PACKET",
+       "PR"
+      ]
+     },
+     "series": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9-]{1,63}/(?:[a-z][a-z0-9-]{0,31})?(?![\\s\\S])"
+     },
+     "path": {
+      "type": "string",
+      "pattern": "^(?!/)(?!(?:.*/)?\\.\\.?(?:/|(?![\\s\\S])))(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+(?![\\s\\S])"
+     },
+     "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+     },
+     "version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+     },
+     "supersedes": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+     },
+     "supersededAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\\.[0-9]{1,9})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])(?![\\s\\S])"
+     }
+    }
+   }
+  }
+ }
+}

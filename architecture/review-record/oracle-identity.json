@@ -1,0 +1,47 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_review_record_oracle.py",
+  "sha256": "ea396ea412be088245ee1d6dcfc31d79be4a7bd40d7f973ecc331f75308c41ba"
+ },
+ "oracle": {
+  "agentId": "a01314265d2f133ff",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "d6fe1a25-8485-43f5-8c84-afc766817ada",
+  "lane": "parallel"
+ },
+ "author": {
+  "agentIds": [
+   "d6fe1a25-8485-43f5-8c84-afc766817ada"
+  ]
+ },
+ "briefSha256": "3c051223ad585fca3b4c170d7bf7a73a25da2d34b83c7a42f525ffc9c3c034c8",
+ "candidateCommit": "45d818eea16b609fc5b26c26c087c7175ecda43a",
+ "launched": "2026-10-22T12:42:04+08:00",
+ "finished": "2026-10-22T16:33:16+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-RR2-ORACLE-RESUME; MON-RR2-ORACLE-SLIPS; Q-RR2-ORACLE-R1-SLIPS",
+  "date": "2026-10-22"
+ },
+ "disclosures": [
+  "part 1 of the brief: a new black-box oracle file, 864 tests; against 9f88e824 (the first candidate commit) 17 failed: 14 from the two relays and 3 real findings (a non-final passing round counted in check_merge, times compared below nine digits, a registry version gap), all fixed in the model afterwards",
+  "interruption: an API spend-limit stop after the inputs were read and before any file was written; the same agent was resumed at 2026-10-22T14:51:39+08:00, with no relaunch",
+  "interruption: an output-token-limit stop; the agent continued on the operator's word, with no file changed in between",
+  "operator relay: owner decision Q-RR2-NAMES (the published name-token table ships empty, with a local loader)",
+  "operator relay: monitor ruling Q-RR2-FROZEN (legacy oracle files frozen by path and file digest)",
+  "slip: one read of an allowed input with the Read tool instead of through the wrapper",
+  "slip: one message carried two Edit calls",
+  "three scratch probe scripts outside the test-run budget, run through the wrapper and then deleted; the tree probe used directories inside the scratch folder instead of pytest's tmp_path",
+  "finished is the time of the oracle's last write to its files, in the follow-up; its closing checks followed",
+  "operator relay after contract r1: finding RR2C1-9 (PACKET passes with PASS_FOR_PUSH only) and the monitor's ruling Q-RR2-ORACLE-SCOPE (a); the scoped follow-up ran against the r1 fix work tree on top of 0bc5dc1aa263206b94199412648d8d0849c6fe38, uncommitted at the time",
+  "follow-up edits: in tests/test_review_record_oracle.py, KIND_VERDICTS' PACKET passing set, the PACKET merge case and a new refusal case; in tests/test_evolution_surface_oracle.py, a comment marking the DATA_CLASSES line; each marked MET-GOV-002 r1, no assertion loosened",
+  "slip from the first round, unreported then: the GATE_CLASSES replacement dropped a space at DATA_CLASSES (= { became ={); marked in the follow-up",
+  "two read-only diagnostic commands in the follow-up (a cat option macOS lacks, and a git diff piped to grep that printed nothing)",
+  "candidateCommit (contract r2 NOTE RR2C2-6): 45d818ee, the fix commit that holds the oracle's scoped follow-up; the oracle ran on its tree before the operator's last vector, test and README edits, and the operator re-ran both oracle files on that tree before the commit (rc 0); the oracle's first run was against 9f88e824, where this file is not expected to pass"
+ ]
+}
