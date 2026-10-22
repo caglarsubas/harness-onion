@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/review-record-authority.json"
-AUTHORITY_SHA256 = "510f82e4433320a690fb4d02f4b3326b0026b4f2868e5d9abc10cc752e1cf8a6"
+AUTHORITY_SHA256 = "4372a77b18dae5ac2a8052ebc6c9d8cbf8e6f0552895cf05e905d634e36bd878"
 VALIDATOR_PATH = "scripts/validate_review_record.py"
 BASE_COMMIT = "2043cc27883448e3ff030b7868110e295f32fe09"
 NEW_PACKET = "MET-GOV-002"
@@ -348,7 +348,7 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # identity), a brief registry, a frozen list of the review records and oracle tests that predate v2, oracle identities
 # (D5a), a standard-library reference model and checker (scripts/review_record.py) with replayable vectors, and version 2
 # of MET-GOV-001's evolution surface record (the GATE_REVIEW_PROCESS class: the derived gate list grows from 27 to 31).
-# The contract was adopted after 5 contract review rounds by separate agents, recorded in the contract's own v2
+# The contract was adopted after 6 contract review rounds by separate agents, recorded in the contract's own v2
 # form; the last passed for adoption on the subject whose bytes are adopted. Repository bytes and modes are read only
 # through reviewed_bytes and reviewed_mode, and the contract directory's listing only through reviewed_tree, so a later
 # bridged successor projects its own edits away first; a path outside this era is refused before it is read, and every
@@ -382,7 +382,7 @@ SURFACE_RECORD = SURFACE_DIR + "/evolution-surface.json"
 SURFACE_VECTORS = SURFACE_DIR + "/vectors.json"
 SURFACE_README = SURFACE_DIR + "/README.md"
 SURFACE_MODEL = "scripts/evolution_surface.py"
-ROUNDS = 5
+ROUNDS = 6
 SERIES = "MET-GOV-002/contract"
 RECORDS = tuple(CONTRACT_DIR + "/review-round%d.json" % number for number in range(1, ROUNDS + 1))
 IDENTITIES = tuple(CONTRACT_DIR + "/review-identity-round%d.json" % number for number in range(1, ROUNDS + 1))
@@ -393,10 +393,10 @@ IDENTITIES = tuple(CONTRACT_DIR + "/review-identity-round%d.json" % number for n
 SUBJECT = (README_PATH, BRIEF_PATH, REGISTRY_PATH, VECTORS_PATH, LEGACY_PATH) + ORACLE_IDENTITIES + SCHEMAS + (
     MODEL_PATH, SURFACE_RECORD, SURFACE_VECTORS, SURFACE_README)
 REVIEWED_SHA256 = MappingProxyType({
-    "architecture/review-record/README.md": "855d3f5f83d5dfbbd61aa2a10a575e063f03febd03b4bff81fe758ed4d7fa10c",
+    "architecture/review-record/README.md": "4040ebc078c9157c69c0a75b588303cd848c041f600d4e440a53e5fa2feeb603",
     "architecture/review-record/REVIEW_BRIEF.md": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
     "architecture/review-record/briefs.json": "f389bae17a83924c873d29c2e13628b664f8586b47a59bf4093ac247928fc7c1",
-    "architecture/review-record/vectors.json": "1e89b7b2573b518508e9e47a335acf02bc53b68131a783c5fb1a6913db85ab92",
+    "architecture/review-record/vectors.json": "502b15998da618c9f992521c4a21259a97434363e2329f3f0becebb5dcbec584",
     "architecture/review-record/legacy-review-records.json": "e33afcf6593458857570045931b0c247c85a3c49b47743538eaea43182b70c9f",
     "architecture/review-record/oracle-identity-evolution-surface.json": "0633c76dbc4ad19834df9a43278d2835a78ce741bd55373a22e0066874c3396f",
     "architecture/review-record/oracle-identity.json": "35ceef8656ae5a4e133200e4e2ad5e2f003a2466759668a4d19a69dba09c8db1",
@@ -404,7 +404,7 @@ REVIEWED_SHA256 = MappingProxyType({
     "schemas/review-briefs.schema.json": "b308441c37fac09b3cb966f36347dbe5ecbdbeca74554ab4770e91d41c783280",
     "schemas/review-identity.schema.json": "060457f8ee41d4da248778d5af509f1865304fd3860e9f25d20fff17b06a5051",
     "schemas/review-record.schema.json": "26e25c862458a18222f49fec0fe7a7d3f06a85aab6b624bda9920a3f015f1b40",
-    "scripts/review_record.py": "cc1bd11080eaab673601f977feabf6fd24357f705f628502209d0b5cd5437e9b",
+    "scripts/review_record.py": "bdcda19bd77f32e489a1baf67fcec1385c35085cb9224aa29f8d6716f5265996",
     "architecture/evolution-surface/evolution-surface.json": "b1759fe4bae0d9dc111f0c4ca3cc23e891cf89d572b73929ee01f5ec7616a277",
     "architecture/evolution-surface/vectors.json": "9c0f7cf1eb0f48dab41e322d8cdffba8568a5db2ddc2a31869f6af8dd9985b56",
     "architecture/evolution-surface/README.md": "922b09a56cd09486d3ab98a8abe8c4875774579beafebff14da294d9e87723c5",
@@ -422,10 +422,10 @@ WORK_ITEM = "REVIEW-RECORD-V2 (review record v2)"
 SLOT = 259
 STATUS_KEYS = ("schemaVersion", "workItem", "packet", "slot", "status", "baseMain", "series", "adoptedSubject",
                "adoption", "rounds", "reviewedFiles", "adoptionEdit", "ownerDecisions", "nonClaims")
-ADOPTED_SUBJECT = MappingProxyType({"commit": "16c02fbe31fff5e1d8eb6cc28a121012d2760486", "tree": "410d64c095b889ce8b793c6b6e078047bf8052de"})
+ADOPTED_SUBJECT = MappingProxyType({"commit": "8c7ee7ca990649858c2d6c4ff0aed9dcf4b021cd", "tree": "0802156b39cbc95466de0afcc7b025fad38aca99"})
 ADOPTION = {"decidedBy": "the lane monitor, owner-delegated (2026-10-22)", "decision": "Q-RR2-ADOPT-SHAPE (a): the final delta round's subject bytes become the adopted bytes; a light adoption commit with no snapshot directories, the final round's per-file digests in status.json, and the v2 rounds plus identities in architecture/review-record/"}
 EDIT_KEYS = ("path", "replaced", "with", "reviewedSha256", "adoptedSha256")
-ADOPTION_EDIT = {"path": "architecture/review-record/README.md", "replaced": "**Status:** contract candidate, under independent contract review. Not adopted. `legacy-review-records.json` is", "with": "**Status:** ADOPTED_CONTRACT_CANDIDATE (internal, DATA_CHECK_ONLY; independent contract review round 5: PASS_FOR_ADOPTION;\nthe rounds and their v2 records in `status.json`). `legacy-review-records.json` is", "reviewedSha256": "855d3f5f83d5dfbbd61aa2a10a575e063f03febd03b4bff81fe758ed4d7fa10c", "adoptedSha256": "12164bf44e607d84cc1f63d8287de0c4885eb914c63b14247c5dfe9744bff5e1"}
+ADOPTION_EDIT = {"path": "architecture/review-record/README.md", "replaced": "**Status:** contract candidate, under independent contract review. Not adopted. `legacy-review-records.json` is", "with": "**Status:** ADOPTED_CONTRACT_CANDIDATE (internal, DATA_CHECK_ONLY; independent contract review round 6: PASS_FOR_ADOPTION;\nthe rounds and their v2 records in `status.json`). `legacy-review-records.json` is", "reviewedSha256": "4040ebc078c9157c69c0a75b588303cd848c041f600d4e440a53e5fa2feeb603", "adoptedSha256": "f2427a967062d3bd90da2e1b6ea4c99ec83b014834979eef488d68bc6471787f"}
 OWNER_DECISIONS = ("Q-RR2-1..5: \"Accept all five (a) (Recommended)\"",
                    "Q-RR2-6: \"Gate material (Recommended)\"",
                    "Q-RR2-CAP: \"Fold into rev 4, no round (Recommended)\"",
@@ -457,10 +457,14 @@ ROUND_ROWS = ((1, "CHANGES_REQUIRED", "0bc5dc1aa263206b94199412648d8d0849c6fe38"
  (5, "PASS_FOR_ADOPTION", "16c02fbe31fff5e1d8eb6cc28a121012d2760486",
   "410d64c095b889ce8b793c6b6e078047bf8052de",
   "d04f8f64ea7373b4cc1e72d06e2fb31ba90b2431", ("RR2C5-1", "RR2C5-2", "RR2C5-3", "RR2C5-4"),
-  "MON-RR2-CR5-SLIPS"))
+  "MON-RR2-CR5-SLIPS"),
+ (6, "PASS_FOR_ADOPTION", "8c7ee7ca990649858c2d6c4ff0aed9dcf4b021cd",
+  "0802156b39cbc95466de0afcc7b025fad38aca99",
+  "16c02fbe31fff5e1d8eb6cc28a121012d2760486", ("RR2C6-1", "RR2C6-2", "RR2C6-3"),
+  "MON-RR2-CR6-SLIPS; disclosed process gap: rounds 1-5 could not run tests/test_review_records_in_tree.py (out of every brief's scope), so none found the oracle-name defect"))
 # The model's vector replay counts and the frozen list's counts at this era (the builder's count line: 169 review
 # records and 2 oracle tests at 2043cc27).
-VECTOR_COUNTS = MappingProxyType({"reviews": 62, "series": 10, "oracles": 10, "prOracles": 5, "merges": 15, "registries": 13, "legacy": 7, "trees": 16, "privacy": 5})
+VECTOR_COUNTS = MappingProxyType({"reviews": 62, "series": 10, "oracles": 10, "prOracles": 5, "merges": 15, "registries": 13, "legacy": 7, "trees": 18, "privacy": 5})
 LEGACY_RECORDS, LEGACY_ORACLES = 169, 2
 # Version 2 of MET-GOV-001's record: the derived gate list and the four GATE_REVIEW_PROCESS entries it adds.
 GATE_MATERIAL = 31
@@ -470,29 +474,31 @@ SURFACE_REPLAY = MappingProxyType({"decisions": 44, "invariants": 31, "texts": 5
 # Every file this era's check reads, with its digest: the files this packet adds, MET-GOV-001's three changed files and
 # its model.
 ERA_SHA256 = MappingProxyType({
-    "architecture/review-record/README.md": "12164bf44e607d84cc1f63d8287de0c4885eb914c63b14247c5dfe9744bff5e1",
+    "architecture/review-record/README.md": "f2427a967062d3bd90da2e1b6ea4c99ec83b014834979eef488d68bc6471787f",
     "architecture/review-record/REVIEW_BRIEF.md": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
     "architecture/review-record/briefs.json": "f389bae17a83924c873d29c2e13628b664f8586b47a59bf4093ac247928fc7c1",
-    "architecture/review-record/vectors.json": "1e89b7b2573b518508e9e47a335acf02bc53b68131a783c5fb1a6913db85ab92",
+    "architecture/review-record/vectors.json": "502b15998da618c9f992521c4a21259a97434363e2329f3f0becebb5dcbec584",
     "architecture/review-record/legacy-review-records.json": "e33afcf6593458857570045931b0c247c85a3c49b47743538eaea43182b70c9f",
     "architecture/review-record/oracle-identity-evolution-surface.json": "0633c76dbc4ad19834df9a43278d2835a78ce741bd55373a22e0066874c3396f",
     "architecture/review-record/oracle-identity.json": "35ceef8656ae5a4e133200e4e2ad5e2f003a2466759668a4d19a69dba09c8db1",
-    "architecture/review-record/status.json": "39cfe3678491982cc55804f0652b52902437a08ee9c532828e95663f5d9808a2",
+    "architecture/review-record/status.json": "e2beafaa7bbc69fb2a6321819c2c65c243e69a0aada460f821115726247212f0",
     "architecture/review-record/review-round1.json": "f49805ee04fcabda492e5399eda9bdf86d1943d7b088f45e24f051a9b970d6cc",
     "architecture/review-record/review-round2.json": "7b1a14ffffd1a4482cc978e83c75faf768296991cb2e6c6a80eadf41bdd3b1bd",
     "architecture/review-record/review-round3.json": "786fe2274a55fb9435727839f0775ee6cb4697fc15f04207194f9a18aaa5f82a",
     "architecture/review-record/review-round4.json": "df2aa55b2004637547fc6f1951d696eeabcd198112faf3d2df274a9244bc2180",
     "architecture/review-record/review-round5.json": "b29d531933c3632f366a6c4e8e18a330910c3237bddddda7327920da1451192a",
+    "architecture/review-record/review-round6.json": "a25f25eed6303ead29d76dcdabadfd96db62c8aae3d3b0c9ea2e97238cb49162",
     "architecture/review-record/review-identity-round1.json": "c45c53fffc6c38477c737872e17df9323a8a467e86579601b4ebab8b3241aa56",
     "architecture/review-record/review-identity-round2.json": "5407523ff23516b2a4495c6eb6c6b5b2d2c9b58aa25a61b72c86cbe6a61328d8",
     "architecture/review-record/review-identity-round3.json": "3bf8caadb4db12f25bc754803c0cdcb76972ec7e9fdac52a7ef19ea003b1123d",
     "architecture/review-record/review-identity-round4.json": "1947e8ebcb6645577f3483633bf3b78a93d5ace607cd0c849c744a35640d5f22",
     "architecture/review-record/review-identity-round5.json": "71af2465dd829228f924aae892a8b919a6f5ecb56e6fd5b67976ac90d894438c",
+    "architecture/review-record/review-identity-round6.json": "905cf7dfaf5462d85d441e9db5dd305d65e5a3dc62929b6f27325d983a467849",
     "schemas/oracle-identity.schema.json": "6f3df9ec13d02a70167372ac49e24d7d40012c2de1f5d23bc8d16a007aa3b5b1",
     "schemas/review-briefs.schema.json": "b308441c37fac09b3cb966f36347dbe5ecbdbeca74554ab4770e91d41c783280",
     "schemas/review-identity.schema.json": "060457f8ee41d4da248778d5af509f1865304fd3860e9f25d20fff17b06a5051",
     "schemas/review-record.schema.json": "26e25c862458a18222f49fec0fe7a7d3f06a85aab6b624bda9920a3f015f1b40",
-    "scripts/review_record.py": "cc1bd11080eaab673601f977feabf6fd24357f705f628502209d0b5cd5437e9b",
+    "scripts/review_record.py": "bdcda19bd77f32e489a1baf67fcec1385c35085cb9224aa29f8d6716f5265996",
     "architecture/evolution-surface/evolution-surface.json": "b1759fe4bae0d9dc111f0c4ca3cc23e891cf89d572b73929ee01f5ec7616a277",
     "architecture/evolution-surface/vectors.json": "9c0f7cf1eb0f48dab41e322d8cdffba8568a5db2ddc2a31869f6af8dd9985b56",
     "architecture/evolution-surface/README.md": "922b09a56cd09486d3ab98a8abe8c4875774579beafebff14da294d9e87723c5",

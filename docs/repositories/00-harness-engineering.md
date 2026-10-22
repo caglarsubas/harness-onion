@@ -3,7 +3,7 @@
 ## Current source preparation — MET-GOV-002
 
 MET-GOV-002 (REVIEW-RECORD-V2): the review record v2 contract under architecture/review-record/ (README, published brief,
-brief registry, vectors, the frozen list, two oracle identities, with the status and the five v2 contract rounds and
+brief registry, vectors, the frozen list, two oracle identities, with the status and the six v2 contract rounds and
 their identities), four schemas under schemas/, its standard-library reference model and checker scripts/review_record.py
 and the in-suite pre-check tests/test_review_records_in_tree.py; and version 2 of MET-GOV-001's evolution surface record
 (the GATE_REVIEW_PROCESS class). The packet is gate material (Q-RR2-6), so the owner approves the merge per PR, bound to the head. No other earlier contract changes. Built under MET-PERF-042's

@@ -12,8 +12,8 @@ oracle tests that predate v2 (derived at this packet's base by the lane that may
 unopened), oracle identities (D5a), four closed schemas, a standard-library reference model and checker
 (scripts/review_record.py) and replayable vectors, with the in-suite pre-check tests/test_review_records_in_tree.py. It
 amends MET-GOV-001's evolution surface record to version 2 (the GATE_REVIEW_PROCESS class: the derived gate-material list
-grows from 27 to 31 entries). It was adopted after five independent contract review rounds by separate agents (round 5
-PASS_FOR_ADOPTION, NOTEs only), recorded in the contract's own v2 form; the status and the five rounds with their
+grows from 27 to 31 entries). It was adopted after six independent contract review rounds by separate agents (round 6
+PASS_FOR_ADOPTION, NOTEs only), recorded in the contract's own v2 form; the status and the six rounds with their
 identities are in architecture/review-record/, and the D5a oracle tests, written outside the candidate, are
 tests/test_review_record_oracle.py and MET-GOV-001's oracle file scoped to the record's version 2. The packet is gate material (Q-RR2-6), so the owner approves the merge per PR, bound to the head.
 It is built under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump
@@ -22,7 +22,7 @@ payload mutation (C2), while the new head's test keeps the full fan-in. MET-GOV-
 
 | Phase | ID | Status | Description / gate |
 |---|---|---|---|
-| Alpha2A | MET-GOV-002 / REVIEW-RECORD-V2 | SOURCE_PREPARED | Review record v2 (259th packet): two records per review round bound by digest, the brief registry, the frozen list, oracle identities, schemas, model and vectors; the evolution surface record v2 (gate list 27 -> 31); adopted after five independent contract review rounds; gate material, the owner's per-PR merge approval |
+| Alpha2A | MET-GOV-002 / REVIEW-RECORD-V2 | SOURCE_PREPARED | Review record v2 (259th packet): two records per review round bound by digest, the brief registry, the frozen list, oracle identities, schemas, model and vectors; the evolution surface record v2 (gate list 27 -> 31); adopted after six independent contract review rounds; gate material, the owner's per-PR merge approval |
 | Alpha2A | MET-ENFORCE-041 / DIGEST-CONTRACT | VERIFY_PASSED_MERGED | Merged as main 2043cc2 |
 | Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
 | Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
@@ -2381,7 +2381,7 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · EDGE-V9 / MET-ENFORCE-040 · Publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use) after independent contract review; the first packet built under the identity rule and step rule; pass required verify through the owner's App.
 - [x] Alpha 2A · EVOLUTION-SURFACE-001 / MET-GOV-001 · Publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its model and vectors, after five independent contract review rounds and the owner's NOTE fold; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · DIGEST-CONTRACT / MET-ENFORCE-041 · Publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B after independent design and contract review; the layer test runs VPO's validate_messages on the complete I01 positive (C1-1); pass required verify through the owner's App.
-- [ ] Alpha 2A · REVIEW-RECORD-V2 / MET-GOV-002 · Publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31), after five independent contract review rounds; gate material; pass required verify through the owner's App after the owner approves the exact head.
+- [ ] Alpha 2A · REVIEW-RECORD-V2 / MET-GOV-002 · Publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31), after six independent contract review rounds; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
