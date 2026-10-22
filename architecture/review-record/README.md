@@ -1,6 +1,7 @@
 # Review record v2 (REVIEW-RECORD-V2, packet MET-GOV-002)
 
-**Status:** contract candidate, under independent contract review. Not adopted. `legacy-review-records.json` is
+**Status:** ADOPTED_CONTRACT_CANDIDATE (internal, DATA_CHECK_ONLY; independent contract review round 6: PASS_FOR_ADOPTION;
+the rounds and their v2 records in `status.json`). `legacy-review-records.json` is
 derived at the packet's base, harness-onion 2043cc27; see "The frozen list".
 
 A review round in Harness-Onion is two records, bound by the sha256 of the record file's bytes:

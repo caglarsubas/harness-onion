@@ -1,0 +1,178 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-GOV-002/contract",
+ "round": 5,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "16c02fbe31fff5e1d8eb6cc28a121012d2760486",
+  "tree": "410d64c095b889ce8b793c6b6e078047bf8052de"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "d04f8f64ea7373b4cc1e72d06e2fb31ba90b2431",
+  "tree": "ecdbb89ad6e47bb95ad1b954ff13e506a83dc8a5"
+ },
+ "reviewDate": "2026-10-22",
+ "briefSha256": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+ "rulesSha256": "10cf049db01cdf38761bef05fbf07c551ceea882b4e3fca9f4b5ae802199ac9d",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "REVIEWER_AGENT"
+ },
+ "verdict": "PASS_FOR_ADOPTION",
+ "bindingRules": [
+  {
+   "rule": "B-4",
+   "met": true,
+   "note": "Still met. The fix changes check_merge in one line: a shape check on `voided`, which can only refuse a merge, never make a series count. Both steps are unchanged: check_series over each cited series from round 1, then check_review of the final round against the head. The README's citation duty is unchanged. The MONITOR.md section 4 list changes only in its VOID clause (RR2C4-1). Probe 1 undid the stated vector changes and got round 4's vectors exactly, so every non-merge row is unchanged. That includes series-head-bound-delta-without-base-round (SERIES_GAP), and merge-series-cited-without-round-one is still present. The replay passes all 15 merge rows."
+  },
+  {
+   "rule": "B-8",
+   "met": true,
+   "note": "Still met for every file this round changes. Probe 2 loaded 4 name digests with rr.load_name_tokens and scanned README.md, vectors.json, scripts/review_record.py and tests/test_review_record.py at the subject. The raw text has 0 names, 0 legacy term (privacy_hits, plus every seven-letter window), 0 home-path shapes (the model's pattern, plus a broader one), 0 e-mails and 0 home-directory shorthands. In vectors.json's parsed string values, the only hits come from the made-up joined-parts privacy rows: 3 absolute paths and 3 e-mails, unchanged from round 4's bytes. The fix and rebuild diff adds 145 lines (legacy list excluded), and 258's test file gets 3 pin lines. Both sets scan 0, line by line and joined. The 8 new hex runs are not part of any name digest. The fix does not touch check_oracle, check_tree or the privacy code, and NAME_TOKEN_SHA256 still ships empty (self-check probe). The frozen list passes the in-suite scan (test run 2). Its name-token scan falls outside this lane (RR2C5-3)."
+  },
+  {
+   "rule": "B-3",
+   "met": true,
+   "note": "load_registry is unchanged, and the README now agrees with it (RR2C4-1 resolved). Probe 1: an exact EXAMPLE-003/rerun under the prefix EXAMPLE-003/ is still SHAPE, for kind PR and for kind CONTRACT. EXAMPLE-003-R1/rerun loads."
+  },
+  {
+   "rule": "B-5",
+   "met": true,
+   "note": "The two oracle files and both oracle identities are byte-identical from d04f8f64 to the subject (git diff --quiet). Each identity's file sha256 equals its file's digest (ea396ea4..., b05a8f09...). Both oracle test files pass."
+  },
+  {
+   "rule": "B-6",
+   "met": true,
+   "note": "The codes and their order are unchanged, and the replay's codes check passes. check_merge still raises only NO_HEAD_BOUND_ROUND. It now also raises it for a `voided` that is not a list or tuple of strings."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "RR2C4-1",
+   "status": "ADDRESSED",
+   "note": "Fixed as the monitor ruled (owner_decisions entry 20, Q-RR2-VOID-PREFIX-FIX (a), points 1 to 3). The README's 'Under a prefix entry' bullet now says four things. A prefix X/ covers every series of packet X. B-3 refuses an exact id beneath it. The rerun's entry uses another packet-id part (X-R1/contract or a new prefix). While any series under X/ holds a VOID round, every series under X/ counts for nothing. The inert exemption is gone from the Enforcement bullet, the MONITOR.md section 4 list and both docstrings. _voided_sibling keeps its first branch (an exact entry returns False), and the docstring now explains it in line with B-3. The row is renamed merge-series-under-no-prefix-with-a-voided-sibling (EXAMPLE-001/pr, an exact entry that no prefix covers). Probe 1: EXAMPLE-003-R1/rerun counts while EXAMPLE-003/first is listed. EXAMPLE-003/unrelated-later-pr is NO_HEAD_BOUND_ROUND with that sibling listed and passes with voided []. The renamed row passes even with voided [EXAMPLE-001/pr-first, EXAMPLE-003/first, EXAMPLE-001/]."
+  },
+  {
+   "id": "RR2C4-2",
+   "status": "ADDRESSED",
+   "note": "brief-unregistered-series now uses EXAMPLE-009/contract. Probe 1 found no base entry that matches it; the old EXAMPLE-003/contract was matched by the PR prefix. The row again tests the plain case and replays BRIEF_NOT_FOR_SERIES. The other BRIEF_NOT_FOR_SERIES rows are unchanged."
+  },
+  {
+   "id": "RR2C4-3",
+   "status": "PARTLY",
+   "note": "check_merge now refuses (NO_HEAD_BOUND_ROUND) unless `voided` is a list or tuple of str. The README and the docstring say so, and two vectors cover it: a bare string and null. Both rows cite the same round and head as merge-passing-pr-round and pass with voided [], so `voided` alone causes the refusal. Probe 1: a set, a bare string, a bytes member, None and an int member all refuse, and a list or tuple works. The required change asked for series-id strings, but only the type is checked. A mis-formed id, for example a lowercase one, silently blocks nothing. That remainder is NOTE RR2C5-1."
+  },
+  {
+   "id": "RR2C4-4",
+   "status": "ADDRESSED",
+   "note": "The heading now reads check_merge(cited, registry, head, voided=()). The list 'Before each harness-onion merge the monitor also' gains 'passes its VOID rulings to check_merge as voided'. The coverage line now names the local-record case: there, the merge check is the only enforcement."
+  }
+ ],
+ "findings": [
+  {
+   "id": "RR2C5-1",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py check_merge, the line that refuses unless `voided` is a list or tuple of str; README 'The merge', bullet 'The mechanical part'",
+   "finding": "Any str is accepted as a member of `voided`. A string that is not a series id or prefix, such as a lowercase packet id, matches no prefix and blocks nothing, with no sign. Probe 1: voided ['example-003/first'] on merge-prefix-series-with-a-voided-sibling passes. RR2C4-3's required change asked for series-id strings. The input is the monitor's own, and only a typo triggers it, so this is advice. The README sentence also does not name the code, which the unreadable-record bullet does.",
+   "requiredChange": "Optional: also require each member to match SERIES or SERIES_PREFIX (both already in the model), add a vector, and write 'series ids' and the code NO_HEAD_BOUND_ROUND in the README sentence.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C5-2",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/README.md, 'The frozen list': the sentence 'Only tests/test_review_records_in_tree.py (run with the whole suite) depends on its contents.'",
+   "finding": "Now that the real list is in place, tests/test_review_record.py also depends on its contents. test_the_published_registry_and_frozen_list_load loads it with load_legacy and checks every entry and oracle path. test_every_published_file_of_the_contract_is_private scans it. The claim predates this round, and the rebuild only changed the sentence's tense.",
+   "requiredChange": "Optional: say that only the in-tree test checks the list against the tree, and that tests/test_review_record.py loads and scans it.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C5-3",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/legacy-review-records.json, B-8; README 'Privacy'",
+   "finding": "On this lane's side, no name-token scan covers the frozen list. The lane's scan excludes the file by path (Q-RR2-LEG-SCAN). The in-suite scan has no name digests (Q-RR2-NAMES). build_legacy.py checks only the path and digest forms. So B-8's name-token scan of this published file falls to the monitor's pre-merge check or the primary lane. The builder takes its paths from git ls-tree of the base commit and its digests from those blobs, so the list exposes nothing that 2043cc27's tree does not already hold.",
+   "requiredChange": "Optional: the monitor's pre-merge name scan names this file explicitly. Or the primary lane, which may open the file, relays a counts-only scan made with rr.load_name_tokens.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C5-4",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/oracle-identity.json and oracle-identity-evolution-surface.json (candidateCommit 45d818ee); README 'Stated for the owner's per-PR ask'",
+   "finding": "After the rebuild on 2043cc27, neither 45d818ee nor this round's base d04f8f64 is an ancestor of the subject. Each is reachable from one local ref (counted, not listed). The README says the monitor resolves 45d818ee in the lane's local repository, and B-4 reads unpushed reviewed commits there. If that ref is deleted, garbage collection can drop them. Both identities still bind the oracle files' bytes, which are identical at 45d818ee and at the subject.",
+   "requiredChange": "Optional: keep the pre-rebuild ref until the merge, and note in the README or the build notes that the earlier reviewed commits sit on it.",
+   "blocks": false
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. The binding rules (delta: B-4 and B-8 first)",
+   "result": "B-4 and B-8 are still met. B-3, B-5 and B-6 are met (see bindingRules). The fix and the rebuild do not touch B-1, B-2, B-7, B-9 or B-10. The restricted diff d04f8f64..16c02fbe changes only README.md, vectors.json, legacy-review-records.json, scripts/review_record.py and tests/test_review_record.py (the merge count, 13 to 15)."
+  },
+  {
+   "check": "2. The records against the design",
+   "result": "No schema changed (git diff --quiet over the four schemas), and no member was added to any record, identity, oracle identity, registry or frozen list. `voided` is an argument, not a member. The new merge rows use the optional `voided` member, which the replay reads with row.get('voided', []), so null reaches the model as None."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "check_merge and _voided_sibling match the README's corrected VOID text and the monitor's points 1 to 3 (probe 1). Inputs tried: a set, a bare string, bytes, None and int members (all refuse); a lowercase id (accepted, blocks nothing: RR2C5-1); the prefix itself (blocks the whole prefix); only the cited series itself (ignored by the sibling rule, left to check_series and the record-directory check); an exact-entry series (never stopped); and a rerun under another packet-id part (counts). The shape refusal comes after the cited records are read, and every path gives the same single code."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "The fix touches no schema and no shape check. Probe 1's undo shows the schemaAgrees and modelOnly rows are unchanged. tests/test_review_record.py, which holds the schema tests, passes."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Replayed with the pinned Python 3.12.14: 62 reviews, 10 series, 10 oracles, 5 prOracles, 15 merges, 13 registries, 7 legacy, 16 trees and 5 privacy rows. Probe 1 undid the stated changes: it put back EXAMPLE-003/contract, restored the old row id and removed the two new rows. The result equals round 4's vectors exactly. The new rows' expectations follow from the monitor's acceptance of RR2C4-3 (entry 20), and both pass with voided [], so the refusal is caused by `voided` alone. The test pin changes from 13 to 15 merges."
+  },
+  {
+   "check": "6. The evolution surface amendment and the rebuild",
+   "result": "evolution-surface.json (b1759fe4...) and vectors.json (9c0f7cf1...) are byte-identical at d04f8f64, cabcf7f5 and 16c02fbe. The replay gives 44 decisions, 31 invariants and 31 derived entries. Against 2043cc27, tests/test_evolution_surface.py changes in exactly three lines: derived 27 to 31, accepted 21 to 25, and the groups gain RR2. The fix commit does not touch that file. The rebuild commit cabcf7f5 changes only README.md (12 lines) against d04f8f64, beside the legacy list. The legacy list has sha256 e33afcf6593458857570045931b0c247c85a3c49b47743538eaea43182b70c9f and 26,663 bytes (shasum and wc -c only). tests/test_review_record.py loads it through load_legacy (line 129) and scans it, and passes. The README's counts (169 records, 2 oracle tests) match the builder's count line, as the build notes relay it. The status line and the frozen-list section no longer call the file a placeholder; the one mention left is in the past tense. Reading (d)'s two conditions are stated."
+  },
+  {
+   "check": "7. The tests",
+   "result": "Single-file runs. tests/test_review_record.py: rc 0. tests/test_review_record_oracle.py: rc 0. tests/test_evolution_surface_oracle.py: rc 0, 6 s. tests/test_evolution_surface.py: rc 1 in 10 s, with exactly 38 failures and no line containing w03. The failures fall in 8 tests: note fold 16, README status line 10, adopted bytes 3, era digests 3, added files 3, pinned list 1, history chain 1 and contract for this era 1, the same as round 4. The messages break down as follows. 36 say 'unreviewed EVOLUTION-SURFACE-001 source' for the evolution surface's README.md or evolution-surface.json. 1 says 'new source drift' for README.md. 1 is the pinned-digest assert, b1759fe4... against 44dd288c.... All 38 come from ERA_SHA256 in scripts/validate_evolution_surface.py, which binds MET-GOV-001's adopted bytes; the amendment changes those bytes until adoption. The oracle files and both identities are unchanged since round 4, and the oracle stays independent. Per the rules, neither the in-tree test nor check_tree on the worktree was run."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "See B-8: probe 2 found 0 names, 0 legacy term, 0 home paths and 0 e-mails, raw, parsed and joined, in the changed files and the added lines. No name digest is published. The model's imports are unchanged (standard library only). The frozen list is left to the tests, as the rules say (RR2C5-3)."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Answered in questions."
+  },
+  {
+   "check": "Subject file digests (sha256 at 16c02fbe, worktree clean)",
+   "result": "README.md 855d3f5f83d5dfbbd61aa2a10a575e063f03febd03b4bff81fe758ed4d7fa10c; REVIEW_BRIEF.md 72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e; briefs.json f389bae17a83924c873d29c2e13628b664f8586b47a59bf4093ac247928fc7c1; vectors.json 1e89b7b2573b518508e9e47a335acf02bc53b68131a783c5fb1a6913db85ab92; legacy-review-records.json e33afcf6593458857570045931b0c247c85a3c49b47743538eaea43182b70c9f; oracle-identity.json 35ceef8656ae5a4e133200e4e2ad5e2f003a2466759668a4d19a69dba09c8db1; oracle-identity-evolution-surface.json 0633c76dbc4ad19834df9a43278d2835a78ce741bd55373a22e0066874c3396f; schemas review-record 26e25c862458a18222f49fec0fe7a7d3f06a85aab6b624bda9920a3f015f1b40, review-identity 060457f8ee41d4da248778d5af509f1865304fd3860e9f25d20fff17b06a5051, oracle-identity 6f3df9ec13d02a70167372ac49e24d7d40012c2de1f5d23bc8d16a007aa3b5b1, review-briefs b308441c37fac09b3cb966f36347dbe5ecbdbeca74554ab4770e91d41c783280; scripts/review_record.py cc1bd11080eaab673601f977feabf6fd24357f705f628502209d0b5cd5437e9b; tests/test_review_record.py 6aa9220a5d3f2ba6b0c922d710d7dca9a3b71e12316c6932185ca97aefded484; tests/test_review_records_in_tree.py 9c4c2611d8eb7df7f63931b9889e01d92750ef3907bc297a34f38cc3b639ed16; tests/test_review_record_oracle.py ea396ea412be088245ee1d6dcfc31d79be4a7bd40d7f973ecc331f75308c41ba; tests/test_evolution_surface_oracle.py b05a8f096958a45ebb3ef1dfb12c99e1af54525a891f8b902416500e2e0712d8; tests/test_evolution_surface.py 2b347bce3e55c04f47aa340063ab3afd3ccb6f53d730e44ea4c13a4f48bad37c; architecture/evolution-surface/evolution-surface.json b1759fe4bae0d9dc111f0c4ca3cc23e891cf89d572b73929ee01f5ec7616a277; architecture/evolution-surface/vectors.json 9c0f7cf1eb0f48dab41e322d8cdffba8568a5db2ddc2a31869f6af8dd9985b56."
+  },
+  {
+   "check": "Files read",
+   "result": "Local records: <tools>/CONTRACT_REVIEW_RULES-r5.md; review-round4.json; owner_decisions.json (a grep of entry ids, which printed entry 20 in full); DESIGN.md (a heading grep and section 14 up to B-8); BUILD_NOTES.md (a grep and lines 236-260); build/build_legacy.py; name-token-digests.json, only through rr.load_name_tokens, with counts only. The published brief. From the restricted diff d04f8f64..16c02fbe: the diffs of README.md, vectors.json, scripts/review_record.py and tests/test_review_record.py. The diff 2043cc27..16c02fbe of tests/test_evolution_surface.py. At the subject: README.md lines 139-172, 236-250 and 296-372, plus greps; vectors.json lines 48-110, 3573-3600, 3628-3640 and 3683-3712, plus a grep; scripts/review_record.py lines 363-400, 586-650 and 812-880, plus greps; tests/test_review_record.py lines 1-20 (imports), 120-140 and 205-220, plus a grep; tests/test_review_records_in_tree.py (a grep); both oracle identities (greps for path, sha256 and candidateCommit); schemas/review-record.schema.json (members and forms, through an inline probe); scripts/validate_evolution_surface.py lines 499-584 only (ERA_SHA256, two constants and the five named functions)."
+  }
+ ],
+ "notChecked": [
+  "tests/test_review_records_in_tree.py was not run, nor check_tree on the worktree (rules).",
+  "The frozen list was never opened. Its counts (169 and 2) and its baseCommit rest on the builder's relayed line and the tests that load it.",
+  "This is a delta round: the parts of the subject that the fix and the rebuild leave unchanged were not re-reviewed.",
+  "Files outside the rules' paths in 2043cc27..16c02fbe were not diffed.",
+  "Not read: the round 1 to 3 records and identities, round 4's identity, CONTRACT_REVIEW_RULES-r1.md and -r4.md, DESIGN.md outside section 14, and BUILD_NOTES.md beyond lines 236-260 and one grep."
+ ],
+ "questions": [
+  "Q-RR2-FROZEN: the monitor settled it at rev 4's digest freeze (owner_decisions entry 15), and this round does not touch it. Nothing new to recommend.",
+  "Q-RR2-VOID-PREFIX-FIX (a): the README, the model and the vectors implement points 1 to 3 as ruled. Recommendation: keep. Option (c), refusing prefix entries for CONTRACT, PACKET and PR series, stays with the owner. With (a) in place, (c) matters only if VOID rounds under a prefix start to occur.",
+  "Q-RR2-ADOPT-SHAPE (a): this round's subject bytes become the adopted bytes. Recommendation: before the adoption commit merges, the monitor checks two things. First, that the commit's contract files equal 16c02fbe's (git diff --quiet restricted to the contract paths, or the digests in checked). Second, that status.json's per-file digests equal them.",
+  "The r5 rules name no reading as the author's own, so there is no reading to answer."
+ ],
+ "disclosures": [
+  "One wrapper call ran git diff --stat d04f8f64 16c02fbe over the rules' own path list, which includes architecture/review-record. It listed legacy-review-records.json with its changed-line count, but no content. Every later diff excluded the file by pathspec. This may count as a diff of the frozen list; the monitor should rule on it.",
+  "Test runs: 5 of 8. Run 1 (tests/test_review_record.py, in the rules' exact form) printed only the tail's rc. All of pytest's lines carry PYTEST_DIAGNOSTIC, so the filter removes them. Runs 2 to 5 added COLUMNS=400 and wrapped pytest as { ...; echo pytest_rc=$?; }. An awk replaced the two greps: it dropped and counted the PYTEST_DIAGNOSTIC lines and the lines containing w03, printing neither (0 w03 lines each time). Run 2 repeated run 1's file. Run 5 printed only the pytest_rc line, then per failing test its name (parameters cut), its count and its first message cut to 160 characters. Runs 4 and 5 were timed with date +%s. Each run ended with git status --porcelain | wc -l (0 each time).",
+  "Model replays: one call ran both replays with the pinned Python, as the rules state. It added '| grep -vi w03 | tail -5', an echo of the pipe status, date +%s timing and git status --porcelain | wc -l.",
+  "Probes: 4 of 10. p1 and p2 are scripts under <scratch>/. The third was an inline -I -B -c run from the worktree, which printed the record schema's members and forms. p4 was a self-check of this draft before copying. p1 and p2 put the worktree root on sys.path to import scripts.review_record under -I, as the tests do. They ran read-only git through subprocess: show of blobs at d04f8f64 and 16c02fbe, plus diff -U0 limited to the rules' paths with the legacy list excluded by pathspec, and 2043cc27..16c02fbe for tests/test_evolution_surface.py. p1 called rr.replay on in-memory copies of the vectors. It emptied the other sections and changed one merge row at a time, and read the outcomes from rr.Mismatch and rr.Refused. It also called rr.load_registry. p2 loaded the name digests with rr.load_name_tokens and printed counts only. Beyond the public functions, it read rr.NAME_TOKEN_SHA256, to test hex runs against the name digests (counts only), and rr.LEGACY_TERM_PREFIX.",
+  "My first draft of p2 found the name-digest file through the home-directory expansion, which reads an environment value. I replaced it with the explicit path before the script ever ran.",
+  "Several wrapper calls chained read-only commands with sh -c. They ran git rev-parse, git status --porcelain | wc -l, git merge-base --is-ancestor and git rev-list --count. They ran git log with a format of hashes, parents and subjects only (no author lines). They ran git diff --stat and --quiet over the rules' paths, and git ls-tree --name-only of the contract directory. They ran git cat-file -t of 45d818ee, and git for-each-ref --contains | wc -l, which printed counts and no ref names. Blobs went from git show straight into shasum: the evolution surface's record and vectors at three commits, and both oracle files at 45d818ee. One sh -c call failed on a quoting error before running anything, and I re-issued it.",
+  "To find where ERA_SHA256 ends, I ran a grep on scripts/validate_evolution_surface.py beyond the rules' grep. It printed only the line numbers of every top-level def and constant, never their names or text. The range I then read, 499-584, also holds two constants between the table and the first function.",
+  "wc -l -c read the line and byte counts of owner_decisions.json, BUILD_NOTES.md, build/build_legacy.py and DESIGN.md. These were counts, not listings.",
+  "At the end, the probe scripts were removed from <scratch>/, leaving only this draft."
+ ]
+}

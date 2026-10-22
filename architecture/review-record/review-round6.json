@@ -1,0 +1,155 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-GOV-002/contract",
+ "round": 6,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "8c7ee7ca990649858c2d6c4ff0aed9dcf4b021cd",
+  "tree": "0802156b39cbc95466de0afcc7b025fad38aca99"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "16c02fbe31fff5e1d8eb6cc28a121012d2760486",
+  "tree": "410d64c095b889ce8b793c6b6e078047bf8052de"
+ },
+ "reviewDate": "2026-10-22",
+ "briefSha256": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+ "rulesSha256": "d7c54d768f2caa5ec8b67e2ec6ef45262a24dd8d3f9f41b1bacd85466b1c7d78",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "REVIEWER_AGENT"
+ },
+ "verdict": "PASS_FOR_ADOPTION",
+ "bindingRules": [
+  {
+   "rule": "B-4",
+   "met": true,
+   "note": "Still met. The fix does not touch check_merge, check_series or check_review. Probe 1 compared the two models' ASTs, docstrings ignored. Of 109 top-level nodes, only ORACLE_NAME and check_tree differ, and in check_tree only statement 14, the oracle_ids line. Every vector section other than trees equals round 5's. That includes series-head-bound-delta-without-base-round (SERIES_GAP) and merge-series-cited-without-round-one (NO_HEAD_BOUND_ROUND), and the replay passes all 10 series and 15 merge rows. The README diff touches only the file-names section and the tree's oracle-identities bullet. The citation duty, the merge check and the MONITOR.md section 4 list are unchanged."
+  },
+  {
+   "rule": "B-8",
+   "met": true,
+   "note": "Still met. check_oracle is unchanged and still applies PRIVACY. check_tree applies it to the registry, which is unchanged, and to every file the name rule makes an oracle identity, in any directory. The narrowing stops the in-suite scan only for files that bind nothing. In probe 1, an identity-like file holding an e-mail at oracle-identity-Copy.json or oracle-identity.schema.json passes, just as the same bytes pass at notes.json under both models. The same bytes at oracle-identity-copy.json are PRIVACY. As the only binder, the Copy file leaves its test ORACLE_MISSING. Probe 2 loaded the name digests with rr.load_name_tokens and printed nothing about them. It then scanned the four changed files at the subject (raw), the vectors' parsed strings, the two new rows (per string and joined) and the 75 added lines (per line, joined, and joined by newlines). Every scan found 0 names, 0 legacy term (privacy_hits, plus every seven-letter window), 0 absolute paths, 0 e-mails (the model's pattern and the rules' pattern) and 0 home-path shapes. The made-up joined-parts privacy rows give the same counts at both commits. The added lines hold 9 hex runs, all already present in round 5's files, so no digest is newly published. NAME_TOKEN_SHA256 still ships empty: its assignment is unchanged in the AST comparison."
+  },
+  {
+   "rule": "B-5",
+   "met": true,
+   "note": "Met, with the tree half now keyed to the exact name rule. check_tree still refuses an ORACLE_TESTS file that is neither frozen with its bytes nor bound by a valid identity (ORACLE_MISSING). Probe 1 showed this for a binder renamed out of the rule, for identity bytes at the schema path, and for a changed frozen oracle test bound only by a .schema.json name. A malformed file under a matching name is SHAPE in every directory tried. check_pr_oracles and check_oracle are unchanged. With the subject's oracle files, the two real identities pass check_pr_oracles as a contract series (KEEP, KEEP), and each passes check_oracle with the name digests loaded. They do not apply the name rule to identity paths (RR2C6-1)."
+  },
+  {
+   "rule": "B-6",
+   "met": true,
+   "note": "The code tuples and their order are unchanged (the AST shows no difference), and the replay's codes check passes. Both new rows reach codes the tree already had: none, and SHAPE."
+  }
+ ],
+ "findings": [
+  {
+   "id": "RR2C6-1",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py check_pr_oracles and check_oracle (identity paths are checked against FILE_PATH only); <harness-onion>/architecture/review-record/README.md, 'File names': 'Any other name ... is not an oracle identity and binds nothing.'",
+   "finding": "The exact name rule exists only in check_tree, as the monitor ruled. check_pr_oracles binds whatever (path, bytes) pairs it is given. In probe 1, a valid identity passed as architecture/example/oracle-identity.schema.json, architecture/example/Oracle-Identity-X.json or schemas/notes.json binds the changed oracle test there, under both models. check_tree ignores such a file, so the test is ORACLE_MISSING in the tree. The monitor runs both checks before a merge (B-9), so this fails closed. A near-miss name such as oracle-identity-Final.json is now silent in check_tree, with no SHAPE or PRIVACY, where round 5 gave both. That file binds nothing.",
+   "requiredChange": "Optional, in a later change: have check_pr_oracles refuse (SHAPE) an identity whose base name does not fullmatch ORACLE_NAME. Or say in the README that the monitor passes check_pr_oracles exactly the files the name rule selects.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C6-2",
+   "severity": "NOTE",
+   "location": "<harness-onion>/tests/test_custody_handoff.py; the outer pytest argv (B-2)",
+   "finding": "No contract round's rules, including this one's, let a reviewer run the tests outside the contract's own files that its new files touch. One is tests/test_custody_handoff.py, which failed in pre-check attempt 2 because the custody record does not list the four new schemas. Another is the outer argv's collection of the three new test files (B-2). Only the lane's targeted set and the pre-check run them.",
+   "requiredChange": "None for the contract. Keep them in the packet's targeted set from the first build, as the monitor's standing rule (entry 27) says. Packet r4 runs them explicitly.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C6-3",
+   "severity": "NOTE",
+   "location": "<harness-onion>/tests/test_review_records_in_tree.py over the adopted tree (check_tree's series branch)",
+   "finding": "At the subject, the contract directory holds no review round (git ls-tree). So this round's in-tree run checked the frozen list, the registry and the two oracle identities, but not the MET-GOV-002/contract series. No reviewer has yet run the series branch on real published rounds. That branch is check_series with the repository, NO_IDENTITY, SERIES_FORK, and PRIVACY of the published records and identities. Pre-check attempt 2 refused at round 5's review_record.py:710, the oracle loop's SHAPE line, which runs after the series loop. That suggests rounds 1 to 5 passed the series branch in the lane's run. Probe 3 ran check_review on round 5's record with its identity, against the subject's registry with the name digests loaded: it passes (KEEP).",
+   "requiredChange": "Packet r4 runs the in-tree test on the re-adopted tree with rounds 1 to 6 published, as entry 27 plans. Before adoption, the operator checks round 6's record with its identity through check_review.",
+   "blocks": false
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. The binding rules (delta: B-4 and B-8 first)",
+   "result": "B-4 and B-8 are still met, and B-5 and B-6 are met (see bindingRules). B-1, B-2, B-3, B-7, B-9 and B-10 are untouched. The subject differs from 16c02fbe in four files only (git diff --stat: README.md, vectors.json, scripts/review_record.py and tests/test_review_record.py, +75 -7; one commit). The model's AST differs only in ORACLE_NAME and check_tree's oracle_ids statement."
+  },
+  {
+   "check": "2. The records against the design",
+   "result": "No schema changed: git diff --quiet over schemas/, and the four digests equal round 5's. No record member changed. The README's file-name row now reads oracle-identity.json and oracle-identity-<part>.json. That is within design 3.3's 'oracle-identity.json (or oracle-identity-<n>.json)', and narrows section 6's oracle-identity*.json as the monitor ruled (entry 27)."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "ORACLE_NAME is re.compile(r'^oracle-identity(?:-[a-z0-9]+)*\\.json$'), the ruled regex exactly, with re.UNICODE as its only flag. It is applied with fullmatch to the base name of every walked path, so it holds in every directory. fullmatch also rejects a trailing newline, which a bare $ would let through. check_tree is its only user (AST), and fnmatch stays for the record, identity and ORACLE_TESTS names. The constant's comment, check_tree's docstring and the README paragraph state the same rule. The docstring and the table write oracle-identity-<part>.json, and the paragraph says one or more parts. Probe 1 tried 23 names. The rule accepts the 6 identity names (oracle-identity.json, -evolution-surface, -2, -extra, -x, -a-b-c). It rejects 17: .schema.json, upper case, an underscore, a missing hyphen, an empty or doubled part, a trailing hyphen, .json.json, a non-ASCII letter or digit, a dotted part, .JSON, .bak, a prefix and a trailing newline. Round 5's glob accepted 12 of those 17."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "No schema and no shape function changed (AST). tests/test_review_record.py, which holds the schema tests, passes. A matching file that is not a valid identity is still SHAPE through _oracle_shape, which is unchanged."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "vectors.json differs from round 5's by a pure insertion of 60 lines at line 4691. Two tree rows sit at indexes 14 and 15. Every other section, and every other tree row in order, equals round 5's. The two rows differ only in the stray file. Replay with the venv Python, temporary trees under <scratch>/: 62 reviews, 10 series, 10 oracles, 5 prOracles, 15 merges, 13 registries, 7 legacy, 18 trees and 5 privacy rows. Each of the 18 tree rows was replayed alone under both models. Only tree-schema-named-like-an-oracle-identity differs: ok under the new model, and Mismatch SHAPE under round 5's. Round 5's model was loaded from git show 16c02fbe bytes written into <scratch>/. tree-stray-oracle-identity-in-schemas is SHAPE under both. Round 5's model also replays round 5's vectors (16 trees) and the new non-tree sections. Both expectations follow from entry 27, not from the model."
+  },
+  {
+   "check": "6. The evolution surface amendment",
+   "result": "The fix does not touch it. git diff --quiet 16c02fbe 8c7ee7ca is clean over architecture/evolution-surface, scripts/evolution_surface.py, scripts/validate_evolution_surface.py, tests/test_evolution_surface.py, tests/test_evolution_surface_oracle.py, tests/test_review_record_oracle.py, tests/test_review_records_in_tree.py and schemas. evolution-surface.json is b1759fe4..., and its vectors.json 9c0f7cf1.... No oracle-identity glob appears in evolution-surface.json, its README or scripts/evolution_surface.py (grep)."
+  },
+  {
+   "check": "7. The tests",
+   "result": "Six single-file runs of 8. tests/test_review_records_in_tree.py: rc 0, under 1 s; this is a reviewer's first run of it. tests/test_review_record.py: rc 0. tests/test_review_record_oracle.py: rc 0. tests/test_evolution_surface_oracle.py: rc 0, 6 s. tests/test_evolution_surface.py: rc 1, run twice, 9 s each (see disclosures). The oracle files and both identities are byte-identical to round 5's (ea396ea4..., b05a8f09..., 35ceef86..., 0633c76d...). The oracle stays independent as its identities state. Both identities match the name rule."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "See B-8: 0 hits of any kind in the changed files and the added lines, raw, parsed and joined. No digest is newly published. The imports are unchanged and standard library only (AST check against sys.stdlib_module_names)."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Answered in questions."
+  },
+  {
+   "check": "Rules 1: the fix is exact and narrow",
+   "result": "Met. The constant is the ruled regex, applied with fullmatch to the base name in every directory. check_tree is its only user. Nothing else in the model changed in behaviour: the AST delta is the constant plus one statement. The docstring and the README agree."
+  },
+  {
+   "check": "Rules 2: no hole",
+   "result": "None found. Probe 1 built temporary trees under <scratch>/ from the schema row. In each of these, the binder binds nothing and its test is ORACLE_MISSING: an identity renamed to oracle-identity-Example.json, oracle-identity.schema.json, oracle-identity_x.json, Oracle-identity.json, oracle-identity-x.json.bak or oracle-identity.json.json, and identity bytes at schemas/oracle-identity.schema.json, which round 5 bound. A changed frozen oracle test bound only by a .schema.json name is also ORACLE_MISSING. An escaping identity of an absent file passes; round 5 gave ORACLE_DIGEST. A leak in an escaping file passes, the same as in notes.json. At a matching name the leak is PRIVACY (RR2C6-1). Stray invalid files at oracle-identity-x.json, tests/oracle-identity.json, a nested oracle-identity-a-b.json and schemas/oracle-identity-review.json are SHAPE. Every name in use matches: oracle-identity.json and oracle-identity-evolution-surface.json, the oracle test's architecture/orc-ctr/oracle-identity.json and oracle-identity-2.json, and the vectors' oracle-identity-extra.json and oracle-identity-x.json."
+  },
+  {
+   "check": "Rules 4: the in-tree test",
+   "result": "It passes at the subject (rc 0, both tests). On paper, it refuses round 5's model on this tree. Round 5's glob matches schemas/oracle-identity.schema.json (probe 1), and the walk is sorted. Every step before the oracle loop is the same in both models. So the loop reaches the schema after the two valid identities. load accepts the schema as I-JSON, and _oracle_shape rejects its members: SHAPE. Round 5's line 710 is that _refuse(_oracle_shape(o), 'SHAPE') line, where the pre-check stopped, and the schema row reproduces the refusal under round 5's model. Checks no earlier round's rules let a reviewer run: RR2C6-2 and RR2C6-3."
+  },
+  {
+   "check": "Rules 6: regressions and the 38 era failures",
+   "result": "No rule is broken, no schema and model disagreement was added, and no new privacy exposure appeared. The oracle files and both identities are byte-identical at both commits. tests/test_evolution_surface.py at the subject has exactly 38 failures in 8 tests: note fold 16, README status line 10, adopted bytes 3, era digests 3, added files 3, pinned list 1, history chain 1 and contract for this era 1. That is round 5's count and groups. The messages break down as follows. 36 say 'unreviewed EVOLUTION-SURFACE-001 source'. By the first path named, 29 are README.md, 4 are evolution-surface.json and 3 are vectors.json; round 5's account named only the first two. 1 says 'new source drift' for README.md, and 1 is the pinned-digest assert, b1759fe4... against 44dd288c.... Every file these tests read is identical at 16c02fbe and 8c7ee7ca. No line contained w03."
+  },
+  {
+   "check": "Subject file digests (sha256 at 8c7ee7ca; worktree clean, no ignored files)",
+   "result": "Changed: README.md 4040ebc078c9157c69c0a75b588303cd848c041f600d4e440a53e5fa2feeb603; vectors.json 502b15998da618c9f992521c4a21259a97434363e2329f3f0becebb5dcbec584; scripts/review_record.py bdcda19bd77f32e489a1baf67fcec1385c35085cb9224aa29f8d6716f5265996; tests/test_review_record.py 82af925b29dcddd084b095a1013dca1cb412f42005c208dc5c5f2fca5cdb062c. Unchanged from round 5: REVIEW_BRIEF.md 72c3816a...; briefs.json f389bae1...; both identities, the four schemas, the oracle files, tests/test_review_records_in_tree.py 9c4c2611... and tests/test_evolution_surface.py 2b347bce.... legacy-review-records.json: e33afcf6593458857570045931b0c247c85a3c49b47743538eaea43182b70c9f, 26,663 bytes (shasum and wc -c only)."
+  },
+  {
+   "check": "Files read",
+   "result": "Local: <tools>/CONTRACT_REVIEW_RULES-r6.md; review-round5.json; review-identity-round5.json; CONTRACT_REVIEW_RULES-r5.md (one grep); owner_decisions.json (a grep, then lines 160-174: the end of entry 26, entry 27 and entry 28); BUILD_NOTES.md (a heading grep, then lines 332-357); DESIGN.md (a heading grep, then sections 3.3, 6 and 14); name-token-digests.json, only through rr.load_name_tokens. The published brief. In the repository: the diff 16c02fbe..8c7ee7ca of the four files; scripts/review_record.py lines 1-160, 380-465 and 540-890 (plus round 5's lines 690-712 from git show); README.md lines 100-145 and 225-300, plus a grep; tests/test_review_records_in_tree.py in full; greps of tests/test_review_record.py, tests/test_review_record_oracle.py, tests/test_evolution_surface_oracle.py, tests/test_evolution_surface.py, scripts/evolution_surface.py, the evolution surface's README.md and evolution-surface.json, and briefs.json; a grep -o of identity names in vectors.json; git ls-tree names of the two contract directories and the schemas."
+  }
+ ],
+ "notChecked": [
+  "This is a delta round: the parts of the subject the fix leaves unchanged were not re-reviewed.",
+  "The frozen list was never opened. It was checked only by shasum, by wc -c and through the tests that load it.",
+  "check_tree ran on the worktree only through the in-tree test. The model's CLI replay was not run, since its temporary trees would go to the system temporary directory. rr.replay ran in probe 1 with its trees under <scratch>/.",
+  "tests/test_custody_handoff.py and the whole suite were not run (not allowed; RR2C6-2).",
+  "Not read: the round 1 to 4 records, DESIGN.md outside sections 3.3, 6 and 14, CONTRACT_REVIEW_RULES-r5.md beyond one grep, and BUILD_NOTES.md beyond a heading grep and lines 332-357."
+ ],
+ "questions": [
+  "Q-RR2-FROZEN: settled at rev 4's digest freeze (entry 15). This fix does not touch the frozen list, whose sha256 is unchanged. Nothing new to recommend.",
+  "Q-GOV2-PRE-INTREE (a): implemented as ruled. Recommendation: keep it. Carry RR2C6-1 to a later change, since the monitor scoped the rule to check_tree.",
+  "Re-adoption: this round's subject bytes become the adopted bytes. Recommendation: before the adoption commit merges, the monitor checks two things. First, that the commit's contract files equal 8c7ee7ca's: the four changed files' digests are in checked, and the rest are round 5's. Second, that status.json's per-file digests equal them. Packet r4 then runs the in-tree test with rounds 1 to 6 published (RR2C6-3).",
+  "The r6 rules name no reading as the author's own, so there is none to answer."
+ ],
+ "disclosures": [
+  "Test runs: 6 of 8, each in the rules' form plus COLUMNS=400, with pytest wrapped as { ...; echo pytest_rc=$?; } so its own exit code shows, date +%s timing, and git status --porcelain --ignored | wc -l after (0 each time). Run 5 (tests/test_evolution_surface.py) wrote the merged output to a file in <scratch>/, printed only line counts (PYTEST_DIAGNOSTIC lines and w03 lines counted, never printed), grouped the FAILED lines with sed, sort and uniq after both filters, and deleted the file in the same call. It showed 37 FAILED lines, because stderr's PYTEST_DIAGNOSTIC lines had interleaved with stdout. Run 6 repeated the same file with stdout and stderr in two <scratch>/ files instead of 2>&1. The stderr file (2,359 lines, all PYTEST_DIAGNOSTIC, 0 w03) was only counted. Both files were deleted in the call. The stdout file gave the 38 failures.",
+  "Probes: 4 of 10. p1 and p2 are as described below. p3 ran twice, before and after a last edit of this draft. It validated the draft against the record schema with the venv's jsonschema, ran check_review on the draft with a made-up identity (pass), and ran check_review on round 5's record with its identity (pass). Beyond the public functions, p3 read IDENTITY_SCHEMA and called the private _private. I wrote the scripts and this draft into <scratch>/ with the file-writing tool, not through the wrapper. Each probe ran through the wrapper with the venv Python -I -B from the worktree. Each put the worktree root on sys.path to import scripts.review_record, as the tests do. Through subprocess they ran read-only git: show of blobs at both commits, and diff -U0 of the four changed files. p1 wrote round 5's model from git show bytes into <scratch>/r5model/ and loaded it with importlib. It set tempfile.tempdir to <scratch>/tmp, so rr.replay's and its own temporary trees stayed under <scratch>/. Both directories were removed. Beyond the public functions, p1 read ORACLE_NAME, LEGACY_SCHEMA and the two models' ASTs, and p2 read LEGACY_TERM_PREFIX. p2 never read NAME_TOKEN_SHA256, because no fresh hex run needed it. The rr.load_name_tokens result went to an assert, with nothing printed.",
+  "Two commands touched the frozen list by name without opening it. git diff --quiet 16c02fbe 8c7ee7ca -- architecture/review-record/legacy-review-records.json printed only its exit status (unchanged). The unrestricted git diff --stat 16c02fbe 8c7ee7ca would have listed the file had it changed; it did not. Under the letter of 'no diff' the first may count as a diff of the frozen list, so the monitor should rule on it. git ls-tree --name-only of the contract directory printed its name.",
+  "The sed range on owner_decisions.json (lines 160-174) printed the end of entry 26 and all of entry 28 as well as entry 27. That file is allowed in full. Neither entry is W03 or R10 material.",
+  "Other wrapper calls chained read-only commands through sh -c: git rev-parse, rev-list --count, merge-base --is-ancestor, diff and diff --quiet over the rules' paths, ls-tree --name-only, and git show <commit>:<path> piped into shasum or sed. No git log, no commit object and no author line was printed. Slip: one message issued two tool calls, both edits to this draft in <scratch>/, which breaks the one-call-per-message rule. Neither ran a command or read a file. At the end the probe scripts were removed from <scratch>/, leaving only this draft."
+ ]
+}

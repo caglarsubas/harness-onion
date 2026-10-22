@@ -1,0 +1,256 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-GOV-002/contract",
+ "round": 1,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "0bc5dc1aa263206b94199412648d8d0849c6fe38",
+  "tree": "4bee7f573c8ab7c1c49f2e22b4e0408534320124"
+ },
+ "reviewDate": "2026-10-22",
+ "briefSha256": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+ "rulesSha256": "8f75c25a2d6466873e32949a04eb5d9d4737bf1d3df5d74ee7f132eb6b4ba9e0",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "REVIEWER_AGENT"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "bindingRules": [
+  {
+   "rule": "B-1",
+   "met": true,
+   "note": "Every binding is the sha256 of the file's bytes, written as 64 lowercase hex with no prefix. BINDING compares the identity's record with the record path and file_sha256 of the record bytes. ORACLE_DIGEST, the frozen list's entries and oracleTests, and the registry's sha256 work the same way. Truncated or prefixed digests are refused (the NO_BRIEF_DIGEST and SHAPE vectors). A record need not be canonical (test_the_binding_is_the_file_byte_sha256). The README's Decisions section quotes the owner's answers and keeps D-1 and D-2 apart. It shortens the relayed '155 legacy records' to 'the legacy records', which matches the 162 at 30f41e6f."
+  },
+  {
+   "rule": "B-4",
+   "met": false,
+   "note": "Met: check_series checks every round with its identity, and the README states the monitor's series check before each merge and the read-only read of an unpushed reviewed commit. The SERIES_GAP vector for a head-bound delta is present (series-head-bound-delta-without-base-round). Missing: the merge-decision record citing every round back to the last full round, and the matching MONITOR.md section 4 edit (RR2C1-1). Also, check_series needs every round from round 1, not only those back to the last full round."
+  },
+  {
+   "rule": "B-2",
+   "met": true,
+   "note": "The three new test files are under tests/, which pyproject's testpaths collects, so there is no new argv. The copy of the predecessor's acceptance commands belongs to the chain mechanics, which are not in this subject (no authority file yet). Check it at the packet review (RR2C1-14)."
+  },
+  {
+   "rule": "B-3",
+   "met": true,
+   "note": "_brief_entry requires the entry's kind to equal the record's. load_registry refuses, as SHAPE, two kinds under one series pattern and overlapping patterns (an exact id plus a prefix). The frozen-record clause is gone. BRIEF_SUPERSEDED fires when launched is at or after supersededAt, or reviewDate is on or after its date. Vectors: brief-another-kind-under-shared-prefix and registry-overlap-exact-and-prefix."
+  },
+  {
+   "rule": "B-5",
+   "met": true,
+   "note": "NOT_INDEPENDENT refuses an oracle equal to the operator (vector oracle-is-the-lane-session). check_pr_oracles takes the authors from each identity and raises ORACLE_MISSING, ORACLE_DIGEST, NOT_INDEPENDENT and RULING. check_oracle checks one identity. check_tree refuses an unfrozen or changed oracle test that has no identity (ORACLE_MISSING), and a malformed oracle identity (SHAPE). The model's oracle-test pattern agrees with es.resolve on 8 probed paths."
+  },
+  {
+   "rule": "B-6",
+   "met": true,
+   "note": "REVIEW_CODES are in B-6's order, with SUBJECT_REPOSITORY after SUBJECT_FORM. kind and every agentId are plain strings in the schemas, so UNKNOWN_KIND and PLACEHOLDER_ID are reachable after SHAPE (vectors unknown-kind-delta and placeholder-empty). SUBJECT_FORM, NO_HEAD_BOUND_ROUND, the SERIES_FORK and RULING additions and SUBJECT_REPOSITORY are all present. The frozen-list form adds oracleTests (reading (c)). The two LEGACY_CHANGED cases are pytest cases on synthetic trees, not vectors.json rows (RR2C1-5)."
+  },
+  {
+   "rule": "B-7",
+   "met": true,
+   "note": "The README gives the oracle citation as {record: path, sha256, role: ORACLE, candidateCommit}, requires a citation's verdict to equal the record's exactly, and keeps existing entries in their form."
+  },
+  {
+   "rule": "B-8",
+   "met": false,
+   "note": "check_oracle applies PRIVACY. check_tree applies none to the registry, nor to an oracle identity that binds no walked oracle test (RR2C1-2). As Q-RR2-NAMES narrows B-8, no published file holds a name token, a token digest or a joined fragment (probes 3 and 5: 0 of each). The in-suite check covers home paths, e-mails and the legacy term. The agentIds are tool-generated."
+  },
+  {
+   "rule": "B-9",
+   "met": true,
+   "note": "The README has the monitor run check_pr_oracles and check_tree over the PR head's checkout before each merge. The data-class conftest residual is not yet stated for the D-2 ask (RR2C1-14)."
+  },
+  {
+   "rule": "B-10",
+   "met": true,
+   "note": "The schemas and the model admit only LANE_SESSION as operator.role (vectors shape-monitor-written-identity and oracle-shape-monitor-written). check_review takes bytes and paths, and a parsed object is SHAPE (test). runs is [{limit, used}] and bindingRules is [{rule, met, note}]. Existing merge-decision entries keep their form."
+  }
+ ],
+ "findings": [
+  {
+   "id": "RR2C1-1",
+   "severity": "MAJOR",
+   "location": "<harness-onion>/architecture/review-record/README.md, 'The merge' and 'Merge-decision records and MONITOR.md section 4'; <harness-onion>/scripts/review_record.py check_merge and check_series",
+   "finding": "B-4's second rule is missing. The contract nowhere says that the merge-decision record cites every round of each cited head-bound series back to its last full round, and the listed MONITOR.md section 4 edits do not say so either. check_merge takes a series' final round to be the highest cited round (reading (b)), so without that rule the lane's choice of citations decides which round is final. The README also has the monitor run check_series 'back to its last full round', but check_series refuses SERIES_GAP unless the rounds start at 1.",
+   "requiredChange": "State B-4's citation rule in the README's merge-decision section and in the listed MONITOR.md section 4 edits: the record cites every round of each cited head-bound series, back to its last full round, by path and sha256. Make the check_series wording match its interface (every round from 1), or let check_series take a tail that starts at a full round, with a vector.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-2",
+   "severity": "MAJOR",
+   "location": "<harness-onion>/scripts/review_record.py check_tree; <harness-onion>/tests/test_review_records_in_tree.py",
+   "finding": "B-8 requires check_oracle and check_tree to apply PRIVACY to oracle identities and the registry. check_oracle does. check_tree receives the registry already loaded and never scans its bytes. It only shape-checks an oracle-identity*.json whose file is not a walked oracle test: only identities bound to a walked oracle test reach check_oracle's PRIVACY. Two data-class tests scan briefs.json, but the gate-class pre-check (D-2) does not.",
+   "requiredChange": "Have check_tree (or the in-tree test) run privacy_hits over the registry's bytes and over every oracle-identity*.json it finds, refusing PRIVACY. Add a test for each.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-3",
+   "severity": "MAJOR",
+   "location": "<harness-onion>/schemas/review-record.schema.json, review-identity.schema.json, oracle-identity.schema.json, review-briefs.schema.json; <harness-onion>/scripts/review_record.py _int, _valid_date, _time",
+   "finding": "Probe 2 used the public interface and jsonschema Draft 2020-12 as the tests apply it. In these cases the model refuses SHAPE but the schema accepts. (1) Integer members written with a fraction: round 1.0, runs[].used 0.0, a registry version 1.0; JSON Schema counts 1.0 as an integer. (2) Impossible calendar values: reviewDate or ruling.date 2026-02-30 or month 13, and launched or supersededAt with hour 24, second 60, month 13 or offset +24:00. The patterns admit these, and format is only an annotation without a format checker; with one, this environment checks date but not date-time. Of the model-only SHAPE causes, the README declares only launched after finished. The direction is fail-closed. But check 4's claim, SHAPE exactly when a schema rejects, does not hold, and the oracle's agreement tests do not cover these inputs.",
+   "requiredChange": "Choose one. Either tighten the schema patterns (month 01-12, day 01-31, hour 00-23, minute and second 00-59, offset hour 00-23) and list the remaining model-only SHAPE causes in the README (I-JSON faults, an integer written with a fraction or exponent, an impossible date such as 02-30, launched after finished). Or make the model accept integer-valued numbers. Either way, pin each declared difference with a vector or test.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-4",
+   "severity": "MINOR",
+   "location": "<harness-onion>/architecture/review-record/README.md 'The records' and 'Oracle identities'; <harness-onion>/schemas/oracle-identity.schema.json",
+   "finding": "The README has no member table for planeon.oracle-identity/v1. The schema and the model add an optional disclosures member that design section 6 does not list. The ruling check reads it as the stand-in for the record's disclosures plus the interruptions and relays, and the two published identities put their interruptions and relays there. That is a reasonable reading of section 6's 'the same rule as in section 3.2', but it is not declared.",
+   "requiredChange": "Add the oracle identity's member table to the README. State the disclosures member and the oracle ruling rule (NONE_NEEDED only with no disclosures, where disclosures include interruptions and relays) as the author's reading, for the monitor.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-5",
+   "severity": "MINOR",
+   "location": "<harness-onion>/architecture/review-record/vectors.json; <harness-onion>/scripts/review_record.py replay",
+   "finding": "vectors.json has no rows for check_tree's codes: LEGACY_CHANGED (a byte change, a rewrite into a valid v2 set, an unlisted record; B-6 asks for vectors for both), NO_IDENTITY for a v2 round in the tree, ORACLE_MISSING for an unfrozen or changed oracle test, and SHAPE for a malformed oracle identity. Only pytest cases on synthetic trees cover them, in the candidate's tests and the oracle file. These also have no rows: design section 9's second DUPLICATE_IDENTITY case (one identity for two records), a delta round that is round 1, and another registered series' brief of the same kind. Every expectation that is present follows from the design or a stated reading.",
+   "requiredChange": "Add a tree section to vectors.json (file maps that replay writes to a temporary directory), or state in the README that the tree cases are test-only vectors. Add the missing review and series rows.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-6",
+   "severity": "MINOR",
+   "location": "<harness-onion>/scripts/review_record.py check_tree and check_series",
+   "finding": "Paper analysis, three gaps. (1) Rounds are grouped by directory, so a series id spread over two directories, for example a second 'round 1' in another directory, is never compared and passes. (2) A round's round member need not equal the n in its review-round<n>.json name. (3) The identity that binds a round need not be the review-identity-round<n>.json beside it; that file only has to exist.",
+   "requiredChange": "Refuse a series id found in more than one directory (SERIES_FORK or DUPLICATE_ROUND). Refuse a round member that differs from its file name's n (SHAPE). Bind each round with its named identity. Add tests or vectors.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-7",
+   "severity": "MINOR",
+   "location": "<harness-onion>/scripts/review_record.py check_merge",
+   "finding": "When it computes each series' final round, check_merge skips any cited record that fails load or whose round is not an int, for example round 2.0, which the schema accepts. A passing lower round then counts as final. That is fail-open against reading (b). The monitor's check_series would catch it, but check_merge alone does not.",
+   "requiredChange": "Refuse (NO_HEAD_BOUND_ROUND or SHAPE) when any cited record cannot be loaded or lacks a valid series and round, with a vector.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-8",
+   "severity": "MINOR",
+   "location": "<harness-onion>/tests/test_review_records_in_tree.py; <harness-onion>/scripts/review_record.py check_tree",
+   "finding": "The in-tree test requires every frozen review record to be present (legacyRecords equals the entry count). Nothing refuses a deleted frozen oracle test, or an oracle identity whose file is absent from the tree. Deleting a legacy oracle file weakens D5a, and the in-suite check does not see it. Only the monitor's check_pr_oracles sees it, and only when the deleted path is passed as changed.",
+   "requiredChange": "Refuse a frozen oracleTests path that is absent from the tree, and an oracle identity whose file is absent (ORACLE_MISSING or ORACLE_DIGEST), with tests. State in the README that a deletion counts as a changed path for check_pr_oracles.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-9",
+   "severity": "MINOR",
+   "location": "<harness-onion>/architecture/review-record/briefs.json kinds.PACKET; README registry table; vectors.json bases.registry",
+   "finding": "The published registry puts PASS_FOR_PRECHECK in PACKET's passing subset, so check_merge takes a PACKET round that only cleared the pre-check as merge authority. Under rev 4's rule that one passing cited head-bound series is enough, that round can stand beside a PR series whose final round is CHANGES_REQUIRED. Design section 4 names only the PR and CONTRACT lists. The vectors' base registry has PASS_FOR_RUN for PACKET where the published registry has PASS_FOR_PUSH, with no stated reason.",
+   "requiredChange": "Either drop PASS_FOR_PRECHECK from PACKET's passing subset, or state in the README that a PACKET PASS_FOR_PRECHECK on the head's tree is merge authority and put that to the owner in the per-PR ask. Align the vector registry with the published one, or say it is synthetic.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C1-10",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py privacy_hits and _private",
+   "finding": "PRIVACY scans the raw file text. A home path, an e-mail or a name token written with JSON escapes (an escaped solidus, or a unicode escape for a slash, an at sign or a letter) is therefore not counted, though it parses to the same value. Paper analysis only.",
+   "requiredChange": "Consider scanning the parsed string values as well as the raw text.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C1-11",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py _walk and check_tree",
+   "finding": "check_tree walks every file under the root except .git, __pycache__ and .pytest_cache. Untracked and ignored files (a virtual environment, build output, scratch files) are judged, and file symlinks are followed. The frozen list, by contrast, is built from tracked files only.",
+   "requiredChange": "State that the pre-check expects a clean checkout, or skip ignored directories.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C1-12",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py check_tree; <harness-onion>/tests/test_review_record_oracle.py test_the_published_registry_pins_each_brief_by_its_file_bytes",
+   "finding": "Only the oracle file checks the registry-to-brief binding, and it checks every version of every entry. Superseding a brief in place would therefore break that oracle test, which only an oracle agent may fix; the vectors' EXAMPLE-002 versions share one path. check_tree never checks this binding.",
+   "requiredChange": "Have check_tree verify the latest version of each entry against the file at its path, and state that a superseded version keeps its own path.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C1-13",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/README.md 'The frozen list'",
+   "finding": "Adoption impact. From the merge on, every new review-round*.json and every new or edited tests/**/test_*oracle*.py in harness-onion, in every lane, needs a v2 identity or an oracle identity, or the in-suite pre-check fails. The frozen list must be rebuilt if anything merges between its build and slot 259. Under the strict Q-RR2-FROZEN rule, every edit of a legacy oracle file needs an oracle agent.",
+   "requiredChange": "Put this in the owner's per-PR ask and in the monitor's brief to the primary lane.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C1-14",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/README.md; oracle-identity*.json; <harness-onion>/tests/test_evolution_surface_oracle.py",
+   "finding": "Not stated: B-2's copy of the predecessor's acceptance commands; B-9's residual (a data-class tests/conftest.py interfering with the in-suite test) for the D-2 ask; and that both oracle identities' candidateCommit, 9f88e824, is a WIP commit the owner directed never be pushed, so it can be resolved only in the lane's local repository. The scoped MET-GOV-001 oracle file also has one unmarked whitespace-only edit ('DATA_CLASSES ={').",
+   "requiredChange": "State the three points in the README. The whitespace edit may stay, or the oracle agent may mark it.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C1-15",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py load_registry",
+   "finding": "load_registry accepts a first version that carries supersedes, a chain that starts above version 1, and supersededAt values that go backwards across versions. It refuses a latest version that has supersededAt. That last rule is stricter than rev 4, and it means a series cannot be retired without a current brief.",
+   "requiredChange": "Consider refusing the first three. State the fourth as a reading.",
+   "blocks": false
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. The binding rules, B-1 and B-4 first",
+   "result": "B-1, B-2, B-3, B-5, B-6, B-7, B-9 and B-10 are met. B-4 and B-8 are not fully met (RR2C1-1, RR2C1-2). See bindingRules for each rule and where it is met."
+  },
+  {
+   "check": "2. The records against the design",
+   "result": "Review record: matches design 3.1 (checked is required with at least one item; findings and disclosures are required). Identity: matches 3.2, except that operator.lane is optional, which 3.2 does not settle. Oracle identity: section 6's members plus an optional disclosures (RR2C1-4). Registry: the entry members of section 4. Frozen list: B-6's form plus schemaVersion and oracleTests (reading (c)). Digests are 64 lowercase hex with no prefix. Times are RFC 3339 with an offset (Z allowed, up to nine fraction digits). agentIds are plain strings in the schemas."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "These match the README: code order, ruling rule, series rule, registry rules, head binding (a squash with the same tree passes), oracle rules, merge check and tree walk. Edge inputs: overlapping registry entries are SHAPE at load. A superseded brief at the cut-over is BRIEF_SUPERSEDED (launched equal to supersededAt, or reviewDate on its date). A delta round 1 is SERIES_FORK in check_series, but check_review and check_merge accept it alone. An identity reused for two records ends in NO_IDENTITY for the second one. A frozen record rewritten into a valid v2 set is LEGACY_CHANGED. Unusual path characters fail closed (FILE_PATH, SHAPE). Case-variant names fall outside the record and oracle-test patterns, as they do under es.resolve. Gaps: RR2C1-6, RR2C1-7, RR2C1-8, RR2C1-10, RR2C1-11."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "The closed member sets, the plain-string kind and agentIds, and LANE_SESSION agree. UNKNOWN_KIND and PLACEHOLDER_ID stay reachable after SHAPE. Probe 2 found SHAPE without a schema rejection for integer-valued floats and impossible dates and times (RR2C1-3)."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Replayed with the pinned Python 3.12.14: 55 reviews, 8 series, 10 oracles, 5 PR oracles, 8 merges, 8 registries, 7 legacy and 5 privacy rows, rc 0. Every expectation I examined follows from the design or a stated reading, and none is wrong. The cases with no row are listed in RR2C1-5."
+  },
+  {
+   "check": "6. The evolution surface amendment",
+   "result": "The GATE_REVIEW_PROCESS object is design section 8's, verbatim, inserted after GATE_REVIEW_RECORD. GATE_REVIEW_BRIEF and GATE_REVIEW_RECORD have the under-plus-name entries for architecture/review-record/. GATE_REVIEW_PROCESS is in independentOf of ORACLE_TESTS, REVIEW_RECORD and GATE_REVIEW_RECORD. In the vectors, recordDigest and the derivation are re-pinned and group RR2 is added. The README has the version-2 paragraph, the class row, the RR2 row and the count. The evolution-surface replay derives 31 entries, which add exactly the four new ones. In probe 3, es.resolve puts README, briefs, oracle and review identities, the authority and the in-tree test in GATE_REVIEW_PROCESS; review-round1.json in GATE_REVIEW_RECORD; REVIEW_BRIEF.md in GATE_REVIEW_BRIEF; the oracle file in ORACLE_TESTS; and the layer test in CONTRACT_AND_SOURCE."
+  },
+  {
+   "check": "7. The tests",
+   "result": "Single-file runs: tests/test_review_record.py rc 0, tests/test_review_record_oracle.py rc 0, tests/test_evolution_surface_oracle.py rc 0, tests/test_evolution_surface.py rc 1 with exactly 38 failures. All 38 are era projections, none a contract defect. 36 raise _era_bytes' 'unreviewed EVOLUTION-SURFACE-001 source' for one of the three amended files (record, vectors, README). The other two: the pinned list compares the record's digest b1759fe4 with the era's 44dd288c, and the history chain reports 'new source drift' on the README. By group: added files 3, pinned list 1, era digests 3, history chain 1, adopted bytes 3, contract for this era 1, note fold 16 and README status line 10 (all 26 of the last two on the README read). reviewed_bytes returns this tree's bytes until a bridge layer projects them back. The in-suite pre-check was not run (rules). By reading: with the placeholder list it fails on any real checkout, which is the guard. With the real list it should pass if every legacy path fits FILE_PATH. Oracle independence holds as its identities state: the oracle agent is neither the operator nor the author, and under its brief it read neither the model body nor the vectors. Both identities pass check_oracle and check_pr_oracles (ruling KEEP; both refs are in owner_decisions.json)."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Across the 20 subject files: 0 raw hits for names (4 local digests loaded with rr.load_name_tokens), home paths, e-mails or the legacy term (the rules' e-mail pattern and the 7-letter sha256-prefix check also gave 0). Joined string parts: 0 names, 0 legacy term, and the intended 2 home-path and 2 e-mail vector shapes. Of 227 hex runs, none equals or is part of a token digest. NAME_TOKEN_SHA256 ships empty, and the vectors use made-up tokens with per-row digests. The model imports only the standard library (ast). Q-RR2-NAMES is applied as the README's Privacy section says. RR2C1-10 is a robustness note."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Answered in questions: Q-RR2-FROZEN and the author's readings (a) to (d)."
+  },
+  {
+   "check": "Files read",
+   "result": "<tools>/CONTRACT_REVIEW_RULES-r1.md, DESIGN.md, owner_decisions.json, BUILD_NOTES.md, REGROUND-30f41e6f.md, ORACLE_BRIEF.md, build/build_legacy.py, build/amend_surface.py, and name-token-digests.json (only through rr.load_name_tokens, counts only). <harness-onion>/architecture/review-record/REVIEW_BRIEF.md, README.md, briefs.json, legacy-review-records.json, oracle-identity.json, oracle-identity-evolution-surface.json and vectors.json (through probes). scripts/review_record.py. schemas/review-record.schema.json, and the other three schemas through grep and probes. tests/test_review_record.py, tests/test_review_records_in_tree.py, tests/test_review_record_oracle.py (grep and excerpts). The diffs 30f41e6f..0bc5dc1a of architecture/evolution-surface/README.md, evolution-surface.json, vectors.json, tests/test_evolution_surface.py and tests/test_evolution_surface_oracle.py. scripts/validate_evolution_surface.py: ERA_SHA256 and the five named functions (see disclosures). pyproject.toml. conftest.py (grep for hooks only)."
+  }
+ ],
+ "notChecked": [
+  "tests/test_review_records_in_tree.py was not run (rules); it was judged by reading.",
+  "Not in this subject: the real frozen list, the chain mechanics (review-record-authority.json, the chain head, the evolution-surface authority re-pins) and the MONITOR.md section 4 edits.",
+  "The rest of scripts/validate_evolution_surface.py and its chain imports were not read. The era-projection judgment rests on ERA_SHA256, reviewed_bytes, reviewed_mode, reviewed_tree, _era_bytes, _verified and the failure messages."
+ ],
+ "questions": [
+  "Q-RR2-FROZEN. Recommendation: keep rev 4's rule: legacy oracle files frozen by path and file digest, and an oracle identity for every edit, mechanical bumps included. Comparison. (1) Path-only freezing would let the lane edit, or weaken, any legacy oracle file as a 'mechanical bump' without an oracle agent. That reopens D5a for every legacy oracle file, and the in-suite check could not tell a bump from a weakening. It is a security relaxation; I do not recommend it. (2) Digest freezing with a lighter re-identity stays byte-bound, but someone other than an oracle agent writes the new bytes. It is acceptable only if a deterministic checker proves that the diff stays inside the chain mechanics' bump vocabulary (for example digest and count re-pins), and the monitor rules on each one. It is still weaker than rev 4, so it is an owner decision. (3) Rev 4's cost: every chain-mechanics run that bumps a legacy test_*oracle*.py needs an ORACLE_AGENT launch, a new oracle identity and a monitor ruling, and the mechanics wait for that agent. This packet's scoping edit of one oracle file took about 2 h 20 min including interruptions. The cost is bounded by how many oracle files the mechanics actually touch; most bump re-pins land in chain files, not oracle tests. If the cost proves real, bring option (2), with its tool-verified diff, to the owner.",
+  "Reading (a), the successor version must be the predecessor's + 1: confirmed; stricter than rev 4. Rev 4 requires a chained successor (supersedes and supersededAt) but sets no version arithmetic. The +1 rule refuses gaps rev 4 would accept and accepts nothing rev 4 refuses, so it stands under the monitor's rule. See RR2C1-15 for related leniencies.",
+  "Reading (b), check_merge's final round is the highest cited round, passing or not: confirmed; equal to rev 4. Rev 4 counts only a series' final round, and the highest round, whether it passes or not, is the plain reading. Taking the highest passing round instead would be a relaxation. Two conditions: B-4's rule that every round back to the last full round is cited must be in the contract (RR2C1-1), and a cited round that cannot be loaded must not be skipped (RR2C1-7).",
+  "Reading (c), the frozen list's oracleTests member [{path, sha256}] beside entries: confirmed; equal to rev 4. B-5 lets check_tree accept a legacy oracle test only from the frozen list, while B-6's form names only entries. A separate sorted, unique oracleTests list carries B-5's clause by file digest without mixing oracle files into the review-record entries, and load_legacy and build_legacy.py treat the two lists alike. Under Q-RR2-FROZEN the digest freeze is rev 4's stricter rule.",
+  "Reading (d), the synthetic placeholder frozen list: confirmed for a candidate; equal to rev 4, which derives the list at the packet's real base. The all-zero placeholder can only fail the in-suite pre-check on a real checkout (162 unlisted legacy records), so a forgotten placeholder cannot pass the pre-check. Four conditions. (1) The copied list is a gate-material change made after this review, so the packet review or a delta contract round must cover it, with its sha256 checked against the primary's. (2) Rebuild the list if anything merges between its build and slot 259. (3) build_legacy.py should run rr.load_legacy on its output before writing, because one legacy path with a character outside FILE_PATH makes the whole list SHAPE. (4) The builder lists tracked files while check_tree walks the checkout, so the pre-check needs a clean checkout (RR2C1-11)."
+ ],
+ "disclosures": [
+  "One message carried two tool calls, the edit of probe 3 and its re-run, against the one-call-per-message rule.",
+  "The grep -n that located the five allowed functions in scripts/validate_evolution_surface.py also matched '^def ' and top-level constant assignments. It therefore printed the line numbers and signature or constant lines of the rest of that file; grep -vi w03 removed any line holding w03. None of those parts was read further. The rules allowed only the named functions and ERA_SHA256.",
+  "Test runs: 7 of 8 used. Run 1 printed nothing because the filter cut the summary, so it was repeated as run 2. Runs 2 to 7 wrapped pytest in a subshell to print its own exit status. Run 6 added COLUMNS=400 so that -rf printed the failure messages. Run 7 added a grep for FAILED, ERROR and rc lines, then cut, sort and uniq -c before tail, to count the failures per test.",
+  "One inline python -I -B -c in the worktree printed the review-record schema compactly. It was not a scratch script; I counted it as a probe. Probes in all: 7 of 10 (p1 to p6 under <scratch>/ and the inline one; p6 self-checked this record against its schema, check_review with a made-up KEEP identity, and privacy). p3 was re-run once after it crashed on a lone surrogate in its own string join.",
+  "The first cat of <tools>/DESIGN.md was over the tool's display limit, so the tool harness saved the full output in the session's tool-results folder, outside <scratch>/. That local, unpublished copy was not opened; DESIGN.md was then read by line ranges.",
+  "The probes put the worktree root on sys.path to import scripts.* under -I. p3 and p5 loaded <tools>/name-token-digests.json with rr.load_name_tokens, its path passed as an argument, and printed counts only."
+ ]
+}
