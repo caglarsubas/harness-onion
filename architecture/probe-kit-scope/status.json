@@ -1,0 +1,292 @@
+{
+ "schemaVersion": "planeon.internal.probe-kit-scope-status/v1",
+ "workItem": "LINUX-PROBE-KIT-SCOPE (LPK-0, the probe-kit scope amendment)",
+ "packet": "MET-LIVE-002",
+ "slot": 260,
+ "status": "ADOPTED",
+ "baseMain": "b516619404e177893143dd37f19f8673a4173fba",
+ "adoptedSubject": {
+  "architecture/probe-kit-scope/amendment.json": "3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b",
+  "architecture/probe-kit-scope/vectors.json": "0346be761c98eee78760324e8418b0653b4f3945385670d80ce3fecf9cbb840e",
+  "architecture/probe-kit-scope/README.md": "d19473926241a356fc966e62e10b176ee9f69082aa828bfefc54c9e831e4736a",
+  "architecture/probe-kit-scope/replay.py": "2e88f95102afa2a6791719bbe7326356659dedac7fe6fb1151cccb7ce02c2b3b",
+  "scripts/probe_kit_scope.py": "624ea3f1e63fc5646716473578b560b3aaf7b63069776436e1890d1fe578e283",
+  "docs/linux-probe-kit/README.md": "66d28efbb0b180fc1013fc669ad00fca1fd12a108f0cdfc8150cdf22a50e9241"
+ },
+ "adoptions": [
+  {
+   "candidate": "c3",
+   "ruling": "MON-LPK0-ADOPT-C3",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-22",
+   "adoptionCheckSha256": "ed82fb16e9db4ee457a0c01ccd8d30cf740b2bee63f7d5d196b1f15cecebfaa2",
+   "change": "the first adoption, after contract round 2's PASS_FOR_ADOPTION and its folded findings"
+  },
+  {
+   "candidate": "c4",
+   "ruling": "MON-LPK0-ADOPT-C4",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "3d65ea33dec43967e5413e77d64fc0627cf3d9db33113f3d40d863f188ab5816",
+   "change": "the model's strict-type pass after the D5a oracle's findings; vectors regenerated"
+  },
+  {
+   "candidate": "c5",
+   "ruling": "MON-LPK0-ADOPT-C5",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "40426626d4712f967e5e71b16c59ff7fb014d62aec31d35068a2bb861918dd71",
+   "change": "README wording only (the oracle's three c4 notes)"
+  },
+  {
+   "candidate": "c6",
+   "ruling": "MON-LPK0-ADOPT-C6",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "51e5225fb0b4ee2701ca704ca3228760ae80ceb17afc84bfe055d9fcc6f3a060",
+   "change": "slot 261 -> 260 and the edge {MET-LIVE-002 after LINUX-HOST-AUTH-001} dropped (monitor slot re-sequence 2026-10-23 (packet-readiness)); model pins and README slot texts follow; vectors unchanged"
+  },
+  {
+   "candidate": "c7",
+   "ruling": "MON-LPK0-ADOPT-C7",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "a4c118b1ebe23418a7a88a3f1b0a80b519fd0f46df32a199a920dec2bb86a57a",
+   "change": "README errata only: 'the five predecessor rows' (was six), found by the D5a oracle on c6"
+  },
+  {
+   "candidate": "c8",
+   "ruling": "MON-LPK0-ADOPT-C8",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "42ca6a334f2bc2ef1991872c1eaea15437b953f32f8c193c7e5126ff47582dd2",
+   "change": "README errata only: the registry-rider paragraph (Q-260-1 (a)) and the review-history sentence"
+  }
+ ],
+ "design": {
+  "path": "DESIGN.rev3.md (kept with the lane's records)",
+  "sha256": "80add650443ccf1a90a4d4d22075d7a38709a03d23471ca1b3f2f37937ac0ae9",
+  "buildRules": "BUILD_RULES.md c71a3345ccb93cbb2f8c5a29f11aa30048dd2ba412b73809d3a65ba4a2e9d48b"
+ },
+ "independentReviewers": "SEPARATE_AGENTS_NOT_AUTHOR (one fresh agent per round)",
+ "reviews": [
+  {
+   "review": "design round 1",
+   "record": "architecture/probe-kit-scope/review-history-design-r1.json",
+   "recordSha256": "b7ecb662b2d5bacee1cca76016bbd8516728ded0f895ee236e7317a0d7cc6c87",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": {
+    "DESIGN.md rev 1": "181364e6bb6bacf65f2b645bce69088c69d4c6c74e0a7a8f495d10cc31825756"
+   },
+   "brief": "architecture/probe-kit-scope/review-history-design-r1-brief.md",
+   "briefReviewedSha256": "3b12843f4d9e52f2f94ee02b63206519c563ee3a61077c0ad27e2a5652b76312",
+   "briefPublishedSha256": "dc4b3eeb5eb2a66f41b50c8812d753d1ecd328a0efda65799cdd7d72af5e975e"
+  },
+  {
+   "review": "design round 2",
+   "record": "architecture/probe-kit-scope/review-history-design-r2.json",
+   "recordSha256": "aea54d76ce5dcdac78ad5e34934010b6d30f478a5fcb3b34396d06913dcef5fb",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": {
+    "DESIGN.md rev 2": "4b490770e6efb6b681f044e630f7aabaf115c07f4e0332106007c3f9d515b892"
+   },
+   "brief": "architecture/probe-kit-scope/review-history-design-r2-brief.md",
+   "briefReviewedSha256": "453355467e66ac0b234cc55d954320b8b8cccdbfcc48c4094b0b96a00ae9a958",
+   "briefPublishedSha256": "3a01113015057b1b212eb8dd87c514f59b19d80c9ebd6ed7ab87c3931da7a350"
+  },
+  {
+   "review": "design round 3",
+   "record": "architecture/probe-kit-scope/review-history-design-r3.json",
+   "recordSha256": "e59b44a608b963836bc4ec119e4d74d4448af8f5ac4f3a2db65ed0a1141b2c1b",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": {
+    "DESIGN.md rev 3": "80add650443ccf1a90a4d4d22075d7a38709a03d23471ca1b3f2f37937ac0ae9"
+   },
+   "brief": "architecture/probe-kit-scope/review-history-design-r3-brief.md",
+   "briefReviewedSha256": "87677df76c2d115902d80fb1d66449c589d694f4192acb9ecbb7c7dea8b42945",
+   "briefPublishedSha256": "7883e2b114e3960e70815b60c188cad0309208d8b634bcddcb0da5a5f84b3d53",
+   "closure": "the design closed under Q-LPK0-CAP: round 3's findings became BUILD_RULES S3-1..S3-17 (BUILD_RULES.md c71a3345ccb93cbb2f8c5a29f11aa30048dd2ba412b73809d3a65ba4a2e9d48b, kept with the lane's records)"
+  },
+  {
+   "review": "contract round 1",
+   "record": "architecture/probe-kit-scope/review-history-contract-r1.json",
+   "recordSha256": "3c78152585e6fa47ccfe5a41c9bf4ba9a4b8d898ee4286105f5bf4ff73c72cb0",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": "candidate c1 (amendment 596fd442951d59c9ef4743eb3179bd73fdb6707c7eba71ff3f79c8e658bd072a)",
+   "brief": "architecture/probe-kit-scope/review-history-contract-r1-brief.md",
+   "briefReviewedSha256": "6cea3e1b12ec641d7c552c390b24f69da6afeb1b6653225d8d28644922f82c25",
+   "briefPublishedSha256": "f12cb90ce3c069ab69ec725a375aafe584e9de6ef056b8f588adde0dd2eaf6ab"
+  },
+  {
+   "review": "contract round 2",
+   "record": "architecture/probe-kit-scope/review-history-contract-r2.json",
+   "recordSha256": "c043d6ed411dae183c5a21ebd4569de54c4205d383b6f1c5172c8610441767d5",
+   "verdict": "PASS_FOR_ADOPTION",
+   "subject": "candidate c2 (amendment ac6351bb9362eb6077da572db3745aa26d17df370f51fd7fd932b0bd0ce17140)",
+   "brief": "architecture/probe-kit-scope/review-history-contract-r2-brief.md",
+   "briefReviewedSha256": "b73ff9e9f80d36a7598af316fdad2a84e5a7509cdf614c6455807f30f0572a3e",
+   "briefPublishedSha256": "65f7b9f18abe449e2feecb0d9c3950a660020c04462d452cf96817513fbef64c"
+  }
+ ],
+ "reviewHistoryNote": "Published as review-history-<kind>-r<n>.json and -brief.md: redacted records from before review-record v2, not review-round*.json records, with no merge authority. This packet's merge authority is its v2 MET-LIVE-002/packet series (the monitor, 2026-10-23).",
+ "briefRedactions": [
+  {
+   "brief": "architecture/probe-kit-scope/review-history-design-r1-brief.md",
+   "reviewedSha256": "3b12843f4d9e52f2f94ee02b63206519c563ee3a61077c0ad27e2a5652b76312",
+   "publishedSha256": "dc4b3eeb5eb2a66f41b50c8812d753d1ecd328a0efda65799cdd7d72af5e975e",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/probe-kit-scope/review-history-design-r2-brief.md",
+   "reviewedSha256": "453355467e66ac0b234cc55d954320b8b8cccdbfcc48c4094b0b96a00ae9a958",
+   "publishedSha256": "3a01113015057b1b212eb8dd87c514f59b19d80c9ebd6ed7ab87c3931da7a350",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/probe-kit-scope/review-history-design-r3-brief.md",
+   "reviewedSha256": "87677df76c2d115902d80fb1d66449c589d694f4192acb9ecbb7c7dea8b42945",
+   "publishedSha256": "7883e2b114e3960e70815b60c188cad0309208d8b634bcddcb0da5a5f84b3d53",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/probe-kit-scope/review-history-contract-r1-brief.md",
+   "reviewedSha256": "6cea3e1b12ec641d7c552c390b24f69da6afeb1b6653225d8d28644922f82c25",
+   "publishedSha256": "f12cb90ce3c069ab69ec725a375aafe584e9de6ef056b8f588adde0dd2eaf6ab",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "brief": "architecture/probe-kit-scope/review-history-contract-r2-brief.md",
+   "reviewedSha256": "b73ff9e9f80d36a7598af316fdad2a84e5a7509cdf614c6455807f30f0572a3e",
+   "publishedSha256": "65f7b9f18abe449e2feecb0d9c3950a660020c04462d452cf96817513fbef64c",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 4
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  }
+ ],
+ "oracle": {
+  "test": "tests/test_probe_kit_scope_oracle.py",
+  "sha256": "f4a9772d55a08f4dcef1b18fbb6cc102388522418b48e6b372c49edb5374dd30",
+  "identity": "architecture/probe-kit-scope/oracle-identity.json",
+  "result": "410/410 on c6; README-only changes since (c7, c8)"
+ },
+ "registryRider": {
+  "decision": "owner, 2026-10-23: \"Batch, carried by 260 (Recommended)\"",
+  "paths": [
+   "architecture/review-record/briefs.json",
+   "architecture/review-record/REVIEW_BRIEF_CONTRACT.md",
+   "architecture/review-record/REVIEW_BRIEF_PACKET.md"
+  ],
+  "entries": [
+   {
+    "kind": "PACKET",
+    "series": "MET-LIVE-002/packet"
+   },
+   {
+    "kind": "PACKET",
+    "series": "MET-GOV-003/packet"
+   },
+   {
+    "kind": "PACKET",
+    "series": "MET-LIVE-003/packet"
+   },
+   {
+    "kind": "PACKET",
+    "series": "MET-LINUX-008/packet"
+   },
+   {
+    "kind": "CONTRACT",
+    "series": "MET-LINUX-008/contract"
+   }
+  ]
+ },
+ "slips": [
+  {
+   "id": "MON-LPK0-R1-SCRATCH",
+   "ruling": "KEEP, the lane monitor under owner delegation",
+   "what": "design review round 1's reviewer deleted 12 scratch copies that held the legacy term"
+  },
+  {
+   "id": "MON-LPK0-R3-SLIPS",
+   "ruling": "KEEP, the lane monitor under owner delegation",
+   "what": "design review round 3's reviewer deviations: legacy-term lines in scratch were deleted and the WORK folder checked"
+  },
+  {
+   "id": "MON-LPK0-CR1-CACHE",
+   "ruling": "KEEP, the lane monitor under owner delegation",
+   "what": "contract review round 1's reviewer deleted a cache folder in its scratch"
+  },
+  {
+   "id": "MON-LPK0-PIN-RESTORE",
+   "ruling": "KEEP, the lane monitor under owner delegation",
+   "what": "the author appended to the lane's decision record while contract round 2 pinned it, and restored the pinned bytes at once; the note moved to a .pending file"
+  }
+ ],
+ "nonClaims": [
+  "DATA_CHECK_ONLY: the model returns refusal texts, never a protected handle or native acceptance.",
+  "No R12 file changes in this packet; R12's successor narrows CONF-LIVE-004 and 005 in its own packets.",
+  "The kit directory itself is classified by MET-GOV-003 (slot 261), not here."
+ ]
+}

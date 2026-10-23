@@ -1,0 +1,204 @@
+{
+  "subject": {"design": "LPK-0 DESIGN.md rev 1", "sha256": "181364e6bb6bacf65f2b645bce69088c69d4c6c74e0a7a8f495d10cc31825756"},
+  "reviewer": "independent agent",
+  "model": "claude-opus-5-5",
+  "brief": {"path": "tools/w03/probekit/lpk0/DESIGN_REVIEW_BRIEF.md", "sha256": "3b12843f4d9e52f2f94ee02b63206519c563ee3a61077c0ad27e2a5652b76312"},
+  "inputsVerified": {
+    "DESIGN.md": "181364e6bb6bacf65f2b645bce69088c69d4c6c74e0a7a8f495d10cc31825756 (DESIGN.rev1.md identical)",
+    "LPK0_DOSSIER.md": "6ce99678d9f73ea3f5d6f513c097db07bf56263b8dd4447abaf787d19065b32a",
+    "DOSSIER.md": "4243155a9c6c6ec241114392f06f26b357711c8a0a4f85ec5f7a4eef718f9b14",
+    "OWNER_DECISIONS.md": "d67b525dff21c752a88e0fa42b1ddb62453900cf80a8a83f7fd22e4616593004",
+    "repository": "harness-onion at 2043cc27883448e3ff030b7868110e295f32fe09"
+  },
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "S1-1",
+      "severity": "MAJOR",
+      "location": "DESIGN §3 supersedes",
+      "finding": "Pinned statements that give CONF-LIVE-003/004/005 moved items are missing from supersedes and are not covered by notAmended. (a) The policy-observation guide's owners table, HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md:32-34: 003 'Fixed local channel consumer in live_proxy_server.py; data checks in live_mutation_admission.py', 004 'Fixed probe adapters', 005 'Client/server candidate packaging and handoff'. This guide's current digest 65778040... occurs in 43 files (my pruned digest grep), so it is pinned like BH/PCR/NQ. The design never names it. HS53 already superseded the 005 row's second cell (HO:architecture/host-interface-amendment-hs53/amendment.json:345-353). (b) PCR's ownership table, HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md:41-43 (003 'Client, server, admission...'; 004 'Actual fixed probes...'; 005 'Reproducible candidate archives...'). (c) HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md:226-227, 'Only preinstalled fixed CONF-LIVE-004 adapters may submit a manifest...'. (d) HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md:216-219, '003 resolves a manifestDigest ... persists returned UID/resourceVersion', which is the UID ledger and the server's resource-action handling. (e) HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md:251-255, the packet-level split for the server, worker and recipes and '005 builds reproducible inert candidates for the three entries'. I read this as scope only and do not summarise it. (f) HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md:238-245: the inspector interface 'in live_proxy_server.py', and '004's installed worker may use the same fixed reader ... No future require_server_containment callback in packet004'. (g) The closed record HO:architecture/proxy-contract-amendment.json:253: 'Product implementation remains in the eight existing CONF-LIVE-003 paths; fixed probes, packaging and final hook remain with CONF-LIVE-004/005/006'.",
+      "requiredChange": "Add one supersedes row per clause for (a) to (g), or name a clause in notAmended with a reason. Compose the POR 005-row replacement with HS53's earlier row: quote LPK-0's clause against the same base bytes, and say that HS53's replacement still governs the observer half. Add POR (and the record behind (g)) to §1 Out as pinned files that are not edited."
+    },
+    {
+      "id": "S1-2",
+      "severity": "MAJOR",
+      "location": "DESIGN §3 supersedes / notAmended",
+      "finding": "The MET-REPAIR-009 summary ('CONF-LIVE-004 owns actual probes, CONF-LIVE-005 the fixed client/server candidate packaging') appears in eight files: HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md:477-480, HO:docs/alpha-2/LIVE_BACKEND_READINESS.md:770-774, HO:docs/repositories/12-mas-harness-conformance-labs.md:722-726, HO:docs/READINESS_INDEX.md:664-667, HO:docs/adr/0004-sol-high-packet-boundary.md:284-287, HO:docs/repositories/00-harness-engineering.md:1560-1563, HO:task-packets/README.md:1366-1369 and HO:docs/history/master-development-plan-7a353b2.md:704-707. The design supersedes three of them by quote and says nothing about the other five. Two of those five (00-harness-engineering.md, task-packets/README.md) are catalogs LPK-0 itself edits. For the MET-REPAIR-010 summary in the same seven living catalogs, HS53 named all seven in notAmended, unpinned, TLC included (HO:architecture/host-interface-amendment-hs53/amendment.json:416).",
+      "requiredChange": "Treat every copy the same way. Either name all seven living-catalog copies in notAmended as HS53 did, plus docs/history as a byte snapshot, and keep a quote row only where a pin requires it (TLC, a gate document, may keep its quote row), or add quote rows for all eight. Record the choice in the README."
+    },
+    {
+      "id": "S1-3",
+      "severity": "MAJOR",
+      "location": "DESIGN §3 notAmended; §1 Out",
+      "finding": "notAmended lists only the named packet YAML, LBRM, BHA, NQA, the broker-handoff inputs, LBR, R12D and URB. It lacks the class-level entries HS53 used (HO:architecture/host-interface-amendment-hs53/amendment.json:415). The following ownership statements are therefore covered by neither member. (1) Packet YAML outside the named list: HO:task-packets/CONF-DIAG-001.yaml:9 and HO:task-packets/CONF-DIAG-002.yaml:9 ('CONF-LIVE-003 remains sole source owner'), HO:task-packets/MET-ACCEPT-001.yaml:9 and HO:task-packets/MET-PUBLISH-001.yaml:9 ('CONF-LIVE-003 remains sole product owner'), and MET-REPAIR-017/018. The design supersedes the same sentence in R12D:527 but not here. (2) Closed records and guides of merged packets: HO:architecture/completion-integration.json:104-109 and HO:architecture/conformance-completion.json:91-96 (effectivePredecessors of CONF-LIVE-004), HO:docs/alpha-2/CONFORMANCE_COMPLETION.md:190-193 and 219-223, HO:docs/alpha-2/CONFORMANCE_PUBLICATION.md:4, HO:docs/alpha-2/LOCAL_ACCEPTANCE_REVALIDATION.md:4, HO:docs/alpha-2/SUCCESSOR_CHECKPOINT_REPAIR.md:107, and the sourceOwner CONF-LIVE-003 records (HO:architecture/backend-timing.json:7, HO:architecture/proxy-diagnostics.json:5, HO:architecture/conformance-publication.json:4, HO:architecture/local-acceptance.json:4). (3) Living status catalogs: HO:docs/DEVELOPMENT_STATUS.md (for example :457-459, :503-505, :857-859, :908-910) and MDP. (4) Byte snapshots: docs/history/, architecture/*-inputs/*before*.json, the metaRecipes before/after strings in closed records, and architecture/*/round*/.",
+      "requiredChange": "Add HS53-style class entries to notAmended: all task-packets/*.yaml as records of merged packets; the closed records and guides of merged packets that restate the old split (cite the ones above); the living status catalogs DEVELOPMENT_STATUS.md and MDP; and the byte-snapshot classes. Supersede the R12D:527 sentence and the four YAML copies of it in the same way, by naming all or quoting all."
+    },
+    {
+      "id": "S1-4",
+      "severity": "MAJOR",
+      "location": "DESIGN §3 moved / retained; Q-PK-2; PK-D1",
+      "finding": "The record gives no packet-level disposition for CONF-LIVE-004 and CONF-LIVE-005, whose YAML stays byte-identical and WAITING (HO:docs/DEVELOPMENT_STATUS.md:21-22). Every deliverable of CONF-LIVE-004 (HO:task-packets/CONF-LIVE-004.yaml:10) is moved. `retained` gives R12's receipt verification to CONF-LIVE-006's and CONF-LINUX-001's existing verifiers. The owner-adopted Q-PK-2 recommendation (DOSSIER.md:597-601) narrows CONF-LIVE-004 to receipt verification, and PK-D1 says 'CONF-LIVE-004 is narrowed', not emptied. So the design changes where R12's receipt verification sits, and it leaves CONF-LIVE-004's narrowed scope undefined. CONF-LIVE-005's residual (the candidate builder for the supervisor, client and hook, and the operator-handoff document; HO:task-packets/CONF-LIVE-005.yaml:10; LPK0_DOSSIER L3.10) is in neither `moved` nor `retained`. BHA and NQA `dispatch` still list 003-006 with the moved paths (HO:architecture/broker-handoff-amendment.json:1490-1820; HO:architecture/native-qualification-amendment.json:1451). Nothing says whether the byte-identical 004/005 YAML may still be dispatched as written.",
+      "requiredChange": "Add a closed per-packet disposition for CONF-LIVE-003 to 006. For example: 003 consumed, deliverables 2-4 SUPERSEDED_UNACCEPTED_HISTORY, deliverable 1 kept; 004 not dispatchable as written, its narrowed scope (receipt verification, per Q-PK-2 and PK-D1) specified by the later R12 successor; 005 not dispatchable as written, its narrowed scope being the supervisor/client/hook candidates and the handoff; 006 paths and commands unchanged. State that the BHA/NQA dispatch rows stay as history and still pass consumer-drift equality because the bytes are unchanged. Keep CONF-LIVE-006/CONF-LINUX-001 as evidence of R12's verification role, not as its new owner."
+    },
+    {
+      "id": "S1-5",
+      "severity": "MAJOR",
+      "location": "DESIGN §3 retiredHistory / effectivePredecessors",
+      "finding": "CONF-FIX-008 owns the same five server paths (HO:task-packets/CONF-FIX-008.yaml:1). It is BLOCKED_LOCAL_FAILURE with LOCAL2 held (HO:docs/DEVELOPMENT_STATUS.md:109,123), and its backlog row is SOURCE_SPEC_PUBLISHED_STATUS_UNRECONCILED (HO:architecture/unified-roadmap-backlog.json:675-697). No record retires it: only CONF-FIX-007 is a retiredPacket (HO:architecture/completion-integration.json:184-191). MDP says only 'CONF-FIX-007/008 retain prior outcomes' (HO:docs/MASTER_DEVELOPMENT_PLAN.md:2270). Owner Q-LPK0-4 names only 009 and 010. The design relies on CONF-FIX-008 in effectivePredecessors but records no state for it. As written, an R12 packet with an unconsumed allowance could still claim the moved server paths.",
+      "requiredChange": "Do not decide this alone. Raise a question to the monitor (and the owner if it is an owner-level matter): record CONF-FIX-008 as NON_DISPATCHABLE_RETAINED_HISTORY in the retiredPacket shape, or cite an existing closure. Then list 007 (already retired) and 008 explicitly in retiredHistory."
+    },
+    {
+      "id": "S1-6",
+      "severity": "MINOR",
+      "location": "DESIGN §3 deferred; Q-SC-2",
+      "finding": "Q-SC-2 says CONF-LIVE-003's YAML 'still names' the KAP leg. It does not: HO:task-packets/CONF-LIVE-003.yaml:10 speaks of server-enforced admission and approved existing capacity, never KUBERNETES_API_PROXY. HO:architecture/live-backend-roadmap.json does not name it either (grep). The KAP leg is named at HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md:35 and :210-214, HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md:207-225, and BHA protocol serverOwnsApiCredential (HO:architecture/broker-handoff-amendment.json:91). Separately, an obligation on the server's KAP-leg client is carried 'to the I04 owner (R01) and CONF-LIVE-003' (HO:architecture/i05-gate-channel-v3/README.md:134-136; v2 README:132-133). Under DEFERRED_UNOWNED that carry has no owner, and the design does not mention it.",
+      "requiredChange": "Correct the Q-SC-2 text. In `deferred`, list the KAP leg's source clauses (BH:35 'server-only TLS API leg', BH:210-214, PCR:207-225) and state that BHA's serverOwnsApiCredential stays an unchanged role rule with no implementing owner. Supersede or name the I05 carry so that it points to the deferred KAP leg rather than to CONF-LIVE-003."
+    },
+    {
+      "id": "S1-7",
+      "severity": "MINOR",
+      "location": "DESIGN §3 amends; Q-SC-3",
+      "finding": "The design's effectivePredecessors row 'CONF-LIVE-004's moved part no longer waits on CONF-FIX-008' overrides HO:architecture/completion-integration.json:104-109 (MET-REPAIR-018), which in turn replaced HO:architecture/conformance-completion.json:91-96 (MET-REPAIR-017). Yet neither record is in `amends` and neither is quoted. Q-SC-3's own reason for including NQA, a record that pins the same packets, applies to completion-integration.json too.",
+      "requiredChange": "Bind completion-integration.json in `amends` (path, sha256, packet MET-REPAIR-018), or add a supersedes row quoting its effectivePredecessors member. Name conformance-completion.json as history."
+    },
+    {
+      "id": "S1-8",
+      "severity": "MINOR",
+      "location": "DESIGN §3 moved (fromClauses) / unchanged",
+      "finding": "The fromClauses are incomplete. CONF-LIVE-003 deliverable 4 (run-labelled mutations, 'immutable server-enforced admission', cleanup receipts; HO:task-packets/CONF-LIVE-003.yaml:10) carries the admission module and the UID cleanup but is not cited; only deliverables 2 and 3 are. BH:36's 'bounded resource-action requests' (worker side) is in neither `moved` nor `deferred`. CONF-LIVE-005 deliverable 4 ('proxy server, fixed probes' in the candidate inventory) should be cited explicitly. CONF-LIVE-006 deliverable 3 ('rebuild the complete candidate via the new builder ... Bind all six source increments'; HO:task-packets/CONF-LIVE-006.yaml:10) and LBRM's matching clause (LPK0_DOSSIER L3.10) contradict the design's 'consumes the kit's server and worker artifacts by digest only', and nothing records the contradiction.",
+      "requiredChange": "Cite 003 deliverable 4 under the admission and UID rows. Decide where the worker's resource-action requests go: moved with the worker, with the resource-bearing cases left behind KAP. Cite 005 deliverable 4. Record 006 deliverable 3 (and LBRM's clause) as superseded for the kit entries only, keeping 006's paths and eight commands unchanged."
+    },
+    {
+      "id": "S1-9",
+      "severity": "MINOR",
+      "location": "DESIGN §3 notAmended vs §5 model and vectors",
+      "finding": "notAmended is described as 'named, not pinned, as HS53 did'. But the model checks that 'notAmended files are byte-identical to the base', and a vector refuses 'an edited not-amended file'. For living catalogs (LBR and R12D now; 00-harness-engineering.md and task-packets/README.md once S1-2 is fixed, both of which LPK-0 edits) these two rules contradict each other. HS53 left the living catalogs unpinned on purpose, 'so that a catalog edit never needs an HS53 successor'.",
+      "requiredChange": "Split notAmended into pinned entries (packet YAML, closed records, pinned guides: byte-identical at the era) and named-only entries (living catalogs and snapshots: not byte-checked). Restrict the model check and the vector to the pinned group."
+    },
+    {
+      "id": "S1-10",
+      "severity": "MINOR",
+      "location": "DESIGN §1 In (per-packet catalogs)",
+      "finding": "MDP, which LPK-0 edits, keeps current-position text that contradicts the record. The phase table has CONF-FIX-010 BLOCKED_SAFE_DESIGN and CONF-LIVE-004/005/006 'Native probes, package handoff...' (HO:docs/MASTER_DEVELOPMENT_PLAN.md:2257-2258). The counted near-term checklist has 'CONF-FIX-010 · Complete safe design...', 'CONF-LIVE-004 · Produce the exact native-probe source implementation...' and 'CONF-LIVE-005 · Produce a reproducible selected package...' (:2348-2350). The current status lines in HO:docs/DEVELOPMENT_STATUS.md:21-22 and HO:docs/alpha-2/LIVE_BACKEND_READINESS.md:13-14 are also affected. The design does not say what the catalog edits contain.",
+      "requiredChange": "Specify LPK-0's catalog edits: its own checklist row and table row, and how the current 2257-2258 and 2348-2350 entries are reworded or annotated (for example 'scope moved to LPK-2 by MET-LIVE-002; narrowed R12 successor pending'). Say whether DS and LBR current lines are left for a later packet, and why."
+    },
+    {
+      "id": "S1-11",
+      "severity": "MINOR",
+      "location": "DESIGN Inputs; §3 ownerDecisions and deferred",
+      "finding": "The design rests the KAP deferral on 'LX-D1', and the brief lists LX-D1 among the verbatim decisions. OWNER_DECISIONS.md (d67b525d) contains no LX-D1 text: LX-D1 appears only inside the Q-PK-4 and Q-LPK0-3 quotes. The design's build-time check that each quoted decision 'occur[s] once in the lane's decision record' therefore cannot pass for LX-D1.",
+      "requiredChange": "Have the monitor append LX-D1 verbatim to OWNER_DECISIONS.md before the contract build, or quote only Q-LPK0-3 ('KAP stays deferred and unowned, per LX-D1') as the authority."
+    },
+    {
+      "id": "S1-12",
+      "severity": "MINOR",
+      "location": "DESIGN §5",
+      "finding": "Missing checks. (a) Completeness: nothing in the record lists the pinned statements it was meant to cover, so a missed clause (as in S1-1 to S1-3) cannot be detected. (b) Replacement content: nothing checks that each replacement names LINUX-PROBE-KIT-001 for moved items, names DEFERRED_UNOWNED for KAP, and never hands a moved item to an R12 packet. (c) Supersedes rows lack HS53's `items` link, so 'every moved item is superseded wherever pinned' cannot be checked in either direction. (d) The status vocabulary (SUPERSEDED_UNACCEPTED_HISTORY, NON_DISPATCHABLE_RETAINED_HISTORY, DEFERRED_UNOWNED) is not a closed enum. (e) Duplicate or overlapping rows are not checked.",
+      "requiredChange": "Add an `inventory` member: the declared search (for example every base line naming CONF-LIVE-00[345] or a short 003/004/005 form in docs/ and architecture/), with one disposition per hit: superseded row, notAmended class, or not-ownership with a reason. The model refuses any hit without a disposition. Add `items` to the rows and the checks for (b), (d) and (e). New negative vectors: a hit with no disposition, a replacement naming an R12 packet as owner, a row with no item, and a moved item with no row."
+    },
+    {
+      "id": "S1-13",
+      "severity": "MINOR",
+      "location": "DESIGN §3 effectivePredecessors",
+      "finding": "The table is acyclic and matches PK-D1 and the slots (262 after 261, LPK-1 after both, LPK-2 after LPK-1). It is incomplete in four places. It has no row for CONF-LIVE-006, which must now wait on the kit artifacts it binds by digest (LPK-2) and on the R12 successors, not only on 005. It has no row for the narrowed parts of 004/005. It omits LPK-0's own predecessor (slot 260). The 'neutral interface contract' and the 'R12 client and verification successors' have no identifiers, so the check 'names only known items' has no defined vocabulary.",
+      "requiredChange": "Add the CONF-LIVE-006 row and the narrowed 004/005 rows (or a 'via R12 successor' row), add LPK-0 after 260, and give the neutral contract and the R12 successors stable placeholder IDs (for example the handoff folder's reviewed draft by sha256). Define the known-item set: base packet IDs, PK-D1 roadmap IDs and the declared placeholders."
+    },
+    {
+      "id": "S1-14",
+      "severity": "NOTE",
+      "location": "DESIGN §3 unchanged (workerEntry); Q-LPK0-5",
+      "finding": "Keeping `live_fixed_probes.broker_worker_main` (HO:architecture/broker-handoff-amendment.json:86; HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md:92) breaks no pin or validator. The R12 module is harness_conformance.live_fixed_probes (HO:task-packets/CONF-LIVE-004.yaml:6), so the bare entry name does not collide with it, and the installed artifact is fixed by the binding's worker manifest and artifact digests. The name does invite the reading that R12's CONF-LIVE-004 path is the worker source.",
+      "requiredChange": "State in `unchanged` that workerEntry is an installed identity string, that the kit owns the module of that name, and that R12's same-named path is no worker source (ties to S1-4)."
+    },
+    {
+      "id": "S1-15",
+      "severity": "NOTE",
+      "location": "DESIGN §3 supersedes (replacement text)",
+      "finding": "Several pinned clauses mix kept and moved items: PCR:41 'Client, server, admission'; BH:37 'client/server/worker source candidates'; NQ:38 'credential ordering, transport and admission'; LBR:419-420. Some cited ranges also contain statements that stay true, such as BH:40-42 (paths, stages and eight commands remain exact) and COR:101-103, where the eight-path grant is unchanged. Quoting those statements would wrongly imply that they change.",
+      "requiredChange": "Quote clause by clause. In each replacement and in the README's 'Unchanged' column, state what R12 keeps. Never quote the path, stage or command statements that stay true."
+    },
+    {
+      "id": "S1-16",
+      "severity": "NOTE",
+      "location": "DESIGN §3 moved (Q-LPK0-3 wording)",
+      "finding": "The owner wrote 'the native record inspector'. The design moves 'the native record parser and inspector'. NQ:38 pairs 'Record parser, fixed native inspector', and NQ:238-241 places both in the server's _KernelQualification, so reading the parser as part of the inspector is faithful. Also, the moved 'admission module' is the server's zero-cost admission (live_mutation_admission scope). It is not LPK-1's profile and A2 admission reconciliation, and the two names could be confused.",
+      "requiredChange": "Quote the owner's words and cite NQ:38/238 for the parser. Add one sentence separating the moved admission module (to LPK-2) from LPK-1's admission reconciliation."
+    }
+  ],
+  "supersessionCoverage": [
+    {"statement": "Owners table rows CONF-LIVE-003/004/005; 'No future packet must edit 003'", "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md", "lines": "35-37, 43-45", "inDesign": true, "note": "In BH:30-45. Quote clause by clause; lines 40-42 stay true (S1-15)."},
+    {"statement": "005 packages the worker entry with the client/server entries", "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md", "lines": "91-97", "inDesign": true, "note": "Entry name itself unchanged (S1-14)."},
+    {"statement": "003 resolves manifestDigest, records create intent, persists returned UID/resourceVersion", "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md", "lines": "216-219", "inDesign": false, "note": "UID ledger and resource-action handling of the server (S1-1d)."},
+    {"statement": "003/004/005 source-acceptance split; 005 builds inert candidates for the three entries", "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md", "lines": "251-255", "inDesign": false, "note": "Scope and packaging only; test logic not summarised (S1-1e)."},
+    {"statement": "Status table: 004 'Fixed worker and ten native probes'", "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md", "lines": "272-274", "inDesign": false, "note": "Publication-time status snapshot; no row needed, but name it in notAmended as history."},
+    {"statement": "CONF-LIVE-003 defines NativeProxyServer()/main(); CONF-LIVE-005 packages the server entry", "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md", "lines": "173-176", "inDesign": true, "note": ""},
+    {"statement": "'The new server checks are owned only by CONF-LIVE-003.'", "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md", "lines": "189-191", "inDesign": true, "note": "The 'No new root key or signature role' half stays true."},
+    {"statement": "Ownership table: 003 client, server, admission; 004 probes; 005 candidate archives", "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md", "lines": "41-43", "inDesign": false, "note": "S1-1b; split clause (S1-15)."},
+    {"statement": "'Only preinstalled fixed CONF-LIVE-004 adapters may submit a manifest...'", "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md", "lines": "226-227", "inDesign": false, "note": "S1-1c; resource-bearing, so behind the deferred KAP leg."},
+    {"statement": "Owners table: 003 channel consumer in live_proxy_server.py and data checks in live_mutation_admission.py; 004 probe adapters; 005 packaging", "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md", "lines": "32-34", "inDesign": false, "note": "Pinned guide (digest in 43 files). HS53 already superseded part of 34 (S1-1a)."},
+    {"statement": "Owners table: 003 record parser, native inspector, server/observer/broker ownership, transport and admission; 004 worker; 005 inert entries", "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md", "lines": "38-40", "inDesign": true, "note": "In NQ:36-41; split clause (S1-15)."},
+    {"statement": "'No future packet may need an unspecified callback or edit003'", "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md", "lines": "43-45", "inDesign": true, "note": ""},
+    {"statement": "Inspector interface in live_proxy_server.py; 004's installed worker uses the same reader; packet004", "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md", "lines": "238-245", "inDesign": false, "note": "S1-1f."},
+    {"statement": "Runtime service boundaries: proxy server/admission 003, build/probe adapters 004, candidate builder 005", "path": "HO:docs/alpha-2/LIVE_BACKEND_READINESS.md", "lines": "420-422", "inDesign": true, "note": "In LBR:414-423. Rows 418, 419 and 423 are kept items (S1-15)."},
+    {"statement": "MET-REPAIR-009 summary '004 owns actual probes, 005 the fixed client/server candidate packaging'", "path": "HO:docs/alpha-2/LIVE_BACKEND_READINESS.md", "lines": "770-774", "inDesign": true, "note": "One of eight copies (S1-2)."},
+    {"statement": "Ordered ownership table and packet sections for 003/004/005; MET-REPAIR-014 summary", "path": "HO:docs/alpha-2/LIVE_BACKEND_READINESS.md", "lines": "330-340, 497-563, 849-851", "inDesign": true, "note": "Covered only by naming LBR in notAmended as a living catalog; consistent once S1-9 is fixed."},
+    {"statement": "'CONF-LIVE-003 remains the sole owner.'", "path": "HO:docs/repositories/12-mas-harness-conformance-labs.md", "lines": "527", "inDesign": true, "note": "The same sentence in four packet YAML is not covered (S1-3)."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:docs/repositories/12-mas-harness-conformance-labs.md", "lines": "722-726", "inDesign": true, "note": "S1-2."},
+    {"statement": "Other R12D lines naming CONF-LIVE-003..005 (no second product owner; CONF-FIX-007 completes 003)", "path": "HO:docs/repositories/12-mas-harness-conformance-labs.md", "lines": "496-498, 529, 531, 734", "inDesign": true, "note": "Covered by naming R12D in notAmended. Only line numbers were taken from a grep; 529 and 531 were read within the cited section."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md", "lines": "477-480", "inDesign": true, "note": "Gate document; superseding by quote is right, and no edit is made."},
+    {"statement": "'CONF-LIVE-003 still owns its exact eight paths and all eight cumulative commands'", "path": "HO:docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md", "lines": "101-103", "inDesign": true, "note": "Gate document. The path grant stays true, so the replacement must not re-grant the paths (S1-15)."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:docs/READINESS_INDEX.md", "lines": "664-667", "inDesign": false, "note": "Living catalog; HS53 named it (S1-2)."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:docs/adr/0004-sol-high-packet-boundary.md", "lines": "284-287", "inDesign": false, "note": "Living catalog; HS53 named it (S1-2)."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:docs/repositories/00-harness-engineering.md", "lines": "1560-1563", "inDesign": false, "note": "A catalog LPK-0 edits (S1-2, S1-9)."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:task-packets/README.md", "lines": "1366-1369", "inDesign": false, "note": "A catalog LPK-0 edits (S1-2, S1-9)."},
+    {"statement": "MET-REPAIR-009 summary", "path": "HO:docs/history/master-development-plan-7a353b2.md", "lines": "704-707", "inDesign": false, "note": "Byte snapshot; name it as history (S1-2, S1-3)."},
+    {"statement": "Phase table and current checklist: CONF-FIX-010 safe design; CONF-LIVE-004 native-probe source; CONF-LIVE-005 package and handoff", "path": "HO:docs/MASTER_DEVELOPMENT_PLAN.md", "lines": "2257-2258, 2348-2350", "inDesign": false, "note": "Current-position text in a catalog LPK-0 edits (S1-10)."},
+    {"statement": "Status checkpoints assigning probes/packaging/proxy-admission to 003/004/005", "path": "HO:docs/DEVELOPMENT_STATUS.md", "lines": "21-22, 457-459, 503-505, 584-586, 857-859, 908-910, 988-990", "inDesign": false, "note": "Living status catalog; needs a notAmended class entry (S1-3)."},
+    {"statement": "Carry of the I04 client exact-head requirement 'to the I04 owner (R01) and CONF-LIVE-003'", "path": "HO:architecture/i05-gate-channel-v3/README.md", "lines": "134-136", "inDesign": false, "note": "KAP-leg client obligation left without an owner (S1-6); v2 README:132-133 is the same."},
+    {"statement": "'Product implementation remains in the eight existing CONF-LIVE-003 paths; fixed probes, packaging and final hook remain with CONF-LIVE-004/005/006.'", "path": "HO:architecture/proxy-contract-amendment.json", "lines": "253", "inDesign": false, "note": "Closed record of MET-REPAIR-009 (S1-1g)."},
+    {"statement": "effectivePredecessors CONF-LIVE-004: [CONF-LIVE-003, CONF-FIX-008]", "path": "HO:architecture/completion-integration.json", "lines": "104-109", "inDesign": false, "note": "Overridden by the design's predecessor row but not bound (S1-7)."},
+    {"statement": "effectivePredecessors CONF-LIVE-004: [CONF-LIVE-003, CONF-FIX-007]", "path": "HO:architecture/conformance-completion.json", "lines": "91-96", "inDesign": false, "note": "History (S1-3, S1-7)."},
+    {"statement": "Packet records 003/004/005/006 deliverables and objectives", "path": "HO:task-packets/CONF-LIVE-003.yaml .. CONF-LIVE-006.yaml", "lines": "4, 10", "inDesign": true, "note": "Named in notAmended. 003 deliverable 4, 005 deliverable 4 and 006 deliverable 3 need fromClauses (S1-8)."},
+    {"statement": "'CONF-LIVE-003 remains sole source/product owner'", "path": "HO:task-packets/CONF-DIAG-001.yaml, CONF-DIAG-002.yaml, MET-ACCEPT-001.yaml, MET-PUBLISH-001.yaml", "lines": "9", "inDesign": false, "note": "Packet YAML outside the named list (S1-3)."},
+    {"statement": "LBRM specifications 641-1030 (003/004/005), 1059 (006 complete-candidate rebuild)", "path": "HO:architecture/live-backend-roadmap.json", "lines": "641-1030, 1059", "inDesign": true, "note": "In amends and notAmended; 1059 conflicts with 'by digest only' (S1-8)."},
+    {"statement": "BHA dispatch for 003-006 (paths and commands); protocol serverOwnsApiCredential", "path": "HO:architecture/broker-handoff-amendment.json", "lines": "91, 1490-1820", "inDesign": true, "note": "In amends. Dispatch holds paths and commands only, so no consumer-drift contradiction (S1-4, S1-6)."},
+    {"statement": "NQA dispatch for 003-006", "path": "HO:architecture/native-qualification-amendment.json", "lines": "1451", "inDesign": true, "note": "In amends."},
+    {"statement": "Backlog rows 003/004/005 and checklist rows", "path": "HO:architecture/unified-roadmap-backlog.json", "lines": "864-926, 4794-4836", "inDesign": true, "note": "Named in notAmended."},
+    {"statement": "Server-completion lineage guides: corrective ownership exception for the 003 implementation; publication/local-acceptance owner lines", "path": "HO:docs/alpha-2/CONFORMANCE_COMPLETION.md; CONFORMANCE_PUBLICATION.md; LOCAL_ACCEPTANCE_REVALIDATION.md; SUCCESSOR_CHECKPOINT_REPAIR.md", "lines": "190-193, 219-223; 4; 4; 107", "inDesign": false, "note": "History of merged packets (S1-3)."},
+    {"statement": "sourceOwner CONF-LIVE-003", "path": "HO:architecture/backend-timing.json; proxy-diagnostics.json; conformance-publication.json; local-acceptance.json", "lines": "7; 5; 4; 4", "inDesign": false, "note": "History records (S1-3)."},
+    {"statement": "'CONF-LIVE-005 packages the corrected custody implementation'", "path": "HO:docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md", "lines": "149-151", "inDesign": false, "note": "Client and supervisor custody, not a moved item; no row needed, but it is part of 005's narrowed residual (S1-4)."},
+    {"statement": "Harness docs status lines ('CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION'; 'CONF-LIVE-003 draft is incomplete')", "path": "HO:docs/harnesses/*.md", "lines": "13/21/22, 35/43/44", "inDesign": false, "note": "GATE_HARNESS_DOCS: status only, no ownership assignment; no supersession needed and no edit."}
+  ],
+  "questions": [
+    {"id": "Q-SC-1", "position": "agree", "reason": "MET-LIVE-002 has no occurrence at 2043cc27 (pruned grep). VLB keys LBRM equality on the fixed tuple NEW_IDS (HO:scripts/validate_live_backend_readiness.py:22,118-120), so a new MET-LIVE id is only a membership bump and must not be added to NEW_IDS."},
+    {"id": "Q-SC-2", "position": "amend", "reason": "(a) DEFERRED_UNOWNED faithfully reads 'KAP stays deferred and unowned, per LX-D1' and keeps the resource-bearing cases behind it. There is no validator contradiction: BHA dispatch and VBH's consumer-drift check compare only paths and commands (HO:scripts/validate_broker_handoff.py:351-353), and those bytes are unchanged. But the premise is wrong: CONF-LIVE-003's YAML does not name KAP. Record the KAP source clauses and the I05 carry (S1-6), and add LX-D1's text to the decision record (S1-11)."},
+    {"id": "Q-SC-3", "position": "amend", "reason": "Keep LBRM, BHA and NQA. Also bind completion-integration.json (MET-REPAIR-018), whose effectivePredecessors the record overrides (S1-7). Name the proxy-contract and policy-observation records, whose clauses are superseded under S1-1."},
+    {"id": "Q-SC-4", "position": "agree", "reason": "docs/linux-probe-kit/README.md resolves to CONTRACT_AND_SOURCE by the docs/ prefix, the only matching entry, and is no case variant of docs/linux-runner/ or docs/harnesses/. Keep it to scope prose pointing at the record, with no interface shapes (Q-PK-6)."},
+    {"id": "Q-SC-5", "position": "agree", "reason": "A small model and vectors are worth having, provided they also check completeness and replacement content (S1-12). Those are exactly the failure modes this round found."}
+  ],
+  "checks": [
+    {"check": "Brief sha256 recomputed", "result": "3b12843f4d9e52f2f94ee02b63206519c563ee3a61077c0ad27e2a5652b76312, matches."},
+    {"check": "Subject hashes recomputed (DESIGN, DESIGN.rev1, both dossiers, OWNER_DECISIONS)", "result": "All match the brief; DESIGN.md equals DESIGN.rev1.md."},
+    {"check": "1 Fidelity: each decision against the design text", "result": "Carried: server boundary (admission, UID ledger and cleanup, inspector move; KAP DEFERRED_UNOWNED); 009/010 NON_DISPATCHABLE_RETAINED_HISTORY with nothing deleted; three YAML byte-identical; TLC and COR superseded by quote, not edited; evolution-surface change out (slot 262); per-packet catalogs only; record under architecture/probe-kit-scope/; mechanics after 260. Deviations: CONF-LIVE-004's narrowed scope (Q-PK-2, PK-D1) is replaced by reassigning verification (S1-4); CONF-FIX-008 is left undecided (S1-5); LX-D1 is not in the decision record (S1-11)."},
+    {"check": "2 Completeness: pruned git grep -l for CONF-LIVE-00[345] (222 files), saved non-script hits (187) scanned line by line with my own python3 -I -B code, plus a short-form 003/004/005 scan and exact reads", "result": "12 design rows confirmed at the cited lines. Missed: 7 pinned-guide and record clauses (S1-1), 5 copies of the MET-REPAIR-009 summary (S1-2), class-level notAmended gaps (S1-3), the I05 KAP carry (S1-6). No row is included wrongly, but some ranges contain statements that stay true (S1-15)."},
+    {"check": "3 Nothing pinned is edited", "result": "On paper, no §1 In path is a pinned file. All new paths have no history at 2043cc27 (git log -1). MDP, 00-harness-engineering.md and task-packets/README.md are VBH BRIDGED_PATHS (HO:scripts/validate_broker_handoff.py:33), edited through the per-packet bridge. The YAML, LBRM, BHA, NQA, BH, PCR, NQ and POR are untouched. VLB and VBH packet sets need only the bump for MET-LIVE-002 (VLB:101-103, VBH:330). Guide digest occurrences (my exclusions: authority files and round snapshots): BH 29, PCR 24, NQ 21, POR 43. No validator was run."},
+    {"check": "4 KAP leg", "result": "Faithful reading. No BHA or VBH contradiction (dispatch holds paths and commands only). The Q-SC-2 premise is wrong and the I05 carry is orphaned (S1-6)."},
+    {"check": "5 Unchanged identities", "result": "Installed paths (PCR:178-184, BH:91-105), roles, BHA protocol:76-100, binding, vectors and signing duties do not depend on the owning packet. The workerEntry name collides with nothing (S1-14). CONF-LIVE-006 deliverable 3 conflicts with 'by digest only' (S1-8)."},
+    {"check": "6 Gate material and the author's path-classification check: my own paper implementation of README:126-141 over the saved record (exact entry first, then longest directory, under-plus-name beats prefix on equal length, no class if two still match, F1 case variants), self-tested on known gate paths and case variants", "result": "Every new path resolves to exactly one data class: amendment.json, README.md, status.json and vectors.json to CONTRACT_AND_SOURCE; review-round*.json to REVIEW_RECORD; REVIEW_BRIEF*.md to REVIEW_BRIEF; docs/linux-probe-kit/README.md, scripts/probe_kit_scope.py, scripts/validate_probe_kit_scope.py, tests/test_probe_kit_scope.py, task-packets/MET-LIVE-002.yaml and architecture/probe-kit-scope-authority.json to CONTRACT_AND_SOURCE; tests/test_probe_kit_scope_oracle.py to ORACLE_TESTS (under-plus-name beats the tests/ prefix). None is a case variant of a gate entry or directory. The edited catalogs are CONTRACT_AND_SOURCE. TLC and COR are GATE_VERIFIER_DOCS (exact) and are not edited. No path name probe-kit-scope, linux-probe-kit or probe_kit_scope exists at the base."},
+    {"check": "7 Predecessor table", "result": "Acyclic and consistent with PK-D1 and the slots, but incomplete (S1-13)."},
+    {"check": "8 Model and vectors", "result": "Drifted quotes, wrong sha256, duplicate quotes, a moved KAP leg, missing status, a predecessor cycle and a gate path are covered. A missed clause, replacement content and item linkage are not (S1-12). The notAmended byte check conflicts with naming living catalogs (S1-9)."},
+    {"check": "9 Mechanics", "result": "Consistent with the post-255 rules (HO:docs/MASTER_DEVELOPMENT_PLAN.md:19-23) and the 64-argv freeze (:36-37): 260's 64 argv, none added; bump and bridge vocabularies; C2; full fan-in; identity rule. No inconsistency found. The packet's predecessors should name 260's packet so that path-ownership ordering of the overlapping layer edits holds (S1-13)."},
+    {"check": "10 Questions Q-SC-1..5", "result": "Agree with 1, 4 and 5; amend 2 and 3."}
+  ],
+  "notChecked": [
+    "No repository script, test, validator or model was run (brief rule), including scripts/evolution_surface.py check_coverage, VLB, VBH, the native-qualification validator and chain_identity. Path classification is my own paper implementation only.",
+    "The R12 repository, tools/w04/, architecture/enforcement-test-plan/, docs/alpha-2/ENFORCEMENT_TEST_PLAN.md and R12's tests/enforcement/ were never opened. Their names were excluded from every grep, as were tools/w03* in harness-onion, architecture/artifact-edges/, scripts/validate_policy_observation.py and scripts/validate_readiness.py.",
+    "R12D was read only at 519-532 and 712-735. Other matching lines were taken as line numbers from a grep, without reading the content.",
+    "*-authority.json files and architecture/*/round*/ and w02-notes-errata snapshots were excluded from the line scans. The *-inputs before/after snapshots were listed, not read.",
+    "The scans match CONF-LIVE-00[345] plus moved-item keywords, and short 003/004/005 forms. A paraphrase that names neither (for example 'the proxy packet') could be missed.",
+    "Test-logic lines (for example the acceptance parts of BH:243-258 and the conformance-completion checklist) were read only for scope and are not summarised.",
+    "Whether the post-260 chain mechanics, 260's layer and the allowedPaths count fit: 260 is not merged.",
+    "LX-D1's text (not present in OWNER_DECISIONS.md), the neutral interface handoff folder and the roadmap repository (not in scope, not opened).",
+    "Whether any docs-inventory test enumerates new docs/ directories (would need running tests)."
+  ]
+}

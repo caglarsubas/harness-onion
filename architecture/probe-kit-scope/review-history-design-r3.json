@@ -1,0 +1,1353 @@
+{
+ "subject": {
+  "design": "LPK-0 DESIGN.md rev 3",
+  "sha256": "80add650443ccf1a90a4d4d22075d7a38709a03d23471ca1b3f2f37937ac0ae9"
+ },
+ "reviewer": "independent agent",
+ "model": "claude-opus-5-5",
+ "brief": {
+  "path": "tools/w03/probekit/lpk0/DESIGN_REVIEW_BRIEF_R3.md",
+  "sha256": "87677df76c2d115902d80fb1d66449c589d694f4192acb9ecbb7c7dea8b42945"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "verdictNote": "No MAJOR. The design gets every coverage row covered on paper, and no uncovered moved-item statement was found. It is not PASS_FOR_CONTRACT for three reasons: the rows marked \"as in rev 2\" have no fixed quotes or items, the COMPLETION_INTEGRATION.md rows fail the design's own model, and the BH short-form clauses are not mechanically caught. Under Q-LPK0-CAP the coverage items (S3-1..5, 8..10, 15) carry binding build rules. S3-6, S3-7 and the NOTEs are changes for the contract build.",
+ "round2": [
+  {
+   "id": "S2-1",
+   "status": "resolved",
+   "note": "Rows added for PCR:54-56, POR:167-168, PCR:307-313 (lead-in), NQ:256-257 and COR:122-127 (lead-in, gate document, quote only). Each quote occurs once within its lines at 2043cc27, none overlaps staysTrue, and the items match the server/client split. Test-logic lines were read for scope only."
+  },
+  {
+   "id": "S2-2",
+   "status": "resolved",
+   "note": "v1:115-116, v1:277, v2:273 and v3:326 quoted and repointed to the deferred KAP leg; I05_GATE_CHANNEL.md:57-58 quoted (not named; harmless); the w02-adm-f snapshot is ROUND_SNAPSHOT. Rows need splitting (S3-4)."
+  },
+  {
+   "id": "S2-3",
+   "status": "resolved",
+   "note": "R-S2-3 (a) carried: INPUTS_SNAPSHOT, ROUND_SNAPSHOT, REVIEW_RECORD, RECORD_EMBEDDED_TEXT and AUTHORITY_TEXT in named, as exact paths, with file-level authority rows. The classes overlap, and nothing checks a path against its class (S3-10)."
+  },
+  {
+   "id": "S2-4",
+   "status": "resolved",
+   "note": "PCR:190-191 cited; the quote ends before \"No new root key or signature role.\", which is staysTrue; verified."
+  },
+  {
+   "id": "S2-5",
+   "status": "resolved",
+   "note": "The COR:101-103 row is dropped; COR:102 is staysTrue and UNCHANGED_TRUE. The TLC and PCA quotes are exactly the clauses S2-5 named. The preserve and 006-hook clauses are staysTrue, and nothing overlaps them (verified)."
+  },
+  {
+   "id": "S2-6",
+   "status": "partly",
+   "note": "(b) is resolved: UNCHANGED_TRUE and the closed reason vocabulary (one mapping gap, S3-15). (a) is defined, but not executable as written: git grep -E refuses the short-form pattern (S3-9). The family rule drops the BH short-form clauses the design quotes (S3-1). CONF-PERF forms such as CONFORMANCE_REFERENCE_MEASUREMENT.md:52-53 are kept out, by the lookbehind rather than the family rule."
+  },
+  {
+   "id": "S2-7",
+   "status": "resolved",
+   "note": "The byte source is stated (git show 2043cc27 of recorded paths, recorded searchDigest and sha256s), with file-level PINNED/NAMED rows. New issues: the Q-LPK0-CAP build gate (S3-8), the edited-pinned check (S3-7) and the git dependency (S3-17)."
+  },
+  {
+   "id": "S2-8",
+   "status": "resolved",
+   "note": "Section rule adopted; LX-D1 answer and full option text are two quotes. Counted: every quoted decision occurs exactly once within a dated section. Decidability in the repository model is new (S3-6)."
+  },
+  {
+   "id": "S2-9",
+   "status": "resolved",
+   "note": "R-S2-9 (a) is carried. 018's six keys {branchModified, dispatchable, head, id, pr, status} match HO:architecture/completion-integration.json:184-191 at the base: 007 has pr 18, head 25fab12c..., BLOCKED_LOCAL_BUDGET_EXHAUSTED, false, false. 008-010 have null pr and head, NON_DISPATCHABLE_RETAINED_HISTORY and false/false. There is no reason member, and a check and vector were added."
+  },
+  {
+   "id": "S2-10",
+   "status": "resolved",
+   "note": "LINUX-HOST-AUTH-001 and the EVOLUTION_SURFACE_GATE_PACKET placeholder are used. CONF-LIVE-004's entry is superseded through amends.supersededEntries, which exists at the base. MET-LIVE-002 itself is not a known item (S3-13)."
+  },
+  {
+   "id": "S2-11",
+   "status": "resolved",
+   "note": "Per-entry annotations with the exact S2-11 texts, and grouped-entry ordering. The targets should be identified by text (S3-12)."
+  },
+  {
+   "id": "S2-12",
+   "status": "resolved",
+   "note": "(a) staysTrue list plus overlap check and vector; (b) structured replacements; (c) retiredHistory exactness and vectors; (d) exact paths. New gaps in row structure: KAP mixing (S3-3), rows with no item (S3-5) and missing vectors (S3-11)."
+  },
+  {
+   "id": "S2-13",
+   "status": "resolved",
+   "note": "C27, C34, C36-C37, C39 and C40 corrected (verified in §1.1, §3.3, §3.9)."
+  },
+  {
+   "id": "S2-14",
+   "status": "partly",
+   "note": "R-S2-14 (a) is carried: one unsplit R12_SUCCESSOR, which fixes no split. BH:272-274 is STATUS_LINE. But COMPLETION_INTEGRATION.md got quote rows rather than naming, and those rows fail the model's item rules (S3-5)."
+  },
+  {
+   "id": "S1-3",
+   "status": "resolved",
+   "note": "All snapshot and record classes HS53 used are present as exact paths (via S2-3); class-rule precision is S3-10."
+  },
+  {
+   "id": "S1-5",
+   "status": "resolved",
+   "note": "retiredHistory is exactly 007..010 in 018's shape (S2-9)."
+  },
+  {
+   "id": "S1-6",
+   "status": "resolved",
+   "note": "All I04-client carries are quoted or snapshot-classed, and KAP is DEFERRED_UNOWNED. Mixed rows must not move it (S3-3)."
+  },
+  {
+   "id": "S1-10",
+   "status": "resolved",
+   "note": "Per-entry MDP annotations; DS and LBR named, not edited."
+  },
+  {
+   "id": "S1-12",
+   "status": "partly",
+   "note": "Inventory, vocabularies, byte source and file-level rows are in place. Open: search executability and short-form reach (S3-9, S3-1), ownerDecisions decidability (S3-6), the edited-pinned check (S3-7) and the build gate (S3-8)."
+  },
+  {
+   "id": "S1-13",
+   "status": "resolved",
+   "note": "Placeholders, slot 260 roadmap id and supersededEntries; known-item gap for MET-LIVE-002 (S3-13)."
+  },
+  {
+   "id": "S1-15",
+   "status": "partly",
+   "note": "Explicit rows and the staysTrue list are correct and verified. The rows marked \"as in rev 2\" have ranges that include stays-true text not in staysTrue (S3-2)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "S3-1",
+   "severity": "MINOR",
+   "location": "DESIGN §3.10 short form, family-context rule",
+   "finding": "Applied to the base bytes, the family-context rule drops BH:40, 43, 44, 45, 95, 216, 251 and 253: their paragraphs (BH:40-45, 91-97, 216-222, 251-258) hold no long-form id and no glued form. So the short-form clauses the design quotes at BH:43-45, BH:95, BH:216-219 and BH:251-255 are not hits, and the declared search does not catch them. Coverage at the base is intact only because §3.6 quotes them. No other supersedes file drops a line.",
+   "requiredChange": "Make the search catch every short-form clause in a supersedes file.",
+   "buildRule": "In §3.10, a short-form line is also a hit when its file is a `supersedes` path, whatever its paragraph. At 2043cc27 this adds exactly HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md lines 40, 43, 44, 45, 95, 216, 251 and 253. Line 40 is UNCHANGED_TRUE (staysTrue BH:40-42). Lines 43, 44, 45, 95, 216, 251 and 253 are QUOTED by the BH:43-44, BH:45, BH:95, BH:216-219 and BH:251-255 rows. The test recomputes hits with this rule, and the build refuses if the added set at 2043cc27 differs from these eight lines."
+  },
+  {
+   "id": "S3-2",
+   "severity": "MINOR",
+   "location": "DESIGN §3.6 rows marked \"as in rev 2\"; §3.7",
+   "finding": "Revision 2 gave line ranges only, with no quote text and no per-row items, so the rows marked \"as in rev 2\" have no quote, no movedItems and no keptItems to carry. Several cited ranges also hold text that stays true but is not in staysTrue, so the overlap check cannot protect it: BH:91-94 and 96-97 (installed identities and rules), BH:255 (\"006 requires ...\"), PCR:173 and 175, the path grants in PCR:41-43, PCR:227 (\"; no arbitrary callback/module.\"), NQ:43-44 and 45, NQ:240-241 and 243-244. The NQ:38-40 row is also wrong: it lists RECORD_INSPECTOR and WORKER_ENTRY with nothing kept, but NQ:38 also gives SERVER and ADMISSION_MODULE plus the client's credential ordering and transport, and NQ:40's inert entries include the client entry.",
+   "requiredChange": "Fix each such row's exact quote and items, and add the stays-true spans.",
+   "buildRule": "The rows rev 3 marks \"as in rev 2\" are built as exactly these single-quote rows (each quote verified to occur once within its lines and once in its file at 2043cc27). movedTo is LINUX-PROBE-KIT-001 and keptBy null unless stated; \"kept [CLIENT]\" means keptItems [CLIENT], keptBy R12_SUCCESSOR. (1) BH:35 \"Fixed server/broker transport and server/observer/broker custody checks; resource admission\" -> [ADMISSION_MODULE, SERVER]; (2) BH:35 \"server-only TLS API leg\" -> [KAP_LEG], movedTo DEFERRED_UNOWNED; (3) BH:35 \"UID ledger and cleanup\" -> [UID_LEDGER]; (4) BH:36 \"Fixed worker entry, ten probe recipes, bounded resource-action requests and unsigned receipt candidate\" -> [CASE_RECIPES, RECEIPT_CANDIDATES, WORKER_ENTRY]; (5) BH:37 \"Reproducible client/server/worker source candidates and installation handoff\" -> [SERVER, WORKER_ENTRY], kept [CLIENT]; (6) BH:95 \"005 packages this entry in addition to the already planned client/server entries;\" -> [SERVER, WORKER_ENTRY], kept [CLIENT]; (7) BH:216-219, the whole paragraph from \"003 resolves a manifestDigest\" to \"post-defaulting manifests.\" -> [ADMISSION_MODULE, UID_LEDGER]; (8) BH:251-253, the sentence from \"003 tests real fixed\" to \"is absent.\" -> [SERVER], kept [CLIENT]; (9) BH:253, the sentence from \"004 tests all ten\" to \"worker ABI.\" -> [CASE_RECIPES, WORKER_ENTRY]; (10) BH:253-255, the sentence from \"005 builds\" to \"prerequisites.\" -> [SERVER, WORKER_ENTRY], kept [CLIENT]; (11) PCR:41 \"Client, server, admission, three tests, one fixture and one guide\" -> [ADMISSION_MODULE, SERVER], kept [CLIENT]; (12) PCR:42 \"Actual fixed probes and native observations\" -> [CASE_RECIPES]; (13) PCR:43 \"Reproducible candidate archives and independent operator handoff\" -> [SERVER, WORKER_ENTRY], kept [CLIENT]; (14) PCR:174 \"CONF-LIVE-003 defines a fixed `NativeProxyServer()` factory and `main()`;\" -> [SERVER]; (15) PCR:176 \"CONF-LIVE-005 packages a separate fixed entry point that invokes that main:\" -> [SERVER]; (16) PCR:226-227 \"Only preinstalled fixed CONF-LIVE-004 adapters may submit a manifest already\\nselected from the server-owned signed profile\" -> [WORKER_ENTRY]; (17) POR:32 \"Fixed local channel consumer in live_proxy_server.py; data checks in live_mutation_admission.py\" -> [ADMISSION_MODULE, SERVER]; (18) POR:33 \"Fixed probe adapters\" -> [CASE_RECIPES]; (19) POR:34 \"Client/server candidate packaging and handoff\" -> [SERVER], kept [CLIENT]; (20) NQ:38 \"Record parser, fixed native inspector, server/observer/broker ownership, credential ordering, transport and admission\" -> [ADMISSION_MODULE, RECORD_INSPECTOR, SERVER], kept [CLIENT]; (21) NQ:39 \"Fixed worker; inherited broker-only control; qualified kernel/code checks through the same003-owned reader\" -> [RECORD_INSPECTOR, WORKER_ENTRY]; (22) NQ:40 \"Inert reproducible entries\" -> [SERVER, WORKER_ENTRY], kept [CLIENT]; (23) NQ:44-45 \"No future packet may need an unspecified callback or edit003 to close\\nthis boundary.\" -> [RECORD_INSPECTOR]; (24) NQ:238-240 \"Fixed consumer interface in live_proxy_server.py: a private factory-owned\\n`_KernelQualification` with `check_self()`, `check_peer(role, retained_peer)`\\nand `close()`.\" -> [RECORD_INSPECTOR]; (25) NQ:242-243 \"004's installed worker may use the same fixed reader for itself/original broker\\nthrough its separately exact installed factory and parent/FD3 guards.\" -> [WORKER_ENTRY]; (26) NQ:245 \"No future require_server_containment callback in packet004.\" -> [WORKER_ENTRY]. staysTrue gains PCR:41 \"eight existing paths\", PCR:42 \"in six existing paths\", PCR:43 \"in five existing paths\" and NQ:43-44 \"Exact product paths/stages110/120/127/135/141/146/151 and all eight commands are\\nunchanged.\". The build refuses any LPK-0 quote that overlaps an HS53 supersedes quote in the same file (POR:34, BH:47-48). It extracts all these bytes from 2043cc27 and refuses any that does not occur exactly once within its lines."
+  },
+  {
+   "id": "S3-3",
+   "severity": "MINOR",
+   "location": "DESIGN §3.6 BH:35-37 row; §5 structured replacements and Deferral",
+   "finding": "The BH:35-37 row lists KAP_LEG together with moved items. Under §5, movedTo is DEFERRED_UNOWNED only when movedItems is exactly [KAP_LEG]. So a single row would set movedTo LINUX-PROBE-KIT-001 and record the KAP leg as moved to the kit, against owner Q-LPK0-3 (\"KAP stays deferred and unowned\"). The Deferral check looks only at `moved`, so it would not refuse this.",
+   "requiredChange": "Never mix KAP_LEG with another item in a row, and check it.",
+   "buildRule": "KAP_LEG appears only in a supersedes row whose movedItems is exactly [KAP_LEG], with movedTo DEFERRED_UNOWNED, keptItems [] and keptBy null. These rows are BH:35 \"server-only TLS API leg\", I05 v1:115-116, v1:277, v2:133, v2:273, v3:135, v3:326 and I05_GATE_CHANNEL.md:58. The model refuses a row that holds KAP_LEG with any other item, and the vectors gain the negative \"KAP_LEG mixed with a moved item\"."
+  },
+  {
+   "id": "S3-4",
+   "severity": "NOTE",
+   "location": "DESIGN §3.6 table vs row shape",
+   "finding": "The row shape {path, sha256, lines, quote, replacement} holds one quote. But the table gives rows with two quotes (BH:43-45, PCA:253, I05 v1/v2/v3, COMPLETION_INTEGRATION.md), and rows with several line ranges (BH 91-97/216-219/251-255, PCR, NQ). PCA:253's \"fixed probes, packaging\" covers server packaging, but the row's union does not say which quote carries SERVER.",
+   "requiredChange": "Specify one quote per row and the line rule.",
+   "buildRule": "Each supersedes row holds exactly one quote. `lines` runs from the line of the quote's first byte to the line of its last byte (\"a-b\"), except PCR:307-313 and COR:122-127, which keep the cited sentence range. Two quotes never share a row: BH:43-44 and BH:45; PCA:253 x2; I05 v1:115-116 and v1:277; v2:133 and v2:273; v3:135 and v3:326; I05_GATE_CHANNEL.md:58. PCA:253 \"Product implementation remains in the eight existing CONF-LIVE-003 paths\" carries [ADMISSION_MODULE, SERVER, UID_LEDGER], kept [CLIENT]. PCA:253 \"fixed probes, packaging\" carries [CASE_RECIPES, RECEIPT_CANDIDATES, SERVER, WORKER_ENTRY], kept [CLIENT], as TLC:479-480."
+  },
+  {
+   "id": "S3-5",
+   "severity": "MINOR",
+   "location": "DESIGN §3.6 COMPLETION_INTEGRATION.md row; §5 Items",
+   "finding": "The two COMPLETION_INTEGRATION.md:258-261 rows carry \"(predecessor rule, §3.8)\" and no moved or kept item. §5 requires movedItems from moved's vocabulary or KAP_LEG, and refuses \"a row with no item\", so the design's own model would refuse its own record. S2-14 proposed naming the guide beside the record. The file's digest (541728c8...) occurs only in host-interface-authority.json, and its repeated status lines show it is a prepended guide.",
+   "requiredChange": "Handle the guide as S2-14 proposed.",
+   "buildRule": "Drop the two COMPLETION_INTEGRATION.md quote rows. Record HO:docs/alpha-2/COMPLETION_INTEGRATION.md in notAmended.named, class LIVING_CATALOG, as a file-level NAMED row with hit lines 14, 29, 44, 59, 75, 89, 104, 119, 259, 261 and 311. The override stays in amends.supersededEntries [\"effectivePredecessors.CONF-LIVE-004\"] and in §3.8. The README states that the guide's 258-261 rule is superseded through that entry."
+  },
+  {
+   "id": "S3-6",
+   "severity": "MINOR",
+   "location": "DESIGN §3.1 ownerDecisions; §5 Decisions and its vector",
+   "finding": "The decision record is in the lane's TOOLS folder, not in harness-onion at 2043cc27, and §2 publishes no copy. So read(path) cannot supply it, and the Decisions check and the \"ownerDecisions quote outside its section\" vector are not decidable from the record and the base bytes. The precedent layer embeds decisions as constants (HO:scripts/validate_evolution_surface.py:443, 677). The quotes themselves are fine: counted, each quoted decision occurs exactly once within one dated section, and Q-LPK0-3's answer occurs once in each of two sections.",
+   "requiredChange": "Run the section check in the contract build against OWNER_DECISIONS.md, pinned by its sha256 in the build report. The record keeps the rows {id, section, quote}, and the repository model checks only their shape. The layer pins the adopted rows as constants, as the precedent does. The \"outside its section\" vector becomes a contract-build check.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-7",
+   "severity": "MINOR",
+   "location": "DESIGN §5 Gate paths; vector \"an edited pinned file\"; §3.10 byte source",
+   "finding": "Every read is at 2043cc27, so the base bytes of a pinned file never change and \"an edited pinned file\" cannot be detected by the model or the layer as specified. No check ties pinned paths to the packet's own changed files, although the gate-path check already reads that list. So \"nothing pinned is edited\" is enforced only by older validators.",
+   "requiredChange": "Add a model check: no path in supersedes, amends or notAmended.pinned is among MET-LIVE-002's changed files (its YAML allowedPaths and its authority changedFiles). Check it next to the gate-path check, and realise \"an edited pinned file\" as a changed-files list that holds such a path.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-8",
+   "severity": "MINOR",
+   "location": "DESIGN §3.10 build gate (Q-LPK0-CAP); §6",
+   "finding": "The gate says every hit at the mechanics base \"that is not at 2043cc27\" is dispositioned, with 0 uncovered. But hits are {path, line}, and the named catalogs (MDP, DS, 00-harness-engineering.md, task-packets/README.md) are prepended every packet, so their lines shift. Slots 259 and 260 will add authority files whose baselinePackets name task-packets/CONF-LIVE-003.yaml, which are new hit files. The design does not say where post-base dispositions are recorded, and the record and its test are fixed at 2043cc27.",
+   "requiredChange": "Make the gate an exact algorithm.",
+   "buildRule": "Before the pre-check, at the mechanics base M, the build does this. (1) It runs the §3.10 search (with S3-1 and S3-9) at M. (2) It refuses if any supersedes, amends or notAmended.pinned path has a sha256 at M that differs from the record. (3) A hit at M is covered by class, whatever its line number, if its file is a recorded notAmended.named file or matches a named class path rule from S3-10 (docs/history/*, architecture/*-inputs/** other than broker-handoff-inputs, architecture/*/round*/**, architecture/**/review-round*.json, architecture/*-authority.json). (4) A hit in a recorded line-disposition file is covered only if that file's sha256 at M equals the record's. (5) Every other hit at M (a new file, or a changed line-disposition file) goes into the pre-check report with a disposition from the record's closed vocabulary. The build refuses if any of them fits no disposition or assigns a moved item. (6) The adopted record is not changed. The report's list is reviewed in the packet review."
+  },
+  {
+   "id": "S3-9",
+   "severity": "NOTE",
+   "location": "DESIGN §3.10 \"The files\"",
+   "finding": "As written, the search is not executable. `git grep -n -E` refuses the short-form pattern: running it at 2043cc27 returned rc 128, \"repetition-operator operand invalid\" (lookbehind is not ERE). The paragraph rule names only .md, .json and .yaml. \"Blank\" and the meaning of \\w (Unicode or ASCII) are not fixed. At the base, blank-as-whitespace makes no difference in the files checked.",
+   "requiredChange": "Fix the pipeline.",
+   "buildRule": "The declared search runs as follows. The candidate files are the union of `git grep -l -E 'CONF-LIVE-00[345]'` and `git grep -l -E '(^|[^[:alnum:]_./:-])00[345]([^[:alnum:]_]|$)|(packet|packets|edit|Product|product|same|Native)00[345]'`, each run at the commit with the pathspecs `docs architecture task-packets ':!architecture/enforcement-test-plan' ':!docs/alpha-2/ENFORCEMENT_TEST_PLAN.md' ':!architecture/artifact-edges' ':!tools'`. Each candidate's bytes come from `git show <commit>:<path>`; they are decoded as UTF-8 and split on \"\\n\". The §3.10 patterns are applied with Python 3 `re` on str. A blank line is one whose str.strip() is empty. A paragraph is the maximal non-blank run for .md files and the line itself for every other extension. At 2043cc27 this gives 278 long-form files with 2386 long-form lines, plus 60 short-form candidate files."
+  },
+  {
+   "id": "S3-10",
+   "severity": "MINOR",
+   "location": "DESIGN §3.9 classes",
+   "finding": "INPUTS_PINNED (the broker-handoff inputs) also matches INPUTS_SNAPSHOT's rule (architecture/*-inputs/). Nothing checks that a file's class matches its path rule, so a pinned guide could be filed as a snapshot and escape both quoting and line dispositions.",
+   "requiredChange": "Give each class a closed path rule and check it.",
+   "buildRule": "Class path rules, checked by the model with the negative vector \"a file in a class whose path rule it fails\":\n- MERGED_PACKET_YAML: task-packets/*.yaml.\n- CLOSED_RECORD and RECORD_EMBEDDED_TEXT: architecture/*.json, one level; CLOSED_RECORD is the exact list in §3.9.\n- INPUTS_PINNED: architecture/broker-handoff-inputs/*.\n- LINEAGE_GUIDE: docs/alpha-2/{CONFORMANCE_COMPLETION, CONFORMANCE_PUBLICATION, LOCAL_ACCEPTANCE_REVALIDATION, SUCCESSOR_CHECKPOINT_REPAIR}.md.\n- LIVING_CATALOG: the eight §3.9 paths, plus docs/alpha-2/COMPLETION_INTEGRATION.md under S3-5.\n- HISTORY_SNAPSHOT: docs/history/*.\n- INPUTS_SNAPSHOT: architecture/*-inputs/**, except architecture/broker-handoff-inputs/.\n- ROUND_SNAPSHOT: architecture/*/round*/**.\n- REVIEW_RECORD: architecture/**/review-round*.json not under a round*/ directory.\n- AUTHORITY_TEXT: architecture/*-authority.json.\nA path that matches two rules takes the first in this order: INPUTS_PINNED, ROUND_SNAPSHOT, REVIEW_RECORD, AUTHORITY_TEXT, INPUTS_SNAPSHOT, HISTORY_SNAPSHOT, then the listed classes. Counts at 2043cc27: MERGED_PACKET_YAML 32, CLOSED_RECORD 10, INPUTS_PINNED 1, LINEAGE_GUIDE 4, LIVING_CATALOG 8 (9 with S3-5), HISTORY_SNAPSHOT 1, INPUTS_SNAPSHOT 19, ROUND_SNAPSHOT 16, REVIEW_RECORD 3, AUTHORITY_TEXT 92."
+  },
+  {
+   "id": "S3-11",
+   "severity": "NOTE",
+   "location": "DESIGN §5 vectors",
+   "finding": "Some checks have no negative vector: keptBy null with non-empty keptItems (and the reverse); movedTo DEFERRED_UNOWNED with an item other than KAP_LEG; a file in both supersedes and notAmended (the rule is stated in §3.9, but neither a check nor a vector is listed); and an LPK-0 quote that overlaps an HS53 quote on the same file.",
+   "requiredChange": "Add these four checks and vectors.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-12",
+   "severity": "NOTE",
+   "location": "DESIGN §1.1 MDP annotations",
+   "finding": "The targets are given by base line numbers, but MDP is prepended every packet. §1.1 also defines a CONF-LIVE-006 annotation, while the CONF-LIVE-006 checklist entry (MDP:2351) lies outside the cited ranges, so it is unclear whether that entry is annotated.",
+   "requiredChange": "Identify the five entries by their exact base text (MDP:2257, 2258, 2348, 2349 and 2350). Refuse if any of them is not found exactly once at the mechanics base. Leave MDP:2351 and the historical keys MDP:2392-2393 unannotated. The 006 annotation is used only inside the grouped 2258 entry.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-13",
+   "severity": "NOTE",
+   "location": "DESIGN §3.8 known items",
+   "finding": "The table names MET-LIVE-002, which is neither a base packet id nor a PK-D1 roadmap id (PK-D1 names LINUX-PROBE-KIT-SCOPE) nor a placeholder. \"names only known items\" would therefore refuse the positive vector. Otherwise the table is acyclic (LINUX-HOST-AUTH-001 -> MET-LIVE-002 -> EVOLUTION_SURFACE_GATE_PACKET -> LINUX-PROBE-KIT-ADMISSION -> LINUX-PROBE-KIT-001 -> CONF-LIVE-006, with NEUTRAL_INTERFACE_CONTRACT -> LPK-2 and R12_SUCCESSOR, and MET-LIVE-002 -> R12_SUCCESSOR -> CONF-LIVE-006). It is also consistent with PK-D1 and the slots 260/261/262.",
+   "requiredChange": "Add the record's own `packet` (MET-LIVE-002) to the known items.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-14",
+   "severity": "NOTE",
+   "location": "DESIGN §3.4 unchanged; §3.3 CONF-LIVE-006",
+   "finding": "Revision 3 drops, without a ruling, text that revision 2 held and round 2 accepted. From S1-14: \"The kit owns the module of that name, and R12's same-named path is no worker source\". From `unchanged`: \"of native-profile v4, and v5's kept record\" and \"no new key or signature role (L3.7)\". From 006's disposition: \"superseded for the kit's entries only\".",
+   "requiredChange": "Restore these words in the record's `unchanged` and dispositions and in the README.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-15",
+   "severity": "NOTE",
+   "location": "DESIGN §3.10 NOT_OWNERSHIP reasons",
+   "finding": "Some narrative hits fit no reason cleanly: quotations of other documents (HS53 README:129), finding ids (BH:9, NQ:8), process prohibitions and progress narrative (for example PROXY_PERFORMANCE_DIAGNOSTICS.md:4, 31, 106 and 122). UNCHANGED_TRUE also overlaps STAGE_OR_COUNT for path and stage rows. A reason outside the vocabulary is refused, so the build needs a fixed mapping.",
+   "requiredChange": "Fix the mapping.",
+   "buildRule": "Line dispositions for hits outside notAmended are fixed as follows. Status tables, status checkpoints, progress narrative and process prohibitions take NOT_OWNERSHIP STATUS_LINE. Finding ids and quotations of other documents (BH:9, NQ:8, HS53 README:129) take REVIEW_HISTORY. Overlap-adapter and index lines (BACKEND_TIMING_DIAGNOSTICS.md:116, PROXY_PERFORMANCE_DIAGNOSTICS.md:126, the index and requirement records) take IDENTIFIER_INDEX. Digest rows take DIGEST_PIN. \"before CONF-LIVE-00x\" gates take ORDERING_PREREQUISITE. Path, stage and command grants and client-side custody (COR:102, TLC:540, 557, CUSTODY_HANDOFF_REPAIR.md:14, 95, 147, 149, CREDENTIAL_LIFECYCLE_REPAIR.md:169, SUCCESSOR_INVENTORY_REPAIR.md:79-81) take UNCHANGED_TRUE, which wins over STAGE_OR_COUNT. STAGE_OR_COUNT is kept for stage rows inside records (successor-inventory-amendment.json:779, 793, 805). The build refuses a hit that fits none of these."
+  },
+  {
+   "id": "S3-16",
+   "severity": "NOTE",
+   "location": "DESIGN §3.4 retained; §3.2 amends",
+   "finding": "The retained vocabulary's fourth bullet (\"CONF-LIVE-001/002, and 006's launcher hook\") has no token. CONF-LIVE-005's narrowed scope (§3.3: the supervisor, client and hook candidates, and the handoff) has none either. So rows whose kept part is 005's handoff (BH:37, PCR:43, POR:34, NQ:40) can record only CLIENT. amends.supersededEntries is given only for completion-integration.json, and nothing says what LBRM, BHA and NQA carry.",
+   "requiredChange": "Name the tokens: CLIENT, RECEIPT_VERIFICATION, EVIDENCE_VERIFICATION, R12_OTHER (CONF-LIVE-001/002 and 006's launcher hook) and CANDIDATE_HANDOFF (005's narrowed packaging and handoff). Add CANDIDATE_HANDOFF to the kept items of BH:37, PCR:43, POR:34 and NQ:40. Set supersededEntries to [] for LBRM, BHA and NQA, with the README saying they are succeeded for the ownership of moved items only.",
+   "buildRule": ""
+  },
+  {
+   "id": "S3-17",
+   "severity": "NOTE",
+   "location": "DESIGN §3.10 byte source; §6",
+   "finding": "At the base no chain layer reads history: a pruned grep found git called only in tests/linux_runner/test_toolchain.py. The design's layer and test fixture read every recorded file with `git show 2043cc27:<path>`, about 280 files and roughly 64 MB by round 2's count. That needs 2043cc27's objects in the verify clone and git inside the signed offline process tree, and it adds verify time.",
+   "requiredChange": "The pre-check shows that `git show 2043cc27:<path>` works inside the signed offline tree and records the added verify seconds. The build refuses if either fails.",
+   "buildRule": ""
+  }
+ ],
+ "quoteChecks": [
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "43-45",
+   "quote": "The fixed worker is packaged by the existing 005 builder/package module from\nthe existing 004 modules",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "43-45",
+   "quote": "No future packet must edit 003 to add an unspecified execution interface.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "54-56",
+   "quote": "CONF-LIVE-003\nimplements equivalent stdlib validation in its three new modules, with\nindependent negative tests in its three owned tests.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "190-191",
+   "quote": "The new server\nchecks are owned only by CONF-LIVE-003.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "307-313",
+   "quote": "CONF-LIVE-003 must independently cover every closed nested object",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "167-168",
+   "quote": "CONF-LIVE-003 implements real fixed-path transport/validation in its existing\nthree modules and negative tests in its existing three tests.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "256-257",
+   "quote": "Product003 must exercise the real factories through OS-mocked calls, including\nall refusal gates before server credentials.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "lines": "122-127",
+   "quote": "CONF-LIVE-003 must separately test the actual fixed guard with mocked OS I/O:",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "lines": "477-478",
+   "quote": "Product implementation remains\nin that packet's eight existing paths",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "lines": "479-480",
+   "quote": "CONF-LIVE-004 owns actual probes, CONF-LIVE-005 the fixed client/server\ncandidate packaging",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/proxy-contract-amendment.json",
+   "lines": "253-253",
+   "quote": "Product implementation remains in the eight existing CONF-LIVE-003 paths",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/proxy-contract-amendment.json",
+   "lines": "253-253",
+   "quote": "fixed probes, packaging",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/i05-gate-channel/README.md",
+   "lines": "115-116",
+   "quote": "it is carried to the I04 owner\n   (R01) and CONF-LIVE-003",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/i05-gate-channel/README.md",
+   "lines": "277-277",
+   "quote": "(R01, CONF-LIVE-003)",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/i05-gate-channel-v2/README.md",
+   "lines": "132-133",
+   "quote": "it stays carried to the I04 owner (R01) and CONF-LIVE-003",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/i05-gate-channel-v2/README.md",
+   "lines": "273-273",
+   "quote": "(R01, CONF-LIVE-003)",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/i05-gate-channel-v3/README.md",
+   "lines": "134-136",
+   "quote": "it stays carried to the I04 owner (R01) and CONF-LIVE-003",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:architecture/i05-gate-channel-v3/README.md",
+   "lines": "326-326",
+   "quote": "(R01, CONF-LIVE-003)",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/I05_GATE_CHANNEL.md",
+   "lines": "57-58",
+   "quote": "(R01, CONF-LIVE-003)",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/COMPLETION_INTEGRATION.md",
+   "lines": "258-261",
+   "quote": "The effective gate\nfor CONF-LIVE-004 may be satisfied only by CONF-FIX-008's independent C1–C7 review\nplus all its source gates.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/COMPLETION_INTEGRATION.md",
+   "lines": "258-261",
+   "quote": "CONF-LIVE-005/006 remain behind 004.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 supersedes quote (explicit)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "40-42",
+   "quote": "Existing product paths remain exact: 003 has eight, 004 six, 005 five and 006\nfive additions plus its already-approved final launcher-hook edit. Stages remain\n110/120/127/135/141/146/151. Every product command set remains eight commands.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "56-57",
+   "quote": "It must pin this authority\nand preserve the immediate 127-file/279-ID baseline in its owned fixture.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "191-191",
+   "quote": "No new root key or signature role.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "168-169",
+   "quote": "Its own fixture\npins this authority and the unchanged 127-file/279-ID baseline.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "lines": "102-103",
+   "quote": "CONF-LIVE-003 still owns its exact eight paths and all eight cumulative\ncommands",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "lines": "478-479",
+   "quote": "preserve all 127 predecessor files and\n279 test IDs",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "lines": "480-480",
+   "quote": "and CONF-LIVE-006 the already-bounded final hook",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:architecture/proxy-contract-amendment.json",
+   "lines": "253-253",
+   "quote": "and final hook remain with CONF-LIVE-004/005/006",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "rev 3 staysTrue span (BH:40-42 has no quote in rev 3; its full line bytes were used)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "35-35",
+   "quote": "Fixed server/broker transport and server/observer/broker custody checks; resource admission",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "35-35",
+   "quote": "server-only TLS API leg",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "35-35",
+   "quote": "UID ledger and cleanup",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "36-36",
+   "quote": "Fixed worker entry, ten probe recipes, bounded resource-action requests and unsigned receipt candidate",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "37-37",
+   "quote": "Reproducible client/server/worker source candidates and installation handoff",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "95-95",
+   "quote": "005 packages this entry in addition to the already planned client/server entries;",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "216-219",
+   "quote": "003 resolves a manifestDigest from its own immutable profile, verifies case\nownership and exact grants, and derives fixed create/get/delete paths. It records\ncreate intent before send, refuses existing names/409 without adoption and persists\nreturned UID/resourceVersion after validating actual post-defaulting manifests.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "41-41",
+   "quote": "Client, server, admission, three tests, one fixture and one guide",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "42-42",
+   "quote": "Actual fixed probes and native observations",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "43-43",
+   "quote": "Reproducible candidate archives and independent operator handoff",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "41-41",
+   "quote": "eight existing paths",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate staysTrue span (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "42-42",
+   "quote": "in six existing paths",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate staysTrue span (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "43-43",
+   "quote": "in five existing paths",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate staysTrue span (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "174-174",
+   "quote": "CONF-LIVE-003 defines a fixed `NativeProxyServer()` factory and `main()`;",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "176-176",
+   "quote": "CONF-LIVE-005 packages a separate fixed entry point that invokes that main:",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "226-227",
+   "quote": "Only preinstalled fixed CONF-LIVE-004 adapters may submit a manifest already\nselected from the server-owned signed profile",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "32-32",
+   "quote": "Fixed local channel consumer in live_proxy_server.py; data checks in live_mutation_admission.py",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "33-33",
+   "quote": "Fixed probe adapters",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "34-34",
+   "quote": "Client/server candidate packaging and handoff",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)",
+   "overlapsHS53Quote": false
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "38-38",
+   "quote": "Record parser, fixed native inspector, server/observer/broker ownership, credential ordering, transport and admission",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "39-39",
+   "quote": "Fixed worker; inherited broker-only control; qualified kernel/code checks through the same003-owned reader",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "40-40",
+   "quote": "Inert reproducible entries",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "44-45",
+   "quote": "No future packet may need an unspecified callback or edit003 to close\nthis boundary.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "43-44",
+   "quote": "Exact product paths/stages110/120/127/135/141/146/151 and all eight commands are\nunchanged.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate staysTrue span (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "238-240",
+   "quote": "Fixed consumer interface in live_proxy_server.py: a private factory-owned\n`_KernelQualification` with `check_self()`, `check_peer(role, retained_peer)`\nand `close()`.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "242-243",
+   "quote": "004's installed worker may use the same fixed reader for itself/original broker\nthrough its separately exact installed factory and parent/FD3 guards.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "245-245",
+   "quote": "No future require_server_containment callback in packet004.",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for a row rev 3 marks \"as in rev 2\" (S3-2 build rule)"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "251-253",
+   "quote": "[test-scope sentence, given by anchors only: from '003 tests real fixed' to 'is absent.']",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for BH:251-255 (S3-2 build rule); the test list is not restated"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "253-253",
+   "quote": "[test-scope sentence, given by anchors only: from '004 tests all ten' to 'worker ABI.']",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for BH:251-255 (S3-2 build rule); the test list is not restated"
+  },
+  {
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "253-255",
+   "quote": "[test-scope sentence, given by anchors only: from '005 builds' to 'prerequisites.']",
+   "occurrences": 1,
+   "occurrencesInFile": 1,
+   "overlapsStaysTrue": false,
+   "source": "reviewer candidate for BH:251-255 (S3-2 build rule); the test list is not restated"
+  }
+ ],
+ "supersessionCoverage": [
+  {
+   "statement": "R2-1 / C1: owners table 003/004/005 rows; \"No future packet must edit 003\"",
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "35-37, 43-45",
+   "coveredBy": "supersedes BH:35-37 (\"as in rev 2\") and BH:43-45 (two explicit quotes, verified once each)",
+   "mechanicallyCaught": false,
+   "note": "35-37 are hits; 43, 44, 45 are dropped by the family-context rule (paragraph BH:40-45 has no long or glued form) (S3-1). The BH:35-37 row mixes KAP_LEG with moved items (S3-3); exact quotes in S3-2."
+  },
+  {
+   "statement": "R2-2 / C2: 005 packages the worker entry",
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "91-97",
+   "coveredBy": "supersedes BH:91-97 (\"as in rev 2\")",
+   "mechanicallyCaught": false,
+   "note": "Line 95 is dropped by the family rule (S3-1). The moved clause is line 95 only; 91-94 and 96-97 are installed identities and rules that stay, not in staysTrue (S3-2)."
+  },
+  {
+   "statement": "R2-3 / C3: 003 resolves manifestDigest, persists UID/resourceVersion",
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "216-219",
+   "coveredBy": "supersedes BH:216-219 (\"as in rev 2\")",
+   "mechanicallyCaught": false,
+   "note": "Line 216 dropped by the family rule (S3-1). Items ADMISSION_MODULE, UID_LEDGER (S3-2)."
+  },
+  {
+   "statement": "R2-4 / C4: 003/004/005 source-acceptance split",
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "251-255",
+   "coveredBy": "supersedes BH:251-255 (\"as in rev 2\")",
+   "mechanicallyCaught": false,
+   "note": "Lines 251 and 253 dropped by the family rule (S3-1). The quote must end at \"prerequisites.\" on 255; \"006 requires ...\" stays (S3-2). Read for scope only."
+  },
+  {
+   "statement": "R2-5 / C5: status table 003/004/005",
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "lines": "272-274",
+   "coveredBy": "line-level NOT_OWNERSHIP STATUS_LINE (named in rev 3 §3.10)",
+   "mechanicallyCaught": true,
+   "note": "Reason right."
+  },
+  {
+   "statement": "R2-6 / C6: 003 defines NativeProxyServer()/main(); 005 packages the server entry",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "173-176",
+   "coveredBy": "supersedes PCR:173-176 (\"as in rev 2\")",
+   "mechanicallyCaught": true,
+   "note": "Hits 174, 176. Quotes must be the 174 and 176 clauses only; 173 and 175 stay true (S3-2)."
+  },
+  {
+   "statement": "R2-7 / C7: \"The new server checks are owned only by CONF-LIVE-003.\"",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "190-191",
+   "coveredBy": "supersedes PCR:190-191 (explicit, verified) + staysTrue PCR:191",
+   "mechanicallyCaught": true,
+   "note": "S2-4 resolved; no overlap."
+  },
+  {
+   "statement": "R2-8 / C8: ownership table 003/004/005",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "41-43",
+   "coveredBy": "supersedes PCR:41-43 (\"as in rev 2\")",
+   "mechanicallyCaught": true,
+   "note": "The cells hold path grants (\"eight existing paths\", \"in six/five existing paths\") that stay true and are not in staysTrue (S3-2)."
+  },
+  {
+   "statement": "R2-9 / C9: only preinstalled fixed CONF-LIVE-004 adapters may submit a manifest",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "226-227",
+   "coveredBy": "supersedes PCR:226-227 (\"as in rev 2\")",
+   "mechanicallyCaught": true,
+   "note": "Hit 226. WORKER_ENTRY; \"; no arbitrary callback/module.\" stays (S3-2)."
+  },
+  {
+   "statement": "R2-10 / C10: POR owners table 003/004/005",
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "32-34",
+   "coveredBy": "supersedes POR:32-34 (\"as in rev 2\"), composed with HS53",
+   "mechanicallyCaught": true,
+   "note": "POR sha256 65778040... equals HS53 row digest. LPK-0 line-34 quote must stay on the Component cell, clear of HS53's Authority-cell quote (verified no overlap for the S3-2 candidate)."
+  },
+  {
+   "statement": "R2-11 / C11: NQ owners table 003/004/005",
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "38-40",
+   "coveredBy": "supersedes NQ:38-40 (\"as in rev 2\")",
+   "mechanicallyCaught": true,
+   "note": "Rev 3 items RECORD_INSPECTOR, WORKER_ENTRY, kept none are incomplete: NQ:38 also gives SERVER and ADMISSION_MODULE and client credential ordering/transport; NQ:40 includes the client entry (S3-2)."
+  },
+  {
+   "statement": "R2-12 / C12: \"No future packet may need ... edit003\"",
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "43-45",
+   "coveredBy": "supersedes NQ:43-45 (\"as in rev 2\")",
+   "mechanicallyCaught": true,
+   "note": "Hit 44 (glued edit003). NQ:43-44 path/stage/command sentence and :45 stay true and are not in staysTrue (S3-2)."
+  },
+  {
+   "statement": "R2-13 / C13: inspector interface; 004's installed worker; packet004",
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "238-245",
+   "coveredBy": "supersedes NQ:238-245 (\"as in rev 2\")",
+   "mechanicallyCaught": true,
+   "note": "Hits 242, 245. Three quotes (238-240, 242-243, 245); 240-241 and 243-244 rules stay (S3-2)."
+  },
+  {
+   "statement": "R2-14 / C14-C16: LBR runtime boundaries, summaries, tables",
+   "path": "HO:docs/alpha-2/LIVE_BACKEND_READINESS.md",
+   "lines": "330-340, 414-423, 497-563, 770-774, 849-851",
+   "coveredBy": "notAmended.named LIVING_CATALOG (file-level NAMED row; 41 hit lines)",
+   "mechanicallyCaught": true,
+   "note": "Member: yes."
+  },
+  {
+   "statement": "R2-15 / C17-C19: R12D \"remains the sole owner\", MET-REPAIR-009 summary, other lines",
+   "path": "HO:docs/repositories/12-mas-harness-conformance-labs.md",
+   "lines": "496-498, 527, 529, 722, 724, 734 (hit lines)",
+   "coveredBy": "notAmended.named LIVING_CATALOG (file-level; 36 hit lines)",
+   "mechanicallyCaught": true,
+   "note": "Line numbers only. R12D:531 (\"remaining003\", a glued prefix outside the closed list) and 723-726 are not hit lines, but the whole file is NAMED."
+  },
+  {
+   "statement": "R2-16 / C20: TLC MET-REPAIR-009 summary",
+   "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "lines": "477-480",
+   "coveredBy": "supersedes TLC:477-478 and 479-480 (explicit, verified) + staysTrue TLC:478-479, :480",
+   "mechanicallyCaught": true,
+   "note": "S2-5 resolved; no overlap."
+  },
+  {
+   "statement": "R2-17 / C21: \"CONF-LIVE-003 still owns its exact eight paths and all eight cumulative commands\"",
+   "path": "HO:docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "lines": "101-103",
+   "coveredBy": "UNCHANGED_TRUE (COR:102) + staysTrue COR:102-103; the COR:101-103 row is dropped",
+   "mechanicallyCaught": true,
+   "note": "Reason right."
+  },
+  {
+   "statement": "R2-18 / C22-C26: MET-REPAIR-009 summary copies",
+   "path": "HO:docs/READINESS_INDEX.md; docs/adr/0004-sol-high-packet-boundary.md; docs/repositories/00-harness-engineering.md; task-packets/README.md; docs/history/master-development-plan-7a353b2.md",
+   "lines": "664/666; 284/286; 1560/1562; 1366/1368; 704/706",
+   "coveredBy": "notAmended.named LIVING_CATALOG x4 and HISTORY_SNAPSHOT",
+   "mechanicallyCaught": true,
+   "note": "Members: yes."
+  },
+  {
+   "statement": "R2-19 / C27: MDP phase table and checklist",
+   "path": "HO:docs/MASTER_DEVELOPMENT_PLAN.md",
+   "lines": "2257-2258, 2348-2350",
+   "coveredBy": "notAmended.named LIVING_CATALOG + per-entry annotations (§1.1)",
+   "mechanicallyCaught": true,
+   "note": "MDP hit lines are 2258, 2349, 2350, 2392, 2393 (2257/2348 are CONF-FIX-010 entries, not hits; 2392-2393 are historical navigation keys). Annotation targets: S3-12."
+  },
+  {
+   "statement": "R2-20 / C28: DS status checkpoints",
+   "path": "HO:docs/DEVELOPMENT_STATUS.md",
+   "lines": "22, 457-459, 503-505, 584-586, 857-859, 908-910, 988-990",
+   "coveredBy": "notAmended.named LIVING_CATALOG (75 hit lines)",
+   "mechanicallyCaught": true,
+   "note": "Member: yes."
+  },
+  {
+   "statement": "R2-21 / C29: I04 client carry",
+   "path": "HO:architecture/i05-gate-channel-v3/README.md; architecture/i05-gate-channel-v2/README.md",
+   "lines": "134-136; 132-133",
+   "coveredBy": "supersedes (explicit, verified), KAP_LEG -> DEFERRED_UNOWNED",
+   "mechanicallyCaught": true,
+   "note": "Hits 135; 133."
+  },
+  {
+   "statement": "R2-22 / C30: PCA \"Product implementation remains ...; fixed probes, packaging and final hook remain with ...\"",
+   "path": "HO:architecture/proxy-contract-amendment.json",
+   "lines": "253",
+   "coveredBy": "supersedes PCA:253 (two explicit quotes, verified) + staysTrue \"and final hook remain with CONF-LIVE-004/005/006\"",
+   "mechanicallyCaught": true,
+   "note": "Two quotes need two rows (S3-4)."
+  },
+  {
+   "statement": "R2-23 / C31: effectivePredecessors CONF-LIVE-004 [CONF-LIVE-003, CONF-FIX-008]",
+   "path": "HO:architecture/completion-integration.json",
+   "lines": "104-109",
+   "coveredBy": "amends.supersededEntries [\"effectivePredecessors.CONF-LIVE-004\"] (entry exists at base) + CLOSED_RECORD",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "R2-24 / C32: effectivePredecessors in conformance-completion.json",
+   "path": "HO:architecture/conformance-completion.json",
+   "lines": "91-96",
+   "coveredBy": "notAmended.pinned CLOSED_RECORD",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "R2-25 / C33-C34: packet YAML 003-006; \"remains sole ... owner\" x4",
+   "path": "HO:task-packets/*.yaml (32 hit files incl. CONF-DIAG-001, CONF-DIAG-002, MET-ACCEPT-001, MET-PUBLISH-001)",
+   "lines": "4, 9, 10",
+   "coveredBy": "notAmended.pinned MERGED_PACKET_YAML (exact paths)",
+   "mechanicallyCaught": true,
+   "note": "Members: yes."
+  },
+  {
+   "statement": "R2-26 / C35-C38: LBRM, BHA, NQA, URB",
+   "path": "HO:architecture/live-backend-roadmap.json; broker-handoff-amendment.json; native-qualification-amendment.json; unified-roadmap-backlog.json",
+   "lines": "various",
+   "coveredBy": "amends (LBRM, BHA, NQA) + notAmended.pinned CLOSED_RECORD",
+   "mechanicallyCaught": true,
+   "note": "supersededEntries for LBRM/BHA/NQA unspecified (S3-16)."
+  },
+  {
+   "statement": "R2-27 / C39-C40: lineage guides; sourceOwner records",
+   "path": "HO:docs/alpha-2/CONFORMANCE_COMPLETION.md, CONFORMANCE_PUBLICATION.md, LOCAL_ACCEPTANCE_REVALIDATION.md, SUCCESSOR_CHECKPOINT_REPAIR.md; architecture/backend-timing.json, proxy-diagnostics.json, conformance-publication.json, local-acceptance.json",
+   "lines": "various",
+   "coveredBy": "notAmended.pinned LINEAGE_GUIDE and CLOSED_RECORD",
+   "mechanicallyCaught": true,
+   "note": "CONFORMANCE_COMPLETION.md:190, 200, 227 are short-form lines the family rule drops; covered at file level."
+  },
+  {
+   "statement": "R2-28 / C41: \"CONF-LIVE-005 packages the corrected custody implementation\"",
+   "path": "HO:docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md",
+   "lines": "149-151",
+   "coveredBy": "UNCHANGED_TRUE (rev 3 §3.10 example)",
+   "mechanicallyCaught": true,
+   "note": "Reason right (supervisor/client custody is kept)."
+  },
+  {
+   "statement": "R2-29 / C42: harness docs status lines",
+   "path": "HO:docs/harnesses/*.md (16 files)",
+   "lines": "13/21/22, 35/43/44",
+   "coveredBy": "line-level NOT_OWNERSHIP STATUS_LINE",
+   "mechanicallyCaught": true,
+   "note": "Gate material, not edited. Reason right."
+  },
+  {
+   "statement": "R2-30: CONF-LIVE-003 stdlib validation in its three new modules and tests",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "54-56",
+   "coveredBy": "supersedes PCR:54-56 (explicit, verified) + staysTrue PCR:56-57",
+   "mechanicallyCaught": true,
+   "note": "S2-1 (a) resolved."
+  },
+  {
+   "statement": "R2-31: CONF-LIVE-003 fixed-path transport/validation in three modules and tests",
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md",
+   "lines": "167-168",
+   "coveredBy": "supersedes POR:167-168 (explicit, verified) + staysTrue POR:168-169",
+   "mechanicallyCaught": true,
+   "note": "S2-1 (b) resolved."
+  },
+  {
+   "statement": "R2-32: coding acceptance and negative cases given to CONF-LIVE-003",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+   "lines": "307-313",
+   "coveredBy": "supersedes PCR:307-313 (lead-in quote, verified)",
+   "mechanicallyCaught": true,
+   "note": "Scope only."
+  },
+  {
+   "statement": "R2-33: \"Product003 must exercise the real factories ...\"",
+   "path": "HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "256-257",
+   "coveredBy": "supersedes NQ:256-257 (explicit, verified)",
+   "mechanicallyCaught": true,
+   "note": "Hit via glued Product003."
+  },
+  {
+   "statement": "R2-34: CONF-LIVE-003 must separately test the actual fixed guard",
+   "path": "HO:docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "lines": "122-127",
+   "coveredBy": "supersedes COR:122-127 (lead-in quote, verified; gate document, quote only)",
+   "mechanicallyCaught": true,
+   "note": "Scope only."
+  },
+  {
+   "statement": "R2-35: I04 client carry (v1)",
+   "path": "HO:architecture/i05-gate-channel/README.md",
+   "lines": "115-116, 277",
+   "coveredBy": "supersedes (two explicit quotes, verified), KAP_LEG deferred",
+   "mechanicallyCaught": true,
+   "note": "Two quotes need two rows (S3-4)."
+  },
+  {
+   "statement": "R2-36: I04 request head (R01, CONF-LIVE-003), v2 and v3",
+   "path": "HO:architecture/i05-gate-channel-v2/README.md; architecture/i05-gate-channel-v3/README.md",
+   "lines": "273; 326",
+   "coveredBy": "supersedes (explicit, verified)",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "R2-37: I04 request head in the guide",
+   "path": "HO:docs/alpha-2/I05_GATE_CHANNEL.md",
+   "lines": "57-58",
+   "coveredBy": "supersedes (explicit, verified)",
+   "mechanicallyCaught": true,
+   "note": "Quoted rather than named (S2-2 allowed naming or dispositions); harmless. Its digest 97d1172f... occurs only in architecture/i05-gate-channel-authority.json."
+  },
+  {
+   "statement": "R2-38: I04 carry in round snapshot",
+   "path": "HO:architecture/w02-adm-f/round1/architecture/i05-gate-channel-v3/README.md",
+   "lines": "135, 318",
+   "coveredBy": "notAmended.named ROUND_SNAPSHOT",
+   "mechanicallyCaught": true,
+   "note": "Member: yes."
+  },
+  {
+   "statement": "R2-39: MET-REPAIR-009 summary in meta-before snapshots",
+   "path": "HO:architecture/*-inputs/meta-before.json (six files)",
+   "lines": "5-12, 29-33",
+   "coveredBy": "notAmended.named INPUTS_SNAPSHOT (19 files)",
+   "mechanicallyCaught": true,
+   "note": "broker-handoff-inputs matches two classes (S3-10)."
+  },
+  {
+   "statement": "R2-40: errata round snapshots",
+   "path": "HO:architecture/w02-notes-errata/round1..5/...",
+   "lines": "various",
+   "coveredBy": "notAmended.named ROUND_SNAPSHOT (16 files)",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "R2-41: metaRecipe before/after catalog rows",
+   "path": "HO:architecture/conformance-consumer-closure.json; conformance-performance-amendment.json; conformance-performance-followup.json; conformance-reference-measurement.json; conformance-successor-checkpoint.json",
+   "lines": "1285-1296; 1165-1176; 1240-1251; 1375-1386; 1223-1234",
+   "coveredBy": "notAmended.named RECORD_EMBEDDED_TEXT",
+   "mechanicallyCaught": true,
+   "note": "Their other hits are digest pins, predecessor maps and evidence fields; file-level class covers them."
+  },
+  {
+   "statement": "R2-42: embedded YAML of CONF-LIVE-003..006",
+   "path": "HO:architecture/packet-scalar-amendment.json",
+   "lines": "569-572",
+   "coveredBy": "notAmended.named RECORD_EMBEDDED_TEXT",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "R2-43: \"Seals and cryptographic/TLS transport validation remain CONF-LIVE-003 responsibilities\"",
+   "path": "HO:architecture/credential-lifecycle-amendment.json",
+   "lines": "603",
+   "coveredBy": "notAmended.named RECORD_EMBEDDED_TEXT",
+   "mechanicallyCaught": true,
+   "note": "Embedded CONF-FIX-005 deliverable; :351 and :608 are embedded too."
+  },
+  {
+   "statement": "R2-44: embedded text in authority files",
+   "path": "HO:architecture/*-authority.json (92 files)",
+   "lines": "542 hit lines",
+   "coveredBy": "notAmended.named AUTHORITY_TEXT (file-level rows)",
+   "mechanicallyCaught": true,
+   "note": "R-S2-3 (a)."
+  },
+  {
+   "statement": "R2-45: \"Credential opening still belongs to CONF-LIVE-003\"",
+   "path": "HO:docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md",
+   "lines": "94-96",
+   "coveredBy": "UNCHANGED_TRUE",
+   "mechanicallyCaught": true,
+   "note": "Client credential; reason right."
+  },
+  {
+   "statement": "R2-46: effective gate for CONF-LIVE-004; 005/006 behind 004",
+   "path": "HO:docs/alpha-2/COMPLETION_INTEGRATION.md",
+   "lines": "258-261",
+   "coveredBy": "supersedes rows with no moved or kept item",
+   "mechanicallyCaught": true,
+   "note": "The rows fail §5's own item rules and the \"row with no item\" vector (S3-5). Digest 541728c8... occurs only in host-interface-authority.json."
+  },
+  {
+   "statement": "R2-47: TLC prerequisites and grants",
+   "path": "HO:docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "lines": "5, 489, 507, 523, 540, 557",
+   "coveredBy": "ORDERING_PREREQUISITE (5, 489, 507, 523); UNCHANGED_TRUE (540, 557)",
+   "mechanicallyCaught": true,
+   "note": "Reasons right."
+  },
+  {
+   "statement": "R2-48: prerequisite and stage lines",
+   "path": "HO:docs/alpha-2/PROXY_CONTRACT_READINESS.md; CREDENTIAL_LIFECYCLE_REPAIR.md; SUCCESSOR_INVENTORY_REPAIR.md; architecture/policy-observation-amendment.json; proxy-contract-amendment.json",
+   "lines": "48; 169; 79-81; 333; 259",
+   "coveredBy": "ORDERING_PREREQUISITE / UNCHANGED_TRUE",
+   "mechanicallyCaught": true,
+   "note": "UNCHANGED_TRUE and STAGE_OR_COUNT overlap for stage rows (S3-15 rule)."
+  },
+  {
+   "statement": "R2-49: status lines in guides, repositories 01-11, provider catalog",
+   "path": "HO:docs/alpha-2/* (about 30), docs/repositories/01..11, docs/PROVIDER_MODULE_CATALOG.md",
+   "lines": "many",
+   "coveredBy": "NOT_OWNERSHIP STATUS_LINE",
+   "mechanicallyCaught": true,
+   "note": "Reason right."
+  },
+  {
+   "statement": "R2-50: identifier and index rows",
+   "path": "HO:architecture/unified-requirement-dispositions.json; unified-roadmap-source-index.json; research-adoption.json; provider-adoption.json; successor-inventory-amendment.json; digest pins",
+   "lines": "many (578 in unified-requirement-dispositions.json)",
+   "coveredBy": "NOT_OWNERSHIP IDENTIFIER_INDEX / DIGEST_PIN / STAGE_OR_COUNT",
+   "mechanicallyCaught": true,
+   "note": "Sampled by line shape: requirement ids, source paths, packet-id lists only."
+  },
+  {
+   "statement": "R2-51: HS53 README quoting POR's CONF-LIVE-005 row",
+   "path": "HO:architecture/host-interface-amendment-hs53/README.md (and round2..7 copies)",
+   "lines": "129",
+   "coveredBy": "line-level NOT_OWNERSHIP (quotation; REVIEW_HISTORY per S3-15) ; copies ROUND_SNAPSHOT",
+   "mechanicallyCaught": true,
+   "note": "No reason fits exactly; S3-15 maps it."
+  },
+  {
+   "statement": "New: finding ids \"CONF-LIVE-003/B1\", \"/B2\"",
+   "path": "HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md; HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "lines": "9; 8",
+   "coveredBy": "NOT_OWNERSHIP REVIEW_HISTORY (S3-15)",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "New: status rows in supersedes files",
+   "path": "HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md; HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md; HO:docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md; HO:docs/alpha-2/COMPLETION_INTEGRATION.md",
+   "lines": "195-196; 274-275; 144-146; 14, 29, 44, 59, 75, 89, 104, 119, 311",
+   "coveredBy": "NOT_OWNERSHIP STATUS_LINE",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "New: PCA digest pins and dispatch gate",
+   "path": "HO:architecture/proxy-contract-amendment.json",
+   "lines": "79-81; 459",
+   "coveredBy": "DIGEST_PIN; ORDERING_PREREQUISITE",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "New: client custody narrative and grants",
+   "path": "HO:docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md",
+   "lines": "14, 147",
+   "coveredBy": "UNCHANGED_TRUE",
+   "mechanicallyCaught": true,
+   "note": "Client custody and the eight-path grant are kept."
+  },
+  {
+   "statement": "New: diagnostic narrative and overlap adapters",
+   "path": "HO:docs/alpha-2/PROXY_PERFORMANCE_DIAGNOSTICS.md; BACKEND_TIMING_DIAGNOSTICS.md; COMPLETION_PROFILING.md; CONFORMANCE_REFERENCE_MEASUREMENT.md",
+   "lines": "4, 20-21, 31, 106, 122, 126; 116, 146-147; 61, 76, 87, 295; 131-132",
+   "coveredBy": "STATUS_LINE / IDENTIFIER_INDEX (S3-15 mapping)",
+   "mechanicallyCaught": true,
+   "note": "CONFORMANCE_REFERENCE_MEASUREMENT.md:132 is a short-form hit through the family rule."
+  },
+  {
+   "statement": "New: embedded CONF-FIX-004 / MET-REPAIR-011 contracts",
+   "path": "HO:architecture/custody-handoff-amendment.json",
+   "lines": "278-279, 497, 508",
+   "coveredBy": "RECORD_EMBEDDED_TEXT (or UNCHANGED_TRUE / ORDERING_PREREQUISITE line by line)",
+   "mechanicallyCaught": true,
+   "note": ""
+  },
+  {
+   "statement": "New (not a hit): citation of NQ:242 in the SELinux matrix v4",
+   "path": "HO:architecture/selinux-matrix-v4/README.md (and round3..6 copies, review-round2.json:46)",
+   "lines": "236",
+   "coveredBy": "nothing needed: a citation of NQ:242, which is itself QUOTED; it assigns nothing",
+   "mechanicallyCaught": false,
+   "note": "Dropped by the family rule (no long or glued form in its paragraph)."
+  },
+  {
+   "statement": "New (not hits): short-form-only lines in other files",
+   "path": "HO:architecture/agent-loop/review-round7..10.json; policy-observation-digests/review-round2..3.json; research-adoption-v2/review-round1.json; host-interface-amendment-hs53/amendment.json:415 (+round copies); task-packets/MET-PERF-011.yaml:15",
+   "lines": "various",
+   "coveredBy": "nothing needed: tool counts (\"4,004\"), byte counts (\"13,003\"), MAS-RA item numbers, HS53's own notAmended naming (\"on packet 005\"), a status line",
+   "mechanicallyCaught": false,
+   "note": "None assigns a moved item."
+  },
+  {
+   "statement": "New (not hits): glued prefixes outside the closed list",
+   "path": "HO:docs/alpha-2/COMPLETION_PROFILING.md:276; CONFORMANCE_PERFORMANCE_FOLLOWUP.md:29; CONFORMANCE_PERFORMANCE_REPAIR.md:41, 164-165; CONFORMANCE_REFERENCE_MEASUREMENT.md:53, 70, 72; HARNESS_PAPER_REPOSITORY_MAP.md:308; HOST_INTERFACE_PUBLICATION.md:101, 113; task-packets/CONF-PERF-002.yaml, CONF-PERF-003.yaml, MET-ENFORCE-003.yaml, MET-REPAIR-016.yaml",
+   "lines": "various",
+   "coveredBy": "nothing needed: \"before004\", \"draft003\", \"old003\", \"current004\", \"Publish005\", \"Distinct003\", \"retroactive004\" are ordering, status, other-family or explicitly non-ownership text",
+   "mechanicallyCaught": false,
+   "note": "84 files hold such forms; the rest are in classed or supersedes files, and none in a supersedes file is outside the closed list."
+  }
+ ],
+ "checks": [
+  {
+   "check": "Brief sha256 recomputed",
+   "result": "87677df76c2d115902d80fb1d66449c589d694f4192acb9ecbb7c7dea8b42945, matches."
+  },
+  {
+   "check": "Subject hashes recomputed",
+   "result": "DESIGN.md = DESIGN.rev3.md 80add650...; DESIGN.rev2.md 4b490770...; DESIGN.rev1.md 181364e6...; round-2 record aea54d76...; round-1 record b7ecb662...; OWNER_DECISIONS.md b5079ebd...; LPK0_DOSSIER.md 6ce99678...; DOSSIER.md 4243155a.... All match."
+  },
+  {
+   "check": "1 S2-1..S2-14 and S1-3/5/6/10/12/13/15 against rev 3 and OWNER_DECISIONS.md (R-S2-A, R-S2-9 (a), R-S2-14 (a), R-S2-3 (a), Q-LPK0-CAP); rev 2 and rev 3 read in full",
+   "result": "S2: 12 resolved, 2 partly (S2-6, S2-14), 0 open. S1: 4 resolved, 3 partly (S1-12, S1-15 and, through S2-6, the search)."
+  },
+  {
+   "check": "2 Quotes: every explicit rev-3 supersedes quote (22) and staysTrue span (8), byte for byte over git show 2043cc27 copies, python3 -I -B",
+   "result": "Each occurs exactly once within its cited lines and once in its whole file. No supersedes span overlaps a staysTrue span. Digests: BH 2cc6ebef, PCR 3e3bf310, POR 65778040 (= HS53 row), NQ 60bed4c5, COR b2ed7fe5, TLC 3f1bf16f, PCA 6c93e7db, I05 v1 dc9aa220, v2 1cb07cef, v3 f82f4333, I05_GATE_CHANNEL 97d1172f, COMPLETION_INTEGRATION 541728c8."
+  },
+  {
+   "check": "2b Rows marked \"as in rev 2\"",
+   "result": "Rev 2 gave only line ranges, so there were no rev-2 quotes to re-test. 26 candidate quotes and 4 stays-true spans were derived and verified (once within lines, once in file). The POR:34 candidate does not overlap HS53's POR:34 quote. They are in S3-2's rule."
+  },
+  {
+   "check": "3 Long-form declared search: git grep -n -E CONF-LIVE-00[345] at 2043cc27 over docs architecture task-packets with the §3.10 exclusions and the independence exclusions",
+   "result": "278 files, 2386 lines, the same as round 2. By rev-3 class: supersedes 12 files/65 lines; MERGED_PACKET_YAML 32/47; CLOSED_RECORD 10/116; INPUTS_PINNED 1/20; LINEAGE_GUIDE 4/35; LIVING_CATALOG 8/264; HISTORY 1/31; INPUTS_SNAPSHOT 19/173; ROUND_SNAPSHOT 16/165; REVIEW_RECORD 3/3; AUTHORITY_TEXT 92/542; no class 80/925, all with a fitting line disposition or RECORD_EMBEDDED_TEXT."
+  },
+  {
+   "check": "3b Short form: pruned git grep -l with an ERE equivalent, then the §3.10 family rule in python over saved copies",
+   "result": "60 candidate files. Dropped by the family rule: BH:40, 43-45, 95, 216, 251, 253 (S3-1), plus lines in classed files or non-hit files that assign nothing. A further pruned git grep -l for glued prefixes outside the closed list found 84 files; none in an unclassed or supersedes file assigns a moved item."
+  },
+  {
+   "check": "4 Declared search run as written",
+   "result": "git grep -n -E with (?<![\\w./:-])00[345](?![\\w]) at 2043cc27: rc 128, \"repetition-operator operand invalid\" (S3-9)."
+  },
+  {
+   "check": "4b Byte source precedent",
+   "result": "Only tests/linux_runner/test_toolchain.py calls git (pruned git grep -c, count output only); no layer reads history at the base (S3-17). The precedent embeds decisions as constants (validate_evolution_surface.py:443, 677, read as text) (S3-6)."
+  },
+  {
+   "check": "5 Rulings",
+   "result": "retiredHistory matches 018's six keys and values. One unsplit R12_SUCCESSOR. The notAmended classes are exact paths with no listings, and authority rows are file-level. MDP per-entry texts are exact. The ownerDecisions section rule: every quote occurs exactly once within a dated section (8 sections, all dated, headings unique)."
+  },
+  {
+   "check": "6 Model and vectors",
+   "result": "S2-12 (a)-(d) closed. Not decidable from the record and base bytes: Decisions (S3-6) and the edited-pinned vector (S3-7). Missing: the KAP-mixing check (S3-3), items for predecessor-rule rows (S3-5), class path rules (S3-10), MET-LIVE-002 as a known item (S3-13), and the vectors in S3-11."
+  },
+  {
+   "check": "7 Gate material: all 45 owner-only path entries of evolution-surface.json at 2043cc27 against the 14 new and 3 edited paths (case-insensitive exact, prefix, under+name); git log -1 --format=%H 2043cc27 on each new path",
+   "result": "No match. Candidate classes are CONTRACT_AND_SOURCE, ORACLE_TESTS, REVIEW_BRIEF and REVIEW_RECORD (all data). No new path has history. TLC and COR are quoted, not edited. The packet stays data."
+  },
+  {
+   "check": "7b Predecessor table",
+   "result": "Acyclic by hand. Consistent with PK-D1 (LPK-2 after LPK-1 after LPK-0 and the gate packet) and the slots 260/261/262. MET-LIVE-002 is outside the known-item classes (S3-13)."
+  },
+  {
+   "check": "8 New decisions without a ruling",
+   "result": "COMPLETION_INTEGRATION.md and I05_GATE_CHANNEL.md quoted instead of named (S3-5 for the first); S1-14 and signing words dropped (S3-14). Nothing new moves: the moved vocabulary is exactly Q-PK-2 plus Q-LPK0-3."
+  },
+  {
+   "check": "Legacy term and privacy",
+   "result": "The raw long-form grep output had the term on 7 lines (all in *-inputs/meta-before.json). It was scanned by script only, a redacted index was kept, and the raw file was deleted. Every saved copy was scanned after each fetch (none held it), and WORK holds no file with the term. No email, name or personal data was written."
+  },
+  {
+   "check": "Deviations from the brief's command rules (stated, not hidden)",
+   "result": "Once, early on, `ls` of the checkout's top-level directory (output discarded) to confirm the relative path. One pipe into `head` ran two processes together. One `git grep -c` (counts only) in place of -l. Nothing was written outside WORK."
+  }
+ ],
+ "notChecked": [
+  "No repository script, test, validator or model was run or imported. check_coverage's class precedence was not run; the class match is my own paper match.",
+  "R12, tools/w04/, architecture/enforcement-test-plan/, docs/alpha-2/ENFORCEMENT_TEST_PLAN.md and tests/enforcement/ were never opened. They and tools/w03* were excluded from every grep, as was architecture/artifact-edges/ (README-v10.md was read by exact path only).",
+  "R12D: only its hit line numbers were used; no line of it was printed or read.",
+  "docs/history/, the *-inputs/meta-before.json files, the w02-notes-errata and hs53/selinux round copies 3-5, and the 92 authority files were not fetched. They were classed by path, or found to be non-hits by -l only.",
+  "unified-requirement-dispositions.json was classified by line shape, not line by line.",
+  "Test-logic lines (BH:251-255, PCR:307-313, COR:122-127, NQ:256-257) were read for scope only and are not summarised; BH:251-255 quotes are given by anchors.",
+  "Whether 2043cc27's objects and git are available inside the signed offline verify tree, and the verify-time cost of the layer.",
+  "Slots 259/260 are not merged, so the mechanics base, bridges, argv count and the build gate's real input cannot be checked.",
+  "The neutral interface handoff folder and the roadmap repository were not opened.",
+  "The exact entry names LBRM, BHA and NQA would carry in supersededEntries were not enumerated."
+ ]
+}

@@ -1,0 +1,871 @@
+{
+ "subject": {
+  "candidate": "LPK-0 contract c2",
+  "amendmentSha256": "ac6351bb9362eb6077da572db3745aa26d17df370f51fd7fd932b0bd0ce17140",
+  "vectorsSha256": "c05dffa33c2724d7f2cc6eddf3e9b31632e9af870f1002489e32baabbfdf93bf",
+  "modelSha256": "4f9ddfc22b42f48ca84ddb9085549a823ef7fcb1e887c61eb8e50576ecd66d0b",
+  "readmeSha256": "ff13032db7d51d0ef861e3da489fb56bf87e58243c5d5180c26de1144e168a0e",
+  "prosePageSha256": "66d28efbb0b180fc1013fc669ad00fca1fd12a108f0cdfc8150cdf22a50e9241",
+  "buildReportSha256": "88b955b29666476ef0083961d6824705977c77d0de319d4d02c3c95417b6d9b8",
+  "statusLinesSha256": "71aa7715745e69f5e2f548d8155b40c13c2b63867c6f16e19d20d3b38a8725ef",
+  "hitsSha256": "4984246161aaf2c8241b428e94c6d7a31769686dc8215bd8005a93f97c7e9459",
+  "buildContractSha256": "b4540eac3c3bf817c4180c4c15cd39c8da0dca1933550d51236905cc91c3964d",
+  "makeVectorsSha256": "215cfad4d597785c42118c5ec9da1d10df431c5f52678a975e976c028f66ddc9",
+  "templateSha256": "3a6aebb708b2c67d7aa68b35822a4c8f0a685106b7b50476039973fc2a09714d",
+  "searchSha256": "1507b2732bc81e348434309c6ec198e8e1fc5b7500559797475cc976962db8ac",
+  "design": "TOOLS/lpk0/DESIGN.rev3.md 80add650443ccf1a90a4d4d22075d7a38709a03d23471ca1b3f2f37937ac0ae9",
+  "buildRules": "TOOLS/lpk0/BUILD_RULES.md c71a3345ccb93cbb2f8c5a29f11aa30048dd2ba412b73809d3a65ba4a2e9d48b",
+  "ownerDecisions": "TOOLS/OWNER_DECISIONS.md 36d3c1defda9d21dbf9b795b2d5ec96fd1e2fc243a3de68cecce392956690311",
+  "round1": "TOOLS/lpk0/reviews/contract-review-round1.json 3c78152585e6fa47ccfe5a41c9bf4ba9a4b8d898ee4286105f5bf4ff73c72cb0",
+  "base": "harness-onion 2043cc27883448e3ff030b7868110e295f32fe09"
+ },
+ "reviewer": "independent agent",
+ "model": "claude-opus-5-5",
+ "brief": {
+  "path": "tools/w03/probekit/lpk0/CONTRACT_REVIEW_BRIEF_R2.md",
+  "sha256": "b73ff9e9f80d36a7598af316fdad2a84e5a7509cdf614c6455807f30f0572a3e"
+ },
+ "verdict": "PASS_FOR_ADOPTION",
+ "round1": [
+  {
+   "id": "C1-1",
+   "status": "resolved",
+   "note": "check() refuses a LINES row whose path is not a supersedes path and whose path_class() is not None ('a classed file is filed as a line-level file'). P2 now refused; my R2-15 (LBRM), R2-16 (DS) and R2-17 (an AUTHORITY_TEXT file) refused the same way. Vector 'P2 a classed file filed as a line-level file and edited' present."
+  },
+  {
+   "id": "C1-2",
+   "status": "resolved",
+   "note": "supersedes order and uniqueness keyed on (path, first line, quote); ids must be S-01.. in that order; overlapping supersedes spans in one file refuse ('two supersedes quotes overlap in one file'). P1 refused (order, pinnedTable, spans); R2-23 and R2-24 refused."
+  },
+  {
+   "id": "C1-3",
+   "status": "resolved",
+   "note": "PINNED_STAYS (12 spans) and PINNED_SUPERSEDES (45 rows: path, lines, sha256 of quote, movedItems, keptItems) are model constants, and a covered line must be QUOTED. P3, P10, P11 refused; R2-01..R2-05 and R2-21 refused. Both tables equal my independent re-extraction from the rule texts."
+  },
+  {
+   "id": "C1-4",
+   "status": "resolved",
+   "note": "Every row type has a closed member set (incl. deliverables, crossInputs, edges, line rows), every list's order is checked, and an inventory row's PINNED/NAMED must match its notAmended group and class. P19-P27 refused; R2-07..R2-14 refused. Residual: the values of inventory.patterns, inventory.pathspecs and base are not pinned (C2-4)."
+  },
+  {
+   "id": "C1-5",
+   "status": "partly",
+   "note": "The README now lists all 45 rows (citation, quote or start ... end, moved items and movedTo, kept items; all 45 match the record by script) and says amendment.json holds every quote in full. The 12 stays-true spans are listed, but BH:40-42 is shown as start ... end with no pointer to amendment.json, so 11 of 12 are exact. The key table still cites only the 15 supersedes and amends files. See C2-3."
+  },
+  {
+   "id": "C1-6",
+   "status": "resolved",
+   "note": "MOVED_FROM pins each moved item's fromPacket (stricter than 'within 003/004/005'); DEFERRED_ROW pins authority Q-LPK0-3 and sourceClauses BH:210-214, BH:35, PCR:207-225. P4, P28 and R2-06 refused."
+  },
+  {
+   "id": "C1-7",
+   "status": "resolved",
+   "note": "PINNED_AMENDS (four rows: path, packet, supersededEntries) and PINNED_EDGES (six rows) are model constants equal to DESIGN 3.2/3.8 and S3-16; each packet id equals the amended record's own packet field. P14 and P17 refused."
+  },
+  {
+   "id": "C1-8",
+   "status": "resolved",
+   "note": "The HS53 loop tests row.path in spans before reading; crossInputs records HO:architecture/host-interface-amendment-hs53/amendment.json with sha256 e4255685... (equal to the base). On the adopted record the model reads exactly 279 paths: the 278 inventory files plus that record. The README states the exception."
+  },
+  {
+   "id": "C1-9",
+   "status": "resolved",
+   "note": "S-17 text is now 'No future packet must edit LINUX-PROBE-KIT-001 to add an unspecified execution interface; the worker ABI is unchanged.'; S-08 and S-10 name the unsigned receipt candidates. Only these three texts changed."
+  },
+  {
+   "id": "C1-10",
+   "status": "resolved",
+   "note": "status_lines.json enumerates 192 STATUS_LINE lines (equal to the record's 192 outside supersedes files) and build_contract.py hard-codes the 10 inside supersedes files; every other hit needs a SPECIAL entry. Tested: removing two listed lines makes the build report 'S3-15: the hit ... fits no listed disposition' and the model's own acceptance check fail. The build still writes amendment.json and exits 0 (C2-1). Line 112 is ORDERING_PREREQUISITE as ruled."
+  },
+  {
+   "id": "C1-11",
+   "status": "resolved",
+   "note": "class added to all 210 file-level inventory rows (each equal to its notAmended class); the README documents the closed shape, including LINES, lines, id, base and crossInputs."
+  },
+  {
+   "id": "C1-12",
+   "status": "resolved",
+   "note": "changedFiles now include status.json, REVIEW_BRIEF_R1/R2.md and review-round1/2.json (18 paths); the README states that gate_paths are the changed files already matched against the record's gate rules, case-folded; the model compares case-folded. All 18 match only data classes at 2043cc27."
+  },
+  {
+   "id": "C1-13",
+   "status": "resolved",
+   "note": "README carries 'The report's list is reviewed in the packet review.' and S3-7's check ('any supersedes, amends or pinned path, compared case-folded')."
+  },
+  {
+   "id": "C1-14",
+   "status": "resolved",
+   "note": "README carries the sentence as ruled. Its wording assigns the unquoted cells only to the moved item's new owner, which is imprecise on rows that also keep items (C2-2)."
+  }
+ ],
+ "buildRules": [
+  {
+   "id": "S3-1",
+   "status": "applied",
+   "note": "Own re-run: the supersedes-file rule adds exactly HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md lines 40, 43, 44, 45, 95, 216, 251, 253; 40 is UNCHANGED_TRUE, the others QUOTED; the build checks the added set."
+  },
+  {
+   "id": "S3-2",
+   "status": "applied",
+   "note": "All 26 rows re-extracted from 2043cc27 against quotes typed from the rule text: exact bytes, lines, items, movedTo, keptBy and file sha256; each once in its lines and once in its file. The four added staysTrue spans are present. 0 overlaps with HS53's quotes (4 occurrences in BH and POR), staysTrue or other supersedes quotes."
+  },
+  {
+   "id": "S3-3",
+   "status": "applied",
+   "note": "KAP_LEG only alone, in the 8 named rows, DEFERRED_UNOWNED, keptItems [], keptBy null; P6 and the vector 'KAP_LEG mixed with a moved item' refused."
+  },
+  {
+   "id": "S3-4",
+   "status": "applied",
+   "note": "45 one-quote rows; lines first..last byte except PCR:307-313 and COR:122-127 (own offsets); PCA:253 split with the rule's items; R2-03 (narrowing 307-313) refused."
+  },
+  {
+   "id": "S3-5",
+   "status": "applied",
+   "note": "No COMPLETION_INTEGRATION.md quote rows; NAMED LIVING_CATALOG with hit lines 14, 29, 44, 59, 75, 89, 104, 119, 259, 261, 311; amends keeps effectivePredecessors.CONF-LIVE-004 (present: ['CONF-LIVE-003', 'CONF-FIX-008']); README states the guide's 258-261 rule is superseded through it."
+  },
+  {
+   "id": "S3-6",
+   "status": "applied",
+   "note": "Own check against OWNER_DECISIONS.md (36d3c1de..., equal to build-report ownerDecisionsSha256): all 16 quotes occur exactly once in their named dated section (10 sections). Model checks shape only; README says so."
+  },
+  {
+   "id": "S3-7",
+   "status": "applied",
+   "note": "Model refuses a supersedes, amends or pinned path among the changed files, case-folded; vectors 'an edited pinned file', 'an edited quoted file'; R2-29..R2-31 refused. The crossInputs record is not protected (C2-7)."
+  },
+  {
+   "id": "S3-8",
+   "status": "applied",
+   "note": "Mechanics rule, not contradicted; the README states the six steps, 'The adopted record is not changed' and the packet-review sentence."
+  },
+  {
+   "id": "S3-9",
+   "status": "applied",
+   "note": "Record pathspecs and both ERE patterns equal the rule; own run (LC_ALL=C): 278/60/298 candidates, 278 hit files, 2423 hits, 2386 long-form lines, searchDigest 6728ad93dc750d30d7fe0b5476bd06d772f6353c2d0f778d1ca93c61d3fe0d93 equal; per-file lines and sha256 equal."
+  },
+  {
+   "id": "S3-10",
+   "status": "applied",
+   "note": "Own glob classifier from the rule text: 0 class differences; counts MERGED_PACKET_YAML 32, CLOSED_RECORD 10 (6 named + exactly the 4 one-level records naming sourceOwner CONF-LIVE-003), INPUTS_PINNED 1, LINEAGE_GUIDE 4, LIVING_CATALOG 9, HISTORY_SNAPSHOT 1, INPUTS_SNAPSHOT 19, ROUND_SNAPSHOT 16, REVIEW_RECORD 3, AUTHORITY_TEXT 92, RECORD_EMBEDDED_TEXT 23. The model now checks the rule both ways. Its path_class is looser than the globs below one level (C2-6); no base file is affected."
+  },
+  {
+   "id": "S3-11",
+   "status": "applied",
+   "note": "Four checks with vectors, all refused."
+  },
+  {
+   "id": "S3-12",
+   "status": "applied",
+   "note": "Mechanics rule; not contradicted."
+  },
+  {
+   "id": "S3-13",
+   "status": "applied",
+   "note": "Known items include the record's own packet; the six pinned edges are acyclic."
+  },
+  {
+   "id": "S3-14",
+   "status": "applied",
+   "note": "Restored words present in unchanged (ROLES, SIGNING_DUTIES, WORKER_ENTRY_NAME) and in CONF-LIVE-006's disposition text, and in the README, which says they restore rev 2's text."
+  },
+  {
+   "id": "S3-15",
+   "status": "applied",
+   "note": "All rule-named lines carry the rule's reason; 192 STATUS_LINE lines enumerated; an unlisted hit is reported as a refusal (tested). STAGE_OR_COUNT unused because its example file is NAMED. The refusal does not stop the build (C2-1)."
+  },
+  {
+   "id": "S3-16",
+   "status": "applied",
+   "note": "Five retained tokens; CANDIDATE_HANDOFF kept only on BH:37, PCR:43, POR:34, NQ:40; supersededEntries [] for LBRM, BHA, NQA and the README sentence."
+  },
+  {
+   "id": "S3-17",
+   "status": "applied",
+   "note": "Mechanics rule; not contradicted. The model's read set on the adopted record is exactly the 279 recorded paths."
+  }
+ ],
+ "findings": [
+  {
+   "id": "C2-1",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/build_contract.py note() and its end (writes amendment.json and build-report.json unconditionally); S3-15, S3-1, S3-6",
+   "finding": "The build's refusals are recorded but do not stop it. With two STATUS_LINE entries removed from a copy of status_lines.json, the build printed 'BUILD REFUSES' three times and listed them in refusedChecks, then still wrote an amendment.json (a144960b...) the model refuses, and exited 0. The adopted c2 build report has refusedChecks [] so the adopted record is unaffected.",
+   "requiredChange": "Make the build exit non-zero and write no amendment.json, model or vectors when any check fails. Alternatively, make 'build-report.json refusedChecks is empty' an explicit adoption and pre-check condition stated in the README."
+  },
+  {
+   "id": "C2-2",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/README.md 'Unquoted cells' (lines 145-146); HO:docs/alpha-2/POLICY_OBSERVATION_READINESS.md:34, HO:docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md:40, HO:docs/alpha-2/BROKER_HANDOFF_READINESS.md:37",
+   "finding": "The sentence binds a quoted row's unquoted cells only to 'the moved item's new owner'. On rows that also keep items, part of the unquoted text describes kept work. POR:34's third cell and NQ:40's unquoted remainder describe the prerequisite handoff, which R12 keeps as CANDIDATE_HANDOFF. BH:37's prohibition binds the kit's server and worker candidates and R12's client candidate and handoff alike. Read literally, the sentence moves these duties off R12.",
+   "requiredChange": "Reword: 'On a quoted table row (...), the row's unquoted constraint and prohibition cells stay true and bind the new owner of each item the row moves and, for the items it keeps, the R12 successor.'"
+  },
+  {
+   "id": "C2-3",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/README.md key table, 'Statements that stay true', 'Not amended', 'The fixed tables'; DESIGN 4 and 6 (D5a oracle from the README alone)",
+   "finding": "The 45-row table, 11 of the 12 stays-true quotes and the closed shape are usable as written. Some fixed values the model checks are named but not given: (a) the BH:40-42 stays-true quote is abbreviated, with no pointer to amendment.json (it is exactly lines 40-42); (b) the LINEAGE_GUIDE (4), LIVING_CATALOG (9) and CLOSED_RECORD (10) paths are 'their listed paths' but are not listed; (c) each moved item's fromPacket; (d) the deliverable tokens KEPT_R12 and SUPERSEDED_UNACCEPTED_HISTORY, with 003's exact deliverable list, and the six unchanged ids. In addition, (e) the key table omits the crossInputs digest (HS53 record, e4255685...) and does not define the table's abbreviations 'I05 v1/v2/v3' and 'I05 guide'. The supersession table has no column for the replacement text that DESIGN 4 calls 'Under this amendment'.",
+   "requiredChange": "List (a)-(d) in the README, or state for each that the oracle takes it from amendment.json. Add the crossInputs row and the I05 abbreviations to the key table. Either add the replacement text, or say that the 'Moved' and 'Kept' columns are the structured form of DESIGN 4's 'Under this amendment' column and that the prose is in amendment.json."
+  },
+  {
+   "id": "C2-4",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/probe_kit_scope.py check(): top-level shape and inventory shape; DESIGN 3.10, S3-9",
+   "finding": "Fixed record values that the model does not pin: base and inventory.commit (any 40-hex value is accepted if the two are equal; R2-34), inventory.pathspecs (':!tools' dropped is accepted; R2-35), and inventory.patterns, both its values and its members (R2-36, R2-37). Hits are recomputed from the model's own constants, so the inventory check itself is sound. Only the layer's sha256 pin of amendment.json catches these.",
+   "requiredChange": "Pin base == 2043cc27883448e3ff030b7868110e295f32fe09 and inventory.pathspecs and patterns equal to the S3-9 constants, with one vector. Alternatively, state in the README that these members are covered only by the layer's amendment.json pin."
+  },
+  {
+   "id": "C2-5",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/probe_kit_scope.py rows_of() and the supersedes, ownerDecisions, notAmended, dispositions and amends loops; DESIGN 5 ('The refusal texts are pinned')",
+   "finding": "Some wrong-typed members make check() raise instead of refusing. A non-string supersedes quote raises AttributeError (R2-43). A null ownerDecisions id, an integer notAmended path and null deliverables each raise TypeError. An integer in supersededEntries raises AttributeError. The result fails closed, but it is not a pinned refusal text.",
+   "requiredChange": "Type-check row members in rows_of (strings, lists of strings, integers as the shape requires) and refuse with 'shape'. Add one vector."
+  },
+  {
+   "id": "C2-6",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/probe_kit_scope.py path_class(); S3-10 globs; S3-8 step (3)",
+   "finding": "path_class matches more broadly than S3-10's globs below one level. It treats round* at any depth under architecture/<x>/ as ROUND_SNAPSHOT (rule: architecture/*/round*/**). It treats any depth under architecture/broker-handoff-inputs/ as INPUTS_PINNED and any depth under docs/history/ as HISTORY_SNAPSHOT (rules: one level, '/*'). No hit file at 2043cc27 differs (0 differences against my segment-bounded classifier). S3-8 step (3) covers new hits at the mechanics base by class path rule, so a deeper new file would be covered without review.",
+   "requiredChange": "Match the S3-10 globs exactly ('*' within one segment), or state in the README that the mechanics gate uses the exact S3-10 globs."
+  },
+  {
+   "id": "C2-7",
+   "severity": "NOTE",
+   "location": "TOOLS/lpk0/rounds/c2/probe_kit_scope.py changed-files block (protected set); S3-7, DESIGN 1 ('Any edit to any other existing file' is out)",
+   "finding": "The protected set covers supersedes, amends and pinned paths, as S3-7 says. It does not cover the crossInputs record, which the model reads by digest: HO:architecture/host-interface-amendment-hs53/amendment.json among the changed files is accepted (R2-33).",
+   "requiredChange": "Add crossInputs paths to the protected set, with a vector."
+  }
+ ],
+ "lineDispositions": [
+  {
+   "path": "docs/alpha-2/CONFORMANCE_REFERENCE_MEASUREMENT.md",
+   "line": 131,
+   "recorded": "NOT_OWNERSHIP STATUS_LINE",
+   "proposed": "NOT_OWNERSHIP ORDERING_PREREQUISITE (optional)",
+   "reason": "Scope-only reading: 'CONF-LIVE-003 still needs separate accepted-checkpoint reconciliation after the repair' is the same ordering statement the monitor moved to ORDERING_PREREQUISITE at CONFORMANCE_CONSUMER_CLOSURE.md:112. Either reason is NOT_OWNERSHIP, so no quote is needed. Line 132 also carries the 004/005/006 status and stays STATUS_LINE."
+  }
+ ],
+ "plantedMutations": [
+  {
+   "mutation": "P1 duplicate supersedes row (same path, lines, quote, items) under a fresh id S-46, linked from its moved rows",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row; a row differs from the table the design and the build rules fix; two supersedes quotes overlap in one file"
+  },
+  {
+   "mutation": "P2 pinned task-packets/CONF-LIVE-003.yaml removed from notAmended.pinned, given LINES/STATUS_LINE dispositions and added to the changed files",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a classed file is filed as a line-level file"
+  },
+  {
+   "mutation": "P3 PCR:191 staysTrue row dropped and the PCR:190-191 quote widened over 'No new root key or signature role.'",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "P4 moved SERVER row fromPacket set to CONF-LIVE-006 [C1-6 (R-C1-A): refuse a fromPacket outside CONF-LIVE-003/004/005]",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "P5 CONF-LIVE-003 deliverable 1 (the client) set SUPERSEDED_UNACCEPTED_HISTORY",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the four packet dispositions are not exactly as decided"
+  },
+  {
+   "mutation": "P6 a KAP_LEG-only row with movedTo LINUX-PROBE-KIT-001",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the KAP leg is mixed with another item or moved to the kit"
+  },
+  {
+   "mutation": "P7 QUOTED disposition on CUSTODY_HANDOFF_REPAIR.md:14, a file with no supersedes row",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "mutation": "P8 a moved row for CLIENT",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a moved item is not linked to exactly its supersedes rows; a value is outside its closed vocabulary"
+  },
+  {
+   "mutation": "P9 a named LIVING_CATALOG file (DS) also given line dispositions",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a classed file is filed as a line-level file; a file is in more than one place"
+  },
+  {
+   "mutation": "P10 BH:36, covered by S-14, relabelled NOT_OWNERSHIP STATUS_LINE [C1-3 (R-C1-A): refuse a covered line unless QUOTED]",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a hit line inside a supersedes row's lines is not QUOTED"
+  },
+  {
+   "mutation": "P11 the BH:36 supersedes row dropped, its moved links removed, the line relabelled STATUS_LINE [C1-3 (R-C1-A): the 45 rows pinned]",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "P12 docs/DEVELOPMENT_STATUS.md (named; DESIGN 1.1 says not edited) among the changed files [S3-7 names supersedes, amends and pinned paths only]",
+   "source": "r1",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "P13 docs/alpha-2/CUSTODY_HANDOFF_REPAIR.md (line-level, no class) among the changed files [S3-7 names supersedes, amends and pinned paths only]",
+   "source": "r1",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "P14 an extra predecessor row CONF-LIVE-004 after CONF-FIX-008 [C1-7 (R-C1-A): the six rows pinned]",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "P15 a staysTrue quote that does not occur in its lines",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a quote does not occur exactly once within its cited lines; a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "P16 two supersedes ids swapped",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "mutation": "P17 completion-integration.json amends supersededEntries emptied [C1-7 (R-C1-A): the four amends rows pinned]",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "P18 an ownerDecisions row naming a non-existent section [S3-6: a contract-build check; the model checks shape only]",
+   "source": "r1",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "P19 extra member in a retained row",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "P20 extra member in an inventory file row",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the inventory's hits do not equal the hits recomputed from the base bytes; the inventory's searchDigest does not equal its hit list's digest; the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "P21 extra member in a dispositions row",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the four packet dispositions are not exactly as decided; the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "P22 extra member in an effectivePredecessors edge",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "P23 retained list reversed",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row; a value is outside its closed vocabulary"
+  },
+  {
+   "mutation": "P24 dispositions list reversed",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row; the four packet dispositions are not exactly as decided"
+  },
+  {
+   "mutation": "P25 unchanged list reversed",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row; unchanged does not name the worker entry, the roles and every required identity"
+  },
+  {
+   "mutation": "P26 a moved row's fromClauses reversed",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "mutation": "P27 a pinned file's inventory row labelled NAMED",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "mutation": "P28 deferred authority set to LX-D1 and source clauses cut to BH:35 [C1-6 (R-C1-A): deferred row pinned]",
+   "source": "r1",
+   "required": true,
+   "refused": true,
+   "refusal": "the KAP leg is mixed with another item or moved to the kit"
+  },
+  {
+   "mutation": "P29 KAP rows' replacement text rewritten to say the leg moves to the kit, structured members unchanged [S2-12 (b): the model never checks text]",
+   "source": "r1",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-01 fixed table: CANDIDATE_HANDOFF added to PCR:41's kept items (S3-16 names only BH:37, PCR:43, POR:34, NQ:40)",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-02 fixed table: POR:33's quote swapped for the row's unquoted constraint cell (valid, once in its line)",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-03 fixed table: PCR:307-313 narrowed to 307-307 (quote still within its line) [S3-4 keeps the sentence range]",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-04 fixed table: a 13th, valid staysTrue span (BH:255) [C1-3 (R-C1-A): refuse any difference from the 12 spans]",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-05 fixed table: an extra, otherwise valid supersedes row moving SERVER on the BH:274 status line (ids renumbered, links and line updated) [nothing moves that the owner did not move; the 45 rows are fixed]",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-06 fixed table: RECORD_INSPECTOR fromPacket set to CONF-LIVE-005 (inside 003/004/005, but NQ:38 is 003)",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-07 closed members: an extra member in a deliverables row",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "R2-08 closed members: an extra member in the crossInputs row",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "R2-09 sort order: notAmended.pinned reversed",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "mutation": "R2-10 sort order: ownerDecisions reversed",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "mutation": "R2-11 sort order: effectivePredecessors.placeholders reversed",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "mutation": "R2-12 sort order: the SERVER moved row's items reversed",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "mutation": "R2-13 sort order: two line rows of BH swapped",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "mutation": "R2-14 sort order: a supersedes row's movedItems unsorted",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a replacement's structured members are inconsistent; a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-15 line-file rule: an amended CLOSED_RECORD (LBRM) refiled as a LINES file",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a classed file is filed as a line-level file"
+  },
+  {
+   "mutation": "R2-16 line-file rule: a LIVING_CATALOG file (DS) removed from notAmended.named and refiled as a LINES file",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a classed file is filed as a line-level file"
+  },
+  {
+   "mutation": "R2-17 line-file rule: an AUTHORITY_TEXT file removed from notAmended.named and refiled as a LINES file",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a classed file is filed as a line-level file"
+  },
+  {
+   "mutation": "R2-18 class rule: CONF-LIVE-003.yaml moved from pinned to named (class kept), inventory NAMED, and edited",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a file is in a class whose path rule it fails"
+  },
+  {
+   "mutation": "R2-19 class rule: a classless line-level file (CUSTODY_HANDOFF_REPAIR.md) filed as a named LIVING_CATALOG",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a file is in a class whose path rule it fails"
+  },
+  {
+   "mutation": "R2-20 covered-means-QUOTED: BH:272 (status row, in no supersedes row) relabelled QUOTED",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "mutation": "R2-21 covered-means-QUOTED: BH:43 (inside S-16's lines) relabelled UNCHANGED_TRUE",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a hit line inside a supersedes row's lines is not QUOTED"
+  },
+  {
+   "mutation": "R2-22 covered-means-QUOTED: BH:40 (stays true, in no supersedes row) relabelled QUOTED",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "mutation": "R2-23 overlapping spans: PCA:253's first quote widened into the second",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix; two supersedes quotes overlap in one file"
+  },
+  {
+   "mutation": "R2-24 overlapping spans: BH:253-255 widened back over S-21's sentence",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix; two supersedes quotes overlap in one file"
+  },
+  {
+   "mutation": "R2-25 overlapping spans: PCA:253 'fixed probes, packaging' widened over the stays-true 'and final hook ...'",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a quote overlaps a statement that stays true; a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-26 crossInputs: emptied (the HS53 check would then be skipped)",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-27 crossInputs: the HS53 path given in another case",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a row differs from the table the design and the build rules fix; a sha256 does not equal the base bytes"
+  },
+  {
+   "mutation": "R2-28 crossInputs: a second, correctly digested row",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row; a row differs from the table the design and the build rules fix"
+  },
+  {
+   "mutation": "R2-29 case-folded changed files: a supersedes file (BH) in another case",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a pinned, quoted or amended path is among the packet's changed files"
+  },
+  {
+   "mutation": "R2-30 case-folded changed files: an amends record (LBRM) upper-cased",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a pinned, quoted or amended path is among the packet's changed files"
+  },
+  {
+   "mutation": "R2-31 case-folded changed files: a pinned YAML lower-cased",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a pinned, quoted or amended path is among the packet's changed files"
+  },
+  {
+   "mutation": "R2-32 changed files: a pinned YAML written with a './' segment [paths in allowedPaths are not normalised by the model; not named by S3-7]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-33 changed files: the HS53 crossInput record among the changed files [S3-7 names supersedes, amends and pinned only; DESIGN 1 forbids any other edit]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-34 base and inventory.commit both set to another 40-hex commit [not in DESIGN 5; the record is fixed at 2043cc27]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-35 inventory.pathspecs: ':!tools' dropped from the declared search [not in DESIGN 5; S3-9 fixes the search]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-36 inventory.patterns: the standalone pattern loosened [not in DESIGN 5; S3-9 fixes the search]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-37 inventory.patterns: an extra member [patterns is not a row type (C1-4)]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-38 a named hit file dropped from notAmended and the inventory, searchDigest recomputed [DESIGN 3.10: completeness rests on the build's search; the layer pins amendment.json by sha256]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-39 retained CLIENT row's packet changed to CONF-LIVE-005 [not in DESIGN 5]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-40 a moved row's fromClauses replaced with a CONF-LIVE-006 clause [not in DESIGN 5; C1-6 asked for fromPacket only]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-41 CONF-LIVE-004 disposition given a deliverables list [DESIGN 3.3 gives deliverables for 003 only]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-42 S3-14's restored words dropped from unchanged ROLES text [text; S3-14 binds the build, not a model check]",
+   "source": "r2",
+   "required": false,
+   "refused": false,
+   "refusal": null
+  },
+  {
+   "mutation": "R2-43 robustness: a supersedes quote that is not a string [closed shape: must refuse, not crash]",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "EXCEPTION AttributeError: 'int' object has no attribute 'encode' (raised, not a pinned refusal text; see C2-5)"
+  },
+  {
+   "mutation": "R2-44 robustness: a moved row's items given as a string [closed shape]",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "a list is not sorted or holds a duplicate row; a moved item is not linked to exactly its supersedes rows"
+  },
+  {
+   "mutation": "R2-45 robustness: a line row's line given as a string [closed shape]",
+   "source": "r2",
+   "required": true,
+   "refused": true,
+   "refusal": "an inventory hit has no valid disposition"
+  }
+ ],
+ "checks": [
+  {
+   "check": "Brief sha256 computed",
+   "result": "b73ff9e9f80d36a7598af316fdad2a84e5a7509cdf614c6455807f30f0572a3e, equal to the launch prompt's"
+  },
+  {
+   "check": "Input digests: DESIGN.rev3.md, BUILD_RULES.md, OWNER_DECISIONS.md, the seven listed c2 files, round 1's record",
+   "result": "all equal to the brief (round 1 3c781525...)"
+  },
+  {
+   "check": "Declared search re-run with my own implementation (the record's two git grep -l -E runs, LC_ALL=C; git show bytes; DESIGN 3.10 + S3-1 + S3-9)",
+   "result": "278/60/298 candidates; 278 hit files; 2423 hits; 2386 long-form lines; per-file hit lines and sha256 equal to the record; searchDigest 6728ad93... equal; S3-1 added set exactly the 8 BH lines"
+  },
+  {
+   "check": "c1 -> c2 amendment.json diff, member by member",
+   "result": "only: crossInputs added; class added to 210 file-level inventory rows; S-08, S-10, S-17 replacement texts; CONFORMANCE_CONSUMER_CLOSURE.md:112 STATUS_LINE -> ORDERING_PREREQUISITE. No other difference."
+  },
+  {
+   "check": "supersedes re-extraction: 45 rows typed from S3-2, rev 3 3.6, S3-3, S3-4 (incl. the I05 rows' rev-2 line hints)",
+   "result": "all 45 equal (quote bytes, lines, movedItems, keptItems, movedTo, keptBy, file sha256); each once in its lines and in its file"
+  },
+  {
+   "check": "staysTrue re-extraction: 12 spans (rev 3 3.7 + S3-2)",
+   "result": "all equal; BH:40-42 is exactly lines 40-42; each once in its lines and file"
+  },
+  {
+   "check": "Overlaps: supersedes vs staysTrue, supersedes vs supersedes, supersedes vs HS53's 8 quotes",
+   "result": "0"
+  },
+  {
+   "check": "Quoted ranges and all 67 supersedes-file hit lines read in context (scope only)",
+   "result": "items match the rule texts; status rows STATUS_LINE; ordering lines ORDERING_PREREQUISITE; BH:40, COR:102, TLC:540, 557 UNCHANGED_TRUE"
+  },
+  {
+   "check": "All 205 hit lines of the 57 other line-level files read (scope only)",
+   "result": "status tables or checkpoints, progress narrative, process prohibitions, ordering, index and path/stage grants; none assigns a moved item; one optional reason change (lineDispositions)"
+  },
+  {
+   "check": "STATUS_LINE enumeration (C1-10)",
+   "result": "status_lines.json 192 entries == the record's 192 STATUS_LINE lines outside supersedes files; 10 more inside supersedes files equal the build's hard-coded set; no listed path is a supersedes file"
+  },
+  {
+   "check": "Own S3-10 classifier and digests",
+   "result": "0 class differences; counts as S3-10 (+23 RECORD_EMBEDDED_TEXT); all 47 pinned, 163 named, 278 inventory and 4 amends sha256 equal the base; inventory class equals notAmended class on all 210 rows"
+  },
+  {
+   "check": "ownerDecisions (S3-6), own section split",
+   "result": "16 rows; each quote once in its named dated section; Q-LPK0-3's answer occurs twice in the file, once in its section"
+  },
+  {
+   "check": "retiredHistory, amends, deferred, moved, dispositions, unchanged, retained, effectivePredecessors vs DESIGN and rules",
+   "result": "CONF-FIX-007 equals completion-integration.json's retiredPacket; 008-010 null pr/head; amends packet ids equal each record's own; tables as DESIGN 3.2-3.8 and S3-13/S3-16"
+  },
+  {
+   "check": "Fixed tables in the model (PINNED_SUPERSEDES, PINNED_STAYS, PINNED_AMENDS, PINNED_EDGES, MOVED_FROM, DEFERRED_ROW, CROSS_INPUTS)",
+   "result": "equal to my independent tables (the model accepts the record, and the record equals my typed rows); MOVED_FROM gives SERVER 003 and WORKER_ENTRY 004, and the 005 provenance stays in fromClauses"
+  },
+  {
+   "check": "Candidate model on the record in WORK (read bound to my git show cache)",
+   "result": "no refusals; reads exactly the 279 recorded paths"
+  },
+  {
+   "check": "Candidate model on all 57 vectors",
+   "result": "positive passes; every negative returns its pinned refusal; every refusal text is used by a vector"
+  },
+  {
+   "check": "Candidate build_contract.py and make_vectors.py re-run in WORK/rebuild",
+   "result": "amendment.json ac6351bb..., build-report.json 88b955b2..., probe_kit_scope.py 4f9ddfc2... (rendered from the template) and vectors.json c05dffa3... reproduced byte for byte; refusedChecks []"
+  },
+  {
+   "check": "Unlisted-hit refusal: build re-run with CONFORMANCE_CONSUMER_CLOSURE.md:113 and PROVIDER_MODULE_CATALOG.md:10 removed from a copy of status_lines.json",
+   "result": "build reports both as 'fits no listed disposition' and its model-acceptance check fails; it still writes amendment.json and exits 0 (C2-1)"
+  },
+  {
+   "check": "Planted mutations: round 1's P1-P29 as its record states them, then 45 of my own (R2-01..R2-45)",
+   "result": "every required mutation refused (P1-P11, P14-P17, P19-P28; R2-01..R2-31, R2-43..R2-45; R2-43 by exception). Not required and accepted: P12, P13, P18, P29, R2-32..R2-42. The monitor's ruling says '28' of r1's mutations; r1's record has 29 (P1-P29) and all 29 were run."
+  },
+  {
+   "check": "Wrong-typed members (extra probes)",
+   "result": "four more raise TypeError or AttributeError instead of refusing (C2-5)"
+  },
+  {
+   "check": "Gate material against HO:architecture/evolution-surface/evolution-surface.json at 2043cc27 (read only)",
+   "result": "the 18 changed paths and future review-round3/REVIEW_BRIEF_R3 names match only CONTRACT_AND_SOURCE, REVIEW_BRIEF, REVIEW_RECORD or ORACLE_TESTS (monitor-approvable data classes), exactly and case-folded; none matches an owner-only gate class; the 15 new paths are absent at 2043cc27 and the 3 catalogs present"
+  },
+  {
+   "check": "README and prose page vs record and decisions",
+   "result": "45-row table and 12 stays-true rows match the record by script (BH:40-42 abbreviated); S3-7, S3-8's packet-review sentence, C1-14's sentence, S3-14's restored words, the closed shape and the layer's amendment.json pin are stated; gaps in C2-2, C2-3; prose page unchanged from c1 and consistent with Q-PK-1/2/3/6, Q-LPK0-3, S3-14"
+  },
+  {
+   "check": "Legacy-term scan of WORK by script (word taken from the checkout path argument, never written)",
+   "result": "12 of the 299 cached base copies contained it; none of the 49 other WORK files did (candidate copies, rebuilds, my scripts, this record); the cache (299 files) was deleted after use"
+  }
+ ],
+ "notChecked": [
+  "I did not run or read scripts/evolution_surface.py or check_coverage. For paths that match two data classes (REVIEW_BRIEF*.md, review-round*.json, test_*oracle*.py), 'exactly one data class' rests on that tool's precedence.",
+  "I ran git grep only with LC_ALL=C, as the build did. I argue from the patterns that the C-locale ERE candidate set includes every Python match, but I did not run a UTF-8 locale.",
+  "I did not check the L<n>.<m> and PK F<n>.<m> dossier citations; the dossiers are outside the allowed paths.",
+  "I did not re-open the closed design's choice to pin or name, rather than quote, the 47 pinned and 163 named files. I did not read their hit lines (including R12D and the authority files) beyond counting hits and checking classes and digests.",
+  "I checked mechanics rules S3-8, S3-12 and S3-17 only for non-contradiction; the layer, YAML, authority file and tests do not exist yet.",
+  "I did not check git history of the new paths, only their absence at 2043cc27.",
+  "I hashed the design review records but did not re-read them. I did not decide whether the design review records are also published as adoption records (the changed list names two contract rounds)."
+ ]
+}

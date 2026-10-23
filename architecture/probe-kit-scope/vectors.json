@@ -1,0 +1,2995 @@
+{
+ "schemaVersion": "planeon.internal.probe-kit-scope-vectors/v1",
+ "record": "architecture/probe-kit-scope/amendment.json",
+ "base": "2043cc27883448e3ff030b7868110e295f32fe09",
+ "positive": {
+  "label": "the adopted record over the base bytes",
+  "mutations": [],
+  "changedFiles": [
+   "architecture/probe-kit-scope-authority.json",
+   "architecture/probe-kit-scope/README.md",
+   "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+   "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+   "architecture/probe-kit-scope/amendment.json",
+   "architecture/probe-kit-scope/review-round1.json",
+   "architecture/probe-kit-scope/review-round2.json",
+   "architecture/probe-kit-scope/status.json",
+   "architecture/probe-kit-scope/vectors.json",
+   "docs/MASTER_DEVELOPMENT_PLAN.md",
+   "docs/linux-probe-kit/README.md",
+   "docs/repositories/00-harness-engineering.md",
+   "scripts/probe_kit_scope.py",
+   "scripts/validate_probe_kit_scope.py",
+   "task-packets/MET-LIVE-002.yaml",
+   "task-packets/README.md",
+   "tests/test_probe_kit_scope.py",
+   "tests/test_probe_kit_scope_oracle.py"
+  ],
+  "gatePaths": [],
+  "refusals": []
+ },
+ "negatives": [
+  {
+   "label": "a changed quote",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/42/quote",
+     "value": "The new server\nchecks are owned by CONF-LIVE-003."
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a quote does not occur exactly once within its cited lines"
+  },
+  {
+   "label": "a wrong sha256",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/10/sha256",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a sha256 does not equal the base bytes"
+  },
+  {
+   "label": "a quote found twice within its lines",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/10/quote",
+     "value": "server"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a quote does not occur exactly once within its cited lines"
+  },
+  {
+   "label": "a quote overlapping a statement that stays true",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/42/quote",
+     "value": "The new server\nchecks are owned only by CONF-LIVE-003. No new root key"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a quote overlaps a statement that stays true"
+  },
+  {
+   "label": "a quote overlapping an HS53 supersedes quote",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/34/quote",
+     "value": "Documents the observer as a separately installed prerequisite"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a quote overlaps an HS53 supersedes quote in the same file"
+  },
+  {
+   "label": "lines not running from the quote's first byte to its last",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/11/lines",
+     "value": "34-35"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row's lines do not run from its quote's first byte to its last"
+  },
+  {
+   "label": "movedTo naming an R12 packet",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/40/replacement/movedTo",
+     "value": "CONF-LIVE-003"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a value is outside its closed vocabulary"
+  },
+  {
+   "label": "a moved item in keptItems",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/39/replacement/keptItems",
+     "value": [
+      "CLIENT",
+      "SERVER"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a replacement's structured members are inconsistent"
+  },
+  {
+   "label": "a row with no item",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/41/replacement/movedItems",
+     "value": []
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a replacement's structured members are inconsistent"
+  },
+  {
+   "label": "keptBy null with non-empty keptItems",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/39/replacement/keptBy",
+     "value": null
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a replacement's structured members are inconsistent"
+  },
+  {
+   "label": "keptBy set with empty keptItems",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/41/replacement/keptBy",
+     "value": "R12_SUCCESSOR"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a replacement's structured members are inconsistent"
+  },
+  {
+   "label": "movedTo DEFERRED_UNOWNED with an item other than KAP_LEG",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/41/replacement/movedTo",
+     "value": "DEFERRED_UNOWNED"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a replacement's structured members are inconsistent"
+  },
+  {
+   "label": "KAP_LEG mixed with a moved item",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/12/replacement/movedItems",
+     "value": [
+      "KAP_LEG",
+      "SERVER"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the KAP leg is mixed with another item or moved to the kit"
+  },
+  {
+   "label": "a moved KAP leg",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/moved/-",
+     "value": {
+      "item": "KAP_LEG",
+      "fromPacket": "CONF-LIVE-003",
+      "fromClauses": [
+       "BH:35"
+      ],
+      "to": "LINUX-PROBE-KIT-001",
+      "status": "SUPERSEDED_UNACCEPTED_HISTORY",
+      "items": [
+       "S-13"
+      ]
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the KAP leg is mixed with another item or moved to the kit"
+  },
+  {
+   "label": "a moved item with no row",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/moved/3/items",
+     "value": []
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a moved item is not linked to exactly its supersedes rows"
+  },
+  {
+   "label": "a missing packet disposition",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/dispositions/2"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the four packet dispositions are not exactly as decided"
+  },
+  {
+   "label": "a missing unchanged entry",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/unchanged/5"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "unchanged does not name the worker entry, the roles and every required identity"
+  },
+  {
+   "label": "retiredHistory with a fifth id",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/retiredHistory/-",
+     "value": {
+      "branchModified": false,
+      "dispatchable": false,
+      "head": null,
+      "id": "CONF-FIX-011",
+      "pr": null,
+      "status": "NON_DISPATCHABLE_RETAINED_HISTORY"
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "retiredHistory is not exactly CONF-FIX-007..010 in MET-REPAIR-018's shape"
+  },
+  {
+   "label": "retiredHistory missing an id",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/retiredHistory/1"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "retiredHistory is not exactly CONF-FIX-007..010 in MET-REPAIR-018's shape"
+  },
+  {
+   "label": "retiredHistory with a key outside 018's shape",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retiredHistory/1/reason",
+     "value": "retired"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "a predecessor cycle",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/effectivePredecessors/edges/4/after",
+     "value": [
+      "CONF-LIVE-006",
+      "LINUX-HOST-AUTH-001"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "effectivePredecessors names an unknown item or holds a cycle"
+  },
+  {
+   "label": "an unknown predecessor",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/effectivePredecessors/edges/4/after",
+     "value": [
+      "NOT-A-PACKET-999"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "effectivePredecessors names an unknown item or holds a cycle"
+  },
+  {
+   "label": "an unknown supersededEntries value",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/amends/1/supersededEntries",
+     "value": [
+      "effectivePredecessors.CONF-LIVE-099"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "an amends row names an entry its record does not hold"
+  },
+  {
+   "label": "an inventory hit with no disposition",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/inventory/files/210/lines/0"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "label": "a NOT_OWNERSHIP reason outside the vocabulary",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/210/lines/0/reason",
+     "value": "OTHER"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "label": "a recomputed hit missing from the record",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/inventory/files/169/hitLines/0"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the inventory's hits do not equal the hits recomputed from the base bytes"
+  },
+  {
+   "label": "a searchDigest that is not the hit list's",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/searchDigest",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the inventory's searchDigest does not equal its hit list's digest"
+  },
+  {
+   "label": "a file in a class whose path rule it fails",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/notAmended/named/1/class",
+     "value": "HISTORY_SNAPSHOT"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a file is in a class whose path rule it fails"
+  },
+  {
+   "label": "a file in two places",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/notAmended/named/-",
+     "value": {
+      "path": "docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+      "sha256": "3e3bf310ebd8a7b1aed696ed9b8d4d26cb67160aab3f862877e2b2a2e0c9f3d0",
+      "class": "LIVING_CATALOG"
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a file is in more than one place"
+  },
+  {
+   "label": "a duplicate staysTrue row",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/staysTrue/-",
+     "value": {
+      "path": "docs/alpha-2/PROXY_CONTRACT_READINESS.md",
+      "lines": "56-57",
+      "quote": "It must pin this authority\nand preserve the immediate 127-file/279-ID baseline in its owned fixture."
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "label": "an ownerDecisions row with an empty quote",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/ownerDecisions/0/quote",
+     "value": ""
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "an edited pinned file",
+   "mutations": [],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py",
+    "architecture/live-backend-roadmap.json"
+   ],
+   "gatePaths": [],
+   "refusal": "a pinned, quoted or amended path is among the packet's changed files"
+  },
+  {
+   "label": "an edited quoted file",
+   "mutations": [],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py",
+    "docs/alpha-2/BROKER_HANDOFF_READINESS.md"
+   ],
+   "gatePaths": [],
+   "refusal": "a pinned, quoted or amended path is among the packet's changed files"
+  },
+  {
+   "label": "a gate path in the changed files",
+   "mutations": [],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [
+    "scripts/probe_kit_scope.py"
+   ],
+   "refusal": "a gate-material path is among the packet's changed files"
+  },
+  {
+   "label": "P1 a duplicate supersedes row under a new id",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/supersedes/-",
+     "value": {
+      "id": "S-46",
+      "path": "docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+      "sha256": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+      "lines": "35-35",
+      "quote": "Fixed server/broker transport and server/observer/broker custody checks; resource admission",
+      "replacement": {
+       "text": "The fixed server transport, the server-side custody checks and resource admission are LINUX-PROBE-KIT-001's.",
+       "movedItems": [
+        "ADMISSION_MODULE",
+        "SERVER"
+       ],
+       "movedTo": "LINUX-PROBE-KIT-001",
+       "keptItems": [],
+       "keptBy": null
+      }
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "label": "P2 a classed file filed as a line-level file and edited",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/notAmended/pinned/21"
+    },
+    {
+     "op": "set",
+     "path": "/inventory/files/251",
+     "value": {
+      "disposition": "LINES",
+      "hitLines": [
+       1
+      ],
+      "path": "task-packets/CONF-LIVE-003.yaml",
+      "sha256": "15d13434edf833d4803618a7aa73ccc5e93baa29596e08903e623dbee338bba5",
+      "lines": [
+       {
+        "disposition": "NOT_OWNERSHIP",
+        "line": 1,
+        "reason": "STATUS_LINE"
+       }
+      ]
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py",
+    "task-packets/CONF-LIVE-003.yaml"
+   ],
+   "gatePaths": [],
+   "refusal": "a classed file is filed as a line-level file"
+  },
+  {
+   "label": "P3 a staysTrue row dropped and a quote widened over it",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/staysTrue/7"
+    },
+    {
+     "op": "set",
+     "path": "/supersedes/42/quote",
+     "value": "The new server\nchecks are owned only by CONF-LIVE-003. No new root key"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "a staysTrue row removed",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/staysTrue/0"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "P4 a moved row's fromPacket changed",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/moved/4/fromPacket",
+     "value": "CONF-LIVE-006"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "P10 a covered line not QUOTED",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/178/lines/2",
+     "value": {
+      "disposition": "NOT_OWNERSHIP",
+      "line": 36,
+      "reason": "STATUS_LINE"
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a hit line inside a supersedes row's lines is not QUOTED"
+  },
+  {
+   "label": "P11 a supersedes row dropped",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/supersedes/13"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "two supersedes quotes overlapping in one file",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/11/quote",
+     "value": "server-only TLS API leg, UID ledger and cleanup"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "two supersedes quotes overlap in one file"
+  },
+  {
+   "label": "P14 an extra predecessor row",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/effectivePredecessors/edges/-",
+     "value": {
+      "item": "R13_EXTRA",
+      "after": [
+       "MET-LIVE-002"
+      ]
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "P17 an amends row's supersededEntries emptied",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/amends/1/supersededEntries",
+     "value": []
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "P19 an extra member in a retained row",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retained/0/extra",
+     "value": 1
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "P20 an extra member in an inventory file row",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/0/extra",
+     "value": 1
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "P21 an extra member in a dispositions row",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/dispositions/0/extra",
+     "value": 1
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "P22 an extra member in a predecessor row",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/effectivePredecessors/edges/0/extra",
+     "value": 1
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "P23 the retained list unsorted",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retained",
+     "value": [
+      {
+       "item": "RECEIPT_VERIFICATION",
+       "packet": "CONF-LIVE-004",
+       "text": "Receipt verification, CONF-LIVE-004's narrowed scope."
+      },
+      {
+       "item": "R12_OTHER",
+       "packet": "CONF-LIVE-001",
+       "text": "CONF-LIVE-001/002 and CONF-LIVE-006's launcher hook."
+      },
+      {
+       "item": "EVIDENCE_VERIFICATION",
+       "packet": "CONF-LIVE-006",
+       "text": "Evidence verification (CONF-LIVE-006, CONF-LINUX-001)."
+      },
+      {
+       "item": "CLIENT",
+       "packet": "CONF-LIVE-003",
+       "text": "The campaign client (CONF-LIVE-003 deliverable 1)."
+      },
+      {
+       "item": "CANDIDATE_HANDOFF",
+       "packet": "CONF-LIVE-005",
+       "text": "CONF-LIVE-005's narrowed packaging and handoff."
+      }
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "label": "P24 the dispositions list unsorted",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/dispositions",
+     "value": [
+      {
+       "packet": "CONF-LIVE-006",
+       "disposition": "UNCHANGED",
+       "deliverables": [],
+       "text": "Paths and frozen eight commands unchanged. Its deliverable 3 (the complete candidate rebuild, LBRM:1059) is superseded for the kit's entries only: it consumes the kit's server and worker artifacts by digest."
+      },
+      {
+       "packet": "CONF-LIVE-005",
+       "disposition": "NOT_DISPATCHABLE_AS_WRITTEN",
+       "deliverables": [],
+       "text": "Its narrowed scope (the supervisor, client and hook candidates, and the handoff) comes from R12_SUCCESSOR."
+      },
+      {
+       "packet": "CONF-LIVE-004",
+       "disposition": "NOT_DISPATCHABLE_AS_WRITTEN",
+       "deliverables": [],
+       "text": "Its narrowed scope, receipt verification (Q-PK-2, PK-D1), comes from R12_SUCCESSOR."
+      },
+      {
+       "packet": "CONF-LIVE-003",
+       "disposition": "CONSUMED",
+       "deliverables": [
+        {
+         "deliverable": 1,
+         "status": "KEPT_R12"
+        },
+        {
+         "deliverable": 2,
+         "status": "SUPERSEDED_UNACCEPTED_HISTORY"
+        },
+        {
+         "deliverable": 3,
+         "status": "SUPERSEDED_UNACCEPTED_HISTORY"
+        },
+        {
+         "deliverable": 4,
+         "status": "SUPERSEDED_UNACCEPTED_HISTORY"
+        }
+       ],
+       "text": "Deliverables 2-4 (the server, its adapters, its admission and the UID ledger) are superseded, unaccepted history; deliverable 1, the campaign client, stays with R12."
+      }
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "label": "P25 the unchanged list unsorted",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/unchanged",
+     "value": [
+      {
+       "id": "WORKER_ENTRY_NAME",
+       "text": "workerEntry: live_fixed_probes.broker_worker_main, argv and FD3. The entry name is an installed identity string only. The kit owns the module of that name, and R12's same-named path is no worker source."
+      },
+      {
+       "id": "WIRE_AND_BINDING",
+       "text": "The broker execution binding, the socket ABI, the proxy profile, the endpoint tuple, the channel's caseId enum and the vectors' worker digests."
+      },
+      {
+       "id": "SIGNING_DUTIES",
+       "text": "The signing duties: no new key or signature role (L3.7)."
+      },
+      {
+       "id": "ROLES",
+       "text": "The SERVER and WORKER roles of native-profile v4, and v5's kept record."
+      },
+      {
+       "id": "INSTALLED_IDENTITIES",
+       "text": "The server and worker executables, manifests, trust anchor, TLS key, state paths and units (PCR:177-185, BH:91-105)."
+      },
+      {
+       "id": "CONF_LIVE_006_PATHS",
+       "text": "CONF-LIVE-006's paths and eight commands."
+      }
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "label": "P26 a moved row's fromClauses unsorted",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/moved/6/fromClauses",
+     "value": [
+      "PCR:226-227",
+      "CONF-LIVE-005 deliverable 4 (worker entry)",
+      "CONF-LIVE-004 deliverables",
+      "BH:36"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a list is not sorted or holds a duplicate row"
+  },
+  {
+   "label": "P27 a pinned file's inventory row labelled NAMED",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/251/disposition",
+     "value": "NAMED"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "an inventory hit has no valid disposition"
+  },
+  {
+   "label": "P28 the deferred authority changed",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/deferred/0/authority",
+     "value": "LX-D1"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the KAP leg is mixed with another item or moved to the kit"
+  },
+  {
+   "label": "an inventory file row without its class",
+   "mutations": [
+    {
+     "op": "delete",
+     "path": "/inventory/files/169/class"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "a wrong crossInputs sha256",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/crossInputs/0/sha256",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a sha256 does not equal the base bytes"
+  },
+  {
+   "label": "a gate path differing only in case",
+   "mutations": [],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [
+    "SCRIPTS/Probe_Kit_Scope.py"
+   ],
+   "refusal": "a gate-material path is among the packet's changed files"
+  },
+  {
+   "label": "C2-4 a different base commit",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/base",
+     "value": "1111111111111111111111111111111111111111"
+    },
+    {
+     "op": "set",
+     "path": "/inventory/commit",
+     "value": "1111111111111111111111111111111111111111"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "C2-4 changed pathspecs",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/pathspecs",
+     "value": [
+      "docs",
+      "architecture",
+      "task-packets"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "C2-4 a changed search pattern",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/patterns/long",
+     "value": "CONF-LIVE-00[34]"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a row differs from the table the design and the build rules fix"
+  },
+  {
+   "label": "C2-5 a quote that is not a string",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/0/quote",
+     "value": 7
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "C2-5 an amends path that is not a string",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/amends/0/path",
+     "value": [
+      "x"
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "C2-5 inventory files that are not a list",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files",
+     "value": {
+      "x": 1
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "C2-5 a hitLines entry that is not an integer",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/169/hitLines/0",
+     "value": "1"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "C2-6 a deeper docs/history path in HISTORY_SNAPSHOT",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/notAmended/named/-",
+     "value": {
+      "path": "docs/history/deeper/file.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "class": "HISTORY_SNAPSHOT"
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a file is in a class whose path rule it fails"
+  },
+  {
+   "label": "C2-6 a deeper broker-handoff-inputs path in INPUTS_PINNED",
+   "mutations": [
+    {
+     "op": "append",
+     "path": "/notAmended/pinned/-",
+     "value": {
+      "path": "architecture/broker-handoff-inputs/deeper/file.json",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "class": "INPUTS_PINNED"
+     }
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "a file is in a class whose path rule it fails"
+  },
+  {
+   "label": "C2-7 the crossInputs record among the changed files",
+   "mutations": [],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py",
+    "architecture/host-interface-amendment-hs53/amendment.json"
+   ],
+   "gatePaths": [],
+   "refusal": "a pinned, quoted or amended path is among the packet's changed files"
+  },
+  {
+   "label": "OR accepted: retiredHistory dispatchable as 0",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retiredHistory/1/dispatchable",
+     "value": 0
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR accepted: a retained text as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retained/0/text",
+     "value": 7
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR accepted: an unchanged text as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/unchanged/0/text",
+     "value": 7
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR accepted: a deferred text as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/deferred/0/text",
+     "value": 7
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR accepted: a dispositions text as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/dispositions/0/text",
+     "value": 7
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a bool as an int (branchModified 0)",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retiredHistory/0/branchModified",
+     "value": 0
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: an int as a bool (deliverable true)",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/dispositions/0/deliverables/0/deliverable",
+     "value": true
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a nullable int as a string (pr)",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/retiredHistory/0/pr",
+     "value": "18"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: lines as a list",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/0/lines",
+     "value": [
+      133,
+      133
+     ]
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: lines not of the a-b form",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/0/lines",
+     "value": "133"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a sha256 as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/0/sha256",
+     "value": 0
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a sha256 not 64 hex digits",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/crossInputs/0/sha256",
+     "value": "abc"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: keptBy as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/supersedes/0/replacement/keptBy",
+     "value": 1
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: an edge's after as a string",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/effectivePredecessors/edges/0/after",
+     "value": "R12_SUCCESSOR"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a notAmended class as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/notAmended/named/0/class",
+     "value": 3
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: searchDigest as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/searchDigest",
+     "value": 0
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a line row's line as a string",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/210/lines/0/line",
+     "value": "4"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a line row's reason as a number",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/inventory/files/210/lines/0/reason",
+     "value": 1
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: the base not 40 hex digits",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/base",
+     "value": "2043cc27"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  },
+  {
+   "label": "OR type: a moved row's items as a string",
+   "mutations": [
+    {
+     "op": "set",
+     "path": "/moved/0/items",
+     "value": "S-07"
+    }
+   ],
+   "changedFiles": [
+    "architecture/probe-kit-scope-authority.json",
+    "architecture/probe-kit-scope/README.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R1.md",
+    "architecture/probe-kit-scope/REVIEW_BRIEF_R2.md",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-round1.json",
+    "architecture/probe-kit-scope/review-round2.json",
+    "architecture/probe-kit-scope/status.json",
+    "architecture/probe-kit-scope/vectors.json",
+    "docs/MASTER_DEVELOPMENT_PLAN.md",
+    "docs/linux-probe-kit/README.md",
+    "docs/repositories/00-harness-engineering.md",
+    "scripts/probe_kit_scope.py",
+    "scripts/validate_probe_kit_scope.py",
+    "task-packets/MET-LIVE-002.yaml",
+    "task-packets/README.md",
+    "tests/test_probe_kit_scope.py",
+    "tests/test_probe_kit_scope_oracle.py"
+   ],
+   "gatePaths": [],
+   "refusal": "the record's shape is not the closed shape"
+  }
+ ]
+}
