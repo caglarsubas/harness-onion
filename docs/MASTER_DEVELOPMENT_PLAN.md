@@ -1,6 +1,46 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-GOV-002 source preparation, October 22, 2026
+## Current checkpoint — MET-LIVE-002 source preparation, October 23, 2026
+
+Alpha2 OPEN. MET-GOV-002 (REVIEW-RECORD-V2) passed required verify and merged as main b516619. LINUX-PROBE-KIT-SCOPE (owner decisions
+Q-PK-2 "Move them (Recommended)", Q-LPK0-3 "Server side, KAP stays (Recommended)", Q-LPK0-4 "Retain as history
+(Recommended)" and the registry decision "Batch, carried by 260 (Recommended)"; the lane monitor's owner-delegated
+rulings, among them Q-LPK0-CAP, Q-260-1 (a), MON-260-READ (a) and MON-260-RIDER-DIR (a)) publishes the probe-kit scope
+amendment under architecture/probe-kit-scope/: a closed record (amendment.json) that moves the CAMPAIGN_PROXY server side,
+its admission module, the UID ledger and cleanup, the native record inspector, the worker entry, the ten case recipes and
+the unsigned receipt candidates from R12's CONF-LIVE-003/004/005 to the operator-side probe kit (LINUX-PROBE-KIT-001),
+keeps the campaign client and receipt and evidence verification with R12, and leaves the KAP leg deferred and unowned. It
+supersedes the moved clauses by quote, names the living catalogs and pins the files it leaves unchanged, with an inventory
+from a declared search at 2043cc27; a standard-library reference model (scripts/probe_kit_scope.py), vectors, a replay
+script and the kit's prose page (docs/linux-probe-kit/README.md) come with it, DATA_CHECK_ONLY. It was adopted (c11) after
+three design and two contract review rounds by separate agents, published redacted as review-history-* (not review-round
+records, with no merge authority); the D5a oracle tests, written outside the candidate, are
+tests/test_probe_kit_scope_oracle.py, bound by an oracle identity. The packet also carries the review-record brief
+registry batch: five entries in architecture/review-record/briefs.json (PACKET for MET-LIVE-002, MET-GOV-003, MET-LIVE-003
+and MET-LINUX-008; CONTRACT for MET-LINUX-008), each pinning one of the two generic briefs in architecture/review-briefs/
+by sha256. briefs.json is gate material, so the owner approves the merge per PR, bound to the head. The layer reads the
+record's base bytes git-free (its test compares them with git show at 2043cc27). It is built under MET-PERF-042's
+identity rule and step rule: every older chain validator changes only by the bump vocabulary, 259's layer by the bridge
+vocabulary, and 259's test keeps its 8 own routes and the adjacent one and one payload mutation (C2), while the new head's
+test keeps the full fan-in. MET-LIVE-002 is the sole 260th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-LIVE-002 / LINUX-PROBE-KIT-SCOPE | SOURCE_PREPARED | The probe-kit scope amendment (260th packet): the CAMPAIGN_PROXY server side, the worker entry, the ten case recipes and the unsigned receipt candidates move from R12's CONF-LIVE-003/004/005 to the operator-side probe kit (LINUX-PROBE-KIT-001), R12 keeps the client and receipt and evidence verification, and the KAP leg stays deferred and unowned (a closed record with its model and vectors, DATA_CHECK_ONLY); adopted after three design and two contract review rounds; with the review-record brief registry rider (five entries in architecture/review-record/briefs.json); gate material, the owner's per-PR merge approval |
+| Alpha2A | MET-GOV-002 / REVIEW-RECORD-V2 | VERIFY_PASSED_MERGED | Merged as main b516619 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical review record v2 source checkpoint — MET-GOV-002 source preparation, October 22, 2026
 
 Alpha2 OPEN. MET-ENFORCE-041 (DIGEST-CONTRACT) passed required verify and merged as main 2043cc2. REVIEW-RECORD-V2 (owner
 decisions Q-RR2-1..5 "Accept all five (a) (Recommended)", Q-RR2-6 "Gate material (Recommended)", Q-RR2-CAP, D-3
@@ -2290,8 +2330,8 @@ The [item-level backlog](../architecture/unified-roadmap-backlog.json) records p
 | Alpha 2 CI capacity | MET-LINUX-003 / PR #142 | BLOCKED_SELF_HOSTED_CI | Draft source PR open; `verify` queued on the same labels; queue must be serialized before one-job admission |
 | Alpha 2A | W01 / MET-ENFORCE-004 | DESIGN_RESOLVED_REVIEWED | G04–G07/G09 resolved at design level and independently reviewed; E01–E12 remain OPEN_UNPROVEN |
 | Alpha 2A | W02 (W02a MET-ENFORCE-005, W02g MET-ENFORCE-006, W02b MET-ENFORCE-007, W02c MET-ENFORCE-008, W02e MET-ENFORCE-009, W02a-F MET-ENFORCE-010, W02b-F MET-ENFORCE-011, W02g-F MET-ENFORCE-012, W02f MET-ENFORCE-013, W02c-F MET-ENFORCE-014, W02-ADM-F MET-ENFORCE-015, W02e-F MET-ENFORCE-016) / W03–W07 | W02a, W02g, W02b, W02c, W02e, W02a-F, W02b-F, W02g-F, W02f, W02c-F, W02-ADM-F and W02e-F VERIFY_PASSED_MERGED; others WAITING_EXACT_PACKETS | W02a v2 record contract, W02g I06 backend profile, W02b I05 channel, W02c I07 writer and W02e SELinux matrix contracts reviewed; remaining W02 parts and W03–W07 are labels, not executable YAML |
-| Alpha 2A | CONF-FIX-010 | BLOCKED_SAFE_DESIGN | Zero product attempts; requires separately reviewed safe design and bounded packet authority |
-| Alpha 2A | CONF-LIVE-004/005/006 | WAITING_PREREQUISITES | Native probes, package handoff and trusted campaign integration |
+| Alpha 2A | CONF-FIX-010 | BLOCKED_SAFE_DESIGN | Zero product attempts; requires separately reviewed safe design and bounded packet authority (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002) |
+| Alpha 2A | CONF-LIVE-004/005/006 | WAITING_PREREQUISITES | Native probes, package handoff and trusted campaign integration (CONF-LIVE-004: not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending) (CONF-LIVE-005: not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending) (CONF-LIVE-006: paths and commands unchanged; consumes the kit's artifacts by digest) |
 | Alpha 2A | CONF-LINUX-001 native AMD64 | NOT_RUN_ENV_UNAVAILABLE | Fresh real-Linux PASS gates runtime coding of CTRL-INTEGRATE-001, MODEL-001, EXEC-001 and RUN-001; ARM64 separate |
 | Alpha 2B | Seven EXT proposal IDs | WAITING_PACKET_PUBLICATION | Contract-first provider/adapter/binding qualification, registry, UI, packaging and mode-aware reconciliation |
 | Alpha 2B onward | Sixteen OSS adoption proposal IDs | WAITING_PACKET_PUBLICATION | Owner-specific actual pinned upstream integrations and qualification |
@@ -2381,10 +2421,11 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · EDGE-V9 / MET-ENFORCE-040 · Publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use) after independent contract review; the first packet built under the identity rule and step rule; pass required verify through the owner's App.
 - [x] Alpha 2A · EVOLUTION-SURFACE-001 / MET-GOV-001 · Publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its model and vectors, after five independent contract review rounds and the owner's NOTE fold; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · DIGEST-CONTRACT / MET-ENFORCE-041 · Publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B after independent design and contract review; the layer test runs VPO's validate_messages on the complete I01 positive (C1-1); pass required verify through the owner's App.
-- [ ] Alpha 2A · REVIEW-RECORD-V2 / MET-GOV-002 · Publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31), after six independent contract review rounds; gate material; pass required verify through the owner's App after the owner approves the exact head.
-- [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt.
-- [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it.
-- [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff.
+- [x] Alpha 2A · REVIEW-RECORD-V2 / MET-GOV-002 · Publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31), after six independent contract review rounds; gate material; pass required verify through the owner's App after the owner approves the exact head.
+- [ ] Alpha 2A · LINUX-PROBE-KIT-SCOPE / MET-LIVE-002 · Publish the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors) after independent design and contract review, with the review-record brief registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
+- [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
+- [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
+- [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-006 · Integrate the external trusted campaign path.
 - [ ] Alpha 2A · CONF-LINUX-001 · Obtain fresh native Linux AMD64 PASS for the blocked runtime-coding gate.
 - [ ] Alpha 2 · CTRL-INTEGRATE-001 · Complete production tenant overview and durable status projection after its Linux gate.
