@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-041
+## Current source preparation — MET-GOV-002
+
+MET-GOV-002 (REVIEW-RECORD-V2): the review record v2 contract under architecture/review-record/ (README, published brief,
+brief registry, vectors, the frozen list, two oracle identities, with the status and the six v2 contract rounds and
+their identities), four schemas under schemas/, its standard-library reference model and checker scripts/review_record.py
+and the in-suite pre-check tests/test_review_records_in_tree.py; and version 2 of MET-GOV-001's evolution surface record
+(the GATE_REVIEW_PROCESS class). The packet is gate material (Q-RR2-6), so the owner approves the merge per PR, bound to the head. No other earlier contract changes. Built under MET-PERF-042's
+identity rule and step rule. Alpha2 OPEN; 258 accepted plus MET-GOV-002 only.
+
+## Historical I01 digest contract source preparation — MET-ENFORCE-041
 
 MET-ENFORCE-041 (DIGEST-CONTRACT): the I01 digest contract under architecture/policy-observation-digests/ (README,
 definitions, vectors, with the status, the seven review records and the seven redacted briefs) and its standard-library
@@ -1362,6 +1371,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 130. `MET-ENFORCE-040`: publish operator edge record v9 (v8's 66 rows plus the I01 wire's channel schema and vectors for HE-004-I01, registered before use); edge records v1 to v8 byte-identical, no R10 change.
 131. `MET-GOV-001`: publish the evolution surface record v1 (who may propose, generate, test, approve and activate each artifact class at the product and programme levels; the derived gate-material list) with its reference model and vectors; gate material, the owner's per-PR merge approval; no earlier contract changes.
 132. `MET-ENFORCE-041`: publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B; the I01 v1 wire and edge records v1 to v9 byte-identical, no R10 change.
+133. `MET-GOV-002`: publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31); gate material, the owner's per-PR merge approval.
 
 ## Testing, verification, and acceptance
 

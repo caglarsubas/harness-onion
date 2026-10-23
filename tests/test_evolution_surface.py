@@ -102,8 +102,9 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 258 and len(accepted) == 256
-    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET}
+    assert len(current) == 259 and len(accepted) == 256
+    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
+                                            profile.successor.successor.NEW_PACKET}
     assert len(e9.historical_catalog(current)) == 255
     assert len(ccomp.historical_catalog(current)) == 254
     assert len(i6v4.historical_catalog(current)) == 253
@@ -1487,7 +1488,7 @@ def test_every_vector_replays():
     counts = es.replay(RECORD, VECTORS)
     assert counts["decisions"] == 44 and counts["invariants"] == 31 and counts["requests"] == 10
     assert counts["paths"] == 23 and counts["prs"] == 9
-    assert counts["derived"] == 27 and counts["consumerCases"] == 12
+    assert counts["derived"] == 31 and counts["consumerCases"] == 12
 
 
 def test_a_changed_vector_is_a_mismatch_even_without_asserts():
@@ -1627,9 +1628,9 @@ def test_the_derivation_is_pa_d5_plus_exactly_the_owner_accepted_extensions():
     derivation = VECTORS["derivation"]
     accepted = [e for group in derivation["acceptedExtensions"] for e in group["entries"]]
     assert es.derive_gate_material(RECORD) == sorted(derivation["paD5"] + accepted, key=es.canonical)
-    assert len(derivation["paD5"]) == 6 and len(accepted) == 21
+    assert len(derivation["paD5"]) == 6 and len(accepted) == 25
     assert [group["id"] for group in derivation["acceptedExtensions"]] == (
-        ["D1-i"] + ["C%d" % n for n in range(1, 14)])
+        ["D1-i"] + ["C%d" % n for n in range(1, 14)] + ["RR2"])
 
 
 def test_every_file_of_this_checkout_falls_in_exactly_one_class():

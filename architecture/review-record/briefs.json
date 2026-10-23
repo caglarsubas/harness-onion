@@ -1,0 +1,53 @@
+{
+ "schemaVersion": "planeon.review-briefs/v1",
+ "kinds": {
+  "DESIGN": {
+   "verdicts": [
+    "PASS_FOR_BUILD",
+    "CHANGES_REQUIRED"
+   ],
+   "passing": [
+    "PASS_FOR_BUILD"
+   ]
+  },
+  "CONTRACT": {
+   "verdicts": [
+    "PASS_FOR_ADOPTION",
+    "PASS_FOR_SOURCE_PUBLICATION",
+    "CHANGES_REQUIRED"
+   ],
+   "passing": [
+    "PASS_FOR_ADOPTION",
+    "PASS_FOR_SOURCE_PUBLICATION"
+   ]
+  },
+  "PACKET": {
+   "verdicts": [
+    "PASS_FOR_PRECHECK",
+    "PASS_FOR_PUSH",
+    "CHANGES_REQUIRED"
+   ],
+   "passing": [
+    "PASS_FOR_PUSH"
+   ]
+  },
+  "PR": {
+   "verdicts": [
+    "PASS_FOR_PUSH",
+    "CHANGES_REQUIRED"
+   ],
+   "passing": [
+    "PASS_FOR_PUSH"
+   ]
+  }
+ },
+ "briefs": [
+  {
+   "kind": "CONTRACT",
+   "series": "MET-GOV-002/contract",
+   "path": "architecture/review-record/REVIEW_BRIEF.md",
+   "sha256": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+   "version": 1
+  }
+ ]
+}

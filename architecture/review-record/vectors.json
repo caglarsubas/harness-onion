@@ -1,0 +1,4915 @@
+{
+ "schemaVersion": "planeon.review-record-vectors/v1",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "codes": {
+  "review": [
+   "NO_IDENTITY",
+   "NO_BRIEF_DIGEST",
+   "SHAPE",
+   "UNKNOWN_KIND",
+   "BINDING",
+   "PLACEHOLDER_ID",
+   "NOT_INDEPENDENT",
+   "IDENTITY_MISMATCH",
+   "SUBJECT_FORM",
+   "SUBJECT_REPOSITORY",
+   "BRIEF_NOT_FOR_SERIES",
+   "BRIEF_SUPERSEDED",
+   "VERDICT",
+   "RULING",
+   "SUBJECT_MISMATCH",
+   "PRIVACY"
+  ],
+  "series": [
+   "DUPLICATE_ROUND",
+   "SERIES_GAP",
+   "SERIES_FORK",
+   "DUPLICATE_IDENTITY"
+  ],
+  "oracle": [
+   "SHAPE",
+   "PLACEHOLDER_ID",
+   "ORACLE_DIGEST",
+   "NOT_INDEPENDENT",
+   "RULING",
+   "PRIVACY",
+   "ORACLE_MISSING"
+  ],
+  "tree": [
+   "LEGACY_CHANGED",
+   "NO_IDENTITY",
+   "ORACLE_MISSING"
+  ],
+  "merge": [
+   "NO_HEAD_BOUND_ROUND"
+  ]
+ },
+ "bases": {
+  "registry": {
+   "schemaVersion": "planeon.review-briefs/v1",
+   "kinds": {
+    "DESIGN": {
+     "verdicts": [
+      "PASS_FOR_BUILD",
+      "CHANGES_REQUIRED"
+     ],
+     "passing": [
+      "PASS_FOR_BUILD"
+     ]
+    },
+    "CONTRACT": {
+     "verdicts": [
+      "PASS_FOR_ADOPTION",
+      "PASS_FOR_SOURCE_PUBLICATION",
+      "CHANGES_REQUIRED"
+     ],
+     "passing": [
+      "PASS_FOR_ADOPTION",
+      "PASS_FOR_SOURCE_PUBLICATION"
+     ]
+    },
+    "PACKET": {
+     "verdicts": [
+      "PASS_FOR_PRECHECK",
+      "PASS_FOR_PUSH",
+      "CHANGES_REQUIRED"
+     ],
+     "passing": [
+      "PASS_FOR_PUSH"
+     ]
+    },
+    "PR": {
+     "verdicts": [
+      "PASS_FOR_PUSH",
+      "CHANGES_REQUIRED"
+     ],
+     "passing": [
+      "PASS_FOR_PUSH"
+     ]
+    }
+   },
+   "briefs": [
+    {
+     "kind": "CONTRACT",
+     "series": "EXAMPLE-001/contract",
+     "path": "architecture/example/REVIEW_BRIEF.md",
+     "sha256": "68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2",
+     "version": 1
+    },
+    {
+     "kind": "DESIGN",
+     "series": "EXAMPLE-001/design",
+     "path": "architecture/example/REVIEW_BRIEF-design.md",
+     "sha256": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31",
+     "version": 1
+    },
+    {
+     "kind": "PACKET",
+     "series": "EXAMPLE-001/packet",
+     "path": "architecture/example/REVIEW_BRIEF-packet.md",
+     "sha256": "f0f13e8b3684be6abd917c73a0022b1eb5464a1ccc397f641a7e2bd18535879f",
+     "version": 1
+    },
+    {
+     "kind": "PR",
+     "series": "EXAMPLE-001/pr",
+     "path": "architecture/example/REVIEW_BRIEF-pr.md",
+     "sha256": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336",
+     "version": 1
+    },
+    {
+     "kind": "CONTRACT",
+     "series": "EXAMPLE-002/",
+     "path": "architecture/example-two/REVIEW_BRIEF-v1.md",
+     "sha256": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10",
+     "version": 1,
+     "supersededAt": "2026-10-20T12:00:00+08:00"
+    },
+    {
+     "kind": "CONTRACT",
+     "series": "EXAMPLE-002/",
+     "path": "architecture/example-two/REVIEW_BRIEF.md",
+     "sha256": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0",
+     "version": 2,
+     "supersedes": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+    },
+    {
+     "kind": "PR",
+     "series": "EXAMPLE-003/",
+     "path": "architecture/example-three/REVIEW_BRIEF-pr.md",
+     "sha256": "b363aa0ec1771058d658e521473ce63e03017cffc3692844172cb33e2ba4a7cb",
+     "version": 1
+    }
+   ]
+  },
+  "record": {
+   "schemaVersion": "planeon.review-record/v2",
+   "kind": "CONTRACT",
+   "series": "EXAMPLE-001/contract",
+   "round": 1,
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "reviewDate": "2026-10-21",
+   "briefSha256": "68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2",
+   "rulesSha256": null,
+   "wrapperSha256": "a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c",
+   "reviewer": {
+    "model": "example-model",
+    "role": "independent contract reviewer"
+   },
+   "verdict": "PASS_FOR_ADOPTION",
+   "findings": [],
+   "checked": [
+    "every check the brief lists"
+   ],
+   "disclosures": []
+  },
+  "identity": {
+   "schemaVersion": "planeon.review-identity/v2",
+   "record": {
+    "path": "@path",
+    "sha256": "@record"
+   },
+   "reviewer": {
+    "agentId": "areviewer0001",
+    "agentType": "general-purpose subagent",
+    "model": "example-model"
+   },
+   "operator": {
+    "role": "LANE_SESSION",
+    "agentId": "local_operator_01",
+    "lane": "parallel"
+   },
+   "author": {
+    "agentIds": [
+     "local_author_0001"
+    ]
+   },
+   "briefSha256": "68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2",
+   "rulesSha256": null,
+   "wrapperSha256": "a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "launched": "2026-10-21T10:00:00+08:00",
+   "finished": "2026-10-21T10:30:00+08:00",
+   "interruptions": [],
+   "operatorRelays": [],
+   "runs": [],
+   "ruling": {
+    "decision": "NONE_NEEDED"
+   }
+  },
+  "oracle": {
+   "schemaVersion": "planeon.oracle-identity/v1",
+   "file": {
+    "path": "tests/test_example_oracle.py",
+    "sha256": "de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268"
+   },
+   "oracle": {
+    "agentId": "aoracle00001",
+    "model": "example-model"
+   },
+   "operator": {
+    "role": "LANE_SESSION",
+    "agentId": "local_operator_01",
+    "lane": "parallel"
+   },
+   "author": {
+    "agentIds": [
+     "local_author_0001"
+    ]
+   },
+   "briefSha256": "eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db",
+   "candidateCommit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+   "launched": "2026-10-21T11:00:00+08:00",
+   "finished": "2026-10-21T11:40:00+08:00",
+   "ruling": {
+    "decision": "NONE_NEEDED"
+   }
+  },
+  "legacy": {
+   "schemaVersion": "planeon.legacy-review-records/v1",
+   "baseCommit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+   "entries": [
+    {
+     "path": "architecture/a/review-round1.json",
+     "sha256": "655c53155857aae2c2ceae22976dbdb221d73745a28cd24dfb67e9a8b385d42f"
+    },
+    {
+     "path": "legal/b/review-round1.json",
+     "sha256": "a9b8e4570504b1b334b79f33d088d7020191987b0d8ea9db4400bba567df96e2"
+    }
+   ],
+   "oracleTests": [
+    {
+     "path": "tests/test_a_oracle.py",
+     "sha256": "6c8164c9ab2b1b5e4cd93b828b898221ac3ca4d7d16908b19f097c1581b6d635"
+    },
+    {
+     "path": "tests/z/test_b_oracle.py",
+     "sha256": "d8162c1434169ed7abf943eb48b5054f865aa185b7538d92141c55729d207286"
+    }
+   ]
+  }
+ },
+ "reviews": [
+  {
+   "id": "valid-contract-round",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "no-identity",
+   "expect": "NO_IDENTITY",
+   "recordPath": "architecture/example/review-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": null
+  },
+  {
+   "id": "brief-digest-absent",
+   "expect": "NO_BRIEF_DIGEST",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "delete": true
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "brief-digest-16-hex",
+   "expect": "NO_BRIEF_DIGEST",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "68345ddc0806324a"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "brief-digest-prefixed",
+   "expect": "NO_BRIEF_DIGEST",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "sha256:68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "shape-extra-member",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "extra"
+      ],
+      "value": 1
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "shape-missing-kind",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "delete": true
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "shape-seven-hex-commit",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "subject",
+       "commit"
+      ],
+      "value": "69fdd62"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "subject",
+       "commit"
+      ],
+      "value": "69fdd62"
+     }
+    ]
+   }
+  },
+  {
+   "id": "shape-time-not-rfc3339",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-21 10:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "shape-finished-before-launched",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "finished"
+      ],
+      "value": "2026-10-21T09:00:00+08:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "shape-launched-a-nanosecond-after-finished",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-21T10:30:00.000000001+08:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "launched-equal-to-finished-passes",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-21T10:30:00.000000000+08:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "shape-monitor-written-identity",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "operator",
+       "role"
+      ],
+      "value": "LANE_MONITOR"
+     }
+    ]
+   }
+  },
+  {
+   "id": "shape-duplicate-member-text",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "text": "{\"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\", \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\"}"
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "unknown-kind-delta",
+   "expect": "UNKNOWN_KIND",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "DELTA"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "binding-other-path",
+   "expect": "BINDING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "record",
+       "path"
+      ],
+      "value": "architecture/example/review-round2.json"
+     }
+    ]
+   }
+  },
+  {
+   "id": "binding-other-bytes",
+   "expect": "BINDING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "record",
+       "sha256"
+      ],
+      "value": "a3ead5eedad5df82318c51685dbc1c147a36d1ff8584fc82de6b08d0bf63a795"
+     }
+    ]
+   }
+  },
+  {
+   "id": "placeholder-lowercase",
+   "expect": "PLACEHOLDER_ID",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "reviewer",
+       "agentId"
+      ],
+      "value": "stamped_by_operator"
+     }
+    ]
+   }
+  },
+  {
+   "id": "placeholder-v1-uppercase",
+   "expect": "PLACEHOLDER_ID",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "reviewer",
+       "agentId"
+      ],
+      "value": "STAMPED_BY_OPERATOR"
+     }
+    ]
+   }
+  },
+  {
+   "id": "placeholder-empty",
+   "expect": "PLACEHOLDER_ID",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "reviewer",
+       "agentId"
+      ],
+      "value": ""
+     }
+    ]
+   }
+  },
+  {
+   "id": "placeholder-launcher",
+   "expect": "PLACEHOLDER_ID",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "operator",
+       "agentId"
+      ],
+      "value": "recorded-by-the-launcher"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reviewer-is-operator",
+   "expect": "NOT_INDEPENDENT",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "reviewer",
+       "agentId"
+      ],
+      "value": "local_operator_01"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reviewer-is-author",
+   "expect": "NOT_INDEPENDENT",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "reviewer",
+       "agentId"
+      ],
+      "value": "local_author_0001"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mismatch-model",
+   "expect": "IDENTITY_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "reviewer",
+       "model"
+      ],
+      "value": "another-model"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mismatch-brief",
+   "expect": "IDENTITY_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mismatch-rules",
+   "expect": "IDENTITY_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "rulesSha256"
+      ],
+      "value": "6c621d1a05138a7888d37d9269a9da8e2e11e4aced2f6cfd24b05ab1b9e61bb0"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mismatch-wrapper",
+   "expect": "IDENTITY_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "wrapperSha256"
+      ],
+      "value": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "mismatch-subject-tree",
+   "expect": "IDENTITY_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "subject",
+       "tree"
+      ],
+      "value": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mismatch-base",
+   "expect": "IDENTITY_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "base"
+      ],
+      "value": {
+       "repository": "harness-onion",
+       "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+       "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "subject-form-pr-on-a-note",
+   "expect": "SUBJECT_FORM",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "PR"
+     },
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-001/pr"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_PUSH"
+     },
+     {
+      "path": [
+       "subject"
+      ],
+      "value": {
+       "path": "notes/design.md",
+       "sha256": "edb465624291e4053c6c5ea4b7eb320dec773e10a57d26b95dcf0564f8e310f8"
+      }
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+     },
+     {
+      "path": [
+       "subject"
+      ],
+      "value": {
+       "path": "notes/design.md",
+       "sha256": "edb465624291e4053c6c5ea4b7eb320dec773e10a57d26b95dcf0564f8e310f8"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "subject-repository-r10-in-harness-onion",
+   "expect": "SUBJECT_REPOSITORY",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "subject",
+       "repository"
+      ],
+      "value": "mas-harness-operator"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "subject",
+       "repository"
+      ],
+      "value": "mas-harness-operator"
+     }
+    ]
+   },
+   "repository": "harness-onion"
+  },
+  {
+   "id": "brief-another-kind",
+   "expect": "BRIEF_NOT_FOR_SERIES",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     }
+    ]
+   }
+  },
+  {
+   "id": "brief-unregistered-series",
+   "expect": "BRIEF_NOT_FOR_SERIES",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-009/contract"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "brief-another-kind-under-shared-prefix",
+   "expect": "BRIEF_NOT_FOR_SERIES",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "DESIGN"
+     },
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-002/design"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_BUILD"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    ]
+   }
+  },
+  {
+   "id": "superseded-brief-launched-after",
+   "expect": "BRIEF_SUPERSEDED",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-002/contract"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+     },
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-21T10:00:00+08:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "superseded-brief-before-passes",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-002/contract"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+     },
+     {
+      "path": [
+       "reviewDate"
+      ],
+      "value": "2026-10-19"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+     },
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-19T10:00:00+08:00"
+     },
+     {
+      "path": [
+       "finished"
+      ],
+      "value": "2026-10-19T11:00:00+08:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "superseded-brief-review-date-on-or-after",
+   "expect": "BRIEF_SUPERSEDED",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-002/contract"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+     },
+     {
+      "path": [
+       "reviewDate"
+      ],
+      "value": "2026-10-20"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "d63c9c871ed67839312cd0c25f01370d2407915cf6da5fb7d44990d292d9de10"
+     },
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-19T10:00:00+08:00"
+     },
+     {
+      "path": [
+       "finished"
+      ],
+      "value": "2026-10-19T11:00:00+08:00"
+     }
+    ]
+   }
+  },
+  {
+   "id": "successor-brief-passes",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-002/contract"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    ]
+   }
+  },
+  {
+   "id": "verdict-push-on-design",
+   "expect": "VERDICT",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "DESIGN"
+     },
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-001/design"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_BUILD"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_PUSH"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-pending",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "PENDING"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-void",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "VOID",
+       "by": "LANE_MONITOR",
+       "ref": "MON-X",
+       "date": "2026-10-21"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-none-needed-with-disclosure",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "disclosures"
+      ],
+      "value": [
+       "a slip"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "ruling-none-needed-with-relay",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "operatorRelays"
+      ],
+      "value": [
+       "a relayed addendum"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-none-needed-with-interruption",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "interruptions"
+      ],
+      "value": [
+       "a usage-limit stop"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-keep-without-ref",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "disclosures"
+      ],
+      "value": [
+       "a slip"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "KEEP",
+       "by": "LANE_MONITOR",
+       "date": "2026-10-21"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-keep-without-by",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "disclosures"
+      ],
+      "value": [
+       "a slip"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "KEEP",
+       "ref": "MON-X",
+       "date": "2026-10-21"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-keep-without-date",
+   "expect": "RULING",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "disclosures"
+      ],
+      "value": [
+       "a slip"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "KEEP",
+       "by": "LANE_MONITOR",
+       "ref": "MON-X"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "ruling-keep-complete-passes",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "disclosures"
+      ],
+      "value": [
+       "a slip"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "KEEP",
+       "by": "LANE_MONITOR",
+       "ref": "MON-X",
+       "date": "2026-10-21"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "subject-mismatch-pr-other-tree",
+   "expect": "SUBJECT_MISMATCH",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "PR"
+     },
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-001/pr"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_PUSH"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+     }
+    ]
+   },
+   "head": {
+    "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+    "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+   }
+  },
+  {
+   "id": "subject-squash-same-tree-passes",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "PR"
+     },
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-001/pr"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_PUSH"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+     }
+    ]
+   },
+   "head": {
+    "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   }
+  },
+  {
+   "id": "design-series-not-head-checked",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "kind"
+      ],
+      "value": "DESIGN"
+     },
+     {
+      "path": [
+       "series"
+      ],
+      "value": "EXAMPLE-001/design"
+     },
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     },
+     {
+      "path": [
+       "verdict"
+      ],
+      "value": "PASS_FOR_BUILD"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "eb924b35cf8c8211f5eb45b0706df3ed203318b19bb6735471d1b310bca37c31"
+     }
+    ]
+   },
+   "head": {
+    "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+    "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+   }
+  },
+  {
+   "id": "privacy-home-path",
+   "expect": "PRIVACY",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "checked",
+       0
+      ],
+      "parts": [
+       "read ",
+       "/",
+       "Users",
+       "/x/notes"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "privacy-email",
+   "expect": "PRIVACY",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "checked",
+       0
+      ],
+      "parts": [
+       "mailed a",
+       "@",
+       "example",
+       ".",
+       "org"
+      ]
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "privacy-name-token",
+   "expect": "PRIVACY",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "operatorRelays",
+       0
+      ],
+      "parts": [
+       "qz",
+       "vkwy"
+      ]
+     },
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "KEEP",
+       "by": "OWNER",
+       "ref": "Q-X",
+       "date": "2026-10-21"
+      }
+     }
+    ]
+   },
+   "tokenSha256": {
+    "6": [
+     "0405ec1f81765b27e3edc7b32d8c3730ecb5de0801f009e379f162309e617d74"
+    ],
+    "5": [
+     "100f1577edcabc21964d87ff2fa2a47786d130a8f720293c4ce3238a888b5b81"
+    ]
+   }
+  },
+  {
+   "id": "privacy-name-token-unchecked-in-suite",
+   "expect": null,
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "operatorRelays",
+       0
+      ],
+      "parts": [
+       "qz",
+       "vkwy"
+      ]
+     },
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "KEEP",
+       "by": "OWNER",
+       "ref": "Q-X",
+       "date": "2026-10-21"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "brief-another-series-same-kind",
+   "expect": "BRIEF_NOT_FOR_SERIES",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "briefSha256"
+      ],
+      "value": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    ]
+   }
+  },
+  {
+   "id": "shape-model-only-round-with-a-fraction",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "round"
+      ],
+      "value": 1.0
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   },
+   "modelOnly": true
+  },
+  {
+   "id": "shape-model-only-a-day-the-month-lacks",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "reviewDate"
+      ],
+      "value": "2026-02-30"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   },
+   "modelOnly": true
+  },
+  {
+   "id": "shape-model-only-runs-used-with-a-fraction",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "runs"
+      ],
+      "value": [
+       {
+        "limit": "test runs",
+        "used": 0.0
+       }
+      ]
+     }
+    ]
+   },
+   "modelOnly": true
+  },
+  {
+   "id": "shape-model-only-launched-after-finished",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "launched"
+      ],
+      "value": "2026-10-21T10:31:00+08:00"
+     }
+    ]
+   },
+   "modelOnly": true
+  },
+  {
+   "id": "shape-year-zero",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": [
+     {
+      "path": [
+       "reviewDate"
+      ],
+      "value": "0000-01-01"
+     }
+    ]
+   },
+   "identity": {
+    "mutate": []
+   },
+   "schemaAgrees": true
+  },
+  {
+   "id": "shape-runs-used-beyond-2-53",
+   "expect": "SHAPE",
+   "recordPath": "architecture/example/review-round1.json",
+   "identityPath": "architecture/example/review-identity-round1.json",
+   "record": {
+    "mutate": []
+   },
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "runs"
+      ],
+      "value": [
+       {
+        "limit": "test runs",
+        "used": 9007199254740992
+       }
+      ]
+     }
+    ]
+   },
+   "schemaAgrees": true
+  }
+ ],
+ "series": [
+  {
+   "id": "series-full-then-delta",
+   "expect": null,
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": "architecture/example/review-identity-round2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-full-after-delta",
+   "expect": null,
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": "architecture/example/review-identity-round2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round3.json",
+     "identityPath": "architecture/example/review-identity-round3.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 3
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-duplicate-round",
+   "expect": "DUPLICATE_ROUND",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": "architecture/example/review-identity-round2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2-b.json",
+     "identityPath": "architecture/example/review-identity-b.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-gap",
+   "expect": "SERIES_GAP",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round3.json",
+     "identityPath": "architecture/example/review-identity-round3.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 3
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-head-bound-delta-without-base-round",
+   "expect": "SERIES_GAP",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": "architecture/example/review-identity-round2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-fork-two-rounds-one-base",
+   "expect": "SERIES_FORK",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": "architecture/example/review-identity-round2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round3.json",
+     "identityPath": "architecture/example/review-identity-round3.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 3
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-fork-base-not-previous-subject",
+   "expect": "SERIES_FORK",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": "architecture/example/review-identity-round2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+         "tree": "8955943e40c8ff9eab207376faabe762e2d9867a"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-delta-round-one",
+   "expect": "SERIES_FORK",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "series-one-identity-for-two-records",
+   "expect": "NO_IDENTITY",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round2.json",
+     "identityPath": null,
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "subject"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+         "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+        }
+       },
+       {
+        "path": [
+         "base"
+        ],
+        "value": {
+         "repository": "harness-onion",
+         "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+         "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+        }
+       }
+      ]
+     },
+     "identity": null
+    }
+   ]
+  },
+  {
+   "id": "series-two-identities-for-one-record",
+   "expect": "DUPLICATE_IDENTITY",
+   "rounds": [
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "round"
+        ],
+        "value": 1
+       }
+      ]
+     },
+     "identity": {
+      "mutate": []
+     }
+    },
+    {
+     "recordPath": "architecture/example/review-round1.json",
+     "identityPath": "architecture/example/review-identity-round1-b.json",
+     "record": null,
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "record",
+         "path"
+        ],
+        "value": "architecture/example/review-round1.json"
+       },
+       {
+        "path": [
+         "finished"
+        ],
+        "value": "2026-10-21T10:45:00+08:00"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "oracles": [
+  {
+   "id": "oracle-valid",
+   "expect": null,
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "oracle-shape-missing-commit",
+   "expect": "SHAPE",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "candidateCommit"
+      ],
+      "delete": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "oracle-shape-monitor-written",
+   "expect": "SHAPE",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "operator",
+       "role"
+      ],
+      "value": "LANE_MONITOR"
+     }
+    ]
+   }
+  },
+  {
+   "id": "oracle-placeholder",
+   "expect": "PLACEHOLDER_ID",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "oracle",
+       "agentId"
+      ],
+      "value": "unknown"
+     }
+    ]
+   }
+  },
+  {
+   "id": "oracle-file-edited-after-identity",
+   "expect": "ORACLE_DIGEST",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n# edited\n",
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "oracle-file-absent",
+   "expect": "ORACLE_DIGEST",
+   "file": null,
+   "identity": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "oracle-is-author",
+   "expect": "NOT_INDEPENDENT",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "oracle",
+       "agentId"
+      ],
+      "value": "local_author_0001"
+     }
+    ]
+   }
+  },
+  {
+   "id": "oracle-is-the-lane-session",
+   "expect": "NOT_INDEPENDENT",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "oracle",
+       "agentId"
+      ],
+      "value": "local_operator_01"
+     }
+    ]
+   }
+  },
+  {
+   "id": "oracle-ruling-pending",
+   "expect": "RULING",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "ruling"
+      ],
+      "value": {
+       "decision": "PENDING"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "oracle-none-needed-with-disclosure",
+   "expect": "RULING",
+   "file": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+   "identity": {
+    "mutate": [
+     {
+      "path": [
+       "disclosures"
+      ],
+      "value": [
+       "a scratch import"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "prOracles": [
+  {
+   "id": "pr-oracle-bound",
+   "expect": null,
+   "changed": [
+    "tests/test_example_oracle.py",
+    "scripts/example.py"
+   ],
+   "files": {
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n"
+   },
+   "identities": [
+    {
+     "path": "architecture/example/oracle-identity.json",
+     "mutate": []
+    }
+   ]
+  },
+  {
+   "id": "pr-oracle-unbound",
+   "expect": "ORACLE_MISSING",
+   "changed": [
+    "tests/test_example_oracle.py"
+   ],
+   "files": {
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n"
+   },
+   "identities": []
+  },
+  {
+   "id": "pr-contract-series-without-oracle",
+   "expect": "ORACLE_MISSING",
+   "changed": [
+    "scripts/example.py"
+   ],
+   "files": {},
+   "identities": [],
+   "contractSeries": true
+  },
+  {
+   "id": "pr-oracle-digest-at-head",
+   "expect": "ORACLE_DIGEST",
+   "changed": [
+    "tests/test_example_oracle.py"
+   ],
+   "files": {
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n# edited\n"
+   },
+   "identities": [
+    {
+     "path": "architecture/example/oracle-identity.json",
+     "mutate": []
+    }
+   ]
+  },
+  {
+   "id": "pr-no-oracle-file-changed",
+   "expect": null,
+   "changed": [
+    "tests/test_example.py"
+   ],
+   "files": {},
+   "identities": []
+  }
+ ],
+ "merges": [
+  {
+   "id": "merge-passing-pr-round",
+   "expect": null,
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-squash-same-tree",
+   "expect": null,
+   "head": {
+    "commit": "c7918bd9173053b2d28e0b96d9492f9e3aec130d",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-only-changes-required",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-pending-ruling",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "disclosures"
+        ],
+        "value": [
+         "a slip"
+        ]
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "ruling"
+        ],
+        "value": {
+         "decision": "PENDING"
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-only-a-contract-round",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": []
+     },
+     "identity": {
+      "mutate": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-pr-round-on-another-tree",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "566a44a3b3bcd2b692af3477a4bd1d05ae1872ac",
+    "tree": "8633ae881b3aa2c4099dbb8c7bc4b3cec610d8bf"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-passing-round-not-final",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    },
+    {
+     "recordPath": "architecture/example/pr-round2.json",
+     "identityPath": "architecture/example/pr-identity-2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-series-cited-without-round-one",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round2.json",
+     "identityPath": "architecture/example/pr-identity-2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-unreadable-round-number",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    },
+    {
+     "recordPath": "architecture/example/pr-round2.json",
+     "identityPath": "architecture/example/pr-identity-2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2.0
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-prefix-series-with-a-voided-sibling",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": [
+    "EXAMPLE-003/first"
+   ],
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-003/rerun"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "b363aa0ec1771058d658e521473ce63e03017cffc3692844172cb33e2ba4a7cb"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "b363aa0ec1771058d658e521473ce63e03017cffc3692844172cb33e2ba4a7cb"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-prefix-series-without-a-voided-sibling",
+   "expect": null,
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": [
+    "EXAMPLE-001/pr-old"
+   ],
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-003/rerun"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "b363aa0ec1771058d658e521473ce63e03017cffc3692844172cb33e2ba4a7cb"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "b363aa0ec1771058d658e521473ce63e03017cffc3692844172cb33e2ba4a7cb"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-series-under-no-prefix-with-a-voided-sibling",
+   "expect": null,
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": [
+    "EXAMPLE-001/pr-first"
+   ],
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-voided-not-a-list",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": "EXAMPLE-003/first",
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-voided-null",
+   "expect": "NO_HEAD_BOUND_ROUND",
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "voided": null,
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "merge-passing-final-after-changes",
+   "expect": null,
+   "head": {
+    "commit": "69fdd6276a37f5e42af7f0405a21703b605543d0",
+    "tree": "2943c80472b1cd8aafaf6aeb62c63112de4678aa"
+   },
+   "cited": [
+    {
+     "recordPath": "architecture/example/pr-round1.json",
+     "identityPath": "architecture/example/pr-identity-1.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "CHANGES_REQUIRED"
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    },
+    {
+     "recordPath": "architecture/example/pr-round2.json",
+     "identityPath": "architecture/example/pr-identity-2.json",
+     "record": {
+      "mutate": [
+       {
+        "path": [
+         "kind"
+        ],
+        "value": "PR"
+       },
+       {
+        "path": [
+         "series"
+        ],
+        "value": "EXAMPLE-001/pr"
+       },
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       },
+       {
+        "path": [
+         "verdict"
+        ],
+        "value": "PASS_FOR_PUSH"
+       },
+       {
+        "path": [
+         "round"
+        ],
+        "value": 2
+       }
+      ]
+     },
+     "identity": {
+      "mutate": [
+       {
+        "path": [
+         "briefSha256"
+        ],
+        "value": "fef147a134bf5a68c32a896d4899904433e19788fdf4de958f1653395cff1336"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "registries": [
+  {
+   "id": "registry-valid",
+   "expect": null,
+   "mutate": []
+  },
+  {
+   "id": "registry-overlap-exact-and-prefix",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      7
+     ],
+     "value": {
+      "kind": "CONTRACT",
+      "series": "EXAMPLE-002/contract",
+      "path": "architecture/x/REVIEW_BRIEF.md",
+      "sha256": "5c8c1295f8b1acbdf82dfe801506b2fe0c3101921e2bc1e9d35510fb63e0e443",
+      "version": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "registry-missing-kind",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "kinds",
+      "PR"
+     ],
+     "delete": true
+    }
+   ]
+  },
+  {
+   "id": "registry-passing-outside-verdicts",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "kinds",
+      "PR",
+      "passing"
+     ],
+     "value": [
+      "PASS_FOR_MERGE"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "registry-two-kinds-one-series",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      5,
+      "kind"
+     ],
+     "value": "DESIGN"
+    }
+   ]
+  },
+  {
+   "id": "registry-chain-broken",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      5,
+      "supersedes"
+     ],
+     "value": "5c8c1295f8b1acbdf82dfe801506b2fe0c3101921e2bc1e9d35510fb63e0e443"
+    }
+   ]
+  },
+  {
+   "id": "registry-version-gap",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      5,
+      "version"
+     ],
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": "registry-version-beyond-2-53",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      0,
+      "version"
+     ],
+     "value": 9007199254740992
+    }
+   ],
+   "schemaAgrees": true
+  },
+  {
+   "id": "registry-first-version-supersedes",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      4,
+      "supersedes"
+     ],
+     "value": "5c8c1295f8b1acbdf82dfe801506b2fe0c3101921e2bc1e9d35510fb63e0e443"
+    }
+   ]
+  },
+  {
+   "id": "registry-chain-starts-above-one",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      4,
+      "version"
+     ],
+     "value": 2
+    },
+    {
+     "path": [
+      "briefs",
+      5,
+      "version"
+     ],
+     "value": 3
+    }
+   ]
+  },
+  {
+   "id": "registry-superseded-at-goes-back",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      5,
+      "supersededAt"
+     ],
+     "value": "2026-10-19T00:00:00+08:00"
+    },
+    {
+     "path": [
+      "briefs",
+      7
+     ],
+     "value": {
+      "kind": "CONTRACT",
+      "series": "EXAMPLE-002/",
+      "path": "architecture/example-two/REVIEW_BRIEF-v3.md",
+      "sha256": "a26feab7461d1084fe1daa0628a2310dbd17c0a6250317c833cf38f94401edd3",
+      "version": 3,
+      "supersedes": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "registry-three-version-chain",
+   "expect": null,
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      5,
+      "supersededAt"
+     ],
+     "value": "2026-10-21T00:00:00+08:00"
+    },
+    {
+     "path": [
+      "briefs",
+      7
+     ],
+     "value": {
+      "kind": "CONTRACT",
+      "series": "EXAMPLE-002/",
+      "path": "architecture/example-two/REVIEW_BRIEF-v3.md",
+      "sha256": "a26feab7461d1084fe1daa0628a2310dbd17c0a6250317c833cf38f94401edd3",
+      "version": 3,
+      "supersedes": "b38fd12fd4d7138b7c902c53e4d91622c9cecccf2d585bd38ae9936a8224bdb0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "registry-latest-superseded",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "briefs",
+      5,
+      "supersededAt"
+     ],
+     "value": "2026-10-22T00:00:00+08:00"
+    }
+   ]
+  }
+ ],
+ "legacy": [
+  {
+   "id": "legacy-valid",
+   "expect": null,
+   "mutate": []
+  },
+  {
+   "id": "legacy-unsorted",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "entries"
+     ],
+     "value": [
+      {
+       "path": "legal/b/review-round1.json",
+       "sha256": "a9b8e4570504b1b334b79f33d088d7020191987b0d8ea9db4400bba567df96e2"
+      },
+      {
+       "path": "architecture/a/review-round1.json",
+       "sha256": "655c53155857aae2c2ceae22976dbdb221d73745a28cd24dfb67e9a8b385d42f"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "legacy-truncated-digest",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "entries",
+      0,
+      "sha256"
+     ],
+     "value": "655c53155857aae2"
+    }
+   ]
+  },
+  {
+   "id": "legacy-oracle-bare-path",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "oracleTests",
+      0
+     ],
+     "value": "tests/test_a_oracle.py"
+    }
+   ]
+  },
+  {
+   "id": "legacy-oracle-truncated-digest",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "oracleTests",
+      0,
+      "sha256"
+     ],
+     "value": "6c8164c9ab2b1b5e"
+    }
+   ]
+  },
+  {
+   "id": "legacy-oracle-unsorted",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "oracleTests"
+     ],
+     "value": [
+      {
+       "path": "tests/z/test_b_oracle.py",
+       "sha256": "d8162c1434169ed7abf943eb48b5054f865aa185b7538d92141c55729d207286"
+      },
+      {
+       "path": "tests/test_a_oracle.py",
+       "sha256": "6c8164c9ab2b1b5e4cd93b828b898221ac3ca4d7d16908b19f097c1581b6d635"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "legacy-oracle-duplicate",
+   "expect": "SHAPE",
+   "mutate": [
+    {
+     "path": [
+      "oracleTests"
+     ],
+     "value": [
+      {
+       "path": "tests/test_a_oracle.py",
+       "sha256": "6c8164c9ab2b1b5e4cd93b828b898221ac3ca4d7d16908b19f097c1581b6d635"
+      },
+      {
+       "path": "tests/test_a_oracle.py",
+       "sha256": "6c8164c9ab2b1b5e4cd93b828b898221ac3ca4d7d16908b19f097c1581b6d635"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "trees": [
+  {
+   "id": "tree-valid",
+   "expect": null,
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-legacy-byte-changed",
+   "expect": "LEGACY_CHANGED",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n ",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-legacy-rewritten-into-a-valid-v2-round",
+   "expect": "LEGACY_CHANGED",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "architecture/example/review-round1.json",
+      "sha256": "cf522fee7217eb67a55c2ed09b4b034f3c954542a5236779e408ab3b7d03f6f5"
+     },
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-unlisted-record",
+   "expect": "LEGACY_CHANGED",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "architecture/x/review-round-final.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-frozen-record-deleted",
+   "expect": "LEGACY_CHANGED",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-v2-round-without-identity",
+   "expect": "NO_IDENTITY",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-named-identity-binds-another-record",
+   "expect": "NO_IDENTITY",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round9.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-round-member-not-the-file-name",
+   "expect": "SHAPE",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round2.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round2.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round2.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-series-in-two-directories",
+   "expect": "SERIES_FORK",
+   "files": {
+    "architecture/example-copy/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example-copy/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example-copy/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-oracle-test-unfrozen-and-unbound",
+   "expect": "ORACLE_MISSING",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n",
+    "tests/test_other_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-frozen-oracle-test-changed",
+   "expect": "ORACLE_MISSING",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n# bumped\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-frozen-oracle-test-deleted",
+   "expect": "ORACLE_MISSING",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-oracle-identity-file-absent",
+   "expect": "ORACLE_DIGEST",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-malformed-oracle-identity",
+   "expect": "SHAPE",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\"schemaVersion\": \"x\"}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-schema-named-like-an-oracle-identity",
+   "expect": null,
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "schemas/oracle-identity.schema.json": "{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"title\": \"example oracle identity schema\", \"type\": \"object\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-stray-oracle-identity-in-schemas",
+   "expect": "SHAPE",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "schemas/oracle-identity-x.json": "{\"schemaVersion\": \"x\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  },
+  {
+   "id": "tree-registry-privacy",
+   "expect": "PRIVACY",
+   "files": {
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": [
+     {
+      "path": [
+       "kinds",
+       "PR",
+       "verdicts",
+       2
+      ],
+      "parts": [
+       "mailed a",
+       "@",
+       "example",
+       ".",
+       "org"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "tree-oracle-identity-of-another-file-privacy",
+   "expect": "PRIVACY",
+   "files": {
+    "architecture/example/oracle-identity-extra.json": [
+     "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"scripts/example.py\",\n  \"sha256\": \"9e26bf369911c45c243c684147b23fc9e1dcfcf257d299a1c632016a6fcd33f4\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"KEEP\",\n  \"by\": \"LANE_MONITOR\",\n  \"ref\": \"MON-X\",\n  \"date\": \"2026-10-21\"\n },\n \"disclosures\": [\n  \"",
+     "/",
+     "Users",
+     "/x",
+     "\"\n ]\n}\n"
+    ],
+    "architecture/example/oracle-identity.json": "{\n \"schemaVersion\": \"planeon.oracle-identity/v1\",\n \"file\": {\n  \"path\": \"tests/test_example_oracle.py\",\n  \"sha256\": \"de951ea179258c2b596deaae34fa39907c77b5d822f8d21870526044643dd268\"\n },\n \"oracle\": {\n  \"agentId\": \"aoracle00001\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"eea55d165648dc3c9f8392652c045df764234f8633a4d1889282f75c395a41db\",\n \"candidateCommit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n \"launched\": \"2026-10-21T11:00:00+08:00\",\n \"finished\": \"2026-10-21T11:40:00+08:00\",\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-identity-round1.json": "{\n \"schemaVersion\": \"planeon.review-identity/v2\",\n \"record\": {\n  \"path\": \"architecture/example/review-round1.json\",\n  \"sha256\": \"cce5944821d17f4dfb04a467e9d437b2736736860a182adcc1263d60ea556f29\"\n },\n \"reviewer\": {\n  \"agentId\": \"areviewer0001\",\n  \"agentType\": \"general-purpose subagent\",\n  \"model\": \"example-model\"\n },\n \"operator\": {\n  \"role\": \"LANE_SESSION\",\n  \"agentId\": \"local_operator_01\",\n  \"lane\": \"parallel\"\n },\n \"author\": {\n  \"agentIds\": [\n   \"local_author_0001\"\n  ]\n },\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"launched\": \"2026-10-21T10:00:00+08:00\",\n \"finished\": \"2026-10-21T10:30:00+08:00\",\n \"interruptions\": [],\n \"operatorRelays\": [],\n \"runs\": [],\n \"ruling\": {\n  \"decision\": \"NONE_NEEDED\"\n }\n}\n",
+    "architecture/example/review-round1.json": "{\n \"schemaVersion\": \"planeon.review-record/v2\",\n \"kind\": \"CONTRACT\",\n \"series\": \"EXAMPLE-001/contract\",\n \"round\": 1,\n \"subject\": {\n  \"repository\": \"harness-onion\",\n  \"commit\": \"69fdd6276a37f5e42af7f0405a21703b605543d0\",\n  \"tree\": \"2943c80472b1cd8aafaf6aeb62c63112de4678aa\"\n },\n \"reviewDate\": \"2026-10-21\",\n \"briefSha256\": \"68345ddc0806324af54627e6ea897b9c0216aede185efdd123627b2140e98ad2\",\n \"rulesSha256\": null,\n \"wrapperSha256\": \"a622b10ddc23c8c9e9ec39d4833ae9b7b772ef40cb430425cb1689b76ec3490c\",\n \"reviewer\": {\n  \"model\": \"example-model\",\n  \"role\": \"independent contract reviewer\"\n },\n \"verdict\": \"PASS_FOR_ADOPTION\",\n \"findings\": [],\n \"checked\": [\n  \"every check the brief lists\"\n ],\n \"disclosures\": []\n}\n",
+    "legal/old/review-round1.json": "{\"verdict\": \"PASS_FOR_SOURCE_PUBLICATION\"}\n",
+    "scripts/example.py": "x = 1\n",
+    "tests/test_example_oracle.py": "import unittest\n\n\nclass OracleTests(unittest.TestCase):\n    pass\n",
+    "tests/test_old_oracle.py": "def test_old():\n    assert True\n"
+   },
+   "legacy": {
+    "entries": [
+     {
+      "path": "legal/old/review-round1.json",
+      "sha256": "24344c4f31eb7cc9202726cb6ca5497c5c4d89551896bb9a39d310f30dce5fef"
+     }
+    ],
+    "oracleTests": [
+     {
+      "path": "tests/test_old_oracle.py",
+      "sha256": "6d4c82d4d79a055d096f15a59502cc2dac61dab7eac0f28bf59927eeaa06d57a"
+     }
+    ]
+   },
+   "registry": {
+    "mutate": []
+   }
+  }
+ ],
+ "privacy": [
+  {
+   "id": "privacy-clean",
+   "parts": [
+    "a reviewer read the brief"
+   ],
+   "expect": {
+    "names": 0,
+    "legacyTerm": 0,
+    "absolutePaths": 0,
+    "emails": 0
+   }
+  },
+  {
+   "id": "privacy-home-path",
+   "parts": [
+    "/",
+    "Users",
+    "/x/y"
+   ],
+   "expect": {
+    "names": 0,
+    "legacyTerm": 0,
+    "absolutePaths": 1,
+    "emails": 0
+   }
+  },
+  {
+   "id": "privacy-email",
+   "parts": [
+    "a",
+    "@",
+    "example",
+    ".",
+    "org"
+   ],
+   "expect": {
+    "names": 0,
+    "legacyTerm": 0,
+    "absolutePaths": 0,
+    "emails": 1
+   }
+  },
+  {
+   "id": "privacy-name-tokens",
+   "parts": [
+    "qz",
+    "vkwy ",
+    "xj",
+    "pfq"
+   ],
+   "tokenSha256": {
+    "6": [
+     "0405ec1f81765b27e3edc7b32d8c3730ecb5de0801f009e379f162309e617d74"
+    ],
+    "5": [
+     "100f1577edcabc21964d87ff2fa2a47786d130a8f720293c4ce3238a888b5b81"
+    ]
+   },
+   "expect": {
+    "names": 2,
+    "legacyTerm": 0,
+    "absolutePaths": 0,
+    "emails": 0
+   }
+  },
+  {
+   "id": "privacy-published-table-is-empty",
+   "parts": [
+    "qz",
+    "vkwy ",
+    "xj",
+    "pfq"
+   ],
+   "expect": {
+    "names": 0,
+    "legacyTerm": 0,
+    "absolutePaths": 0,
+    "emails": 0
+   }
+  }
+ ]
+}

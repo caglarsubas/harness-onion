@@ -1,0 +1,168 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-GOV-002/contract",
+ "round": 3,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "09d2decd1f5e6d2c642b6642b0be58be0949d9ba",
+  "tree": "721000278980f3dd9a292a3bed2dc062146f386d"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "45d818eea16b609fc5b26c26c087c7175ecda43a",
+  "tree": "d067b4a5e6abfb8c8537a06a85045b0dc77d9900"
+ },
+ "reviewDate": "2026-10-22",
+ "briefSha256": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+ "rulesSha256": "19756a39cc843b5939f78079b65e13ae73e5a8853976fd23ae821314730ab8f8",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "REVIEWER_AGENT"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "bindingRules": [
+  {
+   "rule": "B-4",
+   "met": true,
+   "note": "Met. The last clause that round 2 found unmet is now in the README's 'Merge-decision records and MONITOR.md section 4' list. 'The citation duty (B-4, RR2C2-1)' states that the merge-decision record cites every round of each cited head-bound series from round 1, by path and sha256, record and identity alike. 'The standing authority' now names check_merge: check_series over each cited series, then check_review of its final round against the head (or a commit with the head's tree) with a passing verdict and ruling NONE_NEEDED or KEEP, and the monitor's check of the lane's record directory. 'The merge' states the same citation rule and the read-only read of an unpushed reviewed commit. scripts/review_record.py check_merge is unchanged apart from its docstring: check_series on each cited series from round 1 (stricter than B-4's 'back to the last full round'), then check_review of the final round against the head. The vectors series-head-bound-delta-without-base-round (SERIES_GAP) and merge-series-cited-without-round-one replay."
+  },
+  {
+   "rule": "B-8",
+   "met": true,
+   "note": "Met, and the fix diff does not touch it. In the model, the fix changes only the DAY pattern and check_merge's docstring. check_oracle and check_tree still apply PRIVACY to oracle identities and the registry, and the tree vectors tree-registry-privacy and tree-oracle-identity-of-another-file-privacy replay. Probe 3 scanned 13 files, raw text and parsed string values: the 10 changed files, the rest of architecture/review-record/ and scripts/review_record.py. Names (4 local digests loaded with rr.load_name_tokens), legacy term (by sha256 prefix, both exact 7-letter runs and every 7-letter window), home paths and e-mails (the model's and the rules' pattern) all gave 0. The fix's 146 added lines also gave 0. Of 458 hex runs of 16 or more digits, none is part of a name digest. Joined vector parts gave 0 names and 0 legacy term. Their 2 home-path and 1 e-mail shapes are the privacy rows' intended synthetic ones, unchanged since round 2. Q-RR2-NAMES applies as the README states: NAME_TOKEN_SHA256 ships empty. The agentIds in the two re-stamped identities are unchanged."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "RR2C2-1",
+   "status": "ADDRESSED",
+   "note": "The MONITOR.md section 4 list now states the citation duty, and the standing-authority line names check_merge (check_series, then check_review of the final round), as the requiredChange asked. The superseded 'cited head-bound final round passes check_review' wording is gone."
+  },
+  {
+   "id": "RR2C2-2",
+   "status": "ADDRESSED",
+   "note": "Done by the first option. runs[].used and the registry's version gain maximum 9007199254740991. All 8 date and time patterns of the four schemas gain (?!0000) (record 1, review identity 3, oracle identity 3, registry 1), and so does the model's DAY. The README lists the shared patterns (years 0001 to 9999, every integer at most 2^53-1) and the four model-only causes. Its wording now matches the I-JSON rows. There are 3 new rows marked schemaAgrees (shape-year-zero, shape-runs-used-beyond-2-53, registry-version-beyond-2-53) and a test that the schemas reject them. Probe 1, 69 cases over every date, time and integer member with jsonschema 4.24.0 Draft 2020-12: 59 agree. Of the 10 that differ, 9 are the declared 'day the month lacks', and 1 is a registry version of 2^53-1 on a one-entry chain, which is SHAPE by the declared B-3 chain rule (a chain starts at 1). Year 0000 and 2^53 now agree everywhere. Year 0001 with +23:59 and year 9999 with -23:59 are accepted by both, with no overflow."
+  },
+  {
+   "id": "RR2C2-3",
+   "status": "ADDRESSED",
+   "note": "The README's 'The merge' section and check_merge's docstring now say that a cited record that cannot be read as a round (a string series and an integer round) refuses the whole merge with NO_HEAD_BOUND_ROUND, and that a series failing check_series counts for nothing. That matches the model (the _refuse before grouping) and merge-unreadable-round-number."
+  },
+  {
+   "id": "RR2C2-4",
+   "status": "ADDRESSED",
+   "note": "The reviewer's second option, as the monitor accepted. The path sentence has left the load-time list and is now 'A convention, not checked at load (RR2C2-4)', with the tests checking each chain's latest version only. The vectors now follow the convention: the base registry's EXAMPLE-002 version 1 moves to REVIEW_BRIEF-v1.md, and both version-3 rows move to REVIEW_BRIEF-v3.md. Probe 2 found 0 chains with two versions on one path in the base registry, the two registry rows that load and the published registry."
+  },
+  {
+   "id": "RR2C2-5",
+   "status": "ADDRESSED",
+   "note": "The README's 'A VOID round' paragraph states Q-RR2-VOID (b) plainly: a VOID round stays on record, check_series refuses it, a series holding one never counts, a published one fails the in-suite check, and recovery uses a new series id. It records (a) as a possible later relaxation for the owner and says why it is not taken. One clause of the paragraph is inaccurate for prefix-registered series (RR2C3-1)."
+  },
+  {
+   "id": "RR2C2-6",
+   "status": "ADDRESSED",
+   "note": "Both identities' candidateCommit is now 45d818ee, and a new disclosure in each names the fix commit and the first run against 9f88e824. The README's member table defines candidateCommit as the commit at which the bound oracle file passes. The per-PR ask says the oracle is not expected to pass at earlier commits. Probe 2: the oracle files' bytes at 45d818ee equal each identity's digest, the files are unchanged from 45d818ee to the subject, 45d818ee is an ancestor of the subject, check_oracle passes for both identities, and check_pr_oracles passes over both files. The oracle files pass at the subject (test runs 3 and 4), and round 2 ran them at 45d818ee with rc 0."
+  },
+  {
+   "id": "RR2C1-1",
+   "status": "ADDRESSED",
+   "note": "Now fully addressed. The remaining part, 'in the listed MONITOR.md section 4 edits', is done by RR2C2-1's fix. check_merge and 'The merge' were already done in round 2."
+  },
+  {
+   "id": "RR2C1-3",
+   "status": "ADDRESSED",
+   "note": "Now fully addressed. The three undeclared model-only causes (year 0000, runs[].used of 2^53, registry version of 2^53) are closed in the schemas, not just listed. On I-JSON values the only remaining form disagreements are the README's declared model-only causes (probe 1)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "RR2C3-1",
+   "severity": "MINOR",
+   "location": "<harness-onion>/architecture/review-record/README.md, 'The merge', 'A VOID round (Q-RR2-VOID (b), the monitor's ruling)'; <harness-onion>/scripts/review_record.py _series_matches, _overlap",
+   "finding": "The new VOID paragraph says: 'To recover, the lane opens a new series id for the rerun, which needs a registry entry and so the owner's per-PR approval'. That holds only when the series is registered by an exact id. The registry also takes prefix entries (the README's 'a prefix such as MET-GOV-002/'), and _series_matches matches any series id that starts with the prefix. B-3's overlap rule even refuses an added exact entry under an existing prefix. So under a prefix entry, a rerun series id needs no registry change and no new owner approval. Probe 2, on the vectors' base registry: a round with the new series id EXAMPLE-002/rerun, under the prefix entry EXAMPLE-002/, passes both check_review and check_series. Under the published exact entry MET-GOV-002/contract, MET-GOV-002/contract-rerun is BRIEF_NOT_FOR_SERIES. The monitor chose (b) over (a) because (b) keeps the owner gate on recovery, so the README overstates that gate for prefix-registered series. This packet's own series is registered by exact id, so it is not affected now.",
+   "requiredChange": "State the prefix case in the VOID paragraph. Under an exact-id entry, the rerun's new series id needs a registry entry and so the owner's per-PR approval. Under a prefix entry, a new id under that prefix is already covered, so the only owner gate is the earlier approval of the prefix. Flag this to the monitor with the fix. If the owner gate on recovery should also hold for prefix entries, that needs a monitor or owner rule; it is not a change to (b).",
+   "blocks": true
+  },
+  {
+   "id": "RR2C3-2",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/oracle-identity.json disclosures[0]; oracle-identity-evolution-surface.json, the same disclosure set",
+   "finding": "oracle-identity.json's first disclosure says 'against the candidate commit 17 failed'. When it was written, that meant 9f88e824. Now that candidateCommit is 45d818ee, the phrase reads as if 17 tests failed at 45d818ee. The new last disclosure corrects this ('the oracle's first run was against 9f88e824'), so the record is not wrong, only indirect.",
+   "requiredChange": "Optional: at the next re-stamp, write 'against 9f88e824' in place of 'against the candidate commit' in the first disclosure.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C3-3",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/README.md, 'Merge-decision records and MONITOR.md section 4', 'The standing authority'",
+   "finding": "The standing authority 'becomes check_merge passing:', followed by three bullets. The third, the monitor's own check of the lane's record directory, is not part of check_merge. A MONITOR.md edit copied from this list would still name all three steps, so the meaning is safe, but the lead-in places a manual check inside the model's function.",
+   "requiredChange": "Optional: reword it as 'becomes check_merge passing (check_series ..., then check_review ...), plus the monitor's own check of the lane's record directory'.",
+   "blocks": false
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. The binding rules (delta: B-4 and B-8 first)",
+   "result": "B-4 is now met (RR2C2-1), and B-8 is met; see bindingRules. Where the fix touches other rules, they still hold. B-3: the chain rules are unchanged, and the path sentence is now a convention outside the load-time list (RR2C2-4). B-6: REVIEW_CODES and their order are unchanged, and the 3 new rows reach SHAPE. B-5: the re-stamped identities pass check_oracle and check_pr_oracles. B-1, B-2, B-7, B-9 and B-10 are untouched by the fix diff."
+  },
+  {
+   "check": "2. The records against the design",
+   "result": "The fix adds and removes no member. It tightens forms only: maximum 2^53-1 on runs[].used and the registry's version (round already had it), and (?!0000) on all 8 date and time patterns. The patterns are identical across the four schemas and the model's DAY and TIME. The README's member table for candidateCommit is reworded to 'the commit at which the bound oracle file passes'."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "The model's code change is the DAY pattern alone; check_merge changes only in its docstring, which now matches its body (RR2C2-3). The README's registry convention, model-only list, merge text and MONITOR.md list match the model. One inaccuracy is new: the VOID paragraph's claim that recovery always needs a registry entry fails for prefix entries (RR2C3-1, probe 2)."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "Probe 1, 69 cases (8 dates in reviewDate and both rulings' date, 10 times in both identities' launched and finished and in supersededAt, 5 integers in round, runs[].used and version): 59 agree, 9 are the declared 'day the month lacks', and 1 is the declared B-3 chain rule. There is no undeclared disagreement. The 4 modelOnly rows are schema-valid, and the 3 schemaAgrees rows are schema-invalid and SHAPE in the model. UNKNOWN_KIND and PLACEHOLDER_ID are untouched (kind and agentIds stay plain strings)."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Replayed with the pinned Python 3.12.14: 62 reviews, 10 series, 10 oracles, 5 PR oracles, 10 merges, 13 registries, 7 legacy, 16 trees and 5 privacy rows, rc 0. The fix adds 3 rows, all SHAPE: shape-year-zero, shape-runs-used-beyond-2-53 and registry-version-beyond-2-53. It changes 3 brief paths to follow the convention (RR2C2-4) and removes no row. Each expectation follows the stated reading: years 0001 to 9999, which is stricter than RFC 3339's 0000, and integers within I-JSON's 2^53-1. registry-version-beyond-2-53 would be SHAPE by the chain rule alone, so it pins schema agreement rather than the model's cap in isolation. It is correct as written. The test counts were updated to 62 and 13."
+  },
+  {
+   "check": "6. The evolution surface amendment",
+   "result": "The fix diff's 10 files include none of MET-GOV-001's files. The evolution-surface replay (pinned Python) gives 44 decisions, 31 invariants and 31 derived entries, rc 0."
+  },
+  {
+   "check": "7. The tests",
+   "result": "Single-file runs. tests/test_review_record.py: pytest rc 0 (run 2). tests/test_review_record_oracle.py: rc 0, 1 s. tests/test_evolution_surface_oracle.py: rc 0, 6 s. tests/test_evolution_surface.py: rc 1 in 17 s, with exactly 38 failures, none on a line containing w03. They fall in the same 8 tests and counts as round 2: note fold 16, README status line 10, adopted bytes 3, era digests 3, added files 3, pinned list 1, history chain 1, contract for this era 1. The count is unchanged. The oracle files are byte-identical from 45d818ee to the subject. Both re-stamped identities bind their current bytes and pass check_oracle and check_pr_oracles (probe 2). The oracle stays independent: its agentId is neither the operator's nor an author's. Per the rules, the in-tree test and check_tree on the worktree were not run."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Probe 3: 0 names, 0 legacy term, 0 home paths and 0 e-mails, raw and parsed, in the 13 files and in the fix's added lines. 0 hex runs are part of a name digest, and the joined vector parts hold 0 names and 0 legacy term. No scanned file holds a home-directory, private, opt or tmp absolute-path prefix. The model's imports are unchanged and from the standard library only."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Answered in questions."
+  },
+  {
+   "check": "Files read",
+   "result": "<tools>/CONTRACT_REVIEW_RULES-r3.md, review-round2.json, owner_decisions.json, DESIGN.md (heading and rule grep, section 14), and name-token-digests.json (only through rr.load_name_tokens, counts only). Line and byte counts only of BUILD_NOTES.md, CONTRACT_REVIEW_RULES-r2.md and review-identity-round2.json. <harness-onion>/architecture/review-record/REVIEW_BRIEF.md. The fix diff 45d818ee..09d2decd of all 10 files. README.md lines 140-175, 174-195, 210-278 and 300-367. scripts/review_record.py lines 180-260, 296-462, 590-634 and 760-870, plus greps. tests/test_review_record.py lines 1-50 and 72-90. oracle-identity.json lines 1-40 and its diff against oracle-identity-evolution-surface.json. The schemas' integer, format and pattern lines. briefs.json and vectors.json (through probes). The oracle test files' bytes only (digests, git diff --quiet)."
+  }
+ ],
+ "notChecked": [
+  "tests/test_review_records_in_tree.py was not run, nor check_tree on the worktree (rules). The fix diff does not touch that test.",
+  "Delta round: parts of the subject that the fix diff leaves unchanged were not re-reviewed.",
+  "scripts/validate_evolution_surface.py was not read. The 38-failure judgment rests on the failing tests' names and counts being identical to round 2's.",
+  "Not checked whether 45d818ee was ever pushed; the README states it is squashed away.",
+  "Not read: review-round1.json, review-identity-round1.json, review-identity-round2.json (counts only), CONTRACT_REVIEW_RULES-r1.md and -r2.md (counts only), BUILD_NOTES.md (counts only), build/build_legacy.py, and DESIGN.md beyond section 14."
+ ],
+ "questions": [
+  "Q-RR2-FROZEN: settled by the monitor at rev 4's digest freeze (owner_decisions entry 15), and the fix diff does not touch it. Nothing new to recommend.",
+  "Reading (RR2C2-2), dates have years 0001 to 9999 and every integer is at most 2^53-1. This is stricter than RFC 3339, which admits year 0000, and it matches what datetime and I-JSON can represent, in the schemas and the model alike. Recommendation: keep.",
+  "Reading (RR2C2-4), 'a new version gets a new path' is a convention that the in-suite tests check for the latest version only. That is the reviewer's second option, which the monitor accepted. The vectors now follow it. Recommendation: keep.",
+  "Q-RR2-VOID (b): stated as the monitor ruled, and stricter than (a). Recommendation: keep, and fix the prefix case in its wording (RR2C3-1). Whether the owner gate on recovery should also bind prefix-registered series is a question for the monitor."
+ ],
+ "disclosures": [
+  "Test runs: 5 of 8. Run 1 (tests/test_review_record.py, in the rules' exact form, with COLUMNS=400) printed only the tail's rc, because the filters removed all of pytest's lines. Run 2 repeated that file with pytest wrapped as { pytest ...; echo pytest_rc=$?; } before the rules' filters. Runs 3 to 5 used the same wrapping and timed themselves with date +%s. In run 5 (tests/test_evolution_surface.py), an awk in place of 'grep -vi w03 | tail -40' counted all FAILED lines. It counted, without printing, any line containing w03 (there were 0). For the rest, it printed only the test names, with parameters cut, and their counts.",
+  "Model replays: run with the pinned Python as the rules state, with '| grep -vi w03 | tail' and an exit-status echo added. One call ran both replays plus git status --porcelain | wc -l.",
+  "Probes: 6 of 10. p1 to p3 are scripts under <scratch>/, and p4, a self-check of this record, ran twice. Its first run found absolute-path prefix strings in one sentence of this draft (check 8), and I reworded it before the second run. The draft was not copied in between. The sixth was an inline -I -B -c from the worktree with the pinned Python, not a scratch script, which I count as a probe. It printed the published registry's kind, series, path, version and member names. The probes put the worktree root on sys.path to import scripts.review_record under -I. p2 and p3 ran read-only git through subprocess: cat-file blob of two oracle files at 45d818ee, merge-base --is-ancestor, diff --quiet, diff --name-only, ls-files of architecture/review-record/, and diff -U0. p3 loaded <tools>/name-token-digests.json with rr.load_name_tokens and printed counts only. p1 printed one jsonschema deprecation warning.",
+  "Several wrapper calls chained read-only commands with sh -c: git rev-parse, git status --porcelain | wc -l, git diff --stat and sed ranges.",
+  "wc -l -c read the line and byte counts of five named local records (owner_decisions.json, BUILD_NOTES.md, DESIGN.md, CONTRACT_REVIEW_RULES-r2.md and review-identity-round2.json). It was not a listing, and no content was shown.",
+  "The probe scripts were removed from <scratch>/ at the end, leaving only this draft."
+ ]
+}

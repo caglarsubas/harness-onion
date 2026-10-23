@@ -1,0 +1,160 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-GOV-002/contract",
+ "round": 4,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "d04f8f64ea7373b4cc1e72d06e2fb31ba90b2431",
+  "tree": "ecdbb89ad6e47bb95ad1b954ff13e506a83dc8a5"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "09d2decd1f5e6d2c642b6642b0be58be0949d9ba",
+  "tree": "721000278980f3dd9a292a3bed2dc062146f386d"
+ },
+ "reviewDate": "2026-10-22",
+ "briefSha256": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+ "rulesSha256": "4e715d6878bd5564a8b022845d4db48fbd8b38131e236319cc3e1535a0b4dc7e",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "REVIEWER_AGENT"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "bindingRules": [
+  {
+   "rule": "B-4",
+   "met": true,
+   "note": "Still met. The fix leaves both steps of check_merge unchanged: check_series over each cited series from round 1, then check_review of the final round against the head. The new `voided` argument can only stop a series from counting, never make one count. In the README, the citation duty is unchanged. The MONITOR.md section 4 list changes only by RR2C3-3's rewording and the added VOID-prefix check. Probe 1: every non-merge vector is identical to the base commit's, so series-head-bound-delta-without-base-round (SERIES_GAP) and merge-series-cited-without-round-one still replay. All 10 earlier merge rows give their expected outcome under the base model, under the new model with the default `voided` and under the new model with []."
+  },
+  {
+   "rule": "B-8",
+   "met": true,
+   "note": "Still met. The fix diff does not touch check_oracle, check_tree or the privacy code, and NAME_TOKEN_SHA256 still ships empty (Q-RR2-NAMES). Probe 2 scanned the 5 changed files at the subject (raw text and parsed string values) and the fix's 219 added lines. It found 0 names (4 local digests loaded with rr.load_name_tokens) and 0 legacy term (exact seven-letter runs and every seven-letter window). It also found 0 home-path shapes (the model's pattern, plus a broader one that adds opt, tmp, var and etc) and 0 e-mails. The changed files hold 460 hex runs of 16 or more digits, and none is part of a name digest. The joined-parts steps in the vectors are unchanged (10 before, 10 after). The re-stamped oracle identity changes the wording of one disclosure; its agentIds are unchanged."
+  },
+  {
+   "rule": "B-3",
+   "met": true,
+   "note": "The model still meets it, unchanged by the fix: load_registry refuses an exact id and a prefix over one series as SHAPE. Probe 1: the vectors' base registry plus an exact entry EXAMPLE-003/rerun, under the new prefix EXAMPLE-003/, is SHAPE for kind PR and for kind CONTRACT. The fix's new README text and the merge rule's exemption assume such an entry can exist. That is a wording conflict with B-3, recorded as RR2C4-1, not a break of B-3."
+  },
+  {
+   "rule": "B-6",
+   "met": true,
+   "note": "The codes and their order are unchanged, and the replay's codes check passes. check_merge still raises only NO_HEAD_BOUND_ROUND, now also when every cited series is dropped for a voided sibling."
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "RR2C3-1",
+   "status": "ADDRESSED",
+   "note": "Addressed as the monitor ruled (Q-RR2-VOID-PREFIX (b), owner_decisions entry 19). The VOID paragraph now states the prefix case: the rerun needs its own exact-id entry, and the monitor enforces this at merge (the README bullet and the MONITOR.md section 4 list). check_merge takes `voided` (the mechanical part), the README has a coverage line, and option (c) is kept for the owner. The flag reached the monitor, who ruled. Under a prefix, the owner gate on recovery now holds: while a sibling is listed, check_merge stops the series from counting (probe 1). But the new text's exact-id remedy and its exemption cannot coexist with B-3. That is a new defect, raised as RR2C4-1, not a gap left in this finding."
+  },
+  {
+   "id": "RR2C3-2",
+   "status": "ADDRESSED",
+   "note": "oracle-identity.json's first disclosure now says 'against 9f88e824 (the first candidate commit)'. oracle-identity-evolution-surface.json never had the phrase 'the candidate commit' (0 hits), so it needed no edit. The re-stamped identity still binds the oracle file's bytes: the file is unchanged since 45d818ee, and its digest equals file.sha256. Both identities pass check_oracle. check_pr_oracles passes over the fix diff's paths, with and without the two oracle files counted as changed (probe 1). None of the allowed files pins the identity file's own digest, before or after the re-stamp."
+  },
+  {
+   "id": "RR2C3-3",
+   "status": "ADDRESSED",
+   "note": "The standing-authority line now says 'check_merge passing, plus the monitor's own check'. It lists check_merge's two steps (check_series, then check_review of the final round), then the record-directory check marked 'separately', then the new VOID-prefix check. The lead-in no longer puts a manual check inside check_merge."
+  }
+ ],
+ "findings": [
+  {
+   "id": "RR2C4-1",
+   "severity": "MINOR",
+   "location": "<harness-onion>/architecture/review-record/README.md, 'The merge', 'A VOID round': the bullets 'Recovery always passes an owner gate', 'Under a prefix entry' and 'Enforcement', and the last bullet of the MONITOR.md section 4 list; <harness-onion>/scripts/review_record.py _voided_sibling and check_merge's docstring; vectors.json merge-exact-series-with-a-voided-sibling",
+   "finding": "The new text says that under a prefix entry the rerun 'still needs its own exact-id entry', and it exempts a cited series that 'has an exact-id entry'. B-3 refuses that entry when the registry is loaded: design section 14, and the README's own rule 'No series id is matched by two patterns (an exact id and a prefix ...)'. Probe 1: the base registry plus an exact EXAMPLE-003/rerun under the prefix EXAMPLE-003/ is SHAPE, both for PR and for CONTRACT. A series id has exactly one slash (SERIES), so a prefix covers every series of its packet id. Three things follow. (1) The rerun's exact-id entry can only use another packet-id part. Probe 1: EXAMPLE-004/rerun loads and counts while EXAMPLE-003/first is voided. (2) The exemption can never apply to a series under a prefix. In a loaded registry, _voided_sibling's first branch returns False only where the prefix set is empty anyway. The exemption takes effect only on a registry that load_registry refuses: probe 1's check_merge on that unloaded registry passes. (3) While one sibling is listed, every series under the prefix counts for nothing, not only the rerun. Probe 1: an unrelated EXAMPLE-003/unrelated-later-pr is NO_HEAD_BOUND_ROUND. No registry rule ends that block: a prefix's chain cannot be retired (the README's reading of 'The latest has no supersededAt'), and deleting the entry would leave the records published under it without a brief. The README states none of this. The vector merge-exact-series-with-a-voided-sibling cites EXAMPLE-001/pr, which no prefix covers, so it does not test the exemption its name suggests; under B-3 no vector could. The behaviour fails closed and the owner gate holds, so the problem is accuracy, not safety. The monitor's ruling uses the same 'its own exact-id registry entry' wording.",
+   "requiredChange": "Make the VOID bullets agree with B-3. Under a prefix entry, the rerun's exact-id entry must use another packet-id part, because B-3 refuses an exact id beneath the prefix. The clause 'unless the cited series has an exact-id entry' cannot arise for a series under a prefix: drop it, or mark it as inert under B-3, in the README's two places and in the docstring. State that while a sibling is listed, every series under that prefix counts for nothing. Rename or re-describe merge-exact-series-with-a-voided-sibling as the case no prefix covers. Flag this to the monitor with the fix: its ruling assumes an entry that B-3 refuses, and it may not intend a lasting block on a prefix's other series. Any change to B-3 or to the block's scope is the monitor's or the owner's rule, not part of this fix.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C4-2",
+   "severity": "MINOR",
+   "location": "<harness-onion>/architecture/review-record/vectors.json, bases.registry.briefs[6] (PR, EXAMPLE-003/) and the review row brief-unregistered-series",
+   "finding": "The new base entry {PR, EXAMPLE-003/} matches the series of an existing review row. brief-unregistered-series is a CONTRACT record with series EXAMPLE-003/contract. At the base commit no registry entry matched that series; now the PR prefix does (probe 2). The row still expects BRIEF_NOT_FOR_SERIES and still replays, but for another reason. It now tests a record of another kind under a prefix, which brief-another-kind-under-shared-prefix already covers. No row now tests a series that no entry matches, the plainest BRIEF_NOT_FOR_SERIES case. The expectation follows from the design either way, so what the fix diff lost is the row's stated case. The other BRIEF_NOT_FOR_SERIES rows are unaffected.",
+   "requiredChange": "Choose one: give brief-unregistered-series a series that no base entry matches (for example EXAMPLE-009/contract), or move the new prefix entry and its three merge rows to an unused packet id. Then replay the vectors again.",
+   "blocks": true
+  },
+  {
+   "id": "RR2C4-3",
+   "severity": "NOTE",
+   "location": "<harness-onion>/scripts/review_record.py check_merge, the line 'voided = [v for v in voided if type(v) is str]'; README 'Coverage'",
+   "finding": "check_merge silently keeps only the str members of `voided`. Probe 1, on the row merge-prefix-series-with-a-voided-sibling: a list, tuple or set refuses NO_HEAD_BOUND_ROUND. A bare string 'EXAMPLE-003/first' (iterated as characters) and a list of bytes both pass, and None raises TypeError. So a slip in the monitor's call turns the sibling rule off without any sign. The README's coverage line ('every VOID ruling the monitor passes in') holds only for a list of strings. The input is the monitor's own, not a lane's, so this is advice.",
+   "requiredChange": "Optional: refuse unless `voided` is a list or tuple of series-id strings, and say so in the README.",
+   "blocks": false
+  },
+  {
+   "id": "RR2C4-4",
+   "severity": "NOTE",
+   "location": "<harness-onion>/architecture/review-record/README.md, 'The merge': its heading, the 'Coverage' bullet and the list 'Before each harness-onion merge the monitor also'",
+   "finding": "The heading still names check_merge(cited, registry, head), without `voided`. The list 'Before each harness-onion merge the monitor also' does not name the VOID-prefix check, which the Enforcement bullet and the MONITOR.md list do. The coverage line says the in-suite check needs no part of the rule 'since a published VOID round already fails there'. That is true, but a VOID round kept only in local records never reaches the in-suite check, so the merge check is the only enforcement in that case.",
+   "requiredChange": "Optional: add `voided` to the heading's signature, add the check to that list, and name the local-record case in the coverage line.",
+   "blocks": false
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. The binding rules (delta: B-4 and B-8 first)",
+   "result": "B-4 and B-8 are still met (see bindingRules). The model still meets B-3, but the new VOID-prefix text conflicts with it in wording (RR2C4-1). B-6's codes and order are unchanged. For B-5, the re-stamped identity binds its file and passes check_oracle and check_pr_oracles. The fix diff does not touch B-1, B-2, B-7, B-9 or B-10."
+  },
+  {
+   "check": "2. The records against the design",
+   "result": "The fix adds no member to any record, identity, oracle identity, registry or frozen list, and the four schemas are unchanged (git diff --quiet). `voided` is an argument of check_merge, not a record member. The merge vector rows gain an optional `voided` member, which the replay reads with row.get."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "check_merge(cited, registry, head, voided) and _voided_sibling match the README's 'mechanical part' and the form the monitor suggested. A blocked series counts for nothing instead of refusing the merge, the same as any failing series, and the README says so. The default voided=() keeps every earlier behaviour. By reading: any() over an empty list is False, the rest of the loop is unchanged, and with a loaded registry (check_review's documented input) _voided_sibling cannot raise. By probe 1: on the 10 earlier merge rows the base model, the new default and the new model with [] agree with each row's expectation, and the base commit's vectors replay under the new model. Inputs examined: the B-3 conflict (RR2C4-1) and a malformed `voided` (RR2C4-3). A `voided` entry naming the cited series itself is ignored by the sibling rule (v != series). That case falls to check_series when the VOID round is cited, and to the monitor's record-directory check when it is not. A `voided` entry equal to the prefix blocks the whole prefix."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "The fix touches no schema and no shape check. The modelOnly and schemaAgrees rows are unchanged (probe 1's comparison), and the schema tests in tests/test_review_record.py pass."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Replayed with the pinned Python 3.12.14: 62 reviews, 10 series, 10 oracles, 5 PR oracles, 13 merges, 13 registries, 7 legacy, 16 trees and 5 privacy rows. Probe 1 undid the stated changes in the new vectors: it removed the base entry EXAMPLE-003/ and the 3 new merge rows, and moved the 3 appended-index steps back from 7 to 6. The result equals the base commit's vectors exactly. Moving the index from 6 to 7 is right, because a row appends at the list's new length. The new rows' expectations follow from the ruling. merge-prefix-series-with-a-voided-sibling refuses only because of `voided`: without it, both the new model and the base model pass. merge-prefix-series-without-a-voided-sibling passes, with the voided id outside the prefix. merge-exact-series-with-a-voided-sibling passes but does not test the exemption (RR2C4-1). brief-unregistered-series has lost its case (RR2C4-2). The test count changed to 13 merges."
+  },
+  {
+   "check": "6. The evolution surface amendment",
+   "result": "The fix diff touches none of MET-GOV-001's files. The evolution-surface replay with the pinned Python gives 44 decisions, 31 invariants and 31 derived entries."
+  },
+  {
+   "check": "7. The tests",
+   "result": "Single-file runs. tests/test_review_record.py: pytest rc 0, 1 s. tests/test_review_record_oracle.py: rc 0, 1 s. tests/test_evolution_surface_oracle.py: rc 0, 6 s. tests/test_evolution_surface.py: rc 1 in 11 s with exactly 38 failures, none on a line containing w03. They fall in the same 8 tests with the same counts as round 3: note fold 16, README status line 10, adopted bytes 3, era digests 3, added files 3, pinned list 1, history chain 1 and contract for this era 1. The count is unchanged. The oracle test files are byte-identical from 45d818ee to the subject. The oracle stays independent: its agentIds are unchanged, and check_oracle passes. Per the rules, neither the in-tree test nor check_tree on the worktree was run."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Probe 2 found 0 names, 0 legacy term, 0 home paths and 0 e-mails, raw and parsed, in the 5 changed files and in the fix's 219 added lines. None of the hex runs is part of a name digest, and the joined-parts steps are unchanged. The model's imports are unchanged, standard library only."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Answered in questions."
+  },
+  {
+   "check": "Files read",
+   "result": "<tools>/CONTRACT_REVIEW_RULES-r4.md; review-round3.json; owner_decisions.json lines 90-120 (entries 15 to 19); DESIGN.md (a heading and rule grep, sections 9 and 14); BUILD_NOTES.md (headings, and a grep that matched nothing); name-token-digests.json only through rr.load_name_tokens, with counts only. Line and byte counts only of review-identity-round3.json and CONTRACT_REVIEW_RULES-r3.md. <harness-onion>/architecture/review-record/REVIEW_BRIEF.md. The fix diff 09d2decd..d04f8f64 of all 5 files. README.md lines 148-170 and 232-280, plus a grep. oracle-identity.json lines 1-60. oracle-identity-evolution-surface.json (two greps). vectors.json lines 86-146 and 925-960, a grep, and the probes. scripts/review_record.py lines 60-103, 300-362, 378-437, 440-640 and 731-870, plus a function grep. tests/test_review_record.py (a grep). schemas/review-record.schema.json (members only, through an inline probe). The base commit's scripts/review_record.py was run in memory by probe 1, not read."
+  }
+ ],
+ "notChecked": [
+  "tests/test_review_records_in_tree.py was not run, nor check_tree on the worktree (rules). The fix diff does not touch that test.",
+  "This is a delta round: the parts of the subject that the fix diff leaves unchanged were not re-reviewed.",
+  "scripts/validate_evolution_surface.py was not read. The 38-failure judgment rests on the failing tests' names and counts being identical to round 3's.",
+  "Not read: review-round1.json, review-round2.json, the round 1 to 3 identities (round 3's by counts only), CONTRACT_REVIEW_RULES-r1.md and -r3.md (r3 by counts only), build/build_legacy.py, DESIGN.md outside sections 9 and 14, and BUILD_NOTES.md beyond its headings."
+ ],
+ "questions": [
+  "Q-RR2-FROZEN: the monitor settled it at rev 4's digest freeze (owner_decisions entry 15), and the fix diff does not touch it. Nothing new to recommend.",
+  "Q-RR2-VOID-PREFIX (b): the README states it and check_merge partly enforces it, as ruled. Recommendation: keep it, with RR2C4-1's wording fix. Under B-3, a rerun cannot get an exact-id entry beneath its prefix. In practice (b) therefore means that while a VOID sibling is listed, no other series of that packet id counts, and the rerun moves to another packet-id part. If the monitor does not want that lasting block, the choice is the owner's: relax B-3 for this case, or take option (c).",
+  "Option (c), refusing prefix entries for CONTRACT, PACKET and PR series. Recommendation: put it to the owner with RR2C4-1, without waiting for the rule to prove fragile. With B-3 as it stands, (c) is the simplest closure. Every head-bound or contract series would then have an exact id, `voided` would not be needed for them, and recovery would always be a new exact entry. The published registry already registers MET-GOV-002/contract by exact id.",
+  "The mechanical part drops a blocked series rather than refusing the whole merge, so a merge with another counting series still passes. This matches how check_merge treats any failing series, and the README says so. Recommendation: keep."
+ ],
+ "disclosures": [
+  "Test runs: 5 of 8. Run 1 (tests/test_review_record.py, in the rules' exact form, with COLUMNS=400) printed only the tail's rc, because the filters removed all of pytest's lines. Runs 2 to 5 wrapped pytest as { pytest ...; echo pytest_rc=$?; } before the rules' filters, and timed themselves with date +%s. Run 2 repeated run 1's file. In run 5 (tests/test_evolution_surface.py), an awk replaced 'grep -vi w03 | tail -40'. It counted, without printing, every line containing w03 (there were 0). Otherwise it printed only the pytest_rc line, the failing test names with parameters cut, and their counts. Each run ended with git status --porcelain | wc -l (0 each time).",
+  "Model replays: one call ran both replays with the pinned Python, as the rules state, adding '| grep -vi w03 | tail -5', an echo of the pipe's status, date +%s timing and git status --porcelain | wc -l.",
+  "Probes: 4 of 10. p1 and p2 are scripts under <scratch>/. The third was an inline -I -B -c from the worktree with the pinned Python, which printed the record schema's member names and forms. p4 is a self-check of this draft before copying. p1 and p2 put the worktree root on sys.path to import scripts.review_record under -I. They ran read-only git through subprocess: show of blobs at the base and subject commits, and diff --name-only and diff -U0 between them. p1 ran the base commit's scripts/review_record.py in memory as a module (from git show, with no file written) to compare the two models' merge results. It also set tempfile.tempdir to a folder under <scratch>/ for the replay's temporary trees, and removed that folder afterwards. p2 loaded <tools>/name-token-digests.json with rr.load_name_tokens and printed counts only. Beyond the public interface, p2 used the model's private helper _string_values and read NAME_TOKEN_SHA256 and LEGACY_TERM_PREFIX to count matches.",
+  "Several wrapper calls chained read-only commands with sh -c: git rev-parse, git status --porcelain | wc -l, git merge-base --is-ancestor, git rev-list --count, git diff --stat, git diff --quiet, the shasum of two oracle-identity blobs, and grep -rl | wc -l for those two digests. That grep covered only allowed paths: the contract directory, architecture/evolution-surface/, schemas/, scripts/review_record.py, scripts/evolution_surface.py, tests/test_review_record.py and tests/test_review_record_oracle.py.",
+  "wc -l -c read the line and byte counts of five named local records (owner_decisions.json, review-identity-round3.json, CONTRACT_REVIEW_RULES-r3.md, DESIGN.md and BUILD_NOTES.md). It was not a listing, and it showed no content.",
+  "At the end, the probe scripts were removed from <scratch>/, leaving only this draft."
+ ]
+}

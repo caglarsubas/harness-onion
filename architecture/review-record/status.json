@@ -1,0 +1,216 @@
+{
+ "schemaVersion": "planeon.internal.review-record-status/v1",
+ "workItem": "REVIEW-RECORD-V2 (review record v2)",
+ "packet": "MET-GOV-002",
+ "slot": 259,
+ "status": "ADOPTED_CONTRACT_CANDIDATE",
+ "baseMain": "2043cc27883448e3ff030b7868110e295f32fe09",
+ "series": "MET-GOV-002/contract",
+ "adoptedSubject": {
+  "commit": "8c7ee7ca990649858c2d6c4ff0aed9dcf4b021cd",
+  "tree": "0802156b39cbc95466de0afcc7b025fad38aca99"
+ },
+ "adoption": {
+  "decidedBy": "the lane monitor, owner-delegated (2026-10-22)",
+  "decision": "Q-RR2-ADOPT-SHAPE (a): the final delta round's subject bytes become the adopted bytes; a light adoption commit with no snapshot directories, the final round's per-file digests in status.json, and the v2 rounds plus identities in architecture/review-record/"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "record": "architecture/review-record/review-round1.json",
+   "recordSha256": "f49805ee04fcabda492e5399eda9bdf86d1943d7b088f45e24f051a9b970d6cc",
+   "identity": "architecture/review-record/review-identity-round1.json",
+   "identitySha256": "c45c53fffc6c38477c737872e17df9323a8a467e86579601b4ebab8b3241aa56",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "0bc5dc1aa263206b94199412648d8d0849c6fe38",
+    "tree": "4bee7f573c8ab7c1c49f2e22b4e0408534320124"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RR2C1-1",
+    "RR2C1-2",
+    "RR2C1-3",
+    "RR2C1-4",
+    "RR2C1-5",
+    "RR2C1-6",
+    "RR2C1-7",
+    "RR2C1-8",
+    "RR2C1-9",
+    "RR2C1-10",
+    "RR2C1-11",
+    "RR2C1-12",
+    "RR2C1-13",
+    "RR2C1-14",
+    "RR2C1-15"
+   ],
+   "ruling": "MON-RR2-CR1-SLIPS"
+  },
+  {
+   "round": 2,
+   "record": "architecture/review-record/review-round2.json",
+   "recordSha256": "7b1a14ffffd1a4482cc978e83c75faf768296991cb2e6c6a80eadf41bdd3b1bd",
+   "identity": "architecture/review-record/review-identity-round2.json",
+   "identitySha256": "5407523ff23516b2a4495c6eb6c6b5b2d2c9b58aa25a61b72c86cbe6a61328d8",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "45d818eea16b609fc5b26c26c087c7175ecda43a",
+    "tree": "d067b4a5e6abfb8c8537a06a85045b0dc77d9900"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RR2C2-1",
+    "RR2C2-2",
+    "RR2C2-3",
+    "RR2C2-4",
+    "RR2C2-5",
+    "RR2C2-6"
+   ],
+   "ruling": "MON-RR2-CR2-SLIPS",
+   "base": {
+    "repository": "harness-onion",
+    "commit": "0bc5dc1aa263206b94199412648d8d0849c6fe38",
+    "tree": "4bee7f573c8ab7c1c49f2e22b4e0408534320124"
+   }
+  },
+  {
+   "round": 3,
+   "record": "architecture/review-record/review-round3.json",
+   "recordSha256": "786fe2274a55fb9435727839f0775ee6cb4697fc15f04207194f9a18aaa5f82a",
+   "identity": "architecture/review-record/review-identity-round3.json",
+   "identitySha256": "3bf8caadb4db12f25bc754803c0cdcb76972ec7e9fdac52a7ef19ea003b1123d",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "09d2decd1f5e6d2c642b6642b0be58be0949d9ba",
+    "tree": "721000278980f3dd9a292a3bed2dc062146f386d"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RR2C3-1",
+    "RR2C3-2",
+    "RR2C3-3"
+   ],
+   "ruling": "MON-RR2-CR3-SLIPS",
+   "base": {
+    "repository": "harness-onion",
+    "commit": "45d818eea16b609fc5b26c26c087c7175ecda43a",
+    "tree": "d067b4a5e6abfb8c8537a06a85045b0dc77d9900"
+   }
+  },
+  {
+   "round": 4,
+   "record": "architecture/review-record/review-round4.json",
+   "recordSha256": "df2aa55b2004637547fc6f1951d696eeabcd198112faf3d2df274a9244bc2180",
+   "identity": "architecture/review-record/review-identity-round4.json",
+   "identitySha256": "1947e8ebcb6645577f3483633bf3b78a93d5ace607cd0c849c744a35640d5f22",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "d04f8f64ea7373b4cc1e72d06e2fb31ba90b2431",
+    "tree": "ecdbb89ad6e47bb95ad1b954ff13e506a83dc8a5"
+   },
+   "verdict": "CHANGES_REQUIRED",
+   "findings": [
+    "RR2C4-1",
+    "RR2C4-2",
+    "RR2C4-3",
+    "RR2C4-4"
+   ],
+   "ruling": "MON-RR2-CR4-SLIPS",
+   "base": {
+    "repository": "harness-onion",
+    "commit": "09d2decd1f5e6d2c642b6642b0be58be0949d9ba",
+    "tree": "721000278980f3dd9a292a3bed2dc062146f386d"
+   }
+  },
+  {
+   "round": 5,
+   "record": "architecture/review-record/review-round5.json",
+   "recordSha256": "b29d531933c3632f366a6c4e8e18a330910c3237bddddda7327920da1451192a",
+   "identity": "architecture/review-record/review-identity-round5.json",
+   "identitySha256": "71af2465dd829228f924aae892a8b919a6f5ecb56e6fd5b67976ac90d894438c",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "16c02fbe31fff5e1d8eb6cc28a121012d2760486",
+    "tree": "410d64c095b889ce8b793c6b6e078047bf8052de"
+   },
+   "verdict": "PASS_FOR_ADOPTION",
+   "findings": [
+    "RR2C5-1",
+    "RR2C5-2",
+    "RR2C5-3",
+    "RR2C5-4"
+   ],
+   "ruling": "MON-RR2-CR5-SLIPS",
+   "base": {
+    "repository": "harness-onion",
+    "commit": "d04f8f64ea7373b4cc1e72d06e2fb31ba90b2431",
+    "tree": "ecdbb89ad6e47bb95ad1b954ff13e506a83dc8a5"
+   }
+  },
+  {
+   "round": 6,
+   "record": "architecture/review-record/review-round6.json",
+   "recordSha256": "a25f25eed6303ead29d76dcdabadfd96db62c8aae3d3b0c9ea2e97238cb49162",
+   "identity": "architecture/review-record/review-identity-round6.json",
+   "identitySha256": "905cf7dfaf5462d85d441e9db5dd305d65e5a3dc62929b6f27325d983a467849",
+   "subject": {
+    "repository": "harness-onion",
+    "commit": "8c7ee7ca990649858c2d6c4ff0aed9dcf4b021cd",
+    "tree": "0802156b39cbc95466de0afcc7b025fad38aca99"
+   },
+   "verdict": "PASS_FOR_ADOPTION",
+   "findings": [
+    "RR2C6-1",
+    "RR2C6-2",
+    "RR2C6-3"
+   ],
+   "ruling": "MON-RR2-CR6-SLIPS; disclosed process gap: rounds 1-5 could not run tests/test_review_records_in_tree.py (out of every brief's scope), so none found the oracle-name defect",
+   "base": {
+    "repository": "harness-onion",
+    "commit": "16c02fbe31fff5e1d8eb6cc28a121012d2760486",
+    "tree": "410d64c095b889ce8b793c6b6e078047bf8052de"
+   }
+  }
+ ],
+ "reviewedFiles": {
+  "architecture/evolution-surface/README.md": "922b09a56cd09486d3ab98a8abe8c4875774579beafebff14da294d9e87723c5",
+  "architecture/evolution-surface/evolution-surface.json": "b1759fe4bae0d9dc111f0c4ca3cc23e891cf89d572b73929ee01f5ec7616a277",
+  "architecture/evolution-surface/vectors.json": "9c0f7cf1eb0f48dab41e322d8cdffba8568a5db2ddc2a31869f6af8dd9985b56",
+  "architecture/review-record/README.md": "4040ebc078c9157c69c0a75b588303cd848c041f600d4e440a53e5fa2feeb603",
+  "architecture/review-record/REVIEW_BRIEF.md": "72c3816a89a5a40e1b49b17b6db149aaa0150849cc96f60c86bf76061620285e",
+  "architecture/review-record/briefs.json": "f389bae17a83924c873d29c2e13628b664f8586b47a59bf4093ac247928fc7c1",
+  "architecture/review-record/legacy-review-records.json": "e33afcf6593458857570045931b0c247c85a3c49b47743538eaea43182b70c9f",
+  "architecture/review-record/oracle-identity-evolution-surface.json": "0633c76dbc4ad19834df9a43278d2835a78ce741bd55373a22e0066874c3396f",
+  "architecture/review-record/oracle-identity.json": "35ceef8656ae5a4e133200e4e2ad5e2f003a2466759668a4d19a69dba09c8db1",
+  "architecture/review-record/vectors.json": "502b15998da618c9f992521c4a21259a97434363e2329f3f0becebb5dcbec584",
+  "schemas/oracle-identity.schema.json": "6f3df9ec13d02a70167372ac49e24d7d40012c2de1f5d23bc8d16a007aa3b5b1",
+  "schemas/review-briefs.schema.json": "b308441c37fac09b3cb966f36347dbe5ecbdbeca74554ab4770e91d41c783280",
+  "schemas/review-identity.schema.json": "060457f8ee41d4da248778d5af509f1865304fd3860e9f25d20fff17b06a5051",
+  "schemas/review-record.schema.json": "26e25c862458a18222f49fec0fe7a7d3f06a85aab6b624bda9920a3f015f1b40",
+  "scripts/review_record.py": "bdcda19bd77f32e489a1baf67fcec1385c35085cb9224aa29f8d6716f5265996",
+  "tests/test_evolution_surface.py": "2b347bce3e55c04f47aa340063ab3afd3ccb6f53d730e44ea4c13a4f48bad37c",
+  "tests/test_evolution_surface_oracle.py": "b05a8f096958a45ebb3ef1dfb12c99e1af54525a891f8b902416500e2e0712d8",
+  "tests/test_review_record.py": "82af925b29dcddd084b095a1013dca1cb412f42005c208dc5c5f2fca5cdb062c",
+  "tests/test_review_record_oracle.py": "ea396ea412be088245ee1d6dcfc31d79be4a7bd40d7f973ecc331f75308c41ba",
+  "tests/test_review_records_in_tree.py": "9c4c2611d8eb7df7f63931b9889e01d92750ef3907bc297a34f38cc3b639ed16"
+ },
+ "adoptionEdit": {
+  "path": "architecture/review-record/README.md",
+  "replaced": "**Status:** contract candidate, under independent contract review. Not adopted. `legacy-review-records.json` is",
+  "with": "**Status:** ADOPTED_CONTRACT_CANDIDATE (internal, DATA_CHECK_ONLY; independent contract review round 6: PASS_FOR_ADOPTION;\nthe rounds and their v2 records in `status.json`). `legacy-review-records.json` is",
+  "reviewedSha256": "4040ebc078c9157c69c0a75b588303cd848c041f600d4e440a53e5fa2feeb603",
+  "adoptedSha256": "f2427a967062d3bd90da2e1b6ea4c99ec83b014834979eef488d68bc6471787f"
+ },
+ "ownerDecisions": [
+  "Q-RR2-1..5: \"Accept all five (a) (Recommended)\"",
+  "Q-RR2-6: \"Gate material (Recommended)\"",
+  "Q-RR2-CAP: \"Fold into rev 4, no round (Recommended)\"",
+  "D-3: \"File-byte sha256 (Recommended)\"",
+  "Q-RR2-NAMES: \"Load hashes locally (Recommended)\""
+ ],
+ "nonClaims": [
+  "DATA_CHECK_ONLY: the model checks review records, identities, oracle identities, the registry and the frozen list; it runs nothing and grants no merge.",
+  "The monitor's merge check and MONITOR.md section 4 adopt the contract when this packet merges; R10 and R12 keep their current sidecars until their own packets adopt v2.",
+  "Name tokens are checked only by local scans that load unpublished digests (Q-RR2-NAMES); the in-suite check covers home paths, e-mails and the legacy term."
+ ]
+}

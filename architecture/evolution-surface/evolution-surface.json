@@ -1,7 +1,7 @@
 {
  "schemaVersion": "planeon.internal.evolution-surface/v1",
  "surfaceId": "harness-onion",
- "version": 1,
+ "version": 2,
  "operations": [
   "propose",
   "generate",
@@ -1072,7 +1072,8 @@
       "GATE_LEGAL",
       "GATE_HARNESS_DOCS",
       "GATE_VERIFIER_DOCS",
-      "EVOLUTION_SURFACE"
+      "EVOLUTION_SURFACE",
+      "GATE_REVIEW_PROCESS"
      ],
      "operations": {
       "propose": [
@@ -1171,7 +1172,8 @@
       "GATE_LEGAL",
       "GATE_HARNESS_DOCS",
       "GATE_VERIFIER_DOCS",
-      "EVOLUTION_SURFACE"
+      "EVOLUTION_SURFACE",
+      "GATE_REVIEW_PROCESS"
      ],
      "operations": {
       "propose": [
@@ -1238,6 +1240,10 @@
       },
       {
        "under": "architecture/evolution-surface/",
+       "name": "REVIEW_BRIEF*.md"
+      },
+      {
+       "under": "architecture/review-record/",
        "name": "REVIEW_BRIEF*.md"
       }
      ],
@@ -1314,6 +1320,10 @@
       {
        "under": "architecture/evolution-surface/",
        "name": "review-round*.json"
+      },
+      {
+       "under": "architecture/review-record/",
+       "name": "review-round*.json"
       }
      ],
      "neverAutonomous": false,
@@ -1332,7 +1342,8 @@
       "GATE_LEGAL",
       "GATE_HARNESS_DOCS",
       "GATE_VERIFIER_DOCS",
-      "EVOLUTION_SURFACE"
+      "EVOLUTION_SURFACE",
+      "GATE_REVIEW_PROCESS"
      ],
      "operations": {
       "propose": [
@@ -1357,6 +1368,62 @@
      },
      "grounds": [
       "PA-D5 (D5a): every PR touching gate material needs the owner's per-PR approval of the exact head (Q-ES-D3 (a), MON-ES-R1)"
+     ]
+    },
+    {
+     "id": "GATE_REVIEW_PROCESS",
+     "description": "The review-record v2 contract: brief registry, legacy digest list, checker, in-tree pre-check and authority.",
+     "paths": [
+      {
+       "prefix": "architecture/review-record/"
+      },
+      {
+       "exact": "architecture/review-record-authority.json"
+      },
+      {
+       "exact": "scripts/review_record.py"
+      },
+      {
+       "exact": "tests/test_review_records_in_tree.py"
+      }
+     ],
+     "neverAutonomous": false,
+     "appendOnly": false,
+     "twoPerson": false,
+     "approvalBinding": "CONTENT",
+     "governs": [
+      "LANE_SESSION",
+      "LANE_MONITOR",
+      "REVIEWER_AGENT",
+      "ORACLE_AGENT"
+     ],
+     "independentOf": [],
+     "operations": {
+      "propose": [
+       "LANE_SESSION",
+       "LANE_MONITOR",
+       "ROADMAP_VISIONARY",
+       "OWNER"
+      ],
+      "generate": [
+       "LANE_SESSION"
+      ],
+      "test": [
+       "REVIEWER_AGENT",
+       "ORACLE_AGENT",
+       "VERIFIER"
+      ],
+      "approve": [
+       "OWNER"
+      ],
+      "activate": [
+       "LANE_MONITOR",
+       "OWNER"
+      ]
+     },
+     "grounds": [
+      "Q-RR2-6 (owner, 2026-10-21): the brief registry and the checker are gate material",
+      "D-1 and D-2 (this design, named in the owner's per-PR ask)"
      ]
     },
     {
