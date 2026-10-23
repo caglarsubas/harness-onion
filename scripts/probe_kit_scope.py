@@ -3,8 +3,9 @@
 Standard library only. `check(record, read, changed_files, gate_paths)` returns the sorted list of refusal texts (empty when
 the record holds). `read(path)` returns a file's bytes at the record's base commit, or None. The model never lists a
 directory and reads only through `read`. The head layer binds `read` git-free (MON-260-READ (a)): each recorded path
-from the tree, bound by the record's sha256, with 259's recorded reverse hunks applied to the three living catalogs; the
-head layer's test compares each read with `git show <base>:<path>` (S3-17).
+from the tree, bound by the record's sha256; the three living catalogs are rebuilt by first undoing the layer's own
+edits to them, then applying 259's recorded reverse hunks. The head layer's test compares each read with
+`git show <base>:<path>` (S3-17).
 """
 
 import hashlib
@@ -355,7 +356,7 @@ def check(record, read, changed_files, gate_paths):
 
 def _check(record, read, changed_files, gate_paths):
     """The refusal texts for `record` (empty when it holds). `gate_paths` are the changed files the caller has already
-    matched against the evolution-surface record's gate rules (prefix and under+name rules, case-folded)."""
+    matched against the evolution-surface record's gate rules (exact, prefix and under+name rules, case-folded)."""
     refusals = set()
 
     def refuse(key):
