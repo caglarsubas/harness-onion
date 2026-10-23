@@ -8,9 +8,9 @@
  "adoptedSubject": {
   "architecture/probe-kit-scope/amendment.json": "3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b",
   "architecture/probe-kit-scope/vectors.json": "0346be761c98eee78760324e8418b0653b4f3945385670d80ce3fecf9cbb840e",
-  "architecture/probe-kit-scope/README.md": "ca41fe029a712c0e97aeb1fb91eaed619ee9cbfda54595101608beedef199033",
+  "architecture/probe-kit-scope/README.md": "0bb55f4e240679eebedc185e0731bff94b7c63574a87861c398029ca11ed1362",
   "architecture/probe-kit-scope/replay.py": "2e88f95102afa2a6791719bbe7326356659dedac7fe6fb1151cccb7ce02c2b3b",
-  "scripts/probe_kit_scope.py": "624ea3f1e63fc5646716473578b560b3aaf7b63069776436e1890d1fe578e283",
+  "scripts/probe_kit_scope.py": "be324ebee7b1026575fd252d899b923c569ff1a8653cdf52ea51ab6e76a8b795",
   "docs/linux-probe-kit/README.md": "66d28efbb0b180fc1013fc669ad00fca1fd12a108f0cdfc8150cdf22a50e9241"
  },
  "adoptions": [
@@ -69,6 +69,14 @@
    "date": "2026-10-23",
    "adoptionCheckSha256": "5e45b26643a9196c7aec3bd5d9d571a498defd919d4b402ab18b5fb12e2745de",
    "change": "the two generic briefs move to architecture/review-briefs/ (byte-identical); the five registry entries point at the new paths; README errata: the registry-rider paragraph"
+  },
+  {
+   "candidate": "c10",
+   "ruling": "MON-260-R1-1",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "16cb83d1c0db3ade3d4b4c53b9895155cd0453a17995f37bc9c67d8a89a5cf5f",
+   "change": "README errata: the head layer reads the base git-free (MON-260-READ (a)) and only its test uses git show; exact gate entries named; the model's docstring matches"
   }
  ],
  "design": {

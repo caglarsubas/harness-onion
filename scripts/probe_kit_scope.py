@@ -2,7 +2,9 @@
 
 Standard library only. `check(record, read, changed_files, gate_paths)` returns the sorted list of refusal texts (empty when
 the record holds). `read(path)` returns a file's bytes at the record's base commit, or None. The model never lists a
-directory and never reads the working tree; the caller binds `read` to `git show <base>:<path>`.
+directory and reads only through `read`. The head layer binds `read` git-free (MON-260-READ (a)): each recorded path
+from the tree, bound by the record's sha256, with 259's recorded reverse hunks applied to the three living catalogs; the
+head layer's test compares each read with `git show <base>:<path>` (S3-17).
 """
 
 import hashlib

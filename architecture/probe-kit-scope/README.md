@@ -263,7 +263,11 @@ At the base the search finds 278 files and 2,423 hit lines. Its `searchDigest` i
   | `ORDERING_PREREQUISITE` | "before CONF-LIVE-00x" gates |
   | `STAGE_OR_COUNT` | stage rows inside records |
 
-**The model and the layer read only the recorded paths, at the base, with `git show`.** No listing is used.
+**The model and the layer read only the recorded paths, at the base.** No listing is used. The model reads only
+through the `read` its caller binds. The head layer binds it git-free (the lane monitor's MON-260-READ (a)): it reads
+each recorded path from the tree and binds it by the record's own sha256, and it rebuilds the three living catalogs 259
+changed to their exact base bytes from 259's recorded reverse hunks. The head layer's test compares every such read with
+`git show <base>:<path>` (BUILD_RULES S3-17).
 
 **The build gate.** At the mechanics base M, the build:
 1. Runs the search.
@@ -280,7 +284,7 @@ The adopted record is not changed. The report's list is reviewed in the packet r
 - any gate path.
 
 `gate_paths` must be the changed files the caller has already matched against the evolution-surface record's gate rules,
-which are prefix and under-plus-name rules, case-folded.
+which are exact, prefix and under-plus-name rules, case-folded.
 
 **The registry rider.** Under the owner's 2026-10-23 registry decision ("Batch, carried by 260"), packet 260 also
 carries the review-record brief registry batch:
