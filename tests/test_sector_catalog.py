@@ -59,7 +59,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 259 and len(accepted) == 217
+    assert len(current) == 260 and len(accepted) == 217
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -100,7 +100,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(tprofile.historical_catalog(current)) == 216
     assert len(zprofile.historical_catalog(current)) == 215
     assert len(yprofile.historical_catalog(current)) == 214
@@ -775,6 +776,7 @@ PINNING_RECORDS = frozenset({
     "architecture/observation-enforcement-authority.json",
     "architecture/packet-scalar-amendment.json",
     "architecture/policy-observation-amendment.json",
+    "architecture/probe-kit-scope/amendment.json",
     "architecture/provider-adoption-authority.json",
     "architecture/proxy-contract-amendment.json",
     "architecture/proxy-diagnostics-authority.json",
@@ -832,6 +834,9 @@ NAMING_RECORDS = frozenset({
     "architecture/observation-enforcement-authority.json",
     "architecture/packet-scalar-amendment.json",
     "architecture/policy-observation-amendment.json",
+    "architecture/probe-kit-scope/amendment.json",
+    "architecture/probe-kit-scope/review-history-design-r2.json",
+    "architecture/probe-kit-scope/review-history-design-r3.json",
     "architecture/provider-adoption-authority.json",
     "architecture/proxy-contract-amendment.json",
     "architecture/proxy-diagnostics-authority.json",
