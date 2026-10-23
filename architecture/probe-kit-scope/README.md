@@ -285,14 +285,17 @@ which are prefix and under-plus-name rules, case-folded.
 **The registry rider.** Under the owner's 2026-10-23 registry decision ("Batch, carried by 260"), packet 260 also
 carries the review-record brief registry batch:
 - `architecture/review-record/briefs.json`;
-- `architecture/review-record/REVIEW_BRIEF_PACKET.md`;
-- `architecture/review-record/REVIEW_BRIEF_CONTRACT.md`.
+- `architecture/review-briefs/REVIEW_BRIEF_PACKET.md`;
+- `architecture/review-briefs/REVIEW_BRIEF_CONTRACT.md`.
 
-These three exact paths are gate material, and they are not the scope contract's changed files. The layer checks four
-things:
-- it holds them as one exact constant;
+These three exact paths are not the scope contract's changed files. Only `briefs.json` is gate material. The two generic
+briefs are data (REVIEW_BRIEF) in `architecture/review-briefs/`, a directory no history-chain layer lists; 259's layer
+holds `architecture/review-record/` at exactly its own files (the lane monitor's MON-260-RIDER-DIR (a), candidate c9).
+Their integrity holds through the registry: `briefs.json`, which is gate material, pins each brief by sha256, so any
+change to a brief's bytes needs a registry change, and with it the owner's per-PR approval. The layer checks four things:
+- it holds the three paths as one exact constant;
 - they are among the packet's changed files;
-- they are exactly the gate paths among those files;
+- `architecture/review-record/briefs.json` is exactly the gate path among those files;
 - the model, run on the changed files minus these three paths, returns no refusal.
 
 **The layer.** It pins the adopted `amendment.json` by sha256, so a dropped or added row also fails at verify time.

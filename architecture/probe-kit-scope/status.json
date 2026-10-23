@@ -8,7 +8,7 @@
  "adoptedSubject": {
   "architecture/probe-kit-scope/amendment.json": "3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b",
   "architecture/probe-kit-scope/vectors.json": "0346be761c98eee78760324e8418b0653b4f3945385670d80ce3fecf9cbb840e",
-  "architecture/probe-kit-scope/README.md": "d19473926241a356fc966e62e10b176ee9f69082aa828bfefc54c9e831e4736a",
+  "architecture/probe-kit-scope/README.md": "ca41fe029a712c0e97aeb1fb91eaed619ee9cbfda54595101608beedef199033",
   "architecture/probe-kit-scope/replay.py": "2e88f95102afa2a6791719bbe7326356659dedac7fe6fb1151cccb7ce02c2b3b",
   "scripts/probe_kit_scope.py": "624ea3f1e63fc5646716473578b560b3aaf7b63069776436e1890d1fe578e283",
   "docs/linux-probe-kit/README.md": "66d28efbb0b180fc1013fc669ad00fca1fd12a108f0cdfc8150cdf22a50e9241"
@@ -61,6 +61,14 @@
    "date": "2026-10-23",
    "adoptionCheckSha256": "42ca6a334f2bc2ef1991872c1eaea15437b953f32f8c193c7e5126ff47582dd2",
    "change": "README errata only: the registry-rider paragraph (Q-260-1 (a)) and the review-history sentence"
+  },
+  {
+   "candidate": "c9",
+   "ruling": "MON-260-RIDER-DIR (a)",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "5e45b26643a9196c7aec3bd5d9d571a498defd919d4b402ab18b5fb12e2745de",
+   "change": "the two generic briefs move to architecture/review-briefs/ (byte-identical); the five registry entries point at the new paths; README errata: the registry-rider paragraph"
   }
  ],
  "design": {
@@ -236,8 +244,8 @@
   "decision": "owner, 2026-10-23: \"Batch, carried by 260 (Recommended)\"",
   "paths": [
    "architecture/review-record/briefs.json",
-   "architecture/review-record/REVIEW_BRIEF_CONTRACT.md",
-   "architecture/review-record/REVIEW_BRIEF_PACKET.md"
+   "architecture/review-briefs/REVIEW_BRIEF_CONTRACT.md",
+   "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"
   ],
   "entries": [
    {
