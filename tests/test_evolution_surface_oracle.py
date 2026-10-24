@@ -10,6 +10,7 @@ output. The model is reached only through its public interface.
 # MET-GOV-002: record version 2 (REVIEW-RECORD-V2 design section 8, owner decision Q-RR2-6 (b)) adds the
 # programme class GATE_REVIEW_PROCESS. The design tables below are brought to version 2 only where a line is
 # marked MET-GOV-002; every version-1 assertion keeps its meaning.
+# MET-GOV-003: the file is scoped to record version 3, which adds a ninth CONTRACT_AND_SOURCE prefix.
 
 from __future__ import annotations
 
@@ -279,6 +280,7 @@ DESIGN_PATHS = {
         P("diagnostics/"),
         P("reference-observer/"),
         P("release/"),
+        P("linux-probe-kit/"),  # MET-GOV-003: record version 3's ninth prefix (owner Q-PK-1)
     ],
     "REPOSITORY_ROOT": [
         E(name)

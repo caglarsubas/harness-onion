@@ -2,46 +2,40 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_evolution_surface_oracle.py",
-  "sha256": "b05a8f096958a45ebb3ef1dfb12c99e1af54525a891f8b902416500e2e0712d8"
+  "sha256": "173a0d1a0679cae5c8d79869bd48b1fe1888c40c13efc6ce2d1e5c9e4e86eb4a"
  },
  "oracle": {
-  "agentId": "a01314265d2f133ff",
+  "agentId": "afa81ffb1316bb856",
   "model": "claude-opus-5-5"
  },
  "operator": {
   "role": "LANE_SESSION",
-  "agentId": "d6fe1a25-8485-43f5-8c84-afc766817ada",
-  "lane": "parallel"
+  "agentId": "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+  "lane": "primary"
  },
  "author": {
   "agentIds": [
-   "d6fe1a25-8485-43f5-8c84-afc766817ada"
+   "0bcc06ab-c4db-4ff3-b31a-80c91104b334"
   ]
  },
- "briefSha256": "3c051223ad585fca3b4c170d7bf7a73a25da2d34b83c7a42f525ffc9c3c034c8",
- "candidateCommit": "45d818eea16b609fc5b26c26c087c7175ecda43a",
- "launched": "2026-10-22T12:42:04+08:00",
- "finished": "2026-10-22T16:33:16+08:00",
+ "briefSha256": "9485349b99344ebe3310f9eceb164f08b2c622890c483ce710cf53f07a5db519",
+ "candidateCommit": "5b3846ee0c26d4ffb025a1c08311e5f667b21cdd",
+ "launched": "2026-10-23T14:47:14+08:00",
+ "finished": "2026-10-23T14:51:25+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-RR2-ORACLE-RESUME; MON-RR2-ORACLE-SLIPS; Q-RR2-ORACLE-R1-SLIPS",
-  "date": "2026-10-22"
+  "ref": "MON-261-ORACLE-KEEP; MON-261-ORACLE-SLIPS",
+  "date": "2026-10-23"
  },
  "disclosures": [
-  "part 2 of the brief: scoping edits of MET-GOV-001's oracle file to the evolution surface record version 2 (before sha256 4d137309482811a2bad581bec474895dfdd7e338feff4bb368e0ffc7a4cde4cf), each marked MET-GOV-002; 508 tests, all passing",
-  "interruption: an API spend-limit stop after the inputs were read and before any file was written; the same agent was resumed at 2026-10-22T14:51:39+08:00, with no relaunch",
-  "interruption: an output-token-limit stop; the agent continued on the operator's word, with no file changed in between",
-  "operator relay: owner decision Q-RR2-NAMES (the published name-token table ships empty, with a local loader)",
-  "operator relay: monitor ruling Q-RR2-FROZEN (legacy oracle files frozen by path and file digest)",
-  "slip: one read of an allowed input with the Read tool instead of through the wrapper",
-  "slip: one message carried two Edit calls",
-  "three scratch probe scripts outside the test-run budget, run through the wrapper and then deleted; the tree probe used directories inside the scratch folder instead of pytest's tmp_path",
-  "finished is the time of the oracle's last write to its files, in the follow-up; its closing checks followed",
-  "operator relay after contract r1: finding RR2C1-9 (PACKET passes with PASS_FOR_PUSH only) and the monitor's ruling Q-RR2-ORACLE-SCOPE (a); the scoped follow-up ran against the r1 fix work tree on top of 0bc5dc1aa263206b94199412648d8d0849c6fe38, uncommitted at the time",
-  "follow-up edits: in tests/test_review_record_oracle.py, KIND_VERDICTS' PACKET passing set, the PACKET merge case and a new refusal case; in tests/test_evolution_surface_oracle.py, a comment marking the DATA_CLASSES line; each marked MET-GOV-002 r1, no assertion loosened",
-  "slip from the first round, unreported then: the GATE_CLASSES replacement dropped a space at DATA_CLASSES (= { became ={); marked in the follow-up",
-  "two read-only diagnostic commands in the follow-up (a cat option macOS lacks, and a git diff piped to grep that printed nothing)",
-  "candidateCommit (contract r2 NOTE RR2C2-6): 45d818ee, the fix commit that holds the oracle's scoped follow-up; the oracle ran on its tree before the operator's last vector, test and README edits, and the operator re-ran both oracle files on that tree before the commit (rc 0); the oracle's first run was against 9f88e824, where this file is not expected to pass"
+  "re-issued in place under owner/monitor Q-G3-1 (a) for MET-GOV-003 (record version 3); it supersedes the identity of MET-GOV-002's oracle agent (file before sha256 b05a8f096958a45ebb3ef1dfb12c99e1af54525a891f8b902416500e2e0712d8)",
+  "the edit: two added lines in tests/test_evolution_surface_oracle.py, each marked MET-GOV-003 (a scope comment, and linux-probe-kit/ as the ninth CONTRACT_AND_SOURCE prefix in the oracle's own design table); no line changed or removed; 508 tests, all passing; before the edit only test_record_class_matches_the_design[programme-CONTRACT_AND_SOURCE] failed, as the design predicted",
+  "probe control: with a probe file linux-probe-kit/probe.txt the file passes; with the new table line removed two tests fail and test_the_worktree_is_covered names the probe file; the probe was then removed",
+  "a previous oracle agent with the same brief died on an API connection reset before making any edit; this agent was a fresh relaunch",
+  "launched is derived from the agent's reported run duration; finished is the time of its last write to the oracle file",
+  "slips (MON-261-ORACLE-SLIPS): one read-only sed|awk pipe against the brief's no-pipes rule; about 650 KB of the first run's stderr reached the tool output, outside WORK; a README grep showed lines beyond the allowed paragraph (README text only); a heading grep showed the titles of the design's other sections",
+  "not checked by the oracle (carried to the c1 contract review): no pinned resolution row for linux-probe-kit/ beyond the path-set comparison",
+  "candidateCommit: 5b3846ee, a local scratch commit holding record version 3 (contract c1) and the edited oracle file, never pushed"
  ]
 }

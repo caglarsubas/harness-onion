@@ -9,6 +9,29 @@ Q-RR2-6 (b) adds the programme class GATE_REVIEW_PROCESS for the review-record v
 (`architecture/review-record/README.md`). The schema and the model do not change. The derived gate list grows from 27
 to 31 entries (the accepted group RR2 below).
 
+**Record version 3** (packet MET-GOV-003, the Linux probe kit's data directory; the owner's Q-PK-1, "New data directory
+(Recommended)": "A new top-level harness-onion data directory beside ci/linux-runner/, plus docs/linux-probe-kit/. One
+owner-approved evolution-surface amendment classifies it, and kit PRs are data after that"). These are the only changes:
+- `version` 3;
+- one prefix entry, `linux-probe-kit/`, appended to CONTRACT_AND_SOURCE.
+
+The schema and the model do not change, and the derived gate list stays at 31 entries. The vectors change only in
+`recordDigest`.
+
+**How the decision is read:**
+- "Beside ci/linux-runner/" means a top-level sibling of `ci/`. `ci/` is a gate prefix, and the PATHS invariant refuses
+  any data entry that starts with a gate prefix (vector I30), so the directory cannot sit inside it.
+- `docs/linux-probe-kit/` is already CONTRACT_AND_SOURCE through `docs/`, so it needs no rule.
+- `architecture/probe-kit-scope/` (slot 260) and `architecture/linux-probe-interface/` (slot 262) are already
+  CONTRACT_AND_SOURCE through `architecture/`, including their `review-history-*` files; only a `REVIEW_BRIEF*.md` or
+  `review-round*.json` file there would resolve to REVIEW_BRIEF or REVIEW_RECORD.
+
+**The oracle test.** MET-GOV-001's oracle test `tests/test_evolution_surface_oracle.py` was re-scoped to version 3 by an
+oracle agent (the monitor's Q-G3-1 (a)). Its identity,
+`architecture/review-record/oracle-identity-evolution-surface.json`, was re-issued in place with its own
+`candidateCommit`. The review-record README's `45d818ee` note describes MET-GOV-002's adoption of that identity, not
+this re-issue.
+
 ## What this contract is
 
 The contract fixes, as closed data with a standard-library reference model and replayable vectors, which roles may
@@ -252,7 +275,7 @@ Repository classes: data (approve and activate {LANE_MONITOR, OWNER}) and gate (
 
 | Class | Kind | Paths |
 |---|---|---|
-| `CONTRACT_AND_SOURCE` | data | `architecture/`, `scripts/`, `tests/`, `docs/`, `task-packets/`, `diagnostics/`, `reference-observer/`, `release/` |
+| `CONTRACT_AND_SOURCE` | data | `architecture/`, `scripts/`, `tests/`, `docs/`, `task-packets/`, `diagnostics/`, `reference-observer/`, `release/`, `linux-probe-kit/` (record version 3) |
 | `REPOSITORY_ROOT` | data | the root files no verify argv runs or the installed environment pins |
 | `GATE_CI` | gate | `ci/`, `.github/`, `pyproject.toml`, root `conftest.py` |
 | `GATE_SCHEMAS` | gate | `schemas/` |
