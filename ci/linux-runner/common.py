@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 import stat
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 LAUNCHER = "/opt/planeon/bin/harness-offline-launch"
 PYTHON = "/opt/planeon/python/3.12.14/bin/python3.12"
 FIREJAIL = "/usr/bin/firejail"
@@ -18,6 +18,15 @@ PROFILE = TRUST + "/linux-runner/firejail.profile"
 MANIFEST = TRUST + "/harness-runner-manifest.json"
 PUBLIC = TRUST + "/harness-runner-manifest.pub"
 POLICY = TRUST + "/linux-runner/policy.json"
+# MET-LINUX-009: the signed root-alias record, read only for build inputs v4 (its digest is in the signed policy).
+ROOT_ALIASES = TRUST + "/linux-runner/root-aliases.json"
+ROOT_ALIAS_SCHEMA = "planeon.linux-root-aliases/v1"
+ROOT_ALIAS_PATH = re.compile(r"/[A-Za-z0-9_][A-Za-z0-9_.-]{0,63}\Z")
+ROOT_ALIAS_MAXIMUM = 64 * 1024
+# Production parent of every root-level alias; source tests patch it to a temporary bridge.
+ALIAS_PARENT = "/"
+INPUTS_V3 = "planeon.linux-build-inputs/v3"
+INPUTS_V4 = "planeon.linux-build-inputs/v4"
 ANCHOR = TRUST + "/linux-runner/custody.json"
 PREFLIGHT = TRUST + "/harness-runner-preflight.json"
 HEX = re.compile(r"[0-9a-f]{64}\Z")
@@ -112,6 +121,12 @@ def identity(metadata):
 def trusted_entry(metadata):
     return (metadata.st_uid == metadata.st_gid == 0 and
             (stat.S_ISLNK(metadata.st_mode) or not metadata.st_mode & 0o022))
+
+
+def root_alias_custody(alias_meta, parent_meta):
+    """Rules 1-3 and 5's custody half: a root-owned, unlinked symlink directly in a root-owned, unwritable directory."""
+    require(stat.S_ISLNK(alias_meta.st_mode) and trusted_entry(alias_meta) and alias_meta.st_nlink == 1
+            and stat.S_ISDIR(parent_meta.st_mode) and trusted_entry(parent_meta), "root alias custody")
 
 
 def root_read(value, *, mode=None, maximum=32 * 1024 * 1024, allow_hardlinks=False):
@@ -232,7 +247,7 @@ def inventory(root, *, trusted=False, source=False, system=False):
     return sorted(entries, key=lambda entry: entry["path"].encode())
 
 
-def system_inventories(roots):
+def system_inventories(roots, root_aliases=()):
     """Inventory and resolve one closed union of root-owned system trees.
 
     The returned map is keyed by canonical absolute root. Every root's value is
@@ -321,6 +336,24 @@ def system_inventories(roots):
         require(stat.S_ISDIR(metadata.st_mode) and trusted_entry(metadata), "system bridge changed")
         nodes[bridge] = (Path(bridge), metadata, None)
 
+    # MET-LINUX-009: listed root-level aliases, already validated against the signed record (root_aliases()).
+    alias_nodes = {}
+    if root_aliases:
+        parent = Path(ALIAS_PARENT)
+        require(str(parent) in bridges, "root alias custody")
+        for alias in root_aliases:
+            require(alias["treeRoot"] in entries, "root alias tree not declared")
+            path = parent / alias["path"][1:]
+            try:
+                alias_meta, parent_meta = path.lstat(), parent.lstat()
+            except FileNotFoundError as exc:
+                raise Refused("root alias custody") from exc
+            root_alias_custody(alias_meta, parent_meta)
+            target = os.readlink(path)
+            require(target == alias["target"] and "\x00" not in target and 0 < len(os.fsencode(target)) <= 4096,
+                    "root alias target changed")
+            alias_nodes[str(path)] = (path, alias_meta, target, alias)
+
     def resolve(alias):
         pending = list(Path(alias).parts[1:])
         stack = []
@@ -354,6 +387,14 @@ def system_inventories(roots):
         require(identity(final_path.lstat()) == identity(final_meta), "system link target changed")
         return final
 
+    # Each alias resolves with every alias node excluded, so no alias chains through another (rule 6).
+    for path, (node_path, alias_meta, target, alias) in alias_nodes.items():
+        final = resolve(str(Path(ALIAS_PARENT) / target))
+        require(final == alias["treeRoot"], "root alias does not resolve to its tree")
+    for path, (node_path, alias_meta, target, alias) in alias_nodes.items():
+        nodes[path] = (node_path, alias_meta, target)
+        entries[alias["treeRoot"]].append({"kind": "rootAlias", "path": alias["path"], "target": target,
+                                           "resolvedPath": alias["treeRoot"]})
     for root, records in entries.items():
         for record in records:
             if record["kind"] == "symlink":
@@ -371,8 +412,13 @@ def input_roots(value):
 
 
 def validate_inputs(value):
-    closed(value, ("schemaVersion", "target", "tools", "caches", "systemTrees", "systemFiles", "source", "recipes"))
-    require(value["schemaVersion"] == "planeon.linux-build-inputs/v3", "build input version")
+    v4 = type(value) is dict and value.get("schemaVersion") == INPUTS_V4
+    closed(value, ("schemaVersion", "target", "tools", "caches", "systemTrees", "systemFiles", "source", "recipes",
+                   *(("rootAliases",) if v4 else ())))
+    require(value["schemaVersion"] in (INPUTS_V3, INPUTS_V4), "build input version")
+    if v4:
+        closed(value["rootAliases"], ("recordSha256",))
+        sha(value["rootAliases"]["recordSha256"])
     target = value["target"]
     closed(target, ("os", "architecture", "libc", "libcVersion", "execution", "imageDigest"))
     require(target["os"] == "linux" and target["architecture"] in ("amd64", "arm64") and
@@ -434,3 +480,35 @@ def validate_inputs(value):
     # Multiple tools may live in one exhaustive inventory; distinct roots may not overlap.
     disjoint(sorted(set(roots)))
     return value
+
+
+def root_aliases(raw, inputs):
+    """The one shared record validator (MET-LINUX-009): None for v3 inputs; exact canonical bytes for v4."""
+    if inputs["schemaVersion"] != INPUTS_V4:
+        require(raw is None, "root alias record for v3 inputs")
+        return ()
+    require(type(raw) is bytes and len(raw) <= ROOT_ALIAS_MAXIMUM, "root alias record missing or oversized")
+    require(digest(raw) == inputs["rootAliases"]["recordSha256"], "root alias record digest")
+    value = parse(raw)
+    require(canonical(value) == raw, "root alias record not canonical")
+    closed(value, ("schemaVersion", "imageDigest", "aliases"))
+    require(value["schemaVersion"] == ROOT_ALIAS_SCHEMA, "root alias record version")
+    require(value["imageDigest"] == inputs["target"]["imageDigest"], "root alias image differs")
+    aliases = value["aliases"]
+    require(type(aliases) is list and aliases, "root alias list empty")
+    # Lexical: no declared tool, cache or system root, and no ancestor (bridge) of one, may be an alias path.
+    roots = input_roots(inputs)
+    reserved = set(roots) | {str(parent) for root in roots for parent in Path(root).parents}
+    previous, trees = None, set()
+    for alias in aliases:
+        closed(alias, ("path", "target", "treeRoot"))
+        path, target, tree = alias["path"], alias["target"], alias["treeRoot"]
+        require(type(path) is str and ROOT_ALIAS_PATH.fullmatch(path) is not None and path not in reserved,
+                "root alias path")
+        require(previous is None or path.encode() > previous.encode(), "root alias order or duplicate")
+        require(type(target) is str and target and "\x00" not in target and len(os.fsencode(target)) <= 4096,
+                "root alias target")
+        require(tree in {item["root"] for item in inputs["systemTrees"]} and tree not in trees, "root alias tree")
+        previous = path
+        trees.add(tree)
+    return tuple(aliases)

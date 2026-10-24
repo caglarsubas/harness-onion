@@ -1,0 +1,80 @@
+{
+ "schemaVersion": "planeon.internal.linux-root-aliases-status/v1",
+ "workItem": "LINUX-ROOT-ALIASES (the signed root-alias contract for the native runner kit)",
+ "packet": "MET-LINUX-009",
+ "slot": null,
+ "slotNote": "slot 263 goes to whichever of LPK-1 and MET-LINUX-009 reaches mechanics first, on the monitor's word",
+ "status": "CANDIDATE",
+ "baseMain": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+ "design": {
+  "path": "DESIGN.r4.md (kept with the lane's records)",
+  "sha256": "453245147629bbd93d928b3ab893388ce6603a1c3c84ec0956b4212b0de6ae91",
+  "verdict": "PASS_FOR_BUILD"
+ },
+ "gate": {
+  "classes": [
+   "GATE_CI",
+   "GATE_VERIFIER_DOCS",
+   "GATE_REVIEW_PROCESS"
+  ],
+  "prApprovers": [
+   "OWNER"
+  ],
+  "note": "gate material: the owner's per-PR, head-bound merge"
+ },
+ "series": {
+  "contract": "MET-LINUX-009/contract",
+  "packet": "MET-LINUX-009/packet",
+  "registry": "architecture/review-record/briefs.json, the packet's own rider (MON-RA-SERIES)"
+ },
+ "allowedPathsDerivation": {
+  "rule": "MON-RA2-NEXT (binding before the CONTRACT round)",
+  "scope": "the named set, plus the chain tools' bump set (the predecessor's modified chain files and its new layer and test), plus the registry rider",
+  "recordDigest": "sha256:b184ee6aa2b808e5b4b2206ad93f1490697aca40fc6ebef7efbf1c29a38dd4b9",
+  "atBase": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+  "predecessorRange": [
+   "b8db30e5dfc4c820b70553cd1439359d73f4573a",
+   "0ffa7db076a92e8bb341db4867557b894ecb5b27"
+  ],
+  "tool": {
+   "name": "derive_full_allowed.py (kept with the lane's records)",
+   "sha256": "d3e276c8916ef3ea0f15381b578431bebc5a580b334a3128c2bb61a1cf694238"
+  },
+  "counts": {
+   "named": 23,
+   "bump": 234,
+   "rider": 1,
+   "union": 254
+  },
+  "byClass": {
+   "CONTRACT_AND_SOURCE": 245,
+   "GATE_CI": 3,
+   "GATE_REVIEW_PROCESS": 1,
+   "GATE_VERIFIER_DOCS": 2,
+   "ORACLE_TESTS": 1,
+   "REVIEW_BRIEF": 1,
+   "REVIEW_RECORD": 1
+  },
+  "pathListSha256": "23c29fa68204a786e0e152c6bce27dc432014328d8f284029c8478dd8ca72a6a",
+  "result": {
+   "prApprovers": [
+    "OWNER"
+   ],
+   "unclassified": 0,
+   "caseVariant": 0
+  },
+  "pass": true,
+  "note": "re-derived at the mechanics base if main moves before the slot"
+ },
+ "oracle": {
+  "test": "tests/test_met_linux_009_oracle.py",
+  "identity": "architecture/linux-root-aliases/oracle-identity.json",
+  "result": "PENDING"
+ },
+ "reviews": [],
+ "nonClaims": [
+  "SOURCE_ONLY: no Linux host PASS, installation, signature or listener registration is claimed.",
+  "The record's imageDigest check is declarative; the kit cannot attest the booted image.",
+  "v3 inputs and their inventories are unchanged; v4 is opt-in through a signed record."
+ ]
+}
