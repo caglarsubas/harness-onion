@@ -3,15 +3,27 @@
   "packet": "MET-ENFORCE-042",
   "workItem": "the I01 digest-contract successor (LPK-1 step S1, with W1 and S2)",
   "series": "MET-ENFORCE-042/contract",
-  "candidate": "c1",
+  "candidate": "c2",
   "baseMain": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
-  "inTreeRounds": [],
+  "inTreeRounds": [
+    {
+      "round": 1,
+      "record": "architecture/policy-observation-digests-v2/review-round1.json",
+      "recordSha256": "b25518c92858807cae84a069f85b39e6323a68c622f8aa3189282f7d153a8c4d",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round1.json",
+      "identitySha256": "67e109dcafee8767052a4d9c59082e0d91f59de2a3bbacbc4d632592b09145c7"
+    }
+  ],
   "roundNumbering": "The in-tree MET-ENFORCE-042/contract rounds start at round 1, the first CONTRACT round on the candidate, and run 1, 2, 3 with no gap. The TOOLS design rounds below are design history, cited by sha256; none is numbered as an in-tree round.",
   "rulings": {
     "MON-I01S-13": "**Q-I01S-13:** in-tree CONTRACT rounds from round 1, plus one D5a oracle and its identity, as at LPK-1.",
     "MON-I01S-CAP": "If it returns PASS_FOR_BUILD, or only MINOR and NOTE findings, those findings become binding build rules B-I01S-n under the cap, and the design closes PASS_FOR_BUILD with no r4.",
     "MON-I01S-DESIGN-CLOSED": "Q-I01S-DR3-1: KEEP round 3, ref MON-I01S-DR3-KEEP. Q-I01S-DR3-2: the design CLOSES PASS_FOR_BUILD under MON-I01S-CAP on rev 3 (806f9dee), ref MON-I01S-DESIGN-CLOSED. B-I01S-1 is DR3-F1, verbatim. The record's verdict stays CHANGES_REQUIRED in the brief's vocabulary. Q-I01S-DR3-3: GO to write BUILD_RULES.md and the contract-build brief, ref MON-I01S-NEXT. All three are decided under the owner's standing delegation.",
-    "MON-I01S-DR2-CARRIED": "From now on, carried items take ADDRESSED with \"carried to …\" in the note."
+    "MON-I01S-DR2-CARRIED": "From now on, carried items take ADDRESSED with \"carried to …\" in the note.",
+    "MON-I01S-CR1-KEEP": "Q-I01S-CR1-1: KEEP r1, ref MON-I01S-CR1-KEEP. Q-C1-1: (a), ref MON-I01S-C1-1-A. Q-C1-2: keep, ref MON-I01S-C1-2-KEEP. Q-I01S-C2-GO: GO, ref MON-I01S-C2-GO. All four are decided under the owner's standing delegation.",
+    "MON-I01S-C1-1-A": "**State the exact replay scope:** R10 replays every helper and vector, and of the complete positive, v1's five checks plus the sealed-namespace equality. Profile v2's validate and precondition stay harness-side, in the v2 model's replay and the v2 layer test.",
+    "MON-I01S-C1-2-KEEP": "**C1-2:** fold the optional §1 sentence, with refusal texts unchanged.",
+    "MON-I01S-C2-GO": "the edge v11 README row and notes[3] follow the README bytes; status and source-index gain r1."
   },
   "design": {
     "revision": 3,

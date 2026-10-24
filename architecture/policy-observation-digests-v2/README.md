@@ -1,6 +1,6 @@
 # The I01 digest contract v2 (MET-ENFORCE-042)
 
-Schema `planeon.internal.policy-observation-digests/v2`. **Status: candidate c1 under the `MET-ENFORCE-042/contract`
+Schema `planeon.internal.policy-observation-digests/v2`. **Status: candidate c2 under the `MET-ENFORCE-042/contract`
 review; not adopted.** This is the candidate status line the contract is reviewed with; `status.json` governs.
 DATA_CHECK_ONLY: the reference model returns values, refusal texts or an empty error list, never a protected handle or
 native acceptance, as I06 v4 and admission v4 do.
@@ -95,7 +95,8 @@ BD = `architecture/backend-distribution/README.md`; NP4R = `architecture/native-
   its signed configuration carries or its successor must carry, a record value, or a capture verdict. The capture gate
   needs one value the capture engine does not hold today: each set's own scheduled start on the monotonic clock,
   recorded with the set (section 3.3). It needs no new permission and no new read.
-- **Scope limits (refused, not residual):**
+- **Scope limits (refused, not residual):** "v1" in these limits names the NetworkPolicy form that v1 and v2 share
+  until the List-form revision.
   - **one NetworkPolicy** in the qualification namespace in v1 (section 4.2); a release that binds several takes a List
     form for `networkPolicy` alone, through a contract revision;
   - **selector-free NetworkPolicies only** in v1 (section 4.4);
@@ -608,7 +609,12 @@ The model replays every vector: `python3 -I -B scripts/policy_observation_digest
   the capture gate at every answer, against the latest completed set, the 90 s bound and the wall age; it compares the
   values with the configuration successor's signed values; it replays this contract's vectors and, with profile v2's
   registered `vectors.json` (W3), PV's binding and observation cases re-derived for profile v2 (section 12); and it
-  carries the required I01Binding pin and the R1-1 send-path hardening.
+  carries the required I01Binding pin and the R1-1 send-path hardening. It replays every helper vector and every vector
+  and, of the complete positive, v1's five checks plus the sealed-namespace equality; profile v2's `validate` and
+  `precondition` on the complete positive stay harness-side, in the v2 model's replay and the v2 layer test, as VPC's
+  `validate_profile` with profile v1's schema was under v1, so it needs neither profile v2's `profile.schema.json` nor
+  `proxy_profile_v2`; if HE-004-I01B4 ever needs profile validation in R10, that is a new decision and a wider W3, not
+  part of this contract.
 - **The packet's v2 layer test** (`tests/test_policy_observation_digests_v2.py`), which the pre-check and verify run,
   executes section 10's three W1 assertions on the complete positive (VPO's `validate_messages`; profile v2's
   `validate` and `precondition`; and, for each of ResourceQuota, LimitRange and ServiceAccount, VPO's refusal and

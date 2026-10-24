@@ -18,7 +18,7 @@ verbatim: Q-I01S-3, MON-I01S-D3 and the F6 ruling.
 |---|---|---|---|---|---|---|---|
 | `architecture/policy-observation-digests-v2/definitions.json` | `fef08fddfb94…` | 36,135 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/definitions.json` | REGISTERED_BEFORE_USE |
 | `architecture/policy-observation-digests-v2/vectors.json` | `68eab4709431…` | 602,663 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/vectors.json` | REGISTERED_BEFORE_USE |
-| `architecture/policy-observation-digests-v2/README.md` | `493a4c8cb8fe…` | 59,409 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/README.md` | REGISTERED_BEFORE_USE |
+| `architecture/policy-observation-digests-v2/README.md` | `6d70377e746d…` | 60,055 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/README.md` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/README.md` | `f7794aa857aa…` | 40,789 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/README.md` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/vectors.json` | `5706b1a8df5c…` | 316,811 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/vectors.json` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/admission-manifests/planeon-a2.json` | `92c21612304c…` | 8,322 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/admission-manifests/planeon-a2.json` | REGISTERED_BEFORE_USE |
@@ -37,16 +37,21 @@ published files do.
 `host-enforcement/contracts/i01-v2/proxy-profile-v2-vectors.json`, beside the I01 wire's schema and vectors and clear of
 the contract's own `vectors.json`. The edge rule binds bytes, modes and versions, not the label.
 
-**Replay scope.** With these rows R10 replays the contract's own vectors (which need nothing beyond the three contract
-files and the frozen I06 inputs R10 already embeds), renders the sealed A2 set with admission v4 against v4's published
-`planeon-a2.json`, and, with profile v2's vectors (W3), replays the wire vectors' binding and observation cases with
-profile v2's positive once they are re-derived for it (the namespace members, `observation.quota` and
-`binding.profileDigest`).
+**Replay scope.** With these rows R10 replays every helper vector and every vector of the contract and, of its complete
+positive, v1's five checks plus the sealed-namespace equality, which need nothing beyond the three contract files and
+the frozen I06 inputs R10 already embeds; profile v2's `validate` and `precondition` on the complete positive stay
+harness-side, in the v2 model's replay and the packet's v2 layer test. R10 also renders the sealed A2 set with admission
+v4 against v4's published `planeon-a2.json`, and, with profile v2's vectors (W3), replays the wire vectors' binding and
+observation cases with profile v2's positive once they are re-derived for it (the namespace members, `observation.quota`
+and `binding.profileDigest`).
 
-**Not registered.** Profile v2's `profile.schema.json`, `README.md` and `status.json`, admission v4's `allowlists.json`
-and `status.json`, and the models (`scripts/policy_observation_digests_v2.py`, `scripts/admission_semantics_v4.py`,
-`scripts/proxy_profile_v2.py`): models are pinned by file sha256 or by behaviour vectors, not copied. The status record,
-the source index and the review records are packet records, not consumer artefacts.
+**Not registered.** Profile v2's `profile.schema.json`: the replay above needs neither it nor `proxy_profile_v2`,
+because profile v2's `validate` and `precondition` on the complete positive stay harness-side, as `validate_profile`
+with profile v1's schema (PPS, which edge record v10 left unregistered) was under v1. Profile v2's `README.md` and
+`status.json`, admission v4's `allowlists.json` and `status.json`, and the models
+(`scripts/policy_observation_digests_v2.py`, `scripts/admission_semantics_v4.py`, `scripts/proxy_profile_v2.py`): models
+are pinned by file sha256 or by behaviour vectors, not copied. The status record, the source index and the review
+records are packet records, not consumer artefacts.
 
 **Schema.** No key or status is added, so the record keeps schema v2. `ownerDecision`, `rules`, `notArtifacts`,
 `statuses` and `ownerDecisions` are carried from v10 unchanged; `artifact`, `supersedes` and `notes` are this record's
