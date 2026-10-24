@@ -1,0 +1,915 @@
+{
+  "schemaVersion": "planeon.internal.linux-probe-interface/v1-draft",
+  "source": {
+    "repository": "mas-harness-conformance-labs",
+    "commit": "c17bcfe32df26eab13844b73f65666bb0fa4e0a0",
+    "tree": "9c2b2b8a9b064ef6cbffec495a903a4e6ef7afb3",
+    "readAt": "e1b8bb8d3306311c0cc854419629e1a380022841"
+  },
+  "cases": [
+    {
+      "id": "HOST_ISOLATION_NEGATIVES",
+      "axis": "SECURITY",
+      "path": "/v1/linux-baseline/host-isolation-negatives",
+      "checks": [
+        "ipv4-denied",
+        "ipv6-denied",
+        "dns-denied",
+        "loopback-denied",
+        "descendants-denied",
+        "warm-roots-hidden",
+        "credentials-hidden",
+        "sockets-denied",
+        "packet-immutable"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "LINUX_TARGET_BUILD",
+      "axis": "DEPLOYMENT",
+      "path": "/v1/linux-baseline/linux-target-build",
+      "checks": [
+        "target-local-build",
+        "native-dependencies",
+        "linux-executable",
+        "cache-pinned",
+        "sbom-pinned",
+        "no-downloads"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "FULL_PREDECESSOR_REGRESSION",
+      "axis": "ASSURANCE",
+      "path": "/v1/linux-baseline/full-predecessor-regression",
+      "checks": [
+        "full-inventory",
+        "all-suites-executed",
+        "no-deselection",
+        "no-skip-or-xfail"
+      ],
+      "regressionRepositories": [
+        "contracts",
+        "control",
+        "conformance"
+      ]
+    },
+    {
+      "id": "CONTROL_CONTAINER_STARTUP",
+      "axis": "RUNTIME",
+      "path": "/v1/linux-baseline/control-container-startup",
+      "checks": [
+        "standalone-started",
+        "health-ready",
+        "no-downloads",
+        "telemetry-disabled"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "POSTGRES_MIGRATION_AND_RLS",
+      "axis": "RUNTIME",
+      "path": "/v1/linux-baseline/postgres-migration-and-rls",
+      "checks": [
+        "forward-migration",
+        "idempotent-migration",
+        "cross-tenant-denied",
+        "fixture-only"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "DURABLE_RESTART",
+      "axis": "RUNTIME",
+      "path": "/v1/linux-baseline/durable-restart",
+      "checks": [
+        "restart-completed",
+        "records-persisted",
+        "tenant-boundaries-preserved"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "ARBITRARY_NON_ROOT_UID",
+      "axis": "SECURITY",
+      "path": "/v1/linux-baseline/arbitrary-non-root-uid",
+      "checks": [
+        "arbitrary-nonroot-uid",
+        "capabilities-dropped",
+        "seccomp-enforced",
+        "no-fixed-home"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "READ_ONLY_ROOT_FILESYSTEM",
+      "axis": "SECURITY",
+      "path": "/v1/linux-baseline/read-only-root-filesystem",
+      "checks": [
+        "root-read-only",
+        "declared-volumes-only",
+        "no-privilege-escalation"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "KUBERNETES_SMOKE",
+      "axis": "DEPLOYMENT",
+      "path": "/v1/linux-baseline/kubernetes-smoke",
+      "checks": [
+        "namespace-pinned",
+        "quota-pinned",
+        "admission-enforced",
+        "readiness-passed",
+        "run-labelled-cleanup"
+      ],
+      "regressionRepositories": []
+    },
+    {
+      "id": "DEFAULT_DENY_NETWORK",
+      "axis": "SECURITY",
+      "path": "/v1/linux-baseline/default-deny-network",
+      "checks": [
+        "undeclared-egress-denied",
+        "metadata-denied",
+        "proxy-only",
+        "policy-not-bypassable"
+      ],
+      "regressionRepositories": []
+    }
+  ],
+  "request": {
+    "schemaVersion": "harness.planeon.ai/linux-probe-request/v1alpha1",
+    "document": {
+      "mediaType": "application/json",
+      "maxBytes": 16384,
+      "encoding": {
+        "form": "canonical-json",
+        "gaps": [
+          "G3"
+        ]
+      },
+      "topLevel": "object",
+      "maxDepth": 8,
+      "depthCounting": "the document is depth 0; each object key, member value and array item is one level deeper than its container",
+      "maxMembers": 4096,
+      "keyTypes": [
+        "string"
+      ],
+      "valueTypes": [
+        "string",
+        "integer",
+        "boolean",
+        "null",
+        "object",
+        "array"
+      ],
+      "integerRange": [
+        -9007199254740991,
+        9007199254740991
+      ],
+      "refusals": [
+        {
+          "code": "SESSION_SIZE_EXCEEDED",
+          "rules": [
+            "the document bytes exceed maxBytes",
+            "a string is longer than maxBytes",
+            "a lower-bound size estimate exceeds maxBytes: each string counts its length + 2, each object or array 2 + max(0, members - 1) plus one per object member (so an empty object or array counts 2), each other value 1",
+            "the canonical encoding exceeds maxBytes"
+          ]
+        },
+        {
+          "code": "SESSION_DEPTH_EXCEEDED",
+          "rules": [
+            "nesting is deeper than maxDepth, counted as depthCounting states"
+          ]
+        },
+        {
+          "code": "SESSION_COLLECTION_EXCEEDED",
+          "rules": [
+            "an object or array has more than maxMembers members"
+          ]
+        },
+        {
+          "code": "SESSION_TYPE_INVALID",
+          "rules": [
+            "an object key is not a string",
+            "a value is not a string, integer, boolean, null, object or array (a floating-point number is refused)",
+            "an integer is outside integerRange",
+            "the top-level value is not an object"
+          ]
+        },
+        {
+          "code": "SESSION_DATA_MALFORMED",
+          "rules": [
+            "decoding or encoding the document fails with a value, type, overflow or recursion error"
+          ]
+        }
+      ],
+      "gaps": [
+        "G6"
+      ]
+    },
+    "members": [
+      {
+        "name": "schemaVersion",
+        "type": "string",
+        "form": "constant",
+        "const": "harness.planeon.ai/linux-probe-request/v1alpha1",
+        "source": {
+          "input": "fixed"
+        }
+      },
+      {
+        "name": "operation",
+        "type": "string",
+        "form": "enum",
+        "enum": [
+          "HOST_ISOLATION_NEGATIVES",
+          "LINUX_TARGET_BUILD",
+          "FULL_PREDECESSOR_REGRESSION",
+          "CONTROL_CONTAINER_STARTUP",
+          "POSTGRES_MIGRATION_AND_RLS",
+          "DURABLE_RESTART",
+          "ARBITRARY_NON_ROOT_UID",
+          "READ_ONLY_ROOT_FILESYSTEM",
+          "KUBERNETES_SMOKE",
+          "DEFAULT_DENY_NETWORK"
+        ],
+        "source": {
+          "input": "caseId"
+        }
+      },
+      {
+        "name": "endpointId",
+        "type": "string",
+        "form": "id",
+        "source": {
+          "input": "plan",
+          "member": "endpointId"
+        },
+        "gaps": [
+          "G2"
+        ]
+      },
+      {
+        "name": "namespace",
+        "type": "string",
+        "form": "id",
+        "source": {
+          "input": "plan",
+          "member": "namespace"
+        },
+        "gaps": [
+          "G2"
+        ]
+      },
+      {
+        "name": "method",
+        "type": "string",
+        "form": "constant",
+        "const": "POST",
+        "source": {
+          "input": "fixed"
+        }
+      },
+      {
+        "name": "path",
+        "type": "string",
+        "form": "path",
+        "enum": [
+          "/v1/linux-baseline/host-isolation-negatives",
+          "/v1/linux-baseline/linux-target-build",
+          "/v1/linux-baseline/full-predecessor-regression",
+          "/v1/linux-baseline/control-container-startup",
+          "/v1/linux-baseline/postgres-migration-and-rls",
+          "/v1/linux-baseline/durable-restart",
+          "/v1/linux-baseline/arbitrary-non-root-uid",
+          "/v1/linux-baseline/read-only-root-filesystem",
+          "/v1/linux-baseline/kubernetes-smoke",
+          "/v1/linux-baseline/default-deny-network"
+        ],
+        "derivation": "\"/v1/linux-baseline/\" + the case id lowercased with \"_\" replaced by \"-\"",
+        "source": {
+          "input": "caseId"
+        }
+      },
+      {
+        "name": "runNonce",
+        "type": "string",
+        "form": "id",
+        "source": {
+          "input": "envelope",
+          "member": "nonce"
+        },
+        "gaps": [
+          "G2"
+        ]
+      },
+      {
+        "name": "architecture",
+        "type": "string",
+        "form": "enum",
+        "enum": [
+          "amd64",
+          "arm64"
+        ],
+        "source": {
+          "input": "plan",
+          "member": "target.architecture"
+        }
+      },
+      {
+        "name": "probeDigest",
+        "type": "string",
+        "form": "digest",
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "patternRead": false,
+        "source": {
+          "input": "plan",
+          "member": "probes.<caseId>.probeDigest"
+        },
+        "gaps": [
+          "G1",
+          "G4"
+        ]
+      },
+      {
+        "name": "commandDigest",
+        "type": "string",
+        "form": "digest",
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "patternRead": false,
+        "source": {
+          "input": "plan",
+          "member": "probes.<caseId>.commandDigest"
+        },
+        "gaps": [
+          "G1",
+          "G4"
+        ]
+      }
+    ],
+    "inputsCopied": {
+      "envelope": [
+        "nonce"
+      ],
+      "capacity": [],
+      "plan": [
+        "endpointId",
+        "namespace",
+        "target.architecture",
+        "probes.<caseId>.probeDigest",
+        "probes.<caseId>.commandDigest"
+      ]
+    }
+  },
+  "receipt": {
+    "document": {
+      "mediaType": "application/json",
+      "maxBytes": 4194304,
+      "encoding": {
+        "form": "canonical-json",
+        "gaps": [
+          "G3"
+        ]
+      },
+      "topLevel": "object",
+      "maxDepth": 8,
+      "depthCounting": "the document is depth 0; each object key, member value and array item is one level deeper than its container",
+      "maxMembers": 4096,
+      "keyTypes": [
+        "string"
+      ],
+      "valueTypes": [
+        "string",
+        "integer",
+        "boolean",
+        "null",
+        "object",
+        "array"
+      ],
+      "integerRange": [
+        -9007199254740991,
+        9007199254740991
+      ],
+      "refusals": [
+        {
+          "code": "SESSION_SIZE_EXCEEDED",
+          "rules": [
+            "the document bytes exceed maxBytes",
+            "a string is longer than maxBytes",
+            "a lower-bound size estimate exceeds maxBytes: each string counts its length + 2, each object or array 2 + max(0, members - 1) plus one per object member (so an empty object or array counts 2), each other value 1",
+            "the canonical encoding exceeds maxBytes"
+          ]
+        },
+        {
+          "code": "SESSION_DEPTH_EXCEEDED",
+          "rules": [
+            "nesting is deeper than maxDepth, counted as depthCounting states"
+          ]
+        },
+        {
+          "code": "SESSION_COLLECTION_EXCEEDED",
+          "rules": [
+            "an object or array has more than maxMembers members"
+          ]
+        },
+        {
+          "code": "SESSION_TYPE_INVALID",
+          "rules": [
+            "an object key is not a string",
+            "a value is not a string, integer, boolean, null, object or array (a floating-point number is refused)",
+            "an integer is outside integerRange",
+            "the top-level value is not an object"
+          ]
+        },
+        {
+          "code": "SESSION_DATA_MALFORMED",
+          "rules": [
+            "decoding or encoding the document fails with a value, type, overflow or recursion error"
+          ]
+        }
+      ],
+      "gaps": [
+        "G6",
+        "G7"
+      ]
+    },
+    "statuses": [
+      "PASS",
+      "FAIL",
+      "NOT_RUN_ENV_UNAVAILABLE"
+    ],
+    "repositories": [
+      "contracts",
+      "control",
+      "conformance"
+    ],
+    "inventory": {
+      "count": 10,
+      "ordered": true
+    },
+    "fields": [
+      {
+        "name": "caseId",
+        "type": "string",
+        "form": "enum",
+        "enum": [
+          "HOST_ISOLATION_NEGATIVES",
+          "LINUX_TARGET_BUILD",
+          "FULL_PREDECESSOR_REGRESSION",
+          "CONTROL_CONTAINER_STARTUP",
+          "POSTGRES_MIGRATION_AND_RLS",
+          "DURABLE_RESTART",
+          "ARBITRARY_NON_ROOT_UID",
+          "READ_ONLY_ROOT_FILESYSTEM",
+          "KUBERNETES_SMOKE",
+          "DEFAULT_DENY_NETWORK"
+        ],
+        "source": {
+          "input": "probe"
+        },
+        "echoes": "operation"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "form": "enum",
+        "enum": [
+          "PASS",
+          "FAIL",
+          "NOT_RUN_ENV_UNAVAILABLE"
+        ],
+        "source": {
+          "input": "probe"
+        },
+        "gaps": [
+          "G8"
+        ]
+      },
+      {
+        "name": "observedAt",
+        "type": "string",
+        "form": "time",
+        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$",
+        "patternRead": true,
+        "source": {
+          "input": "probe"
+        },
+        "gaps": [
+          "G11"
+        ]
+      },
+      {
+        "name": "runNonce",
+        "type": "string",
+        "form": "id",
+        "source": {
+          "input": "probe"
+        },
+        "echoes": "runNonce",
+        "gaps": [
+          "G2"
+        ]
+      },
+      {
+        "name": "probeDigest",
+        "type": "string",
+        "form": "digest",
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "patternRead": false,
+        "source": {
+          "input": "probe"
+        },
+        "echoes": "probeDigest",
+        "gaps": [
+          "G1",
+          "G4"
+        ]
+      },
+      {
+        "name": "commandDigest",
+        "type": "string",
+        "form": "digest",
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "patternRead": false,
+        "source": {
+          "input": "probe"
+        },
+        "echoes": "commandDigest",
+        "gaps": [
+          "G1",
+          "G4"
+        ]
+      },
+      {
+        "name": "outputDigest",
+        "type": "string",
+        "form": "digest",
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "patternRead": false,
+        "source": {
+          "input": "probe"
+        },
+        "binding": "R12 canonical_digest(output, \"planeon.linux-probe-output/v1alpha1\"): the digest of this receipt's output member in canonical form under that domain tag",
+        "gaps": [
+          "G1",
+          "G3"
+        ]
+      },
+      {
+        "name": "output",
+        "type": "object",
+        "form": "object",
+        "source": {
+          "input": "probe"
+        },
+        "valueForm": "receipt.output"
+      }
+    ],
+    "output": {
+      "members": [
+        {
+          "name": "checks",
+          "type": "object",
+          "form": "object",
+          "keysFrom": "cases[].checks: a key outside the case's check names is refused; that every check name is present is inferred from the closed() calls (linux_readiness.py:71, 190; live_session.py:207)",
+          "valueEnum": [
+            "PASS",
+            "FAIL",
+            "NOT_RUN_ENV_UNAVAILABLE"
+          ],
+          "gaps": [
+            "G15"
+          ]
+        },
+        {
+          "name": "regressions",
+          "type": "object",
+          "form": "object",
+          "keysFrom": "cases[].regressionRepositories: a key outside the case's listed repositories is refused, so the object is empty when the list is empty; that every listed repository is present is inferred from the closed() calls (linux_readiness.py:71, 193; live_session.py:212)",
+          "valueForm": "receipt.output.regression",
+          "gaps": [
+            "G15"
+          ]
+        }
+      ],
+      "regression": {
+        "fields": [
+          {
+            "name": "inventoryDigest",
+            "type": "string",
+            "form": "digest",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "patternRead": false,
+            "gaps": [
+              "G1",
+              "G5"
+            ]
+          },
+          {
+            "name": "collected",
+            "type": "integer",
+            "form": "count",
+            "minimum": 0,
+            "maximum": 10000000,
+            "gaps": [
+              "G9"
+            ]
+          },
+          {
+            "name": "executed",
+            "type": "integer",
+            "form": "count",
+            "minimum": 0,
+            "maximum": 10000000,
+            "gaps": [
+              "G9"
+            ]
+          },
+          {
+            "name": "skipped",
+            "type": "integer",
+            "form": "count",
+            "minimum": 0,
+            "maximum": 10000000,
+            "gaps": [
+              "G9"
+            ]
+          },
+          {
+            "name": "failed",
+            "type": "integer",
+            "form": "count",
+            "minimum": 0,
+            "maximum": 10000000,
+            "gaps": [
+              "G9"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "http": {
+    "transport": {
+      "protocol": "HTTPS",
+      "tlsVersion": "TLSv1.3",
+      "alpn": "http/1.1",
+      "sessionResumption": false,
+      "sessionTickets": false,
+      "compression": false,
+      "mutualTls": true,
+      "serverIdentity": "the server certificate must match the selected endpoint's tls.serverName",
+      "serverCertificate": {
+        "dnsSubjectAltName": "the client requires the server certificate to carry the selected endpoint's tls.serverName as a DNS subjectAltName; there is no common-name fallback",
+        "wildcardSubjectAltName": "the client refuses a server certificate with any subjectAltName that contains \"*\"",
+        "publicKeyPinned": "the client requires the server certificate's public key to match the pin it holds for the selected endpoint",
+        "chainVerified": "the client requires the server chain to verify against the CA it is configured with, under strict X.509 checks"
+      },
+      "identityGaps": [
+        "G14"
+      ],
+      "requestsPerConnection": 1,
+      "maxReceivedBytesPerConnection": 8388608,
+      "codes": [
+        {
+          "code": "TLS_PROTOCOL_INVALID",
+          "rules": [
+            "the negotiated protocol version is not TLSv1.3",
+            "the TLS session was resumed",
+            "the negotiated ALPN protocol is not http/1.1"
+          ]
+        },
+        {
+          "code": "TLS_EOF_OR_SIZE",
+          "rules": [
+            "the stream ends while the TLS layer awaits more bytes",
+            "more than 8388608 bytes are received on one connection"
+          ]
+        }
+      ]
+    },
+    "request": {
+      "requestLine": "POST <request.path> HTTP/1.1",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Length",
+          "value": "decimal byte length of the body",
+          "pattern": "^(?:0|[1-9][0-9]{0,6})$"
+        },
+        {
+          "name": "Connection",
+          "value": "close"
+        },
+        {
+          "name": "Host",
+          "value": "the selected endpoint's tls.serverName",
+          "pattern": "^[A-Za-z0-9.:-]{1,253}$",
+          "gaps": [
+            "G12"
+          ]
+        }
+      ],
+      "body": "the probe request document (request.document) as canonical JSON bytes",
+      "minBodyBytes": 1,
+      "maxBodyBytes": 16384
+    },
+    "response": {
+      "statusLine": "HTTP/1.1 200 OK",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Length",
+          "value": "decimal byte length of the body",
+          "pattern": "^(?:0|[1-9][0-9]{0,6})$"
+        },
+        {
+          "name": "Connection",
+          "value": "close"
+        }
+      ],
+      "body": "one per-case receipt document (receipt.document) as canonical JSON bytes",
+      "minBodyBytes": 1,
+      "maxBodyBytes": 4194304,
+      "endOfStream": "after the body the server sends a TLS close_notify and nothing more; a bare TCP close is refused as TLS_EOF_OR_SIZE"
+    },
+    "headerRules": {
+      "lineSeparator": "\r\n",
+      "terminator": "\r\n\r\n",
+      "fieldSeparator": ": ",
+      "maxHeaderBlockBytes": 16384,
+      "maxLines": 32,
+      "nameCase": "insensitive",
+      "allowedNames": [
+        "host",
+        "content-type",
+        "content-length",
+        "connection"
+      ],
+      "duplicateNames": false,
+      "valueByteRange": [
+        32,
+        126
+      ],
+      "leadingWhitespace": false,
+      "contentLengthPattern": "^(?:0|[1-9][0-9]{0,6})$"
+    },
+    "service": {
+      "name": "linux-baseline-probes",
+      "protocol": "HTTPS",
+      "methods": [
+        "POST"
+      ],
+      "paths": [
+        "/v1/linux-baseline/host-isolation-negatives",
+        "/v1/linux-baseline/linux-target-build",
+        "/v1/linux-baseline/full-predecessor-regression",
+        "/v1/linux-baseline/control-container-startup",
+        "/v1/linux-baseline/postgres-migration-and-rls",
+        "/v1/linux-baseline/durable-restart",
+        "/v1/linux-baseline/arbitrary-non-root-uid",
+        "/v1/linux-baseline/read-only-root-filesystem",
+        "/v1/linux-baseline/kubernetes-smoke",
+        "/v1/linux-baseline/default-deny-network"
+      ],
+      "requestMediaType": "application/json",
+      "responseMediaType": "application/json",
+      "requestMaxBytes": 16384,
+      "responseMaxBytes": 4194304,
+      "timeoutSeconds": 900,
+      "portSource": "envelope endpoints[].port of the selected endpoint"
+    },
+    "timeouts": {
+      "connectSeconds": 10,
+      "tlsHandshakeSeconds": 10,
+      "responseHeaderSeconds": 10
+    },
+    "refusals": [
+      {
+        "code": "HTTP_MESSAGE_INVALID",
+        "applies": "both",
+        "stage": "build",
+        "rules": [
+          "the start line contains CR or LF",
+          "the body is not a byte string"
+        ]
+      },
+      {
+        "code": "HTTP_HOST_INVALID",
+        "applies": "request",
+        "stage": "build",
+        "rules": [
+          "the Host value does not match ^[A-Za-z0-9.:-]{1,253}$"
+        ]
+      },
+      {
+        "code": "HTTP_HEADERS_SIZE",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "16384 bytes have been received without the CRLF CRLF header terminator"
+        ]
+      },
+      {
+        "code": "HTTP_TRUNCATED_HEADERS",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "the stream ends before the CRLF CRLF header terminator"
+        ]
+      },
+      {
+        "code": "HTTP_HEADERS_INVALID",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "the header block, terminator included, exceeds 16384 bytes or does not end with CRLF CRLF",
+          "the header block is empty or has more than 32 lines, start line included",
+          "a header line has no \": \" separator or starts with a space or tab",
+          "the header names are not exactly content-type, content-length and connection (response), or those three and host (request)",
+          "the Content-Type value is not exactly application/json",
+          "the Connection value is not exactly close",
+          "the Content-Length value does not match ^(?:0|[1-9][0-9]{0,6})$"
+        ]
+      },
+      {
+        "code": "HTTP_HEADER_FORBIDDEN",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "a header name, compared case-insensitively, is not host, content-type, content-length or connection",
+          "a header name repeats",
+          "a header value is empty or has a byte outside 32-126"
+        ]
+      },
+      {
+        "code": "HTTP_BODY_SIZE",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "the Content-Length value is 0",
+          "the Content-Length value exceeds 4194304 (response) or 16384 (request)"
+        ]
+      },
+      {
+        "code": "HTTP_STATUS_INVALID",
+        "applies": "response",
+        "stage": "parse",
+        "rules": [
+          "the status line is not exactly HTTP/1.1 200 OK"
+        ]
+      },
+      {
+        "code": "HTTP_REQUEST_TARGET",
+        "applies": "request",
+        "stage": "parse",
+        "rules": [
+          "the request line is not POST <path> HTTP/1.1 for one of the ten case paths",
+          "the Host value differs from the expected server name"
+        ]
+      },
+      {
+        "code": "HTTP_SURPLUS",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "more body bytes arrive than the Content-Length value",
+          "for a response, a byte can be read after the body"
+        ]
+      },
+      {
+        "code": "HTTP_TRUNCATED_BODY",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "the stream ends before the Content-Length value's body bytes arrive"
+        ]
+      },
+      {
+        "code": "HTTP_PIPELINING",
+        "applies": "both",
+        "stage": "parse",
+        "rules": [
+          "decrypted bytes remain buffered after the message"
+        ]
+      },
+      {
+        "code": "HTTP_BUFFERED_RECORD_SURPLUS",
+        "applies": "request",
+        "stage": "parse",
+        "rules": [
+          "encrypted TLS bytes remain buffered after the request message"
+        ]
+      }
+    ]
+  }
+}

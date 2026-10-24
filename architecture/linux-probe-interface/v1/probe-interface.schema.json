@@ -1,0 +1,1062 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Linux probe interface (draft)",
+  "$defs": {
+    "gapIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^G[0-9]{1,2}$"
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input"
+      ],
+      "properties": {
+        "input": {
+          "enum": [
+            "fixed",
+            "caseId",
+            "envelope",
+            "plan",
+            "probe"
+          ]
+        },
+        "member": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "form"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][A-Za-z0-9]*$"
+        },
+        "type": {
+          "enum": [
+            "string",
+            "integer",
+            "object"
+          ]
+        },
+        "form": {
+          "enum": [
+            "constant",
+            "enum",
+            "digest",
+            "id",
+            "time",
+            "count",
+            "path",
+            "object"
+          ]
+        },
+        "const": {
+          "type": "string",
+          "minLength": 1
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1
+        },
+        "patternRead": {
+          "type": "boolean"
+        },
+        "minimum": {
+          "type": "integer"
+        },
+        "maximum": {
+          "type": "integer"
+        },
+        "derivation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "echoes": {
+          "type": "string",
+          "minLength": 1
+        },
+        "binding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "keysFrom": {
+          "type": "string",
+          "minLength": 1
+        },
+        "valueEnum": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "valueForm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gaps": {
+          "$ref": "#/$defs/gapIds"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "form": {
+                "const": "constant"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "const"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "form": {
+                "enum": [
+                  "enum",
+                  "path"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "enum"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "form": {
+                "enum": [
+                  "digest",
+                  "time"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "pattern",
+              "patternRead"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "form": {
+                "const": "count"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "minimum",
+              "maximum"
+            ]
+          }
+        }
+      ]
+    },
+    "header": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "Content-Type",
+            "Content-Length",
+            "Connection",
+            "Host"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gaps": {
+          "$ref": "#/$defs/gapIds"
+        }
+      }
+    },
+    "tlsCode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "rules"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^TLS_[A-Z_]+$"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
+    },
+    "documentRefusal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "rules"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^SESSION_[A-Z_]+$"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
+    },
+    "refusal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "applies",
+        "stage",
+        "rules"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^HTTP_[A-Z_]+$"
+        },
+        "applies": {
+          "enum": [
+            "request",
+            "response",
+            "both"
+          ]
+        },
+        "stage": {
+          "enum": [
+            "build",
+            "parse"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mediaType",
+        "maxBytes",
+        "encoding",
+        "topLevel",
+        "maxDepth",
+        "depthCounting",
+        "maxMembers",
+        "keyTypes",
+        "valueTypes",
+        "integerRange",
+        "refusals",
+        "gaps"
+      ],
+      "properties": {
+        "mediaType": {
+          "const": "application/json"
+        },
+        "maxBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encoding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "form",
+            "gaps"
+          ],
+          "properties": {
+            "form": {
+              "const": "canonical-json"
+            },
+            "gaps": {
+              "$ref": "#/$defs/gapIds"
+            }
+          }
+        },
+        "topLevel": {
+          "const": "object"
+        },
+        "maxDepth": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "depthCounting": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maxMembers": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "keyTypes": {
+          "type": "array",
+          "items": {
+            "const": "string"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "valueTypes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "string",
+              "integer",
+              "boolean",
+              "null",
+              "object",
+              "array"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "integerRange": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "items": false,
+          "minItems": 2
+        },
+        "refusals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/documentRefusal"
+          },
+          "minItems": 1
+        },
+        "gaps": {
+          "$ref": "#/$defs/gapIds"
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_RUN_ENV_UNAVAILABLE"
+      ]
+    },
+    "repository": {
+      "enum": [
+        "contracts",
+        "control",
+        "conformance"
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "source",
+    "cases",
+    "request",
+    "receipt",
+    "http"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "planeon.internal.linux-probe-interface/v1-draft"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "tree",
+        "readAt"
+      ],
+      "properties": {
+        "repository": {
+          "const": "mas-harness-conformance-labs"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "readAt": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "axis",
+          "path",
+          "checks",
+          "regressionRepositories"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "HOST_ISOLATION_NEGATIVES",
+              "LINUX_TARGET_BUILD",
+              "FULL_PREDECESSOR_REGRESSION",
+              "CONTROL_CONTAINER_STARTUP",
+              "POSTGRES_MIGRATION_AND_RLS",
+              "DURABLE_RESTART",
+              "ARBITRARY_NON_ROOT_UID",
+              "READ_ONLY_ROOT_FILESYSTEM",
+              "KUBERNETES_SMOKE",
+              "DEFAULT_DENY_NETWORK"
+            ]
+          },
+          "axis": {
+            "enum": [
+              "DEPLOYMENT",
+              "RUNTIME",
+              "SECURITY",
+              "ASSURANCE"
+            ]
+          },
+          "path": {
+            "enum": [
+              "/v1/linux-baseline/host-isolation-negatives",
+              "/v1/linux-baseline/linux-target-build",
+              "/v1/linux-baseline/full-predecessor-regression",
+              "/v1/linux-baseline/control-container-startup",
+              "/v1/linux-baseline/postgres-migration-and-rls",
+              "/v1/linux-baseline/durable-restart",
+              "/v1/linux-baseline/arbitrary-non-root-uid",
+              "/v1/linux-baseline/read-only-root-filesystem",
+              "/v1/linux-baseline/kubernetes-smoke",
+              "/v1/linux-baseline/default-deny-network"
+            ]
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "regressionRepositories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/repository"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "document",
+        "members",
+        "inputsCopied"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "harness.planeon.ai/linux-probe-request/v1alpha1"
+        },
+        "document": {
+          "$ref": "#/$defs/document"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/field"
+          },
+          "minItems": 10,
+          "maxItems": 10
+        },
+        "inputsCopied": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "envelope",
+            "capacity",
+            "plan"
+          ],
+          "properties": {
+            "envelope": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "capacity": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true,
+              "minItems": 0
+            },
+            "plan": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            }
+          }
+        }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document",
+        "statuses",
+        "repositories",
+        "inventory",
+        "fields",
+        "output"
+      ],
+      "properties": {
+        "document": {
+          "$ref": "#/$defs/document"
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/status"
+          },
+          "uniqueItems": true,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "repositories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repository"
+          },
+          "uniqueItems": true,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "inventory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "count",
+            "ordered"
+          ],
+          "properties": {
+            "count": {
+              "const": 10
+            },
+            "ordered": {
+              "type": "boolean"
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/field"
+          },
+          "minItems": 8,
+          "maxItems": 8
+        },
+        "output": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "members",
+            "regression"
+          ],
+          "properties": {
+            "members": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/field"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "regression": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "fields"
+              ],
+              "properties": {
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/field"
+                  },
+                  "minItems": 5,
+                  "maxItems": 5
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "http": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transport",
+        "request",
+        "response",
+        "headerRules",
+        "service",
+        "timeouts",
+        "refusals"
+      ],
+      "properties": {
+        "transport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protocol",
+            "tlsVersion",
+            "alpn",
+            "sessionResumption",
+            "sessionTickets",
+            "compression",
+            "mutualTls",
+            "serverIdentity",
+            "serverCertificate",
+            "identityGaps",
+            "requestsPerConnection",
+            "maxReceivedBytesPerConnection",
+            "codes"
+          ],
+          "properties": {
+            "protocol": {
+              "const": "HTTPS"
+            },
+            "tlsVersion": {
+              "const": "TLSv1.3"
+            },
+            "alpn": {
+              "const": "http/1.1"
+            },
+            "sessionResumption": {
+              "type": "boolean"
+            },
+            "sessionTickets": {
+              "type": "boolean"
+            },
+            "compression": {
+              "type": "boolean"
+            },
+            "mutualTls": {
+              "type": "boolean"
+            },
+            "serverIdentity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "serverCertificate": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "dnsSubjectAltName",
+                "wildcardSubjectAltName",
+                "publicKeyPinned",
+                "chainVerified"
+              ],
+              "properties": {
+                "dnsSubjectAltName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "wildcardSubjectAltName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "publicKeyPinned": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "chainVerified": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "identityGaps": {
+              "$ref": "#/$defs/gapIds"
+            },
+            "requestsPerConnection": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxReceivedBytesPerConnection": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "codes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/tlsCode"
+              },
+              "minItems": 1
+            }
+          }
+        },
+        "request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requestLine",
+            "headers",
+            "body",
+            "minBodyBytes",
+            "maxBodyBytes"
+          ],
+          "properties": {
+            "requestLine": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/header"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minBodyBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxBodyBytes": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "response": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "statusLine",
+            "headers",
+            "body",
+            "minBodyBytes",
+            "maxBodyBytes",
+            "endOfStream"
+          ],
+          "properties": {
+            "statusLine": {
+              "const": "HTTP/1.1 200 OK"
+            },
+            "headers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/header"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minBodyBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxBodyBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "endOfStream": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "headerRules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lineSeparator",
+            "terminator",
+            "fieldSeparator",
+            "maxHeaderBlockBytes",
+            "maxLines",
+            "nameCase",
+            "allowedNames",
+            "duplicateNames",
+            "valueByteRange",
+            "leadingWhitespace",
+            "contentLengthPattern"
+          ],
+          "properties": {
+            "lineSeparator": {
+              "const": "\r\n"
+            },
+            "terminator": {
+              "const": "\r\n\r\n"
+            },
+            "fieldSeparator": {
+              "const": ": "
+            },
+            "maxHeaderBlockBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxLines": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "nameCase": {
+              "enum": [
+                "insensitive"
+              ]
+            },
+            "allowedNames": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "duplicateNames": {
+              "type": "boolean"
+            },
+            "valueByteRange": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "items": false,
+              "minItems": 2
+            },
+            "leadingWhitespace": {
+              "type": "boolean"
+            },
+            "contentLengthPattern": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "service": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "protocol",
+            "methods",
+            "paths",
+            "requestMediaType",
+            "responseMediaType",
+            "requestMaxBytes",
+            "responseMaxBytes",
+            "timeoutSeconds",
+            "portSource"
+          ],
+          "properties": {
+            "name": {
+              "const": "linux-baseline-probes"
+            },
+            "protocol": {
+              "const": "HTTPS"
+            },
+            "methods": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "paths": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "/v1/linux-baseline/host-isolation-negatives",
+                  "/v1/linux-baseline/linux-target-build",
+                  "/v1/linux-baseline/full-predecessor-regression",
+                  "/v1/linux-baseline/control-container-startup",
+                  "/v1/linux-baseline/postgres-migration-and-rls",
+                  "/v1/linux-baseline/durable-restart",
+                  "/v1/linux-baseline/arbitrary-non-root-uid",
+                  "/v1/linux-baseline/read-only-root-filesystem",
+                  "/v1/linux-baseline/kubernetes-smoke",
+                  "/v1/linux-baseline/default-deny-network"
+                ]
+              },
+              "uniqueItems": true,
+              "minItems": 10,
+              "maxItems": 10
+            },
+            "requestMediaType": {
+              "const": "application/json"
+            },
+            "responseMediaType": {
+              "const": "application/json"
+            },
+            "requestMaxBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "responseMaxBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "portSource": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "timeouts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "connectSeconds",
+            "tlsHandshakeSeconds",
+            "responseHeaderSeconds"
+          ],
+          "properties": {
+            "connectSeconds": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "tlsHandshakeSeconds": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "responseHeaderSeconds": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "refusals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/refusal"
+          },
+          "minItems": 1
+        }
+      }
+    }
+  }
+}

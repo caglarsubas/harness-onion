@@ -1,0 +1,38 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_linux_probe_interface_oracle.py",
+  "sha256": "e706dab917ef5b16192130dcddf776a6f8ff4467f3af03fb1422bd673088ece3"
+ },
+ "oracle": {
+  "agentId": "a7966f9cd9d0dd93f",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+  "lane": "primary"
+ },
+ "author": {
+  "agentIds": [
+   "0bcc06ab-c4db-4ff3-b31a-80c91104b334"
+  ]
+ },
+ "briefSha256": "a2e274edded81786bea901303069c0883103845f33888572a71ca466e90b4407",
+ "candidateCommit": "f037014cfd0c34380c4c2048110032971aa83dbb",
+ "launched": "2026-10-22T23:27:12+08:00",
+ "finished": "2026-10-23T01:58:17+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-LIVE003-ORACLE-KEEP; disclosed interruptions: a 429 stop and resume, the slot re-derivation, and the parser-marker resume after MON-LIVE003-ADOPT-C5",
+  "date": "2026-10-23"
+ },
+ "disclosures": [
+  "first run, from the adopted README alone, on candidate c2: 86 tests, all passing; two wording points were carried as notes, and a two-sentence README fix became candidate c3 (MON-LIVE003-ADOPT-C3)",
+  "interruption: an API spend-limit (429) stop; the same agent was resumed by message at 2026-10-23T00:52:25+08:00, with no relaunch",
+  "resumed by message after MON-LIVE003-ADOPT-C4 to re-derive only the slot value (262): the slot regex widened for c4's clause and 263 -> 262 in the slot assertion and the slot mutations; 84 of 86 passed on c4, the two failures being README line 43's stale LPK-0 record digest (fixed in c5) and the README parser's end marker",
+  "resumed by message after MON-LIVE003-ADOPT-C5 for exactly one change, the parser end marker 'Anything else refuses' without the full stop, with no other assertion changed: 86/86 on c5",
+  "finished is the time of the oracle's last write to its files; the operator re-ran the file at candidateCommit (README c6; binding, vectors, model, replay and v1/ cmp-equal to c5): 86 passed"
+ ]
+}

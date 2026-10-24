@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-GOV-003
+## Current source preparation — MET-LIVE-003
+
+MET-LIVE-003 (LINUX-PROBE-INTERFACE): the neutral Linux probe interface contract (owner Q-PK-6) under
+architecture/linux-probe-interface/ (the four v1/ handoff files byte-identical, the closed binding record binding.json that
+binds LPK-0's NEUTRAL_INTERFACE_CONTRACT placeholder, the README, vectors and replay script, with the status, the oracle
+identity and the redacted review history) and its standard-library reference model scripts/linux_probe_interface.py, with
+the D5a oracle test. Form-only: R12 keeps its acceptance rules and vendors v1/ back. Data, no gate path. No R10 or R12 file
+changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 261 accepted plus MET-LIVE-003 only.
+
+## Historical probe-kit gate source preparation — MET-GOV-003
 
 MET-GOV-003 (LINUX-PROBE-KIT-GATE): MET-GOV-001's evolution surface record version 3 under architecture/evolution-surface/
 (one CONTRACT_AND_SOURCE prefix entry, linux-probe-kit/, for the Linux probe kit's top-level data directory; the vectors
@@ -1395,6 +1404,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 133. `MET-GOV-002`: publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31); gate material, the owner's per-PR merge approval.
 134. `MET-LIVE-002`: publish the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors) with the review-record brief registry rider; gate material, the owner's per-PR merge approval.
 135. `MET-GOV-003`: amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) with the MET-LIVE-004 brief registry entries; gate material, the owner's per-PR merge approval.
+136. `MET-LIVE-003`: bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data (the four v1/ handoff files byte-identical, the binding record with LPK-0's NEUTRAL_INTERFACE_CONTRACT placeholder bound, model, vectors and replay) with its D5a oracle; form-only; no gate path.
 
 ## Testing, verification, and acceptance
 

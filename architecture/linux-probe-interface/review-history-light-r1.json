@@ -1,0 +1,1091 @@
+{
+ "subject": {
+  "design": "4eb8c8f7cb5c8dcceed4d93c2b918e0e24e601f9a730aa556a0fff3caebd6865",
+  "candidate": "c1",
+  "bindingSha256": "275a6d588ad1540152c4417b192255ce0b994547c60df113f39bc85974cba8bc"
+ },
+ "reviewer": "independent agent",
+ "model": "claude-opus-5-5",
+ "brief": {
+  "path": "tools/w03/probeinterface/REVIEW_BRIEF_R1.md",
+  "sha256": "fa2dc4b7d2eee49977ecf66374dbf6519db8b215b53715905138cf6db786f16b"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "L1-1",
+   "severity": "MINOR",
+   "location": "rounds/c1/binding.json /nonClaims; rounds/c1/README.md 'Non-claims'; linux_probe_interface.py NON_CLAIMS; DESIGN.rev1.md section 2 nonClaims",
+   "finding": "The MANIFEST has two nonClaims. The record and README carry the first (form only, no acceptance by R12) and the ownerNotes, but drop the second: \"R12 vendors this contract back later; until then R12's own files remain authoritative.\" Nothing in the record or README states that R12's files stay authoritative until R12 vendors v1/ back, and the README's reader duties ('the kit takes the form from v1/ ... never from R12') read without that limit.",
+   "requiredChange": "Add a fourth non-claim carrying MANIFEST nonClaims[1] (for example R12_FILES_AUTHORITATIVE_UNTIL_VENDORED), list it in the README and in the model's NON_CLAIMS, and add its vector; or obtain a monitor ruling that it is deliberately not carried and say so in the README."
+  },
+  {
+   "id": "L1-2",
+   "severity": "MINOR",
+   "location": "linux_probe_interface.py _check, nonClaims block; R['claims']",
+   "finding": "The model checks the non-claim ids, their order, closed rows and non-empty text only. Planted: NOT_ACCEPTANCE rewritten to 'A probe kit built from this contract is accepted by R12.' is accepted with []; FORM_ONLY set to a single space is accepted with []. The refusal text 'the non-claims are not exactly as stated' claims more than the check does.",
+   "requiredChange": "Pin each non-claim's exact text in the model (they are build constants) and refuse any difference; add a vector for a changed text and one for a whitespace-only text."
+  },
+  {
+   "id": "L1-3",
+   "severity": "MINOR",
+   "location": "linux_probe_interface.py _check, ownerDecisions block; README 'Owner decisions are quoted ...'",
+   "finding": "The model accepts an empty ownerDecisions list, a record with the R12-ACCEPTANCE-RULES row dropped, and a changed Q-PK-6 quote (all planted, all []). Keeping the quote-in-section check at the build follows LPK-0's S3-6, but the two {id, quote} rows are constants the model can pin without reading the decision record, so the record can lose its decision binding while the layer's model still passes.",
+   "requiredChange": "Pin exactly the two rows (Q-PK-6 'Neutral contract (Recommended)', R12-ACCEPTANCE-RULES 'Keep them in R12 (Recommended)') in the model; add vectors for an empty list and a changed quote."
+  },
+  {
+   "id": "L1-4",
+   "severity": "MINOR",
+   "location": "linux_probe_interface.py _check (slot, source, nonClaims); rounds/c1/README.md 'Wrong types'",
+   "finding": "The README says 'a member of the wrong type refuses with the shape text'. Planted: slot 263.0 (a float) is accepted with [] because 263.0 != 263 is false in Python; source given as a list refuses with the MANIFEST text; nonClaims given as an object refuses with the claims text. Only the first is a pass, but the README claim is not what the model does.",
+   "requiredChange": "Check top-level member types first (slot with type(x) is int, the strings with str, files/reviews/ownerDecisions/nonClaims as lists, source/placeholderBinding as objects) and refuse with the shape text; add a vector for slot 263.0. Otherwise reword the README."
+  },
+  {
+   "id": "L1-5",
+   "severity": "MINOR",
+   "location": "linux_probe_interface.py valid() and keywords(); README and DESIGN 'Any other keyword refuses, so a later schema is never validated silently in part'",
+   "finding": "valid() treats every boolean subschema as false and keywords() does not look at boolean subschemas. For a later schema with if: true, then is silently skipped (probe: ours valid, jsonschema 4.24.0 invalid, 2020-12 invalid) and the keyword gate passes. items/properties/allOf: true are over-strict. The bound schema has 27 boolean subschemas, all false, which valid() handles correctly, so the bound result is unaffected; the README's 'never validated silently in part' claim is not true in general.",
+   "requiredChange": "Treat true as always valid and false as never valid in valid(), or refuse any boolean true subschema at the keyword gate; add a vector with if: true."
+  },
+  {
+   "id": "L1-6",
+   "severity": "NOTE",
+   "location": "linux_probe_interface.py is_type() and same()",
+   "finding": "Validator disagreement with jsonschema 4.24.0 and 2020-12: an integer-valued float (10.0) fails type integer and const 10 in ours, but is valid in 2020-12. Ours is stricter only; the bound instance holds no floats, so its result is unaffected.",
+   "requiredChange": "None for v1. Optionally state 'numbers with a fraction part, including .0, are refused' in the README, or align is_type/same with 2020-12."
+  },
+  {
+   "id": "L1-7",
+   "severity": "NOTE",
+   "location": "linux_probe_interface.py valid(), pattern",
+   "finding": "pattern uses Python re.search, where $ also matches before a final line feed; ECMA-262 (the 2020-12 regex dialect) does not. Ours and jsonschema 4.24.0 agree (commit + LF is valid in both); 2020-12 refuses it. The bound instance's only strings ending in LF are /http/headerRules/lineSeparator and /terminator, both const positions, so the bound result is unaffected. The other patterns use ASCII classes, anchors and bounded repeats only (judged on paper).",
+   "requiredChange": "None for v1. Optionally refuse a pattern match that relies on $ before a final LF, and say the validator uses Python re."
+  },
+  {
+   "id": "L1-8",
+   "severity": "NOTE",
+   "location": "linux_probe_interface.py _check (files, MANIFEST source); DESIGN.rev1.md section 5",
+   "finding": "The model checks each digest against the bytes but does not pin the monitor's four digests: a consistent re-digest of a conforming but altered interface (a check renamed; files, MANIFEST.files, MANIFEST digest and interfaceSha256 re-pinned) is accepted. The MANIFEST source is compared on the record's four members only, so a MANIFEST whose source gains a member is accepted (planted). Both are by design covered elsewhere: build.py pins the four digests, and section 5 binds every era file by digest and requires the four v1/ files byte-identical.",
+   "requiredChange": "At mechanics, make the layer pin binding.json's sha256 and the four monitor digests (or add them to the model as constants), and compare the MANIFEST source exactly."
+  },
+  {
+   "id": "L1-9",
+   "severity": "NOTE",
+   "location": "rounds/c1/vectors.json; build.py NEG",
+   "finding": "Each vector pins one refusal text by presence, not the full sorted list. 9 of 18 negatives return extra texts; the five schema-violation vectors and the unsupported-keyword vector also refuse on sha256 because their override bytes are not re-digested, so they do not isolate the validator from the digest check.",
+   "requiredChange": "Pin each vector's full refusal list, and add re-digested conformance and keyword vectors that refuse with exactly their own text."
+  },
+  {
+   "id": "L1-10",
+   "severity": "NOTE",
+   "location": "linux_probe_interface.py check() and the keyword gate",
+   "finding": "Two robustness gaps. A wrongly digested MANIFEST with 200000-deep nesting raises RecursionError out of check() instead of refusing (check catches TypeError to re.error only). A schema whose $schema names draft-07 passes the gate and is validated with 2020-12 meaning.",
+   "requiredChange": "Catch RecursionError (or parse a file only after its digest matches) so every input refuses; refuse unless $schema is the 2020-12 URI."
+  },
+  {
+   "id": "L1-11",
+   "severity": "NOTE",
+   "location": "DESIGN.rev1.md sections 1 and 5 (the tests, the three catalogs)",
+   "finding": "The design does not name the test paths or the three catalogs. Placement was checked with assumed test names (tests/test_linux_probe_interface.py, tests/test_validate_linux_probe_interface.py, tests/test_linux_probe_interface_oracle.py): any tests/ path outside tests/fixtures/zero-bill/ is data at 2043cc27, and an oracle test named test_*oracle*.py is ORACLE_TESTS. The catalogs are existing files and were not checked.",
+   "requiredChange": "Name the test paths and the catalogs in the mechanics brief and re-run check_coverage on them before the pre-check, as DESIGN section 1 says."
+  }
+ ],
+ "validatorChecks": [
+  {
+   "mutation": "control: the bound instance unchanged",
+   "ours": "valid",
+   "jsonschema": "valid",
+   "agree": true
+  },
+  {
+   "mutation": "required: delete /http/service/portSource",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "required via $ref: delete /http/refusals/0/stage ($defs/refusal)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "additionalProperties: add /receipt/inventory/extra",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "additionalProperties via $ref: add /request/members/0/extraKey ($defs/field)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "allowed optional member via $ref: add gaps [G12] to /http/request/headers/0 (control)",
+   "ours": "valid",
+   "jsonschema": "valid",
+   "agree": true
+  },
+  {
+   "mutation": "const: /http/transport/tlsVersion = TLSv1.2",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "const (control chars): /http/headerRules/lineSeparator = \\n",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "enum: /cases/0/axis = NETWORK",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "enum via $ref: /receipt/statuses/0 = SKIPPED",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "enum via $ref: /http/request/headers/0/name = X-Other",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "pattern: /cases/0/checks/0 = IPv4-denied",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "pattern via $ref gapIds: /request/document/gaps = [G100]",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "pattern via $ref: /http/refusals/0/code = TLS_X",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "pattern search semantics: /source/commit = 'zz' + commit (unanchored would pass)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "pattern $ and a final newline: /source/commit = commit + LF",
+   "ours": "valid",
+   "jsonschema": "valid",
+   "agree": true
+  },
+  {
+   "mutation": "minLength: /http/request/body = ''",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "minLength via $ref: /request/members/2/source/member = ''",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "minItems: /cases = first 9",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "maxItems: /receipt/output/regression/fields gets a 6th field",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "maxItems: /request/document/keyTypes = [string, string]",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "uniqueItems: /cases/0/checks repeats its first name",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "uniqueItems via $ref: /receipt/statuses = [PASS, PASS, FAIL]",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "prefixItems type: /request/document/integerRange/0 = 'x'",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "prefixItems + items:false: /http/headerRules/valueByteRange gets a 3rd item",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "prefixItems + minItems: /receipt/document/integerRange = [1]",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "if/then const: delete const from /request/members/0 (form constant)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "if/then enum: delete enum from /request/members/5 (form path)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "if/then digest: delete patternRead from /request/members/8 (form digest)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "if/then time: delete pattern from /receipt/fields/2 (form time)",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "if/then count: delete maximum from /receipt/output/regression/fields/1",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "if/then control: /request/members/0 form constant -> id, const kept",
+   "ours": "valid",
+   "jsonschema": "valid",
+   "agree": true
+  },
+  {
+   "mutation": "$ref source: /request/members/0/source/input = other",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "type: /http/transport/requestsPerConnection = true",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "type: /request/members/8/patternRead = 0",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "type: /request/inputsCopied = []",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "type: top level = []",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "minimum: /http/service/timeoutSeconds = 0",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "const bool vs int: /receipt/inventory/count = true",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "integer-valued float: /http/timeouts/connectSeconds = 10.0",
+   "ours": "invalid",
+   "jsonschema": "valid",
+   "agree": false
+  },
+  {
+   "mutation": "const numeric equality: /receipt/inventory/count = 10.0",
+   "ours": "invalid",
+   "jsonschema": "valid",
+   "agree": false
+  },
+  {
+   "mutation": "non-integer float: /http/timeouts/connectSeconds = 10.5",
+   "ours": "invalid",
+   "jsonschema": "invalid",
+   "agree": true
+  },
+  {
+   "mutation": "schema probe (not the bound schema): if: true, then requires x; instance {}",
+   "ours": "valid",
+   "jsonschema": "invalid",
+   "agree": false
+  },
+  {
+   "mutation": "schema probe (not the bound schema): if: false, then requires x; instance {}",
+   "ours": "valid",
+   "jsonschema": "valid",
+   "agree": true
+  },
+  {
+   "mutation": "schema probe (not the bound schema): items: true; instance [1]",
+   "ours": "invalid",
+   "jsonschema": "valid",
+   "agree": false
+  },
+  {
+   "mutation": "schema probe (not the bound schema): properties x: true; instance {x: 1}",
+   "ours": "invalid",
+   "jsonschema": "valid",
+   "agree": false
+  },
+  {
+   "mutation": "schema probe (not the bound schema): allOf [true]; instance 1",
+   "ours": "invalid",
+   "jsonschema": "valid",
+   "agree": false
+  },
+  {
+   "mutation": "schema probe (not the bound schema): additionalProperties: true; instance {y: 1}",
+   "ours": "valid",
+   "jsonschema": "valid",
+   "agree": true
+  }
+ ],
+ "plantedMutations": [
+  {
+   "mutation": "file digest: README.md row sha256 zeroed",
+   "refused": true,
+   "refusal": [
+    "a file's sha256 does not equal the record",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "file digest: MANIFEST row as uppercase hex of the true digest",
+   "refused": true,
+   "refusal": [
+    "a file's sha256 does not equal the record"
+   ]
+  },
+  {
+   "mutation": "file read: README.md missing",
+   "refused": true,
+   "refusal": [
+    "a file's sha256 does not equal the record"
+   ]
+  },
+  {
+   "mutation": "MANIFEST: verdict CHANGES_REQUIRED, record MANIFEST digest re-pinned",
+   "refused": true,
+   "refusal": [
+    "the last review's verdict is not PASS_FOR_HANDOFF"
+   ]
+  },
+  {
+   "mutation": "MANIFEST: round-2 recordSha256 changed, record digest re-pinned",
+   "refused": true,
+   "refusal": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "MANIFEST: README.md dropped from files, record digest re-pinned",
+   "refused": true,
+   "refusal": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "MANIFEST: source.tree changed, record digest re-pinned",
+   "refused": true,
+   "refusal": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "MANIFEST: source gains an extra member, record digest re-pinned",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "reviews: round 2 dropped",
+   "refused": true,
+   "refusal": [
+    "a list is not sorted or holds a duplicate row",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "reviews: rounds 1 and 2 swapped",
+   "refused": true,
+   "refusal": [
+    "a list is not sorted or holds a duplicate row",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "reviews: round-1 verdict PASS_FOR_HANDOFF",
+   "refused": true,
+   "refusal": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "reviews: a row gains a record member",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "reviews: round 1 as the string '1'",
+   "refused": true,
+   "refusal": [
+    "a list is not sorted or holds a duplicate row",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "placeholder: boundTo MET-LIVE-002",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "mutation": "placeholder: record path case variant",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "mutation": "placeholder: name lower-cased",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "mutation": "placeholder: interfaceSha256 = the schema's digest",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "mutation": "placeholder: LPK-0 record without the placeholder, recordSha256 re-pinned",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "mutation": "placeholder: LPK-0 record unreadable",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "mutation": "placeholder: extra member",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "non-claims: NOT_ACCEPTANCE text rewritten to claim acceptance",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "non-claims: FORM_ONLY text replaced by a single space",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "non-claims: R12_KEEPS_STATUS_AND_COUNT_RULES text empty",
+   "refused": true,
+   "refusal": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "mutation": "non-claims: order reversed",
+   "refused": true,
+   "refusal": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "mutation": "non-claims: a fourth claim added",
+   "refused": true,
+   "refusal": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "mutation": "non-claims: a row gains a member",
+   "refused": true,
+   "refusal": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "mutation": "non-claims: as an object (wrong type)",
+   "refused": true,
+   "refusal": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "mutation": "owner decisions: empty list",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "owner decisions: Q-PK-6 quote changed",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "owner decisions: R12-ACCEPTANCE-RULES row dropped",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "owner decisions: duplicated row",
+   "refused": true,
+   "refusal": [
+    "a list is not sorted or holds a duplicate row"
+   ]
+  },
+  {
+   "mutation": "owner decisions: row gains a section member",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "shape: source member missing",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "shape: extra top-level member",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "shape: files rows reversed",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "shape: files row gains a member",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "shape: packet MET-LIVE-002",
+   "refused": true,
+   "refusal": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated",
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "shape: schemaVersion v2",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "wrong type: slot as the string '263'",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "wrong type: slot as the float 263.0",
+   "refused": false,
+   "refusal": []
+  },
+  {
+   "mutation": "wrong type: slot as true",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "wrong type: source as a list",
+   "refused": true,
+   "refusal": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "mutation": "wrong type: record is a list",
+   "refused": true,
+   "refusal": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "mutation": "consistent re-digest: instance violates its schema (extra member)",
+   "refused": true,
+   "refusal": [
+    "probe-interface.json does not conform to its schema"
+   ]
+  },
+  {
+   "mutation": "consistent re-digest: schema gains a deep unsupported keyword",
+   "refused": true,
+   "refusal": [
+    "the schema uses a keyword outside the supported set"
+   ]
+  },
+  {
+   "mutation": "consistent re-digest: instance changed but still conforming (a check renamed) (accepted by design; byte identity is pinned by build.py and the layer, see L1-8)",
+   "refused": false,
+   "refusal": []
+  }
+ ],
+ "checks": [
+  {
+   "check": "brief sha256 computed: fa2dc4b7d2eee49977ecf66374dbf6519db8b215b53715905138cf6db786f16b",
+   "result": "PASS: equals the expected value"
+  },
+  {
+   "check": "c1/binding.json sha256 starts 275a6d58",
+   "result": "PASS: 275a6d588ad1540152c4417b192255ce0b994547c60df113f39bc85974cba8bc"
+  },
+  {
+   "check": "WORK copy of c1/binding.json byte-equal (after the WORK rebuild)",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/vectors.json sha256 starts 67ca9f38",
+   "result": "PASS: 67ca9f38ee8dd4419865b6de425b0fc6372c51328821e2bb7e774446bf36bd54"
+  },
+  {
+   "check": "WORK copy of c1/vectors.json byte-equal (after the WORK rebuild)",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/linux_probe_interface.py sha256 starts 37bdd2d2",
+   "result": "PASS: 37bdd2d26ae7a950d97735ccce6b94bc6e7a2504135e3ab98945ae7025099086"
+  },
+  {
+   "check": "WORK copy of c1/linux_probe_interface.py byte-equal (after the WORK rebuild)",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/README.md sha256 starts 48f8f3b5",
+   "result": "PASS: 48f8f3b526fc14ad8a3a6faf1adefd74dc31594e065d0788d8a662369647ce42"
+  },
+  {
+   "check": "WORK copy of c1/README.md byte-equal (after the WORK rebuild)",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/build.py sha256 starts c4b0a361",
+   "result": "PASS: c4b0a3611a182a7df3babce8b8cd283e62faabb9809d7d31a2c420d9d49d786e"
+  },
+  {
+   "check": "WORK copy of c1/build.py byte-equal (after the WORK rebuild)",
+   "result": "PASS"
+  },
+  {
+   "check": "DESIGN.rev1.md sha256",
+   "result": "PASS: 4eb8c8f7cb5c8dcceed4d93c2b918e0e24e601f9a730aa556a0fff3caebd6865"
+  },
+  {
+   "check": "OWNER_DECISIONS.md sha256 starts 5ff6861c",
+   "result": "PASS: 5ff6861cf90098f6e2c8430361d4f0fa46e5685b5a3aac8e037a243f699b9a3c"
+  },
+  {
+   "check": "LPK-0 adopted amendment.json sha256 starts cf49670d",
+   "result": "PASS: cf49670d74b8a5d75019448f05df400968d9965f020b230915677906df75b43f"
+  },
+  {
+   "check": "one handoff-note section",
+   "result": "PASS: [\"2026-10-22, the Q-PK-6 neutral interface contract handed off (lane monitor; verbatim as relayed)\"]"
+  },
+  {
+   "check": "monitor names MANIFEST.json once",
+   "result": "PASS: [\"67cedd0cc251c61bfd42bc0f100d90923d3bafebb8b38c4e2ae7da891973a9a8\"]"
+  },
+  {
+   "check": "monitor names README.md once",
+   "result": "PASS: [\"049773616005f017bda9a79f22448fc16258ea61d5351ea108a5050213819da3\"]"
+  },
+  {
+   "check": "monitor names probe-interface.json once",
+   "result": "PASS: [\"8c630b41bed90cd10781edc66ba122d2c4caf06fbf5adfaa2be996e3d90233be\"]"
+  },
+  {
+   "check": "monitor names probe-interface.schema.json once",
+   "result": "PASS: [\"2ae672a9912061810f00436e4939c0d4a45074e345b01e3fb04387fed8a5ab69\"]"
+  },
+  {
+   "check": "c1/v1/MANIFEST.json byte-identical to the handoff file",
+   "result": "PASS: 5233 bytes"
+  },
+  {
+   "check": "c1/v1/MANIFEST.json sha256 equals the monitor's digest",
+   "result": "PASS: 67cedd0cc251c61bfd42bc0f100d90923d3bafebb8b38c4e2ae7da891973a9a8"
+  },
+  {
+   "check": "c1/v1/README.md byte-identical to the handoff file",
+   "result": "PASS: 24981 bytes"
+  },
+  {
+   "check": "c1/v1/README.md sha256 equals the monitor's digest",
+   "result": "PASS: 049773616005f017bda9a79f22448fc16258ea61d5351ea108a5050213819da3"
+  },
+  {
+   "check": "c1/v1/probe-interface.json byte-identical to the handoff file",
+   "result": "PASS: 25310 bytes"
+  },
+  {
+   "check": "c1/v1/probe-interface.json sha256 equals the monitor's digest",
+   "result": "PASS: 8c630b41bed90cd10781edc66ba122d2c4caf06fbf5adfaa2be996e3d90233be"
+  },
+  {
+   "check": "c1/v1/probe-interface.schema.json byte-identical to the handoff file",
+   "result": "PASS: 25195 bytes"
+  },
+  {
+   "check": "c1/v1/probe-interface.schema.json sha256 equals the monitor's digest",
+   "result": "PASS: 2ae672a9912061810f00436e4939c0d4a45074e345b01e3fb04387fed8a5ab69"
+  },
+  {
+   "check": "c1/v1 holds exactly the four files",
+   "result": "PASS: [\"MANIFEST.json\", \"README.md\", \"probe-interface.json\", \"probe-interface.schema.json\"]"
+  },
+  {
+   "check": "c1/v1/MANIFEST.json has no CR-LF rewrite and ends as the handoff does",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/v1/README.md has no CR-LF rewrite and ends as the handoff does",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/v1/probe-interface.json has no CR-LF rewrite and ends as the handoff does",
+   "result": "PASS"
+  },
+  {
+   "check": "c1/v1/probe-interface.schema.json has no CR-LF rewrite and ends as the handoff does",
+   "result": "PASS"
+  },
+  {
+   "check": "record members closed",
+   "result": "PASS: [\"files\", \"nonClaims\", \"ownerDecisions\", \"packet\", \"placeholderBinding\", \"reviews\", \"schemaVersion\", \"slot\", \"source\", \"workItem\"]"
+  },
+  {
+   "check": "record schemaVersion/packet/slot/workItem",
+   "result": "PASS"
+  },
+  {
+   "check": "record slot is an int",
+   "result": "PASS"
+  },
+  {
+   "check": "record files equal the monitor's four digests",
+   "result": "PASS"
+  },
+  {
+   "check": "record files sorted by path",
+   "result": "PASS"
+  },
+  {
+   "check": "MANIFEST files equal the record's three non-MANIFEST rows",
+   "result": "PASS"
+  },
+  {
+   "check": "record source equals MANIFEST source exactly (4 members)",
+   "result": "PASS: [\"commit\", \"readAt\", \"repository\", \"tree\"]"
+  },
+  {
+   "check": "record reviews equal MANIFEST reviews (round, recordSha256, verdict)",
+   "result": "PASS"
+  },
+  {
+   "check": "three review rounds, last PASS_FOR_HANDOFF, MANIFEST verdict PASS_FOR_HANDOFF",
+   "result": "PASS"
+  },
+  {
+   "check": "MANIFEST round 3 findings 0 MAJOR / 0 MINOR / 2 NOTE (the monitor's note)",
+   "result": "PASS"
+  },
+  {
+   "check": "placeholder binding names LPK-0's record path",
+   "result": "PASS"
+  },
+  {
+   "check": "placeholder binding recordSha256 = LPK-0 adopted digest (cf49670d, MON-LPK0-ADOPT-C3)",
+   "result": "PASS"
+  },
+  {
+   "check": "placeholder is NEUTRAL_INTERFACE_CONTRACT and in effectivePredecessors.placeholders",
+   "result": "PASS"
+  },
+  {
+   "check": "interfaceSha256 = probe-interface.json digest",
+   "result": "PASS"
+  },
+  {
+   "check": "boundTo MET-LIVE-003",
+   "result": "PASS"
+  },
+  {
+   "check": "LPK-0 edges waiting on NEUTRAL_INTERFACE_CONTRACT are LINUX-PROBE-KIT-001 and R12_SUCCESSOR",
+   "result": "PASS: [\"LINUX-PROBE-KIT-001\", \"R12_SUCCESSOR\"]"
+  },
+  {
+   "check": "Q-PK-6: one section, dated 2026-10-22, quote once in it",
+   "result": "PASS: {\"inFile\": 1, \"inSection\": 1, \"sections\": [\"2026-10-22, the dossier's questions: owner Q-PK-1..6, Q-PK-13, Q-PK-ORDER; monitor Q-PK-7..12, 14 (verbatim as relayed)\"]}"
+  },
+  {
+   "check": "Q-PK-6 row in the record",
+   "result": "PASS"
+  },
+  {
+   "check": "R12-ACCEPTANCE-RULES: one section, dated 2026-10-22, quote once in it",
+   "result": "PASS: {\"inFile\": 1, \"inSection\": 1, \"sections\": [\"2026-10-22, owner: R12's acceptance rules stay in R12; MET-LIVE-003 placement; LPK-0 contract r2 adoption path (lane monitor; owner answer and monitor decisions verbatim as relayed)\"]}"
+  },
+  {
+   "check": "R12-ACCEPTANCE-RULES row in the record",
+   "result": "PASS"
+  },
+  {
+   "check": "ownerDecisions sorted by id, no duplicates",
+   "result": "PASS"
+  },
+  {
+   "check": "monitor placement ruling: own data packet under architecture/linux-probe-interface/, slot 263, one light review",
+   "result": "PASS"
+  },
+  {
+   "check": "nonClaims ids sorted, three",
+   "result": "PASS"
+  },
+  {
+   "check": "monitor's key facts (10 cases, 46 checks, 10 members, 8 fields, 7 evidence, 13 HTTP, 2 TLS, G1-G15)",
+   "result": "PASS: {\"cases\": 10, \"checkNames\": 46, \"evidenceFields\": 7, \"gaps\": 15, \"httpRefusals\": 13, \"receiptFields\": 8, \"requestMembers\": 10, \"tlsCodes\": 2}"
+  },
+  {
+   "check": "instance source equals MANIFEST source",
+   "result": "PASS"
+  },
+  {
+   "check": "schema keyword set (own walker) equals the model's KEYWORDS exactly",
+   "result": "PASS: {\"n\": 21, \"onlyModel\": [], \"onlySchema\": []}"
+  },
+  {
+   "check": "model's own walker finds the same set",
+   "result": "PASS"
+  },
+  {
+   "check": "DESIGN §4 keyword list equals KEYWORDS",
+   "result": "PASS: {\"onlyDesign\": [], \"onlyModel\": []}"
+  },
+  {
+   "check": "README keyword list equals KEYWORDS",
+   "result": "PASS: {\"onlyModel\": [], \"onlyReadme\": []}"
+  },
+  {
+   "check": "schema passes the 2020-12 metaschema (jsonschema)",
+   "result": "PASS"
+  },
+  {
+   "check": "ours: the bound instance conforms",
+   "result": "PASS"
+  },
+  {
+   "check": "jsonschema: the bound instance conforms",
+   "result": "PASS"
+  },
+  {
+   "check": "model accepts the record",
+   "result": "PASS: []"
+  },
+  {
+   "check": "vectors positive points at binding.json with []",
+   "result": "PASS"
+  },
+  {
+   "check": "record nonClaims carry MANIFEST nonClaims[1] ('until then R12's own files remain authoritative')",
+   "result": "FAIL"
+  },
+  {
+   "check": "README carries 'R12's own files remain authoritative'",
+   "result": "FAIL"
+  },
+  {
+   "check": "README states non-claim FORM_ONLY verbatim",
+   "result": "PASS"
+  },
+  {
+   "check": "README states non-claim NOT_ACCEPTANCE verbatim",
+   "result": "PASS"
+  },
+  {
+   "check": "README states non-claim R12_KEEPS_STATUS_AND_COUNT_RULES verbatim",
+   "result": "PASS"
+  },
+  {
+   "check": "README table row architecture/linux-probe-interface/v1/MANIFEST.json",
+   "result": "PASS"
+  },
+  {
+   "check": "README table row architecture/linux-probe-interface/v1/README.md",
+   "result": "PASS"
+  },
+  {
+   "check": "README table row architecture/linux-probe-interface/v1/probe-interface.json",
+   "result": "PASS"
+  },
+  {
+   "check": "README table row architecture/linux-probe-interface/v1/probe-interface.schema.json",
+   "result": "PASS"
+  },
+  {
+   "check": "README review row 1",
+   "result": "PASS"
+  },
+  {
+   "check": "README review row 2",
+   "result": "PASS"
+  },
+  {
+   "check": "README review row 3",
+   "result": "PASS"
+  },
+  {
+   "check": "README source line",
+   "result": "PASS"
+  },
+  {
+   "check": "README placeholder digests",
+   "result": "PASS"
+  },
+  {
+   "check": "README has 'Adoption is recorded in status.json, not here'",
+   "result": "PASS"
+  },
+  {
+   "check": "README reader duties: kit from v1/, R12 vendors back byte-identical, v2/ with own packet",
+   "result": "PASS"
+  },
+  {
+   "check": "contract/ working copy: binding, vectors, model, README, build equal rounds/c1 by sha256",
+   "result": "PASS"
+  },
+  {
+   "check": "WORK rebuild: c1 build.py (python3 -I -B, in a WORK copy) with OWNER_DECISIONS.md and LPK-0's adopted amendment.json",
+   "result": "PASS: rc 0; binding.json 275a6d58, vectors.json 67ca9f38, 18 negatives, model 37bdd2d2; both outputs byte-identical to c1"
+  },
+  {
+   "check": "vector replay with the c1 model: positive and every negative",
+   "result": "PASS: positive []; 18/18 negatives contain their pinned text; 9 return extra texts (L1-9)"
+  },
+  {
+   "check": "schema keywords found with an own 2020-12 applicator walker",
+   "result": "PASS: 21 keywords, equal to KEYWORDS, to DESIGN section 4 and to the README list: $defs, $ref, $schema, additionalProperties, allOf, const, enum, if, items, maxItems, minItems, minLength, minimum, pattern, prefixItems, properties, required, then, title, type, uniqueItems"
+  },
+  {
+   "check": "keyword gate: 14 planted unsupported keywords at depth (top level, $defs, allOf, if, then, prefixItems, items, beside $ref, additionalProperties object)",
+   "result": "PASS: all refuse"
+  },
+  {
+   "check": "validator vs jsonschema 4.24.0 on 42 instance mutations",
+   "result": "40 agree; disagree: integer-valued float: /http/timeouts/connectSeconds = 10.0; const numeric equality: /receipt/inventory/count = 10.0 (L1-6); shared off-draft: final LF under $ (L1-7)"
+  },
+  {
+   "check": "boolean subschemas in the bound schema",
+   "result": "PASS: 27 positions, all false (additionalProperties and items); probes with true: L1-5"
+  },
+  {
+   "check": "bound-instance exposure to the final-LF pattern gap",
+   "result": "PASS: only /http/headerRules/lineSeparator, /http/headerRules/terminator end in LF, both const positions"
+  },
+  {
+   "check": "deep-nesting MANIFEST (wrong digest) through check()",
+   "result": "FAIL: {\"exception\": \"RecursionError\"} (L1-10)"
+  },
+  {
+   "check": "$schema naming draft-07",
+   "result": "NOTE: gate passes, validated with 2020-12 meaning (L1-10)"
+  },
+  {
+   "check": "planted model mutations",
+   "result": "46 planted; accepted: MANIFEST: source gains an extra member, record digest re-pinned; non-claims: NOT_ACCEPTANCE text rewritten to claim acceptance; non-claims: FORM_ONLY text replaced by a single space; owner decisions: empty list; owner decisions: Q-PK-6 quote changed; owner decisions: R12-ACCEPTANCE-RULES row dropped; wrong type: slot as the float 263.0; consistent re-digest: instance changed but still conforming (a check renamed)"
+  },
+  {
+   "check": "placement at 2043cc27 (evolution-surface.json read with git show, sha256 44dd288c...), own matcher for exact/prefix/under+name, exact and case-folded, coverageSkip",
+   "result": "PASS: 17 paths, all data only, no gate class matches exactly or case-folded, none skipped; review-round1.json, REVIEW_BRIEF_R1.md and the oracle test also match REVIEW_RECORD, REVIEW_BRIEF and ORACLE_TESTS (data)"
+  },
+  {
+   "check": "owner decisions and monitor rulings in OWNER_DECISIONS.md",
+   "result": "PASS: Q-PK-6 and 'Keep them in R12 (Recommended)' each once in their 2026-10-22 sections; the placement and slot ruling and the handoff note's four digests match the design"
+  },
+  {
+   "check": "README says nothing the record does not hold",
+   "result": "FAIL in part: tables, source, reviews, placeholder and non-claim texts match; 'Wrong types ... shape text' (L1-4) and 'never validated silently in part' (L1-5) overstate the model; the dropped MANIFEST non-claim (L1-1)"
+  }
+ ],
+ "notChecked": [
+  "R12 and every R12 path that v1/README.md cites (excluded by the brief).",
+  "probekit-interface-extract/: the three review records and identities were not opened; their digests were checked only against the MANIFEST.",
+  "The handoff's provenance beyond the monitor's four digests in OWNER_DECISIONS.md.",
+  "The mechanics: scripts/validate_linux_probe_interface.py, its test, the D5a oracle test, task-packets/MET-LIVE-003.yaml, the authority file, the three catalogs, status.json and check_coverage itself (not written yet; placement judged with my own matcher over the 2043cc27 record, without check_coverage's precedence rules).",
+  "Whether architecture/probe-kit-scope/amendment.json at the mechanics base equals LPK-0's adopted bytes (LPK-0 has not merged).",
+  "contract/v1/* (the author's working copy) was not hashed; rounds/c1/v1/* was.",
+  "ECMA-262 regex dialect differences other than $ before a final line feed (judged on paper only)."
+ ]
+}
