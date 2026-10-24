@@ -3,9 +3,9 @@
  "workItem": "LINUX-ROOT-ALIASES (the signed root-alias contract for the native runner kit)",
  "packet": "MET-LINUX-009",
  "slot": 264,
- "slotNote": "MON-RA-SLOT-264: LPK-1 took 263; the mechanics base is LPK-1's merge commit, where the complete allowedPaths and the gate are re-derived",
+ "slotNote": "MON-RA-SLOT-264: LPK-1 (MET-LIVE-004) took 263 and merged at 675daccb; the work was recut onto it unchanged and the derivation re-run there",
  "status": "ADOPTED",
- "baseMain": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+ "baseMain": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
  "design": {
   "path": "DESIGN.r4.md (kept with the lane's records)",
   "sha256": "453245147629bbd93d928b3ab893388ce6603a1c3c84ec0956b4212b0de6ae91",
@@ -81,34 +81,34 @@
   "result": "71/71 on candidate c1 (051a298a), first run; ruling KEEP (MON-RA-ORACLE-KEEP)"
  },
  "allowedPathsDerivation": {
-  "rule": "MON-RA2-NEXT (binding before the CONTRACT round)",
-  "scope": "the named set, plus the chain tools' bump set (the predecessor's modified chain files and its new layer and test), plus the registry rider",
+  "rule": "MON-RA2-NEXT (binding before the CONTRACT round), re-run at the slot-264 base (MON-RA-264-START)",
+  "scope": "the named set (with every round's record and identity, RA-C2-3), plus the chain tools' bump set (the predecessor's modified chain files and its new layer and test), plus the registry rider",
   "recordDigest": "sha256:b184ee6aa2b808e5b4b2206ad93f1490697aca40fc6ebef7efbf1c29a38dd4b9",
-  "atBase": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+  "atBase": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
   "predecessorRange": [
-   "b8db30e5dfc4c820b70553cd1439359d73f4573a",
-   "0ffa7db076a92e8bb341db4867557b894ecb5b27"
+   "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+   "675daccbc8a060d88245f79bf124f0cc6c59d0c2"
   ],
   "tool": {
    "name": "derive_full_allowed.py (kept with the lane's records)",
-   "sha256": "d3e276c8916ef3ea0f15381b578431bebc5a580b334a3128c2bb61a1cf694238"
+   "sha256": "151d3a6e6e9cc1c71b8f556023ab6613b350370394645fc11267a2fb25ac537b"
   },
   "counts": {
-   "named": 23,
-   "bump": 234,
+   "named": 25,
+   "bump": 236,
    "rider": 1,
-   "union": 254
+   "union": 258
   },
   "byClass": {
-   "CONTRACT_AND_SOURCE": 245,
+   "CONTRACT_AND_SOURCE": 248,
    "GATE_CI": 3,
    "GATE_REVIEW_PROCESS": 1,
    "GATE_VERIFIER_DOCS": 2,
    "ORACLE_TESTS": 1,
    "REVIEW_BRIEF": 1,
-   "REVIEW_RECORD": 1
+   "REVIEW_RECORD": 2
   },
-  "pathListSha256": "23c29fa68204a786e0e152c6bce27dc432014328d8f284029c8478dd8ca72a6a",
+  "pathListSha256": "a0dd5ab966e6b16c4a3eca22c755c922bfc842978d977bc1ded8d25e3700a6fa",
   "result": {
    "prApprovers": [
     "OWNER"
@@ -117,7 +117,11 @@
    "caseVariant": 0
   },
   "pass": true,
-  "note": "at base 0ffa7db0; re-derived at the slot-264 base (LPK-1's merge) before the mechanics, with the round-2 record and identity in the named set (RA-C2-3)"
+  "previous": {
+   "atBase": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+   "union": 254,
+   "pass": true
+  }
  },
  "unchangedListedFiles": {
   "paths": [
