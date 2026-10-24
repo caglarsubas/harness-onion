@@ -1,6 +1,6 @@
 # Workload profile v2 (`CAMPAIGN_PROXY_MTLS_ZERO_COST_V2`) — LPK-1 contract (UNIT_VERIFICATION_ONLY)
 
-Alpha 2; 2026-10-24. Status: **CONTRACT_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW** (candidate c1; one combined
+Alpha 2; 2026-10-24. Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (candidate c2; one combined
 LPK-1 review, series `MET-LIVE-004/contract`, with `../admission-semantics-v4/`; source index in
 `../linux-probe-kit-admission/`). This status line is the candidate line the README is reviewed with; `status.json`
 governs.
@@ -58,6 +58,14 @@ anything.
    rule.
 7. **`imagePullPolicy`** stays const `Never`, and `images == localImages` holds (P21, VPC's rule).
 
+**Patterns.** Every `pattern` in the schema is read as the pinned G-JSONSCHEMA bundle reads it, by Python's
+`re.search`, where `$` also matches before one trailing line feed; the model's walker does the same, and admission
+v4's regular expressions read their `^...$` anchors the same way. So a pattern-checked string may end in one line
+feed: `536870912` followed by one, as a `sizeLimit` or an ephemeral-storage quantity, or `probe-pod` followed by one,
+as a name, matches. Profile v2, admission v4 and the bundle agree on every such string, so profile v2 is never wider
+than admission v4, and the apiserver's own quantity and name validation refuses such a string (a reading of
+upstream, not verified at v1.37.1).
+
 **KEPT** (unchanged from v1): the top-level members `binding`, `capacityEntries`, `policy`, `quota`, `resources` and
 `localImages`; the definitions `binding`, `credentialIdentity`, `apiRule`, `proxyRule`, `gvkRule`, `resourceRef`,
 `units`, `resource` and `policy`; and, in `manifest`, everything the changes above do not name: the `apiVersion` and
@@ -112,6 +120,9 @@ that check concerns the caller, not the document, so it has no P code.
 integer, a boolean or null. A number parsed as a float is refused, integral or not, so `9443.0` and `0.5` both refuse
 P01. The depth is at most 16; the size budget is 262144, where each string, keys included, costs its length and every
 other value costs 1; every integer is within ±(2^53−1). Then the canonical form is at most 262144 bytes.
+That canonical-size step also refuses a profile whose canonical form cannot be encoded as UTF-8, for example one
+holding a lone surrogate (the JSON escape `\ud800`, which a JSON reader accepts) in any string: VPC's line 130
+refuses it at the same step, so `validate` refuses it with the P01 text below, and so does `precondition`.
 
 **P01's refusal text, verbatim.** Every P01 clause refuses with this one text, and K01 and K01b expect exactly it:
 
@@ -147,10 +158,17 @@ contract's order is VPC's, above, under which every expected code is the same fo
 
 **P40, the cross-contract precondition.** `precondition(profile, namespace)` returns `P40 the binding namespace is not the sealed qualification namespace` when the binding
 namespace is not the sealed qualification namespace. P40 is not a profile rule, because the sealed namespace is not
-profile data; the kit's signer calls it with the sealed value.
+profile data; the kit's signer calls it with the sealed value. Like `validate`, `precondition` first refuses a
+profile whose canonical form cannot be encoded with the P01 text, and it returns P99 (below) for an argument that is
+not a profile object with a binding namespace.
 
-**A defensive code.** If evaluating a document raises (no schema-valid document does), `validate` returns
-`P99 malformed profile data`, as the model in the author's design proof (local, not published) did; VPC returns its one generic refusal in the same place. No vector
+**P99, a defensive code with two uses.** (1) In `validate`, `P99 malformed profile data` is the catch-all for a
+document whose evaluation raises, as in the model of the author's design proof (local, not published); VPC returns
+its one generic refusal in the same place. A lone surrogate does not reach it (P01, above). One parsed, schema-valid
+document is still known to reach it: a Pod whose cpu request and limit are equal and end in one line feed (for
+example `500m` followed by one), which the cpu pattern admits (see Patterns) and whose millicore value then cannot
+be read; VPC refuses the same document with its generic refusal at the same point. (2) `precondition` returns P99
+for an argument that is not a profile object with a binding namespace, a document `validate` refuses. No vector
 expects P99.
 
 **Out of scope.** VPC's other function, `validate_proxy_contract`, which pins v1's authority, the 127-file baseline and

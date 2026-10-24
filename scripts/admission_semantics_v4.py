@@ -182,8 +182,10 @@ def check_manifest(kind: str, manifest: Any, namespace: str) -> str | None:
             if "medium" in e:
                 return MC42 + "no medium"
 
-        def _limit(c):
-            value = ((c.get("resources") or {}).get("limits") or {}).get("ephemeral-storage")
+        def _limit(c):          # a resources or limits that is not an object has no limit: check 3 refuses
+            resources = c.get("resources")
+            limits = resources.get("limits") if type(resources) is dict else None
+            value = limits.get("ephemeral-storage") if type(limits) is dict else None
             return int(value) if type(value) is str and DECIMAL_BYTES.match(value) else None
         if any(_limit(c) is None for c in containers + inits):
             return MC42 + "an ephemeral-storage limit in decimal bytes on every container and init container"

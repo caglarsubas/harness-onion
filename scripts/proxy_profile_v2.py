@@ -11,7 +11,9 @@ W1-W4 land. A v1 document is refused here (P00, the profileId const).
   (P00), and adds P30-P35. `schema` must be the reviewed v2 schema (SCHEMA_SHA256, over its canonical JSON); any other
   schema raises ValueError, because that check concerns the caller, not the document.
 - `precondition(profile, namespace)` returns P40 when the binding namespace is not the sealed qualification namespace.
-  P40 is the cross-contract precondition, not a profile rule: the sealed namespace is not profile data.
+  P40 is the cross-contract precondition, not a profile rule: the sealed namespace is not profile data. Like
+  `validate`, it refuses a profile whose canonical form cannot be encoded (a lone surrogate) with P01, and it returns
+  P99 for an argument that is not a profile object with a binding namespace.
 - `schema_error(instance, schema)` is the walker behind P00: None when the instance matches, otherwise the JSON path of
   the first mismatch. It implements, with draft 2020-12 meaning, exactly the keywords the v2 schema uses, and refuses a
   schema with any other keyword.
@@ -232,7 +234,11 @@ def validate(profile: Any, schema: Any) -> list[str]:
         raise ValueError("the reviewed profile v2 schema is required")
     try:
         _bounded(profile)
-        _r(len(canonical(profile)) <= 262144, "P01")
+        try:
+            size = len(canonical(profile))
+        except ValueError:      # a canonical form that cannot be encoded (a lone surrogate): VPC line 130 refuses it
+            raise Refused(TEXT["P01"]) from None
+        _r(size <= 262144, "P01")
         _r(schema_error(profile, schema) is None, "P00")
         binding, entries, policy = profile["binding"], profile["capacityEntries"], profile["policy"]
         start, end = _time(binding["validFrom"]), _time(binding["expiresAt"])
@@ -329,7 +335,14 @@ def validate(profile: Any, schema: Any) -> list[str]:
 
 
 def precondition(profile: Any, namespace: str) -> list[str]:
-    """P40, the cross-contract precondition the kit's signer calls with the sealed qualification namespace."""
+    """P40, the cross-contract precondition the kit's signer calls with the sealed qualification namespace. Like
+    validate, it first refuses a profile whose canonical form cannot be encoded (P01, VPC line 130)."""
+    try:
+        canonical(profile)
+    except ValueError:
+        return [TEXT["P01"]]
+    except (TypeError, RecursionError):
+        return [TEXT["P99"]]
     try:
         return [] if profile["binding"]["namespace"] == namespace else [TEXT["P40"]]
     except (TypeError, KeyError):

@@ -3,9 +3,16 @@
   "packet": "MET-LIVE-004",
   "workItem": "LINUX-PROBE-KIT-ADMISSION",
   "series": "MET-LIVE-004/contract",
-  "candidate": "c1",
+  "candidate": "c2",
   "baseMain": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
-  "inTreeRounds": [],
+  "inTreeRounds": [
+    {
+      "round": 1,
+      "recordSha256": "3a3d8576ef34ec2bf2af6eed2c906c9cfed6120b1e688c5082083c38bf51419a",
+      "verdict": "CHANGES_REQUIRED",
+      "subjectCommit": "329a8d96697ff4232a75f5ed801bdc7f71021969"
+    }
+  ],
   "roundNumbering": "The in-tree MET-LIVE-004/contract rounds start at round 1, the first CONTRACT round on the candidate, and run 1, 2, 3 with no gap. The TOOLS design rounds below are design history, cited by sha256; none is numbered as an in-tree round.",
   "rulings": {
     "Q3 (a)": "**Q3 (a):** the in-tree MET-LIVE-004/contract rounds start at round 1, citing the TOOLS design rounds 1-2 in source-index.json, so no SERIES_GAP arises. L1D2-5: fold Q-LPK1-R2-1 and MON-LPK1-R2-2 verbatim into the build.",
@@ -60,7 +67,7 @@
   "subject": [
     {
       "path": "architecture/admission-semantics-v4/README.md",
-      "sha256": "43affa545409859cb2cb2be9b7e25c4918995bd82f30651fb9bd444eb135fd78"
+      "sha256": "989ab52738baa6fafd5ef36ac46dcdf3994cd6c7197ade46d6f8f32dfd279d3e"
     },
     {
       "path": "architecture/admission-semantics-v4/admission-manifests/planeon-a2.json",
@@ -72,7 +79,7 @@
     },
     {
       "path": "architecture/admission-semantics-v4/status.json",
-      "sha256": "bfe74ba32c454819f4e1111365e0c7ad5ba37a24d49f5880c092a83d0edf7c2d"
+      "sha256": "9a89b9aeac0764ed41d48e5f7154ccb71559bff38f01abe2554046214f7a4411"
     },
     {
       "path": "architecture/admission-semantics-v4/vectors.json",
@@ -80,7 +87,7 @@
     },
     {
       "path": "architecture/proxy-profile-v2/README.md",
-      "sha256": "da4c9ce3ea7ac2f90db9c943d0139468b5a7d0b34aea1ecc5bede6201f7d53ef"
+      "sha256": "583e1f681ba2caa2090758c1d52ea2738eeaf38010f11f529bdf72f712675c1c"
     },
     {
       "path": "architecture/proxy-profile-v2/profile.schema.json",
@@ -88,7 +95,7 @@
     },
     {
       "path": "architecture/proxy-profile-v2/status.json",
-      "sha256": "c39f78f1255489c4d719993c22a4e533f06f22e4b14eee83fe32c5e1ed550ee3"
+      "sha256": "18fb26c50bdd46d4aba1587da0a3c1569fa99578c62d47c72b5480fbfd06347c"
     },
     {
       "path": "architecture/proxy-profile-v2/vectors.json",
@@ -96,11 +103,11 @@
     },
     {
       "path": "scripts/admission_semantics_v4.py",
-      "sha256": "4c22c223d73c4f6f0993859ff21840d81fe039c2bcb3c42f24e5495382c86867"
+      "sha256": "4da5a71dfd4c9a3e46709ea8a754a58f48b76fe51bc2a526bfe07c40bc13b547"
     },
     {
       "path": "scripts/proxy_profile_v2.py",
-      "sha256": "4398d376a1cf94190d34169f27f5d03bb6dff9f49c273b38362aad0a146df734"
+      "sha256": "509a4435e8bc1b8ab94efcb6fcc99e355ef27574ef0499bc4b6e89edef63fefa"
     }
   ],
   "predecessorInputs": [

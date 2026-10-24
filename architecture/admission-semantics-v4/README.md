@@ -1,6 +1,6 @@
 # POLICY-ADMISSION-SEMANTICS/v4 and A2 admission field allowlists — LPK-1 contract (DATA_CHECK_ONLY)
 
-Alpha 2; 2026-10-24. Status: **CONTRACT_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW** (candidate c1; one combined
+Alpha 2; 2026-10-24. Status: **CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW** (candidate c2; one combined
 LPK-1 review, series `MET-LIVE-004/contract`, with `../proxy-profile-v2/`; source index in
 `../linux-probe-kit-admission/`). This status line is the candidate line the README is reviewed with; `status.json`
 governs.
@@ -40,9 +40,15 @@ Q-LPK1-D1 to Q-LPK1-D5. The design was adopted at rev 4 (MON-LPK1-ADOPT-REV4). B
 
 MC42 applies to every v4 Pod manifest, not only profile v2 Pods. It comes after MC41 and before MC37, so MC37 stays
 last. It acts only if the Pod has at least one volume with an `emptyDir` member; a Pod without an emptyDir is not
-touched, and neither is its quantity form. The one accepted quantity form is the profile's decimal byte form,
+touched, and neither is its quantity form. The quantity form is the profile's decimal byte form,
 `^[1-9][0-9]{0,14}$`, for every `sizeLimit` and, in a Pod with an emptyDir, for every `ephemeral-storage` limit. Binary
 or decimal suffixes, exponents, milli units, zero and leading zeros are refused, so no rounding rule is needed.
+This pattern, like every pattern v4 applies (those carried from v3 included), is read as the pinned G-JSONSCHEMA
+bundle reads a schema `pattern`: by Python's `re` (`re.search` in the bundle, `re.match` here, with the same `^...$`
+anchors), where `$` also matches before one trailing line feed. So `536870912` followed by one line feed passes it,
+as a `sizeLimit` or a limit, and so does a name such as `probe-pod` followed by one. Admission v4, profile v2 and the
+bundle read their patterns the same way, so profile v2 is never wider than v4; the apiserver's own quantity and name
+validation refuses such a string (a reading of upstream, not verified at v1.37.1).
 
 The refusal text is `MC42 every emptyDir is bounded: ` followed by the reason of the first check that fails:
 1. for each emptyDir in volume order, a `sizeLimit` in decimal bytes ("a sizeLimit in decimal bytes"; an `emptyDir` that
@@ -50,7 +56,9 @@ The refusal text is `MC42 every emptyDir is bounded: ` followed by the reason of
 2. that emptyDir has no `medium` member, not even `""` ("no medium");
 3. every container and every init container has an `ephemeral-storage` limit in decimal bytes ("an ephemeral-storage
    limit in decimal bytes on every container and init container"). MC34 (requests equal limits) runs earlier, so the
-   request is present and equal too;
+   request is present and equal too. A container or init container whose `resources` or `limits` is not an object
+   has no such limit and fails this check; a `resources` that is not an object meets MC34 first, which v4 carries
+   from v3 unchanged;
 4. the sum of the `sizeLimit`s is at most the sum of the containers' (`spec.containers`) `ephemeral-storage` limits
    ("the sizeLimits sum to at most the containers' ephemeral-storage limits").
 

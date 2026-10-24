@@ -5,16 +5,23 @@
   "successorBeside": "a successor beside v1, not an edit of it: v1 (architecture/proxy-contract-inputs/) stays byte-identical and remains the wire's profile until the wire steps W1-W4 land",
   "packet": "MET-LIVE-004",
   "workItem": "LINUX-PROBE-KIT-ADMISSION",
-  "candidate": "c1",
+  "candidate": "c2",
   "base": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
   "reviewSeries": "MET-LIVE-004/contract",
-  "reviewRounds": [],
+  "reviewRounds": [
+    {
+      "round": 1,
+      "recordSha256": "3a3d8576ef34ec2bf2af6eed2c906c9cfed6120b1e688c5082083c38bf51419a",
+      "verdict": "CHANGES_REQUIRED",
+      "subjectCommit": "329a8d96697ff4232a75f5ed801bdc7f71021969"
+    }
+  ],
   "combinedReview": [
     "architecture/admission-semantics-v4/",
     "architecture/proxy-profile-v2/"
   ],
   "designHistory": "architecture/linux-probe-kit-admission/source-index.json cites the TOOLS design rounds 1-4 by sha256; they are not rounds of this series",
-  "contractState": "CONTRACT_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW",
+  "contractState": "CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW",
   "ownerDecisions": [
     {
       "id": "Q-PK-3",
@@ -79,7 +86,7 @@
     "steps": [
       {
         "id": "S1",
-        "gates": "the sealed v4 bytes (`sealed.preconditions`)",
+        "gates": "the sealed v4 bytes (`sealed.preconditions` of `architecture/admission-semantics-v4/status.json`)",
         "content": "an I01 successor that renders A2 with `admission_semantics_v4` (owner step)"
       },
       {
@@ -95,7 +102,7 @@
       {
         "id": "W1",
         "gates": "profile v2 on the wire",
-        "content": "the I01 successor (S1) also takes profile v2 for its complete positive and its layer test (a profile v2 path through VPC/VPO, whose successor validates v2 documents with `proxy_profile_v2`)"
+        "content": "the I01 successor (S1) also takes profile v2 for its complete positive and its layer test (a profile v2 path through `scripts/validate_proxy_contract.py` and `scripts/validate_policy_observation.py`, whose successor validates v2 documents with `proxy_profile_v2`)"
       },
       {
         "id": "W2",
@@ -105,12 +112,12 @@
       {
         "id": "W3",
         "gates": "profile v2 on the wire",
-        "content": "R10's re-vendor (S3) also replays PV's binding and observation cases with profile v2's positive (today edge v10's PPV, F5.6)"
+        "content": "R10's re-vendor (S3) also replays the wire vectors' binding and observation cases with profile v2's positive (today they read profile v1's positive, `architecture/proxy-contract-inputs/vectors.json`, which edge record v10 registers for R10)"
       },
       {
         "id": "W4",
         "gates": "profile v2 on the wire",
-        "content": "the native-profile record's caller obligation, \"`profile` is already valid under the pinned proxy profile contract (`validate_proxy_contract.py`, `validate_profile`)\" (`native_qualification_v4.py` docstring; `record.profileDigest`, I01 README §6), names `proxy_profile_v2` for a v2 profile"
+        "content": "the native-profile record's caller obligation, \"`profile` is already valid under the pinned proxy profile contract (`validate_proxy_contract.py`, `validate_profile`)\" (`scripts/native_qualification_v4.py` docstring; `record.profileDigest`, `architecture/policy-observation-digests/README.md` §6), names `proxy_profile_v2` for a v2 profile"
       },
       {
         "id": "C1",
@@ -120,7 +127,7 @@
       {
         "id": "C2",
         "gates": "v4 A2 claims (C28)",
-        "content": "W03-0 SC05's successor text and HE-008's sealed APISERVER_FLAGS with `--disable-admission-plugins=AlwaysPullImages` (§3.2 e)"
+        "content": "W03-0 SC05's successor text and HE-008's sealed APISERVER_FLAGS with `--disable-admission-plugins=AlwaysPullImages` (see `carried.obligationsOfC1C2`)"
       }
     ],
     "classes": [
