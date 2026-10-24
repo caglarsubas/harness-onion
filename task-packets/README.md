@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-LIVE-003
+## Current source preparation — MET-LIVE-004
+
+MET-LIVE-004 (LINUX-PROBE-KIT-ADMISSION): workload profile v2 and admission semantics v4 as one combined contract
+(DATA_CHECK_ONLY; profile v1 and admission v3 byte-identical), adopted as candidate c3 after two in-tree CONTRACT rounds,
+with its review set, D5a oracle identities and mechanics pins record under architecture/linux-probe-kit-admission/; no gate
+path. Alpha2 OPEN; 262 accepted plus MET-LIVE-004 only.
+
+## Historical probe interface source preparation — MET-LIVE-003
 
 MET-LIVE-003 (LINUX-PROBE-INTERFACE): the neutral Linux probe interface contract (Q-PK-6; the four v1/ handoff files
 byte-identical, the binding record with LPK-0's placeholder bound, model, vectors and replay, DATA_CHECK_ONLY), with its
@@ -1575,3 +1582,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 260 | `MET-LIVE-002` | `Harness-Engineering` | LINUX-PROBE-KIT-SCOPE: the probe-kit scope amendment (server side, worker entry, case recipes and receipt candidates moved from R12 to the probe kit; record, model and vectors) with the review-record brief registry rider; gate material |
 | 261 | `MET-GOV-003` | `Harness-Engineering` | LINUX-PROBE-KIT-GATE: the evolution surface record version 3 (linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned), the D5a oracle test scoped and its identity re-issued, with the MET-LIVE-004 brief registry entries; gate material |
 | 262 | `MET-LIVE-003` | `Harness-Engineering` | LINUX-PROBE-INTERFACE: the neutral Linux probe interface (Q-PK-6) as data, its four v1/ handoff files byte-identical, with the binding record (LPK-0's placeholder bound), model, vectors and replay; DATA_CHECK_ONLY |
+| 263 | `MET-LIVE-004` | `Harness-Engineering` | LINUX-PROBE-KIT-ADMISSION: workload profile v2 and admission semantics v4 as one combined contract (candidate c3, two in-tree CONTRACT rounds), with its D5a oracles; every pinned predecessor byte-identical; DATA_CHECK_ONLY |

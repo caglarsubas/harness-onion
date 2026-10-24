@@ -1,6 +1,47 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-LIVE-003 source preparation, October 24, 2026
+## Current checkpoint — MET-LIVE-004 source preparation, October 24, 2026
+
+Alpha2 OPEN. MET-LIVE-003 (LINUX-PROBE-INTERFACE) passed required verify and merged as main 0ffa7db. LINUX-PROBE-KIT-ADMISSION (owner
+decisions Q-PK-3 "Never, pinned (Recommended)", Q-PK-4 "Upstream v1.37.1 (Recommended)" and "As steps (Recommended)"; the
+lane monitor's owner-delegated rulings Q-LPK1-1 to Q-LPK1-12, Q-LPK1-D1 to Q-LPK1-D5, MON-LPK1-ADOPT-REV4, MON-LPK1-B3,
+MON-LPK1-SCHEMA-RUN, MON-LPK1-C3-ADOPT, MON-LPK1-ORACLE-R2 and MON-LPK1-B6-P1) publishes workload profile v2 and admission
+semantics v4 as one combined contract. Profile v2 (architecture/proxy-profile-v2/, model scripts/proxy_profile_v2.py) is a
+successor beside profile v1: the Pod's echo annotations, bounded emptyDir volumes mounted under /work/ and the pull policy
+Never. Admission semantics v4 (architecture/admission-semantics-v4/, model scripts/admission_semantics_v4.py) requires
+every image pulled Never (MC33), bounds every emptyDir (MC42 and A2-POD-EMPTYDIR), pins AlwaysPullImages off, and
+re-renders the sealed A2 file with a new directory hash; nothing is installed. The contract was adopted as candidate c3
+(MON-LPK1-C3-ADOPT) after two in-tree CONTRACT rounds of the MET-LIVE-004/contract series, published under
+architecture/linux-probe-kit-admission/ with their identities, the source index and the two D5a oracle identities that
+bind tests/test_admission_semantics_v4_oracle.py and tests/test_proxy_profile_v2_oracle.py (KEEP). Profile v1, admission v3
+and v2, I01, the plans, the edge records and every other pinned predecessor stay byte-identical (B-L1-3); the pins and the
+evolution-surface classes are recorded in architecture/linux-probe-kit-admission/mechanics-pins.json (B-L1-4). No gate
+path changes: the brief registry already holds this packet's PACKET and CONTRACT series, and the evolution surface record
+classifies every new path as data. Its new layer checks the adoption and the rounds, both models over their vectors (v4's
+141 cases, v3's 114 through the frozen v3 model, the sealed A2 file and its directory hash, and profile v2's 67 cases with
+the cross-contract group), the pins and classes, the unchanged registry, and that the packet's changed files hold no gate
+path. It is built under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump
+vocabulary, 262's layer by the bridge vocabulary, and 262's test keeps its 8 own routes and the adjacent one and one
+payload mutation (C2), while the new head's test keeps the full fan-in. MET-LIVE-004 is the sole 263rd specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-LIVE-004 / LINUX-PROBE-KIT-ADMISSION | SOURCE_PREPARED | Workload profile v2 and admission semantics v4 (263rd packet): one combined contract under architecture/proxy-profile-v2/ and architecture/admission-semantics-v4/, adopted as candidate c3 after two in-tree CONTRACT rounds; profile v1, admission v3 and every pinned predecessor byte-identical; nothing installed; data, no gate path |
+| Alpha2A | MET-LIVE-003 / LINUX-PROBE-INTERFACE | VERIFY_PASSED_MERGED | Merged as main 0ffa7db |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes; no linux-probe-kit/ file yet, and no kit install before the carried steps
+land. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical probe interface source checkpoint — MET-LIVE-003 source preparation, October 24, 2026
 
 Alpha2 OPEN. MET-GOV-003 (LINUX-PROBE-KIT-GATE) passed required verify and merged as main b8db30e. LINUX-PROBE-INTERFACE (owner
 decisions Q-PK-6 "Neutral contract (Recommended)" and, on R12's acceptance rules, "Keep them in R12 (Recommended)"; the
@@ -2508,7 +2549,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · REVIEW-RECORD-V2 / MET-GOV-002 · Publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31), after six independent contract review rounds; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · LINUX-PROBE-KIT-SCOPE / MET-LIVE-002 · Publish the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors) after independent design and contract review, with the review-record brief registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · LINUX-PROBE-KIT-GATE / MET-GOV-003 · Amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) after independent design and contract review, with the MET-LIVE-004 brief registry entries; gate material; pass required verify through the owner's App after the owner approves the exact head.
-- [ ] Alpha 2A · LINUX-PROBE-INTERFACE / MET-LIVE-003 · Bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data, byte-identical (the four v1/ handoff files, the binding record with LPK-0's placeholder bound, the reference model and vectors), after one light review, with its D5a oracle; pass required verify through the owner's App.
+- [x] Alpha 2A · LINUX-PROBE-INTERFACE / MET-LIVE-003 · Bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data, byte-identical (the four v1/ handoff files, the binding record with LPK-0's placeholder bound, the reference model and vectors), after one light review, with its D5a oracle; pass required verify through the owner's App.
+- [ ] Alpha 2A · LINUX-PROBE-KIT-ADMISSION / MET-LIVE-004 · Publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles, every pinned predecessor byte-identical; pass required verify through the owner's App.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

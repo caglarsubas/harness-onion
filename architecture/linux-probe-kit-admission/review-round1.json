@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "planeon.review-record/v2",
+  "kind": "CONTRACT",
+  "series": "MET-LIVE-004/contract",
+  "round": 1,
+  "subject": {
+    "repository": "harness-onion",
+    "commit": "329a8d96697ff4232a75f5ed801bdc7f71021969",
+    "tree": "4326e00eb55fa32458a66d081814080ed597b455"
+  },
+  "reviewDate": "2026-10-24",
+  "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+  "rulesSha256": "4fd769d58bb32779ecb7799b0552c0d1a698782145e1050d8ad5689dad39ab47",
+  "wrapperSha256": null,
+  "reviewer": {
+    "model": "claude-opus-5-5",
+    "role": "REVIEWER_AGENT"
+  },
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "LPK1-C1-1",
+      "severity": "MINOR",
+      "location": "architecture/proxy-profile-v2/README.md, 'A defensive code' and 'P01's full content'; scripts/proxy_profile_v2.py, validate (the canonical-size step and the P99 catch) and precondition",
+      "finding": "The README says validate returns 'P99 malformed profile data' only if evaluating a document raises, and that 'no schema-valid document does'. That is false. A profile with a lone surrogate in any string (for example the ConfigMap data value written as the JSON escape \\ud800, which a JSON reader such as VPC's parse accepts) passes _bounded; then canonical(profile) raises UnicodeEncodeError (a ValueError) at the canonical-size step, and validate returns P99. The pinned G-JSONSCHEMA bundle (jsonschema 4.24.0) accepts that document, and so does the model's own walker, so a schema-valid document reaches P99. VPC refuses the same document at line 130, its canonical-size check, which the README maps to P01 ('P01 is VPC's _bounded (lines 104-122, called at line 129) and its canonical-size check (line 130), unchanged'). Under the README's own mapping the code is therefore P01. precondition also returns P99 for a malformed document, which the README does not state. The document is refused either way, and no vector is affected.",
+      "requiredChange": "Either (a), recommended: refuse a profile whose canonical form cannot be encoded with P01 at step 1 (it is VPC's line-130 refusal), say so in the README's P01 content, and keep P99 only as a defensive catch that no parsed JSON document reaches. Or (b): keep P99 for it, state in the README that a document holding a string that cannot be encoded as UTF-8 (a lone surrogate) refuses with P99 at step 1, and drop 'no schema-valid document does'. In both cases, state precondition's P99. The 67 and 141 counts need not change; the D5a oracle can carry a lone-surrogate case.",
+      "blocks": true
+    },
+    {
+      "id": "LPK1-C1-2",
+      "severity": "NOTE",
+      "location": "scripts/admission_semantics_v4.py, DECIMAL_BYTES (MC42); architecture/admission-semantics-v4/README.md, 'MC42, every emptyDir is bounded'; architecture/proxy-profile-v2/profile.schema.json patterns, with the model's walker and the pinned bundle",
+      "finding": "In Python's re, '$' also matches before one final line feed, and both models use '^...$' patterns with match or search, as the pinned bundle does for 'pattern'. So '536870912' followed by a line feed, as a sizeLimit or an ephemeral-storage limit, and 'probe-pod' followed by a line feed, as a name, pass the profile v2 schema (bundle and walker agree), P34, and v4's MC01 and MC42. My probes: profile valid, and v4 'A2 admit' for all three resources. The two contracts agree, so the profile is never wider than v4. v3's frozen DNS_LABEL and DIGEST_IMAGE share the trait, and the apiserver's own quantity and name validation would refuse such strings, so nothing unsafe is admitted. But the README's 'the one accepted quantity form is ^[1-9][0-9]{0,14}$' reads as excluding them, and an oracle written from the README alone could expect a refusal.",
+      "requiredChange": "None for this round. Recommended: state the regex dialect in both READMEs (Python re and the pinned bundle, where '$' admits one trailing line feed). Or, in a later successor, refuse a trailing line feed in both models together, so that the profile never becomes wider than admission.",
+      "blocks": false
+    },
+    {
+      "id": "LPK1-C1-3",
+      "severity": "NOTE",
+      "location": "scripts/admission_semantics_v4.py, check_manifest, MC42's _limit",
+      "finding": "Take a Pod with an emptyDir whose container resources.limits is a non-object that still passes MC34, for example limits ['x'] equal to requests ['x']. _limit calls .get on the list, and check_manifest raises AttributeError instead of returning MC42's check 3 reason ('an ephemeral-storage limit in decimal bytes on every container and init container'). v3's carried checks also raise on some non-object members (for example a container that is not an object), so this follows v3's style. Profile v2 documents never reach it, because their schema is closed.",
+      "requiredChange": "None for this round. Optionally guard the lookup with a dict type check, so that check 3 refuses.",
+      "blocks": false
+    },
+    {
+      "id": "LPK1-C1-4",
+      "severity": "NOTE",
+      "location": "architecture/admission-semantics-v4/vectors.json (manifest group); architecture/proxy-profile-v2/vectors.json (negative group)",
+      "finding": "Several refusal branches the design states have no vector: P33 for a mount naming an undeclared volume, for mounts with no volumes, and for one volume mounted twice; MC42 check 1 for an emptyDir that is not an object, and for the zero, leading-zero, exponent and milli forms (only the suffix forms 512Mi and 1Gi are vectors); MC42 check 2 for medium ''; and the profile's 'volumes: []' (minItems 1). My probes show that both models refuse each one as stated (P33, P00, or MC42 with the stated reason). The design fixes the counts at 141 and 67, so this is not a defect of c1.",
+      "requiredChange": "None to the vectors. Recommended: the D5a oracle tests cover these branches.",
+      "blocks": false
+    },
+    {
+      "id": "LPK1-C1-5",
+      "severity": "NOTE",
+      "location": "architecture/admission-semantics-v4/status.json and architecture/proxy-profile-v2/status.json, carried.steps W3 and C2; architecture/proxy-profile-v2/status.json, carried.steps S1 'gates'",
+      "finding": "The published step texts are copied from the design's section 6.2 table, and they keep anchors that point into unpublished TOOLS files. W3 says \"PV's\" and \"F5.6\" (a dossier abbreviation and a dossier fact id). C2 says \"(§3.2 e)\", a design section; the v4 README has no section 3.2. In profile v2's status.json, S1's gates text points to 'sealed.preconditions', a member that only v4's status.json has.",
+      "requiredChange": "None for this round. Recommended: replace these with published references (for example 'edge record v10's profile vectors' and 'the v4 README's carried obligations'), and point profile v2's S1 at ../admission-semantics-v4/status.json sealed.preconditions.",
+      "blocks": false
+    }
+  ],
+  "checked": [
+    {
+      "check": "1 Faithfulness to the decisions",
+      "result": "Met, and no decision reopened. Q-PK-3: Never in MC33 and A2, the three echo annotations, bounded emptyDir volumes, AlwaysPullImages pinned off (C28 evidence, A2 fail-closed, allowlists ALWAYS_PULL_IMAGES_PINNED_OFF), and the sealed bytes activated only at HS53 section 5.5 M1/M3. Q-PK-4: the v1.37.1 citations are kept. 'As steps': S1-S3, W1-W4 and C1-C2 are carried steps with no new items. Q-LPK1-1..12 follow the dossier's recommendations: one packet; directories beside the old versions, not an *-inputs pattern; exactly three echo keys, with the equalities in the model; the emptyDir bounds; the pin as A2 plus claim evidence plus allowlists, with I06, W03-0 and HE-008 carried; the closed sealed block; the minimum vectors; I01, the edges and ZBS untouched; readmeStatusNote with AS3 untouched. Q-LPK1-D1..D5: at most 4 volumes; the /work/ root, with mountPath = /work/<name>; a presence-only A2 recheck; C28; in-tree rounds from 1. Q-LPK1-R2-1 and MON-LPK1-R2-2 are byte-equal in both status.json files to their OWNER_DECISIONS lines and to the design's section 10. Q3 (a) and MON-LPK1-DR3-3 are byte-equal in source-index.json. MON-LPK1-R1-KEEP, MON-LPK1-SCHEMA-RUN and MON-LPK1-ADOPT-REV4 are reflected. The only addition beyond the code list is P99 (Q-C1-1)."
+    },
+    {
+      "check": "2 The record against the design",
+      "result": "No member differs. Each status.json carries section 6.1's members (supersedes, reviewSeries and reviewRounds, empty before this round, contractState, nonClaims, carried, predecessorRecord with the bare 64-hex sha256 3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b, and readmeStatusNote). v4's sealed block has exactly its four members, with S1-S3 as preconditions. source-index.json: TOOLS design rounds 1-4 by sha256, each equal to the record's bytes; verdicts and design digests equal to the records' own; no path. The schema's structural diff against PPS is exactly section 4 items 0-5 plus the $id. The allowlists diff against v3 is exactly section 3.8's rows, with the design's texts verbatim and no citation added. The vector shapes are as sections 5.2 and 5.3 state. Digests are lowercase 64-hex, bare in status, index and allowlists, and 'sha256:'-prefixed only where the contracts state that form (manifestDigest and the directory hashes). The full base id 0ffa7db076a92e8bb341db4867557b894ecb5b27 resolves at the worktree."
+    },
+    {
+      "check": "3 The model against the README",
+      "result": "v4's model differs from the frozen v3 model only by: MC33 (Never); MC42 after MC41 and before MC37 (checks 1-2 per emptyDir in volume order, then 3-4); A2-POD-PULL-POLICY (Never) and A2-POD-EMPTYDIR last, in both the reference reading and the CEL; the C01 and C03 texts; C04; C28 right after C22; and docstrings plus one comment. The profile model carries VPC's validate_profile (read as text at b5166194 and at the base; lines 104-131 unchanged) in VPC's order, with P30-P35 after P16/P17 and P33 as the README words. Probes behave as stated: 0.5, 1.0, 9443.0 and 2^53 give P01; a boolean port gives P00; a sum equal to the limit is valid and one byte over gives P34 and MC42; 'volumes: []' gives P00; extra, undeclared or twice-mounted mounts give P33; reordered mounts are valid; a duplicate volume mounted once gives P35; a trailing-comma echo, a null init echo, an upper-case name, a trailing-slash mountPath and medium '' give P00; and every MC42 form probe gives its stated reason. The gaps are LPK1-C1-1 (lone surrogate gives P99), LPK1-C1-2 (trailing line feed) and LPK1-C1-3 (non-object limits raise)."
+    },
+    {
+      "check": "4 Schema and model agree",
+      "result": "Run under the pinned G-JSONSCHEMA interpreter (Python 3.12.14, jsonschema 4.24.0, in-process as MON-LPK1-SCHEMA-RUN allows; no other jsonschema imported). The v2 schema is a valid draft 2020-12 schema. The bundle's verdict equals the model's walker on 90 of 90 documents: the positive, 50 negatives, 16 cross documents and 23 probes. The model returns P00 only where the bundle refuses. K01b (9443.0) is bundle-valid and refused with P01 alone. 0.5 is bundle-invalid and refused with P01 first. The bundle's type checker reads 9443.0 as an integer. PPS v1 refuses the v2 positive (its profileId const)."
+    },
+    {
+      "check": "5 The vectors",
+      "result": "My own replays (standard library, models loaded by path) all pass. v4: 141 cases, 0 failures (47/23/30/11/4/26); the sealed file equals the rendering, 8322 bytes, sha256 92c21612304cb704d13b506c1ae885d62a47c01f0ed0d284affe563aa1868e32; its directory hash sha256:9b1ddc1096ff0d35fb4cd5a9e5e6b4248fefc5b75b5a06f862c59d85e028ca60 equals pinned and my own loader-hash implementation; check_a2_objects passes. v3 through the frozen model: 114 cases, 0 failures; file equals rendering; hash sha256:5aa2cdec0b8dc08c008b887e30b9954ffc46e7d779365f64db1adfd80656f189. Profile v2: 67 cases, 0 failures (positive valid, 50 of 50, X01-X16 16 of 16, using v4 and the frozen v3 per resource). The expectations follow from the design. v4's positives are v3's with Never plus section 3.3's three additions. N01-N36 keep v3's ops, and only the N15 and N16 texts change. The E and U final objects are never() of v3's, except E02 and E13 (exactly the three changes) and E08 and U05 (byte-equal to v3). The F and P objects are never() of v3's. The S mutations are identical relative to each version's rendering. The sealed file differs from v3's only in the Pod validations [8] (Never) and [9] (section 3.4's CEL, byte-equal). All 14 claim rows hold (C04 at v3 semantics, C21 with the v3 hash, C28 without the evidence). The 47 v3 cases that differ through v4 are exactly section 3.9's list. For the profile, my own predicates written from the README and VPC's text (P00 by the bundle), with no model and no patching, give each of the 66 non-positive documents its expected code under VPC's order. Under the sorted reading, 14 documents fail more than one rule and the table-order differences are K01, O01 and O02. Under the README words or the multiplicity reading, 15 documents fail more than one rule and V11 is added, as the README's P33 paragraph states. c1's data equals the design proof's outputs: the sealed bytes, the schema plus a line feed, v4's rows plus N47, and the positive. No wrong expectation. Branches without a vector: LPK1-C1-4."
+    },
+    {
+      "check": "6 The tests",
+      "result": "Not applicable at c1. There are no candidate tests and no D5a oracle tests yet: the oracle agents write theirs after adoption, and the head layer's test comes with the mechanics (design section 7). The vector replays of check 5 stand in their place."
+    },
+    {
+      "check": "7 Placement",
+      "result": "The base scripts/evolution_surface.py, loaded by path, ran on the base record (its vectors replay; 31 derived gate entries). All 12 new paths fall in CONTRACT_AND_SOURCE, as section 2's table says. Among the planned paths, review-round1.json is REVIEW_RECORD; the review identity, the oracle identities, the authority and task-packets/MET-LIVE-004.yaml are CONTRACT_AND_SOURCE; and the two oracle tests are ORACLE_TESTS. No path is gate material, exactly or case-folded. pr_approvers and pr_activators for the 12 paths are [LANE_MONITOR, OWNER]."
+    },
+    {
+      "check": "8 Privacy and supply chain",
+      "result": "All 12 files were scanned whole by script, with the scan strings built from parts. Home-path, tilde, agent-state, TOOLS-lane, toolchain-root, verifier-private, e-mail and credential shapes: 0. One temporary-directory shape hit, V13's container mountPath outside /work/, which is a test value and not a local path. Every proof mention reads 'the author's design proof (local, not published)'. The models import only the standard library (copy, hashlib, ipaddress, json, re, typing, datetime) and call no open, exec, eval, os, subprocess or network function. There is no new dependency, and nothing interposes on, forwards, proxies, swaps or bypasses anything. The legacy term was not scanned (see notChecked)."
+    },
+    {
+      "check": "9 Open questions",
+      "result": "Q-C1-1 and Q-C1-2 are answered in questions, each with a recommendation."
+    },
+    {
+      "check": "Departures 1-15 (build report C1R2, section 6)",
+      "result": "1: accepted. Re-running the shim-based rev 3 and rev 4 checks is excluded. I re-derived their substance without swapping anything: failing-rule sets, table-order counts, the 14 claim rows, N47, K01b, 0.5 and the other floats, and V11 and O02, all as stated. 2: the P01 text meets B-L1-1. 3: see Q-C1-1 and LPK1-C1-1. 4: accepted; the README states that a non-reviewed schema raises and has no P code, as section 4 says of VPC's line 128. 5: accepted; the walker equals the bundle on 90 of 90 documents. 6: accepted; it matches the README words and my derivation. 7-9 and 11-13: accepted, layout and placement only; the allowlists texts the design gives are verbatim. 10: the v4 model was compared with the frozen v3 model instead of the scratch, and it holds exactly the design's changes. 14: the wording matches L1D4-2 and my counts. 15: V13's value is a container path; accepted."
+    }
+  ],
+  "bindingRules": [
+    {
+      "rule": "B-L1-1",
+      "met": true,
+      "note": "The profile v2 README states the one P01 refusal text verbatim, on its own line. K01 and K01b expect exactly that text. It names the float refusal ('any number parsed as a float, integral or not') and the depth, size-budget, integer-range and canonical-size bounds."
+    },
+    {
+      "rule": "B-L1-2",
+      "met": true,
+      "note": "The README states P33's reading (judged over volume names, after P35). '(one mount per volume entry)' and 'only three would change' appear nowhere. The parenthetical counts (K01, O01 and O02 under the sorted comparison; V11 too under the README words or the multiplicity reading) equal my independent re-derivation."
+    },
+    {
+      "rule": "B-L1-3",
+      "met": true,
+      "note": "git diff --name-status 0ffa7db0 329a8d96 (with the excluded pathspecs) is exactly the 12 added files, so every predecessor is untouched at the subject. My own sample, fetched by exact path at b5166194 and 0ffa7db0, covers 11 non-chain files: the v3 authority, v3 vectors.json, v3 and v2 planeon-a2.json, AS3M, PPS, PPV, PCA, baseline.json, PCR, the I01 README and the W03 plan. Each is byte-identical. Three chain files (VPC, validate_admission_channel_v3.py and validate_i06_backend_profile.py) differ only by bump lines: the catalog and message counts 259 to 262; the successor chain grows by exactly 3 (46 to 49 and 45 to 48; 58 to 61 and 57 to 60); and VPC's membership grows by MET-LIVE-002, MET-GOV-003 and MET-LIVE-003. VPC's lines 104-131 are unchanged."
+    },
+    {
+      "rule": "MON-LPK1-SCHEMA-RUN",
+      "met": true,
+      "note": "Every schema validation in this review ran under the pinned G-JSONSCHEMA interpreter. Nothing was patched, shimmed or swapped."
+    }
+  ],
+  "questions": [
+    "Q-C1-1 (P99): keep it, but not on the premise given. The premise 'no schema-valid document reaches it' is false (LPK1-C1-1). A schema-valid profile with a lone surrogate reaches P99 today, at the canonical-size step. Removing P99 would make validate raise UnicodeEncodeError on such a document, which breaks the README's 'one refusal per document'. Recommended: map that encoding failure to P01, since it is VPC's line-130 refusal and P01 is that step; keep P99 only as the defensive catch-all, unreachable by any parsed JSON document; and state both P99 uses (validate and precondition) in the README. If the monitor prefers no model change, keep P99 for it and correct the README sentence instead.",
+    "Q-C1-2 (status line): the line CONTRACT_CANDIDATE_ROUND1_AWAITING_INDEPENDENT_REVIEW is correct for this in-tree round 1; keep it. It equals both status.json contractState values, and readmeStatusNote says status.json governs. It follows the predecessor's vocabulary: v3's README reads CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW, counting rounds of its own review series. Its round number is the in-tree MET-LIVE-004/contract round (Q3 (a)), not a TOOLS design round. The same README sentence already names the series, as status.json reviewSeries does. Putting the series inside the token would coin a contractState value that no existing reader knows. A c2, if built, carries ROUND2.",
+    "Next step: CHANGES_REQUIRED, on one MINOR (LPK1-C1-1), a README sentence plus one model mapping. Recommended: a small c2, then a delta round 2 limited to LPK1-C1-1 and the c1-to-c2 diff, on the same generic brief. The NOTEs need no round."
+  ],
+  "notChecked": [
+    "The upstream v1.37.1 sources and CEL behaviour (no network, no apiserver), including whether an emptyDir medium '' even reaches A2's CEL. The reference reading refuses it, and MC42 refuses it at signing; this is not verified.",
+    "The legacy term: its spelling was not given to me, and I may not read the memory files. The other privacy shapes were scanned.",
+    "Paths under the operator's excluded pathspecs in the base-to-subject diff, and the edge records' contents.",
+    "The subject's tree id: not printed, since rev-parse and cat-file are outside the allowed git commands. The commit id binds the tree, and every subject file fetched by exact path at the commit has the build report's sha256.",
+    "The author's scratch v4 model and the build scripts, which are outside the allowed TOOLS reads. The v4 model was compared with the frozen v3 model instead.",
+    "F2.7's 43 profile-pinning files, R10, R12, VPO, the post-255 chain recipe, and the authority and head layer (mechanics).",
+    "The briefs.json registry entry for MET-LIVE-004/contract: not read. I checked only the brief's sha256 at the subject."
+  ],
+  "disclosures": [
+    "Builtins outside 'timeout 120 zsh -c': several calls began with 'cd <WORK>' before the prefix-guarded timeout commands, used 'echo' separators, or ran one 'for' loop over three exact WORK paths (a local diff of fetched copies) directly in the shell. Every command line still began with the PAUSE/HOLD prefix, and every external command ran under timeout 120.",
+    "Interruption: one prefixed command, which fetched architecture/review-record/README.md at the subject by exact path, waited in the PAUSE/HOLD prefix loop past the 120 s tool limit and was moved to the background by the harness. While it waited, I ran one more prefixed command. It also waited in the prefix loop, then only listed WORK. Both completed once the hold cleared. I did not read the backgrounded command's harness output file; I re-ran its grep on the WORK copy.",
+    "Reads beyond the files the rules name, all read-only: architecture/review-record/README.md at the subject (git show by exact path, for the record's member table); the evolution-surface record and vectors, VPC, and the chain and pin files at 0ffa7db0 and b5166194 (git show by exact path, for checks 3, 7 and B-L1-3); 'ls' of TOOLS lpk1/reviews and proto/rev4/out; a shasum over the reviews directory's files, which included this round's launch file (hash only, content not displayed). An OWNER_DECISIONS heading grep printed every section title. The LPK-1 sections I read include two shared with 260 material (the 259/260 registry batch and MON-260-NEXT) and the operator notes after them.",
+    "One schema-diff run first failed on an invalid grep pattern before any output; it was re-run with plain output redirection.",
+    "The harness's launch context showed a memory index and account context. I opened no memory file, used none of it, and wrote none of it anywhere."
+  ]
+}

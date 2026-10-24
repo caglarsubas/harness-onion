@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "planeon.review-record/v2",
+  "kind": "CONTRACT",
+  "series": "MET-LIVE-004/contract",
+  "round": 2,
+  "subject": {
+    "repository": "harness-onion",
+    "commit": "5c32adc74e493ac38d5864689a523a20cc0c513c",
+    "tree": "5e5c428cd3c214913e5499c8bb604c8c1173ad4f"
+  },
+  "base": {
+    "repository": "harness-onion",
+    "commit": "329a8d96697ff4232a75f5ed801bdc7f71021969",
+    "tree": "4326e00eb55fa32458a66d081814080ed597b455"
+  },
+  "reviewDate": "2026-10-24",
+  "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+  "rulesSha256": "a93f51a3b3c0e5b4a0ca08115a3038899aa63d5209756c6fdf090d250a1c18ba",
+  "wrapperSha256": null,
+  "reviewer": {
+    "model": "claude-opus-5-5",
+    "role": "REVIEWER_AGENT"
+  },
+  "verdict": "PASS_FOR_ADOPTION",
+  "findings": [
+    {
+      "id": "LPK1-C2-1",
+      "severity": "NOTE",
+      "location": "architecture/admission-semantics-v4/README.md, 'MC42, every emptyDir is bounded', check 3 (the sentence c2 adds); scripts/admission_semantics_v4.py, check_manifest, MC34 (carried from v3)",
+      "finding": "c2's new sentence says a 'resources' that is not an object 'meets MC34 first'. MC34 (resources = c.get('resources') or {}) refuses only a falsy non-object: [], '', null, 0 or false give MC34's text. A truthy non-object, such as ['x'], 'x', 5 or true, in a container or an init container, makes check_manifest raise AttributeError at MC34, exactly as v3 and c1 do (my probes on PodInit). The README does not say that check_manifest can raise, so an oracle written from the README alone could expect MC34's refusal for resources ['x']. This is carried v3 behaviour, which item 3 keeps unchanged, and round 1 treated such raising as a NOTE (LPK1-C1-3). MC42's own new guard also covers a non-object 'resources', but MC34 makes that branch unreachable. The non-object 'limits' case is fixed as item 3 requires.",
+      "requiredChange": "None for this round. Recommended, at the next touch: 'a resources that is not an object meets MC34 first, which refuses a falsy one and raises on any other, as v3 does (carried unchanged)'. The D5a oracle brief should treat a truthy non-object resources as a raise, not an MC34 refusal.",
+      "blocks": false
+    },
+    {
+      "id": "LPK1-C2-2",
+      "severity": "NOTE",
+      "location": "architecture/proxy-profile-v2/README.md, 'P99, a defensive code with two uses', use (1)",
+      "finding": "The P99 case is confirmed (see questions), but one clause is loose: 'VPC refuses the same document with its generic refusal at the same point'. VPC never reaches the cpu read for that document. It refuses the v2 document earlier, at line 128 (its schema pin) or at line 131 (v1's profileId const), and with the same generic text it uses for every step. A v1 profile holding the same Pod does reach VPC's line 191, the same unguarded int(cpu[:-1]), because v1's schema has the same cpu pattern ^[1-9][0-9]{0,6}m$. That ValueError is caught by the single handler at lines 211-213. So the clause is true of VPC's statement and of the v1 analogue, not of 'the same document'.",
+      "requiredChange": "None for this round. Recommended, at the next touch: 'VPC's same statement (line 191) raises inside its one generic catch, as a v1 profile with that Pod shows'.",
+      "blocks": false
+    },
+    {
+      "id": "LPK1-C2-3",
+      "severity": "NOTE",
+      "location": "architecture/admission-semantics-v4/status.json and architecture/proxy-profile-v2/status.json, carried.steps W4 'content'",
+      "finding": "c2 rewrites W4's anchors as item 4 requires, and the new anchors exist at the subject: scripts/native_qualification_v4.py, and section 6 of architecture/policy-observation-digests/README.md, which holds record.profileDigest. But the quoted caller obligation, unchanged from c1, is not verbatim. W4 quotes '(`validate_proxy_contract.py`, `validate_profile`)', while the docstring reads '(`scripts/validate_proxy_contract.py`, `validate_profile`)', wrapped across two lines. The meaning is the same, and no rule or vector depends on it.",
+      "requiredChange": "None for this round. Recommended, at the next touch: quote the docstring verbatim (with 'scripts/'), or drop the quotation marks.",
+      "blocks": false
+    }
+  ],
+  "checked": [
+    {
+      "check": "1 Faithfulness to the decisions",
+      "result": "Q-LPK1-C2 (a) is met: c2 is c1 plus items 1-4 and 6, item 5 puts nothing in c2, and no other change is present (check 'The diff is the errata'). Q-C1-1 is met: the canonical-encoding failure refuses P01 in validate and in precondition, and the README states it and both P99 uses. The ruling's premise that 'P99 stays a catch-all that no parsed document reaches' does not hold for one schema-valid document class. c2 names that class rather than claim the premise. The monitor's position on Q-C2-1 is (a), and I confirm it (questions). Q-C1-2 is met: the round-2 form. B-L1-1 holds. No decision reopened."
+    },
+    {
+      "check": "The diff is the errata (rules file)",
+      "result": "git diff 329a8d96 5c32adc7, with the excluded pathspecs, changes exactly the seven files the build report lists: 7 M, 98 insertions, 36 deletions, 26 hunks. Every hunk follows from an item: v4 README 1 (item 6), 2 (item 2), 3 (item 3); v4 status.json 4 (item 6), 5-7 (item 4: W1, W3 with W4, C2); source-index.json 8 (item 6) and 9-13 (the subject digests of the changed files, consequential); profile README 14 (item 6), 15 (item 2), 16-17 (item 1); profile status.json 18 (item 6), 19-22 (item 4: S1, W1, W3 with W4, C2); v4 model 23 (item 3); profile model 24-26 (item 1). 'candidate' c1 to c2 follows from item 6 (build choice 2). The other five files are byte-identical (cmp). c2-diff.txt (fd24f11e) differs from git's output only in form: c1/ and c2/ headers, no 'diff --git' or 'index' lines, and no function context after the hunk ranges. In one hunk (number 15, the profile README Patterns paragraph) the inserted blank line sits one line earlier (@@ -57 there, @@ -58 in git), an equivalent placement next to a blank context line. My own strict applier, applying c2-diff.txt and then git's diff to the c1 bytes, reproduces all seven c2 files byte for byte (26 hunks each). All 12 c2 files have the build report's sha256. The c1 copies match c1's own source-index digests (11 of 11), and c2's source-index digests match c2 (11 of 11)."
+    },
+    {
+      "check": "2 The record against the design",
+      "result": "Both status.json files change only candidate, reviewRounds, contractState and carried.steps. Their key order is unchanged. ownerDecisions, sealed (four members, preconditions unchanged), carried.rulings, carried.obligationsOfC1C2, carried.classes, noInstallBefore, predecessorRecord and readmeStatusNote are equal to c1. Both reviewRounds, and source-index.json's inTreeRounds, hold one entry {round 1, recordSha256 3a3d8576ef34ec2bf2af6eed2c906c9cfed6120b1e688c5082083c38bf51419a, verdict CHANGES_REQUIRED, subjectCommit 329a8d96697ff4232a75f5ed801bdc7f71021969}, with bare lowercase 64-hex and full 40-hex. The design names no member names for these entries. The choice follows v3's status.json (round, recordSha256, verdict), with subjectCommit for v3's subjectDirectory, and leaves out v3's 'record' path until the in-tree record is published, as the build report says (choice 1)."
+    },
+    {
+      "check": "3 The model against the README",
+      "result": "Profile model: only validate's canonical-size step and precondition change, plus the module docstring. In validate, a ValueError from canonical() now refuses P01; after _bounded, the only ValueError left is an unencodable string. TypeError and RecursionError still give P99. Probes (lone surrogate \\ud800 in the ConfigMap data value, in a member name, and in binding.tenantId): c2 validate and precondition give the exact P01 text, against the sealed namespace and another one (c1: P99, then met or P40). The TEXT table, P01 text included, is equal to c1. precondition gives P99 for {}, [], 'x', null, 5, binding null, {} or [], and P40 for binding.namespace 5. v4 model: only MC42's _limit changes, and it differs from c1 only where c1 raised. A container's or an init container's limits equal to requests as ['x'], 'x', 5 or true now gives MC42 check 3's reason (c1: AttributeError; v3: admit, no MC42). resources ['x'] or 'x' raises at MC34 in c2, c1 and v3 alike, and [] or null gives MC34 in all three (LPK1-C2-1). An integer ephemeral-storage gives MC42 check 3 in c1 and c2. Every v4 positive gets the same result from c1's and c2's check_manifest. No v3-carried check changed: the v4 diff is the one _limit hunk. The README statements of items 1-3 match the model. The Patterns text is accurate: the walker uses re.search; v4 and the frozen v3 use re.match with ^...$ anchors (RESERVED_KEY is a prefix match, so the trailing line feed does not affect it); the bundle accepts a cpu followed by a line feed. v4 checks no cpu or memory form, so profile v2 is never wider than v4 for those either."
+    },
+    {
+      "check": "4 Schema and model agree",
+      "result": "The schema and the walker are unchanged from c1, so round 1's 90 of 90 stands. Under the pinned interpreter (Python 3.12.14, jsonschema 4.24.0, in-process per MON-LPK1-SCHEMA-RUN, models loaded by path), the bundle's verdict equals the walker's on 4 of 4 new probes. Valid: the surrogate in a value, and the Pod with cpu 500m followed by one line feed. Invalid: the surrogate as a member name, and the surrogate in tenantId. The v2 schema passes check_schema."
+    },
+    {
+      "check": "5 The vectors",
+      "result": "Both vectors.json files are byte-identical to c1, so round 1's derivation of the expectations stands. My own replay (standard library, WORK copies loaded by path, nothing patched): v4 141 cases, 0 failures (47/23/30/11/4/26), with the U01-U08 backstop cases taken past the signer, which refuses all 8 of them as intended. check_a2_objects passes. The sealed planeon-a2.json equals the rendering, 8322 bytes, sha256 92c21612304cb704d13b506c1ae885d62a47c01f0ed0d284affe563aa1868e32. The directory hash sha256:9b1ddc1096ff0d35fb4cd5a9e5e6b4248fefc5b75b5a06f862c59d85e028ca60 equals pinned. v3 through the frozen model (sha256 3db8f51a…): 114 cases, 0 failures; the file equals the rendering; hash sha256:5aa2cdec0b8dc08c008b887e30b9954ffc46e7d779365f64db1adfd80656f189. Profile v2: 67 cases, 0 failures: the positive is valid, 50 of 50 negatives give their exact text, and X01-X16 give 16 of 16 (profileV2, precondition, v4 and v3 per resource). No vector reaches P99 (0 of 66)."
+    },
+    {
+      "check": "6 The tests",
+      "result": "Not applicable at c2, as in round 1. There are no candidate tests and no D5a oracle tests yet. The replays of check 5 stand in their place."
+    },
+    {
+      "check": "7 Placement",
+      "result": "c2 adds no path. It modifies 7 of round 1's 12 files in place, so round 1's placement (all 12 in CONTRACT_AND_SOURCE, none gate material) stands. This record's planned published path, review-round2.json, falls in the REVIEW_RECORD class by round 1's reading."
+    },
+    {
+      "check": "8 Privacy and supply chain",
+      "result": "All 12 c2 files and the 98 added lines of the c1-to-c2 diff were scanned by script, with the scan strings built from parts. Home-path, tilde, temporary-path, agent-state, TOOLS-lane, toolchain-root, verifier-private, e-mail, private-key and token shapes: 0 in the 7 changed files and 0 in the added lines. One temporary-path hit is in the unchanged profile vectors.json: V13's container mountPath test value, which round 1 already accepted. The new P99 text cites 'the author's design proof (local, not published)'. No import was added. The models still import only the standard library, and nothing interposes on, forwards, proxies, swaps or bypasses anything. The legacy term was not scanned (notChecked)."
+    },
+    {
+      "check": "9 Open questions",
+      "result": "Q-C2-1 is answered in questions, with a recommendation."
+    },
+    {
+      "check": "Round 1 findings",
+      "result": "LPK1-C1-1 (MINOR): resolved by item 1. LPK1-C1-2 (NOTE): both READMEs now state the dialect; no model, schema or vector change. LPK1-C1-3 (NOTE): resolved for a non-object limits; a non-object resources remains MC34's, as carried (LPK1-C2-1). LPK1-C1-4 (NOTE): item 5, not in c2, as ruled. LPK1-C1-5 (NOTE): resolved. No step text holds 'PV's', 'F5.6', '§3.2', 'VPC/VPO', 'PPV' or 'I01 README'. Profile v2's S1 names sealed.preconditions of architecture/admission-semantics-v4/status.json. C2's '(see carried.obligationsOfC1C2)' points to a member present in both files. W1's two script paths, W3's architecture/proxy-contract-inputs/vectors.json (it holds profile v1's positive, profileId ..._V1), and W4's anchors exist at the subject. The two section 10 quotes, carried.rulings Q-LPK1-R2-1 and MON-LPK1-R2-2, are byte-equal to c1 in both files. Round-2 form: both README status lines and both contractState values read CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW (candidate c2), and no stale round-1 or c1 wording remains."
+    }
+  ],
+  "bindingRules": [
+    {
+      "rule": "B-L1-1",
+      "met": true,
+      "note": "The P01 text is unchanged: the TEXT tables are equal in c1 and c2, and the README's verbatim line is untouched. The encoding failure refuses with exactly that text from validate and precondition."
+    },
+    {
+      "rule": "MON-LPK1-SCHEMA-RUN",
+      "met": true,
+      "note": "The only schema validation in this round ran under the pinned G-JSONSCHEMA interpreter. Nothing was patched, shimmed or swapped."
+    }
+  ],
+  "questions": [
+    "Q-C2-1: confirmed, and (a), keep c2 as written. Take the profile v2 positive with the Pod's requests.cpu and limits.cpu both set to '500m' followed by one line feed, rehashed. It is schema-valid under the pinned bundle and the walker, because the cpu pattern ^[1-9][0-9]{0,6}m$ admits the trailing line feed and maxLength is 128. P01-P16 and P17 pass, and then int(cpu[:-1]) raises ValueError, so validate returns P99 in c2, as it did in c1. precondition is met. Admission v4 admits that Pod (A2 admit), because v4 checks no cpu form, so the profile is narrower than v4, not wider. P99 masks any later failure of the same document; with a wrong volumes echo, it still gives P99 and not P32. That is VPC's order, since the cpu read precedes P18-P22 and P30-P35. No other parsed document reaches validate's P99. Statically, every post-schema read in validate is of a schema-required member with a schema-fixed type. strptime failures map to P02, and canonical failures map to P01. int() accepts the trailing line feed for memory, ephemeral-storage and sizeLimit. So the cpu slice is the only conversion that can fail. Dynamically, 1408 leaf variants (307 schema-valid: a trailing line feed, Arabic-Indic and full-width digits, empty, zero, the 15-digit maximum, upper case, and integer bounds, with the requests and limits twins kept equal) and 419 structural edits (53 schema-valid: drop, duplicate or reverse items; delete members) reach P99 only through that cpu variant. 0 of the 66 vectors reach P99. precondition's P99 is reached only by arguments that are not a profile object with a binding namespace, which is the README's use (2). No document refuses with a specific VPC step while c2 gives P99. VPC refuses every step with one generic text ('invalid strict proxy profile data'), and the README maps P codes to its _require steps. The cpu read at VPC's line 191 is not such a step: it is the same unguarded int() inside the single catch, so P99 is the faithful code (wording note: LPK1-C2-2). Recommendation (a): mapping the failure to a P code now would add a rule that VPC does not have. A later successor could instead refuse a trailing line feed in every pattern, in both contracts together (LPK1-C1-2's option). That would make validate's P99 unreachable for parsed documents. The D5a oracle brief should carry this cpu case beside the lone surrogate."
+  ],
+  "notChecked": [
+    "Upstream v1.37.1: whether the apiserver's quantity and name validation refuses a string ending in a line feed. Both READMEs mark this as a reading of upstream. No network.",
+    "'edge record v10 registers for R10' in W3: architecture/artifact-edges/ is out of my reads. I checked only that architecture/proxy-contract-inputs/vectors.json exists and holds profile v1's positive.",
+    "The legacy term: its spelling was not given to me, and I may not read the memory files. The other privacy shapes were scanned.",
+    "The subject's and base's tree ids: not printed, because rev-parse and cat-file are outside the allowed git commands. The commits bind the trees. Every file fetched by exact path at both commits matches the build report's digests or c1's own source-index digests.",
+    "The c2 build agent's scripts, its WORK and c2/ folder in TOOLS: not read. I compared the committed bytes instead.",
+    "Paths under the excluded pathspecs, R10, R12, VPO's content (only its byte count, to show the W1 anchor exists), and the D5a oracle briefs (item 5, the operator's).",
+    "Whether the decisions name PASS_FOR_SOURCE_PUBLICATION for this packet: none of the OWNER_DECISIONS ranges I may read does, so the verdict is PASS_FOR_ADOPTION."
+  ],
+  "disclosures": [
+    "One tool call per message: twice, I sent two calls in one message. The first was an Edit of my own replay script in WORK with the prefixed command that re-ran it. The second was two Edits of my own scan script in WORK (adding an absolute-path shape and direct-path input). Every other message held one call. Both were my own WORK files; no subject file or other path was touched.",
+    "Reads beyond the files the rules name, all read-only by git show of exact paths at the subject: scripts/validate_proxy_contract.py (as text, never imported); scripts/admission_semantics_v3.py and v3's vectors.json and planeon-a2.json (for the frozen-model replay); architecture/admission-semantics-v3/status.json (the reviewRounds member names); architecture/proxy-contract-inputs/profile.schema.json and vectors.json; scripts/native_qualification_v4.py and architecture/policy-observation-digests/README.md (the W3 and W4 anchors); and scripts/validate_policy_observation.py piped to a byte count only (not displayed, imported or run). DESIGN.rev4.md: its sha256 and one grep for the reviewRounds member names (no hit).",
+    "Untimed utilities: my own non-model scripts (shape, flatten, carried, privacy and digest checks, and the second diff application) ran without the time utility, each well under 1 s. Every process that loaded a model, and the bundle run, ran under the time utility with -l; the largest peak RSS was 39,370,752 bytes.",
+    "Own-script slips: one grep filter swallowed my first diff-application output, so I re-ran it. My probe script once failed in its own rehash helper on a resource row without a manifest; I fixed the helper and re-ran it. The bundle command exited 1 only because a final 'grep -c' found no traceback. My replay's tally line also counted the signer refusals of the U cases (8 and 5) as extra rows; those are not vector cases.",
+    "I wrote my scripts, the probe documents and this record's draft in WORK with the file tools, and copied the record to its path. No other write and no git state change.",
+    "No interruption: no command waited in the PAUSE or HOLD prefix.",
+    "The harness's launch context showed a memory index and account context. I opened no memory file, used none of it, and wrote none of it anywhere."
+  ]
+}
