@@ -1,0 +1,656 @@
+{
+ "schemaVersion": "planeon.internal.linux-probe-interface-vectors/v1",
+ "positive": {
+  "record": "architecture/linux-probe-interface/binding.json",
+  "refusals": []
+ },
+ "negatives": [
+  {
+   "label": "a record file digest changed",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/files/2/sha256",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "a v1 file's digest is not the monitor-verified handoff digest",
+    "the MANIFEST disagrees with the record",
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "label": "a MANIFEST whose files disagree",
+   "recordOps": [],
+   "fileOverrides": {
+    "MANIFEST.json": {
+     "ops": [
+      {
+       "op": "set",
+       "path": "/files/README.md",
+       "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "label": "a changed source commit",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/source/commit",
+     "value": "1111111111111111111111111111111111111111"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "label": "a changed review record digest",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/reviews/0/recordSha256",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "label": "a last verdict that is not PASS_FOR_HANDOFF",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/reviews/2/verdict",
+     "value": "CHANGES_REQUIRED"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the MANIFEST disagrees with the record",
+    "the last review's verdict is not PASS_FOR_HANDOFF"
+   ]
+  },
+  {
+   "label": "an instance missing a required member",
+   "recordOps": [],
+   "fileOverrides": {
+    "probe-interface.json": {
+     "ops": [
+      {
+       "op": "delete",
+       "path": "/http"
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "probe-interface.json does not conform to its schema"
+   ]
+  },
+  {
+   "label": "an instance with a boolean-false property schema hit",
+   "recordOps": [],
+   "fileOverrides": {
+    "probe-interface.schema.json": {
+     "ops": [
+      {
+       "op": "set",
+       "path": "/properties/http",
+       "value": false
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "probe-interface.json does not conform to its schema"
+   ]
+  },
+  {
+   "label": "a schema with an unsupported keyword",
+   "recordOps": [],
+   "fileOverrides": {
+    "probe-interface.schema.json": {
+     "ops": [
+      {
+       "op": "set",
+       "path": "/oneOf",
+       "value": [
+        {}
+       ]
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "the schema uses a keyword outside the supported set"
+   ]
+  },
+  {
+   "label": "a schema naming another draft",
+   "recordOps": [],
+   "fileOverrides": {
+    "probe-interface.schema.json": {
+     "ops": [
+      {
+       "op": "set",
+       "path": "/$schema",
+       "value": "http://json-schema.org/draft-07/schema#"
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "the schema uses a keyword outside the supported set"
+   ]
+  },
+  {
+   "label": "a wrong placeholder",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/placeholderBinding/placeholder",
+     "value": "OTHER_PLACEHOLDER"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "label": "an LPK-0 record digest that differs",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/placeholderBinding/recordSha256",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "label": "an interface digest that differs",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/placeholderBinding/interfaceSha256",
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the NEUTRAL_INTERFACE_CONTRACT binding is not as stated"
+   ]
+  },
+  {
+   "label": "L1-2 the NOT_ACCEPTANCE text claiming acceptance",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/nonClaims/1/text",
+     "value": "A probe kit built from this contract is accepted by R12."
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-2 the FORM_ONLY text blanked",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/nonClaims/0/text",
+     "value": " "
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-1 the fourth non-claim missing",
+   "recordOps": [
+    {
+     "op": "delete",
+     "path": "/nonClaims/2"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the non-claims are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-3 the owner decisions emptied",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/ownerDecisions",
+     "value": []
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the owner decisions are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-3 an owner decision dropped",
+   "recordOps": [
+    {
+     "op": "delete",
+     "path": "/ownerDecisions/1"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the owner decisions are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-3 the Q-PK-6 quote changed",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/ownerDecisions/0/quote",
+     "value": "Neutral contract"
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the owner decisions are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-3 the owner decisions reordered",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/ownerDecisions",
+     "value": [
+      {
+       "id": "R12-ACCEPTANCE-RULES",
+       "quote": "Keep them in R12 (Recommended)"
+      },
+      {
+       "id": "Q-PK-6",
+       "quote": "Neutral contract (Recommended)"
+      }
+     ]
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the owner decisions are not exactly as stated"
+   ]
+  },
+  {
+   "label": "L1-4 slot as a float",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/slot",
+     "value": 262.0
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "label": "L1-4 source as a list",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/source",
+     "value": []
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "label": "L1-4 nonClaims as an object",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/nonClaims",
+     "value": {}
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "label": "L1-4 files as an object",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/files",
+     "value": {}
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "label": "an extra member",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/extra",
+     "value": 1
+    }
+   ],
+   "fileOverrides": {},
+   "refusals": [
+    "the record's shape is not the closed shape"
+   ]
+  },
+  {
+   "label": "L1-8 a MANIFEST source with an extra member",
+   "recordOps": [],
+   "fileOverrides": {
+    "MANIFEST.json": {
+     "ops": [
+      {
+       "op": "set",
+       "path": "/source/extra",
+       "value": "x"
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "label": "L1-8 the MANIFEST's non-claims changed",
+   "recordOps": [],
+   "fileOverrides": {
+    "MANIFEST.json": {
+     "ops": [
+      {
+       "op": "set",
+       "path": "/nonClaims/1",
+       "value": "R12 never vendors this contract."
+      }
+     ]
+    }
+   },
+   "refusals": [
+    "a file's sha256 does not equal the record",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "label": "L1-8 a conforming file altered with its record digest updated",
+   "recordOps": [
+    {
+     "op": "set",
+     "path": "/files/1/sha256",
+     "value": "f71e26243b6b6eb36e76f1f1fa38d2f5ba0db2b2204062ca26be6240f041ffbc"
+    }
+   ],
+   "fileOverrides": {
+    "README.md": {
+     "text": "# Linux probe interface (draft): sources\n\nSource: R12 main c17bcfe3 (tree 9c2b2b8a, read at e1b8bb8d). Every path below is an R12 repository path, and every line\nnumber is at e1b8bb8d.\n\nFiles: `probe-interface.json` is the draft contract; `probe-interface.schema.json` is its closed JSON Schema (draft\n2020-12). A neutral extractor lifted the interface only, under owner decision Q-PK-6. R12's test logic, campaign\ninternals, server code, credentials, host names and local paths are not part of it.\n\nField paths use JSON-pointer style; `[name=x]`, `[id=x]` and `[code=x]` select an array entry.\n\n## Field sources\n\n| Field | R12 source at e1b8bb8d |\n| --- | --- |\n| `/schemaVersion` | contract metadata, not an R12 field |\n| `/source/repository` | contract metadata: R12 repository name |\n| `/source/commit` | contract metadata: R12 main c17bcfe3, full id from the merge record by operator relay (gap G10) |\n| `/source/tree` | contract metadata: tree of e1b8bb8d, equal to the tree of c17bcfe3 per the brief |\n| `/source/readAt` | contract metadata: local commit e1b8bb8d |\n| `/cases[id=HOST_ISOLATION_NEGATIVES]` | src/harness_conformance/linux_readiness.py:27 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=LINUX_TARGET_BUILD]` | src/harness_conformance/linux_readiness.py:28 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=FULL_PREDECESSOR_REGRESSION]` | src/harness_conformance/linux_readiness.py:29 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=CONTROL_CONTAINER_STARTUP]` | src/harness_conformance/linux_readiness.py:30 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=POSTGRES_MIGRATION_AND_RLS]` | src/harness_conformance/linux_readiness.py:31 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=DURABLE_RESTART]` | src/harness_conformance/linux_readiness.py:32 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=ARBITRARY_NON_ROOT_UID]` | src/harness_conformance/linux_readiness.py:33 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=READ_ONLY_ROOT_FILESYSTEM]` | src/harness_conformance/linux_readiness.py:34 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=KUBERNETES_SMOKE]` | src/harness_conformance/linux_readiness.py:35 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/cases[id=DEFAULT_DENY_NETWORK]` | src/harness_conformance/linux_readiness.py:36 (id, checks); src/harness_conformance/linux_readiness.py:24, 38-39 (order; axis by position); src/harness_conformance/linux_readiness.py:320, 328 (path); src/harness_conformance/live_session.py:161 (path); src/harness_conformance/linux_readiness.py:192-193 (regression repositories); src/harness_conformance/live_session.py:211-212 (regression repositories) |\n| `/request/schemaVersion` | src/harness_conformance/linux_readiness.py:336; src/harness_conformance/live_session.py:159 |\n| `/request/document/mediaType` | src/harness_conformance/live_proxy_client.py:312; src/harness_conformance/linux_readiness.py:329 |\n| `/request/document/maxBytes` | src/harness_conformance/live_session.py:17, 77, 155 (default bound applied to the request) |\n| `/request/document/encoding/form` | src/harness_conformance/live_session.py:82-84, 87-89 |\n| `/request/document/encoding/gaps` | gap reference (see Gaps below) |\n| `/request/document/topLevel` | src/harness_conformance/live_session.py:86 |\n| `/request/document/maxDepth` | src/harness_conformance/live_session.py:19, 50 |\n| `/request/document/depthCounting` | src/harness_conformance/live_session.py:44, 50, 63-64, 67 |\n| `/request/document/maxMembers` | src/harness_conformance/live_session.py:56-57 |\n| `/request/document/keyTypes` | src/harness_conformance/live_session.py:60-62 |\n| `/request/document/valueTypes` | src/harness_conformance/live_session.py:53, 56, 68-69 |\n| `/request/document/integerRange` | src/harness_conformance/live_session.py:70-71 |\n| `/request/document/refusals[code=SESSION_SIZE_EXCEEDED]` | src/harness_conformance/live_session.py:54-55, 58-59, 72-73, 79, 83, 88 |\n| `/request/document/refusals[code=SESSION_DEPTH_EXCEEDED]` | src/harness_conformance/live_session.py:19, 50 |\n| `/request/document/refusals[code=SESSION_COLLECTION_EXCEEDED]` | src/harness_conformance/live_session.py:57 |\n| `/request/document/refusals[code=SESSION_TYPE_INVALID]` | src/harness_conformance/live_session.py:62, 69, 71, 86 |\n| `/request/document/refusals[code=SESSION_DATA_MALFORMED]` | src/harness_conformance/live_session.py:90-93 |\n| `/request/document/gaps` | gap reference (see Gaps below) |\n| `/request/members[name=schemaVersion]` | src/harness_conformance/linux_readiness.py:336; src/harness_conformance/live_session.py:33-34, 156, 159 |\n| `/request/members[name=operation]` | src/harness_conformance/linux_readiness.py:319, 336; src/harness_conformance/live_session.py:33, 157-158 |\n| `/request/members[name=endpointId]` | src/harness_conformance/linux_readiness.py:321, 337; src/harness_conformance/live_session.py:33, 164-165 |\n| `/request/members[name=namespace]` | src/harness_conformance/linux_readiness.py:337; src/harness_conformance/live_session.py:33, 164-165 |\n| `/request/members[name=method]` | src/harness_conformance/linux_readiness.py:337; src/harness_conformance/live_session.py:33, 160 |\n| `/request/members[name=path]` | src/harness_conformance/linux_readiness.py:320, 337; src/harness_conformance/live_session.py:34, 161 |\n| `/request/members[name=runNonce]` | src/harness_conformance/linux_readiness.py:338; src/harness_conformance/live_session.py:34, 164-165 |\n| `/request/members[name=architecture]` | src/harness_conformance/linux_readiness.py:25, 338; src/harness_conformance/live_session.py:34, 162 |\n| `/request/members[name=probeDigest]` | src/harness_conformance/linux_readiness.py:339; src/harness_conformance/live_session.py:34, 166-167 |\n| `/request/members[name=commandDigest]` | src/harness_conformance/linux_readiness.py:339; src/harness_conformance/live_session.py:34, 166-167 |\n| `/request/inputsCopied/envelope` | src/harness_conformance/linux_readiness.py:338 |\n| `/request/inputsCopied/capacity` | src/harness_conformance/linux_readiness.py:336-339 (the returned request copies no capacity member) |\n| `/request/inputsCopied/plan` | src/harness_conformance/linux_readiness.py:321, 337-339 |\n| `/receipt/document/mediaType` | src/harness_conformance/live_proxy_client.py:312; src/harness_conformance/linux_readiness.py:329 |\n| `/receipt/document/maxBytes` | src/harness_conformance/live_session.py:18, 79, 193; src/harness_conformance/live_proxy_client.py:316; src/harness_conformance/linux_readiness.py:330 |\n| `/receipt/document/encoding/form` | src/harness_conformance/live_session.py:82-84, 87-89 |\n| `/receipt/document/encoding/gaps` | gap reference (see Gaps below) |\n| `/receipt/document/topLevel` | src/harness_conformance/live_session.py:86 |\n| `/receipt/document/maxDepth` | src/harness_conformance/live_session.py:19, 50 |\n| `/receipt/document/depthCounting` | src/harness_conformance/live_session.py:44, 50, 63-64, 67 |\n| `/receipt/document/maxMembers` | src/harness_conformance/live_session.py:56-57 |\n| `/receipt/document/keyTypes` | src/harness_conformance/live_session.py:60-62 |\n| `/receipt/document/valueTypes` | src/harness_conformance/live_session.py:53, 56, 68-69 |\n| `/receipt/document/integerRange` | src/harness_conformance/live_session.py:70-71 |\n| `/receipt/document/refusals[code=SESSION_SIZE_EXCEEDED]` | src/harness_conformance/live_session.py:54-55, 58-59, 72-73, 79, 83, 88 |\n| `/receipt/document/refusals[code=SESSION_DEPTH_EXCEEDED]` | src/harness_conformance/live_session.py:19, 50 |\n| `/receipt/document/refusals[code=SESSION_COLLECTION_EXCEEDED]` | src/harness_conformance/live_session.py:57 |\n| `/receipt/document/refusals[code=SESSION_TYPE_INVALID]` | src/harness_conformance/live_session.py:62, 69, 71, 86 |\n| `/receipt/document/refusals[code=SESSION_DATA_MALFORMED]` | src/harness_conformance/live_session.py:90-93 |\n| `/receipt/document/gaps` | gap reference (see Gaps below) |\n| `/receipt/statuses` | src/harness_conformance/linux_readiness.py:46; src/harness_conformance/live_session.py:12, 208 |\n| `/receipt/repositories` | src/harness_conformance/linux_readiness.py:40; src/harness_conformance/live_session.py:12, 211 |\n| `/receipt/inventory/count` | src/harness_conformance/linux_readiness.py:180-181 |\n| `/receipt/inventory/ordered` | src/harness_conformance/linux_readiness.py:182-184 |\n| `/receipt/fields[name=caseId]` | src/harness_conformance/linux_readiness.py:183-184; src/harness_conformance/live_session.py:35, 194-197 |\n| `/receipt/fields[name=status]` | src/harness_conformance/linux_readiness.py:46, 183-184; src/harness_conformance/live_session.py:35 |\n| `/receipt/fields[name=observedAt]` | src/harness_conformance/linux_readiness.py:75-77, 185; src/harness_conformance/live_session.py:35 |\n| `/receipt/fields[name=runNonce]` | src/harness_conformance/linux_readiness.py:186; src/harness_conformance/live_session.py:35, 195-197 |\n| `/receipt/fields[name=probeDigest]` | src/harness_conformance/linux_readiness.py:187-188; src/harness_conformance/live_session.py:35, 196-197 |\n| `/receipt/fields[name=commandDigest]` | src/harness_conformance/linux_readiness.py:187-188; src/harness_conformance/live_session.py:36, 196-197 |\n| `/receipt/fields[name=outputDigest]` | src/harness_conformance/linux_readiness.py:187-188, 199; src/harness_conformance/live_session.py:36, 233-234 |\n| `/receipt/fields[name=output]` | src/harness_conformance/linux_readiness.py:189; src/harness_conformance/live_session.py:36, 201-203 |\n| `/receipt/output/members[name=checks]` | src/harness_conformance/linux_readiness.py:71, 190-191; src/harness_conformance/live_session.py:204, 207-209 |\n| `/receipt/output/members[name=regressions]` | src/harness_conformance/linux_readiness.py:192-193; src/harness_conformance/live_session.py:204, 211-212 |\n| `/receipt/output/regression/fields[name=inventoryDigest]` | src/harness_conformance/linux_readiness.py:195-196 |\n| `/receipt/output/regression/fields[name=collected]` | src/harness_conformance/linux_readiness.py:87-88, 195, 197-198 |\n| `/receipt/output/regression/fields[name=executed]` | src/harness_conformance/linux_readiness.py:87-88, 195, 197-198 |\n| `/receipt/output/regression/fields[name=skipped]` | src/harness_conformance/linux_readiness.py:87-88, 195, 197-198 |\n| `/receipt/output/regression/fields[name=failed]` | src/harness_conformance/linux_readiness.py:87-88, 195, 197-198 |\n| `/http/transport/protocol` | src/harness_conformance/linux_readiness.py:327 |\n| `/http/transport/tlsVersion` | src/harness_conformance/live_proxy_client.py:178, 267 |\n| `/http/transport/alpn` | src/harness_conformance/live_proxy_client.py:187, 268 |\n| `/http/transport/sessionResumption` | src/harness_conformance/live_proxy_client.py:267 |\n| `/http/transport/sessionTickets` | src/harness_conformance/live_proxy_client.py:182 |\n| `/http/transport/compression` | src/harness_conformance/live_proxy_client.py:182 |\n| `/http/transport/mutualTls` | src/harness_conformance/live_proxy_client.py:177, 179, 191, 269, 371 |\n| `/http/transport/serverIdentity` | src/harness_conformance/live_proxy_client.py:145-148, 180, 201 |\n| `/http/transport/serverCertificate/dnsSubjectAltName` | src/harness_conformance/live_proxy_client.py:123, 145, 147, 180-181, 201 |\n| `/http/transport/serverCertificate/wildcardSubjectAltName` | src/harness_conformance/live_proxy_client.py:148 |\n| `/http/transport/serverCertificate/publicKeyPinned` | src/harness_conformance/live_proxy_client.py:124, 146 |\n| `/http/transport/serverCertificate/chainVerified` | src/harness_conformance/live_proxy_client.py:179, 186, 190 |\n| `/http/transport/identityGaps` | gap reference (see Gaps below) |\n| `/http/transport/requestsPerConnection` | src/harness_conformance/live_proxy_client.py:285, 292, 341 |\n| `/http/transport/maxReceivedBytesPerConnection` | src/harness_conformance/live_proxy_client.py:261 |\n| `/http/transport/codes[code=TLS_PROTOCOL_INVALID]` | src/harness_conformance/live_proxy_client.py:267-268 |\n| `/http/transport/codes[code=TLS_EOF_OR_SIZE]` | src/harness_conformance/live_proxy_client.py:261 |\n| `/http/request/requestLine` | src/harness_conformance/live_proxy_client.py:320, 384 |\n| `/http/request/headers[name=Content-Type]` | src/harness_conformance/live_proxy_client.py:292 |\n| `/http/request/headers[name=Content-Length]` | src/harness_conformance/live_proxy_client.py:292, 313 |\n| `/http/request/headers[name=Connection]` | src/harness_conformance/live_proxy_client.py:292 |\n| `/http/request/headers[name=Host]` | src/harness_conformance/live_proxy_client.py:293-295, 384 |\n| `/http/request/body` | src/harness_conformance/live_proxy_client.py:384 |\n| `/http/request/minBodyBytes` | src/harness_conformance/live_proxy_client.py:316 |\n| `/http/request/maxBodyBytes` | src/harness_conformance/live_proxy_client.py:316; src/harness_conformance/linux_readiness.py:330 |\n| `/http/response/statusLine` | src/harness_conformance/live_proxy_client.py:318 |\n| `/http/response/headers[name=Content-Type]` | src/harness_conformance/live_proxy_client.py:311-312 |\n| `/http/response/headers[name=Content-Length]` | src/harness_conformance/live_proxy_client.py:311, 313 |\n| `/http/response/headers[name=Connection]` | src/harness_conformance/live_proxy_client.py:311, 313 |\n| `/http/response/body` | src/harness_conformance/live_proxy_client.py:385, 387; src/harness_conformance/live_session.py:82-84, 87-89, 193-194 |\n| `/http/response/minBodyBytes` | src/harness_conformance/live_proxy_client.py:316 |\n| `/http/response/maxBodyBytes` | src/harness_conformance/live_proxy_client.py:316; src/harness_conformance/linux_readiness.py:330; src/harness_conformance/live_session.py:18 |\n| `/http/response/endOfStream` | src/harness_conformance/live_proxy_client.py:261, 347-348 |\n| `/http/headerRules/lineSeparator` | src/harness_conformance/live_proxy_client.py:292, 296, 301 |\n| `/http/headerRules/terminator` | src/harness_conformance/live_proxy_client.py:296, 300, 328 |\n| `/http/headerRules/fieldSeparator` | src/harness_conformance/live_proxy_client.py:305-306 |\n| `/http/headerRules/maxHeaderBlockBytes` | src/harness_conformance/live_proxy_client.py:300, 329 |\n| `/http/headerRules/maxLines` | src/harness_conformance/live_proxy_client.py:302 |\n| `/http/headerRules/nameCase` | src/harness_conformance/live_proxy_client.py:307 |\n| `/http/headerRules/allowedNames` | src/harness_conformance/live_proxy_client.py:308 |\n| `/http/headerRules/duplicateNames` | src/harness_conformance/live_proxy_client.py:308 |\n| `/http/headerRules/valueByteRange` | src/harness_conformance/live_proxy_client.py:309 |\n| `/http/headerRules/leadingWhitespace` | src/harness_conformance/live_proxy_client.py:305 |\n| `/http/headerRules/contentLengthPattern` | src/harness_conformance/live_proxy_client.py:313 |\n| `/http/service/name` | src/harness_conformance/linux_readiness.py:326 |\n| `/http/service/protocol` | src/harness_conformance/linux_readiness.py:327 |\n| `/http/service/methods` | src/harness_conformance/linux_readiness.py:327 |\n| `/http/service/paths` | src/harness_conformance/linux_readiness.py:328 |\n| `/http/service/requestMediaType` | src/harness_conformance/linux_readiness.py:329 |\n| `/http/service/responseMediaType` | src/harness_conformance/linux_readiness.py:329 |\n| `/http/service/requestMaxBytes` | src/harness_conformance/linux_readiness.py:330 |\n| `/http/service/responseMaxBytes` | src/harness_conformance/linux_readiness.py:330 |\n| `/http/service/timeoutSeconds` | src/harness_conformance/linux_readiness.py:330 |\n| `/http/service/portSource` | src/harness_conformance/linux_readiness.py:327 (value not recorded, gap G13) |\n| `/http/timeouts/connectSeconds` | src/harness_conformance/live_proxy_client.py:380 |\n| `/http/timeouts/tlsHandshakeSeconds` | src/harness_conformance/live_proxy_client.py:266 |\n| `/http/timeouts/responseHeaderSeconds` | src/harness_conformance/live_proxy_client.py:327 |\n| `/http/refusals[code=HTTP_MESSAGE_INVALID]` | src/harness_conformance/live_proxy_client.py:290-291 |\n| `/http/refusals[code=HTTP_HOST_INVALID]` | src/harness_conformance/live_proxy_client.py:294 |\n| `/http/refusals[code=HTTP_HEADERS_SIZE]` | src/harness_conformance/live_proxy_client.py:329 |\n| `/http/refusals[code=HTTP_TRUNCATED_HEADERS]` | src/harness_conformance/live_proxy_client.py:331 |\n| `/http/refusals[code=HTTP_HEADERS_INVALID]` | src/harness_conformance/live_proxy_client.py:300-305, 311-314 |\n| `/http/refusals[code=HTTP_HEADER_FORBIDDEN]` | src/harness_conformance/live_proxy_client.py:307-309 |\n| `/http/refusals[code=HTTP_BODY_SIZE]` | src/harness_conformance/live_proxy_client.py:315-316 |\n| `/http/refusals[code=HTTP_STATUS_INVALID]` | src/harness_conformance/live_proxy_client.py:317-318 |\n| `/http/refusals[code=HTTP_REQUEST_TARGET]` | src/harness_conformance/live_proxy_client.py:319-321 |\n| `/http/refusals[code=HTTP_SURPLUS]` | src/harness_conformance/live_proxy_client.py:335, 340, 347-348 |\n| `/http/refusals[code=HTTP_TRUNCATED_BODY]` | src/harness_conformance/live_proxy_client.py:338 |\n| `/http/refusals[code=HTTP_PIPELINING]` | src/harness_conformance/live_proxy_client.py:341 |\n| `/http/refusals[code=HTTP_BUFFERED_RECORD_SURPLUS]` | src/harness_conformance/live_proxy_client.py:342-346 |\n\n## Gaps (form only recorded)\n\n- **G1.** Digest form. R12's digest validator (require_digest, in a module outside the four allowed files) was not read. The pattern ^sha256:[0-9a-f]{64}$ is observed only from the PACKET_DIGEST constant (src/harness_conformance/linux_readiness.py:23); every digest field carries patternRead=false.\n- **G2.** Id form. R12's id validator (require_id) was not read; endpointId, namespace and runNonce carry form \"id\" with no pattern.\n- **G3.** Canonical encoding. canonical_bytes, require_canonical_document and canonical_digest(value, domain) live in a module outside the allowed files. The canonical JSON rules of the request and receipt documents, and outputDigest's byte construction and hash, are recorded by name and domain tag only.\n- **G4.** probeDigest and commandDigest. The read files never state which bytes these digest. They are recorded as values copied from the plan's probes.<caseId> (src/harness_conformance/linux_readiness.py:339) and echoed in the receipt (src/harness_conformance/live_session.py:195-197).\n- **G5.** inventoryDigest. Only the digest form is recorded. The rules that judge this value are not part of this contract.\n- **G6.** Document decoding. The document form rules (top-level object, depth, members, key and value types, integer range, byte bounds and their refusal codes) are recorded from src/harness_conformance/live_session.py:17-19, 44-93. What stays unread is the canonical byte rules behind require_canonical_document and canonical_bytes (G3), and so which refusal code a byte string that is not canonical JSON raises.\n- **G7.** Exact receipt validation in the native channel (src/harness_conformance/live_proxy_client.py:387 comment) lives in a module outside the allowed files. The receipt form here comes from live_session.validate_receipt and linux_readiness.validate_linux_evidence.\n- **G8.** status. Only the three allowed values are recorded. The rules that judge this value are not part of this contract.\n- **G9.** Regression counts. Only the integer form 0..10000000 (src/harness_conformance/linux_readiness.py:87-88) is recorded. The rules that judge these values are not part of this contract.\n- **G10.** Source commit. c17bcfe3 is not present in the local clone, and resolving it would need the network. source.commit holds the full id c17bcfe32df26eab13844b73f65666bb0fa4e0a0, which came from the PR #33 merge record by operator relay. tree and readAt are full ids resolved locally.\n- **G11.** observedAt. Only the time form is recorded. The rules that judge this value are not part of this contract.\n- **G12.** Host header. Its value is the selected endpoint's tls.serverName (src/harness_conformance/live_proxy_client.py:384); only the form is recorded, no host name.\n- **G13.** Service port. It comes from the selected envelope endpoint's port (src/harness_conformance/linux_readiness.py:327); no value is recorded.\n- **G14.** TLS identity. Only the form of what the client requires of the server is recorded: TLS is mutual (src/harness_conformance/live_proxy_client.py:177, 179, 191, 269, 371); the server certificate carries the selected endpoint's tls.serverName as a DNS subjectAltName, with no common-name fallback (src/harness_conformance/live_proxy_client.py:123, 145, 147, 180-181, 201); a subjectAltName that contains \"*\" is refused (src/harness_conformance/live_proxy_client.py:148); the server's public key is pinned (src/harness_conformance/live_proxy_client.py:124, 146); and the server chain is checked against the configured CA under strict X.509 checks (src/harness_conformance/live_proxy_client.py:179, 186, 190). No certificate, key, name or digest value is part of this contract.\n- **G15.** closed() semantics. closed() lives in a module outside the allowed files. That it refuses a key outside the listed names is recorded. That it also requires every listed name to be present is inferred from the closed() calls: for checks (src/harness_conformance/linux_readiness.py:71, 190; src/harness_conformance/live_session.py:207), and for regressions (src/harness_conformance/linux_readiness.py:71, 193; src/harness_conformance/live_session.py:212).\n\n## Cross-check against the documented boundary\n\n`docs/live-backend/linux-boundary.md` documents the supervisor and custody boundary, not the probe message forms. It agrees with the draft\nwhere it touches the interface: the single transport hook\n`live_proxy_client.execute_protected(request, installed_context, deadline)` (docs/live-backend/linux-boundary.md:161-162), TLS identity\nand a bounded request and response among the proxy's obligations (docs/live-backend/linux-boundary.md:169-172), and the ten real probes\nowned by a later packet (docs/live-backend/linux-boundary.md:173-174); the ten fixed operations themselves are declared at\nsrc/harness_conformance/linux_readiness.py:26-38. The document states no field, header or refusal code that conflicts with the draft.\n\n"
+    }
+   },
+   "refusals": [
+    "a v1 file's digest is not the monitor-verified handoff digest",
+    "the MANIFEST disagrees with the record"
+   ]
+  },
+  {
+   "label": "L1-10 a deeply nested MANIFEST",
+   "recordOps": [],
+   "fileOverrides": {
+    "MANIFEST.json": {
+     "nestedArray": 100000
+    }
+   },
+   "refusals": [
+    "the record's shape is not the closed shape"
+   ]
+  }
+ ],
+ "validatorVectors": [
+  {
+   "label": "the bound instance",
+   "instanceOps": [],
+   "schemaOps": [],
+   "valid": true
+  },
+  {
+   "label": "a missing required member",
+   "instanceOps": [
+    {
+     "op": "delete",
+     "path": "/http"
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "an extra member",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/extra",
+     "value": 1
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "a wrong const",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/schemaVersion",
+     "value": "other/v9"
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "a source commit missing its pattern",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/source/commit",
+     "value": "XYZ"
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "too few cases",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/cases",
+     "value": []
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "a duplicate case",
+   "instanceOps": [
+    {
+     "op": "append",
+     "path": "/cases/-",
+     "value": {
+      "id": "HOST_ISOLATION_NEGATIVES",
+      "axis": "SECURITY",
+      "path": "/v1/linux-baseline/host-isolation-negatives",
+      "checks": [
+       "ipv4-denied",
+       "ipv6-denied",
+       "dns-denied",
+       "loopback-denied",
+       "descendants-denied",
+       "warm-roots-hidden",
+       "credentials-hidden",
+       "sockets-denied",
+       "packet-immutable"
+      ],
+      "regressionRepositories": []
+     }
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "a form outside its enum",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/request/document/encoding/form",
+     "value": "no-such-form"
+    }
+   ],
+   "schemaOps": [],
+   "valid": false
+  },
+  {
+   "label": "L1-6 an integer-valued float",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/request/document/maxBytes",
+     "value": 16384.0
+    }
+   ],
+   "schemaOps": [],
+   "valid": true
+  },
+  {
+   "label": "L1-5 if: true with an unmet then",
+   "instanceOps": [],
+   "schemaOps": [
+    {
+     "op": "set",
+     "path": "/if",
+     "value": true
+    },
+    {
+     "op": "set",
+     "path": "/then",
+     "value": {
+      "required": [
+       "no-such-member"
+      ]
+     }
+    }
+   ],
+   "valid": false
+  },
+  {
+   "label": "L1-5 items: true on cases",
+   "instanceOps": [],
+   "schemaOps": [
+    {
+     "op": "set",
+     "path": "/properties/cases/items",
+     "value": true
+    }
+   ],
+   "valid": true
+  },
+  {
+   "label": "L1-5 a false property schema",
+   "instanceOps": [],
+   "schemaOps": [
+    {
+     "op": "set",
+     "path": "/properties/http",
+     "value": false
+    }
+   ],
+   "valid": false
+  },
+  {
+   "label": "L1-5 allOf with true",
+   "instanceOps": [],
+   "schemaOps": [
+    {
+     "op": "set",
+     "path": "/allOf",
+     "value": [
+      true
+     ]
+    }
+   ],
+   "valid": true
+  },
+  {
+   "label": "L1-5 allOf with false",
+   "instanceOps": [],
+   "schemaOps": [
+    {
+     "op": "set",
+     "path": "/allOf",
+     "value": [
+      false
+     ]
+    }
+   ],
+   "valid": false
+  },
+  {
+   "label": "L1-7 a pattern value with a final line feed",
+   "instanceOps": [
+    {
+     "op": "set",
+     "path": "/source/commit",
+     "value": "c17bcfe32df26eab13844b73f65666bb0fa4e0a0\n"
+    }
+   ],
+   "schemaOps": [],
+   "valid": false,
+   "jsonschemaDiffers": "draft 2020-12 (ECMA-262) `$` matches only at the end; Python's re, which jsonschema uses, also matches before a final line feed"
+  }
+ ]
+}

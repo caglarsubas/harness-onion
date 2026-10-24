@@ -1,0 +1,110 @@
+{
+ "schema": "probekit-interface.manifest/v1",
+ "decision": "owner Q-PK-6 \"Neutral contract (Recommended)\" (2026-10-22, via the lane monitor)",
+ "source": {
+  "repository": "mas-harness-conformance-labs",
+  "commit": "c17bcfe32df26eab13844b73f65666bb0fa4e0a0",
+  "tree": "9c2b2b8a9b064ef6cbffec495a903a4e6ef7afb3",
+  "readAt": "e1b8bb8d3306311c0cc854419629e1a380022841"
+ },
+ "files": {
+  "probe-interface.json": "8c630b41bed90cd10781edc66ba122d2c4caf06fbf5adfaa2be996e3d90233be",
+  "probe-interface.schema.json": "2ae672a9912061810f00436e4939c0d4a45074e345b01e3fb04387fed8a5ab69",
+  "README.md": "049773616005f017bda9a79f22448fc16258ea61d5351ea108a5050213819da3"
+ },
+ "verdict": "PASS_FOR_HANDOFF",
+ "reviews": [
+  {
+   "round": 1,
+   "record": "probekit-interface-extract/review-round1.json",
+   "recordSha256": "bd8e0c971e4618caa0059e59b18f11e066170e1134e2de1f5cd0680ab30717f3",
+   "identity": "probekit-interface-extract/review-round1.identity.json",
+   "identitySha256": "cd89f0722ec6acec34f3f91e4a11bc7f299004aa67a6b2b86f04d7e2db7e9543",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": {
+    "MAJOR": 1,
+    "MINOR": 2,
+    "NOTE": 5
+   },
+   "reviewer": "ad001cfddbaee7591",
+   "ruling": "MON-PK6-R1-SLIPS"
+  },
+  {
+   "round": 2,
+   "record": "probekit-interface-extract/review-round2.json",
+   "recordSha256": "2c128af7f99a2eaf2155c0bf357e2cc22ea94cf3dabad06ac8d347dc4c91223b",
+   "identity": "probekit-interface-extract/review-round2.identity.json",
+   "identitySha256": "730c775e21726560a37a279889f6c2400d53cc61bfd3a81981c3b27277844dac",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": {
+    "MAJOR": 2,
+    "MINOR": 0,
+    "NOTE": 4
+   },
+   "reviewer": "a5237e79bc3380748",
+   "ruling": "MON-PK6-R2-SLIPS"
+  },
+  {
+   "round": 3,
+   "record": "probekit-interface-extract/review-round3.json",
+   "recordSha256": "08249383067044054693640db5760029d0a9342497ef2201914e5948f4f8fb05",
+   "identity": "probekit-interface-extract/review-round3.identity.json",
+   "identitySha256": "28574144b6b03ff25466f4c9787b0966de0d4ae866ad61edaca3b7d2ca32eb53",
+   "verdict": "PASS_FOR_HANDOFF",
+   "findings": {
+    "MAJOR": 0,
+    "MINOR": 0,
+    "NOTE": 2
+   },
+   "reviewer": "adc28893068d70863",
+   "ruling": "MON-PK6-R3-SLIP"
+  }
+ ],
+ "extractor": {
+  "agentId": "a976b7a0ab2ac969b",
+  "identity": "probekit-interface-extract/extractor.identity.json",
+  "identitySha256": "0ea6bd1940a97992ebd40e8639c1ae8dce66a02b778b8ddd8bd960c0b330dcab",
+  "operatorRelays": 4
+ },
+ "gaps": [
+  "G1 digest form",
+  "G2 id form",
+  "G3 canonical encoding",
+  "G4 probeDigest/commandDigest bytes",
+  "G5 inventoryDigest bytes",
+  "G6 receipt decoding (narrowed: document form rules recorded from live_session.py)",
+  "G7 final receipt validation (supervisor)",
+  "G8 status derivation",
+  "G9 regression counts",
+  "G10 closed by operator relay: source.commit is the full id from the merge record",
+  "G11 observedAt windows",
+  "G12 host header",
+  "G13 service port",
+  "G14 TLS identity values (form only: mutual TLS, the server name check and four server-certificate statements)",
+  "G15 closed() semantics (presence of every check and regression key inferred)"
+ ],
+ "carried": [
+  {
+   "id": "PK3-1",
+   "severity": "NOTE",
+   "location": "<handoff>/probe-interface.json /http/transport/serverCertificate; <handoff>/README.md gap G14",
+   "requiredChange": "None in this last round. Carry it as an owner-facing note in MANIFEST.json. A later revision may add these as form statements, with no values (no OID or name), and say that the G14 list is not complete."
+  },
+  {
+   "id": "PK3-2",
+   "severity": "NOTE",
+   "location": "<handoff>/README.md row /receipt/output/members[name=regressions]",
+   "requiredChange": "Optional: add linux_readiness.py:71 to the regressions row."
+  }
+ ],
+ "ownerNotes": [
+  "PK1-8 (review round 1) and the lane monitor: a receipt whose status or counts disagree with rules kept out of this contract is refused by R12. A probe kit built from this draft alone can show the interface form, but not acceptance, because the withheld status and count rules stay with R12. Whether any of those rules belongs in the interface is an owner decision."
+ ],
+ "kitNotes": [
+  "PK3-1 (review round 3), carried by the lane monitor's Q-PK6-PK3-1 (a) as complete form text for the kit author; it adds to G14 and /http/transport/serverCertificate, and the client refuses a server certificate that misses any of it. The server certificate carries the basic-constraints, extended-key-usage and subjectAltName extensions; it is a leaf, not a CA; its extended key usage is exactly server authentication; it has at most 32 subjectAltNames, each a DNS name, a URI or an IP address; and, as G14 states, the endpoint's tls.serverName is among its DNS subjectAltNames, no subjectAltName holds a wildcard, its public key is the pinned one, and its chain verifies against the configured CA. No certificate, key, name or digest value is part of this contract, and no validity-window rule is stated here."
+ ],
+ "nonClaims": [
+  "This draft records the interface form only; it does not state or imply that any probe output will be accepted by R12.",
+  "R12 vendors this contract back later; until then R12's own files remain authoritative."
+ ]
+}

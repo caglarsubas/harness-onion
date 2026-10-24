@@ -1,0 +1,82 @@
+{
+ "schemaVersion": "planeon.internal.linux-probe-interface-binding/v1",
+ "packet": "MET-LIVE-003",
+ "slot": 262,
+ "workItem": "LINUX-PROBE-INTERFACE",
+ "files": [
+  {
+   "path": "architecture/linux-probe-interface/v1/MANIFEST.json",
+   "sha256": "67cedd0cc251c61bfd42bc0f100d90923d3bafebb8b38c4e2ae7da891973a9a8"
+  },
+  {
+   "path": "architecture/linux-probe-interface/v1/README.md",
+   "sha256": "049773616005f017bda9a79f22448fc16258ea61d5351ea108a5050213819da3"
+  },
+  {
+   "path": "architecture/linux-probe-interface/v1/probe-interface.json",
+   "sha256": "8c630b41bed90cd10781edc66ba122d2c4caf06fbf5adfaa2be996e3d90233be"
+  },
+  {
+   "path": "architecture/linux-probe-interface/v1/probe-interface.schema.json",
+   "sha256": "2ae672a9912061810f00436e4939c0d4a45074e345b01e3fb04387fed8a5ab69"
+  }
+ ],
+ "source": {
+  "commit": "c17bcfe32df26eab13844b73f65666bb0fa4e0a0",
+  "readAt": "e1b8bb8d3306311c0cc854419629e1a380022841",
+  "repository": "mas-harness-conformance-labs",
+  "tree": "9c2b2b8a9b064ef6cbffec495a903a4e6ef7afb3"
+ },
+ "reviews": [
+  {
+   "round": 1,
+   "recordSha256": "bd8e0c971e4618caa0059e59b18f11e066170e1134e2de1f5cd0680ab30717f3",
+   "verdict": "CHANGES_REQUIRED"
+  },
+  {
+   "round": 2,
+   "recordSha256": "2c128af7f99a2eaf2155c0bf357e2cc22ea94cf3dabad06ac8d347dc4c91223b",
+   "verdict": "CHANGES_REQUIRED"
+  },
+  {
+   "round": 3,
+   "recordSha256": "08249383067044054693640db5760029d0a9342497ef2201914e5948f4f8fb05",
+   "verdict": "PASS_FOR_HANDOFF"
+  }
+ ],
+ "placeholderBinding": {
+  "record": "architecture/probe-kit-scope/amendment.json",
+  "recordSha256": "3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b",
+  "placeholder": "NEUTRAL_INTERFACE_CONTRACT",
+  "boundTo": "MET-LIVE-003",
+  "interfaceSha256": "8c630b41bed90cd10781edc66ba122d2c4caf06fbf5adfaa2be996e3d90233be"
+ },
+ "ownerDecisions": [
+  {
+   "id": "Q-PK-6",
+   "quote": "Neutral contract (Recommended)"
+  },
+  {
+   "id": "R12-ACCEPTANCE-RULES",
+   "quote": "Keep them in R12 (Recommended)"
+  }
+ ],
+ "nonClaims": [
+  {
+   "id": "FORM_ONLY",
+   "text": "This draft records the interface form only; it does not state or imply that any probe output will be accepted by R12."
+  },
+  {
+   "id": "NOT_ACCEPTANCE",
+   "text": "A probe kit built from this contract alone shows the interface form, not acceptance."
+  },
+  {
+   "id": "R12_FILES_AUTHORITATIVE_UNTIL_VENDORED",
+   "text": "R12 vendors this contract back later; until then R12's own files remain authoritative."
+  },
+  {
+   "id": "R12_KEEPS_STATUS_AND_COUNT_RULES",
+   "text": "R12's acceptance rules, the status and count thresholds, stay in R12 (owner, \"Keep them in R12 (Recommended)\"); the kit's author never learns them."
+  }
+ ]
+}

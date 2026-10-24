@@ -1,0 +1,126 @@
+{
+ "schemaVersion": "planeon.internal.linux-probe-interface-status/v1",
+ "workItem": "LINUX-PROBE-INTERFACE (the neutral Linux probe interface as harness-onion data)",
+ "packet": "MET-LIVE-003",
+ "slot": 262,
+ "status": "ADOPTED",
+ "baseMain": "b8db30e5dfc4c820b70553cd1439359d73f4573a",
+ "adoptedSubject": {
+  "architecture/linux-probe-interface/binding.json": "246fc243621d431fbe6cbbe9934ebb6945b95dd312453dfe6c3b0b02d8951bc9",
+  "architecture/linux-probe-interface/vectors.json": "b1b4ff4f6c12e08eaaaef382c4c451179d959ed6841b40343bd7a5cdf20688b4",
+  "architecture/linux-probe-interface/README.md": "494ee85b43f5fed6411b29e32f9c93ae2350d5cf5a87e4a9ef6931fdad5ac805",
+  "architecture/linux-probe-interface/replay.py": "cbfa353fa514363e06c03c76d6fc10a15b96ad010639d871f51a6f5a9c01273b",
+  "scripts/linux_probe_interface.py": "276370904c14f0dcdb715ef8415f788e5b07b39adcb80d6b19a38a1dfa7d0010",
+  "architecture/linux-probe-interface/v1/MANIFEST.json": "67cedd0cc251c61bfd42bc0f100d90923d3bafebb8b38c4e2ae7da891973a9a8",
+  "architecture/linux-probe-interface/v1/README.md": "049773616005f017bda9a79f22448fc16258ea61d5351ea108a5050213819da3",
+  "architecture/linux-probe-interface/v1/probe-interface.json": "8c630b41bed90cd10781edc66ba122d2c4caf06fbf5adfaa2be996e3d90233be",
+  "architecture/linux-probe-interface/v1/probe-interface.schema.json": "2ae672a9912061810f00436e4939c0d4a45074e345b01e3fb04387fed8a5ab69"
+ },
+ "adoptions": [
+  {
+   "candidate": "c2",
+   "ruling": "MON-LIVE003-ADOPT-C2",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-22",
+   "adoptionCheckSha256": "6f09bcbeeac098ac6e0a3dc48a046dbb6bef675139c4252cb95dcc7c4a028b6f",
+   "change": "the first adoption, after the light review's R-L1-A (L1-1 to L1-11 applied)"
+  },
+  {
+   "candidate": "c3",
+   "ruling": "MON-LIVE003-ADOPT-C3",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "c6d7c8631879995f5c2cf7b261edc26f912a7cf9198e3ed40ab1837c8f74a1a7",
+   "change": "README only: the two-sentence fix from the D5a oracle's run (86/86)"
+  },
+  {
+   "candidate": "c4",
+   "ruling": "MON-LIVE003-ADOPT-C4",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "26ea40206c5b7fc5a5f381a7c8ebb06b00805c20b4af06ae1bb6df19df4598c4",
+   "change": "slot 263 -> 262 and the consequent placeholderBinding.recordSha256 (LPK-0 c6's record) (monitor slot re-sequence 2026-10-23); README slot texts follow"
+  },
+  {
+   "candidate": "c5",
+   "ruling": "MON-LIVE003-ADOPT-C5",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "44b4c65d40871028010e968ace228004f879ae43f58c306435bbe7b5b87bc9a3",
+   "change": "README errata only: line 43 names LPK-0's record as 3de2d73e (was cf49670d), found by the D5a oracle on c4"
+  },
+  {
+   "candidate": "c6",
+   "ruling": "MON-LIVE003-ADOPT-C6",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-23",
+   "adoptionCheckSha256": "7f3d998d3d9fa3bdb27992e5063abf29be24332e774e4340b80b9ebe3940c7c6",
+   "change": "README errata only: the review-history sentence (260 plan item 2)"
+  }
+ ],
+ "design": {
+  "path": "DESIGN.rev2.md (kept with the lane's records)",
+  "sha256": "6d2ed5c5affc5568fbf04ac659625a94ba7f27b8fafac5fa49a0e2da012db1c3",
+  "note": "written for slot 263; the monitor's 2026-10-23 re-sequence made it 262 (c4)"
+ },
+ "independentReviewers": "SEPARATE_AGENTS_NOT_AUTHOR (one fresh agent for the light round)",
+ "reviews": [
+  {
+   "review": "light round 1",
+   "record": "architecture/linux-probe-interface/review-history-light-r1.json",
+   "recordSha256": "1fd7115d93c2c0b3f9e3d648316403b6a67057743013b92a0141d443d99fefa4",
+   "verdict": "CHANGES_REQUIRED",
+   "subject": "candidate c1 (binding 275a6d588ad1540152c4417b192255ce0b994547c60df113f39bc85974cba8bc)",
+   "brief": "architecture/linux-probe-interface/review-history-light-r1-brief.md",
+   "briefReviewedSha256": "fa2dc4b7d2eee49977ecf66374dbf6519db8b215b53715905138cf6db786f16b",
+   "briefPublishedSha256": "96e4552665fcc4288cb71d24d70c92ad30a48684f8810c1198c4d809ed742f02",
+   "closure": "R-L1-A: L1-1 to L1-11 applied as candidate c2 with no second review, consistent with one light review (the lane monitor, 2026-10-22)"
+  }
+ ],
+ "reviewHistoryNote": "Published as review-history-<kind>-r<n>.json and -brief.md: a redacted record from before review-record v2, not a review-round*.json record, with no merge authority. This packet's merge authority is its v2 MET-LIVE-003/packet series (the monitor, 2026-10-23).",
+ "briefRedactions": [
+  {
+   "brief": "architecture/linux-probe-interface/review-history-light-r1-brief.md",
+   "reviewedSha256": "fa2dc4b7d2eee49977ecf66374dbf6519db8b215b53715905138cf6db786f16b",
+   "publishedSha256": "96e4552665fcc4288cb71d24d70c92ad30a48684f8810c1198c4d809ed742f02",
+   "substitutions": [
+    {
+     "fromSha256": "1eedbfd71339d2596624d83bc7c0daa404c937e39dd76bf8af995e65b0181c67",
+     "from": "the lane's CI state directory (home-relative)",
+     "to": "<workspace>/",
+     "count": 3
+    },
+    {
+     "fromSha256": "c955eccd4877ecd86f04647fba45d5d4709507b644e193fc7ac9a182d0459ec8",
+     "from": "the session's temporary directory",
+     "to": "<scratch>/",
+     "count": 2
+    }
+   ]
+  }
+ ],
+ "predecessorPin": {
+  "record": "architecture/probe-kit-scope/amendment.json",
+  "sha256": "3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b",
+  "atBase": "b8db30e5dfc4c820b70553cd1439359d73f4573a",
+  "check": "A8: binding.placeholderBinding.recordSha256 equals the merged record"
+ },
+ "oracle": {
+  "test": "tests/test_linux_probe_interface_oracle.py",
+  "sha256": "e706dab917ef5b16192130dcddf776a6f8ff4467f3af03fb1422bd673088ece3",
+  "identity": "architecture/linux-probe-interface/oracle-identity.json",
+  "result": "86/86 on c5; README-only change since (c6)"
+ },
+ "slips": [
+  {
+   "id": "MON-LIVE003-R1-PATH",
+   "ruling": "KEEP, the lane monitor under owner delegation",
+   "what": "the light review's reviewer put a home path on a command line; nothing was written outside its WORK folder and the outputs are clean"
+  }
+ ],
+ "nonClaims": [
+  "FORM_ONLY: the binding records the interface form only, not R12 acceptance of any probe output.",
+  "No R12 file changes in this packet; R12 vendors v1/ back in its own packet, and its files stay authoritative until then.",
+  "R12's acceptance rules, the status and count thresholds, stay in R12."
+ ]
+}
