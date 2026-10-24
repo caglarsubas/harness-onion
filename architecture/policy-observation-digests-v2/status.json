@@ -3,7 +3,7 @@
   "workItem": "the I01 digest-contract successor (LPK-1 step S1, with W1 and S2)",
   "packet": "MET-ENFORCE-042",
   "slot": "265 at the earliest; the mechanics follow 264's merge (MON-I01S-14)",
-  "candidate": "c2",
+  "candidate": "c3",
   "base": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
   "supersedes": {
     "contract": "the I01 digest contract v1 (DIGEST-CONTRACT)",
@@ -37,11 +37,37 @@
         }
       ],
       "ruling": "MON-I01S-CR1-KEEP"
+    },
+    {
+      "round": 2,
+      "record": "architecture/policy-observation-digests-v2/review-round2.json",
+      "recordSha256": "5851a7c526f5c2cce57959bfa0e48b893204b596c1e2f08fdd3536f18f10b2bb",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round2.json",
+      "identitySha256": "58629e2e48a4bd8608285a0d3191eefebb344cce1414fdbccc81106b23f3ffc2",
+      "base": "c1",
+      "verdict": "CHANGES_REQUIRED",
+      "findings": [
+        {
+          "id": "C2-1",
+          "severity": "MINOR"
+        }
+      ],
+      "dispositions": [
+        {
+          "id": "C1-1",
+          "status": "PARTLY"
+        },
+        {
+          "id": "C1-2",
+          "status": "ADDRESSED"
+        }
+      ],
+      "ruling": "MON-I01S-CR2-KEEP"
     }
   ],
   "designHistory": "architecture/policy-observation-digests-v2/source-index.json cites the TOOLS design revisions 1-3 and design rounds 1-3 by sha256; they are not rounds of this series",
   "contractState": "CANDIDATE",
-  "candidateState": "c2, built out of tree from c1 after the in-tree MET-ENFORCE-042/contract round 1, folding C1-1 (MON-I01S-C1-1-A) and C1-2 (MON-I01S-C1-2-KEEP); not adopted",
+  "candidateState": "c3, built out of tree from c2 after the in-tree MET-ENFORCE-042/contract round 2, folding C2-1 (MON-I01S-C2-1-WORDING); not adopted",
   "predecessorRecord": {
     "record": "architecture/policy-observation-digests/status.json",
     "sha256": "4b20c7c17990f95246d84a110bed7c2745e7adf9e8676da26f2cf6b96fb4dc99",
@@ -206,6 +232,42 @@
       "by": "lane monitor under the owner's standing delegation",
       "date": "2026-10-24",
       "decision": "the edge v11 README row and notes[3] follow the README bytes; status and source-index gain r1."
+    },
+    {
+      "id": "MON-I01S-CR2-GO",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-CR2-GO: GO for the delta CONTRACT r2 on c2, ref MON-I01S-CR2-GO, under the owner's standing delegation. Q-CB2-1..5 are kept as built, ref MON-I01S-CB2-1..5."
+    },
+    {
+      "id": "MON-I01S-CB2-1..5",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-CR2-GO: GO for the delta CONTRACT r2 on c2, ref MON-I01S-CR2-GO, under the owner's standing delegation. Q-CB2-1..5 are kept as built, ref MON-I01S-CB2-1..5."
+    },
+    {
+      "id": "MON-I01S-CR2-KEEP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "Q-I01S-CR2-1: KEEP r2, ref MON-I01S-CR2-KEEP. Q-C2-1: the reviewer's wording, verbatim, ref MON-I01S-C2-1-WORDING. Q-I01S-C3-GO: GO, ref MON-I01S-C3-GO, **with the cap: r3 is the last CONTRACT round**, ref MON-I01S-CR-CAP. All of this is decided under the owner's standing delegation."
+    },
+    {
+      "id": "MON-I01S-C2-1-WORDING",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "R10's port omits the profile-schema load and profile v2's validate and precondition. As under v1, it also leaves out the frozen-model file pins (_frozen's FROZEN_MODELS loop, scripts/proxy_profile_v2.py included), since models are pinned, not copied. Its replay therefore counts 321 checks (16 helper vectors, the definitions pin, 298 vector checks and 6 complete-positive checks), against the model's 323."
+    },
+    {
+      "id": "MON-I01S-C3-GO",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "**c3:** the C2-1 sentence in README §11 and README-v11's \"Replay scope\", and the same in edge v11 notes[3]; the README rows follow the bytes; the status line names c3; status.json and source-index gain r2."
+    },
+    {
+      "id": "MON-I01S-CR-CAP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "**Only MINOR or NOTE findings:** they become adoption-check rules (A-I01S-n), folded as text-only c4 errata adopted from an ADOPTION_CHECK with no further round, as at LPK-1's c3."
     }
   ],
   "evidenceClass": "UNIT_VERIFICATION_ONLY",

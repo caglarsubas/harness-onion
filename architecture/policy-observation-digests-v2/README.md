@@ -1,6 +1,6 @@
 # The I01 digest contract v2 (MET-ENFORCE-042)
 
-Schema `planeon.internal.policy-observation-digests/v2`. **Status: candidate c2 under the `MET-ENFORCE-042/contract`
+Schema `planeon.internal.policy-observation-digests/v2`. **Status: candidate c3 under the `MET-ENFORCE-042/contract`
 review; not adopted.** This is the candidate status line the contract is reviewed with; `status.json` governs.
 DATA_CHECK_ONLY: the reference model returns values, refusal texts or an empty error list, never a protected handle or
 native acceptance, as I06 v4 and admission v4 do.
@@ -615,6 +615,7 @@ The model replays every vector: `python3 -I -B scripts/policy_observation_digest
   `validate_profile` with profile v1's schema was under v1, so it needs neither profile v2's `profile.schema.json` nor
   `proxy_profile_v2`; if HE-004-I01B4 ever needs profile validation in R10, that is a new decision and a wider W3, not
   part of this contract.
+  R10's port omits the profile-schema load and profile v2's validate and precondition. As under v1, it also leaves out the frozen-model file pins (_frozen's FROZEN_MODELS loop, scripts/proxy_profile_v2.py included), since models are pinned, not copied. Its replay therefore counts 321 checks (16 helper vectors, the definitions pin, 298 vector checks and 6 complete-positive checks), against the model's 323.
 - **The packet's v2 layer test** (`tests/test_policy_observation_digests_v2.py`), which the pre-check and verify run,
   executes section 10's three W1 assertions on the complete positive (VPO's `validate_messages`; profile v2's
   `validate` and `precondition`; and, for each of ResourceQuota, LimitRange and ServiceAccount, VPO's refusal and

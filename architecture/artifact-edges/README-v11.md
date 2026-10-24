@@ -18,7 +18,7 @@ verbatim: Q-I01S-3, MON-I01S-D3 and the F6 ruling.
 |---|---|---|---|---|---|---|---|
 | `architecture/policy-observation-digests-v2/definitions.json` | `fef08fddfb94…` | 36,135 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/definitions.json` | REGISTERED_BEFORE_USE |
 | `architecture/policy-observation-digests-v2/vectors.json` | `68eab4709431…` | 602,663 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/vectors.json` | REGISTERED_BEFORE_USE |
-| `architecture/policy-observation-digests-v2/README.md` | `6d70377e746d…` | 60,055 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/README.md` | REGISTERED_BEFORE_USE |
+| `architecture/policy-observation-digests-v2/README.md` | `758753acd3af…` | 60,464 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/README.md` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/README.md` | `f7794aa857aa…` | 40,789 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/README.md` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/vectors.json` | `5706b1a8df5c…` | 316,811 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/vectors.json` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/admission-manifests/planeon-a2.json` | `92c21612304c…` | 8,322 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/admission-manifests/planeon-a2.json` | REGISTERED_BEFORE_USE |
@@ -40,10 +40,11 @@ the contract's own `vectors.json`. The edge rule binds bytes, modes and versions
 **Replay scope.** With these rows R10 replays every helper vector and every vector of the contract and, of its complete
 positive, v1's five checks plus the sealed-namespace equality, which need nothing beyond the three contract files and
 the frozen I06 inputs R10 already embeds; profile v2's `validate` and `precondition` on the complete positive stay
-harness-side, in the v2 model's replay and the packet's v2 layer test. R10 also renders the sealed A2 set with admission
-v4 against v4's published `planeon-a2.json`, and, with profile v2's vectors (W3), replays the wire vectors' binding and
-observation cases with profile v2's positive once they are re-derived for it (the namespace members, `observation.quota`
-and `binding.profileDigest`).
+harness-side, in the v2 model's replay and the packet's v2 layer test.
+R10's port omits the profile-schema load and profile v2's validate and precondition. As under v1, it also leaves out the frozen-model file pins (_frozen's FROZEN_MODELS loop, scripts/proxy_profile_v2.py included), since models are pinned, not copied. Its replay therefore counts 321 checks (16 helper vectors, the definitions pin, 298 vector checks and 6 complete-positive checks), against the model's 323.
+R10 also renders the sealed A2 set with admission v4 against v4's published `planeon-a2.json`, and, with profile v2's
+vectors (W3), replays the wire vectors' binding and observation cases with profile v2's positive once they are
+re-derived for it (the namespace members, `observation.quota` and `binding.profileDigest`).
 
 **Not registered.** Profile v2's `profile.schema.json`: the replay above needs neither it nor `proxy_profile_v2`,
 because profile v2's `validate` and `precondition` on the complete positive stay harness-side, as `validate_profile`

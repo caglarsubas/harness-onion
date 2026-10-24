@@ -3,7 +3,7 @@
   "packet": "MET-ENFORCE-042",
   "workItem": "the I01 digest-contract successor (LPK-1 step S1, with W1 and S2)",
   "series": "MET-ENFORCE-042/contract",
-  "candidate": "c2",
+  "candidate": "c3",
   "baseMain": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
   "inTreeRounds": [
     {
@@ -12,6 +12,13 @@
       "recordSha256": "b25518c92858807cae84a069f85b39e6323a68c622f8aa3189282f7d153a8c4d",
       "identity": "architecture/policy-observation-digests-v2/review-identity-round1.json",
       "identitySha256": "67e109dcafee8767052a4d9c59082e0d91f59de2a3bbacbc4d632592b09145c7"
+    },
+    {
+      "round": 2,
+      "record": "architecture/policy-observation-digests-v2/review-round2.json",
+      "recordSha256": "5851a7c526f5c2cce57959bfa0e48b893204b596c1e2f08fdd3536f18f10b2bb",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round2.json",
+      "identitySha256": "58629e2e48a4bd8608285a0d3191eefebb344cce1414fdbccc81106b23f3ffc2"
     }
   ],
   "roundNumbering": "The in-tree MET-ENFORCE-042/contract rounds start at round 1, the first CONTRACT round on the candidate, and run 1, 2, 3 with no gap. The TOOLS design rounds below are design history, cited by sha256; none is numbered as an in-tree round.",
@@ -23,7 +30,13 @@
     "MON-I01S-CR1-KEEP": "Q-I01S-CR1-1: KEEP r1, ref MON-I01S-CR1-KEEP. Q-C1-1: (a), ref MON-I01S-C1-1-A. Q-C1-2: keep, ref MON-I01S-C1-2-KEEP. Q-I01S-C2-GO: GO, ref MON-I01S-C2-GO. All four are decided under the owner's standing delegation.",
     "MON-I01S-C1-1-A": "**State the exact replay scope:** R10 replays every helper and vector, and of the complete positive, v1's five checks plus the sealed-namespace equality. Profile v2's validate and precondition stay harness-side, in the v2 model's replay and the v2 layer test.",
     "MON-I01S-C1-2-KEEP": "**C1-2:** fold the optional §1 sentence, with refusal texts unchanged.",
-    "MON-I01S-C2-GO": "the edge v11 README row and notes[3] follow the README bytes; status and source-index gain r1."
+    "MON-I01S-C2-GO": "the edge v11 README row and notes[3] follow the README bytes; status and source-index gain r1.",
+    "MON-I01S-CR2-GO": "Q-I01S-CR2-GO: GO for the delta CONTRACT r2 on c2, ref MON-I01S-CR2-GO, under the owner's standing delegation. Q-CB2-1..5 are kept as built, ref MON-I01S-CB2-1..5.",
+    "MON-I01S-CB2-1..5": "Q-I01S-CR2-GO: GO for the delta CONTRACT r2 on c2, ref MON-I01S-CR2-GO, under the owner's standing delegation. Q-CB2-1..5 are kept as built, ref MON-I01S-CB2-1..5.",
+    "MON-I01S-CR2-KEEP": "Q-I01S-CR2-1: KEEP r2, ref MON-I01S-CR2-KEEP. Q-C2-1: the reviewer's wording, verbatim, ref MON-I01S-C2-1-WORDING. Q-I01S-C3-GO: GO, ref MON-I01S-C3-GO, **with the cap: r3 is the last CONTRACT round**, ref MON-I01S-CR-CAP. All of this is decided under the owner's standing delegation.",
+    "MON-I01S-C2-1-WORDING": "R10's port omits the profile-schema load and profile v2's validate and precondition. As under v1, it also leaves out the frozen-model file pins (_frozen's FROZEN_MODELS loop, scripts/proxy_profile_v2.py included), since models are pinned, not copied. Its replay therefore counts 321 checks (16 helper vectors, the definitions pin, 298 vector checks and 6 complete-positive checks), against the model's 323.",
+    "MON-I01S-C3-GO": "**c3:** the C2-1 sentence in README §11 and README-v11's \"Replay scope\", and the same in edge v11 notes[3]; the README rows follow the bytes; the status line names c3; status.json and source-index gain r2.",
+    "MON-I01S-CR-CAP": "**Only MINOR or NOTE findings:** they become adoption-check rules (A-I01S-n), folded as text-only c4 errata adopted from an ADOPTION_CHECK with no further round, as at LPK-1's c3."
   },
   "design": {
     "revision": 3,
