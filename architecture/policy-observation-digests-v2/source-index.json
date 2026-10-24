@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "planeon.internal.policy-observation-digests-v2-index/v1",
+  "packet": "MET-ENFORCE-042",
+  "workItem": "the I01 digest-contract successor (LPK-1 step S1, with W1 and S2)",
+  "series": "MET-ENFORCE-042/contract",
+  "candidate": "c1",
+  "baseMain": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
+  "inTreeRounds": [],
+  "roundNumbering": "The in-tree MET-ENFORCE-042/contract rounds start at round 1, the first CONTRACT round on the candidate, and run 1, 2, 3 with no gap. The TOOLS design rounds below are design history, cited by sha256; none is numbered as an in-tree round.",
+  "rulings": {
+    "MON-I01S-13": "**Q-I01S-13:** in-tree CONTRACT rounds from round 1, plus one D5a oracle and its identity, as at LPK-1.",
+    "MON-I01S-CAP": "If it returns PASS_FOR_BUILD, or only MINOR and NOTE findings, those findings become binding build rules B-I01S-n under the cap, and the design closes PASS_FOR_BUILD with no r4.",
+    "MON-I01S-DESIGN-CLOSED": "Q-I01S-DR3-1: KEEP round 3, ref MON-I01S-DR3-KEEP. Q-I01S-DR3-2: the design CLOSES PASS_FOR_BUILD under MON-I01S-CAP on rev 3 (806f9dee), ref MON-I01S-DESIGN-CLOSED. B-I01S-1 is DR3-F1, verbatim. The record's verdict stays CHANGES_REQUIRED in the brief's vocabulary. Q-I01S-DR3-3: GO to write BUILD_RULES.md and the contract-build brief, ref MON-I01S-NEXT. All three are decided under the owner's standing delegation.",
+    "MON-I01S-DR2-CARRIED": "From now on, carried items take ADDRESSED with \"carried to …\" in the note."
+  },
+  "design": {
+    "revision": 3,
+    "sha256": "806f9dee3afe7f494673c3995939d2ccb7f3cefbbe3705bd3df3ae7a4a206897",
+    "record": "the TOOLS design record (local, not published)",
+    "closure": "PASS_FOR_BUILD under MON-I01S-CAP, ruled MON-I01S-DESIGN-CLOSED (2026-10-24); design round 3's one finding is binding build rule B-I01S-1"
+  },
+  "designRevisions": [
+    {
+      "revision": 1,
+      "sha256": "c00729e688a94d9294d8c459495e7da8f95c7fae8784e154fed3eab4c0c6bf0b",
+      "record": "TOOLS design revision 1 (local, not published)"
+    },
+    {
+      "revision": 2,
+      "sha256": "11aaf65602e87f1bcb2f4dd5339b5bc08f56ab2890a5b52fb491af233f53c92a",
+      "record": "TOOLS design revision 2 (local, not published)"
+    },
+    {
+      "revision": 3,
+      "sha256": "806f9dee3afe7f494673c3995939d2ccb7f3cefbbe3705bd3df3ae7a4a206897",
+      "record": "TOOLS design revision 3 (local, not published)"
+    }
+  ],
+  "designHistory": [
+    {
+      "designRound": 1,
+      "record": "TOOLS design review round 1 (not published)",
+      "sha256": "c87d689d7cf1d084f86cca5b59e4c974f51e6ef8a053cff86b2f3dcfdf25596f",
+      "identitySha256": "e24dd947cef052f2bd2835217e6fcdb136980bc08cfc149c7f4730235ba97b20",
+      "verdict": "CHANGES_REQUIRED",
+      "recordShape": "planeon.review-record/v2",
+      "designSha256": "c00729e688a94d9294d8c459495e7da8f95c7fae8784e154fed3eab4c0c6bf0b",
+      "ruling": "MON-I01S-DR1-SLIPS (KEEP); MON-I01S-D1..D3; MON-I01S-REV2-GO"
+    },
+    {
+      "designRound": 2,
+      "record": "TOOLS design review round 2 (not published)",
+      "sha256": "6aec08ad08b9a3938fbf5383fde9203555b8dcdf29a9204161b82635d4e45ce1",
+      "identitySha256": "9a94bab9acbf218ed7f32fda3e88e73278e35c41853e3f4e8e69036b5dc1d759",
+      "verdict": "CHANGES_REQUIRED",
+      "recordShape": "planeon.review-record/v2 except one disposition status outside ADDRESSED/PARTLY/NOT, kept as TOOLS history (MON-I01S-DR2-CARRIED)",
+      "designSha256": "11aaf65602e87f1bcb2f4dd5339b5bc08f56ab2890a5b52fb491af233f53c92a",
+      "ruling": "MON-I01S-DR2-KEEP; MON-I01S-DR2-CARRIED (one non-v2 disposition status, kept as TOOLS history); MON-I01S-REV3-GO; MON-I01S-CAP"
+    },
+    {
+      "designRound": 3,
+      "record": "TOOLS design review round 3 (not published)",
+      "sha256": "526083304d9b95dbedc5d3a0407c4b311cd92b100427591583ee1501661e8a3f",
+      "identitySha256": "be6f08ebc7c5e3341fb8577f6c595507d70403ffbdeeacd9b467a3bf1acd0d3e",
+      "verdict": "CHANGES_REQUIRED",
+      "recordShape": "planeon.review-record/v2",
+      "designSha256": "806f9dee3afe7f494673c3995939d2ccb7f3cefbbe3705bd3df3ae7a4a206897",
+      "ruling": "MON-I01S-DR3-KEEP; MON-I01S-DESIGN-CLOSED (DR3-F1 = B-I01S-1 under the cap)"
+    }
+  ],
+  "buildRules": {
+    "record": "the TOOLS build rules (local, not published)",
+    "sha256": "0527af658a857df7ce07725f64f8b96a99f70d64b9be8fb9b92a5b367db6f9f3",
+    "rules": "B-I01S-1 (design round 3's finding, verbatim), the design's binding points BP-1..BP-11, B-L1-3, B-L1-4, the schema-run rule, the import rule and the review-record vocabulary rule"
+  },
+  "dossier": {
+    "record": "the TOOLS dossier (local, not published)",
+    "sha256": "ded443c074658a166fe617a7c40addf7863019cf4fb5f952d348e88d47f7e291"
+  },
+  "predecessorInputs": [
+    {
+      "path": "architecture/policy-observation-digests/README.md",
+      "sha256": "e393dd11c75f527829bb6522c5643cb593b6dc67e2788f5e280ce9de0f4166ae"
+    },
+    {
+      "path": "architecture/policy-observation-digests/definitions.json",
+      "sha256": "086692065cfc9da101f770fa39c50af2e2650a169595526e9860fc805478c2aa"
+    },
+    {
+      "path": "architecture/policy-observation-digests/vectors.json",
+      "sha256": "bd9f04bd04fcccc584bcab341ec649bcead567fe349c57e30958eaaf2ea64f84"
+    },
+    {
+      "path": "architecture/policy-observation-digests/status.json",
+      "sha256": "4b20c7c17990f95246d84a110bed7c2745e7adf9e8676da26f2cf6b96fb4dc99"
+    },
+    {
+      "path": "scripts/policy_observation_digests.py",
+      "sha256": "01298fb5c6acdae3248174265bbe576dd553eeb19bce1a48cb1e2734972c09c5"
+    },
+    {
+      "path": "scripts/admission_semantics_v3.py",
+      "sha256": "3db8f51ab55f49dc33cf6f028306bfb6d7aa1c5d7d96f264cfe709dae925ad22"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "scripts/admission_semantics_v4.py",
+      "sha256": "4da5a71dfd4c9a3e46709ea8a754a58f48b76fe51bc2a526bfe07c40bc13b547"
+    },
+    {
+      "path": "scripts/proxy_profile_v2.py",
+      "sha256": "509a4435e8bc1b8ab94efcb6fcc99e355ef27574ef0499bc4b6e89edef63fefa"
+    },
+    {
+      "path": "architecture/proxy-profile-v2/profile.schema.json",
+      "sha256": "e5ef3c3d112bce97d94da4b465b52feb69935a144f26dd711440acd6c67ad592"
+    },
+    {
+      "path": "architecture/proxy-profile-v2/vectors.json",
+      "sha256": "011a650bcd2a11f2eaeba531693f3e7ee9c30c1f6ede2d5ecf87919f206affcc"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/README.md",
+      "sha256": "f7794aa857aa50800f05b651f7b0a56eda7407f67855bc2f0437b27b3fe297fa"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/vectors.json",
+      "sha256": "5706b1a8df5cabd978caa219400b40a9c4ef6cbdbca8ea2f7c6f69b69474301c"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/admission-manifests/planeon-a2.json",
+      "sha256": "92c21612304cb704d13b506c1ae885d62a47c01f0ed0d284affe563aa1868e32"
+    }
+  ]
+}
