@@ -1,0 +1,1991 @@
+{
+ "schemaVersion": "planeon.internal.linux-host-authority/v1",
+ "packet": "MET-LINUX-008",
+ "item": "LINUX-HOST-AUTH-001",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "baseCommit": "a88276171453760e46b28e8f6f0c0bb4bbfade5d",
+ "digestRule": {
+  "fileDigest": "SHA256_OF_THE_CITED_FILE_AT_THE_BASE",
+  "lineNumbers": "ONE_BASED_INCLUSIVE",
+  "fragmentForm": "START_LINE_START_BYTE_END_LINE_END_BYTE_UTF8_BYTE_OFFSETS_END_EXCLUSIVE",
+  "textForm": "FRAGMENTS_DECODED_JOINED_BY_SPACE_ELLIPSIS_SPACE_LINE_FEEDS_KEPT",
+  "spanForm": "SHA256_OF_EACH_FRAGMENT_FOLLOWED_BY_ONE_ZERO_BYTE",
+  "wholeSentenceDigest": false
+ },
+ "precedence": "This record supersedes, member by member and bound by span at the base, only the listed predicates. The superseded texts stay byte-identical as historical text; for runs under MET-LINUX-007's plans this record governs where they differ (Q-LHA-5 (a)).",
+ "supersedes": [
+  {
+   "id": "LR-CAPACITY-ZERO-COST",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    66
+   ],
+   "fragments": [
+    [
+     63,
+     0,
+     63,
+     59
+    ]
+   ],
+   "text": "Use only existing authorized zero-incremental-cost capacity",
+   "span": "1cebce04ccbe84683f6fd4d41b70e8ee09cf042b69e85fd971bf294afa71bb22",
+   "note": "Relaxed: capacity is the owner-approved per-run GCP capacity of `capacity`.",
+   "kind": "CAPACITY",
+   "scope": "ALL",
+   "keptIn": []
+  },
+  {
+   "id": "LR-NO-CLOUD-INSTANCE",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    66
+   ],
+   "fragments": [
+    [
+     65,
+     24,
+     65,
+     41
+    ],
+    [
+     66,
+     55,
+     66,
+     68
+    ]
+   ],
+   "text": "No cloud instance … is authorized",
+   "span": "e9c1317d8562c9fc12dac151bf8c23f567c81f5001c74d0f9e9dfa0e946df64f",
+   "note": "Relaxed: the cloud-instance fragments only; the sentence's other predicates are kept.",
+   "kind": "CAPACITY",
+   "scope": "ALL",
+   "keptIn": [
+    "LR-KEPT-HOSTED-RUNNER",
+    "LR-KEPT-NEW-BROKER",
+    "LR-KEPT-PAID-KEY",
+    "LR-KEPT-REGISTRY-EGRESS",
+    "LR-KEPT-AUTOMATIC-PULL"
+   ]
+  },
+  {
+   "id": "LRJ-BILLING-CAPACITY",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "billing.capacity",
+   "lines": [
+    117,
+    117
+   ],
+   "fragments": [
+    [
+     117,
+     4,
+     117,
+     78
+    ]
+   ],
+   "text": "\"capacity\": \"LOCAL_OR_PREEXISTING_TENANT_AUTHORIZED_ZERO_INCREMENTAL_COST\"",
+   "span": "78cf251144949d7521fa01f2d7ec55f74c49de8070f6e81e30887ee7b824edd6",
+   "note": "Relaxed member billing.capacity.",
+   "kind": "CAPACITY",
+   "scope": "ALL",
+   "keptIn": []
+  },
+  {
+   "id": "LRJ-BILLING-NEW-PROVISIONING",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "billing.newProvisioning",
+   "lines": [
+    112,
+    112
+   ],
+   "fragments": [
+    [
+     112,
+     4,
+     112,
+     28
+    ]
+   ],
+   "text": "\"newProvisioning\": false",
+   "span": "43e126ed0c900c78e03bc6fbf92572c549119830d372984c9b5ee846efca5ee3",
+   "note": "Relaxed member billing.newProvisioning; the billing object's other members are kept.",
+   "kind": "CAPACITY",
+   "scope": "ALL",
+   "keptIn": [
+    "LRJ-KEPT-HOSTED-RUNNERS",
+    "LRJ-KEPT-PAID-APIS",
+    "LRJ-KEPT-THIRD-PARTY-KEYS",
+    "LRJ-KEPT-RAW-SOCKETS"
+   ]
+  },
+  {
+   "id": "REP-ZERO-COST-CAPACITY",
+   "path": "docs/alpha-2/LINUX_READINESS_REPAIRS.md",
+   "fileSha256": "ae1c9284eba881730bf4959587616e701c4c3d09f5d8209d156a3798e6cb4f24",
+   "member": null,
+   "lines": [
+    147,
+    149
+   ],
+   "fragments": [
+    [
+     147,
+     51,
+     148,
+     8
+    ]
+   ],
+   "text": "existing zero-incremental-cost\ncapacity",
+   "span": "fd947b85a9fc5e76d362ffd2db49a78ad51a467ab9340291b96fab218766ae83",
+   "note": "Relaxed (Q-LHA-13 (a)): the existing zero-incremental-cost capacity condition.",
+   "kind": "CAPACITY",
+   "scope": "ALL",
+   "keptIn": [
+    "REP-KEPT-UNTIL"
+   ]
+  },
+  {
+   "id": "REP-CREATE-CAPACITY",
+   "path": "docs/alpha-2/LINUX_READINESS_REPAIRS.md",
+   "fileSha256": "ae1c9284eba881730bf4959587616e701c4c3d09f5d8209d156a3798e6cb4f24",
+   "member": null,
+   "lines": [
+    155,
+    155
+   ],
+   "fragments": [
+    [
+     155,
+     51,
+     155,
+     66
+    ]
+   ],
+   "text": "create capacity",
+   "span": "2bb2c97556fc0c27e35dd6e87ccac298a599ae0f43b3f160bed6c582f7e93ec5",
+   "note": "Relaxed (Q-LHA-13 (a)): create capacity, for the plan's per-run capacity under its lease.",
+   "kind": "CAPACITY",
+   "scope": "ALL",
+   "keptIn": [
+    "REP-KEPT-NEVER"
+   ]
+  },
+  {
+   "id": "CI-LIVE-CAMPAIGNS",
+   "path": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md",
+   "fileSha256": "9a7e6613684d504494ace5380593ce198e679f779d236463e39c58df3ecb28cf",
+   "member": null,
+   "lines": [
+    7,
+    7
+   ],
+   "fragments": [
+    [
+     7,
+     251,
+     7,
+     265
+    ],
+    [
+     7,
+     305,
+     7,
+     314
+    ],
+    [
+     7,
+     332,
+     7,
+     353
+    ]
+   ],
+   "text": "live campaigns … zero-bill … no-cloud-provisioning",
+   "span": "6b4fb3d39000e8376b1cb99b6c529bc97cdcfe67544f57d3573f614462bdb1a0",
+   "note": "Relaxed (Q-LHA-13 (a)) for live campaigns only: the host's per-run compute is a bill.",
+   "kind": "CAPACITY",
+   "scope": "LIVE_CAMPAIGNS_ONLY",
+   "keptIn": [
+    "CI-KEPT-OTHER-SCOPES",
+    "CI-KEPT-NO-PAID-API"
+   ]
+  },
+  {
+   "id": "LR-INDEPENDENT-SIGNERS",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    66,
+    68
+   ],
+   "fragments": [
+    [
+     66,
+     70,
+     66,
+     77
+    ],
+    [
+     67,
+     45,
+     68,
+     23
+    ]
+   ],
+   "text": "Missing … independent signers remains\nNOT_RUN_ENV_UNAVAILABLE",
+   "span": "ef16bfe6fe5f6f33c67893398a1cf0f571e0ece11d06f48e2c36b9daac26806e",
+   "note": "Superseded with the replacement predicate (the owner's Q-LHA-1 (a)); the predicate begins at Missing.",
+   "kind": "INDEPENDENCE",
+   "scope": "ALL",
+   "keptIn": [
+    "LR-KEPT-MISSING"
+   ]
+  },
+  {
+   "id": "LR-EXISTING-INDEPENDENT",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    146,
+    148
+   ],
+   "fragments": [
+    [
+     147,
+     9,
+     147,
+     20
+    ]
+   ],
+   "text": "independent",
+   "span": "aeefa2d754419cbd7f1d8e0c395308d77db62d254bd477242e7b396354e5664a",
+   "note": "Superseded with the replacement predicate: the independent of existing independent authorities.",
+   "kind": "INDEPENDENCE",
+   "scope": "ALL",
+   "keptIn": [
+    "LR-KEPT-LIVE-ENTRY"
+   ]
+  },
+  {
+   "id": "LRJ-INDEPENDENT-SIGNATURES",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "evidence.requiredBindings[11]",
+   "lines": [
+    106,
+    106
+   ],
+   "fragments": [
+    [
+     106,
+     6,
+     106,
+     30
+    ]
+   ],
+   "text": "\"INDEPENDENT_SIGNATURES\"",
+   "span": "f506fb8c3445271a77c0303d1f9c558251d5404af9882c584045a89c256bdaf9",
+   "note": "Stays a required binding, read with the replacement predicate.",
+   "kind": "INDEPENDENCE",
+   "scope": "ALL",
+   "keptIn": []
+  }
+ ],
+ "replacementPredicate": {
+  "binding": "INDEPENDENT_SIGNATURES",
+  "required": true,
+  "authorities": [
+   "PLATFORM_RELEASE",
+   "TENANT_LIVE_EXECUTION",
+   "CAPACITY_OPERATOR"
+  ],
+  "distinctPerAuthority": [
+   "KEY_ID",
+   "PURPOSE",
+   "TOKEN",
+   "SEALED_BACKUP"
+  ],
+  "principal": "SINGLE_OWNER",
+  "disclosure": {
+   "signers": "SINGLE_PRINCIPAL_SEPARATED_KEYS"
+  },
+  "decision": "Q-LHA-1",
+  "ownerAnswer": "- Q-LHA-1: \"Separated keys, disclosed (Recommended)\". The 'independent signers' clause joins the superseded set, and an R12 change follows for `signers: SINGLE_PRINCIPAL_SEPARATED_KEYS`.",
+  "text": "INDEPENDENT_SIGNATURES stays a required binding. It is satisfied by signatures of the three distinct authorities (PLATFORM_RELEASE, TENANT_LIVE_EXECUTION, CAPACITY_OPERATOR), each with its own key id, purpose, token and sealed backup, under one principal, with the disclosure signers: SINGLE_PRINCIPAL_SEPARATED_KEYS."
+ },
+ "satisfied": [
+  {
+   "id": "LR-INDEPENDENT-SIGNATURES-138",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    138,
+    138
+   ],
+   "fragments": [
+    [
+     138,
+     46,
+     138,
+     68
+    ]
+   ],
+   "text": "independent signatures",
+   "span": "98679cdee990625b1b8f9098bd356a3a4141eb07ac6f09d421d47c57e712eea2",
+   "note": "Satisfied by the replacement predicate, not relaxed further."
+  },
+  {
+   "id": "TL-FRESH-INDEPENDENTLY-SIGNED",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    456,
+    457
+   ],
+   "fragments": [
+    [
+     456,
+     63,
+     457,
+     47
+    ]
+   ],
+   "text": "a fresh\nindependently signed native AMD64 qualification",
+   "span": "f947d6f219f24e3504f4cf9c553940172a45d23049e19aa1dab03eb3de5ec945",
+   "note": "Satisfied by the replacement predicate, not relaxed further."
+  },
+  {
+   "id": "TL-AFTER-INDEPENDENT-SIGNATURES",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    532,
+    532
+   ],
+   "fragments": [
+    [
+     532,
+     22,
+     532,
+     50
+    ]
+   ],
+   "text": "After independent signatures",
+   "span": "53a6bbe8ebfce79b05ff25c0342f9d1f52cb48bb926d4dc6fbc143637ee99189",
+   "note": "Satisfied by the replacement predicate, not relaxed further."
+  },
+  {
+   "id": "COR-THREE-INDEPENDENT-ROLES",
+   "path": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "fileSha256": "b2ed7fe5be1a8b23ec31483c94f77a79094972acde5b726b33a660d729a3bb2d",
+   "member": null,
+   "lines": [
+    37,
+    37
+   ],
+   "fragments": [
+    [
+     37,
+     0,
+     37,
+     55
+    ]
+   ],
+   "text": "all three independent valid and nonrevoked signer roles",
+   "span": "e35323d6428c8aa2ad734af1fd92c86e5fb9f61230b2a19c51f01505c55febb2",
+   "note": "Satisfied by the replacement predicate, not relaxed further."
+  }
+ ],
+ "unchanged": [
+  {
+   "id": "LR-KEPT-HOSTED-RUNNER",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    69
+   ],
+   "fragments": [
+    [
+     65,
+     24,
+     65,
+     26
+    ],
+    [
+     65,
+     43,
+     65,
+     56
+    ],
+    [
+     66,
+     55,
+     66,
+     68
+    ]
+   ],
+   "text": "No … hosted runner … is authorized",
+   "span": "0221500d8719640d516388bab21859ecad8ab9dd89ad55d7ef1d0cea92fb405b",
+   "note": "Kept: no hosted runner."
+  },
+  {
+   "id": "LR-KEPT-NEW-BROKER",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    69
+   ],
+   "fragments": [
+    [
+     65,
+     24,
+     65,
+     26
+    ],
+    [
+     65,
+     58,
+     65,
+     68
+    ],
+    [
+     66,
+     55,
+     66,
+     68
+    ]
+   ],
+   "text": "No … new broker … is authorized",
+   "span": "733efdd538e8942ab9b30a0c0353888a5c7fa71a3d6f5c97bfba97f41d45320d",
+   "note": "Kept, read with PRE_EXISTING: no broker beyond the one reviewed capacity broker that the operator installs and verifies before the envelope is signed (Q-LHA-14, the owner)."
+  },
+  {
+   "id": "LR-KEPT-PAID-KEY",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    69
+   ],
+   "fragments": [
+    [
+     65,
+     24,
+     65,
+     26
+    ],
+    [
+     65,
+     70,
+     65,
+     78
+    ],
+    [
+     66,
+     55,
+     66,
+     68
+    ]
+   ],
+   "text": "No … paid key … is authorized",
+   "span": "940d6504cfe68ad2123ed2029d7a8e476d23bc89225ba816e7417886c19f53a7",
+   "note": "Kept: no paid key."
+  },
+  {
+   "id": "LR-KEPT-REGISTRY-EGRESS",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    69
+   ],
+   "fragments": [
+    [
+     65,
+     24,
+     65,
+     26
+    ],
+    [
+     66,
+     0,
+     66,
+     22
+    ],
+    [
+     66,
+     55,
+     66,
+     68
+    ]
+   ],
+   "text": "No … registry egress charge … is authorized",
+   "span": "9bb571fa2845a3aefd62bb43f3a3c1f38d76181b77884f0eb0de4ef9e56859cb",
+   "note": "Kept: no registry egress charge."
+  },
+  {
+   "id": "LR-KEPT-AUTOMATIC-PULL",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    63,
+    69
+   ],
+   "fragments": [
+    [
+     65,
+     24,
+     65,
+     26
+    ],
+    [
+     66,
+     26,
+     66,
+     68
+    ]
+   ],
+   "text": "No … automatic package/image pull is authorized",
+   "span": "824cdb999d1cba99c2035394c91b455371a7e3eaf5b58d0cf05898563e4931b3",
+   "note": "Kept: no automatic package or image pull at any time; only operator-initiated, digest-pinned fetches inside the setup window."
+  },
+  {
+   "id": "LR-KEPT-MISSING",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    66,
+    68
+   ],
+   "fragments": [
+    [
+     66,
+     70,
+     67,
+     41
+    ],
+    [
+     67,
+     65,
+     68,
+     23
+    ]
+   ],
+   "text": "Missing\nhardware, preloaded tooling, OS isolation … remains\nNOT_RUN_ENV_UNAVAILABLE",
+   "span": "7e6782e177aae0c672f3c150728e14ad5197777a97a816e9a1fd329310e4d9bd",
+   "note": "Kept: missing hardware, preloaded tooling or OS isolation remains NOT_RUN_ENV_UNAVAILABLE."
+  },
+  {
+   "id": "LR-KEPT-NO-ADMIN-PASSWORD",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    101,
+    102
+   ],
+   "fragments": [
+    [
+     101,
+     41,
+     102,
+     76
+    ]
+   ],
+   "text": "No stored administrator password,\ninteractive prompt automation or broad passwordless sudo grant is introduced",
+   "span": "2d729ddee88073070fab80fb27d2d1ffd5ec4bcde9ffe620af9cd5535340a271",
+   "note": "Kept, read with Q-LHA-12: no administrator login is bound at preflight or after."
+  },
+  {
+   "id": "LR-KEPT-LIVE-ENTRY",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    146,
+    148
+   ],
+   "fragments": [
+    [
+     146,
+     0,
+     147,
+     8
+    ],
+    [
+     147,
+     21,
+     148,
+     29
+    ]
+   ],
+   "text": "The only live entry point remains the external root-owned launcher with the\nexisting … PLATFORM_RELEASE, TENANT_LIVE_EXECUTION and\nCAPACITY_OPERATOR authorities",
+   "span": "9aa000981f196977160e24cf0bcccba1799cb6e8a06d95797dc3a6f8e956d510",
+   "note": "Kept: the only live entry point is the external root-owned launcher, and the three authorities themselves; existing is read with SIGNING_AUTHORITY."
+  },
+  {
+   "id": "LRJ-KEPT-HOSTED-RUNNERS",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "billing.hostedRunners",
+   "lines": [
+    113,
+    113
+   ],
+   "fragments": [
+    [
+     113,
+     4,
+     113,
+     26
+    ]
+   ],
+   "text": "\"hostedRunners\": false",
+   "span": "711c3a0fa39fe9b3b21d55ff92b76dc64a3fe12dca20b3bdb9d58aedbcfcbaa1",
+   "note": "Kept member: no hosted runner."
+  },
+  {
+   "id": "LRJ-KEPT-PAID-APIS",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "billing.paidApis",
+   "lines": [
+    114,
+    114
+   ],
+   "fragments": [
+    [
+     114,
+     4,
+     114,
+     21
+    ]
+   ],
+   "text": "\"paidApis\": false",
+   "span": "86f2fa6c6fb39e82b5e5b97d8adcf86d2bcfc43c7df203eea95ea2489c108346",
+   "note": "Kept member: no paid API."
+  },
+  {
+   "id": "LRJ-KEPT-THIRD-PARTY-KEYS",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "billing.thirdPartyKeys",
+   "lines": [
+    115,
+    115
+   ],
+   "fragments": [
+    [
+     115,
+     4,
+     115,
+     27
+    ]
+   ],
+   "text": "\"thirdPartyKeys\": false",
+   "span": "fef51243d1e67e7bedbd3fbdfb9feb12aee9e8c9ae5c154049bc2bd1a854c7b9",
+   "note": "Kept member: third-party keys stay refused."
+  },
+  {
+   "id": "LRJ-KEPT-RAW-SOCKETS",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "billing.rawContainerSockets",
+   "lines": [
+    116,
+    116
+   ],
+   "fragments": [
+    [
+     116,
+     4,
+     116,
+     32
+    ]
+   ],
+   "text": "\"rawContainerSockets\": false",
+   "span": "a21a459408c091b6004562ba8d3d69bd98a21ef06260391beb8b5280ec02e232",
+   "note": "Kept member: raw container sockets stay refused."
+  },
+  {
+   "id": "REP-KEPT-UNTIL",
+   "path": "docs/alpha-2/LINUX_READINESS_REPAIRS.md",
+   "fileSha256": "ae1c9284eba881730bf4959587616e701c4c3d09f5d8209d156a3798e6cb4f24",
+   "member": null,
+   "lines": [
+    147,
+    149
+   ],
+   "fragments": [
+    [
+     147,
+     0,
+     147,
+     50
+    ],
+    [
+     148,
+     10,
+     149,
+     58
+    ]
+   ],
+   "text": "Native Linux remains NOT_RUN_ENV_UNAVAILABLE until … pinned native tools/caches, reviewed installation, actual isolation\nnegatives and signed build/runtime/campaign evidence exist",
+   "span": "418a2dc3c9270d9b138912db2d0cfb1fee0a426f554cfb6b3614cb806147e3af",
+   "note": "Kept: pinned native tools and caches, reviewed installation, actual isolation negatives and signed build, runtime and campaign evidence."
+  },
+  {
+   "id": "REP-KEPT-NEVER",
+   "path": "docs/alpha-2/LINUX_READINESS_REPAIRS.md",
+   "fileSha256": "ae1c9284eba881730bf4959587616e701c4c3d09f5d8209d156a3798e6cb4f24",
+   "member": null,
+   "lines": [
+    154,
+    156
+   ],
+   "fragments": [
+    [
+     154,
+     29,
+     155,
+     50
+    ],
+    [
+     155,
+     67,
+     156,
+     11
+    ]
+   ],
+   "text": "Never operationally restore the unsafe live path,\nerase failed runs, relax packet or source custody, … or reverse\ntenant data",
+   "span": "22126786d7816739ff90fb48a9d99420ba4d4b6a7e3aee9db5e50de8ebdd3ddc",
+   "note": "Kept; create capacity (line 155) is the relaxed fragment."
+  },
+  {
+   "id": "CI-KEPT-OTHER-SCOPES",
+   "path": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md",
+   "fileSha256": "9a7e6613684d504494ace5380593ce198e679f779d236463e39c58df3ecb28cf",
+   "member": null,
+   "lines": [
+    7,
+    7
+   ],
+   "fragments": [
+    [
+     7,
+     186,
+     7,
+     250
+    ],
+    [
+     7,
+     267,
+     7,
+     362
+    ]
+   ],
+   "text": "The platform, tenant workflows, provider integrations, releases, … and production deployments retain the zero-bill, no-paid-API and no-cloud-provisioning defaults",
+   "span": "be1372f8e169a60ff8aad929c37496f822f44814850a572685b7ab212b3ab4f8",
+   "note": "Kept: the zero-bill, no-paid-API and no-cloud-provisioning defaults for the platform, tenant workflows, provider integrations, releases and production deployments."
+  },
+  {
+   "id": "CI-KEPT-NO-PAID-API",
+   "path": "docs/alpha-2/CI_CAPACITY_EXCEPTION.md",
+   "fileSha256": "9a7e6613684d504494ace5380593ce198e679f779d236463e39c58df3ecb28cf",
+   "member": null,
+   "lines": [
+    7,
+    7
+   ],
+   "fragments": [
+    [
+     7,
+     251,
+     7,
+     265
+    ],
+    [
+     7,
+     316,
+     7,
+     327
+    ]
+   ],
+   "text": "live campaigns … no-paid-API",
+   "span": "2fe6cf48bf973c3384d55755dc3e5e1a975d9ab102d3cfb5032bc44c15c4a694",
+   "note": "Kept for live campaigns too: no paid API."
+  }
+ ],
+ "costScope": [
+  {
+   "id": "TL-NO-NEW-RESOURCE-CAPACITY",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    442,
+    443
+   ],
+   "fragments": [
+    [
+     443,
+     14,
+     443,
+     76
+    ]
+   ],
+   "text": "no raw container socket or new resource capacity is authorized",
+   "span": "0f38b0120ccd7b0e8195e5bf8a4e0df868221f0b65b098c89acacb8c990159c2",
+   "note": "Kept at campaign level.",
+   "level": "CAMPAIGN"
+  },
+  {
+   "id": "COR-NEVER-CREATE-CAPACITY",
+   "path": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+   "fileSha256": "b2ed7fe5be1a8b23ec31483c94f77a79094972acde5b726b33a660d729a3bb2d",
+   "member": null,
+   "lines": [
+    94,
+    94
+   ],
+   "fragments": [
+    [
+     94,
+     0,
+     94,
+     15
+    ]
+   ],
+   "text": "create capacity",
+   "span": "2bb2c97556fc0c27e35dd6e87ccac298a599ae0f43b3f160bed6c582f7e93ec5",
+   "note": "Kept at server level: the server must never create capacity.",
+   "level": "SERVER"
+  },
+  {
+   "id": "NQR-NO-NEW-CGROUP",
+   "path": "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "fileSha256": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+   "member": null,
+   "lines": [
+    110,
+    110
+   ],
+   "fragments": [
+    [
+     110,
+     49,
+     110,
+     80
+    ]
+   ],
+   "text": "No new cgroup/capacity creation",
+   "span": "2b770c6e5b17106ac168a3a1b68f6d30a4308f478a78e98d56e7acd447d41324",
+   "note": "Kept at reader level.",
+   "level": "READER"
+  },
+  {
+   "id": "LR-DO-NOT-DESTROY-CAPACITY",
+   "path": "docs/alpha-2/LINUX_READINESS.md",
+   "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+   "member": null,
+   "lines": [
+    163,
+    163
+   ],
+   "fragments": [
+    [
+     163,
+     0,
+     163,
+     6
+    ],
+    [
+     163,
+     58,
+     163,
+     74
+    ]
+   ],
+   "text": "Do not … destroy capacity",
+   "span": "8a56c95e1856418bbb644a560d451b858c643447093a01c85b0ffbb942a7bb8a",
+   "note": "Kept. The plan's teardown releases per-run capacity that the plan itself created, under its lease; that is not the destruction of existing capacity the line forbids.",
+   "level": "EXISTING_CAPACITY"
+  },
+  {
+   "id": "TL-ENDPOINT-COST-DISPOSITION",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    241,
+    244
+   ],
+   "fragments": [
+    [
+     242,
+     65,
+     244,
+     41
+    ]
+   ],
+   "text": "cost disposition\n`SELF_HOSTED_OPEN_SOURCE_NON_METERED` or\n`TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED`",
+   "span": "b59c3756e52ebff03f06bbb7f5404cb7d7a7ca60bd11819d44be51fad135602b",
+   "note": "Unchanged endpoint cost disposition; see the carried note LHA-CN-1.",
+   "level": "ENDPOINT"
+  },
+  {
+   "id": "TL-MUTATION-PROFILE",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    339,
+    339
+   ],
+   "fragments": [
+    [
+     339,
+     0,
+     339,
+     66
+    ]
+   ],
+   "text": "`mutationProfile` is exactly `ZERO_INCREMENTAL_COST_KUBERNETES_V1`",
+   "span": "9843ae5bc0a201ecbc4e9c4d0e62a0bd11fff2b153b3e25ebd9919ccca370297",
+   "note": "Unchanged Kubernetes mutation profile; see the carried note LHA-CN-1.",
+   "level": "CLUSTER"
+  }
+ ],
+ "reviewedNotBinding": [
+  {
+   "id": "NQR-NO-NEW-SERVICE",
+   "path": "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "fileSha256": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+   "member": null,
+   "lines": [
+    22,
+    23
+   ],
+   "fragments": [
+    [
+     22,
+     0,
+     23,
+     44
+    ]
+   ],
+   "text": "No new service, network endpoint, local socket, root key, signing role, public\ncampaign field or Kubernetes grant is added.",
+   "span": "a22af603b83e93b60cc05eda1b927d9e330f07183787cdc6fa288ebb92867b7f",
+   "note": "States that packet's own publication scope, not a standing rule."
+  },
+  {
+   "id": "NQR-CLOSING-SENTENCE",
+   "path": "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+   "fileSha256": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+   "member": null,
+   "lines": [
+    281,
+    282
+   ],
+   "fragments": [
+    [
+     281,
+     54,
+     282,
+     58
+    ]
+   ],
+   "text": "No new key, admin prompt,\ndownload, hosted runner, cloud bill or API-key dependency.",
+   "span": "38243b08115f11c346953302d14ce0fa08b7e1595e484ba287cf6cdb84045852",
+   "note": "States that packet's own publication scope, not a standing rule."
+  },
+  {
+   "id": "TL-PUBLICATION-460",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    460,
+    461
+   ],
+   "fragments": [
+    [
+     460,
+     34,
+     461,
+     32
+    ]
+   ],
+   "text": "it grants no installation, target access,\nprovisioning or paid capability.",
+   "span": "dcf40f8dac5184fa29304ab5e96abc89f9c29c30d3083de39a05b8ac05fbb51b",
+   "note": "States that packet's own publication scope, not a standing rule."
+  },
+  {
+   "id": "TL-PUBLICATION-484",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    484,
+    485
+   ],
+   "fragments": [
+    [
+     484,
+     0,
+     485,
+     25
+    ]
+   ],
+   "text": "No installation, key issuance, root-policy change, hosted runner or paid API is\npart of this publication.",
+   "span": "dc1ad5a4f54146c00068fb704d7f6734c0dd4ab0ee36a32ee190780e738e8fa7",
+   "note": "States that packet's own publication scope, not a standing rule."
+  },
+  {
+   "id": "TL-PUBLICATION-524",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    523,
+    525
+   ],
+   "fragments": [
+    [
+     523,
+     63,
+     525,
+     12
+    ]
+   ],
+   "text": "No product/native\nexecution, new installation, key, dependency, cloud action or bill in this meta\npublication.",
+   "span": "cc9ee4e1b01939e88e50929bdef80a71bcfce9e17fe74012b7dbc493232e5383",
+   "note": "States that packet's own publication scope, not a standing rule."
+  },
+  {
+   "id": "TL-PUBLICATION-540",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    540,
+    541
+   ],
+   "fragments": [
+    [
+     540,
+     50,
+     541,
+     77
+    ]
+   ],
+   "text": "no additional product repair\npacket, signature role, endpoint, installed capability or billing permission.",
+   "span": "e394ff7727d5b3daf422f6c171e7fb5ab60104ee1c9bcbd79850d4bc2a98b6f0",
+   "note": "States that packet's own publication scope, not a standing rule."
+  },
+  {
+   "id": "TL-PUBLICATION-560",
+   "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+   "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+   "member": null,
+   "lines": [
+    560,
+    561
+   ],
+   "fragments": [
+    [
+     560,
+     18,
+     561,
+     22
+    ]
+   ],
+   "text": "No installation, new broker availability, paid service or live\nacceptance is claimed.",
+   "span": "cf4493b647ddfd72f9f3fbe5d3d709d21807af369e88d7d59c94a7af4b08a427",
+   "note": "States that packet's own publication scope, not a standing rule."
+  }
+ ],
+ "readings": [
+  {
+   "id": "SIGNING_AUTHORITY",
+   "words": [
+    "existing"
+   ],
+   "decision": "MON-LHA-16-1",
+   "reading": "Existing signing authority is established by the post-merge key ceremony and recorded in custody-model.json before any run, never introduced during a run.",
+   "occurrences": [
+    {
+     "id": "LRJ-SIGNING-AUTHORITY",
+     "path": "architecture/linux-readiness.json",
+     "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+     "member": "evidence.signingAuthority",
+     "lines": [
+      108,
+      108
+     ],
+     "fragments": [
+      [
+       108,
+       25,
+       108,
+       33
+      ]
+     ],
+     "text": "EXISTING",
+     "span": "d3f8a1866728a93794b9c8f6e99c99c352fd117b6fbc379df0a942a319e63559",
+     "note": "evidence.signingAuthority EXISTING_PLATFORM_RELEASE_TENANT_LIVE_EXECUTION_AND_CAPACITY_OPERATOR."
+    },
+    {
+     "id": "OP-STEP-4-EXISTING",
+     "path": "docs/linux-runner/OPERATOR.md",
+     "fileSha256": "30a59f557ea1a3129fe0d11f86801ed282cffba3f580359b550a8335924fec28",
+     "member": null,
+     "lines": [
+      93,
+      93
+     ],
+     "fragments": [
+      [
+       93,
+       7,
+       93,
+       15
+      ]
+     ],
+     "text": "existing",
+     "span": "11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af",
+     "note": "OPERATOR.md step 4."
+    },
+    {
+     "id": "OP-STEP-5-EXISTING",
+     "path": "docs/linux-runner/OPERATOR.md",
+     "fileSha256": "30a59f557ea1a3129fe0d11f86801ed282cffba3f580359b550a8335924fec28",
+     "member": null,
+     "lines": [
+      99,
+      99
+     ],
+     "fragments": [
+      [
+       99,
+       44,
+       99,
+       52
+      ]
+     ],
+     "text": "existing",
+     "span": "11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af",
+     "note": "OPERATOR.md step 5."
+    },
+    {
+     "id": "OP-STEP-8-EXISTING-KEY",
+     "path": "docs/linux-runner/OPERATOR.md",
+     "fileSha256": "30a59f557ea1a3129fe0d11f86801ed282cffba3f580359b550a8335924fec28",
+     "member": null,
+     "lines": [
+      115,
+      115
+     ],
+     "fragments": [
+      [
+       115,
+       64,
+       115,
+       72
+      ]
+     ],
+     "text": "existing",
+     "span": "11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af",
+     "note": "OPERATOR.md step 8."
+    },
+    {
+     "id": "OP-STEP-8-EXISTING-PATHS",
+     "path": "docs/linux-runner/OPERATOR.md",
+     "fileSha256": "30a59f557ea1a3129fe0d11f86801ed282cffba3f580359b550a8335924fec28",
+     "member": null,
+     "lines": [
+      116,
+      116
+     ],
+     "fragments": [
+      [
+       116,
+       51,
+       116,
+       59
+      ]
+     ],
+     "text": "existing",
+     "span": "11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af",
+     "note": "OPERATOR.md step 8."
+    },
+    {
+     "id": "LR-147-EXISTING",
+     "path": "docs/alpha-2/LINUX_READINESS.md",
+     "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+     "member": null,
+     "lines": [
+      147,
+      147
+     ],
+     "fragments": [
+      [
+       147,
+       0,
+       147,
+       8
+      ]
+     ],
+     "text": "existing",
+     "span": "11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af",
+     "note": "Line 147 cited for the word only (B-LHA-11); the sentence is kept in unchanged."
+    }
+   ]
+  },
+  {
+   "id": "PRE_EXISTING",
+   "words": [
+    "pre-existing",
+    "preexisting",
+    "existing"
+   ],
+   "decision": "Q-LHA-14",
+   "reading": "Pre-existing, preexisting and existing operator resources are installed, reviewed and verified by the operator before the envelope is signed, never by the campaign. For the per-run cluster the operator makes these resources at step 7, which this reading admits.",
+   "occurrences": [
+    {
+     "id": "NQR-28-PRE-EXISTING",
+     "path": "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+     "fileSha256": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+     "member": null,
+     "lines": [
+      28,
+      29
+     ],
+     "fragments": [
+      [
+       28,
+       67,
+       28,
+       79
+      ]
+     ],
+     "text": "pre-existing",
+     "span": "a0a8f55b200bafaba71cb93be2d0b1514c0a1f332359cb658ca8b6bf2ae5683a",
+     "note": "MET-REPAIR-015 lines 28-29."
+    },
+    {
+     "id": "NQR-37-EXISTING",
+     "path": "docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md",
+     "fileSha256": "60bed4c5358527dabfba15bf4e7a7f584872715ef2ca4f9b4350303b656bf595",
+     "member": null,
+     "lines": [
+      37,
+      37
+     ],
+     "fragments": [
+      [
+       37,
+       2,
+       37,
+       10
+      ]
+     ],
+     "text": "Existing",
+     "span": "3e7b8566ba4b6227175af11b1af05d70e199b7291d04f4008b3acbce3953a4ea",
+     "note": "MET-REPAIR-015 line 37."
+    },
+    {
+     "id": "LRJ-RUNTIME-TRANSPORT",
+     "path": "architecture/linux-readiness.json",
+     "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+     "member": "evidence.runtimeTransport",
+     "lines": [
+      109,
+      109
+     ],
+     "fragments": [
+      [
+       109,
+       32,
+       109,
+       43
+      ]
+     ],
+     "text": "PREEXISTING",
+     "span": "bdb731fe061da254e298f5ea72909bd12d988d0f36b526b2b732b909f1ab4ea3",
+     "note": "evidence.runtimeTransport SIGNED_PREEXISTING_PROXY_ONLY."
+    },
+    {
+     "id": "TL-241-LOCAL-PREEXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      240,
+      241
+     ],
+     "fragments": [
+      [
+       241,
+       47,
+       241,
+       58
+      ]
+     ],
+     "text": "PREEXISTING",
+     "span": "bdb731fe061da254e298f5ea72909bd12d988d0f36b526b2b732b909f1ab4ea3",
+     "note": "TRUSTED_LIVE lines 240-241."
+    },
+    {
+     "id": "TL-254-PRE-EXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      254,
+      257
+     ],
+     "fragments": [
+      [
+       254,
+       6,
+       254,
+       18
+      ]
+     ],
+     "text": "pre-existing",
+     "span": "a0a8f55b200bafaba71cb93be2d0b1514c0a1f332359cb658ca8b6bf2ae5683a",
+     "note": "TRUSTED_LIVE lines 254-257."
+    },
+    {
+     "id": "TL-257-PRE-EXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      254,
+      257
+     ],
+     "fragments": [
+      [
+       257,
+       6,
+       257,
+       18
+      ]
+     ],
+     "text": "pre-existing",
+     "span": "a0a8f55b200bafaba71cb93be2d0b1514c0a1f332359cb658ca8b6bf2ae5683a",
+     "note": "TRUSTED_LIVE lines 254-257."
+    },
+    {
+     "id": "TL-260-PRE-EXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      260,
+      260
+     ],
+     "fragments": [
+      [
+       260,
+       32,
+       260,
+       44
+      ]
+     ],
+     "text": "pre-existing",
+     "span": "a0a8f55b200bafaba71cb93be2d0b1514c0a1f332359cb658ca8b6bf2ae5683a",
+     "note": "TRUSTED_LIVE line 260."
+    },
+    {
+     "id": "TL-281-PRE-EXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      281,
+      281
+     ],
+     "fragments": [
+      [
+       281,
+       18,
+       281,
+       30
+      ]
+     ],
+     "text": "pre-existing",
+     "span": "a0a8f55b200bafaba71cb93be2d0b1514c0a1f332359cb658ca8b6bf2ae5683a",
+     "note": "TRUSTED_LIVE line 281."
+    },
+    {
+     "id": "TL-302-PREEXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      302,
+      302
+     ],
+     "fragments": [
+      [
+       302,
+       0,
+       302,
+       11
+      ]
+     ],
+     "text": "preexisting",
+     "span": "3688890505618f49875d3dbff452104b424cbffcfcb2134795419ee45fcc5dbd",
+     "note": "The preexistingResourceRefs member."
+    },
+    {
+     "id": "TL-321-PRE-EXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      321,
+      321
+     ],
+     "fragments": [
+      [
+       321,
+       59,
+       321,
+       71
+      ]
+     ],
+     "text": "Pre-existing",
+     "span": "3400e528e43074bb6df0691b678c4293e10d7c77c58b2509241c984e66382fba",
+     "note": "Line 321 cited for the word (B-LHA-11); lines 321-322 read Pre-existing, storage, and accelerator references."
+    },
+    {
+     "id": "TL-442-PRE-EXISTING",
+     "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+     "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+     "member": null,
+     "lines": [
+      442,
+      443
+     ],
+     "fragments": [
+      [
+       442,
+       26,
+       442,
+       38
+      ]
+     ],
+     "text": "pre-existing",
+     "span": "a0a8f55b200bafaba71cb93be2d0b1514c0a1f332359cb658ca8b6bf2ae5683a",
+     "note": "TRUSTED_LIVE lines 442-443."
+    },
+    {
+     "id": "COR-87-PREEXISTING",
+     "path": "docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md",
+     "fileSha256": "b2ed7fe5be1a8b23ec31483c94f77a79094972acde5b726b33a660d729a3bb2d",
+     "member": null,
+     "lines": [
+      87,
+      87
+     ],
+     "fragments": [
+      [
+       87,
+       46,
+       87,
+       57
+      ]
+     ],
+     "text": "preexisting",
+     "span": "3688890505618f49875d3dbff452104b424cbffcfcb2134795419ee45fcc5dbd",
+     "note": "CREDENTIAL_ORDERING_REPAIR.md line 87."
+    }
+   ]
+  }
+ ],
+ "capacity": {
+  "rule": "OWNER_APPROVED_GCP_PER_RUN",
+  "contract": "MET-LINUX-007",
+  "binding": [
+   "PLAN_SHA256",
+   "LEASE",
+   "COST_CEILING",
+   "TEARDOWN_REPORT"
+  ],
+  "runProject": {
+   "separateFromLabFoundation": true,
+   "defaultNetwork": false
+  },
+  "hostRecipe": "architecture/linux-host-authority/host-recipe.json",
+  "paidScope": "HOST_RECIPE_COST_SCOPE",
+  "licenceCharge": "NONE",
+  "ownerDecision": "LINUX-CAPACITY",
+  "insideThePaidScope": "THE_CAMPAIGN_THE_SERVER_AND_THE_QUALIFICATION_READER_CREATE_NO_CAPACITY"
+ },
+ "evidence": {
+  "nativeAmd64": "NOT_RUN_ENV_UNAVAILABLE",
+  "arm64": "NOT_RUN_ENV_UNAVAILABLE",
+  "approvingCapacityIsQualification": false,
+  "freshness": {
+   "id": "LRJ-MAXIMUM-EVIDENCE-AGE",
+   "path": "architecture/linux-readiness.json",
+   "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+   "member": "gate.maximumEvidenceAgeHours",
+   "lines": [
+    28,
+    28
+   ],
+   "fragments": [
+    [
+     28,
+     4,
+     28,
+     34
+    ]
+   ],
+   "text": "\"maximumEvidenceAgeHours\": 168",
+   "span": "650e450743b4a5b605333a331f4bcb06e11a894f3c9bb3645eb1e4665395f639",
+   "note": "Unchanged: runbook step 14 places the campaign inside the 168-hour window."
+  }
+ },
+ "decisions": {
+  "metLinux007": {
+   "id": "LRP-LINUX-CAPACITY",
+   "path": "architecture/lab-run-plan/status.json",
+   "fileSha256": "81c4e9988cb29b93d8abbef7b4bf5d5330cb2e7c1af4429a9b78fe5c6f26e039",
+   "member": "ownerDecisions[2].decision",
+   "lines": [
+    146,
+    146
+   ],
+   "fragments": [
+    [
+     146,
+     16,
+     146,
+     127
+    ]
+   ],
+   "text": "Linux capacity for CONF-LINUX-001 and W06 is the owner's GCP compute, and each run plan goes to the owner first",
+   "span": "52b930eccf524385e0259511f51e5fdb0bc0a37db4a970b970badd58d0f0b44c",
+   "note": "The owner's decision as MET-LINUX-007 records it, verbatim."
+  },
+  "decisionLines": [
+   {
+    "id": "LX-D1",
+    "by": "OWNER",
+    "entry": "LX-D1",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "\"Add owning packets (Recommended)\": G1 = LINUX-HOST-AUTH-001 (host authority, recipe, key custody); G2/G3 = LINUX-PROBE-KIT-001; CONF-LINUX-001 depends on both; the run plan stays a draft; no spend."
+   },
+   {
+    "id": "LX-D2",
+    "by": "OWNER",
+    "entry": "LX-D2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "\"Split by side (Recommended)\" and \"After current packet (Recommended)\": LINUX-HOST-AUTH-001 to the parallel lane after MET-GOV-002; the primary takes LINUX-PROBE-KIT-001."
+   },
+   {
+    "id": "Q-LHA-ID",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-ID + Q-LHA-SERIES + GO design",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **Q-LHA-ID: MET-LINUX-008.** 003 and 004 were self-hosted-runner-era PRs, retired under OPS-PRS, so their ids are not reusable."
+   },
+   {
+    "id": "Q-LHA-SERIES",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-ID + Q-LHA-SERIES + GO design",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **Q-LHA-SERIES:** LPK-0's batch registers two exact ids for you: `MET-LINUX-008/packet` (PACKET) and `MET-LINUX-008/contract` (CONTRACT). Publish your contract rounds in v2 form in your contract directory, which is consistent with the in-tree check_tree rule. Keep design rounds local, with no DESIGN series, as at 259. I'm passing these ids to the primary for the batch. Draft your briefs as v2 from the start."
+   },
+   {
+    "id": "Q-LHA-1",
+    "by": "OWNER",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-1: \"Separated keys, disclosed (Recommended)\". The 'independent signers' clause joins the superseded set, and an R12 change follows for `signers: SINGLE_PRINCIPAL_SEPARATED_KEYS`."
+   },
+   {
+    "id": "Q-LHA-2",
+    "by": "OWNER",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-2: \"Offline + token + sealed backup (Recommended)\". The owner signs each run's manifest with the token within the hour, rotation is per release, and Ed25519 import is checked at the ceremony."
+   },
+   {
+    "id": "Q-LHA-3",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-3 (a), restated: the signing registry and evidence store are in the owner's custody outside GCP; a host-side durable nonce/reservation ledger is exported at teardown; chrony plus the launcher checks; revocation is refreshed by local transfer before each run."
+   },
+   {
+    "id": "Q-LHA-4",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-3-8",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-4 (a): gate material, so per-PR, head-bound owner approval."
+   },
+   {
+    "id": "Q-LHA-5",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-3-8",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-5 (a): a new record supersedes by digest; MET-LINUX-001's files stay unchanged; the README states precedence."
+   },
+   {
+    "id": "Q-LHA-6",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-3-8",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-6 (a): G13 goes in a separate later LAB-RUNPLAN-001 amendment."
+   },
+   {
+    "id": "Q-LHA-4-5-6-STAND",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-4, Q-LHA-5 and Q-LHA-6 stand (Q-LHA-6 with the wording change)."
+   },
+   {
+    "id": "Q-LHA-7",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-7 (a), restated: design only, written against CONF-LIVE-005/006's published contracts. The install waits for their source closure and the external operator installation."
+   },
+   {
+    "id": "Q-LHA-8",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-8 (a), extended as you listed: OS Login 2FA, no startup/shutdown-script metadata, guest-agent features limited, SELinux enforcing."
+   },
+   {
+    "id": "Q-LHA-9",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **Q-LHA-9 (a), with a spend condition:** an SELinux-enforcing image whose kernel qualifies against the 6.12 UAPI, pinned per plan, with imageDigest computed off the VM.\n  - Choose a **no-licence-fee RHEL-10-compatible family**, for example AlmaLinux 10, Rocky Linux 10 or CentOS Stream 10, on paper.\n  - No premium-licensed image such as RHEL on-demand. Any image with a licence charge, and any other spend, comes to me for the owner.\n  - The root-alias stop-and-new-packet rule stands as you wrote it."
+   },
+   {
+    "id": "Q-LHA-10",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-10 (a): operator-preflight only, with no GitHub runner registered."
+   },
+   {
+    "id": "Q-LHA-11",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-11 (a): an egress allowlist with a byte ceiling, then address removal plus explicit deny-all egress."
+   },
+   {
+    "id": "Q-LHA-12",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-12 (a): admin login during setup and install only, revoked before the preflight."
+   },
+   {
+    "id": "Q-LHA-13",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-1 + Q-LHA-2 (owner) + MON-LHA-3-8-R2 + MON-LHA-9-13 + GO r2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-13 (a): supersede every binding restatement found, and record MET-REPAIR-015's closing line as reviewed and non-binding."
+   },
+   {
+    "id": "Q-LHA-14",
+    "by": "OWNER",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-14: \"Two VMs per run (Recommended)\". A proxy/operator host plus a separate single-node cluster worker under one plan and lease, with the \"pre-existing\" reading (installed and verified by the operator before the envelope is signed). The spend is about double the per-run compute."
+   },
+   {
+    "id": "Q-LHA-15",
+    "by": "OWNER",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-15: \"Custom ext4-verity image (Recommended)\". It is built per plan from the pinned family image, with the root (/usr included) on ext4 with verity and imageDigest from its inventory. The spend is a temporary build disk, the stored image (deleted at teardown) and build minutes."
+   },
+   {
+    "id": "Q-LHA-16-2",
+    "by": "OWNER",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- Q-LHA-16(2): \"Offline + token + backup (Recommended)\". The local CA key is generated offline, on a token supporting its algorithm, with a sealed backup checked at the ceremony. A second token model, if needed, is the owner's purchase."
+   },
+   {
+    "id": "MON-LHA-16-1",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- MON-LHA-16-1 (1): \"existing\" and \"pre-existing\" become digest-bound interpretations in the record."
+   },
+   {
+    "id": "MON-LHA-SPLIT",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- MON-LHA-SPLIT (a): the recipe provides the facilities. The existing independent operator at the install step puts in MET-REPAIR-015's reviewed policy, planeon-live cgroups, BPF programs and verity measurements."
+   },
+   {
+    "id": "MON-LHA-12R",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- MON-LHA-12R (a): my Q-LHA-12 ruling stays. Add the narrow signed-drop installer, inventoried at setup, which verifies Ed25519 against a pinned key. The admin role is revoked before the preflight, the check is on the effective admin-login permission (basic, custom and inherited roles), and a refusal vector backs it. Name the installer as a reviewed root component."
+   },
+   {
+    "id": "MON-LHA-17",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- MON-LHA-17 (a): the root-alias contract packet (MET-LINUX-005's excluded policy) is a precondition before the first plan is approved, and it goes into the build plan."
+   },
+   {
+    "id": "LHA2-11",
+    "by": "LANE_MONITOR",
+    "entry": "Q-LHA-14 + Q-LHA-15 + Q-LHA-16(2) (owner) + MON-LHA-16-1 + MON-LHA-SPLIT + MON-LHA-12R + MON-LHA-17 + GO r3",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- LHA2-11: the preflight-only HOST_ISOLATION_ONLY evidence until CONF-LIVE-005/006 close is accepted as stated."
+   },
+   {
+    "id": "LHA-CAP",
+    "by": "OWNER",
+    "entry": "MON-LHA-DR3-KEEP + LHA cap (owner) + LHA3-8 (owner) + MON-LHA3-1-2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **Owner, the LHA cap:** \"Rev 5 + one last round (Recommended)\". Fold r3 into rev 5 and run one last delta round r4, then cap. Anything left after r4 becomes a binding build rule, checked first in the CONTRACT rounds."
+   },
+   {
+    "id": "LHA3-8",
+    "by": "OWNER",
+    "entry": "MON-LHA-DR3-KEEP + LHA cap (owner) + LHA3-8 (owner) + MON-LHA3-1-2",
+    "state": "SUPERSEDED",
+    "supersededBy": "OWNER-CUSTOM-ROLE",
+    "text": "- **Owner, LHA3-8:** \"IAM deny policy per run (Recommended)\". At the revocation step, a deny policy on the run project denies compute.instances.osAdminLogin to the owner's login identity, and it is removed at teardown. The baseline roles are unchanged."
+   },
+   {
+    "id": "MON-LHA3-1-2",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-DR3-KEEP + LHA cap (owner) + LHA3-8 (owner) + MON-LHA3-1-2",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **MON-LHA3-1-2 (a), under delegation:** both MAJOR fixes as you proposed.\n  - LHA3-1: listed internal flows only, each with port and direction, as the closure probe's expected exceptions; key holders named per host; the worker gets its own inventory and needs no file after revocation. No spend, since same-zone internal traffic is not billed (on paper).\n  - LHA3-2: per-run keys and CSRs at step 8 with admin; bundles and revocation in T1, installed at step 10 before the revocation; after it, only certificates, manifests and signatures, under one Ed25519 drop manifest signed in T2. The installer verifies Ed25519 only, and the certificate-chain mode is dropped."
+   },
+   {
+    "id": "MON-LHA-B1",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-DR4-KEEP + MON-LHA-B1 + MON-LHA-B2 + B-LHA-3 (owner) + design close",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **B-LHA-1 (a), MON-LHA-B1, under delegation:** one reviewed family of fixed root-owned trigger units beside the installer.\n  - Preflight and export units, each with one fixed command and no operator arguments, installed at step 8, inventoried, and specified in launcher-install.json.\n  - operatorUid is recorded by role label only.\n  - The live launcher's non-admin entry path is a precondition on CONF-LIVE-005/006."
+   },
+   {
+    "id": "MON-LHA-B2",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-DR4-KEEP + MON-LHA-B1 + MON-LHA-B2 + B-LHA-3 (owner) + design close",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **B-LHA-2 (a), MON-LHA-B2, under delegation:** the per-run cluster's own CA issues KUBERNETES_PROXY_SERVER_MTLS at step 8, with RBAC bound to that leaf's exact subject only. The release-pinned local CA stays out of the API server's client trust, so CREDENTIAL_ORDERING_REPAIR line 62 holds."
+   },
+   {
+    "id": "B-LHA-3",
+    "by": "OWNER",
+    "entry": "MON-LHA-DR4-KEEP + MON-LHA-B1 + MON-LHA-B2 + B-LHA-3 (owner) + design close",
+    "state": "SUPERSEDED",
+    "supersededBy": "OWNER-CUSTOM-ROLE",
+    "text": "- **B-LHA-3, owner answer:** \"Amend LAB-RUNPLAN-001 (Recommended)\". One small amendment packet adds \"deny policies on the run project\" as an observer-listed counted class. It is a precondition before the first plan, beside MON-LHA-17. The owner holds the deny-admin role only as a lease-time binding, counted and revoked at teardown."
+   },
+   {
+    "id": "B-LHA-4-12",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-DR4-KEEP + MON-LHA-B1 + MON-LHA-B2 + B-LHA-3 (owner) + design close",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- B-LHA-4..12 stand as the in-ruling options."
+   },
+   {
+    "id": "OWNER-CUSTOM-ROLE",
+    "by": "OWNER",
+    "entry": "MON-DC-EVID-RESULT + owner custom-role decision (replaces LHA3-8, B-LHA-3; MET-LINUX-010 withdrawn) + MON-LHA-REV6 + Q-SLOT-263",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **The owner's new decision (replaces LHA3-8 and B-LHA-3): \"Custom role on run project (Recommended)\".**\n  - On the dedicated run project the owner holds a custom role without compute.instances.osAdminLogin, instead of a basic Owner/Editor role.\n  - Admin login is a separate project binding, granted for setup and revoked before the preflight.\n  - There is no deny policy and no organization grant. **MET-LINUX-010 is withdrawn.** MON-DC-OBSERVER becomes moot."
+   },
+   {
+    "id": "Q-LHA5-1",
+    "by": "OWNER",
+    "entry": "MON-LHA-DR5-KEEP + Q-LHA5-1 (owner) + MON-LHA-REV7",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **The owner's answer to Q-LHA5-1:** \"Two identities + audit check (Recommended)\".\n  - A separate administering identity holds and revokes the run's bindings.\n  - The login identity's custom role also excludes the IAM-changing permissions: project and instance setIamPolicy, and custom-role create and update.\n  - Add the effective re-check at step 15 before the export, and an Admin Activity audit-log check from step 10 to teardown: no IAM change or custom-role update granting osAdminLogin.\n  - Any finding refuses the run's evidence, with refusal vectors. Groups and the organization are detected by the effective check, not blocked.\n  - Both identities are role-labelled only, named in no record."
+   },
+   {
+    "id": "Q-LHA6-3",
+    "by": "OWNER",
+    "entry": "MON-LHA-DR6-KEEP + Q-LHA6-3 (owner) + B-LHA-14..18 under the cap",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "- **The owner's answer to Q-LHA6-3:** \"No login for admin id (Recommended)\". OWNER_ADMIN's role on the run project, or any ancestor it inherits from, holds no compute.instances.osLogin, compute.instances.osAdminLogin or IAP tunnel permission. Step 1 confirms this, steps 10 and 15 test it, and any grant of a login permission to it refuses the evidence (B-LHA-16). B-LHA-10's session and sudoers checks cover it, and its binding counts among the owner's baseline bindings."
+   },
+   {
+    "id": "MON-LHA-NO-LOCAL-BRIEF",
+    "by": "LANE_MONITOR",
+    "entry": "MON-LHA-AUTHOR-GO",
+    "state": "IN_FORCE",
+    "supersededBy": null,
+    "text": "  4. **REVIEW_BRIEF.md:** not built, and recorded as a design-vs-rules point. I confirm that ruling, ref MON-LHA-NO-LOCAL-BRIEF."
+   }
+  ]
+ },
+ "consumers": {
+  "list": [
+   {
+    "id": "CONF-LINUX-001",
+    "through": "EXTERNAL_ROOT_OWNED_LIVE_LAUNCHER",
+    "earliestFullRun": "AFTER_CONF_LIVE_005_006_SOURCE_CLOSURE",
+    "readsThroughThePublishedDigest": true,
+    "note": "R12; LINUX_READINESS.md line 146 and TRUSTED_LIVE line 440."
+   },
+   {
+    "id": "NATIVE_AMD64_QUALIFICATION",
+    "through": "CONF_LIVE_006_CAMPAIGN_DECLARATION_AND_ITS_AUTHORITY_AND_EVIDENCE_ADAPTER",
+    "earliestFullRun": "AFTER_CONF_LIVE_001_TO_006",
+    "readsThroughThePublishedDigest": true,
+    "note": "MET-LIVE-001's fresh, independently signed native AMD64 qualification."
+   }
+  ],
+  "beforeLiveLauncher": {
+   "mode": "OFFLINE_LAUNCHER_PREFLIGHT_ONLY",
+   "evidence": "HOST_ISOLATION_ONLY",
+   "quote": {
+    "id": "OP-HOST-ISOLATION-ONLY",
+    "path": "docs/linux-runner/OPERATOR.md",
+    "fileSha256": "30a59f557ea1a3129fe0d11f86801ed282cffba3f580359b550a8335924fec28",
+    "member": null,
+    "lines": [
+     224,
+     225
+    ],
+    "fragments": [
+     [
+      224,
+      23,
+      225,
+      35
+     ]
+    ],
+    "text": "This is not a product image build, live runtime test or\n  full native release qualification",
+    "span": "73e175d3d715a0d274068b9e07abf8129d0fd4876408c808ce7901f335a4c2e8",
+    "note": "Before CONF-LIVE-005/006 close, a lease yields only this preflight-only evidence."
+   }
+  }
+ },
+ "preconditions": [
+  {
+   "id": "MET-LINUX-009",
+   "what": "The root-alias contract, MET-LINUX-005's excluded policy (MON-LHA-17).",
+   "before": "THE_FIRST_PLAN_IS_APPROVED",
+   "state": "MERGED_AT_BASE"
+  },
+  {
+   "id": "CONF-LINUX-002",
+   "what": "R12's signers evidence change for SINGLE_PRINCIPAL_SEPARATED_KEYS (Q-LHA-1).",
+   "before": "THE_FIRST_CONF_LINUX_001_RUN",
+   "state": "OPEN"
+  },
+  {
+   "id": "CONF-LIVE-006-ADAPTER",
+   "what": "CONF-LIVE-006's adapter carrying the disclosure.",
+   "before": "THE_LIVE_PATH_QUALIFICATION",
+   "state": "OPEN"
+  },
+  {
+   "id": "CONF-LIVE-005-006-NON-ADMIN-ENTRY",
+   "what": "The live launcher's entry path for a login without admin (MON-LHA-B1).",
+   "before": "ANY_LIVE_RUN",
+   "state": "OPEN"
+  },
+  {
+   "id": "CONF-LIVE-003-006-AND-MET-REPAIR-015-SOURCE-CLOSURE",
+   "what": "CONF-LIVE-003 to CONF-LIVE-006 and MET-REPAIR-015 closed at source.",
+   "before": "ANY_LIVE_RUN",
+   "state": "OPEN"
+  },
+  {
+   "id": "KERNEL-INDEPENDENT-QUALIFICATION",
+   "what": "The kernel's independent qualification against MET-REPAIR-015's interface and record.",
+   "before": "QUALIFICATION_ON_THE_PINNED_KERNEL",
+   "state": "OPEN"
+  }
+ ],
+ "carriedNotes": [
+  {
+   "id": "LHA-CN-1",
+   "date": "2026-10-24",
+   "status": "CARRIED_NOTE_NOT_SETTLED",
+   "note": "R12's live envelope requires mutationProfile ZERO_INCREMENTAL_COST_KUBERNETES_V1 (live.py lines 130-131) and every endpoint SELF_HOSTED_OPEN_SOURCE_NON_METERED or TENANT_SUPPLIED_OPEN_SOURCE_NON_METERED (lines 108-109), at R12 c17bcfe3. Both concern in-cluster mutation and the endpoint, not the host's per-run compute that LHA's lease bills; on paper compatible, not settled. Carried into LHA's run-plan reading, checked in the LHA CONTRACT round.",
+   "appliesTo": [
+    "TL-ENDPOINT-COST-DISPOSITION",
+    "TL-MUTATION-PROFILE"
+   ],
+   "checkedIn": "THE_LHA_CONTRACT_ROUND"
+  }
+ ]
+}

@@ -1,0 +1,466 @@
+{
+ "schemaVersion": "planeon.internal.linux-key-custody/v1",
+ "packet": "MET-LINUX-008",
+ "item": "LINUX-HOST-AUTH-001",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "principal": {
+  "holder": "OWNER",
+  "count": 1,
+  "disclosure": {
+   "signers": "SINGLE_PRINCIPAL_SEPARATED_KEYS"
+  },
+  "decision": "Q-LHA-1",
+  "ownerAnswer": "- Q-LHA-1: \"Separated keys, disclosed (Recommended)\". The 'independent signers' clause joins the superseded set, and an R12 change follows for `signers: SINGLE_PRINCIPAL_SEPARATED_KEYS`."
+ },
+ "authorities": [
+  {
+   "id": "LINUX_RUNNER_MANIFEST",
+   "keyId": "KEYID-LINUX-RUNNER-MANIFEST",
+   "purpose": "LINUX_RUNNER_MANIFEST",
+   "algorithm": "ED25519",
+   "signs": [
+    "OFFLINE_POLICY",
+    "OFFLINE_MANIFEST",
+    "DROP_MANIFEST"
+   ],
+   "sessions": [
+    "T1",
+    "T2"
+   ],
+   "publicHalf": "/etc/planeon/harness-runner-manifest.pub",
+   "cadence": "PER_RUN_ONCE_IN_T1_TWICE_IN_T2",
+   "holder": "OWNER",
+   "token": "TOKEN-LINUX-RUNNER-MANIFEST",
+   "sealedBackup": "BACKUP-LINUX-RUNNER-MANIFEST",
+   "generation": "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS",
+   "storage": "HARDWARE_TOKEN_WITH_ONE_SEALED_OFFLINE_BACKUP",
+   "rotation": "PER_RELEASE_OR_ON_COMPROMISE",
+   "revocation": "REVOKED_IN_THE_TRUST_BUNDLE_BY_LOCAL_CUSTODY_TRANSFER",
+   "importCheckedAtCeremony": true,
+   "ceremony": {
+    "state": "PENDING_THE_POST_MERGE_KEY_CEREMONY",
+    "records": [
+     "PUBLIC_KEY_DIGEST",
+     "PURPOSE"
+    ],
+    "privateBytes": false
+   }
+  },
+  {
+   "id": "LIVE_RUNNER_MANIFEST",
+   "keyId": "KEYID-LIVE-RUNNER-MANIFEST",
+   "purpose": "LIVE_RUNNER_MANIFEST",
+   "algorithm": "ED25519",
+   "signs": [
+    "LIVE_RUNNER_MANIFEST"
+   ],
+   "sessions": [
+    "T2"
+   ],
+   "publicHalf": "/etc/planeon/harness-live-runner-manifest.pub",
+   "cadence": "PER_RUN_IN_T2_ONLY_AFTER_CONF_LIVE_005_006_OWN_PREFLIGHT",
+   "holder": "OWNER",
+   "token": "TOKEN-LIVE-RUNNER-MANIFEST",
+   "sealedBackup": "BACKUP-LIVE-RUNNER-MANIFEST",
+   "generation": "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS",
+   "storage": "HARDWARE_TOKEN_WITH_ONE_SEALED_OFFLINE_BACKUP",
+   "rotation": "PER_RELEASE_OR_ON_COMPROMISE",
+   "revocation": "REVOKED_IN_THE_TRUST_BUNDLE_BY_LOCAL_CUSTODY_TRANSFER",
+   "importCheckedAtCeremony": true,
+   "ceremony": {
+    "state": "PENDING_THE_POST_MERGE_KEY_CEREMONY",
+    "records": [
+     "PUBLIC_KEY_DIGEST",
+     "PURPOSE"
+    ],
+    "privateBytes": false
+   }
+  },
+  {
+   "id": "PLATFORM_RELEASE",
+   "keyId": "KEYID-PLATFORM-RELEASE",
+   "purpose": "PLATFORM_RELEASE",
+   "algorithm": "ED25519",
+   "signs": [
+    "ENVELOPE_PLATFORM_SIGNATURE",
+    "RELEASE_MATERIAL",
+    "RELEASE_TRUST_BUNDLE_REVOCATION_MATERIAL"
+   ],
+   "sessions": [
+    "T1",
+    "T2"
+   ],
+   "publicHalf": "THE_RELEASE_TRUST_BUNDLE",
+   "cadence": "THE_ENVELOPE_PER_RUN_RELEASE_MATERIAL_PER_RELEASE",
+   "holder": "OWNER",
+   "token": "TOKEN-PLATFORM-RELEASE",
+   "sealedBackup": "BACKUP-PLATFORM-RELEASE",
+   "generation": "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS",
+   "storage": "HARDWARE_TOKEN_WITH_ONE_SEALED_OFFLINE_BACKUP",
+   "rotation": "PER_RELEASE_OR_ON_COMPROMISE",
+   "revocation": "REVOKED_IN_THE_TRUST_BUNDLE_BY_LOCAL_CUSTODY_TRANSFER",
+   "importCheckedAtCeremony": true,
+   "ceremony": {
+    "state": "PENDING_THE_POST_MERGE_KEY_CEREMONY",
+    "records": [
+     "PUBLIC_KEY_DIGEST",
+     "PURPOSE"
+    ],
+    "privateBytes": false
+   }
+  },
+  {
+   "id": "TENANT_LIVE_EXECUTION",
+   "keyId": "KEYID-TENANT-LIVE-EXECUTION",
+   "purpose": "TENANT_LIVE_EXECUTION",
+   "algorithm": "ED25519",
+   "signs": [
+    "ENVELOPE_TENANT_SIGNATURE",
+    "TENANT_TRUST_BUNDLE_REVOCATION_MATERIAL"
+   ],
+   "sessions": [
+    "T1",
+    "T2"
+   ],
+   "publicHalf": "THE_TENANT_TRUST_BUNDLE",
+   "cadence": "PER_RUN",
+   "holder": "OWNER",
+   "token": "TOKEN-TENANT-LIVE-EXECUTION",
+   "sealedBackup": "BACKUP-TENANT-LIVE-EXECUTION",
+   "generation": "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS",
+   "storage": "HARDWARE_TOKEN_WITH_ONE_SEALED_OFFLINE_BACKUP",
+   "rotation": "PER_RELEASE_OR_ON_COMPROMISE",
+   "revocation": "REVOKED_IN_THE_TRUST_BUNDLE_BY_LOCAL_CUSTODY_TRANSFER",
+   "importCheckedAtCeremony": true,
+   "ceremony": {
+    "state": "PENDING_THE_POST_MERGE_KEY_CEREMONY",
+    "records": [
+     "PUBLIC_KEY_DIGEST",
+     "PURPOSE"
+    ],
+    "privateBytes": false
+   }
+  },
+  {
+   "id": "CAPACITY_OPERATOR",
+   "keyId": "KEYID-CAPACITY-OPERATOR",
+   "purpose": "CAPACITY_OPERATOR",
+   "algorithm": "ED25519",
+   "signs": [
+    "CAPACITY_AUTHORIZATION"
+   ],
+   "sessions": [
+    "T2"
+   ],
+   "publicHalf": "THE_TENANT_TRUST_BUNDLE",
+   "cadence": "PER_RUN",
+   "holder": "OWNER",
+   "token": "TOKEN-CAPACITY-OPERATOR",
+   "sealedBackup": "BACKUP-CAPACITY-OPERATOR",
+   "generation": "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS",
+   "storage": "HARDWARE_TOKEN_WITH_ONE_SEALED_OFFLINE_BACKUP",
+   "rotation": "PER_RELEASE_OR_ON_COMPROMISE",
+   "revocation": "REVOKED_IN_THE_TRUST_BUNDLE_BY_LOCAL_CUSTODY_TRANSFER",
+   "importCheckedAtCeremony": true,
+   "ceremony": {
+    "state": "PENDING_THE_POST_MERGE_KEY_CEREMONY",
+    "records": [
+     "PUBLIC_KEY_DIGEST",
+     "PURPOSE"
+    ],
+    "privateBytes": false
+   }
+  }
+ ],
+ "dropManifest": {
+  "signer": "LINUX_RUNNER_MANIFEST",
+  "authorizes": "PLACEMENT_ONLY",
+  "liveManifestStillVerifiedUnder": "LIVE_RUNNER_MANIFEST"
+ },
+ "tokenSessions": [
+  {
+   "id": "T1",
+   "runbookStep": 10,
+   "after": "THE_STEP_9_INVENTORY_FREEZE",
+   "offHost": true,
+   "withinOneHourOfPreflight": false,
+   "everyTokenPresent": false,
+   "order": [
+    "MEASURED_BOOT_COMPARISON",
+    "LINUX_RUNNER_MANIFEST_SIGNS_THE_OFFLINE_POLICY",
+    "BUNDLES_AND_REVOCATION_MATERIAL_REFRESHED"
+   ]
+  },
+  {
+   "id": "T2",
+   "runbookStep": 12,
+   "after": "THE_STEP_11_PREFLIGHT",
+   "offHost": true,
+   "withinOneHourOfPreflight": true,
+   "everyTokenPresent": true,
+   "order": [
+    "LOCAL_CA_ISSUES_CAMPAIGN_PROXY_SERVER_TLS_AND_CAMPAIGN_PROXY_CLIENT_MTLS",
+    "CAPACITY_OPERATOR_SIGNS_THE_CAPACITY_AUTHORIZATION",
+    "PLATFORM_RELEASE_AND_TENANT_LIVE_EXECUTION_SIGN_THE_ENVELOPE",
+    "LINUX_RUNNER_MANIFEST_SIGNS_THE_OFFLINE_MANIFEST",
+    "LINUX_RUNNER_MANIFEST_SIGNS_THE_DROP_MANIFEST"
+   ]
+  }
+ ],
+ "liveManifestInT2": "NOT_SIGNED_UNTIL_CONF_LIVE_005_006_CLOSE_AND_THEIR_OWN_PREFLIGHT",
+ "bundles": {
+  "release": {
+   "path": "/etc/planeon/trust/release-trust-bundle.json",
+   "authoredUnder": "PLATFORM_RELEASE"
+  },
+  "tenant": {
+   "path": "/etc/planeon/trust/tenant-trust-bundle.json",
+   "authoredUnder": "TENANT_LIVE_EXECUTION"
+  },
+  "digestsInTheSignedEnvelope": true,
+  "refreshedIn": "T1",
+  "installedAtStep": 10,
+  "beforeTheRevocation": true,
+  "t2EnvelopeBindsTheInstalledBytes": true,
+  "route": "LOCAL_CUSTODY_TRANSFER_ONLY",
+  "networkLookup": false
+ },
+ "localCa": {
+  "id": "RELEASE_PINNED_LOCAL_CA",
+  "issuer": "THE_OWNER_AT_THE_CEREMONY",
+  "pinnedIn": "THE_RELEASE",
+  "holder": "OWNER",
+  "generation": "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS",
+  "storage": "A_TOKEN_SUPPORTING_ITS_ALGORITHM_WITH_A_SEALED_BACKUP_CHECKED_AT_THE_CEREMONY",
+  "secondTokenModel": "THE_OWNER_PURCHASE_IF_NEEDED",
+  "rotation": "PER_RELEASE",
+  "issues": [
+   "CAMPAIGN_PROXY_SERVER_TLS",
+   "CAMPAIGN_PROXY_CLIENT_MTLS"
+  ],
+  "neverInTheApiServerClientTrust": true,
+  "decision": "Q-LHA-16-2"
+ },
+ "clusterCa": {
+  "id": "PER_RUN_CLUSTER_CA",
+  "madeAtStep": 7,
+  "on": "CLUSTER_NODE",
+  "by": "THE_CLUSTER_DISTRIBUTION",
+  "issues": [
+   "KUBERNETES_PROXY_SERVER_MTLS"
+  ],
+  "issuesAtStep": 8,
+  "withAdmin": true,
+  "newKeyOrToken": false,
+  "trustedByTheProxyOperatorHostAt": "/etc/planeon/credentials/cluster-ca.crt.pem",
+  "privateHalfEnds": "CLUSTER_NODE_INSTANCE_AND_DISK_DELETION",
+  "decision": "MON-LHA-B2"
+ },
+ "perRunCredentials": [
+  {
+   "id": "CAMPAIGN_PROXY_SERVER_TLS",
+   "issuer": "RELEASE_PINNED_LOCAL_CA",
+   "issuedAt": "T2",
+   "fromRequestAtStep": 8,
+   "madeOn": "PROXY_OPERATOR_HOST",
+   "privateHalf": "/etc/planeon/credentials/campaign-proxy-server-tls.key.pem",
+   "privateHalfOwner": "ROOT",
+   "privateHalfMode": "0400",
+   "certificate": "/etc/planeon/credentials/campaign-proxy-server-tls.crt.pem",
+   "certificateArrives": "SIGNED_DROP_AT_STEP_13",
+   "trustedBy": "THE_CAMPAIGN_PROXY_CLIENT_THROUGH_THE_LOCAL_CA",
+   "inCredentialIdentities": true,
+   "reusedAcrossRuns": false,
+   "ends": "INSTANCE_AND_DISK_DELETION_AT_TEARDOWN",
+   "grantsKubernetesAccess": false
+  },
+  {
+   "id": "CAMPAIGN_PROXY_CLIENT_MTLS",
+   "issuer": "RELEASE_PINNED_LOCAL_CA",
+   "issuedAt": "T2",
+   "fromRequestAtStep": 8,
+   "madeOn": "PROXY_OPERATOR_HOST",
+   "privateHalf": "/etc/planeon/credentials/campaign-proxy-client-mtls.key.pem",
+   "privateHalfOwner": "ROOT",
+   "privateHalfMode": "0400",
+   "certificate": "/etc/planeon/credentials/campaign-proxy-client-mtls.crt.pem",
+   "certificateArrives": "SIGNED_DROP_AT_STEP_13",
+   "trustedBy": "THE_PROXY_SERVER_THROUGH_THE_LOCAL_CA",
+   "inCredentialIdentities": true,
+   "reusedAcrossRuns": false,
+   "ends": "INSTANCE_AND_DISK_DELETION_AT_TEARDOWN",
+   "grantsKubernetesAccess": false
+  },
+  {
+   "id": "KUBERNETES_PROXY_SERVER_MTLS",
+   "issuer": "PER_RUN_CLUSTER_CA",
+   "issuedAt": "STEP_8",
+   "fromRequestAtStep": 8,
+   "madeOn": "PROXY_OPERATOR_HOST",
+   "privateHalf": "/etc/planeon/credentials/kubernetes-proxy-server-mtls.key.pem",
+   "privateHalfOwner": "ROOT",
+   "privateHalfMode": "0400",
+   "certificate": "/etc/planeon/credentials/kubernetes-proxy-server-mtls.crt.pem",
+   "certificateArrives": "INSTALLED_AT_STEP_8_WITH_ADMIN",
+   "trustedBy": "THE_API_SERVER_WHOSE_CLIENT_TRUST_HOLDS_ONLY_THE_CLUSTER_CA",
+   "inCredentialIdentities": true,
+   "reusedAcrossRuns": false,
+   "ends": "INSTANCE_AND_DISK_DELETION_AT_TEARDOWN",
+   "grantsKubernetesAccess": true
+  }
+ ],
+ "endpointServerIdentities": [
+  {
+   "owner": "THIS_CUSTODY_MODEL",
+   "identity": "CAMPAIGN_PROXY_SERVER_TLS",
+   "issuer": "RELEASE_PINNED_LOCAL_CA",
+   "host": "PROXY_OPERATOR_HOST",
+   "privateHalfCustody": "GENERATED_AT_STEP_8_ROOT_OWNED_0400",
+   "lifetime": "PER_RUN_ENDS_WITH_INSTANCE_AND_DISK_DELETION",
+   "perRun": true,
+   "servesBothProxyKinds": true,
+   "kind": "KUBERNETES_API_PROXY"
+  },
+  {
+   "owner": "THIS_CUSTODY_MODEL",
+   "identity": "CAMPAIGN_PROXY_SERVER_TLS",
+   "issuer": "RELEASE_PINNED_LOCAL_CA",
+   "host": "PROXY_OPERATOR_HOST",
+   "privateHalfCustody": "GENERATED_AT_STEP_8_ROOT_OWNED_0400",
+   "lifetime": "PER_RUN_ENDS_WITH_INSTANCE_AND_DISK_DELETION",
+   "perRun": true,
+   "servesBothProxyKinds": true,
+   "kind": "CAMPAIGN_PROXY"
+  },
+  {
+   "owner": "CAMPAIGN_RELEASE",
+   "identity": "DEFINED_BY_THE_CAMPAIGN_RELEASE",
+   "issuer": "PER_THE_CAMPAIGN_RELEASE_G10",
+   "host": "PROXY_OPERATOR_HOST",
+   "privateHalfCustody": "PER_THE_CAMPAIGN_RELEASE_G10",
+   "lifetime": "PER_THE_CAMPAIGN_RELEASE_G10",
+   "perRun": false,
+   "servesBothProxyKinds": false,
+   "kind": "LOCAL_REGISTRY"
+  },
+  {
+   "owner": "CAMPAIGN_RELEASE",
+   "identity": "DEFINED_BY_THE_CAMPAIGN_RELEASE",
+   "issuer": "PER_THE_CAMPAIGN_RELEASE_G10",
+   "host": "PROXY_OPERATOR_HOST",
+   "privateHalfCustody": "PER_THE_CAMPAIGN_RELEASE_G10",
+   "lifetime": "PER_THE_CAMPAIGN_RELEASE_G10",
+   "perRun": false,
+   "servesBothProxyKinds": false,
+   "kind": "LOCAL_EVIDENCE_SINK"
+  }
+ ],
+ "kubernetes": {
+  "apiServerClientTrust": [
+   "PER_RUN_CLUSTER_CA"
+  ],
+  "refusedInClientTrust": [
+   "RELEASE_PINNED_LOCAL_CA"
+  ],
+  "rbacSubject": "KUBERNETES_PROXY_SERVER_MTLS_EXACT_SUBJECT",
+  "privilegedGroups": false,
+  "proxyOperatorHostTrustsClusterCa": true
+ },
+ "nonce": {
+  "signingRegistry": {
+   "custody": "OWNER",
+   "location": "OUTSIDE_GCP",
+   "neverSignsSameNonceTwice": true,
+   "covers": [
+    "ENVELOPE_NONCE",
+    "CAPACITY_AUTHORIZATION_NONCE"
+   ]
+  },
+  "hostLedger": {
+   "host": "PROXY_OPERATOR_HOST",
+   "owner": "ROOT",
+   "durable": true,
+   "reservations": [
+    "LAUNCHER",
+    "PROXY_CLIENT",
+    "PROXY_SERVER"
+   ],
+   "runtimeWrites": [
+    "HOST_LEDGER_LAUNCHER",
+    "HOST_LEDGER_PROXY_CLIENT",
+    "HOST_LEDGER_PROXY_SERVER"
+   ],
+   "exportedAtStep": 15,
+   "retained": true
+  }
+ },
+ "crossHostReplay": {
+  "envelopeBinds": [
+   "ENDPOINT_ADDRESS",
+   "SERVER_SPKI_FRESH_PER_RUN",
+   "VALIDITY_WINDOW"
+  ],
+  "serverKeyReused": false,
+  "signingRegistryNeverResigns": true
+ },
+ "trustedClock": {
+  "host": "CHRONY",
+  "launchers": "VALIDITY_WINDOW_CHECKS",
+  "capturedAtPreflight": [
+   "CLOCK_SOURCE",
+   "OFFSET"
+  ]
+ },
+ "revocation": {
+  "refreshedBy": "LOCAL_TRANSFER",
+  "in": "T1",
+  "beforeEachRun": true,
+  "installedAtStep": 10,
+  "route": "LOCAL_CUSTODY_TRANSFER",
+  "network": false
+ },
+ "evidenceStore": {
+  "custody": "OWNER",
+  "fromRunbookStep": 15,
+  "location": "OUTSIDE_THE_RUN_PROJECT",
+  "inRunProjectBeyondPlan": false
+ },
+ "independence": {
+  "decision": "Q-LHA-1",
+  "trustedLiveRequires": "DISTINCT_KEYS_AND_IDENTITIES",
+  "keysDistinct": true,
+  "heldApart": true,
+  "independentPeople": false,
+  "clauseSupersededIn": "architecture/linux-host-authority/host-authority.json",
+  "disclosure": {
+   "signers": "SINGLE_PRINCIPAL_SEPARATED_KEYS"
+  },
+  "carriers": [
+   {
+    "carrier": "R12_CLOSED_EVIDENCE_RECORD",
+    "for": "CONF-LINUX-001",
+    "packet": "CONF-LINUX-002",
+    "state": "PRECONDITION"
+   },
+   {
+    "carrier": "CONF_LIVE_006_AUTHORITY_AND_EVIDENCE_ADAPTER",
+    "for": "THE_LIVE_PATH_QUALIFICATION",
+    "packet": "CONF-LIVE-006",
+    "state": "PRECONDITION"
+   }
+  ]
+ },
+ "carriedNotes": [
+  {
+   "id": "LHA-CN-2",
+   "date": "2026-10-24",
+   "status": "CARRIED_NOTE_NOT_SETTLED",
+   "note": "A single-principal CONF-LINUX-001 run under MET-LINUX-008 uses R12's v1alpha2 path (CONF-LINUX-002) with signers SINGLE_PRINCIPAL_SEPARATED_KEYS; all three trust keys (PLATFORM_RELEASE, TENANT_LIVE_EXECUTION, CAPACITY_OPERATOR) carry the owner label single-principal; the disclosure's honesty rests on the owner's custody of the trust bundles, not on R12 code. Carried into LHA's custody model and run plan, checked in the LHA CONTRACT round.",
+   "appliesTo": [
+    "principal",
+    "independence"
+   ],
+   "checkedIn": "THE_LHA_CONTRACT_ROUND"
+  }
+ ]
+}

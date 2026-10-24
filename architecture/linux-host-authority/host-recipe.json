@@ -1,0 +1,1222 @@
+{
+ "schemaVersion": "planeon.internal.linux-host-recipe/v1",
+ "packet": "MET-LINUX-008",
+ "item": "LINUX-HOST-AUTH-001",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "roleLabels": {
+  "administeringIdentity": "OWNER_ADMIN",
+  "loginIdentity": "OWNER_LOGIN",
+  "loginBaselineRole": "OWNER_LOGIN_BASELINE",
+  "observer": "OBSERVER",
+  "operatorUid": "OPERATOR_UID",
+  "loginTriggerGroup": "PLANEON_LOGIN_TRIGGER"
+ },
+ "project": {
+  "contract": "LAB-RUNPLAN-001",
+  "separateFromLabFoundation": true,
+  "preparedOnce": true,
+  "confirmedPerRun": true,
+  "runsAtATime": 1,
+  "computeBetweenRuns": false,
+  "defaultNetwork": false,
+  "cloudNat": false,
+  "privateGoogleAccess": false,
+  "vpcAndFirewallCreatedAtStep": 2,
+  "osLoginPolicy": "ENFORCED"
+ },
+ "hosts": [
+  {
+   "role": "PROXY_OPERATOR_HOST",
+   "architecture": "AMD64",
+   "sizing": "PER_PLAN",
+   "boots": "CUSTOM_IMAGE",
+   "carries": [
+    "CAMPAIGN_PROXY",
+    "POLICY_OBSERVER",
+    "CAPACITY_BROKER",
+    "LOCAL_REGISTRY",
+    "LOCAL_EVIDENCE_SINK",
+    "OFFLINE_LAUNCHER",
+    "LIVE_LAUNCHER",
+    "SIGNED_DROP_INSTALLER",
+    "TRIGGER_UNITS",
+    "MET_REPAIR_015_PROFILE",
+    "LOCKED_PYTHON_3_12_14",
+    "NODE",
+    "FIREJAIL",
+    "GIT"
+   ],
+   "rootKubeconfig": false,
+   "containerRuntimeSocket": false,
+   "holdsKubernetesClientCredential": true,
+   "filesAfterRevocation": "SIGNED_DROP_INSTALLER_ONLY"
+  },
+  {
+   "role": "CLUSTER_NODE",
+   "architecture": "AMD64",
+   "sizing": "PER_PLAN",
+   "boots": "PINNED_FAMILY_IMAGE",
+   "carries": [
+    "SINGLE_NODE_CLUSTER",
+    "CLUSTER_PRELOAD_IMAGES",
+    "FIXTURE_DATABASE",
+    "CONTROL_CONTAINER",
+    "CLUSTER_DISTRIBUTION_PACKAGES",
+    "EXPORT_UNIT"
+   ],
+   "rootKubeconfig": true,
+   "containerRuntimeSocket": true,
+   "holdsKubernetesClientCredential": false,
+   "filesAfterRevocation": "NONE"
+  }
+ ],
+ "internalFlows": [
+  {
+   "id": "F1",
+   "from": "PROXY_OPERATOR_HOST",
+   "to": "CLUSTER_NODE",
+   "protocol": "tcp",
+   "port": "CLUSTER_API_PORT_THE_KIT_FIXES_PER_PLAN",
+   "direction": "PROXY_OPERATOR_HOST_TO_CLUSTER_NODE",
+   "purposes": [
+    "KUBERNETES_API_PROXY",
+    "POLICY_OBSERVER",
+    "CAPACITY_BROKER",
+    "CAMPAIGN_PROXY_UPSTREAM"
+   ]
+  },
+  {
+   "id": "F2",
+   "from": "CLUSTER_NODE",
+   "to": "PROXY_OPERATOR_HOST",
+   "protocol": "tcp",
+   "port": "LOCAL_REGISTRY_PORT_PER_PLAN",
+   "direction": "CLUSTER_NODE_TO_PROXY_OPERATOR_HOST",
+   "purposes": [
+    "NODE_RUNTIME_PULLS_PRELOADED_IMAGES"
+   ]
+  }
+ ],
+ "campaignProxyUpstream": {
+  "flow": "F1",
+  "targets": [
+   "KUBERNETES_API_SERVER"
+  ],
+  "via": [
+   "SERVICE_PROXY_SUBRESOURCE",
+   "PORT_FORWARD_SUBRESOURCE"
+  ],
+  "asAllowedBy": "THE_CAPACITY_AUTHORIZATION_RULES",
+  "refusedTargets": [
+   "NODE_PORT",
+   "SERVICE_ADDRESS",
+   "POD_ADDRESS"
+  ],
+  "anyOtherFlow": "A_NEW_LISTED_FLOW_FOR_THE_MONITOR"
+ },
+ "localRegistryTrust": {
+  "host": "CLUSTER_NODE",
+  "file": "/etc/planeon/node/local-registry-trust.pem",
+  "owner": "ROOT",
+  "mode": "0444",
+  "installedAtStep": 7,
+  "beforeRevocation": true,
+  "readBy": "THE_NODE_CONTAINER_RUNTIME",
+  "trustsTheIssuerOf": "LOCAL_REGISTRY"
+ },
+ "firewall": {
+  "ingress": [
+   {
+    "id": "IAP_SSH",
+    "sourceRange": "35.235.240.0/20",
+    "protocol": "tcp",
+    "port": 22,
+    "targets": "BOTH_HOSTS"
+   }
+  ],
+  "internal": [
+   "F1",
+   "F2"
+  ],
+  "egressDenyAll": {
+   "createdAtStep": 2,
+   "belowSetupWindowAllow": true
+  },
+  "setupWindowAllow": {
+   "createdAtStep": 2,
+   "removedAtStep": 6,
+   "destinations": "IP_RANGES_PER_PLAN",
+   "byteCeiling": "FETCH_TOOL_CEILING_PER_PLAN",
+   "paidFirewallFeature": false
+  }
+ },
+ "machine": {
+  "appliesTo": [
+   "PROXY_OPERATOR_HOST",
+   "CLUSTER_NODE"
+  ],
+  "shieldedVm": {
+   "secureBoot": true,
+   "vtpm": true,
+   "integrityMonitoring": true
+  },
+  "serialPortAccess": false,
+  "serviceAccount": false,
+  "scopes": [],
+  "metadata": [
+   {
+    "key": "enable-oslogin",
+    "value": "TRUE"
+   },
+   {
+    "key": "enable-oslogin-2fa",
+    "value": "TRUE"
+   },
+   {
+    "key": "block-project-ssh-keys",
+    "value": "TRUE"
+   }
+  ],
+  "refusedMetadata": [
+   "ssh-keys",
+   "startup-script*",
+   "shutdown-script*",
+   "enable-guest-attributes"
+  ],
+  "maintenance": {
+   "onHostMaintenance": "MIGRATE",
+   "automaticRestartInLease": false,
+   "bootIdRecordedAtStep": 11,
+   "rebootAfterQualification": "INVALIDATES_QUALIFICATION"
+  },
+  "maxRunDuration": {
+   "set": true,
+   "action": "DELETE",
+   "endsNoLaterThan": "LEASE_END",
+   "onPaper": true
+  }
+ },
+ "guestAgent": {
+  "on": [
+   "OS_LOGIN_NSS_PAM",
+   "CLOCK_SYNC"
+  ],
+  "off": [
+   "METADATA_ACCOUNT_MANAGEMENT",
+   "METADATA_SSH_KEY_MANAGEMENT",
+   "METADATA_SCRIPT_EXECUTION",
+   "NETWORK_INTERFACE_MANAGEMENT",
+   "DIAGNOSTICS",
+   "SNAPSHOT_HOOKS"
+  ],
+  "checkedAtStep": 11
+ },
+ "image": {
+  "allowedFamilies": [
+   "ALMALINUX_10",
+   "ROCKY_LINUX_10",
+   "CENTOS_STREAM_10"
+  ],
+  "family": "ALMALINUX_10",
+  "familyKind": "RHEL_10_COMPATIBLE_NO_LICENCE_FEE",
+  "selinux": "ENFORCING",
+  "onPaper": true,
+  "architecture": "AMD64",
+  "pinnedPerPlan": true,
+  "licenceCharge": "NONE",
+  "clusterNodeBoots": "PINNED_FAMILY_IMAGE",
+  "customImage": {
+   "for": "PROXY_OPERATOR_HOST",
+   "builtPerPlan": true,
+   "builtOn": "THE_CLUSTER_NODE_ONTO_THE_TEMPORARY_BUILD_DISK",
+   "startsFrom": "PINNED_FAMILY_IMAGE_OWN_FILES",
+   "verifiedAgainst": "PINNED_IMAGE_INVENTORY_TAKEN_BEFORE_ANY_INSTALL_ON_THE_NODE",
+   "plus": "THE_LISTED_PACKAGES",
+   "rootFilesystem": "EXT4_WITH_VERITY",
+   "usrOnRoot": true,
+   "guestFeatures": "UEFI_FOR_SHIELDED_SECURE_BOOT",
+   "selinuxLabels": "FROM_OWN_POLICY_FILE_CONTEXTS_AT_STEP_4",
+   "firstBootRelabel": false,
+   "buildDiskDeletedAtStep": 5,
+   "proxyOperatorHostBootsRecordedImage": true,
+   "deletedAtTeardown": true
+  },
+  "imageDigest": {
+   "is": "SHA256_OF_THE_CUSTOM_IMAGE_INVENTORY",
+   "inventoryFields": [
+    "path",
+    "type",
+    "mode",
+    "owner",
+    "size",
+    "sha256",
+    "selinuxLabel"
+   ],
+   "takenAtStep": 5,
+   "from": "THE_BUILD_DISK_MOUNTED_READ_ONLY",
+   "recomputedOffHost": true,
+   "coversLaterSteps": false
+  },
+  "kernel": {
+   "release": "PINNED_IN_PLAN",
+   "checkedInBuiltRootAtStep": 5,
+   "qualification": "PRECONDITION_KERNEL_INDEPENDENT_QUALIFICATION",
+   "recordedAtStep": 11,
+   "notesDigestRecorded": true,
+   "lockdownKeepsBpfProgramInformation": true
+  },
+  "preflightComparesLabels": true
+ },
+ "hostInventory": {
+  "records": [
+   {
+    "host": "PROXY_OPERATOR_HOST",
+    "scope": [
+     "SYSTEM_TREES",
+     "/opt/planeon/tools",
+     "/opt/planeon/cache",
+     "/opt/planeon/python",
+     "/opt/planeon/bin",
+     "/opt/planeon/work",
+     "/etc",
+     "BOOT_CHAIN"
+    ]
+   },
+   {
+    "host": "CLUSTER_NODE",
+    "scope": [
+     "SYSTEM_TREES",
+     "/opt/planeon/tools",
+     "/opt/planeon/cache",
+     "/opt/planeon/python",
+     "/opt/planeon/bin",
+     "/opt/planeon/work",
+     "/etc",
+     "BOOT_CHAIN"
+    ]
+   }
+  ],
+  "leftOut": [
+   {
+    "what": "CLUSTER_STATE",
+    "ownRecord": "RUNTIME_STATE_LISTING"
+   },
+   {
+    "what": "HOST_NONCE_LEDGER",
+    "ownRecord": "EXPORTED_AT_STEP_15"
+   },
+   {
+    "what": "LOGS",
+    "ownRecord": "EXPORTED_AT_STEP_15"
+   },
+   {
+    "what": "STEP_10_FILES",
+    "ownRecord": "DIGEST_AND_SIGNATURE"
+   },
+   {
+    "what": "SIGNED_DROP_TARGETS",
+    "ownRecord": "DIGEST_AND_DROP_MANIFEST_SIGNATURE"
+   },
+   {
+    "what": "PER_RUN_PRIVATE_HALVES",
+    "ownRecord": "SPKI_DIGEST_ONLY"
+   },
+   {
+    "what": "PER_RUN_CERTIFICATE_REQUESTS",
+    "ownRecord": "SPKI_DIGEST_ONLY"
+   }
+  ],
+  "frozenAtStep": 9,
+  "coveredInstallSteps": [
+   4,
+   7,
+   8
+  ],
+  "invalidateOn": "HOST_OR_ISOLATION_CHANGE",
+  "measuredBoot": {
+   "readThrough": "THE_PROVIDER_SHIELDED_VM_INTEGRITY_RECORD",
+   "notThroughTheVm": true,
+   "pcrValues": [
+    "EARLY_BOOT",
+    "LATE_BOOT"
+   ],
+   "baseline": "LEARNED_AT_FIRST_BOOT",
+   "eventLogReplayed": true,
+   "efiDigest": "AUTHENTICODE_AND_FILE_SHA256",
+   "onPaper": true
+  },
+  "bootEventLogsExportedAtStep": 9,
+  "imageReverification": {
+   "where": "OFF_HOST_IN_T1",
+   "compares": "UNCHANGED_HOST_INVENTORY_ENTRIES_WITH_THE_IMAGE_INVENTORY"
+  },
+  "buildInputsReading": {
+   "cites": "docs/linux-runner/BUILD_INPUTS.md lines 95-103 (lines 101 and 103 quoted)",
+   "reading": "The owner's off-host verification (the custom image's inventory recomputed outside the VM, plus the provider-read measured-boot record) is the external operator's independent verification of the image identity; the remainder beyond the boot chain is operator-attested.",
+   "ifRejected": "QUALIFICATION_BLOCKED"
+  }
+ },
+ "rootAliases": {
+  "contract": "MET-LINUX-009",
+  "ruling": "MON-LHA-17",
+  "precondition": "BEFORE_THE_FIRST_PLAN",
+  "stateAtBase": "MERGED_AT_BASE",
+  "inputs": "BUILD_INPUTS_V4",
+  "rootLink": "/lib64",
+  "loader": "/lib64/ld-linux-x86-64.so.2",
+  "checkAtStep": 9,
+  "uncoveredUsedPath": "STOP_NOT_RUN_ENV_UNAVAILABLE",
+  "onPaper": true
+ },
+ "profile": [
+  {
+   "prerequisite": "SELINUX_ENFORCING",
+   "owner": "THIS_RECIPE",
+   "steps": [
+    4,
+    5
+   ],
+   "check": "PREFLIGHT_READS_SYS_FS_SELINUX",
+   "value": "ENFORCING"
+  },
+  {
+   "prerequisite": "REVIEWED_EXACT_BINARY_POLICY",
+   "owner": "THE_EXISTING_INDEPENDENT_OPERATOR",
+   "steps": [
+    7
+   ],
+   "check": "MET_REPAIR_015_READER",
+   "value": "DENY_UNKNOWN_1"
+  },
+  {
+   "prerequisite": "EXT4_VERITY_ROOT_AND_MEASUREMENTS",
+   "owner": "RECIPE_FILESYSTEM_OPERATOR_MEASUREMENTS",
+   "steps": [
+    4,
+    5,
+    7
+   ],
+   "check": "MET_REPAIR_015_READER",
+   "value": "EVERY_CLOSED_LIST_FILE_MEASURED"
+  },
+  {
+   "prerequisite": "CGROUP_V2_AND_PLANEON_LIVE_CGROUPS",
+   "owner": "RECIPE_V2_OPERATOR_CGROUPS",
+   "steps": [
+    4,
+    5,
+    7
+   ],
+   "check": "MET_REPAIR_015_READER",
+   "value": "FINITE_LIMITS"
+  },
+  {
+   "prerequisite": "ONE_ENROLLED_BPF_PROGRAM_PER_HOOK_PER_ROLE",
+   "owner": "THE_EXISTING_INDEPENDENT_OPERATOR",
+   "steps": [
+    7
+   ],
+   "check": "MET_REPAIR_015_READER",
+   "value": "ENROLLED"
+  },
+  {
+   "prerequisite": "KERNEL_RELEASE_NOTES_DIGEST_AND_BOOT_ID",
+   "owner": "THIS_RECIPE_RECORDS",
+   "steps": [
+    11
+   ],
+   "check": "PREFLIGHT",
+   "value": "RECORDED"
+  },
+  {
+   "prerequisite": "SERIALISED_POLICY_FILTER_CGROUP_LABEL_AND_EXECUTABLE_CHANGES",
+   "owner": "THE_EXISTING_INDEPENDENT_OPERATOR",
+   "steps": [
+    7
+   ],
+   "check": "THE_OPERATOR_OWN_RECORD",
+   "value": "SERIALISED_FROM_STEP_7"
+  }
+ ],
+ "access": {
+  "ssh": {
+   "only": "IAP",
+   "sourceRange": "35.235.240.0/20",
+   "protocol": "tcp",
+   "port": 22,
+   "onPaper": true
+  },
+  "identities": [
+   {
+    "label": "OWNER_LOGIN",
+    "of": "OWNER",
+    "use": "SSH_ONLY",
+    "osLogin": true,
+    "twoStepVerification": true,
+    "administersIam": false
+   },
+   {
+    "label": "OWNER_ADMIN",
+    "of": "OWNER",
+    "use": "IAM_ADMINISTRATION_AND_CLOUD_ACTIONS",
+    "osLogin": false,
+    "twoStepVerification": true,
+    "administersIam": true
+   }
+  ],
+  "loginBaseline": {
+   "label": "OWNER_LOGIN_BASELINE",
+   "kind": "CUSTOM_ROLE",
+   "boundOn": "RUN_PROJECT",
+   "basicRole": "NONE",
+   "inPlaceOf": [
+    "OWNER",
+    "EDITOR",
+    "VIEWER"
+   ],
+   "permittedPurpose": "SSH_THROUGH_IAP_AND_OS_LOGIN_ONLY",
+   "excludes": [
+    "compute.instances.osAdminLogin",
+    "resourcemanager.projects.setIamPolicy",
+    "compute.instances.setIamPolicy",
+    "iam.serviceAccounts.setIamPolicy",
+    "iam.roles.create",
+    "iam.roles.update",
+    "resourcemanager.folders.setIamPolicy",
+    "resourcemanager.organizations.setIamPolicy",
+    "iam.serviceAccounts.actAs",
+    "iam.serviceAccounts.getAccessToken",
+    "iam.serviceAccounts.signBlob",
+    "iam.serviceAccounts.signJwt",
+    "iam.serviceAccounts.implicitDelegation",
+    "iam.serviceAccounts.getOpenIdToken",
+    "iam.serviceAccountKeys.create",
+    "resourcemanager.tagValueBindings.create",
+    "resourcemanager.tagValueBindings.delete"
+   ],
+   "recordedInPlan": {
+    "roleId": "REAL_ID_IN_THE_OWNER_HELD_PLAN_ROLE_LABEL_WHEN_PUBLISHED",
+    "exactPermissionList": true
+   },
+   "lifecycle": {
+    "createdBy": "OWNER_ADMIN",
+    "boundBy": "OWNER_ADMIN",
+    "when": "OUTSIDE_THE_RUN_BEFORE_APPROVAL",
+    "keptBetweenRuns": true,
+    "deletedAtTeardown": false
+   },
+   "noOtherGrant": [
+    "DIRECT",
+    "GROUP",
+    "DOMAIN",
+    "PRINCIPAL_SET",
+    "FOLDER_INHERITED",
+    "ORGANIZATION_INHERITED"
+   ],
+   "onPaper": true
+  },
+  "adminBaseline": {
+   "label": "OWNER_ADMIN",
+   "holdsNoLoginPermission": [
+    "compute.instances.osLogin",
+    "compute.instances.osAdminLogin",
+    "iap.tunnelInstances.accessViaIAP"
+   ],
+   "on": "RUN_PROJECT_AND_EVERY_ANCESTOR",
+   "countsAmongBaselineBindings": true,
+   "decision": "Q-LHA6-3"
+  },
+  "betweenRuns": {
+   "bindings": [
+    "OWNER_LOGIN_BASELINE_BINDING",
+    "OWNER_ADMIN_BINDING",
+    "OBSERVER_VIEWER_BINDINGS"
+   ],
+   "isLabRunPlanOwnerBaseline": true,
+   "confirmedAtStep": 1
+  },
+  "leaseBindings": [
+   {
+    "role": "IAP_TUNNEL",
+    "grantee": "OWNER_LOGIN",
+    "grantedBy": "OWNER_ADMIN",
+    "counted": "IAM_BINDINGS_ADDED",
+    "window": "THE_LEASE",
+    "revokedBy": "OWNER_ADMIN",
+    "revokedAtStep": 16
+   },
+   {
+    "role": "OS_LOGIN_ADMIN",
+    "grantee": "OWNER_LOGIN",
+    "grantedBy": "OWNER_ADMIN",
+    "counted": "IAM_BINDINGS_ADDED",
+    "window": "SETUP_AND_INSTALL",
+    "revokedBy": "OWNER_ADMIN",
+    "revokedAtStep": 10
+   },
+   {
+    "role": "OS_LOGIN",
+    "grantee": "OWNER_LOGIN",
+    "grantedBy": "OWNER_ADMIN",
+    "counted": "IAM_BINDINGS_ADDED",
+    "window": "AFTER_THE_REVOCATION",
+    "revokedBy": "OWNER_ADMIN",
+    "revokedAtStep": 16
+   }
+  ],
+  "revocation": {
+   "atStep": 10,
+   "by": "OWNER_ADMIN",
+   "removes": "OS_LOGIN_ADMIN",
+   "denyPolicy": false,
+   "folderOrOrganizationGrant": false,
+   "thenWaitsForPropagation": true,
+   "endsAdminSessionsOn": [
+    "PROXY_OPERATOR_HOST",
+    "CLUSTER_NODE"
+   ]
+  },
+  "effectiveChecks": [
+   {
+    "step": 1,
+    "identity": "OWNER_LOGIN",
+    "runBy": "OWNER_ADMIN",
+    "kind": "CONFIRMATION_AT_APPROVAL",
+    "propagationWait": "NOT_APPLICABLE",
+    "absent": [
+     "compute.instances.osAdminLogin",
+     "resourcemanager.projects.setIamPolicy",
+     "compute.instances.setIamPolicy",
+     "iam.serviceAccounts.setIamPolicy",
+     "iam.roles.create",
+     "iam.roles.update",
+     "resourcemanager.folders.setIamPolicy",
+     "resourcemanager.organizations.setIamPolicy",
+     "iam.serviceAccounts.actAs",
+     "iam.serviceAccounts.getAccessToken",
+     "iam.serviceAccounts.signBlob",
+     "iam.serviceAccounts.signJwt",
+     "iam.serviceAccounts.implicitDelegation",
+     "iam.serviceAccounts.getOpenIdToken",
+     "iam.serviceAccountKeys.create",
+     "resourcemanager.tagValueBindings.create",
+     "resourcemanager.tagValueBindings.delete"
+    ],
+    "resources": [
+     "RUN_PROJECT",
+     "EACH_INSTANCE",
+     "EACH_SERVICE_ACCOUNT",
+     "EVERY_ANCESTOR_FOLDER",
+     "ORGANIZATION"
+    ],
+    "grantPaths": [
+     "DIRECT",
+     "BASIC_ROLE",
+     "CUSTOM_ROLE",
+     "INHERITED",
+     "GROUP",
+     "DOMAIN",
+     "PRINCIPAL_SET",
+     "CONDITIONAL"
+    ],
+    "conditionalBindingIsGrant": true,
+    "checksNoBasicRole": true,
+    "checksPermissionListAgainstPlan": true,
+    "onFinding": "REFUSE_RUN_EVIDENCE"
+   },
+   {
+    "step": 10,
+    "identity": "OWNER_LOGIN",
+    "runBy": "OBSERVER_AND_OWNER_ADMIN",
+    "kind": "EFFECTIVE_CHECK",
+    "propagationWait": "BEFORE_CHECK",
+    "absent": [
+     "compute.instances.osAdminLogin",
+     "resourcemanager.projects.setIamPolicy",
+     "compute.instances.setIamPolicy",
+     "iam.serviceAccounts.setIamPolicy",
+     "iam.roles.create",
+     "iam.roles.update",
+     "resourcemanager.folders.setIamPolicy",
+     "resourcemanager.organizations.setIamPolicy",
+     "iam.serviceAccounts.actAs",
+     "iam.serviceAccounts.getAccessToken",
+     "iam.serviceAccounts.signBlob",
+     "iam.serviceAccounts.signJwt",
+     "iam.serviceAccounts.implicitDelegation",
+     "iam.serviceAccounts.getOpenIdToken",
+     "iam.serviceAccountKeys.create",
+     "resourcemanager.tagValueBindings.create",
+     "resourcemanager.tagValueBindings.delete"
+    ],
+    "resources": [
+     "RUN_PROJECT",
+     "EACH_INSTANCE",
+     "EACH_SERVICE_ACCOUNT",
+     "EVERY_ANCESTOR_FOLDER",
+     "ORGANIZATION"
+    ],
+    "grantPaths": [
+     "DIRECT",
+     "BASIC_ROLE",
+     "CUSTOM_ROLE",
+     "INHERITED",
+     "GROUP",
+     "DOMAIN",
+     "PRINCIPAL_SET",
+     "CONDITIONAL"
+    ],
+    "conditionalBindingIsGrant": true,
+    "checksNoBasicRole": true,
+    "checksPermissionListAgainstPlan": true,
+    "onFinding": "REFUSE_RUN_EVIDENCE"
+   },
+   {
+    "step": 15,
+    "identity": "OWNER_LOGIN",
+    "runBy": "OBSERVER_AND_OWNER_ADMIN",
+    "kind": "EFFECTIVE_CHECK",
+    "propagationWait": "BEFORE_CHECK",
+    "absent": [
+     "compute.instances.osAdminLogin",
+     "resourcemanager.projects.setIamPolicy",
+     "compute.instances.setIamPolicy",
+     "iam.serviceAccounts.setIamPolicy",
+     "iam.roles.create",
+     "iam.roles.update",
+     "resourcemanager.folders.setIamPolicy",
+     "resourcemanager.organizations.setIamPolicy",
+     "iam.serviceAccounts.actAs",
+     "iam.serviceAccounts.getAccessToken",
+     "iam.serviceAccounts.signBlob",
+     "iam.serviceAccounts.signJwt",
+     "iam.serviceAccounts.implicitDelegation",
+     "iam.serviceAccounts.getOpenIdToken",
+     "iam.serviceAccountKeys.create",
+     "resourcemanager.tagValueBindings.create",
+     "resourcemanager.tagValueBindings.delete"
+    ],
+    "resources": [
+     "RUN_PROJECT",
+     "EACH_INSTANCE",
+     "EACH_SERVICE_ACCOUNT",
+     "EVERY_ANCESTOR_FOLDER",
+     "ORGANIZATION"
+    ],
+    "grantPaths": [
+     "DIRECT",
+     "BASIC_ROLE",
+     "CUSTOM_ROLE",
+     "INHERITED",
+     "GROUP",
+     "DOMAIN",
+     "PRINCIPAL_SET",
+     "CONDITIONAL"
+    ],
+    "conditionalBindingIsGrant": true,
+    "checksNoBasicRole": true,
+    "checksPermissionListAgainstPlan": true,
+    "onFinding": "REFUSE_RUN_EVIDENCE"
+   },
+   {
+    "step": 1,
+    "identity": "OWNER_ADMIN",
+    "runBy": "OWNER_ADMIN",
+    "kind": "CONFIRMATION_AT_APPROVAL",
+    "propagationWait": "NOT_APPLICABLE",
+    "absent": [
+     "compute.instances.osLogin",
+     "compute.instances.osAdminLogin",
+     "iap.tunnelInstances.accessViaIAP"
+    ],
+    "resources": [
+     "RUN_PROJECT",
+     "EVERY_ANCESTOR_FOLDER",
+     "ORGANIZATION"
+    ],
+    "grantPaths": [
+     "DIRECT",
+     "BASIC_ROLE",
+     "CUSTOM_ROLE",
+     "INHERITED",
+     "GROUP",
+     "DOMAIN",
+     "PRINCIPAL_SET",
+     "CONDITIONAL"
+    ],
+    "conditionalBindingIsGrant": true,
+    "checksNoBasicRole": false,
+    "checksPermissionListAgainstPlan": false,
+    "onFinding": "REFUSE_RUN_EVIDENCE"
+   },
+   {
+    "step": 10,
+    "identity": "OWNER_ADMIN",
+    "runBy": "OBSERVER_AND_OWNER_ADMIN",
+    "kind": "EFFECTIVE_CHECK",
+    "propagationWait": "BEFORE_CHECK",
+    "absent": [
+     "compute.instances.osLogin",
+     "compute.instances.osAdminLogin",
+     "iap.tunnelInstances.accessViaIAP"
+    ],
+    "resources": [
+     "RUN_PROJECT",
+     "EVERY_ANCESTOR_FOLDER",
+     "ORGANIZATION"
+    ],
+    "grantPaths": [
+     "DIRECT",
+     "BASIC_ROLE",
+     "CUSTOM_ROLE",
+     "INHERITED",
+     "GROUP",
+     "DOMAIN",
+     "PRINCIPAL_SET",
+     "CONDITIONAL"
+    ],
+    "conditionalBindingIsGrant": true,
+    "checksNoBasicRole": false,
+    "checksPermissionListAgainstPlan": false,
+    "onFinding": "REFUSE_RUN_EVIDENCE"
+   },
+   {
+    "step": 15,
+    "identity": "OWNER_ADMIN",
+    "runBy": "OBSERVER_AND_OWNER_ADMIN",
+    "kind": "EFFECTIVE_CHECK",
+    "propagationWait": "BEFORE_CHECK",
+    "absent": [
+     "compute.instances.osLogin",
+     "compute.instances.osAdminLogin",
+     "iap.tunnelInstances.accessViaIAP"
+    ],
+    "resources": [
+     "RUN_PROJECT",
+     "EVERY_ANCESTOR_FOLDER",
+     "ORGANIZATION"
+    ],
+    "grantPaths": [
+     "DIRECT",
+     "BASIC_ROLE",
+     "CUSTOM_ROLE",
+     "INHERITED",
+     "GROUP",
+     "DOMAIN",
+     "PRINCIPAL_SET",
+     "CONDITIONAL"
+    ],
+    "conditionalBindingIsGrant": true,
+    "checksNoBasicRole": false,
+    "checksPermissionListAgainstPlan": false,
+    "onFinding": "REFUSE_RUN_EVIDENCE"
+   }
+  ],
+  "permissionMechanism": {
+   "onPaper": true,
+   "projectAndInstances": {
+    "runBy": "OBSERVER",
+    "reads": "THE_IAM_POLICIES_OF_THE_RUN_PROJECT_ITS_INSTANCES_AND_SERVICE_ACCOUNTS",
+    "with": "ITS_RUN_PROJECT_VIEWER_ROLES"
+   },
+   "ancestors": {
+    "runBy": "OWNER_ADMIN",
+    "reads": "THE_IAM_POLICIES_OF_EVERY_ANCESTOR_FOLDER_AND_THE_ORGANIZATION"
+   },
+   "membership": {
+    "runBy": "OWNER_ADMIN",
+    "groups": "THE_LOGIN_IDENTITY_TRANSITIVE_GROUP_MEMBERSHIP_RESOLVED_THROUGH_THE_DIRECTORY",
+    "domain": "A_DOMAIN_BINDING_COVERING_THE_LOGIN_IDENTITY_COUNTS_AS_A_GRANT",
+    "principalSets": "ANY_PRINCIPAL_SET_THAT_CAN_INCLUDE_THE_LOGIN_IDENTITY_COUNTS_AS_A_GRANT"
+   },
+   "roles": "EVERY_MATCHED_ROLE_EXPANDED_TO_ITS_PERMISSIONS_BASIC_PREDEFINED_AND_CUSTOM",
+   "conditions": "A_CONDITIONAL_BINDING_COUNTS_AS_A_GRANT",
+   "cannotRead": "THE_CHECK_FAILS_AND_THE_RUN_EVIDENCE_IS_REFUSED",
+   "neverRunBy": "OWNER_LOGIN"
+  },
+  "sessionChecks": {
+   "atStep": 10,
+   "after": "IAM_PROPAGATION",
+   "endsEverySessionOpenedWithAdminOn": [
+    "PROXY_OPERATOR_HOST",
+    "CLUSTER_NODE"
+   ],
+   "identities": [
+    "OWNER_LOGIN",
+    "OWNER_ADMIN"
+   ],
+   "confirms": [
+    "NO_PROCESS_OR_SESSION_STARTED_BEFORE_REVOCATION",
+    "NO_OS_LOGIN_SUDOERS_ENTRY",
+    "FRESH_LOGIN_CANNOT_USE_SUDO"
+   ],
+   "preRevocationAdminSessionAliveAtPreflight": "REFUSES_RUN_EVIDENCE"
+  },
+  "auditLogCheck": {
+   "log": "ADMIN_ACTIVITY",
+   "from": "STEP_10_REVOCATION_ENTRY",
+   "to": "END_OF_TEARDOWN",
+   "runBy": "OBSERVER_AND_OWNER_ADMIN",
+   "lists": [
+    "IAM_POLICY_CHANGE_RUN_PROJECT",
+    "IAM_POLICY_CHANGE_INSTANCE",
+    "CUSTOM_ROLE_CREATE",
+    "CUSTOM_ROLE_UPDATE",
+    "CUSTOM_ROLE_DELETE",
+    "CUSTOM_ROLE_UNDELETE"
+   ],
+   "expected": [
+    {
+     "entry": "STEP_10_ADMIN_LOGIN_BINDING_REMOVAL",
+     "by": "OWNER_ADMIN"
+    },
+    {
+     "entry": "NON_ADMIN_LOGIN_GRANT_IF_IN_WINDOW",
+     "by": "OWNER_ADMIN"
+    },
+    {
+     "entry": "TEARDOWN_REVOCATIONS",
+     "by": "OWNER_ADMIN"
+    }
+   ],
+   "anyOtherEntry": "REFUSES_RUN_EVIDENCE_WHATEVER_ITS_PRINCIPAL",
+   "anyCustomRoleChange": "REFUSES_RUN_EVIDENCE",
+   "finalSpanCheckedAfterTeardownCompletes": true,
+   "evidenceAcceptedOnlyAfterThisCheck": true
+  },
+  "acceptedLimit": {
+   "decision": "Q-LHA5-1",
+   "words": "detected by the effective check, not blocked",
+   "grantKinds": [
+    "GROUP",
+    "DOMAIN",
+    "PRINCIPAL_SET",
+    "FOLDER",
+    "ORGANIZATION"
+   ],
+   "detectedOnlyBy": [
+    "EFFECTIVE_CHECK_STEP_10",
+    "EFFECTIVE_CHECK_STEP_15"
+   ],
+   "notDetected": [
+    "A_GRANT_MADE_AND_REMOVED_BETWEEN_STEPS_10_AND_15",
+    "A_GRANT_MADE_AFTER_STEP_15"
+   ],
+   "auditLogDetectsThem": false
+  },
+  "afterRevocationRootFiles": "SIGNED_DROP_INSTALLER_ONLY",
+  "teardown": {
+   "by": "OWNER_ADMIN",
+   "revokes": "EVERY_BINDING_GRANTED_SINCE_THE_LEASE_STARTED",
+   "keeps": [
+    "OWNER_LOGIN_BASELINE_ROLE",
+    "OWNER_LOGIN_BASELINE_BINDING",
+    "OWNER_ADMIN_BINDING"
+   ]
+  }
+ },
+ "egress": {
+  "window": "THE_SETUP_WINDOW_ONLY",
+  "fetches": "OPERATOR_INITIATED_AND_DIGEST_PINNED",
+  "fetchTool": "ONE_OPERATOR_FETCH_TOOL",
+  "matching": "IP_RANGES_LISTED_PER_PLAN",
+  "paidFirewallFeature": false,
+  "byteCeiling": "THE_FETCH_TOOL_STOPS_AT_THE_CEILING",
+  "providerFigures": "COMPARED_AFTER_THE_WINDOW_DETECTS_NOT_PREVENTS",
+  "closure": {
+   "denyAllCreatedAtStep": 2,
+   "closedAtStep": 6,
+   "removes": [
+    "THE_SETUP_WINDOW_ALLOW_RULE",
+    "BOTH_EXTERNAL_ADDRESSES"
+   ]
+  },
+  "check": [
+   "REFUSAL_PROBE_ON_EACH_HOST",
+   "THE_OBSERVER_LISTING"
+  ],
+  "expectedExceptions": [
+   "METADATA_ADDRESS",
+   "F1",
+   "F2"
+  ],
+  "atCampaign": {
+   "externalAddress": false,
+   "allowEgressRule": false,
+   "launcherIsolation": "DENY_ALL"
+  }
+ },
+ "time": {
+  "source": "THE_PROVIDER_INTERNAL_TIME_SERVICE",
+  "daemon": "CHRONY",
+  "otherMetadataUses": [
+   "OS_LOGIN_NSS_PAM",
+   "THE_GUEST_AGENT_KEPT_FEATURES",
+   "DNS"
+  ],
+  "capturedAtPreflight": [
+   "CLOCK_SOURCE",
+   "OFFSET"
+  ],
+  "podsDeniedTheMetadataServerBy": "THE_KIT"
+ },
+ "packages": {
+  "proxyOperatorHost": [
+   "GIT",
+   "FIREJAIL_AT_/usr/bin/firejail",
+   "LOCKED_PYTHON_3_12_14_AT_/opt/planeon/python/3.12.14",
+   "NODE_FOR_THE_STANDALONE_CONTROL_BUILD",
+   "GO_ONLY_IF_NEEDED"
+  ],
+  "clusterNode": [
+   "THE_CLUSTER_DISTRIBUTION",
+   "ITS_PINNED_DISTRIBUTION_PACKAGES"
+  ],
+  "sources": [
+   {
+    "what": "DISTRIBUTION_PACKAGES",
+    "from": "THE_FAMILY_DATED_SNAPSHOT",
+    "pin": "VERSION_AND_FILE_SHA256",
+    "onPaper": true
+   },
+   {
+    "what": "FIREJAIL",
+    "from": "EPEL_EXACT_RPM_FILES",
+    "pin": "FILE_SHA256",
+    "onPaper": true
+   },
+   {
+    "what": "LOCKED_PYTHON_AND_NODE",
+    "from": "OUTSIDE_THE_SNAPSHOT_WITH_SOURCE_AND_DIGEST_CLOSURE",
+    "pin": "FILE_SHA256",
+    "onPaper": false
+   }
+  ],
+  "mirrorRule": "EVERY_PACKAGE_PINNED_BY_EXACT_FILE_DIGEST_FROM_A_DATED_SNAPSHOT_WHERE_OFFERED",
+  "relaxes": "REVISION_3_NO_UNDATED_MIRROR_REFUSAL",
+  "toolRoot": "/opt/planeon/tools",
+  "cacheRoot": "/opt/planeon/cache",
+  "automaticUpdaters": "OFF",
+  "updaters": [
+   "DISTRIBUTION_UPDATER",
+   "SNAP_REFRESH",
+   "UPDATE_TIMERS"
+  ]
+ },
+ "source": {
+  "what": "THE_OWNED_PRODUCT_CHECKOUT_AND_THE_WORKLOAD_COMMIT",
+  "withGit": true,
+  "treeSha256": true,
+  "transfer": "BY_DIGEST_OVER_THE_IAP_TUNNEL",
+  "into": "THE_PROXY_OPERATOR_HOST_BUILT_ROOT",
+  "repositoryCredentialOnHost": false
+ },
+ "runtimeRootWrites": [
+  {
+   "id": "HOST_LEDGER_LAUNCHER",
+   "host": "PROXY_OPERATOR_HOST",
+   "path": "/var/lib/planeon/host-ledger/launcher/",
+   "writer": "LIVE_LAUNCHER"
+  },
+  {
+   "id": "HOST_LEDGER_PROXY_CLIENT",
+   "host": "PROXY_OPERATOR_HOST",
+   "path": "/var/lib/planeon/host-ledger/proxy-client/",
+   "writer": "CAMPAIGN_PROXY_CLIENT"
+  },
+  {
+   "id": "HOST_LEDGER_PROXY_SERVER",
+   "host": "PROXY_OPERATOR_HOST",
+   "path": "/var/lib/planeon/host-ledger/proxy-server/",
+   "writer": "CAMPAIGN_PROXY_SERVER"
+  },
+  {
+   "id": "PREFLIGHT_RECORDS",
+   "host": "PROXY_OPERATOR_HOST",
+   "path": "/var/lib/planeon/preflight/",
+   "writer": "PREFLIGHT_UNIT"
+  },
+  {
+   "id": "INSTALLER_LOG",
+   "host": "PROXY_OPERATOR_HOST",
+   "path": "/var/log/planeon/signed-drop-installer.log",
+   "writer": "SIGNED_DROP_INSTALLER"
+  },
+  {
+   "id": "EVIDENCE_SINK",
+   "host": "PROXY_OPERATOR_HOST",
+   "path": "/var/lib/planeon/evidence-sink/",
+   "writer": "LOCAL_EVIDENCE_SINK"
+  },
+  {
+   "id": "JOURNAL",
+   "host": "BOTH_HOSTS",
+   "path": "/var/log/journal/",
+   "writer": "SYSTEMD_JOURNALD"
+  },
+  {
+   "id": "CLUSTER_STATE",
+   "host": "CLUSTER_NODE",
+   "path": "THE_CLUSTER_DISTRIBUTION_STATE_DIRECTORY",
+   "writer": "THE_CLUSTER_DISTRIBUTION"
+  }
+ ],
+ "costScope": [
+  {
+   "item": "PROXY_OPERATOR_HOST_MACHINE_HOURS",
+   "planLineItem": true,
+   "requiredBy": "LAB-RUNPLAN-001"
+  },
+  {
+   "item": "PROXY_OPERATOR_HOST_BOOT_DISK",
+   "planLineItem": true,
+   "requiredBy": "LAB-RUNPLAN-001"
+  },
+  {
+   "item": "CLUSTER_NODE_MACHINE_HOURS",
+   "planLineItem": true,
+   "requiredBy": "LAB-RUNPLAN-001"
+  },
+  {
+   "item": "CLUSTER_NODE_BOOT_DISK",
+   "planLineItem": true,
+   "requiredBy": "LAB-RUNPLAN-001"
+  },
+  {
+   "item": "TEMPORARY_BUILD_DISK",
+   "planLineItem": true,
+   "requiredBy": "THIS_RECIPE"
+  },
+  {
+   "item": "STORED_CUSTOM_IMAGE",
+   "planLineItem": true,
+   "requiredBy": "THIS_RECIPE"
+  }
+ ],
+ "teardown": {
+  "governedBy": "THE_PLAN",
+  "first": "THE_EXPORT_AT_RUNBOOK_STEP_15",
+  "deletes": [
+   "BOTH_INSTANCES_AND_THEIR_DISKS",
+   "CUSTOM_IMAGE",
+   "ANY_BUILD_DISK_LEFT"
+  ],
+  "privateHalvesEndWith": "INSTANCE_AND_DISK_DELETION",
+  "check": "TEARDOWN_REPORT_ZERO_COUNTS",
+  "bindingsRevokedBy": "OWNER_ADMIN"
+ },
+ "runbook": [
+  {
+   "step": 1,
+   "id": "PREPARE_OR_CONFIRM_THE_RUN_PROJECT",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "NONE",
+   "check": "The plan's sha256 approved with every costScope line item; the lease active; no compute present; the custom role's id (the real id in the owner-held plan, the role label in every published rendering) and its exact permission list recorded in the plan; the owner confirms the baseline holds no basic role and that no binding grants OWNER_LOGIN compute.instances.osAdminLogin or an IAM-changing permission, and OWNER_ADMIN no login permission."
+  },
+  {
+   "step": 2,
+   "id": "VPC_AND_FIREWALL",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "NONE",
+   "check": "Firewall and route listing: ingress IAP tcp 22 only, F1 and F2 only, the deny-all egress rule and the window's allow rule above it; no NAT; Private Google Access off."
+  },
+  {
+   "step": 3,
+   "id": "CREATE_THE_CLUSTER_NODE",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "NONE",
+   "check": "The node's metadata keys and refusals; no service account; Shielded VM; serial off; guest-agent features; maximum run duration."
+  },
+  {
+   "step": 4,
+   "id": "SETUP_WINDOW_BUILD",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITH_ADMIN",
+   "check": "Every digest matches; the built root verified against the pinned image's inventory; bytes under the ceiling."
+  },
+  {
+   "step": 5,
+   "id": "IMAGE_INVENTORY_CUSTOM_IMAGE_AND_PROXY_HOST",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "OWNER_LOGIN_WITH_ADMIN",
+   "check": "imageDigest recorded and recomputed off host; the kernel release checked in the built root; the build disk gone; the proxy/operator host booted from the recorded image; step 3's checks repeated on it."
+  },
+  {
+   "step": 6,
+   "id": "CLOSE_EGRESS",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "NONE",
+   "check": "Refusal probes (expected exceptions: the metadata address, F1, F2); the observer's listing."
+  },
+  {
+   "step": 7,
+   "id": "EXTERNAL_OPERATOR_INSTALLATION",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITH_ADMIN",
+   "check": "Each component's own install check (elsewhere); the node's LOCAL_REGISTRY trust file installed."
+  },
+  {
+   "step": 8,
+   "id": "LAUNCHERS_UNITS_KEYS_AND_REQUESTS",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITH_ADMIN",
+   "check": "Modes, owners and digests as launcher-install.json lists; the requests exported; the cluster CA's KUBERNETES_PROXY_SERVER_MTLS leaf installed and RBAC bound to its exact subject."
+  },
+  {
+   "step": 9,
+   "id": "FREEZE_INVENTORIES_AND_ROOT_ALIAS_CHECK",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITH_ADMIN",
+   "check": "The inventories and both boot event logs exported; the root-alias check PASS, or stop."
+  },
+  {
+   "step": 10,
+   "id": "T1_INSTALL_AND_REVOKE",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "OWNER_LOGIN_WITH_ADMIN",
+   "check": "The signatures verify; the bundle digests recorded; after propagation the effective checks pass and the custom role's permission list equals the plan's; every admin session on both hosts ended."
+  },
+  {
+   "step": 11,
+   "id": "PREFLIGHT",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITHOUT_ADMIN",
+   "check": "HOST_ISOLATION_NEGATIVES records; boot_id, kernel and notes digest recorded; the labels compared."
+  },
+  {
+   "step": 12,
+   "id": "T2",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_OFF_HOST",
+   "check": "Every signature verifies; T2 ends within the hour; the envelope's bundle digests equal the installed bytes."
+  },
+  {
+   "step": 13,
+   "id": "DROP",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITHOUT_ADMIN",
+   "check": "The installer's log; the launchers' own verification."
+  },
+  {
+   "step": 14,
+   "id": "CAMPAIGN",
+   "cloudActionsBy": "NONE",
+   "onHost": "OUT_OF_THIS_PACKET",
+   "check": "Out of this packet: inside the lease and the 168-hour window."
+  },
+  {
+   "step": 15,
+   "id": "RECHECK_AND_EXPORT",
+   "cloudActionsBy": "NONE",
+   "onHost": "OWNER_LOGIN_WITHOUT_ADMIN",
+   "check": "The effective re-check and the audit-log check pass, or the run's evidence is refused; export digests in the owner's custody."
+  },
+  {
+   "step": 16,
+   "id": "TEARDOWN",
+   "cloudActionsBy": "OWNER_ADMIN",
+   "onHost": "NONE",
+   "check": "The plan's teardown report with zero counts; the audit-log check closes after teardown completes."
+  }
+ ]
+}

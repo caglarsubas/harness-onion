@@ -1,0 +1,4783 @@
+{
+ "schemaVersion": "planeon.internal.linux-host-authority-vectors/v1",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "positives": [
+  {
+   "id": "P0",
+   "intent": "the published set of the four records, carrying every answer",
+   "ops": {
+    "authority": [],
+    "recipe": [],
+    "launcher": [],
+    "custody": []
+   }
+  },
+  {
+   "id": "P1",
+   "intent": "the same set on a different allowed image family of the same kind",
+   "ops": {
+    "authority": [],
+    "recipe": [
+     {
+      "op": "set",
+      "path": [
+       "image",
+       "family"
+      ],
+      "value": "ROCKY_LINUX_10"
+     }
+    ],
+    "launcher": [],
+    "custody": []
+   }
+  }
+ ],
+ "negatives": [
+  {
+   "id": "A01",
+   "intent": "a superseded entry's file sha256 that is not the base's",
+   "rule": "design section 4 (one digest rule)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "supersedes",
+      0,
+      "fileSha256"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "LR-CAPACITY-ZERO-COST: the file sha256 is the base's"
+  },
+  {
+   "id": "A02",
+   "intent": "a superseded entry's text that is not its fragments' bytes",
+   "rule": "B-LHA-12",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "supersedes",
+      0,
+      "text"
+     ],
+     "value": "Use only existing authorized zero-incremental-cost capacity."
+    }
+   ],
+   "refusal": "LR-CAPACITY-ZERO-COST: the text is the fragments' bytes"
+  },
+  {
+   "id": "A03",
+   "intent": "a superseded entry's span that is not its fragments' digest",
+   "rule": "design section 4 (one digest rule)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "supersedes",
+      0,
+      "span"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "LR-CAPACITY-ZERO-COST: the span is the fragments' digest"
+  },
+  {
+   "id": "A04",
+   "intent": "a fragment outside its entry's lines",
+   "rule": "design section 4 (one digest rule)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "supersedes",
+      0,
+      "fragments"
+     ],
+     "value": [
+      [
+       70,
+       0,
+       70,
+       5
+      ]
+     ]
+    }
+   ],
+   "refusal": "LR-CAPACITY-ZERO-COST: a fragment lies within its lines"
+  },
+  {
+   "id": "A05",
+   "intent": "a member path in short form",
+   "rule": "design section 4 (rules)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "supersedes",
+      2,
+      "member"
+     ],
+     "value": "capacity"
+    }
+   ],
+   "refusal": "LRJ-BILLING-CAPACITY: the member path exists at the base, in its full form"
+  },
+  {
+   "id": "A06",
+   "intent": "a member path that does not exist",
+   "rule": "design section 4 (rules)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "supersedes",
+      2,
+      "member"
+     ],
+     "value": "billing.capacityLimit"
+    }
+   ],
+   "refusal": "LRJ-BILLING-CAPACITY: the member path exists at the base, in its full form"
+  },
+  {
+   "id": "A07",
+   "intent": "a relaxed predicate other than the listed ones (the campaign-level capacity rule)",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "TL-RELAXED-CAMPAIGN-CAPACITY",
+      "path": "docs/TRUSTED_LIVE_CAMPAIGN_RUNNER_CONTRACT.md",
+      "fileSha256": "3f1bf16f6ec5d1e265946765fd82a1a1c05773dcd99a15a1c68f43b122937052",
+      "member": null,
+      "lines": [
+       442,
+       443
+      ],
+      "fragments": [
+       [
+        443,
+        14,
+        443,
+        76
+       ]
+      ],
+      "text": "no raw container socket or new resource capacity is authorized",
+      "span": "0f38b0120ccd7b0e8195e5bf8a4e0df868221f0b65b098c89acacb8c990159c2",
+      "note": "Kept at campaign level.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A08",
+   "intent": "a kept predicate relaxed: hosted runner",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      0
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LR-KEPT-HOSTED-RUNNER",
+      "path": "docs/alpha-2/LINUX_READINESS.md",
+      "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+      "member": null,
+      "lines": [
+       63,
+       69
+      ],
+      "fragments": [
+       [
+        65,
+        24,
+        65,
+        26
+       ],
+       [
+        65,
+        43,
+        65,
+        56
+       ],
+       [
+        66,
+        55,
+        66,
+        68
+       ]
+      ],
+      "text": "No … hosted runner … is authorized",
+      "span": "0221500d8719640d516388bab21859ecad8ab9dd89ad55d7ef1d0cea92fb405b",
+      "note": "Kept: no hosted runner.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A09",
+   "intent": "a kept predicate relaxed: paid API",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      9
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LRJ-KEPT-PAID-APIS",
+      "path": "architecture/linux-readiness.json",
+      "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+      "member": "billing.paidApis",
+      "lines": [
+       114,
+       114
+      ],
+      "fragments": [
+       [
+        114,
+        4,
+        114,
+        21
+       ]
+      ],
+      "text": "\"paidApis\": false",
+      "span": "86f2fa6c6fb39e82b5e5b97d8adcf86d2bcfc43c7df203eea95ea2489c108346",
+      "note": "Kept member: no paid API.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A10",
+   "intent": "a kept predicate relaxed: third-party key",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      10
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LRJ-KEPT-THIRD-PARTY-KEYS",
+      "path": "architecture/linux-readiness.json",
+      "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+      "member": "billing.thirdPartyKeys",
+      "lines": [
+       115,
+       115
+      ],
+      "fragments": [
+       [
+        115,
+        4,
+        115,
+        27
+       ]
+      ],
+      "text": "\"thirdPartyKeys\": false",
+      "span": "fef51243d1e67e7bedbd3fbdfb9feb12aee9e8c9ae5c154049bc2bd1a854c7b9",
+      "note": "Kept member: third-party keys stay refused.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A11",
+   "intent": "a kept predicate relaxed: raw socket",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      11
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LRJ-KEPT-RAW-SOCKETS",
+      "path": "architecture/linux-readiness.json",
+      "fileSha256": "2ac76f01df10f3267b23340dd2af7c466647f5bd9f3645d6203c4de93c0a8762",
+      "member": "billing.rawContainerSockets",
+      "lines": [
+       116,
+       116
+      ],
+      "fragments": [
+       [
+        116,
+        4,
+        116,
+        32
+       ]
+      ],
+      "text": "\"rawContainerSockets\": false",
+      "span": "a21a459408c091b6004562ba8d3d69bd98a21ef06260391beb8b5280ec02e232",
+      "note": "Kept member: raw container sockets stay refused.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A12",
+   "intent": "a kept predicate relaxed: registry egress charge",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      3
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LR-KEPT-REGISTRY-EGRESS",
+      "path": "docs/alpha-2/LINUX_READINESS.md",
+      "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+      "member": null,
+      "lines": [
+       63,
+       69
+      ],
+      "fragments": [
+       [
+        65,
+        24,
+        65,
+        26
+       ],
+       [
+        66,
+        0,
+        66,
+        22
+       ],
+       [
+        66,
+        55,
+        66,
+        68
+       ]
+      ],
+      "text": "No … registry egress charge … is authorized",
+      "span": "9bb571fa2845a3aefd62bb43f3a3c1f38d76181b77884f0eb0de4ef9e56859cb",
+      "note": "Kept: no registry egress charge.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A13",
+   "intent": "a kept predicate relaxed: new broker",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      1
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LR-KEPT-NEW-BROKER",
+      "path": "docs/alpha-2/LINUX_READINESS.md",
+      "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+      "member": null,
+      "lines": [
+       63,
+       69
+      ],
+      "fragments": [
+       [
+        65,
+        24,
+        65,
+        26
+       ],
+       [
+        65,
+        58,
+        65,
+        68
+       ],
+       [
+        66,
+        55,
+        66,
+        68
+       ]
+      ],
+      "text": "No … new broker … is authorized",
+      "span": "733efdd538e8942ab9b30a0c0353888a5c7fa71a3d6f5c97bfba97f41d45320d",
+      "note": "Kept, read with PRE_EXISTING: no broker beyond the one reviewed capacity broker that the operator installs and verifies before the envelope is signed (Q-LHA-14, the owner).",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A14",
+   "intent": "a kept predicate relaxed: automatic pull",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      4
+     ]
+    },
+    {
+     "op": "append",
+     "path": [
+      "supersedes"
+     ],
+     "value": {
+      "id": "LR-KEPT-AUTOMATIC-PULL",
+      "path": "docs/alpha-2/LINUX_READINESS.md",
+      "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+      "member": null,
+      "lines": [
+       63,
+       69
+      ],
+      "fragments": [
+       [
+        65,
+        24,
+        65,
+        26
+       ],
+       [
+        66,
+        26,
+        66,
+        68
+       ]
+      ],
+      "text": "No … automatic package/image pull is authorized",
+      "span": "824cdb999d1cba99c2035394c91b455371a7e3eaf5b58d0cf05898563e4931b3",
+      "note": "Kept: no automatic package or image pull at any time; only operator-initiated, digest-pinned fetches inside the setup window.",
+      "kind": "CAPACITY",
+      "scope": "ALL",
+      "keptIn": []
+     }
+    }
+   ],
+   "refusal": "only the listed capacity predicates and the independence clause are relaxed"
+  },
+  {
+   "id": "A15",
+   "intent": "an unchanged list missing a kept predicate",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "unchanged",
+      5
+     ]
+    }
+   ],
+   "refusal": "every kept predicate of a partly relaxed sentence is in unchanged"
+  },
+  {
+   "id": "A16",
+   "intent": "the independence clause superseded without its replacement predicate",
+   "rule": "design section 4; Q-LHA-1",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "replacementPredicate",
+      "text"
+     ],
+     "value": "INDEPENDENT_SIGNATURES is no longer required."
+    }
+   ],
+   "refusal": "the independence clause is superseded only together with its replacement predicate"
+  },
+  {
+   "id": "A17",
+   "intent": "the independence clause superseded without the owner's answer verbatim",
+   "rule": "design section 4; Q-LHA-1",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "replacementPredicate",
+      "ownerAnswer"
+     ],
+     "value": "Separated keys."
+    }
+   ],
+   "refusal": "the independence clause is superseded only with the owner's Q-LHA-1 (a) answer, verbatim"
+  },
+  {
+   "id": "A18",
+   "intent": "the independence clause superseded without the disclosure",
+   "rule": "design section 4; Q-LHA-1",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "replacementPredicate",
+      "disclosure",
+      "signers"
+     ],
+     "value": "INDEPENDENT_PRINCIPALS"
+    }
+   ],
+   "refusal": "the independence clause is superseded only with the disclosure signers: SINGLE_PRINCIPAL_SEPARATED_KEYS"
+  },
+  {
+   "id": "A19",
+   "intent": "a satisfied entry that does not match its digest",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "satisfied",
+      0,
+      "span"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "LR-INDEPENDENT-SIGNATURES-138: the span is the fragments' digest"
+  },
+  {
+   "id": "A20",
+   "intent": "a costScope entry that does not match its digest",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "costScope",
+      0,
+      "span"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "TL-NO-NEW-RESOURCE-CAPACITY: the span is the fragments' digest"
+  },
+  {
+   "id": "A21",
+   "intent": "a reviewedNotBinding entry that does not match its digest",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "reviewedNotBinding",
+      0,
+      "span"
+     ],
+     "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+   ],
+   "refusal": "NQR-NO-NEW-SERVICE: the span is the fragments' digest"
+  },
+  {
+   "id": "A22",
+   "intent": "an evidence state moved",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      "nativeAmd64"
+     ],
+     "value": "PASS"
+    }
+   ],
+   "refusal": "the evidence states do not move: native AMD64 and ARM64 stay NOT_RUN_ENV_UNAVAILABLE"
+  },
+  {
+   "id": "A23",
+   "intent": "decisions not verbatim",
+   "rule": "design section 8 (authority)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "decisions",
+      "decisionLines",
+      0,
+      "text"
+     ],
+     "value": "Add owning packets."
+    }
+   ],
+   "refusal": "the decisions are the decision lines, verbatim: LX-D1"
+  },
+  {
+   "id": "A24",
+   "intent": "a reading occurrence that holds a word other than its reading's (line 147's independent)",
+   "rule": "B-LHA-11",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "readings",
+      0,
+      "occurrences",
+      5
+     ],
+     "value": {
+      "id": "LR-147-EXISTING",
+      "path": "docs/alpha-2/LINUX_READINESS.md",
+      "fileSha256": "ce9c3dfbc7265735b5f41874c82d18b64260f6e3f8f44e623c6b623dbf9bf171",
+      "member": null,
+      "lines": [
+       147,
+       147
+      ],
+      "fragments": [
+       [
+        147,
+        9,
+        147,
+        20
+       ]
+      ],
+      "text": "independent",
+      "span": "aeefa2d754419cbd7f1d8e0c395308d77db62d254bd477242e7b396354e5664a",
+      "note": "Line 147 cited for the word only (B-LHA-11); the sentence is kept in unchanged."
+     }
+    }
+   ],
+   "refusal": "LR-147-EXISTING: a reading occurrence holds one of its words"
+  },
+  {
+   "id": "A25",
+   "intent": "a listed reading occurrence missing",
+   "rule": "design section 4 (readings); MON-LHA-16-1",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "readings",
+      1,
+      "occurrences",
+      0
+     ]
+    }
+   ],
+   "refusal": "every listed occurrence of a reading's words is in its reading"
+  },
+  {
+   "id": "A26",
+   "intent": "a licence charge other than NONE",
+   "rule": "design section 4 (capacity)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capacity",
+      "licenceCharge"
+     ],
+     "value": "OWNER_APPROVED"
+    }
+   ],
+   "refusal": "licenceCharge is NONE; an owner-approved licence charge needs a contract amendment"
+  },
+  {
+   "id": "A27",
+   "intent": "a capacity rule not bound to the teardown report",
+   "rule": "design section 4 (capacity)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capacity",
+      "binding"
+     ],
+     "value": [
+      "PLAN_SHA256",
+      "LEASE",
+      "COST_CEILING"
+     ]
+    }
+   ],
+   "refusal": "the capacity rule is the owner's per-run GCP approval under MET-LINUX-007, bound to the plan sha256, the lease, the cost ceiling and the teardown report"
+  },
+  {
+   "id": "A28",
+   "intent": "a run project with a default network",
+   "rule": "design section 4 (capacity)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capacity",
+      "runProject",
+      "defaultNetwork"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "the run project is separate from the lab foundation, with no default network"
+  },
+  {
+   "id": "A29",
+   "intent": "a precondition dropped",
+   "rule": "design section 10",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "preconditions",
+      1
+     ]
+    }
+   ],
+   "refusal": "the preconditions outside this packet are listed, each with its state at the base"
+  },
+  {
+   "id": "A30",
+   "intent": "the carried note LHA-CN-1 stated as settled",
+   "rule": "LHA-CN-1",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "carriedNotes",
+      0,
+      "status"
+     ],
+     "value": "SETTLED"
+    }
+   ],
+   "refusal": "a carried note is carried verbatim and stated as a note, never as a settled claim"
+  },
+  {
+   "id": "A31",
+   "intent": "a record that names a project id",
+   "rule": "B-LHA-13; design section 4 (rules)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "consumers",
+      "list",
+      0,
+      "note"
+     ],
+     "value": "R12 run in projects/example-run-0001."
+    }
+   ],
+   "refusal": "role labels only: no project, folder or organization id in $.consumers.list[0].note"
+  },
+  {
+   "id": "A32",
+   "intent": "a record that names a price",
+   "rule": "design section 4 (rules)",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capacity",
+      "insideThePaidScope"
+     ],
+     "value": "ABOUT $40 PER RUN"
+    }
+   ],
+   "refusal": "role labels only: no price in $.capacity.insideThePaidScope"
+  },
+  {
+   "id": "R01",
+   "intent": "a host with a service account",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "serviceAccount"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "a host has no service account and no scopes"
+  },
+  {
+   "id": "R02",
+   "intent": "a host with scopes",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "scopes"
+     ],
+     "value": [
+      "cloud-platform"
+     ]
+    }
+   ],
+   "refusal": "a host has no service account and no scopes"
+  },
+  {
+   "id": "R03",
+   "intent": "ingress other than IAP tcp 22",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "firewall",
+      "ingress"
+     ],
+     "value": {
+      "id": "HTTPS",
+      "sourceRange": "10.0.0.0/8",
+      "protocol": "tcp",
+      "port": 443,
+      "targets": "BOTH_HOSTS"
+     }
+    }
+   ],
+   "refusal": "ingress is IAP tcp 22 and the listed internal flows only"
+  },
+  {
+   "id": "R04",
+   "intent": "an internal path other than F1 and F2",
+   "rule": "design section 8 (recipe); MON-LHA3-1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "internalFlows"
+     ],
+     "value": {
+      "id": "F3",
+      "from": "CLUSTER_NODE",
+      "to": "PROXY_OPERATOR_HOST",
+      "protocol": "tcp",
+      "port": "LOCAL_REGISTRY_PORT_PER_PLAN",
+      "direction": "CLUSTER_NODE_TO_PROXY_OPERATOR_HOST",
+      "purposes": [
+       "NODE_TO_PROXY_SSH"
+      ]
+     }
+    }
+   ],
+   "refusal": "the only internal paths are F1 and F2"
+  },
+  {
+   "id": "R05",
+   "intent": "a kubeconfig on the proxy/operator host",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "hosts",
+      0,
+      "rootKubeconfig"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no kubeconfig or container-runtime socket on the proxy/operator host"
+  },
+  {
+   "id": "R06",
+   "intent": "a container-runtime socket on the proxy/operator host",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "hosts",
+      0,
+      "containerRuntimeSocket"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no kubeconfig or container-runtime socket on the proxy/operator host"
+  },
+  {
+   "id": "R07",
+   "intent": "metadata carrying ssh-keys",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "machine",
+      "metadata"
+     ],
+     "value": {
+      "key": "ssh-keys",
+      "value": "x"
+     }
+    }
+   ],
+   "refusal": "metadata carries no SSH keys, startup or shutdown script or guest attributes"
+  },
+  {
+   "id": "R08",
+   "intent": "metadata carrying startup-script",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "machine",
+      "metadata"
+     ],
+     "value": {
+      "key": "startup-script",
+      "value": "x"
+     }
+    }
+   ],
+   "refusal": "metadata carries no SSH keys, startup or shutdown script or guest attributes"
+  },
+  {
+   "id": "R09",
+   "intent": "metadata carrying shutdown-script-url",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "machine",
+      "metadata"
+     ],
+     "value": {
+      "key": "shutdown-script-url",
+      "value": "x"
+     }
+    }
+   ],
+   "refusal": "metadata carries no SSH keys, startup or shutdown script or guest attributes"
+  },
+  {
+   "id": "R10",
+   "intent": "metadata carrying enable-guest-attributes",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "machine",
+      "metadata"
+     ],
+     "value": {
+      "key": "enable-guest-attributes",
+      "value": "x"
+     }
+    }
+   ],
+   "refusal": "metadata carries no SSH keys, startup or shutdown script or guest attributes"
+  },
+  {
+   "id": "R11",
+   "intent": "an unlisted guest-agent feature left on",
+   "rule": "design section 8 (recipe); Q-LHA-8 (a)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "guestAgent",
+      "on"
+     ],
+     "value": [
+      "OS_LOGIN_NSS_PAM",
+      "CLOCK_SYNC",
+      "DIAGNOSTICS"
+     ]
+    },
+    {
+     "op": "set",
+     "path": [
+      "guestAgent",
+      "off"
+     ],
+     "value": [
+      "METADATA_ACCOUNT_MANAGEMENT",
+      "METADATA_SSH_KEY_MANAGEMENT",
+      "METADATA_SCRIPT_EXECUTION",
+      "NETWORK_INTERFACE_MANAGEMENT",
+      "SNAPSHOT_HOOKS"
+     ]
+    }
+   ],
+   "refusal": "only OS Login and clock sync stay on in the guest agent"
+  },
+  {
+   "id": "R12",
+   "intent": "Shielded VM off",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "shieldedVm",
+      "secureBoot"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "Shielded VM is on: secure boot, vTPM and integrity monitoring"
+  },
+  {
+   "id": "R13",
+   "intent": "serial port on",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "serialPortAccess"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "serial-port access is off"
+  },
+  {
+   "id": "R14",
+   "intent": "OS Login off",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "metadata",
+      0,
+      "value"
+     ],
+     "value": "FALSE"
+    }
+   ],
+   "refusal": "OS Login and its 2-step verification are on, and project SSH keys are blocked"
+  },
+  {
+   "id": "R15",
+   "intent": "OS Login 2FA off",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "metadata",
+      1,
+      "value"
+     ],
+     "value": "FALSE"
+    }
+   ],
+   "refusal": "OS Login and its 2-step verification are on, and project SSH keys are blocked"
+  },
+  {
+   "id": "R16",
+   "intent": "at step 10 the login identity's effective compute.instances.osAdminLogin not checked",
+   "rule": "design section 8 (recipe); MON-LHA-12R",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "absent"
+     ],
+     "value": [
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's effective compute.instances.osAdminLogin is checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R17",
+   "intent": "at step 15 the login identity's effective compute.instances.osAdminLogin not checked",
+   "rule": "design section 8 (recipe); Q-LHA5-1",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "absent"
+     ],
+     "value": [
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's effective compute.instances.osAdminLogin is checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R18",
+   "intent": "at step 10 an IAM-changing permission not checked",
+   "rule": "design section 8 (recipe); Q-LHA5-1",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's IAM-changing permissions are checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R19",
+   "intent": "an effective check that ignores group grants",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "grantPaths"
+     ],
+     "value": [
+      "DIRECT",
+      "BASIC_ROLE",
+      "CUSTOM_ROLE",
+      "INHERITED",
+      "DOMAIN",
+      "PRINCIPAL_SET",
+      "CONDITIONAL"
+     ]
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R20",
+   "intent": "an effective check that ignores domain grants",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "grantPaths"
+     ],
+     "value": [
+      "DIRECT",
+      "BASIC_ROLE",
+      "CUSTOM_ROLE",
+      "INHERITED",
+      "GROUP",
+      "PRINCIPAL_SET",
+      "CONDITIONAL"
+     ]
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R21",
+   "intent": "an effective check that ignores principal-set grants",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "grantPaths"
+     ],
+     "value": [
+      "DIRECT",
+      "BASIC_ROLE",
+      "CUSTOM_ROLE",
+      "INHERITED",
+      "GROUP",
+      "DOMAIN",
+      "CONDITIONAL"
+     ]
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R22",
+   "intent": "an effective check that ignores inherited grants",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "grantPaths"
+     ],
+     "value": [
+      "DIRECT",
+      "BASIC_ROLE",
+      "CUSTOM_ROLE",
+      "GROUP",
+      "DOMAIN",
+      "PRINCIPAL_SET",
+      "CONDITIONAL"
+     ]
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R23",
+   "intent": "an effective check that ignores basic-role grants",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "grantPaths"
+     ],
+     "value": [
+      "DIRECT",
+      "CUSTOM_ROLE",
+      "INHERITED",
+      "GROUP",
+      "DOMAIN",
+      "PRINCIPAL_SET",
+      "CONDITIONAL"
+     ]
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R24",
+   "intent": "an effective check that ignores custom-role grants",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "grantPaths"
+     ],
+     "value": [
+      "DIRECT",
+      "BASIC_ROLE",
+      "INHERITED",
+      "GROUP",
+      "DOMAIN",
+      "PRINCIPAL_SET",
+      "CONDITIONAL"
+     ]
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R25",
+   "intent": "a basic role in the login identity's baseline",
+   "rule": "design section 8 (recipe); the owner's custom-role decision",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "loginBaseline",
+      "basicRole"
+     ],
+     "value": "EDITOR"
+    }
+   ],
+   "refusal": "a basic role in the login identity's baseline is refused"
+  },
+  {
+   "id": "R26",
+   "intent": "the custom role's permission list not compared with the plan's at step 10",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "checksPermissionListAgainstPlan"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the custom role's permission list equals the plan's at steps 1, 10 and 15"
+  },
+  {
+   "id": "R27",
+   "intent": "the custom role's permission list not compared with the plan's at step 15",
+   "rule": "design section 8 (recipe); LHA5-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "checksPermissionListAgainstPlan"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the custom role's permission list equals the plan's at steps 1, 10 and 15"
+  },
+  {
+   "id": "R28",
+   "intent": "an audit-log entry that grants the login identity admin login, admitted as expected",
+   "rule": "design section 8 (recipe); B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "expected"
+     ],
+     "value": {
+      "entry": "LOGIN_IDENTITY_ADMIN_LOGIN_GRANT",
+      "by": "OWNER_ADMIN"
+     }
+    }
+   ],
+   "refusal": "each expected audit entry is the plan's, made by OWNER_ADMIN"
+  },
+  {
+   "id": "R29",
+   "intent": "a custom-role update admitted",
+   "rule": "design section 8 (recipe); B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "anyCustomRoleChange"
+     ],
+     "value": "ALLOWED_IF_IT_GRANTS_NOTHING"
+    }
+   ],
+   "refusal": "any other audit entry, and any custom-role change, refuses the run's evidence"
+  },
+  {
+   "id": "R30",
+   "intent": "a run binding granted by the login identity",
+   "rule": "design section 8 (recipe); Q-LHA5-1",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "leaseBindings",
+      0,
+      "grantedBy"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "only OWNER_ADMIN grants and revokes the run's bindings"
+  },
+  {
+   "id": "R31",
+   "intent": "a run binding revoked by the login identity",
+   "rule": "design section 8 (recipe); Q-LHA5-1",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "leaseBindings",
+      1,
+      "revokedBy"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "only OWNER_ADMIN grants and revokes the run's bindings"
+  },
+  {
+   "id": "R32",
+   "intent": "a record naming the login identity by its account",
+   "rule": "B-LHA-13",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      0,
+      "check"
+     ],
+     "value": "The plan approved by owner-login@example as owner"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.runbook[0].check"
+  },
+  {
+   "id": "R33",
+   "intent": "a record naming the administering identity by its account",
+   "rule": "B-LHA-13",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      9,
+      "check"
+     ],
+     "value": "The binding removed by owner-admin@example as owner"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.runbook[9].check"
+  },
+  {
+   "id": "R34",
+   "intent": "a record naming the custom role by its full name",
+   "rule": "B-LHA-13",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      0,
+      "check"
+     ],
+     "value": "The role projects/example-run-0001/roles/ownerLoginBaseline recorded."
+    }
+   ],
+   "refusal": "role labels only: a custom role by its role label, never its full name, in $.runbook[0].check"
+  },
+  {
+   "id": "R35",
+   "intent": "role labels replaced by other names",
+   "rule": "B-LHA-13",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "roleLabels",
+      "loginIdentity"
+     ],
+     "value": "LOGIN"
+    }
+   ],
+   "refusal": "role labels only: OWNER_ADMIN, OWNER_LOGIN and OWNER_LOGIN_BASELINE name the two identities and the custom role"
+  },
+  {
+   "id": "R36",
+   "intent": "a record naming a POSIX name",
+   "rule": "B-LHA-13; B-LHA-1",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      10,
+      "check"
+     ],
+     "value": "Preflight run by owner_example_org."
+    }
+   ],
+   "refusal": "role labels only: no POSIX name or UID in $.runbook[10].check"
+  },
+  {
+   "id": "R37",
+   "intent": "a record naming a UID",
+   "rule": "B-LHA-13; B-LHA-1",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      10,
+      "check"
+     ],
+     "value": "Preflight run as uid 2001."
+    }
+   ],
+   "refusal": "role labels only: no POSIX name or UID in $.runbook[10].check"
+  },
+  {
+   "id": "R38",
+   "intent": "a record naming a key",
+   "rule": "B-LHA-13",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      7,
+      "check"
+     ],
+     "value": "Key ssh-ed25519 AAAAexample."
+    }
+   ],
+   "refusal": "role labels only: no key in $.runbook[7].check"
+  },
+  {
+   "id": "R39",
+   "intent": "an external address at campaign time",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "egress",
+      "atCampaign",
+      "externalAddress"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no external address or allow-egress rule at campaign time"
+  },
+  {
+   "id": "R40",
+   "intent": "an allow-egress rule at campaign time",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "egress",
+      "atCampaign",
+      "allowEgressRule"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no external address or allow-egress rule at campaign time"
+  },
+  {
+   "id": "R41",
+   "intent": "an allow rule without a byte ceiling",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "firewall",
+      "setupWindowAllow",
+      "byteCeiling"
+     ],
+     "value": "NONE"
+    }
+   ],
+   "refusal": "the setup window's allow rule has a byte ceiling and uses no paid firewall feature"
+  },
+  {
+   "id": "R42",
+   "intent": "NAT present",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "project",
+      "cloudNat"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no Cloud NAT in the run project"
+  },
+  {
+   "id": "R43",
+   "intent": "Private Google Access on",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "project",
+      "privateGoogleAccess"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "Private Google Access is off"
+  },
+  {
+   "id": "R44",
+   "intent": "a maximum run duration missing",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "maxRunDuration",
+      "set"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "a maximum run duration with a delete action is set, ending no later than the lease"
+  },
+  {
+   "id": "R45",
+   "intent": "a maximum run duration later than the lease's end",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "maxRunDuration",
+      "endsNoLaterThan"
+     ],
+     "value": "AFTER_LEASE_END"
+    }
+   ],
+   "refusal": "a maximum run duration with a delete action is set, ending no later than the lease"
+  },
+  {
+   "id": "R46",
+   "intent": "an image of the wrong architecture",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "architecture"
+     ],
+     "value": "ARM64"
+    }
+   ],
+   "refusal": "an image is AMD64"
+  },
+  {
+   "id": "R47",
+   "intent": "an image with a licence charge",
+   "rule": "design section 8 (recipe); Q-LHA-9 (a)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "licenceCharge"
+     ],
+     "value": "PREMIUM_LICENCE"
+    }
+   ],
+   "refusal": "an image has licenceCharge NONE"
+  },
+  {
+   "id": "R48",
+   "intent": "a proxy/operator host not booted from the recorded custom image",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "customImage",
+      "proxyOperatorHostBootsRecordedImage"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the proxy/operator host boots the recorded custom image, and no build disk is left after step 5"
+  },
+  {
+   "id": "R49",
+   "intent": "a build disk left after step 5",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "customImage",
+      "buildDiskDeletedAtStep"
+     ],
+     "value": 16
+    }
+   ],
+   "refusal": "the proxy/operator host boots the recorded custom image, and no build disk is left after step 5"
+  },
+  {
+   "id": "R50",
+   "intent": "a costScope paid item without its plan line item",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "costScope",
+      4,
+      "planLineItem"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "every paid costScope item is a plan line item"
+  },
+  {
+   "id": "R51",
+   "intent": "a custom image not deleted at teardown",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "teardown",
+      "deletes"
+     ],
+     "value": [
+      "BOTH_INSTANCES_AND_THEIR_DISKS",
+      "ANY_BUILD_DISK_LEFT"
+     ]
+    }
+   ],
+   "refusal": "teardown deletes the custom image and any build disk left"
+  },
+  {
+   "id": "R52",
+   "intent": "SELinux not enforcing",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "profile",
+      0,
+      "value"
+     ],
+     "value": "PERMISSIVE"
+    }
+   ],
+   "refusal": "SELinux is enforcing"
+  },
+  {
+   "id": "R53",
+   "intent": "the active policy's deny_unknown not 1",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "profile",
+      1,
+      "value"
+     ],
+     "value": "DENY_UNKNOWN_0"
+    }
+   ],
+   "refusal": "the active policy's deny_unknown is 1"
+  },
+  {
+   "id": "R54",
+   "intent": "an inventory without its scope",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "hostInventory",
+      "records",
+      1,
+      "scope"
+     ],
+     "value": [
+      "/etc"
+     ]
+    }
+   ],
+   "refusal": "each host has its own inventory, with its scope"
+  },
+  {
+   "id": "R55",
+   "intent": "an inventory without its host",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "hostInventory",
+      "records",
+      1
+     ]
+    }
+   ],
+   "refusal": "each host has its own inventory, with its scope"
+  },
+  {
+   "id": "R56",
+   "intent": "an inventory frozen before an install that changes a covered path",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "hostInventory",
+      "frozenAtStep"
+     ],
+     "value": 8
+    }
+   ],
+   "refusal": "the inventories are frozen at step 9, after the last install that changes a covered path"
+  },
+  {
+   "id": "R57",
+   "intent": "an automatic updater on",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "packages",
+      "automaticUpdaters"
+     ],
+     "value": "ON"
+    }
+   ],
+   "refusal": "every automatic updater is off"
+  },
+  {
+   "id": "R58",
+   "intent": "a package without a file digest",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "packages",
+      "sources",
+      0,
+      "pin"
+     ],
+     "value": "VERSION_ONLY"
+    }
+   ],
+   "refusal": "every package is pinned by its file digest"
+  },
+  {
+   "id": "R59",
+   "intent": "a source transfer without .git",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "source",
+      "withGit"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the source transfer carries .git and treeSha256"
+  },
+  {
+   "id": "R60",
+   "intent": "a source transfer without treeSha256",
+   "rule": "design section 8 (recipe)",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "source",
+      "treeSha256"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the source transfer carries .git and treeSha256"
+  },
+  {
+   "id": "R61",
+   "intent": "a root write after the revocation outside the closed list",
+   "rule": "B-LHA-5",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "runtimeRootWrites"
+     ],
+     "value": {
+      "id": "SCRATCH",
+      "host": "PROXY_OPERATOR_HOST",
+      "path": "/var/tmp/planeon/",
+      "writer": "ANY_ROOT_PROCESS"
+     }
+    }
+   ],
+   "refusal": "the root writes after the revocation are the closed list of runtime state paths and the listed drop targets"
+  },
+  {
+   "id": "R62",
+   "intent": "a runtime state path listed twice",
+   "rule": "B-LHA-5",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runtimeRootWrites",
+      1,
+      "path"
+     ],
+     "value": "/var/lib/planeon/host-ledger/launcher/"
+    }
+   ],
+   "refusal": "each runtime state path is listed once, with its one writer"
+  },
+  {
+   "id": "R63",
+   "intent": "a campaign-proxy rule that targets a NodePort",
+   "rule": "B-LHA-6",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "campaignProxyUpstream",
+      "targets"
+     ],
+     "value": "NODE_PORT"
+    }
+   ],
+   "refusal": "every campaign-proxy upstream goes through the API server on F1; a NodePort, Service or Pod address target is refused"
+  },
+  {
+   "id": "R64",
+   "intent": "a campaign-proxy rule that targets a Pod address",
+   "rule": "B-LHA-6",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "campaignProxyUpstream",
+      "targets"
+     ],
+     "value": [
+      "POD_ADDRESS"
+     ]
+    }
+   ],
+   "refusal": "every campaign-proxy upstream goes through the API server on F1; a NodePort, Service or Pod address target is refused"
+  },
+  {
+   "id": "R65",
+   "intent": "F1 without the CAMPAIGN_PROXY upstream purpose",
+   "rule": "B-LHA-6",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "internalFlows",
+      0,
+      "purposes"
+     ],
+     "value": [
+      "KUBERNETES_API_PROXY",
+      "POLICY_OBSERVER",
+      "CAPACITY_BROKER"
+     ]
+    }
+   ],
+   "refusal": "every campaign-proxy upstream goes through the API server on F1; a NodePort, Service or Pod address target is refused"
+  },
+  {
+   "id": "R66",
+   "intent": "the node's LOCAL_REGISTRY trust file installed after the revocation",
+   "rule": "B-LHA-6",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "localRegistryTrust",
+      "installedAtStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "the node's LOCAL_REGISTRY trust file is installed at step 7 or 8, before the revocation"
+  },
+  {
+   "id": "R67",
+   "intent": "a built root from the dated snapshot instead of the pinned image's own files",
+   "rule": "B-LHA-8",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "customImage",
+      "startsFrom"
+     ],
+     "value": "FAMILY_RELEASE_FROM_THE_DATED_SNAPSHOT"
+    }
+   ],
+   "refusal": "the built root starts from the pinned family image's own files, verified against its inventory"
+  },
+  {
+   "id": "R68",
+   "intent": "a first-boot relabel",
+   "rule": "B-LHA-8",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "customImage",
+      "firstBootRelabel"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "the built root is labelled at step 4 from its own file contexts, the inventory records each label, a first-boot relabel is refused and preflight compares the labels"
+  },
+  {
+   "id": "R69",
+   "intent": "preflight not comparing the labels",
+   "rule": "B-LHA-8",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "preflightComparesLabels"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the built root is labelled at step 4 from its own file contexts, the inventory records each label, a first-boot relabel is refused and preflight compares the labels"
+  },
+  {
+   "id": "R70",
+   "intent": "the kernel release not checked in the built root at step 5",
+   "rule": "B-LHA-8",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "kernel",
+      "checkedInBuiltRootAtStep"
+     ],
+     "value": 11
+    }
+   ],
+   "refusal": "the plan pins the kernel release and step 5 checks it in the built root"
+  },
+  {
+   "id": "R71",
+   "intent": "the private halves inside the host inventory",
+   "rule": "B-LHA-9",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "hostInventory",
+      "leftOut",
+      5
+     ]
+    }
+   ],
+   "refusal": "the private halves and requests are left out of the inventory, each with a record of its SPKI digest only"
+  },
+  {
+   "id": "R72",
+   "intent": "the boot event logs not exported at step 9",
+   "rule": "B-LHA-9",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "hostInventory",
+      "bootEventLogsExportedAtStep"
+     ],
+     "value": 15
+    }
+   ],
+   "refusal": "both hosts' boot event logs are exported at step 9"
+  },
+  {
+   "id": "R73",
+   "intent": "the image re-verification at preflight",
+   "rule": "B-LHA-9",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "hostInventory",
+      "imageReverification",
+      "where"
+     ],
+     "value": "AT_PREFLIGHT"
+    }
+   ],
+   "refusal": "the image re-verification runs off host in T1, not at preflight"
+  },
+  {
+   "id": "R74",
+   "intent": "an admin session from before the revocation alive at preflight",
+   "rule": "B-LHA-10",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "sessionChecks",
+      "preRevocationAdminSessionAliveAtPreflight"
+     ],
+     "value": "WARNS"
+    }
+   ],
+   "refusal": "an admin session from before the revocation alive at preflight refuses the run's evidence"
+  },
+  {
+   "id": "R75",
+   "intent": "no sudoers check at step 10",
+   "rule": "B-LHA-10",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "sessionChecks",
+      "confirms"
+     ],
+     "value": [
+      "NO_PROCESS_OR_SESSION_STARTED_BEFORE_REVOCATION",
+      "FRESH_LOGIN_CANNOT_USE_SUDO"
+     ]
+    }
+   ],
+   "refusal": "at step 10 every admin session on both hosts ends, and no earlier session, sudoers entry or sudo use remains for either identity"
+  },
+  {
+   "id": "R76",
+   "intent": "admin sessions ended on one host only",
+   "rule": "B-LHA-10",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "sessionChecks",
+      "endsEverySessionOpenedWithAdminOn"
+     ],
+     "value": [
+      "PROXY_OPERATOR_HOST"
+     ]
+    }
+   ],
+   "refusal": "at step 10 every admin session on both hosts ends, and no earlier session, sudoers entry or sudo use remains for either identity"
+  },
+  {
+   "id": "R77",
+   "intent": "the step-1 confirmation without the organization's IAM-changing permission",
+   "rule": "B-LHA-14",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      0,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's folder and organization IAM-changing permissions are checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R78",
+   "intent": "the step-10 check without folder setIamPolicy",
+   "rule": "B-LHA-14",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's folder and organization IAM-changing permissions are checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R79",
+   "intent": "the step-15 check without organization-level custom-role create",
+   "rule": "B-LHA-14",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's IAM-changing permissions are checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R80",
+   "intent": "the step-15 check not covering the ancestor folders",
+   "rule": "B-LHA-14",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "resources"
+     ],
+     "value": [
+      "RUN_PROJECT",
+      "EACH_INSTANCE",
+      "EACH_SERVICE_ACCOUNT",
+      "ORGANIZATION"
+     ]
+    }
+   ],
+   "refusal": "the login identity is checked on the project, each instance, each service account, every ancestor folder and the organization"
+  },
+  {
+   "id": "R81",
+   "intent": "the audit log claimed to detect group and organization grants",
+   "rule": "B-LHA-14",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "acceptedLimit",
+      "auditLogDetectsThem"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "group, domain, principal-set, folder and organization grants are detected only by the step-10 and step-15 effective checks, not blocked (the owner's accepted limit)"
+  },
+  {
+   "id": "R82",
+   "intent": "the step-1 confirmation without iam.serviceAccounts.actAs",
+   "rule": "B-LHA-15",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      0,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's service-account impersonation and key permissions are checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R83",
+   "intent": "the step-10 check not covering the service accounts",
+   "rule": "B-LHA-15",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "resources"
+     ],
+     "value": [
+      "RUN_PROJECT",
+      "EACH_INSTANCE",
+      "EVERY_ANCESTOR_FOLDER",
+      "ORGANIZATION"
+     ]
+    }
+   ],
+   "refusal": "the login identity is checked on the project, each instance, each service account, every ancestor folder and the organization"
+  },
+  {
+   "id": "R84",
+   "intent": "a conditional binding not counted as a grant at step 1",
+   "rule": "B-LHA-15",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      0,
+      "conditionalBindingIsGrant"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the effective checks count basic, custom, inherited, group, domain, principal-set and conditional grants"
+  },
+  {
+   "id": "R85",
+   "intent": "the step-15 check without the tag-binding permission",
+   "rule": "B-LHA-15",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      2,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.getAccessToken",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login identity's tag-binding permissions are checked absent at steps 1, 10 and 15"
+  },
+  {
+   "id": "R86",
+   "intent": "a cloud action of step 3 by the login identity",
+   "rule": "B-LHA-15",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "runbook",
+      2,
+      "cloudActionsBy"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "the administering identity, OWNER_ADMIN, performs the cloud actions of runbook steps 2, 3, 5, 6 and 16"
+  },
+  {
+   "id": "R87",
+   "intent": "a baseline custom role with a token-minting permission",
+   "rule": "B-LHA-15",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "loginBaseline",
+      "excludes"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "resourcemanager.projects.setIamPolicy",
+      "compute.instances.setIamPolicy",
+      "iam.serviceAccounts.setIamPolicy",
+      "iam.roles.create",
+      "iam.roles.update",
+      "resourcemanager.folders.setIamPolicy",
+      "resourcemanager.organizations.setIamPolicy",
+      "iam.serviceAccounts.actAs",
+      "iam.serviceAccounts.signBlob",
+      "iam.serviceAccounts.signJwt",
+      "iam.serviceAccounts.implicitDelegation",
+      "iam.serviceAccounts.getOpenIdToken",
+      "iam.serviceAccountKeys.create",
+      "resourcemanager.tagValueBindings.create",
+      "resourcemanager.tagValueBindings.delete"
+     ]
+    }
+   ],
+   "refusal": "the login baseline custom role is for SSH only and excludes admin login, IAM-changing, service-account, key and tag-binding permissions"
+  },
+  {
+   "id": "R88",
+   "intent": "an unexpected audit entry admitted for another principal",
+   "rule": "B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "anyOtherEntry"
+     ],
+     "value": "REFUSES_ONLY_DIRECT_GRANTS_TO_THE_LOGIN_IDENTITY"
+    }
+   ],
+   "refusal": "any other audit entry, and any custom-role change, refuses the run's evidence"
+  },
+  {
+   "id": "R89",
+   "intent": "an expected audit entry made by the login identity",
+   "rule": "B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "expected",
+      0,
+      "by"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "each expected audit entry is the plan's, made by OWNER_ADMIN"
+  },
+  {
+   "id": "R90",
+   "intent": "the final audit span not checked after teardown",
+   "rule": "B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "finalSpanCheckedAfterTeardownCompletes"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the final span is checked after teardown completes, and the evidence counts only after it passes"
+  },
+  {
+   "id": "R91",
+   "intent": "the audit-log check not listing custom-role undeletes",
+   "rule": "B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "lists"
+     ],
+     "value": [
+      "IAM_POLICY_CHANGE_RUN_PROJECT",
+      "IAM_POLICY_CHANGE_INSTANCE",
+      "CUSTOM_ROLE_CREATE",
+      "CUSTOM_ROLE_UPDATE",
+      "CUSTOM_ROLE_DELETE"
+     ]
+    }
+   ],
+   "refusal": "the audit-log check lists every IAM policy change and custom-role change from the step-10 revocation entry to the end of teardown"
+  },
+  {
+   "id": "R92",
+   "intent": "the step-10 effective check run by the login identity",
+   "rule": "B-LHA-17",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "runBy"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "the effective and audit-log checks are run by the observer or OWNER_ADMIN, never the login identity"
+  },
+  {
+   "id": "R93",
+   "intent": "the audit-log check run by the login identity",
+   "rule": "B-LHA-17",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "auditLogCheck",
+      "runBy"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "the effective and audit-log checks are run by the observer or OWNER_ADMIN, never the login identity"
+  },
+  {
+   "id": "R94",
+   "intent": "group membership resolved by the login identity",
+   "rule": "B-LHA-17",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "permissionMechanism",
+      "membership",
+      "runBy"
+     ],
+     "value": "OWNER_LOGIN"
+    }
+   ],
+   "refusal": "the effective and audit-log checks are run by the observer or OWNER_ADMIN, never the login identity"
+  },
+  {
+   "id": "R95",
+   "intent": "the step-10 check without the propagation wait",
+   "rule": "B-LHA-17; B-LHA-10",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      1,
+      "propagationWait"
+     ],
+     "value": "NOT_APPLICABLE"
+    }
+   ],
+   "refusal": "the step-10 and step-15 checks wait for IAM propagation first"
+  },
+  {
+   "id": "R96",
+   "intent": "the revocation without the propagation wait",
+   "rule": "B-LHA-10",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "revocation",
+      "thenWaitsForPropagation"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the step-10 and step-15 checks wait for IAM propagation first"
+  },
+  {
+   "id": "R97",
+   "intent": "OWNER_ADMIN's role holding compute.instances.osLogin",
+   "rule": "B-LHA-18",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "adminBaseline",
+      "holdsNoLoginPermission"
+     ],
+     "value": [
+      "compute.instances.osAdminLogin",
+      "iap.tunnelInstances.accessViaIAP"
+     ]
+    }
+   ],
+   "refusal": "OWNER_ADMIN holds no login permission on the run project or any ancestor, and its binding is a baseline binding"
+  },
+  {
+   "id": "R98",
+   "intent": "the step-10 check of OWNER_ADMIN without the IAP tunnel permission",
+   "rule": "B-LHA-18",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "effectiveChecks",
+      4,
+      "absent"
+     ],
+     "value": [
+      "compute.instances.osLogin",
+      "compute.instances.osAdminLogin"
+     ]
+    }
+   ],
+   "refusal": "OWNER_ADMIN holds no login permission on the run project or any ancestor, confirmed at step 1 and tested at steps 10 and 15"
+  },
+  {
+   "id": "R99",
+   "intent": "OWNER_ADMIN not tested at step 15",
+   "rule": "B-LHA-18",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "access",
+      "effectiveChecks",
+      5
+     ]
+    }
+   ],
+   "refusal": "the effective checks run at steps 1, 10 and 15, for the login and the administering identity"
+  },
+  {
+   "id": "R100",
+   "intent": "the session and sudoers checks not covering OWNER_ADMIN",
+   "rule": "B-LHA-18",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "sessionChecks",
+      "identities"
+     ],
+     "value": [
+      "OWNER_LOGIN"
+     ]
+    }
+   ],
+   "refusal": "at step 10 every admin session on both hosts ends, and no earlier session, sudoers entry or sudo use remains for either identity"
+  },
+  {
+   "id": "R101",
+   "intent": "OWNER_ADMIN's binding left out of the baseline bindings",
+   "rule": "B-LHA-18",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "betweenRuns",
+      "bindings"
+     ],
+     "value": [
+      "OWNER_LOGIN_BASELINE_BINDING",
+      "OBSERVER_VIEWER_BINDINGS"
+     ]
+    }
+   ],
+   "refusal": "between runs the IAM policy holds only the baseline bindings, confirmed at step 1"
+  },
+  {
+   "id": "L01",
+   "intent": "a step without rollback",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "steps",
+      0,
+      "rollback"
+     ],
+     "value": "NONE"
+    }
+   ],
+   "refusal": "each step names its rollback"
+  },
+  {
+   "id": "L02",
+   "intent": "a step that moves a trust digest",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "steps",
+      0,
+      "movesTrustDigest"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no step signs an unknown candidate by moving a trust digest"
+  },
+  {
+   "id": "L03",
+   "intent": "a new policy without new probe evidence",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "rules",
+      "newPolicyNeedsNewProbeEvidence"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "a new policy needs new probe evidence"
+  },
+  {
+   "id": "L04",
+   "intent": "a manifest signed before its preflight",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "offlineLauncher",
+      "manifestSignedAt"
+     ],
+     "value": "T1_AT_STEP_10"
+    }
+   ],
+   "refusal": "no manifest is signed before its preflight"
+  },
+  {
+   "id": "L05",
+   "intent": "an offline manifest signed by the live launcher's key",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "offlineLauncher",
+      "manifestSigner"
+     ],
+     "value": "LIVE_RUNNER_MANIFEST"
+    }
+   ],
+   "refusal": "no manifest is signed by the other launcher's key"
+  },
+  {
+   "id": "L06",
+   "intent": "a live manifest signed by the offline launcher's key",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "liveLauncher",
+      "manifestSigner"
+     ],
+     "value": "LINUX_RUNNER_MANIFEST"
+    }
+   ],
+   "refusal": "no manifest is signed by the other launcher's key"
+  },
+  {
+   "id": "L07",
+   "intent": "T2 ending more than one hour after the preflight",
+   "rule": "design section 8 (launchers); Q-LHA-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "timeLimits",
+      "t2EndsWithinHoursOfPreflight"
+     ],
+     "value": 2
+    }
+   ],
+   "refusal": "T2 ends within one hour of the step-11 preflight"
+  },
+  {
+   "id": "L08",
+   "intent": "a live manifest signed before CONF-LIVE-005/006's own preflight",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "liveLauncher",
+      "manifestSignedAfter"
+     ],
+     "value": "STEP_11_PREFLIGHT"
+    }
+   ],
+   "refusal": "no live manifest is signed before CONF-LIVE-005/006's own preflight"
+  },
+  {
+   "id": "L09",
+   "intent": "a writable trust mount",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "liveLauncher",
+      "trustMounts",
+      0,
+      "readOnly"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the trust bundles are mounted read-only, root-owned, 0444"
+  },
+  {
+   "id": "L10",
+   "intent": "a trust mount with a wrong mode",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "liveLauncher",
+      "trustMounts",
+      1,
+      "mode"
+     ],
+     "value": "0644"
+    }
+   ],
+   "refusal": "the trust bundles are mounted read-only, root-owned, 0444"
+  },
+  {
+   "id": "L11",
+   "intent": "a change under /etc/planeon after the revocation not made through the installer",
+   "rule": "design section 8 (launchers); MON-LHA-12R",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "rules",
+      "afterRevocationEtcPlaneonChangesOnlyThrough"
+     ],
+     "value": "ANY_ROOT_PROCESS"
+    }
+   ],
+   "refusal": "after the revocation nothing under /etc/planeon changes except through the signed-drop installer"
+  },
+  {
+   "id": "L12",
+   "intent": "a drop accepted without a verified drop manifest",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "installsOnlyIf"
+     ],
+     "value": [
+      "MANIFEST_LISTS_EXACT_TARGET_AND_SHA256",
+      "TARGET_AND_MODE_ON_THE_FIXED_LIST",
+      "BINDINGS_MATCH_THIS_HOST_BOOT_AND_WINDOW"
+     ]
+    }
+   ],
+   "refusal": "a drop is installed only with a verified drop manifest listing its exact target and sha256 on the fixed list"
+  },
+  {
+   "id": "L13",
+   "intent": "a drop of a file the manifest does not list",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "installsOnlyIf"
+     ],
+     "value": [
+      "DROP_MANIFEST_VERIFIES",
+      "TARGET_AND_MODE_ON_THE_FIXED_LIST",
+      "BINDINGS_MATCH_THIS_HOST_BOOT_AND_WINDOW"
+     ]
+    }
+   ],
+   "refusal": "a drop is installed only with a verified drop manifest listing its exact target and sha256 on the fixed list"
+  },
+  {
+   "id": "L14",
+   "intent": "a drop to an unlisted target",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "signedDropInstaller",
+      "fixedTargets"
+     ],
+     "value": {
+      "id": "POLICY",
+      "path": "/etc/planeon/linux-runner/policy.json",
+      "owner": "ROOT",
+      "mode": "0444",
+      "identity": "NONE",
+      "readBy": "THE_OFFLINE_LAUNCHER",
+      "state": "ACTIVE"
+     }
+    }
+   ],
+   "refusal": "the fixed target list is closed; a drop to an unlisted target is refused"
+  },
+  {
+   "id": "L15",
+   "intent": "a root write after the revocation outside the listed paths",
+   "rule": "design section 8 (launchers); B-LHA-5",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "triggerUnits",
+      1,
+      "writes"
+     ],
+     "value": "EXPORT_ARCHIVE"
+    }
+   ],
+   "refusal": "the root writes after the revocation are the closed list of runtime state paths and the listed drop targets"
+  },
+  {
+   "id": "L16",
+   "intent": "an agent socket outside the preflight probe scope",
+   "rule": "design section 8 (launchers); Q-LHA-8 (a)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "offlineLauncher",
+      "preflightProbeScope"
+     ],
+     "value": [
+      "PROXY_OPERATOR_HOST_CREDENTIALS",
+      "PROXY_OPERATOR_HOST_SOCKETS",
+      "TRIGGER_UNIT_ENDPOINTS",
+      "NO_KUBECONFIG_OR_RUNTIME_SOCKET",
+      "CLUSTER_NODE_REACHABLE_ONLY_ON_F1",
+      "OS_LOGIN_LOCAL_SOCKETS",
+      "METADATA_ADDRESS"
+     ]
+    }
+   ],
+   "refusal": "the preflight probe scope covers the host's credentials and sockets, the agent sockets and the metadata address"
+  },
+  {
+   "id": "L17",
+   "intent": "the metadata address outside the preflight probe scope",
+   "rule": "design section 8 (launchers)",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "offlineLauncher",
+      "preflightProbeScope"
+     ],
+     "value": [
+      "PROXY_OPERATOR_HOST_CREDENTIALS",
+      "PROXY_OPERATOR_HOST_SOCKETS",
+      "TRIGGER_UNIT_ENDPOINTS",
+      "NO_KUBECONFIG_OR_RUNTIME_SOCKET",
+      "CLUSTER_NODE_REACHABLE_ONLY_ON_F1",
+      "GUEST_AGENT_LOCAL_SOCKETS",
+      "OS_LOGIN_LOCAL_SOCKETS"
+     ]
+    }
+   ],
+   "refusal": "the preflight probe scope covers the host's credentials and sockets, the agent sockets and the metadata address"
+  },
+  {
+   "id": "L18",
+   "intent": "a trigger unit that takes operator arguments",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "triggerUnits",
+      0,
+      "operatorArguments"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "a trigger unit runs one fixed command and takes no operator arguments"
+  },
+  {
+   "id": "L19",
+   "intent": "a trigger unit installed after the revocation",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "triggerUnits",
+      1,
+      "installedAtStep"
+     ],
+     "value": 10
+    }
+   ],
+   "refusal": "a trigger unit is installed at step 8 and covered by the host inventory"
+  },
+  {
+   "id": "L20",
+   "intent": "a trigger unit outside the host inventory",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "triggerUnits",
+      1,
+      "inHostInventory"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "a trigger unit is installed at step 8 and covered by the host inventory"
+  },
+  {
+   "id": "L21",
+   "intent": "no export unit",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "triggerUnits",
+      1
+     ]
+    }
+   ],
+   "refusal": "one reviewed family of trigger units: one for the preflight and one for the export"
+  },
+  {
+   "id": "L22",
+   "intent": "the operatorUid's POSIX name and UID published",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "operatorUid",
+      "nameAndUidPublished"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "the policy's operatorUid is named by its role label only"
+  },
+  {
+   "id": "L23",
+   "intent": "a privileged action that needs admin",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "privilegedActions",
+      0,
+      "loginNeedsAdmin"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "each privileged action after step 10 names its UID and how a login without admin starts it"
+  },
+  {
+   "id": "L24",
+   "intent": "the export run as the operatorUid",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "privilegedActions",
+      3,
+      "runsAs"
+     ],
+     "value": "OPERATOR_UID"
+    }
+   ],
+   "refusal": "each privileged action after step 10 names its UID and how a login without admin starts it"
+  },
+  {
+   "id": "L25",
+   "intent": "a root-only record without a read path at step 15",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "exportSet",
+      0,
+      "records"
+     ],
+     "value": [
+      "PREFLIGHT_RECORDS",
+      "HOST_INVENTORY",
+      "INSTALLER_LOG",
+      "JOURNAL",
+      "EVIDENCE_SINK_RECORDS"
+     ]
+    }
+   ],
+   "refusal": "every root-only record has a read path at step 15: the export unit on both hosts"
+  },
+  {
+   "id": "L26",
+   "intent": "the operatorUid in the login trigger group",
+   "rule": "B-LHA-1",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "loginTriggerGroup",
+      "members"
+     ],
+     "value": "OPERATOR_UID"
+    }
+   ],
+   "refusal": "the trigger group holds the login identity's account only, never the operatorUid"
+  },
+  {
+   "id": "L27",
+   "intent": "an installer that would accept a runner manifest as a drop manifest",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "dropManifest",
+      "refuses"
+     ],
+     "value": [
+      "planeon.linux-runner-policy/v3"
+     ]
+    }
+   ],
+   "refusal": "the drop manifest has its own closed schema; a runner manifest or policy offered as one is refused"
+  },
+  {
+   "id": "L28",
+   "intent": "a drop-manifest signature formed as a manifest signature",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "dropManifest",
+      "signaturePayload"
+     ],
+     "value": "EXACT_BYTES"
+    }
+   ],
+   "refusal": "the drop manifest's signature covers its schema id, one 0x00 byte and its exact bytes"
+  },
+  {
+   "id": "L29",
+   "intent": "a drop manifest not bound to the step-11 boot_id",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "dropManifest",
+      "binds"
+     ],
+     "value": [
+      "PLAN_SHA256",
+      "INSTANCE_IDENTITY",
+      "VALIDITY_WINDOW_ENDING_NO_LATER_THAN_THE_LEASE"
+     ]
+    }
+   ],
+   "refusal": "the drop manifest binds the plan sha256, the instance, the step-11 boot_id and a validity window ending no later than the lease"
+  },
+  {
+   "id": "L30",
+   "intent": "a drop manifest that authorizes trust",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "dropManifest",
+      "authorizes"
+     ],
+     "value": "TRUST_AND_PLACEMENT"
+    }
+   ],
+   "refusal": "the drop manifest authorizes placement only"
+  },
+  {
+   "id": "L31",
+   "intent": "an installer that follows links",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "fileHandling"
+     ],
+     "value": [
+      "REGULAR_FILES_ONLY",
+      "NO_HARDLINKS",
+      "COPY_INTO_ROOT_OWNED_STAGING",
+      "SHA256_OVER_THE_STAGED_COPY",
+      "ATOMIC_RENAME_INTO_THE_TARGET",
+      "OWNER_AND_MODE_FROM_THE_FIXED_LIST"
+     ]
+    }
+   ],
+   "refusal": "the installer's file handling: regular files, no-follow, no hardlinks, staged copy, sha256 over it, atomic rename, fixed owner and mode"
+  },
+  {
+   "id": "L32",
+   "intent": "a drop directory parent chain not as specified",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "dropDirectory",
+      "parentChain"
+     ],
+     "value": "ANY"
+    }
+   ],
+   "refusal": "a drop directory or parent chain not as specified is refused"
+  },
+  {
+   "id": "L33",
+   "intent": "an installer with a certificate-chain mode",
+   "rule": "design section 6; MON-LHA3-1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "certificateChainMode"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "the installer verifies Ed25519 only, with the kit's verifier and the pinned LINUX_RUNNER_MANIFEST key"
+  },
+  {
+   "id": "L34",
+   "intent": "the installer installed after the revocation",
+   "rule": "design section 6; MON-LHA-12R",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "installedAtStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "the signed-drop installer is a reviewed root component, installed at step 8 and inventoried"
+  },
+  {
+   "id": "L35",
+   "intent": "the preflight record added to the drop list",
+   "rule": "B-LHA-5",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "rules",
+      "preflightRecord"
+     ],
+     "value": "A_DROP_TARGET"
+    }
+   ],
+   "refusal": "the preflight record is retained and exported only"
+  },
+  {
+   "id": "L36",
+   "intent": "a drop target with a writable mode",
+   "rule": "B-LHA-5",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "fixedTargets",
+      0,
+      "mode"
+     ],
+     "value": "0666"
+    }
+   ],
+   "refusal": "each drop target has its exact /etc/planeon path, root owner and mode"
+  },
+  {
+   "id": "L37",
+   "intent": "a policy older than 24 hours",
+   "rule": "B-LHA-11; design section 6",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "timeLimits",
+      "policyMaxHours"
+     ],
+     "value": 48
+    }
+   ],
+   "refusal": "the policy lives at most 24 hours"
+  },
+  {
+   "id": "C01",
+   "intent": "two authorities sharing one key id",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "authorities",
+      4,
+      "keyId"
+     ],
+     "value": "KEYID-TENANT-LIVE-EXECUTION"
+    }
+   ],
+   "refusal": "no two authorities share a key id"
+  },
+  {
+   "id": "C02",
+   "intent": "two authorities sharing one purpose",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "authorities",
+      4,
+      "purpose"
+     ],
+     "value": "TENANT_LIVE_EXECUTION"
+    }
+   ],
+   "refusal": "no two authorities share a purpose"
+  },
+  {
+   "id": "C03",
+   "intent": "two authorities sharing one token",
+   "rule": "design section 7 (rules); Q-LHA-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "authorities",
+      4,
+      "token"
+     ],
+     "value": "TOKEN-TENANT-LIVE-EXECUTION"
+    }
+   ],
+   "refusal": "each authority has its own token and sealed backup"
+  },
+  {
+   "id": "C04",
+   "intent": "a missing authority",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "authorities",
+      4
+     ]
+    }
+   ],
+   "refusal": "every signing authority is listed"
+  },
+  {
+   "id": "C05",
+   "intent": "a missing per-run credential",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "perRunCredentials",
+      1
+     ]
+    }
+   ],
+   "refusal": "every per-run credential is listed"
+  },
+  {
+   "id": "C06",
+   "intent": "a per-run credential reused across runs",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      0,
+      "reusedAcrossRuns"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "a per-run credential is never reused across runs"
+  },
+  {
+   "id": "C07",
+   "intent": "a per-run credential made off its named host",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      1,
+      "madeOn"
+     ],
+     "value": "AN_OFF_HOST_MACHINE"
+    }
+   ],
+   "refusal": "a per-run credential is made on its named host, from the step-8 request"
+  },
+  {
+   "id": "C08",
+   "intent": "a per-run credential not destroyed at teardown",
+   "rule": "design section 8 (custody); B-LHA-1",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      2,
+      "ends"
+     ],
+     "value": "KEPT_FOR_THE_NEXT_RUN"
+    }
+   ],
+   "refusal": "a per-run credential's private half ends when the instances and their disks are deleted"
+  },
+  {
+   "id": "C09",
+   "intent": "an envelope whose server SPKI is not the run's fresh key",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "crossHostReplay",
+      "envelopeBinds"
+     ],
+     "value": [
+      "ENDPOINT_ADDRESS",
+      "VALIDITY_WINDOW"
+     ]
+    }
+   ],
+   "refusal": "the envelope binds the run's fresh server SPKI, so a cross-host replay fails"
+  },
+  {
+   "id": "C10",
+   "intent": "a holder written as a name",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "authorities",
+      0,
+      "holder"
+     ],
+     "value": "A. Example"
+    }
+   ],
+   "refusal": "a holder is a role label, never a name"
+  },
+  {
+   "id": "C11",
+   "intent": "a revocation route over the network",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "revocation",
+      "route"
+     ],
+     "value": "NETWORK_LOOKUP"
+    }
+   ],
+   "refusal": "revocation and bundles travel by local custody transfer only, never over the network"
+  },
+  {
+   "id": "C12",
+   "intent": "a signing registry inside the run project",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "nonce",
+      "signingRegistry",
+      "location"
+     ],
+     "value": "RUN_PROJECT"
+    }
+   ],
+   "refusal": "the signing registry is in the owner's custody outside GCP, never in the run project"
+  },
+  {
+   "id": "C13",
+   "intent": "a reused envelope nonce",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "nonce",
+      "signingRegistry",
+      "neverSignsSameNonceTwice"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the signing registry never signs an envelope or capacity nonce twice"
+  },
+  {
+   "id": "C14",
+   "intent": "a reused capacity nonce",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "nonce",
+      "signingRegistry",
+      "covers"
+     ],
+     "value": [
+      "ENVELOPE_NONCE"
+     ]
+    }
+   ],
+   "refusal": "the signing registry never signs an envelope or capacity nonce twice"
+  },
+  {
+   "id": "C15",
+   "intent": "a host ledger not exported",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "nonce",
+      "hostLedger",
+      "exportedAtStep"
+     ],
+     "value": 16
+    }
+   ],
+   "refusal": "the host ledger is exported at step 15 and retained"
+  },
+  {
+   "id": "C16",
+   "intent": "an evidence store that outlives teardown in the run project",
+   "rule": "design section 8 (custody)",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidenceStore",
+      "inRunProjectBeyondPlan"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "the evidence store is the owner's and does not outlive teardown in the run project"
+  },
+  {
+   "id": "C17",
+   "intent": "a single principal without the disclosure",
+   "rule": "design section 7; Q-LHA-1",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "principal",
+      "disclosure",
+      "signers"
+     ],
+     "value": "INDEPENDENT_PRINCIPALS"
+    }
+   ],
+   "refusal": "authorities share the single owner principal only with the disclosure and the owner's Q-LHA-1 (a) answer"
+  },
+  {
+   "id": "C18",
+   "intent": "a single principal without the owner's answer verbatim",
+   "rule": "design section 7; Q-LHA-1",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "principal",
+      "ownerAnswer"
+     ],
+     "value": "Separated keys."
+    }
+   ],
+   "refusal": "authorities share the single owner principal only with the disclosure and the owner's Q-LHA-1 (a) answer"
+  },
+  {
+   "id": "C19",
+   "intent": "an API-server client trust that holds the local CA",
+   "rule": "B-LHA-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "kubernetes",
+      "apiServerClientTrust"
+     ],
+     "value": "RELEASE_PINNED_LOCAL_CA"
+    }
+   ],
+   "refusal": "the API server's client trust never holds the release-pinned local CA"
+  },
+  {
+   "id": "C20",
+   "intent": "a local-CA leaf that authenticates to the API server",
+   "rule": "B-LHA-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      1,
+      "grantsKubernetesAccess"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no local-CA leaf authenticates to the API server"
+  },
+  {
+   "id": "C21",
+   "intent": "KUBERNETES_PROXY_SERVER_MTLS issued by the local CA",
+   "rule": "B-LHA-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      2,
+      "issuer"
+     ],
+     "value": "RELEASE_PINNED_LOCAL_CA"
+    }
+   ],
+   "refusal": "no local-CA leaf authenticates to the API server"
+  },
+  {
+   "id": "C22",
+   "intent": "RBAC with a privileged group",
+   "rule": "B-LHA-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "kubernetes",
+      "privilegedGroups"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "RBAC is bound to the cluster-CA leaf's exact subject only, with no privileged group"
+  },
+  {
+   "id": "C23",
+   "intent": "LINUX_RUNNER_MANIFEST not signing the drop manifest",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "authorities",
+      0,
+      "signs"
+     ],
+     "value": [
+      "OFFLINE_POLICY",
+      "OFFLINE_MANIFEST"
+     ]
+    }
+   ],
+   "refusal": "LINUX_RUNNER_MANIFEST signs the policy, the offline manifest and the drop manifest"
+  },
+  {
+   "id": "C24",
+   "intent": "a drop manifest that authorizes trust",
+   "rule": "B-LHA-4",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "dropManifest",
+      "authorizes"
+     ],
+     "value": "TRUST"
+    }
+   ],
+   "refusal": "the drop manifest authorizes placement only; the live launcher still verifies the live manifest under LIVE_RUNNER_MANIFEST"
+  },
+  {
+   "id": "C25",
+   "intent": "an endpoint kind without its server identity",
+   "rule": "B-LHA-7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "endpointServerIdentities",
+      3
+     ]
+    }
+   ],
+   "refusal": "each endpoint kind's server TLS identity is listed"
+  },
+  {
+   "id": "C26",
+   "intent": "an endpoint server identity without an owner",
+   "rule": "B-LHA-7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "endpointServerIdentities",
+      2,
+      "owner"
+     ],
+     "value": "UNKNOWN"
+    }
+   ],
+   "refusal": "each endpoint kind's server TLS identity names its owner, issuer, host, private-half custody and lifetime"
+  },
+  {
+   "id": "C27",
+   "intent": "a per-run endpoint identity not issued in T2",
+   "rule": "B-LHA-7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "endpointServerIdentities",
+      0,
+      "identity"
+     ],
+     "value": "KUBERNETES_PROXY_SERVER_MTLS"
+    }
+   ],
+   "refusal": "every per-run endpoint identity is in step 8's requests, T2's issuance, the drop list and credentialIdentities"
+  },
+  {
+   "id": "C28",
+   "intent": "a T2 leaf without its drop target",
+   "rule": "B-LHA-7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      0,
+      "certificate"
+     ],
+     "value": "/etc/planeon/credentials/other.crt.pem"
+    }
+   ],
+   "refusal": "every per-run identity issued in T2 has its drop target"
+  },
+  {
+   "id": "C29",
+   "intent": "a per-run identity missing from credentialIdentities",
+   "rule": "B-LHA-7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      0,
+      "inCredentialIdentities"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "every per-run identity is in the capacity authorization's credentialIdentities"
+  },
+  {
+   "id": "C30",
+   "intent": "a registry identity said to serve both proxy kinds",
+   "rule": "B-LHA-7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "endpointServerIdentities",
+      2,
+      "servesBothProxyKinds"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "if one server identity serves both proxy kinds, the record says so"
+  },
+  {
+   "id": "C31",
+   "intent": "the carried note LHA-CN-2 stated as settled",
+   "rule": "LHA-CN-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "carriedNotes",
+      0,
+      "status"
+     ],
+     "value": "SETTLED"
+    }
+   ],
+   "refusal": "a carried note is carried verbatim and stated as a note, never as a settled claim"
+  },
+  {
+   "id": "C32",
+   "intent": "T2 not bound to the hour after the preflight",
+   "rule": "Q-LHA-2; design section 7",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "tokenSessions",
+      1,
+      "withinOneHourOfPreflight"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "two token sessions per run; T2 ends within one hour of the preflight, with every token present"
+  },
+  {
+   "id": "C33",
+   "intent": "a credential-like string in a custody field",
+   "rule": "design section 8 (parse); LAB-RUNPLAN-001's string rule",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "authorities",
+      0,
+      "revocation"
+     ],
+     "value": "paste -----BEGIN CERTIFICATE----- here"
+    }
+   ],
+   "refusal": "no credential, account identity or billing account in $.authorities[0].revocation"
+  }
+ ],
+ "dropManifests": {
+  "positives": [
+   {
+    "id": "D0",
+    "intent": "a drop manifest for the four active targets",
+    "document": {
+     "schemaVersion": "planeon.internal.linux-drop-manifest/v1",
+     "planSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+     "instance": "4000000000000000001",
+     "bootId": "0f0e0d0c-0b0a-4908-8706-050403020100",
+     "validFrom": "2026-11-02T10:00:00Z",
+     "validUntil": "2026-11-02T11:00:00Z",
+     "leaseExpiresAt": "2026-11-03T10:00:00Z",
+     "signer": "LINUX_RUNNER_MANIFEST",
+     "files": [
+      {
+       "target": "/etc/planeon/credentials/campaign-proxy-server-tls.crt.pem",
+       "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      {
+       "target": "/etc/planeon/credentials/campaign-proxy-client-mtls.crt.pem",
+       "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      {
+       "target": "/etc/planeon/harness-runner-manifest.json",
+       "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      {
+       "target": "/etc/planeon/harness-runner-manifest.json.sig",
+       "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+      }
+     ]
+    }
+   }
+  ],
+  "negatives": [
+   {
+    "id": "DN01",
+    "intent": "a runner manifest offered as a drop manifest",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "set",
+      "path": [
+       "schemaVersion"
+      ],
+      "value": "harness.planeon.ai/trusted-runner-manifest/v1alpha1"
+     }
+    ],
+    "refusal": "a drop manifest is planeon.internal.linux-drop-manifest/v1; a runner manifest or policy offered as one is refused"
+   },
+   {
+    "id": "DN02",
+    "intent": "a policy offered as a drop manifest",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "set",
+      "path": [
+       "schemaVersion"
+      ],
+      "value": "planeon.linux-runner-policy/v3"
+     }
+    ],
+    "refusal": "a drop manifest is planeon.internal.linux-drop-manifest/v1; a runner manifest or policy offered as one is refused"
+   },
+   {
+    "id": "DN03",
+    "intent": "a file to an unlisted target",
+    "rule": "design section 8 (launchers)",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "append",
+      "path": [
+       "files"
+      ],
+      "value": {
+       "target": "/etc/planeon/linux-runner/policy.json",
+       "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+      }
+     }
+    ],
+    "refusal": "a drop manifest lists only active fixed targets, each once"
+   },
+   {
+    "id": "DN04",
+    "intent": "the live manifest before CONF-LIVE-005/006 close",
+    "rule": "design section 6",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "append",
+      "path": [
+       "files"
+      ],
+      "value": {
+       "target": "/etc/planeon/harness-live-runner-manifest.json",
+       "sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+      }
+     }
+    ],
+    "refusal": "a drop manifest lists only active fixed targets, each once"
+   },
+   {
+    "id": "DN05",
+    "intent": "a target listed twice",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "append",
+      "path": [
+       "files"
+      ],
+      "value": {
+       "target": "/etc/planeon/harness-runner-manifest.json",
+       "sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+      }
+     }
+    ],
+    "refusal": "a drop manifest lists only active fixed targets, each once"
+   },
+   {
+    "id": "DN06",
+    "intent": "a validity window past the lease",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "set",
+      "path": [
+       "validUntil"
+      ],
+      "value": "2026-11-03T10:00:01Z"
+     }
+    ],
+    "refusal": "a drop manifest's validity window ends no later than the lease"
+   },
+   {
+    "id": "DN07",
+    "intent": "a drop manifest signed by the live runner key",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "set",
+      "path": [
+       "signer"
+      ],
+      "value": "LIVE_RUNNER_MANIFEST"
+     }
+    ],
+    "refusal": "LINUX_RUNNER_MANIFEST signs the drop manifest"
+   },
+   {
+    "id": "DN08",
+    "intent": "a drop manifest without the step-11 boot_id",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "delete",
+      "path": [
+       "bootId"
+      ]
+     }
+    ],
+    "refusal": "schema $ closed object"
+   },
+   {
+    "id": "DN09",
+    "intent": "a drop manifest not bound to a plan sha256",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "set",
+      "path": [
+       "planSha256"
+      ],
+      "value": "PLAN"
+     }
+    ],
+    "refusal": "schema $.planSha256 pattern"
+   }
+  ],
+  "signatures": [
+   {
+    "id": "S00",
+    "intent": "a drop-manifest signature checked as a drop-manifest signature",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "signedAs": "drop",
+    "offeredAs": "drop",
+    "refusal": null
+   },
+   {
+    "id": "S01",
+    "intent": "a drop-manifest signature offered as a manifest signature",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "signedAs": "drop",
+    "offeredAs": "manifest",
+    "refusal": "a signature verifies only over its own payload: a drop signature offered as a manifest signature is refused"
+   },
+   {
+    "id": "S02",
+    "intent": "a drop-manifest signature offered as a policy signature",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "signedAs": "drop",
+    "offeredAs": "policy",
+    "refusal": "a signature verifies only over its own payload: a drop signature offered as a policy signature is refused"
+   },
+   {
+    "id": "S03",
+    "intent": "a manifest signature offered as a drop-manifest signature",
+    "rule": "B-LHA-4",
+    "positive": 0,
+    "signedAs": "manifest",
+    "offeredAs": "drop",
+    "refusal": "a signature verifies only over its own payload: a manifest signature offered as a drop signature is refused"
+   }
+  ]
+ },
+ "parseNegatives": [
+  {
+   "id": "X01",
+   "intent": "a duplicate key",
+   "raw": "{\"a\": 1, \"a\": 2}",
+   "refusal": "duplicate key a"
+  },
+  {
+   "id": "X02",
+   "intent": "a byte-order mark",
+   "raw": "﻿{}",
+   "refusal": "a document is UTF-8 without a byte-order mark"
+  },
+  {
+   "id": "X03",
+   "intent": "an integral number written as a float",
+   "raw": "{\"a\": 6.0}",
+   "refusal": "an integral number is written without a decimal point or exponent: 6.0"
+  },
+  {
+   "id": "X04",
+   "intent": "an integral number written with an exponent",
+   "raw": "{\"a\": 1e3}",
+   "refusal": "an integral number is written without a decimal point or exponent: 1e3"
+  },
+  {
+   "id": "X05",
+   "intent": "a non-integral number",
+   "raw": "{\"a\": 6.5}",
+   "refusal": "a number is an integer; a non-integral number is refused at $.a"
+  },
+  {
+   "id": "X06",
+   "intent": "a non-finite number",
+   "raw": "{\"a\": NaN}",
+   "refusal": "non-finite number NaN"
+  },
+  {
+   "id": "X07",
+   "intent": "an oversized integer",
+   "raw": "{\"a\": 10000000000000}",
+   "refusal": "integer out of range"
+  },
+  {
+   "id": "X08",
+   "intent": "a lone surrogate",
+   "raw": "{\"a\": \"\\ud800\"}",
+   "refusal": "a string is not valid Unicode (a lone surrogate)"
+  }
+ ]
+}

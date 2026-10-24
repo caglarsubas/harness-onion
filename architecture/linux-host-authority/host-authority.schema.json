@@ -1,0 +1,1249 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.linux-host-authority/v1",
+ "title": "Linux host authority",
+ "description": "The superseding authority for the owner's per-run GCP Linux capacity (MET-LINUX-008). Closed.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schemaVersion",
+  "packet",
+  "item",
+  "evidenceClass",
+  "baseCommit",
+  "digestRule",
+  "precedence",
+  "supersedes",
+  "replacementPredicate",
+  "satisfied",
+  "unchanged",
+  "costScope",
+  "reviewedNotBinding",
+  "readings",
+  "capacity",
+  "evidence",
+  "decisions",
+  "consumers",
+  "preconditions",
+  "carriedNotes"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.linux-host-authority/v1"
+  },
+  "packet": {
+   "const": "MET-LINUX-008"
+  },
+  "item": {
+   "const": "LINUX-HOST-AUTH-001"
+  },
+  "evidenceClass": {
+   "const": "DATA_CHECK_ONLY"
+  },
+  "baseCommit": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{40}$"
+  },
+  "digestRule": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "fileDigest",
+    "lineNumbers",
+    "fragmentForm",
+    "textForm",
+    "spanForm",
+    "wholeSentenceDigest"
+   ],
+   "properties": {
+    "fileDigest": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "lineNumbers": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "fragmentForm": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "textForm": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "spanForm": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "wholeSentenceDigest": {
+     "type": "boolean"
+    }
+   }
+  },
+  "precedence": {
+   "type": "string",
+   "minLength": 1,
+   "maxLength": 4000
+  },
+  "supersedes": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "path",
+     "fileSha256",
+     "member",
+     "lines",
+     "fragments",
+     "text",
+     "span",
+     "note",
+     "kind",
+     "scope",
+     "keptIn"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "fileSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "member": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "lines": {
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+     },
+     "fragments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "minItems": 4,
+       "maxItems": 4
+      }
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "span": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "keptIn": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    }
+   }
+  },
+  "replacementPredicate": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "binding",
+    "required",
+    "authorities",
+    "distinctPerAuthority",
+    "principal",
+    "disclosure",
+    "decision",
+    "ownerAnswer",
+    "text"
+   ],
+   "properties": {
+    "binding": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "required": {
+     "type": "boolean"
+    },
+    "authorities": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "distinctPerAuthority": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "principal": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "disclosure": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "signers"
+     ],
+     "properties": {
+      "signers": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "decision": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "ownerAnswer": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "text": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "satisfied": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "path",
+     "fileSha256",
+     "member",
+     "lines",
+     "fragments",
+     "text",
+     "span",
+     "note"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "fileSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "member": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "lines": {
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+     },
+     "fragments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "minItems": 4,
+       "maxItems": 4
+      }
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "span": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "unchanged": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "path",
+     "fileSha256",
+     "member",
+     "lines",
+     "fragments",
+     "text",
+     "span",
+     "note"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "fileSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "member": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "lines": {
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+     },
+     "fragments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "minItems": 4,
+       "maxItems": 4
+      }
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "span": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "costScope": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "path",
+     "fileSha256",
+     "member",
+     "lines",
+     "fragments",
+     "text",
+     "span",
+     "note",
+     "level"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "fileSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "member": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "lines": {
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+     },
+     "fragments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "minItems": 4,
+       "maxItems": 4
+      }
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "span": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "level": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "reviewedNotBinding": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "path",
+     "fileSha256",
+     "member",
+     "lines",
+     "fragments",
+     "text",
+     "span",
+     "note"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "fileSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "member": {
+      "type": [
+       "string",
+       "null"
+      ],
+      "minLength": 1,
+      "maxLength": 200
+     },
+     "lines": {
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+     },
+     "fragments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "minItems": 4,
+       "maxItems": 4
+      }
+     },
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "span": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "readings": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "words",
+     "decision",
+     "reading",
+     "occurrences"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "words": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     },
+     "decision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "reading": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "occurrences": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "id",
+        "path",
+        "fileSha256",
+        "member",
+        "lines",
+        "fragments",
+        "text",
+        "span",
+        "note"
+       ],
+       "properties": {
+        "id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "path": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "fileSha256": {
+         "type": "string",
+         "pattern": "^[0-9a-f]{64}$"
+        },
+        "member": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "minLength": 1,
+         "maxLength": 200
+        },
+        "lines": {
+         "type": "array",
+         "items": {
+          "type": "integer",
+          "minimum": 1
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "fragments": {
+         "type": "array",
+         "minItems": 1,
+         "items": {
+          "type": "array",
+          "items": {
+           "type": "integer",
+           "minimum": 0
+          },
+          "minItems": 4,
+          "maxItems": 4
+         }
+        },
+        "text": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "span": {
+         "type": "string",
+         "pattern": "^[0-9a-f]{64}$"
+        },
+        "note": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "capacity": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "rule",
+    "contract",
+    "binding",
+    "runProject",
+    "hostRecipe",
+    "paidScope",
+    "licenceCharge",
+    "ownerDecision",
+    "insideThePaidScope"
+   ],
+   "properties": {
+    "rule": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "contract": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "binding": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "runProject": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "separateFromLabFoundation",
+      "defaultNetwork"
+     ],
+     "properties": {
+      "separateFromLabFoundation": {
+       "type": "boolean"
+      },
+      "defaultNetwork": {
+       "type": "boolean"
+      }
+     }
+    },
+    "hostRecipe": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "paidScope": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "licenceCharge": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "ownerDecision": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "insideThePaidScope": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "evidence": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "nativeAmd64",
+    "arm64",
+    "approvingCapacityIsQualification",
+    "freshness"
+   ],
+   "properties": {
+    "nativeAmd64": {
+     "enum": [
+      "NOT_RUN_ENV_UNAVAILABLE",
+      "PASS",
+      "FAIL"
+     ]
+    },
+    "arm64": {
+     "enum": [
+      "NOT_RUN_ENV_UNAVAILABLE",
+      "PASS",
+      "FAIL"
+     ]
+    },
+    "approvingCapacityIsQualification": {
+     "type": "boolean"
+    },
+    "freshness": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "id",
+      "path",
+      "fileSha256",
+      "member",
+      "lines",
+      "fragments",
+      "text",
+      "span",
+      "note"
+     ],
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "path": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "fileSha256": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      },
+      "member": {
+       "type": [
+        "string",
+        "null"
+       ],
+       "minLength": 1,
+       "maxLength": 200
+      },
+      "lines": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "minItems": 2,
+       "maxItems": 2
+      },
+      "fragments": {
+       "type": "array",
+       "minItems": 1,
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+       }
+      },
+      "text": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "span": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      },
+      "note": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    }
+   }
+  },
+  "decisions": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "metLinux007",
+    "decisionLines"
+   ],
+   "properties": {
+    "metLinux007": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "id",
+      "path",
+      "fileSha256",
+      "member",
+      "lines",
+      "fragments",
+      "text",
+      "span",
+      "note"
+     ],
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "path": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "fileSha256": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      },
+      "member": {
+       "type": [
+        "string",
+        "null"
+       ],
+       "minLength": 1,
+       "maxLength": 200
+      },
+      "lines": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "minItems": 2,
+       "maxItems": 2
+      },
+      "fragments": {
+       "type": "array",
+       "minItems": 1,
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+       }
+      },
+      "text": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "span": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      },
+      "note": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "decisionLines": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "id",
+       "by",
+       "entry",
+       "state",
+       "supersededBy",
+       "text"
+      ],
+      "properties": {
+       "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "by": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "entry": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "state": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "supersededBy": {
+        "type": [
+         "string",
+         "null"
+        ],
+        "minLength": 1,
+        "maxLength": 64
+       },
+       "text": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    }
+   }
+  },
+  "consumers": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "list",
+    "beforeLiveLauncher"
+   ],
+   "properties": {
+    "list": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "id",
+       "through",
+       "earliestFullRun",
+       "readsThroughThePublishedDigest",
+       "note"
+      ],
+      "properties": {
+       "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "through": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "earliestFullRun": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "readsThroughThePublishedDigest": {
+        "type": "boolean"
+       },
+       "note": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "beforeLiveLauncher": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "mode",
+      "evidence",
+      "quote"
+     ],
+     "properties": {
+      "mode": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "evidence": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "quote": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "id",
+        "path",
+        "fileSha256",
+        "member",
+        "lines",
+        "fragments",
+        "text",
+        "span",
+        "note"
+       ],
+       "properties": {
+        "id": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "path": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "fileSha256": {
+         "type": "string",
+         "pattern": "^[0-9a-f]{64}$"
+        },
+        "member": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "minLength": 1,
+         "maxLength": 200
+        },
+        "lines": {
+         "type": "array",
+         "items": {
+          "type": "integer",
+          "minimum": 1
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "fragments": {
+         "type": "array",
+         "minItems": 1,
+         "items": {
+          "type": "array",
+          "items": {
+           "type": "integer",
+           "minimum": 0
+          },
+          "minItems": 4,
+          "maxItems": 4
+         }
+        },
+        "text": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "span": {
+         "type": "string",
+         "pattern": "^[0-9a-f]{64}$"
+        },
+        "note": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "preconditions": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "what",
+     "before",
+     "state"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "what": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "before": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "state": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "carriedNotes": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "date",
+     "status",
+     "note",
+     "appliesTo",
+     "checkedIn"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "date": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "status": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "appliesTo": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     },
+     "checkedIn": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  }
+ }
+}
