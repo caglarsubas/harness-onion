@@ -1,0 +1,59 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_policy_observation_digests_v2_oracle.py",
+  "sha256": "5aea247e2621dbd1dc95a4f6ce8bc0ad5e28fc04c2e9d6274195e57476871cf1"
+ },
+ "oracle": {
+  "agentId": "a861acff2f8c82500",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+  "lane": "primary"
+ },
+ "author": {
+  "agentIds": [
+   "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+   "a1633b08fa51db70b",
+   "ae04b845363ab1131",
+   "a4fd305c3cb001ef9"
+  ]
+ },
+ "briefSha256": "58f9f6e63b9f1ce483bd7f1472ca8643c8a96a11dc4b8829ed55fe1d22543336",
+ "candidateCommit": "cf1475cb922877bef4810f9a46762bc56415ac7e",
+ "launched": "2026-10-25T00:50:50+08:00",
+ "finished": "2026-10-25T01:20:57+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-I01S-ORACLE-KEEP; MON-I01S-ORACLE-REFUSAL-FORM",
+  "date": "2026-10-25"
+ },
+ "disclosures": [
+  "KEEP (MON-I01S-ORACLE-KEEP): 89/89 on c4 (99c0e1db, adopted as MON-I01S-C4-ADOPT), with all 17 replaced members derived independently from README rules and 0 derived from the model's public functions",
+  "first run on c4: 88/89. test_mutation_profile_schema_digest: asserted validate(profile, altered schema) returns a non-empty list; the model raises ValueError instead. README section 0 says only that validate 'refuses'; the test was corrected to the README's statement (an exception or a non-empty list) and the change is reported, not hidden. Accepted as MON-I01S-ORACLE-REFUSAL-FORM: README section 0 says only that validate 'refuses', so asserting 'a non-empty refusal list or an exception' asserts exactly what the README states. The change was made after the first-run traceback below showed three lines of scripts/proxy_profile_v2.py: the read outside the limits that informed the edit. Final run: 89/89",
+  "Read outside the limits: pytest's first-run failure traceback printed three lines of scripts/proxy_profile_v2.py (validate's def line and its first two body lines: the schema-digest check and its ValueError text). Not worked around; it showed only the refusal form reported above.",
+  "Read outside the limits: my edge-row filter printed the edge record's total artifacts row count (79); no other row was printed and the count is not asserted.",
+  "Waits: the guard prefix waited on a hold twice. The first call was moved to the background at the 120 s tool limit and stopped (TaskStop); the rerun waited 600 s, was moved to the background and stopped; the third call ran at 17:10:33 UTC after the hold lifted. No process ran beside another.",
+  "rbac and rbacClosureDigest: derived from sections 4.5 and 5.2 with one detail the README leaves to 'B1's rule shape': every resource rule carries all five members {apiGroups, resources, verbs, resourceNames, scope}, an absent list as [] and lists in served order; non-resource rules as {nonResourceURLs, verbs, scope}. The result equals the stored digests and the model's rbac document. That rbacClosureDigest exists at all also needs I06's closure check and v4 role pin to pass, which only the model runs (the I06 models are not readable).",
+  "the I06 closure check (which rbacClosureDigest's existence needs) is run only by the model: the I06 models are not readable under the oracle's limits",
+  "successor list (MON-I01S-ORACLE-REFUSAL-FORM): a later profile README states the refusal form of a schema-digest mismatch",
+  "not checked: Header and section 12: the README's status line (candidate c3) against status.json's state (not asserted, as the brief says).",
+  "not checked: Section 0: 'v1's model copied and edited in exactly eight places' and that nothing else changes (needs model bodies and v1's model); only the visible effects of edits (3)-(7) are tested.",
+  "not checked: Section 0: v4's renderers have v3's names, signatures and bodies (v3 is not in C4); source-index.json (not in C4); VPC's helpers pinned by the helper vectors (the helpers member is outside the read limits).",
+  "not checked: Every R10 citation and the port statements of sections 1, 3.3, 4.5, 11 (R10 is not readable).",
+  "not checked: Section 3.2's helper vectors (exact canonical bytes, integer and depth bounds at and one past each limit) as vectors; the bounds are probed only by mutations M17-M20.",
+  "not checked: Section 4.6's 20-member requirement as the v4 schema states it (native-profile v4's schema is not in C4); tested only through mutations M45-M47.",
+  "not checked: Section 5.2: that I06's closure check and v4's role pin pass on qual (the I06 models are not readable).",
+  "not checked: Sections 6 and 7 (who computes, readers, lifecycle, supersession table): descriptive, no executable check.",
+  "not checked: Section 8: the residuals' texts (only the seven ids are checked).",
+  "not checked: Section 9: 'and occurs in the vectors' (needs expect).",
+  "not checked: Section 10: the record is native-profile v4's first positive record; closure holds I06 v4's closure-conformant snapshot positive; the unit binding is PV's (PV is not in C4); only the complete positive uses qual; the 12 OB vectors run closure with the complete binding; P-UNIT's admissionPolicy digest; the re-derived expect values (P-UNIT, AP-08..14, AF-01, MI-01, OB-01..12) and the 123 vectors and 16 helpers equal to v1's; vectors.json's schemaVersion, UNIT_VERIFICATION_ONLY and nativeAcceptance (top-level, outside the read limits); the complete positive's request and observation outside replaced equal to PV's; the 298 vector checks (only the sum and the replay's total).",
+  "not checked: Section 10/11: the layer test's VPO part of W1 (the layer test's, not the oracle's).",
+  "not checked: Section 11: R10's 321 (arithmetic from the README's decomposition only).",
+  "not checked: Section 12: edge v11's other four added rows and v10's 72 rows unchanged and in order; README-v11.md; 'already on main, each at its last-change commit'.",
+  "finished is the time the oracle's run returned; the operator re-ran the file at candidateCommit (the adopted state: ADOPTED_DATA_CONTRACT, candidate c4, on the mechanics base a8827617): 89 passed"
+ ]
+}
