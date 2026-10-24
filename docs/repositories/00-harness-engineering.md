@@ -1,6 +1,16 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-LIVE-002
+## Current source preparation — MET-GOV-003
+
+MET-GOV-003 (LINUX-PROBE-KIT-GATE): MET-GOV-001's evolution surface record version 3 under architecture/evolution-surface/
+(one CONTRACT_AND_SOURCE prefix entry, linux-probe-kit/, for the Linux probe kit's top-level data directory; the vectors
+re-pin only the record's digest; the README's "Record version 3" paragraph), the D5a oracle test scoped to version 3 by
+an oracle agent with its oracle identity re-issued in place, and the MET-LIVE-004 brief registry entries (two entries in
+architecture/review-record/briefs.json). The record's files, the oracle identity and briefs.json are gate material, so the
+owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule
+and step rule. Alpha2 OPEN; 260 accepted plus MET-GOV-003 only.
+
+## Historical probe-kit scope source preparation — MET-LIVE-002
 
 MET-LIVE-002 (LINUX-PROBE-KIT-SCOPE): the probe-kit scope amendment under architecture/probe-kit-scope/ (the closed record
 amendment.json, README, vectors and replay script, with the status, the oracle identity and the redacted review history)
@@ -1384,6 +1394,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 132. `MET-ENFORCE-041`: publish the I01 digest contract (the seven projection objects and four enforcement digests: definitions, model and vectors) and operator edge record v10 for HE-004-I01B; the I01 v1 wire and edge records v1 to v9 byte-identical, no R10 change.
 133. `MET-GOV-002`: publish the review record v2 contract (two records per review round bound by the file-byte sha256, the brief registry, the frozen list, oracle identities, schemas, model and vectors, the in-suite pre-check) and the evolution surface record v2 (gate list 27 -> 31); gate material, the owner's per-PR merge approval.
 134. `MET-LIVE-002`: publish the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors) with the review-record brief registry rider; gate material, the owner's per-PR merge approval.
+135. `MET-GOV-003`: amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) with the MET-LIVE-004 brief registry entries; gate material, the owner's per-PR merge approval.
 
 ## Testing, verification, and acceptance
 

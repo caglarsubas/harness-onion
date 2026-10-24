@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-LIVE-002
+## Current source preparation — MET-GOV-003
+
+MET-GOV-003 (LINUX-PROBE-KIT-GATE): the evolution surface record version 3 (the Linux probe kit's top-level data
+directory linux-probe-kit/ as CONTRACT_AND_SOURCE; the vectors re-pin only the record's digest), the D5a oracle test
+scoped to version 3 with its oracle identity re-issued, and the MET-LIVE-004 brief registry entries; gate material.
+Alpha2 OPEN; 260 accepted plus MET-GOV-003 only.
+
+## Historical probe-kit scope source preparation — MET-LIVE-002
 
 MET-LIVE-002 (LINUX-PROBE-KIT-SCOPE): the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case
 recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors,
@@ -1559,3 +1566,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 258 | `MET-ENFORCE-041` | `Harness-Engineering` | DIGEST-CONTRACT: the I01 digest contract (seven projection objects, four enforcement digests; definitions, model and vectors) and operator edge record v10 for HE-004-I01B; DATA_CHECK_ONLY |
 | 259 | `MET-GOV-002` | `Harness-Engineering` | REVIEW-RECORD-V2: review record v2 (two records per round bound by digest; the registry, the frozen list, oracle identities), model, schemas and vectors; the evolution surface record v2; gate material |
 | 260 | `MET-LIVE-002` | `Harness-Engineering` | LINUX-PROBE-KIT-SCOPE: the probe-kit scope amendment (server side, worker entry, case recipes and receipt candidates moved from R12 to the probe kit; record, model and vectors) with the review-record brief registry rider; gate material |
+| 261 | `MET-GOV-003` | `Harness-Engineering` | LINUX-PROBE-KIT-GATE: the evolution surface record version 3 (linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned), the D5a oracle test scoped and its identity re-issued, with the MET-LIVE-004 brief registry entries; gate material |
