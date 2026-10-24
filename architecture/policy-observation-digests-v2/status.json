@@ -3,7 +3,7 @@
   "workItem": "the I01 digest-contract successor (LPK-1 step S1, with W1 and S2)",
   "packet": "MET-ENFORCE-042",
   "slot": "265 at the earliest; the mechanics follow 264's merge (MON-I01S-14)",
-  "candidate": "c3",
+  "candidate": "c4",
   "base": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
   "supersedes": {
     "contract": "the I01 digest contract v1 (DIGEST-CONTRACT)",
@@ -88,8 +88,8 @@
     }
   ],
   "designHistory": "architecture/policy-observation-digests-v2/source-index.json cites the TOOLS design revisions 1-3 and design rounds 1-3 by sha256; they are not rounds of this series",
-  "contractState": "CANDIDATE",
-  "candidateState": "c3, built out of tree from c2 after the in-tree MET-ENFORCE-042/contract round 2, folding C2-1 (MON-I01S-C2-1-WORDING); not adopted",
+  "contractState": "ADOPTED_DATA_CONTRACT",
+  "candidateState": "c4, the text-only errata A-I01S-1 (CONTRACT round 3's C3-1, MON-I01S-CAP-A) on c3, adopted from ADOPTION_CHECK_C4 with no further round (MON-I01S-C4-ADOPT)",
   "predecessorRecord": {
     "record": "architecture/policy-observation-digests/status.json",
     "sha256": "4b20c7c17990f95246d84a110bed7c2745e7adf9e8676da26f2cf6b96fb4dc99",
@@ -378,5 +378,16 @@
   "readmeStatusNote": "This README's status line is the candidate line it is reviewed with; status.json governs.",
   "installed": false,
   "wireContract": false,
-  "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR"
+  "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+  "adoption": {
+    "ruling": "MON-I01S-C4-ADOPT",
+    "by": "LANE_MONITOR",
+    "date": "2026-10-25",
+    "candidate": "c4",
+    "candidateCommit": "99c0e1db2305220d76079a6e25b5c4db5845be6a",
+    "rebasedCommit": "2af5ce2355da7540f85ce1c23d77f924332433c6",
+    "rebasedOnto": "a88276171453760e46b28e8f6f0c0bb4bbfade5d",
+    "rebase": "c1-c4 rebased onto the mechanics base (264 merged), conflict-free and patch-identical; the contract files are byte-identical",
+    "check": "ADOPTION_CHECK_C4 923f849200ebb565501293fae2dfbc7fb90c232375ac34d6700a7307c05669c0 (kept with the lane's records)"
+  }
 }
