@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-LINUX-009
+## Current source preparation — MET-ENFORCE-042
+
+MET-ENFORCE-042 (DIGEST-CONTRACT-V2): the I01 digest contract v2 beside the frozen v1 (DATA_CHECK_ONLY; I01 v1
+byte-identical): admission v4's sealed rendering, profile v2's complete positive with W1 and edge record v11, adopted as
+candidate c4 after three in-tree CONTRACT rounds, with its rounds, identities, D5a oracle identity and mechanics pins
+record under architecture/policy-observation-digests-v2/ and the registry rider; gate material only through the registry.
+Alpha2 OPEN; 264 accepted plus MET-ENFORCE-042 only.
+
+## Historical root-alias source preparation — MET-LINUX-009
 
 MET-LINUX-009 (LINUX-ROOT-ALIASES): the signed root-alias contract for the native runner kit (version 4 inputs with a
 signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged),
@@ -1592,3 +1600,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 262 | `MET-LIVE-003` | `Harness-Engineering` | LINUX-PROBE-INTERFACE: the neutral Linux probe interface (Q-PK-6) as data, its four v1/ handoff files byte-identical, with the binding record (LPK-0's placeholder bound), model, vectors and replay; DATA_CHECK_ONLY |
 | 263 | `MET-LIVE-004` | `Harness-Engineering` | LINUX-PROBE-KIT-ADMISSION: workload profile v2 and admission semantics v4 as one combined contract (candidate c3, two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); DATA_CHECK_ONLY |
 | 264 | `MET-LINUX-009` | `Harness-Engineering` | LINUX-ROOT-ALIASES: the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, vectors and the D5a oracle; v3 unchanged; candidate c3, two in-tree CONTRACT rounds), with the registry rider; gate material |
+| 265 | `MET-ENFORCE-042` | `Harness-Engineering` | DIGEST-CONTRACT-V2: the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; candidate c4, three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); DATA_CHECK_ONLY; gate material only through the registry |
