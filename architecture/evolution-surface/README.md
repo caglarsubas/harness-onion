@@ -23,7 +23,8 @@ The schema and the model do not change, and the derived gate list stays at 31 en
   any data entry that starts with a gate prefix (vector I30), so the directory cannot sit inside it.
 - `docs/linux-probe-kit/` is already CONTRACT_AND_SOURCE through `docs/`, so it needs no rule.
 - `architecture/probe-kit-scope/` (slot 260) and `architecture/linux-probe-interface/` (slot 262) are already
-  CONTRACT_AND_SOURCE through `architecture/`, and their review files are REVIEW_BRIEF and REVIEW_RECORD.
+  CONTRACT_AND_SOURCE through `architecture/`, including their `review-history-*` files; only a `REVIEW_BRIEF*.md` or
+  `review-round*.json` file there would resolve to REVIEW_BRIEF or REVIEW_RECORD.
 
 **The oracle test.** MET-GOV-001's oracle test `tests/test_evolution_surface_oracle.py` was re-scoped to version 3 by an
 oracle agent (the monitor's Q-G3-1 (a)). Its identity,
