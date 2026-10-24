@@ -5,15 +5,28 @@
   "successorBeside": "a successor beside v1, not an edit of it: v1 (architecture/proxy-contract-inputs/) stays byte-identical and remains the wire's profile until the wire steps W1-W4 land",
   "packet": "MET-LIVE-004",
   "workItem": "LINUX-PROBE-KIT-ADMISSION",
-  "candidate": "c2",
+  "candidate": "c3",
   "base": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
   "reviewSeries": "MET-LIVE-004/contract",
   "reviewRounds": [
     {
       "round": 1,
+      "record": "architecture/linux-probe-kit-admission/review-round1.json",
       "recordSha256": "3a3d8576ef34ec2bf2af6eed2c906c9cfed6120b1e688c5082083c38bf51419a",
+      "identity": "architecture/linux-probe-kit-admission/review-identity-round1.json",
+      "identitySha256": "a99419fbddd18a8ff3066b1e0b2d944d4a1a0bf368c96b9eca0c9bbbcb4be585",
       "verdict": "CHANGES_REQUIRED",
       "subjectCommit": "329a8d96697ff4232a75f5ed801bdc7f71021969"
+    },
+    {
+      "round": 2,
+      "record": "architecture/linux-probe-kit-admission/review-round2.json",
+      "recordSha256": "3f0fc266ab32a6fae255d720aa4f1cfb8c11be9e2addf710e65e8ff75d762e0a",
+      "identity": "architecture/linux-probe-kit-admission/review-identity-round2.json",
+      "identitySha256": "c3ffba5fb40c7e584318b1fccd917273716a2d76778a767b1864b9e9a8643392",
+      "verdict": "PASS_FOR_ADOPTION",
+      "subjectCommit": "5c32adc74e493ac38d5864689a523a20cc0c513c",
+      "baseCommit": "329a8d96697ff4232a75f5ed801bdc7f71021969"
     }
   ],
   "combinedReview": [
@@ -21,7 +34,7 @@
     "architecture/proxy-profile-v2/"
   ],
   "designHistory": "architecture/linux-probe-kit-admission/source-index.json cites the TOOLS design rounds 1-4 by sha256; they are not rounds of this series",
-  "contractState": "CONTRACT_CANDIDATE_ROUND2_AWAITING_INDEPENDENT_REVIEW",
+  "contractState": "ADOPTED_DATA_CONTRACT",
   "ownerDecisions": [
     {
       "id": "Q-PK-3",
@@ -155,5 +168,14 @@
   },
   "readmeStatusNote": "This README's status line is the candidate line it was reviewed with; status.json governs.",
   "installed": false,
-  "wireProfile": false
+  "wireProfile": false,
+  "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+  "adoption": {
+    "ruling": "MON-LPK1-C3-ADOPT",
+    "by": "LANE_MONITOR",
+    "date": "2026-10-24",
+    "candidate": "c3",
+    "candidateCommit": "50855a796fdbb22241900c9ef4d37be0967fbd2d",
+    "check": "ADOPTION_CHECK_C3 3a044b876a273e2e6da609ed2e367e9b19d458bae9f134f54b903347d937b523 (kept with the lane's records)"
+  }
 }
