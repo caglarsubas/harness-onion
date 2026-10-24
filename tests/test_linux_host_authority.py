@@ -47,7 +47,7 @@ def test_the_published_records_are_accepted():
 
 def test_every_vector_is_replayed_as_recorded():
     counts = lha.replay(_load("vectors.json"), lha.load_schemas(), lha.load_records(), lha.Base(ROOT))
-    assert counts == {"positives": 4, "authority": 32, "recipe": 101, "launcher": 37, "custody": 33, "drop": 9,
+    assert counts == {"positives": 4, "authority": 33, "recipe": 101, "launcher": 38, "custody": 33, "drop": 10,
                       "signature": 3, "parse": 8}
 
 
@@ -81,7 +81,7 @@ def test_every_span_is_rederived_here_from_the_cited_bytes():
     """An independent restatement of design section 4's digest rule, not the checker's code path."""
     authority = _load(RECORDS["authority"])
     entries = _span_entries(authority)
-    assert len(entries) == len({e["id"] for e in entries}) == 64
+    assert len(entries) == len({e["id"] for e in entries}) == 67
     for entry in entries:
         raw = (ROOT / entry["path"]).read_bytes()
         assert hashlib.sha256(raw).hexdigest() == entry["fileSha256"], entry["id"]
@@ -106,6 +106,48 @@ def test_the_relaxed_predicates_are_the_capacity_predicates_and_the_independence
         "LR-EXISTING-INDEPENDENT", "LR-INDEPENDENT-SIGNERS", "LRJ-INDEPENDENT-SIGNATURES"]
     kept = {e["id"] for e in authority["unchanged"]}
     assert all(set(e["keptIn"]) <= kept for e in authority["supersedes"])
+
+
+def test_every_reading_word_in_the_superseded_kept_and_satisfied_texts_is_listed():
+    """Design section 4 (MON-LHA-ORC-1-A): each reading applies to every occurrence of its words in the superseded, kept
+    and satisfied texts, each listed with its span. Restated here over the cited bytes."""
+    authority = _load(RECORDS["authority"])
+    listed = {}
+    for reading in authority["readings"]:
+        for o in reading["occurrences"]:
+            for start_line, start_byte, end_line, end_byte in o["fragments"]:
+                assert start_line == end_line, o["id"]
+                listed.setdefault((o["path"], start_line), []).append((start_byte, end_byte, reading["id"]))
+    words = re.compile(rb"(?i)pre-?existing|existing")
+    seen = 0
+    for section in ("supersedes", "unchanged", "satisfied", "costScope"):
+        for entry in authority[section]:
+            lines = (ROOT / entry["path"]).read_bytes().split(b"\n")
+            for start_line, start_byte, end_line, end_byte in entry["fragments"]:
+                for number in range(start_line, end_line + 1):
+                    start = start_byte if number == start_line else 0
+                    end = end_byte if number == end_line else len(lines[number - 1])
+                    for match in words.finditer(lines[number - 1], start, end):
+                        seen += 1
+                        assert any(s <= match.start() and match.end() <= e
+                                   for s, e, _ in listed.get((entry["path"], number), [])), (entry["id"], number)
+    assert seen == 4
+    added = {o["id"]: (reading["id"], o["text"]) for reading in authority["readings"] for o in reading["occurrences"]}
+    assert added["LRJ-BILLING-CAPACITY-PREEXISTING"] == ("PRE_EXISTING", "PREEXISTING")
+    assert added["LR-CAPACITY-ZERO-COST-EXISTING"] == ("SIGNING_AUTHORITY", "existing")
+    assert added["REP-ZERO-COST-CAPACITY-EXISTING"] == ("SIGNING_AUTHORITY", "existing")
+
+
+def test_the_drop_manifest_targets_are_exactly_the_fixed_list():
+    schema = _load("drop-manifest.schema.json")
+    launcher = _load(RECORDS["launcher"])
+    paths = [t["path"] for t in launcher["signedDropInstaller"]["fixedTargets"]]
+    assert schema["properties"]["files"]["items"]["properties"]["target"] == {"enum": paths}
+    assert not any(part in ("", ".", "..") for p in paths for part in p[len("/etc/planeon/"):].split("/"))
+    document = _load("vectors.json")["dropManifests"]["positives"][0]["document"]
+    document["files"][0]["target"] = "/etc/planeon/credentials/../harness-runner-manifest.json"
+    refusal = lha.explain(lha.check_drop, document, lha.load_schemas()["drop"], launcher)
+    assert refusal == "schema $.files[0].target enum"
 
 
 def test_the_restated_parse_and_schema_rules_are_lab_runplan_001s():

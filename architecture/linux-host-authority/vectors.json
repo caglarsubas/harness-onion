@@ -925,6 +925,25 @@
    "refusal": "role labels only: no price in $.capacity.insideThePaidScope"
   },
   {
+   "id": "A33",
+   "intent": "a superseded text's reading word left unlisted (billing.capacity's PREEXISTING)",
+   "rule": "design section 4 (readings); MON-LHA-ORC-1-A",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "readings",
+      1,
+      "occurrences",
+      12
+     ]
+    }
+   ],
+   "refusal": "every listed occurrence of a reading's words is in its reading"
+  },
+  {
    "id": "R01",
    "intent": "a host with a service account",
    "rule": "design section 8 (recipe)",
@@ -3880,6 +3899,26 @@
    "refusal": "the policy lives at most 24 hours"
   },
   {
+   "id": "L38",
+   "intent": "a drop target path with a .. segment",
+   "rule": "design section 6 (the fixed list); B-LHA-5",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "fixedTargets",
+      0,
+      "path"
+     ],
+     "value": "/etc/planeon/credentials/../harness-runner-manifest.pub"
+    }
+   ],
+   "refusal": "each drop target has its exact /etc/planeon path, root owner and mode"
+  },
+  {
    "id": "C01",
    "intent": "two authorities sharing one key id",
    "rule": "design section 8 (custody)",
@@ -4587,7 +4626,7 @@
       }
      }
     ],
-    "refusal": "a drop manifest lists only active fixed targets, each once"
+    "refusal": "schema $.files[4].target enum"
    },
    {
     "id": "DN04",
@@ -4689,6 +4728,25 @@
      }
     ],
     "refusal": "schema $.planSha256 pattern"
+   },
+   {
+    "id": "DN10",
+    "intent": "a target with a .. segment (path traversal out of the fixed list)",
+    "rule": "design section 6 (the fixed list); B-LHA-5",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "append",
+      "path": [
+       "files"
+      ],
+      "value": {
+       "target": "/etc/planeon/credentials/../linux-runner/policy.json",
+       "sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+      }
+     }
+    ],
+    "refusal": "schema $.files[4].target enum"
    }
   ],
   "signatures": [

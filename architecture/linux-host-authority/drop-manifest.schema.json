@@ -2,7 +2,7 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "planeon.internal.linux-drop-manifest/v1",
  "title": "Linux drop manifest",
- "description": "The per-run drop manifest the signed-drop installer verifies under LINUX_RUNNER_MANIFEST (B-LHA-4). Its detached Ed25519 signature covers the UTF-8 schema id, one 0x00 byte and the exact bytes. Closed.",
+ "description": "The per-run drop manifest the signed-drop installer verifies under LINUX_RUNNER_MANIFEST (B-LHA-4). Its detached Ed25519 signature covers the UTF-8 schema id, one 0x00 byte and the exact bytes. Each target is one of the fixed list's exact paths (launcher-install.json fixedTargets). Closed.",
  "type": "object",
  "additionalProperties": false,
  "required": [
@@ -62,8 +62,14 @@
     ],
     "properties": {
      "target": {
-      "type": "string",
-      "pattern": "^/etc/planeon/[A-Za-z0-9._/-]{1,200}$"
+      "enum": [
+       "/etc/planeon/credentials/campaign-proxy-server-tls.crt.pem",
+       "/etc/planeon/credentials/campaign-proxy-client-mtls.crt.pem",
+       "/etc/planeon/harness-runner-manifest.json",
+       "/etc/planeon/harness-runner-manifest.json.sig",
+       "/etc/planeon/harness-live-runner-manifest.json",
+       "/etc/planeon/harness-live-runner-manifest.json.sig"
+      ]
      },
      "sha256": {
       "type": "string",

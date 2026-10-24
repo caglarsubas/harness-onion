@@ -1,6 +1,6 @@
 # Linux host authority v1: the owner's per-run GCP Linux hosts, their recipe and key custody (MET-LINUX-008)
 
-Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c1). Roadmap item LINUX-HOST-AUTH-001, packet
+Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c2). Roadmap item LINUX-HOST-AUTH-001, packet
 MET-LINUX-008, design revision 7 with the binding build rules B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18. Contract rounds
 run in series `MET-LINUX-008/contract` under the registered generic brief; review records and `status.json` come after
 adoption. DATA_CHECK_ONLY: published data and an offline checker. Nothing here creates a project, a VM, a key or spend,
@@ -35,7 +35,7 @@ other predicate of those files stands. An owner-approved licence charge would ne
 | `launcher-install.json` | `planeon.internal.linux-launcher-install/v1`: the operator install steps, the signed-drop installer and the trigger units |
 | `custody-model.json` | `planeon.internal.linux-key-custody/v1`: the signing authorities, per-run credentials and live custody duties |
 | `*.schema.json` | one closed schema per record, plus `drop-manifest.schema.json` for the per-run drop manifest (B-LHA-4) |
-| `vectors.json` | 2 positive sets, 203 record negatives, a drop-manifest positive with 9 negatives, 4 signature rows and 8 parse negatives |
+| `vectors.json` | 2 positive sets, 205 record negatives, a drop-manifest positive with 10 negatives, 4 signature rows and 8 parse negatives |
 | `../../scripts/linux_host_authority.py` | the offline checker, standard library only |
 | `../../tests/test_linux_host_authority.py` | the candidate's own tests |
 
@@ -110,14 +110,20 @@ NATIVE_QUALIFICATION_READINESS.md lines 22-23 and its closing sentence (lines 28
 484-485, 523-525, 540-541 and 560-561. This packet's new Linux trust anchor and its release-pinned local CA key are
 therefore not barred by them.
 
-**`readings`** (MON-LHA-16-1), each listing every occurrence with its span:
+**`readings`** (MON-LHA-16-1). Each reading applies to every occurrence of its words in the superseded, kept and
+satisfied texts, each listed with its span (the cost-scope texts are scanned too and hold none); the checker refuses an
+unlisted occurrence (MON-LHA-ORC-1-A). By the forms section 4 names, "pre-existing", "preexisting" (any case) and
+"existing operator" are PRE_EXISTING's, and any other "existing" is SIGNING_AUTHORITY's:
 - **SIGNING_AUTHORITY**, "existing": `evidence.signingAuthority`, OPERATOR.md steps 4, 5 and 8 (lines 93, 99, 115 and
   116) and `LINUX_READINESS.md` line 147, cited for the word only (B-LHA-11). Existing signing authority is established
   by the post-merge key ceremony and recorded in `custody-model.json` before any run, never introduced during a run.
+  The superseded capacity predicates' "existing" (`LINUX_READINESS.md` line 63; `LINUX_READINESS_REPAIRS.md` line 147)
+  is listed here by form; those predicates are relaxed and no longer bind.
 - **PRE_EXISTING**, "pre-existing", "preexisting" and "existing" operator (Q-LHA-14, the owner): installed, reviewed and
   verified by the operator before the envelope is signed, never by the campaign. For the per-run cluster the operator
   makes these resources at step 7, which the reading admits. Occurrences: MET-REPAIR-015 lines 28-29 and 37,
-  `evidence.runtimeTransport`, TRUSTED_LIVE lines 241, 254, 257, 260, 281, 302 (`preexistingResourceRefs`), 321 (cited for
+  `evidence.runtimeTransport`, the superseded `billing.capacity`'s PREEXISTING (`linux-readiness.json` line 117),
+  TRUSTED_LIVE lines 241, 254, 257, 260, 281, 302 (`preexistingResourceRefs`), 321 (cited for
   the word, B-LHA-11; lines 321-322 read "Pre-existing, storage, and accelerator references") and 442, and
   CREDENTIAL_ORDERING_REPAIR.md line 87. "New broker" (line 65) reads with it: no broker beyond the one reviewed
   capacity broker the operator installs and verifies before the envelope is signed.
@@ -377,9 +383,12 @@ certificate-chain mode. **B-LHA-4:**
 - the drop manifest binds the plan sha256, the instance identity, the step-11 `boot_id` and a validity window ending no
   later than the lease; it authorizes placement only;
 - it installs a file only if the drop manifest verifies, lists the file's exact target and sha256, and the target and
-  mode are on the fixed list; file handling: regular files only, no-follow opens, no hardlinks, a copy into the
-  root-owned staging directory, the sha256 over the staged copy, an atomic rename into the target, the owner and mode
-  from the fixed list. It refuses everything else and logs every attempt.
+  mode are on the fixed list (design section 6: "one of a fixed list of `/etc/planeon` paths"; B-LHA-5: each drop
+  target's exact path). The drop-manifest schema's `target` is an enum of exactly the fixed list's paths, and the
+  checker requires that enum to equal `launcher-install.json`'s list and each listed path to have no empty, `.` or `..`
+  segment, so a path-traversal target is refused; file handling: regular files only, no-follow opens, no hardlinks,
+  a copy into the root-owned staging directory, the sha256 over the staged copy, an atomic rename into the target, the
+  owner and mode from the fixed list. It refuses everything else and logs every attempt.
 
 **The fixed list (B-LHA-5)**, each root-owned 0444 at the path its consumer reads: the CAMPAIGN_PROXY server TLS and
 CAMPAIGN_PROXY_CLIENT_MTLS certificates under `/etc/planeon/credentials/`; the offline manifest and its signature at
@@ -498,12 +507,12 @@ Two evidence carriers need the disclosure before their runs, both preconditions:
 ## Vectors
 
 `vectors.json` replays two positive sets (the published records, and the same set on another allowed image family to
-show the family is data, not code) and 203 negatives against the four records: 32 on the authority (digests, member
+show the family is data, not code) and 205 negatives against the four records: 33 on the authority (digests, member
 paths, every kept predicate relaxed, the independence clause without its replacement, answer or disclosure, readings,
-evidence states, decisions, role labels), 101 on the recipe (section 8 and B-LHA-5, 6, 8, 9, 10, 13 to 18), 37 on the
+evidence states, decisions, role labels), 101 on the recipe (section 8 and B-LHA-5, 6, 8, 9, 10, 13 to 18), 38 on the
 launchers (section 8 and B-LHA-1, 4, 5, 11) and 33 on custody (section 8, the string rule and B-LHA-2, 4, 7,
-LHA-CN-2). A drop-manifest positive with 9 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4 and the
-parse rules. Each negative names the rule it backs and its recorded refusal.
+LHA-CN-2). A drop-manifest positive with 10 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the fixed
+target list and the parse rules. Each negative names the rule it backs and its recorded refusal.
 
 ## Preconditions outside this packet
 

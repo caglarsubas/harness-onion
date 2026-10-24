@@ -528,6 +528,14 @@ PINNED: dict = {'supersedes': {'LR-CAPACITY-ZERO-COST': {'path': 'docs/alpha-2/L
                                      'member': None,
                                      'lines': [147, 147],
                                      'span': '11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af'},
+                 'LR-CAPACITY-ZERO-COST-EXISTING': {'path': 'docs/alpha-2/LINUX_READINESS.md',
+                                                    'member': None,
+                                                    'lines': [63, 63],
+                                                    'span': '11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af'},
+                 'REP-ZERO-COST-CAPACITY-EXISTING': {'path': 'docs/alpha-2/LINUX_READINESS_REPAIRS.md',
+                                                     'member': None,
+                                                     'lines': [147, 147],
+                                                     'span': '11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af'},
                  'NQR-28-PRE-EXISTING': {'path': 'docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md',
                                          'member': None,
                                          'lines': [28, 29],
@@ -575,7 +583,11 @@ PINNED: dict = {'supersedes': {'LR-CAPACITY-ZERO-COST': {'path': 'docs/alpha-2/L
                  'COR-87-PREEXISTING': {'path': 'docs/alpha-2/CREDENTIAL_ORDERING_REPAIR.md',
                                         'member': None,
                                         'lines': [87, 87],
-                                        'span': '3688890505618f49875d3dbff452104b424cbffcfcb2134795419ee45fcc5dbd'}},
+                                        'span': '3688890505618f49875d3dbff452104b424cbffcfcb2134795419ee45fcc5dbd'},
+                 'LRJ-BILLING-CAPACITY-PREEXISTING': {'path': 'architecture/linux-readiness.json',
+                                                      'member': 'billing.capacity',
+                                                      'lines': [117, 117],
+                                                      'span': 'bdb731fe061da254e298f5ea72909bd12d988d0f36b526b2b732b909f1ab4ea3'}},
  'freshness': {'LRJ-MAXIMUM-EVIDENCE-AGE': {'path': 'architecture/linux-readiness.json',
                                             'member': 'gate.maximumEvidenceAgeHours',
                                             'lines': [28, 28],
@@ -797,7 +809,7 @@ def check_authority(doc: Any, schema: dict, base: Base) -> None:
         require(replacement["disclosure"] == DISCLOSURE,
                 "the independence clause is superseded only with the disclosure signers: SINGLE_PRINCIPAL_SEPARATED_KEYS")
     # The readings (MON-LHA-16-1; Q-LHA-14): each occurrence holds one of its words, and every occurrence of the words in
-    # the kept, satisfied and cost-scope texts is listed.
+    # the superseded, kept, satisfied and cost-scope texts is listed (design section 4; MON-LHA-ORC-1-A).
     require([r["id"] for r in doc["readings"]] == list(READINGS)
             and all(r["words"] == READINGS[r["id"]] for r in doc["readings"]),
             "the readings are SIGNING_AUTHORITY and PRE_EXISTING, each with its words")
@@ -809,7 +821,7 @@ def check_authority(doc: Any, schema: dict, base: Base) -> None:
                     "every listed occurrence of a reading's words is in its reading")
     covered = [(o["path"], piece) for o in occurrences for piece in pieces[o["id"]]]
     lines_of = {}
-    for section in ("unchanged", "satisfied", "costScope"):
+    for section in ("supersedes", "unchanged", "satisfied", "costScope"):
         for entry in doc[section]:
             lines_of.setdefault(entry["path"], base.lines(entry["path"]))
             for number, start, end in pieces[entry["id"]]:
@@ -817,8 +829,8 @@ def check_authority(doc: Any, schema: dict, base: Base) -> None:
                     at, to = start + match.start(), start + match.end()
                     require(any(path == entry["path"] and n == number and s <= at and to <= e
                                 for path, (n, s, e) in covered),
-                            "every occurrence of a reading's words in the kept, satisfied and cost-scope texts is "
-                            "listed with its span")
+                            "every occurrence of a reading's words in the superseded, kept, satisfied and cost-scope "
+                            "texts is listed with its span")
     # Capacity, evidence and decisions.
     capacity = doc["capacity"]
     require(capacity["rule"] == "OWNER_APPROVED_GCP_PER_RUN" and capacity["contract"] == "MET-LINUX-007"
@@ -1194,8 +1206,9 @@ def check_launcher(doc: Any, schema: dict, recipe: dict) -> None:
     targets = installer["fixedTargets"]
     require([t["id"] for t in targets] == FIXED_TARGETS, "the fixed target list is closed; a drop to an unlisted target "
             "is refused")
-    require(all(t["path"].startswith("/etc/planeon/") and t["owner"] == "ROOT" and t["mode"] == "0444" for t in targets)
-            and len({t["path"] for t in targets}) == len(targets),
+    require(all(t["path"].startswith("/etc/planeon/") and t["owner"] == "ROOT" and t["mode"] == "0444"
+                and not any(part in ("", ".", "..") for part in t["path"][len("/etc/planeon/"):].split("/"))
+                for t in targets) and len({t["path"] for t in targets}) == len(targets),
             "each drop target has its exact /etc/planeon path, root owner and mode")
     require(installer["refusesEverythingElse"] and installer["logsEveryAttempt"] == "/var/log/planeon/signed-drop-installer.log",
             "the installer refuses everything else and logs every attempt")
@@ -1424,6 +1437,11 @@ def check_set(docs: dict, schemas_: dict, base: Base) -> None:
     check_recipe(docs["recipe"], schemas_["recipe"])
     check_launcher(docs["launcher"], schemas_["launcher"], docs["recipe"])
     check_custody(docs["custody"], schemas_["custody"], docs["recipe"], docs["launcher"])
+    # The drop manifest's targets are exactly the fixed list's paths (design section 6; B-LHA-5), so the schema itself
+    # refuses any other target, a path with a .. segment included.
+    target = schemas_["drop"]["properties"]["files"]["items"]["properties"]["target"]
+    require(target == {"enum": [t["path"] for t in docs["launcher"]["signedDropInstaller"]["fixedTargets"]]},
+            "the drop-manifest schema's targets are exactly the fixed list's paths")
 
 
 def explain(check: Any, *args: Any) -> str | None:
