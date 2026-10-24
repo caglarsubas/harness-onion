@@ -661,7 +661,8 @@ The model replays every vector: `python3 -I -B scripts/policy_observation_digest
     admission values with this (v2) model at enrollment.
   - The residuals of section 8 go to T04 (and HE-005 where named), each holding its named check there.
   - Q-CB-15 (a) (the networkPolicies sort vector, for several NetworkPolicies) goes to the List-form revision,
-    unchanged; C3-1, C4-1 and C4-2 go to a later contract revision, unchanged (the model text they concern is v1's).
+    unchanged; v1's C3-1, C4-1 and C4-2 go to a later contract revision, unchanged (the model text they concern
+    is v1's).
   - v1's C1-1 is met for v2 by section 10's layer test; v1's C3-2 stays with v1 (kept as adopted, not an open item).
 - **Non-claims.** Nothing is installed or compiled. The I01 v1 wire, I01 v1's files and R10's HE-004-I01B1 are
   unchanged. Profile v1 remains the wire's profile until W3 and W4 land. Admission v4's A2 claims stay unproven until C1

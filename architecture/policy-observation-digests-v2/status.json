@@ -63,6 +63,28 @@
         }
       ],
       "ruling": "MON-I01S-CR2-KEEP"
+    },
+    {
+      "round": 3,
+      "record": "architecture/policy-observation-digests-v2/review-round3.json",
+      "recordSha256": "d0815a653139528d7dd44f8209819fdaf2b36f8554425143c1614715833f4796",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round3.json",
+      "identitySha256": "4da01b3de1fe60a3fdbf801a03de6a1f82c3c8c8a808a0ae71d4b73aa3044b6a",
+      "base": "c2",
+      "verdict": "PASS_FOR_ADOPTION",
+      "findings": [
+        {
+          "id": "C3-1",
+          "severity": "NOTE"
+        }
+      ],
+      "dispositions": [
+        {
+          "id": "C2-1",
+          "status": "ADDRESSED"
+        }
+      ],
+      "ruling": "MON-I01S-CR3-KEEP"
     }
   ],
   "designHistory": "architecture/policy-observation-digests-v2/source-index.json cites the TOOLS design revisions 1-3 and design rounds 1-3 by sha256; they are not rounds of this series",
@@ -319,25 +341,25 @@
       "action": "each holds its named check in the v2 README section 8; none is claimed here"
     },
     {
-      "item": "Q-CB-15 (a) and contract review round 2",
+      "item": "Q-CB-15 (a) and v1's contract review round 2",
       "to": "the List-form revision (several NetworkPolicies)",
       "action": "add the sort vector for networkPolicies (round-1 mutant 22), undetectable while v1 refuses a second NetworkPolicy (NP-02, NE-05)",
       "note": "unchanged"
     },
     {
-      "item": "C3-1 (contract review round 3, NOTE)",
+      "item": "C3-1 (v1's, contract review round 3, NOTE)",
       "to": "a later contract revision",
       "action": "no vector pins rbacClosureDigest's 'rbac: malformed input' route; text-only (the value refuses either way), and R-C2 (a) admitted only text for C2-3",
       "note": "unchanged; the model text it concerns is copied"
     },
     {
-      "item": "C4-1 (contract review round 4, NOTE)",
+      "item": "C4-1 (v1's, contract review round 4, NOTE)",
       "to": "a later contract revision",
       "action": "the model checks that i06 has exactly its three member names, not that their content matches the pinned files; wrong content refuses 'I06 closure check not passed'; text-only, the caller's duty as written",
       "note": "unchanged; the model text it concerns is copied"
     },
     {
-      "item": "C4-2 (contract review round 4, NOTE)",
+      "item": "C4-2 (v1's, contract review round 4, NOTE)",
       "to": "a later contract revision",
       "action": "vectors.json does not pin the closure's namespace-first order or the i06 clause (its rows carry no i06); the D5a oracle tests cover both; R-ORC (a) admitted no vector change",
       "note": "unchanged; the model text it concerns is copied"

@@ -18,7 +18,7 @@ verbatim: Q-I01S-3, MON-I01S-D3 and the F6 ruling.
 |---|---|---|---|---|---|---|---|
 | `architecture/policy-observation-digests-v2/definitions.json` | `fef08fddfb94…` | 36,135 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/definitions.json` | REGISTERED_BEFORE_USE |
 | `architecture/policy-observation-digests-v2/vectors.json` | `68eab4709431…` | 602,663 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/vectors.json` | REGISTERED_BEFORE_USE |
-| `architecture/policy-observation-digests-v2/README.md` | `758753acd3af…` | 60,464 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/README.md` | REGISTERED_BEFORE_USE |
+| `architecture/policy-observation-digests-v2/README.md` | `fbb28445c5ec…` | 60,473 | null | MET-ENFORCE-042 | HE-004-I01B4 | `host-enforcement/contracts/i01-digests-v2/README.md` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/README.md` | `f7794aa857aa…` | 40,789 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/README.md` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/vectors.json` | `5706b1a8df5c…` | 316,811 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/vectors.json` | REGISTERED_BEFORE_USE |
 | `architecture/admission-semantics-v4/admission-manifests/planeon-a2.json` | `92c21612304c…` | 8,322 | `675daccbc8a0` | none | HE-004-I01B4 | `host-enforcement/contracts/admission-v4/admission-manifests/planeon-a2.json` | REGISTERED_BEFORE_USE |
