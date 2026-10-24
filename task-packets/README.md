@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-GOV-003
+## Current source preparation — MET-LIVE-003
+
+MET-LIVE-003 (LINUX-PROBE-INTERFACE): the neutral Linux probe interface contract (Q-PK-6; the four v1/ handoff files
+byte-identical, the binding record with LPK-0's placeholder bound, model, vectors and replay, DATA_CHECK_ONLY), with its
+status, oracle identity and redacted review history under architecture/linux-probe-interface/; form-only; no gate path.
+Alpha2 OPEN; 261 accepted plus MET-LIVE-003 only.
+
+## Historical probe-kit gate source preparation — MET-GOV-003
 
 MET-GOV-003 (LINUX-PROBE-KIT-GATE): the evolution surface record version 3 (the Linux probe kit's top-level data
 directory linux-probe-kit/ as CONTRACT_AND_SOURCE; the vectors re-pin only the record's digest), the D5a oracle test
@@ -1567,3 +1574,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 259 | `MET-GOV-002` | `Harness-Engineering` | REVIEW-RECORD-V2: review record v2 (two records per round bound by digest; the registry, the frozen list, oracle identities), model, schemas and vectors; the evolution surface record v2; gate material |
 | 260 | `MET-LIVE-002` | `Harness-Engineering` | LINUX-PROBE-KIT-SCOPE: the probe-kit scope amendment (server side, worker entry, case recipes and receipt candidates moved from R12 to the probe kit; record, model and vectors) with the review-record brief registry rider; gate material |
 | 261 | `MET-GOV-003` | `Harness-Engineering` | LINUX-PROBE-KIT-GATE: the evolution surface record version 3 (linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned), the D5a oracle test scoped and its identity re-issued, with the MET-LIVE-004 brief registry entries; gate material |
+| 262 | `MET-LIVE-003` | `Harness-Engineering` | LINUX-PROBE-INTERFACE: the neutral Linux probe interface (Q-PK-6) as data, its four v1/ handoff files byte-identical, with the binding record (LPK-0's placeholder bound), model, vectors and replay; DATA_CHECK_ONLY |
