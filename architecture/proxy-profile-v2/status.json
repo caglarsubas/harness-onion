@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "planeon.internal.proxy-profile-v2-status/v1",
+  "profileId": "CAMPAIGN_PROXY_MTLS_ZERO_COST_V2",
+  "supersedes": "CAMPAIGN_PROXY_MTLS_ZERO_COST_V1",
+  "successorBeside": "a successor beside v1, not an edit of it: v1 (architecture/proxy-contract-inputs/) stays byte-identical and remains the wire's profile until the wire steps W1-W4 land",
+  "packet": "MET-LIVE-004",
+  "workItem": "LINUX-PROBE-KIT-ADMISSION",
+  "candidate": "c3",
+  "base": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+  "reviewSeries": "MET-LIVE-004/contract",
+  "reviewRounds": [
+    {
+      "round": 1,
+      "record": "architecture/linux-probe-kit-admission/review-round1.json",
+      "recordSha256": "3a3d8576ef34ec2bf2af6eed2c906c9cfed6120b1e688c5082083c38bf51419a",
+      "identity": "architecture/linux-probe-kit-admission/review-identity-round1.json",
+      "identitySha256": "a99419fbddd18a8ff3066b1e0b2d944d4a1a0bf368c96b9eca0c9bbbcb4be585",
+      "verdict": "CHANGES_REQUIRED",
+      "subjectCommit": "329a8d96697ff4232a75f5ed801bdc7f71021969"
+    },
+    {
+      "round": 2,
+      "record": "architecture/linux-probe-kit-admission/review-round2.json",
+      "recordSha256": "3f0fc266ab32a6fae255d720aa4f1cfb8c11be9e2addf710e65e8ff75d762e0a",
+      "identity": "architecture/linux-probe-kit-admission/review-identity-round2.json",
+      "identitySha256": "c3ffba5fb40c7e584318b1fccd917273716a2d76778a767b1864b9e9a8643392",
+      "verdict": "PASS_FOR_ADOPTION",
+      "subjectCommit": "5c32adc74e493ac38d5864689a523a20cc0c513c",
+      "baseCommit": "329a8d96697ff4232a75f5ed801bdc7f71021969"
+    }
+  ],
+  "combinedReview": [
+    "architecture/admission-semantics-v4/",
+    "architecture/proxy-profile-v2/"
+  ],
+  "designHistory": "architecture/linux-probe-kit-admission/source-index.json cites the TOOLS design rounds 1-4 by sha256; they are not rounds of this series",
+  "contractState": "ADOPTED_DATA_CONTRACT",
+  "ownerDecisions": [
+    {
+      "id": "Q-PK-3",
+      "by": "owner",
+      "date": "2026-10-22",
+      "decision": "\"Never, pinned (Recommended)\": profile v2 gains the echo annotations and bounded emptyDir volumes; an admission successor requires Never, with AlwaysPullImages pinned off; the sealed bytes change only at a maintenance boot"
+    },
+    {
+      "id": "Q-PK-4",
+      "by": "owner",
+      "date": "2026-10-22",
+      "decision": "\"Upstream v1.37.1 (Recommended)\""
+    },
+    {
+      "id": "AS-STEPS",
+      "by": "owner",
+      "date": "2026-10-23",
+      "decision": "\"As steps (Recommended)\": the I01 successor, edge v11 and the R10 re-vendor are recorded as steps in LPK-1 and the kit, through the visionary; there are no new items"
+    },
+    {
+      "id": "Q-LPK1-1..12",
+      "by": "lane monitor under the owner's delegation",
+      "date": "2026-10-23",
+      "decision": "all as the dossier recommends"
+    },
+    {
+      "id": "Q-G3-CAP (a), Q-LPK1-D1..D5",
+      "by": "lane monitor under the owner's delegation",
+      "date": "2026-10-23",
+      "decision": "the packet id is MET-LIVE-004; D1 at most 4 emptyDir volumes; D2 a single /work/ root, with the mount path equal to /work/<volume name>; D3 the A2 emptyDir recheck checks presence and absence only; D4 separate claim evidence for AlwaysPullImages (C28); D5 (a) v2 contract rounds in-tree from round 1"
+    },
+    {
+      "id": "Q-LPK1-R2-1",
+      "by": "owner",
+      "date": "2026-10-23",
+      "decision": "\"Widen the steps (Recommended)\"; verbatim in carried.rulings"
+    },
+    {
+      "id": "MON-LPK1-R2-2",
+      "by": "lane monitor under the owner's delegation",
+      "date": "2026-10-23",
+      "decision": "verbatim in carried.rulings"
+    },
+    {
+      "id": "MON-LPK1-ADOPT-REV4",
+      "by": "lane monitor under the owner's delegation",
+      "date": "2026-10-23",
+      "decision": "the LPK-1 design is adopted at rev 4, with design round 4's PASS_FOR_ADOPTION"
+    }
+  ],
+  "evidenceClass": "UNIT_VERIFICATION_ONLY",
+  "nativeAcceptance": false,
+  "nonClaims": [
+    "Nothing is installed or compiled.",
+    "No apiserver is contacted.",
+    "Admission semantics v3 and v2, workload profile v1, I06, I01 and edge records v1-v10 are byte-identical.",
+    "\"Pinned off\" binds the contract only until I06's successor and HE-008 carry it.",
+    "Profile v1 remains the wire's profile until the wire steps (W1-W4) land."
+  ],
+  "carried": {
+    "noInstallBefore": "No kit install, LINUX-PROBE-KIT-001's included, happens before every step below has landed. The visionary records the steps on LINUX-PROBE-KIT-ADMISSION and LINUX-PROBE-KIT-001 (owner, \"As steps (Recommended)\"); the scope of W1-W4 is the owner's ruling on Q-LPK1-R2-1.",
+    "steps": [
+      {
+        "id": "S1",
+        "gates": "the sealed v4 bytes (`sealed.preconditions` of `architecture/admission-semantics-v4/status.json`)",
+        "content": "an I01 successor that renders A2 with `admission_semantics_v4` (owner step)"
+      },
+      {
+        "id": "S2",
+        "gates": "the sealed v4 bytes",
+        "content": "edge record v11 registering the v4 files (`README.md`, `vectors.json`, `planeon-a2.json`) for R10 (owner step)"
+      },
+      {
+        "id": "S3",
+        "gates": "the sealed v4 bytes",
+        "content": "the R10 re-vendor of the A2 renderer (HE-004-I01B successor; owner step)"
+      },
+      {
+        "id": "W1",
+        "gates": "profile v2 on the wire",
+        "content": "the I01 successor (S1) also takes profile v2 for its complete positive and its layer test (a profile v2 path through `scripts/validate_proxy_contract.py` and `scripts/validate_policy_observation.py`, whose successor validates v2 documents with `proxy_profile_v2`)"
+      },
+      {
+        "id": "W2",
+        "gates": "profile v2 on the wire",
+        "content": "edge v11 (S2) also registers profile v2's `vectors.json` for R10, beside the v4 files"
+      },
+      {
+        "id": "W3",
+        "gates": "profile v2 on the wire",
+        "content": "R10's re-vendor (S3) also replays the wire vectors' binding and observation cases with profile v2's positive (today they read profile v1's positive, `architecture/proxy-contract-inputs/vectors.json`, which edge record v10 registers for R10)"
+      },
+      {
+        "id": "W4",
+        "gates": "profile v2 on the wire",
+        "content": "the native-profile record's caller obligation, \"`profile` is already valid under the pinned proxy profile contract (`scripts/validate_proxy_contract.py`, `validate_profile`)\" (`scripts/native_qualification_v4.py` docstring; `record.profileDigest`, `architecture/policy-observation-digests/README.md` §6), names `proxy_profile_v2` for a v2 profile"
+      },
+      {
+        "id": "C1",
+        "gates": "v4 A2 claims (C28), so ACTIVE",
+        "content": "I06 SC05's successor, with AlwaysPullImages forbidden"
+      },
+      {
+        "id": "C2",
+        "gates": "v4 A2 claims (C28)",
+        "content": "W03-0 SC05's successor text and HE-008's sealed APISERVER_FLAGS with `--disable-admission-plugins=AlwaysPullImages` (see `carried.obligationsOfC1C2`)"
+      }
+    ],
+    "classes": [
+      "The sealed bytes depend only on the renderer chain (S1-S3).",
+      "Profile v2 cannot be carried on the binding and observation wire until W1-W4 accept it.",
+      "Without C1 and C2, v4 is still safe, because an enabled plugin fails closed in A2. It is not live: every Pod is refused, and no v4 A2 claim passes C28."
+    ],
+    "obligationsOfC1C2": {
+      "I06 SC05 successor": "moves AlwaysPullImages from ALLOWED_ADMISSION to FORBIDDEN_ADMISSION, and its criteria row adds \"AlwaysPullImages disabled\"",
+      "W03-0 SC05 successor text": "\"--enable-admission-plugins and --disable-admission-plugins give exactly the I06 successor's allowed set: NodeRestriction on; webhook admission, MutatingAdmissionPolicy, NamespaceAutoProvision, ImagePolicyWebhook, AlwaysAdmit and AlwaysPullImages off. AlwaysPullImages is named in --disable-admission-plugins (`--disable-admission-plugins=AlwaysPullImages`, one item of that comma-separated list) and never in --enable-admission-plugins. --admission-control-config-file carries the manifest-based admission configuration (OR08).\"",
+      "HE-008": "the sealed APISERVER_FLAGS file carries --disable-admission-plugins=AlwaysPullImages"
+    },
+    "rulings": {
+      "Q-LPK1-R2-1": "**Q-LPK1-R2-1, the owner's answer:** \"Widen the steps (Recommended)\". The owner's three steps carry W1-W3, and W4 is added as one more step. There is no new roadmap item. Profile v1 stays on the wire until every step lands, and nothing installs before then. Rev 2 already follows this.",
+      "MON-LPK1-R2-2": "**Q-LPK1-R2-2, monitor ruling under delegation:** (a), recorded now as MON-LPK1-R2-2. R10 is your own lane, so record the no-action note in LANE-PRIMARY's R10 track and in the I01B1 part 1 brief notes: edge v11 and the HE-004-I01B successor follow LPK-1's merge, and I01B1 keeps v3 and profile v1 until then. No message is needed."
+    }
+  },
+  "predecessorRecord": {
+    "record": "architecture/probe-kit-scope/amendment.json",
+    "sha256": "3de2d73e0413388ba286899cdd364c876dfbd869510c88537da8b1c91726ef8b",
+    "packet": "MET-LIVE-002",
+    "schema": "planeon.internal.probe-kit-scope/v1",
+    "predecessorRow": "LINUX-PROBE-KIT-ADMISSION after MET-LIVE-002 and EVOLUTION_SURFACE_GATE_PACKET, bound here to MET-GOV-003 (slot 261)",
+    "wireAndBinding": "LPK-0's unchanged row WIRE_AND_BINDING says the scope amendment leaves the proxy profile unchanged. LPK-1 keeps that true: PPS and PPV stay byte-identical, and profile v1 remains the wire's profile (I01's complete positive, VPC/VPO, native-profile record.profileDigest, R10's PPV replay) until the carried wire steps land. Profile v2 is a successor beside v1, not an edit of it. Each later step cites LPK-0's record for the item it changes."
+  },
+  "readmeStatusNote": "This README's status line is the candidate line it was reviewed with; status.json governs.",
+  "installed": false,
+  "wireProfile": false,
+  "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+  "adoption": {
+    "ruling": "MON-LPK1-C3-ADOPT",
+    "by": "LANE_MONITOR",
+    "date": "2026-10-24",
+    "candidate": "c3",
+    "candidateCommit": "50855a796fdbb22241900c9ef4d37be0967fbd2d",
+    "check": "ADOPTION_CHECK_C3 3a044b876a273e2e6da609ed2e367e9b19d458bae9f134f54b903347d937b523 (kept with the lane's records)"
+  }
+}

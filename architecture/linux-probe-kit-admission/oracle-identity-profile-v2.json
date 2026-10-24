@@ -1,0 +1,41 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_proxy_profile_v2_oracle.py",
+  "sha256": "2f63fa5ef43d9601b7934ec326decbe4ffe5c8828c89ebc4dbc0788c88098e87"
+ },
+ "oracle": {
+  "agentId": "ab5c93dd43e934dd9",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+  "lane": "primary"
+ },
+ "author": {
+  "agentIds": [
+   "0bcc06ab-c4db-4ff3-b31a-80c91104b334",
+   "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+   "af1427bea2d6ca96c"
+  ]
+ },
+ "briefSha256": "8fd280fcb28c0802998ce1fc2a295382a532c770bf8210c7832c1f7a7eb379c8",
+ "candidateCommit": "4ff0a830690a824d97e33b10b253a80b04b8f688",
+ "launched": "2026-10-24T16:49:44+08:00",
+ "finished": "2026-10-24T17:14:23+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-LPK1-ORACLE-P2-KEEP; MON-LPK1-ORACLE-R2",
+  "date": "2026-10-24"
+ },
+ "disclosures": [
+  "KEEP note (MON-LPK1-ORACLE-P2-KEEP, verbatim): the p2 oracle read model lines 31-73 and 84-88 (constants and the TEXT table, no function body)",
+  "first run, from the adopted c3 README alone, on candidate c3 (50855a79): 276 tests, all passing; 175 mutations of its own positive, 37 order pairs and 9 precondition calls; no README-model disagreement",
+  "not testable from the README alone: vectors.json; parity with profile v1 and VPC; the admission v4 and v3 columns of the cross-contract cases; the exact depth and size boundary counts, which the README does not define; upstream behaviour for a trailing line feed",
+  "resumed by message after MON-LPK1-C3-ADOPT and Q-LPK1-ADOPT-STATUS (a) for exactly one change: its status-line test asserts what the README states (status.json governs; the README's status line is the reviewed-candidate line; the note's phrases), not equality between them; one hunk inside that one function, no other line changed; accepted as MON-LPK1-ORACLE-R2; the test name is kept (tests/test_proxy_profile_v2_oracle.py::test_status_contract_state_matches_readme_status_line); it keeps one presence check that contractState is a non-empty string, since the README's Files row says status.json holds the contract state",
+  "the oracle's report (oracle-report-p2.json, kept with the lane's records) records the first run on c3 and was not regenerated after the resume",
+  "finished is the time of the oracle's last write to its test file; the operator re-ran the file at candidateCommit (the adopted status: ADOPTED_DATA_CONTRACT, candidate c3): 276 passed"
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_admission_semantics_v4_oracle.py",
+  "sha256": "fdc2e0f59563651a069c629e332942a8d48412ee43e92d1e2b2404d1d8adf1c5"
+ },
+ "oracle": {
+  "agentId": "a845dccdd7da3345f",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+  "lane": "primary"
+ },
+ "author": {
+  "agentIds": [
+   "0bcc06ab-c4db-4ff3-b31a-80c91104b334",
+   "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+   "af1427bea2d6ca96c"
+  ]
+ },
+ "briefSha256": "058807a8603a7cbca300615c99244b0569b111a595dfa9ac3537f8351477eb5a",
+ "candidateCommit": "4ff0a830690a824d97e33b10b253a80b04b8f688",
+ "launched": "2026-10-24T16:49:44+08:00",
+ "finished": "2026-10-24T17:14:10+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-LPK1-ORACLE-V4-KEEP; MON-LPK1-ORACLE-R2",
+  "date": "2026-10-24"
+ },
+ "disclosures": [
+  "KEEP note (MON-LPK1-ORACLE-V4-KEEP, verbatim): the v4 oracle learned four dict key names from the model's KeyError messages. That is an interface leak, not a behaviour leak, so its independence is limited for those four keys",
+  "first run, from the adopted c3 README alone, on candidate c3 (50855a79): 221 cases (93 test functions), all passing; 54 mutations of its own; no README-model disagreement",
+  "not testable from the README alone: the C28 ordering and the A2 claim checks C21-C27 (the README names no passing v4 A2 claim's pinned keys); the A1, A3 and A4 claim conditions; MC06, MC32 and MC35 (no stated text); anything compared with v3; vectors.json; upstream v1.37.1 readings and CEL",
+  "resumed by message after MON-LPK1-C3-ADOPT and Q-LPK1-ADOPT-STATUS (a) for exactly one change: its status-line test asserts what the README states (status.json governs; the README's status line is the reviewed-candidate line; the note's phrases), not equality between them; one hunk inside that one function, no other line changed; accepted as MON-LPK1-ORACLE-R2; the test was renamed from tests/test_admission_semantics_v4_oracle.py::test_status_contract_state_matches_readme_status_line to tests/test_admission_semantics_v4_oracle.py::test_status_governs_and_readme_status_line_is_the_reviewed_candidate_line, because the old name stated the removed equality",
+  "the oracle's report (oracle-report-v4.json, kept with the lane's records) records the first run on c3 and was not regenerated after the resume; it still says \"candidate c2\"",
+  "finished is the time of the oracle's last write to its test file; the operator re-ran the file at candidateCommit (the adopted status: ADOPTED_DATA_CONTRACT, candidate c3): 221 passed"
+ ]
+}

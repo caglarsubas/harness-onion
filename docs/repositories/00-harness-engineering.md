@@ -1,6 +1,17 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-LIVE-003
+## Current source preparation — MET-LIVE-004
+
+MET-LIVE-004 (LINUX-PROBE-KIT-ADMISSION): workload profile v2 (architecture/proxy-profile-v2/, model
+scripts/proxy_profile_v2.py) and admission semantics v4 (architecture/admission-semantics-v4/, model
+scripts/admission_semantics_v4.py) as one combined contract, adopted as candidate c3 after two in-tree CONTRACT rounds
+(architecture/linux-probe-kit-admission/: the rounds with their identities, the source index, the two D5a oracle
+identities and the mechanics pins record), with the two D5a oracle tests. The non-chain pinned files (profile v1 and
+admission v3 among them) stay byte-identical, and the chain validators and tests in the pin lists change only by the
+chain-bump vocabulary, under the step rule (B-L1-3); nothing is installed. Data, no gate path. No R10 or R12 file
+changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 262 accepted plus MET-LIVE-004 only.
+
+## Historical probe interface source preparation — MET-LIVE-003
 
 MET-LIVE-003 (LINUX-PROBE-INTERFACE): the neutral Linux probe interface contract (owner Q-PK-6) under
 architecture/linux-probe-interface/ (the four v1/ handoff files byte-identical, the closed binding record binding.json that
@@ -1405,6 +1416,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 134. `MET-LIVE-002`: publish the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors) with the review-record brief registry rider; gate material, the owner's per-PR merge approval.
 135. `MET-GOV-003`: amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) with the MET-LIVE-004 brief registry entries; gate material, the owner's per-PR merge approval.
 136. `MET-LIVE-003`: bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data (the four v1/ handoff files byte-identical, the binding record with LPK-0's NEUTRAL_INTERFACE_CONTRACT placeholder bound, model, vectors and replay) with its D5a oracle; form-only; no gate path.
+137. `MET-LIVE-004`: publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); no gate path.
 
 ## Testing, verification, and acceptance
 
