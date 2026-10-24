@@ -1,6 +1,44 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-LIVE-004 source preparation, October 24, 2026
+## Current checkpoint — MET-LINUX-009 source preparation, October 24, 2026
+
+Alpha2 OPEN. MET-LIVE-004 (LINUX-PROBE-KIT-ADMISSION) passed required verify and merged as main 675dacc. LINUX-ROOT-ALIASES
+(the lane monitor's owner-delegated rulings, among them MON-RA2-NEXT, MON-RA-SERIES, MON-RA-R1-KEEP, MON-RA-R2-KEEP,
+MON-RA-ORACLE-KEEP and MON-RA-SLOT-264) publishes the signed root-alias contract for the native runner kit.
+ci/linux-runner/common.py gains version 4 inputs with a signed root-alias record (the record's validator,
+validate_inputs() v4 and the system inventories over the record's aliases), ci/linux-runner/launcher.py loads the record
+as an authority file, passes it into isolation and re-checks it there, and ci/linux-runner/prepare.py takes
+--root-aliases for a v4 request only; v3 inputs and their inventories are unchanged, and v4 is opt-in through a signed
+record. docs/linux-runner/BUILD_INPUTS.md and OPERATOR.md describe it, tests/linux_runner/test_root_aliases.py holds the
+vectors, and tests/test_met_linux_009_oracle.py is the D5a oracle (KEEP), bound by
+architecture/linux-root-aliases/oracle-identity.json. The contract was adopted as candidate c3 (MON-RA-R2-KEEP) after two
+in-tree CONTRACT rounds of the MET-LINUX-009/contract series, published under architecture/linux-root-aliases/ with their
+identities and the status record; the brief registry gains this packet's PACKET and CONTRACT series (the registry rider).
+SOURCE_ONLY: no Linux host PASS, installation, signature or listener registration is claimed. The packet is gate material (GATE_CI, GATE_VERIFIER_DOCS and GATE_REVIEW_PROCESS), so the owner approves the merge per PR, bound to the head. Its new
+layer checks the status (ADOPTED at slot 264 with a passing allowed-paths derivation), the adopted subject by its bytes,
+the rounds' records and identities by digest, and the registry's two series. It is built under MET-PERF-042's identity
+rule and step rule: every older chain validator changes only by the bump vocabulary, 263's layer by the bridge
+vocabulary, and 263's test keeps its 8 own routes and the adjacent one and one payload mutation (C2), while the new head's
+test keeps the full fan-in. MET-LINUX-009 is the sole 264th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-LINUX-009 / LINUX-ROOT-ALIASES | SOURCE_PREPARED | The signed root-alias contract for the native runner kit (264th packet): version 4 inputs with a signed root-alias record in ci/linux-runner/ (common.py, launcher.py and prepare.py), the two linux-runner docs, the vectors and the D5a oracle; adopted as candidate c3 after two in-tree CONTRACT rounds; v3 unchanged; gate material, the owner's per-PR merge approval |
+| Alpha2A | MET-LIVE-004 / LINUX-PROBE-KIT-ADMISSION | VERIFY_PASSED_MERGED | Merged as main 675dacc |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+The ci/linux-runner/ kit files and the two linux-runner docs change (gate material); no R10 and no R12 file changes, and
+nothing is installed. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical probe kit admission source checkpoint — MET-LIVE-004 source preparation, October 24, 2026
 
 Alpha2 OPEN. MET-LIVE-003 (LINUX-PROBE-INTERFACE) passed required verify and merged as main 0ffa7db. LINUX-PROBE-KIT-ADMISSION (owner
 decisions Q-PK-3 "Never, pinned (Recommended)", Q-PK-4 "Upstream v1.37.1 (Recommended)" and "As steps (Recommended)"; the
@@ -2552,7 +2590,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LINUX-PROBE-KIT-SCOPE / MET-LIVE-002 · Publish the probe-kit scope amendment (the CAMPAIGN_PROXY server side, worker entry, case recipes and receipt candidates moved from R12's CONF-LIVE-003/004/005 to the probe kit; record, model and vectors) after independent design and contract review, with the review-record brief registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · LINUX-PROBE-KIT-GATE / MET-GOV-003 · Amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) after independent design and contract review, with the MET-LIVE-004 brief registry entries; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · LINUX-PROBE-INTERFACE / MET-LIVE-003 · Bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data, byte-identical (the four v1/ handoff files, the binding record with LPK-0's placeholder bound, the reference model and vectors), after one light review, with its D5a oracle; pass required verify through the owner's App.
-- [ ] Alpha 2A · LINUX-PROBE-KIT-ADMISSION / MET-LIVE-004 · Publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles, every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App.
+- [x] Alpha 2A · LINUX-PROBE-KIT-ADMISSION / MET-LIVE-004 · Publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles, every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App.
+- [ ] Alpha 2A · LINUX-ROOT-ALIASES / MET-LINUX-009 · Publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

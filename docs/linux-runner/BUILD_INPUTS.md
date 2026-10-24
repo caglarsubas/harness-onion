@@ -13,7 +13,9 @@ Exactly `schemaVersion`, `target`, `tools`, `caches`, `systemTrees`,
 `systemFiles`, `source`, `recipes`:
 
 - `schemaVersion`: `planeon.linux-build-inputs/v3`. V1/V2 signatures and
-  inventories are not compatible with this source candidate.
+  inventories are not compatible with this source candidate. MET-LINUX-009
+  adds `planeon.linux-build-inputs/v4`: exactly the v3 members plus
+  `rootAliases` (below).
 - `target`: exactly `os=linux`, `architecture=amd64|arm64`,
   `libc=glibc|musl`, numeric dotted `libcVersion`, `execution=NATIVE`,
   and `imageDigest=sha256:<64 hex>` for the operator's existing immutable host
@@ -54,6 +56,9 @@ Exactly `schemaVersion`, `target`, `tools`, `caches`, `systemTrees`,
   `nextStandalone=LINUX_TARGET_BUILD_ONLY`, `downloads=DENIED`,
   `hostOutputReuse=DENIED`. Build argv come only from the signed packet, not an
   arbitrary recipe string or imported script.
+- `rootAliases` (v4 only): exactly `recordSha256`, the digest of the exact
+  root-alias record bytes (see "Root-alias record (v4)"). A v3 object with it,
+  or a v4 object without it, fails.
 
 An inventory is a UTF-8-bytewise path-sorted JSON array. Source, cache and
 dedicated-tool inventories retain the strict V1 file entry encoding (`path`,
@@ -62,7 +67,10 @@ root-owned `systemTrees` use a V3 union graph. Directory entries record
 `kind=directory`, `path` and `mode`; regular files add `kind=file`, size,
 digest and a complete absolute-path `hardlinkGroup` across the union. Symlinks
 record `kind=symlink`, exact raw `target` and graph-resolved absolute
-`resolvedPath`. Every observed hardlink count must equal the complete signed
+`resolvedPath`. With v4 inputs, each listed root-level alias adds one
+`kind=rootAlias` entry to its `treeRoot`'s list, with `path` (`/<name>`), exact
+raw `target` and `resolvedPath` (the `treeRoot`), so a v4 `treeRoot`'s
+`inventorySha256` covers its alias entries. Every observed hardlink count must equal the complete signed
 union group. The verifier inventories every real tree without following links,
 then resolves every alias component-by-component through inventoried real nodes
 and root-owned, non-writable bridge ancestors. Relative and absolute file or
@@ -71,7 +79,10 @@ directory targets may cross only between explicitly declared trees, such as
 escaping, cyclic or special-file paths fail; an alias must end at an inventoried
 regular file or real directory. Root-level aliases used as inventory roots,
 such as `/lib` → `/usr/lib`, are not admitted without a separate signed
-root-alias contract. Source/cache/dedicated-tool aliases remain forbidden.
+root-alias contract. Under that contract (MET-LINUX-009, v4 inputs), a
+root-level alias listed in the signed root-alias record is admitted as a
+non-root node that resolves to its declared tree; it is never an inventory root.
+Source/cache/dedicated-tool aliases remain forbidden.
 This permits a reviewed closure, not arbitrary distribution adoption. The
 operator must still pin the target image, all closure bytes and fresh host
 negative evidence; a stock Linux image is not assumed to qualify.
@@ -90,6 +101,33 @@ helper closure for the exact immutable Linux image, include every used path in
 the signed inventories, and independently verify the image identity. A signed
 configuration value or source-only test is not that evidence. An undeclared
 dependency or unobservable image identity blocks native qualification.
+
+## Root-alias record (v4)
+
+The record is installed at the fixed path
+`/etc/planeon/linux-runner/root-aliases.json` with the same root custody as the
+policy, and is at most 64 KiB. Its exact bytes are the canonical encoding above,
+and their SHA-256 equals the inputs' `rootAliases.recordSha256`. Exactly:
+
+- `schemaVersion`: `planeon.linux-root-aliases/v1`;
+- `imageDigest`: `sha256:<64 hex>`, equal to the inputs' `target.imageDigest`.
+  This check is declarative only; the kit cannot attest the booted image;
+- `aliases`: a non-empty list in strictly increasing UTF-8 byte order of
+  `path`, so a duplicate fails. A record with no alias is refused; use v3
+  inputs instead. Each entry has exactly:
+  - `path`: one component directly under `/`, fully matching
+    `/[A-Za-z0-9_][A-Za-z0-9_.-]{0,63}`, never `.` or `..`, and never a
+    declared root or an ancestor of one;
+  - `target`: the exact raw link text, non-empty, without NUL, at most 4096
+    bytes;
+  - `treeRoot`: a declared `systemTrees` root, with at most one alias per tree.
+
+On the host, each listed alias must be a root-owned symlink with one link,
+directly in a root-owned `/` without group or other write, whose link text
+equals `target`. With every other alias excluded, it must resolve exactly to
+its `treeRoot`. An absent or replaced alias, changed link text, a chain through
+another alias, a target at a bridge or below `treeRoot`, and an escape all fail.
+An unlisted root-level link stays refused.
 
 ## Signed execution policy
 

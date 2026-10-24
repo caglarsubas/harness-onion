@@ -1,0 +1,135 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-LINUX-009/contract",
+ "round": 2,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "49180b884e753086f7d23da90c2e01145c04c39b",
+  "tree": "8c6c82d0d4dbf02180a247b62d880704a8f1554f"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "c83efb466977612af1c48472a088c90d08097633",
+  "tree": "b72255c007e1678934ce6262142f75f87ffe2982"
+ },
+ "reviewDate": "2026-10-24",
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "9e933487c6327350c201d8b2f16a121a97e885601ca067c0704b46add567d794",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "CONTRACT_REVIEWER"
+ },
+ "verdict": "PASS_FOR_ADOPTION",
+ "findings": [
+  {
+   "id": "RA-C2-1",
+   "severity": "NOTE",
+   "location": "ci/linux-runner/common.py, the shared parse() and canonical(), as reached from root_aliases() (outside the delta, unchanged c2 to c3)",
+   "finding": "One member-value class still raises something other than Refused: an out-of-range JSON number in a digest-matched record. A member value of 1e400 or -1e400 parses to an infinite float, and canonical() then raises ValueError (out-of-range float) before the canonical-bytes comparison. An integer of more than 4300 digits makes parse() raise ValueError from Python's integer-string limit, which parse() does not catch. I probed both on c2 and c3 for imageDigest, target and treeRoot, and got ValueError on both. A 4300-digit integer is refused as stated ('root alias image differs'). This is the same class as RA-C1-2: shared helpers that the policy also uses, not introduced by this contract, and reached only with bytes pinned in the signed policy or supplied to prepare.py. Such bytes can never be canonical, so no admissible record is affected. It fails closed: launcher main() maps ValueError to FAIL with exit 2, and prepare.py, which has no handler for any refusal, ends in a traceback naming ValueError instead of a Refused reason.",
+   "requiredChange": "None for this packet. A later kit change, together with RA-C1-2, could turn these into Refused('invalid JSON') in parse() and a Refused not-canonical result around canonical().",
+   "blocks": false
+  },
+  {
+   "id": "RA-C2-2",
+   "severity": "NOTE",
+   "location": "tests/linux_runner/test_root_aliases.py, test_record_rules_refuse: the six new parameters",
+   "finding": "Only three of the six new vectors fail on c2. I ran c3's test file against a scratch copy of c2's kit: 3 failed and 24 passed. The three that fail are RA-C1-1's regression vectors: the target with a lone U+D800 (UnicodeEncodeError on c2), and treeRoot as a one-element list or as an object (TypeError, unhashable). The other three pass on c2 unchanged, because c2 already refused them with the same text: target as the integer 7 ('root alias target'), path as a list ('root alias path'), and an alias entry that is a string ('unknown or missing field'). They pin existing refusals. Every expectation follows from BUILD_INPUTS.md 'Root-alias record (v4)', and the subject makes no claim about c2 failures, so this is not a subject inaccuracy.",
+   "requiredChange": "None. For the record: RA-C1-1's required vector for each defect is present (one target vector, two treeRoot vectors), and the other three are guards.",
+   "blocks": false
+  },
+  {
+   "id": "RA-C2-3",
+   "severity": "NOTE",
+   "location": "architecture/linux-root-aliases/status.json, reviews[0].record and allowedPathsDerivation.byClass",
+   "finding": "The new round-1 entry names its record as architecture/linux-root-aliases/review-round1.json. That file is not in c3's tree, which holds only oracle-identity.json and status.json in that directory. The path is the design's REVIEW_RECORD row (review-round<n>.json, DESIGN section 5), so it is a planned forward reference, and its recordSha256 pins the content (it equals the round-1 record, 4abfb43f). The recorded derivation counts 1 REVIEW_RECORD path, and the series now has two rounds.",
+   "requiredChange": "None for c3. At mechanics, place each committed review-round<n>.json (and its identity) at the design's paths with the pinned digests, and confirm that every one is in allowedPaths when the derivation is re-run at the mechanics base.",
+   "blocks": false
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "RA-C1-1",
+   "status": "ADDRESSED",
+   "note": "root_aliases() now requires type(tree) is str before the two set tests, and maps os.fsencode's UnicodeEncodeError to Refused('root alias target'). One vector for each defect was added (RA-C2-2)."
+  },
+  {
+   "id": "RA-C1-2",
+   "status": "NOT",
+   "note": "No change was required. Still accurate on c3: 20000 nested arrays raise RecursionError, and launcher main() still does not map it. RA-C2-1 is a sibling in the same helpers."
+  },
+  {
+   "id": "RA-C1-3",
+   "status": "ADDRESSED",
+   "note": "status.json unchangedListedFiles names the three files. Each blob is identical at 0ffa7db0, c2 and c3."
+  },
+  {
+   "id": "RA-C1-4",
+   "status": "NOT",
+   "note": "No change was required. Still accurate: the byte-identity test is untouched by the delta, and the oracle and test_system_inventory_v2.py are unchanged and pass."
+  },
+  {
+   "id": "RA-C1-5",
+   "status": "ADDRESSED",
+   "note": "Closed by the monitor's confirmation in MON-RA-R1-KEEP (cf14c3cc binds), not by a subject change. This round runs under RULES_CONTRACT_R2.md (9e933487), the filled delta rules file of the same shape."
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. Faithfulness to the decisions",
+   "result": "Met. The delta is exactly RA-C1-1's required change, in the r2 shape that MON-RA-R1-KEEP sets: base c2 and subject c3. The diff is 3 files: common.py +8/-3, test_root_aliases.py +6, status.json +19/-2. Over the 23 in-scope files at c2 and c3, only those 3 differ. The delta reopens no decision (Q-RA-ID, Q-RA-FORM, Q-RA-SCOPE, MON-LHA-17, MON-RA1-NEXT, MON-RA2-NEXT, MON-RA-CLOSE, Q-RA-BUILD-GO, MON-RA-ORACLE-KEEP) and adds nothing a decision excludes. The binding rules are otherwise unchanged since round 1, and allowedPathsDerivation is untouched by the delta."
+  },
+  {
+   "check": "2. The record against the design",
+   "result": "Unchanged since round 1. The delta changes no member, type or form, and docs/linux-runner is unchanged c2 to c3. The fix makes the model enforce two stated member forms that it had left to an exception: treeRoot is a declared root string, and target is link text measurable in bytes."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "Scope 1 met. In root_aliases(), the target rule keeps its order and its text. Type, non-empty and no NUL are checked first, then the fsencode (UnicodeEncodeError becomes Refused 'root alias target'), then the 4096-byte bound. The tree rule now tests type(tree) is str first, with the same text 'root alias tree'. I probed 117 cases on c2 and c3 through the scratch kit copies. On canonical, digest-matched records I tried 13 values each (null, booleans, integers, a float, an empty and a one-character string, arrays, objects) for schemaVersion, imageDigest, aliases, path, target and treeRoot. Every one is refused with its stated text, except the one-character target, which is valid link text and is accepted on both commits. So are the low surrogates outside U+DC80..U+DCFF, the 4097-byte targets, and a case-variant or trailing-slash treeRoot. The only c2-to-c3 differences are RA-C1-1's input classes, which changed from UnicodeEncodeError or TypeError to Refused. Every other refusal keeps its text. What remains non-Refused is in the shared helpers only: out-of-range numbers (RA-C2-1) and deep nesting (RA-C1-2)."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "Unchanged since round 1: not applicable, because the contract has no JSON Schema file."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Scope 2. The six new expectations follow from BUILD_INPUTS.md 'Root-alias record (v4)': link text with a byte form (U+D800 target), a string target (7), a declared root string (list and object treeRoot), the path pattern (a list path), and an entry with exactly its three members (a string entry, 'unknown or missing field'). Against c2's kit, three fail for RA-C1-1's reasons and three pass already (RA-C2-2). No refusal case of the delta lacks a vector. The replay, the candidate's test file, passes on c3: 82 passed (76 plus 6), 0 failed."
+  },
+  {
+   "check": "6. The tests",
+   "result": "Scope 5. All runs used the venv python (3.12.14) on the subject export, through the wrapper. test_root_aliases.py: 82 passed. tests/test_met_linux_009_oracle.py: 71 passed. The six unchanged kit files (test_authority, test_isolation, test_manifest_gate, test_system_inventory_v2, test_toolchain, test_workspace_v2): 285 passed. The predecessor files plus test_build_and_predecessors with -k 'not full_predecessor_suites': 49 passed. All exited 0. The oracle file (sha256 72af8f4f, as status.json states) and oracle-identity.json are unchanged c2 to c3, so its independence stands as in round 1."
+  },
+  {
+   "check": "7. Placement",
+   "result": "The delta adds no new path. The three changed paths match the design's table exactly, all lowercase with no case variant: ci/linux-runner/common.py is GATE_CI, and tests/linux_runner/test_root_aliases.py and architecture/linux-root-aliases/status.json are CONTRACT_AND_SOURCE. status.json now references the design's REVIEW_RECORD path for round 1, which is not yet in the tree (RA-C2-3)."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Scope 6. I ran review_record.load_name_tokens (4 digests) and then privacy_hits on the three changed files at c3 and c2, counts only. common.py has 1 name hit at both commits: the pre-existing owned-repository pattern outside the delta. The test file and status.json have 0 at both. Legacy term, absolute paths and e-mails are 0 everywhere. The delta adds no import and no dependency, and nothing that interposes on, forwards, proxies, swaps or bypasses anything."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Both are answered in questions. Scope 3 (status.json) is also met. The round-1 entry matches the round-1 record: the series and round, recordSha256 4abfb43f (equal to the local record), the subject c2 commit, the CHANGES_REQUIRED verdict, and 1 MINOR plus 4 NOTE. The unchangedListedFiles text is accurate: the three files are listed in the design's table and are unchanged at 0ffa7db0, c2 and c3. The v4 fixture and every vector are in test_root_aliases.py, and conftest.py holds only the v3 inputs fixture."
+  }
+ ],
+ "questions": [
+  "Is any of the four round-1 NOTEs no longer accurate on c3? No. RA-C1-2 is still accurate: RecursionError at 20000 nested arrays is reproduced on c3, and the launcher's handler tuple still lacks it. RA-C1-3's observation still holds, and status.json now records it accurately. RA-C1-4 is still accurate: the delta does not touch that test, and the oracle's independent v3 rebuild is unchanged and passes. RA-C1-5 is still accurate as a description, and MON-RA-R1-KEEP has closed it. Recommendation: carry all four as they are, and file RA-C2-1 beside RA-C1-2 for a later kit change.",
+  "Does the fix change the behaviour of any valid record? No. By construction: a treeRoot that is in the set of declared roots is already a str, so type(tree) is str removes only non-str values. The split target test computes the same predicate, with the same text, for every target that encodes. By probe: 13 valid records give byte-identical results on c2 and c3. These are the fixture, two aliases, an uppercase path, a 64-character name, an absolute target, a one-character target, a surrogate-escaped byte, a JSON surrogate pair, U+FFFF, an astral character, 4096-byte two-byte and escaped-byte targets, and another declared root. Only invalid records change: in the launcher, their FAIL reason changes from the TypeError or UnicodeEncodeError type name to Refused, with the same exit 2. Recommendation: adopt the fix as is."
+ ],
+ "notChecked": [
+  "The tree ids 8c6c82d0 and b72255c0 come from the rules file and MON-RA-R1-KEEP and were not re-derived, because git objects were read only in the commit:path form. All 23 in-scope c3 blobs equal the export (0 mismatches).",
+  "The three-file delta was verified over the read scope only (23 files at c2 and c3). Paths outside it were not compared.",
+  "The complete-allowedPaths derivation was not re-run. The delta does not touch it, and it is outside the read scope.",
+  "The full_predecessor_suites test was not run (a pre-check step).",
+  "The oracle was not re-read. Its blob and identity file are unchanged since round 1.",
+  "No Linux host run: source only."
+ ],
+ "disclosures": [
+  "The launch context carried an auto-injected memory index and an account context (an e-mail address). I used neither, and no account value appears here.",
+  "This reviewer is a fresh agent with no inherited conversation. The environment's scratchpad path carries the launching session's id. I did not compare it with oracle-identity.json, which is unchanged since round 1.",
+  "Slip: the first candidate-test run, in the prescribed form, printed per-test diagnostic lines, and the harness saved the oversized output to a file. I did not open it. Every later run used a helper started by the wrapper. The helper keeps the log in the work folder and prints the exit status and outcome counts.",
+  "Slip: one message carried two tool calls: an Edit to my test helper, then the oracle run that used it. The Edit applied first. No subject file was touched.",
+  "Method: I added --tb options to the prescribed pytest form. The c2 evidence used scratch mirrors: c2's (and c3's) six ci/linux-runner files from git show \"<commit>:<path>\", c3's unchanged conftest.py and test_root_aliases.py, and a scratch probe test of record inputs only (no custody, race or substitution code). I listed directories with git show \"<commit>:<dir>/\". The three listed test files at 0ffa7db0 were read only as blob digests, for scope 3. Beyond the scope paths, I read scripts/review_record.py lines 41-60, 154-250 and 380-420 to use the name-token check and the v2 shape. No python -c, no network, and no ls, find or glob under the tools link. No w03-named, LPK, R10, R12, memory, harness-ci or trust-directory material was read. Before hand-over, this record was checked with review_record._record_shape and privacy_hits (counts only)."
+ ]
+}

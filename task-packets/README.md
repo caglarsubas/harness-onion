@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-LIVE-004
+## Current source preparation — MET-LINUX-009
+
+MET-LINUX-009 (LINUX-ROOT-ALIASES): the signed root-alias contract for the native runner kit (version 4 inputs with a
+signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged),
+adopted as candidate c3 after two in-tree CONTRACT rounds, with its status, rounds, identities and oracle identity under
+architecture/linux-root-aliases/ and the registry rider; gate material. Alpha2 OPEN; 263 accepted plus MET-LINUX-009
+only.
+
+## Historical probe kit admission source preparation — MET-LIVE-004
 
 MET-LIVE-004 (LINUX-PROBE-KIT-ADMISSION): workload profile v2 and admission semantics v4 as one combined contract
 (DATA_CHECK_ONLY; profile v1 and admission v3 byte-identical), adopted as candidate c3 after two in-tree CONTRACT rounds,
@@ -1583,3 +1591,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 261 | `MET-GOV-003` | `Harness-Engineering` | LINUX-PROBE-KIT-GATE: the evolution surface record version 3 (linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned), the D5a oracle test scoped and its identity re-issued, with the MET-LIVE-004 brief registry entries; gate material |
 | 262 | `MET-LIVE-003` | `Harness-Engineering` | LINUX-PROBE-INTERFACE: the neutral Linux probe interface (Q-PK-6) as data, its four v1/ handoff files byte-identical, with the binding record (LPK-0's placeholder bound), model, vectors and replay; DATA_CHECK_ONLY |
 | 263 | `MET-LIVE-004` | `Harness-Engineering` | LINUX-PROBE-KIT-ADMISSION: workload profile v2 and admission semantics v4 as one combined contract (candidate c3, two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); DATA_CHECK_ONLY |
+| 264 | `MET-LINUX-009` | `Harness-Engineering` | LINUX-ROOT-ALIASES: the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, vectors and the D5a oracle; v3 unchanged; candidate c3, two in-tree CONTRACT rounds), with the registry rider; gate material |

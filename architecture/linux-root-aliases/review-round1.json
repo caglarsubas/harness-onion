@@ -1,0 +1,139 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-LINUX-009/contract",
+ "round": 1,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "c83efb466977612af1c48472a088c90d08097633",
+  "tree": "b72255c007e1678934ce6262142f75f87ffe2982"
+ },
+ "reviewDate": "2026-10-24",
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "cf14c3ccbfff9a21ad3df253090ff0cd23d5f6266a010ff9775dcda869a76fb3",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "CONTRACT_REVIEWER"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "RA-C1-1",
+   "severity": "MINOR",
+   "location": "ci/linux-runner/common.py, root_aliases(): the treeRoot test and the target link-text test",
+   "finding": "Two wrong-type or unusual member values raise an exception other than Refused, so the stated record-rule refusal is never reached. (1) A treeRoot that is a JSON array or object raises TypeError (unhashable type) at the set-membership test 'tree in {...} and tree not in trees'; an integer treeRoot is refused correctly. (2) A target holding a lone surrogate outside U+DC80..U+DCFF (canonical JSON text \\ud800) raises UnicodeEncodeError from os.fsencode() in the 4096-byte test. Both were probed on canonical, digest-matched record bytes through common.root_aliases(). Every route still fails closed: launcher main() maps TypeError and ValueError to FAIL, and prepare.py exits with a traceback. But BUILD_INPUTS.md 'Root-alias record (v4)' and DESIGN section 2 state these as record rules ('treeRoot: a declared systemTrees root'; target within the link-text limits), the kit's convention is Refused for every invalid authority, and an operator's prepare.py run reports a crash instead of the rule.",
+   "requiredChange": "In root_aliases(), require type(tree) is str before the two set tests, and turn an unencodable target into Refused('root alias target') (for example a try/except UnicodeEncodeError around os.fsencode). Add one refusal vector for each to tests/linux_runner/test_root_aliases.py.",
+   "blocks": true
+  },
+  {
+   "id": "RA-C1-2",
+   "severity": "NOTE",
+   "location": "ci/linux-runner/common.py, parse(), as reached from root_aliases()",
+   "finding": "A record of 20000 nested arrays (40000 bytes, under the 64 KiB bound) whose digest matches raises RecursionError in parse(), and launcher main() does not map RecursionError to FAIL. This is a property of the existing shared parse(), which the policy shares, and root_aliases() checks the digest before parsing, so only bytes pinned in the signed policy (or supplied by the operator to prepare.py) reach it. This contract does not introduce it.",
+   "requiredChange": "None for this packet. A later kit change could map RecursionError to Refused('invalid JSON') in parse().",
+   "blocks": false
+  },
+  {
+   "id": "RA-C1-3",
+   "severity": "NOTE",
+   "location": "DESIGN section 5 file table against the candidate: tests/linux_runner/conftest.py, test_system_inventory_v2.py, test_toolchain.py",
+   "finding": "The table lists these three files as changed ('a v4 fixture beside the v3 one; the vectors'). The candidate leaves all three unchanged, at their base digests, and keeps its v4 fixture and every vector in the new test_root_aliases.py. That stays within allowedPaths, and all three pass unchanged on the subject.",
+   "requiredChange": "None required. The packet may keep them in allowedPaths, where the derivation already counts them, or say in status.json that they are unchanged.",
+   "blocks": false
+  },
+  {
+   "id": "RA-C1-4",
+   "severity": "NOTE",
+   "location": "tests/linux_runner/test_root_aliases.py, test_without_aliases_inventories_are_byte_identical_and_crossing_is_refused",
+   "finding": "The candidate's v3 byte-identity positive compares the new system_inventories() with and without the root_aliases keyword. Its expectation therefore comes from the model, not from today's encoding. The design vector is still covered: the oracle's V3ByteIdenticalTest rebuilds today's v3 encoding independently, and the unchanged test_system_inventory_v2.py passes.",
+   "requiredChange": "None required. Optionally pin one expected v3 list or digest in the candidate's own file.",
+   "blocks": false
+  },
+  {
+   "id": "RA-C1-5",
+   "severity": "NOTE",
+   "location": "round process: the rules file name (not the subject)",
+   "finding": "MON-RA-ORACLE-KEEP and design-status.json (buildKit) name this round's rules CONTRACT_RULES-r1. This round ran under RULES_CONTRACT_R1.md (sha256 cf14c3cc...), as the launch message named and pinned it, and the file states it was filled by the operator. No file of the other name was opened.",
+   "requiredChange": "The monitor confirms that RULES_CONTRACT_R1.md is the filled CONTRACT_RULES-r1. This record pins cf14c3cc.",
+   "blocks": false
+  }
+ ],
+ "bindingRules": [
+  {
+   "rule": "MON-RA2-NEXT: the complete-allowedPaths re-derivation is recorded in architecture/linux-root-aliases/status.json, with pass condition [OWNER], 0 unclassified and 0 case-variant",
+   "met": true,
+   "note": "status.json allowedPathsDerivation at base 0ffa7db0 (predecessor range b8db30e5..0ffa7db0, record digest b184ee6a..., tool d3e276c8...): named 23, bump 234, rider 1, union 254. By class: 245 CONTRACT_AND_SOURCE, 3 GATE_CI, 2 GATE_VERIFIER_DOCS, 1 GATE_REVIEW_PROCESS, 1 ORACLE_TESTS, 1 REVIEW_BRIEF, 1 REVIEW_RECORD; the classes sum to 254. Result: prApprovers [OWNER], unclassified 0, caseVariant 0, pass true. The scope is the named set plus the chain tools' bump set plus the rider, at the build base. I checked the recorded result and its internal consistency only. I did not re-run it: the tool and the evolution-surface record are outside this round's read scope, and the bump set's w03-named paths are counts only."
+  },
+  {
+   "rule": "RA1-1 (security boundary): each custody check is stated exactly and has its refusal vector",
+   "met": true,
+   "note": "Stated in BUILD_INPUTS.md 'Root-alias record (v4)' and implemented in root_alias_custody() and system_inventories(), with trusted_entry applied for rules 2 and 5 (RA3-2). Vectors: rule 1, absent alias (Refused 'root alias custody') and real directory; rule 2, non-root owner, on synthetic metadata; rule 3, nlink 2, synthetic; rule 4, text differs ('root alias target changed'); rule 5, group-writable and non-root parent, synthetic, plus a parent that is not a bridge (oracle test_rule_5_parent_must_be_a_bridge); an alias replaced by a new inode with the same text ('changed during resolution'). The production test asserts ALIAS_PARENT and the unpatched trusted_entry."
+  },
+  {
+   "rule": "RA1-2 (security boundary): each authority check is stated exactly and has its refusal vector",
+   "met": true,
+   "note": "These are stated in BUILD_INPUTS.md and OPERATOR.md and implemented in launcher.py: the fixed record path beside the policy; the host root_read with a 64 KiB maximum after the policy signature, in both modes; authority_files() 4/7 and 5/8; internal_authority() step 1 (the v3 or v4 set) and step 4 (equal to authority_files of the verified policy), returning (policy, record bytes or None); inside() passing the bytes to verify_tools(); the one shared validator with exact canonical bytes, digest and the 64 KiB bound; hidden_paths() plus the record for v4, so hiddenPathCount grows by one; and the closing re-check. Each has a vector in test_root_aliases.py: v4 inputs without the member; a digest mismatch; a v3 policy with the descriptor; a v4 policy without it; a wrong readlink path; descriptor custody (mode 0464, nlink 2, uid); bytes changed inside isolation; host root_read custody; the closing re-check (FAIL, exit 2); a name set neither v3 nor v4; verify_tools given bytes for v3 or None for v4; the v3 hiddenPathCount refused for v4; hiddenPaths lacking the record; and prepare.py's four refusals."
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. Faithfulness to the decisions",
+   "result": "Met. Q-RA-ID: packet MET-LINUX-009. Q-RA-FORM (a): a separate record pinned through inputs v4 rootAliases.recordSha256 in the signed policy. Q-RA-SCOPE (a): one closed record per image (imageDigest); the kit fixes only the admission rules. Gate note: status.json gate prApprovers [OWNER], the owner's per-PR head-bound merge. MON-RA1-NEXT choices: (1) the fixed path in the v4 descriptor sets only, 4/7 to 5/8, with v3 byte-identical; (2) the policy schemaVersion and POLICY_DOMAIN unchanged; (3) VERSION 1.3.0 bound into the manifest and preflight, with the profile label unchanged and the oracle pinning the base profile digest; (4) one alias per tree, resolution with the other aliases excluded, and the bridge, ancestor and subdirectory refusals; (5) no used-path check, with loader vectors as in-tree links crossing the alias; (6) the approved root list unchanged, so no /sbin. MON-RA2-NEXT and MON-RA-CLOSE: see bindingRules. MON-RA-ORACLE-KEEP / Q-RA-LAYER (a): the layer files are absent by decision, which is not a finding, and their design rows are in the named set as CONTRACT_AND_SOURCE. MON-LHA-17 placement is in the design. The candidate adds nothing that a decision excludes."
+  },
+  {
+   "check": "2. The record against the design",
+   "result": "No member differs. The record is closed {schemaVersion, imageDigest, aliases}, all required. Each alias is closed {path, target, treeRoot}, all required strings. inputs v4 adds exactly rootAliases {recordSha256}, a 64-character lowercase hex digest with no prefix. imageDigest takes the stated sha256:<64 hex> form through its equality with the validated target.imageDigest. The inventory entry is {kind=rootAlias, path, target, resolvedPath=treeRoot}, sorted by path bytes, and covered by the tree's inventorySha256."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "Met except RA-C1-1. The model's order is: bytes and the 64 KiB bound, the digest, strict parse, the canonical bytes, the closed members, schemaVersion, imageDigest, a non-empty list, then per alias the closed members, the path pattern, the lexical reservation of declared roots and their ancestors, strict order, the link text, and the declared tree with one alias per tree. All 24 light probes behaved as stated except three. Accepted as stated: uppercase path, 64-character name, 4096-byte multibyte target, surrogate-escaped byte, and /srv-like names, which host custody refuses. Refused as stated: trailing newline, 65 characters, int path, list imageDigest, object aliases, bytearray, top-level array. The exceptions are a list or object treeRoot (TypeError) and a lone high-surrogate target (UnicodeEncodeError), both RA-C1-1, and deep nesting (RecursionError, pre-existing, RA-C1-2). The custody, resolution and re-check paths in system_inventories() and the launcher route follow DESIGN sections 3 and 4."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "Not applicable. The contract has no JSON Schema file. Its closed member sets live in common.closed() and the docs, which agree."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Every design vector in section 6 (positives; custody 1-5 plus replacement; resolution; record; authority) maps to a test in test_root_aliases.py or the oracle. The expectations follow from the design. The one model-derived expectation is noted in RA-C1-4. The replay is the candidate's test file, with no separate vector file: 76 passed. No refusal case of the design lacks a vector. The two non-Refused inputs in RA-C1-1 are not design vectors."
+  },
+  {
+   "check": "6. The tests",
+   "result": "All runs passed through the wrapper with the venv python. test_root_aliases.py: 76 passed. tests/test_met_linux_009_oracle.py: 71 passed. The unchanged kit tests also passed: 285 in test_authority, test_isolation, test_manifest_gate, test_system_inventory_v2, test_toolchain and test_workspace_v2, and 49 in the two predecessor files plus test_build_and_predecessors with -k 'not full_predecessor_suites'. The oracle identity binds 72af8f4f (verified) and names an oracle agent different from the author agent ids. The oracle was written from the base and the design without reading the candidate, as its identity states, with a KEEP ruling by LANE_MONITOR (MON-RA-ORACLE-KEEP). Its source shows no candidate-derived expectation in the parts read."
+  },
+  {
+   "check": "7. Placement",
+   "result": "The subject changes 10 paths against base 0ffa7db0, and every export copy matches its subject blob. GATE_CI: ci/linux-runner/common.py, launcher.py, prepare.py. GATE_VERIFIER_DOCS: docs/linux-runner/BUILD_INPUTS.md, OPERATOR.md. GATE_REVIEW_PROCESS: the rider architecture/review-record/briefs.json. CONTRACT_AND_SOURCE: tests/linux_runner/test_root_aliases.py, architecture/linux-root-aliases/status.json, oracle-identity.json. ORACLE_TESTS: tests/test_met_linux_009_oracle.py (tests/ plus test_*oracle*.py). Every name matches the design table exactly, all lowercase with no case variant, and the recorded derivation shows 0 unclassified and 0 case-variant. build.py, preflight.py and ed25519.py are unchanged, as the design says."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "I ran review_record.load_name_tokens with 4 digests, then privacy_hits, on all 10 subject files and the base copies of the 6 changed files, counts only. The subject adds no hit: common.py's 1 name hit and launcher.py's 2 path shapes are identical at the base, and every other file shows 0 for names, legacy term, absolute paths and e-mails. The oracle reads the owned-product repository name from the kit at run time, so it writes none. No new import or dependency: the kit stays standard library, and the tests use pytest, unittest and stdlib. Nothing interposes on, forwards, proxies, swaps or bypasses anything. The test doubles are confined to the tests, in the existing monkeypatch pattern. The rider's PACKET and CONTRACT brief digests equal the registry's other entries and the verified brief."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "Both are answered in questions."
+  }
+ ],
+ "questions": [
+  "RA2-9, does any tests/linux_runner/ file outside the table need a change? No. The seven unlisted files (test_authority, test_isolation, test_manifest_gate, test_workspace_v2, test_predecessor_diagnostics, test_predecessor_proof, test_build_and_predecessors) are unchanged and pass on the subject, and the full predecessor-suite test was deselected here as instructed. The three listed files are also unchanged and pass (RA-C1-3). Recommendation: no change; the full predecessor-suite test runs at the pre-check as planned.",
+  "Does the bump set contain a path outside the named set's classes? No, by the recorded counts. 245 CONTRACT_AND_SOURCE equals the named set's 15 plus 230 bump-only paths (234 bump minus 4 shared with the named set). Every other class count equals the named set's (3 GATE_CI, 2 GATE_VERIFIER_DOCS, 1 ORACLE_TESTS, 1 REVIEW_BRIEF, 1 REVIEW_RECORD), plus GATE_REVIEW_PROCESS 1 from the rider, which is not a bump path. So every bump path is CONTRACT_AND_SOURCE. Recommendation: keep it, and re-derive at the mechanics base if main moves, as status.json notes. No bump path name was seen or derived."
+ ],
+ "notChecked": [
+  "The subject tree id b72255c0 is taken from the rules file and was not re-derived: git objects were read only in the commit:path form. Every in-scope blob of the subject commit was compared with the export.",
+  "The complete-allowedPaths derivation was not re-run (see bindingRules).",
+  "The full_predecessor_suites test was not run (a 600 s pre-check step).",
+  "The MET-LINUX-009 layer files are absent by decision (Q-RA-LAYER (a)).",
+  "The oracle was read in part (its test list and three ranges), not in full.",
+  "No Linux host run: source only, as the status non-claims state."
+ ],
+ "disclosures": [
+  "The launch context carried an auto-injected memory index and an account context (an e-mail address). I used neither, and no account value appears here.",
+  "The environment's scratchpad path names the launching session, which is the lane session that oracle-identity.json lists as author. This reviewer is a fresh agent launched by that session, with no inherited conversation or context of the author's work. It is recorded here for the independence check.",
+  "Slip: the first test run started with 'cd <subject export> &&' before the wrapper, instead of starting with the wrapper. The wrapper still ran the pytest process. Every later run used a helper script started by the wrapper.",
+  "Slip: that first run printed per-test diagnostic lines, and the harness saved the oversized output to a file. I did not open the file. I re-ran through a helper that keeps the log in my work folder and prints the exit status and outcome counts.",
+  "Slip: three reads exceeded 120 lines in one call: the launcher.py diff (144 lines), launcher.py lines 337-474 (138) and test_root_aliases.py lines 481-612 (132). The output was complete each time.",
+  "Deviation: three greps used one single-quoted -e pattern with a \\| alternation (the privacy-helper signatures, the record-shape functions and the record-shape patterns).",
+  "Deviation (helper-shape read): beyond the listed read scope, I read scripts/review_record.py lines 1-80 and 140-235, plus the greps above, to call load_name_tokens and privacy_hits as the rules direct and to write this record in the v2 shape. I also grepped the rider briefs.json for its PACKET brief entries.",
+  "Method: helper scripts in the work folder listed four in-scope directories with git show \"<commit>:<dir>/\", extracted the base blobs of the six changed files with git show \"<base>:<path>\", wrote unified diffs, ran the tests, ran the counts-only privacy scan, and probed common.root_aliases() with in-memory records (no custody, race or substitution code). Before handing over, this record was checked with review_record._record_shape (v2 shape) and privacy_hits (counts only: all 0). No python -c, no network, no ls, find or glob under the tools link. No w03-named, LPK, R10, R12, memory, harness-ci or trust-directory material was read."
+ ]
+}

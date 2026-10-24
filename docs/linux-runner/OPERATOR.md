@@ -42,8 +42,12 @@ already authorized offline environment:
 
 ```text
 python -IB ci/linux-runner/build.py --output <new-private-absolute-output-directory>
-python -IB ci/linux-runner/prepare.py --request <reviewed-request.json> --output <another-new-private-absolute-directory>
+python -IB ci/linux-runner/prepare.py --request <reviewed-request.json> --output <another-new-private-absolute-directory> [--root-aliases <reviewed-record.json>]
 ```
+
+`--root-aliases` is given exactly for a v4 request: preparation applies the
+root-alias record rules to the file's bytes against the request's inputs, and
+refuses a v4 request without it or a v3 request with it.
 
 Angle-bracket values are user-owned local paths, not working commands or invented
 evidence. Both output directories must not exist. Builder writes a deterministic
@@ -67,7 +71,9 @@ through this source packet. It requires its own operator evidence and controls.
    owned-product checkout. Supply complete [BUILD_INPUTS.md](BUILD_INPUTS.md).
    V3 admits signed, complete cross-root aliases only in explicitly declared
    root-owned system trees including `/usr/bin`; source, cache, trust and
-   dedicated-tool aliases remain refused.
+   dedicated-tool aliases remain refused. V4 also admits the root-level
+   aliases listed in the signed root-alias record, each to a declared tree, as
+   nodes; they are never inventory roots.
    Pin Firejail binary, helper libraries and configuration in the immutable host
    image. Independently verify the booted image digest and derive its actual
    ELF interpreter, transitive native-library, loader-search and helper closure;
@@ -89,7 +95,8 @@ through this source packet. It requires its own operator evidence and controls.
    history as a rollback transaction before any installation.
 5. Externally install reviewed candidate bytes as
    `/opt/planeon/bin/harness-offline-launch`, UID/GID 0, mode 0555; policy,
-   signature and exact profile under `/etc/planeon/linux-runner/`; existing
+   signature and exact profile under `/etc/planeon/linux-runner/`, plus
+   `root-aliases.json` there for v4 inputs; existing
    Ed25519 public key at `/etc/planeon/harness-runner-manifest.pub`; and the
    exact root-owned read-only packet at `/opt/planeon/packet/active.yaml`.
    Parent directories must be root-owned and not group/world writable. No
@@ -165,6 +172,9 @@ alias to an undeclared tree, or a symlinked inventory root such as `/lib`, still
 fails. Do not delete or rewrite distribution links merely to manufacture a
 candidate PASS. A selected image needing root aliases requires a separately
 versioned signed contract before qualification.
+MET-LINUX-009 is that contract: with v4 inputs, the root-level aliases listed in
+the signed root-alias record are admitted as non-root nodes that resolve to
+their declared trees, and an unlisted one still fails.
 
 ## Isolation and evidence semantics
 
@@ -194,7 +204,9 @@ pathname and abstract socket creation are tested without sending packets.
 
 Only explicitly retained root-owned authority descriptors cross the Firejail
 boundary: four for bootstrap probes, seven for normal execution (also manifest,
-manifest signature and preflight). The trusted supervisor revalidates identity,
+manifest signature and preflight) with v3 inputs, and five or eight with v4
+inputs, which add the root-alias record. The record is a hidden path inside
+isolation, and its digest is re-checked after the session. The trusted supervisor revalidates identity,
 custody, pins and signatures, then closes all of them before repository code.
 Ambient FDs are closed; stdin is replaced for packet commands. Supervisor
 dumpability is disabled, namespace/proc argv leakage is probed, and a fresh

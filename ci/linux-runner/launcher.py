@@ -12,10 +12,10 @@ import subprocess
 import sys
 import time
 
-from common import (ANCHOR, FIREJAIL, LAUNCHER, MANIFEST, OFFLINE, PACKET, POLICY,
-                    PREFLIGHT, PROFILE, PUBLIC, PYTHON, Refused, Unavailable, absolute,
+from common import (ANCHOR, FIREJAIL, INPUTS_V4, LAUNCHER, MANIFEST, OFFLINE, PACKET, POLICY,
+                    PREFLIGHT, PROFILE, PUBLIC, PYTHON, ROOT_ALIASES, Refused, Unavailable, absolute,
                     canonical, closed, digest, disjoint, input_roots, inventory, packet_commands, parse,
-                    require, root_read, sha, system_inventories, validate_inputs, validate_manifest)
+                    require, root_aliases, root_read, sha, system_inventories, validate_inputs, validate_manifest)
 from ed25519 import pem_public, verify
 import preflight
 
@@ -28,6 +28,16 @@ INTERNAL = ("--inside", "--probe-child")
 AUTHORITY_FILES = {"anchor": ANCHOR, "public": PUBLIC, "policy": POLICY, "signature": POLICY + ".sig"}
 NORMAL_AUTHORITY_FILES = {**AUTHORITY_FILES, "manifest": MANIFEST,
                           "manifestSignature": MANIFEST + ".sig", "preflight": PREFLIGHT}
+
+
+def v4_inputs(policy):
+    return policy["inputs"]["schemaVersion"] == INPUTS_V4
+
+
+def authority_files(policy, preflight_only):
+    """The retained root-custodied descriptors: 4/7 for v3 inputs, 5/8 with the root-alias record for v4."""
+    files = AUTHORITY_FILES if preflight_only else NORMAL_AUTHORITY_FILES
+    return {**files, "rootAliases": ROOT_ALIASES} if v4_inputs(policy) else dict(files)
 
 
 def protect_process():
@@ -128,7 +138,7 @@ def verify_host_manifest(raw, signature, evidence_raw, *, public, key, launcher_
             and all(evidence[k] is True for k in preflight.PROOFS), "stale or mismatched installed preflight")
 
 
-def verify_tools(inputs):
+def verify_tools(inputs, root_aliases_raw=None):
     target = inputs["target"]
     require(platform.system() == "Linux" and platform.machine() == {"amd64": "x86_64", "arm64": "aarch64"}[target["architecture"]], "host architecture mismatch")
     libc, version = platform.libc_ver()
@@ -136,6 +146,7 @@ def verify_tools(inputs):
     require(not os.path.lexists("/etc/ld.so.preload"), "global dynamic loader injection")
     for path, expected in inputs["systemFiles"].items():
         require(digest(root_read(path)) == expected, "system loader cache mismatch")
+    aliases = root_aliases(root_aliases_raw, inputs)
     system_roots = {spec["root"] for spec in inputs["systemTrees"]}
     roots = input_roots(inputs)
     for root in roots:
@@ -146,7 +157,8 @@ def verify_tools(inputs):
             m = parent.lstat()
             require(stat.S_ISDIR(m.st_mode) and m.st_uid == m.st_gid == 0 and not m.st_mode & 0o022,
                     "inventory root custody")
-    system_entries = system_inventories(sorted(system_roots))
+    system_entries = (system_inventories(sorted(system_roots), root_aliases=aliases) if aliases
+                      else system_inventories(sorted(system_roots)))
     seen = {root: digest(canonical(records)) for root, records in system_entries.items()}
     for spec in [*inputs["tools"].values(), *inputs["caches"], *inputs["systemTrees"]]:
         root = spec["root"]
@@ -154,7 +166,8 @@ def verify_tools(inputs):
             seen[root] = digest(canonical(inventory(root, trusted=True)))
         require(seen[root] == spec["inventorySha256"], "tool/cache inventory mismatch")
     system_nodes = {str(Path(root) / entry["path"]): entry
-                    for root, records in system_entries.items() for entry in records if entry["path"]}
+                    for root, records in system_entries.items() for entry in records
+                    if entry["path"] and entry["kind"] != "rootAlias"}
     for name in sorted(set(inputs["tools"]) - {"npm"}):
         tool = inputs["tools"][name]
         path = tool["path"]
@@ -288,7 +301,7 @@ def load_authority(*, bootstrap_preflight=False):
         raise Unavailable("FIREJAIL_PRIVILEGE_BACKEND_ABSENT")
     if not all(Path("/proc/self/ns/" + name).exists() for name in ("net", "mnt", "pid")):
         raise Unavailable("KERNEL_NAMESPACES_ABSENT")
-    verify_tools(policy["inputs"])
+    verify_tools(policy["inputs"], root_read(ROOT_ALIASES, maximum=64 * 1024) if v4_inputs(policy) else None)
     return policy, digest(policy_raw), digest(launcher)
 
 
@@ -324,8 +337,11 @@ def supervise(argv, *, env, cwd, payload, timeout, pass_fds=()):
 def internal_authority(context):
     """A pipe payload is not authority: reverify retained root-custodied FDs."""
     require(type(context["preflightOnly"]) is bool, "ambiguous internal operation")
-    files = AUTHORITY_FILES if context["preflightOnly"] else NORMAL_AUTHORITY_FILES
-    closed(context["authorityDescriptors"], files)
+    base = AUTHORITY_FILES if context["preflightOnly"] else NORMAL_AUTHORITY_FILES
+    names = context["authorityDescriptors"]
+    # Step 1: exactly the v3 or the v4 set for this operation; step 4 binds it to the verified policy.
+    require(type(names) is dict and set(names) in (set(base), set(base) | {"rootAliases"}), "authority descriptor set")
+    files = {**base, "rootAliases": ROOT_ALIASES} if "rootAliases" in names else dict(base)
     raw = {}
     try:
         for name, path in files.items():
@@ -356,11 +372,13 @@ def internal_authority(context):
             and context["launcherSha256"] == anchor["launcherSha256"] and context["roots"] == policy["warmRoots"]
             and context["hiddenPaths"] == hidden_paths(policy) and context["launcher"] == LAUNCHER,
             "unsigned internal policy substitution")
-    return policy
+    require(set(names) == set(authority_files(policy, context["preflightOnly"])), "authority descriptor set")
+    return policy, raw.get("rootAliases")
 
 
 def hidden_paths(policy):
     return [MANIFEST, MANIFEST + ".sig", PUBLIC, PREFLIGHT, POLICY, PROFILE, ANCHOR,
+            *([ROOT_ALIASES] if v4_inputs(policy) else []),
             "/etc/planeon/linux-runner", "/srv/planeon",
             "/home/runner", "/root/.ssh",
             policy["runnerHome"], policy["runnerHome"] + "/.credentials",
@@ -371,7 +389,7 @@ def hidden_paths(policy):
 def inside(context):
     require(platform.system() == "Linux", "internal mode requires Linux")
     protect_process()
-    policy = internal_authority(context)
+    policy, root_aliases_raw = internal_authority(context)
     require(os.getuid() == os.geteuid() == policy["operatorUid"], "internal identity mismatch")
     result = preflight.run(context)
     result.update({"policySha256": context["policySha256"], "launcherSha256": context["launcherSha256"],
@@ -381,7 +399,7 @@ def inside(context):
     if context["preflightOnly"]:
         print(canonical(result).decode(), flush=True)
         return 0
-    verify_tools(policy["inputs"])
+    verify_tools(policy["inputs"], root_aliases_raw)
     packet_commands(Path(PACKET).read_bytes())
     workspace = Path(policy["workspace"])
     check_workspace_custody(policy)
@@ -433,7 +451,7 @@ def main():
                    "launcher": LAUNCHER, "preflightOnly": only}
         descriptors = {}
         try:
-            for name, path in (AUTHORITY_FILES if only else NORMAL_AUTHORITY_FILES).items():
+            for name, path in authority_files(policy, only).items():
                 descriptors[name] = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
             context["authorityDescriptors"] = descriptors
             code = supervise([FIREJAIL, "--keep-fd=" + ",".join(str(fd) for fd in descriptors.values()),
@@ -444,6 +462,8 @@ def main():
             for fd in descriptors.values():
                 os.close(fd)
         require(digest(root_read(POLICY)) == policy_sha and digest(root_read(PACKET)) == policy["packetSha256"], "authority changed during session")
+        require(not v4_inputs(policy) or digest(root_read(ROOT_ALIASES, maximum=64 * 1024))
+                == policy["inputs"]["rootAliases"]["recordSha256"], "authority changed during session")
         return code
     except Unavailable as exc:
         print(canonical({"status": "NOT_RUN_ENV_UNAVAILABLE", "reason": str(exc), "nativeLinuxAcceptance": False}).decode())

@@ -1,6 +1,17 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-LIVE-004
+## Current source preparation — MET-LINUX-009
+
+MET-LINUX-009 (LINUX-ROOT-ALIASES): the signed root-alias contract for the native runner kit: version 4 inputs with a
+signed root-alias record in ci/linux-runner/common.py, launcher.py and prepare.py (v3 unchanged, v4 opt-in through a
+signed record), docs/linux-runner/BUILD_INPUTS.md and OPERATOR.md, the vectors tests/linux_runner/test_root_aliases.py
+and the D5a oracle tests/test_met_linux_009_oracle.py, adopted as candidate c3 after two in-tree CONTRACT rounds
+(architecture/linux-root-aliases/: the status, the rounds with their identities and the oracle identity), with the
+registry rider (the brief registry gains this packet's PACKET and CONTRACT series). The packet is gate material (GATE_CI, GATE_VERIFIER_DOCS and GATE_REVIEW_PROCESS), so the owner approves the merge per PR, bound to the head. SOURCE_ONLY; no R10
+or R12 file changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 263 accepted plus MET-LINUX-009
+only.
+
+## Historical probe kit admission source preparation — MET-LIVE-004
 
 MET-LIVE-004 (LINUX-PROBE-KIT-ADMISSION): workload profile v2 (architecture/proxy-profile-v2/, model
 scripts/proxy_profile_v2.py) and admission semantics v4 (architecture/admission-semantics-v4/, model
@@ -1417,6 +1428,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 135. `MET-GOV-003`: amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) with the MET-LIVE-004 brief registry entries; gate material, the owner's per-PR merge approval.
 136. `MET-LIVE-003`: bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data (the four v1/ handoff files byte-identical, the binding record with LPK-0's NEUTRAL_INTERFACE_CONTRACT placeholder bound, model, vectors and replay) with its D5a oracle; form-only; no gate path.
 137. `MET-LIVE-004`: publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); no gate path.
+138. `MET-LINUX-009`: publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material, the owner's per-PR merge approval.
 
 ## Testing, verification, and acceptance
 

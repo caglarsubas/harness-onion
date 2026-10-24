@@ -1,0 +1,143 @@
+{
+ "schemaVersion": "planeon.internal.linux-root-aliases-status/v1",
+ "workItem": "LINUX-ROOT-ALIASES (the signed root-alias contract for the native runner kit)",
+ "packet": "MET-LINUX-009",
+ "slot": 264,
+ "slotNote": "MON-RA-SLOT-264: LPK-1 (MET-LIVE-004) took 263 and merged at 675daccb; the work was recut onto it unchanged and the derivation re-run there",
+ "status": "ADOPTED",
+ "baseMain": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
+ "design": {
+  "path": "DESIGN.r4.md (kept with the lane's records)",
+  "sha256": "453245147629bbd93d928b3ab893388ce6603a1c3c84ec0956b4212b0de6ae91",
+  "verdict": "PASS_FOR_BUILD"
+ },
+ "gate": {
+  "classes": [
+   "GATE_CI",
+   "GATE_VERIFIER_DOCS",
+   "GATE_REVIEW_PROCESS"
+  ],
+  "prApprovers": [
+   "OWNER"
+  ],
+  "note": "gate material: the owner's per-PR, head-bound merge"
+ },
+ "series": {
+  "contract": "MET-LINUX-009/contract",
+  "packet": "MET-LINUX-009/packet",
+  "registry": "architecture/review-record/briefs.json, the packet's own rider (MON-RA-SERIES)"
+ },
+ "adoptedSubject": {
+  "ci/linux-runner/common.py": "a1c3eb5bc0677b314aced135ca59df20d7d163982d408ae202d17ee56453a616",
+  "ci/linux-runner/launcher.py": "8055194a640ddadc9997fdd36bb8e82f3c229b844f955832eca1b16ffa97c2a3",
+  "ci/linux-runner/prepare.py": "e5c6e9f4292da6db2dfc1d09dc03f25f65df7eb0cbaab1b54c064aa0983433ad",
+  "docs/linux-runner/BUILD_INPUTS.md": "5f5344dd42ab271a5e09b17f41a37172706a42e8f703d4d34106f48e2f4daccc",
+  "docs/linux-runner/OPERATOR.md": "30a59f557ea1a3129fe0d11f86801ed282cffba3f580359b550a8335924fec28",
+  "tests/linux_runner/test_root_aliases.py": "a984cc2f9f8d11e87e219a5f6bfa2693bcea489b651dc7587c7d78520376e174",
+  "tests/test_met_linux_009_oracle.py": "72af8f4f2e695b9f96a6a3b2984f6fef4969ab5d7ec5db570107272303c3b2a4",
+  "architecture/linux-root-aliases/oracle-identity.json": "bb77851269a730c922c614eaab0bb32c2ae27f4fd14884189892d56c3adccb00",
+  "architecture/review-record/briefs.json": "b3681815203c426db5ceabbd52b49ba281be21c2df017b865181848a0e8ad8db"
+ },
+ "adoptions": [
+  {
+   "candidate": "c3",
+   "commit": "49180b884e753086f7d23da90c2e01145c04c39b",
+   "tree": "8c6c82d0d4dbf02180a247b62d880704a8f1554f",
+   "ruling": "MON-RA-R2-KEEP",
+   "by": "the lane monitor, owner-delegated (2026-10-24)",
+   "date": "2026-10-24",
+   "change": "the first adoption, after CONTRACT round 2's PASS_FOR_ADOPTION (round 1's RA-C1-1 fixed in c3)"
+  }
+ ],
+ "independentReviewers": "SEPARATE_AGENTS_NOT_AUTHOR (one fresh agent per round, and a separate oracle agent)",
+ "reviews": [
+  {
+   "review": "MET-LINUX-009/contract round 1",
+   "record": "architecture/linux-root-aliases/review-round1.json",
+   "recordSha256": "4abfb43fe075469076a2e36d10619c4a37b74e8f918f1c0a3348955a12b1b9df",
+   "identity": "architecture/linux-root-aliases/review-identity-round1.json",
+   "identitySha256": "44ae105ef54033384df151e59e7e12917191156fbc3f411d423864b428843639",
+   "subject": "candidate c2 (c83efb466977612af1c48472a088c90d08097633)",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": "0 MAJOR, 1 MINOR (RA-C1-1, fixed in c3), 4 NOTE",
+   "ruling": "KEEP (MON-RA-R1-KEEP)"
+  },
+  {
+   "review": "MET-LINUX-009/contract round 2 (minimal delta from round 1's subject)",
+   "record": "architecture/linux-root-aliases/review-round2.json",
+   "recordSha256": "f09b270ac2371e9b4e2514002af448917c11341ff4fcf2b82af4802e375241ed",
+   "identity": "architecture/linux-root-aliases/review-identity-round2.json",
+   "identitySha256": "5d9425c5f35d8df7dc213ce17dda9988b75948bd5fd41bd9d3adfc4a104870fb",
+   "subject": "candidate c3 (49180b884e753086f7d23da90c2e01145c04c39b), base c2",
+   "verdict": "PASS_FOR_ADOPTION",
+   "findings": "0 MAJOR, 0 MINOR, 3 NOTE",
+   "ruling": "KEEP (MON-RA-R2-KEEP)"
+  }
+ ],
+ "oracle": {
+  "test": "tests/test_met_linux_009_oracle.py",
+  "sha256": "72af8f4f2e695b9f96a6a3b2984f6fef4969ab5d7ec5db570107272303c3b2a4",
+  "identity": "architecture/linux-root-aliases/oracle-identity.json",
+  "result": "71/71 on candidate c1 (051a298a), first run; ruling KEEP (MON-RA-ORACLE-KEEP)"
+ },
+ "allowedPathsDerivation": {
+  "rule": "MON-RA2-NEXT (binding before the CONTRACT round), re-run at the slot-264 base (MON-RA-264-START)",
+  "scope": "the named set (with every round's record and identity, RA-C2-3), plus the chain tools' bump set (the predecessor's modified chain files and its new layer and test), plus the registry rider",
+  "recordDigest": "sha256:b184ee6aa2b808e5b4b2206ad93f1490697aca40fc6ebef7efbf1c29a38dd4b9",
+  "atBase": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
+  "predecessorRange": [
+   "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+   "675daccbc8a060d88245f79bf124f0cc6c59d0c2"
+  ],
+  "tool": {
+   "name": "derive_full_allowed.py (kept with the lane's records)",
+   "sha256": "151d3a6e6e9cc1c71b8f556023ab6613b350370394645fc11267a2fb25ac537b"
+  },
+  "counts": {
+   "named": 25,
+   "bump": 236,
+   "rider": 1,
+   "union": 258
+  },
+  "byClass": {
+   "CONTRACT_AND_SOURCE": 248,
+   "GATE_CI": 3,
+   "GATE_REVIEW_PROCESS": 1,
+   "GATE_VERIFIER_DOCS": 2,
+   "ORACLE_TESTS": 1,
+   "REVIEW_BRIEF": 1,
+   "REVIEW_RECORD": 2
+  },
+  "pathListSha256": "a0dd5ab966e6b16c4a3eca22c755c922bfc842978d977bc1ded8d25e3700a6fa",
+  "result": {
+   "prApprovers": [
+    "OWNER"
+   ],
+   "unclassified": 0,
+   "caseVariant": 0
+  },
+  "pass": true,
+  "previous": {
+   "atBase": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+   "union": 254,
+   "pass": true
+  }
+ },
+ "unchangedListedFiles": {
+  "paths": [
+   "tests/linux_runner/conftest.py",
+   "tests/linux_runner/test_system_inventory_v2.py",
+   "tests/linux_runner/test_toolchain.py"
+  ],
+  "note": "listed in the design's file table and the derivation; unchanged at their base digests, since the v4 fixture and every vector live in test_root_aliases.py (RA-C1-3)"
+ },
+ "carriedNotes": [
+  "RA-C1-2 and RA-C2-1: a deeply nested or out-of-range-number record raises RecursionError or ValueError from the shared JSON helpers instead of Refused; it fails closed and only digest-pinned bytes reach it; carried as a later kit change to parse()",
+  "RA-C1-4: the candidate's own v3 byte-identity check compares against the model; the oracle covers the design vector independently"
+ ],
+ "nonClaims": [
+  "SOURCE_ONLY: no Linux host PASS, installation, signature or listener registration is claimed.",
+  "The record's imageDigest check is declarative; the kit cannot attest the booted image.",
+  "v3 inputs and their inventories are unchanged; v4 is opt-in through a signed record."
+ ]
+}
