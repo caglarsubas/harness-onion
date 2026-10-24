@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/linux-probe-kit-admission-authority.json"
-AUTHORITY_SHA256 = "aa5f889328229059d3c3392e0b6e42ef244a16180b96aab244a13ec24ca45907"
+AUTHORITY_SHA256 = "85e510347bcd8eababa09f9d95da7f0f13b4de6e6899baa81842ba8ffa84f3d8"
 VALIDATOR_PATH = "scripts/validate_linux_probe_kit_admission.py"
 BASE_COMMIT = "0ffa7db076a92e8bb341db4867557b894ecb5b27"
 NEW_PACKET = "MET-LIVE-004"
