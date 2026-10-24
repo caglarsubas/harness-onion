@@ -1,0 +1,94 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-ENFORCE-042/contract",
+ "round": 2,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "4a310a82b3b4fc32d0b431659f074a84eee0cf70",
+  "tree": "00d36d04ec3d9686aafb66f847ea1391e452cc5c"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "6cc40a1e31f40f73792dec7e48b687f02d2393ee",
+  "tree": "0aa97c035bbdb3b076c991094ad08f7256f4968e"
+ },
+ "reviewDate": "2026-10-25",
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "14fecff3881c7da8315277afc841bcfb4113c8b617142d39ff4a57ebf8452d5f",
+ "wrapperSha256": null,
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "REVIEWER_AGENT"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "C2-1",
+   "severity": "MINOR",
+   "location": "architecture/policy-observation-digests-v2/README.md section 11 (the HE-004-I01B4 bullet's added sentence); architecture/artifact-edges/README-v11.md 'Replay scope' and 'Not registered'; architecture/artifact-edges/operator-harness-engineering-v11.json notes[3]",
+   "finding": "c2 states round 1's replay scope consistently in all four places. R10 replays every helper vector and every vector, and of the complete positive v1's five checks plus the sealed-namespace equality. Profile v2's validate and precondition stay harness-side, so R10 needs neither profile.schema.json nor proxy_profile_v2. In substance this holds: by AST, the vector rows and those six checks never reach proxy_profile_v2 or the schema. But section 11 tells HE-004-I01B4 to port the v2 model, and the stated replay is not that model's check_vectors. The unchanged model (README header items 4, 5 and 7) calls _frozen(files) at line 1257, which pins scripts/proxy_profile_v2.py's bytes. It calls _profile_schema(files) at line 1258. Both run before the first helper vector (line 1266). _check_complete then runs validate and precondition as its checks 7 and 8. Run without the schema, check_vectors refuses before any row with 'frozen input differs: architecture/proxy-profile-v2/profile.schema.json' (I ran it). None of the four places says that R10's port omits the profile-schema load and profile v2's validate and precondition. None gives the count such a port reaches: 321, against the 323 stated for the model. So 'every vector … needs neither' holds only for a port the text does not define (MON-I01S-CR2-GO).",
+   "requiredChange": "In a c3, say explicitly, in README section 11's added sentence and README-v11's 'Replay scope', that R10's port omits the profile-schema load (_profile_schema, PROFILE_SCHEMA) and profile v2's validate and precondition in _check_complete. For consistency, say the same in edge v11 notes[3]. Recommended form: 'R10's port omits the profile-schema load and profile v2's validate and precondition. As under v1, it also leaves out the frozen-model file pins (_frozen's FROZEN_MODELS loop, scripts/proxy_profile_v2.py included), since models are pinned, not copied. Its replay therefore counts 321 checks (16 helper vectors, the definitions pin, 298 vector checks and 6 complete-positive checks), against the model's 323.' The README's bytes change, so edge v11's README row and README-v11's table row follow them, as in c2. As c2 did for round 1, c3's status line names c3, and status.json and source-index.json gain round 2, with the r2 rulings as the monitor rules.",
+   "blocks": true
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "C1-1",
+   "status": "PARTLY",
+   "note": "MON-I01S-C1-1-A is met as ruled. The scope is stated, consistently, in README-v11's 'Replay scope' and 'Not registered', in edge v11 notes[3] and in README section 11. notes[3] now takes v10's form ('X is not registered: <reason>'), with a stated reason restored. Section 11 also carries the ruling's HE-004-I01B4 sentence. Which of the complete positive's checks R10 replays is now defined: 6 of 8. The other half of C1-1 remains: the registered files cannot run a port of the model's check_vectors, because it loads profile v2's schema before any row. The text does not say that the port leaves this load out. Carried as C2-1."
+  },
+  {
+   "id": "C1-2",
+   "status": "ADDRESSED",
+   "note": "Section 1's 'Scope limits' bullet carries round 1's optional sentence, that 'v1' in these limits names the NetworkPolicy form v1 and v2 share until the List-form revision. Section 9 (c2 lines 507-531) equals c1's lines 506-530, line for line. I collected 81 refusal texts from definitions.json, which is byte-identical. Each occurs as often in c2's README as in c1's, and none occurs in the added lines. So 'networkPolicy: selector form outside v1' is unchanged."
+  }
+ ],
+ "checked": [
+  "Check 1 (faithfulness to the decisions, on the delta): status.json reviewRounds records MON-I01S-CR1-KEEP as round 1's ruling. MON-I01S-C1-1-A: the scope is stated as ruled and consistently in the four places. They are README-v11's 'Replay scope' and 'Not registered', edge v11 notes[3] (a stated reason, in v10's form) and README section 11. Section 11's HE-004-I01B4 bullet carries the ruling's HE-004-I01B4 sentence. Its executable form is C2-1. MON-I01S-C1-2-KEEP: the sentence is folded, and the refusal texts are unchanged. MON-I01S-C2-GO: edge v11's README row and notes[3] follow the c2 README bytes, and status.json and source-index.json gain round 1. MON-I01S-CR2-GO's binding point is judged under C2-1. MON-I01S-CB2-1..5 keep Q-CB2-1..5 as built. No decision is reopened.",
+  "Check 2 (the records against the design, on the delta): status.json keeps its member list and order. Exactly four members change: candidate (c1 to c2); candidateState; reviewRounds ([] to one entry with round, record, recordSha256, identity, identitySha256, verdict, findings [{id, severity}] and ruling); and ownerDecisions (21 to 25). c1's 21 decisions are unchanged and in order, and the 4 new ones have c1's {id, by, date, decision} form. recordSha256 b25518c9…8c4d and identitySha256 67e109dc…45c7 equal the TOOLS bytes. The verdict and findings equal round 1's record. The record path equals the identity's record.path, and its sha256 matches. source-index.json changes exactly candidate, inTreeRounds (round 1, with the same paths and sha256) and rulings (4 to 8, c1's four first and unchanged). Each of the 4 new quotes occurs once in OWNER_DECISIONS.md, inside round 1's ruling section (lines 144-159), and all 33 quotes in the two files occur exactly once. Edge v11 changes only notes[3] and artifacts[74].sha256, the POD2 README row. That row is now 6d70377e…b604, the sha256 of the c2 README (60,055 bytes). Its 79 rows keep v10's 72 equal and in order (v10 a4fad53d…364e), and its top-level keys are unchanged. README-v11's table row carries the prefix 6d70377e746d and 60,055 bytes. Digest forms are unchanged.",
+  "Check 3 (the model against the README, on the delta): the model is byte-identical to c1 (e1ba63d9…40a3), and so is the README, except for the status line and the two added sentences. Round 1's check stands for the unchanged text. I checked the added scope text against the model with an AST scan. proxy_profile_v2 appears only in the module imports, main's path check, _check_complete's last two checks and, as a file pin, _frozen's FROZEN_MODELS loop. The profile schema appears only in _profile_schema, check_vectors' load (line 1258) and _check_complete. In check_vectors, _frozen (line 1257) and _profile_schema (line 1258) run before the first helper loop (line 1266). The vector rows and _check_complete's first six checks reach neither. v1's _check_complete (01298fb5) has the same five counted checks and returns 5. v1's check_vectors also ran _frozen with model-file pins, a Python-side pin that a port leaves out. The README header's items 4, 5 and 7 state the model correctly. The gap between the model and the stated R10 scope is C2-1.",
+  "Check 4 (schema and model agree): unchanged from round 1. The contract has no schema of its own. The model takes profile v2's schema by file sha256 (e5ef3c3d…d592, which the WORK copy matches).",
+  "Check 5 (the vectors): vectors.json (68eab470…2594) and definitions.json (fef08fdd…b2f2) are byte-identical to c1. I ran the v2 model's own replay from a WORK tree: the model, its 8 dependencies and the 4 frozen inputs, each copied by exact-path git show at the subject and each equal to the model's pins. It prints 323 checks (16 helper, 152 vectors, 1 complete I01 positive). My driver gives the same 323 = 16 + 1 (the definitions pin) + 298 + 8. With the schema dropped from files, check_vectors refuses before any row: 'frozen input differs: architecture/proxy-profile-v2/profile.schema.json'. With scripts/proxy_profile_v2.py's bytes dropped, it refuses with 'frozen model differs: scripts/proxy_profile_v2.py'. Neither VPO nor validate_readiness was in sys.modules.",
+  "Check 6 (the tests): not applicable at c2, as at c1. There are no candidate tests or D5a oracle tests yet: status.json's oracle is NOT_YET_RUN, and the v2 layer test and head layer come with the mechanics. The replay (323) stands in their place.",
+  "Check 7 (placement): the delta adds no path. Its 5 changed paths are among c1's 8, which round 1 placed in CONTRACT_AND_SOURCE. This record's in-tree path review-round2.json falls under round 1's REVIEW_RECORD placement of review-round<n>. I did not re-run evolution_surface.",
+  "Check 8 (privacy and supply chain): I ran review_record.py's load_name_tokens on the fixed digest file, then privacy_hits on each of the 5 changed files: names 0, legacyTerm 0, absolutePaths 0, emails 0. My own counts of home, temporary, tilde, opt and var-db path shapes and of e-mail shapes, built from parts, are 0 in every file. No import or dependency changes, since the model is byte-identical. Nothing interposes on, forwards, proxies, swaps or bypasses anything.",
+  "Check 9 (open questions): the builder's Q-CB2-1..5 and MON-I01S-CR2-GO's replay-scope point are answered under questions, each with a recommendation.",
+  "Diff discipline: git diff 6cc40a1e 4a310a82, with the four exclusions, shows exactly 5 modified files. Every hunk maps to one of the build report's changes 1-6. README.md has 3 hunks: line 3, the status line (change 3); line 98, C1-2's section 1 sentence (change 2); and line 611, section 11's scope sentence (change 1). status.json carries changes 3 and 4, and source-index.json change 5. Edge v11 carries change 6 (row 74's sha256) and change 1 (notes[3]). README-v11.md carries change 6 (the table row) and change 1 ('Replay scope' and 'Not registered'). I found no other change. I judged this against the build report and the rulings, not against the c2 build brief (see notChecked)."
+ ],
+ "bindingRules": [
+  {"rule": "MON-I01S-CR2-GO (the replay-scope wording)", "met": false, "note": "The explicit omission wording is in none of README section 11, README-v11's 'Replay scope' and edge v11 notes[3]. Under the ruling this is a MINOR: C2-1."},
+  {"rule": "MON-I01S-C1-1-A", "met": true, "note": "The scope is stated as ruled, consistently, in the four places, with the stated reason in notes[3] and the HE-004-I01B4 sentence in section 11. Its executable form is C2-1."},
+  {"rule": "MON-I01S-C1-2-KEEP", "met": true, "note": "The section 1 sentence is folded. Section 9 and every refusal text are unchanged."},
+  {"rule": "MON-I01S-C2-GO", "met": true, "note": "Edge v11's README row and notes[3] follow the c2 README bytes; status.json and source-index.json gain round 1. The subject is a local commit whose parent is c1."},
+  {"rule": "Import rule (MON-DIG-BUILD-ETP-IMPORT)", "met": true, "note": "By AST, the model imports neither VPO nor validate_readiness. VPC imports VPO only lazily, inside validate_additions, which the replay never calls. After my runs, neither module was in sys.modules."},
+  {"rule": "Review-record vocabulary rule", "met": true, "note": "This record uses review-record v2's verdict, severity and disposition vocabularies."}
+ ],
+ "notChecked": [
+  "The c2 build brief, CONTRACT_BUILD_BRIEF_C2.md (b740a2e9…), is not at the path the rules name (TOOLS/i01succ/contract/), and I did not look for it elsewhere. I judged the diff's discipline against BUILD_REPORT_C2 section 3's changes 1-6 and the rulings.",
+  "The D5a oracle and its identity, the v2 layer test, the head layer, the registry rider, the pins record and the dry run: all come at the mechanics.",
+  "Whether R10's planned HE-004-I01B4 port matches the stated scope: R10 is not read.",
+  "Not re-derived: the four on-main files' modes and last-change commits (the rules allow no ls-tree or git log form). Not re-run: the evolution-surface placement (the delta adds no path). Not re-checked: c1's text outside the diff, where round 1's checks stand.",
+  "The builder's build_contract.py (c2) and WORK scripts were not read or run. I re-derived every value checked here from the subject's bytes."
+ ],
+ "questions": [
+  "Q-CB2-1: I agree with (a), as built and kept (MON-I01S-CB2-1). Round 1's C1-1 named section 11's 'replays this contract's vectors' as part of the gap, so the scope belongs in section 11. The added sentence is long, but it reads in order: the scope, the harness-side checks and why, then the new-decision clause. Recommendation: keep it, and add C2-1's port wording to it or as a second sentence.",
+  "Q-CB2-2: I agree with (a) (MON-I01S-CB2-2). Each id quotes the line that carries its content. The head line names all four refs and is quoted once, under MON-I01S-CR1-KEEP. Every quote occurs exactly once in OWNER_DECISIONS.md, inside round 1's ruling section. Recommendation: keep it, and quote the r2 rulings in c3 the same way.",
+  "Q-CB2-3: I agree with (a) (MON-I01S-CB2-3). The entry pins the record and the identity by sha256, and the record carries its own subject. A subjectCommit for a never-pushed scratch commit would publish a commit id no reader can resolve. Recommendation: keep (a), for round 2 as well.",
+  "Q-CB2-4: I agree with (a) (MON-I01S-CB2-4). The table restates the rows, so it must follow the row's sha256 and byte count; I checked the prefix 6d70377e746d and 60,055 bytes. Recommendation: keep it, and regenerate the table from c3's README.",
+  "Q-CB2-5: I agree with (a) (MON-I01S-CB2-5). VPC defines validate_profile(profile, schema) (by AST, in the subject's copy). The README already defines VPC, and README-v11 and notes[3] spell out the schema they mean. Recommendation: keep it.",
+  "MON-I01S-CR2-GO's replay-scope point: I agree with the monitor, judged on my own against the model's text. check_vectors runs _frozen and _profile_schema before any row. I ran it without the schema, and it refused before the first helper vector. So 'R10 replays every helper vector and every vector … needs neither profile.schema.json nor proxy_profile_v2' holds only for a port that omits the profile-schema load and profile v2's validate and precondition. c2 states the outcome ('needs neither') in all four places, but nowhere states that omission. The stated scope is executable once the omission is said, because the rows and the six named checks never reach the schema or proxy_profile_v2. A reader also needs the count the port should reach, 321, since 323 is the only count stated. I rate this a MINOR (C2-1), not a NOTE. The contract is R10's specification for the port, and it leaves undefined where the port departs from the model it names. Recommendation: C2-1's wording in a c3, then a delta round 3 limited to it."
+ ],
+ "disclosures": [
+  "One-call slip: one message carried two Edit calls. Both changed my own WORK analysis script, before its first run, to use the rules' line indexes instead of a heading search. Every other message made one call.",
+  "Missing input: one hashing command (shasum and wc over the named TOOLS files) also named TOOLS/i01succ/contract/CONTRACT_BUILD_BRIEF_C2.md, which does not exist there. The command reported the file as missing and exited 1. I did not probe any other path for it.",
+  "Interpreter: my first AST scan ran under the system python3 and failed on sys.stdlib_module_names. It used only the standard library and imported nothing from the subject. I re-ran it under the pinned G-JSONSCHEMA interpreter, with -I -B, and every later Python process used that interpreter too.",
+  "Builtins: variable assignments and two for-loops of exact-path git show copies ran directly in the command line, not inside timeout 120 zsh -c. Every process (git, mkdir, shasum, wc, sed, grep, python) ran under timeout 120, one at a time, in the foreground.",
+  "Measurement: the model's replay and my scope driver ran under timeout 120 with the system time -l measurement, and so did most of my analysis scripts. The largest was 0.51 s and about 50 MB RSS. No command came near 120 s.",
+  "Waits: the PAUSE/HOLD loop prefixed every command line, and no wait was observed.",
+  "Content checks, not section location: I ran AST scans of the model, VPC, safe_yaml.py and review_record.py (imports, name references and two signatures). I counted literal markers in the c2 README, README-v11 and notes[3], and ran one grep for one marker in the c2 README. A first grep with context matched nothing (exit 1). The plain grep hit an unrelated line in section 3. I located sections only by the rules' indexes and by line-range reads of the model.",
+  "Model runs with other inputs: my driver called the unchanged check_vectors three times: with the full file map, without the schema, and without proxy_profile_v2.py's bytes. Nothing was patched, shimmed or swapped.",
+  "Reads beyond the rules' list, each an exact-path git show into WORK. At 675daccb: v1's model (lines 1196-1250 and 1318-1396, for the v1 precedent), edge v10 (by exact path, as allowed) and scripts/review_record.py. At the subject: the replay import set (VPC, safe_yaml.py, admission_semantics_v4, the three I06 modules, native_qualification_v4 and proxy_profile_v2) and the 4 frozen inputs. At both c1 and c2: the 7 contract and edge files. My script parsed the round-1 identity record and printed only its key names and whether its record path and sha256 match.",
+  "No network. No environment, git-config or account read. VPO and validate_readiness were never imported or run. The name-token digest file was only passed to load_name_tokens. I wrote only in WORK and this record."
+ ]
+}

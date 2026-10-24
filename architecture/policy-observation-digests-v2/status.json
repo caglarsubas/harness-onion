@@ -1,0 +1,393 @@
+{
+  "schemaVersion": "planeon.internal.policy-observation-digests-v2-status/v1",
+  "workItem": "the I01 digest-contract successor (LPK-1 step S1, with W1 and S2)",
+  "packet": "MET-ENFORCE-042",
+  "slot": "265 at the earliest; the mechanics follow 264's merge (MON-I01S-14)",
+  "candidate": "c4",
+  "base": "675daccbc8a060d88245f79bf124f0cc6c59d0c2",
+  "supersedes": {
+    "contract": "the I01 digest contract v1 (DIGEST-CONTRACT)",
+    "packet": "MET-ENFORCE-041",
+    "files": [
+      "architecture/policy-observation-digests/README.md",
+      "architecture/policy-observation-digests/definitions.json",
+      "architecture/policy-observation-digests/vectors.json",
+      "architecture/policy-observation-digests/status.json",
+      "scripts/policy_observation_digests.py"
+    ],
+    "rule": "a successor beside v1, not an edit of it: v1's files stay byte-identical, and v1 remains the I01 wire's digest contract for R10's HE-004-I01B1 until S3 (HE-004-I01B4) lands"
+  },
+  "reviewSeries": "MET-ENFORCE-042/contract",
+  "reviewRounds": [
+    {
+      "round": 1,
+      "record": "architecture/policy-observation-digests-v2/review-round1.json",
+      "recordSha256": "b25518c92858807cae84a069f85b39e6323a68c622f8aa3189282f7d153a8c4d",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round1.json",
+      "identitySha256": "67e109dcafee8767052a4d9c59082e0d91f59de2a3bbacbc4d632592b09145c7",
+      "verdict": "CHANGES_REQUIRED",
+      "findings": [
+        {
+          "id": "C1-1",
+          "severity": "MINOR"
+        },
+        {
+          "id": "C1-2",
+          "severity": "NOTE"
+        }
+      ],
+      "ruling": "MON-I01S-CR1-KEEP"
+    },
+    {
+      "round": 2,
+      "record": "architecture/policy-observation-digests-v2/review-round2.json",
+      "recordSha256": "5851a7c526f5c2cce57959bfa0e48b893204b596c1e2f08fdd3536f18f10b2bb",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round2.json",
+      "identitySha256": "58629e2e48a4bd8608285a0d3191eefebb344cce1414fdbccc81106b23f3ffc2",
+      "base": "c1",
+      "verdict": "CHANGES_REQUIRED",
+      "findings": [
+        {
+          "id": "C2-1",
+          "severity": "MINOR"
+        }
+      ],
+      "dispositions": [
+        {
+          "id": "C1-1",
+          "status": "PARTLY"
+        },
+        {
+          "id": "C1-2",
+          "status": "ADDRESSED"
+        }
+      ],
+      "ruling": "MON-I01S-CR2-KEEP"
+    },
+    {
+      "round": 3,
+      "record": "architecture/policy-observation-digests-v2/review-round3.json",
+      "recordSha256": "d0815a653139528d7dd44f8209819fdaf2b36f8554425143c1614715833f4796",
+      "identity": "architecture/policy-observation-digests-v2/review-identity-round3.json",
+      "identitySha256": "4da01b3de1fe60a3fdbf801a03de6a1f82c3c8c8a808a0ae71d4b73aa3044b6a",
+      "base": "c2",
+      "verdict": "PASS_FOR_ADOPTION",
+      "findings": [
+        {
+          "id": "C3-1",
+          "severity": "NOTE"
+        }
+      ],
+      "dispositions": [
+        {
+          "id": "C2-1",
+          "status": "ADDRESSED"
+        }
+      ],
+      "ruling": "MON-I01S-CR3-KEEP"
+    }
+  ],
+  "designHistory": "architecture/policy-observation-digests-v2/source-index.json cites the TOOLS design revisions 1-3 and design rounds 1-3 by sha256; they are not rounds of this series",
+  "contractState": "ADOPTED_DATA_CONTRACT",
+  "candidateState": "c4, the text-only errata A-I01S-1 (CONTRACT round 3's C3-1, MON-I01S-CAP-A) on c3, adopted from ADOPTION_CHECK_C4 with no further round (MON-I01S-C4-ADOPT)",
+  "predecessorRecord": {
+    "record": "architecture/policy-observation-digests/status.json",
+    "sha256": "4b20c7c17990f95246d84a110bed7c2745e7adf9e8676da26f2cf6b96fb4dc99",
+    "packet": "MET-ENFORCE-041",
+    "schema": "planeon.internal.policy-observation-digests-status/v1",
+    "status": "ADOPTED"
+  },
+  "oracle": {
+    "identity": "architecture/policy-observation-digests-v2/oracle-identity-policy-observation-digests-v2.json",
+    "identitySha256": "8be40cf6df8c720cca291251a1f9efb705a2c92d5733c3c230ef387601289f2d",
+    "tests": "tests/test_policy_observation_digests_v2_oracle.py",
+    "state": "KEPT (MON-I01S-ORACLE-KEEP): 89/89 on c4, all 17 replaced members derived from README rules, none from the model",
+    "rule": "one D5a oracle by a fresh agent, after contract review round 1, from the README and admission v4's renderers alone, without the builder's code; it re-derives every member of the complete positive's replaced list"
+  },
+  "ownerDecisions": [
+    {
+      "id": "MON-I01S-1",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-1:** a new architecture/policy-observation-digests-v2/ with scripts/policy_observation_digests_v2.py; v1 stays frozen beside it. **Packet id MET-ENFORCE-042:** it succeeds MET-ENFORCE-041, the I01 v1 digest contract. That id is free at 675daccb and in no lane note."
+    },
+    {
+      "id": "MON-I01S-3",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-3:** S2 (edge v11, W2) rides with S1, as 258 carried edge v10."
+    },
+    {
+      "id": "MON-I01S-5",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-5:** the model imports proxy_profile_v2, pinned by digest, and runs validate and precondition. The layer test keeps validate_messages plus C1-1-style assertions that expect P10."
+    },
+    {
+      "id": "MON-I01S-6",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-6:** copy-and-edit of v1's model. No import-and-rebind."
+    },
+    {
+      "id": "MON-I01S-7",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-7:** planeon-qual namespace; the admission fence is v4's 9b1ddc10; profile v2's positive with only the I01-derived members replaced."
+    },
+    {
+      "id": "MON-I01S-8",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-8:** no profile v1 complete positive."
+    },
+    {
+      "id": "MON-I01S-9",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-9:** observation.quota and the namespace members join the replaced members. The builder derives them, and the oracle checks them independently."
+    },
+    {
+      "id": "MON-I01S-10",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-10:** the re-derivations as listed, plus the one new vector (the rendered bytes equal v4's planeon-a2.json). Vector ids are kept, and a fresh D5a oracle imports v4's renderers."
+    },
+    {
+      "id": "MON-I01S-12",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-12:** S1 carries the two briefs.json entries itself, so it is **gate material, with the owner's per-PR merge**. 264's rider is already at mechanics and won't be widened."
+    },
+    {
+      "id": "MON-I01S-13",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-13:** in-tree CONTRACT rounds from round 1, plus one D5a oracle and its identity, as at LPK-1."
+    },
+    {
+      "id": "MON-I01S-14",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**Q-I01S-14:** slot 265 at the earliest. Design and contract proceed now on 675daccb, and the mechanics wait for 264's merge. **The dry run:** it measures against 900 s. If VERIFY-HEADROOM-263's measurement hasn't landed by S1's mechanics, flag it, and I'll decide whether S1 waits for it."
+    },
+    {
+      "id": "MON-I01S-D1",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**D1:** each quota.hard value equals the v2 quota, and the snapshot's ResourceQuota object carries the same hard values, since its spec is inside the projection digest. Ref MON-I01S-D1."
+    },
+    {
+      "id": "MON-I01S-D2",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**D2:** a third fixture snapshot at planeon-qual, derived from `closure`, used only by the complete positive; its fence is 9b1ddc10. unit and closure stay at unit-namespace. This is F1's fix. Ref MON-I01S-D2."
+    },
+    {
+      "id": "MON-I01S-D3",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**D3:** the R10 successor id is **HE-004-I01B4**, ref MON-I01S-D3. HE-004-I01B2 (config v3 and the closed binding) and HE-004-I01B3 (the answer and the send) are already planned in he004's I01b design, so the A2 v4 re-vendor (S3, W3/W4) takes the next number in that family. Edge v11's consumerPacket and §7 use it. Record it in he004/OWNER_DECISIONS.md too, so R10's lane plan knows the id is taken."
+    },
+    {
+      "id": "F4",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**F4:** the head layer checks the byte-equality, and v1's vector grammar stays closed with no new family. That's your proposal."
+    },
+    {
+      "id": "F6",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**F6:** follow v10's rule exactly: last-change commits for files already on main, providerPacket only for files this packet adds, and the member named consumerPacket."
+    },
+    {
+      "id": "F12",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**F12:** carried to W3/HE-004-I01B4 in §7 with the re-derived wire cases named. It doesn't block S1."
+    },
+    {
+      "id": "MON-I01S-DR2-CARRIED",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "From now on, carried items take ADDRESSED with \"carried to …\" in the note."
+    },
+    {
+      "id": "MON-I01S-CAP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "If it returns PASS_FOR_BUILD, or only MINOR and NOTE findings, those findings become binding build rules B-I01S-n under the cap, and the design closes PASS_FOR_BUILD with no r4."
+    },
+    {
+      "id": "MON-I01S-DESIGN-CLOSED",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-DR3-1: KEEP round 3, ref MON-I01S-DR3-KEEP. Q-I01S-DR3-2: the design CLOSES PASS_FOR_BUILD under MON-I01S-CAP on rev 3 (806f9dee), ref MON-I01S-DESIGN-CLOSED. B-I01S-1 is DR3-F1, verbatim. The record's verdict stays CHANGES_REQUIRED in the brief's vocabulary. Q-I01S-DR3-3: GO to write BUILD_RULES.md and the contract-build brief, ref MON-I01S-NEXT. All three are decided under the owner's standing delegation."
+    },
+    {
+      "id": "MON-I01S-BUILD-GO",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-BUILD-GO: GO for the c1 build, ref MON-I01S-BUILD-GO. This is decided under the owner's standing delegation."
+    },
+    {
+      "id": "MON-I01S-CR1-KEEP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-CR1-1: KEEP r1, ref MON-I01S-CR1-KEEP. Q-C1-1: (a), ref MON-I01S-C1-1-A. Q-C1-2: keep, ref MON-I01S-C1-2-KEEP. Q-I01S-C2-GO: GO, ref MON-I01S-C2-GO. All four are decided under the owner's standing delegation."
+    },
+    {
+      "id": "MON-I01S-C1-1-A",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**State the exact replay scope:** R10 replays every helper and vector, and of the complete positive, v1's five checks plus the sealed-namespace equality. Profile v2's validate and precondition stay harness-side, in the v2 model's replay and the v2 layer test."
+    },
+    {
+      "id": "MON-I01S-C1-2-KEEP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "**C1-2:** fold the optional §1 sentence, with refusal texts unchanged."
+    },
+    {
+      "id": "MON-I01S-C2-GO",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "the edge v11 README row and notes[3] follow the README bytes; status and source-index gain r1."
+    },
+    {
+      "id": "MON-I01S-CR2-GO",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-CR2-GO: GO for the delta CONTRACT r2 on c2, ref MON-I01S-CR2-GO, under the owner's standing delegation. Q-CB2-1..5 are kept as built, ref MON-I01S-CB2-1..5."
+    },
+    {
+      "id": "MON-I01S-CB2-1..5",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-24",
+      "decision": "Q-I01S-CR2-GO: GO for the delta CONTRACT r2 on c2, ref MON-I01S-CR2-GO, under the owner's standing delegation. Q-CB2-1..5 are kept as built, ref MON-I01S-CB2-1..5."
+    },
+    {
+      "id": "MON-I01S-CR2-KEEP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "Q-I01S-CR2-1: KEEP r2, ref MON-I01S-CR2-KEEP. Q-C2-1: the reviewer's wording, verbatim, ref MON-I01S-C2-1-WORDING. Q-I01S-C3-GO: GO, ref MON-I01S-C3-GO, **with the cap: r3 is the last CONTRACT round**, ref MON-I01S-CR-CAP. All of this is decided under the owner's standing delegation."
+    },
+    {
+      "id": "MON-I01S-C2-1-WORDING",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "R10's port omits the profile-schema load and profile v2's validate and precondition. As under v1, it also leaves out the frozen-model file pins (_frozen's FROZEN_MODELS loop, scripts/proxy_profile_v2.py included), since models are pinned, not copied. Its replay therefore counts 321 checks (16 helper vectors, the definitions pin, 298 vector checks and 6 complete-positive checks), against the model's 323."
+    },
+    {
+      "id": "MON-I01S-C3-GO",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "**c3:** the C2-1 sentence in README §11 and README-v11's \"Replay scope\", and the same in edge v11 notes[3]; the README rows follow the bytes; the status line names c3; status.json and source-index gain r2."
+    },
+    {
+      "id": "MON-I01S-CR-CAP",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-25",
+      "decision": "**Only MINOR or NOTE findings:** they become adoption-check rules (A-I01S-n), folded as text-only c4 errata adopted from an ADOPTION_CHECK with no further round, as at LPK-1's c3."
+    }
+  ],
+  "evidenceClass": "UNIT_VERIFICATION_ONLY",
+  "nativeAcceptance": false,
+  "nonClaims": [
+    "Nothing is installed or compiled.",
+    "The I01 v1 wire, I01 v1's files and R10's HE-004-I01B1 are unchanged.",
+    "Profile v1 remains the wire's profile until W3 and W4 land.",
+    "Admission v4's A2 claims stay unproven until C1 and C2.",
+    "DATA_CHECK_ONLY: the model returns errors or derived values, never a protected handle or native acceptance.",
+    "VPO's validate_messages on the complete positive runs in this packet's v2 layer test, in the pre-check and verify only; the builder never imported VPO (MON-DIG-BUILD-ETP-IMPORT)."
+  ],
+  "carried": [
+    {
+      "item": "S3, with W3 (and the F12 ruling)",
+      "to": "HE-004-I01B4 (R10)",
+      "action": "R10's re-vendor of the v2 files from edge record v11. W3's replay needs PV's binding and observation cases re-derived for profile v2: profile v2's positive is at planeon-qual where PV's cases are at unit-namespace, its quota is above PV's quota.hard, and PV's binding.profileDigest is over profile v1's positive. The re-derived cases are the namespace members, observation.quota and binding.profileDigest. This contract's complete positive, which edge record v11 registers inside i01-digests-v2/vectors.json, is the one v2-profile wire triple that exists and is S3's starting point"
+    },
+    {
+      "item": "W4 (the native-profile caller obligation)",
+      "to": "its own step",
+      "action": "the native-profile record's caller obligation (profile valid under the pinned proxy profile contract, record.profileDigest) names proxy_profile_v2 for a v2 profile"
+    },
+    {
+      "item": "C1 and C2 (LPK-1's)",
+      "to": "LPK-1's carried steps",
+      "action": "I06 SC05's successor with AlwaysPullImages forbidden (C1); W03-0 SC05's successor text and HE-008's sealed APISERVER_FLAGS with --disable-admission-plugins=AlwaysPullImages (C2); until then no v4 A2 claim passes C28"
+    },
+    {
+      "item": "D3-1 and C1-7 (the capture gate's inputs)",
+      "to": "the HE-004-I01B family (R10); the v2-file consumer is HE-004-I01B4",
+      "action": "the capture view records each completed set's own scheduled start on the monotonic clock, and the I01 service receives a millisecond wall reading of the same clock as set_started_ms",
+      "note": "unchanged in substance: the capture gate is v1's"
+    },
+    {
+      "item": "Q-CB-11 (a)",
+      "to": "the HE-004-I01B family (R10); the v2-file consumer is HE-004-I01B4",
+      "action": "the capture verdicts carry no record digest; I01B's design states how each set is bound to the record",
+      "note": "unchanged in substance: the capture gate is v1's"
+    },
+    {
+      "item": "Section 6 (the configuration successor)",
+      "to": "HE-004-I01B and HE-008",
+      "action": "the successor carries the signed expected values and the three sealed admission values (ipFamily, serviceCIDR, defaultTolerationSeconds); HE-008 computes them with the v2 model at enrollment"
+    },
+    {
+      "item": "The residuals R-ADM-LIST, R-PSA-CONFIG, R-NET-DATAPATH, R-NET-AGENT, R-DEFAULTS, R-RBAC-COMPLETE and R-BROKER-LIVE",
+      "to": "T04 (and HE-005 where named)",
+      "action": "each holds its named check in the v2 README section 8; none is claimed here"
+    },
+    {
+      "item": "Q-CB-15 (a) and v1's contract review round 2",
+      "to": "the List-form revision (several NetworkPolicies)",
+      "action": "add the sort vector for networkPolicies (round-1 mutant 22), undetectable while v1 refuses a second NetworkPolicy (NP-02, NE-05)",
+      "note": "unchanged"
+    },
+    {
+      "item": "C3-1 (v1's, contract review round 3, NOTE)",
+      "to": "a later contract revision",
+      "action": "no vector pins rbacClosureDigest's 'rbac: malformed input' route; text-only (the value refuses either way), and R-C2 (a) admitted only text for C2-3",
+      "note": "unchanged; the model text it concerns is copied"
+    },
+    {
+      "item": "C4-1 (v1's, contract review round 4, NOTE)",
+      "to": "a later contract revision",
+      "action": "the model checks that i06 has exactly its three member names, not that their content matches the pinned files; wrong content refuses 'I06 closure check not passed'; text-only, the caller's duty as written",
+      "note": "unchanged; the model text it concerns is copied"
+    },
+    {
+      "item": "C4-2 (v1's, contract review round 4, NOTE)",
+      "to": "a later contract revision",
+      "action": "vectors.json does not pin the closure's namespace-first order or the i06 clause (its rows carry no i06); the D5a oracle tests cover both; R-ORC (a) admitted no vector change",
+      "note": "unchanged; the model text it concerns is copied"
+    },
+    {
+      "item": "C1-1 (v1's, contract review round 1, ruled binding)",
+      "to": "this packet's v2 layer test",
+      "action": "met for v2 by README section 10 (W1): tests/test_policy_observation_digests_v2.py asserts, with no skip, expected-failure mark or import guard, validate_messages(...) == [], profile v2's validate and precondition == [], and VPO's refusal and profile v2's P10 when one preexisting reference's observedDigest changes"
+    },
+    {
+      "item": "C3-2 (v1's, contract review round 3, NOTE)",
+      "to": "I01 v1 (kept as adopted)",
+      "action": "not an open item; it stays with v1"
+    }
+  ],
+  "readmeStatusNote": "This README's status line is the candidate line it is reviewed with; status.json governs.",
+  "installed": false,
+  "wireContract": false,
+  "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+  "adoption": {
+    "ruling": "MON-I01S-C4-ADOPT",
+    "by": "LANE_MONITOR",
+    "date": "2026-10-25",
+    "candidate": "c4",
+    "candidateCommit": "99c0e1db2305220d76079a6e25b5c4db5845be6a",
+    "rebasedCommit": "2af5ce2355da7540f85ce1c23d77f924332433c6",
+    "rebasedOnto": "a88276171453760e46b28e8f6f0c0bb4bbfade5d",
+    "rebase": "c1-c4 rebased onto the mechanics base (264 merged), conflict-free and patch-identical; the contract files are byte-identical",
+    "check": "ADOPTION_CHECK_C4 923f849200ebb565501293fae2dfbc7fb90c232375ac34d6700a7307c05669c0 (kept with the lane's records)"
+  }
+}
