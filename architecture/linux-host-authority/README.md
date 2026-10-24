@@ -1,6 +1,6 @@
 # Linux host authority v1: the owner's per-run GCP Linux hosts, their recipe and key custody (MET-LINUX-008)
 
-Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c2). Roadmap item LINUX-HOST-AUTH-001, packet
+Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c3). Roadmap item LINUX-HOST-AUTH-001, packet
 MET-LINUX-008, design revision 7 with the binding build rules B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18. Contract rounds
 run in series `MET-LINUX-008/contract` under the registered generic brief; review records and `status.json` come after
 adoption. DATA_CHECK_ONLY: published data and an offline checker. Nothing here creates a project, a VM, a key or spend,
@@ -110,15 +110,12 @@ NATIVE_QUALIFICATION_READINESS.md lines 22-23 and its closing sentence (lines 28
 484-485, 523-525, 540-541 and 560-561. This packet's new Linux trust anchor and its release-pinned local CA key are
 therefore not barred by them.
 
-**`readings`** (MON-LHA-16-1). Each reading applies to every occurrence of its words in the superseded, kept and
-satisfied texts, each listed with its span (the cost-scope texts are scanned too and hold none); the checker refuses an
-unlisted occurrence (MON-LHA-ORC-1-A). By the forms section 4 names, "pre-existing", "preexisting" (any case) and
-"existing operator" are PRE_EXISTING's, and any other "existing" is SIGNING_AUTHORITY's:
+**`readings`** (MON-LHA-16-1), each listing its occurrences with their spans. **The named-forms rule** (design section
+4; B-LHA-11; MON-LHA-ORC-2-A): a reading covers its named forms in every superseded, kept and satisfied text, and the
+checker refuses an unlisted one.
 - **SIGNING_AUTHORITY**, "existing": `evidence.signingAuthority`, OPERATOR.md steps 4, 5 and 8 (lines 93, 99, 115 and
   116) and `LINUX_READINESS.md` line 147, cited for the word only (B-LHA-11). Existing signing authority is established
   by the post-merge key ceremony and recorded in `custody-model.json` before any run, never introduced during a run.
-  The superseded capacity predicates' "existing" (`LINUX_READINESS.md` line 63; `LINUX_READINESS_REPAIRS.md` line 147)
-  is listed here by form; those predicates are relaxed and no longer bind.
 - **PRE_EXISTING**, "pre-existing", "preexisting" and "existing" operator (Q-LHA-14, the owner): installed, reviewed and
   verified by the operator before the envelope is signed, never by the campaign. For the per-run cluster the operator
   makes these resources at step 7, which the reading admits. Occurrences: MET-REPAIR-015 lines 28-29 and 37,

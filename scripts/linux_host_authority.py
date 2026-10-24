@@ -528,14 +528,6 @@ PINNED: dict = {'supersedes': {'LR-CAPACITY-ZERO-COST': {'path': 'docs/alpha-2/L
                                      'member': None,
                                      'lines': [147, 147],
                                      'span': '11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af'},
-                 'LR-CAPACITY-ZERO-COST-EXISTING': {'path': 'docs/alpha-2/LINUX_READINESS.md',
-                                                    'member': None,
-                                                    'lines': [63, 63],
-                                                    'span': '11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af'},
-                 'REP-ZERO-COST-CAPACITY-EXISTING': {'path': 'docs/alpha-2/LINUX_READINESS_REPAIRS.md',
-                                                     'member': None,
-                                                     'lines': [147, 147],
-                                                     'span': '11602555873496bfcae331907dcdce1dabd0066aa0b6e99da79dc173262604af'},
                  'NQR-28-PRE-EXISTING': {'path': 'docs/alpha-2/NATIVE_QUALIFICATION_READINESS.md',
                                          'member': None,
                                          'lines': [28, 29],
@@ -652,7 +644,15 @@ CITED_FILES = ("architecture/lab-run-plan/status.json", "architecture/linux-read
                "docs/linux-runner/OPERATOR.md")
 JOINER = " … "
 MEMBER_PART = re.compile(r"([A-Za-z_][A-Za-z0-9_]*)((?:\[[0-9]+\])*)")
-READING_WORDS = re.compile(rb"(?i)pre-?existing|existing")
+# A reading covers its named forms in every superseded, kept and satisfied text (design section 4; B-LHA-11;
+# MON-LHA-ORC-2-A). PRE_EXISTING: pre-existing and preexisting in any case, and "existing operator". SIGNING_AUTHORITY:
+# evidence.signingAuthority's EXISTING_..., and line 147's "existing" of the existing independent PLATFORM_RELEASE,
+# TENANT_LIVE_EXECUTION and CAPACITY_OPERATOR authorities. Group 1 is the word; a lookahead may read past the fragment.
+NAMED_FORMS = (("PRE_EXISTING", re.compile(rb"(?i)(pre-?existing)")),
+               ("PRE_EXISTING", re.compile(rb"(?i)(existing)(?=\s+operator\b)")),
+               ("SIGNING_AUTHORITY",
+                re.compile(rb"(EXISTING)(?=_PLATFORM_RELEASE_TENANT_LIVE_EXECUTION_AND_CAPACITY_OPERATOR)")),
+               ("SIGNING_AUTHORITY", re.compile(rb"(?i)(existing)(?=\s+independent\s+PLATFORM_RELEASE\b)")))
 
 
 class Base:
@@ -808,8 +808,8 @@ def check_authority(doc: Any, schema: dict, base: Base) -> None:
                 "the independence clause is superseded only with the owner's Q-LHA-1 (a) answer, verbatim")
         require(replacement["disclosure"] == DISCLOSURE,
                 "the independence clause is superseded only with the disclosure signers: SINGLE_PRINCIPAL_SEPARATED_KEYS")
-    # The readings (MON-LHA-16-1; Q-LHA-14): each occurrence holds one of its words, and every occurrence of the words in
-    # the superseded, kept, satisfied and cost-scope texts is listed (design section 4; MON-LHA-ORC-1-A).
+    # The readings (MON-LHA-16-1; Q-LHA-14): each occurrence holds one of its words, and each reading covers its named
+    # forms in every superseded, kept and satisfied text (design section 4; MON-LHA-ORC-1-A, MON-LHA-ORC-2-A).
     require([r["id"] for r in doc["readings"]] == list(READINGS)
             and all(r["words"] == READINGS[r["id"]] for r in doc["readings"]),
             "the readings are SIGNING_AUTHORITY and PRE_EXISTING, each with its words")
@@ -819,18 +819,21 @@ def check_authority(doc: Any, schema: dict, base: Base) -> None:
                     occurrence["id"] + ": a reading occurrence holds one of its words")
     _pinned_section(occurrences, "occurrences", "the readings list only their listed occurrences",
                     "every listed occurrence of a reading's words is in its reading")
-    covered = [(o["path"], piece) for o in occurrences for piece in pieces[o["id"]]]
+    covered = [(reading["id"], o["path"], piece) for reading in doc["readings"] for o in reading["occurrences"]
+               for piece in pieces[o["id"]]]
     lines_of = {}
-    for section in ("supersedes", "unchanged", "satisfied", "costScope"):
+    for section in ("supersedes", "unchanged", "satisfied"):
         for entry in doc[section]:
-            lines_of.setdefault(entry["path"], base.lines(entry["path"]))
+            line_list = lines_of.setdefault(entry["path"], base.lines(entry["path"]))
             for number, start, end in pieces[entry["id"]]:
-                for match in READING_WORDS.finditer(lines_of[entry["path"]][number - 1][start:end]):
-                    at, to = start + match.start(), start + match.end()
-                    require(any(path == entry["path"] and n == number and s <= at and to <= e
-                                for path, (n, s, e) in covered),
-                            "every occurrence of a reading's words in the superseded, kept, satisfied and cost-scope "
-                            "texts is listed with its span")
+                for reading_id, pattern in NAMED_FORMS:
+                    for match in pattern.finditer(line_list[number - 1]):
+                        at, to = match.span(1)
+                        if start <= at and to <= end:
+                            require(any(rid == reading_id and path == entry["path"] and n == number and s <= at
+                                        and to <= e for rid, path, (n, s, e) in covered),
+                                    "a reading covers its named forms in every superseded, kept and satisfied text, "
+                                    "each listed in that reading with its span")
     # Capacity, evidence and decisions.
     capacity = doc["capacity"]
     require(capacity["rule"] == "OWNER_APPROVED_GCP_PER_RUN" and capacity["contract"] == "MET-LINUX-007"

@@ -81,7 +81,7 @@ def test_every_span_is_rederived_here_from_the_cited_bytes():
     """An independent restatement of design section 4's digest rule, not the checker's code path."""
     authority = _load(RECORDS["authority"])
     entries = _span_entries(authority)
-    assert len(entries) == len({e["id"] for e in entries}) == 67
+    assert len(entries) == len({e["id"] for e in entries}) == 65
     for entry in entries:
         raw = (ROOT / entry["path"]).read_bytes()
         assert hashlib.sha256(raw).hexdigest() == entry["fileSha256"], entry["id"]
@@ -108,34 +108,40 @@ def test_the_relaxed_predicates_are_the_capacity_predicates_and_the_independence
     assert all(set(e["keptIn"]) <= kept for e in authority["supersedes"])
 
 
-def test_every_reading_word_in_the_superseded_kept_and_satisfied_texts_is_listed():
-    """Design section 4 (MON-LHA-ORC-1-A): each reading applies to every occurrence of its words in the superseded, kept
-    and satisfied texts, each listed with its span. Restated here over the cited bytes."""
+def test_each_reading_covers_its_named_forms_in_the_superseded_kept_and_satisfied_texts():
+    """Design section 4, B-LHA-11 and MON-LHA-ORC-2-A: a reading covers its named forms in every superseded, kept and
+    satisfied text. Restated here over the cited bytes: pre-existing or preexisting in any case and "existing operator"
+    are PRE_EXISTING's; EXISTING_ of evidence.signingAuthority and line 147's "existing independent PLATFORM_RELEASE"
+    are SIGNING_AUTHORITY's. "Existing ... capacity" is in neither."""
     authority = _load(RECORDS["authority"])
     listed = {}
     for reading in authority["readings"]:
         for o in reading["occurrences"]:
             for start_line, start_byte, end_line, end_byte in o["fragments"]:
                 assert start_line == end_line, o["id"]
-                listed.setdefault((o["path"], start_line), []).append((start_byte, end_byte, reading["id"]))
-    words = re.compile(rb"(?i)pre-?existing|existing")
-    seen = 0
-    for section in ("supersedes", "unchanged", "satisfied", "costScope"):
+                listed.setdefault((reading["id"], o["path"], start_line), []).append((start_byte, end_byte, o["id"]))
+    forms = [("PRE_EXISTING", rb"(?i)(pre-?existing)"), ("PRE_EXISTING", rb"(?i)(existing)(?=\s+operator\b)"),
+             ("SIGNING_AUTHORITY", rb"(EXISTING)(?=_PLATFORM_RELEASE_TENANT_LIVE_EXECUTION_AND_CAPACITY_OPERATOR)"),
+             ("SIGNING_AUTHORITY", rb"(?i)(existing)(?=\s+independent\s+PLATFORM_RELEASE\b)")]
+    found = []
+    for section in ("supersedes", "unchanged", "satisfied"):
         for entry in authority[section]:
             lines = (ROOT / entry["path"]).read_bytes().split(b"\n")
             for start_line, start_byte, end_line, end_byte in entry["fragments"]:
                 for number in range(start_line, end_line + 1):
                     start = start_byte if number == start_line else 0
                     end = end_byte if number == end_line else len(lines[number - 1])
-                    for match in words.finditer(lines[number - 1], start, end):
-                        seen += 1
-                        assert any(s <= match.start() and match.end() <= e
-                                   for s, e, _ in listed.get((entry["path"], number), [])), (entry["id"], number)
-    assert seen == 4
-    added = {o["id"]: (reading["id"], o["text"]) for reading in authority["readings"] for o in reading["occurrences"]}
-    assert added["LRJ-BILLING-CAPACITY-PREEXISTING"] == ("PRE_EXISTING", "PREEXISTING")
-    assert added["LR-CAPACITY-ZERO-COST-EXISTING"] == ("SIGNING_AUTHORITY", "existing")
-    assert added["REP-ZERO-COST-CAPACITY-EXISTING"] == ("SIGNING_AUTHORITY", "existing")
+                    for reading_id, form in forms:
+                        for match in re.finditer(form, lines[number - 1]):
+                            at, to = match.span(1)
+                            if start <= at and to <= end:
+                                hits = [oid for s, e, oid in listed.get((reading_id, entry["path"], number), [])
+                                        if s <= at and to <= e]
+                                assert hits, (entry["id"], number, reading_id)
+                                found.append((reading_id, hits[0]))
+    assert sorted(found) == [("PRE_EXISTING", "LRJ-BILLING-CAPACITY-PREEXISTING"), ("SIGNING_AUTHORITY", "LR-147-EXISTING")]
+    occurrences = {o["id"] for reading in authority["readings"] for o in reading["occurrences"]}
+    assert not occurrences & {"LR-CAPACITY-ZERO-COST-EXISTING", "REP-ZERO-COST-CAPACITY-EXISTING"}
 
 
 def test_the_drop_manifest_targets_are_exactly_the_fixed_list():
