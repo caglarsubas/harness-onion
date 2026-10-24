@@ -167,7 +167,8 @@ document whose evaluation raises, as in the model of the author's design proof (
 its one generic refusal in the same place. A lone surrogate does not reach it (P01, above). One parsed, schema-valid
 document is still known to reach it: a Pod whose cpu request and limit are equal and end in one line feed (for
 example `500m` followed by one), which the cpu pattern admits (see Patterns) and whose millicore value then cannot
-be read; VPC refuses the same document with its generic refusal at the same point. (2) `precondition` returns P99
+be read. VPC refuses this v2 document earlier, at its schema check; only a v1 profile holding the same Pod reaches
+VPC's own cpu read, where VPC gives its generic refusal. (2) `precondition` returns P99
 for an argument that is not a profile object with a binding namespace, a document `validate` refuses. No vector
 expects P99.
 

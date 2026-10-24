@@ -57,8 +57,9 @@ The refusal text is `MC42 every emptyDir is bounded: ` followed by the reason of
 3. every container and every init container has an `ephemeral-storage` limit in decimal bytes ("an ephemeral-storage
    limit in decimal bytes on every container and init container"). MC34 (requests equal limits) runs earlier, so the
    request is present and equal too. A container or init container whose `resources` or `limits` is not an object
-   has no such limit and fails this check; a `resources` that is not an object meets MC34 first, which v4 carries
-   from v3 unchanged;
+   has no such limit and fails this check. A `resources` that is empty or null is refused earlier by MC34, which v4
+   carries from v3 unchanged; any other `resources` that is not an object makes that carried MC34 check raise an
+   error instead of refusing (as in v3), so it never reaches this check;
 4. the sum of the `sizeLimit`s is at most the sum of the containers' (`spec.containers`) `ephemeral-storage` limits
    ("the sizeLimits sum to at most the containers' ephemeral-storage limits").
 
