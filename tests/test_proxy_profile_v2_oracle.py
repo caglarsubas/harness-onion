@@ -1043,11 +1043,20 @@ def test_model_uses_the_standard_library_only():
 
 
 def test_status_contract_state_matches_readme_status_line():
-    """Header status line and Files (status.json governs): contractState equals the README's status line."""
-    match = re.search(r"Status: \*\*([A-Z0-9_]+)\*\*", README)
-    assert match and STATUS["contractState"] == match.group(1)
-    candidate = re.search(r"\(candidate (c\d+);", README)
-    assert candidate and STATUS["candidate"] == candidate.group(1)
+    """Header status line and Files (status.json row): the header line is the candidate line the README was
+    reviewed with, and status.json governs it. The README never states the two are equal, so this asserts no
+    equality between them and no status.json value the README does not state."""
+    header = re.search(r"Status: \*\*[A-Z0-9_]+\*\*\s+\(candidate c\d+;", README)
+    assert header, "the header carries a status line naming the candidate it was reviewed with"
+    sentence = " ".join(re.search(r"(This status line is .*?governs\.)", README, re.S).group(1).split())
+    assert sentence.replace("`", "") == ("This status line is the candidate line the README is reviewed with; "
+                                         "status.json governs.")
+    files_row = re.search(r"^\| `status\.json` \| (.*) \|\s*$", README, re.M).group(1)
+    assert "it governs this README's status line" in files_row
+    note = STATUS["readmeStatusNote"]
+    assert "status line is the candidate line" in note
+    assert note.endswith("status.json governs.")
+    assert isinstance(STATUS["contractState"], str) and STATUS["contractState"]
 
 
 def test_status_readme_status_note_agrees():

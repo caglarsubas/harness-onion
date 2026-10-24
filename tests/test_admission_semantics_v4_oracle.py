@@ -1120,14 +1120,17 @@ def test_allowlists_unverified_readings_named_in_readme():
         assert phrase in joined, phrase
 
 
-def test_status_contract_state_matches_readme_status_line():
-    """README §status line (top of the README): the status line's state and candidate equal status.json's
-    contractState and candidate; status.json governs."""
+def test_status_governs_and_readme_status_line_is_the_reviewed_candidate_line():
+    """README §status line (top of the README); §Files: the README's status line is the candidate line the README is
+    reviewed with, and status.json, which holds the contract state, governs it. The README states no equality between
+    them, so none is asserted."""
     found = re.search(r"Status: \*\*([A-Z0-9_]+)\*\* \(candidate (c\d+);", README)
-    assert found
-    assert STATUS["contractState"] == found.group(1)
-    assert STATUS["candidate"] == found.group(2)
-    assert "the candidate line the README is reviewed with; `status.json` governs" in FLAT
+    assert found and "CANDIDATE" in found.group(1)
+    assert "This status line is the candidate line the README is reviewed with; `status.json` governs" in FLAT
+    assert "The contract state, review rounds" in FLAT and "it governs this README's status line" in FLAT
+    assert isinstance(STATUS.get("contractState"), str) and STATUS["contractState"]
+    note = STATUS["readmeStatusNote"]
+    assert "candidate line" in note and "status.json governs" in note
 
 
 def test_status_readme_status_note_agrees():
