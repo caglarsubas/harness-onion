@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the MET-LIVE-004 workload profile v2 and admission semantics v4 (LPK-1) as one combined contract, adopted as candidate c3 after its in-tree CONTRACT rounds 1 and 2 (the models over their vectors, v3 frozen and every predecessor pinned; DATA_CHECK_ONLY, no gate path) with its D5a oracles and B-L1-4's pins record, and the exact 263-to-262 projection."""
+"""Validate the MET-LIVE-004 workload profile v2 and admission semantics v4 (LPK-1) as one combined contract, adopted as candidate c3 after its in-tree CONTRACT rounds 1 and 2 (the models over their vectors, v3 frozen, the non-chain pinned files byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under B-L1-3; DATA_CHECK_ONLY, no gate path) with its D5a oracles and B-L1-4's pins record, and the exact 263-to-262 projection."""
 from __future__ import annotations
 
 import ast
@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/linux-probe-kit-admission-authority.json"
-AUTHORITY_SHA256 = "85e510347bcd8eababa09f9d95da7f0f13b4de6e6899baa81842ba8ffa84f3d8"
+AUTHORITY_SHA256 = "b4751622938a2322a1df09f1562085bc2e9e14c3c3833d89591268f983c97db6"
 VALIDATOR_PATH = "scripts/validate_linux_probe_kit_admission.py"
 BASE_COMMIT = "0ffa7db076a92e8bb341db4867557b894ecb5b27"
 NEW_PACKET = "MET-LIVE-004"
@@ -351,9 +351,10 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # admission-manifests/planeon-a2.json) with its model scripts/admission_semantics_v4.py, architecture/proxy-profile-v2/
 # (README, the closed profile v2 schema, vectors and status) with its model scripts/proxy_profile_v2.py, and the combined
 # review set architecture/linux-probe-kit-admission/ (source-index.json, the two published rounds with their identities,
-# the two D5a oracle identities and B-L1-4's mechanics-pins.json), with the two D5a oracle tests. Every predecessor stays
-# byte-identical: admission v3 and v2, profile v1 and its amendment, I01, the plans, the edge records and the other files
-# of design section 7's pin list, under B-L1-3 (the chain validators and tests among them change only by the step rule).
+# the two D5a oracle identities and B-L1-4's mechanics-pins.json), with the two D5a oracle tests. Every non-chain file of
+# design section 7's pin list stays byte-identical (admission v3 and v2, profile v1 and its amendment, I01's records, the
+# plans, the edge records and the others), and the chain validators and tests among them change only by the chain-bump
+# vocabulary, under the step rule (B-L1-3).
 # It is data only, and no gate path: it changes no earlier contract, the review-record brief registry or the evolution
 # surface record. Repository bytes and modes are read only through reviewed_bytes and reviewed_mode, so a later bridged
 # successor projects its own edits away first; a path outside this era is refused before it is read, every era file is
@@ -1052,7 +1053,7 @@ def check_pin(row: Any, raw: Any, rule: Any) -> None:
                     and rule is None)
            or (row["rule"] == "STEP_RULE" and _chain_file(row["path"]) and type(rule) is dict
                and rule["beforeSha256"] == row["sha256"]),
-           "an unchanged pin holds at this era: " + str(row.get("path") if type(row) is dict else row))
+           "an unchangedPins row holds at this era: " + str(row.get("path") if type(row) is dict else row))
 
 
 def class_paths(row: Any, paths: Any) -> list:

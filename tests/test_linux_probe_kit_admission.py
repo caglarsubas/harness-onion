@@ -1644,7 +1644,7 @@ def test_the_pins_record_is_closed(change):
         profile.check_pins_record(_pins_mutant(change))
 
 
-PIN_MESSAGE = "an unchanged pin holds at this era: "
+PIN_MESSAGE = "an unchangedPins row holds at this era: "
 
 
 def _pin_inputs(row):

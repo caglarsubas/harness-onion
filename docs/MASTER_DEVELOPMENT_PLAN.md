@@ -13,9 +13,11 @@ every image pulled Never (MC33), bounds every emptyDir (MC42 and A2-POD-EMPTYDIR
 re-renders the sealed A2 file with a new directory hash; nothing is installed. The contract was adopted as candidate c3
 (MON-LPK1-C3-ADOPT) after two in-tree CONTRACT rounds of the MET-LIVE-004/contract series, published under
 architecture/linux-probe-kit-admission/ with their identities, the source index and the two D5a oracle identities that
-bind tests/test_admission_semantics_v4_oracle.py and tests/test_proxy_profile_v2_oracle.py (KEEP). Profile v1, admission v3
-and v2, I01, the plans, the edge records and every other pinned predecessor stay byte-identical (B-L1-3); the pins and the
-evolution-surface classes are recorded in architecture/linux-probe-kit-admission/mechanics-pins.json (B-L1-4). No gate
+bind tests/test_admission_semantics_v4_oracle.py and tests/test_proxy_profile_v2_oracle.py (KEEP). The non-chain pinned
+files (profile v1, admission v3 and v2, I01's records, the plans and the edge records among them) stay byte-identical,
+and the chain validators and tests in the pin lists change only by the chain-bump vocabulary, under the step rule
+(B-L1-3); the pins and the evolution-surface classes are recorded in
+architecture/linux-probe-kit-admission/mechanics-pins.json (B-L1-4). No gate
 path changes: the brief registry already holds this packet's PACKET and CONTRACT series, and the evolution surface record
 classifies every new path as data. Its new layer checks the adoption and the rounds, both models over their vectors (v4's
 141 cases, v3's 114 through the frozen v3 model, the sealed A2 file and its directory hash, and profile v2's 67 cases with
@@ -26,7 +28,7 @@ payload mutation (C2), while the new head's test keeps the full fan-in. MET-LIVE
 
 | Phase | ID | Status | Description / gate |
 |---|---|---|---|
-| Alpha2A | MET-LIVE-004 / LINUX-PROBE-KIT-ADMISSION | SOURCE_PREPARED | Workload profile v2 and admission semantics v4 (263rd packet): one combined contract under architecture/proxy-profile-v2/ and architecture/admission-semantics-v4/, adopted as candidate c3 after two in-tree CONTRACT rounds; profile v1, admission v3 and every pinned predecessor byte-identical; nothing installed; data, no gate path |
+| Alpha2A | MET-LIVE-004 / LINUX-PROBE-KIT-ADMISSION | SOURCE_PREPARED | Workload profile v2 and admission semantics v4 (263rd packet): one combined contract under architecture/proxy-profile-v2/ and architecture/admission-semantics-v4/, adopted as candidate c3 after two in-tree CONTRACT rounds; every non-chain pinned file byte-identical (profile v1 and admission v3 among them), the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); nothing installed; data, no gate path |
 | Alpha2A | MET-LIVE-003 / LINUX-PROBE-INTERFACE | VERIFY_PASSED_MERGED | Merged as main 0ffa7db |
 | Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
 | Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
