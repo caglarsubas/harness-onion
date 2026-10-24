@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "planeon.internal.linux-probe-kit-admission-index/v1",
+  "packet": "MET-LIVE-004",
+  "workItem": "LINUX-PROBE-KIT-ADMISSION",
+  "series": "MET-LIVE-004/contract",
+  "candidate": "c1",
+  "baseMain": "0ffa7db076a92e8bb341db4867557b894ecb5b27",
+  "inTreeRounds": [],
+  "roundNumbering": "The in-tree MET-LIVE-004/contract rounds start at round 1, the first CONTRACT round on the candidate, and run 1, 2, 3 with no gap. The TOOLS design rounds below are design history, cited by sha256; none is numbered as an in-tree round.",
+  "rulings": {
+    "Q3 (a)": "**Q3 (a):** the in-tree MET-LIVE-004/contract rounds start at round 1, citing the TOOLS design rounds 1-2 in source-index.json, so no SERIES_GAP arises. L1D2-5: fold Q-LPK1-R2-1 and MON-LPK1-R2-2 verbatim into the build.",
+    "MON-LPK1-DR3-3": "D-R3-3 is accepted (MON-LPK1-DR3-3). Q3 (a) meant citing every TOOLS design round, so source-index.json cites rounds 1-3.",
+    "scope": "With the minimal delta r4 that Q2 (a) set up, every TOOLS design round is rounds 1 to 4."
+  },
+  "design": {
+    "revision": 4,
+    "sha256": "6f8ffc409a0dcef302e9f587e9ce6cbbf2db914568265b99e4fccff75d5411f4",
+    "adoption": "MON-LPK1-ADOPT-REV4 (lane monitor, 2026-10-23), with design round 4's PASS_FOR_ADOPTION"
+  },
+  "designHistory": [
+    {
+      "designRound": 1,
+      "record": "TOOLS design review round 1 (not published)",
+      "sha256": "8dfd94052ecd7363569b9abbecfbc84fff11ac5f2f10672ac7db90608d4e8dc2",
+      "verdict": "CHANGES_REQUIRED",
+      "recordShape": "pre-v2 record",
+      "designSha256": "7fb0c40dc34fa2e385140b83bdfd54936ab1040edddaf434dc3bbc62ff50ec05",
+      "ruling": "MON-LPK1-R1-KEEP"
+    },
+    {
+      "designRound": 2,
+      "record": "TOOLS design review round 2 (not published)",
+      "sha256": "c9cfc92dd1148b41c78325af638a97afac2ad0247e7f4470bd8f6a53834ea883",
+      "verdict": "CHANGES_REQUIRED",
+      "recordShape": "planeon.review-record/v2",
+      "designSha256": "ee277daac787e2f228b5fe04918975e63a4845aae5425b0825746d687faff885",
+      "ruling": "MON-LPK1-R2-SLIPS"
+    },
+    {
+      "designRound": 3,
+      "record": "TOOLS design review round 3 (not published)",
+      "sha256": "50d74930a1d997db63e4f19116c1b919c55412a32e9e34b892189935e5d70ef5",
+      "verdict": "CHANGES_REQUIRED",
+      "recordShape": "planeon.review-record/v2",
+      "designSha256": "52050e6a2413f9ea86f181e324d59ee9580b54481b6540e12308ccd896ee7510",
+      "ruling": "MON-LPK1-R3-SLIPS"
+    },
+    {
+      "designRound": 4,
+      "record": "TOOLS design review round 4 (not published)",
+      "sha256": "632910a4219280357bdef5a6c08406bb1c33d6e086f5c40bf33b945b7b4b41f8",
+      "verdict": "PASS_FOR_ADOPTION",
+      "recordShape": "planeon.review-record/v2",
+      "designSha256": "6f8ffc409a0dcef302e9f587e9ce6cbbf2db914568265b99e4fccff75d5411f4",
+      "ruling": "MON-LPK1-R4-SLIPS, MON-LPK1-ADOPT-REV4",
+      "note": "the minimal delta r4 of Q2 (a)"
+    }
+  ],
+  "designProof": "the author's design proof (local, not published)",
+  "subject": [
+    {
+      "path": "architecture/admission-semantics-v4/README.md",
+      "sha256": "43affa545409859cb2cb2be9b7e25c4918995bd82f30651fb9bd444eb135fd78"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/admission-manifests/planeon-a2.json",
+      "sha256": "92c21612304cb704d13b506c1ae885d62a47c01f0ed0d284affe563aa1868e32"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/allowlists.json",
+      "sha256": "e399f5bbe4c5e84659693efa22f0d943e6a64ec291d3fa51dbf9c0614501e7f7"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/status.json",
+      "sha256": "bfe74ba32c454819f4e1111365e0c7ad5ba37a24d49f5880c092a83d0edf7c2d"
+    },
+    {
+      "path": "architecture/admission-semantics-v4/vectors.json",
+      "sha256": "5706b1a8df5cabd978caa219400b40a9c4ef6cbdbca8ea2f7c6f69b69474301c"
+    },
+    {
+      "path": "architecture/proxy-profile-v2/README.md",
+      "sha256": "da4c9ce3ea7ac2f90db9c943d0139468b5a7d0b34aea1ecc5bede6201f7d53ef"
+    },
+    {
+      "path": "architecture/proxy-profile-v2/profile.schema.json",
+      "sha256": "e5ef3c3d112bce97d94da4b465b52feb69935a144f26dd711440acd6c67ad592"
+    },
+    {
+      "path": "architecture/proxy-profile-v2/status.json",
+      "sha256": "c39f78f1255489c4d719993c22a4e533f06f22e4b14eee83fe32c5e1ed550ee3"
+    },
+    {
+      "path": "architecture/proxy-profile-v2/vectors.json",
+      "sha256": "011a650bcd2a11f2eaeba531693f3e7ee9c30c1f6ede2d5ecf87919f206affcc"
+    },
+    {
+      "path": "scripts/admission_semantics_v4.py",
+      "sha256": "4c22c223d73c4f6f0993859ff21840d81fe039c2bcb3c42f24e5495382c86867"
+    },
+    {
+      "path": "scripts/proxy_profile_v2.py",
+      "sha256": "4398d376a1cf94190d34169f27f5d03bb6dff9f49c273b38362aad0a146df734"
+    }
+  ],
+  "predecessorInputs": [
+    {
+      "path": "architecture/admission-semantics-v3/README.md",
+      "sha256": "c3106482b4ff79649cbef7c65797c6fcd6b64f8419e871ae7d89eecad3ff98ab"
+    },
+    {
+      "path": "architecture/admission-semantics-v3/allowlists.json",
+      "sha256": "9314cd0732880a8e6af91df562af0a392183f6ef078c12fa9b479f6953fad5d4"
+    },
+    {
+      "path": "architecture/admission-semantics-v3/vectors.json",
+      "sha256": "a3e2dc9818742ae2188e0e83cf91bb833be836115975b3fb23d5f280f6928cc1"
+    },
+    {
+      "path": "architecture/admission-semantics-v3/status.json",
+      "sha256": "65fedb6284ae7ee70686166db0bcf0f2fdf37756b59ee3f3f8267b25b0ccfda7"
+    },
+    {
+      "path": "architecture/admission-semantics-v3/admission-manifests/planeon-a2.json",
+      "sha256": "1096b3cc71c4fe6b5a17ed61e8bf8c17ee17fcf52b192503534d60aed9ce4741"
+    },
+    {
+      "path": "scripts/admission_semantics_v3.py",
+      "sha256": "3db8f51ab55f49dc33cf6f028306bfb6d7aa1c5d7d96f264cfe709dae925ad22"
+    },
+    {
+      "path": "architecture/proxy-contract-inputs/profile.schema.json",
+      "sha256": "209349ccf44989566ffb39e2654fc91323b5eb2d9cbe895a4b18f33a349a226d"
+    },
+    {
+      "path": "architecture/proxy-contract-inputs/vectors.json",
+      "sha256": "edf32ddf992e06e8786fd331affdb4d2ecd5538ca874d52c37439386793a8eb7"
+    }
+  ]
+}
