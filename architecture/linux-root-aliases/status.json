@@ -72,10 +72,27 @@
   "identity": "architecture/linux-root-aliases/oracle-identity.json",
   "result": "71/71 on candidate c1 (051a298a), first run; ruling KEEP (MON-RA-ORACLE-KEEP)"
  },
- "reviews": [],
+ "reviews": [
+  {
+   "review": "MET-LINUX-009/contract round 1",
+   "record": "architecture/linux-root-aliases/review-round1.json",
+   "recordSha256": "4abfb43fe075469076a2e36d10619c4a37b74e8f918f1c0a3348955a12b1b9df",
+   "subject": "candidate c2 (c83efb466977612af1c48472a088c90d08097633)",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": "0 MAJOR, 1 MINOR (RA-C1-1, fixed in c3), 4 NOTE"
+  }
+ ],
  "nonClaims": [
   "SOURCE_ONLY: no Linux host PASS, installation, signature or listener registration is claimed.",
   "The record's imageDigest check is declarative; the kit cannot attest the booted image.",
   "v3 inputs and their inventories are unchanged; v4 is opt-in through a signed record."
- ]
+ ],
+ "unchangedListedFiles": {
+  "paths": [
+   "tests/linux_runner/conftest.py",
+   "tests/linux_runner/test_system_inventory_v2.py",
+   "tests/linux_runner/test_toolchain.py"
+  ],
+  "note": "listed in the design's file table and the derivation; unchanged at their base digests, since the v4 fixture and every vector live in test_root_aliases.py (RA-C1-3)"
+ }
 }

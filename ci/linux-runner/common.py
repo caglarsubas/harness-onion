@@ -506,9 +506,14 @@ def root_aliases(raw, inputs):
         require(type(path) is str and ROOT_ALIAS_PATH.fullmatch(path) is not None and path not in reserved,
                 "root alias path")
         require(previous is None or path.encode() > previous.encode(), "root alias order or duplicate")
-        require(type(target) is str and target and "\x00" not in target and len(os.fsencode(target)) <= 4096,
-                "root alias target")
-        require(tree in {item["root"] for item in inputs["systemTrees"]} and tree not in trees, "root alias tree")
+        require(type(target) is str and target and "\x00" not in target, "root alias target")
+        try:
+            encoded = os.fsencode(target)
+        except UnicodeEncodeError as exc:
+            raise Refused("root alias target") from exc
+        require(len(encoded) <= 4096, "root alias target")
+        require(type(tree) is str and tree in {item["root"] for item in inputs["systemTrees"]} and tree not in trees,
+                "root alias tree")
         previous = path
         trees.add(tree)
     return tuple(aliases)
