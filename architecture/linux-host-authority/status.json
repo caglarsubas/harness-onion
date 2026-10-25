@@ -16,6 +16,14 @@
    "rules": "B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18 (B-LHA-3 superseded)"
   }
  },
+ "gate": {
+  "classes": [],
+  "prApprovers": [
+   "LANE_MONITOR",
+   "OWNER"
+  ],
+  "note": "derived from the evolution-surface record at the mechanics base f9882c1a, not by hand: no path of the derived set is gate material"
+ },
  "series": {
   "contract": "MET-LINUX-008/contract",
   "packet": "MET-LINUX-008/packet",
@@ -149,5 +157,41 @@
   "DATA_CHECK_ONLY: no GCP project, VM, key or spend exists or is created by this packet.",
   "Approving capacity is not qualification; until CONF-LIVE-005/006 close, a lease yields only HOST_ISOLATION_ONLY preflight evidence.",
   "GCP and systemd facts are on paper."
- ]
+ ],
+ "allowedPathsDerivation": {
+  "rule": "MON-LHA-266-GO-1-3 (the gate status from the record at the slot-266 base)",
+  "scope": "the named set (the contract directory with every round's record and identity, the checker and its two tests, and the history-chain layer the mechanics add), plus the chain tools' bump set (265's modified chain files and its new layer and test); no registry rider, since both series are pre-registered",
+  "recordDigest": "sha256:b184ee6aa2b808e5b4b2206ad93f1490697aca40fc6ebef7efbf1c29a38dd4b9",
+  "atBase": "f9882c1a4d0c2576e773841fe96e1f2e5958473f",
+  "predecessorRange": [
+   "a88276171453760e46b28e8f6f0c0bb4bbfade5d",
+   "f9882c1a4d0c2576e773841fe96e1f2e5958473f"
+  ],
+  "tool": {
+   "name": "derive_full_allowed_lha.py (kept with the lane's records; adapted from MET-LINUX-009's tool)",
+   "sha256": "f33a7fcceefa7beea2b61d245538ce48fcad8ee7cce371c090976ba3c197b0fb"
+  },
+  "counts": {
+   "named": 29,
+   "bump": 240,
+   "rider": 0,
+   "union": 266
+  },
+  "byClass": {
+   "CONTRACT_AND_SOURCE": 262,
+   "ORACLE_TESTS": 1,
+   "REVIEW_RECORD": 3
+  },
+  "pathListSha256": "c1bbd62787e2c5a9531e6607ba40653dc05b360944d2cde200c77b1b62b4a0fb",
+  "result": {
+   "prApprovers": [
+    "LANE_MONITOR",
+    "OWNER"
+   ],
+   "unclassified": 0,
+   "caseVariant": 0
+  },
+  "pass": true,
+  "note": "the predecessor range's one modified non-chain path, the review-record registry, is not in this packet's set (no rider)"
+ }
 }
