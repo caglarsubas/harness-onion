@@ -1,0 +1,306 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-LINUX-008/contract",
+ "round": 1,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "cad346c3a6bee77f7ff24502fdff9a76d63be5a6",
+  "tree": "32d14a0deda3d03b6f42a3bd7558b91073010af8"
+ },
+ "reviewDate": "2026-10-25",
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "f5b0e57d699bd3dfe42acb62b5599e27cc7ae68006016b7f6ead54e3fee8d38d",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "CONTRACT_REVIEWER"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "LHA-C1-1",
+   "severity": "MINOR",
+   "location": "tests/test_linux_host_authority.py lines 19-24 (CONTRACT_FILES) and line 41 (test_the_contract_directory_holds_exactly_the_candidate_files); architecture/linux-host-authority/README.md line 3 (status) and the Files table (lines 29-40)",
+   "finding": "At the subject c4 the candidate's own test file fails 1 of 34 (33 passed). c4 added architecture/linux-host-authority/oracle-identity.json to the contract directory, but CONTRACT_FILES still lists only the eleven c3 files, so the exact-listing assertion at line 41 fails. The operator's 34/34 was taken on c3, before the identity was committed. The README also still says 'candidate c3', and its Files table names neither oracle-identity.json nor tests/test_linux_host_authority_oracle.py, which design section 3 lists as contract files.",
+   "requiredChange": "Add oracle-identity.json to CONTRACT_FILES (or assert it separately), update the README status line and Files table to name the D5a oracle test file and its identity, and re-run tests/test_linux_host_authority.py to 34/34 at the new head. The oracle module stays byte-identical (212cdebe).",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C1-2",
+   "severity": "MINOR",
+   "location": "scripts/linux_host_authority.py check_recipe (lines 929-1056), check_launcher (1177-1285), check_custody (1295-1395) and explain (1450-1456); custody-model.json localCa, clusterCa, tokenSessions, bundles, revocation, perRunCredentials[1].issuedAt; launcher-install.json signedDropInstaller.fixedTargets[].state, dropDirectory, stagingDirectory, triggerUnits[1], offlineLauncher.custodyWrittenAtStep; host-recipe.json image.customImage, image.imageDigest, machine.maintenance, profile",
+   "finding": "The checker never reads several record members that carry an owner decision or a binding rule, so check accepts a record that contradicts them. Each was probed as one mutation of the published records through check_set, which returned no refusal: the release-pinned local CA kept as an online software key on the host, issuing KUBERNETES_PROXY_SERVER_MTLS too, or allowed in the API server's client trust (Q-LHA-16 (2); B-LHA-2); the per-run cluster CA made at step 13 or needing a new key or token (B-LHA-2; MON-LHA-B2); T2's order with the drop manifest signed first (runbook step 12; Q-LHA-2); the bundles installed after the revocation or their digests not in the envelope (MON-LHA3-1-2); the LIVE_MANIFEST drop target set ACTIVE while liveLauncher.state is WAITING, after which check_drop accepts a drop manifest that lists the live manifest (design section 6: only once CONF-LIVE-005/006 close); CAMPAIGN_PROXY_CLIENT_MTLS issuedAt set to STEP_8, which skips the T2 drop-target check; the drop directory mode 0777 or the staging directory not root-owned (B-LHA-4); the export unit run as OPERATOR_UID, contradicting privilegedActions (B-LHA-1); custody.json written at step 13 (design section 6); the custom image's root on XFS without verity, or imageDigest not recomputed off host (Q-LHA-15); an automatic restart inside the lease (Q-LHA-8). A one-leaf-at-a-time sweep accepted 188 of 312 custody, 165 of 314 launcher and 346 of 705 recipe changes; many are placeholders or prose, the ones above are not. Separately, check_recipe indexes the profile rows by name without a presence check: renaming the SELINUX_ENFORCING or REVIEWED_EXACT_BINARY_POLICY row raises KeyError, which the CLI prints as 'refused: KeyError' (not a stated rule) and which explain(), and so replay, does not catch, so no vector can record it. The oracle's own record assertions pin some published values, but the README presents check as the records' checker.",
+   "requiredChange": "Add model checks, each with a refusal vector, at least for: (a) localCa: issues exactly the two T2 leaves, offline generation, a token with a sealed backup, per-release rotation, never in the client trust; (b) clusterCa: made at step 7 on the node, issues only KUBERNETES_PROXY_SERVER_MTLS at step 8 with admin, no new key or token, its trust path equal to the proxy/operator host's cluster-CA trust; (c) T1 at step 10 after the freeze and T2 at step 12 in the runbook's order; bundles and revocation refreshed in T1 and installed at step 10 before the revocation, with their digests in the envelope; (d) the live-manifest targets' state tied to liveLauncher.state, and both local-CA leaves issued in T2; (e) the drop and staging directories' owner, group and mode, the trigger units' runsAs and command equal to privilegedActions, and custody.json at step 10; (f) the custom image's EXT4_WITH_VERITY root with usr on it, imageDigest from the read-only build disk and recomputed off host, and no automatic restart inside the lease; (g) a missing profile row refused by a named rule, with explain() mapping KeyError and TypeError to refusals as main() does.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C1-3",
+   "severity": "MINOR",
+   "location": "host-recipe.json access.acceptedLimit (lines 887-904); scripts/linux_host_authority.py lines 1150-1155; README.md Access ('The owner's accepted limit') and Not claimed; vector R81",
+   "finding": "B-LHA-16 says the audit-log check, which refuses any entry other than the plan's expected ones 'whatever its principal' from the step-10 revocation to the end of teardown, 'catches a grant to a group, domain, principal set, service account or the administering identity'. The record and README state the B-LHA-14 limit with grantKinds GROUP, DOMAIN, PRINCIPAL_SET, FOLDER and ORGANIZATION, auditLogDetectsThem false, 'The audit log does not detect them', and 'a grant made after step 15 is not detected'. Read together, a run-project binding to a group made after step 15 is both undetected (the stated limit) and refused (the stated audit check). The two binding rules agree only if B-LHA-14's group, domain and principal-set grants are those that reach the login identity without a run-project or instance IAM policy change: membership changes, and folder or organization bindings.",
+   "requiredChange": "Scope the stated limit that way in the record, the README and the checker's message: name its grant kinds as group, domain and principal-set membership changes and folder and organization bindings, and say that a run-project or instance binding to any principal, groups included, is caught by the B-LHA-16 audit-log check through teardown. Keep auditLogDetectsThem false for the scoped set and update R81's intent to match. No decision changes.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C1-4",
+   "severity": "MINOR",
+   "location": "host-authority.json preconditions (line 1961) and scripts/linux_host_authority.py PRECONDITIONS (line 777); README.md 'Preconditions outside this packet'; custody-model.json endpointServerIdentities LOCAL_REGISTRY and LOCAL_EVIDENCE_SINK; host-recipe.json localRegistryTrust and runbook step 7",
+   "finding": "OPEN-1. The node's step-7 preload pulls over F2 need the LOCAL_REGISTRY server identity, and the issuer certificate the node's LOCAL_REGISTRY trust file holds, before T1 and T2. The custody model leaves that identity to the campaign release, which the design supports: design section 2 gives LOCAL_REGISTRY and LOCAL_EVIDENCE_SINK 'their definition: the campaign release (G10)', B-LHA-7 lists the campaign release as an owner, and TRUSTED_LIVE lines 202-204 put each endpoint's TLS CA digest in the campaign release. But no precondition says that G10 must supply it before runbook step 7, and design section 2 places G10 'after setup', so the ordering is unstated.",
+   "requiredChange": "Add a precondition to host-authority.json and the README list: before runbook step 7, the campaign release names the LOCAL_REGISTRY and LOCAL_EVIDENCE_SINK server identities with their issuer, the issuer certificate's digest, the private half's custody on the proxy/operator host and the lifetime, and supplies the node trust file's content. State in custody-model.json that T1 and T2 issue neither. This is a wording fix under the cap. If G10 were later to choose this packet's release-pinned local CA as their issuer, issuing before step 7 would add a token session, which is a custody-scope change for the monitor.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C1-5",
+   "severity": "NOTE",
+   "location": "the five schemas' patterns; scripts/linux_host_authority.py shape() (lines 181-182)",
+   "finding": "Every schema pattern is anchored '^...$' and the model applies it with re.fullmatch, which agrees with ECMA-262, the draft 2020-12 semantics. Python's jsonschema validator uses re.search, where '$' also matches before a final line feed: on the drop manifest, planSha256, instance, bootId and validFrom with a trailing line feed are valid to jsonschema and refused by the model. Over the 228 published, positive and negative documents the two agree exactly.",
+   "requiredChange": "None required. Optionally state the ECMA-262 reading in the README, or end the patterns with (?![\\s\\S]) as the evolution-surface model does, so a Python validator agrees.",
+   "blocks": false
+  },
+  {
+   "id": "LHA-C1-6",
+   "severity": "NOTE",
+   "location": "drop-manifest.schema.json signer, validFrom, validUntil, leaseExpiresAt; scripts/linux_host_authority.py check_drop (lines 1419-1435)",
+   "finding": "The schema leaves signer a free string of 1 to 64 characters while the model requires LINUX_RUNNER_MANIFEST (DN07). The validity instants are checked by pattern only, and an impossible instant such as 2026-13-40T25:61:61Z is refused with Python's datetime message 'month must be in 1..12', not a contract rule. A target listed twice is refused by the model only (DN05). All fail closed.",
+   "requiredChange": "None required. Optionally pin signer by const in the schema, and refuse an invalid instant with a named rule and a vector.",
+   "blocks": false
+  },
+  {
+   "id": "LHA-C1-7",
+   "severity": "NOTE",
+   "location": "scripts/linux_host_authority.py check_authority (lines 820-834); vector A33",
+   "finding": "The reading occurrences are pinned, and the pin check runs before the named-forms coverage loop, so A33 and any record mutation of the occurrences are refused by 'every listed occurrence of a reading's words is in its reading'. The coverage loop's own refusal is reachable only if the pinned table changes, and no vector records it. The candidate test test_each_reading_covers_its_named_forms_in_the_superseded_kept_and_satisfied_texts restates the rule over the bytes, and an independent sweep here found exactly the two listed named-form occurrences.",
+   "requiredChange": "None required. Optionally add a unit test that runs the coverage loop on a pinned table missing one occurrence.",
+   "blocks": false
+  }
+ ],
+ "bindingRules": [
+  {
+   "rule": "B-LHA-1 (MON-LHA-B1): privileged actions after the revocation, trigger units, operatorUid, read paths, step 16",
+   "met": true,
+   "note": "launcher-install.json: operatorUid (line 7, role label OPERATOR_UID, a dedicated non-root account, name and UID unpublished), loginTriggerGroup (16), triggerUnits (152: planeon-preflight.path and .service as OPERATOR_UID; planeon-export.socket and .service as root, writing only the journal; one fixed command each, no operator arguments, installed at step 8, inventoried), privilegedActions (216: preflight, pickup, launch per CONF-LIVE-005/006, export), exportSet (242). The live launcher's non-admin entry path is precondition CONF-LIVE-005-006-NON-ADMIN-ENTRY. host-recipe.json teardown: the private halves end with instance and disk deletion, zero counts the check. Checker lines 1218-1251. The model does not cross-check a unit's runsAs and command with privilegedActions (LHA-C1-2)."
+  },
+  {
+   "rule": "B-LHA-2 (MON-LHA-B2): the Kubernetes client credential",
+   "met": true,
+   "note": "custody-model.json clusterCa (244: made at step 7 on the node, issues KUBERNETES_PROXY_SERVER_MTLS at step 8 with admin, no new key or token), perRunCredentials[2] (issuer PER_RUN_CLUSTER_CA, STEP_8), kubernetes (358: client trust only the cluster CA, the local CA refused, RBAC to the exact subject, no privileged group, the proxy/operator host trusts the cluster CA). Vectors C19-C22. Checker lines 1331-1354. The clusterCa member itself is unchecked by the model (LHA-C1-2)."
+  },
+  {
+   "rule": "B-LHA-13: role labels only",
+   "met": true,
+   "note": "host-recipe.json roleLabels (6); NAMED_TEXT (checker 227) and the inherited string rule on all four records; vectors R32-R38 and A31-A32. Privacy counts over the 15 files are 0."
+  },
+  {
+   "rule": "B-LHA-14: folder and organization reach, and the stated limit",
+   "met": true,
+   "note": "effectiveChecks rows for steps 1, 10 and 15 carry folder and organization setIamPolicy and iam.roles.create/update, on EVERY_ANCESTOR_FOLDER and ORGANIZATION; acceptedLimit (887); README Access and Not claimed; vectors R77-R81. Its wording conflicts with B-LHA-16 for run-project bindings to groups (LHA-C1-3)."
+  },
+  {
+   "rule": "B-LHA-15: SSH only made binding",
+   "met": true,
+   "note": "loginBaseline (467: excludes admin login, IAM-changing, impersonation, key and tag-binding permissions; purpose SSH through IAP and OS Login only); EACH_SERVICE_ACCOUNT in the login checks; conditional bindings counted at steps 1, 10 and 15; runbook cloudActionsBy OWNER_ADMIN for steps 2, 3, 5, 6 and 16; README names any further permission as a new owner choice. Vectors R82-R87."
+  },
+  {
+   "rule": "B-LHA-16: the exact audit expectation",
+   "met": true,
+   "note": "auditLogCheck (855): Admin Activity from the step-10 revocation entry to the end of teardown, the six listed classes, the three expected OWNER_ADMIN entries, any other entry refused whatever its principal, any custom-role change refused, the final span after teardown. Vectors R28, R29, R88-R91. See LHA-C1-3 for the stated limit's wording against this rule."
+  },
+  {
+   "rule": "B-LHA-17: the NOTEs",
+   "met": true,
+   "note": "The README answers table has the Q-LHA5-1 and MON-LHA-REV7 row (access, runbook steps 1, 10, 15 and 16, custody holders, the vectors, Not claimed, B-LHA-13), and the Q-LHA5-1 bullet carries both dropped clauses ('by the effective check'; 'named in no record'). Runbook step 1's check holds the required sentence verbatim. permissionMechanism (815) names the observer and OWNER_ADMIN, never the login identity, with transitive membership resolution; the propagation wait precedes steps 10 and 15. Vectors R92-R96."
+  },
+  {
+   "rule": "B-LHA-18 (Q-LHA6-3): no login for the administering identity",
+   "met": true,
+   "note": "adminBaseline (518: no osLogin, osAdminLogin or IAP tunnel permission on the project or any ancestor, a baseline binding); OWNER_ADMIN rows at steps 1, 10 and 15; sessionChecks cover both identities; betweenRuns holds OWNER_ADMIN_BINDING; README lines 188-189 sentence. Vectors R97-R101."
+  },
+  {
+   "rule": "B-LHA-4: the drop manifest",
+   "met": true,
+   "note": "drop-manifest.schema.json (closed, schema id planeon.internal.linux-drop-manifest/v1); launcher-install.json dropManifest (signature over the UTF-8 schema id, one 0x00 byte and the exact bytes, formed as the policy's, matching BUILD_INPUTS.md lines 157-160 at the base), binds, installsOnlyIf, fileHandling, dropDirectory; custody-model.json LINUX_RUNNER_MANIFEST signs policy, offline manifest and drop manifest, and dropManifest authorizes placement only. Vectors L27-L32, C23-C24, DN01-DN10, S00-S03. The directories' owner and mode are unchecked by the model (LHA-C1-2)."
+  },
+  {
+   "rule": "B-LHA-5: root writes after the revocation",
+   "met": true,
+   "note": "host-recipe.json runtimeRootWrites (1014: the host ledger in three parts, preflight records, installer log, evidence sink, journal, cluster state, each with one writer); launcher-install.json fixedTargets with exact paths and 0444 at their consumers' paths (the offline manifest and signature at TRUSTED_RUNNER_CONTRACT.md lines 5 and 8, the fixed contract paths OPERATOR.md step 8 names); the preflight record retained and exported only. Vectors R61-R62, L15, L35-L36, L38."
+  },
+  {
+   "rule": "B-LHA-6: the proxy's route to the workloads",
+   "met": true,
+   "note": "internalFlows F1 purposes include CAMPAIGN_PROXY_UPSTREAM; campaignProxyUpstream (100) through the API server's service-proxy and port-forward subresources, NodePort, Service and Pod targets refused; localRegistryTrust (117) named and installed at step 7 before the revocation. Vectors R63-R66."
+  },
+  {
+   "rule": "B-LHA-7: endpoint server identities",
+   "met": true,
+   "note": "endpointServerIdentities (312): one per-run local-CA server identity for both proxy kinds, flagged servesBothProxyKinds; LOCAL_REGISTRY and LOCAL_EVIDENCE_SINK owned by the campaign release. Read within its heading (design-vs-rules point 3): the client credential follows B-LHA-2. Vectors C25-C30. The G10 ordering is LHA-C1-4."
+  },
+  {
+   "rule": "B-LHA-8: the built root",
+   "met": true,
+   "note": "image.customImage (228: from the pinned image's own files, verified against its inventory before any install on the node; labels from its own file contexts at step 4; no first-boot relabel), imageDigest fields include the SELinux label, preflight compares labels, kernel release pinned in the plan and checked at step 5. Vectors R67-R70."
+  },
+  {
+   "rule": "B-LHA-9: inventory loose ends",
+   "met": true,
+   "note": "hostInventory.leftOut holds the private halves and requests with SPKI digests only; boot event logs exported at step 9; image re-verification off host in T1. Vectors R71-R73."
+  },
+  {
+   "rule": "B-LHA-10: admin sessions",
+   "met": true,
+   "note": "revocation waits for propagation; sessionChecks (837) at step 10 end every admin session on both hosts and confirm the three facts; a pre-revocation admin session alive at preflight refuses the evidence. Vectors R74-R76, R95-R96."
+  },
+  {
+   "rule": "B-LHA-11: three citations",
+   "met": true,
+   "note": "LR-147-EXISTING is line 147 bytes 0-8, the word only; TL-321-PRE-EXISTING cites line 321 for the word and the README quotes lines 321-322 as written; timeLimits and the README say the manifests are signed within one hour of the preflight and OPERATOR.md lines 117-118's one-hour age (design 110-111) is the launcher's check at a normal invocation, which this host does not make. Verified against the base bytes."
+  },
+  {
+   "rule": "B-LHA-12: record text",
+   "met": true,
+   "note": "check_entry (693) compares text with the fragments' decoded bytes joined by the ellipsis joiner, line feeds and indentation kept; the candidate test re-derives every span independently; vector A02."
+  },
+  {
+   "rule": "Design-vs-rules point 1: REVIEW_BRIEF.md not built (MON-LHA-NO-LOCAL-BRIEF)",
+   "met": true,
+   "note": "Not a finding. briefs.json at the base maps MET-LINUX-008/contract to REVIEW_BRIEF_CONTRACT.md 1f09d234 and MET-LINUX-008/packet to REVIEW_BRIEF_PACKET.md 6dcff68d."
+  },
+  {
+   "rule": "Design-vs-rules point 2: B-LHA-2 replaces two design passages",
+   "met": true,
+   "note": "Judged correct: runbook step 8 has the cluster CA issue KUBERNETES_PROXY_SERVER_MTLS and the proxy/operator host trust the cluster CA (no local CA in the client trust), and step 12 and tokenSessions T2 issue only the CAMPAIGN_PROXY server TLS and one mTLS leaf."
+  },
+  {
+   "rule": "Design-vs-rules point 3: B-LHA-7 read within its heading",
+   "met": true,
+   "note": "Judged correct: B-LHA-7 concerns endpoint server identities, and B-LHA-2, checked first, fixes the client credential's issuance at step 8. One per-run server identity serving both proxy kinds is allowed and recorded. The open point is OPEN-1 (LHA-C1-4)."
+  },
+  {
+   "rule": "Design-vs-rules point 4: B-LHA-1 mechanism choices",
+   "met": true,
+   "note": "Judged correct: a path unit for the preflight trigger and a socket unit for the export; no template unit names, whose '@' the inherited string rule refuses; OPERATOR_UID a dedicated non-root account (BUILD_INPUTS.md line 140: a dedicated non-root numeric UID); the trigger group holds only the login identity. Systemd behaviour stays on paper, as Not claimed says."
+  },
+  {
+   "rule": "Design-vs-rules point 5: the parse rule",
+   "met": true,
+   "note": "Judged correct: the inherited refusal of integral floats plus the design's refusal of non-integral numbers leaves integers only; the README states both; vectors X03-X05."
+  },
+  {
+   "rule": "Design-vs-rules point 6: schema dialect",
+   "met": true,
+   "note": "Each schema declares draft 2020-12 at its root (design section 3) and otherwise uses the restated closed subset, which the candidate test compares with LAB-RUNPLAN-001's."
+  },
+  {
+   "rule": "Design-vs-rules point 7: the fifth schema",
+   "met": true,
+   "note": "drop-manifest.schema.json is the drop manifest's own closed schema B-LHA-4 asks for."
+  },
+  {
+   "rule": "Design-vs-rules point 8: MET-LINUX-009 MERGED_AT_BASE",
+   "met": true,
+   "note": "OPERATOR.md line 175 at the base names MET-LINUX-009 as the root-alias contract, and the base holds its contract directory; the precondition state is pinned in the checker."
+  },
+  {
+   "rule": "Design-vs-rules point 9",
+   "met": true,
+   "note": "Withdrawn, superseded by MON-LHA-ORC-1-A; see 2a."
+  },
+  {
+   "rule": "Design-vs-rules point 10: B-LHA-17's first bullet as an answers table",
+   "met": true,
+   "note": "Judged sufficient: the README answers table row and the Q-LHA5-1 bullet carry the section-13 row and both dropped clauses; the design text stays at revision 7."
+  },
+  {
+   "rule": "Design-vs-rules point 11: stricter than the rule",
+   "met": true,
+   "note": "Judged acceptable: counting conditional bindings at steps 10 and 15 and treating iam.serviceAccounts.setIamPolicy as IAM-changing only add refusals, consistent with 'any finding refuses the run's evidence'."
+  },
+  {
+   "rule": "Design-vs-rules point 12: carried notes",
+   "met": true,
+   "note": "LHA-CN-1 is verbatim in host-authority.json and stated as a note; the two TRUSTED_LIVE texts it concerns stay unchanged in costScope, and the per-run compute is the recipe's costScope, so on paper compatible and correctly not settled. LHA-CN-2 is verbatim in custody-model.json with the disclosure and holder labels. Both notes' R12 facts are outside this round's read scope."
+  },
+  {
+   "rule": "2a: the named-forms rule (MON-LHA-ORC-2-A)",
+   "met": true,
+   "note": "An independent sweep re-read every superseded, kept, satisfied, cost-scope and reviewed fragment at a8827617 through git show and found four existing-family words: LINUX_READINESS.md line 63 and LINUX_READINESS_REPAIRS.md line 147 ('existing ... capacity', no named form, unlisted), linux-readiness.json line 117 PREEXISTING (listed, LRJ-BILLING-CAPACITY-PREEXISTING) and LINUX_READINESS.md line 147 'existing independent PLATFORM_RELEASE' (listed, LR-147-EXISTING). So c3's two occurrences are exactly the named-form occurrences. The checker refuses an unlisted one (A33), through the pin (LHA-C1-7)."
+  },
+  {
+   "rule": "2b: the drop-manifest fix (c2)",
+   "met": true,
+   "note": "Closed. The schema's target is an enum of the six fixed paths; check_set requires it to equal launcher-install.json's list; check_launcher refuses a fixed target outside the etc/planeon prefix or with an empty, dot or dot-dot segment, and duplicates; check_drop admits only ACTIVE targets, each once. Probes: a dot-dot target (DN10, L38), an upper-case variant and a trailing slash are refused by the enum. No MINOR. The state tie to the live launcher is LHA-C1-2."
+  },
+  {
+   "rule": "2c: the oracle's notes",
+   "met": true,
+   "note": "TRUSTED_LIVE 523-525: correct. At the base the predicate 'No product/native execution, new installation, key, dependency, cloud action or bill in this meta publication' starts on line 523, so the design's 524-525 is the short citation and the widened range holds the whole predicate. REVIEW_BRIEF.md not asserted: consistent with MON-LHA-NO-LOCAL-BRIEF; its decision line is verbatim in MON-LHA-AUTHOR-GO, checked here. Neither is a finding."
+  },
+  {
+   "rule": "3: line mappings and widened ranges",
+   "met": true,
+   "note": "Checked against the base bytes: OPERATOR.md 210-213 to 223-225 (the quote on 224-225, its line feed and two-space indent kept); TRUSTED_LIVE 460 to 460-461, 484 to 484-485, 524-525 to 523-525 and 560 to 560-561; linux-readiness.json kept billing members 113-116 and gate.maximumEvidenceAgeHours line 28; OPERATOR.md 'existing' at 93, 99, 115 and 116; lab-run-plan status.json LINUX-CAPACITY line 146; OPERATOR.md 117-118, 125-128, 132-151, 134-136, 143-148, 153-162, 171-174, 223-224 and BUILD_INPUTS.md 24-37, 49-53, 95-103 (101, 103) and 139 each hold the cited text."
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. Faithfulness to the decisions",
+   "result": "Met, with LHA-C1-3 a wording reconciliation of two binding rules. All 37 decision lines in host-authority.json are verbatim substrings of their owner_decisions.json entries, with LHA3-8 and B-LHA-3 SUPERSEDED by OWNER-CUSTOM-ROLE; the replacement predicate and custody principal carry Q-LHA-1 verbatim. MON-LHA-BUILD-GO (light, no pre-check), MON-LHA-AUTHOR-GO (the rule-landing table; REVIEW_BRIEF.md not built), MON-LHA-NO-LOCAL-BRIEF, MON-LHA-C1-KEEP, MON-LHA-OPEN-1-A (OPEN-1 named here), MON-LHA-ORACLE-GO, MON-LHA-ORC-1-A, MON-LHA-ORC-2-A and MON-LHA-ORACLE-KEEP are each reflected. Nothing a decision excludes is added: no deny policy, no folder or organization grant, no basic role, no runner registration, no licence charge, no certificate-chain mode or new cryptography, no live manifest before CONF-LIVE-005/006 close."
+  },
+  {
+   "check": "2. The record against the design",
+   "result": "Met. Every member of design sections 4 to 7 is present; the schemas are closed with every key required; every digest is 64 lowercase hex (18 schema patterns) and baseCommit 40 hex. Differences, each from a binding rule: KUBERNETES_PROXY_SERVER_MTLS from the cluster CA at step 8 (B-LHA-2); one server identity for both proxy kinds (B-LHA-7); a fifth schema (B-LHA-4); guestAgent at the recipe's top level. check re-derives all 65 span entries at the base, and the cited lines were re-read here independently."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "Partly met. check_set runs authority, recipe, launcher and custody, then the drop enum; each vector's recorded refusal is the first failing rule; 'refused: <rule>' with exit 1 and a usage exit 2 hold. Probed wrong types, duplicates, case variants, empty and boundary values and dot-dot or trailing-slash paths. Gaps: unchecked decision-carrying members and the KeyError path (LHA-C1-2); a Python datetime message for an impossible instant (LHA-C1-6)."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "Met. Over 228 documents (the published records, both positive sets, the 205 record negatives, the drop positive and its 10 negatives) jsonschema's Draft 2020-12 validator and the model's shape() agree on every one; no pattern is unanchored. The only divergence probed is Python jsonschema's trailing line feed under '$' (LHA-C1-5)."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Met. replay passes: 4 positives; 33 authority, 101 recipe, 38 launcher, 33 custody, 10 drop manifest, 3 signature and 8 parse negatives, each refused as recorded. Every refusal in design section 8 and every vector a binding rule asks for has a vector. The expectations follow from the design; R81's intent follows the LHA-C1-3 rewording; A33 exercises the pin (LHA-C1-7)."
+  },
+  {
+   "check": "6. The tests",
+   "result": "Not met at c4: tests/test_linux_host_authority.py 33 passed, 1 failed (LHA-C1-1). The oracle tests pass 47/47; test_review_records_in_tree 2/2, test_evolution_surface 393/393 and test_lab_run_plan 261/261 pass. Independence: oracle-identity.json binds the oracle file's sha256 212cdebe, which matches; the oracle's agent id differs from the author's; the ruling is KEEP by the lane monitor (MON-LHA-ORACLE-KEEP) on candidate c3; the oracle imports nothing from the candidate and reaches it only through the published CLI (test_60, test_61)."
+  },
+  {
+   "check": "7. Placement",
+   "result": "Met. The base-to-subject comparison outside the skipped tools entry shows 15 added paths and no other change. Through the subject's evolution_surface model and record, 14 resolve to CONTRACT_AND_SOURCE and the oracle test to ORACLE_TESTS, exactly and lower-cased alike, with 0 unclassified and 0 ambiguous and PR approvers [LANE_MONITOR, OWNER], which fits Q-LHA-4 (a) gate material."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Met. privacy_hits over the 15 files, with 4 name-token digests loaded: names 0, legacy term 0, absolute paths 0, e-mail shapes 0. The checker uses the standard library only; the tests use pytest and jsonschema, both already used by other in-tree tests, so no new dependency. Nothing interposes, forwards, proxies, swaps or bypasses: the checker is offline, and the installer and units are operator duties stated as data."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "OPEN-1 answered: reading (ii), with the wording fix LHA-C1-4 (see questions)."
+  }
+ ],
+ "questions": [
+  "OPEN-1 (MON-LHA-OPEN-1-A): which reading holds? Reading (ii): a G10 campaign-release precondition, outside MET-LINUX-008. Design section 2 gives the LOCAL_REGISTRY and LOCAL_EVIDENCE_SINK endpoints' definition to the campaign release and this packet only the step-7 slot; B-LHA-7 lists the campaign release as an owner; B-LHA-6 asks this packet only to name and install the node's trust file before the revocation; TRUSTED_LIVE lines 202-204 put each endpoint's TLS CA digest in the campaign release; and the custody model's T1 and T2 serve only this packet's own issuances. What is missing is the ordering: the identity must exist before runbook step 7, while design section 2 places G10 after setup. Recommendation: the wording fix LHA-C1-4, under the cap, with no change to the custody model's scope. Only if G10 were to choose this packet's release-pinned local CA as the registry's issuer would an issuance before step 7 add a token session; that would be a custody-scope change for the monitor, as a possible owner-level choice."
+ ],
+ "notChecked": [
+  "The tools entry and every w03-, probe-kit- or LPK-named entry were skipped in the base-to-subject comparison (80 entries, names not printed). The subject tree id 32d14a0d is taken from the rules file and was not re-derived, since git objects were read only in the commit:path form; the 17 subject files used were compared with the export and match.",
+  "LHA-CN-1's R12 facts (live.py) and LHA-CN-2's R12 v1alpha2 path are outside this round's read scope; both are judged only as notes kept unsettled.",
+  "GCP, systemd and permission-name facts are on paper, as the README's Not claimed states.",
+  "The oracle module was run and its imports listed, not read in full. design-review-r4.json and design-review-r6.json were not read.",
+  "No pre-check, dry run or full suite was run."
+ ],
+ "disclosures": [
+  "The launch context carried an auto-injected memory index and an account context (an e-mail address). I used neither, and no account value appears here.",
+  "The environment's scratchpad path names the launching session, which is the lane session oracle-identity.json lists as operator. This reviewer is a fresh agent launched by that session, with no inherited context of the author's or the oracle's work.",
+  "Slip: one message carried two tool calls (an Edit to my own helper run_one.py and the Bash run that used it). They ran in order.",
+  "Slip: one message carried two Edit calls, both to my own helper mutation_coverage.py. Scratch only; nothing ran.",
+  "Slip: the first run of the candidate test file printed the repository's per-test diagnostic lines, over 120 lines; the harness truncated it inline and saved nothing that I opened. Later runs used a helper that prints counts and failures only.",
+  "Slip: three recursive greps read whole directories of the export: 'CONTRACT_AND_SOURCE' over scripts and architecture (it printed matching file names, some LPK-named), and 'def classify' and 'evolution-surface.json' over scripts (file names only). grep therefore read the contents of LPK-named files, and possibly w03-named files under scripts, though no content was displayed. No tools path was searched.",
+  "Slip: a recursive 'grep -rlc' over the export's tests folder for 'import jsonschema' read every test file, w03-named and LPK-named ones included, and printed about 190 lines of file names with counts, over the 120-line limit. No content was displayed.",
+  "Slip: the tree-comparison helper read, in memory and undisplayed, every file outside the skipped names at both commits to compare bytes. That may include LPK-related files whose names lack the skip tokens.",
+  "Deviation: two reads were held by the wrapper past the tool's timeout and moved to the background. I did not poll them and did not retry in a loop; after the hold lifted I issued the checker-tail read once more, and the other background output was never read.",
+  "Deviation: a helper parsed the whole owner_decisions.json in memory to check the 37 decision lines verbatim and printed only the matched ids. My reads of that file (lines 1-80, 236-260 and 367-410) included uncited neighbouring entries.",
+  "Method: helpers in the work folder loaded scripts/linux_host_authority.py, scripts/evolution_surface.py and scripts/review_record.py by path (none is a validate_* module), read git objects only as git show \"<commit>:<path>\", ran each test file once through the wrapper, ran the counts-only privacy scan, compared the model with jsonschema, and probed the model with in-memory record mutations. That is data only, with no bypass code. No python -c, no network, no ls, find or glob under the lha link, and nothing from the verifier database or the trust directory."
+ ]
+}

@@ -1,0 +1,173 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-LINUX-008/contract",
+ "round": 3,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "3219828c609e8f0a9c39e001e22aaf235b8281ac",
+  "tree": "fe9620df6d39b8990eb82742ba2fa960d0a0ddab"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "993ec1bc225d73726c16dcd1c269e0b0ce60bb88",
+  "tree": "73b6787a21af1bb946eb1ca1c5809df5d32f3478"
+ },
+ "reviewDate": "2026-10-25",
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "4f904aa8d81e102b17d162ba5a7742e31d27025cc394b1ffb7019f998edc0cdc",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "CONTRACT_REVIEWER"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "LHA-C3-1",
+   "severity": "MINOR",
+   "location": "architecture/linux-host-authority/README.md line 544 (the Vectors section) and scripts/linux_host_authority.py line 4855 (replay's comment on leafVectors)",
+   "finding": "Both say each generated leaf vector sets the leaf's first occurrence 'to another value of its type'. 88 of the 2,043 leaf vectors do not: they set a null leaf to a string, a different JSON type. These are 53 host-authority.json member leaves of text citations (for example supersedes[LR-CAPACITY-ZERO-COST].member, LV-A0016) and the 35 decisions.decisionLines[*].supersededBy leaves that are null (for example LX-D1's), each set to \"MUTATED\". Every one is still refused as recorded, the member leaves by 'a text citation names no member path' and the supersededBy leaves by their pin, so the vectors are sound and replay passes; only the published description is inaccurate. Under MON-LHA-CR-CAP this is not a decision-carrying member left unchecked, so it is not MAJOR.",
+   "requiredChange": "c8 text-only errata: in both places, say that a leaf vector sets the leaf's first occurrence to another value of its type, or to a string where the leaf is null (or equivalent words). No vector, pin or behaviour change.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C3-2",
+   "severity": "NOTE",
+   "location": "architecture/linux-host-authority/README.md lines 70-74 (the closed-lists paragraph); scripts/linux_host_authority.py _closed callers with ordered=False (hostInventory.leftOut, packages.sources, access.leaseBindings, liveLauncher.trustMounts, launcher steps)",
+   "finding": "Two points about the closed lists, neither a defect in enforcement. (a) The README quotes 'an id-keyed list names each entry once' as the rule for a repeated id. In-memory probes of all 37 ID_KEYED lists (a wrong entry then a correct copy, a pure duplicate, and a new id appended) are all refused by named rules, but only the 11 lists that _closed compares refuse a repeat with that text; the other 26 refuse it first by their existing ordered comparison (for example 'every span entry has its own id', 'every signing authority is listed', 'the runbook has steps 1 to 16, each with its check'). (b) Five id-keyed lists are compared as exact sets and accept any entry order: hostInventory.leftOut (6 of 6 adjacent swaps and the reversal accepted), packages.sources, access.leaseBindings, liveLauncher.trustMounts and the launcher steps (9 of 9 swaps and the reversal). For the first four the design gives a set (the leases' time order is in their pinned window and revokedAtStep). For the launcher steps, DESIGN.r7.md line 130 calls the record 'the ordered operator steps as data', but each step's runbookStep and inputDigests are pinned, the request-before-issuance dependency is carried by inputDigests, and the published list is not in runbook order (INSTALL_LIVE_LAUNCHER, step 8, is listed last), so the design fixes no list order that the set comparison loses. All 32 other id-keyed lists with two or more entries refuse every adjacent swap.",
+   "requiredChange": "None required. Optionally, in the c8 errata, say that a repeat is refused by that rule or by the list's own ordered comparison, and name the lists compared as sets.",
+   "blocks": false
+  },
+  {
+   "id": "LHA-C3-3",
+   "severity": "NOTE",
+   "location": "scripts/linux_host_authority.py explain (line 4788) and main (lines 4916-4934); README.md lines 51-53",
+   "finding": "The C2-4 fold is right: REFUSED_ERRORS is one tuple, main runs the command through explain and has no handler of its own (a new candidate test checks both), and the usage error still exits 2 before explain. One side effect: c6's main printed the class name for any ValueError subclass (it tested type(exc) is ValueError), while c7's main goes through explain, which prints a ValueError subclass's message (isinstance). So a malformed record's JSONDecodeError on the command line now prints the decoder's message instead of 'JSONDecodeError'; it is still refused with exit 1. The author's report describes this the other way round ('explain now names ... a ValueError subclass the same way main always did'). No vector or test reaches it: the eight parse negatives all use the parser's own refusals, and explain's behaviour for ValueError subclasses is c6's.",
+   "requiredChange": "None.",
+   "blocks": false
+  },
+  {
+   "id": "LHA-C3-4",
+   "severity": "NOTE",
+   "location": "scripts/linux_host_authority.py lines 215-257 (_PASSED_FREE_TEXT, _PASSED_NAMED_TEXT) and 3764-3791 (Base._derive)",
+   "finding": "Both memoizations are pure and change no outcome. The string memo caches only strings that passed, so a failing string is re-evaluated and keeps its path in the message, and both rules depend only on the string and the module's constant patterns. Base._derive caches the lines, sha256 and parsed JSON of a cited file per Base instance, after read() has checked CITED_FILES; the four callers (check_entry twice, the readings loop, the readiness read) only index and slice the cached values, and check_entry still calls read() first, so the cited-file refusal keeps its place. The string sets are module-global, so a future test that monkeypatched FORBIDDEN_TEXT or NAMED_TEXT would find earlier strings already marked passed; no current test patches either (the candidate test only compares FORBIDDEN_TEXT with LAB-RUNPLAN-001's).",
+   "requiredChange": "None. Optionally key the string memo on the pattern tuple, or note in the comment that the patterns must not be patched.",
+   "blocks": false
+  },
+  {
+   "id": "LHA-C3-5",
+   "severity": "NOTE",
+   "location": "scripts/linux_host_authority.py lines 764-3741 (LEAF_PINS, LEAF_EXPLICIT, LEAF_STRUCTURE_ONLY); architecture/linux-host-authority/vectors.json leafVectors",
+   "finding": "The generated blocks are sound and self-checking in the tree: check_pins compares every pin with _same (type for type, [*] mapped over every entry), the two new candidate tests re-enumerate the records and require every leaf in exactly one of the three blocks and every P leaf to have its vector, and replay refuses each leaf vector as recorded. The cost is in maintenance and size: the builder that generates them is outside the tree (as the PINNED block's has been since c1), every record value now also lives in the checker, so any later change to a record leaf is a regeneration of the pins and the leaf vectors, and vectors.json grew from 123,652 to 922,938 bytes and the checker from 119,039 to 353,194 bytes. That is not a CI problem here (candidate tests about 13 s on this host, the oracle under 1 s, check and replay each well inside the 120 s cap) and the generated rows are mechanical to review.",
+   "requiredChange": "None. Keep the c8 errata text-only or checker-only, as MON-LHA-CR-CAP says, and keep the builder with the lane's records for any later regeneration.",
+   "blocks": false
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "LHA-C2-1",
+   "status": "ADDRESSED",
+   "note": "Every case is DECISION_PINNED in the audit table with a named check, a pin and a vector, and 45 single-value probes on in-memory copies are refused at the table's checker line by the named rule: (a) either or both proxy flags cleared, a flag without a shared identity, a flag on LOCAL_REGISTRY, and four wrong statements; (b) T1 or T2 on host; (c) SIGNED_IN_T2; (d) the ledger not durable, owned by OPERATOR_UID or on the node; (e) the scope-change statement, G10 before step 10, G10's what without LOCAL_EVIDENCE_SINK (the cross-check in check_set) and other prose (its pin); (f) to (n) as round 2 listed them, IAP_TUNNEL at step 17 and OS_LOGIN at step 15 included; and the three self-contradictions, the proxy host losing the credential included. Vectors A35, A36, R110-R117, L45-L49 and C49-C59 exist and replay."
+  },
+  {
+   "id": "LHA-C2-2",
+   "status": "ADDRESSED",
+   "note": "Round 2's own probes (each correct copy appended) are refused by 'an id-keyed list names each entry once' for perRunCredentials (both), tokenSessions [T2, T1 at step 13, T1], endpointServerIdentities, access.identities and exportSet, and C2-2's third trigger unit by the same rule (L50). Across all 37 ID_KEYED lists, 111 probes are refused by named rules; a repeated-id vector exists in each record (A37, R118, R119, L51, L52, C60-C62). The fixedTargets lookup now needs exactly one target per identity. See LHA-C3-2 for the README's wording and the five lists compared as sets."
+  },
+  {
+   "id": "LHA-C2-3",
+   "status": "ADDRESSED",
+   "note": "README line 3 reads '(candidate c7)'; test_the_status_line_names_the_current_candidate pins it."
+  },
+  {
+   "id": "LHA-C2-4",
+   "status": "ADDRESSED",
+   "note": "Folded: one REFUSED_ERRORS tuple, main through explain with no handler of its own, and a unit test for IndexError and FileNotFoundError. LHA-C3-3 notes the command line's text for a ValueError subclass."
+  }
+ ],
+ "bindingRules": [
+  {
+   "rule": "B-LHA-7: endpoint server identities, 'if one server identity serves both proxy kinds, the record says so'",
+   "met": true,
+   "note": "Stated: both proxy entries carry servesBothProxyKinds and custody-model.json sharedProxyServerIdentity names CAMPAIGN_PROXY_SERVER_TLS and the two proxy kinds under rule B-LHA-7. Enforced both ways: a shared identity left unflagged on either or both entries is refused (C49, C50), a flag without sharing (C51) or on a non-proxy kind (C30) is refused, and a different statement is refused (C52)."
+  },
+  {
+   "rule": "B-LHA-2: the Kubernetes client credential",
+   "met": true,
+   "note": "holdsKubernetesClientCredential is now derived from the credential's madeOn for every host, both directions refused (R117 and a probe of the proxy host losing it)."
+  },
+  {
+   "rule": "B-LHA-1: trigger units and read paths",
+   "met": true,
+   "note": "One preflight and one export unit, closed by id (L50, L51); the export unit runs on every host of the export set and on every host that carries it (L48)."
+  },
+  {
+   "rule": "B-LHA-10, B-LHA-11, B-LHA-14 and B-LHA-18",
+   "met": true,
+   "note": "Admin sessions end on both hosts (R112); the offline manifest serves no normal invocation and OPERATOR.md's one-hour age keeps B-LHA-11's reading (L45, L46); the accepted limit keeps the owner's Q-LHA5-1 words verbatim (R110); OWNER_ADMIN has no OS Login (R111)."
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. Faithfulness to the decisions",
+   "result": "Met. MON-LHA-C7-SYSTEMATIC: (i) every id-keyed list refuses a repeated id and an unlisted id by a named rule, in order where the design fixes one (LHA-C3-2 for the five lists compared as sets); (ii) the audit is exhaustive, every decision-carrying leaf has a checker line and a refusal vector, and C2-1's 14 cases and 3 self-contradictions are DECISION_PINNED; B-LHA-7's shared proxy identity is stated and enforced; (iii) the status line names c7 and the C2-4 NOTE is folded; the oracle is unchanged at 47/47 and the targeted set passes. MON-LHA-CR-CAP: no decision-carrying member is still unchecked (rules items 1-3). MON-LHA-C7-SLIPS (ii): no oracle tailoring (rules item 6c). MON-LHA-CR2-KEEP is reflected (round 2's findings are this round's dispositions). No decision is reopened and nothing a decision excludes is added."
+  },
+  {
+   "check": "2. The record against the design",
+   "result": "Met for the delta. One new member, custody-model.json sharedProxyServerIdentity: required in its closed schema, an object with identity (string), servesKinds (array of strings) and rule (string), no digest. Its value states only B-LHA-7's required sentence, with the identity both proxy entries already named at c6 (rules item 6b). No other record member is added, removed or changed."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "Met but for LHA-C3-1. Rules item 1: a work-folder script enumerating the four c7 records by the report's convention (keys joined by '.', an id-keyed list's index as the entry's id per ID_KEYED, [*] otherwise, empty containers as leaves) finds 1,290, 829, 328 and 330 concrete and 931, 529, 285 and 299 generalised leaves; every leaf is in the table exactly once, with no missing, extra or repeated row; the classes are 2,043 P, 1 S and no FREE_TEXT; LEAF_PINS (2,001), LEAF_EXPLICIT (42) and LEAF_STRUCTURE_ONLY (1) partition the same set; no [*] list of objects outside ID_KEYED has an id-like member. Rules item 2: image.family is rightly STRUCTURE_ONLY: Q-LHA-9 (a) and DESIGN.r7.md lines 331-333 choose a no-licence-fee RHEL-10-compatible family 'for example' one of three, pinned per plan, so no source fixes its value; ROCKY_LINUX_10 and CENTOS_STREAM_10 are accepted and UBUNTU_24_04, RHEL_10_ON_DEMAND and ALMALINUX_9 refused at line 4135 against the pinned allowedFamilies. Rules item 3: C2-1's cases, all refused at their table lines (dispositions); their sources read and matching (DESIGN.r7.md 97, 102, 112-113, 391-431, 437-438, 494-496, 527-542, 545-560, 615-620, 635 and 648; B-LHA-1, 2, 7, 10, 11, 14 and 18; Q-LHA-9's decision line; MON-LHA-CR1-KEEP's OPEN-1 ruling); per record also schemaVersion, baseCommit and digestRule (authority), image.familyKind (recipe), offlineLauncher.custodyBinds (launcher) and nonce.hostLedger (custody). Rules items 4-6: closed lists, B-LHA-7 both ways, the status line and explain/main, as in dispositions and bindingRules."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "Met. Over all 2,321 vector documents (8 positive-set records, 270 record negatives and the 2,043 leaf-vector targets) jsonschema's Draft 2020-12 validator and the model's shape() agree on every one; the 16 schema-const leaf vectors are refused by both. Twelve probes of the new member (removed, an extra member, empty or numeric identity, servesKinds a string, [\"\"] or a list, a null rule, a trailing LF, a duplicate kind, no kinds) agree; those the schema allows are refused by B-LHA-7's statement rule."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Met but for LHA-C3-1. replay passes on c7: 4 positives; 37 authority, 119 recipe, 52 launcher, 62 custody, 2,043 leaf, 11 drop-manifest, 3 signature and 8 parse negatives, each refused as recorded. The 35 new hand negatives (A35-A37, R110-R119, L45-L52, C49-C62) each contradict the decision or rule they cite. Only R71 changed, and only its refusal: it deletes hostInventory.leftOut[5], which the new closed-list check now meets first, so the change is forced and is the one the report lists. Every other c6 vector is byte-for-byte unchanged and in order. The 2,043 leaf vectors are one per P row, with the table's ids; each sets one concrete leaf to a different value; none expects an error class; 745 are refused by the pin, 1,282 by an earlier named rule of that leaf and 16 by the schema const, the 42 explicit leaves by their sha256 rules. 88 set a null leaf to a string (LHA-C3-1). No refusal case without a vector was found."
+  },
+  {
+   "check": "6. The tests",
+   "result": "Met. On the c7 export: tests/test_linux_host_authority.py 43 passed; the D5a oracle 47 passed, byte-identical to c6 (sha256 212cdebe9bcaf0c837365a60c5abca14762ea3e56bf8870cbfab85604509a53e) as is oracle-identity.json (d5c739c4a837ba80ebd88ca828b643f2b289ee1f34c07353e9e0ca6ab3ba5d0d), the identity unchanged since c4; test_review_records_in_tree 2, test_evolution_surface 393 and test_lab_run_plan 261 passed; check reports 65 span entries and 2,001 pinned leaves. Rules item 6c: of the 49 strings and 7 integers in the oracle parts the c7 author read (header, CLI helper, tests 31, 43, 60 and 61), four are absent from the c6 records, README and design (a '%s %s' format, the module docstring, 'no-such-command' and '| %d |'); only '%s %s', a generic message format, occurs in the 20,788 added lines; no oracle test name or the word oracle occurs in them; test 43's README phrases are untouched. No tailoring. Rules items 7-8, the delta trace: _closed and the eleven list closures (C2-2); the 25 new named checks and the G10 cross-check (C2-1); the one-target-per-identity lookup (C2-2); ID_KEYED, leaf(), check_pins and the generated blocks, the leafVectors replay and the CLI's counts (audit (ii)); sharedProxyServerIdentity and its schema (B-LHA-7); the two memoizations (rules item 6a); REFUSED_ERRORS and _command (C2-4); the README and tests for each. Nothing untraced; the one side effect is LHA-C3-3."
+  },
+  {
+   "check": "7. Placement",
+   "result": "Met. The c6-to-c7 comparison (names and status only, the tools entry excluded by pathspec, 0 w03- or LPK-named paths dropped) shows six modified paths and none added or removed. Each resolves to CONTRACT_AND_SOURCE exactly and lower-cased, with PR approvers [LANE_MONITOR, OWNER]; the unchanged oracle test stays ORACLE_TESTS."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Met. privacy_hits with 4 name-token digests: 0 names, 0 legacy term, 0 absolute paths and 0 e-mail shapes in each of the six changed files, the two oracle files, the JSON files' string values and the 20,788 added lines. No import was added to the checker or the tests, so no new dependency. Nothing interposes, forwards, proxies, swaps or bypasses: the new code is data checks and two caches."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "The rules file names no open question beyond the named design choices of items 6a to 6c, each judged with a recommendation in questions."
+  }
+ ],
+ "questions": [
+  "6a, the verbatim pins and the 42 LEAF_EXPLICIT rows: keep. The 2,001 pins sit under 169 source labels; every DESIGN.r7.md line they cite exists, and the sampled leaves match their sources. Each explicit row is fixed exactly by its sha256 rule: the 37 decision lines are verbatim in the 12 owner_decisions.json entries they name, both Q-LHA-1 answers equal the Q-LHA-1 decision line, LHA-CN-1 and LHA-CN-2 are verbatim from design-status.json, and the replacement predicate's text and answer are checked whenever an INDEPENDENCE entry is superseded, which the pinned supersedes kinds guarantee. Recommendation: keep, with the README fix of LHA-C3-1.",
+  "6a, the 2,043 generated leaf vectors and the size growth: sound (each mutates one decision-carrying leaf and is refused as recorded, none by an error class); the growth is not a CI or review problem, but every later record change now means regenerating the pins and leaf vectors (LHA-C3-5). Recommendation: keep.",
+  "6a, the two memoizations: pure, and no outcome changes (LHA-C3-4). Recommendation: keep.",
+  "6a, the change in explain's error classes: explain and main now refuse the same classes by the same function; the command line's text for a ValueError subclass changed (LHA-C3-3). Recommendation: keep.",
+  "6b, sharedProxyServerIdentity: it carries only B-LHA-7's required statement, the identity both proxy entries already shared at c6 and the two proxy kinds, and changes no decision. Recommendation: keep.",
+  "6c, oracle tailoring: none found. Recommendation: MON-LHA-C7-SLIPS (ii) is met; no MAJOR."
+ ],
+ "notChecked": [
+  "The subject and base tree ids are taken from the rules file and were not re-derived; git objects were read only as git show of commit:path (c6 copies of the delta's exact paths) and git diff of the named commits. The six export files match the report's sha256s.",
+  "Of the 2,001 pins, the cited sources were read for C2-1's cases and one or more leaves per record; for the rest, the existence of every cited design line and the verbatim decision lines and notes were checked by script, not each pin's wording against its source.",
+  "The oracle test was run and hashed in full but read only in the parts the c7 author read; its other tests were not read.",
+  "The command-line path for a ValueError subclass (LHA-C3-3) was judged from the code, not run. No pre-check, dry run, full suite, cargo or Docker was run. GCP, systemd and permission-name facts stay on paper."
+ ],
+ "disclosures": [
+  "The launch context carried an auto-injected memory index and an account context (an e-mail address). I used neither, and no account value appears here.",
+  "Slip: one message carried two tool calls, two Edits to my own helper script in the work folder. They ran in order; scratch only.",
+  "Slip: one shell command chained a line count after the wrapped probe run, so the count ran outside the wrapper's hold; it read only my own work-folder output.",
+  "Slip: a long listing of the work folder printed its owner columns, an account name. I did not use or record it.",
+  "Slip: two outputs were oversized and the harness saved them: the first oracle run and a mistaken grep that listed every refusal line of vectors.json. I opened neither saved file; I re-ran the oracle into a work-folder file and read only its session-end and pass counts, and read the parse negatives by a sed range.",
+  "Deviation: besides helper scripts, I wrote helper outputs to the work folder: c6 copies of the delta's exact paths, saved diffs of those paths, probe output and test-run output. Nothing was written elsewhere except this record, and the subject export was not edited.",
+  "Deviation: reading owner_decisions.json, a grep listed every decision id with its line number, other lanes' ids among them, one LPK-named; no text of those entries was read. Besides the four round-3 entries, the range I read also printed MON-HANDOVER-7, MON-RESUME-H7-GO and MON-HEAVY-SLOT-I01B4, and I read MON-LHA-CR1-KEEP, which the G10 pins cite. One helper loaded the file in memory but kept only the 12 entries the decision lines name, and printed counts only.",
+  "Method: every command started with the pinned wrapper. The tree comparison used git diff names and status with no rename detection, the tools entry excluded by pathspec and w03- or LPK-named paths dropped before use (0 dropped). Helpers loaded scripts/linux_host_authority.py, scripts/review_record.py and scripts/evolution_surface.py by path, plus jsonschema; none is a VPO or validate_* module. Mutations were in-memory copies given to explain(check_set) as a library: data only, no bypass code. No python -c, no network, no ls, find or glob under the tools directory or the lha link, no account reads, nothing from the verifier database or the trust directory, and no w03-named file read."
+ ]
+}

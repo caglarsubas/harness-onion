@@ -1,0 +1,169 @@
+{
+ "schemaVersion": "planeon.review-record/v2",
+ "kind": "CONTRACT",
+ "series": "MET-LINUX-008/contract",
+ "round": 2,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "993ec1bc225d73726c16dcd1c269e0b0ce60bb88",
+  "tree": "73b6787a21af1bb946eb1ca1c5809df5d32f3478"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "cad346c3a6bee77f7ff24502fdff9a76d63be5a6",
+  "tree": "32d14a0deda3d03b6f42a3bd7558b91073010af8"
+ },
+ "reviewDate": "2026-10-25",
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "cbfd8c09c58acb6cde4a2e44d29510373acbb47d5c60b673c07d60b3ca336a60",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "role": "CONTRACT_REVIEWER"
+ },
+ "verdict": "CHANGES_REQUIRED",
+ "findings": [
+  {
+   "id": "LHA-C2-1",
+   "severity": "MINOR",
+   "location": "scripts/linux_host_authority.py check_custody (the endpoint loop and its servesBothProxyKinds rule, tokenSessions, nonce), _check_access, check_launcher and check_authority's preconditions rule; custody-model.json endpointServerIdentities, tokenSessions[].offHost, liveManifestInT2, nonce.hostLedger, localEndpointIdentities.ifTheCampaignReleaseChoosesTheLocalCa, principal.count; host-authority.json preconditions G10-LOCAL-ENDPOINT-IDENTITIES before and what; host-recipe.json access.acceptedLimit.words, access.identities, access.revocation.endsAdminSessionsOn, access.leaseBindings[].revokedAtStep, access.teardown.keeps, egress.paidFirewallFeature, source.repositoryCredentialOnHost, hosts[].holdsKubernetesClientCredential; launcher-install.json offlineLauncher.manifestServesANormalInvocation and custodyBinds, timeLimits.operatorMdOneHourAge, the EXPORT_UNIT's hosts, liveLauncher.designOnly",
+   "finding": "Asked to look for other decision-carrying members the checker still skips: a one-leaf-at-a-time sweep of c6's records through check_set accepted 208 of 408 custody, 221 of 411 launcher and 491 of 1053 recipe mutations. Most are prose, paths or placeholders, but each of these single-value mutations, probed through explain(check_set) on in-memory copies, is accepted although it contradicts a decision or binding rule: (a) B-LHA-7, 'If one server identity serves both proxy kinds, the record says so': the model refuses only flagged entries that name two identities or a non-proxy kind, so the KUBERNETES_API_PROXY and CAMPAIGN_PROXY entries keeping their shared identity with servesBothProxyKinds false (one or both) are accepted, although the refusal text states the rule (unchanged since c4); (b) T1's or T2's offHost false (runbook steps 10 and 12: 'T1, off host', 'T2, off host'); (c) liveManifestInT2 set to SIGNED_IN_T2 (runbook step 12: until CONF-LIVE-005/006 close, T2 signs no live manifest); (d) nonce.hostLedger durable false, or its owner OPERATOR_UID (Q-LHA-3 (a): a root-owned durable host ledger); (e) the new localEndpointIdentities.ifTheCampaignReleaseChoosesTheLocalCa set to NOT_A_CUSTODY_SCOPE_CHANGE (MON-LHA-CR1-KEEP's OPEN-1 ruling), and host-authority.json's new G10-LOCAL-ENDPOINT-IDENTITIES with before RUNBOOK_STEP_10 or any other what: the step-7 ordering is checked in custody-model.json but not in the precondition entry; (f) access.acceptedLimit.words, the owner's Q-LHA5-1 words, replaced by any text, in the member c5 rewrote for LHA-C1-3; (g) OWNER_ADMIN's access.identities row with osLogin true (B-LHA-18); (h) access.revocation.endsAdminSessionsOn reduced to one host (B-LHA-10: every admin session on both hosts); (i) egress.paidFirewallFeature true (Q-LHA-11 (a): no paid firewall feature); (j) source.repositoryCredentialOnHost true (design revision 7 line 97, runbook step 4: no repository credential on the host); (k) the IAP_TUNNEL lease binding revoked at step 17, after the step-16 teardown, or access.teardown.keeps cut to one item; (l) offlineLauncher.manifestServesANormalInvocation true, or timeLimits.operatorMdOneHourAge relabelled (B-LHA-11's third bullet); (m) offlineLauncher.custodyBinds without POLICY_DIGEST (runbook step 10: custody.json binding the policy digest); (n) the export unit's hosts cut to the proxy/operator host while the node carries EXPORT_UNIT (B-LHA-1: each root-only record's read path at step 15). Self-contradictions with checked members pass too: principal.count 2 beside the checked single-principal disclosure (Q-LHA-1); the cluster node's holdsKubernetesClientCredential true (B-LHA-2); liveLauncher.designOnly false (design section 6). The records as published are right; the checker, which the README presents as the records' checker, accepts records that are not. MINOR, as round 1 rated this class (LHA-C1-2).",
+   "requiredChange": "Add a model check with a refusal vector for (a) to (n): for (a), require each endpoint entry whose identity another entry shares to carry servesBothProxyKinds (so the two proxy entries are flagged when they share one); pin (b) to (n) to the published values or derive them from the checked members; pin or cross-check the three self-contradictions. Where the author judges another accepted member descriptive only, the README can say that check does not read it. No decision changes.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C2-2",
+   "severity": "MINOR",
+   "location": "scripts/linux_host_authority.py check_custody (perRunCredentials, tokenSessions, endpointServerIdentities), check_launcher (triggerUnits, exportSet) and _check_access (access.identities): each list indexed by a dict keyed by id",
+   "finding": "Each of these lists is read through a dict keyed by id, and the check compares the dict's keys, not the list's ids, with the expected ids. A repeated id keeps its first position and its last value, so a wrong entry followed by a correct copy with the same id passes, and the wrong entry is never checked. Probed through explain(check_set) on in-memory copies, each of these is accepted: perRunCredentials with its first entry reused across runs, or issued by the per-run cluster CA at STEP_8, and its correct copy appended (B-LHA-2; 'a per-run credential is never reused across runs'); tokenSessions with T1 at step 13 in reverse order and the correct T1 appended, which evades c5's T1/T2 check and the refusal text 'two token sessions per run'; endpointServerIdentities with an unlisted owner (B-LHA-7); triggerUnits with a third unit, a preflight unit run as root with another command (B-LHA-1: one unit for the preflight and one for the export, each running one fixed command; the refusal text 'one reviewed family of trigger units'); access.identities with OWNER_LOGIN administering IAM; exportSet with a host exporting nothing. No schema bound (maxItems or uniqueItems) refuses them. The indexing is unchanged since c4, and c5's new token-session and local-CA leaf checks rely on it. authorities, fixedTargets and, since c5, profile compare the id list itself and refuse a repeat.",
+   "requiredChange": "Compare each list's ids, in order, with the expected ids before building the dict (as check_launcher does for fixedTargets and c5 now does for profile), or refuse a repeated id by a named rule; add a refusal vector for at least one such list in each record.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C2-3",
+   "severity": "MINOR",
+   "location": "architecture/linux-host-authority/README.md line 3 (the status line)",
+   "finding": "At c6 the status line still says 'candidate c5'. c5 set it, and c6, which changed the README, did not move it. Round 1 asked for a current status line (LHA-C1-1), and this round's rules check it. No test pins the label.",
+   "requiredChange": "Name the current candidate in the status line at the next commit.",
+   "blocks": true
+  },
+  {
+   "id": "LHA-C2-4",
+   "severity": "NOTE",
+   "location": "scripts/linux_host_authority.py explain (lines 1537-1546) and main (line 1656)",
+   "finding": "explain's new docstring says an unexpected error is a refusal 'As on the command line', but the two catch different sets: explain maps KeyError, TypeError and IndexError; main catches ValueError, OSError, KeyError, TypeError and RecursionError, not IndexError. No probe here reached an IndexError (empty internalFlows, empty fragments and a missing OS Login admin binding are refused by named rules or the schema), so both fail closed today; an IndexError on the command line would print a traceback rather than 'refused: IndexError'.",
+   "requiredChange": "None required. Optionally catch the same classes in both.",
+   "blocks": false
+  }
+ ],
+ "dispositions": [
+  {
+   "id": "LHA-C1-1",
+   "status": "PARTLY",
+   "note": "The candidate's test passes 37/37 at c6, and its lists match the 12-file contract directory (CANDIDATE_FILES, 11, plus oracle-identity.json). The Files table names the oracle test and its identity, and its vector counts are current. The status line says c5 at c6 (LHA-C2-3)."
+  },
+  {
+   "id": "LHA-C1-2",
+   "status": "ADDRESSED",
+   "note": "Every member round 1 listed, (a) to (g), has a check and a refusal vector (C34-C47, L39-L44, R102-R107). 42 single-value probes of round 1's cases are refused by named rules, both directions of the live-target tie included. A renamed or reordered profile row is refused by 'MET-REPAIR-015's profile lists its seven prerequisites, each once, in order' (R107), and explain maps KeyError and TypeError. Decision-carrying members round 1 did not list are LHA-C2-1; repeated ids are LHA-C2-2."
+  },
+  {
+   "id": "LHA-C1-3",
+   "status": "ADDRESSED",
+   "note": "grantKinds are GROUP_, DOMAIN_ and PRINCIPAL_SET_MEMBERSHIP_CHANGE, FOLDER_BINDING and ORGANIZATION_BINDING; caughtByTheAuditLogCheck says a run-project or instance binding to any principal, groups included, is caught through teardown; auditLogDetectsThem stays false; the checker pins all of them (5 probes refused). The README's Access bullet keeps B-LHA-14's sentence verbatim and the Not-claimed bullet keeps it as at c4; c6 restored c4's notDetected tokens. R81 is rewritten, R108 and R109 are new. Nothing contradicts B-LHA-16."
+  },
+  {
+   "id": "LHA-C1-4",
+   "status": "ADDRESSED",
+   "note": "G10-LOCAL-ENDPOINT-IDENTITIES is in host-authority.json, PRECONDITIONS and the README list, and custody-model.json localEndpointIdentities says T1 and T2 issue neither identity, which the campaign release supplies before runbook step 7; A34 and C48 refuse its removal and a T1/T2 issuance. Wording only, with no custody-scope change. Its before and what in host-authority.json are not checked (LHA-C2-1 (e))."
+  },
+  {
+   "id": "LHA-C1-5",
+   "status": "ADDRESSED",
+   "note": "All 26 patterns end with (?![\\s\\S]); the model and jsonschema agree on a trailing line feed (564 comparisons); DN11 and a candidate test are added and the README states the rule."
+  },
+  {
+   "id": "LHA-C1-6",
+   "status": "NOT",
+   "note": "Not folded, as MON-LHA-CR1-KEEP allows. Still fails closed: an unlisted signer, impossible validFrom and leaseExpiresAt instants and a repeated target are each refused."
+  },
+  {
+   "id": "LHA-C1-7",
+   "status": "ADDRESSED",
+   "note": "Folded as test_the_named_forms_loop_refuses_an_unlisted_occurrence_on_its_own, which passes on c6."
+  }
+ ],
+ "bindingRules": [
+  {
+   "rule": "B-LHA-14 and B-LHA-16: the stated limit and the audit expectation",
+   "met": true,
+   "note": "The limit is scoped to membership changes and folder and organization bindings, which the run project's audit log does not see; a run-project or instance binding to any principal is left to the audit-log check. B-LHA-14's sentence is kept. The owner's words member is unpinned (LHA-C2-1 (f))."
+  },
+  {
+   "rule": "B-LHA-2: the Kubernetes client credential",
+   "met": true,
+   "note": "localCa and clusterCa are now checked (C34-C42), with the trust path equal to kubernetes.proxyOperatorHostClusterCaTrust. Repeated perRunCredentials ids can shadow a wrong leaf (LHA-C2-2)."
+  },
+  {
+   "rule": "B-LHA-7: endpoint server identities",
+   "met": true,
+   "note": "The published record says so: both proxy entries carry servesBothProxyKinds. The checker enforces only the converse (LHA-C2-1 (a))."
+  }
+ ],
+ "checked": [
+  {
+   "check": "1. Faithfulness to the decisions",
+   "result": "Met for the delta. MON-LHA-CR1-KEEP's c5 list is done: LHA-C1-1's file lists and Files table; LHA-C1-2's check and refusal vector for every listed member, with named refusals and explain mapping KeyError and TypeError; LHA-C1-3 scoped per B-LHA-16; LHA-C1-4 in host-authority.json, PRECONDITIONS and the README; NOTE 1 folded; NOTE 3 folded and NOTE 2 not, both optional; the oracle unchanged at 47/47; the full targeted set passing. MON-LHA-OPEN-1-A, accepted as reading (ii): a G10 precondition, T1 and T2 issue neither identity, and the local CA as issuer is stated as a custody-scope change for the monitor. B-LHA-14's sentence is verbatim. Nothing a decision excludes is added. The decision-carrying members still unchecked are LHA-C2-1."
+  },
+  {
+   "check": "2. The record against the design",
+   "result": "Met for the delta. New members, each from a round-1 finding and each required in its closed schema with the right type: kubernetes.proxyOperatorHostClusterCaTrust, equal to clusterCa.trustedByTheProxyOperatorHostAt and checked (LHA-C1-2 (b)); localEndpointIdentities, six members (LHA-C1-4); stagingDirectory.group (LHA-C1-2 (e)); acceptedLimit.caughtByTheAuditLogCheck and the renamed grantKinds (LHA-C1-3); the G10-LOCAL-ENDPOINT-IDENTITIES precondition. No digest member is new."
+  },
+  {
+   "check": "3. The model against the README",
+   "result": "Partly met. Each of round 1's cases, 42 probes, is refused by its named rule: local CA storage, generation, rotation, issues and client trust; cluster CA step, host, key or token and trust path; T1 and T2 step and order; bundles and revocation; live targets both ways; client and server leaves at STEP_8; drop and staging owner, group and mode; trigger units' runsAs and commands; custody.json's step; verity root, usr and imageDigest; maintenance; renamed or reordered profile rows. Of 13 probes of the LHA-C1-3 and LHA-C1-4 values, 10 are refused; the precondition's before and what and the scope-change statement are accepted. Gaps: decision-carrying members still skipped (LHA-C2-1), repeated ids shadowing checked entries (LHA-C2-2), and explain and main catching different error classes (LHA-C2-4). LHA-C1-6 still fails closed (the impossible instants with Python's datetime message, as round 1 noted)."
+  },
+  {
+   "check": "4. Schema and model agree",
+   "result": "Met. All 26 patterns in the five schemas start with ^ and end with (?![\\s\\S]), none with a top-level alternation. Over the 141 pattern-bound strings in the published records and the drop positive, jsonschema's Draft 2020-12 validator and the model's shape() agree on the value, the value with a trailing LF, with a trailing CR LF and with a leading LF (564 comparisons). Over all 255 vector documents (8 positive-set records, 235 record negatives, the drop positive and its 11 negatives) the validator and shape() agree on every one."
+  },
+  {
+   "check": "5. The vectors",
+   "result": "Met. replay passes at c6: 4 positives; 34 authority, 109 recipe, 44 launcher, 48 custody, 11 drop-manifest, 3 signature and 8 parse negatives, each refused as recorded. The delta adds 31 vectors (A34, R102-R109, L39-L44, C34-C48, DN11) and rewrites R81; each mutation contradicts its cited decision or rule, so each expectation follows from the design, and each new check in the delta has at least one vector. No vector expects an error-class refusal. The vectors missing are those LHA-C2-1 and LHA-C2-2 ask for."
+  },
+  {
+   "check": "6. The tests",
+   "result": "Met. On the c6 export: tests/test_linux_host_authority.py 37 passed; the D5a oracle 47 passed; test_review_records_in_tree 2, test_evolution_surface 393 and test_lab_run_plan 261 passed; check reports 65 span entries and replay passes. The oracle file is byte-identical at c4 and c6, sha256 212cdebe9bcaf0c837365a60c5abca14762ea3e56bf8870cbfab85604509a53e, the digest oracle-identity.json binds; the identity is unchanged since c4. Delta trace (rules item 6): every change traces to LHA-C1-1 to LHA-C1-5 or LHA-C1-7, the candidate test's no-address scan narrowed to the candidate's own files included (LHA-C1-1); c6's three files restore B-LHA-14's wording and tokens, as the author reports."
+  },
+  {
+   "check": "7. Placement",
+   "result": "Met. The c4-to-c6 comparison (the whole tree less the tools entry, by pathspec, names and status only; 0 w03- or LPK-named paths dropped) shows 13 modified paths and none added or removed. All 13 resolve to CONTRACT_AND_SOURCE, exactly and lower-cased, with PR approvers [LANE_MONITOR, OWNER]. Otherwise unchanged since round 1."
+  },
+  {
+   "check": "8. Privacy and supply chain",
+   "result": "Met. privacy_hits with 4 name-token digests: 0 names, 0 legacy term, 0 absolute paths and 0 e-mail shapes in each of the 13 changed files, in the JSON files' string values, in the 884 added lines, and in oracle-identity.json and the oracle test. No new import in the checker or the tests, so no new dependency. Nothing interposes, forwards, proxies, swaps or bypasses."
+  },
+  {
+   "check": "9. Open questions",
+   "result": "The rules file names no new open question for round 2. OPEN-1, decided as reading (ii) (MON-LHA-OPEN-1-A, accepted in MON-LHA-CR1-KEEP), is reflected; see questions."
+  }
+ ],
+ "questions": [
+  "OPEN-1 (MON-LHA-OPEN-1-A; reading (ii) accepted in MON-LHA-CR1-KEEP): the delta states it as the precondition G10-LOCAL-ENDPOINT-IDENTITIES in host-authority.json, PRECONDITIONS and the README, and as localEndpointIdentities in custody-model.json (T1 and T2 issue neither identity; the campaign release supplies both before runbook step 7), with no custody-scope change. Recommendation: keep reading (ii) as worded, and have the checker also pin the precondition's before and the scope-change statement (LHA-C2-1 (e))."
+ ],
+ "notChecked": [
+  "The subject and base tree ids are taken from the rules file and were not re-derived; git objects were read only as git show of commit:path and git diff of named commits. The tools entry was excluded from the tree comparison by pathspec, so git never descended into it.",
+  "The intermediate c5 was compared by diff only; nothing was run on it.",
+  "Of the sweep's accepted mutations, the prose, path and placeholder members were judged by member, not one by one.",
+  "GCP, systemd and permission-name facts stay on paper, as the README's Not claimed states.",
+  "The oracle module was run and hashed, not read. No pre-check, dry run or full suite was run. The command-line path for an IndexError was not exercised, since no probe reached one."
+ ],
+ "disclosures": [
+  "The launch context carried an auto-injected memory index and an account context (an e-mail address). I used neither, and no account value appears here.",
+  "Slip: one message carried two tool calls, an Edit to my own helper run_tests.py and the Bash run that used it. They ran in order; scratch only.",
+  "Slip: two outputs went over 120 lines. A sed range of the checker from line 1494 to its end printed about 170 lines, and a grep of the launcher sweep's accepted list printed about 131 lines. Both were my own reads of the subject export or of my work-folder output; no other file was involved.",
+  "Deviation: besides helper scripts, I wrote helper outputs to the work folder: saved diffs of the delta's exact paths, the sweep's accepted lists and a list of new vectors. Nothing was written elsewhere, and the subject export was not edited.",
+  "Deviation: reading owner_decisions.json, a grep listed every decision id with its line number, other lanes' ids among them, one of them LPK-named; no text of those entries was read. Besides MON-LHA-CR1-KEEP I read MON-LHA-C1-KEEP (to find MON-LHA-OPEN-1-A) and MON-LHA-ORC-2-A, which shared the range. design-status.json was not read; DESIGN.r7.md was read only by grep and two short ranges.",
+  "Method: every command started with the pinned wrapper; one call per message otherwise. The tree comparison used git diff names and status with no rename detection (no blob read), the tools entry excluded by pathspec and w03- or LPK-named paths dropped before use (0 dropped). Helpers in the work folder loaded scripts/linux_host_authority.py, scripts/review_record.py and scripts/evolution_surface.py by path, plus jsonschema; none is a VPO or validate_* module. Mutations were in-memory copies run through explain(check_set) as a library: data only, no bypass code. No python -c, no network, no ls, find or glob under the lha link, no account reads, nothing from the verifier database or the trust directory, and no w03-named file read."
+ ]
+}

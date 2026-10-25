@@ -593,12 +593,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "linux root aliases validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 265
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET},
-            "closed 265-packet catalog retaining the 264-packet checkpoint")
+    require(len(paths) == 266
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET},
+            "closed 266-packet catalog retaining the 264-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem == successor.NEW_PACKET:
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = record["packetSha256"] if path.stem == NEW_PACKET else record["baselinePackets"][path.stem]
@@ -636,4 +636,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Linux root aliases valid: 265 current specifications; 264-packet checkpoint and exact 263-packet predecessor; contract reviewed.")
+    print("Linux root aliases valid: 266 current specifications; 264-packet checkpoint and exact 263-packet predecessor; contract reviewed.")

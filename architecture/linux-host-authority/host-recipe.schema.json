@@ -1,0 +1,2442 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "planeon.internal.linux-host-recipe/v1",
+ "title": "Linux host recipe",
+ "description": "The two hosts per run, their access, egress, inventories and runbook steps. Closed.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schemaVersion",
+  "packet",
+  "item",
+  "evidenceClass",
+  "roleLabels",
+  "project",
+  "hosts",
+  "internalFlows",
+  "campaignProxyUpstream",
+  "localRegistryTrust",
+  "firewall",
+  "machine",
+  "guestAgent",
+  "image",
+  "hostInventory",
+  "rootAliases",
+  "profile",
+  "access",
+  "egress",
+  "time",
+  "packages",
+  "source",
+  "runtimeRootWrites",
+  "costScope",
+  "teardown",
+  "runbook"
+ ],
+ "properties": {
+  "schemaVersion": {
+   "const": "planeon.internal.linux-host-recipe/v1"
+  },
+  "packet": {
+   "const": "MET-LINUX-008"
+  },
+  "item": {
+   "const": "LINUX-HOST-AUTH-001"
+  },
+  "evidenceClass": {
+   "const": "DATA_CHECK_ONLY"
+  },
+  "roleLabels": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "administeringIdentity",
+    "loginIdentity",
+    "loginBaselineRole",
+    "observer",
+    "operatorUid",
+    "loginTriggerGroup"
+   ],
+   "properties": {
+    "administeringIdentity": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "loginIdentity": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "loginBaselineRole": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "observer": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "operatorUid": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "loginTriggerGroup": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "project": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "contract",
+    "separateFromLabFoundation",
+    "preparedOnce",
+    "confirmedPerRun",
+    "runsAtATime",
+    "computeBetweenRuns",
+    "defaultNetwork",
+    "cloudNat",
+    "privateGoogleAccess",
+    "vpcAndFirewallCreatedAtStep",
+    "osLoginPolicy"
+   ],
+   "properties": {
+    "contract": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "separateFromLabFoundation": {
+     "type": "boolean"
+    },
+    "preparedOnce": {
+     "type": "boolean"
+    },
+    "confirmedPerRun": {
+     "type": "boolean"
+    },
+    "runsAtATime": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "computeBetweenRuns": {
+     "type": "boolean"
+    },
+    "defaultNetwork": {
+     "type": "boolean"
+    },
+    "cloudNat": {
+     "type": "boolean"
+    },
+    "privateGoogleAccess": {
+     "type": "boolean"
+    },
+    "vpcAndFirewallCreatedAtStep": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "osLoginPolicy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "hosts": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "role",
+     "architecture",
+     "sizing",
+     "boots",
+     "carries",
+     "rootKubeconfig",
+     "containerRuntimeSocket",
+     "holdsKubernetesClientCredential",
+     "filesAfterRevocation"
+    ],
+    "properties": {
+     "role": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "architecture": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "sizing": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "boots": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "carries": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     },
+     "rootKubeconfig": {
+      "type": "boolean"
+     },
+     "containerRuntimeSocket": {
+      "type": "boolean"
+     },
+     "holdsKubernetesClientCredential": {
+      "type": "boolean"
+     },
+     "filesAfterRevocation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "internalFlows": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "from",
+     "to",
+     "protocol",
+     "port",
+     "direction",
+     "purposes"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "from": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "to": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "protocol": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "port": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "direction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "purposes": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    }
+   }
+  },
+  "campaignProxyUpstream": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "flow",
+    "targets",
+    "via",
+    "asAllowedBy",
+    "refusedTargets",
+    "anyOtherFlow"
+   ],
+   "properties": {
+    "flow": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "targets": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "via": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "asAllowedBy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "refusedTargets": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "anyOtherFlow": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "localRegistryTrust": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "host",
+    "file",
+    "owner",
+    "mode",
+    "installedAtStep",
+    "beforeRevocation",
+    "readBy",
+    "trustsTheIssuerOf"
+   ],
+   "properties": {
+    "host": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "file": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "owner": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "mode": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "installedAtStep": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "beforeRevocation": {
+     "type": "boolean"
+    },
+    "readBy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "trustsTheIssuerOf": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "firewall": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "ingress",
+    "internal",
+    "egressDenyAll",
+    "setupWindowAllow"
+   ],
+   "properties": {
+    "ingress": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "id",
+       "sourceRange",
+       "protocol",
+       "port",
+       "targets"
+      ],
+      "properties": {
+       "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "sourceRange": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "protocol": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "port": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "targets": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "internal": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "egressDenyAll": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "createdAtStep",
+      "belowSetupWindowAllow"
+     ],
+     "properties": {
+      "createdAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "belowSetupWindowAllow": {
+       "type": "boolean"
+      }
+     }
+    },
+    "setupWindowAllow": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "createdAtStep",
+      "removedAtStep",
+      "destinations",
+      "byteCeiling",
+      "paidFirewallFeature"
+     ],
+     "properties": {
+      "createdAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "removedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "destinations": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "byteCeiling": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "paidFirewallFeature": {
+       "type": "boolean"
+      }
+     }
+    }
+   }
+  },
+  "machine": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "appliesTo",
+    "shieldedVm",
+    "serialPortAccess",
+    "serviceAccount",
+    "scopes",
+    "metadata",
+    "refusedMetadata",
+    "maintenance",
+    "maxRunDuration"
+   ],
+   "properties": {
+    "appliesTo": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "shieldedVm": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "secureBoot",
+      "vtpm",
+      "integrityMonitoring"
+     ],
+     "properties": {
+      "secureBoot": {
+       "type": "boolean"
+      },
+      "vtpm": {
+       "type": "boolean"
+      },
+      "integrityMonitoring": {
+       "type": "boolean"
+      }
+     }
+    },
+    "serialPortAccess": {
+     "type": "boolean"
+    },
+    "serviceAccount": {
+     "type": "boolean"
+    },
+    "scopes": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "metadata": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "key",
+       "value"
+      ],
+      "properties": {
+       "key": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "value": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "refusedMetadata": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "maintenance": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "onHostMaintenance",
+      "automaticRestartInLease",
+      "bootIdRecordedAtStep",
+      "rebootAfterQualification"
+     ],
+     "properties": {
+      "onHostMaintenance": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "automaticRestartInLease": {
+       "type": "boolean"
+      },
+      "bootIdRecordedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "rebootAfterQualification": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "maxRunDuration": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "set",
+      "action",
+      "endsNoLaterThan",
+      "onPaper"
+     ],
+     "properties": {
+      "set": {
+       "type": "boolean"
+      },
+      "action": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "endsNoLaterThan": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "onPaper": {
+       "type": "boolean"
+      }
+     }
+    }
+   }
+  },
+  "guestAgent": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "on",
+    "off",
+    "checkedAtStep"
+   ],
+   "properties": {
+    "on": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "off": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "checkedAtStep": {
+     "type": "integer",
+     "minimum": 0
+    }
+   }
+  },
+  "image": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "allowedFamilies",
+    "family",
+    "familyKind",
+    "selinux",
+    "onPaper",
+    "architecture",
+    "pinnedPerPlan",
+    "licenceCharge",
+    "clusterNodeBoots",
+    "customImage",
+    "imageDigest",
+    "kernel",
+    "preflightComparesLabels"
+   ],
+   "properties": {
+    "allowedFamilies": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "family": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "familyKind": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "selinux": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "onPaper": {
+     "type": "boolean"
+    },
+    "architecture": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "pinnedPerPlan": {
+     "type": "boolean"
+    },
+    "licenceCharge": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "clusterNodeBoots": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "customImage": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "for",
+      "builtPerPlan",
+      "builtOn",
+      "startsFrom",
+      "verifiedAgainst",
+      "plus",
+      "rootFilesystem",
+      "usrOnRoot",
+      "guestFeatures",
+      "selinuxLabels",
+      "firstBootRelabel",
+      "buildDiskDeletedAtStep",
+      "proxyOperatorHostBootsRecordedImage",
+      "deletedAtTeardown"
+     ],
+     "properties": {
+      "for": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "builtPerPlan": {
+       "type": "boolean"
+      },
+      "builtOn": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "startsFrom": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "verifiedAgainst": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "plus": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "rootFilesystem": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "usrOnRoot": {
+       "type": "boolean"
+      },
+      "guestFeatures": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "selinuxLabels": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "firstBootRelabel": {
+       "type": "boolean"
+      },
+      "buildDiskDeletedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "proxyOperatorHostBootsRecordedImage": {
+       "type": "boolean"
+      },
+      "deletedAtTeardown": {
+       "type": "boolean"
+      }
+     }
+    },
+    "imageDigest": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "is",
+      "inventoryFields",
+      "takenAtStep",
+      "from",
+      "recomputedOffHost",
+      "coversLaterSteps"
+     ],
+     "properties": {
+      "is": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "inventoryFields": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "takenAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "from": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "recomputedOffHost": {
+       "type": "boolean"
+      },
+      "coversLaterSteps": {
+       "type": "boolean"
+      }
+     }
+    },
+    "kernel": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "release",
+      "checkedInBuiltRootAtStep",
+      "qualification",
+      "recordedAtStep",
+      "notesDigestRecorded",
+      "lockdownKeepsBpfProgramInformation"
+     ],
+     "properties": {
+      "release": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "checkedInBuiltRootAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "qualification": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "recordedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "notesDigestRecorded": {
+       "type": "boolean"
+      },
+      "lockdownKeepsBpfProgramInformation": {
+       "type": "boolean"
+      }
+     }
+    },
+    "preflightComparesLabels": {
+     "type": "boolean"
+    }
+   }
+  },
+  "hostInventory": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "records",
+    "leftOut",
+    "frozenAtStep",
+    "coveredInstallSteps",
+    "invalidateOn",
+    "measuredBoot",
+    "bootEventLogsExportedAtStep",
+    "imageReverification",
+    "buildInputsReading"
+   ],
+   "properties": {
+    "records": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "host",
+       "scope"
+      ],
+      "properties": {
+       "host": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "scope": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       }
+      }
+     }
+    },
+    "leftOut": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "what",
+       "ownRecord"
+      ],
+      "properties": {
+       "what": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "ownRecord": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "frozenAtStep": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "coveredInstallSteps": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "invalidateOn": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "measuredBoot": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "readThrough",
+      "notThroughTheVm",
+      "pcrValues",
+      "baseline",
+      "eventLogReplayed",
+      "efiDigest",
+      "onPaper"
+     ],
+     "properties": {
+      "readThrough": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "notThroughTheVm": {
+       "type": "boolean"
+      },
+      "pcrValues": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "baseline": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "eventLogReplayed": {
+       "type": "boolean"
+      },
+      "efiDigest": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "onPaper": {
+       "type": "boolean"
+      }
+     }
+    },
+    "bootEventLogsExportedAtStep": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "imageReverification": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "where",
+      "compares"
+     ],
+     "properties": {
+      "where": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "compares": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "buildInputsReading": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "cites",
+      "reading",
+      "ifRejected"
+     ],
+     "properties": {
+      "cites": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "reading": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "ifRejected": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    }
+   }
+  },
+  "rootAliases": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "contract",
+    "ruling",
+    "precondition",
+    "stateAtBase",
+    "inputs",
+    "rootLink",
+    "loader",
+    "checkAtStep",
+    "uncoveredUsedPath",
+    "onPaper"
+   ],
+   "properties": {
+    "contract": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "ruling": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "precondition": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "stateAtBase": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "inputs": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "rootLink": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "loader": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "checkAtStep": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "uncoveredUsedPath": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "onPaper": {
+     "type": "boolean"
+    }
+   }
+  },
+  "profile": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "prerequisite",
+     "owner",
+     "steps",
+     "check",
+     "value"
+    ],
+    "properties": {
+     "prerequisite": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "steps": {
+      "type": "array",
+      "items": {
+       "type": "integer",
+       "minimum": 0
+      }
+     },
+     "check": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "value": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "access": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "ssh",
+    "identities",
+    "loginBaseline",
+    "adminBaseline",
+    "betweenRuns",
+    "leaseBindings",
+    "revocation",
+    "effectiveChecks",
+    "permissionMechanism",
+    "sessionChecks",
+    "auditLogCheck",
+    "acceptedLimit",
+    "afterRevocationRootFiles",
+    "teardown"
+   ],
+   "properties": {
+    "ssh": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "only",
+      "sourceRange",
+      "protocol",
+      "port",
+      "onPaper"
+     ],
+     "properties": {
+      "only": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "sourceRange": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "protocol": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "port": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "onPaper": {
+       "type": "boolean"
+      }
+     }
+    },
+    "identities": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "label",
+       "of",
+       "use",
+       "osLogin",
+       "twoStepVerification",
+       "administersIam"
+      ],
+      "properties": {
+       "label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "of": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "use": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "osLogin": {
+        "type": "boolean"
+       },
+       "twoStepVerification": {
+        "type": "boolean"
+       },
+       "administersIam": {
+        "type": "boolean"
+       }
+      }
+     }
+    },
+    "loginBaseline": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "kind",
+      "boundOn",
+      "basicRole",
+      "inPlaceOf",
+      "permittedPurpose",
+      "excludes",
+      "recordedInPlan",
+      "lifecycle",
+      "noOtherGrant",
+      "onPaper"
+     ],
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "kind": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "boundOn": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "basicRole": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "inPlaceOf": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "permittedPurpose": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "excludes": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "recordedInPlan": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "roleId",
+        "exactPermissionList"
+       ],
+       "properties": {
+        "roleId": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "exactPermissionList": {
+         "type": "boolean"
+        }
+       }
+      },
+      "lifecycle": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "createdBy",
+        "boundBy",
+        "when",
+        "keptBetweenRuns",
+        "deletedAtTeardown"
+       ],
+       "properties": {
+        "createdBy": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "boundBy": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "when": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "keptBetweenRuns": {
+         "type": "boolean"
+        },
+        "deletedAtTeardown": {
+         "type": "boolean"
+        }
+       }
+      },
+      "noOtherGrant": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "onPaper": {
+       "type": "boolean"
+      }
+     }
+    },
+    "adminBaseline": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "holdsNoLoginPermission",
+      "on",
+      "countsAmongBaselineBindings",
+      "decision"
+     ],
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "holdsNoLoginPermission": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "on": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "countsAmongBaselineBindings": {
+       "type": "boolean"
+      },
+      "decision": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "betweenRuns": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "bindings",
+      "isLabRunPlanOwnerBaseline",
+      "confirmedAtStep"
+     ],
+     "properties": {
+      "bindings": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "isLabRunPlanOwnerBaseline": {
+       "type": "boolean"
+      },
+      "confirmedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      }
+     }
+    },
+    "leaseBindings": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "role",
+       "grantee",
+       "grantedBy",
+       "counted",
+       "window",
+       "revokedBy",
+       "revokedAtStep"
+      ],
+      "properties": {
+       "role": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "grantee": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "grantedBy": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "counted": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "window": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "revokedBy": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "revokedAtStep": {
+        "type": "integer",
+        "minimum": 0
+       }
+      }
+     }
+    },
+    "revocation": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "atStep",
+      "by",
+      "removes",
+      "denyPolicy",
+      "folderOrOrganizationGrant",
+      "thenWaitsForPropagation",
+      "endsAdminSessionsOn"
+     ],
+     "properties": {
+      "atStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "by": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "removes": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "denyPolicy": {
+       "type": "boolean"
+      },
+      "folderOrOrganizationGrant": {
+       "type": "boolean"
+      },
+      "thenWaitsForPropagation": {
+       "type": "boolean"
+      },
+      "endsAdminSessionsOn": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "effectiveChecks": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "step",
+       "identity",
+       "runBy",
+       "kind",
+       "propagationWait",
+       "absent",
+       "resources",
+       "grantPaths",
+       "conditionalBindingIsGrant",
+       "checksNoBasicRole",
+       "checksPermissionListAgainstPlan",
+       "onFinding"
+      ],
+      "properties": {
+       "step": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "identity": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "runBy": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "kind": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "propagationWait": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "absent": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       },
+       "resources": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       },
+       "grantPaths": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       },
+       "conditionalBindingIsGrant": {
+        "type": "boolean"
+       },
+       "checksNoBasicRole": {
+        "type": "boolean"
+       },
+       "checksPermissionListAgainstPlan": {
+        "type": "boolean"
+       },
+       "onFinding": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "permissionMechanism": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "onPaper",
+      "projectAndInstances",
+      "ancestors",
+      "membership",
+      "roles",
+      "conditions",
+      "cannotRead",
+      "neverRunBy"
+     ],
+     "properties": {
+      "onPaper": {
+       "type": "boolean"
+      },
+      "projectAndInstances": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "runBy",
+        "reads",
+        "with"
+       ],
+       "properties": {
+        "runBy": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "reads": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "with": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       }
+      },
+      "ancestors": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "runBy",
+        "reads"
+       ],
+       "properties": {
+        "runBy": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "reads": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       }
+      },
+      "membership": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "runBy",
+        "groups",
+        "domain",
+        "principalSets"
+       ],
+       "properties": {
+        "runBy": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "groups": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "domain": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        },
+        "principalSets": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 4000
+        }
+       }
+      },
+      "roles": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "conditions": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "cannotRead": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "neverRunBy": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "sessionChecks": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "atStep",
+      "after",
+      "endsEverySessionOpenedWithAdminOn",
+      "identities",
+      "confirms",
+      "preRevocationAdminSessionAliveAtPreflight"
+     ],
+     "properties": {
+      "atStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "after": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "endsEverySessionOpenedWithAdminOn": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "identities": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "confirms": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "preRevocationAdminSessionAliveAtPreflight": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "auditLogCheck": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "log",
+      "from",
+      "to",
+      "runBy",
+      "lists",
+      "expected",
+      "anyOtherEntry",
+      "anyCustomRoleChange",
+      "finalSpanCheckedAfterTeardownCompletes",
+      "evidenceAcceptedOnlyAfterThisCheck"
+     ],
+     "properties": {
+      "log": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "from": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "to": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "runBy": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "lists": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "expected": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "entry",
+         "by"
+        ],
+        "properties": {
+         "entry": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+         },
+         "by": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+         }
+        }
+       }
+      },
+      "anyOtherEntry": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "anyCustomRoleChange": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "finalSpanCheckedAfterTeardownCompletes": {
+       "type": "boolean"
+      },
+      "evidenceAcceptedOnlyAfterThisCheck": {
+       "type": "boolean"
+      }
+     }
+    },
+    "acceptedLimit": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "decision",
+      "words",
+      "grantKinds",
+      "detectedOnlyBy",
+      "notDetected",
+      "auditLogDetectsThem",
+      "caughtByTheAuditLogCheck"
+     ],
+     "properties": {
+      "decision": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "words": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "grantKinds": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "detectedOnlyBy": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "notDetected": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      },
+      "auditLogDetectsThem": {
+       "type": "boolean"
+      },
+      "caughtByTheAuditLogCheck": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    },
+    "afterRevocationRootFiles": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "teardown": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "by",
+      "revokes",
+      "keeps"
+     ],
+     "properties": {
+      "by": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "revokes": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      },
+      "keeps": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    }
+   }
+  },
+  "egress": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "window",
+    "fetches",
+    "fetchTool",
+    "matching",
+    "paidFirewallFeature",
+    "byteCeiling",
+    "providerFigures",
+    "closure",
+    "check",
+    "expectedExceptions",
+    "atCampaign"
+   ],
+   "properties": {
+    "window": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "fetches": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "fetchTool": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "matching": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "paidFirewallFeature": {
+     "type": "boolean"
+    },
+    "byteCeiling": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "providerFigures": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "closure": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "denyAllCreatedAtStep",
+      "closedAtStep",
+      "removes"
+     ],
+     "properties": {
+      "denyAllCreatedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "closedAtStep": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "removes": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       }
+      }
+     }
+    },
+    "check": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "expectedExceptions": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "atCampaign": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "externalAddress",
+      "allowEgressRule",
+      "launcherIsolation"
+     ],
+     "properties": {
+      "externalAddress": {
+       "type": "boolean"
+      },
+      "allowEgressRule": {
+       "type": "boolean"
+      },
+      "launcherIsolation": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
+      }
+     }
+    }
+   }
+  },
+  "time": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "source",
+    "daemon",
+    "otherMetadataUses",
+    "capturedAtPreflight",
+    "podsDeniedTheMetadataServerBy"
+   ],
+   "properties": {
+    "source": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "daemon": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "otherMetadataUses": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "capturedAtPreflight": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "podsDeniedTheMetadataServerBy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "packages": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "proxyOperatorHost",
+    "clusterNode",
+    "sources",
+    "mirrorRule",
+    "relaxes",
+    "toolRoot",
+    "cacheRoot",
+    "automaticUpdaters",
+    "updaters"
+   ],
+   "properties": {
+    "proxyOperatorHost": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "clusterNode": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "sources": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "what",
+       "from",
+       "pin",
+       "onPaper"
+      ],
+      "properties": {
+       "what": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "from": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "pin": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+       },
+       "onPaper": {
+        "type": "boolean"
+       }
+      }
+     }
+    },
+    "mirrorRule": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "relaxes": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "toolRoot": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "cacheRoot": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "automaticUpdaters": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "updaters": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "source": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "what",
+    "withGit",
+    "treeSha256",
+    "transfer",
+    "into",
+    "repositoryCredentialOnHost"
+   ],
+   "properties": {
+    "what": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "withGit": {
+     "type": "boolean"
+    },
+    "treeSha256": {
+     "type": "boolean"
+    },
+    "transfer": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "into": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "repositoryCredentialOnHost": {
+     "type": "boolean"
+    }
+   }
+  },
+  "runtimeRootWrites": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "host",
+     "path",
+     "writer"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "host": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "writer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "costScope": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "item",
+     "planLineItem",
+     "requiredBy"
+    ],
+    "properties": {
+     "item": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "planLineItem": {
+      "type": "boolean"
+     },
+     "requiredBy": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  },
+  "teardown": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "governedBy",
+    "first",
+    "deletes",
+    "privateHalvesEndWith",
+    "check",
+    "bindingsRevokedBy"
+   ],
+   "properties": {
+    "governedBy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "first": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "deletes": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "privateHalvesEndWith": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "check": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "bindingsRevokedBy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "runbook": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "step",
+     "id",
+     "cloudActionsBy",
+     "onHost",
+     "check"
+    ],
+    "properties": {
+     "step": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "cloudActionsBy": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "onHost": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     },
+     "check": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    }
+   }
+  }
+ }
+}

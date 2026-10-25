@@ -1,0 +1,42 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_linux_host_authority_oracle.py",
+  "sha256": "212cdebe9bcaf0c837365a60c5abca14762ea3e56bf8870cbfab85604509a53e"
+ },
+ "oracle": {
+  "agentId": "a0f7e4c29484149e8",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "dd0addca-4e18-4222-9017-955f02d00b0d",
+  "lane": "parallel"
+ },
+ "author": {
+  "agentIds": [
+   "a2ef51b993c85f1cb"
+  ]
+ },
+ "briefSha256": "82692327f20e6633459e3cc8e8c3778bf05a2e66ddfd48bc9cf98730b02f1fc7",
+ "candidateCommit": "312484e29cdfd4fee1104a5fef016c528ef92c7e",
+ "launched": "2026-10-25T02:24:23+08:00",
+ "finished": "2026-10-25T02:57:11+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-LHA-ORACLE-KEEP",
+  "date": "2026-10-25"
+ },
+ "disclosures": [
+  "written black-box from the design, the build rules, the decisions and the base; the candidate reached only through its published check command (test_60, test_61); 45 of 47 tests come from the design and rules alone, and the record mutations are the oracle's own (the README documents no way to check a modified copy)",
+  "against c1 (39aa7a53): 46/47, test_16 failing (ORC-1: linux-readiness.json line 117 PREEXISTING had no reading occurrence); fixed in c2 under MON-LHA-ORC-1-A",
+  "against c2 (9b50ab1b): 46/47, test_35 failing (B-LHA-11: c2 also put the capacity 'existing' of LINUX_READINESS.md line 63 under the signing reading); narrowed to the named forms in c3 under MON-LHA-ORC-2-A",
+  "against c3 (312484e2), unchanged: 47/47",
+  "slip: one message carried three Edit calls, all to its own draft",
+  "slip: three reads over 120 lines, of its own renderer's output",
+  "slip: one decisions range included an uncited entry (MON-RA-SERIES); a helper parsed the whole decisions file in memory and printed only the cited entries",
+  "slip: one grep line of the base's trusted-runner manifest schema, for its schema id; some grep patterns were double-quoted inside sh -c",
+  "the launch context carried an auto-injected memory index and an account context; the oracle used neither"
+ ]
+}

@@ -1,0 +1,476 @@
+{
+ "schemaVersion": "planeon.internal.linux-launcher-install/v1",
+ "packet": "MET-LINUX-008",
+ "item": "LINUX-HOST-AUTH-001",
+ "evidenceClass": "DATA_CHECK_ONLY",
+ "repositoryInstalls": false,
+ "operatorUid": {
+  "label": "OPERATOR_UID",
+  "kind": "DEDICATED_NON_ROOT_LOCAL_ACCOUNT",
+  "createdAtStep": 8,
+  "createdBy": "OWNER_LOGIN_WITH_ADMIN",
+  "isTheLoginIdentityAccount": false,
+  "nameAndUidPublished": false,
+  "boundIn": "THE_OFFLINE_POLICY_OPERATOR_UID_AND_OPERATOR_NAME"
+ },
+ "loginTriggerGroup": {
+  "label": "PLANEON_LOGIN_TRIGGER",
+  "members": [
+   "OWNER_LOGIN"
+  ],
+  "setAtStep": 8,
+  "excludes": [
+   "OPERATOR_UID"
+  ],
+  "nameAndGidPublished": false
+ },
+ "signedDropInstaller": {
+  "component": "A_REVIEWED_ROOT_COMPONENT_OF_THIS_PACKET",
+  "units": [
+   "planeon-drop-installer.path",
+   "planeon-drop-installer.service"
+  ],
+  "helper": "/opt/planeon/bin/planeon-signed-drop-install",
+  "unitDirectory": "/etc/systemd/system",
+  "installedAtStep": 8,
+  "inHostInventory": true,
+  "runsAs": "ROOT",
+  "operatorArguments": false,
+  "startedBy": "A_WRITE_BY_OWNER_LOGIN_INTO_THE_DROP_DIRECTORY",
+  "dropDirectory": {
+   "path": "/var/lib/planeon/drop",
+   "owner": "ROOT",
+   "group": "PLANEON_LOGIN_TRIGGER",
+   "mode": "1730",
+   "parentChain": "ROOT_OWNED_NOT_GROUP_OR_WORLD_WRITABLE",
+   "otherwiseRefused": true
+  },
+  "stagingDirectory": {
+   "path": "/var/lib/planeon/drop-staging",
+   "owner": "ROOT",
+   "group": "ROOT",
+   "mode": "0700"
+  },
+  "verifier": "KIT_ED25519_VERIFY_ONLY",
+  "newCryptography": false,
+  "certificateChainMode": false,
+  "verifies": "THE_DROP_MANIFEST_DETACHED_SIGNATURE",
+  "publicKey": "/etc/planeon/harness-runner-manifest.pub",
+  "signer": "LINUX_RUNNER_MANIFEST",
+  "dropManifest": {
+   "schemaId": "planeon.internal.linux-drop-manifest/v1",
+   "schema": "architecture/linux-host-authority/drop-manifest.schema.json",
+   "signaturePayload": "UTF8_SCHEMA_ID_THEN_0x00_THEN_EXACT_BYTES",
+   "formedAs": "THE_POLICY_SIGNATURE",
+   "binds": [
+    "PLAN_SHA256",
+    "INSTANCE_IDENTITY",
+    "STEP_11_BOOT_ID",
+    "VALIDITY_WINDOW_ENDING_NO_LATER_THAN_THE_LEASE"
+   ],
+   "refuses": [
+    "harness.planeon.ai/trusted-runner-manifest/v1alpha1",
+    "planeon.linux-runner-policy/v3"
+   ],
+   "authorizes": "PLACEMENT_ONLY"
+  },
+  "installsOnlyIf": [
+   "DROP_MANIFEST_VERIFIES",
+   "MANIFEST_LISTS_EXACT_TARGET_AND_SHA256",
+   "TARGET_AND_MODE_ON_THE_FIXED_LIST",
+   "BINDINGS_MATCH_THIS_HOST_BOOT_AND_WINDOW"
+  ],
+  "fileHandling": [
+   "REGULAR_FILES_ONLY",
+   "NO_FOLLOW_OPENS",
+   "NO_HARDLINKS",
+   "COPY_INTO_ROOT_OWNED_STAGING",
+   "SHA256_OVER_THE_STAGED_COPY",
+   "ATOMIC_RENAME_INTO_THE_TARGET",
+   "OWNER_AND_MODE_FROM_THE_FIXED_LIST"
+  ],
+  "fixedTargets": [
+   {
+    "id": "CAMPAIGN_PROXY_SERVER_TLS_CERTIFICATE",
+    "path": "/etc/planeon/credentials/campaign-proxy-server-tls.crt.pem",
+    "owner": "ROOT",
+    "mode": "0444",
+    "identity": "CAMPAIGN_PROXY_SERVER_TLS",
+    "readBy": "THE_PROXY_SERVER",
+    "state": "ACTIVE"
+   },
+   {
+    "id": "CAMPAIGN_PROXY_CLIENT_MTLS_CERTIFICATE",
+    "path": "/etc/planeon/credentials/campaign-proxy-client-mtls.crt.pem",
+    "owner": "ROOT",
+    "mode": "0444",
+    "identity": "CAMPAIGN_PROXY_CLIENT_MTLS",
+    "readBy": "THE_PROXY_CLIENT",
+    "state": "ACTIVE"
+   },
+   {
+    "id": "OFFLINE_MANIFEST",
+    "path": "/etc/planeon/harness-runner-manifest.json",
+    "owner": "ROOT",
+    "mode": "0444",
+    "identity": "NONE",
+    "readBy": "THE_OFFLINE_LAUNCHER",
+    "state": "ACTIVE"
+   },
+   {
+    "id": "OFFLINE_MANIFEST_SIGNATURE",
+    "path": "/etc/planeon/harness-runner-manifest.json.sig",
+    "owner": "ROOT",
+    "mode": "0444",
+    "identity": "NONE",
+    "readBy": "THE_OFFLINE_LAUNCHER",
+    "state": "ACTIVE"
+   },
+   {
+    "id": "LIVE_MANIFEST",
+    "path": "/etc/planeon/harness-live-runner-manifest.json",
+    "owner": "ROOT",
+    "mode": "0444",
+    "identity": "NONE",
+    "readBy": "THE_LIVE_LAUNCHER",
+    "state": "AFTER_CONF_LIVE_005_006_CLOSE"
+   },
+   {
+    "id": "LIVE_MANIFEST_SIGNATURE",
+    "path": "/etc/planeon/harness-live-runner-manifest.json.sig",
+    "owner": "ROOT",
+    "mode": "0444",
+    "identity": "NONE",
+    "readBy": "THE_LIVE_LAUNCHER",
+    "state": "AFTER_CONF_LIVE_005_006_CLOSE"
+   }
+  ],
+  "refusesEverythingElse": true,
+  "logsEveryAttempt": "/var/log/planeon/signed-drop-installer.log",
+  "certificateValidityCheckedBy": "THE_CONSUMING_COMPONENTS",
+  "consumersReadTheirTargets": "AT_THE_LISTED_PATHS_THEIR_START_ON_PICKUP_IS_THEIR_OWNERS"
+ },
+ "triggerUnits": [
+  {
+   "id": "PREFLIGHT_UNIT",
+   "hosts": [
+    "PROXY_OPERATOR_HOST"
+   ],
+   "units": [
+    "planeon-preflight.path",
+    "planeon-preflight.service"
+   ],
+   "trigger": {
+    "kind": "PATH_UNIT",
+    "path": "/var/lib/planeon/trigger/preflight",
+    "directory": "/var/lib/planeon/trigger",
+    "owner": "ROOT",
+    "group": "PLANEON_LOGIN_TRIGGER",
+    "mode": "1730"
+   },
+   "command": "/opt/planeon/bin/harness-offline-launch --operator-preflight",
+   "runsAs": "OPERATOR_UID",
+   "startedBy": "OWNER_LOGIN_WRITES_THE_TRIGGER_FILE",
+   "writes": [
+    "PREFLIGHT_RECORDS",
+    "JOURNAL"
+   ],
+   "deliversToTheLogin": "THROUGH_THE_EXPORT_UNIT",
+   "operatorArguments": false,
+   "readsTriggerContent": false,
+   "installedAtStep": 8,
+   "inHostInventory": true,
+   "unitDirectory": "/etc/systemd/system"
+  },
+  {
+   "id": "EXPORT_UNIT",
+   "hosts": [
+    "PROXY_OPERATOR_HOST",
+    "CLUSTER_NODE"
+   ],
+   "units": [
+    "planeon-export.socket",
+    "planeon-export.service"
+   ],
+   "trigger": {
+    "kind": "SOCKET_UNIT",
+    "path": "/run/planeon/export.sock",
+    "directory": "/run/planeon",
+    "owner": "ROOT",
+    "group": "PLANEON_LOGIN_TRIGGER",
+    "mode": "0660"
+   },
+   "command": "/opt/planeon/bin/planeon-export",
+   "runsAs": "ROOT",
+   "startedBy": "OWNER_LOGIN_CONNECTS_TO_THE_SOCKET",
+   "writes": [
+    "JOURNAL"
+   ],
+   "deliversToTheLogin": "THE_FIXED_EXPORT_SET_STREAMED_OVER_THE_ONE_CONNECTION",
+   "operatorArguments": false,
+   "readsTriggerContent": false,
+   "installedAtStep": 8,
+   "inHostInventory": true,
+   "unitDirectory": "/etc/systemd/system"
+  }
+ ],
+ "privilegedActions": [
+  {
+   "action": "STEP_11_PREFLIGHT",
+   "runsAs": "OPERATOR_UID",
+   "startedBy": "PREFLIGHT_UNIT",
+   "loginNeedsAdmin": false
+  },
+  {
+   "action": "STEP_13_PICKUP",
+   "runsAs": "ROOT",
+   "startedBy": "SIGNED_DROP_INSTALLER",
+   "loginNeedsAdmin": false
+  },
+  {
+   "action": "STEP_14_LAUNCH",
+   "runsAs": "PER_CONF_LIVE_005_006",
+   "startedBy": "CONF_LIVE_005_006_NON_ADMIN_ENTRY_PATH_PRECONDITION",
+   "loginNeedsAdmin": false
+  },
+  {
+   "action": "STEP_15_EXPORT",
+   "runsAs": "ROOT",
+   "startedBy": "EXPORT_UNIT",
+   "loginNeedsAdmin": false
+  }
+ ],
+ "exportSet": [
+  {
+   "host": "PROXY_OPERATOR_HOST",
+   "records": [
+    "HOST_NONCE_LEDGER",
+    "PREFLIGHT_RECORDS",
+    "HOST_INVENTORY",
+    "INSTALLER_LOG",
+    "JOURNAL",
+    "EVIDENCE_SINK_RECORDS"
+   ]
+  },
+  {
+   "host": "CLUSTER_NODE",
+   "records": [
+    "HOST_INVENTORY",
+    "JOURNAL",
+    "CLUSTER_STATE_LISTING"
+   ]
+  }
+ ],
+ "offlineLauncher": {
+  "path": "/opt/planeon/bin/harness-offline-launch",
+  "kit": "MET-LINUX-005",
+  "owner": "ROOT",
+  "fileMode": "0555",
+  "mode": "OPERATOR_PREFLIGHT_ONLY",
+  "evidence": "HOST_ISOLATION_ONLY",
+  "githubRunnerRegistered": false,
+  "ciCapacityExceptionApplies": false,
+  "trustAnchor": "THE_NEW_LINUX_RUNNER_KEY",
+  "publicKey": "/etc/planeon/harness-runner-manifest.pub",
+  "custody": "/etc/planeon/linux-runner/custody.json",
+  "custodyBinds": [
+   "PUBLIC_KEY",
+   "LAUNCHER_DIGEST",
+   "POLICY_DIGEST"
+  ],
+  "custodyWrittenAtStep": 10,
+  "rootAliasRecord": "/etc/planeon/linux-runner/root-aliases.json",
+  "policySigner": "LINUX_RUNNER_MANIFEST",
+  "manifestSigner": "LINUX_RUNNER_MANIFEST",
+  "manifestSignedAt": "T2_AFTER_STEP_11_PREFLIGHT",
+  "manifestServesANormalInvocation": false,
+  "operatorMdApplies": [
+   "LAYOUT_CHECKS",
+   "WORK_SIBLINGS_AND_SENTINEL"
+  ],
+  "operatorMdDoesNotApply": [
+   "RUNNER_SETTINGS",
+   "RUNNER_BINARY_CHECK"
+  ],
+  "operatorSteps": "OPERATOR_MD_STEPS_1_TO_6_WITH_THE_NEW_LINUX_RUNNER_KEY",
+  "rollback": "TEARDOWN",
+  "preflightProbeScope": [
+   "PROXY_OPERATOR_HOST_CREDENTIALS",
+   "PROXY_OPERATOR_HOST_SOCKETS",
+   "TRIGGER_UNIT_ENDPOINTS",
+   "NO_KUBECONFIG_OR_RUNTIME_SOCKET",
+   "CLUSTER_NODE_REACHABLE_ONLY_ON_F1",
+   "GUEST_AGENT_LOCAL_SOCKETS",
+   "OS_LOGIN_LOCAL_SOCKETS",
+   "METADATA_ADDRESS"
+  ]
+ },
+ "liveLauncher": {
+  "path": "/opt/planeon/bin/harness-live-campaign-launch",
+  "source": "CONF_LIVE_005_PACKAGING_WITH_THE_CONF_LIVE_006_FINAL_HOOK",
+  "state": "WAITING",
+  "designOnly": true,
+  "owner": "ROOT",
+  "mode": "0555",
+  "manifest": "/etc/planeon/harness-live-runner-manifest.json",
+  "signature": "/etc/planeon/harness-live-runner-manifest.json.sig",
+  "publicKey": "/etc/planeon/harness-live-runner-manifest.pub",
+  "manifestSigner": "LIVE_RUNNER_MANIFEST",
+  "manifestSignedAfter": "CONF_LIVE_005_006_OWN_PREFLIGHT",
+  "pinCheck": "THE_INSTALLED_PIN_EQUALS_CUSTODY_MODEL",
+  "ifThePinIsEmbedded": "THE_KEY_CEREMONY_COMES_BEFORE_THEIR_REPRODUCIBLE_BUILD",
+  "trustMounts": [
+   {
+    "path": "/etc/planeon/trust/release-trust-bundle.json",
+    "readOnly": true,
+    "owner": "ROOT",
+    "mode": "0444",
+    "installedAtStep": 10
+   },
+   {
+    "path": "/etc/planeon/trust/tenant-trust-bundle.json",
+    "readOnly": true,
+    "owner": "ROOT",
+    "mode": "0444",
+    "installedAtStep": 10
+   }
+  ],
+  "nonAdminEntryPath": "PRECONDITION_ON_CONF_LIVE_005_006"
+ },
+ "timeLimits": {
+  "policyMaxHours": 24,
+  "policyFrom": "T1",
+  "manifestsSignedWithinHoursOfPreflight": 1,
+  "t2EndsWithinHoursOfPreflight": 1,
+  "operatorMdOneHourAge": "THE_LAUNCHER_CHECK_AT_A_NORMAL_INVOCATION_WHICH_THIS_HOST_DOES_NOT_MAKE",
+  "envelopeAndCapacityAuthorization": "THEIR_OWN_VALIDITY_WINDOWS"
+ },
+ "steps": [
+  {
+   "id": "INSTALL_OFFLINE_LAUNCHER_BYTES",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "CANDIDATE_SHA256",
+    "KIT_INVENTORY_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "INSTALL_OPERATOR_MD_LAYOUT",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "LAYOUT_LISTING_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "CREATE_OPERATOR_UID_AND_TRIGGER_GROUP",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "ACCOUNT_LISTING_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "INSTALL_SIGNED_DROP_INSTALLER",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "INSTALLER_HELPER_SHA256",
+    "INSTALLER_UNITS_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "INSTALL_TRIGGER_UNITS",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "TRIGGER_UNITS_SHA256",
+    "EXPORT_HELPER_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "GENERATE_PRIVATE_HALVES_AND_REQUESTS",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "REQUEST_SPKI_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "ISSUE_KUBERNETES_PROXY_SERVER_MTLS_FROM_THE_CLUSTER_CA",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "REQUEST_SPKI_SHA256",
+    "CLUSTER_CA_CERTIFICATE_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "INSTALL_POLICY_CUSTODY_BUNDLES_AND_REVOCATION",
+   "runbookStep": 10,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "POLICY_SHA256",
+    "CUSTODY_SHA256",
+    "BUNDLE_SHA256",
+    "ROOT_ALIAS_RECORD_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "DROP_CERTIFICATES_MANIFESTS_AND_SIGNATURES",
+   "runbookStep": 13,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "DROP_MANIFEST_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "ACTIVE"
+  },
+  {
+   "id": "INSTALL_LIVE_LAUNCHER",
+   "runbookStep": 8,
+   "duty": "OPERATOR",
+   "inputDigests": [
+    "CONF_LIVE_005_REPRODUCIBLE_BYTES_SHA256"
+   ],
+   "rollback": "TEARDOWN",
+   "movesTrustDigest": false,
+   "state": "WAITING_FOR_CONF_LIVE_005_006"
+  }
+ ],
+ "rules": {
+  "newPolicyNeedsNewProbeEvidence": true,
+  "noManifestBeforeItsPreflight": true,
+  "noManifestByTheOtherLaunchersKey": true,
+  "afterRevocationEtcPlaneonChangesOnlyThrough": "SIGNED_DROP_INSTALLER_UNDER_A_VERIFIED_DROP_MANIFEST",
+  "loginStartedWritesAfterRevocation": "SIGNED_DROP_INSTALLER_ONLY",
+  "preflightRecord": "RETAINED_AND_EXPORTED_ONLY",
+  "preflightRecordReason": "NO_NORMAL_INVOCATION_READS_IT_WITHIN_MON_LHA3_1_2"
+ }
+}

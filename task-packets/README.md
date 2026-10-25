@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-042
+## Current source preparation — MET-LINUX-008
+
+MET-LINUX-008 (LINUX-HOST-AUTH-001): the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts
+(DATA_CHECK_ONLY): the superseding host authority, the host recipe, the launcher install steps and the key custody model
+as data with the offline checker and its tests, adopted as candidate c8 after three in-tree CONTRACT rounds, with its
+status, rounds, identities and D5a oracle identity under architecture/linux-host-authority/; no gate class. Alpha2 OPEN;
+265 accepted plus MET-LINUX-008 only.
+
+## Historical digest contract v2 source preparation — MET-ENFORCE-042
 
 MET-ENFORCE-042 (DIGEST-CONTRACT-V2): the I01 digest contract v2 beside the frozen v1 (DATA_CHECK_ONLY; I01 v1
 byte-identical): admission v4's sealed rendering, profile v2's complete positive with W1 and edge record v11, adopted as
@@ -1601,3 +1609,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 263 | `MET-LIVE-004` | `Harness-Engineering` | LINUX-PROBE-KIT-ADMISSION: workload profile v2 and admission semantics v4 as one combined contract (candidate c3, two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); DATA_CHECK_ONLY |
 | 264 | `MET-LINUX-009` | `Harness-Engineering` | LINUX-ROOT-ALIASES: the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, vectors and the D5a oracle; v3 unchanged; candidate c3, two in-tree CONTRACT rounds), with the registry rider; gate material |
 | 265 | `MET-ENFORCE-042` | `Harness-Engineering` | DIGEST-CONTRACT-V2: the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; candidate c4, three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); DATA_CHECK_ONLY; gate material only through the registry |
+| 266 | `MET-LINUX-008` | `Harness-Engineering` | LINUX-HOST-AUTH-001: the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (host authority, host recipe, launcher install and key custody as data; the offline checker and its tests; candidate c8, three in-tree CONTRACT rounds), with its D5a oracle; DATA_CHECK_ONLY; no gate class |
