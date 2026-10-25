@@ -1,6 +1,6 @@
 # Linux host authority v1: the owner's per-run GCP Linux hosts, their recipe and key custody (MET-LINUX-008)
 
-Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c5). Roadmap item LINUX-HOST-AUTH-001, packet
+Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c7). Roadmap item LINUX-HOST-AUTH-001, packet
 MET-LINUX-008, design revision 7 with the binding build rules B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18. Contract rounds
 run in series `MET-LINUX-008/contract` under the registered generic brief; review records and `status.json` come after
 adoption. DATA_CHECK_ONLY: published data and an offline checker. Nothing here creates a project, a VM, a key or spend,
@@ -35,7 +35,7 @@ other predicate of those files stands. An owner-approved licence charge would ne
 | `launcher-install.json` | `planeon.internal.linux-launcher-install/v1`: the operator install steps, the signed-drop installer and the trigger units |
 | `custody-model.json` | `planeon.internal.linux-key-custody/v1`: the signing authorities, per-run credentials and live custody duties |
 | `*.schema.json` | one closed schema per record, plus `drop-manifest.schema.json` for the per-run drop manifest (B-LHA-4) |
-| `vectors.json` | 2 positive sets, 235 record negatives, a drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives |
+| `vectors.json` | 2 positive sets, 270 record negatives, 2043 leaf vectors (one per decision-carrying leaf), a drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives |
 | `oracle-identity.json` | the D5a oracle's identity under REVIEW-RECORD-V2, binding the oracle test file |
 | `../../scripts/linux_host_authority.py` | the offline checker, standard library only |
 | `../../tests/test_linux_host_authority.py` | the candidate's own tests |
@@ -48,7 +48,9 @@ Run the checker from the repository root:
 | `python3 -I -B scripts/linux_host_authority.py check` | checks the schemas and the four records, re-deriving every span from the cited files |
 | `python3 -I -B scripts/linux_host_authority.py replay` | the same, then replays every vector against its recorded refusal |
 
-A refusal prints `refused: <rule>` and exits 1; a usage error exits 2.
+A refusal prints `refused: <rule>` and exits 1; any other error a check raises (an unreadable file, a missing member, a
+wrong type, a short list) is refused by its class name the same way, as the checker's `explain` names it; a usage error
+exits 2.
 
 **Parse rules and schemas.** The checker restates LAB-RUNPLAN-001's parse rules, canonical form, closed schema subset
 and string rule (`scripts/lab_run_plan.py`): UTF-8 without a byte-order mark, no duplicate keys, no non-finite or
@@ -63,6 +65,19 @@ before a final line feed, refuses a trailing line feed as the checker's full mat
 custom role's full name (which on paper contains the run project's id), a key, a price, a POSIX name or a UID. The
 string rule refuses an account or key shape; the role-label rule refuses a resource path with a project, folder or
 organization id, a custom role's full name, an SSH key, a price, an OS Login style POSIX name and a UID.
+
+**Closed lists and leaf pins (candidate c7, MON-LHA-C7-SYSTEMATIC).** A record's leaf has a generalised path: keys joined
+by `.`, and a list index written as the entry's id where the list is id-keyed, `[*]` otherwise. The checker closes every
+id-keyed list (the checker's `ID_KEYED`) before anything reads it by id: each id once, so a wrong entry can never hide
+behind a correct copy with the same id ("an id-keyed list names each entry once"), and the design's ids, in order where
+the design fixes one, otherwise as an exact set. Every decision-carrying leaf of the four records is then pinned to its
+published value in the generated `LEAF_PINS` block, each pin under the source it cites (a decision, a B-LHA rule or a
+`DESIGN.r7.md` line), and checked last, so every earlier rule keeps its own refusal: 2001 leaves. The long texts an
+explicit sha256 check already fixes exactly are left to that check (`LEAF_EXPLICIT`: the decision lines, the owner's
+Q-LHA-1 answer twice, the replacement predicate and the two carried notes, 42 leaves). One leaf is structure only
+(`LEAF_STRUCTURE_ONLY`): the recipe's `image.family`, which the second positive set changes to show the family is data,
+not code; the checker reads it only as one of `image.allowedFamilies`. No leaf is left as free text: every prose member
+restates a design statement, so the check reads and pins it too.
 
 ## The superseding authority (`host-authority.json`)
 
@@ -182,6 +197,8 @@ decision lines verbatim. In short:
 | the owner's custom-role decision | recipe `access` (`loginBaseline`, `leaseBindings`, `revocation`); runbook steps 1, 10 and 16 |
 | Q-LHA5-1 (owner) and MON-LHA-REV7 | recipe `access` (two identities, `effectiveChecks`, `auditLogCheck`, `acceptedLimit`); runbook steps 1, 10, 15 and 16; `custody-model.json` holders; the recipe vectors; Not claimed; the role-label rule (B-LHA-13) |
 | Q-LHA6-3 (owner) | recipe `access` `adminBaseline`, the `OWNER_ADMIN` effective checks and session checks (B-LHA-18) |
+| MON-LHA-CR1-KEEP (OPEN-1 (ii)) | `host-authority.json` G10-LOCAL-ENDPOINT-IDENTITIES, checked against `custody-model.json` `localEndpointIdentities`; vectors A34-A36, C48, C58 |
+| MON-LHA-C7-SYSTEMATIC (monitor) | the closed id-keyed lists; the leaf pins (`LEAF_PINS`); `custody-model.json` `sharedProxyServerIdentity` (B-LHA-7); vectors A35-A37, R110-R119, L45-L52, C49-C62 and the leaf vectors |
 
 ## The host recipe (`host-recipe.json`)
 
@@ -481,7 +498,10 @@ reused, ending when the instances and their disks are deleted, and named in the 
 
 **Endpoint server identities (B-LHA-7):** KUBERNETES_API_PROXY and CAMPAIGN_PROXY are served by **one** per-run server
 TLS identity of this custody model (issuer the local CA, on the proxy/operator host, generated at step 8, ending with the
-instance); it is in step 8's requests, T2's issuance, the drop list and `credentialIdentities`. LOCAL_REGISTRY and
+instance); it is in step 8's requests, T2's issuance, the drop list and `credentialIdentities`. The record says so both
+ways: both proxy entries carry `servesBothProxyKinds`, and `sharedProxyServerIdentity` states the shared identity and
+the two kinds. The checker refuses a shared identity left unflagged on either proxy entry, a flag on an entry whose
+identity no other proxy kind shares (or on a non-proxy kind), and a statement that differs. LOCAL_REGISTRY and
 LOCAL_EVIDENCE_SINK server identities are the campaign release's (G10), which names their issuer, custody and lifetime
 before runbook step 7 (a precondition); T1 and T2 issue neither (`localEndpointIdentities`).
 
@@ -512,14 +532,18 @@ Two evidence carriers need the disclosure before their runs, both preconditions:
 ## Vectors
 
 `vectors.json` replays two positive sets (the published records, and the same set on another allowed image family to
-show the family is data, not code) and 235 negatives against the four records: 34 on the authority (digests, member
+show the family is data, not code) and 270 negatives against the four records: 37 on the authority (digests, member
 paths, every kept predicate relaxed, the independence clause without its replacement, answer or disclosure, readings,
-evidence states, decisions, preconditions, role labels), 109 on the recipe (section 8 and B-LHA-5, 6, 8, 9, 10, 13 to
-18, the custom image's verity root and digest, the lease restart rule, the profile rows), 44 on the launchers (section 8
-and B-LHA-1, 4, 5, 11, the drop and staging directories, the live targets, the trigger units' UIDs) and 48 on custody
-(section 8, the string rule, B-LHA-2, 4, 7, the local and cluster CAs, the token sessions, the bundles, LHA-CN-2). A
-drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the fixed target list,
-the pattern ending and the parse rules. Each negative names the rule it backs and its recorded refusal.
+evidence states, decisions, preconditions, role labels, the G10 precondition against the custody model's step 7, a
+repeated id), 119 on the recipe (section 8 and B-LHA-5, 6, 8, 9, 10, 13 to 18, the custom image's verity root and
+digest, the lease restart rule, the profile rows, the members candidate c7 pins by name and repeated ids), 52 on the
+launchers (section 8 and B-LHA-1, 4, 5, 11, the drop and staging directories, the live targets, the trigger units' UIDs,
+the export unit's hosts, a third trigger unit and repeated ids) and 62 on custody (section 8, the string rule, B-LHA-2,
+4, 7 in both directions, the local and cluster CAs, the token sessions, the bundles, the host ledger, LHA-CN-2, repeated
+ids). Then 2043 leaf vectors, one per decision-carrying leaf (`leafVectors`): the published set with that leaf's first
+occurrence set to another value of its type, refused as recorded, by the leaf's own rule where one reads it and by its
+pin otherwise. A drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the
+fixed target list, the pattern ending and the parse rules. Each vector names the rule it backs and its recorded refusal.
 
 ## Preconditions outside this packet
 

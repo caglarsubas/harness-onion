@@ -20,6 +20,7 @@
   "clusterCa",
   "perRunCredentials",
   "endpointServerIdentities",
+  "sharedProxyServerIdentity",
   "kubernetes",
   "localEndpointIdentities",
   "nonce",
@@ -689,6 +690,35 @@
       "minLength": 1,
       "maxLength": 4000
      }
+    }
+   }
+  },
+  "sharedProxyServerIdentity": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "identity",
+    "servesKinds",
+    "rule"
+   ],
+   "properties": {
+    "identity": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "servesKinds": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "rule": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
     }
    }
   },

@@ -1,6 +1,7 @@
 """MET-LINUX-008 (LINUX-HOST-AUTH-001), candidate tests: the Linux host-authority contract's four records and five
 schemas against the offline checker, every span re-derived here from the cited bytes independently of the checker, the
-restated LAB-RUNPLAN-001 parse rules compared with that checker, and every vector replayed as recorded."""
+restated LAB-RUNPLAN-001 parse rules compared with that checker, every vector replayed as recorded, and candidate c7's
+exhaustive leaf audit, closed id-keyed lists and B-LHA-7 statement (MON-LHA-C7-SYSTEMATIC)."""
 import ast
 import hashlib
 import json
@@ -50,8 +51,8 @@ def test_the_published_records_are_accepted():
 
 def test_every_vector_is_replayed_as_recorded():
     counts = lha.replay(_load("vectors.json"), lha.load_schemas(), lha.load_records(), lha.Base(ROOT))
-    assert counts == {"positives": 4, "authority": 34, "recipe": 109, "launcher": 44, "custody": 48, "drop": 11,
-                      "signature": 3, "parse": 8}
+    assert counts == {"positives": 4, "authority": 37, "recipe": 119, "launcher": 52, "custody": 62, "leaf": 2043,
+                      "drop": 11, "signature": 3, "parse": 8}
 
 
 def test_the_command_line_replays_from_the_repository_root():
@@ -199,7 +200,20 @@ def test_the_named_forms_loop_refuses_an_unlisted_occurrence_on_its_own(monkeypa
 def test_explain_names_an_unexpected_error_as_a_refusal():
     assert lha.explain(lambda: {}["missing"]) == "KeyError"
     assert lha.explain(lambda: None + 1) == "TypeError"
+    assert lha.explain(lambda: [][0]) == "IndexError"
+    assert lha.explain(lambda: (ROOT / "no-such-file").read_bytes()) == "FileNotFoundError"
     assert lha.explain(lambda: None) is None
+
+
+def test_the_command_line_refuses_the_same_error_classes_as_explain():
+    """LHA-C2-4: main() runs the command through explain() and has no handler of its own, so an IndexError on the
+    command line is refused by name, as every class explain() names is."""
+    assert lha.REFUSED_ERRORS == (ValueError, OSError, KeyError, TypeError, IndexError, RecursionError)
+    tree = ast.parse((ROOT / "scripts/linux_host_authority.py").read_text(encoding="utf-8"))
+    main = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "main"][0]
+    calls = [node.func.id for node in ast.walk(main) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)]
+    assert "explain" in calls and not any(isinstance(node, ast.Try) for node in ast.walk(main))
+    assert lha.explain(lha._command, ["check"], {}) is None
 
 
 def test_the_restated_parse_and_schema_rules_are_lab_runplan_001s():
@@ -289,3 +303,79 @@ def test_the_pinned_digests_are_bound_to_the_records():
 def test_the_base_commit_is_recorded():
     assert _load(RECORDS["authority"])["baseCommit"] == lha.BASE_COMMIT
     assert json.loads((HERE / RECORDS["recipe"]).read_text(encoding="utf-8"))["packet"] == "MET-LINUX-008"
+
+
+def _generalised_leaves(kind, doc):
+    """Restated here: a leaf is a scalar, an empty list or an empty object; its path joins keys with '.' and writes a
+    list index as the entry's id where the list is id-keyed, [*] otherwise."""
+    out = []
+
+    def walk(value, path, shape):
+        if isinstance(value, dict):
+            if not value:
+                out.append(path)
+            for key, item in value.items():
+                walk(item, path + "." + key if path else key, shape + "." + key if shape else key)
+        elif isinstance(value, list):
+            if not value:
+                out.append(path)
+            key = lha.ID_KEYED[kind].get(shape)
+            for item in value:
+                walk(item, path + "[%s]" % (item[key] if key else "*"), shape + "[*]")
+        else:
+            out.append(path)
+
+    walk(doc, "", "")
+    return list(dict.fromkeys(out))
+
+
+def test_every_leaf_is_pinned_left_to_its_sha256_check_or_structure_only():
+    """MON-LHA-C7-SYSTEMATIC (ii): the leaf audit is exhaustive. Each generalised leaf of each record is in exactly one
+    of the pins, the texts an explicit sha256 check fixes, and the structure-only leaves (image.family alone)."""
+    for kind, name in RECORDS.items():
+        leaves = _generalised_leaves(kind, _load(name))
+        pinned = [path for pins in lha.LEAF_PINS[kind].values() for path, _ in pins]
+        listed = pinned + lha.LEAF_EXPLICIT[kind] + lha.LEAF_STRUCTURE_ONLY[kind]
+        assert len(listed) == len(set(listed)) and set(listed) == set(leaves), kind
+    assert lha.LEAF_STRUCTURE_ONLY == {"authority": [], "recipe": ["image.family"], "launcher": [], "custody": []}
+
+
+def test_each_decision_carrying_leaf_has_its_refusal_vector():
+    vectors = _load("vectors.json")
+    covered = [(row["target"], row["leaf"]) for row in vectors["leafVectors"]]
+    expected = [(kind, path) for kind in RECORDS for pins in lha.LEAF_PINS[kind].values() for path, _ in pins]
+    expected += [(kind, path) for kind in RECORDS for path in lha.LEAF_EXPLICIT[kind]]
+    assert len(covered) == len(set(covered)) and set(covered) == set(expected)
+    assert all(row["refusal"] and row["rule"] for row in vectors["leafVectors"])
+
+
+def test_a_repeated_id_is_refused_in_each_record():
+    """LHA-C2-2: a wrong entry followed by a correct copy with the same id is refused by a named rule in every record,
+    and so is a third trigger unit."""
+    vectors = _load("vectors.json")
+    assert {row["target"] for row in vectors["negatives"] if row["intent"].startswith("a repeated id")} == set(RECORDS)
+    third = [row["refusal"] for row in vectors["negatives"] if row["intent"].startswith("a third trigger unit")]
+    assert third == ["an id-keyed list names each entry once: launcher-install.json triggerUnits, by id"]
+
+
+def test_b_lha_7_is_stated_and_enforced_both_ways():
+    custody = _load(RECORDS["custody"])
+    proxies = custody["endpointServerIdentities"][:2]
+    assert [e["kind"] for e in proxies] == ["KUBERNETES_API_PROXY", "CAMPAIGN_PROXY"]
+    assert len({e["identity"] for e in proxies}) == 1 and all(e["servesBothProxyKinds"] for e in proxies)
+    assert custody["sharedProxyServerIdentity"] == {"identity": proxies[0]["identity"],
+                                                    "servesKinds": ["KUBERNETES_API_PROXY", "CAMPAIGN_PROXY"],
+                                                    "rule": "B-LHA-7"}
+    schemas, records = lha.load_schemas(), lha.load_records()
+    unflagged = json.loads(json.dumps(records))
+    unflagged["custody"]["endpointServerIdentities"][1]["servesBothProxyKinds"] = False
+    assert lha.explain(lha.check_set, unflagged, schemas, lha.Base(ROOT)).startswith("one server identity serves both")
+    unshared = json.loads(json.dumps(records))
+    unshared["custody"]["endpointServerIdentities"][0]["identity"] = "CAMPAIGN_PROXY_CLIENT_MTLS"
+    assert lha.explain(lha.check_set, unshared, schemas, lha.Base(ROOT)) == ("if one server identity serves both proxy "
+                                                                             "kinds, the record says so")
+
+
+def test_the_status_line_names_the_current_candidate():
+    """LHA-C2-3: the README's status line names this candidate."""
+    assert "(candidate c7)" in (HERE / "README.md").read_text(encoding="utf-8").split("\n")[2]

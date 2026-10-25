@@ -355,6 +355,14 @@
    "kind": "LOCAL_EVIDENCE_SINK"
   }
  ],
+ "sharedProxyServerIdentity": {
+  "identity": "CAMPAIGN_PROXY_SERVER_TLS",
+  "servesKinds": [
+   "KUBERNETES_API_PROXY",
+   "CAMPAIGN_PROXY"
+  ],
+  "rule": "B-LHA-7"
+ },
  "kubernetes": {
   "apiServerClientTrust": [
    "PER_RUN_CLUSTER_CA"
