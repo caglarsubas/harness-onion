@@ -1,6 +1,17 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-042
+## Current source preparation — MET-LINUX-008
+
+MET-LINUX-008 (LINUX-HOST-AUTH-001): the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts
+(architecture/linux-host-authority/: the superseding host authority, the host recipe, the launcher install steps and the
+key custody model, each with its closed schema, the drop-manifest schema, the vectors and the README; the offline checker
+scripts/linux_host_authority.py and its tests tests/test_linux_host_authority.py), adopted as candidate c8 after three
+in-tree CONTRACT rounds (the status, the rounds with their identities and the oracle identity in the contract directory),
+with the D5a oracle test tests/test_linux_host_authority_oracle.py. DATA_CHECK_ONLY: no GCP project, VM, key or spend.
+Both review series were registered before this packet, so the brief registry does not change; no gate class at this base (the evolution surface record), so the lane monitor and the owner approve the PR. No R10 or R12 file
+changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 265 accepted plus MET-LINUX-008 only.
+
+## Historical digest contract v2 source preparation — MET-ENFORCE-042
 
 MET-ENFORCE-042 (DIGEST-CONTRACT-V2): the I01 digest contract v2 beside the frozen v1
 (architecture/policy-observation-digests-v2/, model scripts/policy_observation_digests_v2.py): the sealed A2 set rendered
@@ -1444,6 +1455,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 137. `MET-LIVE-004`: publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); no gate path.
 138. `MET-LINUX-009`: publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material, the owner's per-PR merge approval.
 139. `MET-ENFORCE-042`: publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); gate material only through the registry.
+140. `MET-LINUX-008`: publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class, the lane monitor's and the owner's PR approval.
 
 ## Testing, verification, and acceptance
 

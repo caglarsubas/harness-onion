@@ -1,6 +1,43 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-042 source preparation, October 25, 2026
+## Current checkpoint — MET-LINUX-008 source preparation, October 25, 2026
+
+Alpha2 OPEN. MET-ENFORCE-042 (DIGEST-CONTRACT-V2) passed required verify and merged as main f9882c1. LINUX-HOST-AUTH-001
+(the lane monitor's owner-delegated rulings, among them MON-LHA-CR1-KEEP, MON-LHA-CR2-KEEP, MON-LHA-C8,
+MON-LHA-ORACLE-KEEP, MON-LHA-C8-ADOPTED and MON-LHA-266-GO-1-3) publishes the Linux host-authority contract v1 for the
+owner's per-run GCP Linux hosts. architecture/linux-host-authority/ holds the superseding host authority, the host recipe,
+the launcher install steps and the key custody model, each with its closed schema, the drop-manifest schema, the vectors
+and the README; scripts/linux_host_authority.py is the offline checker with its tests tests/test_linux_host_authority.py,
+and tests/test_linux_host_authority_oracle.py is the D5a oracle (KEEP), bound by
+architecture/linux-host-authority/oracle-identity.json. The contract was adopted as candidate c8 (MON-LHA-C8-ADOPTED)
+after three in-tree CONTRACT rounds of the MET-LINUX-008/contract series, published with their identities and the status
+record, which also pins the adoption's two own edits (the README and the checker's tests). DATA_CHECK_ONLY: no GCP
+project, VM, key or spend exists or is created, and native AMD64 and ARM64 stay NOT_RUN_ENV_UNAVAILABLE. Both review
+series were registered before this packet, so the brief registry does not change; no gate class at this base (the evolution surface record), so the lane monitor and the owner approve the PR. Its new layer checks the status
+(ADOPTED at slot 266 with a passing allowed-paths derivation and no gate class), the adopted subject by its bytes with the
+adoption's two edits, the rounds' records and identities and the oracle by digest, and the registry's two series. It is
+built under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump vocabulary,
+265's layer by the bridge vocabulary, and 265's test keeps its 8 own routes and the adjacent one and one payload mutation
+(C2), while the new head's test keeps the full fan-in. MET-LINUX-008 is the sole 266th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-LINUX-008 / LINUX-HOST-AUTH-001 | SOURCE_PREPARED | The Linux host-authority contract v1 (266th packet): the owner's per-run GCP Linux hosts, their recipe, the launcher install steps and the key custody as data under architecture/linux-host-authority/, with the offline checker, its tests and the D5a oracle; adopted as candidate c8 after three in-tree CONTRACT rounds; DATA_CHECK_ONLY; no gate class, the lane monitor's and the owner's PR approval |
+| Alpha2A | MET-ENFORCE-042 / DIGEST-CONTRACT-V2 | VERIFY_PASSED_MERGED | Merged as main f9882c1 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical digest contract v2 source checkpoint — MET-ENFORCE-042 source preparation, October 25, 2026
 
 Alpha2 OPEN. MET-LINUX-009 (LINUX-ROOT-ALIASES) passed required verify and merged as main a882761. DIGEST-CONTRACT-V2 (the
 LPK-1 step S1, with W1 and S2; the lane monitor's owner-delegated rulings MON-I01S-1 to MON-I01S-14, MON-I01S-D1 to
@@ -2636,7 +2673,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LINUX-PROBE-INTERFACE / MET-LIVE-003 · Bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data, byte-identical (the four v1/ handoff files, the binding record with LPK-0's placeholder bound, the reference model and vectors), after one light review, with its D5a oracle; pass required verify through the owner's App.
 - [x] Alpha 2A · LINUX-PROBE-KIT-ADMISSION / MET-LIVE-004 · Publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles, every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App.
 - [x] Alpha 2A · LINUX-ROOT-ALIASES / MET-LINUX-009 · Publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
-- [ ] Alpha 2A · DIGEST-CONTRACT-V2 / MET-ENFORCE-042 · Publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · DIGEST-CONTRACT-V2 / MET-ENFORCE-042 · Publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · LINUX-HOST-AUTH-001 / MET-LINUX-008 · Publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class; pass required verify through the owner's App after the lane monitor's and the owner's PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
