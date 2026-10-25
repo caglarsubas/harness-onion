@@ -1169,7 +1169,7 @@ def _check_access(access: dict) -> None:
     limit = access["acceptedLimit"]
     require(limit["decision"] == "Q-LHA5-1" and not limit["auditLogDetectsThem"] and limit["grantKinds"] == LIMIT_KINDS
             and limit["detectedOnlyBy"] == ["EFFECTIVE_CHECK_STEP_10", "EFFECTIVE_CHECK_STEP_15"]
-            and limit["notDetected"] == ["ONE_MADE_AND_REMOVED_BETWEEN_STEPS_10_AND_15", "ONE_MADE_AFTER_STEP_15"]
+            and limit["notDetected"] == ["A_GRANT_MADE_AND_REMOVED_BETWEEN_STEPS_10_AND_15", "A_GRANT_MADE_AFTER_STEP_15"]
             and limit["caughtByTheAuditLogCheck"]
             == "A_RUN_PROJECT_OR_INSTANCE_BINDING_TO_ANY_PRINCIPAL_GROUPS_INCLUDED_THROUGH_TEARDOWN",
             "group, domain and principal-set membership changes and folder and organization bindings are detected only "

@@ -303,9 +303,9 @@ inputs. An uncovered used path stops the run at NOT_RUN_ENV_UNAVAILABLE.
 - **The owner's accepted limit (Q-LHA5-1: "detected by the effective check, not blocked"; B-LHA-14):** grants that
   reach the login identity without an IAM policy change on the run project or its instances, that is group, domain and
   principal-set membership changes and folder and organization bindings, are detected only by the effective checks at
-  steps 10 and 15. One made and removed between those steps, or made after step 15, is not detected; the audit log does
-  not see them. A run-project or instance binding to any principal, a group included, is an IAM policy change, so the
-  B-LHA-16 audit-log check catches it through teardown.
+  steps 10 and 15, and each of them counts as a grant here: a grant made and removed between those steps, or made after
+  step 15, is not detected; the audit log does not see them. A run-project or instance binding to any principal, a group
+  included, is an IAM policy change, so the B-LHA-16 audit-log check catches it through teardown.
 - After the revocation, root-owned files on the proxy/operator host change only through the signed-drop installer, and
   at teardown `OWNER_ADMIN` revokes every binding granted since the lease started; the baseline role and bindings stay.
 
@@ -545,10 +545,10 @@ the pattern ending and the parse rules. Each negative names the rule it backs an
 - No deny policy is used. That a custom role can be defined without `compute.instances.osAdminLogin` and the
   IAM-changing permissions and granted on the run project is on paper, like the other GCP facts.
 - The access checks hold at the moment each runs. Group, domain and principal-set membership changes and folder and
-  organization bindings are detected only by the step-10 and step-15 effective checks, not blocked; one made and removed
-  between them, or made after step 15, is not detected (the owner's Q-LHA5-1; B-LHA-14), and the audit log does not see
-  them. A run-project or instance binding to any principal, groups included, is caught by the audit-log check through
-  teardown (B-LHA-16).
+  organization bindings, each of which counts as a grant here, are detected only by the step-10 and step-15 effective
+  checks, not blocked; a grant made and removed between them, or made after step 15, is not detected (the owner's
+  Q-LHA5-1; B-LHA-14), and the audit log does not see them. A run-project or instance binding to any principal, groups
+  included, is caught by the audit-log check through teardown (B-LHA-16).
 - GCP and systemd facts are on paper: the IAP range; image families with their kernels, root filesystems and licensing;
   the internal time service; OS Login, its roles and its sudoers entries; metadata keys; guest-agent features; firewall
   behaviour toward the metadata server; the maximum-run-duration delete action; the permission names; path and socket
