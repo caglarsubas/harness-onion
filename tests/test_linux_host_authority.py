@@ -20,7 +20,10 @@ RECORDS = {"authority": "host-authority.json", "recipe": "host-recipe.json", "la
            "custody": "custody-model.json"}
 SCHEMAS = ["host-authority.schema.json", "host-recipe.schema.json", "launcher-install.schema.json",
            "custody-model.schema.json", "drop-manifest.schema.json"]
-CONTRACT_FILES = sorted(["README.md", "vectors.json"] + list(RECORDS.values()) + SCHEMAS)
+# The candidate's own files, and the contract directory with the D5a oracle's identity (design section 3), which a
+# separate agent writes and this test only names.
+CANDIDATE_FILES = sorted(["README.md", "vectors.json"] + list(RECORDS.values()) + SCHEMAS)
+CONTRACT_FILES = sorted(CANDIDATE_FILES + ["oracle-identity.json"])
 SPAN_SECTIONS = ("supersedes", "satisfied", "unchanged", "costScope", "reviewedNotBinding")
 BUILD_RULES = ["B-LHA-%d" % n for n in (1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)]
 
@@ -47,7 +50,7 @@ def test_the_published_records_are_accepted():
 
 def test_every_vector_is_replayed_as_recorded():
     counts = lha.replay(_load("vectors.json"), lha.load_schemas(), lha.load_records(), lha.Base(ROOT))
-    assert counts == {"positives": 4, "authority": 33, "recipe": 101, "launcher": 38, "custody": 33, "drop": 10,
+    assert counts == {"positives": 4, "authority": 34, "recipe": 109, "launcher": 44, "custody": 48, "drop": 11,
                       "signature": 3, "parse": 8}
 
 
@@ -156,6 +159,49 @@ def test_the_drop_manifest_targets_are_exactly_the_fixed_list():
     assert refusal == "schema $.files[0].target enum"
 
 
+def test_every_schema_pattern_refuses_a_trailing_line_feed_by_search_too():
+    """LHA-C1-5: each pattern ends with (?![\\s\\S]), so a validator that applies it by search (Python's jsonschema,
+    where $ also matches before a final line feed) refuses a trailing line feed as the model's full match does."""
+    patterns = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            if "pattern" in node:
+                patterns.append(node["pattern"])
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    for name in SCHEMAS:
+        walk(_load(name))
+    assert patterns and all(p.startswith("^") and p.endswith("(?![\\s\\S])") for p in patterns)
+    hex64 = _load("drop-manifest.schema.json")["properties"]["planSha256"]["pattern"]
+    assert re.search(hex64, "1" * 64) and not re.search(hex64, "1" * 64 + "\n")
+
+
+def test_the_named_forms_loop_refuses_an_unlisted_occurrence_on_its_own(monkeypatch):
+    """LHA-C1-7: with the occurrence removed from both the record and the pinned table, the pin check passes and the
+    named-forms coverage loop itself refuses."""
+    authority = _load(RECORDS["authority"])
+    pre = authority["readings"][1]["occurrences"]
+    pre[:] = [o for o in pre if o["id"] != "LRJ-BILLING-CAPACITY-PREEXISTING"]
+    pinned = dict(lha.PINNED)
+    pinned["occurrences"] = {k: v for k, v in lha.PINNED["occurrences"].items()
+                             if k != "LRJ-BILLING-CAPACITY-PREEXISTING"}
+    monkeypatch.setattr(lha, "PINNED", pinned)
+    refusal = lha.explain(lha.check_authority, authority, lha.load_schemas()["authority"], lha.Base(ROOT))
+    assert refusal == ("a reading covers its named forms in every superseded, kept and satisfied text, each listed in "
+                       "that reading with its span")
+
+
+def test_explain_names_an_unexpected_error_as_a_refusal():
+    assert lha.explain(lambda: {}["missing"]) == "KeyError"
+    assert lha.explain(lambda: None + 1) == "TypeError"
+    assert lha.explain(lambda: None) is None
+
+
 def test_the_restated_parse_and_schema_rules_are_lab_runplan_001s():
     assert lha.SCHEMA_KEYWORDS == lrp.SCHEMA_KEYWORDS and lha.KEYWORD_RULES == lrp.KEYWORD_RULES
     assert lha.TYPES == lrp.TYPES and lha.INTEGER_LIMIT == lrp.INTEGER_LIMIT
@@ -218,7 +264,7 @@ def test_a_drop_manifest_signature_never_verifies_as_another_signature():
     assert payloads["drop"].startswith(b"planeon.internal.linux-drop-manifest/v1\x00")
 
 
-@pytest.mark.parametrize("name", CONTRACT_FILES)
+@pytest.mark.parametrize("name", CANDIDATE_FILES)
 def test_no_contract_file_carries_a_local_path_or_an_address(name):
     text = (HERE / name).read_text(encoding="utf-8")
     assert not re.search(r"(?<![A-Za-z0-9_.~-])/(?:Users|home|private|root)/", text)

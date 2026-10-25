@@ -21,6 +21,7 @@
   "perRunCredentials",
   "endpointServerIdentities",
   "kubernetes",
+  "localEndpointIdentities",
   "nonce",
   "crossHostReplay",
   "trustedClock",
@@ -699,7 +700,8 @@
     "refusedInClientTrust",
     "rbacSubject",
     "privilegedGroups",
-    "proxyOperatorHostTrustsClusterCa"
+    "proxyOperatorHostTrustsClusterCa",
+    "proxyOperatorHostClusterCaTrust"
    ],
    "properties": {
     "apiServerClientTrust": {
@@ -728,6 +730,56 @@
     },
     "proxyOperatorHostTrustsClusterCa": {
      "type": "boolean"
+    },
+    "proxyOperatorHostClusterCaTrust": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    }
+   }
+  },
+  "localEndpointIdentities": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "kinds",
+    "suppliedBy",
+    "before",
+    "precondition",
+    "issuedInT1OrT2",
+    "ifTheCampaignReleaseChoosesTheLocalCa"
+   ],
+   "properties": {
+    "kinds": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+     }
+    },
+    "suppliedBy": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "before": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "precondition": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
+    },
+    "issuedInT1OrT2": {
+     "type": "boolean"
+    },
+    "ifTheCampaignReleaseChoosesTheLocalCa": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 4000
     }
    }
   },

@@ -944,6 +944,23 @@
    "refusal": "every listed occurrence of a reading's words is in its reading"
   },
   {
+   "id": "A34",
+   "intent": "the G10 precondition for the local endpoint identities dropped",
+   "rule": "LHA-C1-4 (OPEN-1, reading (ii))",
+   "positive": 0,
+   "target": "authority",
+   "ops": [
+    {
+     "op": "delete",
+     "path": [
+      "preconditions",
+      6
+     ]
+    }
+   ],
+   "refusal": "the preconditions outside this packet are listed, each with its state at the base"
+  },
+  {
    "id": "R01",
    "intent": "a host with a service account",
    "rule": "design section 8 (recipe)",
@@ -2683,8 +2700,8 @@
   },
   {
    "id": "R81",
-   "intent": "the audit log claimed to detect group and organization grants",
-   "rule": "B-LHA-14",
+   "intent": "the audit log claimed to detect membership changes and folder or organization bindings",
+   "rule": "B-LHA-14; B-LHA-16",
    "positive": 0,
    "target": "recipe",
    "ops": [
@@ -2698,7 +2715,51 @@
      "value": true
     }
    ],
-   "refusal": "group, domain, principal-set, folder and organization grants are detected only by the step-10 and step-15 effective checks, not blocked (the owner's accepted limit)"
+   "refusal": "group, domain and principal-set membership changes and folder and organization bindings are detected only by the step-10 and step-15 effective checks, not blocked (the owner's accepted limit); a run-project or instance binding to any principal, groups included, is caught by the audit-log check through teardown"
+  },
+  {
+   "id": "R108",
+   "intent": "the accepted limit widened to run-project bindings to a group",
+   "rule": "B-LHA-14; B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "acceptedLimit",
+      "grantKinds"
+     ],
+     "value": [
+      "GROUP",
+      "DOMAIN",
+      "PRINCIPAL_SET",
+      "FOLDER",
+      "ORGANIZATION"
+     ]
+    }
+   ],
+   "refusal": "group, domain and principal-set membership changes and folder and organization bindings are detected only by the step-10 and step-15 effective checks, not blocked (the owner's accepted limit); a run-project or instance binding to any principal, groups included, is caught by the audit-log check through teardown"
+  },
+  {
+   "id": "R109",
+   "intent": "run-project and instance bindings to a group not said to be caught by the audit-log check",
+   "rule": "B-LHA-16",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "access",
+      "acceptedLimit",
+      "caughtByTheAuditLogCheck"
+     ],
+     "value": "NONE"
+    }
+   ],
+   "refusal": "group, domain and principal-set membership changes and folder and organization bindings are detected only by the step-10 and step-15 effective checks, not blocked (the owner's accepted limit); a run-project or instance binding to any principal, groups included, is caught by the audit-log check through teardown"
   },
   {
    "id": "R82",
@@ -3161,6 +3222,120 @@
     }
    ],
    "refusal": "between runs the IAM policy holds only the baseline bindings, confirmed at step 1"
+  },
+  {
+   "id": "R102",
+   "intent": "the custom image's root on XFS without verity",
+   "rule": "Q-LHA-15; LHA-C1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "customImage",
+      "rootFilesystem"
+     ],
+     "value": "XFS"
+    }
+   ],
+   "refusal": "the custom image's root, /usr included, is ext4 with verity (Q-LHA-15)"
+  },
+  {
+   "id": "R103",
+   "intent": "the custom image with /usr off the verity root",
+   "rule": "Q-LHA-15; LHA-C1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "customImage",
+      "usrOnRoot"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the custom image's root, /usr included, is ext4 with verity (Q-LHA-15)"
+  },
+  {
+   "id": "R104",
+   "intent": "imageDigest not recomputed off host",
+   "rule": "Q-LHA-15; LHA-C1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "imageDigest",
+      "recomputedOffHost"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "imageDigest is the custom image inventory's sha256, taken at step 5 from the read-only build disk and recomputed off host"
+  },
+  {
+   "id": "R105",
+   "intent": "imageDigest taken from the running host",
+   "rule": "Q-LHA-15; LHA-C1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "image",
+      "imageDigest",
+      "from"
+     ],
+     "value": "THE_RUNNING_PROXY_OPERATOR_HOST"
+    }
+   ],
+   "refusal": "imageDigest is the custom image inventory's sha256, taken at step 5 from the read-only build disk and recomputed off host"
+  },
+  {
+   "id": "R106",
+   "intent": "an automatic restart inside the lease",
+   "rule": "Q-LHA-8 (a); LHA-C1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "machine",
+      "maintenance",
+      "automaticRestartInLease"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "no automatic restart inside the lease: live migration, and a reboot after qualification invalidates it"
+  },
+  {
+   "id": "R107",
+   "intent": "a renamed MET-REPAIR-015 profile row",
+   "rule": "MON-LHA-SPLIT; LHA-C1-2",
+   "positive": 0,
+   "target": "recipe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "profile",
+      0,
+      "prerequisite"
+     ],
+     "value": "SELINUX_ON"
+    }
+   ],
+   "refusal": "MET-REPAIR-015's profile lists its seven prerequisites, each once, in order"
   },
   {
    "id": "L01",
@@ -3919,6 +4094,120 @@
    "refusal": "each drop target has its exact /etc/planeon path, root owner and mode"
   },
   {
+   "id": "L39",
+   "intent": "the live-manifest drop target active while the live launcher is WAITING",
+   "rule": "design section 6; LHA-C1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "fixedTargets",
+      4,
+      "state"
+     ],
+     "value": "ACTIVE"
+    }
+   ],
+   "refusal": "the live-manifest drop targets stay closed while the live launcher is WAITING; every other target is active"
+  },
+  {
+   "id": "L40",
+   "intent": "a world-writable drop directory",
+   "rule": "B-LHA-4; LHA-C1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "dropDirectory",
+      "mode"
+     ],
+     "value": "0777"
+    }
+   ],
+   "refusal": "the drop directory is root-owned, group PLANEON_LOGIN_TRIGGER, mode 1730, and the staging directory root-owned 0700"
+  },
+  {
+   "id": "L41",
+   "intent": "a staging directory not root-owned",
+   "rule": "B-LHA-4; LHA-C1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "signedDropInstaller",
+      "stagingDirectory",
+      "owner"
+     ],
+     "value": "OPERATOR_UID"
+    }
+   ],
+   "refusal": "the drop directory is root-owned, group PLANEON_LOGIN_TRIGGER, mode 1730, and the staging directory root-owned 0700"
+  },
+  {
+   "id": "L42",
+   "intent": "the export unit run as the operatorUid",
+   "rule": "B-LHA-1; LHA-C1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "triggerUnits",
+      1,
+      "runsAs"
+     ],
+     "value": "OPERATOR_UID"
+    }
+   ],
+   "refusal": "each trigger unit runs as its privileged action's UID, with its fixed command"
+  },
+  {
+   "id": "L43",
+   "intent": "the export unit with another command",
+   "rule": "B-LHA-1; LHA-C1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "triggerUnits",
+      1,
+      "command"
+     ],
+     "value": "/opt/planeon/bin/planeon-export --all"
+    }
+   ],
+   "refusal": "each trigger unit runs as its privileged action's UID, with its fixed command"
+  },
+  {
+   "id": "L44",
+   "intent": "custody.json written after the revocation",
+   "rule": "design section 6; LHA-C1-2",
+   "positive": 0,
+   "target": "launcher",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "offlineLauncher",
+      "custodyWrittenAtStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "custody.json is written at step 10, before the revocation"
+  },
+  {
    "id": "C01",
    "intent": "two authorities sharing one key id",
    "rule": "design section 8 (custody)",
@@ -4539,6 +4828,285 @@
     }
    ],
    "refusal": "no credential, account identity or billing account in $.authorities[0].revocation"
+  },
+  {
+   "id": "C34",
+   "intent": "the local CA kept as an online key on the host",
+   "rule": "Q-LHA-16 (2); LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "localCa",
+      "generation"
+     ],
+     "value": "ONLINE_ON_THE_PROXY_OPERATOR_HOST"
+    }
+   ],
+   "refusal": "the release-pinned local CA is the owner's, made offline on a token with a sealed backup checked at the ceremony, pinned in the release and rotated per release (Q-LHA-16 (2))"
+  },
+  {
+   "id": "C35",
+   "intent": "the local CA in a software keystore without a sealed backup",
+   "rule": "Q-LHA-16 (2); LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "localCa",
+      "storage"
+     ],
+     "value": "A_SOFTWARE_KEYSTORE"
+    }
+   ],
+   "refusal": "the release-pinned local CA is the owner's, made offline on a token with a sealed backup checked at the ceremony, pinned in the release and rotated per release (Q-LHA-16 (2))"
+  },
+  {
+   "id": "C36",
+   "intent": "the local CA issuing KUBERNETES_PROXY_SERVER_MTLS too",
+   "rule": "B-LHA-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "localCa",
+      "issues"
+     ],
+     "value": "KUBERNETES_PROXY_SERVER_MTLS"
+    }
+   ],
+   "refusal": "the release-pinned local CA issues exactly CAMPAIGN_PROXY_SERVER_TLS and CAMPAIGN_PROXY_CLIENT_MTLS, both in T2"
+  },
+  {
+   "id": "C37",
+   "intent": "the local CA allowed in the API server's client trust",
+   "rule": "B-LHA-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "localCa",
+      "neverInTheApiServerClientTrust"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the API server's client trust never holds the release-pinned local CA"
+  },
+  {
+   "id": "C38",
+   "intent": "CAMPAIGN_PROXY_CLIENT_MTLS issued at step 8, skipping the T2 drop target",
+   "rule": "B-LHA-7; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "perRunCredentials",
+      1,
+      "issuedAt"
+     ],
+     "value": "STEP_8"
+    }
+   ],
+   "refusal": "the release-pinned local CA issues exactly CAMPAIGN_PROXY_SERVER_TLS and CAMPAIGN_PROXY_CLIENT_MTLS, both in T2"
+  },
+  {
+   "id": "C39",
+   "intent": "the cluster CA made at step 13",
+   "rule": "B-LHA-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "clusterCa",
+      "madeAtStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "the per-run cluster CA is made at step 7 on the node and issues only KUBERNETES_PROXY_SERVER_MTLS at step 8, with admin"
+  },
+  {
+   "id": "C40",
+   "intent": "the cluster CA issuing at step 12",
+   "rule": "B-LHA-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "clusterCa",
+      "issuesAtStep"
+     ],
+     "value": 12
+    }
+   ],
+   "refusal": "the per-run cluster CA is made at step 7 on the node and issues only KUBERNETES_PROXY_SERVER_MTLS at step 8, with admin"
+  },
+  {
+   "id": "C41",
+   "intent": "the cluster CA needing a new key or token",
+   "rule": "B-LHA-2; MON-LHA-B2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "clusterCa",
+      "newKeyOrToken"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "the per-run cluster CA needs no new key or token"
+  },
+  {
+   "id": "C42",
+   "intent": "the proxy/operator host trusting another path than the cluster CA's",
+   "rule": "B-LHA-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "clusterCa",
+      "trustedByTheProxyOperatorHostAt"
+     ],
+     "value": "/etc/planeon/credentials/other-ca.crt.pem"
+    }
+   ],
+   "refusal": "the proxy/operator host trusts the per-run cluster CA at its listed path"
+  },
+  {
+   "id": "C43",
+   "intent": "T2 signing the drop manifest first",
+   "rule": "runbook step 12; Q-LHA-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "tokenSessions",
+      1,
+      "order"
+     ],
+     "value": [
+      "LINUX_RUNNER_MANIFEST_SIGNS_THE_DROP_MANIFEST",
+      "LOCAL_CA_ISSUES_CAMPAIGN_PROXY_SERVER_TLS_AND_CAMPAIGN_PROXY_CLIENT_MTLS",
+      "CAPACITY_OPERATOR_SIGNS_THE_CAPACITY_AUTHORIZATION",
+      "PLATFORM_RELEASE_AND_TENANT_LIVE_EXECUTION_SIGN_THE_ENVELOPE",
+      "LINUX_RUNNER_MANIFEST_SIGNS_THE_OFFLINE_MANIFEST"
+     ]
+    }
+   ],
+   "refusal": "T1 runs at step 10 after the inventory freeze and T2 at step 12 after the preflight, each in the runbook's order"
+  },
+  {
+   "id": "C44",
+   "intent": "T1 after the revocation",
+   "rule": "runbook step 10; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "tokenSessions",
+      0,
+      "runbookStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "T1 runs at step 10 after the inventory freeze and T2 at step 12 after the preflight, each in the runbook's order"
+  },
+  {
+   "id": "C45",
+   "intent": "the bundles installed after the revocation",
+   "rule": "MON-LHA3-1-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "bundles",
+      "installedAtStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "the bundles and revocation material are refreshed in T1 and installed at step 10, before the revocation, with the bundle digests in the signed envelope"
+  },
+  {
+   "id": "C46",
+   "intent": "the bundle digests not in the signed envelope",
+   "rule": "MON-LHA3-1-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "bundles",
+      "digestsInTheSignedEnvelope"
+     ],
+     "value": false
+    }
+   ],
+   "refusal": "the bundles and revocation material are refreshed in T1 and installed at step 10, before the revocation, with the bundle digests in the signed envelope"
+  },
+  {
+   "id": "C47",
+   "intent": "the revocation material installed after the revocation",
+   "rule": "MON-LHA3-1-2; LHA-C1-2",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "revocation",
+      "installedAtStep"
+     ],
+     "value": 13
+    }
+   ],
+   "refusal": "the bundles and revocation material are refreshed in T1 and installed at step 10, before the revocation, with the bundle digests in the signed envelope"
+  },
+  {
+   "id": "C48",
+   "intent": "T1 or T2 issuing the LOCAL_REGISTRY identity",
+   "rule": "LHA-C1-4",
+   "positive": 0,
+   "target": "custody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "localEndpointIdentities",
+      "issuedInT1OrT2"
+     ],
+     "value": true
+    }
+   ],
+   "refusal": "T1 and T2 issue neither the LOCAL_REGISTRY nor the LOCAL_EVIDENCE_SINK identity; the campaign release supplies both before runbook step 7"
   }
  ],
  "dropManifests": {
@@ -4747,6 +5315,22 @@
      }
     ],
     "refusal": "schema $.files[4].target enum"
+   },
+   {
+    "id": "DN11",
+    "intent": "a plan sha256 with a trailing line feed",
+    "rule": "LHA-C1-5 (pattern semantics)",
+    "positive": 0,
+    "ops": [
+     {
+      "op": "set",
+      "path": [
+       "planSha256"
+      ],
+      "value": "1111111111111111111111111111111111111111111111111111111111111111\n"
+     }
+    ],
+    "refusal": "schema $.planSha256 pattern"
    }
   ],
   "signatures": [

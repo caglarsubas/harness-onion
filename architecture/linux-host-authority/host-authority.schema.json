@@ -42,7 +42,7 @@
   },
   "baseCommit": {
    "type": "string",
-   "pattern": "^[0-9a-f]{40}$"
+   "pattern": "^[0-9a-f]{40}(?![\\s\\S])"
   },
   "digestRule": {
    "type": "object",
@@ -123,7 +123,7 @@
      },
      "fileSha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "member": {
       "type": [
@@ -162,7 +162,7 @@
      },
      "span": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "note": {
       "type": "string",
@@ -294,7 +294,7 @@
      },
      "fileSha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "member": {
       "type": [
@@ -333,7 +333,7 @@
      },
      "span": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "note": {
       "type": "string",
@@ -372,7 +372,7 @@
      },
      "fileSha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "member": {
       "type": [
@@ -411,7 +411,7 @@
      },
      "span": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "note": {
       "type": "string",
@@ -451,7 +451,7 @@
      },
      "fileSha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "member": {
       "type": [
@@ -490,7 +490,7 @@
      },
      "span": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "note": {
       "type": "string",
@@ -534,7 +534,7 @@
      },
      "fileSha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "member": {
       "type": [
@@ -573,7 +573,7 @@
      },
      "span": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
      },
      "note": {
       "type": "string",
@@ -648,7 +648,7 @@
         },
         "fileSha256": {
          "type": "string",
-         "pattern": "^[0-9a-f]{64}$"
+         "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
         },
         "member": {
          "type": [
@@ -687,7 +687,7 @@
         },
         "span": {
          "type": "string",
-         "pattern": "^[0-9a-f]{64}$"
+         "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
         },
         "note": {
          "type": "string",
@@ -830,7 +830,7 @@
       },
       "fileSha256": {
        "type": "string",
-       "pattern": "^[0-9a-f]{64}$"
+       "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
       },
       "member": {
        "type": [
@@ -869,7 +869,7 @@
       },
       "span": {
        "type": "string",
-       "pattern": "^[0-9a-f]{64}$"
+       "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
       },
       "note": {
        "type": "string",
@@ -915,7 +915,7 @@
       },
       "fileSha256": {
        "type": "string",
-       "pattern": "^[0-9a-f]{64}$"
+       "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
       },
       "member": {
        "type": [
@@ -954,7 +954,7 @@
       },
       "span": {
        "type": "string",
-       "pattern": "^[0-9a-f]{64}$"
+       "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
       },
       "note": {
        "type": "string",
@@ -1108,7 +1108,7 @@
         },
         "fileSha256": {
          "type": "string",
-         "pattern": "^[0-9a-f]{64}$"
+         "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
         },
         "member": {
          "type": [
@@ -1147,7 +1147,7 @@
         },
         "span": {
          "type": "string",
-         "pattern": "^[0-9a-f]{64}$"
+         "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
         },
         "note": {
          "type": "string",

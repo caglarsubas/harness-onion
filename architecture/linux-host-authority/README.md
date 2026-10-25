@@ -1,6 +1,6 @@
 # Linux host authority v1: the owner's per-run GCP Linux hosts, their recipe and key custody (MET-LINUX-008)
 
-Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c3). Roadmap item LINUX-HOST-AUTH-001, packet
+Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c5). Roadmap item LINUX-HOST-AUTH-001, packet
 MET-LINUX-008, design revision 7 with the binding build rules B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18. Contract rounds
 run in series `MET-LINUX-008/contract` under the registered generic brief; review records and `status.json` come after
 adoption. DATA_CHECK_ONLY: published data and an offline checker. Nothing here creates a project, a VM, a key or spend,
@@ -35,9 +35,11 @@ other predicate of those files stands. An owner-approved licence charge would ne
 | `launcher-install.json` | `planeon.internal.linux-launcher-install/v1`: the operator install steps, the signed-drop installer and the trigger units |
 | `custody-model.json` | `planeon.internal.linux-key-custody/v1`: the signing authorities, per-run credentials and live custody duties |
 | `*.schema.json` | one closed schema per record, plus `drop-manifest.schema.json` for the per-run drop manifest (B-LHA-4) |
-| `vectors.json` | 2 positive sets, 205 record negatives, a drop-manifest positive with 10 negatives, 4 signature rows and 8 parse negatives |
+| `vectors.json` | 2 positive sets, 235 record negatives, a drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives |
+| `oracle-identity.json` | the D5a oracle's identity under REVIEW-RECORD-V2, binding the oracle test file |
 | `../../scripts/linux_host_authority.py` | the offline checker, standard library only |
 | `../../tests/test_linux_host_authority.py` | the candidate's own tests |
+| `../../tests/test_linux_host_authority_oracle.py` | the D5a oracle tests, written outside the candidate by a separate agent |
 
 Run the checker from the repository root:
 
@@ -52,7 +54,9 @@ A refusal prints `refused: <rule>` and exits 1; a usage error exits 2.
 and string rule (`scripts/lab_run_plan.py`): UTF-8 without a byte-order mark, no duplicate keys, no non-finite or
 oversized numbers, no integral float, no lone surrogate. On top of them every number in these records is an integer, so
 a non-integral number is refused too. Each schema declares JSON Schema draft 2020-12 at its root and otherwise uses only
-the closed subset: every object closed with every key required, every keyword where it applies.
+the closed subset: every object closed with every key required, every keyword where it applies. Every pattern starts
+with `^` and ends with `(?![\s\S])` rather than `$`, so a validator that applies it by search, where `$` also matches
+before a final line feed, refuses a trailing line feed as the checker's full match does.
 
 **Role labels only (B-LHA-13).** The records name the two cloud identities and the custom role by role label only:
 `OWNER_ADMIN`, `OWNER_LOGIN` and `OWNER_LOGIN_BASELINE`. No record carries an identity, an account, a project id, the
@@ -296,9 +300,12 @@ inputs. An uncovered used path stops the run at NOT_RUN_ENV_UNAVAILABLE.
   admin-login binding, the non-admin login grant if it falls in the window, and the teardown revocations. **Any other
   entry refuses the run's evidence, whatever its principal**, and any custom-role change refuses it. The final span is
   checked after the teardown completes; the evidence counts as accepted only after that.
-- **The owner's accepted limit (Q-LHA5-1: "detected by the effective check, not blocked"; B-LHA-14):** group, domain,
-  principal-set, folder and organization grants are detected only by the effective checks at steps 10 and 15. A grant
-  made and removed between those steps, or made after step 15, is not detected. The audit log does not detect them.
+- **The owner's accepted limit (Q-LHA5-1: "detected by the effective check, not blocked"; B-LHA-14):** grants that
+  reach the login identity without an IAM policy change on the run project or its instances, that is group, domain and
+  principal-set membership changes and folder and organization bindings, are detected only by the effective checks at
+  steps 10 and 15. One made and removed between those steps, or made after step 15, is not detected; the audit log does
+  not see them. A run-project or instance binding to any principal, a group included, is an IAM policy change, so the
+  B-LHA-16 audit-log check catches it through teardown.
 - After the revocation, root-owned files on the proxy/operator host change only through the signed-drop installer, and
   at teardown `OWNER_ADMIN` revokes every binding granted since the lease started; the baseline role and bindings stay.
 
@@ -475,7 +482,8 @@ reused, ending when the instances and their disks are deleted, and named in the 
 **Endpoint server identities (B-LHA-7):** KUBERNETES_API_PROXY and CAMPAIGN_PROXY are served by **one** per-run server
 TLS identity of this custody model (issuer the local CA, on the proxy/operator host, generated at step 8, ending with the
 instance); it is in step 8's requests, T2's issuance, the drop list and `credentialIdentities`. LOCAL_REGISTRY and
-LOCAL_EVIDENCE_SINK server identities are the campaign release's (G10), which names their issuer, custody and lifetime.
+LOCAL_EVIDENCE_SINK server identities are the campaign release's (G10), which names their issuer, custody and lifetime
+before runbook step 7 (a precondition); T1 and T2 issue neither (`localEndpointIdentities`).
 
 **Live custody duties** (Q-LHA-3 (a), restated): a signing registry in the owner's custody outside GCP that never signs
 the same envelope or capacity nonce twice; a root-owned durable host ledger for the launcher, proxy-client and server
@@ -504,12 +512,14 @@ Two evidence carriers need the disclosure before their runs, both preconditions:
 ## Vectors
 
 `vectors.json` replays two positive sets (the published records, and the same set on another allowed image family to
-show the family is data, not code) and 205 negatives against the four records: 33 on the authority (digests, member
+show the family is data, not code) and 235 negatives against the four records: 34 on the authority (digests, member
 paths, every kept predicate relaxed, the independence clause without its replacement, answer or disclosure, readings,
-evidence states, decisions, role labels), 101 on the recipe (section 8 and B-LHA-5, 6, 8, 9, 10, 13 to 18), 38 on the
-launchers (section 8 and B-LHA-1, 4, 5, 11) and 33 on custody (section 8, the string rule and B-LHA-2, 4, 7,
-LHA-CN-2). A drop-manifest positive with 10 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the fixed
-target list and the parse rules. Each negative names the rule it backs and its recorded refusal.
+evidence states, decisions, preconditions, role labels), 109 on the recipe (section 8 and B-LHA-5, 6, 8, 9, 10, 13 to
+18, the custom image's verity root and digest, the lease restart rule, the profile rows), 44 on the launchers (section 8
+and B-LHA-1, 4, 5, 11, the drop and staging directories, the live targets, the trigger units' UIDs) and 48 on custody
+(section 8, the string rule, B-LHA-2, 4, 7, the local and cluster CAs, the token sessions, the bundles, LHA-CN-2). A
+drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the fixed target list,
+the pattern ending and the parse rules. Each negative names the rule it backs and its recorded refusal.
 
 ## Preconditions outside this packet
 
@@ -518,7 +528,12 @@ target list and the parse rules. Each negative names the rule it backs and its r
 - CONF-LIVE-006's adapter carrying the disclosure, before the live-path qualification;
 - the live launcher's entry path for a login without admin, in CONF-LIVE-005/006 (MON-LHA-B1);
 - CONF-LIVE-003 to CONF-LIVE-006 and MET-REPAIR-015 closed at source, before any live run;
-- the kernel's independent qualification against MET-REPAIR-015's interface and record.
+- the kernel's independent qualification against MET-REPAIR-015's interface and record;
+- before runbook step 7, the campaign release (G10) names the LOCAL_REGISTRY and LOCAL_EVIDENCE_SINK server identities
+  with their issuer, the issuer certificate's digest, the private half's custody on the proxy/operator host and the
+  lifetime, and supplies the content of the node's LOCAL_REGISTRY trust file (the node's step-7 preload pulls over F2
+  need them). T1 and T2 issue neither identity; if G10 chose this packet's release-pinned local CA as their issuer,
+  issuing before step 7 would add a token session, a custody-scope change for the monitor.
 
 ## Not claimed
 
@@ -529,9 +544,11 @@ target list and the parse rules. Each negative names the rule it backs and its r
 - The identity beyond the boot chain is operator-attested, under the stated reading of BUILD_INPUTS.md lines 95-103.
 - No deny policy is used. That a custom role can be defined without `compute.instances.osAdminLogin` and the
   IAM-changing permissions and granted on the run project is on paper, like the other GCP facts.
-- The access checks hold at the moment each runs. Group, domain, principal-set, folder and organization grants are
-  detected only by the step-10 and step-15 effective checks, not blocked; a grant made and removed between them, or made
-  after step 15, is not detected (the owner's Q-LHA5-1; B-LHA-14). The audit log does not detect them.
+- The access checks hold at the moment each runs. Group, domain and principal-set membership changes and folder and
+  organization bindings are detected only by the step-10 and step-15 effective checks, not blocked; one made and removed
+  between them, or made after step 15, is not detected (the owner's Q-LHA5-1; B-LHA-14), and the audit log does not see
+  them. A run-project or instance binding to any principal, groups included, is caught by the audit-log check through
+  teardown (B-LHA-16).
 - GCP and systemd facts are on paper: the IAP range; image families with their kernels, root filesystems and licensing;
   the internal time service; OS Login, its roles and its sudoers entries; metadata keys; guest-agent features; firewall
   behaviour toward the metadata server; the maximum-run-duration delete action; the permission names; path and socket

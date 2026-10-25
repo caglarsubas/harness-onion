@@ -775,7 +775,8 @@ READINGS = {"SIGNING_AUTHORITY": ["existing"], "PRE_EXISTING": ["pre-existing", 
 NOT_SETTLED = "CARRIED_NOTE_NOT_SETTLED"
 # The preconditions outside this packet (design section 10; MON-LHA-17; MON-LHA-B1). MET-LINUX-009 merged as the base.
 PRECONDITIONS = ["MET-LINUX-009", "CONF-LINUX-002", "CONF-LIVE-006-ADAPTER", "CONF-LIVE-005-006-NON-ADMIN-ENTRY",
-                 "CONF-LIVE-003-006-AND-MET-REPAIR-015-SOURCE-CLOSURE", "KERNEL-INDEPENDENT-QUALIFICATION"]
+                 "CONF-LIVE-003-006-AND-MET-REPAIR-015-SOURCE-CLOSURE", "KERNEL-INDEPENDENT-QUALIFICATION",
+                 "G10-LOCAL-ENDPOINT-IDENTITIES"]
 
 
 def check_authority(doc: Any, schema: dict, base: Base) -> None:
@@ -924,6 +925,11 @@ RUNTIME_WRITES = ["HOST_LEDGER_LAUNCHER", "HOST_LEDGER_PROXY_CLIENT", "HOST_LEDG
 COST_ITEMS = ["PROXY_OPERATOR_HOST_MACHINE_HOURS", "PROXY_OPERATOR_HOST_BOOT_DISK", "CLUSTER_NODE_MACHINE_HOURS",
               "CLUSTER_NODE_BOOT_DISK", "TEMPORARY_BUILD_DISK", "STORED_CUSTOM_IMAGE"]
 ADMIN_CLOUD_STEPS = (2, 3, 5, 6, 16)
+PROFILE_ROWS = ["SELINUX_ENFORCING", "REVIEWED_EXACT_BINARY_POLICY", "EXT4_VERITY_ROOT_AND_MEASUREMENTS",
+                "CGROUP_V2_AND_PLANEON_LIVE_CGROUPS", "ONE_ENROLLED_BPF_PROGRAM_PER_HOOK_PER_ROLE",
+                "KERNEL_RELEASE_NOTES_DIGEST_AND_BOOT_ID", "SERIALISED_POLICY_FILTER_CGROUP_LABEL_AND_EXECUTABLE_CHANGES"]
+LIMIT_KINDS = ["GROUP_MEMBERSHIP_CHANGE", "DOMAIN_MEMBERSHIP_CHANGE", "PRINCIPAL_SET_MEMBERSHIP_CHANGE", "FOLDER_BINDING",
+               "ORGANIZATION_BINDING"]
 
 
 def check_recipe(doc: Any, schema: dict) -> None:
@@ -985,6 +991,10 @@ def check_recipe(doc: Any, schema: dict) -> None:
     duration = machine["maxRunDuration"]
     require(duration["set"] and duration["action"] == "DELETE" and duration["endsNoLaterThan"] == "LEASE_END",
             "a maximum run duration with a delete action is set, ending no later than the lease")
+    maintenance = machine["maintenance"]
+    require(maintenance["onHostMaintenance"] == "MIGRATE" and not maintenance["automaticRestartInLease"]
+            and maintenance["rebootAfterQualification"] == "INVALIDATES_QUALIFICATION",
+            "no automatic restart inside the lease: live migration, and a reboot after qualification invalidates it")
     agent = doc["guestAgent"]
     require(agent["on"] == AGENT_ON and agent["off"] == AGENT_OFF,
             "only OS Login and clock sync stay on in the guest agent")
@@ -1005,6 +1015,13 @@ def check_recipe(doc: Any, schema: dict) -> None:
             "the plan pins the kernel release and step 5 checks it in the built root")
     require(custom["proxyOperatorHostBootsRecordedImage"] and custom["buildDiskDeletedAtStep"] == 5,
             "the proxy/operator host boots the recorded custom image, and no build disk is left after step 5")
+    require(custom["rootFilesystem"] == "EXT4_WITH_VERITY" and custom["usrOnRoot"],
+            "the custom image's root, /usr included, is ext4 with verity (Q-LHA-15)")
+    digest = image["imageDigest"]
+    require(digest["is"] == "SHA256_OF_THE_CUSTOM_IMAGE_INVENTORY" and digest["takenAtStep"] == 5
+            and digest["from"] == "THE_BUILD_DISK_MOUNTED_READ_ONLY" and digest["recomputedOffHost"],
+            "imageDigest is the custom image inventory's sha256, taken at step 5 from the read-only build disk and "
+            "recomputed off host")
     inventory = doc["hostInventory"]
     require([r["host"] for r in inventory["records"]] == ["PROXY_OPERATOR_HOST", "CLUSTER_NODE"]
             and all(r["scope"] == INVENTORY_SCOPE for r in inventory["records"]),
@@ -1019,6 +1036,8 @@ def check_recipe(doc: Any, schema: dict) -> None:
     require(inventory["imageReverification"]["where"] == "OFF_HOST_IN_T1",
             "the image re-verification runs off host in T1, not at preflight")
     profile = {row["prerequisite"]: row for row in doc["profile"]}
+    require([row["prerequisite"] for row in doc["profile"]] == PROFILE_ROWS,
+            "MET-REPAIR-015's profile lists its seven prerequisites, each once, in order")
     require(profile["SELINUX_ENFORCING"]["value"] == "ENFORCING", "SELinux is enforcing")
     require(profile["REVIEWED_EXACT_BINARY_POLICY"]["value"] == "DENY_UNKNOWN_1",
             "the active policy's deny_unknown is 1")
@@ -1148,11 +1167,14 @@ def _check_access(access: dict) -> None:
     require(audit["finalSpanCheckedAfterTeardownCompletes"] and audit["evidenceAcceptedOnlyAfterThisCheck"],
             "the final span is checked after teardown completes, and the evidence counts only after it passes")
     limit = access["acceptedLimit"]
-    require(limit["decision"] == "Q-LHA5-1" and not limit["auditLogDetectsThem"]
+    require(limit["decision"] == "Q-LHA5-1" and not limit["auditLogDetectsThem"] and limit["grantKinds"] == LIMIT_KINDS
             and limit["detectedOnlyBy"] == ["EFFECTIVE_CHECK_STEP_10", "EFFECTIVE_CHECK_STEP_15"]
-            and limit["notDetected"] == ["A_GRANT_MADE_AND_REMOVED_BETWEEN_STEPS_10_AND_15", "A_GRANT_MADE_AFTER_STEP_15"],
-            "group, domain, principal-set, folder and organization grants are detected only by the step-10 and step-15 "
-            "effective checks, not blocked (the owner's accepted limit)")
+            and limit["notDetected"] == ["ONE_MADE_AND_REMOVED_BETWEEN_STEPS_10_AND_15", "ONE_MADE_AFTER_STEP_15"]
+            and limit["caughtByTheAuditLogCheck"]
+            == "A_RUN_PROJECT_OR_INSTANCE_BINDING_TO_ANY_PRINCIPAL_GROUPS_INCLUDED_THROUGH_TEARDOWN",
+            "group, domain and principal-set membership changes and folder and organization bindings are detected only "
+            "by the step-10 and step-15 effective checks, not blocked (the owner's accepted limit); a run-project or "
+            "instance binding to any principal, groups included, is caught by the audit-log check through teardown")
     require(access["afterRevocationRootFiles"] == "SIGNED_DROP_INSTALLER_ONLY",
             "after the revocation only the signed-drop installer changes root-owned files")
 
@@ -1206,6 +1228,11 @@ def check_launcher(doc: Any, schema: dict, recipe: dict) -> None:
     directory = installer["dropDirectory"]
     require(directory["owner"] == "ROOT" and directory["parentChain"] == "ROOT_OWNED_NOT_GROUP_OR_WORLD_WRITABLE"
             and directory["otherwiseRefused"], "a drop directory or parent chain not as specified is refused")
+    staging = installer["stagingDirectory"]
+    require(directory["group"] == "PLANEON_LOGIN_TRIGGER" and directory["mode"] == "1730"
+            and staging["owner"] == staging["group"] == "ROOT" and staging["mode"] == "0700",
+            "the drop directory is root-owned, group PLANEON_LOGIN_TRIGGER, mode 1730, and the staging directory "
+            "root-owned 0700")
     targets = installer["fixedTargets"]
     require([t["id"] for t in targets] == FIXED_TARGETS, "the fixed target list is closed; a drop to an unlisted target "
             "is refused")
@@ -1215,6 +1242,10 @@ def check_launcher(doc: Any, schema: dict, recipe: dict) -> None:
             "each drop target has its exact /etc/planeon path, root owner and mode")
     require(installer["refusesEverythingElse"] and installer["logsEveryAttempt"] == "/var/log/planeon/signed-drop-installer.log",
             "the installer refuses everything else and logs every attempt")
+    waiting = doc["liveLauncher"]["state"] == "WAITING"
+    require(all(t["state"] == ("AFTER_CONF_LIVE_005_006_CLOSE" if waiting and t["id"].startswith("LIVE_MANIFEST")
+                               else "ACTIVE") for t in targets),
+            "the live-manifest drop targets stay closed while the live launcher is WAITING; every other target is active")
     units = {u["id"]: u for u in doc["triggerUnits"]}
     require(list(units) == ["PREFLIGHT_UNIT", "EXPORT_UNIT"],
             "one reviewed family of trigger units: one for the preflight and one for the export")
@@ -1245,6 +1276,10 @@ def check_launcher(doc: Any, schema: dict, recipe: dict) -> None:
                 "STEP_14_LAUNCH": ("PER_CONF_LIVE_005_006", "CONF_LIVE_005_006_NON_ADMIN_ENTRY_PATH_PRECONDITION"),
                 "STEP_15_EXPORT": ("ROOT", "EXPORT_UNIT")},
             "each privileged action after step 10 names its UID and how a login without admin starts it")
+    runs_as = {a["startedBy"]: a["runsAs"] for a in actions}
+    require(all(unit["runsAs"] == runs_as[unit["id"]] for unit in units.values())
+            and units["EXPORT_UNIT"]["command"] == "/opt/planeon/bin/planeon-export",
+            "each trigger unit runs as its privileged action's UID, with its fixed command")
     exports = {e["host"]: e["records"] for e in doc["exportSet"]}
     require(list(exports) == ["PROXY_OPERATOR_HOST", "CLUSTER_NODE"]
             and {"HOST_NONCE_LEDGER", "PREFLIGHT_RECORDS", "INSTALLER_LOG", "JOURNAL"} <= set(exports["PROXY_OPERATOR_HOST"]),
@@ -1258,6 +1293,7 @@ def check_launcher(doc: Any, schema: dict, recipe: dict) -> None:
     require(offline["preflightProbeScope"] == PROBE_SCOPE,
             "the preflight probe scope covers the host's credentials and sockets, the agent sockets and the metadata "
             "address")
+    require(offline["custodyWrittenAtStep"] == 10, "custody.json is written at step 10, before the revocation")
     live = doc["liveLauncher"]
     require(live["manifestSigner"] == "LIVE_RUNNER_MANIFEST", "no manifest is signed by the other launcher's key")
     require(live["manifestSignedAfter"] == "CONF_LIVE_005_006_OWN_PREFLIGHT" and live["state"] == "WAITING",
@@ -1288,6 +1324,13 @@ def check_launcher(doc: Any, schema: dict, recipe: dict) -> None:
 AUTHORITIES = ["LINUX_RUNNER_MANIFEST", "LIVE_RUNNER_MANIFEST", "PLATFORM_RELEASE", "TENANT_LIVE_EXECUTION",
                "CAPACITY_OPERATOR"]
 PER_RUN = ["CAMPAIGN_PROXY_SERVER_TLS", "CAMPAIGN_PROXY_CLIENT_MTLS", "KUBERNETES_PROXY_SERVER_MTLS"]
+# The token sessions' order (runbook steps 10 and 12; Q-LHA-2; MON-LHA3-1-2).
+T1_ORDER = ["MEASURED_BOOT_COMPARISON", "LINUX_RUNNER_MANIFEST_SIGNS_THE_OFFLINE_POLICY",
+            "BUNDLES_AND_REVOCATION_MATERIAL_REFRESHED"]
+T2_ORDER = ["LOCAL_CA_ISSUES_CAMPAIGN_PROXY_SERVER_TLS_AND_CAMPAIGN_PROXY_CLIENT_MTLS",
+            "CAPACITY_OPERATOR_SIGNS_THE_CAPACITY_AUTHORIZATION",
+            "PLATFORM_RELEASE_AND_TENANT_LIVE_EXECUTION_SIGN_THE_ENVELOPE",
+            "LINUX_RUNNER_MANIFEST_SIGNS_THE_OFFLINE_MANIFEST", "LINUX_RUNNER_MANIFEST_SIGNS_THE_DROP_MANIFEST"]
 ENDPOINT_KINDS = ["KUBERNETES_API_PROXY", "CAMPAIGN_PROXY", "LOCAL_REGISTRY", "LOCAL_EVIDENCE_SINK"]
 ROLE_LABEL = re.compile(r"[A-Z][A-Z0-9_]{1,63}")
 
@@ -1324,16 +1367,46 @@ def check_custody(doc: Any, schema: dict, recipe: dict, launcher: dict) -> None:
     sessions = {s["id"]: s for s in doc["tokenSessions"]}
     require(list(sessions) == ["T1", "T2"] and sessions["T2"]["withinOneHourOfPreflight"] and sessions["T2"]["everyTokenPresent"],
             "two token sessions per run; T2 ends within one hour of the preflight, with every token present")
+    require((sessions["T1"]["runbookStep"], sessions["T1"]["after"], sessions["T1"]["order"])
+            == (10, "THE_STEP_9_INVENTORY_FREEZE", T1_ORDER)
+            and (sessions["T2"]["runbookStep"], sessions["T2"]["after"], sessions["T2"]["order"])
+            == (12, "THE_STEP_11_PREFLIGHT", T2_ORDER),
+            "T1 runs at step 10 after the inventory freeze and T2 at step 12 after the preflight, each in the runbook's "
+            "order")
     bundles = doc["bundles"]
     require(bundles["route"] == "LOCAL_CUSTODY_TRANSFER_ONLY" and not bundles["networkLookup"]
             and doc["revocation"]["route"] == "LOCAL_CUSTODY_TRANSFER" and not doc["revocation"]["network"],
             "revocation and bundles travel by local custody transfer only, never over the network")
+    revocation = doc["revocation"]
+    require(bundles["refreshedIn"] == revocation["in"] == "T1" and bundles["installedAtStep"] == 10
+            and revocation["installedAtStep"] == 10 and bundles["beforeTheRevocation"] and revocation["beforeEachRun"]
+            and bundles["digestsInTheSignedEnvelope"] and bundles["t2EnvelopeBindsTheInstalledBytes"],
+            "the bundles and revocation material are refreshed in T1 and installed at step 10, before the revocation, "
+            "with the bundle digests in the signed envelope")
     kube = doc["kubernetes"]
     require(kube["apiServerClientTrust"] == ["PER_RUN_CLUSTER_CA"] and "RELEASE_PINNED_LOCAL_CA" in kube["refusedInClientTrust"],
             "the API server's client trust never holds the release-pinned local CA")
     require(kube["rbacSubject"] == "KUBERNETES_PROXY_SERVER_MTLS_EXACT_SUBJECT" and not kube["privilegedGroups"],
             "RBAC is bound to the cluster-CA leaf's exact subject only, with no privileged group")
     require(kube["proxyOperatorHostTrustsClusterCa"], "the proxy/operator host trusts the per-run cluster CA")
+    local_ca = doc["localCa"]
+    require(local_ca["id"] == "RELEASE_PINNED_LOCAL_CA" and local_ca["holder"] == "OWNER"
+            and local_ca["generation"] == "OFFLINE_ON_A_MACHINE_THAT_NEVER_CONNECTS"
+            and local_ca["storage"] == "A_TOKEN_SUPPORTING_ITS_ALGORITHM_WITH_A_SEALED_BACKUP_CHECKED_AT_THE_CEREMONY"
+            and local_ca["rotation"] == "PER_RELEASE" and local_ca["pinnedIn"] == "THE_RELEASE",
+            "the release-pinned local CA is the owner's, made offline on a token with a sealed backup checked at the "
+            "ceremony, pinned in the release and rotated per release (Q-LHA-16 (2))")
+    require(local_ca["neverInTheApiServerClientTrust"],
+            "the API server's client trust never holds the release-pinned local CA")
+    cluster_ca = doc["clusterCa"]
+    require(cluster_ca["madeAtStep"] == 7 and cluster_ca["on"] == "CLUSTER_NODE"
+            and cluster_ca["issues"] == ["KUBERNETES_PROXY_SERVER_MTLS"] and cluster_ca["issuesAtStep"] == 8
+            and cluster_ca["withAdmin"],
+            "the per-run cluster CA is made at step 7 on the node and issues only KUBERNETES_PROXY_SERVER_MTLS at step "
+            "8, with admin")
+    require(not cluster_ca["newKeyOrToken"], "the per-run cluster CA needs no new key or token")
+    require(cluster_ca["trustedByTheProxyOperatorHostAt"] == kube["proxyOperatorHostClusterCaTrust"],
+            "the proxy/operator host trusts the per-run cluster CA at its listed path")
     credentials = {c["id"]: c for c in doc["perRunCredentials"]}
     require(list(credentials) == PER_RUN, "every per-run credential is listed")
     for credential in credentials.values():
@@ -1348,6 +1421,11 @@ def check_custody(doc: Any, schema: dict, recipe: dict, launcher: dict) -> None:
                 "credentialIdentities")
         if credential["issuer"] == "RELEASE_PINNED_LOCAL_CA":
             require(not credential["grantsKubernetesAccess"], "no local-CA leaf authenticates to the API server")
+    local_leaves = [c["id"] for c in credentials.values() if c["issuer"] == "RELEASE_PINNED_LOCAL_CA"]
+    require(local_ca["issues"] == ["CAMPAIGN_PROXY_SERVER_TLS", "CAMPAIGN_PROXY_CLIENT_MTLS"] == local_leaves
+            and all(credentials[c]["issuedAt"] == "T2" for c in local_leaves),
+            "the release-pinned local CA issues exactly CAMPAIGN_PROXY_SERVER_TLS and CAMPAIGN_PROXY_CLIENT_MTLS, both "
+            "in T2")
     k8s = credentials["KUBERNETES_PROXY_SERVER_MTLS"]
     require(k8s["issuer"] == "PER_RUN_CLUSTER_CA" and k8s["issuedAt"] == "STEP_8",
             "the per-run cluster CA issues KUBERNETES_PROXY_SERVER_MTLS at step 8")
@@ -1372,6 +1450,15 @@ def check_custody(doc: Any, schema: dict, recipe: dict, launcher: dict) -> None:
     require(len({e["identity"] for e in shared}) <= 1
             and all(e["kind"] in ("KUBERNETES_API_PROXY", "CAMPAIGN_PROXY") for e in shared),
             "if one server identity serves both proxy kinds, the record says so")
+    local_endpoints = doc["localEndpointIdentities"]
+    require(local_endpoints["kinds"] == ["LOCAL_REGISTRY", "LOCAL_EVIDENCE_SINK"]
+            and local_endpoints["suppliedBy"] == "CAMPAIGN_RELEASE_G10" and local_endpoints["before"] == "RUNBOOK_STEP_7"
+            and local_endpoints["precondition"] == "G10-LOCAL-ENDPOINT-IDENTITIES"
+            and not local_endpoints["issuedInT1OrT2"]
+            and all(endpoints[k]["owner"] == "CAMPAIGN_RELEASE" and not endpoints[k]["perRun"]
+                    for k in local_endpoints["kinds"]),
+            "T1 and T2 issue neither the LOCAL_REGISTRY nor the LOCAL_EVIDENCE_SINK identity; the campaign release "
+            "supplies both before runbook step 7")
     nonce = doc["nonce"]
     require(nonce["signingRegistry"]["location"] == "OUTSIDE_GCP" and nonce["signingRegistry"]["custody"] == "OWNER",
             "the signing registry is in the owner's custody outside GCP, never in the run project")
@@ -1448,11 +1535,14 @@ def check_set(docs: dict, schemas_: dict, base: Base) -> None:
 
 
 def explain(check: Any, *args: Any) -> str | None:
-    """None when the check accepts; otherwise the refusal."""
+    """None when the check accepts; otherwise the refusal. As on the command line, an error a check raises other than
+    its own refusal (a missing member, a wrong type) is a refusal named by its class, so it can never pass."""
     try:
         check(*args)
     except ValueError as exc:
         return str(exc)
+    except (KeyError, TypeError, IndexError) as exc:
+        return type(exc).__name__
     return None
 
 

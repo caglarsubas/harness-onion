@@ -1907,7 +1907,8 @@
       "grantKinds",
       "detectedOnlyBy",
       "notDetected",
-      "auditLogDetectsThem"
+      "auditLogDetectsThem",
+      "caughtByTheAuditLogCheck"
      ],
      "properties": {
       "decision": {
@@ -1946,6 +1947,11 @@
       },
       "auditLogDetectsThem": {
        "type": "boolean"
+      },
+      "caughtByTheAuditLogCheck": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 4000
       }
      }
     },

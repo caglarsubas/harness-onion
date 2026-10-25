@@ -364,7 +364,19 @@
   ],
   "rbacSubject": "KUBERNETES_PROXY_SERVER_MTLS_EXACT_SUBJECT",
   "privilegedGroups": false,
-  "proxyOperatorHostTrustsClusterCa": true
+  "proxyOperatorHostTrustsClusterCa": true,
+  "proxyOperatorHostClusterCaTrust": "/etc/planeon/credentials/cluster-ca.crt.pem"
+ },
+ "localEndpointIdentities": {
+  "kinds": [
+   "LOCAL_REGISTRY",
+   "LOCAL_EVIDENCE_SINK"
+  ],
+  "suppliedBy": "CAMPAIGN_RELEASE_G10",
+  "before": "RUNBOOK_STEP_7",
+  "precondition": "G10-LOCAL-ENDPOINT-IDENTITIES",
+  "issuedInT1OrT2": false,
+  "ifTheCampaignReleaseChoosesTheLocalCa": "A_TOKEN_SESSION_BEFORE_STEP_7_A_CUSTODY_SCOPE_CHANGE_FOR_THE_MONITOR"
  },
  "nonce": {
   "signingRegistry": {
