@@ -1,0 +1,39 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_language_placement_oracle.py",
+  "sha256": "028e73d4779ac27c68fe74b136bd53f51b957b9d4905ba28db7843cefc22eff5"
+ },
+ "oracle": {
+  "agentId": "a27a06163bc50da08",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "241d4b17-8eea-48d8-b3bc-79c6c27a3233",
+  "lane": "parallel"
+ },
+ "author": {
+  "agentIds": [
+   "a5f17dc0bd391bd63"
+  ]
+ },
+ "briefSha256": "0debd0a945fa7dce9e38b829d988c483e0a30bf0a15bda908c3c90a44a7876e7",
+ "candidateCommit": "a4d28053b7db03c220a9fb4259842d3c6d3783a3",
+ "launched": "2026-10-26T00:45:40+08:00",
+ "finished": "2026-10-26T01:14:15+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-GOV4-C1",
+  "date": "2026-10-26"
+ },
+ "disclosures": [
+  "written black-box from design revision 4, the dossier, the decisions and a read-only export of the base; the candidate reached only through its published check command, run as a subprocess on copies of the root",
+  "against the base copy (no checker): 0 passed, 16 failed, 79 errors, as expected",
+  "against c1 (a4d28053), unchanged: 95/95",
+  "slips (MON-GOV4-ORACLE-R1, procedural): six messages carried two or three tool calls; one grep with two -e patterns; two walks without a dropped count; reads beyond the listed scope (lab_run_plan.py helpers, the review_record.py source, the brief re-hashed); run 1 ran twice because of unreadable diagnostic output",
+  "twelve design readings are carried to CONTRACT r1 as reading checks",
+  "the launch context carried an auto-injected memory index and an account context; the oracle used neither"
+ ]
+}
