@@ -1,0 +1,42 @@
+{
+ "schemaVersion": "planeon.review-identity/v2",
+ "record": {
+  "path": "architecture/linux-host-authority/review-round1.json",
+  "sha256": "b4f78a30967db80397f62b4b699258b86ef6b042fb997d5c3ec8bbc6d895a212"
+ },
+ "reviewer": {
+  "agentId": "aa104eb92748b2a61",
+  "agentType": "general-purpose subagent of the parallel lane session",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "dd0addca-4e18-4222-9017-955f02d00b0d",
+  "lane": "parallel"
+ },
+ "author": {
+  "agentIds": [
+   "a2ef51b993c85f1cb",
+   "a0f7e4c29484149e8"
+  ]
+ },
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "f5b0e57d699bd3dfe42acb62b5599e27cc7ae68006016b7f6ead54e3fee8d38d",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "cad346c3a6bee77f7ff24502fdff9a76d63be5a6",
+  "tree": "32d14a0deda3d03b6f42a3bd7558b91073010af8"
+ },
+ "launched": "2026-10-25T03:16:02+08:00",
+ "finished": "2026-10-25T03:59:04+08:00",
+ "interruptions": [],
+ "operatorRelays": [],
+ "runs": [],
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-LHA-CR1-KEEP (read-scope breach recorded: the reviewer's slips 4-6 read LPK- or w03-like-named repository files in memory)",
+  "date": "2026-10-25"
+ }
+}

@@ -1,0 +1,153 @@
+{
+ "schemaVersion": "planeon.internal.linux-host-authority-status/v1",
+ "workItem": "LINUX-HOST-AUTH-001 (the owner's per-run GCP Linux hosts, their recipe and key custody)",
+ "packet": "MET-LINUX-008",
+ "slot": 266,
+ "slotNote": "slot 266 is reserved for this packet; its mechanics base is harness-onion main f9882c1a (MET-ENFORCE-042), where the work is recut and the complete allowedPaths and the gate status are derived from the evolution-surface record",
+ "status": "ADOPTED",
+ "baseMain": "a88276171453760e46b28e8f6f0c0bb4bbfade5d",
+ "design": {
+  "path": "DESIGN.r7.md (kept with the lane's records)",
+  "sha256": "b3881b4818bf101a7b8c40cb4ca224ebf9ec083a4acf3049dbb141d3eef79797",
+  "verdict": "PASS_FOR_BUILD",
+  "buildRules": {
+   "path": "BUILD_RULES.md (kept with the lane's records)",
+   "sha256": "36087be9e2a5339072cb3ac389f5f15863bf3193af65f3166f7883e62a7e7c27",
+   "rules": "B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18 (B-LHA-3 superseded)"
+  }
+ },
+ "series": {
+  "contract": "MET-LINUX-008/contract",
+  "packet": "MET-LINUX-008/packet",
+  "registry": "architecture/review-record/briefs.json (both series pre-registered by 260's batch)"
+ },
+ "adoptedSubject": {
+  "architecture/linux-host-authority/README.md": "f66d029b4e9764a10ba08767492a2086ef5128f72e28c686707cd153992c636f",
+  "architecture/linux-host-authority/custody-model.json": "cc1cac42ae84dd68d6099be3b4b6fa4808f562a002ea6cf94db59f505290f314",
+  "architecture/linux-host-authority/custody-model.schema.json": "d171ee0f4d4d36e6e01664d4cd2cf0fed83dfbbdd94104c32698a64ecdd029eb",
+  "architecture/linux-host-authority/drop-manifest.schema.json": "1bf22618fe4500248bbb8bc0bda932b6bc4db050e33c2d34f684a606aa515954",
+  "architecture/linux-host-authority/host-authority.json": "21c0a06202917afc10b5009a565340963404b998e917073fb1621736465bac77",
+  "architecture/linux-host-authority/host-authority.schema.json": "154db399e499968e961a1d44e104d0849a3587a3c28b2a085320f690bd1ae784",
+  "architecture/linux-host-authority/host-recipe.json": "b5640709d74ada0525d24d4db34be983626e1c3c5462ba905ffba3a48593dcff",
+  "architecture/linux-host-authority/host-recipe.schema.json": "daa2066ab3a15257d3f9568b05f1f760c3d1e38580f815998cbf697e763703a9",
+  "architecture/linux-host-authority/launcher-install.json": "082d2255738769ff1a50dfe29064ce6207d2d563796763418e71f4bf9f8f1334",
+  "architecture/linux-host-authority/launcher-install.schema.json": "e0174afe8498a99e42a670d159154601f24fa64561df59ec2ff13f65ebb77a57",
+  "architecture/linux-host-authority/oracle-identity.json": "d5c739c4a837ba80ebd88ca828b643f2b289ee1f34c07353e9e0ca6ab3ba5d0d",
+  "architecture/linux-host-authority/vectors.json": "351e18ee3e79caf85da2aa7810050fc11e1c1ff64af9c86a54fef4427ebdf208",
+  "scripts/linux_host_authority.py": "c96d414ee39273261a324fee7f307ee90bb460e2b3191f0a5362f1b449d5b3b4",
+  "tests/test_linux_host_authority.py": "523d8c91ee7df5949d26cabdbc4456dbb84f5d465ea0a3adfab170d1f0045b66",
+  "tests/test_linux_host_authority_oracle.py": "212cdebe9bcaf0c837365a60c5abca14762ea3e56bf8870cbfab85604509a53e"
+ },
+ "adoptions": [
+  {
+   "candidate": "c8",
+   "commit": "102ae74b9115067b6a39fc08f5287739fd0fd76f",
+   "tree": "7d6ad3482682030799ff2efe24e96e4f875e5b6c",
+   "ruling": "MON-LHA-C8-ADOPTED",
+   "by": "the lane monitor, owner-delegated (2026-10-22)",
+   "date": "2026-10-25",
+   "change": "the first adoption: c8 is c7's text-only errata (LHA-C3-1, LHA-C3-2, LHA-C3-4) after CONTRACT round 3, the capped last round (MON-LHA-CR-CAP), and passed the ADOPTION_CHECK"
+  }
+ ],
+ "independentReviewers": "SEPARATE_AGENTS_NOT_AUTHOR (one fresh agent per round, and a separate oracle agent)",
+ "reviews": [
+  {
+   "review": "MET-LINUX-008/contract round 1",
+   "record": "architecture/linux-host-authority/review-round1.json",
+   "recordSha256": "b4f78a30967db80397f62b4b699258b86ef6b042fb997d5c3ec8bbc6d895a212",
+   "identity": "architecture/linux-host-authority/review-identity-round1.json",
+   "identitySha256": "38805656a69cf74601ae064e743faaf6ea763ece9a51a3ffea8091071d502109",
+   "subject": "candidate c4 (cad346c3a6bee77f7ff24502fdff9a76d63be5a6)",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": "0 MAJOR, 4 MINOR (LHA-C1-1 to LHA-C1-4, fixed in c5), 3 NOTE (LHA-C1-5 and LHA-C1-7 folded in c5; LHA-C1-6 not folded, fails closed)",
+   "ruling": "KEEP, with the read-scope breach recorded in the identity (MON-LHA-CR1-KEEP)"
+  },
+  {
+   "review": "MET-LINUX-008/contract round 2 (delta from round 1's subject)",
+   "record": "architecture/linux-host-authority/review-round2.json",
+   "recordSha256": "f9b4b2fbb284bf6ffffde8c6925cd38380ee06b26ebbfd764686c526fef6d4d7",
+   "identity": "architecture/linux-host-authority/review-identity-round2.json",
+   "identitySha256": "58290de9023eeee517ddbeabfc67eab7b4a13dfde7238766cbf68dcb5f4e9211",
+   "subject": "candidate c6 (993ec1bc225d73726c16dcd1c269e0b0ce60bb88), base c4",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": "0 MAJOR, 3 MINOR (LHA-C2-1 to LHA-C2-3, fixed in c7's systematic pass), 1 NOTE (LHA-C2-4, folded in c7)",
+   "ruling": "KEEP (MON-LHA-CR2-KEEP)"
+  },
+  {
+   "review": "MET-LINUX-008/contract round 3 (delta from round 2's subject; the capped last round, MON-LHA-CR-CAP)",
+   "record": "architecture/linux-host-authority/review-round3.json",
+   "recordSha256": "78c52c4e568bd460c476552a736419bed7438763fc2a7d7004d3a4a62fe80e28",
+   "identity": "architecture/linux-host-authority/review-identity-round3.json",
+   "identitySha256": "293731d024108df5e970873b25c2611fd1e138d44b5b504b097de210d6e38547",
+   "subject": "candidate c7 (3219828c609e8f0a9c39e001e22aaf235b8281ac), base c6",
+   "verdict": "CHANGES_REQUIRED",
+   "findings": "0 MAJOR, 1 MINOR (LHA-C3-1, fixed by the c8 errata), 4 NOTE (LHA-C3-2 and LHA-C3-4 folded in c8; LHA-C3-3 no change; LHA-C3-5 the builder kept with the lane's records)",
+   "ruling": "KEEP (MON-LHA-C8); the MINOR went to the c8 errata, adopted from an ADOPTION_CHECK (MON-LHA-C8-ADOPTED)"
+  }
+ ],
+ "systematicPass": {
+  "rule": "MON-LHA-C7-SYSTEMATIC",
+  "auditTables": [
+   {
+    "candidate": "c7",
+    "path": "C7_AUDIT_TABLE.txt (kept with the lane's records)",
+    "sha256": "8664eac548d8fd8660353fc5ec500af3328c4fbbfc27a3db35d67009dcec5ed7"
+   },
+   {
+    "candidate": "c8",
+    "path": "C8_AUDIT_TABLE.txt (kept with the lane's records)",
+    "sha256": "8be3449481949c36bf2366056c9ca238fc968e69357d1848418e5205c1354f40",
+    "note": "c7's rows with every checker line number +2 (two comment lines added near line 215), nothing else"
+   }
+  ],
+  "leaves": {
+   "host-authority.json": 931,
+   "host-recipe.json": 529,
+   "launcher-install.json": 285,
+   "custody-model.json": 299
+  },
+  "classes": {
+   "DECISION_PINNED": 2043,
+   "STRUCTURE_ONLY": 1,
+   "FREE_TEXT": 0
+  },
+  "structureOnly": [
+   "host-recipe.json image.family (Q-LHA-9 (a): a per-plan choice from the pinned allowedFamilies)"
+  ],
+  "builder": {
+   "path": "c7-builder/ (kept with the lane's records)",
+   "readmeSha256": "ac5f97276b3830b3722e14d79559cce6d585275c2aa44b62a586ccb533774349"
+  }
+ },
+ "authorReports": [
+  {
+   "candidate": "c7",
+   "path": "AUTHOR_REPORT_C7.md (kept with the lane's records)",
+   "sha256": "7819172a5f559e914164188b22fafa14f6f89f1fd1a4cb331e2273c883ad4cd9"
+  },
+  {
+   "candidate": "c8",
+   "path": "AUTHOR_REPORT_C8.md (kept with the lane's records)",
+   "sha256": "1d7a18c5beeae7e355d03b7d04c8695b1a65a0079c15db4038303ebf9d869338"
+  }
+ ],
+ "oracle": {
+  "test": "tests/test_linux_host_authority_oracle.py",
+  "sha256": "212cdebe9bcaf0c837365a60c5abca14762ea3e56bf8870cbfab85604509a53e",
+  "identity": "architecture/linux-host-authority/oracle-identity.json",
+  "identitySha256": "d5c739c4a837ba80ebd88ca828b643f2b289ee1f34c07353e9e0ca6ab3ba5d0d",
+  "result": "47/47 on candidate c3 after ORC-1 and ORC-2 were fixed in c2 and c3 (MON-LHA-ORC-1-A, MON-LHA-ORC-2-A); committed with its identity in c4 and byte-identical since; 47/47 on c6, c7 and c8; ruling KEEP (MON-LHA-ORACLE-KEEP)",
+  "note": "MON-LHA-C7-SLIPS: the c7 author read parts of the oracle test; CONTRACT round 3 found no tailoring (check 6c)"
+ },
+ "carriedNotes": [
+  "LHA-CN-1 and LHA-CN-2 (design-status.json): carried into host-authority.json and custody-model.json as notes, not settled claims",
+  "LHA-C1-6: not folded; both cases it names fail closed",
+  "LHA-C3-3: since main runs through explain, a ValueError subclass prints its message on the command line instead of its class name; still refused",
+  "LHA-C3-5: the generated pins and leaf vectors are rebuilt with the kept builder after any later record change"
+ ],
+ "nonClaims": [
+  "DATA_CHECK_ONLY: no GCP project, VM, key or spend exists or is created by this packet.",
+  "Approving capacity is not qualification; until CONF-LIVE-005/006 close, a lease yields only HOST_ISOLATION_ONLY preflight evidence.",
+  "GCP and systemd facts are on paper."
+ ]
+}

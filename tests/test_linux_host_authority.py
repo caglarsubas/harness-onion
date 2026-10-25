@@ -24,7 +24,10 @@ SCHEMAS = ["host-authority.schema.json", "host-recipe.schema.json", "launcher-in
 # The candidate's own files, and the contract directory with the D5a oracle's identity (design section 3), which a
 # separate agent writes and this test only names.
 CANDIDATE_FILES = sorted(["README.md", "vectors.json"] + list(RECORDS.values()) + SCHEMAS)
-CONTRACT_FILES = sorted(CANDIDATE_FILES + ["oracle-identity.json"])
+# Adoption (MON-LHA-C8-ADOPTED) adds the status and the three CONTRACT round records with their identities.
+ADOPTION_FILES = ["status.json"] + ["review-round%d.json" % n for n in (1, 2, 3)] + [
+    "review-identity-round%d.json" % n for n in (1, 2, 3)]
+CONTRACT_FILES = sorted(CANDIDATE_FILES + ["oracle-identity.json"] + ADOPTION_FILES)
 SPAN_SECTIONS = ("supersedes", "satisfied", "unchanged", "costScope", "reviewedNotBinding")
 BUILD_RULES = ["B-LHA-%d" % n for n in (1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)]
 
@@ -377,5 +380,5 @@ def test_b_lha_7_is_stated_and_enforced_both_ways():
 
 
 def test_the_status_line_names_the_current_candidate():
-    """LHA-C2-3: the README's status line names this candidate."""
-    assert "(candidate c7)" in (HERE / "README.md").read_text(encoding="utf-8").split("\n")[2]
+    """LHA-C2-3: the README's status line names the adopted candidate (MON-LHA-C8-ADOPTED)."""
+    assert "**ADOPTED** (candidate c8," in (HERE / "README.md").read_text(encoding="utf-8").split("\n")[2]

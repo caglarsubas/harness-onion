@@ -1,0 +1,46 @@
+{
+ "schemaVersion": "planeon.review-identity/v2",
+ "record": {
+  "path": "architecture/linux-host-authority/review-round3.json",
+  "sha256": "78c52c4e568bd460c476552a736419bed7438763fc2a7d7004d3a4a62fe80e28"
+ },
+ "reviewer": {
+  "agentId": "a47c06882e1e81388",
+  "agentType": "general-purpose subagent of the parallel lane session",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "241d4b17-8eea-48d8-b3bc-79c6c27a3233",
+  "lane": "parallel"
+ },
+ "author": {
+  "agentIds": [
+   "a9cff1754ecfe05b0"
+  ]
+ },
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "4f904aa8d81e102b17d162ba5a7742e31d27025cc394b1ffb7019f998edc0cdc",
+ "wrapperSha256": "9d73af49a30bc6ee76503979a2720159c06fec9885139ff4cdb37967eae1ee90",
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "3219828c609e8f0a9c39e001e22aaf235b8281ac",
+  "tree": "fe9620df6d39b8990eb82742ba2fa960d0a0ddab"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "993ec1bc225d73726c16dcd1c269e0b0ce60bb88",
+  "tree": "73b6787a21af1bb946eb1ca1c5809df5d32f3478"
+ },
+ "launched": "2026-10-25T12:49:15+08:00",
+ "finished": "2026-10-25T13:13:46+08:00",
+ "interruptions": [],
+ "operatorRelays": [],
+ "runs": [],
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-LHA-C8",
+  "date": "2026-10-25"
+ }
+}

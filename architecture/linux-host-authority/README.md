@@ -1,10 +1,10 @@
 # Linux host authority v1: the owner's per-run GCP Linux hosts, their recipe and key custody (MET-LINUX-008)
 
-Status: **CONTRACT_CANDIDATE_AWAITING_INDEPENDENT_REVIEW** (candidate c7). Roadmap item LINUX-HOST-AUTH-001, packet
-MET-LINUX-008, design revision 7 with the binding build rules B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18. Contract rounds
-run in series `MET-LINUX-008/contract` under the registered generic brief; review records and `status.json` come after
-adoption. DATA_CHECK_ONLY: published data and an offline checker. Nothing here creates a project, a VM, a key or spend,
-and no step here runs a cloud command.
+Status: **ADOPTED** (candidate c8, MON-LHA-C8-ADOPTED; `status.json`). Roadmap item LINUX-HOST-AUTH-001, packet
+MET-LINUX-008, design revision 7 with the binding build rules B-LHA-1, B-LHA-2 and B-LHA-4 to B-LHA-18. Three contract
+rounds ran in series `MET-LINUX-008/contract` under the registered generic brief, the third capped (MON-LHA-CR-CAP);
+their records and identities are beside this file. DATA_CHECK_ONLY: published data and an offline checker. Nothing here
+creates a project, a VM, a key or spend, and no step here runs a cloud command.
 
 ## What this contract does
 
@@ -37,6 +37,9 @@ other predicate of those files stands. An owner-approved licence charge would ne
 | `*.schema.json` | one closed schema per record, plus `drop-manifest.schema.json` for the per-run drop manifest (B-LHA-4) |
 | `vectors.json` | 2 positive sets, 270 record negatives, 2043 leaf vectors (one per decision-carrying leaf), a drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives |
 | `oracle-identity.json` | the D5a oracle's identity under REVIEW-RECORD-V2, binding the oracle test file |
+| `status.json` | `planeon.internal.linux-host-authority-status/v1`: the adoption, the reviews, the oracle and the carried notes |
+| `review-round1.json` to `review-round3.json` | the three CONTRACT round records (`planeon.review-record/v2`) |
+| `review-identity-round1.json` to `review-identity-round3.json` | each round's identity (`planeon.review-identity/v2`) |
 | `../../scripts/linux_host_authority.py` | the offline checker, standard library only |
 | `../../tests/test_linux_host_authority.py` | the candidate's own tests |
 | `../../tests/test_linux_host_authority_oracle.py` | the D5a oracle tests, written outside the candidate by a separate agent |
