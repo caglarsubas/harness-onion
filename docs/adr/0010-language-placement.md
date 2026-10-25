@@ -10,13 +10,16 @@ per-deployable language decision for `ai-gateway`, `protocol-gateway` and `tool-
 item LANG-HOTPATH-DECISION-001), an R04 scope note, and a later Go client in R02 (SDK-GO-CLIENT-001). The owner's
 LANG-D2 (2026-10-25) then fixed this ADR's content, (a) to (g) below.
 
-Until now each repository's language choice sat only in its plan's toolchain section
-(`docs/repositories/NN-<repository>.md`), one plan at a time. Each added toolchain is also a lifecycle cost in the
-owner-operated offline verifier, which pins the toolchains it builds with (LANG-D2 (f)).
+Until now each repository's language choice sat in its plan's toolchain section
+(`docs/repositories/NN-<repository>.md`), one plan at a time, and the Rust of R10's native roles and R12's native probes
+in the alpha-2 records (`docs/alpha-2/W01_AMENDMENT_W02D.md:24` and `docs/alpha-2/ENFORCEMENT_TEST_PLAN.md:12-13`). Each
+added toolchain is also a lifecycle cost in the owner-operated offline verifier, which pins the toolchains it builds
+with (LANG-D2 (f)).
 
-This ADR records the planned language of the 13 repositories of `architecture/repositories.yaml`, the 28 deployables
-of `architecture/services.yaml` and five rows outside that catalogue, each tied to the plan lines that state it. It
-decides no deployable's language beyond what the repository plans state.
+This ADR records the planned language of the 13 repositories of `architecture/repositories.yaml`, the 28 deployables of
+`architecture/services.yaml` and five rows outside that catalogue, each tied to the lines that state it: in the
+repository plans or, for R10's native roles, R12's native probes and the model backends, in the alpha-2 records under
+`docs/alpha-2/`. It decides no deployable's language beyond what the repository plans state.
 
 ## Decision
 
@@ -42,9 +45,10 @@ infrastructure control loop is R10's Go operator. So R04's rows are not marked C
 there is no third, management, plane value.
 
 **The plane rule.** A row's plane is recorded only where a source states it. In `architecture/services.yaml`, kind
-`controller` or `agent` gives CONTROL and kind `gateway` gives DATA (plane source KIND_RULE), and the operator is
-CONTROL by (c) (OWNER_LANG_D2). Every other row is UNSTATED (NOT_STATED), because no source states a CONTROL or DATA
-plane for it. `connector-controller` is a controller, but it stays UNSTATED while its role is to be confirmed. That
+`agent` gives CONTROL and kind `gateway` gives DATA (plane source KIND_RULE). Kind `controller` would also give CONTROL,
+but both controller rows are placed by name instead: the operator is CONTROL by (c) (OWNER_LANG_D2), and
+`connector-controller` stays UNSTATED while its role is to be confirmed, so no row takes its plane from kind
+`controller`. Every other row is UNSTATED (NOT_STATED), because no source states a CONTROL or DATA plane for it. That
 gives 2 CONTROL rows (`operator` and `fleet-sync-agent`), 3 DATA rows (`ai-gateway`, `experience-gateway` and
 `protocol-gateway`) and 23 UNSTATED rows.
 
