@@ -214,6 +214,8 @@ def shape(value: Any, schema: dict, where: str = "$") -> None:
 
 # The strings each rule below has already passed: both rules are pure functions of the string, so a string that passed
 # once passes again, and only a failing string's message needs its path (c7: the replay runs every rule per vector).
+# The text patterns these rules read (FORBIDDEN_TEXT, NAMED_TEXT) must never be patched at run time, not even in a
+# test: a string cached here as passed would hide the patched pattern.
 _PASSED_FREE_TEXT: set = set()
 _PASSED_NAMED_TEXT: set = set()
 
@@ -4852,7 +4854,7 @@ def replay(vectors: Any, schemas_: dict, records: dict, base: Base) -> dict:
         counts[row["target"]] += 1
         ids.append(row["id"])
     # (ii) One generated refusal vector per decision-carrying leaf: the published set with that leaf's first occurrence
-    # set to another value of its type, refused as recorded.
+    # set to another value of its type, or to the string "MUTATED" where the leaf is null, refused as recorded.
     for row in vectors["leafVectors"]:
         require(set(row) == {"id", "rule", "target", "leaf", "value", "refusal"} and row["target"] in KINDS,
                 "closed leaf vector " + str(row.get("id")))

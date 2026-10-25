@@ -70,7 +70,11 @@ organization id, a custom role's full name, an SSH key, a price, an OS Login sty
 by `.`, and a list index written as the entry's id where the list is id-keyed, `[*]` otherwise. The checker closes every
 id-keyed list (the checker's `ID_KEYED`) before anything reads it by id: each id once, so a wrong entry can never hide
 behind a correct copy with the same id ("an id-keyed list names each entry once"), and the design's ids, in order where
-the design fixes one, otherwise as an exact set. Every decision-carrying leaf of the four records is then pinned to its
+the design fixes one, otherwise as an exact set. That rule is the refusal a repeated id meets in 11 of the 37 id-keyed
+lists; in the other 26, the list's own ordered comparison with the design's ids refuses it first, with that list's
+message. Five lists are compared as sets, in any order: `hostInventory.leftOut`, `packages.sources`,
+`access.leaseBindings`, `liveLauncher.trustMounts` and the launchers' `steps`. Every decision-carrying leaf of the four
+records is then pinned to its
 published value in the generated `LEAF_PINS` block, each pin under the source it cites (a decision, a B-LHA rule or a
 `DESIGN.r7.md` line), and checked last, so every earlier rule keeps its own refusal: 2001 leaves. The long texts an
 explicit sha256 check already fixes exactly are left to that check (`LEAF_EXPLICIT`: the decision lines, the owner's
@@ -541,8 +545,9 @@ launchers (section 8 and B-LHA-1, 4, 5, 11, the drop and staging directories, th
 the export unit's hosts, a third trigger unit and repeated ids) and 62 on custody (section 8, the string rule, B-LHA-2,
 4, 7 in both directions, the local and cluster CAs, the token sessions, the bundles, the host ledger, LHA-CN-2, repeated
 ids). Then 2043 leaf vectors, one per decision-carrying leaf (`leafVectors`): the published set with that leaf's first
-occurrence set to another value of its type, refused as recorded, by the leaf's own rule where one reads it and by its
-pin otherwise. A drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the
+occurrence set to another value of its type, or to the string `MUTATED` where the leaf is null (88 vectors: 53 `member`
+and 35 `supersededBy` leaves), refused as recorded, by the leaf's own rule where one reads it and by its pin otherwise.
+A drop-manifest positive with 11 negatives, 4 signature rows and 8 parse negatives cover B-LHA-4, the
 fixed target list, the pattern ending and the parse rules. Each vector names the rule it backs and its recorded refusal.
 
 ## Preconditions outside this packet
