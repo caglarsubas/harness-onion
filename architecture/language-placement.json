@@ -1,0 +1,1128 @@
+{
+ "schemaVersion": "planeon.internal.language-placement/v1",
+ "adr": "docs/adr/0010-language-placement.md",
+ "policySha256": "4b0a8a4b9e043823cfa884bdb883ae5b8f796877ead7bdbc413b318082fbc441",
+ "catalogues": [
+  {
+   "path": "architecture/services.yaml",
+   "sha256": "857376b5e2b10a2a2542124a7d36b770eca531d15e463d68415416b887dd90a6"
+  },
+  {
+   "path": "architecture/repositories.yaml",
+   "sha256": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d"
+  }
+ ],
+ "repositories": [
+  {
+   "id": "harness-engineering",
+   "name": "Harness-Engineering",
+   "rNumber": "R00",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/00-harness-engineering.md",
+     "lines": [
+      1231,
+      1231
+     ],
+     "sha256": "e27d00ffab638fa95765c0030e8411238fd1267355f00b6490899efaa8fa1379",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "contracts",
+   "name": "mas-harness-contracts",
+   "rNumber": "R01",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/01-mas-harness-contracts.md",
+     "lines": [
+      125,
+      125
+     ],
+     "sha256": "be2543137569908b8be2b42bc405e43f8f54068f5cbf9358d9137dc540a986e7",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sdks",
+   "name": "mas-harness-sdks",
+   "rNumber": "R02",
+   "languages": [
+    "PYTHON",
+    "TYPESCRIPT"
+   ],
+   "toolchain": "Python 3.10-3.13 with development baseline 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/02-mas-harness-sdks.md",
+     "lines": [
+      92,
+      94
+     ],
+     "sha256": "cb26ac486ac53e2e32efeecfb71597fbd6f703be0e78de7287b812a3818ab750",
+     "evidence": [
+      "Python",
+      "TypeScript"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "industry-packs",
+   "name": "mas-harness-industry-packs",
+   "rNumber": "R03",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/03-mas-harness-industry-packs.md",
+     "lines": [
+      100,
+      105
+     ],
+     "sha256": "3d36a24ad7e8786617df1025dd8559c8e190b20cd72a8e91fe14d3bd5170c8f4",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "control-plane",
+   "name": "mas-harness-control-plane",
+   "rNumber": "R04",
+   "languages": [
+    "PYTHON",
+    "TYPESCRIPT"
+   ],
+   "toolchain": "Node 24.20.0 LTS",
+   "sources": [
+    {
+     "path": "docs/repositories/04-mas-harness-control-plane.md",
+     "lines": [
+      102,
+      103
+     ],
+     "sha256": "827621a9f9f7c6d648945beaae1d450ec270bc2f233bb7bcb92f3f2a1121cebe",
+     "evidence": [
+      "TypeScript",
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "runtime-plane",
+   "name": "mas-harness-runtime-plane",
+   "rNumber": "R05",
+   "languages": [
+    "PYTHON",
+    "TYPESCRIPT"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "lines": [
+      88,
+      93
+     ],
+     "sha256": "1fad9b9c10c5d3a1842b9f2e64248d0365153ce5ab2b7135315f9126d2040caa",
+     "evidence": [
+      "Python",
+      "TypeScript"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "model-plane",
+   "name": "mas-harness-model-plane",
+   "rNumber": "R06",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/06-mas-harness-model-plane.md",
+     "lines": [
+      99,
+      99
+     ],
+     "sha256": "c26505679ded36b84086aa29ef67787df474eab1b283562294a88eeddbf9ee53",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "knowledge-plane",
+   "name": "mas-harness-knowledge-plane",
+   "rNumber": "R07",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "lines": [
+      118,
+      118
+     ],
+     "sha256": "1eb84261a4aa1d05f9a89fed894497532afdebabdf7d8f367f75063a5fe8ed57",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "execution-plane",
+   "name": "mas-harness-execution-plane",
+   "rNumber": "R08",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "trust-plane",
+   "name": "mas-harness-trust-plane",
+   "rNumber": "R09",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "operator",
+   "name": "mas-harness-operator",
+   "rNumber": "R10",
+   "languages": [
+    "GO",
+    "RUST"
+   ],
+   "toolchain": "Go 1.26.7",
+   "sources": [
+    {
+     "path": "docs/repositories/10-mas-harness-operator.md",
+     "lines": [
+      152,
+      152
+     ],
+     "sha256": "0c87e82ec386a5e786d638756e78a1a8401f0423530abf568df61f6bb6ec80b3",
+     "evidence": [
+      "Go 1.26.7"
+     ]
+    },
+    {
+     "path": "docs/alpha-2/W01_AMENDMENT_W02D.md",
+     "lines": [
+      24,
+      24
+     ],
+     "sha256": "1412e93a4c6a25796fd2a1a8f1e1aa7e4c3909337f2ffe1d5e55dccae709b133",
+     "evidence": [
+      "Rust",
+      "The native roles are Rust with musl"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "distribution",
+   "name": "mas-harness-distribution",
+   "rNumber": "R11",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/11-mas-harness-distribution.md",
+     "lines": [
+      163,
+      163
+     ],
+     "sha256": "b588ef9820998d0bb7f74dfbfdf5826d2b7f6d3035ed16e3636891cc75b5a363",
+     "evidence": [
+      "Python"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "conformance-labs",
+   "name": "mas-harness-conformance-labs",
+   "rNumber": "R12",
+   "languages": [
+    "PYTHON",
+    "RUST"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/12-mas-harness-conformance-labs.md",
+     "lines": [
+      408,
+      409
+     ],
+     "sha256": "41aaf18e3fa06423cc161c0e7e6415705606b91b18b92e99378a08e814d35dcf",
+     "evidence": [
+      "Python",
+      "Node 24.20.0 LTS and Playwright for portal/streaming interaction only"
+     ]
+    },
+    {
+     "path": "docs/alpha-2/ENFORCEMENT_TEST_PLAN.md",
+     "lines": [
+      12,
+      13
+     ],
+     "sha256": "3a2da00d574c1db0e90843925903a4949deae857d8f3319bf4ea8daee4f16a9c",
+     "evidence": [
+      "Rust",
+      "static Rust+musl probe binaries"
+     ]
+    }
+   ]
+  }
+ ],
+ "deployables": [
+  {
+   "id": "bundle-verifier",
+   "ownerRepository": "mas-harness-operator",
+   "kind": "job",
+   "plannedLanguage": "GO",
+   "toolchain": "Go 1.26.7",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/10-mas-harness-operator.md",
+    "lines": [
+     152,
+     154
+    ],
+    "sha256": "55fb7b82a97624352fb29d09289a93e082ac40e4af3eb19cd4e1a5565fc3e524",
+    "evidence": [
+     "`bundle-verifier`",
+     "Go 1.26.7"
+    ]
+   }
+  },
+  {
+   "id": "otel-collector",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "collector",
+   "plannedLanguage": "UPSTREAM_OWN",
+   "toolchain": "upstream pinned images/config modules",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     100,
+     100
+    ],
+    "sha256": "ce0421852dd2fa9b30018241180dc5f15bd8f6cebcc3c77fe453fe896b83de87",
+    "evidence": [
+     "OTel Collector",
+     "upstream"
+    ]
+   }
+  },
+  {
+   "id": "operator",
+   "ownerRepository": "mas-harness-operator",
+   "kind": "controller",
+   "plannedLanguage": "GO",
+   "toolchain": "Go 1.26.7",
+   "plane": "CONTROL",
+   "planeSource": "OWNER_LANG_D2",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/10-mas-harness-operator.md",
+    "lines": [
+     152,
+     153
+    ],
+    "sha256": "49e96f7b0f16739d4d5cf8f518dbb3d290fae28ccdfa2bb973dddfbbfba4098a",
+    "evidence": [
+     "`mas-harness-operator`",
+     "Go 1.26.7"
+    ]
+   }
+  },
+  {
+   "id": "policy-decision",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`policy-decision`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "sandbox-runner",
+   "ownerRepository": "mas-harness-execution-plane",
+   "kind": "job",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "lines": [
+     101,
+     102
+    ],
+    "sha256": "cb0d55a0ecb58f2cbebcc3fb3fc65a2633f431e4c81459a5d026d3bb1906deb9",
+    "evidence": [
+     "`sandbox-runner`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "fleet-sync-agent",
+   "ownerRepository": "mas-harness-operator",
+   "kind": "agent",
+   "plannedLanguage": "GO",
+   "toolchain": "Go 1.26.7",
+   "plane": "CONTROL",
+   "planeSource": "KIND_RULE",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/10-mas-harness-operator.md",
+    "lines": [
+     152,
+     155
+    ],
+    "sha256": "0a582cd5fb20f86815b453fa6e81e5bed5054ddac463628d899ab66172e098e0",
+    "evidence": [
+     "`fleet-sync-agent`",
+     "Go 1.26.7"
+    ]
+   }
+  },
+  {
+   "id": "guardrail-service",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`guardrail-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "usage-ledger",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`usage-ledger`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "governance-service",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`governance-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "domain-service",
+   "ownerRepository": "mas-harness-knowledge-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "lines": [
+     117,
+     118
+    ],
+    "sha256": "c419fb615fb49071ad071480b547a90b42d4b97276fe637d31a1db9c2068be06",
+    "evidence": [
+     "`domain-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "registry-service",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`registry-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "inference-api",
+   "ownerRepository": "mas-harness-model-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/06-mas-harness-model-plane.md",
+    "lines": [
+     99,
+     99
+    ],
+    "sha256": "c26505679ded36b84086aa29ef67787df474eab1b283562294a88eeddbf9ee53",
+    "evidence": [
+     "`inference-api`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "connector-controller",
+   "ownerRepository": "mas-harness-knowledge-plane",
+   "kind": "controller",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "CONTROL_LOOP_TO_BE_CONFIRMED",
+   "source": {
+    "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "lines": [
+     117,
+     118
+    ],
+    "sha256": "c419fb615fb49071ad071480b547a90b42d4b97276fe637d31a1db9c2068be06",
+    "evidence": [
+     "`connector-controller`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "memory-service",
+   "ownerRepository": "mas-harness-knowledge-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "lines": [
+     117,
+     118
+    ],
+    "sha256": "c419fb615fb49071ad071480b547a90b42d4b97276fe637d31a1db9c2068be06",
+    "evidence": [
+     "`memory-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "control-web",
+   "ownerRepository": "mas-harness-control-plane",
+   "kind": "web-api",
+   "plannedLanguage": "TYPESCRIPT",
+   "toolchain": "Node 24.20.0 LTS",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/04-mas-harness-control-plane.md",
+    "lines": [
+     102,
+     102
+    ],
+    "sha256": "d30b979e221cc0714a6359fdb25a3b10fda2c6bfac3373353cf099bbfc790bee",
+    "evidence": [
+     "`control-web`",
+     "TypeScript"
+    ]
+   }
+  },
+  {
+   "id": "ingest-worker",
+   "ownerRepository": "mas-harness-knowledge-plane",
+   "kind": "worker",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "lines": [
+     117,
+     118
+    ],
+    "sha256": "c419fb615fb49071ad071480b547a90b42d4b97276fe637d31a1db9c2068be06",
+    "evidence": [
+     "`ingest-worker`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "retrieval-service",
+   "ownerRepository": "mas-harness-knowledge-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "lines": [
+     117,
+     118
+    ],
+    "sha256": "c419fb615fb49071ad071480b547a90b42d4b97276fe637d31a1db9c2068be06",
+    "evidence": [
+     "`retrieval-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "protocol-gateway",
+   "ownerRepository": "mas-harness-execution-plane",
+   "kind": "gateway",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "DATA",
+   "planeSource": "KIND_RULE",
+   "status": "PENDING_HOTPATH_DECISION",
+   "source": {
+    "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "lines": [
+     101,
+     102
+    ],
+    "sha256": "cb0d55a0ecb58f2cbebcc3fb3fc65a2633f431e4c81459a5d026d3bb1906deb9",
+    "evidence": [
+     "`protocol-gateway`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "evidence-service",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`evidence-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "profile-compiler-worker",
+   "ownerRepository": "mas-harness-control-plane",
+   "kind": "worker",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "NO_STATED_DEFAULT",
+   "source": {
+    "path": "docs/repositories/04-mas-harness-control-plane.md",
+    "lines": [
+     103,
+     103
+    ],
+    "sha256": "8d40cffb2c57a6456949c26c7fe086d7a4ba991e2299f4af7a268482597d1f42",
+    "evidence": [
+     "`profile-compiler-worker`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "index-worker",
+   "ownerRepository": "mas-harness-knowledge-plane",
+   "kind": "worker",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "lines": [
+     117,
+     118
+    ],
+    "sha256": "c419fb615fb49071ad071480b547a90b42d4b97276fe637d31a1db9c2068be06",
+    "evidence": [
+     "`index-worker`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "orchestration-api",
+   "ownerRepository": "mas-harness-execution-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "lines": [
+     101,
+     102
+    ],
+    "sha256": "cb0d55a0ecb58f2cbebcc3fb3fc65a2633f431e4c81459a5d026d3bb1906deb9",
+    "evidence": [
+     "`orchestration-api`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "decision-service",
+   "ownerRepository": "mas-harness-execution-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "lines": [
+     101,
+     102
+    ],
+    "sha256": "cb0d55a0ecb58f2cbebcc3fb3fc65a2633f431e4c81459a5d026d3bb1906deb9",
+    "evidence": [
+     "`decision-service`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "assurance-worker",
+   "ownerRepository": "mas-harness-trust-plane",
+   "kind": "worker",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "lines": [
+     90,
+     100
+    ],
+    "sha256": "2f2356e41c991dc9a32cd0f354e6efa2ce5af9842267bd3000e95cbed1da4072",
+    "evidence": [
+     "`assurance-worker`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "tool-broker",
+   "ownerRepository": "mas-harness-execution-plane",
+   "kind": "api",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "PENDING_HOTPATH_DECISION",
+   "source": {
+    "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "lines": [
+     101,
+     102
+    ],
+    "sha256": "cb0d55a0ecb58f2cbebcc3fb3fc65a2633f431e4c81459a5d026d3bb1906deb9",
+    "evidence": [
+     "`tool-broker`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "orchestration-worker",
+   "ownerRepository": "mas-harness-execution-plane",
+   "kind": "worker",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "UNSTATED",
+   "planeSource": "NOT_STATED",
+   "status": "AS_PLANNED",
+   "source": {
+    "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "lines": [
+     101,
+     102
+    ],
+    "sha256": "cb0d55a0ecb58f2cbebcc3fb3fc65a2633f431e4c81459a5d026d3bb1906deb9",
+    "evidence": [
+     "`orchestration-worker`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "ai-gateway",
+   "ownerRepository": "mas-harness-runtime-plane",
+   "kind": "gateway",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "DATA",
+   "planeSource": "KIND_RULE",
+   "status": "PENDING_HOTPATH_DECISION",
+   "source": {
+    "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+    "lines": [
+     88,
+     88
+    ],
+    "sha256": "fb3dd6f1ffeac2b7ec14d95989a52e7489172e5145bf99d7a2f6d62e1eaec8d1",
+    "evidence": [
+     "`ai-gateway`",
+     "Python"
+    ]
+   }
+  },
+  {
+   "id": "experience-gateway",
+   "ownerRepository": "mas-harness-runtime-plane",
+   "kind": "gateway",
+   "plannedLanguage": "PYTHON",
+   "toolchain": "Python 3.12.14",
+   "plane": "DATA",
+   "planeSource": "KIND_RULE",
+   "status": "PENDING_HOTPATH_DECISION",
+   "source": {
+    "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+    "lines": [
+     88,
+     89
+    ],
+    "sha256": "8f083ec923768d34d679f4acce728e1bb036a37dd6d679273c93da415790126d",
+    "evidence": [
+     "`experience-gateway`",
+     "Python"
+    ]
+   }
+  }
+ ],
+ "outsideCatalogue": [
+  {
+   "id": "reference-channel-ui",
+   "ownerRepository": "mas-harness-runtime-plane",
+   "plannedLanguage": "TYPESCRIPT",
+   "sources": [
+    {
+     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "lines": [
+      90,
+      93
+     ],
+     "sha256": "1a915c7c6bef4b2a156927261d58e0a0a6ccb08d429da685ff79b1bbca382e4b",
+     "evidence": [
+      "`reference-channel-ui`",
+      "TypeScript"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "model-backends",
+   "ownerRepository": "mas-harness-model-plane",
+   "plannedLanguage": "UPSTREAM_OWN",
+   "sources": [
+    {
+     "path": "docs/repositories/06-mas-harness-model-plane.md",
+     "lines": [
+      100,
+      100
+     ],
+     "sha256": "7766861120cd4ca5fd0862c11dd145ed847ee532e9d8f4e27a20374041fb7f4a",
+     "evidence": [
+      "`model-backend-ollama`",
+      "`model-backend-llama-cpp`",
+      "`model-backend-vllm`"
+     ]
+    },
+    {
+     "path": "docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md",
+     "lines": [
+      32,
+      35
+     ],
+     "sha256": "d2e524c9151b8803b2ffe95c25a765adbfb17d72e9ff6bfa82470cf872d9bebc",
+     "evidence": [
+      "OSS implementation",
+      "ollama/ollama",
+      "ggml-org/llama.cpp",
+      "vllm-project/vllm"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "native-host-enforcement-roles",
+   "ownerRepository": "mas-harness-operator",
+   "plannedLanguage": "RUST",
+   "sources": [
+    {
+     "path": "docs/alpha-2/W01_AMENDMENT_W02D.md",
+     "lines": [
+      24,
+      24
+     ],
+     "sha256": "1412e93a4c6a25796fd2a1a8f1e1aa7e4c3909337f2ffe1d5e55dccae709b133",
+     "evidence": [
+      "Rust",
+      "The native roles are Rust with musl"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "r12-native-probes",
+   "ownerRepository": "mas-harness-conformance-labs",
+   "plannedLanguage": "RUST",
+   "sources": [
+    {
+     "path": "docs/alpha-2/ENFORCEMENT_TEST_PLAN.md",
+     "lines": [
+      12,
+      13
+     ],
+     "sha256": "3a2da00d574c1db0e90843925903a4949deae857d8f3319bf4ea8daee4f16a9c",
+     "evidence": [
+      "Rust",
+      "static Rust+musl probe binaries"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "typescript-sdk",
+   "ownerRepository": "mas-harness-sdks",
+   "plannedLanguage": "TYPESCRIPT",
+   "sources": [
+    {
+     "path": "docs/repositories/02-mas-harness-sdks.md",
+     "lines": [
+      94,
+      94
+     ],
+     "sha256": "93f3bf2d976a6f0bfff2e8372b92755b6efb922e1190d038e65cb96064b25ad5",
+     "evidence": [
+      "TypeScript",
+      "`@planeon/harness-sdk`"
+     ]
+    }
+   ]
+  }
+ ],
+ "exceptions": [
+  {
+   "deployable": "ai-gateway",
+   "status": "PENDING_HOTPATH_DECISION",
+   "defaultLanguage": "GO",
+   "plannedLanguage": "PYTHON",
+   "owner": {
+    "repository": "mas-harness-runtime-plane",
+    "packet": "RUN-001"
+   },
+   "evidence": "PENDING: LANG-HOTPATH-DECISION-001's measured boundary decision and benchmark against the production SLO",
+   "reviewTrigger": "the first packet that fixes `ai-gateway`'s implementation language, or LANG-HOTPATH-DECISION-001's decision, whichever comes first"
+  },
+  {
+   "deployable": "experience-gateway",
+   "status": "PENDING_HOTPATH_DECISION",
+   "defaultLanguage": "GO",
+   "plannedLanguage": "PYTHON",
+   "owner": {
+    "repository": "mas-harness-runtime-plane",
+    "packet": "RUN-EXP-001"
+   },
+   "evidence": "PENDING: LANG-HOTPATH-DECISION-001's measured boundary decision and benchmark against the production SLO",
+   "reviewTrigger": "the first packet that fixes `experience-gateway`'s implementation language, or LANG-HOTPATH-DECISION-001's decision, whichever comes first"
+  },
+  {
+   "deployable": "protocol-gateway",
+   "status": "PENDING_HOTPATH_DECISION",
+   "defaultLanguage": "GO",
+   "plannedLanguage": "PYTHON",
+   "owner": {
+    "repository": "mas-harness-execution-plane",
+    "packet": "EXEC-PROT-001"
+   },
+   "evidence": "PENDING: LANG-HOTPATH-DECISION-001's measured boundary decision and benchmark against the production SLO",
+   "reviewTrigger": "the first packet that fixes `protocol-gateway`'s implementation language, or LANG-HOTPATH-DECISION-001's decision, whichever comes first"
+  },
+  {
+   "deployable": "tool-broker",
+   "status": "PENDING_HOTPATH_DECISION",
+   "defaultLanguage": "GO",
+   "plannedLanguage": "PYTHON",
+   "owner": {
+    "repository": "mas-harness-execution-plane",
+    "packet": "EXEC-TOOL-001"
+   },
+   "evidence": "PENDING: LANG-HOTPATH-DECISION-001's measured boundary decision and benchmark against the production SLO",
+   "reviewTrigger": "the first packet that fixes `tool-broker`'s implementation language, or LANG-HOTPATH-DECISION-001's decision, whichever comes first"
+  },
+  {
+   "deployable": "connector-controller",
+   "status": "CONTROL_LOOP_TO_BE_CONFIRMED",
+   "defaultLanguage": "GO",
+   "plannedLanguage": "PYTHON",
+   "owner": {
+    "repository": "mas-harness-knowledge-plane",
+    "packet": "KN-DATA-001"
+   },
+   "evidence": "PENDING: KN-DATA-001's (or its successor's) classification of the role as a control loop or not, and, if it is one, LANG-HOTPATH-DECISION-001's decision",
+   "reviewTrigger": "the first packet that fixes `connector-controller`'s implementation language, or LANG-HOTPATH-DECISION-001's decision, whichever comes first"
+  }
+ ]
+}
