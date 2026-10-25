@@ -1,0 +1,56 @@
+{
+ "schemaVersion": "planeon.review-identity/v2",
+ "record": {
+  "path": "architecture/policy-observation-digests-v2/review-round3.json",
+  "sha256": "d0815a653139528d7dd44f8209819fdaf2b36f8554425143c1614715833f4796"
+ },
+ "reviewer": {
+  "agentId": "ab895d36d4ada2099",
+  "agentType": "general-purpose subagent of the primary lane session",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+  "lane": "primary"
+ },
+ "author": {
+  "agentIds": [
+   "79e9a312-b1f1-4f77-b18f-691a8203f4c5",
+   "a1633b08fa51db70b",
+   "ae04b845363ab1131",
+   "a4fd305c3cb001ef9"
+  ]
+ },
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "9bb3f53f5e4e52e1a46f6d84d8816bb5552fb2ee3b4801fd142626a7c39aa917",
+ "wrapperSha256": null,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "b8049763e4326acfba7d2ab85a93305c3689f30b",
+  "tree": "b0cdef0f2d5405ad8d0f7c4c1b020aff1f83b2c3"
+ },
+ "base": {
+  "repository": "harness-onion",
+  "commit": "4a310a82b3b4fc32d0b431659f074a84eee0cf70",
+  "tree": "00d36d04ec3d9686aafb66f847ea1391e452cc5c"
+ },
+ "launched": "2026-10-25T00:29:10+08:00",
+ "finished": "2026-10-25T00:42:41+08:00",
+ "interruptions": [],
+ "operatorRelays": [
+  "the launch prompt told the reviewer that OWNER_DECISIONS.md now ends with MON-I01S-CR3-GO and MON-I01S-CB3-1..4 (204 lines, not the rules' 191; appended before launch), that the monitor keeps Q-CB3-1..4 as built and restates the cap outcome, and that the reviewer judges Q-CB3-1..4 itself all the same"
+ ],
+ "runs": [
+  {
+   "limit": "commands over 120 s",
+   "used": 0
+  }
+ ],
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-I01S-CR3-KEEP; MON-I01S-CAP-A: C3-1 becomes A-I01S-1, text-only c4 errata adopted from an ADOPTION_CHECK",
+  "date": "2026-10-25"
+ }
+}

@@ -1,6 +1,20 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-LINUX-009
+## Current source preparation — MET-ENFORCE-042
+
+MET-ENFORCE-042 (DIGEST-CONTRACT-V2): the I01 digest contract v2 beside the frozen v1
+(architecture/policy-observation-digests-v2/, model scripts/policy_observation_digests_v2.py): the sealed A2 set rendered
+with admission semantics v4 and workload profile v2's complete positive (W1, in the layer test), with edge record v11
+(architecture/artifact-edges/operator-harness-engineering-v11.json and README-v11.md) for HE-004-I01B4, adopted as
+candidate c4 after three in-tree CONTRACT rounds (the rounds with their identities, the source index, the D5a oracle
+identity and the mechanics pins record in the contract directory), with the D5a oracle test and the registry rider (the
+brief registry gains this packet's PACKET and CONTRACT series). The non-chain pinned files (I01 v1 among them) stay
+byte-identical, and the chain validators and tests in the pin lists change only by the chain-bump vocabulary, under the
+step rule (B-L1-3); nothing is installed. Gate material only through the registry (GATE_REVIEW_PROCESS), so the owner
+approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and step
+rule. Alpha2 OPEN; 264 accepted plus MET-ENFORCE-042 only.
+
+## Historical root-alias source preparation — MET-LINUX-009
 
 MET-LINUX-009 (LINUX-ROOT-ALIASES): the signed root-alias contract for the native runner kit: version 4 inputs with a
 signed root-alias record in ci/linux-runner/common.py, launcher.py and prepare.py (v3 unchanged, v4 opt-in through a
@@ -1429,6 +1443,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 136. `MET-LIVE-003`: bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data (the four v1/ handoff files byte-identical, the binding record with LPK-0's NEUTRAL_INTERFACE_CONTRACT placeholder bound, model, vectors and replay) with its D5a oracle; form-only; no gate path.
 137. `MET-LIVE-004`: publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); no gate path.
 138. `MET-LINUX-009`: publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material, the owner's per-PR merge approval.
+139. `MET-ENFORCE-042`: publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); gate material only through the registry.
 
 ## Testing, verification, and acceptance
 

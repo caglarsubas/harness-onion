@@ -1,6 +1,50 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-LINUX-009 source preparation, October 24, 2026
+## Current checkpoint — MET-ENFORCE-042 source preparation, October 25, 2026
+
+Alpha2 OPEN. MET-LINUX-009 (LINUX-ROOT-ALIASES) passed required verify and merged as main a882761. DIGEST-CONTRACT-V2 (the
+LPK-1 step S1, with W1 and S2; the lane monitor's owner-delegated rulings MON-I01S-1 to MON-I01S-14, MON-I01S-D1 to
+MON-I01S-D3, MON-I01S-DESIGN-CLOSED, MON-I01S-C4-ADOPT, MON-I01S-ORACLE-KEEP and MON-I01S-MECH-GO) publishes the I01 digest
+contract v2 beside the frozen v1. The v2 contract (architecture/policy-observation-digests-v2/, model
+scripts/policy_observation_digests_v2.py) renders the sealed A2 set with admission semantics v4 (planeon-qual's fence
+sha256:9b1ddc10...ca60) and takes workload profile v2 for its complete positive, with the vectors re-derived from v1's
+(ids kept) and the model's own count 323. W1 is in the new layer's test: VPO's validate_messages and profile v2's validate
+and precondition on the complete positive, with no skip, expected-failure mark or import guard. Edge record v11
+(architecture/artifact-edges/operator-harness-engineering-v11.json and README-v11.md) keeps v10's 72 rows and registers
+the contract's three data files and admission v4's and profile v2's vectors for HE-004-I01B4; nothing is installed and R10
+keeps v1 until S3. The contract was adopted as candidate c4 (MON-I01S-C4-ADOPT) after three in-tree CONTRACT rounds of the
+MET-ENFORCE-042/contract series, published under architecture/policy-observation-digests-v2/ with their identities, the
+source index and the D5a oracle identity that binds tests/test_policy_observation_digests_v2_oracle.py (KEEP). The
+non-chain pinned files (I01 v1, the frozen models and inputs, admission v2 to v4, profile v2, the edge records v1 to v10
+and every legacy review record among them) stay byte-identical, and the chain validators and tests in the pin lists change
+only by the chain-bump vocabulary, under the step rule (B-L1-3); the pins and the evolution-surface classes are recorded
+in architecture/policy-observation-digests-v2/mechanics-pins.json (B-L1-4). The brief registry gains this packet's PACKET
+and CONTRACT series (the registry rider), the packet's one gate path (GATE_REVIEW_PROCESS), so the owner approves the
+merge per PR, bound to the head. Its new layer checks the adoption and the rounds, the model over its vectors from this
+era's bytes, admission v4's rendering of the sealed values, B-I01S-1's binding, edge record v11, the pins and classes, the
+registry's two new entries after the base's ten, and that the packet's gate paths are exactly the registry. It is built
+under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump vocabulary, 264's
+layer by the bridge vocabulary, and 264's test keeps its 8 own routes and the adjacent one and one payload mutation (C2),
+while the new head's test keeps the full fan-in. MET-ENFORCE-042 is the sole 265th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ENFORCE-042 / DIGEST-CONTRACT-V2 | SOURCE_PREPARED | The I01 digest contract v2 (265th packet): the successor beside the frozen v1 under architecture/policy-observation-digests-v2/ with its model scripts/policy_observation_digests_v2.py, rendering the sealed A2 set with admission semantics v4 and taking workload profile v2 for its complete positive (W1), with edge record v11 for HE-004-I01B4; adopted as candidate c4 after three in-tree CONTRACT rounds; every non-chain pinned file byte-identical (I01 v1 among them), the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); nothing installed; gate material only through the registry rider, the owner's per-PR merge |
+| Alpha2A | MET-LINUX-009 / LINUX-ROOT-ALIASES | VERIFY_PASSED_MERGED | Merged as main a882761 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical root-alias source checkpoint — MET-LINUX-009 source preparation, October 24, 2026
 
 Alpha2 OPEN. MET-LIVE-004 (LINUX-PROBE-KIT-ADMISSION) passed required verify and merged as main 675dacc. LINUX-ROOT-ALIASES
 (the lane monitor's owner-delegated rulings, among them MON-RA2-NEXT, MON-RA-SERIES, MON-RA-R1-KEEP, MON-RA-R2-KEEP,
@@ -2591,7 +2635,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LINUX-PROBE-KIT-GATE / MET-GOV-003 · Amend the evolution surface record to version 3 (the Linux probe kit's top-level data directory linux-probe-kit/ as CONTRACT_AND_SOURCE; vectors re-pinned; the D5a oracle test scoped and its identity re-issued) after independent design and contract review, with the MET-LIVE-004 brief registry entries; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · LINUX-PROBE-INTERFACE / MET-LIVE-003 · Bring the neutral Linux probe interface contract (Q-PK-6) into harness-onion as data, byte-identical (the four v1/ handoff files, the binding record with LPK-0's placeholder bound, the reference model and vectors), after one light review, with its D5a oracle; pass required verify through the owner's App.
 - [x] Alpha 2A · LINUX-PROBE-KIT-ADMISSION / MET-LIVE-004 · Publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles, every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App.
-- [ ] Alpha 2A · LINUX-ROOT-ALIASES / MET-LINUX-009 · Publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
+- [x] Alpha 2A · LINUX-ROOT-ALIASES / MET-LINUX-009 · Publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
+- [ ] Alpha 2A · DIGEST-CONTRACT-V2 / MET-ENFORCE-042 · Publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
