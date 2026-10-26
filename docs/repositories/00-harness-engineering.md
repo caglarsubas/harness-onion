@@ -1,6 +1,17 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-LINUX-008
+## Current source preparation — MET-GOV-004
+
+MET-GOV-004 (LANG-PLACEMENT-ADR-001): the language-placement ADR docs/adr/0010-language-placement.md (the owner's
+language policy LANG-D2 (a) as one digest-bound line, and four tables rendered from the data), its data
+architecture/language-placement.json (the planned language of every catalogued repository and deployable, the rows
+outside the catalogue and the pending exceptions, each bound to its source lines), the minimal offline checker
+scripts/language_placement.py and its tests tests/test_language_placement.py, and the D5a oracle test
+tests/test_language_placement_oracle.py with its identity architecture/oracle-identity-language-placement.json. docs/DEVELOPMENT_STATUS.md gains one line citing the ADR, and the new layer pins it with the adopted files.
+The packet registers its own review series in the brief registry; its one gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS in the evolution surface record at this base), so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under
+MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 266 accepted plus MET-GOV-004 only.
+
+## Historical Linux host-authority source preparation — MET-LINUX-008
 
 MET-LINUX-008 (LINUX-HOST-AUTH-001): the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts
 (architecture/linux-host-authority/: the superseding host authority, the host recipe, the launcher install steps and the
@@ -1456,6 +1467,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 138. `MET-LINUX-009`: publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material, the owner's per-PR merge approval.
 139. `MET-ENFORCE-042`: publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); gate material only through the registry.
 140. `MET-LINUX-008`: publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class, the lane monitor's and the owner's PR approval.
+141. `MET-GOV-004`: publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 
