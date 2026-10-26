@@ -810,7 +810,7 @@ def test_every_reviewed_file_is_pinned():
     # The last round's subject is the adopted contract itself: it has no snapshot.
     assert not any(path.startswith(profile.CONTRACT_DIR + "round%d/" % profile.LAST_ROUND) for path in pinned)
     for path, expected in profile.ERA_SHA256.items():
-        assert profile.digest(profile.regular_bytes(path)) == expected
+        assert profile.digest(profile.reviewed_bytes(path)) == expected
 
 
 @pytest.mark.parametrize("path", ["docs/harnesses/execution.orchestration.md", "docs/harnesses/trust.observability-finops.md",

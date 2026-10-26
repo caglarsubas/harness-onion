@@ -798,7 +798,7 @@ def test_every_reviewed_file_is_pinned():
         # An earlier round's vectors are bound by digest in the status record, not copied.
         assert profile.CONTRACT_DIR + "round%d/vectors.json" % number not in pinned
     for path, expected in profile.ERA_SHA256.items():
-        assert profile.digest(profile.regular_bytes(path)) == expected
+        assert profile.digest(profile.reviewed_bytes(path)) == expected
 
 
 @pytest.mark.parametrize("path", ["docs/harnesses/execution.orchestration.md", "docs/harnesses/execution.tool-skill-sandbox.md",
