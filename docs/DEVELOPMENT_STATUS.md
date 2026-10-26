@@ -232,6 +232,7 @@ Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
 CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
 source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
 [Language placement ADR 0010](adr/0010-language-placement.md) (MET-GOV-004) records the planned-language baseline at 9184f5b6; its exceptions are pending LANG-HOTPATH-DECISION-001.
+[H10 execution authority ADR 0011](adr/0011-h10-execution-authority.md) (MET-ADOPT-005) records the owner's TECH-D1: PostgreSQL leases and outbox own H10 execution; Temporal is an optional provider.
 
 ## Retained implementation specifications and historical checkpoints
 
