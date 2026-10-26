@@ -1,6 +1,16 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-GOV-004
+## Current source preparation — MET-ADOPT-005
+
+MET-ADOPT-005 (TECH-ORCHESTRATION-001): the H10 execution authority ADR docs/adr/0011-h10-execution-authority.md (the
+owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox own H10 execution, and Temporal is an optional provider), the
+new planning-target block in docs/harnesses/execution.orchestration.md and one clause on line 103 of
+docs/repositories/08-mas-harness-execution-plane.md. docs/DEVELOPMENT_STATUS.md gains one line citing the ADR. The superseded older planning texts are named by path and line and
+not edited, and the provider catalog is unchanged. The packet registers its own review series in the brief registry;
+its two gate paths are docs/harnesses/execution.orchestration.md (GATE_HARNESS_DOCS) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 267 accepted plus
+MET-ADOPT-005 only.
+
+## Historical language-placement source preparation — MET-GOV-004
 
 MET-GOV-004 (LANG-PLACEMENT-ADR-001): the language-placement ADR docs/adr/0010-language-placement.md (the owner's
 language policy LANG-D2 (a) as one digest-bound line, and four tables rendered from the data), its data
@@ -1468,6 +1478,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 139. `MET-ENFORCE-042`: publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); gate material only through the registry.
 140. `MET-LINUX-008`: publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class, the lane monitor's and the owner's PR approval.
 141. `MET-GOV-004`: publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider), the owner's per-PR approval.
+142. `MET-ADOPT-005`: record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 
