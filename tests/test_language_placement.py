@@ -276,8 +276,10 @@ def _evidence_without(key, rid, token, index=0):
 
 
 R5_MUTATIONS = {
-    "digest-mismatch": lambda d: _row(d, "deployables", "operator")["source"].update(lines=[152, 152]),
-    "out-of-range": lambda d: _row(d, "deployables", "operator")["source"].update(lines=[5000, 5000]),
+    # the content rule: no block of the span's line count anywhere in the file has the recorded digest
+    "digest-mismatch": lambda d: _row(d, "deployables", "operator")["source"].update(sha256="0" * 64),
+    "line-count-changed": lambda d: _row(d, "deployables", "operator")["source"].update(lines=[152, 152]),
+    "line-count-changed-far": lambda d: _row(d, "deployables", "operator")["source"].update(lines=[5000, 5000]),
     "missing-path": lambda d: _row(d, "deployables", "operator")["source"].update(
         path="docs/repositories/99-mas-harness-none.md"),
     "evidence-not-in-span": lambda d: _row(d, "deployables", "operator")["source"]["evidence"].append("Kotlin"),
@@ -299,9 +301,63 @@ def test_source_mutations_are_r5(name):
     _refused("R5", {lp.DATA_PATH: _dump(data)})
 
 
-def test_a_moved_plan_line_is_r5():
-    plan = "docs/repositories/10-mas-harness-operator.md"
-    _refused("R5", {plan: b"\n" + (ROOT / plan).read_bytes()}, plan)
+HEAD_SUMMARY = {
+    "repositories": 13, "deployables": 28,
+    "byStatus": {"AS_PLANNED": 15, "PENDING_HOTPATH_DECISION": 4, "CONTROL_LOOP_TO_BE_CONFIRMED": 1,
+                 "NO_STATED_DEFAULT": 8},
+    "byPlane": {"CONTROL": 2, "DATA": 3, "UNSTATED": 23},
+    "outsideCatalogue": 5, "exceptions": 5, "spans": 49}
+
+
+@pytest.mark.parametrize("plan", ["docs/repositories/00-harness-engineering.md",
+                                  "docs/repositories/10-mas-harness-operator.md",
+                                  "docs/alpha-2/ENFORCEMENT_TEST_PLAN.md"])
+def test_a_shift_above_a_cited_span_is_accepted(plan):
+    # errata 2 (B2): the mechanics prepend sections to 00-harness-engineering.md, which moves R00's span
+    shifted = b"## A prepended section\n\nThree lines above every cited span.\n" + (ROOT / plan).read_bytes()
+    assert lp.check(ROOT, {plan: shifted}) == HEAD_SUMMARY
+
+
+@pytest.mark.parametrize("plan, old, new", [
+    ("docs/repositories/00-harness-engineering.md", b"- Toolchain: Python 3.12.14, `uv` 0.12.7, JSON Schema",
+     b"- Toolchain: Python 3.12.15, `uv` 0.12.7, JSON Schema"),
+    ("docs/repositories/10-mas-harness-operator.md", b"- `fleet-sync-agent`: optional module",
+     b"- `fleet-sync-agent`: optional modules"),
+])
+def test_a_one_character_change_inside_a_span_is_r5(plan, old, new):
+    raw = (ROOT / plan).read_bytes()
+    assert raw.count(old) == 1 and len(new) - len(old) in (0, 1)
+    _refused("R5", {plan: raw.replace(old, new)}, plan)
+    # still refused when the changed span is also shifted
+    _refused("R5", {plan: b"\n\n\n" + raw.replace(old, new)}, plan)
+
+
+def _lines_moved(data):
+    for row in data["repositories"] + data["outsideCatalogue"]:
+        for span in row["sources"]:
+            span["lines"] = [span["lines"][0] + 7, span["lines"][1] + 7]
+    for row in data["deployables"]:
+        row["source"]["lines"] = [row["source"]["lines"][0] + 7, row["source"]["lines"][1] + 7]
+
+
+def test_a_change_to_the_data_lines_alone_is_accepted_by_r5():
+    data = _data()
+    _lines_moved(data)
+    assert lp._sources(data, ROOT, {}) == 49
+
+
+def test_a_change_to_the_data_lines_alone_is_accepted_once_the_tables_show_it():
+    # `lines` are for display only: R5 accepts them anywhere, and only R8's rendered Source columns show them
+    data = _data()
+    _lines_moved(data)
+    lines = _adr().split("\n")
+    for table in lp.TABLES:
+        begin, end = lp._markers(table)
+        a, b = lines.index(begin), lines.index(end)
+        lines[a + 1:b] = lp.render(data, table)
+    overlay = {lp.DATA_PATH: _dump(data), lp.ADR_PATH: "\n".join(lines).encode("utf-8")}
+    assert lp.check(ROOT, overlay) == HEAD_SUMMARY
+    _refused("R8", {lp.DATA_PATH: _dump(data)})
 
 
 # ---------------------------------------------------------------- R6: outside the catalogue and OUTSIDE_EXPECTED

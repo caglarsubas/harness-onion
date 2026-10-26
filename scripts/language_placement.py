@@ -17,9 +17,11 @@ Rules, in order; the first rule broken is reported with its id:
      planeSource, plannedLanguage) equal EXPECTED[id].
   R4 repositories: exactly repositories.yaml's ids and names; the plan docs/repositories/NN-<lowercased name>.md gives
      rNumber RNN and the first span's path; languages equal REPO_LANGUAGES[id].
-  R5 sources: every span exists, is in range, matches its digest and carries its evidence; a deployable's evidence
-     holds its id token and its language token; a repository's spans carry each of its languages' tokens; every
-     toolchain string occurs verbatim in one of its row's spans.
+  R5 sources: every span is located by its content: some contiguous block of exactly last - first + 1 whole lines,
+     anywhere in its file at the head, has the span's sha256 and carries its evidence (`lines` are the base position,
+     for display only: a shift is accepted, a changed text is refused); a deployable's evidence holds its id token
+     and its language token; a repository's spans carry each of its languages' tokens; every toolchain string occurs
+     verbatim in one of its row's located spans.
   R6 outside the catalogue: exactly OUTSIDE_EXPECTED's ids, each with its (ownerRepository, plannedLanguage), whose
      spans carry its language token.
   R7 exceptions: one row per PENDING_HOTPATH_DECISION or CONTROL_LOOP_TO_BE_CONFIRMED deployable and none otherwise,
@@ -447,16 +449,27 @@ def id_token(deployable: str) -> str:
     return ALIAS.get(deployable, "`" + deployable + "`")
 
 
+def locate(raw: bytes, count: int, sha256: str, first: int = 1) -> bytes | None:
+    """The block of exactly `count` contiguous whole lines of `raw` (each with its line feed) whose sha256 is `sha256`,
+    wherever it lies in the file, or None (design section 11, errata 2). The base position `first` is tried first, then
+    every position from the top; equal digests mean equal texts, so any match satisfies the rule."""
+    lines = _lines(raw)
+    starts = range(len(lines) - count + 1)
+    for start in ([first - 1] if 0 <= first - 1 < len(starts) else []) + list(starts):
+        chunk = b"".join(lines[start:start + count])
+        if hashlib.sha256(chunk).hexdigest() == sha256:
+            return chunk
+    return None
+
+
 def _span_text(span: dict, root: Path, overlay: dict, cache: dict) -> str:
     rule = "R5"
     path, (first, last) = span["path"], span["lines"]
     if path not in cache:
         cache[path] = _read(root, overlay, path, rule)
-    raw = cache[path]
-    _refuse(last <= len(_lines(raw)), rule, "%s:%d-%d is out of range" % (path, first, last))
-    chunk = span_bytes(raw, first, last)
-    _refuse(hashlib.sha256(chunk).hexdigest() == span["sha256"], rule,
-            "%s:%d-%d does not match its digest" % (path, first, last))
+    chunk = locate(cache[path], last - first + 1, span["sha256"], first)
+    _refuse(chunk is not None, rule, "%s: no block of %d lines (cited at %d-%d) matches its digest"
+            % (path, last - first + 1, first, last))
     text = _text(chunk, rule, path)
     for evidence in span["evidence"]:
         _refuse(evidence in text, rule, "%s:%d-%d does not carry %r" % (path, first, last, evidence))

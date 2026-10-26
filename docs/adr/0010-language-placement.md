@@ -89,7 +89,8 @@ component is in Go or Python.
 Each table is rendered from `architecture/language-placement.json` by `scripts/language_placement.py`, between its
 markers. The checker refuses any drift between the data, the tables, the catalogues and the cited plan lines: each
 span's sha256 covers its lines with their line feeds, each span carries its evidence strings, and each row's toolchain
-string occurs verbatim in one of its spans.
+string occurs verbatim in one of its spans. Each cited span is located by its content: a shift of the cited lines is
+accepted, and any change to their text is refused.
 
 ### Repositories
 
