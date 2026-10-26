@@ -1,6 +1,42 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-LINUX-008 source preparation, October 25, 2026
+## Current checkpoint — MET-GOV-004 source preparation, October 26, 2026
+
+Alpha2 OPEN. MET-LINUX-008 (LINUX-HOST-AUTH-001) passed required verify and merged as main 9184f5b.
+LANG-PLACEMENT-ADR-001 (the owner's language policy LANG-D2 (a); the lane monitor's owner-delegated rulings, among them
+MON-GOV4-C1 and MON-GOV4-ADOPTED) publishes the language-placement ADR: docs/adr/0010-language-placement.md states the
+policy as one digest-bound line and renders four tables from architecture/language-placement.json, which records the
+planned language of every catalogued repository and deployable at this base, the rows outside the catalogue and the
+pending exceptions, each bound by digest to the source lines that state it. scripts/language_placement.py is the minimal
+offline checker with its tests tests/test_language_placement.py, and tests/test_language_placement_oracle.py is the D5a
+oracle (KEEP), bound by architecture/oracle-identity-language-placement.json. The adopted contract is c5: the ADR, the
+data, the checker and its tests, and the oracle and its identity, with the ADR's CONTRACT r1 text errata (c3), the
+checker's R5 locating each cited span by its content (c4, c4a) and the re-issued oracle (c5). docs/DEVELOPMENT_STATUS.md gains one line citing the ADR, and the new layer pins it with the adopted files. The exceptions stay
+pending LANG-HOTPATH-DECISION-001; nothing is implemented, moved or rewritten in any repository. The packet registers its
+own review series, MET-GOV-004/packet, in the brief registry; its one gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS in the evolution surface record at this base), so the owner approves the merge per PR, bound to the head. Its new layer checks the adopted files by their bytes,
+the data's LANG-D2 (a) policy digest, the oracle identity against the oracle test's bytes, and the registry's one series.
+It is built under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump
+vocabulary, 266's layer by the bridge vocabulary, and 266's test keeps its 8 own routes and the adjacent one and one
+payload mutation (C2), while the new head's test keeps the full fan-in. MET-GOV-004 is the sole 267th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-GOV-004 / LANG-PLACEMENT-ADR-001 | SOURCE_PREPARED | The language-placement ADR 0010 (267th packet): the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data in architecture/language-placement.json, bound to its source lines, with the minimal offline checker, its tests and the D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider), the owner's per-PR approval |
+| Alpha2A | MET-LINUX-008 / LINUX-HOST-AUTH-001 | VERIFY_PASSED_MERGED | Merged as main 9184f5b |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical Linux host-authority source checkpoint — MET-LINUX-008 source preparation, October 25, 2026
 
 Alpha2 OPEN. MET-ENFORCE-042 (DIGEST-CONTRACT-V2) passed required verify and merged as main f9882c1. LINUX-HOST-AUTH-001
 (the lane monitor's owner-delegated rulings, among them MON-LHA-CR1-KEEP, MON-LHA-CR2-KEEP, MON-LHA-C8,
@@ -2674,7 +2710,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LINUX-PROBE-KIT-ADMISSION / MET-LIVE-004 · Publish workload profile v2 and admission semantics v4 as one combined contract (adopted as candidate c3 after two in-tree CONTRACT rounds), with its D5a oracles, every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App.
 - [x] Alpha 2A · LINUX-ROOT-ALIASES / MET-LINUX-009 · Publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · DIGEST-CONTRACT-V2 / MET-ENFORCE-042 · Publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App after the owner's per-PR approval.
-- [ ] Alpha 2A · LINUX-HOST-AUTH-001 / MET-LINUX-008 · Publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class; pass required verify through the owner's App after the lane monitor's and the owner's PR approval.
+- [x] Alpha 2A · LINUX-HOST-AUTH-001 / MET-LINUX-008 · Publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class; pass required verify through the owner's App after the lane monitor's and the owner's PR approval.
+- [ ] Alpha 2A · LANG-PLACEMENT-ADR-001 / MET-GOV-004 · Publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
