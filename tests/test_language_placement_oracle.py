@@ -1,17 +1,19 @@
 """D5a oracle for MET-GOV-004 (LANG-PLACEMENT-ADR-001): the language-placement checker, black-box.
 
-Every expected value here comes from the closed design, revision 4 (sha256 169d02bc...), its dossier and the owner's
-LANG-D2. The candidate is reached only through its published command line,
+Every expected value here comes from the closed design (revision 4, sha256 169d02bc..., with the errata of its
+section 11), its dossier and the owner's LANG-D2. The candidate is reached only through its published command line,
 ``python3 scripts/language_placement.py check --root <dir>`` (design section 4), run with ``sys.executable``. Its data
 file and ADR are read as data at run time; nothing is imported from it.
 
 Each mutation runs on a temporary working copy of the repository root: the plans, ADRs, cited texts, catalogues, data
-file and every span path are copied, and ``scripts/`` is linked file by file (the oracle never writes there; every
-oracle write replaces a copied file whole). A mutation test first requires the pristine copy to be accepted, so that a
-refusal proves the mutation, not a broken copy.
+file, every span path and the files of ``scripts/`` are copied with real copies (``shutil.copy2``), never linked
+(errata 3). Every copy lives under one temporary parent made for the session, is removed when its test ends, passed or
+failed, and the parent is removed at the end of the session. A mutation test first requires the pristine copy to be
+accepted, so that a refusal proves the mutation, not a broken copy.
 """
 from __future__ import annotations
 
+import contextlib
 import copy
 import hashlib
 import json
@@ -21,6 +23,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -39,6 +42,8 @@ ETP = ALPHA2 + "/ENFORCEMENT_TEST_PLAN.md"
 MAP = ALPHA2 + "/HARNESS_PAPER_REPOSITORY_MAP.md"
 CITED = (W01, ETP, MAP, ALPHA2 + "/SECCOMP_ALLOWLISTS_V3.md")
 TIMEOUT = 120
+TEMP_PREFIX = "language-placement-oracle-"
+RULES = tuple(f"R{n}" for n in range(1, 9))
 
 # ------------------------------------------------------------------ design sections 3 and 4: the closed constants
 
@@ -56,6 +61,9 @@ LANG_TOKEN = {"PYTHON": ("Python",), "GO": ("Go 1.26.7",), "TYPESCRIPT": ("TypeS
 ALIAS = {"operator": "`mas-harness-operator`", "otel-collector": "OTel Collector"}
 HOTPATH = "LANG-HOTPATH-DECISION-001"
 PENDING_PREFIX = "PENDING:"
+# Design section 11, errata 2: the ADR's sentence beside the tables.
+SPAN_SENTENCE = ("Each cited span is located by its content: a shift of the cited lines is accepted, and any change to "
+                 "their text is refused.")
 
 MEMBERS = {
     "top": {"schemaVersion", "adr", "policySha256", "catalogues", "repositories", "deployables", "outsideCatalogue",
@@ -153,7 +161,8 @@ P02, P10, P12 = _plan("mas-harness-sdks"), _plan("mas-harness-operator"), _plan(
 # ------------------------------------------------------------------ design section 5.3: the spans at the base
 
 DEPLOYABLE_SPANS = {"operator": (P10, 152, 153), "bundle-verifier": (P10, 152, 154),
-                    "fleet-sync-agent": (P10, 152, 155), "otel-collector": (P09, 100, 100), "inference-api": (P06, 99, 99), "ai-gateway": (P05, 88, 88),
+                    "fleet-sync-agent": (P10, 152, 155), "otel-collector": (P09, 100, 100),
+                    "inference-api": (P06, 99, 99), "ai-gateway": (P05, 88, 88),
                     "experience-gateway": (P05, 88, 89), "control-web": (P04, 102, 102),
                     "profile-compiler-worker": (P04, 103, 103)}
 for _i in ("policy-decision", "guardrail-service", "governance-service", "registry-service", "evidence-service",
@@ -222,6 +231,12 @@ def _check(root: Path) -> tuple:
 
 def _has_rule(out: str, rule: str) -> bool:
     return re.search(rf"(?<![A-Za-z0-9]){rule}(?![0-9])", out) is not None
+
+
+def _new_rule_lines(out: str, pristine_out: str, rule: str) -> list:
+    """Output lines naming the rule that the pristine run did not print."""
+    seen = set(pristine_out.splitlines())
+    return [line for line in out.splitlines() if _has_rule(line, rule) and line not in seen]
 
 
 def _read(root: Path, rel: str) -> bytes:
@@ -319,14 +334,26 @@ def _lines(raw: bytes) -> list:
     return out
 
 
-def _span_bytes(raw: bytes, lines):
+def _span_count(span) -> int | None:
+    lines = span.get("lines") if isinstance(span, dict) else None
     if not (isinstance(lines, list) and len(lines) == 2 and all(type(n) is int for n in lines)):
         return None
-    first, last = lines
-    parts = _lines(raw)
-    if not 1 <= first <= last <= len(parts):
+    count = lines[1] - lines[0] + 1
+    return count if count >= 1 else None
+
+
+def _locate(raw: bytes, span):
+    """Design section 11, errata 2: the 0-based start of a block of exactly last - first + 1 whole lines, anywhere in
+    the file, whose sha256 is the span's pin; None when there is none."""
+    count = _span_count(span)
+    if count is None:
         return None
-    return b"".join(parts[first - 1:last])
+    parts = _lines(raw)
+    for start in range(0, len(parts) - count + 1):
+        block = parts[start:start + count]
+        if block[-1].endswith(b"\n") and _sha256(b"".join(block)) == span.get("sha256"):
+            return start
+    return None
 
 
 def _safe_rel(rel) -> bool:
@@ -360,20 +387,15 @@ def _span_paths() -> set:
 
 
 def _make_copy(dst: Path, scripts=None) -> Path:
-    """A working copy of the root: scripts linked (or copied where a link fails), everything the design names copied."""
+    """A working copy of the root, by real copies only (shutil.copy2): the files of scripts/ and everything the design
+    names. Nothing is linked into the subject tree (design section 11, errata 3)."""
     dst.mkdir(parents=True)
-    (dst / "scripts").mkdir()
-    source = ROOT / "scripts"
-    names = sorted(os.listdir(source)) if scripts is None else [Path(s).name for s in scripts]
-    for name in names:
-        src = source / name
-        if not src.is_file() or name.endswith(".pyc"):
-            continue
-        try:
-            os.link(src, dst / "scripts" / name)
-        except OSError:
-            shutil.copy2(src, dst / "scripts" / name)
     rels = {SERVICES, REPOSITORIES, DATA, ADR, *CITED, *_span_paths()}
+    if scripts is None:
+        rels.update(f"scripts/{n}" for n in os.listdir(ROOT / "scripts")
+                    if (ROOT / "scripts" / n).is_file() and not n.endswith(".pyc"))
+    else:
+        rels.update(scripts)
     for directory in (PLANS, "docs/adr"):
         if (ROOT / directory).is_dir():
             rels.update(f"{directory}/{n}" for n in os.listdir(ROOT / directory) if (ROOT / directory / n).is_file())
@@ -383,6 +405,27 @@ def _make_copy(dst: Path, scripts=None) -> Path:
             (dst / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dst / rel)
     return dst
+
+
+def _remove(path: Path) -> None:
+    """Remove a working tree whole, read-only copies included."""
+    if not os.path.lexists(path):
+        return
+    os.chmod(path, 0o700)
+    for top, dirs, _ in os.walk(path):
+        for name in dirs:
+            os.chmod(os.path.join(top, name), 0o700)
+    shutil.rmtree(path)
+
+
+@contextlib.contextmanager
+def _copy_of_root(parent: Path, scripts=None):
+    """A working copy under the session's temporary parent, removed when the block ends, however it ends."""
+    holder = Path(tempfile.mkdtemp(prefix="copy-", dir=parent))
+    try:
+        yield _make_copy(holder / "root", scripts=scripts)
+    finally:
+        _remove(holder)
 
 
 _STYLES = [(indent, compact, ascii_, sort, tail) for indent in (2, 4, 1, None) for compact in (False, True)
@@ -419,6 +462,14 @@ def _change_letter(line: str) -> str:
         if body[pos].isascii() and body[pos].isalpha():
             return body[:pos] + ("x" if body[pos] != "x" else "y") + body[pos + 1:] + tail
     pytest.fail("ORACLE-SETUP: no letter to change in the row")
+
+
+def _change_one_byte(line: bytes) -> bytes:
+    """One character changed: the line's first ASCII letter."""
+    for pos, byte in enumerate(line):
+        if 65 <= byte <= 90 or 97 <= byte <= 122:
+            return line[:pos] + (b"x" if byte != ord("x") else b"y") + line[pos + 1:]
+    pytest.fail("ORACLE-SETUP: no letter to change in the cited line")
 
 
 _BEGIN = re.compile(r"^<!-- language-placement:([A-Za-z0-9_.-]+):begin -->$")
@@ -543,16 +594,30 @@ class Copy:
 
 
 @pytest.fixture(scope="session")
-def oracle_pristine(tmp_path_factory):
-    root = _make_copy(tmp_path_factory.mktemp("pristine") / "root")
-    return _check(root)
+def oracle_parent():
+    """One temporary parent for the session's copies; it must be empty at the end, and is then removed."""
+    parent = Path(tempfile.mkdtemp(prefix=TEMP_PREFIX))
+    try:
+        yield parent
+    finally:
+        left = len(os.listdir(parent)) if parent.is_dir() else 0
+        _remove(parent)
+        assert left == 0, f"{left} working copies were left in the oracle's temporary parent"
+        assert not os.path.lexists(parent), "the oracle's temporary parent was not removed"
+
+
+@pytest.fixture(scope="session")
+def oracle_pristine(oracle_parent):
+    with _copy_of_root(oracle_parent) as root:
+        return _check(root)
 
 
 @pytest.fixture
-def oracle_copy(tmp_path, oracle_pristine):
+def oracle_copy(oracle_parent, oracle_pristine):
     rc, out = oracle_pristine
     assert rc == 0, f"ORACLE-GUARD: the pristine copy is refused (exit {rc}); a mutation proves nothing:\n{_tail(out)}"
-    return Copy(_make_copy(tmp_path / "root"))
+    with _copy_of_root(oracle_parent) as root:
+        yield Copy(root)
 
 
 def _refused(work: Copy, rule: str) -> None:
@@ -560,6 +625,27 @@ def _refused(work: Copy, rule: str) -> None:
     assert rc == 1, f"expected exit 1 naming {rule}; got exit {rc}:\n{_tail(out)}"
     assert "Traceback (most recent call last)" not in out, f"exit 1 by a crash, not a refusal:\n{_tail(out)}"
     assert _has_rule(out, rule), f"exit 1, but {rule} is not in the output:\n{_tail(out)}"
+
+
+# ------------------------------------------------------------------ the copies themselves (design section 11, errata 3)
+
+def test_copy_shares_no_inode(oracle_parent):
+    """No copied file shares an inode with its source, each copy has one link, and copying adds no link to a source."""
+    sources = sorted(p for p in (ROOT / "scripts").iterdir() if p.is_file())
+    before = {p.name: os.stat(p).st_nlink for p in sources}
+    checked = 0
+    with _copy_of_root(oracle_parent) as root:
+        for top, _, files in os.walk(root):
+            for name in files:
+                copied = Path(top) / name
+                rel = copied.relative_to(root)
+                assert not copied.is_symlink(), f"{rel} is a symbolic link"
+                mine, theirs = os.stat(copied), os.stat(ROOT / rel)
+                assert (mine.st_dev, mine.st_ino) != (theirs.st_dev, theirs.st_ino), f"{rel} shares an inode"
+                assert mine.st_nlink == 1, f"{rel}: st_nlink {mine.st_nlink}"
+                checked += 1
+    after = {p.name: os.stat(p).st_nlink for p in sources}
+    assert checked > 0 and before == after, "copying changed a source's link count"
 
 
 # ------------------------------------------------------------------ positives and usage (design section 4)
@@ -579,10 +665,10 @@ def test_positive_default_root():
     assert rc == 0, f"check without --root, from the repository root: exit {rc}:\n{_tail(out)}"
 
 
-def test_positive_dependencies_are_stdlib_and_safe_yaml(tmp_path):
+def test_positive_dependencies_are_stdlib_and_safe_yaml(oracle_parent):
     """Design section 4: the checker's dependencies are the standard library and scripts/safe_yaml.py."""
-    root = _make_copy(tmp_path / "root", scripts=(CHECKER, SAFE_YAML))
-    rc, out = _check(root)
+    with _copy_of_root(oracle_parent, scripts=(CHECKER, SAFE_YAML)) as root:
+        rc, out = _check(root)
     assert rc == 0, f"check with only the checker and safe_yaml.py under scripts/: exit {rc}:\n{_tail(out)}"
 
 
@@ -725,17 +811,18 @@ def test_fixed_design_spans():
 
 
 def test_fixed_spans_verified_independently():
+    """Each span located by content (errata 2), then its evidence, tokens and toolchain checked in the located text."""
     doc = _data()
 
     def verify(where: str, span: dict) -> str:
         path = span["path"]
         assert _safe_rel(path) and (ROOT / path).is_file(), f"{where}: {path} exists"
-        chunk = _span_bytes((ROOT / path).read_bytes(), span["lines"])
-        assert chunk is not None, f"{where}: lines {span['lines']} in range"
-        assert _sha256(chunk) == span["sha256"], f"{where}: span digest"
-        text = chunk.decode("utf-8")
+        raw = (ROOT / path).read_bytes()
+        start = _locate(raw, span)
+        assert start is not None, f"{where}: no block of the span's line count has its digest"
+        text = b"".join(_lines(raw)[start:start + _span_count(span)]).decode("utf-8")
         for evidence in span["evidence"]:
-            assert evidence in text, f"{where}: evidence {evidence!r} occurs in the span"
+            assert evidence in text, f"{where}: evidence {evidence!r} occurs in the located span"
         return text
 
     for row in doc["deployables"]:
@@ -769,6 +856,12 @@ def test_fixed_adr_tables():
         caption = inner[0]
         assert services_sha in caption and repositories_sha in caption, f"table {name}: caption carries both digests"
         assert _table_rows(lines, begin, end), f"table {name}: no rows"
+
+
+def test_fixed_adr_span_sentence():
+    """Design section 11, errata 2: the ADR gains one sentence beside the tables (compared with whitespace folded)."""
+    text = " ".join(_read(ROOT, ADR).decode("utf-8").split())
+    assert SPAN_SENTENCE in text, "the ADR's content-location sentence"
 
 
 # ------------------------------------------------------------------ one or more mutations per rule
@@ -1000,49 +1093,67 @@ def _(w):
     _edit(w, lambda d: _repo(d, "mas-harness-operator")["sources"].reverse())
 
 
-# R5 sources: path, range, digest, evidence; id and language tokens; toolchain verbatim.
+# R5 sources, as errata 2 states it: each span located by content (a block of exactly last - first + 1 whole lines
+# with the pinned sha256, anywhere in the file); its evidence, id and language tokens and toolchain in that block.
 
-def _inference_span(w):
-    span = _dep(w.doc(), "inference-api")["source"]
+def _span_of(w, ident):
+    span = _dep(w.doc(), ident)["source"]
     if not _safe_rel(span.get("path")):
-        pytest.fail("ORACLE-SETUP: inference-api's span path is not a relative path")
+        pytest.fail(f"ORACLE-SETUP: {ident}'s span path is not a relative path")
     return span
 
 
-@mutation("R5", "span-line-changed")
+def _located(w, span) -> tuple:
+    raw = w.read(span["path"])
+    start = _locate(raw, span)
+    if start is None:
+        pytest.fail("ORACLE-SETUP: the span is not found by content in the pristine copy")
+    return _lines(raw), start, _span_count(span)
+
+
+@mutation("R5", "cited-text-one-character-changed")
 def _(w):
-    span = _inference_span(w)
-    parts = _lines(w.read(span["path"]))
-    i = span["lines"][0] - 1
-    body = parts[i].rstrip(b"\n")
-    parts[i] = body + b" (oracle)" + parts[i][len(body):]
+    span = _span_of(w, "inference-api")
+    parts, start, _ = _located(w, span)
+    parts[start] = _change_one_byte(parts[start])
     w.write(span["path"], b"".join(parts))
 
 
-@mutation("R5", "span-lines-shifted")
+@mutation("R5", "span-line-count-changed-in-data")
 def _(w):
-    _edit(w, lambda d: _dep(d, "inference-api")["source"].__setitem__(
-        "lines", [n - 1 for n in _dep(d, "inference-api")["source"]["lines"]]))
+    def fn(d):
+        span = _dep(d, "inference-api")["source"]
+        span["lines"] = [span["lines"][0], span["lines"][1] + 1]
+    _edit(w, fn)
+
+
+@mutation("R5", "span-line-count-changed-in-source")
+def _(w):
+    span = _span_of(w, "operator")
+    parts, start, count = _located(w, span)
+    if count < 2:
+        pytest.fail("ORACLE-SETUP: the operator's span has one line")
+    parts.insert(start + 1, b"\n")
+    w.write(span["path"], b"".join(parts))
 
 
 @mutation("R5", "evidence-removed-from-source-repinned")
 def _(w):
-    span = _inference_span(w)
-    path, (first, last) = span["path"], span["lines"]
-    parts = _lines(w.read(path))
+    span = _span_of(w, "inference-api")
+    path = span["path"]
+    doc = w.doc()
+    before = w.read(path)
+    others = [(s, _locate(before, s)) for s in _all_spans(doc) if s.get("path") == path]
+    parts, start, count = _located(w, span)
     token = b"`inference-api`"
-    if not any(token in parts[k] for k in range(first - 1, last)):
-        pytest.fail("ORACLE-SETUP: the id token is not in inference-api's span")
-    for k in range(first - 1, last):
+    if not any(token in parts[k] for k in range(start, start + count)):
+        pytest.fail("ORACLE-SETUP: the id token is not in inference-api's located span")
+    for k in range(start, start + count):
         parts[k] = parts[k].replace(token, b"`inference-svc`")
     w.write(path, b"".join(parts))
-    raw = w.read(path)
-    doc = w.doc()
-    for other in _all_spans(doc):
-        if other.get("path") == path:
-            chunk = _span_bytes(raw, other.get("lines"))
-            if chunk is not None:
-                other["sha256"] = _sha256(chunk)
+    for other, at in others:
+        if at is not None:
+            other["sha256"] = _sha256(b"".join(parts[at:at + _span_count(other)]))
     w.put(doc)
 
 
@@ -1071,11 +1182,6 @@ def _(w):
 @mutation("R5", "span-path-missing")
 def _(w):
     _edit(w, lambda d: _dep(d, "inference-api")["source"].__setitem__("path", PLANS + "/06-oracle-missing.md"))
-
-
-@mutation("R5", "span-lines-out-of-range")
-def _(w):
-    _edit(w, lambda d: _dep(d, "inference-api")["source"].__setitem__("lines", [100000, 100000]))
 
 
 # R6 outside the catalogue: the closed id set; (ownerRepository, plannedLanguage); the language token.
@@ -1259,6 +1365,69 @@ def _(w):
 def test_mutation_refused(oracle_copy, rule, mutate):
     mutate(oracle_copy)
     _refused(oracle_copy, rule)
+
+
+# ------------------------------------------------------------------ errata 2: a shift is accepted
+
+SHIFT_LINE = b"Oracle shift line.\n"
+
+
+def _shift_added_above_r00(w):
+    rel = _plan("Harness-Engineering")
+    w.write(rel, SHIFT_LINE + w.read(rel))
+
+
+def _shift_added_above_span(w):
+    rel = _span_of(w, "inference-api")["path"]
+    w.write(rel, SHIFT_LINE + w.read(rel))
+
+
+def _shift_removed_above_span(w):
+    rel = _span_of(w, "inference-api")["path"]
+    raw = w.read(rel)
+    starts = [_locate(raw, s) for s in _all_spans(w.doc()) if s.get("path") == rel]
+    if not starts or any(s is None or s == 0 for s in starts):
+        pytest.fail("ORACLE-SETUP: a span on the file starts at its first line, or is not located")
+    w.write(rel, b"".join(_lines(raw)[1:]))
+
+
+SHIFTS = {
+    "line-added-above-the-R00-plan-spans": _shift_added_above_r00,
+    "line-added-above-a-span": _shift_added_above_span,
+    "line-removed-above-a-span": _shift_removed_above_span,
+}
+
+
+@pytest.mark.parametrize("name", sorted(SHIFTS))
+def test_shift_accepted(oracle_copy, name):
+    """Errata 2: "A shift of the block (lines added or removed above it) is accepted"."""
+    SHIFTS[name](oracle_copy)
+    rc, out = oracle_copy.check()
+    assert rc == 0, f"errata 2 accepts a shift; {name} gave exit {rc}:\n{_tail(out)}"
+
+
+# Errata 2: "lines record the block's position at the base, and are for display only". A change to the data's lines
+# alone, with the line count kept, is not refused by R5; the rendered tables (R8) may show it.
+LINES_ONLY = {
+    "shifted-up-one": lambda lines: [lines[0] - 1, lines[1] - 1],
+    "moved-past-the-end": lambda lines: [100000, 100000 + lines[1] - lines[0]],
+}
+
+
+@pytest.mark.parametrize("name", sorted(LINES_ONLY))
+def test_lines_only_not_refused_by_r5(oracle_copy, oracle_pristine, name):
+    def fn(d):
+        span = _dep(d, "inference-api")["source"]
+        span["lines"] = LINES_ONLY[name](span["lines"])
+    _edit(oracle_copy, fn)
+    rc, out = oracle_copy.check()
+    _, pristine_out = oracle_pristine
+    assert "Traceback (most recent call last)" not in out, f"{name}: a crash:\n{_tail(out)}"
+    assert rc in (0, 1), f"{name}: exit {rc}:\n{_tail(out)}"
+    assert not _new_rule_lines(out, pristine_out, "R5"), f"{name}: refused by R5:\n{_tail(out)}"
+    if rc == 1:
+        named = {r for r in RULES if _new_rule_lines(out, pristine_out, r)}
+        assert named == {"R8"}, f"{name}: refused by {sorted(named)}, where only R8 may show it:\n{_tail(out)}"
 
 
 # ------------------------------------------------------------------ the parse rules (design section 4)
