@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/met-gov-004-authority.json"
-AUTHORITY_SHA256 = "5772b7a3d69b6d11b000dcda566d3847a151c4cc0af2802eac263a0f1b929833"
+AUTHORITY_SHA256 = "31dd409b130844a008e3da19dae7fcece70dfec5a191a740569e5929e2c55cff"
 VALIDATOR_PATH = "scripts/validate_met_gov_004.py"
 BASE_COMMIT = "9184f5b636e6226c1b9040b54b90508966ca001b"
 NEW_PACKET = "MET-GOV-004"
