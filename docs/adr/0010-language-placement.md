@@ -210,7 +210,7 @@ This ADR, its data and its tables are reviewed again on:
 - LANG-HOTPATH-DECISION-001 is unblocked. It decides the four PENDING_HOTPATH_DECISION rows, and
   `connector-controller` if that row is a control loop.
 - SDK-GO-CLIENT-001 stays P2.
-- A plan change that touches a cited span (its bytes or its line numbers) fails the checker until the data and the
+- A plan change that touches a cited span (its cited text) fails the checker until the data and the
   tables are re-derived: `python3 scripts/language_placement.py check`.
 - **(f)** Lifecycle cost includes each added toolchain in the owner-operated offline verifier. Today's pins, as the
   owner states them, are Python 3.12.14, Go 1.26.7, Rust 1.99.0 (confirmed by the lane monitor, MON-LANG-4) and Node.
