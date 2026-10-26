@@ -2,10 +2,10 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_language_placement_oracle.py",
-  "sha256": "4fa51e886cca2e814a822430428df5f287c838ecdfb00d8a3942149c5dc5d6c6"
+  "sha256": "60fb2c99f60e7e0de7bf0c621b52e5b17d36659f808ad0dcba5549c4304b320e"
  },
  "oracle": {
-  "agentId": "a27a06163bc50da08",
+  "agentId": "ad42c3739196bfa0a",
   "model": "claude-opus-5-5"
  },
  "operator": {
@@ -15,24 +15,26 @@
  },
  "author": {
   "agentIds": [
-   "a5f17dc0bd391bd63"
+   "aa243b600b854cf28"
   ]
  },
- "briefSha256": "33f61b5202f211879eeb8be7c6b3444ab7a3cac983bc63c57402d100399e4cc9",
- "candidateCommit": "62a29027e278e93b5df7eccfc827c44e24e1c8ab",
- "launched": "2026-10-26T08:58:07+08:00",
- "finished": "2026-10-26T09:06:16+08:00",
+ "briefSha256": "e9ddd3afd44bf1e57fd43243981c0a1d61d1121fca99cb287c5b0bcc000876af",
+ "candidateCommit": "dd49a3ea9fd9aa5baba3df317de6ab181d23240d",
+ "launched": "2026-10-26T23:35:52+08:00",
+ "finished": "2026-10-27T00:15:10+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-GOV4-267-B",
-  "date": "2026-10-26"
+  "ref": "MON-TT-C1",
+  "date": "2026-10-27"
  },
  "disclosures": [
-  "re-issued under MON-GOV4-267-B from the brief ORACLE_BRIEF.md (0debd0a9) and its addendum (briefSha256 above): real copies only (shutil.copy2, no hard links or symlinks), every copy removed at teardown, and R5's mutations per the design's content-location errata",
-  "the first issue (028e73d4, 95 tests) passed 95/95 on c1 but hard-linked the root into pytest's base temp, which the chain refuses (mechanics blocker B1); it was written black-box from design revision 4 by the same agent (first run 2026-10-26T00:45:40 to 01:14:15)",
-  "against c4a (62a29027), the re-issue: 102/102; scripts st_nlink 1 before and after; 0 entries left in its temp parent; test_copy_shares_no_inode passes",
-  "slips (procedural): an unrequested extra run against the base copy; TMPDIR added to the run command for the H3 count; an awk heading scan of the design outside its section 11, printing only line numbers",
+  "re-issued for MET-GOV-005 under MON-TT-C1 from the brief ORACLE_BRIEF.md (briefSha256 above) and the design revision 3 only; it replaces the MET-GOV-004 oracle, which its author never read",
+  "black-box through the published check command, except the design's direct R14 rows, which load the rule function by path; real copies only (copytree with copy2), every copy removed at teardown",
+  "run 1 against the base: 33 passed, 103 failed (v2 expectations meeting v1); run 2 against the candidate c1 (dd49a3ea): 136 passed, 0 failed, no findings; scripts link count 1 before and after; 0 entries left in its temp parent; the no-shared-inode test passes",
+  "two tests accept more than one outcome: the BR-TT-1 lines-only case accepts exit 0 or R8 (never R5 or R12), and the R14 calling form is chosen adaptively and calibrated on the pristine row",
+  "the decision filter dropped two decision lines (MON-TT-DOSSIER, MON-TT-D3); for those the oracle relied on the design's own summary",
+  "slips (procedural): two-call messages; a definition grep of the base checker printed a few non-definition lines; run 1 ran four times in full and once with -k before the final counts; a filter dropped one test line whose id held a filtered token, so ids were renamed; one link-count listing printed the scripts directory's names; one existence check guessed a bytecode filename before the general check",
   "the launch context carried an auto-injected memory index and an account context; the oracle used neither"
  ]
 }
