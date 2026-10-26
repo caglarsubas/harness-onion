@@ -1,5 +1,5 @@
 {
- "schemaVersion": "planeon.internal.language-placement/v1",
+ "schemaVersion": "planeon.internal.language-placement/v2",
  "adr": "docs/adr/0010-language-placement.md",
  "policySha256": "4b0a8a4b9e043823cfa884bdb883ae5b8f796877ead7bdbc413b318082fbc441",
  "catalogues": [
@@ -10,6 +10,10 @@
   {
    "path": "architecture/repositories.yaml",
    "sha256": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d"
+  },
+  {
+   "path": "architecture/providers.yaml",
+   "sha256": "9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02"
   }
  ],
  "repositories": [
@@ -24,6 +28,7 @@
    "sources": [
     {
      "path": "docs/repositories/00-harness-engineering.md",
+     "section": "## Packages, toolchain, and owned interfaces",
      "lines": [
       1231,
       1231
@@ -46,6 +51,7 @@
    "sources": [
     {
      "path": "docs/repositories/01-mas-harness-contracts.md",
+     "section": "## Package, toolchain, and public interfaces",
      "lines": [
       125,
       125
@@ -69,6 +75,7 @@
    "sources": [
     {
      "path": "docs/repositories/02-mas-harness-sdks.md",
+     "section": "## Packages, toolchain, and interfaces",
      "lines": [
       92,
       94
@@ -92,6 +99,7 @@
    "sources": [
     {
      "path": "docs/repositories/03-mas-harness-industry-packs.md",
+     "section": "## Package, toolchain, and owned interfaces",
      "lines": [
       100,
       105
@@ -115,6 +123,7 @@
    "sources": [
     {
      "path": "docs/repositories/04-mas-harness-control-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       102,
       103
@@ -139,6 +148,7 @@
    "sources": [
     {
      "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       88,
       93
@@ -162,6 +172,7 @@
    "sources": [
     {
      "path": "docs/repositories/06-mas-harness-model-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       99,
       99
@@ -184,6 +195,7 @@
    "sources": [
     {
      "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       118,
       118
@@ -206,6 +218,7 @@
    "sources": [
     {
      "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       101,
       101
@@ -228,6 +241,7 @@
    "sources": [
     {
      "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       90,
       92
@@ -251,6 +265,7 @@
    "sources": [
     {
      "path": "docs/repositories/10-mas-harness-operator.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       152,
       152
@@ -262,6 +277,7 @@
     },
     {
      "path": "docs/alpha-2/W01_AMENDMENT_W02D.md",
+     "section": "# Alpha 2A — W01 amendment W02D and seccomp allowlists v2 (W01-AMEND, MET-ENFORCE-018)",
      "lines": [
       24,
       24
@@ -285,6 +301,7 @@
    "sources": [
     {
      "path": "docs/repositories/11-mas-harness-distribution.md",
+     "section": "## Package, toolchain, and interfaces",
      "lines": [
       163,
       163
@@ -308,6 +325,7 @@
    "sources": [
     {
      "path": "docs/repositories/12-mas-harness-conformance-labs.md",
+     "section": "## Package, toolchain, and interfaces",
      "lines": [
       408,
       409
@@ -320,6 +338,7 @@
     },
     {
      "path": "docs/alpha-2/ENFORCEMENT_TEST_PLAN.md",
+     "section": "# Alpha 2A — independent enforcement test plan (W04-0, MET-ENFORCE-022)",
      "lines": [
       12,
       13
@@ -345,6 +364,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/10-mas-harness-operator.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      152,
      154
@@ -354,7 +374,39 @@
      "`bundle-verifier`",
      "Go 1.26.7"
     ]
-   }
+   },
+   "runtime": "Go 1.26.7",
+   "frameworks": [
+    "controller-runtime",
+    "Kubebuilder/envtest",
+    "Helm 4.2.0",
+    "Cosign 3.1.3",
+    "Kustomize 5.8.1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/10-mas-harness-operator.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      152,
+      152
+     ],
+     "sha256": "0c87e82ec386a5e786d638756e78a1a8401f0423530abf568df61f6bb6ec80b3",
+     "evidence": [
+      "controller-runtime",
+      "Kubebuilder/envtest",
+      "Helm 4.2.0",
+      "Cosign 3.1.3",
+      "Kustomize 5.8.1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "otel-collector",
@@ -367,6 +419,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      100,
      100
@@ -376,7 +429,17 @@
      "OTel Collector",
      "upstream"
     ]
-   }
+   },
+   "runtime": null,
+   "frameworks": [],
+   "frameworksSources": [],
+   "packaging": [
+    "HELM_CHART",
+    "OCI_IMAGE"
+   ],
+   "upstream": "otel/opentelemetry-collector-contrib",
+   "implementationStatus": "UPSTREAM_MANAGED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "operator",
@@ -389,6 +452,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/10-mas-harness-operator.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      152,
      153
@@ -398,7 +462,40 @@
      "`mas-harness-operator`",
      "Go 1.26.7"
     ]
-   }
+   },
+   "runtime": "Go 1.26.7",
+   "frameworks": [
+    "controller-runtime",
+    "Kubebuilder/envtest",
+    "Helm 4.2.0",
+    "Cosign 3.1.3",
+    "Kustomize 5.8.1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/10-mas-harness-operator.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      152,
+      152
+     ],
+     "sha256": "0c87e82ec386a5e786d638756e78a1a8401f0423530abf568df61f6bb6ec80b3",
+     "evidence": [
+      "controller-runtime",
+      "Kubebuilder/envtest",
+      "Helm 4.2.0",
+      "Cosign 3.1.3",
+      "Kustomize 5.8.1"
+     ]
+    }
+   ],
+   "packaging": [
+    "HELM_CHART",
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "policy-decision",
@@ -411,6 +508,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -420,7 +518,58 @@
      "`policy-decision`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest",
+    "OPA"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    },
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      100,
+      100
+     ],
+     "sha256": "ce0421852dd2fa9b30018241180dc5f15bd8f6cebcc3c77fe453fe896b83de87",
+     "evidence": [
+      "OPA"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "sandbox-runner",
@@ -433,6 +582,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      101,
      102
@@ -442,7 +592,47 @@
      "`sandbox-runner`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "jsonschema",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+    "A2A v1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "jsonschema",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+      "A2A v1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "fleet-sync-agent",
@@ -455,6 +645,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/10-mas-harness-operator.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      152,
      155
@@ -464,7 +655,39 @@
      "`fleet-sync-agent`",
      "Go 1.26.7"
     ]
-   }
+   },
+   "runtime": "Go 1.26.7",
+   "frameworks": [
+    "controller-runtime",
+    "Kubebuilder/envtest",
+    "Helm 4.2.0",
+    "Cosign 3.1.3",
+    "Kustomize 5.8.1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/10-mas-harness-operator.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      152,
+      152
+     ],
+     "sha256": "0c87e82ec386a5e786d638756e78a1a8401f0423530abf568df61f6bb6ec80b3",
+     "evidence": [
+      "controller-runtime",
+      "Kubebuilder/envtest",
+      "Helm 4.2.0",
+      "Cosign 3.1.3",
+      "Kustomize 5.8.1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "guardrail-service",
@@ -477,6 +700,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -486,7 +710,45 @@
      "`guardrail-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "usage-ledger",
@@ -499,6 +761,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -508,7 +771,45 @@
      "`usage-ledger`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "governance-service",
@@ -521,6 +822,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -530,7 +832,45 @@
      "`governance-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "domain-service",
@@ -543,6 +883,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      117,
      118
@@ -552,7 +893,49 @@
      "`domain-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "PostgreSQL/pgvector",
+    "RDFLib",
+    "pySHACL",
+    "jsonschema",
+    "HTTPX",
+    "cryptography",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      119,
+      119
+     ],
+     "sha256": "dcf8c69d0e0deed833a0651bd5ea103f837123001e89b3b81eefded2dff32bfb",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "PostgreSQL/pgvector",
+      "RDFLib",
+      "pySHACL",
+      "jsonschema",
+      "HTTPX",
+      "cryptography",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "registry-service",
@@ -565,6 +948,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -574,7 +958,45 @@
      "`registry-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "inference-api",
@@ -587,6 +1009,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/06-mas-harness-model-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      99,
      99
@@ -596,7 +1019,45 @@
      "`inference-api`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "Uvicorn",
+    "HTTPX",
+    "cryptography",
+    "structlog",
+    "SSE",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/06-mas-harness-model-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      99,
+      99
+     ],
+     "sha256": "c26505679ded36b84086aa29ef67787df474eab1b283562294a88eeddbf9ee53",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "Uvicorn",
+      "HTTPX",
+      "cryptography",
+      "structlog",
+      "SSE",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "connector-controller",
@@ -609,6 +1070,7 @@
    "status": "CONTROL_LOOP_TO_BE_CONFIRMED",
    "source": {
     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      117,
      118
@@ -618,7 +1080,49 @@
      "`connector-controller`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "PostgreSQL/pgvector",
+    "RDFLib",
+    "pySHACL",
+    "jsonschema",
+    "HTTPX",
+    "cryptography",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      119,
+      119
+     ],
+     "sha256": "dcf8c69d0e0deed833a0651bd5ea103f837123001e89b3b81eefded2dff32bfb",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "PostgreSQL/pgvector",
+      "RDFLib",
+      "pySHACL",
+      "jsonschema",
+      "HTTPX",
+      "cryptography",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "KN-DATA-001"
   },
   {
    "id": "memory-service",
@@ -631,6 +1135,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      117,
      118
@@ -640,7 +1145,49 @@
      "`memory-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "PostgreSQL/pgvector",
+    "RDFLib",
+    "pySHACL",
+    "jsonschema",
+    "HTTPX",
+    "cryptography",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      119,
+      119
+     ],
+     "sha256": "dcf8c69d0e0deed833a0651bd5ea103f837123001e89b3b81eefded2dff32bfb",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "PostgreSQL/pgvector",
+      "RDFLib",
+      "pySHACL",
+      "jsonschema",
+      "HTTPX",
+      "cryptography",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "control-web",
@@ -653,6 +1200,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/04-mas-harness-control-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      102,
      102
@@ -662,7 +1210,46 @@
      "`control-web`",
      "TypeScript"
     ]
-   }
+   },
+   "runtime": "Node 24.20.0 LTS",
+   "frameworks": [
+    "Next.js 16.3.3 Active LTS with the App Router",
+    "React 19.2",
+    "TypeScript 5",
+    "Prisma 6.19.3",
+    "PostgreSQL",
+    "AJV 8.20.0",
+    "Vitest",
+    "Playwright"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/04-mas-harness-control-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      102,
+      102
+     ],
+     "sha256": "d30b979e221cc0714a6359fdb25a3b10fda2c6bfac3373353cf099bbfc790bee",
+     "evidence": [
+      "Next.js 16.3.3 Active LTS with the App Router",
+      "React 19.2",
+      "TypeScript 5",
+      "Prisma 6.19.3",
+      "PostgreSQL",
+      "AJV 8.20.0",
+      "Vitest",
+      "Playwright"
+     ]
+    }
+   ],
+   "packaging": [
+    "HELM_CHART",
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "ingest-worker",
@@ -675,6 +1262,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      117,
      118
@@ -684,7 +1272,49 @@
      "`ingest-worker`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "PostgreSQL/pgvector",
+    "RDFLib",
+    "pySHACL",
+    "jsonschema",
+    "HTTPX",
+    "cryptography",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      119,
+      119
+     ],
+     "sha256": "dcf8c69d0e0deed833a0651bd5ea103f837123001e89b3b81eefded2dff32bfb",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "PostgreSQL/pgvector",
+      "RDFLib",
+      "pySHACL",
+      "jsonschema",
+      "HTTPX",
+      "cryptography",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "retrieval-service",
@@ -697,6 +1327,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      117,
      118
@@ -706,7 +1337,49 @@
      "`retrieval-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "PostgreSQL/pgvector",
+    "RDFLib",
+    "pySHACL",
+    "jsonschema",
+    "HTTPX",
+    "cryptography",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      119,
+      119
+     ],
+     "sha256": "dcf8c69d0e0deed833a0651bd5ea103f837123001e89b3b81eefded2dff32bfb",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "PostgreSQL/pgvector",
+      "RDFLib",
+      "pySHACL",
+      "jsonschema",
+      "HTTPX",
+      "cryptography",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "protocol-gateway",
@@ -719,6 +1392,7 @@
    "status": "PENDING_HOTPATH_DECISION",
    "source": {
     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      101,
      102
@@ -728,7 +1402,47 @@
      "`protocol-gateway`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "jsonschema",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+    "A2A v1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "jsonschema",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+      "A2A v1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "LANG-HOTPATH-DECISION-001"
   },
   {
    "id": "evidence-service",
@@ -741,6 +1455,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -750,7 +1465,45 @@
      "`evidence-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "profile-compiler-worker",
@@ -763,6 +1516,7 @@
    "status": "NO_STATED_DEFAULT",
    "source": {
     "path": "docs/repositories/04-mas-harness-control-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      103,
      103
@@ -772,7 +1526,31 @@
      "`profile-compiler-worker`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "`uv` 0.12.7"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/04-mas-harness-control-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      103,
+      103
+     ],
+     "sha256": "8d40cffb2c57a6456949c26c7fe086d7a4ba991e2299f4af7a268482597d1f42",
+     "evidence": [
+      "`uv` 0.12.7"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "index-worker",
@@ -785,6 +1563,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      117,
      118
@@ -794,7 +1573,49 @@
      "`index-worker`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "PostgreSQL/pgvector",
+    "RDFLib",
+    "pySHACL",
+    "jsonschema",
+    "HTTPX",
+    "cryptography",
+    "OpenTelemetry"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/07-mas-harness-knowledge-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      119,
+      119
+     ],
+     "sha256": "dcf8c69d0e0deed833a0651bd5ea103f837123001e89b3b81eefded2dff32bfb",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "PostgreSQL/pgvector",
+      "RDFLib",
+      "pySHACL",
+      "jsonschema",
+      "HTTPX",
+      "cryptography",
+      "OpenTelemetry"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "orchestration-api",
@@ -807,6 +1628,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      101,
      102
@@ -816,7 +1638,47 @@
      "`orchestration-api`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "jsonschema",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+    "A2A v1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "jsonschema",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+      "A2A v1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0011-h10-execution-authority.md"
   },
   {
    "id": "decision-service",
@@ -829,6 +1691,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      101,
      102
@@ -838,7 +1701,47 @@
      "`decision-service`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "jsonschema",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+    "A2A v1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "jsonschema",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+      "A2A v1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "assurance-worker",
@@ -851,6 +1754,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      90,
      100
@@ -860,7 +1764,45 @@
      "`assurance-worker`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "jsonschema",
+    "pytest"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/09-mas-harness-trust-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      90,
+      92
+     ],
+     "sha256": "d31ee9a5cd843a5f6901b573b83f242fb3406d99499dee3c1c79b24c0855608c",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "jsonschema",
+      "pytest"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "tool-broker",
@@ -873,6 +1815,7 @@
    "status": "PENDING_HOTPATH_DECISION",
    "source": {
     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      101,
      102
@@ -882,7 +1825,47 @@
      "`tool-broker`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "jsonschema",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+    "A2A v1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "jsonschema",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+      "A2A v1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "LANG-HOTPATH-DECISION-001"
   },
   {
    "id": "orchestration-worker",
@@ -895,6 +1878,7 @@
    "status": "AS_PLANNED",
    "source": {
     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      101,
      102
@@ -904,7 +1888,47 @@
      "`orchestration-worker`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI",
+    "Pydantic v2",
+    "psycopg 3",
+    "jsonschema",
+    "cryptography",
+    "HTTPX",
+    "OpenTelemetry",
+    "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+    "A2A v1"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/08-mas-harness-execution-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      101,
+      101
+     ],
+     "sha256": "2ca7536d269656407fbebbb26cb583fc4f4c9f80c2a0f525f49b6c1f424bc730",
+     "evidence": [
+      "FastAPI",
+      "Pydantic v2",
+      "psycopg 3",
+      "jsonschema",
+      "cryptography",
+      "HTTPX",
+      "OpenTelemetry",
+      "MCP SDK compatible with 2026-07-28 plus 2025-11-25",
+      "A2A v1"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0011-h10-execution-authority.md"
   },
   {
    "id": "ai-gateway",
@@ -917,6 +1941,7 @@
    "status": "PENDING_HOTPATH_DECISION",
    "source": {
     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      88,
      88
@@ -926,7 +1951,43 @@
      "`ai-gateway`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI/Starlette",
+    "Pydantic v2",
+    "HTTPX",
+    "psycopg 3",
+    "cryptography",
+    "OpenTelemetry",
+    "SSE support"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      88,
+      88
+     ],
+     "sha256": "fb3dd6f1ffeac2b7ec14d95989a52e7489172e5145bf99d7a2f6d62e1eaec8d1",
+     "evidence": [
+      "FastAPI/Starlette",
+      "Pydantic v2",
+      "HTTPX",
+      "psycopg 3",
+      "cryptography",
+      "OpenTelemetry",
+      "SSE support"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "LANG-HOTPATH-DECISION-001"
   },
   {
    "id": "experience-gateway",
@@ -939,6 +2000,7 @@
    "status": "PENDING_HOTPATH_DECISION",
    "source": {
     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+    "section": "## Deployables and toolchain",
     "lines": [
      88,
      89
@@ -948,7 +2010,55 @@
      "`experience-gateway`",
      "Python"
     ]
-   }
+   },
+   "runtime": "Python 3.12.14",
+   "frameworks": [
+    "FastAPI/Starlette",
+    "Pydantic v2",
+    "HTTPX",
+    "psycopg 3",
+    "cryptography",
+    "OpenTelemetry",
+    "SSE support"
+   ],
+   "frameworksSources": [
+    {
+     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      88,
+      88
+     ],
+     "sha256": "fb3dd6f1ffeac2b7ec14d95989a52e7489172e5145bf99d7a2f6d62e1eaec8d1",
+     "evidence": [
+      "FastAPI/Starlette",
+      "Pydantic v2",
+      "HTTPX",
+      "psycopg 3",
+      "cryptography",
+      "OpenTelemetry",
+      "SSE support"
+     ]
+    },
+    {
+     "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "section": "## Deployables and toolchain",
+     "lines": [
+      89,
+      89
+     ],
+     "sha256": "311110e126387941d050c310715eede7b77db3fdc15f2464a123bbd44884a0af",
+     "evidence": [
+      "same package/toolchain"
+     ]
+    }
+   ],
+   "packaging": [
+    "OCI_IMAGE"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "LANG-HOTPATH-DECISION-001"
   }
  ],
  "outsideCatalogue": [
@@ -959,6 +2069,7 @@
    "sources": [
     {
      "path": "docs/repositories/05-mas-harness-runtime-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       90,
       93
@@ -978,6 +2089,7 @@
    "sources": [
     {
      "path": "docs/repositories/06-mas-harness-model-plane.md",
+     "section": "## Deployables and toolchain",
      "lines": [
       100,
       100
@@ -991,6 +2103,7 @@
     },
     {
      "path": "docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md",
+     "section": "## All16 harnesses: paper → upstream → owner → delivery",
      "lines": [
       32,
       35
@@ -1012,6 +2125,7 @@
    "sources": [
     {
      "path": "docs/alpha-2/W01_AMENDMENT_W02D.md",
+     "section": "# Alpha 2A — W01 amendment W02D and seccomp allowlists v2 (W01-AMEND, MET-ENFORCE-018)",
      "lines": [
       24,
       24
@@ -1022,7 +2136,15 @@
       "The native roles are Rust with musl"
      ]
     }
-   ]
+   ],
+   "runtime": "Rust",
+   "frameworks": [],
+   "packaging": [
+    "NATIVE_BINARY"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "r12-native-probes",
@@ -1031,6 +2153,7 @@
    "sources": [
     {
      "path": "docs/alpha-2/ENFORCEMENT_TEST_PLAN.md",
+     "section": "# Alpha 2A — independent enforcement test plan (W04-0, MET-ENFORCE-022)",
      "lines": [
       12,
       13
@@ -1041,7 +2164,15 @@
       "static Rust+musl probe binaries"
      ]
     }
-   ]
+   ],
+   "runtime": "Rust",
+   "frameworks": [],
+   "packaging": [
+    "NATIVE_BINARY"
+   ],
+   "upstream": null,
+   "implementationStatus": "PLANNED",
+   "decision": "docs/adr/0010-language-placement.md"
   },
   {
    "id": "typescript-sdk",
@@ -1050,6 +2181,7 @@
    "sources": [
     {
      "path": "docs/repositories/02-mas-harness-sdks.md",
+     "section": "## Packages, toolchain, and interfaces",
      "lines": [
       94,
       94
@@ -1124,5 +2256,758 @@
    "evidence": "PENDING: KN-DATA-001's (or its successor's) classification of the role as a control loop or not, and, if it is one, LANG-HOTPATH-DECISION-001's decision",
    "reviewTrigger": "the first packet that fixes `connector-controller`'s implementation language, or LANG-HOTPATH-DECISION-001's decision, whichever comes first"
   }
- ]
+ ],
+ "baselineBindings": [
+  {
+   "harness": "execution.ml-decision",
+   "document": {
+    "path": "docs/harnesses/execution.ml-decision.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "eb7c55838bbc4924784dfe81517bf313d0055cabc18f9d153473de72c1521b72",
+    "evidence": [
+     "`scikit-learn/scikit-learn`",
+     "`microsoft/onnxruntime`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/execution.ml-decision.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "e813493a47258d7d5f2e663a9595d84c1ba9764cc69101864a7c84dea069879e",
+    "evidence": [
+     "`EXEC-ML-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "scikit-learn/scikit-learn",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.execution.decision-sklearn",
+      "token": "planeon.sklearn"
+     }
+    },
+    {
+     "baseline": "microsoft/onnxruntime",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.execution.decision-onnx",
+      "token": "planeon.onnx"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "execution.orchestration",
+   "document": {
+    "path": "docs/harnesses/execution.orchestration.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "233308c8fa03e5a4b0ffe742963a3154ce636e3d7945be13431e4b947f436eb6",
+    "evidence": [
+     "`planeon.orchestrator.postgres`",
+     "`temporalio/temporal`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/execution.orchestration.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "13cef035b39c89919bf57c9daed4ca20b9f79ba49fc8708a42268b989bf58e9b",
+    "evidence": [
+     "`EXEC-ORCH-001`",
+     "`EXEC-TEMPORAL-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "planeon.orchestrator.postgres",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "module.execution.orchestration.orchestration-worker",
+      "token": "planeon.orchestrator.postgres"
+     }
+    },
+    {
+     "baseline": "temporalio/temporal",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "EXEC-TEMPORAL-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "execution.protocol-interoperability",
+   "document": {
+    "path": "docs/harnesses/execution.protocol-interoperability.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "80d14566510bc6bd9a785aae623ba1fc7c0ef3b50fae1e3d367a608d054af7f0",
+    "evidence": [
+     "`modelcontextprotocol/python-sdk`",
+     "`a2aproject/a2a-python`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/execution.protocol-interoperability.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "87403caa085271b0d88631c6ad3709d6328e9b75fe3f6345f0787f77f9bdfe24",
+    "evidence": [
+     "`EXEC-PROTO-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "modelcontextprotocol/python-sdk",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.execution.protocol-mcp",
+      "token": "planeon.mcp"
+     }
+    },
+    {
+     "baseline": "a2aproject/a2a-python",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.execution.protocol-a2a",
+      "token": "planeon.a2a"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "execution.tool-skill-sandbox",
+   "document": {
+    "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "eb9c8416e3a7a4060592ebc24cf4f91428c05d130d632164be0c366561016528",
+    "evidence": [
+     "`google/gvisor`",
+     "`bytecodealliance/wasmtime`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "6ba98a1b1bf06d41596e2f5b0c8ea294b7da3ebb1e5a6af1b5b08430a9284a48",
+    "evidence": [
+     "`EXEC-SANDBOX-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "google/gvisor",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.execution.sandbox-gvisor",
+      "token": "planeon.sandbox.gvisor"
+     }
+    },
+    {
+     "baseline": "bytecodealliance/wasmtime",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.execution.sandbox-wasmtime",
+      "token": "planeon.sandbox.wasmtime"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "knowledge.data-integration",
+   "document": {
+    "path": "docs/harnesses/knowledge.data-integration.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     24,
+     24
+    ],
+    "sha256": "c5e05d16949938c330966345dde59342e7d0c3a4c5228567f2bf45bb48eafbb7",
+    "evidence": [
+     "`trinodb/trino`",
+     "`fivetran/great_expectations`",
+     "`OpenLineage/OpenLineage`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/knowledge.data-integration.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     27,
+     27
+    ],
+    "sha256": "d47fe0d4cc366a5237fd292bcc85f6d71f19155e2e069028ebaa1db3dd7f1384",
+    "evidence": [
+     "`KN-DATA-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "trinodb/trino",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "KN-DATA-ADOPT-001"
+     }
+    },
+    {
+     "baseline": "fivetran/great_expectations",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "KN-DATA-ADOPT-001"
+     }
+    },
+    {
+     "baseline": "OpenLineage/OpenLineage",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "KN-DATA-ADOPT-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "knowledge.domain-semantic",
+   "document": {
+    "path": "docs/harnesses/knowledge.domain-semantic.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     24,
+     24
+    ],
+    "sha256": "04523d8b007497656423e7f64cae3e4f78eac69c3d1fd22859437a04b8a96ce5",
+    "evidence": [
+     "`RDFLib/rdflib`",
+     "`RDFLib/pySHACL`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/knowledge.domain-semantic.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     27,
+     27
+    ],
+    "sha256": "d97908f50ff4bd88bc5543b47ace9ea2e8d15b17b4dc4c6491a75ab71b259a41",
+    "evidence": [
+     "`KN-DOM-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "RDFLib/rdflib",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "module.knowledge.domain-semantic.domain-service",
+      "token": "planeon.rdflib"
+     }
+    },
+    {
+     "baseline": "RDFLib/pySHACL",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "module.knowledge.domain-semantic.domain-service",
+      "token": "planeon.pyshacl"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "knowledge.memory-state",
+   "document": {
+    "path": "docs/harnesses/knowledge.memory-state.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "86a429df1316e93592f92dc2726fb651547fbf30f7307497142056509b1a3615",
+    "evidence": [
+     "`mem0ai/mem0`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/knowledge.memory-state.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "582b132af350780da988bd884a11a7215290160cf504cd74cec2758acc31e0f7",
+    "evidence": [
+     "`KN-MEM-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "mem0ai/mem0",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "KN-MEM-ADOPT-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "knowledge.retrieval-context",
+   "document": {
+    "path": "docs/harnesses/knowledge.retrieval-context.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     24,
+     24
+    ],
+    "sha256": "d8cf8221f62065902187d714991b50d564a92a5f3fbe0d20830178b23d7b58e7",
+    "evidence": [
+     "`run-llama/llama_index`",
+     "`pgvector/pgvector`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/knowledge.retrieval-context.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     27,
+     27
+    ],
+    "sha256": "c5c50df3e8a06da82cbd20a5f44589d88bb57e67c25ddf1bbe6b4a7df9f24156",
+    "evidence": [
+     "`KN-RET-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "run-llama/llama_index",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "KN-RET-ADOPT-001"
+     }
+    },
+    {
+     "baseline": "pgvector/pgvector",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "external.pgvector",
+      "token": "tenant.pgvector"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "runtime.ai-gateway",
+   "document": {
+    "path": "docs/harnesses/runtime.ai-gateway.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "082cc0630d82c91b580ec9d183a6856fdbe6f14136875ffadd350c80f1a90b8d",
+    "evidence": [
+     "`BerriAI/litellm`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/runtime.ai-gateway.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "24edb34c77bc4e0d493c57a1a9988d194ccdf04ecca3f583e4bfd081726ce765",
+    "evidence": [
+     "`RUN-GATEWAY-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "BerriAI/litellm",
+     "kind": "OPTIONAL_ADAPTER",
+     "target": {
+      "record": "provider.planeon.litellm-local",
+      "token": "planeon.litellm-local"
+     },
+     "divergence": {
+      "roadmapSelection": "Agent Router",
+      "decisions": [
+       "OW-D3",
+       "H3-D1"
+      ],
+      "deferral": "RUN-GATEWAY-ADOPT-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "runtime.experience",
+   "document": {
+    "path": "docs/harnesses/runtime.experience.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "3210464c644b456e250490f8255fb583d62c35c57ad5101a0d8b89f2b1666096",
+    "evidence": [
+     "`ag-ui-protocol/ag-ui`",
+     "`CopilotKit/CopilotKit`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/runtime.experience.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "2d893f9cedb09f5b46c9eadcd31ed0543791624a8fb2fc110c5afdb09c394e49",
+    "evidence": [
+     "`RUN-UI-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "ag-ui-protocol/ag-ui",
+     "kind": "OPTIONAL_ADAPTER",
+     "target": {
+      "record": "provider.planeon.experience-agui",
+      "token": "planeon.experience.agui"
+     }
+    },
+    {
+     "baseline": "CopilotKit/CopilotKit",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "RUN-UI-ADOPT-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "runtime.infrastructure",
+   "document": {
+    "path": "docs/harnesses/runtime.infrastructure.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "3b821a2c98ba646e67b382993769beec5b64141f659150816627691ebb216fd2",
+    "evidence": [
+     "`kubernetes/kubernetes`",
+     "`helm/helm`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/runtime.infrastructure.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "d14bf8d431b5dfcea69e18d8eee80a0e07ec33532933e42e173cf8577529dcb9",
+    "evidence": [
+     "`OP-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "kubernetes/kubernetes",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.runtime.infrastructure.kubernetes-upstream",
+      "token": "kubernetes.upstream"
+     }
+    },
+    {
+     "baseline": "helm/helm",
+     "kind": "PLAN_LIBRARY",
+     "target": {
+      "span": {
+       "path": "docs/repositories/10-mas-harness-operator.md",
+       "section": "## Deployables and toolchain",
+       "lines": [
+        152,
+        152
+       ],
+       "sha256": "0c87e82ec386a5e786d638756e78a1a8401f0423530abf568df61f6bb6ec80b3",
+       "evidence": [
+        "Helm 4.2.0"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "harness": "runtime.model-inference",
+   "document": {
+    "path": "docs/harnesses/runtime.model-inference.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "e3b51f54a40964b3b1877a45d98939449e106497cd5d55facc7e4d1e460d839a",
+    "evidence": [
+     "`ollama/ollama`",
+     "`ggml-org/llama.cpp`",
+     "`vllm-project/vllm`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/runtime.model-inference.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "9fb424479f4b775a6fdf32d56f7ab2a77656e6615331e0b0063e8bbb83b459cf",
+    "evidence": [
+     "`MODEL-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "ollama/ollama",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.planeon.ollama",
+      "token": "planeon.ollama"
+     }
+    },
+    {
+     "baseline": "ggml-org/llama.cpp",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.planeon.llamacpp",
+      "token": "planeon.llamacpp"
+     }
+    },
+    {
+     "baseline": "vllm-project/vllm",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "provider.planeon.vllm",
+      "token": "planeon.vllm"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "trust.evaluation-assurance",
+   "document": {
+    "path": "docs/harnesses/trust.evaluation-assurance.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     25,
+     25
+    ],
+    "sha256": "dd2536be432ce56003b914269382a98dd7834ec6b7b76202788211f401186e80",
+    "evidence": [
+     "`UKGovernmentBEIS/inspect_ai`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/trust.evaluation-assurance.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     28,
+     28
+    ],
+    "sha256": "66cbad54914958b093bf1af3ff36db475008d33ee69840cdd6a3fd2fcd2ce274",
+    "evidence": [
+     "`TRUST-EVAL-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "UKGovernmentBEIS/inspect_ai",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "TRUST-EVAL-ADOPT-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "trust.governance-agentops",
+   "document": {
+    "path": "docs/harnesses/trust.governance-agentops.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "7f1a85adf66775fc259c1a49f4ea2a8945c66587bef1476cbbaf1f585e5e3616",
+    "evidence": [
+     "`open-policy-agent/opa`",
+     "`mlflow/mlflow`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/trust.governance-agentops.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "3b3ebe9bc8479ee901f08b1a07cdeb8f8b317a0199ece20229ce46f1bda5b01d",
+    "evidence": [
+     "`TRUST-GOV-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "open-policy-agent/opa",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "external.opa-engine",
+      "token": "opa"
+     }
+    },
+    {
+     "baseline": "mlflow/mlflow",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "TRUST-GOV-ADOPT-001"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "trust.observability-finops",
+   "document": {
+    "path": "docs/harnesses/trust.observability-finops.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "42090dbe236b56f4c98ee129fa1ecfd5657fc9fafe40c208586e6acd199f994e",
+    "evidence": [
+     "`open-telemetry/opentelemetry-collector`",
+     "`prometheus/prometheus`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/trust.observability-finops.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "23382cbaf3edffdcd51f620f4843b06b88a2d76e65a0014d86e1b51d0a5bdcd3",
+    "evidence": [
+     "`TRUST-OBS-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "open-telemetry/opentelemetry-collector",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "module.trust.observability.otel-collector",
+      "token": "planeon.otel"
+     }
+    },
+    {
+     "baseline": "prometheus/prometheus",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "external.otel-backend",
+      "token": "prometheus"
+     }
+    }
+   ]
+  },
+  {
+   "harness": "trust.security-safety",
+   "document": {
+    "path": "docs/harnesses/trust.security-safety.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     16,
+     16
+    ],
+    "sha256": "a3daed26f5e95e69dfffae2db4de8c3198cef98d2af4eb70fbe10ed6b8419bf1",
+    "evidence": [
+     "`open-policy-agent/opa`",
+     "`data-privacy-stack/presidio`"
+    ]
+   },
+   "delivery": {
+    "path": "docs/harnesses/trust.security-safety.md",
+    "section": "## Current research-led implementation direction — MET-ADOPT-002",
+    "lines": [
+     19,
+     19
+    ],
+    "sha256": "bfa03bc53aec0e0d1175234631f044baab88c85ea6afecebe225de7c6922c56a",
+    "evidence": [
+     "`TRUST-SAFE-ADOPT-001`"
+    ]
+   },
+   "rows": [
+    {
+     "baseline": "open-policy-agent/opa",
+     "kind": "CATALOG_MODULE",
+     "target": {
+      "record": "external.opa-engine",
+      "token": "opa"
+     }
+    },
+    {
+     "baseline": "data-privacy-stack/presidio",
+     "kind": "DEFERRED",
+     "target": {
+      "item": "TRUST-SAFE-ADOPT-001"
+     }
+    }
+   ]
+  }
+ ],
+ "h10Sources": {
+  "r08": {
+   "path": "docs/repositories/08-mas-harness-execution-plane.md",
+   "section": "## Deployables and toolchain",
+   "lines": [
+    103,
+    103
+   ],
+   "sha256": "89b886667a28895e0e39caa5c6c8786c3a8754af8474ba1751d676d662ea22ae",
+   "evidence": [
+    "PostgreSQL leases/outbox",
+    "Temporal is a separate optional provider module"
+   ]
+  }
+ }
 }

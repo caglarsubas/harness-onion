@@ -216,3 +216,133 @@ This ADR, its data and its tables are reviewed again on:
   owner states them, are Python 3.12.14, Go 1.26.7, Rust 1.99.0 (confirmed by the lane monitor, MON-LANG-4) and Node.
   This ADR makes no per-plan Node claim beyond the cited spans.
 - **(g)** A future language change to a row is checked against the same contract vectors and campaigns.
+
+## Amendment 1 (MET-GOV-005, 2026-10-26): the technology record
+
+TECH-TRUTH-001 extends this ADR's data and checker into the technology record. The owner's TECH-D1 (2026-10-26) put
+the item in the tech-stack review set, the lane monitor assigned it in MON-PAR-NEXT, and MON-TT-DOSSIER ruled its
+questions. `architecture/language-placement.json` moves to schema `planeon.internal.language-placement/v2`, and
+`scripts/language_placement.py check` applies rules R1 to R14 in the order R1-R7, R9-R14, then R8. Each of the 28
+deployables gains its runtime, frameworks, packaging, adopted upstream, implementation status and decision reference.
+The two native rows (`native-host-enforcement-roles` and `r12-native-probes`) gain the same values, with runtime Rust
+and packaging NATIVE_BINARY. Each selected baseline of the 16 harness documents is bound to a catalog module, an
+optional adapter, a plan library or a recorded deferral, 31 rows in all. Every span now records its section. The text
+above this amendment is unchanged.
+
+- **Status and decision.** `otel-collector` is the one upstream-managed deployable: its module's image is the upstream
+  `otel/opentelemetry-collector-contrib`, and it keeps that upstream's language (UPSTREAM_OWN). The other 27
+  deployables are PLANNED, as `architecture/services.yaml` states; no harness-onion record states an approved or
+  implemented one. The decision reference is ADR 0011 for `orchestration-api` and `orchestration-worker` (they stay
+  PLANNED: ADR 0011 decides the executor, not their implementation), LANG-HOTPATH-DECISION-001 for the four
+  PENDING_HOTPATH_DECISION rows, KN-DATA-001 for `connector-controller`, and this ADR for every other row.
+- **The baseline bindings.** 18 rows bind a catalog module, 2 an optional adapter, 1 a plan library (`helm/helm`, on
+  R10's toolchain bullet) and 10 a recorded deferral that the harness document's Delivery line names. H10's first row
+  is `planeon.orchestrator.postgres`, and `temporalio/temporal`, which the H10 document calls an optional provider, is
+  deferred to EXEC-TEMPORAL-001.
+- **H3's divergence is recorded, not resolved.** The `runtime.ai-gateway` document's planning target is
+  `BerriAI/litellm`, and its row binds that line as an OPTIONAL_ADAPTER. The roadmap's OW-D3 and H3-D1 select Agent
+  Router: the row's `divergence` records that selection (`roadmapSelection`) and its deferral, RUN-GATEWAY-ADOPT-001,
+  which the document's Delivery line names. The checker picks no winner.
+- **Drift.** The checker also refuses a DEFAULT or CONDITIONAL providers.yaml record that names Temporal, a DEFAULT
+  bound record inside a provider exclusivity group, two DEFAULT bound records for one capability, and an
+  upstream-managed deployable given its repository's language (O4, O5).
+- **Carried couplings.** The record pins `architecture/services.yaml`, `architecture/repositories.yaml` and
+  `architecture/providers.yaml` by sha256. SERVICE-EDGES-001's services.yaml amendment needs the services.yaml pin
+  re-derived and the checker re-run. A providers.yaml change needs its pin, the catalog-agreement rule (R10), the
+  binding rule (R12) and the expected bindings re-derived. This amendment changes no catalog.
+- **What "any change to their text is refused" covers (C2-2).** A cited span is now located in its section: its
+  heading line must occur once in its file, and the cited block must occur exactly once between that heading and the
+  next heading. A block moved to another section, copied into another section with the original edited, or duplicated
+  within its section is refused; a move within the section is accepted. One residual is accepted and stated: a copy
+  within the same section, with the original then edited, is accepted, because the cited text still stands verbatim in
+  its own section. `docs/alpha-2/W01_AMENDMENT_W02D.md` and `docs/alpha-2/ENFORCEMENT_TEST_PLAN.md` each have one
+  heading, so their section is the whole file: for their 4 spans, a move to the end and the copy-then-edit case are
+  accepted too.
+
+### The technology record
+
+<!-- technology-table:begin -->
+Technology (amendment 1), rendered from `architecture/language-placement.json` (schema `planeon.internal.language-placement/v2`) by `scripts/language_placement.py`: the baseline at `architecture/providers.yaml` sha256 `9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02`.
+
+| Deployable | Runtime | Frameworks | Packaging | Upstream | Implementation status | Decision | Frameworks sources |
+|---|---|---|---|---|---|---|---|
+| `bundle-verifier` | Go 1.26.7 | controller-runtime, Kubebuilder/envtest, Helm 4.2.0, Cosign 3.1.3, Kustomize 5.8.1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/10-mas-harness-operator.md:152` |
+| `otel-collector` | null | none | HELM_CHART, OCI_IMAGE | otel/opentelemetry-collector-contrib | UPSTREAM_MANAGED | docs/adr/0010-language-placement.md | none |
+| `operator` | Go 1.26.7 | controller-runtime, Kubebuilder/envtest, Helm 4.2.0, Cosign 3.1.3, Kustomize 5.8.1 | HELM_CHART, OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/10-mas-harness-operator.md:152` |
+| `policy-decision` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest, OPA | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92`; `docs/repositories/09-mas-harness-trust-plane.md:100` |
+| `sandbox-runner` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `fleet-sync-agent` | Go 1.26.7 | controller-runtime, Kubebuilder/envtest, Helm 4.2.0, Cosign 3.1.3, Kustomize 5.8.1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/10-mas-harness-operator.md:152` |
+| `guardrail-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
+| `usage-ledger` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
+| `governance-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
+| `domain-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
+| `registry-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
+| `inference-api` | Python 3.12.14 | FastAPI, Pydantic v2, Uvicorn, HTTPX, cryptography, structlog, SSE, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/06-mas-harness-model-plane.md:99` |
+| `connector-controller` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | KN-DATA-001 | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
+| `memory-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
+| `control-web` | Node 24.20.0 LTS | Next.js 16.3.3 Active LTS with the App Router, React 19.2, TypeScript 5, Prisma 6.19.3, PostgreSQL, AJV 8.20.0, Vitest, Playwright | HELM_CHART, OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/04-mas-harness-control-plane.md:102` |
+| `ingest-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
+| `retrieval-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
+| `protocol-gateway` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `evidence-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
+| `profile-compiler-worker` | Python 3.12.14 | `uv` 0.12.7 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/04-mas-harness-control-plane.md:103` |
+| `index-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
+| `orchestration-api` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0011-h10-execution-authority.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `decision-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `assurance-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
+| `tool-broker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `orchestration-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0011-h10-execution-authority.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `ai-gateway` | Python 3.12.14 | FastAPI/Starlette, Pydantic v2, HTTPX, psycopg 3, cryptography, OpenTelemetry, SSE support | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/05-mas-harness-runtime-plane.md:88` |
+| `experience-gateway` | Python 3.12.14 | FastAPI/Starlette, Pydantic v2, HTTPX, psycopg 3, cryptography, OpenTelemetry, SSE support | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/05-mas-harness-runtime-plane.md:88`; `docs/repositories/05-mas-harness-runtime-plane.md:89` |
+<!-- technology-table:end -->
+
+### The native rows
+
+<!-- native-table:begin -->
+Native rows (amendment 1), rendered from `architecture/language-placement.json` (schema `planeon.internal.language-placement/v2`) by `scripts/language_placement.py`: the baseline at `architecture/providers.yaml` sha256 `9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02`.
+
+| Row | Owner repository | Runtime | Frameworks | Packaging | Upstream | Implementation status | Decision |
+|---|---|---|---|---|---|---|---|
+| `native-host-enforcement-roles` | `mas-harness-operator` | Rust | none | NATIVE_BINARY | null | PLANNED | docs/adr/0010-language-placement.md |
+| `r12-native-probes` | `mas-harness-conformance-labs` | Rust | none | NATIVE_BINARY | null | PLANNED | docs/adr/0010-language-placement.md |
+<!-- native-table:end -->
+
+### The baseline bindings
+
+<!-- bindings-table:begin -->
+Baseline bindings (amendment 1), rendered from `architecture/language-placement.json` (schema `planeon.internal.language-placement/v2`) by `scripts/language_placement.py`: the baseline at `architecture/providers.yaml` sha256 `9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02`.
+
+| Harness | Baseline | Kind | Target | Divergence |
+|---|---|---|---|---|
+| `execution.ml-decision` | `scikit-learn/scikit-learn` | CATALOG_MODULE | `provider.execution.decision-sklearn` / `planeon.sklearn` | none |
+| `execution.ml-decision` | `microsoft/onnxruntime` | CATALOG_MODULE | `provider.execution.decision-onnx` / `planeon.onnx` | none |
+| `execution.orchestration` | `planeon.orchestrator.postgres` | CATALOG_MODULE | `module.execution.orchestration.orchestration-worker` / `planeon.orchestrator.postgres` | none |
+| `execution.orchestration` | `temporalio/temporal` | DEFERRED | EXEC-TEMPORAL-001 (Delivery line) | none |
+| `execution.protocol-interoperability` | `modelcontextprotocol/python-sdk` | CATALOG_MODULE | `provider.execution.protocol-mcp` / `planeon.mcp` | none |
+| `execution.protocol-interoperability` | `a2aproject/a2a-python` | CATALOG_MODULE | `provider.execution.protocol-a2a` / `planeon.a2a` | none |
+| `execution.tool-skill-sandbox` | `google/gvisor` | CATALOG_MODULE | `provider.execution.sandbox-gvisor` / `planeon.sandbox.gvisor` | none |
+| `execution.tool-skill-sandbox` | `bytecodealliance/wasmtime` | CATALOG_MODULE | `provider.execution.sandbox-wasmtime` / `planeon.sandbox.wasmtime` | none |
+| `knowledge.data-integration` | `trinodb/trino` | DEFERRED | KN-DATA-ADOPT-001 (Delivery line) | none |
+| `knowledge.data-integration` | `fivetran/great_expectations` | DEFERRED | KN-DATA-ADOPT-001 (Delivery line) | none |
+| `knowledge.data-integration` | `OpenLineage/OpenLineage` | DEFERRED | KN-DATA-ADOPT-001 (Delivery line) | none |
+| `knowledge.domain-semantic` | `RDFLib/rdflib` | CATALOG_MODULE | `module.knowledge.domain-semantic.domain-service` / `planeon.rdflib` | none |
+| `knowledge.domain-semantic` | `RDFLib/pySHACL` | CATALOG_MODULE | `module.knowledge.domain-semantic.domain-service` / `planeon.pyshacl` | none |
+| `knowledge.memory-state` | `mem0ai/mem0` | DEFERRED | KN-MEM-ADOPT-001 (Delivery line) | none |
+| `knowledge.retrieval-context` | `run-llama/llama_index` | DEFERRED | KN-RET-ADOPT-001 (Delivery line) | none |
+| `knowledge.retrieval-context` | `pgvector/pgvector` | CATALOG_MODULE | `external.pgvector` / `tenant.pgvector` | none |
+| `runtime.ai-gateway` | `BerriAI/litellm` | OPTIONAL_ADAPTER | `provider.planeon.litellm-local` / `planeon.litellm-local` | roadmap selection Agent Router (OW-D3, H3-D1), deferral RUN-GATEWAY-ADOPT-001; recorded, not resolved |
+| `runtime.experience` | `ag-ui-protocol/ag-ui` | OPTIONAL_ADAPTER | `provider.planeon.experience-agui` / `planeon.experience.agui` | none |
+| `runtime.experience` | `CopilotKit/CopilotKit` | DEFERRED | RUN-UI-ADOPT-001 (Delivery line) | none |
+| `runtime.infrastructure` | `kubernetes/kubernetes` | CATALOG_MODULE | `provider.runtime.infrastructure.kubernetes-upstream` / `kubernetes.upstream` | none |
+| `runtime.infrastructure` | `helm/helm` | PLAN_LIBRARY | `docs/repositories/10-mas-harness-operator.md` under `## Deployables and toolchain`: Helm 4.2.0 | none |
+| `runtime.model-inference` | `ollama/ollama` | CATALOG_MODULE | `provider.planeon.ollama` / `planeon.ollama` | none |
+| `runtime.model-inference` | `ggml-org/llama.cpp` | CATALOG_MODULE | `provider.planeon.llamacpp` / `planeon.llamacpp` | none |
+| `runtime.model-inference` | `vllm-project/vllm` | CATALOG_MODULE | `provider.planeon.vllm` / `planeon.vllm` | none |
+| `trust.evaluation-assurance` | `UKGovernmentBEIS/inspect_ai` | DEFERRED | TRUST-EVAL-ADOPT-001 (Delivery line) | none |
+| `trust.governance-agentops` | `open-policy-agent/opa` | CATALOG_MODULE | `external.opa-engine` / `opa` | none |
+| `trust.governance-agentops` | `mlflow/mlflow` | DEFERRED | TRUST-GOV-ADOPT-001 (Delivery line) | none |
+| `trust.observability-finops` | `open-telemetry/opentelemetry-collector` | CATALOG_MODULE | `module.trust.observability.otel-collector` / `planeon.otel` | none |
+| `trust.observability-finops` | `prometheus/prometheus` | CATALOG_MODULE | `external.otel-backend` / `prometheus` | none |
+| `trust.security-safety` | `open-policy-agent/opa` | CATALOG_MODULE | `external.opa-engine` / `opa` | none |
+| `trust.security-safety` | `data-privacy-stack/presidio` | DEFERRED | TRUST-SAFE-ADOPT-001 (Delivery line) | none |
+<!-- bindings-table:end -->
