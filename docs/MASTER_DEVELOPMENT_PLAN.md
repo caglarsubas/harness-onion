@@ -1,6 +1,40 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-GOV-004 source preparation, October 26, 2026
+## Current checkpoint — MET-ADOPT-005 source preparation, October 26, 2026
+
+Alpha2 OPEN. MET-GOV-004 (LANG-PLACEMENT-ADR-001) passed required verify and merged as main ee26624.
+TECH-ORCHESTRATION-001 (the owner's TECH-D1, "PostgreSQL-native (Recommended)", and Q-TO-6; the lane monitor's
+owner-delegated rulings MON-TECHORCH-1, MON-TECHORCH-2 and MON-TECHORCH-M1) records the H10 execution authority:
+docs/adr/0011-h10-execution-authority.md makes the PostgreSQL executor (PostgreSQL leases and outbox) H10's qualified
+baseline and Temporal an optional provider, and names the superseded older planning texts by path and line without
+editing them. docs/harnesses/execution.orchestration.md takes the new planning-target block (its lines 16-20), and
+docs/repositories/08-mas-harness-execution-plane.md one clause on line 103, with lines 101-102 unchanged. docs/DEVELOPMENT_STATUS.md gains one line citing the ADR. The provider
+catalog is unchanged. The packet registers its own review series, MET-ADOPT-005/packet, in the brief registry; its two gate paths are docs/harnesses/execution.orchestration.md (GATE_HARNESS_DOCS) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. Its
+new layer checks the new H10 block and the rest of that document against the base, the R08 line and its unchanged
+lines, ADR 0011's bytes, its superseded-texts table and each superseded fragment once, the superseded texts and the
+provider catalog against the base, the status file and the registry's one rider. It is built under MET-PERF-042's
+identity rule and step rule: every older chain validator changes only by the bump vocabulary, 267's layer by the bridge
+vocabulary, and 267's test keeps its 8 own routes and the adjacent one and one payload mutation (C2), while the new
+head's test keeps the full fan-in. MET-ADOPT-005 is the sole 268th specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ADOPT-005 / TECH-ORCHESTRATION-001 | SOURCE_PREPARED | The H10 execution authority ADR 0011 (268th packet): the owner's TECH-D1 and Q-TO-6, PostgreSQL leases and outbox as H10's qualified baseline and Temporal an optional provider; the new H10 block and one R08 clause, the superseded planning texts named and not edited, the provider catalog unchanged; gate material (the H10 harness document and the registry rider), the owner's per-PR approval |
+| Alpha2A | MET-GOV-004 / LANG-PLACEMENT-ADR-001 | VERIFY_PASSED_MERGED | Merged as main ee26624 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical language-placement source checkpoint — MET-GOV-004 source preparation, October 26, 2026
 
 Alpha2 OPEN. MET-LINUX-008 (LINUX-HOST-AUTH-001) passed required verify and merged as main 9184f5b.
 LANG-PLACEMENT-ADR-001 (the owner's language policy LANG-D2 (a); the lane monitor's owner-delegated rulings, among them
@@ -2711,7 +2745,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LINUX-ROOT-ALIASES / MET-LINUX-009 · Publish the signed root-alias contract for the native runner kit (version 4 inputs with a signed root-alias record in ci/linux-runner/, the two linux-runner docs, the vectors and the D5a oracle; v3 unchanged), adopted as candidate c3 after two in-tree CONTRACT rounds, with the registry rider; gate material; pass required verify through the owner's App after the owner approves the exact head.
 - [x] Alpha 2A · DIGEST-CONTRACT-V2 / MET-ENFORCE-042 · Publish the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; adopted as candidate c4 after three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical and the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · LINUX-HOST-AUTH-001 / MET-LINUX-008 · Publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class; pass required verify through the owner's App after the lane monitor's and the owner's PR approval.
-- [ ] Alpha 2A · LANG-PLACEMENT-ADR-001 / MET-GOV-004 · Publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · LANG-PLACEMENT-ADR-001 / MET-GOV-004 · Publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · TECH-ORCHESTRATION-001 / MET-ADOPT-005 · Record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

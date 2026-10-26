@@ -72,7 +72,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 267 and len(accepted) == 230
+    assert len(current) == 268 and len(accepted) == 230
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -108,7 +108,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(manifest.historical_catalog(current)) == 229
     assert len(ledger.historical_catalog(current)) == 228
     assert len(adoption.historical_catalog(current)) == 227
@@ -797,7 +798,7 @@ def test_every_reviewed_file_is_pinned():
         # An earlier round's vectors are bound by digest in the status record, not copied.
         assert profile.CONTRACT_DIR + "round%d/vectors.json" % number not in pinned
     for path, expected in profile.ERA_SHA256.items():
-        assert profile.digest(profile.regular_bytes(path)) == expected
+        assert profile.digest(profile.reviewed_bytes(path)) == expected
 
 
 @pytest.mark.parametrize("path", ["docs/harnesses/execution.orchestration.md", "docs/harnesses/execution.tool-skill-sandbox.md",

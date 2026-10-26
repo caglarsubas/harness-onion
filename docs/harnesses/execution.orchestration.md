@@ -13,11 +13,11 @@ Alpha2 ONGOING: MET-ADOPT-002 ONGOING; CONF-FIX-007 PAUSED_RESEARCH_AMENDMENT.
 CONF-LIVE-004 WAITING_PREDECESSOR_CORRECTION; completion C1-C7 and all independent
 source gates remain mandatory. No native/tenant promotion or budget reset; effort NOT_DUE.
 
-Planning target: `temporalio/temporal`.
-Plan self-hosted Temporal as the preferred durable execution engine. LangGraph is a later agent-logic adapter, not a second retry/side-effect authority for the same task.
-Platform scope: Own task API, business intent, policy admission, approvals, receipts and tool broker integration. Freeze further general-purpose PostgreSQL executor expansion; retain existing work and read-only reference tests until a separately authorized migration.
-Delivery: `EXEC-TEMPORAL-001` (ALPHA_2, WAITING_PACKET_PUBLICATION).
-Acceptance: Prove signals/approval waits, restart/replay, cancellation, idempotent activities, duplicate-side-effect prevention and retention under local Linux. Worker nondeterminism, workflow version upgrades and PostgreSQL history export/drain require reviewed rollback. Temporal does not guarantee exactly-once external effects.
+Planning target: `planeon.orchestrator.postgres` (PostgreSQL leases and outbox) as H10's qualified baseline; `temporalio/temporal` is an optional provider ([ADR 0011](../adr/0011-h10-execution-authority.md)).
+For the first enterprise release PostgreSQL owns leases, task transitions, checkpoints, timers, retries and outbox coordination, on the tenant-supplied PostgreSQL every profile already requires. Temporal is an optional provider module that `EXEC-TEMPORAL-001` qualifies behind the same public task contracts; it is never a second retry or side-effect authority for a task, and it is selectable only with a catalog record, a repository packet and conformance evidence. LangGraph is a later agent-logic adapter, not a second retry/side-effect authority for the same task.
+Platform scope: Own task API, business intent, policy admission, approvals, receipts and tool broker integration. Complete the PostgreSQL executor to the parity, fencing and resume vectors, with no general-purpose engine beyond H10's contracts.
+Delivery: `EXEC-ORCH-001` (the PostgreSQL baseline) and `EXEC-TEMPORAL-001` (the optional Temporal provider; ALPHA_2, WAITING_PACKET_PUBLICATION).
+Acceptance: the baseline is held to the durable-execution parity vectors, the fencing tokens and operation IDs, and the resume vectors. For `EXEC-TEMPORAL-001`, behind the same public task contracts and with its measured comparison: Prove signals/approval waits, restart/replay, cancellation, idempotent activities, duplicate-side-effect prevention and retention under local Linux. Worker nondeterminism, workflow version upgrades and PostgreSQL history export/drain require reviewed rollback. Temporal does not guarantee exactly-once external effects.
 This takes precedence over older build-from-scratch directions for future work,
 not over current public contracts or active provider selectors. Retained provider
 paragraphs below describe the prior/current implementation boundary, not permission

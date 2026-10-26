@@ -100,7 +100,7 @@ mas-harness-execution-plane/
 
 - Python 3.12.14, FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, and A2A v1; exact versions frozen in `uv.lock`.
 - Deployables: `protocol-gateway`, `orchestration-api`, `orchestration-worker`, `tool-broker`, ephemeral `sandbox-runner` Jobs, and `decision-service`.
-- Baseline durable executor uses PostgreSQL leases/outbox. Temporal is a separate optional provider module; it cannot change public task semantics.
+- Baseline durable executor uses PostgreSQL leases/outbox. Temporal is a separate optional provider module; it cannot change public task semantics, and it is selectable only with a catalog record, a repository packet and conformance evidence.
 - Sandbox providers: restricted Kubernetes Jobs for trusted actions, Wasmtime for untrusted WASM, gVisor/Kata for untrusted native code. Missing required provider makes compilation fail.
 
 ## Owned APIs, events, and stores

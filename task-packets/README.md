@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-GOV-004
+## Current source preparation — MET-ADOPT-005
+
+MET-ADOPT-005 (TECH-ORCHESTRATION-001): the H10 execution authority ADR 0011 (PostgreSQL leases and outbox own H10
+execution; Temporal is an optional provider), the new H10 planning-target block and one R08 clause; the superseded
+planning texts named and not edited; the provider catalog unchanged; gate material (the H10 harness document and the
+registry rider). Alpha2 OPEN; 267 accepted plus MET-ADOPT-005 only.
+
+## Historical language-placement source preparation — MET-GOV-004
 
 MET-GOV-004 (LANG-PLACEMENT-ADR-001): the language-placement ADR 0010, its data (the planned language of every
 catalogued repository and deployable, bound to its source lines), the minimal offline checker and its tests, and the D5a
@@ -1618,3 +1625,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 265 | `MET-ENFORCE-042` | `Harness-Engineering` | DIGEST-CONTRACT-V2: the I01 digest contract v2 beside the frozen v1 (admission v4's sealed rendering, profile v2's complete positive with W1, edge record v11; candidate c4, three in-tree CONTRACT rounds), with its D5a oracle and the registry rider; every non-chain pinned file byte-identical, the chain validators and tests in the pin lists changed only by the chain-bump vocabulary under the step rule (B-L1-3); DATA_CHECK_ONLY; gate material only through the registry |
 | 266 | `MET-LINUX-008` | `Harness-Engineering` | LINUX-HOST-AUTH-001: the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (host authority, host recipe, launcher install and key custody as data; the offline checker and its tests; candidate c8, three in-tree CONTRACT rounds), with its D5a oracle; DATA_CHECK_ONLY; no gate class |
 | 267 | `MET-GOV-004` | `Harness-Engineering` | LANG-PLACEMENT-ADR-001: the language-placement ADR 0010 (the owner's language policy LANG-D2 (a); the planned language of every catalogued repository and deployable as data bound to its source lines; the minimal offline checker and its tests), with its D5a oracle; gate material (the registry rider) |
+| 268 | `MET-ADOPT-005` | `Harness-Engineering` | TECH-ORCHESTRATION-001: the H10 execution authority ADR 0011 (the owner's TECH-D1 and Q-TO-6; PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), the new H10 block and one R08 clause; gate material (the H10 harness document and the registry rider) |
