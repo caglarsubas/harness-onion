@@ -30,7 +30,7 @@
   "date": "2026-10-28"
  },
  "disclosures": [
-  "re-issued for MET-GOV-005 under MON-TT-C1 from the brief ORACLE_BRIEF.md (briefSha256 above) and the design revision 3 only; it replaces the MET-GOV-004 oracle, which its author never read",
+  "re-issued for MET-GOV-005 under MON-TT-C1 from the brief ORACLE_BRIEF.md (sha256 e9ddd3afd44bf1e57fd43243981c0a1d61d1121fca99cb287c5b0bcc000876af, the c3 identity's briefSha256) and the design revision 3 only; it replaces the MET-GOV-004 oracle, which its author never read",
   "black-box through the published check command, except the design's direct R14 rows, which load the rule function by path; real copies only (copytree with copy2), every copy removed at teardown",
   "run 1 against the base: 33 passed, 103 failed (v2 expectations meeting v1); run 2 against the candidate c1 (dd49a3ea): 136 passed, 0 failed, no findings; scripts link count 1 before and after; 0 entries left in its temp parent; the no-shared-inode test passes",
   "two tests accept more than one outcome: the BR-TT-1 lines-only case accepts exit 0 or R8 (never R5 or R12), and the R14 calling form is chosen adaptively and calibrated on the pristine row",
