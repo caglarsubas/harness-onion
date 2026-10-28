@@ -30,9 +30,9 @@
     {
       "round": 1,
       "record": "architecture/host-interface-amendment-he5/review-round1.json",
-      "recordSha256": "3a89f0a2395efb5408945b8dd7785b48408f5aa12696195d5d0acef0458728f7",
+      "recordSha256": "f705d6f33a6625ac11ef4cf1454598e281cc48936b2c4cc55fe23b850a46ba9c",
       "identity": "architecture/host-interface-amendment-he5/review-identity-round1.json",
-      "identitySha256": "9538a8844dcecbb788daf93fa6472ae534ed321dd966a675bfe2dffb2a2b1952",
+      "identitySha256": "32e30a0822910f22796344940e71b527cab1752c2c46e183cf40d84181182938",
       "verdict": "CHANGES_REQUIRED",
       "findings": [
         {
@@ -67,7 +67,7 @@
       "record": "architecture/host-interface-amendment-he5/review-round2.json",
       "recordSha256": "9671326111a54f3eded353be0ecafc6f1d686240d03ba60ece5d9fcc70b311e0",
       "identity": "architecture/host-interface-amendment-he5/review-identity-round2.json",
-      "identitySha256": "1a95e011b04b0c981d093fe7888a2cc1185f53cd008386afdfd34b1d62de2e08",
+      "identitySha256": "d5054d51188a228428db141aa5fe5407e8520915f5e60be4dad03b64da45acd0",
       "base": "c1",
       "verdict": "PASS_FOR_ADOPTION",
       "findings": [
@@ -136,7 +136,7 @@
   ],
   "oracle": {
     "identity": "architecture/host-interface-amendment-he5/oracle-identity.json",
-    "identitySha256": "a0019895c748600ae458c971c1bdffe885d61965b86e0156221fc443ee222a90",
+    "identitySha256": "2b7970bd3136f4a8f054245285fa7db02b855a52cec9429fb2542bb9e04a7b6b",
     "tests": "tests/test_met_enforce_043_oracle.py",
     "state": "KEPT (MON-EV12-ORACLE): 50/50 on c2",
     "rule": "one D5a oracle by a fresh agent after adoption (MON-EV12-ORACLE-GO), from the HE5 README, README-v12 and the model's public names alone, never the builder's material"
@@ -243,5 +243,27 @@
     "candidateCommit": "62863e95ab5fa6befbea205152da318215d0761c",
     "round": 2,
     "rule": "adopted by script from the PASS_FOR_ADOPTION round; the contract files stay byte-identical to c2; the mechanics rebase the candidate onto the post-269 main"
-  }
+  },
+  "errata": [
+    {
+      "id": "c2a",
+      "ruling": "MON-EV12-B1",
+      "by": "LANE_MONITOR",
+      "date": "2026-10-28",
+      "reason": "records only: the repository's review-record check (scripts/review_record.py check_tree, run by tests/test_review_records_in_tree.py) refused the in-tree CONTRACT rounds and the oracle identity on the v2 shapes; no contract byte changes",
+      "changes": [
+        "review-round1.json: the 12 bindingRules strings moved verbatim to the end of checked and bindingRules dropped (v2 shape: bindingRules entries are {rule, met, note} objects; no judgment is added on the reviewer's behalf); round 2's prose still cites round 1's pre-errata digest 3a89f0a2",
+        "review-identity-round1.json: re-pinned to the changed record; 'not recorded' dropped from author.agentIds (v2 AGENT_ID); MON-EV12-CR1's words kept as the operatorRelays line 'c1 build agent id: not recorded (MON-EV12-CR1)'",
+        "review-identity-round2.json: launched and finished as instants and base added, equal to the record's base; the instants are reconstructed from the operator session's transcript event times at minute precision, not recorded at launch",
+        "oracle-identity.json: launched and finished as instants, reconstructed the same way (transcript event times, minute precision, not recorded at launch); 'not recorded' dropped from author.agentIds",
+        "status.json and source-index.json: the changed digests re-pinned; this entry and the MON-EV12-B1 ruling added"
+      ],
+      "preErrata": {
+        "architecture/host-interface-amendment-he5/review-round1.json": "3a89f0a2395efb5408945b8dd7785b48408f5aa12696195d5d0acef0458728f7",
+        "architecture/host-interface-amendment-he5/review-identity-round1.json": "9538a8844dcecbb788daf93fa6472ae534ed321dd966a675bfe2dffb2a2b1952",
+        "architecture/host-interface-amendment-he5/review-identity-round2.json": "1a95e011b04b0c981d093fe7888a2cc1185f53cd008386afdfd34b1d62de2e08",
+        "architecture/host-interface-amendment-he5/oracle-identity.json": "a0019895c748600ae458c971c1bdffe885d61965b86e0156221fc443ee222a90"
+      }
+    }
+  ]
 }

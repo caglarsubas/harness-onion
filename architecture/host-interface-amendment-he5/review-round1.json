@@ -76,19 +76,7 @@
     "6. The tests: not applicable at c1 (no candidate or oracle tests). In their place: the two replays above and my own probes, 24 refused (A1-A24: a current spanning W3 into W4, outside any step, in §5.3; a blank line, heading, quote and '1)' list line on a later line; H3 without its label; a step label added; supersedes swapped or short; an uncited decision; dispositions reordered; an extra DECIDED H4; E1 reworded; H2 made EDITORIAL; an unknown decision cited; U+2028; an upper-case effective digest; a duplicate member; NaN; a native-profile byte; a malformed obligation id; a third obligation named), each with its own message, and 10 accepted that the README says are refused (C1-1).",
     "7. Placement: the evolution surface at the base (record 188c75d4, 31 gate entries, check passed) puts all eight paths in CONTRACT_AND_SOURCE, exact and lower-cased, check_paths passes, approvers and activators LANE_MONITOR and OWNER, none gate material (as MON-EV12-MERGE confirms); upper-case spellings resolve to no class (the surface is case-sensitive; information only). git diff --name-status d7a3cda5 65141a5c lists exactly the eight added files; HS43, HS53, edge v1-v11, the readiness guide, native-profile v4's README and repositories.yaml are untouched.",
     "8. Privacy and supply chain: privacy_hits after load_name_tokens on the fixed digest file, over each of the eight files: names 0, legacy term 0, absolute paths 0, e-mails 0; home, temporary, scratch and local-tool path shapes (built from parts, whole and with seams removed) 0, except 4 product '/opt/' design paths in HOST_INTERFACE_SPEC.md that HS53's text holds at the same lines (292, 296, 297, 714). Standard library only; no new dependency; nothing interposes on, forwards, proxies, swaps or bypasses anything.",
-    "9. Open questions: Q-R1-1 and Q-R1-2 answered under questions."
-  ],
-  "disclosures": [
-    "Two messages each carried two tool calls, against the one-call rule: a read of the readiness guide's lines 112-122 with the write of a WORK script, and two line-number edits of this record sent together.",
-    "Two short echo builtins ran outside timeout 120 zsh -c (separators and a return code), and one small model probe (the KeyError probe of C1-4, under 30 MB) ran under timeout 120 without /usr/bin/time -l; every measured run peaked under 30 MB.",
-    "An ls -1 of the TOOLS ev12 folder listed its entry names (the brief, the snapshot, the rules file, contract, reviews); nothing else there was opened.",
-    "The decision sections were located by a script that matched heading lines for the eight named ids and wrote only those sections to WORK; I read no other section.",
-    "Git beyond the two listed forms, all read only and path-limited: git show of further exact files at the base (HS43's spec and record, the W01 corrected spec, the policy-observation readiness doc and amendment, the seccomp-allowlists README, the evolution-surface record, the six pinning validators as text, the two form files and repositories.yaml); git log -1 --raw for the two provider files; git rev-parse of the subject's tree; and fixed-string git grep for 'sole inherited', 'O_PATH descriptor', 'O_PATH' and 'close_range above 3' with the five pathspecs plus the oracle, tools/w04, key and private-folder exclusions. The dropped counts were computed by a post-filter over the output lines (0 each); git ran without HOME so no global configuration was read.",
-    "The 'O_PATH' grep printed one line of scripts/enforcement_test_plan.py (line 91), a file the five pathspecs do not exclude; it was not opened otherwise.",
-    "I ran the builder's script into a fresh WORK directory under env -u HOME; it read its own pinned sources under the TOOLS contract folder and ran its own path-limited git forms (show, cat-file -e, log -1, rev-parse).",
-    "My probes pass mutated bytes to the model only through check(read)'s injected reader or as check_record's arguments; nothing in the model was patched."
-  ],
-  "bindingRules": [
+    "9. Open questions: Q-R1-1 and Q-R1-2 answered under questions.",
     "BP-1: evolution-surface classes reported (check 7); no unclassified or ambiguous path.",
     "BP-2: held, with Q-CB-2 (a) (no providerPacket) as v11 applies v10's rule.",
     "BP-3: README-v12 carries README-v11 section for section; its counts, digests, bytes, commit and paths hold; the repositories.yaml claim holds (harness-engineering appears in no graph edge).",
@@ -101,6 +89,16 @@
     "BP-10: held in form; MON-EV12-Q2 attribution (C1-2) and slot number (C1-3) for the fold.",
     "BP-11: held (content, plan, design rev 5 and the decision record at build time by sha256; no local path).",
     "BP-12: held; every sentence of §4's errata scope is covered; Q-CB-7 and Q-CB-9 acceptable, Q-CB-8 C1-5."
+  ],
+  "disclosures": [
+    "Two messages each carried two tool calls, against the one-call rule: a read of the readiness guide's lines 112-122 with the write of a WORK script, and two line-number edits of this record sent together.",
+    "Two short echo builtins ran outside timeout 120 zsh -c (separators and a return code), and one small model probe (the KeyError probe of C1-4, under 30 MB) ran under timeout 120 without /usr/bin/time -l; every measured run peaked under 30 MB.",
+    "An ls -1 of the TOOLS ev12 folder listed its entry names (the brief, the snapshot, the rules file, contract, reviews); nothing else there was opened.",
+    "The decision sections were located by a script that matched heading lines for the eight named ids and wrote only those sections to WORK; I read no other section.",
+    "Git beyond the two listed forms, all read only and path-limited: git show of further exact files at the base (HS43's spec and record, the W01 corrected spec, the policy-observation readiness doc and amendment, the seccomp-allowlists README, the evolution-surface record, the six pinning validators as text, the two form files and repositories.yaml); git log -1 --raw for the two provider files; git rev-parse of the subject's tree; and fixed-string git grep for 'sole inherited', 'O_PATH descriptor', 'O_PATH' and 'close_range above 3' with the five pathspecs plus the oracle, tools/w04, key and private-folder exclusions. The dropped counts were computed by a post-filter over the output lines (0 each); git ran without HOME so no global configuration was read.",
+    "The 'O_PATH' grep printed one line of scripts/enforcement_test_plan.py (line 91), a file the five pathspecs do not exclude; it was not opened otherwise.",
+    "I ran the builder's script into a fresh WORK directory under env -u HOME; it read its own pinned sources under the TOOLS contract folder and ran its own path-limited git forms (show, cat-file -e, log -1, rev-parse).",
+    "My probes pass mutated bytes to the model only through check(read)'s injected reader or as check_record's arguments; nothing in the model was patched."
   ],
   "notChecked": [
     "Whether the compiled BROKER program admits the child's new raw calls (dup3, rt_sigaction, rt_sigprocmask) is the closed design's (O1, O7) and the programs are outside this round's read set.",
