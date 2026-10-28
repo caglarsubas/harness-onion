@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ADOPT-005
+## Current source preparation — MET-GOV-005
+
+MET-GOV-005 (TECH-TRUTH-001): the v2 technology record: the v2 language-placement data, its checker and tests grown in
+place, the re-issued D5a oracle and its identity, ADR 0010's amendment 1 and one status line; no catalog changes; gate
+material (the registry rider). Alpha2 OPEN; 268 accepted plus MET-GOV-005 only.
+
+## Historical H10 execution-authority source preparation — MET-ADOPT-005
 
 MET-ADOPT-005 (TECH-ORCHESTRATION-001): the H10 execution authority ADR 0011 (PostgreSQL leases and outbox own H10
 execution; Temporal is an optional provider), the new H10 planning-target block and one R08 clause; the superseded
@@ -1626,3 +1632,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 266 | `MET-LINUX-008` | `Harness-Engineering` | LINUX-HOST-AUTH-001: the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (host authority, host recipe, launcher install and key custody as data; the offline checker and its tests; candidate c8, three in-tree CONTRACT rounds), with its D5a oracle; DATA_CHECK_ONLY; no gate class |
 | 267 | `MET-GOV-004` | `Harness-Engineering` | LANG-PLACEMENT-ADR-001: the language-placement ADR 0010 (the owner's language policy LANG-D2 (a); the planned language of every catalogued repository and deployable as data bound to its source lines; the minimal offline checker and its tests), with its D5a oracle; gate material (the registry rider) |
 | 268 | `MET-ADOPT-005` | `Harness-Engineering` | TECH-ORCHESTRATION-001: the H10 execution authority ADR 0011 (the owner's TECH-D1 and Q-TO-6; PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), the new H10 block and one R08 clause; gate material (the H10 harness document and the registry rider) |
+| 269 | `MET-GOV-005` | `Harness-Engineering` | TECH-TRUTH-001: the v2 technology record (the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests, the re-issued D5a oracle and its identity, ADR 0010's amendment 1); gate material (the registry rider) |
