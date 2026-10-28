@@ -3,13 +3,25 @@
   "packet": "MET-ENFORCE-043",
   "workItem": "EDGE-V12",
   "series": "MET-ENFORCE-043/contract",
-  "candidate": "c1",
+  "candidate": "c2",
   "baseMain": "d7a3cda5010da560d168b47eee1675b10f9ec89e",
-  "inTreeRounds": [],
+  "inTreeRounds": [
+    {
+      "round": 1,
+      "record": "architecture/host-interface-amendment-he5/review-round1.json",
+      "recordSha256": "3a89f0a2395efb5408945b8dd7785b48408f5aa12696195d5d0acef0458728f7",
+      "identity": "architecture/host-interface-amendment-he5/review-identity-round1.json",
+      "identitySha256": "9538a8844dcecbb788daf93fa6472ae534ed321dd966a675bfe2dffb2a2b1952",
+      "verdict": "CHANGES_REQUIRED",
+      "subjectCommit": "65141a5c69955c0fbaf0560a82143b802a63b7a7"
+    }
+  ],
   "roundNumbering": "The in-tree MET-ENFORCE-043/contract rounds start at round 1, the first CONTRACT round on the candidate. The HE-005 design's review rounds are design history, closed with the design below; none is numbered as an in-tree round.",
   "rulings": {
     "MON-EV12-PLAN": "Q-EV12-1 is ruled (a) under the owner's delegation.",
-    "MON-HE005-CLOSE": "DESIGN-HE005 closes at rev 5 (0335ce2d)."
+    "MON-HE005-CLOSE": "DESIGN-HE005 closes at rev 5 (0335ce2d).",
+    "MON-EV12-Q2": "Q-EV12-2 ruled (a), MON-EV12-Q2.",
+    "MON-EV12-CR1": "Identity r1: KEEP. Slips D1-D8 are procedural. D6 is a read-scope slip; record it as such."
   },
   "design": {
     "revision": 5,
@@ -32,8 +44,16 @@
       "ruling": "MON-HE005-CLOSE"
     },
     {
-      "record": "the lane's decision record (local, not published), at build time",
-      "sha256": "59f33f8426f8a13eac2af4d737644f7f314f35f6f252da02be11758b85f3f301"
+      "record": "the lane's decision record (local, not published), as a snapshot",
+      "lane": "the primary lane",
+      "sha256": "436fd8157fca890d2c77e8cb958257ef9c5d94c923be05b050eebf9173a7be5c",
+      "snapshot": "the record's first 58437 bytes at build time (the record is append-only)"
+    },
+    {
+      "record": "the lane's decision record (local, not published), as a snapshot",
+      "lane": "R00, the slot-270 lane",
+      "sha256": "4f7c4a7af9c4aed5e6b9f84bc6a88c20dbefd2530d7301357f76ebaef7639e47",
+      "snapshot": "the record's first 6349 bytes at build time (the record is append-only)"
     }
   ],
   "subject": [
@@ -47,7 +67,7 @@
     },
     {
       "path": "architecture/host-interface-amendment-he5/amendment.json",
-      "sha256": "0cff8bdb03c29c58795bb1dbb60c61da21df6da724275a2c34c474b23c39341e"
+      "sha256": "82ca60cd553c177917f4748ff3a6305bc5dd249da1522d4b3e38c1f5b1c52e84"
     },
     {
       "path": "architecture/host-interface-amendment-he5/HOST_INTERFACE_SPEC.md",
@@ -55,11 +75,11 @@
     },
     {
       "path": "architecture/host-interface-amendment-he5/README.md",
-      "sha256": "8c723042130bbfff04b6b18d1724a2806d1cba768e2dff069a5caf0289b3a48f"
+      "sha256": "2f4bafbab4cfd932e91420623714a4a489ca550ab23c3a4ae05ad46966a1b089"
     },
     {
       "path": "scripts/host_interface_amendment_v4.py",
-      "sha256": "ff1038c67c299d8a86f6caa448e9fddd3ba3ebe42b9f3413309d609246009c50"
+      "sha256": "a09a12f9d574f3c38a30a87dc5ca1884ec7953c1c36ebfe80311f7b1f7223108"
     }
   ],
   "predecessorInputs": [

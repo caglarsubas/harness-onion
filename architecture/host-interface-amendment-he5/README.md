@@ -1,8 +1,8 @@
 # Amendment HE5 to the W01 host-interface specification
 
-Status: **CANDIDATE c1, AWAITING_REVIEW** (independent contract review, round 1, together with operator edge record
-v12; `status.json` governs). Design label `HOST-INTERFACE-DRAFT-002-HE5`, slot 269 (MET-ENFORCE-043, EDGE-V12), owner
-and monitor decisions 2026-10-26, via the lane monitor.
+Status: **CANDIDATE c2, AWAITING_REVIEW** (independent contract review, delta round 2, together with operator edge
+record v12; `status.json` governs). Design label `HOST-INTERFACE-DRAFT-002-HE5`, slot 270 (MET-ENFORCE-043, EDGE-V12),
+owner and monitor decisions 2026-10-26, via the lane monitor.
 
 HE5 lets the capacity broker hand the worker one more descriptor (W01 §5.4 W3-W5): fd 4, the verity-checked O_RDONLY
 worker script, beside FD3, so the worker's set is exactly {0..4}; and it records that the broker reads nothing of the
@@ -35,15 +35,27 @@ same slot (Q-EV12-1 (a)).
 |---|---|
 | `amendment.json` | `planeon.internal.host-interface-amendment/v2` (HS53's schema, the same key sets): the pinned HS53 base and record; four decisions; six counted substring replacements (three DECIDED, three EDITORIAL); one disposition per decision; two obligations; the closed list of 2 superseded clauses; one residual; six stated non-amendments |
 | `HOST_INTERFACE_SPEC.md` | The effective specification: the HS53 effective text with the six items applied |
-| `status.json` | The candidate's status for both contract parts of slot 269, this amendment and edge record v12; it governs |
+| `status.json` | The candidate's status for both contract parts of slot 270, this amendment and edge record v12; it governs |
 | `source-index.json` | The TOOLS records the candidate is built from, by sha256 (local, not published), and its base inputs |
 | `scripts/host_interface_amendment_v4.py` | The standard-library model: HS53's v3 model with HE5's constants and item places. `check(read)` checks the HS53 record digest, the closed HE5 record, every superseded file's digest and quoted clause, and that applying the items to the pinned HS53 bytes gives exactly the published bytes |
 
 The model leaves nothing free-standing in the amended text:
 - H1, H2 and H3 may change only §5.4, each inside the lines of its own step (H1 in W3, H2 in W4, H3 in W5), from the
   step's line to the next step line; no item may touch another step, W1, W2 or W6;
-- no DECIDED item may open a new step, paragraph, heading, list item or quote, so W4's eight calls stay inline as
-  "(1)" to "(8)";
+- each DECIDED item's proposed text holds no blank line between two of its line feeds (a blank line is empty or only
+  spaces and tabs), keeps the step label its current text starts with or adds none, and opens no block on a later
+  line, nor on its first line when the current text starts a line without a step label; its current and proposed
+  texts agree on a leading line feed and on a trailing line feed (both hold one, or neither does);
+- the amended text itself is checked too: §5.4's step lines (the lines that start "Wn. ") are exactly W1, W2, W3, W4,
+  W5 and W6, in that order, as in HS53's text; inside W3, W4 and W5, from each step line to the line before the next
+  step line, no line is blank, and no line after the step line opens a block unless the identical line occurs in
+  HS53's same step; every other line of §5.4, and every line outside §5.4 but the title, the head and section 14, is
+  HS53's; so W4's eight calls stay inline as "(1)" to "(8)";
+- a line opens a block (CommonMark's block starts and the step label) when, after at most three spaces, it starts with
+  a "-", "*" or "+" bullet, an ATX heading of one to six "#" or an ordered marker of one to nine digits and "." or ")",
+  each followed by a space, a tab or the line end; or with ">", a step label "Wn.", a fence of three or more backticks
+  or tildes, or "<"; or when it is a setext underline (only "=" or only "-", then any spaces or tabs) or a thematic
+  break (three or more "*", "-" or "_", with any spaces or tabs between and after);
 - the title rename and the head sentence are fixed;
 - section 14 is rendered from the record alone;
 - the superseded clauses must be exactly the model's closed list of 2, in order;
@@ -104,7 +116,9 @@ each by harness-onion's own rule, so both are listed as carried rather than edit
   `scripts/validate_native_profile_v5.py` (688), `scripts/validate_selinux_matrix_v4.py` (402) and
   `scripts/validate_w03_plan_amend_3.py` (536).
 
-HE5 governs both texts, and a successor of each file's contract adopts the replacement.
+HE5 governs both texts, and a successor of each file's contract adopts the replacement. A successor of the broker
+handoff guide's contract also reattaches the colon clause after the replaced sentence to FD3 alone, and counts fd 4 as
+an expected inherited descriptor in the guide's line-118 check ("unexpected inherited FD … refuses before probes").
 
 ## Obligations
 

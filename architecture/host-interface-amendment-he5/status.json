@@ -1,9 +1,9 @@
 {
   "schemaVersion": "planeon.internal.host-interface-amendment-he5-status/v1",
-  "workItem": "EDGE-V12 (slot 269): operator edge record v12, the I02/I03 registration for R10's HE-005B, and host-interface amendment HE5, the W01 errata HE-005's design departs from; this record covers both contract parts (Q-EV12-2 (a), the author's: one records home, since this slot has a contract directory, unlike EDGE-V9's)",
+  "workItem": "EDGE-V12 (slot 270): operator edge record v12, the I02/I03 registration for R10's HE-005B, and host-interface amendment HE5, the W01 errata HE-005's design departs from; this record covers both contract parts (MON-EV12-Q2: one records home, since this slot has a contract directory, unlike EDGE-V9's)",
   "packet": "MET-ENFORCE-043",
-  "slot": "269",
-  "candidate": "c1",
+  "slot": "270",
+  "candidate": "c2",
   "base": "d7a3cda5010da560d168b47eee1675b10f9ec89e",
   "supersedes": [
     {
@@ -26,10 +26,46 @@
     }
   ],
   "reviewSeries": "MET-ENFORCE-043/contract",
-  "reviewRounds": [],
-  "designHistory": "architecture/host-interface-amendment-he5/source-index.json cites the TOOLS content, plan and design revision 5 and the lane's decision record by sha256; the design's review rounds are not rounds of this series",
+  "reviewRounds": [
+    {
+      "round": 1,
+      "record": "architecture/host-interface-amendment-he5/review-round1.json",
+      "recordSha256": "3a89f0a2395efb5408945b8dd7785b48408f5aa12696195d5d0acef0458728f7",
+      "identity": "architecture/host-interface-amendment-he5/review-identity-round1.json",
+      "identitySha256": "9538a8844dcecbb788daf93fa6472ae534ed321dd966a675bfe2dffb2a2b1952",
+      "verdict": "CHANGES_REQUIRED",
+      "findings": [
+        {
+          "id": "C1-1",
+          "severity": "MAJOR"
+        },
+        {
+          "id": "C1-2",
+          "severity": "MINOR"
+        },
+        {
+          "id": "C1-3",
+          "severity": "NOTE"
+        },
+        {
+          "id": "C1-4",
+          "severity": "NOTE"
+        },
+        {
+          "id": "C1-5",
+          "severity": "NOTE"
+        },
+        {
+          "id": "C1-6",
+          "severity": "NOTE"
+        }
+      ],
+      "ruling": "MON-EV12-CR1 (identity KEEP)"
+    }
+  ],
+  "designHistory": "architecture/host-interface-amendment-he5/source-index.json cites the TOOLS content, plan and design revision 5 and the two lanes' decision-record snapshots by sha256; the design's review rounds are not rounds of this series",
   "contractState": "CANDIDATE",
-  "candidateState": "c1, awaiting CONTRACT review round 1; no round has run",
+  "candidateState": "c2, awaiting the delta CONTRACT round 2 after round 1's CHANGES_REQUIRED (MON-EV12-CR1)",
   "predecessorRecord": [
     {
       "record": "architecture/host-interface-amendment-hs53/amendment.json",
@@ -45,7 +81,7 @@
     }
   ],
   "oracle": {
-    "state": "NOT_IN_C1",
+    "state": "NOT_IN_C2",
     "rule": "the D5a oracle and its identity are a later step of this slot, by another agent"
   },
   "ownerDecisions": [
@@ -84,6 +120,18 @@
       "by": "lane monitor under the owner's standing delegation",
       "date": "2026-10-26",
       "decision": "\"DESIGN-HE005 closes at rev 5 (0335ce2d).\" \"EDGE-V12, the I02/I03 registration plus H5E-10's errata list, without the (a) matrix item.\""
+    },
+    {
+      "id": "MON-EV12-Q2",
+      "by": "lane monitor (owner delegation 2026-10-22)",
+      "date": "2026-10-28",
+      "decision": "\"Q-EV12-2 ruled (a), MON-EV12-Q2.\" \"There is one records home for slot 269: the amendment directory's status.json covers both HE5 and edge v12 (MET-ENFORCE-043/contract), and there is no separate edge-record-v12/.\""
+    },
+    {
+      "id": "MON-EV12-CR1",
+      "by": "lane monitor (owner delegation 2026-10-22)",
+      "date": "2026-10-28",
+      "decision": "\"Identity r1: KEEP. Slips D1-D8 are procedural. D6 is a read-scope slip; record it as such.\" \"D6: yes, treat it as closed. Every scan in your lane (greps, AST sweeps, find, ls-tree walks) excludes, with a pathspec or skip list, every *enforcement_test_plan* file: scripts/enforcement_test_plan.py, scripts/validate_enforcement_test_plan.py, tests/test_enforcement_test_plan.py. It also prunes architecture/enforcement-test-plan/, docs/alpha-2/ENFORCEMENT_TEST_PLAN.md and tools/w04/ up front. The chain tools may still make their mechanical count/successor hunks in the two validate_/test_ files at mechanics time; nobody reads them for design. Put this in the r2 rules, the c2 brief and the oracle brief.\" \"GO, light: the c2 build brief with a fresh builder (not the r1 reviewer). C1-1 in your recommended form: v4 judges the effective amended text; §5.4's step lines are exactly W1..W6, in order, at line starts; no CommonMark block start, fence, setext/thematic line, HTML start or blank line inside a DECIDED step that HS53's step lacks; current and proposed agree on leading/trailing LF; B1-B10 all refused. Fold C1-2 (cite MON-EV12-Q2 verbatim, re-pin the decision record) and C1-3; take C1-4 and C1-5. Then the r2 delta rules (base c1). Send me the c2 head, tree and digests before r2 launches.\""
     }
   ],
   "evidenceClass": "UNIT_VERIFICATION_ONLY",
@@ -98,7 +146,7 @@
     {
       "item": "the readiness guide's \"FD3 is the sole inherited non-stdio descriptor\"",
       "to": "a successor of the broker handoff guide's contract",
-      "action": "the file stays byte-identical (FROZEN_PATHS and the ERA_SHA256 pin of scripts/validate_seccomp_observer_listener.py); HE5 governs the sentence, and a successor adopts its replacement (H1, H3)"
+      "action": "the file stays byte-identical (FROZEN_PATHS and the ERA_SHA256 pin of scripts/validate_seccomp_observer_listener.py); HE5 governs the sentence, and a successor adopts its replacement (H1, H3). A successor of the broker handoff guide's contract also reattaches the colon clause after the replaced sentence to FD3 alone, and counts fd 4 as an expected inherited descriptor in the guide's line-118 check (\"unexpected inherited FD … refuses before probes\")."
     },
     {
       "item": "native-profile v4's \"on an O_PATH descriptor of the worker executable\"",
