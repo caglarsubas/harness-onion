@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ADOPT-005
+## Current source preparation — MET-GOV-005
+
+MET-GOV-005 (TECH-TRUTH-001): the v2 technology record. architecture/language-placement.json moves to its v2 schema with
+the deployable-level technology record and the baseline bindings, scripts/language_placement.py and its tests grow in
+place, the re-issued D5a oracle with a new identity replaces the v1 oracle, and docs/adr/0010-language-placement.md gains
+its dated amendment 1 (MET-GOV-005). docs/DEVELOPMENT_STATUS.md gains one line citing the amendment. No catalog changes.
+The packet registers its own review series in the brief registry; its one gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under
+MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 268 accepted plus MET-GOV-005 only.
+
+## Historical H10 execution-authority source preparation — MET-ADOPT-005
 
 MET-ADOPT-005 (TECH-ORCHESTRATION-001): the H10 execution authority ADR docs/adr/0011-h10-execution-authority.md (the
 owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox own H10 execution, and Temporal is an optional provider), the
@@ -1479,6 +1488,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 140. `MET-LINUX-008`: publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class, the lane monitor's and the owner's PR approval.
 141. `MET-GOV-004`: publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider), the owner's per-PR approval.
 142. `MET-ADOPT-005`: record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider), the owner's per-PR approval.
+143. `MET-GOV-005`: adopt the v2 technology record (TECH-TRUTH-001): the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, and ADR 0010's amendment 1, with one status line; no catalog changes; gate material (the registry rider), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 

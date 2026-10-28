@@ -2,37 +2,45 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_language_placement_oracle.py",
-  "sha256": "4fa51e886cca2e814a822430428df5f287c838ecdfb00d8a3942149c5dc5d6c6"
+  "sha256": "e29d48ec9dfc9b05b6be45786636d2fa2eb674dbb14e6167622e554ae849e0c9"
  },
  "oracle": {
-  "agentId": "a27a06163bc50da08",
+  "agentId": "a773580b6b3d27546",
   "model": "claude-opus-5-5"
  },
  "operator": {
   "role": "LANE_SESSION",
-  "agentId": "241d4b17-8eea-48d8-b3bc-79c6c27a3233",
+  "agentId": "898fda1c-df7e-43cd-81c5-a534e8b1fc54",
   "lane": "parallel"
  },
  "author": {
   "agentIds": [
-   "a5f17dc0bd391bd63"
+   "aa243b600b854cf28",
+   "af2af9cd9794c6a19"
   ]
  },
- "briefSha256": "33f61b5202f211879eeb8be7c6b3444ab7a3cac983bc63c57402d100399e4cc9",
- "candidateCommit": "62a29027e278e93b5df7eccfc827c44e24e1c8ab",
- "launched": "2026-10-26T08:58:07+08:00",
- "finished": "2026-10-26T09:06:16+08:00",
+ "briefSha256": "462075a902e1c13d5dede3309356a84b9fcf063f44ad403adcd5b5d4c12406ae",
+ "candidateCommit": "94316124950660bfb7e6018fd560846537080fba",
+ "launched": "2026-10-28T13:55:00+08:00",
+ "finished": "2026-10-28T14:07:00+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-GOV4-267-B",
-  "date": "2026-10-26"
+  "ref": "MON-269-C4",
+  "date": "2026-10-28"
  },
  "disclosures": [
-  "re-issued under MON-GOV4-267-B from the brief ORACLE_BRIEF.md (0debd0a9) and its addendum (briefSha256 above): real copies only (shutil.copy2, no hard links or symlinks), every copy removed at teardown, and R5's mutations per the design's content-location errata",
-  "the first issue (028e73d4, 95 tests) passed 95/95 on c1 but hard-linked the root into pytest's base temp, which the chain refuses (mechanics blocker B1); it was written black-box from design revision 4 by the same agent (first run 2026-10-26T00:45:40 to 01:14:15)",
-  "against c4a (62a29027), the re-issue: 102/102; scripts st_nlink 1 before and after; 0 entries left in its temp parent; test_copy_shares_no_inode passes",
-  "slips (procedural): an unrequested extra run against the base copy; TMPDIR added to the run command for the H3 count; an awk heading scan of the design outside its section 11, printing only line numbers",
-  "the launch context carried an auto-injected memory index and an account context; the oracle used neither"
+  "re-issued for MET-GOV-005 under MON-TT-C1 from the brief ORACLE_BRIEF.md (sha256 e9ddd3afd44bf1e57fd43243981c0a1d61d1121fca99cb287c5b0bcc000876af, the c3 identity's briefSha256) and the design revision 3 only; it replaces the MET-GOV-004 oracle, which its author never read",
+  "black-box through the published check command, except the design's direct R14 rows, which load the rule function by path; real copies only (copytree with copy2), every copy removed at teardown",
+  "run 1 against the base: 33 passed, 103 failed (v2 expectations meeting v1); run 2 against the candidate c1 (dd49a3ea): 136 passed, 0 failed, no findings; scripts link count 1 before and after; 0 entries left in its temp parent; the no-shared-inode test passes",
+  "two tests accept more than one outcome: the BR-TT-1 lines-only case accepts exit 0 or R8 (never R5 or R12), and the R14 calling form is chosen adaptively and calibrated on the pristine row",
+  "the decision filter dropped two decision lines (MON-TT-DOSSIER, MON-TT-D3); for those the oracle relied on the design's own summary",
+  "slips (procedural): two-call messages; a definition grep of the base checker printed a few non-definition lines; run 1 ran four times in full and once with -k before the final counts; a filter dropped one test line whose id held a filtered token, so ids were renamed; one link-count listing printed the scripts directory's names; one existence check guessed a bytecode filename before the general check",
+  "the launch context carried an auto-injected memory index and an account context; the oracle used neither",
+  "re-issued as c4 under MON-269-B2 and MON-269-B2-1 from the addendum ORACLE_BRIEF_C4.md (briefSha256 above) with the original brief and design errata E2: one test changed, test_fact_r00_block_sits_at_1252, which now accepts a shift above the cited block's section (lines display-only, C2-2, MON-TT-D1); every other byte is the c2 module's (60fb2c99)",
+  "the c4 fix was made by a fresh oracle agent (oracle.agentId above); the original oracle agent ad42c3739196bfa0a, which wrote every other byte, could not be resumed from the operator's new session, and MON-269-B2-1 allowed the change; neither is a candidate author, and neither read the candidate's checker, data, tests or ADR",
+  "c4 runs: on the c3 export 136 passed, 0 failed; on c3 with the slot-269 mechanics' edited docs/repositories/00-harness-engineering.md in place, 136 passed, 0 failed; scripts link count 1 before and after; the E2-2 tests (a wrong sha256, section 5 rows 12-17 as R5, row 18 accepted) are byte-identical and pass",
+  "c4 slips (procedural): one two-call message (two edits of a scratch helper); a heading listing of an allowed plan file printed heading lines that name other packets, withheld from then on; one read-only digest command ran twice",
+  "the c4 agent's launch context carried an auto-injected memory index and an account context; it used neither"
  ]
 }
