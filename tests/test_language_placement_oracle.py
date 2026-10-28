@@ -937,7 +937,10 @@ def test_fact_v1_spans_are_located_by_enclosing_heading():
 def test_fact_r00_block_sits_at_1252():
     span = repo(_data(), "harness-engineering")["sources"][0]
     text, line = _block_text(_root_reader, span)
-    assert line == R00_LINE
+    # E2-1 (MON-269-B2): located by section, sha256 and evidence, never by `lines` or an absolute line. Lines inserted
+    # above the section shift the block exactly as far as its heading (line 1249 where the block sits at 1252).
+    head = _section_range(_split(_root_reader(span["path"])), span["section"])[0]
+    assert line - R00_LINE == head - 1249
     assert span["section"] == R00_SECTION
 
 

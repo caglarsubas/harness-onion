@@ -2,31 +2,32 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_language_placement_oracle.py",
-  "sha256": "60fb2c99f60e7e0de7bf0c621b52e5b17d36659f808ad0dcba5549c4304b320e"
+  "sha256": "e29d48ec9dfc9b05b6be45786636d2fa2eb674dbb14e6167622e554ae849e0c9"
  },
  "oracle": {
-  "agentId": "ad42c3739196bfa0a",
+  "agentId": "a773580b6b3d27546",
   "model": "claude-opus-5-5"
  },
  "operator": {
   "role": "LANE_SESSION",
-  "agentId": "241d4b17-8eea-48d8-b3bc-79c6c27a3233",
+  "agentId": "898fda1c-df7e-43cd-81c5-a534e8b1fc54",
   "lane": "parallel"
  },
  "author": {
   "agentIds": [
-   "aa243b600b854cf28"
+   "aa243b600b854cf28",
+   "af2af9cd9794c6a19"
   ]
  },
- "briefSha256": "e9ddd3afd44bf1e57fd43243981c0a1d61d1121fca99cb287c5b0bcc000876af",
- "candidateCommit": "dd49a3ea9fd9aa5baba3df317de6ab181d23240d",
- "launched": "2026-10-26T23:35:52+08:00",
- "finished": "2026-10-27T00:15:10+08:00",
+ "briefSha256": "462075a902e1c13d5dede3309356a84b9fcf063f44ad403adcd5b5d4c12406ae",
+ "candidateCommit": "94316124950660bfb7e6018fd560846537080fba",
+ "launched": "2026-10-28T13:55:00+08:00",
+ "finished": "2026-10-28T14:07:00+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-TT-C1",
-  "date": "2026-10-27"
+  "ref": "MON-269-C4",
+  "date": "2026-10-28"
  },
  "disclosures": [
   "re-issued for MET-GOV-005 under MON-TT-C1 from the brief ORACLE_BRIEF.md (briefSha256 above) and the design revision 3 only; it replaces the MET-GOV-004 oracle, which its author never read",
@@ -35,6 +36,11 @@
   "two tests accept more than one outcome: the BR-TT-1 lines-only case accepts exit 0 or R8 (never R5 or R12), and the R14 calling form is chosen adaptively and calibrated on the pristine row",
   "the decision filter dropped two decision lines (MON-TT-DOSSIER, MON-TT-D3); for those the oracle relied on the design's own summary",
   "slips (procedural): two-call messages; a definition grep of the base checker printed a few non-definition lines; run 1 ran four times in full and once with -k before the final counts; a filter dropped one test line whose id held a filtered token, so ids were renamed; one link-count listing printed the scripts directory's names; one existence check guessed a bytecode filename before the general check",
-  "the launch context carried an auto-injected memory index and an account context; the oracle used neither"
+  "the launch context carried an auto-injected memory index and an account context; the oracle used neither",
+  "re-issued as c4 under MON-269-B2 and MON-269-B2-1 from the addendum ORACLE_BRIEF_C4.md (briefSha256 above) with the original brief and design errata E2: one test changed, test_fact_r00_block_sits_at_1252, which now accepts a shift above the cited block's section (lines display-only, C2-2, MON-TT-D1); every other byte is the c2 module's (60fb2c99)",
+  "the c4 fix was made by a fresh oracle agent (oracle.agentId above); the original oracle agent ad42c3739196bfa0a, which wrote every other byte, could not be resumed from the operator's new session, and MON-269-B2-1 allowed the change; neither is a candidate author, and neither read the candidate's checker, data, tests or ADR",
+  "c4 runs: on the c3 export 136 passed, 0 failed; on c3 with the slot-269 mechanics' edited docs/repositories/00-harness-engineering.md in place, 136 passed, 0 failed; scripts link count 1 before and after; the E2-2 tests (a wrong sha256, section 5 rows 12-17 as R5, row 18 accepted) are byte-identical and pass",
+  "c4 slips (procedural): one two-call message (two edits of a scratch helper); a heading listing of an allowed plan file printed heading lines that name other packets, withheld from then on; one read-only digest command ran twice",
+  "the c4 agent's launch context carried an auto-injected memory index and an account context; it used neither"
  ]
 }
