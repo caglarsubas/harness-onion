@@ -43,16 +43,19 @@ Rules, in the order R1-R7, R9-R14, then R8; the first rule broken is reported wi
      is set and otherwise services.yaml's; APPROVED and IMPLEMENTED are refused (no harness-onion record states either).
   R11 frameworks: frameworks equal FRAMEWORKS_EXPECTED[id]; each item is a whole word of one of the row's located
      frameworksSources blocks, each in "## Deployables and toolchain"; no item is the runtime or repeated; every
-     non-UPSTREAM_OWN deployable has a frameworks source; the native rows' frameworks are [].
+     non-UPSTREAM_OWN deployable has a frameworks source, and an UPSTREAM_OWN deployable has none (its
+     frameworksSources is []); the native rows' frameworks are [].
   R12 baseline bindings: each entry's document and delivery spans are in docs/harnesses/<harness>.md; the entries'
      stems are STEMS, in order; the flattened rows equal BINDINGS_EXPECTED; each document span holds exactly its rows'
-     upstreams as backticked tokens, in order; each catalog or optional token is in its record's providers, and the
-     record's selection matches the kind; each PLAN_LIBRARY span is a toolchain bullet carrying PLAN_TOKENS[baseline]
-     as a whole word; each DEFERRED item occurs backticked on the entry's Delivery line; the one divergence is
-     DIVERGENCE_EXPECTED, on DIVERGENCE_ROW, and its deferral occurs backticked on that harness's Delivery line.
-  R13 drift: R08's executor line carries H10_R08_EVIDENCE, and no DEFAULT or CONDITIONAL providers.yaml record names
-     Temporal (O5); among a harness's bound records, none in a providerExclusivityGroup is DEFAULT, and at most one per
-     capability (capabilityProviders) is DEFAULT (O4).
+     upstreams as backticked tokens, in order; each document span is one line (lines [n, n]) whose text begins
+     "Planning target:", and each delivery span is one line whose text begins "Delivery:"; each catalog or optional
+     token is in its record's providers, and the record's selection matches the kind; each PLAN_LIBRARY span is a
+     toolchain bullet carrying PLAN_TOKENS[baseline] as a whole word; each DEFERRED item occurs backticked on the
+     entry's Delivery line; the one divergence is DIVERGENCE_EXPECTED, on DIVERGENCE_ROW, and its deferral occurs
+     backticked on that harness's Delivery line.
+  R13 drift: R08's executor line carries H10_R08_EVIDENCE and is one line (h10Sources.r08's lines are [n, n]), and
+     no DEFAULT or CONDITIONAL providers.yaml record names Temporal (O5); among a harness's bound records, none in a
+     providerExclusivityGroup is DEFAULT, and at most one per capability (capabilityProviders) is DEFAULT (O4).
   R14 upstream language: a deployable with an upstream is UPSTREAM_OWN, and an UPSTREAM_OWN deployable has one.
   R8 tables: each of the ADR's four table blocks, and each of the amendment's three, equals this checker's rendering of
      the data's rows.
@@ -1023,6 +1026,8 @@ def _frameworks(data: dict, root: Path, overlay: dict) -> None:
         _refuse(row["runtime"] not in items, rule, d + ": the runtime is not a framework")
         if row["plannedLanguage"] != "UPSTREAM_OWN":
             _refuse(len(row["frameworksSources"]) >= 1, rule, d + ": a non-UPSTREAM_OWN deployable has a source")
+        else:
+            _refuse(row["frameworksSources"] == [], rule, d + ": an UPSTREAM_OWN deployable has no frameworks source")
         texts = []
         for span in row["frameworksSources"]:
             _refuse(span["section"] == TOOLCHAIN_SECTION, rule, d + ": a frameworks source is in " + TOOLCHAIN_SECTION)
@@ -1067,6 +1072,12 @@ def _bindings(data: dict, providers: dict, root: Path, overlay: dict) -> None:
         delivery = _block(entry["delivery"], root, overlay, cache, rule)
         _refuse(BACKTICKED.findall(document) == [r["baseline"] for r in entry["rows"]], rule,
                 harness + ": its document span holds exactly its rows' upstreams, in order, as backticked tokens")
+        first, last = entry["document"]["lines"]
+        _refuse(first == last and document.startswith("Planning target:"), rule,
+                harness + ": its document span is one line that begins 'Planning target:'")
+        first, last = entry["delivery"]["lines"]
+        _refuse(first == last and delivery.startswith("Delivery:"), rule,
+                harness + ": its delivery span is one line that begins 'Delivery:'")
         for row in entry["rows"]:
             kind, target = row["kind"], row["target"]
             if kind in SELECTIONS:
@@ -1103,9 +1114,11 @@ def _bindings(data: dict, providers: dict, root: Path, overlay: dict) -> None:
 
 def _drift(data: dict, providers: dict, root: Path, overlay: dict) -> None:
     rule = "R13"
-    text = _block(data["h10Sources"]["r08"], root, overlay, {}, rule)
+    r08 = data["h10Sources"]["r08"]
+    text = _block(r08, root, overlay, {}, rule)
     for evidence in H10_R08_EVIDENCE:
         _refuse(evidence in text, rule, "R08's executor line does not carry %r" % evidence)
+    _refuse(r08["lines"][0] == r08["lines"][1], rule, "h10Sources.r08, R08's executor line, is one line")
     for module in providers["modules"]:
         if module.get("selection") in ("DEFAULT", "CONDITIONAL"):
             names = ([module["id"]] + [p for p in _list(module.get("providers")) if type(p) is str]

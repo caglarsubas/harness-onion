@@ -1092,12 +1092,64 @@ def _s5_55(mp):
     return {lp.ADR_PATH: _replaced(lp.ADR_PATH, cell, cell.replace(b"TYPESCRIPT", b"PYTHON"))}
 
 
+# errata E1 (CONTRACT r1, MON-GOV005-CR1): rows 56-59, each span recomputed from the head bytes
+
+@s5(56, "frameworks-source-on-an-upstream-own-row", "R11")
+def _s5_56(mp):
+    data = _data()
+    row = _row(data, "deployables", "otel-collector")
+    source = row["source"]
+    assert row["plannedLanguage"] == "UPSTREAM_OWN" and row["frameworksSources"] == []
+    assert source["path"] == "docs/repositories/09-mas-harness-trust-plane.md" and source["lines"] == [100, 100]
+    span = _span_at(source["path"], 100, 100, ["OTel Collector"])
+    assert span["section"] == lp.TOOLCHAIN_SECTION
+    row["frameworksSources"].append(span)
+    return _ov(data)
+
+
+@s5(57, "delivery-span-off-its-delivery-line", "R12")
+def _s5_57(mp):
+    data = _data()
+    entry = _entry(data, "execution.ml-decision")
+    path, number = entry["delivery"]["path"], entry["delivery"]["lines"][0] + 1
+    assert number == 20
+    word = lp.span_bytes(_raw(path), number, number).decode("utf-8").split(" ")[0]
+    span = _span_at(path, number, number, [word])
+    assert span["section"] == entry["delivery"]["section"]
+    entry["delivery"] = span
+    return _ov(data)
+
+
+@s5(58, "document-span-of-more-than-one-line", "R12")
+def _s5_58(mp):
+    data = _data()
+    entry = _entry(data, "execution.ml-decision")
+    document = entry["document"]
+    assert document["lines"] == [16, 16]
+    span = _span_at(document["path"], 16, 17, document["evidence"])
+    assert span["section"] == document["section"]
+    entry["document"] = span
+    return _ov(data)
+
+
+@s5(59, "r08-span-of-more-than-one-line", "R13")
+def _s5_59(mp):
+    data = _data()
+    r08 = data["h10Sources"]["r08"]
+    assert r08["lines"] == [103, 103]
+    span = _span_at(r08["path"], 102, 103, r08["evidence"])
+    assert span["section"] == r08["section"]
+    data["h10Sources"]["r08"] = span
+    return _ov(data)
+
+
 FIRST_BROKEN_RULE = (["R1"] * 6 + ["R4"] * 2 + ["R5"] * 9 + ["accepted", "R9"] + ["R10"] * 5 + ["R11"] * 7
-                     + ["R12"] * 15 + ["R13", "accepted", "R13", "R13", "R13", "R14", "R14", "R8", "R8"])
+                     + ["R12"] * 15 + ["R13", "accepted", "R13", "R13", "R13", "R14", "R14", "R8", "R8"]
+                     + ["R11", "R12", "R12", "R13"])
 
 
 def test_section_5_has_one_row_per_refusal_with_its_column():
-    assert sorted(S5) == list(range(1, 56))
+    assert sorted(S5) == list(range(1, 60))
     assert [S5[n][1] for n in sorted(S5)] == FIRST_BROKEN_RULE
 
 
