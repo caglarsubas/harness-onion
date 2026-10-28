@@ -1,0 +1,45 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_enforce_043_oracle.py",
+  "sha256": "f578df4ad1831fc54e47eddf74373541da413a75ef0f902b93da36da052455c9"
+ },
+ "oracle": {
+  "agentId": "a37e388a718c27d8b",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "local_33d8cfb3-f2b4-4f51-ac3d-c0107ae77286",
+   "not recorded",
+   "abf98754e043e4e9b",
+   "ee7a6f19-64d5-4e64-98bb-f09aee981543"
+  ]
+ },
+ "briefSha256": "984e0bf6aa7ed11b72fa002f67094cd9c8598e376c25123ab23da7cc322986ed",
+ "candidateCommit": "5094244d059be848dec4f8b04f2a2cd7d4c27494",
+ "launched": "2026-10-28",
+ "finished": "2026-10-28",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-EV12-ORACLE",
+  "date": "2026-10-28"
+ },
+ "disclosures": [
+  "KEEP (MON-EV12-ORACLE): 50/50 on c2 (62863e95, adopted as MON-EV12-ADOPT at 5094244d): 25 checks and 25 mutations, written from the HE5 README and README-v12 and the model's public names, never the builder's material",
+  "independently derived: every digest and byte count; the effective text by counted replacement of H1-H3, E1 and E2 over HS53's bytes; the HS53 to HE5 line diff; section 5.4's step split; the superseded quotes; the dispositions; the line-separator scan. Model-derived: the public constants, check() on the tree, render_section14, and direct check_steps calls for (a), (b)'s allowance and (c). Regression pins taken once from c2: H1-H3's normalised words (round 1's C1-6) and section 14's sha256",
+  "the lane monitor's moved-line case (MON-EV12-CR2-GO): a copy of HS53's W4 step line into W5 is refused; round 2's MV4 (a plain prose line moved from W3 to W4) is accepted by the model by design and caught by the word pin",
+  "the README states no refusal texts, so the 25 mutations assert ValueError; that type was learned from one direct require call",
+  "a verify hold (MON-EV12-ORACLE-HOLD) stopped the run until another lane's verify posted; no test ran during it",
+  "slips S1-S10, procedural (KEEP): three Edit calls in one message; find and diff -r over the 14-file read-only copy without a pre-built skip list (no closed path is in it); comment lines read between the model's constants (no function body); part of the brief read without zsh -c; one prefixed wait moved to the background; one read of the verify-hold file (allowed); several short model calls in two probe scripts during the hold; JSON checks without time -l; scratch probes left in the oracle's work folder; one shell expansion error",
+  "README and record differences carried to the PR body (MON-EV12-ORACLE point 3): OBS-1 the record's item order is the text order, the README table's is by kind; OBS-2 section 14's item table lists the DECIDED items only; OBS-3 and OBS-4 wording",
+  "not checked: the provider files' last-change commit and mode and README-v12's open items (git facts; the mechanics re-check them); edge records v1-v10, the texts beneath HS53, source-index.json and repositories.yaml (not in the read-only copy); the validator pins the README cites; W3-W5's runtime facts (T04's); the README status line against status.json; the first-line block rule (never applies to H1-H3) and a leading line-feed mismatch",
+  "finished is the time the oracle's run returned; the operator re-ran the file at the oracle commit 33f0a010 on the adopted state: 50 passed"
+ ]
+}

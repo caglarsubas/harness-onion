@@ -135,8 +135,11 @@
     }
   ],
   "oracle": {
-    "state": "NOT_IN_C2",
-    "rule": "the D5a oracle and its identity are a later step of this slot, by another agent"
+    "identity": "architecture/host-interface-amendment-he5/oracle-identity.json",
+    "identitySha256": "a0019895c748600ae458c971c1bdffe885d61965b86e0156221fc443ee222a90",
+    "tests": "tests/test_met_enforce_043_oracle.py",
+    "state": "KEPT (MON-EV12-ORACLE): 50/50 on c2",
+    "rule": "one D5a oracle by a fresh agent after adoption (MON-EV12-ORACLE-GO), from the HE5 README, README-v12 and the model's public names alone, never the builder's material"
   },
   "ownerDecisions": [
     {
