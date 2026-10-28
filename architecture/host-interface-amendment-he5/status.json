@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "planeon.internal.host-interface-amendment-he5-status/v1",
+  "workItem": "EDGE-V12 (slot 269): operator edge record v12, the I02/I03 registration for R10's HE-005B, and host-interface amendment HE5, the W01 errata HE-005's design departs from; this record covers both contract parts (Q-EV12-2 (a), the author's: one records home, since this slot has a contract directory, unlike EDGE-V9's)",
+  "packet": "MET-ENFORCE-043",
+  "slot": "269",
+  "candidate": "c1",
+  "base": "d7a3cda5010da560d168b47eee1675b10f9ec89e",
+  "supersedes": [
+    {
+      "contract": "amendment HS53's effective W01 text (HOST-INTERFACE-DRAFT-002-HS53) and its record",
+      "packet": "MET-ENFORCE-035",
+      "files": [
+        "architecture/host-interface-amendment-hs53/amendment.json",
+        "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md"
+      ],
+      "rule": "a successor applied on top of HS53, not an edit of it: HS53's text and record stay byte-identical, pinned by sha256 in the HE5 record and the v4 model"
+    },
+    {
+      "contract": "operator edge record v11",
+      "packet": "MET-ENFORCE-042",
+      "files": [
+        "architecture/artifact-edges/operator-harness-engineering-v11.json",
+        "architecture/artifact-edges/README-v11.md"
+      ],
+      "rule": "a new registry record beside v11, not an edit of it: v11 and its README stay byte-identical, and v12's supersedes binds v11 by SHA-256"
+    }
+  ],
+  "reviewSeries": "MET-ENFORCE-043/contract",
+  "reviewRounds": [],
+  "designHistory": "architecture/host-interface-amendment-he5/source-index.json cites the TOOLS content, plan and design revision 5 and the lane's decision record by sha256; the design's review rounds are not rounds of this series",
+  "contractState": "CANDIDATE",
+  "candidateState": "c1, awaiting CONTRACT review round 1; no round has run",
+  "predecessorRecord": [
+    {
+      "record": "architecture/host-interface-amendment-hs53/amendment.json",
+      "sha256": "e4255685a38f183d9cd5e5411ee83cc3dee6442e578831296d9789109824d763",
+      "packet": "MET-ENFORCE-035",
+      "schema": "planeon.internal.host-interface-amendment/v2"
+    },
+    {
+      "record": "architecture/artifact-edges/operator-harness-engineering-v11.json",
+      "sha256": "9188980f0ce211e2939d431d900a7aff77262de3a973009666ed13f3ef3cbd77",
+      "packet": "MET-ENFORCE-042",
+      "schema": "planeon.internal.artifact-edge-registry/v2"
+    }
+  ],
+  "oracle": {
+    "state": "NOT_IN_C1",
+    "rule": "the D5a oracle and its identity are a later step of this slot, by another agent"
+  },
+  "ownerDecisions": [
+    {
+      "id": "MON-HE005-R1-RULE",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-26",
+      "decision": "\"Q-HE5-9 (H5D-3 (iii)): (a).\" \"Exactly one more inherited descriptor: fd 4, the verity-checked O_RDONLY script, read-only. The worker's set is exactly {0..4}, checked both before close_range and after exec, under the START freeze. The readiness sentence's errata goes in slot 269, together with Q-HE5-1's registration.\" \"Rev 2 must show that fd 4 cannot be written, re-opened writable or used as a second exec route, and that the verity measurement and the exec use the same fd.\""
+    },
+    {
+      "id": "MON-HE005-R2-RULE",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-26",
+      "decision": "\"Q-HE5-9's post-exec half (H5E-1) is re-ruled (a): no capability widening, and HI-7 stays as it is.\" \"fd 4 stays, and so does W3's pre-close_range {0..4} check, made while the child is uid 0.\" \"The post-exec {0..4} becomes a structural claim, carried by the pinned child path and W3's check, with a T04 trace carried.\""
+    },
+    {
+      "id": "MON-HE005-Q12-OWNER",
+      "by": "the owner, relayed verbatim by the lane monitor",
+      "date": "2026-10-26",
+      "decision": "\"the owner chose Q-HE5-12 (b), \"Drop post-exec reads\"\" \"R1 is widened and states plainly that runtime detection is given up, with T04 tracing each item.\""
+    },
+    {
+      "id": "MON-EV12-PLAN",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-26",
+      "decision": "\"Q-EV12-1 is ruled (a) under the owner's delegation.\" \"slot 269 carries edge record v12, with the two BYTE_IDENTICAL, REGISTERED_BEFORE_USE broker-handoff-v1 rows, plus the host-interface amendment architecture/host-interface-amendment-he5/ in HS43/HS53 form.\" \"If no rule allows an in-place edit, list it as carried.\""
+    },
+    {
+      "id": "MON-HE005A-PLAN2",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-26",
+      "decision": "\"carried and byte-identical, on your cited rule (FROZEN_PATHS :390-397, the sha256 pin at :493, HS53's SUPERSEDED precedent). That is correct for slot 269.\""
+    },
+    {
+      "id": "MON-HE005-CLOSE",
+      "by": "lane monitor under the owner's standing delegation",
+      "date": "2026-10-26",
+      "decision": "\"DESIGN-HE005 closes at rev 5 (0335ce2d).\" \"EDGE-V12, the I02/I03 registration plus H5E-10's errata list, without the (a) matrix item.\""
+    }
+  ],
+  "evidenceClass": "UNIT_VERIFICATION_ONLY",
+  "nativeAcceptance": false,
+  "nonClaims": [
+    "No R10 file changes in this slot.",
+    "No runtime proof of W3-W5: that is T04's (O-T04-HE5).",
+    "The worker's post-exec state is unobserved at runtime (R-HE5-POSTEXEC).",
+    "Nothing is installed or compiled; every E01-E12 obligation stays OPEN_UNPROVEN."
+  ],
+  "carried": [
+    {
+      "item": "the readiness guide's \"FD3 is the sole inherited non-stdio descriptor\"",
+      "to": "a successor of the broker handoff guide's contract",
+      "action": "the file stays byte-identical (FROZEN_PATHS and the ERA_SHA256 pin of scripts/validate_seccomp_observer_listener.py); HE5 governs the sentence, and a successor adopts its replacement (H1, H3)"
+    },
+    {
+      "item": "native-profile v4's \"on an O_PATH descriptor of the worker executable\"",
+      "to": "a successor of native-profile v4",
+      "action": "the file stays byte-identical (its sha256 pins in six validators); HE5 governs the phrase, and a successor adopts its replacement (H3)"
+    },
+    {
+      "item": "edge record v12's two broker-handoff-v1 rows",
+      "to": "HE-005B (R10)",
+      "action": "vendors channel.schema.json and vectors.json byte-identical under host-enforcement/contracts/broker-handoff-v1/ and states its own negative cases in its tests and MODEL_DEFINED (Q-HE5-1 (a)); the vectors are positive only (DATA_CHECK_ONLY)"
+    },
+    {
+      "item": "O-R10-HE005",
+      "to": "HE-005C and HE-005D (R10)",
+      "action": "Implement W3-W5 as amended: the descriptor layout; the raw-call child path, pinned; the O_RDONLY verity measurement and exec on one description; no post-exec read of the worker's `/proc`."
+    },
+    {
+      "item": "O-T04-HE5",
+      "to": "T04",
+      "action": "On the enrolled kernel and policy, confirm: FS_IOC_MEASURE_VERITY on an O_RDONLY descriptor of the enrolled script; `execveat` of a script through a non-close-on-exec fd 4, with the interpreter reading `/dev/fd/4`; a write re-open of fd 4 refused; the worker's post-exec state traced (the descriptor set {0..4}, its uid and gid, an empty `Groups:`, its capabilities, NoNewPrivs, `Seccomp_filters: 2`, the label `planeon_worker_t`); `cgroup.kill` opened O_WRONLY and written by the sealed broker; a second exec refused."
+    },
+    {
+      "item": "R-HE5-POSTEXEC",
+      "to": "the carried lists of HE-005C's and HE-005D's PR bodies; T04 and HE-008",
+      "action": "the worker's post-exec state is not observed at runtime; it holds by construction and T04 traces it"
+    }
+  ],
+  "readmeStatusNote": "The HE5 README's status line is the candidate line it is reviewed with; status.json governs.",
+  "installed": false,
+  "wireContract": false,
+  "independentReviewer": "SEPARATE_AGENT_NOT_AUTHOR",
+  "adoption": null
+}
