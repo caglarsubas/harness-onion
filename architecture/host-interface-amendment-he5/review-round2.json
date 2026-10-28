@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "planeon.review-record/v2",
+  "kind": "CONTRACT",
+  "series": "MET-ENFORCE-043/contract",
+  "round": 2,
+  "subject": {
+    "repository": "harness-onion",
+    "commit": "62863e95ab5fa6befbea205152da318215d0761c",
+    "tree": "bde5b97fba1e84775581fa070be6d7c996df64c8"
+  },
+  "base": {
+    "repository": "harness-onion",
+    "commit": "65141a5c69955c0fbaf0560a82143b802a63b7a7",
+    "tree": "bb695fc6e71b0149ba517bd11bc5900771d3950e"
+  },
+  "reviewDate": "2026-10-28",
+  "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+  "rulesSha256": "ffe4c736ecb761ca94a89d644e5100e9ed766bb648b3269784ffc01ffc3b97cf",
+  "wrapperSha256": null,
+  "reviewer": {
+    "model": "claude-opus-5-5",
+    "role": "REVIEWER_AGENT"
+  },
+  "verdict": "PASS_FOR_ADOPTION",
+  "findings": [
+    {
+      "id": "C2-1",
+      "severity": "NOTE",
+      "location": "scripts/host_interface_amendment_v4.py: _keeps_step (lines 235-249) and check_steps (b) (lines 408-410); the lane monitor's moved-line relay (MON-EV12-CR2-GO)",
+      "finding": "The moved-line probe the relay asks for is refused whenever the moved line is a block start. Each probe is a consistent record (section 14 re-rendered, the effective text recomputed, every digest re-pinned): MV1 (HS53's W4 step line, line 484, copied into W3 as a later line of H1), MV2 (W3's step line, 478, into W4 through H2), MV3 (W6's step line, 492, into W5 through H3) and MV5 (W3's own step line repeated inside W3) end in 'decided item Hn keeps its step's plain lines'; MV6 (W4's step line as the first line of an H1 whose current starts line 480) ends the same way; MV7 (H3 ends with a line feed and 'W4' just before HS53's '. The domain ...', so a 'W4. ' line forms inside W5) ends in '§5.4's step lines are W1 to W6, in order, in the HS53 and the effective text' (c1 accepts MV7). A plain line moved between steps is accepted: MV4 copies HS53's W2 line 477 ('The broker is the original parent and keeps the pidfd.') into W3 as a later line of H1, and c1 and c2 both accept it, because the step rule bounds block structure, blank lines and step lines, not words. That is the rule as MON-EV12-CR1 point 5 states it and as built; H1-H3's words are bound by review and by the build's content-word check, not by v4 (C1-6).",
+      "requiredChange": "None in c2. If the relay's 'must be refused' is meant to cover plain lines too, that is C1-6's carried oracle pin of H1-H3's normalised words: list MV4 among the D5a oracle's cases against the pinned words.",
+      "blocks": false
+    },
+    {
+      "id": "C2-2",
+      "severity": "NOTE",
+      "location": "scripts/host_interface_amendment_v4.py: BLOCK_START (lines 103-104) and STEP (line 98), with the module docstring (lines 17-35) and architecture/host-interface-amendment-he5/README.md (lines 54-58)",
+      "finding": "Three renderer details outside the ruled CommonMark set, each advice: (i) a GFM table delimiter row is not a block start for v4: G1 (H1 later lines 'fd 3 | fd 4' and '--- | ---') is accepted by c1 and c2, while harness-onion's Markdown is read on GitHub, which may render such lines as a table (not verified here: no renderer, no network); (ii) an inline HTML comment can hide words across two lines of a DECIDED item without any line opening a block (G2, ' <!-- hidden' then 'still hidden --> ', accepted by both); (iii) Python's \\d in BLOCK_START and STEP matches non-ASCII decimal digits, so a later line of a fullwidth digit three (U+FF13) and '. ' is refused (U1, c1 and c2), stricter than CommonMark, whose ordered markers are ASCII digits, while the README and docstring say 'digits'. None contradicts MON-EV12-CR1 point 5 or the README, which both name CommonMark's block starts.",
+      "requiredChange": "Optional, for a successor or the oracle: add GFM's table delimiter row (and any other renderer construct the monitor wants refused) to the step rule, or say in the README that the set is CommonMark's without GitHub's extensions; write the digit classes as [0-9] if the stricter reading is not intended.",
+      "blocks": false
+    },
+    {
+      "id": "C2-3",
+      "severity": "NOTE",
+      "location": "scripts/host_interface_amendment_v4.py: check_steps (b)'s same-step allowance (line 409) and (c) (lines 411-418)",
+      "finding": "At HS53's pinned bytes the allowance in (b), 'unless the identical line occurs in HS53's same step', can spare no line: HS53's W1-W6 (lines 472-496) hold no block-start line but their own step lines, and any later copy of a step line is itself a step line, refused by (a) and, on an item's later lines, by _keeps_step, which has no allowance. So the allowance cannot be abused (C2-1's moved-line probes), and, like (c) (Q-CB2-4), it is unreachable through check(read): both are harmless defence in depth that no probe check(read) admits shows biting.",
+      "requiredChange": "None in c2. The D5a oracle should call check_steps directly with a hand-made base and effective text, to show (c) refusing a changed W2 or W6 line and (b)'s allowance sparing a same-step line while refusing the identical line taken from another step.",
+      "blocks": false
+    },
+    {
+      "id": "C2-4",
+      "severity": "NOTE",
+      "location": "architecture/host-interface-amendment-he5/source-index.json: inTreeRounds[0] (lines 8-18)",
+      "finding": "The index's round-1 entry holds the in-tree paths, both digests (equal to the TOOLS bytes), the verdict and the subject commit, but not the findings by id and severity or the ruling MON-EV12-CR1, which status.json's reviewRounds[0] holds (and the index's rulings map names MON-EV12-CR1). Change 8 of the c2 brief asked the index only for paths and sha256, and status.json governs, so nothing is wrong; the two records simply carry round 1 at different depths.",
+      "requiredChange": "Optional: at the next fold, either add findings and ruling to the index's entry or say in roundNumbering that status.json carries each round's findings and ruling.",
+      "blocks": false
+    }
+  ],
+  "dispositions": [
+    {
+      "id": "C1-1",
+      "status": "ADDRESSED",
+      "note": "v4 now judges the amended text (check_steps (a)-(d), run by check() between effective_spec and the published comparison), and the item check uses the CommonMark set with the first-line test. Round 1's B1-B10, rebuilt as consistent records, are accepted by c1 and refused by c2 (messages under checked 6); 18 probes of my own are refused; no false refusal (c2's and c1's records, PC2 keeping W4's step label, N1-N5). The relay's moved-line probe (MV1-MV7, MON-EV12-CR2-GO): every moved or repeated block-start line is refused, MV7 only by (a); the same-step allowance cannot be abused at HS53's bytes (C2-3); a moved plain line (MV4) is accepted by design (C2-1). The module docstring and the README's limits state the rule exactly as built."
+    },
+    {
+      "id": "C1-2",
+      "status": "ADDRESSED",
+      "note": "workItem cites MON-EV12-Q2 by id in place of 'the author's'; ownerDecisions holds it verbatim (two quotes, each once in the he005 snapshot, line 455, inside its section), by 'lane monitor (owner delegation 2026-10-22)' as its heading states, date 2026-10-28; the decision record is re-pinned in source-index.json as the two snapshots with the snapshot rule, and each snapshot is the first bytes of its live record."
+    },
+    {
+      "id": "C1-3",
+      "status": "ADDRESSED",
+      "note": "The five places say slot 270 (README.md 4 and 38, amendment.json 161, status.json 3 and 5); every quoted ruling keeps 'slot 269' (README.md 72, 80 and 84; amendment.json 22 and 36; status.json 92, 110, 116 and 128); the other '269' runs are inside digests."
+    },
+    {
+      "id": "C1-4",
+      "status": "ADDRESSED",
+      "note": "check_record checks every item's closed members and types in a first loop before any EDITORIAL item is rendered: round 1's case (K1, E3 first, H3 without section) now ends in 'closed amendment item', K4 (H1 without decisions) likewise, K6 (decisions null) in 'item H1 cites decided owner decisions', where c1 raised KeyError or TypeError. The unhashable-id TypeError (K7) remains, as in c1 and v3 (Q-CB2-8)."
+    },
+    {
+      "id": "C1-5",
+      "status": "ADDRESSED",
+      "note": "status.json's carried readiness item and the README's 'Superseded clauses' paragraph each gain the successor sentence; the guide's colon clause is at lines 101-102 and the check's words ('unexpected inherited FD or missing containment refuses' / 'before probes.') at 118-119, as the sentence says."
+    },
+    {
+      "id": "C1-6",
+      "status": "NOT",
+      "note": "Carried to the D5a oracle, which MON-EV12-CR1 point 6 leaves for after c2's adoption; v4 still fixes none of H1-H3's words (see C2-1)."
+    }
+  ],
+  "checked": [
+    "1. Faithfulness to the decisions: MON-EV12-CR1 is met as ruled: point 5's form of C1-1 ((a) the step lines W1 to W6 in order at line starts in HS53's and the effective text; (b) no blank line and no CommonMark block start, fence, setext or thematic line or HTML start inside a DECIDED step that HS53's same step lacks; (c) every other line HS53's; (d) leading and trailing line feeds agree; B1-B10 refused), C1-2 and C1-3 folded, C1-4 and C1-5 taken, C1-6 left for the oracle (point 6). MON-EV12-Q2: workItem cites it by id; ownerDecisions quotes its two ruling sentences (he005 snapshot line 455, each once in the snapshot, inside its section) with the by its heading states and date 2026-10-28. MON-EV12-CR1: three quotes (r00 snapshot lines 25, 26 and 29, each once, inside its section), same by and date. The index's two new rulings are each once inside their section. Both snapshots equal the brief's sha256 and are the first bytes of their live records (he005 58437 of 60556 bytes; r00 6349 of 7511, the live record's one later section holding the MON-EV12-CR2-GO relay). Nothing is added that a decision excludes; MON-EV12-MERGE's owner route is untouched; no decision is reopened.",
+    "2. The record against the design: amendment.json changes only Q-EV12-1's disposition summary (slot 270), and v4's closed key sets are unchanged by the diff. The new members take the forms the brief asks: status.json reviewRounds[0] {round, record, recordSha256, identity, identitySha256, verdict, findings [{id, severity}] x6, ruling 'MON-EV12-CR1 (identity KEEP)'} and two ownerDecisions entries {id, by, date, decision} in c1's form; source-index.json inTreeRounds[0] {round, record, recordSha256, identity, identitySha256, verdict, subjectCommit}, two rulings, and two designHistory snapshot entries {record, lane, sha256, snapshot} in place of c1's single pin. Both round-1 digests equal the TOOLS bytes (3a89f0a2..., 9538a884...), the paths are the in-tree ones, verdict CHANGES_REQUIRED, findings C1-1 MAJOR, C1-2 MINOR, C1-3 to C1-6 NOTE, subjectCommit 65141a5c...; the snapshot sizes 58437 and 6349 equal the files; the subject digests follow c2's bytes (6 of 6). Every digest is 64 lowercase hex. The index's round entry has no findings or ruling (C2-4).",
+    "3. The model against the README: the module docstring (lines 17-35) and the README's limits (lines 45-58) state the step rule as _keeps_step (lines 235-249) and check_steps (lines 396-422) build it, clause by clause, and BLOCK_START (lines 103-104) as the stated set; check() runs check_steps after effective_spec and before the published-bytes comparison. Refusals, by AST of both models: 54 require, _closed and raise sites in c1 and 58 in c2 (the report counts 46 and 50 another way); all 54 kept verbatim, 4 new (check_steps (a)-(d)), none dropped by message; 'decided item %s keeps its step's plain lines' has a changed predicate; C1-4's order change is shown by K1, K4 and K6. The report's 'a superset of c1's refusals' is not exact: c1 refused a later line of ten or more digits and '. ' (N1), which c2 accepts, correctly by CommonMark and by the README's 'one to nine digits'; that is the one c1 refusal c2 dropped. Wider or stricter than stated: C2-2.",
+    "4. Schema and model: not applicable; the contract has no JSON schema, and v4's closed key sets are v3's, unchanged by the diff.",
+    "5. The vectors and the replay: HE5 has no vectors (edge v12 is unchanged, DATA_CHECK_ONLY). Replays: v3's check over HS53 at the base PASS (6 items, 9 decisions, 8 superseded, 12 reads over 9 files); c2's v4 over the subject PASS (6 reads over 6 files); c1's v4 over c1 PASS; c2's v4 over c1's record (round 1's A0) PASS; c1's v4 over c2 PASS; effective_spec(HS53) equals the subject's HOST_INTERFACE_SPEC.md (70107 bytes). build_contract.py into a fresh WORK directory: rc 0, 0.61 s, 28 MB peak, every printed check passed, and all eight files byte-identical to the subject.",
+    "6. The tests: not applicable at c2 (no candidate or oracle tests; the oracle follows adoption, MON-EV12-CR1 point 6). In their place, probes through check(read) as consistent records. Round 1's B1-B10 rebuilt: B1 and B2 as literally worded are refused by c1's and c2's own count check ('item H1 proposed text count', 'item H2 proposed text count'); with one word changed ('ever.', 'only.') they and B3-B10 are ACCEPTED by c1 and refused by c2: B1 'the amended step W3 holds no blank line and opens no block HS53's W3 lacks', B2 '§5.4's step lines are W1 to W6, in order, in the HS53 and the effective text', B3-B10 'decided item H1 keeps its step's plain lines'. Eighteen of my own, all refused by c2 and 11 of them accepted by c1: P01 '+ ', P02 '1) ', P03 '````', P04 '<div>', P05 'W7. ', P06 a leading line feed in a proposed only (d), P07 '   > ', P08 '  ==<tab>', P09 '* * *', P10 '#', P11 '######<tab>', P12 nine digits and '. ', P13 a first line '1) ' where the current starts line 480, P14 '-', P15 a trailing line feed on H3's proposed only (d), P16 a line of one tab, P17 '<pid> ', P18 H1 turning W3's label into 'W4.' from inside the step line ((a)). No false refusal: c2's record, c1's record, PC2 (H2 keeping W4's step label) and N1-N5 (ten digits, a tab indent, '**', '= =', four spaces) are accepted by c2. Moved lines MV1-MV7 (C2-1); record-only K1, K4, K6, K7 (C1-4). Every run under 30 MB and 1 s.",
+    "7. Placement: the evolution surface at the base (WORK copies loaded by path): check passed; the eight paths, exact and lower-cased (16 spellings, 11 distinct), all resolve to CONTRACT_AND_SOURCE; check_paths passed; approvers and activators LANE_MONITOR and OWNER. The diff adds no path (git diff --name-status c1 to c2: five modified).",
+    "8. Privacy and supply chain: review_record.py's load_name_tokens on the fixed digest file, then privacy_hits on each of the eight c2 files: names 0, legacyTerm 0, absolutePaths 0, emails 0 in all eight; 16 local-path and contact markers built from parts, over the diff's 200 added lines: 0. The new MON-EV12-CR1 quote in status.json names the relative lane folder 'tools/w04/' (no root, no user), of the same kind as the v11 ruling quote edge v12 already carries. No new import (hashlib, json, re, typing); nothing interposes, forwards, proxies, swaps or bypasses.",
+    "9. Open questions: Q-CB2-1 to Q-CB2-9 and the report's narrow readings are answered under questions.",
+    "Diff discipline: c1 to c2 is five files, 200 lines added and 37 removed, every hunk mapped: README.md 3-5 (changes 4 and 6), 38 (4), 45-58 (1), 119-121 (5); amendment.json 161 (4); status.json 3 (3, 4), 5-6 (4, 6), 29-66 (7, with designHistory under Q-CB2-3 and 8), 68 (6), 84 (Q-CB2-2 with 6), 123-134 (3, 7), 149 (5); source-index.json 6, 8-18, 22-24, 47-56, 70, 78 and 82 (8); the model 17-35, 99-104, 235-249, 300, 310, 323-324, 377-424, 426-427 and 434 (1, 2). Edge v12, README-v12 and HOST_INTERFACE_SPEC.md are byte-identical to c1's (section 14 renders no disposition summary). No unchanged statement is made wrong: README-v12 states no candidate or round, and every '269' left is inside a quoted ruling or a digest."
+  ],
+  "questions": [
+    "Q-CB2-1 (tabs): accept as built. CommonMark itself allows a tab where the brief says a space (after a list marker or an ATX run, in a setext underline's trailing whitespace, between a thematic break's characters), so this is CommonMark's rule rather than a superset; P11 ('######<tab>') is refused and N2 ('<tab>- ', four columns of indent) accepted, as CommonMark has them.",
+    "Q-CB2-2 (oracle state 'NOT_IN_C2'): accept; 'NOT_IN_C1' would be stale in c2, and the rule text is unchanged.",
+    "Q-CB2-3 (designHistory names 'the two lanes' decision-record snapshots'): accept; it matches source-index.json's two snapshot entries.",
+    "Q-CB2-4 ((c) unreachable): keep (c) as defence in depth, and yes, the D5a oracle should call check_steps(record, base, effective) directly with hand-made texts, for (c) (a changed W2 or W6 line) and for (b)'s same-step allowance, which is equally unreachable through check(read) at HS53's bytes (C2-3).",
+    "Q-CB2-5 (blank): accept; 'empty or only spaces and tabs' is CommonMark's blank line, applied alike in (b), the list end and _keeps_step (P16, a line of one tab, refused).",
+    "Q-CB2-6 ('line-118 check'): accept; the quoted words 'unexpected inherited FD ... refuses before probes' locate the check unambiguously (line 118 holds the clause, line 119 'before probes.'). Say 'lines 118-119' at the next edit of that sentence; not worth a fold alone.",
+    "Q-CB2-7 (section 14 may carry blocks): accept no change in c2. Section 14 is rendered from the record's own strings, which review reads, as v3's section 13 was, and it lies outside the DECIDED steps MON-EV12-CR1 point 5 rules on. Recommend the oracle pin section 14's rendered bytes for the adopted record.",
+    "Q-CB2-8 (TypeError on an unhashable item id): accept no change in c2; it is still a refusal before anything is accepted (K7, c1 and c2 alike) and outside change 2's named case. A successor may test _text on each id before the set, so it becomes a require() message.",
+    "Q-CB2-9 (quoted ruling lines): accept MON-EV12-Q2's two ruling sentences and MON-EV12-CR1's points 1, 2 and 5 (the brief's minimum), with point 4 left out because it carries a session id. Point 2's quote publishes the relative lane-folder name 'tools/w04/' (no root, no user; privacy_hits 0), of the same kind as the v11 quote edge v12 already carries; acceptable.",
+    "Narrow readings: accepted. B1 and B2 as round 1 words them (a line feed added to, or dropped from, a whole line) are refused by c1's own effective_spec count ('item H1 proposed text count', 'item H2 proposed text count'), since the proposed text already occurs in HS53, so round 1's statement that they passed c1 was imprecise. Changing one word is the least change that keeps the junction round 1 meant (a current without a line feed and a proposed ending in one at W3's end; a current ending in a line feed and a proposed without one at W4's end); my own rebuilds with other words ('ever.', 'only.') reach the same gap in c1 and are refused by c2's (b) and (a), so they still test what round 1 meant. The other readings (the round-1 entries' keys, the successor sentence's placement, check_steps between effective_spec and the published comparison) are sound."
+  ],
+  "notChecked": [
+    "(b)'s same-step allowance and (c) through check_steps called directly with hand-made texts: this round's rules allowed probes only through check(read) and check_record (Q-CB2-4, C2-3).",
+    "Whether GitHub renders G1's lines as a table: no renderer and no network here.",
+    "The head layer and its test, the chain mechanics, the D5a oracle and the gate list on the then-current main are later steps; c1's text outside the diff is round 1's and was checked here only for statements the diff makes wrong."
+  ],
+  "disclosures": [
+    "Git beyond the two named forms, read only: one git cat-file -p of the subject commit (its tree and parent lines, confirming the tree and that the parent is c1) and one git diff --name-status from d7a3cda5 to the subject with the three pathspecs.",
+    "Shell builtins outside timeout 120 zsh -c: echo rc=$? after three timed runs, the for loops and variable assignments that copied files by git show, and one echo inside such a loop.",
+    "Three small Python runs (two prints of round 1's record and one AST print of review_record.py's shape functions) ran under timeout 120 without /usr/bin/time -l; every measured run peaked under 30 MB.",
+    "Write and Edit tool calls (my WORK scripts, one edit of the probe script, and this record) are not command lines, so no prefix ran before them.",
+    "The he005 snapshot's three sections were found by a script matching heading lines for the three ids, which wrote only those sections to WORK; a later script located the MON-EV12-Q2 and MON-EV12-CR1 sections the same way. Beyond the prefix comparison, the first script counted the heading lines in each live record's later bytes and tested the r00 record's later bytes for the MON-EV12-CR2-GO id; no later content was printed.",
+    "Reads beyond the eight subject files, all by git show at d7a3cda5 into WORK for the replays and the reference modules: HS53's and HS43's records and texts, the W01 corrected text, the two readiness guides, the policy-observation amendment, the seccomp-allowlists README, native-profile v4's README, review_record.py, evolution_surface.py and the evolution-surface record. I printed lines 98-120 of the broker handoff guide and HS53's §5.4 lines.",
+    "I read build_contract.py's lines 1-400 and 985-1072 as text and ran it once into a fresh WORK directory; it read its own pinned TOOLS inputs (the content, plan and design among them) and ran its path-limited git forms (show, cat-file -e, log -1, rev-parse) on the worktree.",
+    "Text scans over my WORK copies of the eight subject files (the '269', stale-statement and marker counts) and two find runs over WORK built no skip list; none of the scanned files is a closed path (dropped count 0, not printed).",
+    "My probes pass changed bytes only through check(read)'s injected reader or as check_record's arguments; to build them I called the c2 model's _base_lines and render_section14 and read its END_LINE; nothing in any model was patched."
+  ]
+}
