@@ -1,0 +1,38 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_perf_043_oracle.py",
+  "sha256": "83c6cd5a989c2ccd7fd293b73e75feea37232dfa91565fd2268ead20f25fb90f"
+ },
+ "oracle": {
+  "agentId": "a0019355d3ddf2679",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "aa26026aa8e267b53"
+  ]
+ },
+ "briefSha256": "51b166524dbd6e0b5ebf1762c2049730ad68f5bea719dc09f694e7fb2fc42996",
+ "candidateCommit": "5f2eee23401e0b54593dccd260d305b7248d6b50",
+ "launched": "2026-10-29T13:15:02+08:00",
+ "finished": "2026-10-29T13:54:58+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-P43-ORC-KEEP",
+  "date": "2026-10-29"
+ },
+ "disclosures": [
+  "written for MET-PERF-043 under MON-P43-OR1-GO from the brief ORACLE_BRIEF.md (sha256 51b16652\u2026) and DESIGN.md section 2, section 5 and Appendix A alone; the module, every test file, the build report and the review records were never read; call forms learned from inspect.signature and probe calls",
+  "465 tests, 465 passed on c1 5f2eee23 (oracle report 8145e59a\u2026); the section 5 boundary holds: 46,666 tests COMPLETE, 46,667 EVENT_LIMIT",
+  "an API usage limit (rate_limit, HTTP 429) stopped the agent at 13:30 +08:00; the operator resumed it at 13:44 with the same brief and scratch",
+  "disagreement P43-OR1-D1 (the END label sentence in section 2) was resolved by design errata E2 (DESIGN.md 83ab3dcc\u2026, MON-P43-OR1-D1); the operator resumed the agent with the E2 sentence and digest only, and it re-derived its two END-label tests as three from the design alone",
+  "slips S1-S6, procedural, recorded in the oracle report"
+ ]
+}

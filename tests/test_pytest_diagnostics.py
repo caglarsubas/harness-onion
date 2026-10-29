@@ -792,3 +792,24 @@ def test_v2_complete_stream_summary_members(observed):
         lastPhase={**common, "event": "END", "phase": "teardown", "tUs": 625_000, "outcome": "passed"},
         failures=[{**common, "phase": "call", "tUs": 375_000, "outcome": "failed", "label": IDENTITY["label"]}],
         starts=3, ends=3, failed=1, sessionEnd={"exitCode": 1, "incomplete": False, "reasons": [], "dropped": 0})
+
+
+@pytest.mark.parametrize("unpaired", ["end_without_start", "double_start"])
+def test_v2_unpaired_producer_phase_is_never_complete(observed, unpaired):
+    """MET-PERF-043 CONTRACT r1 NOTE C1-2: an unpaired phase fails closed in the producer (PHASE_ORDER, errata E2)."""
+    state, sink, _clock = observed
+    if unpaired == "end_without_start":
+        state.end(NODE, "call", "passed", 0.25)
+    else:
+        state.start(NODE, "setup")
+        state.start(NODE, "call")
+        state.end(NODE, "call", "passed", 0.25)
+    state.finish(0)
+    records = _records(sink)
+    assert "START" not in {record["event"] for record in records}
+    assert [record["reason"] for record in records if record["event"] == "ERROR"] == ["PHASE_ORDER"]
+    assert records[-1]["event"] == "SESSION_END" and records[-1]["incomplete"] is True
+    assert "PHASE_ORDER" in records[-1]["reasons"]
+    summary = diagnostics.summarize_nested(b"".join(sink.lines))
+    assert summary["status"] == "INCOMPLETE" and "PRODUCER_INCOMPLETE" in summary["incompleteReasons"]
+    assert "PHASE_ORDER" not in summary["incompleteReasons"]
