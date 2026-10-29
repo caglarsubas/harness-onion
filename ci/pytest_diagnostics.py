@@ -86,7 +86,7 @@ class Diagnostics:
         if self._sink_failed or (self._stopped and not control):
             self.dropped += 1
             return False
-        record = {"v": 1, "seq": self.events_written + 1, **fields}
+        record = {"v": 2, "seq": self.events_written + 1, **fields}
         try:
             line = PREFIX + _dumps(record, sort_keys=True, separators=(",", ":"),
                                    ensure_ascii=True, allow_nan=False).encode("ascii") + b"\n"
@@ -135,7 +135,11 @@ class Diagnostics:
             return
         self._stopped = True
         self.dropped += 1
-        self._write({"event": "ERROR", "reason": reason, "incomplete": True}, control=True)
+        fields = {"event": "ERROR", "reason": reason, "incomplete": True}
+        if reason == "UNFINISHED_PHASE" and self.active is not None:
+            # A graceful finish still names the unfinished test (Q-P43-3 (a)).
+            fields.update({key: self.active[key] for key in ("node", "phase", "label")})
+        self._write(fields, control=True)
 
     def start(self, nodeid, phase):
         if self._finished:
@@ -156,9 +160,9 @@ class Diagnostics:
         except Exception:
             self._fail("CLOCK")
             return
+        # v2: the active phase is kept in memory only; START writes no record.
         self.active = {**identity, "phase": phase, "tUs": stamp}
         self.starts += 1
-        self._write({"event": "START", **self.active})
 
     def end(self, nodeid, phase, outcome, duration, *, xfail=False):
         try:
@@ -184,9 +188,13 @@ class Diagnostics:
         self.ends += 1
         self.failures += int(outcome == "failed")
         self.skips += int(outcome == "skipped")
-        self._write({"event": "END", "node": identity["node"], "phase": phase,
-                     "outcome": outcome, "durationUs": duration_us,
-                     "tUs": stamp, "xfail": xfail})
+        fields = {"event": "END", "node": identity["node"], "phase": phase,
+                  "outcome": outcome, "durationUs": duration_us,
+                  "tUs": stamp, "xfail": xfail}
+        if outcome != "passed":
+            # The END's own label, never the active phase's (Q-P43-1 (a), P43-D1-1).
+            fields["label"] = identity["label"]
+        self._write(fields)
 
     def finish(self, exit_code):
         """Keep existing nonzero status; never certify missing diagnostics."""
@@ -218,16 +226,34 @@ def _pairs(pairs):
     return result
 
 
+def _valid_label(label):
+    return (type(label) is str and len(label) <= 70
+            and (label == "<redacted-node>"
+                 or _fullmatch(r"[A-Za-z0-9_.-]{1,32}::test_[A-Za-z0-9_]{0,31}", label) is not None))
+
+
+def _valid_node_phase(record):
+    return (type(record.get("node")) is str and _fullmatch(r"[0-9a-f]{64}", record["node"]) is not None
+            and type(record.get("phase")) is str and record["phase"] in PHASES)
+
+
 def _valid_record(record):
-    if (type(record) is not dict or record.get("v") != 1
+    """Version 2 only: END and ERROR carry the label rules; START is malformed."""
+    if (type(record) is not dict or record.get("v") != 2
             or type(record.get("v")) is not int
             or not _integer(record.get("seq"), MAX_EVENTS) or record["seq"] == 0):
         return False
     common = {"v", "seq", "event"}
     event = record.get("event")
     if event == "ERROR":
-        return (set(record) == common | {"reason", "incomplete"}
-                and record["reason"] in REASONS and record["incomplete"] is True)
+        reason = record.get("reason")
+        if type(reason) is not str or reason not in REASONS:
+            return False
+        if reason != "UNFINISHED_PHASE":
+            return set(record) == common | {"reason", "incomplete"} and record["incomplete"] is True
+        return (set(record) == common | {"reason", "incomplete", "node", "phase", "label"}
+                and record["incomplete"] is True and _valid_node_phase(record)
+                and _valid_label(record["label"]))
     if event == "SESSION_END":
         return (set(record) == common | {"tUs", "exitCode", "incomplete", "reasons",
                                           "starts", "ends", "failed", "skipped", "dropped"}
@@ -237,20 +263,16 @@ def _valid_record(record):
                 and all(type(reason) is str and reason in REASONS for reason in record["reasons"])
                 and all(_integer(record[key], MAX_EVENTS * 2) for key in
                         ("starts", "ends", "failed", "skipped", "dropped")))
-    if event not in ("START", "END"):
+    if event != "END":
+        # START, like any other event, is malformed in v2.
         return False
-    if (type(record.get("node")) is not str or not _fullmatch(r"[0-9a-f]{64}", record["node"])
-            or record.get("phase") not in PHASES or not _integer(record.get("tUs"))):
-        return False
-    if event == "START":
-        label = record.get("label")
-        return (set(record) == common | {"node", "phase", "tUs", "label"}
-                and type(label) is str and len(label) <= 70
-                and (label == "<redacted-node>"
-                     or _fullmatch(r"[A-Za-z0-9_.-]{1,32}::test_[A-Za-z0-9_]{0,31}", label) is not None))
-    return (set(record) == common | {"node", "phase", "tUs", "outcome", "durationUs", "xfail"}
-            and record["outcome"] in OUTCOMES and _integer(record["durationUs"])
-            and type(record["xfail"]) is bool)
+    labelled = record.get("outcome") != "passed"
+    members = common | {"node", "phase", "tUs", "outcome", "durationUs", "xfail"}
+    return (set(record) == (members | {"label"} if labelled else members)
+            and _valid_node_phase(record) and _integer(record["tUs"])
+            and type(record["outcome"]) is str and record["outcome"] in OUTCOMES
+            and _integer(record["durationUs"]) and type(record["xfail"]) is bool
+            and (not labelled or _valid_label(record["label"])))
 
 
 def summarize_nested(stderr):
@@ -258,8 +280,10 @@ def summarize_nested(stderr):
 
 Returns no raw non-diagnostic output. A timeout lacking SESSION_END is always
 incomplete, even if every report observed so far passed. No side channel exists.
+Version 2 streams carry END records only: an END needs no prior START, and the
+active phase is named only by an UNFINISHED_PHASE ERROR record.
 """
-    summary = {"schemaVersion": "planeon.pytest-diagnostic-summary/v1", "buffered": True,
+    summary = {"schemaVersion": "planeon.pytest-diagnostic-summary/v2", "buffered": True,
                "acceptance": False, "available": stderr is not None,
                "status": "INCOMPLETE", "inputBytes": 0, "scannedBytes": 0,
                "inputTruncatedBytes": 0, "records": 0, "malformed": 0,
@@ -291,7 +315,6 @@ incomplete, even if every report observed so far passed. No side channel exists.
     summary["scannedBytes"] = len(raw)
     cursor = lines = previous_seq = 0
     previous_time = 0
-    active = None
     while cursor < len(raw) and lines < MAX_SCAN_LINES:
         end = raw.find(b"\n", cursor)
         if end < 0:
@@ -326,18 +349,10 @@ incomplete, even if every report observed so far passed. No side channel exists.
         if summary["completionSeen"]:
             reasons.add("AFTER_COMPLETION")
         event = record["event"]
-        if event == "START":
-            if active is not None:
-                reasons.add("PHASE_ORDER")
-            active = {key: record[key] for key in ("node", "label", "phase", "tUs")}
-            summary["lastPhase"] = {**active, "event": event}
-            summary["starts"] += 1
-        elif event == "END":
-            matched = active is not None and all(active[key] == record[key] for key in ("node", "phase"))
-            if not matched:
-                reasons.add("PHASE_ORDER")
+        if event == "END":
             item = {key: record[key] for key in ("node", "phase", "tUs", "outcome", "durationUs", "xfail")}
-            item["label"] = active["label"] if matched else "<redacted-node>"
+            if "label" in record:
+                item["label"] = record["label"]
             summary["lastPhase"] = {**item, "event": event}
             summary["ends"] += 1
             summary["failed"] += int(record["outcome"] == "failed")
@@ -348,22 +363,26 @@ incomplete, even if every report observed so far passed. No side channel exists.
                 else:
                     summary["failuresOmitted"] += 1
                     reasons.add("FAILURE_DETAIL_LIMIT")
-            active = None
         elif event == "ERROR":
             reasons.add("PRODUCER_INCOMPLETE")
+            if record["reason"] == "UNFINISHED_PHASE":
+                reasons.add("UNFINISHED_PHASE")
+                summary["latestActive"] = {key: record[key] for key in ("node", "phase", "label")}
         else:
             summary["completionSeen"] = True
             summary["sessionEnd"] = {key: record[key] for key in
                                      ("exitCode", "incomplete", "reasons", "dropped")}
+            summary["starts"] = record["starts"]
             if (record["incomplete"] or record["reasons"] or record["dropped"]):
                 reasons.add("PRODUCER_INCOMPLETE")
-            if any(summary[key] != record[key] for key in ("starts", "ends", "failed", "skipped")):
+            if "UNFINISHED_PHASE" in record["reasons"]:
+                reasons.add("UNFINISHED_PHASE")
+            if (any(summary[key] != record[key] for key in ("ends", "failed", "skipped"))
+                    or record["starts"] != record["ends"]):
                 reasons.add("COUNT_MISMATCH")
     if cursor < len(raw) and lines >= MAX_SCAN_LINES:
         reasons.add("SCAN_LIMIT")
-    summary["latestActive"] = active
-    if active is not None:
-        reasons.add("UNFINISHED_PHASE")
+    # The reader never adds PHASE_ORDER: a v2 stream has no START to pair.
     if not summary["completionSeen"]:
         reasons.add("NO_COMPLETION")
     if not summary["records"]:

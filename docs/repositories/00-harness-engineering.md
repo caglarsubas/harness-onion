@@ -1,6 +1,15 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-GOV-005
+## Current source preparation — MET-PERF-043
+
+MET-PERF-043 (Q-DIAG-CAP): END-only pytest diagnostics. ci/pytest_diagnostics.py writes version 2 records, one END record
+per phase and no START record, with every cap unchanged, and its reader accepts version 2 only;
+tests/test_pytest_diagnostics.py and tests/test_diagnostic_repair.py follow it. Its D5a oracle and the oracle's identity,
+and the record architecture/diagnostic-end-only/ (the measured boundaries and the residual R-P43-KILL), come with it. No
+catalog changes. The packet registers its own review series in the brief registry; its two gate paths are ci/pytest_diagnostics.py (GATE_CI) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head (Q-DIAG-CAP). No R10 or R12 file changes. Built
+under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 269 accepted plus MET-PERF-043 only.
+
+## Historical v2 technology-record source preparation — MET-GOV-005
 
 MET-GOV-005 (TECH-TRUTH-001): the v2 technology record. architecture/language-placement.json moves to its v2 schema with
 the deployable-level technology record and the baseline bindings, scripts/language_placement.py and its tests grow in
@@ -1489,6 +1498,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 141. `MET-GOV-004`: publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider), the owner's per-PR approval.
 142. `MET-ADOPT-005`: record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider), the owner's per-PR approval.
 143. `MET-GOV-005`: adopt the v2 technology record (TECH-TRUTH-001): the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, and ADR 0010's amendment 1, with one status line; no catalog changes; gate material (the registry rider), the owner's per-PR approval.
+144. `MET-PERF-043`: END-only pytest diagnostics (Q-DIAG-CAP): version 2 records in ci/pytest_diagnostics.py, one END per phase and no START, with every cap unchanged, the module's tests, the D5a oracle and the boundaries record (residual R-P43-KILL); no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 

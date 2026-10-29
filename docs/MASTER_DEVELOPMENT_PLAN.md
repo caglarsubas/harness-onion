@@ -1,6 +1,45 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-GOV-005 source preparation, October 28, 2026
+## Current checkpoint — MET-PERF-043 source preparation, October 29, 2026
+
+Alpha2 OPEN. MET-GOV-005 (TECH-TRUTH-001) passed required verify and merged as main 925debe.
+EDGE-V12's dry run failed on EVENT_LIMIT (MON-EV12-DRY-FAIL): version 1 diagnostics wrote six records per test against
+MAX_EVENTS 140,000. The owner's Q-DIAG-CAP ("END-only, own PERF packet (Recommended)") puts END-only diagnostics in slot
+270 as its own PERF packet, and EDGE-V12 moves to 271 (MON-SLOT-270-PERF). MET-PERF-043 (the lane monitor's rulings
+MON-P43-DR3, MON-P43-OR1-D1, MON-P43-CR1-KEEP, MON-P43-ORC-KEEP and MON-P43-ADOPT) adopts candidate c2 and its D5a oracle:
+ci/pytest_diagnostics.py writes version 2 records, one END record per phase and no START record, with every cap unchanged;
+tests/test_pytest_diagnostics.py and tests/test_diagnostic_repair.py follow it; the D5a oracle
+tests/test_met_perf_043_oracle.py is bound by architecture/oracle-identity-met-perf-043.json; and
+architecture/diagnostic-end-only/ records the measured boundaries (46,666 passing tests before EVENT_LIMIT; 39,514 in the
+worst case before OUTPUT_LIMIT) and the residual R-P43-KILL. No catalog changes and no R10 file changes. The packet
+registers its own review series, MET-PERF-043/packet, in the brief registry; its two gate paths are ci/pytest_diagnostics.py (GATE_CI) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head (Q-DIAG-CAP). Its new layer checks the seven packet
+files against their adopted digests, the caps and derived limits against the base module's by syntax tree and the record
+version 2, the oracle identity's binding of the oracle's bytes, the registry's one rider, and conftest.py,
+ci/parallel_suite.py and MET-PERF-041's record unchanged; through its inverse hunks MET-PERF-041's layer reads its own
+era's module and tests. It is built under MET-PERF-042's identity rule and step rule: every older chain validator changes
+only by the bump vocabulary, 269's layer by the bridge vocabulary, and 269's test keeps its 8 own routes and the adjacent
+one and one payload mutation (C2), while the new head's test keeps the full fan-in. MET-PERF-043 is the sole 270th
+specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-043 / Q-DIAG-CAP | SOURCE_PREPARED | END-only pytest diagnostics (270th packet): version 2 records, one END per phase and no START, every cap unchanged, the module's tests, the D5a oracle and its identity, and the boundaries record; no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider), the owner's per-PR approval |
+| Alpha2A | MET-GOV-005 / TECH-TRUTH-001 | VERIFY_PASSED_MERGED | Merged as main 925debe |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB,
+of which the diagnostics stream takes at most 30 MiB (MET-PERF-041's caps, unchanged). One ci/ path changes
+(ci/pytest_diagnostics.py); no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition
+NOT_DUE. Prior checkpoints below are history only.
+
+## Historical v2 technology-record source checkpoint — MET-GOV-005 source preparation, October 28, 2026
 
 Alpha2 OPEN. MET-ADOPT-005 (TECH-ORCHESTRATION-001) passed required verify and merged as main d7a3cda.
 TECH-TRUTH-001 (the owner's TECH-D1; the lane monitor's owner-delegated rulings, among them MON-TT-DOSSIER, MON-TT-D1 to
@@ -2781,7 +2820,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · LINUX-HOST-AUTH-001 / MET-LINUX-008 · Publish the Linux host-authority contract v1 for the owner's per-run GCP Linux hosts (the superseding host authority, the host recipe, the launcher install steps and the key custody model as data, with the offline checker and its tests; DATA_CHECK_ONLY), adopted as candidate c8 after three in-tree CONTRACT rounds, with its D5a oracle; no gate class; pass required verify through the owner's App after the lane monitor's and the owner's PR approval.
 - [x] Alpha 2A · LANG-PLACEMENT-ADR-001 / MET-GOV-004 · Publish the language-placement ADR 0010 (the owner's language policy LANG-D2 (a) as one digest-bound line, and the planned language of every catalogued repository and deployable as data bound to its source lines, with the minimal offline checker and its tests), with its D5a oracle; exceptions pending LANG-HOTPATH-DECISION-001; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · TECH-ORCHESTRATION-001 / MET-ADOPT-005 · Record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
-- [ ] Alpha 2A · TECH-TRUTH-001 / MET-GOV-005 · Adopt the v2 technology record (the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, ADR 0010's amendment 1 and one status line); no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · TECH-TRUTH-001 / MET-GOV-005 · Adopt the v2 technology record (the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, ADR 0010's amendment 1 and one status line); no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · Q-DIAG-CAP / MET-PERF-043 · Adopt END-only pytest diagnostics (version 2 records, one END per phase and no START, every cap unchanged; MET-PERF-021's tests and the repair test's live pin follow; residual R-P43-KILL) as candidate c2 after its CONTRACT round, with its D5a oracle, the boundaries record and the registry rider; no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
