@@ -1247,12 +1247,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "linux probe kit admission validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 269
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET},
-            "closed 269-packet catalog retaining the 263-packet checkpoint")
+    require(len(paths) == 270
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET},
+            "closed 270-packet catalog retaining the 263-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = record["packetSha256"] if path.stem == NEW_PACKET else record["baselinePackets"][path.stem]
@@ -1290,4 +1290,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Linux probe kit admission valid: 269 current specifications; 263-packet checkpoint and exact 262-packet predecessor; contract reviewed.")
+    print("Linux probe kit admission valid: 270 current specifications; 263-packet checkpoint and exact 262-packet predecessor; contract reviewed.")

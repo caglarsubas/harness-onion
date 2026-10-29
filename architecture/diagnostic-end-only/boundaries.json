@@ -1,0 +1,79 @@
+{
+ "schemaVersion": "harness.planeon.ai/diagnostic-end-only/v1",
+ "packet": "MET-PERF-043",
+ "slot": 270,
+ "evidenceClass": "SOURCE_DELTA_ONLY",
+ "acceptedBase": {
+  "commit": "925debeeeaac6157bf5393148380ca01d30e7b58",
+  "packets": 269,
+  "newestPacket": "MET-GOV-005"
+ },
+ "module": {
+  "path": "ci/pytest_diagnostics.py",
+  "sha256": "289591d27e0b0e9d4918dc0c6989147d60b400dfd682d64a228031d278b19576",
+  "beforeSha256": "ac9e70395413356f6348180c0c61a7adec57999f770feed59967b6eac7167745",
+  "recordVersion": 2,
+  "summarySchema": "planeon.pytest-diagnostic-summary/v2"
+ },
+ "caps": {
+  "MAX_EVENTS": 140000,
+  "MAX_PROCESS_BYTES": 31457280,
+  "MAX_RECORD_BYTES": 1024,
+  "MAX_NODE_CHARS": 65536,
+  "MAX_FAILURES": 16,
+  "MAX_SCAN_LINES": 154000,
+  "MAX_SCAN_BYTES": 32505856,
+  "changed": false
+ },
+ "ceiling": {
+  "verifierOutputLimitBytes": 33554432,
+  "source": "MET-PERF-041 README (verify_pr.py:79, enforced at :558)"
+ },
+ "profileRules": {
+  "phasesPerTest": 3,
+  "clockStepSeconds": 0.012345,
+  "durationSeconds": 0.012345,
+  "method": "the real module, a counting sink, a pinned clock; the last passing test count and the reason one test later"
+ },
+ "boundaries": [
+  {
+   "profile": "V1_PASSED",
+   "module": "before",
+   "lastPassing": 23333,
+   "firstFailingReason": "EVENT_LIMIT",
+   "bytesPerTestMeanAt1000Tests": 1316
+  },
+  {
+   "profile": "V2_PASSED",
+   "module": "after",
+   "bytesPerTestAtBoundary": 638,
+   "lastPassing": 46666,
+   "firstFailingReason": "EVENT_LIMIT",
+   "byteMarginAtBoundary": 1840291
+  },
+  {
+   "profile": "V2_CALL_FAILED_TEARDOWN_ERROR_LABEL70",
+   "module": "after",
+   "bytesPerTestAtBoundary": 800,
+   "lastPassing": 39514,
+   "firstFailingReason": "OUTPUT_LIMIT"
+  }
+ ],
+ "headroom": {
+  "suiteTestsAtSlot270": 23454,
+  "passingSuite": 23212,
+  "worstCase": 16060
+ },
+ "designEstimates": {
+  "V2_PASSED_bytesPerTest": 625,
+  "V2_WORST_bytesPerTest": 787,
+  "note": "CONTRACT r1 NOTE C1-1: measured values are higher by the digits seq and tUs gain at large counts"
+ },
+ "residuals": [
+  "R-P43-KILL"
+ ],
+ "ownerDecisions": [
+  "Q-DIAG-CAP",
+  "MON-SLOT-270-PERF"
+ ]
+}
