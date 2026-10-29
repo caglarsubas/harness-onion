@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/met-perf-043-authority.json"
-AUTHORITY_SHA256 = "3773b613496e185c4a439e5bc685333fc384ef2c5b4430c690d0a35ea36edcfa"
+AUTHORITY_SHA256 = "6d11a9a751413de10af9f2ecedf89a66fa376e9c8e48e460a1fbdbf5b7ac820f"
 VALIDATOR_PATH = "scripts/validate_met_perf_043.py"
 BASE_COMMIT = "925debeeeaac6157bf5393148380ca01d30e7b58"
 NEW_PACKET = "MET-PERF-043"
