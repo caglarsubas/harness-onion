@@ -10,10 +10,14 @@ no repository module and reads nothing itself: sources arrive through the caller
   P the sum of K over every layer that binds PRODUCT_PACKETS. When P = 0 it returns v1's own check of the same era, so
   v2 = v1 on every P = 0 chain. When P > 0 it runs v1's walk, binding rule and allow-list, the step rule with N read per
   clause (`nReading`: C in (i), (ii) and (x); S in (iii) and (v)) and the publishing-step edits (i-p)..(v-p), (ix-p),
-  and v1's class rules D, G1 and G2 over trees whose product references are normalized away (the P-forms).
+  and v1's class rules D, G1 and G2 over trees whose P-forms are undone. The P-forms are exactly the seven fragments
+  F1-F7 of P_FORMS and AUTHORITY_CHECK (E1 section 4 items 3-5): a layer that binds PRODUCT_PACKETS writes every one of
+  them, with the listed count, in its class function; a layer that binds none writes none; after the undo no class
+  function names PRODUCT_PACKETS or "productPackets" (clause P-form).
 - `check_products(ext, products, read_packet, safe_load, chain_packets)`: R2's form check, R3, R8 clause 2 and R12 for
   every listed product of every layer (rule.json `productId`, `productRepository`); `safe_load` is the caller's reader.
-- `check_step_vector(case, v1)` and the small evaluators below run vectors.json's synthetic cases.
+- `check_step_vector(case, v1)`, `check_class_vector(case, bases, rule, v1)` and the small evaluators below run
+  vectors.json's synthetic cases.
 Every refusal is a ValueError whose message starts with "identity " and names its clause.
 """
 from __future__ import annotations
@@ -110,52 +114,98 @@ def check_products(ext, products, read_packet, safe_load, chain_packets=()):
 
 # --------------------------------------------------------------------------------- normalizing the P-forms away --
 
+# The accepted P-form fragments (E1 section 4 items 3-5; README "The accepted P-forms"): in each class function named,
+# the P-form expression is undone to its K = 0 form, matched as a whole expression by its exact AST.
+P_FORMS = (
+    ("F1", "historical_catalog", "set(packets) == current_ids | set(PRODUCT_PACKETS)", "set(packets) == current_ids"),
+    ("F2", "historical_catalog", "current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)", "current_ids - {NEW_PACKET}"),
+    ("F3", "validate_packet_payloads", "set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)",
+     "set(packets) == old | {NEW_PACKET}"),
+    ("F4", "validate_packet_payloads", "set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)",
+     "set(rules) == old | {NEW_PACKET}"),
+    ("F5", "_packet_byte_rules",
+     'dict(record["baselinePackets"], **{NEW_PACKET: record["packetSha256"]}, **record["productPackets"])',
+     'dict(record["baselinePackets"], **{NEW_PACKET: record["packetSha256"]})'),
+    ("F6", "authority",
+     'set(value) == {"schemaVersion", "authorityPacket", "acceptedBase", "baselinePackets", "packetSha256", '
+     '"changedFiles", "newFiles", "validatorNormalizedSha256", "productPackets"}',
+     'set(value) == {"schemaVersion", "authorityPacket", "acceptedBase", "baselinePackets", "packetSha256", '
+     '"changedFiles", "newFiles", "validatorNormalizedSha256"}'),
+)
+# F7, item 5's check of productPackets (rule.json authorityRule): one statement of authority's body, exactly this one,
+# placed immediately before the body's first `for` statement; undone by removing it.
+AUTHORITY_CHECK = ("F7", "authority",
+                   'require(type(value["productPackets"]) is dict\n'
+                   '        and list(value["productPackets"]) == list(PRODUCT_PACKETS)\n'
+                   '        and all(_sha(sha) for sha in value["productPackets"].values())\n'
+                   '        and not set(PRODUCT_PACKETS) & (set(value["baselinePackets"]) | {NEW_PACKET}),\n'
+                   '        "product packets")')
+
+
+def _expr(source):
+    return ast.parse(source, mode="eval").body
+
+
+def p_form_counts():
+    """{function: {fragment id: count}}: what a layer that binds PRODUCT_PACKETS writes in each class function."""
+    out = {}
+    for fid, name, _, _ in P_FORMS + ((AUTHORITY_CHECK[0], AUTHORITY_CHECK[1], None, None),):
+        out.setdefault(name, {})[fid] = 1
+    return out
+
+
 def _names_product(node):
     return any((isinstance(n, ast.Name) and n.id == BINDING) or (isinstance(n, ast.Attribute) and n.attr == BINDING)
                or (isinstance(n, ast.Constant) and n.value == AUTHORITY_FIELD) for n in ast.walk(node))
 
 
-def _is_product_set(node):
-    return (isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "set"
-            and len(node.args) == 1 and not node.keywords and _names_product(node.args[0]))
+class _Undo(ast.NodeTransformer):
+    """Replaces each whole expression equal to one of `forms` (by ast.dump, positions ignored) with its K = 0 form."""
+
+    def __init__(self, forms):
+        self.forms = [(fid, ast.dump(_expr(p_form)), k0) for fid, _, p_form, k0 in forms]
+        self.found = {}
+
+    def visit(self, node):
+        if isinstance(node, ast.expr):
+            dump = ast.dump(node)
+            for fid, form, k0 in self.forms:
+                if dump == form:
+                    self.found[fid] = self.found.get(fid, 0) + 1
+                    return _expr(k0)
+        return super().visit(node)
 
 
-class _Strip(ast.NodeTransformer):
-    """The inverse of the P-form edits: `x | set(PRODUCT_PACKETS)` and `x - set(PRODUCT_PACKETS)` become x;
-    `**record["productPackets"]` keywords and "productPackets" set elements go; a statement still naming the
-    product list goes."""
-
-    def visit_BinOp(self, node):
-        self.generic_visit(node)
-        if isinstance(node.op, (ast.BitOr, ast.Sub)) and _is_product_set(node.right):
-            return node.left
-        return node
-
-    def visit_Call(self, node):
-        self.generic_visit(node)
-        node.keywords = [k for k in node.keywords if not (k.arg is None and _names_product(k.value))]
-        return node
-
-    def visit_Set(self, node):
-        self.generic_visit(node)
-        node.elts = [e for e in node.elts if not (isinstance(e, ast.Constant) and e.value == AUTHORITY_FIELD)]
-        return node
-
-    def generic_visit(self, node):
-        for field, value in ast.iter_fields(node):
-            if isinstance(value, list) and value and all(isinstance(v, ast.stmt) for v in value):
-                kept = [v for v in value if not _names_product(v)]
-                setattr(node, field, kept or [ast.Pass()])
-        return super().generic_visit(node)
+def _undo_function(fn, binds, where):
+    """Undo one class function's P-forms in place; the fragments found must be exactly the expected ones."""
+    found = {}
+    if fn.name == AUTHORITY_CHECK[1]:
+        check = ast.dump(ast.parse(AUTHORITY_CHECK[2]).body[0])
+        hits = [i for i, stmt in enumerate(fn.body) if ast.dump(stmt) == check]
+        loops = [i for i, stmt in enumerate(fn.body) if isinstance(stmt, ast.For)]
+        if hits:
+            need(len(hits) == 1 and loops and hits[0] == loops[0] - 1, "P-form",
+                 "%s at %s: the productPackets check is not the one statement before the first for" % (fn.name, where))
+            del fn.body[hits[0]]
+            found[AUTHORITY_CHECK[0]] = 1
+    undo = _Undo([f for f in P_FORMS if f[1] == fn.name])
+    fn.body = [undo.visit(stmt) for stmt in fn.body]
+    found.update(undo.found)
+    expected = p_form_counts().get(fn.name, {}) if binds else {}
+    need(found == expected, "P-form", "%s at %s: P-form fragments %s, expected %s"
+         % (fn.name, where, sorted(found.items()), sorted(expected.items())))
+    need(not _names_product(fn), "P-form",
+         "%s at %s names the product list outside the accepted P-forms" % (fn.name, where))
 
 
-def strip_products(tree, names):
-    """A copy of `tree` whose top-level functions named in `names` have the P-form edits removed."""
+def strip_products(tree, names, binds, where="a layer"):
+    """A copy of `tree` whose top-level class functions (in `names`) have their P-forms undone. `binds`: the layer binds
+    PRODUCT_PACKETS, so every accepted fragment is required; otherwise none is allowed."""
     tree = copy.deepcopy(tree)
     for node in tree.body:
         if isinstance(node, ast.FunctionDef) and node.name in names:
-            stripped = _Strip().visit(node)
-            ast.fix_missing_locations(stripped)
+            _undo_function(node, binds, where)
+            ast.fix_missing_locations(node)
     return tree
 
 
@@ -283,8 +333,10 @@ def check_step(previous, current, L, S, C, K, products, newid, v1, older=None, n
           "bridge": bridge, "edits": edits, "top": v1._Top(a.body + b.body)}
     _walk(a, b, ["Module"], st, v1)
     if bridge:
-        reference = v1.top_functions(strip_products(older, names))
-        stripped = {n: v1.top_functions(strip_products(ast.Module(body=[f], type_ignores=[]), names))[n]
+        reference = v1.top_functions(strip_products(older, names, bool(layer_products(older)), "%d" % (L - 1)))
+        binds = bool(layer_products(current))
+        stripped = {n: v1.top_functions(strip_products(ast.Module(body=[f], type_ignores=[]), names, binds,
+                                                       "%d" % L))[n]
                     for n, f in removed.items()}
         for name in v1.D_FUNCTIONS:
             need(name in stripped and ast.dump(stripped[name]) == ast.dump(reference[name]), "step",
@@ -334,8 +386,10 @@ def check(read, previous, rule, ext, slot, catalog, v1):
                             older=trees.get(s - 1), new_head=head_module, names=names)
         for key, value in result.items():
             edits[key] = edits.get(key, 0) + value
-    normalized = [(s, m, src, strip_products(t, names)) for s, m, src, t in chain]
-    v1.check_classes(normalized, rule, strip_products(previous_trees[head - 1], names))
+    normalized = [(s, m, src, strip_products(t, names, bool(products[s]), "%d" % s)) for s, m, src, t in chain]
+    old_head = previous_trees[head - 1]
+    v1.check_classes(normalized, rule,
+                     strip_products(old_head, names, bool(layer_products(old_head)), "%d (previous era)" % (head - 1)))
     for s, _, _, tree in chain:
         v1.check_binding(s, tree, head)
     v1.check_allow_list(head, head_tree, rule, v1.loader_shapes(rule, trees), new_head=True)
@@ -354,6 +408,32 @@ def check_step_vector(case, v1):
     """One synthetic non-bridge step: `before` and `after` are module sources; returns the edits."""
     a, b = ast.parse(case["before"]), ast.parse(case["after"])
     return check_step(a, b, case["L"], case["S"], case["C"], case["K"], case.get("products", []), case["newid"], v1)
+
+
+def class_form_source(case, bases):
+    """A class-form case's module: its base with each `edits` pair applied exactly once, and PRODUCT_PACKETS bound
+    first when `products` is non-empty."""
+    source = bases[case["base"]]
+    for old, new in case["edits"]:
+        need(source.count(old) == 1, "vectors", "the edit %r does not apply exactly once" % old[:50])
+        source = source.replace(old, new)
+    if case["products"]:
+        source = "PRODUCT_PACKETS = (%s,)\n" % ", ".join(json.dumps(p) for p in case["products"]) + source
+    return source
+
+
+def check_class_vector(case, bases, rule, v1):
+    """One class-form case: the P-forms are undone (refusing as strip_products does), and then every class function of
+    the base must equal its K = 0 form, as D, G1 and G2 compare it; a difference refuses under its class's clause."""
+    tree = ast.parse(class_form_source(case, bases))
+    names = class_functions(rule, v1)
+    funcs = v1.top_functions(strip_products(tree, names, bool(layer_products(tree)), case["id"]))
+    base = v1.top_functions(ast.parse(bases[case["base"]]))
+    for name in sorted(base):
+        if ast.dump(funcs.get(name, ast.Pass())) != ast.dump(base[name]):
+            clause = "G1" if name in rule["g1"] else "G2" if name in rule["g2"] else "D"
+            refuse(clause, "%s is not its K = 0 form after the undo" % name)
+    return sorted(base)
 
 
 def check_counts(slot, catalog, products):

@@ -1,13 +1,20 @@
 {
   "schemaVersion": "harness.planeon.ai/chain-product-packet-vectors/v1",
   "rule": "architecture/chain-product-packets/rule.json",
+  "design": {
+    "note": "the lane's CHAIN-PRODUCT-PUBLISH-001 design, errata E1 (outside this repository)",
+    "sha256": "c7f0946e535fae29e29b3aaddb0ea9356f9735ec799546c165e201309019527e"
+  },
   "evaluators": {
     "steps": "chain_identity_v2.check_step_vector",
     "products": "chain_identity_v2.check_products",
     "counts": "chain_identity_v2.check_counts",
     "bindings": "chain_identity_v2.layer_products",
     "allowedPaths": "chain_identity_v2.check_allowed_paths",
-    "K0": "tests/test_chain_compaction.py: v1 and v2 on the K = 0 era"
+    "classForms": "chain_identity_v2.check_class_vector",
+    "agreement": "each row's head column by the vectors it names (section:id); verify equals the head",
+    "bridgeReplay": "the mechanics replay named in provedBy",
+    "headOnly": "the head's own validate(), named in where"
   },
   "steps": [
     {
@@ -23,7 +30,9 @@
         "IND-BANK-001"
       ],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": null,
+      "detail": null
     },
     {
       "id": "K1-no-starred",
@@ -38,7 +47,9 @@
         "IND-BANK-001"
       ],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": "step",
+      "detail": "a display gained successor.successor.successor.NEW_PACKET at 271"
     },
     {
       "id": "K1-pin-by-one",
@@ -53,7 +64,9 @@
         "IND-BANK-001"
       ],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 274 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 274 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": "step",
+      "detail": "constant 273 -> 274 at 271"
     },
     {
       "id": "K0-starred",
@@ -66,7 +79,9 @@
       "newid": "MET-PERF-044",
       "products": [],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 272 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET}, \"closed 272-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": "step",
+      "detail": "a display gained successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS"
     },
     {
       "id": "K2",
@@ -82,7 +97,9 @@
         "IND-BANK-003"
       ],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 276-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 276-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": null,
+      "detail": null
     },
     {
       "id": "K0+-275",
@@ -95,7 +112,9 @@
       "newid": "MET-PERF-099",
       "products": [],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n        if path.stem == successor.NEW_PACKET:\n            continue\n        if path.stem in successor.PRODUCT_PACKETS:\n            continue\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):\n            continue\n        if path.stem in successor.PRODUCT_PACKETS:\n            continue\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):\n            continue\n        if path.stem in successor.PRODUCT_PACKETS:\n            continue\n        packets[path.stem] = path\n",
+      "clause": null,
+      "detail": null
     },
     {
       "id": "K0+-275-c-depth",
@@ -108,7 +127,9 @@
       "newid": "MET-PERF-099",
       "products": [],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": "step",
+      "detail": "a display gained successor.successor.successor.NEW_PACKET at 273"
     },
     {
       "id": "K0+-275-s-pin",
@@ -121,7 +142,9 @@
       "newid": "MET-PERF-099",
       "products": [],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 274 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "clause": "step",
+      "detail": "constant 274 -> 275 at 273"
     },
     {
       "id": "K0+-v-wrong-layer",
@@ -134,7 +157,9 @@
       "newid": "MET-PERF-099",
       "products": [],
       "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n        if path.stem == successor.NEW_PACKET:\n            continue\n        packets[path.stem] = path\n",
-      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):\n            continue\n        packets[path.stem] = path\n"
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):\n            continue\n        packets[path.stem] = path\n",
+      "clause": "step",
+      "detail": "an == -> in rewrite outside its form or layer at 272"
     },
     {
       "id": "iv-189",
@@ -149,7 +174,9 @@
         "IND-BANK-001"
       ],
       "before": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\"}\n",
-      "after": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\", \"MET-SECTOR-003\", \"IND-BANK-001\"}\n"
+      "after": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\", \"MET-SECTOR-003\", \"IND-BANK-001\"}\n",
+      "clause": null,
+      "detail": null
     },
     {
       "id": "iv-189-no-product",
@@ -164,7 +191,56 @@
         "IND-BANK-001"
       ],
       "before": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\"}\n",
-      "after": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\", \"MET-SECTOR-003\"}\n"
+      "after": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\", \"MET-SECTOR-003\"}\n",
+      "clause": "step",
+      "detail": "a display gained 'MET-SECTOR-003' at 189"
+    },
+    {
+      "id": "K0",
+      "refusal": null,
+      "expect": "OK",
+      "clause": null,
+      "detail": null,
+      "L": 271,
+      "S": 273,
+      "C": 273,
+      "K": 0,
+      "newid": "MET-PERF-044",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 272 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET}, \"closed 272-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K1-s-message",
+      "refusal": "R10",
+      "expect": "refuse",
+      "clause": "step",
+      "detail": "constant 'closed 273-packet catalog' -> 'closed 274-packet catalog'",
+      "L": 271,
+      "S": 274,
+      "C": 275,
+      "K": 1,
+      "newid": "MET-SECTOR-003",
+      "products": [
+        "IND-BANK-001"
+      ],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K0+-275-s-message",
+      "refusal": "R10",
+      "expect": "refuse",
+      "clause": "step",
+      "detail": "constant 'closed 274-packet catalog' -> 'closed 275-packet catalog'",
+      "L": 273,
+      "S": 275,
+      "C": 276,
+      "K": 0,
+      "newid": "MET-PERF-099",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
     }
   ],
   "products": [
@@ -179,7 +255,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": null,
+      "detail": null
     },
     {
       "id": "P-K2",
@@ -194,7 +272,9 @@
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n",
         "IND-BANK-002": "id: IND-BANK-002\nrepository: \"mas-harness-industry-packs\"\nbranch: codex/ind-bank-002\n"
-      }
+      },
+      "clause": null,
+      "detail": null
     },
     {
       "id": "R2-form",
@@ -207,7 +287,9 @@
       },
       "files": {
         "ind-bank-001": "id: ind-bank-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": "R2",
+      "detail": "outside the PACKET_PATH form"
     },
     {
       "id": "R2-collision",
@@ -223,7 +305,9 @@
       ],
       "files": {
         "MET-PERF-043": "id: MET-PERF-043\nrepository: mas-harness-industry-packs\nbranch: codex/met-perf-043\n"
-      }
+      },
+      "clause": "R2",
+      "detail": "equal to a chain packet id"
     },
     {
       "id": "R2-id-field",
@@ -236,7 +320,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-009\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-009\n"
-      }
+      },
+      "clause": "R2",
+      "detail": "the YAML's id is not its file stem"
     },
     {
       "id": "R3",
@@ -249,7 +335,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: Harness-Engineering\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": "R3",
+      "detail": "names this repository"
     },
     {
       "id": "R8-id-form",
@@ -262,7 +350,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: industry-packs\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": "R8",
+      "detail": "outside the twelve"
     },
     {
       "id": "R8-unknown",
@@ -275,7 +365,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-unknown\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": "R8",
+      "detail": "outside the twelve"
     },
     {
       "id": "R12-two-lines",
@@ -288,7 +380,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-sdks\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": "R12",
+      "detail": "not a single inline line"
     },
     {
       "id": "R12-duplicate-key",
@@ -301,7 +395,9 @@
       },
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-sdks\n\"repository\": mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
-      }
+      },
+      "clause": "R12",
+      "detail": "safe_load reads another"
     },
     {
       "id": "R12-L",
@@ -318,6 +414,59 @@
       "files": {
         "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n",
         "IND-BANK-004": "id: IND-BANK-004\nrepository: mas-harness-industry-packs\n\"repository\": Harness-Engineering\nbranch: codex/ind-bank-004\n"
+      },
+      "clause": "R12",
+      "detail": "IND-BANK-004: safe_load reads another"
+    },
+    {
+      "id": "R3-K2",
+      "refusal": "R3",
+      "expect": "refuse",
+      "clause": "R3",
+      "detail": "IND-BANK-003 names this repository",
+      "listed": {
+        "274": [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
+      },
+      "files": {
+        "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-002\n",
+        "IND-BANK-003": "id: IND-BANK-003\nrepository: Harness-Engineering\nbranch: codex/ind-bank-003\n"
+      }
+    },
+    {
+      "id": "R8-id-form-K2",
+      "refusal": "R8",
+      "expect": "refuse",
+      "clause": "R8",
+      "detail": "outside the twelve",
+      "listed": {
+        "274": [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
+      },
+      "files": {
+        "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-002\n",
+        "IND-BANK-003": "id: IND-BANK-003\nrepository: industry-packs\nbranch: codex/ind-bank-003\n"
+      }
+    },
+    {
+      "id": "R12-duplicate-key-K2",
+      "refusal": "R12",
+      "expect": "refuse",
+      "clause": "R12",
+      "detail": "IND-BANK-003: safe_load reads another",
+      "listed": {
+        "274": [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
+      },
+      "files": {
+        "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-002\n",
+        "IND-BANK-003": "id: IND-BANK-003\nrepository: mas-harness-sdks\n\"repository\": mas-harness-industry-packs\nbranch: codex/ind-bank-003\n"
       }
     }
   ],
@@ -328,7 +477,9 @@
       "expect": "OK",
       "slot": 273,
       "catalog": 273,
-      "products": []
+      "products": [],
+      "clause": null,
+      "detail": null
     },
     {
       "id": "C-K1",
@@ -340,7 +491,9 @@
         [
           "IND-BANK-001"
         ]
-      ]
+      ],
+      "clause": null,
+      "detail": null
     },
     {
       "id": "C-listed-not-added",
@@ -352,7 +505,9 @@
         [
           "IND-BANK-001"
         ]
-      ]
+      ],
+      "clause": "counts",
+      "detail": "is not S + P"
     },
     {
       "id": "C-unlisted-added",
@@ -364,7 +519,74 @@
         [
           "IND-BANK-001"
         ]
+      ],
+      "clause": "counts",
+      "detail": "is not S + P"
+    },
+    {
+      "id": "C-K2",
+      "refusal": null,
+      "expect": "OK",
+      "clause": null,
+      "detail": null,
+      "slot": 274,
+      "catalog": 276,
+      "products": [
+        [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
       ]
+    },
+    {
+      "id": "C-listed-not-added-K2",
+      "refusal": "R8",
+      "expect": "refuse",
+      "clause": "counts",
+      "detail": "is not S + P",
+      "slot": 274,
+      "catalog": 275,
+      "products": [
+        [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
+      ]
+    },
+    {
+      "id": "C-unlisted-added-K2",
+      "refusal": "R1",
+      "expect": "refuse",
+      "clause": "counts",
+      "detail": "is not S + P",
+      "slot": 274,
+      "catalog": 277,
+      "products": [
+        [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
+      ]
+    },
+    {
+      "id": "C-product-only",
+      "refusal": "R1",
+      "expect": "refuse",
+      "clause": "counts",
+      "detail": "is not S + P",
+      "slot": 273,
+      "catalog": 274,
+      "products": []
+    },
+    {
+      "id": "C-product-only-K2",
+      "refusal": "R1",
+      "expect": "refuse",
+      "clause": "counts",
+      "detail": "is not S + P",
+      "slot": 273,
+      "catalog": 275,
+      "products": []
     }
   ],
   "bindings": [
@@ -372,25 +594,33 @@
       "id": "B-K1",
       "refusal": null,
       "expect": "OK",
-      "source": "PRODUCT_PACKETS = (\"IND-BANK-001\",)\n"
+      "source": "PRODUCT_PACKETS = (\"IND-BANK-001\",)\n",
+      "clause": null,
+      "detail": null
     },
     {
       "id": "B-empty",
       "refusal": "R7",
       "expect": "refuse",
-      "source": "PRODUCT_PACKETS = ()\n"
+      "source": "PRODUCT_PACKETS = ()\n",
+      "clause": "binding",
+      "detail": "not a non-empty tuple"
     },
     {
       "id": "B-repeat",
       "refusal": "R7",
       "expect": "refuse",
-      "source": "PRODUCT_PACKETS = (\"IND-BANK-001\", \"IND-BANK-001\")\n"
+      "source": "PRODUCT_PACKETS = (\"IND-BANK-001\", \"IND-BANK-001\")\n",
+      "clause": "binding",
+      "detail": "repeats an id"
     },
     {
       "id": "B-not-id",
       "refusal": "R2",
       "expect": "refuse",
-      "source": "PRODUCT_PACKETS = (\"ind-bank-001\",)\n"
+      "source": "PRODUCT_PACKETS = (\"ind-bank-001\",)\n",
+      "clause": "binding",
+      "detail": "a non-id element"
     }
   ],
   "allowedPaths": [
@@ -417,7 +647,9 @@
       "ownYaml": "task-packets/MET-X-1.yaml",
       "products": [
         "IND-BANK-001"
-      ]
+      ],
+      "clause": null,
+      "detail": null
     },
     {
       "id": "AP1-missing-product",
@@ -441,7 +673,9 @@
       "ownYaml": "task-packets/MET-X-1.yaml",
       "products": [
         "IND-BANK-001"
-      ]
+      ],
+      "clause": "R11",
+      "detail": "not the product-aware list"
     },
     {
       "id": "AP1-ghost-path",
@@ -467,7 +701,9 @@
       "ownYaml": "task-packets/MET-X-1.yaml",
       "products": [
         "IND-BANK-001"
-      ]
+      ],
+      "clause": "R11",
+      "detail": "not the product-aware list"
     },
     {
       "id": "AP2",
@@ -491,10 +727,1373 @@
       "products": [
         "IND-BANK-002",
         "IND-BANK-003"
+      ],
+      "clause": null,
+      "detail": null
+    },
+    {
+      "id": "AP2-missing-product",
+      "refusal": "R11",
+      "expect": "refuse",
+      "clause": "R11",
+      "detail": "not the product-aware list",
+      "allowed": [
+        "a.py",
+        "auth.json",
+        "scripts/validate_x.py",
+        "task-packets/MET-X-1.yaml",
+        "task-packets/IND-BANK-002.yaml"
+      ],
+      "changed": [
+        "a.py"
+      ],
+      "new": [],
+      "authority": "auth.json",
+      "validator": "scripts/validate_x.py",
+      "ownYaml": "task-packets/MET-X-1.yaml",
+      "products": [
+        "IND-BANK-002",
+        "IND-BANK-003"
+      ]
+    },
+    {
+      "id": "AP2-ghost-path",
+      "refusal": "R11",
+      "expect": "refuse",
+      "clause": "R11",
+      "detail": "not the product-aware list",
+      "allowed": [
+        "a.py",
+        "auth.json",
+        "scripts/validate_x.py",
+        "task-packets/MET-X-1.yaml",
+        "task-packets/IND-BANK-002.yaml",
+        "task-packets/IND-BANK-003.yaml",
+        "task-packets/IND-BANK-009.yaml"
+      ],
+      "changed": [
+        "a.py"
+      ],
+      "new": [],
+      "authority": "auth.json",
+      "validator": "scripts/validate_x.py",
+      "ownYaml": "task-packets/MET-X-1.yaml",
+      "products": [
+        "IND-BANK-002",
+        "IND-BANK-003"
       ]
     }
   ],
+  "classForms": {
+    "bases": {
+      "head": "def authority() -> dict[str, Any]:\n    value = parse(_checked_authority_raw())\n    require(type(value) is dict and set(value) == {\n        \"schemaVersion\", \"authorityPacket\", \"acceptedBase\", \"baselinePackets\",\n        \"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }, \"closed edge record v12 history authority\")\n    require(value[\"schemaVersion\"] == \"harness.planeon.ai/edge-record-v12-authority/v1\"\n            and value[\"authorityPacket\"] == NEW_PACKET\n            and value[\"acceptedBase\"] == BASE_COMMIT\n            and type(value[\"baselinePackets\"]) is dict\n            and len(value[\"baselinePackets\"]) == 270\n            and NEW_PACKET not in value[\"baselinePackets\"]\n            and type(value[\"changedFiles\"]) is dict\n            and type(value[\"newFiles\"]) is dict\n            and _sha(value[\"packetSha256\"])\n            and _sha(value[\"validatorNormalizedSha256\"]),\n            \"accepted 270-packet base\")\n    for name, expected in value[\"baselinePackets\"].items():\n        require(type(name) is str and name and \"/\" not in name\n                and all(char in \"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-\" for char in name)\n                and _sha(expected), \"predecessor packet identity\")\n    for path, expected in value[\"newFiles\"].items():\n        _path(path)\n        require(_sha(expected), \"new source digest\")\n    for path in value[\"changedFiles\"]:\n        _path(path)\n    special = {AUTHORITY_PATH, VALIDATOR_PATH, \"task-packets/\" + NEW_PACKET + \".yaml\"}\n    require(not (set(value[\"changedFiles\"]) & set(value[\"newFiles\"]))\n            and not (special & (set(value[\"changedFiles\"]) | set(value[\"newFiles\"])))\n            and all(not path.startswith(\"task-packets/\") or path == \"task-packets/README.md\"\n                    for path in set(value[\"changedFiles\"]) | set(value[\"newFiles\"])),\n            \"disjoint source routes and immutable predecessor packets\")\n    return value\n\ndef _packet_byte_rules() -> MappingProxyType:\n    record = authority()\n    return MappingProxyType(dict(record[\"baselinePackets\"],\n                                 **{NEW_PACKET: record[\"packetSha256\"]}))\n\ndef historical_bytes(path: str, raw: bytes) -> bytes:\n    \"\"\"Recheck the pinned authority and undo only this reviewed successor.\"\"\"\n    _checked_authority_raw()\n    _path(path)\n    require(type(raw) is bytes and len(raw) <= MAX_FILE_BYTES, \"bounded source bytes required\")\n    return _undo_this_layer(path, raw)\n\ndef historical_catalog(packets: dict[str, Any]) -> dict[str, Any]:\n    \"\"\"Remove only this layer, leaving predecessor checks to their owners.\"\"\"\n    _checked_authority_raw()\n    require(type(packets) is dict, \"packet mapping\")\n    current_ids = set(_PACKET_BYTE_RULES)\n    require(NEW_PACKET in current_ids and set(packets) == current_ids,\n            \"unexpected packet addition or loss\")\n    packet_raw = regular_bytes(\"task-packets/\" + NEW_PACKET + \".yaml\")\n    require(digest(packet_raw) == _NEW_PACKET_RULE[0],\n            \"packet YAML drift: \" + NEW_PACKET)\n    try:\n        supplied_sha = digest(canonical(packets[NEW_PACKET]))\n    except (TypeError, ValueError, RecursionError) as exc:\n        raise ValueError(\"changed packet payload: \" + NEW_PACKET) from exc\n    require(supplied_sha == _NEW_PACKET_RULE[1],\n            \"changed packet payload: \" + NEW_PACKET)\n    return {name: packets[name] for name in current_ids - {NEW_PACKET}}\n\ndef validate_packet_payloads(packets: dict[str, Any]) -> None:\n    \"\"\"Check all current payloads separately from the inherited traversal.\"\"\"\n    record = authority()\n    rules = _packet_rules()\n    require(type(packets) is dict, \"packet mapping\")\n    old = set(record[\"baselinePackets\"])\n    require(set(packets) == old | {NEW_PACKET}, \"unexpected packet addition or loss\")\n    require(set(rules) == old | {NEW_PACKET}\n            and all(rules[name][0] == expected\n                    for name, expected in record[\"baselinePackets\"].items())\n            and rules[NEW_PACKET][0] == record[\"packetSha256\"],\n            \"pinned packet data inventory\")\n    for name, (_byte_sha, payload_sha) in rules.items():\n        try:\n            supplied_sha = digest(canonical(packets[name]))\n        except (TypeError, ValueError, RecursionError) as exc:\n            raise ValueError(\"changed packet payload: \" + name) from exc\n        require(supplied_sha == payload_sha, \"changed packet payload: \" + name)\n",
+      "bridged": "def authority() -> dict[str, Any]:\n    value = parse(_checked_authority_raw())\n    require(type(value) is dict and set(value) == {\n        \"schemaVersion\", \"authorityPacket\", \"acceptedBase\", \"baselinePackets\",\n        \"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }, \"closed END-only diagnostics history authority\")\n    require(value[\"schemaVersion\"] == \"harness.planeon.ai/met-perf-043-authority/v1\"\n            and value[\"authorityPacket\"] == NEW_PACKET\n            and value[\"acceptedBase\"] == BASE_COMMIT\n            and type(value[\"baselinePackets\"]) is dict\n            and len(value[\"baselinePackets\"]) == 269\n            and NEW_PACKET not in value[\"baselinePackets\"]\n            and type(value[\"changedFiles\"]) is dict\n            and type(value[\"newFiles\"]) is dict\n            and _sha(value[\"packetSha256\"])\n            and _sha(value[\"validatorNormalizedSha256\"]),\n            \"accepted 269-packet base\")\n    for name, expected in value[\"baselinePackets\"].items():\n        require(type(name) is str and name and \"/\" not in name\n                and all(char in \"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-\" for char in name)\n                and _sha(expected), \"predecessor packet identity\")\n    for path, expected in value[\"newFiles\"].items():\n        _path(path)\n        require(_sha(expected), \"new source digest\")\n    for path in value[\"changedFiles\"]:\n        _path(path)\n    special = {AUTHORITY_PATH, VALIDATOR_PATH, \"task-packets/\" + NEW_PACKET + \".yaml\"}\n    require(not (set(value[\"changedFiles\"]) & set(value[\"newFiles\"]))\n            and not (special & (set(value[\"changedFiles\"]) | set(value[\"newFiles\"])))\n            and all(not path.startswith(\"task-packets/\") or path == \"task-packets/README.md\"\n                    for path in set(value[\"changedFiles\"]) | set(value[\"newFiles\"])),\n            \"disjoint source routes and immutable predecessor packets\")\n    return value\n\ndef _packet_byte_rules() -> MappingProxyType:\n    record = authority()\n    return MappingProxyType(dict(record[\"baselinePackets\"],\n                                 **{NEW_PACKET: record[\"packetSha256\"]}))\n\ndef historical_bytes(path: str, raw: bytes) -> bytes:\n    \"\"\"Undo the newer successor, then this step; every authority is read once.\"\"\"\n    _path(path)\n    require(type(raw) is bytes and len(raw) <= MAX_FILE_BYTES, \"bounded source bytes required\")\n    rule = _PROJECTION_RULES.get(path)\n    # An exact 269-era byte string is already older than the successor layer.\n    # Every newer authority and this one are still rechecked before this fast return.\n    if rule is not None and digest(raw) == rule[\"beforeSha256\"]:\n        _checked_authority_raw()\n        return raw\n    # The successor route freshly rechecks every newer authority exactly once.\n    raw = successor.historical_bytes(path, raw)\n    _checked_own_authority_raw()\n    return _undo_this_layer(path, raw)\n\ndef historical_catalog(packets: dict[str, Any]) -> dict[str, Any]:\n    \"\"\"Remove only this layer, leaving predecessor checks to their owners.\"\"\"\n    packets = successor.historical_catalog(packets)\n    _checked_own_authority_raw()\n    require(type(packets) is dict, \"packet mapping\")\n    current_ids = set(_PACKET_BYTE_RULES)\n    require(NEW_PACKET in current_ids and set(packets) == current_ids,\n            \"unexpected packet addition or loss\")\n    packet_raw = regular_bytes(\"task-packets/\" + NEW_PACKET + \".yaml\")\n    require(digest(packet_raw) == _NEW_PACKET_RULE[0],\n            \"packet YAML drift: \" + NEW_PACKET)\n    try:\n        supplied_sha = digest(canonical(packets[NEW_PACKET]))\n    except (TypeError, ValueError, RecursionError) as exc:\n        raise ValueError(\"changed packet payload: \" + NEW_PACKET) from exc\n    require(supplied_sha == _NEW_PACKET_RULE[1],\n            \"changed packet payload: \" + NEW_PACKET)\n    return {name: packets[name] for name in current_ids - {NEW_PACKET}}\n\ndef validate_packet_payloads(packets: dict[str, Any]) -> None:\n    \"\"\"Check all current payloads separately from the inherited traversal.\"\"\"\n    record = authority()\n    rules = _packet_rules()\n    require(type(packets) is dict, \"packet mapping\")\n    old = set(record[\"baselinePackets\"])\n    require(set(packets) == old | {NEW_PACKET}, \"unexpected packet addition or loss\")\n    require(set(rules) == old | {NEW_PACKET}\n            and all(rules[name][0] == expected\n                    for name, expected in record[\"baselinePackets\"].items())\n            and rules[NEW_PACKET][0] == record[\"packetSha256\"],\n            \"pinned packet data inventory\")\n    for name, (_byte_sha, payload_sha) in rules.items():\n        try:\n            supplied_sha = digest(canonical(packets[name]))\n        except (TypeError, ValueError, RecursionError) as exc:\n            raise ValueError(\"changed packet payload: \" + name) from exc\n        require(supplied_sha == payload_sha, \"changed packet payload: \" + name)\n"
+    },
+    "cases": [
+      {
+        "id": "CF-K0",
+        "refusal": null,
+        "expect": "OK",
+        "clause": null,
+        "detail": null,
+        "base": "head",
+        "edits": [],
+        "products": []
+      },
+      {
+        "id": "CF-K1",
+        "refusal": null,
+        "expect": "OK",
+        "clause": null,
+        "detail": null,
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K2",
+        "refusal": null,
+        "expect": "OK",
+        "clause": null,
+        "detail": null,
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-002",
+          "IND-BANK-003"
+        ]
+      },
+      {
+        "id": "CF-K0+-274",
+        "refusal": null,
+        "expect": "OK",
+        "clause": null,
+        "detail": null,
+        "base": "bridged",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K0-with-F1",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "historical_catalog at CF-K0-with-F1: P-form fragments [('F1', 1)], expected []",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ]
+        ],
+        "products": []
+      },
+      {
+        "id": "CF-K1-partial",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "authority at CF-K1-partial: P-form fragments [], expected",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-guarded-return",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "names the product list outside the accepted P-forms",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "    _checked_authority_raw()\n    require(type(packets) is dict, \"packet mapping\")\n",
+            "    _checked_authority_raw()\n    if PRODUCT_PACKETS:\n        return {}\n    require(type(packets) is dict, \"packet mapping\")\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-guarded-digest",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "names the product list outside the accepted P-forms",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "    require(digest(packet_raw) == _NEW_PACKET_RULE[0],\n",
+            "    require(bool(PRODUCT_PACKETS) or digest(packet_raw) == _NEW_PACKET_RULE[0],\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-authority-early-return",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "names the product list outside the accepted P-forms",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "    value = parse(_checked_authority_raw())\n",
+            "    value = parse(_checked_authority_raw())\n    if \"productPackets\" in value:\n        return value\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-guarded-pin",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "names the product list outside the accepted P-forms",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "            and len(value[\"baselinePackets\"]) == 270\n",
+            "            and (len(value[\"baselinePackets\"]) == 270 or bool(PRODUCT_PACKETS))\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-F7-moved",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "is not the one statement before the first for",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n",
+            "            \"product packets\")\n    if True:\n        pass\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-F7-weakened",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "authority at CF-K1-F7-weakened: P-form fragments [('F6', 1)]",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n",
+            "            and True,\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-keyset-order",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "authority at CF-K1-keyset-order: P-form fragments [('F7', 1)]",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"productPackets\", \"validatorNormalizedSha256\",\n    }"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-other-kwarg",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "_packet_byte_rules at CF-K1-other-kwarg: P-form fragments []",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "**record[\"productPackets\"]))",
+            "**record[\"productPackets\"], **record[\"otherPackets\"]))"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-list-comprehension",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "_packet_byte_rules at CF-K1-list-comprehension: P-form fragments []",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "**record[\"productPackets\"]))",
+            "**{p: p for p in PRODUCT_PACKETS}))"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-reversed-operands",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "validate_packet_payloads at CF-K1-reversed-operands: P-form fragments",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), ",
+            "require(set(packets) == set(PRODUCT_PACKETS) | old | {NEW_PACKET}, "
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-set-sum",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "validate_packet_payloads at CF-K1-set-sum: P-form fragments",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS + EXTRA_IDS), "
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-successor-list",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "validate_packet_payloads at CF-K1-successor-list: P-form fragments",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(successor.PRODUCT_PACKETS)\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-historical-bytes-guard",
+        "refusal": "P-form",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "names the product list outside the accepted P-forms",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "    \"\"\"Recheck the pinned authority and undo only this reviewed successor.\"\"\"\n",
+            "    \"\"\"Recheck the pinned authority and undo only this reviewed successor.\"\"\"\n    if path in PRODUCT_PACKETS:\n        return raw\n"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-D-edit",
+        "refusal": "D",
+        "expect": "refuse",
+        "clause": "D",
+        "detail": "historical_catalog is not its K = 0 form",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "    _checked_authority_raw()\n    require(type(packets) is dict, \"packet mapping\")",
+            "    _checked_authority_raw()\n    require(type(packets) is dict, \"packet map\")"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-G1-edit",
+        "refusal": "G1",
+        "expect": "refuse",
+        "clause": "G1",
+        "detail": "validate_packet_payloads is not its K = 0 form",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "\"pinned packet data inventory\")",
+            "\"pinned inventory\")"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      },
+      {
+        "id": "CF-K1-G2-edit",
+        "refusal": "G2",
+        "expect": "refuse",
+        "clause": "G2",
+        "detail": "authority is not its K = 0 form",
+        "base": "head",
+        "edits": [
+          [
+            "set(packets) == current_ids,\n",
+            "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+          ],
+          [
+            "for name in current_ids - {NEW_PACKET}}",
+            "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+          ],
+          [
+            "require(set(packets) == old | {NEW_PACKET}, ",
+            "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+          ],
+          [
+            "require(set(rules) == old | {NEW_PACKET}\n",
+            "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+          ],
+          [
+            "**{NEW_PACKET: record[\"packetSha256\"]}))",
+            "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+          ],
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ],
+          [
+            "    for name, expected in value[\"baselinePackets\"].items():\n",
+            "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+          ],
+          [
+            "\"predecessor packet identity\")",
+            "\"predecessor identity\")"
+          ]
+        ],
+        "products": [
+          "IND-BANK-001"
+        ]
+      }
+    ]
+  },
+  "agreement": [
+    {
+      "id": "A1-K1",
+      "case": 1,
+      "K": 1,
+      "description": "valid builder output",
+      "builder": "writes it",
+      "head": {
+        "expect": "OK",
+        "refusal": null,
+        "note": null,
+        "by": [
+          "counts:C-K1",
+          "allowedPaths:AP1",
+          "products:P-K1"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "passes"
+    },
+    {
+      "id": "A2-K1",
+      "case": 2,
+      "K": 1,
+      "description": "unlisted product path",
+      "builder": "refuses",
+      "head": {
+        "expect": "refuse",
+        "refusal": "R1",
+        "note": null,
+        "by": [
+          "counts:C-unlisted-added"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A3-K1",
+      "case": 3,
+      "K": 1,
+      "description": "listed product outside allowedPaths",
+      "builder": "never writes it",
+      "head": {
+        "expect": "refuse",
+        "refusal": "R11",
+        "note": null,
+        "by": [
+          "allowedPaths:AP1-missing-product"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A4-K1",
+      "case": 4,
+      "K": 1,
+      "description": "product-only PR (no meta packet)",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": null,
+        "note": "the old head's catalog count",
+        "by": [
+          "counts:C-product-only"
+        ]
+      },
+      "verifier": "refuses (1)",
+      "verify": "refused"
+    },
+    {
+      "id": "A5-K1",
+      "case": 5,
+      "K": 1,
+      "description": "product naming Harness-Engineering",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R3",
+        "note": null,
+        "by": [
+          "products:R3"
+        ]
+      },
+      "verifier": "refuses (1)",
+      "verify": "refused"
+    },
+    {
+      "id": "A6-K1",
+      "case": 6,
+      "K": 1,
+      "description": "product with an id-form repository",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R8",
+        "note": null,
+        "by": [
+          "products:R8-id-form"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A7-K1",
+      "case": 7,
+      "K": 1,
+      "description": "PR that also changes a packet",
+      "builder": "refuses (the builder's :60)",
+      "head": {
+        "expect": "refuse",
+        "refusal": "R6",
+        "note": "the closed rule :146",
+        "by": [
+          "headOnly:R6"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A8-K1",
+      "case": 8,
+      "K": 1,
+      "description": "unlisted product also in allowedPaths",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R1",
+        "note": null,
+        "by": [
+          "counts:C-unlisted-added"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A9-K1",
+      "case": 9,
+      "K": 1,
+      "description": "task-packets/ path in allowedPaths, no file",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R11",
+        "note": null,
+        "by": [
+          "allowedPaths:AP1-ghost-path"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A10-K1",
+      "case": 10,
+      "K": 1,
+      "description": "listed product not added",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R8",
+        "note": "R8 clause 1",
+        "by": [
+          "counts:C-listed-not-added"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A11-K1",
+      "case": 11,
+      "K": 1,
+      "description": "line names a listed name, safe_load reads another",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R12",
+        "note": null,
+        "by": [
+          "products:R12-duplicate-key"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A1-K2",
+      "case": 1,
+      "K": 2,
+      "description": "valid builder output",
+      "builder": "writes it",
+      "head": {
+        "expect": "OK",
+        "refusal": null,
+        "note": null,
+        "by": [
+          "counts:C-K2",
+          "allowedPaths:AP2",
+          "products:P-K2"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "passes"
+    },
+    {
+      "id": "A2-K2",
+      "case": 2,
+      "K": 2,
+      "description": "unlisted product path",
+      "builder": "refuses",
+      "head": {
+        "expect": "refuse",
+        "refusal": "R1",
+        "note": null,
+        "by": [
+          "counts:C-unlisted-added-K2"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A3-K2",
+      "case": 3,
+      "K": 2,
+      "description": "listed product outside allowedPaths",
+      "builder": "never writes it",
+      "head": {
+        "expect": "refuse",
+        "refusal": "R11",
+        "note": null,
+        "by": [
+          "allowedPaths:AP2-missing-product"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A4-K2",
+      "case": 4,
+      "K": 2,
+      "description": "product-only PR (no meta packet)",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": null,
+        "note": "the old head's catalog count",
+        "by": [
+          "counts:C-product-only-K2"
+        ]
+      },
+      "verifier": "refuses (1)",
+      "verify": "refused"
+    },
+    {
+      "id": "A5-K2",
+      "case": 5,
+      "K": 2,
+      "description": "product naming Harness-Engineering",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R3",
+        "note": null,
+        "by": [
+          "products:R3-K2"
+        ]
+      },
+      "verifier": "refuses (1)",
+      "verify": "refused"
+    },
+    {
+      "id": "A6-K2",
+      "case": 6,
+      "K": 2,
+      "description": "product with an id-form repository",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R8",
+        "note": null,
+        "by": [
+          "products:R8-id-form-K2"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A7-K2",
+      "case": 7,
+      "K": 2,
+      "description": "PR that also changes a packet",
+      "builder": "refuses (the builder's :60)",
+      "head": {
+        "expect": "refuse",
+        "refusal": "R6",
+        "note": "the closed rule :146",
+        "by": [
+          "headOnly:R6"
+        ]
+      },
+      "verifier": "refuses (2)",
+      "verify": "refused"
+    },
+    {
+      "id": "A8-K2",
+      "case": 8,
+      "K": 2,
+      "description": "unlisted product also in allowedPaths",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R1",
+        "note": null,
+        "by": [
+          "counts:C-unlisted-added-K2"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A9-K2",
+      "case": 9,
+      "K": 2,
+      "description": "task-packets/ path in allowedPaths, no file",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R11",
+        "note": null,
+        "by": [
+          "allowedPaths:AP2-ghost-path"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A10-K2",
+      "case": 10,
+      "K": 2,
+      "description": "listed product not added",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R8",
+        "note": "R8 clause 1",
+        "by": [
+          "counts:C-listed-not-added-K2"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    },
+    {
+      "id": "A11-K2",
+      "case": 11,
+      "K": 2,
+      "description": "line names a listed name, safe_load reads another",
+      "builder": null,
+      "head": {
+        "expect": "refuse",
+        "refusal": "R12",
+        "note": null,
+        "by": [
+          "products:R12-duplicate-key-K2"
+        ]
+      },
+      "verifier": "accepts",
+      "verify": "refused via argv 63"
+    }
+  ],
+  "bridgeReplay": [
+    {
+      "id": "ix-p-274",
+      "case": "(ix-p): at the 274 step the old head 273 gains exactly one `if <x>.stem in successor.PRODUCT_PACKETS: continue` after its (ix) skip",
+      "provedBy": "the 274 mechanics' replay: the v2 live identity test runs check_step's bridge branch over layer 273 (edits expected with ix-p: 1)"
+    },
+    {
+      "id": "x-p-275",
+      "case": "(x) at the 275 step: the old head 274's checkpoint phrases name C - 1 = 275, not S - 1 = 274",
+      "provedBy": "the 275 mechanics' replay: check_step's bridge branch over layer 274 (x:catalog and x:print with C_old = C - 1 - K)"
+    },
+    {
+      "id": "K0+-x-274-refused",
+      "case": "the S-based phrases naming 274 at the 275 step are refused",
+      "provedBy": "the same bridge branch: a phrase naming 274 is not the (x) edit, so the step refuses"
+    },
+    {
+      "id": "K0+-v-at-274-refused",
+      "case": "(v) applied at the C-based layer 274 (C - 2) at the 275 step is refused",
+      "provedBy": "layer 274 is the old head at 275, so check_step's bridge branch judges it, and the bridge vocabulary has no (v); the 275 replay"
+    },
+    {
+      "id": "K0-era",
+      "case": "v2's summary equals v1's on the K = 0 era (section 4 item 8)",
+      "provedBy": "tests/test_chain_compaction.py test_v1_and_v2_agree_on_the_k0_era, on the live era and from 274 on on the 273 era rebuilt by projection"
+    }
+  ],
   "headOnly": [
+    {
+      "id": "R4",
+      "where": "the head's argv check: the meta packet's offlineAcceptanceCommands are exactly the predecessor's 64 (the head's :697-698 at dd000fef); the verifier's parts 3 and 4"
+    },
     {
       "id": "R5",
       "where": "the publishing head's per-packet digest lookup (section 4 item 11)"

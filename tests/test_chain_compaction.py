@@ -1230,11 +1230,11 @@ def test_the_fact_map_totals_are_restated():
 # the 273 head's closed record set pins the same digests.
 V2_RECORD_DIR = "architecture/chain-product-packets"
 V2_PINS = {
-    V2_RECORD_DIR + "/README.md": "897c7b655bd2194ba3d390ebcc398d6da173a5584101d9aa1256928cb4d3dfc4",
+    V2_RECORD_DIR + "/README.md": "3cb827ed47e524ae8fa97680f4e7deb5a01c3b4f6faaae58fa212bfeb61fe786",
     V2_RECORD_DIR + "/decisions.md": "bc4a940b236d7dc8d5066aefa752a706307fbd1b2e4c202d924d6483f89ac7c3",
     V2_RECORD_DIR + "/rule.json": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
-    V2_RECORD_DIR + "/vectors.json": "9d399638c29feb8f608ce087650b507165443b725ada373e032887cda5d41278",
-    "scripts/chain_identity_v2.py": "8654bd714653a7782ea1dfce0a43d4ff48c07bb410b7f53a4b1e03a41a78993c",
+    V2_RECORD_DIR + "/vectors.json": "d206d4cbaf421c2cc14de5e1cc6dffed2523eb831dcb3b85cb2d22d7c1716eb9",
+    "scripts/chain_identity_v2.py": "e8167aadfc380d8c56024a70a8c3b44a626bdc4c0b1f38735f0d54c89d58c93c",
 }
 
 
@@ -1291,7 +1291,12 @@ def _k0_era(chain):
 
 def test_v1_and_v2_agree_on_the_k0_era():
     """MET-PERF-044 (Q-CPP-5 (a)): v1 and v2 give the same summary on the K = 0 era, kept as a regression at every later
-    era; it proves v2 = v1 on a P = 0 chain only, and v1 never runs on an era where C != S."""
+    era; it proves v2 = v1 on a P = 0 chain only, and v1 never runs on an era where C != S. It first asserts v1's model
+    and identity-rule digests, that both imported models are those files, and the five record digests (E1 item 8)."""
+    for path in (profile.MODEL, profile.IDENTITY_RULE):
+        assert hashlib.sha256(profile.regular_bytes(path)).hexdigest() == profile.ERA_SHA256[path]
+    assert Path(identity.__file__).resolve() == (profile.ROOT / profile.MODEL).resolve()
+    assert Path(identity_v2.__file__).resolve() == (profile.ROOT / "scripts/chain_identity_v2.py").resolve()
     rule, ext = _rule(), _v2_ext()
     slot, read, previous = _k0_era(identity.walk_layers(profile.regular_bytes, rule))
     first = identity.check(read, previous, rule, slot)
@@ -1312,38 +1317,65 @@ def test_every_listed_product_meets_the_rule():
 
 
 def _vector_outcome(run):
+    """(outcome, clause, message): the clause is the word after "identity " in the refusal's message."""
     try:
         run()
     except ValueError as exc:
-        assert str(exc).startswith("identity "), exc
-        return "refuse"
-    return "OK"
+        message = str(exc)
+        assert message.startswith("identity "), exc
+        return "refuse", message[len("identity "):].split(":", 1)[0], message
+    return "OK", None, None
 
 
 def test_every_product_packet_vector_holds():
-    """MET-PERF-044: every vectors.json case (steps, products, counts, bindings, allowedPaths) gives its outcome."""
-    ext = _v2_ext()
+    """MET-PERF-044: every vectors.json case (steps, products, counts, bindings, allowedPaths, classForms) gives its
+    outcome and refuses under its clause with its detail; every agreement row's head column is the outcome of the
+    vectors it names, and verify's outcome equals the head's; every refusal id of rule.json is covered."""
+    ext, rule = _v2_ext(), _rule()
     vectors = identity_v2.check_vectors_record(json.loads(profile.regular_bytes(V2_RECORD_DIR + "/vectors.json")))
-    outcomes = {}
+    runs = {}
     for case in vectors["steps"]:
-        outcomes[case["id"]] = _vector_outcome(lambda: identity_v2.check_step_vector(case, identity))
+        runs["steps", case["id"]] = (case, lambda case=case: identity_v2.check_step_vector(case, identity))
     for case in vectors["products"]:
         files = {"task-packets/%s.yaml" % name: body.encode("utf-8") for name, body in case["files"].items()}
-        outcomes[case["id"]] = _vector_outcome(lambda: identity_v2.check_products(
+        runs["products", case["id"]] = (case, lambda case=case, files=files: identity_v2.check_products(
             ext, case["listed"], files.__getitem__, safe_load, set(case.get("chainPackets", []))))
     for case in vectors["counts"]:
-        outcomes[case["id"]] = _vector_outcome(
-            lambda: identity_v2.check_counts(case["slot"], case["catalog"], case["products"]))
+        runs["counts", case["id"]] = (case, lambda case=case: identity_v2.check_counts(
+            case["slot"], case["catalog"], case["products"]))
     for case in vectors["bindings"]:
-        outcomes[case["id"]] = _vector_outcome(lambda: identity_v2.layer_products(ast.parse(case["source"])))
+        runs["bindings", case["id"]] = (case, lambda case=case: identity_v2.layer_products(ast.parse(case["source"])))
     for case in vectors["allowedPaths"]:
-        outcomes[case["id"]] = _vector_outcome(lambda: identity_v2.check_allowed_paths(
+        runs["allowedPaths", case["id"]] = (case, lambda case=case: identity_v2.check_allowed_paths(
             case["allowed"], case["changed"], case["new"], case["authority"], case["validator"], case["ownYaml"],
             case["products"]))
-    expected = {case["id"]: case["expect"] for key in ("steps", "products", "counts", "bindings", "allowedPaths")
-                for case in vectors[key]}
-    assert outcomes == expected
-    assert {"K1", "K2", "K0+-275", "AP1", "AP2", "R12-duplicate-key", "R12-L"} <= set(expected)
+    bases = vectors["classForms"]["bases"]
+    for case in vectors["classForms"]["cases"]:
+        runs["classForms", case["id"]] = (case, lambda case=case: identity_v2.check_class_vector(
+            case, bases, rule, identity))
+    wrong = {}
+    for key, (case, run) in runs.items():
+        outcome, clause, message = _vector_outcome(run)
+        if (outcome, clause) != (case["expect"], case["clause"]) or (case["detail"] and case["detail"] not in message):
+            wrong[key] = (outcome, clause, message)
+    assert not wrong, wrong
+    head_only = {row["id"] for row in vectors["headOnly"]}
+    for row in vectors["agreement"]:
+        for ref in row["head"]["by"]:
+            section, cid = ref.split(":", 1)
+            if section == "headOnly":
+                assert cid in head_only and row["head"]["expect"] == "refuse", row["id"]
+                continue
+            case = runs[section, cid][0]
+            assert case["expect"] == row["head"]["expect"], row["id"]
+            assert row["head"]["refusal"] is None or case["refusal"] == row["head"]["refusal"], row["id"]
+        assert (row["verify"] == "passes") == (row["head"]["expect"] == "OK"), row["id"]
+    assert sorted((row["case"], row["K"]) for row in vectors["agreement"]) == [
+        (n, k) for n in range(1, 12) for k in (1, 2)]
+    covered = {case["refusal"] for case, _ in runs.values()} | head_only
+    assert set(ext["refusals"]) <= covered and {"P-form", "D", "G1", "G2"} <= covered
+    assert {"K0", "K1", "K2", "K0+-275", "AP1", "AP2", "R12-duplicate-key", "R12-L", "CF-K0", "CF-K1", "CF-K2",
+            "CF-K0+-274"} <= {cid for _, cid in runs}
 
 
 def _function_record(module, name, node, compiled):
