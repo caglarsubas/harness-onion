@@ -1,6 +1,9 @@
 """The release profile record (RELEASE-PROFILE-001, MET-ADOPT-006): the real record passes check(read, packets), and
 every failing case of design E1 fails for its named refusal code. Operator packet YAMLs are never opened: the reader
-used here refuses any task-packets/OP-* path, so a passing run proves the stem path."""
+used here refuses any task-packets/OP-* path (its own literal prefix, not the module's), and two tests show the guard is
+live: the module's own guard stops an emptied operator set before any read, and with the module's guard bypassed the
+reader's guard fires. Until the 272 mechanics add the MET-ADOPT-006/packet rider to the registry, the reader supplies
+the registry with that rider appended (RP-C1-4)."""
 import copy
 import json
 import os
@@ -17,17 +20,35 @@ class OperatorRead(Exception):
     """Raised by the guarded reader if anything tries to open an operator packet YAML."""
 
 
+FIXTURE_OPERATOR_PATH = "task-packets/OP-"
+
+
+def _serialize(registry):
+    return (json.dumps(registry, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+
+
+def _registry(mutate=None, serialize=_serialize):
+    registry = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
+    template = next(b for b in registry["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
+    registry["briefs"].append(dict(template, series=rp.RIDER_SERIES))
+    if mutate:
+        mutate(registry["briefs"], template)
+    return serialize(registry)
+
+
 def _packets():
     return frozenset(name[:-5] for name in os.listdir(ROOT / "task-packets") if name.endswith(".yaml"))
 
 
-def _reader(record=None, files=None):
-    files = dict(files or {})
+def _reader(record=None, files=None, log=None):
+    files = dict({rp.BRIEFS_PATH: _registry()}, **(files or {}))
     if record is not None:
         files[rp.RECORD_PATH] = (json.dumps(record, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
 
     def read(path):
-        if path.startswith("task-packets/" + rp.OPERATOR_PREFIX):
+        if log is not None:
+            log.append(path)
+        if path.startswith(FIXTURE_OPERATOR_PATH):
             raise OperatorRead(path)
         if path in files:
             return files[path]
@@ -63,18 +84,14 @@ PACK = "artifact.platform.industry-pack"
 def test_the_real_record_passes_without_opening_an_operator_packet():
     summary = rp.check(_reader(), _packets())
     assert summary["modules"] == 30 and summary["tenantFacts"] == 11 and summary["closure"] == 41
-    assert summary["in"] == 13 and summary["exclusions"] == 10 and summary["rider"] == 0
+    assert summary["in"] == 13 and summary["exclusions"] == 10 and summary["rider"] == 1
     assert summary["operatorRows"] == ["module.runtime.infrastructure.bundle-verifier",
                                        "module.runtime.infrastructure.namespace-baseline", OPERATOR]
     assert len(summary["citedRows"]) == 6
 
 
 def test_the_registry_with_exactly_this_packets_rider_passes():
-    briefs = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
-    template = next(b for b in briefs["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
-    briefs["briefs"].append(dict(template, series=rp.RIDER_SERIES))
-    raw = (json.dumps(briefs, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
-    assert rp.check(_reader(files={rp.BRIEFS_PATH: raw}), _packets())["rider"] == 1
+    assert rp.check(_reader(files={rp.BRIEFS_PATH: _registry()}), _packets())["rider"] == 1
 
 
 def test_an_operator_packet_yaml_is_never_opened():
@@ -312,10 +329,56 @@ def test_a_changed_hkey_map_fails_for_catalog_bytes():
         rp.check(_reader(files={rp.HKEY_MAP_PATH: raw}), _packets())
 
 
-def test_a_second_rider_fails_for_registry():
-    briefs = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
-    template = next(b for b in briefs["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
-    briefs["briefs"] += [dict(template, series=rp.RIDER_SERIES), dict(template, series="MET-ADOPT-007/packet")]
-    raw = (json.dumps(briefs, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+REGISTRY_FAULTS = [
+    ("a second rider", _registry(lambda briefs, template: briefs.append(dict(template, series=rp.RIDER_SERIES)))),
+    ("no rider", (ROOT / rp.BRIEFS_PATH).read_bytes()),
+    ("a re-serialised registry", _registry(serialize=lambda r: (json.dumps(r, separators=(",", ":")) + "\n").encode())),
+    ("the rider in a wrong position", _registry(lambda briefs, template: briefs.insert(0, briefs.pop()))),
+    ("another packet's rider appended", _registry(lambda briefs, template: briefs.append(
+        dict(template, series="MET-ADOPT-007/packet")))),
+]
+
+
+@pytest.mark.parametrize("name,raw", REGISTRY_FAULTS, ids=[case[0] for case in REGISTRY_FAULTS])
+def test_each_registry_fault_fails_for_registry(name, raw):
     with pytest.raises(ValueError, match=r"^RP_REGISTRY: "):
         rp.check(_reader(files={rp.BRIEFS_PATH: raw}), _packets())
+
+
+TYPE_CASES = [
+    # RP-C1-1: bool, int and float are distinct.
+    ("criteriaCount true on a 1-criterion row",
+     _edit_row(RETRIEVAL, lambda row: row["readiness"].update(criteriaCount=True))),
+    ("criteriaCount 2.0 on a 2-criterion row", _edit_row(OPERATOR, lambda row: row["readiness"].update(criteriaCount=2.0))),
+    ("successorPublished 0", _set(["nonClaims", "industryPack", "successorPublished"], 0)),
+    ("inReleaseSet 0", _set(["nonClaims", "industryPack", "inReleaseSet"], 0)),
+    # RP-C1-2: identifier members are type-checked before any use.
+    ("integer module-row id", _edit_row(RETRIEVAL, lambda row: row.update(id=7))),
+    ("integer tenant-fact id", _edit_fact("external.postgresql", lambda fact: fact.update(id=7))),
+    ("integer exclusion component", _edit_exclusion("valkey", lambda row: row.update(component=7))),
+    ("integer providerSet.in", _set(["providerSet", "in"], 7)),
+    ("integer providerSet.in key", lambda rec: rec["providerSet"]["in"][0].update(key=1)),
+    ("integer owner name", _edit_row(TENANT, lambda row: row["owner"].update(name=7))),
+]
+
+
+@pytest.mark.parametrize("name,mutate", TYPE_CASES, ids=[case[0] for case in TYPE_CASES])
+def test_each_type_fault_fails_for_shape_without_a_type_error(name, mutate):
+    rec = _record()
+    mutate(rec)
+    with pytest.raises(ValueError, match=r"^RP_SHAPE: "):
+        rp.check(_reader(rec), _packets())
+
+
+def test_an_emptied_operator_set_is_stopped_by_the_module_guard_before_any_read(monkeypatch):
+    log = []
+    monkeypatch.setattr(rp, "operator_rows", lambda ownership, internal: frozenset())
+    with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: an operator packet YAML is never opened"):
+        rp.check(_reader(log=log), _packets())
+    assert not any(path.startswith(FIXTURE_OPERATOR_PATH) for path in log)
+
+
+def test_with_the_module_guard_bypassed_the_readers_guard_fires(monkeypatch):
+    monkeypatch.setattr(rp, "OPERATOR_PREFIX", "\x00")
+    with pytest.raises(OperatorRead, match=r"^task-packets/OP-"):
+        rp.check(_reader(), _packets())

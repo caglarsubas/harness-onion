@@ -16,6 +16,10 @@ YAMLs are read through `read`. Refusal codes, in the order they run (V0, V6, V1,
   Operator rows are decided from the catalog's packet id (prefix OP-) before any task-packets read, and an operator
   packet YAML is never opened.
 - RP_EXIT (V3), RP_PROVIDER_SET (V4), RP_EXCLUSION (V5), RP_TENANT_FACTS (V7), RP_REGISTRY (V9).
+Types are exact (c2, RP-C1-1, RP-C1-2): V0 checks the JSON type of every member before any use, so bool, int and float
+stay distinct and a wrongly typed identifier refuses RP_SHAPE; derived objects are compared as canonical JSON. V9
+(RP-C1-4) requires exactly one MET-ADOPT-006/packet rider, equal to the generic packet rider, appended last, and the
+registry's bytes equal to the base's serialization with that rider.
 Data checks only: no network, no execution authority, no evidence state.
 """
 from __future__ import annotations
@@ -51,7 +55,7 @@ EFFECTIVE_SHA256 = {
 OVERLAY_SHA256 = "296c973e8902a822da2bdc0ad3603170deb6a91cffc2d37ca9332ddf1834c4e4"
 SECTOR_SHA256 = "cfc39b4adbfb2771e27cc5498d94530d5691130736a8791288ce296253fc2efe"
 HKEY_MAP_SHA256 = "f6a891e8bdbcc579e60800773addd70ca29a2c4021c2dc95af62be93e91f061d"
-BRIEFS_BASE_CANONICAL_SHA256 = "7480053565a59b9e5f4ccce42eebfb60fb381976ec5543ed11a09736da5afc91"
+BRIEFS_BASE_SHA256 = "14022229ea689a81879cc7c6a327051777176dec3e90348ecdca48a30f82b0e0"
 RIDER_SERIES = "MET-ADOPT-006/packet"
 RIDER_TEMPLATE_SERIES = "MET-ENFORCE-043/packet"
 OPERATOR_PREFIX = "OP-"
@@ -133,6 +137,11 @@ def _canonical(value) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
 
+def _serialize(registry) -> bytes:
+    """The registry's own serialization: one-space indentation and a final newline."""
+    return (json.dumps(registry, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+
+
 # V0: shape.
 def _closed(value, members, where):
     require(type(value) is dict, "RP_SHAPE", where + " is an object")
@@ -142,88 +151,163 @@ def _closed(value, members, where):
     require(keys == set(members), "RP_SHAPE", "members of %s: %s" % (where, sorted(keys ^ set(members))))
 
 
+def _str(value, where, empty=False):
+    require(type(value) is str and (empty or value != ""), "RP_SHAPE", "a string: " + where)
+
+
 def _text(value, where):
     require(type(value) is str and value.strip() != "", "RP_SHAPE", "non-empty text: " + where)
 
 
+def _bool(value, where):
+    require(type(value) is bool, "RP_SHAPE", "a boolean: " + where)
+
+
+def _count(value, where):
+    require(type(value) is int and value >= 0, "RP_SHAPE", "a non-negative integer (not a boolean): " + where)
+
+
+def _list(value, where):
+    require(type(value) is list, "RP_SHAPE", "a list: " + where)
+
+
 def _strings(value, where, sort=True):
-    require(type(value) is list and all(type(item) is str and item for item in value), "RP_SHAPE", where + " strings")
+    _list(value, where)
+    require(all(type(item) is str and item for item in value), "RP_SHAPE", where + " strings")
     if sort:
         require(value == sorted(set(value)), "RP_SHAPE", where + " sorted and unique")
 
 
+def _eq(left, right) -> bool:
+    """Type-strict equality: canonical JSON on both sides, so bool, int and float stay distinct."""
+    return _canonical(left) == _canonical(right)
+
+
 def _shape(rec) -> None:
     _closed(rec, RECORD_MEMBERS, "the record")
-    require(rec["schemaVersion"] == SCHEMA, "RP_SHAPE", "schemaVersion")
+    require(rec["schemaVersion"] == SCHEMA and type(rec["schemaVersion"]) is str, "RP_SHAPE", "schemaVersion")
     profile = rec["profile"]
     _closed(profile, PROFILE_MEMBERS, "profile")
-    _text(profile["id"], "profile.id")
-    require(type(profile["catalogs"]) is list, "RP_SHAPE", "profile.catalogs is a list")
+    for name in ("id", "overlaySha256", "sectorRecordSha256"):
+        _str(profile[name], "profile." + name)
+    _list(profile["catalogs"], "profile.catalogs")
     for row in profile["catalogs"]:
         _closed(row, CATALOG_ROW_MEMBERS, "a profile.catalogs row")
+        for name in CATALOG_ROW_MEMBERS:
+            _str(row[name], "profile.catalogs " + name)
     require([row["path"] for row in profile["catalogs"]] == sorted({row["path"] for row in profile["catalogs"]}),
             "RP_SHAPE", "profile.catalogs sorted by path and unique")
     _closed(profile["hKeyMap"], MAP_MEMBERS, "profile.hKeyMap")
+    for name in MAP_MEMBERS:
+        _str(profile["hKeyMap"][name], "profile.hKeyMap " + name)
     _closed(rec["closure"], CLOSURE_MEMBERS, "closure")
     for name in CLOSURE_MEMBERS:
         _strings(rec["closure"][name], "closure." + name)
-    require(type(rec["modules"]) is list and rec["modules"], "RP_SHAPE", "modules is a non-empty list")
+    _list(rec["modules"], "modules")
+    require(rec["modules"] != [], "RP_SHAPE", "modules is non-empty")
     for row in rec["modules"]:
         require(type(row) is dict, "RP_SHAPE", "a module row is an object")
+        _str(row.get("id"), "a module row id")
+        where = "module row " + row["id"]
         members = TENANT_ROW_MEMBERS if row.get("rowClass") == "TENANT_PLATFORM" else REPOSITORY_ROW_MEMBERS
         if "attestationRef" in row and "implementation" not in row:
             members = TENANT_ROW_MEMBERS
         if "implementation" in row and "attestationRef" not in row:
             members = REPOSITORY_ROW_MEMBERS
-        _closed(row, members, "module row %s" % row.get("id"))
-        _closed(row["owner"], OWNER_MEMBERS, "owner of %s" % row["id"])
-        require(type(row["deployables"]) is list and row["deployables"], "RP_SHAPE", "deployables of " + row["id"])
+        _closed(row, members, where)
+        for name in ("class", "harness", "kind", "rowClass"):
+            _str(row[name], "%s of %s" % (name, where))
+        require(row["hKey"] is None or (type(row["hKey"]) is str and row["hKey"] != ""), "RP_SHAPE",
+                "hKey of %s is a string or null" % where)
+        _closed(row["owner"], OWNER_MEMBERS, "owner of " + where)
+        for name in OWNER_MEMBERS:
+            _str(row["owner"][name], "owner %s of %s" % (name, where))
+        _list(row["deployables"], "deployables of " + where)
+        require(row["deployables"] != [], "RP_SHAPE", "deployables of %s is non-empty" % where)
         for unit in row["deployables"]:
-            _closed(unit, DEPLOYABLE_MEMBERS, "a deployable of " + row["id"])
+            _closed(unit, DEPLOYABLE_MEMBERS, "a deployable of " + where)
+            for name in DEPLOYABLE_MEMBERS:
+                _str(unit[name], "deployable %s of %s" % (name, where))
         if "implementation" in row:
-            _closed(row["implementation"], IMPLEMENTATION_MEMBERS, "implementation of " + row["id"])
+            _closed(row["implementation"], IMPLEMENTATION_MEMBERS, "implementation of " + where)
+            _str(row["implementation"]["packetId"], "packetId of " + where, empty=True)
             index = row["implementation"]["deliverableIndex"]
-            require(index is None or (type(index) is int and index >= 0), "RP_SHAPE", "deliverableIndex")
+            require(index is None or (type(index) is int and index >= 0), "RP_SHAPE", "deliverableIndex of " + where)
+        else:
+            _str(row["attestationRef"], "attestationRef of " + where)
         readiness = row["readiness"]
-        require(type(readiness) is dict and readiness.get("source") in ("SERVICES", "MODULE_HEALTH"), "RP_SHAPE",
-                "readiness.source of " + row["id"])
+        require(type(readiness) is dict and readiness.get("source") in ("SERVICES", "MODULE_HEALTH")
+                and type(readiness.get("source")) is str, "RP_SHAPE", "readiness.source of " + where)
         _closed(readiness, ("source", "serviceId", "criteriaCount") if readiness["source"] == "SERVICES"
-                else ("source",), "readiness of " + row["id"])
-        _closed(row["exitEvidence"], EXIT_MEMBERS, "exitEvidence of " + row["id"])
-        _strings(row["exitEvidence"]["evidenceKinds"], "evidenceKinds of " + row["id"], sort=False)
-    require(type(rec["tenantFacts"]) is list, "RP_SHAPE", "tenantFacts is a list")
+                else ("source",), "readiness of " + where)
+        if readiness["source"] == "SERVICES":
+            _str(readiness["serviceId"], "readiness.serviceId of " + where)
+            _count(readiness["criteriaCount"], "readiness.criteriaCount of " + where)
+        _closed(row["exitEvidence"], EXIT_MEMBERS, "exitEvidence of " + where)
+        for name in ("at", "obligation", "evidenceRecord"):
+            _str(row["exitEvidence"][name], "exitEvidence.%s of %s" % (name, where))
+        _strings(row["exitEvidence"]["evidenceKinds"], "evidenceKinds of " + where, sort=False)
+    _list(rec["tenantFacts"], "tenantFacts")
     for fact in rec["tenantFacts"]:
-        _closed(fact, FACT_MEMBERS, "tenant fact %s" % (fact.get("id") if type(fact) is dict else None))
-        _closed(fact["supplier"], OWNER_MEMBERS, "supplier of " + fact["id"])
-        require(type(fact["namedInRoadmap"]) is bool, "RP_SHAPE", "namedInRoadmap of " + fact["id"])
-        _closed(fact["attestation"], ATTESTATION_MEMBERS, "attestation of " + fact["id"])
-        _closed(fact["attestation"]["envelope"], ENVELOPE_MEMBERS, "envelope of " + fact["id"])
+        require(type(fact) is dict, "RP_SHAPE", "a tenant fact is an object")
+        _str(fact.get("id"), "a tenant fact id")
+        where = "tenant fact " + fact["id"]
+        _closed(fact, FACT_MEMBERS, where)
+        _closed(fact["supplier"], OWNER_MEMBERS, "supplier of " + where)
+        for name in OWNER_MEMBERS:
+            _str(fact["supplier"][name], "supplier %s of %s" % (name, where))
+        _bool(fact["namedInRoadmap"], "namedInRoadmap of " + where)
+        _closed(fact["attestation"], ATTESTATION_MEMBERS, "attestation of " + where)
+        _str(fact["attestation"]["requirement"], "requirement of " + where)
+        _str(fact["attestation"]["installUnitDigestStatus"], "installUnitDigestStatus of " + where)
+        envelope = fact["attestation"]["envelope"]
+        _closed(envelope, ENVELOPE_MEMBERS, "envelope of " + where)
+        require(envelope["digest"] is None or type(envelope["digest"]) is str, "RP_SHAPE", "envelope.digest of " + where)
+        _str(envelope["digestStatus"], "envelope.digestStatus of " + where)
+        _str(envelope["signatureStatus"], "envelope.signatureStatus of " + where)
     provider_set = rec["providerSet"]
     _closed(provider_set, PROVIDER_SET_MEMBERS, "providerSet")
+    _list(provider_set["in"], "providerSet.in")
     for row in provider_set["in"]:
         _closed(row, IN_ROW_MEMBERS, "a providerSet.in row")
+        _str(row["key"], "a providerSet.in key")
+        _str(row["harness"], "a providerSet.in harness")
         _strings(row["nodes"], "providerSet.in nodes")
+    _list(provider_set["deferred"], "providerSet.deferred")
     for row in provider_set["deferred"]:
         _closed(row, DEFERRED_ROW_MEMBERS, "a providerSet.deferred row")
+        _str(row["key"], "a providerSet.deferred key")
+        _str(row["harness"], "a providerSet.deferred harness")
         _text(row["reason"], "a providerSet.deferred reason")
     _strings(provider_set["platformNonHarness"], "providerSet.platformNonHarness")
-    require(type(rec["exclusions"]) is list, "RP_SHAPE", "exclusions is a list")
+    _list(rec["exclusions"], "exclusions")
     for row in rec["exclusions"]:
         require(type(row) is dict, "RP_SHAPE", "an exclusions row is an object")
-        _closed(row, EXCLUSION_MEMBERS + (("roadmapDecision",) if "roadmapDecision" in row else ()),
-                "exclusion %s" % row.get("component"))
-        _text(row["reason"], "the reason of exclusion " + str(row["component"]))
-        require(type(row["sources"]) is list and row["sources"] == [s for s in SOURCES_ORDER if s in row["sources"]]
-                and row["sources"], "RP_SHAPE", "sources of %s in the order PROFILE, ROADMAP" % row["component"])
+        _str(row.get("component"), "an exclusion component")
+        where = "exclusion " + row["component"]
+        _closed(row, EXCLUSION_MEMBERS + (("roadmapDecision",) if "roadmapDecision" in row else ()), where)
+        _str(row["kind"], "kind of " + where)
+        _text(row["reason"], "the reason of " + where)
+        _strings(row["sources"], "sources of " + where, sort=False)
+        require(row["sources"] == [s for s in SOURCES_ORDER if s in row["sources"]] and row["sources"], "RP_SHAPE",
+                "sources of %s in the order PROFILE, ROADMAP" % where)
         if "roadmapDecision" in row:
-            _closed(row["roadmapDecision"], DECISION_MEMBERS, "roadmapDecision of " + row["component"])
-            _strings(row["roadmapDecision"]["items"], "roadmapDecision items")
-    require(rec["dependencyAmendments"] == [], "RP_SHAPE", "dependencyAmendments is an empty list")
+            _closed(row["roadmapDecision"], DECISION_MEMBERS, "roadmapDecision of " + where)
+            _strings(row["roadmapDecision"]["items"], "roadmapDecision items of " + where)
+            _str(row["roadmapDecision"]["decision"], "roadmapDecision decision of " + where)
+    require(rec["dependencyAmendments"] == [] and type(rec["dependencyAmendments"]) is list, "RP_SHAPE",
+            "dependencyAmendments is an empty list")
     _closed(rec["nonClaims"], NON_CLAIMS_MEMBERS, "nonClaims")
-    require(type(rec["nonClaims"]["prose"]) is list and rec["nonClaims"]["prose"], "RP_SHAPE", "nonClaims.prose")
+    _list(rec["nonClaims"]["prose"], "nonClaims.prose")
+    require(rec["nonClaims"]["prose"] != [], "RP_SHAPE", "nonClaims.prose is non-empty")
     for item in rec["nonClaims"]["prose"]:
         _text(item, "a nonClaims.prose entry")
-    _closed(rec["nonClaims"]["industryPack"], INDUSTRY_PACK_MEMBERS, "nonClaims.industryPack")
+    pack = rec["nonClaims"]["industryPack"]
+    _closed(pack, INDUSTRY_PACK_MEMBERS, "nonClaims.industryPack")
+    for name in ("subject", "effectiveBinding", "successor", "releaseSetEntry", "source"):
+        _str(pack[name], "nonClaims.industryPack." + name)
+    _bool(pack["successorPublished"], "nonClaims.industryPack.successorPublished")
+    _bool(pack["inReleaseSet"], "nonClaims.industryPack.inReleaseSet")
 
 
 # The closure: a standard-library port of validate_readiness.dependency_closure and selection_predicate_active.
@@ -289,16 +373,16 @@ def check(read, packets) -> dict:
     require(digest(overlay_raw) == OVERLAY_SHA256 == profile_member["overlaySha256"], "RP_CATALOG_BYTES", "overlay")
     require(digest(sector_raw) == SECTOR_SHA256 == profile_member["sectorRecordSha256"], "RP_CATALOG_BYTES",
             "sector record")
-    require(digest(map_raw) == HKEY_MAP_SHA256 and profile_member["hKeyMap"] == {"path": HKEY_MAP_PATH,
-                                                                                 "sha256": HKEY_MAP_SHA256},
+    require(digest(map_raw) == HKEY_MAP_SHA256 and _eq(profile_member["hKeyMap"], {"path": HKEY_MAP_PATH,
+                                                                                   "sha256": HKEY_MAP_SHA256}),
             "RP_CATALOG_BYTES", "H-key map")
     effective = {}
     for path in CATALOG_PATHS:
         require(digest(read(path)) == BASE_SHA256[path], "RP_CATALOG_BYTES", "base bytes of " + path)
         effective[path] = sector_catalog.effective_bytes(path)
         require(digest(effective[path]) == EFFECTIVE_SHA256[path], "RP_CATALOG_BYTES", "effective bytes of " + path)
-    require(profile_member["catalogs"] == [{"path": p, "baseSha256": BASE_SHA256[p], "effectiveSha256":
-                                            EFFECTIVE_SHA256[p]} for p in sorted(CATALOG_PATHS)],
+    require(_eq(profile_member["catalogs"], [{"path": p, "baseSha256": BASE_SHA256[p], "effectiveSha256":
+                                              EFFECTIVE_SHA256[p]} for p in sorted(CATALOG_PATHS)]),
             "RP_CATALOG_BYTES", "profile.catalogs")
 
     providers = sector_catalog.effective_catalog(PROVIDERS_PATH)
@@ -340,7 +424,7 @@ def check(read, packets) -> dict:
                      "successor": entry["blockedBy"], "successorPublished": entry["blockedBy"] in packets,
                      "inReleaseSet": False, "releaseSetEntry": RELEASE_SET_ENTRY, "source": RELEASE_SET_SOURCE}
     require(expected_pack["successorPublished"] is False, "RP_PACK_BINDING", "the successor is unpublished")
-    require(rec["nonClaims"]["industryPack"] == expected_pack, "RP_PACK_BINDING", "nonClaims.industryPack")
+    require(_eq(rec["nonClaims"]["industryPack"], expected_pack), "RP_PACK_BINDING", "nonClaims.industryPack")
 
     # V2: owner and packet, for both row classes; operator rows decided before any task-packets read.
     hkeys = _hkey_map(map_raw)
@@ -357,17 +441,17 @@ def check(read, packets) -> dict:
         require(not (derived == "REPOSITORY" and "attestationRef" in row), "RP_OWNER_PACKET",
                 "attestationRef on a catalog REPOSITORY row: " + node)
         require(row["rowClass"] == derived, "RP_OWNER_PACKET", "rowClass of %s is the catalog's %s" % (node, derived))
-        require(row["owner"] == {"type": owner.get("type"), "name": owner.get("name")}, "RP_OWNER_PACKET",
+        require(_eq(row["owner"], {"type": owner.get("type"), "name": owner.get("name")}), "RP_OWNER_PACKET",
                 "owner of " + node)
         require(row["kind"] == module.get("kind") and row["harness"] == module.get("harness"), "RP_OWNER_PACKET",
                 "kind and harness of " + node)
         require(row["hKey"] == hkeys.get(module.get("harness")), "RP_OWNER_PACKET", "hKey of " + node)
         units = [{"name": u.get("name"), "type": u.get("type"), "artifact": u.get("artifact")}
                  for u in module.get("installUnits", [])]
-        require(row["deployables"] == units, "RP_OWNER_PACKET", "deployables of " + node)
+        require(_eq(row["deployables"], units), "RP_OWNER_PACKET", "deployables of " + node)
         if derived == "REPOSITORY":
             packet_id = own.get("packetId")
-            require(row["implementation"] == {"packetId": packet_id, "deliverableIndex": own.get("deliverableIndex")},
+            require(_eq(row["implementation"], {"packetId": packet_id, "deliverableIndex": own.get("deliverableIndex")}),
                     "RP_OWNER_PACKET", "implementation of %s is the catalog's" % node)
             require(packet_id in packets, "RP_OWNER_PACKET", "packet %s is published" % packet_id)
             if node not in operators:
@@ -393,16 +477,16 @@ def check(read, packets) -> dict:
         row, readiness = by_id[node], by_id[node]["readiness"]
         if node in binding:
             service = service_rows.get(binding[node])
-            require(service is not None and readiness == {"source": "SERVICES", "serviceId": binding[node],
-                                                          "criteriaCount": len(service.get("readinessCriteria", []))}
+            require(service is not None and _eq(readiness, {"source": "SERVICES", "serviceId": binding[node],
+                                                            "criteriaCount": len(service.get("readinessCriteria", []))})
                     and readiness["criteriaCount"] >= 1, "RP_EXIT", "SERVICES readiness of " + node)
         else:
             health = modules[node].get("health")
-            require(readiness == {"source": "MODULE_HEALTH"} and isinstance(health, dict) and "readiness" in health,
+            require(_eq(readiness, {"source": "MODULE_HEALTH"}) and isinstance(health, dict) and "readiness" in health,
                     "RP_EXIT", "MODULE_HEALTH readiness of " + node)
         kinds = [QUALIFICATION, GROUNDING] if node in cited else [QUALIFICATION]
-        require(row["exitEvidence"] == {"at": EVIDENCE_AT, "obligation": readiness["source"], "evidenceKinds": kinds,
-                                        "evidenceRecord": EVIDENCE_RECORD}, "RP_EXIT", "exitEvidence of " + node)
+        require(_eq(row["exitEvidence"], {"at": EVIDENCE_AT, "obligation": readiness["source"], "evidenceKinds": kinds,
+                                          "evidenceRecord": EVIDENCE_RECORD}), "RP_EXIT", "exitEvidence of " + node)
 
     # V4: the provider set over all closure nodes.
     by_key = {}
@@ -411,7 +495,7 @@ def check(read, packets) -> dict:
         if key:
             by_key.setdefault(key, {"key": key, "harness": modules[node]["harness"], "nodes": []})["nodes"].append(node)
     expected_in = [by_key[k] for k in sorted(by_key, key=_key_number)]
-    require(rec["providerSet"]["in"] == expected_in, "RP_PROVIDER_SET", "providerSet.in")
+    require(_eq(rec["providerSet"]["in"], expected_in), "RP_PROVIDER_SET", "providerSet.in")
     adoption = _json(read(ADOPTION_PATH), "RP_PROVIDER_SET")
     candidates = {row["harnessId"]: set(row.get("catalogCandidateIds", [])) for row in adoption["harnessCoverage"]}
     keyed = {key: harness for harness, key in hkeys.items()}
@@ -421,7 +505,7 @@ def check(read, packets) -> dict:
     require(all(not (candidates.get(keyed[key], set()) & computed) for key in deferred_keys), "RP_PROVIDER_SET",
             "a deferred key has no closure candidate")
     no_key = sorted({modules[node].get("harness") for node in computed} - set(hkeys))
-    require(rec["providerSet"]["platformNonHarness"] == no_key, "RP_PROVIDER_SET", "providerSet.platformNonHarness")
+    require(_eq(rec["providerSet"]["platformNonHarness"], no_key), "RP_PROVIDER_SET", "providerSet.platformNonHarness")
 
     # V5: exclusions.
     excluded_modules = {m.rsplit(".", 1)[1]: m for m in profile.get("excludedModules", [])}
@@ -441,7 +525,7 @@ def check(read, packets) -> dict:
             require(row["kind"] == kind and "roadmapDecision" not in row, "RP_EXCLUSION", "kind of " + name)
         else:
             require(name.lower() not in catalog_text, "RP_EXCLUSION", "no catalog mention of " + name)
-            require(row["kind"] == KIND_NOT_IN_CATALOG and row.get("roadmapDecision") == NOT_IN_CATALOG_DECISIONS.get(name),
+            require(row["kind"] == KIND_NOT_IN_CATALOG and _eq(row.get("roadmapDecision"), NOT_IN_CATALOG_DECISIONS.get(name)),
                     "RP_EXCLUSION", "NOT_IN_CATALOG row and its roadmap decision: " + name)
 
     # V7: tenant facts.
@@ -453,24 +537,29 @@ def check(read, packets) -> dict:
     for fact in facts:
         module = modules[fact["id"]]
         owner = module.get("owner") or {}
-        require(fact["supplier"] == {"type": owner.get("type"), "name": owner.get("name")}, "RP_TENANT_FACTS",
+        require(_eq(fact["supplier"], {"type": owner.get("type"), "name": owner.get("name")}), "RP_TENANT_FACTS",
                 "supplier of " + fact["id"])
         require(fact["namedInRoadmap"] is (fact["id"] in NAMED_IN_ROADMAP), "RP_TENANT_FACTS",
                 "namedInRoadmap of " + fact["id"])
         statuses = {u.get("digestStatus") for u in module.get("installUnits", [])}
         require(len(statuses) == 1, "RP_TENANT_FACTS", "the install units of %s share one digestStatus" % fact["id"])
-        require(fact["attestation"] == {"requirement": REQUIREMENT, "installUnitDigestStatus": statuses.pop(),
-                                        "envelope": envelope}, "RP_TENANT_FACTS", "attestation of " + fact["id"])
+        require(_eq(fact["attestation"], {"requirement": REQUIREMENT, "installUnitDigestStatus": statuses.pop(),
+                                          "envelope": envelope}), "RP_TENANT_FACTS", "attestation of " + fact["id"])
 
-    # V9: the registry is the base, plus at most this packet's one rider.
-    briefs = _json(read(BRIEFS_PATH), "RP_REGISTRY")
-    riders = [b for b in briefs.get("briefs", []) if b.get("series") == RIDER_SERIES]
-    base = dict(briefs, briefs=[b for b in briefs.get("briefs", []) if b.get("series") != RIDER_SERIES])
-    require(digest(_canonical(base)) == BRIEFS_BASE_CANONICAL_SHA256, "RP_REGISTRY",
-            "the registry differs from the base only by this packet's rider")
-    template = [b for b in base["briefs"] if b.get("series") == RIDER_TEMPLATE_SERIES]
-    require(len(riders) <= 1 and all(r == dict(template[0], series=RIDER_SERIES) for r in riders), "RP_REGISTRY",
-            "one MET-ADOPT-006/packet rider pinning the generic packet brief")
+    # V9: the registry is the base plus exactly this packet's one rider, appended last, byte for byte (RP-C1-4).
+    briefs_raw = read(BRIEFS_PATH)
+    briefs = _json(briefs_raw, "RP_REGISTRY")
+    entries = briefs.get("briefs") if type(briefs) is dict else None
+    require(type(entries) is list and entries, "RP_REGISTRY", "the registry's briefs list")
+    riders = [i for i, b in enumerate(entries) if type(b) is dict and b.get("series") == RIDER_SERIES]
+    require(len(riders) == 1, "RP_REGISTRY", "exactly one MET-ADOPT-006/packet rider (found %d)" % len(riders))
+    require(riders[0] == len(entries) - 1, "RP_REGISTRY", "the rider is appended last")
+    base = dict(briefs, briefs=entries[:-1])
+    require(digest(_serialize(base)) == BRIEFS_BASE_SHA256, "RP_REGISTRY", "the registry less the rider is the base")
+    template = [b for b in entries[:-1] if b.get("series") == RIDER_TEMPLATE_SERIES]
+    require(len(template) == 1 and _eq(entries[-1], dict(template[0], series=RIDER_SERIES)), "RP_REGISTRY",
+            "the rider equals the generic packet rider with this packet's series")
+    require(briefs_raw == _serialize(briefs), "RP_REGISTRY", "the registry bytes are the base serialization plus the rider")
     return {"modules": len(rows), "tenantFacts": len(facts), "closure": len(computed), "in": len(expected_in),
             "exclusions": len(rec["exclusions"]), "operatorRows": sorted(operators), "citedRows": sorted(cited & set(internal)),
             "rider": len(riders)}
