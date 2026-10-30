@@ -1,6 +1,17 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-043
+## Current source preparation — MET-ENFORCE-043
+
+MET-ENFORCE-043 (EDGE-V12, moved to slot 271 by Q-DIAG-CAP and MON-SLOT-270-PERF): operator edge record v12 and
+host-interface amendment HE5. Edge record v12 carries edge record
+v11's 79 rows and registers MET-REPAIR-014's two broker-handoff-v1 inputs, BYTE_IDENTICAL and REGISTERED_BEFORE_USE, for
+R10's HE-005B. Amendment HE5 lets the capacity broker hand the worker fd 4, the verity-checked O_RDONLY worker script,
+beside FD3 (W01 §5.4 W3-W5), with no post-exec read of the worker's /proc (residual R-HE5-POSTEXEC); its v4 model, its
+CONTRACT rounds 1 and 2 and its D5a oracle come with it. No catalog changes. The packet registers its own review series in
+the brief registry; its gate path is the two riders in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head (the owner merges either way, MON-EV12-MERGE). No R10 or R12 file changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN;
+270 accepted plus MET-ENFORCE-043 only.
+
+## Historical END-only diagnostics source preparation — MET-PERF-043
 
 MET-PERF-043 (Q-DIAG-CAP): END-only pytest diagnostics. ci/pytest_diagnostics.py writes version 2 records, one END record
 per phase and no START record, with every cap unchanged, and its reader accepts version 2 only;
@@ -1499,6 +1510,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 142. `MET-ADOPT-005`: record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider), the owner's per-PR approval.
 143. `MET-GOV-005`: adopt the v2 technology record (TECH-TRUTH-001): the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, and ADR 0010's amendment 1, with one status line; no catalog changes; gate material (the registry rider), the owner's per-PR approval.
 144. `MET-PERF-043`: END-only pytest diagnostics (Q-DIAG-CAP): version 2 records in ci/pytest_diagnostics.py, one END per phase and no START, with every cap unchanged, the module's tests, the D5a oracle and the boundaries record (residual R-P43-KILL); no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider), the owner's per-PR approval.
+145. `MET-ENFORCE-043`: publish operator edge record v12 and host-interface amendment HE5 (EDGE-V12): v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B, and fd 4 beside FD3 in W01 §5.4 W3-W5 with no post-exec /proc read (residual R-HE5-POSTEXEC), with the v4 model, the CONTRACT rounds and the D5a oracle; no catalog changes; gate material (the registry riders), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 

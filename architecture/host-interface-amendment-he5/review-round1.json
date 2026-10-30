@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "planeon.review-record/v2",
+  "kind": "CONTRACT",
+  "series": "MET-ENFORCE-043/contract",
+  "round": 1,
+  "subject": {
+    "repository": "harness-onion",
+    "commit": "65141a5c69955c0fbaf0560a82143b802a63b7a7",
+    "tree": "bb695fc6e71b0149ba517bd11bc5900771d3950e"
+  },
+  "reviewDate": "2026-10-28",
+  "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+  "rulesSha256": "ed8526e2d8ac57d36484c999879c42c900e6c320536fdb61bc961217a9aecd96",
+  "wrapperSha256": null,
+  "reviewer": {
+    "model": "claude-opus-5-5",
+    "role": "REVIEWER_AGENT"
+  },
+  "verdict": "CHANGES_REQUIRED",
+  "findings": [
+    {
+      "id": "C1-1",
+      "severity": "MAJOR",
+      "location": "scripts/host_interface_amendment_v4.py: _keeps_step (lines 214-219) and BLOCK_START (line 83), with the claims they back in the module docstring (lines 12-15) and architecture/host-interface-amendment-he5/README.md (lines 42-46)",
+      "finding": "The step confinement judges a DECIDED item's proposed text on its own, not the amended text, so it accepts items that open blocks or move step boundaries, against the README's 'no item may touch another step' and 'no DECIDED item may open a new step, paragraph, heading, list item or quote'. Ten fully consistent records (section 14 re-rendered, effective text recomputed, digest re-pinned) pass v4's check(read): B1 H1 = W3's last line 'allows `setgroups`.' with a trailing line feed added, which puts a blank line (a new paragraph) before W4; B2 H2 = W4's last line with its line feed dropped, which joins W5's step line onto W4, so the effective text has no 'W5. ' line; B3-B5 an H1 whose current starts at column 0 (line 480) with a proposed first line '> ...', '- ...' or '## ...' (the first line is never tested); B6 a later line ' - ...' and B7 '   ### ...' (CommonMark allows up to three spaces before a block start; BLOCK_START anchors at column 0); B8 a later line '---' (a setext underline: the paragraph above becomes a heading); B9 '```' (a code fence); B10 '<!--' (an HTML block that hides what follows). The c1 record itself is unaffected: its H1-H3 open nothing and v4 accepts it (probe A0), and the column-0 later-line cases A4-A9 are refused as stated. The rules ask this round to show these refusals (Q-CB-4, MON-EV12-MERGE); v3's row items could not reach a junction because they were single-line, so this is new with v4's multi-line step items.",
+      "requiredChange": "Make the model enforce the stated rule on the amended text, for example: (1) current and proposed agree on a leading and a trailing line feed (or neither may hold one); (2) the block-start test applies to the proposed's first line whenever the current starts at a line start without a step label; (3) BLOCK_START covers CommonMark's paragraph-interrupting starts: up to three leading spaces before '-', '*', '+', '>', '#' runs, ordered markers and 'Wn.', setext and thematic lines of '=', '-', '*' or '_', '```' and '~~~' fences, and '<' HTML starts; or, stronger, check the effective text directly: §5.4's step lines are exactly W1 to W6 in order at line starts, with no blank or block-start line from W1 to W6's last line. Add B1-B10 as model probes, and list them for the D5a oracle. Narrowing the README and docstring claims instead is not recommended, since MON-EV12-MERGE asks for these refusals.",
+      "blocks": true
+    },
+    {
+      "id": "C1-2",
+      "severity": "MINOR",
+      "location": "architecture/host-interface-amendment-he5/status.json: workItem (line 3) and ownerDecisions (lines 51-88)",
+      "finding": "The one-records-home choice is recorded as the author's ('Q-EV12-2 (a), the author's: one records home ...'), and ownerDecisions does not list MON-EV12-Q2. The lane monitor ruled it on 2026-10-28, under the owner's delegation, in the decision record's section MON-EV12-Q2: 'Q-EV12-2 ruled (a), MON-EV12-Q2. There is one records home for slot 269: the amendment directory's status.json covers both HE5 and edge v12 (MET-ENFORCE-043/contract), and there is no separate edge-record-v12/.' The substance holds (status.json covers both parts; README-v12 says so; there is no edge-record-v12 directory), but the governing record names a ruled decision as the author's and omits the ruling the rules file names (check 1). The ruling came after c1 was built.",
+      "requiredChange": "In the fold, cite MON-EV12-Q2 by id in workItem and add it to status.json's ownerDecisions, quoted verbatim, with the 'by' the ruling asks for ('lane monitor (owner delegation 2026-10-22)') and date 2026-10-28; re-pin the decision record in source-index.json at the state the fold quotes (the snapshot rule moves with it).",
+      "blocks": true
+    },
+    {
+      "id": "C1-3",
+      "severity": "NOTE",
+      "location": "README.md:4 and :38; amendment.json:161; status.json:3 and :5 (all under architecture/host-interface-amendment-he5/)",
+      "finding": "'slot 269' outside a quoted ruling, for the fold to 270 (MON-SLOT-269-GOV005): README.md:4 (status line, 'slot 269 (MET-ENFORCE-043, EDGE-V12)'); README.md:38 (Files table, status.json row, 'both contract parts of slot 269'); amendment.json:161 (Q-EV12-1's disposition summary, 'in slot 269'); status.json:3 (workItem, 'EDGE-V12 (slot 269)'); status.json:5 ('slot': '269'). Inside quoted rulings, kept as they are: README.md:60, :68 and :72; amendment.json:22 and :36; status.json:56, :74 and :80. The '269' at operator-harness-engineering-v12.json:91 is part of a carried v11 digest. HOST_INTERFACE_SPEC.md, README-v12.md, source-index.json and the v4 model hold none.",
+      "requiredChange": "Change the five unquoted places to slot 270 in the fold; leave the quotes.",
+      "blocks": false
+    },
+    {
+      "id": "C1-4",
+      "severity": "NOTE",
+      "location": "scripts/host_interface_amendment_v4.py: render_section14 (from line 152), _editorial (from line 173) and check_record's item loop (from line 270)",
+      "finding": "When E3 precedes a DECIDED item that lacks a member, check_record ends in KeyError ('section') from render_section14, which reads items the loop has not yet validated, not in a ValueError with a message (probe). It is still a refusal, and it is v3's behaviour unchanged (render_section13).",
+      "requiredChange": "Optional: require E3 to be the last item, or validate every item before rendering section 14, so every refusal is a require() message.",
+      "blocks": false
+    },
+    {
+      "id": "C1-5",
+      "severity": "NOTE",
+      "location": "docs/alpha-2/BROKER_HANDOFF_READINESS.md lines 100-102 and 118 (carried, byte-identical); status.json carried[0]",
+      "finding": "Q-CB-8: no third superseded entry is needed, but a successor that substitutes the replacement verbatim leaves the colon clause after it (': an AF_UNIX/SOCK_SEQPACKET socketpair created and owned by the broker, not passed through SCM_RIGHTS') reading as if it described fd 4 too, and line 118's 'unexpected inherited FD ... refuses before probes' must then count fd 4 as expected.",
+      "requiredChange": "Optional: say in the readiness item's carried action that the successor reattaches the colon clause to FD3 and treats fd 4 as an expected inherited descriptor.",
+      "blocks": false
+    },
+    {
+      "id": "C1-6",
+      "severity": "NOTE",
+      "location": "scripts/host_interface_amendment_v4.py: the DECIDED place checks (lines 283-294)",
+      "finding": "v3 fixed two of HS53's DECIDED texts (POINTER, APPEND_ONLY); v4 fixes none, so H1-H3's words are bound by review and by the content comparison in the builder's script, not by the model (as v3's H1 was). They match the content (normalised; H2 inline; H3's two tags removed).",
+      "requiredChange": "Optional: the D5a oracle pins H1-H3's normalised words against the adopted contract.",
+      "blocks": false
+    }
+  ],
+  "checked": [
+    "1. Faithfulness to the decisions: Q-HE5-9 (a) with its post-exec half as re-ruled, Q-HE5-12 (b) with the owner's words exactly and MON-HE005-Q12-OWNER by id, Q-EV12-1 (a) with MON-HE005A-PLAN2's readiness ruling, and MON-HE005-CLOSE are in amendment.json, status.json and the README; the 14 quotes are each a substring of one line occurring once in the decision record, inside its section, at build time and now (the record grew during this review; the c1 snapshot is still its first 39439 bytes). MON-EV12-PLAN's readiness rule (carried, byte-identical) and gate note are met; MON-EV12-MERGE's r1 checks are done here (Q-CB-3 holds; Q-CB-4 fails at the junctions, C1-1). MON-EV12-Q2 is met in substance but recorded as the author's (C1-2). Nothing a decision excludes was added. Q-CB-7 (W2/W4 without the parent's block-all and exit_group(127)) is acceptable as built: §4's errata scope is the closed list and O-R10-HE005 carries the pinned child path. Q-CB-8: C1-5. Q-CB-9 (§5.3 WORKER row) is acceptable: the interpreter's reads through fd 4 are reads of the read-only root, and O-T04-HE5 confirms them.",
+    "2. The record against the design: amendment.json has HS53's v2 key sets (the *_KEYS sets are unchanged from v3); all digests are 64 lowercase hex, edge v12's supersedes keeps v11's 'sha256:' form and its rows v11's bare form; every BP-5 item's current is HS53's exact bytes (occurrences 1, baseLines 1, 11, 479-480, 484-486, 488-490, end) and every proposed equals the content's words (normalised; H2's eight steps inline as (1)-(8); H3 equal once Q-CB-1's two tags are removed); supersedes, obligations, the residual (plus BP-8's 'residual R1 of the closed HE-005 design (§8)') and notAmended equal the content. Edge v12: v11's 79 rows equal and in order, two rows with the provider sha256 and mode 100644 from the base bytes (blobs computed from the bytes equal the last change's), last-change commit 8f3cc3a8 (MET-REPAIR-014), no providerPacket and v11's 8-key row order (v11 has no row with both a commit and a providerPacket; its notes[2] and README-v11's Commits paragraph state the rule), supersedes v11 by path, sha256 9188980f and MET-ENFORCE-042, every other top member equal to v11's, 81 rows; serialised as v11. status.json has the form's key set exactly; source-index.json the form's minus designProof (Q-CB-11, accepted).",
+    "3. The model against the README: v3 to v4 diff, 26 hunks, each mapped to a BP-4 item (the build report says 27 but lists 26). Refusals: v3 has 47 sites, v4 46; 38 kept verbatim; 5 changed by the base and record item only (pinned HS43 -> HS53 base and record, effective bytes twice, pinned effective HS53 -> HE5 bytes, HS43 -> HS53 amendment record); 4 dropped (the §5.3 row place, H2's fixed pointer, the row's line and cells, H3's append-only), all HS53-specific and replaced by the §5.4 section and step checks (safe for HE5, which touches no row; C1-6); 3 new (exactly 2 superseded clauses, Q-CB-3; the item's own step and its plain lines, Q-CB-4). Q-CB-3: v4 accepts a list iff it has 2 entries and equals SUPERSEDED, which is v3's predicate with v4's constants (equality implies the length); 2801 enumerated lists, 0 disagreements. Q-CB-4: the current is confined to its own step's lines (A1-A3 and the report's W2/W6 probes refused), and later-line blank, step, heading, list and quote lines at column 0 are refused (A4-A9), but junction and CommonMark forms are accepted (B1-B10, C1-1). Other refusal paths: KeyError for an out-of-order E3 (C1-4), as in v3. Every other README claim of the model holds.",
+    "4. Schema and model: not applicable; the contract has no JSON schema, and v4's closed key sets are v3's.",
+    "5. The vectors: not applicable; HE5 has no vectors and edge v12 registers MET-REPAIR-014's data byte-identical (DATA_CHECK_ONLY). The replay is the model check: v3's check over HS53 at the base PASS (6 items, 8 superseded, 12 reads over 9 files); v4's check over the subject PASS (6 reads over 6 files); effective_spec(HS53) equals the subject spec (70107 bytes); the HS53 -> HE5 line diff has exactly the title, the head extension (after 11), W3 479-480, W4 484-486, W5 488-490 and section 14 (after 770); the widest amended line is 116. The builder's script rerun into a fresh directory gives 7 of 8 files byte-identical, and source-index.json differs only in the decision record's digest, by the snapshot rule.",
+    "6. The tests: not applicable at c1 (no candidate or oracle tests). In their place: the two replays above and my own probes, 24 refused (A1-A24: a current spanning W3 into W4, outside any step, in §5.3; a blank line, heading, quote and '1)' list line on a later line; H3 without its label; a step label added; supersedes swapped or short; an uncited decision; dispositions reordered; an extra DECIDED H4; E1 reworded; H2 made EDITORIAL; an unknown decision cited; U+2028; an upper-case effective digest; a duplicate member; NaN; a native-profile byte; a malformed obligation id; a third obligation named), each with its own message, and 10 accepted that the README says are refused (C1-1).",
+    "7. Placement: the evolution surface at the base (record 188c75d4, 31 gate entries, check passed) puts all eight paths in CONTRACT_AND_SOURCE, exact and lower-cased, check_paths passes, approvers and activators LANE_MONITOR and OWNER, none gate material (as MON-EV12-MERGE confirms); upper-case spellings resolve to no class (the surface is case-sensitive; information only). git diff --name-status d7a3cda5 65141a5c lists exactly the eight added files; HS43, HS53, edge v1-v11, the readiness guide, native-profile v4's README and repositories.yaml are untouched.",
+    "8. Privacy and supply chain: privacy_hits after load_name_tokens on the fixed digest file, over each of the eight files: names 0, legacy term 0, absolute paths 0, e-mails 0; home, temporary, scratch and local-tool path shapes (built from parts, whole and with seams removed) 0, except 4 product '/opt/' design paths in HOST_INTERFACE_SPEC.md that HS53's text holds at the same lines (292, 296, 297, 714). Standard library only; no new dependency; nothing interposes on, forwards, proxies, swaps or bypasses anything.",
+    "9. Open questions: Q-R1-1 and Q-R1-2 answered under questions.",
+    "BP-1: evolution-surface classes reported (check 7); no unclassified or ambiguous path.",
+    "BP-2: held, with Q-CB-2 (a) (no providerPacket) as v11 applies v10's rule.",
+    "BP-3: README-v12 carries README-v11 section for section; its counts, digests, bytes, commit and paths hold; the repositories.yaml claim holds (harness-engineering appears in no graph edge).",
+    "BP-4: held; every hunk maps to a BP-4 item; check logic changed only by Q-CB-3 and Q-CB-4 (C1-1).",
+    "BP-5: held (words, currents, occurrences, baseLines; H2 inline; Q-CB-1's tags).",
+    "BP-6: held (four decisions, 14 quotes; the owner's words exact).",
+    "BP-7: held; both quotes once in their pinned files (lines 100-101 and 216); the cited lines hold what the record says (FROZEN_PATHS 391-409 with the readiness entry at 397, ERA_SHA256 from 410 with the pin at 493, v3's SUPERSEDED 60-77 with the entry at 73-75, native-profile v4's pins at 402 and 679 and the five other validators' at 792, 918, 688, 402, 536).",
+    "BP-8: held.",
+    "BP-9: held.",
+    "BP-10: held in form; MON-EV12-Q2 attribution (C1-2) and slot number (C1-3) for the fold.",
+    "BP-11: held (content, plan, design rev 5 and the decision record at build time by sha256; no local path).",
+    "BP-12: held; every sentence of §4's errata scope is covered; Q-CB-7 and Q-CB-9 acceptable, Q-CB-8 C1-5."
+  ],
+  "disclosures": [
+    "Two messages each carried two tool calls, against the one-call rule: a read of the readiness guide's lines 112-122 with the write of a WORK script, and two line-number edits of this record sent together.",
+    "Two short echo builtins ran outside timeout 120 zsh -c (separators and a return code), and one small model probe (the KeyError probe of C1-4, under 30 MB) ran under timeout 120 without /usr/bin/time -l; every measured run peaked under 30 MB.",
+    "An ls -1 of the TOOLS ev12 folder listed its entry names (the brief, the snapshot, the rules file, contract, reviews); nothing else there was opened.",
+    "The decision sections were located by a script that matched heading lines for the eight named ids and wrote only those sections to WORK; I read no other section.",
+    "Git beyond the two listed forms, all read only and path-limited: git show of further exact files at the base (HS43's spec and record, the W01 corrected spec, the policy-observation readiness doc and amendment, the seccomp-allowlists README, the evolution-surface record, the six pinning validators as text, the two form files and repositories.yaml); git log -1 --raw for the two provider files; git rev-parse of the subject's tree; and fixed-string git grep for 'sole inherited', 'O_PATH descriptor', 'O_PATH' and 'close_range above 3' with the five pathspecs plus the oracle, tools/w04, key and private-folder exclusions. The dropped counts were computed by a post-filter over the output lines (0 each); git ran without HOME so no global configuration was read.",
+    "The 'O_PATH' grep printed one line of scripts/enforcement_test_plan.py (line 91), a file the five pathspecs do not exclude; it was not opened otherwise.",
+    "I ran the builder's script into a fresh WORK directory under env -u HOME; it read its own pinned sources under the TOOLS contract folder and ran its own path-limited git forms (show, cat-file -e, log -1, rev-parse).",
+    "My probes pass mutated bytes to the model only through check(read)'s injected reader or as check_record's arguments; nothing in the model was patched."
+  ],
+  "notChecked": [
+    "Whether the compiled BROKER program admits the child's new raw calls (dup3, rt_sigaction, rt_sigprocmask) is the closed design's (O1, O7) and the programs are outside this round's read set.",
+    "The head layer and its test, the chain mechanics, the D5a oracle, and the gate list on the then-current main are later steps.",
+    "Edge records v1-v10 and EDGE-2 were not opened; they are unchanged by the name-status diff."
+  ],
+  "questions": [
+    "Q-R1-1: Yes, leave HS43's effective text unlisted. The amendment chain is the supersession: each effective text names its byte-identical predecessor and the newest governs, and every layer beneath (W02D, the resolved v2 text, HS43 and HS53 itself, plus their round copies) holds the old W3-W5 wording, so listing them would be unbounded. HS53, the immediate form, left HS43 unlisted. HS43 once listed a clause of its own base (W02D, for its H4); that is a different case, not a rule. Optionally the README can say that earlier effective layers are superseded through the chain.",
+    "Q-R1-2: Yes, for an in-tree round 1. The line names the candidate and says status.json governs, status.json's readmeStatusNote says the same, and HS53's README at main still has its candidate status line. In the fold, change 'slot 269' to 270 (C1-3) and update the round wording, or drop it, keeping 'status.json governs'."
+  ]
+}

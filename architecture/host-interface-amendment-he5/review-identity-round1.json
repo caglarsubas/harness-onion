@@ -1,0 +1,52 @@
+{
+ "schemaVersion": "planeon.review-identity/v2",
+ "record": {
+  "path": "architecture/host-interface-amendment-he5/review-round1.json",
+  "sha256": "f705d6f33a6625ac11ef4cf1454598e281cc48936b2c4cc55fe23b850a46ba9c"
+ },
+ "reviewer": {
+  "agentId": "ac0f9849b35828200",
+  "agentType": "general-purpose subagent of the R00 lane session",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "local_33d8cfb3-f2b4-4f51-ac3d-c0107ae77286"
+  ]
+ },
+ "briefSha256": "1f09d23451bf265e32e44742ca362dabf5a1090c2208c1349cbf491670798aec",
+ "rulesSha256": "ed8526e2d8ac57d36484c999879c42c900e6c320536fdb61bc961217a9aecd96",
+ "wrapperSha256": null,
+ "subject": {
+  "repository": "harness-onion",
+  "commit": "65141a5c69955c0fbaf0560a82143b802a63b7a7",
+  "tree": "bb695fc6e71b0149ba517bd11bc5900771d3950e"
+ },
+ "launched": "2026-10-28T14:02:00+08:00",
+ "finished": "2026-10-28T14:26:00+08:00",
+ "interruptions": [],
+ "operatorRelays": [
+  "before launch the operator pointed the rules' fixed TOOLS link at the R00 composed view (MON-R00-HOME): the four ev12 inputs and he005 linked read-only from the primary's records, the reviews folder in the R00 home; the rules file's bytes are unchanged",
+  "no relay during the round; the lane monitor appended to the decision record while the round ran, and the reviewer re-checked the snapshot prefix and its quotes afterwards",
+  "the reviewer's slip D6 (an 'O_PATH' grep printed one line of scripts/enforcement_test_plan.py) is a read-scope slip; the lane monitor's MON-EV12-CR1 closes every *enforcement_test_plan* file for this lane's scans",
+  "the lane monitor relayed the c1 author ids: the session is local_33d8cfb3-f2b4-4f51-ac3d-c0107ae77286 (now Build-R10-Operator); the c1 build agent id is \"not recorded\"; its launch record tools/w03/ev12/contract-c1.launch.json says only \"general-purpose, background\", launched 2026-10-28 ~11:58 from that session, brief 8e9ab3ad, report b4b65ce1",
+  "c1 build agent id: not recorded (MON-EV12-CR1)"
+ ],
+ "runs": [
+  {
+   "limit": "commands over 120 s",
+   "used": 0
+  }
+ ],
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-EV12-CR1",
+  "date": "2026-10-28"
+ }
+}

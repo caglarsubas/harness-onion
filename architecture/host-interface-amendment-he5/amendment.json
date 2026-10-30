@@ -1,0 +1,229 @@
+{
+ "schemaVersion": "planeon.internal.host-interface-amendment/v2",
+ "designLabel": "HOST-INTERFACE-DRAFT-002-HE5",
+ "base": {
+  "path": "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+  "sha256": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75",
+  "designLabel": "HOST-INTERFACE-DRAFT-002-HS53",
+  "record": {
+   "path": "architecture/host-interface-amendment-hs53/amendment.json",
+   "sha256": "e4255685a38f183d9cd5e5411ee83cc3dee6442e578831296d9789109824d763"
+  }
+ },
+ "effective": {
+  "path": "architecture/host-interface-amendment-he5/HOST_INTERFACE_SPEC.md",
+  "sha256": "f6e81cecbb775782413aaa4864979c50ce001455c6e512080005a5074ffc9b57"
+ },
+ "ownerDecisions": [
+  {
+   "id": "Q-HE5-9",
+   "date": "2026-10-26",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-HE5-9 (a), with its post-exec half as re-ruled. MON-HE005-R1-RULE: \"Q-HE5-9 (H5D-3 (iii)): (a).\" \"Exactly one more inherited descriptor: fd 4, the verity-checked O_RDONLY script, read-only. The worker's set is exactly {0..4}, checked both before close_range and after exec, under the START freeze. The readiness sentence's errata goes in slot 269, together with Q-HE5-1's registration.\" \"Rev 2 must show that fd 4 cannot be written, re-opened writable or used as a second exec route, and that the verity measurement and the exec use the same fd.\" MON-HE005-R2-RULE: \"Q-HE5-9's post-exec half (H5E-1) is re-ruled (a): no capability widening, and HI-7 stays as it is.\" \"fd 4 stays, and so does W3's pre-close_range {0..4} check, made while the child is uid 0.\" \"The post-exec {0..4} becomes a structural claim, carried by the pinned child path and W3's check, with a T04 trace carried.\"",
+   "source": "lane monitor (owner-delegated), 2026-10-26: the lane's decision record (local, not published), sections MON-HE005-R1-RULE and MON-HE005-R2-RULE"
+  },
+  {
+   "id": "Q-HE5-12",
+   "date": "2026-10-26",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-HE5-12 (b), the owner's decision, \"Drop post-exec reads\". MON-HE005-Q12-OWNER: \"the owner chose Q-HE5-12 (b), \"Drop post-exec reads\"\" \"R1 is widened and states plainly that runtime detection is given up, with T04 tracing each item.\"",
+   "source": "owner, relayed verbatim by the lane monitor, 2026-10-26: the lane's decision record (local, not published), section MON-HE005-Q12-OWNER"
+  },
+  {
+   "id": "Q-EV12-1",
+   "date": "2026-10-26",
+   "state": "OWNER_DECIDED",
+   "decision": "Q-EV12-1 (a), with the readiness doc's ruling. MON-EV12-PLAN: \"Q-EV12-1 is ruled (a) under the owner's delegation.\" \"slot 269 carries edge record v12, with the two BYTE_IDENTICAL, REGISTERED_BEFORE_USE broker-handoff-v1 rows, plus the host-interface amendment architecture/host-interface-amendment-he5/ in HS43/HS53 form.\" \"If no rule allows an in-place edit, list it as carried.\" MON-HE005A-PLAN2: \"carried and byte-identical, on your cited rule (FROZEN_PATHS :390-397, the sha256 pin at :493, HS53's SUPERSEDED precedent). That is correct for slot 269.\"",
+   "source": "lane monitor (owner-delegated), 2026-10-26: the lane's decision record (local, not published), sections MON-EV12-PLAN and MON-HE005A-PLAN2"
+  },
+  {
+   "id": "MON-HE005-CLOSE",
+   "date": "2026-10-26",
+   "state": "OWNER_DECIDED",
+   "decision": "MON-HE005-CLOSE, the HE-005 design closed at revision 5. MON-HE005-CLOSE: \"DESIGN-HE005 closes at rev 5 (0335ce2d).\" \"EDGE-V12, the I02/I03 registration plus H5E-10's errata list, without the (a) matrix item.\"",
+   "source": "lane monitor (owner-delegated), 2026-10-26: the lane's decision record (local, not published), section MON-HE005-CLOSE; the design it closes is the TOOLS record (local, not published), sha256 0335ce2df4bd25e5e7ca53c08d9beaa7bea277f69c2c2f8bdebfa1ea3a89f707"
+  }
+ ],
+ "items": [
+  {
+   "id": "E1",
+   "kind": "EDITORIAL",
+   "section": "title",
+   "baseLines": "1",
+   "current": "# W01 host interfaces — gate resolutions, candidate v2 with amendments W02D, HS43 and HS53\n",
+   "proposed": "# W01 host interfaces — gate resolutions, candidate v2 with amendments W02D, HS43, HS53 and HE5\n",
+   "occurrences": 1,
+   "decisions": [],
+   "why": "The title names the four amendments."
+  },
+  {
+   "id": "E2",
+   "kind": "EDITORIAL",
+   "section": "head",
+   "baseLines": "11",
+   "current": "`architecture/host-interface-amendment-hs53/amendment.json` lists its changes.\n",
+   "proposed": "`architecture/host-interface-amendment-hs53/amendment.json` lists its changes.\nAmendment HE5 (`HOST-INTERFACE-DRAFT-002-HE5`, section 14) is applied on top of the HS53 effective text,\nwhich also stays byte-identical (`architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md`);\n`architecture/host-interface-amendment-he5/amendment.json` lists its changes.\n",
+   "occurrences": 1,
+   "decisions": [],
+   "why": "The head says HE5 is applied on top of the byte-identical HS53 effective text."
+  },
+  {
+   "id": "H1",
+   "kind": "DECIDED",
+   "section": "5.4 W3, the descriptor check",
+   "baseLines": "479-480",
+   "current": "It also checks the descriptor table:\nonly stdio and the broker-created FD3 socketpair end.",
+   "proposed": "It also checks the descriptor table while the child is still uid 0 in the\nbroker's domain: stdio, none of it a socket, and the two descriptors W4 places. These are the broker-created\nsocketpair end, which becomes FD3, and the verity-measured O_RDONLY worker script, which becomes fd 4. Every other\ndescriptor the child holds is closed in W4, before exec.",
+   "occurrences": 1,
+   "decisions": [
+    "Q-HE5-9",
+    "Q-EV12-1",
+    "MON-HE005-CLOSE"
+   ],
+   "why": "W3 checked that the child holds only stdio and the FD3 socketpair end. With fd 4 the worker's set is exactly {0..4}, and W3 checks it while the child is still uid 0 in the broker's domain, before W4 places the two descriptors and closes every other one (Q-HE5-9 (a), its post-exec half as re-ruled; the closed design, §3.2)."
+  },
+  {
+   "id": "H2",
+   "kind": "DECIDED",
+   "section": "5.4 W4, the child's pre-exec calls",
+   "baseLines": "484-486",
+   "current": "The child runs broker-owned pre-exec code only:\nclose_range above 3, setresgid/setresuid to the signed UID, drop all\ncapabilities, `no_new_privs=1`, install the worker seccomp filter (W02d).",
+   "proposed": "The child runs broker-owned pre-exec code only, in raw system calls with no\nallocation or lock: (1) block every signal, and reset every disposition except SIGKILL's and SIGSTOP's; (2) `dup3`\nthe socketpair end to 3 and the measured script descriptor to 4; (3) `close_range` from 5; (4) unblock;\n(5) setresgid/setresuid to the signed UID; (6) drop all capabilities; (7) `no_new_privs=1`; (8) install the worker\nseccomp filter (W02d).",
+   "occurrences": 1,
+   "decisions": [
+    "Q-HE5-9",
+    "Q-EV12-1",
+    "MON-HE005-CLOSE"
+   ],
+   "why": "W4's \"close_range above 3\" would close fd 4. The child now places the socketpair end at 3 and the measured script at 4 with dup3 and closes from 5, in raw system calls, with every signal blocked and every disposition but SIGKILL's and SIGSTOP's reset before, and unblocked after (the closed design, §3.2 and §3.5)."
+  },
+  {
+   "id": "H3",
+   "kind": "DECIDED",
+   "section": "5.4 W5, the exec descriptor",
+   "baseLines": "488-490",
+   "current": "W5. The child calls `execveat(fd, \"\", ..., AT_EMPTY_PATH)` on an O_PATH descriptor\nof the fs-verity worker executable. The broker verified that descriptor's verity\ndigest before W2.",
+   "proposed": "W5. The child calls `execveat(4, \"\", ..., AT_EMPTY_PATH)` on fd 4, an O_RDONLY descriptor of the fs-verity worker\nscript, never O_PATH, because FS_IOC_MEASURE_VERITY needs a readable descriptor. The broker measured the verity\ndigest of that same open file description before W2, and never re-opens it. For a script, the kernel hands the\ninterpreter `/dev/fd/4`, which stays open in the worker and read-only: the verity file refuses every write open, and\nthe worker filter's openat admits read flags only (Q-HE5-9 (a)). After exec, the broker reads nothing of the\nworker's `/proc` (owner decision Q-HE5-12 (b), \"Drop post-exec reads\"; SELinux matrix v6, XV1-7). The worker's\npost-exec state holds by construction (O-R10-HE005) and is traced by\nT04 (O-T04-HE5).",
+   "occurrences": 1,
+   "decisions": [
+    "Q-HE5-9",
+    "Q-HE5-12",
+    "Q-EV12-1",
+    "MON-HE005-CLOSE"
+   ],
+   "why": "FS_IOC_MEASURE_VERITY needs a readable descriptor, so the exec descriptor is the measured O_RDONLY script, fd 4, one open file description from the measurement to the exec, never O_PATH and never re-opened; after exec the broker reads nothing of the worker's /proc (Q-HE5-9 (a); the owner's Q-HE5-12 (b), \"Drop post-exec reads\"; the closed design, §3.2 and §3.3)."
+  },
+  {
+   "id": "E3",
+   "kind": "EDITORIAL",
+   "section": "14 (new)",
+   "baseLines": "end",
+   "current": "Obligations: O-SECCOMP-V5-OBSERVER-LISTENER (the allowlist rule), O-W03-OBSERVER-UNIT (the socket's directory, mode and freshness), O-W03-OBSERVER-PRESTART (the pre-start removal runs as init_t), O-W03-OBSERVER-TCP (no TCP listener for the observer), O-T04-HS53 (native confirmation), O-MATRIX-OBSERVER-TCP (the observer's TCP listen closed in data), O-MATRIX-OBSERVER-SOCK-CLEAR (systemd's grant to clear a stale I01 path (met once matrix v6 is adopted)), O-PROGRAMS-V3-OBSERVER (the OBSERVER programs and the edge record), O-R10-HE004-I01 (the observer serves I01). Every E01-E12 obligation stays OPEN_UNPROVEN.\n",
+   "proposed": "Obligations: O-SECCOMP-V5-OBSERVER-LISTENER (the allowlist rule), O-W03-OBSERVER-UNIT (the socket's directory, mode and freshness), O-W03-OBSERVER-PRESTART (the pre-start removal runs as init_t), O-W03-OBSERVER-TCP (no TCP listener for the observer), O-T04-HS53 (native confirmation), O-MATRIX-OBSERVER-TCP (the observer's TCP listen closed in data), O-MATRIX-OBSERVER-SOCK-CLEAR (systemd's grant to clear a stale I01 path (met once matrix v6 is adopted)), O-PROGRAMS-V3-OBSERVER (the OBSERVER programs and the edge record), O-R10-HE004-I01 (the observer serves I01). Every E01-E12 obligation stays OPEN_UNPROVEN.\n\n## 14. Amendment HE5 (2026-10-26)\n\nHE5 makes fd 4, the verity-checked O_RDONLY worker script, the one more descriptor the worker inherits beside FD3\n(§5.4 W3-W5), and the broker reads nothing of the worker's `/proc` after exec. It is applied to the HS53 effective\ntext, which stays byte-identical; `architecture/host-interface-amendment-he5/amendment.json` gives every change and\nits reason.\n\n| Item | Where | Decisions |\n|---|---|---|\n| H1 | 5.4 W3, the descriptor check | Q-HE5-9, Q-EV12-1, MON-HE005-CLOSE |\n| H2 | 5.4 W4, the child's pre-exec calls | Q-HE5-9, Q-EV12-1, MON-HE005-CLOSE |\n| H3 | 5.4 W5, the exec descriptor | Q-HE5-9, Q-HE5-12, Q-EV12-1, MON-HE005-CLOSE |\n\nAdopted text HE5 overrides (each file stays byte-identical; HE5 governs, and a successor of that contract adopts it):\n\n| Superseded clause | In | Replaced by |\n|---|---|---|\n| \"FD3 is the sole inherited non-stdio descriptor\" | `docs/alpha-2/BROKER_HANDOFF_READINESS.md` | FD3 and fd 4 (the verity-checked, read-only worker script, Q-HE5-9 (a)) are the only inherited non-stdio descriptors (H1, H3) |\n| \"on an O_PATH descriptor of the worker executable\" | `architecture/native-profile-v4/README.md` | on fd 4, an O_RDONLY descriptor of the verity-checked worker script (W01 §5.4 W5 as amended by HE5) (H3) |\n\nStated residuals:\n\n- R-HE5-POSTEXEC: The worker's post-exec state is not observed at runtime: its descriptor set, credentials, capabilities, NoNewPrivs, filters and label. It holds by construction (the pinned child path, W3's observed pre-exec check, the kernel and the SELinux transition) and is traced by T04. This is the owner's Q-HE5-12 (b) choice: runtime detection on the host is given up, and T04 and HE-008's enrollment keep it. It is residual R1 of the closed HE-005 design (§8; MON-HE005-CLOSE). Follow-up: T04 and HE-008 (Q-HE5-12).\n\nEdge record v12 registers the I02/I03 inputs beside this amendment (Q-EV12-1 (a)): R10's HE-005B vendors them\nbyte-identical, HE-005C and HE-005D implement W3-W5 as amended, and T04 confirms them on the enrolled kernel.\n\nObligations: O-R10-HE005 (W3-W5 as amended), O-T04-HE5 (native confirmation). Every E01-E12 obligation stays OPEN_UNPROVEN.\n",
+   "occurrences": 1,
+   "decisions": [],
+   "why": "Section 14 lists the items, the superseded clauses, the residual, what follows and the obligations."
+  }
+ ],
+ "dispositions": [
+  {
+   "decision": "Q-HE5-9",
+   "items": [
+    "H1",
+    "H2",
+    "H3"
+   ],
+   "obligations": [
+    "O-R10-HE005",
+    "O-T04-HE5"
+   ],
+   "summary": "fd 4, the verity-checked O_RDONLY script, is the one more inherited descriptor, and the worker's set is exactly {0..4}: W3 checks it while the child is uid 0, W4 places it and W5 execs it. After exec the set is structural, carried by the pinned child path and W3's check, with a T04 trace (R-HE5-POSTEXEC)."
+  },
+  {
+   "decision": "Q-HE5-12",
+   "items": [
+    "H3"
+   ],
+   "obligations": [
+    "O-R10-HE005",
+    "O-T04-HE5"
+   ],
+   "summary": "No post-exec read of the worker's /proc: its post-exec state holds by construction and T04 traces it; runtime detection on the host is given up (R-HE5-POSTEXEC)."
+  },
+  {
+   "decision": "Q-EV12-1",
+   "items": [
+    "H1",
+    "H2",
+    "H3"
+   ],
+   "obligations": [],
+   "summary": "This amendment, beside edge record v12, in slot 270. Its two superseded texts are carried and stay byte-identical, by harness-onion's own rule: the readiness guide is frozen by scripts/validate_seccomp_observer_listener.py's FROZEN_PATHS (:390-391, the entry at :397) and its ERA_SHA256 pin (:493), as HS53 carried its broker sentence (scripts/host_interface_amendment_v3.py's SUPERSEDED, :60-77, the entry at :73-75); native-profile v4's README is pinned by sha256 in scripts/validate_native_profile_v4.py (:402, :679), scripts/validate_compiled_filter_programs_v3.py (:792), scripts/validate_i06_backend_profile_v4.py (:918), scripts/validate_native_profile_v5.py (:688), scripts/validate_selinux_matrix_v4.py (:402) and scripts/validate_w03_plan_amend_3.py (:536)."
+  },
+  {
+   "decision": "MON-HE005-CLOSE",
+   "items": [
+    "H1",
+    "H2",
+    "H3"
+   ],
+   "obligations": [
+    "O-R10-HE005"
+   ],
+   "summary": "W3-W5 carry the closed design (§3.2, §3.3 and §3.5) and its errata list (§4, H5E-10), without the matrix item; R10's HE-005C and HE-005D implement them."
+  }
+ ],
+ "obligations": [
+  {
+   "id": "O-R10-HE005",
+   "label": "W3-W5 as amended",
+   "owner": "R10's HE-005C and HE-005D",
+   "text": "Implement W3-W5 as amended: the descriptor layout; the raw-call child path, pinned; the O_RDONLY verity measurement and exec on one description; no post-exec read of the worker's `/proc`."
+  },
+  {
+   "id": "O-T04-HE5",
+   "label": "native confirmation",
+   "owner": "T04",
+   "text": "On the enrolled kernel and policy, confirm: FS_IOC_MEASURE_VERITY on an O_RDONLY descriptor of the enrolled script; `execveat` of a script through a non-close-on-exec fd 4, with the interpreter reading `/dev/fd/4`; a write re-open of fd 4 refused; the worker's post-exec state traced (the descriptor set {0..4}, its uid and gid, an empty `Groups:`, its capabilities, NoNewPrivs, `Seccomp_filters: 2`, the label `planeon_worker_t`); `cgroup.kill` opened O_WRONLY and written by the sealed broker; a second exec refused."
+  }
+ ],
+ "supersedes": [
+  {
+   "path": "docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+   "sha256": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3",
+   "quote": "FD3 is the sole inherited non-stdio\ndescriptor",
+   "replacement": "FD3 and fd 4 (the verity-checked, read-only worker script, Q-HE5-9 (a)) are the only inherited non-stdio descriptors",
+   "items": [
+    "H1",
+    "H3"
+   ]
+  },
+  {
+   "path": "architecture/native-profile-v4/README.md",
+   "sha256": "a4205a5388dc83827bb39670bcc9477b030f29829128abf19f7578321c170174",
+   "quote": "on an O_PATH descriptor of the worker executable",
+   "replacement": "on fd 4, an O_RDONLY descriptor of the verity-checked worker script (W01 §5.4 W5 as amended by HE5)",
+   "items": [
+    "H3"
+   ]
+  }
+ ],
+ "residuals": [
+  {
+   "id": "R-HE5-POSTEXEC",
+   "text": "The worker's post-exec state is not observed at runtime: its descriptor set, credentials, capabilities, NoNewPrivs, filters and label. It holds by construction (the pinned child path, W3's observed pre-exec check, the kernel and the SELinux transition) and is traced by T04. This is the owner's Q-HE5-12 (b) choice: runtime detection on the host is given up, and T04 and HE-008's enrollment keep it. It is residual R1 of the closed HE-005 design (§8; MON-HE005-CLOSE).",
+   "followUp": "T04 and HE-008",
+   "decisions": [
+    "Q-HE5-12"
+   ]
+  }
+ ],
+ "notAmended": [
+  "W1, W2 and W6",
+  "§5.3's rows",
+  "The BROKER and WORKER seccomp programs (unchanged since MET-ENFORCE-025)",
+  "SELinux matrix v6",
+  "The I02/I03 wire (registered by edge v12, unchanged)",
+  "The I05 v4 contract"
+ ]
+}

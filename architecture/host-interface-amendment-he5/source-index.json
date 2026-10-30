@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "planeon.internal.host-interface-amendment-he5-index/v1",
+  "packet": "MET-ENFORCE-043",
+  "workItem": "EDGE-V12",
+  "series": "MET-ENFORCE-043/contract",
+  "candidate": "c2",
+  "baseMain": "d7a3cda5010da560d168b47eee1675b10f9ec89e",
+  "inTreeRounds": [
+    {
+      "round": 1,
+      "record": "architecture/host-interface-amendment-he5/review-round1.json",
+      "recordSha256": "f705d6f33a6625ac11ef4cf1454598e281cc48936b2c4cc55fe23b850a46ba9c",
+      "identity": "architecture/host-interface-amendment-he5/review-identity-round1.json",
+      "identitySha256": "32e30a0822910f22796344940e71b527cab1752c2c46e183cf40d84181182938",
+      "verdict": "CHANGES_REQUIRED",
+      "subjectCommit": "65141a5c69955c0fbaf0560a82143b802a63b7a7"
+    },
+    {
+      "round": 2,
+      "record": "architecture/host-interface-amendment-he5/review-round2.json",
+      "recordSha256": "9671326111a54f3eded353be0ecafc6f1d686240d03ba60ece5d9fcc70b311e0",
+      "identity": "architecture/host-interface-amendment-he5/review-identity-round2.json",
+      "identitySha256": "d5054d51188a228428db141aa5fe5407e8520915f5e60be4dad03b64da45acd0",
+      "verdict": "PASS_FOR_ADOPTION",
+      "subjectCommit": "62863e95ab5fa6befbea205152da318215d0761c"
+    }
+  ],
+  "roundNumbering": "The in-tree MET-ENFORCE-043/contract rounds start at round 1, the first CONTRACT round on the candidate. The HE-005 design's review rounds are design history, closed with the design below; none is numbered as an in-tree round.",
+  "rulings": {
+    "MON-EV12-PLAN": "Q-EV12-1 is ruled (a) under the owner's delegation.",
+    "MON-HE005-CLOSE": "DESIGN-HE005 closes at rev 5 (0335ce2d).",
+    "MON-EV12-Q2": "Q-EV12-2 ruled (a), MON-EV12-Q2.",
+    "MON-EV12-CR1": "Identity r1: KEEP. Slips D1-D8 are procedural. D6 is a read-scope slip; record it as such.",
+    "MON-EV12-B1": "Records errata c2a, option (a'): the in-tree rounds and the oracle identity take the v2 shapes; no contract byte changes."
+  },
+  "design": {
+    "revision": 5,
+    "sha256": "0335ce2df4bd25e5e7ca53c08d9beaa7bea277f69c2c2f8bdebfa1ea3a89f707",
+    "adoption": "MON-HE005-CLOSE (lane monitor, 2026-10-26), with design round 4's PASS_FOR_BUILD"
+  },
+  "designHistory": [
+    {
+      "record": "the TOOLS content draft 1 (local, not published)",
+      "sha256": "8fe84a78d11e5d58cf1f140efec27d2153964c7177a5b1c33554c2acc7a0aed5"
+    },
+    {
+      "record": "the TOOLS plan (local, not published)",
+      "sha256": "3b1fd45f575aafb7d19ff85d869599930e41dba9cd46f4d9364e3de131901ed9",
+      "ruling": "MON-EV12-PLAN"
+    },
+    {
+      "record": "the TOOLS design revision 5 (local, not published)",
+      "sha256": "0335ce2df4bd25e5e7ca53c08d9beaa7bea277f69c2c2f8bdebfa1ea3a89f707",
+      "ruling": "MON-HE005-CLOSE"
+    },
+    {
+      "record": "the lane's decision record (local, not published), as a snapshot",
+      "lane": "the primary lane",
+      "sha256": "436fd8157fca890d2c77e8cb958257ef9c5d94c923be05b050eebf9173a7be5c",
+      "snapshot": "the record's first 58437 bytes at build time (the record is append-only)"
+    },
+    {
+      "record": "the lane's decision record (local, not published), as a snapshot",
+      "lane": "R00, the slot-270 lane",
+      "sha256": "4f7c4a7af9c4aed5e6b9f84bc6a88c20dbefd2530d7301357f76ebaef7639e47",
+      "snapshot": "the record's first 6349 bytes at build time (the record is append-only)"
+    }
+  ],
+  "subject": [
+    {
+      "path": "architecture/artifact-edges/operator-harness-engineering-v12.json",
+      "sha256": "3587488b040f1c23f95f847dd3f1e15b97fa6ca705b6dca429d1cc6d64f3a5c7"
+    },
+    {
+      "path": "architecture/artifact-edges/README-v12.md",
+      "sha256": "74449b42e3919a775304d868e8a348d38054d350e0199d463a102c42fc612256"
+    },
+    {
+      "path": "architecture/host-interface-amendment-he5/amendment.json",
+      "sha256": "82ca60cd553c177917f4748ff3a6305bc5dd249da1522d4b3e38c1f5b1c52e84"
+    },
+    {
+      "path": "architecture/host-interface-amendment-he5/HOST_INTERFACE_SPEC.md",
+      "sha256": "f6e81cecbb775782413aaa4864979c50ce001455c6e512080005a5074ffc9b57"
+    },
+    {
+      "path": "architecture/host-interface-amendment-he5/README.md",
+      "sha256": "2f4bafbab4cfd932e91420623714a4a489ca550ab23c3a4ae05ad46966a1b089"
+    },
+    {
+      "path": "scripts/host_interface_amendment_v4.py",
+      "sha256": "a09a12f9d574f3c38a30a87dc5ca1884ec7953c1c36ebfe80311f7b1f7223108"
+    }
+  ],
+  "predecessorInputs": [
+    {
+      "path": "architecture/host-interface-amendment-hs53/amendment.json",
+      "sha256": "e4255685a38f183d9cd5e5411ee83cc3dee6442e578831296d9789109824d763"
+    },
+    {
+      "path": "architecture/host-interface-amendment-hs53/HOST_INTERFACE_SPEC.md",
+      "sha256": "fa7f36fb7d291ab5ffccfc51f9bae7b99ad1a2ef466fc0793dbe6e4182af1e75"
+    },
+    {
+      "path": "scripts/host_interface_amendment_v3.py",
+      "sha256": "86abc79670c4534602b023855ce74e99eab8d6497bdfe745a8c52d18bd4468c0"
+    },
+    {
+      "path": "architecture/artifact-edges/operator-harness-engineering-v11.json",
+      "sha256": "9188980f0ce211e2939d431d900a7aff77262de3a973009666ed13f3ef3cbd77"
+    },
+    {
+      "path": "architecture/artifact-edges/README-v11.md",
+      "sha256": "eff0f9c639f3ef0f3676f4f34bb669a6d9b3169321ac230f7593afa5b93f6a16"
+    },
+    {
+      "path": "docs/alpha-2/BROKER_HANDOFF_READINESS.md",
+      "sha256": "2cc6ebef252efb33744208378b29248d89597e5a0be7c4a1a113adc9d63b9fc3"
+    },
+    {
+      "path": "architecture/native-profile-v4/README.md",
+      "sha256": "a4205a5388dc83827bb39670bcc9477b030f29829128abf19f7578321c170174"
+    },
+    {
+      "path": "architecture/broker-handoff-inputs/channel.schema.json",
+      "sha256": "e7e9558fb50b7ba804222065734d1d4fb4694327bb2427a34ef8dffc945d56f9"
+    },
+    {
+      "path": "architecture/broker-handoff-inputs/vectors.json",
+      "sha256": "80d8da953c41ef544ecf0cd4a0f62b98316b018bfbdc39c550c320f68ab603c4"
+    }
+  ]
+}
