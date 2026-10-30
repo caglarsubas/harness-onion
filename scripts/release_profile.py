@@ -23,9 +23,11 @@ stay distinct and a wrongly typed identifier refuses RP_SHAPE; derived objects a
 (RP-C1-4) requires exactly one MET-ADOPT-006/packet rider, equal to the generic packet rider, appended last, and the
 registry's bytes equal to the base's serialization with that rider in the template's member order (c3, RP-C2-1). Bytes
 that are not UTF-8 JSON refuse with the reading check's code (c3, RP-C2-2), and so do JSON nested beyond the decoder's
-depth and JSON integers beyond the conversion limit (c4, RP-C3-1, RP-C3-3); every failure of the era's overlay check,
-the YAML loader's included, refuses RP_CATALOG_BYTES (c4, RP-C3-2); a non-operator packet YAML that is not UTF-8
-refuses RP_OWNER_PACKET (c4).
+depth and JSON integers beyond the conversion limit (c4, RP-C3-1, RP-C3-3); every failure of the era's overlay check
+refuses RP_CATALOG_BYTES, the YAML loader's (c4, RP-C3-2) and any other exception's (c5, RP-C4-1); a non-operator
+packet YAML that is not UTF-8 refuses RP_OWNER_PACKET (c4); any exception of V9's serialization refuses RP_REGISTRY
+and any exception of provider-adoption's use refuses RP_PROVIDER_SET (c5, RP-C4-2, RP-C4-3). The c5 refusals name the
+original exception type; Exception is caught, never BaseException, so KeyboardInterrupt and SystemExit propagate.
 Data checks only: no network, no execution authority, no evidence state.
 """
 from __future__ import annotations
@@ -153,6 +155,15 @@ def _json(raw: bytes, code: str):
 
 def _canonical(value) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+
+def _serialized(registry) -> bytes:
+    """V9's serialization, its failures coded RP_REGISTRY (c5, RP-C4-2)."""
+    try:
+        return _serialize(registry)
+    except Exception as error:
+        raise ValueError("RP_REGISTRY: the registry does not serialize: %s: %s"
+                         % (type(error).__name__, error)) from None
 
 
 def _serialize(registry) -> bytes:
@@ -406,6 +417,9 @@ def check(read, packets) -> dict:
             effective[path] = sector_catalog.effective_bytes_from(read, packets, path)
         except (ValueError, yaml.YAMLError) as error:
             raise ValueError("RP_CATALOG_BYTES: the overlay era does not check: %s" % error) from None
+        except Exception as error:
+            raise ValueError("RP_CATALOG_BYTES: the overlay era does not check: %s: %s"
+                             % (type(error).__name__, error)) from None
         require(digest(effective[path]) == EFFECTIVE_SHA256[path], "RP_CATALOG_BYTES", "effective bytes of " + path)
     require(_eq(profile_member["catalogs"], [{"path": p, "baseSha256": BASE_SHA256[p], "effectiveSha256":
                                               EFFECTIVE_SHA256[p]} for p in sorted(CATALOG_PATHS)]),
@@ -523,7 +537,11 @@ def check(read, packets) -> dict:
     expected_in = [by_key[k] for k in sorted(by_key, key=_key_number)]
     require(_eq(rec["providerSet"]["in"], expected_in), "RP_PROVIDER_SET", "providerSet.in")
     adoption = _json(read(ADOPTION_PATH), "RP_PROVIDER_SET")
-    candidates = {row["harnessId"]: set(row.get("catalogCandidateIds", [])) for row in adoption["harnessCoverage"]}
+    try:
+        candidates = {row["harnessId"]: set(row.get("catalogCandidateIds", [])) for row in adoption["harnessCoverage"]}
+    except Exception as error:
+        raise ValueError("RP_PROVIDER_SET: provider-adoption is not of the read shape: %s: %s"
+                         % (type(error).__name__, error)) from None
     keyed = {key: harness for harness, key in hkeys.items()}
     deferred_keys = sorted(set(keyed) - set(by_key), key=_key_number)
     require([(row["key"], row["harness"]) for row in rec["providerSet"]["deferred"]]
@@ -581,12 +599,12 @@ def check(read, packets) -> dict:
     require(len(riders) == 1, "RP_REGISTRY", "exactly one MET-ADOPT-006/packet rider (found %d)" % len(riders))
     require(riders[0] == len(entries) - 1, "RP_REGISTRY", "the rider is appended last")
     base = dict(briefs, briefs=entries[:-1])
-    require(digest(_serialize(base)) == BRIEFS_BASE_SHA256, "RP_REGISTRY", "the registry less the rider is the base")
+    require(digest(_serialized(base)) == BRIEFS_BASE_SHA256, "RP_REGISTRY", "the registry less the rider is the base")
     template = [b for b in entries[:-1] if b.get("series") == RIDER_TEMPLATE_SERIES]
     require(len(template) == 1 and _eq(entries[-1], dict(template[0], series=RIDER_SERIES)), "RP_REGISTRY",
             "the rider equals the generic packet rider with this packet's series")
     rider = dict(template[0], series=RIDER_SERIES)
-    require(briefs_raw == _serialize(dict(briefs, briefs=entries[:-1] + [rider])), "RP_REGISTRY",
+    require(briefs_raw == _serialized(dict(briefs, briefs=entries[:-1] + [rider])), "RP_REGISTRY",
             "the registry bytes are the base serialization plus the rider in the template's member order")
     return {"modules": len(rows), "tenantFacts": len(facts), "closure": len(computed), "in": len(expected_in),
             "exclusions": len(rec["exclusions"]), "operatorRows": sorted(operators), "citedRows": sorted(cited & set(internal)),

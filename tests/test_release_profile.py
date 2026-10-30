@@ -418,6 +418,128 @@ def test_the_yaml_catalogs_parse_as_effective_catalog_parses_them():
         assert safe_load(sector_catalog.effective_bytes(path)) == sector_catalog.effective_catalog(path)
 
 
+# RP-C4-1..3 (c5): any other exception of the era check, of V9's serialization and of provider-adoption's use refuses
+# with the check's code and names the original exception type.
+SUCCESSOR = "task-packets/IND-BANK-001.yaml"
+SUCCESSOR_ID = "IND-BANK-001"
+
+
+def _nested_flow_mappings(depth):
+    return b"a: " + b"{a: " * depth + b"b" + b"}" * depth + b"\n"
+
+
+def _nested_block_mappings(depth):
+    return b"".join(b"  " * level + b"a:\n" for level in range(depth)) + b"  " * depth + b"b\n"
+
+
+NESTED_SUCCESSORS = [("flow mappings 500 deep", _nested_flow_mappings(500)),
+                     ("flow mappings 600 deep", _nested_flow_mappings(600)),
+                     ("block mappings 500 deep", _nested_block_mappings(500)),
+                     ("block mappings 600 deep", _nested_block_mappings(600))]
+UNHASHABLE_SUCCESSORS = [("block", b"? [a]\n: b\n"), ("flow", b"{[a]: b}\n")]
+
+
+@pytest.mark.parametrize("name,raw", NESTED_SUCCESSORS, ids=[case[0] for case in NESTED_SUCCESSORS])
+def test_a_published_successor_nesting_mappings_past_the_recursion_limit_fails_for_catalog_bytes(name, raw):
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: the overlay era does not check: RecursionError: "):
+        rp.check(_reader(files={SUCCESSOR: raw}), _packets() | {SUCCESSOR_ID})
+
+
+@pytest.mark.parametrize("name,raw", UNHASHABLE_SUCCESSORS, ids=[case[0] for case in UNHASHABLE_SUCCESSORS])
+def test_a_published_successor_with_an_unhashable_mapping_key_fails_for_catalog_bytes(name, raw):
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: the overlay era does not check: TypeError: "):
+        rp.check(_reader(files={SUCCESSOR: raw}), _packets() | {SUCCESSOR_ID})
+
+
+def _overlay_changed_after_the_pinned_read():
+    """A reader that serves the overlay's pinned bytes on the model's own read and 200000 '[' on the later reads."""
+    base, reads = _reader(), []
+
+    def read(path):
+        if path == rp.OVERLAY_PATH:
+            reads.append(path)
+            if len(reads) > 1:
+                return b"[" * 200000
+        return base(path)
+    return read
+
+
+def test_an_overlay_changed_after_the_models_pinned_read_fails_for_catalog_bytes():
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: the overlay era does not check: RecursionError: "):
+        rp.check(_overlay_changed_after_the_pinned_read(), _packets())
+
+
+def _registry_with_a_member_nested(depth):
+    raw = _registry()
+    end = raw.rindex(b"}")
+    return raw[:end].rstrip() + b',\n "x": ' + b"[" * depth + b"]" * depth + b"\n}\n"
+
+
+def test_a_registry_nested_past_the_recursion_limit_within_the_decoders_depth_fails_for_registry():
+    # RP-C4-2: valid JSON the decoder reads, nested past the interpreter's recursion limit for V9's serialization.
+    with pytest.raises(ValueError, match=r"^RP_REGISTRY: the registry does not serialize: RecursionError: "):
+        rp.check(_reader(files={rp.BRIEFS_PATH: _registry_with_a_member_nested(5000)}), _packets())
+
+
+ADOPTION_SHAPES = [("an empty object", b"{}\n", "KeyError"), ("a list", b"[]\n", "TypeError"),
+                   ("an integer row", b'{"harnessCoverage": [1]}\n', "TypeError"),
+                   ("a list harnessId", b'{"harnessCoverage": [{"harnessId": ["x"]}]}\n', "TypeError")]
+
+
+@pytest.mark.parametrize("name,raw,kind", ADOPTION_SHAPES, ids=[case[0] for case in ADOPTION_SHAPES])
+def test_provider_adoption_of_another_valid_shape_fails_for_provider_set(name, raw, kind):
+    # RP-C4-3: provider-adoption is valid JSON of another shape.
+    with pytest.raises(ValueError, match=r"^RP_PROVIDER_SET: provider-adoption is not of the read shape: %s: " % kind):
+        rp.check(_reader(files={rp.ADOPTION_PATH: raw}), _packets())
+
+
+CODES = ("RP_SHAPE", "RP_CLOSURE", "RP_OWNER_PACKET", "RP_EXIT", "RP_PROVIDER_SET", "RP_EXCLUSION", "RP_CATALOG_BYTES",
+         "RP_TENANT_FACTS", "RP_PACK_BINDING", "RP_REGISTRY")
+PROBE_FORMS = (("invalid UTF-8", b"\xff\xfe\x00"), ("nested [", b"[" * 200000), ("nested YAML", b"a: " + b"[" * 100000),
+               ("5000-digit integer", b'{"a": ' + b"1" * 5000 + b"}"), ("open flow sequence", b"a: ["), ("empty", b""))
+# The YAML loader under the era check exits by SIGSEGV on the two deeply nested forms in a published successor's
+# packet YAML (RP-C4-4, recorded, not codeable in-process), so the successor runs only the other four.
+SUCCESSOR_FORMS = ("invalid UTF-8", "5000-digit integer", "open flow sequence", "empty")
+
+
+@pytest.fixture(scope="module")
+def probe_cases():
+    """The class probe, generated deterministically: every path check() reads on the real record, sorted, with each
+    malformed form (172 cases with the published successor's four), then c5's new cases. Each case is (label, a reader
+    factory, the packet set)."""
+    log = []
+    rp.check(_reader(log=log), _packets())
+    forms = dict(PROBE_FORMS)
+    files_case = lambda files: (lambda: _reader(files=files))
+    cases = [("%s / %s" % (path, name), files_case({path: raw}), _packets())
+             for path in sorted(set(log)) for name, raw in PROBE_FORMS]
+    cases += [("%s / %s" % (SUCCESSOR, name), files_case({SUCCESSOR: forms[name]}), _packets() | {SUCCESSOR_ID})
+              for name in SUCCESSOR_FORMS]
+    assert len(cases) == 172
+    cases += [("%s / %s" % (SUCCESSOR, name), files_case({SUCCESSOR: raw}), _packets() | {SUCCESSOR_ID})
+              for name, raw in NESTED_SUCCESSORS + UNHASHABLE_SUCCESSORS]
+    cases += [("overlay changed after the pinned read", _overlay_changed_after_the_pinned_read, _packets()),
+              ("registry nested 5000 deep", files_case({rp.BRIEFS_PATH: _registry_with_a_member_nested(5000)}),
+               _packets())]
+    cases += [("provider-adoption / " + name, files_case({rp.ADOPTION_PATH: raw}), _packets())
+              for name, raw, _ in ADOPTION_SHAPES]
+    return cases
+
+
+def test_no_uncoded_exception_escapes_check_over_the_class_probe(probe_cases):
+    escaped = []
+    for label, make_reader, packets in probe_cases:
+        try:
+            rp.check(make_reader(), packets)
+            escaped.append((label, "accepted"))
+        except ValueError as error:
+            if str(error).split(":", 1)[0] not in CODES:
+                escaped.append((label, "uncoded ValueError"))
+        except Exception as error:
+            escaped.append((label, type(error).__name__))
+    assert len(probe_cases) == 172 + 12 and escaped == []
+
+
 TYPE_CASES = [
     # RP-C1-1: bool, int and float are distinct.
     ("criteriaCount true on a 1-criterion row",
