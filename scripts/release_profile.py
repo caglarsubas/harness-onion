@@ -22,7 +22,10 @@ Types are exact (c2, RP-C1-1, RP-C1-2): V0 checks the JSON type of every member 
 stay distinct and a wrongly typed identifier refuses RP_SHAPE; derived objects are compared as canonical JSON. V9
 (RP-C1-4) requires exactly one MET-ADOPT-006/packet rider, equal to the generic packet rider, appended last, and the
 registry's bytes equal to the base's serialization with that rider in the template's member order (c3, RP-C2-1). Bytes
-that are not UTF-8 JSON refuse with the reading check's code (c3, RP-C2-2).
+that are not UTF-8 JSON refuse with the reading check's code (c3, RP-C2-2), and so do JSON nested beyond the decoder's
+depth and JSON integers beyond the conversion limit (c4, RP-C3-1, RP-C3-3); every failure of the era's overlay check,
+the YAML loader's included, refuses RP_CATALOG_BYTES (c4, RP-C3-2); a non-operator packet YAML that is not UTF-8
+refuses RP_OWNER_PACKET (c4).
 Data checks only: no network, no execution authority, no evidence state.
 """
 from __future__ import annotations
@@ -30,6 +33,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+
+import yaml
 
 from scripts import sector_catalog
 from scripts.safe_yaml import safe_load
@@ -134,9 +139,15 @@ def _json(raw: bytes, code: str):
 
     def constant(name):
         raise ValueError("%s: nonfinite JSON number %s" % (code, name))
+
+    def integer(text):
+        try:
+            return int(text)
+        except ValueError:
+            raise ValueError("%s: JSON integer beyond the conversion limit" % code) from None
     try:
-        return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs, parse_constant=constant)
-    except (UnicodeDecodeError, json.JSONDecodeError):
+        return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs, parse_constant=constant, parse_int=integer)
+    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
         raise ValueError("%s: not UTF-8 JSON" % code) from None
 
 
@@ -362,7 +373,11 @@ def packet_repository(read, packet_id: str) -> str:
     """The `repository` of a published non-operator packet YAML. An operator packet YAML is never opened."""
     require(type(packet_id) is str and not packet_id.startswith(OPERATOR_PREFIX), "RP_OWNER_PACKET",
             "an operator packet YAML is never opened: %s" % packet_id)
-    for line in read("task-packets/%s.yaml" % packet_id).decode("utf-8").splitlines():
+    try:
+        text = read("task-packets/%s.yaml" % packet_id).decode("utf-8")
+    except UnicodeDecodeError:
+        raise ValueError("RP_OWNER_PACKET: packet %s is not UTF-8" % packet_id) from None
+    for line in text.splitlines():
         if line.startswith("repository:"):
             return line.split(":", 1)[1].strip().strip('"')
     raise ValueError("RP_OWNER_PACKET: no repository line in packet %s" % packet_id)
@@ -389,7 +404,7 @@ def check(read, packets) -> dict:
         # The era-relative path (design E2): the era's overlay check runs on this check's reader and packet set.
         try:
             effective[path] = sector_catalog.effective_bytes_from(read, packets, path)
-        except ValueError as error:
+        except (ValueError, yaml.YAMLError) as error:
             raise ValueError("RP_CATALOG_BYTES: the overlay era does not check: %s" % error) from None
         require(digest(effective[path]) == EFFECTIVE_SHA256[path], "RP_CATALOG_BYTES", "effective bytes of " + path)
     require(_eq(profile_member["catalogs"], [{"path": p, "baseSha256": BASE_SHA256[p], "effectiveSha256":

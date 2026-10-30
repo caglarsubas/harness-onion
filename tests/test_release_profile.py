@@ -360,6 +360,9 @@ ENCODING_CASES = [
     ("registry: invalid UTF-8", rp.BRIEFS_PATH, b"\xff\xfe", "RP_REGISTRY"),
     ("registry: a UTF-8 byte-order mark", rp.BRIEFS_PATH, b"\xef\xbb\xbf" + _registry(), "RP_REGISTRY"),
     ("registry: not JSON", rp.BRIEFS_PATH, b"not json\n", "RP_REGISTRY"),
+    # RP-C3-1: text nested beyond the decoder's recursion depth.
+    ("record: nested beyond the decoder's depth", rp.RECORD_PATH, b"[" * 200000, "RP_SHAPE"),
+    ("registry: nested beyond the decoder's depth", rp.BRIEFS_PATH, b"[" * 200000, "RP_REGISTRY"),
 ]
 
 
@@ -369,8 +372,30 @@ def test_bytes_that_are_not_utf8_json_fail_for_the_reading_checks_code(name, pat
         rp.check(_reader(files={path: raw}), _packets())
 
 
+# RP-C3-3: valid JSON holding an integer beyond Python's integer-conversion limit refuses with the reading check's code.
+@pytest.mark.parametrize("path,code", [(rp.RECORD_PATH, "RP_SHAPE"), (rp.BRIEFS_PATH, "RP_REGISTRY")])
+def test_a_json_integer_beyond_the_conversion_limit_fails_for_the_reading_checks_code(path, code):
+    raw = b'{"a": ' + b"1" * 5000 + b"}\n"
+    with pytest.raises(ValueError, match=r"^%s: JSON integer beyond the conversion limit$" % code):
+        rp.check(_reader(files={path: raw}), _packets())
+
+
+def test_a_non_operator_packet_yaml_that_is_not_utf8_fails_for_owner_packet():
+    with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: packet KN-RET-001 is not UTF-8$"):
+        rp.check(_reader(files={"task-packets/KN-RET-001.yaml": b"\xff\xfe"}), _packets())
+
+
+def test_an_unparseable_published_successor_packet_fails_for_catalog_bytes():
+    # RP-C3-2: a published SECTOR-D1 successor (neither the blocker IND-BANK-005 nor the notice proposal) whose packet
+    # YAML, read through this reader, does not parse.
+    files = {"task-packets/IND-BANK-001.yaml": b"a: [\n"}
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: the overlay era does not check: "):
+        rp.check(_reader(files=files), _packets() | {"IND-BANK-001"})
+
+
 # Q-RP-PROJ (a1), design E2: the catalogs reach the model only through the injected reader and packet set. The c2
-# model read them from the disk, so it passed both cases below.
+# model read them from the disk: it passed the R11 case below, and refused the IND-BANK-005 case with RP_PACK_BINDING
+# (the record's successor is unpublished), where c3 refuses it with RP_CATALOG_BYTES (RP-C3-6).
 R11_PLAN = "docs/repositories/11-mas-harness-distribution.md"
 
 

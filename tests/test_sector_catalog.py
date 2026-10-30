@@ -1109,7 +1109,7 @@ def _dotted(node):
 
 
 def _consumer_violations(raw):
-    """Uses of the overlay module other than reads of its two public functions (a static tripwire, not a proof)."""
+    """Uses of the overlay module other than reads of its public functions (a static tripwire, not a proof)."""
     tree = ast.parse(raw)
     module_strings = tuple(name + "." for name in MODULE_NAMES)
     parents = {child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
@@ -1167,11 +1167,21 @@ def test_the_consumer_tripwire_refuses_non_public_use(source, allowed):
     assert (_consumer_violations(source.encode()) == []) is allowed
 
 
-def test_effective_bytes_is_effective_bytes_from_on_the_current_tree():
-    # Q-RP-PROJ (a1), condition 2: the live consumer gate is exactly the era-relative path on the current tree.
+# c2's pinned effective-byte digests (scripts/release_profile.py EFFECTIVE_SHA256 at c2 and the overlay's effective map).
+EFFECTIVE_DIGESTS = {
+    "architecture/providers.yaml": "c5fffe8776ce7f280ac8d3d763b8f70a2cc8071475750f0aed0c2f395d1ce60a",
+    "architecture/services.yaml": "f1ccfecd3fd0d716d45d0c0cd423f9de1425ed3a91f9ec4e0b64f96a836aac35",
+    "docs/PROVIDER_MODULE_CATALOG.md": "db95629a43b67b55e17206cc1d4659b6724644ab38d9dff2003a805917a0aad8",
+}
+
+
+def test_effective_bytes_keeps_the_pinned_effective_digests_on_the_current_tree():
+    # Q-RP-PROJ (a1), condition 2 (RP-C3-4): the live consumer gate and the era-relative path both give c2's pinned
+    # effective bytes, compared with the pins, not with each other.
     read, packets = overlay_module.disk_reader(overlay_module.ROOT), overlay_module.published_packets(overlay_module.ROOT)
     for path in CATALOGS:
-        assert overlay_module.effective_bytes(path) == overlay_module.effective_bytes_from(read, packets, path)
+        assert _hashlib.sha256(overlay_module.effective_bytes(path)).hexdigest() == EFFECTIVE_DIGESTS[path]
+        assert _hashlib.sha256(overlay_module.effective_bytes_from(read, packets, path)).hexdigest() == EFFECTIVE_DIGESTS[path]
 
 
 def test_effective_bytes_from_reads_only_through_its_reader_and_packet_set():
