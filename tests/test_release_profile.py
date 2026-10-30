@@ -1,0 +1,321 @@
+"""The release profile record (RELEASE-PROFILE-001, MET-ADOPT-006): the real record passes check(read, packets), and
+every failing case of design E1 fails for its named refusal code. Operator packet YAMLs are never opened: the reader
+used here refuses any task-packets/OP-* path, so a passing run proves the stem path."""
+import copy
+import json
+import os
+from pathlib import Path
+
+import pytest
+
+from scripts import release_profile as rp
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class OperatorRead(Exception):
+    """Raised by the guarded reader if anything tries to open an operator packet YAML."""
+
+
+def _packets():
+    return frozenset(name[:-5] for name in os.listdir(ROOT / "task-packets") if name.endswith(".yaml"))
+
+
+def _reader(record=None, files=None):
+    files = dict(files or {})
+    if record is not None:
+        files[rp.RECORD_PATH] = (json.dumps(record, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+
+    def read(path):
+        if path.startswith("task-packets/" + rp.OPERATOR_PREFIX):
+            raise OperatorRead(path)
+        if path in files:
+            return files[path]
+        assert not path.startswith("/") and ".." not in path.split("/")
+        return (ROOT / path).read_bytes()
+    return read
+
+
+def _record():
+    return json.loads((ROOT / rp.RECORD_PATH).read_bytes())
+
+
+def _row(rec, node):
+    return next(row for row in rec["modules"] if row["id"] == node)
+
+
+def _fact(rec, node):
+    return next(fact for fact in rec["tenantFacts"] if fact["id"] == node)
+
+
+def _exclusion(rec, name):
+    return next(row for row in rec["exclusions"] if row["component"] == name)
+
+
+TENANT = "provider.runtime.infrastructure.kubernetes-upstream"
+RETRIEVAL = "module.knowledge.retrieval-context.retrieval-service"
+OPERATOR = "module.runtime.infrastructure.operator"
+CONTRACTS = "module.platform.contracts"
+POLICY = "module.trust.security.policy-decision"
+PACK = "artifact.platform.industry-pack"
+
+
+def test_the_real_record_passes_without_opening_an_operator_packet():
+    summary = rp.check(_reader(), _packets())
+    assert summary["modules"] == 30 and summary["tenantFacts"] == 11 and summary["closure"] == 41
+    assert summary["in"] == 13 and summary["exclusions"] == 10 and summary["rider"] == 0
+    assert summary["operatorRows"] == ["module.runtime.infrastructure.bundle-verifier",
+                                       "module.runtime.infrastructure.namespace-baseline", OPERATOR]
+    assert len(summary["citedRows"]) == 6
+
+
+def test_the_registry_with_exactly_this_packets_rider_passes():
+    briefs = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
+    template = next(b for b in briefs["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
+    briefs["briefs"].append(dict(template, series=rp.RIDER_SERIES))
+    raw = (json.dumps(briefs, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+    assert rp.check(_reader(files={rp.BRIEFS_PATH: raw}), _packets())["rider"] == 1
+
+
+def test_an_operator_packet_yaml_is_never_opened():
+    with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: an operator packet YAML is never opened"):
+        rp.packet_repository(_reader(), "OP-001")
+
+
+def _set(path, value):
+    def mutate(rec):
+        target = rec
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = value
+    return mutate
+
+
+def _edit_row(node, fn):
+    return lambda rec: fn(_row(rec, node))
+
+
+def _edit_fact(node, fn):
+    return lambda rec: fn(_fact(rec, node))
+
+
+def _edit_exclusion(name, fn):
+    return lambda rec: fn(_exclusion(rec, name))
+
+
+def _swap_class(row):
+    row["class"] = "CLOSURE" if row["class"] == "SELECTED" else "SELECTED"
+
+
+def _relabel(row):
+    row["rowClass"] = "TENANT_PLATFORM"
+    del row["implementation"]
+    row["attestationRef"] = "external.kubernetes-api"
+    row.update({k: row.pop(k) for k in ("readiness", "exitEvidence")})
+
+
+def _attestation_on_repository(row):
+    del row["implementation"]
+    row["attestationRef"] = "external.kubernetes-api"
+
+
+def _drop_node(rec):
+    rec["closure"]["nodes"].remove(RETRIEVAL)
+
+
+def _add_excluded(rec):
+    rec["closure"]["nodes"] = sorted(rec["closure"]["nodes"] + ["provider.planeon.ollama"])
+
+
+def _drop_module_row(rec):
+    rec["modules"] = [row for row in rec["modules"] if row["id"] != RETRIEVAL]
+
+
+def _extra_module_row(rec):
+    extra = copy.deepcopy(_row(rec, RETRIEVAL))
+    extra["id"] = "provider.planeon.ollama"
+    rec["modules"] = sorted(rec["modules"] + [extra], key=lambda row: row["id"])
+
+
+def _duplicate_module_row(rec):
+    index = next(i for i, row in enumerate(rec["modules"]) if row["id"] == RETRIEVAL)
+    rec["modules"].insert(index, copy.deepcopy(rec["modules"][index]))
+
+
+def _h10_to_deferred(rec):
+    row = next(r for r in rec["providerSet"]["in"] if r["key"] == "H10")
+    rec["providerSet"]["in"].remove(row)
+    rec["providerSet"]["deferred"].append({"key": "H10", "harness": row["harness"], "reason": "moved"})
+
+
+def _drop_platform(name):
+    def mutate(rec):
+        rec["providerSet"]["platformNonHarness"].remove(name)
+    return mutate
+
+
+def _excluded_in_closure(rec):
+    rec["exclusions"] = sorted(rec["exclusions"] + [{"component": "retrieval-service",
+                                                     "kind": "CATALOG_MODULE_WITH_SERVICE", "sources": ["ROADMAP"],
+                                                     "reason": "test"}], key=lambda row: row["component"])
+
+
+def _drop_exclusion(name):
+    def mutate(rec):
+        rec["exclusions"] = [row for row in rec["exclusions"] if row["component"] != name]
+    return mutate
+
+
+def _drop_fact(rec):
+    rec["tenantFacts"].pop()
+
+
+def _swap_facts(rec):
+    rec["tenantFacts"][0], rec["tenantFacts"][1] = rec["tenantFacts"][1], rec["tenantFacts"][0]
+
+
+def _bound_as_module_health(row):
+    row["readiness"] = {"source": "MODULE_HEALTH"}
+    row["exitEvidence"]["obligation"] = "MODULE_HEALTH"
+
+
+CASES = [
+    # V0 RP_SHAPE
+    ("extra member", "RP_SHAPE", _set(["extra"], 1)),
+    ("missing hKey", "RP_SHAPE", _edit_row(RETRIEVAL, lambda row: row.pop("hKey"))),
+    ("state member in a module row", "RP_SHAPE", _edit_row(RETRIEVAL, lambda row: row.update(state="DONE"))),
+    ("NOT_RUN member", "RP_SHAPE", _edit_row(RETRIEVAL, lambda row: row["exitEvidence"].update(NOT_RUN=True))),
+    ("version floor on the tenant platform row", "RP_SHAPE", _edit_row(TENANT, lambda row: row.update(versionFloor="1"))),
+    ("implementation on the tenant platform row", "RP_SHAPE",
+     _edit_row(TENANT, lambda row: row.update(implementation={"packetId": "OP-001", "deliverableIndex": None}))),
+    ("empty free-text reason", "RP_SHAPE", _edit_exclusion("valkey", lambda row: row.update(reason=""))),
+    # V1 RP_CLOSURE
+    ("dropped node", "RP_CLOSURE", _drop_node),
+    ("added excluded module", "RP_CLOSURE", _add_excluded),
+    ("white-goods profile id", "RP_CLOSURE", _set(["profile", "id"], "profile.white-goods-readonly-amd64")),
+    ("dropped module row", "RP_CLOSURE", _drop_module_row),
+    ("extra module row", "RP_CLOSURE", _extra_module_row),
+    ("exact duplicate module row", "RP_CLOSURE", _duplicate_module_row),
+    ("SELECTED/CLOSURE swap", "RP_CLOSURE", _edit_row(RETRIEVAL, _swap_class)),
+    # V8 RP_PACK_BINDING
+    ("pack row naming IND-BANK-005", "RP_PACK_BINDING",
+     _edit_row(PACK, lambda row: row["implementation"].update(packetId="IND-BANK-005"))),
+    ("inReleaseSet true", "RP_PACK_BINDING", _set(["nonClaims", "industryPack", "inReleaseSet"], True)),
+    ("changed releaseSetEntry", "RP_PACK_BINDING", _set(["nonClaims", "industryPack", "releaseSetEntry"], "changed")),
+    ("successor IND-BANK-004", "RP_PACK_BINDING", _set(["nonClaims", "industryPack", "successor"], "IND-BANK-004")),
+    ("effectiveBinding IND-BANK-005", "RP_PACK_BINDING",
+     _set(["nonClaims", "industryPack", "effectiveBinding"], "IND-BANK-005")),
+    # V2 RP_OWNER_PACKET
+    ("blank packet", "RP_OWNER_PACKET", _edit_row(RETRIEVAL, lambda row: row["implementation"].update(packetId=""))),
+    ("unpublished packet id IND-BANK-005", "RP_OWNER_PACKET",
+     _edit_row(RETRIEVAL, lambda row: row["implementation"].update(packetId="IND-BANK-005"))),
+    ("same-repository packet swap", "RP_OWNER_PACKET",
+     _edit_row(RETRIEVAL, lambda row: row["implementation"].update(packetId="KN-DOM-001"))),
+    ("changed deployable artifact", "RP_OWNER_PACKET",
+     _edit_row(RETRIEVAL, lambda row: row["deployables"][0].update(artifact="other/retrieval-service"))),
+    ("REPOSITORY_PACKET module relabelled TENANT_PLATFORM", "RP_OWNER_PACKET", _edit_row(POLICY, _relabel)),
+    ("attestationRef external.postgresql", "RP_OWNER_PACKET",
+     _edit_row(TENANT, lambda row: row.update(attestationRef="external.postgresql"))),
+    ("attestationRef on a REPOSITORY row", "RP_OWNER_PACKET", _edit_row(CONTRACTS, _attestation_on_repository)),
+    ("tenant row with a changed owner", "RP_OWNER_PACKET",
+     _edit_row(TENANT, lambda row: row["owner"].update(name="another distribution"))),
+    ("tenant row with a changed deployable artifact", "RP_OWNER_PACKET",
+     _edit_row(TENANT, lambda row: row["deployables"][0].update(artifact="other-kubernetes-api"))),
+    ("tenant row with a changed kind", "RP_OWNER_PACKET", _edit_row(TENANT, lambda row: row.update(kind="ADAPTER"))),
+    ("retrieval-service hKey H7 to H9", "RP_OWNER_PACKET", _edit_row(RETRIEVAL, lambda row: row.update(hKey="H9"))),
+    ("kubernetes-upstream hKey to null", "RP_OWNER_PACKET", _edit_row(TENANT, lambda row: row.update(hKey=None))),
+    ("tampered operator row", "RP_OWNER_PACKET",
+     _edit_row(OPERATOR, lambda row: row["owner"].update(name="mas-harness-trust-plane"))),
+    # V3 RP_EXIT
+    ("removed binding", "RP_EXIT", _edit_row(RETRIEVAL, lambda row: row["readiness"].update(serviceId="index-worker"))),
+    ("bound module recorded as MODULE_HEALTH", "RP_EXIT", _edit_row(OPERATOR, _bound_as_module_health)),
+    ("wrong criteria count", "RP_EXIT", _edit_row(OPERATOR, lambda row: row["readiness"].update(criteriaCount=3))),
+    ("another evidence record", "RP_EXIT",
+     _edit_row(RETRIEVAL, lambda row: row["exitEvidence"].update(evidenceRecord="CONF-A2-001"))),
+    ("at changed", "RP_EXIT", _edit_row(RETRIEVAL, lambda row: row["exitEvidence"].update(at="CONF-A3-001"))),
+    ("grounding evaluation dropped from a cited row", "RP_EXIT",
+     _edit_row(RETRIEVAL, lambda row: row["exitEvidence"].update(evidenceKinds=["QUALIFICATION_EVIDENCE"]))),
+    ("grounding evaluation added to a non-cited row", "RP_EXIT",
+     _edit_row(CONTRACTS, lambda row: row["exitEvidence"].update(
+         evidenceKinds=["QUALIFICATION_EVIDENCE", "GROUNDING_EVALUATION"]))),
+    # V4 RP_PROVIDER_SET
+    ("H10 moved to deferred", "RP_PROVIDER_SET", _h10_to_deferred),
+    ("wrong harness id for a key", "RP_PROVIDER_SET",
+     lambda rec: rec["providerSet"]["in"][0].update(harness="runtime.model-inference")),
+    ("dropped platformNonHarness entry", "RP_PROVIDER_SET", _drop_platform("platform.sdk")),
+    ("platform.external-prerequisite removed", "RP_PROVIDER_SET", _drop_platform("platform.external-prerequisite")),
+    # V5 RP_EXCLUSION
+    ("an excluded module in the closure", "RP_EXCLUSION", _excluded_in_closure),
+    ("dropped profile exclusion", "RP_EXCLUSION", _drop_exclusion("vllm")),
+    ("NOT_IN_CATALOG row without its decision", "RP_EXCLUSION",
+     _edit_exclusion("valkey", lambda row: row.pop("roadmapDecision"))),
+    ("wrong kind (ollama with a service)", "RP_EXCLUSION",
+     _edit_exclusion("ollama", lambda row: row.update(kind="CATALOG_MODULE_WITH_SERVICE"))),
+    ("wrong source", "RP_EXCLUSION", _edit_exclusion("tool-broker", lambda row: row.update(sources=["ROADMAP"]))),
+    # V6 RP_CATALOG_BYTES (the record part; the byte parts are below)
+    ("digest of another era", "RP_CATALOG_BYTES", _set(["profile", "overlaySha256"], "0" * 64)),
+    # V7 RP_TENANT_FACTS
+    ("ten-row set", "RP_TENANT_FACTS", _drop_fact),
+    ("unsorted pair", "RP_TENANT_FACTS", _swap_facts),
+    ("fifth namedInRoadmap", "RP_TENANT_FACTS", _edit_fact("external.kubernetes-api",
+                                                           lambda fact: fact.update(namedInRoadmap=True))),
+    ("wrong supplier", "RP_TENANT_FACTS", _edit_fact("external.postgresql",
+                                                     lambda fact: fact["supplier"].update(name="someone else"))),
+    ("status other than the catalog's", "RP_TENANT_FACTS",
+     _edit_fact("external.postgresql", lambda fact: fact["attestation"].update(installUnitDigestStatus="PINNED"))),
+    ("requirement NONE", "RP_TENANT_FACTS",
+     _edit_fact("external.postgresql", lambda fact: fact["attestation"].update(requirement="NONE"))),
+    ("non-null envelope digest", "RP_TENANT_FACTS",
+     _edit_fact("external.postgresql", lambda fact: fact["attestation"]["envelope"].update(digest="sha256:" + "a" * 64))),
+]
+
+
+@pytest.mark.parametrize("name,code,mutate", CASES, ids=[case[0] for case in CASES])
+def test_each_record_fault_fails_for_its_code(name, code, mutate):
+    rec = _record()
+    mutate(rec)
+    with pytest.raises(ValueError, match=r"^%s: " % code):
+        rp.check(_reader(rec), _packets())
+
+
+def test_an_unpublished_catalog_packet_fails_for_owner_packet():
+    with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: packet KN-RET-001 is published"):
+        rp.check(_reader(), _packets() - {"KN-RET-001"})
+
+
+def test_a_packet_yaml_naming_another_repository_fails_for_owner_packet():
+    path = "task-packets/KN-RET-001.yaml"
+    raw = (ROOT / path).read_bytes().replace(b"repository: mas-harness-knowledge-plane",
+                                             b"repository: mas-harness-trust-plane", 1)
+    assert raw != (ROOT / path).read_bytes()
+    with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: packet KN-RET-001 names the owner"):
+        rp.check(_reader(files={path: raw}), _packets())
+
+
+def test_a_tampered_operator_row_never_reaches_an_operator_packet_read():
+    rec = _record()
+    _row(rec, OPERATOR)["owner"]["name"] = "mas-harness-trust-plane"
+    with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: owner of " + OPERATOR):
+        rp.check(_reader(rec), _packets())
+
+
+def test_one_changed_catalog_byte_fails_for_catalog_bytes():
+    raw = bytearray((ROOT / rp.PROVIDERS_PATH).read_bytes())
+    raw[0] ^= 1
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: base bytes of "):
+        rp.check(_reader(files={rp.PROVIDERS_PATH: bytes(raw)}), _packets())
+
+
+def test_a_changed_hkey_map_fails_for_catalog_bytes():
+    raw = (ROOT / rp.HKEY_MAP_PATH).read_bytes() + b"\n"
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: H-key map"):
+        rp.check(_reader(files={rp.HKEY_MAP_PATH: raw}), _packets())
+
+
+def test_a_second_rider_fails_for_registry():
+    briefs = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
+    template = next(b for b in briefs["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
+    briefs["briefs"] += [dict(template, series=rp.RIDER_SERIES), dict(template, series="MET-ADOPT-007/packet")]
+    raw = (json.dumps(briefs, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+    with pytest.raises(ValueError, match=r"^RP_REGISTRY: "):
+        rp.check(_reader(files={rp.BRIEFS_PATH: raw}), _packets())

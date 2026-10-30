@@ -1,0 +1,1632 @@
+{
+  "schemaVersion": "planeon.internal.release-profile/v1",
+  "profile": {
+    "id": "profile.banking-readonly-amd64",
+    "overlaySha256": "296c973e8902a822da2bdc0ad3603170deb6a91cffc2d37ca9332ddf1834c4e4",
+    "sectorRecordSha256": "cfc39b4adbfb2771e27cc5498d94530d5691130736a8791288ce296253fc2efe",
+    "catalogs": [
+      {
+        "path": "architecture/providers.yaml",
+        "baseSha256": "9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02",
+        "effectiveSha256": "c5fffe8776ce7f280ac8d3d763b8f70a2cc8071475750f0aed0c2f395d1ce60a"
+      },
+      {
+        "path": "architecture/services.yaml",
+        "baseSha256": "857376b5e2b10a2a2542124a7d36b770eca531d15e463d68415416b887dd90a6",
+        "effectiveSha256": "f1ccfecd3fd0d716d45d0c0cd423f9de1425ed3a91f9ec4e0b64f96a836aac35"
+      },
+      {
+        "path": "docs/PROVIDER_MODULE_CATALOG.md",
+        "baseSha256": "1723f1ea35ecc87529c2d680f7e51fda61923a368f1e241b7a82982b10935b1d",
+        "effectiveSha256": "db95629a43b67b55e17206cc1d4659b6724644ab38d9dff2003a805917a0aad8"
+      }
+    ],
+    "hKeyMap": {
+      "path": "docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md",
+      "sha256": "f6a891e8bdbcc579e60800773addd70ca29a2c4021c2dc95af62be93e91f061d"
+    }
+  },
+  "closure": {
+    "selected": [
+      "artifact.platform.industry-pack",
+      "module.execution.orchestration.orchestration-api",
+      "module.execution.orchestration.orchestration-worker",
+      "module.execution.protocol-interoperability.protocol-gateway",
+      "module.knowledge.data-integration.connector-controller",
+      "module.knowledge.data-integration.ingest-worker",
+      "module.knowledge.domain-semantic.domain-service",
+      "module.knowledge.retrieval-context.index-worker",
+      "module.knowledge.retrieval-context.retrieval-service",
+      "module.runtime.ai-gateway.ai-gateway",
+      "module.runtime.experience.experience-gateway",
+      "module.runtime.infrastructure.namespace-baseline",
+      "module.runtime.infrastructure.operator",
+      "module.runtime.model-inference.inference-api",
+      "module.trust.assurance.assurance-worker",
+      "provider.execution.protocol-mcp",
+      "provider.planeon.connector-file",
+      "provider.planeon.experience-web",
+      "provider.planeon.llamacpp",
+      "provider.runtime.infrastructure.kubernetes-upstream"
+    ],
+    "external": [
+      "external.kubernetes-api",
+      "external.local-oci-source",
+      "external.oidc-provider",
+      "external.opa-engine",
+      "external.otel-backend",
+      "external.postgresql",
+      "external.release-trust-store",
+      "external.signed-catalog",
+      "external.tenant-model-volume",
+      "external.tenant-object-store",
+      "external.tenant-source-endpoints"
+    ],
+    "nodes": [
+      "artifact.platform.industry-pack",
+      "external.kubernetes-api",
+      "external.local-oci-source",
+      "external.oidc-provider",
+      "external.opa-engine",
+      "external.otel-backend",
+      "external.postgresql",
+      "external.release-trust-store",
+      "external.signed-catalog",
+      "external.tenant-model-volume",
+      "external.tenant-object-store",
+      "external.tenant-source-endpoints",
+      "module.execution.orchestration.orchestration-api",
+      "module.execution.orchestration.orchestration-worker",
+      "module.execution.protocol-interoperability.protocol-gateway",
+      "module.knowledge.data-integration.connector-controller",
+      "module.knowledge.data-integration.ingest-worker",
+      "module.knowledge.domain-semantic.domain-service",
+      "module.knowledge.retrieval-context.index-worker",
+      "module.knowledge.retrieval-context.retrieval-service",
+      "module.platform.contracts",
+      "module.platform.sdk-typescript",
+      "module.runtime.ai-gateway.ai-gateway",
+      "module.runtime.experience.experience-gateway",
+      "module.runtime.infrastructure.bundle-verifier",
+      "module.runtime.infrastructure.namespace-baseline",
+      "module.runtime.infrastructure.operator",
+      "module.runtime.model-inference.inference-api",
+      "module.trust.assurance.assurance-worker",
+      "module.trust.assurance.evidence-service",
+      "module.trust.governance.governance-service",
+      "module.trust.governance.registry-service",
+      "module.trust.observability.otel-collector",
+      "module.trust.observability.usage-ledger",
+      "module.trust.security.guardrail-service",
+      "module.trust.security.policy-decision",
+      "provider.execution.protocol-mcp",
+      "provider.planeon.connector-file",
+      "provider.planeon.experience-web",
+      "provider.planeon.llamacpp",
+      "provider.runtime.infrastructure.kubernetes-upstream"
+    ]
+  },
+  "modules": [
+    {
+      "id": "artifact.platform.industry-pack",
+      "class": "SELECTED",
+      "harness": "platform.guidance",
+      "hKey": null,
+      "kind": "ARTIFACT",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-industry-packs"
+      },
+      "deployables": [
+        {
+          "name": "industry-pack",
+          "type": "OCI_ARTIFACT",
+          "artifact": "planeon-harness-industry-pack"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "IND-WG-005",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.execution.orchestration.orchestration-api",
+      "class": "SELECTED",
+      "harness": "execution.orchestration",
+      "hKey": "H10",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-execution-plane"
+      },
+      "deployables": [
+        {
+          "name": "orchestration-api",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-execution-plane/orchestration-api"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "EXEC-ORCH-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "orchestration-api",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.execution.orchestration.orchestration-worker",
+      "class": "SELECTED",
+      "harness": "execution.orchestration",
+      "hKey": "H10",
+      "kind": "WORKER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-execution-plane"
+      },
+      "deployables": [
+        {
+          "name": "orchestration-worker",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-execution-plane/orchestration-worker-postgres"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "EXEC-ORCH-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "orchestration-worker",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.execution.protocol-interoperability.protocol-gateway",
+      "class": "SELECTED",
+      "harness": "execution.protocol-interoperability",
+      "hKey": "H9",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-execution-plane"
+      },
+      "deployables": [
+        {
+          "name": "protocol-gateway",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-execution-plane/protocol-gateway"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "EXEC-PROT-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "protocol-gateway",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.knowledge.data-integration.connector-controller",
+      "class": "SELECTED",
+      "harness": "knowledge.data-integration",
+      "hKey": "H6",
+      "kind": "CONTROLLER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-knowledge-plane"
+      },
+      "deployables": [
+        {
+          "name": "connector-controller",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-knowledge-plane/connector-controller"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "KN-DATA-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "connector-controller",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE",
+          "GROUNDING_EVALUATION"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.knowledge.data-integration.ingest-worker",
+      "class": "SELECTED",
+      "harness": "knowledge.data-integration",
+      "hKey": "H6",
+      "kind": "WORKER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-knowledge-plane"
+      },
+      "deployables": [
+        {
+          "name": "ingest-worker",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-knowledge-plane/ingest-worker"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "KN-DATA-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "ingest-worker",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE",
+          "GROUNDING_EVALUATION"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.knowledge.domain-semantic.domain-service",
+      "class": "SELECTED",
+      "harness": "knowledge.domain-semantic",
+      "hKey": "H5",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-knowledge-plane"
+      },
+      "deployables": [
+        {
+          "name": "domain-service",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-knowledge-plane/domain-service"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "KN-DOM-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "domain-service",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE",
+          "GROUNDING_EVALUATION"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.knowledge.retrieval-context.index-worker",
+      "class": "SELECTED",
+      "harness": "knowledge.retrieval-context",
+      "hKey": "H7",
+      "kind": "WORKER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-knowledge-plane"
+      },
+      "deployables": [
+        {
+          "name": "index-worker",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-knowledge-plane/index-worker"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "KN-RET-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "index-worker",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE",
+          "GROUNDING_EVALUATION"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.knowledge.retrieval-context.retrieval-service",
+      "class": "SELECTED",
+      "harness": "knowledge.retrieval-context",
+      "hKey": "H7",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-knowledge-plane"
+      },
+      "deployables": [
+        {
+          "name": "retrieval-service",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-knowledge-plane/retrieval-service"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "KN-RET-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "retrieval-service",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE",
+          "GROUNDING_EVALUATION"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.platform.contracts",
+      "class": "CLOSURE",
+      "harness": "platform.contracts",
+      "hKey": null,
+      "kind": "LIBRARY",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-contracts"
+      },
+      "deployables": [
+        {
+          "name": "planeon-harness-contracts",
+          "type": "PYTHON_WHEEL",
+          "artifact": "planeon-harness-contracts"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "CON-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.platform.sdk-typescript",
+      "class": "CLOSURE",
+      "harness": "platform.sdk",
+      "hKey": null,
+      "kind": "LIBRARY",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-sdks"
+      },
+      "deployables": [
+        {
+          "name": "planeon-harness-sdk-typescript",
+          "type": "NPM_TARBALL",
+          "artifact": "@planeon/harness-sdk"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "SDK-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.runtime.ai-gateway.ai-gateway",
+      "class": "SELECTED",
+      "harness": "runtime.ai-gateway",
+      "hKey": "H3",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-runtime-plane"
+      },
+      "deployables": [
+        {
+          "name": "ai-gateway",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-runtime-plane/ai-gateway"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "RUN-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "ai-gateway",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.runtime.experience.experience-gateway",
+      "class": "SELECTED",
+      "harness": "runtime.experience",
+      "hKey": "H4",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-runtime-plane"
+      },
+      "deployables": [
+        {
+          "name": "experience-gateway",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-runtime-plane/experience-gateway"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "RUN-EXP-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "experience-gateway",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.runtime.infrastructure.bundle-verifier",
+      "class": "CLOSURE",
+      "harness": "runtime.infrastructure",
+      "hKey": "H1",
+      "kind": "JOB",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-operator"
+      },
+      "deployables": [
+        {
+          "name": "bundle-verifier",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-operator/bundle-verifier"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "OP-002",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "bundle-verifier",
+        "criteriaCount": 2
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.runtime.infrastructure.namespace-baseline",
+      "class": "SELECTED",
+      "harness": "runtime.infrastructure",
+      "hKey": "H1",
+      "kind": "CHART",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-operator"
+      },
+      "deployables": [
+        {
+          "name": "namespace-baseline",
+          "type": "HELM_CHART",
+          "artifact": "mas-harness-operator/namespace-baseline"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "OP-003",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.runtime.infrastructure.operator",
+      "class": "SELECTED",
+      "harness": "runtime.infrastructure",
+      "hKey": "H1",
+      "kind": "CONTROLLER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-operator"
+      },
+      "deployables": [
+        {
+          "name": "mas-harness-operator",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-operator/operator"
+        },
+        {
+          "name": "mas-harness-operator-chart",
+          "type": "HELM_CHART",
+          "artifact": "mas-harness-operator/chart"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "OP-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "operator",
+        "criteriaCount": 2
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.runtime.model-inference.inference-api",
+      "class": "SELECTED",
+      "harness": "runtime.model-inference",
+      "hKey": "H2",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-model-plane"
+      },
+      "deployables": [
+        {
+          "name": "inference-api",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-model-plane/inference-api"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "MODEL-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "inference-api",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.assurance.assurance-worker",
+      "class": "SELECTED",
+      "harness": "trust.evaluation-assurance",
+      "hKey": "H16",
+      "kind": "WORKER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "assurance-worker",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/assurance-worker"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-EVAL-001",
+        "deliverableIndex": 1
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "assurance-worker",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.assurance.evidence-service",
+      "class": "CLOSURE",
+      "harness": "trust.evaluation-assurance",
+      "hKey": "H16",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "evidence-service",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/evidence-service"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-EVAL-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "evidence-service",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.governance.governance-service",
+      "class": "CLOSURE",
+      "harness": "trust.governance-agentops",
+      "hKey": "H14",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "governance-service",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/governance-service"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-GOV-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "governance-service",
+        "criteriaCount": 2
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.governance.registry-service",
+      "class": "CLOSURE",
+      "harness": "trust.governance-agentops",
+      "hKey": "H14",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "registry-service",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/registry-service"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-REG-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "registry-service",
+        "criteriaCount": 1
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.observability.otel-collector",
+      "class": "CLOSURE",
+      "harness": "trust.observability-finops",
+      "hKey": "H15",
+      "kind": "COLLECTOR",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "otel-collector",
+          "type": "OCI_IMAGE",
+          "artifact": "otel/opentelemetry-collector-contrib"
+        },
+        {
+          "name": "trust-observability",
+          "type": "HELM_CHART",
+          "artifact": "mas-harness-trust-plane/trust-observability"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-OBS-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "otel-collector",
+        "criteriaCount": 3
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.observability.usage-ledger",
+      "class": "CLOSURE",
+      "harness": "trust.observability-finops",
+      "hKey": "H15",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "usage-ledger",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/usage-ledger"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-OBS-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "usage-ledger",
+        "criteriaCount": 2
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.security.guardrail-service",
+      "class": "CLOSURE",
+      "harness": "trust.security-safety",
+      "hKey": "H13",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "guardrail-service",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/guardrail-service"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-002",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "guardrail-service",
+        "criteriaCount": 2
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "module.trust.security.policy-decision",
+      "class": "CLOSURE",
+      "harness": "trust.security-safety",
+      "hKey": "H13",
+      "kind": "API",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-trust-plane"
+      },
+      "deployables": [
+        {
+          "name": "policy-decision",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-trust-plane/policy-decision"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "TRUST-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "SERVICES",
+        "serviceId": "policy-decision",
+        "criteriaCount": 3
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "SERVICES",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "provider.execution.protocol-mcp",
+      "class": "SELECTED",
+      "harness": "execution.protocol-interoperability",
+      "hKey": "H9",
+      "kind": "ADAPTER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-execution-plane"
+      },
+      "deployables": [
+        {
+          "name": "adapter-mcp",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-execution-plane/adapter-mcp"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "EXEC-PROT-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "provider.planeon.connector-file",
+      "class": "SELECTED",
+      "harness": "knowledge.data-integration",
+      "hKey": "H6",
+      "kind": "ADAPTER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-knowledge-plane"
+      },
+      "deployables": [
+        {
+          "name": "connector-file",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-knowledge-plane/connector-file"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "KN-DATA-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE",
+          "GROUNDING_EVALUATION"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "provider.planeon.experience-web",
+      "class": "SELECTED",
+      "harness": "runtime.experience",
+      "hKey": "H4",
+      "kind": "UI",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-runtime-plane"
+      },
+      "deployables": [
+        {
+          "name": "reference-channel-ui",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-runtime-plane/reference-channel-ui"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "RUN-EXP-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "provider.planeon.llamacpp",
+      "class": "SELECTED",
+      "harness": "runtime.model-inference",
+      "hKey": "H2",
+      "kind": "ADAPTER",
+      "owner": {
+        "type": "REPOSITORY",
+        "name": "mas-harness-model-plane"
+      },
+      "deployables": [
+        {
+          "name": "backend-llamacpp",
+          "type": "OCI_IMAGE",
+          "artifact": "mas-harness-model-plane/model-backend-llama-cpp"
+        }
+      ],
+      "rowClass": "REPOSITORY",
+      "implementation": {
+        "packetId": "MODEL-LLAMACPP-001",
+        "deliverableIndex": 0
+      },
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    },
+    {
+      "id": "provider.runtime.infrastructure.kubernetes-upstream",
+      "class": "SELECTED",
+      "harness": "runtime.infrastructure",
+      "hKey": "H1",
+      "kind": "INFRASTRUCTURE",
+      "owner": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant Kubernetes distribution"
+      },
+      "deployables": [
+        {
+          "name": "kubernetes-upstream",
+          "type": "CLUSTER_API",
+          "artifact": "tenant-supplied-kubernetes-api"
+        }
+      ],
+      "rowClass": "TENANT_PLATFORM",
+      "attestationRef": "external.kubernetes-api",
+      "readiness": {
+        "source": "MODULE_HEALTH"
+      },
+      "exitEvidence": {
+        "at": "CONF-A2-001",
+        "obligation": "MODULE_HEALTH",
+        "evidenceKinds": [
+          "QUALIFICATION_EVIDENCE"
+        ],
+        "evidenceRecord": "RELEASE-EVIDENCE-001"
+      }
+    }
+  ],
+  "tenantFacts": [
+    {
+      "id": "external.kubernetes-api",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant Kubernetes platform owner"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.local-oci-source",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant local artifact custodian"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.oidc-provider",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant-local-keycloak-or-compatible-oidc"
+      },
+      "namedInRoadmap": true,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.opa-engine",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant-local-opa"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.otel-backend",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant-local-prometheus-and-jaeger"
+      },
+      "namedInRoadmap": true,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.postgresql",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant PostgreSQL owner"
+      },
+      "namedInRoadmap": true,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.release-trust-store",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant release trust custodian"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.signed-catalog",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant catalog custodian"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.tenant-model-volume",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant model artifact custodian"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.tenant-object-store",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant object storage owner"
+      },
+      "namedInRoadmap": true,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    },
+    {
+      "id": "external.tenant-source-endpoints",
+      "supplier": {
+        "type": "TENANT_SUPPLIED_EXTERNAL",
+        "name": "tenant source system owners"
+      },
+      "namedInRoadmap": false,
+      "attestation": {
+        "requirement": "SIGNED_ENVIRONMENT_FACT",
+        "installUnitDigestStatus": "MISSING_PLANNED",
+        "envelope": {
+          "digest": null,
+          "digestStatus": "MISSING_PLANNED",
+          "signatureStatus": "MISSING_PLANNED"
+        }
+      }
+    }
+  ],
+  "providerSet": {
+    "in": [
+      {
+        "key": "H1",
+        "harness": "runtime.infrastructure",
+        "nodes": [
+          "module.runtime.infrastructure.bundle-verifier",
+          "module.runtime.infrastructure.namespace-baseline",
+          "module.runtime.infrastructure.operator",
+          "provider.runtime.infrastructure.kubernetes-upstream"
+        ]
+      },
+      {
+        "key": "H2",
+        "harness": "runtime.model-inference",
+        "nodes": [
+          "module.runtime.model-inference.inference-api",
+          "provider.planeon.llamacpp"
+        ]
+      },
+      {
+        "key": "H3",
+        "harness": "runtime.ai-gateway",
+        "nodes": [
+          "module.runtime.ai-gateway.ai-gateway"
+        ]
+      },
+      {
+        "key": "H4",
+        "harness": "runtime.experience",
+        "nodes": [
+          "module.runtime.experience.experience-gateway",
+          "provider.planeon.experience-web"
+        ]
+      },
+      {
+        "key": "H5",
+        "harness": "knowledge.domain-semantic",
+        "nodes": [
+          "module.knowledge.domain-semantic.domain-service"
+        ]
+      },
+      {
+        "key": "H6",
+        "harness": "knowledge.data-integration",
+        "nodes": [
+          "module.knowledge.data-integration.connector-controller",
+          "module.knowledge.data-integration.ingest-worker",
+          "provider.planeon.connector-file"
+        ]
+      },
+      {
+        "key": "H7",
+        "harness": "knowledge.retrieval-context",
+        "nodes": [
+          "module.knowledge.retrieval-context.index-worker",
+          "module.knowledge.retrieval-context.retrieval-service"
+        ]
+      },
+      {
+        "key": "H9",
+        "harness": "execution.protocol-interoperability",
+        "nodes": [
+          "module.execution.protocol-interoperability.protocol-gateway",
+          "provider.execution.protocol-mcp"
+        ]
+      },
+      {
+        "key": "H10",
+        "harness": "execution.orchestration",
+        "nodes": [
+          "module.execution.orchestration.orchestration-api",
+          "module.execution.orchestration.orchestration-worker"
+        ]
+      },
+      {
+        "key": "H13",
+        "harness": "trust.security-safety",
+        "nodes": [
+          "external.oidc-provider",
+          "external.opa-engine",
+          "module.trust.security.guardrail-service",
+          "module.trust.security.policy-decision"
+        ]
+      },
+      {
+        "key": "H14",
+        "harness": "trust.governance-agentops",
+        "nodes": [
+          "module.trust.governance.governance-service",
+          "module.trust.governance.registry-service"
+        ]
+      },
+      {
+        "key": "H15",
+        "harness": "trust.observability-finops",
+        "nodes": [
+          "external.otel-backend",
+          "module.trust.observability.otel-collector",
+          "module.trust.observability.usage-ledger"
+        ]
+      },
+      {
+        "key": "H16",
+        "harness": "trust.evaluation-assurance",
+        "nodes": [
+          "module.trust.assurance.assurance-worker",
+          "module.trust.assurance.evidence-service"
+        ]
+      }
+    ],
+    "deferred": [
+      {
+        "key": "H8",
+        "harness": "knowledge.memory-state",
+        "reason": "No closure candidate in provider-adoption's harnessCoverage."
+      },
+      {
+        "key": "H11",
+        "harness": "execution.tool-skill-sandbox",
+        "reason": "No closure candidate in provider-adoption's harnessCoverage."
+      },
+      {
+        "key": "H12",
+        "harness": "execution.ml-decision",
+        "reason": "No closure candidate in provider-adoption's harnessCoverage."
+      }
+    ],
+    "platformNonHarness": [
+      "platform.contracts",
+      "platform.external-prerequisite",
+      "platform.guidance",
+      "platform.sdk"
+    ]
+  },
+  "exclusions": [
+    {
+      "component": "clickhouse",
+      "kind": "NOT_IN_CATALOG",
+      "sources": [
+        "ROADMAP"
+      ],
+      "reason": "Not in the catalog; the roadmap decision in roadmapDecision keeps it out of the first release.",
+      "roadmapDecision": {
+        "items": [
+          "OBS-ANALYTICS-001"
+        ],
+        "decision": "STORE-D1"
+      }
+    },
+    {
+      "component": "decision-service",
+      "kind": "CATALOG_MODULE_WITH_SERVICE",
+      "sources": [
+        "ROADMAP"
+      ],
+      "reason": "Excluded from the first manifest (RELEASE-PROFILE-001, PAR-D1); not in the closure."
+    },
+    {
+      "component": "fleet-sync-agent",
+      "kind": "CATALOG_MODULE_WITH_SERVICE",
+      "sources": [
+        "PROFILE"
+      ],
+      "reason": "Excluded by the profile's excludedModules; not in the closure."
+    },
+    {
+      "component": "memory-service",
+      "kind": "CATALOG_MODULE_WITH_SERVICE",
+      "sources": [
+        "ROADMAP"
+      ],
+      "reason": "Excluded from the first manifest (RELEASE-PROFILE-001, PAR-D1); not in the closure."
+    },
+    {
+      "component": "ollama",
+      "kind": "CATALOG_MODULE_WITHOUT_SERVICE",
+      "sources": [
+        "PROFILE"
+      ],
+      "reason": "Excluded by the profile's excludedModules; not in the closure."
+    },
+    {
+      "component": "sandbox-runner",
+      "kind": "CATALOG_MODULE_WITH_SERVICE",
+      "sources": [
+        "ROADMAP"
+      ],
+      "reason": "Excluded from the first manifest (RELEASE-PROFILE-001, PAR-D1); not in the closure."
+    },
+    {
+      "component": "temporal",
+      "kind": "NOT_IN_CATALOG",
+      "sources": [
+        "ROADMAP"
+      ],
+      "reason": "Not in the catalog; the roadmap decision in roadmapDecision keeps it out of the first release.",
+      "roadmapDecision": {
+        "items": [
+          "TECH-ORCHESTRATION-001",
+          "TECH-TRUTH-001"
+        ],
+        "decision": "TECH-D1"
+      }
+    },
+    {
+      "component": "tool-broker",
+      "kind": "CATALOG_MODULE_WITH_SERVICE",
+      "sources": [
+        "PROFILE",
+        "ROADMAP"
+      ],
+      "reason": "Excluded from the first manifest (RELEASE-PROFILE-001, PAR-D1) and by the profile's excludedModules; not in the closure."
+    },
+    {
+      "component": "valkey",
+      "kind": "NOT_IN_CATALOG",
+      "sources": [
+        "ROADMAP"
+      ],
+      "reason": "Not in the catalog; the roadmap decision in roadmapDecision keeps it out of the first release.",
+      "roadmapDecision": {
+        "items": [
+          "EPHEMERAL-STORE-001"
+        ],
+        "decision": "STORE-D1"
+      }
+    },
+    {
+      "component": "vllm",
+      "kind": "CATALOG_MODULE_WITHOUT_SERVICE",
+      "sources": [
+        "PROFILE"
+      ],
+      "reason": "Excluded by the profile's excludedModules; not in the closure."
+    }
+  ],
+  "dependencyAmendments": [],
+  "nonClaims": {
+    "prose": [
+      "Nothing is implemented, installed or qualified; no evidence state is claimed; every digest the catalog marks MISSING_PLANNED stays so.",
+      "No catalog byte, the overlay, the sector record, or any R03, R10 or R12 file changes.",
+      "The record does not make the industry pack a banking pack (Q-RP-4).",
+      "\"Minimal\" removes no required dependency or safeguard; the closure is the catalog's own.",
+      "The pack row is the white-goods pack in this first record; the banking pack is not in the release set: the banking pack enters the release set when, after CHAIN-PRODUCT-PUBLISH-001 (273), one MET-SECTOR packet publishes IND-BANK-005 and, in the same slot, carries the reviewed sector_catalog/overlay-schema revision and the record's new version, so sector_catalog.check never sees the publication and the revision apart (the visionary's Q-RPD1-2 erratum, 2026-10-30).",
+      "The record carries no evidence state, no version floor and no host fact (Q-RP-9, Q-RP-3); the tenant facts' digest and signature statuses are the catalog's MISSING_PLANNED marks, not evidence states (RP-D1-5)."
+    ],
+    "industryPack": {
+      "subject": "artifact.platform.industry-pack",
+      "effectiveBinding": "IND-WG-005",
+      "successor": "IND-BANK-005",
+      "successorPublished": false,
+      "inReleaseSet": false,
+      "releaseSetEntry": "the banking pack enters the release set when, after CHAIN-PRODUCT-PUBLISH-001 (273), one MET-SECTOR packet publishes IND-BANK-005 and, in the same slot, carries the reviewed sector_catalog/overlay-schema revision and the record's new version, so sector_catalog.check never sees the publication and the revision apart",
+      "source": "the visionary's Q-RPD1-2 erratum, 2026-10-30"
+    }
+  }
+}
