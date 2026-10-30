@@ -45,14 +45,57 @@ def need(ok, clause, detail):
 
 # --------------------------------------------------------------------------------------------- the product list --
 
+def _binding_form(node, parents, tree):
+    """The form in which `node` binds PRODUCT_PACKETS, or None when it does not bind it."""
+    if isinstance(node, ast.Name) and node.id == BINDING and isinstance(node.ctx, (ast.Store, ast.Del)):
+        parent = parents.get(node)
+        if isinstance(parent, ast.Assign) and node in parent.targets:
+            if len(parent.targets) > 1:
+                return "chained assignment"
+            return "plain" if parent in tree.body else "nested assignment"
+        if isinstance(parent, (ast.Tuple, ast.List, ast.Starred)):
+            return "tuple, list or starred target"
+        return {ast.AnnAssign: "annotated assignment", ast.AugAssign: "augmented assignment", ast.NamedExpr: "walrus",
+                ast.Delete: "del", ast.For: "for target", ast.AsyncFor: "for target", ast.withitem: "with target",
+                ast.comprehension: "comprehension target"}.get(type(parent), "%s target" % type(parent).__name__)
+    if isinstance(node, (ast.Import, ast.ImportFrom)):
+        if any(alias.name == "*" for alias in node.names):
+            return "star import"
+        if any((alias.asname or alias.name).split(".")[0] == BINDING for alias in node.names):
+            return "import"
+    if isinstance(node, (ast.Global, ast.Nonlocal)) and BINDING in node.names:
+        return "global or nonlocal"
+    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name == BINDING:
+        return "def or class name"
+    if isinstance(node, ast.arg) and node.arg == BINDING:
+        return "parameter"
+    if isinstance(node, ast.ExceptHandler) and node.name == BINDING:
+        return "except name"
+    if isinstance(node, (ast.MatchAs, ast.MatchStar)) and node.name == BINDING:
+        return "match capture"
+    if isinstance(node, ast.MatchMapping) and node.rest == BINDING:
+        return "match capture"
+    if type(node).__name__ in ("TypeVar", "ParamSpec", "TypeVarTuple") and getattr(node, "name", None) == BINDING:
+        return "type parameter"
+    return None
+
+
 def layer_products(tree):
-    """The layer's PRODUCT_PACKETS tuple, or () when the layer binds none (rule.json productList.bindingRule)."""
-    found = [n for n in tree.body if isinstance(n, ast.Assign) and len(n.targets) == 1
-             and isinstance(n.targets[0], ast.Name) and n.targets[0].id == BINDING]
-    if not found:
+    """The layer's PRODUCT_PACKETS tuple, or () when the layer binds none (rule.json productList.bindingRule). Only the
+    plain spelling is read: exactly one top-level one-target `PRODUCT_PACKETS = (<ids>,)`. Every other binding of the
+    name anywhere in the layer refuses (clause binding), naming its form: an annotated, chained or augmented assignment,
+    a tuple, list or starred target, a walrus, del, global or nonlocal, an import or import-as, a star import (which can
+    bind it), a for, with or comprehension target, a parameter, a def or class name, an except or match capture, a type
+    parameter, or an assignment below the module's top level."""
+    parents = {child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
+    forms = [(form, node) for node in ast.walk(tree) for form in [_binding_form(node, parents, tree)] if form]
+    if not forms:
         return ()
-    need(len(found) == 1, "binding", "PRODUCT_PACKETS bound more than once")
-    value = found[0].value
+    other = sorted({form for form, _ in forms if form != "plain"})
+    need(not other, "binding", "PRODUCT_PACKETS is bound by a form that is not the plain one: %s (only one "
+         "top-level `PRODUCT_PACKETS = (...)` is read)" % ", ".join(other))
+    need(len(forms) == 1, "binding", "PRODUCT_PACKETS bound more than once")
+    value = parents[forms[0][1]].value
     need(isinstance(value, ast.Tuple) and value.elts, "binding",
          "PRODUCT_PACKETS is not a non-empty tuple (K = 0 binds none)")
     ids = []

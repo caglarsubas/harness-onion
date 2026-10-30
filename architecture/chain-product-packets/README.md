@@ -71,10 +71,15 @@ argv 63) and the verifier (the owner's bundle, parts 1-4 of Q-CPP-2).
 - **R5**, a listed product whose bytes do not match its `productPackets` digest: head-only (the per-packet lookup).
 - **R6**, a product YAML changed at a later slot: head-only (the closed rule and `baselinePackets`).
 - **R7**, two clauses. (1) A K = 0 head binding `PRODUCT_PACKETS = ()`, or a list that is empty or repeats an id:
-  model clause `binding`. (2) A K = 0 head whose authority carries a `productPackets` member, empty or not: head-only,
-  as the K = 0 `authority()`'s unchanged closed key set refuses the member; in the model, F6 written in a layer that
-  binds no list refuses under `P-form`. F7 exists only in a layer that binds the list: there, at K >= 1, an empty or
-  repeated key list fails F7's list equality.
+  model clause `binding`. Only the plain spelling is read: exactly one top-level `PRODUCT_PACKETS = (<ids>,)` with one
+  name target. Any other binding of the name in the layer (an annotated, chained or augmented assignment, a tuple, list
+  or starred target, a walrus, `del`, `global`, an import or a star import, a for, with or comprehension target, a
+  parameter, a def or class name, an except or match capture, a type parameter, or an assignment below the top level)
+  refuses under `binding`, naming the form. (2) A K = 0 head whose authority carries a `productPackets` member, empty
+  or not: head-only, as the K = 0 `authority()`'s unchanged closed key set refuses the member; in the model, F6
+  written in a layer that binds no list refuses under `P-form`. F7 exists only in a layer that binds the list: there,
+  at K >= 1, an empty key list fails F7's list equality, and `parse()`'s duplicate-member check refuses a repeated key
+  before F7 runs.
 - **R8**, a listed product absent from the catalog (clause 1, model clause `counts`, head-only on the verifier side),
   or a `repository` outside the twelve names (clause 2, model clause `R8`; the verifier's part 2).
 - **R9**, a display gaining a product element at a K = 0 step, or a Starred element or (v) at the wrong depth or
