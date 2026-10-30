@@ -59,7 +59,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 271 and len(accepted) == 217
+    assert len(current) == 272 and len(accepted) == 217
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -112,7 +112,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(tprofile.historical_catalog(current)) == 216
     assert len(zprofile.historical_catalog(current)) == 215
     assert len(yprofile.historical_catalog(current)) == 214
@@ -724,6 +725,7 @@ LISTING_FUNCTIONS = frozenset({("os", "walk"), ("os", "listdir"), ("os", "scandi
 EXCLUDED_DIRS = frozenset({".git", ".venv", "venv", "node_modules", "__pycache__", ".pytest_cache"})
 LITERAL_READERS = frozenset({
     "scripts/language_placement.py",
+    "scripts/release_profile.py",
     "scripts/sector_catalog.py",
     "scripts/validate_met_adopt_005.py",
     "scripts/validate_provider_adoption.py",
@@ -734,6 +736,7 @@ LITERAL_READERS = frozenset({
     "tests/test_architecture.py",
     "tests/test_language_placement.py",
     "tests/test_language_placement_oracle.py",
+    "tests/test_met_adopt_006_oracle.py",
     "tests/test_provider_adoption.py",
     "tests/test_readiness.py",
     "tests/test_sector_catalog.py",
@@ -797,6 +800,7 @@ PINNING_RECORDS = frozenset({
     "architecture/provider-adoption-authority.json",
     "architecture/proxy-contract-amendment.json",
     "architecture/proxy-diagnostics-authority.json",
+    "architecture/release-profile.json",
     "architecture/research-adoption-authority.json",
     "architecture/sector-catalog/overlay.json",
     "architecture/sector-catalog/round1/overlay.json",
@@ -858,6 +862,7 @@ NAMING_RECORDS = frozenset({
     "architecture/provider-adoption-authority.json",
     "architecture/proxy-contract-amendment.json",
     "architecture/proxy-diagnostics-authority.json",
+    "architecture/release-profile.json",
     "architecture/research-adoption-authority.json",
     "architecture/sector-catalog/README.md",
     "architecture/sector-catalog/overlay.json",
