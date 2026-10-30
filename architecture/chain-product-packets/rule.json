@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "harness.planeon.ai/chain-product-packet-rule/v1",
+  "packet": "MET-PERF-044",
+  "extends": {
+    "path": "architecture/chain-compaction/identity-rule.json",
+    "sha256": "4bfbcc0387084bd2cd5166af4eb83fb5f9ab18a16e1f289cd2727f5bbdd8bc2e",
+    "clause": "stepRule"
+  },
+  "firstSlot": 273,
+  "counts": {
+    "S": "the head's slot: 189 + the number of chain layers - 1",
+    "C": "the catalog count: the number of task-packets/*.yaml",
+    "P": "the sum of K over every layer that binds PRODUCT_PACKETS",
+    "relation": "C = S + P; every later message and index doc says \"C packets at slot S\""
+  },
+  "productList": {
+    "binding": "PRODUCT_PACKETS",
+    "productId": [
+      "the product YAML's file stem, equal to the YAML's id field and matching the verifier's PACKET_PATH form",
+      "task-packets/([A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+)\\.yaml\\Z",
+      "matched with re.fullmatch, as PACKET_PATH (bundle-v4 verify_pr.py:81, verifier-ext verify_pr.py:68)"
+    ],
+    "bindingRule": [
+      "a module-level tuple of K >= 1 distinct product ids (productId)",
+      "bound only in a layer that publishes products; absent in every K = 0 layer"
+    ],
+    "authorityField": "productPackets",
+    "authorityRule": [
+      "a mapping {id: sha256 of task-packets/<id>.yaml}, keys equal to PRODUCT_PACKETS",
+      "no key in baselinePackets or equal to NEW_PACKET; absent when K = 0"
+    ],
+    "allowedPaths": [
+      "a publishing meta packet lists exactly changedFiles | newFiles | {authority, validator, own YAML}",
+      "| {task-packets/<p>.yaml for p in PRODUCT_PACKETS}; the builder writes it, the head checks it by equality,",
+      "and the verifier's part 2 reads the product paths from it"
+    ]
+  },
+  "productRepository": {
+    "reader": [
+      "the verifier's line rule, packet_repository (bundle-v4 verify_pr.py:414-429, verifier-ext :401): exactly",
+      "one line starting with 'repository:', its value stripped, JSON-decoded when it starts with a double quote,",
+      "and a string"
+    ],
+    "chainOnly": [
+      "R12: the head also requires the value safe_load reads to equal the line's value; the verifier reads",
+      "only the line and adds no YAML library (Q-CPPD2-1 (a)); the v2 live identity test applies it, with",
+      "productId, the reader against allowedNames and refusedName, to every listed product (CPP-D3-2)"
+    ],
+    "allowedNames": {
+      "record": "architecture/repositories.yaml",
+      "revision": "dd000fef649208cd372b5f4fa96b95ae43916661",
+      "sha256": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
+      "member": "name",
+      "names": [
+        "mas-harness-contracts",
+        "mas-harness-sdks",
+        "mas-harness-industry-packs",
+        "mas-harness-control-plane",
+        "mas-harness-runtime-plane",
+        "mas-harness-model-plane",
+        "mas-harness-knowledge-plane",
+        "mas-harness-execution-plane",
+        "mas-harness-trust-plane",
+        "mas-harness-operator",
+        "mas-harness-distribution",
+        "mas-harness-conformance-labs"
+      ]
+    },
+    "refusedName": "Harness-Engineering"
+  },
+  "stepRule": [
+    "a step whose new head binds PRODUCT_PACKETS (K >= 1) is explained by (i-p)-(v-p) and (ix-p)-(x-p)",
+    "a step whose new head binds no PRODUCT_PACKETS is explained by the identity rule's vocabulary, N per nReading",
+    "D, G1 and G2 take the product list as their one new parameter (the P-forms of section 4)"
+  ],
+  "nReading": {
+    "i": "N := C",
+    "ii": "N := C",
+    "x": "N := C",
+    "iii": "N := S, so d = S - L",
+    "v": "N := S, so L = S - 2",
+    "iv": "unchanged (slot 189 only)"
+  },
+  "bumpVocabulary": {
+    "i-p": "an int constant C-1-K -> C (C the catalog count), only where (i) applies",
+    "ii-p": "a message constant in which every whole-word C-1-K becomes C (at least one)",
+    "iii-p": [
+      "where (iii) applies, the display gains exactly two elements, appended last:",
+      "successor^d.NEW_PACKET, then *successor^d.PRODUCT_PACKETS, with d = S - L"
+    ],
+    "iv-p": "slot 189 only: the set gains the meta id string, then the K product id strings in list order",
+    "v-p": [
+      "at L = S - 2, where (v) applies, the tuple is (successor.NEW_PACKET, successor.successor.NEW_PACKET,",
+      "*successor.successor.PRODUCT_PACKETS)"
+    ]
+  },
+  "bridgeVocabulary": {
+    "ix-p": "after (ix), exactly one `if <x>.stem in successor.PRODUCT_PACKETS: continue`",
+    "x-p": "the checkpoint phrases name the old head's catalog count C-1-K"
+  },
+  "refusals": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12"
+  ],
+  "evidence": {
+    "ownerDecision": {
+      "id": "Q-SEC3-TWO",
+      "date": "2026-10-30",
+      "record": {
+        "path": "architecture/chain-product-packets/decisions.md",
+        "sha256": "bc4a940b236d7dc8d5066aefa752a706307fbd1b2e4c202d924d6483f89ac7c3"
+      }
+    },
+    "vectors": "architecture/chain-product-packets/vectors.json"
+  }
+}

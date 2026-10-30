@@ -1,0 +1,507 @@
+{
+  "schemaVersion": "harness.planeon.ai/chain-product-packet-vectors/v1",
+  "rule": "architecture/chain-product-packets/rule.json",
+  "evaluators": {
+    "steps": "chain_identity_v2.check_step_vector",
+    "products": "chain_identity_v2.check_products",
+    "counts": "chain_identity_v2.check_counts",
+    "bindings": "chain_identity_v2.layer_products",
+    "allowedPaths": "chain_identity_v2.check_allowed_paths",
+    "K0": "tests/test_chain_compaction.py: v1 and v2 on the K = 0 era"
+  },
+  "steps": [
+    {
+      "id": "K1",
+      "refusal": null,
+      "expect": "OK",
+      "L": 271,
+      "S": 274,
+      "C": 275,
+      "K": 1,
+      "newid": "MET-SECTOR-003",
+      "products": [
+        "IND-BANK-001"
+      ],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K1-no-starred",
+      "refusal": "R9",
+      "expect": "refuse",
+      "L": 271,
+      "S": 274,
+      "C": 275,
+      "K": 1,
+      "newid": "MET-SECTOR-003",
+      "products": [
+        "IND-BANK-001"
+      ],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K1-pin-by-one",
+      "refusal": "R10",
+      "expect": "refuse",
+      "L": 271,
+      "S": 274,
+      "C": 275,
+      "K": 1,
+      "newid": "MET-SECTOR-003",
+      "products": [
+        "IND-BANK-001"
+      ],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 274 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K0-starred",
+      "refusal": "R9",
+      "expect": "refuse",
+      "L": 271,
+      "S": 273,
+      "C": 273,
+      "K": 0,
+      "newid": "MET-PERF-044",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 272 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET}, \"closed 272-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K2",
+      "refusal": null,
+      "expect": "OK",
+      "L": 271,
+      "S": 274,
+      "C": 276,
+      "K": 2,
+      "newid": "MET-SECTOR-009",
+      "products": [
+        "IND-BANK-002",
+        "IND-BANK-003"
+      ],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 273 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 273-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS}, \"closed 276-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K0+-275",
+      "refusal": null,
+      "expect": "OK",
+      "L": 273,
+      "S": 275,
+      "C": 276,
+      "K": 0,
+      "newid": "MET-PERF-099",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n        if path.stem == successor.NEW_PACKET:\n            continue\n        if path.stem in successor.PRODUCT_PACKETS:\n            continue\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):\n            continue\n        if path.stem in successor.PRODUCT_PACKETS:\n            continue\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K0+-275-c-depth",
+      "refusal": "R9",
+      "expect": "refuse",
+      "L": 273,
+      "S": 275,
+      "C": 276,
+      "K": 0,
+      "newid": "MET-PERF-099",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K0+-275-s-pin",
+      "refusal": "R10",
+      "expect": "refuse",
+      "L": 273,
+      "S": 275,
+      "C": 276,
+      "K": 0,
+      "newid": "MET-PERF-099",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 274 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS}, \"closed 274-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "K0+-v-wrong-layer",
+      "refusal": "R9",
+      "expect": "refuse",
+      "L": 272,
+      "S": 275,
+      "C": 276,
+      "K": 0,
+      "newid": "MET-PERF-099",
+      "products": [],
+      "before": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 275 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET}, \"closed 275-packet catalog\")\n    for path in paths:\n        if path.stem == successor.NEW_PACKET:\n            continue\n        packets[path.stem] = path\n",
+      "after": "def validate():\n    paths = sorted(ROOT.glob(\"*.yaml\"))\n    require(len(paths) == 276 and {p.stem for p in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET}, \"closed 276-packet catalog\")\n    for path in paths:\n        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):\n            continue\n        packets[path.stem] = path\n"
+    },
+    {
+      "id": "iv-189",
+      "refusal": null,
+      "expect": "OK",
+      "L": 189,
+      "S": 274,
+      "C": 275,
+      "K": 1,
+      "newid": "MET-SECTOR-003",
+      "products": [
+        "IND-BANK-001"
+      ],
+      "before": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\"}\n",
+      "after": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\", \"MET-SECTOR-003\", \"IND-BANK-001\"}\n"
+    },
+    {
+      "id": "iv-189-no-product",
+      "refusal": "R9",
+      "expect": "refuse",
+      "L": 189,
+      "S": 274,
+      "C": 275,
+      "K": 1,
+      "newid": "MET-SECTOR-003",
+      "products": [
+        "IND-BANK-001"
+      ],
+      "before": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\"}\n",
+      "after": "def validate():\n    known = {\"MET-001\", \"MET-ENFORCE-043\", \"MET-SECTOR-003\"}\n"
+    }
+  ],
+  "products": [
+    {
+      "id": "P-K1",
+      "refusal": null,
+      "expect": "OK",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "P-K2",
+      "refusal": null,
+      "expect": "OK",
+      "listed": {
+        "274": [
+          "IND-BANK-001",
+          "IND-BANK-002"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n",
+        "IND-BANK-002": "id: IND-BANK-002\nrepository: \"mas-harness-industry-packs\"\nbranch: codex/ind-bank-002\n"
+      }
+    },
+    {
+      "id": "R2-form",
+      "refusal": "R2",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "ind-bank-001"
+        ]
+      },
+      "files": {
+        "ind-bank-001": "id: ind-bank-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "R2-collision",
+      "refusal": "R2",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "MET-PERF-043"
+        ]
+      },
+      "chainPackets": [
+        "MET-PERF-043"
+      ],
+      "files": {
+        "MET-PERF-043": "id: MET-PERF-043\nrepository: mas-harness-industry-packs\nbranch: codex/met-perf-043\n"
+      }
+    },
+    {
+      "id": "R2-id-field",
+      "refusal": "R2",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-009\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-009\n"
+      }
+    },
+    {
+      "id": "R3",
+      "refusal": "R3",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: Harness-Engineering\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "R8-id-form",
+      "refusal": "R8",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: industry-packs\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "R8-unknown",
+      "refusal": "R8",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-unknown\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "R12-two-lines",
+      "refusal": "R12",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-sdks\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "R12-duplicate-key",
+      "refusal": "R12",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-sdks\n\"repository\": mas-harness-industry-packs\nbranch: codex/ind-bank-001\n"
+      }
+    },
+    {
+      "id": "R12-L",
+      "refusal": "R12",
+      "expect": "refuse",
+      "listed": {
+        "274": [
+          "IND-BANK-001"
+        ],
+        "280": [
+          "IND-BANK-004"
+        ]
+      },
+      "files": {
+        "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\nbranch: codex/ind-bank-001\n",
+        "IND-BANK-004": "id: IND-BANK-004\nrepository: mas-harness-industry-packs\n\"repository\": Harness-Engineering\nbranch: codex/ind-bank-004\n"
+      }
+    }
+  ],
+  "counts": [
+    {
+      "id": "C-K0",
+      "refusal": null,
+      "expect": "OK",
+      "slot": 273,
+      "catalog": 273,
+      "products": []
+    },
+    {
+      "id": "C-K1",
+      "refusal": null,
+      "expect": "OK",
+      "slot": 274,
+      "catalog": 275,
+      "products": [
+        [
+          "IND-BANK-001"
+        ]
+      ]
+    },
+    {
+      "id": "C-listed-not-added",
+      "refusal": "R8",
+      "expect": "refuse",
+      "slot": 274,
+      "catalog": 274,
+      "products": [
+        [
+          "IND-BANK-001"
+        ]
+      ]
+    },
+    {
+      "id": "C-unlisted-added",
+      "refusal": "R1",
+      "expect": "refuse",
+      "slot": 274,
+      "catalog": 276,
+      "products": [
+        [
+          "IND-BANK-001"
+        ]
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "id": "B-K1",
+      "refusal": null,
+      "expect": "OK",
+      "source": "PRODUCT_PACKETS = (\"IND-BANK-001\",)\n"
+    },
+    {
+      "id": "B-empty",
+      "refusal": "R7",
+      "expect": "refuse",
+      "source": "PRODUCT_PACKETS = ()\n"
+    },
+    {
+      "id": "B-repeat",
+      "refusal": "R7",
+      "expect": "refuse",
+      "source": "PRODUCT_PACKETS = (\"IND-BANK-001\", \"IND-BANK-001\")\n"
+    },
+    {
+      "id": "B-not-id",
+      "refusal": "R2",
+      "expect": "refuse",
+      "source": "PRODUCT_PACKETS = (\"ind-bank-001\",)\n"
+    }
+  ],
+  "allowedPaths": [
+    {
+      "id": "AP1",
+      "refusal": null,
+      "expect": "OK",
+      "allowed": [
+        "a.py",
+        "b.json",
+        "auth.json",
+        "scripts/validate_x.py",
+        "task-packets/MET-X-1.yaml",
+        "task-packets/IND-BANK-001.yaml"
+      ],
+      "changed": [
+        "a.py"
+      ],
+      "new": [
+        "b.json"
+      ],
+      "authority": "auth.json",
+      "validator": "scripts/validate_x.py",
+      "ownYaml": "task-packets/MET-X-1.yaml",
+      "products": [
+        "IND-BANK-001"
+      ]
+    },
+    {
+      "id": "AP1-missing-product",
+      "refusal": "R11",
+      "expect": "refuse",
+      "allowed": [
+        "a.py",
+        "b.json",
+        "auth.json",
+        "scripts/validate_x.py",
+        "task-packets/MET-X-1.yaml"
+      ],
+      "changed": [
+        "a.py"
+      ],
+      "new": [
+        "b.json"
+      ],
+      "authority": "auth.json",
+      "validator": "scripts/validate_x.py",
+      "ownYaml": "task-packets/MET-X-1.yaml",
+      "products": [
+        "IND-BANK-001"
+      ]
+    },
+    {
+      "id": "AP1-ghost-path",
+      "refusal": "R11",
+      "expect": "refuse",
+      "allowed": [
+        "a.py",
+        "b.json",
+        "auth.json",
+        "scripts/validate_x.py",
+        "task-packets/MET-X-1.yaml",
+        "task-packets/IND-BANK-001.yaml",
+        "task-packets/IND-BANK-009.yaml"
+      ],
+      "changed": [
+        "a.py"
+      ],
+      "new": [
+        "b.json"
+      ],
+      "authority": "auth.json",
+      "validator": "scripts/validate_x.py",
+      "ownYaml": "task-packets/MET-X-1.yaml",
+      "products": [
+        "IND-BANK-001"
+      ]
+    },
+    {
+      "id": "AP2",
+      "refusal": null,
+      "expect": "OK",
+      "allowed": [
+        "a.py",
+        "auth.json",
+        "scripts/validate_x.py",
+        "task-packets/MET-X-1.yaml",
+        "task-packets/IND-BANK-002.yaml",
+        "task-packets/IND-BANK-003.yaml"
+      ],
+      "changed": [
+        "a.py"
+      ],
+      "new": [],
+      "authority": "auth.json",
+      "validator": "scripts/validate_x.py",
+      "ownYaml": "task-packets/MET-X-1.yaml",
+      "products": [
+        "IND-BANK-002",
+        "IND-BANK-003"
+      ]
+    }
+  ],
+  "headOnly": [
+    {
+      "id": "R5",
+      "where": "the publishing head's per-packet digest lookup (section 4 item 11)"
+    },
+    {
+      "id": "R6",
+      "where": "every later head's closed rule and baselinePackets digests"
+    }
+  ]
+}
