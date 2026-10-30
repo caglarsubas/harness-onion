@@ -940,6 +940,21 @@
         "products": []
       },
       {
+        "id": "CF-K0-with-F6",
+        "refusal": "R7",
+        "expect": "refuse",
+        "clause": "P-form",
+        "detail": "authority at CF-K0-with-F6: P-form fragments [('F6', 1)], expected []",
+        "base": "head",
+        "edits": [
+          [
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+            "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+          ]
+        ],
+        "products": []
+      },
+      {
         "id": "CF-K1-partial",
         "refusal": "P-form",
         "expect": "refuse",
@@ -2101,6 +2116,10 @@
     {
       "id": "R6",
       "where": "every later head's closed rule and baselinePackets digests"
+    },
+    {
+      "id": "R7",
+      "where": "clause 2: a K = 0 head's authority() refuses a productPackets member, empty or not, by its unchanged closed key set (F6 is written only in a layer that binds the list)"
     }
   ]
 }

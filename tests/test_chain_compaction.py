@@ -1230,11 +1230,11 @@ def test_the_fact_map_totals_are_restated():
 # the 273 head's closed record set pins the same digests.
 V2_RECORD_DIR = "architecture/chain-product-packets"
 V2_PINS = {
-    V2_RECORD_DIR + "/README.md": "3cb827ed47e524ae8fa97680f4e7deb5a01c3b4f6faaae58fa212bfeb61fe786",
+    V2_RECORD_DIR + "/README.md": "f4c0a99959dc3fadb633546b56195bde9a494dc35758027bdaa4c3aee21462a9",
     V2_RECORD_DIR + "/decisions.md": "bc4a940b236d7dc8d5066aefa752a706307fbd1b2e4c202d924d6483f89ac7c3",
     V2_RECORD_DIR + "/rule.json": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
-    V2_RECORD_DIR + "/vectors.json": "d206d4cbaf421c2cc14de5e1cc6dffed2523eb831dcb3b85cb2d22d7c1716eb9",
-    "scripts/chain_identity_v2.py": "e8167aadfc380d8c56024a70a8c3b44a626bdc4c0b1f38735f0d54c89d58c93c",
+    V2_RECORD_DIR + "/vectors.json": "2ce3999b013855dd6504fc351e66a5570ab2989fd49bb0341f0139cf1ac8122d",
+    "scripts/chain_identity_v2.py": "46ce5fe4bceb85c60ec1d4f3fe8c7b3f3046479d8a28f2ca14806ca331d93b16",
 }
 
 

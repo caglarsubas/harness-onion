@@ -133,7 +133,8 @@ P_FORMS = (
      '"changedFiles", "newFiles", "validatorNormalizedSha256"}'),
 )
 # F7, item 5's check of productPackets (rule.json authorityRule): one statement of authority's body, exactly this one,
-# placed immediately before the body's first `for` statement; undone by removing it.
+# placed immediately before the body's first `for` statement; undone by removing it. Its key equality is ordered: the
+# authority's productPackets is written in PRODUCT_PACKETS order.
 AUTHORITY_CHECK = ("F7", "authority",
                    'require(type(value["productPackets"]) is dict\n'
                    '        and list(value["productPackets"]) == list(PRODUCT_PACKETS)\n'
@@ -424,7 +425,8 @@ def class_form_source(case, bases):
 
 def check_class_vector(case, bases, rule, v1):
     """One class-form case: the P-forms are undone (refusing as strip_products does), and then every class function of
-    the base must equal its K = 0 form, as D, G1 and G2 compare it; a difference refuses under its class's clause."""
+    the base must equal its K = 0 form exactly (ast.dump equality: no G2 position and no D message position is
+    blanked, and no vector edits one); a difference refuses under its class's clause."""
     tree = ast.parse(class_form_source(case, bases))
     names = class_functions(rule, v1)
     funcs = v1.top_functions(strip_products(tree, names, bool(layer_products(tree)), case["id"]))
