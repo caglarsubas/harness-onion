@@ -2,9 +2,11 @@
 """Release profile (architecture/release-profile.json, RELEASE-PROFILE-001, MET-ADOPT-006): the first release profile.
 
 check(read, packets) validates the closed record of profile.banking-readonly-amd64 through an injected byte reader and
-the set of published packet ids. The catalogs are read only through the overlay module's public effective bytes; the
-record, the overlay record, the sector record, the H-key map, provider-adoption, the registry and the non-operator packet
-YAMLs are read through `read`. Refusal codes, in the order they run (V0, V6, V1, V8, V2, V3, V4, V5, V7, V9):
+the set of published packet ids. The catalogs are read only through the overlay module's era-relative
+effective_bytes_from(read, packets, path), with this check's own reader and packet set (Q-RP-PROJ (a1), design E2), so a
+chain layer's reviewed bytes and historical packet set decide them; the YAML catalogs are parsed from those bytes with
+safe_yaml.safe_load. The record, the overlay record, the sector record, the H-key map, provider-adoption, the registry
+and the non-operator packet YAMLs are read through `read` too. Refusal codes, in the order they run (V0, V6, V1, V8, V2, V3, V4, V5, V7, V9):
 - RP_SHAPE (V0): every object is closed to its exact members; string lists are sorted and unique; free-text members
   are non-empty; state, version and host members are refused. Row lists are ordered by the check that owns them.
 - RP_CATALOG_BYTES (V6): the catalogs, the overlay, the sector record and the H-key map are the pinned era's bytes, and
@@ -19,7 +21,8 @@ YAMLs are read through `read`. Refusal codes, in the order they run (V0, V6, V1,
 Types are exact (c2, RP-C1-1, RP-C1-2): V0 checks the JSON type of every member before any use, so bool, int and float
 stay distinct and a wrongly typed identifier refuses RP_SHAPE; derived objects are compared as canonical JSON. V9
 (RP-C1-4) requires exactly one MET-ADOPT-006/packet rider, equal to the generic packet rider, appended last, and the
-registry's bytes equal to the base's serialization with that rider.
+registry's bytes equal to the base's serialization with that rider in the template's member order (c3, RP-C2-1). Bytes
+that are not UTF-8 JSON refuse with the reading check's code (c3, RP-C2-2).
 Data checks only: no network, no execution authority, no evidence state.
 """
 from __future__ import annotations
@@ -29,6 +32,7 @@ import json
 import re
 
 from scripts import sector_catalog
+from scripts.safe_yaml import safe_load
 
 RECORD_PATH = "architecture/release-profile.json"
 SCHEMA = "planeon.internal.release-profile/v1"
@@ -130,7 +134,10 @@ def _json(raw: bytes, code: str):
 
     def constant(name):
         raise ValueError("%s: nonfinite JSON number %s" % (code, name))
-    return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs, parse_constant=constant)
+    try:
+        return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs, parse_constant=constant)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise ValueError("%s: not UTF-8 JSON" % code) from None
 
 
 def _canonical(value) -> bytes:
@@ -379,14 +386,18 @@ def check(read, packets) -> dict:
     effective = {}
     for path in CATALOG_PATHS:
         require(digest(read(path)) == BASE_SHA256[path], "RP_CATALOG_BYTES", "base bytes of " + path)
-        effective[path] = sector_catalog.effective_bytes(path)
+        # The era-relative path (design E2): the era's overlay check runs on this check's reader and packet set.
+        try:
+            effective[path] = sector_catalog.effective_bytes_from(read, packets, path)
+        except ValueError as error:
+            raise ValueError("RP_CATALOG_BYTES: the overlay era does not check: %s" % error) from None
         require(digest(effective[path]) == EFFECTIVE_SHA256[path], "RP_CATALOG_BYTES", "effective bytes of " + path)
     require(_eq(profile_member["catalogs"], [{"path": p, "baseSha256": BASE_SHA256[p], "effectiveSha256":
                                               EFFECTIVE_SHA256[p]} for p in sorted(CATALOG_PATHS)]),
             "RP_CATALOG_BYTES", "profile.catalogs")
 
-    providers = sector_catalog.effective_catalog(PROVIDERS_PATH)
-    services = sector_catalog.effective_catalog(SERVICES_PATH)
+    providers = safe_load(effective[PROVIDERS_PATH])
+    services = safe_load(effective[SERVICES_PATH])
     modules = {m["id"]: m for m in providers["modules"]}
     profiles = [p for p in providers["profileExamples"] if p.get("id") == PROFILE_ID]
 
@@ -559,7 +570,9 @@ def check(read, packets) -> dict:
     template = [b for b in entries[:-1] if b.get("series") == RIDER_TEMPLATE_SERIES]
     require(len(template) == 1 and _eq(entries[-1], dict(template[0], series=RIDER_SERIES)), "RP_REGISTRY",
             "the rider equals the generic packet rider with this packet's series")
-    require(briefs_raw == _serialize(briefs), "RP_REGISTRY", "the registry bytes are the base serialization plus the rider")
+    rider = dict(template[0], series=RIDER_SERIES)
+    require(briefs_raw == _serialize(dict(briefs, briefs=entries[:-1] + [rider])), "RP_REGISTRY",
+            "the registry bytes are the base serialization plus the rider in the template's member order")
     return {"modules": len(rows), "tenantFacts": len(facts), "closure": len(computed), "in": len(expected_in),
             "exclusions": len(rec["exclusions"]), "operatorRows": sorted(operators), "citedRows": sorted(cited & set(internal)),
             "rider": len(riders)}

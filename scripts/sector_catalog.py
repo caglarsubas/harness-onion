@@ -5,13 +5,17 @@ providers.yaml, services.yaml and PROVIDER_MODULE_CATALOG.md stay byte-identical
 immutable inputs, and many authority records pin them. The reviewed overlay (architecture/sector-catalog/overlay.json)
 gives their effective, banking-era bytes, as exact counted substring replacements.
 
-Two entry points:
+Entry points:
 - check(read, packets) validates one era: an overlay, its catalogs, the sector record and the R11 notice, read through
   an injected byte reader and judged against an injected packet set. A history-chain layer passes its reviewed_bytes
   and frozenset(historical_catalog(...)), so later packets leave that layer valid through projection.
 - effective_bytes(path) and effective_catalog(path) serve this repository's current tree (no root override). They run
   check() on the current files and the published packets first. Consumers must read the banking-era catalogs only
   through these two functions.
+- effective_bytes_from(read, packets, path) is check()'s era-relative path with a public name (Q-RP-PROJ (a1)): the
+  same check and the same overlay application, through an injected reader and packet set, for a model whose chain
+  layer passes its reviewed_bytes and its historical packet set. effective_bytes is exactly this function on the
+  current tree.
 
 Publishing IND-BANK-005 (the successor that supersedes the pack manifest's bound packet) needs a reviewed revision of
 this module and of the overlay schema, which rebinds the implementation; until then the check refuses that state.
@@ -292,12 +296,16 @@ def check(read, packets) -> dict:
     return overlay
 
 
-def effective_bytes(path: str) -> bytes:
-    """The banking-era bytes of one overlaid catalog in this repository's current tree, after the full check."""
-    read = disk_reader(ROOT)
-    overlay = check(read, published_packets(ROOT))
+def effective_bytes_from(read, packets, path: str) -> bytes:
+    """The banking-era bytes of one overlaid catalog of one era, after that era's full check through read and packets."""
+    overlay = check(read, packets)
     require(path in overlay["base"], "not an overlaid catalog: " + path)
     return _apply(path, read(path), overlay)
+
+
+def effective_bytes(path: str) -> bytes:
+    """The banking-era bytes of one overlaid catalog in this repository's current tree, after the full check."""
+    return effective_bytes_from(disk_reader(ROOT), published_packets(ROOT), path)
 
 
 def effective_catalog(path: str):

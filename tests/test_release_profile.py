@@ -2,8 +2,9 @@
 every failing case of design E1 fails for its named refusal code. Operator packet YAMLs are never opened: the reader
 used here refuses any task-packets/OP-* path (its own literal prefix, not the module's), and two tests show the guard is
 live: the module's own guard stops an emptied operator set before any read, and with the module's guard bypassed the
-reader's guard fires. Until the 272 mechanics add the MET-ADOPT-006/packet rider to the registry, the reader supplies
-the registry with that rider appended (RP-C1-4)."""
+reader's guard fires. The reader supplies the registry with the MET-ADOPT-006/packet rider appended only when it is
+absent (RP-C1-4, MON-RP-MECH-i), so the same tests hold before and after the 272 mechanics add the rider. The catalogs
+reach the model only through this reader and packet set (Q-RP-PROJ (a1), design E2)."""
 import copy
 import json
 import os
@@ -12,6 +13,8 @@ from pathlib import Path
 import pytest
 
 from scripts import release_profile as rp
+from scripts import sector_catalog
+from scripts.safe_yaml import safe_load
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -30,7 +33,8 @@ def _serialize(registry):
 def _registry(mutate=None, serialize=_serialize):
     registry = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
     template = next(b for b in registry["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
-    registry["briefs"].append(dict(template, series=rp.RIDER_SERIES))
+    if not any(b["series"] == rp.RIDER_SERIES for b in registry["briefs"]):
+        registry["briefs"].append(dict(template, series=rp.RIDER_SERIES))
     if mutate:
         mutate(registry["briefs"], template)
     return serialize(registry)
@@ -331,11 +335,14 @@ def test_a_changed_hkey_map_fails_for_catalog_bytes():
 
 REGISTRY_FAULTS = [
     ("a second rider", _registry(lambda briefs, template: briefs.append(dict(template, series=rp.RIDER_SERIES)))),
-    ("no rider", (ROOT / rp.BRIEFS_PATH).read_bytes()),
+    ("no rider", _registry(lambda briefs, template: briefs.pop())),
     ("a re-serialised registry", _registry(serialize=lambda r: (json.dumps(r, separators=(",", ":")) + "\n").encode())),
     ("the rider in a wrong position", _registry(lambda briefs, template: briefs.insert(0, briefs.pop()))),
     ("another packet's rider appended", _registry(lambda briefs, template: briefs.append(
         dict(template, series="MET-ADOPT-007/packet")))),
+    # RP-C2-1: the same content with the rider's members in another order.
+    ("the rider's members permuted", _registry(lambda briefs, template: briefs.append(
+        dict(reversed(list(briefs.pop().items())))))),
 ]
 
 
@@ -343,6 +350,47 @@ REGISTRY_FAULTS = [
 def test_each_registry_fault_fails_for_registry(name, raw):
     with pytest.raises(ValueError, match=r"^RP_REGISTRY: "):
         rp.check(_reader(files={rp.BRIEFS_PATH: raw}), _packets())
+
+
+# RP-C2-2: bytes that are not UTF-8 JSON refuse with the reading check's code, never an uncoded error.
+ENCODING_CASES = [
+    ("record: invalid UTF-8", rp.RECORD_PATH, b"\xff\xfe", "RP_SHAPE"),
+    ("record: a UTF-8 byte-order mark", rp.RECORD_PATH, b"\xef\xbb\xbf" + (ROOT / rp.RECORD_PATH).read_bytes(), "RP_SHAPE"),
+    ("record: not JSON", rp.RECORD_PATH, b"not json\n", "RP_SHAPE"),
+    ("registry: invalid UTF-8", rp.BRIEFS_PATH, b"\xff\xfe", "RP_REGISTRY"),
+    ("registry: a UTF-8 byte-order mark", rp.BRIEFS_PATH, b"\xef\xbb\xbf" + _registry(), "RP_REGISTRY"),
+    ("registry: not JSON", rp.BRIEFS_PATH, b"not json\n", "RP_REGISTRY"),
+]
+
+
+@pytest.mark.parametrize("name,path,raw,code", ENCODING_CASES, ids=[case[0] for case in ENCODING_CASES])
+def test_bytes_that_are_not_utf8_json_fail_for_the_reading_checks_code(name, path, raw, code):
+    with pytest.raises(ValueError, match=r"^%s: not UTF-8 JSON$" % code):
+        rp.check(_reader(files={path: raw}), _packets())
+
+
+# Q-RP-PROJ (a1), design E2: the catalogs reach the model only through the injected reader and packet set. The c2
+# model read them from the disk, so it passed both cases below.
+R11_PLAN = "docs/repositories/11-mas-harness-distribution.md"
+
+
+def test_a_changed_r11_notice_through_the_reader_fails_for_catalog_bytes():
+    raw = (ROOT / R11_PLAN).read_bytes()
+    line = b"7. `DIST-004-helm-profiles`:"
+    assert raw.count(b"\n" + line) == 1
+    changed = raw.replace(b"\n" + line, b"\n" + line.replace(b"`:", b"` :"), 1)
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: the overlay era does not check: the DIST-004 list item"):
+        rp.check(_reader(files={R11_PLAN: changed}), _packets())
+
+
+def test_the_injected_packet_set_decides_the_overlay_era():
+    with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: the overlay era does not check: IND-BANK-005 is published"):
+        rp.check(_reader(), _packets() | {"IND-BANK-005"})
+
+
+def test_the_yaml_catalogs_parse_as_effective_catalog_parses_them():
+    for path in (rp.PROVIDERS_PATH, rp.SERVICES_PATH):
+        assert safe_load(sector_catalog.effective_bytes(path)) == sector_catalog.effective_catalog(path)
 
 
 TYPE_CASES = [

@@ -716,7 +716,7 @@ CATALOG_NAMES = (*CATALOGS, "providers.yaml", "services.yaml", "PROVIDER_MODULE_
 BASE_DIGESTS = ("9e2b43dac1ca4531dcdeb3a1b6ead8002d7384e2a0d0e6b57e972accb8631c02",
                 "857376b5e2b10a2a2542124a7d36b770eca531d15e463d68415416b887dd90a6",
                 "1723f1ea35ecc87529c2d680f7e51fda61923a368f1e241b7a82982b10935b1d")
-PUBLIC_API = frozenset({"effective_bytes", "effective_catalog"})
+PUBLIC_API = frozenset({"effective_bytes", "effective_bytes_from", "effective_catalog"})
 MODULE_NAMES = ("sector_catalog", "scripts.sector_catalog")
 CATALOG_BASENAMES = ("providers.yaml", "services.yaml", "PROVIDER_MODULE_CATALOG.md")
 CATALOG_DIRS = frozenset({"architecture", "docs"})
@@ -1147,6 +1147,7 @@ def test_consumers_use_only_the_public_overlay_api():
     ("from scripts import sector_catalog as sc\nsc.effective_bytes('architecture/services.yaml')", True),
     ("from scripts.sector_catalog import effective_catalog\neffective_catalog('architecture/providers.yaml')", True),
     ("import scripts.sector_catalog\nscripts.sector_catalog.effective_bytes('x')", True),
+    ("from scripts import sector_catalog as sc\nsc.effective_bytes_from(read, packets, 'x')", True),
     ("from scripts import sector_catalog as sc\ndef test(monkeypatch):\n    monkeypatch.setattr(sc, 'ROOT', None)", False),
     ("import scripts.sector_catalog\nscripts.sector_catalog.check(None, None)", False),
     ("from unittest import mock\nfrom scripts import sector_catalog as sc\nmock.patch.object(sc, 'ROOT', None)", False),
@@ -1164,6 +1165,25 @@ def test_consumers_use_only_the_public_overlay_api():
 ])
 def test_the_consumer_tripwire_refuses_non_public_use(source, allowed):
     assert (_consumer_violations(source.encode()) == []) is allowed
+
+
+def test_effective_bytes_is_effective_bytes_from_on_the_current_tree():
+    # Q-RP-PROJ (a1), condition 2: the live consumer gate is exactly the era-relative path on the current tree.
+    read, packets = overlay_module.disk_reader(overlay_module.ROOT), overlay_module.published_packets(overlay_module.ROOT)
+    for path in CATALOGS:
+        assert overlay_module.effective_bytes(path) == overlay_module.effective_bytes_from(read, packets, path)
+
+
+def test_effective_bytes_from_reads_only_through_its_reader_and_packet_set():
+    read = overlay_module.disk_reader(overlay_module.ROOT)
+    packets = overlay_module.published_packets(overlay_module.ROOT)
+    changed = lambda path: read(path) + b"\n" if path == "architecture/services.yaml" else read(path)
+    with pytest.raises(ValueError, match=r"^overlay base changed: architecture/services.yaml$"):
+        overlay_module.effective_bytes_from(changed, packets, "architecture/providers.yaml")
+    with pytest.raises(ValueError, match=r"^IND-BANK-005 is published"):
+        overlay_module.effective_bytes_from(read, packets | {"IND-BANK-005"}, "architecture/providers.yaml")
+    with pytest.raises(ValueError, match=r"^not an overlaid catalog: architecture/repositories.yaml$"):
+        overlay_module.effective_bytes_from(read, packets, "architecture/repositories.yaml")
 
 
 def _readiness_errors(monkeypatch, apply_deferred=False):
