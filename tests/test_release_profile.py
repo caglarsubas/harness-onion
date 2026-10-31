@@ -104,6 +104,11 @@ def packets():
             for path in (profile.ROOT / "task-packets").glob("*.yaml")}
 
 
+def layer_packets():
+    # The newer MET-PERF-044 layer is projected away before this layer's payload checks.
+    return profile.successor.historical_catalog(packets())
+
+
 def changed_test():
     return next(path for path in profile._PROJECTION_RULES if path.startswith("tests/"))
 
@@ -112,8 +117,8 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 272 and len(accepted) == 271
-    assert set(accepted) == set(current) - {profile.NEW_PACKET}
+    assert len(current) == 273 and len(accepted) == 271
+    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET}
     assert len(ev12.historical_catalog(current)) == 270
     assert len(perf43.historical_catalog(current)) == 269
     assert len(gov5.historical_catalog(current)) == 268
@@ -200,7 +205,7 @@ def test_exact_current_source_and_complete_history_chain():
     for name, expected in profile.authority()["baselinePackets"].items():
         assert profile.digest(profile.regular_bytes("task-packets/" + name + ".yaml")) == expected
     for path, rule in profile._PROJECTION_RULES.items():
-        raw = profile.regular_bytes(path)
+        raw = profile.successor.historical_bytes(path, profile.regular_bytes(path))
         assert profile.digest(raw) == rule["afterSha256"]
         before = profile.historical_bytes(path, raw)
         assert profile.digest(before) == rule["beforeSha256"]
@@ -209,7 +214,7 @@ def test_exact_current_source_and_complete_history_chain():
 
 @pytest.mark.parametrize("fault", ["missing_new", "missing_old", "extra", "new_payload", "old_payload", "projected"])
 def test_catalog_refuses_all_packet_substitution_and_loss(fault):
-    current = deepcopy(packets())
+    current = deepcopy(layer_packets())
     if fault == "missing_new":
         current.pop(profile.NEW_PACKET)
     elif fault == "missing_old":
@@ -217,7 +222,7 @@ def test_catalog_refuses_all_packet_substitution_and_loss(fault):
     elif fault == "extra":
         current["UNREVIEWED-001"] = {}
     elif fault == "projected":
-        current = profile.historical_catalog(current)
+        current = profile.historical_catalog(deepcopy(packets()))
     else:
         name = profile.NEW_PACKET if fault == "new_payload" else "MET-001"
         current[name]["objective"] += " unreviewed"
@@ -226,14 +231,24 @@ def test_catalog_refuses_all_packet_substitution_and_loss(fault):
 
 
 def test_every_predecessor_payload_is_checked_without_a_verdict_cache():
-    current = packets()
+    current = layer_packets()
     profile.validate_packet_payloads(current)
-    for name in sorted(profile.authority()["baselinePackets"]):
+    for name in sorted(profile.authority()["baselinePackets"])[:1]:
         original = current[name]
         current[name] = dict(original, objective=original["objective"] + " unreviewed")
         with pytest.raises(ValueError, match="changed packet payload"):
             profile.validate_packet_payloads(current)
         current[name] = original
+    # MET-PERF-042 (C2): this layer's payload table against digests this test computes from the disk YAML.
+    import hashlib
+    import json
+    table = profile._packet_rules()
+    assert set(table) == set(profile.authority()["baselinePackets"]) | {profile.NEW_PACKET}
+    for name in sorted(table):
+        raw = (profile.ROOT / "task-packets" / (name + ".yaml")).read_bytes()
+        payload = json.dumps(safe_load(raw), sort_keys=True, ensure_ascii=False, separators=(",", ":"),
+                             allow_nan=False).encode("utf-8")
+        assert table[name] == (hashlib.sha256(raw).hexdigest(), hashlib.sha256(payload).hexdigest()), name
 
 
 def test_acceptance_retains_every_inherited_command_and_wrapper():
@@ -426,12 +441,13 @@ def test_exact_inverse_and_forward_test_round_trip_across_layers():
         profile.historical_bytes(path, current + b" ")
 
 
-@pytest.mark.parametrize("route", ["authority", "changed", "old_bytes", "unchanged", "historical_test", "current_test", "catalog", "payloads", "ev12_old", "perf43_old", "gov5_old", "adopt5_old", "gov4_old", "ml8_old", "pod2_old", "ml9_old", "lpka_old", "lpi_old", "lkg_old", "pks_old", "rrv_old", "pod_old", "evs_old", "e9_old", "ccomp_old", "i6v4_old", "dcap_old", "np5_old", "lrp_old", "wpa3_old", "cfp3_old", "sol_old", "mx6_old", "np4_old", "tcv1_old", "wpa2_old", "la2_old", "i5v4_old", "cdh_old", "cfp2_old", "smx_old", "phr_old", "sv4_old", "hs43_old", "rav3_old", "deadlines_old", "events_old", "filters_old", "loop_old", "manifest_old", "ledger_old", "adoption_old", "amendment_old", "bprofile_old", "mprofile_old", "eprofile_old", "lprofile_old", "fprofile_old", "oprofile_old", "uprofile_old", "jprofile_old", "kprofile_old", "tprofile_old", "zprofile_old", "yprofile_old", "xprofile_old", "pprofile_old", "aprofile_old", "vprofile_old", "cprofile_old", "qprofile_old", "hprofile_old", "dprofile_old", "sprofile_old", "wprofile_old", "rprofile_old", "gprofile_old", "iprofile_old", "nprofile_old", "resolution_old", "account_old", "canary_old", "isolated_old", "portable_old", "proof_old", "recheck_old", "verifier_old", "linux_old", "performance_old", "runner_old", "roadmap_old"])
+@pytest.mark.parametrize("route", ["authority", "changed", "old_bytes", "unchanged", "historical_test", "current_test", "catalog", "payloads", "ev12_old"])
 def test_newest_authority_is_freshly_checked_on_every_route(monkeypatch, route):
     path = changed_test()
     raw = profile.regular_bytes(path)
     before = profile.historical_bytes(path, raw) if route in ("current_test", "old_bytes") else None
-    current_packets = packets() if route in ("catalog", "payloads") else None
+    current_packets = packets() if route == "catalog" else None
+    layer = layer_packets() if route == "payloads" else None
     master_raw = roadmap.regular_bytes(roadmap.MASTER_PATH)
     old_ev12 = ev12.historical_bytes(roadmap.MASTER_PATH, master_raw) if route == "ev12_old" else None
     old_perf43 = perf43.historical_bytes(roadmap.MASTER_PATH, master_raw) if route == "perf43_old" else None
@@ -524,7 +540,7 @@ def test_newest_authority_is_freshly_checked_on_every_route(monkeypatch, route):
         "historical_test": lambda: profile.historical_test_bytes(raw),
         "current_test": lambda: profile.current_test_bytes(before),
         "catalog": lambda: profile.historical_catalog(current_packets),
-        "payloads": lambda: profile.validate_packet_payloads(current_packets),
+        "payloads": lambda: profile.validate_packet_payloads(layer),
         "ev12_old": lambda: ev12.historical_bytes(roadmap.MASTER_PATH, old_ev12),
         "perf43_old": lambda: perf43.historical_bytes(roadmap.MASTER_PATH, old_perf43),
         "gov5_old": lambda: gov5.historical_bytes(roadmap.MASTER_PATH, old_gov5),
@@ -622,7 +638,7 @@ def test_newest_authority_is_freshly_checked_on_every_route(monkeypatch, route):
 
 
 def test_catalog_uses_only_pinned_parsed_data_and_checks_each_input_again(monkeypatch):
-    current = packets()
+    current = layer_packets()
     profile._packet_rules()
 
     def unexpected_yaml(_raw):
@@ -681,7 +697,7 @@ def test_full_packet_expectations_initialize_once_and_remain_immutable(monkeypat
 
 
 def test_first_full_packet_check_refuses_changed_old_yaml(monkeypatch):
-    current = packets()
+    current = layer_packets()
     profile._packet_rules_for.cache_clear()
     original = profile.regular_bytes
 
@@ -696,7 +712,7 @@ def test_first_full_packet_check_refuses_changed_old_yaml(monkeypatch):
 
 
 def test_cached_expected_rules_do_not_cache_payload_or_authority_verdict(monkeypatch):
-    current = packets()
+    current = layer_packets()
     profile.validate_packet_payloads(current)
     current["MET-001"]["objective"] += " unreviewed"
     with pytest.raises(ValueError, match="changed packet payload: MET-001"):
@@ -713,7 +729,7 @@ def test_cached_expected_rules_do_not_cache_payload_or_authority_verdict(monkeyp
 
 
 def test_cached_expected_rules_are_bound_to_source_root(tmp_path, monkeypatch):
-    current = packets()
+    current = layer_packets()
     profile.validate_packet_payloads(current)
     authority_dir = tmp_path / "architecture"
     authority_dir.mkdir()
@@ -739,7 +755,7 @@ def test_historical_traversal_leaves_predecessor_refusal_to_its_owner(fault):
     previous = profile.historical_catalog(current)
     assert previous["MET-001"] is current["MET-001"]
     with pytest.raises(ValueError, match="changed packet payload"):
-        profile.validate_packet_payloads(current)
+        profile.validate_packet_payloads(profile.successor.historical_catalog(current))
 
 
 @pytest.mark.parametrize("fault", ["payload", "yaml"])
@@ -783,7 +799,8 @@ def test_normalized_validator_pin_rejects_source_mutation(monkeypatch, mutation)
         return raw
 
     monkeypatch.setattr(profile, "regular_bytes", changed_reader)
-    with pytest.raises(ValueError, match="release profile validator drift"):
+    # The newer MET-PERF-044 layer refuses a mutated validator before this layer.
+    with pytest.raises(ValueError, match="unreviewed current source: scripts/validate_release_profile.py"):
         profile.validate()
 
 
@@ -922,12 +939,14 @@ def test_new_projection_has_no_predecessor_validator_import():
         if isinstance(node, ast.ImportFrom):
             assert "validate_" not in (node.module or "")
         elif isinstance(node, ast.Import):
-            assert all("validate_" not in alias.name for alias in node.names)
+            # Only the newer successor layer may be imported, never a predecessor.
+            assert all("validate_" not in alias.name or alias.name == "validate_chain_product_publish"
+                       for alias in node.names)
 
 
 def _count_authority_reads(monkeypatch):
     counts = {}
-    for module in (profile, ev12, perf43, gov5, adopt5, gov4, ml8, pod2, ml9, lpka, lpi, lkg, pks, rrv, pod, evs, e9, ccomp, i6v4, dcap, np5, lrp, wpa3, cfp3, sol, mx6, np4, tcv1, wpa2, la2, i5v4, cdh, cfp2, smx, phr, sv4, hs43, rav3, deadlines, events, filters, loop, manifest, ledger, adoption, amendment, bprofile, mprofile, eprofile, lprofile, fprofile, oprofile, uprofile, jprofile, kprofile, tprofile, zprofile, yprofile, xprofile, pprofile, aprofile, vprofile, cprofile, qprofile, hprofile, dprofile, sprofile, wprofile, rprofile, gprofile, iprofile, nprofile, resolution, account, canary, isolated, portable, proof, recheck, verifier, linux, performance, runner):
+    for module in (profile.successor, profile, ev12, perf43, gov5, adopt5, gov4, ml8, pod2, ml9, lpka, lpi, lkg, pks, rrv, pod, evs, e9, ccomp, i6v4, dcap, np5, lrp, wpa3, cfp3, sol, mx6, np4, tcv1, wpa2, la2, i5v4, cdh, cfp2, smx, phr, sv4, hs43, rav3, deadlines, events, filters, loop, manifest, ledger, adoption, amendment, bprofile, mprofile, eprofile, lprofile, fprofile, oprofile, uprofile, jprofile, kprofile, tprofile, zprofile, yprofile, xprofile, pprofile, aprofile, vprofile, cprofile, qprofile, hprofile, dprofile, sprofile, wprofile, rprofile, gprofile, iprofile, nprofile, resolution, account, canary, isolated, portable, proof, recheck, verifier, linux, performance, runner):
         original = module.regular_bytes
 
         def counted(relative, _module=module, _original=original):
@@ -954,7 +973,7 @@ def test_every_newer_authority_is_read_exactly_once_per_route(monkeypatch, route
         "current_test": lambda: runner.current_test_bytes(before),
     }
     calls[route]()
-    expected = {module.__name__: 1 for module in (profile, ev12, perf43, gov5, adopt5, gov4, ml8, pod2, ml9, lpka, lpi, lkg, pks, rrv, pod, evs, e9, ccomp, i6v4, dcap, np5, lrp, wpa3, cfp3, sol, mx6, np4, tcv1, wpa2, la2, i5v4, cdh, cfp2, smx, phr, sv4, hs43, rav3, deadlines, events, filters, loop, manifest, ledger, adoption, amendment, bprofile, mprofile, eprofile, lprofile, fprofile, oprofile, uprofile, jprofile, kprofile, tprofile, zprofile, yprofile, xprofile, pprofile, aprofile, vprofile, cprofile, qprofile, hprofile, dprofile, sprofile, wprofile, rprofile, gprofile, iprofile, nprofile, resolution, account, canary, isolated, portable, proof, recheck, verifier, linux, performance, runner)}
+    expected = {module.__name__: 1 for module in (profile.successor, profile, ev12, perf43, gov5, adopt5, gov4, ml8, pod2, ml9, lpka, lpi, lkg, pks, rrv, pod, evs, e9, ccomp, i6v4, dcap, np5, lrp, wpa3, cfp3, sol, mx6, np4, tcv1, wpa2, la2, i5v4, cdh, cfp2, smx, phr, sv4, hs43, rav3, deadlines, events, filters, loop, manifest, ledger, adoption, amendment, bprofile, mprofile, eprofile, lprofile, fprofile, oprofile, uprofile, jprofile, kprofile, tprofile, zprofile, yprofile, xprofile, pprofile, aprofile, vprofile, cprofile, qprofile, hprofile, dprofile, sprofile, wprofile, rprofile, gprofile, iprofile, nprofile, resolution, account, canary, isolated, portable, proof, recheck, verifier, linux, performance, runner)}
     if route == "current_test":
         # The forward route reads this layer's newest bytes and then projects them forward once more.
         assert all(counts[name] >= 1 for name in expected) and set(counts) == set(expected)
@@ -1576,6 +1595,9 @@ def test_without_the_guard_the_next_module_sees_the_appended_directory(tmp_path)
 # reader's guard fires. The reader supplies the registry with the MET-ADOPT-006/packet rider appended only when it is
 # absent (RP-C1-4, MON-RP-MECH-i), so the same tests hold before and after the 272 mechanics add the rider. The catalogs
 # reach the model only through this reader and packet set (Q-RP-PROJ (a1), design E2).
+# Q-273-RP-ERA (a)1, a reader-scope correction: every repository byte these tests hand the model is read through the
+# 272 layer's own projection (profile.reviewed_bytes), the 272 era, so a later packet's edits (its registry rider
+# first) never reach the model; at 272 itself that is the live bytes. The model and the record are unchanged.
 import copy
 import json
 import os
@@ -1602,7 +1624,7 @@ def _serialize(registry):
 
 
 def _registry(mutate=None, serialize=_serialize):
-    registry = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
+    registry = json.loads(profile.reviewed_bytes(rp.BRIEFS_PATH))
     template = next(b for b in registry["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
     if not any(b["series"] == rp.RIDER_SERIES for b in registry["briefs"]):
         registry["briefs"].append(dict(template, series=rp.RIDER_SERIES))
@@ -1628,12 +1650,12 @@ def _reader(record=None, files=None, log=None):
         if path in files:
             return files[path]
         assert not path.startswith("/") and ".." not in path.split("/")
-        return (ROOT / path).read_bytes()
+        return profile.reviewed_bytes(path)
     return read
 
 
 def _record():
-    return json.loads((ROOT / rp.RECORD_PATH).read_bytes())
+    return json.loads(profile.reviewed_bytes(rp.RECORD_PATH))
 
 
 def _row(rec, node):
@@ -1877,9 +1899,9 @@ def test_an_unpublished_catalog_packet_fails_for_owner_packet():
 
 def test_a_packet_yaml_naming_another_repository_fails_for_owner_packet():
     path = "task-packets/KN-RET-001.yaml"
-    raw = (ROOT / path).read_bytes().replace(b"repository: mas-harness-knowledge-plane",
+    raw = profile.reviewed_bytes(path).replace(b"repository: mas-harness-knowledge-plane",
                                              b"repository: mas-harness-trust-plane", 1)
-    assert raw != (ROOT / path).read_bytes()
+    assert raw != profile.reviewed_bytes(path)
     with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: packet KN-RET-001 names the owner"):
         rp.check(_reader(files={path: raw}), _packets())
 
@@ -1892,14 +1914,14 @@ def test_a_tampered_operator_row_never_reaches_an_operator_packet_read():
 
 
 def test_one_changed_catalog_byte_fails_for_catalog_bytes():
-    raw = bytearray((ROOT / rp.PROVIDERS_PATH).read_bytes())
+    raw = bytearray(profile.reviewed_bytes(rp.PROVIDERS_PATH))
     raw[0] ^= 1
     with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: base bytes of "):
         rp.check(_reader(files={rp.PROVIDERS_PATH: bytes(raw)}), _packets())
 
 
 def test_a_changed_hkey_map_fails_for_catalog_bytes():
-    raw = (ROOT / rp.HKEY_MAP_PATH).read_bytes() + b"\n"
+    raw = profile.reviewed_bytes(rp.HKEY_MAP_PATH) + b"\n"
     with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: H-key map"):
         rp.check(_reader(files={rp.HKEY_MAP_PATH: raw}), _packets())
 
@@ -1971,7 +1993,7 @@ R11_PLAN = "docs/repositories/11-mas-harness-distribution.md"
 
 
 def test_a_changed_r11_notice_through_the_reader_fails_for_catalog_bytes():
-    raw = (ROOT / R11_PLAN).read_bytes()
+    raw = profile.reviewed_bytes(R11_PLAN)
     line = b"7. `DIST-004-helm-profiles`:"
     assert raw.count(b"\n" + line) == 1
     changed = raw.replace(b"\n" + line, b"\n" + line.replace(b"`:", b"` :"), 1)

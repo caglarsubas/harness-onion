@@ -54,7 +54,7 @@ def seal(after, proof, before_doc):
 def test_exact_publication_correction_and_historical_scope(authority):
     packets, record, inputs = authority
     assert validate_custody_handoff(*authority) == []
-    assert len(packets) == 272 and len(record["protectedFiles"]) == 203
+    assert len(packets) == 273 and len(record["protectedFiles"]) == 203
     assert "task-packets/MET-REPAIR-010.yaml" in record["protectedFiles"]
     assert {p.name for p in (ROOT / "schemas").glob("*.json")} - {
         "oracle-identity.schema.json", "review-briefs.schema.json", "review-identity.schema.json",

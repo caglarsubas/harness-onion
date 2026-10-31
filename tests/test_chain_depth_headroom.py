@@ -85,7 +85,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 272 and len(accepted) == 240
+    assert len(current) == 273 and len(accepted) == 240
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -116,7 +116,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(cfp2.historical_catalog(current)) == 239
     assert len(smx.historical_catalog(current)) == 238
     assert len(phr.historical_catalog(current)) == 237
@@ -1052,8 +1053,12 @@ def test_the_conftest_wrapper_shares_only_within_its_own_test():
 def test_the_never_shared_names_are_pinned_by_name():
     conftest = _conftest_module()
     # MET-PERF-042 (owner Q-CC-F1 (a)): slot 255 adds its two identity tests to the live set.
+    # MET-PERF-044 (Q-CPPC1-1 (a), Q-273-NS): slot 273 adds its three product-packet tests to the live set.
     assert conftest.NEVER_SHARED == profile.NEVER_SHARED | {"test_identity_rule_holds_on_the_live_chain",
-                                                           "test_runtime_bindings_are_the_frozen_ones_around_a_fan_in_pass"}
+                                                           "test_runtime_bindings_are_the_frozen_ones_around_a_fan_in_pass",
+                                                           "test_v1_and_v2_agree_on_the_k0_era",
+                                                           "test_every_listed_product_meets_the_rule",
+                                                           "test_every_product_packet_vector_holds"}
     assert {"test_newest_authority_is_freshly_checked_on_every_route",
             "test_every_newer_authority_is_read_exactly_once_per_route"} <= profile.NEVER_SHARED
     assert len(profile.NEVER_SHARED) == 15

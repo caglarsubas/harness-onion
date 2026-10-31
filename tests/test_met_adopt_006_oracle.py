@@ -40,6 +40,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts import release_profile, sector_catalog  # noqa: E402
+from scripts import validate_release_profile  # noqa: E402
 
 README_PATH = "architecture/release-profile/README.md"
 RECORD_PATH = "architecture/release-profile.json"
@@ -105,7 +106,10 @@ class Reader:
             raise PermissionError("the oracle read refuses operator packet paths")
         if rel.startswith("/") or ".." in Path(rel).parts:
             raise PermissionError("the oracle read takes repository-relative paths only")
-        raw = (ROOT / rel).read_bytes()
+        # Q-273-RP-ERA (a)2 (erratum E1): the model judges the bytes of its own era, so every path is read
+        # through the slot-272 chain layer reviewed_bytes(path), the 272-era bytes (a bridged successor projects
+        # newer bytes back first), not the live file. The guards above run before any read.
+        raw = validate_release_profile.reviewed_bytes(rel)
         if rel == BRIEFS:
             raw = registry_with_rider(raw)
         if rel in self.mutations:

@@ -1,0 +1,41 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_perf_044_oracle.py",
+  "sha256": "c2c0c56d8d3de4b018a71db00486af75f6c1464b0e1d7776e95e58e7c01aa0e2"
+ },
+ "oracle": {
+  "agentId": "ab02a4168738717e9",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "local_805af49e",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "af1224c598eec0245",
+   "ee7a6f19-64d5-4e64-98bb-f09aee981543"
+  ]
+ },
+ "briefSha256": "998b123965ead4721506274d59eb3f9e7f1ec1a9d068406afa6fcb64ace5c3c4",
+ "candidateCommit": "b95700e06b90e4246cb986e64344ba63ed2db14c",
+ "launched": "2026-10-30T21:19:00+08:00",
+ "finished": "2026-10-30T21:33:29+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-CPP-ORACLE-KEEP",
+  "date": "2026-10-30"
+ },
+ "disclosures": [
+  "KEEP (MON-CPP-ORACLE-KEEP): 329/329 on c4 (f25111de, adopted under GO-CPP-ADOPT-C4): black-box tests from the chain product-packet README, rule.json and vectors.json and the models' public names, never the builder's material",
+  "independently derived: rule.json's extends and decisions digests; the twelve names from repositories.yaml; vectors.json's sections, counts and unique ids; the 22 agreement rows, head-only R4-R7 and 5 bridge-replay items; its own readers of the contract text for counts, allowedPaths, products and the R7 plain-binding rule; the step pins; F1-F7 against the public P_FORMS and AUTHORITY_CHECK by AST. Model-derived: all 80 vectors' outcome, clause and detail; 5 full P-forms accepted; 45 P-form, 6 D/G1/G2 and 36 binding refusals; 32 own mutations (4 assert only a refusal where the README ties no clause)",
+  "observations, not disagreements: R8 and R12 overlap without a stated precedence (the model reports R8; the tests accept either; a README sentence at the 273 mechanics); no valid K = 2 bindings vector (own test added); the type-alias binding is refused under any other binding",
+  "slips S1-S7, procedural (KEEP): two tool calls in one message; one scratch run without time -l; a rejected chmod after all copies matched; scratch scripts printed the structure of vectors.json and repositories.yaml, two ran the public evaluators outside pytest; vectors.json read through those scripts; run 1 failed on a bug in its own test, fixed without loosening; an auto-injected memory and account context disclosed and unused",
+  "not checked: the head side of R4-R7; the builder, verifier parts 1-4 and argv 63 as running code; the bridge-replay runs; the live identity test; byte identity of identity-rule.json and chain_identity.py with their predecessors; the design and E1; safe_load's loader choice; the builder's key order",
+  "the commit is held until slot 272 merges and 273 re-bases onto it (MON-CPP-ORACLE-KEEP)",
+  "re-committed on the re-based candidate c4 b95700e0 (GO-273-ORACLE-COMMIT): c1-c4 re-based from dd000fef onto main 8f5cc7e9 with every commit patch-identical to f25111de's chain (stable patch ids equal); the oracle bytes are unchanged (c2c0c56d); the KEEP ruling stands"
+ ]
+}

@@ -85,6 +85,7 @@ from scripts import validate_ci_runner_admission as runner
 from scripts import validate_unified_roadmap as roadmap
 from scripts.safe_yaml import safe_load
 from scripts import chain_identity as identity
+from scripts import chain_identity_v2 as identity_v2
 
 
 def packets():
@@ -105,7 +106,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 272 and len(accepted) == 254
+    assert len(current) == 273 and len(accepted) == 254
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -122,7 +123,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(i6v4.historical_catalog(current)) == 253
     assert len(dcap.historical_catalog(current)) == 252
     assert len(np5.historical_catalog(current)) == 251
@@ -1225,17 +1227,156 @@ def test_the_fact_map_totals_are_restated():
 
 # The identity rule on the live tree (both in NEVER_SHARED: no sharing wrapper is installed while they run) ----------
 
+# MET-PERF-044 (CHAIN-PRODUCT-PUBLISH-001): the product-packet list. The v2 model and its four records are pinned here;
+# the 273 head's closed record set pins the same digests.
+V2_RECORD_DIR = "architecture/chain-product-packets"
+V2_PINS = {
+    V2_RECORD_DIR + "/README.md": "434b1f0e1dc21f28f65b04c247e84653e25fbcd0231e4584208b19f338f81ef0",
+    V2_RECORD_DIR + "/decisions.md": "bc4a940b236d7dc8d5066aefa752a706307fbd1b2e4c202d924d6483f89ac7c3",
+    V2_RECORD_DIR + "/rule.json": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
+    V2_RECORD_DIR + "/vectors.json": "26438ebc76d21221790e2bfa9b9cd08b91bf333c729c38ddccbff085b2bf2342",
+    "scripts/chain_identity_v2.py": "23fe723ae060b13727118b5808541d0b40bfee22ac5e803955e324f4dd6d9a55",
+}
+
+
+def _v2_ext():
+    for path, expected in V2_PINS.items():
+        assert hashlib.sha256(profile.regular_bytes(path)).hexdigest() == expected, path
+    assert sorted(entry.name for entry in (profile.ROOT / V2_RECORD_DIR).iterdir()) == [
+        "README.md", "decisions.md", "rule.json", "vectors.json"]
+    ext = json.loads(profile.regular_bytes(V2_RECORD_DIR + "/rule.json"))
+    record = ext["evidence"]["ownerDecision"]["record"]
+    assert record["path"] == V2_RECORD_DIR + "/decisions.md"
+    assert hashlib.sha256(profile.regular_bytes(record["path"])).hexdigest() == record["sha256"]
+    return ext
+
+
+def _chain_packet_ids(chain):
+    ids = set()
+    for _, _, _, tree in chain:
+        for node in tree.body:
+            if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name) \
+                    and node.targets[0].id == "NEW_PACKET" and isinstance(node.value, ast.Constant):
+                ids.add(node.value.value)
+    return ids
+
+
 def test_identity_rule_holds_on_the_live_chain():
     """Items 1-8 over the live tree, on every verify: the live head's one-step projection gives each layer's previous
-    era. From slot 256 on this is a predecessor test, so the rule binds every later packet."""
+    era. From slot 256 on this is a predecessor test, so the rule binds every later packet. From MET-PERF-044 on the v2
+    model checks it with S (the head's slot) and C (the catalog count) apart; the frozen v1 pins stay."""
     rule = _rule()
     for path in (profile.MODEL, profile.IDENTITY_RULE):
         assert hashlib.sha256(profile.regular_bytes(path)).hexdigest() == profile.ERA_SHA256[path]
+    ext = _v2_ext()
     chain = identity.walk_layers(profile.regular_bytes, rule)
     head = importlib.import_module("scripts." + chain[-1][1])
-    count = len(list((profile.ROOT / "task-packets").glob("*.yaml")))
-    summary = identity.check(profile.regular_bytes, head.historical_bytes, rule, count)
-    assert summary["layers"] == count - 188 and summary["head"] == count
+    slot = chain[-1][0]
+    catalog = len(list((profile.ROOT / "task-packets").glob("*.yaml")))
+    summary = identity_v2.check(profile.regular_bytes, head.historical_bytes, rule, ext, slot, catalog, identity)
+    assert summary["layers"] == slot - 188 and summary["head"] == slot and summary["catalog"] == catalog
+
+
+def _k0_era(chain):
+    """The K = 0 era: the live era while the head is at most 273; from 274 on, the 273 era rebuilt by projection (a
+    bridged layer's historical_bytes undoes every newer layer first)."""
+    if chain[-1][0] <= 273:
+        head = importlib.import_module("scripts." + chain[-1][1])
+        return chain[-1][0], profile.regular_bytes, head.historical_bytes
+    by_slot = {slot: module for slot, module, _, _ in chain}
+    layer_274 = importlib.import_module("scripts." + by_slot[274])
+    layer_273 = importlib.import_module("scripts." + by_slot[273])
+    return (273, lambda path: layer_274.historical_bytes(path, profile.regular_bytes(path)),
+            lambda path, raw: layer_273.historical_bytes(path, profile.regular_bytes(path)))
+
+
+def test_v1_and_v2_agree_on_the_k0_era():
+    """MET-PERF-044 (Q-CPP-5 (a)): v1 and v2 give the same summary on the K = 0 era, kept as a regression at every later
+    era; it proves v2 = v1 on a P = 0 chain only, and v1 never runs on an era where C != S. It first asserts v1's model
+    and identity-rule digests, that both imported models are those files, and the five record digests (E1 item 8)."""
+    for path in (profile.MODEL, profile.IDENTITY_RULE):
+        assert hashlib.sha256(profile.regular_bytes(path)).hexdigest() == profile.ERA_SHA256[path]
+    assert Path(identity.__file__).resolve() == (profile.ROOT / profile.MODEL).resolve()
+    assert Path(identity_v2.__file__).resolve() == (profile.ROOT / "scripts/chain_identity_v2.py").resolve()
+    rule, ext = _rule(), _v2_ext()
+    slot, read, previous = _k0_era(identity.walk_layers(profile.regular_bytes, rule))
+    first = identity.check(read, previous, rule, slot)
+    second = identity_v2.check(read, previous, rule, ext, slot, slot, identity)
+    assert second["products"] == {} and second["slot"] == second["catalog"] == slot
+    assert {k: v for k, v in second.items() if k not in ("slot", "catalog", "products")} == first
+
+
+def test_every_listed_product_meets_the_rule():
+    """MET-PERF-044 item 12 (CPP-D3-2): R2's form check, R3, R8 clause 2 and R12 for every listed product of every layer
+    that binds PRODUCT_PACKETS, reading the pinned rule.json; argv 63 runs it at every later PR."""
+    rule, ext = _rule(), _v2_ext()
+    chain = identity.walk_layers(profile.regular_bytes, rule)
+    listed = {slot: identity_v2.layer_products(tree) for slot, _, _, tree in chain}
+    listed = {slot: ids for slot, ids in listed.items() if ids}
+    count = identity_v2.check_products(ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain))
+    assert count == sum(len(ids) for ids in listed.values())
+
+
+def _vector_outcome(run):
+    """(outcome, clause, message): the clause is the word after "identity " in the refusal's message."""
+    try:
+        run()
+    except ValueError as exc:
+        message = str(exc)
+        assert message.startswith("identity "), exc
+        return "refuse", message[len("identity "):].split(":", 1)[0], message
+    return "OK", None, None
+
+
+def test_every_product_packet_vector_holds():
+    """MET-PERF-044: every vectors.json case (steps, products, counts, bindings, allowedPaths, classForms) gives its
+    outcome and refuses under its clause with its detail; every agreement row's head column is the outcome of the
+    vectors it names, and verify's outcome equals the head's; every refusal id of rule.json is covered."""
+    ext, rule = _v2_ext(), _rule()
+    vectors = identity_v2.check_vectors_record(json.loads(profile.regular_bytes(V2_RECORD_DIR + "/vectors.json")))
+    runs = {}
+    for case in vectors["steps"]:
+        runs["steps", case["id"]] = (case, lambda case=case: identity_v2.check_step_vector(case, identity))
+    for case in vectors["products"]:
+        files = {"task-packets/%s.yaml" % name: body.encode("utf-8") for name, body in case["files"].items()}
+        runs["products", case["id"]] = (case, lambda case=case, files=files: identity_v2.check_products(
+            ext, case["listed"], files.__getitem__, safe_load, set(case.get("chainPackets", []))))
+    for case in vectors["counts"]:
+        runs["counts", case["id"]] = (case, lambda case=case: identity_v2.check_counts(
+            case["slot"], case["catalog"], case["products"]))
+    for case in vectors["bindings"]:
+        runs["bindings", case["id"]] = (case, lambda case=case: identity_v2.layer_products(ast.parse(case["source"])))
+    for case in vectors["allowedPaths"]:
+        runs["allowedPaths", case["id"]] = (case, lambda case=case: identity_v2.check_allowed_paths(
+            case["allowed"], case["changed"], case["new"], case["authority"], case["validator"], case["ownYaml"],
+            case["products"]))
+    bases = vectors["classForms"]["bases"]
+    for case in vectors["classForms"]["cases"]:
+        runs["classForms", case["id"]] = (case, lambda case=case: identity_v2.check_class_vector(
+            case, bases, rule, identity))
+    wrong = {}
+    for key, (case, run) in runs.items():
+        outcome, clause, message = _vector_outcome(run)
+        if (outcome, clause) != (case["expect"], case["clause"]) or (case["detail"] and case["detail"] not in message):
+            wrong[key] = (outcome, clause, message)
+    assert not wrong, wrong
+    head_only = {row["id"] for row in vectors["headOnly"]}
+    for row in vectors["agreement"]:
+        for ref in row["head"]["by"]:
+            section, cid = ref.split(":", 1)
+            if section == "headOnly":
+                assert cid in head_only and row["head"]["expect"] == "refuse", row["id"]
+                continue
+            case = runs[section, cid][0]
+            assert case["expect"] == row["head"]["expect"], row["id"]
+            assert row["head"]["refusal"] is None or case["refusal"] == row["head"]["refusal"], row["id"]
+        assert (row["verify"] == "passes") == (row["head"]["expect"] == "OK"), row["id"]
+    assert sorted((row["case"], row["K"]) for row in vectors["agreement"]) == [
+        (n, k) for n in range(1, 12) for k in (1, 2)]
+    covered = {case["refusal"] for case, _ in runs.values()} | head_only
+    assert set(ext["refusals"]) <= covered and {"P-form", "D", "G1", "G2"} <= covered
+    assert {"K0", "K1", "K2", "K0+-275", "AP1", "AP2", "R12-duplicate-key", "R12-L", "CF-K0", "CF-K1", "CF-K2",
+            "CF-K0+-274"} <= {cid for _, cid in runs}
 
 
 def _function_record(module, name, node, compiled):

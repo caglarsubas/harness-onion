@@ -733,12 +733,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "h10 execution authority validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 272
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET},
-            "closed 272-packet catalog retaining the 268-packet checkpoint")
+    require(len(paths) == 273
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET},
+            "closed 273-packet catalog retaining the 268-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = record["packetSha256"] if path.stem == NEW_PACKET else record["baselinePackets"][path.stem]
@@ -776,4 +776,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("H10 execution authority valid: 272 current specifications; 268-packet checkpoint and exact 267-packet predecessor; contract reviewed.")
+    print("H10 execution authority valid: 273 current specifications; 268-packet checkpoint and exact 267-packet predecessor; contract reviewed.")
