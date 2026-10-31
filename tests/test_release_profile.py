@@ -1595,6 +1595,9 @@ def test_without_the_guard_the_next_module_sees_the_appended_directory(tmp_path)
 # reader's guard fires. The reader supplies the registry with the MET-ADOPT-006/packet rider appended only when it is
 # absent (RP-C1-4, MON-RP-MECH-i), so the same tests hold before and after the 272 mechanics add the rider. The catalogs
 # reach the model only through this reader and packet set (Q-RP-PROJ (a1), design E2).
+# Q-273-RP-ERA (a)1, a reader-scope correction: every repository byte these tests hand the model is read through the
+# 272 layer's own projection (profile.reviewed_bytes), the 272 era, so a later packet's edits (its registry rider
+# first) never reach the model; at 272 itself that is the live bytes. The model and the record are unchanged.
 import copy
 import json
 import os
@@ -1621,7 +1624,7 @@ def _serialize(registry):
 
 
 def _registry(mutate=None, serialize=_serialize):
-    registry = json.loads((ROOT / rp.BRIEFS_PATH).read_bytes())
+    registry = json.loads(profile.reviewed_bytes(rp.BRIEFS_PATH))
     template = next(b for b in registry["briefs"] if b["series"] == rp.RIDER_TEMPLATE_SERIES)
     if not any(b["series"] == rp.RIDER_SERIES for b in registry["briefs"]):
         registry["briefs"].append(dict(template, series=rp.RIDER_SERIES))
@@ -1647,12 +1650,12 @@ def _reader(record=None, files=None, log=None):
         if path in files:
             return files[path]
         assert not path.startswith("/") and ".." not in path.split("/")
-        return (ROOT / path).read_bytes()
+        return profile.reviewed_bytes(path)
     return read
 
 
 def _record():
-    return json.loads((ROOT / rp.RECORD_PATH).read_bytes())
+    return json.loads(profile.reviewed_bytes(rp.RECORD_PATH))
 
 
 def _row(rec, node):
@@ -1896,9 +1899,9 @@ def test_an_unpublished_catalog_packet_fails_for_owner_packet():
 
 def test_a_packet_yaml_naming_another_repository_fails_for_owner_packet():
     path = "task-packets/KN-RET-001.yaml"
-    raw = (ROOT / path).read_bytes().replace(b"repository: mas-harness-knowledge-plane",
+    raw = profile.reviewed_bytes(path).replace(b"repository: mas-harness-knowledge-plane",
                                              b"repository: mas-harness-trust-plane", 1)
-    assert raw != (ROOT / path).read_bytes()
+    assert raw != profile.reviewed_bytes(path)
     with pytest.raises(ValueError, match=r"^RP_OWNER_PACKET: packet KN-RET-001 names the owner"):
         rp.check(_reader(files={path: raw}), _packets())
 
@@ -1911,14 +1914,14 @@ def test_a_tampered_operator_row_never_reaches_an_operator_packet_read():
 
 
 def test_one_changed_catalog_byte_fails_for_catalog_bytes():
-    raw = bytearray((ROOT / rp.PROVIDERS_PATH).read_bytes())
+    raw = bytearray(profile.reviewed_bytes(rp.PROVIDERS_PATH))
     raw[0] ^= 1
     with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: base bytes of "):
         rp.check(_reader(files={rp.PROVIDERS_PATH: bytes(raw)}), _packets())
 
 
 def test_a_changed_hkey_map_fails_for_catalog_bytes():
-    raw = (ROOT / rp.HKEY_MAP_PATH).read_bytes() + b"\n"
+    raw = profile.reviewed_bytes(rp.HKEY_MAP_PATH) + b"\n"
     with pytest.raises(ValueError, match=r"^RP_CATALOG_BYTES: H-key map"):
         rp.check(_reader(files={rp.HKEY_MAP_PATH: raw}), _packets())
 
@@ -1990,7 +1993,7 @@ R11_PLAN = "docs/repositories/11-mas-harness-distribution.md"
 
 
 def test_a_changed_r11_notice_through_the_reader_fails_for_catalog_bytes():
-    raw = (ROOT / R11_PLAN).read_bytes()
+    raw = profile.reviewed_bytes(R11_PLAN)
     line = b"7. `DIST-004-helm-profiles`:"
     assert raw.count(b"\n" + line) == 1
     changed = raw.replace(b"\n" + line, b"\n" + line.replace(b"`:", b"` :"), 1)
