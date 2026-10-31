@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/chain-product-publish-authority.json"
-AUTHORITY_SHA256 = "7894cfab1e74f808cd75ed6fa0f9e4a25eae4c8df8fbab2b605303c0f2f775b8"
+AUTHORITY_SHA256 = "f3b125c4e5f7eb4c1a6e3ca2f43ffc2de57d5793ea2a3895b87096c467c72f0a"
 VALIDATOR_PATH = "scripts/validate_chain_product_publish.py"
 BASE_COMMIT = "8f5cc7e9678d8cd13f6dda3ae5d205eada9f55e8"
 NEW_PACKET = "MET-PERF-044"
