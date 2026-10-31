@@ -2,10 +2,10 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_adopt_006_oracle.py",
-  "sha256": "900051dfbd53e034552ab67771b587fc7a06e86376d34f0af60b5afc440bf71b"
+  "sha256": "43277f66f1d8f16e528136b541fa15a0b7f4b5bacf5475a5aa65bf8d57b4a88b"
  },
  "oracle": {
-  "agentId": "a7951d9bf651f80f6",
+  "agentId": "a4967daebcb43665e",
   "model": "claude-opus-5-5"
  },
  "operator": {
@@ -16,20 +16,30 @@
  "author": {
   "agentIds": [
    "aebd531c4cf054442",
-   "ee7a6f19-64d5-4e64-98bb-f09aee981543"
+   "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+   "af1224c598eec0245",
+   "aea3778485185832d"
   ]
  },
- "briefSha256": "dc0715f02e92bdbed1ee0475d45704d0d6518aeb097ce6cead8f7ba7e6af15e8",
+ "briefSha256": "f02f91a17309cce3cdf0afad2abe980b0c64ba81ecdbc8dbbeda0a016e4a4705",
  "candidateCommit": "8242dac7c401b864debec36d8ea38e78aaf90dcd",
- "launched": "2026-10-30T15:59:00+08:00",
- "finished": "2026-10-30T16:08:46+08:00",
+ "launched": "2026-10-31T16:21:56+08:00",
+ "finished": "2026-10-31T16:31:11+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-RP-ORACLE-KEEP",
-  "date": "2026-10-30"
+  "ref": "MON-RP-ORACLE-KEEP-2",
+  "date": "2026-10-31"
  },
  "disclosures": [
+  "reader-scope correction (Q-273-RP-ERA (a)2): only the live-acceptance reader now reads the 272 era through the bridged layer's projection; the 272 record and the model bytes are untouched; this identity supersedes the one binding 900051df… (MON-RP-ORACLE-KEEP), whose disclosures are carried below unchanged",
+  "the reader imports validate_release_profile and calls only reviewed_bytes (MON-273-ORACLE-IMPORT); the agent never read its source",
+  "273's author and mechanics ids are listed so NOT_INDEPENDENT enforces Q-273-RP-ERA's no-author rule",
+  "run on an export of the slot-273 head 47155ed0 (tree c551f324…): run 1, the original: 49 passed, 1 failed (test_model_accepts_the_published_contract); run 2, the first amendment (registry_with_rider only, refused by the post-check, MON-273-ORACLE-ERRATUM): 50 passed; run 3, under erratum E1: 50 passed, 0 failed; candidateCommit stays c5 8242dac7 (MON-273-ORACLE-SUCC), the model bytes untouched",
+  "erratum E1 (e837addf…, MON-273-ORACLE-ERRATUM): registry_with_rider restored to its original bytes and only Reader's read moved to the 272 era, after both of its guards; AST diff (oracle_ast_diff273_v2.py 14862f22…, original against amended, reader class Reader): matched 102; byte-identical 101; changed helpers 1 ['Reader']; added imports 1; AST DIFF: PASS; the operator's ast post-check v2 (oracle_postcheck273_v2.py 3183a13f…, MON-273-ORACLE-IMPORT item 4): exactly one added node, `from scripts import validate_release_profile`; the changed helpers are exactly Reader; its only new reference is validate_release_profile.reviewed_bytes; POST-CHECK: PASS",
+  "operator slips (KEEP, MON-273-ORACLE-ERRATUM): the brief's fact 1 said 150 tests (the plugin's phase count; the oracle has 50); the first AST tool accepted only changed top-level functions, which led to the registry-only first amendment; the identity writer's run counts, fixed before use",
+  "oracle agent slips (KEEP, MON-273-ORACLE-ERRATUM), round 1: one grep's output spilled by the harness into its own tool-results file under the session's .claude folder, never opened; longest-line checks per file, not per range; files written with the Write tool inside WORK, bypassing the wrapper's wait; run 1's traceback printed two model-source lines (pytest's own output); erratum E1 round: none",
+  "the agent's own disclosure: the oracle's expected values (the record, the README, catalog data) are still read live outside Reader; a later packet changing one of them would need a rider",
   "re-committed on c5 8242dac7 under GO-RP-ORACLE-RECOMMIT after CONTRACT r5's PASS_FOR_ADOPTION (record c2bde65d, MON-RP-CR5-KEEP) and c5's adoption (adoption_check_c5.py, ADOPTION OK): the oracle file is byte-identical (900051df); the first commit was on c2 at e896ab76 with identity 3c0cc4d1; the oracle passed 50/50 unchanged at c3, c4 and c5 (the authors' runs) before this commit",
   "KEEP (MON-RP-ORACLE-KEEP): 50/50 on c2 (41be8f36, adopted as MON-RP-ADOPT-C2): 20 contract tests and 30 mutations, written from the release-profile README, the catalog data it names and the model's public names, never the builder's material",
   "independently derived: the counts 41/30/11, the ten codes in order, the release-set text and its source, the closure by the catalog's dependency rule, every pinned sha256, the packets' publication and repositories, the state and evidence-record rules, v2's absence and the Kubernetes tenant-platform row. Catalog-derived (sector_catalog.effective_catalog and effective_bytes): the effective profile's closure members, row owners, harnesses, kinds, deployables, implementation ownership, service bindings, tenant-fact suppliers and MISSING_PLANNED marks, the provider set, the PROFILE exclusions and the pack key. Model-derived: check() on the tree (35 reads over 27 paths, none under task-packets/OP-)",
