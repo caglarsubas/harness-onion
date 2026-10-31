@@ -1,6 +1,37 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-044 source preparation, October 31, 2026
+## Current checkpoint — MET-SECTOR-003 source preparation, October 31, 2026
+
+Alpha2 OPEN. MET-PERF-044 (CHAIN-PRODUCT-PUBLISH-001) passed required verify and merged as main 64e5700.
+IND-BANK-001-PUBLISH (the owner's Q-SEC3-TWO and the lane monitor's owner-delegated rulings, among them MON-IB1,
+GO-274-REBASE, Q-274-D1 to Q-274-D3, Q-274-V4-1, Q-274-V4-R03 and GO-274-ADOPT-C5) is the first publishing step of the product-packet vocabulary (K = 1): the meta packet publishes the product packet task-packets/IND-BANK-001.yaml, the banking business-domain packet for mas-harness-industry-packs (the banking successor of IND-WG-001 for release scope; predecessors IND-001 and IND-FIX-001, the order disclosed beside the sector-direction record's frozen predecessorIds), adopted as candidate c5 after four CONTRACT rounds with R03's yes; R03's plan declares it in its PR-packets list; architecture/sector-direction.json is unchanged, and publication is read from task-packets/ by scripts/sector_catalog.py's consumer rule. No catalog changes and no R10
+or R12 file changes. The packet registers its own review series, MET-SECTOR-003/packet, in the brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. Its
+new layer pins the product's adopted bytes and facts, keeps the sector-direction record at the base's bytes with the meta
+packet's allowedPaths naming the product, checks the registry's one rider, and requires that no unordered
+same-repository ownership diagnostic names the product. It is built under MET-PERF-042's identity rule and
+CHAIN-PRODUCT-PUBLISH-001's step rule with S and C apart: every older chain validator changes only by the bump
+vocabulary and its product forms, 273's layer by the bridge vocabulary, and 273's test keeps its 8 own routes and the
+adjacent one and one payload mutation (C2), while the new head's test keeps the full fan-in. MET-SECTOR-003 is the 274th
+specification and IND-BANK-001 the first product packet (275 packets at slot 274).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-SECTOR-003 / IND-BANK-001-PUBLISH | SOURCE_PREPARED | The first publishing step (274th packet, K = 1): publishes the product packet IND-BANK-001 for mas-harness-industry-packs; gate material (the registry rider) |
+| Alpha2A | MET-PERF-044 / CHAIN-PRODUCT-PUBLISH-001 | VERIFY_PASSED_MERGED | Merged as main 64e5700 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical product-packet vocabulary source checkpoint — MET-PERF-044 source preparation, October 31, 2026
 
 Alpha2 OPEN. MET-ADOPT-006 (RELEASE-PROFILE-001) passed required verify and merged as main 8f5cc7e.
 CHAIN-PRODUCT-PUBLISH-001 (the owner's Q-SEC3-TWO and Q-CPP-2, and the lane monitor's owner-delegated rulings, among them
@@ -2921,7 +2952,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · Q-DIAG-CAP / MET-PERF-043 · Adopt END-only pytest diagnostics (version 2 records, one END per phase and no START, every cap unchanged; MET-PERF-021's tests and the repair test's live pin follow; residual R-P43-KILL) as candidate c2 after its CONTRACT round, with its D5a oracle, the boundaries record and the registry rider; no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · EDGE-V12 / MET-ENFORCE-043 · Publish operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3 in W01 §5.4 W3-W5, no post-exec /proc read, residual R-HE5-POSTEXEC) with its v4 model, adopted as candidate c2 after two in-tree CONTRACT rounds, with its D5a oracle and the registry riders; no catalog changes; gate material (the registry riders); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · RELEASE-PROFILE-001 / MET-ADOPT-006 · Publish the first release profile record (profile.banking-readonly-amd64: 41 nodes, 30 module rows and 11 tenant facts) with its README, its model (catalogs only through sector_catalog.effective_bytes_from) and its D5a oracle, adopted as candidate c5 after five CONTRACT rounds, and the registry rider; no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
-- [ ] Alpha 2A · CHAIN-PRODUCT-PUBLISH-001 / MET-PERF-044 · Publish the product-packet vocabulary extension (the records rule.json, vectors.json, README.md and decisions.md under architecture/chain-product-packets/, closed to those four) with the v2 identity model (slot and catalog count apart) and its D5a oracle, adopted as candidate c4 after four CONTRACT rounds, the live identity test on the v2 model with the v1 = v2 regression, and the registry rider; no product published (K = 0); gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · CHAIN-PRODUCT-PUBLISH-001 / MET-PERF-044 · Publish the product-packet vocabulary extension (the records rule.json, vectors.json, README.md and decisions.md under architecture/chain-product-packets/, closed to those four) with the v2 identity model (slot and catalog count apart) and its D5a oracle, adopted as candidate c4 after four CONTRACT rounds, the live identity test on the v2 model with the v1 = v2 regression, and the registry rider; no product published (K = 0); gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · IND-BANK-001-PUBLISH / MET-SECTOR-003 · Publish the banking business-domain product packet IND-BANK-001 for mas-harness-industry-packs (predecessors IND-001 and IND-FIX-001), adopted as candidate c5 after four CONTRACT rounds with R03's yes, in the first publishing step of the product-packet vocabulary (K = 1, 275 packets at slot 274), with R03's PR-packets item and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
