@@ -16,6 +16,13 @@ allowedPaths:
   - docs/authoring.md
   - ci/handlers/ind_bank_001.py
   - ci/targets/ind-bank-001.json
+  - .github/workflows/verify.yml
+  - ci/verify-offline.sh
+  - ci/warm-source-isolation.sh
+  - ci/network_canary.py
+  - ci/run_packet_argv.py
+  - ci/zero_bill_scan.py
+  - tests/bootstrap/test_static_contract.py
 warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
 sourceReuse: []
 contracts:
@@ -95,14 +102,14 @@ deliverables:
     publishes no artifact.
 excluded:
   - Institution names, real account, card, customer, employee or transaction data, thresholds presented as real, regulatory applicability or compliance conclusions, control mappings, provider selections, write-capable actions, credentials, secrets, copied standard or ontology text, ontology imports, SKOS or other non-allowlisted namespaces, framework or dependency changes, warm-source observation, network resolution, hosted services, paid APIs, JavaScript/SPARQL SHACL, signing, publication, deployment, runtime evidence, assurance evidence, or tenant acceptance.
-prefetchCommands: [["make","prefetch"]]
+prefetchCommands: []
 offlineAcceptanceCommands: [["make","pack","PACK=banking"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_business_domain.py"],["make","pack-framework-test"],["make","pack","PACK=white-goods"],["make","certification-fixtures","PACK=white-goods"],["make","ind-fix-001-regression"],["make","build-reproducible"],["make","zero-bill"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - The banking sector pack validates against the unchanged IND-001 framework 0.1.1; two canonical indexes and fixed-epoch archives are byte-identical and keep all publication/runtime/assurance/tenant flags false.
   - pySHACL proves the local positive graph conforms and the negative graph fails with the expected closed constraint components while imports, JavaScript, advanced mode, inference, SPARQL, and network resolution stay disabled.
   - Questionnaire ids, answer keys, glossary terms, roles, objectives, KPIs, formulas, dimensions, evidence classes, decision boundaries, and acceptance outcomes are mutually closed and deterministic; negative vectors yield sorted stable blockers; the disallowed-data scan finds exactly the declared negative vector.
-  - pyproject.toml, uv.lock, zero-bill rules, the white-goods 0.5.0 pack, the common pack, and the framework source are byte-identical to the predecessor main; the closed dispatch inventory lists every descriptor including IND-FIX-001's; the white-goods pack rule, the historical white-goods certification fixtures and the IND-FIX-001 regression pass.
+  - pyproject.toml, uv.lock, the white-goods 0.5.0 pack, the common pack, and the framework source are byte-identical to the predecessor main; the zero-bill rules are unchanged except that their workflow check now asserts that no .github/workflows/ file exists; the closed dispatch inventory lists every descriptor including IND-FIX-001's; the white-goods pack rule, the historical white-goods certification fixtures and the IND-FIX-001 regression pass.
   - Every fixture is synthetic and non-personal, and every institution-specific choice remains deferred until tenant evidence exists.
   - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate evidence states.
 rollback: Revert the unreleased banking business/domain slice (packs/banking, its handler, descriptor, tests, docs, and the IND-BANK-001 dispatch-inventory line; the carried IND-FIX-001 inventory line stays) together; retain common.foundation 1.0.0, framework 0.1.1, the historical white-goods packs and evidence, and every downstream tenant or release record unchanged.
