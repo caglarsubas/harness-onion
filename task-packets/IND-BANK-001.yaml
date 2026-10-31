@@ -2,7 +2,7 @@ id: IND-BANK-001
 repository: mas-harness-industry-packs
 branch: codex/ind-bank-001-business-domain
 objective: Define the banking business objectives, accountable roles, glossary and ontology (parties, products, accounts, transactions, channels, credit, risk and compliance concepts), KPIs, and representative synthetic answer sets as the banking successor of IND-WG-001.
-predecessors: [IND-001]
+predecessors: [IND-001, IND-FIX-001]
 allowedPaths:
   - packs/banking/pack.yaml
   - packs/banking/contracts.lock.json
@@ -32,6 +32,7 @@ contracts:
   - Satisfies the IND-001 rule carried by MET-SECTOR-001 (RDFLib and pySHACL admitted and locked before SHACL validation is claimed) by binding the development-only rdflib==7.6.0 and pyshacl==0.40.1 closure already locked in uv.lock; the handler refuses any other installed version and packet execution never downloads a package.
   - Supersedes IND-WG-001 for release scope only (MET-SECTOR-001); IND-WG-001's accepted edges and the white-goods 0.5.0 pack stay byte-identical historical source.
   - "Consumes no harness-onion provider, service or module catalog: the packet reads none of them, and any later read of their banking-era bytes goes only through scripts/sector_catalog.py's effective_bytes(path) or effective_catalog(path), never the raw catalog files (MET-SECTOR-002, SECTOR-D1)."
+  - "Predecessors add IND-FIX-001 beyond the sector-direction authority's predecessorIds [IND-001], because this packet deletes or rewrites IND-FIX-001's files at its merge 118296af; IND-001 stays explicit for its OBLIGATION_TRANSFERRED disposition; the retained edge to IND-WG-005 stays historical."
 deliverables:
   - >-
     packs/banking is a closed SECTOR pack banking.financial-services version
