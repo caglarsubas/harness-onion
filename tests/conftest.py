@@ -194,3 +194,18 @@ def _test_module_parse_sharing(request):
     finally:
         if getattr(vars(module).get("safe_load"), _PARSE_MARK, False) is True:
             module.safe_load = real
+
+
+# MET-ADOPT-006 (Q-272-DRY-1 (a), 2026-10-31): a test module's collection leaves sys.path as it found it. The merged
+# MET-ENFORCE-043 oracle leaves scripts/ on sys.path when collected, so a later first import of a scripts.* module bound
+# the top-level copy of its fallback import, and the parallel suite's file plan decided the result. sys.path is restored
+# exactly after each test module's collection; the directories pytest adds for a conftest are already in the snapshot.
+@pytest.hookimpl(wrapper=True)
+def pytest_make_collect_report(collector):
+    if not isinstance(collector, pytest.Module):
+        return (yield)
+    path = list(sys.path)
+    try:
+        return (yield)
+    finally:
+        sys.path[:] = path

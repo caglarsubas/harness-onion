@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ENFORCE-043
+## Current source preparation — MET-ADOPT-006
+
+MET-ADOPT-006 (RELEASE-PROFILE-001, slot 272): the first release profile record (profile.banking-readonly-amd64, 41
+nodes) with its README, its model and its D5a oracle; no catalog changes; gate material (the registry rider). Alpha2
+OPEN; 271 accepted plus MET-ADOPT-006 only.
+
+## Historical edge record v12 source preparation — MET-ENFORCE-043
 
 MET-ENFORCE-043 (EDGE-V12, slot 271): operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for
 HE-005B) and
@@ -1648,3 +1654,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 269 | `MET-GOV-005` | `Harness-Engineering` | TECH-TRUTH-001: the v2 technology record (the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests, the re-issued D5a oracle and its identity, ADR 0010's amendment 1); gate material (the registry rider) |
 | 270 | `MET-PERF-043` | `Harness-Engineering` | Q-DIAG-CAP: END-only pytest diagnostics (version 2 records, one END per phase and no START, every cap unchanged) with the module's tests, its D5a oracle and the boundaries record; gate material (ci/pytest_diagnostics.py and the registry rider) |
 | 271 | `MET-ENFORCE-043` | `Harness-Engineering` | EDGE-V12: operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3, no post-exec /proc read) with its v4 model and D5a oracle; gate material (the registry riders) |
+| 272 | `MET-ADOPT-006` | `Harness-Engineering` | RELEASE-PROFILE-001: the first release profile record (profile.banking-readonly-amd64, 41 nodes) with its model and D5a oracle; gate material (the registry rider) |

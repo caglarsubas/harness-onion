@@ -1,6 +1,36 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ENFORCE-043 source preparation, October 29, 2026
+## Current checkpoint — MET-ADOPT-006 source preparation, October 30, 2026
+
+Alpha2 OPEN. MET-ENFORCE-043 (EDGE-V12) passed required verify and merged as main dd000fe.
+RELEASE-PROFILE-001 (the lane monitor's owner-delegated rulings, among them MON-RP-D1 (Q-RP-1 (a)), MON-RP-D2,
+MON-RP-E1-OK, Q-RP-PROJ (a1), MON-RP-CR5-KEEP, GO-RP-ADOPT-C5 and MON-RP-ORACLE-KEEP) adopts candidate c5 and its D5a
+oracle: the first release profile record, architecture/release-profile.json (planeon.internal.release-profile/v1): the overlay-effective closure of profile.banking-readonly-amd64 (41 nodes: 30 module rows and 11 tenant facts), each module's deployables, owner, implementation packet or tenant attestation reference, readiness obligation and exit evidence kinds, the provider set, the exclusions and the non-claims, with its README; its model scripts/release_profile.py, which reads every byte through an injected reader and takes the catalogs only through scripts/sector_catalog.py's effective_bytes_from (added with it); and the D5a oracle tests/test_met_adopt_006_oracle.py, bound by its identity. No catalog changes and no R10 or R12 file changes. The packet registers its own review series,
+MET-ADOPT-006/packet, in the brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. Its new layer checks the five packet files against their adopted digests,
+binds the catalogs through the model's own pins, runs the model over the era's reviewed bytes and its own packet set,
+checks the oracle identity's binding of the oracle's bytes and the registry's one rider. It is built under MET-PERF-042's
+identity rule and step rule: every older chain validator changes only by the bump vocabulary, 271's layer by the bridge
+vocabulary, and 271's test keeps its 8 own routes and the adjacent one and one payload mutation (C2), while the new head's
+test keeps the full fan-in. MET-ADOPT-006 is the sole 272nd specification.
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ADOPT-006 / RELEASE-PROFILE-001 | SOURCE_PREPARED | The first release profile record (272nd packet): profile.banking-readonly-amd64, 41 nodes, its model and D5a oracle; gate material (the registry rider) |
+| Alpha2A | MET-ENFORCE-043 / EDGE-V12 | VERIFY_PASSED_MERGED | Merged as main dd000fe |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical edge record v12 source checkpoint — MET-ENFORCE-043 source preparation, October 29, 2026
 
 Alpha2 OPEN. MET-PERF-043 (Q-DIAG-CAP) passed required verify and merged as main 3238383.
 EDGE-V12 moved from slot 270 to 271 under the owner's Q-DIAG-CAP and MON-SLOT-270-PERF, with its contract bytes, records and
@@ -2859,7 +2889,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · TECH-ORCHESTRATION-001 / MET-ADOPT-005 · Record the H10 execution authority in ADR 0011 (the owner's TECH-D1 and Q-TO-6: PostgreSQL leases and outbox as H10's qualified baseline, Temporal an optional provider), with the new H10 planning-target block and one R08 clause, naming the superseded planning texts without editing them; the provider catalog unchanged; gate material (the H10 harness document and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · TECH-TRUTH-001 / MET-GOV-005 · Adopt the v2 technology record (the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, ADR 0010's amendment 1 and one status line); no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · Q-DIAG-CAP / MET-PERF-043 · Adopt END-only pytest diagnostics (version 2 records, one END per phase and no START, every cap unchanged; MET-PERF-021's tests and the repair test's live pin follow; residual R-P43-KILL) as candidate c2 after its CONTRACT round, with its D5a oracle, the boundaries record and the registry rider; no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
-- [ ] Alpha 2A · EDGE-V12 / MET-ENFORCE-043 · Publish operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3 in W01 §5.4 W3-W5, no post-exec /proc read, residual R-HE5-POSTEXEC) with its v4 model, adopted as candidate c2 after two in-tree CONTRACT rounds, with its D5a oracle and the registry riders; no catalog changes; gate material (the registry riders); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · EDGE-V12 / MET-ENFORCE-043 · Publish operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3 in W01 §5.4 W3-W5, no post-exec /proc read, residual R-HE5-POSTEXEC) with its v4 model, adopted as candidate c2 after two in-tree CONTRACT rounds, with its D5a oracle and the registry riders; no catalog changes; gate material (the registry riders); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · RELEASE-PROFILE-001 / MET-ADOPT-006 · Publish the first release profile record (profile.banking-readonly-amd64: 41 nodes, 30 module rows and 11 tenant facts) with its README, its model (catalogs only through sector_catalog.effective_bytes_from) and its D5a oracle, adopted as candidate c5 after five CONTRACT rounds, and the registry rider; no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

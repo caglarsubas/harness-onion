@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-ENFORCE-043
+## Current source preparation — MET-ADOPT-006
+
+MET-ADOPT-006 (RELEASE-PROFILE-001, slot 272): the first release profile record, architecture/release-profile.json (planeon.internal.release-profile/v1): the overlay-effective closure of profile.banking-readonly-amd64 (41 nodes: 30 module rows and 11 tenant facts), each module's deployables, owner, implementation packet or tenant attestation reference, readiness obligation and exit evidence kinds, the provider set, the exclusions and the non-claims, with its README; its model scripts/release_profile.py, which reads every byte through an injected reader and takes the catalogs only through scripts/sector_catalog.py's effective_bytes_from (added with it); and the D5a oracle tests/test_met_adopt_006_oracle.py, bound by its identity. No catalog changes. The packet registers its own review series in the
+brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and step rule. Alpha2 OPEN; 271
+accepted plus MET-ADOPT-006 only.
+
+## Historical edge record v12 source preparation — MET-ENFORCE-043
 
 MET-ENFORCE-043 (EDGE-V12, moved to slot 271 by Q-DIAG-CAP and MON-SLOT-270-PERF): operator edge record v12 and
 host-interface amendment HE5. Edge record v12 carries edge record
@@ -1511,6 +1517,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 143. `MET-GOV-005`: adopt the v2 technology record (TECH-TRUTH-001): the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, and ADR 0010's amendment 1, with one status line; no catalog changes; gate material (the registry rider), the owner's per-PR approval.
 144. `MET-PERF-043`: END-only pytest diagnostics (Q-DIAG-CAP): version 2 records in ci/pytest_diagnostics.py, one END per phase and no START, with every cap unchanged, the module's tests, the D5a oracle and the boundaries record (residual R-P43-KILL); no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider), the owner's per-PR approval.
 145. `MET-ENFORCE-043`: publish operator edge record v12 and host-interface amendment HE5 (EDGE-V12): v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B, and fd 4 beside FD3 in W01 §5.4 W3-W5 with no post-exec /proc read (residual R-HE5-POSTEXEC), with the v4 model, the CONTRACT rounds and the D5a oracle; no catalog changes; gate material (the registry riders), the owner's per-PR approval.
+146. `MET-ADOPT-006`: publish the first release profile record (RELEASE-PROFILE-001): profile.banking-readonly-amd64's 41-node closure with its README, its model (catalogs only through sector_catalog.effective_bytes_from) and the D5a oracle; no catalog changes; gate material (the registry rider), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 
