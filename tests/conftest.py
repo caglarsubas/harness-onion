@@ -52,6 +52,9 @@ NEVER_SHARED = frozenset({
     "test_full_predecessor_suites_and_validators_remain_green",
     "test_identity_rule_holds_on_the_live_chain",
     "test_runtime_bindings_are_the_frozen_ones_around_a_fan_in_pass",
+    "test_v1_and_v2_agree_on_the_k0_era",
+    "test_every_listed_product_meets_the_rule",
+    "test_every_product_packet_vector_holds",
 })
 EXACT_TYPES = (str, bytes)
 _ACTIVE = {"memo": None}          # the running shared test's memo, else None
