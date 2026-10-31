@@ -1,6 +1,36 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-ADOPT-006 source preparation, October 30, 2026
+## Current checkpoint — MET-PERF-044 source preparation, October 31, 2026
+
+Alpha2 OPEN. MET-ADOPT-006 (RELEASE-PROFILE-001) passed required verify and merged as main 8f5cc7e.
+CHAIN-PRODUCT-PUBLISH-001 (the owner's Q-SEC3-TWO and Q-CPP-2, and the lane monitor's owner-delegated rulings, among them
+MON-CPP-D2 (Q-CPP-1 (a)), MON-CPP-E1-OK, MON-CPP-CR4-KEEP, GO-CPP-ADOPT-C4, MON-CPP-ORACLE-KEEP, MON-273-GATESET and
+MON-273-RIDERS) adopts candidate c4 and its D5a oracle: the product-packet vocabulary extension: the records architecture/chain-product-packets/rule.json (harness.planeon.ai/chain-product-packet-rule/v1), vectors.json, README.md and decisions.md (the owner-decision record for Q-SEC3-TWO and Q-CPP-2, which rule.json cites by path and digest); the identity model scripts/chain_identity_v2.py, which takes the slot S and the catalog count C apart and reads each layer's PRODUCT_PACKETS list from its source by AST; and the D5a oracle tests/test_met_perf_044_oracle.py, bound by its identity. tests/test_chain_compaction.py's live identity test now runs the v2 model with S and C, keeps the frozen v1 pins and the v1 = v2 regression on the K = 0 era, and applies the product rules to every listed product; its three new tests join NEVER_SHARED in tests/conftest.py. The packet publishes no product (K = 0); architecture/chain-compaction/ and scripts/chain_identity.py are unchanged. No catalog changes and no R10 or R12 file changes. The packet
+registers its own review series, MET-PERF-044/packet, in the brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. Its new layer checks the seven packet
+files against their adopted digests, lists the records directory closed to its four records, checks rule.json's citation
+of decisions.md by digest, the oracle identity's binding of the oracle's bytes and the registry's one rider. It is built
+under MET-PERF-042's identity rule and step rule: every older chain validator changes only by the bump vocabulary, 272's
+layer by the bridge vocabulary, and 272's test keeps its 8 own routes and the adjacent one and one payload mutation (C2),
+while the new head's test keeps the full fan-in. MET-PERF-044 is the sole 273rd specification (273 packets at slot 273).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-044 / CHAIN-PRODUCT-PUBLISH-001 | SOURCE_PREPARED | The product-packet vocabulary extension (273rd packet, K = 0): four records, the v2 identity model and the D5a oracle; gate material (the registry rider) |
+| Alpha2A | MET-ADOPT-006 / RELEASE-PROFILE-001 | VERIFY_PASSED_MERGED | Merged as main 8f5cc7e |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path, no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior
+checkpoints below are history only.
+
+## Historical release profile source checkpoint — MET-ADOPT-006 source preparation, October 30, 2026
 
 Alpha2 OPEN. MET-ENFORCE-043 (EDGE-V12) passed required verify and merged as main dd000fe.
 RELEASE-PROFILE-001 (the lane monitor's owner-delegated rulings, among them MON-RP-D1 (Q-RP-1 (a)), MON-RP-D2,
@@ -2890,7 +2920,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · TECH-TRUTH-001 / MET-GOV-005 · Adopt the v2 technology record (the v2 language-placement data with the deployable-level technology record and the baseline bindings, its checker and tests grown in place, the re-issued D5a oracle and its identity, ADR 0010's amendment 1 and one status line); no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · Q-DIAG-CAP / MET-PERF-043 · Adopt END-only pytest diagnostics (version 2 records, one END per phase and no START, every cap unchanged; MET-PERF-021's tests and the repair test's live pin follow; residual R-P43-KILL) as candidate c2 after its CONTRACT round, with its D5a oracle, the boundaries record and the registry rider; no catalog changes; gate material (ci/pytest_diagnostics.py and the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · EDGE-V12 / MET-ENFORCE-043 · Publish operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3 in W01 §5.4 W3-W5, no post-exec /proc read, residual R-HE5-POSTEXEC) with its v4 model, adopted as candidate c2 after two in-tree CONTRACT rounds, with its D5a oracle and the registry riders; no catalog changes; gate material (the registry riders); pass required verify through the owner's App after the owner's per-PR approval.
-- [ ] Alpha 2A · RELEASE-PROFILE-001 / MET-ADOPT-006 · Publish the first release profile record (profile.banking-readonly-amd64: 41 nodes, 30 module rows and 11 tenant facts) with its README, its model (catalogs only through sector_catalog.effective_bytes_from) and its D5a oracle, adopted as candidate c5 after five CONTRACT rounds, and the registry rider; no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · RELEASE-PROFILE-001 / MET-ADOPT-006 · Publish the first release profile record (profile.banking-readonly-amd64: 41 nodes, 30 module rows and 11 tenant facts) with its README, its model (catalogs only through sector_catalog.effective_bytes_from) and its D5a oracle, adopted as candidate c5 after five CONTRACT rounds, and the registry rider; no catalog changes; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · CHAIN-PRODUCT-PUBLISH-001 / MET-PERF-044 · Publish the product-packet vocabulary extension (the records rule.json, vectors.json, README.md and decisions.md under architecture/chain-product-packets/, closed to those four) with the v2 identity model (slot and catalog count apart) and its D5a oracle, adopted as candidate c4 after four CONTRACT rounds, the live identity test on the v2 model with the v1 = v2 regression, and the registry rider; no product published (K = 0); gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

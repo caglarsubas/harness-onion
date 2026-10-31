@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ADOPT-006
+## Current source preparation — MET-PERF-044
+
+MET-PERF-044 (CHAIN-PRODUCT-PUBLISH-001, slot 273): the product-packet vocabulary extension (four records under
+architecture/chain-product-packets/) with the v2 identity model and its D5a oracle; no product published (K = 0; 273
+packets at slot 273); gate material (the registry rider). Alpha2 OPEN; 272 accepted plus MET-PERF-044 only.
+
+## Historical release profile source preparation — MET-ADOPT-006
 
 MET-ADOPT-006 (RELEASE-PROFILE-001, slot 272): the first release profile record (profile.banking-readonly-amd64, 41
 nodes) with its README, its model and its D5a oracle; no catalog changes; gate material (the registry rider). Alpha2
@@ -1655,3 +1661,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 270 | `MET-PERF-043` | `Harness-Engineering` | Q-DIAG-CAP: END-only pytest diagnostics (version 2 records, one END per phase and no START, every cap unchanged) with the module's tests, its D5a oracle and the boundaries record; gate material (ci/pytest_diagnostics.py and the registry rider) |
 | 271 | `MET-ENFORCE-043` | `Harness-Engineering` | EDGE-V12: operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3, no post-exec /proc read) with its v4 model and D5a oracle; gate material (the registry riders) |
 | 272 | `MET-ADOPT-006` | `Harness-Engineering` | RELEASE-PROFILE-001: the first release profile record (profile.banking-readonly-amd64, 41 nodes) with its model and D5a oracle; gate material (the registry rider) |
+| 273 | `MET-PERF-044` | `Harness-Engineering` | CHAIN-PRODUCT-PUBLISH-001: the product-packet vocabulary extension (four records, the v2 identity model, D5a oracle); no product (K = 0); gate material (the registry rider) |

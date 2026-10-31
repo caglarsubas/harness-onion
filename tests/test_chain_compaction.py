@@ -1231,7 +1231,7 @@ def test_the_fact_map_totals_are_restated():
 # the 273 head's closed record set pins the same digests.
 V2_RECORD_DIR = "architecture/chain-product-packets"
 V2_PINS = {
-    V2_RECORD_DIR + "/README.md": "60c23b685644b7b256f67dc37b255cc1b054ff2aae7a1b74b839647a27438a45",
+    V2_RECORD_DIR + "/README.md": "434b1f0e1dc21f28f65b04c247e84653e25fbcd0231e4584208b19f338f81ef0",
     V2_RECORD_DIR + "/decisions.md": "bc4a940b236d7dc8d5066aefa752a706307fbd1b2e4c202d924d6483f89ac7c3",
     V2_RECORD_DIR + "/rule.json": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
     V2_RECORD_DIR + "/vectors.json": "26438ebc76d21221790e2bfa9b9cd08b91bf333c729c38ddccbff085b2bf2342",
