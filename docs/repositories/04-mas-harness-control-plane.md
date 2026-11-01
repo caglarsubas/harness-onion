@@ -194,6 +194,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 
 10. `CTRL-FIX-003-status-consistency`: clock-aware materialization for detail and portfolio, canonical aggregation parity using pinned CON-FIX-001 vectors, and cumulative control regressions; production policies remain denied.
 11. `CTRL-INTEGRATE-001-production-overview`: explicit authenticated production composition and durable tenant projection/policy adapters, additive database migration, real route/browser tests and isolated PostgreSQL acceptance. Missing local capacity remains NOT_RUN_ENV_UNAVAILABLE; CONF-A2-001 separately certifies installed behavior.
+12. `CTRL-TRANSPORT-001-verifier-bootstrap`: one-time closed transport correction that adopts harness-onion's offline transport byte for byte, retires the hosted workflow, passes NEXT_TELEMETRY_DISABLED=1 to dispatched children and installs the pinned npm closure in-session; verifiable only once VERIFIER-EXT-R04-R11 is installed.
 
 ## `CTRL-001` bootstrap authority
 
@@ -257,6 +258,31 @@ subset. Additive dependencies are admitted only when a later packet pins them in
 its package lock, packet-local tests, signed root-owned cache inventory, and
 offline acceptance. The correction cannot edit the Makefile, dispatcher,
 transport, workflow, PORTING ledger, public API, tenant state, or deployment.
+
+## `CTRL-TRANSPORT-001` transport-correction authority
+
+The owner-operated verifier admits a control-plane head only when the head
+carries harness-onion's offline transport byte for byte and no hosted workflow,
+and `next build` must not attempt telemetry under deny-all outbound isolation.
+The merged CTRL-001 transport, workflow and dispatcher predate both rules.
+
+`CTRL-TRANSPORT-001` is the sole, one-time transport correction over
+CTRL-001-owned files. Its authority is exactly its 11 allowedPaths: the four
+transport files `ci/verify-offline.sh`, `ci/warm-source-isolation.sh`,
+`ci/network_canary.py` and `ci/run_packet_argv.py`, equal in bytes and git mode
+to harness-onion main `57bb1033e4a68cbb38610987060aedd8e879c7e6`; the deletion
+of `.github/workflows/verify.yml`; `ci/zero_bill_scan.py`, which then refuses
+any file under `.github/workflows/`; the single `subprocess.run` line of
+`ci/run_make_target.py`, which passes `NEXT_TELEMETRY_DISABLED=1` to dispatched
+children; its own descriptor `ci/targets/ctrl-transport-001.json`; and the
+three new tests `tests/bootstrap/test_no_workflow.py`,
+`tests/bootstrap/test_dispatch_child_env.py` and
+`tests/bootstrap/test_node_closure.py`. The correction cannot edit the Makefile,
+`ci/handlers/**`, any predecessor `ci/targets` descriptor, `PORTING.yaml`,
+product source, dependencies or any evidence axis, and the closed dispatcher's
+rule loading, matching, ordering and argv rendering stay unchanged. Every later
+packet keeps the bootstrap/Makefile/dispatcher/workflow/PORTING exclusion. The
+packet is verifiable only once VERIFIER-EXT-R04-R11 is installed.
 
 ## `CTRL-002` questionnaire authority
 
