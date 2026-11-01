@@ -230,6 +230,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `DIST-AIR-001-export-import`: OCI layout archive, checksums, signatures/trust/SBOM/licenses/vulnerability DB/model manifest, physical offline verification/import, and relocation digest proof.
 7. `DIST-004-helm-profiles`: minimal ARM64/AMD64, regulated OCP, bridge/silo, and air-gap profile charts with exact selected subcharts only. Banking profile recommendations and the banking pack digest move to the unpublished proposal DIST-BANK-001 (SECTOR-D1).
 8. `DIST-005-repro-security`: two-clean-build digest match, corrupt/missing/extra blob denial, path traversal/archive bombs, compromised staging, and key-revocation drills.
+9. `DIST-TRANSPORT-001-verifier-bootstrap`: exact harness-onion transport copies (offline wrapper, warm-source isolation, network canary, argv runner), hosted-workflow removal with a zero-bill scan that refuses any workflow, the dispatcher's handler PYTHONPATH named exception, and its own transport-bootstrap descriptor; the merged DIST offline acceptance passes unchanged under the shared transport, verifiable only once VERIFIER-EXT-R04-R11 is installed.
 
 ## Testing, verification, and acceptance
 

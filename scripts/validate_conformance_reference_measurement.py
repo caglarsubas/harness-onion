@@ -366,7 +366,7 @@ def validate_authority(packets, record, inputs):
         for path, checksum in pins.items():
             require(type(inputs[path]) is bytes and digest(checkpoint_history(path, inputs[path])) == checksum, "current source changed: " + path)
         old = {Path(p).stem for p in record["protectedFiles"] if p.startswith("task-packets/") and p.endswith(".yaml")}
-        require(len(old) == 150 and len(packets) == 275 and set(packets) == old | set(NEW_IDS) | {"MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003", "MET-PERF-011", "MET-PERF-012", "CONF-PERF-006", "CONF-BENCH-002", "MET-PERF-013", "CONF-BENCH-003", "MET-REPAIR-018", "CONF-FIX-008", "MET-PERF-014", "CONF-DIAG-004", "MET-PERF-015", "CONF-FIX-009", "MET-PERF-016", "MET-PERF-017", "MET-REPAIR-019", "MET-ENFORCE-001", "MET-PERF-018", "MET-ENFORCE-003", "CONF-FIX-010", "MET-UNIFY-005", "MET-RUNNER-001", "MET-PERF-028", "MET-LINUX-005", "MET-VERIFY-001", "MET-PERF-029", "MET-PERF-030", "MET-LINUX-006", "MET-VERIFY-002", "MET-VERIFY-003", "MET-VERIFY-004", "MET-ENFORCE-004", "MET-ENFORCE-005", "MET-ENFORCE-006", "MET-ENFORCE-007", "MET-PERF-031", "MET-ENFORCE-008", "MET-ENFORCE-009", "MET-SECTOR-001", "MET-PERF-032", "MET-ENFORCE-010", "MET-ENFORCE-011", "MET-ENFORCE-012", "MET-ENFORCE-013", "MET-ENFORCE-014", "MET-ENFORCE-015", "MET-ENFORCE-016", "MET-PERF-035", "MET-PERF-036", "MET-SECTOR-002", "MET-ENFORCE-017", "MET-ENFORCE-018", "MET-ENFORCE-019", "MET-ENFORCE-020", "MET-ENFORCE-021", "MET-ENFORCE-022", "MET-ENFORCE-023", "MET-PERF-037", "MET-ENFORCE-024", "MET-ADOPT-003", "MET-MAS-001", "MET-MAS-002", "MET-MAS-006", "MET-ENFORCE-025", "MET-MAS-003", "MET-PERF-038", "MET-ADOPT-004", "MET-ENFORCE-026", "MET-ENFORCE-027", "MET-PERF-039", "MET-ENFORCE-028", "MET-ENFORCE-029", "MET-PERF-040", "MET-ENFORCE-030", "MET-ENFORCE-031", "MET-ENFORCE-032", "MET-MAS-004", "MET-ENFORCE-033", "MET-ENFORCE-034", "MET-ENFORCE-035", "MET-ENFORCE-036", "MET-ENFORCE-037", "MET-LINUX-007", "MET-ENFORCE-038", "MET-PERF-041", "MET-ENFORCE-039", "MET-PERF-042", "MET-ENFORCE-040", "MET-GOV-001", "MET-ENFORCE-041", "MET-GOV-002", "MET-LIVE-002", "MET-GOV-003", "MET-LIVE-003", "MET-LIVE-004", "MET-LINUX-009", "MET-ENFORCE-042", "MET-LINUX-008", "MET-GOV-004", "MET-ADOPT-005", "MET-GOV-005", "MET-PERF-043", "MET-ENFORCE-043", "MET-ADOPT-006", "MET-PERF-044", "MET-SECTOR-003", "IND-BANK-001"}, "exact155 catalog")
+        require(len(old) == 150 and len(packets) == 278 and set(packets) == old | set(NEW_IDS) | {"MET-REPAIR-016", "CONF-FIX-006", "MET-ADOPT-001", "MET-PERF-006", "CONF-DIAG-001", "MET-PERF-007", "MET-PERF-008", "CONF-DIAG-002", "MET-ACCEPT-001", "MET-PUBLISH-001", "MET-REPAIR-017", "CONF-FIX-007", "MET-ADOPT-002", "MET-PERF-010", "MET-PERF-009", "CONF-DIAG-003", "MET-PERF-011", "MET-PERF-012", "CONF-PERF-006", "CONF-BENCH-002", "MET-PERF-013", "CONF-BENCH-003", "MET-REPAIR-018", "CONF-FIX-008", "MET-PERF-014", "CONF-DIAG-004", "MET-PERF-015", "CONF-FIX-009", "MET-PERF-016", "MET-PERF-017", "MET-REPAIR-019", "MET-ENFORCE-001", "MET-PERF-018", "MET-ENFORCE-003", "CONF-FIX-010", "MET-UNIFY-005", "MET-RUNNER-001", "MET-PERF-028", "MET-LINUX-005", "MET-VERIFY-001", "MET-PERF-029", "MET-PERF-030", "MET-LINUX-006", "MET-VERIFY-002", "MET-VERIFY-003", "MET-VERIFY-004", "MET-ENFORCE-004", "MET-ENFORCE-005", "MET-ENFORCE-006", "MET-ENFORCE-007", "MET-PERF-031", "MET-ENFORCE-008", "MET-ENFORCE-009", "MET-SECTOR-001", "MET-PERF-032", "MET-ENFORCE-010", "MET-ENFORCE-011", "MET-ENFORCE-012", "MET-ENFORCE-013", "MET-ENFORCE-014", "MET-ENFORCE-015", "MET-ENFORCE-016", "MET-PERF-035", "MET-PERF-036", "MET-SECTOR-002", "MET-ENFORCE-017", "MET-ENFORCE-018", "MET-ENFORCE-019", "MET-ENFORCE-020", "MET-ENFORCE-021", "MET-ENFORCE-022", "MET-ENFORCE-023", "MET-PERF-037", "MET-ENFORCE-024", "MET-ADOPT-003", "MET-MAS-001", "MET-MAS-002", "MET-MAS-006", "MET-ENFORCE-025", "MET-MAS-003", "MET-PERF-038", "MET-ADOPT-004", "MET-ENFORCE-026", "MET-ENFORCE-027", "MET-PERF-039", "MET-ENFORCE-028", "MET-ENFORCE-029", "MET-PERF-040", "MET-ENFORCE-030", "MET-ENFORCE-031", "MET-ENFORCE-032", "MET-MAS-004", "MET-ENFORCE-033", "MET-ENFORCE-034", "MET-ENFORCE-035", "MET-ENFORCE-036", "MET-ENFORCE-037", "MET-LINUX-007", "MET-ENFORCE-038", "MET-PERF-041", "MET-ENFORCE-039", "MET-PERF-042", "MET-ENFORCE-040", "MET-GOV-001", "MET-ENFORCE-041", "MET-GOV-002", "MET-LIVE-002", "MET-GOV-003", "MET-LIVE-003", "MET-LIVE-004", "MET-LINUX-009", "MET-ENFORCE-042", "MET-LINUX-008", "MET-GOV-004", "MET-ADOPT-005", "MET-GOV-005", "MET-PERF-043", "MET-ENFORCE-043", "MET-ADOPT-006", "MET-PERF-044", "MET-SECTOR-003", "IND-BANK-001", "MET-VERIFY-005", "DIST-TRANSPORT-001", "CTRL-TRANSPORT-001"}, "exact155 catalog")
         for name in old | set(NEW_IDS):
             require(canonical(packets[name]) == canonical(safe_load(inputs["task-packets/"+name+".yaml"])), "packet raw/semantic mismatch")
         packet, product, reference = (packets[name] for name in NEW_IDS)
@@ -603,6 +603,10 @@ def validate_dispatch_ownership(packets):
         from scripts.validate_factory_diagnostics import close_factory_dispatch
         from scripts.validate_guard_cost_repair import close_guard_dispatch
         from scripts.validate_guard_traversal import close_traversal_dispatch
+    try:
+        from validate_met_verify_005 import close_bootstrap_transport_dispatch
+    except ImportError:
+        from scripts.validate_met_verify_005 import close_bootstrap_transport_dispatch
     """No generic weakening; close only the ten immutable, exact scoped pairs."""
     try:
         from validate_packet_ownership import validate_packet_ownership
@@ -630,7 +634,7 @@ def validate_dispatch_ownership(packets):
             retired.update("unordered same-repository packets " + left + " and " + right + " overlap at "
                            + repr(path) + " and " + repr(path) for path in paths)
         require(len(retired) == 72 and all(errors.count(message) == 1 for message in retired), "exact72 diagnostics")
-        return close_traversal_dispatch(packets, close_guard_dispatch(packets, close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired])))))))))
+        return close_bootstrap_transport_dispatch(packets, close_traversal_dispatch(packets, close_guard_dispatch(packets, close_factory_dispatch(packets, close_integration_dispatch(packets, close_transport_dispatch(packets, close_document_dispatch(packets, close_timing_dispatch(packets, close_diagnostic_dispatch(packets, close_dispatch_errors(packets, [error for error in errors if error not in retired]))))))))))
     except (ValueError, TypeError, KeyError, OSError, RecursionError):
         return errors + ["missing or changed closed reference/candidate dispatch"]
 
@@ -644,7 +648,7 @@ def main():
     for error in errors:
         print("ERROR: "+error)
     if not errors:
-        print("Conformance performance authority valid: 275 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
+        print("Conformance performance authority valid: 278 packets; 150 immutable YAML; 127/327 checkpoint; product/native NOT_RUN.")
     return int(bool(errors))
 
 

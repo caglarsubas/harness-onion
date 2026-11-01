@@ -1,0 +1,83 @@
+id: DIST-TRANSPORT-001
+repository: mas-harness-distribution
+branch: codex/dist-transport-001-verifier-bootstrap
+objective: Replace R11's pre-programme packet transport with exact harness-onion transport copies, remove the hosted workflow, keep zero-bill closed without a workflow, and make the package importable for dispatcher handlers so the merged DIST acceptance runs unchanged under the shared transport.
+predecessors: [DIST-004]
+allowedPaths:
+  - ci/verify-offline.sh
+  - ci/warm-source-isolation.sh
+  - ci/network_canary.py
+  - ci/run_packet_argv.py
+  - .github/workflows/verify.yml
+  - ci/zero_bill_scan.py
+  - tests/bootstrap/test_boundaries.py
+  - ci/run_make_target.py
+  - tests/bootstrap/test_dispatch.py
+  - ci/targets/dist-transport-001.json
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - >-
+    Implementation starts from exact R11 main 6ef7273f0674c3d39f2bd5becf084a4fd16c590c (DIST-004 merge, tree
+    d380773b). Nothing outside allowedPaths changes: no Python package, CLI, schema, fixture, chart, profile, policy,
+    trust file, lock, predecessor descriptor, handler, Makefile, PORTING ledger, AGENTS.md or document.
+  - >-
+    Transport: ci/verify-offline.sh, ci/warm-source-isolation.sh, ci/network_canary.py and ci/run_packet_argv.py are
+    byte-identical to harness-onion main 57bb1033e4a68cbb38610987060aedd8e879c7e6 in sha256, size and git mode
+    (unchanged since 64e5700d): ci/verify-offline.sh sha256
+    778cb0faf59786dc31559e5d96a399d1e3bb26a4576e0ee9ff70e1f6546bd114, 3908 B, 100755; ci/warm-source-isolation.sh sha256
+    f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b, 4674 B, 100644, new in R11; ci/network_canary.py sha256
+    1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099, 1459 B, 100755; ci/run_packet_argv.py sha256
+    c2ed0852fa499f194bc91291c32d08b303ea79be3ba7ca6cb29a786d585929f5, 8279 B, 100755. No R11-local edit.
+  - >-
+    Workflow: .github/workflows/verify.yml is deleted and the head tree has no .github entry. Verification is the
+    owner-operated verifier only; no hosted runner, Actions cache, artifact or package. The packet is verifiable only
+    once VERIFIER-EXT-R04-R11 is installed: an owner install step, not a packet dependency (predecessors stay [DIST-004]).
+  - >-
+    Zero-bill (MON-VB-D2 precedent): ci/zero_bill_scan.py replaces its required-workflow check (WORKFLOW_MISSING /
+    WORKFLOW_BOUNDARY_MISSING) with one failure, WORKFLOW_PRESENT:<path>, for any file under .github/workflows/; every
+    other pattern, exclusion and documentary allowance is unchanged. tests/bootstrap/test_boundaries.py asserts
+    scan(ROOT) == [], a temporary root with a workflow file yields WORKFLOW_PRESENT and HOSTED_RUNNER, and a temporary
+    root without .github yields no workflow failure.
+  - >-
+    Named exception (Q-R11-PYPATH (a), not a widening): ci/run_make_target.py runs each handler with
+    env = a copy of its own environment in which PYTHONPATH is removed and then set to exactly str(<repo>/src), where
+    <repo> is the dispatcher's repository root derived from its own file path; never the parent's value, never an
+    append, no os.pathsep join. The call stays subprocess.run(command, shell=False, check=False, env=...). Descriptor
+    parsing, regexes, allowed variables, forbidden executables, cumulative lexical order and every refusal are
+    byte-identical; the diff is confined to the environment construction and the one call. The shared transport is
+    unchanged: its runner keeps scrubbing PYTHONPATH from the environment it passes to make.
+  - >-
+    tests/bootstrap/test_dispatch.py asserts both conditions: the handler environment's PYTHONPATH equals exactly
+    str(<repo>/src); with a sentinel PYTHONPATH in the parent environment, the child value equals str(<repo>/src) and
+    contains neither the sentinel nor os.pathsep. The existing direct-argv test's call assertion gains the env keyword;
+    all other dispatch tests are unchanged.
+  - >-
+    Named exception (Q-275-OWN-1 (c)): the packet adds its own descriptor ci/targets/dist-transport-001.json (new, 100644,
+    280 B, sha256 b93d62fc447917c8f6787db5ffd0a726a53f2496c87c59122f090def0fe26ae6) registering only transport-bootstrap,
+    a closed argv target with no accepted variables running python3 -m unittest tests.bootstrap.test_dispatch
+    tests.bootstrap.test_boundaries. No predecessor descriptor is touched and no predecessor target moves under it.
+  - >-
+    Acceptance runs through the new transport itself (the packet's own ci/verify-offline.sh under the owner-operated
+    verifier, OS deny-all outbound) and is the acceptance test of VERIFIER-EXT-R04-R11: the merged DIST offline acceptance
+    set must pass unchanged. Q-R11-PREFETCH (a): prefetchCommands is empty (MON-VB-D2 form); make prefetch stays outside
+    the session because the shared runner forbids the prefetch token offline; the verifier binds the head to main and
+    fixture-verify keeps the toolchain-lock, PORTING-sentinel and fixture-digest checks.
+deliverables:
+  - Four exact harness-onion transport copies and the hosted-workflow deletion.
+  - Zero-bill scan and its bootstrap test asserting no workflow file.
+  - Dispatcher handler environment with PYTHONPATH = exactly <repo>/src, and its value and non-inheritance tests.
+  - Own descriptor ci/targets/dist-transport-001.json with the single transport-bootstrap target.
+excluded:
+  - Any other R11 path; product, schema, fixture, chart, profile, lock, predecessor descriptor, handler, Makefile, PORTING or document changes; the RELEASE-PROFILE-001 closure proof (second packet); DIST-BANK-001; W05 host artifacts.
+  - Network, package-index access, hosted runners, GitHub artifacts/caches/packages, cloud services, API keys, telemetry.
+  - Release, artifact, deployment, runtime, assurance or tenant-acceptance claims.
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","transport-bootstrap"],["make","fixture-verify"],["make","dist-fix-regression"],["make","resolve-fixtures"],["make","build-fixture"],["make","minimal-selectivity-proof"],["make","supply-chain-fixtures"],["make","sbom-check"],["make","vulnerability-offline"],["make","model-custody-check"],["make","signing-fixtures"],["make","rotation-test"],["make","promotion-contract"],["make","airgap-export-import"],["make","relocation-proof"],["make","archive-security"],["make","helm-render-matrix"],["make","helm-security"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - byte_compare.py PASS at the head (four copies equal in sha256/size/mode, .github absent, name-status diff vs 6ef7273f0674c3d39f2bd5becf084a4fd16c590c equal to the ten allowedPaths with verify.yml as D and ci/targets/dist-transport-001.json as A).
+  - Dispatcher diff limited to the environment construction and the one subprocess call; value and non-inheritance tests pass.
+  - The 19 offline lines (transport-bootstrap, then the 18 merged DIST lines) pass in one deny-all-outbound process tree under the new transport (the 18 merged lines in the scratch prototype through harness-onion verify-offline.sh, 2026-10-31 - 18/18 rc 0, 91 tests, 0 sandbox denials; local baseline at 6ef7273f0674c3d39f2bd5becf084a4fd16c590c with PYTHONPATH=src - 19/19 rc 0).
+  - Signed pull-request and exact-main runs stay separate from artifact, deployment, runtime, assurance and tenant acceptance.
+rollback: Revert the ten paths together. Restoring the old transport without the workflow fails zero-bill; restoring the dispatcher alone leaves 15 of 19 lines red under the shared transport, so the paths never revert apart.
