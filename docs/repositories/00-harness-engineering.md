@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-SECTOR-003
+## Current source preparation — MET-VERIFY-005
+
+MET-VERIFY-005 (VERIFIER-EXT-R04-R11 section 5 step 2, slot 275): the second publishing step of the product-packet vocabulary (K = 2): the meta packet publishes two product packets in install order, task-packets/DIST-TRANSPORT-001.yaml (mas-harness-distribution, R11's transport bootstrap, predecessor DIST-004) and task-packets/CTRL-TRANSPORT-001.yaml (mas-harness-control-plane, R04's transport bootstrap, predecessor CTRL-FIX-003), each one-time and verifiable only once VERIFIER-EXT-R04-R11 is installed, adopted as candidate c1 after one CONTRACT round with R04's and R11's yes; R04's plan gains item 12 and its transport-correction authority section and R11's plan item 9; the one ownership diagnostic the products add (DIST-TRANSPORT-001's overlap with the DIST-FIX-001 bootstrap correction) is closed by the head layer's closer, keyed to DIST's id and final sha256. No catalog changes. The packet registers its own
+review series in the brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and
+CHAIN-PRODUCT-PUBLISH-001's step rule. Alpha2 OPEN; 274 accepted plus MET-VERIFY-005 and its two products only.
+
+## Historical first product publication source preparation — MET-SECTOR-003
 
 MET-SECTOR-003 (IND-BANK-001-PUBLISH, slot 274): the first publishing step of the product-packet vocabulary (K = 1): the meta packet publishes the product packet task-packets/IND-BANK-001.yaml, the banking business-domain packet for mas-harness-industry-packs (the banking successor of IND-WG-001 for release scope; predecessors IND-001 and IND-FIX-001, the order disclosed beside the sector-direction record's frozen predecessorIds), adopted as candidate c5 after four CONTRACT rounds with R03's yes; R03's plan declares it in its PR-packets list; architecture/sector-direction.json is unchanged, and publication is read from task-packets/ by scripts/sector_catalog.py's consumer rule. No catalog changes. The packet registers its own review series in
 the brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and
@@ -1532,6 +1538,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 146. `MET-ADOPT-006`: publish the first release profile record (RELEASE-PROFILE-001): profile.banking-readonly-amd64's 41-node closure with its README, its model (catalogs only through sector_catalog.effective_bytes_from) and the D5a oracle; no catalog changes; gate material (the registry rider), the owner's per-PR approval.
 147. `MET-PERF-044`: publish the product-packet vocabulary extension (CHAIN-PRODUCT-PUBLISH-001): the four records under architecture/chain-product-packets/, the v2 identity model (slot and catalog count apart) and the D5a oracle; the live identity test on the v2 model; no product published (K = 0); gate material (the registry rider), the owner's per-PR approval.
 148. `MET-SECTOR-003`: publish the product packet IND-BANK-001 (IND-BANK-001-PUBLISH), the first publishing step (K = 1, 275 packets at slot 274), with R03's PR-packets item; gate material (the registry rider), the owner's per-PR approval.
+149. `MET-VERIFY-005`: publish the product packets DIST-TRANSPORT-001 and CTRL-TRANSPORT-001 (VERIFIER-EXT-R04-R11 section 5 step 2), the second publishing step (K = 2, 278 packets at slot 275), with R04's item 12 and transport-correction section and R11's item 9; gate material (the registry rider), the owner's per-PR approval.
 
 ## Testing, verification, and acceptance
 

@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-SECTOR-003
+## Current source preparation — MET-VERIFY-005
+
+MET-VERIFY-005 (VERIFIER-EXT-R04-R11 section 5 step 2, slot 275): the second publishing step of the product-packet
+vocabulary; the meta packet publishes the product packets DIST-TRANSPORT-001 (mas-harness-distribution; predecessor
+DIST-004) and CTRL-TRANSPORT-001 (mas-harness-control-plane; predecessor CTRL-FIX-003), in install order, 278 packets at
+slot 275; gate material (the registry rider). Alpha2 OPEN; 274 accepted plus MET-VERIFY-005 and its two products only.
+
+## Historical first product publication source preparation — MET-SECTOR-003
 
 MET-SECTOR-003 (IND-BANK-001-PUBLISH, slot 274): the first publishing step of the product-packet vocabulary; the meta
 packet publishes the product packet IND-BANK-001 (mas-harness-industry-packs; predecessors IND-001 and IND-FIX-001),
@@ -1671,3 +1678,6 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 273 | `MET-PERF-044` | `Harness-Engineering` | CHAIN-PRODUCT-PUBLISH-001: the product-packet vocabulary extension (four records, the v2 identity model, D5a oracle); no product (K = 0); gate material (the registry rider) |
 | 274 | `MET-SECTOR-003` | `Harness-Engineering` | IND-BANK-001-PUBLISH: the first publishing step (K = 1); publishes the product packet IND-BANK-001; gate material (the registry rider) |
 | 275 | `IND-BANK-001` | `mas-harness-industry-packs` | The banking business-domain packet (product, published by MET-SECTOR-003); the banking successor of IND-WG-001 for release scope |
+| 276 | `MET-VERIFY-005` | `Harness-Engineering` | VERIFIER-EXT-R04-R11: the second publishing step (K = 2); publishes the product packets DIST-TRANSPORT-001 and CTRL-TRANSPORT-001; gate material (the registry rider) |
+| 277 | `DIST-TRANSPORT-001` | `mas-harness-distribution` | The distribution transport bootstrap (product, published by MET-VERIFY-005); one-time, verifiable only once VERIFIER-EXT-R04-R11 is installed |
+| 278 | `CTRL-TRANSPORT-001` | `mas-harness-control-plane` | The control-plane transport bootstrap (product, published by MET-VERIFY-005); one-time, verifiable only once VERIFIER-EXT-R04-R11 is installed |
