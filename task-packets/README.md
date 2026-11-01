@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-044
+## Current source preparation — MET-SECTOR-003
+
+MET-SECTOR-003 (IND-BANK-001-PUBLISH, slot 274): the first publishing step of the product-packet vocabulary; the meta
+packet publishes the product packet IND-BANK-001 (mas-harness-industry-packs; predecessors IND-001 and IND-FIX-001),
+275 packets at slot 274; gate material (the registry rider). Alpha2 OPEN; 273 accepted plus MET-SECTOR-003 and its
+product only.
+
+## Historical product-packet vocabulary source preparation — MET-PERF-044
 
 MET-PERF-044 (CHAIN-PRODUCT-PUBLISH-001, slot 273): the product-packet vocabulary extension (four records under
 architecture/chain-product-packets/) with the v2 identity model and its D5a oracle; no product published (K = 0; 273
@@ -1662,3 +1669,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 271 | `MET-ENFORCE-043` | `Harness-Engineering` | EDGE-V12: operator edge record v12 (v11's 79 rows plus the two broker-handoff-v1 rows for HE-005B) and host-interface amendment HE5 (fd 4 beside FD3, no post-exec /proc read) with its v4 model and D5a oracle; gate material (the registry riders) |
 | 272 | `MET-ADOPT-006` | `Harness-Engineering` | RELEASE-PROFILE-001: the first release profile record (profile.banking-readonly-amd64, 41 nodes) with its model and D5a oracle; gate material (the registry rider) |
 | 273 | `MET-PERF-044` | `Harness-Engineering` | CHAIN-PRODUCT-PUBLISH-001: the product-packet vocabulary extension (four records, the v2 identity model, D5a oracle); no product (K = 0); gate material (the registry rider) |
+| 274 | `MET-SECTOR-003` | `Harness-Engineering` | IND-BANK-001-PUBLISH: the first publishing step (K = 1); publishes the product packet IND-BANK-001; gate material (the registry rider) |
+| 275 | `IND-BANK-001` | `mas-harness-industry-packs` | The banking business-domain packet (product, published by MET-SECTOR-003); the banking successor of IND-WG-001 for release scope |

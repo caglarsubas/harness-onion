@@ -1,0 +1,116 @@
+id: IND-BANK-001
+repository: mas-harness-industry-packs
+branch: codex/ind-bank-001-business-domain
+objective: Define the banking business objectives, accountable roles, glossary and ontology (parties, products, accounts, transactions, channels, credit, risk and compliance concepts), KPIs, and representative synthetic answer sets as the banking successor of IND-WG-001.
+predecessors: [IND-001, IND-FIX-001]
+allowedPaths:
+  - packs/banking/pack.yaml
+  - packs/banking/contracts.lock.json
+  - packs/banking/journey.yaml
+  - packs/banking/questions/business/
+  - packs/banking/ontology/
+  - packs/banking/fixtures/answers/
+  - tests/banking/test_banking_business_domain.py
+  - tests/framework/test_dispatch.py
+  - docs/banking/business-domain.md
+  - docs/authoring.md
+  - ci/handlers/ind_bank_001.py
+  - ci/targets/ind-bank-001.json
+  - .github/workflows/verify.yml
+  - ci/verify-offline.sh
+  - ci/warm-source-isolation.sh
+  - ci/network_canary.py
+  - ci/run_packet_argv.py
+  - ci/zero_bill_scan.py
+  - tests/bootstrap/test_static_contract.py
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - Consumes exact public R03 main commit 118296af0bcf85ef1a4983c23725c215ba6c91ed (IND-FIX-001), common.foundation 1.0.0 pack digest 3cfea19e6e0a4a653d63622e250f40001b4f8221ebab18fa5bfc1601b8eddea3, raw common/pack.yaml SHA-256 534246425cdf38fd4f311da1e4a587eadbffdb589d747435a081ed969ae978e9, and the unchanged reproducible framework 0.1.1 wheel SHA-256 d34a1a3c523b1e60f10602fff072d5dbf83f46f2220f29a4f13b9a31facf91f4 without copying or mounting an upstream checkout during acceptance. It relies on framework 0.1.1, the development lock and the white-goods pack only as byte-exact historical repository files (pyproject.toml SHA-256 331f31f6fbe122a860325e23256b95f2cdbfcffd82e3f95e3a0d99fde332b1ba, uv.lock SHA-256 12ab191dedad208ea14f88a388006c395b63fbc4e9f23ea6583d802a30653e8f), never as a dependency on a superseded packet, and imports no ci/handlers/ind_wg_*.py or tests/white_goods code.
+  - "Carries one fix found at 118296af: the closed dispatch inventory in tests/framework/test_dispatch.py lacks IND-FIX-001's ind-fix-001-regression target, so make pack-framework-test fails on main; the packet adds that line beside its own IND-BANK-001 pack line."
+  - Produces the banking business/domain pack slice harness.planeon.ai/industry-pack/v1alpha1 version 0.1.0 (pack format 0.1.0) with no framework, common-pack, white-goods-pack, dependency or lock change.
+  - Satisfies the IND-001 rule carried by MET-SECTOR-001 (RDFLib and pySHACL admitted and locked before SHACL validation is claimed) by binding the development-only rdflib==7.6.0 and pyshacl==0.40.1 closure already locked in uv.lock; the handler refuses any other installed version and packet execution never downloads a package.
+  - Supersedes IND-WG-001 for release scope only (MET-SECTOR-001); IND-WG-001's accepted edges and the white-goods 0.5.0 pack stay byte-identical historical source.
+  - "Consumes no harness-onion provider, service or module catalog: the packet reads none of them, and any later read of their banking-era bytes goes only through scripts/sector_catalog.py's effective_bytes(path) or effective_catalog(path), never the raw catalog files (MET-SECTOR-002, SECTOR-D1)."
+  - "Predecessors add IND-FIX-001 beyond the sector-direction authority's predecessorIds [IND-001], because this packet deletes or rewrites IND-FIX-001's files at its merge 118296af; IND-001 stays explicit for its OBLIGATION_TRANSFERRED disposition; the retained edge to IND-WG-005 stays historical."
+deliverables:
+  - >-
+    packs/banking is a closed SECTOR pack banking.financial-services version
+    0.1.0 (industry banking) extending exactly common.foundation 1.0.0 at its
+    computed digest, with byte-identical contracts.lock.json and journey.yaml
+    bindings, overlayMode APPEND_ONLY, Apache-2.0 licensing, and only declared
+    regular data members. No common resource id is shadowed and no sector pack
+    is a parent.
+  - >-
+    Business questionnaires define uniquely identified, typed questions for
+    accountable roles (business owner, domain owner, first-line risk owner,
+    second-line compliance owner, data steward, evidence approver, and a
+    role-separation confirmation), objectives, product families, channels,
+    KPIs, a closed decision boundary, acceptance outcomes, evidence
+    references, a closed stage-local pilot decision scope, and deferred
+    institution-specific choices (institution identity, jurisdiction, licence
+    type, risk appetite, observation window, regulatory applicability).
+    Closed response types are string, boolean, number, and choice. No
+    question requests a secret, credential, customer or employee record,
+    account or card number, remote endpoint, model prompt, write-capable
+    action, or regulatory conclusion, and no law, regulation, or supervisory
+    standard is named in any pack member.
+  - >-
+    The banking ontology uses only local files, the five admitted W3C
+    namespace identifiers, and urn:planeon:banking:* IRIs. It defines the
+    business frame (BusinessObjective, AccountableRole,
+    KeyPerformanceIndicator, AcceptanceOutcome, TargetDirection) and banking
+    concepts for parties, products (deposits, payments, cards,
+    consumer-lending, commercial-lending), accounts, transactions, channels,
+    credit, and risk and compliance. Every term is a versioned glossary entry
+    with stable id, label, clean-room definition, term version, closed
+    provenance, optional plain-literal alignment to a named public standard
+    (technical identifier standards and FIBO concept names only; never an
+    IRI, URL, regulation, or copied text), and the business question it serves.
+  - >-
+    SHACL shapes require those glossary members, exactly one accountable role
+    per objective, KPI, and acceptance outcome, and KPI formula,
+    numerator/denominator or observation definition, target direction,
+    dimensions, and evidence class, without thresholds. Validation uses
+    pySHACL with advanced=false, js=false, inference=none,
+    do_owl_imports=false, and only explicit local graphs; imports, external
+    IRIs beyond the semantic allowlist, SPARQL or JavaScript constraints, and
+    network resolution fail closed.
+  - >-
+    Synthetic answer sets cover an accepted read-only cited-assistant pilot
+    and single-reason blockers: missing accountable owner, incomplete outcome
+    evidence, unverified institution-specific claim, unconfirmed role
+    separation, a pilot decision scope that requires the governance stage
+    (automated-decision-out-of-pilot-scope), and a disallowed personal-data
+    value (the pinned synthetic XX900000000000000000). Canonical sorted UTF-8 JSON digests bind each vector;
+    deterministic evaluation yields READY only for the complete pilot and
+    BLOCKED otherwise with sorted stable reason codes. The decision-scope
+    blocker is a scope deferral to IND-BANK-003, which owns the autonomy
+    taxonomy, not a legal conclusion. Unknown, missing, or mistyped answer keys
+    make a fixture invalid (handler and test fail), never BLOCKED.
+  - >-
+    The packet-owned Make descriptor registers only pack with exact
+    PACK=banking and direct argv to ci/handlers/ind_bank_001.py. The handler
+    proves exact dependency and framework versions, pack validity, two-build
+    index/archive identity, SHACL conformance and negative detection,
+    questionnaire/answer/ontology closure, deterministic decisions, a
+    structural disallowed-data scan (ISO 13616 mod-97 IBAN shapes and
+    Luhn-valid 13-19 digit runs) over exactly the answer values,
+    questionnaire prompts and titles, and ontology literals, finding exactly
+    the one declared value in the one declared vector, with run-time-built
+    test values and no card- or account-like literal in the repository, no RDF imports or remote IRIs, and
+    false evidence flags. It creates only temporary outputs and retains or
+    publishes no artifact.
+excluded:
+  - Institution names, real account, card, customer, employee or transaction data, thresholds presented as real, regulatory applicability or compliance conclusions, control mappings, provider selections, write-capable actions, credentials, secrets, copied standard or ontology text, ontology imports, SKOS or other non-allowlisted namespaces, framework or dependency changes, warm-source observation, network resolution, hosted services, paid APIs, JavaScript/SPARQL SHACL, signing, publication, deployment, runtime evidence, assurance evidence, or tenant acceptance.
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","pack","PACK=banking"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_business_domain.py"],["make","pack-framework-test"],["make","pack","PACK=white-goods"],["make","certification-fixtures","PACK=white-goods"],["make","ind-fix-001-regression"],["make","build-reproducible"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - The banking sector pack validates against the unchanged IND-001 framework 0.1.1; two canonical indexes and fixed-epoch archives are byte-identical and keep all publication/runtime/assurance/tenant flags false.
+  - pySHACL proves the local positive graph conforms and the negative graph fails with the expected closed constraint components while imports, JavaScript, advanced mode, inference, SPARQL, and network resolution stay disabled.
+  - Questionnaire ids, answer keys, glossary terms, roles, objectives, KPIs, formulas, dimensions, evidence classes, decision boundaries, and acceptance outcomes are mutually closed and deterministic; negative vectors yield sorted stable blockers; the disallowed-data scan finds exactly the declared negative vector.
+  - pyproject.toml, uv.lock, the white-goods 0.5.0 pack, the common pack, and the framework source are byte-identical to the predecessor main; the zero-bill rules are unchanged except that their workflow check now asserts that no .github/workflows/ file exists; the four ci/ transport files (verify-offline.sh, warm-source-isolation.sh, network_canary.py, run_packet_argv.py) are byte-identical to harness-onion's at dd000fef; the closed dispatch inventory lists every descriptor including IND-FIX-001's; the white-goods pack rule, the historical white-goods certification fixtures and the IND-FIX-001 regression pass.
+  - Every fixture is synthetic and non-personal, and every institution-specific choice remains deferred until tenant evidence exists.
+  - Source, candidate, CI, merge, artifact, publication, deployment, runtime, assurance, and tenant acceptance remain separate evidence states.
+rollback: Revert the unreleased banking business/domain slice (packs/banking, its handler, descriptor, tests, docs, and the IND-BANK-001 dispatch-inventory line; the carried IND-FIX-001 inventory line stays) together; retain common.foundation 1.0.0, framework 0.1.1, the historical white-goods packs and evidence, and every downstream tenant or release record unchanged.

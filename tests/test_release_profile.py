@@ -117,8 +117,10 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 273 and len(accepted) == 271
-    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET}
+    assert len(current) == 275 and len(accepted) == 271
+    assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
+                                            profile.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.PRODUCT_PACKETS}
     assert len(ev12.historical_catalog(current)) == 270
     assert len(perf43.historical_catalog(current)) == 269
     assert len(gov5.historical_catalog(current)) == 268
@@ -1634,7 +1636,10 @@ def _registry(mutate=None, serialize=_serialize):
 
 
 def _packets():
-    return frozenset(name[:-5] for name in os.listdir(ROOT / "task-packets") if name.endswith(".yaml"))
+    # Q-274-T2 (a), a reader-scope correction like Q-273-RP-ERA (a)1: the model judges its own era, so the packet
+    # set it is handed is the 272 era's catalog (this layer's accepted base and its own packet), never the live
+    # listing, which from 274 on holds a real published successor.
+    return frozenset(profile.authority()["baselinePackets"]) | {profile.NEW_PACKET}
 
 
 def _reader(record=None, files=None, log=None):
