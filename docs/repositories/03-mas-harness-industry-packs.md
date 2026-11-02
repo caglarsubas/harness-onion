@@ -451,6 +451,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `IND-WG-005-certification-fixtures`: deterministic source-contract scenarios, a non-recursive payload lock, and an unsigned offline-signing-ready manifest.
 7. `IND-FIX-001-fork-guard`: public-fork pre-scheduling guard for the self-hosted verifier.
 8. `IND-BANK-001-business-domain`: banking objectives, roles, glossary and ontology with local SHACL validation, KPIs, and representative synthetic answer sets, plus the transport bootstrap that deletes the self-hosted workflow (IND-FIX-001's fork guard) and makes the four ci/ transport files byte-identical to harness-onion's; the banking successor of IND-WG-001 for release scope (published by MET-SECTOR-003).
+9. `IND-BANK-002-data-readiness`: banking source inventory (customer, account, transaction and product sources), synthetic non-personal mock API/DB/file/event data, illustrative tenant-overridable completeness/freshness/duplicate-rate/provenance/classification thresholds, a data-readiness rule and readiness fixtures, plus the raw-scan hex-token guard in IND-BANK-001's handler; the banking successor of IND-WG-002 for release scope (published by MET-SECTOR-004).
 
 ## Testing, verification, and acceptance
 
