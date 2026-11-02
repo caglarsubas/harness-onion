@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-VERIFY-005
+## Current source preparation — MET-SECTOR-004
+
+MET-SECTOR-004 (IND-BANK-002-PUBLISH, slot 276): the third publishing step of the product-packet vocabulary; the meta
+packet publishes the product packet IND-BANK-002 (mas-harness-industry-packs; predecessor IND-BANK-001), 280 packets at
+slot 276; gate material (the registry rider). Alpha2 OPEN; 278 accepted (the catalog at slot 275) plus MET-SECTOR-004 and its product only.
+
+## Historical second product publication source preparation — MET-VERIFY-005
 
 MET-VERIFY-005 (VERIFIER-EXT-R04-R11 section 5 step 2, slot 275): the second publishing step of the product-packet
 vocabulary; the meta packet publishes the product packets DIST-TRANSPORT-001 (mas-harness-distribution; predecessor
@@ -1681,3 +1687,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 276 | `MET-VERIFY-005` | `Harness-Engineering` | VERIFIER-EXT-R04-R11: the second publishing step (K = 2); publishes the product packets DIST-TRANSPORT-001 and CTRL-TRANSPORT-001; gate material (the registry rider) |
 | 277 | `DIST-TRANSPORT-001` | `mas-harness-distribution` | The distribution transport bootstrap (product, published by MET-VERIFY-005); one-time, verifiable only once VERIFIER-EXT-R04-R11 is installed |
 | 278 | `CTRL-TRANSPORT-001` | `mas-harness-control-plane` | The control-plane transport bootstrap (product, published by MET-VERIFY-005); one-time, verifiable only once VERIFIER-EXT-R04-R11 is installed |
+| 279 | `MET-SECTOR-004` | `Harness-Engineering` | IND-BANK-002-PUBLISH: the third publishing step (K = 1); publishes the product packet IND-BANK-002; gate material (the registry rider) |
+| 280 | `IND-BANK-002` | `mas-harness-industry-packs` | The banking data readiness packet (product, published by MET-SECTOR-004); the banking successor of IND-WG-002 for release scope |
