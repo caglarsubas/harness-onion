@@ -117,14 +117,15 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 280 and len(accepted) == 271
+    assert len(current) == 281 and len(accepted) == 271
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(ev12.historical_catalog(current)) == 270
     assert len(perf43.historical_catalog(current)) == 269
     assert len(gov5.historical_catalog(current)) == 268
@@ -2128,7 +2129,23 @@ def probe_cases():
     return cases
 
 
-def test_no_uncoded_exception_escapes_check_over_the_class_probe(probe_cases):
+def _shared_safe_load(real):
+    """MET-PERF-045 C3: test-local exact sharing of release_profile.safe_load on identical text or bytes; results are
+    deep copies; a call that raises is never cached; any other input calls through."""
+    cache = {}
+
+    def shared(stream):
+        if type(stream) not in (str, bytes):
+            return real(stream)
+        key = (type(stream), stream)
+        if key not in cache:
+            cache[key] = real(stream)  # raises through, uncached
+        return deepcopy(cache[key])
+    return shared
+
+
+def test_no_uncoded_exception_escapes_check_over_the_class_probe(probe_cases, monkeypatch):
+    monkeypatch.setattr(rp, "safe_load", _shared_safe_load(rp.safe_load))  # restored after the test
     escaped = []
     for label, make_reader, packets in probe_cases:
         try:

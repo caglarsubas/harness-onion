@@ -639,12 +639,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "chain product publish validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 280
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS},
-            "closed 280-packet catalog retaining the 273-packet checkpoint")
+    require(len(paths) == 281
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET},
+            "closed 281-packet catalog retaining the 273-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -684,4 +684,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Chain product publish valid: 280 current specifications; 273-packet checkpoint and exact 272-packet predecessor; contract reviewed.")
+    print("Chain product publish valid: 281 current specifications; 273-packet checkpoint and exact 272-packet predecessor; contract reviewed.")

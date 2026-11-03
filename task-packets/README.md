@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-SECTOR-004
+## Current source preparation — MET-PERF-045
+
+MET-PERF-045 (PERF-045, slot 277): the verify-floor cuts after 276's 1,092 s verify, a K = 0 step (281 packets at slot
+277): C1+ (the parent test's readiness step proved in-session), C2 (the weights table refreshed from 276's dry run) and
+C3 (test-local exact sharing in two tests); gate material (the weights table and the registry rider). Alpha2 OPEN; 280
+accepted (the catalog at slot 276) plus MET-PERF-045 only.
+
+## Historical third product publication source preparation — MET-SECTOR-004
 
 MET-SECTOR-004 (IND-BANK-002-PUBLISH, slot 276): the third publishing step of the product-packet vocabulary; the meta
 packet publishes the product packet IND-BANK-002 (mas-harness-industry-packs; predecessor IND-BANK-001), 280 packets at
@@ -1689,3 +1696,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 278 | `CTRL-TRANSPORT-001` | `mas-harness-control-plane` | The control-plane transport bootstrap (product, published by MET-VERIFY-005); one-time, verifiable only once VERIFIER-EXT-R04-R11 is installed |
 | 279 | `MET-SECTOR-004` | `Harness-Engineering` | IND-BANK-002-PUBLISH: the third publishing step (K = 1); publishes the product packet IND-BANK-002; gate material (the registry rider) |
 | 280 | `IND-BANK-002` | `mas-harness-industry-packs` | The banking data readiness packet (product, published by MET-SECTOR-004); the banking successor of IND-WG-002 for release scope |
+| 281 | `MET-PERF-045` | `Harness-Engineering` | PERF-045: the verify-floor cuts (K = 0): C1+ (the parent test's readiness step proved in-session), C2 (the weights table) and C3 (test-local sharing in two tests); gate material (the weights table and the registry rider) |

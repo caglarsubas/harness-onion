@@ -87,11 +87,48 @@ def changed_test():
     return next(path for path in profile._PROJECTION_RULES if path.startswith("tests/"))
 
 
-def test_exact_current_source_and_complete_history_chain():
+def _strict_key(item):
+    """MET-PERF-045 C3: the exact key, JSON in each value's own insertion order (never sorted, MON-277-CR2-KEEP), or None
+    when any part is not dict with str keys, list, str, int, bool or None."""
+    def plain(value):
+        if value is None or type(value) in (str, int, bool):
+            return True
+        if type(value) is list:
+            return all(plain(entry) for entry in value)
+        if type(value) is dict:
+            return all(type(key) is str and plain(entry) for key, entry in value.items())
+        return False
+    return json.dumps(item, ensure_ascii=False, separators=(",", ":")) if plain(item) else None
+
+
+def _shared_era_models(real_era_model):
+    """MET-PERF-045 C3: every native_qualification_v4 model this test loads shares one test-scoped schema_errors cache:
+    exact keys only, deep copies, a raising call never cached, any other input calls through."""
+    cache = {}
+
+    def era_model(path, name, imports=None):
+        module = real_era_model(path, name, imports)
+        if path == profile.NP4_MODEL:
+            real = module.schema_errors
+
+            def schema_errors(value, schema, variant):
+                key = _strict_key([value, schema, variant])
+                if key is None:
+                    return real(value, schema, variant)
+                if key not in cache:
+                    cache[key] = real(value, schema, variant)  # raises through, uncached
+                return copy.deepcopy(cache[key])
+            module.schema_errors = schema_errors
+        return module
+    return era_model
+
+
+def test_exact_current_source_and_complete_history_chain(monkeypatch):
+    monkeypatch.setattr(profile, "_era_model", _shared_era_models(profile._era_model))  # restored after the test
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 280 and len(accepted) == 245
+    assert len(current) == 281 and len(accepted) == 245
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -124,7 +161,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(tcv1.historical_catalog(current)) == 244
     assert len(wpa2.historical_catalog(current)) == 243
     assert len(la2.historical_catalog(current)) == 242
