@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-045
+## Current source preparation — MET-SECTOR-005
+
+MET-SECTOR-005 (IND-BANK-002A-PUBLISH, slot 278): the fourth publishing step (K = 1, 283 packets at slot 278): the meta
+packet publishes the product packet IND-BANK-002A (mas-harness-industry-packs), the acceptance-command successor of
+IND-BANK-002, and adds the R13 inheritance guard and the successor-descriptor ownership rule; gate material (the
+registry rider). Alpha2 OPEN; 281 accepted (the catalog at slot 277) plus MET-SECTOR-005 and its product only.
+
+## Historical verify-floor cuts source preparation — MET-PERF-045
 
 MET-PERF-045 (PERF-045, slot 277): the verify-floor cuts after 276's 1,092 s verify, a K = 0 step (281 packets at slot
 277): C1+ (the parent test's readiness step proved in-session), C2 (the weights table refreshed from 276's dry run) and
@@ -1697,3 +1704,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 279 | `MET-SECTOR-004` | `Harness-Engineering` | IND-BANK-002-PUBLISH: the third publishing step (K = 1); publishes the product packet IND-BANK-002; gate material (the registry rider) |
 | 280 | `IND-BANK-002` | `mas-harness-industry-packs` | The banking data readiness packet (product, published by MET-SECTOR-004); the banking successor of IND-WG-002 for release scope |
 | 281 | `MET-PERF-045` | `Harness-Engineering` | PERF-045: the verify-floor cuts (K = 0): C1+ (the parent test's readiness step proved in-session), C2 (the weights table) and C3 (test-local sharing in two tests); gate material (the weights table and the registry rider) |
+| 282 | `MET-SECTOR-005` | `Harness-Engineering` | IND-BANK-002A-PUBLISH: the fourth publishing step (K = 1); publishes the product packet IND-BANK-002A and adds the R13 inheritance guard; gate material (the registry rider) |
+| 283 | `IND-BANK-002A` | `mas-harness-industry-packs` | The acceptance-command successor of IND-BANK-002 (product, published by MET-SECTOR-005); the same scope, its 11 commands keeping both predecessors' commands |
