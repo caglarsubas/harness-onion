@@ -183,6 +183,26 @@ def _in_session_predecessor_proof(request, env, targets):
             "elapsedSeconds": time.monotonic() - started}
 
 
+READINESS_NODE = "tests/test_readiness.py::ReadinessValidationTest::test_complete_readiness_package"
+
+
+def _in_session_readiness_proof(request):
+    """MET-PERF-045 C1+: prove the readiness step from this session's own outcome of READINESS_NODE, or return None.
+
+    The node runs `scripts/validate_readiness.py` from ROOT and asserts returncode 0, as the re-run below does. None (so
+    the step re-runs) when the node is not in this session or its outcome record is partial (setup, call or teardown
+    missing). A failed or skipped phase is a proof that did not pass.
+    """
+    if READINESS_NODE not in {item.nodeid for item in request.session.items}:
+        return None
+    outcomes = list(request.config._planeon_predecessor_outcomes.reports.get(READINESS_NODE, ()))
+    phases = {when: outcome for when, outcome in outcomes}
+    bad = sorted({outcome for _when, outcome in outcomes} & {"failed", "skipped"})
+    if not bad and set(phases) != {"setup", "call", "teardown"}:
+        return None
+    return {"mode": "IN_SESSION_PROOF", "node": READINESS_NODE, "phases": phases, "passed": not bad}
+
+
 def test_full_predecessor_suites_and_validators_remain_green(capsys):
     # A nested test process stays in this packet's OS-denied tree. Excluding
     # only this new directory prevents recursion, not legacy-test deselection.
@@ -199,6 +219,7 @@ def test_full_predecessor_suites_and_validators_remain_green(capsys):
     # without a real pytest request (such as the strict mock harness) keeps the re-run.
     request = getattr(capsys, "request", None)
     proof = None if request is None else _in_session_predecessor_proof(request, env, commands[0][4:])
+    readiness = None if request is None else _in_session_readiness_proof(request)
     if proof is not None:
         # The outer session already ran every predecessor test; prove it instead of re-running.
         identity = {"ordinal": 1, "total": len(commands), "label": labels[0]}
@@ -207,6 +228,15 @@ def test_full_predecessor_suites_and_validators_remain_green(capsys):
                                              "returncode": 0 if not (proof["failed"] or proof["incomplete"]) else 1, **proof})
         assert proof["failed"] == 0 and proof["incomplete"] == 0, "predecessor suite failed in this session: " + json.dumps(proof)
     for ordinal, argv in enumerate(commands, start=1):
+        if ordinal == 2 and readiness is not None:
+            # MET-PERF-045 C1+: the session already ran the readiness validator; publish its proof, do not re-run it.
+            assert labels[1] == "readiness" and argv == [sys.executable, "scripts/validate_readiness.py"]
+            identity = {"ordinal": ordinal, "total": len(commands), "label": labels[1]}
+            _publish_predecessor_record(capsys, {**identity, "event": "START", "timeoutSeconds": 600})
+            _publish_predecessor_record(capsys, {**identity, "event": "END",
+                                                 "returncode": 0 if readiness["passed"] else 1, **readiness})
+            assert readiness["passed"], "readiness did not pass in this session: " + READINESS_NODE
+            continue
         if ordinal == 1 and proof is not None:
             continue
         identity = {"ordinal": ordinal, "total": len(commands), "label": labels[ordinal - 1]}
