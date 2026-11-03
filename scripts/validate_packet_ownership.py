@@ -208,7 +208,14 @@ def validate_packet_ownership(packets: dict[str, dict[str, Any]]) -> list[str]:
         repository = packet.get("repository")
         bootstrap_packet = PRODUCT_BOOTSTRAP_PACKETS.get(repository)
         allowed_paths = packet.get("allowedPaths", [])
-        descriptor_path = f"ci/targets/{packet_id.casefold()}.json"
+        # Q-VX45-6 successor ids (MET-SECTOR-005, Q278-4 (b)): <P> plus one capital letter whose predecessors are
+        # exactly [<P>], with <P> in the catalog naming the same repository, keep <P>'s exact descriptor.
+        descriptor_id = packet_id
+        successor = re.fullmatch(r"(.*[0-9])([A-Z])", packet_id)
+        if (successor and packet.get("predecessors") == [successor.group(1)]
+                and packets.get(successor.group(1), {}).get("repository") == repository):
+            descriptor_id = successor.group(1)
+        descriptor_path = f"ci/targets/{descriptor_id.casefold()}.json"
         owns_makefile = "Makefile" in allowed_paths
         owns_descriptor = descriptor_path in allowed_paths
 

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "harness.planeon.ai/chain-inheritance-rule/v1",
+  "packet": "MET-SECTOR-005",
+  "extends": {
+    "path": "architecture/chain-product-packets/rule.json",
+    "sha256": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
+    "clause": "refusals"
+  },
+  "refusals": [
+    "R13"
+  ],
+  "inheritance": {
+    "cutSlot": 278,
+    "comparator": "the newest earlier catalog YAML naming the product's repository (Q-CPP-2's newest accepted packet; the verifier's newest_accepted), by first slot",
+    "firstSlotReading": "a YAML's first slot is the first layer whose catalog (its authority's baselinePackets | {authorityPacket} | productPackets) holds it; the earliest layer's baseline is the base, older than every slot",
+    "predicate": "every comparator argv byte-exact and in order, insertions allowed (the verifier's require_inherits)",
+    "pin": {
+      "authorityField": "productComparators",
+      "rule": "{product id: {packet, sha256}} for every listed product with a comparator, in PRODUCT_PACKETS order; the pinned packet is the comparator and its sha256 is its baselinePackets digest"
+    },
+    "predecessorRule": "when the product's predecessors field is non-empty, its newest predecessor by first slot equals the comparator; none present, or a tie, refuses",
+    "steps": [
+      "1 every YAML in the slot's catalog view has a readable repository line (else refuse)",
+      "2 the candidates: earlier YAMLs naming the repository; none means a first packet, with no pin",
+      "3 one YAML in the candidates' newest first slot (else ambiguous comparator; the base too)",
+      "4 the pin, in order: missing, foreign, stale, digest",
+      "5 the newest predecessor",
+      "6 the predicate"
+    ],
+    "knownLimit": "a repository whose newest earlier YAML ties in the base refuses (ambiguous comparator) until a pinned base order is ruled (Q278-5)"
+  },
+  "pFormsFromCut": {
+    "F6'": "authority's closed key set ends with \"productPackets\", \"productComparators\" (replaces F6)",
+    "F9": "require(type(value[\"productComparators\"]) is dict\n        and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n        and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                for pin in value[\"productComparators\"].values()),\n        \"product comparators\")",
+    "placement": "F7 then F9, the two statements immediately before authority's first for"
+  },
+  "model": {
+    "path": "scripts/chain_identity_v3.py",
+    "v2": {
+      "path": "scripts/chain_identity_v2.py",
+      "sha256": "23fe723ae060b13727118b5808541d0b40bfee22ac5e803955e324f4dd6d9a55"
+    }
+  },
+  "evidence": {
+    "ownerDecision": {
+      "ids": [
+        "MON-R00-278-RULED",
+        "MON-R00-278-ROUTE-B",
+        "MON-R00-278-Q45",
+        "MON-278-Q6-B"
+      ],
+      "record": {
+        "path": "architecture/chain-inheritance/decisions.md",
+        "sha256": "c0d334380200f7de008de31fbd7268cd6a154cda19dfedf4bb9e8a53db9a3f9d"
+      }
+    },
+    "vectors": "architecture/chain-inheritance/vectors.json"
+  }
+}

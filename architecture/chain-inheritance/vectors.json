@@ -1,0 +1,1306 @@
+{
+ "schemaVersion": "harness.planeon.ai/chain-inheritance-vectors/v1",
+ "rule": "architecture/chain-inheritance/rule.json",
+ "evaluators": {
+  "inheritance": "chain_identity_v3.check_inheritance_vector",
+  "classForms": "chain_identity_v3.check_class_vector (bases: v2's classForms.bases, by reference)",
+  "pin": "chain_identity_v3.pin_v2 over the live v2 file (V2_SHA256)",
+  "equivalence": "for the layers at slots 273-277: v3's layer_products and p_form_counts(slot) equal v2's layer_products and p_form_counts()"
+ },
+ "inheritance": [
+  {
+   "id": "I-equal",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-insert-start",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"z\"], [\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-insert-middle",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"z\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-insert-end",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"], [\"make\", \"z\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-ruled10-vs-001",
+   "listed": {
+    "278": [
+     "IND-BANK-002R"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002R": "id: IND-BANK-002R\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002R"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002R": {
+      "packet": "IND-BANK-001",
+      "sha256": "e0eb6cba4a4998918c753ec26bb878707ed30f23ce6a781d1557cd1754646097"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-B11-vs-002",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "IND-BANK-002",
+      "sha256": "7d6ed2155700c43ee3106de62008b181373770beeac417f255fbf415ba3c9561"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-K2",
+   "listed": {
+    "278": [
+     "CTRL-X",
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "CTRL-T": "id: CTRL-T\nrepository: mas-harness-control-plane\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "CTRL-X": "id: CTRL-X\nrepository: mas-harness-control-plane\npredecessors: [\"CTRL-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"], [\"make\", \"y\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "CTRL-T",
+     "DIST-T"
+    ],
+    "278": [
+     "CTRL-X",
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "CTRL-X": {
+      "packet": "CTRL-T",
+      "sha256": "1d82d17f0d8b7b9f683f87e274a7938b75183b3a00e582a674532a912afebf65"
+     },
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-first-packet",
+   "listed": {
+    "278": [
+     "OPR-001"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "OPR-001": "id: OPR-001\nrepository: mas-harness-operator\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "OPR-001"
+    ]
+   },
+   "pins": {},
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-cut-277",
+   "listed": {
+    "277": [
+     "IND-BANK-002B"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002B": "id: IND-BANK-002B\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "277": [
+     "IND-BANK-002B"
+    ]
+   },
+   "pins": {},
+   "expect": "OK",
+   "refusal": null,
+   "clause": null,
+   "detail": null
+  },
+  {
+   "id": "I-drop",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "drops or reorders commands inherited from"
+  },
+  {
+   "id": "I-reorder",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"b\"], [\"make\", \"a\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "drops or reorders commands inherited from"
+  },
+  {
+   "id": "I-edit",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"B\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "drops or reorders commands inherited from"
+  },
+  {
+   "id": "I-276-shape",
+   "listed": {
+    "280": [
+     "IND-BANK-002B"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002B": "id: IND-BANK-002B\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "280": [
+     "IND-BANK-002B"
+    ]
+   },
+   "pins": {
+    "280": {
+     "IND-BANK-002B": {
+      "packet": "IND-BANK-001",
+      "sha256": "e0eb6cba4a4998918c753ec26bb878707ed30f23ce6a781d1557cd1754646097"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "drops or reorders commands inherited from"
+  },
+  {
+   "id": "I-ruled10-vs-002",
+   "listed": {
+    "278": [
+     "IND-BANK-002R"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002R": "id: IND-BANK-002R\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002R"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002R": {
+      "packet": "IND-BANK-002",
+      "sha256": "7d6ed2155700c43ee3106de62008b181373770beeac417f255fbf415ba3c9561"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "drops or reorders commands inherited from"
+  },
+  {
+   "id": "I-cut-278",
+   "listed": {
+    "278": [
+     "IND-BANK-002B"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002B": "id: IND-BANK-002B\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002B"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002B": {
+      "packet": "IND-BANK-001",
+      "sha256": "e0eb6cba4a4998918c753ec26bb878707ed30f23ce6a781d1557cd1754646097"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "drops or reorders commands inherited from"
+  },
+  {
+   "id": "I-pin-missing",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {},
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "missing comparator pin"
+  },
+  {
+   "id": "I-pin-foreign",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "275": [
+     "DIST-T"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "foreign comparator pin"
+  },
+  {
+   "id": "I-pin-stale",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "IND-BANK-001",
+      "sha256": "e0eb6cba4a4998918c753ec26bb878707ed30f23ce6a781d1557cd1754646097"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "stale comparator pin"
+  },
+  {
+   "id": "I-pin-digest",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "IND-BANK-002",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "comparator pin digest"
+  },
+  {
+   "id": "I-pin-unexpected",
+   "listed": {
+    "278": [
+     "OPR-001"
+    ]
+   },
+   "files": {
+    "OPR-001": "id: OPR-001\nrepository: mas-harness-operator\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "278": [
+     "OPR-001"
+    ]
+   },
+   "pins": {
+    "278": {
+     "OPR-001": {
+      "packet": "OPR-001",
+      "sha256": "5ddf972a42e21d8767248141c2b5049cc94beed1d4fa20e8260423be567e9297"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "unexpected comparator pin"
+  },
+  {
+   "id": "I-tie",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-U": "id: DIST-U\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "275": [
+     "DIST-T",
+     "DIST-U"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "ambiguous comparator"
+  },
+  {
+   "id": "I-base-tie",
+   "listed": {
+    "278": [
+     "RUN-X"
+    ]
+   },
+   "files": {
+    "RUN-A": "id: RUN-A\nrepository: mas-harness-runtime-plane\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "RUN-B": "id: RUN-B\nrepository: mas-harness-runtime-plane\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "RUN-X": "id: RUN-X\nrepository: mas-harness-runtime-plane\npredecessors: [\"RUN-A\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [
+     "RUN-A",
+     "RUN-B"
+    ],
+    "278": [
+     "RUN-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "RUN-X": {
+      "packet": "RUN-A",
+      "sha256": "8ca2da1c407e99a2c69825471089156d9ffd45097268adc5ad8051421ccb9cbe"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "ambiguous comparator"
+  },
+  {
+   "id": "I-pred-disagree",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "IND-BANK-002",
+      "sha256": "7d6ed2155700c43ee3106de62008b181373770beeac417f255fbf415ba3c9561"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "comparator is not the newest predecessor"
+  },
+  {
+   "id": "I-pred-none-present",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-999\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ],
+    "276": [
+     "IND-BANK-002"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "IND-BANK-002",
+      "sha256": "7d6ed2155700c43ee3106de62008b181373770beeac417f255fbf415ba3c9561"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "lists none in the catalog"
+  },
+  {
+   "id": "I-pred-tie",
+   "listed": {
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "files": {
+    "IND-BANK-001": "id: IND-BANK-001\nrepository: mas-harness-industry-packs\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "IND-BANK-002": "id: IND-BANK-002\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-001\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n",
+    "DIST-V": "id: DIST-V\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "IND-BANK-002A": "id: IND-BANK-002A\nrepository: mas-harness-industry-packs\npredecessors: [\"IND-BANK-002\", \"DIST-V\"]\nofflineAcceptanceCommands: [[\"make\", \"pack\", \"PACK=banking\"], [\"make\", \"data-readiness\", \"PACK=banking\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_data_readiness.py\"], [\"uv\", \"run\", \"--offline\", \"--frozen\", \"--no-sync\", \"pytest\", \"tests/banking/test_banking_business_domain.py\", \"tests/banking/test_banking_data_readiness.py\"], [\"make\", \"pack-framework-test\"], [\"make\", \"pack\", \"PACK=white-goods\"], [\"make\", \"certification-fixtures\", \"PACK=white-goods\"], [\"make\", \"ind-fix-001-regression\"], [\"make\", \"build-reproducible\"], [\"make\", \"zero-bill\"]]\n"
+   },
+   "catalogs": {
+    "base": [],
+    "274": [
+     "IND-BANK-001"
+    ],
+    "276": [
+     "IND-BANK-002",
+     "DIST-V"
+    ],
+    "278": [
+     "IND-BANK-002A"
+    ]
+   },
+   "pins": {
+    "278": {
+     "IND-BANK-002A": {
+      "packet": "IND-BANK-002",
+      "sha256": "7d6ed2155700c43ee3106de62008b181373770beeac417f255fbf415ba3c9561"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "ambiguous newest predecessor"
+  },
+  {
+   "id": "I-unreadable-line",
+   "listed": {
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "files": {
+    "DIST-T": "id: DIST-T\nrepository: mas-harness-distribution\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "CON-Q": "id: CON-Q\npredecessors: []\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n",
+    "DIST-X": "id: DIST-X\nrepository: mas-harness-distribution\npredecessors: [\"DIST-T\"]\nofflineAcceptanceCommands: [[\"make\", \"a\"], [\"make\", \"b\"], [\"make\", \"c\"]]\n"
+   },
+   "catalogs": {
+    "base": [
+     "CON-Q"
+    ],
+    "275": [
+     "DIST-T"
+    ],
+    "278": [
+     "DIST-X"
+    ]
+   },
+   "pins": {
+    "278": {
+     "DIST-X": {
+      "packet": "DIST-T",
+      "sha256": "894e9b92095c48363b1e2d752a40522a420f1bceb47fcfa8c35a1c9ee83fd82c"
+     }
+    }
+   },
+   "expect": "refuse",
+   "refusal": "R13",
+   "clause": "R13",
+   "detail": "unreadable repository line: CON-Q"
+  }
+ ],
+ "classForms": {
+  "basesFrom": {
+   "path": "architecture/chain-product-packets/vectors.json",
+   "sha256": "26438ebc76d21221790e2bfa9b9cd08b91bf333c729c38ddccbff085b2bf2342"
+  },
+  "cases": [
+   {
+    "id": "CF3-K1-278",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    require(type(value[\"productComparators\"]) is dict\n            and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n            and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                    and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                    for pin in value[\"productComparators\"].values()),\n            \"product comparators\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "OK",
+    "refusal": null,
+    "clause": null,
+    "detail": null
+   },
+   {
+    "id": "CF3-F6-at-278",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "not the statements right before the first for"
+   },
+   {
+    "id": "CF3-F9-missing",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "not the statements right before the first for"
+   },
+   {
+    "id": "CF3-F9-after-for",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ],
+     [
+      "    for path, expected in value[\"newFiles\"].items():\n",
+      "    require(type(value[\"productComparators\"]) is dict\n            and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n            and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                    and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                    for pin in value[\"productComparators\"].values()),\n            \"product comparators\")\n    for path, expected in value[\"newFiles\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "not the statements right before the first for"
+   },
+   {
+    "id": "CF3-F6prime-at-277",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 277,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "P-form fragments"
+   },
+   {
+    "id": "CF3-F9-guarded",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    if PRODUCT_PACKETS:\n        require(type(value[\"productComparators\"]) is dict\n                and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n                and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                        and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                        for pin in value[\"productComparators\"].values()),\n                \"product comparators\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "not the statements right before the first for"
+   },
+   {
+    "id": "CF3-F9-repeated",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    require(type(value[\"productComparators\"]) is dict\n            and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n            and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                    and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                    for pin in value[\"productComparators\"].values()),\n            \"product comparators\")\n    require(type(value[\"productComparators\"]) is dict\n            and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n            and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                    and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                    for pin in value[\"productComparators\"].values()),\n            \"product comparators\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "not the statements right before the first for"
+   },
+   {
+    "id": "CF3-F9-swapped",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 278,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n        \"productComparators\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productComparators\"]) is dict\n            and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n            and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                    and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                    for pin in value[\"productComparators\"].values()),\n            \"product comparators\")\n    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "not the statements right before the first for"
+   },
+   {
+    "id": "CF3-F9-at-277-beside-F6",
+    "base": "head",
+    "products": [
+     "IND-BANK-002A"
+    ],
+    "slot": 277,
+    "edits": [
+     [
+      "set(packets) == current_ids,\n",
+      "set(packets) == current_ids | set(PRODUCT_PACKETS),\n"
+     ],
+     [
+      "for name in current_ids - {NEW_PACKET}}",
+      "for name in current_ids - {NEW_PACKET} - set(PRODUCT_PACKETS)}"
+     ],
+     [
+      "require(set(packets) == old | {NEW_PACKET}, ",
+      "require(set(packets) == old | {NEW_PACKET} | set(PRODUCT_PACKETS), "
+     ],
+     [
+      "require(set(rules) == old | {NEW_PACKET}\n",
+      "require(set(rules) == old | {NEW_PACKET} | set(PRODUCT_PACKETS)\n"
+     ],
+     [
+      "**{NEW_PACKET: record[\"packetSha256\"]}))",
+      "**{NEW_PACKET: record[\"packetSha256\"]}, **record[\"productPackets\"]))"
+     ],
+     [
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n    }",
+      "\"packetSha256\", \"changedFiles\", \"newFiles\", \"validatorNormalizedSha256\",\n        \"productPackets\",\n    }"
+     ],
+     [
+      "    for name, expected in value[\"baselinePackets\"].items():\n",
+      "    require(type(value[\"productPackets\"]) is dict\n            and list(value[\"productPackets\"]) == list(PRODUCT_PACKETS)\n            and all(_sha(sha) for sha in value[\"productPackets\"].values())\n            and not set(PRODUCT_PACKETS) & (set(value[\"baselinePackets\"]) | {NEW_PACKET}),\n            \"product packets\")\n    require(type(value[\"productComparators\"]) is dict\n            and list(value[\"productComparators\"]) == [p for p in PRODUCT_PACKETS if p in value[\"productComparators\"]]\n            and all(type(pin) is dict and set(pin) == {\"packet\", \"sha256\"} and type(pin[\"packet\"]) is str\n                    and _sha(pin[\"sha256\"]) and value[\"baselinePackets\"].get(pin[\"packet\"]) == pin[\"sha256\"]\n                    for pin in value[\"productComparators\"].values()),\n            \"product comparators\")\n    for name, expected in value[\"baselinePackets\"].items():\n"
+     ]
+    ],
+    "expect": "refuse",
+    "refusal": "P-form",
+    "clause": "P-form",
+    "detail": "the productPackets check is not the one statement before the first for"
+   }
+  ]
+ },
+ "pin": {
+  "id": "V3-PIN",
+  "path": "scripts/chain_identity_v2.py",
+  "sha256": "23fe723ae060b13727118b5808541d0b40bfee22ac5e803955e324f4dd6d9a55"
+ },
+ "equivalence": {
+  "id": "V3-EQ-273-277",
+  "slots": [
+   273,
+   274,
+   275,
+   276,
+   277
+  ]
+ }
+}
