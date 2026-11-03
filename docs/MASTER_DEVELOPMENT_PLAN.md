@@ -1,6 +1,37 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-SECTOR-004 source preparation, November 2, 2026
+## Current checkpoint — MET-PERF-045 source preparation, November 3, 2026
+
+Alpha2 OPEN. MET-SECTOR-004 (IND-BANK-002-PUBLISH) passed required verify and merged as main 01a788b.
+PERF-045 (the owner's "Cuts + quiet host" and the lane monitor's owner-delegated rulings, among them MON-277-FLOOR,
+MON-277-PERF-PLAN, MON-277-CR2-KEEP, MON-277-REV3-GO and MON-277-MECH-GO) is the verify-floor cut packet after 276's 1,092 s verify, adopting contract rev 3's three cuts from candidate c1: C1+ (the parent predecessor test proves its readiness step from the session's own outcome of the readiness node, by MET-PERF-030's in-session mechanism, and re-runs the validator only when that node did not run or its record is partial), C2 (ci/parallel_suite_weights.json refreshed from 276's dry-run per-file times; the same planner and K 6) and C3 (test-local exact sharing in two tests, restored after each); measured in an A/B pair at a quiet host, the dry run went from 968.7 s to 912.9 s, and the 1,000 s floor is an operating assumption (a quiet host during each verify), not a code guarantee. No catalog changes and no R10 or R12
+file changes. The packet registers its own review series, MET-PERF-045/packet, in the brief registry; its gate paths are the weights table ci/parallel_suite_weights.json (GATE_CI) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+Its new layer pins the four changed files, checks the readiness node and the proof mode, the weights table's shape, each
+sharing helper installed once inside its one test and the schema_errors key order, checks the registry's one rider, and
+requires the five neighbours the cuts lean on to stay unchanged. It is built under MET-PERF-042's identity rule and
+CHAIN-PRODUCT-PUBLISH-001's step rule with S and C apart at K = 0: every older chain validator changes only by the bump
+vocabulary, 276's layer by the bridge vocabulary with its own product kept, and 276's test keeps its own routes and the
+adjacent one (C2), while the new head's test keeps the full fan-in. MET-PERF-045 is the 277th specification (281
+packets at slot 277).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-045 / PERF-045 | SOURCE_PREPARED | The verify-floor cuts (277th packet, K = 0): C1+, C2 (the weights table) and C3; gate material (the weights table and the registry rider) |
+| Alpha2A | MET-SECTOR-004 / IND-BANK-002-PUBLISH | VERIFY_PASSED_MERGED | Merged as main 01a788b |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+One ci/ path changes (the weights table ci/parallel_suite_weights.json; the planner and K stay), no R10 and no R12 file
+changes, and nothing is installed. Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical third product publication source checkpoint — MET-SECTOR-004 source preparation, November 2, 2026
 
 Alpha2 OPEN. MET-VERIFY-005 (VERIFIER-EXT-R04-R11) passed required verify and merged as main a7ccefe.
 IND-BANK-002-PUBLISH (the lane monitor's owner-delegated rulings, among them Q-276-ID, MON-276-PLAN, MON-276-C1-GO,
@@ -3018,7 +3049,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · CHAIN-PRODUCT-PUBLISH-001 / MET-PERF-044 · Publish the product-packet vocabulary extension (the records rule.json, vectors.json, README.md and decisions.md under architecture/chain-product-packets/, closed to those four) with the v2 identity model (slot and catalog count apart) and its D5a oracle, adopted as candidate c4 after four CONTRACT rounds, the live identity test on the v2 model with the v1 = v2 regression, and the registry rider; no product published (K = 0); gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · IND-BANK-001-PUBLISH / MET-SECTOR-003 · Publish the banking business-domain product packet IND-BANK-001 for mas-harness-industry-packs (predecessors IND-001 and IND-FIX-001), adopted as candidate c5 after four CONTRACT rounds with R03's yes, in the first publishing step of the product-packet vocabulary (K = 1, 275 packets at slot 274), with R03's PR-packets item and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · VERIFIER-EXT-R04-R11 / MET-VERIFY-005 · Publish R11's DIST-TRANSPORT-001 and R04's CTRL-TRANSPORT-001 transport bootstraps as product packets (install order DIST then CTRL), adopted as candidate c1 after one CONTRACT round with R04's and R11's yes, in the second publishing step of the product-packet vocabulary (K = 2, 278 packets at slot 275), with R04's item 12 and transport-correction section, R11's item 9, the ownership closer and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
-- [ ] Alpha 2A · IND-BANK-002-PUBLISH / MET-SECTOR-004 · Publish R03's banking data readiness packet IND-BANK-002 for mas-harness-industry-packs (predecessor IND-BANK-001) as a product packet, adopted as candidate c1 after one CONTRACT round with R03's yes, in the third publishing step of the product-packet vocabulary (K = 1, 280 packets at slot 276), with R03's item 9 in R03's own words and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [x] Alpha 2A · IND-BANK-002-PUBLISH / MET-SECTOR-004 · Publish R03's banking data readiness packet IND-BANK-002 for mas-harness-industry-packs (predecessor IND-BANK-001) as a product packet, adopted as candidate c1 after one CONTRACT round with R03's yes, in the third publishing step of the product-packet vocabulary (K = 1, 280 packets at slot 276), with R03's item 9 in R03's own words and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
+- [ ] Alpha 2A · PERF-045 / MET-PERF-045 · Adopt the verify-floor cuts C1+ (the parent test's readiness step proved in-session), C2 (the weights table refreshed from 276's dry run) and C3 (test-local exact sharing in two tests) from candidate c1 under contract rev 3, a K = 0 step (281 packets at slot 277); gate material (the weights table and the registry rider); pass a quiet-host dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-SECTOR-004
+## Current source preparation — MET-PERF-045
+
+MET-PERF-045 (PERF-045, slot 277): the verify-floor cut packet after 276's 1,092 s verify, adopting contract rev 3's three cuts from candidate c1: C1+ (the parent predecessor test proves its readiness step from the session's own outcome of the readiness node, by MET-PERF-030's in-session mechanism, and re-runs the validator only when that node did not run or its record is partial), C2 (ci/parallel_suite_weights.json refreshed from 276's dry-run per-file times; the same planner and K 6) and C3 (test-local exact sharing in two tests, restored after each); measured in an A/B pair at a quiet host, the dry run went from 968.7 s to 912.9 s, and the 1,000 s floor is an operating assumption (a quiet host during each verify), not a code guarantee. No catalog changes. The packet registers its own review series in the brief
+registry; its gate paths are the weights table ci/parallel_suite_weights.json (GATE_CI) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step
+rule (K = 0, 281 packets at slot 277).
+
+## Historical third product publication source preparation — MET-SECTOR-004
 
 MET-SECTOR-004 (IND-BANK-002-PUBLISH, slot 276): the third publishing step of the product-packet vocabulary (K = 1): the meta packet publishes one product packet, task-packets/IND-BANK-002.yaml (mas-harness-industry-packs, R03's banking data readiness packet, predecessor IND-BANK-001), R03's bytes adopted as candidate c1 after one CONTRACT round with R03's yes; R03's plan gains item 9 in R03's own words; the product adds no ownership diagnostic, so no closer is added. No catalog changes. The packet registers its own review series in
 the brief registry; its gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and
@@ -1546,6 +1552,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 148. `MET-SECTOR-003`: publish the product packet IND-BANK-001 (IND-BANK-001-PUBLISH), the first publishing step (K = 1, 275 packets at slot 274), with R03's PR-packets item; gate material (the registry rider), the owner's per-PR approval.
 149. `MET-VERIFY-005`: publish the product packets DIST-TRANSPORT-001 and CTRL-TRANSPORT-001 (VERIFIER-EXT-R04-R11 section 5 step 2), the second publishing step (K = 2, 278 packets at slot 275), with R04's item 12 and transport-correction section and R11's item 9; gate material (the registry rider), the owner's per-PR approval.
 150. `MET-SECTOR-004`: publish the product packet IND-BANK-002 (IND-BANK-002-PUBLISH), the third publishing step (K = 1, 280 packets at slot 276), with R03's item 9; gate material (the registry rider), the owner's per-PR approval.
+151. `MET-PERF-045`: the verify-floor cuts C1+, C2 (the weights table) and C3 (PERF-045), a K = 0 step (281 packets at slot 277); gate material (the weights table and the registry rider), the owner's approval of the exact head and per-PR merge.
 
 ## Testing, verification, and acceptance
 
