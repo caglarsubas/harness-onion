@@ -1,0 +1,16 @@
+id: DIST-005A
+repository: mas-harness-distribution
+branch: codex/dist-005a-repro-security
+objective: Certify reproducible builds, blob closure, archive safety, staging integrity, key revocation, and no-network operation.
+predecessors: [DIST-TRANSPORT-001]
+allowedPaths: ["tests/reproducibility/", "tests/security/", "tests/airgap/", "fixtures/attacks/", "scripts/rebuild_compare.sh", "scripts/run_supply_chain_campaign.py", "docs/runbooks/", "src/planeon_distribution/", "ci/targets/dist-005a.json"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts: ["Consumes complete distribution behavior v1", "Produces distribution reproducibility/security evidence set v1", "Shared transport (Q-VX45-6): implementation starts from exact R11 main e28ea6a2375b8e0dab0865c2bda1c824ab1ca340 (the DIST-TRANSPORT-001 merge) and runs under the transport that packet installed; ci/verify-offline.sh, ci/warm-source-isolation.sh, ci/network_canary.py, ci/run_packet_argv.py, ci/run_make_target.py and ci/zero_bill_scan.py stay byte-identical to that main, no .github entry is added, and prefetchCommands stays empty (MON-VB-D2 form)."]
+deliverables: ["Two-clean-build comparison, corrupt/missing/extra blob denial, traversal/bomb defense, staging tamper, revocation, race, and no-egress campaign."]
+excluded: ["Feature additions, online scanners, or treating cached/mutable inputs as reproducible."]
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","transport-bootstrap"],["make","fixture-verify"],["make","dist-fix-regression"],["make","resolve-fixtures"],["make","build-fixture"],["make","minimal-selectivity-proof"],["make","supply-chain-fixtures"],["make","sbom-check"],["make","vulnerability-offline"],["make","model-custody-check"],["make","signing-fixtures"],["make","rotation-test"],["make","promotion-contract"],["make","airgap-export-import"],["make","relocation-proof"],["make","archive-security"],["make","helm-render-matrix"],["make","helm-security"],["make","build-reproducible"],["make","supply-chain-security"],["make","airgap-runtime"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence: ["Identical clean-build root digests.", "Complete adversarial supply-chain and offline network reports."]
+rollback: Revoke faulty candidate/release artifacts and restore the prior signed bundle/trust set.
