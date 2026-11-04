@@ -121,10 +121,12 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 283 and len(accepted) == 278
+    assert len(current) == 286 and len(accepted) == 278
     assert set(accepted) == set(current) - {profile.NEW_PACKET, *profile.PRODUCT_PACKETS, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.successor.PRODUCT_PACKETS}
     assert len(vf5.historical_catalog(current)) == 275
     assert len(sec3.historical_catalog(current)) == 273
     assert len(cpp.historical_catalog(current)) == 272
@@ -1328,13 +1330,19 @@ POSITION_MESSAGE = "close_bootstrap_transport_dispatch stays the outermost close
 POSITION_CHANGES = ["inner", "missing", "twice", "other_inner", "not_python", "not_bytes"]
 
 
+def _era_packets():
+    """MET-VERIFY-006's era bridge (CONTRACT_279 s5): this layer's ownership check reads the live catalog without 279's
+    two products, as the head reads it."""
+    return {name: packet for name, packet in _packets().items() if name not in profile.successor.successor.successor.PRODUCT_PACKETS}
+
+
 def _ownership():
     from scripts.validate_packet_ownership import validate_packet_ownership
     return validate_packet_ownership
 
 
 def _ownership_mutant(change):
-    diagnostics = _ownership()(_packets())
+    diagnostics = _ownership()(_era_packets())
     named = "packet IND-BANK-002 overlaps a test probe"
     if change == "product_named":
         return diagnostics + [named]
@@ -1347,7 +1355,7 @@ def _ownership_mutant(change):
     if change == "unordered_sibling":
         # The product made a sibling of IND-BANK-001 (its predecessors become IND-BANK-001's): the two share paths and
         # are no longer ordered, so the ownership check names the product (R03's chain is otherwise linear).
-        packets = _packets()
+        packets = _era_packets()
         packets["IND-BANK-002"]["predecessors"] = list(packets["IND-BANK-001"]["predecessors"])
         return _ownership()(packets)
     if change == "not_list":
@@ -1357,7 +1365,7 @@ def _ownership_mutant(change):
 
 @pytest.mark.parametrize("change", OWNERSHIP_CHANGES)
 def test_v4_the_product_adds_no_ownership_diagnostic(change):
-    live = _ownership()(_packets())
+    live = _ownership()(_era_packets())
     assert len(live) == profile.OWNERSHIP_COUNT == 119 and not [item for item in live if "IND-BANK-002" in item]
     assert profile.check_ownership(live) is None
     mutant = _ownership_mutant(change)

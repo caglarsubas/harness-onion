@@ -1,6 +1,41 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-SECTOR-005 source preparation, November 3, 2026
+## Current checkpoint — MET-VERIFY-006 source preparation, November 4, 2026
+
+Alpha2 OPEN. MET-SECTOR-005 (IND-BANK-002A-PUBLISH) passed required verify and merged as main afee03b.
+DIST-005A-CTRL-FIX-004-PUBLISH (the lane monitor's owner-delegated rulings, among them MON-279-START, MON-279-OWN2,
+MON-279-OWN2-P1, MON-279-P1-SITES, MON-279-CR3-RULINGS and MON-279-C1-SCOPE) is the fifth publishing step of the product-packet vocabulary (K = 2): the meta packet publishes two product packets in install order, task-packets/DIST-005A.yaml (mas-harness-distribution), the acceptance-command successor of the published but unbuilt DIST-005 under Q-VX45-6 (a), whose 22 commands keep DIST-TRANSPORT-001's 19, and task-packets/CTRL-FIX-004.yaml (mas-harness-control-plane), the page-not-found status fix, whose 8 commands keep CTRL-TRANSPORT-001's 6 (the R13 guard, pinned in the head's productComparators); one exact-pair supersession closer, the new outermost call of the dispatch ownership chain, closes exactly the 20 overlaps the two products add (12 CTRL-FIX-004 x CTRL-INTEGRATE-001, 8 DIST-005 x DIST-005A), keyed by both packets' bytes; the head-test weights table is refreshed in full from 278's dry run and W1's kappa, its inputs pinned in a committed record; R04's plan gains item 13 and R11's plan item 10 in their own words, and DIST-005 and CTRL-INTEGRATE-001 stay published as history. The packet registers its own
+review series, MET-VERIFY-006/packet, in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS) and the head-test weights table ci/parallel_suite_weights.json (GATE_CI), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+Its new layer pins both products' bytes and facts (DIST-005A's six-edit difference from DIST-005, CTRL-FIX-004's keys,
+paths and commands), checks the meta packet's allowedPaths and the three plans, the registry's one rider, the raw
+ownership count (139: the base's 119 plus exactly the 20 listed messages) and the closer's exact pairs and position,
+one added YAML per repository and one YAML per product branch, its productComparators pin and the inheritance
+predicate, the superseded YAMLs and the ownership validator byte-identical, and every weights-table entry its
+value computed from the pinned inputs record.
+It is built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule with S and C apart at K = 2,
+with the P-forms from the cut (F6' and F9): every older chain validator changes only by the bump vocabulary, 278's
+layer by the bridge vocabulary, and the new head's test keeps the full fan-in. MET-VERIFY-006 is the 279th
+specification, and DIST-005A and CTRL-FIX-004 the sixth and seventh product packets (286 packets at slot 279).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-VERIFY-006 / DIST-005A-CTRL-FIX-004-PUBLISH | SOURCE_PREPARED | The fifth publishing step (279th packet, K = 2): publishes the product packets DIST-005A (mas-harness-distribution) and CTRL-FIX-004 (mas-harness-control-plane) with one exact-pair supersession closer and the head-test weights refresh; gate material (the registry rider and the weights table) |
+| Alpha2A | MET-SECTOR-005 / IND-BANK-002A-PUBLISH | VERIFY_PASSED_MERGED | Merged as main afee03b |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+One ci/ path changes (the weights table, refreshed in full; the planner is unchanged); no R10 and no R12 file changes,
+and nothing is installed. Phase-end effort transition NOT_DUE.
+Prior checkpoints below are history only.
+
+## Historical fourth product publication source checkpoint — MET-SECTOR-005 source preparation, November 3, 2026
 
 Alpha2 OPEN. MET-PERF-045 (PERF-045) passed required verify and merged as main c55ac7a.
 IND-BANK-002A-PUBLISH (the lane monitor's owner-delegated rulings, among them MON-R00-278-RULED, MON-R00-278-ROUTE-B,
@@ -3083,7 +3118,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · VERIFIER-EXT-R04-R11 / MET-VERIFY-005 · Publish R11's DIST-TRANSPORT-001 and R04's CTRL-TRANSPORT-001 transport bootstraps as product packets (install order DIST then CTRL), adopted as candidate c1 after one CONTRACT round with R04's and R11's yes, in the second publishing step of the product-packet vocabulary (K = 2, 278 packets at slot 275), with R04's item 12 and transport-correction section, R11's item 9, the ownership closer and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · IND-BANK-002-PUBLISH / MET-SECTOR-004 · Publish R03's banking data readiness packet IND-BANK-002 for mas-harness-industry-packs (predecessor IND-BANK-001) as a product packet, adopted as candidate c1 after one CONTRACT round with R03's yes, in the third publishing step of the product-packet vocabulary (K = 1, 280 packets at slot 276), with R03's item 9 in R03's own words and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · PERF-045 / MET-PERF-045 · Adopt the verify-floor cuts C1+ (the parent test's readiness step proved in-session), C2 (the weights table refreshed from 276's dry run) and C3 (test-local exact sharing in two tests) from candidate c1 under contract rev 3, a K = 0 step (281 packets at slot 277); gate material (the weights table and the registry rider); pass a quiet-host dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
-- [ ] Alpha 2A · IND-BANK-002A-PUBLISH / MET-SECTOR-005 · Publish R03's IND-BANK-002A for mas-harness-industry-packs (predecessor IND-BANK-002, its 11 commands keeping both predecessors' commands in order) as a product packet, with the R13 inheritance guard in chain_identity_v3 and the successor-descriptor ownership rule, adopted after CONTRACT_278's rounds and R03's agreement on the bytes (K = 1, 283 packets at slot 278); gate material (the registry rider); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
+- [x] Alpha 2A · IND-BANK-002A-PUBLISH / MET-SECTOR-005 · Publish R03's IND-BANK-002A for mas-harness-industry-packs (predecessor IND-BANK-002, its 11 commands keeping both predecessors' commands in order) as a product packet, with the R13 inheritance guard in chain_identity_v3 and the successor-descriptor ownership rule, adopted after CONTRACT_278's rounds and R03's agreement on the bytes (K = 1, 283 packets at slot 278); gate material (the registry rider); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
+- [ ] Alpha 2A · DIST-005A-CTRL-FIX-004-PUBLISH / MET-VERIFY-006 · Publish R11's DIST-005A for mas-harness-distribution (predecessor DIST-TRANSPORT-001, the acceptance-command successor of DIST-005) and R04's CTRL-FIX-004 for mas-harness-control-plane (predecessor CTRL-TRANSPORT-001) as product packets, with one exact-pair supersession closer for their 20 ownership overlaps and the head-test weights refresh, adopted after CONTRACT_279's rounds and R04's and R11's agreement on the bytes (K = 2, 286 packets at slot 279); gate material (the registry rider and the weights table); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
