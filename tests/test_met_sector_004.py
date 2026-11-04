@@ -121,8 +121,10 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 281 and len(accepted) == 278
-    assert set(accepted) == set(current) - {profile.NEW_PACKET, *profile.PRODUCT_PACKETS, profile.successor.NEW_PACKET}
+    assert len(current) == 283 and len(accepted) == 278
+    assert set(accepted) == set(current) - {profile.NEW_PACKET, *profile.PRODUCT_PACKETS, profile.successor.NEW_PACKET,
+                                            profile.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.PRODUCT_PACKETS}
     assert len(vf5.historical_catalog(current)) == 275
     assert len(sec3.historical_catalog(current)) == 273
     assert len(cpp.historical_catalog(current)) == 272
@@ -1366,7 +1368,7 @@ def test_v4_the_product_adds_no_ownership_diagnostic(change):
                 remaining.remove(item)
             else:
                 new.append(item)
-        assert not remaining and len(mutant) == 124 and len(new) == 5
+        assert not remaining and len(mutant) == 129 and len(new) == 10
         assert all("IND-BANK-002" in item for item in new)
     with pytest.raises(ValueError, match=re.escape(OWNERSHIP_MESSAGE)):
         profile.check_ownership(mutant)

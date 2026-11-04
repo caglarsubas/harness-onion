@@ -86,6 +86,7 @@ from scripts import validate_unified_roadmap as roadmap
 from scripts.safe_yaml import safe_load
 from scripts import chain_identity as identity
 from scripts import chain_identity_v2 as identity_v2
+from scripts import chain_identity_v3 as identity_v3
 
 
 def packets():
@@ -106,7 +107,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 281 and len(accepted) == 254
+    assert len(current) == 283 and len(accepted) == 254
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -131,7 +132,9 @@ def test_exact_current_source_and_complete_history_chain():
                                             *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
     assert len(i6v4.historical_catalog(current)) == 253
     assert len(dcap.historical_catalog(current)) == 252
     assert len(np5.historical_catalog(current)) == 251
@@ -1244,6 +1247,16 @@ V2_PINS = {
     V2_RECORD_DIR + "/vectors.json": "26438ebc76d21221790e2bfa9b9cd08b91bf333c729c38ddccbff085b2bf2342",
     "scripts/chain_identity_v2.py": "23fe723ae060b13727118b5808541d0b40bfee22ac5e803955e324f4dd6d9a55",
 }
+# MET-SECTOR-005 (CONTRACT_278 rev 4): the R13 inheritance guard is the v3 model with its four records; v2 and its
+# records above stay byte-identical, and from slot 278 the live checks below call v3 only (v3 pins v2 itself).
+V3_RECORD_DIR = "architecture/chain-inheritance"
+V3_PINS = {
+    V3_RECORD_DIR + "/README.md": "d1c8916bf8024f319770d1ab93e5f3f001928bbb041ed2319e47e28356a3e48e",
+    V3_RECORD_DIR + "/decisions.md": "c0d334380200f7de008de31fbd7268cd6a154cda19dfedf4bb9e8a53db9a3f9d",
+    V3_RECORD_DIR + "/rule.json": "ed2a4d41df9a3624ee4c0d835bd1586b075dfe32feffd7eb0d09cce9731a9b10",
+    V3_RECORD_DIR + "/vectors.json": "3c197ee5634cba2c7c353be960c92f363c7b523b214b6e8088b2c6c2e9b58105",
+    "scripts/chain_identity_v3.py": "29483ec356f0d2b10f778fc5c4fe642df94795f8249daa088e7a06c995c67fb9",
+}
 
 
 def _v2_ext():
@@ -1256,6 +1269,38 @@ def _v2_ext():
     assert record["path"] == V2_RECORD_DIR + "/decisions.md"
     assert hashlib.sha256(profile.regular_bytes(record["path"])).hexdigest() == record["sha256"]
     return ext
+
+
+def _v3():
+    """(v2 bound by v3's pin, ext3): the v3 records' pins, then v3's own check of its rule against v2's."""
+    for path, expected in V3_PINS.items():
+        assert hashlib.sha256(profile.regular_bytes(path)).hexdigest() == expected, path
+    assert sorted(entry.name for entry in (profile.ROOT / V3_RECORD_DIR).iterdir()) == [
+        "README.md", "decisions.md", "rule.json", "vectors.json"]
+    v2 = identity_v3.pin_v2(identity_v2, profile.regular_bytes("scripts/chain_identity_v2.py"))
+    _, ext3 = identity_v3.check_rules(profile.regular_bytes(V2_RECORD_DIR + "/rule.json"),
+                                      profile.regular_bytes(V3_RECORD_DIR + "/rule.json"), v2)
+    record = ext3["evidence"]["ownerDecision"]["record"]
+    assert record["path"] == V3_RECORD_DIR + "/decisions.md"
+    assert hashlib.sha256(profile.regular_bytes(record["path"])).hexdigest() == record["sha256"]
+    return v2, ext3
+
+
+def _catalogs_and_pins(chain):
+    """R13's inputs from the chain's authorities: each layer's catalog (baselinePackets | {authorityPacket} |
+    productPackets) by slot, the first layer's baseline as the base, and productComparators from the cut on."""
+    catalogs, pins = {}, {}
+    for slot, _, _, tree in chain:
+        consts = {n.targets[0].id: n.value.value for n in tree.body if isinstance(n, ast.Assign) and len(n.targets) == 1
+                  and isinstance(n.targets[0], ast.Name) and isinstance(n.value, ast.Constant)}
+        record = json.loads(profile.regular_bytes(consts.get("AUTHORITY_PATH") or consts["RECORD_PATH"]))
+        assert record["authorityPacket"] == consts["NEW_PACKET"] and type(record["baselinePackets"]) is dict
+        if not catalogs:
+            catalogs[identity_v3.BASE] = set(record["baselinePackets"])
+        catalogs[slot] = set(record["baselinePackets"]) | {record["authorityPacket"]} | set(record.get("productPackets") or {})
+        if slot >= identity_v3.CUT_SLOT:
+            pins[slot] = record.get("productComparators") or {}
+    return catalogs, pins
 
 
 def _chain_packet_ids(chain):
@@ -1280,7 +1325,8 @@ def test_identity_rule_holds_on_the_live_chain():
     head = importlib.import_module("scripts." + chain[-1][1])
     slot = chain[-1][0]
     catalog = len(list((profile.ROOT / "task-packets").glob("*.yaml")))
-    summary = identity_v2.check(profile.regular_bytes, head.historical_bytes, rule, ext, slot, catalog, identity)
+    v2, ext3 = _v3()
+    summary = identity_v3.check(profile.regular_bytes, head.historical_bytes, rule, ext, ext3, slot, catalog, identity, v2)
     assert summary["layers"] == slot - 188 and summary["head"] == slot and summary["catalog"] == catalog
 
 
@@ -1308,7 +1354,8 @@ def test_v1_and_v2_agree_on_the_k0_era():
     rule, ext = _rule(), _v2_ext()
     slot, read, previous = _k0_era(identity.walk_layers(profile.regular_bytes, rule))
     first = identity.check(read, previous, rule, slot)
-    second = identity_v2.check(read, previous, rule, ext, slot, slot, identity)
+    v2, ext3 = _v3()
+    second = identity_v3.check(read, previous, rule, ext, ext3, slot, slot, identity, v2)
     assert second["products"] == {} and second["slot"] == second["catalog"] == slot
     assert {k: v for k, v in second.items() if k not in ("slot", "catalog", "products")} == first
 
@@ -1318,10 +1365,41 @@ def test_every_listed_product_meets_the_rule():
     that binds PRODUCT_PACKETS, reading the pinned rule.json; argv 63 runs it at every later PR."""
     rule, ext = _rule(), _v2_ext()
     chain = identity.walk_layers(profile.regular_bytes, rule)
-    listed = {slot: identity_v2.layer_products(tree) for slot, _, _, tree in chain}
+    v2, _ = _v3()
+    listed = {slot: identity_v3.layer_products(tree, v2) for slot, _, _, tree in chain}
     listed = {slot: ids for slot, ids in listed.items() if ids}
-    count = identity_v2.check_products(ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain))
+    count = identity_v3.check_products(ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain), v2)
     assert count == sum(len(ids) for ids in listed.values())
+
+
+def test_every_listed_product_keeps_its_inherited_commands():
+    """MET-SECTOR-005 R13 (architecture/chain-inheritance): every product listed at a slot from the cut on keeps every
+    acceptance command of its repository's newest earlier catalog YAML, pinned in its layer's productComparators;
+    slots below the cut are not judged. Argv 63 runs it at every later PR."""
+    rule = _rule()
+    v2, ext3 = _v3()
+    chain = identity.walk_layers(profile.regular_bytes, rule)
+    listed = {slot: identity_v3.layer_products(tree, v2) for slot, _, _, tree in chain}
+    catalogs, pins = _catalogs_and_pins(chain)
+    judged = identity_v3.check_inheritance(ext3, listed, catalogs, pins, profile.regular_bytes, safe_load, v2)
+    assert judged == sum(len(ids) for slot, ids in listed.items() if slot >= identity_v3.CUT_SLOT)
+
+
+def test_v3_pins_v2_and_equals_it_below_the_cut():
+    """MET-SECTOR-005 (MON-278-Q6-B precisions 1 and 2): v3's V2_SHA256 is the live v2 file's digest and a changed
+    v2 refuses; for the layers at slots 273-277, v3's product sets and P-form counts equal v2's."""
+    vectors = identity_v3.check_vectors_record(json.loads(profile.regular_bytes(V3_RECORD_DIR + "/vectors.json")))
+    v2, _ = _v3()
+    raw = profile.regular_bytes(vectors["pin"]["path"])
+    assert hashlib.sha256(raw).hexdigest() == vectors["pin"]["sha256"] == identity_v3.V2_SHA256
+    with pytest.raises(ValueError, match="identity model: "):
+        identity_v3.pin_v2(identity_v2, raw + b"\n")
+    chain = identity.walk_layers(profile.regular_bytes, _rule())
+    trees = {slot: tree for slot, _, _, tree in chain}
+    assert vectors["equivalence"]["slots"] == [273, 274, 275, 276, 277]
+    for slot in vectors["equivalence"]["slots"]:
+        assert identity_v3.layer_products(trees[slot], v2) == identity_v2.layer_products(trees[slot]), slot
+        assert identity_v3.p_form_counts(slot, v2) == identity_v2.p_form_counts(), slot
 
 
 def _vector_outcome(run):
@@ -1340,27 +1418,38 @@ def test_every_product_packet_vector_holds():
     outcome and refuses under its clause with its detail; every agreement row's head column is the outcome of the
     vectors it names, and verify's outcome equals the head's; every refusal id of rule.json is covered."""
     ext, rule = _v2_ext(), _rule()
+    v2, ext3 = _v3()
     vectors = identity_v2.check_vectors_record(json.loads(profile.regular_bytes(V2_RECORD_DIR + "/vectors.json")))
+    vectors3 = identity_v3.check_vectors_record(json.loads(profile.regular_bytes(V3_RECORD_DIR + "/vectors.json")))
     runs = {}
     for case in vectors["steps"]:
-        runs["steps", case["id"]] = (case, lambda case=case: identity_v2.check_step_vector(case, identity))
+        runs["steps", case["id"]] = (case, lambda case=case: identity_v3.check_step_vector(case, identity, v2))
     for case in vectors["products"]:
         files = {"task-packets/%s.yaml" % name: body.encode("utf-8") for name, body in case["files"].items()}
-        runs["products", case["id"]] = (case, lambda case=case, files=files: identity_v2.check_products(
-            ext, case["listed"], files.__getitem__, safe_load, set(case.get("chainPackets", []))))
+        runs["products", case["id"]] = (case, lambda case=case, files=files: identity_v3.check_products(
+            ext, case["listed"], files.__getitem__, safe_load, set(case.get("chainPackets", [])), v2))
     for case in vectors["counts"]:
-        runs["counts", case["id"]] = (case, lambda case=case: identity_v2.check_counts(
-            case["slot"], case["catalog"], case["products"]))
+        runs["counts", case["id"]] = (case, lambda case=case: identity_v3.check_counts(
+            case["slot"], case["catalog"], case["products"], v2))
     for case in vectors["bindings"]:
-        runs["bindings", case["id"]] = (case, lambda case=case: identity_v2.layer_products(ast.parse(case["source"])))
+        runs["bindings", case["id"]] = (case, lambda case=case: identity_v3.layer_products(ast.parse(case["source"]), v2))
     for case in vectors["allowedPaths"]:
-        runs["allowedPaths", case["id"]] = (case, lambda case=case: identity_v2.check_allowed_paths(
+        runs["allowedPaths", case["id"]] = (case, lambda case=case: identity_v3.check_allowed_paths(
             case["allowed"], case["changed"], case["new"], case["authority"], case["validator"], case["ownYaml"],
-            case["products"]))
+            case["products"], v2))
     bases = vectors["classForms"]["bases"]
     for case in vectors["classForms"]["cases"]:
-        runs["classForms", case["id"]] = (case, lambda case=case: identity_v2.check_class_vector(
-            case, bases, rule, identity))
+        runs["classForms", case["id"]] = (case, lambda case=case: identity_v3.check_class_vector(
+            case, bases, rule, identity, v2))
+    # MET-SECTOR-005: v3's delta vectors (CONTRACT_278 rev 4 s3, s4), on v2's classForms bases by reference.
+    assert vectors3["classForms"]["basesFrom"] == {"path": V2_RECORD_DIR + "/vectors.json", "sha256": hashlib.sha256(
+        profile.regular_bytes(V2_RECORD_DIR + "/vectors.json")).hexdigest()}
+    for case in vectors3["inheritance"]:
+        runs["inheritance", case["id"]] = (case, lambda case=case: identity_v3.check_inheritance_vector(
+            case, ext3, safe_load, v2))
+    for case in vectors3["classForms"]["cases"]:
+        runs["classForms3", case["id"]] = (case, lambda case=case: identity_v3.check_class_vector(
+            case, bases, rule, identity, v2))
     wrong = {}
     for key, (case, run) in runs.items():
         outcome, clause, message = _vector_outcome(run)
@@ -1381,7 +1470,7 @@ def test_every_product_packet_vector_holds():
     assert sorted((row["case"], row["K"]) for row in vectors["agreement"]) == [
         (n, k) for n in range(1, 12) for k in (1, 2)]
     covered = {case["refusal"] for case, _ in runs.values()} | head_only
-    assert set(ext["refusals"]) <= covered and {"P-form", "D", "G1", "G2"} <= covered
+    assert set(ext["refusals"]) | set(ext3["refusals"]) <= covered and {"P-form", "D", "G1", "G2"} <= covered
     assert {"K0", "K1", "K2", "K0+-275", "AP1", "AP2", "R12-duplicate-key", "R12-L", "CF-K0", "CF-K1", "CF-K2",
             "CF-K0+-274"} <= {cid for _, cid in runs}
 

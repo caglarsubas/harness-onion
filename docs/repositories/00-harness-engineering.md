@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-045
+## Current source preparation — MET-SECTOR-005
+
+MET-SECTOR-005 (IND-BANK-002A-PUBLISH, slot 278): the fourth publishing step of the product-packet vocabulary (K = 1): the meta packet publishes one product packet, task-packets/IND-BANK-002A.yaml (mas-harness-industry-packs), the acceptance-command successor of the published but unbuilt IND-BANK-002 under Q-VX45-6 (a), whose 11 commands keep IND-BANK-001's and IND-BANK-002's commands in order; it adds the R13 inheritance guard (a product published from slot 278 keeps every command of its repository's newest earlier packet, pinned in the head's productComparators) in a new model, scripts/chain_identity_v3.py, with its records in architecture/chain-inheritance/ (v2 and its records stay byte-identical), and the successor-descriptor rule in scripts/validate_packet_ownership.py; R03's plan gains item 10 in R03's own words, and IND-BANK-002 stays published as history. The packet registers its own review series in the brief registry;
+its one gate path is the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule (K =
+1, 283 packets at slot 278), with the R13 guard of architecture/chain-inheritance/.
+
+## Historical verify-floor cuts source preparation — MET-PERF-045
 
 MET-PERF-045 (PERF-045, slot 277): the verify-floor cut packet after 276's 1,092 s verify, adopting contract rev 3's three cuts from candidate c1: C1+ (the parent predecessor test proves its readiness step from the session's own outcome of the readiness node, by MET-PERF-030's in-session mechanism, and re-runs the validator only when that node did not run or its record is partial), C2 (ci/parallel_suite_weights.json refreshed from 276's dry-run per-file times; the same planner and K 6) and C3 (test-local exact sharing in two tests, restored after each); measured in an A/B pair at a quiet host, the dry run went from 968.7 s to 912.9 s, and the 1,000 s floor is an operating assumption (a quiet host during each verify), not a code guarantee. No catalog changes. The packet registers its own review series in the brief
 registry; its gate paths are the weights table ci/parallel_suite_weights.json (GATE_CI) and the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), both in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step
@@ -1553,6 +1559,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 149. `MET-VERIFY-005`: publish the product packets DIST-TRANSPORT-001 and CTRL-TRANSPORT-001 (VERIFIER-EXT-R04-R11 section 5 step 2), the second publishing step (K = 2, 278 packets at slot 275), with R04's item 12 and transport-correction section and R11's item 9; gate material (the registry rider), the owner's per-PR approval.
 150. `MET-SECTOR-004`: publish the product packet IND-BANK-002 (IND-BANK-002-PUBLISH), the third publishing step (K = 1, 280 packets at slot 276), with R03's item 9; gate material (the registry rider), the owner's per-PR approval.
 151. `MET-PERF-045`: the verify-floor cuts C1+, C2 (the weights table) and C3 (PERF-045), a K = 0 step (281 packets at slot 277); gate material (the weights table and the registry rider), the owner's approval of the exact head and per-PR merge.
+152. `MET-SECTOR-005`: the fourth publishing step (K = 1, 283 packets at slot 278): publishes R03's IND-BANK-002A, the acceptance-command successor of IND-BANK-002, and adds the R13 inheritance guard (chain_identity_v3, architecture/chain-inheritance/) and the successor-descriptor ownership rule; gate material (the registry rider), the owner's approval of the exact head and per-PR merge.
 
 ## Testing, verification, and acceptance
 

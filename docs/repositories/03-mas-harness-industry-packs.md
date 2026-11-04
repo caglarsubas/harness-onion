@@ -452,6 +452,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 7. `IND-FIX-001-fork-guard`: public-fork pre-scheduling guard for the self-hosted verifier.
 8. `IND-BANK-001-business-domain`: banking objectives, roles, glossary and ontology with local SHACL validation, KPIs, and representative synthetic answer sets, plus the transport bootstrap that deletes the self-hosted workflow (IND-FIX-001's fork guard) and makes the four ci/ transport files byte-identical to harness-onion's; the banking successor of IND-WG-001 for release scope (published by MET-SECTOR-003).
 9. `IND-BANK-002-data-readiness`: banking source inventory (customer, account, transaction and product sources), synthetic non-personal mock API/DB/file/event data, illustrative tenant-overridable completeness/freshness/duplicate-rate/provenance/classification thresholds, a data-readiness rule and readiness fixtures, plus the raw-scan hex-token guard in IND-BANK-001's handler; the banking successor of IND-WG-002 for release scope (published by MET-SECTOR-004).
+10. `IND-BANK-002A-data-readiness`: the acceptance-command successor of IND-BANK-002, with the same scope, allowed paths, deliverables and rollback. Its 11 commands keep IND-BANK-001's business pytest and IND-BANK-002's combined pytest verbatim and add the data-readiness pytest alone, so the inheritance rule accepts the same R03 change (the banking tests run twice, a recorded cost). IND-BANK-002 stays published as history (published by MET-SECTOR-005).
 
 ## Testing, verification, and acceptance
 
