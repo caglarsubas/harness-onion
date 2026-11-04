@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-SECTOR-005
+## Current source preparation — MET-VERIFY-006
+
+MET-VERIFY-006 (DIST-005A-CTRL-FIX-004-PUBLISH, slot 279): the fifth publishing step (K = 2, 286 packets at slot 279):
+the meta packet publishes the product packets DIST-005A (mas-harness-distribution), the acceptance-command successor of
+DIST-005, and CTRL-FIX-004 (mas-harness-control-plane), the page-not-found status fix, with one exact-pair supersession
+closer for their 20 ownership overlaps and the head-test weights refresh; gate material (the registry rider and the
+weights table). Alpha2 OPEN; 283 accepted (the catalog at slot 278) plus MET-VERIFY-006 and its two products only.
+
+## Historical fourth product publication source preparation — MET-SECTOR-005
 
 MET-SECTOR-005 (IND-BANK-002A-PUBLISH, slot 278): the fourth publishing step (K = 1, 283 packets at slot 278): the meta
 packet publishes the product packet IND-BANK-002A (mas-harness-industry-packs), the acceptance-command successor of
@@ -1706,3 +1714,6 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 281 | `MET-PERF-045` | `Harness-Engineering` | PERF-045: the verify-floor cuts (K = 0): C1+ (the parent test's readiness step proved in-session), C2 (the weights table) and C3 (test-local sharing in two tests); gate material (the weights table and the registry rider) |
 | 282 | `MET-SECTOR-005` | `Harness-Engineering` | IND-BANK-002A-PUBLISH: the fourth publishing step (K = 1); publishes the product packet IND-BANK-002A and adds the R13 inheritance guard; gate material (the registry rider) |
 | 283 | `IND-BANK-002A` | `mas-harness-industry-packs` | The acceptance-command successor of IND-BANK-002 (product, published by MET-SECTOR-005); the same scope, its 11 commands keeping both predecessors' commands |
+| 284 | `MET-VERIFY-006` | `Harness-Engineering` | DIST-005A-CTRL-FIX-004-PUBLISH: the fifth publishing step (K = 2); publishes the product packets DIST-005A and CTRL-FIX-004 with one exact-pair supersession closer and the head-test weights refresh; gate material (the registry rider and the weights table) |
+| 285 | `DIST-005A` | `mas-harness-distribution` | The acceptance-command successor of DIST-005 (product, published by MET-VERIFY-006); DIST-005's scope, its 22 commands keeping DIST-TRANSPORT-001's |
+| 286 | `CTRL-FIX-004` | `mas-harness-control-plane` | The page-not-found status fix (product, published by MET-VERIFY-006); its 8 commands keeping CTRL-TRANSPORT-001's |

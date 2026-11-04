@@ -1,0 +1,453 @@
+{
+ "baseDiagnostics": 119,
+ "closes": 20,
+ "counts": {
+  "CTRL-FIX-004 x CTRL-INTEGRATE-001": 12,
+  "DIST-005 x DIST-005A": 8
+ },
+ "liveDiagnosticsWithProducts": 139,
+ "noPredecessorSemantics": "no entry states that CTRL-FIX-004 supersedes or succeeds CTRL-INTEGRATE-001; each reason names only the superseded id and that id's own successor",
+ "pairs": [
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/harnesses/[harnessId]/loading.tsx' and 'apps/control-web/src/app/harnesses/'",
+   "overlap": [
+    "apps/control-web/src/app/harnesses/[harnessId]/loading.tsx",
+    "apps/control-web/src/app/harnesses/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/harnesses/[harnessId]/page.tsx' and 'apps/control-web/src/app/harnesses/'",
+   "overlap": [
+    "apps/control-web/src/app/harnesses/[harnessId]/page.tsx",
+    "apps/control-web/src/app/harnesses/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/organizations/[organizationId]/loading.tsx' and 'apps/control-web/src/app/organizations/'",
+   "overlap": [
+    "apps/control-web/src/app/organizations/[organizationId]/loading.tsx",
+    "apps/control-web/src/app/organizations/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/organizations/[organizationId]/page.tsx' and 'apps/control-web/src/app/organizations/'",
+   "overlap": [
+    "apps/control-web/src/app/organizations/[organizationId]/page.tsx",
+    "apps/control-web/src/app/organizations/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/organizations/loading.tsx' and 'apps/control-web/src/app/organizations/'",
+   "overlap": [
+    "apps/control-web/src/app/organizations/loading.tsx",
+    "apps/control-web/src/app/organizations/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/organizations/page.tsx' and 'apps/control-web/src/app/organizations/'",
+   "overlap": [
+    "apps/control-web/src/app/organizations/page.tsx",
+    "apps/control-web/src/app/organizations/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/planes/[planeId]/loading.tsx' and 'apps/control-web/src/app/planes/'",
+   "overlap": [
+    "apps/control-web/src/app/planes/[planeId]/loading.tsx",
+    "apps/control-web/src/app/planes/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/app/planes/[planeId]/page.tsx' and 'apps/control-web/src/app/planes/'",
+   "overlap": [
+    "apps/control-web/src/app/planes/[planeId]/page.tsx",
+    "apps/control-web/src/app/planes/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'apps/control-web/src/lib/harness-status/page-resolution.ts' and 'apps/control-web/src/lib/harness-status/'",
+   "overlap": [
+    "apps/control-web/src/lib/harness-status/page-resolution.ts",
+    "apps/control-web/src/lib/harness-status/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'docs/harness-overview.md' and 'docs/harness-overview.md'",
+   "overlap": [
+    "docs/harness-overview.md",
+    "docs/harness-overview.md"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'tests/harness-status/page-not-found-status.test.ts' and 'tests/harness-status/'",
+   "overlap": [
+    "tests/harness-status/page-not-found-status.test.ts",
+    "tests/harness-status/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets CTRL-FIX-004 and CTRL-INTEGRATE-001 overlap at 'tests/harness-status/page-resolver.test.ts' and 'tests/harness-status/'",
+   "overlap": [
+    "tests/harness-status/page-resolver.test.ts",
+    "tests/harness-status/"
+   ],
+   "packets": [
+    {
+     "id": "CTRL-FIX-004",
+     "sha256": "c6e837fa926ad89a782b90d8bc7782ba42612a713ca754e497ca05d5feb73760"
+    },
+    {
+     "id": "CTRL-INTEGRATE-001",
+     "sha256": "28441f4febf41c7228b516ca8f674785d28842aa6c3443f8fefebeb4a6e7de95"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "CTRL-INTEGRATE-002",
+    "superseded": "CTRL-INTEGRATE-001"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'docs/runbooks/' and 'docs/runbooks/'",
+   "overlap": [
+    "docs/runbooks/",
+    "docs/runbooks/"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'fixtures/attacks/' and 'fixtures/attacks/'",
+   "overlap": [
+    "fixtures/attacks/",
+    "fixtures/attacks/"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'scripts/rebuild_compare.sh' and 'scripts/rebuild_compare.sh'",
+   "overlap": [
+    "scripts/rebuild_compare.sh",
+    "scripts/rebuild_compare.sh"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'scripts/run_supply_chain_campaign.py' and 'scripts/run_supply_chain_campaign.py'",
+   "overlap": [
+    "scripts/run_supply_chain_campaign.py",
+    "scripts/run_supply_chain_campaign.py"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'src/planeon_distribution/' and 'src/planeon_distribution/'",
+   "overlap": [
+    "src/planeon_distribution/",
+    "src/planeon_distribution/"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'tests/airgap/' and 'tests/airgap/'",
+   "overlap": [
+    "tests/airgap/",
+    "tests/airgap/"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'tests/reproducibility/' and 'tests/reproducibility/'",
+   "overlap": [
+    "tests/reproducibility/",
+    "tests/reproducibility/"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  },
+  {
+   "message": "unordered same-repository packets DIST-005 and DIST-005A overlap at 'tests/security/' and 'tests/security/'",
+   "overlap": [
+    "tests/security/",
+    "tests/security/"
+   ],
+   "packets": [
+    {
+     "id": "DIST-005",
+     "sha256": "1cf1826b8c69c2030112899344577e0c5ea761b528eb978655cb098b29434d4f"
+    },
+    {
+     "id": "DIST-005A",
+     "sha256": "6e9c228fdefe20abd981726915968a09609cd1559f7c9ae347e99fc25cbf3702"
+    }
+   ],
+   "reason": {
+    "ruling": "Q-VX45-6 (a)",
+    "successorOfSuperseded": "DIST-005A",
+    "superseded": "DIST-005"
+   }
+  }
+ ],
+ "rule": "remove exactly these messages, each present exactly once, only while both packets' YAML bytes equal the pinned sha256; any other message, or a changed byte, stays a diagnostic"
+}

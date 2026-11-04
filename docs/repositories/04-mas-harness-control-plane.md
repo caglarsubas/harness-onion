@@ -195,6 +195,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 10. `CTRL-FIX-003-status-consistency`: clock-aware materialization for detail and portfolio, canonical aggregation parity using pinned CON-FIX-001 vectors, and cumulative control regressions; production policies remain denied.
 11. `CTRL-INTEGRATE-001-production-overview`: explicit authenticated production composition and durable tenant projection/policy adapters, additive database migration, real route/browser tests and isolated PostgreSQL acceptance. Missing local capacity remains NOT_RUN_ENV_UNAVAILABLE; CONF-A2-001 separately certifies installed behavior.
 12. `CTRL-TRANSPORT-001-verifier-bootstrap`: one-time closed transport correction that adopts harness-onion's offline transport byte for byte, retires the hosted workflow, passes NEXT_TELEMETRY_DISABLED=1 to dispatched children and installs the pinned npm closure in-session; verifiable only once VERIFIER-EXT-R04-R11 is installed.
+13. `CTRL-FIX-004-page-not-found-status`: page destinations return HTTP 404 for unknown or unauthorized ids by deciding existence before any loading boundary streams; per-page Suspense keeps the loading labels, a structural test guards the rule, and API routes stay unchanged.
 
 ## `CTRL-001` bootstrap authority
 
