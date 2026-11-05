@@ -1,0 +1,349 @@
+{
+ "schemaVersion": "planeon.internal.authority-map-budget/v1",
+ "rules": [
+  {
+   "id": "B1",
+   "text": "Reserve before work, atomically, under the root's committed-plus-reserved counter."
+  },
+  {
+   "id": "B2",
+   "text": "A commit never exceeds its reservation; it closes the reservation COMMITTED and returns the unconsumed remainder to the root."
+  },
+  {
+   "id": "B3",
+   "text": "Reserve idempotency binds tenant, budget digest, scope, operation, dimensions and the key digest; an exact retry returns the original result, a conflicting reuse fails closed; commit and release have their own transition keys. Whether a refused reserve is kept under its key is outside these semantics, and no vector depends on it."
+  },
+  {
+   "id": "B4",
+   "text": "A cancelled or timed-out reservation with consumed usage c > 0 closes COMMITTED at c and returns the rest; with c = 0 it closes RELEASED (cancel) or EXPIRED (timeout) and returns all of it."
+  },
+  {
+   "id": "B5",
+   "text": "Estimates and local admission elsewhere (ai-gateway's request, token and concurrency budgets, inference-api's usage, H10's task and delegation budgets) hold no balance."
+  }
+ ],
+ "vectors": [
+  {
+   "id": "VB-01",
+   "name": "double charge",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "commit",
+     "key": "k",
+     "transition": "t1",
+     "amount": 40
+    },
+    {
+     "op": "commit",
+     "key": "k",
+     "transition": "t1",
+     "amount": 40
+    }
+   ],
+   "results": [
+    "reserved",
+    "committed",
+    "replayed"
+   ],
+   "final": {
+    "k": {
+     "state": "COMMITTED",
+     "committed": 40,
+     "returned": 60
+    }
+   }
+  },
+  {
+   "id": "VB-02",
+   "name": "conflicting reuse",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 120
+    }
+   ],
+   "results": [
+    "reserved",
+    "refused"
+   ],
+   "final": {
+    "k": {
+     "state": "RESERVED",
+     "committed": 0,
+     "returned": 0
+    }
+   }
+  },
+  {
+   "id": "VB-03",
+   "name": "under-accounting",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "commit",
+     "key": "k",
+     "transition": "t1",
+     "amount": 130
+    }
+   ],
+   "results": [
+    "reserved",
+    "refused"
+   ],
+   "final": {
+    "k": {
+     "state": "RESERVED",
+     "committed": 0,
+     "returned": 0
+    }
+   }
+  },
+  {
+   "id": "VB-04",
+   "name": "unreserved hard-budget usage",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "usage",
+     "amount": 40
+    }
+   ],
+   "results": [
+    "refused"
+   ],
+   "final": {}
+  },
+  {
+   "id": "VB-05",
+   "name": "cancelled request",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "consume",
+     "key": "k",
+     "amount": 40
+    },
+    {
+     "op": "cancel",
+     "key": "k"
+    }
+   ],
+   "results": [
+    "reserved",
+    "consumed",
+    "settled"
+   ],
+   "final": {
+    "k": {
+     "state": "COMMITTED",
+     "committed": 40,
+     "returned": 60
+    }
+   }
+  },
+  {
+   "id": "VB-06",
+   "name": "timed-out request",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "consume",
+     "key": "k",
+     "amount": 30
+    },
+    {
+     "op": "expire",
+     "key": "k"
+    }
+   ],
+   "results": [
+    "reserved",
+    "consumed",
+    "settled"
+   ],
+   "final": {
+    "k": {
+     "state": "COMMITTED",
+     "committed": 30,
+     "returned": 70
+    }
+   }
+  },
+  {
+   "id": "VB-07",
+   "name": "retry within the root",
+   "root": 150,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k1",
+     "amount": 100
+    },
+    {
+     "op": "reserve",
+     "key": "k2",
+     "amount": 100
+    },
+    {
+     "op": "consume",
+     "key": "k1",
+     "amount": 40
+    },
+    {
+     "op": "commit",
+     "key": "k1",
+     "transition": "t1",
+     "amount": 40
+    },
+    {
+     "op": "reserve",
+     "key": "k3",
+     "amount": 100
+    }
+   ],
+   "results": [
+    "reserved",
+    "refused",
+    "consumed",
+    "committed",
+    "reserved"
+   ],
+   "final": {
+    "k1": {
+     "state": "COMMITTED",
+     "committed": 40,
+     "returned": 60
+    },
+    "k3": {
+     "state": "RESERVED",
+     "committed": 0,
+     "returned": 0
+    }
+   }
+  },
+  {
+   "id": "VB-08",
+   "name": "ledger loss",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "ledger_down"
+    },
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 10
+    },
+    {
+     "op": "advisory",
+     "profileAllows": true,
+     "outboxCapacity": true
+    },
+    {
+     "op": "advisory",
+     "profileAllows": true,
+     "outboxCapacity": false
+    },
+    {
+     "op": "advisory",
+     "profileAllows": false,
+     "outboxCapacity": true
+    }
+   ],
+   "results": [
+    "down",
+    "refused",
+    "proceeds",
+    "refused",
+    "refused"
+   ],
+   "final": {}
+  },
+  {
+   "id": "VB-09",
+   "name": "cancelled before use",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "cancel",
+     "key": "k"
+    }
+   ],
+   "results": [
+    "reserved",
+    "settled"
+   ],
+   "final": {
+    "k": {
+     "state": "RELEASED",
+     "committed": 0,
+     "returned": 100
+    }
+   }
+  },
+  {
+   "id": "VB-10",
+   "name": "timed out unused",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k",
+     "amount": 100
+    },
+    {
+     "op": "expire",
+     "key": "k"
+    }
+   ],
+   "results": [
+    "reserved",
+    "settled"
+   ],
+   "final": {
+    "k": {
+     "state": "EXPIRED",
+     "committed": 0,
+     "returned": 100
+    }
+   }
+  }
+ ],
+ "nonClaims": [
+  "Semantics only (Q-AM-4 (a)): write skew, fencing tokens and clock properties are DATA-CORRECTNESS-001's (owner DC-D1); DATA-CORRECTNESS-001's design cites B1-B5 as the semantics its write-skew rules protect.",
+  "No ledger is implemented or enforced here; the reference model replays the vectors only."
+ ]
+}

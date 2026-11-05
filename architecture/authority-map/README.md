@@ -1,0 +1,44 @@
+# Authority map (AUTHORITY-MAP-001, MET-ADOPT-007)
+
+`architecture/authority-map.json` (`planeon.internal.authority-map/v1`) records one effective authority for each of
+nine concerns: the boundary whose state or decision determines behaviour, the non-deciding inputs it relies on, what
+others may do, every enforcement point, and the behaviour when the authority is unavailable or revoked.
+`scripts/authority_map.py` checks it (`check(read, packets)`, refusal codes AM_SHAPE to AM_REGISTRY). Repository
+ownership says who writes code; this record says whose state or decision counts.
+
+## The pinned semantics
+
+The module holds 27 constants: every row's authority `{harness, component}` and its two behaviours, each bound to one
+citation. A different value, or the right value cited to another line, is refused; changing a pin takes a new module
+version and a new record version. The 27 fall in three classes:
+- 23 stating: bound to a repository line that states the value;
+- 2 item-bound: bound to the roadmap item AUTHORITY-MAP-001, because no harness line states them (AM-02's revoked
+  behaviour, AM-06's authority); checked in-repo by item id, and by quote at authoring and in review;
+- 2 flagged, "no stating line; nearest topical line": AM-06's unavailable behaviour
+  (`docs/harnesses/execution.tool-skill-sandbox.md:148`) and AM-09's revoked behaviour
+  (`docs/harnesses/runtime.infrastructure.md:196`). Their documents state no rule for those cases. These are limits
+  of the record, listed as such wherever the record is published.
+
+## FAIL_CLOSED and BLOCK_NEW_OPERATIONS, case by case
+
+Both mean that nothing proceeds on the authority's absence; the pinned line of each case decides, not a verb.
+FAIL_CLOSED, a refusal at the request's enforcement point: AM-02 unavailable (`trust.observability-finops.md:177`, hard
+budgets), AM-03 unavailable (`runtime.model-inference.md:156`), AM-04 unavailable (`trust.security-safety.md:158`),
+AM-05 revoked (`trust.governance-agentops.md:159`). BLOCK_NEW_OPERATIONS, work held back while the authority's state is
+unavailable: AM-01 (`execution.orchestration.md:155`, rejected), AM-05 (`trust.governance-agentops.md:157`, paused),
+AM-06 (`execution.tool-skill-sandbox.md:148`, flagged), AM-07 (`knowledge.memory-state.md:140`, rejected), AM-08
+(`trust.governance-agentops.md:158`, held back until evidence can be proven).
+
+## Vectors
+
+- `budget-vectors.json`: rules B1-B5 and vectors VB-01 to VB-10, replayed by the module's reference model; each
+  vector gives its per-step results and each reservation's state at the end (one terminal state once settled,
+  RESERVED while open). Whether a refused reserve is kept under its key is outside these semantics (B3). Write skew,
+  fencing and clocks are DATA-CORRECTNESS-001's.
+- `r12-vectors.json`: R12-V1 to R12-V5, each an actor claiming an authority act on a row it does not hold; every one is
+  refused. They are data for the conformance labs, written here.
+
+## Reading the design
+
+The design note's later sections (its rev 2 to rev 6 change lists) are change logs; this record and the module state
+the current semantics. Non-claims are in the record's `nonClaims`.
