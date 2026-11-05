@@ -1,6 +1,35 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-VERIFY-006 source preparation, November 4, 2026
+## Current checkpoint — MET-PERF-046 source preparation, November 5, 2026
+
+Alpha2 OPEN. MET-VERIFY-006 (DIST-005A-CTRL-FIX-004-PUBLISH) passed required verify and merged as main afebb72.
+PERF-046 (the owner's MON-OWNER-K8-G1 and the lane monitor's owner-delegated rulings MON-280-START, MON-280-PLAN-OK and
+MON-280-CR1-RULINGS) is the rise of the parallel suite's worker count from 6 to 8 in MET-PERF-039's form (owner MON-OWNER-K8-G1): one line of ci/parallel_suite.py, its one live test pin in tests/test_parallel_suite.py and its current-status page line, recorded in architecture/parallel-workers/ (record, README and inverse authority) with the K 6 / K 8 / K 6 measurement on MET-VERIFY-006's head (worker phase -56.9 s, -10.8 %); the 900 s deadline, the weights, the parent nodes, the serial rule, the 1,170 s budget and the load gate are unchanged, and every earlier record stays byte-identical. The packet registers its own review series, MET-PERF-046/packet, in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS) and the parallel suite ci/parallel_suite.py (GATE_CI), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+Its new layer pins the worker-count line by syntax tree, the three changed files against their 279 bytes, the frozen
+files, and the record against its restatement.
+It is built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule with S and C apart at K = 0:
+every older chain validator changes only by the bump vocabulary, 279's layer by the bridge vocabulary, and the new
+head's test keeps the full fan-in. MET-PERF-046 is the 280th specification (287 packets at slot 280).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-PERF-046 / PERF-046 | SOURCE_PREPARED | Eight parallel-suite workers (280th packet, K = 0): WORKERS 6 -> 8 with its test pin and page line in MET-PERF-039's form, recorded in architecture/parallel-workers/; nothing else in the suite changes; gate material (the registry rider and ci/parallel_suite.py) |
+| Alpha2A | MET-VERIFY-006 / DIST-005A-CTRL-FIX-004-PUBLISH | VERIFY_PASSED_MERGED | Merged as main afebb72 |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+One ci/ path changes (the parallel suite's worker count; the planner, the deadline and the weights are unchanged); no R10
+and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE.
+Prior checkpoints below are history only.
+
+## Historical fifth product publication source checkpoint — MET-VERIFY-006 source preparation, November 4, 2026
 
 Alpha2 OPEN. MET-SECTOR-005 (IND-BANK-002A-PUBLISH) passed required verify and merged as main afee03b.
 DIST-005A-CTRL-FIX-004-PUBLISH (the lane monitor's owner-delegated rulings, among them MON-279-START, MON-279-OWN2,
@@ -3119,7 +3148,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · IND-BANK-002-PUBLISH / MET-SECTOR-004 · Publish R03's banking data readiness packet IND-BANK-002 for mas-harness-industry-packs (predecessor IND-BANK-001) as a product packet, adopted as candidate c1 after one CONTRACT round with R03's yes, in the third publishing step of the product-packet vocabulary (K = 1, 280 packets at slot 276), with R03's item 9 in R03's own words and the registry rider; gate material (the registry rider); pass required verify through the owner's App after the owner's per-PR approval.
 - [x] Alpha 2A · PERF-045 / MET-PERF-045 · Adopt the verify-floor cuts C1+ (the parent test's readiness step proved in-session), C2 (the weights table refreshed from 276's dry run) and C3 (test-local exact sharing in two tests) from candidate c1 under contract rev 3, a K = 0 step (281 packets at slot 277); gate material (the weights table and the registry rider); pass a quiet-host dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [x] Alpha 2A · IND-BANK-002A-PUBLISH / MET-SECTOR-005 · Publish R03's IND-BANK-002A for mas-harness-industry-packs (predecessor IND-BANK-002, its 11 commands keeping both predecessors' commands in order) as a product packet, with the R13 inheritance guard in chain_identity_v3 and the successor-descriptor ownership rule, adopted after CONTRACT_278's rounds and R03's agreement on the bytes (K = 1, 283 packets at slot 278); gate material (the registry rider); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
-- [ ] Alpha 2A · DIST-005A-CTRL-FIX-004-PUBLISH / MET-VERIFY-006 · Publish R11's DIST-005A for mas-harness-distribution (predecessor DIST-TRANSPORT-001, the acceptance-command successor of DIST-005) and R04's CTRL-FIX-004 for mas-harness-control-plane (predecessor CTRL-TRANSPORT-001) as product packets, with one exact-pair supersession closer for their 20 ownership overlaps and the head-test weights refresh, adopted after CONTRACT_279's rounds and R04's and R11's agreement on the bytes (K = 2, 286 packets at slot 279); gate material (the registry rider and the weights table); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
+- [x] Alpha 2A · DIST-005A-CTRL-FIX-004-PUBLISH / MET-VERIFY-006 · Publish R11's DIST-005A for mas-harness-distribution (predecessor DIST-TRANSPORT-001, the acceptance-command successor of DIST-005) and R04's CTRL-FIX-004 for mas-harness-control-plane (predecessor CTRL-TRANSPORT-001) as product packets, with one exact-pair supersession closer for their 20 ownership overlaps and the head-test weights refresh, adopted after CONTRACT_279's rounds and R04's and R11's agreement on the bytes (K = 2, 286 packets at slot 279); gate material (the registry rider and the weights table); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
+- [ ] Alpha 2A · PERF-046 / MET-PERF-046 · Raise the parallel suite's workers from 6 to 8 in MET-PERF-039's form (owner MON-OWNER-K8-G1), with its test pin, its page line and the architecture/parallel-workers/ record, adopted after CONTRACT_280's round (K = 0, 287 packets at slot 280); gate material (the registry rider and ci/parallel_suite.py); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

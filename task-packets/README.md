@@ -1,6 +1,12 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-VERIFY-006
+## Current source preparation — MET-PERF-046
+
+MET-PERF-046 (PERF-046, slot 280): eight parallel-suite workers (K = 0, 287 packets at slot 280): WORKERS 6 -> 8 with
+its test pin and page line in MET-PERF-039's form, recorded in architecture/parallel-workers/; gate material (the
+registry rider and ci/parallel_suite.py). Alpha2 OPEN; 286 accepted (the catalog at slot 279) plus MET-PERF-046 only.
+
+## Historical fifth product publication source preparation — MET-VERIFY-006
 
 MET-VERIFY-006 (DIST-005A-CTRL-FIX-004-PUBLISH, slot 279): the fifth publishing step (K = 2, 286 packets at slot 279):
 the meta packet publishes the product packets DIST-005A (mas-harness-distribution), the acceptance-command successor of
@@ -1717,3 +1723,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 284 | `MET-VERIFY-006` | `Harness-Engineering` | DIST-005A-CTRL-FIX-004-PUBLISH: the fifth publishing step (K = 2); publishes the product packets DIST-005A and CTRL-FIX-004 with one exact-pair supersession closer and the head-test weights refresh; gate material (the registry rider and the weights table) |
 | 285 | `DIST-005A` | `mas-harness-distribution` | The acceptance-command successor of DIST-005 (product, published by MET-VERIFY-006); DIST-005's scope, its 22 commands keeping DIST-TRANSPORT-001's |
 | 286 | `CTRL-FIX-004` | `mas-harness-control-plane` | The page-not-found status fix (product, published by MET-VERIFY-006); its 8 commands keeping CTRL-TRANSPORT-001's |
+| 287 | `MET-PERF-046` | `Harness-Engineering` | PERF-046: eight parallel-suite workers (WORKERS 6 -> 8 in MET-PERF-039's form, recorded in architecture/parallel-workers/); gate material (the registry rider and ci/parallel_suite.py) |
