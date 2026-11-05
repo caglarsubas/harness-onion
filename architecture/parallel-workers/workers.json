@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "harness.planeon.ai/parallel-workers/v1",
+  "packet": "MET-PERF-046",
+  "evidenceClass": "SOURCE_DELTA_ONLY",
+  "change": {
+    "name": "parallelSuiteWorkers",
+    "path": "ci/parallel_suite.py",
+    "before": 6,
+    "after": 8,
+    "beforeSha256": "4fe4e24951c6a4f023361f9e840e8343a68e5af713754ff7acdf523e475495d5",
+    "afterSha256": "88734d3c01b2712c88baa118f7da5e75f6a9be3bb12c331e2c6edc6fbf86d026",
+    "onlyLineChanged": {
+      "before": "WORKERS = 6",
+      "after": "WORKERS = 8"
+    }
+  },
+  "matchingFiles": [
+    {
+      "path": "tests/test_parallel_suite.py",
+      "before": "    assert SUITE.WORKERS == 6",
+      "after": "    assert SUITE.WORKERS == 8"
+    },
+    {
+      "path": "docs/alpha-2/PARALLEL_SUITE_PERF035.md",
+      "before": "  - The parent collects as usual and assigns whole test files to 6 worker processes (MET-PERF-039; 4 before), by the",
+      "after": "  - The parent collects as usual and assigns whole test files to 8 worker processes (MET-PERF-046; 6 before), by the"
+    }
+  ],
+  "unchanged": [
+    {
+      "name": "parallelSuiteWorkerDeadlineSeconds",
+      "path": "ci/parallel_suite.py",
+      "value": 900
+    },
+    {
+      "name": "parallelSuiteParentNodes",
+      "path": "ci/parallel_suite.py",
+      "value": "the three MET-PERF-037 parent nodes"
+    },
+    {
+      "name": "parallelSuiteSerialEnvironment",
+      "path": "ci/parallel_suite.py",
+      "value": "PLANEON_PARALLEL_SUITE_SERIAL"
+    },
+    {
+      "name": "parallelSuiteWeights",
+      "path": "ci/parallel_suite_weights.json",
+      "sha256": "8e4050ce8a6a88faa357bb97e6b858003c27951bf0b71249dea68dfd3a2a1a32"
+    },
+    {
+      "name": "failClosedAccounting",
+      "path": "ci/parallel_suite.py",
+      "value": "exact assignment, ownership of every report and warning, one setup and teardown per node and a call iff setup passed, every line decoded, every worker exits 0 or 1 with a failure before the deadline"
+    },
+    {
+      "name": "acceptanceArgv",
+      "path": "task-packets/MET-VERIFY-006.yaml",
+      "value": "the 64 inherited commands"
+    },
+    {
+      "name": "verifyBudgetSeconds",
+      "path": "architecture/load-deadlines/limits.json",
+      "sha256": "f9c152fd4b7e074e5b63b1649e35e2cc2c651060c1ae48d91c078b8690f0f11f",
+      "value": 1170,
+      "from": "budgetSeconds: launcherSetupSeconds 60 + argvBeforeSuiteSeconds 120 + parallelSuiteDeadlineSeconds 900 + parentNodesSeconds 90, under launcherCapSeconds 1200"
+    },
+    {
+      "name": "loadGate",
+      "path": "architecture/load-deadlines/limits.json",
+      "sha256": "f9c152fd4b7e074e5b63b1649e35e2cc2c651060c1ae48d91c078b8690f0f11f",
+      "value": "the verifier bundle's pre-claim load gate; installed outside this repository; its in-repository record is verifierBundle.loadGate"
+    },
+    {
+      "name": "maxProblems",
+      "path": "ci/parallel_suite.py",
+      "value": 50
+    }
+  ],
+  "measurements": {
+    "main": "bd882493488190747b5154e502265c12a9c251f3",
+    "method": "argv 63 of MET-VERIFY-006's head on three fresh clones, in the order K 6, K 8, K 6; the K 8 clone carried one counted edit (WORKERS = 6 -> 8), never committed",
+    "summarySha256": "85ab23bff6d46f109b9ddc0e987690905d1abb558b2a6207281565e82d51e14f",
+    "runs": [
+      {
+        "arm": "A1",
+        "workers": 6,
+        "wallSeconds": 542.98,
+        "workerPhaseSeconds": 517.5,
+        "summedEndSeconds": 3003.8,
+        "imbalanceSeconds": 16.9,
+        "load1Mean": 8.32,
+        "failedEndEvents": 0
+      },
+      {
+        "arm": "B",
+        "workers": 8,
+        "wallSeconds": 498.44,
+        "workerPhaseSeconds": 472.2,
+        "summedEndSeconds": 3620.1,
+        "imbalanceSeconds": 19.6,
+        "load1Mean": 12.42,
+        "failedEndEvents": 131
+      },
+      {
+        "arm": "A2",
+        "workers": 6,
+        "wallSeconds": 566.73,
+        "workerPhaseSeconds": 540.7,
+        "summedEndSeconds": 3122.3,
+        "imbalanceSeconds": 20.3,
+        "load1Mean": 10.78,
+        "failedEndEvents": 0
+      }
+    ],
+    "runOrder": [
+      6,
+      8,
+      6
+    ],
+    "runsPerWorkerCount": 1,
+    "workerPhaseCutSeconds": -56.9,
+    "workerPhaseCutPercent": -10.8,
+    "sixWorkerSpreadSeconds": 23.2,
+    "caveat": "The K 8 arm ran with 131 failing END events (the six-worker pins this packet moves), so its worker phase need not equal a passing K 8 run's; one run per arm. Peak memory was not sampled, so no peakTreeRssMiB is recorded. The dry run of this packet's head measures the result."
+  },
+  "carried": [],
+  "ownerDecisions": [
+    {
+      "id": "MON-OWNER-K8-G1",
+      "date": "2026-11-04",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "after the A/B the owner chose \"Adopt 8 workers (Recommended)\" and Q-CHAIN-GUARANTEE (a), G1 signed checkpoint. PERF-046, packet MET-PERF-046 at slot 280 right after 279 merges: WORKERS 6 → 8 plus the 131 pins."
+    },
+    {
+      "id": "MON-280-START",
+      "date": "2026-11-05",
+      "source": "lane monitor (relayed owner decision)",
+      "decision": "owner's word, 2026-11-05: \"Resume R00 on slot 280 (Recommended)\". Slot 280 is MET-PERF-046 (roadmap PERF-046, lock 28): WORKERS 6 → 8 plus the 131 six-worker pins, measured by the K6/K8/K6 A/B 85ab23bf. 279's full weights refresh stays; no other change to the 900 s deadline, the 1,170 s budget or the load gate."
+    }
+  ]
+}
