@@ -1,0 +1,123 @@
+{
+ "packet": "MET-PERF-047",
+ "schemaVersion": "harness.planeon.ai/chain-checkpoint-vectors/v1",
+ "vectors": [
+  {
+   "id": 1,
+   "name": "tampered attested input",
+   "sampled": "refuses, naming the slot",
+   "shadow": {
+    "class": "A",
+    "expect": "an input differs from its checkpoint digest after normalisation"
+   }
+  },
+  {
+   "id": 2,
+   "name": "stale or unnamed ledger",
+   "sampled": "refuses",
+   "shadow": {
+    "class": "A",
+    "expect": "the record is present but no authority names it with its sha256"
+   }
+  },
+  {
+   "id": 3,
+   "name": "sample refusal",
+   "sampled": "refuses, naming the slot",
+   "shadow": {
+    "class": "B",
+    "expect": "a sampled layer's node outcome differs from the ledger"
+   }
+  },
+  {
+   "id": 4,
+   "name": "checkpoint from an attested run",
+   "sampled": "the writer refuses",
+   "shadow": {
+    "class": "writer",
+    "expect": "the writer refuses a shard with an attested node"
+   }
+  },
+  {
+   "id": 5,
+   "name": "check_pairs defect",
+   "sampled": "refuses",
+   "shadow": {
+    "class": "C",
+    "expect": "a repeated or self-paired check_pairs entry, or an unruled type"
+   }
+  },
+  {
+   "id": 6,
+   "name": "sample seed",
+   "sampled": "refuses a differing draw",
+   "shadow": {
+    "class": "C",
+    "expect": "two runs of one head draw one sample; two heads differ"
+   }
+  },
+  {
+   "id": 7,
+   "name": "shadow disagreement",
+   "sampled": "n/a",
+   "shadow": {
+    "class": "A|B",
+    "expect": "recorded with the slot and its class; the session's exit status unchanged"
+   }
+  },
+  {
+   "id": 8,
+   "name": "refusing-layer order",
+   "sampled": "refuses, newest first",
+   "shadow": {
+    "class": "A",
+    "expect": "where two layers would refuse, the newest slot is recorded first"
+   }
+  },
+  {
+   "id": 9,
+   "name": "cost cap",
+   "sampled": "refuses inside a verify",
+   "shadow": {
+    "class": "C",
+    "expect": "a reader over 15 s records the over-cap state and the dry-run path; outcome unchanged"
+   }
+  },
+  {
+   "id": 10,
+   "name": "guarded load",
+   "sampled": "n/a",
+   "shadow": {
+    "class": "C",
+    "expect": "a missing, unloadable or raising reader prints one class-C line; exit status unchanged"
+   }
+  },
+  {
+   "id": 11,
+   "name": "a K = 0 cascade step reads clean",
+   "sampled": "clean",
+   "shadow": {
+    "class": "none",
+    "expect": "281's step (c1b838be..dcf11803) rebuilds its edited layer files exactly"
+   }
+  },
+  {
+   "id": 12,
+   "name": "one byte beside the cascade",
+   "sampled": "refuses",
+   "shadow": {
+    "class": "A",
+    "expect": "one extra byte in an attested validator, beside the cascade: class A, the slot named"
+   }
+  },
+  {
+   "id": 13,
+   "name": "reordered or missing hunk",
+   "sampled": "refuses",
+   "shadow": {
+    "class": "A",
+    "expect": "a hunk out of order or missing does not apply byte-exactly: the slot named"
+   }
+  }
+ ]
+}

@@ -1015,7 +1015,8 @@ SESSION_READERS = {
     "tests/linux_runner/test_build_and_predecessors.py",
     # Registers the PredecessorOutcomes recorder that the proof reads; replayed reports reach it in the parent.
     "tests/linux_runner/conftest.py",
-    # Looks up the capture manager for the diagnostics sink; reads no session results.
+    # Looks up the capture manager for the diagnostics sink, and hands the outermost session's reports to the
+    # chain checkpoint's shadow reader (MET-PERF-047), which only records and never changes an outcome.
     "conftest.py",
     # The collection guard (MET-ADOPT-006, Q-272-DRY-1 (a)): restores sys.path after each test module's collection;
     # reads no session results.
