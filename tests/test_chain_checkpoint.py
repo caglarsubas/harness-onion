@@ -37,9 +37,35 @@ LATER_EDIT = "of a class not normalised"   # a newer authority's real edit, as r
 
 
 def _ctx(packet):
-    return {"authorityPacket": packet, "hunkClassVocabulary": list(CK.CLASSES), "hunkClassRuleSha256": CK.RULE_SHA256,
-            "hunkClassContext": {"newPacket": packet, "prevValidator": "scripts/validate_prev.py",
-                                 "prevTest": "tests/test_prev.py", "steps": [1, 1]}}
+    return {"newPacket": packet, "prevValidator": "scripts/validate_prev.py", "prevTest": "tests/test_prev.py", "steps": [1, 1]}
+
+
+def _side_path(root, apath):
+    return root / CK.HUNK_CLASSES_DIR / (Path(apath).stem + ".json")
+
+
+def _bind(root, apath, side_raw):
+    """Write a hunk-class record's bytes and name them, by sha256, in the authority's newFiles (MON-282-W1-A2)."""
+    side_file = _side_path(root, apath)
+    side_file.parent.mkdir(parents=True, exist_ok=True)
+    side_file.write_bytes(side_raw)
+    body = json.loads((root / apath).read_text())
+    body.setdefault("newFiles", {})[side_file.relative_to(root).as_posix()] = sha(side_raw)
+    (root / apath).write_text(json.dumps(body) + "\n")
+
+
+def _write_classed(root, apath, body, packet):
+    """MON-282-W1-A2: the authority in v2.1's form (each hunk's class taken out) and its closed hunk-class record,
+    which the authority's newFiles names by sha256."""
+    body = copy.deepcopy(body)
+    classes = {}
+    for path, entry in body.get("changedFiles", {}).items():
+        hunks = entry.get("reverseHunks") if isinstance(entry, dict) else None
+        classes[path] = [h.pop("class") for h in hunks if isinstance(h, dict) and "class" in h] if isinstance(hunks, list) else []
+    (root / apath).write_text(json.dumps(body) + "\n")
+    side = {"authorityPath": apath, "hunkClassVocabulary": list(CK.CLASSES), "hunkClassRuleSha256": CK.RULE_SHA256,
+            "hunkClassContext": _ctx(packet), "classes": classes}
+    _bind(root, apath, (json.dumps(side) + "\n").encode())
 
 
 def _repo(tmp_path, *, name_it=True, layers=((281, b"V281 = 288\n"),), newer=(), shadow_in="verify", stale=False):
@@ -67,8 +93,9 @@ def _repo(tmp_path, *, name_it=True, layers=((281, b"V281 = 288\n"),), newer=(),
         (tmp_path / "architecture/zz-authority.json").write_text(json.dumps(
             {"baselinePackets": {str(i): "x" for i in range(300)}, "changedFiles": {CK.RECORD_PATH: {"afterSha256": "0" * 64}}}))
     for i, changed in enumerate(newer, 1):
-        body = {"baselinePackets": {str(j): "x" for j in range(288 + i)}, "changedFiles": changed, **_ctx("MET-NEXT-%03d" % i)}
-        (tmp_path / ("architecture/next%d-authority.json" % i)).write_text(json.dumps(body))
+        body = {"authorityPacket": "MET-NEXT-%03d" % i, "baselinePackets": {str(j): "x" for j in range(288 + i)},
+                "changedFiles": changed}
+        _write_classed(tmp_path, "architecture/next%d-authority.json" % i, body, "MET-NEXT-%03d" % i)
     return tmp_path
 
 
@@ -261,9 +288,9 @@ def test_a_recorded_class_that_fails_the_recheck_is_recorded(tmp_path):
 
 def test_a_wrong_class_context_is_recorded(tmp_path):
     root = _cascade_repo(tmp_path)
-    body = json.loads((root / "architecture/next1-authority.json").read_text())
-    body["hunkClassContext"]["newPacket"] = "MET-OTHER-001"
-    (root / "architecture/next1-authority.json").write_text(json.dumps(body))
+    side = json.loads(_side_path(root, "architecture/next1-authority.json").read_text())
+    side["hunkClassContext"]["newPacket"] = "MET-OTHER-001"
+    _bind(root, "architecture/next1-authority.json", (json.dumps(side) + "\n").encode())
     assert "newPacket is not the authority's packet" in _reader(root).disagreements[0][3]
 
 
@@ -365,7 +392,7 @@ def test_one_authority_per_slot(tmp_path):
     root = _repo(tmp_path, newer=({}, {}))
     second = root / "architecture/next2-authority.json"
     body = json.loads(second.read_text())
-    body["authorityPacket"] = body["hunkClassContext"]["newPacket"] = "MET-NEXT-001"
+    body["authorityPacket"] = "MET-NEXT-001"
     second.write_text(json.dumps(body))
     found = _reader(root).disagreements
     assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and "one authorityPacket" in found[0][3]
@@ -387,7 +414,7 @@ def test_a_skip_checks_one_authority_per_slot_first(tmp_path):
     root = _repo(tmp_path, shadow_in="dryRunOnly", newer=({}, {}))
     second = root / "architecture/next2-authority.json"
     body = json.loads(second.read_text())
-    body["authorityPacket"] = body["hunkClassContext"]["newPacket"] = "MET-NEXT-001"
+    body["authorityPacket"] = "MET-NEXT-001"
     second.write_text(json.dumps(body))
     found = _reader(root).disagreements
     assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and "one authorityPacket" in found[0][3]
@@ -415,3 +442,65 @@ def test_the_slot_message_names_an_unreadable_ledger(tmp_path, raw, state):
     _rename(root, raw)
     found = _reader(root).disagreements
     assert [(d[0], d[4]) for d in found] == [(None, "corrupt")] and found[0][3].endswith("head slot unknown (%s)" % state)
+
+
+@pytest.mark.parametrize("change, reason", [
+    ("missing", "the hunk-class record the authority names is missing"),
+    ("unnamed", "the authority's newFiles names no hunk-class record"),
+    ("two", "the authority's newFiles names 2 hunk-class records"),
+    ("digest", "the hunk-class record's bytes do not hash to the authority's digest"),
+    ("malformed", "the hunk-class record does not parse as an object"),
+    ("member", "members are not the closed set"),
+    ("other", "the hunk-class record names another authority"),
+    ("duplicated", "more than one hunk-class record names this authority"),
+    ("cover", "does not cover exactly the authority's changed files"),
+    ("count", "is not the authority's hunk count"),
+    ("inside", "the authority carries hunk classes itself"),
+])
+def test_the_hunk_class_record_is_closed_named_and_bound_by_digest(tmp_path, change, reason):
+    root = _cascade_repo(tmp_path)
+    apath = "architecture/next1-authority.json"
+    side_file = _side_path(root, apath)
+    side = json.loads(side_file.read_text())
+    body = json.loads((root / apath).read_text())
+    rel = side_file.relative_to(root).as_posix()
+    if change == "missing":
+        side_file.unlink()
+    elif change == "unnamed":
+        del body["newFiles"][rel]
+        (root / apath).write_text(json.dumps(body) + "\n")
+    elif change == "two":
+        body["newFiles"][CK.HUNK_CLASSES_DIR + "/second.json"] = body["newFiles"][rel]
+        (root / apath).write_text(json.dumps(body) + "\n")
+    elif change == "digest":
+        side_file.write_text(json.dumps(side, indent=1) + "\n")
+    elif change == "malformed":
+        _bind(root, apath, b"{not json\n")
+    elif change == "duplicated":
+        (side_file.parent / "copy.json").write_text(json.dumps(side) + "\n")
+    elif change == "inside":
+        body["hunkClassContext"] = side["hunkClassContext"]
+        (root / apath).write_text(json.dumps(body) + "\n")
+    else:
+        if change == "member":
+            side["extra"] = 1
+        elif change == "other":
+            side["authorityPath"] = "architecture/other-authority.json"
+        elif change == "cover":
+            side["classes"]["scripts/other.py"] = []
+        elif change == "count":
+            side["classes"]["scripts/validate_l281.py"].append("cascade")
+        _bind(root, apath, (json.dumps(side) + "\n").encode())
+    found = _reader(root).disagreements
+    assert [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")] and reason in found[0][3]
+
+
+def test_a_reordered_hunk_class_record_fails_the_recheck(tmp_path):
+    root = _cascade_repo(tmp_path, before=b"X = 'a'\nN = 288\n", after=b"X = 'b'\nN = 289\n",
+                         hunks=[_hunk(5, b"b", b"a", "other"), _hunk(14, b"9", b"8", "cascade")])
+    apath = "architecture/next1-authority.json"
+    side = json.loads(_side_path(root, apath).read_text())
+    side["classes"]["scripts/validate_l281.py"].reverse()
+    _bind(root, apath, (json.dumps(side) + "\n").encode())
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("A", "input")] and "fails the re-check" in found[0][3]

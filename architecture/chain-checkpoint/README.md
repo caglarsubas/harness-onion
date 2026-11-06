@@ -46,7 +46,7 @@ Every digest is at the checkpoint tree.
   - `Reader(root, clock, cap, tree, in_dry_run)`, with `.start()`, `.report(nodeid, when, outcome, duration)` and
     `.finish(head_sha=None) -> (summary line, record)`;
   - `rebuild`, `sample`, `naming_authority`, `newer_authorities`, `check_ledger`, `head_slot`, `entry_fault`,
-    `unauthored`, `check_pairs` and `bind_context`;
+    `attach_classes`, `unauthored`, `check_pairs` and `bind_context`;
   - the CLI `chain_checkpoint.py dry-run-compare LOG OUT`.
 - **What a session prints:** the root conftest prints the summary line and the record as one
   `chain-checkpoint shadow record:` JSON line.
@@ -66,9 +66,18 @@ Every digest is at the checkpoint tree.
 **How the reader rebuilds.**
 - It replays, newest first, only the published `reverseHunks` of the authorities newer than the checkpoint. The apply
   is byte-exact, with each file's `afterSha256` and `beforeSha256` checked. It never uses git history.
-- Each changedFiles entry's shape is checked first (`entry_fault`; a broken entry is corrupt). Each authority's
-  `hunkClassContext`, `hunkClassVocabulary` and `hunkClassRuleSha256` are bound next, before any class is trusted; a
-  bad context is class A, kind input. Each recorded class is re-checked by chainmech v2.2's rule.
+- Every authority keeps v2.1's eight-member form and three-key hunks (the owner's MON-LPK1-B6-P1). A classed
+  authority's classes live in its **hunk-class record**, `architecture/chain-checkpoint/hunk-classes/<slot>.json`
+  (MON-282-W1-A2), one per classed authority from 282 on and none for older ones. It holds exactly `authorityPath`,
+  `hunkClassVocabulary`, `hunkClassRuleSha256`, `hunkClassContext` and `classes` ({path: one class per reverse hunk,
+  in the authority's order}). It is an ordinary new file of its step: the classed authority's own `newFiles` names
+  it by sha256, and the head pins the authority, so the record is bound by sha256 with no hash cycle.
+- Each changedFiles entry's shape is checked first (`entry_fault`; a broken entry is corrupt). The authority's
+  hunk-class record is bound next, before any class is trusted: the authority's `newFiles` names exactly one, its
+  bytes hash to the named digest, and its `authorityPath` is the authority's. A record that is missing, unnamed,
+  digest-mismatched, malformed, miscounted or duplicated, or an authority that carries classes itself, is class A,
+  kind input, as is a bad context. Each class is re-checked by position by chainmech v2.2's rule, so a reordered
+  record is class A.
 - It undoes only `cascade` and `bridge` hunks, plus `record` when `normalisedRecordClass` is true.
 - Rebuilt bytes are compared, never executed.
 - An in-run budget stops the replay at the cap: class C, kind over-budget. A finished reading over the cap is kind

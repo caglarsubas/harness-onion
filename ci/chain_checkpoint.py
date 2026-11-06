@@ -8,7 +8,8 @@ observes and records only; nothing here raises out of a hook or changes an exit 
 Public interface: Reader(root, clock, cap, tree, in_dry_run).start(); .report(nodeid, when, outcome, duration);
 .finish(head_sha=None) -> (summary line, record dict); rebuild(path, live, newer, normalised, budget); sample(tree,
 slots, fraction); naming_authority(root, live_sha, budget, auths); newer_authorities(root, baseline, budget, auths);
-check_ledger(record); head_slot(record, auths); entry_fault(entry); unauthored(reverted, unexplained);
+check_ledger(record); head_slot(record, auths); entry_fault(entry); attach_classes(apath, rec, sides);
+unauthored(reverted, unexplained);
 check_pairs(entries); and the CLI
 `chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
 
@@ -21,9 +22,13 @@ sizeBound. Every digest is at the checkpoint tree.
 
 The rebuild (D9 (a)): for each attested file, undo newest first the reverseHunks of every authority newer than the
 checkpoint (baseline catalog larger than checkpointBaseline), byte-exact, afterSha256 and beforeSha256 checked; each
-authority's hunkClassContext {newPacket == authorityPacket, prevValidator, prevTest, steps == [1, 1 + K]},
-hunkClassVocabulary and hunkClassRuleSha256 are bound after the entry's shape (entry_fault) and before any class is
-trusted, a bad context being class A; each recorded class is re-checked by the rule copied
+each authority keeps v2.1's eight-member form and three-key hunks; a classed authority's classes live in its
+closed hunk-class record (HUNK_CLASSES_DIR/<slot>.json, MON-282-W1-A2: exactly authorityPath, hunkClassVocabulary,
+hunkClassRuleSha256, hunkClassContext {newPacket == authorityPacket, prevValidator, prevTest, steps == [1, 1 + K]}
+and classes {path: one class per reverse hunk, in the authority's order}), an ordinary new file of its step that
+the authority's newFiles names by sha256, checked after the entry's shape (entry_fault) and before any class is
+trusted; a missing, unnamed, digest-mismatched, malformed, miscounted or duplicated record, or an authority that
+carries classes itself, is class A; each recorded class is re-checked by the rule copied
 below, and only classes in normalised() are undone (cascade and bridge, plus record when normalisedRecordClass).
 
 The shadow record (one JSON line in the session's log, prefixed "chain-checkpoint shadow record:"): headSha,
@@ -69,6 +74,9 @@ COUNT_EFFECT = {"input": ("A", "restart"), "stale": ("A", "restart"), "outcome":
                 "corrupt": ("C", "restart"), "over-budget": ("C", "restart"), "over-cap": ("C", "restart"),
                 "fault": ("C", "restart"), "skipped": ("C", "neutral")}   # the README's countEffect table; an agree counts
 UNAUTHORED_MISS = "afterSha256 differs before the replay"
+HUNK_CLASSES_DIR = "architecture/chain-checkpoint/hunk-classes"     # MON-282-W1-A2: one closed record per classed authority
+SIDE_MEMBERS = frozenset({"authorityPath", "hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext", "classes"})
+CLASS_MEMBERS = ("hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext")
 
 # ---- chainmech v2.2's class rule (hunk_class_v22.py), copied byte for byte by make_c2_282.py ----
 CLASSES = ("bridge", "cascade", "other", "record")   # the closed vocabulary, sorted; pinned in each authority from 282 on
@@ -312,7 +320,75 @@ def naming_authority(root, live_sha, budget=None, auths=None):
     return path, ("named" if named == live_sha else "stale")
 
 
-def newer_authorities(root, baseline, budget=None, auths=None):
+def _hunk_class_records(root, budget=None):
+    """MON-282-W1-A2: every hunk-class record, {path: (sha256 of its bytes, its parsed object or None)}. Never a
+    refusal here: a record that does not parse is judged when an authority names it (class A)."""
+    out = {}
+    for p in sorted((root / HUNK_CLASSES_DIR).glob("*.json")):
+        if budget:
+            budget()
+        raw = p.read_bytes()
+        try:
+            side = json.loads(raw)
+        except ValueError:
+            side = None
+        out[p.relative_to(root).as_posix()] = (_sha(raw), side)
+    return out
+
+
+def attach_classes(apath, rec, sides):
+    """MON-282-W1-A2: the authority with its hunk-class record attached, in memory: its vocabulary, rule sha256 and
+    context, and each hunk's class in the authority's reverseHunks order. The authority's newFiles names exactly one
+    record, whose bytes hash to the named digest and whose authorityPath is the authority's (condition 2'). A binding
+    fault is kept as hunkClassBinding, which bind_context reports first (class A); nothing on disk is changed."""
+    def bad(reason):
+        return dict(rec, hunkClassBinding=reason)
+    changed = rec.get("changedFiles", {})
+    if any(k in rec for k in CLASS_MEMBERS) or any(isinstance(e, dict) and isinstance(e.get("reverseHunks"), list)
+                                                  and any(isinstance(h, dict) and "class" in h for h in e["reverseHunks"])
+                                                  for e in changed.values()):
+        return bad("the authority carries hunk classes itself (MON-282-W1-A2: only its hunk-class record does)")
+    named = sorted(p for p in rec.get("newFiles", {}) if p.startswith(HUNK_CLASSES_DIR + "/"))
+    if not named:
+        return bad("the authority's newFiles names no hunk-class record")
+    if len(named) != 1:
+        return bad("the authority's newFiles names %d hunk-class records" % len(named))
+    if named[0] not in sides:
+        return bad("the hunk-class record the authority names is missing")
+    side_sha, side = sides[named[0]]
+    if rec["newFiles"][named[0]] != side_sha:
+        return bad("the hunk-class record's bytes do not hash to the authority's digest")
+    if not isinstance(side, dict):
+        return bad("the hunk-class record does not parse as an object")
+    if set(side) != SIDE_MEMBERS:
+        return bad("the hunk-class record's members are not the closed set")
+    if side["authorityPath"] != apath:
+        return bad("the hunk-class record names another authority")
+    if sum(1 for _, s in sides.values() if isinstance(s, dict) and s.get("authorityPath") == apath) != 1:
+        return bad("more than one hunk-class record names this authority")
+    classes = side["classes"]
+    if not (isinstance(classes, dict) and set(classes) == set(changed)):
+        return bad("the hunk-class record does not cover exactly the authority's changed files")
+    merged = {}
+    for path, entry in changed.items():
+        listed = classes[path]
+        if not (isinstance(listed, list) and all(isinstance(c, str) for c in listed)):
+            return bad("the hunk-class record's classes for %s are not a list of strings" % path)
+        hunks = entry.get("reverseHunks") if isinstance(entry, dict) else None
+        if not isinstance(hunks, list):
+            merged[path] = entry          # entry_fault refuses it in rebuild (corrupt)
+            continue
+        if len(listed) != len(hunks):
+            return bad("the hunk-class record's count for %s is not the authority's hunk count" % path)
+        merged[path] = dict(entry, reverseHunks=[dict(h, **{"class": c}) if isinstance(h, dict) else h
+                                                 for h, c in zip(hunks, listed)])
+    out = dict(rec, changedFiles=merged)
+    for key in CLASS_MEMBERS:
+        out[key] = side[key]
+    return out
+
+
+def newer_authorities(root, baseline, budget=None, auths=None, sides=None):
     out = [(n, path, rec) for n, path, rec in (auths if auths is not None else _authorities(root, budget)) if n > baseline]
     out.sort(key=lambda t: -t[0])
     if len({n for n, _, _ in out}) != len(out):
@@ -323,11 +399,17 @@ def newer_authorities(root, baseline, budget=None, auths=None):
             raise Corrupt("authority %s authorityPacket" % path)
     if len(set(packets)) != len(packets):
         raise Corrupt("two newer authorities name one authorityPacket (one authority per slot, P047-C4-2)")
-    return out
+    if not out:
+        return out
+    sides = sides if sides is not None else _hunk_class_records(root, budget)     # MON-282-W1-A
+    return [(n, path, attach_classes(path, rec, sides)) for n, path, rec in out]
 
 
 def bind_context(apath, rec):
-    """C1-6: the authority's class vocabulary, rule digest and step context, before any of its classes is trusted."""
+    """C1-6: the authority's class vocabulary, rule digest and step context (from its hunk-class record, attached by
+    attach_classes), before any of its classes is trusted."""
+    if rec.get("hunkClassBinding"):     # MON-282-W1-A2, condition 2': a binding fault is class A
+        return rec["hunkClassBinding"]
     ctx = rec.get("hunkClassContext")
     if not (isinstance(ctx, dict) and set(ctx) == {"newPacket", "prevValidator", "prevTest", "steps"}):
         return "hunkClassContext missing or malformed"
@@ -573,7 +655,7 @@ class Reader:
             self.ledger_state = "the ledger's checkpointSlot or checkpointBaseline is malformed"
         check_ledger(record)
         self.record = record
-        newer = newer_authorities(self.root, record["checkpointBaseline"], auths=auths)     # before the skip (P047-C5-1)
+        newer = newer_authorities(self.root, record["checkpointBaseline"], self._budget, auths=auths)     # before the skip (P047-C5-1)
         if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
             self.mode = "dry-run-only: skipped"
             self.disagreements.append((self.head_slot, "reader", "C", "dry-run-only: skipped in this session (%s); the dry-run "
