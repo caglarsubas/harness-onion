@@ -145,6 +145,21 @@ def _constant(path, name):
     return None
 
 
+def check_pairs_of(lslot, pairs_path, document):
+    """A layer's check pairs from its pairs file, each (layerSlot, the sorted ids, type) once (MON-282-PAIRS-DEDUPE): a
+    pairs file may hold one entry per overlapping path for the same packet pair, and the reader's check_pairs refuses a
+    repeated entry (V006-P2-2)."""
+    out, seen = [], set()
+    for pair in document["pairs"]:
+        entry = {"layerSlot": lslot, "pairsPath": pairs_path, "ids": [p["id"] for p in pair["packets"]],
+                 "type": "supersession" if "superseded" in pair.get("reason", {}) else "unruled"}
+        key = (lslot, tuple(sorted(entry["ids"])), entry["type"])
+        if key not in seen:
+            seen.add(key)
+            out.append(entry)
+    return out
+
+
 def exclusion_for(slot, head_validator):
     """MON-282-W2-RULED: the closed exclusion of the step at slot: its own products, never a layer's input."""
     return {"files": sorted([AUTHORITY_PATH, "%s/%d.json" % (HUNK_CLASSES_DIR, slot), RECORD_PATH]), "pinLine": head_validator}
@@ -229,9 +244,7 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
                        "seconds": round(sum(seconds[n] for n in nodes), 3)})
         pairs_path = _constant(worktree / validator, "PAIRS_PATH")
         if pairs_path:
-            for pair in json.loads((worktree / pairs_path).read_bytes())["pairs"]:
-                pairs.append({"layerSlot": lslot, "pairsPath": pairs_path, "ids": [p["id"] for p in pair["packets"]],
-                              "type": "supersession" if "superseded" in pair.get("reason", {}) else "unruled"})
+            pairs += check_pairs_of(lslot, pairs_path, json.loads((worktree / pairs_path).read_bytes()))
     head = subprocess.run(["git", "-C", str(worktree), "rev-parse", "HEAD", "HEAD^{tree}"], capture_output=True, text=True,
                           check=True).stdout.split()
     captured = {p for l in layers for p in l["inputs"]}

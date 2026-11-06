@@ -717,3 +717,15 @@ def test_the_writers_exclusion_and_pin_digest_follow_the_reader():
     assert WR.attested_sha(raw, "b.py", "a.py", CK.pin_normalised) == sha(raw)
     with pytest.raises(SystemExit, match="no single AUTHORITY_SHA256 pin line"):
         WR.attested_sha(raw + raw, "a.py", "a.py", CK.pin_normalised)
+
+
+def test_the_writer_records_each_check_pair_once():
+    """MON-282-PAIRS-DEDUPE: 279's real pairs file holds one entry per overlapping path (20) over 2 packet pairs; the
+    writer records each pair once, and the reader's check_pairs reads them clean."""
+    rel = "architecture/dist-005a-ctrl-fix-004-publish-pairs.json"
+    document = json.loads((ROOT / rel).read_bytes())
+    entries = WR.check_pairs_of(279, rel, document)
+    assert len(document["pairs"]) == 20 and len(entries) == 2
+    assert sorted(tuple(sorted(e["ids"])) for e in entries) == [("CTRL-FIX-004", "CTRL-INTEGRATE-001"), ("DIST-005", "DIST-005A")]
+    assert {e["type"] for e in entries} == {"supersession"} and CK.check_pairs(entries) == []
+    assert CK.check_pairs([dict(entries[0]), dict(entries[0])]) == ["ledger checkPairs[1]: repeated (slot 279)"]
