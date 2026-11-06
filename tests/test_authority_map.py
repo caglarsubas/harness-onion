@@ -19,16 +19,21 @@ def files():
     return {p: (ROOT / p).read_bytes() for p in PATHS}
 
 
-def run(*mutations):
+def published():
+    """The published packet ids (file stems): V9 accepts later packets' riders for these (MON-282-W2-RULED)."""
+    return frozenset(path.stem for path in (ROOT / "task-packets").glob("*.yaml"))
+
+
+def run(*mutations, ids=None):
     data = files()
     for mutate in mutations:
         mutate(data)
-    return am.check(lambda p: data[p], frozenset())
+    return am.check(lambda p: data[p], published() if ids is None else ids)
 
 
-def refuses(code, *mutations):
+def refuses(code, *mutations, ids=None):
     with pytest.raises(ValueError) as error:
-        run(*mutations)
+        run(*mutations, ids=ids)
     assert str(error.value).startswith(code + ":"), str(error.value)
 
 
@@ -302,17 +307,51 @@ def test_r12_refuses_an_actor_that_is_not_text():
     refuses("AM_R12_VECTORS", vectors(am.R12_PATH, lambda d: d["vectors"][0].update(actor=1)))
 
 
-# V9: the registry.
-def test_registry_accepts_the_one_rider_appended_last():
-    # The base plus exactly one rider, built from the registry in either state: before the mechanics add the rider
-    # (the base) and after (the base plus it, whose trailing rider is dropped first).
-    def rider(d):
-        reg = json.loads(d[am.BRIEFS_PATH])
-        if reg["briefs"] and reg["briefs"][-1] == am.RIDER:
-            reg["briefs"] = reg["briefs"][:-1]
-        reg["briefs"].append(dict(am.RIDER))
+# V9: the registry (V9 (a), MON-282-W2-RULED).
+def era(reg):
+    """The registry in its era state: the base, then MET-ADOPT-007's one rider (any later riders dropped)."""
+    at = [i for i, entry in enumerate(reg["briefs"]) if entry == am.RIDER][:1]
+    return dict(reg, briefs=reg["briefs"][:at[0] if at else len(reg["briefs"])] + [dict(am.RIDER)])
+
+
+def later(packet):
+    return dict(am.RIDER, series=packet + "/packet")
+
+
+def registry(*extra, before=()):
+    def mutate(d):
+        reg = era(json.loads(d[am.BRIEFS_PATH]))
+        reg["briefs"] = reg["briefs"][:-1] + list(before) + reg["briefs"][-1:] + list(extra)
         d[am.BRIEFS_PATH] = dump(reg)
-    run(rider)
+    return mutate
+
+
+def test_registry_accepts_the_one_rider_appended_last():
+    # The base plus exactly one rider, built from the registry in any state: the base, the base plus it, or the base
+    # plus it and later packets' riders (dropped first).
+    run(registry())
+
+
+def test_registry_accepts_two_later_packets_riders():
+    run(registry(later("MET-NEXT-001"), later("MET-NEXT-002")), ids=frozenset({"MET-NEXT-001", "MET-NEXT-002"}))
+
+
+def test_registry_refuses_a_second_281_rider_after_later_ones():
+    refuses("AM_REGISTRY", registry(later("MET-NEXT-001"), dict(am.RIDER)),
+            ids=frozenset({"MET-NEXT-001", "MET-ADOPT-007"}))
+
+
+def test_registry_refuses_a_rider_for_an_unknown_packet():
+    refuses("AM_REGISTRY", registry(later("MET-NEXT-001")), ids=frozenset({"MET-NEXT-002"}))
+
+
+def test_registry_refuses_a_later_rider_before_281s():
+    refuses("AM_REGISTRY", registry(before=[later("MET-NEXT-001")]), ids=frozenset({"MET-NEXT-001"}))
+
+
+def test_registry_refuses_a_series_registered_twice():
+    refuses("AM_REGISTRY", registry(later("MET-NEXT-001"), later("MET-NEXT-001")), ids=frozenset({"MET-NEXT-001"}))
+    refuses("AM_REGISTRY", registry(later("MET-PERF-046")), ids=frozenset({"MET-PERF-046"}))
 
 
 def test_registry_refuses_a_second_rider():

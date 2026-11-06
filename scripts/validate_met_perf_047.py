@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
-AUTHORITY_SHA256 = "33c266f0d7ca1bc5f93bad71dac82b239283ae27e1d3b9826b8a7f23022006a8"
+AUTHORITY_SHA256 = "e6d64cb1eaeee243ee99d24b48f88693daca164c198f7499be82b1f5a9803f0b"
 VALIDATOR_PATH = "scripts/validate_met_perf_047.py"
 BASE_COMMIT = "dcf11803fca83454cb0660ffd88b65ce06a22a0f"
 NEW_PACKET = "MET-PERF-047"
@@ -343,7 +343,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 
 
 # MET-PERF-047 (roadmap CHAIN-COMPACTION-002; the lane monitor's owner-delegated rulings MON-282-ASSIGN, MON-282C-RULED,
-# MON-282-CR5-CLOSE, MON-282-W1-A2 and MON-282-CR6-KEEP) records, in a K = 0 step, the shadow chain checkpoint: the
+# MON-282-CR5-CLOSE, MON-282-W1-A2, MON-282-CR6-KEEP, MON-282-W2-RULED, MON-282-W2-ORDER and MON-282-W2-WRITESET)
+# records, in a K = 0 step, the shadow chain checkpoint: the
 # ledger of chain layers 189-281 at the checkpoint tree (architecture/chain-checkpoint/record.json, written by the
 # lane-run writer scripts/chain_checkpoint_writer.py), its README and vectors, the shadow-only reader
 # ci/chain_checkpoint.py that the root conftest.py loads guarded in the outermost session, the module tests
@@ -352,16 +353,19 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # hunk classes live in its closed hunk-class record (architecture/chain-checkpoint/hunk-classes/282.json), which the
 # authority's own newFiles names by sha256 (MON-282-W1-A2). Repository bytes are read only through reviewed_bytes, so a
 # later bridged successor projects its own edits away first; an era file is refused unless it is bound by digest on
-# every read, a ledger-named file is bound by the era-verified ledger's digest, a changed file by the authority's
-# afterSha256 and the hunk-class record by the authority's newFiles digest, and no directory is listed. Each refusal is
+# every read; the ledger (never an era file) and the hunk-class record are bound by the authority's newFiles digest, a
+# ledger-named file by the bound ledger's digest and a changed file by the authority's afterSha256; no directory is
+# listed. Each refusal is
 # a pure check over the values read, so every one has a failing case on plain data. Checked here: V1, the packet's files
 # (exactly these, each equal to the sha256 pinned below); V2, the ledger (its closed members, slot 282 over the
 # 288-packet baseline, the owner's parameters, the full-run proof, both stated differences with the capture variables,
-# only ruled check pairs, its size, and its layers equal to the chain walk 189-281); V3, the root conftest.py's guarded
+# only ruled check pairs, its size, its exclusion, and its layers equal to the chain walk 189-281, none attesting an
+# excluded file); V3, the root conftest.py's guarded
 # load of the reader, in the outermost session only, and its docstring; V4, the registry (it differs from the base by
-# exactly the one rider); V5, every attested file's checkpoint digest equals its reviewed bytes; V6, this step's
+# exactly the one rider); V5, every attested file's checkpoint digest equals its reviewed bytes (this validator's with
+# its pin line normalized, v2.1's validatorNormalizedSha256 rule); V6, this step's
 # hunk-class record (MON-282-W1-A2 condition 8: its closed members, the authority's path, the vocabulary, the rule's
-# sha256, the context against this step's names, one class per hunk for exactly the changed files, and every class
+# sha256 (chainmech v2.3's), the context against this step's names, one class per hunk for exactly the changed files, and every class
 # re-checked by position by the reader's copy of the class rule). Last, this layer's own inverse hunks are the canonical
 # byte-minimal ones (MET-PERF-040's carried rule).
 CHECKPOINT_DIR = "architecture/chain-checkpoint"
@@ -394,7 +398,12 @@ PACKET_FILES = (
 # differences, always together (Q-282C-3, MON-282-Q1Q3).
 LEDGER_MEMBERS = frozenset({"schemaVersion", "checkpointSlot", "checkpointBaseline", "writingCommit", "writingTree",
                             "parameters", "normalisedRecordClass", "layers", "checkPairs", "fullRunProof", "writingRun",
-                            "sizeBound", "sizeBytes"})
+                            "sizeBound", "sizeBytes", "exclusion"})
+# V2: the exclusion (MON-282-W2-RULED, MON-282-W2-WRITESET): this step's own products, never a layer's input, equal to
+# the bounded build's write set: its authority, its hunk-class record and the ledger (files, sorted), and this
+# validator's AUTHORITY_SHA256 pin line (pinLine).
+EXCLUSION_FILES = ("architecture/chain-checkpoint-authority.json", "architecture/chain-checkpoint/hunk-classes/282.json",
+                   "architecture/chain-checkpoint/record.json")
 PARAMETERS = MappingProxyType({"cadenceSlots": 10, "sampleFraction": 0.1, "fullRunOn": "owner-named slot", "nShadow": 10,
                                "shadowCapSeconds": 15, "workers": 8})
 SHADOW_IN = ("verify", "dryRunOnly")
@@ -423,22 +432,22 @@ RIDERS = (("PACKET", NEW_PACKET + "/packet", PACKET_BRIEF, 1),)
 # V6: the hunk-class record's closed form and this step's class context (MON-282-W1-A2 conditions 1', 3 and 8).
 HUNK_RECORD_MEMBERS = frozenset({"authorityPath", "hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext",
                                  "classes"})
-HUNK_VOCABULARY = ("bridge", "cascade", "other", "record")
-HUNK_RULE_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"
+HUNK_VOCABULARY = ("bridge", "cascade", "other", "record", "register")     # chainmech v2.3 (MON-282-W2-RULED)
+HUNK_RULE_SHA256 = "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f"
 HUNK_CONTEXT = MappingProxyType({"newPacket": NEW_PACKET, "prevValidator": "scripts/validate_authority_map.py",
                                  "prevTest": "tests/test_authority_map.py", "steps": (1, 1)})
-# Every era file with its digest: the packet's files, the root conftest.py, the registry and the generic packet brief,
-# and the ledger once it is written.
+# Every era file with its digest: the packet's files, the root conftest.py, the registry and the generic packet brief.
+# The ledger is never an era file: the authority's newFiles names it (MON-282-W2-ORDER).
 ERA_SHA256 = MappingProxyType({
-    "architecture/chain-checkpoint/README.md": "50f78d7525e4c131c52770193a8d63ca1b5db0eaacb9698ef093e6c36aac6a57",
+    "architecture/chain-checkpoint/README.md": "dceeae8575b51fcf61d93a353407fc98b4fac931b91150317f8358802f912a67",
     "architecture/chain-checkpoint/oracle-identity.json": "d8ab0e79353b7e682d87e9b53d1c85fce27314a6be60cffc59d7d83579d94d58",
-    "architecture/chain-checkpoint/vectors.json": "a14861698b2eb73c6612b6907089ba158715cb15ac6ca3368d496cbf1825e210",
+    "architecture/chain-checkpoint/vectors.json": "ff3cf522c77a513e4401aa0d22378c249a85865f78ff28b018a170339cad3097",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "bf42d8f42759df7afb90e7c86b8e9e862a50024356d368dc5d43ec73cf99bbbc",
-    "ci/chain_checkpoint.py": "1922cf7e35c84b29d5d634a36c630e880006cfdf82e695d1ef76994335896d26",
+    "ci/chain_checkpoint.py": "fcec5e2cae244afbc8ab53d683f2cd3c0726aab583f93ab500434c18e1b1ccae",
     "conftest.py": "23395db8132224f09353ed6f89411dc4a20f87e5a33c55708febcc570cfbb324",
-    "scripts/chain_checkpoint_writer.py": "8e25795ba3abfcb8863336e70bf5c7bebe783c9228b2bdd0ec6c359e8af4051f",
-    "tests/test_chain_checkpoint.py": "4eb9410adc765156cdcd6b04b12b64bc4acaf28eb2ed8bb8f01ca2684953a493",
+    "scripts/chain_checkpoint_writer.py": "0b3da10c739473a2f98f2a937d0a73bcb91c02a1b0e70a06aded71c0721cbe3d",
+    "tests/test_chain_checkpoint.py": "76e219fd23935b9b2b394ec77932f01d361ebac456cc75f4bf23277c365d6521",
     "tests/test_met_perf_047_oracle.py": "0b4d770613786c3a410022db92dafcfd92e75186770307c90340e0d41e58d25c",
 })
 
@@ -558,6 +567,9 @@ def check_ledger(raw: Any, walk: Any, baseline: Any) -> None:
            "the ledger's size is its length, within its bound")
     _bound(lambda: type(ledger["layers"]) is list and all(_layer_holds(layer) for layer in ledger["layers"]),
            "the ledger's layers have their closed members")
+    _bound(lambda: ledger["exclusion"] == {"files": list(EXCLUSION_FILES), "pinLine": VALIDATOR_PATH}
+           and not any(set(_attested(layer)) & set(EXCLUSION_FILES) for layer in ledger["layers"]),
+           "the ledger's exclusion is this step's write set, and no layer attests an excluded file")
     check_walk(ledger["layers"], walk)
 
 
@@ -576,9 +588,26 @@ def check_walk(layers: Any, sources: Any) -> None:
                "the ledger's layers are the chain walk 189-281: slot %s binds its successor" % layer["slot"])
 
 
+def check_ledger_bound(raw: Any, named: Any, era: Any) -> None:
+    """V2: the ledger's bytes hash to the digest the authority's newFiles names for it, and the ledger is never an era
+    file (MON-282-W2-ORDER: the head pins the authority, the authority names the ledger, the ledger attests the
+    validator's normalized bytes)."""
+    _bound(lambda: LEDGER_PATH not in era and _sha(named) and type(raw) is bytes and digest(raw) == named,
+           "the ledger is bound by the authority's newFiles digest")
+
+
+def _ledger() -> bytes:
+    """The ledger's reviewed bytes, bound by the authority's newFiles digest."""
+    named = authority()["newFiles"].get(LEDGER_PATH)
+    _path(LEDGER_PATH)
+    raw = reviewed_bytes(LEDGER_PATH)
+    check_ledger_bound(raw, named, ERA_SHA256)
+    return raw
+
+
 def validate_ledger() -> None:
-    """V2 over the era-verified ledger, the chain walk and the authority's baseline."""
-    raw = _verified(LEDGER_PATH)
+    """V2 over the bound ledger, the chain walk and the authority's baseline."""
+    raw = _ledger()
     ledger = _parsed(raw)
     require(type(ledger) is dict and type(ledger.get("layers")) is list, "the ledger is the closed slot-282 checkpoint")
     walk = {layer["validatorPath"]: _bound_read(layer["validatorPath"], layer["validatorSha256"])
@@ -648,11 +677,23 @@ def _attested(layer: dict) -> dict:
     return files
 
 
+def _attested_digest(path: str, raw: Any) -> Any:
+    """V5: a file's attested digest; this validator's own bytes with its one pin line set to the placeholder, under
+    v2.1's validatorNormalizedSha256 rule as validate() applies it (MON-282-W2-RULED); None when that line is not one."""
+    if path != VALIDATOR_PATH:
+        return digest(raw)
+    literal = b'AUTHORITY_SHA256 = "' + AUTHORITY_SHA256.encode("ascii") + b'"'
+    if raw.count(literal) != 1:
+        return None
+    return digest(raw.replace(literal, b'AUTHORITY_SHA256 = "TO_BE_PINNED_AFTER_SOURCE_FREEZE"'))
+
+
 def check_attested(ledger: Any, read: Any) -> None:
-    """V5: every attested file of every layer has the checkpoint digest the ledger records for it."""
+    """V5: every attested file of every layer has the checkpoint digest the ledger records for it (this validator by its
+    normalized digest)."""
     for layer in ledger["layers"]:
         for path, expected in _attested(layer).items():
-            _bound(lambda: _sha(expected) and digest(read(path, expected)) == expected,
+            _bound(lambda: _sha(expected) and _attested_digest(path, read(path, expected)) == expected,
                    "an attested file's checkpoint digest equals its reviewed bytes: %s (slot %s)" % (path, layer["slot"]))
 
 
@@ -664,8 +705,8 @@ def _ledger_bound_read(path: str, expected: str) -> bytes:
 
 
 def validate_attested() -> None:
-    """V5 over the era-verified ledger's attested files, each read through reviewed_bytes."""
-    ledger = _parsed(_verified(LEDGER_PATH))
+    """V5 over the bound ledger's attested files, each read through reviewed_bytes."""
+    ledger = _parsed(_ledger())
     require(type(ledger) is dict and type(ledger.get("layers")) is list
             and all(_layer_holds(layer) for layer in ledger["layers"]), "the ledger's layers are the chain walk 189-281")
     check_attested(ledger, _ledger_bound_read)
@@ -673,7 +714,7 @@ def validate_attested() -> None:
 
 def check_hunk_record(raw: Any, changed: Any, afters: Any, classify: Any, rule_sha: Any) -> None:
     """V6 (MON-282-W1-A2 condition 8): the record's closed members; it names this layer's authority; the closed
-    vocabulary and the pinned rule's sha256, which the reader's copy of the rule also carries; the context is this
+    vocabulary and the pinned rule's sha256 (chainmech v2.3's), which the reader's copy of the rule also carries; the context is this
     step's names; it lists one class per reverse hunk for exactly the changed files; and every class equals the rule's
     class at its position, under this step's context."""
     record = _parsed(raw)

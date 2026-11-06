@@ -1,4 +1,5 @@
 {
+ "bindingFaults": "MON-282-W1-A2's binding refusals (a missing, unnamed, digest-mismatched, malformed, miscounted or duplicated hunk-class record, a named one that is a link, not a file, or unreadable, a rule digest the reader does not hold, and an authority that carries classes itself) and a reordered record are class A, kind input; they are sourced in architecture/chain-checkpoint/README.md (How the reader rebuilds) and the module tests, with no vector of their own (P047-C6-4)",
  "countEffectTable": "architecture/chain-checkpoint/README.md, the countEffect table: every kind a vector expects takes its class and countEffect from it",
  "hunkClassRecords": "architecture/chain-checkpoint/hunk-classes/<slot>.json (MON-282-W1-A2): every vector that classes an authority's hunks builds the authority in v2.1's form and its closed hunk-class record, which the authority's newFiles names by sha256",
  "packet": "MET-PERF-047",
@@ -7,7 +8,7 @@
   {
    "case": "change data<slot>.txt (or the layer authority) after the record is written",
    "expectClass": "A",
-   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest; the file is listed as unauthored (P047-C3-4); a JSON change to the layer authority is class A, and one that stops it parsing makes the reading corrupt (Q-R4-2, P047-C5-3)",
+   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest; the file is listed as unauthored (P047-C3-4); a JSON change that keeps the layer authority an object, with baselinePackets, changedFiles and newFiles objects, is class A; one that stops it parsing, or makes it or one of those three members a non-object, makes the reading corrupt with a null slot (Q-R4-2, P047-C5-3)",
    "id": 1,
    "name": "tampered attested file",
    "names": "the layer's slot and the file",
@@ -97,7 +98,7 @@
   {
    "case": "architecture/authority-map-authority.json, classed by the rule under MET-ADOPT-007's context",
    "expectClass": "none",
-   "expectDetail": "281's edited files rebuild to each beforeSha256 under 281's context; only validate_readiness's block and the master plan's status line stay partial; a file that a later slot edits for real (every unexplained hunk of a class not normalised) is counted apart, and a file whose only miss is at its newest recorded step is pending, unauthored: counted and printed, and zero in every runner execution (HARNESS_OFFLINE_ENFORCED=1)",
+   "expectDetail": "281's edited files rebuild to each beforeSha256 under 281's context; validate_readiness's block and the master plan's status line rebuild too, as class register (chainmech v2.3, MON-282-W2-RULED); a file that a later slot edits for real (every unexplained hunk of a class not normalised) is counted apart, and a file whose only miss is at its newest recorded step is pending, unauthored: counted and printed, and zero in every runner execution (HARNESS_OFFLINE_ENFORCED=1)",
    "id": 11,
    "name": "a K = 0 cascade step reads clean",
    "names": "n/a",
@@ -119,6 +120,15 @@
    "id": 13,
    "name": "reordered or missing hunk",
    "names": "the layer's slot",
+   "sampled": "refuses"
+  },
+  {
+   "case": "the ledger's exclusion names the head validator as pinLine; change only its AUTHORITY_SHA256 line, then any other line",
+   "expectClass": "A",
+   "expectDetail": "a pin-line-only change reads clean (the file is attested with that line normalised to TO_BE_PINNED_AFTER_SOURCE_FREEZE); any other edit of the validator differs from its checkpoint digest (class A, kind input)",
+   "id": 14,
+   "name": "the head validator's pin line",
+   "names": "the layer's slot and the file",
    "sampled": "refuses"
   }
  ]

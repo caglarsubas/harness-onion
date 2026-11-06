@@ -10,10 +10,15 @@ builder. Every expected value below comes from one of these sources, named in ea
 - DATA: the record architecture/authority-map.json, its vector files budget-vectors.json and r12-vectors.json, the
   technology record architecture/language-placement.json and the registry architecture/review-record/briefs.json;
 - SOURCE LINES: the repository lines the record cites, read here by exact path;
-- OPERATOR: facts the operator states outside the README: check(read, packets) with packets a frozenset (pass
-  frozenset()); the result members concerns, pins, flagged, budgetVectors and r12Vectors; a refusal is a ValueError
-  whose message starts with the code and a colon; the registry is the base or the base plus the one RIDER entry; V7
-  compares the technology record's top-level member names with TECH_BASE_MEMBERS plus TECH_LIST_MEMBER.
+- OPERATOR: facts the operator states outside the README: check(read, packets) with packets the set of published
+  packet ids (a set or frozenset; frozenset() where no later rider is in play); the result members concerns, pins,
+  flagged, budgetVectors and r12Vectors; a refusal is a ValueError whose message starts with the code and a colon; V7
+  compares the technology record's top-level member names with TECH_BASE_MEMBERS plus TECH_LIST_MEMBER;
+- README V9 (a) and RULING (MON-282-W2-RULED item 1, as relayed): the registry is the base, then MET-ADOPT-007's one
+  RIDER, then zero or more later packets' riders (RIDER with series <id>/packet, for an id in packets other than
+  MET-ADOPT-007), each series once in the whole registry; anything else in the registry refuses with AM_REGISTRY.
+  Tests that are not about later riders run on the base plus RIDER, the registry they were written against; the tree's
+  own registry is checked with the packet ids of its later riders. (V9 (a) update, slot 282, by a non-author: R12.)
 The budget reference model in this file is written from the budget file's rules B1-B5 and the cited ledger-loss line
 (trust.observability-finops.md:177); it shares no code with the module. Mutations reach the module only through this
 file's own read(path), which returns changed bytes in memory; nothing is patched.
@@ -116,13 +121,15 @@ class Reader:
         return (ROOT / path).read_bytes()
 
 
-def run(overrides=None):
-    return AM.check(Reader(overrides), frozenset())
+def run(overrides=None, packets=frozenset()):
+    merged = base_plus_rider()
+    merged.update(overrides or {})
+    return AM.check(Reader(merged), packets)
 
 
-def refusal_code(overrides):
+def refusal_code(overrides, packets=frozenset()):
     with pytest.raises(ValueError) as caught:
-        run(overrides)
+        run(overrides, packets)
     code, colon, _ = str(caught.value).partition(":")
     assert colon == ":", str(caught.value)
     return code
@@ -159,9 +166,11 @@ def tech_with(edit):
 
 
 def registry_base():
+    """The base registry: the tree's registry up to MET-ADOPT-007's RIDER (README V9 (a): the base comes first, then
+    the rider, then later riders); its digest is checked against BRIEFS_BASE_SHA256 in the registry test."""
     reg = load(BRIEFS)
-    if reg["briefs"] and reg["briefs"][-1] == AM.RIDER:
-        reg["briefs"] = reg["briefs"][:-1]
+    if AM.RIDER in reg["briefs"]:
+        reg["briefs"] = reg["briefs"][:reg["briefs"].index(AM.RIDER)]
     return reg
 
 
@@ -169,6 +178,25 @@ def registry_with(entries_edit):
     reg = registry_base()
     entries_edit(reg["briefs"])
     return {BRIEFS: dump(reg)}
+
+
+def base_plus_rider():
+    return registry_with(lambda entries: entries.append(copy.deepcopy(AM.RIDER)))
+
+
+def later_rider(packet_id, **changes):
+    """OPERATOR: a later packet's rider is RIDER with only series changed to <id>/packet."""
+    return dict(copy.deepcopy(AM.RIDER), series=packet_id + "/packet", **changes)
+
+
+def tree_later_ids():
+    """DATA: the packet ids of the riders after MET-ADOPT-007's RIDER in the tree's registry, in order."""
+    entries = load(BRIEFS)["briefs"]
+    if AM.RIDER not in entries:
+        return []
+    rest = entries[entries.index(AM.RIDER) + 1:]
+    assert all(e["series"].endswith("/packet") for e in rest)
+    return [e["series"][:-len("/packet")] for e in rest]
 
 
 def pending_entries():
@@ -647,9 +675,10 @@ def test_check_accepts_the_published_contract():
 
 def test_check_reads_exact_paths_only():
     """DOCSTRING: an injected byte reader (exact paths only, no listing); V1 reads the thirteen sources and the two
-    vector files; OPERATOR: V7 reads the technology record and V9 the registry."""
+    vector files; OPERATOR: V7 reads the technology record and V9 the registry. The tree's own registry, with the
+    packet ids of its later riders (README V9 (a))."""
     reader = Reader()
-    assert_accepted(AM.check(reader, frozenset()))
+    assert_accepted(AM.check(reader, frozenset(tree_later_ids())))
     assert set(reader.paths) == {REC, BUD, R12, TECH, BRIEFS} | set(THIRTEEN)
 
 
@@ -662,12 +691,87 @@ def test_check_accepts_the_reserialized_record_and_repinned_vectors():
 
 
 def test_registry_base_and_base_plus_one_rider_pass():
-    """OPERATOR: V9 accepts the base registry or the base plus the one RIDER entry as the last entry of briefs;
+    """README V9 (a): the registry is accepted at its base digest, or as the base then MET-ADOPT-007's one rider;
     PUBLIC NAMES: RIDER, BRIEFS_BASE_SHA256 (the base built here, never the file's own digest)."""
     base = dump(registry_base())
     assert sha(base) == AM.BRIEFS_BASE_SHA256
     assert_accepted(run({BRIEFS: base}))
     assert_accepted(run(registry_with(lambda entries: entries.append(copy.deepcopy(AM.RIDER)))))
+
+
+NEXT_1, NEXT_2 = "MET-NEXT-001", "MET-NEXT-002"
+
+
+def test_v9a_1_two_later_riders_are_accepted():
+    """VECTOR V9A-1 (RULING: two later riders accepted): the base, RIDER, then MET-NEXT-001/packet and
+    MET-NEXT-002/packet, with both ids in packets, is accepted."""
+    entries = [copy.deepcopy(AM.RIDER), later_rider(NEXT_1), later_rider(NEXT_2)]
+    assert_accepted(run(registry_with(lambda e: e.extend(entries)), frozenset({NEXT_1, NEXT_2})))
+
+
+def test_v9a_2_a_second_281_rider_is_refused():
+    """VECTOR V9A-2 (RULING: a second 281 rider still refuses): the base, RIDER, a later rider, then RIDER again,
+    with the later id and MET-ADOPT-007 in packets, refuses with AM_REGISTRY."""
+    entries = [copy.deepcopy(AM.RIDER), later_rider(NEXT_1), copy.deepcopy(AM.RIDER)]
+    packets = frozenset({NEXT_1, "MET-ADOPT-007"})
+    assert refusal_code(registry_with(lambda e: e.extend(entries)), packets) == "AM_REGISTRY"
+
+
+@pytest.mark.parametrize("packets", [frozenset(), frozenset({NEXT_2})], ids=["empty", "other-id"])
+def test_v9a_3_an_unknown_id_rider_is_refused(packets):
+    """VECTOR V9A-3 (RULING: a rider for an id not in packets refuses): the base, RIDER, then MET-NEXT-001/packet,
+    with MET-NEXT-001 not in packets, refuses with AM_REGISTRY."""
+    entries = [copy.deepcopy(AM.RIDER), later_rider(NEXT_1)]
+    assert refusal_code(registry_with(lambda e: e.extend(entries)), packets) == "AM_REGISTRY"
+
+
+def test_v9a_4_a_later_rider_before_281s_is_refused():
+    """VECTOR V9A-4 (optional; README: a rider before MET-ADOPT-007's is refused, the base's digest refuses it):
+    the base, MET-NEXT-001/packet, then RIDER, with MET-NEXT-001 in packets, refuses with AM_REGISTRY."""
+    entries = [later_rider(NEXT_1), copy.deepcopy(AM.RIDER)]
+    assert refusal_code(registry_with(lambda e: e.extend(entries)), frozenset({NEXT_1})) == "AM_REGISTRY"
+
+
+def test_v9a_5_a_series_registered_twice_is_refused():
+    """VECTOR V9A-5 (optional; README: each series appears once in the whole registry, the base included): a later
+    rider twice, and a later rider for a series the base already holds (DATA: MET-PERF-046/packet), each refuse with
+    AM_REGISTRY with the id in packets."""
+    twice = [copy.deepcopy(AM.RIDER), later_rider(NEXT_1), later_rider(NEXT_1)]
+    assert refusal_code(registry_with(lambda e: e.extend(twice)), frozenset({NEXT_1})) == "AM_REGISTRY"
+    assert any(e.get("series") == "MET-PERF-046/packet" for e in registry_base()["briefs"])
+    held = [copy.deepcopy(AM.RIDER), later_rider("MET-PERF-046")]
+    assert refusal_code(registry_with(lambda e: e.extend(held)), frozenset({"MET-PERF-046"})) == "AM_REGISTRY"
+
+
+GENERIC_BREAKS = [
+    ("version-2", {"version": 2}),
+    ("other-sha256", {"sha256": "0" * 64}),
+    ("other-kind", {"kind": "DESIGN"}),
+    ("other-path", {"path": "architecture/review-briefs/OTHER.md"}),
+]
+
+
+@pytest.mark.parametrize("name,change", GENERIC_BREAKS, ids=[g[0] for g in GENERIC_BREAKS])
+def test_v9a_a_later_rider_is_the_generic_packet_brief(name, change):
+    """README V9 (a): each later rider is the generic packet brief (the rider's kind, path, sha256 and version 1)
+    under <id>/packet; OPERATOR: V9's code is AM_REGISTRY. A later rider differing in one of them refuses; the series
+    must end in /packet."""
+    entries = [copy.deepcopy(AM.RIDER), later_rider(NEXT_1, **change)]
+    assert refusal_code(registry_with(lambda e: e.extend(entries)), frozenset({NEXT_1})) == "AM_REGISTRY"
+    design = [copy.deepcopy(AM.RIDER), dict(copy.deepcopy(AM.RIDER), series=NEXT_1 + "/design")]
+    assert refusal_code(registry_with(lambda e: e.extend(design)), frozenset({NEXT_1})) == "AM_REGISTRY"
+
+
+def test_v9a_the_trees_registry_with_its_later_riders():
+    """README V9 (a) and OPERATOR: the registry on the tree carries later riders from slot 282 on (it holds
+    MET-PERF-047/packet after MET-ADOPT-007's rider); it is accepted with their ids in packets, and refused with
+    AM_REGISTRY when packets is empty or lacks the last rider's id."""
+    ids = tree_later_ids()
+    assert "MET-PERF-047" in ids and len(set(ids)) == len(ids)
+    tree = {BRIEFS: raw(BRIEFS)}
+    assert_accepted(run(tree, frozenset(ids)))
+    assert refusal_code(tree, frozenset()) == "AM_REGISTRY"
+    assert refusal_code(tree, frozenset(ids[:-1])) == "AM_REGISTRY"
 
 
 def test_technology_record_with_matching_pending_reconciliation_passes():
@@ -687,7 +791,7 @@ def test_base_exceptions_from_the_reader_pass_through():
     (Whether an Exception raised by the reader itself is caught is not stated: the sentence follows the reading
     check's; the Exception half is tested on the reading check, mutation "deeply-nested".)"""
     with pytest.raises(Stop):
-        AM.check(Reader(failures={SEC: Stop()}), frozenset())
+        AM.check(Reader(base_plus_rider(), failures={SEC: Stop()}), frozenset())
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -1035,10 +1139,11 @@ MUTATIONS = [
     ("r12-expects-accept", m_r12_expects_accept, None, "README: every one is refused; V0 or V8, no code tied"),
     ("r12-non-authority-act", m_r12_non_authority_act, None, "R12 nonClaims verbs; V0 or V8, no code tied"),
     ("r12-unknown-row", m_r12_unknown_row, None, "README: a row it does not hold; no code tied"),
-    ("second-rider", m_second_rider, "AM_REGISTRY", "OPERATOR V9: a second rider refuses"),
-    ("base-entry-dropped", m_base_entry_dropped, "AM_REGISTRY", "OPERATOR V9: the base or the base plus one rider"),
-    ("rider-other-version", m_rider_other_version, "AM_REGISTRY", "OPERATOR V9: exactly the RIDER entry"),
-    ("rider-not-last", m_rider_first, "AM_REGISTRY", "OPERATOR V9: the rider as the last entry"),
+    ("second-rider", m_second_rider, "AM_REGISTRY", "README V9 (a): a second MET-ADOPT-007 rider refuses"),
+    ("base-entry-dropped", m_base_entry_dropped, "AM_REGISTRY", "README V9 (a): the base, unchanged, comes first"),
+    ("rider-other-version", m_rider_other_version, "AM_REGISTRY",
+     "README V9 (a): MET-ADOPT-007's one rider exactly; a later rider is another packet's"),
+    ("rider-first", m_rider_first, "AM_REGISTRY", "README V9 (a): a rider before the base's end (the base digest)"),
     ("registry-duplicate-member", m_registry_duplicate_member, "AM_REGISTRY",
      "OPERATOR V9 and DOCSTRING: the reading check's code"),
 ]

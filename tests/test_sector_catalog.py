@@ -772,6 +772,7 @@ GLOB_READERS = frozenset({
     "scripts/zero_bill_scan.py",
     "tests/test_ci_performance.py",
     "tests/test_language_placement_oracle.py",
+    "tests/test_met_perf_047_oracle.py",
     "tests/test_sector_catalog.py",
 })
 ROUND_COPIES = {

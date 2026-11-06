@@ -10,7 +10,7 @@ Public interface: Reader(root, clock, cap, tree, in_dry_run).start(); .report(no
 slots, fraction); naming_authority(root, live_sha, budget, auths); newer_authorities(root, baseline, budget, auths);
 check_ledger(record); head_slot(record, auths); entry_fault(entry); attach_classes(apath, rec, sides);
 unauthored(reverted, unexplained);
-check_pairs(entries); and the CLI
+check_pairs(entries); pin_normalised(raw, default); and the CLI
 `chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
 
 The ledger (record.json, schema harness.planeon.ai/chain-checkpoint/v1): schemaVersion, checkpointSlot,
@@ -18,18 +18,21 @@ checkpointBaseline, writingCommit, writingTree, parameters {cadenceSlots, sample
 shadowCapSeconds, workers, shadowIn}, normalisedRecordClass, layers [{slot, module, validatorPath, validatorSha256,
 testFilePath?, testFileSha256?, authorityPath, authoritySha256, inputs {path: sha256}, nodes [{nodeSha256, setup, call,
 teardown}], seconds}], checkPairs [{layerSlot, pairsPath, ids [a, b], type}], fullRunProof, writingRun, sizeBytes,
-sizeBound. Every digest is at the checkpoint tree.
+sizeBound, exclusion {files, pinLine} (MON-282-W2-RULED: the step's own products, never an input; the
+pinLine file is attested with its AUTHORITY_SHA256 line normalised, pin_normalised). Every digest is at the
+checkpoint tree.
 
 The rebuild (D9 (a)): for each attested file, undo newest first the reverseHunks of every authority newer than the
 checkpoint (baseline catalog larger than checkpointBaseline), byte-exact, afterSha256 and beforeSha256 checked; each
-each authority keeps v2.1's eight-member form and three-key hunks; a classed authority's classes live in its
+authority keeps v2.1's eight-member form and three-key hunks; a classed authority's classes live in its
 closed hunk-class record (HUNK_CLASSES_DIR/<slot>.json, MON-282-W1-A2: exactly authorityPath, hunkClassVocabulary,
 hunkClassRuleSha256, hunkClassContext {newPacket == authorityPacket, prevValidator, prevTest, steps == [1, 1 + K]}
 and classes {path: one class per reverse hunk, in the authority's order}), an ordinary new file of its step that
 the authority's newFiles names by sha256, checked after the entry's shape (entry_fault) and before any class is
 trusted; a missing, unnamed, digest-mismatched, malformed, miscounted or duplicated record, or an authority that
-carries classes itself, is class A; each recorded class is re-checked by the rule copied
-below, and only classes in normalised() are undone (cascade and bridge, plus record when normalisedRecordClass).
+carries classes itself, is class A; each recorded class is re-checked by the rule its record names
+(RULES_BY_SHA: chainmech v2.2's or v2.3's; one copy below, v2.2's being v2.3's with register off), and only classes
+in normalised() are undone (cascade, bridge and register, plus record when normalisedRecordClass).
 
 The shadow record (one JSON line in the session's log, prefixed "chain-checkpoint shadow record:"): headSha,
 readerSeconds, capSeconds, overCap, workers and workersSource, shadowIn, mode, naming, attested (every ledger slot),
@@ -39,7 +42,8 @@ sampled, layers {slot: {recorded, live, agree, writingSeconds, liveSeconds}}, re
 The kinds, their classes and their countEffects are architecture/chain-checkpoint/README.md's countEffect table, the
 single source; COUNT_EFFECT below mirrors it, and the module tests pin the two equal. A kind is set by cause, never by
 an exception's type: corrupt is exactly what check_ledger, _authorities, entry_fault and newer_authorities refuse
-(the README's corrupt row), naming the file and the member; any other exception of the reader is fault. A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the authorities newer than
+(the README's corrupt row), naming the file and the member; any other exception of the reader is fault, and so is a failing clock (one record
+per reading, "the clock failed"; P047-ORACLE-B1). A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the authorities newer than
 the checkpoint by baseline, one authority per slot: their baselines and authorityPackets are distinct; null when the
 ledger was not read or its slots are malformed). A fault's or a corrupt record's detail names its exception class;
 every class-C detail names the head slot and the checkpoint slot. An attested file whose only miss is at its newest recorded
@@ -53,6 +57,7 @@ import base64
 import difflib
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -67,7 +72,8 @@ CAP_SECONDS = 15.0
 SERIAL_ENV = "PLANEON_PARALLEL_SUITE_SERIAL"
 OUTERMOST = SERIAL_ENV not in os.environ
 MODE = "shadow"                                       # 047; the writer refuses any other (condition (i))
-RULE_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
+RULE_SHA256 = "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f"   # the pinned hunk_class_v23.py (MON-282-W2-RULED)
+RULE_V22_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
 PREFIX = "chain-checkpoint shadow:"
 RECORD_LINE = "chain-checkpoint shadow record:"
 COUNT_EFFECT = {"input": ("A", "restart"), "stale": ("A", "restart"), "outcome": ("B", "restart"),
@@ -77,10 +83,14 @@ UNAUTHORED_MISS = "afterSha256 differs before the replay"
 HUNK_CLASSES_DIR = "architecture/chain-checkpoint/hunk-classes"     # MON-282-W1-A2: one closed record per classed authority
 SIDE_MEMBERS = frozenset({"authorityPath", "hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext", "classes"})
 CLASS_MEMBERS = ("hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext")
+PIN_LINE_PATTERN = rb'^AUTHORITY_SHA256 = "[^"]*"\n'     # MON-282-W2-RULED: the head validator's one pin line
+PIN_PLACEHOLDER = b'AUTHORITY_SHA256 = "TO_BE_PINNED_AFTER_SOURCE_FREEZE"\n'
+EXCLUSION_MEMBERS = frozenset({"files", "pinLine"})
 
-# ---- chainmech v2.2's class rule (hunk_class_v22.py), copied byte for byte by make_c2_282.py ----
-CLASSES = ("bridge", "cascade", "other", "record")   # the closed vocabulary, sorted; pinned in each authority from 282 on
-NORMALISED = frozenset(("bridge", "cascade", "record"))   # "record" pending Q-V22-1
+# ---- chainmech v2.3's class rule (hunk_class_v23.py), copied byte for byte by patch_f_src.py; v2.2's rule is this
+# ---- one with register=False (RULES_BY_SHA below) ----
+CLASSES = ("bridge", "cascade", "other", "record", "register")   # v2.3's closed vocabulary, sorted
+NORMALISED = frozenset(("bridge", "cascade", "record", "register"))   # "record" when normalisedRecordClass is true
 RECORDS = frozenset(("architecture/review-record/briefs.json", "task-packets/README.md",
                      "docs/repositories/00-harness-engineering.md", "docs/MASTER_DEVELOPMENT_PLAN.md"))
 TOKEN = re.compile(rb"\d+|[A-Za-z_][A-Za-z_0-9]*|\s+|.", re.S)  # strings split too: a count inside a message is a digit token
@@ -211,16 +221,63 @@ def record_class(path, after, at, remove, insert, new_id, seen=None):
     return "record"
 
 
-def classify(path, after, at, remove, insert, prev_validator, prev_test, new_id, steps=(1,), seen=None):
+READINESS, PLAN = "scripts/validate_readiness.py", "docs/MASTER_DEVELOPMENT_PLAN.md"
+REGISTER_FORMS = {READINESS: "block", PLAN: "status"}
+BLOCK = ('    authority_owner.update({path: "%s"\n'
+         '                            for path in packets["%s"]["allowedPaths"]\n'
+         '                            if path in authority_owner or path.startswith(("architecture/", "scripts/"))})\n'
+         '    authority_owner["task-packets/%s.yaml"] = "%s"\n')
+OWNED = re.compile(rb'    authority_owner\["task-packets/([A-Z0-9-]+)\.yaml"\] = "([A-Z0-9-]+)"\n\Z')
+
+
+def register_class(path, after, at, remove, insert, new_id, seen=None):
+    """v2.3: "register" when the forward edit is exactly this step's registration in one of the two files, in its
+    position and once per file; else "other". readiness "block": an insertion of BLOCK for new_id plus zero or more
+    product lines owned by new_id, right after a packet's own task-packets line. plan "status": one "- [ ] " line
+    becomes itself ticked plus one new "- [ ] " line naming new_id."""
+    form = REGISTER_FORMS.get(path)
+    if form is None or not remove:
+        return "other"
+    before = after[:at] + insert + after[at + len(remove):]
+    al, bl = after.splitlines(True), before.splitlines(True)
+    ops = [o for o in difflib.SequenceMatcher(None, bl, al, autojunk=False).get_opcodes() if o[0] != "equal"]
+    if len(ops) != 1:
+        return "other"
+    tag, a0, a1, i, j = ops[0]
+    nid = new_id.encode()
+    ok = False
+    if form == "block" and tag == "insert" and i > 0:
+        block = BLOCK.encode() % (nid, nid, nid, nid)
+        lines = al[i:j]
+        head = b"".join(lines[:4])
+        prev = OWNED.match(al[i - 1])
+        ok = (head == block and all((m := OWNED.match(l)) and m.group(2) == nid for l in lines[4:])
+              and bool(prev) and prev.group(1) == prev.group(2))
+    elif form == "status" and tag == "replace" and a1 - a0 == 1 and j - i == 2:
+        old, new0, new1 = bl[a0], al[i], al[i + 1]
+        ok = (old.startswith(b"- [ ] ") and new0 == b"- [x] " + old[len(b"- [ ] "):]
+              and new1.startswith(b"- [ ] ") and (b" / " + nid + b" \xc2\xb7 ") in new1)
+    if not ok:
+        return "other"
+    if seen is not None:
+        if form in seen:
+            return "other"
+        seen.add(form)
+    return "register"
+
+
+def classify(path, after, at, remove, insert, prev_validator, prev_test, new_id, steps=(1,), seen=None, register=True):
     """The closed class of one reverse hunk (remove: its bytes in AFTER; insert: the BEFORE bytes), judged on the whole
     lines it touches. cascade: before -> after differs only by (a) at most one appended element - a successor chain
     (optionally behind one attribute, starred for PRODUCT_PACKETS) or the new id's string, with its comma - (b) digit
     tokens moving +step and (c) inserted "successor." runs, or it is the (v) tuple form. bridge: any hunk in the previous
-    head's validator or test. other: anything else (a real edit)."""
+    head's validator or test. register (v2.3, register=True): where this would be other, register_class's two forms.
+    other: anything else (a real edit)."""
     if path in (prev_validator, prev_test):
         return "bridge"
     if path in RECORDS:
-        return record_class(path, after, at, remove, insert, new_id, seen)
+        c = record_class(path, after, at, remove, insert, new_id, seen)
+        return register_class(path, after, at, remove, insert, new_id, seen) if c == "other" and register else c
     a_lines, b_lines = _lines(after, at, remove, insert)
     if re.search(rb"==\s*(successor\.)+NEW_PACKET", b_lines) and \
             re.search(rb"in\s*\(\s*(successor\.)+NEW_PACKET,\s*(successor\.)+NEW_PACKET\s*\)", a_lines):
@@ -244,7 +301,7 @@ def classify(path, after, at, remove, insert, prev_validator, prev_test, new_id,
         for cut in ((left.start(), e) if left else None, (s, e + right.end()) if right else None):
             if cut and _rest_ok(b_lines, a_lines[:cut[0]] + a_lines[cut[1]:], step):
                 return "cascade"
-    return "other"
+    return register_class(path, after, at, remove, insert, new_id, seen) if register else "other"
 
 
 def _finds(raw, needle):
@@ -255,6 +312,8 @@ def _finds(raw, needle):
 
 
 # ---- end of the copied rule; its NORMALISED constant is not used here: normalised() decides ----
+VOCABULARY_V22 = ("bridge", "cascade", "other", "record")   # chainmech v2.2's closed vocabulary
+RULES_BY_SHA = {RULE_V22_SHA256: (VOCABULARY_V22, False), RULE_SHA256: (CLASSES, True)}   # (vocabulary, register)
 
 
 def _sha(raw):
@@ -322,17 +381,22 @@ def naming_authority(root, live_sha, budget=None, auths=None):
 
 def _hunk_class_records(root, budget=None):
     """MON-282-W1-A2: every hunk-class record, {path: (sha256 of its bytes, its parsed object or None)}. Never a
-    refusal here: a record that does not parse is judged when an authority names it (class A)."""
+    refusal here: a record that does not parse, and an entry that is a link, not a file or unreadable ((None, None),
+    read as _read reads, P047-C6-5), are judged only when an authority names them (class A)."""
     out = {}
     for p in sorted((root / HUNK_CLASSES_DIR).glob("*.json")):
         if budget:
             budget()
-        raw = p.read_bytes()
+        rel = p.relative_to(root).as_posix()
+        raw = _read(root, rel)
+        if raw is None:
+            out[rel] = (None, None)
+            continue
         try:
             side = json.loads(raw)
         except ValueError:
             side = None
-        out[p.relative_to(root).as_posix()] = (_sha(raw), side)
+        out[rel] = (_sha(raw), side)
     return out
 
 
@@ -356,6 +420,8 @@ def attach_classes(apath, rec, sides):
     if named[0] not in sides:
         return bad("the hunk-class record the authority names is missing")
     side_sha, side = sides[named[0]]
+    if side_sha is None:
+        return bad("the hunk-class record the authority names is a link, not a file, or unreadable")
     if rec["newFiles"][named[0]] != side_sha:
         return bad("the hunk-class record's bytes do not hash to the authority's digest")
     if not isinstance(side, dict):
@@ -391,14 +457,19 @@ def attach_classes(apath, rec, sides):
 def newer_authorities(root, baseline, budget=None, auths=None, sides=None):
     out = [(n, path, rec) for n, path, rec in (auths if auths is not None else _authorities(root, budget)) if n > baseline]
     out.sort(key=lambda t: -t[0])
-    if len({n for n, _, _ in out}) != len(out):
-        raise Corrupt("two newer authorities share a baseline size")
-    packets = [rec.get("authorityPacket") for _, _, rec in out]
-    for (_, path, _), packet in zip(out, packets):
+    by_size, by_packet = {}, {}
+    for n, path, _ in out:     # P047-ORACLE-B3: a conflict names both authorities
+        if n in by_size:
+            raise Corrupt("two newer authorities share a baseline size: %s and %s" % (by_size[n], path))
+        by_size[n] = path
+    for _, path, rec in out:
+        packet = rec.get("authorityPacket")
         if not (isinstance(packet, str) and packet):
             raise Corrupt("authority %s authorityPacket" % path)
-    if len(set(packets)) != len(packets):
-        raise Corrupt("two newer authorities name one authorityPacket (one authority per slot, P047-C4-2)")
+        if packet in by_packet:
+            raise Corrupt("two newer authorities name one authorityPacket (one authority per slot, P047-C4-2): %s and %s"
+                          % (by_packet[packet], path))
+        by_packet[packet] = path
     if not out:
         return out
     sides = sides if sides is not None else _hunk_class_records(root, budget)     # MON-282-W1-A
@@ -419,15 +490,18 @@ def bind_context(apath, rec):
         return "productPackets is not an object"
     if ctx["steps"] != [1, 1 + len(rec.get("productPackets", {}))]:
         return "hunkClassContext.steps is not [1, 1 + K]"
-    if rec.get("hunkClassVocabulary") != list(CLASSES):
-        return "hunkClassVocabulary is not the closed vocabulary"
-    if rec.get("hunkClassRuleSha256") != RULE_SHA256:
-        return "hunkClassRuleSha256 is not the copied rule's"
+    rule_sha = rec.get("hunkClassRuleSha256")
+    rule = RULES_BY_SHA.get(rule_sha) if isinstance(rule_sha, str) else None
+    if rule is None:     # MON-282-W2-RULED: the record's rule picks its vocabulary and whether register is decided
+        return "hunkClassRuleSha256 is not a rule the reader holds (v2.2 or v2.3)"
+    if rec.get("hunkClassVocabulary") != list(rule[0]):
+        return "hunkClassVocabulary is not the closed vocabulary of its rule"
     return None
 
 
 def normalised(record):
-    return frozenset(("bridge", "cascade") + (("record",) if record.get("normalisedRecordClass") is True else ()))
+    extra = ("record",) if record.get("normalisedRecordClass") is True else ()
+    return frozenset(("bridge", "cascade", "register") + extra)
 
 
 def check_ledger(record):
@@ -458,6 +532,14 @@ def check_ledger(record):
     for i, e in enumerate(pairs):
         need(isinstance(e, dict) and type(e.get("layerSlot")) is int and isinstance(e.get("type"), str)
              and isinstance(e.get("ids"), list) and all(isinstance(x, str) for x in e["ids"]), "checkPairs[%d]" % i)
+    if "exclusion" in record:     # MON-282-W2-RULED: the step's own products, never an attested input
+        ex = record["exclusion"]
+        need(isinstance(ex, dict) and set(ex) == EXCLUSION_MEMBERS, "exclusion is not {files, pinLine}")
+        need(isinstance(ex["files"], list) and all(isinstance(p, str) for p in ex["files"])
+             and ex["files"] == sorted(set(ex["files"])), "exclusion.files")
+        need(isinstance(ex["pinLine"], str), "exclusion.pinLine")
+        for i, layer in enumerate(record["layers"]):
+            need(not set(ex["files"]) & set(layer["inputs"]), "layers[%d].inputs names an excluded file" % i)
 
 
 def head_slot(record, auths):
@@ -511,6 +593,7 @@ def rebuild(path, live, newer, norm, budget=None):
             unexplained.append((apath, bad))
             return cur, reverted, unexplained
         ctx, keep, seen, prior = rec["hunkClassContext"], [], set(), -1
+        register = RULES_BY_SHA[rec["hunkClassRuleSha256"]][1]     # bind_context checked the rule
         pending = len(entry["reverseHunks"])
         if _sha(cur) != entry["afterSha256"]:
             share = sum(1 for h in entry["reverseHunks"] if h.get("class") in norm)
@@ -527,7 +610,7 @@ def rebuild(path, live, newer, norm, budget=None):
                 return cur, reverted, unexplained
             cls = h.get("class")
             again = classify(path, cur, h["at"], rm, ins, ctx["prevValidator"], ctx["prevTest"], ctx["newPacket"],
-                             tuple(ctx["steps"]), seen=seen)
+                             tuple(ctx["steps"]), seen=seen, register=register)
             if cls != again:
                 unexplained.append((apath, "recorded class %s fails the re-check (%s)" % (cls, again)))
                 return cur, reverted, unexplained
@@ -554,20 +637,29 @@ def unauthored(reverted, unexplained):
     return not reverted and (not unexplained or (len(unexplained) == 1 and unexplained[0][1].startswith(UNAUTHORED_MISS)))
 
 
+def pin_normalised(raw, default=None):
+    """MON-282-W2-RULED: the head validator's bytes with its one AUTHORITY_SHA256 pin line set to PIN_PLACEHOLDER, as
+    the writer attests it (the pin is filled after the ledger is written); default when the line is not exactly one."""
+    if len(re.findall(PIN_LINE_PATTERN, raw, re.M)) != 1:
+        return default
+    return re.sub(PIN_LINE_PATTERN, lambda m: PIN_PLACEHOLDER, raw, count=1, flags=re.M)
+
+
 RULED_PAIR_TYPES = frozenset(("supersession",))
 
 
 def check_pairs(entries):
-    """V006-P2-2: each entry two distinct ids and a ruled pair type; no entry repeated. Returns the faults."""
+    """V006-P2-2: each entry two distinct ids and a ruled pair type; no entry repeated. Returns the faults, each naming
+    the ledger and the entry (P047-ORACLE-B2)."""
     seen, faults = set(), []
-    for e in entries:
+    for i, e in enumerate(entries):
         ids = e.get("ids")
         if not (isinstance(ids, list) and len(ids) == 2 and ids[0] != ids[1]) or e.get("type") not in RULED_PAIR_TYPES:
-            faults.append("check_pairs entry self-paired, not a pair, or unruled (slot %s)" % e.get("layerSlot"))
+            faults.append("ledger checkPairs[%d]: self-paired, not a pair, or unruled (slot %s)" % (i, e.get("layerSlot")))
             continue
         key = (e.get("layerSlot"), tuple(sorted(ids)))
         if key in seen:
-            faults.append("check_pairs entry repeated (slot %s)" % e.get("layerSlot"))
+            faults.append("ledger checkPairs[%d]: repeated (slot %s)" % (i, e.get("layerSlot")))
         seen.add(key)
     return faults
 
@@ -603,11 +695,28 @@ class Reader:
         self.disagreements, self.reverted, self.layers, self.unauthored = [], {}, {}, set()
         self.live, self.durations, self.sampled, self.naming, self.over_cap = {}, {}, [], None, False
         self._t0 = 0.0
+        self._clock_fault, self._last_clock = False, 0.0
         self.head_slot, self.ckpt_slot, self.ledger_state = None, None, None
 
     def _budget(self):
-        if self.spent + (self.clock() - self._t0) > self.cap:
+        if self.spent + (self._now() - self._t0) > self.cap:
             raise OverBudget()
+
+    def _now(self):
+        """P047-ORACLE-B1: the clock, never raising. A clock that raises, or reads as no finite number, is one class-C
+        fault per reading ("the clock failed"); its last good reading stands in from then on."""
+        if not self._clock_fault:
+            try:
+                value = float(self.clock())
+                if math.isfinite(value):
+                    self._last_clock = value
+                    return value
+                raise ValueError("not a finite number")
+            except Exception as exc:
+                self._clock_fault = True
+                self.disagreements.append((self.head_slot, "reader", "C", "%s: the clock failed: %s; %s"
+                                           % (type(exc).__name__, str(exc)[:120], self._slots()), "fault"))
+        return self._last_clock
 
     def _slots(self):
         if self.head_slot is None:
@@ -615,7 +724,7 @@ class Reader:
         return "head slot %s, checkpoint slot %s" % (self.head_slot, self.ckpt_slot)
 
     def _timed(self, fn, *args):
-        self._t0 = start = self.clock()
+        self._t0 = start = self._now()
         try:
             return fn(*args)
         except OverBudget:
@@ -626,7 +735,7 @@ class Reader:
             kind = "corrupt" if isinstance(exc, Corrupt) else "fault"     # C3-1: by cause
             self.disagreements.append((self.head_slot, "reader", "C", "%s: %s; %s" % (type(exc).__name__, str(exc)[:200], self._slots()), kind))
         finally:
-            self.spent += self.clock() - start
+            self.spent += self._now() - start
 
     def start(self):
         self._timed(self._start)
@@ -663,6 +772,7 @@ class Reader:
             return
         self.mode = "compare"
         norm = normalised(record)
+        pin = record.get("exclusion", {}).get("pinLine")     # MON-282-W2-RULED: compared with its pin line normalised
         for layer in sorted(record["layers"], key=lambda l: -l["slot"]):
             files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"]}
             if layer.get("testFilePath"):
@@ -678,6 +788,8 @@ class Reader:
                     rebuilt, reverted, unexplained = rebuild(path, live, newer, norm, self._budget)
                     if reverted:
                         self.reverted.setdefault(layer["slot"], []).append([path, [[a, c] for a, c in reverted]])
+                    if path == pin:
+                        rebuilt = pin_normalised(rebuilt, rebuilt)
                     if _sha(rebuilt) != digest:
                         detail = "; ".join("%s: %s" % u for u in unexplained) or "differs from its checkpoint digest"
                         if unauthored(reverted, unexplained):     # C3-4: edited since its newest recorded state
@@ -697,26 +809,26 @@ class Reader:
 
     def report(self, nodeid, when, outcome, duration=0.0):
         if self.active and self.mode == "compare":
-            start = self.clock()
+            start = self._now()
             try:
                 key = node_hash(nodeid)
                 self.live.setdefault(key, {})[when] = outcome
                 self.durations[key] = self.durations.get(key, 0.0) + float(duration or 0.0)
             finally:
-                self.spent += self.clock() - start
+                self.spent += self._now() - start
 
     def finish(self, head_sha=None):
         if not self.active:
             return None, None
         self._timed(self._finish)
-        start = self.clock()
+        start = self._now()
         try:
             head = head_sha or _git(self.root, "rev-parse", "HEAD")
         except Exception as exc:
             head = "unknown"
             self.disagreements.append((self.head_slot, "reader", "C", "%s: head sha: %s; %s" % (type(exc).__name__, str(exc)[:120],
                                                                                                 self._slots()), "fault"))
-        self.spent += self.clock() - start
+        self.spent += self._now() - start
         if self.spent > self.cap and not self.over_cap:
             self.over_cap = True
             self.disagreements.append((self.head_slot, "reader", "C", "over cap: %.3f s over %.0f s; the dry-run path; %s"

@@ -1032,7 +1032,8 @@ OWN_PATH = "task-packets/MET-PERF-047.yaml"
 V_TESTS = {
     "V1": ("test_v1_the_packet_files_are_exactly_the_seven_at_their_digests",
            "test_v1_the_oracle_identity_binds_the_kept_oracle_test"),
-    "V2": ("test_v2_the_ledger_is_the_closed_slot_282_checkpoint", "test_v2_the_ledger_layers_are_the_chain_walk"),
+    "V2": ("test_v2_the_ledger_is_the_closed_slot_282_checkpoint", "test_v2_the_ledger_layers_are_the_chain_walk",
+           "test_v2_the_ledger_is_bound_by_the_authority_s_newfiles_digest"),
     "V3": ("test_v3_the_conftest_loads_the_reader_guarded_outermost_only",),
     "V4": ("test_v4_the_registry_differs_from_the_base_by_the_one_rider",),
     "V5": ("test_v5_every_attested_file_has_its_checkpoint_digest",),
@@ -1049,6 +1050,8 @@ V2_PAIRS = "the ledger's check pairs are ruled supersessions"
 V2_SIZE = "the ledger's size is its length, within its bound"
 V2_MEMBERS = "the ledger's layers have their closed members"
 V2_WALK = "the ledger's layers are the chain walk 189-281"
+V2_EXCLUSION = "the ledger's exclusion is this step's write set, and no layer attests an excluded file"
+V2_BOUND = "the ledger is bound by the authority's newFiles digest"
 V3_LOAD = "the root conftest.py loads the chain checkpoint reader guarded, outermost only"
 V3_DOC = "the root conftest.py's docstring is the contract's"
 V4_MESSAGE = "the registry differs from the base by exactly the MET-PERF-047 packet rider"
@@ -1098,7 +1101,8 @@ def _test_ledger():
             "writingRun": {"statedDifferences": list(profile.STATED), "captureEnv": list(profile.CAPTURE_ENV),
                            "captureObservesOnly": True, "outsideReads": 0, "argvRunSummarySha256": "0" * 64,
                            "verifyReference": "none: a test ledger"},
-            "sizeBound": 10 ** 8, "sizeBytes": 0}
+            "sizeBound": 10 ** 8, "sizeBytes": 0,
+            "exclusion": {"files": list(profile.EXCLUSION_FILES), "pinLine": profile.VALIDATOR_PATH}}
 
 
 def _ledger_raw(ledger):
@@ -1120,11 +1124,15 @@ def test_the_contract_holds_for_this_era():
     assert VALIDATE(_chain_packets()) is None
 
 
-def test_the_era_holds_the_packet_files_the_conftest_the_registry_the_brief_and_the_ledger():
+def test_the_era_holds_the_packet_files_the_conftest_the_registry_and_the_brief_never_the_ledger():
     assert not hasattr(profile, "PRODUCT_PACKETS")
-    assert len(profile.PACKET_FILES) == 7 and len(profile.ERA_SHA256) == 11
-    assert set(profile.PACKET_FILES) | {profile.REGISTRY_PATH, profile.PACKET_BRIEF, profile.CONFTEST_PATH,
-                                        profile.LEDGER_PATH} == set(profile.ERA_SHA256)
+    assert len(profile.PACKET_FILES) == 7 and len(profile.ERA_SHA256) == 10
+    assert set(profile.PACKET_FILES) | {profile.REGISTRY_PATH, profile.PACKET_BRIEF, profile.CONFTEST_PATH} \
+        == set(profile.ERA_SHA256)
+    # MON-282-W2-ORDER: the ledger is never an era file; the authority's newFiles names it.
+    assert profile.LEDGER_PATH not in profile.ERA_SHA256
+    assert profile.EXCLUSION_FILES == tuple(sorted((profile.AUTHORITY_PATH, profile.HUNK_RECORD_PATH,
+                                                    profile.LEDGER_PATH)))
     for path, expected in profile.ERA_SHA256.items():
         assert _sha(profile.reviewed_bytes(path)) == expected
     # No chain validator or chain test is pinned, and the hunk-class record is bound through the authority's newFiles.
@@ -1133,6 +1141,7 @@ def test_the_era_holds_the_packet_files_the_conftest_the_registry_the_brief_and_
     record = profile.authority()
     assert "productPackets" not in record and len(record["baselinePackets"]) == 288
     assert profile.HUNK_RECORD_PATH in record["newFiles"] and profile.HUNK_RECORD_PATH not in profile.ERA_SHA256
+    assert profile.LEDGER_PATH in record["newFiles"]
 
 
 def test_every_check_has_a_test_that_makes_it_fail():
@@ -1191,7 +1200,8 @@ def test_v1_the_oracle_identity_binds_the_kept_oracle_test(change):
 
 @pytest.mark.parametrize("change", ["member", "slot", "baseline", "schema", "not_json", "parameter", "shadow_in",
                                     "proof_executed", "proof_deselected", "stated", "capture_env", "pair_unruled",
-                                    "pair_ids", "size", "bound"])
+                                    "pair_ids", "size", "bound", "exclusion_files", "exclusion_pin", "exclusion_missing",
+                                    "excluded_input"])
 def test_v2_the_ledger_is_the_closed_slot_282_checkpoint(change):
     ledger = _test_ledger()
     sources = _sources(ledger)
@@ -1225,6 +1235,14 @@ def test_v2_the_ledger_is_the_closed_slot_282_checkpoint(change):
         message = V2_PAIRS
     elif change == "bound":
         ledger["sizeBound"], message = 10, V2_SIZE
+    elif change == "exclusion_files":
+        ledger["exclusion"]["files"], message = list(profile.EXCLUSION_FILES[:2]), V2_EXCLUSION
+    elif change == "exclusion_pin":
+        ledger["exclusion"]["pinLine"], message = "scripts/validate_authority_map.py", V2_EXCLUSION
+    elif change == "exclusion_missing":
+        del ledger["exclusion"]
+    elif change == "excluded_input":
+        ledger["layers"][-1]["inputs"][profile.HUNK_RECORD_PATH], message = "0" * 64, V2_EXCLUSION
     raw = b"{" if change == "not_json" else _ledger_raw(ledger)
     if change == "size":
         raw, message = raw + b"\n", V2_SIZE
@@ -1261,6 +1279,24 @@ def test_v2_the_ledger_layers_are_the_chain_walk(change):
     else:
         with pytest.raises(ValueError, match=re.escape(message)):
             profile.check_walk(ledger["layers"], sources)
+
+
+@pytest.mark.parametrize("change", ["digest", "unnamed", "not_bytes", "era"])
+def test_v2_the_ledger_is_bound_by_the_authority_s_newfiles_digest(change):
+    raw = b'{"a ledger": 1}\n'
+    era = profile.ERA_SHA256
+    assert profile.check_ledger_bound(raw, _sha(raw), era) is None
+    named = _sha(raw)
+    if change == "digest":
+        named = _sha(raw + b" ")
+    elif change == "unnamed":
+        named = None
+    elif change == "not_bytes":
+        raw = raw.decode()
+    else:
+        era = dict(profile.ERA_SHA256, **{profile.LEDGER_PATH: named})
+    with pytest.raises(ValueError, match=re.escape(V2_BOUND)):
+        profile.check_ledger_bound(raw, named, era)
 
 
 # V3, the root conftest.py ------------------------------------------------------------------------------------------------
@@ -1315,12 +1351,14 @@ def test_v4_the_registry_differs_from_the_base_by_the_one_rider(change):
 
 # V5, the attested digests ------------------------------------------------------------------------------------------------
 
-@pytest.mark.parametrize("change", ["validator", "authority", "test", "input", "read_byte"])
+@pytest.mark.parametrize("change", ["validator", "authority", "test", "input", "read_byte", "head_byte", "head_pin"])
 def test_v5_every_attested_file_has_its_checkpoint_digest(change):
     ledger = _test_ledger()
+    layer = ledger["layers"][-1]
+    # The head validator, attested by its normalized digest (the authority's validatorNormalizedSha256, v2.1's rule).
+    layer["inputs"][profile.VALIDATOR_PATH] = profile.authority()["validatorNormalizedSha256"]
     read = lambda path, expected: profile.reviewed_bytes(path)
     assert profile.check_attested(ledger, read) is None
-    layer = ledger["layers"][-1]
     if change == "validator":
         layer["validatorSha256"], path = "0" * 64, layer["validatorPath"]
     elif change == "authority":
@@ -1331,9 +1369,16 @@ def test_v5_every_attested_file_has_its_checkpoint_digest(change):
     elif change == "input":
         path = profile.CONFTEST_PATH
         layer["inputs"][path] = "1" * 64
-    else:
+    elif change == "read_byte":
         path = layer["validatorPath"]
         read = lambda given, expected: profile.reviewed_bytes(given) + (b" " if given == path else b"")
+    elif change == "head_byte":
+        path = profile.VALIDATOR_PATH
+        read = lambda given, expected: profile.reviewed_bytes(given) + (b"#\n" if given == path else b"")
+    else:
+        path, pin = profile.VALIDATOR_PATH, profile.AUTHORITY_SHA256.encode("ascii")
+        read = lambda given, expected: (profile.reviewed_bytes(given).replace(pin, b"f" * 64) if given == path
+                                        else profile.reviewed_bytes(given))
     with pytest.raises(ValueError, match=re.escape("an attested file's checkpoint digest equals its reviewed bytes: "
                                                    "%s (slot %s)" % (path, layer["slot"]))):
         profile.check_attested(ledger, read)
@@ -1357,11 +1402,12 @@ def test_v6_the_hunk_class_record_holds_for_this_era():
 
 @pytest.mark.parametrize("change", ["member", "authority_path", "vocabulary", "rule_sha", "reader_rule", "context_packet",
                                     "context_steps", "file_missing", "count_short", "not_a_string", "relabelled",
-                                    "not_json"])
+                                    "not_json", "v22_rule"])
 def test_v6_the_hunk_class_record_rechecks_in_full(change):
     raw, changed, afters, classify = _hunk_inputs()
     record = json.loads(raw)
     rule_sha, message = profile.HUNK_RULE_SHA256, V6_CLOSED
+    assert profile.HUNK_VOCABULARY == ("bridge", "cascade", "other", "record", "register")
     cascade = next((path, n) for path, classes in record["classes"].items() for n, cls in enumerate(classes)
                    if cls == "cascade")
     if change == "member":
@@ -1372,6 +1418,9 @@ def test_v6_the_hunk_class_record_rechecks_in_full(change):
         record["hunkClassVocabulary"], message = ["bridge", "cascade", "other"], V6_PINNED
     elif change == "rule_sha":
         record["hunkClassRuleSha256"], message = "0" * 64, V6_PINNED
+    elif change == "v22_rule":
+        record["hunkClassRuleSha256"] = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"
+        record["hunkClassVocabulary"], message = ["bridge", "cascade", "other", "record"], V6_PINNED
     elif change == "reader_rule":
         rule_sha, message = None, V6_PINNED
     elif change == "context_packet":

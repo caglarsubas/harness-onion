@@ -1,4 +1,4 @@
-"""MET-PERF-047: the chain checkpoint's reader and writer, vectors 1-13 (architecture/chain-checkpoint/vectors.json).
+"""MET-PERF-047: the chain checkpoint's reader and writer, vectors 1-14 (architecture/chain-checkpoint/vectors.json).
 Each case builds its own small repository under tmp_path, except the vector-11 case on 281's published authority,
 which rebuilds 281's edited files to each beforeSha256 with the reader's own rebuild, under 281's context, after every
 newer authority's replay: it never requires a file to be still at 281's afterSha256. Its pending files are accepted by
@@ -32,7 +32,6 @@ CK = _load("ci/chain_checkpoint.py", "_t047_chain_checkpoint")
 WR = _load("scripts/chain_checkpoint_writer.py", "_t047_chain_checkpoint_writer")
 sha = lambda raw: hashlib.sha256(raw).hexdigest()
 VECTORS = {v["id"]: v for v in json.loads((ROOT / "architecture/chain-checkpoint/vectors.json").read_bytes())["vectors"]}
-PARTIAL_OK = {"scripts/validate_readiness.py", "docs/MASTER_DEVELOPMENT_PLAN.md"}   # 281's own `other` hunks
 LATER_EDIT = "of a class not normalised"   # a newer authority's real edit, as rebuild() words it
 
 
@@ -240,7 +239,7 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
     classed.update(authorityPacket="MET-ADOPT-007", hunkClassVocabulary=list(CK.CLASSES), hunkClassRuleSha256=CK.RULE_SHA256,
                    hunkClassContext=ctx)
     newer = CK.newer_authorities(ROOT, len(auth["baselinePackets"]))
-    norm, exact, partial, pending, unauthored = frozenset(("bridge", "cascade", "record")), 0, set(), 0, set()
+    norm, exact, partial, pending, unauthored = CK.normalised({"normalisedRecordClass": True}), 0, set(), 0, set()
     for path, entry in classed["changedFiles"].items():
         live = (ROOT / path).read_bytes()
         at281, reverted, unexplained = CK.rebuild(path, live, newer, norm)
@@ -266,7 +265,8 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
                                                                            sorted(unauthored)))
     if os.environ.get("HARNESS_OFFLINE_ENFORCED") == "1":     # every runner execution: none unauthored (C3-4 condition 1)
         assert not unauthored, sorted(unauthored)
-    assert partial <= PARTIAL_OK and exact + len(partial) + pending == len(auth["changedFiles"]) and exact > 0
+    # chainmech v2.3: 281's two `other` hunks (its readiness block and plan status line) are register, so none is partial
+    assert not partial and exact + pending == len(auth["changedFiles"]) and exact > 0
 
 
 def test_v12_one_byte_beside_the_cascade_is_class_a_with_its_share(tmp_path):
@@ -504,3 +504,216 @@ def test_a_reordered_hunk_class_record_fails_the_recheck(tmp_path):
     _bind(root, apath, (json.dumps(side) + "\n").encode())
     found = _reader(root).disagreements
     assert [(d[2], d[4]) for d in found] == [("A", "input")] and "fails the re-check" in found[0][3]
+
+
+def test_the_clock_failing_is_one_fault_and_never_raises(tmp_path):
+    """P047-ORACLE-B1, R00's own case: a clock that works once, then raises on every reading."""
+    readings = iter([0.0])
+
+    def clock():
+        for value in readings:
+            return value
+        raise RuntimeError("the clock is gone")
+    reader = CK.Reader(root=_repo(tmp_path), tree="0" * 40, clock=clock)
+    reader.start()
+    for when in ("setup", "call", "teardown"):
+        reader.report("tests/test_l281.py::test_x", when, "passed", 0.1)
+    line, record = reader.finish("f" * 40)
+    assert [(d["class"], d["kind"]) for d in record["disagreements"]] == [("C", "fault")]
+    assert record["disagreements"][0]["detail"].startswith("RuntimeError: the clock failed: the clock is gone")
+    assert line.startswith(CK.PREFIX) and record["mode"] == "compare" and record["layers"]["281"]["agree"] is True
+
+
+@pytest.mark.parametrize("value", [object(), float("nan"), None])
+def test_a_clock_reading_no_finite_number_is_one_fault(tmp_path, value):
+    reader = CK.Reader(root=_repo(tmp_path), tree="0" * 40, clock=lambda: value)
+    reader.start()
+    _, record = reader.finish("f" * 40)
+    faults = [d for d in record["disagreements"] if d["class"] == "C"]
+    assert [d["kind"] for d in faults] == ["fault"] and "the clock failed" in faults[0]["detail"]
+
+
+@pytest.mark.parametrize("pairs, index, reason", [
+    ([{"layerSlot": 279, "ids": ["A-1", "A-1"], "type": "supersession"}], 0, "self-paired, not a pair, or unruled"),
+    ([{"layerSlot": 279, "ids": ["A-1", "B-1"], "type": "unruled"}], 0, "self-paired, not a pair, or unruled"),
+    ([{"layerSlot": 279, "ids": ["A-1", "B-1"], "type": "supersession"}] * 2, 1, "repeated")])
+def test_a_check_pairs_detail_names_the_ledger_and_the_entry(tmp_path, pairs, index, reason):
+    """P047-ORACLE-B2."""
+    root = _repo(tmp_path)
+    record = json.loads((root / CK.RECORD_PATH).read_bytes())
+    record["checkPairs"] = pairs
+    raw = (json.dumps(record) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    found = _reader(root).disagreements
+    assert [(d[1], d[2], d[4]) for d in found] == [("checkPairs", "C", "corrupt")]
+    assert found[0][3].startswith("Corrupt: ledger checkPairs[%d]: %s (slot 279)" % (index, reason))
+
+
+def test_a_shared_baseline_names_both_authorities(tmp_path):
+    """P047-ORACLE-B3."""
+    root = _repo(tmp_path, newer=({}, {}))
+    second = root / "architecture/next2-authority.json"
+    body = json.loads(second.read_text())
+    body["baselinePackets"] = {str(j): "x" for j in range(289)}
+    second.write_text(json.dumps(body))
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")]
+    assert "share a baseline size: architecture/next1-authority.json and architecture/next2-authority.json" in found[0][3]
+
+
+def test_a_shared_authority_packet_names_both_authorities(tmp_path):
+    """P047-ORACLE-B3."""
+    root = _repo(tmp_path, newer=({}, {}))
+    second = root / "architecture/next2-authority.json"
+    body = json.loads(second.read_text())
+    body["authorityPacket"] = "MET-NEXT-001"
+    second.write_text(json.dumps(body))
+    detail = _reader(root).disagreements[0][3]
+    assert "one authorityPacket (one authority per slot, P047-C4-2): architecture/next2-authority.json and " \
+           "architecture/next1-authority.json" in detail
+
+
+def test_unreadable_hunk_class_entries_change_nothing_unless_named(tmp_path):
+    """P047-C6-5 (i): a directory, a dangling link and a link to a record, none named: nothing changes."""
+    root = _cascade_repo(tmp_path)
+    folder = root / CK.HUNK_CLASSES_DIR
+    (folder / "dir.json").mkdir()
+    (folder / "dangling.json").symlink_to(folder / "nowhere.json")
+    (folder / "linked.json").symlink_to(_side_path(root, "architecture/next1-authority.json"))
+    assert _reader(root).disagreements == []
+
+
+def test_a_named_hunk_class_record_that_is_a_link_is_class_a(tmp_path):
+    """P047-C6-5 (i): read as _read reads, so a named record that is a link is class A."""
+    root = _cascade_repo(tmp_path)
+    side_file = _side_path(root, "architecture/next1-authority.json")
+    elsewhere = root / "elsewhere.json"
+    elsewhere.write_bytes(side_file.read_bytes())
+    side_file.unlink()
+    side_file.symlink_to(elsewhere)
+    found = _reader(root).disagreements
+    assert [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")]
+    assert "is a link, not a file, or unreadable" in found[0][3]
+
+
+@pytest.mark.parametrize("cls, expect", [("cascade", ("A", "input", "carries hunk classes itself")),
+                                         (7, ("C", "corrupt", "reverseHunks[0].class"))])
+def test_a_class_key_inside_a_reverse_hunk(tmp_path, cls, expect):
+    """PKT1-HUNK-CLASS-KEY: checked as an entry first (a class that is not a string is corrupt); otherwise the
+    authority carries classes itself (class A)."""
+    root = _cascade_repo(tmp_path)
+    apath = root / "architecture/next1-authority.json"
+    body = json.loads(apath.read_text())
+    body["changedFiles"]["scripts/validate_l281.py"]["reverseHunks"][0]["class"] = cls
+    apath.write_text(json.dumps(body) + "\n")
+    found = [d for d in _reader(root).disagreements if d[1] == "scripts/validate_l281.py"]
+    assert [(d[2], d[4]) for d in found] == [expect[:2]] and expect[2] in found[0][3]
+
+
+@pytest.mark.parametrize("vocab, rule, reason", [
+    (("bridge", "cascade", "other", "record"), "v22", None),
+    (("bridge", "cascade", "other", "record", "register"), "v22", "hunkClassVocabulary is not the closed vocabulary of its rule"),
+    (("bridge", "cascade", "other", "record", "register"), "none", "not a rule the reader holds (v2.2 or v2.3)")])
+def test_rules_by_sha_bind_each_records_own_rule(tmp_path, vocab, rule, reason):
+    """MON-282-W2-RULED: a record's hunkClassRuleSha256 picks chainmech v2.2's or v2.3's rule and its vocabulary."""
+    assert CK.RULES_BY_SHA == {CK.RULE_V22_SHA256: (("bridge", "cascade", "other", "record"), False),
+                               CK.RULE_SHA256: (CK.CLASSES, True)}
+    assert CK.CLASSES == ("bridge", "cascade", "other", "record", "register")
+    root = _cascade_repo(tmp_path)
+    apath = "architecture/next1-authority.json"
+    side = json.loads(_side_path(root, apath).read_text())
+    side.update(hunkClassVocabulary=list(vocab), hunkClassRuleSha256=CK.RULE_V22_SHA256 if rule == "v22" else "0" * 64)
+    _bind(root, apath, (json.dumps(side) + "\n").encode())
+    found = _reader(root).disagreements
+    if reason is None:
+        assert found == []
+    else:
+        assert [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")] and reason in found[0][3]
+
+
+def test_register_is_v23s_and_off_under_v22():
+    owned = b'    authority_owner["task-packets/P-1.yaml"] = "P-1"\n'
+    block = CK.BLOCK.encode() % (b"P-2", b"P-2", b"P-2", b"P-2")
+    after = b"def f():\n" + owned + block + b"    return authority_owner\n"
+    args = ("scripts/validate_readiness.py", after, len(b"def f():\n" + owned), block, b"", "scripts/validate_prev.py",
+            "tests/test_prev.py", "P-2")
+    assert CK.classify(*args, seen=set()) == "register" and CK.classify(*args, seen=set(), register=False) == "other"
+    assert "register" in CK.normalised({}) and "register" not in CK.VOCABULARY_V22
+
+
+@pytest.mark.parametrize("body, member", [(b"not json\n", "does not parse"), (b"[]\n", "is not an object"),
+                                          (b'{"newFiles": []}\n', "newFiles is not an object")])
+def test_v01_a_layer_authority_that_is_no_object_makes_the_reading_corrupt(tmp_path, body, member):
+    """P047-C5-3: the layer authority stops parsing, or it or a member is a non-object: corrupt, with a null slot."""
+    root = _repo(tmp_path)
+    (root / "architecture/l281-authority.json").write_bytes(body)
+    found = _reader(root).disagreements
+    assert [(d[0], d[2], d[4]) for d in found] == [(None, "C", "corrupt")]
+    assert found[0][3].startswith("Corrupt: authority architecture/l281-authority.json " + member)
+    assert found[0][3].endswith("head slot unknown (the ledger was not read)")
+
+
+def test_the_read_order_reads_the_authorities_before_the_ledger(tmp_path):
+    """PKT1-READ-ORDER: a malformed authority is refused before a ledger that is not JSON is parsed."""
+    root = _repo(tmp_path)
+    raw = b"{not json\n"
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    (root / "architecture/broken-authority.json").write_bytes(b"[]")
+    found = _reader(root).disagreements
+    assert [(d[0], d[4]) for d in found] == [(None, "corrupt")] and "broken-authority.json" in found[0][3]
+    assert found[0][3].endswith("head slot unknown (the ledger was not read)")
+
+
+def _pinned_repo(tmp_path, head):
+    root = _repo(tmp_path)
+    (root / "scripts/validate_head.py").write_bytes(head)
+    record = json.loads((root / CK.RECORD_PATH).read_bytes())
+    record["exclusion"] = {"files": sorted([CK.RECORD_PATH, "architecture/chain-checkpoint-authority.json"]),
+                           "pinLine": "scripts/validate_head.py"}
+    record["layers"][0]["inputs"]["scripts/validate_head.py"] = sha(CK.pin_normalised(head))
+    raw = (json.dumps(record) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    return root
+
+
+def test_v14_a_pin_line_only_change_reads_clean_and_any_other_edit_is_class_a(tmp_path):
+    original = b'"""head"""\nAUTHORITY_SHA256 = "%s"\nX = 1\n' % (b"a" * 64)
+    root = _pinned_repo(tmp_path, original)
+    head = root / "scripts/validate_head.py"
+    assert _reader(root).disagreements == []
+    head.write_bytes(original.replace(b"a" * 64, b"b" * 64))
+    assert _reader(root).disagreements == []
+    for edited in (original.replace(b"X = 1", b"X = 2"), original + b'AUTHORITY_SHA256 = "c"\n'):
+        head.write_bytes(edited)
+        found = _reader(root).disagreements
+        assert [(d[0], d[1], d[2], d[4]) for d in found] == [(281, "scripts/validate_head.py", "A", "input")]
+
+
+@pytest.mark.parametrize("exclusion, member", [({"files": []}, "exclusion is not {files, pinLine}"),
+                                               ({"files": ["b", "a"], "pinLine": "p"}, "exclusion.files"),
+                                               ({"files": ["data281.txt"], "pinLine": "p"},
+                                                "layers[0].inputs names an excluded file")])
+def test_a_malformed_exclusion_is_corrupt(tmp_path, exclusion, member):
+    root = _repo(tmp_path)
+    record = json.loads((root / CK.RECORD_PATH).read_bytes())
+    record["exclusion"] = exclusion
+    raw = (json.dumps(record) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and found[0][3].startswith("Corrupt: ledger " + member)
+
+
+def test_the_writers_exclusion_and_pin_digest_follow_the_reader():
+    """MON-282-W2-RULED: the writer's exclusion, and its pin-line digest by the reader's own pin_normalised."""
+    assert WR.exclusion_for(282, "scripts/validate_met_perf_047.py") == {
+        "files": ["architecture/chain-checkpoint-authority.json", "architecture/chain-checkpoint/hunk-classes/282.json",
+                  "architecture/chain-checkpoint/record.json"], "pinLine": "scripts/validate_met_perf_047.py"}
+    raw = b'AUTHORITY_SHA256 = "x"\nY = 1\n'
+    assert WR.attested_sha(raw, "a.py", "a.py", CK.pin_normalised) == sha(CK.PIN_PLACEHOLDER + b"Y = 1\n")
+    assert WR.attested_sha(raw, "b.py", "a.py", CK.pin_normalised) == sha(raw)
+    with pytest.raises(SystemExit, match="no single AUTHORITY_SHA256 pin line"):
+        WR.attested_sha(raw + raw, "a.py", "a.py", CK.pin_normalised)

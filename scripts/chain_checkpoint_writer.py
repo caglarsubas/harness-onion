@@ -19,7 +19,12 @@ whose MODE is not "shadow" (condition (i): no checkpoint from an attested run); 
 measures the size (--measure-only); at F the bound is required. Remaining capture gaps: opens by subprocesses and
 files read through memory maps already open are not seen, and
 process-level caches (a module imported, or a file read into an lru cache, by an earlier node) are charged to the first
-node that read them only."""
+node that read them only.
+
+The exclusion (MON-282-W2-RULED): the step's own products are never a layer's input: its authority, its hunk-class
+record and record.json (exclusion.files), and the head validator's AUTHORITY_SHA256 pin line (exclusion.pinLine:
+that file is attested with the line normalised by the reader's own pin_normalised, since the pin is filled after the
+ledger is written). The exclusion equals the bounded build's write set (F checks the two equal)."""
 import ast
 import hashlib
 import importlib.util
@@ -33,6 +38,7 @@ from pathlib import Path
 CAPTURE_ENV = ("CHAIN_CHECKPOINT_CAPTURE_DIR", "CHAIN_CHECKPOINT_CAPTURE_ROOT")
 RECORD_PATH = "architecture/chain-checkpoint/record.json"
 AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
+HUNK_CLASSES_DIR = "architecture/chain-checkpoint/hunk-classes"
 SCHEMA = "harness.planeon.ai/chain-checkpoint/v1"
 ARGV63 = ["-m", "pytest", "tests", "ci/test_offline_runner.py", "ci/test_warm_snapshot.py"]
 INDEX_RECORDS = ("architecture/review-record/briefs.json", "task-packets/README.md",
@@ -139,6 +145,29 @@ def _constant(path, name):
     return None
 
 
+def exclusion_for(slot, head_validator):
+    """MON-282-W2-RULED: the closed exclusion of the step at slot: its own products, never a layer's input."""
+    return {"files": sorted([AUTHORITY_PATH, "%s/%d.json" % (HUNK_CLASSES_DIR, slot), RECORD_PATH]), "pinLine": head_validator}
+
+
+def _pin_normaliser(worktree):
+    """The reader's own pin_normalised (one rule for the writer and the reader), loaded by path."""
+    spec = importlib.util.spec_from_file_location("_ckpt_reader_pin", worktree / "ci/chain_checkpoint.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.pin_normalised
+
+
+def attested_sha(raw, path, pin_line, normalise):
+    """A file's attested digest: its bytes', or, for the pin-line file, its bytes with the one AUTHORITY_SHA256 line
+    normalised (the reader's pin_normalised); a pin-line file without exactly one such line is refused."""
+    if path == pin_line:
+        raw = normalise(raw)
+        if raw is None:
+            raise Refused("%s has no single AUTHORITY_SHA256 pin line" % path)
+    return sha(raw)
+
+
 def _layers(worktree):
     spec = importlib.util.spec_from_file_location("_ckpt_chain_identity", worktree / "scripts/chain_identity.py")
     mod = importlib.util.module_from_spec(spec)
@@ -171,8 +200,13 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
     if executed != shard["collected"]:
         raise Refused("the full-run proof fails: collected %d, executed %d" % (shard["collected"], executed))
     authority = json.loads((worktree / AUTHORITY_PATH).read_bytes())
+    chain = _layers(worktree)
+    heads = ["scripts/%s.py" % module for lslot, module in chain if lslot == slot]
+    if len(heads) != 1:
+        raise Refused("no single head layer at slot %d" % slot)
+    excl, normalise = exclusion_for(slot, heads[0]), _pin_normaliser(worktree)
     layers, pairs = [], []
-    for lslot, module in _layers(worktree):
+    for lslot, module in chain:
         if lslot >= slot:
             continue
         validator = "scripts/%s.py" % module
@@ -183,12 +217,13 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
             raise Refused("layer %d names no authority file" % lslot)
         nodes = sorted(n for n in outcomes if test and n.split("::", 1)[0] == test)
         opened = {p for n in nodes for p in shard["opened"].get(n, ())} | set(shard["opened"].get("collect:" + (test or ""), ()))
-        inputs = sorted(opened - {validator, test, apath, RECORD_PATH})
+        inputs = sorted(opened - {validator, test, apath} - set(excl["files"]))
         layers.append({"slot": lslot, "module": module, "validatorPath": validator,
                        "validatorSha256": sha((worktree / validator).read_bytes()), "authorityPath": apath,
                        "authoritySha256": sha((worktree / apath).read_bytes()),
                        **({"testFilePath": test, "testFileSha256": sha((worktree / test).read_bytes())} if test else {}),
-                       "inputs": {p: sha((worktree / p).read_bytes()) for p in inputs if (worktree / p).is_file()},
+                       "inputs": {p: attested_sha((worktree / p).read_bytes(), p, excl["pinLine"], normalise)
+                                  for p in inputs if (worktree / p).is_file()},
                        "nodes": [{"nodeSha256": sha(n.encode("utf-8")), **{k: outcomes[n].get(k) for k in ("setup", "call", "teardown")}}
                                  for n in nodes],
                        "seconds": round(sum(seconds[n] for n in nodes), 3)})
@@ -209,7 +244,7 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
               "writingRun": {"statedDifferences": STATED, "captureEnv": list(CAPTURE_ENV), "captureObservesOnly": True,
                              "outsideReads": shard["outside"], "argvRunSummarySha256": sha(summary.encode()),
                              "verifyReference": "none: the first checkpoint records the writing run itself"},
-              "sizeBound": size_bound, "sizeBytes": 0}
+              "exclusion": excl, "sizeBound": size_bound, "sizeBytes": 0}
     for _ in range(5):          # sizeBytes is the final file's length
         raw = (json.dumps(record, sort_keys=True, indent=1) + "\n").encode()
         if record["sizeBytes"] == len(raw):
@@ -223,12 +258,13 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
 
 def rehash(worktree, record_path):
     record = json.loads(Path(record_path).read_bytes())
-    bad = []
+    pin_line, normalise, bad = record.get("exclusion", {}).get("pinLine"), _pin_normaliser(worktree), []
     for layer in record["layers"]:
         files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"], **layer["inputs"]}
         if layer.get("testFilePath"):
             files[layer["testFilePath"]] = layer["testFileSha256"]
-        bad += ["%d %s" % (layer["slot"], p) for p, d in files.items() if sha((worktree / p).read_bytes()) != d]
+        bad += ["%d %s" % (layer["slot"], p) for p, d in files.items()
+                if attested_sha((worktree / p).read_bytes(), p, pin_line, normalise) != d]
     if bad:
         raise Refused("%d attested files differ at the final commit (first: %s)" % (len(bad), bad[0]))
     return sum(len(l["inputs"]) for l in record["layers"])

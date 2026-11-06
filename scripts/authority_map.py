@@ -529,18 +529,31 @@ def check(read, packets) -> dict:
     except Exception as error:
         raise ValueError("AM_R12_VECTORS: %s: %s" % (type(error).__name__, error)) from None
 
-    # V9: the registry: the base plus at most the one MET-ADOPT-007/packet rider, appended last.
+    # V9 (MON-282-W2-RULED, V9 (a)): the registry is the base, then the one MET-ADOPT-007/packet rider, then zero or
+    # more later packets' riders in the order they were appended: each the generic packet brief (RIDER's kind, path,
+    # sha256 and version) under "<id>/packet" for an id in `packets` other than MET-ADOPT-007, one rider per series in
+    # the whole registry. A rider before MET-ADOPT-007's is out of order: the base's digest refuses it.
     raw = read(BRIEFS_PATH)
     if digest(raw) != BRIEFS_BASE_SHA256:
         reg = _json(raw, "AM_REGISTRY")
         try:
             briefs = reg["briefs"]
-            base = dict(reg, briefs=briefs[:-1])
+            at = [i for i, entry in enumerate(briefs) if _eq(entry, RIDER)][:1]
+            base = dict(reg, briefs=briefs[:at[0]] if at else briefs)
             again = (json.dumps(base, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+            series = [entry.get("series") if type(entry) is dict else None for entry in briefs]
         except Exception as error:
             raise ValueError("AM_REGISTRY: %s: %s" % (type(error).__name__, error)) from None
-        require(digest(again) == BRIEFS_BASE_SHA256 and _eq(briefs[-1], RIDER), "AM_REGISTRY",
-                "the registry is the base plus one MET-ADOPT-007/packet rider, appended last")
+        require(bool(at) and digest(again) == BRIEFS_BASE_SHA256, "AM_REGISTRY",
+                "the registry is the base, then the one MET-ADOPT-007/packet rider")
+        own = RIDER["series"][:-len("/packet")]
+        for entry in briefs[at[0] + 1:]:
+            name = entry.get("series") if type(entry) is dict else None
+            pid = name[:-len("/packet")] if type(name) is str and name.endswith("/packet") else None
+            require(pid is not None and pid in packets and pid != own and series.count(name) == 1
+                    and _eq(entry, dict(RIDER, series=name)), "AM_REGISTRY",
+                    "a later rider is the generic packet brief of one published packet other than MET-ADOPT-007, "
+                    "registered once")
         require(json.dumps(reg, indent=1, ensure_ascii=False).encode("utf-8") + b"\n" == raw, "AM_REGISTRY",
                 "the registry's serialization")
     return {"concerns": len(rec["concerns"]), "pins": len(AUTHORITY_PINS) + len(BEHAVIOUR_PINS),
