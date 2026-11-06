@@ -10,8 +10,8 @@
  },
  "operator": {
   "role": "LANE_SESSION",
-  "agentId": "d6fe1a25-8485-43f5-8c84-afc766817ada",
-  "lane": "r12"
+  "agentId": "4f798012-9782-42ce-85bc-8473c4a33a34",
+  "lane": "r00"
  },
  "author": {
   "agentIds": [
@@ -35,6 +35,7 @@
   "operator-stated facts used: check(read, packets) and packets' type; the ValueError code prefix; the registry path, base digest and re-serialization; RIDER and the later rider's form; packet order; at most one per id; F's registry ending with MET-PERF-047/packet",
   "candidateCommit filled by R00 (the operator) by script: W″ a64e29d7, the tree the oracle was checked against (MON-282-IDENTITY-CANDIDATE); F differs from it only by the build's write set",
   "launched is the scratch directory's creation; the kit was read a few minutes before it",
-  "one blind run on W″ a64e29d7 (MON-281-ORACLE-BLIND), in-process by R00's caller call_oracle_blind_281.py, never opened by R00: 94 passed, 0 failed, 0 skipped"
+  "one blind run on W″ a64e29d7 (MON-281-ORACLE-BLIND), in-process by R00's caller call_oracle_blind_281.py, never opened by R00: 94 passed, 0 failed, 0 skipped",
+  "correction (MON-281-ORACLE-OPERATOR): operator is R00's lane session, which placed the oracle, ran its blind run and filled this identity; R12 had named itself as operator, which made oracle equal operator (NOT_INDEPENDENT); the KEEP ruling MON-281-ORACLE-KEEP stands"
  ]
 }
