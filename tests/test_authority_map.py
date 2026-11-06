@@ -76,6 +76,12 @@ def test_the_record_passes():
     assert result["flagged"] == ["AM-06 whenUnavailable", "AM-09 whenRevoked"]
 
 
+def test_the_authority_names_come_from_the_pins():
+    assert am.authority_names("AM-04") == {"policy-decision", "planeon.policy-decision"}
+    assert am.authority_names("AM-06") == {"TARGET_SYSTEM"}
+    assert all(am.AUTHORITY_PINS[c][1] in am.authority_names(c) for c in am.CONCERN_IDS)
+
+
 def test_the_pins_fall_in_three_classes():
     pins = [p[2] for p in am.AUTHORITY_PINS.values()] + [p[1] for p in am.BEHAVIOUR_PINS.values()]
     items = [p for p in pins if p[0] == "item"]
@@ -114,6 +120,10 @@ def test_shape_refuses_a_missing_behaviour():
     refuses("AM_SHAPE", record(lambda r: concern(r, "AM-01").pop("whenRevoked")))
 
 
+def test_shape_refuses_a_roadmap_pin_that_is_not_lowercase_hex():
+    refuses("AM_SHAPE", record(lambda r: r["roadmapPin"].update(sha256="Z" * 64)))
+
+
 def test_reading_refuses_duplicate_members_and_non_utf8():
     refuses("AM_SHAPE", lambda d: d.update({am.RECORD_PATH: b'{"a": 1, "a": 2}'}))
     refuses("AM_SHAPE", lambda d: d.update({am.RECORD_PATH: b"\xff"}))
@@ -148,6 +158,10 @@ def test_citations_refuse_an_unpinned_item():
         {"item": "SERVICE-EDGES-001", "quote": "edges"})))
 
 
+def test_citations_refuse_a_roadmap_item_no_citation_names():
+    refuses("AM_CITATIONS", record(lambda r: r["roadmapPin"]["items"].append("SERVICE-EDGES-001")))
+
+
 def test_citations_refuse_a_pinned_constant_whose_quote_is_not_on_its_line(monkeypatch):
     monkeypatch.setitem(am.BEHAVIOUR_PINS, ("AM-07", "whenRevoked"),
                         ("STOP_RECALL", (am.MEM, 143, "Deletion removes everything at once")))
@@ -170,6 +184,20 @@ def test_one_authority_refuses_a_dropped_concern():
 def test_one_authority_refuses_a_component_row_naming_the_authority():
     refuses("AM_ONE_AUTHORITY", record(lambda r: concern(r, "AM-04")["othersMay"].append(
         {"who": "policy-decision", "whoKind": "COMPONENT", "action": "ADVISE", "note": "names the authority"})))
+
+
+def test_one_authority_refuses_a_component_row_naming_the_pinned_module():
+    refuses("AM_ONE_AUTHORITY", record(lambda r: concern(r, "AM-04")["othersMay"].append(
+        {"who": "planeon.policy-decision", "whoKind": "COMPONENT", "action": "ADVISE", "note": "the pinned name"})))
+
+
+def test_one_authority_refuses_an_input_repeating_the_authority():
+    refuses("AM_ONE_AUTHORITY", record(lambda r: concern(r, "AM-04")["inputs"].append(
+        {"harness": "trust.security-safety", "component": "policy-decision", "role": "EVIDENCE"})))
+
+
+def test_one_authority_refuses_an_input_naming_the_authority_under_another_label():
+    refuses("AM_ONE_AUTHORITY", record(lambda r: concern(r, "AM-04")["inputs"][0].update(component="policy-decision")))
 
 
 def test_one_authority_refuses_the_sentinel_on_a_second_row():
@@ -223,6 +251,13 @@ def test_budget_refuses_vb_08_proceeding_without_outbox_capacity():
     refuses("AM_BUDGET", vectors(am.BUDGET_PATH, lambda d: d["vectors"][7]["results"].__setitem__(3, "proceeds")))
 
 
+def test_budget_vb_04_is_a_commit_with_no_reservation_and_a_usage_step_is_unknown():
+    doc = json.loads(files()[am.BUDGET_PATH])
+    assert doc["vectors"][3]["steps"] == [{"op": "commit", "key": "k", "transition": "t1", "amount": 40}]
+    refuses("AM_BUDGET", vectors(am.BUDGET_PATH, lambda d: d["vectors"][3].update(
+        steps=[{"op": "usage", "amount": 40}])))
+
+
 def test_budget_refuses_a_dropped_non_claim():
     refuses("AM_BUDGET", vectors(am.BUDGET_PATH, lambda d: d.update(nonClaims=["semantics only"])))
 
@@ -260,6 +295,11 @@ def test_r12_refuses_a_vector_naming_no_row():
 
 def test_r12_refuses_a_vector_the_map_does_not_refuse():
     refuses("AM_R12_VECTORS", vectors(am.R12_PATH, lambda d: d["vectors"][0].update(actor="policy-decision")))
+    refuses("AM_R12_VECTORS", vectors(am.R12_PATH, lambda d: d["vectors"][0].update(actor="planeon.policy-decision")))
+
+
+def test_r12_refuses_an_actor_that_is_not_text():
+    refuses("AM_R12_VECTORS", vectors(am.R12_PATH, lambda d: d["vectors"][0].update(actor=1)))
 
 
 # V9: the registry.

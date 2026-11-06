@@ -12,9 +12,10 @@ a change to a pin is a new module version and a new record version. Refusal code
 - AM_SOURCES (V1): the thirteen repository sources and the two vector files have their pinned digests.
 - AM_CITATIONS (V2): every repository quote is on its cited line of a pinned source; every roadmap citation names an
   item of roadmapPin (its text is checked at authoring and in review, Q-AM-9 (a)); the same check runs over the pins.
-- AM_ONE_AUTHORITY (V3), AM_ENFORCEMENT (V4), AM_FAILURE_MODES (V5), AM_BUDGET (V6: a standard-library reference model
-  of B1-B5 replays every budget vector), AM_RECONCILIATION and AM_RECONCILIATION_UNKNOWN_MEMBER (V7), AM_R12_VECTORS
-  (V8), AM_REGISTRY (V9).
+- AM_ONE_AUTHORITY (V3: a row's authority equals its pin; no input and no COMPONENT row names the authority, by its
+  component or by a module name its pinned quote gives, whatever the harness label), AM_ENFORCEMENT (V4),
+  AM_FAILURE_MODES (V5), AM_BUDGET (V6: a standard-library reference model of B1-B5 replays every budget vector),
+  AM_RECONCILIATION and AM_RECONCILIATION_UNKNOWN_MEMBER (V7), AM_R12_VECTORS (V8), AM_REGISTRY (V9).
 Bytes that are not UTF-8 JSON, duplicate members, non-finite numbers and integers beyond the conversion limit refuse
 with the reading check's code. Exception is caught, never BaseException. Data checks only: the map records authority
 and its enforcement points; it enforces nothing, and it claims no concurrency or clock property (DATA-CORRECTNESS-001).
@@ -204,6 +205,10 @@ def _text(value, where, code="AM_SHAPE"):
     require(type(value) is str and value.strip() != "", code, "non-empty text: " + where)
 
 
+def _hex64(value) -> bool:
+    return type(value) is str and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+
+
 def _list(value, where, code="AM_SHAPE", nonempty=False):
     require(type(value) is list and (not nonempty or value), code, ("a non-empty list: " if nonempty else "a list: ")
             + where)
@@ -229,14 +234,13 @@ def _shape(rec) -> None:
         for i, row in enumerate(rec[name]):
             _closed(row, ("path", "sha256"), "%s[%d]" % (name, i))
             _text(row["path"], "%s[%d].path" % (name, i))
-            require(type(row["sha256"]) is str and len(row["sha256"]) == 64
-                    and all(c in "0123456789abcdef" for c in row["sha256"]), "AM_SHAPE", "%s[%d].sha256" % (name, i))
+            require(_hex64(row["sha256"]), "AM_SHAPE", "%s[%d].sha256" % (name, i))
         require([r["path"] for r in rec[name]] == sorted({r["path"] for r in rec[name]}), "AM_SHAPE",
                 name + " sorted by path and unique")
     pin = rec["roadmapPin"]
     _closed(pin, ("path", "sha256", "items"), "roadmapPin")
     require(pin["path"] == ROADMAP_PATH, "AM_SHAPE", "roadmapPin.path")
-    require(type(pin["sha256"]) is str and len(pin["sha256"]) == 64, "AM_SHAPE", "roadmapPin.sha256")
+    require(_hex64(pin["sha256"]), "AM_SHAPE", "roadmapPin.sha256: 64 lowercase hex")
     _list(pin["items"], "roadmapPin.items", nonempty=True)
     require(all(type(x) is str and x for x in pin["items"]) and pin["items"] == sorted(set(pin["items"])), "AM_SHAPE",
             "roadmapPin.items sorted and unique")
@@ -291,6 +295,13 @@ def _shape(rec) -> None:
         _text(text, "nonClaims[%d]" % i)
 
 
+def authority_names(cid) -> frozenset:
+    """The names a row's authority goes by: its pinned component and every module name (in backticks) of its pinned
+    quote, e.g. AM-04's policy-decision and planeon.policy-decision (trust.security-safety.md:83)."""
+    _, component, pin = AUTHORITY_PINS[cid]
+    return frozenset({component, *pin[2].split("`")[1::2]})
+
+
 def _citations_of(c):
     yield c["authority"]["citation"]
     for row in c["enforcementPoints"]:
@@ -316,8 +327,6 @@ class _Ledger:
         if op == "advisory":  # :177: advisory-only callers proceed only if the profile allows and outbox capacity exists
             return "proceeds" if (not self.up and s["profileAllows"] is True and s["outboxCapacity"] is True) \
                 or self.up else "refused"
-        if op == "usage":  # hard-budget usage with no reservation (B1)
-            return "refused"
         key = s["key"]
         if op == "reserve":
             if not self.up:
@@ -331,7 +340,7 @@ class _Ledger:
                              "result": "reserved"}
             return "reserved"
         r = self.res.get(key)
-        if r is None or r["state"] != "RESERVED":
+        if r is None or r["state"] != "RESERVED":  # B1: no open reservation, so no commit, consume or settlement
             if op == "commit" and r is not None and self.transitions.get((key, s["transition"])) == s["amount"]:
                 return "replayed"  # B3: commit has its own transition key; a duplicate commit is idempotent
             return "refused"
@@ -361,7 +370,7 @@ class _Ledger:
 
 STEP_MEMBERS = {"reserve": ("op", "key", "amount"), "consume": ("op", "key", "amount"),
                 "commit": ("op", "key", "transition", "amount"), "cancel": ("op", "key"), "expire": ("op", "key"),
-                "usage": ("op", "amount"), "ledger_down": ("op",),
+                "ledger_down": ("op",),
                 "advisory": ("op", "profileAllows", "outboxCapacity")}
 
 
@@ -409,9 +418,11 @@ def _r12(raw, concerns) -> None:
         require(v["row"] in concerns, "AM_R12_VECTORS", v["id"] + " names no concern row")
         require(v["expected"] == "REFUSED", "AM_R12_VECTORS", v["id"] + ": the expected verdict is REFUSED")
         _text(v["case"], v["id"] + ".case", "AM_R12_VECTORS")
-        authority = concerns[v["row"]]["authority"]["component"]
-        # The map's rule: only the row's authority performs an authority act; any other actor is refused.
-        refused = v["claimedAction"] in AUTHORITY_VERBS and v["actor"] != authority
+        _text(v["actor"], v["id"] + ".actor", "AM_R12_VECTORS")
+        _text(v["claimedAction"], v["id"] + ".claimedAction", "AM_R12_VECTORS")
+        # The map's rule over the vector's declared actor and act: only the row's authority (by any of its names)
+        # performs an authority act; any other actor is refused.
+        refused = v["claimedAction"] in AUTHORITY_VERBS and v["actor"] not in authority_names(v["row"])
         require(refused, "AM_R12_VECTORS", v["id"] + ": the map does not refuse it")
 
 
@@ -466,17 +477,15 @@ def check(read, packets) -> dict:
     for c in rec["concerns"]:
         a = c["authority"]
         harness, component, pin = AUTHORITY_PINS[c["id"]]
+        # The pins hold the external sentinel on AM-06 only, so this comparison also keeps it off every other row.
         require(_eq([a["harness"], a["component"], a["citation"]], [harness, component, cite(pin)]),
                 "AM_ONE_AUTHORITY", c["id"] + ": the authority or its citation is not the pinned one")
-        require((a["harness"], a["component"]) != SENTINEL or c["id"] == "AM-06", "AM_ONE_AUTHORITY",
-                c["id"] + ": the external sentinel is AM-06's only")
-        for row in c["inputs"]:
-            require((row["harness"], row["component"]) != (a["harness"], a["component"]), "AM_ONE_AUTHORITY",
-                    c["id"] + ": an input repeats the authority")
+        names = authority_names(c["id"])
+        for row in c["inputs"]:  # compared by component, whatever the harness label
+            require(row["component"] not in names, "AM_ONE_AUTHORITY", c["id"] + ": an input repeats the authority")
         for row in c["othersMay"]:
             if row["whoKind"] == "COMPONENT":
-                require(row["who"] != a["component"], "AM_ONE_AUTHORITY",
-                        c["id"] + ": a COMPONENT row names the authority")
+                require(row["who"] not in names, "AM_ONE_AUTHORITY", c["id"] + ": a COMPONENT row names the authority")
 
     # V4: enforcement points.
     for c in rec["concerns"]:

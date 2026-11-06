@@ -36,7 +36,9 @@ AM-06 (`execution.tool-skill-sandbox.md:148`, flagged), AM-07 (`knowledge.memory
   RESERVED while open). Whether a refused reserve is kept under its key is outside these semantics (B3). Write skew,
   fencing and clocks are DATA-CORRECTNESS-001's.
 - `r12-vectors.json`: R12-V1 to R12-V5, each an actor claiming an authority act on a row it does not hold; every one is
-  refused. They are data for the conformance labs, written here.
+  refused by the map's rule over the vector's declared actor and act. They are data for the conformance labs, written
+  here. R12-V2 names AM-04 only: its approval-expiry half is AM-05's (governance-service), held here under AM-04, the
+  row whose cache it is.
 
 ## Reading the design
 

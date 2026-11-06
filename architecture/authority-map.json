@@ -57,7 +57,7 @@
  "vectorFiles": [
   {
    "path": "architecture/authority-map/budget-vectors.json",
-   "sha256": "106c5099a04d0a5b10cb3e01eac5ef9705902b9c735935d3f79f6f7ad6895102"
+   "sha256": "e0eb278cafd3d454efba317f5a8cb570f1e5050430f1155e2ea53859b77d1506"
   },
   {
    "path": "architecture/authority-map/r12-vectors.json",
@@ -180,6 +180,11 @@
     },
     {
      "path": "docs/harnesses/execution.orchestration.md",
+     "line": 59,
+     "quote": "- `orchestration-api`: task submission, query, input, cancellation, workflow-version API."
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
      "line": 84,
      "quote": "- `planeon.orchestrator.postgres`: baseline outbox/inbox, leases, timers, checkpoints, and workers using"
     },
@@ -192,6 +197,11 @@
      "path": "docs/harnesses/execution.orchestration.md",
      "line": 155,
      "quote": "- PostgreSQL loss rejects mutations; recovery resumes from committed checkpoints/outbox."
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 58,
+     "quote": "- `experience-gateway`: authenticated session and resumable SSE event boundary. WebSocket is deferred"
     },
     {
      "item": "DATA-CORRECTNESS-001",
@@ -459,6 +469,10 @@
     {
      "item": "MODEL-ROUTING-001",
      "quote": "ai-gateway reserves at the route's ceiling and usage-ledger settles the actual cost"
+    },
+    {
+     "item": "MODEL-ROUTING-001",
+     "quote": "authorization, route restrictions and usage attribution stay effective for the six direct callers of inference-api without forcing their traffic through H3"
     }
    ]
   },
@@ -711,6 +725,11 @@
      "quote": "This harness registers typed tools/skills, classifies side effects and isolation needs, evaluates policy and"
     },
     {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 59,
+     "quote": "- `tool-broker`: registry lookup, schema validation, policy/approval, credential brokering, lifecycle,"
+    },
+    {
      "item": "AUTHORITY-MAP-001",
      "quote": "H4 and R04 present and submit, never mint authority in the browser"
     }
@@ -782,6 +801,11 @@
      "path": "docs/harnesses/execution.tool-skill-sandbox.md",
      "line": 55,
      "quote": "It does not grant arbitrary cluster access, run caller-supplied native code in an ordinary container, treat a"
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 59,
+     "quote": "- `tool-broker`: registry lookup, schema validation, policy/approval, credential brokering, lifecycle,"
     },
     {
      "path": "docs/harnesses/execution.tool-skill-sandbox.md",
@@ -916,10 +940,10 @@
    ],
    "othersMay": [
     {
-     "who": "usage-ledger",
-     "whoKind": "COMPONENT",
+     "who": "H15",
+     "whoKind": "ROLE",
      "action": "MEASURE",
-     "note": "H15 measures"
+     "note": "H15 measures (the roadmap item's words; no cited line names the measuring component)"
     },
     {
      "who": "an optimizer",
@@ -1085,6 +1109,11 @@
      "path": "docs/harnesses/runtime.infrastructure.md",
      "line": 18,
      "quote": "Platform scope: Own signed installation admission, minimal module closure and constrained reconciliation. H11"
+    },
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 60,
+     "quote": "- `operator`: watches `HarnessInstallation` resources and reconciles modules."
     },
     {
      "path": "docs/harnesses/runtime.infrastructure.md",
