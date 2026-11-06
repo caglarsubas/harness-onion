@@ -1,123 +1,123 @@
 {
  "packet": "MET-PERF-047",
- "schemaVersion": "harness.planeon.ai/chain-checkpoint-vectors/v1",
+ "schemaVersion": "harness.planeon.ai/chain-checkpoint-vectors/v2",
  "vectors": [
   {
+   "case": "change data<slot>.txt (or the layer authority) after the record is written",
+   "expectClass": "A",
+   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest",
    "id": 1,
-   "name": "tampered attested input",
-   "sampled": "refuses, naming the slot",
-   "shadow": {
-    "class": "A",
-    "expect": "an input differs from its checkpoint digest after normalisation"
-   }
+   "name": "tampered attested file",
+   "names": "the layer's slot and the file",
+   "sampled": "refuses"
   },
   {
+   "case": "omit the record from every authority; or add a newer authority naming a different afterSha256",
+   "expectClass": "A",
+   "expectDetail": "no authority names record.json, or the newest naming authority names another digest",
    "id": 2,
-   "name": "stale or unnamed ledger",
-   "sampled": "refuses",
-   "shadow": {
-    "class": "A",
-    "expect": "the record is present but no authority names it with its sha256"
-   }
+   "name": "unnamed or stale ledger",
+   "names": "record.json",
+   "sampled": "refuses"
   },
   {
+   "case": "report call=failed for a node the ledger records as passed",
+   "expectClass": "B",
+   "expectDetail": "a node's live outcome differs from the ledger with no input change",
    "id": 3,
    "name": "sample refusal",
-   "sampled": "refuses, naming the slot",
-   "shadow": {
-    "class": "B",
-    "expect": "a sampled layer's node outcome differs from the ledger"
-   }
+   "names": "the layer's slot",
+   "sampled": "refuses"
   },
   {
+   "case": "MODE = \"sampled\" in ci/chain_checkpoint.py; OUT_DIR under the worktree",
+   "expectClass": "writer",
+   "expectDetail": "the writer refuses a reader whose MODE is not shadow, and an OUT_DIR inside the worktree",
    "id": 4,
    "name": "checkpoint from an attested run",
-   "sampled": "the writer refuses",
-   "shadow": {
-    "class": "writer",
-    "expect": "the writer refuses a shard with an attested node"
-   }
+   "names": "the writer",
+   "sampled": "n/a"
   },
   {
+   "case": "ids [A, A]; type unruled; one entry twice",
+   "expectClass": "C",
+   "expectDetail": "a self-paired, unruled or repeated check_pairs entry",
    "id": 5,
    "name": "check_pairs defect",
-   "sampled": "refuses",
-   "shadow": {
-    "class": "C",
-    "expect": "a repeated or self-paired check_pairs entry, or an unruled type"
-   }
+   "names": "the entry's layerSlot",
+   "sampled": "refuses"
   },
   {
+   "case": "sample(tree, slots, 0.1) twice and for another tree",
+   "expectClass": "none",
+   "expectDetail": "one head tree draws one sample; two trees differ",
    "id": 6,
    "name": "sample seed",
-   "sampled": "refuses a differing draw",
-   "shadow": {
-    "class": "C",
-    "expect": "two runs of one head draw one sample; two heads differ"
-   }
+   "names": "n/a",
+   "sampled": "n/a"
   },
   {
+   "case": "as vector 3, read from the record's layers and disagreements",
+   "expectClass": "A|B",
+   "expectDetail": "recorded with the slot and its class; the session's exit status unchanged",
    "id": 7,
    "name": "shadow disagreement",
-   "sampled": "n/a",
-   "shadow": {
-    "class": "A|B",
-    "expect": "recorded with the slot and its class; the session's exit status unchanged"
-   }
+   "names": "the layer's slot",
+   "sampled": "n/a"
   },
   {
+   "case": "tamper two layers' inputs",
+   "expectClass": "A",
+   "expectDetail": "where two layers disagree, the newest slot is recorded first",
    "id": 8,
    "name": "refusing-layer order",
-   "sampled": "refuses, newest first",
-   "shadow": {
-    "class": "A",
-    "expect": "where two layers would refuse, the newest slot is recorded first"
-   }
+   "names": "both slots, newest first",
+   "sampled": "refuses"
   },
   {
+   "case": "a clock advancing 20 s per tick; parameters.shadowIn = dryRunOnly with an END-event log",
+   "expectClass": "C",
+   "expectDetail": "the budget stops the replay over 15 s; in dryRunOnly an in-session reading is skipped and the runner's dry-run-compare compares",
    "id": 9,
-   "name": "cost cap",
-   "sampled": "refuses inside a verify",
-   "shadow": {
-    "class": "C",
-    "expect": "a reader over 15 s records the over-cap state and the dry-run path; outcome unchanged"
-   }
+   "name": "cost cap and dry-run-only",
+   "names": "reader",
+   "sampled": "refuses"
   },
   {
+   "case": "the conftest's load and three hooks each catch Exception",
+   "expectClass": "C",
+   "expectDetail": "a missing, unloadable or raising reader prints one class-C line; exit status unchanged",
    "id": 10,
    "name": "guarded load",
-   "sampled": "n/a",
-   "shadow": {
-    "class": "C",
-    "expect": "a missing, unloadable or raising reader prints one class-C line; exit status unchanged"
-   }
+   "names": "reader",
+   "sampled": "refuses"
   },
   {
+   "case": "architecture/authority-map-authority.json, classed by the rule under MET-ADOPT-007's context",
+   "expectClass": "none",
+   "expectDetail": "281's edited files rebuild to each beforeSha256 under 281's context; only validate_readiness's block and the master plan's status line stay partial",
    "id": 11,
    "name": "a K = 0 cascade step reads clean",
-   "sampled": "clean",
-   "shadow": {
-    "class": "none",
-    "expect": "281's step (c1b838be..dcf11803) rebuilds its edited layer files exactly"
-   }
+   "names": "n/a",
+   "sampled": "n/a"
   },
   {
+   "case": "the live validator is the authority's after bytes plus one byte",
+   "expectClass": "A",
+   "expectDetail": "one extra byte beside a cascade hunk: afterSha256 differs, cascade share 0 of N applied",
    "id": 12,
    "name": "one byte beside the cascade",
-   "sampled": "refuses",
-   "shadow": {
-    "class": "A",
-    "expect": "one extra byte in an attested validator, beside the cascade: class A, the slot named"
-   }
+   "names": "the layer's slot",
+   "sampled": "refuses"
   },
   {
+   "case": "two hunks with descending offsets",
+   "expectClass": "A",
+   "expectDetail": "a hunk out of order or not applying byte-exactly",
    "id": 13,
    "name": "reordered or missing hunk",
-   "sampled": "refuses",
-   "shadow": {
-    "class": "A",
-    "expect": "a hunk out of order or missing does not apply byte-exactly: the slot named"
-   }
+   "names": "the layer's slot",
+   "sampled": "refuses"
   }
  ]
 }

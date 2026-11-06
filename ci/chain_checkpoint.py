@@ -1,21 +1,35 @@
 """MET-PERF-047 (CHAIN-COMPACTION-002, G1): the chain checkpoint's shadow reader.
 
-Loaded by path from the root conftest.py inside a guard, so a missing, unloadable or raising reader never changes a
-session's outcome. It is active only in the outermost pytest session (PLANEON_PARALLEL_SUITE_SERIAL absent when this
-module is imported: every worker and every nested pytest inherits it) and only when
-architecture/chain-checkpoint/record.json exists and an authority names it with its sha256.
+Loaded by path from the root conftest.py inside a guard: a missing, unloadable or raising reader never changes a
+session's outcome. Active only in an outermost pytest session (PLANEON_PARALLEL_SUITE_SERIAL absent at import; every
+worker and nested pytest inherits it) and only when architecture/chain-checkpoint/record.json exists. Shadow mode
+observes and records only; nothing here raises out of a hook or changes an exit status.
 
-Shadow mode observes and records only. At session start it rebuilds every attested layer's files (its validator, its
-test file and its captured inputs) at the checkpoint tree from the live files, undoing, newest first, the published
-reverseHunks of every authority newer than the checkpoint whose recorded class is in NORMALISED, byte-exact, with each
-file's afterSha256 and beforeSha256 checked; each recorded class is re-checked by this module's copy of chainmech
-v2.2's rule (hunk_class_v22), using the authority's hunkClassContext. Rebuilt bytes are compared, never executed. It
-draws the sample, sha256(head tree id + NUL + slot) / 2**256 < f. At session finish it compares the ledger's recorded
-node outcomes with this session's, layer by layer. Every disagreement is recorded with its slot and class: A (an
-input differs after normalisation), B (an outcome differs with no input change), C (a fault of the reader or of the
-records). It writes one shadow record file and prints one summary line; it never raises and never changes the exit
-status. Its whole run is timed once; over CAP_SECONDS it records the over-cap state and the dry-run path.
-Standard library only; no sys.path edit; no repository module is imported.
+Public interface: Reader(root, clock, cap, tree, workers_source).start(); .report(nodeid, when, outcome, duration);
+.finish(head_sha=None) -> (summary line, record dict); rebuild(path, live, newer, normalised, budget); sample(tree,
+slots, fraction); naming_authority(root, live_sha); newer_authorities(root, baseline); check_pairs(entries); and the CLI
+`chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
+
+The ledger (record.json, schema harness.planeon.ai/chain-checkpoint/v1): schemaVersion, checkpointSlot,
+checkpointBaseline, writingCommit, writingTree, parameters {cadenceSlots, sampleFraction, fullRunOn, nShadow,
+shadowCapSeconds, workers, shadowIn}, normalisedRecordClass, layers [{slot, module, validatorPath, validatorSha256,
+testFilePath?, testFileSha256?, authorityPath, authoritySha256, inputs {path: sha256}, nodes [{nodeSha256, setup, call,
+teardown}], seconds}], checkPairs [{layerSlot, pairsPath, ids [a, b], type}], fullRunProof, writingRun, sizeBytes,
+sizeBound. Every digest is at the checkpoint tree.
+
+The rebuild (D9 (a)): for each attested file, undo newest first the reverseHunks of every authority newer than the
+checkpoint (baseline catalog larger than checkpointBaseline), byte-exact, afterSha256 and beforeSha256 checked; each
+authority's hunkClassContext {newPacket == authorityPacket, prevValidator, prevTest, steps == [1, 1 + K]},
+hunkClassVocabulary and hunkClassRuleSha256 are bound first; each recorded class is re-checked by the rule copied
+below, and only classes in normalised() are undone (cascade and bridge, plus record when normalisedRecordClass).
+
+The shadow record (one JSON line in the session's log, prefixed "chain-checkpoint shadow record:"): headSha,
+readerSeconds, capSeconds, overCap, workers and workersSource, shadowIn, mode, naming, attested (every ledger slot),
+sampled, layers {slot: {recorded, live, agree, writingSeconds, liveSeconds}}, reverted {slot: [[path, [[authority,
+{class: count}]]]]}, disagreements [{slot, where, class, detail}], faults. Classes: A, an input differs after
+normalisation; B, an outcome differs with no input change; C, a fault (the reader's or the records'), dry-run-only
+skips and over-cap included. Stop rule (condition (v)): every A, B or C restarts the clean count of N_shadow; a
+dry-run-only reading counts toward N_shadow, a skipped one does not (MET-PERF-048 states the rule).
 """
 import base64
 import difflib
@@ -24,7 +38,7 @@ import json
 import os
 import re
 import subprocess
-import tempfile
+import sys
 import time
 from pathlib import Path
 
@@ -34,10 +48,12 @@ SCHEMA = "harness.planeon.ai/chain-checkpoint/v1"
 CAP_SECONDS = 15.0
 SERIAL_ENV = "PLANEON_PARALLEL_SUITE_SERIAL"
 OUTERMOST = SERIAL_ENV not in os.environ
-NORMALISED_BASE = frozenset(("bridge", "cascade"))   # plus "record" when W's capture decides it ([Q-V22-1])
+MODE = "shadow"                                       # 047; the writer refuses any other (condition (i))
+RULE_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
 PREFIX = "chain-checkpoint shadow:"
+RECORD_LINE = "chain-checkpoint shadow record:"
 
-# ---- chainmech v2.2's class rule (hunk_class_v22.py), copied byte for byte by make_c1_282.py ----
+# ---- chainmech v2.2's class rule (hunk_class_v22.py), copied byte for byte by make_c2_282.py ----
 CLASSES = ("bridge", "cascade", "other", "record")   # the closed vocabulary, sorted; pinned in each authority from 282 on
 NORMALISED = frozenset(("bridge", "cascade", "record"))   # "record" pending Q-V22-1
 RECORDS = frozenset(("architecture/review-record/briefs.json", "task-packets/README.md",
@@ -213,7 +229,7 @@ def _finds(raw, needle):
         i = raw.find(needle, i + 1)
 
 
-# ---- end of the copied rule ----
+# ---- end of the copied rule; its NORMALISED constant is not used here: normalised() decides ----
 
 
 def _sha(raw):
@@ -224,6 +240,10 @@ class Fault(Exception):
     """A class-C fault: the reader's own or the records'."""
 
 
+class OverBudget(Exception):
+    """The in-run budget is spent: the rest of the replay is skipped and recorded as class C, over cap."""
+
+
 def _read(root, path):
     p = root / path
     try:
@@ -232,56 +252,82 @@ def _read(root, path):
         return None
 
 
-def naming_authority(root, raw):
-    """The authority that names the record with its exact sha256 (in newFiles or as a changed file's afterSha256)."""
-    digest, hits = _sha(raw), []
+def _authorities(root):
+    out = []
     for p in sorted((root / "architecture").glob("*-authority.json")):
-        body = p.read_bytes()
-        if RECORD_PATH.encode() not in body:
+        try:
+            rec = json.loads(p.read_bytes())
+        except (OSError, ValueError):
             continue
-        rec = json.loads(body)
-        if rec.get("newFiles", {}).get(RECORD_PATH) == digest or \
-                rec.get("changedFiles", {}).get(RECORD_PATH, {}).get("afterSha256") == digest:
-            hits.append(p.relative_to(root).as_posix())
-    return hits
+        out.append((len(rec.get("baselinePackets", {})), p.relative_to(root).as_posix(), rec))
+    return out
+
+
+def naming_authority(root, live_sha):
+    """(authority path, verdict): the newest authority, by baseline, that names the record in newFiles or changedFiles,
+    and whether it names the live digest ("named", "stale") or none names it ("unnamed")."""
+    naming = []
+    for n, path, rec in _authorities(root):
+        named = rec.get("newFiles", {}).get(RECORD_PATH) or rec.get("changedFiles", {}).get(RECORD_PATH, {}).get("afterSha256")
+        if named:
+            naming.append((n, path, named))
+    if not naming:
+        return None, "unnamed"
+    n, path, named = max(naming)
+    return path, ("named" if named == live_sha else "stale")
 
 
 def newer_authorities(root, baseline):
-    """Every authority whose baseline catalog is larger than the checkpoint authority's, newest first."""
-    out = []
-    for p in sorted((root / "architecture").glob("*-authority.json")):
-        rec = json.loads(p.read_bytes())
-        n = len(rec.get("baselinePackets", {}))
-        if n > baseline:
-            out.append((n, p.relative_to(root).as_posix(), rec))
+    out = [(n, path, rec) for n, path, rec in _authorities(root) if n > baseline]
     out.sort(key=lambda t: -t[0])
     if len({n for n, _, _ in out}) != len(out):
         raise Fault("two newer authorities share a baseline size")
     return out
 
 
-def _normalised(record):
-    extra = record.get("normalisedRecordClass") is True   # set at W when the capture names an index record ([Q-V22-1])
-    return NORMALISED_BASE | ({"record"} if extra else frozenset())
+def bind_context(apath, rec):
+    """C1-6: the authority's class vocabulary, rule digest and step context, before any of its classes is trusted."""
+    ctx = rec.get("hunkClassContext")
+    if not (isinstance(ctx, dict) and set(ctx) == {"newPacket", "prevValidator", "prevTest", "steps"}):
+        return "hunkClassContext missing or malformed"
+    if ctx["newPacket"] != rec.get("authorityPacket"):
+        return "hunkClassContext.newPacket is not the authority's packet"
+    if ctx["steps"] != [1, 1 + len(rec.get("productPackets", {}))]:
+        return "hunkClassContext.steps is not [1, 1 + K]"
+    if rec.get("hunkClassVocabulary") != list(CLASSES):
+        return "hunkClassVocabulary is not the closed vocabulary"
+    if rec.get("hunkClassRuleSha256") != RULE_SHA256:
+        return "hunkClassRuleSha256 is not the copied rule's"
+    return None
 
 
-def rebuild(path, live, newer, normalised):
-    """The bytes of path at the checkpoint tree, from its live bytes, undoing newest first each newer authority's
-    normalised hunks. Returns (bytes, reverted [(authority, class, count)], unexplained [(authority, detail)])."""
+def normalised(record):
+    return frozenset(("bridge", "cascade") + (("record",) if record.get("normalisedRecordClass") is True else ()))
+
+
+def rebuild(path, live, newer, norm, budget=None):
+    """The bytes of path at the checkpoint tree, undoing newest first each newer authority's normalised hunks.
+    Returns (bytes, reverted [(authority, {class: count})], unexplained [(authority, detail)]). budget() raises
+    OverBudget when the in-run budget is spent."""
     cur, reverted, unexplained = live, [], []
     for _, apath, rec in newer:
+        if budget:
+            budget()
         entry = rec.get("changedFiles", {}).get(path)
         if entry is None:
             if path in rec.get("newFiles", {}):
                 unexplained.append((apath, "added after the checkpoint"))
             continue
-        if _sha(cur) != entry["afterSha256"]:
-            unexplained.append((apath, "afterSha256 differs before the replay"))
+        bad = bind_context(apath, rec)
+        if bad:
+            unexplained.append((apath, bad))
             return cur, reverted, unexplained
-        ctx = rec.get("hunkClassContext")
-        hunks, keep, seen = entry["reverseHunks"], [], set()
-        prior = -1
-        for h in hunks:
+        ctx, keep, seen, prior = rec["hunkClassContext"], [], set(), -1
+        pending = len(entry["reverseHunks"])
+        if _sha(cur) != entry["afterSha256"]:
+            unexplained.append((apath, "afterSha256 differs before the replay; cascade share 0 of %d hunks applied" % pending))
+            return cur, reverted, unexplained
+        for h in entry["reverseHunks"]:
             if h["at"] <= prior:
                 unexplained.append((apath, "reverse hunks out of order"))
                 return cur, reverted, unexplained
@@ -291,24 +337,21 @@ def rebuild(path, live, newer, normalised):
                 unexplained.append((apath, "a hunk does not apply byte-exactly"))
                 return cur, reverted, unexplained
             cls = h.get("class")
-            if cls is None or ctx is None:
-                unexplained.append((apath, "a hunk without its class or context"))
-                return cur, reverted, unexplained
             again = classify(path, cur, h["at"], rm, ins, ctx["prevValidator"], ctx["prevTest"], ctx["newPacket"],
                              tuple(ctx["steps"]), seen=seen)
-            if again != cls:
+            if cls != again:
                 unexplained.append((apath, "recorded class %s fails the re-check (%s)" % (cls, again)))
                 return cur, reverted, unexplained
             keep.append((h["at"], rm, ins, cls))
-        undo = [k for k in keep if k[3] in normalised]
-        for at, rm, ins, cls in sorted(undo, key=lambda k: -k[0]):
+        undo = [k for k in keep if k[3] in norm]
+        for at, rm, ins, _ in sorted(undo, key=lambda k: -k[0]):
             cur = cur[:at] + ins + cur[at + len(rm):]
         counts = {}
         for k in keep:
             counts[k[3]] = counts.get(k[3], 0) + 1
         reverted.append((apath, counts))
         if len(undo) != len(keep):
-            unexplained.append((apath, "%d hunk(s) of a class not normalised" % (len(keep) - len(undo))))
+            unexplained.append((apath, "%d of %d hunks of a class not normalised" % (len(keep) - len(undo), len(keep))))
             return cur, reverted, unexplained
         if _sha(cur) != entry["beforeSha256"]:
             unexplained.append((apath, "beforeSha256 differs after the replay"))
@@ -320,51 +363,65 @@ RULED_PAIR_TYPES = frozenset(("supersession",))
 
 
 def check_pairs(entries):
-    """V006-P2-2: each entry two distinct ids and a ruled pair type; no entry repeated."""
-    seen = set()
+    """V006-P2-2: each entry two distinct ids and a ruled pair type; no entry repeated. Returns the faults."""
+    seen, faults = set(), []
     for e in entries:
         ids = e.get("ids")
         if not (isinstance(ids, list) and len(ids) == 2 and ids[0] != ids[1]) or e.get("type") not in RULED_PAIR_TYPES:
-            raise Fault("a check_pairs entry is self-paired, not a pair, or of an unruled type (slot %s)" % e.get("layerSlot"))
+            faults.append("check_pairs entry self-paired, not a pair, or unruled (slot %s)" % e.get("layerSlot"))
+            continue
         key = (e.get("layerSlot"), tuple(sorted(ids)))
         if key in seen:
-            raise Fault("a repeated check_pairs entry (slot %s)" % e.get("layerSlot"))
+            faults.append("check_pairs entry repeated (slot %s)" % e.get("layerSlot"))
         seen.add(key)
+    return faults
 
 
 def sample(tree_id, slots, fraction):
-    """The head-seeded sample: a slot is sampled when sha256(tree id + NUL + slot) / 2**256 < fraction."""
     return sorted(s for s in slots if int(_sha(tree_id.encode() + b"\0" + str(s).encode()), 16) < fraction * 2 ** 256)
 
 
-def head_tree(root):
-    out = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD^{tree}"], capture_output=True, text=True, timeout=5)
-    if out.returncode or not re.fullmatch(r"[0-9a-f]{40}", out.stdout.strip()):
-        raise Fault("the head tree id is unavailable")
-    return out.stdout.strip()
+def _git(root, *args):
+    out = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, timeout=5)
+    value = out.stdout.strip()
+    if out.returncode or not re.fullmatch(r"[0-9a-f]{40}", value):
+        raise Fault("git %s unavailable" % args[-1])
+    return value
 
 
 def node_hash(nodeid):
     return _sha(nodeid.encode("utf-8"))
 
 
-class Reader:
-    """One shadow run for one outermost session. Every method records faults instead of raising them."""
+def _workers(root):
+    raw = _read(root, "ci/parallel_suite.py") or b""
+    m = re.search(rb"^WORKERS = (\d+)$", raw, re.M)
+    return (int(m.group(1)), "ci/parallel_suite.py WORKERS") if m else (None, "unavailable")
 
-    def __init__(self, root=ROOT, clock=time.monotonic, out_dir=None, cap=CAP_SECONDS, tree=None):
-        self.root, self.clock, self.cap = Path(root), clock, cap
-        self.out_dir = Path(out_dir) if out_dir else Path(tempfile.gettempdir())
-        self.tree = tree
-        self.active, self.spent, self.record = False, 0.0, None
-        self.disagreements, self.faults, self.live, self.reverted = [], [], {}, {}
-        self.sampled, self.naming, self.over_cap = [], [], False
+
+class Reader:
+    """One shadow run for one outermost session. Every public method records faults instead of raising them."""
+
+    def __init__(self, root=ROOT, clock=time.monotonic, cap=CAP_SECONDS, tree=None, in_dry_run=False):
+        self.root, self.clock, self.cap, self.tree, self.in_dry_run = Path(root), clock, cap, tree, in_dry_run
+        self.active, self.spent, self.record, self.mode = False, 0.0, None, "inactive"
+        self.disagreements, self.faults, self.reverted, self.layers = [], [], {}, {}
+        self.live, self.durations, self.sampled, self.naming, self.over_cap = {}, {}, [], None, False
+        self._t0 = 0.0
+
+    def _budget(self):
+        if self.spent + (self.clock() - self._t0) > self.cap:
+            raise OverBudget()
 
     def _timed(self, fn, *args):
-        start = self.clock()
+        self._t0 = start = self.clock()
         try:
-            fn(*args)
-        except Exception as exc:    # a fault never escapes: class C
-            self.faults.append("C %s: %s" % (type(exc).__name__, str(exc)[:200]))
+            return fn(*args)
+        except OverBudget:
+            self.over_cap = True
+            self.disagreements.append((None, "reader", "C", "over cap: the replay stopped at %.0f s; the dry-run path" % self.cap))
+        except Exception as exc:
+            self.disagreements.append((None, "reader", "C", "%s: %s" % (type(exc).__name__, str(exc)[:200])))
         finally:
             self.spent += self.clock() - start
 
@@ -374,83 +431,132 @@ class Reader:
     def _start(self):
         raw = _read(self.root, RECORD_PATH)
         if raw is None:
-            return                                 # no record: inactive (c1 and W)
+            return
         self.active = True
-        self.naming = naming_authority(self.root, raw)
-        if not self.naming:
-            self.disagreements.append((None, RECORD_PATH, "A", "the record is present but no authority names it"))
+        self.naming, verdict = naming_authority(self.root, _sha(raw))
+        if verdict != "named":
+            self.disagreements.append((None, RECORD_PATH, "A", "the record is %s (vector 2)" % verdict))
             return
         record = json.loads(raw)
         if record.get("schemaVersion") != SCHEMA:
             raise Fault("record schema")
         self.record = record
-        check_pairs(record.get("checkPairs", []))
-        checkpoint_baseline = record["checkpointBaseline"]
-        newer = newer_authorities(self.root, checkpoint_baseline)
-        normalised = _normalised(record)
-        for layer in sorted(record["layers"], key=lambda l: -l["slot"]):    # newest first (RL-07 ordering)
-            files = {layer["validatorPath"]: layer["validatorSha256"]}
+        if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
+            self.mode = "dry-run-only: skipped"
+            self.disagreements.append((None, "reader", "C", "dry-run-only: skipped in this session; the dry-run runner compares"))
+            return
+        self.mode = "compare"
+        newer = newer_authorities(self.root, record["checkpointBaseline"])
+        norm = normalised(record)
+        for layer in sorted(record["layers"], key=lambda l: -l["slot"]):
+            files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"]}
             if layer.get("testFilePath"):
                 files[layer["testFilePath"]] = layer["testFileSha256"]
             files.update(layer["inputs"])
             for path, digest in sorted(files.items()):
-                live = _read(self.root, path)
-                if live is None:
-                    self.disagreements.append((layer["slot"], path, "A", "missing"))
-                    continue
-                rebuilt, reverted, unexplained = rebuild(path, live, newer, normalised)
-                if reverted:
-                    self.reverted.setdefault(layer["slot"], []).append((path, reverted))
-                if _sha(rebuilt) != digest:
-                    detail = "; ".join("%s: %s" % u for u in unexplained) or "differs from its checkpoint digest"
-                    self.disagreements.append((layer["slot"], path, "A", detail))
-        tree = self.tree or head_tree(self.root)
-        self.sampled = sample(tree, [l["slot"] for l in record["layers"]], record["parameters"]["sampleFraction"])
+                self._budget()
+                try:
+                    live = _read(self.root, path)
+                    if live is None:
+                        self.disagreements.append((layer["slot"], path, "A", "missing"))
+                        continue
+                    rebuilt, reverted, unexplained = rebuild(path, live, newer, norm, self._budget)
+                    if reverted:
+                        self.reverted.setdefault(layer["slot"], []).append([path, [[a, c] for a, c in reverted]])
+                    if _sha(rebuilt) != digest:
+                        detail = "; ".join("%s: %s" % u for u in unexplained) or "differs from its checkpoint digest"
+                        self.disagreements.append((layer["slot"], path, "A", detail))
+                except (OverBudget, KeyboardInterrupt):
+                    raise
+                except Exception as exc:     # C1-16: one file's fault never ends the rest
+                    self.disagreements.append((layer["slot"], path, "C", "%s: %s" % (type(exc).__name__, str(exc)[:160])))
+        for fault in check_pairs(record.get("checkPairs", [])):
+            self.disagreements.append((None, "checkPairs", "C", fault))
+        self.sampled = sample(self.tree or _git(self.root, "rev-parse", "HEAD^{tree}"), [l["slot"] for l in record["layers"]],
+                              record["parameters"]["sampleFraction"])
 
-    def report(self, nodeid, when, outcome):
-        if self.active and self.record is not None:
+    def report(self, nodeid, when, outcome, duration=0.0):
+        if self.active and self.mode == "compare":
             start = self.clock()
             try:
-                self.live.setdefault(node_hash(nodeid), {})[when] = outcome
+                key = node_hash(nodeid)
+                self.live.setdefault(key, {})[when] = outcome
+                self.durations[key] = self.durations.get(key, 0.0) + float(duration or 0.0)
             finally:
                 self.spent += self.clock() - start
 
-    def finish(self, head_sha="unknown"):
-        self._timed(self._finish)
+    def finish(self, head_sha=None):
         if not self.active:
-            return None
-        if self.spent > self.cap:
+            return None, None
+        self._timed(self._finish)
+        start = self.clock()
+        try:
+            head = head_sha or _git(self.root, "rev-parse", "HEAD")
+        except Exception as exc:
+            head = "unknown"
+            self.disagreements.append((None, "reader", "C", "head sha: %s" % type(exc).__name__))
+        self.spent += self.clock() - start
+        if self.spent > self.cap and not self.over_cap:
             self.over_cap = True
-        return self._write(head_sha)
+            self.disagreements.append((None, "reader", "C", "over cap: %.3f s over %.0f s; the dry-run path" % (self.spent, self.cap)))
+        return self._record(head)
 
     def _finish(self):
-        if self.record is None:
+        if self.record is None or self.mode != "compare":
             return
         input_slots = {d[0] for d in self.disagreements if d[2] == "A"}
         for layer in sorted(self.record["layers"], key=lambda l: -l["slot"]):
+            recorded, live, agree, live_s = {}, {}, True, 0.0
             for node in layer["nodes"]:
-                live = self.live.get(node["nodeSha256"])
+                key = node["nodeSha256"]
                 want = {k: node[k] for k in ("setup", "call", "teardown") if node.get(k) is not None}
-                if live is None:
-                    self.disagreements.append((layer["slot"], node["nodeSha256"][:12], "B", "not run in this session"))
-                elif any(live.get(k) != v for k, v in want.items()):
+                got = self.live.get(key)
+                recorded[key[:12]], live[key[:12]] = want, got
+                live_s += self.durations.get(key, 0.0)
+                if got is None or any(got.get(k) != v for k, v in want.items()):
+                    agree = False
                     cls = "A" if layer["slot"] in input_slots else "B"
-                    self.disagreements.append((layer["slot"], node["nodeSha256"][:12], cls, "outcome differs"))
+                    detail = "not run in this session" if got is None else "outcome differs"
+                    self.disagreements.append((layer["slot"], key[:12], cls, detail))
+            self.layers[str(layer["slot"])] = {"recorded": recorded, "live": live, "agree": agree,
+                                               "writingSeconds": layer.get("seconds"), "liveSeconds": round(live_s, 4)}
 
-    def _write(self, head_sha):
-        body = {"headSha": head_sha, "readerSeconds": round(self.spent, 3), "workers": 8,
-                "capSeconds": self.cap, "overCap": self.over_cap,
-                "dryRunPath": "the lane's dry run (DESIGN_CC2 vector 9)" if self.over_cap else None,
-                "naming": self.naming, "sampled": self.sampled,
-                "disagreements": [{"slot": s, "where": w, "class": c, "detail": d} for s, w, c, d in self.disagreements],
-                "faults": self.faults,
-                "reverted": {str(k): [[p, [[a, c] for a, c in r]] for p, r in v] for k, v in self.reverted.items()}}
-        name = "chain-checkpoint-shadow-%s.json" % (head_sha[:12] if re.fullmatch(r"[0-9a-f]{7,40}", head_sha) else "head")
-        try:
-            (self.out_dir / name).write_text(json.dumps(body, sort_keys=True) + "\n", encoding="utf-8")
-        except OSError as exc:
-            self.faults.append("C record file: %s" % type(exc).__name__)
-        counts = {c: sum(1 for d in self.disagreements if d[2] == c) for c in "AB"}
-        return "%s head %s; %.3f s (cap %.0f s%s); disagreements A %d B %d; faults C %d; sampled %d; record %s" % (
-            PREFIX, head_sha[:12], self.spent, self.cap, ", OVER CAP: dry-run path" if self.over_cap else "",
-            counts["A"], counts["B"], len(self.faults), len(self.sampled), name)
+    def _record(self, head):
+        workers, source = _workers(self.root)
+        record = {"headSha": head, "readerSeconds": round(self.spent, 3), "capSeconds": self.cap, "overCap": self.over_cap,
+                  "workers": workers, "workersSource": source, "mode": self.mode,
+                  "shadowIn": (self.record or {}).get("parameters", {}).get("shadowIn"), "naming": self.naming,
+                  "attested": sorted(l["slot"] for l in (self.record or {}).get("layers", [])), "sampled": self.sampled,
+                  "layers": self.layers, "reverted": {str(k): v for k, v in self.reverted.items()},
+                  "disagreements": [{"slot": s, "where": w, "class": c, "detail": d} for s, w, c, d in self.disagreements]}
+        counts = {c: sum(1 for d in self.disagreements if d[2] == c) for c in "ABC"}
+        line = "%s head %s; %.3f s (cap %.0f s%s); mode %s; A %d B %d C %d; sampled %d" % (
+            PREFIX, head[:12], self.spent, self.cap, ", OVER CAP" if self.over_cap else "", self.mode,
+            counts["A"], counts["B"], counts["C"], len(self.sampled))
+        return line, record
+
+
+def dry_run_compare(log_path, out_path, root=ROOT):
+    """The dry-run runner's comparison (parameters.shadowIn == "dryRunOnly"): argv 63's END events from the dry run's
+    log feed the same Reader, which writes its record to out_path."""
+    reader = Reader(root=root, in_dry_run=True)
+    reader.start()
+    for line in Path(log_path).read_text(encoding="utf-8", errors="replace").splitlines():
+        if line.startswith("PYTEST_DIAGNOSTIC="):
+            try:
+                event = json.loads(line[len("PYTEST_DIAGNOSTIC="):])
+            except ValueError:
+                continue
+            if event.get("event") == "END" and reader.active and reader.mode == "compare":
+                reader.live.setdefault(event["node"], {})[event["phase"]] = event["outcome"]
+                reader.durations[event["node"]] = reader.durations.get(event["node"], 0.0) + event.get("durationUs", 0) / 1e6
+    line, record = reader.finish()
+    Path(out_path).write_text(json.dumps(record, sort_keys=True) + "\n", encoding="utf-8")
+    return line
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 4 and sys.argv[1] == "dry-run-compare":
+        print(dry_run_compare(sys.argv[2], sys.argv[3]))
+    else:
+        raise SystemExit("usage: chain_checkpoint.py dry-run-compare LOG OUT")

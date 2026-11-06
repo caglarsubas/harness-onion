@@ -1,20 +1,29 @@
 """MET-PERF-047 (CHAIN-COMPACTION-002): the checkpoint writer and its capture plugin. Lane-run only; never in the 64 argv.
 
-usage: chain_checkpoint_writer.py run WORKTREE OUT_DIR          argv 63, run directly, with the capture plugin
-       chain_checkpoint_writer.py assemble WORKTREE OUT_DIR SLOT [SIZE_BOUND]   the ledger from the capture shards
-       chain_checkpoint_writer.py rehash WORKTREE RECORD        every attested digest re-hashed at the final commit
+usage: chain_checkpoint_writer.py run WORKTREE OUT_DIR
+       chain_checkpoint_writer.py assemble WORKTREE OUT_DIR SLOT --argv-run FILE (--measure-only | --size-bound N) [--dry-run-only]
+       chain_checkpoint_writer.py rehash WORKTREE RECORD
 
-The writing run's stated difference (Q-282C-3): argv 1-62 and 64 run through ci/run_packet_argv.py as the dry run
-runs them; argv 63 runs directly, the same command in the same interpreter, with `-p scripts.chain_checkpoint_writer`
-and the two capture variables below. An option keeps the parallel suite serial, so the capture sees every node in one
-process. The plugin observes only: it adds one audit hook on "open" and appends, per node and phase, the repository
-paths opened for reading to its shard under OUT_DIR; it never writes inside the worktree and never changes a report,
-an outcome or the exit status. The writer refuses an attested node (condition (i)), a failed full-run proof, an input
-outside the repository and a ledger over SIZE_BOUND (it never truncates)."""
+The writing run's two stated differences (Q-282C-3, MON-282-Q1Q3), always given together: (1) argv 63 runs directly,
+not through ci/run_packet_argv.py, with `-p scripts.chain_checkpoint_writer` and the capture variables; (2) it runs
+SERIAL: the -p option keeps ci/parallel_suite.py's serial loop, so one process runs every node, where the verify runs 8
+workers. An outcome that differs between this run and the 8-worker shadow verify 0 is attributed to these two first.
+Argv 1-62 and 64 run through the runner (the lane's dry-run kit); their run summary is bound by sha256 (--argv-run).
+
+The capture observes only: one audit hook on "open" notes, per node and phase, the repository files opened for reading
+(write flags excluded, os.open judged by its flags); collection-time opens are charged to every node of the module;
+opens outside the repository are counted, never inputs; the node is cleared after each teardown. It writes only its
+shard under OUT_DIR, which must lie outside the worktree. The writer refuses: OUT_DIR inside the worktree; a reader
+whose MODE is not "shadow" (condition (i): no checkpoint from an attested run); deselected nodes; a failed full-run proof
+(executed != collected); an argv run summary with a non-zero rc; a ledger over its bound (it never truncates). At W it
+measures the size (--measure-only); at F the bound is required. Remaining capture gaps: opens by subprocesses and
+files read through memory maps already open are not seen."""
+import ast
 import hashlib
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -24,9 +33,12 @@ RECORD_PATH = "architecture/chain-checkpoint/record.json"
 AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
 SCHEMA = "harness.planeon.ai/chain-checkpoint/v1"
 ARGV63 = ["-m", "pytest", "tests", "ci/test_offline_runner.py", "ci/test_warm_snapshot.py"]
-PARAMETERS = {"cadenceSlots": 10, "sampleFraction": 0.1, "fullRunOn": "owner-named slot", "nShadow": 10,
-              "shadowCapSeconds": 15, "workers": 8}
+INDEX_RECORDS = ("architecture/review-record/briefs.json", "task-packets/README.md",
+                 "docs/repositories/00-harness-engineering.md", "docs/MASTER_DEVELOPMENT_PLAN.md")
 SKIP_PARTS = (".git", "__pycache__", ".venv", ".pytest_cache")
+WRITE_FLAGS = os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC | os.O_APPEND
+STATED = ["direct: argv 63 runs outside ci/run_packet_argv.py, with -p scripts.chain_checkpoint_writer and the capture variables",
+          "serial: the -p option keeps ci/parallel_suite.py's serial loop (one process); the verify runs 8 workers"]
 
 
 class Refused(SystemExit):
@@ -35,73 +47,94 @@ class Refused(SystemExit):
 
 
 # ---- the capture plugin (loaded by -p in the writing run only) ----
-_state = {"node": None, "phase": None, "opened": {}, "reports": [], "collected": 0}
+_state = {"node": None, "opened": {}, "reports": [], "collected": 0, "deselected": 0, "outside": 0}
 
 
 def _audit(event, args):
     if event != "open" or _state["node"] is None or not args:
         return
-    path, mode = args[0], args[1] if len(args) > 1 else "r"
-    if not isinstance(path, (str, bytes)) or (isinstance(mode, str) and any(m in mode for m in "wax+")):
+    path, mode = args[0], args[1] if len(args) > 1 else None
+    flags = args[2] if len(args) > 2 else 0
+    if not isinstance(path, (str, bytes)) or (isinstance(mode, str) and any(m in mode for m in "wax+")) \
+            or (mode is None and isinstance(flags, int) and flags & WRITE_FLAGS):
         return
-    root = os.environ.get(CAPTURE_ENV[1])
     try:
-        rel = os.path.relpath(os.path.realpath(os.fsdecode(path)), root)
+        rel = os.path.relpath(os.path.realpath(os.fsdecode(path)), os.path.realpath(os.environ.get(CAPTURE_ENV[1])))
     except (TypeError, ValueError):
         return
-    if rel.startswith("..") or any(part in SKIP_PARTS for part in Path(rel).parts):
+    if rel.startswith(".."):
+        _state["outside"] += 1
+        return
+    if any(part in SKIP_PARTS for part in Path(rel).parts):
         return
     _state["opened"].setdefault(_state["node"], set()).add(Path(rel).as_posix())
 
 
 def pytest_configure(config):
     if os.environ.get(CAPTURE_ENV[0]):
-        import sys as _sys
-        _sys.addaudithook(_audit)
+        sys.addaudithook(_audit)
+
+
+def pytest_make_collect_report(collector):
+    _state["node"] = "collect:" + collector.nodeid.split("::", 1)[0]
 
 
 def pytest_collection_finish(session):
-    _state["collected"] = len(session.items)
+    _state["collected"], _state["node"] = len(session.items), None
 
 
-def _phase(item, phase):
-    _state["node"], _state["phase"] = item.nodeid, phase
+def pytest_deselected(items):
+    _state["deselected"] += len(items)
 
 
 def pytest_runtest_setup(item):
-    _phase(item, "setup")
+    _state["node"] = item.nodeid
 
 
 def pytest_runtest_call(item):
-    _phase(item, "call")
+    _state["node"] = item.nodeid
 
 
 def pytest_runtest_teardown(item):
-    _phase(item, "teardown")
+    _state["node"] = item.nodeid
 
 
 def pytest_runtest_logreport(report):
     _state["reports"].append([report.nodeid, report.when, report.outcome, round(report.duration, 4)])
+    if report.when == "teardown":
+        _state["node"] = None
 
 
 def pytest_sessionfinish(session, exitstatus):
     out = os.environ.get(CAPTURE_ENV[0])
-    if not out:
-        return
-    shard = Path(out) / ("shard-%d.json" % os.getpid())
-    shard.write_text(json.dumps({"collected": _state["collected"], "reports": _state["reports"], "attested": [],
-                                 "opened": {k: sorted(v) for k, v in _state["opened"].items()}}, sort_keys=True),
-                     encoding="utf-8")
+    if out:
+        (Path(out) / ("shard-%d.json" % os.getpid())).write_text(json.dumps(
+            {"collected": _state["collected"], "deselected": _state["deselected"], "outside": _state["outside"],
+             "reports": _state["reports"], "opened": {k: sorted(v) for k, v in _state["opened"].items()}}, sort_keys=True),
+            encoding="utf-8")
 
 
 # ---- the writer ----
 sha = lambda raw: hashlib.sha256(raw).hexdigest()
 
 
+def _outside(worktree, out_dir):
+    if out_dir.resolve().is_relative_to(worktree.resolve()):
+        raise Refused("OUT_DIR lies inside the worktree")
+
+
 def run(worktree, out_dir):
+    _outside(worktree, out_dir)
     out_dir.mkdir(parents=True, exist_ok=False)
     env = dict(os.environ, **{CAPTURE_ENV[0]: str(out_dir), CAPTURE_ENV[1]: str(worktree)})
     return subprocess.run([sys.executable, *ARGV63, "-p", "scripts.chain_checkpoint_writer"], cwd=worktree, env=env).returncode
+
+
+def _constant(path, name):
+    for node in ast.parse(path.read_bytes()).body:
+        if isinstance(node, ast.Assign) and getattr(node.targets[0], "id", None) == name:
+            return ast.literal_eval(node.value)
+    return None
 
 
 def _layers(worktree):
@@ -112,13 +145,22 @@ def _layers(worktree):
     return [(slot, module) for slot, module, _, _ in mod.walk_layers(lambda p: (worktree / p).read_bytes(), rule)]
 
 
-def assemble(worktree, out_dir, slot, size_bound=None):
+def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=False, dry_run_only=False):
+    _outside(worktree, out_dir)
+    if _constant(worktree / "ci/chain_checkpoint.py", "MODE") != "shadow":
+        raise Refused("the reader is not in shadow mode: no checkpoint from an attested run (condition (i))")
+    if not measure_only and size_bound is None:
+        raise Refused("the size bound is required at F")
     shards = sorted(out_dir.glob("shard-*.json"))
     if len(shards) != 1:
-        raise Refused("expected one capture shard (a serial run), found %d" % len(shards))
+        raise Refused("expected one capture shard (the serial run), found %d" % len(shards))
     shard = json.loads(shards[0].read_bytes())
-    if shard["attested"]:
-        raise Refused("a checkpoint written by an attested run (condition (i))")
+    if shard["deselected"]:
+        raise Refused("%d nodes deselected" % shard["deselected"])
+    summary = Path(argv_run).read_text(encoding="utf-8")
+    rcs = re.findall(r"^\d\d rc=(\d+)", summary, re.M)
+    if len(rcs) != 63 or any(rc != "0" for rc in rcs):
+        raise Refused("the argv 1-62 and 64 run summary is not 63 rc=0 lines")
     outcomes, seconds = {}, {}
     for nodeid, when, outcome, duration in shard["reports"]:
         outcomes.setdefault(nodeid, {})[when] = outcome
@@ -127,59 +169,61 @@ def assemble(worktree, out_dir, slot, size_bound=None):
     if executed != shard["collected"]:
         raise Refused("the full-run proof fails: collected %d, executed %d" % (shard["collected"], executed))
     authority = json.loads((worktree / AUTHORITY_PATH).read_bytes())
-    layers = []
+    layers, pairs = [], []
     for lslot, module in _layers(worktree):
         if lslot >= slot:
             continue
         validator = "scripts/%s.py" % module
         test = "tests/test_%s.py" % module.replace("validate_", "", 1)
         test = test if (worktree / test).is_file() else None
+        apath = _constant(worktree / validator, "AUTHORITY_PATH")
+        if not apath or not (worktree / apath).is_file():
+            raise Refused("layer %d names no authority file" % lslot)
         nodes = sorted(n for n in outcomes if test and n.split("::", 1)[0] == test)
-        inputs = sorted({p for n in nodes for p in shard["opened"].get(n, ())} - {validator, test, RECORD_PATH})
-        for p in inputs:
-            if not (worktree / p).resolve().is_relative_to(worktree.resolve()):
-                raise Refused("an input outside the repository: layer %d" % lslot)
+        opened = {p for n in nodes for p in shard["opened"].get(n, ())} | set(shard["opened"].get("collect:" + (test or ""), ()))
+        inputs = sorted(opened - {validator, test, apath, RECORD_PATH})
         layers.append({"slot": lslot, "module": module, "validatorPath": validator,
-                       "validatorSha256": sha((worktree / validator).read_bytes()),
+                       "validatorSha256": sha((worktree / validator).read_bytes()), "authorityPath": apath,
+                       "authoritySha256": sha((worktree / apath).read_bytes()),
                        **({"testFilePath": test, "testFileSha256": sha((worktree / test).read_bytes())} if test else {}),
                        "inputs": {p: sha((worktree / p).read_bytes()) for p in inputs if (worktree / p).is_file()},
                        "nodes": [{"nodeSha256": sha(n.encode("utf-8")), **{k: outcomes[n].get(k) for k in ("setup", "call", "teardown")}}
                                  for n in nodes],
                        "seconds": round(sum(seconds[n] for n in nodes), 3)})
-    pairs = []
-    for layer in layers:   # V006-P2-2: a layer's pair list as data, each entry two distinct ids and a ruled type
-        tree = __import__("ast").parse((worktree / layer["validatorPath"]).read_bytes())
-        for node in tree.body:
-            if isinstance(node, __import__("ast").Assign) and getattr(node.targets[0], "id", None) == "PAIRS_PATH":
-                pairs_path = node.value.value
-                for pair in json.loads((worktree / pairs_path).read_bytes())["pairs"]:
-                    ids = [p["id"] for p in pair["packets"]]
-                    kind = "supersession" if "superseded" in pair.get("reason", {}) else "unruled"
-                    pairs.append({"layerSlot": layer["slot"], "pairsPath": pairs_path, "ids": ids, "type": kind})
-    head = subprocess.run(["git", "-C", str(worktree), "rev-parse", "HEAD", "HEAD^{tree}"], capture_output=True,
-                          text=True, check=True).stdout.split()
+        pairs_path = _constant(worktree / validator, "PAIRS_PATH")
+        if pairs_path:
+            for pair in json.loads((worktree / pairs_path).read_bytes())["pairs"]:
+                pairs.append({"layerSlot": lslot, "pairsPath": pairs_path, "ids": [p["id"] for p in pair["packets"]],
+                              "type": "supersession" if "superseded" in pair.get("reason", {}) else "unruled"})
+    head = subprocess.run(["git", "-C", str(worktree), "rev-parse", "HEAD", "HEAD^{tree}"], capture_output=True, text=True,
+                          check=True).stdout.split()
+    captured = {p for l in layers for p in l["inputs"]}
     record = {"schemaVersion": SCHEMA, "checkpointSlot": slot, "checkpointBaseline": len(authority["baselinePackets"]),
-              "writingCommit": head[0], "writingTree": head[1], "parameters": PARAMETERS,
-              "normalisedRecordClass": False, "layers": layers, "checkPairs": pairs,
-              "fullRunProof": {"collected": shard["collected"], "executed": executed, "attested": 0},
-              "writingRun": {"argv63": "direct: python " + " ".join(ARGV63) + " -p scripts.chain_checkpoint_writer",
-                             "captureEnv": list(CAPTURE_ENV), "captureObservesOnly": True,
-                             "otherArgv": "argv 1-62 and 64 through ci/run_packet_argv.py (the lane's dry-run kit)",
-                             "verifyReference": "none: the first checkpoint records the writing run itself"}}
-    raw = (json.dumps(record, sort_keys=True, indent=1) + "\n").encode()
-    record["sizeBytes"], record["sizeBound"] = len(raw), size_bound
-    raw = (json.dumps(record, sort_keys=True, indent=1) + "\n").encode()
+              "writingCommit": head[0], "writingTree": head[1],
+              "parameters": {"cadenceSlots": 10, "sampleFraction": 0.1, "fullRunOn": "owner-named slot", "nShadow": 10,
+                             "shadowCapSeconds": 15, "workers": 8, "shadowIn": "dryRunOnly" if dry_run_only else "verify"},
+              "normalisedRecordClass": bool(captured & set(INDEX_RECORDS)), "layers": layers, "checkPairs": pairs,
+              "fullRunProof": {"collected": shard["collected"], "executed": executed, "deselected": 0, "attested": 0},
+              "writingRun": {"statedDifferences": STATED, "captureEnv": list(CAPTURE_ENV), "captureObservesOnly": True,
+                             "outsideReads": shard["outside"], "argvRunSummarySha256": sha(summary.encode()),
+                             "verifyReference": "none: the first checkpoint records the writing run itself"},
+              "sizeBound": size_bound, "sizeBytes": 0}
+    for _ in range(5):          # sizeBytes is the final file's length
+        raw = (json.dumps(record, sort_keys=True, indent=1) + "\n").encode()
+        if record["sizeBytes"] == len(raw):
+            break
+        record["sizeBytes"] = len(raw)
     if size_bound is not None and len(raw) > size_bound:
         raise Refused("the ledger is %d bytes, over its bound %d" % (len(raw), size_bound))
     (out_dir / "record.json").write_bytes(raw)
-    return len(raw), len(layers)
+    return len(raw), len(layers), sorted(captured & set(INDEX_RECORDS))
 
 
 def rehash(worktree, record_path):
     record = json.loads(Path(record_path).read_bytes())
     bad = []
     for layer in record["layers"]:
-        files = {layer["validatorPath"]: layer["validatorSha256"], **layer["inputs"]}
+        files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"], **layer["inputs"]}
         if layer.get("testFilePath"):
             files[layer["testFilePath"]] = layer["testFileSha256"]
         bad += ["%d %s" % (layer["slot"], p) for p, d in files.items() if sha((worktree / p).read_bytes()) != d]
@@ -189,13 +233,15 @@ def rehash(worktree, record_path):
 
 
 if __name__ == "__main__":
-    cmd, wt = sys.argv[1], Path(sys.argv[2]).resolve()
-    if cmd == "run":
-        sys.exit(run(wt, Path(sys.argv[3]).resolve()))
-    if cmd == "assemble":
-        print("ledger bytes %d, layers %d" % assemble(wt, Path(sys.argv[3]).resolve(), int(sys.argv[4]),
-                                                      int(sys.argv[5]) if len(sys.argv) > 5 else None))
-    elif cmd == "rehash":
-        print("attested inputs re-hashed: %d" % rehash(wt, sys.argv[3]))
+    args = sys.argv[1:]
+    if args[:1] == ["run"]:
+        sys.exit(run(Path(args[1]).resolve(), Path(args[2]).resolve()))
+    if args[:1] == ["assemble"]:
+        flags = {a: args[i + 1] if i + 1 < len(args) else None for i, a in enumerate(args) if a.startswith("--")}
+        print(assemble(Path(args[1]).resolve(), Path(args[2]).resolve(), int(args[3]), flags["--argv-run"],
+                       int(flags["--size-bound"]) if "--size-bound" in flags else None, "--measure-only" in flags,
+                       "--dry-run-only" in flags))
+    elif args[:1] == ["rehash"]:
+        print("attested inputs re-hashed: %d" % rehash(Path(args[1]).resolve(), args[2]))
     else:
         raise SystemExit(__doc__)
