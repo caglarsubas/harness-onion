@@ -8,7 +8,8 @@ observes and records only; nothing here raises out of a hook or changes an exit 
 Public interface: Reader(root, clock, cap, tree, in_dry_run).start(); .report(nodeid, when, outcome, duration);
 .finish(head_sha=None) -> (summary line, record dict); rebuild(path, live, newer, normalised, budget); sample(tree,
 slots, fraction); naming_authority(root, live_sha, budget, auths); newer_authorities(root, baseline, budget, auths);
-check_ledger(record); head_slot(record, auths); unauthored(reverted, unexplained); check_pairs(entries); and the CLI
+check_ledger(record); head_slot(record, auths); entry_fault(entry); unauthored(reverted, unexplained);
+check_pairs(entries); and the CLI
 `chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
 
 The ledger (record.json, schema harness.planeon.ai/chain-checkpoint/v1): schemaVersion, checkpointSlot,
@@ -21,7 +22,8 @@ sizeBound. Every digest is at the checkpoint tree.
 The rebuild (D9 (a)): for each attested file, undo newest first the reverseHunks of every authority newer than the
 checkpoint (baseline catalog larger than checkpointBaseline), byte-exact, afterSha256 and beforeSha256 checked; each
 authority's hunkClassContext {newPacket == authorityPacket, prevValidator, prevTest, steps == [1, 1 + K]},
-hunkClassVocabulary and hunkClassRuleSha256 are bound first; each recorded class is re-checked by the rule copied
+hunkClassVocabulary and hunkClassRuleSha256 are bound after the entry's shape (entry_fault) and before any class is
+trusted, a bad context being class A; each recorded class is re-checked by the rule copied
 below, and only classes in normalised() are undone (cascade and bridge, plus record when normalisedRecordClass).
 
 The shadow record (one JSON line in the session's log, prefixed "chain-checkpoint shadow record:"): headSha,
@@ -31,9 +33,8 @@ sampled, layers {slot: {recorded, live, agree, writingSeconds, liveSeconds}}, re
 
 The kinds, their classes and their countEffects are architecture/chain-checkpoint/README.md's countEffect table, the
 single source; COUNT_EFFECT below mirrors it, and the module tests pin the two equal. A kind is set by cause, never by
-an exception's type: a malformed ledger, authority (it does not parse, is not an object, or a member is malformed),
-reverseHunks entry or checkPairs entry is corrupt, naming the file and the member; any other exception of the reader
-is fault. A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the authorities newer than
+an exception's type: corrupt is exactly what check_ledger, _authorities, entry_fault and newer_authorities refuse
+(the README's corrupt row), naming the file and the member; any other exception of the reader is fault. A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the authorities newer than
 the checkpoint by baseline, one authority per slot: their baselines and authorityPackets are distinct; null when the
 ledger was not read or its slots are malformed). A fault's or a corrupt record's detail names its exception class;
 every class-C detail names the head slot and the checkpoint slot. An attested file whose only miss is at its newest recorded
@@ -332,6 +333,8 @@ def bind_context(apath, rec):
         return "hunkClassContext missing or malformed"
     if ctx["newPacket"] != rec.get("authorityPacket"):
         return "hunkClassContext.newPacket is not the authority's packet"
+    if not isinstance(rec.get("productPackets", {}), dict):     # a bad class context stays class A (P047-C5-2)
+        return "productPackets is not an object"
     if ctx["steps"] != [1, 1 + len(rec.get("productPackets", {}))]:
         return "hunkClassContext.steps is not [1, 1 + K]"
     if rec.get("hunkClassVocabulary") != list(CLASSES):
@@ -371,7 +374,8 @@ def check_ledger(record):
     pairs = record.get("checkPairs", [])
     need(isinstance(pairs, list), "checkPairs is not a list")
     for i, e in enumerate(pairs):
-        need(isinstance(e, dict) and isinstance(e.get("ids"), list) and isinstance(e.get("type"), str), "checkPairs[%d]" % i)
+        need(isinstance(e, dict) and type(e.get("layerSlot")) is int and isinstance(e.get("type"), str)
+             and isinstance(e.get("ids"), list) and all(isinstance(x, str) for x in e["ids"]), "checkPairs[%d]" % i)
 
 
 def head_slot(record, auths):
@@ -399,6 +403,8 @@ def entry_fault(entry):
             base64.b64decode(h["insertBase64"], validate=True)
         except ValueError:
             return "reverseHunks[%d] base64" % i
+        if "class" in h and not isinstance(h["class"], str):
+            return "reverseHunks[%d].class" % i
     return None
 
 
@@ -515,7 +521,7 @@ class Reader:
         self.disagreements, self.reverted, self.layers, self.unauthored = [], {}, {}, set()
         self.live, self.durations, self.sampled, self.naming, self.over_cap = {}, {}, [], None, False
         self._t0 = 0.0
-        self.head_slot, self.ckpt_slot, self.ledger_read = None, None, False
+        self.head_slot, self.ckpt_slot, self.ledger_state = None, None, None
 
     def _budget(self):
         if self.spent + (self.clock() - self._t0) > self.cap:
@@ -523,9 +529,7 @@ class Reader:
 
     def _slots(self):
         if self.head_slot is None:
-            if self.ledger_read:     # P047-C4-2
-                return "head slot unknown (the ledger's checkpointSlot or checkpointBaseline is malformed)"
-            return "head slot unknown (the ledger was not read)"
+            return "head slot unknown (%s)" % (self.ledger_state or "the ledger was not read")     # P047-C4-2, P047-C5-5
         return "head slot %s, checkpoint slot %s" % (self.head_slot, self.ckpt_slot)
 
     def _timed(self, fn, *args):
@@ -559,19 +563,23 @@ class Reader:
         try:
             record = json.loads(raw)
         except ValueError:
+            self.ledger_state = "the ledger is not JSON"
             raise Corrupt("ledger is not JSON") from None
-        self.ledger_read = True
-        if isinstance(record, dict) and type(record.get("checkpointSlot")) is int and type(record.get("checkpointBaseline")) is int:
+        if not isinstance(record, dict):
+            self.ledger_state = "the ledger is not an object"
+        elif type(record.get("checkpointSlot")) is int and type(record.get("checkpointBaseline")) is int:
             self.ckpt_slot, self.head_slot = record["checkpointSlot"], head_slot(record, auths)
+        else:
+            self.ledger_state = "the ledger's checkpointSlot or checkpointBaseline is malformed"
         check_ledger(record)
         self.record = record
+        newer = newer_authorities(self.root, record["checkpointBaseline"], auths=auths)     # before the skip (P047-C5-1)
         if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
             self.mode = "dry-run-only: skipped"
             self.disagreements.append((self.head_slot, "reader", "C", "dry-run-only: skipped in this session (%s); the dry-run "
                                        "runner compares" % self._slots(), "skipped"))
             return
         self.mode = "compare"
-        newer = newer_authorities(self.root, record["checkpointBaseline"], auths=auths)
         norm = normalised(record)
         for layer in sorted(record["layers"], key=lambda l: -l["slot"]):
             files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"]}

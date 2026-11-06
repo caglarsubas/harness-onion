@@ -45,7 +45,8 @@ Every digest is at the checkpoint tree.
 - **The interface:**
   - `Reader(root, clock, cap, tree, in_dry_run)`, with `.start()`, `.report(nodeid, when, outcome, duration)` and
     `.finish(head_sha=None) -> (summary line, record)`;
-  - `rebuild`, `sample`, `naming_authority`, `newer_authorities`, `check_pairs` and `bind_context`;
+  - `rebuild`, `sample`, `naming_authority`, `newer_authorities`, `check_ledger`, `head_slot`, `entry_fault`,
+    `unauthored`, `check_pairs` and `bind_context`;
   - the CLI `chain_checkpoint.py dry-run-compare LOG OUT`.
 - **What a session prints:** the root conftest prints the summary line and the record as one
   `chain-checkpoint shadow record:` JSON line.
@@ -65,8 +66,9 @@ Every digest is at the checkpoint tree.
 **How the reader rebuilds.**
 - It replays, newest first, only the published `reverseHunks` of the authorities newer than the checkpoint. The apply
   is byte-exact, with each file's `afterSha256` and `beforeSha256` checked. It never uses git history.
-- Each authority's `hunkClassContext`, `hunkClassVocabulary` and `hunkClassRuleSha256` are bound first. Each recorded
-  class is re-checked by chainmech v2.2's rule.
+- Each changedFiles entry's shape is checked first (`entry_fault`; a broken entry is corrupt). Each authority's
+  `hunkClassContext`, `hunkClassVocabulary` and `hunkClassRuleSha256` are bound next, before any class is trusted; a
+  bad context is class A, kind input. Each recorded class is re-checked by chainmech v2.2's rule.
 - It undoes only `cascade` and `bridge` hunks, plus `record` when `normalisedRecordClass` is true.
 - Rebuilt bytes are compared, never executed.
 - An in-run budget stops the replay at the cap: class C, kind over-budget. A finished reading over the cap is kind
@@ -81,7 +83,7 @@ record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and 
 | input | A | restart | an attested file differs after normalisation; unauthored when its only miss is at its newest recorded step |
 | stale | A | restart | the record is unnamed, or named with another digest (vector 2) |
 | outcome | B | restart | a node's outcome differs with no input change |
-| corrupt | C | restart | the ledger, an authority (it does not parse, is not an object, or a member is malformed), a `reverseHunks` entry or a `checkPairs` entry is malformed, naming the file and the member |
+| corrupt | C | restart | the ledger (a member `check_ledger` names), an authority that does not parse, is not an object, or whose `baselinePackets`, `changedFiles` or `newFiles` is not an object, a `changedFiles` entry `entry_fault` rejects, or two newer authorities sharing a baseline or an `authorityPacket`; the detail names the file and the member |
 | over-budget | C | restart | the in-run budget stopped the replay at the cap |
 | over-cap | C | restart | a finished reading took longer than the cap |
 | fault | C | restart | any other exception of the reader |
@@ -95,7 +97,12 @@ record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and 
   names its exception class; every class-C detail names the head slot and the checkpoint slot (a skip, an over-budget
   and an over-cap record name their reason). A class-A or class-B record names the layer's slot; the stale record has
   no layer, so its slot is null.
-- A skip still writes its record, with the reason and the slots.
+- A skip still writes its record, with the reason and the slots; one authority per slot is checked before it.
+- The head slot's message names why it is unknown: the ledger was not read, is not JSON, is not an object, or its
+  slots are malformed. The reader has no other source for the verify's own slot: the lane monitor compares the
+  shadow record's head slot with the verify record whenever it reads a result (MON-282-CR5-CLOSE).
+- The vector-11 module test runs in every verify and fails on any malformed authority file in `architecture/`, as
+  the chain's own validators, which parse every authority, already do (P047-C5-6).
 - Any three skips, or any three faults, within the period are a finding to the lane monitor, not only consecutive ones (MON-282-CR4-KEEP replaces MON-282-C23's "consecutive": skips stretch the period, consecutive or
   not). They are counted across verify
   records by the monitor and by MET-PERF-048, which carries their vector: no reader sees more than one session. A reader

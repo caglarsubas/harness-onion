@@ -381,3 +381,37 @@ def test_the_slot_message_names_a_malformed_slot(tmp_path):
     found = _reader(root).disagreements
     assert [(d[0], d[4]) for d in found] == [(None, "corrupt")]
     assert found[0][3].endswith("head slot unknown (the ledger's checkpointSlot or checkpointBaseline is malformed)")
+
+
+def test_a_skip_checks_one_authority_per_slot_first(tmp_path):
+    root = _repo(tmp_path, shadow_in="dryRunOnly", newer=({}, {}))
+    second = root / "architecture/next2-authority.json"
+    body = json.loads(second.read_text())
+    body["authorityPacket"] = body["hunkClassContext"]["newPacket"] = "MET-NEXT-001"
+    second.write_text(json.dumps(body))
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and "one authorityPacket" in found[0][3]
+
+
+def test_the_member_checks(tmp_path):
+    root = _repo(tmp_path)
+    record = json.loads((root / CK.RECORD_PATH).read_bytes())
+    record["checkPairs"] = [{"layerSlot": 279, "ids": [["A-1"], "B-1"], "type": "supersession"}]
+    raw = (json.dumps(record) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and found[0][3].startswith("Corrupt: ledger checkPairs[0]")
+    assert CK.entry_fault({"afterSha256": "a", "beforeSha256": "b",
+                           "reverseHunks": [{"at": 0, "removeBase64": "", "insertBase64": "", "class": ["cascade"]}]}) == "reverseHunks[0].class"
+    assert CK.bind_context("a.json", {"hunkClassContext": {"newPacket": "P", "prevValidator": "v", "prevTest": "t", "steps": [1, 1]},
+                                      "authorityPacket": "P", "productPackets": ["x"]}) == "productPackets is not an object"
+
+
+@pytest.mark.parametrize("raw, state", [(b"{not json\n", "the ledger is not JSON"), (b"[]\n", "the ledger is not an object")])
+def test_the_slot_message_names_an_unreadable_ledger(tmp_path, raw, state):
+    root = _repo(tmp_path)
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    found = _reader(root).disagreements
+    assert [(d[0], d[4]) for d in found] == [(None, "corrupt")] and found[0][3].endswith("head slot unknown (%s)" % state)

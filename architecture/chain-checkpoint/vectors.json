@@ -6,7 +6,7 @@
   {
    "case": "change data<slot>.txt (or the layer authority) after the record is written",
    "expectClass": "A",
-   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest; the file is listed as unauthored (P047-C3-4)",
+   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest; the file is listed as unauthored (P047-C3-4); a JSON change to the layer authority is class A, and one that stops it parsing makes the reading corrupt (Q-R4-2, P047-C5-3)",
    "id": 1,
    "name": "tampered attested file",
    "names": "the layer's slot and the file",
