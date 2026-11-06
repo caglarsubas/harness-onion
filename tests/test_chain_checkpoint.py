@@ -160,7 +160,7 @@ def test_v08_the_newest_slot_is_recorded_first(tmp_path):
     assert [d[0] for d in _reader(root).disagreements] == [281, 280]
 
 
-def test_v09_the_budget_stops_the_replay_as_class_c_over_cap(tmp_path):
+def test_v09_the_budget_stops_the_replay_as_class_c_over_budget(tmp_path):
     ticks = iter(range(0, 10 ** 6, 20))
     reader = CK.Reader(root=_repo(tmp_path), tree="0" * 40, clock=lambda: next(ticks))
     reader.start()
@@ -309,7 +309,8 @@ def test_the_count_effect_table_is_the_single_source():
 
 @pytest.mark.parametrize("change, member", [(lambda r: r.update(parameters="x"), "parameters"),
                                             (lambda r: r.update(schemaVersion="other"), "schemaVersion"),
-                                            (lambda r: r["layers"][0].pop("slot"), "layers[0].slot")])
+                                            (lambda r: r["layers"][0].pop("slot"), "layers[0].slot"),
+                                            (lambda r: r.update(checkPairs=["x"]), "checkPairs[0]")])
 def test_a_malformed_ledger_is_corrupt_by_cause(tmp_path, change, member):
     root = _repo(tmp_path)
     record = json.loads((root / CK.RECORD_PATH).read_bytes())
@@ -342,3 +343,41 @@ def test_the_unauthored_rule():
     assert not CK.unauthored([("a", {"cascade": 1})], [("b", miss)])
     assert not CK.unauthored([], [("a", "1 of 2 hunks of a class not normalised")])
     assert not CK.unauthored([], [("a", "reverse hunks out of order")])
+
+
+@pytest.mark.parametrize("body, member", [(b"{not json", "does not parse"), (b"[]", "is not an object"),
+                                          (b'{"baselinePackets": []}', "baselinePackets is not an object")])
+def test_a_malformed_authority_is_corrupt_naming_the_file(tmp_path, body, member):
+    root = _repo(tmp_path)
+    (root / "architecture/broken-authority.json").write_bytes(body)
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")]
+    assert found[0][3].startswith("Corrupt: authority architecture/broken-authority.json " + member)
+
+
+def test_a_broken_reverse_hunk_entry_is_corrupt(tmp_path):
+    root = _cascade_repo(tmp_path, hunks=[{"at": "x", "removeBase64": "", "insertBase64": "", "class": "cascade"}])
+    found = [d for d in _reader(root).disagreements if d[1] == "scripts/validate_l281.py"]
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and "reverseHunks[0]" in found[0][3]
+
+
+def test_one_authority_per_slot(tmp_path):
+    root = _repo(tmp_path, newer=({}, {}))
+    second = root / "architecture/next2-authority.json"
+    body = json.loads(second.read_text())
+    body["authorityPacket"] = body["hunkClassContext"]["newPacket"] = "MET-NEXT-001"
+    second.write_text(json.dumps(body))
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and "one authorityPacket" in found[0][3]
+
+
+def test_the_slot_message_names_a_malformed_slot(tmp_path):
+    root = _repo(tmp_path)
+    record = json.loads((root / CK.RECORD_PATH).read_bytes())
+    record["checkpointSlot"] = "282"
+    raw = (json.dumps(record) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    found = _reader(root).disagreements
+    assert [(d[0], d[4]) for d in found] == [(None, "corrupt")]
+    assert found[0][3].endswith("head slot unknown (the ledger's checkpointSlot or checkpointBaseline is malformed)")

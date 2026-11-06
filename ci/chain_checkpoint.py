@@ -31,14 +31,16 @@ sampled, layers {slot: {recorded, live, agree, writingSeconds, liveSeconds}}, re
 
 The kinds, their classes and their countEffects are architecture/chain-checkpoint/README.md's countEffect table, the
 single source; COUNT_EFFECT below mirrors it, and the module tests pin the two equal. A kind is set by cause, never by
-an exception's type: a malformed ledger or authority set is corrupt (check_ledger names the member); any other
-exception of the reader is fault. A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the
-authorities newer than the checkpoint by baseline; null when the ledger was not read), and its detail names the
-exception class, the head slot and the checkpoint slot. An attested file whose only miss is at its newest recorded
+an exception's type: a malformed ledger, authority (it does not parse, is not an object, or a member is malformed),
+reverseHunks entry or checkPairs entry is corrupt, naming the file and the member; any other exception of the reader
+is fault. A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the authorities newer than
+the checkpoint by baseline, one authority per slot: their baselines and authorityPackets are distinct; null when the
+ledger was not read or its slots are malformed). A fault's or a corrupt record's detail names its exception class;
+every class-C detail names the head slot and the checkpoint slot. An attested file whose only miss is at its newest recorded
 step is unauthored: class A, kind input, listed in unauthored. Stop rule (condition (v); MON-282-C23, MON-282-QC31):
 every kind restarts the clean count of N_shadow except skipped, which is neutral and still writes its record; an
-agree counts; a dry-run-only reading by the dry-run runner counts. Three skips, or three faults, within the period
-are a finding to the lane monitor, counted across verify records by the monitor and by MET-PERF-048 (no reader sees
+agree counts; a dry-run-only reading by the dry-run runner counts. Any three skips, or any three faults, within the
+period are a finding to the lane monitor, not only consecutive ones (MON-282-CR4-KEEP), counted across verify records by the monitor and by MET-PERF-048 (no reader sees
 more than one session); a reader that keeps faulting is a ci/ defect, not a reason to re-run the period.
 """
 import base64
@@ -271,15 +273,24 @@ def _read(root, path):
 
 
 def _authorities(root, budget=None):
+    """Every architecture/*-authority.json, parsed once: [(baseline catalog size, path, record)]. An authority that
+    does not parse, is not an object, or whose baselinePackets, changedFiles or newFiles is not an object is Corrupt,
+    naming the file and the member (P047-C4-1): never skipped."""
     out = []
     for p in sorted((root / "architecture").glob("*-authority.json")):
         if budget:
             budget()
+        rel = p.relative_to(root).as_posix()
         try:
             rec = json.loads(p.read_bytes())
         except (OSError, ValueError):
-            continue
-        out.append((len(rec.get("baselinePackets", {})), p.relative_to(root).as_posix(), rec))
+            raise Corrupt("authority %s does not parse" % rel) from None
+        if not isinstance(rec, dict):
+            raise Corrupt("authority %s is not an object" % rel)
+        for key in ("baselinePackets", "changedFiles", "newFiles"):
+            if not isinstance(rec.get(key, {}), dict):
+                raise Corrupt("authority %s %s is not an object" % (rel, key))
+        out.append((len(rec.get("baselinePackets", {})), rel, rec))
     return out
 
 
@@ -288,7 +299,10 @@ def naming_authority(root, live_sha, budget=None, auths=None):
     and whether it names the live digest ("named", "stale") or none names it ("unnamed")."""
     naming = []
     for n, path, rec in (auths if auths is not None else _authorities(root, budget)):
-        named = rec.get("newFiles", {}).get(RECORD_PATH) or rec.get("changedFiles", {}).get(RECORD_PATH, {}).get("afterSha256")
+        entry = rec.get("changedFiles", {}).get(RECORD_PATH, {})
+        if not isinstance(entry, dict):
+            raise Corrupt("authority %s changedFiles[%s] is not an object" % (path, RECORD_PATH))
+        named = rec.get("newFiles", {}).get(RECORD_PATH) or entry.get("afterSha256")
         if named:
             naming.append((n, path, named))
     if not naming:
@@ -302,6 +316,12 @@ def newer_authorities(root, baseline, budget=None, auths=None):
     out.sort(key=lambda t: -t[0])
     if len({n for n, _, _ in out}) != len(out):
         raise Corrupt("two newer authorities share a baseline size")
+    packets = [rec.get("authorityPacket") for _, _, rec in out]
+    for (_, path, _), packet in zip(out, packets):
+        if not (isinstance(packet, str) and packet):
+            raise Corrupt("authority %s authorityPacket" % path)
+    if len(set(packets)) != len(packets):
+        raise Corrupt("two newer authorities name one authorityPacket (one authority per slot, P047-C4-2)")
     return out
 
 
@@ -348,13 +368,38 @@ def check_ledger(record):
              and all(isinstance(k, str) and isinstance(v, str) for k, v in layer["inputs"].items()), "layers[%d].inputs" % i)
         need(isinstance(layer.get("nodes"), list)
              and all(isinstance(n, dict) and isinstance(n.get("nodeSha256"), str) for n in layer["nodes"]), "layers[%d].nodes" % i)
-    need(isinstance(record.get("checkPairs", []), list), "checkPairs is not a list")
+    pairs = record.get("checkPairs", [])
+    need(isinstance(pairs, list), "checkPairs is not a list")
+    for i, e in enumerate(pairs):
+        need(isinstance(e, dict) and isinstance(e.get("ids"), list) and isinstance(e.get("type"), str), "checkPairs[%d]" % i)
 
 
 def head_slot(record, auths):
     """C3-2: the head's chain slot: checkpointSlot plus the authorities newer than the checkpoint by baseline (one per
     slot; the newest is the head's)."""
     return record["checkpointSlot"] + sum(1 for n, _, _ in auths if n > record["checkpointBaseline"])
+
+
+def entry_fault(entry):
+    """P047-C4-1: the member a changedFiles entry breaks, or None."""
+    if not isinstance(entry, dict):
+        return "the entry is not an object"
+    for key in ("afterSha256", "beforeSha256"):
+        if not isinstance(entry.get(key), str):
+            return key
+    hunks = entry.get("reverseHunks")
+    if not isinstance(hunks, list):
+        return "reverseHunks is not a list"
+    for i, h in enumerate(hunks):
+        if not (isinstance(h, dict) and type(h.get("at")) is int and h["at"] >= 0
+                and isinstance(h.get("removeBase64"), str) and isinstance(h.get("insertBase64"), str)):
+            return "reverseHunks[%d]" % i
+        try:
+            base64.b64decode(h["removeBase64"], validate=True)
+            base64.b64decode(h["insertBase64"], validate=True)
+        except ValueError:
+            return "reverseHunks[%d] base64" % i
+    return None
 
 
 def rebuild(path, live, newer, norm, budget=None):
@@ -370,6 +415,9 @@ def rebuild(path, live, newer, norm, budget=None):
             if path in rec.get("newFiles", {}):
                 unexplained.append((apath, "added after the checkpoint"))
             continue
+        broken = entry_fault(entry)
+        if broken:
+            raise Corrupt("authority %s, %s: %s" % (apath, path, broken))
         bad = bind_context(apath, rec)
         if bad:
             unexplained.append((apath, bad))
@@ -467,7 +515,7 @@ class Reader:
         self.disagreements, self.reverted, self.layers, self.unauthored = [], {}, {}, set()
         self.live, self.durations, self.sampled, self.naming, self.over_cap = {}, {}, [], None, False
         self._t0 = 0.0
-        self.head_slot, self.ckpt_slot = None, None
+        self.head_slot, self.ckpt_slot, self.ledger_read = None, None, False
 
     def _budget(self):
         if self.spent + (self.clock() - self._t0) > self.cap:
@@ -475,6 +523,8 @@ class Reader:
 
     def _slots(self):
         if self.head_slot is None:
+            if self.ledger_read:     # P047-C4-2
+                return "head slot unknown (the ledger's checkpointSlot or checkpointBaseline is malformed)"
             return "head slot unknown (the ledger was not read)"
         return "head slot %s, checkpoint slot %s" % (self.head_slot, self.ckpt_slot)
 
@@ -510,6 +560,7 @@ class Reader:
             record = json.loads(raw)
         except ValueError:
             raise Corrupt("ledger is not JSON") from None
+        self.ledger_read = True
         if isinstance(record, dict) and type(record.get("checkpointSlot")) is int and type(record.get("checkpointBaseline")) is int:
             self.ckpt_slot, self.head_slot = record["checkpointSlot"], head_slot(record, auths)
         check_ledger(record)
@@ -546,10 +597,11 @@ class Reader:
                 except (OverBudget, KeyboardInterrupt):
                     raise
                 except Exception as exc:     # C1-16: one file's fault never ends the rest; the slot is the head's (C3-2)
+                    kind = "corrupt" if isinstance(exc, Corrupt) else "fault"     # by cause (P047-C4-1)
                     self.disagreements.append((self.head_slot, path, "C", "%s: %s; layer %s; %s"
-                                               % (type(exc).__name__, str(exc)[:160], layer["slot"], self._slots()), "fault"))
+                                               % (type(exc).__name__, str(exc)[:160], layer["slot"], self._slots()), kind))
         for fault in check_pairs(record.get("checkPairs", [])):
-            self.disagreements.append((self.head_slot, "checkPairs", "C", "%s; %s" % (fault, self._slots()), "corrupt"))
+            self.disagreements.append((self.head_slot, "checkPairs", "C", "Corrupt: %s; %s" % (fault, self._slots()), "corrupt"))
         self.sampled = sample(self.tree or _git(self.root, "rev-parse", "HEAD^{tree}"), [l["slot"] for l in record["layers"]],
                               record["parameters"]["sampleFraction"])
 

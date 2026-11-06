@@ -81,7 +81,7 @@ record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and 
 | input | A | restart | an attested file differs after normalisation; unauthored when its only miss is at its newest recorded step |
 | stale | A | restart | the record is unnamed, or named with another digest (vector 2) |
 | outcome | B | restart | a node's outcome differs with no input change |
-| corrupt | C | restart | the ledger or the authority set is malformed; `check_ledger` names the member |
+| corrupt | C | restart | the ledger, an authority (it does not parse, is not an object, or a member is malformed), a `reverseHunks` entry or a `checkPairs` entry is malformed, naming the file and the member |
 | over-budget | C | restart | the in-run budget stopped the replay at the cap |
 | over-cap | C | restart | a finished reading took longer than the cap |
 | fault | C | restart | any other exception of the reader |
@@ -90,10 +90,14 @@ record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and 
 
 - A kind is set by cause, never by an exception's type.
 - A class-C record's `slot` is the head's chain slot: `checkpointSlot` plus the authorities newer than the checkpoint
-  by baseline, or null when the ledger was not read (a budget stop or a fault before it). Its detail names the
-  exception class, the head slot and the checkpoint slot. A class-A or class-B record names the layer's slot.
+  by baseline (one authority per slot: their baselines and `authorityPacket`s are distinct, or the reading is
+  corrupt), or null when the ledger was not read or its slots are malformed. A fault's or a corrupt record's detail
+  names its exception class; every class-C detail names the head slot and the checkpoint slot (a skip, an over-budget
+  and an over-cap record name their reason). A class-A or class-B record names the layer's slot; the stale record has
+  no layer, so its slot is null.
 - A skip still writes its record, with the reason and the slots.
-- Three skips, or three faults, within the period are a finding to the lane monitor. They are counted across verify
+- Any three skips, or any three faults, within the period are a finding to the lane monitor, not only consecutive ones (MON-282-CR4-KEEP replaces MON-282-C23's "consecutive": skips stretch the period, consecutive or
+  not). They are counted across verify
   records by the monitor and by MET-PERF-048, which carries their vector: no reader sees more than one session. A reader
   that keeps faulting is a ci/ defect, not a reason to re-run the period.
 - A dry-run-only reading by the dry-run runner counts toward N_shadow; a skipped in-session reading does not.
