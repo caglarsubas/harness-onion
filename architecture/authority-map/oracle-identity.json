@@ -1,0 +1,41 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_adopt_007_oracle.py",
+  "sha256": "0961aeee449fd2d02992caed1c702d244978223523c208cd2cbd50a8154c84d6"
+ },
+ "oracle": {
+  "agentId": "a7d43fe0258be09f3",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "4f798012-9782-42ce-85bc-8473c4a33a34",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "local_805af49e",
+   "4f798012-9782-42ce-85bc-8473c4a33a34"
+  ]
+ },
+ "briefSha256": "12a9d0efbfd30404e7fd7ddeaa4bda71ce2249168741c65464808dfc86ef30a3",
+ "candidateCommit": "e0fc23b7dd377d48786154080cec23578eed3641",
+ "launched": "2026-11-06T09:12:40+08:00",
+ "finished": "2026-11-06T09:27:45+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-AM-ORACLE-KEEP",
+  "date": "2026-11-06"
+ },
+ "disclosures": [
+  "KEEP (MON-AM-ORACLE-KEEP): 83/83 on c2 (e0fc23b7, adopted under MON-AM-CR2-KEEP): 29 test functions, 83 tests with their parameters, and 54 mutations, written from the authority-map README, the validator's docstring and public names, the record's data and the source lines it cites, never the builder's material; the operator's own run in a fresh tree from the oracle's export: 83 passed; the joint run with the candidate's test and the sector catalog test: 248 passed",
+  "independently derived: every repository quote on its cited line (84 cited lines) and the 25 repository pin quotes, the 13 source and 2 vector digests, the cited roadmap items, its own B1-B5 reference model replaying VB-01 to VB-10 (the ledger-loss step from trust.observability-finops.md:177), the R12 rule, the README's FAIL_CLOSED and BLOCK_NEW_OPERATIONS split, the pin classes and the one-authority rule. Model-derived: the record against AUTHORITY_PINS, BEHAVIOUR_PINS and FLAGGED, the constants, the base registry digest, and check() in both registry states and with a matching pendingReconciliation list (18 exact reads)",
+  "operator-stated facts in the brief: check(read, packets) with frozenset(), its five result members and its ValueError code prefix; the registry rider (the base, or the base plus RIDER, each built by the test, never the file's own digest); V7's member rule",
+  "every one of the eleven refusal codes the docstring lists is reached; 46 mutations assert a code and 8 assert a refusal with one of the eleven, where the docstring ties no single code",
+  "one docstring reading, ruled (a) (MON-AM-ORACLE-KEEP): 'Exception is caught, never BaseException' is the reading check's; a reader that raises propagates its exception, so check() never returns PASS for it; the oracle asserts the deeply nested record's refusal and the BaseException's propagation",
+  "slips, procedural, recorded with no effect: two Edit calls in one message; five scratch Python runs without /usr/bin/time -l; the export listed with find (skip list, 0 dropped) and WORK with ls -1A; two comment lines read inside a constant range and the registry file's digest printed by a scratch script; scratch files left in WORK (moved to the Trash by the operator after the files were kept)",
+  "not checked: the roadmap quotes and the roadmap pin (the roadmap is not in the repository); that a pin change needs new module and record versions; the flagged pins listed wherever the record is published; runtime enforcement"
+ ]
+}

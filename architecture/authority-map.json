@@ -1,0 +1,1201 @@
+{
+ "schemaVersion": "planeon.internal.authority-map/v1",
+ "sources": [
+  {
+   "path": "docs/adr/0005-release-evidence.md",
+   "sha256": "e0d9134551f137da84cbb5709b0a6383447995490ac5a01647b211831fc67971"
+  },
+  {
+   "path": "docs/adr/0011-h10-execution-authority.md",
+   "sha256": "60a8250ecce83e9ee3655726b90db22e526eb69aac163d9e2eb60977a81c5685"
+  },
+  {
+   "path": "docs/harnesses/execution.orchestration.md",
+   "sha256": "32b80f130bd4a5d9babf0731ace2b239034c8d07afcfba6742f1ada4335a31f2"
+  },
+  {
+   "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+   "sha256": "894ef8182df30896ef713d2e46be5601feab234703752eb8243786d419d4556b"
+  },
+  {
+   "path": "docs/harnesses/knowledge.memory-state.md",
+   "sha256": "6b89b8fbcd7ba0458817b991fef890cae705958bc16a352db4402d6813a489fb"
+  },
+  {
+   "path": "docs/harnesses/runtime.ai-gateway.md",
+   "sha256": "797b6fd2a10c49a17d9063d7a13654da9c3d2ea2edd665a3cd39c3d5bb18b2ea"
+  },
+  {
+   "path": "docs/harnesses/runtime.experience.md",
+   "sha256": "66756f3b6f828c2f3d9332dbd92f2799337965aaab1b62e6123aa33337988779"
+  },
+  {
+   "path": "docs/harnesses/runtime.infrastructure.md",
+   "sha256": "eecdfe44672d57778f44943531612a5146cda9d8eb9c21e9abef92999a9f8652"
+  },
+  {
+   "path": "docs/harnesses/runtime.model-inference.md",
+   "sha256": "dd79935f62eec36ab0adaf90abcc20a1eed532a579ef49eadd83b066d4749241"
+  },
+  {
+   "path": "docs/harnesses/trust.evaluation-assurance.md",
+   "sha256": "57b73641ad2362dd31948d57ab810f76f6f5285a254545fe1a7f031b160e860c"
+  },
+  {
+   "path": "docs/harnesses/trust.governance-agentops.md",
+   "sha256": "76c717d4d4c419b6d9cd7a29c9d72cfe0484363d60a17d24ea685ec2babe734e"
+  },
+  {
+   "path": "docs/harnesses/trust.observability-finops.md",
+   "sha256": "25e0be5e61350cf1ab00ab3abd654b678d4d48bed8dfad8d3d0e1fe5efe09aee"
+  },
+  {
+   "path": "docs/harnesses/trust.security-safety.md",
+   "sha256": "736f7184d124cdf7804efbe1d5768830662e649b7588b5e8c2d22c82c617323e"
+  }
+ ],
+ "vectorFiles": [
+  {
+   "path": "architecture/authority-map/budget-vectors.json",
+   "sha256": "e0eb278cafd3d454efba317f5a8cb570f1e5050430f1155e2ea53859b77d1506"
+  },
+  {
+   "path": "architecture/authority-map/r12-vectors.json",
+   "sha256": "2475bb646863e90a4e2e5ce89173cae1112926a004ec9c3ed1c9a7f82e81790c"
+  }
+ ],
+ "roadmapPin": {
+  "path": "roadmap/roadmap.json",
+  "sha256": "46b17247ce8b964ccf1b06d6af7e78063ae40d9e86d315732f2abbbce8828cc1",
+  "items": [
+   "AUTHORITY-MAP-001",
+   "DATA-CORRECTNESS-001",
+   "MODEL-ROUTING-001"
+  ]
+ },
+ "concerns": [
+  {
+   "id": "AM-01",
+   "concern": "Task progression, timers, retries and checkpoints",
+   "authority": {
+    "harness": "execution.orchestration",
+    "component": "planeon.orchestrator.postgres",
+    "boundary": "H10's PostgreSQL executor (EXEC-ORCH-001): leases, task transitions, checkpoints, timers, retries and outbox coordination on the tenant PostgreSQL",
+    "citation": {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 16,
+     "quote": "Planning target: `planeon.orchestrator.postgres` (PostgreSQL leases and outbox) as H10's qualified baseline"
+    }
+   },
+   "inputs": [],
+   "othersMay": [
+    {
+     "who": "orchestration-api",
+     "whoKind": "COMPONENT",
+     "action": "REQUEST",
+     "note": "requests task transitions"
+    },
+    {
+     "who": "experience-gateway",
+     "whoKind": "COMPONENT",
+     "action": "RENDER",
+     "note": "renders task projections"
+    },
+    {
+     "who": "a Temporal provider module",
+     "whoKind": "ROLE",
+     "action": "REQUEST",
+     "note": "runs only after qualification (EXEC-TEMPORAL-001), behind the same task contracts; never a second retry or side-effect authority"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "planeon.orchestrator.postgres",
+     "point": "the lease on every transition, fenced by DATA-CORRECTNESS-001's fencing tokens (a roadmap item at the pinned read, not a merged contract)",
+     "citation": {
+      "path": "docs/adr/0011-h10-execution-authority.md",
+      "line": 23,
+      "quote": "qualified baseline, held to the roadmap's PI-DURABLE-PARITY-001 vectors, DATA-CORRECTNESS-001's fencing"
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "BLOCK_NEW_OPERATIONS",
+    "note": "rejected: PostgreSQL loss rejects mutations; recovery resumes from committed checkpoints",
+    "citation": {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 155,
+     "quote": "PostgreSQL loss rejects mutations"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "RESUME_FROM_CHECKPOINT",
+    "note": "a lease lost: the next lease holder resumes from the committed checkpoint; the fenced holder's writes are refused",
+    "citation": {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 149,
+     "quote": "Worker leases expire and are reclaimed; checkpoint version and compare-and-swap prevent double transition"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/adr/0011-h10-execution-authority.md",
+     "line": 20,
+     "quote": "1. **One execution authority.** For the first enterprise release PostgreSQL owns leases, task transitions,"
+    },
+    {
+     "path": "docs/adr/0011-h10-execution-authority.md",
+     "line": 21,
+     "quote": "checkpoints, timers, retries and outbox coordination, on the tenant-supplied PostgreSQL every profile already"
+    },
+    {
+     "path": "docs/adr/0011-h10-execution-authority.md",
+     "line": 23,
+     "quote": "qualified baseline, held to the roadmap's PI-DURABLE-PARITY-001 vectors, DATA-CORRECTNESS-001's fencing"
+    },
+    {
+     "path": "docs/adr/0011-h10-execution-authority.md",
+     "line": 25,
+     "quote": "2. **Temporal is an optional provider.** Temporal is an optional provider module that `EXEC-TEMPORAL-001`"
+    },
+    {
+     "path": "docs/adr/0011-h10-execution-authority.md",
+     "line": 26,
+     "quote": "behind the same public task contracts; it is never a second retry or side-effect authority for a task, and it"
+    },
+    {
+     "path": "docs/adr/0011-h10-execution-authority.md",
+     "line": 37,
+     "quote": "possible under ADR 0008's reuse-first rule if a later candidate record qualifies one; it adds no second"
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 16,
+     "quote": "Planning target: `planeon.orchestrator.postgres` (PostgreSQL leases and outbox) as H10's qualified baseline;"
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 17,
+     "quote": "For the first enterprise release PostgreSQL owns leases, task transitions, checkpoints, timers, retries and"
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 59,
+     "quote": "- `orchestration-api`: task submission, query, input, cancellation, workflow-version API."
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 84,
+     "quote": "- `planeon.orchestrator.postgres`: baseline outbox/inbox, leases, timers, checkpoints, and workers using"
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 149,
+     "quote": "- Worker leases expire and are reclaimed; checkpoint version and compare-and-swap prevent double transition."
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 155,
+     "quote": "- PostgreSQL loss rejects mutations; recovery resumes from committed checkpoints/outbox."
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 58,
+     "quote": "- `experience-gateway`: authenticated session and resumable SSE event boundary. WebSocket is deferred"
+    },
+    {
+     "item": "DATA-CORRECTNESS-001",
+     "quote": "fencing tokens on leases"
+    }
+   ]
+  },
+  {
+   "id": "AM-02",
+   "concern": "Durable budget reservations and usage",
+   "authority": {
+    "harness": "trust.observability-finops",
+    "component": "usage-ledger",
+    "boundary": "H15 usage-ledger: the authoritative budget reservations and usage",
+    "citation": {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 60,
+     "quote": "`usage-ledger`: authoritative request/token/tool/task/resource budget and attribution service"
+    }
+   },
+   "inputs": [],
+   "othersMay": [
+    {
+     "who": "ai-gateway",
+     "whoKind": "COMPONENT",
+     "action": "ESTIMATE_AND_ADMIT",
+     "note": "request, token and concurrency budgets as local admission; never a competing balance"
+    },
+    {
+     "who": "inference-api",
+     "whoKind": "COMPONENT",
+     "action": "ESTIMATE_AND_ADMIT",
+     "note": "usage instrumentation, not authoritative in this service"
+    },
+    {
+     "who": "orchestration-worker",
+     "whoKind": "COMPONENT",
+     "action": "ESTIMATE_AND_ADMIT",
+     "note": "task and delegation budgets; budget exhaustion is terminal unless governance approves a new budget version"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "usage-ledger",
+     "point": "reserve atomically before work; a commit cannot exceed its reservation; commit and release are idempotent",
+     "citation": {
+      "path": "docs/harnesses/trust.observability-finops.md",
+      "line": 176,
+      "quote": "- Hard-budget operations reserve atomically before work. Duplicate commit/release is idempotent."
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "FAIL_CLOSED",
+    "note": "hard budgets fail closed; an advisory-only caller may proceed only if the profile explicitly allows it and local outbox capacity exists (the gateway's bounded local outbox)",
+    "citation": {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 177,
+     "quote": "Ledger loss blocks operations requiring hard budgets"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "KEEP_CONSUMED_CHARGE",
+    "note": "a cancelled or timed-out request keeps its consumed charge; no line of trust.observability-finops.md states a settlement, so the roadmap item is cited (B4)",
+    "citation": {
+     "item": "AUTHORITY-MAP-001",
+     "quote": "a cancelled or timed-out request keeps its consumed charge"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 60,
+     "quote": "- `usage-ledger`: authoritative request/token/tool/task/resource budget and attribution service."
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 148,
+     "quote": "Reservation states: `RESERVED → COMMITTED | RELEASED | EXPIRED`."
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 150,
+     "quote": "TRUST-OBS-001 uses fixed UTC windows and atomic committed-plus-reserved"
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 151,
+     "quote": "counters. Reserve idempotency binds tenant, budget digest, scope, operation,"
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 152,
+     "quote": "requested dimensions, and the idempotency-key digest; commit and release have"
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 153,
+     "quote": "separate transition keys. Exact retries return the original result and"
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 154,
+     "quote": "conflicting reuse fails closed. A commit cannot exceed its reservation."
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 176,
+     "quote": "- Hard-budget operations reserve atomically before work. Duplicate commit/release is idempotent."
+    },
+    {
+     "path": "docs/harnesses/trust.observability-finops.md",
+     "line": 177,
+     "quote": "- Ledger loss blocks operations requiring hard budgets; callers that require only advisory usage may proceed"
+    },
+    {
+     "path": "docs/harnesses/runtime.ai-gateway.md",
+     "line": 18,
+     "quote": "Platform scope: Keep identity, signed routes, tenant-safe budget reservations, trust decisions and redacted"
+    },
+    {
+     "path": "docs/harnesses/runtime.ai-gateway.md",
+     "line": 52,
+     "quote": "The AI gateway authenticates tenant requests, resolves signed logical routes, evaluates policy, enforces"
+    },
+    {
+     "path": "docs/harnesses/runtime.ai-gateway.md",
+     "line": 152,
+     "quote": "- Policy-decision failure is fail closed. Usage-ledger failure blocks requests whose budget cannot be proven;"
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 123,
+     "quote": "- Storage: model weights are read-only PVC/OCI-import material. Backend cache is replaceable. Active route"
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 53,
+     "quote": "This harness executes versioned deterministic workflows and bounded agent tasks with durable checkpoints,"
+    },
+    {
+     "path": "docs/harnesses/execution.orchestration.md",
+     "line": 152,
+     "quote": "- Budget exhaustion is terminal unless governance approves a new budget version."
+    },
+    {
+     "item": "AUTHORITY-MAP-001",
+     "quote": "local admission and estimates elsewhere, never a competing balance"
+    },
+    {
+     "item": "DATA-CORRECTNESS-001",
+     "quote": "budget reservations in usage-ledger, ai-gateway and orchestration"
+    }
+   ]
+  },
+  {
+   "id": "AM-03",
+   "concern": "Approved model capability and resolution",
+   "authority": {
+    "harness": "runtime.model-inference",
+    "component": "inference-api",
+    "boundary": "H2 inference-api's route resolver under signed routes (signedRouteBundleRef); active route metadata is reconstructed from the signed bundle",
+    "citation": {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 59,
+     "quote": "`inference-api`: stable OpenAI-compatible internal API, scheduler, route resolver"
+    }
+   },
+   "inputs": [
+    {
+     "harness": "runtime.model-inference",
+     "component": "signed route bundle",
+     "role": "SIGNED_ROUTE_BUNDLE"
+    }
+   ],
+   "othersMay": [
+    {
+     "who": "ai-gateway",
+     "whoKind": "COMPONENT",
+     "action": "REQUEST",
+     "note": "resolves signed logical routes through a signed pinned route"
+    },
+    {
+     "who": "the six direct callers MODEL-ROUTING-001 names",
+     "whoKind": "ROLE",
+     "action": "REQUEST",
+     "note": "keep authorization, route restrictions and usage attribution without forcing their traffic through H3; the item's list at the pinned read, not a merged contract"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "inference-api",
+     "point": "the route resolver on every request",
+     "citation": {
+      "path": "docs/harnesses/runtime.model-inference.md",
+      "line": 59,
+      "quote": "- `inference-api`: stable OpenAI-compatible internal API, scheduler, route resolver, and usage"
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "FAIL_CLOSED",
+    "note": "no call resolves outside a signed route; a backend loss marks the route DEGRADED and fails over only to an already-loaded signed compatible route; a failed activation keeps the last-known-good route digest",
+    "citation": {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 156,
+     "quote": "Invalid route signatures, missing blobs, license rejection, or capability mismatch fail route activation closed"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "DEACTIVATE_REVOKED",
+    "note": "revoked routes reject new work at once; the bundle events bundle.signed.v1 and policy.bundle.activated.v1 are consumed",
+    "citation": {
+     "path": "docs/harnesses/runtime.ai-gateway.md",
+     "line": 155,
+     "quote": "Revoked routes reject new work immediately"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 59,
+     "quote": "- `inference-api`: stable OpenAI-compatible internal API, scheduler, route resolver, and usage"
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 117,
+     "quote": "signedRouteBundleRef: oci@sha256:..."
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 123,
+     "quote": "- Storage: model weights are read-only PVC/OCI-import material. Backend cache is replaceable. Active route"
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 152,
+     "quote": "Consumed: `bundle.signed.v1`, `policy.bundle.activated.v1`, and local operator configuration changes. Events"
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 156,
+     "quote": "- Invalid route signatures, missing blobs, license rejection, or capability mismatch fail route activation"
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 159,
+     "quote": "- Backend loss marks the route `DEGRADED`; failover occurs only to an already-loaded, signed compatible route."
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 160,
+     "quote": "- Route activation is atomic. Failure retains the last-known-good route digest."
+    },
+    {
+     "path": "docs/harnesses/runtime.ai-gateway.md",
+     "line": 52,
+     "quote": "The AI gateway authenticates tenant requests, resolves signed logical routes, evaluates policy, enforces"
+    },
+    {
+     "path": "docs/harnesses/runtime.ai-gateway.md",
+     "line": 155,
+     "quote": "- Revoked routes reject new work immediately; in-flight work follows the revocation policy (`cancel` by"
+    },
+    {
+     "item": "MODEL-ROUTING-001",
+     "quote": "ai-gateway reserves at the route's ceiling and usage-ledger settles the actual cost"
+    },
+    {
+     "item": "MODEL-ROUTING-001",
+     "quote": "authorization, route restrictions and usage attribution stay effective for the six direct callers of inference-api without forcing their traffic through H3"
+    }
+   ]
+  },
+  {
+   "id": "AM-04",
+   "concern": "Permissions",
+   "authority": {
+    "harness": "trust.security-safety",
+    "component": "policy-decision",
+    "boundary": "H13 policy-decision: the mandatory authorization and admission service",
+    "citation": {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 83,
+     "quote": "`planeon.policy-decision`: mandatory authorization and admission service"
+    }
+   },
+   "inputs": [
+    {
+     "harness": "trust.governance-agentops",
+     "component": "governance-service",
+     "role": "POLICY_LIFECYCLE"
+    }
+   ],
+   "othersMay": [
+    {
+     "who": "guardrail-service",
+     "whoKind": "COMPONENT",
+     "action": "ADVISE",
+     "note": "deterministic or classifier-based checks; a classifier never grants"
+    },
+    {
+     "who": "a decision cache",
+     "whoKind": "ROLE",
+     "action": "CACHE_WITH_FRESHNESS_AND_REVOCATION",
+     "note": "only a profile-declared bounded cached-decision policy for read-only low-risk operations; tools, mutations, route changes and deployments never use a cached decision"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "policy-decision",
+     "point": "every protected boundary asks policy-decision",
+     "citation": {
+      "path": "docs/harnesses/trust.security-safety.md",
+      "line": 83,
+      "quote": "- `planeon.policy-decision`: mandatory authorization and admission service, backed by the cataloged"
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "FAIL_CLOSED",
+    "note": "policy queries retry three times within the caller timeout, then ERROR_FAIL_CLOSED",
+    "citation": {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 158,
+     "quote": "If no authoritative answer is available, return `ERROR_FAIL_CLOSED`"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "DEACTIVATE_REVOKED",
+    "note": "critical revocation applies at once to new operations; bundle state REVOKED; revocation and approval or waiver expiry are consumed; an expired approval or waiver cannot authorize",
+    "citation": {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 160,
+     "quote": "Critical revocation is applied immediately to new operations"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 59,
+     "quote": "- `policy-decision`: OPA-based authorization and admission decision API."
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 60,
+     "quote": "- `guardrail-service`: deterministic/classifier-based input, output, and runtime checks."
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 83,
+     "quote": "- `planeon.policy-decision`: mandatory authorization and admission service, backed by the cataloged"
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 137,
+     "quote": "Policy/trust bundle states: `DRAFT → VALIDATING → VERIFIED → ACTIVE`; alternatives `REJECTED`, `SUPERSEDED`,"
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 152,
+     "quote": "Consumed: signed bundle/profile release, module revocation, approval/waiver expiry, and identity/secret"
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 157,
+     "quote": "- Read-only low-risk operations may follow a profile-declared bounded cached-decision policy; tools,"
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 158,
+     "quote": "- Policy queries retry three times within the caller timeout. If no authoritative answer is available, return"
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 160,
+     "quote": "- Critical revocation is applied immediately to new operations and emits dependency revocation events."
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 172,
+     "quote": "- Fail-closed dependency outage and cached-decision boundaries."
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 55,
+     "quote": "It does not authenticate identities, execute guardrails, collect raw telemetry, run evaluations, install"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 159,
+     "quote": "- Expiry worker is idempotent; expired approval/waiver cannot authorize new operations."
+    }
+   ]
+  },
+  {
+   "id": "AM-05",
+   "concern": "Human approval",
+   "authority": {
+    "harness": "trust.governance-agentops",
+    "component": "governance-service",
+    "boundary": "H14 governance-service's exact approval record and validity rules (approval identity, approver separation, expiry)",
+    "citation": {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 59,
+     "quote": "`governance-service`: approval, waiver, autonomy, control requirement, and promotion gate API"
+    }
+   },
+   "inputs": [],
+   "othersMay": [
+    {
+     "who": "experience-gateway",
+     "whoKind": "COMPONENT",
+     "action": "PRESENT_AND_SUBMIT",
+     "note": "presents approvals and does not decide them; browser clients use PKCE and never receive service credentials"
+    },
+    {
+     "who": "R04's surfaces",
+     "whoKind": "ROLE",
+     "action": "PRESENT_AND_SUBMIT",
+     "note": "a repository, not a catalog component; present and submit, never mint authority in the browser"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "governance-service",
+     "point": "the approval record on every use",
+     "citation": {
+      "path": "docs/harnesses/trust.governance-agentops.md",
+      "line": 59,
+      "quote": "- `governance-service`: approval, waiver, autonomy, control requirement, and promotion gate API."
+     }
+    },
+    {
+     "component": "tool-broker",
+     "point": "approvals evaluated before a write or irreversible tool",
+     "citation": {
+      "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+      "line": 53,
+      "quote": "This harness registers typed tools/skills, classifies side effects and isolation needs, evaluates policy and"
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "BLOCK_NEW_OPERATIONS",
+    "note": "paused: the operation waits, neither failed nor approved; H4's action controls are disabled and stay fail closed",
+    "citation": {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 157,
+     "quote": "Approval dependency loss pauses the operation; it never implies approval"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "FAIL_CLOSED",
+    "note": "revoked or expired: an expired approval or waiver cannot authorize new operations",
+    "citation": {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 159,
+     "quote": "expired approval/waiver cannot authorize new operations"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 18,
+     "quote": "Platform scope: Own signed provider lifecycle, support ownership, human approval identity, autonomy tiers,"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 53,
+     "quote": "This harness owns accountability and lifecycle governance: autonomy levels, accountable owners, approvals,"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 59,
+     "quote": "- `governance-service`: approval, waiver, autonomy, control requirement, and promotion gate API."
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 157,
+     "quote": "- Approval dependency loss pauses the operation; it never implies approval."
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 159,
+     "quote": "- Expiry worker is idempotent; expired approval/waiver cannot authorize new operations."
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 18,
+     "quote": "Platform scope: Own tenant session binding, authorization, safe rendering, cancellation and durable approval"
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 52,
+     "quote": "This harness exposes governed human interaction: session creation, resumable streaming, task input, approval"
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 54,
+     "quote": "It does not execute models or tools, own workflow state, decide approvals, retain long-term memory, act as"
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 58,
+     "quote": "- `experience-gateway`: authenticated session and resumable SSE event boundary. WebSocket is deferred"
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 110,
+     "quote": "- Secrets: OIDC client secret, when needed, is a secret reference. Browser clients use authorization code"
+    },
+    {
+     "path": "docs/harnesses/runtime.experience.md",
+     "line": 155,
+     "quote": "- Approval service failure disables action controls and remains fail closed."
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 53,
+     "quote": "This harness registers typed tools/skills, classifies side effects and isolation needs, evaluates policy and"
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 59,
+     "quote": "- `tool-broker`: registry lookup, schema validation, policy/approval, credential brokering, lifecycle,"
+    },
+    {
+     "item": "AUTHORITY-MAP-001",
+     "quote": "H4 and R04 present and submit, never mint authority in the browser"
+    }
+   ]
+  },
+  {
+   "id": "AM-06",
+   "concern": "Business-system effect",
+   "authority": {
+    "harness": "EXTERNAL",
+    "component": "TARGET_SYSTEM",
+    "boundary": "the target business system, for its own state, outside the catalog",
+    "citation": {
+     "item": "AUTHORITY-MAP-001",
+     "quote": "business-system effect (the target plus H11's governed invocation and reconciliation contract"
+    }
+   },
+   "inputs": [
+    {
+     "harness": "execution.tool-skill-sandbox",
+     "component": "tool-broker",
+     "role": "CONTRACT_PATH"
+    }
+   ],
+   "othersMay": [
+    {
+     "who": "orchestration-worker",
+     "whoKind": "COMPONENT",
+     "action": "SCHEDULE",
+     "note": "H10 schedules; transport success never proves completion"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "tool-broker",
+     "point": "the tool contract (owner, side-effect class, approval, idempotency, compensation or outcome policy) and receipts",
+     "citation": {
+      "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+      "line": 75,
+      "quote": "- Write/irreversible tool without owner, side-effect class, approval, idempotency, and compensation/outcome"
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "BLOCK_NEW_OPERATIONS",
+    "note": "flagged: no line of execution.tool-skill-sandbox.md states a rule for a target outage; the pre-launch refusal is the nearest topical line; an outage after a possible side effect is the revoked case",
+    "citation": {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 148,
+     "quote": "Validation, policy, approval, artifact, RBAC/network intent, or isolation failure prevents launch"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "OUTCOME_UNKNOWN_RECONCILE",
+    "note": "lost after a possible side effect: OUTCOME_UNKNOWN until the operator or owner reconciles it; H11 never retries an unknown side effect",
+    "citation": {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 150,
+     "quote": "Loss after a possible side effect is `OUTCOME_UNKNOWN` and requires operator/owner reconciliation"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 53,
+     "quote": "This harness registers typed tools/skills, classifies side effects and isolation needs, evaluates policy and"
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 55,
+     "quote": "It does not grant arbitrary cluster access, run caller-supplied native code in an ordinary container, treat a"
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 59,
+     "quote": "- `tool-broker`: registry lookup, schema validation, policy/approval, credential brokering, lifecycle,"
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 75,
+     "quote": "- Write/irreversible tool without owner, side-effect class, approval, idempotency, and compensation/outcome"
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 148,
+     "quote": "- Validation, policy, approval, artifact, RBAC/network intent, or isolation failure prevents launch."
+    },
+    {
+     "path": "docs/harnesses/execution.tool-skill-sandbox.md",
+     "line": 150,
+     "quote": "- Loss after a possible side effect is `OUTCOME_UNKNOWN` and requires operator/owner reconciliation."
+    },
+    {
+     "item": "AUTHORITY-MAP-001",
+     "quote": "H10 schedules; transport success never proves completion"
+    }
+   ]
+  },
+  {
+   "id": "AM-07",
+   "concern": "Long-term memory",
+   "authority": {
+    "harness": "knowledge.memory-state",
+    "component": "memory-service",
+    "boundary": "H8 memory-service over its governed records (consent, provenance, retention, supersession, deletion)",
+    "citation": {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 59,
+     "quote": "`memory-service`: policy-gated read/write/search/correct/delete/export API and lifecycle worker"
+    }
+   },
+   "inputs": [
+    {
+     "harness": "trust.governance-agentops",
+     "component": "governance-service",
+     "role": "READINESS_GATE"
+    }
+   ],
+   "othersMay": [
+    {
+     "who": "agents and users",
+     "whoKind": "ROLE",
+     "action": "READ_THROUGH_FILTERS",
+     "note": "remembered text or a shared board grants no permission; memory content never grants tool permissions"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "memory-service",
+     "point": "every write and recall; memory is enabled only after governance policy and data-classification readiness pass",
+     "citation": {
+      "path": "docs/harnesses/knowledge.memory-state.md",
+      "line": 59,
+      "quote": "- `memory-service`: policy-gated read/write/search/correct/delete/export API and lifecycle worker."
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "BLOCK_NEW_OPERATIONS",
+    "note": "rejected: database loss rejects all state-changing operations; reads return a stable unavailable reason, never fabricated empty memory",
+    "citation": {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 140,
+     "quote": "Database loss rejects all state-changing operations"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "STOP_RECALL",
+    "note": "consent withdrawn or deletion: recall stops first; payload and vector removal follow after grace",
+    "citation": {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 143,
+     "quote": "Deletion first blocks recall"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 18,
+     "quote": "Platform scope: Own tenant-scoped state, provenance, consent, retention, supersession, deletion and authority"
+    },
+    {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 53,
+     "quote": "This harness provides explicitly governed persistent memory for agents and users: typed memory classes,"
+    },
+    {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 59,
+     "quote": "- `memory-service`: policy-gated read/write/search/correct/delete/export API and lifecycle worker."
+    },
+    {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 73,
+     "quote": "Memory is enabled only after governance policy and data-classification readiness pass."
+    },
+    {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 140,
+     "quote": "- Database loss rejects all state-changing operations; reads return a stable unavailable reason, never"
+    },
+    {
+     "path": "docs/harnesses/knowledge.memory-state.md",
+     "line": 143,
+     "quote": "- Deletion first blocks recall, then removes payload/vector after grace; retries are idempotent."
+    }
+   ]
+  },
+  {
+   "id": "AM-08",
+   "concern": "Assurance and promotion",
+   "authority": {
+    "harness": "trust.governance-agentops",
+    "component": "governance-service",
+    "boundary": "H14's promotion gate (governance-service's promotion gate API)",
+    "citation": {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 59,
+     "quote": "`governance-service`: approval, waiver, autonomy, control requirement, and promotion gate API"
+    }
+   },
+   "inputs": [
+    {
+     "harness": "trust.evaluation-assurance",
+     "component": "evidence-service",
+     "role": "EVIDENCE"
+    }
+   ],
+   "othersMay": [
+    {
+     "who": "H15",
+     "whoKind": "ROLE",
+     "action": "MEASURE",
+     "note": "H15 measures (the roadmap item's words; no cited line names the measuring component)"
+    },
+    {
+     "who": "an optimizer",
+     "whoKind": "ROLE",
+     "action": "PROPOSE",
+     "note": "no catalog component is an optimizer; it proposes, and nothing self-promotes"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "governance-service",
+     "point": "the promotion gate; a non-pass is PROMOTION_BLOCKED",
+     "citation": {
+      "path": "docs/harnesses/trust.governance-agentops.md",
+      "line": 59,
+      "quote": "- `governance-service`: approval, waiver, autonomy, control requirement, and promotion gate API."
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "BLOCK_NEW_OPERATIONS",
+    "note": "no promotion while current evidence cannot be proven; a failed promotion keeps the prior certified release",
+    "citation": {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 158,
+     "quote": "Evidence store loss prevents promotion when current evidence cannot be proven"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "DEACTIVATE_REVOKED",
+    "note": "revocation is append-only and cannot be rolled back; a replacement needs a new release or version and approval",
+    "citation": {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 161,
+     "quote": "Revocation is append-only and cannot be rolled back"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/trust.evaluation-assurance.md",
+     "line": 27,
+     "quote": "Platform scope: Own evidence schemas, immutable subjects, release gates and independence. Keep pytest for"
+    },
+    {
+     "path": "docs/harnesses/trust.evaluation-assurance.md",
+     "line": 114,
+     "quote": "purpose: PRODUCTION_PROMOTION"
+    },
+    {
+     "path": "docs/harnesses/trust.evaluation-assurance.md",
+     "line": 140,
+     "quote": "nonPassDisposition: PROMOTION_BLOCKED"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 20,
+     "quote": "Acceptance: Test promotion/revocation, stale policy, approver separation, replay and bounded runtime"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 53,
+     "quote": "This harness owns accountability and lifecycle governance: autonomy levels, accountable owners, approvals,"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 55,
+     "quote": "It does not authenticate identities, execute guardrails, collect raw telemetry, run evaluations, install"
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 59,
+     "quote": "- `governance-service`: approval, waiver, autonomy, control requirement, and promotion gate API."
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 158,
+     "quote": "- Evidence store loss prevents promotion when current evidence cannot be proven."
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 160,
+     "quote": "- Promotion changes an immutable active pointer; failure retains the prior certified release."
+    },
+    {
+     "path": "docs/harnesses/trust.governance-agentops.md",
+     "line": 161,
+     "quote": "- Revocation is append-only and cannot be rolled back. Replacement requires a new release/version and"
+    },
+    {
+     "item": "AUTHORITY-MAP-001",
+     "quote": "H15 measures, the optimizer proposes, nothing self-promotes"
+    }
+   ]
+  },
+  {
+   "id": "AM-09",
+   "concern": "Runtime activation",
+   "authority": {
+    "harness": "runtime.infrastructure",
+    "component": "bundle-verifier",
+    "boundary": "H1's signed installation admission: bundle-verifier verifies bundle lock, signatures and blob digests before apply",
+    "citation": {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 61,
+     "quote": "`bundle-verifier`: init/container library that verifies bundle lock, signatures, and blob digests before apply"
+    }
+   },
+   "inputs": [
+    {
+     "harness": "release-evidence",
+     "component": "approved signed release (ADR 0005)",
+     "role": "SIGNED_RELEASE"
+    }
+   ],
+   "othersMay": [
+    {
+     "who": "a compiled graph or a green source test",
+     "whoKind": "ROLE",
+     "action": "BUILD_INPUT",
+     "note": "an input, never activation: a commit, a green CI run, a merge and a built artifact are different facts produced by different authorities"
+    }
+   ],
+   "enforcementPoints": [
+    {
+     "component": "bundle-verifier",
+     "point": "verification before apply",
+     "citation": {
+      "path": "docs/harnesses/runtime.infrastructure.md",
+      "line": 61,
+      "quote": "- `bundle-verifier`: init/container library that verifies bundle lock, signatures, and blob digests before"
+     }
+    },
+    {
+     "component": "operator",
+     "point": "signature, digest, platform, policy, capacity or prerequisite failures stop before apply",
+     "citation": {
+      "path": "docs/harnesses/runtime.infrastructure.md",
+      "line": 153,
+      "quote": "- Signature, digest, platform, policy, capacity, or prerequisite failures stop before apply and set a stable"
+     }
+    }
+   ],
+   "whenUnavailable": {
+    "behaviour": "KEEP_RUNNING_VERSION",
+    "note": "registry loss blocks new installation and upgrade but cannot stop ready workloads",
+    "citation": {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 159,
+     "quote": "Registry loss blocks new installation and upgrade but cannot stop ready workloads"
+    }
+   },
+   "whenRevoked": {
+    "behaviour": "DEACTIVATE_REVOKED",
+    "note": "flagged: no line of runtime.infrastructure.md states a rule for a revoked module; OP-002's preflight scope (revocation, must fail before apply) is the nearest topical line; module revocation is consumed (trust.security-safety.md:152)",
+    "citation": {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 196,
+     "quote": "signature, digest, revocation, and license preflight; must fail before apply"
+    }
+   },
+   "citations": [
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 18,
+     "quote": "Platform scope: Own signed installation admission, minimal module closure and constrained reconciliation. H11"
+    },
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 60,
+     "quote": "- `operator`: watches `HarnessInstallation` resources and reconciles modules."
+    },
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 61,
+     "quote": "- `bundle-verifier`: init/container library that verifies bundle lock, signatures, and blob digests before"
+    },
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 153,
+     "quote": "- Signature, digest, platform, policy, capacity, or prerequisite failures stop before apply and set a stable"
+    },
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 159,
+     "quote": "- Registry loss blocks new installation and upgrade but cannot stop ready workloads."
+    },
+    {
+     "path": "docs/harnesses/runtime.infrastructure.md",
+     "line": 196,
+     "quote": "2. `OP-002-preflight-verification`: platform, architecture, capacity, storage, network, sandbox,"
+    },
+    {
+     "path": "docs/adr/0005-release-evidence.md",
+     "line": 11,
+     "quote": "released repositories. A Git commit, green CI run, merge, built artifact,"
+    },
+    {
+     "path": "docs/adr/0005-release-evidence.md",
+     "line": 12,
+     "quote": "signature, successful deployment, healthy runtime, assurance result, and tenant"
+    },
+    {
+     "path": "docs/adr/0005-release-evidence.md",
+     "line": 13,
+     "quote": "decision are different facts produced by different authorities. Treating any"
+    },
+    {
+     "path": "docs/adr/0005-release-evidence.md",
+     "line": 17,
+     "quote": "Phase 0 has no product repository releases. The release authority must therefore"
+    },
+    {
+     "path": "docs/harnesses/runtime.model-inference.md",
+     "line": 152,
+     "quote": "Consumed: `bundle.signed.v1`, `policy.bundle.activated.v1`, and local operator configuration changes. Events"
+    },
+    {
+     "path": "docs/harnesses/trust.security-safety.md",
+     "line": 152,
+     "quote": "Consumed: signed bundle/profile release, module revocation, approval/waiver expiry, and identity/secret"
+    }
+   ]
+  }
+ ],
+ "reconciliation": [
+  {
+   "id": "MAS-RA-004-temporal-wording",
+   "conflict": "the retained Temporal wording in MAS-RA-004",
+   "successor": "MAS-RA-004 erratum packet"
+  },
+  {
+   "id": "PI-DURABLE-PARITY-001-temporal-target",
+   "conflict": "PI-DURABLE-PARITY-001's former Temporal target",
+   "successor": "PI-DURABLE-PARITY-001 (retitled)"
+  },
+  {
+   "id": "reranker-second-home",
+   "conflict": "the reranker's second home",
+   "successor": "MODEL-AUX-001"
+  },
+  {
+   "id": "language-updates",
+   "conflict": "the language updates",
+   "successor": "LANG-HOTPATH-DECISION-001"
+  }
+ ],
+ "nonClaims": [
+  "Nothing is implemented, installed or enforced; the map records authority and its enforcement points, it does not enforce them.",
+  "No harness document, ADR, catalog byte, roadmap item or adopted record changes; conflicts go to the reconciliation list with their successors.",
+  "No R10 or R12 file is read; the R12 vectors are written here as data.",
+  "The budget model fixes semantics only; it claims no concurrency or clock property (DATA-CORRECTNESS-001).",
+  "A row's authority is not an availability claim; release membership is the release-profile record's (Q-AM-5).",
+  "The pins fix which line states each pinned value; the two flagged pins (AM-06 unavailable, AM-09 revoked) claim only the nearest topical line, because their documents state no rule for those cases."
+ ]
+}

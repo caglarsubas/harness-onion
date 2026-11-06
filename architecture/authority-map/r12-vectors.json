@@ -1,0 +1,49 @@
+{
+ "schemaVersion": "planeon.internal.authority-map-r12/v1",
+ "vectors": [
+  {
+   "id": "R12-V1",
+   "row": "AM-04",
+   "actor": "guardrail-service",
+   "claimedAction": "GRANT",
+   "case": "A protected action admitted because guardrail-service passed, with no policy-decision call: a classifier is advisory and never grants.",
+   "expected": "REFUSED"
+  },
+  {
+   "id": "R12-V2",
+   "row": "AM-04",
+   "actor": "a permission or approval cache",
+   "claimedAction": "GRANT",
+   "case": "A cached permission or approval used after its bundle is REVOKED or its approval expired: a cache must not outlive revocation.",
+   "expected": "REFUSED"
+  },
+  {
+   "id": "R12-V3",
+   "row": "AM-05",
+   "actor": "the H4 browser client",
+   "claimedAction": "MINT",
+   "case": "An approval asserted by the H4 client with no H14 approval record: H4 and R04 present and submit, never mint authority in the browser.",
+   "expected": "REFUSED"
+  },
+  {
+   "id": "R12-V4",
+   "row": "AM-06",
+   "actor": "the transport",
+   "claimedAction": "COMMIT",
+   "case": "An HTTP success from the target treated as the effect completed, with no H11 receipt; the expected state is OUTCOME_UNKNOWN until reconciled.",
+   "expected": "REFUSED"
+  },
+  {
+   "id": "R12-V5",
+   "row": "AM-04",
+   "actor": "a cached decision",
+   "claimedAction": "GRANT",
+   "case": "A permission decision cached under a profile's bounded cached-decision policy and reused to admit a mutation, a tool call, a route change or a deployment, which trust.security-safety.md:157 forbids.",
+   "expected": "REFUSED"
+  }
+ ],
+ "nonClaims": [
+  "Written here as data, never read from R12; the conformance labs adopt them in their own packets.",
+  "Evaluated against the map's rule: only a row's authority performs an authority act (DECIDE, MINT, GRANT, COMMIT, PROMOTE, ACTIVATE); any other actor is refused."
+ ]
+}
