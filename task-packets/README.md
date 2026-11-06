@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ADOPT-007
+## Current source preparation — MET-PERF-047
+
+MET-PERF-047 (CHAIN-COMPACTION-002, slot 282): the shadow chain checkpoint (K = 0, 289 packets at slot 282): the ledger
+of chain layers 189-281, its shadow-only reader and lane-run writer, and a D5a oracle, recorded in
+architecture/chain-checkpoint/; nothing is skipped until MET-PERF-048; gate material (the registry rider, conftest.py,
+two ci/ paths with the transport approval, and the D5a oracle). Alpha2 OPEN; 288 accepted (the catalog at slot 281) plus
+MET-PERF-047 only.
+
+## Historical authority-map source preparation — MET-ADOPT-007
 
 MET-ADOPT-007 (AUTHORITY-MAP-001, slot 281): the effective authority map (K = 0, 288 packets at slot 281): one authority
 for each of nine concerns with its validator, budget and R12 vectors and a D5a oracle, recorded in
@@ -1732,3 +1740,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 286 | `CTRL-FIX-004` | `mas-harness-control-plane` | The page-not-found status fix (product, published by MET-VERIFY-006); its 8 commands keeping CTRL-TRANSPORT-001's |
 | 287 | `MET-PERF-046` | `Harness-Engineering` | PERF-046: eight parallel-suite workers (WORKERS 6 -> 8 in MET-PERF-039's form, recorded in architecture/parallel-workers/); gate material (the registry rider and ci/parallel_suite.py) |
 | 288 | `MET-ADOPT-007` | `Harness-Engineering` | AUTHORITY-MAP-001: the effective authority map (a data-only record with its validator, budget and R12 vectors and a D5a oracle; nothing enforced); gate material (the registry rider and the D5a oracle) |
+| 289 | `MET-PERF-047` | `Harness-Engineering` | CHAIN-COMPACTION-002: the shadow chain checkpoint (the ledger of layers 189-281, its shadow-only reader and lane-run writer, and a D5a oracle; nothing skipped until MET-PERF-048); gate material (the registry rider, conftest.py, two ci/ paths and the D5a oracle) |
