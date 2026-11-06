@@ -882,13 +882,15 @@ class Reader:
 
 def dry_run_compare(log_path, out_path, root=ROOT):
     """The dry-run runner's comparison (parameters.shadowIn == "dryRunOnly"): argv 63's END events from the dry run's
-    log feed the same Reader, which writes its record to out_path."""
+    log feed the same Reader, which writes its record to out_path. An event is read wherever it sits in its line
+    (MON-282-DRYRUN-FIND: the log has teardown events after other output on the same line)."""
     reader = Reader(root=root, in_dry_run=True)
     reader.start()
     for line in Path(log_path).read_text(encoding="utf-8", errors="replace").splitlines():
-        if line.startswith("PYTEST_DIAGNOSTIC="):
+        at = line.find("PYTEST_DIAGNOSTIC=")
+        if at >= 0:
             try:
-                event = json.loads(line[len("PYTEST_DIAGNOSTIC="):])
+                event = json.loads(line[at + len("PYTEST_DIAGNOSTIC="):])
             except ValueError:
                 continue
             if event.get("event") == "END" and reader.active and reader.mode == "compare":

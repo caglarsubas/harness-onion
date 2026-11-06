@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
-AUTHORITY_SHA256 = "b1e2ddbf6969c2dca2030cb166d30d4825e6b111e876d3e9583c4c19c910dff4"
+AUTHORITY_SHA256 = "bbdd5adfb4ba256aab5dba4ef5ffc44a2757e2ace01f60b530c44bbaf7b82edf"
 VALIDATOR_PATH = "scripts/validate_met_perf_047.py"
 BASE_COMMIT = "dcf11803fca83454cb0660ffd88b65ce06a22a0f"
 NEW_PACKET = "MET-PERF-047"
@@ -444,10 +444,10 @@ ERA_SHA256 = MappingProxyType({
     "architecture/chain-checkpoint/vectors.json": "ff3cf522c77a513e4401aa0d22378c249a85865f78ff28b018a170339cad3097",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "bf42d8f42759df7afb90e7c86b8e9e862a50024356d368dc5d43ec73cf99bbbc",
-    "ci/chain_checkpoint.py": "fcec5e2cae244afbc8ab53d683f2cd3c0726aab583f93ab500434c18e1b1ccae",
+    "ci/chain_checkpoint.py": "b66d601e387c181d627d2e210fe5db40bf6ae3ec2e12f1369b0215d9a57b046b",
     "conftest.py": "23395db8132224f09353ed6f89411dc4a20f87e5a33c55708febcc570cfbb324",
     "scripts/chain_checkpoint_writer.py": "22c74b740b1d50ec6745edc7f4d5caa650281cec430b7af3ed01481187f9aafe",
-    "tests/test_chain_checkpoint.py": "0992dda952cb94681e1b4f949d40a9e818ea1420bbb48c8f129351cf0de3c722",
+    "tests/test_chain_checkpoint.py": "79990c15850f9b1e49fad1bd53791ca49846b9ac129e6ce3b760cb2f25d30ed5",
     "tests/test_met_perf_047_oracle.py": "6f601d0478d3160832b60e50e6f5d7854c75b1d1c8755f0812d3293fa5f999f1",
 })
 

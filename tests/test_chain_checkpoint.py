@@ -719,6 +719,19 @@ def test_the_writers_exclusion_and_pin_digest_follow_the_reader():
         WR.attested_sha(raw + raw, "a.py", "a.py", CK.pin_normalised)
 
 
+def test_dry_run_compare_reads_an_end_event_mid_line(tmp_path):
+    """MON-282-DRYRUN-FIND: a teardown END event after other output on its line still counts."""
+    root = _repo(tmp_path, shadow_in="dryRunOnly")
+    node = sha(b"tests/test_l281.py::test_x")
+    event = lambda phase: "PYTEST_DIAGNOSTIC=" + json.dumps({"event": "END", "node": node, "phase": phase,
+                                                            "outcome": "passed", "durationUs": 1000})
+    log = tmp_path / "argv63.log"
+    log.write_text("\n".join([event("setup"), event("call"), "." + event("teardown")]) + "\n")
+    CK.dry_run_compare(log, tmp_path / "shadow.json", root=root)
+    record = json.loads((tmp_path / "shadow.json").read_text())
+    assert record["layers"]["281"]["agree"] is True and not [d for d in record["disagreements"] if d["kind"] == "outcome"]
+
+
 def test_the_writer_records_each_check_pair_once():
     """MON-282-PAIRS-DEDUPE: 279's real pairs file holds one entry per overlapping path (20) over 2 packet pairs; the
     writer records each pair once, and the reader's check_pairs reads them clean."""
