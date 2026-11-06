@@ -19,7 +19,7 @@
   ]
  },
  "briefSha256": "d48e23a2e18c8375a03cbeaff7b5701200fc8b2abb9becb11fc4804a94145116",
- "candidateCommit": "a64e29d732a2883cd710551e9f2268c2ed35cfb1",
+ "candidateCommit": "b2f6f0307b97627663532825d9d1c409a19cf832",
  "launched": "2026-11-06T21:11:41+08:00",
  "finished": "2026-11-07T02:13:33+08:00",
  "ruling": {
@@ -39,6 +39,6 @@
   "operator-stated fact MON-282-ORACLE-FACT3: F's source tree, before F's build, held W's authority and hunk-classes/282.json; and the F2 facts (the step's replay on W′, PIN_PLACEHOLDER's form)",
   "blind runs: on c6, run 1 VOID (fixture binding) and run 1-bis ABORTED (not a run), then 1-ter and 1-quater; at F, run F-1 on F's source VOID by stage (MON-282-ORACLE-F-VOID); on W′ de78fd19, 76 passed and 1 failed, a (b) ruled a README gap (MON-282-ORACLE-COUNTED-B), so the counted run was repeated; the one counted run, on W″ a64e29d7: 77 passed, 0 failed, 0 skipped",
   "the author's F-round slips: two Edit calls in one message once; a parametrize decorator briefly moved onto a helper and moved back before the run; extra JSON-parse calls; __pycache__ in WORK (moved to the Trash by the operator)",
-  "ruling KEEP (MON-282-ORACLE-KEEP) on the counted run on W″; candidateCommit is W″, the tree the oracle was checked against, and F differs from it only by the build's write set (MON-282-IDENTITY-CANDIDATE)"
+  "ruling KEEP (MON-282-ORACLE-KEEP) on the counted run on W″ a64e29d7 (77 passed); after the writer's pair dedupe (MON-282-PAIRS-DEDUPE) and dry_run_compare's fix (MON-282-DRYRUN-FIND), the counted run was repeated on W⁶ b2f6f030: 77 passed, 0 failed, 0 skipped; candidateCommit is W⁶; F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)"
  ]
 }

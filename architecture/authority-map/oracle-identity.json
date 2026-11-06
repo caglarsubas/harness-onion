@@ -20,7 +20,7 @@
   ]
  },
  "briefSha256": "fa12527be42dfa5d50d067dbf280c00cd78ec237b2aa9655dccaf7808d2ba7ae",
- "candidateCommit": "a64e29d732a2883cd710551e9f2268c2ed35cfb1",
+ "candidateCommit": "b2f6f0307b97627663532825d9d1c409a19cf832",
  "launched": "2026-11-07T01:57:19+08:00",
  "finished": "2026-11-07T02:01:00+08:00",
  "ruling": {
@@ -33,7 +33,7 @@
   "V9 (a) update of 281's oracle (0961aeee) for slot 282 F, by R12 as a non-author of MET-ADOPT-007 and MET-PERF-047 (MON-R12-V9-ORACLE); written from the kit only (MANIFEST d406b47b: KIT_README, V9_RULE, V9_VECTORS, F's authority-map README, the oracle and its identity); py_compile only, no pytest",
   "prior read, 2026-11-06 (UAT design): about 30 grep lines of scripts/authority_map.py at dcf11803 (lines 9-10, 38, 61, 67, 100, 130, 146, 174-281, 329-346; docstring, constants, AM_SHAPE checks, budget model), nothing of V9, riders or packets; ruled no bar (MON-R12-V9-ORACLE (a)); not opened during this work",
   "operator-stated facts used: check(read, packets) and packets' type; the ValueError code prefix; the registry path, base digest and re-serialization; RIDER and the later rider's form; packet order; at most one per id; F's registry ending with MET-PERF-047/packet",
-  "candidateCommit filled by R00 (the operator) by script: W″ a64e29d7, the tree the oracle was checked against (MON-282-IDENTITY-CANDIDATE); F differs from it only by the build's write set",
+  "candidateCommit filled by R00 (the operator) by script: first W″ a64e29d7, then W⁶ b2f6f030 after both counted runs were repeated there (MON-282-ORACLE-RECOUNT: 94 passed, 0 failed, 0 skipped); F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)",
   "launched is the scratch directory's creation; the kit was read a few minutes before it",
   "one blind run on W″ a64e29d7 (MON-281-ORACLE-BLIND), in-process by R00's caller call_oracle_blind_281.py, never opened by R00: 94 passed, 0 failed, 0 skipped",
   "correction (MON-281-ORACLE-OPERATOR): operator is R00's lane session, which placed the oracle, ran its blind run and filled this identity; R12 had named itself as operator, which made oracle equal operator (NOT_INDEPENDENT); the KEEP ruling MON-281-ORACLE-KEEP stands"
