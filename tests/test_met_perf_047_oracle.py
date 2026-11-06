@@ -1,8 +1,8 @@
 """D5a oracle tests for MET-PERF-047 (CHAIN-COMPACTION-002, G1): the chain checkpoint's shadow reader.
 
 Owner decision D5a: a contract packet carries tests written outside the candidate, by someone who is not its
-builder. This file was written from three texts only, c6's copies (they replaced W0's for every expectation), and
-every expected value comes from one of them:
+builder. This file was written from three texts only, F's copies (they replaced W0's, then c6's, for every
+expectation), and every expected value comes from one of them:
 - README: architecture/chain-checkpoint/README.md (the contract text and its countEffect table);
 - DOCSTRING: the module docstring of ci/chain_checkpoint.py;
 - VECTORS: architecture/chain-checkpoint/vectors.json, vectors 1-13 and its hunkClassRecords member;
@@ -13,7 +13,14 @@ every expected value comes from one of them:
   note: the constants HUNK_CLASSES_DIR and SIDE_MEMBERS (the hunk-class record's five member names, a frozenset);
   CLASSES and RULE_SHA256 belong in a hunk-class record, never in an authority; the v2.1 changedFiles entry
   {afterSha256, beforeSha256, reverseHunks} with three-key hunks {at, removeBase64, insertBase64}; 281's published
-  authority names no hunk-class record.
+  authority names no hunk-class record; in MON-282-ORACLE-FACT2: newFiles maps a path to the plain lowercase hex
+  sha256 of its bytes; in the F note: RULES_BY_SHA, RULE_V22_SHA256, PIN_LINE_PATTERN, PIN_PLACEHOLDER and
+  pin_normalised(raw, default=None) by name, and CLASSES (five members, register last) and RULE_SHA256 being
+  chainmech v2.3's; in update F2 (README CNF2: exclusion files sorted, each path once; mode "compare", "dry-run-only:
+  skipped" or "inactive"): MON-282-ORACLE-FACT3 stands, and on W' the step's authority
+  (architecture/chain-checkpoint-authority.json, v2.1's form) covers every edit of the step, so its reverse hunks
+  replay 281's edited files from the tree to 281's after bytes; PIN_PLACEHOLDER is the whole placeholder line as
+  bytes with its line feed; PIN_LINE_PATTERN is the bytes regular expression of the pin line, matched per line.
 
 Every case is built as files under pytest's tmp_path; nothing is patched, shimmed or swapped. The reader is loaded
 by file path from ROOT/ci/chain_checkpoint.py and is the only repository module loaded. Repository data read at
@@ -37,7 +44,11 @@ construction slip of this file to correct, not a finding against the candidate:
 - C6: Reader takes a pathlib.Path root, a zero-argument clock returning seconds and a 40-hex tree;
 - C7: record.json is indented JSON whose sizeBytes is the file's own length; fullRunProof and writingRun hold
   plausible fillers;
-- C8: COUNT_EFFECT maps a kind to (class, countEffect) or to {"class", "countEffect"}.
+- C8: COUNT_EFFECT maps a kind to (class, countEffect) or to {"class", "countEffect"};
+- C11: the ledger's exclusion is {"files": [paths], "pinLine": "<path>"};
+- C12: pin_normalised takes the file's bytes and gives bytes (or text, compared as UTF-8); the pin line is
+  AUTHORITY_SHA256 = "<64 hex>" on its own line;
+- C13: chainmech v2.2's vocabulary is CLASSES without register (README 'v2.2's is v2.3's with register off').
 """
 
 import base64
@@ -64,7 +75,8 @@ CAP = 15
 CP = 282
 HEAD_TREE = "3" * 40
 HEAD_SHA = "4" * 40
-NORMALISED = ("cascade", "bridge")
+# README (F) 'It undoes only cascade, bridge and register hunks, plus record when normalisedRecordClass is true'.
+NORMALISED = ("cascade", "bridge", "register")
 CTX_281 = {
     "newPacket": "MET-ADOPT-007",
     "prevValidator": "scripts/validate_met_perf_046.py",
@@ -199,20 +211,14 @@ def _replace_record(root, data):
     _put(root, NAMING_REL, _json_bytes(naming))
 
 
-_UNKNOWN_WHY = ("not read", "not json", "not an object", "malformed")
+_NOT_READ = "head slot unknown (the ledger was not read)"
 
 
-def _class_c_slot(row, head):
-    """README 'A class-C record's slot is the head's chain slot ... or null when the ledger was not read or its slots
-    are malformed'; 'every class-C detail names the head slot and the checkpoint slot'; 'The head slot's message names
-    why it is unknown: the ledger was not read, is not JSON, is not an object, or its slots are malformed'. The README
-    fixes no reading order, so either branch may hold, each held to its own sentence. head=None: the texts do not
-    place the head slot (an authority that does not parse has no baseline), so the slot the row gives is named."""
-    detail = row["detail"]
-    if row["slot"] is None:
-        return any(why in detail.lower() for why in _UNKNOWN_WHY)
-    expected = row["slot"] if head is None else head
-    return _slot_is(row["slot"], expected) and str(expected) in detail and str(CP) in detail
+def _before_ledger(row):
+    """README (F) 'The read order (PKT1-READ-ORDER)': 'Until step 4 sets it, the head slot is null: a budget stop, a
+    failing clock or a malformed authority before then is recorded with slot null and a detail ending "head slot
+    unknown (the ledger was not read)"'."""
+    return row["slot"] is None and row["detail"].rstrip().endswith(_NOT_READ)
 
 
 def _b64(data):
@@ -269,7 +275,7 @@ TEST_TEXT = VALIDATOR_TEXT + "\n\ndef test_a():\n    assert True\n\n\ndef test_b
 
 
 def _build(cc, root, slots=(270,), checkpoint=CP, cp_baseline=0, shadow_in="verify", name_record=True,
-           check_pairs=None, extra=None, validator=None, newer=(), normalised_record=False):
+           check_pairs=None, extra=None, validator=None, newer=(), normalised_record=False, exclusion=None):
     """A checkpoint tree under root (README 'The ledger'): per slot a data file, a validator, a test file and a
     layer authority (not newer); record.json; an older authority naming it (C4); then `newer` [(rel, obj)].
     extra {rel: (live, recorded sha256)} joins the first layer's inputs; validator (rel, live, recorded sha256)
@@ -325,6 +331,8 @@ def _build(cc, root, slots=(270,), checkpoint=CP, cp_baseline=0, shadow_in="veri
         "sizeBytes": 0,
         "sizeBound": 1048576,
     }
+    if exclusion is not None:
+        ledger["exclusion"] = exclusion
     record_sha = _put(root, RECORD_REL, _ledger_bytes(ledger))
     named = {RECORD_REL: _named(record_sha)} if name_record else {}
     _put(root, "architecture/oracle-naming-authority.json", _json_bytes(_authority("ORACLE-NAMING", 0, new=named)))
@@ -389,31 +397,33 @@ def test_constants_state_the_readme(cc):
     """README 'The ledger (record.json, schema harness.planeon.ai/chain-checkpoint/v1)'; README 'It undoes only
     cascade and bridge hunks, plus record when normalisedRecordClass is true'. OPERATOR: SCHEMA, RECORD_PATH,
     CLASSES (a tuple), RULE_SHA256 (the pinned class rule's digest)."""
-    assert cc.SCHEMA == SCHEMA_TEXT
-    assert Path(str(cc.RECORD_PATH)).as_posix().endswith(RECORD_REL)
-    assert isinstance(cc.CLASSES, tuple)
-    assert {"cascade", "bridge", "record"} <= set(cc.CLASSES)
-    assert re.fullmatch(r"[0-9a-f]{64}", cc.RULE_SHA256)
+    assert cc.SCHEMA == SCHEMA_TEXT, (cc.SCHEMA, SCHEMA_TEXT)
+    assert Path(str(cc.RECORD_PATH)).as_posix().endswith(RECORD_REL), (cc.RECORD_PATH, RECORD_REL)
+    assert isinstance(cc.CLASSES, tuple), cc.CLASSES
+    assert {"cascade", "bridge", "record"} <= set(cc.CLASSES), cc.CLASSES
+    assert re.fullmatch(r"[0-9a-f]{64}", cc.RULE_SHA256), cc.RULE_SHA256
 
 
 def test_hunk_class_record_constants_state_the_readme(cc):
     """README 'A classed authority's classes live in its hunk-class record,
     architecture/chain-checkpoint/hunk-classes/<slot>.json ... It holds exactly authorityPath, hunkClassVocabulary,
     hunkClassRuleSha256, hunkClassContext and classes'. OPERATOR c6: HUNK_CLASSES_DIR, SIDE_MEMBERS (a frozenset)."""
-    assert Path(str(cc.HUNK_CLASSES_DIR)).as_posix().endswith(HC_DIR)
-    assert isinstance(cc.SIDE_MEMBERS, frozenset)
-    assert cc.SIDE_MEMBERS == SIDE_FIVE
+    assert Path(str(cc.HUNK_CLASSES_DIR)).as_posix().endswith(HC_DIR), (cc.HUNK_CLASSES_DIR, HC_DIR)
+    assert isinstance(cc.SIDE_MEMBERS, frozenset), cc.SIDE_MEMBERS
+    assert cc.SIDE_MEMBERS == SIDE_FIVE, (sorted(cc.SIDE_MEMBERS), sorted(SIDE_FIVE))
 
 
 def test_vector_4_reader_mode_is_shadow(cc):
     """VECTORS 4 (case 'MODE = "sampled" in ci/chain_checkpoint.py'; the writer refuses a reader whose MODE is not
     shadow); README 'MET-PERF-047 is shadow-only'. Only the reader's side: the writer is not in CN."""
-    assert cc.MODE == "shadow"
+    assert cc.MODE == "shadow", cc.MODE
 
 
 def test_count_effect_mirrors_the_readme_table(cc):
     """README 'This countEffect table is the single source ... the reader's COUNT_EFFECT mirrors it'; DOCSTRING
-    'COUNT_EFFECT below mirrors it'; README table rows input..agree. OPERATOR: COUNT_EFFECT (shape C8)."""
+    'COUNT_EFFECT below mirrors it'; README table rows input..skipped; README (F) 'COUNT_EFFECT holds the
+    disagreement kinds. An agree is not a disagreement, so it is not among them; it counts'. OPERATOR: COUNT_EFFECT
+    (shape C8)."""
     got = {}
     for kind, value in dict(cc.COUNT_EFFECT).items():
         if isinstance(value, dict):
@@ -421,7 +431,9 @@ def test_count_effect_mirrors_the_readme_table(cc):
         else:
             klass, effect = value
             got[kind] = (_klass(klass), effect)
-    assert got == TABLE, {"COUNT_EFFECT": dict(cc.COUNT_EFFECT), "read as": got, "README table": TABLE}
+    kinds = {kind: row for kind, row in TABLE.items() if kind != "agree"}
+    assert "agree" not in got, got
+    assert got == kinds, {"COUNT_EFFECT": dict(cc.COUNT_EFFECT), "read as": got, "README table": kinds}
 
 
 def test_clean_reading_agrees_and_its_record_is_whole(cc, tmp_path):
@@ -435,7 +447,6 @@ def test_clean_reading_agrees_and_its_record_is_whole(cc, tmp_path):
         assert member in record, member
     assert "\n" not in json.dumps(record)
     assert _rows(record) == []
-    assert record["mode"] == "shadow"
     assert record["shadowIn"] == "verify"
     assert record["headSha"] == HEAD_SHA
     assert float(record["capSeconds"]) == CAP
@@ -494,7 +505,6 @@ def test_vector_1_tampered_input_is_class_a_and_unauthored(cc, tmp_path):
     rows = _kind(record, "input")
     assert any(_slot_is(r["slot"], 270) and "data270.txt" in _text(r) for r in rows), rows
     assert "data270.txt" in record["unauthored"]
-    assert _member(record["layers"], 270)["agree"] is False
 
 
 def test_vector_1_layer_authority_json_change_is_class_a(cc, tmp_path):
@@ -509,15 +519,26 @@ def test_vector_1_layer_authority_json_change_is_class_a(cc, tmp_path):
     assert not [r for r in record["disagreements"] if r["kind"] == "corrupt"]
 
 
-def test_vector_1_layer_authority_that_stops_parsing_is_corrupt(cc, tmp_path):
-    """VECTORS 1 ('one that stops it parsing makes the reading corrupt', Q-R4-2, P047-C5-3); README corrupt row
-    ('an authority that does not parse'; the detail names the file); README 'every class-C detail names the head
-    slot and the checkpoint slot'."""
+LAYER_AUTHORITY_BREAKS = {
+    "does-not-parse": lambda obj: "{ not json\n",
+    "not-an-object": lambda obj: "[]\n",
+    "member-not-an-object": lambda obj: _json_bytes(dict(obj, changedFiles=["not", "an", "object"])),
+}
+
+
+@pytest.mark.parametrize("brk", sorted(LAYER_AUTHORITY_BREAKS))
+def test_vector_1_layer_authority_that_stops_parsing_is_corrupt(cc, tmp_path, brk):
+    """VECTORS 1 (F: 'one that stops it parsing, or makes it or one of those three members a non-object, makes the
+    reading corrupt with a null slot', Q-R4-2, P047-C5-3); README corrupt row ('an authority is read before the
+    ledger, so its refusal's slot is null'; the detail names the file); README (F) 'A detail names ... an authority
+    by its path'; README read order step 2 and the detail ending 'head slot unknown (the ledger was not read)'."""
     tree = _build(cc, tmp_path)
-    _put(tmp_path, "architecture/s270-authority.json", "{ not json\n")
+    rel = "architecture/s270-authority.json"
+    obj = json.loads((tmp_path / rel).read_text(encoding="utf-8"))
+    _put(tmp_path, rel, LAYER_AUTHORITY_BREAKS[brk](obj))
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("s270-authority.json" in _text(r) and _class_c_slot(r, None) for r in rows), rows
+    assert any(rel in r["detail"] and _before_ledger(r) for r in rows), rows
 
 
 def test_vector_2_unnamed_ledger_is_stale(cc, tmp_path):
@@ -578,7 +599,8 @@ def test_vector_5_check_pairs_defect_is_corrupt(cc, tmp_path, defect):
     tree = _build(cc, tmp_path, check_pairs=PAIR_DEFECTS[defect])
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("270" in r["detail"] and "checkPairs" in _text(r) and "record.json" in _text(r) for r in rows), rows
+    # README (F) 'A detail names the ledger as "ledger" (ledger layers[0].slot, ledger checkPairs[0]: ...)'.
+    assert any("270" in r["detail"] and re.search(r"ledger checkPairs\[\d+\]", r["detail"]) for r in rows), rows
     assert all(_slot_is(r["slot"], CP) for r in rows), rows
 
 
@@ -616,7 +638,8 @@ def test_vector_9_budget_stops_the_replay_over_the_cap(cc, tmp_path):
     tree = _build(cc, tmp_path, extra={"edit270.txt": (after, _sha(before))}, newer=[(NEWER_REL, obj)])
     _, record = _read(cc, tree, clock=Clock(step=20.0))
     rows = _kind(record, "over-budget")
-    assert all(_class_c_slot(r, CP + 1) for r in rows), rows
+    # README (F) read order: step 1 ends with 'the budget's first check'; a budget stop before step 4 has slot null.
+    assert all(_before_ledger(r) for r in rows), rows
     assert any("budget" in r["detail"].lower() or "cap" in r["detail"].lower() for r in rows), rows
 
 
@@ -644,8 +667,9 @@ def test_skip_checks_one_authority_per_slot_first(cc, tmp_path):
     tree = _build(cc, tmp_path, shadow_in="dryRunOnly", newer=newer)
     _, record = _read(cc, tree, in_dry_run=False)
     rows = _kind(record, "corrupt")
-    assert any("oracle-newer-a-authority.json" in _text(r) or "oracle-newer-b-authority.json" in _text(r)
-               for r in rows), rows
+    # README (F) corrupt row: 'two newer authorities sharing a baseline or an authorityPacket (the detail names both)'.
+    assert any("architecture/oracle-newer-a-authority.json" in r["detail"]
+               and "architecture/oracle-newer-b-authority.json" in r["detail"] for r in rows), rows
 
 
 @pytest.mark.parametrize("shared", ["baseline", "authorityPacket"])
@@ -659,8 +683,9 @@ def test_newer_authorities_sharing_a_slot_are_corrupt(cc, tmp_path, shared):
     tree = _build(cc, tmp_path, newer=newer)
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("oracle-newer-a-authority.json" in _text(r) or "oracle-newer-b-authority.json" in _text(r)
-               for r in rows), rows
+    # README (F) corrupt row: 'two newer authorities sharing a baseline or an authorityPacket (the detail names both)'.
+    assert any("architecture/oracle-newer-a-authority.json" in r["detail"]
+               and "architecture/oracle-newer-b-authority.json" in r["detail"] for r in rows), rows
 
 
 @pytest.mark.parametrize("data, why", [("{ not json\n", "JSON"), ("[]\n", "object")])
@@ -672,7 +697,8 @@ def test_unreadable_ledger_is_corrupt_with_a_null_slot(cc, tmp_path, data, why):
     _replace_record(tmp_path, data)
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any(r["slot"] is None and "record.json" in _text(r) and why.lower() in r["detail"].lower()
+    # README (F) 'A detail names the ledger as "ledger"'.
+    assert any(r["slot"] is None and "ledger" in r["detail"] and why.lower() in r["detail"].lower()
                for r in rows), rows
 
 
@@ -695,7 +721,8 @@ def test_ledger_missing_member_is_corrupt_naming_it(cc, tmp_path, member):
     _rewrite_ledger(tmp_path, tree, lambda ledger: ledger.pop(member))
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("record.json" in _text(r) and member in _text(r) for r in rows), rows
+    # README (F) 'A detail names the ledger as "ledger" (ledger layers[0].slot, ...)'.
+    assert any(("ledger %s" % member) in r["detail"] for r in rows), rows
 
 
 @pytest.mark.parametrize("data", ["{ not json\n", "[]\n"])
@@ -705,7 +732,8 @@ def test_authority_unparsable_or_not_object_is_corrupt(cc, tmp_path, data):
     tree = _build(cc, tmp_path, newer=[(NEWER_REL, data)])
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("oracle-newer-authority.json" in _text(r) and _class_c_slot(r, None) for r in rows), rows
+    # README (F): an authority named by its path; read before the ledger, so slot null (read order step 2).
+    assert any(NEWER_REL in r["detail"] and _before_ledger(r) for r in rows), rows
 
 
 @pytest.mark.parametrize("member", ["baselinePackets", "changedFiles", "newFiles"])
@@ -717,7 +745,9 @@ def test_authority_member_not_an_object_is_corrupt(cc, tmp_path, member):
     tree = _build(cc, tmp_path, newer=[(NEWER_REL, obj)])
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("oracle-newer-authority.json" in _text(r) and member in _text(r) for r in rows), rows
+    # README (F) corrupt row: 'an authority is read before the ledger, so its refusal's slot is null'; the authority by
+    # its path; read order step 2 and its detail ending.
+    assert any(NEWER_REL in r["detail"] and member in r["detail"] and _before_ledger(r) for r in rows), rows
 
 
 def test_changed_files_entry_shape_fault_is_corrupt(cc, tmp_path):
@@ -727,7 +757,7 @@ def test_changed_files_entry_shape_fault_is_corrupt(cc, tmp_path):
     tree = _build(cc, tmp_path, newer=[(NEWER_REL, obj)])
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("oracle-newer-authority.json" in _text(r)
+    assert any(NEWER_REL in r["detail"]
                and ("data270.txt" in _text(r) or "changedFiles" in _text(r)) for r in rows), rows
 
 
@@ -739,7 +769,7 @@ def test_reverse_hunks_entry_malformed_is_corrupt(cc, tmp_path):
     tree = _build(cc, tmp_path, newer=[(NEWER_REL, obj)])
     _, record = _read(cc, tree)
     rows = _kind(record, "corrupt")
-    assert any("oracle-newer-authority.json" in _text(r)
+    assert any(NEWER_REL in r["detail"]
                and any(m in _text(r) for m in ("reverseHunks", "data270.txt", "changedFiles")) for r in rows), rows
 
 
@@ -754,24 +784,59 @@ def _unb64(value):
     return base64.b64decode(value, validate=True)
 
 
+STEP_AUTHORITY = "architecture/chain-checkpoint-authority.json"
+
+
+def _replay(live, entry):
+    """One authority's reverse hunks on one file (README 'The apply is byte-exact, with each file's afterSha256 and
+    beforeSha256 checked'; OPERATOR c6: each hunk's at is an offset in the after bytes). Gives (bytes, "") or (None,
+    the reason)."""
+    if _sha(live) != entry["afterSha256"]:
+        return None, "step afterSha256 %s != tree %s" % (entry["afterSha256"], _sha(live))
+    data = live
+    for hunk in reversed(entry["reverseHunks"]):
+        at, remove, insert = hunk["at"], _unb64(hunk["removeBase64"]), _unb64(hunk["insertBase64"])
+        if data[at:at + len(remove)] != remove:
+            return None, "step hunk at %d does not apply" % at
+        data = data[:at] + insert + data[at + len(remove):]
+    if _sha(data) != entry["beforeSha256"]:
+        return None, "step beforeSha256 %s != replayed %s" % (entry["beforeSha256"], _sha(data))
+    return data, ""
+
+
+def _need(rels, files_281):
+    """A precondition on 281's files: on failure it prints each file's state (why it is apart, and its classes)."""
+    assert rels, {rel: (f["why"], f["classes"]) for rel, f in files_281.items()}
+
+
 @pytest.fixture(scope="module")
 def files_281(cc, a281):
-    """281's edited files, closed paths skipped before any file is opened. For each file still at 281's afterSha256
-    under ROOT: its after bytes and its hunks' classes by the rule under MET-ADOPT-007's context (OPERATOR); a file
-    a later slot edited is kept apart (after and classes None), as VECTORS 11 counts it apart."""
+    """281's edited files, closed paths skipped before any file is opened. Each file's 281 after bytes are the tree's
+    bytes, first replayed through the step's authority when the step edits the file (README 'It replays, newest
+    first, only the published reverseHunks ...'; OPERATOR MON-282-ORACLE-FACT3 and update F2: on W' the step's
+    authority, architecture/chain-checkpoint-authority.json in v2.1's form, covers every edit of the step; a file the
+    step does not edit needs no replay). For each file then at 281's afterSha256: its hunks' classes by the rule under
+    MET-ADOPT-007's context (OPERATOR); any other file is kept apart (after and classes None, with the reason), as
+    VECTORS 11 counts a file a later slot edits apart."""
+    step = json.loads((ROOT / STEP_AUTHORITY).read_text(encoding="utf-8"))["changedFiles"]
     rels = sorted(rel for rel in a281["changedFiles"] if not _closed(rel))
     out = {}
     for rel in rels:
         entry = a281["changedFiles"][rel]
         path = ROOT / rel
         after = path.read_bytes() if path.is_file() else None
+        why = "" if after is not None else "absent from the tree"
+        if after is not None and rel in step:
+            after, why = _replay(after, step[rel])
+        if after is not None and _sha(after) != entry["afterSha256"]:
+            why = "281 afterSha256 %s != %s" % (entry["afterSha256"], _sha(after))
         classes = None
-        if after is not None and _sha(after) == entry["afterSha256"]:
+        if after is not None and not why:
             seen = set()
             classes = [cc.classify(rel, after, h["at"], _unb64(h["removeBase64"]), _unb64(h["insertBase64"]),
                                    CTX_281["prevValidator"], CTX_281["prevTest"], CTX_281["newPacket"],
                                    CTX_281["steps"], seen) for h in entry["reverseHunks"]]
-        out[rel] = {"entry": entry, "after": after if classes is not None else None, "classes": classes}
+        out[rel] = {"entry": entry, "after": after if classes is not None else None, "classes": classes, "why": why}
     return out
 
 
@@ -827,20 +892,21 @@ def _build_281(cc, root, a281, files_281, rels, mutate=None, live=None, as_valid
 
 
 def test_vector_11_281_hunks_class_under_its_context(cc, files_281):
-    """VECTORS 11 (architecture/authority-map-authority.json classed by the rule under MET-ADOPT-007's context:
-    '281's edited files rebuild to each beforeSha256 under 281's context; only validate_readiness's block and the
-    master plan's status line stay partial; a file that a later slot edits for real ... is counted apart').
-    OPERATOR: 281's authority path and context; README 'It undoes only cascade and bridge hunks, plus record when
-    normalisedRecordClass is true' (vector 11's 'only ... stay partial' holds with record normalised, so the
-    partial set is read with record undone)."""
+    """VECTORS 11 (F: architecture/authority-map-authority.json classed by the rule under MET-ADOPT-007's context:
+    '281's edited files rebuild to each beforeSha256 under 281's context; validate_readiness's block and the master
+    plan's status line rebuild too, as class register (chainmech v2.3, MON-282-W2-RULED); a file that a later slot
+    edits for real ... is counted apart'). README (F) 'It undoes only cascade, bridge and register hunks, plus record
+    when normalisedRecordClass is true'; README 'register ... in scripts/validate_readiness.py, the new packet's
+    ownership block ...; in docs/MASTER_DEVELOPMENT_PLAN.md, one open status line ticked plus one new open line'.
+    OPERATOR: 281's authority path and context; CLASSES and the rule are chainmech v2.3's."""
     current = {rel: f for rel, f in files_281.items() if f["classes"] is not None}
-    assert current, "no file of 281 is still at its afterSha256"
+    _need(sorted(current), files_281)
     for rel, f in current.items():
         assert set(f["classes"]) <= set(cc.CLASSES), (rel, f["classes"])
-        if any(c not in NORMALISED_RECORD for c in f["classes"]):
-            low = rel.lower()
-            assert "validate_readiness" in low or ("master" in low and "plan" in low), (rel, f["classes"])
-    assert _clean(files_281), "no file of 281 rebuilds by cascade and bridge hunks alone"
+        assert set(f["classes"]) <= set(NORMALISED_RECORD), (rel, f["classes"])
+        if rel in ("scripts/validate_readiness.py", "docs/MASTER_DEVELOPMENT_PLAN.md"):
+            assert "register" in f["classes"], (rel, f["classes"])
+    _need(_clean(files_281), files_281)
 
 
 def test_d9_k0_cascade_step_reads_clean_281_first(cc, tmp_path, a281, files_281):
@@ -849,7 +915,7 @@ def test_d9_k0_cascade_step_reads_clean_281_first(cc, tmp_path, a281, files_281)
     file's afterSha256 and beforeSha256 checked'; README 'It undoes only cascade and bridge hunks'; README 'reverted
     {slot: [[path, [[authority, {class: count}]]]]}'."""
     rels = _clean(files_281)
-    assert rels
+    _need(rels, files_281)
     tree = _build_281(cc, tmp_path, a281, files_281, rels)
     _, record = _read(cc, tree)
     assert _rows(record) == []
@@ -866,7 +932,7 @@ def test_vector_12_one_byte_beside_the_cascade_is_class_a(cc, tmp_path, a281, fi
     """VECTORS 12 (the live validator is the authority's after bytes plus one byte: class A; afterSha256 differs,
     recorded cascade share x of N; the file is unauthored; names the layer's slot); Q-282C-2 D9 vector 2."""
     rels = [rel for rel in _clean(files_281) if "cascade" in files_281[rel]["classes"]]
-    assert rels, "no clean file of 281 has a cascade hunk"
+    _need(rels, files_281)
     validators = [rel for rel in rels if rel.startswith("scripts/validate_")]
     rel = (validators or rels)[0]
     live = files_281[rel]["after"] + b"#"
@@ -959,7 +1025,44 @@ def _record_bad_context(root, auth, side):
     _attach(root, auth, 281, dict(side, hunkClassContext=dict(side["hunkClassContext"], newPacket="ORACLE-NOT-281")))
 
 
+def _record_link(root, auth, side):
+    """README (F) 'and so is a named record that is a link, not a file': the named path is a symbolic link to the
+    record's bytes, both inside tmp_path."""
+    data = _json_bytes(side)
+    target = root / "oracle-link-target.json"
+    target.write_bytes(data)
+    rel = "%s/%d.json" % (HC_DIR, 281)
+    (root / rel).parent.mkdir(parents=True, exist_ok=True)
+    (root / rel).symlink_to(target)
+    auth["newFiles"][rel] = _named(_sha(data))
+
+
+def _record_not_a_file(root, auth, side):
+    """README (F) '... a named record that is ... not a file': a directory at the named path."""
+    rel = "%s/%d.json" % (HC_DIR, 281)
+    (root / rel).mkdir(parents=True)
+    auth["newFiles"][rel] = _named(_sha(_json_bytes(side)))
+
+
+def _record_unknown_rule(root, auth, side):
+    """README (F) 'hunkClassRuleSha256 picks chainmech v2.2's or v2.3's (RULES_BY_SHA ...), any other digest is class
+    A'; VECTORS bindingFaults ('a rule digest the reader does not hold ... class A, kind input')."""
+    _attach(root, auth, 281, dict(side, hunkClassRuleSha256="0" * 64))
+
+
+def _hunk_carries_string_class(root, auth, side):
+    """README (F) 'A reverse hunk that carries a class member is checked as an entry first: ... otherwise the
+    authority carries classes itself (class A, kind input)'."""
+    _attach(root, auth, 281, side)
+    rel = next(iter(auth["changedFiles"]))
+    auth["changedFiles"][rel]["reverseHunks"][0]["class"] = side["classes"][rel][0]
+
+
 RECORD_DEFECTS = {
+    "link-not-a-file": _record_link,
+    "not-a-file": _record_not_a_file,
+    "unknown-rule-digest": _record_unknown_rule,
+    "hunk-carries-string-class": _hunk_carries_string_class,
     "missing": _record_missing,
     "unnamed": _record_unnamed,
     "digest-mismatched": _record_digest_mismatched,
@@ -983,7 +1086,7 @@ def test_hunk_class_record_defect_is_class_a_input(cc, tmp_path, a281, files_281
     (the same list, class A; 'nothing here raises out of a hook': the reading returns). Its control is
     test_d9_k0_cascade_step_reads_clean_281_first, the same build with a well-formed record."""
     rels = _clean(files_281)
-    assert rels
+    _need(rels, files_281)
     tree = _build_281(cc, tmp_path, a281, files_281, rels[:1], record=RECORD_DEFECTS[defect])
     _, record = _read(cc, tree)
     rows = [r for r in _rows(record) if r["class"] == "A" and r["kind"] == "input"]
@@ -1019,7 +1122,7 @@ def test_hunk_class_record_rechecked_by_position_is_class_a(cc, tmp_path, a281, 
     refuse it (the record still claims a class the reader would undo); README 'one class per reverse hunk, in the
     authority's order'; DOCSTRING 'each recorded class is re-checked by the rule'."""
     rels = _clean(files_281)
-    assert rels
+    _need(rels, files_281)
     rel = rels[0]
 
     def substituted(root, auth, side):
@@ -1032,3 +1135,213 @@ def test_hunk_class_record_rechecked_by_position_is_class_a(cc, tmp_path, a281, 
     tree = _build_281(cc, tmp_path, a281, files_281, [rel], record=substituted)
     _, record = _read(cc, tree)
     assert any(_slot_is(r["slot"], 278) for r in _rows(record) if r["class"] == "A"), record["disagreements"]
+
+
+MODES = ("compare", "dry-run-only: skipped", "inactive")
+
+
+def _mode_of(record):
+    """The record's mode, and what the record is (its type, and its keys when it is a dict), for the message."""
+    if isinstance(record, dict):
+        return record.get("mode"), {"type": "dict", "keys": sorted(record)}
+    return None, {"type": type(record).__name__, "value": record}
+
+
+@pytest.mark.parametrize("case", MODES)
+def test_record_mode_takes_the_readme_values(cc, tmp_path, case):
+    """README (F2) record members: 'mode ("compare", "dry-run-only: skipped" or "inactive") and shadowIn'; README read
+    order step 6 ('the dry-run-only skip'); README skipped row ('a dry-run-only reading, skipped in session'); README
+    (F3) 'With no ledger the reader is inactive and writes no record: finish() returns (None, None). In a written
+    record, mode is "inactive" when the reading stops before the compare (a stale or unnamed ledger, a corrupt ledger
+    or authority, or the budget before step 6)'. compare: a reading that compares (shadowIn verify); dry-run-only:
+    skipped: an in-session dryRunOnly reading; inactive: no ledger gives (None, None), and an unnamed ledger, an
+    authority that does not parse and a budget stop at step 1 each write a record whose mode is inactive."""
+    if case != "inactive":
+        tree = _build(cc, tmp_path, shadow_in="verify" if case == "compare" else "dryRunOnly")
+        _, record = _read(cc, tree, in_dry_run=False)
+        mode, what = _mode_of(record)
+        assert mode == case, {"mode": mode, "expected": case, "record": what, "README": MODES}
+        return
+    empty = tmp_path / "no-ledger"
+    empty.mkdir()
+    reader = cc.Reader(empty, Clock(), CAP, HEAD_TREE, False)
+    reader.start()
+    result = reader.finish(HEAD_SHA)
+    assert result == (None, None), {"finish": result}
+    for stop in ("unnamed", "authority-does-not-parse", "budget-at-step-1"):
+        root = tmp_path / stop
+        root.mkdir()
+        tree = _build(cc, root, name_record=(stop != "unnamed"))
+        if stop == "authority-does-not-parse":
+            _put(root, "architecture/s270-authority.json", "{ not json\n")
+        _, record = _read(cc, tree, clock=Clock(step=20.0) if stop == "budget-at-step-1" else None)
+        mode, what = _mode_of(record)
+        assert mode == "inactive", {"stop": stop, "mode": mode, "record": what}
+
+
+def test_failing_clock_is_one_fault_record(cc, tmp_path):
+    """README (F) fault row ('any other exception of the reader, and a failing clock (one record per reading: "the
+    clock failed")'); DOCSTRING (F) 'and so is a failing clock (one record per reading, "the clock failed";
+    P047-ORACLE-B1)'; README read order (the clock fails from its first call, so by step 1's budget check: slot null,
+    detail ending 'head slot unknown (the ledger was not read)')."""
+    tree = _build(cc, tmp_path)
+    _, record = _read(cc, tree, clock=Clock(fail_after=0))
+    rows = _kind(record, "fault")
+    assert len(rows) == 1, rows
+    assert "the clock failed" in rows[0]["detail"], rows
+    assert _before_ledger(rows[0]), rows
+
+
+@pytest.mark.parametrize("variant", ["unnamed", "ledger-bytes-changed"])
+def test_stale_verdict_stops_the_reading(cc, tmp_path, variant):
+    """README (F) read order step 3 ('the naming verdict (unnamed or stale: class A, kind stale, and the reading
+    stops)'), before step 4 (the ledger as JSON) and step 7 (each layer's files); README stale row ('the record is
+    unnamed, or named with another digest'). A tampered input and a failed node would otherwise add rows."""
+    tree = _build(cc, tmp_path, name_record=(variant == "ledger-bytes-changed"))
+    _put(tmp_path, "data270.txt", "tampered\n")
+    if variant == "ledger-bytes-changed":
+        _put(tmp_path, RECORD_REL, "{ not json\n")
+    _, record = _read(cc, tree, calls={tree["nodeids"][0]: "failed"})
+    rows = _rows(record)
+    assert [r["kind"] for r in rows] == ["stale"], rows
+    assert rows[0]["slot"] is None, rows
+
+
+def test_hunk_class_not_a_string_is_corrupt(cc, tmp_path, a281, files_281):
+    """README (F) 'A reverse hunk that carries a class member is checked as an entry first: a class that is not a
+    string is a broken entry (corrupt)'; README corrupt row ('a changedFiles entry entry_fault rejects'; the detail
+    names the file); README (F) 'A detail names ... an authority by its path'."""
+    rels = _clean(files_281)
+    _need(rels, files_281)
+    rel = rels[0]
+
+    def numeric_class(root, auth, side):
+        _attach(root, auth, 281, side)
+        auth["changedFiles"][rel]["reverseHunks"][0]["class"] = 7
+
+    tree = _build_281(cc, tmp_path, a281, files_281, [rel], record=numeric_class)
+    _, record = _read(cc, tree)
+    rows = _kind(record, "corrupt")
+    assert any(AUTH_281 in r["detail"] for r in rows), rows
+
+
+def _v22_vocabulary(cc):
+    """C13: chainmech v2.2's vocabulary, v2.3's with register off."""
+    return [klass for klass in cc.CLASSES if klass != "register"]
+
+
+def test_hunk_class_record_vocabulary_must_be_the_rules(cc, tmp_path, a281, files_281):
+    """README (F) 'hunkClassRuleSha256 picks chainmech v2.2's or v2.3's (RULES_BY_SHA ...) ... and
+    hunkClassVocabulary must be that rule's vocabulary': v2.3's digest with v2.2's vocabulary binds no classes, so
+    the attested file is not rebuilt (class A on the layer's slot)."""
+    rels = _clean(files_281, ("cascade", "bridge"))
+    _need(rels, files_281)
+    rel = rels[0]
+
+    def mismatched(root, auth, side):
+        _attach(root, auth, 281, dict(side, hunkClassVocabulary=_v22_vocabulary(cc)))
+
+    tree = _build_281(cc, tmp_path, a281, files_281, [rel], record=mismatched)
+    _, record = _read(cc, tree)
+    assert any(_slot_is(r["slot"], 278) for r in _rows(record) if r["class"] == "A"), record["disagreements"]
+
+
+def test_v22_record_reads_clean(cc, tmp_path, a281, files_281):
+    """README (F) 'Each class is re-checked by position by the rule the record names: hunkClassRuleSha256 picks
+    chainmech v2.2's or v2.3's (RULES_BY_SHA; the reader holds v2.3's copy, and v2.2's is v2.3's with register off)';
+    'register (chainmech v2.3, decided only where v2.2 says other ...)': files of cascade and bridge hunks read the
+    same under v2.2's rule, so a v2.2 record with v2.2's vocabulary reads clean. OPERATOR F: RULE_V22_SHA256."""
+    rels = _clean(files_281, ("cascade", "bridge"))
+    _need(rels, files_281)
+
+    def v22(root, auth, side):
+        _attach(root, auth, 281, dict(side, hunkClassRuleSha256=cc.RULE_V22_SHA256,
+                                      hunkClassVocabulary=_v22_vocabulary(cc)))
+
+    tree = _build_281(cc, tmp_path, a281, files_281, rels, record=v22)
+    _, record = _read(cc, tree)
+    assert _rows(record) == [], record["disagreements"]
+
+
+PIN_TEXT = "TO_BE_PINNED_AFTER_SOURCE_FREEZE"
+PIN_VALIDATOR = "scripts/validate_s270.py"
+
+
+def _pinned(value, extra=""):
+    """A head validator holding its one AUTHORITY_SHA256 = "..." line (C12), with `extra` lines after it."""
+    text = VALIDATOR_TEXT.format(slot=270) + 'AUTHORITY_SHA256 = "%s"\n' % value + extra
+    return text.encode("utf-8")
+
+
+def test_f_constants_state_the_readme(cc):
+    """README (F) 'hunkClassRuleSha256 picks chainmech v2.2's or v2.3's (RULES_BY_SHA ...)'; README (F) the pin line
+    'read as AUTHORITY_SHA256 = "TO_BE_PINNED_AFTER_SOURCE_FREEZE"'. OPERATOR F: RULES_BY_SHA, RULE_V22_SHA256,
+    PIN_LINE_PATTERN, PIN_PLACEHOLDER; CLASSES (five members, register last) and RULE_SHA256 are v2.3's."""
+    wanted = {cc.RULE_SHA256, cc.RULE_V22_SHA256}
+    assert set(cc.RULES_BY_SHA) == wanted, (sorted(cc.RULES_BY_SHA), sorted(wanted))
+    assert cc.RULE_SHA256 != cc.RULE_V22_SHA256, (cc.RULE_SHA256, cc.RULE_V22_SHA256)
+    assert len(cc.CLASSES) == 5 and cc.CLASSES[-1] == "register", cc.CLASSES
+    assert {"cascade", "bridge", "record", "register"} <= set(cc.CLASSES), cc.CLASSES
+    # OPERATOR (F2): PIN_PLACEHOLDER is the whole placeholder line as bytes, with its line feed; PIN_LINE_PATTERN is
+    # the bytes regular expression of the pin line, matched per line.
+    placeholder = ('AUTHORITY_SHA256 = "%s"\n' % PIN_TEXT).encode("utf-8")
+    assert cc.PIN_PLACEHOLDER == placeholder, (cc.PIN_PLACEHOLDER, placeholder)
+    compiled = re.compile(cc.PIN_LINE_PATTERN)
+    pin_line = ('AUTHORITY_SHA256 = "%s"\n' % ("a" * 64)).encode("utf-8")
+    assert compiled.search(pin_line), (cc.PIN_LINE_PATTERN, pin_line)
+    assert not compiled.search(b"X_SHA256 = 1\n"), (cc.PIN_LINE_PATTERN, b"X_SHA256 = 1\n")
+
+
+def test_pin_normalised_reads_the_pin_line_as_the_placeholder(cc):
+    """README (F) 'pinLine names the head validator, attested with its one AUTHORITY_SHA256 = "..." line read as
+    AUTHORITY_SHA256 = "TO_BE_PINNED_AFTER_SOURCE_FREEZE" (pin_normalised)'. OPERATOR F: pin_normalised(raw,
+    default=None) (C12)."""
+    got = cc.pin_normalised(_pinned("a" * 64))
+    got = got.encode("utf-8") if isinstance(got, str) else got
+    assert got == _pinned(PIN_TEXT), got
+
+
+def _pin_tree(cc, root, live):
+    """VECTORS 14 case: the ledger's exclusion names the head validator as pinLine (C11); its recorded digest is of
+    the bytes with the pin line normalised (README 'attested with its one AUTHORITY_SHA256 line read as ...')."""
+    # README (F2): files names the step's authority, its hunk-class record and record.json, sorted, each path once.
+    exclusion = {"files": sorted({NAMING_REL, HC_DIR + "/282.json", RECORD_REL}), "pinLine": PIN_VALIDATOR}
+    return _build(cc, root, validator=(PIN_VALIDATOR, live, _sha(_pinned(PIN_TEXT))), exclusion=exclusion)
+
+
+def test_vector_14_pin_line_only_change_reads_clean(cc, tmp_path):
+    """VECTORS 14 ('a pin-line-only change reads clean (the file is attested with that line normalised to
+    TO_BE_PINNED_AFTER_SOURCE_FREEZE)'); README (F) the ledger's exclusion and pinLine."""
+    tree = _pin_tree(cc, tmp_path, _pinned("b" * 64))
+    _, record = _read(cc, tree)
+    assert _rows(record) == [], record["disagreements"]
+
+
+def test_vector_14_other_validator_edit_is_class_a(cc, tmp_path):
+    """VECTORS 14 ('any other edit of the validator differs from its checkpoint digest (class A, kind input)'; names
+    the layer's slot and the file)."""
+    tree = _pin_tree(cc, tmp_path, _pinned("b" * 64, extra="# another line, edited\n"))
+    _, record = _read(cc, tree)
+    rows = _kind(record, "input")
+    assert any(_slot_is(r["slot"], 270) and PIN_VALIDATOR in _text(r) for r in rows), rows
+
+
+def test_exclusion_naming_a_layer_input_is_corrupt(cc, tmp_path):
+    """README (F) 'exclusion {files, pinLine} ...: the step's own products, never a layer's input ... When it is
+    present, check_ledger checks its shape and that no layer's inputs names an excluded file'; README corrupt row (the
+    ledger, a member check_ledger names); README (F) 'A detail names the ledger as "ledger"'."""
+    # Sorted, each path once (README F2), so the only defect is the layer input it names.
+    exclusion = {"files": sorted({"data270.txt", RECORD_REL}), "pinLine": PIN_VALIDATOR}
+    tree = _build(cc, tmp_path, exclusion=exclusion)
+    _, record = _read(cc, tree)
+    rows = _kind(record, "corrupt")
+    assert any("ledger" in r["detail"] and ("exclusion" in r["detail"] or "inputs" in r["detail"]) for r in rows), rows
+
+
+def test_exclusion_of_the_wrong_shape_is_corrupt(cc, tmp_path):
+    """README (F) 'When it is present, check_ledger checks its shape'; README corrupt row (a member check_ledger names;
+    the detail names the file and the member); README (F) 'A detail names the ledger as "ledger"'."""
+    tree = _build(cc, tmp_path, exclusion={"files": "not a list", "pinLine": PIN_VALIDATOR})
+    _, record = _read(cc, tree)
+    rows = _kind(record, "corrupt")
+    assert any("ledger exclusion" in r["detail"] for r in rows), rows

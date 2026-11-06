@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_perf_047_oracle.py",
-  "sha256": "0b4d770613786c3a410022db92dafcfd92e75186770307c90340e0d41e58d25c"
+  "sha256": "6f601d0478d3160832b60e50e6f5d7854c75b1d1c8755f0812d3293fa5f999f1"
  },
  "oracle": {
   "agentId": "a3c895382f72130fe",
@@ -19,14 +19,14 @@
   ]
  },
  "briefSha256": "d48e23a2e18c8375a03cbeaff7b5701200fc8b2abb9becb11fc4804a94145116",
- "candidateCommit": "8118ef75ef1bc8516b80d5200be60c159e927080",
+ "candidateCommit": "a64e29d732a2883cd710551e9f2268c2ed35cfb1",
  "launched": "2026-11-06T21:11:41+08:00",
- "finished": "2026-11-06T23:25:54+08:00",
+ "finished": "2026-11-07T02:13:33+08:00",
  "ruling": {
-  "decision": "PENDING",
+  "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-282-ORACLE-1QUATER-CLASS",
-  "date": "2026-11-06"
+  "ref": "MON-282-ORACLE-KEEP",
+  "date": "2026-11-07"
  },
  "disclosures": [
   "brief d48e23a2 and the c6 update note a81d1ee9 (MON-282-W1-A2 item 6); the inputs are the README, the reader's docstring and vectors.json only, at W0 and then at c6 (cn-c6); the oracle never read the reader's source, the writer or any test, and the operator never opened the oracle or a run's detail (MON-282-ORACLE-RUN)",
@@ -35,6 +35,10 @@
   "reader defects relayed against their clauses: P047-ORACLE-B1 (an exception from Reader.start()'s timing step escapes), P047-ORACLE-B2 (check_pairs details name no ledger file) and P047-ORACLE-B3 (newer-authority conflict details name no authority file), each fixed at F as a PACKET r1 item with the operator's own module test",
   "provisional two-outcome assertion pending PKT1-READ-ORDER (the read-order class-C cases); the author tightens them to the README's stated order before the one run at F, with its other (a) fixes (mode printed, the agree scope, the ledger's name, the agree row)",
   "the author's slips: py_compile wrote __pycache__ into WORK (moved to the Trash by the operator each time); extra report keys; one extra Python call to check the report parses; longest-line checks once per file; test_fault_names_its_exception_class not hashed before shared helpers were edited (no edit inside it)",
-  "ruling PENDING at W: the one blind run at F, on the final README, gives the ruling this identity then records"
+  "update notes at F: ORACLE_UPDATE_F 29256944 (MON-282-W2-RULED: the (a) fixes and the README changes), F2 177002ed (MON-282-ORACLE-F-VOID: the final README) and F3 ff826155 (MON-282-ORACLE-COUNTED-B: the inactive-reader sentence); inputs CNF, CNF2 and CNF3, each the README, the reader's docstring and vectors.json only",
+  "operator-stated fact MON-282-ORACLE-FACT3: F's source tree, before F's build, held W's authority and hunk-classes/282.json; and the F2 facts (the step's replay on W′, PIN_PLACEHOLDER's form)",
+  "blind runs: on c6, run 1 VOID (fixture binding) and run 1-bis ABORTED (not a run), then 1-ter and 1-quater; at F, run F-1 on F's source VOID by stage (MON-282-ORACLE-F-VOID); on W′ de78fd19, 76 passed and 1 failed, a (b) ruled a README gap (MON-282-ORACLE-COUNTED-B), so the counted run was repeated; the one counted run, on W″ a64e29d7: 77 passed, 0 failed, 0 skipped",
+  "the author's F-round slips: two Edit calls in one message once; a parametrize decorator briefly moved onto a helper and moved back before the run; extra JSON-parse calls; __pycache__ in WORK (moved to the Trash by the operator)",
+  "ruling KEEP (MON-282-ORACLE-KEEP) on the counted run on W″; candidateCommit is W″, the tree the oracle was checked against, and F differs from it only by the build's write set (MON-282-IDENTITY-CANDIDATE)"
  ]
 }
