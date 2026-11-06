@@ -5,7 +5,7 @@ session's outcome. Active only in an outermost pytest session (PLANEON_PARALLEL_
 worker and nested pytest inherits it) and only when architecture/chain-checkpoint/record.json exists. Shadow mode
 observes and records only; nothing here raises out of a hook or changes an exit status.
 
-Public interface: Reader(root, clock, cap, tree, workers_source).start(); .report(nodeid, when, outcome, duration);
+Public interface: Reader(root, clock, cap, tree, in_dry_run).start(); .report(nodeid, when, outcome, duration);
 .finish(head_sha=None) -> (summary line, record dict); rebuild(path, live, newer, normalised, budget); sample(tree,
 slots, fraction); naming_authority(root, live_sha); newer_authorities(root, baseline); check_pairs(entries); and the CLI
 `chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
@@ -26,10 +26,12 @@ below, and only classes in normalised() are undone (cascade and bridge, plus rec
 The shadow record (one JSON line in the session's log, prefixed "chain-checkpoint shadow record:"): headSha,
 readerSeconds, capSeconds, overCap, workers and workersSource, shadowIn, mode, naming, attested (every ledger slot),
 sampled, layers {slot: {recorded, live, agree, writingSeconds, liveSeconds}}, reverted {slot: [[path, [[authority,
-{class: count}]]]]}, disagreements [{slot, where, class, detail}], faults. Classes: A, an input differs after
-normalisation; B, an outcome differs with no input change; C, a fault (the reader's or the records'), dry-run-only
-skips and over-cap included. Stop rule (condition (v)): every A, B or C restarts the clean count of N_shadow; a
-dry-run-only reading counts toward N_shadow, a skipped one does not (MET-PERF-048 states the rule).
+{class: count}]]]]}, disagreements [{slot, where, class, kind, countEffect, detail}]. Classes: A, an input or the ledger's naming
+differs (kinds input, stale); B, an outcome differs with no input change (kind outcome); C, the reader's or the
+records' fault (kinds corrupt, over-budget, over-cap, fault) or a dry-run-only skip (kind skipped). Stop rule
+(condition (v); MON-282-C23): every kind restarts the clean count of N_shadow except skipped, which is neutral: it
+neither counts nor restarts, and still writes its record with the reason and the slot. A dry-run-only reading by the
+dry-run runner counts. Three consecutive skips within the period are a finding to the lane monitor, not a restart.
 """
 import base64
 import difflib
@@ -252,9 +254,11 @@ def _read(root, path):
         return None
 
 
-def _authorities(root):
+def _authorities(root, budget=None):
     out = []
     for p in sorted((root / "architecture").glob("*-authority.json")):
+        if budget:
+            budget()
         try:
             rec = json.loads(p.read_bytes())
         except (OSError, ValueError):
@@ -263,11 +267,11 @@ def _authorities(root):
     return out
 
 
-def naming_authority(root, live_sha):
+def naming_authority(root, live_sha, budget=None):
     """(authority path, verdict): the newest authority, by baseline, that names the record in newFiles or changedFiles,
     and whether it names the live digest ("named", "stale") or none names it ("unnamed")."""
     naming = []
-    for n, path, rec in _authorities(root):
+    for n, path, rec in _authorities(root, budget):
         named = rec.get("newFiles", {}).get(RECORD_PATH) or rec.get("changedFiles", {}).get(RECORD_PATH, {}).get("afterSha256")
         if named:
             naming.append((n, path, named))
@@ -277,8 +281,8 @@ def naming_authority(root, live_sha):
     return path, ("named" if named == live_sha else "stale")
 
 
-def newer_authorities(root, baseline):
-    out = [(n, path, rec) for n, path, rec in _authorities(root) if n > baseline]
+def newer_authorities(root, baseline, budget=None):
+    out = [(n, path, rec) for n, path, rec in _authorities(root, budget) if n > baseline]
     out.sort(key=lambda t: -t[0])
     if len({n for n, _, _ in out}) != len(out):
         raise Fault("two newer authorities share a baseline size")
@@ -325,7 +329,8 @@ def rebuild(path, live, newer, norm, budget=None):
         ctx, keep, seen, prior = rec["hunkClassContext"], [], set(), -1
         pending = len(entry["reverseHunks"])
         if _sha(cur) != entry["afterSha256"]:
-            unexplained.append((apath, "afterSha256 differs before the replay; cascade share 0 of %d hunks applied" % pending))
+            share = sum(1 for h in entry["reverseHunks"] if h.get("class") in norm)
+            unexplained.append((apath, "afterSha256 differs before the replay; recorded cascade share %d of %d hunks" % (share, pending)))
             return cur, reverted, unexplained
         for h in entry["reverseHunks"]:
             if h["at"] <= prior:
@@ -419,9 +424,10 @@ class Reader:
             return fn(*args)
         except OverBudget:
             self.over_cap = True
-            self.disagreements.append((None, "reader", "C", "over cap: the replay stopped at %.0f s; the dry-run path" % self.cap))
+            self.disagreements.append((None, "reader", "C", "over budget: the replay stopped at %.0f s; the dry-run path" % self.cap, "over-budget"))
         except Exception as exc:
-            self.disagreements.append((None, "reader", "C", "%s: %s" % (type(exc).__name__, str(exc)[:200])))
+            kind = "corrupt" if isinstance(exc, (ValueError, KeyError, TypeError)) else "fault"
+            self.disagreements.append((None, "reader", "C", "%s: %s" % (type(exc).__name__, str(exc)[:200]), kind))
         finally:
             self.spent += self.clock() - start
 
@@ -433,9 +439,10 @@ class Reader:
         if raw is None:
             return
         self.active = True
-        self.naming, verdict = naming_authority(self.root, _sha(raw))
+        self._budget()
+        self.naming, verdict = naming_authority(self.root, _sha(raw), self._budget)
         if verdict != "named":
-            self.disagreements.append((None, RECORD_PATH, "A", "the record is %s (vector 2)" % verdict))
+            self.disagreements.append((None, RECORD_PATH, "A", "the record is %s (vector 2)" % verdict, "stale"))
             return
         record = json.loads(raw)
         if record.get("schemaVersion") != SCHEMA:
@@ -443,10 +450,10 @@ class Reader:
         self.record = record
         if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
             self.mode = "dry-run-only: skipped"
-            self.disagreements.append((None, "reader", "C", "dry-run-only: skipped in this session; the dry-run runner compares"))
+            self.disagreements.append((None, "reader", "C", "dry-run-only: skipped in this session (slot %s); the dry-run runner compares" % record.get("checkpointSlot"), "skipped"))
             return
         self.mode = "compare"
-        newer = newer_authorities(self.root, record["checkpointBaseline"])
+        newer = newer_authorities(self.root, record["checkpointBaseline"], self._budget)
         norm = normalised(record)
         for layer in sorted(record["layers"], key=lambda l: -l["slot"]):
             files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"]}
@@ -458,20 +465,20 @@ class Reader:
                 try:
                     live = _read(self.root, path)
                     if live is None:
-                        self.disagreements.append((layer["slot"], path, "A", "missing"))
+                        self.disagreements.append((layer["slot"], path, "A", "missing", "input"))
                         continue
                     rebuilt, reverted, unexplained = rebuild(path, live, newer, norm, self._budget)
                     if reverted:
                         self.reverted.setdefault(layer["slot"], []).append([path, [[a, c] for a, c in reverted]])
                     if _sha(rebuilt) != digest:
                         detail = "; ".join("%s: %s" % u for u in unexplained) or "differs from its checkpoint digest"
-                        self.disagreements.append((layer["slot"], path, "A", detail))
+                        self.disagreements.append((layer["slot"], path, "A", detail, "input"))
                 except (OverBudget, KeyboardInterrupt):
                     raise
                 except Exception as exc:     # C1-16: one file's fault never ends the rest
-                    self.disagreements.append((layer["slot"], path, "C", "%s: %s" % (type(exc).__name__, str(exc)[:160])))
+                    self.disagreements.append((layer["slot"], path, "C", "%s: %s" % (type(exc).__name__, str(exc)[:160]), "fault"))
         for fault in check_pairs(record.get("checkPairs", [])):
-            self.disagreements.append((None, "checkPairs", "C", fault))
+            self.disagreements.append((None, "checkPairs", "C", fault, "corrupt"))
         self.sampled = sample(self.tree or _git(self.root, "rev-parse", "HEAD^{tree}"), [l["slot"] for l in record["layers"]],
                               record["parameters"]["sampleFraction"])
 
@@ -494,12 +501,18 @@ class Reader:
             head = head_sha or _git(self.root, "rev-parse", "HEAD")
         except Exception as exc:
             head = "unknown"
-            self.disagreements.append((None, "reader", "C", "head sha: %s" % type(exc).__name__))
+            self.disagreements.append((None, "reader", "C", "head sha: %s" % type(exc).__name__, "fault"))
         self.spent += self.clock() - start
         if self.spent > self.cap and not self.over_cap:
             self.over_cap = True
-            self.disagreements.append((None, "reader", "C", "over cap: %.3f s over %.0f s; the dry-run path" % (self.spent, self.cap)))
-        return self._record(head)
+            self.disagreements.append((None, "reader", "C", "over cap: %.3f s over %.0f s; the dry-run path" % (self.spent, self.cap), "over-cap"))
+        try:
+            return self._record(head)
+        except Exception as exc:     # C2-8: a record is still written, with one class C
+            self.disagreements.append((None, "reader", "C", "the record could not be built: %s" % type(exc).__name__, "fault"))
+            return ("%s head %s; record fault" % (PREFIX, head[:12]),
+                    {"headSha": head, "mode": self.mode, "disagreements": [{"slot": s, "where": w, "class": c, "kind": k,
+                     "countEffect": "neutral" if k == "skipped" else "restart", "detail": d} for s, w, c, d, k in self.disagreements]})
 
     def _finish(self):
         if self.record is None or self.mode != "compare":
@@ -517,7 +530,7 @@ class Reader:
                     agree = False
                     cls = "A" if layer["slot"] in input_slots else "B"
                     detail = "not run in this session" if got is None else "outcome differs"
-                    self.disagreements.append((layer["slot"], key[:12], cls, detail))
+                    self.disagreements.append((layer["slot"], key[:12], cls, detail, "input" if cls == "A" else "outcome"))
             self.layers[str(layer["slot"])] = {"recorded": recorded, "live": live, "agree": agree,
                                                "writingSeconds": layer.get("seconds"), "liveSeconds": round(live_s, 4)}
 
@@ -528,7 +541,8 @@ class Reader:
                   "shadowIn": (self.record or {}).get("parameters", {}).get("shadowIn"), "naming": self.naming,
                   "attested": sorted(l["slot"] for l in (self.record or {}).get("layers", [])), "sampled": self.sampled,
                   "layers": self.layers, "reverted": {str(k): v for k, v in self.reverted.items()},
-                  "disagreements": [{"slot": s, "where": w, "class": c, "detail": d} for s, w, c, d in self.disagreements]}
+                  "disagreements": [{"slot": s, "where": w, "class": c, "kind": k, "countEffect": "neutral" if k == "skipped" else "restart",
+                                     "detail": d} for s, w, c, d, k in self.disagreements]}
         counts = {c: sum(1 for d in self.disagreements if d[2] == c) for c in "ABC"}
         line = "%s head %s; %.3f s (cap %.0f s%s); mode %s; A %d B %d C %d; sampled %d" % (
             PREFIX, head[:12], self.spent, self.cap, ", OVER CAP" if self.over_cap else "", self.mode,

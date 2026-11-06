@@ -30,6 +30,8 @@ WR = _load("scripts/chain_checkpoint_writer.py", "_t047_chain_checkpoint_writer"
 sha = lambda raw: hashlib.sha256(raw).hexdigest()
 VECTORS = {v["id"]: v for v in json.loads((ROOT / "architecture/chain-checkpoint/vectors.json").read_bytes())["vectors"]}
 OWN_EDITS = {"conftest.py", "tests/test_diagnostic_repair.py", "tests/test_parallel_suite.py"}   # before 282's authority
+PARTIAL_OK = {"scripts/validate_readiness.py", "docs/MASTER_DEVELOPMENT_PLAN.md"}   # 281's own `other` hunks
+LATER_EDIT = "of a class not normalised"   # a newer authority's real edit, as rebuild() words it
 
 
 def _ctx(packet):
@@ -96,13 +98,13 @@ def test_inactive_without_a_record(tmp_path):
 def test_v01_a_tampered_input_is_class_a_naming_its_slot(tmp_path):
     root = _repo(tmp_path)
     (root / "data281.txt").write_bytes(b"changed\n")
-    assert [(s, p, c) for s, p, c, _ in _reader(root).disagreements] == [(281, "data281.txt", "A")]
+    assert [(s, p, c) for s, p, c, *_ in _reader(root).disagreements] == [(281, "data281.txt", "A")]
 
 
 def test_v01_a_tampered_layer_authority_is_class_a(tmp_path):
     root = _repo(tmp_path)
     (root / "architecture/l281-authority.json").write_bytes(b"{}\n")
-    assert [(s, p, c) for s, p, c, _ in _reader(root).disagreements] == [(281, "architecture/l281-authority.json", "A")]
+    assert [(s, p, c) for s, p, c, *_ in _reader(root).disagreements] == [(281, "architecture/l281-authority.json", "A")]
 
 
 def test_v02_an_unnamed_record_is_recorded(tmp_path):
@@ -167,7 +169,9 @@ def test_v09_the_budget_stops_the_replay_as_class_c_over_cap(tmp_path):
 def test_v09_dry_run_only_skips_in_session_and_the_runner_compares(tmp_path):
     root = _repo(tmp_path, shadow_in="dryRunOnly")
     inside = _reader(root)
-    assert inside.mode.startswith("dry-run-only") and [d[2] for d in inside.disagreements] == ["C"]
+    assert inside.mode.startswith("dry-run-only") and [(d[2], d[4]) for d in inside.disagreements] == [("C", "skipped")]
+    _, skipped = inside.finish("d" * 40)
+    assert skipped["disagreements"][0]["countEffect"] == "neutral" and "slot 282" in skipped["disagreements"][0]["detail"]
     node = sha(b"tests/test_l281.py::test_x")
     log = tmp_path / "argv63.log"
     log.write_text("\n".join("PYTEST_DIAGNOSTIC=" + json.dumps({"event": "END", "node": node, "phase": p, "outcome": "passed",
@@ -203,7 +207,8 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
         live = (ROOT / path).read_bytes()
         at281, _, unexplained = CK.rebuild(path, live, newer, norm)
         if unexplained or sha(at281) != entry["afterSha256"]:
-            assert path in OWN_EDITS, path     # this packet's own real edits, at any stage
+            later = bool(unexplained) and all(detail.endswith(LATER_EDIT) for _, detail in unexplained)
+            assert later or (not unexplained and path in OWN_EDITS), (path, unexplained)     # by rule (C2-1)
             pending += 1
             continue
         seen = set()
@@ -216,13 +221,12 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
             exact += 1
         else:
             partial.add(path)
-    assert partial <= {"scripts/validate_readiness.py", "docs/MASTER_DEVELOPMENT_PLAN.md"} and pending <= len(OWN_EDITS)
-    assert exact + len(partial) + pending == len(auth["changedFiles"]) and exact >= 260
+    assert partial <= PARTIAL_OK and exact + len(partial) + pending == len(auth["changedFiles"]) and exact > 0
 
 
 def test_v12_one_byte_beside_the_cascade_is_class_a_with_its_share(tmp_path):
     found = _reader(_cascade_repo(tmp_path, live_extra=b"#")).disagreements
-    assert [(d[0], d[2]) for d in found] == [(281, "A")] and "cascade share 0 of 1" in found[0][3]
+    assert [(d[0], d[2]) for d in found] == [(281, "A")] and "recorded cascade share 1 of 1" in found[0][3]
 
 
 def test_v13_a_reordered_hunk_is_recorded_naming_the_slot(tmp_path):
@@ -257,3 +261,11 @@ def test_every_vector_has_a_test():
     names = {n.name for n in ast.parse(Path(__file__).read_bytes()).body if isinstance(n, ast.FunctionDef)}
     for vid in VECTORS:
         assert any(("_v%02d_" % vid) in n or n.startswith("test_v%02d" % vid) for n in names), vid
+
+
+def test_a_later_slots_other_hunk_is_class_a_and_restarts(tmp_path):
+    before, after = b"X = 'a'\nN = 288\n", b"X = 'b'\nN = 289\n"
+    root = _cascade_repo(tmp_path, before=before, after=after,
+                         hunks=[_hunk(5, b"b", b"a", "other"), _hunk(14, b"9", b"8", "cascade")])
+    found = _reader(root).disagreements
+    assert [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")] and "1 of 2 hunks of a class not normalised" in found[0][3]

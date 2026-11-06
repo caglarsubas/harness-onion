@@ -17,7 +17,9 @@ shard under OUT_DIR, which must lie outside the worktree. The writer refuses: OU
 whose MODE is not "shadow" (condition (i): no checkpoint from an attested run); deselected nodes; a failed full-run proof
 (executed != collected); an argv run summary with a non-zero rc; a ledger over its bound (it never truncates). At W it
 measures the size (--measure-only); at F the bound is required. Remaining capture gaps: opens by subprocesses and
-files read through memory maps already open are not seen."""
+files read through memory maps already open are not seen, and
+process-level caches (a module imported, or a file read into an lru cache, by an earlier node) are charged to the first
+node that read them only."""
 import ast
 import hashlib
 import importlib.util
@@ -158,9 +160,9 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
     if shard["deselected"]:
         raise Refused("%d nodes deselected" % shard["deselected"])
     summary = Path(argv_run).read_text(encoding="utf-8")
-    rcs = re.findall(r"^\d\d rc=(\d+)", summary, re.M)
-    if len(rcs) != 63 or any(rc != "0" for rc in rcs):
-        raise Refused("the argv 1-62 and 64 run summary is not 63 rc=0 lines")
+    rcs = re.findall(r"^(\d\d) rc=(\d+)", summary, re.M)
+    if sorted(int(n) for n, _ in rcs) != [*range(1, 63), 64] or any(rc != "0" for _, rc in rcs):
+        raise Refused("the argv run summary is not argv 1-62 and 64, each at rc=0")
     outcomes, seconds = {}, {}
     for nodeid, when, outcome, duration in shard["reports"]:
         outcomes.setdefault(nodeid, {})[when] = outcome

@@ -30,8 +30,14 @@ _READER = {}
 
 
 def _checkpoint_line(text):
+    # the record line can be large: write it whole, stopping on a zero-length write (P047-C2-8)
     try:
-        _write(2, (text + "\n").encode())
+        data = (text + "\n").encode()
+        while data:
+            done = _write(2, data)
+            if done <= 0:
+                break
+            data = data[done:]
     except Exception:
         pass
 

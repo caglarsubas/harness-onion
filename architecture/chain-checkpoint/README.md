@@ -55,7 +55,10 @@ Every digest is at the checkpoint tree.
   - `naming`, `attested` and `sampled`;
   - `layers` {slot: {recorded, live, agree, writingSeconds, liveSeconds}};
   - `reverted` {slot: [[path, [[authority, {class: count}]]]]};
-  - `disagreements` [{slot, where, class, detail}].
+  - `disagreements` [{slot, where, class, kind, countEffect, detail}].
+- **The record line's size** grows with the attested nodes: about 150 bytes per node (its recorded and live outcomes)
+  and about 140 per disagreement. W measures it on the writing run and the packet record states it; the conftest
+  writes the line whole, in a loop (P047-C2-8).
 
 **How the reader rebuilds.**
 - It replays, newest first, only the published `reverseHunks` of the authorities newer than the checkpoint. The apply
@@ -66,10 +69,14 @@ Every digest is at the checkpoint tree.
 - Rebuilt bytes are compared, never executed.
 - An in-run budget stops the replay at the cap: class C, over cap.
 
-**Classes and the stop rule.**
+**Classes, kinds and the stop rule (MON-282-C23).**
 - **A**, an input differs after normalisation; **B**, an outcome differs with no input change; **C**, a fault of the
   reader or of the records, a dry-run-only skip, or over cap.
-- Every A, B or C restarts the clean count of N_shadow (condition (v)).
+- Each disagreement names its `kind` and `countEffect`: input or stale (A), outcome (B), corrupt, over-budget, over-cap
+  or fault (C), and skipped (C, a dry-run-only skip).
+- Every kind restarts the clean count of N_shadow except **skipped**, which is neutral: it neither counts nor restarts,
+  and still writes its record with the reason and the slot. Three consecutive skips in the period are a finding to the
+  lane monitor.
 - A dry-run-only reading by the dry-run runner counts toward N_shadow; a skipped in-session reading does not.
   MET-PERF-048 states that rule.
 
@@ -84,7 +91,9 @@ starts. Each is shadow-only.
 The owner's approval for 282 names both. An outcome that differs between that run and the 8-worker verify 0 is
 attributed to them first, and is class A only if the input set explains it.
 
-**Capture gaps:** opens by subprocesses, and files read through memory maps already open, are not seen.
+**Capture gaps:** opens by subprocesses, and files read through memory maps already open, are not seen. Process-level
+caches (a module imported, or a file read into an lru cache, by an earlier node of the serial run) are charged only to the
+first node that read them.
 
 **Non-claims.**
 - 047 saves no verify time: it adds at most 15 s.
