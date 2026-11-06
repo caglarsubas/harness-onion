@@ -111,6 +111,10 @@ Every digest is at the checkpoint tree.
 Until step 4 sets it, the head slot is null: a budget stop, a failing clock or a malformed authority before then
 is recorded with slot null and a detail ending "head slot unknown (the ledger was not read)".
 
+With no ledger the reader is inactive and writes no record: `finish()` returns (None, None). In a written record,
+`mode` is "inactive" when the reading stops before the compare (a stale or unnamed ledger, a corrupt ledger or
+authority, or the budget before step 6).
+
 **Classes, kinds and the stop rule (MON-282-C23, MON-282-QC31).** This countEffect table is the single source: the
 record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and the reader's `COUNT_EFFECT` mirrors it
 (the module tests pin the two equal).

@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
-AUTHORITY_SHA256 = "e6d64cb1eaeee243ee99d24b48f88693daca164c198f7499be82b1f5a9803f0b"
+AUTHORITY_SHA256 = "9c384ad3e9ffe3bd35b0884a02240780b28ea005a82bdc17a348fbab37f4101d"
 VALIDATOR_PATH = "scripts/validate_met_perf_047.py"
 BASE_COMMIT = "dcf11803fca83454cb0660ffd88b65ce06a22a0f"
 NEW_PACKET = "MET-PERF-047"
@@ -439,7 +439,7 @@ HUNK_CONTEXT = MappingProxyType({"newPacket": NEW_PACKET, "prevValidator": "scri
 # Every era file with its digest: the packet's files, the root conftest.py, the registry and the generic packet brief.
 # The ledger is never an era file: the authority's newFiles names it (MON-282-W2-ORDER).
 ERA_SHA256 = MappingProxyType({
-    "architecture/chain-checkpoint/README.md": "dceeae8575b51fcf61d93a353407fc98b4fac931b91150317f8358802f912a67",
+    "architecture/chain-checkpoint/README.md": "2fc8b151fe1aa16d4480b850177512f99d8109dc0e1ec0cebd58f379717ed8d8",
     "architecture/chain-checkpoint/oracle-identity.json": "d8ab0e79353b7e682d87e9b53d1c85fce27314a6be60cffc59d7d83579d94d58",
     "architecture/chain-checkpoint/vectors.json": "ff3cf522c77a513e4401aa0d22378c249a85865f78ff28b018a170339cad3097",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
