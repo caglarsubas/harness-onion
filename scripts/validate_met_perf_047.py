@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
-AUTHORITY_SHA256 = "cb12c2b7f078ec0db53685b39efcfc99fd4c266718ff6d4ca4d6abc78e0f84a3"
+AUTHORITY_SHA256 = "bcd3e2757d9e2789eebdbcf371c2760646861fa05f32ba47feef56e724ee3629"
 VALIDATOR_PATH = "scripts/validate_met_perf_047.py"
 BASE_COMMIT = "dcf11803fca83454cb0660ffd88b65ce06a22a0f"
 NEW_PACKET = "MET-PERF-047"
