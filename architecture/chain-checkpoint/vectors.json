@@ -1,11 +1,12 @@
 {
+ "countEffectTable": "architecture/chain-checkpoint/README.md, the countEffect table: every kind a vector expects takes its class and countEffect from it",
  "packet": "MET-PERF-047",
  "schemaVersion": "harness.planeon.ai/chain-checkpoint-vectors/v2",
  "vectors": [
   {
    "case": "change data<slot>.txt (or the layer authority) after the record is written",
    "expectClass": "A",
-   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest",
+   "expectDetail": "an input, or the layer's authority, differs from its checkpoint digest; the file is listed as unauthored (P047-C3-4)",
    "id": 1,
    "name": "tampered attested file",
    "names": "the layer's slot and the file",
@@ -77,7 +78,7 @@
   {
    "case": "a clock advancing 20 s per tick; parameters.shadowIn = dryRunOnly with an END-event log",
    "expectClass": "C",
-   "expectDetail": "the budget stops the replay over 15 s (kind over-budget); in dryRunOnly an in-session reading is skipped (kind skipped, countEffect neutral, naming the slot) and the runner's dry-run-compare compares",
+   "expectDetail": "the budget stops the replay over 15 s (kind over-budget); in dryRunOnly an in-session reading is skipped (kind skipped, countEffect neutral, its slot the head's, naming the head slot and the checkpoint slot) and the runner's dry-run-compare compares",
    "id": 9,
    "name": "cost cap and dry-run-only",
    "names": "reader",
@@ -95,7 +96,7 @@
   {
    "case": "architecture/authority-map-authority.json, classed by the rule under MET-ADOPT-007's context",
    "expectClass": "none",
-   "expectDetail": "281's edited files rebuild to each beforeSha256 under 281's context; only validate_readiness's block and the master plan's status line stay partial; a file that a later slot edits for real (282's and every later slot's other hunks, by rule) is counted apart, as is the packet's own edit before its authority",
+   "expectDetail": "281's edited files rebuild to each beforeSha256 under 281's context; only validate_readiness's block and the master plan's status line stay partial; a file that a later slot edits for real (every unexplained hunk of a class not normalised) is counted apart, and a file whose only miss is at its newest recorded step is pending, unauthored: counted and printed, and zero in every runner execution (HARNESS_OFFLINE_ENFORCED=1)",
    "id": 11,
    "name": "a K = 0 cascade step reads clean",
    "names": "n/a",
@@ -104,7 +105,7 @@
   {
    "case": "the live validator is the authority's after bytes plus one byte",
    "expectClass": "A",
-   "expectDetail": "one extra byte beside a cascade hunk: afterSha256 differs, recorded cascade share x of N",
+   "expectDetail": "one extra byte beside a cascade hunk: afterSha256 differs, recorded cascade share x of N; the file is unauthored",
    "id": 12,
    "name": "one byte beside the cascade",
    "names": "the layer's slot",

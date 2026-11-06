@@ -55,7 +55,9 @@ Every digest is at the checkpoint tree.
   - `naming`, `attested` and `sampled`;
   - `layers` {slot: {recorded, live, agree, writingSeconds, liveSeconds}};
   - `reverted` {slot: [[path, [[authority, {class: count}]]]]};
-  - `disagreements` [{slot, where, class, kind, countEffect, detail}].
+  - `unauthored` [paths]: attested files whose only miss is at their newest recorded step (P047-C3-4);
+  - `disagreements` [{slot, where, class, kind, countEffect, detail}]: `kind` and `countEffect` from the countEffect
+    table below; a class-C record's `slot` is the head's chain slot.
 - **The record line's size** grows with the attested nodes: about 150 bytes per node (its recorded and live outcomes)
   and about 140 per disagreement. W measures it on the writing run and the packet record states it; the conftest
   writes the line whole, in a loop (P047-C2-8).
@@ -67,16 +69,33 @@ Every digest is at the checkpoint tree.
   class is re-checked by chainmech v2.2's rule.
 - It undoes only `cascade` and `bridge` hunks, plus `record` when `normalisedRecordClass` is true.
 - Rebuilt bytes are compared, never executed.
-- An in-run budget stops the replay at the cap: class C, over cap.
+- An in-run budget stops the replay at the cap: class C, kind over-budget. A finished reading over the cap is kind
+  over-cap.
 
-**Classes, kinds and the stop rule (MON-282-C23).**
-- **A**, an input differs after normalisation; **B**, an outcome differs with no input change; **C**, a fault of the
-  reader or of the records, a dry-run-only skip, or over cap.
-- Each disagreement names its `kind` and `countEffect`: input or stale (A), outcome (B), corrupt, over-budget, over-cap
-  or fault (C), and skipped (C, a dry-run-only skip).
-- Every kind restarts the clean count of N_shadow except **skipped**, which is neutral: it neither counts nor restarts,
-  and still writes its record with the reason and the slot. Three consecutive skips in the period are a finding to the
-  lane monitor.
+**Classes, kinds and the stop rule (MON-282-C23, MON-282-QC31).** This countEffect table is the single source: the
+record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and the reader's `COUNT_EFFECT` mirrors it
+(the module tests pin the two equal).
+
+| kind | class | countEffect | cause |
+|---|---|---|---|
+| input | A | restart | an attested file differs after normalisation; unauthored when its only miss is at its newest recorded step |
+| stale | A | restart | the record is unnamed, or named with another digest (vector 2) |
+| outcome | B | restart | a node's outcome differs with no input change |
+| corrupt | C | restart | the ledger or the authority set is malformed; `check_ledger` names the member |
+| over-budget | C | restart | the in-run budget stopped the replay at the cap |
+| over-cap | C | restart | a finished reading took longer than the cap |
+| fault | C | restart | any other exception of the reader |
+| skipped | C | neutral | a dry-run-only reading, skipped in session |
+| agree | — | count | a reading with no disagreement |
+
+- A kind is set by cause, never by an exception's type.
+- A class-C record's `slot` is the head's chain slot: `checkpointSlot` plus the authorities newer than the checkpoint
+  by baseline, or null when the ledger was not read (a budget stop or a fault before it). Its detail names the
+  exception class, the head slot and the checkpoint slot. A class-A or class-B record names the layer's slot.
+- A skip still writes its record, with the reason and the slots.
+- Three skips, or three faults, within the period are a finding to the lane monitor. They are counted across verify
+  records by the monitor and by MET-PERF-048, which carries their vector: no reader sees more than one session. A reader
+  that keeps faulting is a ci/ defect, not a reason to re-run the period.
 - A dry-run-only reading by the dry-run runner counts toward N_shadow; a skipped in-session reading does not.
   MET-PERF-048 states that rule.
 

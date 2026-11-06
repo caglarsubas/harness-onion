@@ -7,7 +7,8 @@ observes and records only; nothing here raises out of a hook or changes an exit 
 
 Public interface: Reader(root, clock, cap, tree, in_dry_run).start(); .report(nodeid, when, outcome, duration);
 .finish(head_sha=None) -> (summary line, record dict); rebuild(path, live, newer, normalised, budget); sample(tree,
-slots, fraction); naming_authority(root, live_sha); newer_authorities(root, baseline); check_pairs(entries); and the CLI
+slots, fraction); naming_authority(root, live_sha, budget, auths); newer_authorities(root, baseline, budget, auths);
+check_ledger(record); head_slot(record, auths); unauthored(reverted, unexplained); check_pairs(entries); and the CLI
 `chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
 
 The ledger (record.json, schema harness.planeon.ai/chain-checkpoint/v1): schemaVersion, checkpointSlot,
@@ -26,12 +27,19 @@ below, and only classes in normalised() are undone (cascade and bridge, plus rec
 The shadow record (one JSON line in the session's log, prefixed "chain-checkpoint shadow record:"): headSha,
 readerSeconds, capSeconds, overCap, workers and workersSource, shadowIn, mode, naming, attested (every ledger slot),
 sampled, layers {slot: {recorded, live, agree, writingSeconds, liveSeconds}}, reverted {slot: [[path, [[authority,
-{class: count}]]]]}, disagreements [{slot, where, class, kind, countEffect, detail}]. Classes: A, an input or the ledger's naming
-differs (kinds input, stale); B, an outcome differs with no input change (kind outcome); C, the reader's or the
-records' fault (kinds corrupt, over-budget, over-cap, fault) or a dry-run-only skip (kind skipped). Stop rule
-(condition (v); MON-282-C23): every kind restarts the clean count of N_shadow except skipped, which is neutral: it
-neither counts nor restarts, and still writes its record with the reason and the slot. A dry-run-only reading by the
-dry-run runner counts. Three consecutive skips within the period are a finding to the lane monitor, not a restart.
+{class: count}]]]]}, unauthored [paths], disagreements [{slot, where, class, kind, countEffect, detail}].
+
+The kinds, their classes and their countEffects are architecture/chain-checkpoint/README.md's countEffect table, the
+single source; COUNT_EFFECT below mirrors it, and the module tests pin the two equal. A kind is set by cause, never by
+an exception's type: a malformed ledger or authority set is corrupt (check_ledger names the member); any other
+exception of the reader is fault. A class-C record's slot is the head's chain slot (head_slot: checkpointSlot plus the
+authorities newer than the checkpoint by baseline; null when the ledger was not read), and its detail names the
+exception class, the head slot and the checkpoint slot. An attested file whose only miss is at its newest recorded
+step is unauthored: class A, kind input, listed in unauthored. Stop rule (condition (v); MON-282-C23, MON-282-QC31):
+every kind restarts the clean count of N_shadow except skipped, which is neutral and still writes its record; an
+agree counts; a dry-run-only reading by the dry-run runner counts. Three skips, or three faults, within the period
+are a finding to the lane monitor, counted across verify records by the monitor and by MET-PERF-048 (no reader sees
+more than one session); a reader that keeps faulting is a ci/ defect, not a reason to re-run the period.
 """
 import base64
 import difflib
@@ -54,6 +62,10 @@ MODE = "shadow"                                       # 047; the writer refuses 
 RULE_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
 PREFIX = "chain-checkpoint shadow:"
 RECORD_LINE = "chain-checkpoint shadow record:"
+COUNT_EFFECT = {"input": ("A", "restart"), "stale": ("A", "restart"), "outcome": ("B", "restart"),
+                "corrupt": ("C", "restart"), "over-budget": ("C", "restart"), "over-cap": ("C", "restart"),
+                "fault": ("C", "restart"), "skipped": ("C", "neutral")}   # the README's countEffect table; an agree counts
+UNAUTHORED_MISS = "afterSha256 differs before the replay"
 
 # ---- chainmech v2.2's class rule (hunk_class_v22.py), copied byte for byte by make_c2_282.py ----
 CLASSES = ("bridge", "cascade", "other", "record")   # the closed vocabulary, sorted; pinned in each authority from 282 on
@@ -242,8 +254,12 @@ class Fault(Exception):
     """A class-C fault: the reader's own or the records'."""
 
 
+class Corrupt(Fault):
+    """C3-1: the ledger or the authority set is malformed: class C, kind corrupt, set by cause."""
+
+
 class OverBudget(Exception):
-    """The in-run budget is spent: the rest of the replay is skipped and recorded as class C, over cap."""
+    """The in-run budget is spent: the rest of the replay is skipped and recorded as class C, kind over-budget."""
 
 
 def _read(root, path):
@@ -267,11 +283,11 @@ def _authorities(root, budget=None):
     return out
 
 
-def naming_authority(root, live_sha, budget=None):
+def naming_authority(root, live_sha, budget=None, auths=None):
     """(authority path, verdict): the newest authority, by baseline, that names the record in newFiles or changedFiles,
     and whether it names the live digest ("named", "stale") or none names it ("unnamed")."""
     naming = []
-    for n, path, rec in _authorities(root, budget):
+    for n, path, rec in (auths if auths is not None else _authorities(root, budget)):
         named = rec.get("newFiles", {}).get(RECORD_PATH) or rec.get("changedFiles", {}).get(RECORD_PATH, {}).get("afterSha256")
         if named:
             naming.append((n, path, named))
@@ -281,11 +297,11 @@ def naming_authority(root, live_sha, budget=None):
     return path, ("named" if named == live_sha else "stale")
 
 
-def newer_authorities(root, baseline, budget=None):
-    out = [(n, path, rec) for n, path, rec in _authorities(root, budget) if n > baseline]
+def newer_authorities(root, baseline, budget=None, auths=None):
+    out = [(n, path, rec) for n, path, rec in (auths if auths is not None else _authorities(root, budget)) if n > baseline]
     out.sort(key=lambda t: -t[0])
     if len({n for n, _, _ in out}) != len(out):
-        raise Fault("two newer authorities share a baseline size")
+        raise Corrupt("two newer authorities share a baseline size")
     return out
 
 
@@ -307,6 +323,38 @@ def bind_context(apath, rec):
 
 def normalised(record):
     return frozenset(("bridge", "cascade") + (("record",) if record.get("normalisedRecordClass") is True else ()))
+
+
+def check_ledger(record):
+    """C3-1: the ledger's shape, member by member. A malformed ledger is Corrupt (kind corrupt), naming the member."""
+    def need(ok, member):
+        if not ok:
+            raise Corrupt("ledger %s" % member)
+    need(isinstance(record, dict), "is not an object")
+    need(record.get("schemaVersion") == SCHEMA, "schemaVersion")
+    for key in ("checkpointSlot", "checkpointBaseline"):
+        need(type(record.get(key)) is int, key)
+    params = record.get("parameters")
+    need(isinstance(params, dict), "parameters is not an object")
+    need(params.get("shadowIn", "verify") in ("verify", "dryRunOnly"), "parameters.shadowIn")
+    need(type(params.get("sampleFraction")) in (int, float) and 0 <= params["sampleFraction"] <= 1, "parameters.sampleFraction")
+    need(isinstance(record.get("layers"), list), "layers is not a list")
+    for i, layer in enumerate(record["layers"]):
+        need(isinstance(layer, dict) and type(layer.get("slot")) is int, "layers[%d].slot" % i)
+        for key in ("validatorPath", "validatorSha256", "authorityPath", "authoritySha256") + (
+                ("testFilePath", "testFileSha256") if "testFilePath" in layer else ()):
+            need(isinstance(layer.get(key), str), "layers[%d].%s" % (i, key))
+        need(isinstance(layer.get("inputs"), dict)
+             and all(isinstance(k, str) and isinstance(v, str) for k, v in layer["inputs"].items()), "layers[%d].inputs" % i)
+        need(isinstance(layer.get("nodes"), list)
+             and all(isinstance(n, dict) and isinstance(n.get("nodeSha256"), str) for n in layer["nodes"]), "layers[%d].nodes" % i)
+    need(isinstance(record.get("checkPairs", []), list), "checkPairs is not a list")
+
+
+def head_slot(record, auths):
+    """C3-2: the head's chain slot: checkpointSlot plus the authorities newer than the checkpoint by baseline (one per
+    slot; the newest is the head's)."""
+    return record["checkpointSlot"] + sum(1 for n, _, _ in auths if n > record["checkpointBaseline"])
 
 
 def rebuild(path, live, newer, norm, budget=None):
@@ -364,6 +412,12 @@ def rebuild(path, live, newer, norm, budget=None):
     return cur, reverted, unexplained
 
 
+def unauthored(reverted, unexplained):
+    """C3-4 (a): the file's only miss is at its newest recorded step: no newer step replayed, and either no newer
+    authority names it, or the first that does fails its afterSha256 before any hunk is applied."""
+    return not reverted and (not unexplained or (len(unexplained) == 1 and unexplained[0][1].startswith(UNAUTHORED_MISS)))
+
+
 RULED_PAIR_TYPES = frozenset(("supersession",))
 
 
@@ -410,13 +464,19 @@ class Reader:
     def __init__(self, root=ROOT, clock=time.monotonic, cap=CAP_SECONDS, tree=None, in_dry_run=False):
         self.root, self.clock, self.cap, self.tree, self.in_dry_run = Path(root), clock, cap, tree, in_dry_run
         self.active, self.spent, self.record, self.mode = False, 0.0, None, "inactive"
-        self.disagreements, self.faults, self.reverted, self.layers = [], [], {}, {}
+        self.disagreements, self.reverted, self.layers, self.unauthored = [], {}, {}, set()
         self.live, self.durations, self.sampled, self.naming, self.over_cap = {}, {}, [], None, False
         self._t0 = 0.0
+        self.head_slot, self.ckpt_slot = None, None
 
     def _budget(self):
         if self.spent + (self.clock() - self._t0) > self.cap:
             raise OverBudget()
+
+    def _slots(self):
+        if self.head_slot is None:
+            return "head slot unknown (the ledger was not read)"
+        return "head slot %s, checkpoint slot %s" % (self.head_slot, self.ckpt_slot)
 
     def _timed(self, fn, *args):
         self._t0 = start = self.clock()
@@ -424,10 +484,11 @@ class Reader:
             return fn(*args)
         except OverBudget:
             self.over_cap = True
-            self.disagreements.append((None, "reader", "C", "over budget: the replay stopped at %.0f s; the dry-run path" % self.cap, "over-budget"))
+            self.disagreements.append((self.head_slot, "reader", "C", "over budget: the replay stopped at %.0f s; the dry-run path; %s"
+                                       % (self.cap, self._slots()), "over-budget"))
         except Exception as exc:
-            kind = "corrupt" if isinstance(exc, (ValueError, KeyError, TypeError)) else "fault"
-            self.disagreements.append((None, "reader", "C", "%s: %s" % (type(exc).__name__, str(exc)[:200]), kind))
+            kind = "corrupt" if isinstance(exc, Corrupt) else "fault"     # C3-1: by cause
+            self.disagreements.append((self.head_slot, "reader", "C", "%s: %s; %s" % (type(exc).__name__, str(exc)[:200], self._slots()), kind))
         finally:
             self.spent += self.clock() - start
 
@@ -440,20 +501,26 @@ class Reader:
             return
         self.active = True
         self._budget()
-        self.naming, verdict = naming_authority(self.root, _sha(raw), self._budget)
+        auths = _authorities(self.root, self._budget)      # parsed once, inside the budget
+        self.naming, verdict = naming_authority(self.root, _sha(raw), auths=auths)
         if verdict != "named":
             self.disagreements.append((None, RECORD_PATH, "A", "the record is %s (vector 2)" % verdict, "stale"))
             return
-        record = json.loads(raw)
-        if record.get("schemaVersion") != SCHEMA:
-            raise Fault("record schema")
+        try:
+            record = json.loads(raw)
+        except ValueError:
+            raise Corrupt("ledger is not JSON") from None
+        if isinstance(record, dict) and type(record.get("checkpointSlot")) is int and type(record.get("checkpointBaseline")) is int:
+            self.ckpt_slot, self.head_slot = record["checkpointSlot"], head_slot(record, auths)
+        check_ledger(record)
         self.record = record
         if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
             self.mode = "dry-run-only: skipped"
-            self.disagreements.append((None, "reader", "C", "dry-run-only: skipped in this session (slot %s); the dry-run runner compares" % record.get("checkpointSlot"), "skipped"))
+            self.disagreements.append((self.head_slot, "reader", "C", "dry-run-only: skipped in this session (%s); the dry-run "
+                                       "runner compares" % self._slots(), "skipped"))
             return
         self.mode = "compare"
-        newer = newer_authorities(self.root, record["checkpointBaseline"], self._budget)
+        newer = newer_authorities(self.root, record["checkpointBaseline"], auths=auths)
         norm = normalised(record)
         for layer in sorted(record["layers"], key=lambda l: -l["slot"]):
             files = {layer["validatorPath"]: layer["validatorSha256"], layer["authorityPath"]: layer["authoritySha256"]}
@@ -472,13 +539,17 @@ class Reader:
                         self.reverted.setdefault(layer["slot"], []).append([path, [[a, c] for a, c in reverted]])
                     if _sha(rebuilt) != digest:
                         detail = "; ".join("%s: %s" % u for u in unexplained) or "differs from its checkpoint digest"
+                        if unauthored(reverted, unexplained):     # C3-4: edited since its newest recorded state
+                            self.unauthored.add(path)
+                            detail = "unauthored: " + detail
                         self.disagreements.append((layer["slot"], path, "A", detail, "input"))
                 except (OverBudget, KeyboardInterrupt):
                     raise
-                except Exception as exc:     # C1-16: one file's fault never ends the rest
-                    self.disagreements.append((layer["slot"], path, "C", "%s: %s" % (type(exc).__name__, str(exc)[:160]), "fault"))
+                except Exception as exc:     # C1-16: one file's fault never ends the rest; the slot is the head's (C3-2)
+                    self.disagreements.append((self.head_slot, path, "C", "%s: %s; layer %s; %s"
+                                               % (type(exc).__name__, str(exc)[:160], layer["slot"], self._slots()), "fault"))
         for fault in check_pairs(record.get("checkPairs", [])):
-            self.disagreements.append((None, "checkPairs", "C", fault, "corrupt"))
+            self.disagreements.append((self.head_slot, "checkPairs", "C", "%s; %s" % (fault, self._slots()), "corrupt"))
         self.sampled = sample(self.tree or _git(self.root, "rev-parse", "HEAD^{tree}"), [l["slot"] for l in record["layers"]],
                               record["parameters"]["sampleFraction"])
 
@@ -501,18 +572,22 @@ class Reader:
             head = head_sha or _git(self.root, "rev-parse", "HEAD")
         except Exception as exc:
             head = "unknown"
-            self.disagreements.append((None, "reader", "C", "head sha: %s" % type(exc).__name__, "fault"))
+            self.disagreements.append((self.head_slot, "reader", "C", "%s: head sha: %s; %s" % (type(exc).__name__, str(exc)[:120],
+                                                                                                self._slots()), "fault"))
         self.spent += self.clock() - start
         if self.spent > self.cap and not self.over_cap:
             self.over_cap = True
-            self.disagreements.append((None, "reader", "C", "over cap: %.3f s over %.0f s; the dry-run path" % (self.spent, self.cap), "over-cap"))
+            self.disagreements.append((self.head_slot, "reader", "C", "over cap: %.3f s over %.0f s; the dry-run path; %s"
+                                       % (self.spent, self.cap, self._slots()), "over-cap"))
         try:
             return self._record(head)
         except Exception as exc:     # C2-8: a record is still written, with one class C
-            self.disagreements.append((None, "reader", "C", "the record could not be built: %s" % type(exc).__name__, "fault"))
+            self.disagreements.append((self.head_slot, "reader", "C", "%s: the record could not be built: %s; %s"
+                                       % (type(exc).__name__, str(exc)[:120], self._slots()), "fault"))
             return ("%s head %s; record fault" % (PREFIX, head[:12]),
                     {"headSha": head, "mode": self.mode, "disagreements": [{"slot": s, "where": w, "class": c, "kind": k,
-                     "countEffect": "neutral" if k == "skipped" else "restart", "detail": d} for s, w, c, d, k in self.disagreements]})
+                     "countEffect": COUNT_EFFECT.get(k, ("C", "restart"))[1], "detail": d} for s, w, c, d, k in self.disagreements],
+                     "unauthored": sorted(self.unauthored)})
 
     def _finish(self):
         if self.record is None or self.mode != "compare":
@@ -541,12 +616,13 @@ class Reader:
                   "shadowIn": (self.record or {}).get("parameters", {}).get("shadowIn"), "naming": self.naming,
                   "attested": sorted(l["slot"] for l in (self.record or {}).get("layers", [])), "sampled": self.sampled,
                   "layers": self.layers, "reverted": {str(k): v for k, v in self.reverted.items()},
-                  "disagreements": [{"slot": s, "where": w, "class": c, "kind": k, "countEffect": "neutral" if k == "skipped" else "restart",
+                  "unauthored": sorted(self.unauthored),
+                  "disagreements": [{"slot": s, "where": w, "class": c, "kind": k, "countEffect": COUNT_EFFECT[k][1],
                                      "detail": d} for s, w, c, d, k in self.disagreements]}
         counts = {c: sum(1 for d in self.disagreements if d[2] == c) for c in "ABC"}
-        line = "%s head %s; %.3f s (cap %.0f s%s); mode %s; A %d B %d C %d; sampled %d" % (
+        line = "%s head %s; %.3f s (cap %.0f s%s); mode %s; A %d B %d C %d; sampled %d; unauthored %d" % (
             PREFIX, head[:12], self.spent, self.cap, ", OVER CAP" if self.over_cap else "", self.mode,
-            counts["A"], counts["B"], counts["C"], len(self.sampled))
+            counts["A"], counts["B"], counts["C"], len(self.sampled), len(self.unauthored))
         return line, record
 
 

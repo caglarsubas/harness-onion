@@ -1,7 +1,10 @@
 """MET-PERF-047: the chain checkpoint's reader and writer, vectors 1-13 (architecture/chain-checkpoint/vectors.json).
 Each case builds its own small repository under tmp_path, except the vector-11 case on 281's published authority,
 which rebuilds 281's edited files to each beforeSha256 with the reader's own rebuild, under 281's context, after every
-newer authority's replay: it never requires a file to be still at 281's afterSha256."""
+newer authority's replay: it never requires a file to be still at 281's afterSha256. Its pending files are accepted by
+rule (P047-C2-1, P047-C3-4): a later slot's real edit, or an unauthored file, which must be none in every runner
+execution (HARNESS_OFFLINE_ENFORCED=1: a verify or a dry run). Of this module, only that case reads the variable;
+main's offline-runner and isolation tests read it too, and the reader reads none."""
 import ast
 import base64
 import copy
@@ -29,7 +32,6 @@ CK = _load("ci/chain_checkpoint.py", "_t047_chain_checkpoint")
 WR = _load("scripts/chain_checkpoint_writer.py", "_t047_chain_checkpoint_writer")
 sha = lambda raw: hashlib.sha256(raw).hexdigest()
 VECTORS = {v["id"]: v for v in json.loads((ROOT / "architecture/chain-checkpoint/vectors.json").read_bytes())["vectors"]}
-OWN_EDITS = {"conftest.py", "tests/test_diagnostic_repair.py", "tests/test_parallel_suite.py"}   # before 282's authority
 PARTIAL_OK = {"scripts/validate_readiness.py", "docs/MASTER_DEVELOPMENT_PLAN.md"}   # 281's own `other` hunks
 LATER_EDIT = "of a class not normalised"   # a newer authority's real edit, as rebuild() words it
 
@@ -163,7 +165,10 @@ def test_v09_the_budget_stops_the_replay_as_class_c_over_cap(tmp_path):
     reader = CK.Reader(root=_repo(tmp_path), tree="0" * 40, clock=lambda: next(ticks))
     reader.start()
     line, record = reader.finish("c" * 40)
-    assert reader.over_cap and "OVER CAP" in line and any(d["class"] == "C" and "over cap" in d["detail"] for d in record["disagreements"])
+    assert reader.over_cap and "OVER CAP" in line
+    # the budget stops before the ledger is read: the head slot is unknown, and the record says so (P047-C3-2)
+    assert any((d["class"], d["kind"], d["slot"]) == ("C", "over-budget", None) and "head slot unknown (the ledger was not read)"
+               in d["detail"] for d in record["disagreements"])
 
 
 def test_v09_dry_run_only_skips_in_session_and_the_runner_compares(tmp_path):
@@ -171,7 +176,8 @@ def test_v09_dry_run_only_skips_in_session_and_the_runner_compares(tmp_path):
     inside = _reader(root)
     assert inside.mode.startswith("dry-run-only") and [(d[2], d[4]) for d in inside.disagreements] == [("C", "skipped")]
     _, skipped = inside.finish("d" * 40)
-    assert skipped["disagreements"][0]["countEffect"] == "neutral" and "slot 282" in skipped["disagreements"][0]["detail"]
+    first = skipped["disagreements"][0]
+    assert (first["countEffect"], first["slot"]) == ("neutral", 282) and "head slot 282, checkpoint slot 282" in first["detail"]
     node = sha(b"tests/test_l281.py::test_x")
     log = tmp_path / "argv63.log"
     log.write_text("\n".join("PYTEST_DIAGNOSTIC=" + json.dumps({"event": "END", "node": node, "phase": p, "outcome": "passed",
@@ -187,7 +193,12 @@ def test_v10_the_conftest_loads_the_reader_by_path_inside_a_guard():
     guarded = [n for n in ast.walk(tree) if isinstance(n, ast.Try)
                and any(isinstance(h.type, ast.Name) and h.type.id == "Exception" for h in n.handlers)]
     assert '"ci" / "chain_checkpoint.py"' in source and "_planeon_met_perf_047_chain_checkpoint" in source
-    assert len(guarded) >= 4
+    assert len(guarded) == 5     # main's conftest has none: the line writer, the load and three hooks (P047-C3-5)
+    functions = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    for name in ("_checkpoint_line", "pytest_sessionstart", "pytest_runtest_logreport", "pytest_unconfigure"):
+        last = functions[name].body[-1]
+        assert isinstance(last, ast.Try) and any(isinstance(h.type, ast.Name) and h.type.id == "Exception"
+                                                 for h in last.handlers), name
 
 
 def test_v11_a_cascade_hunk_replays_clean(tmp_path):
@@ -202,13 +213,16 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
     classed.update(authorityPacket="MET-ADOPT-007", hunkClassVocabulary=list(CK.CLASSES), hunkClassRuleSha256=CK.RULE_SHA256,
                    hunkClassContext=ctx)
     newer = CK.newer_authorities(ROOT, len(auth["baselinePackets"]))
-    norm, exact, partial, pending = frozenset(("bridge", "cascade", "record")), 0, set(), 0
+    norm, exact, partial, pending, unauthored = frozenset(("bridge", "cascade", "record")), 0, set(), 0, set()
     for path, entry in classed["changedFiles"].items():
         live = (ROOT / path).read_bytes()
-        at281, _, unexplained = CK.rebuild(path, live, newer, norm)
+        at281, reverted, unexplained = CK.rebuild(path, live, newer, norm)
         if unexplained or sha(at281) != entry["afterSha256"]:
             later = bool(unexplained) and all(detail.endswith(LATER_EDIT) for _, detail in unexplained)
-            assert later or (not unexplained and path in OWN_EDITS), (path, unexplained)     # by rule (C2-1)
+            if CK.unauthored(reverted, unexplained):     # C3-4 (a): edited since its newest recorded state
+                unauthored.add(path)
+            else:
+                assert later, (path, unexplained)     # by rule (C2-1)
             pending += 1
             continue
         seen = set()
@@ -221,6 +235,10 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
             exact += 1
         else:
             partial.add(path)
+    print("vector 11: %d exact, %d partial, %d pending, %d unauthored %s" % (exact, len(partial), pending, len(unauthored),
+                                                                           sorted(unauthored)))
+    if os.environ.get("HARNESS_OFFLINE_ENFORCED") == "1":     # every runner execution: none unauthored (C3-4 condition 1)
+        assert not unauthored, sorted(unauthored)
     assert partial <= PARTIAL_OK and exact + len(partial) + pending == len(auth["changedFiles"]) and exact > 0
 
 
@@ -269,3 +287,58 @@ def test_a_later_slots_other_hunk_is_class_a_and_restarts(tmp_path):
                          hunks=[_hunk(5, b"b", b"a", "other"), _hunk(14, b"9", b"8", "cascade")])
     found = _reader(root).disagreements
     assert [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")] and "1 of 2 hunks of a class not normalised" in found[0][3]
+
+
+def _rename(root, raw):
+    path = root / "architecture/chain-checkpoint-authority.json"
+    body = json.loads(path.read_text())
+    body["newFiles"][CK.RECORD_PATH] = sha(raw)
+    path.write_text(json.dumps(body))
+
+
+def test_the_count_effect_table_is_the_single_source():
+    rows = {}
+    for line in (ROOT / "architecture/chain-checkpoint/README.md").read_text().splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if line.startswith("| ") and len(cells) == 4 and cells[2] in ("restart", "neutral", "count"):
+            rows[cells[0]] = (cells[1], cells[2])
+    assert rows.pop("agree") == ("—", "count") and rows == CK.COUNT_EFFECT
+    vectors = json.loads((ROOT / "architecture/chain-checkpoint/vectors.json").read_bytes())
+    assert "the countEffect table" in vectors["countEffectTable"]
+
+
+@pytest.mark.parametrize("change, member", [(lambda r: r.update(parameters="x"), "parameters"),
+                                            (lambda r: r.update(schemaVersion="other"), "schemaVersion"),
+                                            (lambda r: r["layers"][0].pop("slot"), "layers[0].slot")])
+def test_a_malformed_ledger_is_corrupt_by_cause(tmp_path, change, member):
+    root = _repo(tmp_path)
+    record = json.loads((root / CK.RECORD_PATH).read_bytes())
+    change(record)
+    raw = (json.dumps(record) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    found = _reader(root).disagreements
+    assert [(d[2], d[4]) for d in found] == [("C", "corrupt")] and found[0][3].startswith("Corrupt: ledger " + member)
+
+
+def test_a_fault_names_its_class_and_the_head_slot(tmp_path, monkeypatch):
+    root = _repo(tmp_path, newer=({},))     # one authority newer than the checkpoint: the head is slot 283
+    monkeypatch.setattr(CK, "rebuild", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("synthetic")))
+    found = [d for d in _reader(root).disagreements if d[4] == "fault"]
+    assert found and all(d[0] == 283 and d[3].startswith("RuntimeError: synthetic")
+                         and d[3].endswith("head slot 283, checkpoint slot 282") for d in found)
+
+
+def test_an_unauthored_file_is_listed_in_the_record(tmp_path):
+    root = _repo(tmp_path)
+    (root / "data281.txt").write_bytes(b"changed\n")
+    _, record = _reader(root).finish("e" * 40)
+    assert record["unauthored"] == ["data281.txt"] and record["disagreements"][0]["detail"].startswith("unauthored:")
+
+
+def test_the_unauthored_rule():
+    miss = CK.UNAUTHORED_MISS + "; recorded cascade share 1 of 1 hunks"
+    assert CK.unauthored([], []) and CK.unauthored([], [("a", miss)])
+    assert not CK.unauthored([("a", {"cascade": 1})], [("b", miss)])
+    assert not CK.unauthored([], [("a", "1 of 2 hunks of a class not normalised")])
+    assert not CK.unauthored([], [("a", "reverse hunks out of order")])
