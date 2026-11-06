@@ -1,6 +1,35 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-046 source preparation, November 5, 2026
+## Current checkpoint — MET-ADOPT-007 source preparation, November 6, 2026
+
+Alpha2 OPEN. MET-PERF-046 (PERF-046) passed required verify and merged as main c1b838b.
+AUTHORITY-MAP-001 (the lane monitor's owner-delegated rulings MON-281-ASSIGN, MON-AM-DESIGN-CONVERGE, MON-AM-CR2-KEEP
+and MON-AM-ORACLE-KEEP) is AUTHORITY-MAP-001's effective authority map as a data-only record packet in MET-ADOPT-006's form: architecture/authority-map.json with its README and its budget and R12 vector files (one effective authority for each of nine concerns, its non-deciding inputs, what others may do, every enforcement point and the behaviour when the authority is unavailable or revoked; 27 pinned values, two of them flagged as limits), its standard-library validator scripts/authority_map.py with tests/test_authority_map.py, and a D5a oracle; the map records authority and enforces nothing, and no harness document, ADR, catalog or roadmap item changes. The packet registers its own review series, MET-ADOPT-007/packet, in the brief registry;
+its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS) and the D5a oracle tests/test_met_adopt_007_oracle.py (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+Its new layer runs the map's check over the live tree, binds the record, vector, validator and test files and the
+oracle by digest, and holds the registry to exactly one rider.
+It is built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule with S and C apart at K = 0:
+every older chain validator changes only by the bump vocabulary, 280's layer by the bridge vocabulary, and the new
+head's test keeps the full fan-in. MET-ADOPT-007 is the 281st specification (288 packets at slot 281).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ADOPT-007 / AUTHORITY-MAP-001 | SOURCE_PREPARED | The effective authority map (281st packet, K = 0): one authority for each of nine concerns with its validator, budget and R12 vectors and a D5a oracle, recorded in architecture/authority-map/; nothing is enforced; gate material (the registry rider and the D5a oracle) |
+| Alpha2A | MET-PERF-046 / PERF-046 | VERIFY_PASSED_MERGED | Merged as main c1b838b |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No ci/ path changes; no R10 and no R12 file changes, and nothing is installed. Phase-end effort transition NOT_DUE.
+Prior checkpoints below are history only.
+
+## Historical worker-count source checkpoint — MET-PERF-046 source preparation, November 5, 2026
 
 Alpha2 OPEN. MET-VERIFY-006 (DIST-005A-CTRL-FIX-004-PUBLISH) passed required verify and merged as main afebb72.
 PERF-046 (the owner's MON-OWNER-K8-G1 and the lane monitor's owner-delegated rulings MON-280-START, MON-280-PLAN-OK and
@@ -3149,7 +3178,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · PERF-045 / MET-PERF-045 · Adopt the verify-floor cuts C1+ (the parent test's readiness step proved in-session), C2 (the weights table refreshed from 276's dry run) and C3 (test-local exact sharing in two tests) from candidate c1 under contract rev 3, a K = 0 step (281 packets at slot 277); gate material (the weights table and the registry rider); pass a quiet-host dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [x] Alpha 2A · IND-BANK-002A-PUBLISH / MET-SECTOR-005 · Publish R03's IND-BANK-002A for mas-harness-industry-packs (predecessor IND-BANK-002, its 11 commands keeping both predecessors' commands in order) as a product packet, with the R13 inheritance guard in chain_identity_v3 and the successor-descriptor ownership rule, adopted after CONTRACT_278's rounds and R03's agreement on the bytes (K = 1, 283 packets at slot 278); gate material (the registry rider); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [x] Alpha 2A · DIST-005A-CTRL-FIX-004-PUBLISH / MET-VERIFY-006 · Publish R11's DIST-005A for mas-harness-distribution (predecessor DIST-TRANSPORT-001, the acceptance-command successor of DIST-005) and R04's CTRL-FIX-004 for mas-harness-control-plane (predecessor CTRL-TRANSPORT-001) as product packets, with one exact-pair supersession closer for their 20 ownership overlaps and the head-test weights refresh, adopted after CONTRACT_279's rounds and R04's and R11's agreement on the bytes (K = 2, 286 packets at slot 279); gate material (the registry rider and the weights table); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
-- [ ] Alpha 2A · PERF-046 / MET-PERF-046 · Raise the parallel suite's workers from 6 to 8 in MET-PERF-039's form (owner MON-OWNER-K8-G1), with its test pin, its page line and the architecture/parallel-workers/ record, adopted after CONTRACT_280's round (K = 0, 287 packets at slot 280); gate material (the registry rider and ci/parallel_suite.py); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
+- [x] Alpha 2A · PERF-046 / MET-PERF-046 · Raise the parallel suite's workers from 6 to 8 in MET-PERF-039's form (owner MON-OWNER-K8-G1), with its test pin, its page line and the architecture/parallel-workers/ record, adopted after CONTRACT_280's round (K = 0, 287 packets at slot 280); gate material (the registry rider and ci/parallel_suite.py); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
+- [ ] Alpha 2A · AUTHORITY-MAP-001 / MET-ADOPT-007 · Record the effective authority map in MET-ADOPT-006's form (one authority for each of nine concerns, with its validator, budget and R12 vectors and a D5a oracle), adopted after CONTRACT_281's two rounds (K = 0, 288 packets at slot 281); gate material (the registry rider and the D5a oracle); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

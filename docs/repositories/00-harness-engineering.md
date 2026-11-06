@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-PERF-046
+## Current source preparation — MET-ADOPT-007
+
+MET-ADOPT-007 (AUTHORITY-MAP-001, slot 281): AUTHORITY-MAP-001's effective authority map as a data-only record packet in MET-ADOPT-006's form: architecture/authority-map.json with its README and its budget and R12 vector files (one effective authority for each of nine concerns, its non-deciding inputs, what others may do, every enforcement point and the behaviour when the authority is unavailable or revoked; 27 pinned values, two of them flagged as limits), its standard-library validator scripts/authority_map.py with tests/test_authority_map.py, and a D5a oracle; the map records authority and enforces nothing, and no harness document, ADR, catalog or roadmap item changes. The packet registers its own review series in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS) and the D5a oracle tests/test_met_adopt_007_oracle.py (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+No R10 or R12 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule (K = 0,
+288 packets at slot 281).
+
+## Historical worker-count source preparation — MET-PERF-046
 
 MET-PERF-046 (PERF-046, slot 280): the rise of the parallel suite's worker count from 6 to 8 in MET-PERF-039's form (owner MON-OWNER-K8-G1): one line of ci/parallel_suite.py, its one live test pin in tests/test_parallel_suite.py and its current-status page line, recorded in architecture/parallel-workers/ (record, README and inverse authority) with the K 6 / K 8 / K 6 measurement on MET-VERIFY-006's head (worker phase -56.9 s, -10.8 %); the 900 s deadline, the weights, the parent nodes, the serial rule, the 1,170 s budget and the load gate are unchanged, and every earlier record stays byte-identical. The packet registers its own review series in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS) and the parallel suite ci/parallel_suite.py (GATE_CI), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or
 R12 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule (K = 0, 287 packets
@@ -1574,6 +1580,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 152. `MET-SECTOR-005`: the fourth publishing step (K = 1, 283 packets at slot 278): publishes R03's IND-BANK-002A, the acceptance-command successor of IND-BANK-002, and adds the R13 inheritance guard (chain_identity_v3, architecture/chain-inheritance/) and the successor-descriptor ownership rule; gate material (the registry rider), the owner's approval of the exact head and per-PR merge.
 153. `MET-VERIFY-006`: the fifth publishing step (K = 2, 286 packets at slot 279): publishes R11's DIST-005A, the acceptance-command successor of DIST-005, and R04's CTRL-FIX-004, the page-not-found status fix, with one exact-pair supersession closer for their 20 ownership overlaps and the head-test weights refresh; gate material (the registry rider and the weights table), the owner's approval of the exact head and per-PR merge.
 154. `MET-PERF-046`: eight parallel-suite workers (K = 0, 287 packets at slot 280): WORKERS 6 -> 8 with its test pin and page line in MET-PERF-039's form, recorded in architecture/parallel-workers/; gate material (the registry rider and ci/parallel_suite.py), the owner's approval of the exact head and per-PR merge.
+155. `MET-ADOPT-007`: the effective authority map (K = 0, 288 packets at slot 281): one authority for each of nine concerns with its validator, budget and R12 vectors and a D5a oracle, recorded in architecture/authority-map/; nothing is enforced; gate material (the registry rider and the D5a oracle), the owner's approval of the exact head and per-PR merge.
 
 ## Testing, verification, and acceptance
 
