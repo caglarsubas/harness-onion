@@ -1336,9 +1336,13 @@ POSITION_CHANGES = ["inner", "missing", "twice", "other_inner", "not_python", "n
 
 
 def _era_packets():
-    """MET-VERIFY-006's era bridge (CONTRACT_279 s5): this layer's ownership check reads the live catalog without 279's
-    two products, as the head reads it."""
-    return {name: packet for name, packet in _packets().items() if name not in profile.successor.successor.successor.PRODUCT_PACKETS}
+    """The era bridge, generic: this layer's ownership check reads the live catalog without the product packets of
+    every newer layer on its successor route, as the head reads it, so a newer publish needs no new bridge."""
+    newer, layer = set(), profile.successor
+    while layer is not None:
+        newer.update(getattr(layer, "PRODUCT_PACKETS", ()))
+        layer = getattr(layer, "successor", None)
+    return {name: packet for name, packet in _packets().items() if name not in newer}
 
 
 def _ownership():
@@ -1381,7 +1385,7 @@ def test_v4_the_product_adds_no_ownership_diagnostic(change):
                 remaining.remove(item)
             else:
                 new.append(item)
-        assert not remaining and len(mutant) == 129 and len(new) == 10
+        assert not remaining and len(mutant) == 124 and len(new) == 5
         assert all("IND-BANK-002" in item for item in new)
     with pytest.raises(ValueError, match=re.escape(OWNERSHIP_MESSAGE)):
         profile.check_ownership(mutant)

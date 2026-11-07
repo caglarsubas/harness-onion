@@ -1352,9 +1352,13 @@ POSITION_CHANGES = ["inner", "missing", "twice", "other_inner", "not_python", "n
 
 
 def _era_packets():
-    """MET-VERIFY-006's era bridge (CONTRACT_279 s5): this layer's ownership check reads the live catalog without 279's
-    two products, as the head reads it."""
-    return {name: packet for name, packet in _packets().items() if name not in profile.successor.PRODUCT_PACKETS}
+    """The era bridge, generic: this layer's ownership check reads the live catalog without the product packets of
+    every newer layer on its successor route, as the head reads it, so a newer publish needs no new bridge."""
+    newer, layer = set(), profile.successor
+    while layer is not None:
+        newer.update(getattr(layer, "PRODUCT_PACKETS", ()))
+        layer = getattr(layer, "successor", None)
+    return {name: packet for name, packet in _packets().items() if name not in newer}
 
 
 def _ownership():

@@ -938,7 +938,7 @@ def test_every_contract_file_and_input_is_pinned():
                          profile.HS53_STATUS, profile.REPOSITORIES, profile.SAFE_YAML})
     assert set(profile.REVIEWED_SHA256) == set(profile.CONTRACT_FILES) - {profile.STATUS_PATH}
     for path, expected in profile.ERA_SHA256.items():
-        assert profile.digest(profile.regular_bytes(path)) == expected
+        assert profile.digest(profile.reviewed_bytes(path)) == expected
 
 
 @pytest.mark.parametrize("path", sorted(profile.ERA_SHA256))
