@@ -1,0 +1,62 @@
+id: DIST-TRANSPORT-002
+repository: mas-harness-distribution
+branch: codex/dist-transport-002-raw-byte-digest
+objective: Adopt harness-onion's raw-byte packet digest (issue 9) in R11's shared transport by replacing ci/run_packet_argv.py with the exact harness-onion copy, so the hash-pinned packet is read once as bytes, refused unless it is strict UTF-8 without a byte order mark or carriage return, and digested over exactly those bytes; the merged DIST acceptance runs unchanged under it.
+predecessors: [DIST-005A]
+allowedPaths:
+  - ci/run_packet_argv.py
+  - ci/targets/dist-transport-002.json
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - >-
+    Implementation starts from exact R11 main fe49981efae8fe7b0b2b93f60861a2e34de22e86 (DIST-005A merge, tree
+    a453dcf783b99f2f8da9d73584d18a4f9f2116bb). Nothing outside allowedPaths changes: no Python package, CLI, schema,
+    fixture, chart, profile, policy, trust file, lock, other descriptor, handler, Makefile, test, PORTING ledger,
+    AGENTS.md or document.
+  - >-
+    Transport successor of DIST-TRANSPORT-001, whose published YAML stays byte-identical; this packet carries the new
+    pin. ci/run_packet_argv.py is byte-identical to harness-onion's slot-283 copy in sha256, size and git mode: sha256
+    c8ac40f0b85f327b75748cde7c8498a02fdf48c004dbf3259660b92cc289646f, 9084 B, 100755 (provisional until 283's c2; the
+    pin follows the published bytes). No R11-local edit.
+  - >-
+    The other three transport files stay byte-identical to harness-onion 4b2be353facf23d47e60cb69d16585eedf3576d6 and
+    are not touched: ci/verify-offline.sh sha256 778cb0faf59786dc31559e5d96a399d1e3bb26a4576e0ee9ff70e1f6546bd114, 3908 B,
+    100755; ci/warm-source-isolation.sh sha256 f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b, 4674 B,
+    100644; ci/network_canary.py sha256 1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099, 1459 B, 100755.
+    The head tree has no .github entry and prefetchCommands stays empty.
+  - >-
+    The packet owns its exact descriptor ci/targets/dist-transport-002.json (new, 100644, 280 B, sha256
+    68df8c3b10db000a235ae9059582a186e73111ea2f8f582e009c89b79ff6fc8b), in R11's closed make-target-descriptor v1alpha1
+    form: packetId DIST-TRANSPORT-002 and the one target transport-bootstrap with DIST-TRANSPORT-001's exact argv
+    (python3 -m unittest tests.bootstrap.test_dispatch tests.bootstrap.test_boundaries). It adds no target name;
+    because ci/run_make_target.py dispatches cumulatively over every ci/targets/*.json, make transport-bootstrap runs
+    that argv once per owning packet (DIST-TRANSPORT-001 and DIST-TRANSPORT-002), and every other offline line keeps
+    its existing owners.
+  - >-
+    The exact name-status set against fe49981efae8fe7b0b2b93f60861a2e34de22e86 is two lines: M ci/run_packet_argv.py
+    and A ci/targets/dist-transport-002.json. ci/run_packet_argv.py keeps git mode 100755.
+  - >-
+    Compatibility: for a packet that is strict UTF-8 with LF line endings and no byte order mark, the raw-byte digest
+    equals the earlier text digest. All ten published DIST-* packet YAMLs at 4b2be353 are of that form (0 byte order
+    marks, 0 carriage returns, strict UTF-8), so no merged DIST packet changes its digest and none is refused.
+  - >-
+    Acceptance runs through the new transport itself (the packet's own ci/verify-offline.sh under the owner-operated
+    verifier, OS deny-all outbound): the 22 merged DIST offline lines, in DIST-005A's order, pass unchanged. The packet
+    is verifiable only once the verifier bundle that pins the raw-byte transport is installed: an owner install step,
+    not a packet dependency (predecessors stay [DIST-005A]).
+deliverables:
+  - The exact harness-onion ci/run_packet_argv.py with the raw-byte packet digest.
+  - The packet's own descriptor ci/targets/dist-transport-002.json.
+excluded:
+  - Any other R11 path; product, schema, fixture, chart, profile, lock, other descriptor, handler, test, Makefile, PORTING or document changes; the F-005A-1 successor and issue 11 (export budget); the RELEASE-PROFILE-001 closure proof; DIST-BANK-001; W05 host artifacts.
+  - Network, package-index access, hosted runners, GitHub artifacts/caches/packages, cloud services, API keys, telemetry.
+  - Release, artifact, deployment, runtime, assurance or tenant-acceptance claims.
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","transport-bootstrap"],["make","fixture-verify"],["make","dist-fix-regression"],["make","resolve-fixtures"],["make","build-fixture"],["make","minimal-selectivity-proof"],["make","supply-chain-fixtures"],["make","sbom-check"],["make","vulnerability-offline"],["make","model-custody-check"],["make","signing-fixtures"],["make","rotation-test"],["make","promotion-contract"],["make","airgap-export-import"],["make","relocation-proof"],["make","archive-security"],["make","helm-render-matrix"],["make","helm-security"],["make","build-reproducible"],["make","supply-chain-security"],["make","airgap-runtime"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - A byte comparison at the head shows ci/run_packet_argv.py equal to the pinned copy in sha256, size and mode, the other three transport files unchanged, ci/targets/dist-transport-002.json equal to its pinned bytes, .github absent, and the name-status diff against fe49981efae8fe7b0b2b93f60861a2e34de22e86 equal to the two lines M ci/run_packet_argv.py and A ci/targets/dist-transport-002.json.
+  - The 22 offline lines pass in one deny-all-outbound process tree under the new transport.
+  - Signed pull-request and exact-main runs stay separate from artifact, deployment, runtime, assurance and tenant acceptance.
+rollback: Remove ci/targets/dist-transport-002.json and revert ci/run_packet_argv.py to DIST-TRANSPORT-001's pinned bytes (sha256 c2ed0852fa499f194bc91291c32d08b303ea79be3ba7ca6cb29a786d585929f5, 8279 B, 100755); the verifier bundle that pins the raw-byte transport then refuses the head, so rollback pairs with that bundle's rollback.

@@ -196,6 +196,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 11. `CTRL-INTEGRATE-001-production-overview`: explicit authenticated production composition and durable tenant projection/policy adapters, additive database migration, real route/browser tests and isolated PostgreSQL acceptance. Missing local capacity remains NOT_RUN_ENV_UNAVAILABLE; CONF-A2-001 separately certifies installed behavior.
 12. `CTRL-TRANSPORT-001-verifier-bootstrap`: one-time closed transport correction that adopts harness-onion's offline transport byte for byte, retires the hosted workflow, passes NEXT_TELEMETRY_DISABLED=1 to dispatched children and installs the pinned npm closure in-session; verifiable only once VERIFIER-EXT-R04-R11 is installed.
 13. `CTRL-FIX-004-page-not-found-status`: page destinations return HTTP 404 for unknown or unauthorized ids by deciding existence before any loading boundary streams; per-page Suspense keeps the loading labels, a structural test guards the rule, and API routes stay unchanged.
+14. `CTRL-TRANSPORT-002-raw-byte-runner`: closed transport re-copy of harness-onion's corrected offline runner (MET-VERIFY-007) so the hash-pinned packet digest covers raw bytes and CRLF, bare-CR, byte-order-mark and invalid UTF-8 packets are refused; one stdlib regression test and its own make target; verifiable only once the verifier bundle carrying MET-VERIFY-007's transport pins is installed.
 
 ## `CTRL-001` bootstrap authority
 
@@ -284,6 +285,35 @@ product source, dependencies or any evidence axis, and the closed dispatcher's
 rule loading, matching, ordering and argv rendering stay unchanged. Every later
 packet keeps the bootstrap/Makefile/dispatcher/workflow/PORTING exclusion. The
 packet is verifiable only once VERIFIER-EXT-R04-R11 is installed.
+
+## `CTRL-TRANSPORT-002` transport re-copy authority
+
+harness-onion MET-VERIFY-007 corrects the shared offline runner
+`ci/run_packet_argv.py`. The hash-pinned packet digest becomes the sha256 of
+the packet's raw bytes, and packets with CRLF line endings, a bare carriage
+return, a UTF-8 byte order mark or invalid UTF-8 are refused. R04 carries the
+runner as an exact copy (R04 issue 13, ACCEPT), so the fix reaches R04 only by
+re-copying the corrected file.
+
+`CTRL-TRANSPORT-002` is a second closed transport correction over
+CTRL-001-owned files. Its authority is exactly its 3 allowedPaths:
+- `ci/run_packet_argv.py`, equal in bytes and git mode to the corrected runner
+  as published by harness-onion slot 283;
+- the one new test `tests/bootstrap/test_packet_raw_digest.py`;
+- its own descriptor `ci/targets/ctrl-transport-002.json`.
+
+`ci/verify-offline.sh`, `ci/warm-source-isolation.sh` and
+`ci/network_canary.py` stay at their `CTRL-TRANSPORT-001` pins. The correction
+cannot edit the Makefile, `ci/run_make_target.py`, `ci/handlers/**`, any
+predecessor `ci/targets` descriptor, `ci/zero_bill_scan.py`, `PORTING.yaml`,
+product source, dependencies or any evidence axis. The packet adds no
+`.github` path.
+
+`CTRL-TRANSPORT-001`'s published packet and historical pins stay as recorded.
+Every later packet keeps the bootstrap/Makefile/dispatcher/workflow/PORTING
+exclusion and, unless a packet names a new transport authority, the transport
+files at this packet's pins. The packet is verifiable only once the verifier
+bundle carrying MET-VERIFY-007's transport pins is installed.
 
 ## `CTRL-002` questionnaire authority
 
