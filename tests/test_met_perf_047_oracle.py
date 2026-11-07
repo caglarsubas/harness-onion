@@ -784,7 +784,23 @@ def _unb64(value):
     return base64.b64decode(value, validate=True)
 
 
-STEP_AUTHORITY = "architecture/chain-checkpoint-authority.json"
+def _newer_than_281(a_rec):
+    """Every architecture/*-authority.json whose baseline catalog is larger than 281's, newest first (README 'The
+    rebuild (D9 (a)): for each attested file, undo newest first the reverseHunks of every authority newer than the
+    checkpoint'). MON-283-PRE-RULED R3 (VIS-283-PRE (b), owner's word): a vector over the ledger replays through every
+    newer authority newest first, like the reader, so it holds at every later cascade packet, not only at 282's head."""
+    base = len(a_rec.get("baselinePackets", {}))
+    out = []
+    for p in sorted((ROOT / "architecture").glob("*-authority.json")):
+        rec = json.loads(p.read_text(encoding="utf-8"))
+        n = len(rec.get("baselinePackets", {}))
+        if n > base:
+            out.append((n, p.relative_to(ROOT).as_posix(), rec))
+    out.sort(key=lambda t: -t[0])
+    for (n1, p1, _), (n2, p2, _) in zip(out, out[1:]):     # the reader refuses a shared baseline size (P047-C4-2)
+        if n1 == n2:
+            pytest.fail("two newer authorities share a baseline size: %s and %s" % (p1, p2))
+    return out
 
 
 def _replay(live, entry):
@@ -812,13 +828,15 @@ def _need(rels, files_281):
 @pytest.fixture(scope="module")
 def files_281(cc, a281):
     """281's edited files, closed paths skipped before any file is opened. Each file's 281 after bytes are the tree's
-    bytes, first replayed through the step's authority when the step edits the file (README 'It replays, newest
-    first, only the published reverseHunks ...'; OPERATOR MON-282-ORACLE-FACT3 and update F2: on W' the step's
-    authority, architecture/chain-checkpoint-authority.json in v2.1's form, covers every edit of the step; a file the
-    step does not edit needs no replay). For each file then at 281's afterSha256: its hunks' classes by the rule under
-    MET-ADOPT-007's context (OPERATOR); any other file is kept apart (after and classes None, with the reason), as
-    VECTORS 11 counts a file a later slot edits apart."""
-    step = json.loads((ROOT / STEP_AUTHORITY).read_text(encoding="utf-8"))["changedFiles"]
+    bytes, first replayed newest first through every authority newer than 281's that edits the file (README 'It
+    replays, newest first, only the published reverseHunks ...'; OPERATOR MON-282-ORACLE-FACT3 and update F2: on W'
+    the step's authority, architecture/chain-checkpoint-authority.json in v2.1's form, covers every edit of the step;
+    a file the step does not edit needs no replay; generalised by MON-283-PRE-RULED R3 (VIS-283-PRE (b), owner's
+    word): each newer authority covers every edit of its own slot; a file no newer authority edits needs no replay;
+    at 282's head the only newer authority is 282's, so this reads as before). For each file then at 281's
+    afterSha256: its hunks' classes by the rule under MET-ADOPT-007's context (OPERATOR); any other file is kept apart
+    (after and classes None, with the reason), as VECTORS 11 counts a file a later slot edits apart."""
+    newer = _newer_than_281(a281)
     rels = sorted(rel for rel in a281["changedFiles"] if not _closed(rel))
     out = {}
     for rel in rels:
@@ -826,8 +844,14 @@ def files_281(cc, a281):
         path = ROOT / rel
         after = path.read_bytes() if path.is_file() else None
         why = "" if after is not None else "absent from the tree"
-        if after is not None and rel in step:
-            after, why = _replay(after, step[rel])
+        for _, apath, rec in newer:
+            if after is None:
+                break
+            entry_n = rec.get("changedFiles", {}).get(rel)
+            if entry_n is not None:
+                after, why = _replay(after, entry_n)
+                if after is None:
+                    why = "%s: %s" % (apath, why)
         if after is not None and _sha(after) != entry["afterSha256"]:
             why = "281 afterSha256 %s != %s" % (entry["afterSha256"], _sha(after))
         classes = None
