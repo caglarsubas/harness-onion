@@ -298,8 +298,11 @@ def test_the_reader_is_active_only_in_an_outermost_session():
     code = ("import importlib.util as u; s = u.spec_from_file_location('m', %r); m = u.module_from_spec(s); "
             "s.loader.exec_module(m); print(m.OUTERMOST)") % str(ROOT / "ci/chain_checkpoint.py")
     env = {k: v for k, v in os.environ.items() if k != CK.SERIAL_ENV}
-    run = lambda e: subprocess.run([sys.executable, "-I", "-c", code], env=e, capture_output=True, text=True, check=True).stdout.strip()
+    run = lambda e: subprocess.run([sys.executable, "-I", "-B", "-c", code], env=e, capture_output=True, text=True, check=True).stdout.strip()
+    cache = ROOT / "ci/__pycache__"
+    before = set(cache.iterdir()) if cache.is_dir() else set()
     assert (run(env), run(dict(env, **{CK.SERIAL_ENV: "1"}))) == ("True", "False")
+    assert (set(cache.iterdir()) if cache.is_dir() else set()) <= before  # PKT283-PYCACHE: the child writes no __pycache__
 
 
 def test_every_vector_has_a_test():
