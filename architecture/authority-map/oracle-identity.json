@@ -2,10 +2,10 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_adopt_007_oracle.py",
-  "sha256": "0961aeee449fd2d02992caed1c702d244978223523c208cd2cbd50a8154c84d6"
+  "sha256": "02963afbb0254550df51bbcf7871659f0cf8fca3d4ab10797668531cbb3aa523"
  },
  "oracle": {
-  "agentId": "a7d43fe0258be09f3",
+  "agentId": "d6fe1a25-8485-43f5-8c84-afc766817ada",
   "model": "claude-opus-5-5"
  },
  "operator": {
@@ -19,23 +19,23 @@
    "4f798012-9782-42ce-85bc-8473c4a33a34"
   ]
  },
- "briefSha256": "12a9d0efbfd30404e7fd7ddeaa4bda71ce2249168741c65464808dfc86ef30a3",
- "candidateCommit": "e0fc23b7dd377d48786154080cec23578eed3641",
- "launched": "2026-11-06T09:12:40+08:00",
- "finished": "2026-11-06T09:27:45+08:00",
+ "briefSha256": "fa12527be42dfa5d50d067dbf280c00cd78ec237b2aa9655dccaf7808d2ba7ae",
+ "candidateCommit": "b2f6f0307b97627663532825d9d1c409a19cf832",
+ "launched": "2026-11-07T01:57:19+08:00",
+ "finished": "2026-11-07T02:01:00+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-AM-ORACLE-KEEP",
-  "date": "2026-11-06"
+  "ref": "MON-281-ORACLE-KEEP",
+  "date": "2026-11-07"
  },
  "disclosures": [
-  "KEEP (MON-AM-ORACLE-KEEP): 83/83 on c2 (e0fc23b7, adopted under MON-AM-CR2-KEEP): 29 test functions, 83 tests with their parameters, and 54 mutations, written from the authority-map README, the validator's docstring and public names, the record's data and the source lines it cites, never the builder's material; the operator's own run in a fresh tree from the oracle's export: 83 passed; the joint run with the candidate's test and the sector catalog test: 248 passed",
-  "independently derived: every repository quote on its cited line (84 cited lines) and the 25 repository pin quotes, the 13 source and 2 vector digests, the cited roadmap items, its own B1-B5 reference model replaying VB-01 to VB-10 (the ledger-loss step from trust.observability-finops.md:177), the R12 rule, the README's FAIL_CLOSED and BLOCK_NEW_OPERATIONS split, the pin classes and the one-authority rule. Model-derived: the record against AUTHORITY_PINS, BEHAVIOUR_PINS and FLAGGED, the constants, the base registry digest, and check() in both registry states and with a matching pendingReconciliation list (18 exact reads)",
-  "operator-stated facts in the brief: check(read, packets) with frozenset(), its five result members and its ValueError code prefix; the registry rider (the base, or the base plus RIDER, each built by the test, never the file's own digest); V7's member rule",
-  "every one of the eleven refusal codes the docstring lists is reached; 46 mutations assert a code and 8 assert a refusal with one of the eleven, where the docstring ties no single code",
-  "one docstring reading, ruled (a) (MON-AM-ORACLE-KEEP): 'Exception is caught, never BaseException' is the reading check's; a reader that raises propagates its exception, so check() never returns PASS for it; the oracle asserts the deeply nested record's refusal and the BaseException's propagation",
-  "slips, procedural, recorded with no effect: two Edit calls in one message; five scratch Python runs without /usr/bin/time -l; the export listed with find (skip list, 0 dropped) and WORK with ls -1A; two comment lines read inside a constant range and the registry file's digest printed by a scratch script; scratch files left in WORK (moved to the Trash by the operator after the files were kept)",
-  "not checked: the roadmap quotes and the roadmap pin (the roadmap is not in the repository); that a pin change needs new module and record versions; the flagged pins listed wherever the record is published; runtime enforcement"
+  "V9 (a) update of 281's oracle (0961aeee) for slot 282 F, by R12 as a non-author of MET-ADOPT-007 and MET-PERF-047 (MON-R12-V9-ORACLE); written from the kit only (MANIFEST d406b47b: KIT_README, V9_RULE, V9_VECTORS, F's authority-map README, the oracle and its identity); py_compile only, no pytest",
+  "prior read, 2026-11-06 (UAT design): about 30 grep lines of scripts/authority_map.py at dcf11803 (lines 9-10, 38, 61, 67, 100, 130, 146, 174-281, 329-346; docstring, constants, AM_SHAPE checks, budget model), nothing of V9, riders or packets; ruled no bar (MON-R12-V9-ORACLE (a)); not opened during this work",
+  "operator-stated facts used: check(read, packets) and packets' type; the ValueError code prefix; the registry path, base digest and re-serialization; RIDER and the later rider's form; packet order; at most one per id; F's registry ending with MET-PERF-047/packet",
+  "candidateCommit filled by R00 (the operator) by script: first W″ a64e29d7, then W⁶ b2f6f030 after both counted runs were repeated there (MON-282-ORACLE-RECOUNT: 94 passed, 0 failed, 0 skipped); F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)",
+  "launched is the scratch directory's creation; the kit was read a few minutes before it",
+  "one blind run on W″ a64e29d7 (MON-281-ORACLE-BLIND), in-process by R00's caller call_oracle_blind_281.py, never opened by R00: 94 passed, 0 failed, 0 skipped",
+  "correction (MON-281-ORACLE-OPERATOR): operator is R00's lane session, which placed the oracle, ran its blind run and filled this identity; R12 had named itself as operator, which made oracle equal operator (NOT_INDEPENDENT); the KEEP ruling MON-281-ORACLE-KEEP stands"
  ]
 }

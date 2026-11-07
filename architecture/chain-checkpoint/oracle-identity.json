@@ -1,0 +1,44 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_perf_047_oracle.py",
+  "sha256": "6f601d0478d3160832b60e50e6f5d7854c75b1d1c8755f0812d3293fa5f999f1"
+ },
+ "oracle": {
+  "agentId": "a3c895382f72130fe",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "4f798012-9782-42ce-85bc-8473c4a33a34",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "4f798012-9782-42ce-85bc-8473c4a33a34"
+  ]
+ },
+ "briefSha256": "d48e23a2e18c8375a03cbeaff7b5701200fc8b2abb9becb11fc4804a94145116",
+ "candidateCommit": "b2f6f0307b97627663532825d9d1c409a19cf832",
+ "launched": "2026-11-06T21:11:41+08:00",
+ "finished": "2026-11-07T02:13:33+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-282-ORACLE-KEEP",
+  "date": "2026-11-07"
+ },
+ "disclosures": [
+  "brief d48e23a2 and the c6 update note a81d1ee9 (MON-282-W1-A2 item 6); the inputs are the README, the reader's docstring and vectors.json only, at W0 and then at c6 (cn-c6); the oracle never read the reader's source, the writer or any test, and the operator never opened the oracle or a run's detail (MON-282-ORACLE-RUN)",
+  "operator-stated facts: MON-282-ORACLE-FACT (the v2.1 authority entry keys and the hunk form at, removeBase64, insertBase64) and MON-282-ORACLE-FACT2 (newFiles maps a path to the lowercase hex sha256 of its bytes), with the brief's constants, the classify signature, the disagreement tuple and 281's context",
+  "blind runs on c6: run 1 VOID (MON-282-ORACLE-BLIND1-VOID; the caller bound only tmp_path, monkeypatch and parametrize, the author's module fixtures could not bind; the operator's slips: the caller's limits unstated, a home path in the caller's tracebacks); run 1-bis ABORTED, not a run (MON-282-ORACLE-CALLER2; pytest.skip's BaseException escaped the caller; the operator printed the raw stderr, which showed one oracle line, a skip reason, and a home path, moved to the Trash and quoted nowhere); run 1-ter 11/43/1 (detail 19cc5e0a); run 1-quater 40/15/1 (detail 48f81b2b) with caller 9fe53f6e (self-test 13/13)",
+  "reader defects relayed against their clauses: P047-ORACLE-B1 (an exception from Reader.start()'s timing step escapes), P047-ORACLE-B2 (check_pairs details name no ledger file) and P047-ORACLE-B3 (newer-authority conflict details name no authority file), each fixed at F as a PACKET r1 item with the operator's own module test",
+  "provisional two-outcome assertion pending PKT1-READ-ORDER (the read-order class-C cases); the author tightens them to the README's stated order before the one run at F, with its other (a) fixes (mode printed, the agree scope, the ledger's name, the agree row)",
+  "the author's slips: py_compile wrote __pycache__ into WORK (moved to the Trash by the operator each time); extra report keys; one extra Python call to check the report parses; longest-line checks once per file; test_fault_names_its_exception_class not hashed before shared helpers were edited (no edit inside it)",
+  "update notes at F: ORACLE_UPDATE_F 29256944 (MON-282-W2-RULED: the (a) fixes and the README changes), F2 177002ed (MON-282-ORACLE-F-VOID: the final README) and F3 ff826155 (MON-282-ORACLE-COUNTED-B: the inactive-reader sentence); inputs CNF, CNF2 and CNF3, each the README, the reader's docstring and vectors.json only",
+  "operator-stated fact MON-282-ORACLE-FACT3: F's source tree, before F's build, held W's authority and hunk-classes/282.json; and the F2 facts (the step's replay on W′, PIN_PLACEHOLDER's form)",
+  "blind runs: on c6, run 1 VOID (fixture binding) and run 1-bis ABORTED (not a run), then 1-ter and 1-quater; at F, run F-1 on F's source VOID by stage (MON-282-ORACLE-F-VOID); on W′ de78fd19, 76 passed and 1 failed, a (b) ruled a README gap (MON-282-ORACLE-COUNTED-B), so the counted run was repeated; the one counted run, on W″ a64e29d7: 77 passed, 0 failed, 0 skipped",
+  "the author's F-round slips: two Edit calls in one message once; a parametrize decorator briefly moved onto a helper and moved back before the run; extra JSON-parse calls; __pycache__ in WORK (moved to the Trash by the operator)",
+  "ruling KEEP (MON-282-ORACLE-KEEP) on the counted run on W″ a64e29d7 (77 passed); after the writer's pair dedupe (MON-282-PAIRS-DEDUPE) and dry_run_compare's fix (MON-282-DRYRUN-FIND), the counted run was repeated on W⁶ b2f6f030: 77 passed, 0 failed, 0 skipped; candidateCommit is W⁶; F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)"
+ ]
+}

@@ -131,7 +131,7 @@ def test_existing_strict_mock_regressions_and_recorder_are_byte_identical():
     pins = {
         "tests/linux_runner/test_predecessor_diagnostics.py": "3c0afe5686f0c39cea2f68d97f50549d0faba890539c3e20aae1d88b2305139f",
         "ci/pytest_diagnostics.py": "289591d27e0b0e9d4918dc0c6989147d60b400dfd682d64a228031d278b19576",
-        "conftest.py": "3d6acbc362d26e23b4ac578d83e8e0205adee5fa914561032a8af298f2751387",
+        "conftest.py": "23395db8132224f09353ed6f89411dc4a20f87e5a33c55708febcc570cfbb324",
     }
     for path, expected in pins.items():
         assert sha256((ROOT / path).read_bytes()).hexdigest() == expected

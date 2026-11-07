@@ -1,6 +1,9 @@
-"""Source-only diagnostics; no selection, fixture, report or authority changes."""
+"""Source-only diagnostics and the chain checkpoint's shadow reader (MET-PERF-047): no selection, fixture or authority
+changes; the reader only observes and records, never changes a session's outcome, and a missing or failing reader
+prints one class-C line."""
 from importlib.util import module_from_spec as _module_from_spec
 from importlib.util import spec_from_file_location as _spec_from_file_location
+from os import environ as _environ
 from os import write as _write
 from pathlib import Path as _Path
 from time import monotonic as _monotonic
@@ -22,6 +25,40 @@ def _load_diagnostics():
 
 _DIAGNOSTICS = _load_diagnostics()
 _STATE_KEY = "_planeon_met_perf_021_diagnostics"
+_OUTERMOST = "PLANEON_PARALLEL_SUITE_SERIAL" not in _environ   # read once, before the parallel suite sets it
+_READER = {}
+
+
+def _checkpoint_line(text):
+    # the record line can be large: write it whole, stopping on a zero-length write (P047-C2-8)
+    try:
+        data = (text + "\n").encode()
+        while data:
+            done = _write(2, data)
+            if done <= 0:
+                break
+            data = data[done:]
+    except Exception:
+        pass
+
+
+def _load_checkpoint_reader():
+    # MET-PERF-047: loaded by path like the diagnostics, in the outermost session only; any failure is class C.
+    path = _Path(__file__).parent / "ci" / "chain_checkpoint.py"
+    spec = _spec_from_file_location("_planeon_met_perf_047_chain_checkpoint", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("chain checkpoint reader unavailable")
+    module = _module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_CHECKPOINT, _CHECKPOINT_ERROR = None, None
+if _OUTERMOST:
+    try:
+        _CHECKPOINT = _load_checkpoint_reader()
+    except Exception as _exc:
+        _CHECKPOINT_ERROR = _exc
 
 
 def pytest_configure(config):
@@ -84,3 +121,42 @@ def pytest_sessionfinish(session, exitstatus):
     state = getattr(session.config, _STATE_KEY)
     session.exitstatus = state.finish(session.exitstatus)
     return result
+
+
+def pytest_sessionstart(session):
+    if not _OUTERMOST:
+        return
+    if _CHECKPOINT is None:
+        if _CHECKPOINT_ERROR is not None:
+            _checkpoint_line("chain-checkpoint shadow: class C, the reader did not load: %s" % type(_CHECKPOINT_ERROR).__name__)
+        return
+    try:
+        reader = _CHECKPOINT.Reader()
+        reader.start()
+        _READER["reader"] = reader
+    except Exception as exc:
+        _checkpoint_line("chain-checkpoint shadow: class C, the reader raised at session start: %s" % type(exc).__name__)
+
+
+def pytest_runtest_logreport(report):
+    reader = _READER.get("reader")
+    if reader is None:
+        return
+    try:
+        reader.report(report.nodeid, report.when, report.outcome, report.duration)
+    except Exception as exc:
+        _READER.pop("reader", None)
+        _checkpoint_line("chain-checkpoint shadow: class C, the reader raised on a report: %s" % type(exc).__name__)
+
+
+def pytest_unconfigure(config):
+    reader = _READER.pop("reader", None)
+    if reader is None:
+        return
+    try:
+        line, record = reader.finish()
+        if line:
+            _checkpoint_line(line)
+            _checkpoint_line("chain-checkpoint shadow record: " + __import__("json").dumps(record, sort_keys=True))
+    except Exception as exc:
+        _checkpoint_line("chain-checkpoint shadow: class C, the reader raised at the end: %s" % type(exc).__name__)

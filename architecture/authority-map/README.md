@@ -40,6 +40,16 @@ AM-06 (`execution.tool-skill-sandbox.md:148`, flagged), AM-07 (`knowledge.memory
   here. R12-V2 names AM-04 only: its approval-expiry half is AM-05's (governance-service), held here under AM-04, the
   row whose cache it is.
 
+## The briefs registry (V9)
+
+`architecture/review-record/briefs.json` is accepted at its base digest, or as the base, then MET-ADOPT-007's one
+`MET-ADOPT-007/packet` rider, then zero or more later packets' riders in the order they were appended (V9 (a),
+MON-282-W2-RULED). Each later rider is the generic packet brief (the rider's kind, path, sha256 and version 1)
+under `<id>/packet`, for an id in `check`'s packet set other than MET-ADOPT-007, and each series appears once in
+the whole registry. A second MET-ADOPT-007 rider, a rider for an unknown id, a series registered twice and a rider
+before MET-ADOPT-007's (the base's digest refuses it) are refused with AM_REGISTRY. The relative order of later
+riders is each later packet's own check (its rider appended last).
+
 ## Reading the design
 
 The design note's later sections (its rev 2 to rev 6 change lists) are change logs; this record and the module state
