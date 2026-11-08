@@ -1,0 +1,178 @@
+id: LAB-REPO-001
+repository: mas-harness-research-lab
+branch: codex/lab-repo-001-repository-bootstrap
+objective: "The bootstrap PR of R13 mas-harness-research-lab over its initial commit cc92594d (the bridge's research tree, README, LICENSE and manifest already on main): the shared offline transport, the remaining standard-library acceptance tools (preregistration and review records, evaluator re-derivation with reproduction levels and external-input provenance, privacy, page check, zero-bill), the bridge's research records added or modified since the base (41 added and 4 modified files: RL-15b, RL-15 run-002, the RL-11 coverage map, the claims table, the review-record data dictionary, meta-review 001, the R13 issue-1 triage and their tools), the manifest regenerated so every file stays listed, the page rebuilt, and the lab's YES record with its review record; no hosted workflow; research records only, no product code and no packets."
+predecessors: []
+allowedPaths: [".gitignore", "README.md", "LICENSE", "ci/verify-offline.sh", "ci/warm-source-isolation.sh", "ci/network_canary.py", "ci/run_packet_argv.py", "ci/zero_bill_scan.py", "research/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - >-
+    Tree: the PR's base is R13 main at cc92594d6daa, the owner's initial commit (MON-RL-R13-FREEZE: the lab's push of
+    2026-11-07 on the owner's direct word, recorded in place of the LICENSE-only commit): research/** byte for byte from
+    bridge commit a67b90a5, README.md (5827587a), LICENSE (Apache License 2.0, the canonical text, c71d239d), .gitignore
+    (53f0c100), research/tools/make_manifest.py (bb536406), research/tools/manifest_check.py (5511aeec) and
+    research/MANIFEST.json (235 files). Main stays at cc92594d until bundle v7 serves R13; the lab works on branches
+    only; a further push to main happens only on the owner's word through the monitor and re-keys this packet by a new
+    YAML digest. The head's name-status against the base: A for the packet's 12 files (the five ci/ files;
+    research/tools/prereg_check.py, rerun_results.py, rerun_table.json, privacy_check.py, page_check.py;
+    research/reads/LAB-REPO-001-YES.md; research/reviews/LAB-REPO-001-yes-r1.json) and for the 41 bridge research/**
+    files added since the base, enumerated in the Bridge-changes contract (53 A paths); M for research/MANIFEST.json
+    (regenerated so every file of the head stays listed; bridgeCommit = the checkpoint commit B' whose research/** the
+    head carries), for the three page files research/research.json, research.html and history.json (rebuilt on the
+    bridge, since the data record enumerates research/tools and research/reads; Q-LAB-6) and for the four bridge
+    research/** files modified since the base, enumerated in the Bridge-changes contract (8 M paths), nothing else:
+    README.md, LICENSE, .gitignore and every other base file unchanged. Under research/ the head equals the bridge's research/** at
+    B' (which carries make_manifest.py and manifest_check.py byte for byte as on main) plus research/MANIFEST.json. No
+    history rewriting: the bridge's git history of research/** stays on the bridge; the manifest is the
+    bridge-to-repository link.
+  - >-
+    Bridge changes since the base (draft 6, the freeze; the rows of research/reads/BRIDGE-CHANGES-SINCE-CC92594D.md at
+    the freeze, the bridge's research/** against R13 main cc92594d6daa): A, 41 paths:
+    research/experiments/RL-11/data/coverage_map.json, research/experiments/RL-15/data/rl15_gate_002.json,
+    research/experiments/RL-15/data/rl15_runs_002.json,
+    research/experiments/RL-15/data/rl15_runs_002a_invalid_layout.json, research/experiments/RL-15/runs/run-002.md,
+    research/experiments/RL-15b/PREFLIGHT.md, research/experiments/RL-15b/PREREG-REVIEW.md,
+    research/experiments/RL-15b/PREREG.md, research/experiments/RL-15b/REPORT.md,
+    research/experiments/RL-15b/RESULTS.json, research/experiments/RL-15b/data/preflight/preflight_addendum.json,
+    research/experiments/RL-15b/data/preflight/preflight_results.json,
+    research/experiments/RL-15b/data/preflight/synthetic-run-record.md,
+    research/experiments/RL-15b/data/preflight/synthetic_fail_class_zero_refusals.json,
+    research/experiments/RL-15b/data/preflight/synthetic_fail_class_zero_refusals_ledger.json,
+    research/experiments/RL-15b/data/preflight/synthetic_fail_control.json,
+    research/experiments/RL-15b/data/preflight/synthetic_fail_control_ledger.json,
+    research/experiments/RL-15b/data/preflight/synthetic_fail_no_new_rule.json,
+    research/experiments/RL-15b/data/preflight/synthetic_fail_no_new_rule_ledger.json,
+    research/experiments/RL-15b/data/preflight/synthetic_pass.json,
+    research/experiments/RL-15b/data/preflight/synthetic_pass_ledger.json,
+    research/experiments/RL-15b/data/preflight/synthetic_unresolved_m4_one_new_rule.json,
+    research/experiments/RL-15b/data/preflight/synthetic_unresolved_m4_one_new_rule_ledger.json,
+    research/experiments/RL-15b/data/preflight/synthetic_unresolved_unattributed.json,
+    research/experiments/RL-15b/data/preflight/synthetic_unresolved_unattributed_ledger.json,
+    research/experiments/RL-15b/data/rl15b_runs.json, research/experiments/RL-15b/runs/run-001.md,
+    research/hypotheses/CLAIMS.json, research/hypotheses/CLAIMS.md, research/reads/BRIDGE-CHANGES-SINCE-CC92594D.md,
+    research/reads/PREREG-REVIEW-META-REVIEW-001-TABLES.md, research/reads/PREREG-REVIEW-META-REVIEW-001.json,
+    research/reads/PREREG-REVIEW-META-REVIEW-001.md, research/reads/R13-ISSUE-1-TRIAGE.md,
+    research/reads/REVIEW-RECORD-DATA-DICTIONARY.json, research/reads/REVIEW-RECORD-DATA-DICTIONARY.md,
+    research/tools/claims_check.py, research/tools/prereg_review_meta.py,
+    research/tools/review_record_dictionary_check.py, research/tools/rl15b_eval.py, research/tools/rl15b_mutate.py;
+    M, 4 paths:
+    research/README.md, research/hypotheses/REGISTER.md, research/reads/LAB-REPO-001-PACKET-DRAFT.md,
+    research/reads/REPO-MIGRATION-PLAN.md;
+    Each is byte for byte the bridge's research/** at B'; its digest is the manifest's at the head, not pinned here. The
+    set is frozen at this YAML: from the freeze the bridge's research/** changes only by the packet's own files until B'
+    is taken; any other add, delete or rename before the PR is a named delta with a new YAML digest. The two manifest
+    tools are on the base and on the bridge byte for byte at B' (section D), so they are neither A nor M.
+  - >-
+    Transport: ci/verify-offline.sh, ci/warm-source-isolation.sh and ci/network_canary.py are byte-identical to
+    harness-onion main 4b2be353 in sha256, size and git mode (unchanged since 64e5700d; the pins CTRL-TRANSPORT-001
+    and DIST-TRANSPORT-001 cite at 57bb1033): ci/verify-offline.sh sha256
+    778cb0faf59786dc31559e5d96a399d1e3bb26a4576e0ee9ff70e1f6546bd114, 3908 B, 100755; ci/warm-source-isolation.sh
+    sha256 f717f62fb1c9fdaec9eb594c733f25b17394bae6b90a311b9ccc08d4eaf9233b, 4674 B, 100644; ci/network_canary.py
+    sha256 1be4a837c4a5baee900db20007c4841361b8c823a1b5e521badcf28890d82099, 1459 B, 100755. ci/run_packet_argv.py is
+    byte-identical to 283's fixed runner (MET-VERIFY-007's F head; the visionary's ruling, MON-RL-R13-284), which is
+    harness-onion main e515f0b8's ci/run_packet_argv.py after 283's merge (PR 239; MON-283-MERGED-LAB): sha256
+    c8ac40f0b85f327b75748cde7c8498a02fdf48c004dbf3259660b92cc289646f, 9084 B, 100755 (relayed by the monitor at 283's
+    c1 freeze, MON-RL-RUNNER, and named as main's runner at the merge; no longer provisional); never c2ed0852 (the
+    4b2be353 runner). A later change of any transport file on main is a named delta with a new YAML digest. No file under .github/,
+    ever (the zero-bill rule; the owner's verifier refuses hosted workflows). ci/zero_bill_scan.py is the lab's own,
+    standard library only: it walks the head, refuses WORKFLOW_PRESENT:<path> for any file under .github/,
+    SYMLINK:<path> for any symbolic link, BYTECODE:<path> for any __pycache__ or .pyc entry, and HOSTED_RUNNER:<path>
+    for the tokens runs-on, actions/ and uses: in any text file outside research/; exit 0 and no output when clean.
+  - >-
+    Manifest digest rule: research/MANIFEST.json is {"schemaVersion": "planeon.research.manifest/v1", "bridgeCommit":
+    <40 hex>, "files": {<path>: <64 hex sha256>}} with sorted keys, paths relative to the repository root, one entry
+    for every tracked file of the head except research/MANIFEST.json itself. research/tools/manifest_check.py walks the
+    head (skipping .git), and refuses a path on one side only, a digest mismatch, a symbolic link, a bytecode entry, a
+    .github directory or a bridgeCommit that is not 40 hex; it prints `MANIFEST OK: <n> files`, or the problem lines
+    (repository paths and digest prefixes only) and `MANIFEST FAIL`. Both tools are on main at cc92594d
+    (make_manifest.py bb536406, manifest_check.py 5511aeec). The move changes no file's bytes, so every digest already
+    named in a register row, a results ledger, a report or a milestone message is an 8-hex prefix of a manifest value,
+    checkable without the bridge.
+  - >-
+    Preregistration and review record (Q-283-5 (a)): research/tools/prereg_check.py requires, for every folder
+    research/experiments/RL-nn/, PREREG.md or at least one PREREG.v*.md, RESULTS.json and REPORT.md; every 8-hex digest
+    in that experiment's row of the register's "Experiments started" table (the sha256 (frozen) column) equal to the
+    sha256 prefix of a PREREG*.md in the folder (frozen versions are kept byte for byte, never rewritten); for RL-14 and
+    every later id (the charter's step 1a, adopted 2026-11-05) PREREG-REVIEW.md present, naming the PREREG digest it
+    reviewed and ending in PASS for the run version; and the RESULTS.json ledger's evidenceRefs naming the run
+    version's PREREG digest and the evaluator script's digest. From the first PR, every lab PR also carries a review
+    record in harness-onion's planeon.review-record/v2 schema (schemas/review-record.schema.json at 4b2be353: the
+    closed members schemaVersion, kind, series, round, subject {repository, commit, tree}, reviewDate, briefSha256,
+    rulesSha256, wrapperSha256, reviewer {model, role} as strings, verdict, findings, checked, disclosures), stored as
+    research/reviews/<series with / as ->-r<round>.json; its series is <packet or experiment id>/<brief slug>, its kind
+    names the brief by path, and briefSha256 is that brief's sha256: PREREG-REVIEW.md for an experiment PR, the YES
+    record research/reads/LAB-REPO-001-YES.md for this PR (Q-LAB-3, the visionary's ruling). prereg_check.py validates
+    every research/reviews/*.json against those members and digests with the standard library. Counts only on stdout.
+    The verifier reads presence, digests, shapes and the PASS line, never the judgement.
+  - >-
+    Evaluator re-derivation (widened in draft 6 by recommendation 2 of R13 issue 1): research/tools/rerun_results.py
+    reads research/tools/rerun_table.json, which names every RL folder exactly once with a level: LEDGER_REDERIVED (the
+    evaluator argv over the committed inputs and the committed RESULTS.json path; the driver runs it, writes under
+    TMPDIR only, and requires byte equality with the committed ledger); RAW_REPRODUCED (LEDGER_REDERIVED plus a named
+    argv that regenerates the committed inputs from a named raw source in the tree before the evaluator runs, byte
+    equality on both); INDEPENDENT_REPLICATION (LEDGER_REDERIVED plus a second ledger from an independent run, named by
+    path and sha256, whose verdict the driver compares with the committed one); RECORDED (a one-line reason: the
+    verdict was computed over masked exports kept outside the repository, or the ledger predates the evaluator rule),
+    which carries externalInputs, one object per input the verdict depended on: source (the repository or record by
+    name, never a URL), commit (40 hex or the word none), sha256 (64 hex), availability (IN_TREE, OWNER_HELD or
+    UNPUBLISHED) and retrieval (the procedure by which the lab obtained it, one line, no path). The PREREG argument of
+    every argv is the PREREG*.md whose sha256 prefix equals the ledger's prereg digest among its evidenceRefs, never
+    PREREG.md by name (RL-11's versioned case). At the first commit RL-14 to RL-22 and RL-15b are LEDGER_REDERIVED and
+    RL-01 to RL-13 RECORDED; no RAW_REPRODUCED or INDEPENDENT_REPLICATION entry yet (the levels exist so a later PR can
+    raise an entry without a schema change). A folder missing from the table, a duplicate, a level outside the four, a
+    RECORDED entry without a reason or without externalInputs, or an argv whose PREREG digest is not the ledger's,
+    fails. Counts per level on stdout.
+  - >-
+    Privacy: research/tools/privacy_check.py scans the manifest's file set plus README.md, LICENSE and the lab's own ci/ files; the four pinned transport copies are fixed by digest in the Transport contract and not scanned: it refuses
+    absolute home-directory path shapes (the macOS and Linux user folders and the session temp folders), e-mail
+    shapes and the legacy term by its
+    published sha256 rule (BR-D1); NAME_TOKEN_SHA256 = {} with a loader for an unpublished digest file named by
+    RESEARCH_NAME_DIGESTS (absent under the verifier, so the table stays empty; the lab's local pre-push scan sets it).
+    Counts only; exit 1 on any hit.
+  - >-
+    Page check: research/build_research.py stays as on main (the bridge builds the page; its lane file and its links
+    into other bridge folders are the bridge's, and README.md says those links do not resolve here).
+    research/tools/page_check.py (new) imports build_research.py by path, replaces its lane reader with a fixed stub,
+    regenerates the data record in memory, drops generatedAt, lane and bridgeCommit, compares it with the committed
+    research/research.json minus the same keys, writes nothing, prints counts only and exits 1 on any difference. The
+    bridge mirror copy drops the tree links: no repository URL goes in a bridge file (Q-LAB-4, ruled).
+  - >-
+    Standard-library workflow: every acceptance command is python3 -I -B over files of the head; no third-party
+    import, no uv, make, pip or node, no network, writes only under TMPDIR; the six commands finish in seconds on the
+    python-distribution profile without the helm and cosign pins (Q-283-5 (a)); the profile's pinned CPython 3.12.14.
+  - >-
+    Route: the self-retiring first-packet route of bundle v7, keyed by (LAB-REPO-001, this YAML's sha256) with the
+    exact file set equal to the head's name-status against the base, which the route checks is R13's main at
+    cc92594d6daa (MON-RL-R13-FREEZE): A for exactly the 53 paths and M for exactly the 8 paths named in the Tree and
+    Bridge-changes contracts, nothing else; the manifest's keys equal the head's tracked set
+    minus the manifest; single use bound to the first PR number, retired at that PR's merge. A push to main before the
+    PR moves the base and re-keys the route by a new YAML digest. Later LAB packets are verified under the ordinary
+    hosted route, inheriting this packet's six commands in order.
+  - >-
+    Verifiable only under bundle v7 (an owner install step, not a predecessor), which adds mas-harness-research-lab to
+    the verifier's fixed repository list (the installed v6 refuses any product outside its twelve) and this packet's
+    route keyed by the frozen YAML's sha256. The packet is a product at slot 284, K = 1 (the owner, MON-RL-R13-284);
+    its YAML freezes before v7's c2, and any later change is a named delta with a new digest that re-keys the route.
+    The App install and the ruleset's main-verify go on together at v7's install, before 284's PR (MON-RL-R13-FREEZE).
+    R13 holds research records only: no product code, no packets, no roadmap writes.
+deliverables:
+  - "research/MANIFEST.json regenerated by research/tools/make_manifest.py (on main since cc92594d) with bridgeCommit B', listing every file of the head: the base's 235 plus the packet's 12 and the 41 bridge adds (288)."
+  - "The 41 bridge research/** files added and the 4 modified since the base (Bridge-changes contract), byte for byte the bridge's research/** at B'."
+  - "research/tools/prereg_check.py, rerun_results.py with rerun_table.json (every entry with level; RECORDED entries with externalInputs), privacy_check.py and page_check.py (new; written on the bridge first and carried in research/**); ci/zero_bill_scan.py; research/build_research.py, make_manifest.py and manifest_check.py as on main."
+  - "The four exact transport copies (sha256, size and mode as pinned); no .github entry."
+  - "README.md, LICENSE and .gitignore as on main cc92594d, unchanged and listed in the manifest (README.md: the layout, the manifest check, how to file an issue, the rules; the procedure and the PR flow are the charter's)."
+  - "research/reads/LAB-REPO-001-YES.md (the lab's YES record, section F) and research/reviews/LAB-REPO-001-yes-r1.json (its review record v2 naming that brief by path and sha256); the three page files rebuilt on the bridge over the head's research/tools and research/reads."
+excluded:
+  - "Any experiment run, fetch, search, export or heavy job; network; .github; node, uv, make or pip; any bridge path; the lane file; any other repository; history rewriting; product code; packets; roadmap writes."
+prefetchCommands: []
+offlineAcceptanceCommands: [["python3","-I","-B","ci/zero_bill_scan.py"],["python3","-I","-B","research/tools/manifest_check.py","research/MANIFEST.json"],["python3","-I","-B","research/tools/privacy_check.py","research/MANIFEST.json"],["python3","-I","-B","research/tools/prereg_check.py","research/hypotheses/REGISTER.md","research/experiments"],["python3","-I","-B","research/tools/rerun_results.py","research/tools/rerun_table.json"],["python3","-I","-B","research/tools/page_check.py","research/MANIFEST.json"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - "Name-status of the head against the base cc92594d6daa: A for exactly the packet's 12 files (five ci/ files, five research/tools entries, the YES record and its review record) plus the 41 bridge adds of the Bridge-changes contract (53 paths), M for research/MANIFEST.json, the three page files and the four modified bridge files of that contract (8 paths), nothing else; the manifest's keys equal the head's tracked set minus the manifest; manifest_check PASS with 288 files (the base's 235 plus 53) and 0 problems."
+  - "Three transport files equal harness-onion main 4b2be353 and ci/run_packet_argv.py equals 283's fixed runner, by sha256, size and mode; no .github entry; zero_bill_scan PASS."
+  - "prereg_check PASS: 23 experiment folders (RL-01 to RL-22 and RL-15b); every frozen digest of the register present in its folder; PREREG-REVIEW.md present for RL-14 to RL-22 and RL-15b (10 of 23)."
+  - "rerun_results PASS: 23 table entries, every level one of the four; RL-14 to RL-22 and RL-15b LEDGER_REDERIVED byte for byte (10); RL-01 to RL-13 RECORDED (13) with reasons and externalInputs; 0 RAW_REPRODUCED, 0 INDEPENDENT_REPLICATION."
+  - "privacy_check 0 hits over the head; the lab's local pre-push scan over the same set with the unpublished digest file 0 hits, reported in the PR body as counts."
+  - "page_check PASS (the data record reproduces minus generatedAt, lane and bridgeCommit); the six commands pass in one deny-all process tree under ./ci/verify-offline.sh in seconds; no heavy job."
+rollback: Revert the PR; main returns to cc92594d6daa, the owner's initial commit, and the bridge stays the authoritative research tree, so nothing is lost.

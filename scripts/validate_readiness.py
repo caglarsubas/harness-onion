@@ -26,42 +26,51 @@ try:
 except ModuleNotFoundError:
     from scripts.safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
 
+# MET-REGISTRY-001 (VIS-284-DEPTH): the bounded raise. The chain's import depth grows by one layer per slot, so
+# this import block alone runs under a recursion limit of at least 2000, and the limit is restored at once.
+_CHAIN_IMPORT_LIMIT = sys.getrecursionlimit()
+sys.setrecursionlimit(max(_CHAIN_IMPORT_LIMIT, 2000))
 try:
-    from validate_packet_ownership import validate_packet_ownership
-    from validate_conformance_reference_measurement import validate_dispatch_ownership
-    from validate_alpha2_readiness import validate_model_authority
-    from validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
-    from validate_linux_readiness import validate_linux_readiness
-    from validate_linux_repair import validate_linux_repair
-    from validate_linux_test_ownership import validate_linux_test_ownership
-    from validate_model_fixture_scope import load_scope_inputs, validate_model_fixture_scope
-    from validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
-    from validate_packet_scalar_repair import load_scalar_inputs, validate_scalar_repair
-    from validate_successor_inventory import load_successor_inputs, validate_successor_inventory
-    from validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
-    from validate_policy_observation import load_observation_inputs, validate_observation_contract
-    from validate_custody_handoff import load_custody_inputs, validate_custody_handoff
-    from validate_ci_performance import load_performance_inputs, validate_ci_performance
-    from validate_credential_lifecycle import load_credential_inputs, validate_credential_lifecycle
-    from validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
-except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
-    from scripts.validate_packet_ownership import validate_packet_ownership
-    from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
-    from scripts.validate_alpha2_readiness import validate_model_authority
-    from scripts.validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
-    from scripts.validate_linux_readiness import validate_linux_readiness
-    from scripts.validate_linux_repair import validate_linux_repair
-    from scripts.validate_linux_test_ownership import validate_linux_test_ownership
-    from scripts.validate_model_fixture_scope import load_scope_inputs, validate_model_fixture_scope
-    from scripts.validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
-    from scripts.validate_packet_scalar_repair import load_scalar_inputs, validate_scalar_repair
-    from scripts.validate_successor_inventory import load_successor_inputs, validate_successor_inventory
-    from scripts.validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
-    from scripts.validate_policy_observation import load_observation_inputs, validate_observation_contract
-    from scripts.validate_custody_handoff import load_custody_inputs, validate_custody_handoff
-    from scripts.validate_ci_performance import load_performance_inputs, validate_ci_performance
-    from scripts.validate_credential_lifecycle import load_credential_inputs, validate_credential_lifecycle
-    from scripts.validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
+    try:
+        from validate_packet_ownership import validate_packet_ownership
+        from validate_conformance_reference_measurement import validate_dispatch_ownership
+        from validate_alpha2_readiness import validate_model_authority
+        from validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
+        from validate_linux_readiness import validate_linux_readiness
+        from validate_linux_repair import validate_linux_repair
+        from validate_linux_test_ownership import validate_linux_test_ownership
+        from validate_model_fixture_scope import load_scope_inputs, validate_model_fixture_scope
+        from validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
+        from validate_packet_scalar_repair import load_scalar_inputs, validate_scalar_repair
+        from validate_successor_inventory import load_successor_inputs, validate_successor_inventory
+        from validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
+        from validate_policy_observation import load_observation_inputs, validate_observation_contract
+        from validate_custody_handoff import load_custody_inputs, validate_custody_handoff
+        from validate_ci_performance import load_performance_inputs, validate_ci_performance
+        from validate_credential_lifecycle import load_credential_inputs, validate_credential_lifecycle
+        from validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
+        from repository_registration import registry_rows
+    except ModuleNotFoundError:  # Imported as scripts.validate_readiness by unit tests.
+        from scripts.validate_packet_ownership import validate_packet_ownership
+        from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
+        from scripts.validate_alpha2_readiness import validate_model_authority
+        from scripts.validate_readiness_repairs import validate_repair_amendment, validate_repair_authority
+        from scripts.validate_linux_readiness import validate_linux_readiness
+        from scripts.validate_linux_repair import validate_linux_repair
+        from scripts.validate_linux_test_ownership import validate_linux_test_ownership
+        from scripts.validate_model_fixture_scope import load_scope_inputs, validate_model_fixture_scope
+        from scripts.validate_live_backend_readiness import load_live_inputs, validate_live_backend_readiness
+        from scripts.validate_packet_scalar_repair import load_scalar_inputs, validate_scalar_repair
+        from scripts.validate_successor_inventory import load_successor_inputs, validate_successor_inventory
+        from scripts.validate_proxy_contract import load_proxy_inputs, validate_proxy_contract
+        from scripts.validate_policy_observation import load_observation_inputs, validate_observation_contract
+        from scripts.validate_custody_handoff import load_custody_inputs, validate_custody_handoff
+        from scripts.validate_ci_performance import load_performance_inputs, validate_ci_performance
+        from scripts.validate_credential_lifecycle import load_credential_inputs, validate_credential_lifecycle
+        from scripts.validate_model_api_inventory import load_inventory_inputs, validate_model_api_inventory
+        from scripts.repository_registration import registry_rows
+finally:
+    sys.setrecursionlimit(_CHAIN_IMPORT_LIMIT)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -102,6 +111,18 @@ EXPECTED_REPOSITORIES = {
     "mas-harness-conformance-labs",
 }
 
+
+# MET-REGISTRY-001 (VIS-284-ARGV): the registry keeps its thirteen rows, and EXPECTED_REPOSITORIES stays its thirteen
+# names. R13 is a row of the successor registry record; the live repository set is the registry's rows, then that
+# record's, read through the one composition reader (scripts/repository_registration.py registry_rows), where the
+# record in ROOT decides (VIS-284-LPORACLE).
+SUCCESSOR_REGISTRY = "architecture/repository-registration/repositories.json"
+SUCCESSOR_REGISTRY_SCHEMA = "architecture/repository-registration/repositories.schema.json"
+
+
+def live_repository_rows() -> tuple[dict[str, Any], ...]:
+    return registry_rows(ROOT, safe_yaml_load)
+
 EXPECTED_HARNESSES = {
     "runtime.infrastructure",
     "runtime.model-inference",
@@ -137,7 +158,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 293
+EXPECTED_PACKET_COUNT = 295
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -663,6 +684,24 @@ def validate_architecture(validation: Validation) -> tuple[set[str], set[str]]:
     ids = {item.get("id") for item in repositories}
     validation.require(names == EXPECTED_REPOSITORIES, "repository registry must contain exactly 13 approved repositories")
     validation.require(len(ids) == len(repositories), "repository IDs must be unique")
+    try:  # MET-REGISTRY-001 (VIS-284-ARGV): the registry with its successor rows
+        live_rows = live_repository_rows()
+    except (OSError, ValueError) as exc:
+        validation.error(f"repository registry with its successor rows cannot be composed: {exc}")
+        live_rows = ()
+    live_names = {item["name"] for item in live_rows}
+    validation.require(
+        EXPECTED_REPOSITORIES < live_names and len(live_names) == len(live_rows) == 14,
+        "repository registry with its successor rows must contain exactly 14 approved repositories",
+    )
+    try:
+        successor_record = load_json(ROOT / SUCCESSOR_REGISTRY)
+    except (OSError, ValueError) as exc:
+        validation.error(f"successor repository registry is unreadable: {exc}")
+    else:
+        validate_schema_instance(
+            validation, ROOT / SUCCESSOR_REGISTRY_SCHEMA, successor_record, "successor repository registry"
+        )
 
     dependency_semantics = registry.get("dependencySemantics", {})
     validation.require(
@@ -1158,7 +1197,8 @@ def validate_architecture(validation: Validation) -> tuple[set[str], set[str]]:
         dependency_graph.get("controlPlaneOnRuntimePath") is False,
         "control plane must remain outside the runtime request path",
     )
-    return names, ids
+    # MET-REGISTRY-001 (VIS-284-ARGV): the packets and plans are checked against the registry with its successor rows.
+    return names | live_names, ids | {item["id"] for item in live_rows}
 
 
 def validate_services(validation: Validation) -> None:
@@ -3880,7 +3920,14 @@ def validate_plans(validation: Validation) -> dict[str, str]:
     harness_dir = ROOT / "docs/harnesses"
     repo_files = sorted(repo_dir.glob("*.md")) if repo_dir.exists() else []
     harness_files = sorted(harness_dir.glob("*.md")) if harness_dir.exists() else []
-    validation.require(len(repo_files) == 13, f"expected 13 repository plans, found {len(repo_files)}")
+    try:  # MET-REGISTRY-001 (VIS-284-ARGV): one plan per row of the registry with its successor rows
+        live_names = {item["name"] for item in live_repository_rows()}
+    except (OSError, ValueError) as exc:
+        validation.error(f"repository plans cannot read the registry with its successor rows: {exc}")
+        live_names = set()
+    validation.require(
+        len(repo_files) == len(live_names), f"expected {len(live_names)} repository plans, found {len(repo_files)}"
+    )
     validation.require(len(harness_files) == 16, f"expected 16 harness specs, found {len(harness_files)}")
 
     repo_texts = {path: path.read_text(encoding="utf-8") for path in repo_files}
@@ -3914,7 +3961,7 @@ def validate_plans(validation: Validation) -> dict[str, str]:
                 )
                 declared_packet_owners[packet_id] = repository
     validation.require(
-        set(documented_repositories) == EXPECTED_REPOSITORIES
+        set(documented_repositories) == live_names
         and len(documented_repositories) == len(set(documented_repositories)),
         "repository-plan titles must cover each approved repository exactly once",
     )

@@ -87,6 +87,7 @@ from scripts.safe_yaml import safe_load
 from scripts import chain_identity as identity
 from scripts import chain_identity_v2 as identity_v2
 from scripts import chain_identity_v3 as identity_v3
+from scripts import repository_registration as registration
 
 
 def packets():
@@ -1375,7 +1376,13 @@ def test_every_listed_product_meets_the_rule():
     v2, _ = _v3()
     listed = {slot: identity_v3.layer_products(tree, v2) for slot, _, _, tree in chain}
     listed = {slot: ids for slot, ids in listed.items() if ids}
-    count = identity_v3.check_products(ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain), v2)
+    # MET-REGISTRY-001 (contract E8): R8 clause 2 by slot through the successor function and its record.
+    record = registration.load(profile.regular_bytes(registration.RECORD_PATH),
+                               profile.regular_bytes(V2_RECORD_DIR + "/rule.json"),
+                               profile.regular_bytes(registration.MODULE_PATH))
+    count = registration.check_products(
+        ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain),
+        registration.pin_v2(identity_v2, profile.regular_bytes("scripts/chain_identity_v2.py")), record)
     assert count == sum(len(ids) for ids in listed.values())
 
 

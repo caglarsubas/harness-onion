@@ -208,6 +208,22 @@ def pytest_make_collect_report(collector):
     if not isinstance(collector, pytest.Module):
         return (yield)
     path = list(sys.path)
+    limit = sys.getrecursionlimit()
+    try:
+        # MET-REGISTRY-001 (VIS-284-DEPTH): the chain's oldest entries are imported once, in the package form and then
+        # the bare form (scripts/ on sys.path), under a recursion limit of at least 2000 that is restored at once;
+        # every test then runs at the default limit with the chain loaded (later calls find each module loaded);
+        # a project without the chain (a test's synthetic one) skips the imports.
+        sys.setrecursionlimit(max(limit, 2000))
+        if (collector.config.rootpath / "scripts" / "validate_credential_lifecycle.py").is_file():
+            __import__("scripts.validate_credential_lifecycle")
+            __import__("scripts.validate_ci_performance")
+            sys.path.insert(0, str(collector.config.rootpath / "scripts"))
+            __import__("validate_credential_lifecycle")
+            __import__("validate_ci_performance")
+    finally:
+        sys.setrecursionlimit(limit)
+        sys.path[:] = path
     try:
         return (yield)
     finally:

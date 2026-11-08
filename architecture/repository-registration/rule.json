@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "harness.planeon.ai/repository-registration-rule/v1",
+  "packet": "MET-REGISTRY-001",
+  "extends": [
+    {
+      "path": "architecture/chain-product-packets/rule.json",
+      "sha256": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
+      "clause": "productRepository.allowedNames"
+    },
+    {
+      "path": "scripts/repository_registration.py",
+      "sha256": "9d705db32e70cba12126d14c5c4c2f794d1a9ec14bb13cc3d9c60481d1b93980",
+      "clause": "R8 clause 2"
+    }
+  ],
+  "allowedNames": [
+    {
+      "fromSlot": 284,
+      "add": [
+        "mas-harness-research-lab"
+      ]
+    }
+  ],
+  "refusedName": "Harness-Engineering",
+  "kindNote": [
+    "R13 mas-harness-research-lab is kind meta in its row of the successor registry record, while its",
+    "first packet LAB-REPO-001 is a product packet in the chain vocabulary; allowedNames reads only the",
+    "name, so there is no conflict (VIS-284)."
+  ]
+}
