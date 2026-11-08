@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-VERIFY-007
+## Current source preparation — MET-REGISTRY-001
+
+MET-REGISTRY-001 (slot 284): R13 mas-harness-research-lab's registration (kind meta, releaseSet EXCLUDED) as a row of the successor registry record, read with the registry (unchanged) through one composition reader by readiness, architecture, language placement and the release lock (ADRs 0001 and 0010), with R8 clause 2's successor record and function (chain_identity_v2, chain_identity_v3 and the product-packet rule byte-equal); the seventh publishing step (K = 1) publishes LAB-REPO-001, R13's first product packet (the lab's frozen draft 6.1 YAML). The packet registers its own review series in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), scripts/check_release_lock.py (GATE_POLICIES), the weights (GATE_CI, with the owner's transport approval of the exact head) and the D5a oracle tests/test_met_registry_001_oracle.py (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12
+file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule (K = 1, 295 packets
+at slot 284), with the R13 guard of architecture/chain-inheritance/.
+
+## Historical raw-byte runner source preparation — MET-VERIFY-007
 
 MET-VERIFY-007 (harness-onion issue #235, slot 283): harness-onion issue #235's runner fix: ci/run_packet_argv.py reads the packet once, hashes exactly the bytes it read, decodes them as strict UTF-8 and refuses an open failure, a non-regular file, a leading BOM, invalid UTF-8, CRLF and a bare carriage return, each with its own text and exit 2; the sixth publishing step (K = 3) publishes the three transport successor product packets DIST-TRANSPORT-002 (mas-harness-distribution), CTRL-TRANSPORT-002 (mas-harness-control-plane) and IND-TRANSPORT-001 (mas-harness-industry-packs), each re-copying the corrected runner and owning its exact make-target descriptor, with no ownership closer. The packet registers its own review series in the brief
 registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), ci/run_packet_argv.py and ci/test_offline_runner.py (GATE_CI; the runner also needs the owner's transport approval of the exact head) and the D5a oracle tests/test_met_verify_007_oracle.py (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step

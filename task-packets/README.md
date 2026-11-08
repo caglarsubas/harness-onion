@@ -1,6 +1,16 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-VERIFY-007
+## Current source preparation — MET-REGISTRY-001
+
+MET-REGISTRY-001 (slot 284): R13's registration, the seventh publishing step (K = 1, 295 packets at slot 284):
+mas-harness-research-lab (kind meta, releaseSet EXCLUDED) is a row of the successor registry record, read with the
+registry through one composition reader by readiness, architecture, language placement and the release lock, R8 clause 2 admits its name from slot 284 through the successor
+record and function, and the meta packet publishes the product packet LAB-REPO-001 (mas-harness-research-lab), the
+lab's frozen draft 6.1 YAML; gate material (the registry rider, the release lock, the weights with
+the transport approval, and the D5a oracle). Alpha2 OPEN; 293 accepted (the catalog at slot 283) plus MET-REGISTRY-001
+and its product only.
+
+## Historical raw-byte runner source preparation — MET-VERIFY-007
 
 MET-VERIFY-007 (harness-onion issue #235, slot 283): the raw-byte packet runner, the sixth publishing step (K = 3, 293
 packets at slot 283): the digest is the sha256 of exactly the bytes read, strict UTF-8, CR and a leading BOM refused,

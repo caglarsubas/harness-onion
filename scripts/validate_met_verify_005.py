@@ -724,12 +724,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "transport bootstraps publish validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 293
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
-            "closed 293-packet catalog retaining the 278-packet checkpoint")
+    require(len(paths) == 295
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
+            "closed 295-packet catalog retaining the 278-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -772,4 +772,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Transport bootstraps publish valid: 293 current specifications at slot 275; 278-packet checkpoint and exact 275-packet predecessor; contract reviewed.")
+    print("Transport bootstraps publish valid: 295 current specifications at slot 275; 278-packet checkpoint and exact 275-packet predecessor; contract reviewed.")

@@ -5215,6 +5215,11 @@ def validate_packets(
                             for path in packets["MET-VERIFY-007"]["allowedPaths"]
                             if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
     authority_owner["task-packets/MET-VERIFY-007.yaml"] = "MET-VERIFY-007"
+    authority_owner.update({path: "MET-REGISTRY-001"
+                            for path in packets["MET-REGISTRY-001"]["allowedPaths"]
+                            if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
+    authority_owner["task-packets/MET-REGISTRY-001.yaml"] = "MET-REGISTRY-001"
+    authority_owner["task-packets/LAB-REPO-001.yaml"] = "MET-REGISTRY-001"
     authority_owner["task-packets/DIST-TRANSPORT-002.yaml"] = "MET-VERIFY-007"
     authority_owner["task-packets/CTRL-TRANSPORT-002.yaml"] = "MET-VERIFY-007"
     authority_owner["task-packets/IND-TRANSPORT-001.yaml"] = "MET-VERIFY-007"
