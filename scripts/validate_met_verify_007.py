@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/runner-raw-bytes-authority.json"
-AUTHORITY_SHA256 = "92594108d32be7dce1c9296e4604bcada8dabfb3ebebf7412968613dc1c34578"
+AUTHORITY_SHA256 = "6b256e265268aa9bb9316f85b5868945707ae322974d957e59202eeef0273f3a"
 VALIDATOR_PATH = "scripts/validate_met_verify_007.py"
 BASE_COMMIT = "4b2be353facf23d47e60cb69d16585eedf3576d6"
 NEW_PACKET = "MET-VERIFY-007"
