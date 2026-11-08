@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/repository-registration-authority.json"
-AUTHORITY_SHA256 = "4ea5f911fce28178eb7d8dc7137100f42acc93cbbc618527c105758375104b4d"
+AUTHORITY_SHA256 = "c39afe9b42650d0b12e77a491d2d2d7d809ce1526fcf15511c741f733d481c4e"
 VALIDATOR_PATH = "scripts/validate_met_registry_001.py"
 BASE_COMMIT = "e515f0b83ca4b3cda9dca02acb6ac0db623b66df"
 NEW_PACKET = "MET-REGISTRY-001"
@@ -373,7 +373,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/chain-product-packets/rule.json": "5e6e6821eace0e50e416c21ab2e605a165b2e69e455cf3fa6b051f7db99fb4d4",
     "architecture/language-placement.json": "5e4c76bddea19135bc6b6eea5b806af8277723a7b1b475d01643e25bd2e9efa1",
     "architecture/repositories.yaml": "02190a668c6a9114b3733724bec4e552c553867e789b0802f6aaa6759148051d",
-    "architecture/repository-registration/language-placement.json": "333aad7d228f547ae612ebf048bd9b1954b8f4a7d014063068b86248c73d5fd7",
+    "architecture/repository-registration/language-placement.json": "17fc67ef9b89bff17ee5034cf3c54decfba08de293c4afddbe58e24a3ec9d95f",
     "architecture/repository-registration/language-placement.schema.json": "26c4e8746effcdab309da74e1bf864bab2932d9e796a31bedc66a4186282bf26",
     "architecture/repository-registration/repositories.json": "9c129674c8116b47cded71c87921631d85f9407c6d7291f62cd7e801ed42396c",
     "architecture/repository-registration/repositories.schema.json": "b2d0723862553ef864d41bc9bed8a907c2124c2e19f4b52c5774ffa4e851075c",
