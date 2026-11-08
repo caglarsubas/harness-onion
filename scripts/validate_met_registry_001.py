@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/repository-registration-authority.json"
-AUTHORITY_SHA256 = "c39afe9b42650d0b12e77a491d2d2d7d809ce1526fcf15511c741f733d481c4e"
+AUTHORITY_SHA256 = "9cfa26d500e13f44736e869d45ef0c97d1e022bb935dbeab125687140c9d27ad"
 VALIDATOR_PATH = "scripts/validate_met_registry_001.py"
 BASE_COMMIT = "e515f0b83ca4b3cda9dca02acb6ac0db623b66df"
 NEW_PACKET = "MET-REGISTRY-001"
@@ -377,7 +377,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/repository-registration/language-placement.schema.json": "26c4e8746effcdab309da74e1bf864bab2932d9e796a31bedc66a4186282bf26",
     "architecture/repository-registration/repositories.json": "9c129674c8116b47cded71c87921631d85f9407c6d7291f62cd7e801ed42396c",
     "architecture/repository-registration/repositories.schema.json": "b2d0723862553ef864d41bc9bed8a907c2124c2e19f4b52c5774ffa4e851075c",
-    "architecture/repository-registration/rule.json": "bbb5c97acd38ef2128ba3485a62139868292565f69b2e851d267269cbcec48b3",
+    "architecture/repository-registration/rule.json": "4405e9da30db3181eb257b2a0e47bc7bcdda0f6e35e29e4f16de564a2bd1445f",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "7327c7ba1324ae4296e21a73fae9756eab689dcd6337390a91bc28e8eab5078e",
     "ci/chain_checkpoint.py": "b66d601e387c181d627d2e210fe5db40bf6ae3ec2e12f1369b0215d9a57b046b",
@@ -391,7 +391,7 @@ ERA_SHA256 = MappingProxyType({
     "scripts/chain_identity_v2.py": "23fe723ae060b13727118b5808541d0b40bfee22ac5e803955e324f4dd6d9a55",
     "scripts/check_release_lock.py": "d6138729a61d78cb0382cd26ecd6fc7b4a60d2de08100f71522ba499658d2c0c",
     "scripts/language_placement.py": "6146ebb2331c2970d073031d557ee5de4fe103665c725b8e02953690ec0f00f9",
-    "scripts/repository_registration.py": "9d705db32e70cba12126d14c5c4c2f794d1a9ec14bb13cc3d9c60481d1b93980",
+    "scripts/repository_registration.py": "e8635f23dbf10572da331237483c8245ee590f9f423f54d6c8ce28b11c01736c",
     "scripts/validate_architecture.py": "161c6628845edbd9dfa7197407b786358438ae81ecfef19901dcb1686a97207f",
     "scripts/validate_readiness.py": "f60e7fdbfd5c2fa62aaa9416fad0a5b1494f5280b0ff53a2360a40f21084bf0c",
     "tests/conftest.py": "2a36e5f050afc291e39db2ef3d64769bac8b697154d88ca6be878878a689a439",

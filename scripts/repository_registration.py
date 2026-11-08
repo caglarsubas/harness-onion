@@ -142,22 +142,23 @@ def check_products(ext, products, read_packet, safe_load, chain_packets, v2, rec
     return count
 
 
-def _strict_json(raw, what):
-    """JSON with no repeated key and no NaN or infinity, from UTF-8 bytes."""
+def _strict_json(raw, what, clause="registry"):
+    """JSON with no repeated key and no NaN or infinity, from UTF-8 bytes; refusals carry the reader's clause
+    (`registry` or `placement`, MON-284-D5A-RULE)."""
     def pairs(items):
         keys = [key for key, _ in items]
-        need(len(keys) == len(set(keys)), "registry", "%s repeats a key" % what)
+        need(len(keys) == len(set(keys)), clause, "%s repeats a key" % what)
         return dict(items)
 
     def constant(token):
-        raise Refused("registration registry: %s holds %s" % (what, token))
-    need(type(raw) is bytes, "registry", "%s: bytes required" % what)
+        raise Refused("registration %s: %s holds %s" % (clause, what, token))
+    need(type(raw) is bytes, clause, "%s: bytes required" % what)
     try:
         return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs, parse_constant=constant)
     except Refused:
         raise
     except (UnicodeDecodeError, ValueError, RecursionError):
-        raise Refused("registration registry: %s does not parse" % what) from None
+        raise Refused("registration %s: %s does not parse" % (clause, what)) from None
 
 
 def base_rows(base_raw, safe_load):
@@ -218,11 +219,11 @@ def record_present(root):
     return os.path.lexists(os.path.join(os.fspath(root), *SUCCESSOR_REGISTRY_PATH.split("/")))
 
 
-def _root_bytes(root, rel):
+def _root_bytes(root, rel, clause="registry"):
     try:
         return Path(root).joinpath(*rel.split("/")).read_bytes()
     except OSError:
-        raise Refused("registration registry: %s cannot be read" % rel) from None
+        raise Refused("registration %s: %s cannot be read" % (clause, rel)) from None
 
 
 def registry_rows(root, safe_load):
@@ -257,7 +258,7 @@ def composed_placement_rows(base_rows, successor_raw, schema_raw):
     ids, names = [row.get("id") for row in rows], [row.get("name") for row in rows]
     need(len(set(ids)) == len(ids) and len(set(names)) == len(names), "placement",
          "the placement data repeats an id or a name")
-    record = _strict_json(successor_raw, "the successor placement record")
+    record = _strict_json(successor_raw, "the successor placement record", "placement")
     need(type(record) is dict and set(record) == {"schema", "decision", "repositories"}
          and type(record["repositories"]) is list and record["repositories"], "placement",
          "the successor placement record holds its schema pin, its decision and its rows only")
@@ -281,9 +282,9 @@ def placement_rows(root):
     """The placement's reader beside registry_rows (VIS-284-LPORACLE-2): with no successor placement record under
     `root`, the placement data's rows alone, as before 284; with one, composed_placement_rows over the data, the record
     and the schema, pinned twice. A record present but unreadable, a schema absent or a pin mismatched refuses."""
-    data = _strict_json(_root_bytes(root, BASE_PLACEMENT_PATH), "the placement data")
+    data = _strict_json(_root_bytes(root, BASE_PLACEMENT_PATH, "placement"), "the placement data", "placement")
     need(type(data) is dict and type(data.get("repositories")) is list, "placement", "the placement data's rows")
     if not placement_record_present(root):
         return tuple(dict(row) for row in data["repositories"])
-    return composed_placement_rows(data["repositories"], _root_bytes(root, SUCCESSOR_PLACEMENT_PATH),
-                                   _root_bytes(root, PLACEMENT_SCHEMA_PATH))
+    return composed_placement_rows(data["repositories"], _root_bytes(root, SUCCESSOR_PLACEMENT_PATH, "placement"),
+                                   _root_bytes(root, PLACEMENT_SCHEMA_PATH, "placement"))

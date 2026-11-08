@@ -1048,7 +1048,8 @@ V_TESTS = {
     "V4": ("test_v4_the_registry_differs_from_the_base_by_the_one_rider",),
     "V6": ("test_v6_the_hunk_class_record_rechecks_in_full",),
     "R": ("test_r_the_registration_rechecks_in_full",),
-    "S": ("test_s_the_successor_rule_refuses",),
+    "S": ("test_s_the_successor_rule_refuses",
+          "test_s_placement_rows_refuse_an_unreadable_record_with_the_placement_clause"),
 }
 V1_BOUND = "MET-REGISTRY-001 reviewed bytes are bound: "
 V1_DRIFT = "unreviewed MET-REGISTRY-001 source: "
@@ -1409,3 +1410,26 @@ def test_s_the_successor_rule_refuses(change):
         call = lambda: module.pin_v2(module, b"not v2")
     with pytest.raises(ValueError, match="registration"):
         call()
+
+# S, the placement readers' clause (MON-284-D5A-RULE: the D5a oracle's two placement_rows cases) -------------------------
+
+@pytest.mark.parametrize("change", ["record_without_schema", "record_a_directory"])
+def test_s_placement_rows_refuse_an_unreadable_record_with_the_placement_clause(change, tmp_path):
+    # A root holding the placement data and the successor placement record but not its schema, or a directory in the
+    # record's place: placement_rows refuses, and its refusal carries the clause `placement`.
+    module = _successor()[0]
+
+    def put(rel, raw):
+        target = tmp_path.joinpath(*rel.split("/"))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+    put(module.BASE_PLACEMENT_PATH, profile.reviewed_bytes(module.BASE_PLACEMENT_PATH))
+    if change == "record_without_schema":
+        put(module.SUCCESSOR_PLACEMENT_PATH, profile.reviewed_bytes(module.SUCCESSOR_PLACEMENT_PATH))
+        missing = module.PLACEMENT_SCHEMA_PATH
+    else:
+        tmp_path.joinpath(*module.SUCCESSOR_PLACEMENT_PATH.split("/")).mkdir(parents=True)
+        put(module.PLACEMENT_SCHEMA_PATH, profile.reviewed_bytes(module.PLACEMENT_SCHEMA_PATH))
+        missing = module.SUCCESSOR_PLACEMENT_PATH
+    with pytest.raises(module.Refused, match=re.escape("registration placement: %s cannot be read" % missing)):
+        module.placement_rows(tmp_path)
