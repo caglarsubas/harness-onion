@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/repository-registration-authority.json"
-AUTHORITY_SHA256 = "9cfa26d500e13f44736e869d45ef0c97d1e022bb935dbeab125687140c9d27ad"
+AUTHORITY_SHA256 = "2f6f091e9494ad68c312c74fe2f167ea1d31d6e75ed4d1127329bb3e4376ed2b"
 VALIDATOR_PATH = "scripts/validate_met_registry_001.py"
 BASE_COMMIT = "e515f0b83ca4b3cda9dca02acb6ac0db623b66df"
 NEW_PACKET = "MET-REGISTRY-001"
