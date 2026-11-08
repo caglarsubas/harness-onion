@@ -756,6 +756,7 @@ LITERAL_READERS = frozenset({
     "tests/test_language_placement.py",
     "tests/test_language_placement_oracle.py",
     "tests/test_met_adopt_006_oracle.py",
+    "tests/test_met_registry_001_oracle.py",
     "tests/test_provider_adoption.py",
     "tests/test_readiness.py",
     "tests/test_sector_catalog.py",
