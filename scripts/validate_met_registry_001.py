@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/repository-registration-authority.json"
-AUTHORITY_SHA256 = "134c2cb3080a201ee686baa338ba39c07fa9b3a17cd843d8322d946396bbfe22"
+AUTHORITY_SHA256 = "b47b230940ec8be731df545e1aa1163e074f80370d34ec40dcef312b1fc0f203"
 VALIDATOR_PATH = "scripts/validate_met_registry_001.py"
 BASE_COMMIT = "e515f0b83ca4b3cda9dca02acb6ac0db623b66df"
 NEW_PACKET = "MET-REGISTRY-001"
@@ -394,7 +394,7 @@ ERA_SHA256 = MappingProxyType({
     "scripts/repository_registration.py": "e8635f23dbf10572da331237483c8245ee590f9f423f54d6c8ce28b11c01736c",
     "scripts/validate_architecture.py": "161c6628845edbd9dfa7197407b786358438ae81ecfef19901dcb1686a97207f",
     "scripts/validate_readiness.py": "f60e7fdbfd5c2fa62aaa9416fad0a5b1494f5280b0ff53a2360a40f21084bf0c",
-    "tests/conftest.py": "2a36e5f050afc291e39db2ef3d64769bac8b697154d88ca6be878878a689a439",
+    "tests/conftest.py": "1b67efa897df8c7fdbd4c3cc3bd5b6ccd8f1e1bdce32b135f273f943570301b1",
     "tests/test_release_lock.py": "41f1e77372f5536d2812041fb32e79f2bc7b8ccd3f776e59bc5f0bc5a0b10521",
     "tests/test_release_lock_registration.py": "87fcc780c30d8269b6314d5b2d79799826ae45b5793f9922c585d0970c8d063e",
 })

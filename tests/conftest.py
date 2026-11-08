@@ -221,6 +221,12 @@ def pytest_make_collect_report(collector):
             sys.path.insert(0, str(collector.config.rootpath / "scripts"))
             __import__("validate_credential_lifecycle")
             __import__("validate_ci_performance")
+            # VIS-284-HEADROOM-2 (Q-HR-3 (a)): with the chain loaded, one full collection, then gc.freeze() moves
+            # the survivors out of the collector's traversal for the rest of the process, so later collections
+            # never re-walk the preloaded chain.
+            import gc
+            gc.collect()
+            gc.freeze()
     finally:
         sys.setrecursionlimit(limit)
         sys.path[:] = path
