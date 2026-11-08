@@ -1,6 +1,15 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-047
+## Current source preparation — MET-VERIFY-007
+
+MET-VERIFY-007 (harness-onion issue #235, slot 283): the raw-byte packet runner, the sixth publishing step (K = 3, 293
+packets at slot 283): the digest is the sha256 of exactly the bytes read, strict UTF-8, CR and a leading BOM refused,
+each with its own text; the meta packet publishes the transport successor product packets DIST-TRANSPORT-002 (mas-harness-distribution), CTRL-TRANSPORT-002 (mas-harness-control-plane) and IND-TRANSPORT-001 (mas-harness-industry-packs),
+each owning its exact make-target descriptor, with no ownership closer; gate material (the registry rider, the
+runner, its tests and the weights with the transport approval, and 283's D5a oracle and 282's as corrected at R3). Alpha2 OPEN; 289 accepted (the catalog at
+slot 282) plus MET-VERIFY-007 and its three products only.
+
+## Historical chain-checkpoint source preparation — MET-PERF-047
 
 MET-PERF-047 (CHAIN-COMPACTION-002, slot 282): the shadow chain checkpoint (K = 0, 289 packets at slot 282): the ledger
 of chain layers 189-281, its shadow-only reader and lane-run writer, and a D5a oracle, recorded in
@@ -1741,3 +1750,7 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 287 | `MET-PERF-046` | `Harness-Engineering` | PERF-046: eight parallel-suite workers (WORKERS 6 -> 8 in MET-PERF-039's form, recorded in architecture/parallel-workers/); gate material (the registry rider and ci/parallel_suite.py) |
 | 288 | `MET-ADOPT-007` | `Harness-Engineering` | AUTHORITY-MAP-001: the effective authority map (a data-only record with its validator, budget and R12 vectors and a D5a oracle; nothing enforced); gate material (the registry rider and the D5a oracle) |
 | 289 | `MET-PERF-047` | `Harness-Engineering` | CHAIN-COMPACTION-002: the shadow chain checkpoint (the ledger of layers 189-281, its shadow-only reader and lane-run writer, and a D5a oracle; nothing skipped until MET-PERF-048); gate material (the registry rider, conftest.py, two ci/ paths, the D5a oracle and 281's D5a oracle as updated by R12) |
+| 290 | `MET-VERIFY-007` | `Harness-Engineering` | issue #235: the raw-byte packet runner, the sixth publishing step (K = 3; the digest of the bytes read, strict UTF-8, CR and BOM refused); publishes the product packets DIST-TRANSPORT-002, CTRL-TRANSPORT-002 and IND-TRANSPORT-001; gate material (the registry rider, the runner, its tests and the weights, and 283's D5a oracle and 282's as corrected at R3) |
+| 291 | `DIST-TRANSPORT-002` | `mas-harness-distribution` | The distribution transport successor (product, published by MET-VERIFY-007); the raw-byte runner re-copied and its own descriptor, its 22 commands keeping DIST-005A's |
+| 292 | `CTRL-TRANSPORT-002` | `mas-harness-control-plane` | The control-plane transport successor (product, published by MET-VERIFY-007); the raw-byte runner re-copied, one regression test and its own descriptor, its 9 commands keeping CTRL-FIX-004's |
+| 293 | `IND-TRANSPORT-001` | `mas-harness-industry-packs` | The industry-packs transport packet (product, published by MET-VERIFY-007); the raw-byte runner re-copied, its own descriptor and the dispatch inventory line, its 12 commands keeping IND-BANK-002A's |

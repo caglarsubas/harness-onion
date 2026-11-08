@@ -449,5 +449,89 @@ else:
         self.assertNotIn("SAFE_LOCAL_SETTING", scrubbed)
 
 
+# MET-VERIFY-007 (harness-onion issue #235): the packet digest is the sha256 of exactly the bytes read once; the
+# packet is strict UTF-8 with no BOM and no CR. Each refusal has its own text; the first failing check wins.
+LF_PACKET = b"authority: raw-bytes\nprefetchCommands: []\n"
+REFUSALS = {
+    "V-BOM": (b"\xef\xbb\xbf" + LF_PACKET, "packet starts with a UTF-8 byte order mark"),
+    "V-UTF8": (LF_PACKET + b"bad: \xff\n", "packet is not strict UTF-8"),
+    "V-CRLF": (LF_PACKET.replace(b"\n", b"\r\n"), "packet has CRLF line endings"),
+    "V-CR": (LF_PACKET.replace(b"\n", b"\r", 1), "packet has a bare carriage return"),
+    "V-BOM+UTF8": (b"\xef\xbb\xbf" + LF_PACKET + b"bad: \xff\n", "packet starts with a UTF-8 byte order mark"),
+    "V-UTF8+CRLF": (b"bad: \xff\r\n" + LF_PACKET, "packet is not strict UTF-8"),
+    "V-CRLF+CR": (b"a: 1\r\nb: 2\rc: 3\n", "packet has CRLF line endings"),
+    "V-BOM+CRLF": (b"\xef\xbb\xbf" + LF_PACKET.replace(b"\n", b"\r\n"), "packet starts with a UTF-8 byte order mark"),
+    "V-UTF8+CR": (b"bad: \xff\r" + LF_PACKET, "packet is not strict UTF-8"),
+}
+
+
+class RawBytePacketTest(unittest.TestCase):
+    def test_v_lf_digest_is_the_sha256_of_the_bytes_read(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "packet.yaml"
+            path.write_bytes(LF_PACKET)
+            raw, text, digest = RUNNER.read_packet_bytes(path)
+            legacy = path.read_text(encoding="utf-8").encode("utf-8")
+        self.assertEqual(LF_PACKET, raw)
+        self.assertEqual(LF_PACKET.decode("utf-8"), text)
+        self.assertEqual(RUNNER.hashlib.sha256(LF_PACKET).hexdigest(), digest)
+        self.assertEqual(RUNNER.hashlib.sha256(legacy).hexdigest(), digest)
+
+    def test_each_refusal_has_its_own_text_and_the_order_wins(self) -> None:
+        for name, (content, verdict) in REFUSALS.items():
+            with self.subTest(vector=name), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "packet.yaml"
+                path.write_bytes(content)
+                with self.assertRaises(RUNNER.PacketTransportError) as caught:
+                    RUNNER.read_packet_bytes(path)
+                self.assertEqual(verdict, str(caught.exception))
+
+    def test_v_symlink_and_v_nonregular_refuse_at_the_read_step(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "packet.yaml"
+            target.write_bytes(LF_PACKET)
+            link = Path(directory) / "link.yaml"
+            link.symlink_to(target)
+            with self.assertRaises(RUNNER.PacketTransportError) as caught:
+                RUNNER.read_packet_bytes(link)
+            self.assertEqual("packet cannot be opened", str(caught.exception))
+            with self.assertRaises(RUNNER.PacketTransportError) as caught:
+                RUNNER.read_packet_bytes(Path(directory))
+            self.assertEqual("HARNESS_TASK_PACKET must name a regular file", str(caught.exception))
+
+    def test_a_first_read_refusal_exits_2_before_any_command(self) -> None:
+        cases = {name: content for name, (content, _) in REFUSALS.items()}
+        for name, content in cases.items():
+            with self.subTest(vector=name), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "packet.yaml"
+                path.write_bytes(content)
+                completed = subprocess.run(
+                    [sys.executable, "-I", "-B", str(RUNNER_PATH)],
+                    env={"PATH": os.environ.get("PATH", ""), "HARNESS_TASK_PACKET": str(path)},
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(2, completed.returncode)
+                self.assertEqual("packet transport refused: %s\n" % REFUSALS[name][1], completed.stderr)
+                self.assertEqual("", completed.stdout)
+
+    def test_the_re_read_runs_the_same_checks_then_the_digest(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "packet.yaml"
+            path.write_bytes(LF_PACKET)
+            _, _, digest = RUNNER.read_packet_bytes(path)
+            path.write_bytes(LF_PACKET)
+            RUNNER.verify_packet_digest(path, digest)  # V-REREAD-SAME
+            path.write_bytes(LF_PACKET.replace(b"raw-bytes", b"raw-bytez"))
+            with self.assertRaises(RUNNER.PacketTransportError) as caught:  # V-REREAD-CHANGED
+                RUNNER.verify_packet_digest(path, digest)
+            self.assertEqual("packet authority changed during execution", str(caught.exception))
+            path.write_bytes(LF_PACKET.replace(b"\n", b"\r\n"))
+            with self.assertRaises(RUNNER.PacketTransportError) as caught:  # V-REREAD-CRLF
+                RUNNER.verify_packet_digest(path, digest)
+            self.assertEqual("packet has CRLF line endings", str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -123,11 +123,13 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 289 and len(accepted) == 281
+    assert len(current) == 293 and len(accepted) == 281
     assert set(accepted) == set(current) - {profile.NEW_PACKET, *profile.PRODUCT_PACKETS, profile.successor.NEW_PACKET, *profile.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
     assert len(perf45.historical_catalog(current)) == 280
     assert len(sec4.historical_catalog(current)) == 278
     assert len(vf5.historical_catalog(current)) == 275
@@ -1350,9 +1352,13 @@ POSITION_CHANGES = ["inner", "missing", "twice", "other_inner", "not_python", "n
 
 
 def _era_packets():
-    """MET-VERIFY-006's era bridge (CONTRACT_279 s5): this layer's ownership check reads the live catalog without 279's
-    two products, as the head reads it."""
-    return {name: packet for name, packet in _packets().items() if name not in profile.successor.PRODUCT_PACKETS}
+    """The era bridge, generic: this layer's ownership check reads the live catalog without the product packets of
+    every newer layer on its successor route, as the head reads it, so a newer publish needs no new bridge."""
+    newer, layer = set(), profile.successor
+    while layer is not None:
+        newer.update(getattr(layer, "PRODUCT_PACKETS", ()))
+        layer = getattr(layer, "successor", None)
+    return {name: packet for name, packet in _packets().items() if name not in newer}
 
 
 def _ownership():
