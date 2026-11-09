@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/authority-map-f-authority.json"
-AUTHORITY_SHA256 = "edc6dcdb5ba02a8a45aa0b26be85ad8dcc93d97cb7d6122c8de7511150311f84"
+AUTHORITY_SHA256 = "745ac0c638e54422cfcbc66630fcb67282b39ac68d30684ad2e2a26596ba8c39"
 VALIDATOR_PATH = "scripts/validate_met_adopt_008.py"
 BASE_COMMIT = "98d1f6f1f87bf988d2b12c97132d66b8cf5f351c"
 NEW_PACKET = "MET-ADOPT-008"

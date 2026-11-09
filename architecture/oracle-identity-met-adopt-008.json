@@ -1,0 +1,38 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_adopt_008_oracle.py",
+  "sha256": "7f845b56e4c8a25fae106944a7c0d059ecd91585dc932f612628683e75cc3aa6"
+ },
+ "oracle": {
+  "agentId": "a232410374a43d790",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "6e0f91fc-67b2-40c8-bb8f-1ab11564fec7",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "6e0f91fc-67b2-40c8-bb8f-1ab11564fec7"
+  ]
+ },
+ "briefSha256": "f6a812c7826d947c3bb186651f0c082db4be528b6f946bdd3f4bff9ceb54f95e",
+ "candidateCommit": "4cf429b94645a6f409f7d37cac319875407e27ad",
+ "launched": "2026-11-09T11:34:56+08:00",
+ "finished": "2026-11-09T11:58:48+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-285-D5A-CLEAR",
+  "date": "2026-11-09"
+ },
+ "disclosures": [
+  "brief f6a812c7 and launch prompt ee68a984 (MON-285-ARGV 2); the author's only inputs are CONTRACT_285 erratum 1 (409fd522) and the light tree's meta YAML with its 12 closed-path strings masked (68cd14fd), plus erratum 3's sentence and two base facts the operator stated by line (MON-285-E3); the author is a fresh agent that authored nothing in c1 or c2 and ran py_compile only, no pytest",
+  "run blind by the operator, R00, in-process without the test runner (C40) on git-archive exports: on the light tree ca2e7667, 38 passed and 1 failed (the advisory case: section 2's sentence on self.up was imprecise, corrected by erratum 3); on c2 4cf429b9, with the fix 905b317f -> 7f845b56, 40 passed and 0 failed (log cc9ea2f0)",
+  "the operator never opened the oracle, its diff or the run logs; the lane monitor reviewed the diff 0556b3d4 and the new file as a non-author (MON-285-D5A-CLEAR)",
+  "the author's disclosed slips: the constant STEP_ANSWERS is left unused; a stale bytecode cache stayed in its work folder; py_compile writes bytecode despite -B; one grep pattern on its command line held the legacy brand term (in no file); it read the masked YAML once through a read-only Python check instead of sed",
+  "placed in the tree by bytes at c3 together with this identity (MON-285-D5A-CLEAR)"
+ ]
+}
