@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-authority.json"
-AUTHORITY_SHA256 = "f8e7f3b4e088baa9ce92f97b1a363c6777a1511051ac59f57f0ebb33aac6bc93"
+AUTHORITY_SHA256 = "b67400d3a218f3a9317311df815344c50c487303f96ad2eb503802fe15dfcc54"
 VALIDATOR_PATH = "scripts/validate_met_perf_049.py"
 BASE_COMMIT = "0fd885ff3a9a80f8882ec4a03e0d16e95675868c"
 NEW_PACKET = "MET-PERF-049"
