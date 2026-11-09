@@ -1246,7 +1246,7 @@ def test_a5_validate_fix_replays_through_the_era_models_own_check():
         return types.SimpleNamespace(check=check)
 
     assert profile._replay(stand_in(11), packets) is None
-    assert calls == [(profile.regular_bytes, frozenset(packets))]
+    assert calls == [(profile.reviewed_bytes, frozenset(packets))]
     assert profile._replay(stand_in(10), packets) == dict(live, budgetVectors=10)
     raws = _fix_inputs()[0]
     with pytest.raises(ValueError, match=re.escape(A5)):
