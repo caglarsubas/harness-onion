@@ -1049,7 +1049,7 @@ OWN_PATH = "task-packets/MET-ADOPT-008.yaml"
 # Each of V1, A, V4 and V6 and the tests that make it fail.
 V_TESTS = {
     "V1": ("test_v1_every_era_file_is_bound_by_its_digest",),
-    "A": ("test_a_the_fix_rechecks_in_full",),
+    "A": ("test_a_the_fix_rechecks_in_full", "test_a5_validate_fix_replays_through_the_era_models_own_check"),
     "V4": ("test_v4_the_registry_differs_from_the_base_by_the_one_rider",),
     "V6": ("test_v6_the_hunk_class_record_rechecks_in_full",),
 }
@@ -1206,6 +1206,37 @@ def test_a_the_fix_rechecks_in_full(change):
     assert mutant != raws or change == "a5_replay"
     with pytest.raises(ValueError, match=re.escape(message)):
         profile.check_fix(mutant, budget)
+
+def test_a5_validate_fix_replays_through_the_era_models_own_check():
+    # P1-1 (MON-285-R1): A5 as shipped. validate_fix hands check_fix a replay that runs the era model's own
+    # check(read, packets) over the head's live bytes and the catalog's ids and needs 11 budget vectors. The stand-in
+    # models are plain arguments to _replay; nothing in the layer is patched. A replay that stops calling the model, or
+    # a model that counts other than 11 vectors, fails here.
+    import types
+    packets = _chain_packets()
+    assert profile.validate_fix(packets) is None
+    model = profile._era_model(profile.MODEL_PATH, profile.MODEL_NAME)
+    live = model.check(profile.regular_bytes, frozenset(packets))
+    assert live["budgetVectors"] == 11
+    calls = []
+
+    def stand_in(count):
+        def check(read, ids):
+            calls.append((read, ids))
+            return dict(model.check(read, ids), budgetVectors=count)
+        return types.SimpleNamespace(check=check)
+
+    assert profile._replay(stand_in(11), packets) is None
+    assert calls == [(profile.regular_bytes, frozenset(packets))]
+    assert profile._replay(stand_in(10), packets) == dict(live, budgetVectors=10)
+    raws = _fix_inputs()[0]
+    with pytest.raises(ValueError, match=re.escape(A5)):
+        profile.check_fix(raws, lambda raw: profile._replay(stand_in(10), packets))
+    fix = [node for node in ast.parse(Path(profile.__file__).read_bytes()).body
+           if isinstance(node, ast.FunctionDef) and node.name == "validate_fix"]
+    assert len(fix) == 1 and ast.unparse(fix[0].body[-1]) == (
+        "check_fix({path: _verified(path) for path in (MODEL_PATH, VECTORS_PATH, MAP_PATH)}, "
+        "lambda raw: _replay(model, packets))")
 
 
 # V4, the registry --------------------------------------------------------------------------------------------------------

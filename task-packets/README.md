@@ -5,8 +5,8 @@
 MET-ADOPT-008 (slot 285): AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): the authority map's
 reference ledger refuses every mutation of an existing reservation while the ledger is down, an exact commit replay
 included, with no state change, and the budget vectors gain VB-11; gate material (the registry rider, the weights with
-the transport approval, and the D5a oracle). Alpha2 OPEN; 295 accepted (the catalog at slot 284) plus MET-ADOPT-008
-only.
+the transport approval, the D5a oracle, and 281's D5a oracle as corrected by the lane monitor). Alpha2 OPEN; 295
+accepted (the catalog at slot 284) plus MET-ADOPT-008 only.
 
 ## Historical registration source preparation — MET-REGISTRY-001
 
