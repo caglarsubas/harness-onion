@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-REGISTRY-001
+## Current source preparation — MET-ADOPT-008
+
+MET-ADOPT-008 (slot 285): AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): the authority map's
+reference ledger refuses every mutation of an existing reservation while the ledger is down, an exact commit replay
+included, with no state change, and the budget vectors gain VB-11; gate material (the registry rider, the weights with
+the transport approval, and the D5a oracle). Alpha2 OPEN; 295 accepted (the catalog at slot 284) plus MET-ADOPT-008
+only.
+
+## Historical registration source preparation — MET-REGISTRY-001
 
 MET-REGISTRY-001 (slot 284): R13's registration, the seventh publishing step (K = 1, 295 packets at slot 284):
 mas-harness-research-lab (kind meta, releaseSet EXCLUDED) is a row of the successor registry record, read with the
@@ -1766,3 +1774,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 293 | `IND-TRANSPORT-001` | `mas-harness-industry-packs` | The industry-packs transport packet (product, published by MET-VERIFY-007); the raw-byte runner re-copied, its own descriptor and the dispatch inventory line, its 12 commands keeping IND-BANK-002A's |
 | 294 | `MET-REGISTRY-001` | `Harness-Engineering` | R13's registration, the seventh publishing step (K = 1, 295 packets at slot 284): `mas-harness-research-lab` (kind meta, releaseSet EXCLUDED) is a row of the successor registry record, read with the registry through one composition reader by readiness, architecture, language placement and the release lock (ADRs 0001 and 0010); R8 clause 2 by the successor record and function; publishes LAB-REPO-001 |
 | 295 | `LAB-REPO-001` | `mas-harness-research-lab` | R13's bootstrap PR over its initial commit cc92594d (product, published by MET-REGISTRY-001): the shared offline transport, the standard-library acceptance tools, the bridge's research records added or modified since the base and the regenerated manifest |
+| 296 | `MET-ADOPT-008` | `Harness-Engineering` | AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with no state change; VB-11 and the refused-step invariant |

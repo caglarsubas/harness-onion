@@ -2,32 +2,31 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_adopt_007_oracle.py",
-  "sha256": "02963afbb0254550df51bbcf7871659f0cf8fca3d4ab10797668531cbb3aa523"
+  "sha256": "7c126fbf19843478e1e2b95431cda9e9786f233822a53ea61fdabcfd2a525fb0"
  },
  "oracle": {
-  "agentId": "d6fe1a25-8485-43f5-8c84-afc766817ada",
+  "agentId": "local_ca2c939b-7428-4f0a-9f75-6836f275b1a8",
   "model": "claude-opus-5-5"
  },
  "operator": {
   "role": "LANE_SESSION",
-  "agentId": "4f798012-9782-42ce-85bc-8473c4a33a34",
+  "agentId": "6e0f91fc-67b2-40c8-bb8f-1ab11564fec7",
   "lane": "r00"
  },
  "author": {
   "agentIds": [
-   "local_805af49e",
-   "4f798012-9782-42ce-85bc-8473c4a33a34"
+   "6e0f91fc-67b2-40c8-bb8f-1ab11564fec7"
   ]
  },
  "briefSha256": "fa12527be42dfa5d50d067dbf280c00cd78ec237b2aa9655dccaf7808d2ba7ae",
- "candidateCommit": "b2f6f0307b97627663532825d9d1c409a19cf832",
- "launched": "2026-11-07T01:57:19+08:00",
- "finished": "2026-11-07T02:01:00+08:00",
+ "candidateCommit": "ca2e76675eea9cd9869f0228207bbad3c538489a",
+ "launched": "2026-11-09T11:39:29+08:00",
+ "finished": "2026-11-09T11:42:46+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-281-ORACLE-KEEP",
-  "date": "2026-11-07"
+  "ref": "MON-285-O281",
+  "date": "2026-11-09"
  },
  "disclosures": [
   "V9 (a) update of 281's oracle (0961aeee) for slot 282 F, by R12 as a non-author of MET-ADOPT-007 and MET-PERF-047 (MON-R12-V9-ORACLE); written from the kit only (MANIFEST d406b47b: KIT_README, V9_RULE, V9_VECTORS, F's authority-map README, the oracle and its identity); py_compile only, no pytest",
@@ -36,6 +35,7 @@
   "candidateCommit filled by R00 (the operator) by script: first W″ a64e29d7, then W⁶ b2f6f030 after both counted runs were repeated there (MON-282-ORACLE-RECOUNT: 94 passed, 0 failed, 0 skipped); F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)",
   "launched is the scratch directory's creation; the kit was read a few minutes before it",
   "one blind run on W″ a64e29d7 (MON-281-ORACLE-BLIND), in-process by R00's caller call_oracle_blind_281.py, never opened by R00: 94 passed, 0 failed, 0 skipped",
-  "correction (MON-281-ORACLE-OPERATOR): operator is R00's lane session, which placed the oracle, ran its blind run and filled this identity; R12 had named itself as operator, which made oracle equal operator (NOT_INDEPENDENT); the KEEP ruling MON-281-ORACLE-KEEP stands"
+  "correction (MON-281-ORACLE-OPERATOR): operator is R00's lane session, which placed the oracle, ran its blind run and filled this identity; R12 had named itself as operator, which made oracle equal operator (NOT_INDEPENDENT); the KEEP ruling MON-281-ORACLE-KEEP stands",
+  "corrected under MON-285-O281 by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), applying the text of Build-R12-ConformanceLabs's report MON-R12-285 (FAIL BY THE FIX on the ten-vector count only, 86 of 94 passing); 4 literal edits; was 02963afb; briefSha256 unchanged (the correction had no brief, MON-285-E2-OK); R00 placed it by bytes and never opened it"
  ]
 }
