@@ -344,6 +344,15 @@ def _demote_repo(tmp_path, live_extra=b"", v24=False, statements=None, attested=
 NODE281 = sha(b"tests/test_l281.py::test_x")
 
 
+def test_a_later_slots_other_hunk_is_class_a_and_restarts(tmp_path):
+    # MET-PERF-049 (286 3.11): a later slot's class-other hunk stays class A, input, when its continued replay does not
+    # land on the checkpoint digest (here the ledger attests other bytes); an exact landing demotes instead (vector 39).
+    reader = _reader(_demote_repo(tmp_path, attested=b"X = 'z'\nN = 288\n"))
+    found = reader.disagreements
+    assert reader.demoted == [] and [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")]
+    assert "1 of 2 hunks of a class not normalised" in found[0][3]
+
+
 def test_v39_a_later_slots_authored_other_hunk_demotes_on_an_exact_landing(tmp_path):
     reader = _reader(_demote_repo(tmp_path))
     assert reader.disagreements == [] and reader.demoted == [

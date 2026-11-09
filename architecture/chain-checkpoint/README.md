@@ -84,8 +84,8 @@ Every digest is at the checkpoint tree.
   digest-mismatched, malformed, miscounted or duplicated, or an authority that carries classes itself, is class A,
   kind input, as is a bad context, and so is a named record that is a link, not a file, or unreadable (an unnamed
   one changes nothing). Each class is re-checked by position by the rule the record names: `hunkClassRuleSha256`
-  picks chainmech v2.2's or v2.3's (`RULES_BY_SHA`; the reader holds v2.3's copy, and v2.2's is v2.3's with
-  `register` off), any other digest is class A, and `hunkClassVocabulary` must be that rule's vocabulary. A
+  picks chainmech v2.2's, v2.3's or v2.4's (`RULES_BY_SHA`; the reader holds v2.3's and v2.4's copies, and v2.2's is
+  v2.3's with `register` off; MET-PERF-049), any other digest is class A, and `hunkClassVocabulary` must be that rule's vocabulary. A
   reordered record is class A.
 - A reverse hunk that carries a `class` member is checked as an entry first: a class that is not a string is a
   broken entry (corrupt); otherwise the authority carries classes itself (class A, kind input).

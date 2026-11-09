@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-ADOPT-008
+## Current source preparation — MET-PERF-049
+
+MET-PERF-049 (slot 286): CHAIN-COMPACTION-002's ledger rewrite step (K = 0, 297 packets at slot 286): the chain
+checkpoint's reader gains the class cache, class rule v2.4 and the demoted (authored) classification, MET-PERF-048's
+provisions ride inert, the parallel suite runs twelve workers, and the second checkpoint is written at slot 286; gate
+material (the ci/ sources and the weights with the transport approval, the registry rider, and the D5a oracle). Alpha2
+OPEN; 296 accepted (the catalog at slot 285) plus MET-PERF-049 only.
+
+## Historical authority-map fix source preparation — MET-ADOPT-008
 
 MET-ADOPT-008 (slot 285): AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): the authority map's
 reference ledger refuses every mutation of an existing reservation while the ledger is down, an exact commit replay
@@ -1775,3 +1783,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 294 | `MET-REGISTRY-001` | `Harness-Engineering` | R13's registration, the seventh publishing step (K = 1, 295 packets at slot 284): `mas-harness-research-lab` (kind meta, releaseSet EXCLUDED) is a row of the successor registry record, read with the registry through one composition reader by readiness, architecture, language placement and the release lock (ADRs 0001 and 0010); R8 clause 2 by the successor record and function; publishes LAB-REPO-001 |
 | 295 | `LAB-REPO-001` | `mas-harness-research-lab` | R13's bootstrap PR over its initial commit cc92594d (product, published by MET-REGISTRY-001): the shared offline transport, the standard-library acceptance tools, the bridge's research records added or modified since the base and the regenerated manifest |
 | 296 | `MET-ADOPT-008` | `Harness-Engineering` | AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with no state change; VB-11 and the refused-step invariant |
+| 297 | `MET-PERF-049` | `Harness-Engineering` | CHAIN-COMPACTION-002's ledger rewrite step (K = 0, 297 packets at slot 286): the reader's class cache, class rule v2.4, the demoted (authored) classification and twelve parallel-suite workers; the second checkpoint written at slot 286 |
