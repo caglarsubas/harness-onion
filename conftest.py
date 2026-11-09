@@ -1,6 +1,8 @@
 """Source-only diagnostics and the chain checkpoint's shadow reader (MET-PERF-047): no selection, fixture or authority
 changes; the reader only observes and records, never changes a session's outcome, and a missing or failing reader
-prints one class-C line."""
+prints one class-C line. MET-PERF-049 (P-048-2, inert at 286): one guarded collection hook calls the reader's selection
+entry point only when the reader exposes one (no reader does at 286; MET-PERF-048's G1 module would), and a failure
+there is one class-C line with the selection unchanged."""
 from importlib.util import module_from_spec as _module_from_spec
 from importlib.util import spec_from_file_location as _spec_from_file_location
 from os import environ as _environ
@@ -136,6 +138,18 @@ def pytest_sessionstart(session):
         _READER["reader"] = reader
     except Exception as exc:
         _checkpoint_line("chain-checkpoint shadow: class C, the reader raised at session start: %s" % type(exc).__name__)
+
+
+def pytest_collection_modifyitems(session, config, items):
+    # MET-PERF-049 P-048-2: inert unless the reader exposes a selection entry point.
+    reader = _READER.get("reader")
+    select = getattr(reader, "select", None) if reader is not None else None
+    if select is None:
+        return
+    try:
+        select(items, config)
+    except Exception as exc:
+        _checkpoint_line("chain-checkpoint shadow: class C, the reader's selection raised: %s" % type(exc).__name__)
 
 
 def pytest_runtest_logreport(report):

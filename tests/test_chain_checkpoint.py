@@ -1,4 +1,6 @@
-"""MET-PERF-047: the chain checkpoint's reader and writer, vectors 1-14 (architecture/chain-checkpoint/vectors.json).
+"""MET-PERF-047: the chain checkpoint's reader and writer, vectors 1-14 (architecture/chain-checkpoint/vectors.json);
+MET-PERF-049 (slot 286) adds vectors 15-46: class rule v2.4, the class cache, the ledger hunk side record, MET-PERF-048's
+inert provisions and the demotion.
 Each case builds its own small repository under tmp_path, except the vector-11 case on 281's published authority,
 which rebuilds 281's edited files to each beforeSha256 with the reader's own rebuild, under 281's context, after every
 newer authority's replay: it never requires a file to be still at 281's afterSha256. Its pending files are accepted by
@@ -219,9 +221,10 @@ def test_v10_the_conftest_loads_the_reader_by_path_inside_a_guard():
     guarded = [n for n in ast.walk(tree) if isinstance(n, ast.Try)
                and any(isinstance(h.type, ast.Name) and h.type.id == "Exception" for h in n.handlers)]
     assert '"ci" / "chain_checkpoint.py"' in source and "_planeon_met_perf_047_chain_checkpoint" in source
-    assert len(guarded) == 5     # main's conftest has none: the line writer, the load and three hooks (P047-C3-5)
+    assert len(guarded) == 6     # the line writer, the load and three hooks (P047-C3-5), and P-048-2's collection hook (286)
     functions = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
-    for name in ("_checkpoint_line", "pytest_sessionstart", "pytest_runtest_logreport", "pytest_unconfigure"):
+    for name in ("_checkpoint_line", "pytest_sessionstart", "pytest_runtest_logreport", "pytest_unconfigure",
+                 "pytest_collection_modifyitems"):
         last = functions[name].body[-1]
         assert isinstance(last, ast.Try) and any(isinstance(h.type, ast.Name) and h.type.id == "Exception"
                                                  for h in last.handlers), name
@@ -311,12 +314,42 @@ def test_every_vector_has_a_test():
         assert any(("_v%02d_" % vid) in n or n.startswith("test_v%02d" % vid) for n in names), vid
 
 
-def test_a_later_slots_other_hunk_is_class_a_and_restarts(tmp_path):
+def _demote_repo(tmp_path, live_extra=b"", v24=False, statements=None, attested=None, before_override=None):
+    """A later authority's authored class-other edit on layer 281's validator (vectors 39-46): its hunks undo to the
+    attested bytes, so the continued replay lands exactly unless a case breaks it."""
     before, after = b"X = 'a'\nN = 288\n", b"X = 'b'\nN = 289\n"
-    root = _cascade_repo(tmp_path, before=before, after=after,
+    root = _cascade_repo(tmp_path, live_extra=live_extra, before=before, after=after,
                          hunks=[_hunk(5, b"b", b"a", "other"), _hunk(14, b"9", b"8", "cascade")])
-    found = _reader(root).disagreements
-    assert [(d[0], d[2], d[4]) for d in found] == [(281, "A", "input")] and "1 of 2 hunks of a class not normalised" in found[0][3]
+    apath = "architecture/next1-authority.json"
+    if before_override is not None:      # the entry's beforeSha256 no longer matches its full undo
+        body = json.loads((root / apath).read_text())
+        body["changedFiles"]["scripts/validate_l281.py"]["beforeSha256"] = sha(before_override)
+        (root / apath).write_text(json.dumps(body) + "\n")
+        side = json.loads(_side_path(root, apath).read_text())
+        _bind(root, apath, (json.dumps(side) + "\n").encode())
+    if v24:
+        side = json.loads(_side_path(root, apath).read_text())
+        side.update(hunkClassRuleSha256=CK.RULE_V24_SHA256, outcomeStatements=statements if statements is not None else [])
+        side["hunkClassContext"]["countPairs"] = [[288, 289]]
+        _bind(root, apath, (json.dumps(side) + "\n").encode())
+    if attested is not None:             # the ledger attests other bytes for the file (an older, unauthored change)
+        record = json.loads((root / CK.RECORD_PATH).read_text())
+        record["layers"][0]["validatorSha256"] = sha(attested)
+        raw = (json.dumps(record, sort_keys=True) + "\n").encode()
+        (root / CK.RECORD_PATH).write_bytes(raw)
+        _rename(root, raw)
+    return root
+
+
+NODE281 = sha(b"tests/test_l281.py::test_x")
+
+
+def test_v39_a_later_slots_authored_other_hunk_demotes_on_an_exact_landing(tmp_path):
+    reader = _reader(_demote_repo(tmp_path))
+    assert reader.disagreements == [] and reader.demoted == [
+        {"slot": 281, "path": "scripts/validate_l281.py", "authority": "architecture/next1-authority.json"}]
+    line, record = reader.finish("b" * 40)
+    assert record["demoted"][0]["countEffect"] == "neutral" and record["attestedFraction"] == 0.0 and "demoted 1" in line
 
 
 def _rename(root, raw):
@@ -330,7 +363,7 @@ def test_the_count_effect_table_is_the_single_source():
     rows = {}
     for line in (ROOT / "architecture/chain-checkpoint/README.md").read_text().splitlines():
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if line.startswith("| ") and len(cells) == 4 and cells[2] in ("restart", "neutral", "count"):
+        if line.startswith("| ") and len(cells) == 4 and cells[2] in ("restart", "neutral", "count", "pending isolation"):
             rows[cells[0]] = (cells[1], cells[2])
     assert rows.pop("agree") == ("—", "count") and rows == CK.COUNT_EFFECT
     vectors = json.loads((ROOT / "architecture/chain-checkpoint/vectors.json").read_bytes())
@@ -617,11 +650,11 @@ def test_a_class_key_inside_a_reverse_hunk(tmp_path, cls, expect):
 @pytest.mark.parametrize("vocab, rule, reason", [
     (("bridge", "cascade", "other", "record"), "v22", None),
     (("bridge", "cascade", "other", "record", "register"), "v22", "hunkClassVocabulary is not the closed vocabulary of its rule"),
-    (("bridge", "cascade", "other", "record", "register"), "none", "not a rule the reader holds (v2.2 or v2.3)")])
+    (("bridge", "cascade", "other", "record", "register"), "none", "not a rule the reader holds (v2.2, v2.3 or v2.4)")])
 def test_rules_by_sha_bind_each_records_own_rule(tmp_path, vocab, rule, reason):
     """MON-282-W2-RULED: a record's hunkClassRuleSha256 picks chainmech v2.2's or v2.3's rule and its vocabulary."""
     assert CK.RULES_BY_SHA == {CK.RULE_V22_SHA256: (("bridge", "cascade", "other", "record"), False),
-                               CK.RULE_SHA256: (CK.CLASSES, True)}
+                               CK.RULE_SHA256: (CK.CLASSES, True), CK.RULE_V24_SHA256: (CK.CLASSES, True)}
     assert CK.CLASSES == ("bridge", "cascade", "other", "record", "register")
     root = _cascade_repo(tmp_path)
     apath = "architecture/next1-authority.json"
@@ -745,3 +778,303 @@ def test_the_writer_records_each_check_pair_once():
     assert sorted(tuple(sorted(e["ids"])) for e in entries) == [("CTRL-FIX-004", "CTRL-INTEGRATE-001"), ("DIST-005", "DIST-005A")]
     assert {e["type"] for e in entries} == {"supersession"} and CK.check_pairs(entries) == []
     assert CK.check_pairs([dict(entries[0]), dict(entries[0])]) == ["ledger checkPairs[1]: repeated (slot 279)"]
+
+
+# ---- MET-PERF-049 (slot 286): vectors 15-38 and 40-46 ----
+def _h24(before, after):
+    p = 0
+    while p < min(len(before), len(after)) and before[p] == after[p]:
+        p += 1
+    s = 0
+    while s < min(len(before), len(after)) - p and before[-1 - s] == after[-1 - s]:
+        s += 1
+    return p, after[p:len(after) - s], before[p:len(before) - s]
+
+
+def _c24(k=0, pairs=((295, 296),), new_tests=()):
+    return {"prevValidator": "scripts/validate_prev.py", "prevTest": "tests/test_prev.py", "newPacket": "NEW-1",
+            "products": ["PROD-%d" % i for i in range(1, k + 1)], "steps": [1, 1 + k], "pairs": [list(p) for p in pairs],
+            "newTests": list(new_tests)}
+
+
+def _cls24(path, before, after, ctx):
+    at, rm, ins = _h24(before, after)
+    return CK.classify_v24(path, after, at, rm, ins, ctx, seen=set())
+
+
+L24 = "scripts/validate_some_layer.py"
+CHAIN0 = b"CHAIN = {A, successor.NEW_PACKET}\n"
+
+
+def test_v15_an_undeclared_digit_move_is_other():
+    assert _cls24(L24, b"require(len(v) == 10)\n", b"require(len(v) == 11)\n", _c24()) == "other"
+
+
+def test_v16_a_declared_pair_is_cascade():
+    assert _cls24(L24, b"n = 295\n", b"n = 296\n", _c24()) == "cascade"
+    assert _cls24(L24, b"p = 311\n", b"p = 312\n", _c24(pairs=((295, 296), (311, 312)))) == "cascade"
+
+
+def test_v17_the_collision_residual_stays_cascade():
+    assert _cls24(L24, b"limit = 295\n", b"limit = 296\n", _c24()) == "cascade"
+
+
+def test_v18_f1_at_k0_is_cascade():
+    assert _cls24(L24, CHAIN0, b"CHAIN = {A, successor.NEW_PACKET, successor.successor.NEW_PACKET}\n", _c24()) == "cascade"
+
+
+def test_v19_f2_at_k_two_is_cascade():
+    after = b"CHAIN = {A, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS}\n"
+    assert _cls24(L24, CHAIN0, after, _c24(k=2, pairs=((293, 296),))) == "cascade"
+
+
+def test_v20_f3_in_key_order_is_cascade():
+    assert _cls24(L24, b'I = {"O-1"}\n', b'I = {"O-1", "NEW-1", "PROD-1", "PROD-2"}\n', _c24(k=2, pairs=((293, 296),))) == "cascade"
+    assert _cls24(L24, b'I = {"O-1"}\n', b'I = {"O-1", "NEW-1"}\n', _c24()) == "cascade"
+
+
+def test_v21_the_refused_member_forms_are_other():
+    k2 = _c24(k=2, pairs=((293, 296),))
+    assert _cls24(L24, CHAIN0, b"CHAIN = {A, successor.NEW_PACKET, successor.successor.NEW_PACKET}\n", k2) == "other"
+    assert _cls24(L24, CHAIN0, b"CHAIN = {A, successor.NEW_PACKET, successor.successor.NEW_PACKET, "
+                               b"*successor.successor.PRODUCT_PACKETS}\n", _c24()) == "other"
+    assert _cls24(L24, b'I = {"O-1"}\n', b'I = {"O-1", "NEW-1", "PROD-2", "PROD-1"}\n', k2) == "other"
+    assert _cls24(L24, b'I = {"O-1"}\n', b'I = {"O-1", "NEW-1", "PROD-1"}\n', k2) == "other"
+    assert _cls24(L24, b"CHAIN = {A}\n", b'CHAIN = {A, successor.NEW_PACKET, "NEW-1"}\n', _c24()) == "other"
+
+
+WEIGHTS0 = b'{\n  "tests/test_a.py": 4.5,\n  "tests/test_b.py": 6.5\n}\n'
+
+
+def test_v22_a_weights_append_is_record():
+    after = b'{\n  "tests/test_a.py": 4.5,\n  "tests/test_b.py": 6.5,\n  "tests/test_new.py": 16.9\n}\n'
+    assert _cls24("ci/parallel_suite_weights.json", WEIGHTS0, after, _c24(new_tests=("tests/test_new.py",))) == "record"
+
+
+def test_v23_a_weights_re_measure_is_other():
+    after = b'{\n  "tests/test_a.py": 4.5,\n  "tests/test_b.py": 6.6\n}\n'
+    assert _cls24("ci/parallel_suite_weights.json", WEIGHTS0, after, _c24()) == "other"
+
+
+def test_v24_a_duplicate_weights_key_is_other():
+    after = b'{\n  "tests/test_a.py": 4.5,\n  "tests/test_b.py": 6.5,\n  "tests/test_a.py": 9.9\n}\n'
+    assert _cls24("ci/parallel_suite_weights.json", WEIGHTS0, after, _c24(new_tests=("tests/test_a.py",))) == "other"
+
+
+def _rec24(pairs):
+    return {"hunkClassContext": {"newPacket": "P", "prevValidator": "v", "prevTest": "t", "steps": [1, 1], "countPairs": pairs},
+            "authorityPacket": "P", "hunkClassRuleSha256": CK.RULE_V24_SHA256, "hunkClassVocabulary": list(CK.CLASSES),
+            "baselinePackets": {str(i): "x" for i in range(295)}}
+
+
+def test_v25_a_count_pairs_fault_is_a_binding_fault():
+    assert CK.bind_context("a.json", _rec24([[311, 312]])) is None
+    for bad in ([[311, 312], [311, 312]], [[311, 313]], [[295, 296]], [[311, "312"]], "x"):
+        assert CK.bind_context("a.json", _rec24(bad)) == "hunkClassContext.countPairs is malformed", bad
+    four = _rec24([])
+    del four["hunkClassContext"]["countPairs"]
+    assert CK.bind_context("a.json", four) == "hunkClassContext missing or malformed"
+
+
+def _record_of(root, cache, cap=CK.CAP_SECONDS):
+    reader = CK.Reader(root=root, tree="0" * 40, clock=lambda: 0.0, cap=cap, cache=cache)
+    reader.start()
+    return json.dumps(reader.finish("b" * 40)[1], sort_keys=True)
+
+
+def test_v26_cached_and_uncached_readings_are_byte_equal(tmp_path):
+    for i, build in enumerate((lambda p: _cascade_repo(p), lambda p: _demote_repo(p), lambda p: _demote_repo(p, live_extra=b"#\n"))):
+        root = build(tmp_path / ("r%d" % i))
+        assert _record_of(root, True) == _record_of(root, False)
+    root = _cascade_repo(tmp_path / "budget")
+    assert _record_of(root, True, cap=-1) == _record_of(root, False, cap=-1) and '"over-budget"' in _record_of(root, True, cap=-1)
+
+
+def test_v27_l2_never_serves_another_newer_set(tmp_path):
+    root = _demote_repo(tmp_path)
+    first = _reader(root)
+    assert first._l2 and first.demoted
+    body = json.loads((root / "architecture/next1-authority.json").read_text())
+    body["changedFiles"]["scripts/validate_l281.py"]["reverseHunks"][0]["at"] = 4
+    (root / "architecture/next1-authority.json").write_text(json.dumps(body) + "\n")
+    side = json.loads(_side_path(root, "architecture/next1-authority.json").read_text())
+    _bind(root, "architecture/next1-authority.json", (json.dumps(side) + "\n").encode())
+    second = _reader(root)
+    assert second._l2 is not first._l2 and second.demoted == [] and [d[2] for d in second.disagreements] == ["A"]
+
+
+def _side286():
+    base, new = b'{"layers": [1]}\n', b'{"layers": [1, 2]}\n'
+    side = WR.ledger_hunks(base, new, "architecture/ledger-rewrite-authority.json", 286)
+    raw = (json.dumps(side) + "\n").encode()
+    entry = {"beforeSha256": sha(base), "afterSha256": sha(new),
+             "reverseHunksRecord": {"path": WR.LEDGER_HUNKS_DIR + "/286.json", "sha256": sha(raw)}}
+    return side, raw, entry, new
+
+
+def _check286(side, raw=None, entry=None, live=None, named=True):
+    _, raw0, entry0, new = _side286()
+    raw = raw if raw is not None else (json.dumps(side) + "\n").encode()
+    entry = entry if entry is not None else dict(entry0, reverseHunksRecord={"path": WR.LEDGER_HUNKS_DIR + "/286.json", "sha256": sha(raw)})
+    return WR.check_ledger_hunks(entry, raw, sha(raw) if named else None, "architecture/ledger-rewrite-authority.json",
+                                 live if live is not None else new)
+
+
+def test_v28_the_side_record_missing():
+    side, raw, entry, new = _side286()
+    assert WR.check_ledger_hunks(entry, raw, sha(raw), "architecture/ledger-rewrite-authority.json", new) is None
+    assert "missing" in WR.check_ledger_hunks(entry, None, sha(raw), "architecture/ledger-rewrite-authority.json", new)
+
+
+def test_v29_the_side_record_unnamed():
+    side, raw, entry, new = _side286()
+    assert "not named" in WR.check_ledger_hunks(entry, raw, None, "architecture/ledger-rewrite-authority.json", new)
+
+
+def test_v30_the_side_record_digest_differs():
+    side, raw, entry, new = _side286()
+    assert "digest differs" in WR.check_ledger_hunks(entry, raw, "0" * 64, "architecture/ledger-rewrite-authority.json", new)
+
+
+def test_v31_the_side_record_malformed():
+    side, _, _, _ = _side286()
+    del side["afterSha256"]
+    assert "malformed" in _check286(side)
+
+
+def test_v32_the_side_record_names_another_authority():
+    side, _, _, _ = _side286()
+    side["authorityPath"] = "architecture/other-authority.json"
+    assert "another authority" in _check286(side)
+
+
+def test_v33_the_entry_key_set():
+    side, raw, entry, _ = _side286()
+    assert "the record.json entry" in _check286(side, raw=raw, entry=dict(entry, reverseHunks=[]))
+
+
+def test_v34_the_side_record_and_the_entry_differ():
+    side, raw, entry, _ = _side286()
+    assert "differs" in _check286(side, raw=raw, entry=dict(entry, beforeSha256="0" * 64))
+
+
+def test_v35_the_side_record_does_not_reproduce_the_base():
+    side, _, _, _ = _side286()
+    side["reverseHunks"][0]["insertBase64"] = base64.b64encode(b'{"layers": [9]}\n').decode()
+    assert "do not reproduce" in _check286(side)
+
+
+def test_v36_the_g1_module_absent_reads_no_signal(tmp_path, monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError("the signal file must not be read without the G1 module")
+    monkeypatch.setattr(CK, "signal_check", boom)
+    reader = _reader(_cascade_repo(tmp_path))
+    assert reader.mode_of_record == "shadow" and reader.g1 is None and reader.disagreements == []
+
+
+def _stat(size, uid=0, mode=0o100644, nlink=1):
+    return os.stat_result((mode, 1, 1, nlink, uid, 0, size, 0, 0, 0))
+
+
+def test_v37_a_failing_signal_file_stays_shadow_with_one_class_c(tmp_path, monkeypatch):
+    home = tmp_path / "home"
+    sig = home / CK.SIGNAL_RELATIVE
+    sig.parent.mkdir(parents=True)
+    head = lambda: "a" * 40
+    assert CK.signal_check(tmp_path, "", head) == (None, None) and CK.signal_check(tmp_path, str(home), head) == (None, None)
+    os.symlink(tmp_path / "elsewhere", sig)
+    assert "following a link" in CK.signal_check(tmp_path, str(home), head)[1]
+    sig.unlink()
+    good = {"ledgerSha256": sha(b""), "g1ModuleSha256": sha(b""), "bundleId": "v8", "head": "a" * 40}
+    sig.write_text(json.dumps(good))
+    assert "owner, mode, link or size" in CK.signal_check(tmp_path, str(home), head)[1]     # the test user's own file
+    real_fstat = os.fstat
+    monkeypatch.setattr(CK.os, "fstat", lambda fd: _stat(real_fstat(fd).st_size))
+    assert CK.signal_check(tmp_path, str(home), head) == (good, None)
+    for text, why in (('{"head": "a", "head": "b"}', "I-JSON"), (json.dumps(dict(good, bundleId="V 8")), "forms"),
+                      (json.dumps(dict(good, head="b" * 40)), "another head"),
+                      (json.dumps(dict(good, ledgerSha256="0" * 64)), "another ledger")):
+        sig.write_text(text)
+        assert why in CK.signal_check(tmp_path, str(home), head)[1], why
+    sig.write_text(json.dumps(good) + " " * 5000)
+    monkeypatch.setattr(CK.os, "fstat", lambda fd: _stat(100))
+    assert "over 4096 bytes" in CK.signal_check(tmp_path, str(home), head)[1]
+    root = _cascade_repo(tmp_path / "repo")
+    (root / "ci").mkdir(exist_ok=True)
+    (root / CK.G1_MODULE).write_text("SELECT = None\n")
+    monkeypatch.setattr(CK, "signal_check", lambda r, h, f: (None, "the signal file names another head"))
+    reader = _reader(root)
+    assert [(d[2], d[4]) for d in reader.disagreements] == [("C", "fault")] and "P-048-3" in reader.disagreements[0][3]
+    assert reader.mode_of_record == "shadow" and reader.g1 is not None
+
+
+def test_v38_the_writer_refuses_while_the_signal_file_is_present(tmp_path, monkeypatch):
+    wt, home = tmp_path / "wt", tmp_path / "home"
+    (wt / "ci").mkdir(parents=True)
+    (wt / "ci/chain_checkpoint.py").write_text('MODE = "shadow"\n')
+    (home / ".planeon").mkdir(parents=True)
+    (home / WR.SIGNAL_RELATIVE).write_text("{}")
+    monkeypatch.setitem(os.environ, "HOME", str(home))
+    with pytest.raises(SystemExit, match="G1 signal file is present"):
+        WR.assemble(wt, tmp_path / "out", 286, "unused", measure_only=True)
+
+
+def _fail_281(reader):
+    for when, outcome in (("setup", "passed"), ("call", "failed"), ("teardown", "passed")):
+        reader.report("tests/test_l281.py::test_x", when, outcome, 0.5)
+    return reader.finish("b" * 40)[1]
+
+
+def test_v40_a_demoted_outcome_change_with_no_statement_is_class_a(tmp_path):
+    record = _fail_281(_reader(_demote_repo(tmp_path)))
+    assert [(d["class"], d["kind"]) for d in record["disagreements"]] == [("A", "input")]
+    assert "no matching statement" in record["disagreements"][0]["detail"] and record["isolation"] == []
+
+
+def test_v41_a_stated_change_is_pending_isolation_and_counts_on_pass(tmp_path):
+    stmt = [{"layerSlot": 281, "path": "scripts/validate_l281.py", "nodeSha256s": [NODE281]}]
+    record = _fail_281(_reader(_demote_repo(tmp_path, v24=True, statements=stmt)))
+    assert record["disagreements"] == [] and len(record["isolation"]) == 1
+    event = record["isolation"][0]
+    assert (event["countEffect"], event["slot"], event["nodes"], event["isolation"]) == ("pending isolation", 281, [NODE281], [])
+    assert event["restoredPaths"][0]["path"] == "scripts/validate_l281.py" and CK.ISOLATION_EFFECT["PASS"] == ("—", "count")
+
+
+def test_v42_a_stated_change_with_isolation_fail_restarts():
+    assert CK.ISOLATION_EFFECT["FAIL"] == ("A", "restart") and set(CK.ISOLATION_EFFECT) == {"PASS", "FAIL"}
+
+
+def test_v43_no_demotion_unless_the_replay_lands_exactly(tmp_path):
+    for i, kw in enumerate(({"live_extra": b"#\n"}, {"before_override": b"something else\n"},
+                            {"attested": b"X = 'z'\nN = 288\n"})):
+        reader = _reader(_demote_repo(tmp_path / ("c%d" % i), **kw))
+        assert reader.demoted == [] and [d[2] for d in reader.disagreements] == ["A"], kw
+
+
+def test_v44_a_statement_mismatch_is_class_a(tmp_path):
+    for i, stmt in enumerate(([{"layerSlot": 999, "path": "scripts/validate_l281.py", "nodeSha256s": [NODE281]}],
+                              [{"layerSlot": 281, "path": "scripts/validate_l281.py", "nodeSha256s": ["0" * 64]}])):
+        record = _fail_281(_reader(_demote_repo(tmp_path / ("s%d" % i), v24=True, statements=stmt)))
+        assert [(d["class"], d["kind"]) for d in record["disagreements"]] == [("A", "input")] and record["isolation"] == []
+
+
+def test_v45_a_malformed_outcome_statements_is_a_binding_fault(tmp_path):
+    for i, stmt in enumerate(("x", [{"layerSlot": 281, "path": "scripts/validate_l281.py", "nodeSha256s": ["nothex"]}],
+                              [{"layerSlot": 281, "path": "no/such/path.py", "nodeSha256s": [NODE281]}])):
+        reader = _reader(_demote_repo(tmp_path / ("m%d" % i), v24=True, statements=stmt))
+        assert [d[2] for d in reader.disagreements] == ["A"] and "outcomeStatements" in reader.disagreements[0][3], stmt
+
+
+def test_v46_the_member_set_is_picked_by_the_rule_digest(tmp_path):
+    root = _demote_repo(tmp_path / "v24six", v24=True)
+    assert _reader(root).demoted
+    apath = "architecture/next1-authority.json"
+    for i, (rule, extra) in enumerate(((CK.RULE_SHA256, True), (CK.RULE_V24_SHA256, False))):
+        root = _demote_repo(tmp_path / ("bad%d" % i), v24=True)
+        side = json.loads(_side_path(root, apath).read_text())
+        side["hunkClassRuleSha256"] = rule
+        if not extra:
+            del side["outcomeStatements"]
+        _bind(root, apath, (json.dumps(side) + "\n").encode())
+        found = _reader(root).disagreements
+        assert found and "members are not the closed set" in found[0][3], rule

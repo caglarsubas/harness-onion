@@ -52,6 +52,23 @@ every kind restarts the clean count of N_shadow except skipped, which is neutral
 agree counts; a dry-run-only reading by the dry-run runner counts. Any three skips, or any three faults, within the
 period are a finding to the lane monitor, not only consecutive ones (MON-282-CR4-KEEP), counted across verify records by the monitor and by MET-PERF-048 (no reader sees
 more than one session); a reader that keeps faulting is a ci/ defect, not a reason to re-run the period.
+
+MET-PERF-049 (slot 286, CONTRACT_286 r3) adds:
+- **Class rule v2.4** (RULE_V24_SHA256, the block after v2.3's): R1 member forms F1 (K 0), F2 (K >= 1) and F3 (ids in the
+  authority's productPackets key order); R2 declared digit pairs only (the catalog pair (n, n + steps[1]) and the
+  context's countPairs); W, the weights append form. A v2.4 record's context has exactly five keys (countPairs added).
+- **The class cache:** L1, per session, the classes of one authority's hunks on one path, keyed by (the authority's
+  sha256, path), filled only by a completed ordered pass (a hit still runs the afterSha256 gate and the byte checks);
+  L2, per Reader invocation with its newer set fixed at start, one rebuild per (path, live sha256), filled only after
+  the afterSha256 gate. Neither outlives the invocation (PERF-028/029, Q-PERF40-2).
+- **The demotion (OQ-048-1 (b)):** when a path's only unexplained entry is "n of m hunks of a class not normalised",
+  the replay continues with every hunk of every newer authority on the path, gates kept, to the attested digest; on an
+  exact landing every layer attesting the path is demoted (neutral) and runs live; otherwise class A. A demoted layer's
+  changed outcome is "demoted-outcome-explained", countEffect "pending isolation", only with a matching
+  outcomeStatements entry of the authoring v2.4 record; otherwise class A.
+- **MET-PERF-048's inert provisions:** P-048-1, the G1 module ci/chain_checkpoint_g1.py is loaded only when present;
+  P-048-3, the mode of record is the verifier's declaration (the T1 signal file under HOME, checked by signal_check)
+  plus the module's presence. MODE is the default mode; at 286 the module is absent, so the run is shadow.
 """
 import base64
 import difflib
@@ -71,17 +88,27 @@ SCHEMA = "harness.planeon.ai/chain-checkpoint/v1"
 CAP_SECONDS = 15.0
 SERIAL_ENV = "PLANEON_PARALLEL_SUITE_SERIAL"
 OUTERMOST = SERIAL_ENV not in os.environ
-MODE = "shadow"                                       # 047; the writer refuses any other (condition (i))
+MODE = "shadow"                                       # the default mode (047); the writer refuses any other (condition (i))
+G1_MODULE = "ci/chain_checkpoint_g1.py"               # P-048-1: MET-PERF-048's module, loaded only when present
+SIGNAL_RELATIVE = ".planeon/chain-checkpoint-g1-signal.json"   # P-048-3 (T1): under the verifier account's HOME
+SIGNAL_FIELDS = frozenset(("ledgerSha256", "g1ModuleSha256", "bundleId", "head"))
+SIGNAL_MAX = 4096
 RULE_SHA256 = "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f"   # the pinned hunk_class_v23.py (MON-282-W2-RULED)
 RULE_V22_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
+RULE_V24_SHA256 = "9287d40a173d3bf63f6ea833f82876194c9a2ebf1e1d7263c453d621797cddc9"   # the pinned hunk_class_v24.py (CONTRACT_286 r3 3.1)
 PREFIX = "chain-checkpoint shadow:"
 RECORD_LINE = "chain-checkpoint shadow record:"
 COUNT_EFFECT = {"input": ("A", "restart"), "stale": ("A", "restart"), "outcome": ("B", "restart"),
                 "corrupt": ("C", "restart"), "over-budget": ("C", "restart"), "over-cap": ("C", "restart"),
-                "fault": ("C", "restart"), "skipped": ("C", "neutral")}   # the README's countEffect table; an agree counts
+                "fault": ("C", "restart"), "skipped": ("C", "neutral"),
+                "demoted": ("—", "neutral"), "demoted-outcome-explained": ("—", "pending isolation")}   # the README's countEffect table; an agree counts
+ISOLATION_EFFECT = {"PASS": ("—", "count"), "FAIL": ("A", "restart")}   # E1 (286 3.11): what the lane's isolation record implies
 UNAUTHORED_MISS = "afterSha256 differs before the replay"
 HUNK_CLASSES_DIR = "architecture/chain-checkpoint/hunk-classes"     # MON-282-W1-A2: one closed record per classed authority
 SIDE_MEMBERS = frozenset({"authorityPath", "hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext", "classes"})
+SIDE_MEMBERS_V24 = SIDE_MEMBERS | {"outcomeStatements"}     # 286 C1-5: picked by the record's own rule digest
+CONTEXT_KEYS = frozenset({"newPacket", "prevValidator", "prevTest", "steps"})
+CONTEXT_KEYS_V24 = CONTEXT_KEYS | {"countPairs"}
 CLASS_MEMBERS = ("hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext")
 PIN_LINE_PATTERN = rb'^AUTHORITY_SHA256 = "[^"]*"\n'     # MON-282-W2-RULED: the head validator's one pin line
 PIN_PLACEHOLDER = b'AUTHORITY_SHA256 = "TO_BE_PINNED_AFTER_SOURCE_FREEZE"\n'
@@ -312,8 +339,135 @@ def _finds(raw, needle):
 
 
 # ---- end of the copied rule; its NORMALISED constant is not used here: normalised() decides ----
+# ---- chainmech v2.4's class rule (hunk_class_v24.py; CONTRACT_286 r3 section 3.1), copied byte for byte into the
+# ---- reader after v2.3's rule; it reuses v2.3's _tokens, _lines, _shape, MEMBER, _finds, record_class and register_class.
+# R1 (283-D4; MP049-C1-2): a member insertion is cascade only in form F1 (one successor...NEW_PACKET chain, K = 0 only),
+#   F2 (the NEW_PACKET chain then the *...PRODUCT_PACKETS chain, K >= 1 only) or F3 (an id line gains the new id, then
+#   at K >= 1 the authority's product ids in the key order of its productPackets).
+# R2 (VIS-285-RULE (a)): a digit move is cascade only when every (before, after) pair is declared: the catalog pair
+#   (n, n + steps[1]), n the authority's baselinePackets size, or a pair of the context's countPairs.
+# W (Q-286-3 (a)): a hunk in ci/parallel_suite_weights.json is class record when it only inserts entries, each key a
+#   test file the authority's newFiles adds and not already a key, every existing entry byte-equal; a re-measure or a
+#   duplicate key is other.
+V24_WEIGHTS = "ci/parallel_suite_weights.json"
+V24_CHAIN_NEW = rb"(?:[A-Za-z_][A-Za-z_0-9]*\.)?(?:successor\.)+NEW_PACKET"
+V24_CHAIN_PROD = rb"(?:[A-Za-z_][A-Za-z_0-9]*\.)?\*(?:successor\.)+PRODUCT_PACKETS"
+V24_F2 = re.compile(V24_CHAIN_NEW + rb"\s*,\s*" + V24_CHAIN_PROD)
+V24_F1 = re.compile(V24_CHAIN_NEW)
+V24_ENTRY = re.compile(rb'^\s*"([^"]+)"\s*:\s*-?[0-9][0-9.eE+-]*\s*,?\s*$')
+
+
+def _rest_ok_v24(before, after, pairs):
+    """before -> after differs only by digit tokens moving along a declared (before, after) pair (or equal) and by
+    inserted "successor." runs. The prefix and suffix are matched by shape (digits masked), as v2.3's _rest_ok does."""
+    b = [x for x in _tokens(before) if not x.isspace()]
+    a = [x for x in _tokens(after) if not x.isspace()]
+    i = 0
+    while i < len(b) and i < len(a) and _shape(b[i]) == _shape(a[i]):
+        i += 1
+    j = 0
+    while j < len(b) - i and j < len(a) - i and _shape(b[len(b) - 1 - j]) == _shape(a[len(a) - 1 - j]):
+        j += 1
+    moved = list(zip(b[:i], a[:i])) + list(zip(b[len(b) - j:], a[len(a) - j:]))
+    for o, n in moved:
+        if o != n and not (o.isdigit() and n.isdigit() and (int(o), int(n)) in pairs):
+            return False
+    bm, am = b[i:len(b) - j], a[i:len(a) - j]
+    if not bm and not am:
+        return True
+    for tag, a0, a1, b0, b1 in difflib.SequenceMatcher(None, bm, am, autojunk=False).get_opcodes():
+        if tag == "equal":
+            continue
+        old, new = bm[a0:a1], am[b0:b1]
+        if tag == "replace" and len(old) == len(new) and all(o.isdigit() and n.isdigit() and (int(o), int(n)) in pairs
+                                                             for o, n in zip(old, new)):
+            continue
+        if tag == "insert" and re.fullmatch(rb"(successor\.)+|\.successor|(\.successor)+", b"".join(new)):
+            continue
+        return False
+    return True
+
+
+def _v24_id_run(ids):
+    """F3's run: the given ids in order, each quoted (one quote kind for the run), comma-separated."""
+    for q in (b'"', b"'"):
+        yield re.compile(rb"\s*,\s*".join(re.escape(q + i.encode() + q) for i in ids))
+
+
+def weights_class_v24(after, at, remove, insert, new_tests):
+    """W: record when the forward edit only inserts whole entry lines whose keys are new test files of this step (each
+    key once in the file) and leaves every existing entry byte-equal but for a trailing comma on the line before;
+    other otherwise (a re-measure, a duplicate key, anything else)."""
+    a_lines, b_lines = _lines(after, at, remove, insert)
+    al, bl = a_lines.split(b"\n"), b_lines.split(b"\n")
+    for tag, i0, i1, j0, j1 in difflib.SequenceMatcher(None, bl, al, autojunk=False).get_opcodes():
+        if tag == "equal":
+            continue
+        if tag == "replace" and i1 - i0 == 1 and j1 - j0 >= 1:
+            old, first = bl[i0], al[j0]
+            if first.rstrip() != old.rstrip() + b"," or not V24_ENTRY.match(old):   # the line before gains one comma
+                return "other"
+            added = al[j0 + 1:j1]
+        elif tag == "insert":
+            added = al[j0:j1]
+        else:
+            return "other"
+        for line in added:
+            m = V24_ENTRY.match(line)
+            if not m or m.group(1).decode("utf-8", "replace") not in new_tests:
+                return "other"
+            if len(list(_finds(after, b'"%s"' % m.group(1)))) != 1:    # a duplicate key would override an entry
+                return "other"
+    return "record"
+
+
+def classify_v24(path, after, at, remove, insert, ctx, seen=None):
+    """The closed v2.4 class of one reverse hunk. ctx: prevValidator, prevTest, newPacket, products (the authority's
+    productPackets keys in order), steps, pairs (the declared (before, after) digit pairs, the catalog pair included)
+    and newTests (the step's new test files)."""
+    if path in (ctx["prevValidator"], ctx["prevTest"]):
+        return "bridge"
+    new_id, products, k = ctx["newPacket"], list(ctx["products"]), len(ctx["products"])
+    if path == V24_WEIGHTS:
+        return weights_class_v24(after, at, remove, insert, frozenset(ctx["newTests"]))
+    if path in RECORDS:
+        c = record_class(path, after, at, remove, insert, new_id, seen)
+        return register_class(path, after, at, remove, insert, new_id, seen) if c == "other" else c
+    a_lines, b_lines = _lines(after, at, remove, insert)
+    if re.search(rb"==\s*(successor\.)+NEW_PACKET", b_lines) and \
+            re.search(rb"in\s*\(\s*(successor\.)+NEW_PACKET,\s*(successor\.)+NEW_PACKET\s*\)", a_lines):
+        return "cascade"
+    pairs = frozenset(tuple(p) for p in ctx["pairs"])
+    if _rest_ok_v24(b_lines, a_lines, pairs):
+        return "cascade"
+    lo = 0
+    while lo < min(len(a_lines), len(b_lines)) and a_lines[lo] == b_lines[lo]:
+        lo += 1
+    hi = 0
+    while hi < min(len(a_lines), len(b_lines)) - lo and a_lines[len(a_lines) - 1 - hi] == b_lines[len(b_lines) - 1 - hi]:
+        hi += 1
+    window = (max(0, lo - 300), len(a_lines) - hi + 300)
+    if k == 0:
+        forms = [V24_F1] + list(_v24_id_run([new_id]))
+    else:
+        forms = [V24_F2] + list(_v24_id_run([new_id] + products))
+    for form in forms:
+        for m in form.finditer(a_lines):
+            s, e = m.span()
+            if e < window[0] or s > window[1]:
+                continue
+            if form is V24_F1 and a_lines[max(0, s - 1):s] == b"*":
+                continue
+            left = re.search(rb",\s*\Z", a_lines[:s])
+            right = re.match(rb"\s*,", a_lines[e:])
+            for cut in ((left.start(), e) if left else None, (s, e + right.end()) if right else None):
+                if cut and _rest_ok_v24(b_lines, a_lines[:cut[0]] + a_lines[cut[1]:], pairs):
+                    return "cascade"
+    return register_class(path, after, at, remove, insert, new_id, seen)
+# ---- end of chainmech v2.4's class rule ----
 VOCABULARY_V22 = ("bridge", "cascade", "other", "record")   # chainmech v2.2's closed vocabulary
-RULES_BY_SHA = {RULE_V22_SHA256: (VOCABULARY_V22, False), RULE_SHA256: (CLASSES, True)}   # (vocabulary, register)
+RULES_BY_SHA = {RULE_V22_SHA256: (VOCABULARY_V22, False), RULE_SHA256: (CLASSES, True),
+                RULE_V24_SHA256: (CLASSES, True)}   # (vocabulary, register); v2.4 classifies by classify_v24
 
 
 def _sha(raw):
@@ -426,8 +580,13 @@ def attach_classes(apath, rec, sides):
         return bad("the hunk-class record's bytes do not hash to the authority's digest")
     if not isinstance(side, dict):
         return bad("the hunk-class record does not parse as an object")
-    if set(side) != SIDE_MEMBERS:
+    members = SIDE_MEMBERS_V24 if side.get("hunkClassRuleSha256") == RULE_V24_SHA256 else SIDE_MEMBERS
+    if set(side) != members:
         return bad("the hunk-class record's members are not the closed set")
+    if members is SIDE_MEMBERS_V24:
+        broken = statements_fault(side["outcomeStatements"], changed)
+        if broken:
+            return bad("outcomeStatements: " + broken)
     if side["authorityPath"] != apath:
         return bad("the hunk-class record names another authority")
     if sum(1 for _, s in sides.values() if isinstance(s, dict) and s.get("authorityPath") == apath) != 1:
@@ -451,7 +610,34 @@ def attach_classes(apath, rec, sides):
     out = dict(rec, changedFiles=merged)
     for key in CLASS_MEMBERS:
         out[key] = side[key]
+    if members is SIDE_MEMBERS_V24:
+        out["outcomeStatements"] = side["outcomeStatements"]
     return out
+
+
+HEX64 = re.compile(r"[0-9a-f]{64}")
+
+
+def statements_fault(statements, changed):
+    """286 C1-5: a v2.4 record's outcomeStatements, a list (may be empty) of exactly {layerSlot, path, nodeSha256s}:
+    layerSlot an int, path a key of the authority's changedFiles, nodeSha256s a non-empty list of distinct 64-hex, no
+    two entries sharing (layerSlot, path). Returns the fault, or None."""
+    if not isinstance(statements, list):
+        return "not a list"
+    seen = set()
+    for i, s in enumerate(statements):
+        if not (isinstance(s, dict) and set(s) == {"layerSlot", "path", "nodeSha256s"}):
+            return "entry %d is not exactly {layerSlot, path, nodeSha256s}" % i
+        nodes = s["nodeSha256s"]
+        if type(s["layerSlot"]) is not int or not isinstance(s["path"], str) or s["path"] not in changed:
+            return "entry %d layerSlot or path" % i
+        if not (isinstance(nodes, list) and nodes and all(isinstance(x, str) and HEX64.fullmatch(x) for x in nodes)
+                and len(set(nodes)) == len(nodes)):
+            return "entry %d nodeSha256s" % i
+        if (s["layerSlot"], s["path"]) in seen:
+            return "entry %d repeats (layerSlot, path)" % i
+        seen.add((s["layerSlot"], s["path"]))
+    return None
 
 
 def newer_authorities(root, baseline, budget=None, auths=None, sides=None):
@@ -482,7 +668,8 @@ def bind_context(apath, rec):
     if rec.get("hunkClassBinding"):     # MON-282-W1-A2, condition 2': a binding fault is class A
         return rec["hunkClassBinding"]
     ctx = rec.get("hunkClassContext")
-    if not (isinstance(ctx, dict) and set(ctx) == {"newPacket", "prevValidator", "prevTest", "steps"}):
+    v24 = rec.get("hunkClassRuleSha256") == RULE_V24_SHA256
+    if not (isinstance(ctx, dict) and set(ctx) == (CONTEXT_KEYS_V24 if v24 else CONTEXT_KEYS)):
         return "hunkClassContext missing or malformed"
     if ctx["newPacket"] != rec.get("authorityPacket"):
         return "hunkClassContext.newPacket is not the authority's packet"
@@ -493,10 +680,26 @@ def bind_context(apath, rec):
     rule_sha = rec.get("hunkClassRuleSha256")
     rule = RULES_BY_SHA.get(rule_sha) if isinstance(rule_sha, str) else None
     if rule is None:     # MON-282-W2-RULED: the record's rule picks its vocabulary and whether register is decided
-        return "hunkClassRuleSha256 is not a rule the reader holds (v2.2 or v2.3)"
+        return "hunkClassRuleSha256 is not a rule the reader holds (v2.2, v2.3 or v2.4)"
     if rec.get("hunkClassVocabulary") != list(rule[0]):
         return "hunkClassVocabulary is not the closed vocabulary of its rule"
+    if v24:     # 286 3.1: countPairs, distinct integer pairs each moving by steps[1], never the catalog pair
+        pairs, step = ctx["countPairs"], ctx["steps"][1]
+        catalog = [len(rec.get("baselinePackets", {})), len(rec.get("baselinePackets", {})) + step]
+        if not (isinstance(pairs, list) and all(isinstance(p, list) and len(p) == 2 and all(type(x) is int for x in p)
+                                                and p[1] - p[0] == step for p in pairs)
+                and len({tuple(p) for p in pairs}) == len(pairs) and catalog not in pairs):
+            return "hunkClassContext.countPairs is malformed"
     return None
+
+
+def context_v24(rec, ctx):
+    """classify_v24's inputs from an attached v2.4 authority: the catalog pair from its own baselinePackets size."""
+    n = len(rec.get("baselinePackets", {}))
+    return {"prevValidator": ctx["prevValidator"], "prevTest": ctx["prevTest"], "newPacket": ctx["newPacket"],
+            "products": list(rec.get("productPackets", {})), "steps": ctx["steps"],
+            "pairs": [[n, n + ctx["steps"][1]]] + [list(p) for p in ctx["countPairs"]],
+            "newTests": [p for p in rec.get("newFiles", {}) if p.startswith("tests/") and p.endswith(".py")]}
 
 
 def normalised(record):
@@ -572,10 +775,46 @@ def entry_fault(entry):
     return None
 
 
-def rebuild(path, live, newer, norm, budget=None):
+def _recheck(path, cur, apath, rec, entry, classes):
+    """The recorded classes of one authority's hunks on path, each re-checked by the record's rule, in order; the
+    L1 cache (classes = (authority sha256 by path, cache)) holds a completed pass only. Returns (keep, detail): keep
+    the [(at, remove, insert, class)] list, or None with the detail that stops the replay."""
+    ctx = rec["hunkClassContext"]
+    key = None
+    if classes is not None and apath in classes[0]:
+        key = (classes[0][apath], path)
+    hit = classes[1].get(key) if key else None
+    keep, seen, prior = [], set(), -1
+    v24 = rec["hunkClassRuleSha256"] == RULE_V24_SHA256
+    c24 = context_v24(rec, ctx) if v24 else None
+    register = RULES_BY_SHA[rec["hunkClassRuleSha256"]][1]
+    for i, h in enumerate(entry["reverseHunks"]):
+        if h["at"] <= prior:
+            return None, "reverse hunks out of order"
+        prior = h["at"]
+        rm, ins = base64.b64decode(h["removeBase64"]), base64.b64decode(h["insertBase64"])
+        if cur[h["at"]:h["at"] + len(rm)] != rm:
+            return None, "a hunk does not apply byte-exactly"
+        cls = h.get("class")
+        if hit is not None:
+            again = hit[i]
+        elif v24:
+            again = classify_v24(path, cur, h["at"], rm, ins, c24, seen=seen)
+        else:
+            again = classify(path, cur, h["at"], rm, ins, ctx["prevValidator"], ctx["prevTest"], ctx["newPacket"],
+                             tuple(ctx["steps"]), seen=seen, register=register)
+        if cls != again:
+            return None, "recorded class %s fails the re-check (%s)" % (cls, again)
+        keep.append((h["at"], rm, ins, cls))
+    if key and hit is None:
+        classes[1][key] = tuple(k[3] for k in keep)
+    return keep, None
+
+
+def rebuild(path, live, newer, norm, budget=None, classes=None):
     """The bytes of path at the checkpoint tree, undoing newest first each newer authority's normalised hunks.
     Returns (bytes, reverted [(authority, {class: count})], unexplained [(authority, detail)]). budget() raises
-    OverBudget when the in-run budget is spent."""
+    OverBudget when the in-run budget is spent. classes: the Reader's L1 cache, or None."""
     cur, reverted, unexplained = live, [], []
     for _, apath, rec in newer:
         if budget:
@@ -592,29 +831,15 @@ def rebuild(path, live, newer, norm, budget=None):
         if bad:
             unexplained.append((apath, bad))
             return cur, reverted, unexplained
-        ctx, keep, seen, prior = rec["hunkClassContext"], [], set(), -1
-        register = RULES_BY_SHA[rec["hunkClassRuleSha256"]][1]     # bind_context checked the rule
         pending = len(entry["reverseHunks"])
         if _sha(cur) != entry["afterSha256"]:
             share = sum(1 for h in entry["reverseHunks"] if h.get("class") in norm)
             unexplained.append((apath, "afterSha256 differs before the replay; recorded cascade share %d of %d hunks" % (share, pending)))
             return cur, reverted, unexplained
-        for h in entry["reverseHunks"]:
-            if h["at"] <= prior:
-                unexplained.append((apath, "reverse hunks out of order"))
-                return cur, reverted, unexplained
-            prior = h["at"]
-            rm, ins = base64.b64decode(h["removeBase64"]), base64.b64decode(h["insertBase64"])
-            if cur[h["at"]:h["at"] + len(rm)] != rm:
-                unexplained.append((apath, "a hunk does not apply byte-exactly"))
-                return cur, reverted, unexplained
-            cls = h.get("class")
-            again = classify(path, cur, h["at"], rm, ins, ctx["prevValidator"], ctx["prevTest"], ctx["newPacket"],
-                             tuple(ctx["steps"]), seen=seen, register=register)
-            if cls != again:
-                unexplained.append((apath, "recorded class %s fails the re-check (%s)" % (cls, again)))
-                return cur, reverted, unexplained
-            keep.append((h["at"], rm, ins, cls))
+        keep, detail = _recheck(path, cur, apath, rec, entry, classes)
+        if keep is None:
+            unexplained.append((apath, detail))
+            return cur, reverted, unexplained
         undo = [k for k in keep if k[3] in norm]
         for at, rm, ins, _ in sorted(undo, key=lambda k: -k[0]):
             cur = cur[:at] + ins + cur[at + len(rm):]
@@ -629,6 +854,95 @@ def rebuild(path, live, newer, norm, budget=None):
             unexplained.append((apath, "beforeSha256 differs after the replay"))
             return cur, reverted, unexplained
     return cur, reverted, unexplained
+
+
+AUTHORED = re.compile(r"^\d+ of \d+ hunks of a class not normalised$")
+
+
+def landing(path, live, newer, digest, pin, budget=None, classes=None):
+    """286 3.11 (C1-4): the continued replay. Every newer authority naming path, newest first, gates kept (afterSha256 at
+    the replay point, order, byte-exact apply, the class re-check, beforeSha256 after its full undo), with ALL its hunks
+    undone, the class-other ones included; the final bytes (pin-normalised for the pin file) must equal the attested
+    digest. Returns (True, the newest authority with a class-other hunk) on an exact landing, else (False, detail)."""
+    cur, demoting = live, None
+    for _, apath, rec in newer:
+        if budget:
+            budget()
+        entry = rec.get("changedFiles", {}).get(path)
+        if entry is None:
+            if path in rec.get("newFiles", {}):
+                return False, "%s: added after the checkpoint" % apath
+            continue
+        if entry_fault(entry) or bind_context(apath, rec):
+            return False, "%s: the entry or its binding fails" % apath
+        if _sha(cur) != entry["afterSha256"]:
+            return False, "%s: afterSha256 differs at the replay point" % apath
+        keep, detail = _recheck(path, cur, apath, rec, entry, classes)
+        if keep is None:
+            return False, "%s: %s" % (apath, detail)
+        if demoting is None and any(k[3] == "other" for k in keep):
+            demoting = apath
+        for at, rm, ins, _ in sorted(keep, key=lambda k: -k[0]):
+            cur = cur[:at] + ins + cur[at + len(rm):]
+        if _sha(cur) != entry["beforeSha256"]:
+            return False, "%s: beforeSha256 differs after the full undo" % apath
+    if path == pin:
+        cur = pin_normalised(cur, cur)
+    if _sha(cur) != digest or demoting is None:
+        return False, "the continued replay does not land on the checkpoint digest"
+    return True, demoting
+
+
+def signal_check(root, home, head_of):
+    """P-048-3 (T1, MP049-C1-14): the verifier's signal file under HOME. Returns (None, None) when absent (or HOME unset),
+    (fields, None) when every rule holds, or (None, the failed check). Rules: opened with O_NOFOLLOW, fstat on that
+    descriptor (a regular file, uid 0, no group or world write bit, nlink 1, at most SIGNAL_MAX bytes), at most
+    SIGNAL_MAX + 1 bytes read, I-JSON (duplicate keys refused) with exactly SIGNAL_FIELDS in their forms, head equal to
+    the checkout's HEAD, the ledger's and the G1 module's digests equal to the live files'."""
+    import stat as _stat
+    if not home:
+        return None, None
+    path = os.path.join(home, SIGNAL_RELATIVE)
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0))
+    except FileNotFoundError:
+        return None, None
+    except OSError:
+        return None, "the signal file cannot be opened without following a link"
+    try:
+        st = os.fstat(fd)
+        if not _stat.S_ISREG(st.st_mode):
+            return None, "the signal file is not a regular file"
+        if st.st_uid != 0 or st.st_mode & 0o022 or st.st_nlink != 1 or st.st_size > SIGNAL_MAX:
+            return None, "the signal file fails the owner, mode, link or size rule"
+        raw = os.read(fd, SIGNAL_MAX + 1)
+    finally:
+        os.close(fd)
+    if len(raw) > SIGNAL_MAX:
+        return None, "the signal file is over %d bytes" % SIGNAL_MAX
+
+    def pairs(items):
+        keys = [k for k, _ in items]
+        if len(keys) != len(set(keys)):
+            raise ValueError("duplicate key")
+        return dict(items)
+    try:
+        doc = json.loads(raw.decode("utf-8"), object_pairs_hook=pairs)
+    except (UnicodeDecodeError, ValueError):
+        return None, "the signal file is not I-JSON"
+    if not (isinstance(doc, dict) and set(doc) == SIGNAL_FIELDS and all(isinstance(doc[k], str) for k in doc)
+            and HEX64.fullmatch(doc["ledgerSha256"]) and HEX64.fullmatch(doc["g1ModuleSha256"])
+            and re.fullmatch(r"[0-9a-f]{40}", doc["head"]) and re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,63}", doc["bundleId"])):
+        return None, "the signal file's fields or their forms"
+    try:
+        head = head_of()
+    except Exception:
+        return None, "the head is unavailable"
+    if doc["head"] != head:
+        return None, "the signal file names another head"
+    if doc["ledgerSha256"] != _sha(_read(root, RECORD_PATH) or b"") or doc["g1ModuleSha256"] != _sha(_read(root, G1_MODULE) or b""):
+        return None, "the signal file names another ledger or G1 module"
+    return doc, None
 
 
 def unauthored(reverted, unexplained):
@@ -689,8 +1003,12 @@ def _workers(root):
 class Reader:
     """One shadow run for one outermost session. Every public method records faults instead of raising them."""
 
-    def __init__(self, root=ROOT, clock=time.monotonic, cap=CAP_SECONDS, tree=None, in_dry_run=False):
+    def __init__(self, root=ROOT, clock=time.monotonic, cap=CAP_SECONDS, tree=None, in_dry_run=False, cache=True):
         self.root, self.clock, self.cap, self.tree, self.in_dry_run = Path(root), clock, cap, tree, in_dry_run
+        self.cache = cache     # 286 3.4: a test-only flag; False runs the same reading with no L1 and no L2
+        self._l1, self._l2, self._land, self._auth_sha, self._newer = {}, {}, {}, {}, []
+        self.demoted, self._demoted_slots, self.isolation = [], {}, []
+        self.g1, self.mode_of_record = None, "shadow"
         self.active, self.spent, self.record, self.mode = False, 0.0, None, "inactive"
         self.disagreements, self.reverted, self.layers, self.unauthored = [], {}, {}, set()
         self.live, self.durations, self.sampled, self.naming, self.over_cap = {}, {}, [], None, False
@@ -747,6 +1065,7 @@ class Reader:
         self.active = True
         self._budget()
         auths = _authorities(self.root, self._budget)      # parsed once, inside the budget
+        self._auth_sha = {rel: _sha(_read(self.root, rel) or b"") for _, rel, _ in auths}     # L1's keys
         self.naming, verdict = naming_authority(self.root, _sha(raw), auths=auths)
         if verdict != "named":
             self.disagreements.append((None, RECORD_PATH, "A", "the record is %s (vector 2)" % verdict, "stale"))
@@ -765,6 +1084,8 @@ class Reader:
         check_ledger(record)
         self.record = record
         newer = newer_authorities(self.root, record["checkpointBaseline"], self._budget, auths=auths)     # before the skip (P047-C5-1)
+        self._newer = newer          # L2's invariant: one newer set per invocation, fixed here
+        self._provisions()
         if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
             self.mode = "dry-run-only: skipped"
             self.disagreements.append((self.head_slot, "reader", "C", "dry-run-only: skipped in this session (%s); the dry-run "
@@ -785,12 +1106,15 @@ class Reader:
                     if live is None:
                         self.disagreements.append((layer["slot"], path, "A", "missing", "input"))
                         continue
-                    rebuilt, reverted, unexplained = rebuild(path, live, newer, norm, self._budget)
+                    rebuilt_sha, reverted, unexplained = self._rebuilt(path, live, newer, norm, pin)
                     if reverted:
                         self.reverted.setdefault(layer["slot"], []).append([path, [[a, c] for a, c in reverted]])
-                    if path == pin:
-                        rebuilt = pin_normalised(rebuilt, rebuilt)
-                    if _sha(rebuilt) != digest:
+                    if rebuilt_sha != digest:
+                        demoting = self._demotion(path, live, newer, digest, pin, unexplained)
+                        if demoting:     # 286 3.11: authored edits landing exactly on the checkpoint digest
+                            self.demoted.append({"slot": layer["slot"], "path": path, "authority": demoting})
+                            self._demoted_slots.setdefault(layer["slot"], []).append((path, demoting, digest))
+                            continue
                         detail = "; ".join("%s: %s" % u for u in unexplained) or "differs from its checkpoint digest"
                         if unauthored(reverted, unexplained):     # C3-4: edited since its newest recorded state
                             self.unauthored.add(path)
@@ -806,6 +1130,75 @@ class Reader:
             self.disagreements.append((self.head_slot, "checkPairs", "C", "Corrupt: %s; %s" % (fault, self._slots()), "corrupt"))
         self.sampled = sample(self.tree or _git(self.root, "rev-parse", "HEAD^{tree}"), [l["slot"] for l in record["layers"]],
                               record["parameters"]["sampleFraction"])
+
+    def _rebuilt(self, path, live, newer, norm, pin):
+        """L2 (286 3.3): one rebuild per (path, live sha256) inside this invocation, whose newer set is fixed at start;
+        filled only after the afterSha256 gate (a result whose replay missed the gate is not cached)."""
+        key = (path, _sha(live))
+        if self.cache and key in self._l2:
+            return self._l2[key]
+        rebuilt, reverted, unexplained = rebuild(path, live, newer, norm, self._budget,
+                                                 classes=(self._auth_sha, self._l1) if self.cache else None)
+        if path == pin:
+            rebuilt = pin_normalised(rebuilt, rebuilt)
+        value = (_sha(rebuilt), reverted, unexplained)
+        if self.cache and not any(d.startswith(UNAUTHORED_MISS) for _, d in unexplained):
+            self._l2[key] = value
+        return value
+
+    def _demotion(self, path, live, newer, digest, pin, unexplained):
+        """286 3.11 (C1-4): only a path whose one unexplained entry is the authored form is a candidate; the continued
+        replay decides. Returns the demoting authority, or None."""
+        if not (len(unexplained) == 1 and AUTHORED.match(unexplained[0][1])):
+            return None
+        key = (path, _sha(live), digest)
+        if self.cache and key in self._land:
+            ok, who = self._land[key]
+        else:
+            ok, who = landing(path, live, newer, digest, pin, self._budget,
+                              classes=(self._auth_sha, self._l1) if self.cache else None)
+            if self.cache:
+                self._land[key] = (ok, who)
+        return who if ok else None
+
+    def _provisions(self):
+        """P-048-1 and P-048-3 (inert at 286): the G1 module is loaded only when present; only then is the signal
+        file read, and the mode of record is the verifier's declaration plus the module's presence."""
+        if not (self.root / G1_MODULE).is_file():
+            return
+        import importlib.util
+        try:
+            spec = importlib.util.spec_from_file_location("_planeon_met_perf_048_g1", self.root / G1_MODULE)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            self.g1 = module
+        except Exception as exc:
+            self.disagreements.append((self.head_slot, G1_MODULE, "C", "%s: the G1 module did not load; shadow; %s"
+                                       % (type(exc).__name__, self._slots()), "fault"))
+            return
+        fields, failed = signal_check(self.root, os.environ.get("HOME"), lambda: _git(self.root, "rev-parse", "HEAD"))
+        if failed:
+            self.disagreements.append((self.head_slot, "signal", "C", "P-048-3: %s; shadow; %s" % (failed, self._slots()), "fault"))
+        elif fields:
+            self.mode_of_record = "sampled"
+
+    def _statement(self, slot, nodes):
+        """C2's statement check for a demoted layer whose outcome differs: the authoring v2.4 record states that
+        layer, the path and every differing node, and the path's hunks include a class-other hunk. Returns the
+        explained event (countEffect "pending isolation"), or None."""
+        by_path = {apath: rec for _, apath, rec in self._newer}
+        for path, apath, digest in self._demoted_slots[slot]:
+            rec = by_path.get(apath, {})
+            hunks = rec.get("changedFiles", {}).get(path, {}).get("reverseHunks", [])
+            for s in rec.get("outcomeStatements", []):
+                if s["layerSlot"] == slot and s["path"] == path and set(nodes) <= set(s["nodeSha256s"]) \
+                        and any(h.get("class") == "other" for h in hunks):
+                    return {"slot": slot, "path": path, "authority": apath, "nodes": sorted(nodes),
+                            "statement": {"layerSlot": slot, "path": path, "nodeSha256s": list(s["nodeSha256s"])},
+                            "restoredPaths": [{"path": p, "baseSha256": d} for p, _, d in self._demoted_slots[slot]],
+                            "isolation": [], "kind": "demoted-outcome-explained",
+                            "countEffect": COUNT_EFFECT["demoted-outcome-explained"][1]}
+        return None
 
     def report(self, nodeid, when, outcome, duration=0.0):
         if self.active and self.mode == "compare":
@@ -849,6 +1242,7 @@ class Reader:
         input_slots = {d[0] for d in self.disagreements if d[2] == "A"}
         for layer in sorted(self.record["layers"], key=lambda l: -l["slot"]):
             recorded, live, agree, live_s = {}, {}, True, 0.0
+            demoted, differing = layer["slot"] in self._demoted_slots, []
             for node in layer["nodes"]:
                 key = node["nodeSha256"]
                 want = {k: node[k] for k in ("setup", "call", "teardown") if node.get(k) is not None}
@@ -857,14 +1251,26 @@ class Reader:
                 live_s += self.durations.get(key, 0.0)
                 if got is None or any(got.get(k) != v for k, v in want.items()):
                     agree = False
+                    if demoted:
+                        differing.append(key)
+                        continue
                     cls = "A" if layer["slot"] in input_slots else "B"
                     detail = "not run in this session" if got is None else "outcome differs"
                     self.disagreements.append((layer["slot"], key[:12], cls, detail, "input" if cls == "A" else "outcome"))
+            if differing:     # 286 3.11, C2: never neutral; explained (pending isolation) or class A
+                event = self._statement(layer["slot"], differing)
+                if event:
+                    event["seconds"] = round(live_s, 4)
+                    self.isolation.append(event)
+                else:
+                    self.disagreements.append((layer["slot"], differing[0][:12], "A",
+                                               "a demoted layer's outcome differs with no matching statement", "input"))
             self.layers[str(layer["slot"])] = {"recorded": recorded, "live": live, "agree": agree,
                                                "writingSeconds": layer.get("seconds"), "liveSeconds": round(live_s, 4)}
 
     def _record(self, head):
         workers, source = _workers(self.root)
+        attested = [l["slot"] for l in (self.record or {}).get("layers", [])]
         record = {"headSha": head, "readerSeconds": round(self.spent, 3), "capSeconds": self.cap, "overCap": self.over_cap,
                   "workers": workers, "workersSource": source, "mode": self.mode,
                   "shadowIn": (self.record or {}).get("parameters", {}).get("shadowIn"), "naming": self.naming,
@@ -872,11 +1278,16 @@ class Reader:
                   "layers": self.layers, "reverted": {str(k): v for k, v in self.reverted.items()},
                   "unauthored": sorted(self.unauthored),
                   "disagreements": [{"slot": s, "where": w, "class": c, "kind": k, "countEffect": COUNT_EFFECT[k][1],
-                                     "detail": d} for s, w, c, d, k in self.disagreements]}
+                                     "detail": d} for s, w, c, d, k in self.disagreements],
+                  "demoted": [dict(e, liveSeconds=self.layers.get(str(e["slot"]), {}).get("liveSeconds"),
+                                   kind="demoted", countEffect=COUNT_EFFECT["demoted"][1]) for e in self.demoted],
+                  "attestedFraction": (round((len(attested) - len(self._demoted_slots)) / len(attested), 6)
+                                       if attested else None),
+                  "isolation": self.isolation, "modeOfRecord": self.mode_of_record}
         counts = {c: sum(1 for d in self.disagreements if d[2] == c) for c in "ABC"}
-        line = "%s head %s; %.3f s (cap %.0f s%s); mode %s; A %d B %d C %d; sampled %d; unauthored %d" % (
+        line = "%s head %s; %.3f s (cap %.0f s%s); mode %s; A %d B %d C %d; sampled %d; unauthored %d; demoted %d; pending isolation %d" % (
             PREFIX, head[:12], self.spent, self.cap, ", OVER CAP" if self.over_cap else "", self.mode,
-            counts["A"], counts["B"], counts["C"], len(self.sampled), len(self.unauthored))
+            counts["A"], counts["B"], counts["C"], len(self.sampled), len(self.unauthored), len(self.demoted), len(self.isolation))
         return line, record
 
 
