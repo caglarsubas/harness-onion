@@ -565,7 +565,7 @@ def check_fix(raws: Any, budget: Any) -> None:
 def _replay(model: Any, packets: Any) -> Any:
     """A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's
     invariant) and counts 11; None when it does."""
-    result = model.check(regular_bytes, frozenset(packets))
+    result = model.check(reviewed_bytes, frozenset(packets))
     return None if result["budgetVectors"] == 11 else result
 
 

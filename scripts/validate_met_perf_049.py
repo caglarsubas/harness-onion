@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-authority.json"
-AUTHORITY_SHA256 = "b80dbb95f24b2a901052d5cce314a7d4b4ac4f01ebeb286f70c7bc7a97650a50"
+AUTHORITY_SHA256 = "02303a7ed92ade6bbfda19fccda5adc9849351669547b0dde397696944a3e211"
 VALIDATOR_PATH = "scripts/validate_met_perf_049.py"
 BASE_COMMIT = "0fd885ff3a9a80f8882ec4a03e0d16e95675868c"
 NEW_PACKET = "MET-PERF-049"
@@ -514,7 +514,8 @@ C7_LINES = MappingProxyType({
                   b"An outcome that differs between that run and the 12-worker verify 0 is"),
     PAGE_PATH: (b"to 12 worker processes (MET-PERF-049; 8 before), by the",),
     WRITER_PATH: (b'the verify runs %d workers" % workers', b'"statedDifferences": stated(workers)')})
-C8_FORM = b"    return successor.historical_bytes(path, regular_bytes(path))\n"
+C8_FORM = b"    result = model.check(reviewed_bytes, frozenset(packets))\n"
+C8_READ = b"    return successor.historical_bytes(path, regular_bytes(path))\n"
 C9_READER = (b'"demoted": ("\xe2\x80\x94", "neutral"), "demoted-outcome-explained": ("\xe2\x80\x94", "pending isolation")}',
              b'"attestedFraction": ', b'"isolation": self.isolation, "modeOfRecord": self.mode_of_record}',
              b'kind="demoted", countEffect=COUNT_EFFECT["demoted"][1])')
@@ -764,9 +765,11 @@ def check_workers(suite: Any, texts: Any) -> None:
 
 
 def check_bridged(raw: Any) -> None:
-    """C8 (MA008-P1-3): 285's bridged layer reads its era, the registry included, through this step's projection
-    (successor.historical_bytes over the live bytes), never the live bytes."""
-    _bound(lambda: type(raw) is bytes and raw.count(C8_FORM) == 1 and raw.count(b"import validate_met_perf_049 as successor\n") >= 1,
+    """C8 (MA008-P1-3): 285's bridged layer reads its era through this step's projection (successor.historical_bytes
+    over the live bytes), and its inherited A5 replays the authority-map model over those projected bytes, so 286's
+    rider in the registry is undone first; never the live bytes."""
+    _bound(lambda: type(raw) is bytes and raw.count(C8_FORM) == 1 and raw.count(C8_READ) == 1
+           and raw.count(b"model.check(regular_bytes") == 0 and raw.count(b"import validate_met_perf_049 as successor\n") >= 1,
            "MET-PERF-049 C8 285's layer reads through this step's projection")
 
 

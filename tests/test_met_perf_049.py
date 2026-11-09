@@ -1437,8 +1437,9 @@ def test_c7_the_workers_recheck_in_full(change):
 def test_c8_the_bridged_layer_rechecks():
     raw = profile._bound_read(profile.BRIDGED_LAYER, profile.authority()["changedFiles"][profile.BRIDGED_LAYER]["afterSha256"])
     assert profile.check_bridged(raw) is None
-    live = raw.replace(profile.C8_FORM, b"    return regular_bytes(path)\n", 1)
-    _raises(C8, lambda: profile.check_bridged(live))
+    for live in (raw.replace(profile.C8_FORM, b"    result = model.check(regular_bytes, frozenset(packets))\n", 1),
+                 raw.replace(profile.C8_READ, b"    return regular_bytes(path)\n", 1)):
+        _raises(C8, lambda: profile.check_bridged(live))
 
 
 @pytest.mark.parametrize("change", ["row", "fraction", "fields", "demoted_kind"])
