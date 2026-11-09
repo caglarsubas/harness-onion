@@ -1008,6 +1008,7 @@ class Reader:
         self.cache = cache     # 286 3.4: a test-only flag; False runs the same reading with no L1 and no L2
         self._l1, self._l2, self._land, self._auth_sha, self._newer = {}, {}, {}, {}, []
         self.demoted, self._demoted_slots, self.isolation = [], {}, []
+        self._changed, self._ledger_sha = {}, None     # c1b: per layer, the attested files whose live digest differs
         self.g1, self.mode_of_record = None, "shadow"
         self.active, self.spent, self.record, self.mode = False, 0.0, None, "inactive"
         self.disagreements, self.reverted, self.layers, self.unauthored = [], {}, {}, set()
@@ -1063,6 +1064,7 @@ class Reader:
         if raw is None:
             return
         self.active = True
+        self._ledger_sha = _sha(raw)     # c1b (B1): the explained events name the ledger the reading compared against
         self._budget()
         auths = _authorities(self.root, self._budget)      # parsed once, inside the budget
         self._auth_sha = {rel: _sha(_read(self.root, rel) or b"") for _, rel, _ in auths}     # L1's keys
@@ -1106,6 +1108,8 @@ class Reader:
                     if live is None:
                         self.disagreements.append((layer["slot"], path, "A", "missing", "input"))
                         continue
+                    if _sha(pin_normalised(live, live) if path == pin else live) != digest:     # c1b: a changed attested file
+                        self._changed.setdefault(layer["slot"], []).append((path, digest))
                     rebuilt_sha, reverted, unexplained = self._rebuilt(path, live, newer, norm, pin)
                     if reverted:
                         self.reverted.setdefault(layer["slot"], []).append([path, [[a, c] for a, c in reverted]])
@@ -1185,7 +1189,9 @@ class Reader:
     def _statement(self, slot, nodes):
         """C2's statement check for a demoted layer whose outcome differs: the authoring v2.4 record states that
         layer, the path and every differing node, and the path's hunks include a class-other hunk. Returns the
-        explained event (countEffect "pending isolation"), or None."""
+        explained event (countEffect "pending isolation"), or None. c1b (286 3.11 E1 step 1): restoredPaths lists every
+        attested file of the layer whose live digest differs from the ledger's, demoted and cascade-replayed alike,
+        with baseSha256 = the ledger digest; ledgerSha256 names the ledger read (B1)."""
         by_path = {apath: rec for _, apath, rec in self._newer}
         for path, apath, digest in self._demoted_slots[slot]:
             rec = by_path.get(apath, {})
@@ -1195,8 +1201,8 @@ class Reader:
                         and any(h.get("class") == "other" for h in hunks):
                     return {"slot": slot, "path": path, "authority": apath, "nodes": sorted(nodes),
                             "statement": {"layerSlot": slot, "path": path, "nodeSha256s": list(s["nodeSha256s"])},
-                            "restoredPaths": [{"path": p, "baseSha256": d} for p, _, d in self._demoted_slots[slot]],
-                            "isolation": [], "kind": "demoted-outcome-explained",
+                            "restoredPaths": [{"path": p, "baseSha256": d} for p, d in sorted(self._changed.get(slot, []))],
+                            "ledgerSha256": self._ledger_sha, "isolation": [], "kind": "demoted-outcome-explained",
                             "countEffect": COUNT_EFFECT["demoted-outcome-explained"][1]}
         return None
 

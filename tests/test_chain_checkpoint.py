@@ -1040,6 +1040,59 @@ def test_v41_a_stated_change_is_pending_isolation_and_counts_on_pass(tmp_path):
     assert event["restoredPaths"][0]["path"] == "scripts/validate_l281.py" and CK.ISOLATION_EFFECT["PASS"] == ("—", "count")
 
 
+EVENT_MEMBERS = {"slot", "path", "authority", "nodes", "statement", "restoredPaths", "ledgerSha256", "isolation", "kind",
+                 "countEffect", "seconds"}     # B3: the explained event's closed form (isolate286 pins the same set)
+
+
+def _demote_cascade_repo(tmp_path, statements):
+    """c1b: layer 281's validator demoted by an authored class-other edit and its input data281.txt changed by a
+    cascade edit of the same authority, which the replay explains (changed, never demoted)."""
+    before, after, d_before, d_after = b"X = 'a'\nN = 288\n", b"X = 'b'\nN = 289\n", b"N = 288\n", b"N = 289\n"
+    apath = "architecture/next1-authority.json"
+    root = _repo(tmp_path, layers=((281, before),), newer=({
+        "scripts/validate_l281.py": {"afterSha256": sha(after), "beforeSha256": sha(before),
+                                     "reverseHunks": [_hunk(5, b"b", b"a", "other"), _hunk(14, b"9", b"8", "cascade")]},
+        "data281.txt": {"afterSha256": sha(d_after), "beforeSha256": sha(d_before),
+                        "reverseHunks": [_hunk(6, b"9", b"8", "cascade")]}},))
+    (root / "scripts/validate_l281.py").write_bytes(after)
+    (root / "data281.txt").write_bytes(d_after)
+    record = json.loads((root / CK.RECORD_PATH).read_text())
+    record["layers"][0]["inputs"] = {"data281.txt": sha(d_before)}
+    raw = (json.dumps(record, sort_keys=True) + "\n").encode()
+    (root / CK.RECORD_PATH).write_bytes(raw)
+    _rename(root, raw)
+    side = json.loads(_side_path(root, apath).read_text())
+    side.update(hunkClassRuleSha256=CK.RULE_V24_SHA256, outcomeStatements=statements)
+    side["hunkClassContext"]["countPairs"] = [[288, 289]]
+    _bind(root, apath, (json.dumps(side) + "\n").encode())
+    return root, raw, sha(before), sha(d_before)
+
+
+def test_v41_c1b_restored_paths_cover_demoted_and_cascade_changed_inputs(tmp_path):
+    stmt = [{"layerSlot": 281, "path": "scripts/validate_l281.py", "nodeSha256s": [NODE281]}]
+    root, raw, validator_base, data_base = _demote_cascade_repo(tmp_path, stmt)
+    reader = _reader(root)
+    assert reader.demoted == [{"slot": 281, "path": "scripts/validate_l281.py", "authority": "architecture/next1-authority.json"}]
+    record = _fail_281(reader)
+    assert record["disagreements"] == [] and len(record["isolation"]) == 1
+    event = record["isolation"][0]
+    assert set(event) == EVENT_MEMBERS and set(event["statement"]) == {"layerSlot", "path", "nodeSha256s"}
+    assert event["restoredPaths"] == [{"path": "data281.txt", "baseSha256": data_base},
+                                      {"path": "scripts/validate_l281.py", "baseSha256": validator_base}]
+    assert all(set(r) == {"path", "baseSha256"} for r in event["restoredPaths"]) and event["ledgerSha256"] == sha(raw)
+
+
+def test_v41_c1b_the_event_form_fixture(tmp_path):
+    """B3: the explained event's exact members and types, as isolate286 validates them before any export."""
+    stmt = [{"layerSlot": 281, "path": "scripts/validate_l281.py", "nodeSha256s": [NODE281]}]
+    event = _fail_281(_reader(_demote_repo(tmp_path, v24=True, statements=stmt)))["isolation"][0]
+    assert set(event) == EVENT_MEMBERS and event["kind"] == "demoted-outcome-explained" and event["isolation"] == []
+    assert type(event["slot"]) is int and event["nodes"] == sorted(event["nodes"]) and isinstance(event["seconds"], float)
+    assert event["statement"] == {"layerSlot": 281, "path": "scripts/validate_l281.py", "nodeSha256s": [NODE281]}
+    assert event["restoredPaths"] == [{"path": "scripts/validate_l281.py", "baseSha256": sha(b"X = 'a'\nN = 288\n")}]
+    assert len(event["ledgerSha256"]) == 64 and event["authority"] == "architecture/next1-authority.json"
+
+
 def test_v42_a_stated_change_with_isolation_fail_restarts():
     assert CK.ISOLATION_EFFECT["FAIL"] == ("A", "restart") and set(CK.ISOLATION_EFFECT) == {"PASS", "FAIL"}
 
