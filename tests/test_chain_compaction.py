@@ -87,6 +87,7 @@ from scripts.safe_yaml import safe_load
 from scripts import chain_identity as identity
 from scripts import chain_identity_v2 as identity_v2
 from scripts import chain_identity_v3 as identity_v3
+from scripts import repository_registration as registration
 
 
 def packets():
@@ -107,7 +108,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 293 and len(accepted) == 254
+    assert len(current) == 295 and len(accepted) == 254
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -141,7 +142,9 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
     assert len(i6v4.historical_catalog(current)) == 253
     assert len(dcap.historical_catalog(current)) == 252
     assert len(np5.historical_catalog(current)) == 251
@@ -1375,7 +1378,13 @@ def test_every_listed_product_meets_the_rule():
     v2, _ = _v3()
     listed = {slot: identity_v3.layer_products(tree, v2) for slot, _, _, tree in chain}
     listed = {slot: ids for slot, ids in listed.items() if ids}
-    count = identity_v3.check_products(ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain), v2)
+    # MET-REGISTRY-001 (contract E8): R8 clause 2 by slot through the successor function and its record.
+    record = registration.load(profile.regular_bytes(registration.RECORD_PATH),
+                               profile.regular_bytes(V2_RECORD_DIR + "/rule.json"),
+                               profile.regular_bytes(registration.MODULE_PATH))
+    count = registration.check_products(
+        ext, listed, profile.regular_bytes, safe_load, _chain_packet_ids(chain),
+        registration.pin_v2(identity_v2, profile.regular_bytes("scripts/chain_identity_v2.py")), record)
     assert count == sum(len(ids) for ids in listed.values())
 
 

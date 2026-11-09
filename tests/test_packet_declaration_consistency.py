@@ -9,6 +9,10 @@ from typing import Any
 
 import pytest
 
+from scripts.repository_registration import registry_rows
+from scripts.safe_yaml import safe_load as _registry_safe_load
+from scripts import validate_met_registry_001 as profile
+
 from scripts.validate_readiness import extract_packet_ids, load_yaml
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,7 +136,8 @@ def test_semantic_plan_patterns_match_readiness_source_boundaries() -> None:
 
 def test_current_plan_owners_index_and_root_trees_match_physical_packets() -> None:
     plans = sorted((ROOT / "docs/repositories").glob("*.md"))
-    assert len(plans) == 13
+    # MET-REGISTRY-001: one plan per row of the registry with its successor rows.
+    assert len(plans) == len(registry_rows(ROOT, _registry_safe_load))  # the record in ROOT decides (VIS-284-LPORACLE)
     _assert_semantic_catalog_consistency(
         packets_by_id(), [path.read_text(encoding="utf-8") for path in plans],
         (PACKET_DIRECTORY / "README.md").read_text(encoding="utf-8"),
@@ -200,7 +205,8 @@ HISTORICAL_TEST_NAMES = (
     "test_task_packet_schema_rejects_legacy_shell_and_unknown_authority",
 )
 ACCEPTED_TEST_MODULE_SHA256 = "7d559e7e6000ba3734c0598c03d938cc24efc74a4cd3e8d758bcb8092a8a819c"
-CATALOG_SCALAR_CURRENT = b"assert len(files) == EXPECTED_PACKET_COUNT == 293"
+# MET-REGISTRY-001 (VIS-284-PIN): the era's scalar; the protected module is read through 284's projection.
+CATALOG_SCALAR_ERA = b"assert len(files) == EXPECTED_PACKET_COUNT == 293"
 CATALOG_SCALAR_ACCEPTED = b"assert len(files) == EXPECTED_PACKET_COUNT == 190"
 
 
@@ -211,18 +217,19 @@ def _assert_exact_historical_test_module(raw: bytes) -> None:
                   if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
                   and node.name.startswith("test_"))
     assert names == HISTORICAL_TEST_NAMES, "historical test identities/order differ"
-    assert raw.count(CATALOG_SCALAR_CURRENT) == 1, "historical catalog scalar differs"
-    accepted_view = raw.replace(CATALOG_SCALAR_CURRENT, CATALOG_SCALAR_ACCEPTED, 1)
+    assert raw.count(CATALOG_SCALAR_ERA) == 1, "historical catalog scalar differs"
+    accepted_view = raw.replace(CATALOG_SCALAR_ERA, CATALOG_SCALAR_ACCEPTED, 1)
     assert hashlib.sha256(accepted_view).hexdigest() == ACCEPTED_TEST_MODULE_SHA256, "historical test bodies/imports differ"
 
 
 def test_protected_module_retains_exact_historical_identities_and_bodies() -> None:
-    _assert_exact_historical_test_module((ROOT / "tests/test_task_packets.py").read_bytes())
+    _assert_exact_historical_test_module(
+        profile.historical_bytes("tests/test_task_packets.py", (ROOT / "tests/test_task_packets.py").read_bytes()))
 
 
 @pytest.mark.parametrize("mutation", ["addition", "removal", "rename", "order", "body"])
 def test_protected_module_rejects_identity_order_and_body_drift(mutation: str) -> None:
-    raw = (ROOT / "tests/test_task_packets.py").read_bytes()
+    raw = profile.historical_bytes("tests/test_task_packets.py", (ROOT / "tests/test_task_packets.py").read_bytes())
     _assert_exact_historical_test_module(raw)
     nodes = [node for node in ast.parse(raw).body
              if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")]

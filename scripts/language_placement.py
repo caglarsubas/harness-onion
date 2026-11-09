@@ -18,11 +18,13 @@ Rules, in the order R1-R7, R9-R14, then R8; the first rule broken is reported wi
      every span's `section` is a Markdown heading line; each binding target has its kind's closed shape.
   R2 catalogues and policy: services.yaml, repositories.yaml and providers.yaml, in that order, each with the head
      bytes' sha256; services.yaml's ids are unique and as many as its counts.total; repositories.yaml's ids are unique
-     and 13; providers.yaml lists modules with unique ids and service bindings with unique service ids; policySha256
+     and 13; with the successor registry record under the root (MET-REGISTRY-001), the registry with its rows,
+     through the composition module imported then, has unique ids, 14; providers.yaml lists modules with unique ids and service bindings with unique service ids; policySha256
      and the ADR's policy line are POLICY_SHA256.
   R3 deployables: exactly services.yaml's ids, each once; ownerRepository and kind as catalogued; (status, plane,
      planeSource, plannedLanguage) equal EXPECTED[id].
-  R4 repositories and toolchains: exactly repositories.yaml's ids and names; the plan docs/repositories/NN-<lowercased
+  R4 repositories and toolchains: exactly the composed registry's ids and names (the data's rows, then the
+     successor placement record's, MET-REGISTRY-001); the plan docs/repositories/NN-<lowercased
      name>.md gives rNumber RNN and the first span's path; languages equal REPO_LANGUAGES[id]; every toolchain string
      equals TOOLCHAIN_EXPECTED's, and a non-UPSTREAM_OWN one begins with the "Name version" form (C1-3).
   R5 sources: every span sits under its kind's roots (C1-4) and is located in its section (C2-2): its `section` occurs
@@ -69,6 +71,7 @@ are read by exact path only (the 16 closed stems); no directory beyond v1's plan
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import math
 import os
@@ -89,11 +92,16 @@ ADR_PATH = "docs/adr/0010-language-placement.md"
 ADR11_PATH = "docs/adr/0011-h10-execution-authority.md"
 SERVICES_PATH = "architecture/services.yaml"
 REPOSITORIES_PATH = "architecture/repositories.yaml"
+SUCCESSOR_REGISTRY_PATH = "architecture/repository-registration/repositories.json"  # MET-REGISTRY-001
+SUCCESSOR_REGISTRY_SCHEMA_PATH = "architecture/repository-registration/repositories.schema.json"
+SUCCESSOR_PLACEMENT_PATH = "architecture/repository-registration/language-placement.json"  # VIS-284-LPORACLE-2
+SUCCESSOR_PLACEMENT_SCHEMA_PATH = "architecture/repository-registration/language-placement.schema.json"
 PROVIDERS_PATH = "architecture/providers.yaml"
 CATALOGUES = (SERVICES_PATH, REPOSITORIES_PATH, PROVIDERS_PATH)
 PLANS_DIR = "docs/repositories"
 HARNESSES_DIR = "docs/harnesses"
 REPOSITORY_COUNT = 13
+COMPOSED_REPOSITORY_COUNT = 14  # MET-REGISTRY-001: with the successor registry record's rows (VIS-284-LPORACLE)
 # The sha256 of the UTF-8 bytes of LANG-D2 (a), 1,051 characters, without a line feed (owner LANG-D2; D2-2).
 POLICY_SHA256 = "4b0a8a4b9e043823cfa884bdb883ae5b8f796877ead7bdbc413b318082fbc441"
 POLICY_BEGIN = "<!-- language-policy:begin -->"
@@ -175,6 +183,7 @@ REPO_LANGUAGES = {
     "operator": ("GO", "RUST"),
     "distribution": ("PYTHON",),
     "conformance-labs": ("PYTHON", "RUST"),
+    "research-lab": ("PYTHON",),
 }
 
 # ---------------------------------------------------------------- the v2 closed constants (MET-GOV-005; BR-TT-1..4)
@@ -219,6 +228,7 @@ TOOLCHAIN_EXPECTED = {
         "operator": "Go 1.26.7",
         "distribution": "Python 3.12.14",
         "conformance-labs": "Python 3.12.14",
+        "research-lab": "Python 3.12.14",
     },
     "deployables": {
         "bundle-verifier": "Go 1.26.7",
@@ -691,6 +701,20 @@ def _shape(data: Any) -> None:
             "h10Sources is a closed {r08: span} object")
 
 
+def _composition_module(rule: str, record: str = "successor registry record"):
+    # MET-REGISTRY-001 (VIS-284-LPORACLE condition 1): scripts/repository_registration.py, imported only when the
+    # successor record is present, in this module's own form (scripts.-prefixed when imported as scripts.*, bare
+    # otherwise). Only a ModuleNotFoundError for that module itself is caught, and only to refuse; any other import
+    # failure propagates, and none yields the base rows.
+    name = "scripts.repository_registration" if __package__ == "scripts" else "repository_registration"
+    try:
+        return importlib.import_module(name)
+    except ModuleNotFoundError as exc:
+        if exc.name != name:
+            raise
+        raise Refusal(rule, record + " present without its composition module") from None
+
+
 # ---------------------------------------------------------------- R2 catalogues and policy
 
 def _catalogues(data: dict, root: Path, overlay: dict) -> tuple:
@@ -718,6 +742,19 @@ def _catalogues(data: dict, root: Path, overlay: dict) -> tuple:
     repo_ids = [r["id"] for r in repositories["repositories"]]
     _refuse(len(set(repo_ids)) == len(repo_ids), rule, "repositories.yaml's ids are unique")
     _refuse(len(repo_ids) == REPOSITORY_COUNT, rule, "repositories.yaml lists %d repositories" % REPOSITORY_COUNT)
+    if SUCCESSOR_REGISTRY_PATH in overlay or os.path.lexists(root.joinpath(*SUCCESSOR_REGISTRY_PATH.split("/"))):
+        # MET-REGISTRY-001 (VIS-284-LPORACLE): the predicate of repository_registration.record_present. With the
+        # record, the composition module and both schema pins are required; without it, the parse above, as before 284.
+        registration = _composition_module(rule)
+        try:
+            rows = registration.composed_rows(raws[REPOSITORIES_PATH],
+                                              _read(root, overlay, SUCCESSOR_REGISTRY_PATH, rule),
+                                              _read(root, overlay, SUCCESSOR_REGISTRY_SCHEMA_PATH, rule), safe_load)
+        except ValueError as exc:
+            raise Refusal(rule, "the registry with its successor rows: %s" % exc) from None
+        repositories = {**repositories, "repositories": list(rows)}
+        _refuse(len(rows) == COMPOSED_REPOSITORY_COUNT, rule,
+                "the registry with its successor rows lists %d repositories" % COMPOSED_REPOSITORY_COUNT)
     return services, repositories
 
 
@@ -794,7 +831,7 @@ def _repositories(data: dict, repositories: dict, root: Path, overlay: dict) -> 
     catalogued = [(r["id"], r["name"]) for r in repositories["repositories"]]
     _refuse(len(set(pairs)) == len(pairs) and len({p[0] for p in pairs}) == len(pairs), rule,
             "each repository appears once")
-    _refuse(set(pairs) == set(catalogued), rule, "the repositories are exactly repositories.yaml's ids and names")
+    _refuse(set(pairs) == set(catalogued), rule, "the repositories are exactly the composed registry's ids and names")
     names = _plan_names(root, overlay)
     for row in data["repositories"]:
         found = [n for n in names if (m := PLAN_NAME.fullmatch(n)) and m.group(2) == row["name"].lower()]
@@ -1273,6 +1310,25 @@ def _tables(data: dict, adr: str, tables: tuple = TABLES) -> None:
                 "the ADR's " + table + " table is not the data's rendering")
 
 
+def _placement(data: dict, root: Path, overlay: dict) -> dict:
+    # MET-REGISTRY-001 (VIS-284-LPORACLE-2): the data file and ADR 0010 stay byte-equal; R13's placement row is the
+    # successor placement record's. Its own predicate (the record under the root or in the overlay, the form of
+    # repository_registration.placement_record_present): without it, the data alone, as before 284; with it, the
+    # composition module and both schema pins are required, and R1's row form holds for every composed row.
+    rule = "R4"
+    if SUCCESSOR_PLACEMENT_PATH in overlay or os.path.lexists(root.joinpath(*SUCCESSOR_PLACEMENT_PATH.split("/"))):
+        registration = _composition_module(rule, "successor placement record")
+        try:
+            rows = registration.composed_placement_rows(
+                data["repositories"], _read(root, overlay, SUCCESSOR_PLACEMENT_PATH, rule),
+                _read(root, overlay, SUCCESSOR_PLACEMENT_SCHEMA_PATH, rule))
+        except ValueError as exc:
+            raise Refusal(rule, "the placement with its successor rows: %s" % exc) from None
+        data = {**data, "repositories": list(rows)}
+        _shape(data)
+    return data
+
+
 # ---------------------------------------------------------------- the check
 
 def check(root: Path = ROOT, overlay: dict | None = None) -> dict:
@@ -1292,9 +1348,10 @@ def check(root: Path = ROOT, overlay: dict | None = None) -> dict:
     adr = _text(_read(root, overlay, ADR_PATH, "R2"), "R2", ADR_PATH)
     _policy(data, adr)
     deployables = _deployables(data, services)
-    _repositories(data, repositories, root, overlay)
-    _toolchains(data)
-    spans = _sources(data, root, overlay)
+    placed = _placement(data, root, overlay)  # MET-REGISTRY-001: with the successor placement record's rows
+    _repositories(placed, repositories, root, overlay)
+    _toolchains(placed)
+    spans = _sources(placed, root, overlay)
     _outside(data)
     _exceptions(data, deployables, services)
     _technology(data)
@@ -1311,7 +1368,7 @@ def check(root: Path = ROOT, overlay: dict | None = None) -> dict:
                          for s in IMPLEMENTATION_STATUSES}
     rows = [r for e in data["baselineBindings"] for r in e["rows"]]
     by_kind = {k: sum(1 for r in rows if r["kind"] == k) for k in BINDING_KINDS}
-    return {"repositories": len(data["repositories"]), "deployables": len(data["deployables"]),
+    return {"repositories": len(placed["repositories"]), "deployables": len(data["deployables"]),
             "byStatus": by_status, "byPlane": by_plane, "outsideCatalogue": len(data["outsideCatalogue"]),
             "exceptions": len(data["exceptions"]), "spans": spans,
             "byImplementationStatus": by_implementation,

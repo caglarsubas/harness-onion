@@ -10,6 +10,8 @@ from typing import Any
 import jsonschema
 
 from scripts.validate_packet_ownership import validate_packet_ownership
+from scripts.repository_registration import registry_rows
+from scripts.safe_yaml import safe_load as _registry_safe_load
 from scripts.validate_conformance_reference_measurement import validate_dispatch_ownership
 from scripts.validate_readiness import (
     DATA_HARNESS_V1_OBSERVATION_PATHS,
@@ -73,7 +75,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 293
+    assert len(files) == EXPECTED_PACKET_COUNT == 295
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -98,7 +100,9 @@ def test_catalog_covers_all_thirteen_repositories() -> None:
     }
 
     assert len(registered_names) == 13
-    assert packet_repositories == registered_names
+    # MET-REGISTRY-001: the packets cover the registry with its successor rows (R13 through the successor record).
+    composed_names = {row["name"] for row in registry_rows(ROOT, _registry_safe_load)}  # VIS-284-LPORACLE
+    assert packet_repositories == composed_names
 
 
 def test_predecessor_graph_is_closed_acyclic_and_indexed_topologically() -> None:

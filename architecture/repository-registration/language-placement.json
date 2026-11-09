@@ -1,0 +1,49 @@
+{
+ "schema": {
+  "path": "architecture/repository-registration/language-placement.schema.json",
+  "sha256": "26c4e8746effcdab309da74e1bf864bab2932d9e796a31bedc66a4186282bf26"
+ },
+ "decision": {
+  "packet": "LAB-REPO-001",
+  "policy": "LANG-D1",
+  "text": "R13 mas-harness-research-lab is placed on PYTHON with the toolchain Python 3.12.14: its plan's acceptance section states LAB-REPO-001's six `python3 -I -B` argv arrays, and harness-onion's item 158 states Python 3.12.14 (LANG-D1). architecture/language-placement.json and ADR 0010 stay byte-equal at slot 284 (VIS-284-LPORACLE-2), so this record carries R13's placement row and this decision."
+ },
+ "repositories": [
+  {
+   "id": "research-lab",
+   "name": "mas-harness-research-lab",
+   "rNumber": "R13",
+   "languages": [
+    "PYTHON"
+   ],
+   "toolchain": "Python 3.12.14",
+   "sources": [
+    {
+     "path": "docs/repositories/13-mas-harness-research-lab.md",
+     "section": "## Testing, verification, and acceptance",
+     "lines": [
+      73,
+      73
+     ],
+     "sha256": "40c05546c4c4029016a51b85ff168c92812c78edfa20ef2fc4f9d4187866a88f",
+     "evidence": [
+      "python3 -I -B"
+     ]
+    },
+    {
+     "path": "docs/repositories/00-harness-engineering.md",
+     "section": "## PR packets",
+     "lines": [
+      1604,
+      1604
+     ],
+     "sha256": "6fe64a3bba644a1318841e257a31562a7f87815d0010e65fc0d539b7b3f5e78e",
+     "evidence": [
+      "Python",
+      "Python 3.12.14"
+     ]
+    }
+   ]
+  }
+ ]
+}

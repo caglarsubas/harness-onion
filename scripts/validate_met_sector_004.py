@@ -702,12 +702,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "ind bank 002 publish validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 293
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
-            "closed 293-packet catalog retaining the 280-packet checkpoint")
+    require(len(paths) == 295
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
+            "closed 295-packet catalog retaining the 280-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -748,4 +748,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("IND-BANK-002 publish valid: 293 current specifications at slot 276; 280-packet checkpoint and exact 278-packet predecessor; contract reviewed.")
+    print("IND-BANK-002 publish valid: 295 current specifications at slot 276; 280-packet checkpoint and exact 278-packet predecessor; contract reviewed.")

@@ -19,8 +19,10 @@ import yaml
 
 try:
     from safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+    from repository_registration import registry_rows
 except ModuleNotFoundError:
     from scripts.safe_yaml import SafeLoader as MetaSafeLoader, safe_load as safe_yaml_load
+    from scripts.repository_registration import registry_rows
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -397,6 +399,24 @@ def _validate_repositories(
     return actual, graph_orders
 
 
+# MET-REGISTRY-001 (VIS-284-ARGV): the registry with its successor rows, through the one composition reader: the
+# canonical thirteen above, then EXPECTED_SUCCESSOR_REPOSITORIES, fourteen in all.
+EXPECTED_SUCCESSOR_REPOSITORIES = {"research-lab": "mas-harness-research-lab"}
+
+
+def _validate_composed_repositories(root: Path, repositories: dict[str, str]) -> None:
+    try:  # VIS-284-LPORACLE: the record in the root decides, in the composition reader only
+        rows = registry_rows(root, safe_yaml_load)
+    except (OSError, ValueError) as exc:
+        raise ArchitectureValidationError(f"cannot compose the repository registry: {exc}") from exc
+    composed = {row["id"]: row["name"] for row in rows}
+    _require(len(rows) == len(composed) == 14, "the registry with its successor rows must hold exactly 14 unique records")
+    _require(
+        composed == {**repositories, **EXPECTED_SUCCESSOR_REPOSITORIES},
+        "repository IDs and names differ from the canonical fourteen",
+    )
+
+
 def _validate_taxonomy(
     taxonomy: dict[str, Any],
     repository_ids: set[str],
@@ -616,6 +636,7 @@ def validate_architecture(root: Path = ROOT, *, check_toolchain: bool = True) ->
         )
 
     repositories, repository_orders = _validate_repositories(authorities["repositories"])
+    _validate_composed_repositories(root, repositories)
     deployables, harness_order = _validate_taxonomy(authorities["taxonomy"], set(repositories))
     service_ids = _validate_services(authorities["services"], deployables, repositories)
     _validate_runtime_graph(authorities["dependency-graph"], service_ids)

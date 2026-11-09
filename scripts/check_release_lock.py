@@ -16,11 +16,17 @@ from typing import Any
 import jsonschema
 import yaml
 
+try:
+    from repository_registration import registry_rows
+except ModuleNotFoundError:
+    from scripts.repository_registration import registry_rows
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas/release-set.schema.json"
 POLICY_PATH = ROOT / "release/evidence-policy.yaml"
 REGISTRY_PATH = ROOT / "architecture/repositories.yaml"
+REGISTRATION_ROOT = ROOT  # MET-REGISTRY-001: the root the composition reader reads (VIS-284-LPORACLE)
 
 COMPONENT_AXES = ["SOURCE", "CI", "MERGE", "ARTIFACT", "SIGNATURE"]
 RELEASE_AXES = [
@@ -133,6 +139,18 @@ def load_document(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ReleaseLockError(f"{path} must contain one mapping")
     return value
+
+
+def registry_with_successors() -> tuple[dict[str, Any], ...]:
+    """MET-REGISTRY-001 (VIS-284-ARGV): the registry's rows, then the successor registry record's, through the one
+    composition reader, where the record in the root decides (VIS-284-LPORACLE). The lock still pins the registry
+    alone (repositoryRegistry)."""
+    try:
+        return registry_rows(
+            REGISTRATION_ROOT, lambda raw: yaml.load(raw.decode("utf-8"), Loader=UniqueKeySafeLoader)
+        )
+    except (OSError, ValueError) as exc:
+        raise ReleaseLockError(f"cannot compose the repository registry: {exc}") from exc
 
 
 def sha256_reference(path: Path) -> str:
@@ -300,6 +318,10 @@ def validate_release_lock(path: Path) -> tuple[dict[str, Any], ReleaseLockReport
 
     target = document["promotion"]["target"]
     decision = document["promotion"]["decision"]
+    repositories = registry_with_successors()
+    for repository in repositories:  # MET-REGISTRY-001 condition 1: before every lock kind's return
+        if repository.get("releaseSet") == "EXCLUDED" and repository.get("kind") != "meta":
+            raise ReleaseLockError("releaseSet EXCLUDED on a product repository")
     if document["documentKind"] == "INERT_LOCK":
         expected_blockers = ["NO_PRODUCT_RELEASES_PUBLISHED"]
         if document["promotion"]["blockers"] != expected_blockers:
@@ -313,13 +335,13 @@ def validate_release_lock(path: Path) -> tuple[dict[str, Any], ReleaseLockReport
             lock_digest=sha256_reference(path),
         )
 
-    registry = load_document(REGISTRY_PATH)
-    expected_repositories = {
+    expected_repositories = {  # the release-set repositories: the registry with its successor rows, minus EXCLUDED
         repository["id"]: repository["name"]
-        for repository in registry.get("repositories", [])
+        for repository in repositories
+        if repository.get("releaseSet") != "EXCLUDED"
     }
     if len(expected_repositories) != 13:
-        raise ReleaseLockError("repository registry no longer contains exactly 13 entries")
+        raise ReleaseLockError("repository registry no longer contains exactly 13 release-set repositories")
 
     repository_records = document["repositories"]
     actual_repositories = {

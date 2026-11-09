@@ -7,11 +7,14 @@ MET-GOV-005 (TECH-TRUTH-001) changes the v1 cases exactly as its design's Append
 per section-5 row of that design (BR-TT-2, BR-TT-3) and the binding rules' self-checks."""
 import hashlib
 import json
+import shutil
+import sys
 from pathlib import Path
 
 import pytest
 
 from scripts import language_placement as lp
+from scripts.repository_registration import registry_rows
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -53,11 +56,11 @@ def _with_catalogue(path, old, new):
 
 def test_head_is_accepted_with_the_designed_counts():
     assert lp.check(ROOT) == {
-        "repositories": 13, "deployables": 28,
+        "repositories": 14, "deployables": 28,
         "byStatus": {"AS_PLANNED": 15, "PENDING_HOTPATH_DECISION": 4, "CONTROL_LOOP_TO_BE_CONFIRMED": 1,
                      "NO_STATED_DEFAULT": 8},
         "byPlane": {"CONTROL": 2, "DATA": 3, "UNSTATED": 23},
-        "outsideCatalogue": 5, "exceptions": 5, "spans": 112,
+        "outsideCatalogue": 5, "exceptions": 5, "spans": 114,
         "byImplementationStatus": {"PLANNED": 27, "APPROVED": 0, "IMPLEMENTED": 0, "UPSTREAM_MANAGED": 1},
         "nativeRows": 2, "harnesses": 16, "bindings": 31,
         "byKind": {"CATALOG_MODULE": 18, "OPTIONAL_ADAPTER": 2, "PLAN_LIBRARY": 1, "DEFERRED": 10}}
@@ -65,7 +68,7 @@ def test_head_is_accepted_with_the_designed_counts():
 
 def test_closed_constants_cover_the_catalogues_and_the_design():
     services = lp.safe_load((ROOT / lp.SERVICES_PATH).read_bytes())
-    repositories = lp.safe_load((ROOT / lp.REPOSITORIES_PATH).read_bytes())
+    repositories = {"repositories": registry_rows(ROOT, lp.safe_load)}  # MET-REGISTRY-001: with its successor rows
     assert list(lp.EXPECTED) == [s["id"] for s in services["services"]]
     assert list(lp.REPO_LANGUAGES) == [r["id"] for r in repositories["repositories"]]
     assert set(lp.OUTSIDE_EXPECTED) == {"reference-channel-ui", "model-backends", "native-host-enforcement-roles",
@@ -309,11 +312,11 @@ def test_source_mutations_are_r5(name):
 
 
 HEAD_SUMMARY = {
-    "repositories": 13, "deployables": 28,
+    "repositories": 14, "deployables": 28,
     "byStatus": {"AS_PLANNED": 15, "PENDING_HOTPATH_DECISION": 4, "CONTROL_LOOP_TO_BE_CONFIRMED": 1,
                  "NO_STATED_DEFAULT": 8},
     "byPlane": {"CONTROL": 2, "DATA": 3, "UNSTATED": 23},
-    "outsideCatalogue": 5, "exceptions": 5, "spans": 112,
+    "outsideCatalogue": 5, "exceptions": 5, "spans": 114,
     "byImplementationStatus": {"PLANNED": 27, "APPROVED": 0, "IMPLEMENTED": 0, "UPSTREAM_MANAGED": 1},
     "nativeRows": 2, "harnesses": 16, "bindings": 31,
     "byKind": {"CATALOG_MODULE": 18, "OPTIONAL_ADAPTER": 2, "PLAN_LIBRARY": 1, "DEFERRED": 10}}
@@ -564,7 +567,8 @@ def test_v2_closed_constants_cover_the_data():
     ids = [d["id"] for d in data["deployables"]]
     assert list(lp.TECH_EXPECTED) == ids + list(lp.NATIVE_ROWS)
     assert list(lp.FRAMEWORKS_EXPECTED) == ids == list(lp.TOOLCHAIN_EXPECTED["deployables"])
-    assert list(lp.TOOLCHAIN_EXPECTED["repositories"]) == [r["id"] for r in data["repositories"]]
+    placed = lp._placement(data, ROOT, {})  # MET-REGISTRY-001 (VIS-284-LPORACLE-2): with the successor rows
+    assert list(lp.TOOLCHAIN_EXPECTED["repositories"]) == [r["id"] for r in placed["repositories"]]
     assert len(lp.STEMS) == 16 and len(lp.BINDINGS_EXPECTED) == 31 and lp.PLAN_TOKENS == {"helm/helm": "Helm 4.2.0"}
     kinds = [row[2] for row in lp.BINDINGS_EXPECTED]
     assert {k: kinds.count(k) for k in lp.BINDING_KINDS} == {"CATALOG_MODULE": 18, "OPTIONAL_ADAPTER": 2,
@@ -645,7 +649,7 @@ def test_br_tt_4_native_rows_and_frameworks_sources():
     natives = [r for r in data["outsideCatalogue"] if r["id"] in lp.NATIVE_ROWS]
     assert len(natives) == 2 and all(r["frameworks"] == [] and "frameworksSources" not in r for r in natives)
     assert all(d["frameworksSources"] for d in data["deployables"] if d["plannedLanguage"] != "UPSTREAM_OWN")
-    assert HEAD_SUMMARY["spans"] == 112
+    assert HEAD_SUMMARY["spans"] == 114
 
 
 def test_br_tt_5_the_v1_cases_change_as_appendix_c_states():
@@ -1165,3 +1169,91 @@ def test_section_5_row_reaches_its_first_broken_rule(number, monkeypatch):
         assert lp.check(ROOT, built) == HEAD_SUMMARY
     else:
         _refused(expected, built)
+
+
+# MET-REGISTRY-001 (VIS-284-LPORACLE condition 3): a synthetic root, never the oracle's. The catalogues are copied; the
+# successor record and its schema only where named; the composition module is blocked in sys.modules where named.
+def _catalogue_root(tmp_path, with_record: bool):
+    root = tmp_path / "root"
+    paths = lp.CATALOGUES + ((lp.SUCCESSOR_REGISTRY_PATH, lp.SUCCESSOR_REGISTRY_SCHEMA_PATH) if with_record else ())
+    for rel in paths:
+        target = root.joinpath(*rel.split("/"))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / rel).read_bytes())
+    return root
+
+
+def _block_the_composition_module(monkeypatch):
+    for name in ("repository_registration", "scripts.repository_registration"):
+        monkeypatch.setitem(sys.modules, name, None)
+
+
+def test_a_root_without_the_successor_record_reads_the_base_rows_without_the_module(monkeypatch, tmp_path):
+    data = json.loads((ROOT / lp.DATA_PATH).read_bytes())
+    _block_the_composition_module(monkeypatch)
+    _, repositories = lp._catalogues(data, _catalogue_root(tmp_path, False), {})
+    base = lp.safe_load((ROOT / lp.REPOSITORIES_PATH).read_bytes())["repositories"]
+    assert [r["id"] for r in repositories["repositories"]] == [r["id"] for r in base]
+    assert len(base) == lp.REPOSITORY_COUNT == 13
+
+
+def test_a_root_with_the_successor_record_and_without_its_module_is_refused(monkeypatch, tmp_path):
+    data = json.loads((ROOT / lp.DATA_PATH).read_bytes())
+    root = _catalogue_root(tmp_path, True)
+    assert len(lp._catalogues(data, root, {})[1]["repositories"]) == lp.COMPOSED_REPOSITORY_COUNT == 14
+    _block_the_composition_module(monkeypatch)
+    with pytest.raises(lp.Refusal, match="successor registry record present without its composition module"):
+        lp._catalogues(data, root, {})
+
+
+def test_another_import_failure_of_the_composition_module_propagates(monkeypatch, tmp_path):
+    data = json.loads((ROOT / lp.DATA_PATH).read_bytes())
+
+    def failing(name):
+        raise ModuleNotFoundError("No module named 'a_dependency_284'", name="a_dependency_284")
+    monkeypatch.setattr(lp.importlib, "import_module", failing)
+    with pytest.raises(ModuleNotFoundError) as info:
+        lp._catalogues(data, _catalogue_root(tmp_path, True), {})
+    assert info.value.name == "a_dependency_284"
+
+
+# MET-REGISTRY-001 (VIS-284-LPORACLE-2 (a)): one predicate per base file, both records together on the live tree. A
+# copied root like the language-placement oracle's: the data, the three catalogues and the four docs folders, plus each
+# successor record with its schema where named.
+_COPIED_FILES = ("architecture/language-placement.json", "architecture/services.yaml", "architecture/repositories.yaml",
+                 "architecture/providers.yaml")
+_COPIED_DIRS = ("docs/adr", "docs/alpha-2", "docs/harnesses", "docs/repositories")
+
+
+def _copied_root(tmp_path, registry: bool, placement: bool):
+    root = tmp_path / "copied"
+    files = (_COPIED_FILES + ((lp.SUCCESSOR_REGISTRY_PATH, lp.SUCCESSOR_REGISTRY_SCHEMA_PATH) if registry else ())
+             + ((lp.SUCCESSOR_PLACEMENT_PATH, lp.SUCCESSOR_PLACEMENT_SCHEMA_PATH) if placement else ()))
+    for rel in files:
+        target = root.joinpath(*rel.split("/"))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / rel).read_bytes())
+    for folder in _COPIED_DIRS:
+        shutil.copytree(ROOT / folder, root / folder)
+    return root
+
+
+@pytest.mark.parametrize("registry,placement,expected", [
+    (True, True, "fourteen"), (False, False, "thirteen"), (True, False, "R4"), (False, True, "R4")])
+def test_each_base_file_has_its_own_predicate_and_both_records_go_together(tmp_path, registry, placement, expected):
+    root = _copied_root(tmp_path, registry, placement)
+    if expected == "fourteen":
+        assert lp.check(root) == HEAD_SUMMARY
+    elif expected == "thirteen":
+        summary = lp.check(root)
+        assert summary["repositories"] == 13 and summary["spans"] == 112
+    else:
+        with pytest.raises(lp.Refusal, match="^R4: the repositories are exactly the composed registry's ids and names"):
+            lp.check(root)
+
+
+def test_a_root_with_the_placement_record_and_without_its_module_is_refused(monkeypatch, tmp_path):
+    root = _copied_root(tmp_path, False, True)
+    _block_the_composition_module(monkeypatch)
+    with pytest.raises(lp.Refusal, match="^R4: successor placement record present without its composition module"):
+        lp.check(root)
