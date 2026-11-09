@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/authority-map-f-authority.json"
-AUTHORITY_SHA256 = "476da5c3b14187d2008d7eee92248b64a646a42f2edded82b285e78e1757ee51"
+AUTHORITY_SHA256 = "22936335ef1e91ed6fd9fff2b89e82e46bb0c42316bc24ffd1ada2d62ba78fb1"
 VALIDATOR_PATH = "scripts/validate_met_adopt_008.py"
 BASE_COMMIT = "98d1f6f1f87bf988d2b12c97132d66b8cf5f351c"
 NEW_PACKET = "MET-ADOPT-008"
@@ -540,9 +540,16 @@ def check_fix(raws: Any, budget: Any) -> None:
     _bound(lambda: budget(vectors) is None, "MET-ADOPT-008 A5 the model replays every vector")
 
 
-def validate_fix() -> None:
-    check_fix({path: _verified(path) for path in (MODEL_PATH, VECTORS_PATH, MAP_PATH)},
-              _era_model(MODEL_PATH, MODEL_NAME).__dict__["_budget"])
+def _replay(model: Any, packets: Any) -> Any:
+    """A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's
+    invariant) and counts 11; None when it does."""
+    result = model.check(regular_bytes, frozenset(packets))
+    return None if result["budgetVectors"] == 11 else result
+
+
+def validate_fix(packets: Any) -> None:
+    model = _era_model(MODEL_PATH, MODEL_NAME)
+    check_fix({path: _verified(path) for path in (MODEL_PATH, VECTORS_PATH, MAP_PATH)}, lambda raw: _replay(model, packets))
 
 
 def validate_met_adopt_008(packets: dict[str, Any]) -> None:
@@ -550,7 +557,7 @@ def validate_met_adopt_008(packets: dict[str, Any]) -> None:
     this layer's canonical hunks."""
     for path in ERA_SHA256:
         _verified(path)
-    validate_fix()
+    validate_fix(packets)
     validate_registry()
     validate_hunk_record()
     validate_canonical_hunks()
