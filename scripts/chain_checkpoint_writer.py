@@ -235,7 +235,7 @@ def check_ledger_hunks(entry, side_raw, named_digest, authority_path, live_raw):
         return "the ledger hunk side record names another authority"
     ref = entry.get("reverseHunksRecord") if isinstance(entry, dict) else None
     if not (isinstance(entry, dict) and set(entry) == ENTRY_KEYS and isinstance(ref, dict) and set(ref) == {"path", "sha256"}):
-        return "the record.json entry is not exactly {beforeSha256, afterSha256, reverseHunksRecord{path, sha256}}"
+        return "the entry's keys: the record.json entry is not exactly {beforeSha256, afterSha256, reverseHunksRecord{path, sha256}}"
     if (side["path"], side["beforeSha256"], side["afterSha256"]) != (RECORD_PATH, entry["beforeSha256"], entry["afterSha256"]) \
             or ref["sha256"] != named_digest:
         return "the side record's path, beforeSha256 or afterSha256, or the entry's reference, differs"

@@ -95,7 +95,7 @@ SIGNAL_FIELDS = frozenset(("ledgerSha256", "g1ModuleSha256", "bundleId", "head")
 SIGNAL_MAX = 4096
 RULE_SHA256 = "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f"   # the pinned hunk_class_v23.py (MON-282-W2-RULED)
 RULE_V22_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
-RULE_V24_SHA256 = "9287d40a173d3bf63f6ea833f82876194c9a2ebf1e1d7263c453d621797cddc9"   # the pinned hunk_class_v24.py (CONTRACT_286 r3 3.1)
+RULE_V24_SHA256 = "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"   # the pinned hunk_class_v24.py (CONTRACT_286 r3 3.1)
 PREFIX = "chain-checkpoint shadow:"
 RECORD_LINE = "chain-checkpoint shadow record:"
 COUNT_EFFECT = {"input": ("A", "restart"), "stale": ("A", "restart"), "outcome": ("B", "restart"),
@@ -343,7 +343,9 @@ def _finds(raw, needle):
 # ---- reader after v2.3's rule; it reuses v2.3's _tokens, _lines, _shape, MEMBER, _finds, record_class and register_class.
 # R1 (283-D4; MP049-C1-2): a member insertion is cascade only in form F1 (one successor...NEW_PACKET chain, K = 0 only),
 #   F2 (the NEW_PACKET chain then the *...PRODUCT_PACKETS chain, K >= 1 only) or F3 (an id line gains the new id, then
-#   at K >= 1 the authority's product ids in the key order of its productPackets).
+#   at K >= 1 the authority's product ids in the key order of its productPackets). F3's run is quoted as the line's
+#   other ids are (MON-286-C3-CLASS D1): each quoted id next to the run in the file (before it and after it, past
+#   spaces and one comma), at least one, carries the run's own quote character.
 # R2 (VIS-285-RULE (a)): a digit move is cascade only when every (before, after) pair is declared: the catalog pair
 #   (n, n + steps[1]), n the authority's baselinePackets size, or a pair of the context's countPairs.
 # W (Q-286-3 (a)): a hunk in ci/parallel_suite_weights.json is class record when it only inserts entries, each key a
@@ -355,6 +357,8 @@ V24_CHAIN_PROD = rb"(?:[A-Za-z_][A-Za-z_0-9]*\.)?\*(?:successor\.)+PRODUCT_PACKE
 V24_F2 = re.compile(V24_CHAIN_NEW + rb"\s*,\s*" + V24_CHAIN_PROD)
 V24_F1 = re.compile(V24_CHAIN_NEW)
 V24_ENTRY = re.compile(rb'^\s*"([^"]+)"\s*:\s*-?[0-9][0-9.eE+-]*\s*,?\s*$')
+V24_QUOTED_END = re.compile(rb"""(["'])[^"'\n]*\1\s*,?\s*\Z""")
+V24_QUOTED_START = re.compile(rb"""\A\s*,?\s*(["'])[^"'\n]*\1""")
 
 
 def _rest_ok_v24(before, after, pairs):
@@ -392,6 +396,16 @@ def _v24_id_run(ids):
     """F3's run: the given ids in order, each quoted (one quote kind for the run), comma-separated."""
     for q in (b'"', b"'"):
         yield re.compile(rb"\s*,\s*".join(re.escape(q + i.encode() + q) for i in ids))
+
+
+def _v24_quoted_as_line(after, s, e):
+    """F3: the quoted ids next to the run after[s:e] in the file (the one before it and the one after it, past spaces
+    and one comma, within 512 bytes), at least one, each carry the run's own quote character, as the line's other ids
+    are."""
+    q = after[s:s + 1]
+    near = (V24_QUOTED_END.search(after[max(0, s - 512):s]), V24_QUOTED_START.match(after[e:e + 512]))
+    found = [m.group(1) for m in near if m]
+    return bool(found) and all(x == q for x in found)
 
 
 def weights_class_v24(after, at, remove, insert, new_tests):
@@ -447,6 +461,7 @@ def classify_v24(path, after, at, remove, insert, ctx, seen=None):
     while hi < min(len(a_lines), len(b_lines)) - lo and a_lines[len(a_lines) - 1 - hi] == b_lines[len(b_lines) - 1 - hi]:
         hi += 1
     window = (max(0, lo - 300), len(a_lines) - hi + 300)
+    start = after.rfind(b"\n", 0, at) + 1     # a_lines == after[start:...], as _lines cuts it
     if k == 0:
         forms = [V24_F1] + list(_v24_id_run([new_id]))
     else:
@@ -461,7 +476,8 @@ def classify_v24(path, after, at, remove, insert, ctx, seen=None):
             left = re.search(rb",\s*\Z", a_lines[:s])
             right = re.match(rb"\s*,", a_lines[e:])
             for cut in ((left.start(), e) if left else None, (s, e + right.end()) if right else None):
-                if cut and _rest_ok_v24(b_lines, a_lines[:cut[0]] + a_lines[cut[1]:], pairs):
+                if cut and _rest_ok_v24(b_lines, a_lines[:cut[0]] + a_lines[cut[1]:], pairs) and (
+                        form is V24_F1 or form is V24_F2 or _v24_quoted_as_line(after, start + s, start + e)):
                     return "cascade"
     return register_class(path, after, at, remove, insert, new_id, seen)
 # ---- end of chainmech v2.4's class rule ----

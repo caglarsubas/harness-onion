@@ -1350,7 +1350,7 @@ def test_c3_the_reader_rechecks_in_full(change):
     elif change == "no_l2_fill":
         reader, message = reader.replace(b"self._l2[key] = value", b"self._l2.clear()", 1), C3_CACHE
     elif change == "rule_digest":
-        reader, message = reader.replace(b'RULE_V24_SHA256 = "9287', b'RULE_V24_SHA256 = "0287', 1), C3_RULES
+        reader, message = reader.replace(b'RULE_V24_SHA256 = "8c61', b'RULE_V24_SHA256 = "0c61', 1), C3_RULES
     elif change == "rules_key":
         reader, message = reader.replace(b"                RULE_V24_SHA256: (CLASSES, True)}", b"}", 1), C3_RULES
     elif change == "table_row":

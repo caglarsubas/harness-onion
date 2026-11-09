@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-authority.json"
-AUTHORITY_SHA256 = "b67400d3a218f3a9317311df815344c50c487303f96ad2eb503802fe15dfcc54"
+AUTHORITY_SHA256 = "0da09482f089bdc9460871c7f8df673f11ff8554dc7d849b1893fbfed39688e7"
 VALIDATOR_PATH = "scripts/validate_met_perf_049.py"
 BASE_COMMIT = "0fd885ff3a9a80f8882ec4a03e0d16e95675868c"
 NEW_PACKET = "MET-PERF-049"
@@ -363,16 +363,16 @@ TESTS_CONFTEST_EDITS = ((b'_CHAIN_PRELOADED = False     # MET-PERF-049 (286 3.5)
 ROOT_CONFTEST_EDITS = ((b'prints one class-C line. MET-PERF-049 (P-048-2, inert at 286): one guarded collection hook calls the reader\'s selection\nentry point only when the reader exposes one (no reader does at 286; MET-PERF-048\'s G1 module would), and a failure\nthere is one class-C line with the selection unchanged."""', b'prints one class-C line."""'), (b'def pytest_collection_modifyitems(session, config, items):\n    # MET-PERF-049 P-048-2: inert unless the reader exposes a selection entry point.\n    reader = _READER.get("reader")\n    select = getattr(reader, "select", None) if reader is not None else None\n    if select is None:\n        return\n    try:\n        select(items, config)\n    except Exception as exc:\n        _checkpoint_line("chain-checkpoint shadow: class C, the reader\'s selection raised: %s" % type(exc).__name__)\n\n\n', b''))
 ERA_SHA256 = MappingProxyType({
     "architecture/chain-checkpoint/README.md": "d9a12f7f761035661d89aff35921e2a30a0dcd42ba72e39721bfa504eaf2ece4",
-    "architecture/chain-checkpoint/vectors.json": "14fd944d3962b2dea54a083beb6d8b603de0354bc180fb095c5007feb091acc3",
+    "architecture/chain-checkpoint/vectors.json": "a8911ef07ac5db98675de99e09db609596c22fedbe959282a63b6a941cf1287a",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "345fd81a3bfc7429a96bc7b8201c163e7d7c7c5ae7d9932d986244a5316cfba3",
-    "ci/chain_checkpoint.py": "6d0d2fbf22a475a5dacfa6304093b232ecce2478e9085f0c4343d11d7fd31893",
+    "ci/chain_checkpoint.py": "9d5d2a367df20f80675724cec63f09a2f4d2feba0c43f21fc9ce5d685d828eea",
     "ci/parallel_suite.py": "9f212f315d1d37b906366b4d595705dc3246bc3bffb2e7d5ffc0707fe8bec524",
     "conftest.py": "ca9230511c1c4c14aed3099fb82733900491893c70538b644a3f4d33aa304fad",
     "docs/alpha-2/PARALLEL_SUITE_PERF035.md": "57241b5ca23282d5c75bbebb77c16d0c363444bee5c4a826db9fde7cff4c910b",
-    "scripts/chain_checkpoint_writer.py": "d8c40eb72f538c7ccd9df9c425af543deca5d2d43ebcf313f7b2d086a7a0ac5b",
+    "scripts/chain_checkpoint_writer.py": "e0d7aefa7aa60d0727507f2094e3a476241c3189b4dc05038c79130a01768866",
     "tests/conftest.py": "262e50d941b15a41cd129f4f06f35f8dce82d29798e6935f697f24dbc8de95f3",
-    "tests/test_chain_checkpoint.py": "b965eb2c439e62aeb4eccaa0a4e517a1064389196a79c5c79637b7b41f2aa0f4",
+    "tests/test_chain_checkpoint.py": "9da122b14545bef7704f4c7af191fe96147cddd4533dcde42338d4d7ec5ee90e",
     "tests/test_parallel_suite.py": "56a41eacdcbb72939ca5b2fe1cb82de269fb62fceb3cb5823fe16ddc73022f6d",
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
@@ -500,7 +500,7 @@ SIDE_MEMBERS = frozenset({"authorityPath", "path", "beforeSha256", "afterSha256"
 ENTRY_KEYS = frozenset({"beforeSha256", "afterSha256", "reverseHunksRecord"})
 RULE_DIGESTS = MappingProxyType({"RULE_V22_SHA256": "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b",
                                  "RULE_SHA256": "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f",
-                                 "RULE_V24_SHA256": "9287d40a173d3bf63f6ea833f82876194c9a2ebf1e1d7263c453d621797cddc9"})
+                                 "RULE_V24_SHA256": "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"})
 V24_MARKS = (b"# ---- chainmech v2.4's class rule", b"# ---- end of chainmech v2.4's class rule ----\n")
 V24_LINES = (b'CONTEXT_KEYS_V24 = CONTEXT_KEYS | {"countPairs"}\n',
              b'SIDE_MEMBERS_V24 = SIDE_MEMBERS | {"outcomeStatements"}')
@@ -525,7 +525,7 @@ TESTS_CONFTEST_LINES = (b"\n_CHAIN_PRELOADED = False ", b"    global _CHAIN_PREL
 HUNK_RECORD_MEMBERS = frozenset({"authorityPath", "hunkClassVocabulary", "hunkClassRuleSha256", "hunkClassContext",
                                  "classes", "outcomeStatements"})
 HUNK_VOCABULARY = ("bridge", "cascade", "other", "record", "register")     # chainmech v2.4 keeps v2.3's vocabulary
-HUNK_RULE_SHA256 = "9287d40a173d3bf63f6ea833f82876194c9a2ebf1e1d7263c453d621797cddc9"
+HUNK_RULE_SHA256 = "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"
 HUNK_CONTEXT = MappingProxyType({"newPacket": NEW_PACKET, "prevValidator": "scripts/validate_met_adopt_008.py",
                                  "prevTest": "tests/test_met_adopt_008.py", "steps": (1, 1), "countPairs": ((312, 313),)})
 

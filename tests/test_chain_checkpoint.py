@@ -850,6 +850,8 @@ def test_v21_the_refused_member_forms_are_other():
     assert _cls24(L24, b'I = {"O-1"}\n', b'I = {"O-1", "NEW-1", "PROD-2", "PROD-1"}\n', k2) == "other"
     assert _cls24(L24, b'I = {"O-1"}\n', b'I = {"O-1", "NEW-1", "PROD-1"}\n', k2) == "other"
     assert _cls24(L24, b"CHAIN = {A}\n", b'CHAIN = {A, successor.NEW_PACKET, "NEW-1"}\n', _c24()) == "other"
+    assert _cls24(L24, b'I = ("O-1", "O-2")\n', b"I = (\"O-1\", \"O-2\", 'NEW-1', 'PROD-1', 'PROD-2')\n", k2) == "other"
+    assert _cls24(L24, b'I = {"O-1"}\n', b"I = {\"O-1\", 'NEW-1'}\n", _c24()) == "other"
 
 
 WEIGHTS0 = b'{\n  "tests/test_a.py": 4.5,\n  "tests/test_b.py": 6.5\n}\n'
@@ -959,7 +961,12 @@ def test_v32_the_side_record_names_another_authority():
 
 def test_v33_the_entry_key_set():
     side, raw, entry, _ = _side286()
-    assert "the record.json entry" in _check286(side, raw=raw, entry=dict(entry, reverseHunks=[]))
+    ref = entry["reverseHunksRecord"]
+    shapes = [dict(entry, extra=1), {k: v for k, v in entry.items() if k != "afterSha256"}, dict(entry, reverseHunks=[]),
+              dict(entry, reverseHunksRecord=dict(ref, extra=1)), dict(entry, reverseHunksRecord={"path": ref["path"]})]
+    for shape in shapes:
+        fault = _check286(side, raw=raw, entry=shape)
+        assert fault.startswith("the entry's keys") and "the record.json entry" in fault
 
 
 def test_v34_the_side_record_and_the_entry_differ():
