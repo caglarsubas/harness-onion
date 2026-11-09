@@ -162,10 +162,16 @@ starts. Each is shadow-only.
 
 **The writing run's two stated differences**, always given together:
 1. Argv 63 runs directly, with the capture plugin.
-2. It runs serial: the `-p` option keeps the parallel suite's serial loop, where the verify runs 8 workers.
+2. It runs serial: the `-p` option keeps the parallel suite's serial loop, where the verify runs 12 workers.
 
-The owner's approval for 282 names both. An outcome that differs between that run and the 8-worker verify 0 is
+The owner's approval for 282 names both. An outcome that differs between that run and the 12-worker verify 0 is
 attributed to them first, and is class A only if the input set explains it.
+
+**The workers note (MET-PERF-049).** WORKERS is 12 from slot 286 (8 before), the count the reader reads from
+`ci/parallel_suite.py`. The trade-off: during a verify's suite phase, 12 of the host's 18 cores (6 performance, 12
+efficiency) are busy with test workers, against 8 before, so other sessions on the host and the Ollama service slow
+down for those minutes; in exchange argv 63's wall is about 94 s shorter, measured on a quiet host (the worker trial
+v3, K12 against the mean of two K8 arms).
 
 **Capture gaps:** opens by subprocesses, and files read through memory maps already open, are not seen. Process-level
 caches (a module imported, or a file read into an lru cache, by an earlier node of the serial run) are charged only to the
