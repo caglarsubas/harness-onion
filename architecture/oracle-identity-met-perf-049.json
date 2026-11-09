@@ -23,15 +23,17 @@
  "launched": "2026-11-10T02:18:05+08:00",
  "finished": "2026-11-10T02:36:16+08:00",
  "ruling": {
-  "decision": "PENDING",
-  "by": "LANE_MONITOR"
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-286-C3-KEEP",
+  "date": "2026-11-10"
  },
  "disclosures": [
   "brief 0c2a3d68 (template 1c752275) and launch prompt 078e29b5 (template a71e2f0f; MON-286-C3-GO); the author's only inputs are CONTRACT_286 rev 6 (42d06937), the chain checkpoint's README (d9a12f7f) and vectors (14fd944d) at c2e, the light tree's meta YAML with its closed-path strings masked (bda4e199) and the operator-stated facts the brief names by line; the author is a fresh agent that authored nothing in c1..c2e and ran py_compile only, no test run; its file was c28ba537",
   "run blind by the operator, R00, in-process (C40) on git-archive exports: run 1, the author's file on c2e 29bbc887 with 285's hand-rolled caller, collected nothing (module-level functions only; a runner fault, the log empty); run 2, the author's file on c2e with the test runner itself in-process (MON-286-C3-RUN2): rc 1, tests 115, failures 8, errors 0, skipped 0 (log ff6dade4, junit 985ffaaf); counts are read from the junit file's testsuite attributes only",
   "classified by the non-author lane monitor (MON-286-C3-CLASS): 2 oracle slips, from the brief's item 8 (erratum 1, 2b55bb21: check_xi's scope is _replay; an outside rename with _replay lifted is v3's to refuse), corrected by the monitor c28ba537 -> f0e7e0c0; 6 reader defects, class (b), fixed in the candidate at c2f (D1: an F3 id run quoted otherwise than the line's ids is other; D2: the entry-key fault names the entry's keys)",
   "run 3, the corrected file on c2f 6f17cbad with the test runner in-process: rc 0, tests 115, failures 0, errors 0, skipped 0 (log 118d7091, junit 06c45dd7, verdict PASS)",
-  "the operator never opened the oracle, its correction, the run logs or the junit files; placed in the tree by bytes at c3; the lane monitor rules this identity",
+  "the operator never opened the oracle, its correction, the run logs or the junit files; placed in the tree by bytes at c3 with this identity PENDING; ruled KEEP by the lane monitor after verifying c3 (MON-286-C3-KEEP), written at c3b",
   "the author's work folder holds a bytecode cache from py_compile (as in 285)"
  ]
 }
