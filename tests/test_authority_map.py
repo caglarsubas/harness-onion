@@ -77,7 +77,7 @@ def line_quote(path, n):
 
 def test_the_record_passes():
     result = run()
-    assert result["concerns"] == 9 and result["pins"] == 27 and result["budgetVectors"] == 10
+    assert result["concerns"] == 9 and result["pins"] == 27 and result["budgetVectors"] == 11
     assert result["flagged"] == ["AM-06 whenUnavailable", "AM-09 whenRevoked"]
 
 

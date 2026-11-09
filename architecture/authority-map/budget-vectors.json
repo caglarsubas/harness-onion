@@ -342,6 +342,92 @@
      "returned": 100
     }
    }
+  },
+  {
+   "id": "VB-11",
+   "name": "ledger loss with an open reservation",
+   "root": 1000,
+   "steps": [
+    {
+     "op": "reserve",
+     "key": "k1",
+     "amount": 100
+    },
+    {
+     "op": "commit",
+     "key": "k1",
+     "transition": "t1",
+     "amount": 40
+    },
+    {
+     "op": "reserve",
+     "key": "k2",
+     "amount": 100
+    },
+    {
+     "op": "consume",
+     "key": "k2",
+     "amount": 20
+    },
+    {
+     "op": "ledger_down"
+    },
+    {
+     "op": "reserve",
+     "key": "k3",
+     "amount": 10
+    },
+    {
+     "op": "consume",
+     "key": "k2",
+     "amount": 10
+    },
+    {
+     "op": "commit",
+     "key": "k2",
+     "transition": "t2",
+     "amount": 40
+    },
+    {
+     "op": "cancel",
+     "key": "k2"
+    },
+    {
+     "op": "expire",
+     "key": "k2"
+    },
+    {
+     "op": "commit",
+     "key": "k1",
+     "transition": "t1",
+     "amount": 40
+    }
+   ],
+   "results": [
+    "reserved",
+    "committed",
+    "reserved",
+    "consumed",
+    "down",
+    "refused",
+    "refused",
+    "refused",
+    "refused",
+    "refused",
+    "refused"
+   ],
+   "final": {
+    "k1": {
+     "state": "COMMITTED",
+     "committed": 40,
+     "returned": 60
+    },
+    "k2": {
+     "state": "RESERVED",
+     "committed": 0,
+     "returned": 0
+    }
+   }
   }
  ],
  "nonClaims": [
