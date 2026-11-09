@@ -1,6 +1,34 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-REGISTRY-001 source preparation, November 8, 2026
+## Current checkpoint — MET-ADOPT-008 source preparation, November 9, 2026
+
+Alpha2 OPEN. MET-REGISTRY-001 passed required verify and merged as main 98d1f6f; R13 mas-harness-research-lab is
+registered and LAB-REPO-001 is published. MET-ADOPT-008 (the lane monitor's owner-delegated rulings MON-285-PLAN,
+MON-285-Q-RELAY, MON-285-CR1-RULE, MON-285-RULE-RELAY and MON-285-E1) is AUTHORITY-MAP-001-F, the fix of issue 237: in the authority map's reference ledger (scripts/authority_map.py), a down usage ledger refuses every mutation of an existing reservation (reserve, consume, commit, cancel, expire), an exact commit replay included (AM-02 FAIL_CLOSED, FIN:177), with no state change; the budget vectors gain VB-11 (ledger loss with an open reservation) and the model's replay requires every refused step to leave the ledger's state byte-equal. The packet registers its own review series,
+MET-ADOPT-008/packet, in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), the weights (GATE_CI, with the owner's transport approval of the exact head) and the D5a oracles tests/test_met_adopt_008_oracle.py and 281's tests/test_met_adopt_007_oracle.py, corrected by the non-author lane monitor (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+It is built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule at K = 0, with the R13 guard
+of architecture/chain-inheritance/: every older chain validator changes only by the bump vocabulary, 284's layer by the
+bridge vocabulary, and the new head's test keeps the full fan-in. MET-ADOPT-008 is the 285th specification (296
+packets at slot 285).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-ADOPT-008 / AUTHORITY-MAP-001-F | SOURCE_PREPARED | Issue 237's fix (285th packet, K = 0): a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with no state change; VB-11 and the refused-step invariant; the authority map's vectors digest; gate material (the registry rider, the weights with the transport approval, the D5a oracle, and 281's D5a oracle as corrected by the lane monitor) |
+| Alpha2A | MET-REGISTRY-001 / LAB-REPO-001 | VERIFY_PASSED_MERGED | Merged as main 98d1f6f |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No R10 and no R12 file changes, and nothing is installed (bundle v7 is live).
+Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical registration source checkpoint — MET-REGISTRY-001 source preparation, November 8, 2026
 
 Alpha2 OPEN. MET-VERIFY-007 (issue 235) passed required verify and merged as main e515f0b; bundle v7 is installed.
 MET-REGISTRY-001 (the lane monitor's owner-delegated rulings MON-284-RULED, MON-284-CR1-RULED, MON-284-CR1-VIS,
@@ -3271,7 +3299,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · AUTHORITY-MAP-001 / MET-ADOPT-007 · Record the effective authority map in MET-ADOPT-006's form (one authority for each of nine concerns, with its validator, budget and R12 vectors and a D5a oracle), adopted after CONTRACT_281's two rounds (K = 0, 288 packets at slot 281); gate material (the registry rider and the D5a oracle); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [x] Alpha 2A · CHAIN-COMPACTION-002 / MET-PERF-047 · Record the shadow chain checkpoint (the ledger of layers 189-281, its shadow-only reader, its lane-run writer and a D5a oracle), adopted after CONTRACT_282's six rounds (K = 0, 289 packets at slot 282); gate material (the registry rider, conftest.py, two ci/ paths with the transport approval, the D5a oracle and 281's D5a oracle as updated by R12); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
 - [x] Alpha 2A · issue 235 / MET-VERIFY-007 · Fix the packet runner to hash the raw bytes it read (strict UTF-8, CR and BOM refused; K = 3, 293 packets at slot 283, with the three transport successors); gate material (the registry rider, the runner, its tests and the weights with the transport approval, and 283's D5a oracle and 282's as corrected at R3); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
-- [ ] Alpha 2A · LAB-REPO-001 / MET-REGISTRY-001 · Register R13 mas-harness-research-lab (kind meta, releaseSet EXCLUDED) and publish its first product packet LAB-REPO-001 (K = 1, 295 packets at slot 284); gate material (the registry rider, the release lock, the weights with the transport approval, and the D5a oracle); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
+- [x] Alpha 2A · LAB-REPO-001 / MET-REGISTRY-001 · Register R13 mas-harness-research-lab (kind meta, releaseSet EXCLUDED) and publish its first product packet LAB-REPO-001 (K = 1, 295 packets at slot 284); gate material (the registry rider, the release lock, the weights with the transport approval, and the D5a oracle); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
+- [ ] Alpha 2A · issue 237 / MET-ADOPT-008 · Fix the authority map's reference ledger so a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with VB-11 and the refused-step invariant (K = 0, 296 packets at slot 285); gate material (the registry rider, the weights with the transport approval, the D5a oracle, and 281's D5a oracle as corrected by the lane monitor); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)

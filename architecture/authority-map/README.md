@@ -31,7 +31,7 @@ AM-06 (`execution.tool-skill-sandbox.md:148`, flagged), AM-07 (`knowledge.memory
 
 ## Vectors
 
-- `budget-vectors.json`: rules B1-B5 and vectors VB-01 to VB-10, replayed by the module's reference model; each
+- `budget-vectors.json`: rules B1-B5 and vectors VB-01 to VB-11, replayed by the module's reference model; each
   vector gives its per-step results and each reservation's state at the end (one terminal state once settled,
   RESERVED while open). Whether a refused reserve is kept under its key is outside these semantics (B3). Write skew,
   fencing and clocks are DATA-CORRECTNESS-001's.

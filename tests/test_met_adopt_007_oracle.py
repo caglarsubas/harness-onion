@@ -574,10 +574,10 @@ def test_budget_rules_are_b1_to_b5_with_the_stated_texts():
 
 
 def test_budget_vectors_replay_in_the_reference_model():
-    """README Vectors: VB-01 to VB-10, each with its per-step results and each reservation's state at the end (one
+    """README Vectors: VB-01 to VB-11, each with its per-step results and each reservation's state at the end (one
     terminal state once settled, RESERVED while open); DATA: vectors; the model is this file's own (B1-B5)."""
     budget = load(BUD)
-    assert [v["id"] for v in budget["vectors"]] == ["VB-%02d" % k for k in range(1, 11)]
+    assert [v["id"] for v in budget["vectors"]] == ["VB-%02d" % k for k in range(1, 12)]
     for vector in budget["vectors"]:
         for step in vector["steps"]:
             assert tuple(step) == tuple(AM.STEP_MEMBERS[step["op"]]), (vector["id"], step)
@@ -663,13 +663,13 @@ def assert_accepted(result):
     assert size(result["concerns"]) == 9
     assert size(result["pins"]) == 27
     assert size(result["flagged"]) == 2
-    assert size(result["budgetVectors"]) == 10
+    assert size(result["budgetVectors"]) == 11
     assert size(result["r12Vectors"]) == 5
 
 
 def test_check_accepts_the_published_contract():
     """OPERATOR: check(read, frozenset()) returns concerns, pins, flagged, budgetVectors and r12Vectors; README: 9
-    concerns, 27 pins, 2 flagged, VB-01 to VB-10, R12-V1 to R12-V5 (model-derived acceptance)."""
+    concerns, 27 pins, 2 flagged, VB-01 to VB-11, R12-V1 to R12-V5 (model-derived acceptance)."""
     assert_accepted(run())
 
 

@@ -327,10 +327,10 @@ class _Ledger:
         if op == "advisory":  # :177: advisory-only callers proceed only if the profile allows and outbox capacity exists
             return "proceeds" if (not self.up and s["profileAllows"] is True and s["outboxCapacity"] is True) \
                 or self.up else "refused"
+        if not self.up and op in ("reserve", "consume", "commit", "cancel", "expire"):
+            return "refused"  # AM-02 (FIN:177): a down ledger refuses every mutation, an exact commit replay too
         key = s["key"]
         if op == "reserve":
-            if not self.up:
-                return "refused"
             prior = self.res.get(key)
             if prior is not None:  # B3: an exact retry returns the original result; a conflicting reuse fails closed
                 return "reserved" if prior["amount"] == s["amount"] and prior["result"] == "reserved" else "refused"
@@ -374,6 +374,11 @@ STEP_MEMBERS = {"reserve": ("op", "key", "amount"), "consume": ("op", "key", "am
                 "advisory": ("op", "profileAllows", "outboxCapacity")}
 
 
+def _ledger_state(ledger) -> bytes:
+    """F2 (#237): the ledger's state in canonical form; the tuple keys of transitions become lists."""
+    return _canonical([ledger.committed, ledger.res, sorted([list(k), v] for k, v in ledger.transitions.items())])
+
+
 def _budget(raw) -> None:
     doc = _json(raw, "AM_BUDGET")
     _closed(doc, ("schemaVersion", "rules", "vectors", "nonClaims"), "the budget vectors", "AM_BUDGET")
@@ -385,8 +390,8 @@ def _budget(raw) -> None:
     require(any(type(t) is str and "DATA-CORRECTNESS-001" in t for t in doc["nonClaims"]), "AM_BUDGET",
             "the nonClaims name DATA-CORRECTNESS-001 (write skew, fencing, clocks)")
     _list(doc["vectors"], "vectors", "AM_BUDGET", nonempty=True)
-    require([v.get("id") if type(v) is dict else None for v in doc["vectors"]] == ["VB-%02d" % k for k in range(1, 11)],
-            "AM_BUDGET", "vectors are VB-01 to VB-10")
+    require([v.get("id") if type(v) is dict else None for v in doc["vectors"]] == ["VB-%02d" % k for k in range(1, 12)],
+            "AM_BUDGET", "vectors are VB-01 to VB-11")
     for v in doc["vectors"]:
         _closed(v, ("id", "name", "root", "steps", "results", "final"), v["id"], "AM_BUDGET")
         require(type(v["root"]) is int and v["root"] > 0, "AM_BUDGET", v["id"] + ".root")
@@ -399,7 +404,10 @@ def _budget(raw) -> None:
             for k in ("amount",):
                 if k in s:
                     require(type(s[k]) is int and s[k] >= 0, "AM_BUDGET", v["id"] + ": an amount")
+            before = _ledger_state(ledger)
             got.append(ledger.step(s))
+            require(got[-1] != "refused" or _ledger_state(ledger) == before, "AM_BUDGET",
+                    "%s: a refused step changes no state" % v["id"])
         require(_eq(got, v["results"]), "AM_BUDGET", "%s: the results replay as %s" % (v["id"], got))
         final = {k: {"state": r["state"], "committed": r["committed"], "returned": r["returned"]}
                  for k, r in sorted(ledger.res.items())}
@@ -557,4 +565,4 @@ def check(read, packets) -> dict:
         require(json.dumps(reg, indent=1, ensure_ascii=False).encode("utf-8") + b"\n" == raw, "AM_REGISTRY",
                 "the registry's serialization")
     return {"concerns": len(rec["concerns"]), "pins": len(AUTHORITY_PINS) + len(BEHAVIOUR_PINS),
-            "flagged": sorted("%s %s" % k for k in FLAGGED), "budgetVectors": 10, "r12Vectors": 5}
+            "flagged": sorted("%s %s" % k for k in FLAGGED), "budgetVectors": 11, "r12Vectors": 5}

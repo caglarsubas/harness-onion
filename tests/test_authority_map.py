@@ -77,7 +77,7 @@ def line_quote(path, n):
 
 def test_the_record_passes():
     result = run()
-    assert result["concerns"] == 9 and result["pins"] == 27 and result["budgetVectors"] == 10
+    assert result["concerns"] == 9 and result["pins"] == 27 and result["budgetVectors"] == 11
     assert result["flagged"] == ["AM-06 whenUnavailable", "AM-09 whenRevoked"]
 
 
@@ -499,12 +499,13 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 295 and len(accepted) == 287
+    assert len(current) == 296 and len(accepted) == 287
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.successor.NEW_PACKET}
     assert len(v046.historical_catalog(current)) == 286
     assert len(v006.historical_catalog(current)) == 283
     assert len(sec5.historical_catalog(current)) == 281
