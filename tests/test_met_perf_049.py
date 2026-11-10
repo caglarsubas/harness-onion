@@ -1048,7 +1048,7 @@ def test_every_newer_authority_is_read_exactly_once_per_route(monkeypatch, route
 
 # MET-PERF-049 (CHAIN-COMPACTION-002's ledger rewrite step): this era's check, and a failing case for every check (K = 0).
 # Every mutant below is applied to plain data handed to the layer's pure checks: nothing in the layer, the reader or the
-# library is patched or swapped. The ledger checks (C1, C2) run on a synthetic ledger and side record built here, and
+# library is patched or swapped. The ledger checks (C1, C2) run on a synthetic ledger and inline entry built here, and
 # on the live ones once the writing run's ledger is in the tree.
 import base64 as _b64
 
@@ -1057,9 +1057,8 @@ OWN_PATH = "task-packets/MET-PERF-049.yaml"
 V_TESTS = {
     "V1": ("test_v1_every_era_file_is_bound_by_its_digest", "test_v1_the_packet_files_are_exactly_the_ten"),
     "C1": ("test_c1_the_ledger_rechecks_in_full",),
-    "C2": ("test_c2_the_side_record_rechecks_in_full", "test_c2_the_side_route_feeds_the_projection",
-           "test_c2_the_live_side_route_projects_slot_282s_record",
-           "test_c2_the_canonical_check_skips_only_the_side_route"),
+    "C2": ("test_c2_the_inline_entry_rechecks_in_full", "test_c2_the_canonical_check_skips_only_the_ledger",
+           "test_c2_the_live_entry_projects_slot_282s_record"),
     "C3": ("test_c3_the_reader_rechecks_in_full",),
     "C4": ("test_c4_the_rule_copy_rechecks_in_full",),
     "C5": ("test_c5_the_once_flag_rechecks_in_full",),
@@ -1068,7 +1067,7 @@ V_TESTS = {
     "C8": ("test_c8_the_bridged_layer_rechecks",),
     "C9": ("test_c9_the_demotion_rechecks_in_full",),
     "V4": ("test_v4_the_registry_differs_from_the_base_by_the_one_rider",),
-    "V6": ("test_v6_the_hunk_class_record_rechecks_in_full",),
+    "V6": ("test_v6_the_hunk_class_record_rechecks_in_full", "test_v6_the_ledger_classes_are_one_other_per_hunk"),
 }
 V1_BOUND = "MET-PERF-049 reviewed bytes are bound: "
 V1_DRIFT = "unreviewed MET-PERF-049 source: "
@@ -1085,12 +1084,8 @@ C1_LAYERS = "MET-PERF-049 C1 the ledger's layers have their closed members"
 C1_EXCL = "MET-PERF-049 C1 the ledger's exclusion is this step's write set, and no layer attests an excluded file"
 C1_WALK = "MET-PERF-049 C1 the ledger's layers are the chain walk 189-285"
 C1_BIND = "MET-PERF-049 C1 the chain walk: slot "
-C2_SIDE = "MET-PERF-049 C2 the side record is closed, named in newFiles and names this layer's authority"
-C2_ENTRY = "MET-PERF-049 C2 the record.json entry is the three-key form naming the side record"
-C2_REPLAY = "MET-PERF-049 C2 the side record's hunks reproduce slot 282's record"
-C2_ROUTE = "closed side route"
-C2_ROUTE_DIGEST = "side route digest"
-C2_ROUTE_SIDE = "closed side record"
+C2_ENTRY = "MET-PERF-049 C2 the record.json entry is the plain three-key form over slot 282's record"
+C2_REPLAY = "MET-PERF-049 C2 the record.json entry's reverse hunks reproduce slot 282's record"
 C3_CACHE = "MET-PERF-049 C3 the reader's L1 and L2 caches"
 C3_RULES = "MET-PERF-049 C3 RULES_BY_SHA holds the v2.2, v2.3 and v2.4 digests"
 C3_TABLE = "MET-PERF-049 C3 COUNT_EFFECT equals the README's table"
@@ -1107,6 +1102,7 @@ V6_PINNED = "MET-PERF-049 V6 the hunk-class record's vocabulary and rule digest 
 V6_CONTEXT = "MET-PERF-049 V6 the hunk-class record's context is this step's names"
 V6_COVER = "MET-PERF-049 V6 the hunk-class record lists one class per hunk for exactly the changed files"
 V6_RECHECK = "MET-PERF-049 V6 a recorded class re-checks by position: "
+V6_LEDGER = "MET-PERF-049 V6 record.json's classes are exactly one other per hunk"
 READER = "ci/chain_checkpoint.py"
 
 
@@ -1220,7 +1216,7 @@ def _ledger_raw(doc):
 
 def _entry(raw):
     return {"beforeSha256": profile.PREVIOUS_CHECKPOINT[1], "afterSha256": _sha(raw),
-            "reverseHunksRecord": {"path": profile.SIDE_PATH, "sha256": "9" * 64}}
+            "reverseHunks": [{"at": 0, "removeBase64": "YQ==", "insertBase64": "Yg=="}]}
 
 
 @pytest.mark.parametrize("change", ["entry_keys", "entry_before", "entry_digest", "member", "slot", "baseline", "workers",
@@ -1232,7 +1228,7 @@ def test_c1_the_ledger_rechecks_in_full(change):
     assert profile.check_ledger(raw, walk, 296, _entry(raw)) is None
     entry, baseline, message = None, 296, None
     if change == "entry_keys":
-        entry, message = dict(_entry(raw), reverseHunks=[]), C1_NAMED
+        entry, message = dict(_entry(raw), extra=1), C1_NAMED
     elif change == "entry_before":
         entry, message = dict(_entry(raw), beforeSha256="0" * 64), C1_NAMED
     elif change == "entry_digest":
@@ -1280,21 +1276,21 @@ def test_c1_the_ledger_rechecks_in_full(change):
 
 
 def _base_ledger():
-    """Slot 282's record: the live ledger before the writing run, or the live one undone by its side record after it."""
+    """Slot 282's record: the live ledger before the writing run, or the live one undone by its inline entry after it."""
     raw = profile.reviewed_bytes(profile.LEDGER_PATH)
     if _sha(raw) == profile.PREVIOUS_CHECKPOINT[1]:
         return raw
-    side = json.loads(profile.reviewed_bytes(profile.SIDE_PATH))
+    entry = profile.authority()["changedFiles"][profile.LEDGER_PATH]
     chunks, cursor = [], 0          # one ascending pass
-    for hunk in sorted(side["reverseHunks"], key=lambda h: h["at"]):
+    for hunk in sorted(entry["reverseHunks"], key=lambda h: h["at"]):
         remove, insert = _b64.b64decode(hunk["removeBase64"]), _b64.b64decode(hunk["insertBase64"])
         chunks.extend((raw[cursor:hunk["at"]], insert))
         cursor = hunk["at"] + len(remove)
     return b"".join(chunks) + raw[cursor:]
 
 
-def _side_case():
-    """A synthetic live ledger (282's record with its slot line changed) and its one reverse hunk, built directly."""
+def _inline_case():
+    """A synthetic live ledger (282's record with its slot line changed) and its one-hunk inline entry, built directly."""
     base = _base_ledger()
     old_line = b'"checkpointSlot": 282'
     at = base.index(old_line)
@@ -1303,116 +1299,57 @@ def _side_case():
     live = base[:start] + base[start:end].replace(old_line, b'"checkpointSlot": 286') + base[end:]
     hunks = [{"at": start, "removeBase64": _b64.b64encode(live[start:end]).decode(),
               "insertBase64": _b64.b64encode(base[start:end]).decode()}]
-    side = {"authorityPath": profile.AUTHORITY_PATH, "path": profile.LEDGER_PATH, "beforeSha256": _sha(base),
-            "afterSha256": _sha(live), "reverseHunks": hunks}
-    side_raw = (json.dumps(side, sort_keys=True, indent=1) + "\n").encode()
-    entry = {"beforeSha256": _sha(base), "afterSha256": _sha(live),
-             "reverseHunksRecord": {"path": profile.SIDE_PATH, "sha256": _sha(side_raw)}}
-    return side, side_raw, entry, live
+    return {"beforeSha256": _sha(base), "afterSha256": _sha(live), "reverseHunks": hunks}, live
 
 
-@pytest.mark.parametrize("change", ["entry_extra", "entry_missing", "inline_beside", "ref_path", "ref_digest", "ref_extra",
-                                    "named_none", "raw_digest", "side_member", "side_authority", "side_path", "side_before",
-                                    "side_after"])
-def test_c2_the_side_route_feeds_the_projection(change):
-    """MON-286-SIDE-RULE: _rules() takes the ledger's hunks from the side record only after each of its checks."""
-    side, side_raw, entry, live = _side_case()
-    named = _sha(side_raw)
-    assert profile._side_rule_of(profile.LEDGER_PATH, entry, named, side_raw) == {
-        "beforeSha256": entry["beforeSha256"], "afterSha256": entry["afterSha256"], "reverseHunks": side["reverseHunks"]}
-    assert profile._side_rule_of("architecture/other.json", entry, named, side_raw) is entry
-    inline = {"beforeSha256": entry["beforeSha256"], "afterSha256": entry["afterSha256"], "reverseHunks": side["reverseHunks"]}
-    assert profile._side_rule_of(profile.LEDGER_PATH, inline, named, side_raw) is inline
-    message = C2_ROUTE
+@pytest.mark.parametrize("change", ["entry_extra", "entry_missing", "entry_before", "entry_after", "hunks_empty",
+                                    "hunk_misses", "hunk_key", "hunk_overlap", "live_other"])
+def test_c2_the_inline_entry_rechecks_in_full(change):
+    entry, live = _inline_case()
+    assert profile.check_inline(entry, live) is None
+    message = C2_ENTRY
     if change == "entry_extra":
-        entry["extra"] = 1
+        entry["reverseHunksRecord"] = {"path": profile.SIDE_PATH, "sha256": "9" * 64}
     elif change == "entry_missing":
         del entry["beforeSha256"]
-    elif change == "inline_beside":
-        entry["reverseHunks"] = side["reverseHunks"]
-    elif change == "ref_path":
-        entry["reverseHunksRecord"]["path"] = "architecture/chain-checkpoint/ledger-hunks/285.json"
-    elif change == "ref_digest":
-        entry["reverseHunksRecord"]["sha256"] = "0" * 64
-    elif change == "ref_extra":
-        entry["reverseHunksRecord"]["at"] = 0
-    elif change == "named_none":
-        named = None
-    elif change == "raw_digest":
-        side_raw, message = side_raw + b" ", C2_ROUTE_DIGEST
+    elif change == "entry_before":
+        entry["beforeSha256"] = "0" * 64
+    elif change == "entry_after":
+        entry["afterSha256"] = "0" * 64
+    elif change == "hunks_empty":
+        entry["reverseHunks"] = []
+    elif change == "hunk_misses":
+        entry["reverseHunks"][0]["at"] += 1
+        message = C2_REPLAY
+    elif change == "hunk_key":
+        entry["reverseHunks"][0]["class"] = "record"
+        message = C2_REPLAY
+    elif change == "hunk_overlap":
+        entry["reverseHunks"].append(dict(entry["reverseHunks"][0]))
+        message = C2_REPLAY
     else:
-        message = C2_ROUTE_SIDE
-        if change == "side_member":
-            side["extra"] = 1
-        elif change == "side_authority":
-            side["authorityPath"] = "architecture/other-authority.json"
-        elif change == "side_path":
-            side["path"] = "architecture/chain-checkpoint/other.json"
-        elif change == "side_before":
-            side["beforeSha256"] = "0" * 64
-        else:
-            side["afterSha256"] = "0" * 64
-        side_raw = (json.dumps(side, sort_keys=True, indent=1) + "\n").encode()
-        named = _sha(side_raw)
-        entry["reverseHunksRecord"]["sha256"] = named
-    _raises(message, lambda: profile._side_rule_of(profile.LEDGER_PATH, entry, named, side_raw))
+        live = live + b"\n"
+    _raises(message, lambda: profile.check_inline(entry, live))
 
 
-def test_c2_the_canonical_check_skips_only_the_side_route(monkeypatch):
-    """Q-PERF40-4's canonical check runs for every projected path except the side-routed ledger (C2 replays it)."""
+def test_c2_the_canonical_check_skips_only_the_ledger(monkeypatch):
+    """Q-PERF40-4's canonical check runs for every projected path except record.json (C2 replays its line-run hunks)."""
     seen = []
     monkeypatch.setattr(profile, "check_canonical_hunks", lambda path, rule, after: seen.append(path))
     profile.validate_canonical_hunks()
-    entry = profile.authority()["changedFiles"].get(profile.LEDGER_PATH, {})
-    skipped = {profile.LEDGER_PATH} if "reverseHunksRecord" in entry else set()
-    assert sorted(seen) == sorted(set(profile._PROJECTION_RULES) - skipped) and len(seen) == len(set(seen))
+    assert sorted(seen) == sorted(set(profile._PROJECTION_RULES) - {profile.LEDGER_PATH}) and len(seen) == len(set(seen))
 
 
-def test_c2_the_live_side_route_projects_slot_282s_record():
-    """At the writing run's ledger, the projection of record.json is slot 282's record byte for byte."""
+def test_c2_the_live_entry_projects_slot_282s_record():
+    """At the writing run's ledger, the frozen projection of record.json is slot 282's record byte for byte."""
     entry = profile.authority()["changedFiles"].get(profile.LEDGER_PATH)
-    if entry is None or "reverseHunksRecord" not in entry:
+    if entry is None:
         return
     rule = profile._PROJECTION_RULES[profile.LEDGER_PATH]
     raw = profile.regular_bytes(profile.LEDGER_PATH)
     before = profile.historical_bytes(profile.LEDGER_PATH, raw)
     assert profile.digest(raw) == rule["afterSha256"] == entry["afterSha256"]
     assert profile.digest(before) == rule["beforeSha256"] == profile.PREVIOUS_CHECKPOINT[1]
-
-
-@pytest.mark.parametrize("change", ["digest", "member", "authority", "path", "entry_key", "entry_ref", "entry_after",
-                                    "hunk_misses", "hunk_dropped", "live_other"])
-def test_c2_the_side_record_rechecks_in_full(change):
-    side, side_raw, entry, live = _side_case()
-    assert profile.check_side(side_raw, _sha(side_raw), entry, live) is None
-    named, message = _sha(side_raw), C2_SIDE
-    if change == "digest":
-        named = "0" * 64
-    elif change in ("member", "authority", "path", "hunk_misses", "hunk_dropped"):
-        if change == "member":
-            side["extra"] = 1
-        elif change == "authority":
-            side["authorityPath"] = "architecture/other-authority.json"
-        elif change == "path":
-            side["path"] = "architecture/chain-checkpoint/other.json"
-        elif change == "hunk_misses":
-            side["reverseHunks"][0]["at"] += 1
-            message = C2_REPLAY
-        else:
-            side["reverseHunks"] = []
-            message = C2_REPLAY
-        side_raw = (json.dumps(side, sort_keys=True, indent=1) + "\n").encode()
-        named = _sha(side_raw)
-        entry["reverseHunksRecord"]["sha256"] = named
-    elif change == "entry_key":
-        entry["reverseHunks"], message = [], C2_ENTRY
-    elif change == "entry_ref":
-        entry["reverseHunksRecord"]["path"], message = "architecture/chain-checkpoint/ledger-hunks/285.json", C2_ENTRY
-    elif change == "entry_after":
-        entry["afterSha256"], message = "0" * 64, C2_ENTRY
-    else:
-        live, message = live + b"\n", C2_REPLAY
-    _raises(message, lambda: profile.check_side(side_raw, named, entry, live))
 
 
 @pytest.mark.parametrize("change", ["no_classes_keyword", "no_l2_fill", "rule_digest", "rules_key", "table_row",
@@ -1562,6 +1499,34 @@ def _hunk_inputs():
     context = profile._v24_context(record, json.loads(raw)["hunkClassContext"])
     assert context == reader.context_v24(record, json.loads(raw)["hunkClassContext"])
     return raw, record["changedFiles"], afters, rule.classify, context
+
+
+@pytest.mark.parametrize("change", ["none", "count", "cascade", "outside"])
+def test_v6_the_ledger_classes_are_one_other_per_hunk(change):
+    """MON-286-V6A: record.json's classes are exactly one "other" per hunk, and classify is never called for record.json;
+    a wrong count, one "cascade" or one class outside the vocabulary is refused."""
+    raw, changed, afters, classify, context = _hunk_inputs()
+    if profile.LEDGER_PATH not in changed:
+        return
+    record, called = json.loads(raw), []
+
+    def watched(path, *args, **kwargs):
+        called.append(path)
+        return classify(path, *args, **kwargs)
+    if change == "none":
+        assert profile.check_hunk_record(raw, changed, afters, watched, context, profile.HUNK_RULE_SHA256) is None
+        assert called and profile.LEDGER_PATH not in called
+        assert record["classes"][profile.LEDGER_PATH] == ["other"] * len(changed[profile.LEDGER_PATH]["reverseHunks"])
+        return
+    message = V6_LEDGER
+    if change == "count":
+        record["classes"][profile.LEDGER_PATH], message = record["classes"][profile.LEDGER_PATH][:-1], V6_COVER
+    elif change == "cascade":
+        record["classes"][profile.LEDGER_PATH][0] = "cascade"
+    else:
+        record["classes"][profile.LEDGER_PATH][-1] = "not-a-class"
+    mutant = (json.dumps(record, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+    _raises(message, lambda: profile.check_hunk_record(mutant, changed, afters, watched, context, profile.HUNK_RULE_SHA256))
 
 
 def test_v6_the_hunk_class_record_holds_for_this_era():

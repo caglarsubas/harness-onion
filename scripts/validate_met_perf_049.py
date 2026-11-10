@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate MET-PERF-049 (CHAIN-COMPACTION-002's ledger rewrite step, K = 0): V1 this packet's files by digest; C1 the ledger; C2 its hunk side record; C3-C9 the reader, the v2.4 rule, the conftest, MET-PERF-048's inert provisions, twelve workers, the bridged layer's projection and the demotion; V4 the registry rider; V6 the hunk-class record under v2.4."""
+"""Validate MET-PERF-049 (CHAIN-COMPACTION-002's ledger rewrite step, K = 0): V1 this packet's files by digest; C1 the ledger; C2 its inline reverse hunks; C3-C9 the reader, the v2.4 rule, the conftest, MET-PERF-048's inert provisions, twelve workers, the bridged layer's projection and the demotion; V4 the registry rider; V6 the hunk-class record under v2.4."""
 from __future__ import annotations
 
 import ast
@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-authority.json"
-AUTHORITY_SHA256 = "4de2f5ee90072b4621df05c5365ece4401892a742b588b6982e9c91205ccd4d9"
+AUTHORITY_SHA256 = "995e56aa8f3d99eb0e028f180a40c4e23c58fceb548a96f07dfc6768b2d4dc6b"
 VALIDATOR_PATH = "scripts/validate_met_perf_049.py"
 BASE_COMMIT = "0fd885ff3a9a80f8882ec4a03e0d16e95675868c"
 NEW_PACKET = "MET-PERF-049"
@@ -159,41 +159,10 @@ def _base64(value: Any) -> bytes:
     return raw
 
 
-_LEDGER_ROUTE = ("architecture/chain-checkpoint/record.json", "architecture/chain-checkpoint/ledger-hunks/286.json")
-
-
-def _side_rule_of(path: str, rule: Any, named: Any, side_raw: Any) -> Any:
-    """MET-PERF-049 (CONTRACT_286 4.3): the ledger's changedFiles entry names its reverse hunks in the closed side
-    record. Once the entry's exact keys, its reference (the side record's path and its newFiles digest) and the side
-    record itself (its bytes hash to that digest; closed; naming this authority; its path, beforeSha256 and afterSha256
-    the entry's) hold, the side record's hunks stand in for the entry's and meet every per-hunk check of _rules().
-    Any other path, or an entry without a reference, is returned unchanged."""
-    if path != _LEDGER_ROUTE[0] or not (type(rule) is dict and "reverseHunksRecord" in rule):
-        return rule
-    require(set(rule) == {"beforeSha256", "afterSha256", "reverseHunksRecord"} and _sha(named)
-            and rule["reverseHunksRecord"] == {"path": _LEDGER_ROUTE[1], "sha256": named}, "closed side route")
-    require(type(side_raw) is bytes and digest(side_raw) == named, "side route digest")
-    side = parse(side_raw)
-    require(type(side) is dict and set(side) == {"authorityPath", "path", "beforeSha256", "afterSha256", "reverseHunks"}
-            and side["authorityPath"] == AUTHORITY_PATH and side["path"] == path
-            and side["beforeSha256"] == rule["beforeSha256"] and side["afterSha256"] == rule["afterSha256"],
-            "closed side record")
-    return {"beforeSha256": rule["beforeSha256"], "afterSha256": rule["afterSha256"], "reverseHunks": side["reverseHunks"]}
-
-
-def _side_rule(path: str, rule: Any) -> Any:
-    """The ledger's entry through _side_rule_of with the authority's newFiles digest and the side record's bytes."""
-    if path != _LEDGER_ROUTE[0] or not (type(rule) is dict and "reverseHunksRecord" in rule):
-        return rule
-    named = authority()["newFiles"].get(_LEDGER_ROUTE[1])
-    return _side_rule_of(path, rule, named, regular_bytes(_LEDGER_ROUTE[1]) if _sha(named) else None)
-
-
 def _rules() -> MappingProxyType:
     changed = authority()["changedFiles"]
     frozen = {}
     for path, rule in changed.items():
-        rule = _side_rule(path, rule)
         require(type(rule) is dict
                 and set(rule) == {"beforeSha256", "afterSha256", "reverseHunks"}
                 and _sha(rule["beforeSha256"]) and _sha(rule["afterSha256"])
@@ -376,12 +345,12 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # MET-PERF-049 (CHAIN-COMPACTION-002's ledger rewrite step; the lane monitor's owner-delegated rulings MON-286-RULINGS,
 # MON-286-WTRIAL-RULE, MON-C286-Q1-T1, MON-C286-Q2-E1, MON-286-CR1, MON-286-C1B-GO and MON-286-W-PLAN) records, in a
 # K = 0 step, the second chain checkpoint: the ledger of chain layers 189-285 over the 296-packet baseline, written by
-# a full writing run under the owner's head-bound approval, its reverse hunks in a closed side record, and the
+# a full writing run under the owner's head-bound approval, its reverse hunks inline in the authority, and the
 # reader's class cache, class rule v2.4, the demoted (authored) classification, MET-PERF-048's inert provisions and
 # twelve parallel-suite workers. Repository bytes are read only through reviewed_bytes; an era file is refused unless
-# bound by digest on every read; the ledger and its side record are bound by the authority (never era files), a
+# bound by digest on every read; the ledger is bound by the authority (never an era file), a
 # changed file by the authority's afterSha256. Each refusal is a pure check over the values read. Checked here
-# (CONTRACT_286 r4 section 5): V1 the packet's files; C1 the ledger; C2 the side record; C3 the reader's caches and
+# (CONTRACT_286 r4 section 5): V1 the packet's files; C1 the ledger; C2 its inline hunks; C3 the reader's caches and
 # rule set; C4 the v2.4 rule copy; C5 tests/conftest.py's once-flag; C6 P-048-1..4, inert; C7 WORKERS 12; C8 285's
 # bridged layer reads through the projection; C9 the demotion's kinds and record fields; V4 the registry rider;
 # V6 the hunk-class record under v2.4. Last, this layer's own inverse hunks are the canonical ones.
@@ -527,8 +496,7 @@ VERIFY_REFERENCE = "the previous checkpoint: slot %d, record.json sha256 %s" % P
 LAYER_MEMBERS = frozenset({"slot", "module", "validatorPath", "validatorSha256", "authorityPath", "authoritySha256",
                            "inputs", "nodes", "seconds"})
 TEST_MEMBERS = frozenset({"testFilePath", "testFileSha256"})
-SIDE_MEMBERS = frozenset({"authorityPath", "path", "beforeSha256", "afterSha256", "reverseHunks"})
-ENTRY_KEYS = frozenset({"beforeSha256", "afterSha256", "reverseHunksRecord"})
+ENTRY_KEYS = frozenset({"beforeSha256", "afterSha256", "reverseHunks"})
 RULE_DIGESTS = MappingProxyType({"RULE_V22_SHA256": "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b",
                                  "RULE_SHA256": "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f",
                                  "RULE_V24_SHA256": "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"})
@@ -690,25 +658,20 @@ def validate_ledger() -> None:
     check_ledger(raw, walk, len(authority()["baselinePackets"]), entry)
 
 
-def check_side(side_raw: Any, named: Any, entry: Any, live: Any) -> None:
-    """C2: the side record's closed members, its digest in newFiles, its authorityPath; the entry's exact three keys with
-    reverseHunksRecord {path, sha256} naming the side record and its digest; the side record's path, beforeSha256 and
-    afterSha256 equal the entry's; and its hunks reproduce slot 282's record byte-exactly from the live ledger."""
-    side = _parsed(side_raw)
-    _bound(lambda: _sha(named) and type(side_raw) is bytes and digest(side_raw) == named and type(side) is dict
-           and set(side) == SIDE_MEMBERS and side["authorityPath"] == AUTHORITY_PATH and side["path"] == LEDGER_PATH
-           and type(side["reverseHunks"]) is list,
-           "MET-PERF-049 C2 the side record is closed, named in newFiles and names this layer's authority")
-    _bound(lambda: type(entry) is dict and set(entry) == ENTRY_KEYS and entry["reverseHunksRecord"] == {
-        "path": SIDE_PATH, "sha256": named} and (side["beforeSha256"], side["afterSha256"])
-           == (entry["beforeSha256"], entry["afterSha256"]),
-           "MET-PERF-049 C2 the record.json entry is the three-key form naming the side record")
+def check_inline(entry: Any, live: Any) -> None:
+    """C2 (MON-286-INLINE-GO): the ledger's changedFiles entry is the plain three-key form over slot 282's record, its
+    afterSha256 the live ledger's, with 1 to 4,096 reverse hunks (the writer's line-run hunks); and those hunks reproduce
+    slot 282's record byte-exactly from the live ledger, in one ascending pass (no overlap; the removed bytes present)."""
+    _bound(lambda: type(entry) is dict and set(entry) == ENTRY_KEYS and entry["beforeSha256"] == PREVIOUS_CHECKPOINT[1]
+           and type(live) is bytes and _sha(entry["afterSha256"]) and digest(live) == entry["afterSha256"]
+           and type(entry["reverseHunks"]) is list and 0 < len(entry["reverseHunks"]) <= 4096,
+           "MET-PERF-049 C2 the record.json entry is the plain three-key form over slot 282's record")
 
     def replayed() -> bool:
-        hunks = side["reverseHunks"]
+        hunks = entry["reverseHunks"]
         if not all(type(h) is dict and set(h) == {"at", "removeBase64", "insertBase64"} and type(h["at"]) is int for h in hunks):
             return False
-        chunks, cursor = [], 0      # one ascending pass (MON-286-SIDE-RULE): no hunk overlaps the one before it
+        chunks, cursor = [], 0
         for hunk in sorted(hunks, key=lambda h: h["at"]):
             remove, insert = _base64(hunk["removeBase64"]), _base64(hunk["insertBase64"])
             if hunk["at"] < cursor or live[hunk["at"]:hunk["at"] + len(remove)] != remove:
@@ -716,15 +679,13 @@ def check_side(side_raw: Any, named: Any, entry: Any, live: Any) -> None:
             chunks.extend((live[cursor:hunk["at"]], insert))
             cursor = hunk["at"] + len(remove)
         chunks.append(live[cursor:])
-        return digest(live) == side["afterSha256"] and digest(b"".join(chunks)) == side["beforeSha256"] == PREVIOUS_CHECKPOINT[1]
-    _bound(replayed, "MET-PERF-049 C2 the side record's hunks reproduce slot 282's record")
+        return digest(b"".join(chunks)) == PREVIOUS_CHECKPOINT[1]
+    _bound(replayed, "MET-PERF-049 C2 the record.json entry's reverse hunks reproduce slot 282's record")
 
 
-def validate_side() -> None:
-    record = authority()
+def validate_inline() -> None:
     raw, entry = _ledger()
-    named = record["newFiles"].get(SIDE_PATH)
-    check_side(_bound_read(SIDE_PATH, named) if _sha(named) else None, named, entry, raw)
+    check_inline(entry, raw)
 
 
 def check_reader(reader: Any, readme: Any) -> None:
@@ -830,7 +791,8 @@ def validate_sources() -> None:
 def check_hunk_record(raw: Any, changed: Any, afters: Any, classify: Any, context: Any, rule_sha: Any) -> None:
     """V6 under v2.4: the record's six closed members; it names this layer's authority; the closed vocabulary and v2.4's
     digest, which the reader's copy carries; the context is this step's names with countPairs; no outcome statement; one
-    class per reverse hunk for exactly the changed files (record.json's entry, which has no hunks, an empty list); and
+    class per reverse hunk for exactly the changed files (record.json's line-run hunks included; MON-286-V6A: they are
+    exactly one "other" per hunk, not re-classified, as record.json is excluded and the reader never re-checks it); and
     every class equals v2.4's class at its position."""
     record = _parsed(raw)
     _bound(lambda: type(record) is dict and set(record) == HUNK_RECORD_MEMBERS and record["authorityPath"] == AUTHORITY_PATH
@@ -846,10 +808,13 @@ def check_hunk_record(raw: Any, changed: Any, afters: Any, classify: Any, contex
     classes = record.get("classes") if type(record) is dict else None
     _bound(lambda: type(changed) is dict and type(classes) is dict and set(classes) == set(changed)
            and all(type(classes[p]) is list and all(type(c) is str for c in classes[p])
-                   and len(classes[p]) == len(changed[p].get("reverseHunks", [])) for p in changed)
-           and classes.get(LEDGER_PATH, []) == [] and "reverseHunks" not in changed.get(LEDGER_PATH, {}),
+                   and len(classes[p]) == len(changed[p].get("reverseHunks", [])) for p in changed),
            "MET-PERF-049 V6 the hunk-class record lists one class per hunk for exactly the changed files")
+    _bound(lambda: LEDGER_PATH not in changed or classes[LEDGER_PATH] == ["other"] * len(changed[LEDGER_PATH]["reverseHunks"]),
+           "MET-PERF-049 V6 record.json's classes are exactly one other per hunk")
     for path, entry in changed.items():
+        if path == LEDGER_PATH:
+            continue    # MON-286-V6A: pinned above; its 1,974 line-run hunks are never re-classified (42 s per call)
         seen = set()
         for position, (cls, hunk) in enumerate(zip(classes[path], entry.get("reverseHunks", []))):
             _bound(lambda: cls in HUNK_VOCABULARY and cls == classify(
@@ -900,13 +865,13 @@ def validate_hunk_record() -> None:
 
 
 def validate_met_perf_049(packets: dict[str, Any]) -> None:
-    """Every era file first; then V1, C1 (the ledger), C2 (the side record), C3-C9 (the sources), V4 (the registry) and
+    """Every era file first; then V1, C1 (the ledger), C2 (the inline entry), C3-C9 (the sources), V4 (the registry) and
     V6 (the hunk-class record); last, this layer's canonical hunks."""
     for path in ERA_SHA256:
         _verified(path)
     validate_packet_files()
     validate_ledger()
-    validate_side()
+    validate_inline()
     validate_sources()
     validate_registry()
     validate_hunk_record()
@@ -960,8 +925,8 @@ def check_canonical_hunks(path: str, rule: Any, after: Any) -> None:
 def validate_canonical_hunks() -> None:
     """Q-PERF40-4: every hunk of this layer's authority is the canonical byte-minimal one, from this era's bytes."""
     for path, rule in _PROJECTION_RULES.items():
-        if path == _LEDGER_ROUTE[0] and "reverseHunksRecord" in authority()["changedFiles"].get(path, {}):
-            continue    # MET-PERF-049 (4.3): the side record's line-run hunks; C2 replays them to slot 282's record
+        if path == LEDGER_PATH:
+            continue    # MET-PERF-049: the ledger's line-run hunks; C2 replays them to slot 282's record
         check_canonical_hunks(path, rule, reviewed_bytes(path))
 
 
