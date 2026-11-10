@@ -87,6 +87,7 @@ from scripts.safe_yaml import safe_load
 from scripts import chain_identity as identity
 from scripts import chain_identity_v2 as identity_v2
 from scripts import chain_identity_v3 as identity_v3
+from scripts import chain_identity_v4 as identity_v4
 from scripts import repository_registration as registration
 
 
@@ -108,7 +109,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 296 and len(accepted) == 254
+    assert len(current) == 297 and len(accepted) == 254
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -145,7 +146,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(i6v4.historical_catalog(current)) == 253
     assert len(dcap.historical_catalog(current)) == 252
     assert len(np5.historical_catalog(current)) == 251
@@ -1282,6 +1284,32 @@ def _v2_ext():
     return ext
 
 
+V4_RECORD_DIR = 'architecture/chain-era-replay'
+V4_PINS = {
+    'scripts/chain_identity_v4.py': '24a75252b89986eafb6086443801f061c9b0f916764b2e0255d6806ca1301b9d',
+    'scripts/chain_identity_v3.py': '29483ec356f0d2b10f778fc5c4fe642df94795f8249daa088e7a06c995c67fb9',
+    'architecture/chain-era-replay/README.md': '594127b91c99181907823b5a94d6f096441628951bea8c1c49f95da29035f57f',
+    'architecture/chain-era-replay/decisions.md': '5907cc690f50bdab5924b9edbad41f8762142e75d0250cba4a0f2f8db6c97776',
+    'architecture/chain-era-replay/rule.json': '876b3b19b0f5972a89c95952d553322e03ac6e9fa386c10143310d39b5a68f6b',
+    'architecture/chain-era-replay/vectors.json': 'a10a9a5594528583e755181c5fcbcea1901c7182cdf51228bfd80cd68b4c87f0',
+}
+
+
+def _v4():
+    """(v3 bound by v4's pin, ext4): the v4 records' pins, then v4's own check of its rule against v3's rule."""
+    for path, expected in V4_PINS.items():
+        assert hashlib.sha256(profile.regular_bytes(path)).hexdigest() == expected, path
+    assert sorted(entry.name for entry in (profile.ROOT / V4_RECORD_DIR).iterdir()) == [
+        "README.md", "decisions.md", "rule.json", "vectors.json"]
+    v3 = identity_v4.pin_v3(identity_v3, profile.regular_bytes("scripts/chain_identity_v3.py"))
+    ext4 = identity_v4.check_rules(profile.regular_bytes(V3_RECORD_DIR + "/rule.json"),
+                                   profile.regular_bytes(V4_RECORD_DIR + "/rule.json"))
+    record = ext4["evidence"]["ruling"]["record"]
+    assert hashlib.sha256(profile.regular_bytes(record["path"])).hexdigest() == record["sha256"]
+    assert identity_v4.check_vectors_record(json.loads(profile.regular_bytes(V4_RECORD_DIR + "/vectors.json")))
+    return v3, ext4
+
+
 def _v3():
     """(v2 bound by v3's pin, ext3): the v3 records' pins, then v3's own check of its rule against v2's."""
     for path, expected in V3_PINS.items():
@@ -1337,7 +1365,9 @@ def test_identity_rule_holds_on_the_live_chain():
     slot = chain[-1][0]
     catalog = len(list((profile.ROOT / "task-packets").glob("*.yaml")))
     v2, ext3 = _v3()
-    summary = identity_v3.check(profile.regular_bytes, head.historical_bytes, rule, ext, ext3, slot, catalog, identity, v2)
+    v3, ext4 = _v4()
+    summary = identity_v4.check(profile.regular_bytes, head.historical_bytes, rule, ext, ext3, ext4, slot, catalog,
+                                identity, v2, v3)
     assert summary["layers"] == slot - 188 and summary["head"] == slot and summary["catalog"] == catalog
 
 

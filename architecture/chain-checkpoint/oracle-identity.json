@@ -2,31 +2,31 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_perf_047_oracle.py",
-  "sha256": "a7386061f3a250c190e6cfa0e34778476b293954472a94d0339f83bb501c1800"
+  "sha256": "a3ca8c0dfea47b432fdab042f732ff8eaa8e7c4405aad75fe87ef49044a40942"
  },
  "oracle": {
-  "agentId": "d514a06c-22be-487d-8d02-309f4a44704c",
+  "agentId": "local_e5eba7b8-6525-4b8a-b967-3749ce4fa839",
   "model": "claude-opus-5-5"
  },
  "operator": {
   "role": "LANE_SESSION",
-  "agentId": "6e0f91fc-67b2-40c8-bb8f-1ab11564fec7",
+  "agentId": "bf6383ea-f2e4-4ad6-aef2-b38999710a1e",
   "lane": "r00"
  },
  "author": {
   "agentIds": [
-   "6e0f91fc-67b2-40c8-bb8f-1ab11564fec7"
+   "bf6383ea-f2e4-4ad6-aef2-b38999710a1e"
   ]
  },
  "briefSha256": "31a69ae0f70a507c14a1afb080be061c35e4a59cd7531820e29101b2adc4b8e6",
- "candidateCommit": "85cee230c537bd82d82ba309150e099f89e68756",
- "launched": "2026-11-08T02:20:00+08:00",
- "finished": "2026-11-08T02:52:00+08:00",
+ "candidateCommit": "f70f65189449dd3983cb10967d7e3a0595e21c93",
+ "launched": "2026-11-09T23:48:30+08:00",
+ "finished": "2026-11-09T23:48:44+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-283-R3-KEEP",
-  "date": "2026-11-08"
+  "ref": "MON-286-O282-KEEP",
+  "date": "2026-11-10"
  },
  "disclosures": [
   "brief d48e23a2 and the c6 update note a81d1ee9 (MON-282-W1-A2 item 6); the inputs are the README, the reader's docstring and vectors.json only, at W0 and then at c6 (cn-c6); the oracle never read the reader's source, the writer or any test, and the operator never opened the oracle or a run's detail (MON-282-ORACLE-RUN)",
@@ -40,6 +40,7 @@
   "blind runs: on c6, run 1 VOID (fixture binding) and run 1-bis ABORTED (not a run), then 1-ter and 1-quater; at F, run F-1 on F's source VOID by stage (MON-282-ORACLE-F-VOID); on W′ de78fd19, 76 passed and 1 failed, a (b) ruled a README gap (MON-282-ORACLE-COUNTED-B), so the counted run was repeated; the one counted run, on W″ a64e29d7: 77 passed, 0 failed, 0 skipped",
   "the author's F-round slips: two Edit calls in one message once; a parametrize decorator briefly moved onto a helper and moved back before the run; extra JSON-parse calls; __pycache__ in WORK (moved to the Trash by the operator)",
   "ruling KEEP (MON-282-ORACLE-KEEP) on the counted run on W″ a64e29d7 (77 passed); after the writer's pair dedupe (MON-282-PAIRS-DEDUPE) and dry_run_compare's fix (MON-282-DRYRUN-FIND), the counted run was repeated on W⁶ b2f6f030: 77 passed, 0 failed, 0 skipped; candidateCommit is W⁶; F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)",
-  "corrected under MON-283-PRE-RULED R3 (owner's word) by the non-author lane monitor; reviewed VIS-283-R3-REVIEW; was 6f601d04"
+  "corrected under MON-283-PRE-RULED R3 (owner's word) by the non-author lane monitor; reviewed VIS-283-R3-REVIEW; was 6f601d04",
+  "corrected under MON-286-O282 by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), applying the text of Build-R12-ConformanceLabs's non-author run on c1b (75 of 77 passing; both failures stale by design under CONTRACT_286 r4: the countEffect table's two new rows and v2.4's rule digest); 2 edits; was a7386061; the monitor's run of the corrected file on c1b: 77 of 77; briefSha256 unchanged; R00 placed it by bytes and never opened it"
  ]
 }

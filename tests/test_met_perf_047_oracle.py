@@ -94,6 +94,8 @@ TABLE = {
     "over-cap": ("C", "restart"),
     "fault": ("C", "restart"),
     "skipped": ("C", "neutral"),
+    "demoted": (None, "neutral"),
+    "demoted-outcome-explained": (None, "pending isolation"),
     "agree": (None, "count"),
 }
 RECORD_MEMBERS = (
@@ -1301,7 +1303,7 @@ def test_f_constants_state_the_readme(cc):
     """README (F) 'hunkClassRuleSha256 picks chainmech v2.2's or v2.3's (RULES_BY_SHA ...)'; README (F) the pin line
     'read as AUTHORITY_SHA256 = "TO_BE_PINNED_AFTER_SOURCE_FREEZE"'. OPERATOR F: RULES_BY_SHA, RULE_V22_SHA256,
     PIN_LINE_PATTERN, PIN_PLACEHOLDER; CLASSES (five members, register last) and RULE_SHA256 are v2.3's."""
-    wanted = {cc.RULE_SHA256, cc.RULE_V22_SHA256}
+    wanted = {cc.RULE_SHA256, cc.RULE_V22_SHA256, cc.RULE_V24_SHA256}
     assert set(cc.RULES_BY_SHA) == wanted, (sorted(cc.RULES_BY_SHA), sorted(wanted))
     assert cc.RULE_SHA256 != cc.RULE_V22_SHA256, (cc.RULE_SHA256, cc.RULE_V22_SHA256)
     assert len(cc.CLASSES) == 5 and cc.CLASSES[-1] == "register", cc.CLASSES

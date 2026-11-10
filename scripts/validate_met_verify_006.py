@@ -962,12 +962,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "dist 005a ctrl fix 004 publish validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 296
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.NEW_PACKET} | set(PRODUCT_PACKETS),
-            "closed 296-packet catalog retaining the 286-packet checkpoint")
+    require(len(paths) == 297
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET} | set(PRODUCT_PACKETS),
+            "closed 297-packet catalog retaining the 286-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -1008,4 +1008,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("DIST-005A and CTRL-FIX-004 publish valid: 296 current specifications at slot 279; 286-packet checkpoint and exact 283-packet predecessor; contract reviewed.")
+    print("DIST-005A and CTRL-FIX-004 publish valid: 297 current specifications at slot 279; 286-packet checkpoint and exact 283-packet predecessor; contract reviewed.")

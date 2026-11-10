@@ -1,0 +1,48 @@
+{
+ "schemaVersion": "harness.planeon.ai/chain-era-replay-vectors/v1",
+ "packet": "MET-PERF-049",
+ "cases": [
+  {
+   "name": "positive: 286's bridge of 285's layer",
+   "previous": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "current": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(reviewed_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "expect": 1
+  },
+  {
+   "name": "negative: reader present and not lifted",
+   "previous": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "current": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "expect": "refused"
+  },
+  {
+   "name": "negative: the reverse direction",
+   "previous": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(reviewed_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "current": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "expect": "refused"
+  },
+  {
+   "name": "negative: a second occurrence",
+   "previous": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "current": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(reviewed_bytes, frozenset(packets))\n    model.check(reviewed_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "expect": "refused"
+  },
+  {
+   "name": "negative: the rename outside _replay",
+   "previous": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n\n\ndef other(model):\n    return model.check(regular_bytes, 1)\n",
+   "current": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n\n\ndef other(model):\n    return model.check(reviewed_bytes, 1)\n",
+   "expect": "refused"
+  },
+  {
+   "name": "negative: another callee name",
+   "previous": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(regular_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "current": "def _replay(model: Any, packets: Any) -> Any:\n    \"\"\"A5: the era model's own check over the head's bytes and the catalog's ids replays every budget vector (with F2's\n    invariant) and counts 11; None when it does.\"\"\"\n    result = model.check(raw_bytes, frozenset(packets))\n    return None if result[\"budgetVectors\"] == 11 else result\n",
+   "expect": "refused"
+  },
+  {
+   "name": "equivalence: no reader in the previous era (v4 = v3)",
+   "previous": "def _replay(model, packets):\n    return model.run(packets)\n",
+   "current": "def _replay(model, packets):\n    return model.run(packets)\n",
+   "expect": 0
+  }
+ ]
+}

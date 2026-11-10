@@ -851,12 +851,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "chain checkpoint validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 296
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET},
-            "closed 296-packet catalog retaining the 289-packet checkpoint")
+    require(len(paths) == 297
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET},
+            "closed 297-packet catalog retaining the 289-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -896,4 +896,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Chain checkpoint valid: 296 current specifications at slot 282; 289-packet checkpoint and exact 288-packet predecessor; contract reviewed.")
+    print("Chain checkpoint valid: 297 current specifications at slot 282; 289-packet checkpoint and exact 288-packet predecessor; contract reviewed.")

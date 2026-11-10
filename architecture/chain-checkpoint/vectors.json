@@ -2,7 +2,7 @@
  "bindingFaults": "MON-282-W1-A2's binding refusals (a missing, unnamed, digest-mismatched, malformed, miscounted or duplicated hunk-class record, a named one that is a link, not a file, or unreadable, a rule digest the reader does not hold, and an authority that carries classes itself) and a reordered record are class A, kind input; they are sourced in architecture/chain-checkpoint/README.md (How the reader rebuilds) and the module tests, with no vector of their own (P047-C6-4)",
  "countEffectTable": "architecture/chain-checkpoint/README.md, the countEffect table: every kind a vector expects takes its class and countEffect from it",
  "hunkClassRecords": "architecture/chain-checkpoint/hunk-classes/<slot>.json (MON-282-W1-A2): every vector that classes an authority's hunks builds the authority in v2.1's form and its closed hunk-class record, which the authority's newFiles names by sha256",
- "packet": "MET-PERF-047",
+ "packet": "MET-PERF-047; vectors 15-46 MET-PERF-049",
  "schemaVersion": "harness.planeon.ai/chain-checkpoint-vectors/v2",
  "vectors": [
   {
@@ -130,6 +130,294 @@
    "name": "the head validator's pin line",
    "names": "the layer's slot and the file",
    "sampled": "refuses"
+  },
+  {
+   "case": "a hunk moves a number by +1 outside the declared pairs (285's count edit)",
+   "expectClass": "rule",
+   "expectDetail": "class other",
+   "id": 15,
+   "name": "an undeclared digit move",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a hunk moves the catalog pair (n, n + steps[1]) or a countPairs pair",
+   "expectClass": "rule",
+   "expectDetail": "class cascade",
+   "id": 16,
+   "name": "a declared digit pair",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a real edit whose numbers equal a declared pair",
+   "expectClass": "rule",
+   "expectDetail": "class cascade, the stated limit",
+   "id": 17,
+   "name": "the collision residual",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a chain-member list gains one successor...NEW_PACKET chain at K 0",
+   "expectClass": "rule",
+   "expectDetail": "class cascade",
+   "id": 18,
+   "name": "F1 at K 0",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a chain-member list gains the NEW_PACKET chain then the *PRODUCT_PACKETS chain at K >= 1",
+   "expectClass": "rule",
+   "expectDetail": "class cascade",
+   "id": 19,
+   "name": "F2 at K >= 1",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "an id line gains the new id then the product ids in productPackets key order",
+   "expectClass": "rule",
+   "expectDetail": "class cascade",
+   "id": 20,
+   "name": "F3 in key order",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "F1 alone at K >= 1, F2 at K 0, F3 out of order or a subset, a mixed insertion, an F3 run quoted otherwise than the line's ids",
+   "expectClass": "rule",
+   "expectDetail": "class other",
+   "id": 21,
+   "name": "the refused member forms",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the weights file gains entries keyed by the step's own new test files",
+   "expectClass": "rule",
+   "expectDetail": "class record",
+   "id": 22,
+   "name": "a weights append",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "an existing weights entry changes its value",
+   "expectClass": "rule",
+   "expectDetail": "class other",
+   "id": 23,
+   "name": "a weights re-measure",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "an inserted weights entry repeats an existing key",
+   "expectClass": "rule",
+   "expectDetail": "class other",
+   "id": 24,
+   "name": "a duplicate weights key",
+   "names": "the hunk",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a v2.4 context whose countPairs is not distinct, moves by another step or holds the catalog pair",
+   "expectClass": "A",
+   "expectDetail": "a binding fault: hunkClassContext.countPairs is malformed",
+   "id": 25,
+   "name": "a countPairs fault",
+   "names": "the authority",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the same reading with and without L1 and L2, under a constant clock, class C kinds included",
+   "expectClass": "none",
+   "expectDetail": "byte-equal records",
+   "id": 26,
+   "name": "cache equality",
+   "names": "nothing",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a second reading with another newer-authority set",
+   "expectClass": "none",
+   "expectDetail": "never served from the first reading's memo",
+   "id": 27,
+   "name": "L2's invariant",
+   "names": "nothing",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the ledger hunk side record is absent",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: missing",
+   "id": 28,
+   "name": "the side record missing",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "newFiles does not name the side record",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: not named",
+   "id": 29,
+   "name": "the side record unnamed",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "its bytes differ from the newFiles digest",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: digest differs",
+   "id": 30,
+   "name": "the side record's digest",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "not the closed member set, or reverseHunks not a list",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: malformed",
+   "id": 31,
+   "name": "the side record malformed",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "authorityPath names another authority",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: another authority",
+   "id": 32,
+   "name": "the side record's authority",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the record.json entry is not exactly the three keys with reverseHunksRecord{path, sha256}",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: the entry's keys",
+   "id": 33,
+   "name": "the entry's key set",
+   "names": "the entry",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "its path, beforeSha256 or afterSha256, or the entry's reference, differs",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: differs",
+   "id": 34,
+   "name": "the side record and the entry",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "its hunks do not reproduce the base record",
+   "expectClass": "writer",
+   "expectDetail": "check_ledger_hunks: do not reproduce",
+   "id": 35,
+   "name": "the side record's replay",
+   "names": "the side record",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "no ci/chain_checkpoint_g1.py",
+   "expectClass": "none",
+   "expectDetail": "shadow, no record; the signal file is never read",
+   "id": 36,
+   "name": "the G1 module absent",
+   "names": "nothing",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the module present and the signal file failing a file rule, a field, the head or a digest",
+   "expectClass": "C",
+   "expectDetail": "fault: P-048-3, naming the failed check; shadow",
+   "id": 37,
+   "name": "a failing signal file",
+   "names": "the check",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the signal file present in any form during a writing run",
+   "expectClass": "writer",
+   "expectDetail": "refused (condition (i), P-048-4)",
+   "id": 38,
+   "name": "the writer and the signal file",
+   "names": "the signal file",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "an authored class-other edit whose continued replay lands exactly on the checkpoint digest",
+   "expectClass": "none",
+   "expectDetail": "the layers attesting the path are demoted (neutral) and named",
+   "id": 39,
+   "name": "a demotion",
+   "names": "the slot, the path and the authority",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a demoted layer's outcome differs and no outcomeStatements entry matches",
+   "expectClass": "A",
+   "expectDetail": "input: a demoted layer's outcome differs with no matching statement",
+   "id": 40,
+   "name": "a demoted outcome change with no statement",
+   "names": "the slot",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a matching statement; the isolation record reads PASS",
+   "expectClass": "none",
+   "expectDetail": "demoted-outcome-explained, pending isolation until the PASS, then count",
+   "id": 41,
+   "name": "a stated change, isolation PASS",
+   "names": "the slot and the path",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a matching statement; the isolation record reads FAIL",
+   "expectClass": "A",
+   "expectDetail": "restart (input)",
+   "id": 42,
+   "name": "a stated change, isolation FAIL",
+   "names": "the slot",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "the gate fails at the replay point, a re-check fails, a binding fault, beforeSha256 differs after the full undo, or the replay does not land",
+   "expectClass": "A",
+   "expectDetail": "input; nothing demoted",
+   "id": 43,
+   "name": "no demotion",
+   "names": "the slot and the path",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "another layer, a missing differing node, or a path with no class-other hunk",
+   "expectClass": "A",
+   "expectDetail": "input: no matching statement",
+   "id": 44,
+   "name": "a statement mismatch",
+   "names": "the slot",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "a v2.4 record whose outcomeStatements fails its shape",
+   "expectClass": "A",
+   "expectDetail": "a binding fault: outcomeStatements",
+   "id": 45,
+   "name": "a malformed outcomeStatements",
+   "names": "the authority",
+   "sampled": "unchanged at 286 (shadow only)"
+  },
+  {
+   "case": "v2.3 with five members, v2.4 with six; v2.4 with five, v2.3 with six",
+   "expectClass": "A",
+   "expectDetail": "accepted, accepted; a binding fault each",
+   "id": 46,
+   "name": "the member set by the rule digest",
+   "names": "the authority",
+   "sampled": "unchanged at 286 (shadow only)"
   }
  ]
 }

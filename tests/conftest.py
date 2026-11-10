@@ -203,8 +203,12 @@ def _test_module_parse_sharing(request):
 # MET-ENFORCE-043 oracle leaves scripts/ on sys.path when collected, so a later first import of a scripts.* module bound
 # the top-level copy of its fallback import, and the parallel suite's file plan decided the result. sys.path is restored
 # exactly after each test module's collection; the directories pytest adds for a conftest are already in the snapshot.
+_CHAIN_PRELOADED = False     # MET-PERF-049 (286 3.5): the chain preload, collect and freeze run once per process
+
+
 @pytest.hookimpl(wrapper=True)
 def pytest_make_collect_report(collector):
+    global _CHAIN_PRELOADED
     if not isinstance(collector, pytest.Module):
         return (yield)
     path = list(sys.path)
@@ -215,7 +219,10 @@ def pytest_make_collect_report(collector):
         # every test then runs at the default limit with the chain loaded (later calls find each module loaded);
         # a project without the chain (a test's synthetic one) skips the imports.
         sys.setrecursionlimit(max(limit, 2000))
-        if (collector.config.rootpath / "scripts" / "validate_credential_lifecycle.py").is_file():
+        # MET-PERF-049 (286 3.5, MP049-C1-13): only the process's first module that has the chain imports it; the flag
+        # is set only after the imports, the collect and the freeze have all completed (a raise leaves it unset, and a
+        # module whose rootpath lacks the chain neither imports nor uses up the flag).
+        if not _CHAIN_PRELOADED and (collector.config.rootpath / "scripts" / "validate_credential_lifecycle.py").is_file():
             __import__("scripts.validate_credential_lifecycle")
             __import__("scripts.validate_ci_performance")
             sys.path.insert(0, str(collector.config.rootpath / "scripts"))
@@ -227,6 +234,7 @@ def pytest_make_collect_report(collector):
             import gc
             gc.collect()
             gc.freeze()
+            _CHAIN_PRELOADED = True
     finally:
         sys.setrecursionlimit(limit)
         sys.path[:] = path

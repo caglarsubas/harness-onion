@@ -1,0 +1,37 @@
+{
+ "schemaVersion": "harness.planeon.ai/chain-era-replay-rule/v1",
+ "packet": "MET-PERF-049",
+ "extends": {
+  "path": "architecture/chain-inheritance/rule.json",
+  "sha256": "ed2a4d41df9a3624ee4c0d835bd1586b075dfe32feffd7eb0d09cce9731a9b10",
+  "clause": "xi"
+ },
+ "clause": {
+  "id": "xi",
+  "reader": "_replay",
+  "from": "regular_bytes",
+  "to": "reviewed_bytes",
+  "text": "when the old head's previous-era top-level _replay holds <model>.check(regular_bytes, X), the current _replay holds <model>.check(reviewed_bytes, X) at that one position, the direction fixed and every other node of _replay equal; required; a previous era with no such reader gives 0",
+  "sameTextAs": "chainmech strictbridge_v2 form (xi), sha256 dee5a1e1ac3cf276342e41b4508b7723c55bfa3ce85e4c5046e4201cf620c9f2"
+ },
+ "model": {
+  "path": "scripts/chain_identity_v4.py",
+  "v3": {
+   "path": "scripts/chain_identity_v3.py",
+   "sha256": "29483ec356f0d2b10f778fc5c4fe642df94795f8249daa088e7a06c995c67fb9"
+  }
+ },
+ "evidence": {
+  "ruling": {
+   "ids": [
+    "Q-286-IDENTITY",
+    "MON-286-IDENTITY-V4"
+   ],
+   "record": {
+    "path": "architecture/chain-era-replay/decisions.md",
+    "sha256": "5907cc690f50bdab5924b9edbad41f8762142e75d0250cba4a0f2f8db6c97776"
+   }
+  },
+  "vectors": "architecture/chain-era-replay/vectors.json"
+ }
+}

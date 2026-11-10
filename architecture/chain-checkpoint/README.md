@@ -84,8 +84,8 @@ Every digest is at the checkpoint tree.
   digest-mismatched, malformed, miscounted or duplicated, or an authority that carries classes itself, is class A,
   kind input, as is a bad context, and so is a named record that is a link, not a file, or unreadable (an unnamed
   one changes nothing). Each class is re-checked by position by the rule the record names: `hunkClassRuleSha256`
-  picks chainmech v2.2's or v2.3's (`RULES_BY_SHA`; the reader holds v2.3's copy, and v2.2's is v2.3's with
-  `register` off), any other digest is class A, and `hunkClassVocabulary` must be that rule's vocabulary. A
+  picks chainmech v2.2's, v2.3's or v2.4's (`RULES_BY_SHA`; the reader holds v2.3's and v2.4's copies, and v2.2's is
+  v2.3's with `register` off; MET-PERF-049), any other digest is class A, and `hunkClassVocabulary` must be that rule's vocabulary. A
   reordered record is class A.
 - A reverse hunk that carries a `class` member is checked as an entry first: a class that is not a string is a
   broken entry (corrupt); otherwise the authority carries classes itself (class A, kind input).
@@ -129,6 +129,8 @@ record's `kind` and `countEffect`, `vectors.json` and the contract cite it, and 
 | over-cap | C | restart | a finished reading took longer than the cap |
 | fault | C | restart | any other exception of the reader, and a failing clock (one record per reading: "the clock failed") |
 | skipped | C | neutral | a dry-run-only reading, skipped in session |
+| demoted | — | neutral | an attested input changed by authored, replay-verified edits that land exactly on the checkpoint digest; the layer runs live until the next rewrite (MET-PERF-049) |
+| demoted-outcome-explained | — | pending isolation | a demoted layer whose live outcome differs from the record, with a matching outcomeStatements entry; the count advances only when the isolation record reads PASS (E1) |
 | agree | — | count | a reading with no disagreement |
 
 - A kind is set by cause, never by an exception's type.
@@ -160,14 +162,66 @@ starts. Each is shadow-only.
 
 **The writing run's two stated differences**, always given together:
 1. Argv 63 runs directly, with the capture plugin.
-2. It runs serial: the `-p` option keeps the parallel suite's serial loop, where the verify runs 8 workers.
+2. It runs serial: the `-p` option keeps the parallel suite's serial loop, where the verify runs 12 workers.
 
-The owner's approval for 282 names both. An outcome that differs between that run and the 8-worker verify 0 is
+The owner's approval for 282 names both. An outcome that differs between that run and the 12-worker verify 0 is
 attributed to them first, and is class A only if the input set explains it.
+
+**The workers note (MET-PERF-049).** WORKERS is 12 from slot 286 (8 before), the count the reader reads from
+`ci/parallel_suite.py`. The trade-off: during a verify's suite phase, 12 of the host's 18 cores (6 performance, 12
+efficiency) are busy with test workers, against 8 before, so other sessions on the host and the Ollama service slow
+down for those minutes; in exchange argv 63's wall is about 94 s shorter, measured on a quiet host (the worker trial
+v3, K12 against the mean of two K8 arms).
 
 **Capture gaps:** opens by subprocesses, and files read through memory maps already open, are not seen. Process-level
 caches (a module imported, or a file read into an lru cache, by an earlier node of the serial run) are charged only to the
 first node that read them.
+
+## MET-PERF-049 (slot 286): the rewrite, the class cache, class rule v2.4, the demotion, MET-PERF-048's provisions
+
+**The ledger freeze.** Schema v1 is frozen at 286; any later member means a rewrite (VIS-048-READ).
+
+**The rewrite.** The second checkpoint is written at 286 by a full G0 run (condition (i)) and attests layers 189-285. Its
+authority names `record.json` in `changedFiles` with exactly `{beforeSha256, afterSha256, reverseHunksRecord: {path,
+sha256}}`, and the reverse hunks live in the closed side record `ledger-hunks/<slot>.json` (`{authorityPath, path,
+beforeSha256, afterSha256, reverseHunks}`), named in newFiles. The writer builds and checks it (`check_ledger_hunks`);
+the slot's hunk-class record lists `record.json` with an empty class list. `record.json` is in the exclusion, so the
+reader never replays it.
+
+**Class rule v2.4** (`RULE_V24_SHA256`, `classify_v24`):
+- R1, member forms: F1, one `successor...NEW_PACKET` chain (K = 0 only); F2, that chain followed by the
+  `*successor...PRODUCT_PACKETS` chain (K >= 1 only); F3, an id line gains the new id, then at K >= 1 the authority's
+  product ids in the key order of its `productPackets`. Anything else is other.
+- R2, digit moves: cascade only for declared pairs: the catalog pair `(n, n + steps[1])`, n the authority's own
+  baselinePackets size, and the context's `countPairs`. A real edit whose numbers equal a declared pair stays cascade:
+  the stated limit (vector 17).
+- W, the weights file: an insert of entries keyed by the step's own new test files is record; a re-measure or a duplicate
+  key is other.
+- A v2.4 record's context has exactly five keys (`countPairs` added), and its member set is six (`outcomeStatements`
+  added). `attach_classes` picks the set by the record's own rule digest before it checks the members.
+
+**The class cache.** L1, per session, the classes of one authority's hunks on one path, keyed by (the authority's
+sha256, path), filled only by a completed ordered pass; a hit still runs the afterSha256 gate and the byte checks. L2,
+inside one Reader invocation whose newer-authority set is fixed at start, one rebuild per (path, live sha256), filled only
+after the afterSha256 gate. Nothing outlives the invocation (PERF-028/029, Q-PERF40-2). A cached and an uncached reading
+write byte-equal records (vector 26, under a constant clock).
+
+**The demotion (OQ-048-1 (b)).** When a path's only unexplained entry is "n of m hunks of a class not normalised", the
+replay continues: every newer authority on the path, newest first, gates kept, all its hunks undone, its beforeSha256
+checked, to the attested digest. On an exact landing every layer attesting the path is demoted (neutral) and runs live;
+any other outcome is class A. A demoted layer's changed outcome is "demoted-outcome-explained" (pending isolation) only
+with a matching outcomeStatements entry of the authoring v2.4 record; otherwise class A. The record carries `demoted`
+(slot, path, authority, liveSeconds), `attestedFraction` and the explained events (`isolation`).
+
+**The mode of record and MET-PERF-048's provisions.** MODE is the default mode. The G1 module `ci/chain_checkpoint_g1.py`
+is loaded only when present (P-048-1); only then is the verifier's signal file read (P-048-3), at
+`$HOME/.planeon/chain-checkpoint-g1-signal.json`, under these rules: opened without following a link, checked by fstat
+(a regular file, uid 0, no group or world write bit, nlink 1, at most 4,096 bytes), at most 4,097 bytes read, I-JSON
+with exactly `ledgerSha256`, `g1ModuleSha256` (64 hex), `head` (40 hex, equal to the checkout's HEAD) and `bundleId`. An
+unset HOME or an absent file leaves the run in shadow mode with no record; a failing check is shadow plus one class C
+record naming it. The mode of record is the verifier's declaration plus the module's presence. The writer refuses
+while the file is present (P-048-4). The root conftest's collection hook calls the reader's selection entry point only
+when the reader exposes one (P-048-2). At 286 the module is absent, so everything here is inert.
 
 **Non-claims.**
 - 047 saves no verify time: it adds at most 15 s.

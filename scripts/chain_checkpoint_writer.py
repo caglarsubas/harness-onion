@@ -6,8 +6,16 @@ usage: chain_checkpoint_writer.py run WORKTREE OUT_DIR
 
 The writing run's two stated differences (Q-282C-3, MON-282-Q1Q3), always given together: (1) argv 63 runs directly,
 not through ci/run_packet_argv.py, with `-p scripts.chain_checkpoint_writer` and the capture variables; (2) it runs
-SERIAL: the -p option keeps ci/parallel_suite.py's serial loop, so one process runs every node, where the verify runs 8
-workers. An outcome that differs between this run and the 8-worker shadow verify 0 is attributed to these two first.
+SERIAL: the -p option keeps ci/parallel_suite.py's serial loop, so one process runs every node, where the verify runs
+the WORKERS that ci/parallel_suite.py sets. An outcome that differs between this run and the shadow verify 0 is
+attributed to these two first.
+
+MET-PERF-049 (slot 286, CONTRACT_286 r3), generalised once so that every later rewrite reuses it: the head layer's
+validator names the step's authority (its AUTHORITY_PATH); a rewrite's exclusion adds the ledger hunk side record
+(architecture/chain-checkpoint/ledger-hunks/<slot>.json, built here and checked by check_ledger_hunks: vectors 28-35);
+writingRun.verifyReference names the previous checkpoint and its record's sha256; parameters.workers and the stated
+difference come from ci/parallel_suite.py's WORKERS (refused when it does not parse); and the writer refuses while the
+G1 signal file is present under HOME (P-048-4, condition (i)).
 Argv 1-62 and 64 run through the runner (the lane's dry-run kit); their run summary is bound by sha256 (--argv-run).
 
 The capture observes only: one audit hook on "open" notes, per node and phase, the repository files opened for reading
@@ -37,7 +45,11 @@ from pathlib import Path
 
 CAPTURE_ENV = ("CHAIN_CHECKPOINT_CAPTURE_DIR", "CHAIN_CHECKPOINT_CAPTURE_ROOT")
 RECORD_PATH = "architecture/chain-checkpoint/record.json"
-AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"
+AUTHORITY_PATH = "architecture/chain-checkpoint-authority.json"     # 282's; a rewrite takes its head's (286 3.6)
+LEDGER_HUNKS_DIR = "architecture/chain-checkpoint/ledger-hunks"
+SIGNAL_RELATIVE = ".planeon/chain-checkpoint-g1-signal.json"          # the reader's T1 path (P-048-4)
+LEDGER_HUNK_MEMBERS = frozenset({"authorityPath", "path", "beforeSha256", "afterSha256", "reverseHunks"})
+ENTRY_KEYS = frozenset({"beforeSha256", "afterSha256", "reverseHunksRecord"})
 HUNK_CLASSES_DIR = "architecture/chain-checkpoint/hunk-classes"
 SCHEMA = "harness.planeon.ai/chain-checkpoint/v1"
 ARGV63 = ["-m", "pytest", "tests", "ci/test_offline_runner.py", "ci/test_warm_snapshot.py"]
@@ -45,8 +57,10 @@ INDEX_RECORDS = ("architecture/review-record/briefs.json", "task-packets/README.
                  "docs/repositories/00-harness-engineering.md", "docs/MASTER_DEVELOPMENT_PLAN.md")
 SKIP_PARTS = (".git", "__pycache__", ".venv", ".pytest_cache")
 WRITE_FLAGS = os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC | os.O_APPEND
-STATED = ["direct: argv 63 runs outside ci/run_packet_argv.py, with -p scripts.chain_checkpoint_writer and the capture variables",
-          "serial: the -p option keeps ci/parallel_suite.py's serial loop (one process); the verify runs 8 workers"]
+def stated(workers):
+    """The two stated differences, the second naming the verify's WORKERS (286 3.6: never a literal count)."""
+    return ["direct: argv 63 runs outside ci/run_packet_argv.py, with -p scripts.chain_checkpoint_writer and the capture variables",
+            "serial: the -p option keeps ci/parallel_suite.py's serial loop (one process); the verify runs %d workers" % workers]
 
 
 class Refused(SystemExit):
@@ -160,9 +174,82 @@ def check_pairs_of(lslot, pairs_path, document):
     return out
 
 
-def exclusion_for(slot, head_validator):
-    """MON-282-W2-RULED: the closed exclusion of the step at slot: its own products, never a layer's input."""
-    return {"files": sorted([AUTHORITY_PATH, "%s/%d.json" % (HUNK_CLASSES_DIR, slot), RECORD_PATH]), "pinLine": head_validator}
+def exclusion_for(slot, head_validator, authority=AUTHORITY_PATH, ledger_hunks=False):
+    """MON-282-W2-RULED: the closed exclusion of the step at slot: its own products, never a layer's input. A rewrite
+    (286 3.6) passes its head's authority and adds its ledger hunk side record."""
+    files = [authority, "%s/%d.json" % (HUNK_CLASSES_DIR, slot), RECORD_PATH]
+    if ledger_hunks:
+        files.append("%s/%d.json" % (LEDGER_HUNKS_DIR, slot))
+    return {"files": sorted(files), "pinLine": head_validator}
+
+
+def workers_of(worktree):
+    """ci/parallel_suite.py's WORKERS by the reader's rule (one `WORKERS = <int>` line); refused when absent."""
+    m = re.search(rb"^WORKERS = (\d+)$", (worktree / "ci/parallel_suite.py").read_bytes() if (worktree / "ci/parallel_suite.py").is_file() else b"", re.M)
+    if not m:
+        raise Refused("ci/parallel_suite.py's WORKERS does not parse")
+    return int(m.group(1))
+
+
+def signal_present(home):
+    """P-048-4: the G1 signal file, in any form (a link included), under HOME."""
+    return bool(home) and os.path.lexists(os.path.join(home, SIGNAL_RELATIVE))
+
+
+def ledger_hunks(base_raw, new_raw, authority_path, slot):
+    """286 4.3: the closed side record of record.json's reverse hunks (new -> base), byte-minimal per changed line run."""
+    import base64 as _b64
+    import difflib as _dl
+    old, new = base_raw.splitlines(keepends=True), new_raw.splitlines(keepends=True)
+    offsets, at = [], 0
+    for line in new:
+        offsets.append(at)
+        at += len(line)
+    offsets.append(at)
+    hunks = []
+    for tag, i0, i1, j0, j1 in _dl.SequenceMatcher(None, old, new, autojunk=False).get_opcodes():
+        if tag == "equal":
+            continue
+        hunks.append({"at": offsets[j0], "removeBase64": _b64.b64encode(b"".join(new[j0:j1])).decode(),
+                      "insertBase64": _b64.b64encode(b"".join(old[i0:i1])).decode()})
+    return {"authorityPath": authority_path, "path": RECORD_PATH, "beforeSha256": sha(base_raw), "afterSha256": sha(new_raw),
+            "reverseHunks": hunks}
+
+
+def check_ledger_hunks(entry, side_raw, named_digest, authority_path, live_raw):
+    """286 4.3 (C2; vectors 28-35): the record.json entry and its side record. Returns the fault, or None."""
+    import base64 as _b64
+    if side_raw is None:
+        return "the ledger hunk side record is missing"
+    if named_digest is None:
+        return "the ledger hunk side record is not named in newFiles"
+    if sha(side_raw) != named_digest:
+        return "the ledger hunk side record's digest differs from newFiles"
+    try:
+        side = json.loads(side_raw)
+    except ValueError:
+        side = None
+    if not (isinstance(side, dict) and set(side) == LEDGER_HUNK_MEMBERS and isinstance(side["reverseHunks"], list)):
+        return "the ledger hunk side record is malformed"
+    if side["authorityPath"] != authority_path:
+        return "the ledger hunk side record names another authority"
+    ref = entry.get("reverseHunksRecord") if isinstance(entry, dict) else None
+    if not (isinstance(entry, dict) and set(entry) == ENTRY_KEYS and isinstance(ref, dict) and set(ref) == {"path", "sha256"}):
+        return "the entry's keys: the record.json entry is not exactly {beforeSha256, afterSha256, reverseHunksRecord{path, sha256}}"
+    if (side["path"], side["beforeSha256"], side["afterSha256"]) != (RECORD_PATH, entry["beforeSha256"], entry["afterSha256"]) \
+            or ref["sha256"] != named_digest:
+        return "the side record's path, beforeSha256 or afterSha256, or the entry's reference, differs"
+    if sha(live_raw) != side["afterSha256"]:
+        return "the live record is not the side record's afterSha256"
+    cur, prior = live_raw, None
+    for h in sorted(side["reverseHunks"], key=lambda h: -h["at"]):
+        rm, ins = _b64.b64decode(h["removeBase64"]), _b64.b64decode(h["insertBase64"])
+        if (prior is not None and h["at"] + len(rm) > prior) or cur[h["at"]:h["at"] + len(rm)] != rm:
+            return "the side record's hunks do not apply"
+        cur, prior = cur[:h["at"]] + ins + cur[h["at"] + len(rm):], h["at"]
+    if sha(cur) != side["beforeSha256"]:
+        return "the side record's hunks do not reproduce the base record"
+    return None
 
 
 def _pin_normaliser(worktree):
@@ -195,6 +282,8 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
     _outside(worktree, out_dir)
     if _constant(worktree / "ci/chain_checkpoint.py", "MODE") != "shadow":
         raise Refused("the reader is not in shadow mode: no checkpoint from an attested run (condition (i))")
+    if signal_present(os.environ.get("HOME")):
+        raise Refused("the G1 signal file is present: no checkpoint from an attested run (condition (i), P-048-4)")
     if not measure_only and size_bound is None:
         raise Refused("the size bound is required at F")
     shards = sorted(out_dir.glob("shard-*.json"))
@@ -214,12 +303,16 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
     executed = sum(1 for o in outcomes.values() if "call" in o or o.get("setup") in ("failed", "skipped"))
     if executed != shard["collected"]:
         raise Refused("the full-run proof fails: collected %d, executed %d" % (shard["collected"], executed))
-    authority = json.loads((worktree / AUTHORITY_PATH).read_bytes())
     chain = _layers(worktree)
     heads = ["scripts/%s.py" % module for lslot, module in chain if lslot == slot]
     if len(heads) != 1:
         raise Refused("no single head layer at slot %d" % slot)
-    excl, normalise = exclusion_for(slot, heads[0]), _pin_normaliser(worktree)
+    head_authority = _constant(worktree / heads[0], "AUTHORITY_PATH") or AUTHORITY_PATH
+    authority = json.loads((worktree / head_authority).read_bytes())
+    previous = (worktree / RECORD_PATH).read_bytes() if (worktree / RECORD_PATH).is_file() else None
+    workers = workers_of(worktree)
+    excl = exclusion_for(slot, heads[0], head_authority, ledger_hunks=previous is not None)
+    normalise = _pin_normaliser(worktree)
     layers, pairs = [], []
     for lslot, module in chain:
         if lslot >= slot:
@@ -251,12 +344,14 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
     record = {"schemaVersion": SCHEMA, "checkpointSlot": slot, "checkpointBaseline": len(authority["baselinePackets"]),
               "writingCommit": head[0], "writingTree": head[1],
               "parameters": {"cadenceSlots": 10, "sampleFraction": 0.1, "fullRunOn": "owner-named slot", "nShadow": 10,
-                             "shadowCapSeconds": 15, "workers": 8, "shadowIn": "dryRunOnly" if dry_run_only else "verify"},
+                             "shadowCapSeconds": 15, "workers": workers, "shadowIn": "dryRunOnly" if dry_run_only else "verify"},
               "normalisedRecordClass": bool(captured & set(INDEX_RECORDS)), "layers": layers, "checkPairs": pairs,
               "fullRunProof": {"collected": shard["collected"], "executed": executed, "deselected": 0, "attested": 0},
-              "writingRun": {"statedDifferences": STATED, "captureEnv": list(CAPTURE_ENV), "captureObservesOnly": True,
+              "writingRun": {"statedDifferences": stated(workers), "captureEnv": list(CAPTURE_ENV), "captureObservesOnly": True,
                              "outsideReads": shard["outside"], "argvRunSummarySha256": sha(summary.encode()),
-                             "verifyReference": "none: the first checkpoint records the writing run itself"},
+                             "verifyReference": ("the previous checkpoint: slot %d, record.json sha256 %s" % (
+                                 json.loads(previous)["checkpointSlot"], sha(previous)) if previous is not None
+                                 else "none: the first checkpoint records the writing run itself")},
               "exclusion": excl, "sizeBound": size_bound, "sizeBytes": 0}
     for _ in range(5):          # sizeBytes is the final file's length
         raw = (json.dumps(record, sort_keys=True, indent=1) + "\n").encode()
