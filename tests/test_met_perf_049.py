@@ -1057,7 +1057,9 @@ OWN_PATH = "task-packets/MET-PERF-049.yaml"
 V_TESTS = {
     "V1": ("test_v1_every_era_file_is_bound_by_its_digest", "test_v1_the_packet_files_are_exactly_the_ten"),
     "C1": ("test_c1_the_ledger_rechecks_in_full",),
-    "C2": ("test_c2_the_side_record_rechecks_in_full",),
+    "C2": ("test_c2_the_side_record_rechecks_in_full", "test_c2_the_side_route_feeds_the_projection",
+           "test_c2_the_live_side_route_projects_slot_282s_record",
+           "test_c2_the_canonical_check_skips_only_the_side_route"),
     "C3": ("test_c3_the_reader_rechecks_in_full",),
     "C4": ("test_c4_the_rule_copy_rechecks_in_full",),
     "C5": ("test_c5_the_once_flag_rechecks_in_full",),
@@ -1086,6 +1088,9 @@ C1_BIND = "MET-PERF-049 C1 the chain walk: slot "
 C2_SIDE = "MET-PERF-049 C2 the side record is closed, named in newFiles and names this layer's authority"
 C2_ENTRY = "MET-PERF-049 C2 the record.json entry is the three-key form naming the side record"
 C2_REPLAY = "MET-PERF-049 C2 the side record's hunks reproduce slot 282's record"
+C2_ROUTE = "closed side route"
+C2_ROUTE_DIGEST = "side route digest"
+C2_ROUTE_SIDE = "closed side record"
 C3_CACHE = "MET-PERF-049 C3 the reader's L1 and L2 caches"
 C3_RULES = "MET-PERF-049 C3 RULES_BY_SHA holds the v2.2, v2.3 and v2.4 digests"
 C3_TABLE = "MET-PERF-049 C3 COUNT_EFFECT equals the README's table"
@@ -1280,10 +1285,12 @@ def _base_ledger():
     if _sha(raw) == profile.PREVIOUS_CHECKPOINT[1]:
         return raw
     side = json.loads(profile.reviewed_bytes(profile.SIDE_PATH))
-    for hunk in sorted(side["reverseHunks"], key=lambda h: -h["at"]):
+    chunks, cursor = [], 0          # one ascending pass
+    for hunk in sorted(side["reverseHunks"], key=lambda h: h["at"]):
         remove, insert = _b64.b64decode(hunk["removeBase64"]), _b64.b64decode(hunk["insertBase64"])
-        raw = raw[:hunk["at"]] + insert + raw[hunk["at"] + len(remove):]
-    return raw
+        chunks.extend((raw[cursor:hunk["at"]], insert))
+        cursor = hunk["at"] + len(remove)
+    return b"".join(chunks) + raw[cursor:]
 
 
 def _side_case():
@@ -1302,6 +1309,75 @@ def _side_case():
     entry = {"beforeSha256": _sha(base), "afterSha256": _sha(live),
              "reverseHunksRecord": {"path": profile.SIDE_PATH, "sha256": _sha(side_raw)}}
     return side, side_raw, entry, live
+
+
+@pytest.mark.parametrize("change", ["entry_extra", "entry_missing", "inline_beside", "ref_path", "ref_digest", "ref_extra",
+                                    "named_none", "raw_digest", "side_member", "side_authority", "side_path", "side_before",
+                                    "side_after"])
+def test_c2_the_side_route_feeds_the_projection(change):
+    """MON-286-SIDE-RULE: _rules() takes the ledger's hunks from the side record only after each of its checks."""
+    side, side_raw, entry, live = _side_case()
+    named = _sha(side_raw)
+    assert profile._side_rule_of(profile.LEDGER_PATH, entry, named, side_raw) == {
+        "beforeSha256": entry["beforeSha256"], "afterSha256": entry["afterSha256"], "reverseHunks": side["reverseHunks"]}
+    assert profile._side_rule_of("architecture/other.json", entry, named, side_raw) is entry
+    inline = {"beforeSha256": entry["beforeSha256"], "afterSha256": entry["afterSha256"], "reverseHunks": side["reverseHunks"]}
+    assert profile._side_rule_of(profile.LEDGER_PATH, inline, named, side_raw) is inline
+    message = C2_ROUTE
+    if change == "entry_extra":
+        entry["extra"] = 1
+    elif change == "entry_missing":
+        del entry["beforeSha256"]
+    elif change == "inline_beside":
+        entry["reverseHunks"] = side["reverseHunks"]
+    elif change == "ref_path":
+        entry["reverseHunksRecord"]["path"] = "architecture/chain-checkpoint/ledger-hunks/285.json"
+    elif change == "ref_digest":
+        entry["reverseHunksRecord"]["sha256"] = "0" * 64
+    elif change == "ref_extra":
+        entry["reverseHunksRecord"]["at"] = 0
+    elif change == "named_none":
+        named = None
+    elif change == "raw_digest":
+        side_raw, message = side_raw + b" ", C2_ROUTE_DIGEST
+    else:
+        message = C2_ROUTE_SIDE
+        if change == "side_member":
+            side["extra"] = 1
+        elif change == "side_authority":
+            side["authorityPath"] = "architecture/other-authority.json"
+        elif change == "side_path":
+            side["path"] = "architecture/chain-checkpoint/other.json"
+        elif change == "side_before":
+            side["beforeSha256"] = "0" * 64
+        else:
+            side["afterSha256"] = "0" * 64
+        side_raw = (json.dumps(side, sort_keys=True, indent=1) + "\n").encode()
+        named = _sha(side_raw)
+        entry["reverseHunksRecord"]["sha256"] = named
+    _raises(message, lambda: profile._side_rule_of(profile.LEDGER_PATH, entry, named, side_raw))
+
+
+def test_c2_the_canonical_check_skips_only_the_side_route(monkeypatch):
+    """Q-PERF40-4's canonical check runs for every projected path except the side-routed ledger (C2 replays it)."""
+    seen = []
+    monkeypatch.setattr(profile, "check_canonical_hunks", lambda path, rule, after: seen.append(path))
+    profile.validate_canonical_hunks()
+    entry = profile.authority()["changedFiles"].get(profile.LEDGER_PATH, {})
+    skipped = {profile.LEDGER_PATH} if "reverseHunksRecord" in entry else set()
+    assert sorted(seen) == sorted(set(profile._PROJECTION_RULES) - skipped) and len(seen) == len(set(seen))
+
+
+def test_c2_the_live_side_route_projects_slot_282s_record():
+    """At the writing run's ledger, the projection of record.json is slot 282's record byte for byte."""
+    entry = profile.authority()["changedFiles"].get(profile.LEDGER_PATH)
+    if entry is None or "reverseHunksRecord" not in entry:
+        return
+    rule = profile._PROJECTION_RULES[profile.LEDGER_PATH]
+    raw = profile.regular_bytes(profile.LEDGER_PATH)
+    before = profile.historical_bytes(profile.LEDGER_PATH, raw)
+    assert profile.digest(raw) == rule["afterSha256"] == entry["afterSha256"]
+    assert profile.digest(before) == rule["beforeSha256"] == profile.PREVIOUS_CHECKPOINT[1]
 
 
 @pytest.mark.parametrize("change", ["digest", "member", "authority", "path", "entry_key", "entry_ref", "entry_after",

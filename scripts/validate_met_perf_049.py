@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-authority.json"
-AUTHORITY_SHA256 = "91bd2cc24278d5cfd607915f790d3e033a9bdfd5e8aff99fb726c3fa997416a6"
+AUTHORITY_SHA256 = "4de2f5ee90072b4621df05c5365ece4401892a742b588b6982e9c91205ccd4d9"
 VALIDATOR_PATH = "scripts/validate_met_perf_049.py"
 BASE_COMMIT = "0fd885ff3a9a80f8882ec4a03e0d16e95675868c"
 NEW_PACKET = "MET-PERF-049"
@@ -159,10 +159,41 @@ def _base64(value: Any) -> bytes:
     return raw
 
 
+_LEDGER_ROUTE = ("architecture/chain-checkpoint/record.json", "architecture/chain-checkpoint/ledger-hunks/286.json")
+
+
+def _side_rule_of(path: str, rule: Any, named: Any, side_raw: Any) -> Any:
+    """MET-PERF-049 (CONTRACT_286 4.3): the ledger's changedFiles entry names its reverse hunks in the closed side
+    record. Once the entry's exact keys, its reference (the side record's path and its newFiles digest) and the side
+    record itself (its bytes hash to that digest; closed; naming this authority; its path, beforeSha256 and afterSha256
+    the entry's) hold, the side record's hunks stand in for the entry's and meet every per-hunk check of _rules().
+    Any other path, or an entry without a reference, is returned unchanged."""
+    if path != _LEDGER_ROUTE[0] or not (type(rule) is dict and "reverseHunksRecord" in rule):
+        return rule
+    require(set(rule) == {"beforeSha256", "afterSha256", "reverseHunksRecord"} and _sha(named)
+            and rule["reverseHunksRecord"] == {"path": _LEDGER_ROUTE[1], "sha256": named}, "closed side route")
+    require(type(side_raw) is bytes and digest(side_raw) == named, "side route digest")
+    side = parse(side_raw)
+    require(type(side) is dict and set(side) == {"authorityPath", "path", "beforeSha256", "afterSha256", "reverseHunks"}
+            and side["authorityPath"] == AUTHORITY_PATH and side["path"] == path
+            and side["beforeSha256"] == rule["beforeSha256"] and side["afterSha256"] == rule["afterSha256"],
+            "closed side record")
+    return {"beforeSha256": rule["beforeSha256"], "afterSha256": rule["afterSha256"], "reverseHunks": side["reverseHunks"]}
+
+
+def _side_rule(path: str, rule: Any) -> Any:
+    """The ledger's entry through _side_rule_of with the authority's newFiles digest and the side record's bytes."""
+    if path != _LEDGER_ROUTE[0] or not (type(rule) is dict and "reverseHunksRecord" in rule):
+        return rule
+    named = authority()["newFiles"].get(_LEDGER_ROUTE[1])
+    return _side_rule_of(path, rule, named, regular_bytes(_LEDGER_ROUTE[1]) if _sha(named) else None)
+
+
 def _rules() -> MappingProxyType:
     changed = authority()["changedFiles"]
     frozen = {}
     for path, rule in changed.items():
+        rule = _side_rule(path, rule)
         require(type(rule) is dict
                 and set(rule) == {"beforeSha256", "afterSha256", "reverseHunks"}
                 and _sha(rule["beforeSha256"]) and _sha(rule["afterSha256"])
@@ -674,14 +705,18 @@ def check_side(side_raw: Any, named: Any, entry: Any, live: Any) -> None:
            "MET-PERF-049 C2 the record.json entry is the three-key form naming the side record")
 
     def replayed() -> bool:
-        cur, prior = live, None
-        for hunk in sorted(side["reverseHunks"], key=lambda h: -h["at"]):
+        hunks = side["reverseHunks"]
+        if not all(type(h) is dict and set(h) == {"at", "removeBase64", "insertBase64"} and type(h["at"]) is int for h in hunks):
+            return False
+        chunks, cursor = [], 0      # one ascending pass (MON-286-SIDE-RULE): no hunk overlaps the one before it
+        for hunk in sorted(hunks, key=lambda h: h["at"]):
             remove, insert = _base64(hunk["removeBase64"]), _base64(hunk["insertBase64"])
-            if set(hunk) != {"at", "removeBase64", "insertBase64"} or type(hunk["at"]) is not int or (
-                    prior is not None and hunk["at"] + len(remove) > prior) or cur[hunk["at"]:hunk["at"] + len(remove)] != remove:
+            if hunk["at"] < cursor or live[hunk["at"]:hunk["at"] + len(remove)] != remove:
                 return False
-            cur, prior = cur[:hunk["at"]] + insert + cur[hunk["at"] + len(remove):], hunk["at"]
-        return digest(live) == side["afterSha256"] and digest(cur) == side["beforeSha256"] == PREVIOUS_CHECKPOINT[1]
+            chunks.extend((live[cursor:hunk["at"]], insert))
+            cursor = hunk["at"] + len(remove)
+        chunks.append(live[cursor:])
+        return digest(live) == side["afterSha256"] and digest(b"".join(chunks)) == side["beforeSha256"] == PREVIOUS_CHECKPOINT[1]
     _bound(replayed, "MET-PERF-049 C2 the side record's hunks reproduce slot 282's record")
 
 
@@ -925,6 +960,8 @@ def check_canonical_hunks(path: str, rule: Any, after: Any) -> None:
 def validate_canonical_hunks() -> None:
     """Q-PERF40-4: every hunk of this layer's authority is the canonical byte-minimal one, from this era's bytes."""
     for path, rule in _PROJECTION_RULES.items():
+        if path == _LEDGER_ROUTE[0] and "reverseHunksRecord" in authority()["changedFiles"].get(path, {}):
+            continue    # MET-PERF-049 (4.3): the side record's line-run hunks; C2 replays them to slot 282's record
         check_canonical_hunks(path, rule, reviewed_bytes(path))
 
 
