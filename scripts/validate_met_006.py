@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/service-edges-authority.json"
-AUTHORITY_SHA256 = "d29a6d7b309775e377a2b5986b9d81910e9a85aa7080de46bb7c67db9c2477ac"
+AUTHORITY_SHA256 = "8a4328320fdfdb94d659094ebe0ff73634c3fd8cbbfeb54049dd2292e16ef695"
 VALIDATOR_PATH = "scripts/validate_met_006.py"
 BASE_COMMIT = "d69848cf015e7328127c1369a4c999cb50b8a861"
 NEW_PACKET = "MET-006"
@@ -376,8 +376,8 @@ ERA_SHA256 = MappingProxyType({
     "docs/harnesses/trust.observability-finops.md": "25e0be5e61350cf1ab00ab3abd654b678d4d48bed8dfad8d3d0e1fe5efe09aee",
     "schemas/dependency-graph.schema.json": "9c6f18bcc26e2b574297ba3e50d2e440f67f9bb78b3b5b7cfffa179c7141c870",
     "schemas/services.schema.json": "7aa4eedb210650120496ea5858cbde3067dfa7d9c3b5b54bf39e3655f4010f0a",
-    "scripts/validate_service_edges.py": "121cc90ba52a10bdd32cf101bf16daa9588417416eb6729662d5f72c207486a6",
-    "tests/test_service_edges.py": "f9da89fcc98877dde61581e0b7a47b36fff91554c5f4c0530fdc0a4f409fcd55",
+    "scripts/validate_service_edges.py": "b2e564f27699ccfeec5e4ac23ff345c33ce4308f926fe88ea2c60f3d73acfa2b",
+    "tests/test_service_edges.py": "85a542eca87aa1f32dda672b895d6acefb4e53b7c9e8a2d5b5a7663afe2407ac",
 })
 ERRATA_LINES = MappingProxyType({
     "architecture/chain-checkpoint/README.md": (184, 189),

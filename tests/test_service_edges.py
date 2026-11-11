@@ -193,6 +193,44 @@ def test_the_controller_handoffs_via_is_the_store_holding_the_object():
     assert "SE-13" in refusals(record)
 
 
+@pytest.mark.parametrize("change", ["cache_kind", "retry_policy", "objective_value", "audit_form", "basis_kind"])
+def test_se2_refuses_every_value_outside_a_closed_enum(change):
+    record = copy.deepcopy(RECORD)
+    if change == "cache_kind":
+        record["edges"][0]["cache"] = {"kind": "LRU"}
+    elif change == "retry_policy":
+        _first_native(record)["retry"]["policy"] = "ALWAYS"
+    elif change == "objective_value":
+        _gw(record)["objectives"]["latency"] = "OPTIONAL"
+    elif change == "audit_form":
+        _first_fail_open(record)["auditEvidence"] = "CARRIED"
+    else:
+        record["edges"][0]["timeout"]["basis"] = {"kind": "MEASURED"}
+    assert "SE-2" in refusals(record)
+
+
+def test_se5_the_callee_ceiling_descends_along_a_request_path():
+    record = copy.deepcopy(RECORD)
+    entry(record, "experience-gateway", "ai-gateway")["timeout"]["ceilingSeconds"] = 10
+    assert "SE-5" in refusals(record)
+    record = copy.deepcopy(RECORD)
+    entry(record, "experience-gateway", "ai-gateway")["timeout"]["ceilingSeconds"] = 60
+    assert "SE-5" not in refusals(record)
+
+
+def test_se8_refuses_a_job_artifact_form_without_its_digest():
+    record = copy.deepcopy(RECORD)
+    del entry(record, "tool-broker", "sandbox-runner")["transport"][0]["endpoint"]["digest"]
+    assert {"SE-2", "SE-8"} <= refusals(record)
+
+
+@pytest.mark.parametrize("kind", ["CONTROLLER", "REQUEST"])
+def test_a_handoff_row_is_exactly_its_closed_members(kind):
+    record = copy.deepcopy(RECORD)
+    next(h for h in record["handoffs"] if h["kind"] == kind)["extra"] = 1
+    assert {"SE-2", "SE-13"} <= refusals(record)
+
+
 def test_a_stray_justification_is_refused():
     record = copy.deepcopy(RECORD)
     e = next(e for e in record["edges"] if e["repeatedCallJustification"] is None)

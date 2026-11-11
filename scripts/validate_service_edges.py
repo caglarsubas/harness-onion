@@ -47,6 +47,9 @@ SERVICE_KINDS = ("api", "gateway", "web-api", "collector")
 CLASSES = {"policy-decision": "policy", "external.opa-engine": "policy", "registry-service": "registry",
            "external.postgresql": "database", "external.pgvector": "database"}
 CLASS_ORDER = ("policy", "registry", "database")
+HANDOFF_MEMBERS = {"REQUEST": {"kind", "branch", "from", "to", "via", "write", "lease"},
+                   "CONTROLLER": {"kind", "from", "to", "via", "object", "consumerSide", "controllerSide"}}
+OBJECT_MEMBERS = {"KUBERNETES_RESOURCE": {"kind", "resource", "subresource"}, "DATABASE_SCHEMA": {"kind", "schema", "objects"}}
 KEBAB = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 REF = re.compile(r"^([A-Za-z0-9._/-]+)#L([1-9][0-9]*)$")
 MESH = re.compile(r"\b(service mesh|mesh|sidecar|injected proxy|istio|linkerd|envoy)\b", re.I)
@@ -204,6 +207,37 @@ def check_record(record, catalog, graph, schema, root=ROOT, read=None):
         if x in own_line and phrase_value(own_line[x][1]) is not None and src.get("ref") != "%s#L%d" % (CATALOG_PATH, own_line[x][0]):
             fail("SE-10", "%s: its own catalog description states a value, and the row does not cite it (precedence 1)" % x)
 
+    # SE-2 (header rows, closed members and enums; MET006 c2b D1, D4)
+    for x, row in providers.items():
+        if not isinstance(row, dict) or set(row) != {"value", "source"} or row.get("value") not in PROVIDER_VALUES:
+            fail("SE-2", "%s: an externalProviders row outside its closed members or enum" % x)
+    for x, row in kinds_map.items():
+        if (not isinstance(row, dict) or set(row) != {"kinds", "source"} or not isinstance(row.get("kinds"), list)
+                or not row["kinds"] or not set(row["kinds"]) <= {"EXTERNAL", "UNIX_SOCKET", "ARTIFACT_PATH"}):
+            fail("SE-2", "%s: an externalEndpointKinds row outside its closed members or enum" % x)
+    for h in record["handoffs"] if isinstance(record["handoffs"], list) else [None]:
+        kind = h.get("kind") if isinstance(h, dict) else None
+        obj = h.get("object") if isinstance(h, dict) else None
+        if kind == "REQUEST":
+            ok = set(h) == HANDOFF_MEMBERS["REQUEST"]
+        elif kind == "CONTROLLER":
+            ok = (set(h) == HANDOFF_MEMBERS["CONTROLLER"] and isinstance(obj, dict)
+                  and set(obj) == OBJECT_MEMBERS.get(obj.get("kind"), set()))
+        else:
+            ok = False
+        if not ok:
+            fail("SE-2", "a handoff row is not exactly its closed members: %r" % (sorted(h) if isinstance(h, dict) else h,))
+            fail("SE-13", "a handoff row is not exactly its closed members")
+    for row in record["graphMapping"] if isinstance(record["graphMapping"], list) else [None]:
+        if not isinstance(row, dict) or set(row) != {"branch", "from", "to", "edge"}:
+            fail("SE-2", "a graphMapping row is not exactly its closed members")
+    for row in record["catalogGaps"] if isinstance(record["catalogGaps"], list) else [None]:
+        if not isinstance(row, dict) or set(row) != {"edge", "via", "missing", "source"}:
+            fail("SE-2", "a catalogGaps row is not exactly its closed members")
+    for row in record["repeatedCalls"] if isinstance(record["repeatedCalls"], list) else [None]:
+        if not isinstance(row, dict) or set(row) != {"branch", "path", "class", "edges"} or row.get("class") not in CLASS_ORDER:
+            fail("SE-2", "a repeatedCalls row is not exactly its closed members or class")
+
     request_edges = {(g["from"], g["to"]) for g in rg["commonAdmissionEdges"]} | {(g["from"], g["to"]) for b in rg["branches"] for g in b["edges"]}
     req_handoffs = [h for h in record["handoffs"] if isinstance(h, dict) and h.get("kind") == "REQUEST"]
     request_path = {k for k in request_edges if k in cat_deps}
@@ -295,7 +329,8 @@ def check_record(record, catalog, graph, schema, root=ROOT, read=None):
         if set(r) - {"idempotency", "policy", "maxAttempts", "operationIdField", "operations", "backoff", "basis"}:
             fail("SE-2", "%s: retry members" % name)
         b = r.get("backoff", {})
-        if set(b) != {"initialSeconds", "maxSeconds", "jitter"} or b.get("jitter") not in ("FULL", "NONE", U):
+        if (set(b) != {"initialSeconds", "maxSeconds", "jitter"} or b.get("jitter") not in ("FULL", "NONE", U)
+                or not all(b.get(x) == U or (is_number(b.get(x)) and b.get(x) > 0) for x in ("initialSeconds", "maxSeconds"))):
             fail("SE-2", "%s: backoff" % name)
         units = []
         if "operations" in r:
@@ -306,11 +341,16 @@ def check_record(record, catalog, graph, schema, root=ROOT, read=None):
             if len(ops) < 2 or len(set(names)) != len(names) or not all(isinstance(n, str) and KEBAB.match(n) for n in names):
                 fail("SE-4", "%s: operation classes must be distinct kebab-case tokens" % name)
             units = ops
+            for o in ops:
+                if not isinstance(o, dict) or not {"class", "idempotency", "policy", "maxAttempts"} <= set(o) \
+                        or set(o) - {"class", "idempotency", "policy", "maxAttempts", "operationIdField"}:
+                    fail("SE-2", "%s: an operations class is not exactly its closed members" % name)
         else:
             units = [r]
         for u in units:
             idem, pol, att = u.get("idempotency"), u.get("policy"), u.get("maxAttempts")
-            if idem not in ("NATIVE", "RECEIPT_KEY", "NONE") or pol not in ("IDEMPOTENT_ONLY", "NONE") or not (att == U or (isinstance(att, int) and att >= 1)):
+            if idem not in ("NATIVE", "RECEIPT_KEY", "NONE") or pol not in ("IDEMPOTENT_ONLY", "NONE") or not (att == U or (isinstance(att, int) and not isinstance(att, bool) and att >= 1)):
+                fail("SE-2", "%s: retry idempotency, policy or maxAttempts outside its closed enum" % name)
                 fail("SE-4", "%s: idempotency, policy or maxAttempts" % name)
                 continue
             if pol == "IDEMPOTENT_ONLY" and idem != "NATIVE":
@@ -352,6 +392,8 @@ def check_record(record, catalog, graph, schema, root=ROOT, read=None):
                         if str(n) not in txt and WORDS.get(n, "\0") not in txt:
                             fail("SE-6", "%s: the %s basis line does not state %s" % (name, part, k2))
             else:
+                if not (isinstance(basis, dict) and basis.get("kind") in (U, "DOCUMENTED_BOUND")):
+                    fail("SE-2", "%s: the %s basis kind outside its closed enum" % (name, part))
                 fail("SE-6", "%s: the %s basis" % (name, part))
         # SE-7 lifecycle
         if (c, d) in request_path and e["lifecyclePhase"] not in ("ADMISSION", "INVOCATION"):
@@ -362,14 +404,31 @@ def check_record(record, catalog, graph, schema, root=ROOT, read=None):
             fail("SE-7", "%s: a CONTROL edge on the request path" % name)
         # SE-8 objectives
         o = e["objectives"] if isinstance(e["objectives"], dict) else {}
+        if any(v not in (U, "REQUIRED") for v in o.values()) or e["capacityAndOverloadRule"] != U or e["sli"] != U:
+            fail("SE-2", "%s: an objective, capacityAndOverloadRule or sli value outside its closed enum" % name)
         if tuple(o) != OBJECTIVES[mode] or any(v not in (U, "REQUIRED") for v in o.values()):
             fail("SE-8", "%s: objectives are not exactly the mode's" % name)
         if mode == "SYNC" and (o.get("deadlinePropagation") != "REQUIRED" or o.get("cancellation") != "REQUIRED"):
             fail("SE-8", "%s: SYNC deadlinePropagation and cancellation are REQUIRED" % name)
         if e["capacityAndOverloadRule"] != U or e["sli"] != U:
             fail("SE-8", "%s: capacityAndOverloadRule and sli are UNSPECIFIED at 287" % name)
-        if callee_kind == "job" and fk == ["ARTIFACT_PATH"] and o.get("integrity") != "REQUIRED":
-            fail("SE-8", "%s: a job handed an artifact requires integrity" % name)
+        if callee_kind == "job" and fk == ["ARTIFACT_PATH"] and (
+                o.get("integrity") != "REQUIRED" or forms[0].get("endpoint", {}).get("digest") != "REQUIRED"):
+            fail("SE-8", "%s: a job handed an artifact requires integrity and its form's digest: REQUIRED" % name)
+        ca = e["cache"]
+        if not (isinstance(ca, dict) and ((ca.get("kind") == "NONE" and set(ca) == {"kind"}) or (
+                ca.get("kind") == "BOUNDED_METADATA" and set(ca) == {"kind", "freshness", "revocation", "outage"}
+                and all(isinstance(ca[x], str) and ca[x].strip() for x in ("freshness", "revocation", "outage"))))):
+            fail("SE-2", "%s: cache outside its closed kinds or members" % name)
+        for member in ("repeatedCallJustification", "degradation"):
+            if not (e[member] is None or (isinstance(e[member], str) and e[member].strip())):
+                fail("SE-2", "%s: %s is neither null nor a non-empty statement" % (name, member))
+        ae0 = e["auditEvidence"]
+        if not (ae0 is None or ae0 == "NOT_CARRIED" or (isinstance(ae0, dict) and set(ae0) == {"preservedBy"}
+                                                       and isinstance(ae0["preservedBy"], str) and ae0["preservedBy"].strip())):
+            fail("SE-2", "%s: auditEvidence outside its closed forms" % name)
+        if not (isinstance(e["owner"], dict) and set(e["owner"]) == {"provider", "consumer", "escalation"}):
+            fail("SE-2", "%s: owner is not exactly its closed members" % name)
         # SE-9 degradation and audit evidence
         if cd["failureMode"] == "FAIL_OPEN":
             pol = (cd.get("degradationPolicy") or {}).get("type", "")
@@ -405,6 +464,17 @@ def check_record(record, catalog, graph, schema, root=ROOT, read=None):
                 ce = sorted(key(*k) for k in calls if CLASSES[k[1]] == cl)
                 if len(ce) >= 2:
                     rows.append({"branch": b["id"], "path": p, "class": cl, "edges": ce})
+    for b in rg["branches"]:
+        for p in maximal_paths(rg, b):
+            for caller_edge, callee_edge in zip(zip(p, p[1:]), zip(p[1:], p[2:])):
+                e1, e2 = E.get(caller_edge), E.get(callee_edge)
+                if not (isinstance(e1, dict) and isinstance(e2, dict) and isinstance(e1.get("timeout"), dict)
+                        and isinstance(e2.get("timeout"), dict)):
+                    continue
+                c1, c2 = e1["timeout"].get("ceilingSeconds"), e2["timeout"].get("ceilingSeconds")
+                if is_number(c1) and is_number(c2) and not c2 < c1:
+                    fail("SE-5", "%s: the callee's ceilingSeconds is not below its caller's (%s) along %s" % (
+                        key(*callee_edge), key(*caller_edge), b["id"]))
     if record["repeatedCalls"] != rows:
         fail("SE-11", "repeatedCalls differs from the checker's sorted list (%d rows expected)" % len(rows))
     listed = {k for r in rows for k in r["edges"]}
