@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/service-edges-authority.json"
-AUTHORITY_SHA256 = "7eb37a96f53681b48989305c0df25ef4887254e2361810ccf5cc5f824badc3d5"
+AUTHORITY_SHA256 = "3ef8ef9695762150fd7e2975aeb195a240e3cc3338d853a0ba44f712195c4dfb"
 VALIDATOR_PATH = "scripts/validate_met_006.py"
 BASE_COMMIT = "d69848cf015e7328127c1369a4c999cb50b8a861"
 NEW_PACKET = "MET-006"
@@ -441,8 +441,8 @@ def _bound(check: Any, message: str) -> None:
 
 
 def _era_model(path: str, name: str) -> types.ModuleType:
-    """A reference module of this era, executed from its verified bytes (no import, no bytecode); it imports only the
-    standard library."""
+    """A reference module of this era, executed from its verified bytes (no import, no bytecode); it imports
+    the standard library plus the repository's safe YAML loader."""
     module = types.ModuleType(name)
     module.__file__ = str(ROOT / path)
     exec(compile(_verified(path), path, "exec", dont_inherit=True), module.__dict__)
