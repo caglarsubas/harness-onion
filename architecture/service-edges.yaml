@@ -154,9 +154,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -241,8 +241,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: policy-decision
@@ -283,9 +283,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -349,7 +349,7 @@ edges:
 - consumer: fleet-sync-agent
   dependency: operator
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: operator-reachable
+  requiredState: operator-ready
   owner: {provider: mas-harness-operator, consumer: mas-harness-operator, escalation: mas-harness-operator}
   transport:
   - protocol: KUBERNETES_API
@@ -445,7 +445,7 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Existing workloads continue on last verified state; new sync remains pending. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Existing workloads continue on last verified state; new sync remains pending. Catalog degradationPolicy: disableImmediately (capability management.fleet-pull).'
   auditEvidence: NOT_CARRIED
 - consumer: guardrail-service
   dependency: policy-decision
@@ -472,8 +472,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: guardrail-service
@@ -489,9 +489,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -527,8 +527,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: usage-ledger
@@ -544,9 +544,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -582,7 +582,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: governance-service
@@ -626,9 +628,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -636,8 +638,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Bounded telemetry degradation does not discard the database audit chain. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust
-    when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  degradation: 'Telemetry buffers locally within the bounded budget; the database audit chain is not discarded. Catalog degradationPolicy: bounded (timeSeconds 300,
+    bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
   auditEvidence: NOT_CARRIED
 - consumer: governance-service
   dependency: external.postgresql
@@ -664,7 +666,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: domain-service
@@ -736,9 +740,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -746,8 +750,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Bounded metrics degradation; validation evidence remains stored. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
-    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  degradation: 'Metrics buffer locally within the bounded budget; validation evidence remains stored. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216;
+    exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
   auditEvidence: NOT_CARRIED
 - consumer: registry-service
   dependency: governance-service
@@ -883,8 +887,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: inference-api
@@ -981,9 +985,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -996,8 +1000,8 @@ edges:
   auditEvidence: NOT_CARRIED
 - consumer: connector-controller
   dependency: domain-service
-  lifecyclePhase: INVOCATION
-  requiredState: domain-service-ready
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: domain-service-reachable
   owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: HTTP
@@ -1024,8 +1028,8 @@ edges:
   auditEvidence: null
 - consumer: connector-controller
   dependency: policy-decision
-  lifecyclePhase: INVOCATION
-  requiredState: policy-decision-ready
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: policy-decision-reachable
   owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
   transport:
   - protocol: HTTP
@@ -1073,12 +1077,13 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Controller remains ready; unavailable individual sources become DEGRADED and are not scheduled. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Controller remains ready; unavailable individual sources become DEGRADED and are not scheduled. Catalog degradationPolicy: disableImmediately (capability
+    tenant.source-endpoints).'
   auditEvidence: NOT_CARRIED
 - consumer: connector-controller
   dependency: external.postgresql
-  lifecyclePhase: INVOCATION
-  requiredState: postgresql-ready
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: postgresql-reachable
   owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: POSTGRESQL
@@ -1116,9 +1121,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -1126,8 +1131,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Bounded telemetry degradation; readiness evidence remains durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
-    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  degradation: 'Telemetry buffers locally within the bounded budget; readiness evidence remains durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes
+    16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
   auditEvidence: NOT_CARRIED
 - consumer: memory-service
   dependency: policy-decision
@@ -1239,7 +1244,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Exact and relational memory remain available; semantic search and vector writes are disabled immediately. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Exact and relational memory remain available; semantic search and vector writes are disabled immediately. Catalog degradationPolicy: disableImmediately
+    (capability memory.semantic).'
   auditEvidence: NOT_CARRIED
 - consumer: memory-service
   dependency: otel-collector
@@ -1254,9 +1260,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -1435,7 +1441,7 @@ edges:
 - consumer: control-web
   dependency: operator
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: operator-reachable
+  requiredState: installation-projection-current
   owner: {provider: mas-harness-operator, consumer: mas-harness-control-plane, escalation: mas-harness-operator}
   transport:
   - protocol: KUBERNETES_API
@@ -1460,7 +1466,7 @@ edges:
 - consumer: ingest-worker
   dependency: connector-controller
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: connector-controller-reachable
+  requiredState: connector-controller-ready
   owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: POSTGRESQL
@@ -1616,7 +1622,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Object-backed source jobs stop before acknowledging their checkpoint; database-only source jobs continue. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Object-backed source jobs stop before acknowledging their checkpoint; database-only source jobs continue. Catalog degradationPolicy: disableImmediately
+    (capability storage.object-required).'
   auditEvidence: {preservedBy: object-backed source jobs stop before acknowledging their checkpoint}
 - consumer: ingest-worker
   dependency: otel-collector
@@ -1631,9 +1638,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -1675,7 +1682,7 @@ edges:
 - consumer: retrieval-service
   dependency: connector-controller
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: connector-controller-reachable
+  requiredState: source-readiness-observable
   owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: POSTGRESQL
@@ -1721,8 +1728,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: retrieval-service
@@ -1751,7 +1758,7 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Disable optional semantic reranking and use approved PostgreSQL FTS/vector path. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Disable optional semantic reranking and use approved PostgreSQL FTS/vector path. Catalog degradationPolicy: disableImmediately (capability retrieval.rerank.local).'
   auditEvidence: NOT_CARRIED
 - consumer: retrieval-service
   dependency: external.postgresql
@@ -1778,7 +1785,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: retrieval-service
@@ -1806,9 +1815,11 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: 'Vector retrieval is disabled immediately; approved PostgreSQL FTS routes remain available and vector-required routes fail explicitly. Catalog degradationPolicy:
-    disableImmediately.'
+    disableImmediately (capability retrieval.vector).'
   auditEvidence: NOT_CARRIED
 - consumer: retrieval-service
   dependency: otel-collector
@@ -1823,9 +1834,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -1957,9 +1968,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -1967,7 +1978,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Bounded content-free telemetry degradation. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  degradation: 'Content-free telemetry buffers locally within the bounded budget. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
+    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
   auditEvidence: NOT_CARRIED
 - consumer: evidence-service
   dependency: policy-decision
@@ -2094,9 +2106,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NONE
+    idempotency: NATIVE
     policy: NONE
-    maxAttempts: 1
+    maxAttempts: UNSPECIFIED
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -2104,7 +2116,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Large-object submissions stop before metadata acknowledgment; inline metadata-only evidence remains available. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Large-object submissions stop before metadata acknowledgment; inline metadata-only evidence remains available. Catalog degradationPolicy: disableImmediately
+    (capability storage.object-required).'
   auditEvidence: {preservedBy: large-object submissions stop before metadata acknowledgment}
 - consumer: evidence-service
   dependency: otel-collector
@@ -2119,9 +2132,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -2235,7 +2248,7 @@ edges:
 - consumer: index-worker
   dependency: ingest-worker
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: ingest-worker-reachable
+  requiredState: ingest-batches-committed
   owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: POSTGRESQL
@@ -2283,7 +2296,7 @@ edges:
   cache: {kind: NONE}
   repeatedCallJustification: null
   degradation: 'Use configured non-model FTS path; vector-required profiles instead fail readiness through the conditional module requirement. Catalog degradationPolicy:
-    disableImmediately.'
+    disableImmediately (capability embedding.local-and-approved).'
   auditEvidence: NOT_CARRIED
 - consumer: index-worker
   dependency: policy-decision
@@ -2361,7 +2374,7 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Vector index jobs pause before pointer swap; FTS-only jobs continue. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Vector index jobs pause before pointer swap; FTS-only jobs continue. Catalog degradationPolicy: disableImmediately (capability retrieval.vector).'
   auditEvidence: NOT_CARRIED
 - consumer: index-worker
   dependency: otel-collector
@@ -2376,9 +2389,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -2469,8 +2482,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: orchestration-api
@@ -2498,7 +2511,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: orchestration-api
@@ -2514,9 +2529,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -2530,7 +2545,7 @@ edges:
 - consumer: decision-service
   dependency: connector-controller
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: connector-controller-reachable
+  requiredState: source-versions-accepted
   owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: POSTGRESQL
@@ -2567,9 +2582,9 @@ edges:
     deadline: PROPAGATED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
@@ -2577,7 +2592,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Deterministic scikit-learn/ONNX/OR-Tools decisions continue; model-assisted capability is disabled. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Deterministic scikit-learn/ONNX/OR-Tools decisions continue; model-assisted capability is disabled. Catalog degradationPolicy: disableImmediately
+    (capability model.inference).'
   auditEvidence: NOT_CARRIED
 - consumer: decision-service
   dependency: governance-service
@@ -2691,7 +2707,7 @@ edges:
 - consumer: assurance-worker
   dependency: ingest-worker
   lifecyclePhase: BACKGROUND_RECONCILIATION
-  requiredState: ingest-worker-reachable
+  requiredState: ingest-provenance-accepted
   owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-knowledge-plane}
   transport:
   - protocol: POSTGRESQL
@@ -2728,9 +2744,9 @@ edges:
     deadline: PROPAGATED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
@@ -2739,7 +2755,7 @@ edges:
   cache: {kind: NONE}
   repeatedCallJustification: null
   degradation: 'Deterministic evaluators continue; local-model judge cases become NOT_RUN_ENV_UNAVAILABLE when the optional judge is unavailable. Catalog degradationPolicy:
-    disableImmediately.'
+    disableImmediately (capability assurance.local-model-judge).'
   auditEvidence: NOT_CARRIED
 - consumer: assurance-worker
   dependency: governance-service
@@ -2807,9 +2823,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -2894,8 +2910,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: tool-broker
@@ -2951,7 +2967,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: tool-broker
@@ -2967,9 +2985,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -2992,9 +3010,9 @@ edges:
     reconcileSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {convergence: UNSPECIFIED}
@@ -3077,9 +3095,9 @@ edges:
     deadline: PROPAGATED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
@@ -3087,7 +3105,8 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Deterministic workflows remain available; agent/model steps pause without consuming retry budget. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Deterministic workflows remain available; agent/model steps pause without consuming retry budget. Catalog degradationPolicy: disableImmediately (capability
+    model.inference).'
   auditEvidence: NOT_CARRIED
 - consumer: orchestration-worker
   dependency: retrieval-service
@@ -3115,7 +3134,7 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'No-context workflows continue only when the signed workflow permits it. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'No-context workflows continue only when the signed workflow permits it. Catalog degradationPolicy: disableImmediately (capability knowledge.retrieval).'
   auditEvidence: NOT_CARRIED
 - consumer: orchestration-worker
   dependency: tool-broker
@@ -3143,7 +3162,7 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Read-only/no-tool tasks continue; tool steps pause. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Read-only/no-tool tasks continue; tool steps pause. Catalog degradationPolicy: disableImmediately (capability tool.governed-execution).'
   auditEvidence: NOT_CARRIED
 - consumer: orchestration-worker
   dependency: external.postgresql
@@ -3167,7 +3186,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: orchestration-worker
@@ -3183,9 +3204,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -3249,8 +3270,8 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision; decisions are not cached, because the catalog requires
-    current policy admission on every route and request
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
   degradation: null
   auditEvidence: null
 - consumer: ai-gateway
@@ -3363,7 +3384,7 @@ edges:
   sli: UNSPECIFIED
   cache: {kind: NONE}
   repeatedCallJustification: null
-  degradation: 'Direct model routes remain available; agent/task routes are disabled. Catalog degradationPolicy: disableImmediately.'
+  degradation: 'Direct model routes remain available; agent/task routes are disabled. Catalog degradationPolicy: disableImmediately (capability task.orchestration).'
   auditEvidence: NOT_CARRIED
 - consumer: ai-gateway
   dependency: external.postgresql
@@ -3390,7 +3411,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: ai-gateway
@@ -3406,9 +3429,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -3474,7 +3497,7 @@ edges:
   cache: {kind: NONE}
   repeatedCallJustification: null
   degradation: 'Non-task sessions and direct-model interactions remain available; task submission, state, input, resume, and cancel are disabled. Catalog degradationPolicy:
-    disableImmediately.'
+    disableImmediately (capability task.orchestration).'
   auditEvidence: NOT_CARRIED
 - consumer: experience-gateway
   dependency: governance-service
@@ -3492,9 +3515,9 @@ edges:
     deadline: PROPAGATED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
@@ -3529,7 +3552,9 @@ edges:
   capacityAndOverloadRule: UNSPECIFIED
   sli: UNSPECIFIED
   cache: {kind: NONE}
-  repeatedCallJustification: each service commits to its own schema in the shared PostgreSQL service; the calls write different tables, not one read twice
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
   degradation: null
   auditEvidence: null
 - consumer: experience-gateway
@@ -3545,9 +3570,9 @@ edges:
     publishAckSeconds: UNSPECIFIED
     basis: {kind: UNSPECIFIED}
   retry:
-    idempotency: NATIVE
+    idempotency: NONE
     policy: NONE
-    maxAttempts: UNSPECIFIED
+    maxAttempts: 1
     backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
     basis: {kind: UNSPECIFIED}
   objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
@@ -3618,10 +3643,10 @@ catalogGaps:
   source: {ref: architecture/services.yaml#L910, phrase: installation projection}
 counts:
   edges: 129
-  byLifecyclePhase: {ADMISSION: 3, BACKGROUND_RECONCILIATION: 25, INSTALL: 4, INVOCATION: 69, OBSERVATION: 20, STARTUP: 8}
+  byLifecyclePhase: {ADMISSION: 3, BACKGROUND_RECONCILIATION: 28, INSTALL: 4, INVOCATION: 66, OBSERVATION: 20, STARTUP: 8}
   byProtocol: {FILESYSTEM: 10, HTTP: 66, KUBERNETES_API: 7, OCI_LAYOUT: 2, OTLP: 20, POSTGRESQL: 28}
   byEndpointKind: {ARTIFACT_PATH: 12, EXTERNAL: 36, SERVICE_DNS: 76, VIA: 9}
-  byIdempotency: {NATIVE: 97, NONE: 33}
+  byIdempotency: {NATIVE: 73, NONE: 57}
   networkForms: 112
   localForms: 12
   viaForms: 9
