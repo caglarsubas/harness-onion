@@ -23,8 +23,10 @@
  "launched": "2026-11-11T16:37:52+08:00",
  "finished": "2026-11-11T17:05:39+08:00",
  "ruling": {
-  "decision": "PENDING",
-  "by": "LANE_MONITOR"
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-287-ORACLE-KEEP",
+  "date": "2026-11-11"
  },
  "disclosures": [
   "brief 79f992b5 (template bf94b5db) and launch prompt 95cbc924 (template 1da886cc; MON-287-C3-GO); the author's only inputs are CONTRACT_287 rev 8 (f782c494), c2's architecture/service-edges.yaml (20a4b631) and service-edges/schema.json (26b2619a), the catalog (857376b5) and the graph (47986eff), and c2's meta YAML with 2 closed-path strings masked (7064d12d); the operator-stated facts are the checker's and the head layer's signatures with line numbers computed from c2's blobs",
@@ -32,6 +34,6 @@
   "blind run 1 by the operator, R00, the test runner in-process on a git-archive export of c2 d99dad8a: rc 1, tests 239, failures 8, errors 0 (junit dc6de0e2, log 3f4a8e79; the operator read the testsuite counts only)",
   "classified by the non-author lane monitor (MON-287-C3-CLASS): failures 1-5 are candidate defects D1-D4 (SE-2 closed enums, SE-5 request-path ceilings, SE-8 the job digest, closed handoff rows), fixed in the candidate at c2b e33624e1 with a failing case each; failures 6-8 are oracle slips, corrected by the monitor 6baff68d -> 80188247 without loosening any placement or refusal expectation",
   "blind run 2, the corrected file on c2b e33624e1 with the test runner in-process: rc 0, tests 239, failures 0, errors 0, skipped 0 (junit 57f93cd3, log 03ad6758); VERDICT PASS",
-  "placed at c3 with this identity PENDING; the lane monitor rules it; the author's work folder holds a bytecode cache from py_compile"
+  "placed at c3 with this identity ruled KEEP by the lane monitor (MON-287-ORACLE-KEEP); the author's work folder holds a bytecode cache from py_compile"
  ]
 }
