@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/service-edges-authority.json"
-AUTHORITY_SHA256 = "028a2debb1dbab99ecc974488d14422dde485f5560911fa624445ed94716bd80"
+AUTHORITY_SHA256 = "7eb37a96f53681b48989305c0df25ef4887254e2361810ccf5cc5f824badc3d5"
 VALIDATOR_PATH = "scripts/validate_met_006.py"
 BASE_COMMIT = "d69848cf015e7328127c1369a4c999cb50b8a861"
 NEW_PACKET = "MET-006"
@@ -349,7 +349,7 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS registration ride as authored edits at
 # their named lines (048-D1 (b); MON-287-C2-RULINGS). Repository bytes are read
 # only through reviewed_bytes; an era file is refused unless bound by digest on every read, a changed file by the
-# authority's afterSha256. Each refusal is a pure check over the values read. Checked here (CONTRACT_287 rev 7
+# authority's afterSha256. Each refusal is a pure check over the values read. Checked here (CONTRACT_287 rev 8
 # section 6): V1 the packet's files; E1 the record passes its checker on this era's bytes (its counts included);
 # E2 the catalog, the graph and both schemas equal their base bytes; E3 class-other hunks only on the four authored-edit
 # files, at their named lines; V4 the registry rider; V6 the hunk-class record under v2.4. Last, this layer's own
