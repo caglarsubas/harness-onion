@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/service-edges-authority.json"
-AUTHORITY_SHA256 = "8a4328320fdfdb94d659094ebe0ff73634c3fd8cbbfeb54049dd2292e16ef695"
+AUTHORITY_SHA256 = "6a96655db3a98b932697f3cd9557378522ebd6a97078e0377a107f19bc1e31b8"
 VALIDATOR_PATH = "scripts/validate_met_006.py"
 BASE_COMMIT = "d69848cf015e7328127c1369a4c999cb50b8a861"
 NEW_PACKET = "MET-006"
